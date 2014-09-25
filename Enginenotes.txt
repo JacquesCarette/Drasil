@@ -1,5 +1,4 @@
-Chipmunk:
-
+Chipmunk: https://code.google.com/p/chipmunk-physics/source/browse/trunk
 
 /Src:
 CMakeLists.txt
@@ -60,3 +59,15 @@ cpRatchetJoint.c
 cpRotaryLimitJoint.c
 cpSimpleMotor.c
 spSlideJoint.c
+
+
+Siconos:
+
+
+Simulation Open Framework Architecture:
+
+
+Bullet:
+
+
+Newton Game Dynamics:

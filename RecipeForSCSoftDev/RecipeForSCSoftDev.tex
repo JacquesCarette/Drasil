@@ -1,0 +1,269 @@
+%\documentclass[review]{elsarticle}
+\documentclass{elsarticle}
+
+\usepackage{lineno}
+\usepackage{hyperref}
+\usepackage{amsmath}   % From the American Mathematical Society
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{paralist}
+\usepackage{booktabs}
+\usepackage{xspace}
+\usepackage{enumitem}
+
+\newcommand{\quotes}[1]{\lq\lq #1\rq\rq}
+\newcommand{\CWEB}{{\sc cweb}\xspace}
+\newcommand{\ft}{\textit{fuel\_temp\_}\xspace}
+
+\newcommand{\colAwidth}{0.2\columnwidth}
+\newcommand{\colBwidth}{0.755\columnwidth}
+
+\renewcommand{\arraystretch}{1.1} %so that tables with equations do not look crowded
+
+\modulolinenumbers[5]
+\journal{Working Paper}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{A Recipe for Scientific Computing Software Development}
+
+%% or include affiliations in footnotes:
+\author[mymainaddress]{W.\ Spencer Smith\corref{mycorrespondingauthor}}
+\cortext[mycorrespondingauthor]{Corresponding author}
+\ead[url]{http://www.cas.mcmaster.ca/~smiths/}
+\ead{smiths@mcmaster.ca}
+
+\author[mymainaddress]{?}
+
+\author[mymainaddress]{?}
+
+\address[mymainaddress]{Computing and Software Department, McMaster
+University, Hamilton, Ontario L8S 4L7, Canada}
+
+\begin{abstract}
+abstract
+\end{abstract}
+
+\begin{keyword}
+  Software Certification, Literate Programming, Document Driven Design,
+  Scientific Computing
+\end{keyword}
+
+\end{frontmatter}
+
+%\linenumbers
+
+\section {Introduction} \label{Sec_Introduction}
+
+- technology and processes exist, but still not used - need something more
+prescriptive
+
+- Recipe for dev SC software - includes technology, process, templates etc.
+
+- goals:
+\begin{itemize}
+\item Correct
+\item Verifiable
+\item ...
+\item Reproducible
+\item Simple technology
+\end{itemize}
+
+Figure~\ref{Fig_Process} shows a high level view of the documentation to be produced.
+
+\begin{figure}
+\fbox{
+\begin{minipage}{0.96\textwidth}
+\begin{enumerate}
+\item Problem statement.
+\item Software requirements specification.
+\item Verification and validation plan.
+\item Module guide.
+\item Module interface specification.
+\item Literate code.
+\item Verification report
+\item Validation report.
+\end{enumerate}
+\end{minipage}
+}
+\caption{Top-down view of software documentation following a
+  rational process}
+\label{Fig_Process}
+\end{figure} 
+
+Bottom up pieces are shown in Figure~\ref{Fig_BottomUpPieces}.
+
+\begin{figure}
+\scalebox{0.8}{
+\fbox{
+\begin{minipage}{1.19\textwidth}
+\begin{enumerate}
+
+\item{Problem Statement}
+
+\item{SRS:}
+\begin{inparaenum}[a\upshape)]
+\item{Symbols}
+\item{Goals}
+\item{Theoretical Models}
+\item{Instanced Models}
+\item{Data Definitions}
+\item{General Data Definitions}
+\item{Assumptions}
+\item{Requirements}
+\item{Likely Changes}
+\end{inparaenum}
+
+\item{Verification and Validation plan:} 
+\begin{inparaenum}[a\upshape)]
+\item{V\&V techniques}
+\item{System level verification test cases}
+\item{System level validation test cases}
+\item{Traceability to SRS}
+\end{inparaenum}
+
+\item{MG:}
+\begin{inparaenum}[a\upshape)]
+\item{Modules (name, secret, description)}
+\item{Traceability to SRS}
+\end{inparaenum}
+
+\item{MIS}:
+\begin{inparaenum}[a\upshape)]
+\item{Interface}
+\item{Description (formal or informal)}
+\item{Trace to MG}
+\end{inparaenum}
+
+\item Literate Code:
+\begin{inparaenum}[a\upshape)]
+\item Code
+\item Traceability to numerical algorithm
+\item Traceability to requirements
+\item Traceability to MG
+\end{inparaenum}
+
+\item {Verification Report}
+\begin{inparaenum}[a\upshape)]
+\item{Interface}
+\item{Unit tests}
+\item{System tests}
+\end{inparaenum}
+
+\item {Validation Report}
+\begin{inparaenum}[a\upshape)]
+\item{Interface}
+\item{Comparison to experiments}
+\end{inparaenum}
+
+\end{enumerate}
+\end{minipage}
+}
+}
+\caption{Constituent parts of documents}
+\label{Fig_BottomUpPieces}
+\end{figure}
+
+Introduce Figure~\ref{Fig_TofC_SRS}, which shows template for the  SRS.  Adding
+a section for likely changes.
+
+\begin{figure}
+
+\scalebox{0.8}{
+\fbox{
+\begin{minipage}{1.19\textwidth}
+\begin{enumerate}
+
+\item{Reference Material:}
+\begin{inparaenum}[a\upshape)]
+\item{Table of Symbols}
+\item{Abbreviations and Acronyms}
+\end{inparaenum}
+
+\item{Introduction:} 
+\begin{inparaenum}[a\upshape)]
+\item{Purpose of the Document}
+\item{Scope of the Software Product}
+\item{Organization of the Document}
+\item{Intended Audience}
+\end{inparaenum}
+
+\item{General System Description:}
+\begin{inparaenum}[a\upshape)]
+\item{System Context}
+\item{User Characteristics}
+\item{System Constraints}
+\end{inparaenum}
+
+\item Specific System Description:
+\begin{enumerate}
+\item Problem Description: 
+\begin {inparaenum}[i\upshape)] 
+\item Background Overview,
+\item Terminology Definition,
+\item Physical System Description,
+\item Goal Statements
+\end {inparaenum}
+\item Solution specification:
+\begin {inparaenum}[i\upshape)]
+\item Assumptions,
+\item Theoretical Models, 
+\item General Definitions,
+\item Data Definitions,
+\item Instanced Models, 
+\item Data Constraints, 
+\item System Behaviour
+\end {inparaenum}
+\item Non-functional Requirements:
+\begin{inparaenum}[i\upshape)]
+\item{Accuracy of Input Data}
+\item{Sensitivity of Model}
+\item{Tolerance of Solution}
+\item{Solution Validation Strategies}
+\item{Look and Feel Requirements}
+\item{Usability Requirements}
+\item{Performance Requirements}
+\item{Maintainability Requirements}
+\item{Portability Requirements}
+\item{Security Requirements}
+\end{inparaenum}
+\end{enumerate}
+
+\item Other System Issues:
+\begin{inparaenum}[a\upshape)]
+\item Likely Changes
+\item Open Issues
+\item Off the Shelf Solutions
+\item Waiting Room
+\end{inparaenum}
+
+\item{Traceability Matrix}
+
+\item List of Possible Changes in the Requirements
+
+\item{Values of Auxiliary Constants}
+
+\end{enumerate}
+\end{minipage}
+}
+}
+\caption{Table of Contents of the SRS for FP}
+\label{Fig_TofC_SRS}
+\end{figure}
+
+
+
+\section{Concluding Remarks} \label{Sec_ConcRemarks}
+
+
+\section*{Acknowledgements}
+
+acknowledgements
+
+\bibliographystyle{plainnat}
+
+\bibliography{RecipeForSCSoftDev}
+
+\end {document}

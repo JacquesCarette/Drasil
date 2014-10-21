@@ -1,0 +1,114 @@
+\documentclass{article}
+
+\title{SRS for $h_g$ and $h_c$}
+
+\author{Spencer Smith}
+
+\usepackage{longtable}
+\usepackage{booktabs}
+
+\newcommand{\blt}{- } %used for bullets in a list
+
+\newcounter{datadefnum} %Datadefinition Number
+\newcommand{\ddthedatadefnum}{DD\thedatadefnum}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+
+\newcommand{\colAwidth}{0.2\textwidth}
+\newcommand{\colBwidth}{0.73\textwidth}
+
+\renewcommand{\arraystretch}{1.2} %so that tables with equations do not look crowded
+
+\begin{document}
+
+\maketitle
+
+\section*{Table of Units}
+
+Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed
+as the unit system.  In addition to the basic units, several derived units are
+employed as described below.  For each unit, the symbol is given followed by a
+description of the unit with the SI name in parentheses.  ~\newline
+
+\begin{longtable}{l p{11cm}}
+
+m & \blt for length (metre)\\
+kg & \blt for mass (kilogram)\\
+s & \blt for time (second)\\
+K & \blt for temperature (kelvin)\\
+$^oC$ & \blt for temperature (centigrade)\\
+J & \blt for energy (joule, J=$\mathrm{\frac{kg m^2}{s^2}}$)\\
+cal & \blt for energy (calorie, cal $\approx$ 4.2 $\mathrm{\frac{kg m^2}{s^2}}$)\\
+mol& \blt for amount of substance (mole)\\
+W &\blt for power (watt, W=$\mathrm{\frac{kgm^2}{s^3}}$)\\
+
+\end{longtable}
+
+\section*{Table of Symbols}
+
+The table that follows summarizes the symbols used in this document along with
+their units.  The choice of symbols was made with the goal of being consistent
+with the nuclear physics literature and that used in the FP manual.  The SI
+units are listed in brackets following the definition of the symbol.
+
+\begin{longtable}{l p{10.5cm}}
+$h_c$ & \blt convective heat transfer coefficient between clad and coolant ($\mathrm{\frac{kW}{m^2C}}$)\\
+$h_g$ & \blt effective heat transfer coefficient between clad and fuel surface ($\mathrm{\frac{kW}{m^2C}}$)\\
+\end{longtable}
+
+\section{Data Definitions}
+
+~\newline
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+\toprule
+\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} \label{hg}\\
+\midrule
+Label & $h_g$\\
+\midrule
+Units & $ML^0t^{-3}T^{-1}$\\
+\midrule
+SI equivalent & $\mathrm{\frac{kW}{m^{2\circ} C}}$\\
+\midrule
+Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
+\midrule
+Description & $h_g$ is the  gap conductance\newline
+$\tau_c$ is the clad thickness\newline
+$h_p$ is initial gap film conductance\newline
+$k_c$ is the clad conductivity\newline
+NOTE: Equation taken from the code\\
+\midrule
+ Sources & source code\\
+\bottomrule
+\end{tabular}
+\end{minipage}\\
+
+~\newline
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+\toprule
+\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum \label{hc}}\\
+\midrule
+Label & $h_c$\\
+\midrule
+Units & $ML^0t^{-3}T^{-1}$\\
+\midrule
+SI equivalent & $\mathrm{\frac{kW}{m^{2o}C}}$\\
+\midrule
+Equation & $h_c$ =$\frac{ 2k_{c}h_{b}}{2k_{c}+\tau_ch_{b}}$\\
+\midrule
+Description & 
+$h_c$ is the  effective heat transfer coefficient between the clad and the
+coolant \newline
+$\tau_c$ is the clad thickness\newline
+$h_b$ is initial coolant film conductance\newline
+$k_c$ is the clad conductivity\newline
+NOTE: Equation taken from the code\\
+\midrule
+ Sources & source code \\
+\bottomrule
+\end{tabular}
+\end{minipage}\\
+
+\end{document}

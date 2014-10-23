@@ -13,3 +13,4 @@ cabal.config
 *.log
 *.blg
 *.bbl
+/Physics Engine Families/Papers

@@ -1,0 +1,34 @@
+SRS RELATED:
+
+Number: **If blank generate a number that has not been used yet**
+Name/label: **OPTIONAL - If blank use Symbolic Representation **
+Symbolic Representation (A.K.A. Variable Name in eq'n): **If blank, use Name**
+Units: ** Write down the units with reference to their definitions from somewhere else. Global Unit definitions in a chunk **
+SI Equivalent: ** Write down the SI Units somewhere with their definitions. Perhaps global SI definitions chunk **
+Equation: **Used to generate the code, references other chunks by SYMBOLIC REP**
+Description: **Explain the equation, grab info from other chunks (ref by SR)**
+Sources:
+
+LPM Related:
+
+Dependency: **Any libraries the function will depend on, should be generated as part of the code generation**
+Function(s): **Description of what the function is/does **
+Code: **Created by the generator**
+Index of terms
+List of Refinements?
+
+
+CHUNK BREAKDOWN Example:
+
+Note: Filename will be "<name/sym_rep>.<filetype>"
+
+Type: Data Definition       **Maybe use shorthand of DD for Data Definitions, GD for Global Definitions, TM for Theoretical Models, A for Assumptions  etc.**
+Number: DD1
+Label:
+Symbolic Representation: h_g
+Units: !{u_M} !{u:L}^0 !{u:t}^{-3} !{u:T}^{-1}
+SI Equivalent: !{si:kW} / (!{si:m}^2 !{si:degC})
+Equation: 2 * !{k_c} * !{h_p} / (2 * !{k_c} + !{tau_C} * !{h_p})
+Symbol Description: is the gap conductance
+Function Description: Function to Calculate !{h_g}
+Dependency: **To be filled in**

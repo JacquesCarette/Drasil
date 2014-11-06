@@ -173,16 +173,15 @@ in units is a consequence of using a generic model of material behaviour.
 \newpage
 
 \section{Introduction}
-Physics engines are utilized in both research and industry and can be applied to many different types of problems. Precise physics engines are used in weather forecasting and fluid particle modeling while less precise real-time engines have long been used in the video game industry for modeling rigid and soft body dynamics along with collision detection. Because of their variety of applications, there can be major differences in the structure of these physics engines, including dimensionality, precision of collision accuracy, and type of body modeling. However, much of the underlying calculations are the same because the core function of all engines is the same: applying forces to a set of geometry. The similarities that exist between many of these physics engines allows us to consider them as a program family as described by \cite{SCFamilies}.
+Physics engines are utilized in both research and industry and can be applied to many different types of problems. Precise physics engines are used in weather forecasting and fluid particle modeling while less precise real-time engines have long been used in the video game industry for modeling rigid and soft body dynamics along with collision detection. Because of their variety of applications, there can be major differences in the structure of these physics engines, including dimensionality, precision of collision accuracy, and type of body modeling. However, much of the underlying calculations are the same because the core function of all engines is the same: applying forces to a set of geometry. The similarities that exist between many of these physics engines allows us to consider them as a program family as described by \cite{SmithMcCutchanAndCao2007}.
 \par
 To gain insight into this family of physics engines, this document presents
-a Commonality Analysis (CA) of the family. This CA for a family of physics engines follows the guidelines of a CA for a program family as found in \cite{FASTDomain} and \cite{SoftwarePL}. The CA can be seen as a method for
-summarizing the requirements for all potential engines that are considered to be within the scope of the physics engine family. The CA includes documentation of terminology, commonalities (including goals, theoretical models and assumptions) and variabilities.
+a Commonality Analysis (CA) of the family. This CA for a family of physics engines follows the guidelines of a CA for a program family as found in \cite{CukaAndWeiss1997} and \cite{WeissAndLai1999}. The CA can be seen as a method for summarizing the requirements for all potential engines that are considered to be within the scope of the physics engine family. The CA includes documentation of terminology, commonalities (including goals, theoretical models and assumptions) and variabilities.
 \par
-The template used for documenting this CA is based on the template utilized in \cite{MaterialsCA} and \cite{MeshCA}. In the remainder of this section the purpose of the report is described, the scope of the family is delineated and an outline of the remaining sections of the document is provided.
+The template used for documenting this CA is based on the template utilized in \cite{SmithMcCutchanAndCarette2014} and \cite{SmithAndChen2004b}. In the remainder of this section the purpose of the report is described, the scope of the family is delineated and an outline of the remaining sections of the document is provided.
 
 \subsection{Purpose of Document}
-
+The purpose of this document is to summarize a family of game physics engines, where the features included in each engine's construction characterizes the depth and bredth of scenarios which that engine can simulate. Often, the amount of features included in an engine contributes to the "flexibility" of the engine, or the degree to which it may model many different scenarios.
 
 \subsection{Scope of the Family} \label{Sec_Scope}
 

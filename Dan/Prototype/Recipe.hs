@@ -2,10 +2,13 @@
 -- Recipe
 -------------------------------------------------------------------------------
 import Chunks
+import Config
 
 data Recipe = Recipe [String] [Chunk]
   deriving (Show, Eq, Read)
-
+  
+validChunk (Chunk _ d) = contains terms d
+  
 checkDupes (x:xs) r = if (hasRef x r)
                   then error ("A chunk with that " ++ refHeader ++ " field already exists")
                   else checkDupes xs r

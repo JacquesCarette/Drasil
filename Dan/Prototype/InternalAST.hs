@@ -1,3 +1,6 @@
+--Most of this file is a placeholder and has already become deprecated.
+--Cleanup will be performed soon.
+
 module InternalAST where
 
 -------------------------------------------------------------------------------
@@ -22,6 +25,10 @@ type FName = String
 type Style = String
 
 type Name = String
+
+--Description should be modified as it will contain more than just strings
+--based on the field type. It can have a string, references to other chunks,
+--or some combination of both.
 type Description = String
 
 something style doc = Document style doc "out"

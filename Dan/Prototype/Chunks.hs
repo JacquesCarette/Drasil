@@ -32,18 +32,12 @@ hasRef (Chunk ref _) = \r -> r == ref
 parseChunk filename = makeChunk `fmap` (makeDefs filename)
 
 makeDefs filename = do
-  handle <- openFile (buildPath ++ filename) ReadMode
-  (tempName, tempHandle) <- openTempFile "." "temp"
-  contents <- hGetContents handle
-  let myC = lines contents
-  let results = parseDefs myC
-  hClose handle  
-  hClose tempHandle    
-  renameFile tempName (buildPath ++ filename ++"_update.txt")
+  str1 <- readFile (buildPath ++ filename)
+  let results = parseDefs (lines str1)
   return results
   
 
-parseDefs :: [String] -> [(Name,Description)]
+parseDefs :: [String] -> [Definition]
 parseDefs (l:ls) = 
  if ((head l) == '@')
    then [((drop 1 l),(define ls))] ++ (parseDefs ls)
@@ -53,5 +47,5 @@ parseDefs [] = []
 define (l:ls) = 
   if (not(head l == '@'))
     then l ++ (define ls)
-    else define ls
+    else []
 define [] = []

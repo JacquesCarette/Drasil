@@ -1,6 +1,6 @@
 module Config where
 
-refHeader = "Name" 
+refHeader = "Symbol" 
 terms = refHeader : "Data" : [] 
 
 buildPath = "./"

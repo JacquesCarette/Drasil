@@ -1,7 +1,7 @@
 @Type
 Data Definition
 @Number
-DD1
+1
 
 @Symbol
 h_g
@@ -13,4 +13,4 @@ h_g is the gap conductance
 !{k_c}.Description
 
 @Equation
-h_g = 2 * !{k_c} * !{h_p} / (2 * !{k_c} + !{tau_C} * !{h_p})
+...

@@ -184,8 +184,8 @@
 
 $h_g$ and $h_c$ are symbols which appear in several locations including:
 \begin{itemize}
-\item The Literate Programmer's Manual
 \item The Software Requirements Specification
+\item The Literate Programmer's Manual
 \item The Source Code
 \end{itemize}
 
@@ -195,61 +195,63 @@ Let's take a look!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$ and $h_c$}
-%
-%\framesubtitle{SRS Definition for $h_g$}
-%
-%\noindent
-%\begin{minipage}{\textwidth}
-%\begin{tabular}{p{\colAwidth} p{\colBwidth}}
-%\toprule
-%\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} \label{hg}\\
-%\midrule
-%Label & $h_g$\\
-%\midrule
-%Units & $ML^0t^{-3}T^{-1}$\\
-%\midrule
-%SI equivalent & $\mathrm{\frac{kW}{m^{2\circ} C}}$\\
-%\midrule
-%Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
-%\midrule
-%Description & $h_g$ is the  gap conductance\newline
-%$\tau_c$ is the clad thickness\newline
-%$h_p$ is initial gap film conductance\newline
-%$k_c$ is the clad conductivity\newline
-%NOTE: Equation taken from the code\\
-%\midrule
-% Sources & source code\\
-%\bottomrule
-%\end{tabular}
-%\end{minipage}\\
-%
-%\end{frame}
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{SRS Definition for $h_g$}
+
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+\toprule
+\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} \label{hg}\\
+\midrule
+Label & $h_g$\\
+\midrule
+Units & $ML^0t^{-3}T^{-1}$\\
+\midrule
+SI & $\mathrm{\frac{W}{m^{2} (^{\circ}C)}}$\\
+\midrule
+Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
+\midrule
+Description & $h_g$ is the  gap conductance\newline
+$\tau_c$ is the clad thickness\newline
+$h_p$ is initial gap film conductance\newline
+$k_c$ is the clad conductivity\newline
+NOTE: Equation taken from the code\\
+\midrule
+Sources & source code\\
+\bottomrule
+\end{tabular}
+\end{minipage}\\
+
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$ and $h_c$}
-%
-%\framesubtitle{LPM Definition for $h_g$}
-%
-%\begin{equation} 
-%h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
-%\end{equation}
-%
-%The corresponding C code is given by:
-%
-%\begin{lstlisting}
-%double calc_hg(double k_c, double h_b, double tau_c)
-%{
-% %return (2*(k_c)*(h_b)) / ((2*(k_c)) + (tau_c*(h_b)));
-%}
-%\end{lstlisting}
-%
-%\end{frame}
+\begin{frame}[fragile]
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{LPM Definition for $h_g$}
+
+\begin{equation} 
+h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
+\end{equation}
+
+The corresponding C code is given by:
+
+\begin{lstlisting}
+double 
+calc_hg(double k_c,double h_b,double tau_c)
+{
+ return (2*(k_c)*(h_b)) / 
+        ((2*(k_c)) + (tau_c*(h_b)));
+}
+\end{lstlisting}
+
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -269,9 +271,11 @@ Let's take a look!
 
 \framesubtitle{A simple example taken from the SRS for FP}
 
-Modifying $h_g$ or $h_c$ to reflect changes in requirements is not a simple matter. It involves the following steps (at the very least):
+Modifying $h_g$ or $h_c$ to reflect changes in requirements is not a simple
+matter. It involves the following steps (at the very least):
 \begin{itemize}
-\item Update the definition in the SRS, LPM, and all other documents which reference the symbol
+\item Update the definition in the SRS, LPM, and all other documents which
+  reference the symbol
 \item Modify the source code to reflect the new requirements
 \item Trace all dependencies
 \item Modify dependents to accomodate the change

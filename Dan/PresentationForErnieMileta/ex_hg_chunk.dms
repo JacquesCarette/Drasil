@@ -1,0 +1,16 @@
+@Type
+Data Definition
+@Number
+DD1
+
+@Symbol
+h_g
+
+@Description
+h_g is the gap conductance
+!{tau_c}.Description
+!{h_p}.Description
+!{k_c}.Description
+
+@Equation
+h_g = 2 * !{k_c} * !{h_p} / (2 * !{k_c} + !{tau_C} * !{h_p})

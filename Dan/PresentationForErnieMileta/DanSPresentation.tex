@@ -185,7 +185,7 @@
 $h_g$ and $h_c$ are symbols which appear in several locations including:
 \begin{itemize}
 \item The Literate Programmer's Manual
-\item The SRS Document
+\item The Software Requirements Specification
 \item The Source Code
 \end{itemize}
 
@@ -271,13 +271,36 @@ Let's take a look!
 
 Modifying $h_g$ or $h_c$ to reflect changes in requirements is not a simple matter. It involves the following steps (at the very least):
 \begin{itemize}
-\item Update the definition in the SRS
-\item Update the definition in the LPM
+\item Update the definition in the SRS, LPM, and all other documents which reference the symbol
 \item Modify the source code to reflect the new requirements
-\item Trace any and all dependencies
+\item Trace all dependencies
 \item Modify dependents to accomodate the change
-\item Ensure each of the documents is up to date and consistent
+\item Ensure each of the documents is now up to date and consistent
 \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{Simplifying the process}
+
+What if we could maintain everything in one source?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{Example $h_g$ chunk}
+\lstset{basicstyle = \footnotesize}
+\lstinputlisting{ex_hg_chunk.dms}
 
 \end{frame}
 

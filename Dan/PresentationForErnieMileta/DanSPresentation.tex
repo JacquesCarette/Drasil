@@ -75,7 +75,7 @@
 % - Keep it simple, no one is interested in your street address.
 
 \date[Dec 11, 2014] % (optional, should be abbreviation of conference name)
-{Ernie Mileta Visit, Dec.\ 11, 2014}
+{Ernie Mileta Visit, Jan.\ 15, 2015}
 % - Either use conference name or its abbreviation.
 % - Not really informative to the audience, more for people (including
 %   yourself) who are reading the slides online
@@ -150,20 +150,29 @@
 \begin{itemize}
 \item Motivation
 \begin{itemize}
-\item Improve the qualities of verifiability, maintainability and reusability.
-\item Save money and time when managing change.
+\item Improve verifiability, maintainability and reusability.
+\item Save money and time% when managing change.
 \end{itemize}
 \item One ``source,'' multiple views
 \begin{itemize}
-\item Requirements, including or excluding derivations.
+\item Requirements%, including or excluding derivations.
 \item Design
-\item Test Cases
-\item Build instructions
+%\item Test Cases
+%\item Build instructions
 \item ...
 \end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Literate Software Development for Scientific Software}
+\begin{itemize}
 \item Advantages
 \begin{itemize}
-\item Reuse chunks and transformed chunks to avoid duplication.
+\item Avoid duplication through chunk reuse.
 \item Improve understandability, traceability and reproducibility.
 \item Increased flexibility
 \end{itemize}
@@ -272,7 +281,7 @@ calc_hg(double k_c,double h_b,double tau_c)
 \framesubtitle{A simple example taken from the SRS for FP}
 
 Modifying $h_g$ or $h_c$ to reflect changes in requirements is not a simple
-matter. It involves the following steps (at the very least):
+matter. It involves, at the very least, the following steps:
 \begin{itemize}
 \item Update the definition in the SRS, LPM, and all other documents which
   reference the symbol

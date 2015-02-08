@@ -19,12 +19,12 @@ gen = do
   
 auth = "Spencer Smith"
 
-lpre = bslash <> text "documentclass[article]{cweb-hy}" $$
-       bslash <> text "usepackage{xr}" $$
-       bslash <> text "externaldoument[-L]{hghc_SRS}"
-  
+
+spre = docclass [] "article" $$ usepackage "longtable" $$ usepackage "booktabs"
+lpre = docclass "article" "cweb-hy" $$ usepackage "xr" $$ exdoc "-L" "hghc_SRS"
+
 createSRS :: Doc  
-createSRS = lpre $$ title "Literate Programmer's Manual for $h_g$ and $h_c$" $$
+createSRS = spre $$ title "Literate Programmer's Manual for $h_g$ and $h_c$" $$
             author auth $$ begin
 
 createLPM :: Doc

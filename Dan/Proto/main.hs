@@ -10,8 +10,10 @@ data DocType = SRS
 
 data Recipe = Recipe [DocType]
 
-gen r = do prnt SRS
-           prnt LPM
+gen (Recipe (x:[])) = do prnt x
+gen (Recipe (x:xs)) = do prnt x
+                         gen $ Recipe xs
+gen _ = error "Invalid Recipe"
   
 prnt SRS = do outh <- openFile "SRS.tex" WriteMode
               hPutStrLn outh $ render $ createSRS
@@ -19,7 +21,7 @@ prnt SRS = do outh <- openFile "SRS.tex" WriteMode
 prnt LPM = do outh <- openFile "LPM.tex" WriteMode
               hPutStrLn outh $ render $ createLPM
               hClose outh
-prnt _ = error "Invalid recipe"
+prnt _ = error "Invalid DocType"
 
 auth = "Spencer Smith"
 

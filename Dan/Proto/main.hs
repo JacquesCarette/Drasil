@@ -3,6 +3,8 @@ module Main where
 import Helpers
 import System.IO
 import Text.PrettyPrint.HughesPJ
+import Config
+import Body
 
 data DocType = SRS
              | LPM
@@ -18,7 +20,7 @@ gen _ = error "Invalid Recipe"
 prnt SRS = do outh <- openFile "SRS.tex" WriteMode
               hPutStrLn outh $ render $ createSRS
               hClose outh
-prnt LPM = do outh <- openFile "LPM.tex" WriteMode
+prnt LPM = do outh <- openFile "LPM.w" WriteMode
               hPutStrLn outh $ render $ createLPM
               hClose outh
 prnt _ = error "Invalid DocType"
@@ -30,12 +32,12 @@ spre = docclass [] "article" $$ usepackage "longtable" $$ usepackage "booktabs"
 lpre = docclass "article" "cweb-hy" $$ usepackage "xr" $$ exdoc "-L" "hghc_SRS"
 
 createSRS :: Doc  
-createSRS = spre $$ title "Literate Programmer's Manual for $h_g$ and $h_c$" $$
-            author auth $$ begin
+createSRS = spre $$ title "SRS for $h_g$ and $h_c$" $$
+            author auth $$ srsComms $$ begin $$ srsBody $$ end
 
 createLPM :: Doc
 createLPM = lpre $$ title "Literate Programmer's Manual for $h_g$ and $h_c$" $$
-            author auth $$ begin
+            author auth $$ lpmComms $$ begin $$ lpmBody $$ end
   
 main = do
   gen (Recipe [SRS, LPM])

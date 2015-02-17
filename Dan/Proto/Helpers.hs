@@ -22,7 +22,16 @@ title t = bslash <> text "title" <> br t
 author a = bslash <> text "author" <> br a
 
 begin = bslash <> text "begin" <> br "document" $$ bslash <> text "maketitle"
+end = bslash <> text "enddocument"
 
+command = bslash <> text "newcommand"
+comm b [] []= (command) <> br ("\\" ++ b)
+comm b1 b2 [] = (command) <> br ("\\" ++ b1) <> br b2
+comm b1 b2 s1 = (command) <> br ("\\" ++ b1) <> sq s1 <> br b2
+
+count b = bslash <> text "newcounter" <> br b
+
+renewcomm b1 b2 = bslash <> text "renewcommand" <> br ("\\" ++ b1) <> br b2
 
 --format strings
 upcase, lowcase :: [Char] -> Doc

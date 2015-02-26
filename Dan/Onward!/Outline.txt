@@ -1,0 +1,18 @@
+Outline:
+
+Introduction
+
+What is Literate Programming?
+
+What is Literate Software?
+
+Motivation!
+
+Advantages?
+
+Prototype?
+ -Where we are and where we're going (short term)
+    h_g/h_c example <- Maybe come up with a different "simple" case?
+
+Long term goals?
+ 

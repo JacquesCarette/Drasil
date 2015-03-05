@@ -7,6 +7,7 @@ import Config
 import Body
 import Chunk
 import H_g
+import H_c
 
 data DocType = SRS
              | LPM

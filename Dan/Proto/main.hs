@@ -5,6 +5,8 @@ import System.IO
 import Text.PrettyPrint.HughesPJ
 import Config
 import Body
+import Chunk
+import H_g
 
 data DocType = SRS
              | LPM
@@ -26,7 +28,6 @@ prnt LPM = do outh <- openFile "LPM.w" WriteMode
 prnt _ = error "Invalid DocType"
 
 auth = "Spencer Smith"
-
 
 spre = docclass [] "article" $$ usepackage "longtable" $$ usepackage "booktabs"
 lpre = docclass "article" "cweb-hy" $$ usepackage "xr" $$ exdoc "-L" "hghc_SRS"

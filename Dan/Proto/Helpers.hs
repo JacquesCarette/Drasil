@@ -7,6 +7,8 @@ import Data.Char
 bslash = text "\\"
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
+eq = text "="
+dlr = text "$"
 
 --TeX
 docclass [] braces = bslash <> text "documentclass" <> br braces

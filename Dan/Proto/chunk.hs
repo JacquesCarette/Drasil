@@ -1,15 +1,19 @@
 module Chunk where
 
 import Text.PrettyPrint
+import Data.Maybe
+import qualified Data.Map.Strict as Map
 
-data Chunk = Chunk [(FName,FDesc)]
+type Chunk = Map.Map
 type FName = String
 type FDesc = Doc
 
-get :: FName -> Chunk -> FDesc
-get name (Chunk []) = error "Chunk field not found"            
-get name (Chunk (x:xs)) = if (find name x) then getd x else get name (Chunk xs)
+get :: FName -> Chunk FName FDesc -> FDesc
+get name chunk = fromMaybe empty (Map.lookup name chunk)
 
-find name (n,_) = (name == n)
+newChunk l = Map.fromList l
 
-getd (n,d) = d
+getWFormat _ [] _ _ = [empty]
+getWFormat chunk (x:xs) between after = 
+  [(text x <+> between <+> get x chunk <> after)] ++ 
+  (getWFormat chunk xs between after)

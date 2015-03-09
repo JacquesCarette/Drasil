@@ -5,6 +5,7 @@ import Data.Char
 
 --basic
 bslash = text "\\"
+dbs = bslash <> bslash
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 eq = text "="
@@ -34,6 +35,8 @@ comm b1 b2 s1 = (command) <> br ("\\" ++ b1) <> sq s1 <> br b2
 count b = bslash <> text "newcounter" <> br b
 
 renewcomm b1 b2 = bslash <> text "renewcommand" <> br ("\\" ++ b1) <> br b2
+
+sec b= bslash <> text "section*" <> br b
 
 --format strings
 upcase, lowcase :: [Char] -> Doc

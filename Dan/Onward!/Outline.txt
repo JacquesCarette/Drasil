@@ -15,4 +15,69 @@ Prototype?
     h_g/h_c example <- Maybe come up with a different "simple" case?
 
 Long term goals?
- 
+
+Context
+- first application of computers was scientific computing (SC)
+- the importance of SC code
+	- used for decisions that impact health, safety and economy
+	- certification standards, CSA, Roache
+	
+Goal (Having your cake and eating it too)
+
+1. Improve scientific computing software with respect to the qualities of verifiability, validatability, reliability, performance, usability, maintainability, reusability, understandability and reproducibility.
+2. Save time and money on SC software development, certification and re-certification.
+3. Incorporate nonfunctional requirements in a decision support system for selecting the best design options.
+
+Central Ideas
+
+1. Remove duplication between software artifacts for scientific computing software
+2. Provide complete traceability between all artifacts
+3. Build a library of artifacts that can be reused in many different contexts
+4. Connect optimization with analysis.  Optimization requires running multiple analysis cases.  Code generation can be used to build an efficient model that has just what is needed, and no more.  As the optimization searches the design space, new models can be generated.
+
+
+Approach
+
+1. Provide methods, tools and techniques to support developing scientific software using a literate process
+2. Use ideas from software product lines, or program families
+3. Use code generation
+4. Start with a default set of documentation, as follows
+	- Problem Statement
+	- Development Plan
+	- Requirements Specification
+	- Verification and Validation plan
+	- Design Specification
+	- Coding Standard
+	- Code
+	- Verification and Validation Report
+	- User Manual
+5. Use AHP to rank design options and to match with nonfunctional priorities
+
+
+Example
+
+1. Solar water heating tank with phase change material
+2. An optimization problem for a part where the shape and constitutive equation are degrees of freedom
+3. Finite element method (from Yu, 2011)
+
+
+Justification of SC software as a program family
+
+- SC software satisfies the 3 hypotheses from Weiss: redevelopment hypothesis, oracle hypothesis and organizational hypothesis
+- many examples where reuse has not been achieved
+
+
+History of approaches to improve SC quality and reduce cost (from Yu, 2011)
+
+- object orientation
+- agile methods
+- program family approach
+- several techniques
+	- libraries
+	- component-based development
+	- aspect-oriented programming
+	- generic programming
+	- generative programming
+	- problem solving environment
+	- design patterns
+

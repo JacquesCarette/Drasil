@@ -20,7 +20,7 @@ Context
 - first application of computers was scientific computing (SC)
 - the importance of SC code
 	- used for decisions that impact health, safety and economy
-	- certification standards, CSA, Roache
+	- certification standards, CSA, Roache, Segal, Wilson (Best practices)
 - many scientists currently follow a more agile development process, but this does not mean that this is the best process - with the proper methods and tools, scientists can follow a more structured approach, and still focus on frequent feedback and course correction
 	
 Goal (Having your cake and eating it too)

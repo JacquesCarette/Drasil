@@ -15,14 +15,14 @@ Our goal is to have our cake and eat it too.  We want to improve the qualities (
 
 To accomplish this we need to do the following:
 
-1. Remove duplication between software artifacts for scientific computing software (can cite Wilson et al DRY principle)
-2. Provide complete traceability between all artifacts
+- Remove duplication between software artifacts for scientific computing software (can cite Wilson et al DRY principle)
+- Provide complete traceability between all artifacts
 
 To achieve the above two goals, we propose the following:
 
-1. Provide methods, tools and techniques to support developing scientific software using a literate process
-2. Use ideas from software product lines, or program families
-3. Use code generation
+- Provide methods, tools and techniques to support developing scientific software using a literate process
+- Use ideas from software product lines, or program families
+- Use code generation
 
 - roadmap of the sections that are coming
 
@@ -68,7 +68,7 @@ History of approaches to improve SC quality and reduce cost (from Yu, 2011)
 
 - this is the discussion section - give advantages and then use examples to illustrate
 
-3. Software Certification
+3.1 Software Certification
 - need to generate required documentation, without impeding the work of the scientists
 - need to be able to make changes at reasonable cost - this requires traceability
 
@@ -83,24 +83,24 @@ Start with a default set of documentation, as follows
 	- User Manual
 (A start to an explanation about these documents is in ZhengEtAl2015SS, since the document is not complete, I will not check it into the repository, but e-mail it to you.)
 
-3.1 Knowledge Capture
+3.2 Knowledge Capture
 - conservation of thermal energy equation - used for thermal analysis of fuel pins and then reused for solar water heating tank
 - maybe hg/hc example?
 - Build a library of artifacts that can be reused in many different contexts
 - example of “Commonality Analysis for a Family of Material Models” (SmithMcCutchanAndCarette2014 - not yet published - in mmsc repos) - the section on the purpose of the document (Section 1.1) discusses how the documentation combines various sources and uses a consistent notation and terminology
 
-3.2 "Everything should be made as simple as possible, but not simpler."  (Einstein quote)
+3.3 "Everything should be made as simple as possible, but not simpler."  (Einstein quote)
 - although powerful/general commercial finite element programs are available, they are often not used to develop new “widgets”
 - reasons are cost, and complexity
 - rather than use simulation, engineers often resort to building prototypes and testing
 - engineers would greatly benefit from tools to assist their design efforts that are customized to their exact set of problems - with a literate family approach family members can be generated to fit their needs
 - if an engineer designs parts for strength, they could have a general stress analysis program - the program could be 3D if needed, or specialized for plane stress or plane strain, if that was the appropriate assumption - the program could even be customized to the parameterized shape of the part they are interested in, with only the degrees of freedom, like material properties, or the specific dimensions, they can change being exposed.
  
-3.3 Optimization
+3.4 Optimization
 - Connect optimization with analysis.  Optimization requires running multiple analysis cases.  Code generation can be used to build an efficient model that has just what is needed, and no more.  As the optimization searches the design space, new models can be generated.
 - An optimization problem for a part where the shape and constitutive equation are degrees of freedom, cite family of material models (SmithMcCutchanAndCarette2014)
 
-3.4 Verification
+3.5 Verification
 
 - requirements include so-called “sanity” checks that can be reused when they come up in subsequent phases
 - for instance, requirement would state conservation of mass, or the fact that lengths are always positive - the first used to test output, the second to guard against invalid input
@@ -110,7 +110,7 @@ Start with a default set of documentation, as follows
 - code generation allows for increases in the order of interpolation, for the same grid
 - Yu discusses in section 6.3 of her thesis
 
-3.5 Incorporate nonfunctional requirements in a decision support system for selecting the best design options.  Use AHP. - see Smith2006.pdf
+3.6 Incorporate nonfunctional requirements in a decision support system for selecting the best design options.  Use AHP. - see Smith2006.pdf
 
 4. Concluding Remarks
 

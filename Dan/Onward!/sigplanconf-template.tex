@@ -126,10 +126,13 @@ SC software has certain characteristics which create challenges for its developm
 
 The \textit{approximation challenge} is a challenge to SC software's reliability. Since real numbers are approximated by floating point numbers on computers, round off and truncation errors can be introduced to a SC software system during computation steps. While any single step may introduce a very small error, they can compound quickly and become unmanageable. 
 
-The \textit{unknown solution challenge}
-- technique selection challenge
-- input output challenge
-- modification challenge
+The \textit{unknown solution challenge} is another challenge to SC software's reliability. This challenge arises when SC programs are used to solve problems with unknown true solutions, i.e. there are very limited test cases with known solutions. As such, the accuracy and precision of the software can be hard (if not impossible) to judge.
+
+The \textit{technique selection challenge} is a challenge that comes up often when dealing with continuous mathematical equations. Since these cannot be solved directly (due to computers being discrete), some technique must be chosen which can produce a solution which is ``good enough'' for the user. Choosing the technique to use is typically left to domain experts as each technique will (not) satisfy certain non-functional requirements.
+
+The \textit{input output} challenge impacts the usability of SC software and typically comes up where considerable amounts of input data are used in the production of large volumes of output. The main issue in this case is the complicated nature of the input data and the output, leading developers to recreate existing library routines (slightly modified) in order to deal with the nature of the input and output.
+
+Finally, the \textit{modification challenge} tends to come up as requirements change. As SC software is used at the forefront of scientific knowledge, there can be a high frequency of requirements changes. As changing requirements can mean completely modified systems, it poses a problem for scientists: commercial software can be difficult/expensive to modify and noncommercial programs are not often flexible enough to change.
 
 \subsection{History of Attempts to Improve Quality}
 \label{subsec:history}

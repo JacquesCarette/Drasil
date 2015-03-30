@@ -93,26 +93,24 @@ In the medical, nuclear power, aerospace, automotive, and manufacturing fields t
 
 The main goal of software certification is to ``... systematically determine, based on the principles of science, engineering, and measurement theory, whether a software product satisfies accepted, well-defined and measurable criteria'' \cite{HHLMWW}. As such, certification would not only involve analyzing the code systematically and rigorously, but also analyzing the documentation. Essentially, this means the software must be both valid and verifiable, reliable, usable, maintainable, reusable, understandable, and reproducible. %D Verification involves ensuring that the software is ``solving the equations right'', whereas validation requires ensuring that the software is ``solving the right equations''\cite{Roache1998}.
 
-Developing certifiable software can end up being a much more involved process than developing uncertified software: it takes more money, time, and effort on the part of developers to produce. These increased costs lead to reluctance from practitioners to develop certifiable software \cite{Roache1998}. However, in our %my?
-opinion, cost is not the only contributing factor for the developers. As it stands in the field, scientists seem to prefer a more agile development process (
+Developing certifiable software can end up being a much more involved process than developing uncertified software: it takes more money, time, and effort on the part of developers to produce. These increased costs lead to reluctance from practitioners to develop certifiable software \cite{Roache1998}. However, in our %D my?
+opinion, cost is not the only contributing factor for the developers. As it stands in the field, scientists seem to prefer a more agile development process \cite{Segal2008}. Typically this would lead to problems maintaining the documentation, meaning that not all aspects of the software would be traceable through the design process and making certification more difficult (if not impossible).
+
+Given proper methods and tools, scientists would be able to follow a more structured approach (while capitalizing on frequent feedback and course correction) to meet documentation requirements for certification as well as improve their overall productivity. This is where our work comes in: our goal is to eat our cake and have it too.  We want to improve the qualities (verifiability, reliability, understandability etc.) and at the same time improve performance.  Moreover, we want to improve developer productivity; save time and money on SC software development, certification and re-certification. To accomplish this we need to do the following:
+
+\begin{enumerate}
+	\item Remove duplication between software artifacts for scientific computing software \cite{WilsonEtAl2013}
+	\item Provide complete traceability between all artifacts
+\end{enumerate}
 
 
+To achieve the above goals, we propose the following:
 
-
-- many scientists seem to prefer a more agile development process, but this does not mean that this is the best process - with the proper methods and tools, scientists can follow a more structured approach, and still focus on frequent feedback and course correction - can meet documentation requirements for certification, and improve productivity.
-
-Our goal is to have our cake and eat it too.  We want to improve the qualities (verifiability, reliability, understandability etc.) and at the same time improve performance.  Moreover, we want to improve productivity. Save time and money on SC software development, certification and re-certification.
-
-To accomplish this we need to do the following:
-
-1. Remove duplication between software artifacts for scientific computing software (can cite Wilson et al DRY principle)
-2. Provide complete traceability between all artifacts
-
-To achieve the above two goals, we propose the following:
-
-1. Provide methods, tools and techniques to support developing scientific software using a literate process
-2. Use ideas from software product lines, or program families
-3. Use code generation
+\begin{enumerate}
+	\item Provide methods, tools and techniques to support developing scientific software using a literate process
+	\item Use ideas from software product lines, or program families
+	\item Use code generation
+\end{enumerate}
 
 Section \ref{sec:background} will give a more in-depth look at SC software, specifically focusing on SC software quality (including historical attempts to improve quality), the program family approach, and literate programming. Section \ref{sec:what} focuses on what a literate family approach can achieve, specifically related to software certification; domain knowledge capture; simplification, reusability, and portability; optimization; verification; and how it can incorporate non-functional requirements as well as functional. Finally, section \ref{sec:concluding} will provide a few concluding remarks.
 
@@ -241,7 +239,7 @@ Acknowledgments, if needed.
 
 \begin{thebibliography}{}
 \softraggedright
-%D Need to fix bibliography so it's all in one place since ^^.
+%D Need to fix bibliography so it's all in one place since it should be embedded.
 
 %@article{SmithKoothoorAndNedialkov2014,
 %	Author = {Spencer Smith and Nirmitha Koothoor and Ned Nedialkov},
@@ -260,6 +258,33 @@ Acknowledgments, if needed.
 %	Publisher = {Hermosa Publishers},
 %	Title = {Verification and Validation in Computational Science and Engineering},
 %	Year = {1998}}
+
+%@inproceedings{Segal2008,
+%	Address = {Leipzig, Germany},
+%	Author = {Judith Segal},
+%	Booktitle = {Proceedings of the First International Workshop on Software Engineering for Computational Science and Engineering (SECSE 2008)},
+%	Date-Added = {2015-03-19 19:24:05 +0000},
+%	Date-Modified = {2015-03-19 19:24:05 +0000},
+%	Organization = {In conjunction with the 30th International Conference on Software Engineering (ICSE)},
+%	Pages = {1--6},
+%	Title = {Models of Scientific Software Development},
+%	Url = {http://www.cse.msstate.edu/~SECSE08/schedule.htm},
+%	Year = {2008},
+%	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QLy4uLy4uLy4uL1dvcmsvUmVzZWFyY2gvUmVmZXJlbmNlcy9TZWdhbDIwMDgucGRm0hcLGBlXTlMuZGF0YU8RAaQAAAAAAaQAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAM6Xc4NIKwAAABcCDA1TZWdhbDIwMDgucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADuN1l0KzCSAAAAAAAAAAAAAMABAAACSAAAAAAAAAAAAAAAAAAAAAKUmVmZXJlbmNlcwAQAAgAAM6Xq8MAAAARAAgAANCtCJgAAAABABQAFwIMABcATQAW/e0ACPdmAAJkjgACAEVNYWNpbnRvc2ggSEQ6VXNlcnM6AHNtaXRoczoAV29yazoAUmVzZWFyY2g6AFJlZmVyZW5jZXM6AFNlZ2FsMjAwOC5wZGYAAA4AHAANAFMAZQBnAGEAbAAyADAAMAA4AC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgAzVXNlcnMvc21pdGhzL1dvcmsvUmVzZWFyY2gvUmVmZXJlbmNlcy9TZWdhbDIwMDgucGRmAAATAAEvAAAVAAIADf//AACABtIbHB0eWiRjbGFzc25hbWVYJGNsYXNzZXNdTlNNdXRhYmxlRGF0YaMdHyBWTlNEYXRhWE5TT2JqZWN00hscIiNcTlNEaWN0aW9uYXJ5oiIgXxAPTlNLZXllZEFyY2hpdmVy0SYnVHJvb3SAAQAIABEAGgAjAC0AMgA3AEAARgBNAFUAYABnAGoAbABuAHEAcwB1AHcAhACOAMAAxQDNAnUCdwJ8AocCkAKeAqICqQKyArcCxALHAtkC3ALhAAAAAAAAAgEAAAAAAAAAKAAAAAAAAAAAAAAAAAAAAuM=},
+%	Bdsk-Url-1 = {http://secse08.cs.ua.edu/schedule.htm}}
+
+%@article{WilsonEtAl2013,
+%	Author = {Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P. Chue Hong and Matt Davis and Richard T. Guy and Steven H.D. Haddock and Kathryn D. Huff and Ian M. Mitchell and Mark D. Plumblet and Ben Waugh and Ethan P. White and Paul Wilson},
+%	Bibsource = {DBLP, http://dblp.uni-trier.de},
+%	Date-Added = {2015-03-19 19:44:59 +0000},
+%	Date-Modified = {2015-03-19 19:44:59 +0000},
+%	Ee = {http://arxiv.org/abs/1210.0530},
+%	Journal = {CoRR},
+%	Title = {Best Practices for Scientific Computing},
+%	Volume = {abs/1210.0530},
+%	Year = {2013},
+%	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QNC4uLy4uLy4uL1dvcmsvUmVzZWFyY2gvUmVmZXJlbmNlcy9XaWxzb25FdEFsMjAxMy5wZGbSFwsYGVdOUy5kYXRhTxEBtgAAAAABtgACAAAMTWFjaW50b3NoIEhEAAAAAAAAAAAAAAAAAAAAzpdzg0grAAAAFwIMEldpbHNvbkV0QWwyMDEzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALYZiPQPnKfAAAAAAAAAAAAAwAEAAAJIAAAAAAAAAAAAAAAAAAAAApSZWZlcmVuY2VzABAACAAAzperwwAAABEACAAA0D6q3wAAAAEAFAAXAgwAFwBNABb97QAI92YAAmSOAAIASk1hY2ludG9zaCBIRDpVc2VyczoAc21pdGhzOgBXb3JrOgBSZXNlYXJjaDoAUmVmZXJlbmNlczoAV2lsc29uRXRBbDIwMTMucGRmAA4AJgASAFcAaQBsAHMAbwBuAEUAdABBAGwAMgAwADEAMwAuAHAAZABmAA8AGgAMAE0AYQBjAGkAbgB0AG8AcwBoACAASABEABIAOFVzZXJzL3NtaXRocy9Xb3JrL1Jlc2VhcmNoL1JlZmVyZW5jZXMvV2lsc29uRXRBbDIwMTMucGRmABMAAS8AABUAAgAN//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4AxQDKANICjAKOApMCngKnArUCuQLAAskCzgLbAt4C8ALzAvgAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAC+g==}}
+
 \end{thebibliography}
 
 

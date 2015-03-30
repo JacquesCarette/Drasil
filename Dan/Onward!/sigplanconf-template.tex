@@ -137,6 +137,12 @@ Finally, the \textit{modification challenge} tends to come up as requirements ch
 \subsection{History of Attempts to Improve Quality}
 \label{subsec:history}
 
+SC software has not seen many focused attempts at improving software quality. Most attempts at improving software quality have been aimed at a broader target than SC specifically. However, many of the methods used have been useful to SC software. Yu \cite{Yu2011} addresses the issue in-depth, but we will give a brief overview.
+
+The object-orientation (OO) approach aims to increase software quality through the use of several mechanisms. \textit{Encapsulation} ensures information hiding \cite{Parnas1972} by keeping information hidden from the classes that do not require it. \textit{Inheritance} is useful in the OO approach, but not necessarily when applied to SC as many SC problems do not deal with a hierarchical structure. \textit{Polymorphism} can improve reusability by, for example, allowing algorithms to be bound at runtime (though the use of abstract classes). However, for SC software, the algorithm being solved is typically known ahead of time and thus a general program using different algorithms is not necessarily useful. 
+
+
+
 History of approaches to improve SC quality and reduce cost (from Yu, 2011)
 - object orientation
 - agile methods

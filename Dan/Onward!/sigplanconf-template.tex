@@ -38,10 +38,10 @@
 \setlength{\pdfpageheight}{\paperheight}
 \setlength{\pdfpagewidth}{\paperwidth}
 
-\conferenceinfo{CONF 'yy}{Month d--d, 20yy, City, ST, Country} 
-\copyrightyear{20yy} 
-\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} 
-\doi{nnnnnnn.nnnnnnn}
+\conferenceinfo{SPLASH '15}{Oct 25--30, 2015, Pittsburgh, Pennsylvania, USA} 
+\copyrightyear{2015} 
+\copyrightdata{978-1-nnnn-nnnn-n/yy/mm} %D What goes here?
+\doi{nnnnnnn.nnnnnnn} 								 %D and here?
 
 % Uncomment one of the following two, if you are not going for the 
 % traditional copyright transfer agreement.
@@ -53,23 +53,23 @@
                                   % (paid open-access papers, 
                                   % short abstracts)
 
-\titlebanner{banner above paper title}        % These are ignored unless
-\preprintfooter{short description of paper}   % 'preprint' option specified.
+\titlebanner{DRAFT -- DO NOT DISTRIBUTE}        % These are ignored unless
+\preprintfooter{A literate program family approach to scientific software}   % 'preprint' option specified.
 
 \title{Learning to Cook 'ware}
-\subtitle{Subtitle Text, if any} %D Something about prog families?
+\subtitle{A Family Approach} %D Something about prog families?
 
-\authorinfo{Name1}
-           {Affiliation1}
-           {Email1}
-\authorinfo{Name2\and Name3}
-           {Affiliation2/3}
-           {Email2/3}
+\authorinfo{Daniel Szymczak}
+           {McMaster University}
+           {szymczdm@mcmaster.ca}
+\authorinfo{Spencer Smith\and Jacques Carette}
+           {McMaster University}
+           {smiths at mcmaster.ca/carette at mcmaster.ca}
 
 \maketitle
 
 \begin{abstract}
-This is where we will put the abstract of our paper. It will be super-fantastic and make all the reviewers think that this should not only be accepted, but most definitely published.
+This is where we will put the abstract of our paper. It will be super-fantastic and make all the reviewers think that this should not only be accepted, but most definitely published. %D Going to need to work on this
 \end{abstract}
 
 \category{CR-number}{subcategory}{third-level}
@@ -77,210 +77,152 @@ This is where we will put the abstract of our paper. It will be super-fantastic 
 % general terms are not compulsory anymore, 
 % you may leave them out
 \terms
-term1, term2
+term1, term2 %D What goes here?
 
 \keywords
-Program families, generative programming, documentation, scientific computing, cooking %D ^_^
+Program families, generative programming, documentation, scientific computing, literate programming %D Should anything else go here?
 
-\section{Introduction} %D Context goes here?
+\section{Introduction} 
 
-Problem solving can be simple or difficult depending on the expertise of the person attempting to solve the problem.
+	Scientific computing (SC) was the first application of computers. It is still used today for a wide variety of tasks: constructing mathematical models, performing quantitative analyses, creating simulations, solving scientific problems, etc. SC software has been developed for increasingly safety and security critical systems (nuclear reactor simulation, satellite guidance%D MORE EXAMPLES)
+) as well as predictive systems. %D Change the next bit about applications, pick better examples that fit with the theme: nuclear / avionics / automotive
+It has applications including (but not limited to) predicting weather patterns and natural disasters, and simulating economic fluctuations. As such, it is an incredibly important part of an increasing number of industries today.%D and can be seen as a third mode of science which complements experimentation and theory.
 
-**segue**
+%D Removed something about earthquake prediction as an example.
+In the medical, nuclear power, aerospace, automotive, and manufacturing fields there are many safety critical systems in play. With each system, there is the possibility of a catastrophic failure endangering lives. It is incredibly important then to have some means of certifying and assuring the quality of each software system. As Smith et al. \cite{SmithKoothoorAndNedialkov2014} stated ``Certification of Scientiﬁc Computing (SC) software is official recognition by an authority or regulatory body that the software is ﬁt for its intended use.'' These regulatory bodies determine certain certification standards that must be met in order for a system to become recognized as certified. One example of a certification standard is the Canadian Standards Association (CSA) requirements for quality assurance of scientific software for nuclear power plants. 
 
-The first step in solving a problem is understanding it. In SE that understanding is often described through a problem statement and SRS (which also helps focus the possible solution).
+The main goal of software certification is to ``... systematically determine, based on the principles of science, engineering, and measurement theory, whether a software product satisfies accepted, well-defined and measurable criteria'' \cite{HHLMWW}. As such, certification would not only involve analyzing the code systematically and rigorously, but also analyzing the documentation. Essentially, this means the software must be both valid and verifiable, reliable, usable, maintainable, reusable, understandable, and reproducible. %D Verification involves ensuring that the software is ``solving the equations right'', whereas validation requires ensuring that the software is ``solving the right equations''\cite{Roache1998}.
 
-**segue**
+Developing certifiable software can end up being a much more involved process than developing uncertified software: it takes more money, time, and effort on the part of developers to produce. These increased costs lead to reluctance from practitioners to develop certifiable software \cite{Roache1998}. However, in our %my?
+opinion, cost is not the only contributing factor for the developers. As it stands in the field, scientists seem to prefer a more agile development process (
 
-In scientific computing (SC) / on the forefront of scientific knowledge where problems are still not well enough understood it is often difficult to communicate one's understanding of the problem and plan out a full solution. For Software Engineers, this results in difficulty during early phases of develop (i.e. requirements gathering).
 
---refWilson Difficulties of gathering reqs for SC dev and why it shouldn't be done.
 
-Disagree with Wilson
 
-**segue**
+- many scientists seem to prefer a more agile development process, but this does not mean that this is the best process - with the proper methods and tools, scientists can follow a more structured approach, and still focus on frequent feedback and course correction - can meet documentation requirements for certification, and improve productivity.
 
-There is a distinct divide between SE and other scientists.
+Our goal is to have our cake and eat it too.  We want to improve the qualities (verifiability, reliability, understandability etc.) and at the same time improve performance.  Moreover, we want to improve productivity. Save time and money on SC software development, certification and re-certification.
 
---refSegal Software engineers fail to meet scientists' expectations
+To accomplish this we need to do the following:
 
-    **Go into a bit of depth on this (not too longwinded, we're pandering to SE here so make it seem like it's still the scientists fault i.e. vague problem descriptions / expectations, lack of known (in/out)put pairs, etc.)
+1. Remove duplication between software artifacts for scientific computing software (can cite Wilson et al DRY principle)
+2. Provide complete traceability between all artifacts
 
---refSegal Scientists fail to meet SE expectations
+To achieve the above two goals, we propose the following:
 
-    **Go into a bit of depth on this (can talk at length to puff up SE -> "They fail to give us necessary information and expect us to somehow still make it work" <- something like that but less antagonistic. Talk about reqs gathering and maintainability, traceability, etc.
+1. Provide methods, tools and techniques to support developing scientific software using a literate process
+2. Use ideas from software product lines, or program families
+3. Use code generation
 
-**segue** into Agile development
+Section \ref{sec:background} will give a more in-depth look at SC software, specifically focusing on SC software quality (including historical attempts to improve quality), the program family approach, and literate programming. Section \ref{sec:what} focuses on what a literate family approach can achieve, specifically related to software certification; domain knowledge capture; simplification, reusability, and portability; optimization; verification; and how it can incorporate non-functional requirements as well as functional. Finally, section \ref{sec:concluding} will provide a few concluding remarks.
 
---refSegal Agile development is commonplace
+\section{Background}
+\label{sec:background}
 
-Documentation typically loses traceability / stops being maintained as a project continues onward. (source?). Essentially most documentation would then have to be re-written in the end phases (source?). Some would likely choose not to bother if it is not considered necessary / no budget / etc. (source? Common sense?), but writing the documents is still worthwhile, even if they need to "fake" the traditional SE dev process (Parnas and Clements)
+- introductory blurb for this section
 
---refParnas More on benefits of faking
+\subsection{Challenges for SC Software Quality}
+\label{subsec:challenges}
 
-Wouldn't it be great if documentation could be generated throughout the development process alongside the source code with trivial effort?
+From Yu (2011) (PhD thesis, now in our repository)
+- approximation challenge
+- unknown solution challenge - no test oracle
+- technique selection challenge
+- input output challenge
+- modification challenge
 
-**Drop the mic**
+\subsection{History of Attempts to Improve Quality}
+\label{subsec:history}
 
-It can be, and that is the aim of this project. Particularly dealing w/ families of scientific software (more on that in a bit).
+History of approaches to improve SC quality and reduce cost (from Yu, 2011)
+- object orientation
+- agile methods
+- program family approach
+- several techniques
+	- libraries
+	- component-based development
+	- aspect-oriented programming
+	- generic programming
+	- generative programming
+	- problem solving environment
+	- design patterns
 
-**Move to new section on background? What should come next?**
 
-\section{Central Ideas}
-Lots of text.
+\subsection{Program Family Approach}
+\label{subsec:program}
 
-More text.
+- define the program family approach
+- SC software satisfies the 3 hypotheses from Weiss: redevelopment hypothesis, oracle hypothesis and organizational hypothesis
+- many examples where reuse has not been achieved
 
-Lots of text.
+\subsection{Literate Programming}
+\label{subsec:literate}
 
-More text.
+- overview of LP, starting with Knuth - a similar background to what we need here is given in SmithKoothoorAndNedialkov.pdf
 
-Lots of text.
+\section{What is Possible with a Literate Family Approach}
+\label{sec:what}
 
-More text.
+- this is the discussion section - give advantages and then use examples to illustrate
 
-Lots of text.
+\subsection{Software Certification}
+\label{subsec:software}
 
-More text.
+- need to generate required documentation, without impeding the work of the scientists
+- need to be able to make changes at reasonable cost - this requires traceability
 
-Lots of text.
+Start with a default set of documentation, as follows
+	- Problem Statement
+	- Development Plan
+	- Requirements Specification
+	- Verification and Validation plan
+	- Design Specification
+	- Code
+	- Verification and Validation Report
+	- User Manual
+(A start to an explanation about these documents is in ZhengEtAl2015SS, since the document is not complete, I will not check it into the repository, but e-mail it to you.)
 
-More text.
+\subsection{Knowledge Capture}
+\label{subsec:knowledge}
 
-Lots of text.
+- conservation of thermal energy equation - used for thermal analysis of fuel pins and then reused for solar water heating tank
+- maybe hg/hc example?
+- Build a library of artifacts that can be reused in many different contexts
+- example of “Commonality Analysis for a Family of Material Models” (SmithMcCutchanAndCarette2014 - not yet published - in mmsc repos) - the section on the purpose of the document (Section 1.1) discusses how the documentation combines various sources and uses a consistent notation and terminology
 
-More text.
+\subsection{``Everything should be made as simple as possible, but not simpler.'' (Einstein quote)}
+\label{subsec:everything}
 
-Lots of text.
+- although powerful/general commercial finite element programs are available, they are often not used to develop new “widgets”
+- reasons are cost, and complexity
+- rather than use simulation, engineers often resort to building prototypes and testing
+- engineers would greatly benefit from tools to assist their design efforts that are customized to their exact set of problems - with a literate family approach family members can be generated to fit their needs
+- if an engineer designs parts for strength, they could have a general stress analysis program - the program could be 3D if needed, or specialized for plane stress or plane strain, if that was the appropriate assumption - the program could even be customized to the parameterized shape of the part they are interested in, with only the degrees of freedom, like material properties, or the specific dimensions, they can change being exposed.
 
-More text.
+\subsection{Optimization}
+\label{subsec:optimization}
 
-Lots of text.
+- Connect optimization with analysis.  Optimization requires running multiple analysis cases.  Code generation can be used to build an efficient model that has just what is needed, and no more.  As the optimization searches the design space, new models can be generated.
+- An optimization problem for a part where the shape and constitutive equation are degrees of freedom, cite family of material models (SmithMcCutchanAndCarette2014)
 
-More text.
+\subsection{Verification}
+\label{subsec:verification}
 
-Lots of text.
+- requirements include so-called “sanity” checks that can be reused when they come up in subsequent phases
+- for instance, requirement would state conservation of mass, or the fact that lengths are always positive - the first used to test output, the second to guard against invalid input
 
-More text.
+- computational variability testing, from Yu (2011), FEM example
+- usual to do grid refinement tests - same order of interpolation, but more points
+- code generation allows for increases in the order of interpolation, for the same grid
+- Yu discusses in section 6.3 of her thesis
 
-Lots of text.
+\subsection{Incorporating Non-Functional Requirements in a decision support system for selecting the best design options}
+\label{subsec:incorporating}
 
-More text.
+Use AHP. - see Smith2006.pdf
 
-\section{Historical Approaches}
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-\section{Our Approach} %D ?
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-
-
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-\section{A family meal} %D Our example
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
-
-More text.
-
-Lots of text.
+\section{Concluding Remarks}
+\label{sec:concluding}
 
 \appendix
 \section{Appendix Title}
@@ -299,10 +241,25 @@ Acknowledgments, if needed.
 
 \begin{thebibliography}{}
 \softraggedright
+%D Need to fix bibliography so it's all in one place since ^^.
 
-\bibitem[Smith et~al.(2009)Smith, Jones]{smith02}
-P. Q. Smith, and X. Y. Jones. ...reference text...
+%@article{SmithKoothoorAndNedialkov2014,
+%	Author = {Spencer Smith and Nirmitha Koothoor and Ned Nedialkov},
+%	Date-Added = {2014-10-03 23:52:21 +0000},
+%	Date-Modified = {2014-10-03 23:52:21 +0000},
+%	Journal = {IEEE Transactions on Software Engineering},
+%	Title = {A Document Driven Method for Facilitating Certification of Scientific Computing Software},
+%	Year = {Submitted 2014},
+%	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QHVNtaXRoS29vdGhvb3JBbmROZWRpYWxrb3YucGRm0hcLGBlXTlMuZGF0YU8RAgYAAAAAAgYAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAM6Xc4NIKwAAA3DDZB1TbWl0aEtvb3Rob29yQW5kTmVkaWFsa292LnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADcMOO0EreAAAAAAAAAAAAAAEAAgAACSAAAAAAAAAAAAAAAAAAAAAXU2NpQ29tcEFuZFNvZnRFbmdQYXBlcnMAABAACAAAzperwwAAABEACAAA0EsWQAAAAAEAFANww2QCkcRMABIVpwAI92YAAmSOAAIAX01hY2ludG9zaCBIRDpVc2VyczoAc21pdGhzOgBSZXBvczoAbW1zYzoAU2NpQ29tcEFuZFNvZnRFbmdQYXBlcnM6AFNtaXRoS29vdGhvb3JBbmROZWRpYWxrb3YucGRmAAAOADwAHQBTAG0AaQB0AGgASwBvAG8AdABoAG8AbwByAEEAbgBkAE4AZQBkAGkAYQBsAGsAbwB2AC4AcABkAGYADwAaAAwATQBhAGMAaQBuAHQAbwBzAGgAIABIAEQAEgBNVXNlcnMvc21pdGhzL1JlcG9zL21tc2MvU2NpQ29tcEFuZFNvZnRFbmdQYXBlcnMvU21pdGhLb290aG9vckFuZE5lZGlhbGtvdi5wZGYAABMAAS8AABUAAgAN//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4ArgCzALsCxQLHAswC1wLgAu4C8gL5AwIDBwMUAxcDKQMsAzEAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAADMw==}}
 
+%@book{Roache1998,
+%	Address = {Albuquerque, New Mexico},
+%	Author = {Patrick J. Roache},
+%	Date-Added = {2015-03-19 19:26:55 +0000},
+%	Date-Modified = {2015-03-19 19:26:55 +0000},
+%	Publisher = {Hermosa Publishers},
+%	Title = {Verification and Validation in Computational Science and Engineering},
+%	Year = {1998}}
 \end{thebibliography}
 
 

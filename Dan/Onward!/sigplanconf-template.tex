@@ -117,14 +117,16 @@ Section \ref{sec:background} will give a more in-depth look at SC software, spec
 \section{Background}
 \label{sec:background}
 
-- introductory blurb for this section
+Throughout the history of computing, specifically scientific computing, there have been many challenges towards assuring the quality of software. Many attempts have been made (some successful, others not) at improving the software quality. In this section we will discuss those attempts and challenges, as well as introduce the ideas behind our proposed approach.
 
 \subsection{Challenges for SC Software Quality}
 \label{subsec:challenges}
 
-From Yu (2011) (PhD thesis, now in our repository)
-- approximation challenge
-- unknown solution challenge - no test oracle
+SC software has certain characteristics which create challenges for its development. We will not discuss them all in depth, however, those of interest to us are the approximation, unknown solution, technique, input output, and modification challenges as described by Yu \cite{Yu2011}.
+
+The \textit{approximation challenge} is a challenge to SC software's reliability. Since real numbers are approximated by floating point numbers on computers, round off and truncation errors can be introduced to a SC software system during computation steps. While any single step may introduce a very small error, they can compound quickly and become unmanageable. 
+
+The \textit{unknown solution challenge}
 - technique selection challenge
 - input output challenge
 - modification challenge
@@ -284,6 +286,17 @@ Acknowledgments, if needed.
 %	Volume = {abs/1210.0530},
 %	Year = {2013},
 %	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YV8QNC4uLy4uLy4uL1dvcmsvUmVzZWFyY2gvUmVmZXJlbmNlcy9XaWxzb25FdEFsMjAxMy5wZGbSFwsYGVdOUy5kYXRhTxEBtgAAAAABtgACAAAMTWFjaW50b3NoIEhEAAAAAAAAAAAAAAAAAAAAzpdzg0grAAAAFwIMEldpbHNvbkV0QWwyMDEzLnBkZgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALYZiPQPnKfAAAAAAAAAAAAAwAEAAAJIAAAAAAAAAAAAAAAAAAAAApSZWZlcmVuY2VzABAACAAAzperwwAAABEACAAA0D6q3wAAAAEAFAAXAgwAFwBNABb97QAI92YAAmSOAAIASk1hY2ludG9zaCBIRDpVc2VyczoAc21pdGhzOgBXb3JrOgBSZXNlYXJjaDoAUmVmZXJlbmNlczoAV2lsc29uRXRBbDIwMTMucGRmAA4AJgASAFcAaQBsAHMAbwBuAEUAdABBAGwAMgAwADEAMwAuAHAAZABmAA8AGgAMAE0AYQBjAGkAbgB0AG8AcwBoACAASABEABIAOFVzZXJzL3NtaXRocy9Xb3JrL1Jlc2VhcmNoL1JlZmVyZW5jZXMvV2lsc29uRXRBbDIwMTMucGRmABMAAS8AABUAAgAN//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4AxQDKANICjAKOApMCngKnArUCuQLAAskCzgLbAt4C8ALzAvgAAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAC+g==}}
+
+%@phdthesis{Yu2011,
+%	Address = {Hamilton, ON, Canada},
+%	Author = {Wen Yu},
+%	Date-Added = {2015-03-27 15:01:41 +0000},
+%	Date-Modified = {2015-03-27 15:01:41 +0000},
+%	School = {McMaster University},
+%	Title = {{FASCS}: A Family Approach for Developing Scientific Computing Software},
+%	Year = {2011},
+%	Bdsk-File-1 = {YnBsaXN0MDDUAQIDBAUGJCVYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoKgHCBMUFRYaIVUkbnVsbNMJCgsMDxJXTlMua2V5c1pOUy5vYmplY3RzViRjbGFzc6INDoACgAOiEBGABIAFgAdccmVsYXRpdmVQYXRoWWFsaWFzRGF0YVpZdTIwMTEucGRm0hcLGBlXTlMuZGF0YU8RAbgAAAAAAbgAAgAADE1hY2ludG9zaCBIRAAAAAAAAAAAAAAAAAAAAM6Xc4NIKwAAA3DDZApZdTIwMTEucGRmAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE+7xt0TGXAgAAAAAAAAAAAAEAAgAACSAAAAAAAAAAAAAAAAAAAAAXU2NpQ29tcEFuZFNvZnRFbmdQYXBlcnMAABAACAAAzperwwAAABEACAAA0THPQgAAAAEAFANww2QCkcRMABIVpwAI92YAAmSOAAIATE1hY2ludG9zaCBIRDpVc2VyczoAc21pdGhzOgBSZXBvczoAbW1zYzoAU2NpQ29tcEFuZFNvZnRFbmdQYXBlcnM6AFl1MjAxMS5wZGYADgAWAAoAWQB1ADIAMAAxADEALgBwAGQAZgAPABoADABNAGEAYwBpAG4AdABvAHMAaAAgAEgARAASADpVc2Vycy9zbWl0aHMvUmVwb3MvbW1zYy9TY2lDb21wQW5kU29mdEVuZ1BhcGVycy9ZdTIwMTEucGRmABMAAS8AABUAAgAN//8AAIAG0hscHR5aJGNsYXNzbmFtZVgkY2xhc3Nlc11OU011dGFibGVEYXRhox0fIFZOU0RhdGFYTlNPYmplY3TSGxwiI1xOU0RpY3Rpb25hcnmiIiBfEA9OU0tleWVkQXJjaGl2ZXLRJidUcm9vdIABAAgAEQAaACMALQAyADcAQABGAE0AVQBgAGcAagBsAG4AcQBzAHUAdwCEAI4AmQCeAKYCYgJkAmkCdAJ9AosCjwKWAp8CpAKxArQCxgLJAs4AAAAAAAACAQAAAAAAAAAoAAAAAAAAAAAAAAAAAAAC0A==}}
+
 
 \end{thebibliography}
 

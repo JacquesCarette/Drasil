@@ -174,7 +174,12 @@ Determining how or when to apply the program family approach can be difficult. H
 	\item \textit{The Organizational Hypothesis}: The software may be organized in such a way that predicted changes of one type can be made independently of other types of changes. Essentially, changing at most a few modules in the system for any given type of change.
 \end{itemize}
 
-Many SC programs can be developed as families because they adhere to these hypotheses. 
+Many SC programs can be developed as families because they adhere to these hypotheses. With respect to the redevelopment hypothesis, SC software that performs simulations, for example, typically has several of its own assumptions. If these assumptions are modified, then it is likely that the software can now perform a different (hopefully useful) simulation. The same applies to any SC software which solve problems in similar ways: there is reuse of common functionality so it would necessarily be redeveloped in other situations. 
+
+Many SC software adhere to the oracle hypothesis since they are equations that model scientific theories which have been studied over many, many years. The theories are stable, so any change to the software is predictable. Changes to the computational design are generally known ahead of time or can be estimated by the domain specialists (scientists).
+
+The organizational hypothesis holds for SC software as well, but perhaps not as strongly as the other two (yet). As we mentioned, a major area of change are the underlying assumptions for programs. These assumption changes for the models are not often strongly dependent, thus few modules would need to be changed to modify the software. However, there is typically a strong connection between algorithms and data structures in SC software, but separating the data structures from the algorithms is not impossible \cite{Berti2000, ElSheikh2004}. 
+
 - many examples where reuse has not been achieved
 
 \subsection{Literate Programming}

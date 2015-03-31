@@ -147,11 +147,15 @@ A program family approach is meant to improve reusability. As the program family
 
 There are several other techniques for improving SC software quality. The use of \textit{libraries}, for one, is a fairly standard technique used in many areas of software development. However, in SC software, libraries can be cumbersome or difficult to use due to the variety of their subroutines. \textit{Component-based development (CBD)} is similar to the library approach, but the components that are being reused are not restricted to subroutines, and CBD suggests techniques for the development of reusable components.
 
-	- aspect-oriented programming
-	- generic programming
-	- generative programming
-	- problem solving environment
-	- design patterns
+A \textit{problem solving environment (PSE)} is similar to both libraries and CBD, however, it is much more involved. A PSE provides all of the facilities necessary for solving a class of problems. This includes (semi-)automatic solution method selection, advanced solution methods, and the means to include novel solutions. Combining PSEs and libraries can help avoid the difficulties of using libraries independently \cite{RiceBoisvert1996}.
+
+Another technique is \textit{aspect-oriented programming (AOP)}. It is similar to the OO approach mentioned above in that the main focus is separating concerns, however, AOP deals with cross-cutting concerns of a system (ex: logging). Aspects modularize supporting functions and isolate them from the business logic of the main program.
+
+\textit{Generic programming} is a technique for developing reusable software. Generic programming looks at an algorithm and determines the commonalities between similar implementations of it. From there, a single, generic algorithm is created (through the use of abstractions) which will be able to cover many concrete implementations.
+
+\textit{Generative programming} is used for automatically creating members of program families. Given a requirements specification, generative programming can produce highly customized and optimized products on demand. The product is manufactured using reusable implementation components and specific configuration knowledge.
+
+Finally, \textit{design patterns} are solutions to recurring problems in software design. Each pattern is both general and reusable. Essentially, design patterns are templates for solving problems (that can occur in many different situations), and are typically found in OO design.
 
 
 \subsection{Program Family Approach}

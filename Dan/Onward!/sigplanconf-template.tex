@@ -143,7 +143,7 @@ The object-orientation (OO) approach aims to increase software quality through t
 
 Agile methods, on the other hand, are one of the most prevalent approaches used by software engineers. It is useful in the context of SC software as it allows for flexibility in dealing with unpredictably changing requirements, on the flip side, if the requirements are fairly stable there is no real benefit to using agile methods.
 
-A program family approach is meant to improve reusability. As the program family is reused and retested, it is likely that any defects will be discovered, thus improving reliability. Developing a program family is a general, plan-driven approach. Where agile methods dealt with unpredictably changing requirements, the program family approach is tailored toward projects with stable or predictably changing requirements. The program family is designed to solve a small set of problems, and we will discuss it in more depth in Section \ref{subsec:program}. %D Mention maintainability in sebsec:program.
+A program family approach is meant to improve reusability. As the program family is reused and retested, it is likely that any defects will be discovered, thus improving reliability. Developing a program family is a general, plan-driven approach. Where agile methods dealt with unpredictably changing requirements, the program family approach is tailored toward projects with stable or predictably changing requirements. The program family is designed such that each member solves a small set of problems, and we will discuss it in more depth in Section \ref{subsec:program}. %D Mention maintainability in sebsec:program.
 
 There are several other techniques for improving SC software quality. The use of \textit{libraries}, for one, is a fairly standard technique used in many areas of software development. However, in SC software, libraries can be cumbersome or difficult to use due to the variety of their subroutines. \textit{Component-based development (CBD)} is similar to the library approach, but the components that are being reused are not restricted to subroutines, and CBD suggests techniques for the development of reusable components.
 
@@ -157,9 +157,16 @@ Another technique is \textit{aspect-oriented programming (AOP)}. It is similar t
 
 Finally, \textit{design patterns} are solutions to recurring problems in software design. Each pattern is both general and reusable. Essentially, design patterns are templates for solving problems (that can occur in many different situations), and are typically found in OO design. As such, design patterns can be used in SC in certain cases where the OO approach is taken.
 
-
 \subsection{Program Family Approach}
 \label{subsec:program}
+
+In the previous section, we introduced the idea of a program family approach. To re-iterate: the program family approach should be used in projects with stable, or predictably changing, requirements. The program family approach is reusable, reliable, and easily maintainable.
+
+Reusability of program families is enforced by design. If the product were not reusable, there would be no reason to undertake a program family approach. Reliability stems from the reuse of the common core of the program family; defects are more likely to be found. Finally, since the core assets of the program family are managed together, it is easier to maintain.
+
+In a program family, each member is not a general purpose program. The family members each solve a specific (small) set of problems. This can lead to increased usability, as there is no need to configure a general purpose program for a specific problem. 
+
+
 
 - define the program family approach
 - SC software satisfies the 3 hypotheses from Weiss: redevelopment hypothesis, oracle hypothesis and organizational hypothesis

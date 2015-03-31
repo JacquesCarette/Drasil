@@ -219,14 +219,16 @@ Depending on the regulatory body and set of standards for certification, many ty
 
 \begin{itemize}
 \item Problem Statement: A description of the problem to be solved, essentially summarizing the purpose of the software. There should be no mention of how the problem is to be solved.
-\item Development Plan: An overview of the development process and infrastructure.
-\item Requirements Specification
-\item Verification and Validation plan
-\item Design Specification
-\item Code
-\item Verification and Validation Report
-\item User Manual
+\item Development Plan: An overview of the development process and infrastructure. This should cover the documents to be created, which templates (if any) will be followed, internal processes to be employed, coding standards, and other details relevant to how the software will be developed.
+\item Requirements Specification: The desired functions and qualities of the software should be documented herein. The requirements should cover functionality, goals, context, design constraints, expected performance, and any other quality attributes of the software.
+\item Verification and Validation plan: Documents how the documentation artifacts will be shown to be internally correct (verification) as well as how to ensure that the right problem has been solved (validation).
+\item Design Specification: How will the requirements be realized? Document the software architecture and a detailed design of the modules/interfaces to be used. Can be thought of as a programmer's manual for maintenance.
+\item Code: Implementation of the design specification.
+\item Verification and Validation Report: Summarize the steps taken for performing verification and validation (this should mirror the V \& V plan from above) and include any testing results.
+\item User Manual: Full instructions on how the software is to be used, beginning with installation instructions and proceeding through detailed examples of the program's use.
 \end{itemize}
+
+The documents listed above share non-trivial amounts of information, which is where traceability comes into play. In order to make any changes to the documentation, there must be some way to determine how a change will affect \textbf{all} of the documents.
 
 \subsection{Knowledge Capture}
 \label{subsec:knowledge}

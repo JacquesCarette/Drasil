@@ -180,20 +180,35 @@ Many SC software adhere to the oracle hypothesis since they are equations that m
 
 The organizational hypothesis holds for SC software as well, but perhaps not as strongly as the other two (yet). As we mentioned, a major area of change are the underlying assumptions for programs. These assumption changes for the models are not often strongly dependent, thus few modules would need to be changed to modify the software. However, there is typically a strong connection between algorithms and data structures in SC software, but separating the data structures from the algorithms is not impossible \cite{Berti2000, ElSheikh2004}. 
 
-- many examples where reuse has not been achieved
+%D - many examples where reuse has not been achieved -- Give a recent one.
 
 \subsection{Literate Programming}
 \label{subsec:literate}
 
-- overview of LP, starting with Knuth - a similar background to what we need here is given in SmithKoothoorAndNedialkov.pdf
+Literate programming (LP) is a programming methodology introduced by Knuth \cite{Knuth1984}. The main idea behind it is writing programs in a way that allows us to explain (to humans) what we want the computer to do, as opposed to simply telling the computer what to do. There is a focus on ordering the material to promote better human understanding. 
+
+In a literate program, the documentation and code are kept together in one source. The program is an interconnected web of code pieces, presented in any sequence. As part of the development process, the algorithms used in literate programming are broken down into small, easy to understand parts (known as ``sections'' \cite{Knuth1984} or ``chunks'' \cite{Johnson1997}) which are explained, documented, and implemented in a more intuitive order for better understanding. 
+
+In order to extract the source code or documentation from the literate program, certain processes must be run. To get working source code, the \textit{tangle} process would be run, essentially extracting the code from the literate document and reordering it into an appropriate structure for the computer to understand. In order to get a human-readable document, the \textit{weaving} process must be run to extract and typeset the documentation. 
+
+By adhering to the LP methodology, a literate program ends up with documentation that is expertly written and of publishable quality. The code also ends up being incredibly well documented and high-quality. There are several examples of SC programs being written in LP style, and two that stand out are VNODE-LP \cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to Implementation'' \cite{PharrHumphreys2004} (a literate program / textbook). 
 
 \section{What is Possible with a Literate Family Approach}
 \label{sec:what}
 
-- this is the discussion section - give advantages and then use examples to illustrate
+A literate family approach is a combination of literate programming, program families, and code generation. The main goals of this approach (mentioned earlier) are to improve qualities (verifiability, reliability, etc.) while improving performance and productivity to save money and time on software development, certification, and re-certification.
+
+In order to achieve these goals, we begin by taking a literate approach to software development. For our purposes we will be focusing on SC software, but there are many potential domains of application for the literate family approach. The literate approach helps to break down the problems into easily explained chunks, capturing domain knowledge and ensuring high-quality code and documentation.
+
+As we will be looking at SC software, we also take a program family approach to find commonalities between similar implementations of algorithms. Analyzing commonalities allows us to determine the core versus the configuration of an algorithm. Once the core has been determined, we intend to use code generation to implement the program family (and its members) in a simple and straightforward manner. Since the code will be generated from the knowledge captured in the LP-style chunks, the documentation for each family member can also be generated alongside the program. Having a family of programs with high-quality documentation for little cost to developers would be an enormous benefit and would aid in certifying the family of programs.
+
+%D - this is the discussion section - give advantages and then use examples to illustrate
+%D Should I just introduce the sections following or actually get into the examples before they start?
 
 \subsection{Software Certification}
 \label{subsec:software}
+
+
 
 - need to generate required documentation, without impeding the work of the scientists
 - need to be able to make changes at reasonable cost - this requires traceability

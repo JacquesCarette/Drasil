@@ -200,7 +200,10 @@ A literate family approach is a combination of literate programming, program fam
 
 In order to achieve these goals, we begin by taking a literate approach to software development. For our purposes we will be focusing on SC software, but there are many potential domains of application for the literate family approach. The literate approach helps to break down the problems into easily explained chunks, capturing domain knowledge and ensuring high-quality code and documentation.
 
-As we will be looking at SC software, we also take a program family approach to find commonalities between similar implementations of algorithms. Analyzing commonalities allows us to determine the core versus the configuration of an algorithm. Once the core has been determined, we intend to use code generation to implement the program family (and its members) in a simple and straightforward manner. Since the code will be generated from the knowledge captured in the LP-style chunks, the documentation for each family member can also be generated alongside the program. Having a family of programs with high-quality documentation for little cost to developers would be an enormous benefit and would aid in certifying the family of programs.
+As we will be looking at SC software, we also take a program family approach to find commonalities between similar implementations of algorithms. Analyzing commonalities allows us to determine the core versus the configuration of an algorithm. Once the core has been determined, we intend to use code generation to implement the program family (and its members) in a simple and straightforward manner. Since the code will be generated from the knowledge captured in the LP-style chunks (which we sometimes refer to as \textit{ingredients}) according to a \textit{recipe}, the documentation for each family member can also be generated from a recipe. %D maybe change the next line.
+Having a family of programs with high-quality documentation for little cost to developers would be an enormous benefit and would aid in certifying the family of programs.
+
+%D Family meal example here to set things up?
 
 %D - this is the discussion section - give advantages and then use examples to illustrate
 %D Should I just introduce the sections following or actually get into the examples before they start?
@@ -208,21 +211,22 @@ As we will be looking at SC software, we also take a program family approach to 
 \subsection{Software Certification}
 \label{subsec:software}
 
-In order to certify software there is a need for high-quality documentation.
+In order to certify software there is a need for high-quality documentation. This documentation needs to be created without impeding the work of scientists. One of the major problems with creating documentation for SC software stems from the modification challenge (Section \ref{subsec:challenges}). As the requirements change, the documentation must be updated. The further scientists are into a project, the greater the effect a change of requirements will have on the documentation, leading to maintainability and traceability issues.
 
-- need to generate required documentation, without impeding the work of the scientists
-- need to be able to make changes at reasonable cost - this requires traceability
+The cost of making changes to the documentation should be reasonable. The best way to keep costs low is to ensure the traceability of the documentation. Traceability allows the developers to track which areas of a project will be affected by a change, thus allowing them to ensure that those areas are updated accordingly.
 
-Start with a default set of documentation, as follows
-	- Problem Statement
-	- Development Plan
-	- Requirements Specification
-	- Verification and Validation plan
-	- Design Specification
-	- Code
-	- Verification and Validation Report
-	- User Manual
-(A start to an explanation about these documents is in ZhengEtAl2015SS, since the document is not complete, I will not check it into the repository, but e-mail it to you.)
+Depending on the regulatory body and set of standards for certification, many types of documents can be required. Our approach aims to generate all of these documents alongside the code, accounting for any changes made. As the changes will affect chunks and those chunks will be used to generate the documentation, there is a guarantee that changes will propogate throughout all of the documents. The following are examples of ``default'' documents that we want to create (we assume software engineers will be familiar with most, if not all, of these):
+
+\begin{itemize}
+\item Problem Statement: A description of the problem to be solved, essentially summarizing the purpose of the software. There should be no mention of how the problem is to be solved.
+\item Development Plan: An overview of the development process and infrastructure.
+\item Requirements Specification
+\item Verification and Validation plan
+\item Design Specification
+\item Code
+\item Verification and Validation Report
+\item User Manual
+\end{itemize}
 
 \subsection{Knowledge Capture}
 \label{subsec:knowledge}

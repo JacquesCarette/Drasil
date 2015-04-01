@@ -613,7 +613,28 @@ generation allows for increases in the order of interpolation, for the same grid
 \subsection{Incorporating Non-Functional Requirements in a decision support
   system for selecting the best design options} \label{subsec:incorporating}
 
-Use AHP. - see Smith2006.pdf
+A literate family approach will necessarily be able to create multiple family
+members that can solve the same problem in slightly different ways (ex.
+different algorithm choices), so how should a decision be made between them?
+Traditionally when designing software, this is where the engineers would compare
+the non-functional requirements of the system to the different implementations,
+then make a decision based on how those requirements are being satisfied.
+
+The decision making process can be performed through the literate family
+approach by using the Analytic Hierarchy Process (AHP)~\cite{Smith2006}. AHP is
+a method for comparing attributes by using a ratio scale to prioritize these
+attributes. The priorities are then determined by a series of pair-wise 
+comparisons between attributes. AHP has had great success in decision analysis,
+and as such it is the method we have chosen for ranking non-functional 
+requirements.
+
+Once we have decided on the relative rankings of our different non-functional
+requirements, we can analyze the family members that solve our problem and
+select the one which does the best job of incorporating the non-functional 
+requirements in their priority order.
+
+%D Show example of AHP table?
+
 
 \section{Concluding Remarks} \label{sec:concluding}
 

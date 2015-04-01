@@ -30,7 +30,7 @@
 % authoryear    To obtain author/year citation style instead of numeric.
 
 \usepackage{amsmath}
-
+\usepackage{graphicx}
 
 \begin{document}
 
@@ -443,11 +443,11 @@ areas are updated accordingly.
 Depending on the regulatory body and set of standards for certification, many
 types of documents can be required. Our approach aims to generate all of these
 documents alongside the code, accounting for any changes made. As the changes
-will affect chunks and those chunks will be used to generate the documentation,
-there is a guarantee that changes will propogate throughout all of the
-documents. The following are examples of ``default'' documents that we want to
-create (we assume software engineers will be familiar with most, if not all, of
-these):
+will affect ingredients and those ingredients will be used to generate the
+ documentation, there is a guarantee that changes will propogate throughout all
+  of the documents. The following are examples of ``default'' documents that 
+we want to create (we assume software engineers will be familiar with most, 
+if not all, of these):
 
 \begin{itemize}
 \item Problem Statement: A description of the problem to be solved, essentially
@@ -498,6 +498,47 @@ development cycle, it would not necessitate re-writing the entire document. All
 \textbf{An example would be good here.  We could use fuelpin example.}
 
 \subsection{Knowledge Capture} \label{subsec:knowledge}
+
+Capturing scientific knowledge is essential to implementing effective SC
+software families. Many formulae are commonly shared between a variety of 
+different practical applications. %D Being able to capture not only the relevant
+%D equations, but also the meaning behind them improves the quality
+%D I'm not sure where I'm going with this intro -- needs edits.
+
+As an example, consider the conservation of thermal energy equation:
+\begin{equation}
+CONSERVATION EQN.
+\end{equation}
+This equation is used for thermal analysis of fuel pins, %previous example
+but is also used in applications like solar water heating tanks \cite{}. 
+%D Elaborate
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{figures/h_g}
+	\caption{SRS data definition of $h_g$}
+\label{fig:h_g}
+\end{figure}	
+
+\begin{figure}
+	\includegraphics[width=8.5cm]{figures/h_c}
+	\caption{SRS data definition of $h_c$}
+	\label{fig:h_c}
+\end{figure}	
+From the fuel pin example (again), if we look at the equation for the gap
+conductance from Figure~\ref{fig:h_g} and the equation for heat transfer coefficient
+between clad and coolant from Figure~\ref{fig:h_c}, 
+we can see that there is common knowledge necessary for calculating both 
+of these values (i.e. $k_{c}$ and $\tau_c$). Now, rather than redefining the 
+common terms in these equations in each document where they appear, 
+we consider each unique symbol as its own ingredient. 
+Both $h_g$ and $h_c$ are also ingredients, thus they need only
+reference the ingredients used in their equations to express all of the
+requisite knowledge for implementation.
+
+For the documentation related to $h_g$ and $h_c$, the recipe for each document
+will fill in the appropriate details related to any and all symbols that appear in the
+equations. %D As shown in figure blah-ble-blah
+Now if we were to need to update the description
 
 - conservation of thermal energy equation - used for thermal analysis of fuel
 pins and then reused for solar water heating tank - maybe hg/hc example?  -

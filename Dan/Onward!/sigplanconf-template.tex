@@ -524,9 +524,10 @@ but is also used in applications like solar water heating tanks \cite{}.
 	\caption{SRS data definition of $h_c$}
 	\label{fig:h_c}
 \end{figure}	
+
 From the fuel pin example (again), if we look at the equation for the gap
-conductance from Figure~\ref{fig:h_g} and the equation for heat transfer coefficient
-between clad and coolant from Figure~\ref{fig:h_c}, 
+conductance from Figure~\ref{fig:h_g} and the equation for heat transfer 
+coefficient between clad and coolant from Figure~\ref{fig:h_c}, 
 we can see that there is common knowledge necessary for calculating both 
 of these values (i.e. $k_{c}$ and $\tau_c$). Now, rather than redefining the 
 common terms in these equations in each document where they appear, 
@@ -536,12 +537,18 @@ reference the ingredients used in their equations to express all of the
 requisite knowledge for implementation.
 
 For the documentation related to $h_g$ and $h_c$, the recipe for each document
-will fill in the appropriate details related to any and all symbols that appear in the
-equations. %D As shown in figure blah-ble-blah
-Now if we were to need to update the description
+will fill in the appropriate details related to any and all symbols that appear
+in the equations, which can be seen in the ``Description'' section of 
+Figures~\ref{fig:h_g}~\&~\ref{fig:h_c}. Now if we needed to update the 
+description of any symbol, we would simply update it in one place (its
+ingredient) and the recipe would handle propagating the change through all
+of the documentation and code.
 
-- conservation of thermal energy equation - used for thermal analysis of fuel
-pins and then reused for solar water heating tank - maybe hg/hc example?  -
+From the above example it should be clear that this approach allows for the
+development of a library of artifacts (ingredients) related to SC software
+that capture domain knowledge and can be reused in multiple contexts while
+remaining maintainable and traceable.
+
 Build a library of artifacts that can be reused in many different contexts -
 example of “Commonality Analysis for a Family of Material Models”
 (SmithMcCutchanAndCarette2014 - not yet published - in mmsc repos) - the section

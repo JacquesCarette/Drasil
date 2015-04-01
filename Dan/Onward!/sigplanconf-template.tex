@@ -561,18 +561,24 @@ assumptions are well documented.
 \subsection{``Everything should be made as simple as possible, but not
   simpler.'' (Einstein quote)}  \label{subsec:everything}
 
-- although powerful/general commercial finite element programs are available,
-they are often not used to develop new “widgets” - reasons are cost, and
-complexity - rather than use simulation, engineers often resort to building
-prototypes and testing - engineers would greatly benefit from tools to assist
-their design efforts that are customized to their exact set of problems - with a
-literate family approach family members can be generated to fit their needs - if
-an engineer designs parts for strength, they could have a general stress
-analysis program - the program could be 3D if needed, or specialized for plane
-stress or plane strain, if that was the appropriate assumption - the program
-could even be customized to the parameterized shape of the part they are
-interested in, with only the degrees of freedom, like material properties, or
-the specific dimensions, they can change being exposed.
+Currently there exist many powerful, general commercial programs for solving
+problems using the finite element method. However, they are not often used
+to develop new ``widgets'' because of the cost and complexity of doing so.
+As it stands, engineers often have to resort to building prototypes and testing
+them instead of performing simulations due to a lack of tools that can assist
+with their exact set of problems.
+
+A literate family approach could change that by generating members according
+to the needs of the engineers. For example, if an engineer is designing parts 
+for strength, they could have a general stress analysis program. This program 
+could be 3D or specialized for plane stress or strain, depending on which 
+assumption would be the most appropriate. The program could even be specialized
+further, to be customized to the parameterized shape of the part that the
+engineer is interested in. This new specialized program can expose only the 
+degrees of freedom that the engineer can change (ex. material properties or
+specific dimensions of the part), making the entire simulation process simpler
+and safer.
+
 
 \subsection{Optimization} \label{subsec:optimization}
 
@@ -588,10 +594,16 @@ material models (SmithMcCutchanAndCarette2014)
 
 \subsection{Verification} \label{subsec:verification}
 
-- requirements include so-called “sanity” checks that can be reused when they
-come up in subsequent phases - for instance, requirement would state
-conservation of mass, or the fact that lengths are always positive - the first
-used to test output, the second to guard against invalid input
+When it comes to verification, requirements documents typically include
+so-called ``sanity'' checks that can be reused throughout subsequent phases
+of development. For instance, the requirement would state conservation of mass
+or that lengths are always positive. The former would be used to test the output
+and the latter to guard against some invalid inputs.
+
+With a literate family approach, these sanity checks can be ensured by the 
+knowledge capture mechanism. Each ingredient can maintain its own sanity
+checks and incorporate them into the final system to make sure that all inputs
+and outputs (including intermediaries) are valid.
 
 - computational variability testing, from Yu (2011), FEM example - usual to do
 grid refinement tests - same order of interpolation, but more points - code

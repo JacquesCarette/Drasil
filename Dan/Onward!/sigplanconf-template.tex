@@ -105,7 +105,7 @@ In the medical, nuclear power, aerospace, automotive, and manufacturing fields
 there are many safety critical systems in play. With each system, there is the
 possibility of a catastrophic failure endangering lives. It is incredibly
 important then to have some means of certifying and assuring the quality of each
-software system. As Smith et al. \cite{SmithKoothoorAndNedialkov2014} stated
+software system. As Smith et al. \cite{SmithEtAl2013} stated
 ``Certification of Scientiﬁc Computing (SC) software is official recognition by
 an authority or regulatory body that the software is ﬁt for its intended use.''
 These regulatory bodies determine certain certification standards that must be
@@ -229,7 +229,7 @@ will give a brief overview.
 
 The object-orientation (OO) approach aims to increase software quality through
 the use of several mechanisms. \textit{Encapsulation} ensures information hiding
-\cite{Parnas1972} by keeping information hidden from the classes that do not
+\cite{Parnas1972a} by keeping information hidden from the classes that do not
 require it. \textit{Inheritance} is useful in the OO approach, but not
 necessarily when applied to SC as many SC problems do not deal with a
 hierarchical structure. \textit{Polymorphism} can improve reusability by, for
@@ -271,7 +271,7 @@ CBD, however, it is much more involved. A PSE provides all of the facilities
 necessary for solving a class of problems. This includes (semi-)automatic
 solution method selection, advanced solution methods, and the means to include
 novel solutions. Combining PSEs and libraries can help avoid the difficulties of
-using libraries independently \cite{RiceBoisvert1996}. PSEs have already been
+using libraries independently \cite{RiceAndBoisvert1996}. PSEs have already been
 used for SC for years, with major examples being Matlab and Maple.
 
 Another technique is \textit{aspect-oriented programming (AOP)}. It is similar
@@ -297,6 +297,9 @@ software design. Each pattern is both general and reusable. Essentially, design
 patterns are templates for solving problems (that can occur in many different
 situations), and are typically found in OO design. As such, design patterns can
 be used in SC in certain cases where the OO approach is taken.
+
+As far as we know, there has not been an empirical study to measure the
+effectiveness of any of the above approaches for SC software.
 
 \subsection{Program Family Approach} \label{subsec:program}
 
@@ -356,7 +359,7 @@ underlying assumptions for programs. These assumption changes for the models are
 not often strongly dependent, thus few modules would need to be changed to
 modify the software. However, there is typically a strong connection between
 algorithms and data structures in SC software, but separating the data
-structures from the algorithms is not impossible \cite{Berti2000, ElSheikh2004}.
+structures from the algorithms is not impossible \cite{Berti2000a, ElSheikhEtAl2004}.
 
 %D - many examples where reuse has not been achieved -- Give a recent one.
 
@@ -388,7 +391,7 @@ that is expertly written and of publishable quality. The code also ends up being
 incredibly well documented and high-quality. There are several examples of SC
 programs being written in LP style, and two that stand out are VNODE-LP
 \cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
-Implementation'' \cite{PharrHumphreys2004} (a literate program / textbook).
+Implementation'' \cite{PharrAndHumphreys2004} (a literate program / textbook).
 
 \section{What is Possible with a Literate Family Approach} \label{sec:what}
 
@@ -640,6 +643,13 @@ requirements in their priority order.
 
 \section{Concluding Remarks} \label{sec:concluding}
 
+Concluding remarks.
+
+\section*{References}
+
+\bibliographystyle{abbrvnat}
+\bibliography{LitProgFamDevInSC}
+
 \appendix
 \section{Appendix Title}
 
@@ -648,20 +658,6 @@ This is the text of the appendix, if you need one.
 \acks
 
 Acknowledgments, if needed.
-
-% We recommend abbrvnat bibliography style.
-
-\bibliographystyle{abbrvnat}
-
-% The bibliography should be embedded for final submission.
-
-\begin{thebibliography}{}
-\softraggedright
-
-%D Need to remember how to do bibtex.
-
-\end{thebibliography}
-
 
 \end{document}
 

@@ -63,46 +63,90 @@
 
 \section{Research Questions}
 
-\begin{itemize}
-	\item How to improve reuse mathematical knowledge for scientific and engineering models
-	\item How to improve NFRs like traceability, maintainability, and (re)usability
-	\item How to handle the massive amount of mathematical knowledge duplication
-					across multiple artifacts in a software development project
-\end{itemize}
+Scientists and engineers rely heavily on models that share common mathematical
+knowledge, but many times in software these models are reimplemented for each
+new project. With that in mind, the first question my research intends to
+address is ``how can we improve the reuse of mathematical knowledge for
+scientific and engineering models?''
+
+Another issue that tends to come up in software development projects is that of
+duplication. Across the different artifacts in a given software project
+there is typically a non-trivial amount of knowledge duplication. This brings us
+to the next question my research aims to address: ``how can we handle the 
+massive amount of mathematical knowledge duplication across multiple artifacts
+in a software development project?'' Being able to reduce (and hopefully
+eliminate) the amount of duplication would also help to improve the traceability
+and maintainability of a project.
+
+On that note, it is often the case that Non-functional requirements (NFRs) such
+as traceability, maintainability, and (re)usability are considered nice to have,
+but not necessarily as critical as other traits like correctness, accuracy, and
+performance. This is usually due to the relatively un-quantifiable nature of 
+many of the NFRs (for example, how does one quantify maintainability?). That 
+brings us to the final question: ``how can we improve software development to
+ensure qualities such as traceability, maintainability, and (re)usability are
+met?''
 
 \section{Research Plans}
 
-\begin{itemize}
-	\item Create an infrastructure(/tool?) for knowledge capture and reuse %D EDIT
-	\item Focus on avoiding duplication and maintaining clear traceability
-	\item Utilize generative programming to create software artifacts from the
-					captured knowledge.
-	\item Perform a case study involving applying the tool to the realm of
-					Scientific Computing (as a proof of concept).
-\end{itemize}
+To address the aforementioned questions, I plan to create an 
+infrastructure and/or tool for mathematical knowledge capture and reuse. The 
+main focus of the tool will be to avoid any knowledge duplication across
+artifacts while maintaining clear traceability between them.
+
+The tool will utilize generative programming for the creation of software
+artifacts (including, but not limited to code) from the previously captured
+knowledge. To do this, I will be expanding upon the ideas of literate
+programming and implementing a domain-specific language for mathematical
+knowledge capture (as well as the generator back-end).
+
+The tool will also be focused on creating program families, and allowing the
+user to configure which specific member should be created. In doing so, the tool
+can create many different programs for a given task which will be specialized
+depending on the specific problem at hand. For example, if an algorithm for
+computing a determinate were to be generated, but one (or more) of the matrices
+involved were known to have many zeroes, a specialized computation would be
+created to avoid performing unnecessary operations. If the matrices were not
+known ahead of time, a general algorithm for computing the determinate could be
+produced instead.
+
+Finally, I plan to perform a case study which will involve applying my tool to
+a real problem in the realm of Scientific Computing as a proof of concept.
 
 \section{Completed and Remaining Research}
-\begin{itemize}
-	\item Completed part one of the comprehensive exams.
-	\item Completed the majority of required coursework.
-	\item Currently building a prototype.
-	\item This point is the best for feedback and additional insight from others.
-	
-\end{itemize}
+
+As of the time of this writing, I have currently completed part one of the
+comprehensive exams for my program, as well as a majority of my required
+coursework and I am presently in the process of building a prototype of the tool
+using an iterative approach to flesh out the design.
+
+As the prototype is still in its early stages and its design is still fluid, I
+also believe that now would be the perfect time to receive feedback and 
+additional insights for the implementation of the tool/infrastructure.
 
 \section{Evaluation Plans}
-\begin{itemize}
-	\item The tool will be applied to a real-world problem in the realm of safety
-					analysis in nuclear power systems.
-	\item Evaluation will be based on feedback from experts in the field.
-	\item Quantify the effort involved in making a likely change through
-					traditional methods versus with the tool.
-\end{itemize}
+
+To evaluate the usefulness of my tool, I plan to apply it to a real-world
+problem in the realm of safety analysis in nuclear power systems. The plan is to
+have the tool used by experts in the field for a software development project
+and then have them provide feedback regarding whether or not the tool would be
+useful for them.
+
+Another planned form of evaluation is to quantify the amount of effort
+involved in making a likely change to a piece of code through traditional means
+and comparing that to the amount of effort involved in making a change using my
+tool.
 
 \section{Publication Plans}
-\begin{itemize}
-	\item Paper for SLE / GPCE - Currently in the works
-	\item Plan to target a paper towards ICSE
-	\item Plan to target towards Science of Computer Programming
-\end{itemize}
+
+As of the time of this writing, a conference paper is being written for 
+the international conference on Generative Programming: Concepts \& Experience
+(GPCE) and the international conference on Software Language Engineering (SLE).
+
+I am also planning to write a paper for the International Conference on Software
+Engineering (ICSE).
+
+As for Journals, I am currently planning to submit a paper to the
+Science of Computer Programming.
+
 \end{document}

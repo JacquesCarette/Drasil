@@ -26,6 +26,7 @@ author a = bslash <> text "author" <> br a
 
 begin = bslash <> text "begin" <> br "document" $$ bslash <> text "maketitle"
 end = bslash <> text "enddocument"
+endL = bslash <> text "end" <> br "document"
 
 command = bslash <> text "newcommand"
 comm b [] []= (command) <> br ("\\" ++ b)

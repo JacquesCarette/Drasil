@@ -1,10 +1,9 @@
 module H_p where
 import Chunk
-import Text.PrettyPrint
 
 h_p :: Chunk FName FDesc
 h_p = newChunk $
-  [("Symbol",text "$h_p$"),
-   ("Equation", text "h_{p}"),
-   ("Description", text "initial gap film conductance")
+  [("Symbol","$h_{p}$"),
+   ("Equation", "h_{p}"),
+   ("Description", "initial gap film conductance")
   ]

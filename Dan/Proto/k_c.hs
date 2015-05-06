@@ -1,10 +1,9 @@
 module K_c where
 import Chunk
-import Text.PrettyPrint
 
 k_c :: Chunk FName FDesc
 k_c = newChunk $
-  [("Symbol",text "$k_c$"),
-   ("Equation", text "k_{c}"),
-   ("Description", text "clad conductivity")
+  [("Symbol","$k_{c}$"),
+   ("Equation", "k_{c}"),
+   ("Description", "clad conductivity")
   ]

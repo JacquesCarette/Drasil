@@ -6,11 +6,13 @@ import qualified Data.Map.Strict as Map
 
 type Chunk = Map.Map
 type FName = String
-type FDesc = Doc
+type FDesc = String
 type Dependency = [Chunk FName FDesc]
 
-get :: FName -> Chunk FName FDesc -> FDesc
-get name chunk = fromMaybe empty (Map.lookup name chunk)
+get :: FName -> Chunk FName FDesc -> Doc
+get name chunk = text $ getStr name chunk
+
+getStr name chunk = (fromMaybe "" (Map.lookup name chunk))
 
 newChunk l = Map.fromList l
 

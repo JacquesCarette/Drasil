@@ -11,6 +11,9 @@ br t = text $ "{" ++ t ++ "}"
 eq = text "="
 dlr = text "$"
 
+ast = text "*"
+pls = text "+"
+
 --TeX
 docclass [] braces = bslash <> text "documentclass" <> br braces
 docclass sqbrack braces = bslash <> text "documentclass" <> sq sqbrack <> br braces

@@ -11,7 +11,7 @@ h_g = newChunk $
    ("Equation", text "\\frac{2k_{c}h_{p}}{2k_{c}+\\tau_c h_{p}}"),
    ("SIU", text "($\\mathrm{\\frac{kW}{m^2C}}$)"),
    ("Description", 
-    text "gap conductance")
+    text "effective heat transfer coefficient between clad and fuel surface")
   ]
   
 h_g_dep :: Dependency

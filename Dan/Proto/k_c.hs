@@ -5,5 +5,6 @@ import Text.PrettyPrint
 k_c :: Chunk FName FDesc
 k_c = newChunk $
   [("Symbol",text "$k_c$"),
+   ("Equation", text "k_{c}"),
    ("Description", text "clad conductivity")
   ]

@@ -77,5 +77,25 @@ lpmBody =
   vcat 
    [text "@ First we define the overall structure of the library of functions.",
     text "@c", text "@<Header files@>@/", text "@<Functions@>@/",
-    text "@ Although not necessary for this simple example, we will include the math library, since future expansion will likely require it.\n@<Header files@>=\n#include <math.h>\n@ This library will consist of a set of functions.\n@<Functions@>=\n@<Function to Calculate hg@>@/\n@<Function to Calculate hc@>@/\n@ DD\\ref{L-hc} in the SRS gives the heat transfer coefficient ("<>get "Symbol" h_c<> text ") as: \n\\begin{equation}\nh_{c} ="<> get "Equation" h_c <> text ", \\label{eq:hc}\n\\end{equation} \nThe corresponding C code is given by:\n@<Function to Calculate hc@>=\ndouble calc_hc(double k_c, double h_p, double tau_c)\n{\n return (2*(k_c)*(h_p)) / ((2*(k_c))+(tau_c*(h_p)));\n}\n@ DD\\ref{L-hg} in the SRS gives the gap conductance ("<>get "Symbol" h_g<> text ") as:\n\\begin{equation} \nh_{g} =" <> get "Equation" h_g <> text "\\label{eq:hg} \n\\end{equation}\nThe corresponding C code is given by:\n@<Function to Calculate hg@>=\ndouble calc_hg(double k_c, double h_b, double tau_c)\n{\n return (2*(k_c)*(h_b)) / ((2*(k_c)) + (tau_c*(h_b)));\n}\n@"
+    text "@ Although not necessary for this simple example, we will include the",
+    text "math library, since future expansion will likely require it.",
+    text "@<Header files@>=", text "#include <math.h>",
+    text "@ This library will consist of a set of functions.",
+    text "@<Functions@>=",
+    text "@<Function to Calculate hg@>@/", text "@<Function to Calculate hc@>@/", 
+    text "@ DD\\ref{L-hc} in the SRS gives the heat transfer coefficient (" <>
+    get "Symbol" h_c <> text ") as: \n\\begin{equation}\nh_{c} =" <>
+    get "Equation" h_c <> text ", \\label{eq:hc}",
+    text "\\end{equation}", text "The corresponding C code is given by:",
+    text "@<Function to Calculate hc@>=", 
+    text "double calc_hc(double k_c, double h_p, double tau_c)", text "{",
+    text " return (2*(k_c)*(h_p)) / ((2*(k_c))+(tau_c*(h_p)));", text "}",
+    text "@ DD\\ref{L-hg} in the SRS gives the gap conductance (" <>
+    get "Symbol" h_g <> text ") as:", text "\\begin{equation}", text "h_{g} ="<>
+    get "Equation" h_g <> text "\\label{eq:hg}", text "\\end{equation}",
+    text "The corresponding C code is given by:",
+    text "@<Function to Calculate hg@>=", 
+    text "double calc_hg(double k_c, double h_b, double tau_c)",text "{",
+    text " return (2*(k_c)*(h_b)) / ((2*(k_c)) + (tau_c*(h_b)));", text "}", 
+    text "@"
    ]

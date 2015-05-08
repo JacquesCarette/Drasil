@@ -7,10 +7,8 @@ data Expr = Chnk Variable
           | Int Integer
           | Expr :* Expr
           | Expr :+ Expr
-          -- | Expr :/ Expr
-          -- | Expr :- Expr
-          -- | Neg Expr
-          | Frac Expr Expr
+          | Expr :/ Expr
+          | Div Expr Expr -- used internally (ONLY)
 
 type Variable = Chunk FName FDesc
 
@@ -20,7 +18,8 @@ v = Chnk
 
 --Get dependency from equation  
 get_dep :: Expr -> Dependency
-get_dep (Frac a b) = nub (get_dep a ++ get_dep b)
+--get_dep (Frac a b) = nub (get_dep a ++ get_dep b)
+get_dep (a :/ b) = nub (get_dep a ++ get_dep b)
 get_dep (a :* b) = nub (get_dep a ++ get_dep b)
 get_dep (a :+ b) = nub (get_dep a ++ get_dep b)
 get_dep (Chnk c) = [c]

@@ -19,4 +19,4 @@ h_g = newChunk $
 h_g_dep :: Dependency
 h_g_dep = get_dep h_g_eq
            
-h_g_eq = Frac ((Int 2):*(v k_c):*(v h_p)) ((Int 2):*(v k_c):+(v tau_c):*(v h_p))
+h_g_eq = ((Int 2):*(v k_c):*(v h_p)) :/ ((Int 2):*(v k_c):+(v tau_c):*(v h_p))

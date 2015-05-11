@@ -1,10 +1,11 @@
 module Tau_c where
+import ASTInternal
 import Chunk
 import Config
 
 tau_c :: Chunk FName FDesc
 tau_c = newChunk $
-  [(Symbol,"$\\tau_{c}$"),
-   (Equation,"\\tau_{c}"),
-   (Description,"clad thickness")
+  [(Symbol,G Tau_L :- S "{c}"),
+   (Equation,G Tau_L :- S "{c}"),
+   (Description,S "clad thickness")
   ]

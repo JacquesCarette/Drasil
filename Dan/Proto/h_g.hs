@@ -10,10 +10,10 @@ import Config
 
 h_g :: Chunk FName FDesc
 h_g = newChunk $
-  [(Symbol,"$h_{g}$"),
-   (Equation, expr h_g_eq),
-   (SIU, "($\\mathrm{\\frac{kW}{m^2C}}$)"),
-   (Description, 
+  [(Symbol, S "h" :- S "{g}$"),
+   (Equation, E h_g_eq),
+   (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
+   (Description, S
     "effective heat transfer coefficient between clad and fuel surface")
   ]
   

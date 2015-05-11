@@ -19,3 +19,6 @@ arrayS = renewcomm "arraystretch" "1.2"
 --Could config chunk records here--
 data Field = Symbol | Equation | Description | SIU
   deriving (Ord, Eq)
+
+output :: OutFormat  
+output = TeX

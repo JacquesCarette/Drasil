@@ -3,6 +3,8 @@ module Helpers where
 import Text.PrettyPrint
 import Data.Char
 
+data OutFormat = TeX
+               | Plain
 --basic
 bslash = text "\\"
 dbs = bslash <> bslash

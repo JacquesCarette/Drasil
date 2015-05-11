@@ -2,6 +2,7 @@ module Body where
 import Text.PrettyPrint
 import Config
 import Chunk
+import ToTex
 import H_g
 import H_c
 import H_p
@@ -10,6 +11,7 @@ import K_c
 import SI_Units
 import Helpers
 import Config
+import ASTInternal
 
 
 s1 = sec "Table of Units"
@@ -56,7 +58,7 @@ srsBody = vcat [s1,s1_intro,s1_table,s2,s2_intro,s2_table,s3,
           get Equation h_g <> dlr <> text "\\\\ \\midrule",
           text "Description &"<+>get Symbol h_g<+> text "is the" <+>
           get Description h_g, text "\\newline", 
-          (vcat $ (writeDep [Symbol,Description] h_g_dep "is the" "\\newline")),
+          (vcat $ (writeDep [Symbol,Description] h_g_dep "is the" "\\newline" Pgraph)),
           text "NOTE: Equation taken from the code\\\\ \\midrule",
           text "Sources & source code\\\\", 
           text "\\bottomrule \\end{tabular} \\end{minipage}\\\\",
@@ -71,7 +73,7 @@ srsBody = vcat [s1,s1_intro,s1_table,s2,s2_intro,s2_table,s3,
           text "Description & "<+>get Symbol h_c<+> text "is the" <+>
           get Description h_c,
           text "\\newline",
-          (vcat $ (writeDep [Symbol,Description] h_c_dep "is the" "\\newline")),
+          (vcat $ (writeDep [Symbol,Description] h_c_dep "is the" "\\newline" Pgraph)),
           text "NOTE: Equation taken from the code\\\\ \\midrule  Sources & source code \\\\ \\bottomrule \\end{tabular} \\end{minipage}\\\\ "]
 
 lpmBody = 

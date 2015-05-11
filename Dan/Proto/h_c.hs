@@ -6,14 +6,15 @@ import Text.PrettyPrint
 import Tau_c
 import H_b
 import K_c
+import Config
 
 h_c :: Chunk FName FDesc
 h_c = newChunk $
-  [("Symbol","$h_{c}$"),
-   ("Equation", expr h_c_eq),
-   ("Description", 
+  [(Symbol,"$h_{c}$"),
+   (Equation, expr h_c_eq),
+   (Description, 
     "convective heat transfer coefficient between clad and coolant"),
-   ("SIU", "($\\mathrm{\\frac{kW}{m^2C}}$)")
+   (SIU, "($\\mathrm{\\frac{kW}{m^2C}}$)")
   ]
   
 h_c_dep :: Dependency

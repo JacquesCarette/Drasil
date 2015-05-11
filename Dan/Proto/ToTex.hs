@@ -2,9 +2,10 @@ module ToTex where
 import ASTInternal
 import Chunk
 import Helpers
+import Config
 
 expr :: Expr -> String
-expr (Chnk c) = getStr "Equation" c
+expr (Chnk c) = getStr Equation c
 expr (Dbl d)  = show d
 expr (Int i)  = show i
 expr (a :* b) = mul a b

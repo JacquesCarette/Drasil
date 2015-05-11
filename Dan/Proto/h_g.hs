@@ -6,13 +6,14 @@ import ToTex
 import Tau_c
 import H_p
 import K_c
+import Config
 
 h_g :: Chunk FName FDesc
 h_g = newChunk $
-  [("Symbol","$h_{g}$"),
-   ("Equation", expr h_g_eq),
-   ("SIU", "($\\mathrm{\\frac{kW}{m^2C}}$)"),
-   ("Description", 
+  [(Symbol,"$h_{g}$"),
+   (Equation, expr h_g_eq),
+   (SIU, "($\\mathrm{\\frac{kW}{m^2C}}$)"),
+   (Description, 
     "effective heat transfer coefficient between clad and fuel surface")
   ]
   

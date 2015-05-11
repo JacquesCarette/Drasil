@@ -32,5 +32,3 @@ writeDep (x:[]) (c:[]) _ es = [get x c <+> text es]
 writeDep (x:[]) (c:cs) is es = [get x c <+> text es]
 writeDep (x:xs) (c:[]) is es = [get x c <+> text is] ++ writeDep xs [c] is es
 writeDep (x:xs) (c:cs) is es = writeDep (x:xs) (c:[]) is es ++ writeDep (x:xs) cs is es
-
-

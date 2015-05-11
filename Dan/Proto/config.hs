@@ -19,10 +19,3 @@ arrayS = renewcomm "arraystretch" "1.2"
 --Could config chunk records here--
 data Field = Symbol | Equation | Description | SIU
   deriving (Ord, Eq)
-
-fToStr :: Field -> String
-fToStr (Symbol) = "Symbol"
-fToStr Equation = "Equation"
-fToStr Description = "Description"
-fToStr SIU = "SIU"
-fToStr _ = error "Unknown Field"

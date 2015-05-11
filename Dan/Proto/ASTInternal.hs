@@ -18,7 +18,6 @@ v = Chnk
 
 --Get dependency from equation  
 get_dep :: Expr -> Dependency
---get_dep (Frac a b) = nub (get_dep a ++ get_dep b)
 get_dep (a :/ b) = nub (get_dep a ++ get_dep b)
 get_dep (a :* b) = nub (get_dep a ++ get_dep b)
 get_dep (a :+ b) = nub (get_dep a ++ get_dep b)

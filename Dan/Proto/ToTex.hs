@@ -34,12 +34,12 @@ format_Tex :: Context -> Spec -> String
 format_Tex _ (E e) = expr e
 format_Tex _ (S s) = s
 format_Tex _ (G x) = greek x
-format_Tex Pgraph (a :- b) = 
-  "$"++format_Tex Pgraph a ++"_"++ format_Tex Pgraph b++"$"
+format_Tex Pg (a :- b) = 
+  "$"++format_Tex Pg a ++"_"++ format_Tex Pg b++"$"
 format_Tex c (a :- b) = 
   format_Tex c a ++ "_" ++ format_Tex c b
-format_Tex Pgraph (a :^ b) = 
-  "$"++format_Tex Pgraph a ++"^"++ format_Tex Pgraph b++"$"
+format_Tex Pg (a :^ b) = 
+  "$"++format_Tex Pg a ++"^"++ format_Tex Pg b++"$"
 format_Tex c (a :^ b) = format_Tex c a ++ "^" ++ format_Tex c b
 format_Tex _ _ = ""
 

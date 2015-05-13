@@ -39,10 +39,10 @@ s2_intro = text "The table that follows summarizes the symbols used in this" <+>
            text "the symbol."
 
 s2_table =
-  vcat ([text "\\begin{longtable}{l p{10.5cm}}", (get Symbol h_c) <+> 
-  text "& \\blt" <+> (get Description h_c) <+> (get SIU h_c) <> dbs, 
-  (get Symbol h_g) <+> text "& \\blt" <+> (get Description h_g) <+> 
-  (get SIU h_g), text "\\end{longtable}"])
+  vcat ([text "\\begin{longtable}{l p{10.5cm}}", (get Symbol h_c Pg) <+> 
+  text "& \\blt" <+> (get Description h_c Pg) <+> (get SIU h_c Pg) <> dbs, 
+  (get Symbol h_g Pg) <+> text "& \\blt" <+> (get Description h_g Pg) <+> 
+  (get SIU h_g Pg), text "\\end{longtable}"])
 
 s3 = sec "Data Definitions"
   
@@ -51,29 +51,29 @@ srsBody = vcat [s1,s1_intro,s1_table,s2,s2_intro,s2_table,s3,
           text "\\begin{tabular}{p{\\colAwidth} p{\\colBwidth}}",
           text "\\toprule \\textbf{Number} & \\textbf{DD\\refstepcounter{datadefnum}\\thedatadefnum}",
           text "\\label{hg}\\\\ \\midrule",
-          text "Label &"<+>get Symbol h_g<> text "\\\\ \\midrule",
+          text "Label &"<+>get Symbol h_g Pg<> text "\\\\ \\midrule",
           text "Units & $ML^0t^{-3}T^{-1}$\\\\ \\midrule",
           text "SI equivalent & $\\mathrm{\\frac{kW}{m^{2\\circ} C}}$\\\\",
-          text "\\midrule Equation &"<+>get Symbol h_g<+> eq <+> dlr <>
-          get Equation h_g <> dlr <> text "\\\\ \\midrule",
-          text "Description &"<+>get Symbol h_g<+> text "is the" <+>
-          get Description h_g, text "\\newline", 
-          (vcat $ (writeDep [Symbol,Description] h_g_dep "is the" "\\newline" Pgraph)),
+          text "\\midrule Equation &"<+>get Symbol h_g Pg<+> eq <+> dlr <>
+          get Equation h_g Eqn <> dlr <> text "\\\\ \\midrule",
+          text "Description &"<+>get Symbol h_g Pg<+> text "is the" <+>
+          get Description h_g Pg, text "\\newline", 
+          (vcat $ (writeDep [Symbol,Description] h_g_dep "is the" "\\newline" Pg)),
           text "NOTE: Equation taken from the code\\\\ \\midrule",
           text "Sources & source code\\\\", 
           text "\\bottomrule \\end{tabular} \\end{minipage}\\\\",
           text "~\\newline \\noindent \\begin{minipage}{\\textwidth}",
           text "\\begin{tabular}{p{\\colAwidth} p{\\colBwidth}}", 
           text "\\toprule \\textbf{Number} & \\textbf{DD\\refstepcounter{datadefnum}\\thedatadefnum \\label{hc}}\\\\ \\midrule Label & ",
-          get Symbol h_c, text "\\\\ \\midrule", 
+          get Symbol h_c Pg, text "\\\\ \\midrule", 
           text "Units & $ML^0t^{-3}T^{-1}$\\\\ \\midrule",
           text "SI equivalent & $\\mathrm{\\frac{kW}{m^{2o}C}}$\\\\ \\midrule",
-          text "Equation &"<+>get Symbol h_c<+> eq <> dlr,
-          get Equation h_c <> dlr <> text "\\\\ \\midrule",
-          text "Description & "<+>get Symbol h_c<+> text "is the" <+>
-          get Description h_c,
+          text "Equation &"<+>get Symbol h_c Pg<+> eq <> dlr,
+          get Equation h_c Eqn<> dlr <> text "\\\\ \\midrule",
+          text "Description & "<+>get Symbol h_c Pg<+> text "is the" <+>
+          get Description h_c Pg,
           text "\\newline",
-          (vcat $ (writeDep [Symbol,Description] h_c_dep "is the" "\\newline" Pgraph)),
+          (vcat $ (writeDep [Symbol,Description] h_c_dep "is the" "\\newline" Pg)),
           text "NOTE: Equation taken from the code\\\\ \\midrule  Sources & source code \\\\ \\bottomrule \\end{tabular} \\end{minipage}\\\\ "]
 
 lpmBody = 
@@ -87,15 +87,15 @@ lpmBody =
     text "@<Functions@>=",
     text "@<Function to Calculate hg@>@/", text "@<Function to Calculate hc@>@/", 
     text "@ DD\\ref{L-hc} in the SRS gives the heat transfer coefficient (" <>
-    get Symbol h_c <> text ") as: \n\\begin{equation}\nh_{c} =" <>
-    get Equation h_c <> text ", \\label{eq:hc}",
+    get Symbol h_c Pg <> text ") as: \n\\begin{equation}\nh_{c} =" <>
+    get Equation h_c Eqn <> text ", \\label{eq:hc}",
     text "\\end{equation}", text "The corresponding C code is given by:",
     text "@<Function to Calculate hc@>=", 
     text "double calc_hc(double k_c, double h_p, double tau_c)", text "{",
     text " return (2*(k_c)*(h_p)) / ((2*(k_c))+(tau_c*(h_p)));", text "}",
     text "@ DD\\ref{L-hg} in the SRS gives the gap conductance (" <>
-    get Symbol h_g <> text ") as:", text "\\begin{equation}", text "h_{g} ="<>
-    get Equation h_g <> text "\\label{eq:hg}", text "\\end{equation}",
+    get Symbol h_g Pg <> text ") as:", text "\\begin{equation}", text "h_{g} ="<>
+    get Equation h_g Eqn<> text "\\label{eq:hg}", text "\\end{equation}",
     text "The corresponding C code is given by:",
     text "@<Function to Calculate hg@>=", 
     text "double calc_hg(double k_c, double h_b, double tau_c)",text "{",

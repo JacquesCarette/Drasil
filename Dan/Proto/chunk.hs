@@ -15,7 +15,7 @@ getWFormat :: [AST.Chunk AST.FName AST.FDesc] -> (AST.FName,AST.FName) -> Doc ->
                 Doc -> [Doc]
 getWFormat [] _ _ _ = [empty]
 getWFormat (c:cs) (x,y) between after = 
-  [(get x c AST.Pgraph <+> between <+> get y c AST.Pgraph <> after)] ++
+  [(get x c AST.Pg <+> between <+> get y c AST.Pg <> after)] ++
   (getWFormat cs (x,y) between after)
   
 writeDep :: [AST.FName] -> AST.Dependency -> String -> String -> AST.Context -> [Doc]

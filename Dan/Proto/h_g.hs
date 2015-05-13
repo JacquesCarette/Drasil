@@ -10,7 +10,7 @@ import Config
 
 h_g :: Chunk FName FDesc
 h_g = newChunk $
-  [(Symbol, S "h" :- S "{g}$"),
+  [(Symbol, S "h" :- S "{g}"),
    (Equation, E h_g_eq),
    (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
    (Description, S

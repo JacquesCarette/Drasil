@@ -35,7 +35,7 @@ data GreekChar = Tau_L
                | Alpha_U
   deriving (Eq,Ord)
                -- ... Greek letters, lower and uppercase.
-data Context = Pgraph | Eqn | Code
+data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
 -- Make things prettier
 v = Chnk

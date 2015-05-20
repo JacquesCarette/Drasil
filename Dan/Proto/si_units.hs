@@ -1,7 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module SI_Units where
 import Chunk
-import Config
 import ASTInternal
 
 si_units :: [Chunk FName FDesc]

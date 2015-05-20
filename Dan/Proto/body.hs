@@ -4,7 +4,7 @@ import Text.PrettyPrint
 import Example1
 import SI_Units
 import Helpers
-import Config
+import TeXHelpers
 import ASTInternal
 import PrintTex
 

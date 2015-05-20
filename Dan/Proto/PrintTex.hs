@@ -2,7 +2,6 @@
 module PrintTex where
 import ASTTex
 import ToTex
-import Helpers
 import qualified Data.Map.Strict as Map
 import Config
 import Text.PrettyPrint
@@ -10,7 +9,7 @@ import Data.Maybe
 import qualified ASTInternal as AST
 
 p_expr :: TExp -> String
-p_expr (Chnk c) = getStr Equation c AST.Eqn
+p_expr (Chnk c) = getStr AST.Equation c AST.Eqn
 p_expr (Dbl d)  = show d
 p_expr (Int i)  = show i
 p_expr (Mul a b) = mul a b
@@ -26,10 +25,11 @@ mul a b         = p_expr a ++ p_expr b
 fraction :: String -> String -> String
 fraction a b = "\\frac{" ++ a ++ "}{" ++ b ++ "}"
 
+--This needs to be moved elsewhere. Preferably to the main file.
 format :: AST.Context -> AST.Spec -> String
-format c spec = case output of TeX -> format_Tex c spec
-                               Plain -> ""
-
+format c spec = case output of AST.TeX -> format_Tex c spec
+                               AST.Plain -> ""
+--This is fine here.
 format_Tex :: AST.Context -> AST.Spec -> String                             
 format_Tex _ (AST.E e) = p_expr $ expr e
 format_Tex _ (AST.S s) = s
@@ -43,9 +43,12 @@ format_Tex AST.Pg (a AST.:^ b) =
 format_Tex c (a AST.:^ b) = format_Tex c a ++ "^" ++ format_Tex c b
 format_Tex _ _ = ""
 
+--This function should be moved elsewhere, preferably somewhere accessible to
+  --the recipes, should also be changed to use the internal AST instead of Doc
 get :: AST.FName -> AST.Chunk AST.FName AST.FDesc -> AST.Context -> Doc
 get name chunk con = text $ getStr name chunk con
 
+--This function can be collapsed into get. Functionality may need to be tweaked.
 getStr :: AST.FName -> AST.Chunk AST.FName AST.FDesc -> AST.Context -> String
 getStr name chunk con = format con (fromMaybe (AST.Empty) (Map.lookup name chunk))
 

@@ -1,7 +1,7 @@
+{-# OPTIONS -Wall #-} 
 module Example1 where
 import ASTInternal
 import Chunk
-import Config
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------

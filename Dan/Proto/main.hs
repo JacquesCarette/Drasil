@@ -1,11 +1,9 @@
 {-# OPTIONS -Wall #-} 
 module Main where
-
-import Helpers
 import System.IO
 import Text.PrettyPrint.HughesPJ
-import Config
 import Body
+import TeXHelpers
 
 data DocType = SRS
              | LPM

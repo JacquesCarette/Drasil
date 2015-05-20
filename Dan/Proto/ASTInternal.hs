@@ -1,14 +1,21 @@
 {-# OPTIONS -Wall #-} 
 module ASTInternal where
 import qualified Data.Map.Strict as Map
-import Config
 import Data.List
 
+--Field should be configurable, but currently not in config to avoid
+  -- cyclic import.
+data Field = Symbol | Equation | Description | SIU
+  deriving (Ord, Eq)
 
 type Chunk = Map.Map
 type FName = Field
 type FDesc = Spec
 type Dependency = [Chunk FName FDesc]
+
+--Supported output formats for documentation.
+data OutFormat = TeX
+               | Plain
 
 data Expr = Chnk Variable
           | Dbl Double

@@ -1,7 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Body where
 import Text.PrettyPrint
-import Chunk
 import Example1
 import SI_Units
 import Helpers

@@ -37,7 +37,7 @@ format c spec = case output of TeX -> format_Tex c spec
 format_Tex :: Context -> Spec -> String                             
 format_Tex _ (E e) = expr e
 format_Tex _ (S s) = s
-format_Tex _ (G x) = greek x
+format_Tex _ (U x) = uni x
 format_Tex Pg (a :- b) = 
   "$"++format_Tex Pg a ++"_"++ format_Tex Pg b++"$"
 format_Tex c (a :- b) = 
@@ -53,6 +53,9 @@ get name chunk con = text $ getStr name chunk con
 getStr :: FName -> Chunk FName FDesc -> Context -> String
 getStr name chunk con = format con (fromMaybe (Empty) (Map.lookup name chunk))
 
-greek :: GreekChar -> String
-greek (Tau_L) = "\\tau"
-greek _ = "\\Tau"
+uni :: Unicode -> String
+uni (Tau_L) = "\\tau"
+uni (Tau_U) = "\\Tau"
+uni (Alpha_L) = "\\alpha"
+uni (Alpha_U) = "\\Alpha"
+-- uni _ = error "Invalid unicode character selection"

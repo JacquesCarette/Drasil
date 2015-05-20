@@ -3,8 +3,7 @@ module Body where
 import Text.PrettyPrint
 import Chunk
 import ToTex
-import H_g
-import H_c
+import Example1
 import SI_Units
 import Helpers
 import Config

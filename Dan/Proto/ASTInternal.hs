@@ -21,16 +21,16 @@ data Expr = Chnk Variable
 
 type Variable = Chunk FName FDesc
 
---For writing symbols in a specification lang that can be converted to TeX
-data Spec = E Expr
-            | S String
-            | Spec :- Spec
-            | Spec :^ Spec
-            | Empty
-            | G GreekChar
+--For writing chunks in a specification language that can be converted to TeX
+data Spec = E Expr          -- Expressions
+            | S String      -- Strings, used for Descriptions/Symbols in Chunks
+            | Spec :- Spec  -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
+            | Spec :^ Spec  -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
+            | Empty         -- Blank
+            | U Unicode   -- Greek Character
   deriving (Eq, Ord)
   
-data GreekChar = Tau_L
+data Unicode = Tau_L
                | Tau_U
                | Alpha_L
                | Alpha_U
@@ -49,4 +49,5 @@ get_dep (a :/ b) = nub (get_dep a ++ get_dep b)
 get_dep (a :* b) = nub (get_dep a ++ get_dep b)
 get_dep (a :+ b) = nub (get_dep a ++ get_dep b)
 get_dep (Chnk c) = [c]
-get_dep _ = [] 
+get_dep (Int _) = []
+get_dep _ = error "Unexpected use of get_dep"

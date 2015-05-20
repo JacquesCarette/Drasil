@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module K_c where
 import ASTInternal
 import Chunk

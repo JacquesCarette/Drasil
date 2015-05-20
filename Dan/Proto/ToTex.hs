@@ -1,9 +1,9 @@
+{-# OPTIONS -Wall #-} 
 module ToTex where
 import ASTInternal
 import Helpers
 import qualified Data.Map.Strict as Map
 import Config
-import Data.List
 import Text.PrettyPrint
 import Data.Maybe
 
@@ -16,17 +16,21 @@ expr (a :+ b) = expr a ++ "+" ++ expr b
 expr (a :/ b) = fraction (expr (replace_divs a)) (expr (replace_divs b))
 expr (Div a b) = expr a ++ "/" ++ expr b
 
+mul :: Expr -> Expr -> String
 mul a b@(Dbl _) = expr a ++ "*" ++ expr b
 mul a b@(Int _) = expr a ++ "*" ++ expr b
 mul a b         = expr a ++ expr b
 
+fraction :: String -> String -> String
 fraction a b = "\\frac{" ++ a ++ "}{" ++ b ++ "}"
 
+replace_divs :: Expr -> Expr
 replace_divs (a :/ b) = (Div (replace_divs a) (replace_divs b))
 replace_divs (a :* b) = (replace_divs a) :* (replace_divs b)
 replace_divs (a :+ b) = (replace_divs a) :+ (replace_divs b)
 replace_divs a = a
 
+format :: Context -> Spec -> String
 format c spec = case output of TeX -> format_Tex c spec
                                Plain -> ""
 
@@ -49,5 +53,6 @@ get name chunk con = text $ getStr name chunk con
 getStr :: FName -> Chunk FName FDesc -> Context -> String
 getStr name chunk con = format con (fromMaybe (Empty) (Map.lookup name chunk))
 
+greek :: GreekChar -> String
 greek (Tau_L) = "\\tau"
 greek _ = "\\Tau"

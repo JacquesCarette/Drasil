@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module Tau_c where
 import ASTInternal
 import Chunk

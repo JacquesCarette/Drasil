@@ -1,8 +1,9 @@
+{-# OPTIONS -Wall #-} 
 module ASTInternal where
 import qualified Data.Map.Strict as Map
 import Config
 import Data.List
-import Helpers
+
 
 type Chunk = Map.Map
 type FName = Field
@@ -38,6 +39,7 @@ data GreekChar = Tau_L
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
 -- Make things prettier
+v :: Variable -> Expr
 v = Chnk
 
 

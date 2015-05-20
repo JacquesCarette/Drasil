@@ -1,8 +1,7 @@
+{-# OPTIONS -Wall #-} 
 module H_c where
 import Chunk
 import ASTInternal
-import ToTex
-import Text.PrettyPrint
 import Tau_c
 import H_b
 import K_c
@@ -19,5 +18,6 @@ h_c = newChunk $
   
 h_c_dep :: Dependency
 h_c_dep = get_dep h_c_eq
-           
+
+h_c_eq :: Expr           
 h_c_eq = ((Int 2):*(v k_c):*(v h_b)) :/ ((Int 2):*(v k_c):+(v tau_c):*(v h_b))

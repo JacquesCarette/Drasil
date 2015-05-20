@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module H_b where
 import ASTInternal
 import Chunk

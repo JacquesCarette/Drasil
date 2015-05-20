@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module Config where
 
 import Helpers
@@ -5,6 +6,7 @@ import Text.PrettyPrint.HughesPJ
 
 -- Macro / Command def'n --
 --TeX--
+srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS :: Doc
 srsComms = bullet $$ counter $$ ddefnum $$ ddref $$ colAw $$ colBw $$ arrayS
 lpmComms = text ""
 

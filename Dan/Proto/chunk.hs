@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module Chunk where
 
 import Text.PrettyPrint
@@ -5,10 +6,9 @@ import Text.PrettyPrint
 import qualified Data.Map.Strict as Map
 
 import qualified ASTInternal as AST
-import Config
-import Helpers
 import ToTex
 
+newChunk :: [(AST.FName, AST.FDesc)] -> Map.Map AST.FName AST.FDesc
 newChunk l = Map.fromList l
 
 getWFormat :: [AST.Chunk AST.FName AST.FDesc] -> (AST.FName,AST.FName) -> Doc ->
@@ -23,7 +23,7 @@ writeDep [] _ _ _ _ = [empty]
 writeDep _ [] _ _ _ = [empty]
 writeDep (x:[]) (c:[]) _ es con = 
   [get x c con <+> text es]
-writeDep (x:[]) (c:cs) is es con= 
+writeDep (x:[]) (c:_) _ es con= 
   [get x c con <+> text es]
 writeDep (x:xs) (c:[]) is es con= 
   [get x c con <+> text is] ++ writeDep xs [c] is es con

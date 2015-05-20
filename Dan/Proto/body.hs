@@ -1,19 +1,16 @@
+{-# OPTIONS -Wall #-} 
 module Body where
 import Text.PrettyPrint
-import Config
 import Chunk
 import ToTex
 import H_g
 import H_c
-import H_p
-import Tau_c
-import K_c
 import SI_Units
 import Helpers
 import Config
 import ASTInternal
 
-
+s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, srsBody, lpmBody :: Doc
 s1 = sec "Table of Units"
 
 --The breakdown is for clarity, not technical purposes.

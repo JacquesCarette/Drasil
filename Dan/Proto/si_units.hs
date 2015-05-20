@@ -1,12 +1,14 @@
+{-# OPTIONS -Wall #-} 
 module SI_Units where
 import Chunk
-import Text.PrettyPrint
 import Config
 import ASTInternal
 
+si_units :: [Chunk FName FDesc]
 si_units = [metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
               watt]
-  
+metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
+              watt :: Chunk FName FDesc
 metre = newChunk $
   [ (Symbol, S "m"),
     (Description, S "length (metre)") ]

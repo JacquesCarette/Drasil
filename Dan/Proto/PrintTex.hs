@@ -1,0 +1,57 @@
+{-# OPTIONS -Wall #-} 
+module PrintTex where
+import ASTTex
+import ToTex
+import Helpers
+import qualified Data.Map.Strict as Map
+import Config
+import Text.PrettyPrint
+import Data.Maybe
+import qualified ASTInternal as AST
+
+p_expr :: TExp -> String
+p_expr (Chnk c) = getStr Equation c AST.Eqn
+p_expr (Dbl d)  = show d
+p_expr (Int i)  = show i
+p_expr (Mul a b) = mul a b
+p_expr (Add a b) = p_expr a ++ "+" ++ p_expr b
+p_expr (Frac a b) = fraction (p_expr a) (p_expr b)
+p_expr (Div a b) = p_expr a ++ "/" ++ p_expr b
+
+mul :: TExp -> TExp -> String
+mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
+mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
+mul a b         = p_expr a ++ p_expr b
+
+fraction :: String -> String -> String
+fraction a b = "\\frac{" ++ a ++ "}{" ++ b ++ "}"
+
+format :: AST.Context -> AST.Spec -> String
+format c spec = case output of TeX -> format_Tex c spec
+                               Plain -> ""
+
+format_Tex :: AST.Context -> AST.Spec -> String                             
+format_Tex _ (AST.E e) = p_expr $ expr e
+format_Tex _ (AST.S s) = s
+format_Tex _ (AST.U x) = uni x
+format_Tex AST.Pg (a AST.:- b) = 
+  "$"++format_Tex AST.Pg a ++"_"++ format_Tex AST.Pg b++"$"
+format_Tex c (a AST.:- b) = 
+  format_Tex c a ++ "_" ++ format_Tex c b
+format_Tex AST.Pg (a AST.:^ b) = 
+  "$"++format_Tex AST.Pg a ++"^"++ format_Tex AST.Pg b++"$"
+format_Tex c (a AST.:^ b) = format_Tex c a ++ "^" ++ format_Tex c b
+format_Tex _ _ = ""
+
+get :: AST.FName -> AST.Chunk AST.FName AST.FDesc -> AST.Context -> Doc
+get name chunk con = text $ getStr name chunk con
+
+getStr :: AST.FName -> AST.Chunk AST.FName AST.FDesc -> AST.Context -> String
+getStr name chunk con = format con (fromMaybe (AST.Empty) (Map.lookup name chunk))
+
+uni :: AST.Unicode -> String
+uni (AST.Tau_L) = "\\tau"
+uni (AST.Tau_U) = "\\Tau"
+uni (AST.Alpha_L) = "\\alpha"
+uni (AST.Alpha_U) = "\\Alpha"
+-- uni _ = error "Invalid unicode character selection"

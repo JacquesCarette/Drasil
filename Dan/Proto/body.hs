@@ -2,12 +2,12 @@
 module Body where
 import Text.PrettyPrint
 import Chunk
-import ToTex
 import Example1
 import SI_Units
 import Helpers
 import Config
 import ASTInternal
+import PrintTex
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, srsBody, lpmBody :: Doc
 s1 = sec "Table of Units"

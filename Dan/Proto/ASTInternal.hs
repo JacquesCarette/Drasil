@@ -14,9 +14,8 @@ data Expr = Chnk Variable
           | Dbl Double
           | Int Integer
           | Expr :* Expr
-          | Expr :+ Expr
           | Expr :/ Expr
-          | Div Expr Expr -- used internally (ONLY)
+          | Expr :+ Expr
   deriving (Eq, Ord)
 
 type Variable = Chunk FName FDesc

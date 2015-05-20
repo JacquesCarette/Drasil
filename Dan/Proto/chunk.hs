@@ -6,7 +6,7 @@ import Text.PrettyPrint
 import qualified Data.Map.Strict as Map
 
 import qualified ASTInternal as AST
-import ToTex
+import PrintTex
 
 newChunk :: [(AST.FName, AST.FDesc)] -> Map.Map AST.FName AST.FDesc
 newChunk l = Map.fromList l

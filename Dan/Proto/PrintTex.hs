@@ -42,7 +42,7 @@ format_Tex c (a AST.:- b) =
 format_Tex AST.Pg (a AST.:^ b) = 
   "$"++format_Tex AST.Pg a ++"^{"++ format_Tex AST.Pg b++"}$"
 format_Tex c (a AST.:^ b) = format_Tex c a ++ "^{" ++ format_Tex c b ++ "}"
-format_Tex _ (AST.M _) = ""
+format_Tex _ (AST.M unit) = writeUnit unit
 format_Tex _ AST.Empty = ""
 
 --This function should be moved elsewhere, preferably somewhere accessible to
@@ -79,3 +79,7 @@ writeDep (x:xs) (c:[]) is es con=
   [get x c con <+> text is] ++ writeDep xs [c] is es con
 writeDep (x:xs) (c:cs) is es con= 
   writeDep (x:xs) (c:[]) is es con ++ writeDep (x:xs) cs is es con
+
+writeUnit :: AST.Unit -> String  
+writeUnit (AST.Fundamental s) = s
+writeUnit (AST.Derived s e) = s ++ "=" ++ p_expr (expr e)

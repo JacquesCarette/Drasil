@@ -5,7 +5,7 @@ import Data.List
 
 --Field should be configurable, but currently not in config to avoid
   -- cyclic import.
-data Field = Symbol | Equation | Description | SIU
+data Field = Symbol | Equation | Description | SIU | Name
   deriving (Ord, Eq)
 
 type Chunk = Map.Map
@@ -23,6 +23,7 @@ data Expr = V Variable
           | Expr :* Expr
           | Expr :/ Expr
           | Expr :+ Expr
+          | Expr :^: Expr
           | C (Chunk FName FDesc)
   deriving (Eq, Ord)
 
@@ -34,9 +35,14 @@ data Spec = E Expr          -- Expressions
             | Spec :- Spec  -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
             | Spec :^ Spec  -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
             | Empty         -- Blank
-            | U Unicode   -- Greek Character
+            | U Unicode     -- Unicode for special characters
+            | M Unit        -- Measured in *
   deriving (Eq, Ord)
-  
+
+data Unit = Fundamental String --Fundamental unit type (e.g. "m" for length)
+          | Derived String Expr --Derived unit type (e.g. "J" for power, from
+                                --the expression kg m^2 / s^2
+  deriving (Eq, Ord)
 data Unicode = Tau_L
                | Tau_U
                | Alpha_L

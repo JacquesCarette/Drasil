@@ -42,6 +42,7 @@ format_Tex c (a AST.:- b) =
 format_Tex AST.Pg (a AST.:^ b) = 
   "$"++format_Tex AST.Pg a ++"^{"++ format_Tex AST.Pg b++"}$"
 format_Tex c (a AST.:^ b) = format_Tex c a ++ "^{" ++ format_Tex c b ++ "}"
+format_Tex _ (AST.M _) = ""
 format_Tex _ AST.Empty = ""
 
 --This function should be moved elsewhere, preferably somewhere accessible to

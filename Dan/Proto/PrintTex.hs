@@ -7,6 +7,7 @@ import Config
 import Text.PrettyPrint
 import Data.Maybe
 import qualified ASTInternal as AST
+import Helpers
 
 p_expr :: TExp -> String
 p_expr (C c) = getStr AST.Equation c AST.Eqn
@@ -17,6 +18,7 @@ p_expr (Add a b) = p_expr a ++ "+" ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b)
 p_expr (Div a b) = p_expr a ++ "/" ++ p_expr b
 p_expr (Var v) = v
+p_expr (Pow a b) = p_expr a ++ "^" ++ p_expr b
 
 mul :: TExp -> TExp -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
@@ -68,6 +70,18 @@ getWFormat (c:cs) (x,y) between after =
   [(get x c AST.Pg <+> between <+> get y c AST.Pg <> after)] ++
   (getWFormat cs (x,y) between after)
   
+printSIU :: [AST.Chunk AST.FName AST.FDesc] -> [AST.FName] -> Doc -> Doc -> [Doc]
+printSIU [] _ _ _ = [empty]
+printSIU _ [] _ _ = [empty]
+printSIU (c:cs) (x:xs) between after = 
+  [printSym (fromMaybe (error "not found") (Map.lookup AST.SIU c)) <+> eq] ++
+  [(get x c AST.Pg <+> between)] ++ (get_all xs c AST.Pg) ++ [after] ++
+  (printSIU cs (x:xs) between after)
+  
+get_all :: [AST.FName] -> AST.Chunk AST.FName AST.FDesc -> AST.Context -> [Doc]
+get_all [] _ _= [empty]
+get_all (x:xs) c con = [(get x c con)] ++ get_all xs c con
+  
 writeDep :: [AST.FName] -> AST.Dependency -> String -> String -> AST.Context -> [Doc]
 writeDep [] _ _ _ _ = [empty]
 writeDep _ [] _ _ _ = [empty]
@@ -82,4 +96,25 @@ writeDep (x:xs) (c:cs) is es con=
 
 writeUnit :: AST.Unit -> String  
 writeUnit (AST.Fundamental s) = s
-writeUnit (AST.Derived s e) = s ++ "=" ++ p_expr (expr e)
+writeUnit (AST.Derived s e) = s ++ " = " ++ pU_expr (expr e)
+
+pU_expr :: TExp -> String
+pU_expr (C c) = getStr AST.SIU c AST.Eqn
+pU_expr (Dbl d)  = show d
+pU_expr (Int i)  = show i
+pU_expr (Mul a b) = mulU a b
+pU_expr (Add a b) = pU_expr a ++ "+" ++ pU_expr b
+pU_expr (Frac a b) = fraction (pU_expr a) (pU_expr b)
+pU_expr (Div a b) = pU_expr a ++ "/" ++ pU_expr b
+pU_expr (Var v) = v
+pU_expr (Pow a b) = pU_expr a ++ "^" ++ pU_expr b
+
+mulU :: TExp -> TExp -> String
+mulU a b@(Dbl _) = pU_expr a ++ "*" ++ pU_expr b
+mulU a b@(Int _) = pU_expr a ++ "*" ++ pU_expr b
+mulU a b         = pU_expr a ++ pU_expr b
+
+printSym :: AST.Spec -> Doc
+printSym (AST.M (AST.Derived s _)) = text s
+printSym (AST.M (AST.Fundamental s)) = text s
+printSym _ = error "I can't let you do that Dave"

@@ -14,9 +14,9 @@ metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
 
 -- Fundamental SI Units --------------------------------------------------------
 metre = newChunk $
-  [ (Symbol, S "m"),
-    (Description, S "length (metre)"),
-    (Name, S "Metre")]
+  [ (Description, S "length (metre)"),
+    (Name, S "Metre"),
+    (SIU, M $ Fundamental "m")]
 kilogram = newChunk $
   [ (Symbol, S "kg"),
     (Description, S "mass (kilogram)"),
@@ -49,9 +49,10 @@ centigrade = newChunk $
     (Description, S "temperature (centigrade)"),
     (Name, S "Centigrade")] --script somewhere
 joule = newChunk $
-  [ (Symbol, S "J" {- M $ Derived "J" ((C kilogram :* (C metre:^:(Int 2))) :/ 
-      (C second:^:(Int 2)))-}),
-    (Description, S "energy (joule, J=$\\mathrm{\\frac{kg m^2}{s^2}}$)"),
+  [ (Symbol, S "J"),
+    (SIU, M $ Derived "J" ((C kilogram :* (C metre:^:(Int 2))) :/ 
+      (C second:^:(Int 2)))),
+    (Description, S "energy"),
     (Name, S "Joule")]
   -- Again TeX specific formatting used above/below here. Needs to be changed
 calorie = newChunk $

@@ -17,7 +17,7 @@ type Dependency = [Chunk FName FDesc]
 data OutFormat = TeX
                | Plain
 
-data Expr = Var Variable
+data Expr = V Variable
           | Dbl Double
           | Int Integer
           | Expr :* Expr
@@ -45,9 +45,7 @@ data Unicode = Tau_L
                -- ... Greek letters, lower and uppercase.
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
--- Make things prettier
-v :: Variable -> Expr
-v = Var
+
 --Get dependency from equation  
 get_dep :: Expr -> Dependency
 get_dep (a :/ b) = nub (get_dep a ++ get_dep b)
@@ -55,5 +53,5 @@ get_dep (a :* b) = nub (get_dep a ++ get_dep b)
 get_dep (a :+ b) = nub (get_dep a ++ get_dep b)
 get_dep (C c) = [c]
 get_dep (Int _) = []
-get_dep (Var _) = []
+get_dep (V _) = []
 get_dep _ = error "Unexpected use of get_dep"

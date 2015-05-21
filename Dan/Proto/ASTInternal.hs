@@ -17,15 +17,16 @@ type Dependency = [Chunk FName FDesc]
 data OutFormat = TeX
                | Plain
 
-data Expr = Chnk Variable
+data Expr = Var Variable
           | Dbl Double
           | Int Integer
           | Expr :* Expr
           | Expr :/ Expr
           | Expr :+ Expr
+          | C (Chunk FName FDesc)
   deriving (Eq, Ord)
 
-type Variable = Chunk FName FDesc
+type Variable = String
 
 --For writing chunks in a specification language that can be converted to TeX
 data Spec = E Expr          -- Expressions
@@ -46,14 +47,13 @@ data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
 -- Make things prettier
 v :: Variable -> Expr
-v = Chnk
-
-
+v = Var
 --Get dependency from equation  
 get_dep :: Expr -> Dependency
 get_dep (a :/ b) = nub (get_dep a ++ get_dep b)
 get_dep (a :* b) = nub (get_dep a ++ get_dep b)
 get_dep (a :+ b) = nub (get_dep a ++ get_dep b)
-get_dep (Chnk c) = [c]
+get_dep (C c) = [c]
 get_dep (Int _) = []
+get_dep (Var _) = []
 get_dep _ = error "Unexpected use of get_dep"

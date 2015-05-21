@@ -9,13 +9,14 @@ import Data.Maybe
 import qualified ASTInternal as AST
 
 p_expr :: TExp -> String
-p_expr (Chnk c) = getStr AST.Equation c AST.Eqn
+p_expr (C c) = getStr AST.Equation c AST.Eqn
 p_expr (Dbl d)  = show d
 p_expr (Int i)  = show i
 p_expr (Mul a b) = mul a b
 p_expr (Add a b) = p_expr a ++ "+" ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b)
 p_expr (Div a b) = p_expr a ++ "/" ++ p_expr b
+p_expr (Var v) = v
 
 mul :: TExp -> TExp -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
@@ -35,13 +36,13 @@ format_Tex _ (AST.E e) = p_expr $ expr e
 format_Tex _ (AST.S s) = s
 format_Tex _ (AST.U x) = uni x
 format_Tex AST.Pg (a AST.:- b) = 
-  "$"++format_Tex AST.Pg a ++"_"++ format_Tex AST.Pg b++"$"
+  "$"++format_Tex AST.Pg a ++"_{"++ (format_Tex AST.Pg b)++"}$"
 format_Tex c (a AST.:- b) = 
-  format_Tex c a ++ "_" ++ format_Tex c b
+  format_Tex c a ++ "_{" ++ format_Tex c b ++ "}"
 format_Tex AST.Pg (a AST.:^ b) = 
-  "$"++format_Tex AST.Pg a ++"^"++ format_Tex AST.Pg b++"$"
-format_Tex c (a AST.:^ b) = format_Tex c a ++ "^" ++ format_Tex c b
-format_Tex _ _ = ""
+  "$"++format_Tex AST.Pg a ++"^{"++ format_Tex AST.Pg b++"}$"
+format_Tex c (a AST.:^ b) = format_Tex c a ++ "^{" ++ format_Tex c b ++ "}"
+format_Tex _ AST.Empty = ""
 
 --This function should be moved elsewhere, preferably somewhere accessible to
   --the recipes, should also be changed to use the internal AST instead of Doc

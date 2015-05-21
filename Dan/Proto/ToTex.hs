@@ -4,12 +4,13 @@ import ASTInternal
 import qualified ASTTex as T
 
 expr :: Expr -> T.TExp
-expr (Chnk c) = T.Chnk c
+expr (Var c)  = T.Var c
 expr (Dbl d)  = T.Dbl d
 expr (Int i)  = T.Int i
 expr (a :* b) = T.Mul (expr a) (expr b)
 expr (a :+ b) = T.Add (expr a) (expr b)
 expr (a :/ b) = T.Frac (replace_divs a) (replace_divs b)
+expr (C c)    = T.C c
 
 replace_divs :: Expr -> T.TExp
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)

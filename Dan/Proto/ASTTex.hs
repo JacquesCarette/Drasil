@@ -11,4 +11,5 @@ data TExp = Var AST.Variable
           | Div TExp TExp
           | C (AST.Chunk AST.FName AST.FDesc)
           | Pow TExp TExp
+          | Sub TExp TExp
   deriving (Eq, Ord)

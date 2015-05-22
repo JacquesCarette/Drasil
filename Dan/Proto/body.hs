@@ -21,7 +21,7 @@ s1_intro = text "Throughout this document SI" <+>
            
 s1_table = 
   vcat ([text "~\\newline \\begin{longtable}{l p{11cm}}"] ++ 
-  (getWFormat si_units (Symbol,Description) (text "& \\blt for") dbs) ++ 
+  (printSIU si_units [Description,SIU] (text "& \\blt for") dbs) ++ 
     [text "\\end{longtable}"])
     
 s2 = sec "Table of Symbols"

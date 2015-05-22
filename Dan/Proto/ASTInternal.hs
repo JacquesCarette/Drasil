@@ -20,10 +20,11 @@ data OutFormat = TeX
 data Expr = V Variable
           | Dbl Double
           | Int Integer
+          | Expr :^ Expr
           | Expr :* Expr
           | Expr :/ Expr
           | Expr :+ Expr
-          | Expr :^: Expr
+          | Expr :- Expr
           | C (Chunk FName FDesc)
   deriving (Eq, Ord)
 
@@ -32,8 +33,8 @@ type Variable = String
 --For writing chunks in a specification language that can be converted to TeX
 data Spec = E Expr          -- Expressions
             | S String      -- Strings, used for Descriptions/Symbols in Chunks
-            | Spec :- Spec  -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
-            | Spec :^ Spec  -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
+            | Spec :-: Spec  -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
+            | Spec :^: Spec  -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
             | Empty         -- Blank
             | U Unicode     -- Unicode for special characters
             | M Unit        -- Measured in *
@@ -47,6 +48,7 @@ data Unicode = Tau_L
                | Tau_U
                | Alpha_L
                | Alpha_U
+               | Circle
   deriving (Eq,Ord)
                -- ... Greek letters, lower and uppercase.
 data Context = Pg | Eqn | Code -- paragraph, equation, or code

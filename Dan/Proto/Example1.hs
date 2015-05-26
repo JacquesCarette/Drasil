@@ -7,9 +7,10 @@ import Chunk
 --------------- --------------- --------------- ---------------
 tau_c :: Chunk FName FDesc
 tau_c = newChunk $
-  [(Symbol,U Tau_L :-: S "c"),
-   (Equation,U Tau_L :-: S "c"),
-   (Description,S "clad thickness")
+  [(Symbol,U Tau_L :-: S "c"), --Formatted symbol for documentation
+   (VarName,U Tau_L :-: S "c"), --VarName if the symbol represents a variable
+                                --Equation if the symbol can be calculated
+   (Description,S "clad thickness") --Description
   ]
   
 --------------- --------------- --------------- ---------------
@@ -57,10 +58,9 @@ h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+(C tau_c):*(C h_p))
 h_b :: Chunk FName FDesc
 h_b = newChunk $
   [(Symbol,S "h" :-: S "b"),
-   (Equation,S "h" :-: S "b"),
+   (VarName,S "h" :-: S "b"),
    (Description, S "initial coolant film conductance")
   ]
-  
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_p ---------------}
 --------------- --------------- --------------- ---------------
@@ -68,7 +68,7 @@ h_b = newChunk $
 h_p :: Chunk FName FDesc
 h_p = newChunk $
   [(Symbol, S "h":-: S "p"),
-   (Equation, S "h":-: S "p"),
+   (VarName, S "h":-: S "p"),
    (Description, S "initial gap film conductance")
   ]
   
@@ -79,6 +79,6 @@ h_p = newChunk $
 k_c :: Chunk FName FDesc
 k_c = newChunk $
   [(Symbol,S "k":-: S "c"),
-   (Equation, S "k":-: S "c"),
+   (VarName, S "k":-: S "c"),
    (Description, S "clad conductivity")
   ]

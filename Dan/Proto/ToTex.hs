@@ -4,7 +4,7 @@ import ASTInternal
 import qualified ASTTex as T
 
 expr :: Expr -> T.TExp
-expr (V c)    = T.Var c
+expr (V v)    = T.Var v
 expr (Dbl d)  = T.Dbl d
 expr (Int i)  = T.Int i
 expr (a :* b) = T.Mul (expr a) (expr b)

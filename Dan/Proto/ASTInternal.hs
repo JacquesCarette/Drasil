@@ -5,7 +5,7 @@ import Data.List
 
 --Field should be configurable, but currently not in config to avoid
   -- cyclic import.
-data Field = Symbol | Equation | Description | SIU | Name
+data Field = Symbol | Equation | Description | SIU | Name | VarName
   deriving (Ord, Eq)
 
 type Chunk = Map.Map
@@ -16,6 +16,7 @@ type Dependency = [Chunk FName FDesc]
 --Supported output formats for documentation.
 data OutFormat = TeX
                | Plain
+data OutLang   = CLang
 
 data Expr = V Variable
           | Dbl Double
@@ -53,6 +54,8 @@ data Unicode = Tau_L
                -- ... Greek letters, lower and uppercase.
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
+data CodeType = Calc
+data Precision = Single | Double
 
 --Get dependency from equation  
 get_dep :: Expr -> Dependency

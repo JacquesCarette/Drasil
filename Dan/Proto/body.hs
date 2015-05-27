@@ -88,14 +88,11 @@ lpmBody =
     text "\\end{equation}", text "The corresponding C code is given by:",
     text "@<Function to Calculate hc@>=",
     text (C.code h_c Calc),
-    -- text "double calc_hc(double k_c, double h_p, double tau_c)", text "{",
-    -- text " return (2*(k_c)*(h_p)) / ((2*(k_c))+(tau_c*(h_p)));", text "}",
     text "@ DD\\ref{L-hg} in the SRS gives the gap conductance (" <>
     get Symbol h_g Pg <> text ") as:", text "\\begin{equation}", text "h_{g} ="<>
     get Equation h_g Eqn<> text "\\label{eq:hg}", text "\\end{equation}",
     text "The corresponding C code is given by:",
     text "@<Function to Calculate hg@>=", 
-    text "double calc_hg(double k_c, double h_b, double tau_c)",text "{",
-    text " return (2*(k_c)*(h_b)) / ((2*(k_c)) + (tau_c*(h_b)));", text "}", 
+    text (C.code h_g Calc),
     text "@"
    ]

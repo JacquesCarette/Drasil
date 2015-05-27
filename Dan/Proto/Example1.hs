@@ -49,7 +49,7 @@ h_g_dep :: Dependency
 h_g_dep = get_dep h_g_eq
 
 h_g_eq :: Expr           
-h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+(C tau_c):*(C h_p))
+h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}

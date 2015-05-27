@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module ASTC where
 import qualified ASTInternal as AST
 
@@ -15,7 +16,7 @@ data Expr = V Name
           | Div Expr Expr
           | Add Expr Expr
           | Sub Expr Expr
-          | Call Name Expr
+          | Call Name [Expr] --Call "Function" [Parameters]
           
 data Stmt = Return Expr
           | Wrap Expr

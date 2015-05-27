@@ -17,7 +17,8 @@ sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
-
+paren :: String -> String
+paren t = "(" ++ t ++ ")"
 
 --format strings
 upcase, lowcase :: [Char] -> Doc

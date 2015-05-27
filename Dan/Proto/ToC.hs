@@ -29,14 +29,5 @@ chunk = \c -> C.V $ textify c
   (Map.lookup Equation c))
   
 textify :: Chnk -> FDesc -> String
-textify c (Empty) = error "Not a usable chunk"
-textify c x       = plaintext c
-  
--- data Spec = E Expr          -- Expressions
-            -- | S String      -- Strings, used for Descriptions/Symbols in Chunks
-            -- | Spec :-: Spec  -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
-            -- | Spec :^: Spec  -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
-            -- | Empty         -- Blank
-            -- | U Unicode     -- Unicode for special characters
-            -- | M Unit        -- Measured in *
-  -- deriving (Eq, Ord)
+textify _ (Empty) = error "Not a usable chunk"
+textify c _       = plaintext c

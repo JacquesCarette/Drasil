@@ -5,7 +5,7 @@ import qualified ASTInternal as AST
 type Name = String
 type Chunk = AST.Chunk AST.FName AST.FDesc
 
-data Method = Name [Chunk] Stmt --MethodName Parameters CodeStatements
+data Method = M Name [Chunk] Stmt --MethodName Parameters CodeStatements
 --CodeType -> Name -> [Chunk] -> Stmt; CodeType determines return type
 
 data Expr = V Name

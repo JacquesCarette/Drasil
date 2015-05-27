@@ -3,9 +3,9 @@ module PrintPlain where
 import ASTPlain
 import ToPlain
 import qualified Data.Map.Strict as Map
-import Config
 import Data.Maybe
 import qualified ASTInternal as AST
+import Prelude hiding (print)
 
 plaintext :: Chunk -> String
 plaintext c = print $
@@ -22,24 +22,16 @@ print (a AST.:^: b) = print a ++ "^" ++ print b
 print (AST.M unit)  = writeUnit unit
 print (AST.Empty)   = ""
 
--- p_expr :: Expr -> String
--- p_expr (C c) = getStr AST.Equation c AST.Eqn
--- p_expr (Dbl d)  = show d
--- p_expr (Int i)  = show i
--- p_expr (Mul a b) = mul a b
--- p_expr (Add a b) = p_expr a ++ "+" ++ p_expr b
--- p_expr (Frac a b) = fraction (p_expr a) (p_expr b)
--- p_expr (Div a b) = p_expr a ++ "/" ++ p_expr b
--- p_expr (Var v) = v
--- p_expr (Pow a b) = p_expr a ++ "^" ++ p_expr b
--- p_expr (Sub a b) = p_expr a ++ "-" ++ p_expr b
-
--- mul :: Expr -> Expr -> String
--- mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
--- mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
--- mul a b         = p_expr a ++ p_expr b
-
--- --This is fine here.
+p_expr :: Expr -> String
+p_expr (C c) = print $ fromMaybe (AST.Empty) (Map.lookup AST.Equation c)
+p_expr (Dbl d)  = show d
+p_expr (Int i)  = show i
+p_expr (Mul a b) = p_expr a ++ "*" ++ p_expr b
+p_expr (Add a b) = "(" ++ p_expr a ++ "+" ++ p_expr b ++ ")"
+p_expr (Div a b) = p_expr a ++ "/" ++ p_expr b
+p_expr (Var v) = v
+p_expr (Pow a b) = p_expr a ++ "^(" ++ p_expr b ++ ")"
+p_expr (Sub a b) = "(" ++ p_expr a ++ "-" ++ p_expr b ++ ")"
 
 
 -- --This function should be moved elsewhere, preferably somewhere accessible to
@@ -54,13 +46,13 @@ print (AST.Empty)   = ""
     -- (Map.lookup AST.Equation chunk))
 -- getStr name chunk con = format con (fromMaybe (AST.Empty) (Map.lookup name chunk))
 
--- uni :: AST.Unicode -> String
--- uni (AST.Tau_L) = "\\tau"
--- uni (AST.Tau_U) = "\\Tau"
--- uni (AST.Alpha_L) = "\\alpha"
--- uni (AST.Alpha_U) = "\\Alpha"
--- uni (AST.Circle) = "\\circ"
--- -- uni _ = error "Invalid unicode character selection"
+uni :: AST.Unicode -> String
+uni (AST.Tau_L) = "tau"
+uni (AST.Tau_U) = "Tau"
+uni (AST.Alpha_L) = "alpha"
+uni (AST.Alpha_U) = "Alpha"
+uni (AST.Circle) = "(deg)"
+--uni _ = error "Invalid unicode character selection"
   
 -- writeDep :: [AST.FName] -> AST.Dependency -> String -> String -> AST.Context -> [Doc]
 -- writeDep [] _ _ _ _ = [empty]
@@ -74,10 +66,9 @@ print (AST.Empty)   = ""
 -- writeDep (x:xs) (c:cs) is es con= 
   -- writeDep (x:xs) (c:[]) is es con ++ writeDep (x:xs) cs is es con
 
--- writeUnit :: AST.Unit -> AST.Context -> String  
--- writeUnit (AST.Fundamental s) _ = s
--- writeUnit (AST.Derived s e) AST.Pg = s ++ " = $" ++ pU_expr (expr e) ++"$"
--- writeUnit (AST.Derived s e) _ = s ++ " = " ++ pU_expr (expr e)
+writeUnit :: AST.Unit -> String  
+writeUnit (AST.Fundamental s) = s
+writeUnit (AST.Derived s e) = s ++ " = " ++ pU_expr (expr e)
 
 -- printSIU :: [Chunk] -> [AST.FName] -> Doc -> Doc -> [Doc]
 -- printSIU [] _ _ _ = [empty]
@@ -95,19 +86,13 @@ print (AST.Empty)   = ""
 -- unitSymbol (AST.M (AST.Fundamental s)) = text s
 -- unitSymbol _ = empty
 
--- pU_expr :: Expr -> String
--- pU_expr (C c) = getStr AST.SIU c AST.Eqn
--- pU_expr (Dbl d)  = show d
--- pU_expr (Int i)  = show i
--- pU_expr (Mul a b) = mulU a b
--- pU_expr (Add a b) = pU_expr a ++ "+" ++ pU_expr b
--- pU_expr (Frac a b) = "\\mathrm{" ++ fraction (pU_expr a) (pU_expr b) ++ "}"
--- pU_expr (Div a b) = pU_expr a ++ "/" ++ pU_expr b
--- pU_expr (Var v) = v
--- pU_expr (Pow a b) = pU_expr a ++ "^" ++ pU_expr b
--- pU_expr (Sub a b) = pU_expr a ++ "-" ++ pU_expr b
-
--- mulU :: Expr -> Expr -> String
--- mulU a b@(Dbl _) = pU_expr a ++ "*" ++ pU_expr b
--- mulU a b@(Int _) = pU_expr a ++ "*" ++ pU_expr b
--- mulU a b         = pU_expr a ++ " " ++ pU_expr b --For clarity in units
+pU_expr :: Expr -> String
+pU_expr (C c) = print $ fromMaybe (AST.Empty) (Map.lookup AST.SIU c)
+pU_expr (Dbl d)  = show d
+pU_expr (Int i)  = show i
+pU_expr (Mul a b) = pU_expr a ++ "*" ++ pU_expr b
+pU_expr (Add a b) = "(" ++ pU_expr a ++ "+" ++ pU_expr b ++ ")"
+pU_expr (Div a b) = pU_expr a ++ "/" ++ pU_expr b
+pU_expr (Var v) = v
+pU_expr (Pow a b) = pU_expr a ++ "^(" ++ pU_expr b ++ ")"
+pU_expr (Sub a b) = "(" ++ pU_expr a ++ "-" ++ pU_expr b ++ ")"

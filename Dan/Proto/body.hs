@@ -7,6 +7,7 @@ import Helpers
 import TeXHelpers
 import ASTInternal
 import PrintTex
+import qualified PrintC as C
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, srsBody, lpmBody :: Doc
 s1 = sec "Table of Units"
@@ -85,9 +86,10 @@ lpmBody =
     get Symbol h_c Pg <> text ") as: \n\\begin{equation}\nh_{c} =" <>
     get Equation h_c Eqn <> text ", \\label{eq:hc}",
     text "\\end{equation}", text "The corresponding C code is given by:",
-    text "@<Function to Calculate hc@>=", 
-    text "double calc_hc(double k_c, double h_p, double tau_c)", text "{",
-    text " return (2*(k_c)*(h_p)) / ((2*(k_c))+(tau_c*(h_p)));", text "}",
+    text "@<Function to Calculate hc@>=",
+    text (C.code h_c Calc),
+    -- text "double calc_hc(double k_c, double h_p, double tau_c)", text "{",
+    -- text " return (2*(k_c)*(h_p)) / ((2*(k_c))+(tau_c*(h_p)));", text "}",
     text "@ DD\\ref{L-hg} in the SRS gives the gap conductance (" <>
     get Symbol h_g Pg <> text ") as:", text "\\begin{equation}", text "h_{g} ="<>
     get Equation h_g Eqn<> text "\\label{eq:hg}", text "\\end{equation}",

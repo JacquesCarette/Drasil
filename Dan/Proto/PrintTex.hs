@@ -56,7 +56,8 @@ get name chunk con = text $ getStr name chunk con
 
 --This function can be collapsed into get. Functionality may need to be tweaked.
 getStr :: AST.FName -> Chunk -> AST.Context -> String
-getStr AST.Equation chunk con = 
+getStr AST.Equation chunk AST.Eqn = format AST.Eqn (fromMaybe (fromMaybe (error "wut") (Map.lookup AST.Symbol chunk)) (Map.lookup AST.Equation chunk))
+getStr AST.Equation chunk con =
   format con (fromMaybe (fromMaybe (error "wut") (Map.lookup AST.VarName chunk)) 
     (Map.lookup AST.Equation chunk))
 getStr name chunk con = format con (fromMaybe (AST.Empty) (Map.lookup name chunk))

@@ -11,7 +11,7 @@ import qualified PrintPlain as P
 import Helpers
 
 code :: Chunk -> AST.CodeType -> String
-code c (AST.Calc) = printMeth precision $ buildMethod c
+code c (AST.Calc) = printMeth $ buildMethod c
 
 buildMethod :: Chunk -> Method
 buildMethod c = M ("calc_"++P.plaintext c) (AST.get_dep (get AST.Equation c)) (buildStmt c)
@@ -26,22 +26,36 @@ pull :: AST.FDesc -> AST.Expr
 pull (AST.E e) = e
 pull _ = error "Not an expr"
 
-printMeth :: AST.Precision -> Method -> String
-printMeth (AST.Single) (M name params stmt) = cMeth "float" name params stmt
-printMeth (AST.Double) (M name params stmt) = cMeth "double" name params stmt
+printMeth :: Method -> String
+printMeth (M name params stmt) = cMeth (printPrec precision) name params stmt
+
+printPrec :: AST.Precision -> String
+printPrec (AST.Single) = "float"
+printPrec (AST.Double) = "double"
 
 cMeth :: String -> Name -> [Chunk] -> Stmt -> String
 cMeth ret name params stmt =
-  ret ++ " " ++ name ++ paren (paramList params) ++ sPrint stmt
+  ret ++ " " ++ name ++ paren (paramList params) ++ "\n{\n\t" ++ sPrint stmt 
+    ++ "\n}"
   
 paramList :: [Chunk] -> String
 paramList [] = ""
-paramList (p:ps) = p_expr (expr (AST.C p)) ++ paramList ps
-  
+paramList (p:[]) = printPrec (precision) ++ " " ++ p_expr (expr (AST.C p))
+paramList (p:ps) = 
+  printPrec (precision)++ " " ++ p_expr (expr (AST.C p)) ++ ", " ++ paramList ps
+
+sPrint :: Stmt -> String  
 sPrint (Return e)     = "return " ++ p_expr e ++ ";"
 sPrint (Wrap e)       = p_expr e ++ ";"
 sPrint (Block [])     = ""
-sPrint (Block (s:ss)) = sPrint s ++ sPrint (Block ss)
+sPrint (Block (s:ss)) = sPrint s ++ "\n" ++ sPrint (Block ss)
 
---TODO--
-p_expr _ = ""
+p_expr :: Expr -> String
+p_expr (V v) = v
+p_expr (Dbl d) = show d
+p_expr (Int i) = show i
+p_expr (Mul a b) = p_expr a ++ "*" ++ p_expr b
+p_expr (Div a b) = p_expr a ++ "/" ++ p_expr b
+p_expr (Pow a b) = p_expr a ++ "^" ++ paren (p_expr b)
+p_expr (Add a b) = paren $ p_expr a ++ "+" ++ p_expr b
+p_expr (Sub a b) = paren $ p_expr a ++ "-" ++ p_expr b

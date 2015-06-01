@@ -65,7 +65,9 @@ get_dep :: Expr -> Dependency
 get_dep (a :/ b) = nub (get_dep a ++ get_dep b)
 get_dep (a :* b) = nub (get_dep a ++ get_dep b)
 get_dep (a :+ b) = nub (get_dep a ++ get_dep b)
+get_dep (a :^ b) = nub (get_dep a ++ get_dep b)
+get_dep (a :- b) = nub (get_dep a ++ get_dep b)
 get_dep (C c) = [c]
 get_dep (Int _) = []
+get_dep (Dbl _) = []
 get_dep (V _) = []
-get_dep _ = error "Unexpected use of get_dep"

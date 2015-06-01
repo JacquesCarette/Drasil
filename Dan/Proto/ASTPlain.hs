@@ -1,10 +1,9 @@
 {-# OPTIONS -Wall #-} 
 module ASTPlain where
 
-import qualified ASTInternal as AST
-type Chunk = AST.Chunk AST.FName AST.FDesc
+import ASTInternal (Chunk, Variable)
 
-data Expr = Var AST.Variable
+data Expr = Var Variable
           | Dbl Double
           | Int Integer
           | Mul Expr Expr

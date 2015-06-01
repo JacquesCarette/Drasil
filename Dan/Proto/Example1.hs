@@ -5,7 +5,7 @@ import Chunk
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
-tau_c :: Chunk FName FDesc
+tau_c :: Chunk
 tau_c = newChunk $
   [(Symbol,U Tau_L :-: S "c"), --Formatted symbol for documentation
    (VarName,S "tau_c"),        --VarName if the symbol represents a variable
@@ -16,7 +16,7 @@ tau_c = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}  
 --------------- --------------- --------------- ---------------
-h_c :: Chunk FName FDesc
+h_c :: Chunk
 h_c = newChunk $
   [(Symbol, S "h" :-: S "c"),
    (Equation, E h_c_eq),
@@ -36,7 +36,7 @@ h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_g ---------------}
 --------------- --------------- --------------- ---------------
-h_g :: Chunk FName FDesc
+h_g :: Chunk
 h_g = newChunk $
   [(Symbol, S "h" :-: S "g"),
    (Equation, E h_g_eq),
@@ -55,7 +55,7 @@ h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 {--------------- Begin h_b ---------------}
 --------------- --------------- --------------- ---------------
 
-h_b :: Chunk FName FDesc
+h_b :: Chunk
 h_b = newChunk $
   [(Symbol,S "h" :-: S "b"),
    (VarName,S "h_b"),
@@ -65,7 +65,7 @@ h_b = newChunk $
 {--------------- Begin h_p ---------------}
 --------------- --------------- --------------- ---------------
 
-h_p :: Chunk FName FDesc
+h_p :: Chunk
 h_p = newChunk $
   [(Symbol, S "h":-: S "p"),
    (VarName, S "h_p"),
@@ -76,7 +76,7 @@ h_p = newChunk $
 {--------------- Begin k_c ---------------}
 --------------- --------------- --------------- ---------------
 
-k_c :: Chunk FName FDesc
+k_c :: Chunk
 k_c = newChunk $
   [(Symbol,S "k":-: S "c"),
    (VarName, S "k_c"),

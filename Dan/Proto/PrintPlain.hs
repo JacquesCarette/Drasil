@@ -4,6 +4,7 @@ import ASTPlain
 import ToPlain
 import qualified Data.Map.Strict as Map
 import Data.Maybe
+import ASTInternal (Chunk)
 import qualified ASTInternal as AST
 import Prelude hiding (print)
 

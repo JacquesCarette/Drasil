@@ -10,16 +10,16 @@ import Data.Maybe (fromMaybe)
 import qualified PrintPlain as P
 import Helpers
 
-code :: Chunk -> AST.CodeType -> String
+code :: AST.Chunk -> AST.CodeType -> String
 code c (AST.Calc) = printMeth $ buildMethod c
 
-buildMethod :: Chunk -> Method
+buildMethod :: AST.Chunk -> Method
 buildMethod c = M ("calc_"++P.plaintext c) (AST.get_dep (get AST.Equation c)) (buildStmt c)
 
-buildStmt :: Chunk -> Stmt
+buildStmt :: AST.Chunk -> Stmt
 buildStmt c = Return (expr (get AST.Equation c))
 
-get :: AST.FName -> Chunk -> AST.Expr
+get :: AST.FName -> AST.Chunk -> AST.Expr
 get n c = pull (fromMaybe (error "No field found") (Map.lookup n c))
 
 pull :: AST.FDesc -> AST.Expr
@@ -33,12 +33,12 @@ printPrec :: AST.Precision -> String
 printPrec (AST.Single) = "float"
 printPrec (AST.Double) = "double"
 
-cMeth :: String -> Name -> [Chunk] -> Stmt -> String
+cMeth :: String -> Name -> AST.Chunks -> Stmt -> String
 cMeth ret name params stmt =
   ret ++ " " ++ name ++ paren (paramList params) ++ "\n{\n\t" ++ sPrint stmt 
     ++ "\n}"
   
-paramList :: [Chunk] -> String
+paramList :: AST.Chunks -> String
 paramList [] = ""
 paramList (p:[]) = printPrec (precision) ++ " " ++ p_expr (expr (AST.C p))
 paramList (p:ps) = 

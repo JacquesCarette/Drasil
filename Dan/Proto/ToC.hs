@@ -7,8 +7,6 @@ import qualified Data.Map.Strict as Map
 import Data.Maybe
 import PrintPlain
 
-type Chnk = Chunk FName FDesc
-
 expr :: Expr -> C.Expr
 expr (V v)    = C.V v
 expr (Dbl d)  = C.Dbl d
@@ -23,11 +21,11 @@ expr (C c)    = chunk c
 
 -- Consider chunks as var and ensure they are calc'd in advance? Or inline a 
 -- call?
-chunk :: Chnk -> C.Expr
+chunk :: Chunk -> C.Expr
 chunk = \c -> C.V $ textify c
   (fromMaybe (fromMaybe (Empty) (Map.lookup VarName c)) 
   (Map.lookup Equation c))
   
-textify :: Chnk -> FDesc -> String
+textify :: Chunk -> FDesc -> String
 textify _ (Empty) = error "Not a usable chunk"
 textify c _       = plaintext c

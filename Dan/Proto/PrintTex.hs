@@ -8,7 +8,7 @@ import Text.PrettyPrint
 import Data.Maybe
 import qualified ASTInternal as AST
 
-type Chunk = AST.Chunk AST.FName AST.FDesc
+type Chunk = AST.Chunk
 
 p_expr :: TExp -> String
 p_expr (C c) = getStr AST.Equation c AST.Eqn

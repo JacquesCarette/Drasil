@@ -1,15 +1,15 @@
 {-# OPTIONS -Wall #-} 
 module ASTTex where
-import qualified ASTInternal as AST
+import ASTInternal (Chunk, Variable)
 
-data TExp = Var AST.Variable
+data TExp = Var Variable
           | Dbl Double
           | Int Integer
           | Mul TExp TExp
           | Add TExp TExp
           | Frac TExp TExp
           | Div TExp TExp
-          | C (AST.Chunk AST.FName AST.FDesc)
+          | C Chunk
           | Pow TExp TExp
           | Sub TExp TExp
   deriving (Eq, Ord)

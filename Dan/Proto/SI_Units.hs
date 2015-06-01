@@ -3,14 +3,14 @@ module SI_Units where
 import Chunk
 import ASTInternal
 
-si_units, fundamentals :: [Chunk FName FDesc]
+si_units, fundamentals :: Chunks
 si_units = [metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
               watt]
               
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
 metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
-              watt, ampere, candela :: Chunk FName FDesc
+              watt, ampere, candela :: Chunk
 
 -- Fundamental SI Units --------------------------------------------------------
 metre = newChunk $

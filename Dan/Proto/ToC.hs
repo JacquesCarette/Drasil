@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module ToC where
+module ToC (expr) where
 
 import ASTInternal
 import qualified ASTC as C

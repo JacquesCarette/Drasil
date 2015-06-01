@@ -15,7 +15,7 @@ gen :: Recipe -> IO ()
 gen (Recipe (x:[])) = do prnt x
 gen (Recipe (x:xs)) = do prnt x
                          gen $ Recipe xs
-gen _ = error "Invalid Recipe"
+gen (Recipe []) = return ()
 
 prnt :: DocType -> IO ()  
 prnt SRS = do outh <- openFile "SRS.tex" WriteMode
@@ -24,7 +24,7 @@ prnt SRS = do outh <- openFile "SRS.tex" WriteMode
 prnt LPM = do outh <- openFile "LPM.w" WriteMode
               hPutStrLn outh $ render $ createLPM
               hClose outh
-prnt _ = error "Invalid DocType"
+prnt Code = error "Code DocType is not implemented yet"
 
 auth :: String
 auth = "Spencer Smith"

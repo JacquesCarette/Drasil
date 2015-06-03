@@ -29,11 +29,11 @@ s1_1table =
 s1_2 = subsec "Table of Symbols"
 
 s1_2intro = text "The table that follows summarizes the symbols used in this" <+>
-           text "document along with their units.  The choice of symbols was"<+>
-           text "made with the goal of being consistent with the heat" <+>
-           text "transfer literature and with existing documentation for" <+>
-           text "solar water heating systems. The symbols are listed in" <+>
-           text "alphabetical order."
+            text "document along with their units.  The choice of symbols was"<+>
+            text "made with the goal of being consistent with the heat" <+>
+            text "transfer literature and with existing documentation for" <+>
+            text "solar water heating systems. The symbols are listed in" <+>
+            text "alphabetical order."
 
 s1_2table =
   vcat ([text "\\begin{longtable}{l p{10.5cm}}", (get Symbol h_c Pg) <+> 

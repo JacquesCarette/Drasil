@@ -1,12 +1,11 @@
 {-# OPTIONS -Wall #-} 
-module Example1 where
+module Example2 where
 import ASTInternal
 import Chunk
 import SI_Units
 
 si_units :: Chunks
-si_units = [metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
-              watt]
+si_units = [metre, kilogram, second, centigrade, joule, watt]
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------

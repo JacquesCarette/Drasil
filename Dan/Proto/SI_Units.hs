@@ -3,9 +3,7 @@ module SI_Units where
 import Chunk
 import ASTInternal
 
-si_units, fundamentals :: Chunks
-si_units = [metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
-              watt]
+fundamentals :: Chunks
               
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 

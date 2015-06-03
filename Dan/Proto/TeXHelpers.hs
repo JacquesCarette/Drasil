@@ -41,6 +41,9 @@ renewcomm b1 b2 = bslash <> text "renewcommand" <> br ("\\" ++ b1) <> br b2
 sec :: String -> Doc
 sec b= bslash <> text "section*" <> br b
 
+subsec :: String -> Doc
+subsec b = bslash <> text "subsection*" <> br b
+
 -- Macro / Command def'n --
 --TeX--
 srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS :: Doc

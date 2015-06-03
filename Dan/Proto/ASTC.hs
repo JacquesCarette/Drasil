@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module ASTC where
 
-import ASTInternal (Chunk, Chunks)
+import ASTInternal (Chunks)
 
 type Name = String
 

@@ -1,4 +1,4 @@
-{-# OPPIONS -Wall #-} 
+{-# OPTIONS -Wall #-} 
 module ToPlain where
 import ASTInternal
 import qualified ASTPlain as P

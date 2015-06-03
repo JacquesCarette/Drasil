@@ -9,27 +9,25 @@ import qualified Body2 as E2
 data DocType = SRS
              | LPM
              | Code
-             | SRS2 --For testing right now, will delete.
 
-data Recipe = Recipe [DocType]
+data Recipe = Recipe (DocType, String, Doc)
+        --DocType, Filename, 'Body'
 
-gen :: Recipe -> IO ()
-gen (Recipe (x:[])) = do prnt x
-gen (Recipe (x:xs)) = do prnt x
-                         gen $ Recipe xs
-gen (Recipe []) = return ()
+gen :: [Recipe] -> IO ()
+gen ((Recipe (x,y,z)):[]) = do prnt x y z
+gen ((Recipe (x,y,z)):xs) = do prnt x y z
+                               gen xs
+gen ([])                  = return ()
 
-prnt :: DocType -> IO ()  
-prnt SRS = do outh <- openFile "SRS.tex" WriteMode
-              hPutStrLn outh $ render $ createSRS
-              hClose outh
-prnt SRS2 = do outh <- openFile "PCM_SRS.tex" WriteMode
-               hPutStrLn outh $ render $ createSRS2
-               hClose outh
-prnt LPM = do outh <- openFile "LPM.w" WriteMode
-              hPutStrLn outh $ render $ createLPM
-              hClose outh
-prnt Code = error "Code DocType is not implemented yet"
+prnt :: DocType -> String -> Doc -> IO ()  
+prnt SRS filename body = do outh <- openFile filename WriteMode
+                            hPutStrLn outh $ render $ body
+                            hClose outh
+prnt LPM filename body = do outh <- openFile filename WriteMode
+                            hPutStrLn outh $ render $ body
+                            hClose outh
+  -- No difference b/w SRS and LPM as yet
+prnt Code _ _ = error "Code DocType is not implemented yet"
 
 auth :: String
 auth = "Spencer Smith"
@@ -53,7 +51,12 @@ createSRS2 :: Doc
 createSRS2 = spre $$ title ("Software Requirements Specification for Solar " ++ 
              "Water Heating Systems Incorporating Phase Change Material") $$
              author auth2 $$ srsComms $$ begin $$ E2.srsBody $$ end
-            
+
+docs :: [Recipe]
+docs = [Recipe (SRS, "SRS.tex", createSRS), 
+        Recipe (SRS, "PCM_SRS.tex", createSRS2),
+        Recipe (LPM, "LPM.w", createLPM)]
+             
 main :: IO ()            
 main = do
-  gen (Recipe [SRS, SRS2, LPM])
+  gen docs

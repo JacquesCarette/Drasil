@@ -251,3 +251,45 @@ m = newChunk $
    -- (Equation, E h_c_eq),
    (Description, S "mass")
   ]
+  
+----------------------------------------------------------------------
+
+m_P :: Chunk
+m_P = newChunk $
+  [(Symbol, S "m" :-: S "P"),
+   (VarName,S "m_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "mass of phase change material")
+  ]
+  
+----------------------------------------------------------------------
+
+m_W :: Chunk
+m_W = newChunk $
+  [(Symbol, S "m" :-: S "W"),
+   (VarName,S "m_W"),
+   -- (Equation, E h_c_eq),
+   (Description, S "mass of water")
+  ]
+  
+----------------------------------------------------------------------
+
+--------------- --------------- --------------- ---------------
+{--------------- Begin Vectors ---------------}
+--------------- --------------- --------------- ---------------
+
+nhat :: Chunk
+nhat = newChunk $
+  [(Symbol, F Vector (F Hat (S "n"))),
+   (VarName,S "n"),
+   -- (Equation, E h_c_eq),
+   (Description, S "unit outward normal vector for a surface")
+  ]
+
+--------------- --------------- --------------- ---------------
+{--------------- Begin Heat Flux ---------------}
+--------------- --------------- --------------- ---------------
+
+
+
+

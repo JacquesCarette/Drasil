@@ -36,11 +36,13 @@ type Variable = String
 --For writing chunks in a specification language that can be converted to TeX
 data Spec = E Expr        -- Expressions
           | S String      -- Strings, used for Descriptions/Symbols in Chunks
-          | Spec :-: Spec  -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
-          | Spec :^: Spec  -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
+          | Spec :-: Spec -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
+          | Spec :^: Spec -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
           | Empty         -- Blank
           | U Unicode     -- Unicode for special characters
           | M Unit        -- Measured in *
+          | F Format Spec -- Special formatting for certain symbols 
+                                --(e.g. hat, dot, etc.)
   deriving (Eq, Ord)
 
 data Unit = Fundamental String --Fundamental unit type (e.g. "m" for length)
@@ -54,7 +56,11 @@ data Unicode = Tau_L
              | Alpha_U
              | Circle
   deriving (Eq,Ord)
-               -- ... Greek letters, lower and uppercase.
+
+data Format = Hat
+            | Vector
+  deriving (Eq, Ord)
+  
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
 data CodeType = Calc

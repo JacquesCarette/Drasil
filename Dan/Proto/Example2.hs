@@ -240,6 +240,24 @@ h_f = newChunk $
    (Description, S "specific latent heat of fusion")
   ]
 
+----------------------------------------------------------------------
+  
+--uppercase Q is a problem; there is already a "q" chunk
+qQ :: Chunk
+qQ = newChunk $
+  [(Symbol, S "Q"),
+   (VarName,S "qQ"),
+   -- (Equation, E h_c_eq),
+   (Description, S "latent heat energy")
+  ]
+
+qQ_P :: Chunk
+qQ_P = newChunk $
+  [(Symbol, S "Q" :-: S "P"),
+   (VarName,S "qQ_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "latent heat energy added to PCM")
+  ]
 --------------- --------------- --------------- ---------------
 {--------------- Begin Masses ---------------}
 --------------- --------------- --------------- ---------------
@@ -286,10 +304,87 @@ nhat = newChunk $
    (Description, S "unit outward normal vector for a surface")
   ]
 
+----------------------------------------------------------------------
+  
+qvect :: Chunk
+qvect = newChunk $
+  [(Symbol, F Vector (S "q")),
+   (VarName,S "qvect"),
+   -- (Equation, E h_c_eq),
+   (Description, S "thermal flux vector")
+  ]
 --------------- --------------- --------------- ---------------
 {--------------- Begin Heat Flux ---------------}
 --------------- --------------- --------------- ---------------
 
+q :: Chunk
+q = newChunk $
+  [(Symbol, S "q"),
+   (VarName,S "q"),
+   -- (Equation, E h_c_eq),
+   (Description, S "heat flux")
+  ]
 
+----------------------------------------------------------------------
 
+q_C :: Chunk
+q_C = newChunk $
+  [(Symbol, S "q" :-: S "C"),
+   (VarName,S "q_C"),
+   -- (Equation, E h_c_eq),
+   (Description, S "heat flux from coil")
+  ]
+  
+----------------------------------------------------------------------
 
+q_in :: Chunk
+q_in = newChunk $
+  [(Symbol, S "q" :-: S "in"),
+   (VarName,S "q_in"),
+   -- (Equation, E h_c_eq),
+   (Description, S "heat flux in")
+  ]
+  
+----------------------------------------------------------------------
+
+q_P :: Chunk
+q_P = newChunk $
+  [(Symbol, S "q" :-: S "P"),
+   (VarName,S "q_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "heat flux into phase change material")
+  ]
+  
+----------------------------------------------------------------------
+
+q_out :: Chunk
+q_out = newChunk $
+  [(Symbol, S "q" :-: S "out"),
+   (VarName,S "q_out"),
+   -- (Equation, E h_c_eq),
+   (Description, S "heat flux out")
+  ]
+  
+--------------- --------------- --------------- ---------------
+{--------------- Begin Times ---------------}
+--------------- --------------- --------------- ---------------
+
+t :: Chunk
+t = newChunk $
+  [(Symbol, S "t"),
+   (VarName,S "t"),
+   -- (Equation, E h_c_eq),
+   (Description, S "time")
+  ]
+  
+----------------------------------------------------------------------
+
+t_melt :: Chunk
+t_melt = newChunk $
+  [(Symbol, S "t" :-: S "melt"),
+   (VarName,S "t" :-: S "melt"),
+   -- (Equation, E h_c_eq),
+   (Description, S "time when melting of the PCM begins")
+  ]
+  
+----------------------------------------------------------------------

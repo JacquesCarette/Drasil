@@ -382,9 +382,245 @@ t = newChunk $
 t_melt :: Chunk
 t_melt = newChunk $
   [(Symbol, S "t" :-: S "melt"),
-   (VarName,S "t" :-: S "melt"),
+   (VarName,S "t_melt"),
    -- (Equation, E h_c_eq),
    (Description, S "time when melting of the PCM begins")
+  ]
+  
+----------------------------------------------------------------------
+
+t_final :: Chunk
+t_final = newChunk $
+  [(Symbol, S "t" :-: S "final"),
+   (VarName,S "t_final"),
+   -- (Equation, E h_c_eq),
+   (Description, S "final time")
+  ]
+  
+----------------------------------------------------------------------
+
+t_melt_init :: Chunk
+t_melt_init = newChunk $
+  [(Symbol, S "t" :-: S "melt" :^: S "init"),
+   (VarName,S "t_melt_init"),
+   -- (Equation, E h_c_eq),
+   (Description, S "time at which melting of the PCM begins")
+  ]
+  
+----------------------------------------------------------------------
+
+t_melt_final :: Chunk
+t_melt_final = newChunk $
+  [(Symbol, S "t" :-: S "melt" :^: S "final"),
+   (VarName,S "t_melt_final"),
+   -- (Equation, E h_c_eq),
+   (Description, S "time at which melting of the PCM ends")
+  ]
+  
+----------------------------------------------------------------------
+
+--------------- --------------- --------------- ---------------
+{--------------- Begin Temperatures ---------------}
+--------------- --------------- --------------- ---------------
+
+tT :: Chunk
+tT = newChunk $
+  [(Symbol, S "T"),
+   (VarName,S "tT"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_boil :: Chunk
+tT_boil = newChunk $
+  [(Symbol, S "T" :-: S "boil"),
+   (VarName,S "tT_boil"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature at boiling point")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_C :: Chunk
+tT_C = newChunk $
+  [(Symbol, S "T" :-: S "C"),
+   (VarName,S "tT_C"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature of coil")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_env :: Chunk
+tT_env = newChunk $
+  [(Symbol, S "T" :-: S "env"),
+   (VarName,S "tT_env"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature of environment")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_init :: Chunk
+tT_init = newChunk $
+  [(Symbol, S "T" :-: S "init"),
+   (VarName,S "tT_init"),
+   -- (Equation, E h_c_eq),
+   (Description, S "initial temperature")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_melt :: Chunk
+tT_melt = newChunk $
+  [(Symbol, S "T" :-: S "melt"),
+   (VarName,S "tT_melt"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature at melting point")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_melt_P :: Chunk
+tT_melt_P = newChunk $
+  [(Symbol, S "T" :-: S "melt" :^: S "P"),
+   (VarName,S "tT_melt_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature at melting point for PCM")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_W :: Chunk
+tT_W = newChunk $
+  [(Symbol, S "T" :-: S "W"),
+   (VarName,S "tT_W"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature of water")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_P :: Chunk
+tT_P = newChunk $
+  [(Symbol, S "T" :-: S "P"),
+   (VarName,S "tT_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature of phase change material")
+  ]
+  
+----------------------------------------------------------------------
+
+tT_Delta :: Chunk
+tT_Delta = newChunk $
+  [(Symbol, U Delta_U :+: S "T"),
+   (VarName,S "tT_Delta"),
+   -- (Equation, E h_c_eq),
+   (Description, S "temperature difference")
+  ]
+  
+----------------------------------------------------------------------
+
+--------------- --------------- --------------- ---------------
+{--------------- Begin Volumes ---------------}
+--------------- --------------- --------------- ---------------
+
+v :: Chunk
+v = newChunk $
+  [(Symbol, S "V"),
+   (VarName,S "v"),
+   -- (Equation, E h_c_eq),
+   (Description, S "volume")
+  ]
+  
+----------------------------------------------------------------------
+
+v_P :: Chunk
+v_P = newChunk $
+  [(Symbol, S "V" :-: S "P"),
+   (VarName,S "v_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "volume of PCM")
+  ]
+  
+----------------------------------------------------------------------
+
+v_tank :: Chunk
+v_tank = newChunk $
+  [(Symbol, S "V" :-: S "tank"),
+   (VarName,S "v_tank"),
+   -- (Equation, E h_c_eq),
+   (Description, S "volume of the cylindrical tank")
+  ]
+  
+----------------------------------------------------------------------
+
+v_W :: Chunk
+v_W = newChunk $
+  [(Symbol, S "V" :-: S "W"),
+   (VarName,S "v_W"),
+   -- (Equation, E h_c_eq),
+   (Description, S "volume of water")
+  ]
+  
+----------------------------------------------------------------------
+
+--------------- --------------- --------------- ---------------
+{--------------- Begin Densities ---------------}
+--------------- --------------- --------------- ---------------
+
+rho :: Chunk
+rho = newChunk $
+  [(Symbol, U Rho_L),
+   (VarName,S "rho"),
+   -- (Equation, E h_c_eq),
+   (Description, S "density, mass per unit volume")
+  ]
+  
+----------------------------------------------------------------------
+
+rho_P :: Chunk
+rho_P = newChunk $
+  [(Symbol, U Rho_L :-: S "P"),
+   (VarName,S "rho_P"),
+   -- (Equation, E h_c_eq),
+   (Description, S "density of PCM")
+  ]
+  
+----------------------------------------------------------------------
+
+rho_W :: Chunk
+rho_W = newChunk $
+  [(Symbol, U Rho_L :-: S "W"),
+   (VarName,S "rho_W"),
+   -- (Equation, E h_c_eq),
+   (Description, S "density of water")
+  ]
+  
+----------------------------------------------------------------------
+
+--------------- --------------- --------------- ---------------
+{--------------- Begin Other ---------------}
+--------------- --------------- --------------- ---------------
+
+tau :: Chunk
+tau = newChunk $
+  [(Symbol, U Tau_L),
+   (VarName,S "tau"),
+   -- (Equation, E h_c_eq),
+   (Description, S "dummy variable for integration over time")
+  ]
+  
+----------------------------------------------------------------------
+
+phi :: Chunk
+phi = newChunk $
+  [(Symbol, U Phi_L),
+   (VarName,S "phi"),
+   -- (Equation, E h_c_eq),
+   (Description, S "melt fraction")
   ]
   
 ----------------------------------------------------------------------

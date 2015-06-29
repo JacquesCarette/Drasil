@@ -1,0 +1,17 @@
+Dan Szymczak’s Goals for the next 12 months
+
+- Finish comprehensive exam part 2 by December, 2015.
+
+- Complete my last grad course.
+
+- Complete paper for the SPLASH conference outlining the overall vision for this project (http://2015.splashcon.org/).
+
+- Complete SEHPCCSE conference paper, to show preliminary results to the scientific computing community (http://se4science.org/workshops/sehpccse15/index.htm).
+
+- Create default "recipe" for each software artifact (requirements, design, code, test cases, etc.) that should be generated.
+
+- Have at least one large example working from the prototype (output multiple document types, generate code, ensure everything that is generated is consistent).
+
+- Create the external language for using the prototype (so one would not require extensive knowledge of Haskell / it would be a cleaner syntax).
+
+- Communicate with OPG regarding the prototype and example. Find out what changes (if any) could make them want to adopt the system.  Investigate documenting their engineering calculation reports using the prototype tool.

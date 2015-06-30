@@ -119,3 +119,5 @@ mulU :: TExp -> TExp -> String
 mulU a b@(Dbl _) = pU_expr a ++ "*" ++ pU_expr b
 mulU a b@(Int _) = pU_expr a ++ "*" ++ pU_expr b
 mulU a b         = pU_expr a ++ " " ++ pU_expr b --For clarity in units
+
+makeTable t = vcat (beginTable ++ createRows t ++ endTable)

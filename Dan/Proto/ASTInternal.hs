@@ -68,6 +68,8 @@ data Format = Hat
             | Vector
   deriving (Eq, Ord)
   
+data LayoutObj = Table Chunks [Field]
+  
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------
 data CodeType = Calc

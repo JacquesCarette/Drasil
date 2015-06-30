@@ -11,6 +11,11 @@ surface_areas, shc, dimensions, heat_energies, heat_generations,
 	heat_transfers, latent_heat_rel, masses, vectors, heat_flux,
 	times, temperatures, volumes, densities, others :: Chunks
 
+all_ex2 :: Chunks
+all_ex2 = surface_areas ++ shc ++ dimensions ++ heat_energies ++ 
+	heat_generations ++ heat_transfers ++ latent_heat_rel ++
+	masses ++ vectors ++ heat_flux ++ times ++ temperatures ++
+	volumes ++ densities ++ others
 --------------- --------------- --------------- ---------------
 {--------------- Begin Surface Areas ---------------}
 --------------- --------------- --------------- ---------------

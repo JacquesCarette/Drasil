@@ -8,7 +8,7 @@ import ASTInternal
 import PrintTex
 
 s1, s1_intro, s1_1, s1_1intro, s1_1table, s1_2, s1_2intro, 
-  s1_2table, s3, srsBody:: Doc
+	s1_2table, s3, srsBody:: Doc
 s1 = sec "Reference Material"
 
 --The breakdown is for clarity, not technical purposes.
@@ -35,7 +35,7 @@ s1_2intro = text "The table that follows summarizes the symbols used in this" <+
             text "solar water heating systems. The symbols are listed in" <+>
             text "alphabetical order."
 
-s1_2table = makeTable [a_C,a_in,a_P,a_out,c,c__L]
+s1_2table = makeTable $ Table all_ex2 [Symbol, SIU, Description]
 
 s3 = sec "Data Definitions"
   

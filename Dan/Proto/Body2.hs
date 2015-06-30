@@ -35,11 +35,7 @@ s1_2intro = text "The table that follows summarizes the symbols used in this" <+
             text "solar water heating systems. The symbols are listed in" <+>
             text "alphabetical order."
 
-s1_2table =
-  vcat ([text "\\begin{longtable}{l p{10.5cm}}", (get Symbol h_c Pg) <+> 
-  text "& \\blt" <+> (get Description h_c Pg) <+> (get SIU h_c Pg) <> dbs, 
-  (get Symbol h_g Pg) <+> text "& \\blt" <+> (get Description h_g Pg) <+> 
-  (get SIU h_g Pg), text "\\end{longtable}"])
+s1_2table = makeTable [a_C,a_in,a_P,a_out,c,c__L]
 
 s3 = sec "Data Definitions"
   

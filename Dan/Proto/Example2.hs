@@ -6,9 +6,15 @@ import SI_Units
 
 si_units :: Chunks
 si_units = [metre, kilogram, second, centigrade, joule, watt]
+
+surface_areas, shc, dimensions, heat_energies, heat_generations, 
+	heat_transfers, latent_heat_rel, masses, vectors, heat_flux,
+	times, temperatures, volumes, densities, others :: Chunks
+
 --------------- --------------- --------------- ---------------
 {--------------- Begin Surface Areas ---------------}
 --------------- --------------- --------------- ---------------
+surface_areas = [a_C,a_in,a_P,a_out]
 a_C :: Chunk
 a_C = newChunk $
   [(Symbol, S "A" :-: S "C"), --Formatted symbol for documentation
@@ -24,8 +30,8 @@ a_in = newChunk $
    (Description,S "surface area over which heat is transferred in")
   ]
 ----------------------------------------------------------------------  
-a_p :: Chunk
-a_p = newChunk $
+a_P :: Chunk
+a_P = newChunk $
   [(Symbol, S "A" :-: S "P"),
    (VarName,S "a_P"),
    (Description,S "phase change material surface area")
@@ -42,6 +48,7 @@ a_out = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Specific Heat Capacities ---------------}  
 --------------- --------------- --------------- ---------------
+shc = [c, c__L, c_P_L, c__S, c_P_S,c_V,c_W]
 c :: Chunk
 c = newChunk $
   [(Symbol, S "C"),
@@ -120,6 +127,7 @@ c_W = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Dimensions ---------------}
 --------------- --------------- --------------- ---------------
+dimensions = [d,l]
 d :: Chunk
 d = newChunk $
   [(Symbol, S "D"),
@@ -141,7 +149,7 @@ l = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Heat Energies ---------------}
 --------------- --------------- --------------- ---------------
-
+heat_energies = [e,e_P,e_Pmelt_init,e_W]
 e :: Chunk
 e = newChunk $
   [(Symbol,S "E"),
@@ -154,7 +162,7 @@ e = newChunk $
 
 e_P :: Chunk
 e_P = newChunk $
-  [(Symbol,S "E" :-: P),
+  [(Symbol,S "E" :-: S "P"),
    (VarName,S "e_P"),
 -- (Equation, E h_c_eq),
    (Description, S "heat energy in the PCM")
@@ -185,7 +193,7 @@ e_W = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Heat Generations ---------------}
 --------------- --------------- --------------- ---------------
-
+heat_generations = [g]
 g :: Chunk
 g = newChunk $
   [(Symbol,S "g"),
@@ -197,6 +205,7 @@ g = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Heat Transfers ---------------}
 --------------- --------------- --------------- ---------------
+heat_transfers = [h,h_C,h_P]
 
 h :: Chunk
 h = newChunk $
@@ -231,6 +240,7 @@ h_P = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Latent Heat-related ---------------}
 --------------- --------------- --------------- ---------------
+latent_heat_rel = [h_f, qQ, qQ_P]
 
 h_f :: Chunk
 h_f = newChunk $
@@ -261,6 +271,8 @@ qQ_P = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Masses ---------------}
 --------------- --------------- --------------- ---------------
+
+masses = [m,m_P,m_W]
   
 m :: Chunk
 m = newChunk $
@@ -296,6 +308,8 @@ m_W = newChunk $
 {--------------- Begin Vectors ---------------}
 --------------- --------------- --------------- ---------------
 
+vectors = [nhat, qvect]
+
 nhat :: Chunk
 nhat = newChunk $
   [(Symbol, F Vector (F Hat (S "n"))),
@@ -316,6 +330,8 @@ qvect = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Heat Flux ---------------}
 --------------- --------------- --------------- ---------------
+
+heat_flux = [q,q_C,q_in,q_P,q_out]
 
 q :: Chunk
 q = newChunk $
@@ -368,6 +384,8 @@ q_out = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Times ---------------}
 --------------- --------------- --------------- ---------------
+
+times = [t,t_melt, t_final, t_melt_init, t_melt_final]
 
 t :: Chunk
 t = newChunk $
@@ -422,6 +440,8 @@ t_melt_final = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Temperatures ---------------}
 --------------- --------------- --------------- ---------------
+
+temperatures = [tT, tT_boil, tT_C, tT_env, tT_init, tT_melt, tT_melt_P, tT_W, tT_P, tT_Delta]
 
 tT :: Chunk
 tT = newChunk $
@@ -527,6 +547,8 @@ tT_Delta = newChunk $
 {--------------- Begin Volumes ---------------}
 --------------- --------------- --------------- ---------------
 
+volumes = [v,v_P,v_tank,v_W]
+
 v :: Chunk
 v = newChunk $
   [(Symbol, S "V"),
@@ -571,6 +593,8 @@ v_W = newChunk $
 {--------------- Begin Densities ---------------}
 --------------- --------------- --------------- ---------------
 
+densities = [rho,rho_P,rho_W]
+
 rho :: Chunk
 rho = newChunk $
   [(Symbol, U Rho_L),
@@ -604,6 +628,8 @@ rho_W = newChunk $
 --------------- --------------- --------------- ---------------
 {--------------- Begin Other ---------------}
 --------------- --------------- --------------- ---------------
+
+others = [tau, phi]
 
 tau :: Chunk
 tau = newChunk $

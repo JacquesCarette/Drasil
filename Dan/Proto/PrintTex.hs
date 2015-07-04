@@ -120,4 +120,18 @@ mulU a b@(Dbl _) = pU_expr a ++ "*" ++ pU_expr b
 mulU a b@(Int _) = pU_expr a ++ "*" ++ pU_expr b
 mulU a b         = pU_expr a ++ " " ++ pU_expr b --For clarity in units
 
-makeTable t = vcat (beginTable ++ createRows t ++ endTable)
+makeTable t = vcat (beginTable ++ (createRows t) ++ endTable)
+
+beginTable = [text "~\\newline \\begin{longtable}{1 p{11cm}}"]
+endTable = [text "\\end{longtable}"]
+
+createRows :: AST.LayoutObj -> [Doc]
+createRows (AST.Table [] _) = [empty]
+createRows (AST.Table _ []) = [empty]
+createRows (AST.Table (c:cs) f) = [createColumns c f] ++ createRows (AST.Table cs f)
+
+createColumns :: Chunk -> [AST.Field] -> Doc
+createColumns c ((AST.Equation):[]) = get AST.Equation c AST.Eqn
+createColumns c (f:[])			  	  = get f c AST.Pg
+createColumns c ((AST.Equation):fs) = get AST.Equation c AST.Eqn <+> text "& \\blt" <+> createColumns c fs
+createColumns c (f:fs)			  	  = get f c AST.Pg <+> text "& \\blt" <+> createColumns c fs

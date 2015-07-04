@@ -36,6 +36,25 @@ format c spec = case output of AST.TeX -> format_Tex c spec
                                AST.Plain -> ""
 --This is fine here.
 format_Tex :: AST.Context -> AST.FDesc -> String  
+format_Tex _ (AST.E e) = p_expr $ expr e
+format_Tex _ (AST.S s) = s
+format_Tex _ (AST.U x) = uni x
+format_Tex c (AST.F AST.Hat x) = "\\hat{" ++ format_Tex c x ++ "}"
+format_Tex c (AST.F AST.Vector x) = "\\bf{" ++ format_Tex c x ++ "}"
+format_Tex AST.Pg (a AST.:-: b) = 
+  "$"++format_Tex AST.Pg a ++"_{"++ (format_Tex AST.Pg b)++"}$"
+format_Tex c (a AST.:-: b) = 
+  format_Tex c a ++ "_{" ++ format_Tex c b ++ "}"
+format_Tex AST.Pg (a AST.:^: b) = 
+  "$"++format_Tex AST.Pg a ++"^{"++ format_Tex AST.Pg b++"}$"
+format_Tex AST.Pg (a AST.:+: b) = 
+  "$"++format_Tex AST.Pg a ++ format_Tex AST.Pg b ++ "$"
+format_Tex c (a AST.:+: b) = format_Tex c a ++ format_Tex c b
+format_Tex c (a AST.:^: b) = format_Tex c a ++ "^{" ++ format_Tex c b ++ "}"
+format_Tex c (AST.M unit) = writeUnit unit c
+format_Tex _ AST.Empty = ""
+
+
 {-format_Tex AST.Pg a = "$" ++ format_T a ++ "$"
 format_Tex AST.Eqn a = format_T a
 format_Tex AST.Code a = format_T a
@@ -51,24 +70,6 @@ format_T (a AST.:+: b) = format_T a ++ format_T b
 format_T (a AST.:^: b) = format_T a ++ "^{" ++ format_T b ++ "}"
 format_T (AST.M unit) = writeUnit unit
 format_T AST.Empty = ""-}
-
-format_Tex _ (AST.E e) = p_expr $ expr e
-format_Tex _ (AST.S s) = s
-format_Tex _ (AST.U x) = uni x
-format_Tex _ (AST.F AST.Hat x) = "\\hat{" ++ 
-format_Tex AST.Pg (a AST.:-: b) = 
-  "$"++format_Tex AST.Pg a ++"_{"++ (format_Tex AST.Pg b)++"}$"
-format_Tex c (a AST.:-: b) = 
-  format_Tex c a ++ "_{" ++ format_Tex c b ++ "}"
-format_Tex AST.Pg (a AST.:^: b) = 
-  "$"++format_Tex AST.Pg a ++"^{"++ format_Tex AST.Pg b++"}$"
-format_Tex AST.Pg (a AST.:+: b) = 
-  "$"++format_Tex AST.Pg a ++ format_Tex AST.Pg b ++ "$"
-format_Tex c (a AST.:+: b) = format_Tex c a ++ format_Tex c b
-format_Tex c (a AST.:^: b) = format_Tex c a ++ "^{" ++ format_Tex c b ++ "}"
-format_Tex c (AST.M unit) = writeUnit unit c
-format_Tex _ AST.Empty = ""
- 
 
 --This function should be moved elsewhere, preferably somewhere accessible to
   --the recipes, should also be changed to use the internal AST instead of Doc
@@ -109,9 +110,10 @@ writeDep (x:xs) (c:[]) is es con=
 writeDep (x:xs) (c:cs) is es con= 
   writeDep (x:xs) (c:[]) is es con ++ writeDep (x:xs) cs is es con
 
-writeUnit :: AST.Unit -> String  
-writeUnit (AST.Fundamental s) = s
-writeUnit (AST.Derived s e) = s ++ " = " ++ pU_expr (expr e)
+writeUnit :: AST.Unit -> AST.Context -> String  
+writeUnit (AST.Fundamental s) _ = s
+writeUnit (AST.Derived s e) AST.Pg = "$" ++ s ++ " = " ++ pU_expr (expr e) ++ "$"
+writeUnit (AST.Derived s e) _ = s ++ " = " ++ pU_expr (expr e)
 
 printSIU :: [Chunk] -> [AST.FName] -> Doc -> Doc -> [Doc]
 printSIU [] _ _ _ = [empty]

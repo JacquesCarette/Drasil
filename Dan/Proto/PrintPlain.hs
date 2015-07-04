@@ -20,7 +20,10 @@ print (AST.S s)     = s
 print (AST.U u)     = uni u
 print (a AST.:-: b) = print a ++ "_" ++ print b
 print (a AST.:^: b) = print a ++ "^" ++ print b
+print (a AST.:+: b) = print a ++ print b
 print (AST.M unit)  = writeUnit unit
+print (AST.F AST.Hat a) = print a ++ "_hat"
+print (AST.F AST.Vector a) = print a ++ "_vect"
 print (AST.Empty)   = ""
 
 p_expr :: Expr -> String
@@ -53,6 +56,12 @@ uni (AST.Tau_U) = "Tau"
 uni (AST.Alpha_L) = "alpha"
 uni (AST.Alpha_U) = "Alpha"
 uni (AST.Circle) = "(deg)"
+uni (AST.Delta_L) = "delta"
+uni (AST.Delta_U) = "Delta"
+uni (AST.Rho_L) = "rho"
+uni (AST.Rho_U) = "Rho"
+uni (AST.Phi_L) = "phi"
+uni (AST.Phi_U) = "Phi"
 --uni _ = error "Invalid unicode character selection"
   
 -- writeDep :: [AST.FName] -> AST.Dependency -> String -> String -> AST.Context -> [Doc]

@@ -79,8 +79,8 @@
 % - Use the \inst command only if there are several affiliations.
 % - Keep it simple, no one is interested in your street address.
 
-\date[June 24, 2015] % (optional, should be abbreviation of conference name)
-{June 24, 2015}
+\date[] % (optional, should be abbreviation of conference name)
+{July 13, 2015}
 % - Either use conference name or its abbreviation.
 % - Not really informative to the audience, more for people (including
 %   yourself) who are reading the slides online
@@ -148,6 +148,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%D Remove this slide? Should I even include an introduction to me?
+
 \begin{frame}
 
 \frametitle{Who am I?}
@@ -187,37 +189,83 @@ Dan Szymczak
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%D Remove this slide?
+
 \begin{frame}
-
 \frametitle{Current Program Progress}
-
 \begin{itemize}
 \item Completed 3/4 necessary graduate courses.
-	\begin{itemize}
-	\item CAS703 -- Software Design: A (11)
-	\item CAS708 -- Scientific Computation: A+ (12)
-	\item CAS761 -- Generative Programming: A+ (12)
-	\end{itemize}
+%	\begin{itemize}
+%	\item CAS703 -- Software Design: A (11)
+%	\item CAS708 -- Scientific Computation: A+ (12)
+%	\item CAS761 -- Generative Programming: A+ (12)
+%	\end{itemize}
 \item Completed part one of the comprehensive examination.
 \item Research and prototype system development are underway.
 \end{itemize}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%\begin{frame}
+%
+%\frametitle{Current Program Progress}
+%\framesubtitle{Cont'd}
+%
+%\begin{itemize}
+%\item Attending conferences over the coming months
+%	\begin{itemize}
+%	\item CICM 2015 Doctoral Programme
+%	\item ICFP 2015 Programming Languages Mentoring Workshop
+%	\end{itemize}
+%\item Preparing to submit for SPLASH and SEHPCCSE
+%\end{itemize}
+%\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}
 
-\frametitle{Current Program Progress}
-\framesubtitle{Cont'd}
+\frametitle{Research Topic}
+\framesubtitle{Key Problem(s)}
 
-\begin{itemize}
-\item Attending conferences over the coming months
+
+%D Slide looks too cluttered with all this information, going to remove the 
+% enumerated items and only leave the questions. Will say the numbered parts
+% aloud.
+
+\begin{enumerate}
+\item Many scientific and engineering models %in the abstract sense
+	tend to reuse the same underlying mathematical knowledge, yet are
+	reimplemented for new software projects.
+
 	\begin{itemize}
-	\item CICM 2015 Doctoral Programme
-	\item ICFP 2015 Programming Languages Mentoring Workshop
+	\item How can we improve the reuse of this knowledge?
 	\end{itemize}
-\item Preparing to submit for SPLASH and SEHPCCSE
-\end{itemize}
+
+\item Across software artifacts there is typically a non-trivial amount of 
+	knowledge duplication.
+
+	\begin{itemize}
+	\item How can we handle the massive amount of mathematical knowledge 
+					duplication across artifacts in a software development project?
+	\end{itemize}
+
+\item It is often the case (cite: Kelly) that non-functional requirements (NFRs)
+	are
+	considered nice to have, but not as critical as correctness, accuracy, and
+	performance.
+	
+	\begin{itemize}
+	\item How can we improve software development to ensure qualities such as
+					traceability, maintainability, verifiability and (re)usability are met?
+	\end{itemize}
+
+\end{enumerate}
+
+%D Yup, way too much text.
+
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
@@ -225,7 +273,7 @@ Dan Szymczak
 \frametitle{Research Topic}
 \framesubtitle{What? Why?}
 
-Literate Software Development for Scientific Software
+Literate Software Development
 
 \begin{itemize}
 \item One ``source,'' multiple views

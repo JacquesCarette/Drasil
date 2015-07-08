@@ -38,7 +38,7 @@ data Spec = E Expr        -- Expressions
           | S String      -- Strings, used for Descriptions/Symbols in Chunks
           | Spec :-: Spec -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
           | Spec :^: Spec -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
-		  | Spec :+: Spec -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
+          | Spec :+: Spec -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
           | Empty         -- Blank
           | U Unicode     -- Unicode for special characters
           | M Unit        -- Measured in *
@@ -56,12 +56,12 @@ data Unicode = Tau_L
              | Alpha_L
              | Alpha_U
              | Circle
-			 | Delta_U
-			 | Delta_L
-			 | Rho_U
-			 | Rho_L
-			 | Phi_U
-			 | Phi_L
+             | Delta_U
+             | Delta_L
+             | Rho_U
+             | Rho_L
+             | Phi_U
+             | Phi_L
   deriving (Eq,Ord)
 
 data Format = Hat

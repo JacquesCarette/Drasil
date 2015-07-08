@@ -25,7 +25,8 @@ a_C = newChunk $
   [(Symbol, S "A" :-: S "C"), --Formatted symbol for documentation
    (VarName,S "a_C"),        --VarName if the symbol represents a variable
                                 --Equation if the symbol can be calculated
-   (Description,S "coil surface area") --Description
+   (Description,S "coil surface area"), --Description
+   (SIU, (E (C metre :^ (Int 2))))
   ]
 ----------------------------------------------------------------------
 a_in :: Chunk

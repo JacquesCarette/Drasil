@@ -233,37 +233,92 @@ Dan Szymczak
 % enumerated items and only leave the questions. Will say the numbered parts
 % aloud.
 
-\begin{enumerate}
-\item Many scientific and engineering models %in the abstract sense
-	tend to reuse the same underlying mathematical knowledge, yet are
-	reimplemented for new software projects.
+%\begin{enumerate}
+%\item Many scientific and engineering models %in the abstract sense
+%	tend to reuse the same underlying mathematical knowledge, yet are
+%	reimplemented for new software projects.
 
 	\begin{itemize}
-	\item How can we improve the reuse of this knowledge?
-	\end{itemize}
+	\item How can we improve the reuse of mathematical knowledge?
+%	\end{itemize}
 
-\item Across software artifacts there is typically a non-trivial amount of 
-	knowledge duplication.
+%\item Across software artifacts there is typically a non-trivial amount of 
+%	knowledge duplication.
 
-	\begin{itemize}
+%	\begin{itemize}
 	\item How can we handle the massive amount of mathematical knowledge 
 					duplication across artifacts in a software development project?
-	\end{itemize}
+%	\end{itemize}
 
-\item It is often the case (cite: Kelly) that non-functional requirements (NFRs)
-	are
-	considered nice to have, but not as critical as correctness, accuracy, and
-	performance.
+%\item It is often the case (cite: Kelly) that non-functional requirements (NFRs)
+%	are
+%	considered nice to have, but not as critical as correctness, accuracy, and
+%	performance.
 	
-	\begin{itemize}
+%	\begin{itemize}
 	\item How can we improve software development to ensure qualities such as
 					traceability, maintainability, verifiability and (re)usability are met?
 	\end{itemize}
 
-\end{enumerate}
+%\end{enumerate}
 
-%D Yup, way too much text.
+%D Yup, way too much text. Commented out as per above note.
 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%D Insert slides addressing the problems: 
+%		How can we improve reuse? - Open question, lots of possible answers, but
+%			which is the ``best'' one?
+%   Why is duplication not solved yet? - Knowledge is being shared across 
+%			languages/artifacts/views.
+%		Are these specific to math software? - No. However, math \& scientific
+%			software domains tend to be well-understood, making it much easier to
+%			address the problems in this domain first.
+
+%D Where should I bring in some lit review? I'd like to mention MMT at some point.
+%		Formal content of the knowledge is not (yet) the focus. Reusing the knowledge
+%		via recipes is the true focus.
+
+%D Intentional Programming to come up somewhere?
+
+
+\begin{frame}
+
+\frametitle{Research Topic}
+\framesubtitle{Solution Plan}
+
+Create an infrastructure / tool for knowledge capture and reuse.
+
+\begin{itemize}
+\item Focus: avoid knowledge duplication across artifacts %D copy/pasting
+\item Maintain: clear traceability between artifacts
+\item Utilize: generative programming to create artifacts from captured
+	knowledge
+\item Expand: ideas from literate programming
+
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Research Topic}
+\framesubtitle{Solution Plan Cont'd}
+
+Create an infrastructure / tool for knowledge capture and reuse.
+
+\begin{itemize}
+\item Create: a domain-specific language for both knowledge capture \& the 
+	artifact	generator
+\item Implement: a feature for creating program families
+%D Example time -> determinant calculation involving a known matrix with 
+%		many zeroes vs. unknown input matrices.
+\item Test: apply the tool to real world problems in scientific computing.
+
+\end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -271,9 +326,9 @@ Dan Szymczak
 \begin{frame}
 
 \frametitle{Research Topic}
-\framesubtitle{What? Why?}
+\framesubtitle{Solution Plan}
 
-Literate Software Development
+Literate Software Development for Families of Mathematical Models
 
 \begin{itemize}
 \item One ``source,'' multiple views

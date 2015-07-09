@@ -183,9 +183,6 @@ Dan Szymczak
 
 \end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section[Progress]{Current Progress}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -195,6 +192,7 @@ Dan Szymczak
 \frametitle{Current Program Progress}
 \begin{itemize}
 \item Completed 3/4 necessary graduate courses.
+%D Remove the course details?
 %	\begin{itemize}
 %	\item CAS703 -- Software Design: A (11)
 %	\item CAS708 -- Scientific Computation: A+ (12)
@@ -204,7 +202,13 @@ Dan Szymczak
 \item Research and prototype system development are underway.
 \end{itemize}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Research]{Research Plan \& Progress}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%D Move this to a section on publication plans/future stuff?
 
 %\begin{frame}
 %
@@ -269,7 +273,8 @@ Dan Szymczak
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %D Insert slides addressing the problems: 
 %		How can we improve reuse? - Open question, lots of possible answers, but
-%			which is the ``best'' one?
+%			which is the ``best'' one? No idea. It's time to take a practical approach.
+%			Trying not to ``overdesign'' and underimplement.
 %   Why is duplication not solved yet? - Knowledge is being shared across 
 %			languages/artifacts/views.
 %		Are these specific to math software? - No. However, math \& scientific
@@ -282,7 +287,7 @@ Dan Szymczak
 
 %D Intentional Programming to come up somewhere?
 
-
+%D This slide and the next one should be moved after the question/answer slides.
 \begin{frame}
 
 \frametitle{Research Topic}
@@ -300,6 +305,8 @@ Create an infrastructure / tool for knowledge capture and reuse.
 \end{itemize}
 \end{frame}
 
+%D This slide and the next are more of an ``overview'' of the plan of attack.
+%		 More in-depth info is to follow.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -313,12 +320,87 @@ Create an infrastructure / tool for knowledge capture and reuse.
 \begin{itemize}
 \item Create: a domain-specific language for both knowledge capture \& the 
 	artifact	generator
-\item Implement: a feature for creating program families
+\item Implement: a feature for creating program families. Allows us to
+				easily design for change.
 %D Example time -> determinant calculation involving a known matrix with 
 %		many zeroes vs. unknown input matrices.
 \item Test: apply the tool to real world problems in scientific computing.
 
+%D Thus concludes the gist of the plan. Now talk a bit more in-depth on
+%		the questions.
+
 \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Research Topic}
+\framesubtitle{Solution Plan Cont'd}
+
+How can we improve reuse? %- Open question, lots of possible answers, but
+%			which is the ``best'' one? No idea. It's time to take a practical approach.
+%			Trying not to ``overdesign'' and underimplement. With that in mind...
+%\begin{enumerate} enum or itemize?
+\begin{itemize}
+\item Simplify the source
+%D Not sure if I should include these as bullets or just talking points
+%	\begin{itemize}
+%	\item Use a single source for the creation of artifacts
+%	\item Make it language/view independent
+%	\item Make it sexy
+%	\end{itemize}
+\item Make it accessible %So anyone can use it.
+\end{itemize}
+%\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Research Topic}
+\framesubtitle{Solution Plan Cont'd}
+
+Why is the duplication problem not solved yet? 
+%D Especially since many languages have useful abstraction features and tools 
+%		for reducing the amount of code duplication? Short answer: These features 
+%		only go so far.
+
+\begin{itemize}
+\item Existing tools and abstraction features only go so far
+%D They might be very useful for source code, and even sometimes extend to some
+%   of the documentation (through tools like doxygen, literate programming
+%   practices, etc.). These tools and practices don't help as much when dealing
+%   with multiple languages or types of artifacts.
+\item Knowledge is shared across languages/artifacts/views
+%D Example?
+
+\item No standard method for encoding knowledge or reusing it
+%D How do you write something in a way that is both human and computer readable
+%	  in a simple enough manner that clients can read it? They may be experts in 
+%	  the domain of interest, but not necessarily in the computer-readable 
+%   language.
+\end{itemize}
+%\end{enumerate}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+\frametitle{Research Topic}
+\framesubtitle{Solution Plan Cont'd}
+
+Are these problems specific to math software?
+% No. However, math \& scientific
+%			software domains tend to be well-understood, making it much easier to
+%			address the problems in this domain first.
+
+\Huge{No}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -205,7 +205,8 @@ Dan Szymczak
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section[Research]{Research Plan \& Progress}
+\section[Research]{Research Plan}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %D Move this to a section on publication plans/future stuff?
@@ -229,7 +230,7 @@ Dan Szymczak
 
 \begin{frame}
 
-\frametitle{Research Topic}
+\frametitle{Research}
 \framesubtitle{Key Problem(s)}
 
 
@@ -287,57 +288,11 @@ Dan Szymczak
 
 %D Intentional Programming to come up somewhere?
 
-%D This slide and the next one should be moved after the question/answer slides.
-\begin{frame}
-
-\frametitle{Research Topic}
-\framesubtitle{Solution Plan}
-
-Create an infrastructure / tool for knowledge capture and reuse.
-
-\begin{itemize}
-\item Focus: avoid knowledge duplication across artifacts %D copy/pasting
-\item Maintain: clear traceability between artifacts
-\item Utilize: generative programming to create artifacts from captured
-	knowledge
-\item Expand: ideas from literate programming
-
-\end{itemize}
-\end{frame}
-
-%D This slide and the next are more of an ``overview'' of the plan of attack.
-%		 More in-depth info is to follow.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
-\frametitle{Research Topic}
-\framesubtitle{Solution Plan Cont'd}
-
-Create an infrastructure / tool for knowledge capture and reuse.
-
-\begin{itemize}
-\item Create: a domain-specific language for both knowledge capture \& the 
-	artifact	generator
-\item Implement: a feature for creating program families. Allows us to
-				easily design for change.
-%D Example time -> determinant calculation involving a known matrix with 
-%		many zeroes vs. unknown input matrices.
-\item Test: apply the tool to real world problems in scientific computing.
-
-%D Thus concludes the gist of the plan. Now talk a bit more in-depth on
-%		the questions.
-
-\end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Research Topic}
-\framesubtitle{Solution Plan Cont'd}
+\frametitle{Research}
+\framesubtitle{Musings}
 
 How can we improve reuse? %- Open question, lots of possible answers, but
 %			which is the ``best'' one? No idea. It's time to take a practical approach.
@@ -361,8 +316,8 @@ How can we improve reuse? %- Open question, lots of possible answers, but
 
 \begin{frame}
 
-\frametitle{Research Topic}
-\framesubtitle{Solution Plan Cont'd}
+\frametitle{Research}
+\framesubtitle{Musings Cont'd}
 
 Why is the duplication problem not solved yet? 
 %D Especially since many languages have useful abstraction features and tools 
@@ -391,8 +346,8 @@ Why is the duplication problem not solved yet?
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 
-\frametitle{Research Topic}
-\framesubtitle{Solution Plan Cont'd}
+\frametitle{Research}
+\framesubtitle{Musings Cont'd}
 
 Are these problems specific to math software?
 % No. However, math \& scientific
@@ -405,13 +360,63 @@ Are these problems specific to math software?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \begin{frame}
 
-\frametitle{Research Topic}
+\frametitle{Research}
 \framesubtitle{Solution Plan}
 
-Literate Software Development for Families of Mathematical Models
+Create an infrastructure / tool for knowledge capture and reuse.
 
+\begin{itemize}
+\item Focus: avoid knowledge duplication across artifacts %D copy/pasting
+\item Maintain: clear traceability between artifacts
+\item Utilize: generative programming to create artifacts from captured
+	knowledge
+\item Expand: ideas from literate programming
+
+\end{itemize}
+\end{frame}
+
+%D This slide and the next are more of an ``overview'' of the plan of attack.
+%		 More in-depth info is to follow.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Research}
+\framesubtitle{Solution Plan Cont'd}
+
+Create an infrastructure / tool for knowledge capture and reuse.
+
+\begin{itemize}
+\item Create: a domain-specific language for both knowledge capture \& the 
+	artifact	generator
+\item Implement: a feature for creating program families. Allows us to
+				easily design for change.
+%D Example time -> determinant calculation involving a known matrix with 
+%		many zeroes vs. unknown input matrices.
+\item Test: apply the tool to real world problems in scientific computing.
+
+%D Thus concludes the gist of the plan. Now talk a bit more in-depth on
+%		the questions.
+
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Prototype]{The Prototype System}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Prototype}
+\framesubtitle{Design and Development}
+%D Practical approach -> Don't overdesign and underdevelop
+%   Build off examples. Flesh out the details as we go.
 \begin{itemize}
 \item One ``source,'' multiple views
 \begin{itemize}

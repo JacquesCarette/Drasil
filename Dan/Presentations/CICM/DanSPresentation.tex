@@ -369,7 +369,7 @@ Are these problems specific to math software?
 Create an infrastructure / tool for knowledge capture and reuse.
 
 \begin{itemize}
-\item Focus: avoid knowledge duplication across artifacts %D copy/pasting
+\item Focus: avoid knowledge duplication across artifacts through reuse%D copy/pasting
 \item Maintain: clear traceability between artifacts
 \item Utilize: generative programming to create artifacts from captured
 	knowledge
@@ -393,8 +393,8 @@ Create an infrastructure / tool for knowledge capture and reuse.
 \begin{itemize}
 \item Create: a domain-specific language for both knowledge capture \& the 
 	artifact	generator
-\item Implement: a feature for creating program families. Allows us to
-				easily design for change.
+\item Implement: a feature for creating program families. %Allows us to
+				%easily design for change.
 %D Example time -> determinant calculation involving a known matrix with 
 %		many zeroes vs. unknown input matrices.
 \item Test: apply the tool to real world problems in scientific computing.
@@ -417,28 +417,44 @@ Create an infrastructure / tool for knowledge capture and reuse.
 \framesubtitle{Design and Development}
 %D Practical approach -> Don't overdesign and underdevelop
 %   Build off examples. Flesh out the details as we go.
+
 \begin{itemize}
-\item One ``source,'' multiple views
-\begin{itemize}
-\item Requirements%, including or excluding derivations.
-\item Design
-\item Test Cases
-\item Build instructions
-\item ...
+\item Taking a practical approach
+%D Many reasons for this. Avoids overdesigning the solution since this is a
+%   fairly ambitious project which could stay in design for a decade without
+%   making much progress. Also, since we're working with industry examples we
+%   have a solid starting point and clear goals for the output.
+\item Focusing on knowledge reuse as opposed to the formal capture of the
+				knowledge itself.
 \end{itemize}
-\item Motivation
-\begin{itemize}
-\item Improve verifiability, maintainability and reusability.
-\item Save money and time% when managing change.
-\end{itemize}
-\end{itemize}
+
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%D Maybe bring up the stuff below once getting to the prototype goals?
+%\begin{frame}
+%\begin{itemize}
+%\item One ``source,'' multiple views
+%\begin{itemize}
+%\item Requirements%, including or excluding derivations.
+%\item Design
+%\item Test Cases
+%\item Build instructions
+%\item ...
+%\end{itemize}
+%\item Motivation
+%\begin{itemize}
+%\item Improve verifiability, maintainability and reusability.
+%\item Save money and time% when managing change.
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
-\frametitle{Research Topic}
+\frametitle{Prototype}
 \framesubtitle{How?}
 
 Knowledge Capture!

@@ -375,7 +375,7 @@ Are these problems specific to math software?
 \frametitle{Research}
 \framesubtitle{Solution Plan}
 
-Create an infrastructure / tool for knowledge capture and reuse.
+%D Create an infrastructure / tool for knowledge capture and reuse.
 
 \begin{itemize}
 \item Focus: avoid knowledge duplication across artifacts through reuse%D copy/pasting
@@ -397,7 +397,7 @@ Create an infrastructure / tool for knowledge capture and reuse.
 \frametitle{Research}
 \framesubtitle{Solution Plan Cont'd}
 
-Create an infrastructure / tool for knowledge capture and reuse.
+%D Create an infrastructure / tool for knowledge capture and reuse.
 
 \begin{itemize}
 \item Create: a domain-specific language for both knowledge capture \& the 
@@ -482,6 +482,10 @@ A practical approach
 \end{itemize}
 \end{frame}
 
+%D I've mentioned examples a lot to this point, so how about we actually take a
+%		look at a real-world example (this is from the power generation company I
+%		mentioned earlier.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section[Example]{Example.}
@@ -493,11 +497,18 @@ A practical approach
 \frametitle{Example: $h_g$}
 
 \framesubtitle{A simple example taken from the SRS for FP}
+%D This is an example taken from a nuclear reactor control system. Specifically
+%   the SRS for a fuel pin.
+%		h_g is gap conductance
 
+%D To start off,
 $h_g$ is a symbol which appears in several locations including:
 \begin{itemize}
-\item The Software Requirements Specification
-\item The Literate Programmer's Manual
+\item The Software Requirements Specification (SRS)
+%D Majority should be familiar with SRS
+\item The Literate Programmer's Manual (LPM)
+%D The LPM is a lit. prog. doc. where implemented code segments are placed
+%		alongside the description of the code (more on that in 2 slides).
 \item The Source Code
 \end{itemize}
 
@@ -508,7 +519,7 @@ Let's take a look!
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-
+%D - Give a brief overview of this slide.
 \frametitle{Example: $h_g$}
 
 \framesubtitle{SRS Definition for $h_g$ (original)}
@@ -547,7 +558,11 @@ Sources & source code\\
 \frametitle{Example: $h_g$}
 
 \framesubtitle{LPM Definition for $h_g$ (original)}
-
+%D The point of this document (the LPM) may not be that apparent, however,
+%		its ppurpose is for verification.
+%		Once we trust the generator, documents like this one may become obsolete.
+%		Currently this type of document may be a necessity for regulation and/or
+%		certification.
 \begin{equation} 
 h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
 \end{equation}
@@ -559,7 +574,7 @@ double calc_hg(double k_c,double h_b,double tau_c)
 {
  return (2*(k_c)*(h_p)) / ((2*(k_c)) + (tau_c*(h_p)));
 }
-\end{lstlisting}
+\end{lstlisting} %D Make sure to talk about the source code.
 
 \end{frame}
 
@@ -581,15 +596,19 @@ double calc_hg(double k_c,double h_b,double tau_c)
 
 \framesubtitle{A simple example taken from the SRS for FP}
 
-Modifying $h_g$ to reflect changes in requirements is not a simple
-matter. It involves, at the very least, the following steps:
+Modifying $h_g$ to reflect changes in requirements is not %a 
+simple.
+%matter
+It involves
+%,at the very least, 
+the following steps:
 \begin{itemize}
-\item Update the definition in the SRS, LPM, and all other documents which
-  reference the symbol
-\item Modify the source code to reflect the new requirements
+\item Update the definition in the SRS, LPM, etc.
+% and all other documents which reference the symbol
+\item Modify the source code %to reflect the new requirements
 \item Trace all dependencies
-\item Modify dependents to accomodate the change
-\item Ensure each of the documents is now up to date and consistent
+\item Modify dependents %to accomodate the change
+\item Ensure each artifact is now up to date and consistent
 \end{itemize}
 
 \end{frame}
@@ -602,8 +621,14 @@ matter. It involves, at the very least, the following steps:
 
 \framesubtitle{Simplifying the process}
 
-%This is where knowledge capture comes into play. 
+%D This is where knowledge capture comes into play. 
 Here is an example of a ``chunk'' for $h_g$:
+%D Pay special attention to the Dependency as that is used to fill in the entire
+%		description field. ``get_dep'' determines this chunk's dependencies based
+%		solely on its equation.
+
+%D Note that ALL of the information we need to generate both the SRS definition,
+%		the LPM, and the source code is contained right here in this little chunk.
 
 \pgfuseimage{ex1}
 
@@ -665,6 +690,16 @@ Sources & source code\\
 \bottomrule \end{tabular} \end{minipage}\\
 \end{frame}
 
+%D Note the description of h_g, if we go back to the chunk definition, you can
+%		see that there is a description in place, but it only describes hg itself.
+%		The generator determined the dependencies in the equation and described them
+%		automatically as per the recipe's instructions.
+%		There are also a few minor differences between the two descriptions as the
+%		original document used two different sets of terminology to refer to the same
+%		symbol. To improve understanding, usability, etc. that oversight has been
+%   corrected (and automatically at that).
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]
@@ -688,6 +723,18 @@ double calc_h_g(double k_c, double h_p, double tau_c)
 }
 \end{lstlisting}
 \end{frame}
+
+%D Here you'll notice that the equation is exactly the same as the previous one.
+%		Also, from this equation alone, the source code has been generated. There are
+% 	a few minor differences in the generated code, but the biggest (imo) is the
+%		generated code is actually MORE readable (imo) as it removed extraneous use
+%		of parentheses. The other differences are cosmetic, as the code still
+%		performs the exact same function.
+
+%D All of that documentation was created from so little information! The most
+%		important piece of information in the chunk is the equation as it directly
+%		affects so many artifacts. Of course the other fields are important too, but
+%		they simply aren't used in the same way as the equation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

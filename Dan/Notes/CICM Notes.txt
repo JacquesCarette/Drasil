@@ -1,0 +1,123 @@
+===============================================================================
+Presentation notes (adapted from Florian's notes):
+===============================================================================
+
+General comments: 
+	- More figures/diagrams. Show the prototype?
+	- Should have brought up the verification problem earlier in the 
+		presentation, it gives a better context.
+
+Slide 6:
+	- Is the project related to math software or software in general?
+		-- Explained in slide 9.
+	
+Slide 7:
+	- Need an example of what kind of knowledge we're talking about.
+		-- Explained later on.
+		
+Slide 9:
+	- Math relies heavily on logic (as opposed to other fields), so how do you
+		tackle the logical knowledge aspect while being able to work on other
+		problems? Math needs theorems.
+	
+Slide 10:
+	- "Traceability" was unclear (clarified during discussion).
+	- Knowledge & software problem too vague. Can't have a general solution.
+	
+Slide 11:
+	- DSL is the difficult part. The implementation limits the scope.
+
+Slide 14:
+	- This is where things get interesting!
+	
+Slide 22:
+	- More depth on next steps in research would be better.
+	
+===============================================================================
+Notable comments and questions from the audience (excluding Florian):
+===============================================================================
+
+How will you know when you're "done"? Do you have some criterion?
+	--Answered in some depth regarding the steps we're taking now with
+		[power gen]'s documentation and making the tool usable.
+	--Case studies and seeing if they'll want to use the tool.
+	
+This is a very good area to be in. There is quite a lot of 
+	work to be done here.
+	
+Very ambitious, could be a downside.
+	
+===============================================================================
+One on One Discussion (from Florian's notes and prior questions):
+===============================================================================
+	- Project is way too ambitious.
+	
+	- Need to choose which programming languages you'll be targeting.
+		--We discussed this for a bit.
+		
+	- What logics will you be able to capture? 
+		--Very math specific, but interesting discussion was held.
+		
+	- What kind of documentation (specifically) are you creating?
+		--Went over requirements and LPM, makefiles, test cases, code, etc.
+		
+	- Will you be using existing tools? Will your solution support other tools?
+		--Discussed possibilities (MMT and such).
+		
+	- As mentioned by someone else, need a clear goal riteria.
+		Figure out what you can and what you can't do.
+		
+	- Are you going to formally develop the DSL/Are you going to try to
+		formalize the DSL at some point?
+		
+	- Currently one of the big research objectives is combining computation 
+		and deduction, seems like you're working in the same area.
+		
+	- Recertification example was really good for showing the traceability
+		problem in SE for SC. In math there needs to be stricter conditions
+		since it's not just certification. Need to prove.
+		Also, strict conditions tend to break software.
+		
+	- Need to explain WHY you can do a better job at solving this problem 
+		than someone else in the field. On that note, identify the 
+		specific sub-problem that you are qualified to solve and focus on
+		it in-depth. This will help you finalize the DSL.
+		
+	- More depth on the DSL.
+		--Discussed for a while.
+		
+	- Which PL features are you fixing? Which logics are you working with?
+		Take a look at the LATIN project.
+		
+	- Practical thesis -> making cuts to research thesis stuff.
+
+
+-- Discussion on knowledge core base:	
+	- What exactly is knowledge? Is it in the math sense (where's the logic?)?
+		What is it in the scientific/engineering sense?
+	-- To sum it up, knowledge needs to essentially cover 3 separate concerns:
+			-Human-readable knowledge (specifications, typical values, etc.).
+			-Computation.
+			-Deduction.
+	
+	- Florian showed me how our current chunks could possibly be implemented 
+			in MMT using the standard three tags + metadata.
+		
+	- Explain more on the set of chunks 
+		-> Identifiers, formal and informal definitions, code generation.
+		-- We discussed the chunks for a bit, he got a better idea of the
+			implementation and the knowledge being captured (from above).
+			
+	- Would MMT be a good fit?
+		--Left to ponder this. Mainly thinking "definitely not yet."
+
+--Comments:		
+	- Focus on choice of chunk fields and recipes. Figure out how 
+		they should be interpreted.
+		
+	- Avoid reimplementing expression languages from scratch.
+		
+	- If you decide to go the theoretical route, create a "proof of concept"
+		tool using a small expression language (can implement it yourself).
+		
+	- For a practical thesis use existing languages to simplify things.

@@ -10,3 +10,6 @@ outLang = CLang
 
 precision :: Precision
 precision = Double
+
+expandSymbols :: Bool
+expandSymbols = True

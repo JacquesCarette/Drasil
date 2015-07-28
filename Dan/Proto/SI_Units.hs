@@ -5,70 +5,68 @@ import ASTInternal
 
 fundamentals :: Chunks
               
-fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
+fundamentals = [metre] --, kilogram, second, kelvin, mole, ampere, candela]
 
 metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
-              watt, ampere, candela :: Chunk
+	watt, ampere, candela :: Chunk
 
 -- Fundamental SI Units --------------------------------------------------------
 metre = newChunk $
   [ (Symbol, S "m"),
     (Description, S "length (metre)"),
     (Name, S "Metre"),
-    (SIU, M $ Fundamental "m")]
+    (SIU, SI Fundamental)]
 kilogram = newChunk $
   [ (Symbol, S "kg"),
-    (SIU, M $ Fundamental "kg"),
+    (SIU, SI Fundamental),
     (Description, S "mass (kilogram)"),
     (Name, S "Kilogram")]
 second = newChunk $
   [ (Symbol, S "s"),
-    (SIU, M $ Fundamental "s"),
+    (SIU, SI Fundamental),
     (Description, S "time (second)"),
     (Name, S "Second")]
 kelvin = newChunk $
   [ (Symbol, S "K"),
-    (SIU, M $ Fundamental "K"),
+    (SIU, SI Fundamental),
     (Description, S "temperature (kelvin)"),
     (Name, S "Kelvin")]
 mole = newChunk $
   [ (Symbol, S "mol"),
-    (SIU, M $ Fundamental "mol"),
+    (SIU, SI Fundamental),
     (Description, S "amount of substance (mole)"),
     (Name, S "Mole")]
 ampere = newChunk $
   [ (Symbol, S "A"),
-    (SIU, M $ Fundamental "A"),
+    (SIU, SI Fundamental),
     (Description, S "electric current"),
     (Name, S "Ampere")]
 candela = newChunk $
   [ (Symbol, S "cd"),
-    (SIU, M $ Fundamental "cd"),
+    (SIU, SI Fundamental),
     (Description, S "luminous intensity"),
     (Name, S "Candela")]
-
 ------- END FUNDAMENTALS -------------------------------------------------------
 
 centigrade = newChunk $
-  [ (Symbol, S "$^oC$"), --This is TeX specific
+  [ (Symbol, U Circle :+: S "C"),
     (Description, S "temperature (centigrade)"),
     (Name, S "Centigrade"),
-    (SIU, M $ Derived "$^oC$" (C kelvin :- (Dbl 273.15)))]
+    (SIU, SI $ Derived (C kelvin :- (Dbl 273.15)))]
 joule = newChunk $
   [ (Symbol, S "J"),
-    (SIU, M $ Derived "J" ((C kilogram :* (C metre :^ (Int 2))) :/ 
-      (C second :^ (Int 2)))),
+    (SIU, SI $ Derived ((C kilogram :* (C metre :^ (Int 2))) :/ 
+                           (C second :^ (Int 2)))),
     (Description, S "energy"),
     (Name, S "Joule")]
-  -- Again TeX specific formatting used above/below here. Needs to be changed
 calorie = newChunk $
   [ (Symbol, S "cal"),
     (Description, S ("energy")),
     (Name, S "Calorie"),
-    (SIU, M $ Derived "cal" ((Dbl 4.184) :* (C joule)))]
+    (SIU, SI $ Derived ((Dbl 4.184) :* (C joule)))]
 watt = newChunk $
   [ (Symbol, S "W"),
     (Description, S "power"),
     (Name, S "Watt"),
-    (SIU, M $ Derived "W" 
-      ((C kilogram :* (C metre :^ (Int 2))) :/ (C second :^ (Int 3))))]
+    (SIU, SI $ 
+      Derived ((C kilogram :* (C metre :^ (Int 2))) :/ (C second :^ (Int 3))))]

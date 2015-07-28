@@ -7,6 +7,7 @@ import Config
 import Text.PrettyPrint
 import Data.Maybe
 import qualified ASTInternal as AST
+import Chunk (find)
 
 type Chunk = AST.Chunk
 
@@ -39,19 +40,19 @@ format_Tex :: AST.Context -> AST.FDesc -> String
 format_Tex _ (AST.E e) = p_expr $ expr e
 format_Tex _ (AST.S s) = s
 format_Tex _ (AST.U x) = uni x
-format_Tex c (AST.F AST.Hat x) = "\\hat{" ++ format_Tex c x ++ "}"
-format_Tex c (AST.F AST.Vector x) = "\\bf{" ++ format_Tex c x ++ "}"
+format_Tex con (AST.F AST.Hat x) = "\\hat{" ++ format_Tex con x ++ "}"
+format_Tex con (AST.F AST.Vector x) = "\\bf{" ++ format_Tex con x ++ "}"
 format_Tex AST.Pg (a AST.:-: b) = 
   "$"++format_Tex AST.Pg a ++"_{"++ (format_Tex AST.Pg b)++"}$"
-format_Tex c (a AST.:-: b) = 
-  format_Tex c a ++ "_{" ++ format_Tex c b ++ "}"
+format_Tex con (a AST.:-: b) = 
+  format_Tex con a ++ "_{" ++ format_Tex con b ++ "}"
 format_Tex AST.Pg (a AST.:^: b) = 
   "$"++format_Tex AST.Pg a ++"^{"++ format_Tex AST.Pg b++"}$"
 format_Tex AST.Pg (a AST.:+: b) = 
   "$"++format_Tex AST.Pg a ++ format_Tex AST.Pg b ++ "$"
-format_Tex c (a AST.:+: b) = format_Tex c a ++ format_Tex c b
-format_Tex c (a AST.:^: b) = format_Tex c a ++ "^{" ++ format_Tex c b ++ "}"
-format_Tex c (AST.M unit) = writeUnit unit c
+format_Tex con (a AST.:+: b) = format_Tex con a ++ format_Tex con b
+format_Tex con (a AST.:^: b) = format_Tex con a ++ "^{" ++ format_Tex con b ++ "}"
+format_Tex con (AST.M unit) = writeUnit unit con
 format_Tex _ AST.Empty = ""
 
 
@@ -109,11 +110,21 @@ writeDep (x:xs) (c:[]) is es con=
   [get x c con <+> text is] ++ writeDep xs [c] is es con
 writeDep (x:xs) (c:cs) is es con= 
   writeDep (x:xs) (c:[]) is es con ++ writeDep (x:xs) cs is es con
-
+  
+{-
 writeUnit :: AST.Unit -> AST.Context -> String  
 writeUnit (AST.Fundamental s) _ = s
 writeUnit (AST.Derived s e) AST.Pg = "$" ++ s ++ " = " ++ pU_expr (expr e) ++ "$"
 writeUnit (AST.Derived s e) _ = s ++ " = " ++ pU_expr (expr e)
+-}
+
+writeUnit :: Chunk -> AST.FDesc -> AST.Context -> String
+writeUnit c (AST.SI AST.Fundamental) _ = format_Tex AST.Pg $ 
+  find AST.Symbol c "Symbol not found"
+writeUnit c (AST.SI (AST.Derived e)) AST.Pg = 
+  if (expandSymbols) then 
+    format_Tex AST.Pg (fromMaybe (error "No Symbol") (Map.lookup AST.Symbol c))++ " = " ++ pU_expr (expr e)
+  else plaintext c
 
 printSIU :: [Chunk] -> [AST.FName] -> Doc -> Doc -> [Doc]
 printSIU [] _ _ _ = [empty]

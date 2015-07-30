@@ -7,7 +7,6 @@ import Data.Maybe
 import ASTInternal (Chunk)
 import qualified ASTInternal as AST
 import Prelude hiding (print)
-import Config (expandSymbols)
 
 plaintext :: Chunk -> String
 plaintext c = print $
@@ -22,9 +21,7 @@ print (AST.U u)     = uni u
 print (a AST.:-: b) = print a ++ "_" ++ print b
 print (a AST.:^: b) = print a ++ "^" ++ print b
 print (a AST.:+: b) = print a ++ print b
-print (AST.M c)  = 
-  writeUnit c (fromMaybe (error "Chunk is missing requisite fields") 
-    (Map.lookup AST.SIU c))
+print (AST.M unit)  = writeUnit unit
 print (AST.F AST.Hat a) = print a ++ "_hat"
 print (AST.F AST.Vector a) = print a ++ "_vect"
 print (AST.Empty)   = ""
@@ -79,11 +76,9 @@ uni (AST.Phi_U) = "Phi"
 -- writeDep (x:xs) (c:cs) is es con= 
   -- writeDep (x:xs) (c:[]) is es con ++ writeDep (x:xs) cs is es con
 
-writeUnit :: Chunk -> AST.FDesc -> String
-writeUnit c (AST.SI AST.Fundamental) = plaintext c
-writeUnit c (AST.SI (AST.Derived e)) = 
-  if (expandSymbols) then plaintext c ++ " = " ++ pU_expr (expr e)
-  else plaintext c
+writeUnit :: AST.Unit -> String  
+writeUnit (AST.Fundamental s) = s
+writeUnit (AST.Derived s e) = s ++ " = " ++ pU_expr (expr e)
 
 -- printSIU :: [Chunk] -> [AST.FName] -> Doc -> Doc -> [Doc]
 -- printSIU [] _ _ _ = [empty]

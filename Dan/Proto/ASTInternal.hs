@@ -41,20 +41,13 @@ data Spec = E Expr        -- Expressions
           | Spec :+: Spec -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
           | Empty         -- Blank
           | U Unicode     -- Unicode for special characters
-          | M Chunk       -- Measured in (*unit chunk definition*) to derive units.
-                            -- MUST reference another chunk.
-          | SI Unit       -- ONLY For Unit declarations (which are chunks themselves).
-                            -- This is already a problem, need to have some way
-                            -- to constrain chunks. Need to have chunk "types"
-                            -- or something of that ilk in order to ensure the
-                            -- proper field specs are being used.
+          | M Unit        -- Measured in *
           | F Format Spec -- Special formatting for certain symbols 
                                 --(e.g. hat, dot, etc.)
-
   deriving (Eq, Ord)
 
-data Unit = Fundamental --Fundamental unit type (e.g. "m" for length)
-          | Derived Expr --Derived unit type (e.g. "J" for power, from
+data Unit = Fundamental String --Fundamental unit type (e.g. "m" for length)
+          | Derived String Expr --Derived unit type (e.g. "J" for power, from
                                 --the expression kg m^2 / s^2
   deriving (Eq, Ord)
 

@@ -7,6 +7,7 @@ import Config
 import Text.PrettyPrint
 import Data.Maybe
 import qualified ASTInternal as AST
+import Helpers
 
 type Chunk = AST.Chunk
 
@@ -152,7 +153,7 @@ makeTable :: AST.LayoutObj -> Doc
 makeTable t = vcat (beginTable ++ (createRows t) ++ endTable)
 
 beginTable :: [Doc]
-beginTable = [text "~\\newline \\begin{longtable}{1 p{11cm}}"]
+beginTable = [text "~\\newline \\begin{longtable}{l l p{11cm}}"]
 
 endTable :: [Doc]
 endTable = [text "\\end{longtable}"]
@@ -160,11 +161,9 @@ endTable = [text "\\end{longtable}"]
 createRows :: AST.LayoutObj -> [Doc]
 createRows (AST.Table [] _) = [empty]
 createRows (AST.Table _ []) = [empty]
-createRows (AST.Table (c:cs) f) = [createColumns c f] ++ createRows (AST.Table cs f)
+createRows (AST.Table (c:cs) f) = [createColumns c f] ++ [dbs] ++ createRows (AST.Table cs f)
 
 createColumns :: Chunk -> [AST.Field] -> Doc
 createColumns _ [] = empty
-createColumns c ((AST.Equation):[]) = get AST.Equation c AST.Eqn
 createColumns c (f:[])			  	  = get f c AST.Pg
-createColumns c ((AST.Equation):fs) = get AST.Equation c AST.Eqn <+> text "& \\blt" <+> createColumns c fs
-createColumns c (f:fs)			  	  = get f c AST.Pg <+> text "& \\blt" <+> createColumns c fs
+createColumns c (f:fs)			  	  = createColumns c (f:[]) <+> text "& \\blt" <+> createColumns c fs

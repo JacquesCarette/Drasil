@@ -50,7 +50,7 @@ candela = newChunk $
 ------- END FUNDAMENTALS -------------------------------------------------------
 
 centigrade = newChunk $
-  [ (Symbol, S "$^oC$"), --This is TeX specific
+  [ (Symbol, U Circle :+: S "C"), --This is TeX specific
     (Description, S "temperature (centigrade)"),
     (Name, S "Centigrade"),
     (SIU, M $ Derived "$^oC$" (C kelvin :- (Dbl 273.15)))]

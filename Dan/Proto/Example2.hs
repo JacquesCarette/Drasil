@@ -33,21 +33,24 @@ a_in :: Chunk
 a_in = newChunk $
   [(Symbol, S "A" :-: S "in"),
    (VarName,S "a_in"),
-   (Description,S "surface area over which heat is transferred in")
+   (Description,S "surface area over which heat is transferred in"),
+   (SIU, (E (C metre :^ (Int 2))))
   ]
 ----------------------------------------------------------------------  
 a_P :: Chunk
 a_P = newChunk $
   [(Symbol, S "A" :-: S "P"),
    (VarName,S "a_P"),
-   (Description,S "phase change material surface area")
+   (Description,S "phase change material surface area"),
+   (SIU, (E (C metre :^ (Int 2))))
   ]
 ----------------------------------------------------------------------
 a_out :: Chunk
 a_out = newChunk $
   [(Symbol, S "A" :-: S "out"),
    (VarName,S "a_out"),
-   (Description,S "surface area over which heat is transferred out")
+   (Description,S "surface area over which heat is transferred out"),
+   (SIU, (E (C metre :^ (Int 2))))
   ]
 ----------------------------------------------------------------------
 
@@ -60,7 +63,8 @@ c = newChunk $
   [(Symbol, S "C"),
    (VarName,S "c"),
    -- (Equation, E h_c_eq),
-   (Description, S "specific heat capacity")
+   (Description, S "specific heat capacity"),
+   (SIU, E ((C joule) :/ ((C kilogram) :* (C centigrade))))
   ]
 -- c_dep :: Dependency
 -- c_dep = get_dep h_c_eq

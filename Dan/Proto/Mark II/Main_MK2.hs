@@ -3,8 +3,6 @@ module Main where
 import System.IO
 import Text.PrettyPrint.HughesPJ
 import Body1_MK2
-import TeXHelpers
---import qualified Body2 as E2
 
 data DocType = SRS
              | LPM

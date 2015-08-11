@@ -42,8 +42,9 @@ data Spec = E Expr        -- Expressions
           | Empty         -- Blank
           | U Unicode     -- Unicode for special characters
           | M Unit        -- Measured in *
-          | F Format Spec -- Special formatting for certain symbols 
+          | F Format Spec -- Special formatting for certain symbols & special chars
                                 --(e.g. hat, dot, etc.)
+          | CS Chunk
   deriving (Eq, Ord)
 
 data Unit = Fundamental String --Fundamental unit type (e.g. "m" for length)
@@ -66,14 +67,18 @@ data Unicode = Tau_L
 
 data Format = Hat
             | Vector
+            | Grave
+            | Acute
   deriving (Eq, Ord)
   
 data LayoutObj = Table Chunks [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
 
-type Title = String
-type Contents = String
+data Document = Document Title [LayoutObj]
+
+type Title = Spec
+type Contents = Spec
                
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------

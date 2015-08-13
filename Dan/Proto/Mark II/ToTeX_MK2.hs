@@ -33,7 +33,7 @@ spec Empty = T.S empty
 spec (U u) = convertUnicode u
 spec (M m) = T.M m
 spec (CS c) = T.CS c
---spec (F f s) = 
+spec (F f s) = spec $ format f s
 
 convertUnicode :: Unicode -> T.Spec
 convertUnicode Tau_L = T.S $ text "\\tau"
@@ -47,3 +47,9 @@ convertUnicode Rho_U = T.S $ text "\\Rho"
 convertUnicode Rho_L = T.S $ text "\\rho"
 convertUnicode Phi_U = T.S $ text "\\Phi"
 convertUnicode Phi_L = T.S $ text "\\phi"
+
+format :: Format -> Spec -> Spec
+format Hat    s = S "\\hat{" :+: s :+: S "}"
+format Vector s = S "\\bf{" :+: s :+: S "}"
+format Grave  s = S "\\`{" :+: s :+: S "}"
+format Acute  s = S "\\'{" :+: s :+: S "}"

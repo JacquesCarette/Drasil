@@ -82,14 +82,17 @@ type Contents = Spec
 type Author   = Spec
                
 --data Context = Pg | Eqn | Cd -- paragraph, equation, or code
-----------------------------------------------------------------
-data CodeType = Calc
-data Precision = Single | Double
+-- ----------------------------------------------------------------
+-- data CodeType = Calc
+-- data Precision = Single | Double
 
 data DocType = SRS
              | LPM
              | Code
 
+data DocParams = DocClass String String --SqBracks vs. Braces
+               | UsePackages [String]
+             
 --Get dependency from equation  
 get_dep :: Expr -> Dependency
 get_dep (a :/ b) = nub (get_dep a ++ get_dep b)

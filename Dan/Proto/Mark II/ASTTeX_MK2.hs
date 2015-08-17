@@ -17,7 +17,7 @@ data Expr = Var Variable
   deriving (Eq, Ord)
   
 data Spec = E Expr
-          | S Doc --DocType instead of strings here.
+          | S String
           | Spec :+: Spec
           | Spec :^: Spec
           | Spec :-: Spec

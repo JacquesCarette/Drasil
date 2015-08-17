@@ -25,7 +25,7 @@ replace_divs a = expr a
 
 spec :: Spec -> T.Spec
 spec (E e) = T.E (expr e)
-spec (S s) = T.S (text s)
+spec (S s) = T.S (s)
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
@@ -36,17 +36,17 @@ spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
 
 convertUnicode :: Unicode -> T.Spec
-convertUnicode Tau_L = T.S $ text "\\tau"
-convertUnicode Tau_U = T.S $ text "\\Tau"
-convertUnicode Alpha_L = T.S $ text "\\alpha"
-convertUnicode Alpha_U = T.S $ text "\\Alpha"
-convertUnicode Circle = T.S $ text "\\circ"
-convertUnicode Delta_U = T.S $ text "\\Delta"
-convertUnicode Delta_L = T.S $ text "\\delta"
-convertUnicode Rho_U = T.S $ text "\\Rho"
-convertUnicode Rho_L = T.S $ text "\\rho"
-convertUnicode Phi_U = T.S $ text "\\Phi"
-convertUnicode Phi_L = T.S $ text "\\phi"
+convertUnicode Tau_L = T.S $ "\\tau"
+convertUnicode Tau_U = T.S $ "\\Tau"
+convertUnicode Alpha_L = T.S $ "\\alpha"
+convertUnicode Alpha_U = T.S $ "\\Alpha"
+convertUnicode Circle = T.S $ "\\circ"
+convertUnicode Delta_U = T.S $ "\\Delta"
+convertUnicode Delta_L = T.S $ "\\delta"
+convertUnicode Rho_U = T.S $ "\\Rho"
+convertUnicode Rho_L = T.S $ "\\rho"
+convertUnicode Phi_U = T.S $ "\\Phi"
+convertUnicode Phi_L = T.S $ "\\phi"
 
 format :: Format -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"

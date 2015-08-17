@@ -1,8 +1,15 @@
 {-# OPTIONS -Wall #-} 
 module Helpers_MK2 where
-import ASTInternal_MK2 (OutFormat)
+import ASTInternal_MK2 (OutFormat, DocParams (DocClass, UsePackages))
 import Text.PrettyPrint
 import Data.Char
+
+--TeX Document Parameter Defaults
+defaultSRSparams :: [DocParams]
+defaultSRSparams = [
+  DocClass  [] "article",
+  UsePackages ["booktabs","longtable"]
+  ]
 
 --basic
 bslash,dbs,eq,dlr,ast,pls :: Doc

@@ -81,10 +81,14 @@ type Title    = Spec
 type Contents = Spec
 type Author   = Spec
                
-data Context = Pg | Eqn | Code -- paragraph, equation, or code
+--data Context = Pg | Eqn | Cd -- paragraph, equation, or code
 ----------------------------------------------------------------
 data CodeType = Calc
 data Precision = Single | Double
+
+data DocType = SRS
+             | LPM
+             | Code
 
 --Get dependency from equation  
 get_dep :: Expr -> Dependency

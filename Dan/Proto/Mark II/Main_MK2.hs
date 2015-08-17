@@ -4,6 +4,8 @@ import System.IO
 import Text.PrettyPrint.HughesPJ
 import Body1_MK2 (srsBody)
 import PrintTeX_MK2 (genTeX)
+import Config_MK2
+import ASTInternal_MK2 (Document, OutFormat (TeX, Plain))
 
 data DocType = SRS
              | LPM
@@ -34,13 +36,13 @@ auth = "Spencer Smith"
 auth2 :: String
 auth2 = "Thulasi Jegatheesan"
 
-spre,lpre :: Doc
-spre = docclass [] "article" $$ usepackage "longtable" $$ usepackage "booktabs"
-lpre = docclass "article" "cweb-hy" $$ usepackage "xr" $$ exdoc "L-" "hghc_SRS"
+-- spre,lpre :: Doc
+-- spre = docclass [] "article" $$ usepackage "longtable" $$ usepackage "booktabs"
+-- lpre = docclass "article" "cweb-hy" $$ usepackage "xr" $$ exdoc "L-" "hghc_SRS"
 
 
 createSRS :: Doc  
-createSRS = writeDoc output srsBody 
+createSRS = (writeDoc output) srsBody 
 
 docs :: [Recipe]
 docs = [Recipe (SRS, "SRS.tex", createSRS) --, 
@@ -49,9 +51,9 @@ docs = [Recipe (SRS, "SRS.tex", createSRS) --,
        ]
        
 --generation functions
-writeDoc :: OutFormat
+writeDoc :: OutFormat -> Document -> Doc
 writeDoc TeX    = genTeX
-writeDoc Plain  = genPlain
+--writeDoc Plain  = genPlain
        
 main :: IO ()            
 main = do

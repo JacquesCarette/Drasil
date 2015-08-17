@@ -19,7 +19,8 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
 s1_table = Table si_units [Symbol, Description]
 
 srsBody :: Document
-srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_g)) [s1]
+srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_g)) 
+  (S "Spencer Smith") [s1]
 {-         
 s1_table = 
   vcat ([text "~\\newline \\begin{longtable}{l p{11cm}}"] ++ 

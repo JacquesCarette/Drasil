@@ -2,7 +2,8 @@
 module Main where
 import System.IO
 import Text.PrettyPrint.HughesPJ
-import Body1_MK2
+import Body1_MK2 (srsBody)
+import PrintTeX_MK2 (genTeX)
 
 data DocType = SRS
              | LPM
@@ -37,24 +38,21 @@ spre,lpre :: Doc
 spre = docclass [] "article" $$ usepackage "longtable" $$ usepackage "booktabs"
 lpre = docclass "article" "cweb-hy" $$ usepackage "xr" $$ exdoc "L-" "hghc_SRS"
 
-createSRS :: Doc  
-createSRS = spre $$ title "SRS for $h_g$ and $h_c$" $$
-            author auth $$ srsComms $$ begin $$ srsBody $$ end
-{-            
-createLPM :: Doc
-createLPM = lpre $$ title "Literate Programmer's Manual for $h_g$ and $h_c$" $$
-            author auth $$ lpmComms $$ begin $$ lpmBody $$ endL
 
-createSRS2 :: Doc  
-createSRS2 = spre $$ title ("Software Requirements Specification for Solar " ++ 
-             "Water Heating Systems Incorporating Phase Change Material") $$
-             author auth2 $$ srsComms $$ begin $$ E2.srsBody $$ end
--}
+createSRS :: Doc  
+createSRS = writeDoc output srsBody 
+
 docs :: [Recipe]
 docs = [Recipe (SRS, "SRS.tex", createSRS) --, 
 --        Recipe (SRS, "PCM_SRS.tex", createSRS2),
 --        Recipe (LPM, "LPM.w", createLPM)
        ]
+       
+--generation functions
+writeDoc :: OutFormat
+writeDoc TeX    = genTeX
+writeDoc Plain  = genPlain
+       
 main :: IO ()            
 main = do
   gen docs

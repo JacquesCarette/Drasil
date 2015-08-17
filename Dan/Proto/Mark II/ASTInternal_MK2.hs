@@ -75,10 +75,11 @@ data LayoutObj = Table Chunks [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
 
-data Document = Document Title [LayoutObj]
+data Document = Document Title Author [LayoutObj]
 
-type Title = Spec
+type Title    = Spec
 type Contents = Spec
+type Author   = Spec
                
 data Context = Pg | Eqn | Code -- paragraph, equation, or code
 ----------------------------------------------------------------

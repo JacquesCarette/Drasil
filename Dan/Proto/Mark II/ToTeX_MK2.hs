@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module ToTex_MK2 where
+module ToTeX_MK2 where
 import ASTInternal_MK2
 import qualified ASTTeX_MK2 as T
 import Text.PrettyPrint
@@ -53,3 +53,19 @@ format Hat    s = S "\\hat{" :+: s :+: S "}"
 format Vector s = S "\\bf{" :+: s :+: S "}"
 format Grave  s = S "\\`{" :+: s :+: S "}"
 format Acute  s = S "\\'{" :+: s :+: S "}"
+
+makeDocument :: Document -> T.Document
+makeDocument (Document title author layout) = 
+  T.Document (spec title) (spec author) (createLayout layout)
+
+createLayout :: [LayoutObj] -> [T.LayoutObj]
+createLayout []     = []
+createLayout (l:[]) = [lay l]
+createLayout (l:ls) = lay l : createLayout ls
+
+lay :: LayoutObj -> T.LayoutObj
+--For printing, will need to use "find" function from Chunk_MK2.hs
+lay (Table c f) = T.Table c f 
+lay (Section title layoutComponents) = 
+  T.Section (spec title) (createLayout layoutComponents)
+lay (Paragraph c) = T.Paragraph (spec c)

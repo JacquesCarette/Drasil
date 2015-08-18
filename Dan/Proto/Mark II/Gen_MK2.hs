@@ -3,7 +3,7 @@ module Gen_MK2 where
 import System.IO
 import Text.PrettyPrint.HughesPJ
 import PrintTeX_MK2 (genTeX)
-import ASTInternal_MK2 (Document, OutFormat (TeX), DocType (SRS,LPM,Code))
+import ASTInternal_MK2 (Document, OutFormat (TeX, Plain), DocType (SRS,LPM,Code))
 
 data Recipe = Recipe (DocType, String, Doc)
         --DocType, Filename, 'Body'
@@ -26,4 +26,4 @@ prnt Code _ _ = error "Code DocType is not implemented yet"
 
 writeDoc :: OutFormat -> DocType -> Document -> Doc
 writeDoc TeX    = genTeX
---writeDoc Plain  = genPlain
+writeDoc Plain  = error "Not yet implemented"--genPlain

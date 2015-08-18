@@ -13,8 +13,8 @@ genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
 build A.SRS doc = buildSRS srsTeXParams doc
-build A.LPM (Document title author contents) = error "Unimplemented"
-build A.Code (Document title author contents) = error "Unimplemented"
+build A.LPM _ = error "Unimplemented"
+build A.Code _ = error "Unimplemented"
 
 buildSRS :: [A.DocParams] -> Document -> Doc
 buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =

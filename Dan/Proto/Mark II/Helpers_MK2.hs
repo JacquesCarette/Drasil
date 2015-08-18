@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Helpers_MK2 where
-import ASTInternal_MK2 (OutFormat, DocParams (DocClass, UsePackages))
+import ASTInternal_MK2 (DocParams (DocClass, UsePackages))
 import Text.PrettyPrint
 import Data.Char
 

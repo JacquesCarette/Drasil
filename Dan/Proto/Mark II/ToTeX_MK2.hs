@@ -2,7 +2,6 @@
 module ToTeX_MK2 where
 import ASTInternal_MK2
 import qualified ASTTeX_MK2 as T
-import Text.PrettyPrint
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v
@@ -29,7 +28,7 @@ spec (S s) = T.S (s)
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
-spec Empty = T.S empty
+spec Empty = T.S ""
 spec (U u) = convertUnicode u
 spec (M m) = T.M m
 spec (CS c) = T.CS c

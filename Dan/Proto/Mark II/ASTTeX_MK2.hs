@@ -2,7 +2,7 @@
 module ASTTeX_MK2 where
 
 import ASTInternal_MK2 (Chunk, Chunks, Variable, Unit, Field)
-import Text.PrettyPrint
+
 
 data Expr = Var Variable
           | Dbl Double

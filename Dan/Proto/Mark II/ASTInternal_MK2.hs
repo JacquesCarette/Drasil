@@ -74,6 +74,7 @@ data Format = Hat
 data LayoutObj = Table Chunks [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
+               | EqnBlock Spec
 
 data Document = Document Title Author [LayoutObj]
 

@@ -92,3 +92,6 @@ ddref = comm "ddref" "DD\\ref{#1}" "1"
 colAw = comm "colAwidth" "0.2\\textwidth" []
 colBw = comm "colBwidth" "0.73\\textwidth" []
 arrayS = renewcomm "arraystretch" "1.2"
+
+fraction :: String -> String -> String
+fraction a b = "\\frac{" ++ a ++ "}{" ++ b ++ "}"

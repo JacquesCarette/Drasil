@@ -24,12 +24,12 @@ sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
---basic plaintext
-paren :: String -> String
-paren = \t -> "(" ++ t ++ ")"
+--basic plaintext manipulation
+paren,brace,dollar :: String -> String
+paren  = \x -> "(" ++ x ++ ")"
+brace  = \x -> "{" ++ x ++ "}"
+dollar = \x -> "$" ++ x ++ "$"
 
-brace :: String -> String
-brace = \x -> "{" ++ x ++ "}"
 
 --format strings
 upcase, lowcase :: [Char] -> Doc

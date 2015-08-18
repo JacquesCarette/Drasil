@@ -32,3 +32,6 @@ type Contents = Spec
 data LayoutObj = Table Chunks [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
+               
+data Context = Pg | Eqn | Cd -- paragraph, equation, or code. This will affect
+                             -- the formatting of the finished document.

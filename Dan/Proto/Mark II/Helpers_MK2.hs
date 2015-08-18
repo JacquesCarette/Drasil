@@ -11,7 +11,7 @@ defaultSRSparams = [
   UsePackages ["booktabs","longtable"]
   ]
 
---basic
+--basic docs
 bslash,dbs,eq,dlr,ast,pls :: Doc
 bslash = text "\\"
 dbs = bslash <> bslash
@@ -24,8 +24,12 @@ sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
+--basic plaintext
 paren :: String -> String
-paren t = "(" ++ t ++ ")"
+paren = \t -> "(" ++ t ++ ")"
+
+brace :: String -> String
+brace = \x -> "{" ++ x ++ "}"
 
 --format strings
 upcase, lowcase :: [Char] -> Doc

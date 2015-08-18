@@ -19,7 +19,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
 s1_table = Table si_units [Symbol, Description]
 
 srsBody :: Document
-srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_g)) 
+srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 
   (S "Spencer Smith") [s1]
 {-         
 s1_table = 

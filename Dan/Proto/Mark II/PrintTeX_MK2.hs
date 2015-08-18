@@ -7,6 +7,7 @@ import qualified ASTInternal_MK2 as A
 import Prelude hiding (print)
 import Config_MK2 (srsTeXParams)
 import Helpers_MK2
+import Chunk_MK2 (find)
 
 genTeX :: A.DocType -> A.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -32,4 +33,10 @@ print (c:cs) = text "" $$ print cs
 
 p_spec :: Spec -> String
 p_spec (S s) = s
-p_spec _ = ""
+p_spec (E e) = p_expr e
+p_spec (a :+: b) = p_spec a ++ p_spec b
+p_spec (a :-: b) = p_spec a ++ "_" ++ brace (p_spec b)
+p_spec (a :^: b) = p_spec a ++ "^" ++ brace (p_spec b)
+p_spec (CS c) = p_spec $ spec (find A.Symbol c "Erroneous use of chunk")
+
+p_expr _ = ""

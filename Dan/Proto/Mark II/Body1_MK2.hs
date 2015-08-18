@@ -3,8 +3,7 @@ module Body1_MK2 where
 import Example1_MK2
 import ASTInternal_MK2
 
-s1, s1_intro, s1_table :: LayoutObj
---, s2, s2_intro, s2_table, s3, srsBody, lpmBody
+s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3 :: LayoutObj
 
 s1 = Section (S "Table of Units") [s1_intro, s1_table]
 
@@ -30,13 +29,11 @@ s2_intro = Paragraph $
   
 s2_table = Table [h_g,h_c] [Symbol, Description, SIU]
 
+s3 = Section (S "Data Definitions") []
+
 srsBody :: Document
 srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 
-  (S "Spencer Smith") [s1,s2]
-{-         
-
-s3 = sec "Data Definitions"
--}  
+  (S "Spencer Smith") [s1,s2,s3] 
 
 -- srsBody = vcat [s1,s1_intro,s1_table,s2,s2_intro,s2_table,s3,
           -- text "~\\newline \\noindent \\begin{minipage}{\\textwidth}",

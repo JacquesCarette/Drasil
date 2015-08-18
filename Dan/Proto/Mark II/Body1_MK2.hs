@@ -18,30 +18,22 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
 
 s1_table = Table si_units [Symbol, Description]
 
+s2 = Section (S "Table of Symbols") [s2_intro, s2_table]
+
+s2_intro = Paragraph $ 
+  S "The table that follows summarizes the symbols used in this " :+:
+  S "document along with their units.  The choice of symbols was " :+:
+  S "made with the goal of being consistent with the nuclear " :+:
+  S "physics literature and that used in the FP manual.  The SI " :+:
+  S "units are listed in brackets following the definition of " :+:
+  S "the symbol."
+  
+s2_table = Table [h_g,h_c] [Symbol, Description, SIU]
+
 srsBody :: Document
 srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 
-  (S "Spencer Smith") [s1]
+  (S "Spencer Smith") [s1,s2]
 {-         
-s1_table = 
-  vcat ([text "~\\newline \\begin{longtable}{l p{11cm}}"] ++ 
-  (printSIU si_units [Description,SIU] (text "& \\blt for") dbs) ++ 
-    [text "\\end{longtable}"])
-    
-s2 = sec "Table of Symbols"
-
-
-s2_intro = text "The table that follows summarizes the symbols used in this" <+>
-           text "document along with their units.  The choice of symbols was"<+>
-           text "made with the goal of being consistent with the nuclear" <+>
-           text "physics literature and that used in the FP manual.  The SI" <+>
-           text "units are listed in brackets following the definition of" <+>
-           text "the symbol."
-
-s2_table =
-  vcat ([text "\\begin{longtable}{l p{10.5cm}}", (get Symbol h_c Pg) <+> 
-  text "& \\blt" <+> (get Description h_c Pg) <+> (get SIU h_c Pg) <> dbs, 
-  (get Symbol h_g Pg) <+> text "& \\blt" <+> (get Description h_g Pg) <+> 
-  (get SIU h_g Pg), text "\\end{longtable}"])
 
 s3 = sec "Data Definitions"
 -}  

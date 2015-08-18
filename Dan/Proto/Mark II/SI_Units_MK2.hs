@@ -39,12 +39,12 @@ mole = newChunk $
 ampere = newChunk $
   [ (Symbol, S "A"),
     (SIU, M $ Fundamental "A"),
-    (Description, S "electric current"),
+    (Description, S "electric current (ampere)"),
     (Name, S "Ampere")]
 candela = newChunk $
   [ (Symbol, S "cd"),
     (SIU, M $ Fundamental "cd"),
-    (Description, S "luminous intensity"),
+    (Description, S "luminous intensity (candela)"),
     (Name, S "Candela")]
 
 ------- END FUNDAMENTALS -------------------------------------------------------
@@ -58,17 +58,16 @@ joule = newChunk $
   [ (Symbol, S "J"),
     (SIU, M $ Derived "J" ((C kilogram :* (C metre :^ (Int 2))) :/ 
       (C second :^ (Int 2)))),
-    (Description, S "energy"),
+    (Description, S "energy (joule)"),
     (Name, S "Joule")]
-  -- Again TeX specific formatting used above/below here. Needs to be changed
 calorie = newChunk $
   [ (Symbol, S "cal"),
-    (Description, S ("energy")),
+    (Description, S ("energy (calorie)")),
     (Name, S "Calorie"),
     (SIU, M $ Derived "cal" ((Dbl 4.184) :* (C joule)))]
 watt = newChunk $
   [ (Symbol, S "W"),
-    (Description, S "power"),
+    (Description, S "power (watt)"),
     (Name, S "Watt"),
     (SIU, M $ Derived "W" 
       ((C kilogram :* (C metre :^ (Int 2))) :/ (C second :^ (Int 3))))]

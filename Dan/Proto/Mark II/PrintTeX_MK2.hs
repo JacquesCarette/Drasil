@@ -32,7 +32,7 @@ print :: [LayoutObj] -> Doc
 print []                         = empty
 print ((Section t contents):cs)  = sec (p_spec Pg t) $$ print contents $$ print cs
 print ((Paragraph contents):cs)  = text (p_spec Pg contents) $$ print cs
-print ((EqnBlock contents):cs)   = text (p_spec Pg contents) $$ print cs
+print ((EqnBlock contents):cs)   = makeEquation contents $$ print cs
 print ((Table chunks fields):cs) = makeTable chunks fields $$ print cs
 
 p_spec :: Context -> Spec -> String
@@ -61,4 +61,11 @@ mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
 mul a b         = p_expr a ++ p_expr b
 
+makeEquation :: Spec -> Doc
+makeEquation contents = 
+  text ("\\begin{equation}" ++ p_spec Eqn contents ++ "\\end{equation}")
+  --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
+  --  on chunk (i.e. "eq:h_g" for h_g = ...
+
+makeTable :: A.Chunks -> [A.Field] -> Doc
 makeTable _ _ = error "need to implement tables"

@@ -68,3 +68,4 @@ lay (Table c f) = T.Table c f
 lay (Section title layoutComponents) = 
   T.Section (spec title) (createLayout layoutComponents)
 lay (Paragraph c) = T.Paragraph (spec c)
+lay (EqnBlock c) = T.EqnBlock (spec c)

@@ -20,7 +20,7 @@ build A.Code _  = error "Unimplemented"
 buildSRS :: [A.DocParams] -> Document -> Doc
 buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =
   docclass sb b $$ listpackages ps $$ title (p_spec Pg t) $$ 
-  author (p_spec Pg a) $$ print c
+  author (p_spec Pg a) $$ begin $$ print c $$ endS
 buildSRS _ _ = error "Invalid syntax in Document Parameters"
 
 listpackages :: [String] -> Doc
@@ -68,4 +68,25 @@ makeEquation contents =
   --  on chunk (i.e. "eq:h_g" for h_g = ...
 
 makeTable :: A.Chunks -> [A.Field] -> Doc
-makeTable _ _ = error "need to implement tables"
+makeTable [] _ = error "No chunks provided for creating table"
+makeTable _ [] = error "No fields provided for creating table"
+makeTable c f  = text ("\\begin{longtable}" ++ brace (lAndDim f)) $$ makeRows c f
+
+makeRows :: A.Chunks -> [A.Field] -> Doc
+makeRows [] _ = error "No chunks provided for creating row"
+makeRows _ [] = error "No fields provided for creating row"
+makeRows (c:[]) f = text (makeColumns c f) $$ text "\\end{longtable}"
+makeRows (c:cs) f = text (makeColumns c f) $$ dbs $$ makeRows cs f
+
+makeColumns :: A.Chunk -> [A.Field] -> String
+makeColumns _ [] = error "No fields provided for creating column"
+makeColumns c (A.Symbol:[]) = p_spec Pg $ CS c 
+makeColumns c (A.Symbol:f) = p_spec Pg (CS c) ++ " & " ++ makeColumns c f
+makeColumns c (f:[]) = p_spec Pg $ spec  
+  (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
+  p_spec Eqn (spec (find A.Symbol c "Error: No symbol for chunk"))))
+makeColumns c (f:fs) = p_spec Pg (spec 
+  (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
+  p_spec Eqn (spec (find A.Symbol c "Error: No symbol for chunk"))))) ++ " & " ++ 
+  makeColumns c fs
+  

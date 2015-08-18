@@ -1,7 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Config_MK2 where
 import ASTInternal_MK2
-import Helpers_MK2
 
 output :: OutFormat  
 output = TeX
@@ -17,3 +16,13 @@ expandSymbols = True
 
 srsTeXParams :: [DocParams]
 srsTeXParams = defaultSRSparams
+
+--TeX Document Parameter Defaults
+defaultSRSparams :: [DocParams]
+defaultSRSparams = [
+  DocClass  [] "article",
+  UsePackages ["booktabs","longtable"]
+  ]
+  
+tableWidth :: Double --in cm
+tableWidth = 10.5

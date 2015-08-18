@@ -1,16 +1,25 @@
 {-# OPTIONS -Wall #-} 
 module Helpers_MK2 where
-import ASTInternal_MK2 (DocParams (DocClass, UsePackages))
+import ASTInternal_MK2 (Field (Symbol, Equation, Description, SIU, Name, VarName))
 import Text.PrettyPrint
 import Data.Char
+import Config_MK2 (tableWidth)
 
---TeX Document Parameter Defaults
-defaultSRSparams :: [DocParams]
-defaultSRSparams = [
-  DocClass  [] "article",
-  UsePackages ["booktabs","longtable"]
-  ]
+--Printing of fieldnames (for error messages and possibly other things)
+writeField :: Field -> String
+writeField Symbol       = "Symbol"
+writeField Equation     = "Equation"
+writeField Description  = "Description"
+writeField SIU          = "SIU"
+writeField Name         = "Name"
+writeField VarName      = "VarName"
 
+--Table making help
+lAndDim :: [Field] -> String
+lAndDim [] = error "No fields provided"
+lAndDim f  = concat (replicate ((length f)-1) "l ") ++ "p" ++ 
+  brace (show tableWidth ++ "cm")
+  
 --basic docs
 bslash,dbs,eq,dlr,ast,pls :: Doc
 bslash = text "\\"
@@ -56,9 +65,9 @@ title t = bslash <> text "title" <> br t
 author :: String -> Doc
 author a = bslash <> text "author" <> br a
 
-begin, end, endL, command :: Doc
+begin, endS, endL, command :: Doc
 begin = bslash <> text "begin" <> br "document" $$ bslash <> text "maketitle"
-end = bslash <> text "enddocument"
+endS = bslash <> text "enddocument"
 endL = bslash <> text "end" <> br "document"
 command = bslash <> text "newcommand"
 

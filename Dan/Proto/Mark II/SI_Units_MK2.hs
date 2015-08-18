@@ -50,10 +50,10 @@ candela = newChunk $
 ------- END FUNDAMENTALS -------------------------------------------------------
 
 centigrade = newChunk $
-  [ (Symbol, U Circle :+: S "C"), --This is TeX specific
+  [ (Symbol, U Circle :+: S "C"), 
     (Description, S "temperature (centigrade)"),
     (Name, S "Centigrade"),
-    (SIU, M $ Derived "$^oC$" (C kelvin :- (Dbl 273.15)))]
+    (SIU, M $ Derived "$^oC$" (C kelvin :- (Dbl 273.15)))]--This is TeX specific
 joule = newChunk $
   [ (Symbol, S "J"),
     (SIU, M $ Derived "J" ((C kilogram :* (C metre :^ (Int 2))) :/ 

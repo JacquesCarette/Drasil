@@ -25,7 +25,7 @@ replace_divs a = expr a
 spec :: Spec -> T.Spec
 spec (E e) = T.E (expr e)
 spec (S s) = T.S (s)
-spec (U Circle :+: b) = T.S "\\circ{" T.:+: spec b T.:+: T.S "}"
+spec (a@(U Circle) :+: b) = spec a T.:+: T.S " " T.:+: spec b
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b

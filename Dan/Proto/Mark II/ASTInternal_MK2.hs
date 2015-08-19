@@ -75,7 +75,10 @@ data LayoutObj = Table Chunks [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
+               | Definition DType
 
+data DType = Data
+               
 data Document = Document Title Author [LayoutObj]
 
 type Title    = Spec

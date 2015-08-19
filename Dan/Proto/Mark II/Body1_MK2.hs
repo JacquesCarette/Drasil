@@ -31,6 +31,8 @@ s2_table = Table [h_g,h_c] [Symbol, Description, SIU]
 
 s3 = Section (S "Data Definitions") []
 
+--s3_dd1 = Definition Data h_g [Symbol, SIU, Equation, Description]
+
 srsBody :: Document
 srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 
   (S "Spencer Smith") [s1,s2,s3] 

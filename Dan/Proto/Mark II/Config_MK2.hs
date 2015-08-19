@@ -17,12 +17,22 @@ expandSymbols = True
 srsTeXParams :: [DocParams]
 srsTeXParams = defaultSRSparams
 
---TeX Document Parameter Defaults
+tableWidth :: Double --in cm
+tableWidth = 10.5
+
+--TeX Document Parameter Defaults (can be modified to affect all documents OR
+  -- you can create your own parameter function and replace the one above.
 defaultSRSparams :: [DocParams]
 defaultSRSparams = [
   DocClass  [] "article",
   UsePackages ["booktabs","longtable"]
   ]
+
   
-tableWidth :: Double --in cm
-tableWidth = 10.5
+datadefnFields :: [Field]
+datadefnFields = [Symbol, SIU, Equation, Description]
+
+  --column width for data definitions (fraction of textwidth)
+colAwidth, colBwidth :: Double
+colAwidth = 0.2
+colBwidth = 0.73

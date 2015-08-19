@@ -75,7 +75,7 @@ data LayoutObj = Table Chunks [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
-               | Definition DType
+               | Definition DType Chunk
 
 data DType = Data
                

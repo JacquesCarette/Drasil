@@ -2,6 +2,7 @@
 module ToTeX_MK2 where
 import ASTInternal_MK2
 import qualified ASTTeX_MK2 as T
+import Config_MK2 (datadefnFields)
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v
@@ -70,3 +71,4 @@ lay (Section title layoutComponents) =
   T.Section (spec title) (createLayout layoutComponents)
 lay (Paragraph c) = T.Paragraph (spec c)
 lay (EqnBlock c) = T.EqnBlock (spec c)
+lay (Definition Data c) = T.Definition Data c datadefnFields

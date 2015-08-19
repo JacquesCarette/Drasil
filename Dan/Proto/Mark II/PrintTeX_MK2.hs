@@ -5,7 +5,7 @@ import ToTeX_MK2
 import Text.PrettyPrint
 import qualified ASTInternal_MK2 as A
 import Prelude hiding (print)
-import Config_MK2 (srsTeXParams)
+import Config_MK2 (srsTeXParams,colAwidth,colBwidth)
 import Helpers_MK2
 import Chunk_MK2 (find)
 
@@ -34,13 +34,15 @@ print ((Section t contents):cs)  = sec (p_spec Pg t) $$ print contents $$ print 
 print ((Paragraph contents):cs)  = text (p_spec Pg contents) $$ print cs
 print ((EqnBlock contents):cs)   = makeEquation contents $$ print cs
 print ((Table chunks fields):cs) = makeTable chunks fields $$ print cs
+print ((Definition dtype chunk fields):cs) = makeDefn dtype chunk fields $$ print cs
 
 p_spec :: Context -> Spec -> String
-p_spec Pg (CS c)      = dollar (p_spec Pg (spec (find A.Symbol c "Erroneous use of chunk")))
+p_spec Pg (CS c)      = dollar (printSymbol Pg c)
+p_spec Pg (E e)       = dollar (p_expr e)
 p_spec con (a :+: b)  = p_spec con a ++ p_spec con b
 p_spec con (a :-: b)  = p_spec con a ++ "_" ++ brace (p_spec con b)
 p_spec con (a :^: b)  = p_spec con a ++ "^" ++ brace (p_spec con b)
-p_spec con (CS c)     = p_spec con $ spec (find A.Symbol c "Erroneous use of chunk")
+p_spec con (CS c)     = printSymbol Pg c
 p_spec _ (S s)        = s
 p_spec _ (E e)        = p_expr e
 
@@ -70,12 +72,13 @@ makeEquation contents =
 makeTable :: A.Chunks -> [A.Field] -> Doc
 makeTable [] _ = error "No chunks provided for creating table"
 makeTable _ [] = error "No fields provided for creating table"
-makeTable c f  = text ("\\begin{longtable}" ++ brace (lAndDim f)) $$ makeRows c f
+makeTable c f  = text ("\\begin{longtable}" ++ brace (lAndDim f)) 
+  $$ makeRows c f $$ text "\\end{longtable}"
 
 makeRows :: A.Chunks -> [A.Field] -> Doc
 makeRows [] _ = error "No chunks provided for creating row"
 makeRows _ [] = error "No fields provided for creating row"
-makeRows (c:[]) f = text (makeColumns c f) $$ text "\\end{longtable}"
+makeRows (c:[]) f = text (makeColumns c f)
 makeRows (c:cs) f = text (makeColumns c f) $$ dbs $$ makeRows cs f
 
 makeColumns :: A.Chunk -> [A.Field] -> String
@@ -84,9 +87,44 @@ makeColumns c (A.Symbol:[]) = p_spec Pg $ CS c
 makeColumns c (A.Symbol:f) = p_spec Pg (CS c) ++ " & " ++ makeColumns c f
 makeColumns c (f:[]) = p_spec Pg $ spec  
   (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
-  p_spec Eqn (spec (find A.Symbol c "Error: No symbol for chunk"))))
+  (printSymbol Code c)))
 makeColumns c (f:fs) = p_spec Pg (spec 
   (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
-  p_spec Eqn (spec (find A.Symbol c "Error: No symbol for chunk"))))) ++ " & " ++ 
-  makeColumns c fs
+  (printSymbol Code c)))) ++ " & " ++ makeColumns c fs
   
+makeDefn :: A.DType -> A.Chunk -> [A.Field] -> Doc
+makeDefn _ _ []   = error "No fields provided for data definition"
+makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn
+
+beginDataDefn = text "~\\newline \\noindent \\begin{minipage}{\\textwidth}"
+  
+endDataDefn = text "\\end{minipage}" <> dbs
+  
+makeDDTable c f = vcat [
+  text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
+  text $ "\\toprule \\textbf{Refname} & \\textbf{DD:$"++ (printSymbol Pg c) ++"$}",
+  text $ "\\label{DD:" ++ (printSymbol Code c) ++ "}",
+  makeDDRows c f, dbs <+> text ("\\bottomrule \\end{tabular}")
+  ]
+
+makeDDRows _ [] = error "No fields to create DD table"
+makeDDRows c (f:[]) = ddBoilerplate $ ddWritetext f c
+makeDDRows c (f:fs) = ddBoilerplate (ddWritetext f c) $$ makeDDRows c fs
+
+printSymbol con chunk =
+  p_spec con $ spec (find A.Symbol chunk "Error: No symbol for chunk")
+
+
+ddBoilerplate = \t -> dbs <+> text "\\midrule" <+> dbs $$ t 
+ddWritetext = \f -> \c -> text (writeField f ++ " & " ++ 
+  (p_spec Pg (spec (find f c ("Error: missing field" ++ writeField f ++
+  " in chunk " ++ printSymbol Code c)))))
+
+
+
+
+
+
+
+
+

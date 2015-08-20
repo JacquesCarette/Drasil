@@ -108,17 +108,19 @@ makeDDTable c f = vcat [
   ]
 
 makeDDRows _ [] = error "No fields to create DD table"
-makeDDRows c (f:[]) = ddBoilerplate $ ddWritetext f c
-makeDDRows c (f:fs) = ddBoilerplate (ddWritetext f c) $$ makeDDRows c fs
+makeDDRows c (f@(A.Symbol):[]) = ddBoilerplate f (p_spec Pg (spec (A.CS c)))
+makeDDRows c (f@(A.Symbol):fs) = ddBoilerplate f (p_spec Pg (spec (A.CS c))) $$ makeDDRows c fs
+makeDDRows c (f:[]) = ddBoilerplate f $ ddWritetext f c
+makeDDRows c (f:fs) = ddBoilerplate f (ddWritetext f c) $$ makeDDRows c fs
 
 printSymbol con chunk =
   p_spec con $ spec (find A.Symbol chunk "Error: No symbol for chunk")
 
 
-ddBoilerplate = \t -> dbs <+> text "\\midrule" <+> dbs $$ t 
-ddWritetext = \f -> \c -> text (writeField f ++ " & " ++ 
-  (p_spec Pg (spec (find f c ("Error: missing field" ++ writeField f ++
-  " in chunk " ++ printSymbol Code c)))))
+ddBoilerplate = \f -> \t -> dbs <+> text "\\midrule" <+> dbs $$ text 
+  (writeField f ++ " & " ++ t)
+ddWritetext = \f -> \c -> (p_spec Pg (spec (find f c ("Error: missing field" ++ 
+  writeField f ++ " in chunk " ++ printSymbol Code c))))
 
 
 

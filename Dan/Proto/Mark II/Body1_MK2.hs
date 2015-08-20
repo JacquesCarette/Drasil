@@ -3,7 +3,7 @@ module Body1_MK2 where
 import Example1_MK2
 import ASTInternal_MK2
 
-s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, s3_dd1 :: LayoutObj
+s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, s3_dd1, s3_dd2 :: LayoutObj
 
 s1 = Section (S "Table of Units") [s1_intro, s1_table]
 

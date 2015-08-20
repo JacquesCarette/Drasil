@@ -42,7 +42,7 @@ p_spec Pg (E e)       = dollar (p_expr e)
 p_spec con (a :+: b)  = p_spec con a ++ p_spec con b
 p_spec con (a :-: b)  = p_spec con a ++ "_" ++ brace (p_spec con b)
 p_spec con (a :^: b)  = p_spec con a ++ "^" ++ brace (p_spec con b)
-p_spec con (CS c)     = printSymbol Pg c
+p_spec con (CS c)     = printSymbol con c
 p_spec _ (S s)        = s
 p_spec _ (E e)        = p_expr e
 
@@ -96,10 +96,13 @@ makeDefn :: A.DType -> A.Chunk -> [A.Field] -> Doc
 makeDefn _ _ []   = error "No fields provided for data definition"
 makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn
 
+beginDataDefn :: Doc
 beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
-  
+
+endDataDefn :: Doc  
 endDataDefn = text "\\end{minipage}" <> dbs
-  
+
+makeDDTable :: A.Chunk -> [A.Field] -> Doc
 makeDDTable c f = vcat [
   text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   text $ "\\toprule \\textbf{Refname} & \\textbf{DD:$"++ (printSymbol Pg c) ++"$}",
@@ -107,22 +110,29 @@ makeDDTable c f = vcat [
   makeDDRows c f, dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
+makeDDRows :: A.Chunk -> [A.Field] -> Doc
 makeDDRows _ [] = error "No fields to create DD table"
 makeDDRows c (f@(A.Symbol):[]) = ddBoilerplate f (text (p_spec Pg (CS c)))
 makeDDRows c (f@(A.Symbol):fs) = 
   ddBoilerplate f (text (p_spec Pg (spec (A.CS c)))) $$ makeDDRows c fs
-makeDDRows c (f@(A.Description):fs) = ddBoilerplate f $ writeDesc c $$
+makeDDRows c (f@(A.Description):[]) = ddBoilerplate f $ writeDesc c $$
   (if (verboseDDDescription) then (newline $$ descDependencies c)
   else empty)
+makeDDRows c (f@(A.Description):fs) = ddBoilerplate f $ writeDesc c $$
+  (if (verboseDDDescription) then (newline $$ descDependencies c)
+  else empty) $$ makeDDRows c fs
 makeDDRows c (f:[]) = ddBoilerplate f $ ddWritetext f c
 makeDDRows c (f:fs) = ddBoilerplate f (ddWritetext f c) $$ makeDDRows c fs
 
+printSymbol :: Context -> A.Chunk -> String
 printSymbol con chunk =
   p_spec con $ spec (find A.Symbol chunk "Error: No symbol for chunk")
 
-
+ddBoilerplate :: A.Field -> Doc -> Doc
 ddBoilerplate = \f -> \t -> dbs <+> text "\\midrule" <+> dbs $$ text 
   (writeField f ++ " & ") <> t
+  
+ddWritetext :: A.Field -> A.Chunk -> Doc
 ddWritetext = \f -> \c -> text (p_spec Pg (spec (find f c ("Error: missing field" ++ 
   writeField f ++ " in chunk " ++ printSymbol Code c))))
 
@@ -131,7 +141,7 @@ descDependencies c = writeDescs (unSpec (spec (findOptional A.Dependencies c)))
 
 unSpec :: Spec -> A.Chunks
 unSpec (D cs) = cs
-unSpec (S s) = []
+unSpec (S _) = []
 
 writeDescs :: A.Chunks -> Doc
 writeDescs [] = error "Nothing to write" --Might change this in case chunk has no dependencies

@@ -5,9 +5,9 @@ import ToTeX_MK2
 import Text.PrettyPrint
 import qualified ASTInternal_MK2 as A
 import Prelude hiding (print)
-import Config_MK2 (srsTeXParams,colAwidth,colBwidth)
+import Config_MK2 (srsTeXParams,colAwidth,colBwidth,verboseDDDescription)
 import Helpers_MK2
-import Chunk_MK2 (find)
+import Chunk_MK2 (find, findOptional)
 
 genTeX :: A.DocType -> A.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -96,7 +96,7 @@ makeDefn :: A.DType -> A.Chunk -> [A.Field] -> Doc
 makeDefn _ _ []   = error "No fields provided for data definition"
 makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn
 
-beginDataDefn = text "~\\newline \\noindent \\begin{minipage}{\\textwidth}"
+beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
   
 endDataDefn = text "\\end{minipage}" <> dbs
   
@@ -108,8 +108,12 @@ makeDDTable c f = vcat [
   ]
 
 makeDDRows _ [] = error "No fields to create DD table"
-makeDDRows c (f@(A.Symbol):[]) = ddBoilerplate f (p_spec Pg (spec (A.CS c)))
-makeDDRows c (f@(A.Symbol):fs) = ddBoilerplate f (p_spec Pg (spec (A.CS c))) $$ makeDDRows c fs
+makeDDRows c (f@(A.Symbol):[]) = ddBoilerplate f (text (p_spec Pg (CS c)))
+makeDDRows c (f@(A.Symbol):fs) = 
+  ddBoilerplate f (text (p_spec Pg (spec (A.CS c)))) $$ makeDDRows c fs
+makeDDRows c (f@(A.Description):fs) = ddBoilerplate f $ writeDesc c $$
+  (if (verboseDDDescription) then (newline $$ descDependencies c)
+  else empty)
 makeDDRows c (f:[]) = ddBoilerplate f $ ddWritetext f c
 makeDDRows c (f:fs) = ddBoilerplate f (ddWritetext f c) $$ makeDDRows c fs
 
@@ -118,15 +122,24 @@ printSymbol con chunk =
 
 
 ddBoilerplate = \f -> \t -> dbs <+> text "\\midrule" <+> dbs $$ text 
-  (writeField f ++ " & " ++ t)
-ddWritetext = \f -> \c -> (p_spec Pg (spec (find f c ("Error: missing field" ++ 
+  (writeField f ++ " & ") <> t
+ddWritetext = \f -> \c -> text (p_spec Pg (spec (find f c ("Error: missing field" ++ 
   writeField f ++ " in chunk " ++ printSymbol Code c))))
 
+descDependencies :: A.Chunk -> Doc
+descDependencies c = writeDescs (unSpec (spec (findOptional A.Dependencies c)))
 
+unSpec :: Spec -> A.Chunks
+unSpec (D cs) = cs
+unSpec (S s) = []
 
+writeDescs :: A.Chunks -> Doc
+writeDescs [] = error "Nothing to write" --Might change this in case chunk has no dependencies
+writeDescs (c:[]) = writeDesc c
+writeDescs (c:cs) = writeDesc c <+> newline $$ writeDescs cs
 
-
-
-
+writeDesc :: A.Chunk -> Doc
+writeDesc c  = text $ 
+  p_spec Pg (CS c) ++ " is the " ++ p_spec Pg (spec (find A.Description c "Missing Description"))
 
 

@@ -88,6 +88,9 @@ sec b= bslash <> text "section*" <> br b
 subsec :: String -> Doc
 subsec b = bslash <> text "subsection*" <> br b
 
+newline :: Doc
+newline = bslash <> text "newline"
+
 -- Macro / Command def'n --
 --TeX--
 srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS :: Doc

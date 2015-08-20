@@ -20,6 +20,9 @@ srsTeXParams = defaultSRSparams
 tableWidth :: Double --in cm
 tableWidth = 10.5
 
+verboseDDDescription :: Bool
+verboseDDDescription = True
+
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
   -- you can create your own parameter function and replace the one above.
 defaultSRSparams :: [DocParams]

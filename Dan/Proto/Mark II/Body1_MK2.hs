@@ -29,9 +29,11 @@ s2_intro = Paragraph $
   
 s2_table = Table [h_g,h_c] [Symbol, Description, SIU]
 
-s3 = Section (S "Data Definitions") [s3_dd1]
+s3 = Section (S "Data Definitions") [s3_dd1, s3_dd2]
 
 s3_dd1 = Definition Data h_g
+
+s3_dd2 = Definition Data h_c
 
 srsBody :: Document
 srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 

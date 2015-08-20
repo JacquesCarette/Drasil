@@ -6,7 +6,7 @@ import Data.List (nub)
 
 --Field should be configurable, but currently not in config to avoid
   -- cyclic import.
-data Field = Symbol | Equation | Description | SIU | Name | VarName
+data Field = Symbol | Equation | Description | SIU | Name | VarName | Dependencies
   deriving (Ord, Eq)
 
 type Chunk = Map.Map FName FDesc
@@ -45,6 +45,7 @@ data Spec = E Expr        -- Expressions
           | F Format Spec -- Special formatting for certain symbols & special chars
                                 --(e.g. hat, dot, etc.)
           | CS Chunk
+          | D Dependency  -- Should only be used for "Dependencies" field. Need a way to ensure it.
   deriving (Eq, Ord)
 
 data Unit = Fundamental String --Fundamental unit type (e.g. "m" for length)

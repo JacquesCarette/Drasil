@@ -35,6 +35,7 @@ spec (U u) = convertUnicode u
 spec (M m) = T.M m
 spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
+spec (D cs) = T.D cs
 
 convertUnicode :: Unicode -> T.Spec
 convertUnicode Tau_L = T.S $ "\\tau"

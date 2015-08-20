@@ -23,7 +23,7 @@ data Spec = E Expr
           | Spec :-: Spec
           | M Unit
           | CS Chunk --No need for Format / Empty / Unicode here, they will be converted to TeX specific strings. As will Spec combinations.
-          
+          | D Chunks
 data Document = Document Title Author [LayoutObj]
 type Title = Spec
 type Author = Spec
@@ -36,4 +36,4 @@ data LayoutObj = Table Chunks [Field]
                | Definition DType Chunk [Field]
                
 data Context = Pg | Eqn | Code -- paragraph, equation, or code. This will affect
-                             -- the formatting of the finished document.
+                               -- the formatting of the finished document.

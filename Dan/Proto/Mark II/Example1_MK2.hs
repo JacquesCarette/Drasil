@@ -27,7 +27,8 @@ h_c = newChunk $
    (Equation, E h_c_eq),
    (Description, S 
     "convective heat transfer coefficient between clad and coolant"),
-   (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)")
+   (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
+   (Dependencies, D h_c_dep)
   ]
 
 h_c_dep :: Dependency
@@ -47,7 +48,8 @@ h_g = newChunk $
    (Equation, E h_g_eq),
    (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
    (Description, S
-    "effective heat transfer coefficient between clad and fuel surface")
+    "effective heat transfer coefficient between clad and fuel surface"),
+   (Dependencies, D h_g_dep)
   ]
   
 h_g_dep :: Dependency

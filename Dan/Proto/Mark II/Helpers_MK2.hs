@@ -1,6 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module Helpers_MK2 where
-import ASTInternal_MK2 (Field (Symbol, Equation, Description, SIU, Name, VarName))
+import ASTInternal_MK2 (Field (Symbol, Equation, Description, SIU, Name, VarName, 
+  Dependencies))
 import Text.PrettyPrint
 import Data.Char
 import Config_MK2 (tableWidth)
@@ -13,6 +14,7 @@ writeField Description  = "Description"
 writeField SIU          = "SIU"
 writeField Name         = "Name"
 writeField VarName      = "VarName"
+writeField Dependencies = "Dependencies"
 
 --Table making help
 lAndDim :: [Field] -> String

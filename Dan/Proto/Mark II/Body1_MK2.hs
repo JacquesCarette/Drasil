@@ -35,6 +35,9 @@ s3_dd1 = Definition Data h_g
 
 s3_dd2 = Definition Data h_c
 
-srsBody :: Document
+srsBody,lpmBody :: Document
 srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 
   (S "Spencer Smith") [s1,s2,s3] 
+  
+lpmBody = Document ((S "Literate Programmer's Manual for ") :+: (CS h_g) :+: 
+  (S "and ") :+: (CS h_c)) (S "Spencer Smith") []

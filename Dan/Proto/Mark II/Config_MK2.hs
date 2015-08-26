@@ -14,8 +14,10 @@ outLang = CLang
 expandSymbols :: Bool
 expandSymbols = True
 
-srsTeXParams :: [DocParams]
+srsTeXParams,lpmTeXParams :: [DocParams]
 srsTeXParams = defaultSRSparams
+
+lpmTeXParams = defaultLPMparams
 
 tableWidth :: Double --in cm
 tableWidth = 10.5
@@ -31,6 +33,12 @@ defaultSRSparams = [
   UsePackages ["booktabs","longtable"]
   ]
 
+defaultLPMparams :: [DocParams]
+defaultLPMparams = [
+  DocClass "article" "cweb-hy",
+  UsePackages ["xr"],
+  ExDoc "L-" "hghc_SRS"
+  ]
   
 datadefnFields :: [Field]
 datadefnFields = [Symbol, SIU, Equation, Description]

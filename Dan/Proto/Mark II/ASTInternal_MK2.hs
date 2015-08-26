@@ -96,7 +96,8 @@ data DocType = SRS
              | Code
 
 data DocParams = DocClass String String --SqBracks vs. Braces
-               | UsePackages [String]
+               | UsePackages [String] -- Package name list
+               | ExDoc String String --SqBracks vs. Braces
              
 --Get dependency from equation  
 get_dep :: Expr -> Dependency

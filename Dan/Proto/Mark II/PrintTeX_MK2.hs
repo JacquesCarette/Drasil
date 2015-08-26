@@ -5,7 +5,7 @@ import ToTeX_MK2
 import Text.PrettyPrint
 import qualified ASTInternal_MK2 as A
 import Prelude hiding (print)
-import Config_MK2 (srsTeXParams,colAwidth,colBwidth,verboseDDDescription)
+import Config_MK2 (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
 import Helpers_MK2
 import Chunk_MK2 (find, findOptional)
 
@@ -14,7 +14,7 @@ genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
 build A.SRS doc = buildSRS srsTeXParams doc
-build A.LPM _   = error "Unimplemented"
+build A.LPM doc = buildLPM lpmTeXParams doc
 build A.Code _  = error "Unimplemented"
 
 buildSRS :: [A.DocParams] -> Document -> Doc
@@ -22,6 +22,17 @@ buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =
   docclass sb b $$ listpackages ps $$ title (p_spec Pg t) $$ 
   author (p_spec Pg a) $$ begin $$ print c $$ endS
 buildSRS _ _ = error "Invalid syntax in Document Parameters"
+
+buildLPM :: [A.DocParams] -> Document -> Doc
+buildLPM  ((A.DocClass sb b) : (A.UsePackages ps) : xs) (Document t a c) =
+  docclass sb b $$ listpackages ps $$ moreDocParams xs $$
+  title (p_spec Pg t) $$ author (p_spec Pg a) $$ begin $$ print c $$ endL
+buildLPM _ _ = error "Invalid syntax in Document Parameters"
+
+moreDocParams :: [A.DocParams] -> Doc
+moreDocParams [] = empty
+moreDocParams ((A.ExDoc f n):xs) = exdoc f n $$ moreDocParams xs
+moreDocParams _ = error "Unexpected document parameters"
 
 listpackages :: [String] -> Doc
 listpackages []     = empty

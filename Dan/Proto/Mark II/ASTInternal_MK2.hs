@@ -79,8 +79,9 @@ data LayoutObj = Table Chunks [Field]
                | Definition DType Chunk
 
 data DType = Data
+           | Literate
                
-data Document = Document Title Author [LayoutObj]
+data Document = Document Title Author [LayoutObj] --[LayoutObj] -> DocContent
 
 type Title    = Spec
 type Contents = Spec

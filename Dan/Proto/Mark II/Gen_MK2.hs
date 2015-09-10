@@ -21,7 +21,8 @@ prnt SRS filename body = do outh <- openFile filename WriteMode
 prnt LPM filename body = do outh <- openFile filename WriteMode
                             hPutStrLn outh $ render $ body
                             hClose outh
-  -- No difference b/w SRS and LPM as yet
+  -- No difference b/w SRS and LPM as yet, but there may be in the future so
+  -- keeping them separate for the time being is a good idea
 prnt Code _ _ = error "Code DocType is not implemented yet"
 
 writeDoc :: OutFormat -> DocType -> Document -> Doc

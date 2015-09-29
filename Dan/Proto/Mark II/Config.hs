@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module Config_MK2 where
+module Config where
 import ASTInternal (OutFormat(..) , OutLang(..), DocParams(..), Field(..))
 
 output :: OutFormat  

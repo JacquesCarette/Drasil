@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module Chunk_MK2 where
+module Chunk where
 
 import qualified Data.Map.Strict as Map
 import qualified ASTInternal as AST

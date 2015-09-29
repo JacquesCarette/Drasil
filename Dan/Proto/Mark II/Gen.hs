@@ -1,8 +1,8 @@
 {-# OPTIONS -Wall #-} 
-module Gen_MK2 where
+module Gen where
 import System.IO
 import Text.PrettyPrint.HughesPJ
-import PrintTeX_MK2 (genTeX)
+import PrintTeX (genTeX)
 import ASTInternal (Document, OutFormat (TeX, Plain), DocType (SRS,LPM,Code))
 
 data Recipe = Recipe (DocType, String, Doc)

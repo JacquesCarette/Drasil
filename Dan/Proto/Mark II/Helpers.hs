@@ -1,10 +1,10 @@
 {-# OPTIONS -Wall #-} 
-module Helpers_MK2 where
+module Helpers where
 import ASTInternal (Field (Symbol, Equation, Description, SIU, Name, VarName, 
   Dependencies))
 import Text.PrettyPrint
 import Data.Char
-import Config_MK2 (tableWidth)
+import Config (tableWidth)
 
 --Printing of fieldnames (for error messages and possibly other things)
 writeField :: Field -> String

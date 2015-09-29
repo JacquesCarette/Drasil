@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module ASTTeX_MK2 where
+module ASTTeX where
 
 import ASTInternal (Chunk, Chunks, Variable, Unit, Field, DType)
 

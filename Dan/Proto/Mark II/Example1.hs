@@ -2,8 +2,8 @@
 module Example1 where
 import ASTInternal (Chunk, Expr(..), Spec(..), Field(..), Unicode(..),
   Chunks, Dependency, get_dep)
-import Chunk_MK2
-import SI_Units_MK2
+import Chunk
+import SI_Units
 
 si_units :: Chunks
 si_units = [metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,

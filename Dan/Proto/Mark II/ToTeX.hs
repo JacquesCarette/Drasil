@@ -1,8 +1,8 @@
 {-# OPTIONS -Wall #-} 
-module ToTeX_MK2 where
+module ToTeX where
 import ASTInternal
-import qualified ASTTeX_MK2 as T
-import Config_MK2 (datadefnFields)
+import qualified ASTTeX as T
+import Config (datadefnFields)
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v
@@ -66,7 +66,7 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> T.LayoutObj
---For printing, will need to use "find" function from Chunk_MK2.hs
+--For printing, will need to use "find" function from Chunk.hs
 lay (Table c f) = T.Table c f 
 lay (Section title layoutComponents) = 
   T.Section (spec title) (createLayout layoutComponents)

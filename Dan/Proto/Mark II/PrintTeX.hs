@@ -1,13 +1,13 @@
 {-# OPTIONS -Wall #-} 
-module PrintTeX_MK2 where
-import ASTTeX_MK2
-import ToTeX_MK2
+module PrintTeX where
+import ASTTeX
+import ToTeX
 import Text.PrettyPrint
 import qualified ASTInternal as A
 import Prelude hiding (print)
-import Config_MK2 (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
-import Helpers_MK2
-import Chunk_MK2 (find, findOptional)
+import Config (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
+import Helpers
+import Chunk (find, findOptional)
 
 genTeX :: A.DocType -> A.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -67,7 +67,7 @@ p_expr (Int i)    = show i
 p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
 p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
 p_expr (Mul a b)  = mul a b
-p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in Helpers_MK2
+p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in Helpers
 p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
 p_expr (Pow a b)  = p_expr a ++ "^" ++ brace (p_expr b)
 p_expr (C c)      = p_spec Eqn $ spec (find A.Equation c "No equation or symbol for chunk")

@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module ASTInternal_MK2 where
+module ASTInternal where
 
 import qualified Data.Map.Strict as Map
 import Data.List (nub)

@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Config_MK2 where
-import ASTInternal_MK2
+import ASTInternal (OutFormat(..) , OutLang(..), DocParams(..), Field(..))
 
 output :: OutFormat  
 output = TeX

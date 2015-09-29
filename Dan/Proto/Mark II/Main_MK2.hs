@@ -1,9 +1,9 @@
 {-# OPTIONS -Wall #-} 
 module Main where
-import ASTInternal_MK2
-import Config_MK2
+import ASTInternal (DocType(..))
+import Config_MK2 (output)
 import Body1_MK2 (srsBody,lpmBody)
-import Gen_MK2
+import Gen_MK2 (Recipe(..), writeDoc, gen)
 import Text.PrettyPrint
 
 docs :: [Recipe]

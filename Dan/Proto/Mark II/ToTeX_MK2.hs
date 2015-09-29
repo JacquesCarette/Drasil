@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module ToTeX_MK2 where
-import ASTInternal_MK2
+import ASTInternal
 import qualified ASTTeX_MK2 as T
 import Config_MK2 (datadefnFields)
 

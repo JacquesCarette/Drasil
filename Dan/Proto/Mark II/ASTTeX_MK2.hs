@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module ASTTeX_MK2 where
 
-import ASTInternal_MK2 (Chunk, Chunks, Variable, Unit, Field, DType)
+import ASTInternal (Chunk, Chunks, Variable, Unit, Field, DType)
 
 
 data Expr = Var Variable

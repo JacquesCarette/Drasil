@@ -2,7 +2,7 @@
 module Chunk_MK2 where
 
 import qualified Data.Map.Strict as Map
-import qualified ASTInternal_MK2 as AST
+import qualified ASTInternal as AST
 import Data.Maybe (fromMaybe)
 
 newChunk :: [(AST.FName, AST.FDesc)] -> Map.Map AST.FName AST.FDesc

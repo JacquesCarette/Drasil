@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Helpers_MK2 where
-import ASTInternal_MK2 (Field (Symbol, Equation, Description, SIU, Name, VarName, 
+import ASTInternal (Field (Symbol, Equation, Description, SIU, Name, VarName, 
   Dependencies))
 import Text.PrettyPrint
 import Data.Char

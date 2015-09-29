@@ -1,7 +1,8 @@
 {-# OPTIONS -Wall #-} 
 module SI_Units_MK2 where
 import Chunk_MK2
-import ASTInternal_MK2
+import ASTInternal (Chunk(..),Chunks, Field(..), Spec(..), Unit(..),
+  Unicode(..), Expr(..))
 
 fundamentals :: Chunks
               

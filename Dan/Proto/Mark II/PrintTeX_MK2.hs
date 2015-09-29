@@ -3,7 +3,7 @@ module PrintTeX_MK2 where
 import ASTTeX_MK2
 import ToTeX_MK2
 import Text.PrettyPrint
-import qualified ASTInternal_MK2 as A
+import qualified ASTInternal as A
 import Prelude hiding (print)
 import Config_MK2 (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
 import Helpers_MK2

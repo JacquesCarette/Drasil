@@ -56,6 +56,9 @@ p_spec con (a :^: b)  = p_spec con a ++ "^" ++ brace (p_spec con b)
 p_spec con (CS c)     = printSymbol con c
 p_spec _ (S s)        = s
 p_spec _ (E e)        = p_expr e
+p_spec Eqn _          = error "p_spec in Eqn context not implemented"
+p_spec Code _         = error "p_spec in Code context not implemented"
+p_spec Pg _           = error "p_spec in Pg context, sub-cases M and D not implemented"
 
 p_expr :: Expr -> String
 p_expr (Var v)    = v
@@ -106,6 +109,7 @@ makeColumns c (f:fs) = p_spec Pg (spec
 makeDefn :: A.DType -> A.Chunk -> [A.Field] -> Doc
 makeDefn _ _ []   = error "No fields provided for data definition"
 makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn
+makeDefn A.Literate _ _ = error "makeDefn: missing case"
 
 beginDataDefn :: Doc
 beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
@@ -153,6 +157,7 @@ descDependencies c = writeDescs (unSpec (spec (findOptional A.Dependencies c)))
 unSpec :: Spec -> A.Chunks
 unSpec (D cs) = cs
 unSpec (S _) = []
+unSpec _     = error "oh my, what are we doing here?"
 
 writeDescs :: A.Chunks -> Doc
 writeDescs [] = error "Nothing to write" --Might change this in case chunk has no dependencies

@@ -2,7 +2,7 @@
 module Main where
 import ASTInternal (DocType(..))
 import Config_MK2 (output)
-import Body1_MK2 (srsBody,lpmBody)
+import Body1 (srsBody,lpmBody)
 import Gen_MK2 (Recipe(..), writeDoc, gen)
 import Text.PrettyPrint
 

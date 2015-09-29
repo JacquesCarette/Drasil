@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
-module Body1_MK2 where
-import Example1_MK2
+module Body1 where
+import Example1
 import ASTInternal (Spec(..), Field(..), LayoutObj(..), Format(..),
  Document(..), DType(..))
 

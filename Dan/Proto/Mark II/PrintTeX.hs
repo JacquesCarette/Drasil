@@ -152,7 +152,9 @@ ddWritetext = \f -> \c -> text (p_spec Pg (spec (find f c ("Error: missing field
   writeField f ++ " in chunk " ++ printSymbol Code c))))
 
 descDependencies :: A.Chunk -> Doc
-descDependencies c = writeDescs (unSpec (spec (findOptional A.Dependencies c)))
+descDependencies c = writeDescs (unSpec (maybe (S "") spec deps))
+ where
+   deps = findOptional A.Dependencies c
 
 unSpec :: Spec -> A.Chunks
 unSpec (D cs) = cs

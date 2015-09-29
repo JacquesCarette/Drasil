@@ -14,5 +14,5 @@ find f@AST.Equation chunk errmsg =
 find f chunk errmsg = 
   fromMaybe (error errmsg) (Map.lookup f chunk)
 
-findOptional :: AST.FName -> AST.Chunk -> AST.FDesc
-findOptional f chunk = fromMaybe (AST.Empty) (Map.lookup f chunk) 
+findOptional :: AST.FName -> AST.Chunk -> Maybe AST.FDesc
+findOptional = Map.lookup

@@ -73,3 +73,4 @@ lay (Section title layoutComponents) =
 lay (Paragraph c) = T.Paragraph (spec c)
 lay (EqnBlock c) = T.EqnBlock (spec c)
 lay (Definition Data c) = T.Definition Data c datadefnFields
+lay (Definition Literate _) = error "missing case in lay"

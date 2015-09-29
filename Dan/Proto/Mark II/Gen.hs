@@ -5,13 +5,13 @@ import Text.PrettyPrint.HughesPJ
 import PrintTeX (genTeX)
 import ASTInternal (Document, OutFormat (TeX, Plain), DocType (SRS,LPM,Code))
 
-data Recipe = Recipe (DocType, String, Doc)
+data Recipe = Recipe DocType String Doc
         --DocType, Filename, 'Body'
 
 gen :: [Recipe] -> IO ()
-gen ((Recipe (x,y,z)):[]) = do prnt x y z
-gen ((Recipe (x,y,z)):xs) = do prnt x y z
-                               gen xs
+gen ((Recipe x y z):[]) = do prnt x y z
+gen ((Recipe x y z):xs) = do prnt x y z
+                             gen xs
 gen ([])                  = return ()
 
 prnt :: DocType -> String -> Doc -> IO ()  

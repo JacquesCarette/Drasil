@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 module Example1 where
 import ASTInternal (Chunk, Expr(..), Spec(..), Field(..), Unicode(..),
-  Chunks, Dependency, get_dep)
+  Chunks, get_dep)
 import Chunk
 import SI_Units
 

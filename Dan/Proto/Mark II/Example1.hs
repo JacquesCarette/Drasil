@@ -1,4 +1,4 @@
-{-# OPTIONS -Wall #-} 
+{-# OPTIONS -Wall #-}
 module Example1 where
 import ASTInternal (Chunk, Expr(..), Spec(..), Field(..), Unicode(..),
   Chunks, Dependency, get_dep)
@@ -18,31 +18,30 @@ tau_c = newChunk $
                                 --Equation if the symbol can be calculated
    (Description,S "clad thickness") --Description
   ]
-  
+
 --------------- --------------- --------------- ---------------
-{--------------- Begin h_c ---------------}  
+{--------------- Begin h_c ---------------}
 --------------- --------------- --------------- ---------------
+h_c_eq :: Expr
+h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
+  :+((C tau_c):*(C h_b)))
+
 h_c :: Chunk
 h_c = newChunk $
   [(Symbol, S "h" :-: S "c"),
    (Equation, E h_c_eq),
-   (Description, S 
+   (Description, S
     "convective heat transfer coefficient between clad and coolant"),
    (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
-   (Dependencies, D h_c_dep)
+   (Dependencies, D $ get_dep h_c_eq)
   ]
-
-h_c_dep :: Dependency
-h_c_dep = get_dep h_c_eq
-
-h_c_eq :: Expr           
-h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
-  :+((C tau_c):*(C h_b)))
-
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_g ---------------}
 --------------- --------------- --------------- ---------------
+h_g_eq :: Expr
+h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
+
 h_g :: Chunk
 h_g = newChunk $
   [(Symbol, S "h" :-: S "g"),
@@ -50,14 +49,8 @@ h_g = newChunk $
    (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
    (Description, S
     "effective heat transfer coefficient between clad and fuel surface"),
-   (Dependencies, D h_g_dep)
+   (Dependencies, D $ get_dep h_g_eq)
   ]
-  
-h_g_dep :: Dependency
-h_g_dep = get_dep h_g_eq
-
-h_g_eq :: Expr           
-h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}
@@ -79,7 +72,7 @@ h_p = newChunk $
    (VarName, S "h_p"),
    (Description, S "initial gap film conductance")
   ]
-  
+
 --------------- --------------- --------------- ---------------
 {--------------- Begin k_c ---------------}
 --------------- --------------- --------------- ---------------

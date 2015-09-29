@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Main where
-import ASTInternal (DocType(..))
+import ASTInternal (DocType(SRS,LPM))
 import Config (output)
 import Body1 (srsBody,lpmBody)
 import Gen (Recipe(..), writeDoc, gen)
@@ -14,9 +14,8 @@ docs = [Recipe SRS "SRS.tex" createSRS,
        
 --generation functions
 createSRS,createLPM :: Doc  
-createSRS = (writeDoc output SRS) srsBody 
-
-createLPM = (writeDoc output LPM) lpmBody
+createSRS = writeDoc output SRS srsBody
+createLPM = writeDoc output LPM lpmBody
        
 main :: IO ()            
 main = do

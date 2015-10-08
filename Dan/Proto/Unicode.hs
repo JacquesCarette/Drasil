@@ -1,9 +1,17 @@
 {-# OPTIONS -Wall #-} 
+{-# LANGUAGE MultiParamTypeClasses #-}
 module Unicode where
-import ASTInternal (OutFormat(..))
 
-class Unicode a where
-  render :: a -> OutFormat -> String
+class Format a 
+
+instance Format TeX
+instance Format Plain
+
+data TeX = TeX
+data Plain = Plain
+
+class Unicode mode a where
+  render :: (Format mode) => mode -> a -> String
 
 data Alpha  = Alpha_L
             | Alpha  
@@ -17,36 +25,48 @@ data Rho    = Rho_L
 data Tau    = Tau_L
             | Tau
             
-instance Unicode Alpha where
-  render Alpha_L TeX   = "\\alpha"
-  render Alpha_L Plain = "alpha"
-  render Alpha TeX     = "\\Alpha"
-  render Alpha Plain   = "Alpha"
+instance Unicode TeX Alpha where
+  render TeX Alpha_L   = "\\alpha"
+  render TeX Alpha     = "\\Alpha"
   
-instance Unicode Circle where
-  render Circle TeX    = "\\circle"
-  render Circle Plain  = "o"
+instance Unicode Plain Alpha where
+  render Plain Alpha_L = "alpha"
+  render Plain Alpha   = "uAlpha"
+  
+instance Unicode TeX Circle where
+  render TeX Circle    = "\\circle"
 
-instance Unicode Delta where
-  render Delta_L TeX   = "\\delta"
-  render Delta_L Plain = "delta"
-  render Delta TeX     = "\\Delta"
-  render Delta Plain   = "uDelta"
+instance Unicode Plain Circle where
+  render Plain Circle  = "o"
+
+instance Unicode TeX Delta where
+  render TeX Delta_L  = "\\delta"
+  render TeX Delta    = "\\Delta"
+
+instance Unicode Plain Delta where  
+  render Plain Delta_L = "delta"
+  render Plain Delta  = "uDelta"
   
-instance Unicode Phi where
-  render Phi_L TeX     = "\\phi"
-  render Phi_L Plain   = "phi"
-  render Phi TeX       = "\\Phi"
-  render Phi Plain     = "uPhi"
+instance Unicode TeX Phi where
+  render TeX Phi_L    = "\\phi"
+  render TeX Phi      = "\\Phi"
   
-instance Unicode Rho where
-  render Rho_L TeX     = "\\rho"
-  render Rho_L Plain   = "rho"
-  render Rho TeX       = "\\Rho"
-  render Rho Plain     = "uRho"
+instance Unicode Plain Phi where
+  render Plain Phi_L   = "phi"
+  render Plain Phi     = "uPhi"
   
-instance Unicode Tau where
-  render Tau_L TeX     = "\\tau"
-  render Tau_L Plain   = "tau"
-  render Tau TeX       = "\\Tau"
-  render Tau Plain     = "uTau"             
+instance Unicode TeX Rho where
+  render TeX Rho_L     = "\\rho"
+  render TeX Rho       = "\\Rho"
+
+instance Unicode Plain Rho where
+  render Plain Rho_L   = "rho"
+  render Plain Rho     = "uRho"
+  
+instance Unicode TeX Tau where
+  render TeX Tau_L     = "\\tau"
+  render TeX Tau       = "\\Tau"
+  
+instance Unicode Plain Tau where
+  render Plain Tau_L   = "tau"
+  render Plain Tau     = "uTau"             

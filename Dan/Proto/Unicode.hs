@@ -1,14 +1,7 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE MultiParamTypeClasses #-}
 module Unicode where
-
-class Format a 
-
-instance Format TeX
-instance Format Plain
-
-data TeX = TeX
-data Plain = Plain
+import Format
 
 class Unicode mode a where
   render :: (Format mode) => mode -> a -> String

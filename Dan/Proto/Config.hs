@@ -1,9 +1,10 @@
 {-# OPTIONS -Wall #-} 
 module Config where
-import ASTInternal (OutFormat(..) , OutLang(..), DocParams(..), Field(..))
+import ASTInternal (OutLang(..), DocParams(..), Field(..))
+import Format
 
-output :: OutFormat  
-output = TeX
+output :: TeX     --Polymorphic constant for determining the output format.
+output = format
 
 outLang :: OutLang
 outLang = CLang

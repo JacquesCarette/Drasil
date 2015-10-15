@@ -3,6 +3,8 @@ module ASTInternal where
 
 import qualified Data.Map.Strict as Map
 import Data.List (nub)
+--import Unicode
+import Format
 
 --Field should be configurable, but currently not in config to avoid
   -- cyclic import.
@@ -16,8 +18,6 @@ type FDesc = Spec
 type Dependency = Chunks
 
 --Supported output formats for documentation.
-data OutFormat = TeX
-               | Plain
 data OutLang   = CLang
 
 data Expr = V Variable
@@ -42,7 +42,7 @@ data Spec = E Expr        -- Expressions
           | Empty         -- Blank
           | U Unicode     -- Unicode for special characters
           | M Unit        -- Measured in *
-          | F Format Spec -- Special formatting for certain symbols & special chars
+          | F FormatC Spec -- Special formatting for certain symbols & special chars
                                 --(e.g. hat, dot, etc.)
           | CS Chunk
           | D Dependency  -- Should only be used for "Dependencies" field. Need a way to ensure it.
@@ -66,7 +66,7 @@ data Unicode = Tau_L
              | Phi_L
   deriving (Eq,Ord)
 
-data Format = Hat
+data FormatC = Hat
             | Vector
             | Grave
             | Acute

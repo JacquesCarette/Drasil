@@ -4,7 +4,7 @@ module ASTInternal where
 import qualified Data.Map.Strict as Map
 import Data.List (nub)
 --import Unicode
-import Format
+import Format ()
 
 --Field should be configurable, but currently not in config to avoid
   -- cyclic import.

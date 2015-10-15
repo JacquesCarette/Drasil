@@ -3,7 +3,8 @@ module Gen where
 import System.IO
 import Text.PrettyPrint.HughesPJ
 import PrintTeX (genTeX)
-import ASTInternal (Document, OutFormat (TeX, Plain), DocType (SRS,LPM,Code))
+import ASTInternal (Document, DocType (SRS,LPM,Code))
+import Format(Format, TeX)
 
 data Recipe = Recipe DocType String Doc
         --DocType, Filename, 'Body'
@@ -25,6 +26,8 @@ prnt (Recipe LPM filename body) =
   -- keeping them separate for the time being is a good idea
 prnt (Recipe Code _ _) = error "Code DocType is not implemented yet"
 
-writeDoc :: OutFormat -> DocType -> Document -> Doc
-writeDoc TeX    = genTeX
-writeDoc Plain  = error "Not yet implemented"--genPlain
+class Format a => DocWriter a where
+   writeDoc :: a -> DocType -> Document -> Doc
+
+instance DocWriter TeX where
+  writeDoc _ = genTeX

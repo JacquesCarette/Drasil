@@ -50,7 +50,7 @@ convertUnicode Rho_L = T.S $ "\\rho"
 convertUnicode Phi_U = T.S $ "\\Phi"
 convertUnicode Phi_L = T.S $ "\\phi"
 
-format :: Format -> Spec -> Spec
+format :: FormatC -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"
 format Vector s = S "\\bf{" :+: s :+: S "}"
 format Grave  s = S "\\`{" :+: s :+: S "}"

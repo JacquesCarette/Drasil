@@ -1,8 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module Body1 where
 import Example1
-import ASTInternal (Spec(..), Field(..), LayoutObj(..), Format(..),
- Document(..), DType(..))
+import ASTInternal (Spec(..), Field(..), LayoutObj(..), FormatC(..), Document(..), DType(..))
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, s3_dd1, s3_dd2 :: LayoutObj
 

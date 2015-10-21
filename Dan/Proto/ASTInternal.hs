@@ -1,4 +1,5 @@
 {-# OPTIONS -Wall #-} 
+{-# LANGUAGE GADTS #-}
 module ASTInternal where
 
 import qualified Data.Map.Strict as Map

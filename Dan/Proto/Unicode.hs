@@ -19,47 +19,47 @@ data Tau    = Tau_L
             | Tau
             
 instance Unicode TeX Alpha where
-  render TeX Alpha_L   = "\\alpha"
-  render TeX Alpha     = "\\Alpha"
+  render _ Alpha_L = "\\alpha"
+  render _ Alpha   = "\\Alpha"
   
 instance Unicode Plain Alpha where
-  render Plain Alpha_L = "alpha"
-  render Plain Alpha   = "uAlpha"
+  render _ Alpha_L = "alpha"
+  render _ Alpha   = "uAlpha"
   
 instance Unicode TeX Circle where
-  render TeX Circle    = "\\circle"
+  render _ Circle  = "\\circle"
 
 instance Unicode Plain Circle where
-  render Plain Circle  = "o"
+  render _ Circle  = "o"
 
 instance Unicode TeX Delta where
-  render TeX Delta_L  = "\\delta"
-  render TeX Delta    = "\\Delta"
+  render _ Delta_L = "\\delta"
+  render _ Delta   = "\\Delta"
 
 instance Unicode Plain Delta where  
-  render Plain Delta_L = "delta"
-  render Plain Delta  = "uDelta"
+  render _ Delta_L = "delta"
+  render _ Delta   = "uDelta"
   
 instance Unicode TeX Phi where
-  render TeX Phi_L    = "\\phi"
-  render TeX Phi      = "\\Phi"
+  render _ Phi_L   = "\\phi"
+  render _ Phi     = "\\Phi"
   
 instance Unicode Plain Phi where
-  render Plain Phi_L   = "phi"
-  render Plain Phi     = "uPhi"
+  render _ Phi_L   = "phi"
+  render _ Phi     = "uPhi"
   
 instance Unicode TeX Rho where
-  render TeX Rho_L     = "\\rho"
-  render TeX Rho       = "\\Rho"
+  render _ Rho_L   = "\\rho"
+  render _ Rho     = "\\Rho"
 
 instance Unicode Plain Rho where
-  render Plain Rho_L   = "rho"
-  render Plain Rho     = "uRho"
+  render _ Rho_L   = "rho"
+  render _ Rho     = "uRho"
   
 instance Unicode TeX Tau where
-  render TeX Tau_L     = "\\tau"
-  render TeX Tau       = "\\Tau"
+  render _ Tau_L   = "\\tau"
+  render _ Tau     = "\\Tau"
   
 instance Unicode Plain Tau where
-  render Plain Tau_L   = "tau"
-  render Plain Tau     = "uTau"             
+  render _ Tau_L   = "tau"
+  render _ Tau     = "uTau"             

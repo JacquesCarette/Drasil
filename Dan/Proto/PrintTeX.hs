@@ -8,8 +8,9 @@ import Prelude hiding (print)
 import Config (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
 import Helpers
 import Chunk (find, findOptional)
+import Format (TeX())
 
-genTeX :: A.DocType -> A.Document -> Doc
+genTeX :: A.DocType -> A.Document TeX -> Doc
 genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
@@ -83,19 +84,19 @@ makeEquation contents =
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
 
-makeTable :: A.Chunks -> [A.Field] -> Doc
+makeTable :: A.Chunks TeX -> [A.Field] -> Doc
 makeTable [] _ = error "No chunks provided for creating table"
 makeTable _ [] = error "No fields provided for creating table"
 makeTable c f  = text ("\\begin{longtable}" ++ brace (lAndDim f)) 
   $$ makeRows c f $$ text "\\end{longtable}"
 
-makeRows :: A.Chunks -> [A.Field] -> Doc
+makeRows :: A.Chunks TeX -> [A.Field] -> Doc
 makeRows [] _ = error "No chunks provided for creating row"
 makeRows _ [] = error "No fields provided for creating row"
 makeRows (c:[]) f = text (makeColumns c f)
 makeRows (c:cs) f = text (makeColumns c f) $$ dbs $$ makeRows cs f
 
-makeColumns :: A.Chunk -> [A.Field] -> String
+makeColumns :: A.Chunk TeX -> [A.Field] -> String
 makeColumns _ [] = error "No fields provided for creating column"
 makeColumns c (A.Symbol:[]) = p_spec Pg $ CS c 
 makeColumns c (A.Symbol:f) = p_spec Pg (CS c) ++ " & " ++ makeColumns c f
@@ -106,7 +107,7 @@ makeColumns c (f:fs) = p_spec Pg (spec
   (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
   (printSymbol Code c)))) ++ " & " ++ makeColumns c fs
   
-makeDefn :: A.DType -> A.Chunk -> [A.Field] -> Doc
+makeDefn :: A.DType -> A.Chunk TeX -> [A.Field] -> Doc
 makeDefn _ _ []   = error "No fields provided for data definition"
 makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn
 makeDefn A.Literate _ _ = error "makeDefn: missing case"
@@ -117,7 +118,7 @@ beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textw
 endDataDefn :: Doc  
 endDataDefn = text "\\end{minipage}" <> dbs
 
-makeDDTable :: A.Chunk -> [A.Field] -> Doc
+makeDDTable :: A.Chunk TeX -> [A.Field] -> Doc
 makeDDTable c f = vcat [
   text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   text $ "\\toprule \\textbf{Refname} & \\textbf{DD:$"++ (printSymbol Pg c) ++"$}",
@@ -125,7 +126,7 @@ makeDDTable c f = vcat [
   makeDDRows c f, dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
-makeDDRows :: A.Chunk -> [A.Field] -> Doc
+makeDDRows :: A.Chunk TeX -> [A.Field] -> Doc
 makeDDRows _ [] = error "No fields to create DD table"
 makeDDRows c (f@(A.Symbol):[]) = ddBoilerplate f (text (p_spec Pg (CS c)))
 makeDDRows c (f@(A.Symbol):fs) = 
@@ -139,7 +140,7 @@ makeDDRows c (f@(A.Description):fs) = ddBoilerplate f $ writeDesc c $$
 makeDDRows c (f:[]) = ddBoilerplate f $ ddWritetext f c
 makeDDRows c (f:fs) = ddBoilerplate f (ddWritetext f c) $$ makeDDRows c fs
 
-printSymbol :: Context -> A.Chunk -> String
+printSymbol :: Context -> A.Chunk TeX -> String
 printSymbol con chunk =
   p_spec con $ spec (find A.Symbol chunk "Error: No symbol for chunk")
 
@@ -147,26 +148,26 @@ ddBoilerplate :: A.Field -> Doc -> Doc
 ddBoilerplate = \f -> \t -> dbs <+> text "\\midrule" <+> dbs $$ text 
   (writeField f ++ " & ") <> t
   
-ddWritetext :: A.Field -> A.Chunk -> Doc
+ddWritetext :: A.Field -> A.Chunk TeX -> Doc
 ddWritetext = \f -> \c -> text (p_spec Pg (spec (find f c ("Error: missing field" ++ 
   writeField f ++ " in chunk " ++ printSymbol Code c))))
 
-descDependencies :: A.Chunk -> Doc
+descDependencies :: A.Chunk TeX -> Doc
 descDependencies c = writeDescs (unSpec (maybe (S "") spec deps))
  where
    deps = findOptional A.Dependencies c
 
-unSpec :: Spec -> A.Chunks
+unSpec :: Spec -> A.Chunks TeX
 unSpec (D cs) = cs
 unSpec (S _) = []
 unSpec _     = error "oh my, what are we doing here?"
 
-writeDescs :: A.Chunks -> Doc
+writeDescs :: A.Chunks TeX -> Doc
 writeDescs [] = error "Nothing to write" --Might change this in case chunk has no dependencies
 writeDescs (c:[]) = writeDesc c
 writeDescs (c:cs) = writeDesc c <+> newline $$ writeDescs cs
 
-writeDesc :: A.Chunk -> Doc
+writeDesc :: A.Chunk TeX -> Doc
 writeDesc c  = text $ 
   p_spec Pg (CS c) ++ " is the " ++ p_spec Pg (spec (find A.Description c "Missing Description"))
 

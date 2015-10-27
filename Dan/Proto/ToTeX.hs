@@ -3,8 +3,10 @@ module ToTeX where
 import ASTInternal
 import qualified ASTTeX as T
 import Config (datadefnFields)
+import Unicode (render)
+import Format (TeX(TeX))
 
-expr :: Expr -> T.Expr
+expr :: Expr TeX -> T.Expr
 expr (V v)    = T.Var v
 expr (Dbl d)  = T.Dbl d
 expr (Int i)  = T.Int i
@@ -15,7 +17,7 @@ expr (a :^ b) = T.Pow (expr a) (expr b)
 expr (a :- b) = T.Sub (expr a) (expr b)
 expr (C c)    = T.C c
 
-replace_divs :: Expr -> T.Expr
+replace_divs :: Expr TeX -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)
 replace_divs (a :+ b) = T.Add (replace_divs a) (replace_divs b)
 replace_divs (a :* b) = T.Mul (replace_divs a) (replace_divs b)
@@ -23,20 +25,22 @@ replace_divs (a :^ b) = T.Pow (replace_divs a) (replace_divs b)
 replace_divs (a :- b) = T.Sub (replace_divs a) (replace_divs b)
 replace_divs a = expr a
 
-spec :: Spec -> T.Spec
+spec :: Spec TeX -> T.Spec
 spec (E e) = T.E (expr e)
 spec (S s) = T.S (s)
-spec (a@(U Circle) :+: b) = spec a T.:+: T.S " " T.:+: spec b
+-- spec (a@(U Circle) :+: b) = spec a T.:+: T.S " " T.:+: spec b
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
 spec Empty = T.S ""
-spec (U u) = convertUnicode u
+-- spec (U u) = convertUnicode u
+spec (U TeX u) = T.S $ render TeX u
 spec (M m) = T.M m
 spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
 spec (D cs) = T.D cs
 
+{-
 convertUnicode :: Unicode -> T.Spec
 convertUnicode Tau_L = T.S $ "\\tau"
 convertUnicode Tau_U = T.S $ "\\Tau"
@@ -49,23 +53,24 @@ convertUnicode Rho_U = T.S $ "\\Rho"
 convertUnicode Rho_L = T.S $ "\\rho"
 convertUnicode Phi_U = T.S $ "\\Phi"
 convertUnicode Phi_L = T.S $ "\\phi"
+-}
 
-format :: FormatC -> Spec -> Spec
+format :: FormatC -> Spec TeX -> Spec TeX 
 format Hat    s = S "\\hat{" :+: s :+: S "}"
 format Vector s = S "\\bf{" :+: s :+: S "}"
 format Grave  s = S "\\`{" :+: s :+: S "}"
 format Acute  s = S "\\'{" :+: s :+: S "}"
 
-makeDocument :: Document -> T.Document
+makeDocument :: Document TeX -> T.Document
 makeDocument (Document title author layout) = 
   T.Document (spec title) (spec author) (createLayout layout)
 
-createLayout :: [LayoutObj] -> [T.LayoutObj]
+createLayout :: [LayoutObj TeX] -> [T.LayoutObj]
 createLayout []     = []
 createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
-lay :: LayoutObj -> T.LayoutObj
+lay :: LayoutObj TeX -> T.LayoutObj
 --For printing, will need to use "find" function from Chunk.hs
 lay (Table c f) = T.Table c f 
 lay (Section title layoutComponents) = 

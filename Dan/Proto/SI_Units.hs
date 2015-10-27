@@ -2,14 +2,15 @@
 module SI_Units where
 import Chunk
 import ASTInternal (Chunk,Chunks, Field(..), Spec(..), Unit(..),
-  Unicode(..), Expr(..))
+  Expr(..))
+import Unicode()
 
-fundamentals :: Chunks
+fundamentals :: Chunks mode
               
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
-metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,
-              watt, ampere, candela :: Chunk
+metre, kilogram, second, kelvin, joule, calorie, mole, -- centigrade,
+              watt, ampere, candela :: Chunk mode
 
 -- Fundamental SI Units --------------------------------------------------------
 metre = newChunk $
@@ -54,7 +55,8 @@ centigrade = newChunk $
   [ (Symbol, U Circle :+: S "C"), 
     (Description, S "temperature (centigrade)"),
     (Name, S "Centigrade"),
-    (SIU, M $ Derived "$^oC$" (C kelvin :- (Dbl 273.15)))]--This is TeX specific
+    (SIU, M $ Derived "$^oC$" (C kelvin :- (Dbl 273.15)))]
+-- Not sure what to do with this right now.
 joule = newChunk $
   [ (Symbol, S "J"),
     (SIU, M $ Derived "J" ((C kilogram :* (C metre :^ (Int 2))) :/ 

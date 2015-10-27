@@ -18,6 +18,9 @@ data Rho    = Rho_L
 data Tau    = Tau_L
             | Tau
             
+            
+--
+
 instance Unicode TeX Alpha where
   render _ Alpha_L = "\\alpha"
   render _ Alpha   = "\\Alpha"
@@ -26,11 +29,15 @@ instance Unicode Plain Alpha where
   render _ Alpha_L = "alpha"
   render _ Alpha   = "uAlpha"
   
+-- 
+
 instance Unicode TeX Circle where
   render _ Circle  = "\\circle"
 
 instance Unicode Plain Circle where
   render _ Circle  = "o"
+
+--
 
 instance Unicode TeX Delta where
   render _ Delta_L = "\\delta"
@@ -40,6 +47,8 @@ instance Unicode Plain Delta where
   render _ Delta_L = "delta"
   render _ Delta   = "uDelta"
   
+--
+
 instance Unicode TeX Phi where
   render _ Phi_L   = "\\phi"
   render _ Phi     = "\\Phi"
@@ -48,6 +57,8 @@ instance Unicode Plain Phi where
   render _ Phi_L   = "phi"
   render _ Phi     = "uPhi"
   
+--
+
 instance Unicode TeX Rho where
   render _ Rho_L   = "\\rho"
   render _ Rho     = "\\Rho"
@@ -56,6 +67,8 @@ instance Unicode Plain Rho where
   render _ Rho_L   = "rho"
   render _ Rho     = "uRho"
   
+--
+
 instance Unicode TeX Tau where
   render _ Tau_L   = "\\tau"
   render _ Tau     = "\\Tau"

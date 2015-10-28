@@ -12,7 +12,11 @@ import Format (Format)
 data Field = Symbol | Equation | Description | SIU | Name | VarName | Dependencies
   deriving (Ord, Eq)
 
-type Chunk mode = Map.Map FName (FDesc mode)
+data Chunk mode = Chunk String (Map.Map FName (FDesc mode))
+
+instance Eq (Chunk mode) where
+  Chunk s1 _ == Chunk s2 _ = s1 == s2
+
 type Chunks mode = [Chunk mode]
 type FName = Field
 type FDesc mode = Spec mode
@@ -30,7 +34,6 @@ data Expr mode = V Variable
           | Expr mode :+ Expr mode
           | Expr mode :- Expr mode
           | C (Chunk mode)
-  deriving Eq
 
 type Variable = String
 
@@ -42,31 +45,16 @@ data Spec mode where
   (:^:) :: Spec mode -> Spec mode -> Spec mode -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
   (:+:) :: Spec mode -> Spec mode -> Spec mode -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
   Empty :: Spec mode        -- Blank
-  U :: (Unicode mode r, Format.Format mode) => mode -> r -> Spec mode     -- Unicode for special characters
+  U :: (Unicode mode r, Format.Format mode) => r -> Spec mode     -- Unicode for special characters
   M :: Unit mode -> Spec mode      -- Measured in *
   F :: FormatC -> Spec mode -> Spec mode -- Special formatting for certain symbols & special chars
                                           --(e.g. hat, dot, etc.)
   CS :: Chunk mode -> Spec mode
   D :: Dependency mode -> Spec mode -- Should only be used for "Dependencies" field. Need a way to ensure it.
 
-instance Eq (Spec mode) where
-  (E x) == (E y) = x == y
-  (S x) == (S y) = x == y
-  (x :-: x') == (y :-: y') = x == y && x' == y'
-  (x :^: x') == (y :^: y') = x == y && x' == y'
-  (x :+: x') == (y :+: y') = x == y && x' == y'
-  (Empty) == (Empty) = True
-  (M x) == (M y) = x == y
-  (F x x') == (F y y') = x == y && x' == y'
-  (CS x) == (CS y) = x == y
-  (D x) == (D y) = x == y
-  (U m x) == (U n y) = render m x == render n y
-  _ == _ = False
-  
 data Unit mode = Fundamental String --Fundamental unit type (e.g. "m" for length)
           | Derived String (Expr mode)--Derived unit type (e.g. "J" for power, from
                                 --the expression kg m^2 / s^2
-  deriving Eq
 
 {-
 data Unicode = Tau_L

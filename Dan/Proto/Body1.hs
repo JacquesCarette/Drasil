@@ -1,9 +1,13 @@
 {-# OPTIONS -Wall #-} 
+{-# LANGUAGE FlexibleContexts #-} 
 module Body1 where
 import Example1
 import ASTInternal (Spec(..), Field(..), LayoutObj(..), FormatC(..), Document(..), DType(..))
+import Unicode (Circle(..), Unicode, Tau(..))
+import Format (Format)
 
-s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, s3_dd1, s3_dd2 :: LayoutObj
+s1, s1_intro, s1_table, s2, s2_intro, s2_table, s3, s3_dd1, 
+  s3_dd2 :: (Format.Format a, Unicode a Circle, Unicode a Tau) => LayoutObj a
 
 s1 = Section (S "Table of Units") [s1_intro, s1_table]
 
@@ -35,14 +39,14 @@ s3_dd1 = Definition Data h_g
 
 s3_dd2 = Definition Data h_c
 
-srsBody,lpmBody :: Document
+srsBody,lpmBody :: (Format.Format a, Unicode a Circle, Unicode a Tau) => Document a
 srsBody = Document ((S "SRS for ") :+: (CS h_g) :+: (S " and ") :+: (CS h_c)) 
   (S "Spencer Smith") [s1,s2,s3] 
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: (CS h_g) :+: 
   (S "and ") :+: (CS h_c)) (S "Spencer Smith") [l1]
 
-l1 :: LayoutObj  
+l1 :: LayoutObj mode
 l1 = Section (Empty) [ Paragraph (
   S "@ First we define the overall structure of the library of functions." :+:
   S "\n\n@c\n@<Header files@>@/\n@<Functions@>@/\n\n" :+:

@@ -4,8 +4,8 @@ module Example1 where
 import ASTInternal (Chunk, Expr(..), Spec(..), Field(..), Chunks, get_dep)
 import Chunk
 import SI_Units
-import Unicode
-import Format
+import Unicode (Circle(..), Unicode, Tau(..))
+import Format (Format)
 
 si_units :: (Format a, Unicode a Circle) => Chunks a
 si_units = [metre, kilogram, second, kelvin, centigrade, joule, calorie, mole,

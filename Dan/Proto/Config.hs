@@ -1,7 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Config where
 import ASTInternal (OutLang(..), DocParams(..), Field(..))
-import Format
 
 outLang :: OutLang
 outLang = CLang

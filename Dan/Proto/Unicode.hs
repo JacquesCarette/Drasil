@@ -32,7 +32,7 @@ instance Unicode Plain Alpha where
 -- 
 
 instance Unicode TeX Circle where
-  render _ Circle  = "\\circle"
+  render _ Circle  = "^{\\circ}"
 
 instance Unicode Plain Circle where
   render _ Circle  = "o"

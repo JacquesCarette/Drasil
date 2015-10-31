@@ -52,24 +52,9 @@ data Spec mode where
   CS :: Chunk mode -> Spec mode
   D :: Dependency mode -> Spec mode -- Should only be used for "Dependencies" field. Need a way to ensure it.
 
-data Unit mode = Fundamental String --Fundamental unit type (e.g. "m" for length)
-          | Derived String (Expr mode)--Derived unit type (e.g. "J" for power, from
+data Unit mode = Fundamental --Fundamental unit type (e.g. "m" for length)
+          | Derived (Expr mode)--Derived unit type (e.g. "J" for power, from
                                 --the expression kg m^2 / s^2
-
-{-
-data Unicode = Tau_L
-             | Tau_U
-             | Alpha_L
-             | Alpha_U
-             | Circle
-             | Delta_U
-             | Delta_L
-             | Rho_U
-             | Rho_L
-             | Phi_U
-             | Phi_L
-  deriving (Eq,Ord)
--}
 
 data FormatC = Hat
             | Vector

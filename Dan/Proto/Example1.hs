@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Example1 where
 import ASTInternal (Chunk, Expr(..), Spec(..), Field(..), Chunks, get_dep)
-import Chunk
+import Chunk (newChunk)
 import SI_Units
 import Unicode (Circle(..), Unicode, Tau(..))
 import Format (Format)

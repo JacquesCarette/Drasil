@@ -5,6 +5,23 @@ import qualified Data.Map.Strict as Map
 import qualified ASTInternal as AST
 import Data.Maybe (fromMaybe)
 
+--How to design the chunks? --
+
+--varname is redundant, hopefully can be removed.
+--Going to need a chunk type to make these instances of.
+--Not sure what to do with it right now.
+data Stub = Stub { name :: AST.Spec
+                 , varname :: AST.Spec
+                 , description :: AST.Spec }
+
+data Calc = Calc { name :: AST.Spec
+                 , description :: AST.Spec
+                 , equation :: AST.Spec
+                 , dependencies :: AST.Spec
+                 , siu :: AST.Spec }
+  
+--Keep this stuff for now until the Chunk type is solidified.
+
 newChunk :: String -> [(AST.FName, AST.FDesc a)] -> AST.Chunk a
 newChunk nm l = AST.Chunk nm (Map.fromList l)
 

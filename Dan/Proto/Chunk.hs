@@ -4,21 +4,35 @@ module Chunk where
 import qualified Data.Map.Strict as Map
 import qualified ASTInternal as AST
 import Data.Maybe (fromMaybe)
+import Format
 
 --How to design the chunks? --
 
 --varname is redundant, hopefully can be removed.
 --Going to need a chunk type to make these instances of.
 --Not sure what to do with it right now.
-data Stub = Stub { name :: AST.Spec
-                 , varname :: AST.Spec
-                 , description :: AST.Spec }
+data Stub a = Stub { stubname :: AST.Spec a
+                 , stubvarname :: AST.Spec a
+                 , stubdescription :: AST.Spec a}
 
-data Calc = Calc { name :: AST.Spec
-                 , description :: AST.Spec
-                 , equation :: AST.Spec
-                 , dependencies :: AST.Spec
-                 , siu :: AST.Spec }
+data Calc a = Calc { calcname :: AST.Spec a
+                 , calcdescription :: AST.Spec a
+                 , calcequation :: AST.Spec a
+                 , calcdependencies :: AST.Spec a
+                 , calcsiu :: AST.Spec a}
+
+                 
+-- class (Format b) => Chunk (T b) where --with T as a type constructor for Stub or Calc
+  -- name :: AST.Spec b
+  -- description :: AST.Spec b
+  
+-- instance Chunk (Stub a) where
+  -- name = stubname
+  -- description = stubdescription
+  
+-- instance Chunk (Calc a) where
+  -- name = calcname
+  -- description = calcdescription
   
 --Keep this stuff for now until the Chunk type is solidified.
 

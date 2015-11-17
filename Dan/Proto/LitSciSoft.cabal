@@ -1,0 +1,15 @@
+Name:		LitSciSoft
+Version:	0.0.3
+Cabal-Version:  >= 1.18
+Author:		Dan Szymczak
+Synopsis:	A framework for code and document generation for scientific software
+
+Library
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12
+    
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/literate-scientific-software.git
+  subdir: Dan/Proto

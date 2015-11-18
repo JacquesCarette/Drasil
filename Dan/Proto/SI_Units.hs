@@ -2,8 +2,8 @@
 {-# LANGUAGE FlexibleContexts #-} 
 
 module SI_Units where
-import Chunk (newChunk)
-import ASTInternal (Chunk(..),Chunks, Field(..), Spec(..), Unit(..),
+import Chunk (VarChunk(..))
+import ASTInternal (Field(..), Spec(..), Unit(..),
   Expr(..))
 import Unicode (Circle(..), Unicode)
 import Format (Format)

@@ -1,7 +1,8 @@
 {-# OPTIONS -Wall #-} 
 module ASTTeX where
 
-import ASTInternal (Chunk, Chunks, Variable, Unit, Field, DType)
+import Chunk (Chunk(..))
+import ASTInternal (Variable, Unit, Field, DType)
 import Format (TeX(..))
 
 --Might want to create our own TeX chunk to avoid cascading modes since they're
@@ -25,13 +26,13 @@ data Spec = E Expr
           | Spec :-: Spec
           | M (Unit TeX)
           | CS (Chunk TeX) --No need for Format / Empty / Unicode here, they will be converted to TeX specific strings. As will Spec combinations.
-          | D (Chunks TeX)
+          | D [c TeX]
 data Document = Document Title Author [LayoutObj]
 type Title = Spec
 type Author = Spec
 type Contents = Spec
 
-data LayoutObj = Table (Chunks TeX) [Field]
+data LayoutObj = Table [c TeX] [Field]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents

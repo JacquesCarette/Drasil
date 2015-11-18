@@ -2,12 +2,17 @@ Name:		LitSciSoft
 Version:	0.0.3
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak
+build-type:     Simple
 Synopsis:	A framework for code and document generation for scientific software
 
-Library
+executable lss
+  main-is: Main.hs
   Build-Depends:
     base >= 4.7,
-    lens >= 4.12
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1
+  default-language: Haskell2010
     
 source-repository head
   type:     git

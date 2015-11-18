@@ -2,39 +2,55 @@
 {-# LANGUAGE MultiParamTypeClasses, FlexibleInstances #-}
 module Chunk where
 
-import qualified Data.Map.Strict as Map
-import qualified ASTInternal as AST
-import Data.Maybe (fromMaybe)
 import Control.Lens
+import Unit using (Unit(..))
 
 --How to design the chunks? --
 
-class Chunk c mode where
-   name :: Simple Lens c (AST.Spec mode)
-   descr :: Simple Lens c (AST.Spec mode)
-   symbol :: Simple Lens c (AST.Spec mode)
+class Chunk c where
+   name :: Simple Lens c String
+   descr :: Simple Lens c String
+   symbol :: Simple Lens c String
 
-class Chunk c mode => EqChunk c mode where
-  equat :: Simple Lens c (AST.Spec mode)
-  siu :: Simple Lens c (AST.Spec mode)
-  dependencies :: Simple Lens c (AST.Spec mode)
+{-
+class Chunk c => EqChunk c mode where
+  equat :: Simple Lens c (AST.Expr mode)
+  siu :: Simple Lens c (AST.Unit mode)
+  dependencies :: Simple Lens c [c]
+-}
 
-data VarChunk mode = VC { vname :: AST.Spec mode
-                        , vdesc :: AST.Spec mode
-                        , vsymb :: AST.Spec mode}
+data VarChunk = VC { vname :: String
+                   , vdesc :: String
+                   , vsymb :: String}
 
-data FullChunk mode = FC { cname :: AST.Spec mode
-                         , cdesc :: AST.Spec mode
-                         , csymb :: AST.Spec mode 
-                         , cequat :: AST.Spec mode
-                         , csiu :: AST.Spec mode
-                         , cdep :: AST.Spec mode }
+instance Eq VarChunk where
+  c1 == c2 = (c1 ^. name) == (c2 ^. name)
 
-instance Chunk (VarChunk mode) mode where
+data UnitalChunk = UC { ch :: VarChunk
+                      , usiu :: Unit }
+{-
+data FullChunk mode = FC { cname :: String
+                         , cdesc :: String
+                         , csymb :: String
+                         , cequat :: Expr mode
+                         , csiu :: Unit mode
+                         , cdep :: [c] }
+-}
+
+instance Chunk VarChunk where
+  name f (VC n d s) = fmap (\x -> VC x d s) (f n)
+  descr f (VC n d s) = fmap (\x -> VC n x s) (f d)
+  symbol f (VC n d s) = fmap (\x -> VC n d x) (f s)
+
+{-
 instance Chunk (FullChunk mode) mode where
+  name   f c = fmap (\x -> c {cname = x}) (f $ cname c)
+  descr  f c = fmap (\x -> c {cdesc = x}) (f $ cdesc c)
+  symbol f c = fmap (\x -> c {csymb = x}) (f $ csymb c)
+-}
 
-instance EqChunk (FullChunk mode) mode where
-
+-- instance EqChunk (FullChunk mode) mode where
+{-
 newChunk :: String -> [(AST.FName, AST.FDesc a)] -> AST.Chunk a
 newChunk nm l = AST.Chunk nm (Map.fromList l)
 
@@ -46,3 +62,4 @@ find f (AST.Chunk _ chunk) errmsg =
 
 findOptional :: AST.FName -> AST.Chunk a -> Maybe (AST.FDesc a)
 findOptional f (AST.Chunk _ m) = Map.lookup f m
+-}

@@ -2,7 +2,7 @@
 module ToTeX where
 import ASTInternal
 import qualified ASTTeX as T
-import Config (datadefnFields)
+-- import Config (datadefnFields)
 import Unicode (render)
 import Format (TeX(TeX))
 

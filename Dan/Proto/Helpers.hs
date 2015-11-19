@@ -1,26 +1,15 @@
 {-# OPTIONS -Wall #-} 
 module Helpers where
-import ASTInternal (Field (Symbol, Equation, Description, SIU, Name, VarName, 
-  Dependencies))
+
 import Text.PrettyPrint
 import Data.Char
-import Config (tableWidth)
-
---Printing of fieldnames (for error messages and possibly other things)
-writeField :: Field -> String
-writeField Symbol       = "Symbol"
-writeField Equation     = "Equation"
-writeField Description  = "Description"
-writeField SIU          = "SIU"
-writeField Name         = "Name"
-writeField VarName      = "VarName"
-writeField Dependencies = "Dependencies"
+-- import Config (tableWidth)
 
 --Table making help
-lAndDim :: [Field] -> String
-lAndDim [] = error "No fields provided"
-lAndDim f  = concat (replicate ((length f)-1) "l ") ++ "p" ++ 
-  brace (show tableWidth ++ "cm")
+-- lAndDim :: [Field] -> String
+-- lAndDim [] = error "No fields provided"
+-- lAndDim f  = concat (replicate ((length f)-1) "l ") ++ "p" ++ 
+  -- brace (show tableWidth ++ "cm")
   
 --basic docs
 bslash,dbs,eq,dlr,ast,pls :: Doc

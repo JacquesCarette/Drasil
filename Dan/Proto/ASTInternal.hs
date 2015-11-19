@@ -2,10 +2,6 @@
 {-# LANGUAGE GADTs, FlexibleContexts, RankNTypes, AllowAmbiguousTypes #-}
 module ASTInternal where
 
-import Unicode
-import Format (Format)
-import Control.Lens (Getter)
-
 --Supported output formats for documentation.
 data OutLang   = CLang
 
@@ -27,14 +23,7 @@ data FormatC = Hat
             | Acute
   deriving (Eq, Ord)
   
-data LayoutObj c t mode = Table [c] [Getter c t ]
-               | Section (Title mode) [LayoutObj c t mode]
-               | Paragraph (Contents mode)
-               | EqnBlock (Contents mode)
-               | Definition DType c
 
-data DType = Data
-           | Literate
                
 --data Context = Pg | Eqn | Cd -- paragraph, equation, or code
 -- ----------------------------------------------------------------

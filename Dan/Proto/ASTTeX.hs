@@ -2,7 +2,9 @@
 module ASTTeX where
 
 import Chunk (Chunk(..))
-import ASTInternal (Variable, Unit, Field, DType)
+import ASTInternal (Variable)
+import Unit (Unit)
+import Spec (DType)
 import Format (TeX(..))
 
 --Might want to create our own TeX chunk to avoid cascading modes since they're

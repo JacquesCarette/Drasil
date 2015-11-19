@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module Unit where
 
-import ASTInternal using (Expr(..))
+import ASTInternal (Expr(..))
 
 data Unit c = Fundamental --Fundamental unit type (e.g. "m" for length)
           | Derived (Expr c)--Derived unit type (e.g. "J" for power, from

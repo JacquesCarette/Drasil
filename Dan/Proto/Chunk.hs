@@ -3,7 +3,7 @@
 module Chunk where
 
 import Control.Lens
-import Unit using (Unit(..))
+import Unit (Unit(..))
 
 --How to design the chunks? --
 
@@ -26,8 +26,8 @@ data VarChunk = VC { vname :: String
 instance Eq VarChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 
-data UnitalChunk = UC { ch :: VarChunk
-                      , usiu :: Unit }
+data UnitalChunk c = UC { ch :: VarChunk
+                        , usiu :: Unit c }
 {-
 data FullChunk mode = FC { cname :: String
                          , cdesc :: String

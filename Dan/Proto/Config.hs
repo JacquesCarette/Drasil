@@ -1,6 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Config where
-import ASTInternal (OutLang(..), DocParams(..), Field(..))
+import ASTInternal (OutLang(..), DocParams(..))
 
 outLang :: OutLang
 outLang = CLang
@@ -37,8 +37,8 @@ defaultLPMparams = [
   ExDoc "L-" "hghc_SRS"
   ]
   
-datadefnFields :: [Field]
-datadefnFields = [Symbol, SIU, Equation, Description]
+-- datadefnFields :: [Field]
+-- datadefnFields = [Symbol, SIU, Equation, Description]
 
   --column width for data definitions (fraction of textwidth)
 colAwidth, colBwidth :: Double

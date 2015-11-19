@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-{-# LANGUAGE GADTs, FlexibleContexts, RankNTypes, AllowAmbiguousTypes, ImpredicativeTypes #-}
+{-# LANGUAGE GADTs, ImpredicativeTypes #-}
 module Spec where
 
 import Chunk (Chunk(..))

@@ -1,5 +1,8 @@
 {-# OPTIONS -Wall #-} 
 module ExprTools where
+import Data.List
+import Chunk (Chunk(..))
+import ASTInternal (Expr(..))
 
 --Get dependency from equation  
 get_dep :: (Eq c, Chunk c) => Expr c -> [c]

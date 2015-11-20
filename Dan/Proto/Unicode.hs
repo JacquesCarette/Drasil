@@ -3,8 +3,10 @@
 module Unicode where
 import Format
 
-class Unicode mode a where
-  render :: (Format mode) => mode -> a -> String
+class Unicode a where
+
+class (Format mode, Unicode a) => Render mode a where
+  render :: mode -> a -> String
 
 data Alpha  = Alpha_L
             | Alpha  
@@ -18,61 +20,66 @@ data Rho    = Rho_L
 data Tau    = Tau_L
             | Tau
             
-            
+instance Unicode Alpha
+instance Unicode Circle
+instance Unicode Delta
+instance Unicode Phi
+instance Unicode Rho
+instance Unicode Tau
 --
 
-instance Unicode TeX Alpha where
+instance Render TeX Alpha where
   render _ Alpha_L = "\\alpha"
   render _ Alpha   = "\\Alpha"
   
-instance Unicode Plain Alpha where
+instance Render Plain Alpha where
   render _ Alpha_L = "alpha"
   render _ Alpha   = "uAlpha"
   
 -- 
 
-instance Unicode TeX Circle where
+instance Render TeX Circle where
   render _ Circle  = "^{\\circ}"
 
-instance Unicode Plain Circle where
+instance Render Plain Circle where
   render _ Circle  = "o"
 
 --
 
-instance Unicode TeX Delta where
+instance Render TeX Delta where
   render _ Delta_L = "\\delta"
   render _ Delta   = "\\Delta"
 
-instance Unicode Plain Delta where  
+instance Render Plain Delta where  
   render _ Delta_L = "delta"
   render _ Delta   = "uDelta"
   
 --
 
-instance Unicode TeX Phi where
+instance Render TeX Phi where
   render _ Phi_L   = "\\phi"
   render _ Phi     = "\\Phi"
   
-instance Unicode Plain Phi where
+instance Render Plain Phi where
   render _ Phi_L   = "phi"
   render _ Phi     = "uPhi"
   
 --
 
-instance Unicode TeX Rho where
+instance Render TeX Rho where
   render _ Rho_L   = "\\rho"
   render _ Rho     = "\\Rho"
 
-instance Unicode Plain Rho where
+instance Render Plain Rho where
   render _ Rho_L   = "rho"
   render _ Rho     = "uRho"
   
 --
 
-instance Unicode TeX Tau where
+instance Render TeX Tau where
   render _ Tau_L   = "\\tau"
   render _ Tau     = "\\Tau"
   
-instance Unicode Plain Tau where
+instance Render Plain Tau where
   render _ Tau_L   = "tau"
   render _ Tau     = "uTau"             

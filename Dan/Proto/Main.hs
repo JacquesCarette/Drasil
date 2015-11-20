@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module Main where
--- import ASTInternal (DocType(SRS,LPM))
--- import Body1 (srsBody,lpmBody)
+import ASTInternal (DocType(SRS,LPM))
+import Body1 (srsBody,lpmBody)
 -- import Gen (Recipe(..), writeDoc, gen)
 -- import Text.PrettyPrint
 

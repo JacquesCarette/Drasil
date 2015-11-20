@@ -4,14 +4,24 @@ module Chunk where
 
 import Control.Lens
 import Unit (Unit(..))
+import Spec
 
 --How to design the chunks? --
 
 class Chunk c where
    name :: Simple Lens c String
    descr :: Simple Lens c String
-   symbol :: Simple Lens c String
+   symbol :: Simple Lens c Spec
 
+data VarChunk = VC { vname :: String
+                   , vdesc :: String
+                   , vsymb :: Spec}
+
+instance Eq VarChunk where
+  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+
+data UnitalChunk c = UC { ch :: VarChunk
+                        , usiu :: Unit c }
 {-
 class Chunk c => EqChunk c mode where
   equat :: Simple Lens c (AST.Expr mode)
@@ -19,15 +29,6 @@ class Chunk c => EqChunk c mode where
   dependencies :: Simple Lens c [c]
 -}
 
-data VarChunk = VC { vname :: String
-                   , vdesc :: String
-                   , vsymb :: String}
-
-instance Eq VarChunk where
-  c1 == c2 = (c1 ^. name) == (c2 ^. name)
-
-data UnitalChunk c = UC { ch :: VarChunk
-                        , usiu :: Unit c }
 {-
 data FullChunk mode = FC { cname :: String
                          , cdesc :: String

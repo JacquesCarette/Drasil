@@ -1,30 +1,25 @@
 {-# OPTIONS -Wall #-} 
-{-# LANGUAGE GADTs, FlexibleContexts, RankNTypes, AllowAmbiguousTypes #-}
+{-# LANGUAGE GADTs #-}
 module ASTInternal where
+
+import Chunk (Chunk)
 
 --Supported output formats for documentation.
 data OutLang   = CLang
 
-data Expr c = V Variable
-          | Dbl Double
-          | Int Integer
-          | Expr c :^ Expr c
-          | Expr c :* Expr c
-          | Expr c :/ Expr c
-          | Expr c :+ Expr c
-          | Expr c :- Expr c
-          | C c
+data Expr where
+ V :: Variable -> Expr
+ Dbl :: Double -> Expr
+ Int :: Integer -> Expr
+ (:^) :: Expr -> Expr -> Expr
+ (:*) :: Expr -> Expr -> Expr
+ (:/) :: Expr -> Expr -> Expr
+ (:+) :: Expr -> Expr -> Expr
+ (:-) :: Expr -> Expr -> Expr
+ C :: Chunk c => c -> Expr
 
 type Variable = String
 
-data FormatC = Hat
-            | Vector
-            | Grave
-            | Acute
-  deriving (Eq, Ord)
-  
-
-               
 --data Context = Pg | Eqn | Cd -- paragraph, equation, or code
 -- ----------------------------------------------------------------
 -- data CodeType = Calc

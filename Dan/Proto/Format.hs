@@ -9,3 +9,12 @@ class Format a where
 
 instance Format TeX where
 instance Format Plain where
+
+--------------------------
+
+data FormatC = Hat
+            | Vector
+            | Grave
+            | Acute
+  deriving (Eq, Ord)
+  

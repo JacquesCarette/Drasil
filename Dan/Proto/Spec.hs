@@ -2,7 +2,7 @@
 {-# LANGUAGE GADTs #-}
 module Spec where
 
-import ASTInternal (FormatC(..))
+import Format (FormatC)
 import Unicode (Unicode)
 
 --For writing chunks in a specification language that can be converted to TeX
@@ -24,10 +24,10 @@ type Title    = Spec
 type Contents = Spec
 type Author   = Spec
 
-data Document c t = Document Title Author [LayoutObj c t]
+data Document c = Document Title Author [LayoutObj c]
 
-data LayoutObj c t = Table [c] [t]
-               | Section Title [LayoutObj c t]
+data LayoutObj c = Table [c] [c -> Spec]
+               | Section Title [LayoutObj c]
                | Paragraph Contents
                | EqnBlock Contents
                | Definition DType c

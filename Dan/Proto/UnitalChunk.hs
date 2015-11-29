@@ -1,9 +1,10 @@
 {-# OPTIONS -Wall #-} 
-module UnitalChunk where
+module UnitalChunk (UnitalChunk(..), unit) where
 
 import Chunk (VarChunk, Chunk(..))
+import Spec (Spec)
 import Unit (Unit(..))
-import Control.Lens (Simple, Lens)
+import Control.Lens (Simple, Lens, (^.))
 
 data UnitalChunk = UC { ch :: VarChunk
                       , usiu :: Unit }
@@ -16,3 +17,9 @@ instance Chunk UnitalChunk where
   name = vc . name
   descr = vc . descr
   symbol = vc . symbol
+
+------
+-- useful routines
+
+unit :: Chunk c => c -> Spec
+unit c = c ^. symbol

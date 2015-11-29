@@ -12,6 +12,7 @@ data Spec where
   (:-:) :: Spec -> Spec -> Spec -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
   (:^:) :: Spec -> Spec -> Spec -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
   (:+:) :: Spec -> Spec -> Spec -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
+  (:/:) :: Spec -> Spec -> Spec -- frac
   Empty :: Spec -- Blank
   U :: (Unicode r) => r -> Spec -- Unicode for special characters
 --  M :: Chunk c => Unit c -> Spec -- Measured in *
@@ -24,13 +25,13 @@ type Title    = Spec
 type Contents = Spec
 type Author   = Spec
 
-data Document c = Document Title Author [LayoutObj c]
+data Document = Document Title Author [LayoutObj]
 
-data LayoutObj c = Table [c] [c -> Spec]
-               | Section Title [LayoutObj c]
+data LayoutObj = Table [[Spec]]
+               | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
-               | Definition DType c
+--               | Definition DType c
 
 data DType = Data
            | Literate

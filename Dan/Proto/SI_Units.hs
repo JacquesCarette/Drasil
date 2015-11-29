@@ -33,7 +33,7 @@ candela = fund "Candela" "luminous intensity (candela)" "cd"
 
 -- ------- END FUNDAMENTALS -------------------------------------------------------
 
-centigrade, joule, watt, calorie :: UnitalChunk
+centigrade, joule, watt, calorie, kilowatt :: UnitalChunk
 
 centigrade = UC (VC "Centigrade" "temperature (centigrade)" (U Circle :+: S "C"))
   (Derived (C kelvin :- (Dbl 273.15)))
@@ -46,3 +46,7 @@ calorie = UC (VC "Calorie" "energy (calorie)" (S "cal"))
 
 watt = UC (VC "Watt" "power (watt)" (S "W"))
   (Derived ((C kilogram :* (C metre :^ (Int 2))) :/ (C second :^ (Int 3))))
+
+kilowatt = UC (VC "Kilowatt" "power (kilowatt)" (S "kW"))
+  (Derived ((Int 1000) :* C watt))
+

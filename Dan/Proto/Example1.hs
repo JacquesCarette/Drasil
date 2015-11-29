@@ -3,11 +3,20 @@
 module Example1 where
 import ASTInternal (Expr(..))
 import Spec (Spec(..))
-import ExprTools (get_dep)
-import Chunk (VarChunk(..))
+-- import ExprTools (get_dep) // don't put dependencies in DS, compute it
 import SI_Units
-import Unicode (Circle(..), Unicode, Tau(..))
-import Format (Format)
+import Unicode (Tau(..))
+import Unit (Unit(..))
+
+import Chunk (VarChunk(..))
+import UnitalChunk (UnitalChunk(..))
+import EqChunk (EqChunk(..))
+
+-----
+-- Need some derived units.  For now, put them here, but need to think
+-- about where they really ought to go.
+heat_transfer :: Unit
+heat_transfer = Derived (C kilogram :/ (C metre :^ (Int 2) :* C centigrade))
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
@@ -22,31 +31,23 @@ h_c_eq :: Expr
 h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
   :+((C tau_c):*(C h_b)))
 
--- h_c :: (Format mode, Unicode mode Tau) => Chunk mode
--- h_c = newChunk "h_c" $
-  -- [(Symbol, S "h" :-: S "c"),
-   -- (Equation, E h_c_eq),
-   -- (Description, S
-    -- "convective heat transfer coefficient between clad and coolant"),
-   -- (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
-   -- (Dependencies, D $ get_dep h_c_eq)
-  -- ]
+h_c :: EqChunk
+h_c = EC (UC 
+  (VC "h_c" "convective heat transfer coefficient between clad and coolant"
+      (S "h" :-: S "c"))
+  heat_transfer)
+  h_c_eq
 
 -- --------------- --------------- --------------- ---------------
 -- {--------------- Begin h_g ---------------}
 -- --------------- --------------- --------------- ---------------
--- h_g_eq :: (Format mode, Unicode mode Tau) => Expr mode
--- h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
+h_g_eq :: Expr
+h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 
--- h_g :: (Format mode, Unicode mode Tau) => Chunk mode
--- h_g = newChunk "h_g" $
-  -- [(Symbol, S "h" :-: S "g"),
-   -- (Equation, E h_g_eq),
-   -- (SIU, S "($\\mathrm{\\frac{kW}{m^2C}}$)"),
-   -- (Description, S
-    -- "effective heat transfer coefficient between clad and fuel surface"),
-   -- (Dependencies, D $ get_dep h_g_eq)
-  -- ]
+h_g :: EqChunk
+h_g = EC (UC 
+  (VC "h_g" "effective heat transfer coefficient between clad and fuel surface"
+      (S "h" :-: S "g")) heat_transfer) h_g_eq
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}

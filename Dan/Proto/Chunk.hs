@@ -19,13 +19,6 @@ instance Eq VarChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 
 {-
-class Chunk c => EqChunk c mode where
-  equat :: Simple Lens c (AST.Expr mode)
-  siu :: Simple Lens c (AST.Unit mode)
-  dependencies :: Simple Lens c [c]
--}
-
-{-
 data FullChunk mode = FC { cname :: String
                          , cdesc :: String
                          , csymb :: String
@@ -46,7 +39,6 @@ instance Chunk (FullChunk mode) mode where
   symbol f c = fmap (\x -> c {csymb = x}) (f $ csymb c)
 -}
 
--- instance EqChunk (FullChunk mode) mode where
 {-
 newChunk :: String -> [(AST.FName, AST.FDesc a)] -> AST.Chunk a
 newChunk nm l = AST.Chunk nm (Map.fromList l)

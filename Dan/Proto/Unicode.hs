@@ -3,10 +3,8 @@
 module Unicode where
 import Format
 
-class Unicode a where
-
-class (Format mode, Unicode a) => Render mode a where
-  render :: mode -> a -> String
+class Render a where
+  render :: Format -> a -> String
 
 data Alpha  = Alpha_L
             | Alpha  
@@ -20,66 +18,48 @@ data Rho    = Rho_L
 data Tau    = Tau_L
             | Tau
             
-instance Unicode Alpha
-instance Unicode Circle
-instance Unicode Delta
-instance Unicode Phi
-instance Unicode Rho
-instance Unicode Tau
 --
 
-instance Render TeX Alpha where
-  render _ Alpha_L = "\\alpha"
-  render _ Alpha   = "\\Alpha"
-  
-instance Render Plain Alpha where
-  render _ Alpha_L = "alpha"
-  render _ Alpha   = "uAlpha"
+instance Render Alpha where
+  render TeX Alpha_L = "\\alpha"
+  render TeX Alpha   = "\\Alpha"
+  render Plain Alpha_L = "alpha"
+  render Plain Alpha   = "uAlpha"
   
 -- 
 
-instance Render TeX Circle where
-  render _ Circle  = "^{\\circ}"
-
-instance Render Plain Circle where
-  render _ Circle  = "o"
+instance Render Circle where
+  render TeX Circle  = "^{\\circ}"
+  render Plain Circle  = "o"
 
 --
 
-instance Render TeX Delta where
-  render _ Delta_L = "\\delta"
-  render _ Delta   = "\\Delta"
-
-instance Render Plain Delta where  
-  render _ Delta_L = "delta"
-  render _ Delta   = "uDelta"
+instance Render Delta where
+  render TeX Delta_L = "\\delta"
+  render TeX Delta   = "\\Delta"
+  render Plain Delta_L = "delta"
+  render Plain Delta   = "uDelta"
   
 --
 
-instance Render TeX Phi where
-  render _ Phi_L   = "\\phi"
-  render _ Phi     = "\\Phi"
-  
-instance Render Plain Phi where
-  render _ Phi_L   = "phi"
-  render _ Phi     = "uPhi"
+instance Render Phi where
+  render TeX Phi_L   = "\\phi"
+  render TeX Phi     = "\\Phi"
+  render Plain Phi_L   = "phi"
+  render Plain Phi     = "uPhi"
   
 --
 
-instance Render TeX Rho where
-  render _ Rho_L   = "\\rho"
-  render _ Rho     = "\\Rho"
-
-instance Render Plain Rho where
-  render _ Rho_L   = "rho"
-  render _ Rho     = "uRho"
+instance Render Rho where
+  render TeX Rho_L   = "\\rho"
+  render TeX Rho     = "\\Rho"
+  render Plain Rho_L   = "rho"
+  render Plain Rho     = "uRho"
   
 --
 
-instance Render TeX Tau where
-  render _ Tau_L   = "\\tau"
-  render _ Tau     = "\\Tau"
-  
-instance Render Plain Tau where
-  render _ Tau_L   = "tau"
-  render _ Tau     = "uTau"             
+instance Render Tau where
+  render TeX Tau_L   = "\\tau"
+  render TeX Tau     = "\\Tau"
+  render Plain Tau_L   = "tau"
+  render Plain Tau     = "uTau"             

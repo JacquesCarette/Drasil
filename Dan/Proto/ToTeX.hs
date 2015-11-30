@@ -1,11 +1,10 @@
 {-# OPTIONS -Wall #-} 
 module ToTeX where
-import ASTInternal
 import Spec
 import qualified ASTTeX as T
 -- import Config (datadefnFields)
 import Unicode (render)
-import Format (TeX(TeX))
+import Format (Format(TeX), FormatC(..))
 
 -- expr :: Expr TeX -> T.Expr
 -- expr (V v)    = T.Var v
@@ -26,19 +25,20 @@ import Format (TeX(TeX))
 -- replace_divs (a :- b) = T.Sub (replace_divs a) (replace_divs b)
 -- replace_divs a = expr a
 
--- spec :: Spec TeX -> T.Spec
+spec :: Spec -> T.Spec
 -- spec (E e) = T.E (expr e)
--- spec (S s) = T.S (s)
--- -- spec (a@(U Circle) :+: b) = spec a T.:+: T.S " " T.:+: spec b
--- spec (a :+: b) = spec a T.:+: spec b
--- spec (a :-: b) = spec a T.:-: spec b
--- spec (a :^: b) = spec a T.:^: spec b
--- spec Empty = T.S ""
--- -- spec (U u) = convertUnicode u
--- spec (U u) = T.S $ render TeX u
+spec (S s) = T.S (s)
+-- spec (a@(U Circle) :+: b) = spec a T.:+: T.S " " T.:+: spec b
+spec (a :+: b) = spec a T.:+: spec b
+spec (a :-: b) = spec a T.:-: spec b
+spec (a :^: b) = spec a T.:^: spec b
+spec (a :/: b) = spec a T.:/: spec b
+spec Empty = T.S ""
+-- spec (U u) = convertUnicode u
+spec (U u) = T.S $ render TeX u
 -- spec (M m) = T.M m
 -- spec (CS c) = T.CS c
--- spec (F f s) = spec $ format f s
+spec (F f s) = spec $ format f s
 -- spec (D cs) = T.D cs
 
 -- {-
@@ -56,28 +56,28 @@ import Format (TeX(TeX))
 -- convertUnicode Phi_L = T.S $ "\\phi"
 -- -}
 
--- format :: FormatC -> Spec TeX -> Spec TeX 
--- format Hat    s = S "\\hat{" :+: s :+: S "}"
--- format Vector s = S "\\bf{" :+: s :+: S "}"
--- format Grave  s = S "\\`{" :+: s :+: S "}"
--- format Acute  s = S "\\'{" :+: s :+: S "}"
+format :: FormatC -> Spec -> Spec
+format Hat    s = S "\\hat{" :+: s :+: S "}"
+format Vector s = S "\\bf{" :+: s :+: S "}"
+format Grave  s = S "\\`{" :+: s :+: S "}"
+format Acute  s = S "\\'{" :+: s :+: S "}"
 
--- makeDocument :: Document TeX -> T.Document
--- makeDocument (Document title author layout) = 
-  -- T.Document (spec title) (spec author) (createLayout layout)
+makeDocument :: Document -> T.Document
+makeDocument (Document title author layout) = 
+  T.Document (spec title) (spec author) (createLayout layout)
 
--- createLayout :: [LayoutObj TeX] -> [T.LayoutObj]
--- createLayout []     = []
--- createLayout (l:[]) = [lay l]
--- createLayout (l:ls) = lay l : createLayout ls
+createLayout :: [LayoutObj] -> [T.LayoutObj]
+createLayout []     = []
+createLayout (l:[]) = [lay l]
+createLayout (l:ls) = lay l : createLayout ls
 
--- lay :: LayoutObj TeX -> T.LayoutObj
--- --For printing, will need to use "find" function from Chunk.hs
--- lay (Table c f) = T.Table c f 
--- lay (Section title layoutComponents) = 
-  -- T.Section (spec title) (createLayout layoutComponents)
--- lay (Paragraph c) = T.Paragraph (spec c)
--- lay (EqnBlock c) = T.EqnBlock (spec c)
--- -- lay (Definition Data c) = T.Definition Data c datadefnFields 
-  -- --Temp removal while propagating chunk changes.
+lay :: LayoutObj -> T.LayoutObj
+--For printing, will need to use "find" function from Chunk.hs
+lay (Table hdr lls) = T.Table (map spec hdr) (map (map spec) lls)
+lay (Section title layoutComponents) = 
+  T.Section (spec title) (createLayout layoutComponents)
+lay (Paragraph c) = T.Paragraph (spec c)
+lay (EqnBlock c) = T.EqnBlock (spec c)
+-- lay (Definition Data c) = T.Definition Data c datadefnFields 
+  --Temp removal while propagating chunk changes.
 -- lay (Definition Literate _) = error "missing case in lay"

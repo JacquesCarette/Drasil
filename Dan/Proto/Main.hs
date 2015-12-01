@@ -1,9 +1,10 @@
 {-# OPTIONS -Wall #-} 
 module Main where
-import ASTInternal (DocType(SRS,LPM))
-import Body1 (srsBody,lpmBody)
+import ASTInternal (DocType(SRS)) --,LPM))
+import Body1 (srsBody) --,lpmBody)
 import Gen (Recipe(..), writeDoc, gen)
 import Text.PrettyPrint
+import Format (TeX(..))
 
 docs :: [Recipe]
 docs = [Recipe SRS "SRS.tex" createSRS 
@@ -13,7 +14,7 @@ docs = [Recipe SRS "SRS.tex" createSRS
        
 --generation functions
 createSRS :: Doc
-createSRS = writeDoc SRS srsBody
+createSRS = writeDoc TeX SRS srsBody
 
 --createLPM :: Doc  
 --createLPM = writeDoc LPM lpmBody

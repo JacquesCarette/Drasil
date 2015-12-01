@@ -3,13 +3,14 @@ module Helpers where
 
 import Text.PrettyPrint
 import Data.Char
--- import Config (tableWidth)
+import Config (tableWidth)
 
 --Table making help
--- lAndDim :: [Field] -> String
--- lAndDim [] = error "No fields provided"
--- lAndDim f  = concat (replicate ((length f)-1) "l ") ++ "p" ++ 
-  -- brace (show tableWidth ++ "cm")
+lAndDim :: [[a]] -> String
+lAndDim [] = error "No fields provided"
+lAndDim [f]  = concat (replicate ((length f)-1) "l ") ++ "p" ++ 
+  brace (show tableWidth ++ "cm")
+lAndDim _ = error "Unimplemented use of lAndDim in Helpers."
   
 --basic docs
 bslash,dbs,eq,dlr,ast,pls :: Doc

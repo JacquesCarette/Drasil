@@ -10,7 +10,7 @@ import Helpers
 import Format (TeX())
 import qualified Spec as S
 
-genTeX :: A.DocType -> S.Document TeX -> Doc
+genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
@@ -45,16 +45,16 @@ print []                         = empty
 print ((Section t contents):cs)  = sec (p_spec Pg t) $$ print contents $$ print cs
 print ((Paragraph contents):cs)  = text (p_spec Pg contents) $$ print cs
 print ((EqnBlock contents):cs)   = makeEquation contents $$ print cs
-print ((Table chunks fields):cs) = makeTable chunks fields $$ print cs
+print ((Table fields):cs) = makeTable fields $$ print cs
 -- print ((Definition dtype chunk fields):cs) = makeDefn dtype chunk fields $$ print cs
 
 p_spec :: Context -> Spec -> String
-p_spec Pg (CS c)      = dollar (printSymbol Pg c)
+-- p_spec Pg (CS c)      = dollar (printSymbol Pg c)
 p_spec Pg (E e)       = dollar (p_expr e)
 p_spec con (a :+: b)  = p_spec con a ++ p_spec con b
 p_spec con (a :-: b)  = p_spec con a ++ "_" ++ brace (p_spec con b)
 p_spec con (a :^: b)  = p_spec con a ++ "^" ++ brace (p_spec con b)
-p_spec con (CS c)     = printSymbol con c
+-- p_spec con (CS c)     = printSymbol con c
 p_spec _ (S s)        = s
 p_spec _ (E e)        = p_expr e
 p_spec Eqn _          = error "p_spec in Eqn context not implemented"
@@ -71,7 +71,8 @@ p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in Helpers
 p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
 p_expr (Pow a b)  = p_expr a ++ "^" ++ brace (p_expr b)
-p_expr (C c)      = p_spec Eqn $ spec (find A.Equation c "No equation or symbol for chunk")
+-- p_expr (C c)      = p_spec Eqn $ spec (find A.Equation c "No equation or symbol for chunk")
+p_expr _ = error "Unimplemented expression printing in PrintTex."
 
 mul :: Expr -> Expr -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
@@ -83,29 +84,46 @@ makeEquation contents =
   text ("\\begin{equation}" ++ p_spec Eqn contents ++ "\\end{equation}")
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
+--TODO: Figure out how to implement Table Headings.
 
-makeTable :: A.Chunks TeX -> [A.Field] -> Doc
-makeTable [] _ = error "No chunks provided for creating table"
-makeTable _ [] = error "No fields provided for creating table"
-makeTable c f  = text ("\\begin{longtable}" ++ brace (lAndDim f)) 
-  $$ makeRows c f $$ text "\\end{longtable}"
+makeTable :: [[Spec]] -> Doc
+makeTable [] = error "Cannot make an empty table"
+makeTable ss = text ("\\begin{longtable}" ++ brace (lAndDim ss)) 
+  $$ makeRows ss $$ text "\\end{longtable}"
 
-makeRows :: A.Chunks TeX -> [A.Field] -> Doc
-makeRows [] _ = error "No chunks provided for creating row"
-makeRows _ [] = error "No fields provided for creating row"
-makeRows (c:[]) f = text (makeColumns c f)
-makeRows (c:cs) f = text (makeColumns c f) $$ dbs $$ makeRows cs f
+makeRows :: [[Spec]] -> Doc  
+makeRows [] = error "No rows to create table"
+makeRows [(x:[])] = text (makeColumns [x])
+makeRows [(x:xs)] = text (makeColumns [x]) $$ dbs $$ makeRows [xs]
 
-makeColumns :: A.Chunk TeX -> [A.Field] -> String
-makeColumns _ [] = error "No fields provided for creating column"
-makeColumns c (A.Symbol:[]) = p_spec Pg $ CS c 
-makeColumns c (A.Symbol:f) = p_spec Pg (CS c) ++ " & " ++ makeColumns c f
-makeColumns c (f:[]) = p_spec Pg $ spec  
-  (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
-  (printSymbol Code c)))
-makeColumns c (f:fs) = p_spec Pg (spec 
-  (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
-  (printSymbol Code c)))) ++ " & " ++ makeColumns c fs
+makeColumns :: [Spec] -> String
+makeColumns [] = error "No columns to create table"
+makeColumns (f:[]) = p_spec Pg $ spec f
+makeColumns (f:fs) = p_spec Pg (spec f) ++ " & " ++ makeColumns fs
+
+-- TODO: Re-implement makeTable
+-- makeTable :: A.Chunks TeX -> [A.Field] -> Doc
+-- makeTable [] _ = error "No chunks provided for creating table"
+-- makeTable _ [] = error "No fields provided for creating table"
+-- makeTable c f  = text ("\\begin{longtable}" ++ brace (lAndDim f)) 
+  -- $$ makeRows c f $$ text "\\end{longtable}"
+
+-- makeRows :: A.Chunks TeX -> [A.Field] -> Doc
+-- makeRows [] _ = error "No chunks provided for creating row"
+-- makeRows _ [] = error "No fields provided for creating row"
+-- makeRows (c:[]) f = text (makeColumns c f)
+-- makeRows (c:cs) f = text (makeColumns c f) $$ dbs $$ makeRows cs f
+
+-- makeColumns :: A.Chunk TeX -> [A.Field] -> String
+-- makeColumns _ [] = error "No fields provided for creating column"
+-- makeColumns c (A.Symbol:[]) = p_spec Pg $ CS c 
+-- makeColumns c (A.Symbol:f) = p_spec Pg (CS c) ++ " & " ++ makeColumns c f
+-- makeColumns c (f:[]) = p_spec Pg $ spec  
+  -- (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
+  -- (printSymbol Code c)))
+-- makeColumns c (f:fs) = p_spec Pg (spec 
+  -- (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
+  -- (printSymbol Code c)))) ++ " & " ++ makeColumns c fs
   
 -- makeDefn :: A.DType -> A.Chunk TeX -> [A.Field] -> Doc
 -- makeDefn _ _ []   = error "No fields provided for data definition"

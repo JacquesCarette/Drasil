@@ -11,6 +11,7 @@ import SI_Units (si_units)
 import Chunk
 import UnitalChunk (unit)
 import Control.Lens ((^.))
+import RecipeTools
 
 type SRS = Format -- SRS is a format, but it really 'is' TeX
 type LPM = Format -- LPM is a format, but it really 'is' TeX
@@ -27,12 +28,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " given followed by a description of the unit with the SI" :+: 
            S " name in parentheses.")
 
--- should move this to a tools module
-mkTable :: [a -> b] -> [a] -> [[b]]
-mkTable []     _  = []
-mkTable (f:fl) cl = map f cl : mkTable fl cl
-
-s1_table = Table [S "Symbol", S "Description"] $ transpose $ mkTable
+s1_table = Table [S "Symbol", S "Description"] $ mkTable
   [(\x -> x ^. symbol),
    (\x -> S (x ^. descr))
   ] si_units

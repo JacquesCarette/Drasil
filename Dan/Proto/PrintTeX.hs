@@ -1,14 +1,14 @@
 {-# OPTIONS -Wall #-} 
 module PrintTeX where
 
+import Prelude hiding (print)
 import Data.List (intersperse)
+import Text.PrettyPrint
 
 import ASTTeX
 import ToTeX
-import Text.PrettyPrint
 import qualified ASTInternal as A
 import qualified Spec as S
-import Prelude hiding (print)
 import Config (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,
   tableWidth,verboseDDDescription)
 import Helpers
@@ -48,7 +48,7 @@ printLO :: LayoutObj -> Doc
 printLO (Section t contents)  = sec (p_spec t) $$ print contents
 printLO (Paragraph contents)  = text (p_spec contents)
 printLO (EqnBlock contents)   = makeEquation contents
-printLO (Table chunks fields) = makeTable chunks fields
+printLO (Table rows) = makeTable rows
 -- printLO ((Definition dtype chunk fields):cs) = makeDefn dtype chunk fields $$ print cs
 
 print :: [LayoutObj] -> Doc
@@ -93,27 +93,19 @@ makeEquation contents =
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
 
-makeTable :: [Spec] -> [[Spec]] -> Doc
-makeTable hdr lls  = text ("\\begin{longtable}" ++ brace (header hdr)) 
+makeTable :: [[Spec]] -> Doc
+makeTable lls  = text ("\\begin{longtable}" ++ brace (header lls)) 
   $$ makeRows lls $$ text "\\end{longtable}"
   where header l = concat (replicate ((length l)-1) "l ") ++ "p" ++ 
                    brace (show tableWidth ++ "cm")
 
 makeRows :: [[Spec]] -> Doc
-makeRows [c] = text (makeColumns c)
+makeRows [] = empty
 makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 
 makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map p_spec ls) ++ "\\"
--- makeColumns c (A.Symbol:[]) = p_spec $ CS c 
--- makeColumns c (A.Symbol:f) = p_spec (CS c) ++ " & " ++ makeColumns c f
--- makeColumns c (f:[]) = p_spec $ spec  
---   (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
---   (printSymbol Code c)))
--- makeColumns c (f:fs) = p_spec (spec 
---   (find f c ("Error: missing field " ++ writeField f ++ " in chunk" ++ 
---   (printSymbol Code c)))) ++ " & " ++ makeColumns c fs
-  
+
 -- makeDefn :: A.DType -> A.Chunk TeX -> [A.Field] -> Doc
 -- makeDefn _ _ []   = error "No fields provided for data definition"
 -- makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn

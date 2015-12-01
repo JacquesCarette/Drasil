@@ -2,7 +2,6 @@
 module ASTTeX where
 
 import ASTInternal (Variable)
-import Unit (Unit)
 import Spec ()
 
 --Might want to create our own TeX chunk to avoid cascading modes since they're
@@ -35,13 +34,8 @@ type Title = Spec
 type Author = Spec
 type Contents = Spec
 
-data LayoutObj = Table [Spec] [[Spec]] -- header then data
+data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
                -- | Definition DType c [c -> Spec]
---NOTE: TeX Context is pointless and should be removed. Anything converted to 
---  this AST will by definition be TeX. Will allow for cleanup.
-               
-data Context = Pg | Eqn | Code -- paragraph, equation, or code. This will affect
-                               -- the formatting of the finished document.

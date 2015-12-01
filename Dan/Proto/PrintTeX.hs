@@ -98,8 +98,8 @@ makeRows [(x:xs)] = text (makeColumns [x]) $$ dbs $$ makeRows [xs]
 
 makeColumns :: [Spec] -> String
 makeColumns [] = error "No columns to create table"
-makeColumns (f:[]) = p_spec Pg $ spec f
-makeColumns (f:fs) = p_spec Pg (spec f) ++ " & " ++ makeColumns fs
+makeColumns (f:[]) = p_spec Pg f
+makeColumns (f:fs) = p_spec Pg f ++ " & " ++ makeColumns fs
 
 -- TODO: Re-implement makeTable
 -- makeTable :: A.Chunks TeX -> [A.Field] -> Doc

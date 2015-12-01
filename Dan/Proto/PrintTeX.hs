@@ -94,10 +94,10 @@ makeEquation contents =
   --  on chunk (i.e. "eq:h_g" for h_g = ...
 
 makeTable :: [[Spec]] -> Doc
-makeTable lls  = text ("\\begin{longtable}" ++ brace (header lls)) 
+makeTable lls  = text ("~\\newline \\begin{longtable}" ++ brace (header lls)) 
   $$ makeRows lls $$ text "\\end{longtable}"
-  where header l = concat (replicate ((length l)-1) "l ") ++ "p" ++ 
-                   brace (show tableWidth ++ "cm")
+  where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
+                        brace (show tableWidth ++ "cm")
 
 makeRows :: [[Spec]] -> Doc
 makeRows [] = empty

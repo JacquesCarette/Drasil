@@ -1,6 +1,9 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
 module Body1 where
+
+import Data.List (transpose)
+
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..))
 import Format (Format,FormatC(..))
@@ -29,7 +32,7 @@ mkTable :: [a -> b] -> [a] -> [[b]]
 mkTable []     _  = []
 mkTable (f:fl) cl = map f cl : mkTable fl cl
 
-s1_table = Table [S "Symbol", S "Description"] $ mkTable
+s1_table = Table [S "Symbol", S "Description"] $ transpose $ mkTable
   [(\x -> x ^. symbol),
    (\x -> S (x ^. descr))
   ] si_units
@@ -44,7 +47,7 @@ s2_intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
+s2_table = Table [S "Symbol", S "Description", S "Units"] $ transpose $ mkTable
   [(\c -> c ^. symbol) , (\c -> S $ c ^. descr), unit]
   [h_g,h_c] 
 

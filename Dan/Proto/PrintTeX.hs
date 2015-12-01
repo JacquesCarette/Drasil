@@ -25,7 +25,7 @@ build A.Code _  = error "Unimplemented"
 buildSRS :: [A.DocParams] -> Document -> Doc
 buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =
   docclass sb b $$ listpackages ps $$ title (p_spec t) $$ 
-  author (p_spec a) $$ begin $$ print c $$ endS
+  author (p_spec a) $$ begin $$ print c $$ endL
 buildSRS _ _ = error "Invalid syntax in Document Parameters"
 
 buildLPM :: [A.DocParams] -> Document -> Doc
@@ -104,7 +104,7 @@ makeRows [c] = text (makeColumns c)
 makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 
 makeColumns :: [Spec] -> String
-makeColumns ls = concat $ intersperse " & " $ map p_spec ls
+makeColumns ls = (concat $ intersperse " & " $ map p_spec ls) ++ "\\"
 -- makeColumns c (A.Symbol:[]) = p_spec $ CS c 
 -- makeColumns c (A.Symbol:f) = p_spec (CS c) ++ " & " ++ makeColumns c f
 -- makeColumns c (f:[]) = p_spec $ spec  

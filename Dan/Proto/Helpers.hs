@@ -56,9 +56,8 @@ title t = bslash <> text "title" <> br t
 author :: String -> Doc
 author a = bslash <> text "author" <> br a
 
-begin, endS, endL, command :: Doc
+begin, endL, command :: Doc
 begin = bslash <> text "begin" <> br "document" $$ bslash <> text "maketitle"
-endS = bslash <> text "enddocument"
 endL = bslash <> text "end" <> br "document"
 command = bslash <> text "newcommand"
 

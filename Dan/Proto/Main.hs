@@ -7,11 +7,11 @@ import Format(Format(TeX))
 
 import Text.PrettyPrint
 
--- docs :: [Recipe]
--- docs = [Recipe SRS "SRS.tex" createSRS, 
--- --        Recipe SRS "PCM_SRS.tex" createSRS2,
-        -- Recipe LPM "LPM.w" createLPM
-       -- ]
+docs :: [Recipe]
+docs = [Recipe SRS "SRS.tex" createSRS, 
+--        Recipe SRS "PCM_SRS.tex" createSRS2,
+        Recipe LPM "LPM.w" createLPM
+       ]
        
 --generation functions
 createSRS,createLPM :: Doc  
@@ -20,5 +20,4 @@ createLPM = writeDoc TeX LPM lpmBody
        
 main :: IO ()            
 main = do
-  putStrLn $ "Everything is broken! Woohoo!"
-  -- gen docs
+  gen docs

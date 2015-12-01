@@ -5,9 +5,9 @@ import ToTeX
 import Text.PrettyPrint
 import qualified ASTInternal as A
 import Prelude hiding (print)
-import Config (srsTeXParams,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
+import Config (srsTeXParams) --,lpmTeXParams,colAwidth,colBwidth,verboseDDDescription)
 import Helpers
-import Format (TeX())
+-- import Format (TeX())
 import qualified Spec as S
 
 genTeX :: A.DocType -> S.Document -> Doc
@@ -15,7 +15,7 @@ genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
 build A.SRS doc = buildSRS srsTeXParams doc
--- build A.LPM doc = buildLPM lpmTeXParams doc
+build A.LPM _ = error "LPM Currently being re-implemented" --buildLPM lpmTeXParams doc
 build A.Code _  = error "Unimplemented"
 
 buildSRS :: [A.DocParams] -> Document -> Doc
@@ -72,7 +72,7 @@ p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in Helpers
 p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
 p_expr (Pow a b)  = p_expr a ++ "^" ++ brace (p_expr b)
 -- p_expr (C c)      = p_spec Eqn $ spec (find A.Equation c "No equation or symbol for chunk")
-p_expr _ = error "Unimplemented expression printing in PrintTex."
+-- p_expr _ = error "Unimplemented expression printing in PrintTex."
 
 mul :: Expr -> Expr -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
@@ -95,11 +95,13 @@ makeRows :: [[Spec]] -> Doc
 makeRows [] = error "No rows to create table"
 makeRows [(x:[])] = text (makeColumns [x])
 makeRows [(x:xs)] = text (makeColumns [x]) $$ dbs $$ makeRows [xs]
+makeRows _ = error "MakeRows failed"
 
 makeColumns :: [Spec] -> String
 makeColumns [] = error "No columns to create table"
 makeColumns (f:[]) = p_spec Pg f
 makeColumns (f:fs) = p_spec Pg f ++ " & " ++ makeColumns fs
+
 
 -- TODO: Re-implement makeTable
 -- makeTable :: A.Chunks TeX -> [A.Field] -> Doc

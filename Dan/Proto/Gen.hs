@@ -28,7 +28,7 @@ prnt (Recipe LPM filename body) =
 prnt (Recipe Code _ _) = error "Code DocType is not implemented yet"
 
 class Format a => DocWriter a where
-   writeDoc :: DocType -> Document a -> Doc
+   writeDoc :: a -> DocType -> Document -> Doc
 
 instance DocWriter TeX where
-  writeDoc = genTeX
+  writeDoc = \_ -> genTeX

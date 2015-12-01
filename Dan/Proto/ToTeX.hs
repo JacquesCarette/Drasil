@@ -1,11 +1,12 @@
 {-# OPTIONS -Wall #-} 
 module ToTeX where
-import ASTInternal
+
+import ASTInternal (Expr(..))
 import Spec
 import qualified ASTTeX as T
 -- import Config (datadefnFields)
--- import Unicode (render)
-import Format (FormatC(..))
+import Unicode (render)
+import Format (Format(TeX), FormatC(..))
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v
@@ -35,14 +36,14 @@ spec (S s) = T.S (s)
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
+spec (a :/: b) = spec a T.:/: spec b
 spec Empty = T.S ""
 -- spec (U u) = convertUnicode u
--- spec (U u) = T.S $ render TeX u
+spec (U u) = T.S $ render TeX u
 -- spec (M m) = T.M m
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
 -- spec (D cs) = T.D cs
-spec _ = error "Unimplemented spec transformation in ToTeX."
 
 {-
 convertUnicode :: Unicode -> T.Spec
@@ -76,7 +77,8 @@ createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> T.LayoutObj
 --For printing, will need to use "find" function from Chunk.hs
-lay (Table [a]) = T.Table [map spec a]
+lay (Table hdr lls) = T.Table $ (map spec hdr) : (map (map spec) lls)
+-- lay (Table [a]) = T.Table [map spec a]
 lay (Section title layoutComponents) = 
   T.Section (spec title) (createLayout layoutComponents)
 lay (Paragraph c) = T.Paragraph (spec c)
@@ -84,4 +86,3 @@ lay (EqnBlock c) = T.EqnBlock (spec c)
 -- lay (Definition Data c) = T.Definition Data c datadefnFields 
   --Temp removal while propagating chunk changes.
 -- lay (Definition Literate _) = error "missing case in lay"
-lay _ = error "Unimplemented layout transformation in ToTeX."

@@ -2,8 +2,7 @@
 module ASTTeX where
 
 import ASTInternal (Variable)
-import Unit (Unit)
--- import Spec (DType)
+import Spec ()
 
 --Might want to create our own TeX chunk to avoid cascading modes since they're
 --pointless once we've decided to use TeX.
@@ -26,7 +25,8 @@ data Spec = E Expr
           | Spec :+: Spec
           | Spec :^: Spec
           | Spec :-: Spec
-          | M Unit
+          | Spec :/: Spec
+          -- | M Unit
           -- | CS Chunk --No need for Format / Empty / Unicode here, they will be converted to TeX specific strings. As will Spec combinations.
           -- | D [Chunk]
 data Document = Document Title Author [LayoutObj]
@@ -34,13 +34,8 @@ type Title = Spec
 type Author = Spec
 type Contents = Spec
 
-data LayoutObj = Table [[Spec]] 
+data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
-               -- | Definition DType [Spec]
---NOTE: TeX Context is pointless and should be removed. Anything converted to 
---  this AST will by definition be TeX. Will allow for cleanup.
-               
-data Context = Pg | Eqn | Code -- paragraph, equation, or code. This will affect
-                               -- the formatting of the finished document.
+               -- | Definition DType c [c -> Spec]

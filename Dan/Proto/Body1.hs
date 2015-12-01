@@ -1,17 +1,20 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
 module Body1 where
+
+import Data.List (transpose)
+
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..))
-import Format (TeX(..), FormatC(..))
+import Format (Format,FormatC(..))
 import SI_Units (si_units)
 import Chunk
 import UnitalChunk (unit)
 import Control.Lens ((^.))
 import RecipeTools
 
-type SRS = TeX
-type LPM = TeX
+type SRS = Format -- SRS is a format, but it really 'is' TeX
+type LPM = Format -- LPM is a format, but it really 'is' TeX
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table :: LayoutObj
 
@@ -25,7 +28,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " given followed by a description of the unit with the SI" :+: 
            S " name in parentheses.")
 
-s1_table = Table $ mkTable
+s1_table = Table [S "Symbol", S "Description"] $ mkTable
   [(\x -> x ^. symbol),
    (\x -> S (x ^. descr))
   ] si_units
@@ -40,7 +43,7 @@ s2_intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-s2_table = Table $ mkTable
+s2_table = Table [S "Symbol", S "Description", S "Units"] $ transpose $ mkTable
   [(\c -> c ^. symbol) , (\c -> S $ c ^. descr), unit]
   [h_g,h_c] 
 

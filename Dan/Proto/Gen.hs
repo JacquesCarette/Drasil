@@ -5,7 +5,7 @@ import Text.PrettyPrint.HughesPJ
 import PrintTeX (genTeX)
 import ASTInternal (DocType (SRS,LPM,Code))
 import Spec (Document)
-import Format(Format, TeX)
+import Format(Format(TeX))
 
 data Recipe = Recipe DocType String Doc
         --DocType, Filename, 'Body'
@@ -27,8 +27,12 @@ prnt (Recipe LPM filename body) =
   -- keeping them separate for the time being is a good idea
 prnt (Recipe Code _ _) = error "Code DocType is not implemented yet"
 
-class Format a => DocWriter a where
-   writeDoc :: a -> DocType -> Document -> Doc
+writeDoc :: Format -> DocType -> Document -> Doc
+writeDoc TeX = genTeX
+writeDoc _ = error "we can only write TeX now?"
 
-instance DocWriter TeX where
-  writeDoc = \_ -> genTeX
+-- class Format a => DocWriter a where
+   -- writeDoc :: a -> DocType -> Document -> Doc
+
+-- instance DocWriter TeX where
+  -- writeDoc = \_ -> genTeX

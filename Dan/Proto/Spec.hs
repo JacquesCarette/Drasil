@@ -7,7 +7,7 @@ import Unicode (Unicode)
 
 --For writing chunks in a specification language that can be converted to TeX
 data Spec where
---  E :: Chunk c => Expr c -> Spec -- Expressions
+  -- E :: Expr -> Spec -- Expressions
   S :: String -> Spec -- Strings, used for Descriptions/Symbols in Chunks
   (:-:) :: Spec -> Spec -> Spec -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
   (:^:) :: Spec -> Spec -> Spec -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)

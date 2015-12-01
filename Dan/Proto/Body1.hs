@@ -8,6 +8,7 @@ import SI_Units (si_units)
 import Chunk
 import UnitalChunk (unit)
 import Control.Lens ((^.))
+import RecipeTools
 
 type SRS = TeX
 type LPM = TeX
@@ -23,11 +24,6 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " employed as described below. For each unit, the symbol is" :+: 
            S " given followed by a description of the unit with the SI" :+: 
            S " name in parentheses.")
-
--- should move this to a tools module
-mkTable :: [a -> b] -> [a] -> [[b]]
-mkTable []     _  = []
-mkTable (f:fl) cl = map f cl : mkTable fl cl
 
 s1_table = Table $ mkTable
   [(\x -> x ^. symbol),

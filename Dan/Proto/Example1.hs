@@ -20,6 +20,9 @@ import Symbol
 heat_transfer :: Unit
 heat_transfer = Derived (C kilogram :/ (C metre :^ (Int 2) :* C centigrade))
 
+h :: Symbol
+h = Atomic "h"
+
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
@@ -36,7 +39,7 @@ h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
 h_c :: EqChunk
 h_c = EC (UC 
   (VC "h_c" "convective heat transfer coefficient between clad and coolant"
-      (N $ Composite (Atomic "h") [Atomic "c"] []))
+      (N $ Composite h [Atomic "c"] []))
   heat_transfer)
   h_c_eq
 
@@ -49,25 +52,25 @@ h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 h_g :: EqChunk
 h_g = EC (UC 
   (VC "h_g" "effective heat transfer coefficient between clad and fuel surface"
-      (S "h" :-: S "g")) heat_transfer) h_g_eq
+      (N $ Composite h [Atomic "g"] [])) heat_transfer) h_g_eq
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}
 --------------- --------------- --------------- ---------------
 
 h_b :: VarChunk
-h_b = VC "h_b" "initial coolant film conductance" (S "h" :-: S "b")
+h_b = VC "h_b" "initial coolant film conductance" (N $ Composite h [Atomic "b"] [])
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_p ---------------}
 --------------- --------------- --------------- ---------------
 
 h_p :: VarChunk
-h_p = VC "h_p" "initial gap film conductance" (S "h":-: S "p")
+h_p = VC "h_p" "initial gap film conductance" (N $ Composite h [Atomic "p"] [])
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin k_c ---------------}
 --------------- --------------- --------------- ---------------
 
 k_c :: VarChunk
-k_c = VC "k_c" "clad conductivity" (S "k":-: S "c")
+k_c = VC "k_c" "clad conductivity" ((N $ Composite h [Atomic "c"] []))

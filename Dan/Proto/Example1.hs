@@ -12,6 +12,8 @@ import Chunk (VarChunk(..))
 import UnitalChunk (UnitalChunk(..))
 import EqChunk (EqChunk(..))
 
+import Symbol
+
 -----
 -- Need some derived units.  For now, put them here, but need to think
 -- about where they really ought to go.
@@ -34,7 +36,7 @@ h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
 h_c :: EqChunk
 h_c = EC (UC 
   (VC "h_c" "convective heat transfer coefficient between clad and coolant"
-      (S "h" :-: S "c"))
+      (N $ Composite (Atomic "h") [Atomic "c"] []))
   heat_transfer)
   h_c_eq
 

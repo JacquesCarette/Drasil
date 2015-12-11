@@ -3,6 +3,7 @@ module ASTTeX where
 
 import ASTInternal (Variable)
 import Spec ()
+import Symbol
 
 --Might want to create our own TeX chunk to avoid cascading modes since they're
 --pointless once we've decided to use TeX.
@@ -26,6 +27,7 @@ data Spec = E Expr
           | Spec :^: Spec
           | Spec :-: Spec
           | Spec :/: Spec
+          | N Symbol Parameters Variables
           -- | M Unit
           -- | CS Chunk --No need for Format / Empty / Unicode here, they will be converted to TeX specific strings. As will Spec combinations.
           -- | D [Chunk]

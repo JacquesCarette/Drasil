@@ -7,6 +7,7 @@ import qualified ASTTeX as T
 -- import Config (datadefnFields)
 import Unicode (render)
 import Format (Format(TeX), FormatC(..))
+import Symbol
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v
@@ -43,6 +44,8 @@ spec (U u) = T.S $ render TeX u
 -- spec (M m) = T.M m
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
+spec (N (Atomic s)) = T.S s
+spec (N (Composite sym params vars)) = T.N sym params vars
 -- spec (D cs) = T.D cs
 
 {-

@@ -4,11 +4,13 @@ module Spec where
 
 import Format (FormatC)
 import Unicode (Render)
+import Symbol
 
 --For writing chunks in a specification language that can be converted to TeX
 data Spec where
   -- E :: Expr -> Spec -- Expressions
-  S :: String -> Spec -- Strings, used for Descriptions/Symbols in Chunks
+  N :: Symbol -> Spec
+  S :: String -> Spec -- Strings, used for Descriptions in Chunks
   (:-:) :: Spec -> Spec -> Spec -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
   (:^:) :: Spec -> Spec -> Spec -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
   (:+:) :: Spec -> Spec -> Spec -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)

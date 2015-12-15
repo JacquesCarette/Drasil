@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Body1 where
 
-import Data.List (transpose)
+-- import Data.List (transpose)
 
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..))
@@ -43,7 +43,7 @@ s2_intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-s2_table = Table [S "Symbol", S "Description", S "Units"] $ transpose $ mkTable
+s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
   [(\c -> c ^. symbol) , (\c -> S $ c ^. descr), unit]
   [h_g,h_c] 
 

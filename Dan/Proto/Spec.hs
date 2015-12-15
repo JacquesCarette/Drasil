@@ -17,7 +17,7 @@ data Spec where
   (:/:) :: Spec -> Spec -> Spec -- frac
   Empty :: Spec -- Blank
   U :: (Render r) => r -> Spec -- Unicode for special characters
---  M :: Chunk c => Unit c -> Spec -- Measured in *
+  -- M :: Unit c -> Spec -- Measured in *
   F :: FormatC -> Spec -> Spec -- Special formatting for certain symbols & special chars
                                           --(e.g. hat, dot, etc.)
 --  CS :: Chunk c => c -> Spec 

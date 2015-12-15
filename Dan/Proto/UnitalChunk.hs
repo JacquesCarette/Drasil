@@ -22,4 +22,8 @@ instance Chunk UnitalChunk where
 -- useful routines
 
 unit :: Chunk c => c -> Spec
-unit c = c ^. symbol
+unit c = c ^. symbol --This needs to be changed to usiu, but cyclical imports
+                     -- will occur if we try to wrap it in a spec. May need to
+                     -- return a type "Unit" and then get wrapped at the call point
+                     --However, cyclical imports will still occur because of Unit's
+                     -- use of Expr.

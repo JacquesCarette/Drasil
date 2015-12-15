@@ -2,18 +2,18 @@
 module Chunk where
 
 import Control.Lens
-import Spec
+import Symbol
 
 --How to design the chunks? --
 
 class Chunk c where
    name :: Simple Lens c String
    descr :: Simple Lens c String
-   symbol :: Simple Lens c Spec
+   symbol :: Simple Lens c Symbol
 
 data VarChunk = VC { vname :: String
                    , vdesc :: String
-                   , vsymb :: Spec}
+                   , vsymb :: Symbol}
 
 instance Eq VarChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)

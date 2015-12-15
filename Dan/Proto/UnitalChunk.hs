@@ -2,9 +2,9 @@
 module UnitalChunk (UnitalChunk(..), unit) where
 
 import Chunk (VarChunk, Chunk(..))
-import Spec (Spec)
 import Unit (Unit(..))
 import Control.Lens (Simple, Lens, (^.))
+import Symbol
 
 data UnitalChunk = UC { ch :: VarChunk
                       , usiu :: Unit }
@@ -21,7 +21,7 @@ instance Chunk UnitalChunk where
 ------
 -- useful routines
 
-unit :: Chunk c => c -> Spec
+unit :: Chunk c => c -> Symbol
 unit c = c ^. symbol --This needs to be changed to usiu, but cyclical imports
                      -- will occur if we try to wrap it in a spec. May need to
                      -- return a type "Unit" and then get wrapped at the call point

@@ -29,7 +29,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " name in parentheses.")
 
 s1_table = Table [S "Symbol", S "Description"] $ mkTable
-  [(\x -> x ^. symbol),
+  [(\x -> N (x ^. symbol)),
    (\x -> S (x ^. descr))
   ] si_units
 
@@ -44,7 +44,7 @@ s2_intro = Paragraph $
   S "the symbol."
   
 s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
-  [(\c -> c ^. symbol) , (\c -> S $ c ^. descr), unit]
+  [(\ch -> N (ch ^. symbol)) , (\ch -> S $ ch ^. descr), (\ch -> N $ unit ch)]
   [h_g,h_c] 
 
 -- s3 = Section (S "Data Definitions") [s3_dd1, s3_dd2]
@@ -54,12 +54,12 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
 -- s3_dd2 = Definition Data h_c
 
 srsBody,lpmBody :: Document
-srsBody = Document ((S "SRS for ") :+: (h_g ^. symbol) :+: (S " and ") :+: (h_c ^. symbol)) 
+srsBody = Document ((S "SRS for ") :+: (N $ h_g ^. symbol) :+: (S " and ") :+: (N $ h_c ^. symbol)) 
   (S "Spencer Smith") [s1,s2]  -- need to add s3 back
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
-  (h_g ^. symbol) :+: 
-  (S "and ") :+: (h_c ^. symbol)) (S "Spencer Smith") [l1]
+  (N $ h_g ^. symbol) :+: 
+  (S "and ") :+: (N $ h_c ^. symbol)) (S "Spencer Smith") [l1]
 
 l1 :: LayoutObj
 l1 = Section (Empty) [ Paragraph (

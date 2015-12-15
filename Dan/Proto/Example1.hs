@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Example1 where
 import ASTInternal (Expr(..))
--- import Spec (Spec(..))
+import Spec (Spec(..))
 -- import ExprTools (get_dep) // don't put dependencies in DS, compute it
 import SI_Units
 import Unicode (Tau(..))
@@ -23,12 +23,11 @@ heat_transfer = Derived (C kilogram :/ (C metre :^ (Int 2) :* C centigrade))
 h,c :: Symbol
 h = Atomic "h"
 c = Atomic "c"
-
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
 tau_c :: VarChunk
-tau_c = VC "tau_c" "clad thickness" (Composite (Ta Tau) [c] [])
+tau_c = VC "tau_c" "clad thickness" c --Temporarily removing Tau.
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}
@@ -74,4 +73,4 @@ h_p = VC "h_p" "initial gap film conductance" (Composite h [Atomic "p"] [])
 --------------- --------------- --------------- ---------------
 
 k_c :: VarChunk
-k_c = VC "k_c" "clad conductivity" ((Composite h [Atomic "c"] []))
+k_c = VC "k_c" "clad conductivity" ((Composite h [c] []))

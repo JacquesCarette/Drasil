@@ -5,7 +5,7 @@ import ASTInternal (Expr(..))
 import Spec
 import qualified ASTTeX as T
 -- import Config (datadefnFields)
-import Unicode (render)
+import Unicode (render, Circle(..))
 import Format (Format(TeX), FormatC(..))
 import Symbol
 
@@ -45,6 +45,7 @@ spec (U u) = T.S $ render TeX u
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
 spec (N (Atomic s)) = T.S s
+spec (N (Circ Circle)) = T.S "TODO: FIX CIRCLE "
 spec (N (Composite sym params vars)) = T.N sym params vars
 -- spec (D cs) = T.D cs
 

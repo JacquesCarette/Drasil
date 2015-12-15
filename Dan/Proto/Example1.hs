@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Example1 where
 import ASTInternal (Expr(..))
-import Spec (Spec(..))
+-- import Spec (Spec(..))
 -- import ExprTools (get_dep) // don't put dependencies in DS, compute it
 import SI_Units
 import Unicode (Tau(..))
@@ -20,14 +20,15 @@ import Symbol
 heat_transfer :: Unit
 heat_transfer = Derived (C kilogram :/ (C metre :^ (Int 2) :* C centigrade))
 
-h :: Symbol
+h,c :: Symbol
 h = Atomic "h"
+c = Atomic "c"
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
 tau_c :: VarChunk
-tau_c = VC "tau_c" "clad thickness" (U Tau_L :-: S "c")
+tau_c = VC "tau_c" "clad thickness" (Composite (Ta Tau) [c] [])
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}
@@ -39,7 +40,7 @@ h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
 h_c :: EqChunk
 h_c = EC (UC 
   (VC "h_c" "convective heat transfer coefficient between clad and coolant"
-      (N $ Composite h [Atomic "c"] []))
+      (Composite h [c] []))
   heat_transfer)
   h_c_eq
 
@@ -52,25 +53,25 @@ h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 h_g :: EqChunk
 h_g = EC (UC 
   (VC "h_g" "effective heat transfer coefficient between clad and fuel surface"
-      (N $ Composite h [Atomic "g"] [])) heat_transfer) h_g_eq
+      (Composite h [Atomic "g"] [])) heat_transfer) h_g_eq
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}
 --------------- --------------- --------------- ---------------
 
 h_b :: VarChunk
-h_b = VC "h_b" "initial coolant film conductance" (N $ Composite h [Atomic "b"] [])
+h_b = VC "h_b" "initial coolant film conductance" (Composite h [Atomic "b"] [])
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_p ---------------}
 --------------- --------------- --------------- ---------------
 
 h_p :: VarChunk
-h_p = VC "h_p" "initial gap film conductance" (N $ Composite h [Atomic "p"] [])
+h_p = VC "h_p" "initial gap film conductance" (Composite h [Atomic "p"] [])
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin k_c ---------------}
 --------------- --------------- --------------- ---------------
 
 k_c :: VarChunk
-k_c = VC "k_c" "clad conductivity" ((N $ Composite h [Atomic "c"] []))
+k_c = VC "k_c" "clad conductivity" ((Composite h [Atomic "c"] []))

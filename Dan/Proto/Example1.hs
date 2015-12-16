@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Example1 where
 import ASTInternal (Expr(..))
-import Spec (Spec(..))
+-- import Spec (Spec(..))
 -- import ExprTools (get_dep) // don't put dependencies in DS, compute it
 import SI_Units
 import Unicode (Tau(..))
@@ -27,7 +27,7 @@ c = Atomic "c"
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
 tau_c :: VarChunk
-tau_c = VC "tau_c" "clad thickness" c --Temporarily removing Tau.
+tau_c = VC "tau_c" "clad thickness" (Composite (Ta Tau_L) [c] []) --Temporarily hacking Tau.
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}

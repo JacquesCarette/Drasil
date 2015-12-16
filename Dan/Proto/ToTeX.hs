@@ -46,6 +46,7 @@ spec (U u) = T.S $ render TeX u
 spec (F f s) = spec $ format f s
 spec (N (Atomic s)) = T.S s
 spec (N (Circ Circle)) = T.S $ render TeX Circle
+spec (N (Ta t)) = T.S $ render TeX t
 spec (N (Composite sym params vars)) = 
   spec $ (N sym) :+: (foldl (:+:) (S "") (map N params)) :+: (foldl (:+:) (S "") (map N vars))
 -- spec (D cs) = T.D cs

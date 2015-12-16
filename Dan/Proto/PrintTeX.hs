@@ -12,7 +12,7 @@ import qualified Spec as S
 import Config (srsTeXParams,lpmTeXParams, --colAwidth,colBwidth,
   tableWidth) --, verboseDDDescription)
 import Helpers
-import Unicode (Circle(..))
+-- import Unicode (Circle(..))
 -- import Format (Format(TeX))
 
 import Symbol

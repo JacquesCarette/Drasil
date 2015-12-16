@@ -45,8 +45,9 @@ spec (U u) = T.S $ render TeX u
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
 spec (N (Atomic s)) = T.S s
-spec (N (Circ Circle)) = T.S "TODO: FIX CIRCLE "
-spec (N (Composite sym params vars)) = T.N sym params vars
+spec (N (Circ Circle)) = T.S $ render TeX Circle
+spec (N (Composite sym params vars)) = 
+  spec $ (N sym) :+: (foldl (:+:) (S "") (map N params)) :+: (foldl (:+:) (S "") (map N vars))
 -- spec (D cs) = T.D cs
 
 {-

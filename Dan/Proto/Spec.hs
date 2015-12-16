@@ -5,6 +5,7 @@ module Spec where
 import Format (FormatC)
 import Unicode (Render)
 import Symbol
+import Unit
 
 --For writing chunks in a specification language that can be converted to TeX
 data Spec where
@@ -17,7 +18,7 @@ data Spec where
   (:/:) :: Spec -> Spec -> Spec -- frac
   Empty :: Spec -- Blank
   U :: (Render r) => r -> Spec -- Unicode for special characters
-  -- M :: Unit c -> Spec -- Measured in *
+  M :: Unit -> Spec -- Measured in *
   F :: FormatC -> Spec -> Spec -- Special formatting for certain symbols & special chars
                                           --(e.g. hat, dot, etc.)
 --  CS :: Chunk c => c -> Spec 

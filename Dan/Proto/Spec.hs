@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs #-}
 module Spec where
 

@@ -13,6 +13,7 @@ executable lss
     containers >= 0.5.5.1,
     pretty >= 1.1.1.1
   default-language: Haskell2010
+  ghc-options:      -Wall
     
 source-repository head
   type:     git

@@ -1,11 +1,10 @@
-{-# OPTIONS -Wall #-} 
 module ToTeX where
 
 import ASTInternal (Expr(..))
 import Spec
 import qualified ASTTeX as T
 -- import Config (datadefnFields)
-import Unicode (render, Circle(..))
+import Unicode (render)
 import Format (Format(TeX), FormatC(..))
 import Symbol
 
@@ -45,8 +44,7 @@ spec (U u) = T.S $ render TeX u
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
 spec (N (Atomic s)) = T.S s
-spec (N (Circ Circle)) = T.S $ render TeX Circle
-spec (N (Ta t)) = T.S $ render TeX t
+spec (N (Special s)) = T.S $ render TeX s
 spec (N (Composite sym params vars)) = 
   spec $ (N sym) :+: (foldl (:+:) (S "") (map N params)) :+: (foldl (:+:) (S "") (map N vars))
 -- spec (D cs) = T.D cs

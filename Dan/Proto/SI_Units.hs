@@ -1,52 +1,58 @@
-{-# OPTIONS -Wall #-} 
-{-# LANGUAGE FlexibleContexts #-} 
-
 module SI_Units where
-import Chunk (VarChunk(..))
-import UnitalChunk (UnitalChunk(..))
-import ASTInternal (Expr(..))
-import Unit (Unit(..))
+import Chunk (ConceptChunk(..))
+import Unit (Unit(..), USymb(..), UDefn(..), FundUnit(..), DerUChunk(..),
+  UnitDefn(..))
 import Unicode (Circle(..))
 import Symbol
 
-fundamentals :: [UnitalChunk]
+import Control.Lens ((^.))
+
+fundamentals :: [FundUnit]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
-derived :: [UnitalChunk]
-derived = [centigrade, joule, watt, calorie]
+derived :: [DerUChunk]
+derived = [centigrade, joule, watt, calorie, kilowatt]
 
-si_units :: [UnitalChunk]
-si_units = fundamentals ++ derived
+si_units :: [UnitDefn]
+si_units = map UU fundamentals ++ map UU derived
 
 -- -- Fundamental SI Units --------------------------------------------------------
-fund :: String -> String -> String -> UnitalChunk
-fund nam desc sym = UC (VC {vname = nam, vdesc = desc , vsymb = Atomic sym}) Fundamental
+fund :: String -> String -> String -> FundUnit
+fund nam desc sym = UD (CC nam desc) (UName $ Atomic sym)
 
-metre, kilogram, second, kelvin, mole, ampere, candela :: UnitalChunk
-metre = fund "Metre" "length (metre)" "m"
-kilogram = fund "Kilogram" "mass (kilogram)" "kg"
-second = fund "Second" "time (second)" "s"
-kelvin = fund "Kelvin" "temperature (kelvin)" "K"
-mole = fund "Mole" "amount of substance (mole)" "mol"
-ampere = fund "Ampere" "electric current (ampere)" "A"
-candela = fund "Candela" "luminous intensity (candela)" "cd"
+metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
+metre    = fund "Metre"    "length (metre)"               "m"
+kilogram = fund "Kilogram" "mass (kilogram)"              "kg"
+second   = fund "Second"   "time (second)"                "s"
+kelvin   = fund "Kelvin"   "temperature (kelvin)"         "K"
+mole     = fund "Mole"     "amount of substance (mole)"   "mol"
+ampere   = fund "Ampere"   "electric current (ampere)"    "A"
+candela  = fund "Candela"  "luminous intensity (candela)" "cd"
 
 -- ------- END FUNDAMENTALS -------------------------------------------------------
 
-centigrade, joule, watt, calorie, kilowatt :: UnitalChunk
+centigrade, joule, watt, calorie, kilowatt :: DerUChunk 
 
-centigrade = UC (VC "Centigrade" "temperature (centigrade)" (Composite (Circ Circle) [Atomic "C"] []))
-  (Derived (C kelvin :- (Dbl 273.15)))
+centigrade = DUC 
+  (UD (CC "Centigrade" "temperature (centigrade)") 
+      (UName (Catenate (Special Circle) (Atomic "C"))))
+  (UShift 273.15 (kelvin ^. unit))
 
-joule = UC (VC "Joule" "energy (joule)" (Atomic "J"))
-    (Derived ((C kilogram :* (C metre :^ (Int 2))) :/ (C second :^ (Int 2))))
+joule = DUC
+    (UD (CC "Joule" "energy (joule)") (UName $ Atomic "J"))
+    (USynonym (UProd [kilogram ^. unit, UPow (metre ^. unit) 2,
+                      UPow (second ^. unit) (-2)]))
 
-calorie = UC (VC "Calorie" "energy (calorie)" (Atomic "cal"))
-  (Derived ((Dbl 4.184) :* (C joule)))
+calorie = DUC
+  (UD (CC "Calorie" "energy (calorie)") (UName $ Atomic "cal"))
+  (UScale 4.184 (joule ^. unit))
 
-watt = UC (VC "Watt" "power (watt)" (Atomic "W"))
-  (Derived ((C kilogram :* (C metre :^ (Int 2))) :/ (C second :^ (Int 3))))
+watt = DUC
+  (UD (CC "Watt" "power (watt)") (UName $ Atomic "W"))
+  (USynonym (UProd [kilogram ^. unit, UPow (metre ^. unit)2, 
+                    UPow (second ^. unit) (-3)]))
 
-kilowatt = UC (VC "Kilowatt" "power (kilowatt)" (Composite (Atomic "k") [Atomic "W"] []))
-  (Derived ((Int 1000) :* C watt))
-
+kilowatt = DUC
+  (UD (CC "Kilowatt" "power (kilowatt)")
+      (UName $ Catenate (Atomic "k") (Atomic "W")))
+  (UScale 1000 (watt ^. unit))

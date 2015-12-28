@@ -15,7 +15,7 @@ import Helpers
 -- import Unicode (Circle(..))
 -- import Format (Format(TeX))
 
-import Symbol
+-- import Symbol
 
 genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -72,8 +72,9 @@ p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
 p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
 -- p_spec (CS c)     = printSymbol c
 p_spec (S s)        = s
-p_spec (N s p v)    = p_symbol [s] p v
+-- p_spec (N s p v)    = p_symbol [s] p v
 
+{-
 p_symbol :: [Symbol] -> Parameters -> Variables -> String
 p_symbol [] _ _ = ""
 p_symbol [Atomic s] [] [] = s
@@ -83,6 +84,7 @@ p_symbol [Atomic s] ps vs = s ++ p_symbol ps [] [] ++ p_symbol vs [] []
 p_symbol [(Composite s ips ivs)] [] [] = p_symbol [s] ips ivs
 p_symbol [(Composite s ips ivs)] eps evs = p_symbol [s] ips ivs ++ p_symbol eps [] [] ++ p_symbol evs [] []
 p_symbol (s:ss) ps vs = p_symbol [s] ps vs ++ p_symbol ss ps vs
+-}
 
 
 p_expr :: Expr -> String

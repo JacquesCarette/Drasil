@@ -4,12 +4,13 @@ module Spec where
 import Format (FormatC)
 import Unicode (Render)
 import Symbol
-import Unit
+import Unit (USymb)
 
 --For writing chunks in a specification language that can be converted to TeX
 data Spec where
   -- E :: Expr -> Spec -- Expressions
   N :: Symbol -> Spec
+  Sy :: USymb -> Spec
   S :: String -> Spec -- Strings, used for Descriptions in Chunks
   (:-:) :: Spec -> Spec -> Spec -- Subscripting (Spec :- Spec -> Spec_{Spec} in TeX)
   (:^:) :: Spec -> Spec -> Spec -- Superscript (Spec :^ Spec -> Spec^{Spec} in TeX)
@@ -17,7 +18,6 @@ data Spec where
   (:/:) :: Spec -> Spec -> Spec -- frac
   Empty :: Spec -- Blank
   U :: (Render r) => r -> Spec -- Unicode for special characters
-  M :: Unit -> Spec -- Measured in *
   F :: FormatC -> Spec -> Spec -- Special formatting for certain symbols & special chars
                                           --(e.g. hat, dot, etc.)
 --  CS :: Chunk c => c -> Spec 

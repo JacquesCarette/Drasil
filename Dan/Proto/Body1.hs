@@ -7,9 +7,10 @@ module Body1 where
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..))
 import Format (Format,FormatC(..))
+import Unit (Unit(..))
 import SI_Units (si_units)
 import Chunk
-import UnitalChunk (unit)
+-- import UnitalChunk (unit)
 import Control.Lens ((^.))
 import RecipeTools
 
@@ -29,7 +30,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " name in parentheses.")
 
 s1_table = Table [S "Symbol", S "Description"] $ mkTable
-  [(\x -> N (x ^. symbol)),
+  [(\x -> Sy (x ^. unit)),
    (\x -> S (x ^. descr))
   ] si_units
 
@@ -44,7 +45,9 @@ s2_intro = Paragraph $
   S "the symbol."
   
 s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
-  [(\ch -> N (ch ^. symbol)) , (\ch -> S $ ch ^. descr), (\ch -> N $ unit ch)]
+  [(\ch -> N (ch ^. symbol)) , 
+   (\ch -> S $ ch ^. descr), 
+   (\ch -> Sy $ ch ^. unit)]
   [h_g,h_c] 
 
 -- s3 = Section (S "Data Definitions") [s3_dd1, s3_dd2]

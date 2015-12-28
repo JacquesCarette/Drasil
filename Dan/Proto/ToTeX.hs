@@ -3,10 +3,10 @@ module ToTeX where
 import ASTInternal (Expr(..))
 import Spec
 import qualified ASTTeX as T
--- import Config (datadefnFields)
 import Unicode (render)
 import Format (Format(TeX), FormatC(..))
 import Symbol
+import Unit (USymb(..))
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v
@@ -31,38 +31,36 @@ replace_divs a = expr a
 
 spec :: Spec -> T.Spec
 -- spec (E e) = T.E (expr e)
-spec (S s) = T.S (s)
--- spec (a@(U Circle) :+: b) = spec a T.:+: T.S " " T.:+: spec b
+spec (S s) = T.S s
+spec (Sy s) = unit s
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
 spec (a :/: b) = spec a T.:/: spec b
 spec Empty = T.S ""
--- spec (U u) = convertUnicode u
 spec (U u) = T.S $ render TeX u
 -- spec (M m) = T.M m
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
-spec (N (Atomic s)) = T.S s
-spec (N (Special s)) = T.S $ render TeX s
-spec (N (Composite sym params vars)) = 
-  spec $ (N sym) :+: (foldl (:+:) (S "") (map N params)) :+: (foldl (:+:) (S "") (map N vars))
+spec (N s) = symbol s
 -- spec (D cs) = T.D cs
 
-{-
-convertUnicode :: Unicode -> T.Spec
-convertUnicode Tau_L = T.S $ "\\tau"
-convertUnicode Tau_U = T.S $ "\\Tau"
-convertUnicode Alpha_L = T.S $ "\\alpha"
-convertUnicode Alpha_U = T.S $ "\\Alpha"
-convertUnicode Circle = T.S $ "\\circ"
-convertUnicode Delta_U = T.S $ "\\Delta"
-convertUnicode Delta_L = T.S $ "\\delta"
-convertUnicode Rho_U = T.S $ "\\Rho"
-convertUnicode Rho_L = T.S $ "\\rho"
-convertUnicode Phi_U = T.S $ "\\Phi"
-convertUnicode Phi_L = T.S $ "\\phi"
--}
+symbol :: Symbol -> T.Spec
+symbol (Atomic s) = T.S s
+symbol (Special s) = T.S $ render TeX s
+symbol (Catenate s1 s2) = (symbol s1) T.:+: (symbol s2)
+--
+-- handle the special cases first, then general case
+symbol (Corners [] [] [x] [] s) = (symbol s) T.:^: (symbol x)
+symbol (Corners [] [] [] [x] s) = (symbol s) T.:-: (symbol x)
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
+
+unit :: USymb -> T.Spec
+unit (UName n) = symbol n
+unit (UProd l) = foldr1 (T.:+:) (map unit l)
+unit (UPow n p) = (unit n) T.:^: (T.E $ T.Int p)
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"

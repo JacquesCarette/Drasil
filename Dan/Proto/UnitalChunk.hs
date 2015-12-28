@@ -1,29 +1,44 @@
-{-# OPTIONS -Wall #-} 
-module UnitalChunk (UnitalChunk(..), unit) where
+{-# LANGUAGE GADTs, Rank2Types #-}
+module UnitalChunk (UnitalChunk(..)) where
 
-import Chunk (VarChunk, Chunk(..))
-import Unit (Unit(..))
-import Control.Lens (Simple, Lens, (^.))
-import Symbol
+import Chunk (Chunk(..), Concept(..), Quantity(..))
+import Unit (Unit(..), UnitDefn(..))
 
-data UnitalChunk = UC { ch :: VarChunk
-                      , usiu :: Unit }
+import Control.Lens (Simple, Lens, (^.), set)
 
--- don't export this
-vc :: Simple Lens UnitalChunk VarChunk
-vc f (UC a b) = fmap (\x -> UC x b) (f a)
+data UnitalChunk where
+  UC :: (Quantity c, Unit u) => c -> u -> UnitalChunk
+
+data Q where
+  Q :: Quantity c => c -> Q
+
+qlens :: (forall c. Quantity c => Simple Lens c a) -> Simple Lens Q a
+qlens l f (Q a) = fmap (\x -> Q (set l x a)) (f (a ^. l))
+
+instance Chunk Q where 
+  name = qlens name
+
+instance Concept Q where 
+  descr = qlens descr
+
+instance Quantity Q where
+  symbol = qlens symbol
+
+-- these don't get exported
+q :: Simple Lens UnitalChunk Q
+q f (UC a b) = fmap (\(Q x) -> UC x b) (f (Q a))
+
+u :: Simple Lens UnitalChunk UnitDefn
+u f (UC a b) = fmap (\(UU x) -> UC a x) (f (UU b))
 
 instance Chunk UnitalChunk where
-  name = vc . name
-  descr = vc . descr
-  symbol = vc . symbol
+  name = q . name
 
-------
--- useful routines
+instance Concept UnitalChunk where
+  descr = q . descr
 
-unit :: Chunk c => c -> Symbol
-unit c = c ^. symbol --This needs to be changed to usiu, but cyclical imports
-                     -- will occur if we try to wrap it in a spec. May need to
-                     -- return a type "Unit" and then get wrapped at the call point
-                     --However, cyclical imports will still occur because of Unit's
-                     -- use of Expr.
+instance Quantity UnitalChunk where
+  symbol = q . symbol
+
+instance Unit UnitalChunk where
+  unit = u . unit

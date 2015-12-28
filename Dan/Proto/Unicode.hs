@@ -1,5 +1,3 @@
-{-# OPTIONS -Wall #-} 
-{-# LANGUAGE MultiParamTypeClasses #-}
 module Unicode where
 import Format
 
@@ -29,7 +27,7 @@ instance Render Alpha where
 -- 
 
 instance Render Circle where
-  render TeX Circle  = "^{\\circ}"
+  render TeX Circle  = "{}^{\\circ}"
   render Plain Circle  = "o"
 
 --

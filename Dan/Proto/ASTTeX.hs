@@ -4,8 +4,6 @@ module ASTTeX where
 import ASTInternal (Variable)
 import Spec ()
 
---Might want to create our own TeX chunk to avoid cascading modes since they're
---pointless once we've decided to use TeX.
 data Expr = Var Variable
           | Dbl Double
           | Int Integer

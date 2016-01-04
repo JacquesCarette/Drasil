@@ -15,8 +15,10 @@ data Symbol where
   Catenate :: Symbol -> Symbol -> Symbol
 
 upper_left :: Symbol -> Symbol -> Symbol
-upper_left ul b = Corners [ul] [] [] [] b
+upper_left b ul = Corners [ul] [] [] [] b
 
 sub :: Symbol -> Symbol -> Symbol
-sub lr b = Corners [] [] [] [lr] b
+sub b lr = Corners [] [] [] [lr] b
 
+sup :: Symbol -> Symbol -> Symbol
+sup b ur = Corners [] [] [ur] [] b

@@ -3,7 +3,7 @@ module PrintTeX where
 
 import Prelude hiding (print)
 import Data.List (intersperse)
-import Text.PrettyPrint
+import Text.PrettyPrint hiding (render)
 
 import ASTTeX
 import ToTeX
@@ -12,10 +12,10 @@ import qualified Spec as S
 import Config (srsTeXParams,lpmTeXParams, --colAwidth,colBwidth,
   tableWidth) --, verboseDDDescription)
 import Helpers
--- import Unicode (Circle(..))
--- import Format (Format(TeX))
-
--- import Symbol
+import Unicode
+import Format (Format(TeX))
+import Unit (USymb(..))
+import Symbol (Symbol(..))
 
 genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -52,7 +52,7 @@ printLO (Section t contents)  = sec (p_spec t) $$ print contents
 printLO (Paragraph contents)  = text (p_spec contents)
 printLO (EqnBlock contents)   = makeEquation contents
 printLO (Table rows) = makeTable rows
--- printLO ((Definition dtype chunk fields):cs) = makeDefn dtype chunk fields $$ print cs
+-- printLO (Definition dtype chunk fields) = makeDefn dtype chunk fields
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -65,27 +65,32 @@ print l = foldr ($$) empty $ map printLO l
 
 p_spec :: Spec -> String
 -- p_spec (CS c)      = dollar (printSymbol c)
-p_spec (E e)       = dollar (p_expr e)
+p_spec (E e)      = p_expr e
 p_spec (a :+: b)  = p_spec a ++ p_spec b
 p_spec (a :-: b)  = p_spec a ++ "_" ++ brace (p_spec b)
 p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
 p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
 -- p_spec (CS c)     = printSymbol c
 p_spec (S s)        = s
--- p_spec (N s p v)    = p_symbol [s] p v
+p_spec (N s)        = symbol s
+p_spec (Sy s)       = unit s
 
-{-
-p_symbol :: [Symbol] -> Parameters -> Variables -> String
-p_symbol [] _ _ = ""
-p_symbol [Atomic s] [] [] = s
-p_symbol [Atomic s] ps vs = s ++ p_symbol ps [] [] ++ p_symbol vs [] []
--- p_symbol [Circ Circle] [] [] = "TODO: Print Circle"
--- p_symbol [Circ Circle] ps vs = p_symbol [Circ Circle] [] [] ++ p_symbol ps [] [] ++ p_symbol vs [] []
-p_symbol [(Composite s ips ivs)] [] [] = p_symbol [s] ips ivs
-p_symbol [(Composite s ips ivs)] eps evs = p_symbol [s] ips ivs ++ p_symbol eps [] [] ++ p_symbol evs [] []
-p_symbol (s:ss) ps vs = p_symbol [s] ps vs ++ p_symbol ss ps vs
--}
+symbol :: Symbol -> String
+symbol (Atomic s) = s
+symbol (Special s) = render TeX s
+symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
+--
+-- handle the special cases first, then general case
+symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ (symbol x)
+symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ (symbol x)
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
 
+unit :: USymb -> String
+unit (UName n) = symbol n
+unit (UProd l) = foldr1 (++) (map unit l)
+unit (UPow n p) = (unit n) ++"^"++ (show p)
 
 p_expr :: Expr -> String
 p_expr (Var v)    = v

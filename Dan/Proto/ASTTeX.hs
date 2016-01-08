@@ -3,6 +3,8 @@ module ASTTeX where
 
 import ASTInternal (Variable)
 import Spec ()
+import Symbol (Symbol)
+import Unit (USymb)
 
 data Expr = Var Variable
           | Dbl Double
@@ -21,6 +23,8 @@ data Spec = E Expr
           | Spec :^: Spec -- superscript
           | Spec :-: Spec -- subscript
           | Spec :/: Spec -- frac
+          | Sy USymb
+          | N Symbol
 
 data Document = Document Title Author [LayoutObj]
 type Title = Spec

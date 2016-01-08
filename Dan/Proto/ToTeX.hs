@@ -32,7 +32,7 @@ replace_divs a = expr a
 spec :: Spec -> T.Spec
 -- spec (E e) = T.E (expr e)
 spec (S s) = T.S s
-spec (Sy s) = unit s
+spec (Sy s) = T.Sy s
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
@@ -42,9 +42,9 @@ spec (U u) = T.S $ render TeX u
 -- spec (M m) = T.M m
 -- spec (CS c) = T.CS c
 spec (F f s) = spec $ format f s
-spec (N s) = symbol s
+spec (N s) = T.N s
 -- spec (D cs) = T.D cs
-
+{-
 symbol :: Symbol -> T.Spec
 symbol (Atomic s) = T.S s
 symbol (Special s) = T.S $ render TeX s
@@ -61,7 +61,7 @@ unit :: USymb -> T.Spec
 unit (UName n) = symbol n
 unit (UProd l) = foldr1 (T.:+:) (map unit l)
 unit (UPow n p) = (unit n) T.:^: (T.E $ T.Int p)
-
+-}
 format :: FormatC -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"
 format Vector s = S "\\bf{" :+: s :+: S "}"

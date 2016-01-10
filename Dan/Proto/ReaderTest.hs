@@ -2,10 +2,11 @@ import Control.Monad.Reader
 import qualified Data.Map as Map
 import Data.Maybe
 
-data Context = Equation | Plain deriving (Show, Eq)
+data Context = Equation | EqnBlock Bool | Plain deriving (Show, Eq)
 
 data Term = Eqn String
           | Text String
+          | Block [Term]
   deriving (Show, Eq)
   
 type Terms = [Term]
@@ -19,6 +20,7 @@ gcontext = do
 getCon :: Term -> Context
 getCon (Eqn _) = Equation
 getCon (Text _) = Plain
+getCon (Block (t:ts)) = getCon t
 
 pcontext :: Reader Context (Term -> String)
 pcontext = do
@@ -40,4 +42,46 @@ getConAndPrint = \x -> runReader pcontext (runReader gcontext x) x
 
 main = do
   mapM_ putStrLn $ map getConAndPrint [sample1,sample2]
+  putStrLn $ runReader (foo $ Block $ (Text "Hello here is an equation: "):(Eqn "x = 5"):[]) Plain
+  putStrLn $ runReader (foo $ Block $ (Eqn "x = 5*"):(Eqn "h_g"):(Eqn "+"):(Eqn "k_c"):[]) (EqnBlock True)
   
+foo :: Term -> Reader Context String
+-- foo (Eqn s) = do
+  -- c <- ask
+  -- case c of
+    -- Plain -> return s
+    -- Equation -> return $ dollar s
+-- foo (Text s) = do
+  -- c <- ask
+foo (Block []) = do
+  c <- ask
+  case c of
+    Plain -> return ""
+    Equation -> return "$"
+    EqnBlock _ -> return eEq
+foo (Block (t:ts)) = do
+  c <- ask
+  let c2 = getCon t
+  case c of 
+    EqnBlock b -> 
+         if b then 
+          do return $ bEq ++ (print' t) ++ runReader (foo $ Block ts) (EqnBlock (not b))
+         else return $ (print' t) ++ runReader (foo $ Block ts) c
+    _ -> if c == c2 then
+          return $ (print' t) ++ runReader (foo $ Block ts) c2
+         else
+          case c2 of 
+            Plain -> return $ (print' t) ++ (runReader (foo $ Block ts) c2) ++ "$"
+            Equation -> return $ ("$" ++ print' t) ++ (runReader (foo $ Block ts) c2)
+foo t = do
+  c <- ask
+  case c of
+    EqnBlock _ -> return $ bEq ++ print' t ++ eEq
+    Equation   -> return $ dollar (print' t)
+    Plain      -> return $ print' t
+    
+bEq = "\\begin{equation} " 
+eEq = "\\end{equation}"
+    
+-- Plain -> return $ (print' t) ++ runReader (foo $ Block ts) c
+-- Equation -> return $ dollar $ (print' t) ++ runReader (foo $ Block ts) c  

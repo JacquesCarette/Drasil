@@ -46,13 +46,6 @@ main = do
   putStrLn $ runReader (foo $ Block $ (Eqn "x = 5*"):(Eqn "h_g"):(Eqn "+"):(Eqn "k_c"):[]) (EqnBlock)
   
 foo :: Term -> Reader Context String
--- foo (Eqn s) = do
-  -- c <- ask
-  -- case c of
-    -- Plain -> return s
-    -- Equation -> return $ dollar s
--- foo (Text s) = do
-  -- c <- ask
 foo (Block []) = do
   c <- ask
   case c of

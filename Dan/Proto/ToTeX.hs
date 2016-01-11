@@ -5,8 +5,7 @@ import Spec
 import qualified ASTTeX as T
 import Unicode (render)
 import Format (Format(TeX), FormatC(..))
-import Symbol
-import Unit (USymb(..))
+
 
 expr :: Expr -> T.Expr
 expr (V v)    = T.Var v

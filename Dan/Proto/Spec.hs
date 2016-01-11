@@ -7,6 +7,7 @@ import Symbol
 import Unit (USymb)
 
 --For writing chunks in a specification language that can be converted to TeX
+infixr 5 :+:
 data Spec where
   -- E :: Expr -> Spec -- Expressions
   N :: Symbol -> Spec

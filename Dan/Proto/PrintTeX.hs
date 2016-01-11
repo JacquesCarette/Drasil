@@ -92,7 +92,7 @@ symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
 unit :: USymb -> String
 unit (UName n) = symbol n
 unit (UProd l) = foldr1 (++) (map unit l)
-unit (UPow n p) = (unit n) ++"^"++ (show p)
+unit (UPow n p) = (unit n) ++"^"++ brace (show p)
 
 p_expr :: Expr -> String
 p_expr (Var v)    = v

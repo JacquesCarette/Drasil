@@ -75,7 +75,7 @@ p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
 -- p_spec (CS c)     = printSymbol c
 p_spec (S s)        = s
 p_spec (N s)        = symbol s
-p_spec (Sy s)       = unit s
+p_spec (Sy s)       = runReader (uSymbPrint s) Plain
 
 symbol :: Symbol -> String
 symbol (Atomic s) = s
@@ -89,10 +89,10 @@ symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
 
-unit :: USymb -> String
-unit (UName n) = symbol n
-unit (UProd l) = foldr1 (++) (map unit l)
-unit (UPow n p) = (unit n) ++"^"++ brace (show p)
+-- unit :: USymb -> String
+-- unit (UName n) = symbol n
+-- unit (UProd l) = foldr1 (++) (map unit l)
+-- unit (UPow n p) = (unit n) ++"^"++ brace (show p)
 
 p_expr :: Expr -> String
 p_expr (Var v)    = v
@@ -154,7 +154,7 @@ getCon (E _) = Equation
 getCon (_ :-: _) = Equation --Subscripts and superscripts must be in Equation ctxt.
 getCon (_ :^: _) = Equation
 getCon (_ :/: _) = Equation -- Fractions are always equations.
-getCon (Sy _) = Equation
+getCon (Sy _) = Plain
 getCon (N _) = Equation
 
 
@@ -202,24 +202,35 @@ eEq = "\\end{equation}"
 
 pCon :: Context -> Spec -> String
 pCon = \c t -> runReader (lPrint t) c
+
+uSymbPrint :: USymb -> Reader Context String --To fix unit printing will need this.
+uSymbPrint (UName n) = do
+  c <- ask
+  let cn = getSyCon n
+  if c == cn then
+    return $ symbol n
+  else
+    case cn of
+      Equation -> return $ dollar $ symbol n 
+        --Need a way to parse/print symbols using their context for units, once I figure out the getSyCon part below.
+      _ -> return $ symbol n
+uSymbPrint (UProd l) = do
+  c <- ask
+  return $ foldr1 (++) (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
+uSymbPrint (UPow n p) = do
+  c <- ask
+  case c of
+    Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
+    _ -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
+
+getSyCon :: Symbol -> Context
+getSyCon (Atomic _) = Plain
+--getSyCon (Special Circle) = Equation --Need to figure this out.
+getSyCon (Special _) = Plain
+getSyCon (Catenate s1 _) = getSyCon s1
+getSyCon (Corners _ _ _ _ s) = getSyCon s
+
 --- END READER ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -1,0 +1,388 @@
+% $Header: /cvsroot/latex-beamer/latex-beamer/solutions/conference-talks/conference-ornate-20min.en.tex,v 1.6 2004/10/07 20:53:08 tantau Exp $
+
+\documentclass{beamer}
+
+\mode<presentation>
+{
+%  \usetheme{Hannover}
+\usetheme[width=0.7in]{Hannover}
+% or ...
+
+  \setbeamercovered{transparent}
+  % or whatever (possibly just delete it)
+}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[latin1]{inputenc}
+% or whatever
+
+\usepackage{times}
+%\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+%\usepackage{logictheme}
+
+%\usepackage{hhline}
+\usepackage{multirow}
+%\usepackage{multicol}
+%\usepackage{array}
+%\usepackage{supertabular}
+%\usepackage{amsmath}
+%\usepackage{amsfonts}
+\usepackage{totpages}
+\usepackage{hyperref}
+%\usepackage{booktabs}
+
+%\usepackage{bm}
+
+\usepackage{listings}
+\newcommand{\blt}{- } %used for bullets in a list
+
+\newcounter{datadefnum} %Datadefinition Number
+\newcommand{\ddthedatadefnum}{DD\thedatadefnum}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+
+\newcommand{\colAwidth}{0.2\textwidth}
+\newcommand{\colBwidth}{0.73\textwidth}
+
+\renewcommand{\arraystretch}{0.6} %so that tables with equations do not look crowded
+
+\pgfdeclareimage[height=0.7cm]{logo}{McMasterLogo}
+\title[\pgfuseimage{logo}]  % (optional, use only with long paper titles)
+{Literate Scientific Software}
+
+%\subtitle
+%{Include Only If Paper Has a Subtitle}
+
+\author[Slide \thepage~of \pageref{TotPages}] % (optional, use only with lots of
+                                              % authors)
+{Dan Szymczak}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[McMaster University] % (optional, but mostly needed)
+{
+  Computing and Software Department\\
+  Faculty of Engineering\\
+  McMaster University
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date[Jan 12, 2016] % (optional, should be abbreviation of conference name)
+{Ernie Mileta Visit, Jan.\ 12, 2016}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+\subject{computational science and engineering, software engineering, software
+  quality, literate programming, software requirements specification, document
+  driven design}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+%\pgfdeclareimage[height=0.5cm]{Mac-logo}{McMasterLogo}
+%\logo{\pgfuseimage{Mac-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\beamertemplatenavigationsymbolsempty 
+
+% have SRS and LP open during the presentation
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+\titlepage
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Overview}
+\tableofcontents
+% You might wish to add the option [pausesections]
+
+% make like a story - the phases - reason for, why works, advantages
+% changing the history a bit to make a more rational narrative
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Literate Software]{Literate Scientific Software}
+
+% \subsection[Important Software Qualities]{Scientific Computing Software
+% Qualities}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Literate Scientific Software}
+
+\begin{itemize}
+\item Motivation
+\begin{itemize}
+\item Improve verifiability, maintainability and reusability.
+\item Save money and time% when managing change.
+\end{itemize}
+\item One ``source,'' multiple views
+\begin{itemize}
+\item Requirements%, including or excluding derivations.
+\item Design
+\item Test Cases
+\item Build instructions
+\item ...
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%D Just say this stuff aloud if necessary
+%\begin{frame}
+%
+%\frametitle{Literate Software Development for Scientific Software}
+%\begin{itemize}
+%\item Advantages
+%\begin{itemize}
+%\item Avoid duplication through chunk reuse.
+%\item Improve understandability, traceability and reproducibility.
+%\item Increased flexibility
+%\end{itemize}
+%\end{itemize}
+%\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Recap}
+
+Last time:
+\begin{itemize}
+\item Took a look at a simple example from a project involving a fuel pin.
+\item Discussed the challenges of managing change throughout the software documentation.
+\item Proposed encapsulating all of the requisite knowledge in one source composed of ``chunks''.
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Example]{LSS Today: Building on our Previous Example.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{A simple example taken from the SRS for FP}
+
+Let's take a quick look at the hand-written Software Requirements 
+Specification (SRS) for $h_g$ and $h_c$
+	and compare it to the one generated by the LSS framework.
+
+%D Bring up the pdfs and compare -> First page is almost identical (with
+%	minor additions to the table of units). Second page missing -> explain
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{The source}
+
+The current source for this example is broken up into three pieces.
+\begin{enumerate}
+	\item The recipe %Body
+	\item Global/often reused chunks %SI_Units
+	\item New chunks specific to this example %Example
+
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%D Maybe don't bother with slides for Recipe/Chunks/Global Chunks?
+
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{The Recipe}
+
+The recipe is how we specify exactly what we want our view to look like.
+\newline \newline
+It tells the generator what information is needed and how that information
+should be displayed.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Example: $h_g$ and $h_c$}
+\framesubtitle{Global Chunks}
+
+Global chunks are chunks that will often be reused across many different projects.
+As such they are grouped with relevant related information and kept in 
+specific source files.
+\newline \newline
+This example contains one set of global chunks: SI Units.
+
+%D Pull up SI Units to show a quick chunk example?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Example: $h_g$ and $h_c$}
+
+\framesubtitle{New Chunks}
+
+This example contains two obvious chunks that need to be declared:
+$h_g$ and $h_c$.
+\newline \newline
+There are also a few less obvious chunks that need to be declared:
+the values which $h_g$ and $h_c$ depend on in their equations. 
+For example $\tau_c$, $k_c$, etc.
+
+%D Pull up Example1.hs for a quick look?
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[The Design]{The Current Framework Design}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Framework Design}
+
+\framesubtitle{Chunks}
+
+Chunks come in many flavours:
+The simplest type has only one field (name). Each more complex chunk builds off
+this base and adds (at least) one new field. 
+\newline \newline
+All of the more complex chunks are built up from simpler chunks. 
+\newline \newline
+Currently there are a few different types of chunks including (but not limited
+to) those for describing concepts and variables.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Framework Design}
+
+\framesubtitle{Recipes}
+
+Recipes are specified using a domain-specific language.
+\newline \newline
+They tell the generator both what information needs to be laid out
+and how that information should be laid out for the current document type.
+\newline \newline
+There will exist many types of Recipes, however currently only the SRS recipe
+is working.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Framework Design}
+
+\framesubtitle{The Generator}
+
+The generator is fairly straightforward. It:
+\begin{itemize}
+	\item Takes a given recipe and looks up all the requisite information.
+	\item Creates an internal generalized representation of the document being 
+			generated.
+	\item Translates that internal representation to one specific to the
+			format of the desired output.
+	\item Prints the document to the desired output format.
+\end{itemize}
+
+Currently the generator only prints to a TeX representation (the same as the
+example SRS source), which can then be typeset.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Next Steps]{Next Steps.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Next Steps}
+
+
+\begin{Large}
+What next?
+\end{Large}
+
+\begin{itemize}
+\item Generate the rest of example 1.
+\item Finish implementing options for different document "views".
+\begin{itemize}
+\item Ex. SRS with or without derivations.
+\end{itemize}
+\item Implement additional document types.
+\item Generate the source code from the equations.
+\item Implement more examples using the framework.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\begin{center}
+\Huge Thank You!
+\end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

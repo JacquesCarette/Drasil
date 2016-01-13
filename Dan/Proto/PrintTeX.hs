@@ -18,6 +18,7 @@ import Unicode
 import Format (Format(TeX))
 import Unit (USymb(..))
 import Symbol (Symbol(..))
+-- import Config (colAwidth, colBwidth)
 
 genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -54,7 +55,7 @@ printLO (Section t contents)  = sec (pCon Plain t) $$ print contents
 printLO (Paragraph contents)  = text (pCon Plain contents)
 printLO (EqnBlock contents)   = text $ makeEquation contents
 printLO (Table rows) = makeTable rows
--- printLO (Definition dtype chunk fields) = makeDefn dtype chunk fields
+-- printLO (Definition dtype ssPairs) = makeDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -130,10 +131,10 @@ makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls) ++ "\\"
 
--- makeDefn :: A.DType -> A.Chunk TeX -> [A.Field] -> Doc
--- makeDefn _ _ []   = error "No fields provided for data definition"
--- makeDefn A.Data c f = beginDataDefn $$ makeDDTable c f $$ endDataDefn
--- makeDefn A.Literate _ _ = error "makeDefn: missing case"
+-- makeDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+-- makeDefn _ []  = error "Empty definition"
+-- makeDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
+-- makeDefn S.Literate _ = error "makeDefn: missing case"
 
 beginDataDefn :: Doc
 beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
@@ -233,43 +234,31 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 --- END READER ---
 
 
+-- Data Defn Printing --
 
-
-
-
--- makeDDTable :: A.Chunk TeX -> [A.Field] -> Doc
--- makeDDTable c f = vcat [
+-- makeDDTable :: [(String,LayoutObj)] -> Doc
+-- makeDDTable [] = error "Trying to make empty Data Defn"
+-- makeDDTable ps@((_,d):_) = vcat [
   -- text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  -- text $ "\\toprule \\textbf{Refname} & \\textbf{DD:$"++ (printSymbol Pg c) ++"$}",
-  -- text $ "\\label{DD:" ++ (printSymbol Code c) ++ "}",
-  -- makeDDRows c f, dbs <+> text ("\\bottomrule \\end{tabular}")
+  -- text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
+  -- text "\\label{DD:" <> (printLO d) <> text "}",
+  -- makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
   -- ]
 
--- makeDDRows :: A.Chunk TeX -> [A.Field] -> Doc
--- makeDDRows _ [] = error "No fields to create DD table"
--- makeDDRows c (f@(A.Symbol):[]) = ddBoilerplate f (text (p_spec (CS c)))
--- makeDDRows c (f@(A.Symbol):fs) = 
-  -- ddBoilerplate f (text (p_spec (spec (A.CS c)))) $$ makeDDRows c fs
--- makeDDRows c (f@(A.Description):[]) = ddBoilerplate f $ writeDesc c $$
-  -- (if (verboseDDDescription) then (newline $$ descDependencies c)
-  -- else empty)
--- makeDDRows c (f@(A.Description):fs) = ddBoilerplate f $ writeDesc c $$
-  -- (if (verboseDDDescription) then (newline $$ descDependencies c)
-  -- else empty) $$ makeDDRows c fs
--- makeDDRows c (f:[]) = ddBoilerplate f $ ddWritetext f c
--- makeDDRows c (f:fs) = ddBoilerplate f (ddWritetext f c) $$ makeDDRows c fs
+-- makeDDRows :: [(String,LayoutObj)] -> Doc
+-- makeDDRows [] = error "No fields to create DD table"
+-- makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
+-- makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
+                        -- makeDDRows ps
+-- ddBoilerplate :: Doc
+-- ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
--- printSymbol :: A.Chunk TeX -> String
--- printSymbol chunk =
-  -- p_spec $ spec (find A.Symbol chunk "Error: No symbol for chunk")
+-- End Data Defn Printing --
 
--- ddBoilerplate :: A.Field -> Doc -> Doc
--- ddBoilerplate = \f -> \t -> dbs <+> text "\\midrule" <+> dbs $$ text 
-  -- (writeField f ++ " & ") <> t
-  
--- ddWritetext :: A.Field -> A.Chunk TeX -> Doc
--- ddWritetext = \f -> \c -> text (p_spec (spec (find f c ("Error: missing field" ++ 
-  -- writeField f ++ " in chunk " ++ printSymbol Code c))))
+
+
+
+
 
 -- descDependencies :: A.Chunk TeX -> Doc
 -- descDependencies c = writeDescs (unSpec (maybe (S "") spec deps))

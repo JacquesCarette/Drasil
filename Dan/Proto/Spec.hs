@@ -5,6 +5,7 @@ import Format (FormatC)
 import Unicode (Render)
 import Symbol
 import Unit (USymb)
+-- import EqChunk
 
 --For writing chunks in a specification language that can be converted to TeX
 infixr 5 :+:
@@ -34,7 +35,7 @@ data LayoutObj = Table [Spec] [[Spec]] -- header then data
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
---               | Definition DType c
+               -- | Definition DType (EqChunk)
 
 data DType = Data
            | Literate

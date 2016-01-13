@@ -35,4 +35,4 @@ data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
-               -- | Definition DType c [c -> Spec]
+               -- | Definition DType [(String,LayoutObj)]

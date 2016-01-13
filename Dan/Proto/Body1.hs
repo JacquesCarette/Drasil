@@ -58,7 +58,7 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
 
 srsBody,lpmBody :: Document
 srsBody = Document ((S "SRS for ") :+: (N $ h_g ^. symbol) :+: (S " and ") :+: (N $ h_c ^. symbol))
-  (S "Spencer Smith") [s1,s2]  -- need to add s3 back
+  (S "Spencer Smith") [s1,s2] -- need to add s3
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (N $ h_g ^. symbol) :+: 

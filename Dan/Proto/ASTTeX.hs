@@ -5,6 +5,7 @@ import ASTInternal (Variable)
 import Spec ()
 import Symbol (Symbol)
 import Unit (USymb)
+import ASTCode
 
 data Expr = Var Variable
           | Dbl Double
@@ -35,4 +36,5 @@ data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
+               | CodeBlock Code
                -- | Definition DType [(String,LayoutObj)]

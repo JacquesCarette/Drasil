@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module RecipeTools where --Recipe or layout tools? Or something else?
 
 -- Should now make rows.

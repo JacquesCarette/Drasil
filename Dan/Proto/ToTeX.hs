@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module ToTeX where
 
 import ASTInternal (Expr(..))
@@ -82,13 +83,13 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> T.LayoutObj
---For printing, will need to use "find" function from Chunk.hs
 lay (Table hdr lls) = T.Table $ (map spec hdr) : (map (map spec) lls)
--- lay (Table [a]) = T.Table [map spec a]
 lay (Section title layoutComponents) = 
   T.Section (spec title) (createLayout layoutComponents)
 lay (Paragraph c) = T.Paragraph (spec c)
 lay (EqnBlock c) = T.EqnBlock (spec c)
+lay (CodeBlock c) = T.CodeBlock c
+
 -- lay (Definition Data c) = T.Definition Data $ makeDDPairs c
 -- lay (Definition _ _) = error "Missing definition case in lay"
 

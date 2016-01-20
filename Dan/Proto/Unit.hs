@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Unit (
     USymb(..), UDefn(..) -- languages

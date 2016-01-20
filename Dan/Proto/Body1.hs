@@ -13,11 +13,13 @@ import Chunk
 -- import UnitalChunk (unit)
 import Control.Lens ((^.))
 import RecipeTools
+import ToCode
+import ASTCode
 
 type SRS = Format -- SRS is a format, but it really 'is' TeX
 type LPM = Format -- LPM is a format, but it really 'is' TeX
 
-s1, s1_intro, s1_table, s2, s2_intro, s2_table :: LayoutObj
+s1, s1_intro, s1_table, s2, s2_intro, s2_table, s4, s4c :: LayoutObj
 
 s1 = Section (S "Table of Units") [s1_intro, s1_table]
 
@@ -56,9 +58,13 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
 
 -- s3_dd2 = Definition Data h_c
 
+s4 = Section (S "Code -- Test") [s4c]
+
+s4c = CodeBlock (toCode CLang Calc h_g)
+
 srsBody,lpmBody :: Document
 srsBody = Document ((S "SRS for ") :+: (N $ h_g ^. symbol) :+: (S " and ") :+: (N $ h_c ^. symbol))
-  (S "Spencer Smith") [s1,s2] -- need to add s3
+  (S "Spencer Smith") [s1,s2,s4] -- need to add s3
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (N $ h_g ^. symbol) :+: 

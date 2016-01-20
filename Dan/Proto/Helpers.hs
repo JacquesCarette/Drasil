@@ -20,6 +20,9 @@ eq = text "="
 dlr = text "$"
 ast = text "*"
 pls = text "+"
+hat = text "^"
+slash = text "/"
+hyph = text "-"
 
 sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"

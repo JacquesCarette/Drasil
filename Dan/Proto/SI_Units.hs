@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module SI_Units where
 import Chunk (ConceptChunk(..))
 import Unit (Unit(..), USymb(..), UDefn(..), FundUnit(..), DerUChunk(..),

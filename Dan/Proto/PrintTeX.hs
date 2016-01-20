@@ -18,6 +18,7 @@ import Unicode
 import Format (Format(TeX))
 import Unit (USymb(..))
 import Symbol (Symbol(..))
+import PrintC (printCode)
 -- import Config (colAwidth, colBwidth)
 
 genTeX :: A.DocType -> S.Document -> Doc
@@ -55,6 +56,7 @@ printLO (Section t contents)  = sec (pCon Plain t) $$ print contents
 printLO (Paragraph contents)  = text (pCon Plain contents)
 printLO (EqnBlock contents)   = text $ makeEquation contents
 printLO (Table rows) = makeTable rows
+printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
 -- printLO (Definition dtype ssPairs) = makeDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
@@ -233,6 +235,9 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 
 --- END READER ---
 
+codeHeader,codeFooter :: Doc
+codeHeader = bslash <> text "begin" <> br "lstlisting"
+codeFooter = bslash <> text "end" <> br "lstlisting"
 
 -- Data Defn Printing --
 

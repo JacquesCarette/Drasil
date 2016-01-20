@@ -1,8 +1,9 @@
 {-# OPTIONS -Wall #-} 
 module Config where
-import ASTInternal (OutLang(..), DocParams(..))
+import ASTInternal (DocParams(..))
+import ASTCode (Lang(..))
 
-outLang :: OutLang
+outLang :: Lang
 outLang = CLang
 
 -- precision :: Precision
@@ -27,7 +28,7 @@ verboseDDDescription = True
 defaultSRSparams :: [DocParams]
 defaultSRSparams = [
   DocClass  [] "article",
-  UsePackages ["booktabs","longtable"]
+  UsePackages ["booktabs","longtable","listings"]
   ]
 
 defaultLPMparams :: [DocParams]

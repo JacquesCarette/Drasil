@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs #-}
 
 -- A 'Symbol' is actually going to be a graphical description of what

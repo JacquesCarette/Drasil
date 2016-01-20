@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 module Unicode where
 import Format
 

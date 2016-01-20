@@ -1,3 +1,4 @@
+{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs #-}
 module Spec where
 
@@ -5,6 +6,7 @@ import Format (FormatC)
 import Unicode (Render)
 import Symbol
 import Unit (USymb)
+import ASTCode
 -- import EqChunk
 
 --For writing chunks in a specification language that can be converted to TeX
@@ -35,7 +37,9 @@ data LayoutObj = Table [Spec] [[Spec]] -- header then data
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
+               | CodeBlock Code
                -- | Definition DType (EqChunk)
 
 data DType = Data
            | Literate
+

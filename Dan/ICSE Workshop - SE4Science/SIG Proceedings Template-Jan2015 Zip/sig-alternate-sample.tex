@@ -47,6 +47,7 @@
 
 \documentclass{sig-alternate-05-2015}
 
+\usepackage{qtree}
 
 \begin{document}
 
@@ -238,6 +239,8 @@ re-certification. To accomplish this we need to do the following:
 \item Provide complete traceability between all software artifacts
 \end{enumerate}
 
+%D Introduce artifacts somewhere?
+
 To achieve the above goals, we propose the following:
 
 \begin{enumerate}
@@ -246,14 +249,14 @@ To achieve the above goals, we propose the following:
 \item Automate software artifact generation
 \end{enumerate}
 
-Section \ref{sec:background} will give a more in-depth look at SC software,
-specifically focusing on SC software quality and literate programming. Section
-\ref{sec:lss} focuses on our framework %D Tool?
+Section~\ref{sec:background} will give a more in-depth look at SC software,
+specifically focusing on SC software quality and literate programming. 
+Section~\ref{sec:lss} focuses on our framework %D Tool?
 for improving SC software development using a structured approach. It will
 introduce the framework, discuss the advantages to our approach, and show
-a short example of the framework in action. Section \ref{sec:todo} will discuss
+a short example of the framework in action. Section~\ref{sec:todo} will discuss
 how we want the framework to evolve and what future work we intend to do.
-Finally, Section \ref{sec:conclusion} will provide some concluding remarks.
+Finally, Section~\ref{sec:conclusion} will provide some concluding remarks.
 
 %Context
 %- first application of computers was scientific computing (SC)
@@ -350,10 +353,62 @@ a full textbook).
 
 \section{Introducing LSS} \label{sec:lss} % (NEED A BETTER NAME)
 
-- Tie the introduction of the paper into the tool.
-- Introduce the ideas of recipes and chunks.
-- Explain some of the current design?
-  - i.e. Chunk hierarchy diagram, recipe micro/macro layout languages, code gen
+Our framework, LSS, is being developed with the goals of providing complete
+traceability throughout the development process for SC software and reducing
+the amount of knowledge duplication across software artifacts. Both of these
+goals can be accomplished by following a (somewhat modified) literate approach.
+
+The current framework is composed of several components including 
+\textit{chunks}, \textit{recipes}, and a \textit{generator}.
+The generator produces views of the source material, where these views are
+the software artifacts we require. Recipes are essentially descriptions
+of these views and chunks contain the source material.
+
+Complete traceability is achievable through the use of chunks,
+providing that all requisite knowledge can be appropriately encapsulated.
+Each chunk needs to represent some concept, quantity, unit, etc. Our current design introduces a chunk hierarchy 
+(as seen in Figure~\ref{fig:chunks}), where the most basic
+chunk has only one field: a \textit{name}. A ``Concept'' then adds a 
+\textit{description}, and so on down the tree.
+
+\begin{figure}
+\large{
+\Tree[.\fbox{Chunk(\textit{name})}
+		[.\fbox{Concept(\textit{description})}
+			[.\fbox{Quantity(\textit{symbol})} ]
+			[.\fbox{Unit(\textit{unit})} ]
+		]
+	]
+}
+\caption{The chunk hierarchy design}
+\label{fig:chunks}
+\end{figure}
+
+Each more complex chunk is built from one or more of the existing chunks.
+This will be shown in more detail through the example in 
+Section~\ref{ssec:example}.
+%D Maybe introduce the example here for clarity?
+Thus, all of the information related to any one
+concept in a software project will be stored in a single chunk, allowing
+for complete traceability to the source of the information.
+
+Recipes are specified using a micro- and macro-layout language currently
+embedded in Haskell. Each are used to describe how the generated artifacts
+should appear. The micro-layout language handles the small-scale layout 
+details such as those of specially
+formatted characters (i.e. subscript and superscripts), concatenation of
+symbols, etc. The macro-layout language, on the other hand, handles the
+large-scale layout details such as sections, paragraphs, equations, 
+tables, etc.
+
+Recipes also specify which knowledge should be used from which chunks, thus
+removing knowledge duplication as all of the knowledge is now being referenced
+from within the specified chunks.
+
+%- Tie the introduction of the paper into the tool.
+%- Introduce the ideas of recipes and chunks.
+%- Explain some of the current design?
+%  - i.e. Chunk hierarchy diagram, recipe micro/macro layout languages, code gen
 
 \subsection{Advantages} \label{ssec:advantages}
 

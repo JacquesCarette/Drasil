@@ -61,19 +61,19 @@
 
 
 % DOI
-\doi{10.475/123_4}
+\doi{10.475/123_4} %D What goes here?
 
 % ISBN
-\isbn{123-4567-24-567/08/06}
+\isbn{123-4567-24-567/08/06}  %D What goes here?
 
 %Conference
-\conferenceinfo{PLDI '13}{June 16--19, 2013, Seattle, WA, USA}
+\conferenceinfo{PLDI '13}{June 16--19, 2013, Seattle, WA, USA}  %D What goes here?
 
-\acmPrice{\$15.00}
+\acmPrice{\$15.00}  %D What goes here?
 
 %
 % --- Author Metadata here ---
-\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}
+\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}  %D What goes here?
 %\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
@@ -103,19 +103,22 @@ Spencer Smith\\
        \affaddr{McMaster University}\\
        \affaddr{1280 Main Street W}\\
        \affaddr{Hamilton, Ontario}\\
-       \email{smiths@mcmaster.ca}
+       \email{smiths at mcmaster.ca} 
+%D Not sure if you want your email machine-readable
 \alignauthor
 Jacques Carette\\
        \affaddr{McMaster University}\\
        \affaddr{1280 Main Street W}\\
        \affaddr{Hamilton, Ontario}\\
-       \email{carette@mcmaster.ca}
+       \email{carette at mcmaster.ca}
+%D Not sure if you want your email machine-readable
 }
 \date{24 January 2016}
 
 \maketitle
 \begin{abstract}
-
+Awesome abstract that makes readers fall in love with the research
+and throw grant money at us in droves goes here.
 \end{abstract}
 
 
@@ -169,57 +172,194 @@ Jacques Carette\\
 \keywords{ACM proceedings; \LaTeX; text tagging}
 
 \section{Introduction}
+Scientific computing (SC) was the first application of computers. It is still
+used today for a wide variety of tasks: constructing mathematical models,
+performing quantitative analyses, creating simulations, solving scientific
+problems, etc. SC software has been developed for increasingly safety and
+security critical systems (nuclear reactor simulation, satellite
+guidance%D MORE EXAMPLES)
+) as well as predictive
+systems.
+It has applications including (but not limited to) predicting weather patterns
+and natural disasters, and simulating economic fluctuations. As such, it is an
+incredibly important part of an increasing number of industries
+today.
 
-Context
-- first application of computers was scientific computing (SC)
-- the importance of SC code - used for decisions that impact health, safety and the economy
-- important enough to follow certification standards in some cases, CSA, Roache
-- problem with standards is the time and money required to meet them, resistance from practitioners (can cite Roache to support this)
-- many scientists seem to prefer a more agile development process (cite Carver, Kelly and Segal - see Smith book chapter for specific references), but this does not mean that this is the best process - with the proper methods and tools, scientists can follow a more structured approach, and still focus on frequent feedback and course correction - can meet documentation requirements for certification, and improve productivity.
+In the medical, nuclear power, aerospace, automotive, and manufacturing fields
+there are many safety critical systems in play. With each system, there is the
+possibility of a catastrophic failure endangering lives. It is incredibly
+important then to have some means of certifying and assuring the quality of each
+software system. As Smith et al. \cite{SmithEtAl2013} stated
+``Certification of Scientiﬁc Computing (SC) software is official recognition by
+an authority or regulatory body that the software is ﬁt for its intended use.''
+These regulatory bodies determine certain certification standards that must be
+met for a system to become recognized as certified. One example of a
+certification standard is the Canadian Standards Association (CSA) requirements
+for quality assurance of scientific software for nuclear power plants.
 
-Our goal is to have our cake and eat it too.  We want to improve the qualities (verifiability, reliability, understandability etc.) especially traceability.  Moreover, we want to improve productivity. Save time and money on SC software development, certification and re-certification.  Improving traceability also allows us to improve reproducibility (cite Davison2012) because the decisions and details are explicitly available in the future.
+The main goal of software certification is to ``... systematically determine,
+based on the principles of science, engineering, and measurement theory, whether
+a software product satisfies accepted, well-defined and measurable criteria''
+\cite{HHLMWW}. As such, certification would not only involve analyzing the code
+systematically and rigorously, but also analyzing the
+documentation. Essentially, this means the software must be both valid and
+verifiable, reliable, usable, maintainable, reusable, understandable, and
+reproducible. %D Verification involves ensuring that the software is ``solving
+              %the equations right'', whereas validation requires ensuring that
+              %the software is ``solving the right equations''\cite{Roache1998}.
 
-To accomplish this we need to do the following:
+Developing certifiable software can end up being a much more involved process
+than developing uncertified software: it takes more money, time, and effort on
+the part of developers to produce. These increased costs lead to reluctance from
+practitioners to develop certifiable software \cite{Roache1998}. However, in
+our 
+opinion, cost is not the only contributing factor for the developers. As it
+stands in the field, scientists seem to prefer a more agile development process
+\cite{Segal2008}. However, this is not necessarily the best process as typically
+this would lead to problems maintaining the
+documentation, meaning that not all aspects of the software would be traceable
+through the design process and making certification more difficult (if not
+impossible).
 
-- Remove duplication between software artifacts for scientific computing software (can cite Wilson et al DRY principle)
-- Provide a means for complete traceability between all artifacts
+Given proper methods and tools, scientists would be able to follow a more
+structured approach (while capitalizing on frequent feedback and course
+correction) to meet documentation requirements for certification as well as
+improve their overall productivity. This is where our work comes in: our goal is
+to eat our cake and have it too.  We want to improve the qualities
+(verifiability, reliability, understandability etc.) of SC software and at the
+same time
+improve performance.  Moreover, we want to improve developer productivity; save
+time and money on SC software development, certification and
+re-certification. To accomplish this we need to do the following:
 
-To achieve the above two goals, we propose the following:
+\begin{enumerate}
+\item Remove duplication between software artifacts for SC
+  software \cite{WilsonEtAl2013}
+\item Provide complete traceability between all software artifacts
+\end{enumerate}
 
-- Provide tools to support developing scientific software using a literate process
-- Use artifact generation
+To achieve the above goals, we propose the following:
 
-- roadmap of the sections that are coming
+\begin{enumerate}
+\item Provide methods, tools and techniques to support developing scientific
+  software using a literate process
+\item Automate software artifact generation
+\end{enumerate}
 
-\section{Background}
+Section \ref{sec:background} will give a more in-depth look at SC software,
+specifically focusing on SC software quality and literate programming. Section
+\ref{sec:lss} focuses on our framework %D Tool?
+for improving SC software development using a structured approach. It will
+introduce the framework, discuss the advantages to our approach, and show
+a short example of the framework in action. Section \ref{sec:todo} will discuss
+how we want the framework to evolve and what future work we intend to do.
+Finally, Section \ref{sec:conclusion} will provide some concluding remarks.
 
-- introductory blurb for this section
+%Context
+%- first application of computers was scientific computing (SC)
+%- the importance of SC code - used for decisions that impact health, safety and the economy
+%- important enough to follow certification standards in some cases, CSA, Roache
+%- problem with standards is the time and money required to meet them, resistance from practitioners (can cite Roache to support this)
+%- many scientists seem to prefer a more agile development process (cite Carver, Kelly and Segal - see Smith book chapter for specific references), but this does not mean that this is the best process - with the proper methods and tools, scientists can follow a more structured approach, and still focus on frequent feedback and course correction - can meet documentation requirements for certification, and improve productivity.
+%
+%Our goal is to have our cake and eat it too.  We want to improve the qualities (verifiability, reliability, understandability etc.) especially traceability.  Moreover, we want to improve productivity. Save time and money on SC software development, certification and re-certification.  Improving traceability also allows us to improve reproducibility (cite Davison2012) because the decisions and details are explicitly available in the future.
+%
+%To accomplish this we need to do the following:
+%
+%- Remove duplication between software artifacts for scientific computing software (can cite Wilson et al DRY principle)
+%- Provide a means for complete traceability between all artifacts
+%
+%To achieve the above two goals, we propose the following:
+%
+%- Provide tools to support developing scientific software using a literate process
+%- Use artifact generation
+%
+%- roadmap of the sections that are coming
 
-\subsection{Challenges for Scientific Computing Software Quality}
+\section{Background} \label{sec:background}
 
-From Yu (2011) (PhD thesis, now in our repository)
-- approximation challenge [Smith advice - remove, we don’t really address this challenge with our solution]
-- unknown solution challenge - no test oracle [Smith advice - remove, we don’t really address this challenge with our solution]
-- technique selection challenge - [I think we can keep this challenge, if we later mention how LSS encourages a separation of concerns between requirements (model) and design (numerical algorithm selection).  LSS also allows for experimentation with different numerical techniques.]  
-- input output challenge [I think we should keep this one, but we should characterize it as an understandability challenge.  Programmers do not reuse libraries as often as they could because they do not believe that the interface needs to be as complicated as it appears (Dubois2002).  We can mention this challenge again later, because LSS will allow us to create programs, and interfaces, that are only as complicated as they need to be.]
-- modification challenge [I think we could relabel this as a maintainability challenge.]
+Throughout the history of computing, specifically scientific computing, there
+have been many challenges towards assuring the quality of software. Many
+attempts have been made (some successful, others not) at improving software
+quality. In this section we will discuss those challenges, as well
+as introduce the ideas behind our proposed approach.
 
-\subsection{Literate Programming}
+\subsection{Challenges for Scientific Computing Software Quality} \label{ssec:challenges}
 
-- overview of LP, starting with Knuth - a similar background to what we need here is given in SmithKoothoorAndNedialkov.pdf
+SC software has certain characteristics which create challenges for its
+development. We will not discuss them all in depth, however, those of interest
+to us are the technique selection, input output, and modification
+(or maintainability) challenges as described by Yu \cite{Yu2011}.
 
-\section{Introducing LSS} % (NEED A BETTER NAME)
+The \textit{technique selection challenge} is a challenge that comes up often
+when dealing with continuous mathematical equations. Since these cannot be
+solved directly (due to computers being discrete), some technique must be chosen
+which can produce a solution which is ``good enough'' for the user. Choosing the
+technique to use is typically left to domain experts as each technique will
+(not) satisfy certain non-functional requirements.
+
+The \textit{input output} challenge impacts the usability of SC software and
+typically comes up where considerable amounts of input data are used in the
+production of large volumes of output. The main issue in this case is the
+complicated nature of the input data and the output, leading developers to
+recreate existing library routines (slightly modified) to deal with the
+nature of the input and output.
+
+Finally, the \textit{maintainability challenge} tends to come up as requirements
+change. As SC software is used at the forefront of scientific knowledge, there
+can be a high frequency of requirements changes. As changing requirements can
+mean completely modified systems, it poses a problem for scientists: commercial
+software can be difficult/expensive to modify and noncommercial programs are not
+often flexible enough to change.
+
+%From Yu (2011) (PhD thesis, now in our repository)
+%- technique selection challenge - [I think we can keep this challenge, if we later mention how LSS encourages a separation of concerns between requirements (model) and design (numerical algorithm selection).  LSS also allows for experimentation with different numerical techniques.]  
+%- input output challenge [I think we should keep this one, but we should characterize it as an understandability challenge.  Programmers do not reuse libraries as often as they could because they do not believe that the interface needs to be as complicated as it appears (Dubois2002).  We can mention this challenge again later, because LSS will allow us to create programs, and interfaces, that are only as complicated as they need to be.]
+%- modification challenge [I think we could relabel this as a maintainability challenge.]
+
+\subsection{Literate Programming} \label{ssec:literate}
+
+Literate programming (LP) is a programming methodology introduced by Knuth
+\cite{Knuth1984}. The main idea behind it is writing programs in a way that
+allows us to explain (to humans) what we want the computer to do, as opposed to
+simply telling the computer what to do. There is a focus on ordering the
+material to promote better human understanding.
+
+In a literate program, the documentation and code are kept together in one
+source. The program is an interconnected web of code pieces, presented in any
+sequence. As part of the development process, the algorithms used in literate
+programming are broken down into small, easy to understand parts (known as
+``sections'' \cite{Knuth1984} or ``chunks'' \cite{Johnson1997}) which are
+explained, documented, and implemented in a more intuitive order for better
+understanding.
+
+To extract the source code or documentation from the literate program,
+certain processes must be run. To get working source code, the \textit{tangle}
+process would be run, essentially extracting the code from the literate document
+and reordering it into an appropriate structure for the computer to
+understand.  To get a human-readable document, the \textit{weaving}
+process must be run to extract and typeset the documentation.
+
+By adhering to the LP methodology, a literate program ends up with documentation
+that is expertly written and of publishable quality. The code also ends up being
+incredibly well documented and high-quality. There are several examples of SC
+programs being written in LP style, and two that stand out are VNODE-LP
+\cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
+Implementation'' \cite{PharrAndHumphreys2004} (a literate program which is also
+a full textbook).
+
+\section{Introducing LSS} \label{sec:lss} % (NEED A BETTER NAME)
 
 - Tie the introduction of the paper into the tool.
 - Introduce the ideas of recipes and chunks.
 - Explain some of the current design?
   - i.e. Chunk hierarchy diagram, recipe micro/macro layout languages, code gen
 
-\subsection{Advantages}
+\subsection{Advantages} \label{ssec:advantages}
 
 Move into examples/discussion on advantages.
 
-\subsubsection{Software Certification}
+\subsubsection{Software Certification} \label{sssec:adv_cert}
 - need to generate required documentation, without impeding the work of the scientists
 - need to be able to make changes at reasonable cost - this requires traceability
 
@@ -235,12 +375,13 @@ Move into examples/discussion on advantages.
     - Verification and Validation Report
     - User Manual
 
-\subsubsection{Knowledge Capture}
+\subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
 - conservation of thermal energy equation - used for thermal analysis of fuel pins and then reused for solar water heating tank
 - Build a library of artifacts that can be reused in many different contexts
 - Prime example: SI Units are used everywhere.
 
-\subsubsection{"Everything should be made as simple as possible, but not simpler."  (Einstein quote)}
+\subsubsection{"Everything should be made as simple as possible, but not simpler."  (Einstein quote)} \label{sssec:adv_simple}
+
 - although powerful/general commercial finite element programs are available, they are often not used to develop new “widgets”
 - reasons are cost, and complexity
 - rather than use simulation, engineers often resort to building prototypes and testing
@@ -248,7 +389,7 @@ Move into examples/discussion on advantages.
 - if an engineer designs parts for strength, they could have a general stress analysis program - the program could be 3D if needed, or specialized for plane stress or plane strain, if that was the appropriate assumption - the program could even be customized to the parameterized shape of the part they are interested in, with only the degrees of freedom, like material properties, or the specific dimensions, they can change being exposed.
 [This section is also where we can mention the understandability challenge from Section 2.1.  LSS lets us build components that provide exactly what is needed, and no more.]
 
-\subsubsection{Verification}
+\subsubsection{Verification} \label{sssec:adv_verify}
 
 - requirements include so-called “sanity” checks that can be reused when they come up in subsequent phases
 - for instance, requirement would state conservation of mass, or the fact that lengths are always positive - the first used to test output, the second to guard against invalid input
@@ -258,22 +399,22 @@ Move into examples/discussion on advantages.
 - code generation allows for increases in the order of interpolation, for the same grid
 - Yu discusses in section 6.3 of her thesis
 
-\subsubsection{Testing} % Maybe move this to future work?
+\subsubsection{Testing} \label{sssec:adv_test}% Maybe move this to future work?
 
 - ???
 
-\subsection{Bringing it together with an example}
+\subsection{Bringing it together with an example} \label{ssec:example}
 
 - Introduce fuel pin example.
 - Use appendix for SRS and generated SRS?
 
-\subsubsection{How it works}
+\subsubsection{How it works} \label{sssec:ex_how}
 - Explain the source (recipe, common knowledge, specific knowledge)
 - Show example recipe
 - Example of common knowledge (SI Units to tie into section 3.1.2)
 - Example of specific knowledge ($h_c$ or $h_g$ chunk)
 
-\subsubsection{The result?}
+\subsubsection{The result?} \label{sssec:ex_result}
 
 - Bring it all back to the arguments made in 3.1.1-3.1.4 and justify them.
 
@@ -290,7 +431,7 @@ Move into examples/discussion on advantages.
     - Easier to find errors since they propagate through all the artifacts.
     - Documents are never out of sync with the source.
 
-\section{Future work}
+\section{Future work} \label{sec:todo}
 
 - Generate more document types (more default recipes)
 - Include more types of information in chunks (PCM SRS example of constraints, etc.)
@@ -298,7 +439,7 @@ Move into examples/discussion on advantages.
   - Use constraints for errors and typical values for warnings.
 - Expand the tool practically through examples.
     
-\section{Concluding Remarks}
+\section{Concluding Remarks} \label{sec:conclusion}
 
 %\section{The {\secit Body} of The Paper}
 

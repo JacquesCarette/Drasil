@@ -412,28 +412,123 @@ from within the specified chunks.
 
 \subsection{Advantages} \label{ssec:advantages}
 
-Move into examples/discussion on advantages.
+- Move into examples/discussion on advantages. Should write something here.
 
 \subsubsection{Software Certification} \label{sssec:adv_cert}
-- need to generate required documentation, without impeding the work of the scientists
-- need to be able to make changes at reasonable cost - this requires traceability
+%- need to generate required documentation, without impeding the work of the scientists
+%- need to be able to make changes at reasonable cost - this requires traceability
 
-- Discuss the following documents as being "par for the course" but maybe don't 
-  include full descriptions:
-    Start with a default set of documentation, as follows
-    - Problem Statement
-    - Development Plan
-    - Requirements Specification
-    - Verification and Validation plan
-    - Design Specification
-    - Code
-    - Verification and Validation Report
-    - User Manual
+%- Discuss the following documents as being "par for the course" but maybe don't 
+%  include full descriptions:
+%    Start with a default set of documentation, as follows
+%    - Problem Statement
+%    - Development Plan
+%    - Requirements Specification
+%    - Verification and Validation plan
+%    - Design Specification
+%    - Code
+%    - Verification and Validation Report
+%    - User Manual
+
+To certify software there is a need for high-quality documentation. This
+documentation needs to be created without impeding the work of scientists. One
+of the major problems with creating documentation for SC software stems from the
+maintainability challenge (Section~\ref{subsec:challenges}). As the requirements
+change, the documentation must be updated. The further scientists are into a
+project, the greater the effect a change in requirements will have on the
+documentation, leading to maintainability and traceability issues.
+
+The cost of making changes to the documentation should be reasonable. The best
+way to keep costs low is to ensure the traceability of the documentation.
+Traceability allows the developers to track which areas of a project will be
+affected by a change, thus allowing them to ensure that those areas are updated
+accordingly.
+
+Depending on the regulatory body and set of standards for certification, many
+types of documents can be required. LSS aims to generate all of these documents
+alongside the code, while accounting for any changes made. As the changes will
+affect chunks and those chunks will be used to generate the documentation and
+code, there is a guarantee that changes will propagate throughout all of the
+artifacts. The following are examples software artifacts that we wish to
+generate (we assume software engineers will be familiar with most, if not all,
+of these):
+
+\begin{enumerate}
+\item Problem Statement
+%  A description of the problem to be solved, essentially
+%  summarizing the purpose of the software. There should be no mention of how the
+%  problem is to be solved.
+\item Development Plan
+%  An overview of the development process and
+%  infrastructure. This should cover the documents to be created, which templates
+%  (if any) will be followed, internal processes to be employed, coding
+%  standards, and other details relevant to how the software will be developed.
+\item Requirements Specification
+%  The desired functions and qualities of the
+%  software should be documented herein. The requirements should cover
+%  functionality, goals, context, design constraints, expected performance, and
+%  any other quality attributes of the software.
+\item Verification and Validation plan
+%  Documents how the documentation
+%  artifacts will be shown to be internally correct (verification) as well as how
+%  to ensure that the right problem has been solved (validation).
+\item Design Specification
+%  How will the requirements be realized? Document the
+%  software architecture and a detailed design of the modules/interfaces to be
+%  used. Can be thought of as a programmer's manual for maintenance.
+\item Code
+%  Implementation of the design specification.
+\item Verification and Validation Report
+%  Summarize the steps taken for
+%  performing verification and validation (this should mirror the V \& V plan
+%  from above) and include any testing results.
+\item User Manual
+%  Full instructions on how the software is to be used,
+%  beginning with installation instructions and proceeding through detailed
+%  examples of the program's use.
+\end{enumerate}
+
+The artifacts listed above share non-trivial amounts of information, which is
+where traceability comes into play. To make any changes to the
+documentation, there must be some way to determine how a change will affect
+\textbf{all} of the documents.
+
+This is especially important for (re-) certification, as the documents must be 
+consistent.
+
+In the context of re-certification, if a piece of software was developed using
+LSS and some changes needed to be made, updating the artifacts and submitting
+them for re-certification would be completely trivial. All documentation would
+be generated from the (newly modified) chunks, according to their existing
+recipes. Or in the case of new information being added, a new chunk would be
+created and the recipe slightly modified.
+
+On another note, if a document standard were to be changed during the 
+development cycle, it would not necessitate re-writing the entire document. All
+of the information in the chunks would remain intact, only the recipe 
+would need to be changed to accomodate the new standard.
 
 \subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
-- conservation of thermal energy equation - used for thermal analysis of fuel pins and then reused for solar water heating tank
-- Build a library of artifacts that can be reused in many different contexts
-- Prime example: SI Units are used everywhere.
+
+In SC software there are many commonly shared theorems and formulae between
+different applications. For an example consider the conservation of thermal
+energy equation: 
+\begin{displaymath} 
+-{\bf \nabla q} + g = \rho C \frac{\partial T}{\partial t}
+\end{displaymath} 
+This
+equation is widely used in a variety of thermal analysis applications, where
+each is solving a different problem, or modeling a different system.
+
+Our approach aims to build libraries of chunks that can be reused in many
+different applications. Each library should contain common chunks relevant to a
+specific application domain (ex. thermal analysis) and each project should aim
+to reuse as much as possible during development.
+
+A more abstract, yet more common example of a reused knowledge source is the
+concept of Syst\'{e}me International (SI) units. They are used in applications
+throughout all of SC, so why should they be redefined for each project? Once the
+knowledge has been captured, they can simply be reused wherever necessary.
 
 \subsubsection{"Everything should be made as simple as possible, but not simpler."  (Einstein quote)} \label{sssec:adv_simple}
 

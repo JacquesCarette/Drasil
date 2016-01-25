@@ -48,7 +48,7 @@
 \documentclass{sig-alternate-05-2015}
 
 \usepackage{qtree}
-
+\newcommand{\lss}{LSS}
 \begin{document}
 
 % Copyright
@@ -291,8 +291,8 @@ as introduce the ideas behind our proposed approach.
 
 SC software has certain characteristics which create challenges for its
 development. We will not discuss them all in depth, however, those of interest
-to us are the technique selection, input output, and modification
-(or maintainability) challenges as described by Yu \cite{Yu2011}.
+to us are the technique selection, input output (or understandability), and
+modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
 
 The \textit{technique selection challenge} is a challenge that comes up often
 when dealing with continuous mathematical equations. Since these cannot be
@@ -301,12 +301,12 @@ which can produce a solution which is ``good enough'' for the user. Choosing the
 technique to use is typically left to domain experts as each technique will
 (not) satisfy certain non-functional requirements.
 
-The \textit{input output} challenge impacts the usability of SC software and
+The \textit{understandability} challenge impacts the usability of SC software and
 typically comes up where considerable amounts of input data are used in the
 production of large volumes of output. The main issue in this case is the
 complicated nature of the input data and the output, leading developers to
 recreate existing library routines (slightly modified) to deal with the
-nature of the input and output.
+nature of the input and output. Programmers do not reuse libraries as often as they could because they do not believe that the interface needs to be as complicated as it appears \cite{Dubois2002}.
 
 Finally, the \textit{maintainability challenge} tends to come up as requirements
 change. As SC software is used at the forefront of scientific knowledge, there
@@ -351,9 +351,9 @@ programs being written in LP style, and two that stand out are VNODE-LP
 Implementation'' \cite{PharrAndHumphreys2004} (a literate program which is also
 a full textbook).
 
-\section{Introducing LSS} \label{sec:lss} % (NEED A BETTER NAME)
+\section{Introducing \lss} \label{sec:lss} % (NEED A BETTER NAME)
 
-Our framework, LSS, is being developed with the goals of providing complete
+Our framework, \lss, is being developed with the goals of providing complete
 traceability throughout the development process for SC software and reducing
 the amount of knowledge duplication across software artifacts. Both of these
 goals can be accomplished by following a (somewhat modified) literate approach.
@@ -433,7 +433,7 @@ from within the specified chunks.
 To certify software there is a need for high-quality documentation. This
 documentation needs to be created without impeding the work of scientists. One
 of the major problems with creating documentation for SC software stems from the
-maintainability challenge (Section~\ref{subsec:challenges}). As the requirements
+maintainability challenge (Section~\ref{ssec:challenges}). As the requirements
 change, the documentation must be updated. The further scientists are into a
 project, the greater the effect a change in requirements will have on the
 documentation, leading to maintainability and traceability issues.
@@ -445,7 +445,7 @@ affected by a change, thus allowing them to ensure that those areas are updated
 accordingly.
 
 Depending on the regulatory body and set of standards for certification, many
-types of documents can be required. LSS aims to generate all of these documents
+types of documents can be required. \lss aims to generate all of these documents
 alongside the code, while accounting for any changes made. As the changes will
 affect chunks and those chunks will be used to generate the documentation and
 code, there is a guarantee that changes will propagate throughout all of the
@@ -497,7 +497,7 @@ This is especially important for (re-) certification, as the documents must be
 consistent.
 
 In the context of re-certification, if a piece of software was developed using
-LSS and some changes needed to be made, updating the artifacts and submitting
+\lss and some changes needed to be made, updating the artifacts and submitting
 them for re-certification would be completely trivial. All documentation would
 be generated from the (newly modified) chunks, according to their existing
 recipes. Or in the case of new information being added, a new chunk would be
@@ -532,12 +532,26 @@ knowledge has been captured, they can simply be reused wherever necessary.
 
 \subsubsection{"Everything should be made as simple as possible, but not simpler."  (Einstein quote)} \label{sssec:adv_simple}
 
-- although powerful/general commercial finite element programs are available, they are often not used to develop new “widgets”
-- reasons are cost, and complexity
-- rather than use simulation, engineers often resort to building prototypes and testing
-- engineers would greatly benefit from tools to assist their design efforts that are customized to their exact set of problems - with a literate family approach family members can be generated to fit their needs
-- if an engineer designs parts for strength, they could have a general stress analysis program - the program could be 3D if needed, or specialized for plane stress or plane strain, if that was the appropriate assumption - the program could even be customized to the parameterized shape of the part they are interested in, with only the degrees of freedom, like material properties, or the specific dimensions, they can change being exposed.
-[This section is also where we can mention the understandability challenge from Section 2.1.  LSS lets us build components that provide exactly what is needed, and no more.]
+Currently there exist many powerful, general commercial programs for solving
+problems using the finite element method. However, they are not often used
+to develop new ``widgets'' because of the cost and complexity of doing so.
+As it stands, engineers often have to resort to building prototypes and testing
+them instead of performing simulations due to a lack of tools that can assist
+with their exact set of problems.
+
+Our approach could change that by generating source code suited to the needs of
+the engineers. For example, if an engineer were designing parts for strength,
+the could have a general stress analysis program. This program could be 3D or
+specialized for plane stress or strain, depending on which assumption would be
+most appropriate. The program could even be customized to the parameterized
+shape of the part that the engineer is interested in. The new program would also
+only expose the degrees of freedom necessary for the engineer to change (ex.
+material properties or specific dimensions of the part), making the simulation
+process simpler and safer.
+
+\lss will tackle the understandability challenge (Section~\ref{ssec:challenges})
+by allowing developers to build components which will provide exactly what is
+needed, no more and no less.
 
 \subsubsection{Verification} \label{sssec:adv_verify}
 

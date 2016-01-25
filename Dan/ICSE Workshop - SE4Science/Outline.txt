@@ -79,7 +79,7 @@ Move into examples/discussion on advantages.
 - although powerful/general commercial finite element programs are available, they are often not used to develop new “widgets”
 - reasons are cost, and complexity
 - rather than use simulation, engineers often resort to building prototypes and testing
-- engineers would greatly benefit from tools to assist their design efforts that are customized to their exact set of problems - with a literate family approach family members can be generated to fit their needs
+- engineers would greatly benefit from tools to assist their design efforts that are customized to their exact set of problems 
 - if an engineer designs parts for strength, they could have a general stress analysis program - the program could be 3D if needed, or specialized for plane stress or plane strain, if that was the appropriate assumption - the program could even be customized to the parameterized shape of the part they are interested in, with only the degrees of freedom, like material properties, or the specific dimensions, they can change being exposed.
 [This section is also where we can mention the understandability challenge from Section 2.1.  LSS lets us build components that provide exactly what is needed, and no more.]
 

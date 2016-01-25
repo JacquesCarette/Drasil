@@ -48,7 +48,12 @@
 \documentclass{sig-alternate-05-2015}
 
 \usepackage{qtree}
+\usepackage{listings}
+\usepackage[final]{pdfpages}
+\usepackage{booktabs}
+
 \newcommand{\lss}{LSS}
+
 \begin{document}
 
 % Copyright
@@ -299,14 +304,14 @@ when dealing with continuous mathematical equations. Since these cannot be
 solved directly (due to computers being discrete), some technique must be chosen
 which can produce a solution which is ``good enough'' for the user. Choosing the
 technique to use is typically left to domain experts as each technique will
-(not) satisfy certain non-functional requirements.
+(not) satisfy certain non-functional requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
 
 The \textit{understandability} challenge impacts the usability of SC software and
 typically comes up where considerable amounts of input data are used in the
 production of large volumes of output. The main issue in this case is the
 complicated nature of the input data and the output, leading developers to
 recreate existing library routines (slightly modified) to deal with the
-nature of the input and output. Programmers do not reuse libraries as often as they could because they do not believe that the interface needs to be as complicated as it appears \cite{Dubois2002}.
+nature of the input and output. Programmers do not reuse libraries as often as they could because they do not believe that the interface needs to be as complicated as it appears \cite{Dubois2002}. 
 
 Finally, the \textit{maintainability challenge} tends to come up as requirements
 change. As SC software is used at the forefront of scientific knowledge, there
@@ -445,7 +450,7 @@ affected by a change, thus allowing them to ensure that those areas are updated
 accordingly.
 
 Depending on the regulatory body and set of standards for certification, many
-types of documents can be required. \lss aims to generate all of these documents
+types of documents can be required. \lss{} aims to generate all of these documents
 alongside the code, while accounting for any changes made. As the changes will
 affect chunks and those chunks will be used to generate the documentation and
 code, there is a guarantee that changes will propagate throughout all of the
@@ -463,12 +468,12 @@ of these):
 %  infrastructure. This should cover the documents to be created, which templates
 %  (if any) will be followed, internal processes to be employed, coding
 %  standards, and other details relevant to how the software will be developed.
-\item Requirements Specification
+\item Software Requirements Specification (SRS)
 %  The desired functions and qualities of the
 %  software should be documented herein. The requirements should cover
 %  functionality, goals, context, design constraints, expected performance, and
 %  any other quality attributes of the software.
-\item Verification and Validation plan
+\item Verification and Validation (V\&V) plan
 %  Documents how the documentation
 %  artifacts will be shown to be internally correct (verification) as well as how
 %  to ensure that the right problem has been solved (validation).
@@ -478,7 +483,7 @@ of these):
 %  used. Can be thought of as a programmer's manual for maintenance.
 \item Code
 %  Implementation of the design specification.
-\item Verification and Validation Report
+\item V\&V Report 
 %  Summarize the steps taken for
 %  performing verification and validation (this should mirror the V \& V plan
 %  from above) and include any testing results.
@@ -497,7 +502,7 @@ This is especially important for (re-) certification, as the documents must be
 consistent.
 
 In the context of re-certification, if a piece of software was developed using
-\lss and some changes needed to be made, updating the artifacts and submitting
+\lss{} and some changes needed to be made, updating the artifacts and submitting
 them for re-certification would be completely trivial. All documentation would
 be generated from the (newly modified) chunks, according to their existing
 recipes. Or in the case of new information being added, a new chunk would be
@@ -549,59 +554,168 @@ only expose the degrees of freedom necessary for the engineer to change (ex.
 material properties or specific dimensions of the part), making the simulation
 process simpler and safer.
 
-\lss will tackle the understandability challenge (Section~\ref{ssec:challenges})
+\lss{} will tackle the understandability challenge (Section~\ref{ssec:challenges})
 by allowing developers to build components which will provide exactly what is
 needed, no more and no less.
 
 \subsubsection{Verification} \label{sssec:adv_verify}
 
-- requirements include so-called “sanity” checks that can be reused when they come up in subsequent phases
-- for instance, requirement would state conservation of mass, or the fact that lengths are always positive - the first used to test output, the second to guard against invalid input
+When it comes to verification, requirements documents typically include
+so-called ``sanity'' checks that can be reused throughout subsequent phases
+of development. For instance, the requirement would state conservation of mass
+or that lengths are always positive. The former would be used to test the output
+and the latter to guard against some invalid inputs.
 
-- computational variability testing, from Yu (2011), FEM example
-- usual to do grid refinement tests - same order of interpolation, but more points
-- code generation allows for increases in the order of interpolation, for the same grid
-- Yu discusses in section 6.3 of her thesis
+With \lss, these sanity checks can be ensured by the 
+knowledge capture mechanism. Each chunk can maintain its own sanity
+checks and incorporate them into the final system to make sure that all inputs
+and outputs (including intermediaries) are valid.
+
+% This should have its own section perhaps?
+%- computational variability testing, from Yu (2011), FEM example
+%- usual to do grid refinement tests - same order of interpolation, but more points
+%- code generation allows for increases in the order of interpolation, for the same grid
+%- Yu discusses in section 6.3 of her thesis
+
 
 \subsubsection{Testing} \label{sssec:adv_test}% Maybe move this to future work?
 
 - ???
 
-\subsection{Bringing it together with an example} \label{ssec:example}
+\subsection{The current state of \lss} \label{ssec:example}
 
-- Introduce fuel pin example.
-- Use appendix for SRS and generated SRS?
+\lss{} has been developed up to this point using a practical, example-driven
+approach. The first example used in guiding the development of \lss{} involves the
+incredibly simplified SRS for a fuel pin in a nuclear reactor (See
+Appendix~\ref{app:srs}). It is a fairly trivial example, but the knowledge
+gained from it has been invaluable.
+
+As of the time of this writing, we are able to generate much of the SRS for the
+fuel pin as well as the source code (in C) for the calculations contained within
+(See Appendix~\ref{app:gen}).
 
 \subsubsection{How it works} \label{sssec:ex_how}
-- Explain the source (recipe, common knowledge, specific knowledge)
-- Show example recipe
-- Example of common knowledge (SI Units to tie into section 3.1.2)
-- Example of specific knowledge ($h_c$ or $h_g$ chunk)
+
+The source for this example has been broken down into the recipe, common
+knowledge, and specific knowledge. An example of each source can be seen in
+Figures~\ref{fig:recipe},~\ref{fig:know_common},~and~\ref{fig:know_specific} respectively.
+
+\begin{figure}
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
+srsBody = Document ((S "SRS for ") :+: 
+    (N $ h_g ^. symbol) :+: 
+    (S " and ") :+: (N $ h_c ^. symbol)) 
+    (S "Spencer Smith") [s1,s2]
+
+s1 = Section (S "Table of Units") 
+    [s1_intro, s1_table]
+
+s1_table = Table [S "Symbol", S "Description"] $ mkTable
+    [(\x -> Sy (x ^. unit)),
+     (\x -> S (x ^. descr))
+    ] si_units
+
+s1_intro = Paragraph (S "Throughout this ...
+\end{lstlisting}
+\caption{A portion of a recipe}
+\label{fig:recipe}
+\end{figure}
+
+The recipe is a description what information is necessary and how it should be
+arranged (notice in the ``Section'' declaration from Figure~\ref{fig:recipe},
+\verb|s1_intro| comes before \verb|s1_table|, even though they are defined in
+the reverse order).
+
+\begin{figure}
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
+metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
+metre    = fund "Metre"    "length (metre)"               "m"
+kilogram = fund "Kilogram" "mass (kilogram)"              "kg"
+second   = fund "Second"   "time (second)"                "s"
+kelvin   = fund "Kelvin"   "temperature (kelvin)"         "K"
+mole     = fund "Mole"     "amount of substance (mole)"   "mol"
+ampere   = fund "Ampere"   "electric current (ampere)"    "A"
+candela  = fund "Candela"  "luminous intensity (candela)" "cd"
+\end{lstlisting}
+\caption{Fundamental SI unit library}
+\label{fig:know_common}
+\end{figure}
+%D Need to fix formatting. Tried using figure* but it just put it on the next page
+
+In this example, common knowledge is the fundamental SI units. Each one is
+contained within its own chunk in the SI unit library. As
+Figure~\ref{fig:know_common} shows, each chunk has a name, description, and
+symbolic representation.
+
+\begin{figure}
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
+h_c_eq :: Expr
+h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ 
+    ((Int 2):*(C k_c) :+ ((C tau_c):*(C h_b)))
+
+h_c :: EqChunk
+h_c = EC (UC (VC "h_c" 
+    "convective heat transfer coefficient 
+        between clad and coolant"
+    (sub h c) ) heat_transfer) h_c_eq
+\end{lstlisting}
+\caption{The $h_c$ chunk}
+\label{fig:know_specific}
+\end{figure}
+
+Figure~\ref{fig:know_specific} shows one piece of specific knowledge for this example: the $h_c$ chunk. This chunk contains the equation for calculating $h_c$ (written in an internal expression language which can then be converted to a math representation or source code) as well as the name, description, symbolic representation, and units for $h_c$.
 
 \subsubsection{The result?} \label{sssec:ex_result}
 
-- Bring it all back to the arguments made in 3.1.1-3.1.4 and justify them.
+\lss{} allows us to make changes with minimal effort at effectively no cost!
+This means changing requirements no longer impede scientists as described in
+Section~\ref{sssec:adv_cert}.
 
-- 3.1.1: (Ideally) No cost to make changes, no longer impedes the scientists.
-    - Explain in-depth
+The self-contained SI unit library exemplifies the ease of utilizing common
+knowledge (as mentioned in Section~\ref{sssec:adv_knowledge}) across multiple
+projects with minimal effort, allowing developers and scientists to spend their
+valuable time on more important things.
 
-- 3.1.2: SI Units shows that common knowledge is easily stored to be used elsewhere
-    - No need to reinvent the wheel! Keeps things consistent across projects.
-    
-- 3.1.3: (Ideally) Prototyping becomes trivial due to code gen.
-    - Any changes to spec can be seen in (essentially) real-time.
-    
-- 3.1.4: Any mistakes that occur in the software artifacts occur everywhere.
-    - Easier to find errors since they propagate through all the artifacts.
-    - Documents are never out of sync with the source.
+Prototyping ideally will also become trivial due to code generation. Changes in
+specifications can be seen in the code in (essentially) real-time at trivial
+cost. Thus we provide the means to create exactly what is needed
+(Section~\ref{sssec:adv_simple}) for any given situation.
+
+Finally, any mistakes that occur in the software artifacts will occur \textbf{everywhere}. This makes it much easier to find errors since they propagate through all artifacts, and the artifacts will never be out of sync of each other (or the source), allowing for ease of verification (Section~\ref{sssec:adv_verify}).
 
 \section{Future work} \label{sec:todo}
 
-- Generate more document types (more default recipes)
-- Include more types of information in chunks (PCM SRS example of constraints, etc.)
-  - Auto-generate test cases! Use constraint/typical value info to create tests.
-  - Use constraints for errors and typical values for warnings.
-- Expand the tool practically through examples.
+Currently the framework is still very small, producing only one document type (the SRS) and only one type of code (C code for calculations). We plan to expand \lss{} in several ways including, but not limited to:
+
+\begin{enumerate}
+\item Generate more artifact types (i.e. have more default recipes).
+\item Generate different document views (ex. SRS with equation derivations).
+\item Include more types of information in chunks (for example: physical constraints, typical values, and uncertainty as seen in Table\ref{tab:pcm}).
+\item Auto-generate test cases by using constraints and typical values. The constraints should determine error cases, and typical value ranges give warnings.
+\item Continue to expand the tool by implementing larger example systems.
+\end{enumerate}
+
+\begin{table} \label{tab:pcm}
+\centering
+\caption{Future example variables}
+\begin{tabular}{|c|c|r|c|} \hline
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \hline
+$L$ & $L > 0$ & 1.5 m & 10\% \\ \hline
+$D$ & $D > 0$ & 0.412 m & 10\% \\ \hline
+$V_P$ & $V_P > 0$ (*)	& 0.05 m$^3$	& 10\% \\ \hline
+$A_P$ & $A_P > 0$ (*)	& 1.2 m$^2$	& 10\% \\ \hline
+$\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
+\hline\end{tabular}
+\end{table}
+
+For the auto-generation of test cases, physical constraints will be seen as
+hard limits on the possible values. For example: length must always be positive.
+A negative value would cause the code to raise an error and execution would
+halt. Typical values, on the other hand, are ``reasonable'' values. For example:
+the length of a beam should be on the order of several metres, not centimetres or
+kilometres. Theoretically, however, it could be either and thus the code will
+raise a warning instead of an error.
+
     
 \section{Concluding Remarks} \label{sec:conclusion}
 
@@ -913,9 +1027,21 @@ needed, no more and no less.
 %%
 %%APPENDICES are optional
 %%\balancecolumns
-%\appendix
+\appendix
 %%Appendix A
-%\section{Headings in Appendices}
+\section{SRS for $h_g$ and $h_c$} \label{app:srs}
+
+%\includepdf[pages=-]{SRS.pdf} %D FIX FORMATTING
+
+\section{Artifacts generated by \lss} \label{app:gen}
+\subsection{SRS}
+\subsection{Source code}
+%D FIX FORMATTING
+\begin{lstlisting}[language=C, frame=single, showstringspaces=false]
+double calc_h_g(double k_c, double h_p, double tau_c){
+    return (2 * k_c * h_p / (2 * k_c + tau_c * h_p));
+}
+\end{lstlisting}
 %The rules about hierarchical headings discussed above for
 %the body of the article are different in the appendices.
 %In the \textbf{appendix} environment, the command

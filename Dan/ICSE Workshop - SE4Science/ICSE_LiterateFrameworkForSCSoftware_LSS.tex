@@ -292,46 +292,71 @@ The last section provides concluding remarks.
 % throughout the history of scientific computing. Many attempts have been made
 % (some successful, others not) at overcoming these challenges and improving
 % software quality. 
-In this section we discuss some of the challenges for developing SC software and
-we introduce the ideas behind our proposed approach.
+In this section we discuss challenges for developing SC software and we
+introduce the ideas behind our approach.
 
 \subsection{Challenges for Scientific Computing Software
   Quality} \label{ssec:challenges}
 
-SC software has certain characteristics which create challenges for its
-development. We will not discuss them all in depth, however, those of interest
-to us are the technique selection, input output (or understandability), and
-modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
+% SC software has certain characteristics which create challenges for its
+% development. We will not discuss them all in depth, however, those of interest
+% to us are the technique selection, input output (or understandability), and
+% modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
 
-The \textit{technique selection challenge} is a challenge that comes up often
-when dealing with continuous mathematical equations. Since these cannot be
-solved directly (as computers are discrete), some technique must be chosen which
-can produce a solution which is ``good enough'' for the user. Typically this
-choice is left to domain experts as each technique will (not) satisfy certain
-non-functional requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
+The \textit{technique selection challenge}~\cite{Yu2011} arises in SC because
+the best numerical approach to solve a given SC problem is not known a priori.  
+Experimentation is inevitably necessary to answer questions such as the
+appropriate order of interpolation, the degree of implicitness, etc.  For a
+framework for developing scientific software to be successful it should support
+a separation of concerns between the physical model and the numerical
+algorithm.  Moreover, the framework should provide facilities for parameterizing
+the expected algorithmic variabilities for easy experimentation with different
+options.
+%   is a challenge that
+% comes up often when dealing with continuous mathematical equations. Since these
+% cannot be solved directly (as computers are discrete), some technique must be
+% chosen which can produce a solution which is ``good enough'' for the
+% user. Typically this choice is left to domain experts as each technique will
+% (not) satisfy certain non-functional
+% requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
 
-The \textit{understandability} challenge impacts the usability of SC software
-and typically comes up where considerable amounts of input data are used to
-produce large volumes of output. The main issue in this case is the complicated
-nature of the input data and the output, leading developers to recreate
-(slightly modified) existing library routines to deal with the nature of the
-input and output. Programmers do not reuse libraries as often as they could
-because they do not believe the interface needs to be as complicated as it
-appears \cite{Dubois2002}.
+The \textit{understandability} challenge~\cite{Yu2011} comes up in the source
+code and in the final executable application.  In an effort to make scientific
+libraries and software as widely applicable as possible most packages provide a
+generic interface with a large number of options.  The number of options
+overwhelms users and causes programmers to not reuse libraries, since they do
+not believe the interface needs to be as complicated as it
+appears~\cite{Dubois2002}.  To improve understandability, an ideal framework
+will generate applications and libraries that are only as complicated as they
+need to be for the job at hand.
 
-Finally, the \textit{maintainability challenge} tends to come up as requirements
+% when impacts the usability of SC software
+% and typically comes up where considerable amounts of input data are used to
+% produce large volumes of output. The main issue in this case is the complicated
+% nature of the input data and the output, leading developers to recreate
+% (slightly modified) existing library routines to deal with the nature of the
+% input and output.
+
+The \textit{maintainability challenge}~\cite{Yu2011} tends to come up
+as requirements, especially for the physical model,
 change. As SC software is used at the forefront of scientific knowledge, there
-can be a high frequency of requirements changes. Changing requirements poses a
-problem for scientists: commercial software can be difficult/expensive to modify
-and noncommercial programs are not often flexible enough to change.
+can be a high frequency of requirements changes.  This causes problems for
+software that undergoes a process where it is certified as fit for use.  If the
+expense and time required for re-certification is on the same order of magnitude
+as the original certification, changes will not be made.  To be effective in
+this environment, a framework needs to provide traceability so the consequences
+of change can be evaluated.
+%  Changing requirements poses a
+% problem for scientists: commercial software can be difficult/expensive to modify
+% and noncommercial programs are not often flexible enough to change.
 
 \subsection{Literate Programming} \label{ssec:literate}
 
 Literate programming (LP) is a programming methodology introduced by Knuth
 \cite{Knuth1984}. The main idea is to write programs in a way that explains (to
 humans) what we want the computer to do, as opposed to simply giving the
-computer instructions. There is a focus on ordering the material to promote
-better human understanding.
+computer instructions. % There is a focus on ordering the material to promote
+% better human understanding.
 
 In a literate program, the documentation and code are together in one source.
 While developing a literate program, the algorithms used are broken down into
@@ -340,13 +365,13 @@ small, understandable parts (known as ``sections'' \cite{Knuth1984} or
 implemented in an order which promotes understanding. To get working
 source code, the \textit{tangle} process is run, which extracts the code from
 the literate document and reorders it into an appropriate structure for the
-computer to understand. Similarly, the \textit{weave} process must be run to
+computer to understand. Similarly, the \textit{weave} process is run to
 extract and typeset the documentation.
-
-By adhering to the LP methodology, a literate program ends up with documentation
-that is expertly written and of publishable quality. The code also ends up being
-well documented and high quality. There are several examples of SC
-programs being written in LP style, and two that stand out are VNODE-LP
+% By adhering to the LP methodology, a literate program ends up with documentation
+% that is expertly written and of publishable quality. The code also ends up being
+% well documented and high quality. 
+There are several examples of SC
+programs being written in LP style, such as VNODE-LP
 \cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
 Implementation'' \cite{PharrAndHumphreys2004} (a literate program which is also
 a textbook).

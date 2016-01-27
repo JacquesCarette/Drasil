@@ -555,26 +555,31 @@ to be changed to accomodate the new view.
 
 \subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
 
-In SC software there are many commonly shared theorems and formulae between
-different applications. For an example consider the conservation of thermal
+In SC software there are many commonly shared theorems and formulae across
+different applications. For example consider the conservation of thermal
 energy equation:
 \begin{displaymath} -{\bf \nabla \cdot q} + g = \rho C
 \frac{\partial T}{\partial t} \end{displaymath}
 This equation is widely used in a variety of thermal analysis applications, with
-each solving a different problem, or modeling a different system. Each
-application tends to reimplement this equation, as opposed to reusing
-it~\cite{TODO}. %D I need to grab a citation for this.
+each solving a different problem, or modeling a different system. Many
+applications tend to reimplement this equation, as opposed to reusing
+it~\cite{TODO}. %D I need to grab a citation for this... probably
 
-Our approach aims to build libraries of chunks that can be reused in many
-different applications. Each library should contain common chunks relevant to a
-specific application domain (ex. thermal analysis) and each project should aim
-to reuse as much as possible during development.
+Our approach aims to build libraries of chunks that can be reused anywhere. Each
+library should contain common chunks relevant to a specific application domain
+(ex. thermal analysis) and each project should aim to reuse as much as possible
+during development.
 
-A more abstract, yet more common example of a reused knowledge source is the
-concept of Syst\'{e}me International (SI) units. They are used in applications
-throughout all of SC, so why should they be redefined for each project? Once the
-knowledge has been captured, they can simply be reused wherever necessary.
+From our example, a common source of reused knowledge is the Syst\'{e}me
+International (SI) units (Figure~\ref{fig:know_common}). They are used in
+applications throughout all of SC, so why should they be redefined for each
+project? Once the knowledge has been captured, they can simply be reused
+wherever necessary. With \lss{} they can be reused across projects with minimal
+effort, allowing developers and scientists to spend their valuable time on more
+important things.
 
+%D This next section really feels like it's making a promise without really
+%  explaining how/why it'll work.
 \subsubsection{"Everything should be made as simple as possible, but not
   simpler."  (Einstein quote)} \label{sssec:adv_simple}
 
@@ -582,21 +587,23 @@ Currently there exist many powerful, general commercial programs for solving
 problems using the finite element method. However, they are not often used to
 develop new ``widgets'' because of the cost and complexity of doing
 so~\cite{TODO}. %D Where is this from?
-As it stands, engineers often have to resort to building prototypes and testing
-them instead of performing simulations due to a lack of tools that can assist
-with their exact set of problems. %D Citation needed?
+Engineers often have to resort to building and testing prototypes, instead of
+performing simulations, due to a lack of tools that can assist with their exact
+set of problems. %D Citation needed?
 
-Our approach could change that by generating source code suited to the needs of
-the engineers. For example, if an engineer were designing parts for strength,
-they could have a general stress analysis program. This program could be 3D or
-specialized for plane stress or strain, depending on which assumption would be
-most appropriate. The program could even be customized to the parameterized
-shape of the part that the engineer is interested in. The new program would also
-only expose the degrees of freedom necessary for the engineer to change (ex.
-material properties or specific dimensions of the part), making the simulation
-process simpler and safer.
+Our approach will change that by ideally making prototyping trivial through
+generating source code suited to the needs of the engineers. Changes in
+specifications could be seen in the code in (essentially) real-time at trivial
+cost. For example, if an engineer were designing parts for strength, they could
+have a general stress analysis program. This program could be 3D or specialized
+for plane stress/strain, depending on which assumption would be most appropriate
+at the time. The program could even be customized to the parameterized shape of
+the part the engineer is interested in. The new program would also only expose
+the degrees of freedom necessary for the engineer to change (ex. material
+properties or specific dimensions of the part), making the simulation process
+simpler and safer.
 
-\lss{} will tackle the understandability challenge (Section~\ref{ssec:challenges})
+\lss{} tackles this understandability challenge (Section~\ref{ssec:challenges})
 by allowing developers to build components which will provide exactly what is
 needed, no more and no less.
 
@@ -606,44 +613,20 @@ When it comes to verification, requirements documents typically include
 so-called ``sanity'' checks that can be reused throughout subsequent phases of
 development. For instance, a requirement could assume conservation of mass or
 constrain lengths to be always positive. The former would be used to test the
-output and the latter to guard against some invalid inputs.
+output and the latter to guard against invalid inputs.
 
 With \lss, these sanity checks can be ensured by the knowledge capture
 mechanism. Each chunk can maintain its own sanity checks and incorporate them
-into the final system to make sure that all inputs and outputs (including
+into the final system to ensure all inputs and outputs (including
 intermediaries) are valid.
 
-% Doubt the section on computational variability testing will fit.
-% from Yu (2011), FEM example - usual to do grid refinement tests -
-% same order of interpolation, but more points - code generation allows for
-% increases in the order of interpolation, for the same grid - Yu discusses in
-% section 6.3 of her thesis
+Also, with \lss{}, complete traceability is achievable through the use of chunks
+provided the requisite knowledge can be appropriately encapsulated.
 
-
-%\subsubsection{Testing} \label{sssec:adv_test}% Maybe move this to future work?
-%
-%- ???
-
-\subsubsection{The result?} \label{sssec:ex_result}
-
-The self-contained SI unit library exemplifies the ease of utilizing common
-knowledge (as mentioned in Section~\ref{sssec:adv_knowledge}) across multiple
-projects with minimal effort, allowing developers and scientists to spend their
-valuable time on more important things.
-
-Prototyping ideally will also become trivial due to code generation. Changes in
-specifications can be seen in the code in (essentially) real-time at trivial
-cost. Thus we provide the means to create exactly what is needed
-(Section~\ref{sssec:adv_simple}) for any given situation.
-
-Finally, any mistakes that occur in the software artifacts will occur
-\textbf{everywhere}. Errors propagate through all artifacts, and the artifacts
-will never be out of sync with each other (or the source), making them much
-easier to find and allowing for easier document verification
-(Section~\ref{sssec:adv_verify}).
-
-Complete traceability is achievable through the use of chunks, providing that
-all requisite knowledge can be appropriately encapsulated. 
+Finally, any mistakes that occur in the generated software artifacts will occur
+\textbf{everywhere}. Errors propagate through artifacts, and the artifacts will
+always be in sync with each other (and the source), making errors much easier to
+find and allowing for easier document verification.
 
 \section{Future work} \label{sec:todo}
 
@@ -652,11 +635,10 @@ Currently the framework is still very small, producing only one document type
 \lss{} in several ways including, but not limited to:
 
 \begin{enumerate}
-\item Generate more artifact types (i.e. have more default recipes).
-\item Generate different document views (ex. SRS with equation derivations).
-\item Include more types of information in chunks (for example: physical
-  constraints, typical values, and uncertainty as seen in Table\ref{tab:pcm}).
-\item Auto-generate test cases by using constraints and typical values. The
+\item Generate more artifact types. %(i.e. have more default recipes).
+\item Generate different document views. %(ex. SRS with equation derivations).
+\item Include more types of information in chunks (see Table\ref{tab:pcm}).
+\item Auto-generate test cases using constraints and typical values. The
   constraints should determine error cases, and typical value ranges give
   warnings.
 \item Continue to expand the tool by implementing larger example systems.
@@ -676,12 +658,8 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 \end{table}
 
 For the auto-generation of test cases, physical constraints will be seen as hard
-limits on the possible values. For example: length must always be positive.  A
-negative value would cause the code to raise an error and execution would
-halt. Typical values, on the other hand, are ``reasonable'' values. For example:
-the length of a beam should be on the order of several metres, not centimetres
-or kilometres. Theoretically, however, it could be either and thus the code will
-raise a warning instead of an error.
+limits on values (ex. length must always be positive and a negative value would throw an error). Typical values, on the other hand, are ``reasonable'' values (ex.
+the length of a beam should be on the order of several metres, but theoretically it could be kilometres, thus the code will raise a warning instead of an error).
 
     
 \section{Concluding Remarks} \label{sec:conclusion}

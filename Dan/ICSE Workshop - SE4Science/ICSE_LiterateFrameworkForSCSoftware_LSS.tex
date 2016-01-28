@@ -52,8 +52,9 @@
 \usepackage[final]{pdfpages}
 \usepackage{booktabs}
 \usepackage{longtable}
+\usepackage{graphicx}
 
-\newcommand{\lss}{LSS}
+\newcommand{\lss}{SCS}
 
 \begin{document}
 
@@ -68,19 +69,19 @@
 
 
 % DOI
-\doi{10.475/123_4} %D What goes here?
+%\doi{10.475/123_4} %D What goes here?
 
 % ISBN
-\isbn{123-4567-24-567/08/06}  %D What goes here?
+%\isbn{123-4567-24-567/08/06}  %D What goes here?
 
 %Conference
-\conferenceinfo{PLDI '13}{June 16--19, 2013, Seattle, WA, USA}  %D What goes here?
+\conferenceinfo{SE4SC}{?, 2016, Seattle, WA, USA}  %D What goes here?
 
 \acmPrice{\$15.00}  %D What goes here?
 
 %
 % --- Author Metadata here ---
-\conferenceinfo{WOODSTOCK}{'97 El Paso, Texas USA}  %D What goes here?
+\conferenceinfo{SE4SC}{2016 ?, ? USA}  %D What goes here?
 %\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
@@ -257,96 +258,122 @@ science.
 % (while capitalizing on frequent feedback and course correction) to meet
 % documentation requirements and improve their overall productivity.  This is
 % where our work comes in: 
-Our goal is to eat our cake and have it too.  We want to improve the qualities
+Our goal is to eat our cake and have it too. We want to improve the qualities
 (verifiability, reliability, usability etc.) of SC software and at the same time
-improve, or at least not diminish, performance.  Moreover, we want to improve
+improve, or at least not diminish, performance. Moreover, we want to improve
 developer productivity to save time and money on SC software development,
-certification and re-certification.  To accomplish this we need to remove (by
+certification and re-certification. To accomplish this we need to remove (by
 hand generated) duplication between software artifacts for SC software
 \cite{WilsonEtAl2013} and provide complete traceability between all software
-artifacts.  Practical accomplishment of these objectives means we need to
-provide facilities for automatic software artifact generation.  We aim to
-accomplish this by having one ``source'' that captures all of the relevant
-knowledge for a given SC problem.  From this source we can generate all required
-documents and views.  That is, we aim to provide methods, tools and techniques
-to support developing scientific software using a literate process, analogous
-to Knuth's~\cite{Knuth1984} literate programming.
+artifacts. Practical accomplishment of these objectives means we need to provide
+facilities for automatic software artifact generation. We aim to accomplish this
+by having one ``source'' that captures all of the relevant knowledge for a given
+SC problem. From this source we can generate all required documents and views.
+That is, we aim to provide methods, tools and techniques to support a literate
+process for developing scientific software that generalizes the idea behind
+Knuth's~\cite{Knuth1984} literate programming.
 
 %D May need to cut the roadmap for space.
-In the following sections we will 
+In the following sections we  
 %Section~\ref{sec:background} will give a more in-depth 
 look at SC software, specifically focusing on software quality and literate
 programming.
 %Section~\ref{sec:lss} 
-Then we introduce our framework %D Tool?
-for improving SC software development using a structured approach. We will show
+Then we introduce our framework, Sous-Chef de Software (SCS), 
+%D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
+for improving SC software development using a structured approach.  We show
 a short example of the framework in action and discuss its advantages. 
 %Section~\ref{sec:todo} will discuss
-We will then discuss how we want the framework to evolve and what future work we
-intend to do. Finally, Section~\ref{sec:conclusion} will provide some concluding
-remarks.
+We then discuss how we want the framework to evolve and what future work we
+intend to do. %Finally, Section~\ref{sec:conclusion}
+The last section provides concluding remarks.
 
 \section{Background} \label{sec:background}
 
-There have been many challenges towards assuring the quality of software
-throughout the history of scientific computing. Many attempts have been made
-(some successful, others not) at overcoming these challenges and improving
-software quality. In this section we will discuss some of the challenges, as
-well as introduce the ideas behind our proposed approach.
+% There have been many challenges towards assuring the quality of software
+% throughout the history of scientific computing. Many attempts have been made
+% (some successful, others not) at overcoming these challenges and improving
+% software quality. 
+In this section we discuss challenges for developing SC software and we
+introduce the ideas behind our approach.
 
 \subsection{Challenges for Scientific Computing Software
   Quality} \label{ssec:challenges}
 
-SC software has certain characteristics which create challenges for its
-development. We will not discuss them all in depth, however, those of interest
-to us are the technique selection, input output (or understandability), and
-modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
+% SC software has certain characteristics which create challenges for its
+% development. We will not discuss them all in depth, however, those of interest
+% to us are the technique selection, input output (or understandability), and
+% modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
 
-The \textit{technique selection challenge} is a challenge that comes up often
-when dealing with continuous mathematical equations. Since these cannot be
-solved directly (as computers are discrete), some technique must be chosen which
-can produce a solution which is ``good enough'' for the user. Typically this
-choice is left to domain experts as each technique will (not) satisfy certain
-non-functional requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
+The \textit{technique selection challenge}~\cite{Yu2011} arises in SC because
+the best numerical approach to solve a given SC problem is not known a priori.
+Experimentation is inevitably necessary to answer questions such as the
+appropriate order of interpolation, the degree of implicitness, etc. For a
+framework for developing scientific software to be successful it should support
+a separation of concerns between the physical model and the numerical algorithm.
+Moreover, the framework should provide facilities for parameterizing the
+expected algorithmic variabilities for easy experimentation with different
+options.
+%   is a challenge that
+% comes up often when dealing with continuous mathematical equations. Since these
+% cannot be solved directly (as computers are discrete), some technique must be
+% chosen which can produce a solution which is ``good enough'' for the
+% user. Typically this choice is left to domain experts as each technique will
+% (not) satisfy certain non-functional
+% requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
 
-The \textit{understandability} challenge impacts the usability of SC software
-and typically comes up where considerable amounts of input data are used to
-produce large volumes of output. The main issue in this case is the complicated
-nature of the input data and the output, leading developers to recreate
-(slightly modified) existing library routines to deal with the nature of the
-input and output. Programmers do not reuse libraries as often as they could
-because they do not believe the interface needs to be as complicated as it
-appears \cite{Dubois2002}.
+The \textit{understandability} challenge~\cite{Yu2011} comes up in the source
+code and in the final executable application. In an effort to make scientific
+libraries and software as widely applicable as possible most packages provide a
+generic interface with a large number of options. The number of options
+overwhelms users and causes programmers to not reuse libraries, since they do
+not believe the interface needs to be as complicated as it
+appears~\cite{Dubois2002}. To improve understandability, an ideal framework will
+generate applications and libraries that are only as complicated as they need to
+be for the job at hand.
 
-Finally, the \textit{maintainability challenge} tends to come up as requirements
-change. As SC software is used at the forefront of scientific knowledge, there
-can be a high frequency of requirements changes. Changing requirements poses a
-problem for scientists: commercial software can be difficult/expensive to modify
-and noncommercial programs are not often flexible enough to change.
+% when impacts the usability of SC software
+% and typically comes up where considerable amounts of input data are used to
+% produce large volumes of output. The main issue in this case is the complicated
+% nature of the input data and the output, leading developers to recreate
+% (slightly modified) existing library routines to deal with the nature of the
+% input and output.
+
+The \textit{maintainability challenge}~\cite{Yu2011} tends to come up as
+requirements, especially for the physical model, change. As SC software is used
+at the forefront of scientific knowledge, there can be a high frequency of
+requirements changes. This causes problems for software that undergoes a process
+where it is certified as fit for use. If the expense and time required for
+re-certification is on the same order of magnitude as the original
+certification, changes will not be made. To be effective in this environment, a
+framework needs to provide traceability so the consequences of change can be
+evaluated.
+%  Changing requirements poses a
+% problem for scientists: commercial software can be difficult/expensive to modify
+% and noncommercial programs are not often flexible enough to change.
 
 \subsection{Literate Programming} \label{ssec:literate}
 
 Literate programming (LP) is a programming methodology introduced by Knuth
 \cite{Knuth1984}. The main idea is to write programs in a way that explains (to
 humans) what we want the computer to do, as opposed to simply giving the
-computer instructions. There is a focus on ordering the material to promote
-better human understanding.
+computer instructions. % There is a focus on ordering the material to promote
+% better human understanding.
 
 In a literate program, the documentation and code are together in one source.
 While developing a literate program, the algorithms used are broken down into
 small, understandable parts (known as ``sections'' \cite{Knuth1984} or
 ``chunks'' \cite{JohnsonAndJohnson1997}) which are explained, documented, and
-implemented in an order which promotes understanding. To get working
-source code, the \textit{tangle} process is run, which extracts the code from
-the literate document and reorders it into an appropriate structure for the
-computer to understand. Similarly, the \textit{weave} process must be run to
-extract and typeset the documentation.
-
-By adhering to the LP methodology, a literate program ends up with documentation
-that is expertly written and of publishable quality. The code also ends up being
-well documented and high quality. There are several examples of SC
-programs being written in LP style, and two that stand out are VNODE-LP
-\cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
+implemented in an order which promotes understanding. To get working source
+code, the \textit{tangle} process is run, which extracts the code from the
+literate document and reorders it into an appropriate structure for the computer
+to understand. Similarly, the \textit{weave} process is run to extract and
+typeset the documentation.
+% By adhering to the LP methodology, a literate program ends up with documentation
+% that is expertly written and of publishable quality. The code also ends up being
+% well documented and high quality. 
+There are several examples of SC programs being written in LP style, such as
+VNODE-LP \cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
 Implementation'' \cite{PharrAndHumphreys2004} (a literate program which is also
 a textbook).
 
@@ -355,19 +382,26 @@ a textbook).
 Our framework, \lss, is being developed with the goals of providing complete
 traceability throughout the development process for SC software and reducing the
 amount of knowledge duplication across software artifacts. Both of these goals
-can be accomplished by following a (somewhat modified) literate approach.
+can be accomplished by generalizing a literate approach.
 
 \subsection{The current state of \lss} \label{ssec:example}
 
+\begin{figure}
+	\includegraphics[width=0.45\textwidth]{h_c}
+	\caption{SRS data definition of $h_c$}
+	\label{fig:h_c}
+\end{figure}	
+
 \lss{} has been developed to this point using a practical, example-driven
 approach. The first example used in guiding the development of \lss{} involves
-the incredibly simplified Software Requirements Specification (SRS) for a fuel
-pin in a nuclear reactor (See Appendix~\ref{app:srs}). It is a simple
-example, but the knowledge gained from it has been invaluable.
+the simplified Software Requirements Specification (SRS) for a fuel pin in a
+nuclear reactor (See \cite{SmithAndKoothoor2016} for more details). For brevity
+we will be specifically looking at the term $h_c$ (defined in
+Figure~\ref{fig:h_c}).
 
-As of the time of this writing, we are able to generate much of the SRS for the
-fuel pin as well as the source code for the calculations contained within
-(See Appendix~\ref{app:gen}).
+As of the time of this writing, we are able to generate the \verb|.tex| file for
+much of the SRS for the fuel pin as well as the source code (in C) for the
+required calculations.
 
 \subsection{How it works} \label{sssec:ex_how}
 
@@ -377,15 +411,25 @@ produces views of the source material, where these views are the software
 artifacts we require. Recipes are descriptions of these views and chunks contain
 the source material.
 
+% \begin{figure}
+% \large{
+% \Tree[.\fbox{Chunk(\textit{name})}
+% 		[.\fbox{Concept(\textit{description})}
+% 			[.\fbox{Quantity(\textit{symbol})} ]
+% 			[.\fbox{Unit(\textit{unit})} ]
+% 		]
+% 	]
+% }
+% \caption{The chunk hierarchy design}
+% \label{fig:chunks}
+% \end{figure}
+
 \begin{figure}
-\large{
-\Tree[.\fbox{Chunk(\textit{name})}
-		[.\fbox{Concept(\textit{description})}
-			[.\fbox{Quantity(\textit{symbol})} ]
-			[.\fbox{Unit(\textit{unit})} ]
-		]
-	]
+\begin{center}
+{
+ \includegraphics[width=0.35\textwidth]{ChunkHierarchy.pdf}
 }
+\end{center}
 \caption{The chunk hierarchy design}
 \label{fig:chunks}
 \end{figure}
@@ -396,9 +440,8 @@ most basic chunk has only one field: a \textit{name}. A ``Concept'' adds a
 \textit{description}, and so on.
 
 Each chunk is built from one or more of the existing chunks. This can be seen in
-the \verb|h_c| definition in Figure~\ref{fig:know_specific}. Thus, all of the
-information related to any one concept in a software project will be stored in a
-single chunk.
+the \verb|h_c| implementation below. Thus, all of the information related to any
+one concept in a software project will be stored in a single chunk.
 
 Recipes are specified using a micro- and macro-layout language embedded in
 Haskell. Each describes how the generated artifacts should appear: The
@@ -407,8 +450,13 @@ superscripts, concatenation of symbols, etc.), whereas the macro-language
 handles the larger layout details (sections, tables, etc.).
 
 The source for our example has been broken down into the recipe, common
-knowledge, and specific knowledge.  A portion of the recipe can be seen in
+knowledge, and specific knowledge. A portion of the recipe can be seen in
 Figure~\ref{fig:recipe}.
+
+In this example, the fundamental SI units are common knowledge. Each is
+contained within its own chunk in the SI unit library. As
+Figure~\ref{fig:know_common} shows, each chunk has a name, description, and
+symbolic representation.
 
 \begin{figure}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
@@ -431,11 +479,6 @@ s1_intro = Paragraph (S "Throughout this ...
 \label{fig:recipe}
 \end{figure}
 
-In this example, the fundamental SI units are common knowledge. Each is
-contained within its own chunk in the SI unit library. As
-Figure~\ref{fig:know_common} shows, each chunk has a name, description, and
-symbolic representation.
-
 \begin{figure}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
 metre, kilogram, second, kelvin, mole :: FundUnit
@@ -450,7 +493,6 @@ kelvin   = fund "Kelvin"   "temperature (kelvin)" "K"
 \caption{Segment of the SI unit library}
 \label{fig:know_common}
 \end{figure}
-%D Need to fix formatting. Tried using figure* but it just put it on the next page
 
 \begin{figure}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
@@ -472,32 +514,40 @@ The $h_c$ chunk (Figure~\ref{fig:know_specific}) is a piece of specific
 knowledge. It contains the name, description, symbol, units, and equation
 (written in an internal expression language) for $h_c$.
 
+The internal expression language used to implement the equation for $h_c$
+%is implement the right word?
+allows for the straighforward generation of source code. We utilize methods
+similar to those found in \cite{Carette???, Szymczak???}
+%self-source or is that tacky?
+wherein the expression language is converted to an abstract representation of
+the code and then passed to a pretty-printer to create the final source.
+
+We currently generate C code, however it would be possible to generate any
+language provided we have an appropriate representation for that language.
 \subsection{Advantages} \label{ssec:advantages}
 
 We can already see the beginning of some advantages over traditional SC
-development. Certain advantages are relevant to specific challenges (Section~\ref{ssec:challenges}) and will be
-explored further in the following sections.
+development. Certain advantages are relevant to specific challenges
+(Section~\ref{ssec:challenges}) and will be explored further in the following
+sections.
 
 \subsubsection{Software Certification} \label{sssec:adv_cert}
 
-High-quality documentation is required to certify software. 
-The creation of said documentation should not impede scientists' work. One of
-the major problems in creating documentation for SC software stems from the
-maintainability challenge (Section~\ref{ssec:challenges}). As requirements
-change, documentation must be updated. Changes to requirements result in
-greater changes to documentation as a project progresses. This creates issues
-with traceability and maintainability.
+High-quality documentation is required to certify software. The creation of said
+documentation should not impede scientists' work. One of the major problems in
+creating documentation for SC software stems from the maintainability challenge
+(Section~\ref{ssec:challenges}). As requirements change, documentation must be
+updated. Changes to requirements result in greater changes to documentation as a
+project progresses. This creates issues with traceability and maintainability.
 
 Depending on the regulatory body and set of standards for certification, many
 types of documents may be required. \lss{} aims to generate all of these
-documents alongside the code, while accounting for any changes. As the
-changes will affect chunks and those chunks will be used to generate the
-documentation and code, there is a guarantee that changes will propagate
-throughout all of the artifacts.
+documents alongside the code, while accounting for any changes. As the changes
+will affect chunks and those chunks will be used to generate the documentation
+and code, there is a guarantee that changes will propagate throughout all of the
+artifacts.
 
-The following are examples of software artifacts
-that we wish to generate (we assume software engineers will be familiar with
-most, if not all, of these):
+The following are examples of software artifacts that we wish to generate:
 \begin{enumerate}
 % \item Problem Statement
 %  A description of the problem to be solved, essentially
@@ -541,29 +591,25 @@ documents and source must remain consistent.
 
 In the context of re-certification, if a piece of software were developed using
 \lss{} and some changes needed to be made, updating the artifacts and submitting
-them for re-certification would be completely trivial. All documentation would
-be generated from the (newly modified) chunks, according to their existing
-recipes. Or in the case of new information being added, a new chunk would be
-created and the recipe slightly modified. During the implementation of our
-example, we have already seen how \lss{} allows us to make changes at trivial
-cost.
+them for re-certification would be straightforward. All documentation would be
+generated from the (newly modified) chunks, according to their existing recipes.
+Or in the case of new information being added, a new chunk would be created and
+the recipe slightly modified. During the implementation of our example, we have
+already seen how \lss{} allows us to make changes at trivial cost.
 
 On another note, if a document standard were to be changed during the
 development cycle, it would not necessitate re-writing the entire document. All
 of the information in the chunks would remain intact, only the recipe would need
-to be changed to accomodate the new view.
+to be changed to accomodate the new view. Thus, capturing all of the knowledge
+that a program is based on would improve reproducibility.
 
 \subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
 
 In SC software there are many commonly shared theorems and formulae across
-different applications. For example consider the conservation of thermal
-energy equation:
-\begin{displaymath} -{\bf \nabla \cdot q} + g = \rho C
-\frac{\partial T}{\partial t} \end{displaymath}
-This equation is widely used in a variety of thermal analysis applications, with
-each solving a different problem, or modeling a different system. Many
-applications tend to reimplement this equation, as opposed to reusing
-it~\cite{TODO}. %D I need to grab a citation for this... probably
+different applications. For example consider the general form of the
+conservation of thermal energy equation. This equation is widely used in a
+variety of thermal analysis applications, with each solving a different problem,
+or modeling a different system.
 
 Our approach aims to build libraries of chunks that can be reused anywhere. Each
 library should contain common chunks relevant to a specific application domain
@@ -585,8 +631,8 @@ important things.
 
 Currently there exist many powerful, general commercial programs for solving
 problems using the finite element method. However, they are not often used to
-develop new ``widgets'' because of the cost and complexity of doing
-so~\cite{TODO}. %D Where is this from?
+develop new ``widgets'' because of the understandability challenge.
+%cost and complexity of doing so~\cite{TODO}. %D Where is this from?
 Engineers often have to resort to building and testing prototypes, instead of
 performing simulations, due to a lack of tools that can assist with their exact
 set of problems. %D Citation needed?
@@ -598,10 +644,10 @@ cost. For example, if an engineer were designing parts for strength, they could
 have a general stress analysis program. This program could be 3D or specialized
 for plane stress/strain, depending on which assumption would be most appropriate
 at the time. The program could even be customized to the parameterized shape of
-the part the engineer is interested in. The new program would also only expose
-the degrees of freedom necessary for the engineer to change (ex. material
-properties or specific dimensions of the part), making the simulation process
-simpler and safer.
+the part the engineer is interested in. The new program could only expose the
+degrees of freedom necessary for the engineer to change (ex. material properties
+or specific dimensions of the part), making the simulation process simpler and
+safer.
 
 \lss{} tackles this understandability challenge (Section~\ref{ssec:challenges})
 by allowing developers to build components which will provide exactly what is
@@ -620,13 +666,13 @@ mechanism. Each chunk can maintain its own sanity checks and incorporate them
 into the final system to ensure all inputs and outputs (including
 intermediaries) are valid.
 
-Also, with \lss{}, complete traceability is achievable through the use of chunks
-provided the requisite knowledge can be appropriately encapsulated.
+Also, with \lss{}, complete traceability is achievable through the use of
+chunks, provided the requisite knowledge can be appropriately encapsulated.
 
 Finally, any mistakes that occur in the generated software artifacts will occur
 \textbf{everywhere}. Errors propagate through artifacts, and the artifacts will
-always be in sync with each other (and the source), making errors much easier to
-find and allowing for easier document verification.
+always be in sync with each other (and the source). As a consequence, errors
+will be much easier to find and only need to be fixed in one place.
 
 \section{Future work} \label{sec:todo}
 
@@ -658,8 +704,11 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 \end{table}
 
 For the auto-generation of test cases, physical constraints will be seen as hard
-limits on values (ex. length must always be positive and a negative value would throw an error). Typical values, on the other hand, are ``reasonable'' values (ex.
-the length of a beam should be on the order of several metres, but theoretically it could be kilometres, thus the code will raise a warning instead of an error).
+limits on values (ex. length must always be positive and a negative value would
+throw an error). Typical values, on the other hand, are ``reasonable'' values
+(ex. the length of a beam should be on the order of several metres, but
+theoretically it could be kilometres, thus the code will raise a warning instead
+of an error).
 
     
 \section{Concluding Remarks} \label{sec:conclusion}
@@ -677,20 +726,4 @@ hopefully lead to higher quality software at very little cost.
 
 \bibliographystyle{abbrv}
 \bibliography{sigproc}  
-\appendix
-%%Appendix A
-\section{SRS for $h_g$ and $h_c$} \label{app:srs}
-
-%\includepdf[pages=-]{SRS.pdf} %D FIX FORMATTING
-
-\section{Artifacts generated by \lss} \label{app:gen}
-\subsection{SRS}
-\subsection{Source code}
-%D FIX FORMATTING
-\begin{lstlisting}[language=C, frame=single, showstringspaces=false, basicstyle=\tiny]
-double calc_h_g(double k_c, double h_p, double tau_c){
-    return (2 * k_c * h_p / (2 * k_c + tau_c * h_p));
-}
-\end{lstlisting}
-
 \end{document}

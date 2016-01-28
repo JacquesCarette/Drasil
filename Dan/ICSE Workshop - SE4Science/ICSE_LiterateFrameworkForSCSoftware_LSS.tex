@@ -55,6 +55,20 @@
 \usepackage{graphicx}
 
 \newcommand{\lss}{SCS}
+\newcommand{\fullname}{Sous-Chef de Software} 
+%D because recipes and it's pretty much in charge of the kitchen
+
+%D go full french? 
+%D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
+
+%D Other names (Literate can be precede pretty much any):
+%D Literate Architect (ArchiTeXt lol), Archaeologist, Craftsman
+%D Jack-of-All-Trades (JAT -- Opens us up to ``master of none'' critiques),
+%D (Literate) Sync-Dev (SD/LSD) <-- I like the second acronym (Dan).
+%D Encyclopedia Dev (don't like the acronym, but name plays on knowledge cap)
+%D Quality Management Framework (QMF), get to use `Q'!
+%D Tracer
+%D ???
 
 \begin{document}
 
@@ -126,15 +140,20 @@ Jacques Carette\\
 
 \maketitle
 \begin{abstract}
-Awesome abstract that makes readers fall in love with the research and throw
-grant money at us in droves goes here. I'm going to just fill in some more words
-so we can get an idea of how much space our abstract will most likely take up.
-First we start by introducing ideas. Here are some ideas: compostable javelins
-with seeds in the points, which are somewhat hollow (or absorb water well) to
-allow for easy irrigation. These ideas come with problems. Now we'll mention
-that we're hoping to solve these by utilizing our \lss{} framework. Finally
-we'll discuss how the examples we've used have already shown clear advantages
-from using this process.
+Qualities of scientific computing software can be improved by following a
+rational design process. The qualities of traceability, verifiability, and
+reproducibility are of exceptionally high concern when attempting to certify
+software. We have begun development of a framework, \fullname{} (\lss{}),
+to help ensure complete traceability, adapt to the ever changing nature of
+scientific computing projects, and ensure software artifacts can be easily and
+quickly (re-)~generated as necessary.
+
+Using an example-based approach to implement \lss{}, we have already seen many
+benefits that it provides to the development process. \lss{} keeps all software
+artifacts in sync with each other and the source, allows for reuse of common
+concepts across projects, and aids in the verification of software. It is our
+hope that \lss{} will lead to the development of higher quality software at low
+cost.
 \end{abstract}
 
 
@@ -281,7 +300,7 @@ In the following sections we
 focus on SC software quality and literate
 programming.
 %Section~\ref{sec:lss} 
-Then we introduce our framework, Sous-Chef de Software (SCS), 
+Then we introduce our framework, \fullname{} (\lss{}), 
 %D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
 %S While I like the creativity, I prefer LSS to SCS.  Let's see what Jacques thinks.
 for improving SC software development using a structured approach.  We show

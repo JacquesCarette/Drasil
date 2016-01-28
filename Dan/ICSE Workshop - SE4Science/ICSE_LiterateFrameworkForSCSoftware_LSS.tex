@@ -195,7 +195,7 @@ usability, maintainability, reusability and
 reproducibility~\cite{SmithAndKoothoor2016}.  However, many researchers have
 reported that a document driven process is not used by, nor suitable for, SC
 software; they argue that scientific developers naturally use an agile
-philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
+philosophy~\cite{CarverEtAl2007, EasterbrookAndJohns2009,
   Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
 driven~\cite{Kelly2015}, process.  The arguments are that scientists do not
 view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007} and that
@@ -238,8 +238,10 @@ science.
 % documentation. Essentially, this means the software must be both valid and
 % verifiable, reliable, usable, maintainable, reusable, understandable, and
 % reproducible. %D Verification involves ensuring that the software is ``solving
-%               %the equations right'', whereas validation requires ensuring that
-%               %the software is ``solving the right equations''\cite{Roache1998}.
+%               % the equations right'', whereas validation requires ensuring
+%               % that
+%               % the software is ``solving the right
+%               % equations''\cite{Roache1998}.
 
 % Developing certifiable software can end up being a much more involved process
 % than developing uncertified software: it takes more money, time, and effort on
@@ -276,16 +278,17 @@ Knuth's~\cite{Knuth1984} literate programming.
 %D May need to cut the roadmap for space.
 In the following sections we  
 %Section~\ref{sec:background} will give a more in-depth 
-look at SC software, specifically focusing on software quality and literate
+focus on SC software quality and literate
 programming.
 %Section~\ref{sec:lss} 
 Then we introduce our framework, Sous-Chef de Software (SCS), 
 %D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
+%S While I like the creativity, I prefer LSS to SCS.  Let's see what Jacques thinks.
 for improving SC software development using a structured approach.  We show
-a short example of the framework in action and discuss its advantages. 
+a short example of the framework and discuss its advantages. 
 %Section~\ref{sec:todo} will discuss
-We then discuss how we want the framework to evolve and what future work we
-intend to do. %Finally, Section~\ref{sec:conclusion}
+We then discuss how we want the framework to evolve. % and what future work we
+%intend to do. %Finally, Section~\ref{sec:conclusion}  
 The last section provides concluding remarks.
 
 \section{Background} \label{sec:background}
@@ -306,10 +309,10 @@ introduce the ideas behind our approach.
 % modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
 
 The \textit{technique selection challenge}~\cite{Yu2011} arises in SC because
-the best numerical approach to solve a given SC problem is not known a priori.
-Experimentation is inevitably necessary to answer questions such as the
+the best numerical approach to solve a given problem is not known a priori.
+Experimentation is inevitably necessary to determine the
 appropriate order of interpolation, the degree of implicitness, etc. For a
-framework for developing scientific software to be successful it should support
+framework for developing SC software to be successful, it should support
 a separation of concerns between the physical model and the numerical algorithm.
 Moreover, the framework should provide facilities for parameterizing the
 expected algorithmic variabilities for easy experimentation with different
@@ -322,9 +325,9 @@ options.
 % (not) satisfy certain non-functional
 % requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
 
-The \textit{understandability} challenge~\cite{Yu2011} comes up in the source
-code and in the final executable application. In an effort to make scientific
-libraries and software as widely applicable as possible most packages provide a
+The \textit{understandability} challenge~\cite{Yu2011} effects the source
+code and the executable application. In an effort to make scientific
+libraries and software as widely applicable as possible, most packages provide a
 generic interface with a large number of options. The number of options
 overwhelms users and causes programmers to not reuse libraries, since they do
 not believe the interface needs to be as complicated as it
@@ -339,15 +342,12 @@ be for the job at hand.
 % (slightly modified) existing library routines to deal with the nature of the
 % input and output.
 
-The \textit{maintainability challenge}~\cite{Yu2011} tends to come up as
-requirements, especially for the physical model, change. As SC software is used
-at the forefront of scientific knowledge, there can be a high frequency of
-requirements changes. This causes problems for software that undergoes a process
-where it is certified as fit for use. If the expense and time required for
-re-certification is on the same order of magnitude as the original
-certification, changes will not be made. To be effective in this environment, a
-framework needs to provide traceability so the consequences of change can be
-evaluated.
+The \textit{maintainability challenge}~\cite{Yu2011} comes up as requirements
+change.  The high frequency of change for SC software especially causes problems
+for certification. If the expense and time required for re-certification is on
+the same order of magnitude as the original certification, changes will not be
+made. To be effective in this environment, a framework needs to provide
+traceability, so the consequences of change can be evaluated.
 %  Changing requirements poses a
 % problem for scientists: commercial software can be difficult/expensive to modify
 % and noncommercial programs are not often flexible enough to change.
@@ -379,15 +379,14 @@ a textbook).
 
 \section{Introducing \lss} \label{sec:lss} % (NEED A BETTER NAME)
 
-Our framework, \lss, is being developed with the goals of providing complete
-traceability throughout the development process for SC software and reducing the
-amount of knowledge duplication across software artifacts. Both of these goals
-can be accomplished by generalizing a literate approach.
+Our framework, \lss, is being developed with two goals: complete traceability
+throughout the development process and reduced knowledge duplication. Both of
+these goals can be accomplished by generalizing a literate approach.
 
 \subsection{The current state of \lss} \label{ssec:example}
 
 \begin{figure}
-	\includegraphics[width=0.45\textwidth]{h_c}
+	\includegraphics[width=0.45\textwidth]{h_c.pdf}
 	\caption{SRS data definition of $h_c$}
 	\label{fig:h_c}
 \end{figure}	
@@ -396,10 +395,9 @@ can be accomplished by generalizing a literate approach.
 approach. The first example used in guiding the development of \lss{} involves
 the simplified Software Requirements Specification (SRS) for a fuel pin in a
 nuclear reactor (See \cite{SmithAndKoothoor2016} for more details). For brevity
-we will be specifically looking at the term $h_c$ (defined in
-Figure~\ref{fig:h_c}).
+we look specifically at the term $h_c$ (defined in Figure~\ref{fig:h_c}).
 
-As of the time of this writing, we are able to generate the \verb|.tex| file for
+At the time of this writing, we are able to generate the \verb|.tex| file for
 much of the SRS for the fuel pin as well as the source code (in C) for the
 required calculations.
 
@@ -527,67 +525,67 @@ language provided we have an appropriate representation for that language.
 \subsection{Advantages} \label{ssec:advantages}
 
 We can already see the beginning of some advantages over traditional SC
-development. Certain advantages are relevant to specific challenges
-(Section~\ref{ssec:challenges}) and will be explored further in the following
-sections.
+development. How \lss{} addresses the specific challenges of
+Section~\ref{ssec:challenges} and will be explored below.
 
 \subsubsection{Software Certification} \label{sssec:adv_cert}
 
 High-quality documentation is required to certify software. The creation of said
-documentation should not impede scientists' work. One of the major problems in
-creating documentation for SC software stems from the maintainability challenge
-(Section~\ref{ssec:challenges}). As requirements change, documentation must be
-updated. Changes to requirements result in greater changes to documentation as a
-project progresses. This creates issues with traceability and maintainability.
+documentation should not impede scientists' work.  Major problems in creating SC
+software stems from the maintainability and technique selection challenges
+(Section~\ref{ssec:challenges}). As requirements and numerical algorithmic
+decisions change, documentation and code must be updated.  This creates issues
+with traceability and maintainability.
 
-Depending on the regulatory body and set of standards for certification, many
-types of documents may be required. \lss{} aims to generate all of these
+Depending on the regulatory body and the certification standards, many
+types of documents may be required, such as requirements specification,
+verification plans, design specification and code. \lss{} aims to generate all of these
 documents alongside the code, while accounting for any changes. As the changes
 will affect chunks and those chunks will be used to generate the documentation
 and code, there is a guarantee that changes will propagate throughout all of the
 artifacts.
 
-The following are examples of software artifacts that we wish to generate:
-\begin{enumerate}
-% \item Problem Statement
-%  A description of the problem to be solved, essentially
-%  summarizing the purpose of the software. There should be no mention of how the
-%  problem is to be solved.
-% \item Development Plan
-%  An overview of the development process and
-%  infrastructure. This should cover the documents to be created, which templates
-%  (if any) will be followed, internal processes to be employed, coding
-%  standards, and other details relevant to how the software will be developed.
-\item Software Requirements Specification (SRS)
-%  The desired functions and qualities of the
-%  software should be documented herein. The requirements should cover
-%  functionality, goals, context, design constraints, expected performance, and
-%  any other quality attributes of the software.
-\item Verification and Validation (V\&V) plan
-%  Documents how the documentation
-%  artifacts will be shown to be internally correct (verification) as well as how
-%  to ensure that the right problem has been solved (validation).
-\item Design Specification
-%  How will the requirements be realized? Document the
-%  software architecture and a detailed design of the modules/interfaces to be
-%  used. Can be thought of as a programmer's manual for maintenance.
-\item Code
-%  Implementation of the design specification.
-\item V\&V Report 
-%  Summarize the steps taken for
-%  performing verification and validation (this should mirror the V \& V plan
-%  from above) and include any testing results.
-% \item User Manual
-%  Full instructions on how the software is to be used,
-%  beginning with installation instructions and proceeding through detailed
-%  examples of the program's use.
-\end{enumerate}
+% The following are examples of software artifacts that we wish to generate:
+% \begin{enumerate}
+% % \item Problem Statement
+% %  A description of the problem to be solved, essentially
+% %  summarizing the purpose of the software. There should be no mention of how the
+% %  problem is to be solved.
+% % \item Development Plan
+% %  An overview of the development process and
+% %  infrastructure. This should cover the documents to be created, which templates
+% %  (if any) will be followed, internal processes to be employed, coding
+% %  standards, and other details relevant to how the software will be developed.
+% \item Software Requirements Specification (SRS)
+% %  The desired functions and qualities of the
+% %  software should be documented herein. The requirements should cover
+% %  functionality, goals, context, design constraints, expected performance, and
+% %  any other quality attributes of the software.
+% \item Verification and Validation (V\&V) plan
+% %  Documents how the documentation
+% %  artifacts will be shown to be internally correct (verification) as well as how
+% %  to ensure that the right problem has been solved (validation).
+% \item Design Specification
+% %  How will the requirements be realized? Document the
+% %  software architecture and a detailed design of the modules/interfaces to be
+% %  used. Can be thought of as a programmer's manual for maintenance.
+% \item Code
+% %  Implementation of the design specification.
+% \item V\&V Report 
+% %  Summarize the steps taken for
+% %  performing verification and validation (this should mirror the V \& V plan
+% %  from above) and include any testing results.
+% % \item User Manual
+% %  Full instructions on how the software is to be used,
+% %  beginning with installation instructions and proceeding through detailed
+% %  examples of the program's use.
+% \end{enumerate}
 
-The artifacts listed above share non-trivial amounts of information, which is
-where traceability comes into play. To make any changes to the documentation,
-there must be some way to determine how a change will affect \textbf{all} of the
-artifacts. This is especially important for (re-) certification, as the
-documents and source must remain consistent.
+% The artifacts listed above share non-trivial amounts of information, which is
+% where traceability comes into play. To make any changes to the documentation,
+% there must be some way to determine how a change will affect \textbf{all} of the
+% artifacts. This is especially important for (re-) certification, as the
+% documents and source must remain consistent.
 
 In the context of re-certification, if a piece of software were developed using
 \lss{} and some changes needed to be made, updating the artifacts and submitting
@@ -600,8 +598,8 @@ already seen how \lss{} allows us to make changes at trivial cost.
 On another note, if a document standard were to be changed during the
 development cycle, it would not necessitate re-writing the entire document. All
 of the information in the chunks would remain intact, only the recipe would need
-to be changed to accomodate the new view. Thus, capturing all of the knowledge
-that a program is based on would improve reproducibility.
+to be changed to accommodate the new view. Thus, capturing all of the knowledge
+that a program is based on and improving reproducibility.
 
 \subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
 

@@ -120,103 +120,55 @@ quality software at lower cost over the long term.
 
 \section{Introduction}
 
-A rational document driven design process for Scientific Computing (SC)
-software\footnote{We will also abbreviate SC software to SCS}
-potentially improves the software qualities of verifiability,
-reliability, usability, maintainability, reusability and
-reproducibility~\cite{SmithAndKoothoor2016}.  However, many researchers have
+We believe that, because of the solid scientific knowledge base built up
+over the last $6+$ decades of work in Scientific Computing (SC), it is feasible
+for SC to once again take a leadership position as regards the development
+of high quality software.  More precisely, our goal s to use this knowledge
+to improve the verifiability, reliability, usability, maintainability,
+reusability and reproducibility SC Software (SCS).
+
+Some have argued for a rational document-drive design process%
+\cite{SmithAndKoothoor2016}.  However, many researchers have
 reported that a document driven process is not used by, nor suitable for, SCS;
-they argue that scientific developers naturally use an agile
-philosophy~\cite{CarverEtAl2007, EasterbrookAndJohns2009, Segal2005}, 
-amethododical~\cite{Kelly2013}, or a knowledge acquisition
-driven~\cite{Kelly2015}, process.  The arguments are that scientists do not
+they argue that scientific developers naturally use either an agile
+philosophy~\cite{CarverEtAl2007, EasterbrookAndJohns2009, Segal2005}, or an
+amethododical~\cite{Kelly2013} process, or a knowledge acquisition
+driven~\cite{Kelly2015} process.  The arguments are that scientists do not
 view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007} and that
-in SC requirements are impossible to determine up-front~\cite{CarverEtAl2007,
-  SegalAndMorris2008}.  Rather than abandon the benefits of a rational document
-driven process, these arguments can be addressed through the development of
-appropriate tools that support change and allow the scientist to focus on their
-science.
+in SC, requirements are impossible to determine up-front~\cite{CarverEtAl2007,
+  SegalAndMorris2008}.  But rather than abandon the benefits of a rational
+document-driven process, we argue that the appropriate tools can in fact
+let the scientists focus even more of their time on science.
 
-% Scientific computing (SC) was the first application of computers. It is still
-% used today for a wide variety of tasks: constructing mathematical models,
-% performing quantitative analyses, creating simulations, solving scientific
-% problems, etc. SC software has been developed for increasingly safety and
-% security critical systems (nuclear reactor simulation, satellite
-% guidance%D MORE EXAMPLES)
-% ) as well as predictive
-% systems.
-% It has applications including (but not limited to) predicting weather patterns
-% and natural disasters, and simulating economic fluctuations. As such, it is an
-% incredibly important part of an increasing number of industries
-% today.
+The principal perceived drawbacks of document-driven design methodologies are:
+\begin{itemize}
+\item information duplication,
+\item synchronization headaches between artifacts,
+\item an over-emphasis on non-executable artifacts.
+\end{itemize}
 
-% In the medical, nuclear power, aerospace, automotive, and manufacturing fields
-% there are many safety critical systems in play. With each system, there is the
-% possibility of a catastrophic failure endangering lives.  It is incredibly
-% important then to have some means of certifying and assuring the quality of each
-% software system. As Smith et al.~\cite{SmithAndKoothoor2016} stated
-% ``Certification of Scientific Computing (SC) software is official recognition by
-% an authority or regulatory body that the software is fit for its intended use.''
-% These regulatory bodies determine certain certification standards that must be
-% met for a system to become recognized as certified. One example of a
-% certification standard is the Canadian Standards Association (CSA) requirements
-% for quality assurance of scientific software for nuclear power plants.
-
-% The main goal of software certification is to ``... systematically determine,
-% based on the principles of science, engineering, and measurement theory, whether
-% a software product satisfies accepted, well-defined and measurable criteria''
-% \cite{HatcliffEtAl2009}. As such, certification would not only involve analyzing the code
-% systematically and rigorously, but also analyzing the
-% documentation. Essentially, this means the software must be both valid and
-% verifiable, reliable, usable, maintainable, reusable, understandable, and
-% reproducible. %D Verification involves ensuring that the software is ``solving
-%               % the equations right'', whereas validation requires ensuring
-%               % that
-%               % the software is ``solving the right
-%               % equations''\cite{Roache1998}.
-
-% Developing certifiable software can end up being a much more involved process
-% than developing uncertified software: it takes more money, time, and effort on
-% the part of developers to produce. These increased costs lead to reluctance from
-% practitioners to develop certifiable software \cite{Roache1998}. However, in
-% our 
-% opinion, cost is not the only contributing factor for the developers. As it
-% stands in the field, scientists seem to prefer a more agile development process
-% \cite{Segal2008}. However, this is not necessarily the best process as typically
-% this would lead to problems maintaining the
-% documentation, meaning that not all aspects of the software would be traceable
-% through the design process and making certification more difficult (if not
-% impossible).
-
-% Given proper methods and tools, scientists can follow a structured approach
-% (while capitalizing on frequent feedback and course correction) to meet
-% documentation requirements and improve their overall productivity.  This is
-% where our work comes in: 
-Our goal is to eat our cake and have it too. We want to improve the qualities
-(verifiability, reliability, usability etc.) of SC software and at the same time
-improve, or at least not diminish, performance. Moreover, we want to improve
-developer productivity to save time and money on SC software development,
-certification and re-certification. To accomplish this we need to remove (by
-hand generated) duplication between software artifacts for SC software
-\cite{WilsonEtAl2013} and provide complete traceability between all software
-artifacts. Practical accomplishment of these objectives means we need to provide
-facilities for automatic software artifact generation. We aim to accomplish this
-by having one ``source'' that captures all of the relevant knowledge for a given
-SC problem. From this source we can generate all required documents and views.
+Thus, to successfully achieve our goal of improving various software qualities
+(verifiability, reliability, usability etc.) of SCS, whilst also improving,
+or at least not diminish performance, we must also find a way to simultaneously
+deal with the above drawbacks.  In fact, we are even more ambitious: we want
+to improve developer productivity to save time and money on SCS development,
+certification and re-certification. To accomplish this we need to remove
+duplication between software artifacts \cite{WilsonEtAl2013} as well as provide
+traceability between all software artifacts. In practice, this means providing
+facilities for automatic software artifact generation from high level
+``knowlege''. We can accomplish this by have a single ``source'' for each
+relevant piece of information which makes up an SC problem and its solution.
+From this, we can generate all required documents and views.
 That is, we aim to provide methods, tools and techniques to support a literate
 process for developing scientific software that generalizes the idea behind
 Knuth's~\cite{Knuth1984} literate programming.
 
 %D May need to cut the roadmap for space.
-In the following sections we  
+In the following section, we  
 %Section~\ref{sec:background} will give a more in-depth 
-focus on SC software quality and literate
-programming.
+focus on SC software quality and literate programming.
 %Section~\ref{sec:lss} 
-Then we introduce our framework, \lss{},
-%D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
-%S While I like the creativity, I prefer LSS to SCS.  Let's see what Jacques thinks.
-for improving SC software development using a structured approach.  We show
+Then we introduce our framework, \lss{}.  We show
 a short example of the framework and discuss its advantages. 
 %Section~\ref{sec:todo} will discuss
 We then discuss how we want the framework to evolve. % and what future work we

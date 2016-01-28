@@ -181,68 +181,46 @@ The last section provides concluding remarks.
 % throughout the history of scientific computing. Many attempts have been made
 % (some successful, others not) at overcoming these challenges and improving
 % software quality. 
-In this section we discuss challenges for developing SC software and we
+In this section we discuss challenges for developing SCS and we
 introduce the ideas behind our approach.
 
-\subsection{Challenges for Scientific Computing Software
-  Quality} \label{ssec:challenges}
+\subsection{Challenges} \label{ssec:challenges}
 
-% SC software has certain characteristics which create challenges for its
-% development. We will not discuss them all in depth, however, those of interest
-% to us are the technique selection, input output (or understandability), and
-% modification (or maintainability) challenges as described by Yu \cite{Yu2011}.
+As the best numerical approach to solve a given problem is usually not known
+a priori, we have to face the \textit{technique selection
+challenge}~\cite{Yu2011}. Thus experimentation is inevitably necessary to
+determine the appropriate order of interpolation, the degree of implicitness,
+etc. Nevertheless, the problem to solve does not change.  This implies that
+we need a a separation of concerns between the physical model and the numerical
+algorithms.  In fact, ease of experimentation means that we should also 
+provide facilities for parameterizing the expected algorithmic variabilities.
 
-The \textit{technique selection challenge}~\cite{Yu2011} arises in SC because
-the best numerical approach to solve a given problem is not known a priori.
-Experimentation is inevitably necessary to determine the
-appropriate order of interpolation, the degree of implicitness, etc. For a
-framework for developing SC software to be successful, it should support
-a separation of concerns between the physical model and the numerical algorithm.
-Moreover, the framework should provide facilities for parameterizing the
-expected algorithmic variabilities for easy experimentation with different
-options.
-%   is a challenge that
-% comes up often when dealing with continuous mathematical equations. Since these
-% cannot be solved directly (as computers are discrete), some technique must be
-% chosen which can produce a solution which is ``good enough'' for the
-% user. Typically this choice is left to domain experts as each technique will
-% (not) satisfy certain non-functional
-% requirements. %D NEEDS TO BE BROUGHT UP SOMEWHERE
+In an effort to make scientific libraries and software as widely applicable as
+possible, most packages provide a generic interface with a large number of
+options; this tends to overwhelm users and cause programmers to not reuse
+libraries, since they do not believe the interface needs to be as complicated
+as it appears~\cite{Dubois2002}. This is the \textit{understandability}
+challenge~\cite{Yu2011}.  An ideal framework would allow us to expose an
+API, as well as generate applications, which use routines which are only as
+complicated as they need to be for the job at hand.
 
-The \textit{understandability} challenge~\cite{Yu2011} effects the source
-code and the executable application. In an effort to make scientific
-libraries and software as widely applicable as possible, most packages provide a
-generic interface with a large number of options. The number of options
-overwhelms users and causes programmers to not reuse libraries, since they do
-not believe the interface needs to be as complicated as it
-appears~\cite{Dubois2002}. To improve understandability, an ideal framework will
-generate applications and libraries that are only as complicated as they need to
-be for the job at hand.
-
-% when impacts the usability of SC software
-% and typically comes up where considerable amounts of input data are used to
-% produce large volumes of output. The main issue in this case is the complicated
-% nature of the input data and the output, leading developers to recreate
-% (slightly modified) existing library routines to deal with the nature of the
-% input and output.
-
-The \textit{maintainability challenge}~\cite{Yu2011} comes up as requirements
-change.  The high frequency of change for SC software especially causes problems
-for certification. If the expense and time required for re-certification is on
-the same order of magnitude as the original certification, changes will not be
-made. To be effective in this environment, a framework needs to provide
-traceability, so the consequences of change can be evaluated.
+As requirements change, we face the \textit{maintainability
+challenge}~\cite{Yu2011}.  The high frequency of change for SCS
+causes accute problems for certification. If the expense and time required for
+re-certification is on the same order of magnitude as the original
+certification, changes will not be made. To be effective in this environment, a
+framework needs to provide traceability, so the consequences of change can be
+directly evaluated.
 %  Changing requirements poses a
 % problem for scientists: commercial software can be difficult/expensive to modify
 % and noncommercial programs are not often flexible enough to change.
 
 \subsection{Literate Programming} \label{ssec:literate}
 
-Literate programming (LP) is a programming methodology introduced by Knuth
-\cite{Knuth1984}. The main idea is to write programs in a way that explains (to
-humans) what we want the computer to do, as opposed to simply giving the
-computer instructions. % There is a focus on ordering the material to promote
-% better human understanding.
+Literate programming (LP) is a methodology introduced by Knuth
+\cite{Knuth1984}. The main idea is to write programs in a way that explains 
+{\bf (to humans)} what we want the computer to do, as opposed to simply giving
+the computer instructions.
 
 In a literate program, the documentation and code are together in one source.
 While developing a literate program, the algorithms used are broken down into
@@ -250,38 +228,34 @@ small, understandable parts (known as ``sections'' \cite{Knuth1984} or
 ``chunks'' \cite{JohnsonAndJohnson1997}) which are explained, documented, and
 implemented in an order which promotes understanding. To get working source
 code, the \textit{tangle} process is run, which extracts the code from the
-literate document and reorders it into an appropriate structure for the computer
-to understand. Similarly, the \textit{weave} process is run to extract and
+literate document and reorders it into an appropriate structure acceptable
+to one's compiler.  Similarly, the \textit{weave} process is run to extract and
 typeset the documentation.
-% By adhering to the LP methodology, a literate program ends up with documentation
-% that is expertly written and of publishable quality. The code also ends up being
-% well documented and high quality. 
 There are several examples of SC programs being written in LP style, such as
 VNODE-LP \cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
 Implementation'' \cite{PharrAndHumphreys2004} (a literate program which is also
-a textbook).
-
-\section{Introducing \lss} \label{sec:lss} % (NEED A BETTER NAME)
-
-Our framework, \lss, is being developed with two goals: complete traceability
-throughout the development process and reduced knowledge duplication. Both of
-these goals can be accomplished by generalizing a literate approach.
-
-\subsection{The current state of \lss} \label{ssec:example}
+a successful textbook!).
 
 \begin{figure}
-	\includegraphics[width=0.45\textwidth]{h_c.pdf}
-	\caption{SRS data definition of $h_c$}
-	\label{fig:h_c}
+\includegraphics[width=0.49\textwidth]{h_c.pdf}
+\caption{SRS data definition of $h_c$}
+\label{fig:h_c}
 \end{figure}	
 
-\lss{} has been developed to this point using a practical, example-driven
-approach. The first example used in guiding the development of \lss{} involves
-the simplified Software Requirements Specification (SRS) for a fuel pin in a
-nuclear reactor (See \cite{SmithAndKoothoor2016} for more details). For brevity
-we look specifically at the term $h_c$ (defined in Figure~\ref{fig:h_c}).
+\section{Introducing \lss} \label{sec:lss}
 
-At the time of this writing, we are able to generate the \verb|.tex| file for
+In \lss, we accomplish our two primary objectives (complete traceability, and
+eliminating knowledge duplication) by generalizing the literate approach.
+
+\subsection{Current state} \label{ssec:example}
+
+We have used a practical, example-driven approach to the development of \lss{}.
+Our first example involves 
+the simplified Software Requirements Specification (SRS) for a fuel pin in a
+nuclear reactor (see \cite{SmithAndKoothoor2016} for more details). As an
+example, let us look specifically at the term $h_c$ (defined in
+Figure~\ref{fig:h_c}).
+We can currently generate the \verb|.tex| file for
 much of the SRS for the fuel pin as well as the source code (in C) for the
 required calculations.
 
@@ -331,6 +305,28 @@ micro-language handles the small-scale layout details (subscript and
 superscripts, concatenation of symbols, etc.), whereas the macro-language
 handles the larger layout details (sections, tables, etc.).
 
+\begin{figure}[tb]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
+  basicstyle=\scriptsize]
+srsBody = Document ((S "SRS for ") :+: 
+ (N $ h_g ^. symbol) :+: 
+ (S " and ") :+: (N $ h_c ^. symbol)) 
+ (S "Spencer Smith") [s1,s2]
+
+s1 = Section (S "Table of Units") 
+ [s1_intro, s1_table]
+
+s1_table = Table 
+ [S "Symbol", S "Description"] $ mkTable
+   [(\x -> Sy (x ^. unit)),
+    (\x -> S (x ^. descr)) ] si_units
+
+s1_intro = Paragraph (S "Throughout this ...
+\end{lstlisting}
+\caption{A portion of the SRS recipe}
+\label{fig:recipe}
+\end{figure}
+
 The source for our example has been broken down into the recipe, common
 knowledge, and specific knowledge. A portion of the recipe can be seen in
 Figure~\ref{fig:recipe}.
@@ -340,41 +336,24 @@ contained within its own chunk in the SI unit library. As
 Figure~\ref{fig:know_common} shows, each chunk has a name, description, and
 symbolic representation.
 
-\begin{figure}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
-srsBody = Document ((S "SRS for ") :+: 
-    (N $ h_g ^. symbol) :+: 
-    (S " and ") :+: (N $ h_c ^. symbol)) 
-    (S "Spencer Smith") [s1,s2]
-
-s1 = Section (S "Table of Units") 
-    [s1_intro, s1_table]
-
-s1_table = Table [S "Symbol", S "Description"] $ mkTable
-    [(\x -> Sy (x ^. unit)),
-     (\x -> S (x ^. descr))
-    ] si_units
-
-s1_intro = Paragraph (S "Throughout this ...
-\end{lstlisting}
-\caption{A portion of the SRS recipe}
-\label{fig:recipe}
-\end{figure}
-
-\begin{figure}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
-metre, kilogram, second, kelvin, mole :: FundUnit
+\begin{figure}[thb]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize]
+metre, second, kelvin, mole :: FundUnit
 metre    = fund "Metre"    "length (metre)"       "m"
-kilogram = fund "Kilogram" "mass (kilogram)"      "kg"
 second   = fund "Second"   "time (second)"        "s"
 kelvin   = fund "Kelvin"   "temperature (kelvin)" "K"
 \end{lstlisting}
+%kilogram = fund "Kilogram" "mass (kilogram)"      "kg"
 %mole     = fund "Mole"     "amount of substance (mole)"   "mol"
 %ampere   = fund "Ampere"   "electric current (ampere)"    "A"
 %candela  = fund "Candela"  "luminous intensity (candela)" "cd"
 \caption{Segment of the SI unit library}
 \label{fig:know_common}
 \end{figure}
+
+The $h_c$ chunk (Figure~\ref{fig:know_specific}) is a piece of specific
+knowledge. It contains the name, description, symbol, units, and equation
+(written in an internal expression language) for $h_c$.
 
 \begin{figure}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
@@ -391,10 +370,6 @@ h_c = EC (UC (VC "h_c"
 \caption{The $h_c$ chunk}
 \label{fig:know_specific}
 \end{figure}
-
-The $h_c$ chunk (Figure~\ref{fig:know_specific}) is a piece of specific
-knowledge. It contains the name, description, symbol, units, and equation
-(written in an internal expression language) for $h_c$.
 
 The internal expression language used to implement the equation for $h_c$
 %is implement the right word?

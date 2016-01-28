@@ -1,31 +1,3 @@
-% This is "sig-alternate.tex" V2.1 April 2013
-% This file should be compiled with V2.5 of "sig-alternate.cls" May 2012
-%
-% This example file demonstrates the use of the 'sig-alternate.cls'
-% V2.5 LaTeX2e document class file. It is for those submitting
-% articles to ACM Conference Proceedings WHO DO NOT WISH TO
-% STRICTLY ADHERE TO THE SIGS (PUBS-BOARD-ENDORSED) STYLE.
-% The 'sig-alternate.cls' file will produce a similar-looking,
-% albeit, 'tighter' paper resulting in, invariably, fewer pages.
-%
-% ----------------------------------------------------------------------------------------------------------------
-% This .tex file (and associated .cls V2.5) produces:
-%       1) The Permission Statement
-%       2) The Conference (location) Info information
-%       3) The Copyright Line with ACM data
-%       4) NO page numbers
-%
-% as against the acm_proc_article-sp.cls file which
-% DOES NOT produce 1) thru' 3) above.
-%
-% Using 'sig-alternate.cls' you have control, however, from within
-% the source .tex file, over both the CopyrightYear
-% (defaulted to 200X) and the ACM Copyright Data
-% (defaulted to X-XXXXX-XX-X/XX/XX).
-% e.g.
-% \CopyrightYear{2007} will cause 2007 to appear in the copyright line.
-% \crdata{0-12345-67-8/90/12} will cause 0-12345-67-8/90/12 to appear in the copyright line.
-%
 % ---------------------------------------------------------------------------------------------------------------
 % This .tex source is an example which *does* use
 % the .bib file (from which the .bbl file % is produced).
@@ -34,46 +6,20 @@
 % your .bbl file into your source .tex file so as to provide
 % ONE 'self-contained' source file.
 %
-% ================= IF YOU HAVE QUESTIONS =======================
-% Questions regarding the SIGS styles, SIGS policies and
-% procedures, Conferences etc. should be sent to
-% Adrienne Griscti (griscti@acm.org)
-%
-% Technical questions _only_ to
-% Gerald Murray (murray@hq.acm.org)
 % ===============================================================
-%
-% For tracking purposes - this is V2.0 - May 2012
 
 \documentclass{sig-alternate-05-2015}
 
-\usepackage{qtree}
+%\usepackage{qtree}
 \usepackage{listings}
 \usepackage[final]{pdfpages}
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{graphicx}
 
-\newcommand{\lss}{SCS}
-\newcommand{\fullname}{Sous-Chef de Software} 
-%D because recipes and it's pretty much in charge of the kitchen
+% Drasil, short for Yggdrasil.
 
-%D go full french? 
-%D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
-
-%D Other names (Literate can be precede pretty much any):
-%D Literate Architect (ArchiTeXt lol), Archaeologist, Craftsman
-%D Jack-of-All-Trades (JAT -- Opens us up to ``master of none'' critiques),
-%D (Literate) Sync-Dev (SD/LSD) <-- I like the second acronym (Dan).
-%D Encyclopedia Dev (don't like the acronym, but name plays on knowledge cap)
-%D Quality Management Framework (QMF), get to use `Q'!
-%D Tracer
-%D ???
-%S I tried some brainstorming too.  I can up with
-%S Yggdrasil - the name of the the tree that linkes the 9 different worlds in
-%S Norse mythology - one significant problem is, I don't know how to say it!  :-)
-%S KT - Knowledge and Traceabilty
-%S DRY - Don't repeat yourself - I kind of like this one  :-)
+\newcommand{\lss}{Drasil}
 
 \begin{document}
 
@@ -96,17 +42,17 @@
 %Conference
 \conferenceinfo{SE4SC}{?, 2016, Seattle, WA, USA}  %D What goes here?
 
-\acmPrice{\$15.00}  %D What goes here?
+% \acmPrice{\$15.00}  %D What goes here?
 
 %
 % --- Author Metadata here ---
-\conferenceinfo{SE4SC}{2016 ?, ? USA}  %D What goes here?
-%\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
+% \conferenceinfo{SE4SC}{2016 ?, ? USA}  %D What goes here?
+\CopyrightYear{2016} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
 
-\title{Position Paper: A Literate Framework %D or Tool?
-for Scientific Software Development
+\title{Position Paper: A Knowledge-Based Approach
+to Scientific Software Development
 %\titlenote{(Produces the permission block, and
 %copyright information). For use with
 %SIG-ALTERNATE.CLS. Supported by ACM.}}
@@ -131,96 +77,58 @@ Spencer Smith\\
        \affaddr{McMaster University}\\
        \affaddr{1280 Main Street W}\\
        \affaddr{Hamilton, Ontario}\\
-       \email{smiths at mcmaster.ca} 
+       \email{smiths@mcmaster.ca} 
 %D Not sure if you want your email machine-readable
 \alignauthor
 Jacques Carette\\
        \affaddr{McMaster University}\\
        \affaddr{1280 Main Street W}\\
        \affaddr{Hamilton, Ontario}\\
-       \email{carette at mcmaster.ca}
-%D Not sure if you want your email machine-readable
+       \email{carette@mcmaster.ca}
 }
-\date{24 January 2016}
+\date{}
 
 \maketitle
 \begin{abstract}
-Qualities of scientific computing software can be improved by following a
-rational design process. The qualities of traceability, verifiability, and
-reproducibility are of exceptionally high concern when attempting to certify
-software. We have begun development of a framework, \fullname{} (\lss{}),
-to help ensure complete traceability, adapt to the ever changing nature of
-scientific computing projects, and ensure software artifacts can be easily and
-quickly (re-)~generated as necessary.
+As a relatively mature field, scientific computing has the opportunity to
+lead other software by leveraging its solid, existing knowledge base.  By
+following a rational design process, desirable software qualities such as
+the qualities of traceability, verifiability, and reproducibility, are 
+arguable easier to reach than for other classes of software.
 
-Using an example-based approach to implement \lss{}, we have already seen many
-benefits that it provides to the development process. \lss{} keeps all software
-artifacts in sync with each other and the source, allows for reuse of common
-concepts across projects, and aids in the verification of software. It is our
-hope that \lss{} will lead to the development of higher quality software at low
-cost.
+We have begun development of a framework, \lss{}, to put this into practice.
+Our aims are to ensure complete traceability, to facilitate agility in the
+face of the ever changing nature of scientific computing projects, and ensure
+that software artifacts can be easily and quickly be extracted from \lss{}.
+
+Using an example-based approach to our prototype implementation, we have
+already seen many benefits. \lss{}
+keeps all software artifacts (requirements, design, code, tests, build
+scripts, documentation, etc) synchronized with each other. This allows for
+reuse of common concepts across projects, and aids in the verification of
+software. It is our hope that \lss{} will lead to the development of higher
+quality software at lower cost over the long term.
 \end{abstract}
 
-
-%
-% The code below should be generated by the tool at
-% http://dl.acm.org/ccs.cfm
-% Please copy and paste the code instead of the example below. 
-%
-
-%TODO: THIS
-\begin{CCSXML}
-<ccs2012>
- <concept>
-  <concept_id>10010520.10010553.10010562</concept_id>
-  <concept_desc>Computer systems organization~Embedded systems</concept_desc>
-  <concept_significance>500</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010520.10010575.10010755</concept_id>
-  <concept_desc>Computer systems organization~Redundancy</concept_desc>
-  <concept_significance>300</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010520.10010553.10010554</concept_id>
-  <concept_desc>Computer systems organization~Robotics</concept_desc>
-  <concept_significance>100</concept_significance>
- </concept>
- <concept>
-  <concept_id>10003033.10003083.10003095</concept_id>
-  <concept_desc>Networks~Network reliability</concept_desc>
-  <concept_significance>100</concept_significance>
- </concept>
-</ccs2012>  
-\end{CCSXML}
-
-\ccsdesc[500]{Computer systems organization~Embedded systems}
-\ccsdesc[300]{Computer systems organization~Redundancy}
-\ccsdesc{Computer systems organization~Robotics}
-\ccsdesc[100]{Networks~Network reliability}
-
-
-%
-% End generated code
-%
 
 %
 %  Use this command to print the description
 %
 \printccsdesc
 
-\keywords{ACM proceedings; \LaTeX; text tagging}
+\keywords{}
 
 \section{Introduction}
 
-A rational document driven design process for Scientific Computing (SC) software
-potentially improves the software qualities of verifiability, reliability,
-usability, maintainability, reusability and
+A rational document driven design process for Scientific Computing (SC)
+software\footnote{We will also abbreviate SC software to SCS}
+potentially improves the software qualities of verifiability,
+reliability, usability, maintainability, reusability and
 reproducibility~\cite{SmithAndKoothoor2016}.  However, many researchers have
-reported that a document driven process is not used by, nor suitable for, SC
-software; they argue that scientific developers naturally use an agile
-philosophy~\cite{CarverEtAl2007, EasterbrookAndJohns2009,
-  Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
+reported that a document driven process is not used by, nor suitable for, SCS;
+they argue that scientific developers naturally use an agile
+philosophy~\cite{CarverEtAl2007, EasterbrookAndJohns2009, Segal2005}, 
+amethododical~\cite{Kelly2013}, or a knowledge acquisition
 driven~\cite{Kelly2015}, process.  The arguments are that scientists do not
 view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007} and that
 in SC requirements are impossible to determine up-front~\cite{CarverEtAl2007,
@@ -305,7 +213,7 @@ In the following sections we
 focus on SC software quality and literate
 programming.
 %Section~\ref{sec:lss} 
-Then we introduce our framework, \fullname{} (\lss{}), 
+Then we introduce our framework, \lss{},
 %D Sous-Chef de Logiciel, Sous-Chef de l'Informatique?
 %S While I like the creativity, I prefer LSS to SCS.  Let's see what Jacques thinks.
 for improving SC software development using a structured approach.  We show

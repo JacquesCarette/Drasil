@@ -17,6 +17,9 @@
 \usepackage{longtable}
 \usepackage{graphicx}
 
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
 % Drasil, short for Yggdrasil.
 
 \newcommand{\lss}{Drasil}
@@ -273,10 +276,27 @@ interprets recipes to produce the desired view.
 
 \begin{figure}
 \begin{center}
-{
- \includegraphics[width=0.35\textwidth]{ChunkHierarchy.pdf}
-}
+\begin{tikzpicture}[node distance=5mm]
+  \tikzstyle{every node}=[draw,shape=rectangle, rounded corners,
+    text width=6em, text centered];
+  \node (ch)                     {Chunk (\emph{name})};
+  \node (co) [below = of ch]       {Concept (\emph{description})};
+  \node (qu) [below left = of co]  {Quantity (\emph{symbol})};
+  \node (u ) [below right = of co] {Unit (\emph{unit})};
+  \node (uc) [below right = of qu] {Unital};
+
+  \draw [->, line width=2pt] (ch) -- (co);
+  \draw [->, line width=2pt] (co) -- (qu);
+  \draw [->, line width=2pt] (co) -- (u );
+  \draw [->, line width=2pt] (qu) -- (uc);
+  \draw [->, line width=2pt] (u ) -- (uc);
+\end{tikzpicture}
 \end{center}
+%\begin{center}
+%{
+% \includegraphics[width=0.35\textwidth]{ChunkHierarchy.pdf}
+%}
+%\end{center}
 \caption{The chunk design}
 \label{fig:chunks}
 \end{figure}

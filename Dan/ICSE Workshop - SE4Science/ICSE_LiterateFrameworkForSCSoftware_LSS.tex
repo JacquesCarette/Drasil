@@ -98,8 +98,8 @@ arguable easier to reach than for other classes of software.
 
 We have begun development of a framework, \lss{}, to put this into practice.
 Our aims are to ensure complete traceability, to facilitate agility in the
-face of the ever changing nature of scientific computing projects, and ensure
-that software artifacts can be easily and quickly be extracted from \lss{}.
+face of ever changing scientific computing projects, and ensure
+that software artifacts can be easily and quickly extracted from \lss{}.
 
 Using an example-based approach to our prototype implementation, we have
 already seen many benefits. \lss{}
@@ -190,21 +190,21 @@ introduce the ideas behind our approach.
 
 \subsection{Challenges} \label{ssec:challenges}
 
-As the best numerical approach to solve a given problem is usually not known
-a priori, we have to face the \textit{technique selection
-challenge}~\cite{Yu2011}. Experimentation is inevitably necessary to
-determine the appropriate order of interpolation, the degree of implicitness,
-etc. Nevertheless, the problem to solve does not change.  This implies that
-we need a a separation of concerns between the physical model and the numerical
-algorithms.  Ease of experimentation means that we should also 
-provide facilities for parameterizing the expected algorithmic variabilities.
+As the best numerical approach to solve a given problem is usually not known a
+priori, we have to face the \textit{technique selection
+  challenge}~\cite{Yu2011}. Experimentation is inevitably necessary to determine
+the appropriate order of interpolation, the degree of implicitness,
+etc. Nevertheless, the problem to solve does not change.  This implies that we
+need a separation of concerns between the physical model and the numerical
+algorithms.  Ease of experimentation means that we also need facilities to
+parameterize algorithmic variabilities.
 
 In an effort to make scientific libraries and software as widely applicable as
 possible, most packages provide a generic interface with a large number of
 options; this tends to overwhelm users and cause programmers to not reuse
 libraries, since they do not believe the interface needs to be as complicated
 as it appears~\cite{Dubois2002}. This is the \textit{understandability}
-challenge~\cite{Yu2011}.  An ideal framework would allow us to expose an
+challenge~\cite{Yu2011}.  An ideal framework would expose an
 API, as well as generate applications, which use routines which are only as
 complicated as they need to be for the job at hand.
 

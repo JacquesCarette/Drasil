@@ -288,6 +288,12 @@ which are represented by a specific \emph{symbol}.  Orthogonally, a \emph{unit}
 is also a concept.  Most quantities have units.  And so on (as pictured
 in Fig.~\ref{fig:chunks}).
 
+% Recipes are specified using a micro- and macro-layout language embedded in
+% Haskell. Each describes how the generated artifacts should appear.  The
+% micro-language handles the small-scale layout details (subscript and
+% superscripts, concatenation of symbols, etc.), whereas the macro-language
+% handles the larger layout details (sections, tables, etc.).
+
 By breaking things down in this way, we can assemble most concepts from
 pre-existing chunks -- see Fig.~\ref{fig:recipe} for an SRS recipe that
 uses $h_c$.
@@ -367,6 +373,7 @@ the code and then passed to a pretty-printer to create the final source.
 
 We currently generate C code, however it would be possible to generate any
 language provided we have an appropriate representation for that language.
+
 \subsection{Advantages} \label{ssec:advantages}
 
 We can already see the beginning of some advantages over traditional SC

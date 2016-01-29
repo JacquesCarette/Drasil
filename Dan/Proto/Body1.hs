@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Body1 where
 
--- import Data.List (transpose)
+import Data.List (intersperse)
 
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..))
@@ -62,9 +62,15 @@ s4 = Section (S "Code -- Test") [s4c]
 
 s4c = CodeBlock (toCode CLang Calc h_g)
 
+srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
+srs ls author body =
+  Document ((S "SRS for ") :+: 
+    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> N $ x ^. symbol) ls))))
+    (S author) body
+  
+
 srsBody,lpmBody :: Document
-srsBody = Document ((S "SRS for ") :+: (N $ h_g ^. symbol) :+: (S " and ") :+: (N $ h_c ^. symbol))
-  (S "Spencer Smith") [s1,s2,s4] -- need to add s3
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s4] -- need to add s3
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (N $ h_g ^. symbol) :+: 

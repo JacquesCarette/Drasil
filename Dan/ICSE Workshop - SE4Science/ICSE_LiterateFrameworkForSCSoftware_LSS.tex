@@ -422,7 +422,7 @@ of also improving reproducibility.
 %D This next section really feels like it's making a promise without really
 %  explaining how/why it'll work.
 \subsubsection{"Everything should be made as simple as possible, but not
-  simpler."  (Einstein quote)} \label{sssec:adv_simple}
+  simpler."  --- Einstein} \label{sssec:adv_simple}
 
 Take finite element methods as one example:  while there exist many powerful,
 general commercial programs for this, they are not often used to
@@ -451,18 +451,20 @@ development. For instance, a requirement could assume conservation of mass or
 constrain lengths to be always positive. The former would be used to test the
 output and the latter to guard against invalid inputs.
 
-With \lss, these sanity checks can be ensured by the knowledge capture
-mechanism. Each chunk can maintain its own sanity checks and incorporate them
-into the final system to ensure all inputs and outputs (including
-intermediaries) are valid.
+With \lss, these sanity checks can also be captured and re-used.  Each chunk
+can maintain its own sanity checks (as constraints) and recipes can incorporate
+them into generated systems, either for testing or for in-field use, to ensure
+all inputs and outputs (including intermediaries) are valid.
 
-Also, with \lss{}, complete traceability is achievable through the use of
-chunks, provided the requisite knowledge can be appropriately encapsulated.
+Through recipes, complete traceability is achievable: as knowledge must be
+drawn together explicitly, one can automatically list all chunks that were
+used by a recipe.
 
-Finally, any mistakes that occur in the generated software artifacts will occur
-\textbf{everywhere}. Errors propagate through artifacts, and the artifacts will
-always be in sync with each other (and the source). As a consequence, errors
-will be much easier to find and only need to be fixed in one place.
+Finally, because all knowledge has a unique source, any mistakes that occur in
+the generated software artifacts will occur \textbf{everywhere}. Errors
+propagate through artifacts, and the artifacts will always be in sync with each
+other (and the source). As a consequence, errors will be much easier to see,
+and thus easier to find and fix.  
 
 \section{Future work} \label{sec:todo}
 

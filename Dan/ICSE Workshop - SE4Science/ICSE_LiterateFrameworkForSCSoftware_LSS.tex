@@ -257,7 +257,7 @@ Our first example involves
 the simplified Software Requirements Specification (SRS) for a fuel pin in a
 nuclear reactor (see \cite{SmithAndKoothoor2016} for more details). To get
 started, let us look specifically at the term $h_c$ (defined in
-Figure~\ref{fig:h_c}).  This defines a concept ($h_c$), its units, its
+Figure~\ref{fig:h_c}).  This defines a concept, its units, its
 defining equation, and the description of the other concepts upon which it
 depends.
 
@@ -265,26 +265,13 @@ We can currently generate the \verb|.tex| file for
 much of the SRS for the fuel pin as well as the source code (in C) for the
 required calculations.
 
-\subsection{How it works} \label{sssec:ex_how}
+\subsection{Design} \label{sssec:ex_how}
 
-The current framework is composed of several components including
-\textit{chunks}, \textit{recipes}, and a \textit{generator}. The generator
-produces views of the source material, where these views are the software
-artifacts we require. Recipes are descriptions of these views and chunks contain
-the source material.
-
-% \begin{figure}
-% \large{
-% \Tree[.\fbox{Chunk(\textit{name})}
-% 		[.\fbox{Concept(\textit{description})}
-% 			[.\fbox{Quantity(\textit{symbol})} ]
-% 			[.\fbox{Unit(\textit{unit})} ]
-% 		]
-% 	]
-% }
-% \caption{The chunk hierarchy design}
-% \label{fig:chunks}
-% \end{figure}
+The fundamental task for \lss{} is \emph{knowledge capture}, in such a 
+way that this knowledge can be viewed in different ways (code, specification,
+etc).  Each individual piece of knowledge is a named \textit{chunk}; putting
+chunks together is done via a \textit{recipe}; a \textit{generator} then
+interprets recipes to produce the desired view.  
 
 \begin{figure}
 \begin{center}
@@ -292,46 +279,45 @@ the source material.
  \includegraphics[width=0.35\textwidth]{ChunkHierarchy.pdf}
 }
 \end{center}
-\caption{The chunk hierarchy design}
+\caption{The chunk design}
 \label{fig:chunks}
 \end{figure}
 
-Each chunk needs to represent some concept, quantity, etc. Our current design
-introduces a chunk hierarchy (as seen in Figure~\ref{fig:chunks}), where the
-most basic chunk has only one field: a \textit{name}. A ``Concept'' adds a
-\textit{description}, and so on.
+We have different kinds of chunks.  The most basic ones are simply named pieces
+of information.  Most however represent some \emph{concept}, which has a
+\emph{description}.  In the SC context, many concepts are \emph{quantities},
+which are represented by a specific \emph{symbol}.  Orthogonally, a \emph{unit}
+is also a concept.  Most quantities have units.  And so on (as pictured
+in Fig.~\ref{fig:chunks}).
 
-Each chunk is built from one or more of the existing chunks. This can be seen in
-the \verb|h_c| implementation below. Thus, all of the information related to any
-one concept in a software project will be stored in a single chunk.
-
-Recipes are specified using a micro- and macro-layout language embedded in
-Haskell. Each describes how the generated artifacts should appear: The
-micro-language handles the small-scale layout details (subscript and
-superscripts, concatenation of symbols, etc.), whereas the macro-language
-handles the larger layout details (sections, tables, etc.).
+By breaking things down in this way, we can assemble most concepts from
+pre-existing chunks -- see Fig.~\ref{fig:recipe} for an SRS recipe that
+uses $h_c$.
 
 \begin{figure}[tb]
 \begin{lstlisting}[language=Haskell, frame=single, 
   showstringspaces=false, basicstyle=\scriptsize]
-srsBody = Document ((S "SRS for ") :+: 
- (N $ h_g ^. symbol) :+: 
- (S " and ") :+: (N $ h_c ^. symbol)) 
- (S "Spencer Smith") [s1,s2]
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2]
 
-s1 = Section (S "Table of Units") 
- [s1_intro, s1_table]
+s1 = Section (S "Table of Units") [intro, table]
 
-s1_table = Table 
+table = Table 
  [S "Symbol", S "Description"] $ mkTable
    [(\x -> Sy (x ^. unit)),
     (\x -> S (x ^. descr)) ] si_units
 
-s1_intro = Paragraph (S "Throughout this ...")
+intro = Paragraph (S "Throughout this ...")
 \end{lstlisting}
 \caption{A portion of the SRS recipe}
 \label{fig:recipe}
 \end{figure}
+
+Currently, recipes are specified using a collection of DSLs embedded in
+Haskell.  We have a DSL for expressions, expression layout, document
+layout, C code, and LaTeX code.  For example, the expression layout DSL
+describes how expressions should appear (subscript and
+superscripts, concatenation of symbols, etc.), whereas the document layout
+DSL deals with sections, tables, etc.
 
 The source for our example has been broken down into the recipe, common
 knowledge, and specific knowledge. A portion of the recipe can be seen in

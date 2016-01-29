@@ -446,10 +446,25 @@ part), making the simulation process simpler and safer.
 \subsubsection{Verification} \label{sssec:adv_verify}
 
 When it comes to verification, requirements documents typically include
-so-called ``sanity'' checks that can be reused throughout subsequent phases of
-development. For instance, a requirement could assume conservation of mass or
-constrain lengths to be always positive. The former would be used to test the
-output and the latter to guard against invalid inputs.
+so-called ``sanity'' checks (see $2^{\text{nd}}$ column of Table~\ref{tab:pcm})
+that can be reused throughout subsequent phases of development. For instance, a
+requirement could assume conservation of mass or constrain lengths to be always
+positive. The former would be used to test the output and the latter to guard
+against invalid inputs.
+
+\begin{table} 
+\centering
+\caption{Constraints on quantities}
+\begin{tabular}{|c|c|r|c|} \hline
+\textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \hline
+$L$ & $L > 0$ & 1.5 m & 10\% \\ \hline
+$D$ & $D > 0$ & 0.412 m & 10\% \\ \hline
+$V_P$ & $V_P > 0$ & 0.05 m$^3$	& 10\% \\ \hline
+$A_P$ & $A_P > 0$ & 1.2 m$^2$	& 10\% \\ \hline
+$\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
+\hline\end{tabular}
+\label{tab:pcm}
+\end{table}
 
 With \lss, these sanity checks can also be captured and re-used.  Each chunk
 can maintain its own sanity checks (as constraints) and recipes can incorporate
@@ -468,55 +483,41 @@ and thus easier to find and fix.
 
 \section{Future work} \label{sec:todo}
 
-Currently the framework is still very small, producing only one document type
-(the SRS) and only one type of code (C code for calculations). We plan to expand
-\lss{} in several ways including, but not limited to:
-
+Our prototype is still in its early stages, producing only one document type
+(the SRS) and only one type of code (C code for calculations), but has 
+already been a great source of inspiration to us. We plan to expand
+\lss{} in several ways, including at least:
 \begin{enumerate}
 \setlength{\itemsep}{0pt}
 \setlength{\parskip}{0pt}
 \setlength{\parsep}{0pt}
 \item Generate more artifact types. %(i.e. have more default recipes).
 \item Generate different document views. %(ex. SRS with equation derivations).
-\item Include more types of information in chunks (see Table\ref{tab:pcm}).
-\item Auto-generate test cases using constraints and typical values. The
-  constraints should determine error cases, and typical value ranges give
-  warnings.
-\item Continue to expand the tool by implementing larger example systems.
+\item More types of information in chunks (see Table~\ref{tab:pcm}).
+\item Use these constraints to generate test cases.
+\item Implement much larger examples.
 \end{enumerate}
 
-\begin{table} \label{tab:pcm}
-\centering
-\caption{Future knowledge to capture}
-\begin{tabular}{|c|c|r|c|} \hline
-\textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \hline
-$L$ & $L > 0$ & 1.5 m & 10\% \\ \hline
-$D$ & $D > 0$ & 0.412 m & 10\% \\ \hline
-$V_P$ & $V_P > 0$ (*)	& 0.05 m$^3$	& 10\% \\ \hline
-$A_P$ & $A_P > 0$ (*)	& 1.2 m$^2$	& 10\% \\ \hline
-$\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
-\hline\end{tabular}
-\end{table}
-
-For the auto-generation of test cases, physical constraints will be seen as hard
+For the generation of test cases, physical constraints will be seen as hard
 limits on values (ex. length must always be positive and a negative value would
 throw an error). Typical values, on the other hand, are ``reasonable'' values
 (ex. the length of a beam should be on the order of several metres, but
-theoretically it could be kilometres, thus the code will raise a warning instead
-of an error).
+theoretically it could be kilometres, thus the code will raise a warning
+instead of an error).
 
-    
 \section{Concluding Remarks} \label{sec:conclusion}
 
-The current standard of using agile approaches to SC software development leave
-many things to be desired. Documents tend to fall out of sync with the source
-with each iteration, and the amount of hand-duplicated information leads to
-errors affecting the quality of the software.
+The development of high-quality SCS, especially those which can be
+(re-)certified, leave much to be desired.  The burden of keeping documentation
+and code synchronized, due to hand-duplicated information, leads to many 
+problems.  The end result tend to involve either extremely high development
+costs (and bored developers), or software of dubious quality which is 
+dificult to maintain.
 
-We have begun the creation of a framework to help ensure complete traceability
-between software artifacts in the development process, while attempting to
-inconvenience the developers as little as possible. Using our framework will
-hopefully lead to higher quality software at very little cost.
+With \lss{}, we hope to achieve complete traceability between all software
+artifacts, while causing as little inconvenience to the developers as possible.
+We hope that this will lead to higher quality software, at a lower
+\emph{long term} cost.
 
 \bibliographystyle{abbrv}
 \bibliography{drasil}  

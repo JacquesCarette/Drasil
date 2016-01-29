@@ -317,25 +317,22 @@ describes how expressions should appear (subscript and
 superscripts, concatenation of symbols, etc.), whereas the document layout
 DSL deals with sections, tables, etc.
 
-The source for our example has been broken down into the recipe, common
-knowledge, and specific knowledge. A portion of the recipe can be seen in
-Figure~\ref{fig:recipe}.
-
-In this example, the fundamental SI units are common knowledge. Each is
-contained within its own chunk in the SI unit library. As
-Figure~\ref{fig:know_common} shows, each chunk has a name, description, and
-symbolic representation.
+We have broken down our example into common knowledge, specific knowledge
+and a recipe for an SRS (see Figure~\ref{fig:recipe}).
+Here the fundamental SI units are common knowledge. Each is
+contained within its own chunk in the SI unit library -- see
+Figure~\ref{fig:know_common} for a taste.
 
 \begin{figure}[thb]
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
   basicstyle=\scriptsize]
-metre, second, kelvin, mole :: FundUnit
+metre, second, kelvin :: FundUnit
 metre  = fund "Metre"  "length (metre)"       "m"
 second = fund "Second" "time (second)"        "s"
 kelvin = fund "Kelvin" "temperature (kelvin)" "K"
 \end{lstlisting}
+%mole   = fund "Mole"   "amount of substance (mole)"   "mol"
 %kilogram = fund "Kilogram" "mass (kilogram)"      "kg"
-%mole     = fund "Mole"     "amount of substance (mole)"   "mol"
 %ampere   = fund "Ampere"   "electric current (ampere)"    "A"
 %candela  = fund "Candela"  "luminous intensity (candela)" "cd"
 \caption{Segment of the SI unit library}

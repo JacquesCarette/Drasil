@@ -181,10 +181,6 @@ The last section provides concluding remarks.
 
 \section{Background} \label{sec:background}
 
-% There have been many challenges towards assuring the quality of software
-% throughout the history of scientific computing. Many attempts have been made
-% (some successful, others not) at overcoming these challenges and improving
-% software quality. 
 In this section we discuss challenges for developing SCS and we
 introduce the ideas behind our approach.
 
@@ -288,12 +284,6 @@ which are represented by a specific \emph{symbol}.  Orthogonally, a \emph{unit}
 is also a concept.  Most quantities have units.  And so on (as pictured
 in Fig.~\ref{fig:chunks}).
 
-% Recipes are specified using a micro- and macro-layout language embedded in
-% Haskell. Each describes how the generated artifacts should appear.  The
-% micro-language handles the small-scale layout details (subscript and
-% superscripts, concatenation of symbols, etc.), whereas the macro-language
-% handles the larger layout details (sections, tables, etc.).
-
 By breaking things down in this way, we can assemble most concepts from
 pre-existing chunks -- see Fig.~\ref{fig:recipe} for an SRS recipe that
 uses $h_c$.
@@ -352,14 +342,14 @@ knowledge. It contains the name, description, symbol, units, and equation
 \begin{figure}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
 h_c_eq :: Expr
-h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ 
-    ((Int 2):*(C k_c) :+ ((C tau_c):*(C h_b)))
+h_c_eq = 2*(C k_c)*(C h_b) /
+  (2*(C k_c) + (C tau_c)*(C h_b))
 
 h_c :: EqChunk
-h_c = EC (UC (VC "h_c" 
-    "convective heat transfer coefficient 
-        between clad and coolant"
-    (sub h c) ) heat_transfer) h_c_eq
+h_c = fromEqn "h_c" 
+ "convective heat transfer coefficient between 
+    clad and coolant"
+   (sub h c) heat_transfer h_c_eq
 \end{lstlisting}
 \caption{The $h_c$ chunk}
 \label{fig:know_specific}
@@ -396,48 +386,6 @@ documents alongside the code, while accounting for any changes. As the changes
 will affect chunks and those chunks will be used to generate the documentation
 and code, there is a guarantee that changes will propagate throughout all of the
 artifacts.
-
-% The following are examples of software artifacts that we wish to generate:
-% \begin{enumerate}
-% % \item Problem Statement
-% %  A description of the problem to be solved, essentially
-% %  summarizing the purpose of the software. There should be no mention of how the
-% %  problem is to be solved.
-% % \item Development Plan
-% %  An overview of the development process and
-% %  infrastructure. This should cover the documents to be created, which templates
-% %  (if any) will be followed, internal processes to be employed, coding
-% %  standards, and other details relevant to how the software will be developed.
-% \item Software Requirements Specification (SRS)
-% %  The desired functions and qualities of the
-% %  software should be documented herein. The requirements should cover
-% %  functionality, goals, context, design constraints, expected performance, and
-% %  any other quality attributes of the software.
-% \item Verification and Validation (V\&V) plan
-% %  Documents how the documentation
-% %  artifacts will be shown to be internally correct (verification) as well as how
-% %  to ensure that the right problem has been solved (validation).
-% \item Design Specification
-% %  How will the requirements be realized? Document the
-% %  software architecture and a detailed design of the modules/interfaces to be
-% %  used. Can be thought of as a programmer's manual for maintenance.
-% \item Code
-% %  Implementation of the design specification.
-% \item V\&V Report 
-% %  Summarize the steps taken for
-% %  performing verification and validation (this should mirror the V \& V plan
-% %  from above) and include any testing results.
-% % \item User Manual
-% %  Full instructions on how the software is to be used,
-% %  beginning with installation instructions and proceeding through detailed
-% %  examples of the program's use.
-% \end{enumerate}
-
-% The artifacts listed above share non-trivial amounts of information, which is
-% where traceability comes into play. To make any changes to the documentation,
-% there must be some way to determine how a change will affect \textbf{all} of the
-% artifacts. This is especially important for (re-) certification, as the
-% documents and source must remain consistent.
 
 In the context of re-certification, if a piece of software were developed using
 \lss{} and some changes needed to be made, updating the artifacts and submitting

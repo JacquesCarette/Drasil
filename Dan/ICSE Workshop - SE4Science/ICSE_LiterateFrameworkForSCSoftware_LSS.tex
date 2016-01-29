@@ -304,7 +304,7 @@ the \verb|h_c| implementation below. Thus, all of the information related to any
 one concept in a software project will be stored in a single chunk.
 
 Recipes are specified using a micro- and macro-layout language embedded in
-Haskell. Each describes how the generated artifacts should appear: The
+Haskell. Each describes how the generated artifacts should appear.  The
 micro-language handles the small-scale layout details (subscript and
 superscripts, concatenation of symbols, etc.), whereas the macro-language
 handles the larger layout details (sections, tables, etc.).
@@ -384,6 +384,7 @@ the code and then passed to a pretty-printer to create the final source.
 
 We currently generate C code, however it would be possible to generate any
 language provided we have an appropriate representation for that language.
+
 \subsection{Advantages} \label{ssec:advantages}
 
 We can already see the beginning of some advantages over traditional SC

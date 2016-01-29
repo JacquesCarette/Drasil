@@ -396,34 +396,24 @@ scientists to spend their valuable time on more important things.
 
 \subsubsection{Software Certification} \label{sssec:adv_cert}
 
-High-quality documentation is required to certify software, but its creation
-should not impede a scientists' work.  Major problems in creating SC software
-stem from the maintainability and technique selection challenges
-(Section~\ref{ssec:challenges}). As requirements and numerical algorithmic
-decisions change, documentation and code must be updated.  This creates issues
-with traceability and maintainability.
-
+Current software certification processes require high-quality documentation.
 Depending on the regulatory body and the certification standards, many
 types of documents may be required, such as requirements specification,
-verification plans, design specification and code. \lss{} aims to generate these
-documents alongside the code, while accounting for any changes. As the changes
-will affect chunks and those chunks will be used to generate the documentation
-and code, there is a guarantee that changes will propagate throughout all of the
-artifacts.
+verification plans, design specification and code. 
+However, creating these should not impede a scientists' work.  As requirements
+and numerical algorithmic decisions change, documentation and code must be
+updated.  This creates issues with traceability and maintainability.
+\lss{} aims to generate these documents alongside the code, while accounting
+for any changes. When properly used, singular knowledge will be embodied in
+a single chunk, and the generation process will take care of baking in this
+information into all appropriate places in the documentation and code.  Thus
+any change is guaranteed to propagate throughout all of the artifacts.
 
-In the context of re-certification, if a piece of software were developed using
-\lss{} and some changes needed to be made, updating the artifacts and submitting
-them for re-certification would be straightforward. All documentation would be
-generated from the (newly modified) chunks, according to their existing recipes.
-Or in the case of new information being added, a new chunk would be created and
-the recipe slightly modified. During the implementation of our example, we have
-already seen how \lss{} allows us to make changes at trivial cost.
-
-On another note, if a document standard were to be changed during the
+Recipes are useful too: if a document standard were to be changed during the
 development cycle, it would not necessitate re-writing the entire document. All
 of the information in the chunks would remain intact, only the recipe would need
-to be changed to accommodate the new view. Thus, capturing all of the knowledge
-that a program is based on and improving reproducibility.
+to be changed to accommodate the new view. Traceability has the advantage
+of also improving reproducibility.
 
 %D This next section really feels like it's making a promise without really
 %  explaining how/why it'll work.

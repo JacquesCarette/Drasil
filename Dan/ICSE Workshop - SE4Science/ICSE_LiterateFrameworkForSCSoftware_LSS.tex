@@ -21,6 +21,8 @@
 
 \newcommand{\lss}{Drasil}
 
+\lstset{language=Haskell}
+
 \begin{document}
 
 % Copyright
@@ -337,9 +339,9 @@ kelvin = fund "Kelvin" "temperature (kelvin)" "K"
 \label{fig:know_common}
 \end{figure}
 
-The $h_c$ chunk (Figure~\ref{fig:know_specific}) is a piece of specific
-knowledge. It contains the name, description, symbol, units, and equation
-(written in an internal expression language) for $h_c$.
+The $h_c$ chunk (Figure~\ref{fig:know_specific}) is specific
+knowledge: it contains the name, description, symbol, units, and equation
+for $h_c$.
 
 \begin{figure}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
@@ -357,7 +359,7 @@ h_c = fromEqn "h_c"
 \label{fig:know_specific}
 \end{figure}
 
-The internal expression language used to implement the equation for $h_c$
+The internal expression language \lstinline|Expr|
 allows for the straighforward generation of source code. We utilize methods
 similar to those found in \cite{SAGA:DSL, Szymczak2014}
 wherein the expression language is converted to an abstract representation of

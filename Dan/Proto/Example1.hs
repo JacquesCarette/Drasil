@@ -46,8 +46,9 @@ tau_c = VC "tau_c" "clad thickness" (sub (Special Tau_L) c)
 {--------------- Begin h_c ---------------}
 --------------- --------------- --------------- ---------------
 h_c_eq :: Expr
-h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
-  :+((C tau_c):*(C h_b)))
+-- h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ ((Int 2):*(C k_c)
+--   :+((C tau_c):*(C h_b)))
+h_c_eq = 2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b))
 
 h_c :: EqChunk
 h_c = EC (UC 

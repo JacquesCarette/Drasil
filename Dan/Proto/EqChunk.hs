@@ -1,11 +1,12 @@
 {-# OPTIONS -Wall #-} 
-module EqChunk(EqChunk(..)) where
+module EqChunk(EqChunk(..), fromEqn) where
 
 import ASTInternal (Expr)
 import Chunk
 import UnitalChunk
 import Control.Lens (Simple, Lens)
 import Unit (Unit(..))
+import Symbol (Symbol)
 
 data EqChunk = EC 
   { uc :: UnitalChunk
@@ -28,3 +29,7 @@ instance Quantity EqChunk where
 
 instance Unit EqChunk where
   unit = ul . unit
+
+-- useful
+fromEqn :: Unit u => String -> String -> Symbol -> u -> Expr -> EqChunk
+fromEqn nm desc symb chunk eqn = EC (UC (VC nm desc symb) chunk) eqn

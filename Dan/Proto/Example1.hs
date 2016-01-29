@@ -9,7 +9,7 @@ import Unit (Unit(..), USymb(..), UDefn(..), DerUChunk(..), FundUnit(..),
 
 import Chunk (VarChunk(..), ConceptChunk(..))
 import UnitalChunk (UnitalChunk(..))
-import EqChunk (EqChunk(..))
+import EqChunk (EqChunk(..), fromEqn)
 
 import Symbol
 
@@ -51,11 +51,14 @@ h_c_eq :: Expr
 h_c_eq = 2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b))
 
 h_c :: EqChunk
-h_c = EC (UC 
-  (VC "h_c" "convective heat transfer coefficient between clad and coolant"
-      (sub h c) )
-  heat_transfer)
-  h_c_eq
+h_c = fromEqn "h_c" 
+  "convective heat transfer coefficient between clad and coolant"
+  (sub h c) heat_transfer h_c_eq
+-- h_c = EC (UC 
+--   (VC "h_c" "convective heat transfer coefficient between clad and coolant"
+--       (sub h c) )
+--   heat_transfer)
+--   h_c_eq
 
 -- --------------- --------------- --------------- ---------------
 -- {--------------- Begin h_g ---------------}

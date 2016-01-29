@@ -293,16 +293,16 @@ pre-existing chunks -- see Fig.~\ref{fig:recipe} for an SRS recipe that
 uses $h_c$.
 
 \begin{figure}[tb]
-\begin{lstlisting}[language=Haskell, frame=single, 
+\begin{lstlisting}[frame=single, 
   showstringspaces=false, basicstyle=\scriptsize]
 srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2]
 
 s1 = Section (S "Table of Units") [intro, table]
 
 table = Table 
- [S "Symbol", S "Description"] $ mkTable
+ [S "Symbol", S "Description"] (mkTable
    [(\x -> Sy (x ^. unit)),
-    (\x -> S (x ^. descr)) ] si_units
+    (\x -> S (x ^. descr)) ] si_units)
 
 intro = Paragraph (S "Throughout this ...")
 \end{lstlisting}
@@ -324,7 +324,7 @@ contained within its own chunk in the SI unit library -- see
 Figure~\ref{fig:know_common} for a taste.
 
 \begin{figure}[thb]
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
+\begin{lstlisting}[frame=single, showstringspaces=false, 
   basicstyle=\scriptsize]
 metre, second, kelvin :: FundUnit
 metre  = fund "Metre"  "length (metre)"       "m"
@@ -344,7 +344,7 @@ knowledge: it contains the name, description, symbol, units, and equation
 for $h_c$.
 
 \begin{figure}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
+\begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small]
 h_c_eq :: Expr
 h_c_eq = 2*(C k_c)*(C h_b) /
   (2*(C k_c) + (C tau_c)*(C h_b))
@@ -370,14 +370,34 @@ language provided we have an appropriate representation for that language.
 
 \subsection{Advantages} \label{ssec:advantages}
 
-We can already see the beginning of some advantages over traditional SC
+We can already see some advantages over traditional SC
 development. How \lss{} addresses the specific challenges of
 Section~\ref{ssec:challenges} will be explored below.
+
+\subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
+
+In SCS there are many commonly shared theorems, formulae, algorithms and
+data-structures across different applications. For example consider the general
+form of the conservation of thermal energy equation, widely used in variety of
+thermal analysis applications, with each solving a different problem, or
+modeling a different system.
+
+Our approach aims to build libraries of knowledge that can be reused anywhere.
+Each library should contain common chunks relevant to a specific application
+domain (ex. thermal analysis) and each project should aim to reuse as much as
+possible during development.
+
+From our example, a common source of reused knowledge is the Syst\'{e}me
+International (SI) units (Figure~\ref{fig:know_common}). They are commonly
+used throughout all of SC, so why should they be redefined for each
+project? Once the knowledge has been captured, it can simply be reused.
+With \lss{} this is possible with minimal effort, allowing developers and
+scientists to spend their valuable time on more important things.
 
 \subsubsection{Software Certification} \label{sssec:adv_cert}
 
 High-quality documentation is required to certify software, but its creation
-should not impede a scientist's work.  Major problems in creating SC software
+should not impede a scientists' work.  Major problems in creating SC software
 stem from the maintainability and technique selection challenges
 (Section~\ref{ssec:challenges}). As requirements and numerical algorithmic
 decisions change, documentation and code must be updated.  This creates issues
@@ -404,27 +424,6 @@ development cycle, it would not necessitate re-writing the entire document. All
 of the information in the chunks would remain intact, only the recipe would need
 to be changed to accommodate the new view. Thus, capturing all of the knowledge
 that a program is based on and improving reproducibility.
-
-\subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
-
-In SC software there are many commonly shared theorems and formulae across
-different applications. For example consider the general form of the
-conservation of thermal energy equation. This equation is widely used in a
-variety of thermal analysis applications, with each solving a different problem,
-or modeling a different system.
-
-Our approach aims to build libraries of chunks that can be reused anywhere. Each
-library should contain common chunks relevant to a specific application domain
-(ex. thermal analysis) and each project should aim to reuse as much as possible
-during development.
-
-From our example, a common source of reused knowledge is the Syst\'{e}me
-International (SI) units (Figure~\ref{fig:know_common}). They are used in
-applications throughout all of SC, so why should they be redefined for each
-project? Once the knowledge has been captured, they can simply be reused
-wherever necessary. With \lss{} they can be reused across projects with minimal
-effort, allowing developers and scientists to spend their valuable time on more
-important things.
 
 %D This next section really feels like it's making a promise without really
 %  explaining how/why it'll work.

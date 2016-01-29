@@ -424,29 +424,24 @@ of also improving reproducibility.
 \subsubsection{"Everything should be made as simple as possible, but not
   simpler."  (Einstein quote)} \label{sssec:adv_simple}
 
-Currently there exist many powerful, general commercial programs for solving
-problems using the finite element method. However, they are not often used to
-develop new ``widgets'' because of the understandability challenge.
-%cost and complexity of doing so~\cite{TODO}. %D Where is this from?
-Engineers often have to resort to building and testing prototypes, instead of
-performing simulations, due to a lack of tools that can assist with their exact
-set of problems. %D Citation needed?
+Take finite element methods as one example:  while there exist many powerful,
+general commercial programs for this, they are not often used to
+develop new ``widgets'' because they are hard to understand.  Thus
+engineers often resort to building and testing prototypes, instead of
+performing simulations, due to a lack of clearly relevant tools.
 
-Our approach will change that by ideally making prototyping trivial through
-generating source code suited to the needs of the engineers. Changes in
-specifications could be seen in the code in (essentially) real-time at trivial
-cost. For example, if an engineer were designing parts for strength, they could
-have a general stress analysis program. This program could be 3D or specialized
-for plane stress/strain, depending on which assumption would be most appropriate
-at the time. The program could even be customized to the parameterized shape of
-the part the engineer is interested in. The new program could only expose the
-degrees of freedom necessary for the engineer to change (ex. material properties
-or specific dimensions of the part), making the simulation process simpler and
-safer.
-
-\lss{} tackles this understandability challenge (Section~\ref{ssec:challenges})
-by allowing developers to build components which will provide exactly what is
-needed, no more and no less.
+By using recipes that generate versions of general algorithms specific to
+a particular problem, we can generate applications suited to the needs of
+the engineers.  Changes in specifications can be reflected in the code in
+(essentially) real-time at trivial cost. For example, if an engineer were
+designing parts for strength, they could start from a general stress analysis
+knowledge base.  This could then be specialized to (say) plane stress/strain,
+depending on which assumption would be most appropriate at the time. The
+generated program could even be customized to the parameterized shape of
+the part the engineer is interested in. Importantly, the generated program
+can be generated to only expose the degrees of freedom necessary for the
+engineer to change (ex. material properties or specific dimensions of the
+part), making the simulation process simpler and safer.
 
 \subsubsection{Verification} \label{sssec:adv_verify}
 

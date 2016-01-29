@@ -91,15 +91,15 @@ Jacques Carette\\
 \maketitle
 \begin{abstract}
 As a relatively mature field, scientific computing has the opportunity to
-lead other software by leveraging its solid, existing knowledge base.  By
+lead other software fields by leveraging its solid, existing knowledge base.  By
 following a rational design process, desirable software qualities such as
 the qualities of traceability, verifiability, and reproducibility, are 
 arguable easier to reach than for other classes of software.
 
 We have begun development of a framework, \lss{}, to put this into practice.
 Our aims are to ensure complete traceability, to facilitate agility in the
-face of the ever changing nature of scientific computing projects, and ensure
-that software artifacts can be easily and quickly be extracted from \lss{}.
+face of ever changing scientific computing projects, and ensure
+that software artifacts can be easily and quickly extracted from \lss{}.
 
 Using an example-based approach to our prototype implementation, we have
 already seen many benefits. \lss{}
@@ -116,18 +116,19 @@ quality software at lower cost over the long term.
 %
 \printccsdesc
 
-\keywords{Literate software, traceability, knowledge capture, software development, scientific computing, artifact generation.} %TODO
+\keywords{Literate software, traceability, knowledge capture, software
+  development, scientific computing, artifact generation.} %TODO
 
 \section{Introduction}
 
 We believe that, because of the solid scientific knowledge base built up
 over the last $6+$ decades of work in Scientific Computing (SC), it is feasible
 for SC to once again take a leadership position as regards the development
-of high quality software.  More precisely, our goal s to use this knowledge
+of high quality software.  More precisely, our goal is to use this knowledge
 to improve the verifiability, reliability, usability, maintainability,
 reusability and reproducibility SC Software (SCS).
 
-Some have argued for a rational document-drive design process%
+Some have argued for a rational document-drive design process 
 \cite{SmithAndKoothoor2016}.  However, many researchers have
 reported that a document driven process is not used by, nor suitable for, SCS;
 they argue that scientific developers naturally use either an agile
@@ -136,7 +137,7 @@ amethododical~\cite{Kelly2013} process, or a knowledge acquisition
 driven~\cite{Kelly2015} process.  The arguments are that scientists do not
 view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007} and that
 in SC, requirements are impossible to determine up-front~\cite{CarverEtAl2007,
-  SegalAndMorris2008}.  But rather than abandon the benefits of a rational
+  SegalAndMorris2008}.  Rather than abandon the benefits of a rational
 document-driven process, we argue that the appropriate tools can in fact
 let the scientists focus even more of their time on science.
 
@@ -154,12 +155,12 @@ Thus, to successfully achieve our goal of improving various software qualities
 (verifiability, reliability, usability etc.) of SCS, whilst also improving,
 or at least not diminish performance, we must also find a way to simultaneously
 deal with the above drawbacks.  In fact, we are even more ambitious: we want
-to improve developer productivity to save time and money on SCS development,
+to improve developer productivity and thus save time and money on SCS development,
 certification and re-certification. To accomplish this we need to remove
 duplication between software artifacts \cite{WilsonEtAl2013} as well as provide
 traceability between all software artifacts. In practice, this means providing
 facilities for automatic software artifact generation from high level
-``knowlege''. We can accomplish this by have a single ``source'' for each
+``knowlege.'' We can accomplish this by have a single ``source'' for each
 relevant piece of information which makes up an SC problem and its solution.
 From this, we can generate all required documents and views.
 That is, we aim to provide methods, tools and techniques to support a literate
@@ -169,7 +170,7 @@ Knuth's~\cite{Knuth1984} literate programming.
 %D May need to cut the roadmap for space.
 In the following section, we  
 %Section~\ref{sec:background} will give a more in-depth 
-focus on SC software quality and literate programming.
+focus on SCS quality and literate programming.
 %Section~\ref{sec:lss} 
 Then we introduce our framework, \lss{}.  We show
 a short example of the framework and discuss its advantages. 
@@ -189,21 +190,21 @@ introduce the ideas behind our approach.
 
 \subsection{Challenges} \label{ssec:challenges}
 
-As the best numerical approach to solve a given problem is usually not known
-a priori, we have to face the \textit{technique selection
-challenge}~\cite{Yu2011}. Thus experimentation is inevitably necessary to
-determine the appropriate order of interpolation, the degree of implicitness,
-etc. Nevertheless, the problem to solve does not change.  This implies that
-we need a a separation of concerns between the physical model and the numerical
-algorithms.  In fact, ease of experimentation means that we should also 
-provide facilities for parameterizing the expected algorithmic variabilities.
+As the best numerical approach to solve a given problem is usually not known a
+priori, we have to face the \textit{technique selection
+  challenge}~\cite{Yu2011}. Experimentation is inevitably necessary to determine
+the appropriate order of interpolation, the degree of implicitness,
+etc. Nevertheless, the problem to solve does not change.  This implies that we
+need a separation of concerns between the physical model and the numerical
+algorithms.  Ease of experimentation means that we also need facilities to
+parameterize algorithmic variabilities.
 
 In an effort to make scientific libraries and software as widely applicable as
 possible, most packages provide a generic interface with a large number of
 options; this tends to overwhelm users and cause programmers to not reuse
 libraries, since they do not believe the interface needs to be as complicated
 as it appears~\cite{Dubois2002}. This is the \textit{understandability}
-challenge~\cite{Yu2011}.  An ideal framework would allow us to expose an
+challenge~\cite{Yu2011}.  An ideal framework would expose an
 API, as well as generate applications, which use routines which are only as
 complicated as they need to be for the job at hand.
 
@@ -214,9 +215,6 @@ re-certification is on the same order of magnitude as the original
 certification, changes will not be made. To be effective in this environment, a
 framework needs to provide traceability, so the consequences of change can be
 directly evaluated.
-%  Changing requirements poses a
-% problem for scientists: commercial software can be difficult/expensive to modify
-% and noncommercial programs are not often flexible enough to change.
 
 \subsection{Literate Programming} \label{ssec:literate}
 

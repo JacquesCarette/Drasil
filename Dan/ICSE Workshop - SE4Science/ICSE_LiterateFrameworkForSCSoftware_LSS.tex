@@ -376,11 +376,15 @@ Section~\ref{ssec:challenges} will be explored below.
 
 \subsubsection{Knowledge Capture} \label{sssec:adv_knowledge}
 
-In SCS there are many commonly shared theorems, formulae, algorithms and
-data-structures across different applications. For example consider the general
-form of the conservation of thermal energy equation, widely used in variety of
-thermal analysis applications, with each solving a different problem, or
-modeling a different system.
+At the appropriate abstraction level, many SC problems have significant
+commonality, since a large class of physical models are instances of a
+relatively small number of conservation equations (conservation of energy, mass
+and momentum.)  For instance, the theoretical model for conservation of thermal
+energy for a fuel pin in \cite{SmithAndKoothoor2016} is written generally, without
+reference to a specific coordinate system.  The exact same theoretical model can
+be reused in any thermal model.  The variation in the final instanced model will
+come from the refinement of the theory using assumptions appropriate to the
+problem.
 
 Our approach aims to build libraries of knowledge that can be reused anywhere.
 Each library should contain common chunks relevant to a specific application
@@ -392,7 +396,7 @@ International (SI) units (Figure~\ref{fig:know_common}). They are commonly
 used throughout all of SC, so why should they be redefined for each
 project? Once the knowledge has been captured, it can simply be reused.
 With \lss{} this is possible with minimal effort, allowing developers and
-scientists to spend their valuable time on more important things.
+scientists to spend their valuable time on more important tasks.
 
 \subsubsection{Software Certification} \label{sssec:adv_cert}
 

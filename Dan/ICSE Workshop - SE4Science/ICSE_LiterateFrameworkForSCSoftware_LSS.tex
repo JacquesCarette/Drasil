@@ -98,7 +98,7 @@ Jacques Carette\\
 As a relatively mature field, scientific computing has the opportunity to lead
 other software fields by leveraging its solid, existing knowledge base.  By
 following a rational design process, desirable software qualities such as
-traceability, verifiability, and reproducibility, are arguable easier to reach
+traceability, verifiability, and reproducibility, are arguably easier to reach
 than for other classes of software.
 
 We have begun development of a framework, \lss{}, to put this into practice.
@@ -111,7 +111,7 @@ easy re-certification.
 Using an example-based approach to our prototype implementation, we have
 already seen many benefits. \lss{}
 keeps all software artifacts (requirements, design, code, tests, build
-scripts, documentation, etc) synchronized with each other. This allows for
+scripts, documentation, etc.) synchronized with each other. This allows for
 reuse of common concepts across projects, and aids in the verification of
 software. It is our hope that \lss{} will lead to the development of higher
 quality software at lower cost over the long term.
@@ -123,8 +123,8 @@ quality software at lower cost over the long term.
 %
 \printccsdesc
 
-\keywords{Literate software, traceability, knowledge capture, software
-  development, scientific computing, artifact generation.} %TODO
+\keywords{Literate software, knowledge capture, traceability, software
+  engineering, scientific computing, artifact generation.}
 
 \section{Introduction}
 
@@ -135,14 +135,14 @@ of high quality software.  More precisely, our goal is to use this knowledge
 to improve the verifiability, reliability, usability, maintainability,
 reusability and reproducibility of SC Software (SCS).
 
-Some have argued for a rational document-drive design process 
+Some have argued for a rational document-driven design process 
 \cite{SmithAndKoothoor2016}.  However, many researchers have
 reported that a document driven process is not used by, nor suitable for, SCS;
 they argue that scientific developers naturally use either an agile
 philosophy~\cite{CarverEtAl2007, EasterbrookAndJohns2009, Segal2005}, or an
 amethododical~\cite{Kelly2013} process, or a knowledge acquisition
 driven~\cite{Kelly2015} process.  The arguments are that scientists do not
-view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007} and that
+view rigid, process-heavy approaches favourably~\cite{CarverEtAl2007} and that
 in SC, requirements are impossible to determine up-front~\cite{CarverEtAl2007,
   SegalAndMorris2008}.  Rather than abandon the benefits of a rational
 document-driven process, we argue that the appropriate tools can in fact
@@ -159,19 +159,19 @@ The principal perceived drawbacks of document-driven design methodologies are:
 \end{itemize}
 
 Thus, to successfully achieve our goal of improving various software qualities
-(verifiability, reliability, usability etc.) of SCS, whilst also improving,
-or at least not diminish performance, we must also find a way to simultaneously
-deal with the above drawbacks.  In fact, we are even more ambitious: we want
-to improve developer productivity and thus save time and money on SCS
-development, certification and re-certification. To accomplish this we need to
-remove duplication between software artifacts \cite{WilsonEtAl2013} as well as
-provide traceability between all software artifacts. In practice, this means
-providing facilities for automatic software artifact generation from high level
-``knowlege.'' We can accomplish this by have a single ``source'' for each
+(verifiability, reliability, usability, etc.) of SCS, whilst also improving, or
+at least not diminishing performance, we must also find a way to simultaneously
+deal with the above drawbacks. In fact, we are even more ambitious: we want to
+improve developer productivity and thus save time and money on SCS development,
+certification and re-certification. To accomplish this we need to remove
+duplication between software artifacts \cite{WilsonEtAl2013} as well as provide
+traceability between all software artifacts. In practice, this means providing
+facilities for automatic software artifact generation from high level
+``knowledge.'' We can accomplish this by having a single ``source'' for each
 relevant piece of information which makes up an SC problem and its solution.
-From this, we can generate all required documents and views.
-That is, we aim to provide methods, tools and techniques to support a literate
-process for developing scientific software that generalizes the idea behind
+From this, we can generate all required documents and views. That is, we aim to
+provide methods, tools and techniques to support a literate process for
+developing scientific software that generalizes the idea behind
 Knuth's~\cite{Knuth1984} literate programming.
 
 %D May need to cut the roadmap for space.
@@ -399,7 +399,7 @@ Section~\ref{ssec:challenges} will be explored below.
 At the appropriate abstraction level, many SC problems have significant
 commonality, since a large class of physical models are instances of a
 relatively small number of conservation equations (conservation of energy, mass
-and momentum.)  For instance, the theoretical model for conservation of thermal
+and momentum).  For instance, the theoretical model for conservation of thermal
 energy for a fuel pin in \cite{SmithAndKoothoor2016} is written generally, without
 reference to a specific coordinate system.  The exact same theoretical model can
 be reused in any thermal model.  The variation in the final instanced model will
@@ -422,16 +422,15 @@ scientists to spend their valuable time on more important tasks.
 \subsubsection{Software Certification} \label{sssec:adv_cert}
 
 Current software certification processes require high-quality documentation.
-Depending on the regulatory body and the certification standards, many
-types of documents may be required, such as requirements specification,
-verification plans, design specification and code. 
-However, creating these should not impede a scientists' work.  As requirements
-and numerical algorithmic decisions change, documentation and code must be
-updated.  This creates issues with traceability and maintainability.
-\lss{} aims to generate these documents alongside the code, while accounting
-for any changes. When properly used, singular knowledge will be embodied in
-a single chunk, and the generation process will take care of baking in this
-information into all appropriate places in the documentation and code.  Thus
+Depending on the regulatory body and the certification standards, many types of
+documents may be required, such as the requirements specification, verification
+plans, design specification and code. However, creating these should not impede
+a scientist's work. As requirements and numerical algorithmic decisions change,
+documentation and code must be updated. This creates issues with traceability
+and maintainability. \lss{} aims to generate these documents alongside the code,
+while accounting for any changes. When properly used, singular knowledge will be
+embodied in a single chunk, and the generation process will take care of baking
+this information into all appropriate places in the documentation and code. Thus
 any change is guaranteed to propagate throughout all of the artifacts.
 
 Recipes are useful too: if a document standard were to be changed during the
@@ -531,9 +530,9 @@ instead of an error).
 The development of high-quality SCS, especially those which can be
 (re-)certified, leave much to be desired.  The burden of keeping documentation
 and code synchronized, due to hand-duplicated information, leads to many 
-problems.  The end result tend to involve either extremely high development
+problems.  The end result tends to involve either extremely high development
 costs (and bored developers), or software of dubious quality which is 
-dificult to maintain.
+difficult to maintain.
 
 With \lss{}, we hope to achieve complete traceability between all software
 artifacts, while causing as little inconvenience to the developers as possible.

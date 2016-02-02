@@ -3,7 +3,7 @@
 module ASTInternal where
 
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
-import Chunk (Chunk)
+import Chunk (Quantity)
 
 data Expr where
  V :: Variable -> Expr
@@ -14,7 +14,7 @@ data Expr where
  (:/) :: Expr -> Expr -> Expr
  (:+) :: Expr -> Expr -> Expr
  (:-) :: Expr -> Expr -> Expr
- C :: Chunk c => c -> Expr
+ C :: Quantity c => c -> Expr
 
 type Variable = String
 

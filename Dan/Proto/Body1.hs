@@ -5,7 +5,7 @@ module Body1 where
 import Data.List (intersperse)
 
 import Example1
-import Spec (Spec(..), LayoutObj(..), Document(..))
+import Spec (Spec(..), LayoutObj(..), Document(..), DType(Data))
 import Format (Format,FormatC(..))
 import Unit (Unit(..))
 import SI_Units (si_units)
@@ -52,11 +52,11 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
    (\ch -> Sy $ ch ^. unit)]
   [h_g,h_c] 
 
--- s3 = Section (S "Data Definitions") [s3_dd1, s3_dd2]
+s3 = Section (S "Data Definitions") [s3_dd1, s3_dd2]
 
--- s3_dd1 = Definition Data h_g
+s3_dd1 = Definition Data h_g
 
--- s3_dd2 = Definition Data h_c
+s3_dd2 = Definition Data h_c
 
 s4 = Section (S "Code -- Test") [s4c]
 
@@ -70,7 +70,7 @@ srs ls author body =
   
 
 srsBody,lpmBody :: Document
-srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s4] -- need to add s3
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s3, s4] -- need to add s3
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (N $ h_g ^. symbol) :+: 

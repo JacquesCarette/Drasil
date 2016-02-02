@@ -7,7 +7,7 @@ import Unicode (Render)
 import Symbol
 import Unit (USymb)
 import ASTCode
--- import EqChunk
+import EqChunk
 
 --For writing chunks in a specification language that can be converted to TeX
 infixr 5 :+:
@@ -38,8 +38,8 @@ data LayoutObj = Table [Spec] [[Spec]] -- header then data
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code
-               -- | Definition DType (EqChunk)
+               | Definition DType (EqChunk)
 
 data DType = Data
-           | Literate
+           -- | Literate
 

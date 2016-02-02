@@ -2,7 +2,7 @@
 module ASTTeX where
 
 import ASTInternal (Variable)
-import Spec ()
+import Spec (DType)
 import Symbol (Symbol)
 import Unit (USymb)
 import ASTCode
@@ -37,4 +37,4 @@ data LayoutObj = Table [[Spec]]
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code
-               -- | Definition DType [(String,LayoutObj)]
+               | Definition DType [(String,LayoutObj)]

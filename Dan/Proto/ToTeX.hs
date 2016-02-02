@@ -6,11 +6,11 @@ import Spec
 import qualified ASTTeX as T
 import Unicode (render)
 import Format (Format(TeX), FormatC(..))
--- import EqChunk
--- import Unit
--- import Chunk
--- import Control.Lens
--- import ExprTools
+import EqChunk
+import Unit
+import Chunk
+import Control.Lens
+import ExprTools
 
 
 expr :: Expr -> T.Expr
@@ -89,21 +89,22 @@ lay (Section title layoutComponents) =
 lay (Paragraph c) = T.Paragraph (spec c)
 lay (EqnBlock c) = T.EqnBlock (spec c)
 lay (CodeBlock c) = T.CodeBlock c
-
--- lay (Definition Data c) = T.Definition Data $ makeDDPairs c
+lay (Definition Data c) = T.Definition Data $ makeDDPairs c
 -- lay (Definition _ _) = error "Missing definition case in lay"
 
--- makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
--- makeDDPairs c = [
-  -- ("Label", T.Paragraph $ T.N $ c ^. symbol),
-  -- ("Units", T.Paragraph $ T.Sy $ c ^. unit),
-  -- -- ("Equation", T.EqnBlock $ T.E $ expr $ equat c),
-  -- ("Description", T.Paragraph $ buildDescription c)
-  -- ]
+makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
+makeDDPairs c = [
+  ("Label", T.Paragraph $ T.N $ c ^. symbol),
+  ("Units", T.Paragraph $ T.Sy $ c ^. unit),
+  -- ("Equation", T.EqnBlock $ T.E $ expr $ equat c),
+  ("Description", T.Paragraph $ buildDescription c)
+  ]
   
--- buildDescription :: EqChunk -> T.Spec
--- buildDescription c = descLines (c ^. symbol:(get_dep c)) -- won't work without get_dep returning symbols.
+buildDescription :: Quantity c => c -> T.Spec
+buildDescription c = descLines c -- (c:(get_dep_chunks c)) 
+  --won't work without get_dep returning chunks.
 
+descLines _ = T.S ""
 -- descLines :: [String] -> T.Spec
 -- descLines [] = error "No chunks to describe"
 -- descLines (c:[]) = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.S (c ^. descr)

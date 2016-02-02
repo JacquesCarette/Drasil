@@ -19,7 +19,7 @@ import Format (Format(TeX))
 import Unit (USymb(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
--- import Config (colAwidth, colBwidth)
+import Config (colAwidth, colBwidth)
 
 genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -57,7 +57,7 @@ printLO (Paragraph contents)  = text (pCon Plain contents)
 printLO (EqnBlock contents)   = text $ makeEquation contents
 printLO (Table rows) = makeTable rows
 printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
--- printLO (Definition dtype ssPairs) = makeDefn dtype ssPairs
+printLO (Definition dtype ssPairs) = makeDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -133,9 +133,9 @@ makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls) ++ "\\"
 
--- makeDefn :: S.DType -> [(String,LayoutObj)] -> Doc
--- makeDefn _ []  = error "Empty definition"
--- makeDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
+makeDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+makeDefn _ []  = error "Empty definition"
+makeDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
 -- makeDefn S.Literate _ = error "makeDefn: missing case"
 
 beginDataDefn :: Doc
@@ -241,46 +241,22 @@ codeFooter = bslash <> text "end" <> br "lstlisting"
 
 -- Data Defn Printing --
 
--- makeDDTable :: [(String,LayoutObj)] -> Doc
--- makeDDTable [] = error "Trying to make empty Data Defn"
--- makeDDTable ps@((_,d):_) = vcat [
-  -- text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  -- text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
-  -- text "\\label{DD:" <> (printLO d) <> text "}",
-  -- makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
-  -- ]
+makeDDTable :: [(String,LayoutObj)] -> Doc
+makeDDTable [] = error "Trying to make empty Data Defn"
+makeDDTable ps@((_,d):_) = vcat [
+  text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
+  text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
+  text "\\label{DD:" <> (printLO d) <> text "}",
+  makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
+  ]
 
--- makeDDRows :: [(String,LayoutObj)] -> Doc
--- makeDDRows [] = error "No fields to create DD table"
--- makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
--- makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
-                        -- makeDDRows ps
--- ddBoilerplate :: Doc
--- ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
+makeDDRows :: [(String,LayoutObj)] -> Doc
+makeDDRows [] = error "No fields to create DD table"
+makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
+makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
+                        makeDDRows ps
+ddBoilerplate :: Doc
+ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
 -- End Data Defn Printing --
-
-
-
-
-
-
--- descDependencies :: A.Chunk TeX -> Doc
--- descDependencies c = writeDescs (unSpec (maybe (S "") spec deps))
- -- where
-   -- deps = findOptional A.Dependencies c
-
--- unSpec :: Spec -> A.Chunks TeX
--- unSpec (D cs) = cs
--- unSpec (S _) = []
--- unSpec _     = error "oh my, what are we doing here?"
-
--- writeDescs :: A.Chunks TeX -> Doc
--- writeDescs [] = error "Nothing to write" --Might change this in case chunk has no dependencies
--- writeDescs (c:[]) = writeDesc c
--- writeDescs (c:cs) = writeDesc c <+> newline $$ writeDescs cs
-
--- writeDesc :: A.Chunk TeX -> Doc
--- writeDesc c  = text $ 
-  -- p_spec (CS c) ++ " is the " ++ p_spec (spec (find A.Description c "Missing Description"))
 

@@ -18,6 +18,7 @@ data Expr = Var Variable
           | Sub Expr Expr
   deriving Eq
 
+infixr 5 :+:
 data Spec = E Expr
           | S String
           | Spec :+: Spec -- concat
@@ -26,6 +27,8 @@ data Spec = E Expr
           | Spec :/: Spec -- frac
           | Sy USymb
           | N Symbol
+          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
+                          -- May move to LayoutObj
 
 data Document = Document Title Author [LayoutObj]
 type Title = Spec

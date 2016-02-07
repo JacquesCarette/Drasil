@@ -75,10 +75,11 @@ p_spec (a :+: b)  = p_spec a ++ p_spec b
 p_spec (a :-: b)  = p_spec a ++ "_" ++ brace (p_spec b)
 p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
 p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
--- p_spec (CS c)     = printSymbol c
-p_spec (S s)        = s
-p_spec (N s)        = symbol s
-p_spec (Sy s)       = runReader (uSymbPrint s) Plain
+-- p_spec (CS c)   = printSymbol c
+p_spec (S s)      = s
+p_spec (N s)      = symbol s
+p_spec (Sy s)     = runReader (uSymbPrint s) Plain
+p_spec HARDNL     = "\\newline"
 
 symbol :: Symbol -> String
 symbol (Atomic s) = s
@@ -159,6 +160,7 @@ getCon (_ :^: _) = Equation
 getCon (_ :/: _) = Equation -- Fractions are always equations.
 getCon (Sy _) = Plain
 getCon (N _) = Equation
+getCon (HARDNL) = Plain
 
 
 lPrint :: Spec -> Reader Context String
@@ -168,26 +170,8 @@ lPrint t@(a :+: b) = do
   let cb = getCon b
   case c of
     EqnB -> return $ makeEquation t
-    _    -> 
-        case b of
-          (_ :+: _) ->
-      -- if c == ca then
-            if ca == cb then
-              return $ p_spec a ++ pCon cb b
-            else
-              return $ p_spec a ++ "$" ++ pCon cb b
-          _ ->
-            if ca == cb then
-              case ca of
-                Equation -> return $ p_spec a ++ p_spec b ++ "$"
-                Plain    -> return $ p_spec a ++ p_spec b
-                _        -> error "This can't happen"
-            else
-              case cb of
-                Equation -> return $ p_spec a ++ pCon cb b
-                Plain    -> return $ "$" ++ p_spec b
-                _        -> error "This can't happen"
-          
+    _ -> return $ pCon ca a ++ pCon cb b
+    
 lPrint t = do
   c <- ask
   let ct = getCon t

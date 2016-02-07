@@ -97,14 +97,17 @@ makeDDPairs c = [
   ("Label", T.Paragraph $ T.N $ c ^. symbol),
   ("Units", T.Paragraph $ T.Sy $ c ^. unit),
   -- ("Equation", T.EqnBlock $ T.E $ expr $ equat c),
-  ("Description", T.Paragraph $ buildDescription c)
+  ("Description", T.Paragraph (buildDescription c))
   ]
   
-buildDescription :: Quantity c => c -> T.Spec
-buildDescription c = descLines c -- (c:(get_dep_chunks c)) 
+buildDescription :: EqChunk -> T.Spec
+buildDescription c = descLines ((toVC c):(get_VCs (equat c)))
   --won't work without get_dep returning chunks.
 
-descLines _ = T.S ""
+descLines :: [VarChunk] -> T.Spec  
+descLines [] = error "No chunks to describe"
+descLines (vc:[]) = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: T.S (vc ^. descr)))
+descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
 -- descLines :: [String] -> T.Spec
 -- descLines [] = error "No chunks to describe"
 -- descLines (c:[]) = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.S (c ^. descr)

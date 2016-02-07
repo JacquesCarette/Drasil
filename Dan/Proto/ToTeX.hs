@@ -22,9 +22,9 @@ expr (a :+ b) = T.Add (expr a) (expr b)
 expr (a :/ b) = T.Frac (replace_divs a) (replace_divs b)
 expr (a :^ b) = T.Pow (expr a) (expr b)
 expr (a :- b) = T.Sub (expr a) (expr b)
--- expr (C c)    = T.Var (c ^. symbol) -- Need to figure out how to convert a 
+expr (C c)    = T.Sym (c ^. symbol) -- Need to figure out how to convert a 
                     -- Symbol to a variable within expressions.
-expr _ = error "Unimplemented expression transformation in ToTeX."
+--expr _ = error "Unimplemented expression transformation in ToTeX."
 
 replace_divs :: Expr -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)
@@ -96,9 +96,12 @@ makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
 makeDDPairs c = [
   ("Label", T.Paragraph $ T.N $ c ^. symbol),
   ("Units", T.Paragraph $ T.Sy $ c ^. unit),
-  -- ("Equation", T.EqnBlock $ T.E $ expr $ equat c),
+  ("Equation", T.EqnBlock $ buildEqn c),
   ("Description", T.Paragraph (buildDescription c))
   ]
+
+buildEqn :: EqChunk -> T.Spec  
+buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
   
 buildDescription :: EqChunk -> T.Spec
 buildDescription c = descLines ((toVC c):(get_VCs (equat c)))

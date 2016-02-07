@@ -16,7 +16,7 @@ data Expr = Var Variable
           | Div Expr Expr
           | Pow Expr Expr
           | Sub Expr Expr
-  deriving Eq
+          | Sym Symbol
 
 infixr 5 :+:
 data Spec = E Expr

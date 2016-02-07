@@ -108,7 +108,7 @@ p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in Helpers
 p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
 p_expr (Pow a b)  = p_expr a ++ "^" ++ brace (p_expr b)
--- p_expr (C c)      = p_spec $ spec (find A.Equation c "No equation or symbol for chunk")
+p_expr (Sym s)    = symbol s
 
 mul :: Expr -> Expr -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
@@ -160,7 +160,7 @@ getCon (_ :^: _) = Equation
 getCon (_ :/: _) = Equation -- Fractions are always equations.
 getCon (Sy _) = Plain
 getCon (N _) = Equation
-getCon (HARDNL) = Plain
+getCon HARDNL = Plain
 
 
 lPrint :: Spec -> Reader Context String

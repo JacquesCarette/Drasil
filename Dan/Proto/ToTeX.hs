@@ -11,7 +11,7 @@ import Unit
 import Chunk
 import Control.Lens
 import ExprTools
-import Config (verboseDDDescription)
+import Config (verboseDDDescription, numberedDDEquations)
 
 
 expr :: Expr -> T.Expr
@@ -97,10 +97,13 @@ makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
 makeDDPairs c = [
   ("Label", T.Paragraph $ T.N $ c ^. symbol),
   ("Units", T.Paragraph $ T.Sy $ c ^. unit),
-  ("Equation", T.Paragraph $ buildEqn c),
+  ("Equation", eqnStyleDD $ buildEqn c),
   ("Description", T.Paragraph (buildDescription c))
   ]
 
+eqnStyleDD :: T.Contents -> T.LayoutObj
+eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
+  
 buildEqn :: EqChunk -> T.Spec  
 buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
   

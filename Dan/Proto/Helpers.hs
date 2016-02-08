@@ -13,7 +13,7 @@ lAndDim [f]  = concat (replicate ((length f)-1) "l ") ++ "p" ++
 lAndDim _ = error "Unimplemented use of lAndDim in Helpers."
   
 --basic docs
-bslash,dbs,eq,dlr,ast,pls :: Doc
+bslash,dbs,eq,dlr,ast,pls,hat,slash,hyph :: Doc
 bslash = text "\\"
 dbs = bslash <> bslash
 eq = text "="

@@ -23,6 +23,9 @@ tableWidth = 10.5
 verboseDDDescription :: Bool
 verboseDDDescription = True
 
+numberedDDEquations :: Bool
+numberedDDEquations = False
+
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
   -- you can create your own parameter function and replace the one above.
 defaultSRSparams :: [DocParams]

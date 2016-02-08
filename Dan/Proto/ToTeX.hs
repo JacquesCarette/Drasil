@@ -11,6 +11,7 @@ import Unit
 import Chunk
 import Control.Lens
 import ExprTools
+import Config (verboseDDDescription)
 
 
 expr :: Expr -> T.Expr
@@ -104,7 +105,7 @@ buildEqn :: EqChunk -> T.Spec
 buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
   
 buildDescription :: EqChunk -> T.Spec
-buildDescription c = descLines ((toVC c):(get_VCs (equat c)))
+buildDescription c = descLines ((toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
   --won't work without get_dep returning chunks.
 
 descLines :: [VarChunk] -> T.Spec  

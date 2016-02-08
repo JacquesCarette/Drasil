@@ -96,7 +96,7 @@ makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
 makeDDPairs c = [
   ("Label", T.Paragraph $ T.N $ c ^. symbol),
   ("Units", T.Paragraph $ T.Sy $ c ^. unit),
-  ("Equation", T.EqnBlock $ buildEqn c),
+  ("Equation", T.Paragraph $ buildEqn c),
   ("Description", T.Paragraph (buildDescription c))
   ]
 

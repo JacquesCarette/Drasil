@@ -28,7 +28,7 @@ instance Render Alpha where
 -- 
 
 instance Render Circle where
-  render TeX Circle  = "${}^{\\circ}$" --temp $ workaround until unit printing's fixed.
+  render TeX Circle  = "${}^{\\circ}$"--temp $ workaround until unit printing's fixed.
   render Plain Circle  = "o"
 
 --

@@ -17,7 +17,7 @@ derived = [centigrade, joule, watt, calorie, kilowatt]
 si_units :: [UnitDefn]
 si_units = map UU fundamentals ++ map UU derived
 
--- -- Fundamental SI Units --------------------------------------------------------
+------------- Fundamental SI Units ---------------------------------------------
 fund :: String -> String -> String -> FundUnit
 fund nam desc sym = UD (CC nam desc) (UName $ Atomic sym)
 
@@ -30,7 +30,7 @@ mole     = fund "Mole"     "amount of substance (mole)"   "mol"
 ampere   = fund "Ampere"   "electric current (ampere)"    "A"
 candela  = fund "Candela"  "luminous intensity (candela)" "cd"
 
--- ------- END FUNDAMENTALS -------------------------------------------------------
+------------- END FUNDAMENTALS -------------------------------------------------
 
 centigrade, joule, watt, calorie, kilowatt :: DerUChunk 
 

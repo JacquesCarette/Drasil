@@ -6,9 +6,6 @@ import ASTCode (Lang(..))
 outLang :: Lang
 outLang = CLang
 
--- precision :: Precision
--- precision = Double
-
 expandSymbols :: Bool
 expandSymbols = True
 
@@ -40,11 +37,8 @@ defaultLPMparams = [
   UsePackages ["xr"],
   ExDoc "L-" "hghc_SRS"
   ]
-  
--- datadefnFields :: [Field]
--- datadefnFields = [Symbol, SIU, Equation, Description]
 
-  --column width for data definitions (fraction of textwidth)
+--column width for data definitions (fraction of LaTeX textwidth)
 colAwidth, colBwidth :: Double
 colAwidth = 0.2
 colBwidth = 0.73

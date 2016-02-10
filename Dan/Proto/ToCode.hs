@@ -8,7 +8,7 @@ import EqChunk
 import Chunk (name)
 
 toCode :: Lang -> CodeType -> EqChunk -> Code
---Name should be the name of what you are calculating. For example h_g
+-- Name should be the name of what you are calculating. For example h_g
 toCode CLang Calc ec = C [
   ((MethDecl DblType ("calc_"++(ec ^. name)) (makeArgs $ get_dep (equat ec))),
   [Return (makeCode $ equat ec)])]
@@ -19,6 +19,7 @@ makeArgs [] = []
 makeArgs (x:xs) = (ArgDecl DblType x) : makeArgs xs
 -- Currently assuming type of double for arguments as all examples involve
   -- calculations using known (or calculated) values.
+-- TODO: Add either a toggle or a field in chunks to declare their precision
   
 makeCode :: E.Expr -> CodeExpr
 makeCode (E.V v) = Var v

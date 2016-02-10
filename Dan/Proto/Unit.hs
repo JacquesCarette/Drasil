@@ -1,10 +1,10 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Unit (
-    USymb(..), UDefn(..) -- languages
-  , Unit(..), UnitEq(..) -- classes
+    USymb(..), UDefn(..)        -- languages
+  , Unit(..), UnitEq(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
-  , UnitDefn(..)  -- wrapper for 'Unit' class
+  , UnitDefn(..)                -- wrapper for 'Unit' class
   , from_udefn
   ) where
 
@@ -21,7 +21,7 @@ data USymb = UName Symbol
 
 -- Language of unit equations, to define a unit relative
 -- to another
-data UDefn = USynonym USymb -- to define straight synonyms
+data UDefn = USynonym USymb      -- to define straight synonyms
            | UScale Double USymb -- scale, i.e. *
            | UShift Double USymb -- shift, i.e. +
 

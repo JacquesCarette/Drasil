@@ -20,7 +20,7 @@ printCode (C (m:ms)) = printMethod m $$ printCode (C ms)
 
 printMethod :: Method -> Doc
 printMethod (d, ss) = printDecl d <> text "{" $$ 
-  text "    " <> printStatements ss $$ -- Will update tabbing once more possibilities are available
+  text "    " <> printStatements ss $$ -- TODO: update tabbing style
   text "}"
 
 printDecl :: Declaration -> Doc

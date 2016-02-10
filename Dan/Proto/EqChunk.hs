@@ -8,14 +8,11 @@ import Control.Lens (Simple, Lens)
 import Unit (Unit(..))
 import Symbol (Symbol)
 
+-- BEGIN EQCHUNK --
 data EqChunk = EC 
   { uc :: UnitalChunk
   , equat :: Expr
   }
-
--- don't export this
-ul :: Simple Lens EqChunk UnitalChunk
-ul f (EC a b) = fmap (\x -> EC x b) (f a)
 
 -- this works because UnitalChunk is a Chunk
 instance Chunk EqChunk where
@@ -29,7 +26,12 @@ instance Quantity EqChunk where
 
 instance Unit EqChunk where
   unit = ul . unit
+-- END EQCHUNK --
 
+-- don't export this
+ul :: Simple Lens EqChunk UnitalChunk
+ul f (EC a b) = fmap (\x -> EC x b) (f a)
+  
 -- useful
 fromEqn :: Unit u => String -> String -> Symbol -> u -> Expr -> EqChunk
 fromEqn nm desc symb chunk eqn = EC (UC (VC nm desc symb) chunk) eqn

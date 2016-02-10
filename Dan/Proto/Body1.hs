@@ -6,20 +6,17 @@ import Data.List (intersperse)
 
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..), DType(Data))
-import Format (Format,FormatC(..))
+import Format (FormatC(..))
 import Unit (Unit(..))
 import SI_Units (si_units)
 import Chunk
--- import UnitalChunk (unit)
 import Control.Lens ((^.))
 import RecipeTools
 import ToCode
 import ASTCode
 
-type SRS = Format -- SRS is a format, but it really 'is' TeX
-type LPM = Format -- LPM is a format, but it really 'is' TeX
-
-s1, s1_intro, s1_table, s2, s2_intro, s2_table, s4, s4c :: LayoutObj
+s1, s1_intro, s1_table, s2, s2_intro, s2_table, 
+  s3, s3_dd1, s3_dd2, s4, s4c :: LayoutObj
 
 s1 = Section (S "Table of Units") [s1_intro, s1_table]
 
@@ -70,7 +67,7 @@ srs ls author body =
   
 
 srsBody,lpmBody :: Document
-srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s3, s4] -- need to add s3
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s3, s4]
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (N $ h_g ^. symbol) :+: 

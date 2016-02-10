@@ -11,15 +11,13 @@ import ASTTeX
 import ToTeX
 import qualified ASTInternal as A
 import qualified Spec as S
-import Config (srsTeXParams,lpmTeXParams, --colAwidth,colBwidth,
-  tableWidth) --, verboseDDDescription)
+import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import Helpers
 import Unicode
 import Format (Format(TeX))
 import Unit (USymb(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
-import Config (colAwidth, colBwidth)
 
 genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -57,25 +55,21 @@ printLO (Paragraph contents)  = text (pCon Plain contents)
 printLO (EqnBlock contents)   = text $ makeEquation contents
 printLO (Table rows) = makeTable rows
 printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPairs) = makeDefn dtype ssPairs
+printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
--- print []                         = empty
--- print ((Section t contents):cs)  = sec (p_spec t) $$ print contents $$ print cs
--- print ((Paragraph contents):cs)  = text (p_spec contents) $$ print cs
--- print ((EqnBlock contents):cs)   = makeEquation contents $$ print cs
--- print ((Table chunks fields):cs) = makeTable chunks fields $$ print cs
--- print ((Definition dtype chunk fields):cs) = makeDefn dtype chunk fields $$ print cs
+
+-------------------------------------------------------------------
+------------------BEGIN SPEC PRINTING------------------------------
+-------------------------------------------------------------------
 
 p_spec :: Spec -> String
--- p_spec (CS c)      = dollar (printSymbol c)
 p_spec (E e)      = p_expr e
 p_spec (a :+: b)  = p_spec a ++ p_spec b
 p_spec (a :-: b)  = p_spec a ++ "_" ++ brace (p_spec b)
 p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
 p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
--- p_spec (CS c)   = printSymbol c
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = runReader (uSymbPrint s) Plain
@@ -93,11 +87,9 @@ symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
 
--- unit :: USymb -> String
--- unit (UName n) = symbol n
--- unit (UProd l) = foldr1 (++) (map unit l)
--- unit (UPow n p) = (unit n) ++"^"++ brace (show p)
-
+-------------------------------------------------------------------
+------------------BEGIN EXPRESSION PRINTING------------------------
+-------------------------------------------------------------------
 p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
@@ -115,12 +107,10 @@ mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
 mul a b         = p_expr a ++ p_expr b
 
-makeEquation :: Spec -> String
-makeEquation contents = 
-  ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
-  --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
-  --  on chunk (i.e. "eq:h_g" for h_g = ...
-
+-------------------------------------------------------------------
+------------------BEGIN TABLE PRINTING-----------------------------
+-------------------------------------------------------------------
+  
 makeTable :: [[Spec]] -> Doc
 makeTable lls  = text ("~\\newline \\begin{longtable}" ++ brace (header lls)) 
   $$ makeRows lls $$ text "\\end{longtable}"
@@ -134,19 +124,9 @@ makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls) ++ "\\"
 
-makeDefn :: S.DType -> [(String,LayoutObj)] -> Doc
-makeDefn _ []  = error "Empty definition"
-makeDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
--- makeDefn S.Literate _ = error "makeDefn: missing case"
-
-beginDataDefn :: Doc
-beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
-
-endDataDefn :: Doc  
-endDataDefn = text "\\end{minipage}" <> dbs
-
-
--- READER --
+-------------------------------------------------------------------
+------------------BEGIN READER-------------------------------------
+-------------------------------------------------------------------
 
 data Context = Equation | EqnB | Plain deriving (Show, Eq)
 
@@ -181,7 +161,8 @@ lPrint t = do
       case ct of
         Equation -> return $ dollar (p_spec t)
         Plain    -> return $ p_spec t
-        EqnB     -> return $ makeEquation t --This will never run right now, but maybe eventually.
+        EqnB     -> return $ makeEquation t 
+          --This will never run right now, but maybe eventually.
 
 bEq, eEq :: String    
 bEq = "\\begin{equation} " 
@@ -199,7 +180,6 @@ uSymbPrint (UName n) = do
   else
     case cn of
       Equation -> return $ dollar $ symbol n 
-        --Need a way to parse/print symbols using their context for units, once I figure out the getSyCon part below.
       _ -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
@@ -212,18 +192,26 @@ uSymbPrint (UPow n p) = do
 
 getSyCon :: Symbol -> Context
 getSyCon (Atomic _) = Plain
---getSyCon (Special Circle) = Equation --Need to figure this out.
+--getSyCon (Special Circle) = Equation
+  -- TODO: Need to figure this out, or figure out how to print catenations in a 
+  --       better way.
 getSyCon (Special _) = Plain
 getSyCon (Catenate s1 _) = getSyCon s1
 getSyCon (Corners _ _ _ _ s) = getSyCon s
 
---- END READER ---
+-------------------------------------------------------------------
+------------------BEGIN DATA DEFINITION PRINTING-------------------
+-------------------------------------------------------------------
 
-codeHeader,codeFooter :: Doc
-codeHeader = bslash <> text "begin" <> br "lstlisting"
-codeFooter = bslash <> text "end" <> br "lstlisting"
+makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+makeDDefn _ []  = error "Empty definition"
+makeDDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
 
--- Data Defn Printing --
+beginDataDefn :: Doc
+beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
+
+endDataDefn :: Doc  
+endDataDefn = text "\\end{minipage}" <> dbs
 
 makeDDTable :: [(String,LayoutObj)] -> Doc
 makeDDTable [] = error "Trying to make empty Data Defn"
@@ -242,5 +230,20 @@ makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$
 ddBoilerplate :: Doc
 ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
--- End Data Defn Printing --
+-------------------------------------------------------------------
+------------------BEGIN CODE BLOCK PRINTING------------------------
+-------------------------------------------------------------------
 
+codeHeader,codeFooter :: Doc
+codeHeader = bslash <> text "begin" <> br "lstlisting"
+codeFooter = bslash <> text "end" <> br "lstlisting"
+
+-------------------------------------------------------------------
+------------------BEGIN EQUATION PRINTING--------------------------
+-------------------------------------------------------------------
+
+makeEquation :: Spec -> String
+makeEquation contents = 
+  ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
+  --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
+  --  on chunk (i.e. "eq:h_g" for h_g = ...

@@ -4,6 +4,8 @@ module Helpers where
 import Text.PrettyPrint
 import Data.Char
 import Config (tableWidth)
+-- May subdivide this file into multiple helper files as it grows. Specifically,
+--  we may prefer having TeX specific commands in their own module.
 
 --Table making help
 lAndDim :: [[a]] -> String
@@ -42,7 +44,7 @@ upcase (c:cs) = text $ toUpper c:cs --capitalize first letter of string
 lowcase [] = text []
 lowcase (c:cs) = text $ toLower c:cs --make first letter lowercase
 
---TeX
+--TeX Specifics
 docclass :: String -> String -> Doc
 docclass [] brac = bslash <> text "documentclass" <> br brac
 docclass sqbrack brac = bslash <> text "documentclass" <> sq sqbrack <> br brac

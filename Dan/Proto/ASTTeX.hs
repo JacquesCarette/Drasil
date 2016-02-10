@@ -28,7 +28,8 @@ data Spec = E Expr
           | Sy USymb
           | N Symbol
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
-                          -- May move to LayoutObj
+                          -- May move to a new LayoutObj, but only exists in TeX
+                          -- so it's not really a big deal ATM.
 
 data Document = Document Title Author [LayoutObj]
 type Title = Spec

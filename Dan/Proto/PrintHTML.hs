@@ -13,6 +13,7 @@ import qualified ASTInternal as A
 import qualified Spec as S
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import HTMLHelpers
+import Helpers (brace)
 import Unicode
 import Format (Format(HTML))
 import Unit (USymb(..))
@@ -26,7 +27,7 @@ build :: Document -> Doc
 build (Document t a c) = 
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
           " \"http://www.w3.org/TR/html4/loose.dtd\">") $$ 
-  html (head_tag (title (text (""))) $$ --text (p_spec t)
+  html (head_tag (title (text (title_spec t))) $$ --text (p_spec t)
   body (text ""))
   
 
@@ -71,29 +72,42 @@ build (Document t a c) =
 -- -------------------------------------------------------------------
 -- ------------------BEGIN SPEC PRINTING------------------------------
 -- -------------------------------------------------------------------
+title_spec :: Spec -> String
+title_spec (N s) = t_symbol s
+title_spec (a :+: b)  = title_spec a ++ title_spec b
+title_spec (a :^: b)  = title_spec a ++ "^" ++ brace (title_spec b)
+title_spec (a :-: b) = title_spec a ++ "_" ++ title_spec b
+title_spec (a :/: b)  = brace (p_spec a) ++ "/" ++ brace (p_spec b)
+title_spec HARDNL = ""
+title_spec s = p_spec s
 
--- p_spec :: Spec -> String
--- p_spec (E e)      = p_expr e
--- p_spec (a :+: b)  = p_spec a ++ p_spec b
--- p_spec (a :-: b)  = p_spec a ++ "_" ++ brace (p_spec b)
+
+p_spec :: Spec -> String
+--p_spec (E e)      = p_expr e
+p_spec (a :+: b)  = p_spec a ++ p_spec b
+p_spec (a :-: b)  = p_spec a ++ sub (brace (p_spec b))
 -- p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
 -- p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
--- p_spec (S s)      = s
--- p_spec (N s)      = symbol s
+p_spec (S s)      = s
+p_spec (N s)      = symbol s
 -- p_spec (Sy s)     = runReader (uSymbPrint s) Plain
--- p_spec HARDNL     = "\\newline"
+p_spec HARDNL     = "<br />"
 
--- symbol :: Symbol -> String
--- symbol (Atomic s) = s
--- symbol (Special s) = render TeX s
--- symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
--- --
--- -- handle the special cases first, then general case
+t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
+t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
+t_symbol s = symbol s
+
+symbol :: Symbol -> String
+symbol (Atomic s) = s
+symbol (Special s) = render HTML s
+symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
+--
+-- handle the special cases first, then general case
 -- symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ (symbol x)
--- symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ (symbol x)
--- symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
--- symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
--- symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
+symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
 
 -- -------------------------------------------------------------------
 -- ------------------BEGIN EXPRESSION PRINTING------------------------

@@ -13,3 +13,4 @@ wrap s = \x ->
   vcat [tb s, x, tb $ "/"++s]
   where tb c = text $ "<" ++ c ++ ">"
   
+sub = \x -> "<sub>" ++ x ++ "</sub>"

@@ -2,7 +2,7 @@
 
 module Format where
 
-data Format = TeX | Plain
+data Format = TeX | Plain | HTML
 
 --------------------------
 

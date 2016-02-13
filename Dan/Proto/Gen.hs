@@ -3,9 +3,10 @@ module Gen where
 import System.IO
 import Text.PrettyPrint.HughesPJ
 import PrintTeX (genTeX)
+import PrintHTML (genHTML)
 import ASTInternal (DocType (SRS,LPM,Code))
 import Spec (Document)
-import Format(Format(TeX))
+import Format(Format(TeX, HTML))
 
 data Recipe = Recipe DocType String Doc
                   --DocType, Filename, 'Body'
@@ -31,4 +32,5 @@ prnt (Recipe Code _ _) = error "Code DocType is not implemented yet"
 
 writeDoc :: Format -> DocType -> Document -> Doc
 writeDoc TeX = genTeX
-writeDoc _ = error "we can only write TeX (for now)"
+writeDoc HTML = genHTML
+writeDoc _ = error "we can only write TeX/HTML (for now)"

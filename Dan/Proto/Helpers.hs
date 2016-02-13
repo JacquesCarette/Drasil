@@ -31,11 +31,11 @@ sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
 --basic plaintext manipulation
-paren,brace,dollar :: String -> String
+paren,brace,dollar,quotes :: String -> String
 paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"
-
+quotes = \x -> "\"" ++ x ++ "\""
 
 --format strings
 upcase, lowcase :: [Char] -> Doc

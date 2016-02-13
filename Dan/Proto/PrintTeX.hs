@@ -25,7 +25,8 @@ genTeX typ doc = build typ $ makeDocument doc
 build :: A.DocType -> Document -> Doc
 build (A.SRS _) doc = buildSRS srsTeXParams doc
 build (A.LPM _) doc = buildLPM lpmTeXParams doc
-build (A.Code _) _  = error "Unimplemented"
+build (A.Code _) _  = error "Unimplemented (See PrintTeX)"
+build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: [A.DocParams] -> Document -> Doc
 buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =

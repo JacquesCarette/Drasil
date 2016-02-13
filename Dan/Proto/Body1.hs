@@ -65,7 +65,9 @@ srs ls author body =
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> N $ x ^. symbol) ls))))
     (S author) body
   
-
+srsBodyHTMLTest = srs [h_g, h_c] "Spencer Smith" []
+  
+  
 srsBody,lpmBody :: Document
 srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s3, s4]
   

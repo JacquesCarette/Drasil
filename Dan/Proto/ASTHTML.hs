@@ -34,11 +34,13 @@ type Title = Spec
 type Author = Spec
 type Contents = Spec
 
+type Tags = [String]
+
 data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)]
-               | HDiv Contents
-               | Span Contents
+               | HDiv Tags LayoutObj
+               | Span Tags Contents

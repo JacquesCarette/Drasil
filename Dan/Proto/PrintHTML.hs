@@ -2,10 +2,10 @@
 module PrintHTML where
 
 import Prelude hiding (print)
-import Data.List (intersperse)
+-- import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
 
-import Control.Monad.Reader
+-- import Control.Monad.Reader
 
 import ASTHTML
 import ToHTML (makeDocument)
@@ -16,22 +16,23 @@ import HTMLHelpers
 import Helpers (brace)
 import Unicode
 import Format (Format(HTML))
-import Unit (USymb(..))
+-- import Unit (USymb(..))
 import Symbol (Symbol(..))
-import PrintC (printCode)
+-- import PrintC (printCode)
 
 genHTML :: A.DocType -> S.Document -> Doc
-genHTML typ doc = build $ makeDocument doc
+genHTML (A.Website fn) doc = build fn $ makeDocument doc
+genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
 
-build :: Document -> Doc
-build (Document t a c) = 
+build :: String -> Document -> Doc
+build fn (Document t a c) = 
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
           " \"http://www.w3.org/TR/html4/loose.dtd\">") $$ 
-  html (head_tag (title (text (title_spec t))) $$
-  body (article_title (p_spec t) $$ author (p_spec a) $$
+  html (head_tag ((linkCSS fn) $$ (title (text (title_spec t)))) $$
+  body (article_title (text (p_spec t)) $$ author (text (p_spec a))
+  -- $$ print c
   ))
   
-
 -- build :: A.DocType -> Document -> Doc
 -- build A.SRS doc = buildSRS srsTeXParams doc
 -- build A.LPM doc = buildLPM lpmTeXParams doc
@@ -94,6 +95,7 @@ p_spec (N s)      = symbol s
 -- p_spec (Sy s)     = runReader (uSymbPrint s) Plain
 p_spec HARDNL     = "<br />"
 
+t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s = symbol s

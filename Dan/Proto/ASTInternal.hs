@@ -18,9 +18,12 @@ data Expr where
 
 type Variable = String
 
-data DocType = SRS
-             | LPM
-             | Code
+data DocType = SRS Filename     --Filename with no extension
+             | LPM Filename
+             | Code Filename
+             | Website Filename
+             
+type Filename = String
 
 data DocParams = DocClass String String --SqBracks vs. Braces
                | UsePackages [String] -- Package name list

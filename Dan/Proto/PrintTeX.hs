@@ -23,9 +23,9 @@ genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
-build A.SRS doc = buildSRS srsTeXParams doc
-build A.LPM doc = buildLPM lpmTeXParams doc
-build A.Code _  = error "Unimplemented"
+build (A.SRS _) doc = buildSRS srsTeXParams doc
+build (A.LPM _) doc = buildLPM lpmTeXParams doc
+build (A.Code _) _  = error "Unimplemented"
 
 buildSRS :: [A.DocParams] -> Document -> Doc
 buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =

@@ -2,9 +2,9 @@
 module HTMLHelpers where
 
 import Text.PrettyPrint
-import Data.Char
 import Data.List (intersperse)
-
+import Spec (Document)
+ 
 html, head_tag, body, title :: Doc -> Doc
 html      = wrap "html"
 head_tag  = wrap "head"
@@ -25,8 +25,8 @@ sub :: String -> String
 sub = \x -> "<sub>" ++ x ++ "</sub>"
 
 article_title, author :: Doc -> Doc
-article_title t = div_tag ["title"] (h 1 t)
-author a = div_tag ["author"] (h 2 a)
+article_title t = div_tag ["\"title\""] (h 1 t)
+author a = div_tag ["\"author\""] (h 2 a)
 
 div_tag :: [String] -> Doc -> Doc
 div_tag [] = wrap "div"
@@ -34,5 +34,14 @@ div_tag x = \s -> vcat [
   text ("<div class="++(foldr1 (++) (intersperse " " x))++">"),
   s,
   text "</div>"]
-  
-  
+
+makeCSS :: Document -> Doc  
+makeCSS _ = vcat [
+-- TODO: Autogenerate necessary css selectors only, make CSS configurable
+  text ".title {text-align:center;}",
+  text ".author {text-align:center;}",
+  text ".paragraph {text-align:justify;}"]
+
+linkCSS :: String -> Doc  
+linkCSS fn = 
+  text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"

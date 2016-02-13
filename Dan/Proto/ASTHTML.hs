@@ -27,9 +27,7 @@ data Spec = E Expr
           | Spec :/: Spec -- frac
           | Sy USymb
           | N Symbol
-          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
-                          -- May move to a new LayoutObj, but only exists in TeX
-                          -- so it's not really a big deal ATM.
+          | HARDNL
 
 data Document = Document Title Author [LayoutObj]
 type Title = Spec
@@ -42,3 +40,5 @@ data LayoutObj = Table [[Spec]]
                | EqnBlock Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)]
+               | HDiv Contents
+               | Span Contents

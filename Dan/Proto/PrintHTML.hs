@@ -8,11 +8,11 @@ import Text.PrettyPrint hiding (render)
 import Control.Monad.Reader
 
 import ASTHTML
-import ToHTML
+import ToHTML (makeDocument)
 import qualified ASTInternal as A
 import qualified Spec as S
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
-import Helpers
+import HTMLHelpers
 import Unicode
 import Format (Format(HTML))
 import Unit (USymb(..))
@@ -20,7 +20,15 @@ import Symbol (Symbol(..))
 import PrintC (printCode)
 
 genHTML :: A.DocType -> S.Document -> Doc
-genHTML typ doc = build typ $ makeDocument doc
+genHTML typ doc = build $ makeDocument doc
+
+build :: Document -> Doc
+build (Document t a c) = 
+  text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
+          " \"http://www.w3.org/TR/html4/loose.dtd\">") $$ 
+  html (head_tag (title (text (""))) $$ --text (p_spec t)
+  body (text ""))
+  
 
 -- build :: A.DocType -> Document -> Doc
 -- build A.SRS doc = buildSRS srsTeXParams doc

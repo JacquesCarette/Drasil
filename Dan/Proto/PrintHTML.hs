@@ -27,8 +27,9 @@ build :: Document -> Doc
 build (Document t a c) = 
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
           " \"http://www.w3.org/TR/html4/loose.dtd\">") $$ 
-  html (head_tag (title (text (title_spec t))) $$ --text (p_spec t)
-  body (text ""))
+  html (head_tag (title (text (title_spec t))) $$
+  body (article_title (p_spec t) $$ author (p_spec a) $$
+  ))
   
 
 -- build :: A.DocType -> Document -> Doc

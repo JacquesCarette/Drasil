@@ -34,12 +34,12 @@ build fn (Document t a c) =
   ))
   
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)  = sec (pCon Plain t) $$ print contents
-printLO (Paragraph contents)  = text (pCon Plain contents)
-printLO (EqnBlock contents)   = text $ makeEquation contents
+printLO (Section t contents)  = h 4 ["section"] (text (pCon Plain t)) $$ print contents
+printLO (Paragraph contents)  = wrap "p" ["paragraph"] $ text (pCon Plain contents)
+-- printLO (EqnBlock contents)   = text $ makeEquation contents
 printLO (Table rows) = makeTable rows
-printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
+-- printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
+-- printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -65,7 +65,7 @@ p_spec (a :-: b)  = p_spec a ++ sub (brace (p_spec b))
 -- p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
--- p_spec (Sy s)     = runReader (uSymbPrint s) Plain
+p_spec (Sy s)     = runReader (uSymbPrint s) Plain
 p_spec HARDNL     = "<br />"
 
 t_symbol :: Symbol -> String
@@ -110,17 +110,20 @@ mul a b         = p_expr a ++ p_expr b
 -------------------------------------------------------------------
   
 makeTable :: [[Spec]] -> Doc
-makeTable lls  = text ("~\\newline \\begin{longtable}" ++ brace (header lls)) 
-  $$ makeRows lls $$ text "\\end{longtable}"
-  where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
-                        brace (show tableWidth ++ "cm")
+makeTable (l:lls)  = wrap "table" ["table"] (
+    wrap "tr" [] (makeHeaderCols l) $$
+    makeRows lls
+  )
 
 makeRows :: [[Spec]] -> Doc
 makeRows [] = empty
-makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
+makeRows (c:cs) = wrap "tr" [] (makeColumns c) $$ makeRows cs
 
-makeColumns :: [Spec] -> String
-makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls) ++ "\\"
+
+makeColumns, makeHeaderCols :: [Spec] -> Doc
+makeHeaderCols ls = vcat $ map (wrap "th" [] . text . pCon Plain) ls
+
+makeColumns ls = vcat $ map (wrap "td" [] . text . pCon Plain) ls
 
 -------------------------------------------------------------------
 ------------------BEGIN READER-------------------------------------
@@ -147,24 +150,24 @@ lPrint t@(a :+: b) = do
   let ca = getCon a
   let cb = getCon b
   case c of
-    EqnB -> return $ makeEquation t
+    -- EqnB -> return $ makeEquation t
     _ -> return $ pCon ca a ++ pCon cb b
     
 lPrint t = do
   c <- ask
   let ct = getCon t
   case c of
-    EqnB -> return $ makeEquation t
+    -- EqnB -> return $ makeEquation t
     _ ->
       case ct of
-        Equation -> return $ dollar (p_spec t)
+        -- Equation -> return $ dollar (p_spec t)
         Plain    -> return $ p_spec t
-        EqnB     -> return $ makeEquation t 
+        -- EqnB     -> return $ makeEquation t 
           --This will never run right now, but maybe eventually.
 
-bEq, eEq :: String    
-bEq = "\\begin{equation} " 
-eEq = "\\end{equation}"
+-- bEq, eEq :: String    
+-- bEq = "\\begin{equation} " 
+-- eEq = "\\end{equation}"
 
 pCon :: Context -> Spec -> String
 pCon = \c t -> runReader (lPrint t) c
@@ -177,7 +180,7 @@ uSymbPrint (UName n) = do
     return $ symbol n
   else
     case cn of
-      Equation -> return $ dollar $ symbol n 
+      -- Equation -> return $ dollar $ symbol n 
       _ -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
@@ -185,7 +188,7 @@ uSymbPrint (UProd l) = do
 uSymbPrint (UPow n p) = do
   c <- ask
   case c of
-    Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
+    -- Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
     _ -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
 
 getSyCon :: Symbol -> Context
@@ -201,47 +204,47 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 ------------------BEGIN DATA DEFINITION PRINTING-------------------
 -------------------------------------------------------------------
 
-makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
-makeDDefn _ []  = error "Empty definition"
-makeDDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
+-- makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+-- makeDDefn _ []  = error "Empty definition"
+-- makeDDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
 
-beginDataDefn :: Doc
-beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
+-- beginDataDefn :: Doc
+-- beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
 
-endDataDefn :: Doc  
-endDataDefn = text "\\end{minipage}" <> dbs
+-- endDataDefn :: Doc  
+-- endDataDefn = text "\\end{minipage}" <> dbs
 
-makeDDTable :: [(String,LayoutObj)] -> Doc
-makeDDTable [] = error "Trying to make empty Data Defn"
-makeDDTable ps@((_,d):_) = vcat [
-  text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
-  text "\\label{DD:" <> (printLO d) <> text "}",
-  makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
-  ]
+-- makeDDTable :: [(String,LayoutObj)] -> Doc
+-- makeDDTable [] = error "Trying to make empty Data Defn"
+-- makeDDTable ps@((_,d):_) = vcat [
+  -- text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
+  -- text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
+  -- text "\\label{DD:" <> (printLO d) <> text "}",
+  -- makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
+  -- ]
 
-makeDDRows :: [(String,LayoutObj)] -> Doc
-makeDDRows [] = error "No fields to create DD table"
-makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
-makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
-                        makeDDRows ps
-ddBoilerplate :: Doc
-ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
+-- makeDDRows :: [(String,LayoutObj)] -> Doc
+-- makeDDRows [] = error "No fields to create DD table"
+-- makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
+-- makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
+                        -- makeDDRows ps
+-- ddBoilerplate :: Doc
+-- ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
 -------------------------------------------------------------------
 ------------------BEGIN CODE BLOCK PRINTING------------------------
 -------------------------------------------------------------------
 
-codeHeader,codeFooter :: Doc
-codeHeader = bslash <> text "begin" <> br "lstlisting"
-codeFooter = bslash <> text "end" <> br "lstlisting"
+-- codeHeader,codeFooter :: Doc
+-- codeHeader = bslash <> text "begin" <> br "lstlisting"
+-- codeFooter = bslash <> text "end" <> br "lstlisting"
 
 -------------------------------------------------------------------
 ------------------BEGIN EQUATION PRINTING--------------------------
 -------------------------------------------------------------------
 
-makeEquation :: Spec -> String
-makeEquation contents = 
-  ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
-  --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
-  --  on chunk (i.e. "eq:h_g" for h_g = ...
+-- makeEquation :: Spec -> String
+-- makeEquation contents = 
+  -- ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
+  -- --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
+  -- --  on chunk (i.e. "eq:h_g" for h_g = ...

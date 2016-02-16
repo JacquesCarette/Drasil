@@ -42,5 +42,5 @@ data LayoutObj = Table [[Spec]]
                | EqnBlock Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)]
-               | HDiv Tags LayoutObj
-               | Span Tags Contents
+               -- | HDiv Tags LayoutObj
+               -- | Span Tags Contents

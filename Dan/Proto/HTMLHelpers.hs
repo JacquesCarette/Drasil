@@ -4,7 +4,6 @@ module HTMLHelpers where
 import Text.PrettyPrint
 import Data.List (intersperse)
 import Spec (Document)
-import Helpers (quotes)
 
 html, head_tag, body, title :: Doc -> Doc
 html      = wrap "html" []
@@ -86,6 +85,7 @@ makeCSS _ = vcat [
 linkCSS :: String -> Doc  
 linkCSS fn = 
   text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"
-  
+
+fraction :: String -> String -> String  
 fraction a b =
   render $ div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)

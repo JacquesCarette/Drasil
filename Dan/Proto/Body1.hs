@@ -63,10 +63,7 @@ srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =
   Document ((S "SRS for ") :+: 
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> N $ x ^. symbol) ls))))
-    (S author) body
-  
-srsBodyHTMLTest = srs [h_g, h_c] "Spencer Smith" [s1,s2,s3,s4]
-  
+    (S author) body  
   
 srsBody,lpmBody :: Document
 srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s3, s4]

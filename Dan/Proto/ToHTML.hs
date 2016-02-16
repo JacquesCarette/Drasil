@@ -11,7 +11,7 @@ import Unit
 import Chunk
 import Control.Lens
 import ExprTools
-import Config (verboseDDDescription, numberedDDEquations)
+import Config (verboseDDDescription)
 
 
 expr :: Expr -> H.Expr

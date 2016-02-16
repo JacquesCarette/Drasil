@@ -2,10 +2,7 @@
 module PrintHTML where
 
 import Prelude hiding (print)
-import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
-
-import Control.Monad.Reader
 
 import ASTHTML
 import ToHTML (makeDocument)
@@ -13,7 +10,7 @@ import qualified ASTInternal as A
 import qualified Spec as S
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import HTMLHelpers
-import Helpers (brace,sec)
+import Helpers (brace)
 import Unicode
 import Format (Format(HTML))
 import Unit (USymb(..))
@@ -114,6 +111,7 @@ mul a b         = p_expr a ++ p_expr b
 -------------------------------------------------------------------
   
 makeTable :: [[Spec]] -> Doc
+makeTable [] = error "No table to print (see PrintHTML)"
 makeTable (l:lls)  = wrap "table" ["table"] (
     wrap "tr" [] (makeHeaderCols l) $$
     makeRows lls

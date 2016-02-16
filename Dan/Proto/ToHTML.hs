@@ -80,7 +80,9 @@ makeDDPairs c = [
 
 -- Toggle equation style
 eqnStyleDD :: H.Contents -> H.LayoutObj
-eqnStyleDD = if numberedDDEquations then H.EqnBlock else H.Paragraph
+eqnStyleDD = H.EqnBlock
+  --This style works better for HTML.
+  --if numberedDDEquations then H.EqnBlock else H.Paragraph
   
 buildEqn :: EqChunk -> H.Spec  
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))

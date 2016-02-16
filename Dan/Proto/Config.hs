@@ -18,10 +18,10 @@ tableWidth :: Double --in cm
 tableWidth = 10.5
 
 verboseDDDescription :: Bool
-verboseDDDescription = True
+verboseDDDescription = False
 
 numberedDDEquations :: Bool
-numberedDDEquations = False
+numberedDDEquations = False --Does not affect HTML
 
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
   -- you can create your own parameter function and replace the one above.

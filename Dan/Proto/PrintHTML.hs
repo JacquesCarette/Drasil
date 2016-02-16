@@ -34,11 +34,11 @@ build fn (Document t a c) =
   ))
   
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)  = div_tag ["section"] (h 3 ["section"] (text (pCon Plain t)) $$ print contents)
-printLO (Paragraph contents)  = wrap "p" ["paragraph"] $ text (pCon Plain contents)
--- printLO (EqnBlock contents)   = text $ makeEquation contents
+printLO (Section t contents)  = div_tag ["section"] (h 3 ["section"] (text (p_spec t)) $$ print contents)
+printLO (Paragraph contents)  = wrap "p" ["paragraph"] $ text (p_spec contents)
+printLO (EqnBlock contents)   = div_tag ["equation"] (text $ p_spec contents)
 printLO (Table rows) = makeTable rows
--- printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
+printLO (CodeBlock c) = wrap "code" ["code"] (printCode c)
 printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
@@ -65,7 +65,7 @@ p_spec (a :^: b)  = p_spec a ++ sup (p_spec b)
 p_spec (a :/: b)  = fraction (p_spec a) (p_spec b)
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
-p_spec (Sy s)     = runReader (uSymbPrint s) Plain
+p_spec (Sy s)     = uSymb s
 p_spec HARDNL     = "<br />"
 
 t_symbol :: Symbol -> String
@@ -85,6 +85,10 @@ symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
 
+uSymb :: USymb -> String
+uSymb (UName s) = symbol s
+uSymb (UProd l) = foldr1 (++) (map uSymb l)
+uSymb (UPow s i) = uSymb s ++ sup (show i)
 -------------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING------------------------
 -------------------------------------------------------------------
@@ -124,81 +128,6 @@ makeColumns, makeHeaderCols :: [Spec] -> Doc
 makeHeaderCols ls = vcat $ map (wrap "th" [] . text . p_spec) ls
 
 makeColumns ls = vcat $ map (wrap "td" [] . text . p_spec) ls
-
--------------------------------------------------------------------
-------------------BEGIN READER-------------------------------------
--------------------------------------------------------------------
-
-data Context = Equation | EqnB | Plain deriving (Show, Eq)
-
-getCon :: Spec -> Context
-getCon (a :+: _) = getCon a
-getCon (S _) = Plain
---Not using a catchall for now.
-getCon (E _) = Equation
-getCon (_ :-: _) = Equation --Subscripts and superscripts must be in Equation ctxt.
-getCon (_ :^: _) = Equation
-getCon (_ :/: _) = Equation -- Fractions are always equations.
-getCon (Sy _) = Plain
-getCon (N _) = Equation
-getCon HARDNL = Plain
-
-
-lPrint :: Spec -> Reader Context String
-lPrint t@(a :+: b) = do
-  c <- ask
-  let ca = getCon a
-  let cb = getCon b
-  case c of
-    -- EqnB -> return $ makeEquation t
-    _ -> return $ pCon ca a ++ pCon cb b
-    
-lPrint t = do
-  c <- ask
-  let ct = getCon t
-  case c of
-    -- EqnB -> return $ makeEquation t
-    _ ->
-      case ct of
-        -- Equation -> return $ dollar (p_spec t)
-        _    -> return $ p_spec t
-        -- EqnB     -> return $ makeEquation t 
-          --This will never run right now, but maybe eventually.
-
--- bEq, eEq :: String    
--- bEq = "\\begin{equation} " 
--- eEq = "\\end{equation}"
-
-pCon :: Context -> Spec -> String
-pCon = \c t -> runReader (lPrint t) c
-
-uSymbPrint :: USymb -> Reader Context String --To fix unit printing will need this.
-uSymbPrint (UName n) = do
-  c <- ask
-  let cn = getSyCon n
-  if c == cn then
-    return $ symbol n
-  else
-    case cn of
-      -- Equation -> return $ dollar $ symbol n 
-      _ -> return $ symbol n
-uSymbPrint (UProd l) = do
-  c <- ask
-  return $ foldr1 (++) (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
-uSymbPrint (UPow n p) = do
-  c <- ask
-  case c of
-    -- Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
-    _ -> return $ runReader (uSymbPrint n) c ++ sup (show p)
-
-getSyCon :: Symbol -> Context
-getSyCon (Atomic _) = Plain
---getSyCon (Special Circle) = Equation
-  -- TODO: Need to figure this out, or figure out how to print catenations in a 
-  --       better way.
-getSyCon (Special _) = Plain
-getSyCon (Catenate s1 _) = getSyCon s1
-getSyCon (Corners _ _ _ _ s) = getSyCon s
 
 -------------------------------------------------------------------
 ------------------BEGIN DATA DEFINITION PRINTING-------------------

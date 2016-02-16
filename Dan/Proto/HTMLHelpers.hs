@@ -49,23 +49,38 @@ makeCSS _ = vcat [
   text ".paragraph {text-align:justify;}",
   vcat [
     text ".fraction {",
-    text "    display: inline-block;",
-    text "    vertical-align: middle;",
-    text "    margin: 0 0.2em 0.4ex;",
-    text "    text-align: center;}"
+    text "  display: inline-block;",
+    text "  vertical-align: middle;",
+    text "  margin: 0 0.2em 0.4ex;",
+    text "  text-align: center;}"
     ],
   vcat [
     text ".fraction > span {",
-    text "    display: block;",
-    text "    padding-top: 0.15em;}"
+    text "  display: block;",
+    text "  padding-top: 0.15em;}"
     ],
   text ".fdn {border-top: thin solid black;}",
-  text ".table {width:90%;margin-bottom:2%;margin-top:2%}",
+  text ".table {text-align:left;padding-left:1%;width:90%;margin-bottom:2%;margin-top:2%}",
   text ("table, th, td {border: 1px solid black; border-collapse: collapse;" ++ 
     "margin-left:auto;margin-right:auto;}"),
   text "th, td {padding:1%;}",
-  text ".ddefn {width:65%;margin-top:1%;margin-bottom:1%;}",
-  text ".section {width:80%; margin:0 auto; text-align:center;}"
+  text ".ddefn {width:75%;margin-top:1%;margin-bottom:1%;}",
+  text ".section {width:80%; margin:0 auto;text-align:center;}",
+  vcat [
+    text ".code {",
+    text "  display:inline-block;",
+    text "  text-align:left;",
+    text ("  font-family: Monaco, Consolas, \"Andale Mono\"," ++
+      "\"DejaVu Sans Mono\", monospace;"),
+    text "  font-size: 95%;",
+    text "  line-height: 140%;",
+    text "  white-space: pre;",
+    text "  white-space: pre-wrap;",
+    text "  white-space: -moz-pre-wrap;",
+    text "  white-space: -o-pre-wrap;",
+    text "  background: #faf8f0;",
+    text "}"
+    ]
   ]
 
 linkCSS :: String -> Doc  

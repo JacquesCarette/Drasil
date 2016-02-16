@@ -72,7 +72,7 @@ lay (Definition Data c) = H.Definition Data $ makeDDPairs c
 
 makeDDPairs :: EqChunk -> [(String,H.LayoutObj)]
 makeDDPairs c = [
-  ("Label", H.Paragraph $ H.N $ c ^. symbol),
+  ("Label", H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units", H.Paragraph $ H.Sy $ c ^. unit),
   ("Equation", eqnStyleDD $ buildEqn c),
   ("Description", H.Paragraph (buildDescription c))

@@ -34,12 +34,12 @@ build fn (Document t a c) =
   ))
   
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)  = h 4 ["section"] (text (pCon Plain t)) $$ print contents
+printLO (Section t contents)  = div_tag ["section"] (h 3 ["section"] (text (pCon Plain t)) $$ print contents)
 printLO (Paragraph contents)  = wrap "p" ["paragraph"] $ text (pCon Plain contents)
 -- printLO (EqnBlock contents)   = text $ makeEquation contents
 printLO (Table rows) = makeTable rows
 -- printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
--- printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
+printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -58,11 +58,11 @@ title_spec s = p_spec s
 
 
 p_spec :: Spec -> String
---p_spec (E e)      = p_expr e
+p_spec (E e)      = p_expr e
 p_spec (a :+: b)  = p_spec a ++ p_spec b
 p_spec (a :-: b)  = p_spec a ++ sub (brace (p_spec b))
--- p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
--- p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
+p_spec (a :^: b)  = p_spec a ++ sup (p_spec b)
+p_spec (a :/: b)  = fraction (p_spec a) (p_spec b)
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = runReader (uSymbPrint s) Plain
@@ -97,7 +97,7 @@ p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
 p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
-p_expr (Pow a b)  = p_expr a ++ "^" ++ brace (p_expr b)
+p_expr (Pow a b)  = p_expr a ++ sup (p_expr b)
 p_expr (Sym s)    = symbol s
 
 mul :: Expr -> Expr -> String
@@ -121,9 +121,9 @@ makeRows (c:cs) = wrap "tr" [] (makeColumns c) $$ makeRows cs
 
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
-makeHeaderCols ls = vcat $ map (wrap "th" [] . text . pCon Plain) ls
+makeHeaderCols ls = vcat $ map (wrap "th" [] . text . p_spec) ls
 
-makeColumns ls = vcat $ map (wrap "td" [] . text . pCon Plain) ls
+makeColumns ls = vcat $ map (wrap "td" [] . text . p_spec) ls
 
 -------------------------------------------------------------------
 ------------------BEGIN READER-------------------------------------
@@ -161,7 +161,7 @@ lPrint t = do
     _ ->
       case ct of
         -- Equation -> return $ dollar (p_spec t)
-        Plain    -> return $ p_spec t
+        _    -> return $ p_spec t
         -- EqnB     -> return $ makeEquation t 
           --This will never run right now, but maybe eventually.
 
@@ -189,7 +189,7 @@ uSymbPrint (UPow n p) = do
   c <- ask
   case c of
     -- Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
-    _ -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
+    _ -> return $ runReader (uSymbPrint n) c ++ sup (show p)
 
 getSyCon :: Symbol -> Context
 getSyCon (Atomic _) = Plain
@@ -204,32 +204,18 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 ------------------BEGIN DATA DEFINITION PRINTING-------------------
 -------------------------------------------------------------------
 
--- makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
--- makeDDefn _ []  = error "Empty definition"
--- makeDDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
+makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+makeDDefn _ []  = error "Empty definition"
+makeDDefn S.Data ps = wrap "table" ["ddefn"] (makeDDRows ps)
 
--- beginDataDefn :: Doc
--- beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
+makeDDRows :: [(String,LayoutObj)] -> Doc
+makeDDRows [] = error "No fields to create DD table"
+makeDDRows ((f,d):[]) = wrap "tr" [] (
+  wrap "th" [] (text f) $$ wrap "td" [] (printLO d))
+makeDDRows ((f,d):ps) = wrap "tr" [] (
+  wrap "th" [] (text f) $$ wrap "td" [] (printLO d)
+  ) $$ makeDDRows ps
 
--- endDataDefn :: Doc  
--- endDataDefn = text "\\end{minipage}" <> dbs
-
--- makeDDTable :: [(String,LayoutObj)] -> Doc
--- makeDDTable [] = error "Trying to make empty Data Defn"
--- makeDDTable ps@((_,d):_) = vcat [
-  -- text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  -- text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
-  -- text "\\label{DD:" <> (printLO d) <> text "}",
-  -- makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
-  -- ]
-
--- makeDDRows :: [(String,LayoutObj)] -> Doc
--- makeDDRows [] = error "No fields to create DD table"
--- makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
--- makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
-                        -- makeDDRows ps
--- ddBoilerplate :: Doc
--- ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
 -------------------------------------------------------------------
 ------------------BEGIN CODE BLOCK PRINTING------------------------

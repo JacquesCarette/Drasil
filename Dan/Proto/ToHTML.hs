@@ -32,19 +32,19 @@ replace_divs (a :+ b) = H.Add (replace_divs a) (replace_divs b)
 replace_divs (a :* b) = H.Mul (replace_divs a) (replace_divs b)
 replace_divs (a :^ b) = H.Pow (replace_divs a) (replace_divs b)
 replace_divs (a :- b) = H.Sub (replace_divs a) (replace_divs b)
-replace_divs a = expr a
+replace_divs a        = expr a
 
 spec :: Spec -> H.Spec
-spec (S s) = H.S s
-spec (Sy s) = H.Sy s
+spec (S s)     = H.S s
+spec (Sy s)    = H.Sy s
 spec (a :+: b) = spec a H.:+: spec b
 spec (a :-: b) = spec a H.:-: spec b
 spec (a :^: b) = spec a H.:^: spec b
 spec (a :/: b) = spec a H.:/: spec b
-spec Empty = H.S ""
-spec (U u) = H.S $ render HTML u
-spec (F f s) = spec $ format f s
-spec (N s) = H.N s
+spec Empty     = H.S ""
+spec (U u)     = H.S $ render HTML u
+spec (F f s)   = spec $ format f s
+spec (N s)     = H.N s
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = S "&" :+: s :+: S "circ;" --Only works on vowels.
@@ -62,19 +62,19 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> H.LayoutObj
-lay (Table hdr lls) = H.Table $ (map spec hdr) : (map (map spec) lls)
+lay (Table hdr lls)     = H.Table $ (map spec hdr) : (map (map spec) lls)
 lay (Section title layoutComponents) = 
   H.Section (spec title) (createLayout layoutComponents)
-lay (Paragraph c) = H.Paragraph (spec c)
-lay (EqnBlock c) = H.EqnBlock (spec c)
-lay (CodeBlock c) = H.CodeBlock c
+lay (Paragraph c)       = H.Paragraph (spec c)
+lay (EqnBlock c)        = H.EqnBlock (spec c)
+lay (CodeBlock c)       = H.CodeBlock c
 lay (Definition Data c) = H.Definition Data $ makeDDPairs c
 
 makeDDPairs :: EqChunk -> [(String,H.LayoutObj)]
 makeDDPairs c = [
-  ("Label", H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
-  ("Units", H.Paragraph $ H.Sy $ c ^. unit),
-  ("Equation", eqnStyleDD $ buildEqn c),
+  ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
+  ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
+  ("Equation",    eqnStyleDD $ buildEqn c),
   ("Description", H.Paragraph (buildDescription c))
   ]
 
@@ -82,16 +82,17 @@ makeDDPairs c = [
 eqnStyleDD :: H.Contents -> H.LayoutObj
 eqnStyleDD = H.EqnBlock
   --This style works better for HTML.
-  --if numberedDDEquations then H.EqnBlock else H.Paragraph
   
 buildEqn :: EqChunk -> H.Spec  
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
 buildDescription :: EqChunk -> H.Spec
-buildDescription c = descLines ((toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
+buildDescription c = descLines (
+  (toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
 
 descLines :: [VarChunk] -> H.Spec  
-descLines [] = error "No chunks to describe"
-descLines (vc:[]) = (H.N (vc ^. symbol) H.:+: (H.S " is the " H.:+: H.S (vc ^. descr)))
+descLines []       = error "No chunks to describe"
+descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
+  (H.S " is the " H.:+: H.S (vc ^. descr)))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs

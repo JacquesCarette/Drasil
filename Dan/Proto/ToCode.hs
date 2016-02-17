@@ -22,10 +22,10 @@ makeArgs (x:xs) = (ArgDecl DblType x) : makeArgs xs
 -- TODO: Add either a toggle or a field in chunks to declare their precision
   
 makeCode :: E.Expr -> CodeExpr
-makeCode (E.V v) = Var v
-makeCode (E.Dbl d) = Dbl d
-makeCode (E.Int i) = Int i
-makeCode (E.C c) = Var (c ^. name)
+makeCode (E.V v)    = Var v
+makeCode (E.Dbl d)  = Dbl d
+makeCode (E.Int i)  = Int i
+makeCode (E.C c)    = Var (c ^. name)
 makeCode (b E.:^ e) = Pow (makeCode b) (makeCode e)
 makeCode (b E.:* e) = Mult (makeCode b) (makeCode e)
 makeCode (b E.:/ e) = Div (makeCode b) (makeCode e)

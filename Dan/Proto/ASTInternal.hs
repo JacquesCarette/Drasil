@@ -6,15 +6,15 @@ import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Chunk (Quantity)
 
 data Expr where
- V :: Variable -> Expr
- Dbl :: Double -> Expr
- Int :: Integer -> Expr
+ V    :: Variable -> Expr
+ Dbl  :: Double -> Expr
+ Int  :: Integer -> Expr
  (:^) :: Expr -> Expr -> Expr
  (:*) :: Expr -> Expr -> Expr
  (:/) :: Expr -> Expr -> Expr
  (:+) :: Expr -> Expr -> Expr
  (:-) :: Expr -> Expr -> Expr
- C :: Quantity c => c -> Expr
+ C    :: Quantity c => c -> Expr
 
 type Variable = String
 
@@ -37,7 +37,7 @@ instance Num Expr where
 
   -- these are Num warts
   signum _ = error "should not use signum in expressions"
-  abs _ = error "should not use abs in expressions"
+  abs _    = error "should not use abs in expressions"
 
 instance Fractional Expr where
   a / b = a :/ b

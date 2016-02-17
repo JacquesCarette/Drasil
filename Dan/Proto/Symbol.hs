@@ -9,9 +9,9 @@ module Symbol where
 import Unicode 
 
 data Symbol where
-  Atomic :: String -> Symbol
-  Special :: Render a => a -> Symbol
-  Corners :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
+  Atomic   :: String -> Symbol
+  Special  :: Render a => a -> Symbol
+  Corners  :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
             --upleft  -> lowleft  -> upright  -> lowright -> base   -> out
             -- [1] -> [2] -> [3] -> [4] -> [5] -> out
             --  Visually:  [1]   [3]

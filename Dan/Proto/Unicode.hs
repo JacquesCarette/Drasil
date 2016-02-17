@@ -20,56 +20,56 @@ data Tau    = Tau_L
 --
 
 instance Render Alpha where
-  render TeX Alpha_L = "\\alpha"
-  render TeX Alpha   = "\\Alpha"
+  render TeX Alpha_L   = "\\alpha"
+  render TeX Alpha     = "\\Alpha"
   render Plain Alpha_L = "alpha"
   render Plain Alpha   = "uAlpha"
-  render HTML Alpha_L = "alpha;"
-  render HTML Alpha = "Alpha;"
+  render HTML Alpha_L  = "alpha;"
+  render HTML Alpha    = "Alpha;"
   
 -- 
 
 instance Render Circle where
-  render TeX Circle  = "${}^{\\circ}$"--temp $ workaround until unit printing's fixed.
-  render Plain Circle  = "o"
-  render HTML Circle = "&deg;"
+  render TeX Circle   = "${}^{\\circ}$"--temp $ workaround until unit printing's fixed.
+  render Plain Circle = "o"
+  render HTML Circle  = "&deg;"
 
 --
 
 instance Render Delta where
-  render TeX Delta_L = "\\delta"
-  render TeX Delta   = "\\Delta"
+  render TeX Delta_L   = "\\delta"
+  render TeX Delta     = "\\Delta"
   render Plain Delta_L = "delta"
   render Plain Delta   = "uDelta"
   render HTML Delta_L  = "&delta;"
-  render HTML Delta   = "&Delta;"
+  render HTML Delta    = "&Delta;"
   
 --
 
 instance Render Phi where
   render TeX Phi_L   = "\\phi"
   render TeX Phi     = "\\Phi"
-  render Plain Phi_L   = "phi"
-  render Plain Phi     = "uPhi"
-  render HTML Phi_L = "&phi;"
-  render HTML Phi = "&Phi;"
+  render Plain Phi_L = "phi"
+  render Plain Phi   = "uPhi"
+  render HTML Phi_L  = "&phi;"
+  render HTML Phi    = "&Phi;"
   
 --
 
 instance Render Rho where
   render TeX Rho_L   = "\\rho"
   render TeX Rho     = "\\Rho"
-  render Plain Rho_L   = "rho"
-  render Plain Rho     = "uRho"
-  render HTML Rho_L = "&rho;"
-  render HTML Rho = "&Rho;"
+  render Plain Rho_L = "rho"
+  render Plain Rho   = "uRho"
+  render HTML Rho_L  = "&rho;"
+  render HTML Rho    = "&Rho;"
   
 --
 
 instance Render Tau where
   render TeX Tau_L   = "\\tau"
   render TeX Tau     = "\\Tau"
-  render Plain Tau_L   = "tau"
-  render Plain Tau     = "uTau"  
-  render HTML Tau_L = "&tau;"
-  render HTML Tau = "&Tau;"
+  render Plain Tau_L = "tau"
+  render Plain Tau   = "uTau"  
+  render HTML Tau_L  = "&tau;"
+  render HTML Tau    = "&Tau;"

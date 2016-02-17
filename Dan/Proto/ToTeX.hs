@@ -32,19 +32,19 @@ replace_divs (a :+ b) = T.Add (replace_divs a) (replace_divs b)
 replace_divs (a :* b) = T.Mul (replace_divs a) (replace_divs b)
 replace_divs (a :^ b) = T.Pow (replace_divs a) (replace_divs b)
 replace_divs (a :- b) = T.Sub (replace_divs a) (replace_divs b)
-replace_divs a = expr a
+replace_divs a        = expr a
 
 spec :: Spec -> T.Spec
-spec (S s) = T.S s
-spec (Sy s) = T.Sy s
+spec (S s)     = T.S s
+spec (Sy s)    = T.Sy s
 spec (a :+: b) = spec a T.:+: spec b
 spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
 spec (a :/: b) = spec a T.:/: spec b
-spec Empty = T.S ""
-spec (U u) = T.S $ render TeX u
-spec (F f s) = spec $ format f s
-spec (N s) = T.N s
+spec Empty     = T.S ""
+spec (U u)     = T.S $ render TeX u
+spec (F f s)   = spec $ format f s
+spec (N s)     = T.N s
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -65,16 +65,16 @@ lay :: LayoutObj -> T.LayoutObj
 lay (Table hdr lls) = T.Table $ (map spec hdr) : (map (map spec) lls)
 lay (Section title layoutComponents) = 
   T.Section (spec title) (createLayout layoutComponents)
-lay (Paragraph c) = T.Paragraph (spec c)
-lay (EqnBlock c) = T.EqnBlock (spec c)
-lay (CodeBlock c) = T.CodeBlock c
+lay (Paragraph c)       = T.Paragraph (spec c)
+lay (EqnBlock c)        = T.EqnBlock (spec c)
+lay (CodeBlock c)       = T.CodeBlock c
 lay (Definition Data c) = T.Definition Data $ makeDDPairs c
 
 makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
 makeDDPairs c = [
-  ("Label", T.Paragraph $ T.N $ c ^. symbol),
-  ("Units", T.Paragraph $ T.Sy $ c ^. unit),
-  ("Equation", eqnStyleDD $ buildEqn c),
+  ("Label",       T.Paragraph $ T.N $ c ^. symbol),
+  ("Units",       T.Paragraph $ T.Sy $ c ^. unit),
+  ("Equation",    eqnStyleDD $ buildEqn c),
   ("Description", T.Paragraph (buildDescription c))
   ]
 
@@ -87,9 +87,11 @@ buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
 buildDescription :: EqChunk -> T.Spec
-buildDescription c = descLines ((toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
+buildDescription c = descLines (
+  (toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
 
 descLines :: [VarChunk] -> T.Spec  
-descLines [] = error "No chunks to describe"
-descLines (vc:[]) = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: T.S (vc ^. descr)))
+descLines []       = error "No chunks to describe"
+descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
+                      T.S (vc ^. descr)))
 descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs

@@ -23,9 +23,9 @@ genTeX :: A.DocType -> S.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
-build (A.SRS _) doc = buildSRS srsTeXParams doc
-build (A.LPM _) doc = buildLPM lpmTeXParams doc
-build (A.Code _) _  = error "Unimplemented (See PrintTeX)"
+build (A.SRS _) doc   = buildSRS srsTeXParams doc
+build (A.LPM _) doc   = buildLPM lpmTeXParams doc
+build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: [A.DocParams] -> Document -> Doc
@@ -41,9 +41,9 @@ buildLPM  ((A.DocClass sb b) : (A.UsePackages ps) : xs) (Document t a c) =
 buildLPM _ _ = error "Invalid syntax in Document Parameters"
 
 moreDocParams :: [A.DocParams] -> Doc
-moreDocParams [] = empty
+moreDocParams []                 = empty
 moreDocParams ((A.ExDoc f n):xs) = exdoc f n $$ moreDocParams xs
-moreDocParams _ = error "Unexpected document parameters"
+moreDocParams _                  = error "Unexpected document parameters"
 
 listpackages :: [String] -> Doc
 listpackages []     = empty
@@ -51,12 +51,12 @@ listpackages (p:[]) = usepackage p
 listpackages (p:ps) = usepackage p $$ listpackages ps
 
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)  = sec (pCon Plain t) $$ print contents
-printLO (Paragraph contents)  = text (pCon Plain contents)
-printLO (EqnBlock contents)   = text $ makeEquation contents
-printLO (Table rows) = makeTable rows
-printLO (CodeBlock c) = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
+printLO (Section t contents)    = sec (pCon Plain t) $$ print contents
+printLO (Paragraph contents)    = text (pCon Plain contents)
+printLO (EqnBlock contents)     = text $ makeEquation contents
+printLO (Table rows)            = makeTable rows
+printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
+printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -77,8 +77,8 @@ p_spec (Sy s)     = runReader (uSymbPrint s) Plain
 p_spec HARDNL     = "\\newline"
 
 symbol :: Symbol -> String
-symbol (Atomic s) = s
-symbol (Special s) = render TeX s
+symbol (Atomic s)       = s
+symbol (Special s)      = render TeX s
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
 --
 -- handle the special cases first, then general case
@@ -86,7 +86,7 @@ symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ (symbol x)
 symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
+symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 
 -------------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING------------------------
@@ -113,13 +113,13 @@ mul a b         = p_expr a ++ p_expr b
 -------------------------------------------------------------------
   
 makeTable :: [[Spec]] -> Doc
-makeTable lls  = text ("~\\newline \\begin{longtable}" ++ brace (header lls)) 
+makeTable lls = text ("~\\newline \\begin{longtable}" ++ brace (header lls)) 
   $$ makeRows lls $$ text "\\end{longtable}"
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
                         brace (show tableWidth ++ "cm")
 
 makeRows :: [[Spec]] -> Doc
-makeRows [] = empty
+makeRows []     = empty
 makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 
 makeColumns :: [Spec] -> String
@@ -133,15 +133,14 @@ data Context = Equation | EqnB | Plain deriving (Show, Eq)
 
 getCon :: Spec -> Context
 getCon (a :+: _) = getCon a
-getCon (S _) = Plain
---Not using a catchall for now.
-getCon (E _) = Equation
-getCon (_ :-: _) = Equation --Subscripts and superscripts must be in Equation ctxt.
+getCon (S _)     = Plain
+getCon (E _)     = Equation
+getCon (_ :-: _) = Equation --Sub/superscripts must be in Equation ctxt.
 getCon (_ :^: _) = Equation
 getCon (_ :/: _) = Equation -- Fractions are always equations.
-getCon (Sy _) = Plain
-getCon (N _) = Equation
-getCon HARDNL = Plain
+getCon (Sy _)    = Plain
+getCon (N _)     = Equation
+getCon HARDNL    = Plain
 
 
 lPrint :: Spec -> Reader Context String
@@ -151,14 +150,14 @@ lPrint t@(a :+: b) = do
   let cb = getCon b
   case c of
     EqnB -> return $ makeEquation t
-    _ -> return $ pCon ca a ++ pCon cb b
+    _    -> return $ pCon ca a ++ pCon cb b
     
 lPrint t = do
   c <- ask
   let ct = getCon t
   case c of
     EqnB -> return $ makeEquation t
-    _ ->
+    _    ->
       case ct of
         Equation -> return $ dollar (p_spec t)
         Plain    -> return $ p_spec t
@@ -181,7 +180,7 @@ uSymbPrint (UName n) = do
   else
     case cn of
       Equation -> return $ dollar $ symbol n 
-      _ -> return $ symbol n
+      _        -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
   return $ foldr1 (++) (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
@@ -189,15 +188,15 @@ uSymbPrint (UPow n p) = do
   c <- ask
   case c of
     Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
-    _ -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
+    _     -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
 
 getSyCon :: Symbol -> Context
-getSyCon (Atomic _) = Plain
---getSyCon (Special Circle) = Equation
+getSyCon (Atomic _)          = Plain
+--getSyCon (Special Circle)  = Equation
   -- TODO: Need to figure this out, or figure out how to print catenations in a 
   --       better way.
-getSyCon (Special _) = Plain
-getSyCon (Catenate s1 _) = getSyCon s1
+getSyCon (Special _)         = Plain
+getSyCon (Catenate s1 _)     = getSyCon s1
 getSyCon (Corners _ _ _ _ s) = getSyCon s
 
 -------------------------------------------------------------------
@@ -205,7 +204,7 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 -------------------------------------------------------------------
 
 makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
-makeDDefn _ []  = error "Empty definition"
+makeDDefn _ []      = error "Empty definition"
 makeDDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
 
 beginDataDefn :: Doc
@@ -215,7 +214,7 @@ endDataDefn :: Doc
 endDataDefn = text "\\end{minipage}" <> dbs
 
 makeDDTable :: [(String,LayoutObj)] -> Doc
-makeDDTable [] = error "Trying to make empty Data Defn"
+makeDDTable []           = error "Trying to make empty Data Defn"
 makeDDTable ps@((_,d):_) = vcat [
   text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
@@ -224,7 +223,7 @@ makeDDTable ps@((_,d):_) = vcat [
   ]
 
 makeDDRows :: [(String,LayoutObj)] -> Doc
-makeDDRows [] = error "No fields to create DD table"
+makeDDRows []         = error "No fields to create DD table"
 makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
 makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
                         makeDDRows ps

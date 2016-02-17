@@ -62,9 +62,9 @@ data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
-instance Chunk   DerUChunk where name = duc . name
+instance Chunk   DerUChunk where name  = duc . name
 instance Concept DerUChunk where descr = duc . descr
-instance Unit    DerUChunk where unit = duc . unit
+instance Unit    DerUChunk where unit  = duc . unit
 
 instance UnitEq DerUChunk where
   uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)
@@ -81,6 +81,6 @@ data UnitDefn where
 ulens :: (forall u. Unit u => Simple Lens u a) -> Simple Lens UnitDefn a
 ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 
-instance Unit    UnitDefn where unit = ulens unit
-instance Chunk   UnitDefn where name = ulens name
+instance Unit    UnitDefn where unit  = ulens unit
+instance Chunk   UnitDefn where name  = ulens name
 instance Concept UnitDefn where descr = ulens descr

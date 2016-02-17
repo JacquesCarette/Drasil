@@ -35,6 +35,6 @@ prnt (Recipe (Website fn) body) =
 prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
 
 writeDoc :: Format -> DocType -> Document -> Doc
-writeDoc TeX = genTeX
+writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
-writeDoc _ = error "we can only write TeX/HTML (for now)"
+writeDoc _    = error "we can only write TeX/HTML (for now)"

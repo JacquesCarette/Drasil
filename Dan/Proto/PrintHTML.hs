@@ -31,12 +31,13 @@ build fn (Document t a c) =
   ))
   
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)  = div_tag ["section"] (h 3 ["section"] (text (p_spec t)) $$ print contents)
-printLO (Paragraph contents)  = wrap "p" ["paragraph"] $ text (p_spec contents)
-printLO (EqnBlock contents)   = div_tag ["equation"] (text $ p_spec contents)
-printLO (Table rows) = makeTable rows
-printLO (CodeBlock c) = wrap "code" ["code"] (printCode c)
-printLO (Definition dtype ssPairs) = makeDDefn dtype ssPairs
+printLO (Section t contents)    = div_tag ["section"] (h 3 ["section"] 
+                                    (text (p_spec t)) $$ print contents)
+printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
+printLO (EqnBlock contents)     = div_tag ["equation"] (text $ p_spec contents)
+printLO (Table rows)            = makeTable rows
+printLO (CodeBlock c)           = code $ printCode c
+printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -45,13 +46,13 @@ print l = foldr ($$) empty $ map printLO l
 -- ------------------BEGIN SPEC PRINTING------------------------------
 -- -------------------------------------------------------------------
 title_spec :: Spec -> String
-title_spec (N s) = t_symbol s
+title_spec (N s)      = t_symbol s
 title_spec (a :+: b)  = title_spec a ++ title_spec b
 title_spec (a :^: b)  = title_spec a ++ "^" ++ brace (title_spec b)
-title_spec (a :-: b) = title_spec a ++ "_" ++ title_spec b
+title_spec (a :-: b)  = title_spec a ++ "_" ++ title_spec b
 title_spec (a :/: b)  = brace (p_spec a) ++ "/" ++ brace (p_spec b)
-title_spec HARDNL = ""
-title_spec s = p_spec s
+title_spec HARDNL     = ""
+title_spec s          = p_spec s
 
 
 p_spec :: Spec -> String
@@ -68,24 +69,24 @@ p_spec HARDNL     = "<br />"
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
-t_symbol s = symbol s
+t_symbol s                        = symbol s
 
 symbol :: Symbol -> String
-symbol (Atomic s) = s
-symbol (Special s) = render HTML s
+symbol (Atomic s)       = s
+symbol (Special s)      = render HTML s
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
 --
 -- handle the special cases first, then general case
--- symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ (symbol x)
+symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
 symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _) = error "rendering of Corners (general)"
+symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 
 uSymb :: USymb -> String
-uSymb (UName s) = symbol s
-uSymb (UProd l) = foldr1 (++) (map uSymb l)
-uSymb (UPow s i) = uSymb s ++ sup (show i)
+uSymb (UName s)   = symbol s
+uSymb (UProd l)   = foldr1 (++) (map uSymb l)
+uSymb (UPow s i)  = uSymb s ++ sup (show i)
 -------------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING------------------------
 -------------------------------------------------------------------
@@ -111,53 +112,29 @@ mul a b         = p_expr a ++ p_expr b
 -------------------------------------------------------------------
   
 makeTable :: [[Spec]] -> Doc
-makeTable [] = error "No table to print (see PrintHTML)"
-makeTable (l:lls)  = wrap "table" ["table"] (
-    wrap "tr" [] (makeHeaderCols l) $$
-    makeRows lls
-  )
+makeTable []      = error "No table to print (see PrintHTML)"
+makeTable (l:lls) = wrap "table" ["table"] (
+    tr (makeHeaderCols l) $$ makeRows lls)
 
 makeRows :: [[Spec]] -> Doc
-makeRows [] = empty
-makeRows (c:cs) = wrap "tr" [] (makeColumns c) $$ makeRows cs
+makeRows []     = empty
+makeRows (c:cs) = tr (makeColumns c) $$ makeRows cs
 
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
-makeHeaderCols ls = vcat $ map (wrap "th" [] . text . p_spec) ls
+makeHeaderCols ls = vcat $ map (th . text . p_spec) ls
 
-makeColumns ls = vcat $ map (wrap "td" [] . text . p_spec) ls
+makeColumns ls = vcat $ map (td . text . p_spec) ls
 
 -------------------------------------------------------------------
 ------------------BEGIN DATA DEFINITION PRINTING-------------------
 -------------------------------------------------------------------
 
 makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
-makeDDefn _ []  = error "Empty definition"
+makeDDefn _ []      = error "Empty definition"
 makeDDefn S.Data ps = wrap "table" ["ddefn"] (makeDDRows ps)
 
 makeDDRows :: [(String,LayoutObj)] -> Doc
-makeDDRows [] = error "No fields to create DD table"
-makeDDRows ((f,d):[]) = wrap "tr" [] (
-  wrap "th" [] (text f) $$ wrap "td" [] (printLO d))
-makeDDRows ((f,d):ps) = wrap "tr" [] (
-  wrap "th" [] (text f) $$ wrap "td" [] (printLO d)
-  ) $$ makeDDRows ps
-
-
--------------------------------------------------------------------
-------------------BEGIN CODE BLOCK PRINTING------------------------
--------------------------------------------------------------------
-
--- codeHeader,codeFooter :: Doc
--- codeHeader = bslash <> text "begin" <> br "lstlisting"
--- codeFooter = bslash <> text "end" <> br "lstlisting"
-
--------------------------------------------------------------------
-------------------BEGIN EQUATION PRINTING--------------------------
--------------------------------------------------------------------
-
--- makeEquation :: Spec -> String
--- makeEquation contents = 
-  -- ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
-  -- --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
-  -- --  on chunk (i.e. "eq:h_g" for h_g = ...
+makeDDRows []         = error "No fields to create DD table"
+makeDDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
+makeDDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDDRows ps

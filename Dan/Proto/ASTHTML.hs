@@ -1,6 +1,8 @@
 {-# OPTIONS -Wall #-} 
 module ASTHTML where
-
+--This is a duplicate of ASTTeX, if anything they should be combined into
+--  something like "ASTLayout", or the printHTML should be mined and ToHTML
+--  should take care of tagging/arranging things.
 import ASTInternal (Variable)
 import Spec (DType)
 import Symbol (Symbol)
@@ -30,8 +32,8 @@ data Spec = E Expr
           | HARDNL
 
 data Document = Document Title Author [LayoutObj]
-type Title = Spec
-type Author = Spec
+type Title    = Spec
+type Author   = Spec
 type Contents = Spec
 
 type Tags = [String]

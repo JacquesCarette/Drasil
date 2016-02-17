@@ -32,8 +32,8 @@ data Spec = E Expr
                           -- so it's not really a big deal ATM.
 
 data Document = Document Title Author [LayoutObj]
-type Title = Spec
-type Author = Spec
+type Title    = Spec
+type Author   = Spec
 type Contents = Spec
 
 data LayoutObj = Table [[Spec]]

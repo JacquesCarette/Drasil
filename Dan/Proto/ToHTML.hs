@@ -62,11 +62,12 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> H.LayoutObj
-lay (Table hdr lls)     = H.Table $ (map spec hdr) : (map (map spec) lls)
-lay (Section title layoutComponents) = 
-  H.Section (spec title) (createLayout layoutComponents)
+lay (Table hdr lls)     = 
+  H.Table ["table"] $ (map spec hdr) : (map (map spec) lls)
+lay (Section title contents) = 
+  H.HDiv ["section"] ((H.Header 3 (spec title)):(createLayout contents))
 lay (Paragraph c)       = H.Paragraph (spec c)
-lay (EqnBlock c)        = H.EqnBlock (spec c)
+lay (EqnBlock c)        = H.HDiv ["equation"] [H.Tagless (spec c)]
 lay (CodeBlock c)       = H.CodeBlock c
 lay (Definition Data c) = H.Definition Data $ makeDDPairs c
 
@@ -74,14 +75,9 @@ makeDDPairs :: EqChunk -> [(String,H.LayoutObj)]
 makeDDPairs c = [
   ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
-  ("Equation",    eqnStyleDD $ buildEqn c),
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
   ("Description", H.Paragraph (buildDescription c))
   ]
-
--- Toggle equation style
-eqnStyleDD :: H.Contents -> H.LayoutObj
-eqnStyleDD = H.EqnBlock
-  --This style works better for HTML.
   
 buildEqn :: EqChunk -> H.Spec  
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))

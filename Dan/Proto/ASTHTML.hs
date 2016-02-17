@@ -1,8 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module ASTHTML where
---This is a duplicate of ASTTeX, if anything they should be combined into
---  something like "ASTLayout", or the printHTML should be mined and ToHTML
---  should take care of tagging/arranging things.
+
 import ASTInternal (Variable)
 import Spec (DType)
 import Symbol (Symbol)
@@ -38,11 +36,11 @@ type Contents = Spec
 
 type Tags = [String]
 
-data LayoutObj = Table [[Spec]]
-               | Section Title [LayoutObj]
+data LayoutObj = Table Tags [[Spec]]
+               | Header Int Contents
                | Paragraph Contents
-               | EqnBlock Contents
+               | HDiv Tags [LayoutObj]
+               | Tagless Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)]
-               -- | HDiv Tags LayoutObj
                -- | Span Tags Contents

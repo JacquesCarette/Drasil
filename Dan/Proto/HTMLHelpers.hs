@@ -16,10 +16,10 @@ tr        = wrap "tr" []
 th        = wrap "th" []
 td        = wrap "td" []
 
-h :: Int -> [String] -> Doc -> Doc
+h :: Int -> Doc -> Doc
 h n       | n < 0 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
-          | otherwise = wrap ("h"++show n)
+          | otherwise = wrap ("h"++show n) []
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap s [] = \x -> 
@@ -36,8 +36,8 @@ sub = \x -> "<sub>" ++ x ++ "</sub>"
 sup = \x -> "<sup>" ++ x ++ "</sup>"
 
 article_title, author :: Doc -> Doc
-article_title t = div_tag ["title"]  (h 1 [] t)
-author a        = div_tag ["author"] (h 2 [] a)
+article_title t = div_tag ["title"]  (h 1 t)
+author a        = div_tag ["author"] (h 2 a)
 
 div_tag :: [String] -> Doc -> Doc
 div_tag = wrap "div"

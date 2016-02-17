@@ -31,13 +31,13 @@ build fn (Document t a c) =
   ))
   
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)    = div_tag ["section"] (h 3 ["section"] 
-                                    (text (p_spec t)) $$ print contents)
+printLO (HDiv ts layoutObs)     = div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
-printLO (EqnBlock contents)     = div_tag ["equation"] (text $ p_spec contents)
-printLO (Table rows)            = makeTable rows
+printLO (Tagless contents)     = text $ p_spec contents
+printLO (Table ts rows)         = makeTable ts rows
 printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
+printLO (Header n contents)     = h n $ text (p_spec contents)
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -111,9 +111,9 @@ mul a b         = p_expr a ++ p_expr b
 ------------------BEGIN TABLE PRINTING-----------------------------
 -------------------------------------------------------------------
   
-makeTable :: [[Spec]] -> Doc
-makeTable []      = error "No table to print (see PrintHTML)"
-makeTable (l:lls) = wrap "table" ["table"] (
+makeTable :: Tags -> [[Spec]] -> Doc
+makeTable _ []       = error "No table to print (see PrintHTML)"
+makeTable ts (l:lls) = wrap "table" ts (
     tr (makeHeaderCols l) $$ makeRows lls)
 
 makeRows :: [[Spec]] -> Doc

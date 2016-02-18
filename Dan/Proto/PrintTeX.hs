@@ -116,7 +116,7 @@ mul x y         = p_expr x ++ p_expr y
 -------------------------------------------------------------------
   
 makeTable :: [[Spec]] -> Doc
-makeTable lls = text ("~\\newline \\begin{longtable}" ++ brace (header lls)) 
+makeTable lls = text ("\\begin{longtable}" ++ brace (header lls)) 
   $$ makeRows lls $$ text "\\end{longtable}"
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
                         brace (show tableWidth ++ "cm")

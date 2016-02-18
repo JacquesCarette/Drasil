@@ -27,6 +27,7 @@ data Spec where
 type Title    = Spec
 type Contents = Spec
 type Author   = Spec
+type Bullets  = [Spec]
 
 data Document = Document Title Author [LayoutObj]
 
@@ -38,6 +39,7 @@ data LayoutObj = Table [Spec] [[Spec]] -- table header then data
                | EqnBlock Contents
                | CodeBlock Code
                | Definition DType (EqChunk)
+               | BulletList Bullets
 
 -- Types of definitions
 data DType = Data

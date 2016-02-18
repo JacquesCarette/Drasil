@@ -72,6 +72,7 @@ lay (Paragraph c)       = H.Paragraph (spec c)
 lay (EqnBlock c)        = H.HDiv ["equation"] [H.Tagless (spec c)]
 lay (CodeBlock c)       = H.CodeBlock c
 lay (Definition Data c) = H.Definition Data $ makeDDPairs c
+lay (BulletList cs)     = H.List H.Unordered $ map spec cs
 
 makeDDPairs :: EqChunk -> [(String,H.LayoutObj)]
 makeDDPairs c = [

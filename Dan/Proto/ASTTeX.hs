@@ -35,6 +35,8 @@ data Document = Document Title Author [LayoutObj]
 type Title    = Spec
 type Author   = Spec
 type Contents = Spec
+type Items    = [Spec]
+
 
 data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
@@ -43,3 +45,10 @@ data LayoutObj = Table [[Spec]]
                | EqnBlock Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)]
+               | List ListType Items
+               
+data ListType = Item | Enum
+
+instance Show ListType where
+  show Item = "itemize"
+  show Enum = "enumerate"

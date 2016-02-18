@@ -33,7 +33,7 @@ data Document = Document Title Author [LayoutObj]
 type Title    = Spec
 type Author   = Spec
 type Contents = Spec
-
+type Items    = [Spec]
 type Tags = [String]
 
 data LayoutObj = Table Tags [[Spec]]
@@ -43,4 +43,11 @@ data LayoutObj = Table Tags [[Spec]]
                | Tagless Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)]
+               | List ListType Items
                -- | Span Tags Contents
+               
+data ListType = Ordered | Unordered
+
+instance Show ListType where
+  show Ordered = "o"
+  show Unordered = "u"

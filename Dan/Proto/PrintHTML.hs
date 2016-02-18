@@ -38,6 +38,7 @@ printLO (Table ts rows)         = makeTable ts rows
 printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
 printLO (Header n contents)     = h n $ text (p_spec contents)
+printLO (List t items)          = makeList t items
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -140,3 +141,11 @@ makeDDRows :: [(String,LayoutObj)] -> Doc
 makeDDRows []         = error "No fields to create DD table"
 makeDDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
 makeDDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDDRows ps
+
+-------------------------------------------------------------------
+------------------BEGIN LIST PRINTING------------------------------
+-------------------------------------------------------------------
+
+makeList :: ListType -> [Spec] -> Doc
+makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map
+  (wrap "li" [] . text . p_spec) items)

@@ -29,14 +29,14 @@ build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: [A.DocParams] -> Document -> Doc
-buildSRS ((A.DocClass sb b) : (A.UsePackages ps) : []) (Document t a c) =
-  docclass sb b $$ listpackages ps $$ title (pCon Plain t) $$ 
+buildSRS ((A.DocClass sb b1) : (A.UsePackages ps) : []) (Document t a c) =
+  docclass sb b1 $$ listpackages ps $$ title (pCon Plain t) $$ 
   author (p_spec a) $$ begin $$ print c $$ endL
 buildSRS _ _ = error "Invalid syntax in Document Parameters"
 
 buildLPM :: [A.DocParams] -> Document -> Doc
-buildLPM  ((A.DocClass sb b) : (A.UsePackages ps) : xs) (Document t a c) =
-  docclass sb b $$ listpackages ps $$ moreDocParams xs $$
+buildLPM  ((A.DocClass sb b1) : (A.UsePackages ps) : xs) (Document t a c) =
+  docclass sb b1 $$ listpackages ps $$ moreDocParams xs $$
   title (p_spec t) $$ author (p_spec a) $$ begin $$ print c $$ endL
 buildLPM _ _ = error "Invalid syntax in Document Parameters"
 
@@ -58,6 +58,7 @@ printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows)            = makeTable rows
 printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
 printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
+printLO (List lt is)            = makeList lt is
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -67,11 +68,11 @@ print l = foldr ($$) empty $ map printLO l
 -------------------------------------------------------------------
 
 p_spec :: Spec -> String
-p_spec (E e)      = p_expr e
-p_spec (a :+: b)  = p_spec a ++ p_spec b
-p_spec (a :-: b)  = p_spec a ++ "_" ++ brace (p_spec b)
-p_spec (a :^: b)  = p_spec a ++ "^" ++ brace (p_spec b)
-p_spec (a :/: b)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec b)
+p_spec (E ex)      = p_expr ex
+p_spec (a :+: s)  = p_spec a ++ p_spec s
+p_spec (a :-: s)  = p_spec a ++ "_" ++ brace (p_spec s)
+p_spec (a :^: s)  = p_spec a ++ "^" ++ brace (p_spec s)
+p_spec (a :/: s)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec s)
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = runReader (uSymbPrint s) Plain
@@ -97,18 +98,18 @@ p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
 p_expr (Int i)    = show i
-p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
-p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
-p_expr (Mul a b)  = mul a b
-p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in Helpers
-p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
-p_expr (Pow a b)  = p_expr a ++ "^" ++ brace (p_expr b)
+p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
+p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
+p_expr (Mul x y)  = mul x y
+p_expr (Frac n d) = fraction (p_expr n) (p_expr d) --Found in Helpers
+p_expr (Div n d)  = p_expr n ++ "/" ++ p_expr d
+p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
 p_expr (Sym s)    = symbol s
 
 mul :: Expr -> Expr -> String
-mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
-mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
-mul a b         = p_expr a ++ p_expr b
+mul x y@(Dbl _) = p_expr x ++ "*" ++ p_expr y
+mul x y@(Int _) = p_expr x ++ "*" ++ p_expr y
+mul x y         = p_expr x ++ p_expr y
 
 -------------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING-----------------------------
@@ -146,13 +147,13 @@ getCon HARDNL    = Plain
 
 
 lPrint :: Spec -> Reader Context String
-lPrint t@(a :+: b) = do
+lPrint t@(s1 :+: s2) = do
   c <- ask
-  let ca = getCon a
-  let cb = getCon b
+  let ca = getCon s1
+  let cb = getCon s2
   case c of
     EqnB -> return $ makeEquation t
-    _    -> return $ pCon ca a ++ pCon cb b
+    _    -> return $ pCon ca s1 ++ pCon cb s2
     
 lPrint t = do
   c <- ask
@@ -257,3 +258,13 @@ makeEquation contents =
   ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
+  
+-------------------------------------------------------------------
+------------------BEGIN LIST PRINTING------------------------------
+-------------------------------------------------------------------
+
+makeList :: ListType -> [Spec] -> Doc
+makeList t items = b (show t) $$ vcat (map item items) $$ e (show t)
+
+item :: Spec -> Doc
+item = \s -> text ("\\item " ++ pCon Plain s)

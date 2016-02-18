@@ -37,7 +37,14 @@ brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"
 quotes = \x -> "\"" ++ x ++ "\""
 
---format strings
+--capitalize
+capitalize :: String -> String
+capitalize [] = []
+capitalize (c:cs) = toUpper c:map toLower cs
+
+
+
+--format strings and convert -> Doc
 upcase, lowcase :: [Char] -> Doc
 upcase []      = text []
 upcase (c:cs)  = text $ toUpper c:cs --capitalize first letter of string
@@ -68,21 +75,21 @@ endL    = bslash <> text "end" <> br "document"
 command = bslash <> text "newcommand"
 
 comm :: String -> String -> String -> Doc
-comm b [] []  = (command) <> br ("\\" ++ b)
+comm b1 [] [] = (command) <> br ("\\" ++ b1)
 comm b1 b2 [] = (command) <> br ("\\" ++ b1) <> br b2
 comm b1 b2 s1 = (command) <> br ("\\" ++ b1) <> sq s1 <> br b2
 
 count :: String -> Doc
-count b = bslash <> text "newcounter" <> br b
+count b1 = bslash <> text "newcounter" <> br b1
 
 renewcomm :: String -> String -> Doc
 renewcomm b1 b2 = bslash <> text "renewcommand" <> br ("\\" ++ b1) <> br b2
 
 sec :: String -> Doc
-sec b = bslash <> text "section*" <> br b
+sec b1 = bslash <> text "section*" <> br b1
 
 subsec :: String -> Doc
-subsec b = bslash <> text "subsection*" <> br b
+subsec b1 = bslash <> text "subsection*" <> br b1
 
 newline :: Doc
 newline = bslash <> text "newline"
@@ -102,4 +109,8 @@ colBw   = comm "colBwidth" "0.73\\textwidth" []
 arrayS  = renewcomm "arraystretch" "1.2"
 
 fraction :: String -> String -> String
-fraction a b = "\\frac{" ++ a ++ "}{" ++ b ++ "}"
+fraction n d = "\\frac{" ++ n ++ "}{" ++ d ++ "}"
+
+b,e :: String -> Doc
+b s = bslash <> text ("begin" ++ brace s)
+e s = bslash <> text ("end" ++ brace s)

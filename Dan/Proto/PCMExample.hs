@@ -3,7 +3,7 @@
 module PCMExample where
 -- import ASTInternal (Expr(..))
 import SI_Units
-import Unicode (Tau(..), Delta(..))
+import Unicode (Tau(..), Delta(..), Rho(..)) --, Phi(..))
 -- import EqChunk (EqChunk(..), fromEqn)
 import Symbol
 import UnitalChunk
@@ -16,12 +16,13 @@ pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap_W,tank_D,ht_gen_vol,ht_xfer_co,
   ht_xfer_CW,tank_L,mass,water_m, --norm_vect,
   ht_flux, --thermFlux_vect,
   ht_flux_C,ht_flux_in,ht_flux_out,time,temp,temp_boil,
-  temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff]
+  temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,tank_vol,
+  water_vol,density,water_dense,dummyVar]
 
 coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, ht_gen_vol,ht_xfer_co,ht_xfer_CW,
   tank_L,mass,water_m,ht_flux,ht_flux_C,ht_flux_in,ht_flux_out,time,temp,
   temp_boil,temp_coil,temp_env,time_final,temp_init,temp_water,
-  temp_diff :: UnitalChunk
+  temp_diff,vol,tank_vol,water_vol,density,water_dense,dummyVar :: UnitalChunk
 coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
 hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
               (sub cA (Atomic "in")) m_2
@@ -62,3 +63,12 @@ temp_water  = makeUC "T_W" "temperature of water"
               (sub cT cW) centigrade
 temp_diff   = makeUC "deltaT" "temperature difference" 
               (Catenate (Special Delta) cT) centigrade
+vol         = makeUC "V" "volume" cV m_3
+tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
+                (sub cV (Atomic "tank")) m_3
+water_vol   = makeUC "V_W" "volume of water" (sub cV cW) m_3
+density     = makeUC "rho" "density, mass per unit volume" (Special Rho_L) densityU
+water_dense = makeUC "rho_W" "density of water" (sub (Special Rho_L) cW) densityU
+dummyVar    = makeUC "tau" "dummy variable for integration over time" 
+                (Special Tau_L) second
+--melt_frac   = makeUC "Phi" "melt fraction" (Special Phi) unitless

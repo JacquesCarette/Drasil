@@ -76,6 +76,7 @@ lay (Paragraph c)       = T.Paragraph (spec c)
 lay (EqnBlock c)        = T.EqnBlock (spec c)
 lay (CodeBlock c)       = T.CodeBlock c
 lay (Definition Data c) = T.Definition Data $ makeDDPairs c
+lay (BulletList cs)     = T.List T.Item $ map spec cs
 
 makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
 makeDDPairs c = [

@@ -80,6 +80,7 @@ p_spec HARDNL     = "\\newline"
 symbol :: Symbol -> String
 symbol (Atomic s)       = s
 symbol (Special s)      = render TeX s
+symbol (Catenate s1@(Special _) s2) = (symbol s1) ++ brace (symbol s2)
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
 --
 -- handle the special cases first, then general case

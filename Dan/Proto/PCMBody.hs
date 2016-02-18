@@ -59,4 +59,4 @@ s1_2_table = Table [S "Symbol", S "Units", S "Description"] $ mkTable
    (\ch -> Sy $ ch ^. unit),
    (\ch -> S $ ch ^. descr)
    ]
-  [coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, g, h] 
+  pcmSymbols

@@ -3,77 +3,62 @@
 module PCMExample where
 -- import ASTInternal (Expr(..))
 import SI_Units
--- import Unicode (Tau(..))
+import Unicode (Tau(..), Delta(..))
 -- import EqChunk (EqChunk(..), fromEqn)
 import Symbol
 import UnitalChunk
 import PCMUnits
+import SymbolAlphabet
 
 -- import Control.Lens ((^.))
-cA,cC,lH,lC :: Symbol
-cA = Atomic "A"
-cC = Atomic "C"
-lH = Atomic "h"
-lC = Atomic "c"
+pcmSymbols :: [UnitalChunk]
+pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap_W,tank_D,ht_gen_vol,ht_xfer_co,
+  ht_xfer_CW,tank_L,mass,water_m, --norm_vect,
+  ht_flux, --thermFlux_vect,
+  ht_flux_C,ht_flux_in,ht_flux_out,time,temp,temp_boil,
+  temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff]
 
-coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, g :: UnitalChunk
-coil_SA = makeUC "A_C" "coil surface area" (sub cA cC) m_2
-hIn_SA  = makeUC "A_in" "surface area over which heat is transferred in" 
-            (sub cA (Atomic "in")) m_2
-hOut_SA = makeUC "A_out" "surface area over which heat is transferred out" 
-            (sub cA (Atomic "out")) m_2
-htCap_W = makeUC "C_W" "specific heat capacity of water" (sub cC (Atomic "W"))
-            heat_capacity
-tank_D  = makeUC "D" "diameter of tank" (Atomic "D") metre
-g       = makeUC "g" "volumetric heat generation per unit volume" (Atomic "g")
-            thermFluxU
-h       = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
-
--- --------------- --------------- --------------- ---------------
--- {--------------- Begin tau_c ---------------}
--- --------------- --------------- --------------- ---------------
--- tau_c :: VarChunk
--- tau_c = VC "tau_c" "clad thickness" (sub (Special Tau_L) c)
-
--- --------------- --------------- --------------- ---------------
--- {--------------- Begin h_c ---------------}
--- --------------- --------------- --------------- ---------------
--- h_c_eq :: Expr
--- h_c_eq = 2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b))
-
--- h_c :: EqChunk
--- h_c = fromEqn "h_c" 
-  -- "convective heat transfer coefficient between clad and coolant"
-  -- (sub h c) heat_transfer h_c_eq
-
--- -- --------------- --------------- --------------- ---------------
--- -- {--------------- Begin h_g ---------------}
--- -- --------------- --------------- --------------- ---------------
--- h_g_eq :: Expr
--- h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
-
--- h_g :: EqChunk
--- h_g = fromEqn "h_g" 
-  -- "effective heat transfer coefficient between clad and fuel surface"
-  -- (sub h (Atomic "g")) heat_transfer h_g_eq
-
--- --------------- --------------- --------------- ---------------
--- {--------------- Begin h_b ---------------}
--- --------------- --------------- --------------- ---------------
-
--- h_b :: VarChunk
--- h_b = VC "h_b" "initial coolant film conductance" (sub h (Atomic "b"))
-
--- --------------- --------------- --------------- ---------------
--- {--------------- Begin h_p ---------------}
--- --------------- --------------- --------------- ---------------
-
--- h_p :: VarChunk
--- h_p = VC "h_p" "initial gap film conductance" (sub h (Atomic "p"))
-
--- --------------- --------------- --------------- ---------------
--- {--------------- Begin k_c ---------------}
--- --------------- --------------- --------------- ---------------
-
--- k_c :: VarChunk
--- k_c = VC "k_c" "clad conductivity" (sub h c)
+coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, ht_gen_vol,ht_xfer_co,ht_xfer_CW,
+  tank_L,mass,water_m,ht_flux,ht_flux_C,ht_flux_in,ht_flux_out,time,temp,
+  temp_boil,temp_coil,temp_env,time_final,temp_init,temp_water,
+  temp_diff :: UnitalChunk
+coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
+hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
+              (sub cA (Atomic "in")) m_2
+hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
+              (sub cA (Atomic "out")) m_2
+htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
+              heat_capacity
+tank_D      = makeUC "D" "diameter of tank" cD metre
+ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" lG
+              thermFluxU
+ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
+ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
+              (sub lH cC) heat_transfer
+tank_L      = makeUC "L" "length of tank" cL metre
+mass        = makeUC "m" "mass" lM kilogram
+water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
+-- norm_vect = makeUC "n_vect" "unit outward normal vector for a surface"
+  -- How do I make a symbol that needs one (or more) FormatC? Add to Symbol or
+  -- pull FormatC out somehow?
+ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
+-- thermFlux_vect = makeUC "q_vect" "thermal flux vector" (Vector lQ) thermFluxU
+  --Same problem here with the Vector symbol.
+ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermFluxU
+ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU
+ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermFluxU
+time        = makeUC "t" "time" lT second
+temp        = makeUC "T" "temperature" cT centigrade
+temp_boil   = makeUC "T_boil" "temperature at boiling point" 
+              (sub cT (Atomic "boil")) centigrade
+temp_coil   = makeUC "T_coil" "temperature of coil" 
+              (sub cT cC) centigrade
+temp_env    = makeUC "T_env" "temperature of environment" 
+              (sub cT (Atomic "env")) centigrade
+time_final  = makeUC "t_final" "time" (sub lT (Atomic "final")) second
+temp_init   = makeUC "T_init" "initial temperature" 
+              (sub cT (Atomic "init")) centigrade
+temp_water  = makeUC "T_W" "temperature of water" 
+              (sub cT cW) centigrade
+temp_diff   = makeUC "deltaT" "temperature difference" 
+              (Catenate (Special Delta) cT) centigrade

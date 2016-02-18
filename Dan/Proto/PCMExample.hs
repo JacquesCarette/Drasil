@@ -10,9 +10,11 @@ import UnitalChunk
 import PCMUnits
 
 -- import Control.Lens ((^.))
-cA,cC :: Symbol
+cA,cC,lH,lC :: Symbol
 cA = Atomic "A"
 cC = Atomic "C"
+lH = Atomic "h"
+lC = Atomic "c"
 
 coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, g :: UnitalChunk
 coil_SA = makeUC "A_C" "coil surface area" (sub cA cC) m_2
@@ -25,10 +27,8 @@ htCap_W = makeUC "C_W" "specific heat capacity of water" (sub cC (Atomic "W"))
 tank_D  = makeUC "D" "diameter of tank" (Atomic "D") metre
 g       = makeUC "g" "volumetric heat generation per unit volume" (Atomic "g")
             thermFluxU
+h       = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
 
-h,c :: Symbol
-h = Atomic "h"
-c = Atomic "c"
 -- --------------- --------------- --------------- ---------------
 -- {--------------- Begin tau_c ---------------}
 -- --------------- --------------- --------------- ---------------

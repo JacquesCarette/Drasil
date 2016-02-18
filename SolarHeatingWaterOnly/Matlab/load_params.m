@@ -43,8 +43,8 @@ function [ params ] = load_params(filename)
     params.Tinit   = param(8); % Initial temperature of water
     params.tstep   = param(9); % Time step for simulation
     params.tfinal  = param(10); % Time at which to stop simulation
-    params.AbsTol  = param(11); % Absolute tolerance
-    params.RelTol  = param(12); % Relative tolerance
+% $$$     params.AbsTol  = param(11); % Absolute tolerance
+% $$$     params.RelTol  = param(12); % Relative tolerance
 
     %calculated parameters
     params.Vt      = pi*(params.diam/2)*(params.diam/2)*params.L;       % Total volume of tank, including pcm and water

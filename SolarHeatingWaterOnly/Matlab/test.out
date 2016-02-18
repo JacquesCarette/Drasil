@@ -10,8 +10,6 @@ Date: 18-Feb-2016
           Tinit	 4.000000e+01
           tstep	 1.000000e+00
          tfinal	 5.000000e+04
-         AbsTol	 1.000000e-10
-         RelTol	 1.000000e-10
              Vt	 1.999749e-01
              Mw	 1.999749e+02
           tau_w	 6.975792e+03

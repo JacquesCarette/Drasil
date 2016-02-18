@@ -38,6 +38,7 @@ type Contents = Spec
 
 data LayoutObj = Table [[Spec]]
                | Section Title [LayoutObj]
+               | SubSection Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code

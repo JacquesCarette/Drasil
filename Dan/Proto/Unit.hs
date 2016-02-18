@@ -6,6 +6,7 @@ module Unit (
   , FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn(..)                -- wrapper for 'Unit' class
   , from_udefn
+  , makeDerU
   ) where
 
 import Chunk (ConceptChunk, Chunk(..), Concept(..))
@@ -18,7 +19,8 @@ import Control.Lens (Simple, Lens, set, (^.))
 data USymb = UName Symbol
            | UProd [USymb]
            | UPow USymb Integer -- can be negative, should not be 0
-
+           | UDiv USymb USymb   --Get proper division (not using negative powers)
+                                --  necessary for things like J/(kg*C)
 -- Language of unit equations, to define a unit relative
 -- to another
 data UDefn = USynonym USymb      -- to define straight synonyms
@@ -37,6 +39,8 @@ from_udefn (USynonym x) = x
 from_udefn (UScale _ s) = s
 from_udefn (UShift _ s) = s
 
+makeDerU :: ConceptChunk -> UDefn -> DerUChunk
+makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 ---------------------------------------------------------
 
 -- for defining fundamental units

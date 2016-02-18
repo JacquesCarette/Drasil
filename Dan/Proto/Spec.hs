@@ -33,6 +33,7 @@ data Document = Document Title Author [LayoutObj]
 --Types of layout objects we deal with explicitly
 data LayoutObj = Table [Spec] [[Spec]] -- table header then data
                | Section Title [LayoutObj]
+               | SubSection Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code

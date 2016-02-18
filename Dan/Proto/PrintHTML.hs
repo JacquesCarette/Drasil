@@ -84,9 +84,11 @@ symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 
 uSymb :: USymb -> String
-uSymb (UName s)   = symbol s
-uSymb (UProd l)   = foldr1 (++) (map uSymb l)
-uSymb (UPow s i)  = uSymb s ++ sup (show i)
+uSymb (UName s)           = symbol s
+uSymb (UProd l)           = foldr1 (++) (map uSymb l)
+uSymb (UPow s i)          = uSymb s ++ sup (show i)
+uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
+uSymb (UDiv n d)      = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -------------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING------------------------
 -------------------------------------------------------------------

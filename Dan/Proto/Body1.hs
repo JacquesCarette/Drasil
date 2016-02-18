@@ -3,6 +3,7 @@
 module Body1 where
 
 import Data.List (intersperse)
+import Data.Char (toLower)
 
 import Example1
 import Spec (Spec(..), LayoutObj(..), Document(..), DType(Data))
@@ -30,7 +31,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
 
 s1_table = Table [S "Symbol", S "Description"] $ mkTable
   [(\x -> Sy (x ^. unit)),
-   (\x -> S (x ^. descr))
+   (\x -> S $ (x ^. descr) ++ " (" ++ (map toLower (x ^. name)) ++ ")")
   ] si_units
 
 s2 = Section (S "Table of Symbols") [s2_intro, s2_table]

@@ -66,6 +66,8 @@ lay (Table hdr lls)     =
   H.Table ["table"] $ (map spec hdr) : (map (map spec) lls)
 lay (Section title contents) = 
   H.HDiv ["section"] ((H.Header 3 (spec title)):(createLayout contents))
+lay (SubSection title contents) = 
+  H.HDiv ["subsection"] ((H.Header 4 (spec title)):(createLayout contents))
 lay (Paragraph c)       = H.Paragraph (spec c)
 lay (EqnBlock c)        = H.HDiv ["equation"] [H.Tagless (spec c)]
 lay (CodeBlock c)       = H.CodeBlock c

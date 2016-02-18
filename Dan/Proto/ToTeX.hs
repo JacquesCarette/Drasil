@@ -62,9 +62,16 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> T.LayoutObj
-lay (Table hdr lls) = T.Table $ (map spec hdr) : (map (map spec) lls)
+lay (Table hdr lls) 
+  | length hdr == length (head lls) = T.Table $ 
+                                      (map spec hdr) : (map (map spec) lls)
+  | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
+                        " headers, but data contains " ++ 
+                        show (length (head lls)) ++ " columns."
 lay (Section title layoutComponents) = 
   T.Section (spec title) (createLayout layoutComponents)
+lay (SubSection title contents) = 
+  T.SubSection (spec title) (createLayout contents)
 lay (Paragraph c)       = T.Paragraph (spec c)
 lay (EqnBlock c)        = T.EqnBlock (spec c)
 lay (CodeBlock c)       = T.CodeBlock c

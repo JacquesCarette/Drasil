@@ -52,6 +52,7 @@ listpackages (p:ps) = usepackage p $$ listpackages ps
 
 printLO :: LayoutObj -> Doc
 printLO (Section t contents)    = sec (pCon Plain t) $$ print contents
+printLO (SubSection t contents) = subsec (pCon Plain t) $$ print contents
 printLO (Paragraph contents)    = text (pCon Plain contents)
 printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows)            = makeTable rows
@@ -82,8 +83,8 @@ symbol (Special s)      = render TeX s
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
 --
 -- handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ (symbol x)
-symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ (symbol x)
+symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ brace (symbol x)
+symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ brace (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
@@ -189,7 +190,15 @@ uSymbPrint (UPow n p) = do
   case c of
     Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
     _     -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
-
+uSymbPrint (UDiv n d) = do
+  c <- ask
+  case d of -- 4 possible cases, 2 need parentheses, 2 don't
+    UProd _ -> return $ 
+      runReader (uSymbPrint n) c ++ "/" ++ paren (runReader (uSymbPrint d) c)
+    UDiv _ _ -> return $
+      runReader (uSymbPrint n) c ++ "/" ++ paren (runReader (uSymbPrint d) c)
+    _ -> return $ runReader (uSymbPrint n) c ++ "/" ++ runReader (uSymbPrint d) c
+    
 getSyCon :: Symbol -> Context
 getSyCon (Atomic _)          = Plain
 --getSyCon (Special Circle)  = Equation

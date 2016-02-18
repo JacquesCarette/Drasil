@@ -1,13 +1,16 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs, Rank2Types #-}
-module UnitalChunk (UnitalChunk(..)) where
+module UnitalChunk (UnitalChunk(..), makeUC) where
 
-import Chunk (Chunk(..), Concept(..), Quantity(..))
+import Chunk (Chunk(..), Concept(..), Quantity(..), VarChunk(..))
 import Unit (Unit(..), UnitDefn(..))
-
+import Symbol
 import Control.Lens (Simple, Lens, (^.), set)
 
 --BEGIN HELPER FUNCTIONS--
+makeUC :: Unit u => String -> String -> Symbol -> u -> UnitalChunk
+makeUC nam desc sym un = UC (VC nam desc sym) un
+
 qlens :: (forall c. Quantity c => Simple Lens c a) -> Simple Lens Q a
 qlens l f (Q a) = fmap (\x -> Q (set l x a)) (f (a ^. l))
 

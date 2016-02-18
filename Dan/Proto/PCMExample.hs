@@ -4,7 +4,6 @@ module PCMExample where
 -- import ASTInternal (Expr(..))
 import SI_Units
 -- import Unicode (Tau(..))
-import Chunk (VarChunk(..))
 -- import EqChunk (EqChunk(..), fromEqn)
 import Symbol
 import UnitalChunk
@@ -16,15 +15,15 @@ cA = Atomic "A"
 cC = Atomic "C"
 
 coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, g :: UnitalChunk
-coil_SA = UC (VC "A_C" "coil surface area" (sub cA cC)) m_2
-hIn_SA  = UC (VC "A_in" "surface area over which heat is transferred in" 
-            (sub cA (Atomic "in"))) m_2
-hOut_SA = UC (VC "A_out" "surface area over which heat is transferred out" 
-            (sub cA (Atomic "out"))) m_2
-htCap_W = UC (VC "C_W" "specific heat capacity of water" (sub cC (Atomic "W")))
+coil_SA = makeUC "A_C" "coil surface area" (sub cA cC) m_2
+hIn_SA  = makeUC "A_in" "surface area over which heat is transferred in" 
+            (sub cA (Atomic "in")) m_2
+hOut_SA = makeUC "A_out" "surface area over which heat is transferred out" 
+            (sub cA (Atomic "out")) m_2
+htCap_W = makeUC "C_W" "specific heat capacity of water" (sub cC (Atomic "W"))
             heat_capacity
-tank_D  = UC (VC "D" "diameter of tank" (Atomic "D")) metre
-g       = UC (VC "g" "volumetric heat generation per unit volume" (Atomic "g"))
+tank_D  = makeUC "D" "diameter of tank" (Atomic "D") metre
+g       = makeUC "g" "volumetric heat generation per unit volume" (Atomic "g")
             thermFluxU
 
 h,c :: Symbol

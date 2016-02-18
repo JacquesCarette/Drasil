@@ -7,9 +7,10 @@ module Unit (
   , UnitDefn(..)                -- wrapper for 'Unit' class
   , from_udefn
   , makeDerU
+  , unitCon
   ) where
 
-import Chunk (ConceptChunk, Chunk(..), Concept(..))
+import Chunk (ConceptChunk(..), Chunk(..), Concept(..))
 import Symbol (Symbol)
 import Control.Lens (Simple, Lens, set, (^.))
 
@@ -41,6 +42,9 @@ from_udefn (UShift _ s) = s
 
 makeDerU :: ConceptChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
+
+unitCon :: String -> ConceptChunk
+unitCon s = CC s s
 ---------------------------------------------------------
 
 -- for defining fundamental units

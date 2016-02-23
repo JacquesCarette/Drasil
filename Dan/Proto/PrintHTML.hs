@@ -7,17 +7,17 @@ import Text.PrettyPrint hiding (render)
 import ASTHTML
 import ToHTML (makeDocument)
 import qualified ASTInternal as A
-import qualified Spec as S
+import Spec (USymb(..))
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import HTMLHelpers
 import Helpers (brace)
 import Unicode
 import Format (Format(HTML))
-import Unit (USymb(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
+import qualified LayoutObjs as L
 
-genHTML :: A.DocType -> S.Document -> Doc
+genHTML :: A.DocType -> L.Document -> Doc
 genHTML (A.Website fn) doc = build fn $ makeDocument doc
 genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
 
@@ -43,9 +43,9 @@ printLO (List t items)          = makeList t items
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
 
--- -------------------------------------------------------------------
--- ------------------BEGIN SPEC PRINTING------------------------------
--- -------------------------------------------------------------------
+-----------------------------------------------------------------
+--------------------BEGIN SPEC PRINTING--------------------------
+-----------------------------------------------------------------
 title_spec :: Spec -> String
 title_spec (N s)      = t_symbol s
 title_spec (a :+: b)  = title_spec a ++ title_spec b
@@ -90,9 +90,9 @@ uSymb (UProd l)           = foldr1 (++) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
 uSymb (UDiv n d)      = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
--------------------------------------------------------------------
-------------------BEGIN EXPRESSION PRINTING------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN EXPRESSION PRINTING----------------------
+-----------------------------------------------------------------
 p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
@@ -110,9 +110,9 @@ mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
 mul a b         = p_expr a ++ p_expr b
 
--------------------------------------------------------------------
-------------------BEGIN TABLE PRINTING-----------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN TABLE PRINTING---------------------------
+-----------------------------------------------------------------
   
 makeTable :: Tags -> [[Spec]] -> Doc
 makeTable _ []       = error "No table to print (see PrintHTML)"
@@ -129,22 +129,22 @@ makeHeaderCols ls = vcat $ map (th . text . p_spec) ls
 
 makeColumns ls = vcat $ map (td . text . p_spec) ls
 
--------------------------------------------------------------------
-------------------BEGIN DATA DEFINITION PRINTING-------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN DATA DEFINITION PRINTING-----------------
+-----------------------------------------------------------------
 
-makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+makeDDefn :: L.DType -> [(String,LayoutObj)] -> Doc
 makeDDefn _ []      = error "Empty definition"
-makeDDefn S.Data ps = wrap "table" ["ddefn"] (makeDDRows ps)
+makeDDefn L.Data ps = wrap "table" ["ddefn"] (makeDDRows ps)
 
 makeDDRows :: [(String,LayoutObj)] -> Doc
 makeDDRows []         = error "No fields to create DD table"
 makeDDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
 makeDDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDDRows ps
 
--------------------------------------------------------------------
-------------------BEGIN LIST PRINTING------------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN LIST PRINTING----------------------------
+-----------------------------------------------------------------
 
 makeList :: ListType -> [Spec] -> Doc
 makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map

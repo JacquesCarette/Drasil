@@ -2,10 +2,9 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module PCMBody where
 import Data.Char (toLower)
-import Data.List (intersperse)
 import Helpers
 import PCMExample
-import Spec (Spec(..), LayoutObj(..), Document(..)) --, DType(Data))
+import Spec (Spec(..),sMap)
 import Format (FormatC(..))
 import Unit (Unit(..), UnitDefn(..))
 import SI_Units 
@@ -13,6 +12,7 @@ import Chunk
 import Control.Lens ((^.))
 import RecipeTools
 import PCMUnits
+import LayoutObjs
 -- import ToCode
 -- import ASTCode
 
@@ -44,7 +44,7 @@ s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
 
 s1_1_table = Table [S "Symbol", S "Description", S "Name"] $ mkTable
   [(\x -> Sy (x ^. unit)),
-   (\x -> S (x ^. descr)),
+   (\x -> (x ^. descr)),
    (\x -> S (x ^. name))
   ] this_si
 
@@ -59,7 +59,7 @@ s1_2_intro = Paragraph $
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] $ mkTable
   [(\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
-   (\ch -> S $ ch ^. descr)
+   (\ch -> ch ^. descr)
    ]
   pcmSymbols
 
@@ -67,7 +67,7 @@ s1_3 = Section 1 (S "Abbreviations and Acronyms") [s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] $ mkTable
   [(\ch -> S $ ch ^. name),
-   (\ch -> S $ ch ^. descr)]
+   (\ch -> ch ^. descr)]
   acronyms
 
 s4 = Section 0 (S "Specific System Description") [s4_intro, s4_1,s4_2]
@@ -92,9 +92,9 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+
   S "requirements:"
   
 s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+: 
-  S ": " :+: S (c ^. descr)) [thermFluxU, heat_capacity]
+  S ": " :+: (c ^. descr)) [thermFluxU, heat_capacity]
   
-s4_1_2 = Section 2 (S $ physSysDescr ^. descr) [s4_1_2_intro]
+s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
 --TODO: REFERENCING! (Add to Spec; Ref LayoutObj)
@@ -102,32 +102,40 @@ s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
 --TODO: Simple list (Add to LayoutObj)
 --TODO: Figures (Add to LayoutObj)
 
-s4_1_3 = Section 2 (S $ (goalStmt ^. descr) ++ "s") [s4_1_3_intro]
+s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [s4_1_3_intro]
 s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
   S "temperature of the water, and material properties, the goal statement is"
 --TODO: Simple list.
 
 s4_2 = Section 1 (S "Solution Characteristics Specification") 
-  [s4_2_intro,s4_2_1]
+  [s4_2_intro,s4_2_1,s4_2_2]
 
-s4_2_intro = Paragraph $ S "The " :+: S (map toLower (instanceMod ^. descr)) :+:
+s4_2_intro = Paragraph $ S "The " :+: 
+  (sMap (map toLower) (instanceMod ^. descr)) :+:
   S (" " ++ (paren $ oDE ^. name)) :+: S " that governs " :+: 
   S (sWHS ^. name) :+: S " is presented in " :+: --TODO: Subsec reference
   S ". The information to understand the meaning of the " :+:
-  S (map toLower (instanceMod ^. descr)) :+: S " and its derivation is also" :+:
-  S " presented, so that the " :+: S (map toLower (instanceMod ^. descr)) :+:
-  S " can be verified."
+  (sMap (map toLower) (instanceMod ^. descr)) :+: 
+  S " and its derivation is also" :+: S " presented, so that the " :+: 
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S " can be verified."
   
-s4_2_1 = Section 2 (S $ assumption ^. descr ++ "s") [s4_2_1_intro]
+s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [s4_2_1_intro]
 
 s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   S "and helps in developing the theoretical model by filling in the " :+:
   S "missing information for the physical system. The numbers given in the " :+:
-  S "square brackets refer to the " :+: 
-  S (concat $ intersperse ", " 
-  (map (\ch -> map toLower (ch ^. descr) ++ " " ++ sqbrac (ch ^. name)) 
-  [theoreticMod, genDefn, dataDefn, instanceMod])) :+: S ", or " :+:
-  S ((map toLower $ likelyChange ^. descr) ++ " " ++ 
-  sqbrac (likelyChange ^. name)) :+:
-  S (", in which the respective " ++ (map toLower $ assumption ^. descr)) :+:
-  S " is used."
+  S "square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ")
+  (map (\ch -> (sMap (map toLower) (ch ^. descr)) :+: S (" " ++ 
+  sqbrac (ch ^. name))) [theoreticMod, genDefn, dataDefn, instanceMod]) :+: 
+  S ", or " :+: (sMap (map toLower) $ likelyChange ^. descr) :+: 
+  S (" " ++ sqbrac (likelyChange ^. name)) :+: 
+  S ", in which the respective " :+: 
+  (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
+--TODO: Simple List
+
+s4_2_2 = Section 2 (theoreticMod ^. descr :+: S "s") [s4_2_2_intro]
+
+s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
+  S "and laws that " :+: S (sWHS ^. name) :+: S " is based on."
+  
+s4_2_1_TMods = map (Definition Theory) [t1consThermE]

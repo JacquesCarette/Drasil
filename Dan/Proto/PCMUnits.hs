@@ -2,10 +2,11 @@
 module PCMUnits where
 
 import SI_Units
-import Unit (Unit(..), USymb(..), UDefn(..), DerUChunk(..),
+import Unit (Unit(..), UDefn(..), DerUChunk(..),
   makeDerU, unitCon)
 import Chunk (ConceptChunk(..))
 import Control.Lens ((^.))
+import Spec (USymb(..), Spec(..))
 
 --m^2--
 m_2 :: DerUChunk
@@ -31,7 +32,7 @@ densityU_eqn = USynonym (UDiv (kilogram ^. unit) (m_3 ^. unit))
 --J/(kg*C)--
 heat_capacity :: DerUChunk
 heat_capacity = makeDerU (CC "specific heat"
-  "heat capacity per unit mass") heat_cap_eqn
+  (S "heat capacity per unit mass")) heat_cap_eqn
 
 heat_cap_eqn :: UDefn
 heat_cap_eqn = USynonym (UDiv 
@@ -40,7 +41,7 @@ heat_cap_eqn = USynonym (UDiv
 --W/m^2--
 thermFluxU :: DerUChunk
 thermFluxU = makeDerU (CC "heat flux" 
-  "the rate of heat energy transfer per unit area") thermFluxUeqn
+  (S "the rate of heat energy transfer per unit area")) thermFluxUeqn
 
 thermFluxUeqn :: UDefn
 thermFluxUeqn = USynonym (UDiv (watt ^. unit) (m_2 ^. unit))

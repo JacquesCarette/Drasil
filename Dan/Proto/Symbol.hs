@@ -7,10 +7,12 @@
 
 module Symbol where
 import Unicode 
+import Format (FormatC(..))
 
 data Symbol where
   Atomic   :: String -> Symbol
   Special  :: Render a => a -> Symbol
+  FormatS  :: FormatC -> Symbol -> Symbol
   Corners  :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
             --upleft  -> lowleft  -> upright  -> lowright -> base   -> out
             -- [1] -> [2] -> [3] -> [4] -> [5] -> out
@@ -19,7 +21,8 @@ data Symbol where
             --             [2]   [4]
   Catenate :: Symbol -> Symbol -> Symbol
             -- s1 -> s2 -> s1s2
-
+  NA       :: Symbol
+  
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b
 

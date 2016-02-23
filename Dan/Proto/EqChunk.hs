@@ -7,6 +7,7 @@ import UnitalChunk
 import Control.Lens (Simple, Lens)
 import Unit (Unit(..))
 import Symbol (Symbol)
+import Spec (Spec(..))
 
 -- BEGIN EQCHUNK --
 data EqChunk = EC 
@@ -33,5 +34,5 @@ ul :: Simple Lens EqChunk UnitalChunk
 ul f (EC a b) = fmap (\x -> EC x b) (f a)
   
 -- useful
-fromEqn :: Unit u => String -> String -> Symbol -> u -> Expr -> EqChunk
+fromEqn :: Unit u => String -> Spec -> Symbol -> u -> Expr -> EqChunk
 fromEqn nm desc symb chunk eqn = EC (UC (VC nm desc symb) chunk) eqn

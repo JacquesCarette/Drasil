@@ -1,15 +1,20 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
 module PCMExample where
--- import ASTInternal (Expr(..))
+import ASTInternal (Expr(..))
 import SI_Units
 import Unicode (Tau(..), Delta(..), Rho(..)) --, Phi(..))
--- import EqChunk (EqChunk(..), fromEqn)
 import Symbol
 import UnitalChunk
 import PCMUnits
 import SymbolAlphabet
 import Chunk (ConceptChunk(..))
+import EqChunk (fromEqn)
+import Format (FormatC(..))
+import Spec (Spec(..),USymb(..))
+import Chunk (symbol,name,descr,makeCC)
+import Control.Lens ((^.))
+import Unit
 
 -- import Control.Lens ((^.))
 pcmSymbols :: [UnitalChunk]
@@ -48,8 +53,8 @@ water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
   -- How do I make a symbol that needs one (or more) FormatC? Add to Symbol or
   -- pull FormatC out somehow?
 ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
--- thermFlux_vect = makeUC "q_vect" "thermal flux vector" (Vector lQ) thermFluxU
-  --Same problem here with the Vector symbol.
+thFluxVect  = makeUC "q_vect" "thermal flux vector" (FormatS Vector lQ)
+                  thermFluxU
 ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermFluxU
 ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU
 ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermFluxU
@@ -85,15 +90,33 @@ acronyms = [assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
   
 assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
   physSysDescr,requirement,softwareRS,sWHS,theoreticMod :: ConceptChunk
-assumption    = CC "A" "Assumption"
-dataDefn      = CC "DD" "Data Definition"
-genDefn       = CC "GD" "General Definition"
-goalStmt      = CC "GS"  "Goal Statement"
-instanceMod   = CC "IM" "Instance Model"
-likelyChange  = CC "LC" "Likely Change"
-oDE           = CC "ODE" "Ordinary Differential Equation"
-physSysDescr  = CC "PS" "Physical System Description"
-requirement   = CC "R" "Requirement"
-softwareRS    = CC "SRS" "Software Requirements Specification"
-sWHS          = CC "SWHS" "Solar Water Heating System"
-theoreticMod  = CC "T" "Theoretical Model"
+assumption    = makeCC "A" "Assumption"
+dataDefn      = makeCC "DD" "Data Definition"
+genDefn       = makeCC "GD" "General Definition"
+goalStmt      = makeCC "GS"  "Goal Statement"
+instanceMod   = makeCC "IM" "Instance Model"
+likelyChange  = makeCC "LC" "Likely Change"
+oDE           = makeCC "ODE" "Ordinary Differential Equation"
+physSysDescr  = makeCC "PS" "Physical System Description"
+requirement   = makeCC "R" "Requirement"
+softwareRS    = makeCC "SRS" "Software Requirements Specification"
+sWHS          = makeCC "SWHS" "Solar Water Heating System"
+theoreticMod  = makeCC "T" "Theoretical Model"
+
+----EqChunks----
+--Theoretical models--
+
+t1consThermE = fromEqn "Conservation of thermal energy" t1descr NA 
+                unitless cons_therm_eqn
+
+cons_therm_eqn = (-1) * (C thFluxVect) + (C ht_gen_vol) := (C density) * 
+  (C htCap) * (Deriv (C temp) (C time))
+                
+t1descr = 
+  (S ("This equation gives the conservation of energy for time varying heat " ++
+  "transfer in a material of specific heat capacity ") :+: 
+  (N $ htCap ^. symbol) :+: S "and density " :+: (N $ density ^. symbol) :+:
+  S ", where " :+: (N $ thFluxVect ^. symbol)) 
+  --TODO: Finish this description and do it better. I need to
+  --  figure out the best way to encode this information.
+  

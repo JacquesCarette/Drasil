@@ -2,10 +2,10 @@
 module ASTHTML where
 
 import ASTInternal (Variable)
-import Spec (DType)
+import LayoutObjs (DType)
 import Symbol (Symbol)
-import Unit (USymb)
-import ASTCode
+import Spec (USymb)
+import ASTCode (Code)
 
 data Expr = Var Variable
           | Dbl Double

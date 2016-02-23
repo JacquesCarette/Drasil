@@ -4,11 +4,12 @@ module Example1 where
 import ASTInternal (Expr(..))
 import SI_Units
 import Unicode (Tau(..))
-import Unit (Unit(..), USymb(..), UDefn(..), DerUChunk(..), FundUnit(..),
+import Unit (Unit(..), UDefn(..), DerUChunk(..), FundUnit(..),
   from_udefn)
-import Chunk (VarChunk(..), ConceptChunk(..))
+import Chunk (VarChunk(..), ConceptChunk(..), makeCC, makeVC)
 import EqChunk (EqChunk(..), fromEqn)
 import Symbol
+import Spec (USymb(..),Spec(..))
 
 import Control.Lens ((^.))
 
@@ -19,7 +20,7 @@ heat_transfer :: DerUChunk
 heat_transfer = DUC (UD ht_con ht_symb) heat_transfer_eqn
 
 ht_con :: ConceptChunk
-ht_con = CC "Heat transfer" "Heat transfer"
+ht_con = makeCC "Heat transfer" "Heat transfer"
 
 ht_symb :: USymb
 ht_symb = from_udefn heat_transfer_eqn
@@ -36,7 +37,7 @@ c = Atomic "c"
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
 tau_c :: VarChunk
-tau_c = VC "tau_c" "clad thickness" (sub (Special Tau_L) c)
+tau_c = makeVC "tau_c" "clad thickness" (sub (Special Tau_L) c)
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}
@@ -45,8 +46,8 @@ h_c_eq :: Expr
 h_c_eq = 2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b))
 
 h_c :: EqChunk
-h_c = fromEqn "h_c" 
-  "convective heat transfer coefficient between clad and coolant"
+h_c = fromEqn "h_c" (S 
+  "convective heat transfer coefficient between clad and coolant")
   (sub h c) heat_transfer h_c_eq
 
 -- --------------- --------------- --------------- ---------------
@@ -56,8 +57,8 @@ h_g_eq :: Expr
 h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 
 h_g :: EqChunk
-h_g = fromEqn "h_g" 
-  "effective heat transfer coefficient between clad and fuel surface"
+h_g = fromEqn "h_g" (S
+  "effective heat transfer coefficient between clad and fuel surface")
   (sub h (Atomic "g")) heat_transfer h_g_eq
 
 --------------- --------------- --------------- ---------------
@@ -65,18 +66,18 @@ h_g = fromEqn "h_g"
 --------------- --------------- --------------- ---------------
 
 h_b :: VarChunk
-h_b = VC "h_b" "initial coolant film conductance" (sub h (Atomic "b"))
+h_b = makeVC "h_b" "initial coolant film conductance" (sub h (Atomic "b"))
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_p ---------------}
 --------------- --------------- --------------- ---------------
 
 h_p :: VarChunk
-h_p = VC "h_p" "initial gap film conductance" (sub h (Atomic "p"))
+h_p = makeVC "h_p" "initial gap film conductance" (sub h (Atomic "p"))
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin k_c ---------------}
 --------------- --------------- --------------- ---------------
 
 k_c :: VarChunk
-k_c = VC "k_c" "clad conductivity" (sub h c)
+k_c = makeVC "k_c" "clad conductivity" (sub h c)

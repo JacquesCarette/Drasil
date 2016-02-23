@@ -12,6 +12,7 @@ import Chunk
 import Control.Lens
 import ExprTools
 import Config (verboseDDDescription)
+import LayoutObjs
 
 
 expr :: Expr -> H.Expr
@@ -93,5 +94,5 @@ buildDescription c = descLines (
 descLines :: [VarChunk] -> H.Spec  
 descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
-  (H.S " is the " H.:+: H.S (vc ^. descr)))
+  (H.S " is the " H.:+: (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs

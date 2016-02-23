@@ -5,7 +5,7 @@ import Text.PrettyPrint.HughesPJ
 import PrintTeX (genTeX)
 import PrintHTML (genHTML)
 import ASTInternal (DocType (SRS,LPM,Code,Website))
-import Spec (Document)
+import LayoutObjs (Document)
 import Format(Format(TeX, HTML))
 import HTMLHelpers (makeCSS)
 

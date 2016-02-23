@@ -3,31 +3,32 @@ module Chunk where
 
 import Control.Lens
 import Symbol
+import Spec
 
 -------- BEGIN CLASSES --------
 
 -- BEGIN CHUNK --
 -- a chunk has a name
 class Chunk c where
-   name :: Simple Lens c String
+  name :: Simple Lens c String
 -- END CHUNK --
-   
+  
 -- BEGIN CONCEPT --
 -- a concept has a description
 class Chunk c => Concept c where
-   descr :: Simple Lens c String
+  descr :: Simple Lens c Spec
 -- END CONCEPT --
 
 -- BEGIN QUANTITY --
 -- a quantity is a concept that can be represented graphically
 class Concept c => Quantity c where
-   symbol :: Simple Lens c Symbol
+  symbol :: Simple Lens c Symbol
 -- END QUANTITY --
 
 -------- BEGIN DATATYPES/INSTANCES --------
 
 -- BEGIN CONCEPTCHUNK --
-data ConceptChunk = CC String String
+data ConceptChunk = CC String Spec
 instance Chunk ConceptChunk where
   name f (CC a b) = fmap (\x -> CC x b) (f a)
 instance Concept ConceptChunk where
@@ -36,7 +37,7 @@ instance Concept ConceptChunk where
 
 -- BEGIN VARCHUNK --
 data VarChunk = VC { vname :: String
-                   , vdesc :: String
+                   , vdesc :: Spec
                    , vsymb :: Symbol}
 
 instance Eq VarChunk where
@@ -52,3 +53,10 @@ instance Quantity VarChunk where
   symbol f (VC n d s) = fmap (\x -> VC n d x) (f s)
 
 -- END VARCHUNK --
+
+--Helper Function(s)--
+makeCC :: String -> String -> ConceptChunk
+makeCC nam des = CC nam (S des)
+
+makeVC :: String -> String -> Symbol -> VarChunk
+makeVC nam des sym = VC nam (S des) sym

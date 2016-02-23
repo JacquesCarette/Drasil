@@ -10,16 +10,17 @@ import Control.Monad.Reader
 import ASTTeX
 import ToTeX
 import qualified ASTInternal as A
-import qualified Spec as S
+import Spec (USymb(..))
 import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import Helpers
 import Unicode
 import Format (Format(TeX))
-import Unit (USymb(..))
+import Unit
 import Symbol (Symbol(..))
 import PrintC (printCode)
+import qualified LayoutObjs as L
 
-genTeX :: A.DocType -> S.Document -> Doc
+genTeX :: A.DocType -> L.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
@@ -213,9 +214,9 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 ------------------BEGIN DATA DEFINITION PRINTING-------------------
 -------------------------------------------------------------------
 
-makeDDefn :: S.DType -> [(String,LayoutObj)] -> Doc
+makeDDefn :: L.DType -> [(String,LayoutObj)] -> Doc
 makeDDefn _ []      = error "Empty definition"
-makeDDefn S.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
+makeDDefn L.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
 
 beginDataDefn :: Doc
 beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"

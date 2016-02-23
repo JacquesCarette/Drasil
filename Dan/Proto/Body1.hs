@@ -6,7 +6,7 @@ import Data.List (intersperse)
 import Data.Char (toLower)
 
 import Example1
-import Spec (Spec(..), LayoutObj(..), Document(..), DType(Data))
+import Spec (Spec(..))
 import Format (FormatC(..))
 import Unit (Unit(..))
 import SI_Units (si_units)
@@ -15,6 +15,7 @@ import Control.Lens ((^.))
 import RecipeTools
 import ToCode
 import ASTCode
+import LayoutObjs
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, 
   s3, s3_dd1, s3_dd2, s4, s4c :: LayoutObj
@@ -31,7 +32,7 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
 
 s1_table = Table [S "Symbol", S "Description"] $ mkTable
   [(\x -> Sy (x ^. unit)),
-   (\x -> S $ (x ^. descr) ++ " (" ++ (map toLower (x ^. name)) ++ ")")
+   (\x -> (x ^. descr) :+: S (" (" ++ map toLower (x ^. name) ++ ")"))
   ] si_units
 
 s2 = Section 0 (S "Table of Symbols") [s2_intro, s2_table]
@@ -46,7 +47,7 @@ s2_intro = Paragraph $
   
 s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
   [(\ch -> N (ch ^. symbol)) , 
-   (\ch -> S $ ch ^. descr), 
+   (\ch -> ch ^. descr), 
    (\ch -> Sy $ ch ^. unit)]
   [h_g,h_c] 
 

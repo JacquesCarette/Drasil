@@ -5,9 +5,6 @@ module Spec where
 import Format (FormatC)
 import Unicode (Render)
 import Symbol
-import Unit (USymb)
-import ASTCode
-import EqChunk
 
 --For writing chunks in a specification language that can be converted to TeX
 infixr 5 :+:
@@ -24,25 +21,22 @@ data Spec where
   F     :: FormatC -> Spec -> Spec  -- Special formatting for certain symbols & special
                                     -- chars (e.g. hat, dot, etc.)
 
-type Title    = Spec
-type Contents = Spec
-type Author   = Spec
-type Bullets  = [Spec]
-type Items    = [Spec]
-type Depth    = Int
+--Moving this here to avoid cyclic imports
+data USymb = Unitless
+           | UName Symbol
+           | UProd [USymb]
+           | UPow USymb Integer --can be negative, should not be 0
+           | UDiv USymb USymb   --Get proper division (not neg pow)
+                                --  necessary for things like J/(kg*C)
+-- Language of unit equations, to define a unit relative
+-- to another
 
-data Document = Document Title Author [LayoutObj]
-
---Types of layout objects we deal with explicitly
-data LayoutObj = Table [Spec] [[Spec]] -- table header then data
-               | Section Depth Title [LayoutObj] 
-                  --Section = 0 depth, subsection = 1, subsub = 2 ... etc.
-               | Paragraph Contents
-               | EqnBlock Contents
-               | CodeBlock Code
-               | Definition DType (EqChunk)
-               | BulletList Bullets
-               | NumberedList Items
-
--- Types of definitions
-data DType = Data
+--Maybe spec could become a functor/applicative/monad?
+-- (if we generalize mapping somehow)
+sMap :: (String->String) -> Spec -> Spec
+sMap f (S a) = S (f a)
+sMap f (a :-: b) = sMap f a :-: sMap f b
+sMap f (a :^: b) = sMap f a :^: sMap f b
+sMap f (a :+: b) = sMap f a :+: sMap f b
+sMap f (a :/: b) = sMap f a :/: sMap f b
+sMap _ a = a

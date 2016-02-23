@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-} 
 module ASTCode where
 
-import ASTInternal
+type Variable = String
 
 data Code = C [Method]
 type Method = (Declaration, [Statement])

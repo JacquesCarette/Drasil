@@ -3,7 +3,7 @@ module HTMLHelpers where
 
 import Text.PrettyPrint
 import Data.List (intersperse)
-import Spec (Document)
+import LayoutObjs (Document)
 
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
 html      = wrap "html" []

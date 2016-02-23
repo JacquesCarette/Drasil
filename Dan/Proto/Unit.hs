@@ -1,29 +1,21 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Unit (
-    USymb(..), UDefn(..)        -- languages
+    UDefn(..)        -- languages
   , Unit(..), UnitEq(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn(..)                -- wrapper for 'Unit' class
-  , from_udefn
-  , makeDerU
-  , unitCon
+  , from_udefn, makeDerU, unitCon, unitless
   ) where
 
-import Chunk (ConceptChunk(..), Chunk(..), Concept(..))
-import Symbol (Symbol)
+import Chunk (ConceptChunk(..), Chunk(..), Concept(..),makeCC)
 import Control.Lens (Simple, Lens, set, (^.))
+import Spec (Spec(..), USymb(..))
 
 -- Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)
-data USymb = UName Symbol
-           | UProd [USymb]
-           | UPow USymb Integer -- can be negative, should not be 0
-           | UDiv USymb USymb   --Get proper division (not using negative powers)
-                                --  necessary for things like J/(kg*C)
--- Language of unit equations, to define a unit relative
--- to another
+
 data UDefn = USynonym USymb      -- to define straight synonyms
            | UScale Double USymb -- scale, i.e. *
            | UShift Double USymb -- shift, i.e. +
@@ -44,7 +36,7 @@ makeDerU :: ConceptChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
 unitCon :: String -> ConceptChunk
-unitCon s = CC s s
+unitCon s = CC s (S s)
 ---------------------------------------------------------
 
 -- for defining fundamental units
@@ -92,3 +84,6 @@ ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 instance Unit    UnitDefn where unit  = ulens unit
 instance Chunk   UnitDefn where name  = ulens name
 instance Concept UnitDefn where descr = ulens descr
+
+unitless :: FundUnit
+unitless = UD (makeCC "unitless" "unitless") Unitless

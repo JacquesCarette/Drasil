@@ -6,15 +6,17 @@ import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Chunk (Quantity)
 
 data Expr where
- V    :: Variable -> Expr
- Dbl  :: Double -> Expr
- Int  :: Integer -> Expr
- (:^) :: Expr -> Expr -> Expr
- (:*) :: Expr -> Expr -> Expr
- (:/) :: Expr -> Expr -> Expr
- (:+) :: Expr -> Expr -> Expr
- (:-) :: Expr -> Expr -> Expr
- C    :: Quantity c => c -> Expr
+ V     :: Variable -> Expr
+ Dbl   :: Double -> Expr
+ Int   :: Integer -> Expr
+ (:^)  :: Expr -> Expr -> Expr
+ (:*)  :: Expr -> Expr -> Expr
+ (:/)  :: Expr -> Expr -> Expr
+ (:+)  :: Expr -> Expr -> Expr
+ (:-)  :: Expr -> Expr -> Expr
+ (:=)  :: Expr -> Expr -> Expr
+ Deriv :: Expr -> Expr -> Expr
+ C     :: Quantity c => c -> Expr
 
 type Variable = String
 

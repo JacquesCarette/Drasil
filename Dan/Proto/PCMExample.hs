@@ -9,25 +9,30 @@ import Symbol
 import UnitalChunk
 import PCMUnits
 import SymbolAlphabet
+import Chunk (ConceptChunk(..))
 
 -- import Control.Lens ((^.))
 pcmSymbols :: [UnitalChunk]
-pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap_W,tank_D,ht_gen_vol,ht_xfer_co,
-  ht_xfer_CW,tank_L,mass,water_m, --norm_vect,
+pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap,htCap_Liq,htCap_W,tank_D,ht_gen_vol,
+  ht_xfer_co,ht_xfer_CW,tank_L,mass,water_m, --norm_vect,
   ht_flux, --thermFlux_vect,
-  ht_flux_C,ht_flux_in,ht_flux_out,time,temp,temp_boil,
-  temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,tank_vol,
+  ht_flux_C,ht_flux_in,ht_flux_out,time,temp, --temp_boil,
+  temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol, --tank_vol,
   water_vol,density,water_dense,dummyVar]
 
-coil_SA, hIn_SA, hOut_SA, htCap_W, tank_D, ht_gen_vol,ht_xfer_co,ht_xfer_CW,
-  tank_L,mass,water_m,ht_flux,ht_flux_C,ht_flux_in,ht_flux_out,time,temp,
-  temp_boil,temp_coil,temp_env,time_final,temp_init,temp_water,
-  temp_diff,vol,tank_vol,water_vol,density,water_dense,dummyVar :: UnitalChunk
+coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
+  ht_xfer_co,ht_xfer_CW, tank_L,mass,water_m,ht_flux,ht_flux_C,ht_flux_in,
+  ht_flux_out,time,temp,--temp_boil,
+  temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
+  water_vol,density,water_dense,dummyVar :: UnitalChunk
 coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
 hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
               (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
               (sub cA (Atomic "out")) m_2
+htCap       = makeUC "C" "specific heat capacity" cC heat_capacity
+htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
+              heat_capacity
 htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
               heat_capacity
 tank_D      = makeUC "D" "diameter of tank" cD metre
@@ -50,8 +55,8 @@ ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU
 ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermFluxU
 time        = makeUC "t" "time" lT second
 temp        = makeUC "T" "temperature" cT centigrade
-temp_boil   = makeUC "T_boil" "temperature at boiling point" 
-              (sub cT (Atomic "boil")) centigrade
+-- temp_boil   = makeUC "T_boil" "temperature at boiling point" 
+              -- (sub cT (Atomic "boil")) centigrade
 temp_coil   = makeUC "T_coil" "temperature of coil" 
               (sub cT cC) centigrade
 temp_env    = makeUC "T_env" "temperature of environment" 
@@ -64,11 +69,31 @@ temp_water  = makeUC "T_W" "temperature of water"
 temp_diff   = makeUC "deltaT" "temperature difference" 
               (Catenate (Special Delta) cT) centigrade
 vol         = makeUC "V" "volume" cV m_3
-tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
-                (sub cV (Atomic "tank")) m_3
+-- tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
+                -- (sub cV (Atomic "tank")) m_3
 water_vol   = makeUC "V_W" "volume of water" (sub cV cW) m_3
 density     = makeUC "rho" "density, mass per unit volume" (Special Rho_L) densityU
 water_dense = makeUC "rho_W" "density of water" (sub (Special Rho_L) cW) densityU
 dummyVar    = makeUC "tau" "dummy variable for integration over time" 
                 (Special Tau_L) second
 --melt_frac   = makeUC "Phi" "melt fraction" (Special Phi) unitless
+
+----Acronyms-----
+acronyms :: [ConceptChunk]
+acronyms = [assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
+  physSysDescr,requirement,softwareRS,sWHS,theoreticMod]
+  
+assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
+  physSysDescr,requirement,softwareRS,sWHS,theoreticMod :: ConceptChunk
+assumption    = CC "A" "Assumption"
+dataDefn      = CC "DD" "Data Definition"
+genDefn       = CC "GD" "General Definition"
+goalStmt      = CC "GS"  "Goal Statement"
+instanceMod   = CC "IM" "Instance Model"
+likelyChange  = CC "LC" "Likely Change"
+oDE           = CC "ODE" "Ordinary Differential Equation"
+physSysDescr  = CC "PS" "Physical System Description"
+requirement   = CC "R" "Requirement"
+softwareRS    = CC "SRS" "Software Requirements Specification"
+sWHS          = CC "SWHS" "Solar Water Heating System"
+theoreticMod  = CC "T" "Theoretical Model"

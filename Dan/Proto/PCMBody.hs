@@ -1,8 +1,8 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
 module PCMBody where
-
--- import Data.List (intersperse)
+import Data.Char (toLower)
+import Data.List (intersperse)
 import Helpers
 import PCMExample
 import Spec (Spec(..), LayoutObj(..), Document(..)) --, DType(Data))
@@ -20,18 +20,19 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 s1, s1_intro, s1_1, s1_1_intro, s1_1_table, s1_2, s1_2_intro, 
-  s1_2_table, s1_3, s1_3_table :: LayoutObj
+  s1_2_table, s1_3, s1_3_table,s4,s4_intro,s4_1,s4_1_intro,
+  s4_1_1,s4_1_1_intro,s4_1_1_bullets :: LayoutObj
 
 pcm_srs :: Document  
 pcm_srs = Document (S "Software Requirements Specification for Solar Water " :+:
           S "Heating Systems Incorporating Phase Change Material") 
           (S "Thulasi Jegatheesan") [s1,s4]
 
-s1 = Section (S "Reference Material") [s1_intro, s1_1, s1_2, s1_3]
+s1 = Section 0 (S "Reference Material") [s1_intro, s1_1, s1_2, s1_3]
 
 s1_intro = Paragraph (S "This section records information for easy reference")
 
-s1_1 = SubSection (S "Table of Units") [s1_1_intro, s1_1_table]
+s1_1 = Section 1 (S "Table of Units") [s1_1_intro, s1_1_table]
 
 s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
            (F Grave (S "e")) :+: S "me International d'Unit" :+:
@@ -47,7 +48,7 @@ s1_1_table = Table [S "Symbol", S "Description", S "Name"] $ mkTable
    (\x -> S (x ^. name))
   ] this_si
 
-s1_2 = SubSection (S "Table of Symbols") [s1_2_intro, s1_2_table]
+s1_2 = Section 1 (S "Table of Symbols") [s1_2_intro, s1_2_table]
 
 s1_2_intro = Paragraph $ 
   S "The table that follows summarizes the symbols used in this " :+:
@@ -62,27 +63,71 @@ s1_2_table = Table [S "Symbol", S "Units", S "Description"] $ mkTable
    ]
   pcmSymbols
 
-s1_3 = SubSection (S "Abbreviations and Acronyms") [s1_3_table]
+s1_3 = Section 1 (S "Abbreviations and Acronyms") [s1_3_table]
 
-s1_3_table = Table [S "Symbol", S "Description"] (map (map S)
-  [ --Should turn these into chunks
-  ["A", "Assumption"],["DD","Data Definition"],["GD","General Definition"],
-  ["GS", "Goal Statement"],["IM","Instance Model"],["LC","Likely Change"],
-  ["ODE","Ordinary Differential Equation"],["PS","Physical System Description"],
-  ["R","Requirement"],["SRS","Software Requirements Specification"],
-  ["SWHS","Solar Water Heating System"],["T","Theoretical Model"]
-  ])
+s1_3_table = Table [S "Symbol", S "Description"] $ mkTable
+  [(\ch -> S $ ch ^. name),
+   (\ch -> S $ ch ^. descr)]
+  acronyms
 
-s4 = Section (S "Problem Description") [s4_intro, s4_1]
+s4 = Section 0 (S "Specific System Description") [s4_intro, s4_1,s4_2]
 
-s4_intro = Paragraph $ S "TODO: Adapt the original to this"
+s4_intro = Paragraph $ S "This section first presents the problem " :+:
+  S "description, which gives a high-level view of the problem to be solved" :+:
+  S ". This is followed by the solution characteristics specification, " :+:
+  S "which presents the assumptions, theories, definitions and finally the " :+:
+  S "instance model (ODE) that models the solar water heating tank."
 
-s4_1 = SubSection (S "Terminology and Definitions") [s4_1_intro, s4_1_bullets]
+s4_1 = Section 1 (S "Problem Description") [s4_1_intro, s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+:
+s4_1_intro = Paragraph $ S (sWHS ^. name) :+: S " is a computer program " :+:
+  S "developed to investigate the heating of water in a solar water heating" :+:
+  S " tank."
+
+s4_1_1 = Section 2 (S "Terminology and Definitions") [s4_1_1_intro, s4_1_1_bullets]
+  
+s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+:
   S "are used in subsequent sections and their meaning, with the purpose of ":+:
   S "reducing ambiguity and making it easier to correctly understand the ":+:
   S "requirements:"
   
-s4_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+: S ": " :+:
-  S (c ^. descr)) [thermFluxU, heat_capacity]
+s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+: 
+  S ": " :+: S (c ^. descr)) [thermFluxU, heat_capacity]
+  
+s4_1_2 = Section 2 (S $ physSysDescr ^. descr) [s4_1_2_intro]
+
+s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
+--TODO: REFERENCING! (Add to Spec; Ref LayoutObj)
+  S ", includes the following elements:"
+--TODO: Simple list (Add to LayoutObj)
+--TODO: Figures (Add to LayoutObj)
+
+s4_1_3 = Section 2 (S $ (goalStmt ^. descr) ++ "s") [s4_1_3_intro]
+s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
+  S "temperature of the water, and material properties, the goal statement is"
+--TODO: Simple list.
+
+s4_2 = Section 1 (S "Solution Characteristics Specification") 
+  [s4_2_intro,s4_2_1]
+
+s4_2_intro = Paragraph $ S "The " :+: S (map toLower (instanceMod ^. descr)) :+:
+  S (" " ++ (paren $ oDE ^. name)) :+: S " that governs " :+: 
+  S (sWHS ^. name) :+: S " is presented in " :+: --TODO: Subsec reference
+  S ". The information to understand the meaning of the " :+:
+  S (map toLower (instanceMod ^. descr)) :+: S " and its derivation is also" :+:
+  S " presented, so that the " :+: S (map toLower (instanceMod ^. descr)) :+:
+  S " can be verified."
+  
+s4_2_1 = Section 2 (S $ assumption ^. descr ++ "s") [s4_2_1_intro]
+
+s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
+  S "and helps in developing the theoretical model by filling in the " :+:
+  S "missing information for the physical system. The numbers given in the " :+:
+  S "square brackets refer to the " :+: 
+  S (concat $ intersperse ", " 
+  (map (\ch -> map toLower (ch ^. descr) ++ " " ++ sqbrac (ch ^. name)) 
+  [theoreticMod, genDefn, dataDefn, instanceMod])) :+: S ", or " :+:
+  S ((map toLower $ likelyChange ^. descr) ++ " " ++ 
+  sqbrac (likelyChange ^. name)) :+:
+  S (", in which the respective " ++ (map toLower $ assumption ^. descr)) :+:
+  S " is used."

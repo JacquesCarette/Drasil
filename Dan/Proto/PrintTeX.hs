@@ -51,8 +51,7 @@ listpackages (p:[]) = usepackage p
 listpackages (p:ps) = usepackage p $$ listpackages ps
 
 printLO :: LayoutObj -> Doc
-printLO (Section t contents)    = sec (pCon Plain t) $$ print contents
-printLO (SubSection t contents) = subsec (pCon Plain t) $$ print contents
+printLO (Section d t contents)  = sec d (pCon Plain t) $$ print contents
 printLO (Paragraph contents)    = text (pCon Plain contents)
 printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows)            = makeTable rows

@@ -19,7 +19,7 @@ import ASTCode
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, 
   s3, s3_dd1, s3_dd2, s4, s4c :: LayoutObj
 
-s1 = Section (S "Table of Units") [s1_intro, s1_table]
+s1 = Section 0 (S "Table of Units") [s1_intro, s1_table]
 
 s1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
            (F Grave (S "e")) :+: S "me International d'Unit" :+:
@@ -34,7 +34,7 @@ s1_table = Table [S "Symbol", S "Description"] $ mkTable
    (\x -> S $ (x ^. descr) ++ " (" ++ (map toLower (x ^. name)) ++ ")")
   ] si_units
 
-s2 = Section (S "Table of Symbols") [s2_intro, s2_table]
+s2 = Section 0 (S "Table of Symbols") [s2_intro, s2_table]
 
 s2_intro = Paragraph $ 
   S "The table that follows summarizes the symbols used in this " :+:
@@ -50,13 +50,13 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
    (\ch -> Sy $ ch ^. unit)]
   [h_g,h_c] 
 
-s3 = Section (S "Data Definitions") [s3_dd1, s3_dd2]
+s3 = Section 0 (S "Data Definitions") [s3_dd1, s3_dd2]
 
 s3_dd1 = Definition Data h_g
 
 s3_dd2 = Definition Data h_c
 
-s4 = Section (S "Code -- Test") [s4c]
+s4 = Section 0 (S "Code -- Test") [s4c]
 
 s4c = CodeBlock (toCode CLang Calc h_g)
 
@@ -74,7 +74,7 @@ lpmBody = Document ((S "Literate Programmer's Manual for ") :+:
   (S "and ") :+: (N $ h_c ^. symbol)) (S "Spencer Smith") [l1]
 
 l1 :: LayoutObj
-l1 = Section (Empty) [ Paragraph (
+l1 = Section 0 (Empty) [ Paragraph (
   S "@ First we define the overall structure of the library of functions." :+:
   S "\n\n@c\n@<Header files@>@/\n@<Functions@>@/\n\n" :+:
   S "Although not necessary for this simple example, we will include the " :+:

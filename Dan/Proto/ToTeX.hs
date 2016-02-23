@@ -68,15 +68,14 @@ lay (Table hdr lls)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
-lay (Section title layoutComponents) = 
-  T.Section (spec title) (createLayout layoutComponents)
-lay (SubSection title contents) = 
-  T.SubSection (spec title) (createLayout contents)
+lay (Section depth title layoutComponents) = 
+  T.Section depth (spec title) (createLayout layoutComponents)
 lay (Paragraph c)       = T.Paragraph (spec c)
 lay (EqnBlock c)        = T.EqnBlock (spec c)
 lay (CodeBlock c)       = T.CodeBlock c
 lay (Definition Data c) = T.Definition Data $ makeDDPairs c
 lay (BulletList cs)     = T.List T.Item $ map spec cs
+lay (NumberedList cs)   = T.List T.Enum $ map spec cs
 
 makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
 makeDDPairs c = [

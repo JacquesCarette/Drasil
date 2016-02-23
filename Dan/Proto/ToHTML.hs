@@ -64,15 +64,15 @@ createLayout (l:ls) = lay l : createLayout ls
 lay :: LayoutObj -> H.LayoutObj
 lay (Table hdr lls)     = 
   H.Table ["table"] $ (map spec hdr) : (map (map spec) lls)
-lay (Section title contents) = 
-  H.HDiv ["section"] ((H.Header 3 (spec title)):(createLayout contents))
-lay (SubSection title contents) = 
-  H.HDiv ["subsection"] ((H.Header 4 (spec title)):(createLayout contents))
+lay (Section depth title contents) = 
+  H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
+  ((H.Header (depth+2) (spec title)):(createLayout contents))
 lay (Paragraph c)       = H.Paragraph (spec c)
 lay (EqnBlock c)        = H.HDiv ["equation"] [H.Tagless (spec c)]
 lay (CodeBlock c)       = H.CodeBlock c
 lay (Definition Data c) = H.Definition Data $ makeDDPairs c
 lay (BulletList cs)     = H.List H.Unordered $ map spec cs
+lay (NumberedList cs)   = H.List H.Ordered $ map spec cs
 
 makeDDPairs :: EqChunk -> [(String,H.LayoutObj)]
 makeDDPairs c = [

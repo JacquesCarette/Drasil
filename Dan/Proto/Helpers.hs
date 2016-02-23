@@ -36,6 +36,7 @@ paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"
 quotes = \x -> "\"" ++ x ++ "\""
+sqbrac = \x -> "[" ++ x ++ "]"
 
 --capitalize
 capitalize :: String -> String
@@ -85,11 +86,12 @@ count b1 = bslash <> text "newcounter" <> br b1
 renewcomm :: String -> String -> Doc
 renewcomm b1 b2 = bslash <> text "renewcommand" <> br ("\\" ++ b1) <> br b2
 
-sec :: String -> Doc
-sec b1 = bslash <> text "section*" <> br b1
-
-subsec :: String -> Doc
-subsec b1 = bslash <> text "subsection*" <> br b1
+sec :: Int -> String -> Doc
+sec d b1 
+  | d < 0 = error "Cannot have section with negative depth"
+  | d > 2 = error "Section depth must be from 0-2"
+  | otherwise = bslash <> text (concat $ replicate d "sub") <> text "section*" 
+      <> br b1
 
 newline :: Doc
 newline = bslash <> text "newline"

@@ -36,11 +36,10 @@ type Title    = Spec
 type Author   = Spec
 type Contents = Spec
 type Items    = [Spec]
-
+type Depth    = Int
 
 data LayoutObj = Table [[Spec]]
-               | Section Title [LayoutObj]
-               | SubSection Title [LayoutObj]
+               | Section Depth Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code

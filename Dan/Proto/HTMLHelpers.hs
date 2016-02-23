@@ -48,6 +48,7 @@ span_tag = \t -> wrap "span" t . text
 makeCSS :: Document -> Doc  
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
+  text "body {min-width: 400px; max-width: 1400px;}",
   text ".title {text-align:center;}",
   text ".author {text-align:center;}",
   text ".paragraph {text-align:justify;}",
@@ -84,7 +85,8 @@ makeCSS _ = vcat [
     text "  white-space: -o-pre-wrap;",
     text "  background: #faf8f0;",
     text "}"
-    ]
+    ],
+  text ".list {text-align:left;}"
   ]
 
 linkCSS :: String -> Doc  

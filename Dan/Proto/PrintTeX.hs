@@ -95,7 +95,7 @@ symbol (FormatS f s) = sFormat f s
 
 sFormat :: FormatC -> Symbol -> String
 sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
-sFormat Vector s = "\\bf{" ++ symbol s ++ "}"
+sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
 sFormat Grave  s = "\\`{" ++ symbol s ++ "}"
 sFormat Acute  s = "\\'{" ++ symbol s ++ "}"
 -----------------------------------------------------------------
@@ -117,6 +117,7 @@ p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
 mul :: Expr -> Expr -> String
 mul x y@(Dbl _) = p_expr x ++ "*" ++ p_expr y
 mul x y@(Int _) = p_expr x ++ "*" ++ p_expr y
+mul x@(Sym (Special _)) y = p_expr x ++ brace (p_expr y)
 mul x y         = p_expr x ++ p_expr y
 
 -----------------------------------------------------------------

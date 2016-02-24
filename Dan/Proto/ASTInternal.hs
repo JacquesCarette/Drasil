@@ -5,6 +5,12 @@ module ASTInternal where
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Chunk (Quantity)
 
+infixr 8 :^
+infixl 7 :*
+infixl 7 :/
+infixl 6 :+
+infixl 6 :-
+infix  4 :=
 data Expr where
  V     :: Variable -> Expr
  Dbl   :: Double -> Expr

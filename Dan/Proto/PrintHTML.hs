@@ -12,7 +12,7 @@ import Spec (USymb(..))
 import HTMLHelpers
 import Helpers (brace)
 import Unicode
-import Format (Format(HTML))
+import Format (Format(HTML),FormatC(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
@@ -36,7 +36,7 @@ printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
 printLO (Tagless contents)     = text $ p_spec contents
 printLO (Table ts rows)         = makeTable ts rows
 printLO (CodeBlock c)           = code $ printCode c
-printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
+printLO (Definition dtype ssPs) = makeDefn dtype ssPs
 printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t items)          = makeList t items
 
@@ -73,6 +73,7 @@ t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
 symbol :: Symbol -> String
+symbol NA               = ""
 symbol (Atomic s)       = s
 symbol (Special s)      = render HTML s
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
@@ -83,13 +84,21 @@ symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (FormatS Vector s)       = "<b>" ++ symbol s ++ "</b>"
+symbol (FormatS _ _)       = error $ "Cannot use special formatting other " ++                             "than Vector on Symbols in HTML (see PrintHTML)"
 
 uSymb :: USymb -> String
+uSymb Unitless            = "unitless"
 uSymb (UName s)           = symbol s
-uSymb (UProd l)           = foldr1 (++) (map uSymb l)
+uSymb (UProd l)           = foldr1 
+  (\x -> (if (x == "unitless") then (""++) else (++x))) (map uSymb l)
+uSymb (UPow Unitless _)   = uSymb Unitless
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
+uSymb (UDiv n Unitless)   = uSymb n
+uSymb (UDiv Unitless d)   = uSymb (UDiv (UName (Atomic "1")) d)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
-uSymb (UDiv n d)      = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
+uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
+
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
@@ -104,6 +113,7 @@ p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
 p_expr (Pow a b)  = p_expr a ++ sup (p_expr b)
 p_expr (Sym s)    = symbol s
+p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
 
 mul :: Expr -> Expr -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
@@ -130,17 +140,20 @@ makeHeaderCols ls = vcat $ map (th . text . p_spec) ls
 makeColumns ls = vcat $ map (td . text . p_spec) ls
 
 -----------------------------------------------------------------
-------------------BEGIN DATA DEFINITION PRINTING-----------------
+------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
-makeDDefn :: L.DType -> [(String,LayoutObj)] -> Doc
-makeDDefn _ []      = error "Empty definition"
-makeDDefn L.Data ps = wrap "table" ["ddefn"] (makeDDRows ps)
+makeDefn :: L.DType -> [(String,LayoutObj)] -> Doc
+makeDefn _ []     = error "Empty definition"
+makeDefn dt ps    = wrap "table" [dtag dt] (makeDRows ps)
+  where dtag L.Data = "ddefn"
+        dtag L.Theory = "tdefn"
+        dtag L.General = "gdefn"
 
-makeDDRows :: [(String,LayoutObj)] -> Doc
-makeDDRows []         = error "No fields to create DD table"
-makeDDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
-makeDDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDDRows ps
+makeDRows :: [(String,LayoutObj)] -> Doc
+makeDRows []         = error "No fields to create DD table"
+makeDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------

@@ -31,7 +31,7 @@ sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
 --basic plaintext manipulation
-paren,brace,dollar,quotes :: String -> String
+paren,brace,dollar,quotes,sqbrac :: String -> String
 paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"

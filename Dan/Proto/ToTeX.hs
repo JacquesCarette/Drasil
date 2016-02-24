@@ -4,7 +4,7 @@ module ToTeX where
 import ASTInternal (Expr(..))
 import Spec
 import qualified ASTTeX as T
-import Unicode (render)
+import Unicode (render, Delta(..))
 import Format (Format(TeX), FormatC(..))
 import EqChunk
 import Unit
@@ -13,18 +13,22 @@ import Control.Lens
 import ExprTools
 import Config (verboseDDDescription, numberedDDEquations)
 import LayoutObjs
+import Symbol
 
 
 expr :: Expr -> T.Expr
-expr (V v)    = T.Var v
-expr (Dbl d)  = T.Dbl d
-expr (Int i)  = T.Int i
-expr (a :* b) = T.Mul (expr a) (expr b)
-expr (a :+ b) = T.Add (expr a) (expr b)
-expr (a :/ b) = T.Frac (replace_divs a) (replace_divs b)
-expr (a :^ b) = T.Pow (expr a) (expr b)
-expr (a :- b) = T.Sub (expr a) (expr b)
-expr (C c)    = T.Sym (c ^. symbol)
+expr (V v)        = T.Var v
+expr (Dbl d)      = T.Dbl d
+expr (Int i)      = T.Int i
+expr (a :* b)     = T.Mul (expr a) (expr b)
+expr (a :+ b)     = T.Add (expr a) (expr b)
+expr (a :/ b)     = T.Frac (replace_divs a) (replace_divs b)
+expr (a :^ b)     = T.Pow (expr a) (expr b)
+expr (a :- b)     = T.Sub (expr a) (expr b)
+expr (a := b)     = T.Eq  (expr a) (expr b)
+expr (C c)        = T.Sym (c ^. symbol)
+expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Delta_L)) (expr a))
+                           (T.Mul (T.Sym (Special Delta_L)) (expr b))
 --expr _ = error "Unimplemented expression transformation in ToTeX."
 
 replace_divs :: Expr -> T.Expr
@@ -74,17 +78,23 @@ lay (Section depth title layoutComponents) =
 lay (Paragraph c)       = T.Paragraph (spec c)
 lay (EqnBlock c)        = T.EqnBlock (spec c)
 lay (CodeBlock c)       = T.CodeBlock c
-lay (Definition Data c) = T.Definition Data $ makeDDPairs c
+lay (Definition dt c)   = T.Definition dt $ makePairs dt c
 lay (BulletList cs)     = T.List T.Item $ map spec cs
 lay (NumberedList cs)   = T.List T.Enum $ map spec cs
 
-makeDDPairs :: EqChunk -> [(String,T.LayoutObj)]
-makeDDPairs c = [
+makePairs :: DType -> EqChunk -> [(String,T.LayoutObj)]
+makePairs Data c = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
   ("Units",       T.Paragraph $ T.Sy $ c ^. unit),
   ("Equation",    eqnStyleDD $ buildEqn c),
   ("Description", T.Paragraph (buildDescription c))
   ]
+makePairs Theory c = [
+  ("Label",       T.Paragraph $ T.N $ c ^. symbol),
+  ("Equation",    eqnStyleDD $ buildEqn c),
+  ("Description", T.Paragraph (buildDescription c))
+  ]
+makePairs General _ = error "Not yet implemented"
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj

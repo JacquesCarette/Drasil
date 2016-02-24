@@ -8,11 +8,10 @@ import Symbol
 import UnitalChunk
 import PCMUnits
 import SymbolAlphabet
-import Chunk (ConceptChunk(..))
-import EqChunk (fromEqn)
+import Chunk (ConceptChunk(..),symbol,makeCC)
+import EqChunk (fromEqn,EqChunk(..))
 import Format (FormatC(..))
-import Spec (Spec(..),USymb(..))
-import Chunk (symbol,name,descr,makeCC)
+import Spec (Spec(..))
 import Control.Lens ((^.))
 import Unit
 
@@ -20,14 +19,14 @@ import Unit
 pcmSymbols :: [UnitalChunk]
 pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap,htCap_Liq,htCap_W,tank_D,ht_gen_vol,
   ht_xfer_co,ht_xfer_CW,tank_L,mass,water_m, --norm_vect,
-  ht_flux, --thermFlux_vect,
+  ht_flux, thFluxVect,
   ht_flux_C,ht_flux_in,ht_flux_out,time,temp, --temp_boil,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol, --tank_vol,
   water_vol,density,water_dense,dummyVar]
 
 coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
-  ht_xfer_co,ht_xfer_CW, tank_L,mass,water_m,ht_flux,ht_flux_C,ht_flux_in,
-  ht_flux_out,time,temp,--temp_boil,
+  ht_xfer_co,ht_xfer_CW, tank_L,mass,water_m,ht_flux,thFluxVect,ht_flux_C,
+  ht_flux_in,ht_flux_out,time,temp,--temp_boil,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
 coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
@@ -105,13 +104,15 @@ theoreticMod  = makeCC "T" "Theoretical Model"
 
 ----EqChunks----
 --Theoretical models--
-
+t1consThermE :: EqChunk
 t1consThermE = fromEqn "Conservation of thermal energy" t1descr NA 
                 unitless cons_therm_eqn
 
+cons_therm_eqn :: Expr
 cons_therm_eqn = (-1) * (C thFluxVect) + (C ht_gen_vol) := (C density) * 
   (C htCap) * (Deriv (C temp) (C time))
-                
+
+t1descr :: Spec
 t1descr = 
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 

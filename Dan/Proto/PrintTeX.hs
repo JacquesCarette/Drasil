@@ -14,8 +14,8 @@ import Spec (USymb(..))
 import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import Helpers
 import Unicode
-import Format (Format(TeX))
-import Unit
+import Format (Format(TeX),FormatC(..))
+-- import Unit
 import Symbol (Symbol(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
@@ -57,15 +57,15 @@ printLO (Paragraph contents)    = text (pCon Plain contents)
 printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows)            = makeTable rows
 printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPs) = makeDDefn dtype ssPs
+printLO (Definition dtype ssPs) = makeDefn dtype ssPs
 printLO (List lt is)            = makeList lt is
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
 
--------------------------------------------------------------------
-------------------BEGIN SPEC PRINTING------------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN SPEC PRINTING----------------------------
+-----------------------------------------------------------------
 
 p_spec :: Spec -> String
 p_spec (E ex)      = p_expr ex
@@ -79,6 +79,7 @@ p_spec (Sy s)     = runReader (uSymbPrint s) Plain
 p_spec HARDNL     = "\\newline"
 
 symbol :: Symbol -> String
+symbol NA               = ""
 symbol (Atomic s)       = s
 symbol (Special s)      = render TeX s
 symbol (Catenate s1@(Special _) s2) = (symbol s1) ++ brace (symbol s2)
@@ -90,10 +91,16 @@ symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ brace (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (FormatS f s) = sFormat f s
 
--------------------------------------------------------------------
-------------------BEGIN EXPRESSION PRINTING------------------------
--------------------------------------------------------------------
+sFormat :: FormatC -> Symbol -> String
+sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
+sFormat Vector s = "\\bf{" ++ symbol s ++ "}"
+sFormat Grave  s = "\\`{" ++ symbol s ++ "}"
+sFormat Acute  s = "\\'{" ++ symbol s ++ "}"
+-----------------------------------------------------------------
+------------------BEGIN EXPRESSION PRINTING----------------------
+-----------------------------------------------------------------
 p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
@@ -105,15 +112,16 @@ p_expr (Frac n d) = fraction (p_expr n) (p_expr d) --Found in Helpers
 p_expr (Div n d)  = p_expr n ++ "/" ++ p_expr d
 p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
 p_expr (Sym s)    = symbol s
+p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
 
 mul :: Expr -> Expr -> String
 mul x y@(Dbl _) = p_expr x ++ "*" ++ p_expr y
 mul x y@(Int _) = p_expr x ++ "*" ++ p_expr y
 mul x y         = p_expr x ++ p_expr y
 
--------------------------------------------------------------------
-------------------BEGIN TABLE PRINTING-----------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN TABLE PRINTING---------------------------
+-----------------------------------------------------------------
   
 makeTable :: [[Spec]] -> Doc
 makeTable lls = text ("\\begin{longtable}" ++ brace (header lls)) 
@@ -128,9 +136,9 @@ makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls) ++ "\\"
 
--------------------------------------------------------------------
-------------------BEGIN READER-------------------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN READER-----------------------------------
+-----------------------------------------------------------------
 
 data Context = Equation | EqnB | Plain deriving (Show, Eq)
 
@@ -175,6 +183,8 @@ pCon :: Context -> Spec -> String
 pCon = \c t -> runReader (lPrint t) c
 
 uSymbPrint :: USymb -> Reader Context String --To fix unit printing will need this.
+uSymbPrint (Unitless) = do
+  return "unitless"
 uSymbPrint (UName n) = do
   c <- ask
   let cn = getSyCon n
@@ -186,12 +196,20 @@ uSymbPrint (UName n) = do
       _        -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
-  return $ foldr1 (++) (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
+  return $ foldr1 (\x -> if (x == "unitless") then (""++) else (++x)) 
+    (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
+uSymbPrint (UPow Unitless _) = do
+  uSymbPrint Unitless
 uSymbPrint (UPow n p) = do
   c <- ask
   case c of
     Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
     _     -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
+uSymbPrint (UDiv n Unitless) = do
+  uSymbPrint n
+uSymbPrint (UDiv Unitless d) = do
+  c <- ask
+  return $ "1/" ++ paren (runReader (uSymbPrint d) c)
 uSymbPrint (UDiv n d) = do
   c <- ask
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
@@ -202,6 +220,7 @@ uSymbPrint (UDiv n d) = do
     _ -> return $ runReader (uSymbPrint n) c ++ "/" ++ runReader (uSymbPrint d) c
     
 getSyCon :: Symbol -> Context
+getSyCon NA                  = Plain
 getSyCon (Atomic _)          = Plain
 --getSyCon (Special Circle)  = Equation
   -- TODO: Need to figure this out, or figure out how to print catenations in a 
@@ -209,49 +228,53 @@ getSyCon (Atomic _)          = Plain
 getSyCon (Special _)         = Plain
 getSyCon (Catenate s1 _)     = getSyCon s1
 getSyCon (Corners _ _ _ _ s) = getSyCon s
+getSyCon (FormatS _ s)       = getSyCon s
 
--------------------------------------------------------------------
-------------------BEGIN DATA DEFINITION PRINTING-------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN DATA DEFINITION PRINTING-----------------
+-----------------------------------------------------------------
 
-makeDDefn :: L.DType -> [(String,LayoutObj)] -> Doc
-makeDDefn _ []      = error "Empty definition"
-makeDDefn L.Data ps = beginDataDefn $$ makeDDTable ps $$ endDataDefn
+makeDefn :: L.DType -> [(String,LayoutObj)] -> Doc
+makeDefn _ []      = error "Empty definition"
+makeDefn dt ps = beginDefn $$ makeDefTable dt ps $$ endDefn
 
-beginDataDefn :: Doc
-beginDataDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
+beginDefn :: Doc
+beginDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
 
-endDataDefn :: Doc  
-endDataDefn = text "\\end{minipage}" <> dbs
+endDefn :: Doc  
+endDefn = text "\\end{minipage}" <> dbs
 
-makeDDTable :: [(String,LayoutObj)] -> Doc
-makeDDTable []           = error "Trying to make empty Data Defn"
-makeDDTable ps@((_,d):_) = vcat [
+makeDefTable :: L.DType -> [(String,LayoutObj)] -> Doc
+makeDefTable _ []            = error "Trying to make empty Data Defn"
+makeDefTable dt ps@((_,d):_) = vcat [
   text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  text "\\toprule \\textbf{Refname} & \\textbf{DD:" <> printLO d <> text "}",
-  text "\\label{DD:" <> (printLO d) <> text "}",
-  makeDDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
+  text "\\toprule \\textbf{Refname} & \\textbf{" <> defAc dt <> printLO d <> text "}",
+  text "\\label{" <> defAc dt <> (printLO d) <> text "}",
+  makeDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
+  where defAc L.Data = text "DD:"
+        defAc L.Theory = text "T:"
+        defAc L.General = text "GD:"
 
-makeDDRows :: [(String,LayoutObj)] -> Doc
-makeDDRows []         = error "No fields to create DD table"
-makeDDRows ((f,d):[]) = ddBoilerplate $$ text (f ++ " & ") <> printLO d
-makeDDRows ((f,d):ps) = ddBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
-                        makeDDRows ps
-ddBoilerplate :: Doc
-ddBoilerplate = dbs <+> text "\\midrule" <+> dbs 
+makeDRows :: [(String,LayoutObj)] -> Doc
+makeDRows []         = error "No fields to create Defn table"
+makeDRows ((f,d):[]) = dBoilerplate $$ text (f ++ " & ") <> printLO d
+makeDRows ((f,d):ps) = dBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
+                        makeDRows ps
+dBoilerplate :: Doc
+dBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
--------------------------------------------------------------------
-------------------BEGIN CODE BLOCK PRINTING------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN CODE BLOCK PRINTING----------------------
+-----------------------------------------------------------------
 
 codeHeader,codeFooter :: Doc
 codeHeader = bslash <> text "begin" <> br "lstlisting"
 codeFooter = bslash <> text "end" <> br "lstlisting"
 
--------------------------------------------------------------------
-------------------BEGIN EQUATION PRINTING--------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN EQUATION PRINTING------------------------
+-----------------------------------------------------------------
 
 makeEquation :: Spec -> String
 makeEquation contents = 
@@ -259,9 +282,9 @@ makeEquation contents =
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
   
--------------------------------------------------------------------
-------------------BEGIN LIST PRINTING------------------------------
--------------------------------------------------------------------
+-----------------------------------------------------------------
+------------------BEGIN LIST PRINTING----------------------------
+-----------------------------------------------------------------
 
 makeList :: ListType -> [Spec] -> Doc
 makeList t items = b (show t) $$ vcat (map item items) $$ e (show t)

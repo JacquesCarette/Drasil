@@ -7,16 +7,17 @@ import Symbol (Symbol)
 import Spec (USymb)
 import ASTCode (Code)
 
-data Expr = Var Variable
-          | Dbl Double
-          | Int Integer
-          | Mul Expr Expr
-          | Add Expr Expr
-          | Frac Expr Expr
-          | Div Expr Expr
-          | Pow Expr Expr
-          | Sub Expr Expr
-          | Sym Symbol
+data Expr = Var   Variable
+          | Dbl   Double
+          | Int   Integer
+          | Mul   Expr Expr
+          | Add   Expr Expr
+          | Frac  Expr Expr
+          | Div   Expr Expr
+          | Pow   Expr Expr
+          | Sub   Expr Expr
+          | Sym   Symbol
+          | Eq    Expr Expr
 
 infixr 5 :+:
 data Spec = E Expr
@@ -34,7 +35,7 @@ type Title    = Spec
 type Author   = Spec
 type Contents = Spec
 type Items    = [Spec]
-type Tags = [String]
+type Tags     = [String]
 
 data LayoutObj = Table Tags [[Spec]]
                | Header Int Contents
@@ -49,5 +50,5 @@ data LayoutObj = Table Tags [[Spec]]
 data ListType = Ordered | Unordered
 
 instance Show ListType where
-  show Ordered = "o"
+  show Ordered   = "o"
   show Unordered = "u"

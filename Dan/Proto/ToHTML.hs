@@ -4,7 +4,7 @@ module ToHTML where
 import ASTInternal (Expr(..))
 import Spec
 import qualified ASTHTML as H
-import Unicode (render)
+import Unicode (render, Delta(..))
 import Format (Format(HTML), FormatC(..))
 import EqChunk
 import Unit
@@ -13,18 +13,22 @@ import Control.Lens
 import ExprTools
 import Config (verboseDDDescription)
 import LayoutObjs
+import Symbol
 
 
 expr :: Expr -> H.Expr
-expr (V v)    = H.Var v
-expr (Dbl d)  = H.Dbl d
-expr (Int i)  = H.Int i
-expr (a :* b) = H.Mul (expr a) (expr b)
-expr (a :+ b) = H.Add (expr a) (expr b)
-expr (a :/ b) = H.Frac (replace_divs a) (replace_divs b)
-expr (a :^ b) = H.Pow (expr a) (expr b)
-expr (a :- b) = H.Sub (expr a) (expr b)
-expr (C c)    = H.Sym (c ^. symbol)
+expr (V v)    = H.Var   v
+expr (Dbl d)  = H.Dbl   d
+expr (Int i)  = H.Int   i
+expr (a :* b) = H.Mul   (expr a) (expr b)
+expr (a :+ b) = H.Add   (expr a) (expr b)
+expr (a :/ b) = H.Frac  (replace_divs a) (replace_divs b)
+expr (a :^ b) = H.Pow   (expr a) (expr b)
+expr (a :- b) = H.Sub   (expr a) (expr b)
+expr (a := b) = H.Eq    (expr a) (expr b)
+expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Delta_L)) (expr a)) 
+                          (H.Mul (H.Sym (Special Delta_L)) (expr b))
+expr (C c)    = H.Sym   (c ^. symbol)
 --expr _ = error "Unimplemented expression transformation in ToTeX."
 
 replace_divs :: Expr -> H.Expr
@@ -63,25 +67,31 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> H.LayoutObj
-lay (Table hdr lls)     = 
+lay (Table hdr lls)       = 
   H.Table ["table"] $ (map spec hdr) : (map (map spec) lls)
 lay (Section depth title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title)):(createLayout contents))
-lay (Paragraph c)       = H.Paragraph (spec c)
-lay (EqnBlock c)        = H.HDiv ["equation"] [H.Tagless (spec c)]
-lay (CodeBlock c)       = H.CodeBlock c
-lay (Definition Data c) = H.Definition Data $ makeDDPairs c
-lay (BulletList cs)     = H.List H.Unordered $ map spec cs
-lay (NumberedList cs)   = H.List H.Ordered $ map spec cs
+lay (Paragraph c)         = H.Paragraph (spec c)
+lay (EqnBlock c)          = H.HDiv ["equation"] [H.Tagless (spec c)]
+lay (CodeBlock c)         = H.CodeBlock c
+lay (Definition dt c)     = H.Definition dt $ makePairs dt c
+lay (BulletList cs)       = H.List H.Unordered $ map spec cs
+lay (NumberedList cs)     = H.List H.Ordered $ map spec cs
 
-makeDDPairs :: EqChunk -> [(String,H.LayoutObj)]
-makeDDPairs c = [
+makePairs :: DType -> EqChunk -> [(String,H.LayoutObj)]
+makePairs Data c = [
   ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
   ("Description", H.Paragraph (buildDescription c))
   ]
+makePairs Theory c = [
+  ("Label",       H.Paragraph $ H.S "T: " H.:+: (H.N $ c ^. symbol)),
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
+  ("Description", H.Paragraph (buildDescription c))
+  ]
+makePairs General _ = error "Not yet implemented"
   
 buildEqn :: EqChunk -> H.Spec  
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))

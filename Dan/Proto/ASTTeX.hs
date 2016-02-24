@@ -17,6 +17,7 @@ data Expr = Var Variable
           | Pow Expr Expr
           | Sub Expr Expr
           | Sym Symbol
+          | Eq Expr Expr
 
 infixr 5 :+:
 data Spec = E Expr

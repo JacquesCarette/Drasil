@@ -2,6 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module PCMBody where
 import Data.Char (toLower)
+import Data.List (intersperse)
 import Helpers
 import PCMExample
 import Spec (Spec(..),sMap)
@@ -21,7 +22,9 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 s1, s1_intro, s1_1, s1_1_intro, s1_1_table, s1_2, s1_2_intro, 
   s1_2_table, s1_3, s1_3_table,s4,s4_intro,s4_1,s4_1_intro,
-  s4_1_1,s4_1_1_intro,s4_1_1_bullets :: LayoutObj
+  s4_1_1,s4_1_1_intro,s4_1_1_bullets,s4_1_2,s4_1_2_intro,s4_1_3,
+  s4_1_3_intro,s4_2,s4_2_intro,s4_2_1,s4_2_1_intro,s4_2_2,
+  s4_2_2_intro:: LayoutObj
 
 pcm_srs :: Document  
 pcm_srs = Document (S "Software Requirements Specification for Solar Water " :+:
@@ -124,18 +127,19 @@ s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [s4_2_1_intro]
 s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   S "and helps in developing the theoretical model by filling in the " :+:
   S "missing information for the physical system. The numbers given in the " :+:
-  S "square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ")
+  S "square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ") 
   (map (\ch -> (sMap (map toLower) (ch ^. descr)) :+: S (" " ++ 
-  sqbrac (ch ^. name))) [theoreticMod, genDefn, dataDefn, instanceMod]) :+: 
-  S ", or " :+: (sMap (map toLower) $ likelyChange ^. descr) :+: 
-  S (" " ++ sqbrac (likelyChange ^. name)) :+: 
-  S ", in which the respective " :+: 
+  sqbrac (ch ^. name))) [theoreticMod, genDefn, dataDefn, instanceMod])) :+: 
+  S ", or " :+: (sMap (map toLower) $ likelyChange ^. descr) :+: S (" " ++ 
+  sqbrac (likelyChange ^. name)) :+: S ", in which the respective " :+: 
   (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
 --TODO: Simple List
 
-s4_2_2 = Section 2 (theoreticMod ^. descr :+: S "s") [s4_2_2_intro]
+s4_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s") 
+  (s4_2_2_intro:s4_2_2_TMods)
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
   S "and laws that " :+: S (sWHS ^. name) :+: S " is based on."
   
-s4_2_1_TMods = map (Definition Theory) [t1consThermE]
+s4_2_2_TMods :: [LayoutObj]
+s4_2_2_TMods = map (Definition Theory) [t1consThermE]

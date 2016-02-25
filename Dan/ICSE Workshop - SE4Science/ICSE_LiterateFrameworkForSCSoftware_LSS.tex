@@ -172,7 +172,9 @@ relevant piece of information which makes up an SC problem and its solution.
 From this, we can generate all required documents and views. That is, we aim to
 provide methods, tools and techniques to support a literate process for
 developing scientific software that generalizes the idea behind
-Knuth's~\cite{Knuth1984} literate programming.
+Knuth's~\cite{Knuth1984} literate programming.  Unlike other document generation
+tools, like doxygen, the focus is on all software artifacts, not just the code
+and its comments.
 
 %D May need to cut the roadmap for space.
 In the following section, we  
@@ -458,10 +460,14 @@ designing parts for strength, they could start from a general stress analysis
 knowledge base.  This could then be specialized to (say) plane stress/strain,
 depending on which assumption would be most appropriate at the time. The
 generated program could even be customized to the parameterized shape of
-the part the engineer is interested in. Importantly, the generated program
-can be generated to only expose the degrees of freedom necessary for the
-engineer to change (ex. material properties or specific dimensions of the
-part), making the simulation process simpler and safer.
+the part the engineer is interested in.  %  Importantly, the generated program
+% can be generated to only expose the degrees of freedom necessary for the
+% engineer to change (ex. material properties or specific dimensions of the
+% part), making the simulation process simpler and safer.
+Importantly, the simulation process is made simpler because an engineer is not
+required to interact with the source code; they simply modify those degrees of
+freedom (ex. material properties or specific dimensions of the part), that are
+exposed to them by the generator.
 
 \subsubsection{Verification} \label{sssec:adv_verify}
 

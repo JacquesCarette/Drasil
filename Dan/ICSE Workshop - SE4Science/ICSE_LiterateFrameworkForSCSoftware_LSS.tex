@@ -39,13 +39,13 @@
 
 
 % DOI
-%\doi{10.475/123_4} %D What goes here?
+\doi{*******} %D What goes here?
 
 % ISBN
-\isbn{978-1-4503-4167-7}  %D What goes here?
+\isbn{978-1-4503-4167-7}
 
 %Conference
-\conferenceinfo{SE4Science'16}{Austin, TX, USA}  %D What goes here?
+\conferenceinfo{SE4Science'16}{Austin, TX, USA}
 
 % \acmPrice{\$15.00}  %D What goes here?
 
@@ -99,7 +99,7 @@ As a relatively mature field, scientific computing has the opportunity to lead
 other software fields by leveraging its solid, existing knowledge base.  By
 following a rational design process, desirable software qualities such as
 traceability, verifiability, and reproducibility, are arguably easier to reach
-than for other classes of software.
+than for other classes of software. % <-- Our position is right here
 
 We have begun development of a framework, \lss{}, to put this into practice.
 Our aims are to ensure complete traceability, to facilitate agility in the
@@ -115,6 +115,7 @@ scripts, documentation, etc.) synchronized with each other. This allows for
 reuse of common concepts across projects, and aids in the verification of
 software. It is our hope that \lss{} will lead to the development of higher
 quality software at lower cost over the long term.
+
 \end{abstract}
 
 
@@ -158,22 +159,22 @@ The principal perceived drawbacks of document-driven design methodologies are:
 \item an over-emphasis on non-executable artifacts.
 \end{itemize}
 
-Thus, to successfully achieve our goal of improving various software qualities
-(verifiability, reliability, usability, etc.) of SCS, whilst also improving, or
-at least not diminishing performance, we must also find a way to simultaneously
-deal with the above drawbacks. In fact, we are even more ambitious: we want to
-improve developer productivity and thus save time and money on SCS development,
-certification and re-certification. To accomplish this we need to remove
-duplication between software artifacts \cite{WilsonEtAl2013} as well as provide
-traceability between all software artifacts. In practice, this means providing
-facilities for automatic software artifact generation from high level
-``knowledge.'' We can accomplish this by having a single ``source'' for each
-relevant piece of information which makes up an SC problem and its solution.
-From this, we can generate all required documents and views. That is, we aim to
-provide methods, tools and techniques to support a literate process for
-developing scientific software that generalizes the idea behind
-Knuth's~\cite{Knuth1984} literate programming.  Unlike other document generation
-tools, like doxygen, the focus is on all software artifacts, not just the code
+Thus, we argue that successfully achieving our goal of improving various
+software qualities (verifiability, reliability, usability, etc.) of SCS, whilst
+also improving, or at least not diminishing performance, requires that we find a
+way to simultaneously deal with the above drawbacks. In fact, we are more
+ambitious: we want to improve developer productivity and thus save time and
+money on SCS development, certification and re-certification. To accomplish this
+we need to remove duplication between software artifacts \cite{WilsonEtAl2013}
+as well as provide traceability between all software artifacts. In practice,
+this means providing facilities for automatic software artifact generation from
+high level ``knowledge.'' We can accomplish this by having a single ``source''
+for each relevant piece of information which makes up an SC problem and its
+solution. From this, we can generate all required documents and views. That is,
+we aim to provide methods, tools and techniques to support a literate process
+for developing scientific software that generalizes the idea behind
+Knuth's~\cite{Knuth1984} literate programming. Unlike other document generation
+tools, like Doxygen, the focus is on all software artifacts, not just the code
 and its comments.
 
 %D May need to cut the roadmap for space.
@@ -312,7 +313,7 @@ in Fig.~\ref{fig:chunks}).
 
 By breaking things down in this way, we can assemble most concepts from
 pre-existing chunks -- see Fig.~\ref{fig:recipe} for an SRS recipe that
-uses $h_c$.
+uses (among other things) $h_c$. %D ``among others removed for brevity''?
 
 \begin{figure}[tb]
 \begin{lstlisting}[frame=single, 

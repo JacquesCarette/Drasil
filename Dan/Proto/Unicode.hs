@@ -10,6 +10,7 @@ data Alpha  = Alpha_L
 data Circle = Circle
 data Delta  = Delta_L
             | Delta
+data Nabla  = Nabla
 data Phi    = Phi_L
             | Phi
 data Rho    = Rho_L
@@ -44,6 +45,13 @@ instance Render Delta where
   render HTML Delta_L  = "&delta;"
   render HTML Delta    = "&Delta;"
   
+--
+
+instance Render Nabla where
+  render TeX Nabla   = "\\nabla"
+  render Plain Nabla = "nabla"
+  render HTML Nabla  = "&nabla;"
+
 --
 
 instance Render Phi where

@@ -33,7 +33,7 @@ build fn (Document t a c) =
 printLO :: LayoutObj -> Doc
 printLO (HDiv ts layoutObs)     = div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
-printLO (Tagless contents)     = text $ p_spec contents
+printLO (Tagless contents)      = text $ p_spec contents
 printLO (Table ts rows)         = makeTable ts rows
 printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dtype ssPs) = makeDefn dtype ssPs
@@ -85,7 +85,9 @@ symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (FormatS Vector s)       = "<b>" ++ symbol s ++ "</b>"
-symbol (FormatS _ _)       = error $ "Cannot use special formatting other " ++                             "than Vector on Symbols in HTML (see PrintHTML)"
+symbol (FormatS Hat s)          = symbol s ++ "&#770;"
+symbol (FormatS _ _) = error $ "Cannot use special formatting other than " ++ 
+                        "Vector or Hat on Symbols in HTML (see PrintHTML)"
 
 uSymb :: USymb -> String
 uSymb Unitless            = "unitless"
@@ -151,7 +153,7 @@ makeDefn dt ps    = wrap "table" [dtag dt] (makeDRows ps)
         dtag L.General = "gdefn"
 
 makeDRows :: [(String,LayoutObj)] -> Doc
-makeDRows []         = error "No fields to create DD table"
+makeDRows []         = error "No fields to create defn table"
 makeDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
 makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 

@@ -23,6 +23,9 @@ verboseDDDescription = False
 numberedDDEquations :: Bool
 numberedDDEquations = False --Does not affect HTML
 
+numberedTMEquations :: Bool
+numberedTMEquations = False
+
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
   -- you can create your own parameter function and replace the one above.
 defaultSRSparams :: [DocParams]

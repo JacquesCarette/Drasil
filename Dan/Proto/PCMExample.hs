@@ -3,12 +3,12 @@
 module PCMExample where
 import ASTInternal (Expr(..))
 import SI_Units
-import Unicode (Tau(..), Delta(..), Rho(..)) --, Phi(..))
+import Unicode (Tau(..), Delta(..), Rho(..), Nabla(..)) --, Phi(..))
 import Symbol
 import UnitalChunk
 import PCMUnits
 import SymbolAlphabet
-import Chunk (ConceptChunk(..),symbol,makeCC)
+import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
 import EqChunk (fromEqn,EqChunk(..))
 import Format (FormatC(..))
 import Spec (Spec(..))
@@ -18,15 +18,15 @@ import Unit
 -- import Control.Lens ((^.))
 pcmSymbols :: [UnitalChunk]
 pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap,htCap_Liq,htCap_W,tank_D,ht_gen_vol,
-  ht_xfer_co,ht_xfer_CW,tank_L,mass,water_m, --norm_vect,
+  ht_xfer_co,ht_xfer_CW,tank_L,mass,water_m, norm_vect,
   ht_flux, thFluxVect,
   ht_flux_C,ht_flux_in,ht_flux_out,time,temp, --temp_boil,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol, --tank_vol,
   water_vol,density,water_dense,dummyVar]
 
 coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
-  ht_xfer_co,ht_xfer_CW, tank_L,mass,water_m,ht_flux,thFluxVect,ht_flux_C,
-  ht_flux_in,ht_flux_out,time,temp,--temp_boil,
+  ht_xfer_co,ht_xfer_CW, tank_L,mass,water_m,norm_vect,ht_flux,thFluxVect,
+  ht_flux_C,ht_flux_in,ht_flux_out,time,temp,--temp_boil,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
 coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
@@ -48,7 +48,8 @@ ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water"
 tank_L      = makeUC "L" "length of tank" cL metre
 mass        = makeUC "m" "mass" lM kilogram
 water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
--- norm_vect = makeUC "n_vect" "unit outward normal vector for a surface"
+norm_vect   = makeUC "n_vect" "unit outward normal vector for a surface"
+              (FormatS Vector (FormatS Hat lN)) unitless
   -- How do I make a symbol that needs one (or more) FormatC? Add to Symbol or
   -- pull FormatC out somehow?
 ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
@@ -73,14 +74,19 @@ temp_water  = makeUC "T_W" "temperature of water"
 temp_diff   = makeUC "deltaT" "temperature difference" 
               (Catenate (Special Delta) cT) centigrade
 vol         = makeUC "V" "volume" cV m_3
--- tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
+--tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
                 -- (sub cV (Atomic "tank")) m_3
 water_vol   = makeUC "V_W" "volume of water" (sub cV cW) m_3
-density     = makeUC "rho" "density, mass per unit volume" (Special Rho_L) densityU
+density     = makeUC "rho" "density, mass per unit volume" (Special Rho_L) 
+              densityU
 water_dense = makeUC "rho_W" "density of water" (sub (Special Rho_L) cW) densityU
 dummyVar    = makeUC "tau" "dummy variable for integration over time" 
                 (Special Tau_L) second
 --melt_frac   = makeUC "Phi" "melt fraction" (Special Phi) unitless
+
+----VarChunks----
+gradient :: VarChunk
+gradient = makeVC "gradient" "the gradient operator" (Special Nabla)
 
 ----Acronyms-----
 acronyms :: [ConceptChunk]
@@ -109,8 +115,8 @@ t1consThermE = fromEqn "Conservation of thermal energy" t1descr NA
                 unitless cons_therm_eqn
 
 cons_therm_eqn :: Expr
-cons_therm_eqn = (-1) * (C thFluxVect) + (C ht_gen_vol) := (C density) * 
-  (C htCap) * (Deriv (C temp) (C time))
+cons_therm_eqn = (-1) * (C gradient) * (C thFluxVect) + (C ht_gen_vol) := 
+  (C density) * (C htCap) * (Deriv (C temp) (C time))
 
 t1descr :: Spec
 t1descr = 

@@ -11,7 +11,7 @@ import Unit
 import Chunk
 import Control.Lens
 import ExprTools
-import Config (verboseDDDescription, numberedDDEquations)
+import Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import LayoutObjs
 import Symbol
 
@@ -87,25 +87,28 @@ makePairs Data c = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
   ("Units",       T.Paragraph $ T.Sy $ c ^. unit),
   ("Equation",    eqnStyleDD $ buildEqn c),
-  ("Description", T.Paragraph (buildDescription c))
+  ("Description", T.Paragraph (buildDDDescription c))
   ]
 makePairs Theory c = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
-  ("Equation",    eqnStyleDD $ buildEqn c),
-  ("Description", T.Paragraph (buildDescription c))
+  ("Equation",    eqnStyleTM $ T.E (expr (equat c))),
+  ("Description", T.Paragraph (spec (c ^. descr)))
   ]
 makePairs General _ = error "Not yet implemented"
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj
 eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
+
+eqnStyleTM :: T.Contents -> T.LayoutObj
+eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
   
 buildEqn :: EqChunk -> T.Spec  
 buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
-buildDescription :: EqChunk -> T.Spec
-buildDescription c = descLines (
+buildDDDescription :: EqChunk -> T.Spec
+buildDDDescription c = descLines (
   (toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
 
 descLines :: [VarChunk] -> T.Spec  

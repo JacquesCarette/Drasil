@@ -52,7 +52,7 @@ spec (F f s)   = spec $ format f s
 spec (N s)     = H.N s
 
 format :: FormatC -> Spec -> Spec
-format Hat    s = S "&" :+: s :+: S "circ;" --Only works on vowels.
+format Hat    s = s :+: S "&#770;" 
 format Vector s = S "<b>" :+: s :+: S "</b>"
 format Grave  s = S "&" :+: s :+: S "grave;" --Only works on vowels.
 format Acute  s = S "&" :+: s :+: S "acute;" --Only works on vowels.
@@ -84,12 +84,12 @@ makePairs Data c = [
   ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
-  ("Description", H.Paragraph (buildDescription c))
+  ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs Theory c = [
   ("Label",       H.Paragraph $ H.S "T: " H.:+: (H.N $ c ^. symbol)),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
-  ("Description", H.Paragraph (buildDescription c))
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (expr (equat c)))]),
+  ("Description", H.Paragraph (spec (c ^. descr)))
   ]
 makePairs General _ = error "Not yet implemented"
   
@@ -97,8 +97,8 @@ buildEqn :: EqChunk -> H.Spec
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
-buildDescription :: EqChunk -> H.Spec
-buildDescription c = descLines (
+buildDDDescription :: EqChunk -> H.Spec
+buildDDDescription c = descLines (
   (toVC c):(if verboseDDDescription then (get_VCs (equat c)) else []))
 
 descLines :: [VarChunk] -> H.Spec  

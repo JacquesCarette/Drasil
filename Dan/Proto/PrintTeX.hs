@@ -82,7 +82,6 @@ symbol :: Symbol -> String
 symbol NA               = ""
 symbol (Atomic s)       = s
 symbol (Special s)      = render TeX s
-symbol (Catenate s1@(Special _) s2) = (symbol s1) ++ brace (symbol s2)
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
 --
 -- handle the special cases first, then general case
@@ -119,7 +118,6 @@ p_expr (Neg x)    = neg x
 mul :: Expr -> Expr -> String
 mul x y@(Dbl _) = p_expr x ++ "*" ++ p_expr y
 mul x y@(Int _) = p_expr x ++ "*" ++ p_expr y
-mul x@(Sym (Special _)) y = p_expr x ++ brace (p_expr y)
 mul x y         = p_expr x ++ p_expr y
 
 neg :: Expr -> String

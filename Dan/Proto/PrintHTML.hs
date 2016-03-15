@@ -116,11 +116,21 @@ p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
 p_expr (Pow a b)  = p_expr a ++ sup (p_expr b)
 p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
+p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
+p_expr (Neg a)    = neg a
 
 mul :: Expr -> Expr -> String
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
 mul a b         = p_expr a ++ p_expr b
+
+neg :: Expr -> String
+neg a@(Var _) = "-" ++ p_expr a
+neg a@(Dbl _) = "-" ++ p_expr a
+neg a@(Int _) = "-" ++ p_expr a
+neg a@(Sym _) = "-" ++ p_expr a
+neg   (Neg n) = p_expr n
+neg a         = "(" ++ ("-" ++ p_expr a) ++ ")"
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

@@ -7,17 +7,19 @@ import Symbol (Symbol)
 import Spec (USymb)
 import ASTCode (Code)
 
-data Expr = Var Variable
-          | Dbl Double
-          | Int Integer
-          | Mul Expr Expr
-          | Add Expr Expr
+data Expr = Var  Variable
+          | Dbl  Double
+          | Int  Integer
+          | Mul  Expr Expr
+          | Add  Expr Expr
           | Frac Expr Expr
-          | Div Expr Expr
-          | Pow Expr Expr
-          | Sub Expr Expr
-          | Sym Symbol
-          | Eq Expr Expr
+          | Div  Expr Expr
+          | Pow  Expr Expr
+          | Sub  Expr Expr
+          | Sym  Symbol
+          | Eq   Expr Expr
+          | Dot  Expr Expr
+          | Neg  Expr
 
 infixr 5 :+:
 data Spec = E Expr

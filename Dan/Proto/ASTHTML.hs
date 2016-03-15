@@ -18,6 +18,8 @@ data Expr = Var   Variable
           | Sub   Expr Expr
           | Sym   Symbol
           | Eq    Expr Expr
+          | Dot   Expr Expr
+          | Neg   Expr
 
 infixr 5 :+:
 data Spec = E Expr

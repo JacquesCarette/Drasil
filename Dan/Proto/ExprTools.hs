@@ -15,7 +15,9 @@ get_dep (a :+ b)    = nub (get_dep a ++ get_dep b)
 get_dep (a :^ b)    = nub (get_dep a ++ get_dep b)
 get_dep (a :- b)    = nub (get_dep a ++ get_dep b)
 get_dep (a := b)    = nub (get_dep a ++ get_dep b)
+get_dep (a :. b)    = nub (get_dep a ++ get_dep b)
 get_dep (Deriv a b) = nub (get_dep a ++ get_dep b)
+get_dep (Neg e)     = get_dep e
 get_dep (C c)       = [c ^. name]
 get_dep (Int _)     = []
 get_dep (Dbl _)     = []
@@ -29,7 +31,9 @@ get_VCs (a :+ b)    = nub (get_VCs a ++ get_VCs b)
 get_VCs (a :^ b)    = nub (get_VCs a ++ get_VCs b)
 get_VCs (a :- b)    = nub (get_VCs a ++ get_VCs b)
 get_VCs (a := b)    = nub (get_VCs a ++ get_VCs b)
+get_VCs (a :. b)    = nub (get_VCs a ++ get_VCs b)
 get_VCs (Deriv a b) = nub (get_VCs a ++ get_VCs b)
+get_VCs (Neg e)     = get_VCs e
 get_VCs (C c)       = [toVC c]
 get_VCs (Int _)     = []
 get_VCs (Dbl _)     = []

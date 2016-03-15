@@ -17,16 +17,18 @@ import Symbol
 
 
 expr :: Expr -> T.Expr
-expr (V v)        = T.Var v
-expr (Dbl d)      = T.Dbl d
-expr (Int i)      = T.Int i
-expr (a :* b)     = T.Mul (expr a) (expr b)
-expr (a :+ b)     = T.Add (expr a) (expr b)
+expr (V v)        = T.Var  v
+expr (Dbl d)      = T.Dbl  d
+expr (Int i)      = T.Int  i
+expr (a :* b)     = T.Mul  (expr a) (expr b)
+expr (a :+ b)     = T.Add  (expr a) (expr b)
 expr (a :/ b)     = T.Frac (replace_divs a) (replace_divs b)
-expr (a :^ b)     = T.Pow (expr a) (expr b)
-expr (a :- b)     = T.Sub (expr a) (expr b)
-expr (a := b)     = T.Eq  (expr a) (expr b)
-expr (C c)        = T.Sym (c ^. symbol)
+expr (a :^ b)     = T.Pow  (expr a) (expr b)
+expr (a :- b)     = T.Sub  (expr a) (expr b)
+expr (a := b)     = T.Eq   (expr a) (expr b)
+expr (a :. b)     = T.Dot  (expr a) (expr b)
+expr (Neg a)      = T.Neg  (expr a)
+expr (C c)        = T.Sym  (c ^. symbol)
 expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Delta_L)) (expr a))
                            (T.Mul (T.Sym (Special Delta_L)) (expr b))
 --expr _ = error "Unimplemented expression transformation in ToTeX."

@@ -113,12 +113,22 @@ p_expr (Div n d)  = p_expr n ++ "/" ++ p_expr d
 p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
+p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
+p_expr (Neg x)    = neg x
 
 mul :: Expr -> Expr -> String
 mul x y@(Dbl _) = p_expr x ++ "*" ++ p_expr y
 mul x y@(Int _) = p_expr x ++ "*" ++ p_expr y
 mul x@(Sym (Special _)) y = p_expr x ++ brace (p_expr y)
 mul x y         = p_expr x ++ p_expr y
+
+neg :: Expr -> String
+neg x@(Var _) = "-" ++ p_expr x
+neg x@(Dbl _) = "-" ++ p_expr x
+neg x@(Int _) = "-" ++ p_expr x
+neg x@(Sym _) = "-" ++ p_expr x
+neg   (Neg n) = p_expr n
+neg x         = paren ("-" ++ p_expr x)
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

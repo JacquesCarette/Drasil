@@ -115,7 +115,7 @@ t1consThermE = fromEqn "Conservation of thermal energy" t1descr NA
                 unitless cons_therm_eqn
 
 cons_therm_eqn :: Expr
-cons_therm_eqn = (-1) * (C gradient) * (C thFluxVect) + (C ht_gen_vol) := 
+cons_therm_eqn = (Neg (C gradient)) :. (C thFluxVect) + (C ht_gen_vol) := 
   (C density) * (C htCap) * (Deriv (C temp) (C time))
 
 t1descr :: Spec

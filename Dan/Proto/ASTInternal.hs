@@ -10,20 +10,27 @@ infixl 7 :*
 infixl 7 :/
 infixl 6 :+
 infixl 6 :-
-infix  4 :=
 data Expr where
- V     :: Variable -> Expr
- Dbl   :: Double -> Expr
- Int   :: Integer -> Expr
- (:^)  :: Expr -> Expr -> Expr
- (:*)  :: Expr -> Expr -> Expr
- (:/)  :: Expr -> Expr -> Expr
- (:+)  :: Expr -> Expr -> Expr
- (:-)  :: Expr -> Expr -> Expr
- (:=)  :: Expr -> Expr -> Expr
- Deriv :: Expr -> Expr -> Expr
- C     :: Quantity c => c -> Expr
+  V     :: Variable -> Expr
+  Dbl   :: Double -> Expr
+  Int   :: Integer -> Expr
+  (:^)  :: Expr -> Expr -> Expr
+  (:*)  :: Expr -> Expr -> Expr
+  (:/)  :: Expr -> Expr -> Expr
+  (:+)  :: Expr -> Expr -> Expr
+  (:-)  :: Expr -> Expr -> Expr
+  (:.)  :: Expr -> Expr -> Expr
+  (:=)  :: Expr -> Expr -> Expr
+  Neg   :: Expr -> Expr
+  Deriv :: Expr -> Expr -> Expr
+  C     :: Quantity c => c -> Expr
 
+-- infixr 4 :=
+-- data Rel where
+  -- (:=) :: Expr -> Expr -> Rel
+  -- (:<) :: Expr -> Expr -> Rel
+  -- (:>) :: Expr -> Expr -> Rel
+ 
 type Variable = String
 
 data DocType = SRS Filename     --Filename with no extension

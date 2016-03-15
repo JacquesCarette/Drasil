@@ -1,12 +1,11 @@
 {-# OPTIONS -Wall #-} 
-module RelationChunk where
+module RelationChunk (RelationChunk(..),makeRC) where
 
 import ASTInternal (Relation)
 import Chunk
 import Control.Lens (Simple, Lens)
 import Spec (Spec(..))
 
--- BEGIN RelationChunk --
 data RelationChunk = RC
   { cc :: ConceptChunk
   , relat :: Relation
@@ -18,7 +17,6 @@ instance Chunk RelationChunk where
 instance Concept RelationChunk where
   descr = cp . descr
 
--- END RelationChunk --
 
 -- don't export this
 cp :: Simple Lens RelationChunk ConceptChunk

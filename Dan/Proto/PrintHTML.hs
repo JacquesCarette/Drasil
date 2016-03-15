@@ -10,7 +10,7 @@ import qualified ASTInternal as A
 import Spec (USymb(..))
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import HTMLHelpers
-import Helpers (brace)
+import Helpers
 import Unicode
 import Format (Format(HTML),FormatC(..))
 import Symbol (Symbol(..))
@@ -130,7 +130,7 @@ neg a@(Dbl _) = "-" ++ p_expr a
 neg a@(Int _) = "-" ++ p_expr a
 neg a@(Sym _) = "-" ++ p_expr a
 neg   (Neg n) = p_expr n
-neg a         = "(" ++ ("-" ++ p_expr a) ++ ")"
+neg a         = paren ("-" ++ p_expr a)
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

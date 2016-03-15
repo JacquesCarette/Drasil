@@ -13,6 +13,7 @@ import qualified ASTInternal as A
 import Spec (USymb(..))
 import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
 import Helpers
+import TeXHelpers
 import Unicode
 import Format (Format(TeX),FormatC(..))
 -- import Unit

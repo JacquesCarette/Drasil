@@ -2,7 +2,6 @@
 module ASTHTML where
 
 import ASTInternal (Variable)
-import LayoutObjs (DType)
 import Symbol (Symbol)
 import Spec (USymb)
 import ASTCode (Code)
@@ -45,7 +44,7 @@ data LayoutObj = Table Tags [[Spec]]
                | HDiv Tags [LayoutObj]
                | Tagless Contents
                | CodeBlock Code
-               | Definition DType [(String,LayoutObj)]
+               | Definition String [(String,LayoutObj)]
                | List ListType Items
                -- | Span Tags Contents
                

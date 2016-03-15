@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
 module PCMExample where
-import ASTInternal (Expr(..))
+import ASTInternal (Expr(..), Relation(..))
 import SI_Units
 import Unicode (Tau(..), Delta(..), Rho(..), Nabla(..)) --, Phi(..))
 import Symbol
@@ -9,11 +9,12 @@ import UnitalChunk
 import PCMUnits
 import SymbolAlphabet
 import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
-import EqChunk (fromEqn,EqChunk(..))
+-- import EqChunk (fromEqn,EqChunk(..))
 import Format (FormatC(..))
 import Spec (Spec(..))
 import Control.Lens ((^.))
 import Unit
+import RelationChunk
 
 -- import Control.Lens ((^.))
 pcmSymbols :: [UnitalChunk]
@@ -110,19 +111,18 @@ theoreticMod  = makeCC "T" "Theoretical Model"
 
 ----EqChunks----
 --Theoretical models--
-t1consThermE :: EqChunk
-t1consThermE = fromEqn "Conservation of thermal energy" t1descr NA 
-                unitless cons_therm_eqn
+t1consThermE :: RelationChunk
+t1consThermE = makeRC "Conservation of thermal energy" t1descr cons_therm_rel
 
-cons_therm_eqn :: Expr
-cons_therm_eqn = (Neg (C gradient)) :. (C thFluxVect) + (C ht_gen_vol) := 
+cons_therm_rel :: Relation
+cons_therm_rel = (Neg (C gradient)) :. (C thFluxVect) + (C ht_gen_vol) := 
   (C density) * (C htCap) * (Deriv (C temp) (C time))
 
 t1descr :: Spec
 t1descr = 
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 
-  (N $ htCap ^. symbol) :+: S "and density " :+: (N $ density ^. symbol) :+:
+  (N $ htCap ^. symbol) :+: S " and density " :+: (N $ density ^. symbol) :+:
   S ", where " :+: (N $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.

@@ -244,7 +244,7 @@ getSyCon (FormatS _ s)       = getSyCon s
 ------------------BEGIN DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: L.DType -> [(String,LayoutObj)] -> Doc
+makeDefn :: String -> [(String,LayoutObj)] -> Doc
 makeDefn _ []      = error "Empty definition"
 makeDefn dt ps = beginDefn $$ makeDefTable dt ps $$ endDefn
 
@@ -254,7 +254,7 @@ beginDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth
 endDefn :: Doc  
 endDefn = text "\\end{minipage}" <> dbs
 
-makeDefTable :: L.DType -> [(String,LayoutObj)] -> Doc
+makeDefTable :: String -> [(String,LayoutObj)] -> Doc
 makeDefTable _ []            = error "Trying to make empty Data Defn"
 makeDefTable dt ps@((_,d):_) = vcat [
   text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
@@ -262,9 +262,9 @@ makeDefTable dt ps@((_,d):_) = vcat [
   text "\\label{" <> defAc dt <> (printLO d) <> text "}",
   makeDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
-  where defAc L.Data = text "DD:"
-        defAc L.Theory = text "T:"
-        defAc L.General = text "GD:"
+  where defAc "Data" = text "DD:"
+        defAc "Theory" = text "T:"
+        defAc "General" = text "GD:"
 
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create Defn table"

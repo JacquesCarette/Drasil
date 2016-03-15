@@ -155,12 +155,13 @@ makeColumns ls = vcat $ map (td . text . p_spec) ls
 ------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
-makeDefn :: L.DType -> [(String,LayoutObj)] -> Doc
+makeDefn :: String -> [(String,LayoutObj)] -> Doc
 makeDefn _ []     = error "Empty definition"
 makeDefn dt ps    = wrap "table" [dtag dt] (makeDRows ps)
-  where dtag L.Data = "ddefn"
-        dtag L.Theory = "tdefn"
-        dtag L.General = "gdefn"
+  where dtag "Data" = "ddefn"
+        dtag "Theory" = "tdefn"
+        dtag "General" = "gdefn"
+        dtag _ = error "Attempting to create impossible definition (ToHTML)"
 
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create defn table"

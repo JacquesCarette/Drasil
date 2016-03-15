@@ -2,7 +2,6 @@
 module ASTTeX where
 
 import ASTInternal (Variable)
-import LayoutObjs (DType)
 import Symbol (Symbol)
 import Spec (USymb)
 import ASTCode (Code)
@@ -46,7 +45,7 @@ data LayoutObj = Table [[Spec]]
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code
-               | Definition DType [(String,LayoutObj)]
+               | Definition String [(String,LayoutObj)]
                | List ListType Items
                
 data ListType = Item | Enum

@@ -1,12 +1,13 @@
 {-# OPTIONS -Wall #-} 
 module ToTeX where
 
-import ASTInternal (Expr(..))
+import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTTeX as T
 import Unicode (render, Delta(..))
 import Format (Format(TeX), FormatC(..))
 import EqChunk
+import RelationChunk
 import Unit
 import Chunk
 import Control.Lens
@@ -25,13 +26,16 @@ expr (a :+ b)     = T.Add  (expr a) (expr b)
 expr (a :/ b)     = T.Frac (replace_divs a) (replace_divs b)
 expr (a :^ b)     = T.Pow  (expr a) (expr b)
 expr (a :- b)     = T.Sub  (expr a) (expr b)
-expr (a := b)     = T.Eq   (expr a) (expr b)
 expr (a :. b)     = T.Dot  (expr a) (expr b)
 expr (Neg a)      = T.Neg  (expr a)
 expr (C c)        = T.Sym  (c ^. symbol)
 expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Delta_L)) (expr a))
                            (T.Mul (T.Sym (Special Delta_L)) (expr b))
 --expr _ = error "Unimplemented expression transformation in ToTeX."
+
+rel :: Relation -> T.Expr
+rel (a := b) = T.Eq (expr a) (expr b)
+rel _ = error "unimplemented relation, see ToTeX"
 
 replace_divs :: Expr -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)
@@ -77,26 +81,27 @@ lay (Table hdr lls)
                         show (length (head lls)) ++ " columns."
 lay (Section depth title layoutComponents) = 
   T.Section depth (spec title) (createLayout layoutComponents)
-lay (Paragraph c)       = T.Paragraph (spec c)
-lay (EqnBlock c)        = T.EqnBlock (spec c)
-lay (CodeBlock c)       = T.CodeBlock c
-lay (Definition dt c)   = T.Definition dt $ makePairs dt c
-lay (BulletList cs)     = T.List T.Item $ map spec cs
-lay (NumberedList cs)   = T.List T.Enum $ map spec cs
+lay (Paragraph c)             = T.Paragraph (spec c)
+lay (EqnBlock c)              = T.EqnBlock (spec c)
+lay (CodeBlock c)             = T.CodeBlock c
+lay (Definition c@(Data _))   = T.Definition "Data" $ makePairs c
+lay (Definition c@(Theory _)) = T.Definition "Theory" $ makePairs c
+lay (BulletList cs)           = T.List T.Item $ map spec cs
+lay (NumberedList cs)         = T.List T.Enum $ map spec cs
 
-makePairs :: DType -> EqChunk -> [(String,T.LayoutObj)]
-makePairs Data c = [
+makePairs :: DType -> [(String,T.LayoutObj)]
+makePairs (Data c) = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
   ("Units",       T.Paragraph $ T.Sy $ c ^. unit),
   ("Equation",    eqnStyleDD $ buildEqn c),
   ("Description", T.Paragraph (buildDDDescription c))
   ]
-makePairs Theory c = [
-  ("Label",       T.Paragraph $ T.N $ c ^. symbol),
-  ("Equation",    eqnStyleTM $ T.E (expr (equat c))),
+makePairs (Theory c) = [
+  ("Label",       T.Paragraph $ T.S $ c ^. name),
+  ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
   ("Description", T.Paragraph (spec (c ^. descr)))
   ]
-makePairs General _ = error "Not yet implemented"
+makePairs General = error "Not yet implemented"
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj

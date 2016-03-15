@@ -53,9 +53,9 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
 
 s3 = Section 0 (S "Data Definitions") [s3_dd1, s3_dd2]
 
-s3_dd1 = Definition Data h_g
+s3_dd1 = Definition (Data h_g)
 
-s3_dd2 = Definition Data h_c
+s3_dd2 = Definition (Data h_c)
 
 s4 = Section 0 (S "Code -- Test") [s4c]
 

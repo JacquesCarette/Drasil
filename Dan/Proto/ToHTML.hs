@@ -1,12 +1,13 @@
 {-# OPTIONS -Wall #-} 
 module ToHTML where
 
-import ASTInternal (Expr(..))
+import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTHTML as H
 import Unicode (render, Delta(..))
 import Format (Format(HTML), FormatC(..))
 import EqChunk
+import RelationChunk
 import Unit
 import Chunk
 import Control.Lens
@@ -25,13 +26,16 @@ expr (a :+ b) = H.Add   (expr a) (expr b)
 expr (a :/ b) = H.Frac  (replace_divs a) (replace_divs b)
 expr (a :^ b) = H.Pow   (expr a) (expr b)
 expr (a :- b) = H.Sub   (expr a) (expr b)
-expr (a := b) = H.Eq    (expr a) (expr b)
 expr (a :. b) = H.Dot   (expr a) (expr b)
 expr (Neg a)  = H.Neg   (expr a)
 expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Delta_L)) (expr a)) 
                           (H.Mul (H.Sym (Special Delta_L)) (expr b))
 expr (C c)    = H.Sym   (c ^. symbol)
 --expr _ = error "Unimplemented expression transformation in ToTeX."
+
+rel :: Relation -> H.Expr
+rel (a := b) = H.Eq (expr a) (expr b)
+rel _ = error "unimplemented relation, see ToHTML"
 
 replace_divs :: Expr -> H.Expr
 replace_divs (a :/ b) = H.Div (replace_divs a) (replace_divs b)
@@ -69,31 +73,32 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> H.LayoutObj
-lay (Table hdr lls)       = 
+lay (Table hdr lls)           = 
   H.Table ["table"] $ (map spec hdr) : (map (map spec) lls)
 lay (Section depth title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title)):(createLayout contents))
-lay (Paragraph c)         = H.Paragraph (spec c)
-lay (EqnBlock c)          = H.HDiv ["equation"] [H.Tagless (spec c)]
-lay (CodeBlock c)         = H.CodeBlock c
-lay (Definition dt c)     = H.Definition dt $ makePairs dt c
-lay (BulletList cs)       = H.List H.Unordered $ map spec cs
-lay (NumberedList cs)     = H.List H.Ordered $ map spec cs
+lay (Paragraph c)             = H.Paragraph (spec c)
+lay (EqnBlock c)              = H.HDiv ["equation"] [H.Tagless (spec c)]
+lay (CodeBlock c)             = H.CodeBlock c
+lay (Definition c@(Data _))   = H.Definition "Data" $ makePairs c
+lay (Definition c@(Theory _)) = H.Definition "Theory" $ makePairs c
+lay (BulletList cs)           = H.List H.Unordered $ map spec cs
+lay (NumberedList cs)         = H.List H.Ordered $ map spec cs
 
-makePairs :: DType -> EqChunk -> [(String,H.LayoutObj)]
-makePairs Data c = [
+makePairs :: DType -> [(String,H.LayoutObj)]
+makePairs (Data c) = [
   ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
   ("Description", H.Paragraph (buildDDDescription c))
   ]
-makePairs Theory c = [
-  ("Label",       H.Paragraph $ H.S "T: " H.:+: (H.N $ c ^. symbol)),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (expr (equat c)))]),
+makePairs (Theory c) = [
+  ("Label",       H.Paragraph $ H.S "T:" H.:+: (H.S $ c ^. name)),
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))]),
   ("Description", H.Paragraph (spec (c ^. descr)))
   ]
-makePairs General _ = error "Not yet implemented"
+makePairs General = error "Not yet implemented"
   
 buildEqn :: EqChunk -> H.Spec  
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))

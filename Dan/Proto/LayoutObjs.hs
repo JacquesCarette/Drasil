@@ -1,6 +1,7 @@
 module LayoutObjs where
 
 import EqChunk
+import RelationChunk
 import Spec
 import ASTCode
 
@@ -20,9 +21,11 @@ data LayoutObj = Table [Spec] [[Spec]] -- table header then data
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code
-               | Definition DType (EqChunk)
+               | Definition DType
                | BulletList Bullets
                | NumberedList Items
 
 -- Types of definitions
-data DType = Data | General | Theory
+data DType = Data EqChunk 
+           | General 
+           | Theory RelationChunk

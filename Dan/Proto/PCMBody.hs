@@ -142,4 +142,4 @@ s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
   S "and laws that " :+: S (sWHS ^. name) :+: S " is based on."
   
 s4_2_2_TMods :: [LayoutObj]
-s4_2_2_TMods = map (Definition Theory) [t1consThermE]
+s4_2_2_TMods = map Definition (map Theory [t1consThermE])

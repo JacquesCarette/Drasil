@@ -20,16 +20,15 @@ data Expr where
   (:+)  :: Expr -> Expr -> Expr
   (:-)  :: Expr -> Expr -> Expr
   (:.)  :: Expr -> Expr -> Expr
-  (:=)  :: Expr -> Expr -> Expr
   Neg   :: Expr -> Expr
   Deriv :: Expr -> Expr -> Expr
   C     :: Quantity c => c -> Expr
 
--- infixr 4 :=
--- data Rel where
-  -- (:=) :: Expr -> Expr -> Rel
-  -- (:<) :: Expr -> Expr -> Rel
-  -- (:>) :: Expr -> Expr -> Rel
+infixr 4 :=
+data Relation where
+  (:=) :: Expr -> Expr -> Relation
+  (:<) :: Expr -> Expr -> Relation
+  (:>) :: Expr -> Expr -> Relation
  
 type Variable = String
 

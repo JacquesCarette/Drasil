@@ -48,8 +48,9 @@ data LayoutObj = Table [[Spec]]
                | Definition String [(String,LayoutObj)]
                | List ListType Items
                
-data ListType = Item | Enum
+data ListType = Item | Enum | Simple
 
 instance Show ListType where
   show Item = "itemize"
   show Enum = "enumerate"
+  show Simple = error "Printing Simple list failed, see ASTTeX/PrintTeX"

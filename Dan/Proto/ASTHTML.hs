@@ -48,8 +48,9 @@ data LayoutObj = Table Tags [[Spec]]
                | List ListType Items
                -- | Span Tags Contents
                
-data ListType = Ordered | Unordered
+data ListType = Ordered | Unordered | Simple
 
 instance Show ListType where
   show Ordered   = "o"
   show Unordered = "u"
+  show Simple    = error "Printing Simple list failed, see ASTHTML/PrintHTML"

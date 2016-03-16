@@ -8,9 +8,11 @@ import ASTCode
 type Title    = Spec
 type Contents = Spec
 type Author   = Spec
-type Bullets  = [Spec]
-type Items    = [Spec]
+type Item     = Spec
+type Bullets  = [Item]
+type Items    = [Item]
 type Depth    = Int
+type Pairs    = [(Title,Item)] -- Title: Item
 
 data Document = Document Title Author [LayoutObj]
 
@@ -24,6 +26,7 @@ data LayoutObj = Table [Spec] [[Spec]] -- table header then data
                | Definition DType
                | BulletList Bullets
                | NumberedList Items
+               | SimpleList Pairs
 
 -- Types of definitions
 data DType = Data EqChunk 

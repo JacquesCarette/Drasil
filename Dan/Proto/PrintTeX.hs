@@ -297,7 +297,14 @@ makeEquation contents =
 -----------------------------------------------------------------
 
 makeList :: ListType -> [Spec] -> Doc
+makeList Simple items = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
 makeList t items = b (show t) $$ vcat (map item items) $$ e (show t)
 
 item :: Spec -> Doc
 item = \s -> text ("\\item " ++ pCon Plain s)
+
+sim_item :: [Spec] -> [Doc]
+sim_item [] = [empty]
+sim_item (_:[]) = error "Simple list printing went awry, a pair broke"
+sim_item (x:y:zs) = text ("\\item[" ++ pCon Plain x ++ ":] " ++ pCon Plain y) :
+  sim_item zs

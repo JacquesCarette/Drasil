@@ -85,6 +85,8 @@ lay (Definition c@(Data _))   = H.Definition "Data" $ makePairs c
 lay (Definition c@(Theory _)) = H.Definition "Theory" $ makePairs c
 lay (BulletList cs)           = H.List H.Unordered $ map spec cs
 lay (NumberedList cs)         = H.List H.Ordered $ map spec cs
+lay (SimpleList cs)           = H.List H.Simple $ 
+  map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [

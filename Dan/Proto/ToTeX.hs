@@ -88,6 +88,8 @@ lay (Definition c@(Data _))   = T.Definition "Data" $ makePairs c
 lay (Definition c@(Theory _)) = T.Definition "Theory" $ makePairs c
 lay (BulletList cs)           = T.List T.Item $ map spec cs
 lay (NumberedList cs)         = T.List T.Enum $ map spec cs
+lay (SimpleList cs)           = T.List T.Simple $ concat $
+  map (\(f,s) -> [spec f, spec s]) cs
 
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

@@ -173,5 +173,7 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 -----------------------------------------------------------------
 
 makeList :: ListType -> [Spec] -> Doc
+makeList Simple items = div_tag ["list"] 
+  (vcat $ map (wrap "p" [] . text . p_spec) items)
 makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . text . p_spec) items)

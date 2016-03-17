@@ -4,7 +4,7 @@ module ToHTML where
 import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTHTML as H
-import Unicode (render, Delta(..))
+import Unicode (render, Partial(..))
 import Format (Format(HTML), FormatC(..))
 import EqChunk
 import RelationChunk
@@ -28,8 +28,8 @@ expr (a :^ b) = H.Pow   (expr a) (expr b)
 expr (a :- b) = H.Sub   (expr a) (expr b)
 expr (a :. b) = H.Dot   (expr a) (expr b)
 expr (Neg a)  = H.Neg   (expr a)
-expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Delta_L)) (expr a)) 
-                          (H.Mul (H.Sym (Special Delta_L)) (expr b))
+expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
+                          (H.Mul (H.Sym (Special Partial)) (expr b))
 expr (C c)    = H.Sym   (c ^. symbol)
 --expr _ = error "Unimplemented expression transformation in ToTeX."
 

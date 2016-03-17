@@ -102,7 +102,6 @@ s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,s4_1_2_list]
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
 --TODO: REFERENCING! (Add to Spec; Ref LayoutObj)
   S ", includes the following elements:"
---TODO: Simple list (Add to LayoutObj)
 --TODO: Figures (Add to LayoutObj)
 
 s4_1_2_list = SimpleList $ [

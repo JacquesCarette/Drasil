@@ -11,6 +11,7 @@ data Circle = Circle
 data Delta  = Delta_L
             | Delta
 data Nabla  = Nabla
+data Partial = Partial
 data Phi    = Phi_L
             | Phi
 data Rho    = Rho_L
@@ -52,6 +53,12 @@ instance Render Nabla where
   render Plain Nabla = "nabla"
   render HTML Nabla  = "&nabla;"
 
+--
+
+instance Render Partial where
+  render TeX Partial   = "\\partial{}"
+  render Plain Partial = "partial"
+  render HTML Partial  = "&part;"
 --
 
 instance Render Phi where

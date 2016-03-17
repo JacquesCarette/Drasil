@@ -4,7 +4,7 @@ module ToTeX where
 import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTTeX as T
-import Unicode (render, Delta(..))
+import Unicode (render, Partial(..))
 import Format (Format(TeX), FormatC(..))
 import EqChunk
 import RelationChunk
@@ -29,8 +29,8 @@ expr (a :- b)     = T.Sub  (expr a) (expr b)
 expr (a :. b)     = T.Dot  (expr a) (expr b)
 expr (Neg a)      = T.Neg  (expr a)
 expr (C c)        = T.Sym  (c ^. symbol)
-expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Delta_L)) (expr a))
-                           (T.Mul (T.Sym (Special Delta_L)) (expr b))
+expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
+                           (T.Mul (T.Sym (Special Partial)) (expr b))
 --expr _ = error "Unimplemented expression transformation in ToTeX."
 
 rel :: Relation -> T.Expr

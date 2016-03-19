@@ -5,7 +5,7 @@ import Prelude hiding (print)
 import Text.PrettyPrint hiding (render)
 
 import ASTHTML
-import ToHTML (makeDocument, spec)
+import ToHTML (makeDocument)
 import qualified ASTInternal as A
 import Spec (USymb(..))
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
@@ -16,7 +16,6 @@ import Format (Format(HTML),FormatC(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
-import Reference
 
 genHTML :: A.DocType -> L.Document -> Doc
 genHTML (A.Website fn) doc = build fn $ makeDocument doc
@@ -40,6 +39,7 @@ printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dtype ssPs) = makeDefn dtype ssPs
 printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t items)          = makeList t items
+printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -179,3 +179,10 @@ makeList Simple items = div_tag ["list"]
   (vcat $ map (wrap "p" [] . text . p_spec) items)
 makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . text . p_spec) items)
+  
+-----------------------------------------------------------------
+------------------BEGIN FIGURE PRINTING--------------------------
+-----------------------------------------------------------------
+
+makeFigure :: String -> String -> String -> Doc
+makeFigure r c f = refwrap r (image f c $$ caption c)

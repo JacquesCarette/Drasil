@@ -60,6 +60,7 @@ printLO (Table rows r bl t)    = makeTable rows (pCon Plain r) bl (pCon Plain t)
 printLO (CodeBlock c)          = codeHeader $$ printCode c $$ codeFooter
 printLO (Definition dtype ssPs)= makeDefn dtype ssPs
 printLO (List lt is)           = makeList lt is
+printLO (Figure r c f)         = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -311,3 +312,16 @@ sim_item [] = [empty]
 sim_item (_:[]) = error "Simple list printing went awry, a pair broke"
 sim_item (x:y:zs) = text ("\\item[" ++ pCon Plain x ++ ":] " ++ pCon Plain y) :
   sim_item zs
+  
+-----------------------------------------------------------------
+------------------BEGIN FIGURE PRINTING--------------------------
+-----------------------------------------------------------------
+
+makeFigure :: String -> String -> String -> Doc
+makeFigure r c f = 
+  vcat [
+    b "figure", b "center",
+    text "\\includegraphics" <> br f,
+    caption c, label r,
+    e "center", e "figure"
+  ]

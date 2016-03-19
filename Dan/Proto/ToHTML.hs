@@ -89,6 +89,7 @@ lay (BulletList cs)           = H.List H.Unordered $ map spec cs
 lay (NumberedList cs)         = H.List H.Ordered $ map spec cs
 lay (SimpleList cs)           = H.List H.Simple $ 
   map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
+lay x@(Figure c f)            = H.Figure (spec (makeRef x)) (spec c) f
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [

@@ -15,6 +15,8 @@ type Bullets  = [Item]
 type Items    = [Item]
 type Depth    = Int
 type Pairs    = [(Title,Item)] -- Title: Item
+type Filepath = String
+type Label    = Spec
 
 data Document = Document Title Author [LayoutObj]
 
@@ -30,6 +32,7 @@ data LayoutObj = Table [Spec] [[Spec]] Title Bool
                | BulletList Bullets
                | NumberedList Items
                | SimpleList Pairs
+               | Figure Label Filepath--Should use relative file path.
 
 -- Types of definitions
 data DType = Data EqChunk 

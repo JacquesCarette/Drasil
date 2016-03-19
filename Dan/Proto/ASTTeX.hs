@@ -41,6 +41,8 @@ type Contents = Spec
 type Items    = [Spec]
 type Depth    = Int
 type Label    = Spec
+type Filepath = String
+type Caption  = Spec
 
 data LayoutObj = Table [[Spec]] Label Bool Title
                | Section Depth Title [LayoutObj]
@@ -49,6 +51,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | CodeBlock Code
                | Definition String [(String,LayoutObj)]
                | List ListType Items
+               | Figure Label Caption Filepath
                
 data ListType = Item | Enum | Simple
 

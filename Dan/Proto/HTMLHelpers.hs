@@ -36,6 +36,10 @@ caption t = wrap "p" ["caption"] (text t)
 refwrap :: String -> Doc -> Doc
 refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
+image :: String -> String -> Doc
+image f c = 
+  text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"></img>"
+
 sub,sup :: String -> String  
 sub = \x -> "<sub>" ++ x ++ "</sub>"
 sup = \x -> "<sup>" ++ x ++ "</sup>"

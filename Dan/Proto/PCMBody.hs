@@ -101,13 +101,14 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+
 s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+: 
   S ": " :+: (c ^. descr)) [thermFluxU, heat_capacity]
   
-s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,s4_1_2_list]
+s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,fig_tank,s4_1_2_list]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
---TODO: REFERENCING! (Add to Spec; Ref LayoutObj)
-  S ", includes the following elements:"
---TODO: Figures (Add to LayoutObj)
+  (makeRef fig_tank) :+: S ", includes the following elements:"
 
+fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
+            N (ht_flux_C ^. symbol)) "TankWaterOnly.png"
+  
 s4_1_2_list = SimpleList $ [
   (S "PS1", S "Tank containing water"), 
   (S "PS2", S "Heating coil at bottom of tank. (" :+:

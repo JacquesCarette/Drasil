@@ -39,8 +39,10 @@ type Contents = Spec
 type Items    = [Spec]
 type Tags     = [String]
 type Label    = Spec
+type Filepath = String
+type Caption  = Spec
 
-data LayoutObj = Table Tags [[Spec]] Label Bool Title
+data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Header Int Contents
                | Paragraph Contents
                | HDiv Tags [LayoutObj]
@@ -48,6 +50,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Title
                | CodeBlock Code
                | Definition String [(String,LayoutObj)]
                | List ListType Items
+               | Figure Label Caption Filepath
                -- | Span Tags Contents
                
 data ListType = Ordered | Unordered | Simple

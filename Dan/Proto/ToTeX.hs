@@ -92,7 +92,8 @@ lay (BulletList cs)           = T.List T.Item $ map spec cs
 lay (NumberedList cs)         = T.List T.Enum $ map spec cs
 lay (SimpleList cs)           = T.List T.Simple $ concat $
   map (\(f,s) -> [spec f, spec s]) cs
-
+lay x@(Figure c f)            = T.Figure (spec (makeRef x)) (spec c) f
+  
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),

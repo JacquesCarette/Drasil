@@ -8,8 +8,9 @@ import Helpers
 
 -- Creating References --
 makeRef :: LayoutObj -> Spec
-makeRef (Table h d t b)  = Ref (S "Table:" :+: simplify t)
+makeRef (Table h d l b)  = Ref (S "Table:" :+: simplify l)
 makeRef (Section d t _)  = Ref (writeSec d :+: simplify t)
+makeRef (Figure l _)     = Ref (S "Figure:" :+: simplify l)
 makeRef (Paragraph c)    = error "Can't reference paragraphs" --yet
 makeRef (EqnBlock c)     = error "EqnBlock ref unimplemented"
 makeRef (CodeBlock c)    = error "Codeblock ref unimplemented"
@@ -23,11 +24,12 @@ simplify (s1 :-: s2) = simplify s1 :-: simplify s2
 simplify (s1 :^: s2) = simplify s1 :^: simplify s2
 simplify (s1 :+: s2) = simplify s1 :+: simplify s2
 simplify (s1 :/: s2) = simplify s1 :/: simplify s2
-simplify (S s1)      = S (filter (not . isSpace) s1)
+simplify (S s1)      = S (map head (words s1))
 simplify (F _ s)     = s
 simplify (Ref _)     = error "Attempting to simplify an existing reference"
-simplify x           = x
+simplify _           = Empty
 
+writeSec :: Int -> Spec
 writeSec n
   | n < 0     = error "Illegal section depth. Must be positive."
   | n == 0    = S "Sec:"

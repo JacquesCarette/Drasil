@@ -1,3 +1,5 @@
+{-# OPTIONS -Wall #-}
+{-# LANGUAGE GADTs #-}
 module LayoutObjs where
 
 import EqChunk
@@ -17,7 +19,8 @@ type Pairs    = [(Title,Item)] -- Title: Item
 data Document = Document Title Author [LayoutObj]
 
 --Types of layout objects we deal with explicitly
-data LayoutObj = Table [Spec] [[Spec]] -- table header then data
+data LayoutObj = Table [Spec] [[Spec]] Title Bool
+  --table header data label showlabel?
                | Section Depth Title [LayoutObj] 
                   --Section = 0 depth, subsection = 1, subsub = 2 ... etc.
                | Paragraph Contents

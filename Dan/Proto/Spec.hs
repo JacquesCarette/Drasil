@@ -5,7 +5,6 @@ module Spec where
 import Format (FormatC)
 import Unicode (Render)
 import Symbol
-
 --For writing chunks in a specification language that can be converted to TeX
 infixr 5 :+:
 data Spec where
@@ -20,7 +19,8 @@ data Spec where
   U     :: (Render r) => r -> Spec  -- Unicode for special characters
   F     :: FormatC -> Spec -> Spec  -- Special formatting for certain symbols & special
                                     -- chars (e.g. hat, dot, etc.)
-
+  Ref   :: Spec -> Spec             -- Needs helper func to create Ref
+                                    -- See Reference.hs
 --Moving this here to avoid cyclic imports
 data USymb = Unitless
            | UName Symbol

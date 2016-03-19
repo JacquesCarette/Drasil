@@ -5,6 +5,10 @@ import Text.PrettyPrint
 import Config (tableWidth)
 import Helpers
 
+caption, label :: String -> Doc
+caption c = text "\\caption" <> br c
+label l = text "\\label" <> br l
+
 --Table making help
 lAndDim :: [[a]] -> String
 lAndDim []  = error "No fields provided"

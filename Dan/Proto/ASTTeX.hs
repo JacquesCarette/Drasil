@@ -29,6 +29,7 @@ data Spec = E Expr
           | Spec :/: Spec -- frac
           | Sy USymb
           | N Symbol
+          | Ref Spec
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.
@@ -39,8 +40,9 @@ type Author   = Spec
 type Contents = Spec
 type Items    = [Spec]
 type Depth    = Int
+type Label    = Spec
 
-data LayoutObj = Table [[Spec]]
+data LayoutObj = Table [[Spec]] Label Bool Title
                | Section Depth Title [LayoutObj]
                | Paragraph Contents
                | EqnBlock Contents

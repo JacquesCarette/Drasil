@@ -15,6 +15,7 @@ import ExprTools
 import Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import LayoutObjs
 import Symbol
+import Reference
 
 
 expr :: Expr -> T.Expr
@@ -56,6 +57,7 @@ spec Empty     = T.S ""
 spec (U u)     = T.S $ render TeX u
 spec (F f s)   = spec $ format f s
 spec (N s)     = T.N s
+spec (Ref r)   = T.Ref (spec r)
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -73,9 +75,9 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> T.LayoutObj
-lay (Table hdr lls) 
-  | length hdr == length (head lls) = T.Table $ 
-                                      (map spec hdr) : (map (map spec) lls)
+lay x@(Table hdr lls t b) 
+  | length hdr == length (head lls) = T.Table ((map spec hdr) : 
+      (map (map spec) lls)) (spec (makeRef x)) b (spec t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."

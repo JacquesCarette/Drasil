@@ -53,13 +53,13 @@ listpackages (p:[]) = usepackage p
 listpackages (p:ps) = usepackage p $$ listpackages ps
 
 printLO :: LayoutObj -> Doc
-printLO (Section d t contents)  = sec d (pCon Plain t) $$ print contents
-printLO (Paragraph contents)    = text (pCon Plain contents)
-printLO (EqnBlock contents)     = text $ makeEquation contents
-printLO (Table rows)            = makeTable rows
-printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPs) = makeDefn dtype ssPs
-printLO (List lt is)            = makeList lt is
+printLO (Section d t contents) = sec d (pCon Plain t) $$ print contents
+printLO (Paragraph contents)   = text (pCon Plain contents)
+printLO (EqnBlock contents)    = text $ makeEquation contents
+printLO (Table rows r bl t)    = makeTable rows (pCon Plain r) bl (pCon Plain t)
+printLO (CodeBlock c)          = codeHeader $$ printCode c $$ codeFooter
+printLO (Definition dtype ssPs)= makeDefn dtype ssPs
+printLO (List lt is)           = makeList lt is
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -69,7 +69,7 @@ print l = foldr ($$) empty $ map printLO l
 -----------------------------------------------------------------
 
 p_spec :: Spec -> String
-p_spec (E ex)      = p_expr ex
+p_spec (E ex)     = p_expr ex
 p_spec (a :+: s)  = p_spec a ++ p_spec s
 p_spec (a :-: s)  = p_spec a ++ "_" ++ brace (p_spec s)
 p_spec (a :^: s)  = p_spec a ++ "^" ++ brace (p_spec s)
@@ -78,6 +78,7 @@ p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = runReader (uSymbPrint s) Plain
 p_spec HARDNL     = "\\newline"
+p_spec (Ref r)    = p_spec r
 
 symbol :: Symbol -> String
 symbol NA               = ""
@@ -133,9 +134,10 @@ neg x         = paren ("-" ++ p_expr x)
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------
   
-makeTable :: [[Spec]] -> Doc
-makeTable lls = text ("\\begin{longtable}" ++ brace (header lls)) 
-  $$ makeRows lls $$ text "\\end{longtable}"
+makeTable :: [[Spec]] -> String -> Bool -> String -> Doc
+makeTable lls r bool t = text ("\\begin{longtable}" ++ brace (header lls)) 
+  $$ makeRows lls $$ (if bool then caption t else empty) $$
+  label r $$ text "\\end{longtable}"
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
                         brace (show tableWidth ++ "cm")
 
@@ -162,6 +164,7 @@ getCon (_ :/: _) = Equation -- Fractions are always equations.
 getCon (Sy _)    = Plain
 getCon (N _)     = Equation
 getCon HARDNL    = Plain
+getCon (Ref _)   = Plain
 
 
 lPrint :: Spec -> Reader Context String

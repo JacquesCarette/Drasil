@@ -30,10 +30,11 @@ s1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " given followed by a description of the unit with the SI" :+: 
            S " name in parentheses.")
 
-s1_table = Table [S "Symbol", S "Description"] $ mkTable
+s1_table = Table [S "Symbol", S "Description"] (mkTable
   [(\x -> Sy (x ^. unit)),
    (\x -> (x ^. descr) :+: S (" (" ++ map toLower (x ^. name) ++ ")"))
-  ] si_units
+  ] si_units)
+  (S "Table of Units") False
 
 s2 = Section 0 (S "Table of Symbols") [s2_intro, s2_table]
 
@@ -45,11 +46,12 @@ s2_intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-s2_table = Table [S "Symbol", S "Description", S "Units"] $ mkTable
+s2_table = Table [S "Symbol", S "Description", S "Units"] (mkTable
   [(\ch -> N (ch ^. symbol)) , 
    (\ch -> ch ^. descr), 
    (\ch -> Sy $ ch ^. unit)]
-  [h_g,h_c] 
+  [h_g,h_c])
+  (S "Table of Symbols") False
 
 s3 = Section 0 (S "Data Definitions") [s3_dd1, s3_dd2]
 

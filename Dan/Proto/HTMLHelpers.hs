@@ -30,6 +30,11 @@ wrap s ts = \x ->
   in let te c = text $ "</" ++ c ++ ">"
   in vcat [tb s, x, te s]
   
+caption :: String -> Doc
+caption t = wrap "p" ["caption"] (text t)
+
+refwrap :: String -> Doc -> Doc
+refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
 sub,sup :: String -> String  
 sub = \x -> "<sub>" ++ x ++ "</sub>"
@@ -52,6 +57,13 @@ makeCSS _ = vcat [
   text ".title {text-align:center;}",
   text ".author {text-align:center;}",
   text ".paragraph {text-align:justify;}",
+  vcat [
+    text ".caption {",
+    text "text-align:center;",
+    text "font-weight:bold;",
+    text "padding-bottom:1%;",
+    text "line-height:0;}"
+    ],
   vcat [
     text ".fraction {",
     text "  display: inline-block;",

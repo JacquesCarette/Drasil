@@ -30,6 +30,7 @@ data Spec = E Expr
           | Sy USymb
           | N Symbol
           | HARDNL
+          | Ref Spec
 
 data Document = Document Title Author [LayoutObj]
 type Title    = Spec
@@ -37,8 +38,9 @@ type Author   = Spec
 type Contents = Spec
 type Items    = [Spec]
 type Tags     = [String]
+type Label    = Spec
 
-data LayoutObj = Table Tags [[Spec]]
+data LayoutObj = Table Tags [[Spec]] Label Bool Title
                | Header Int Contents
                | Paragraph Contents
                | HDiv Tags [LayoutObj]

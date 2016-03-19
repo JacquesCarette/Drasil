@@ -5,7 +5,7 @@ import Prelude hiding (print)
 import Text.PrettyPrint hiding (render)
 
 import ASTHTML
-import ToHTML (makeDocument)
+import ToHTML (makeDocument, spec)
 import qualified ASTInternal as A
 import Spec (USymb(..))
 -- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
@@ -16,6 +16,7 @@ import Format (Format(HTML),FormatC(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
+import Reference
 
 genHTML :: A.DocType -> L.Document -> Doc
 genHTML (A.Website fn) doc = build fn $ makeDocument doc
@@ -34,7 +35,7 @@ printLO :: LayoutObj -> Doc
 printLO (HDiv ts layoutObs)     = div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
 printLO (Tagless contents)      = text $ p_spec contents
-printLO (Table ts rows)         = makeTable ts rows
+printLO (Table ts rows r b t)   = makeTable ts rows (p_spec r) b (p_spec t)
 printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dtype ssPs) = makeDefn dtype ssPs
 printLO (Header n contents)     = h n $ text (p_spec contents)
@@ -66,6 +67,7 @@ p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = uSymb s
 p_spec HARDNL     = "<br />"
+p_spec (Ref a)    = p_spec a
 
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
@@ -136,10 +138,10 @@ neg a         = paren ("-" ++ p_expr a)
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------
   
-makeTable :: Tags -> [[Spec]] -> Doc
-makeTable _ []       = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) = wrap "table" ts (
-    tr (makeHeaderCols l) $$ makeRows lls)
+makeTable :: Tags -> [[Spec]] -> String -> Bool -> String -> Doc
+makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
+makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
+    tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
 makeRows :: [[Spec]] -> Doc
 makeRows []     = empty

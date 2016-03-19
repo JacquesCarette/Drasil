@@ -14,6 +14,7 @@ import Control.Lens ((^.))
 import RecipeTools
 import PCMUnits
 import LayoutObjs
+import Reference
 -- import ToCode
 -- import ASTCode
 
@@ -45,11 +46,12 @@ s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S " given followed by a description of the unit followed by " :+: 
            S "the SI name.")
 
-s1_1_table = Table [S "Symbol", S "Description", S "Name"] $ mkTable
+s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. unit)),
    (\x -> (x ^. descr)),
    (\x -> S (x ^. name))
-  ] this_si
+  ] this_si)
+  (S "Table of Units") True
 
 s1_2 = Section 1 (S "Table of Symbols") [s1_2_intro, s1_2_table]
 
@@ -59,19 +61,21 @@ s1_2_intro = Paragraph $
   S "made to be consistent with the heat transfer literature and " :+:
   S "with existing documentation for solar water heating systems."
   
-s1_2_table = Table [S "Symbol", S "Units", S "Description"] $ mkTable
+s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
    ]
-  pcmSymbols
+  pcmSymbols)
+  (S "Table of Symbols") False
 
 s1_3 = Section 1 (S "Abbreviations and Acronyms") [s1_3_table]
 
-s1_3_table = Table [S "Symbol", S "Description"] $ mkTable
+s1_3_table = Table [S "Symbol", S "Description"] (mkTable
   [(\ch -> S $ ch ^. name),
    (\ch -> ch ^. descr)]
-  acronyms
+  acronyms)
+  (S "Abbreviations and Acronyms") False
 
 s4 = Section 0 (S "Specific System Description") [s4_intro, s4_1,s4_2]
 

@@ -15,6 +15,7 @@ import ExprTools
 import Config (verboseDDDescription)
 import LayoutObjs
 import Symbol
+import Reference
 
 
 expr :: Expr -> H.Expr
@@ -56,6 +57,7 @@ spec Empty     = H.S ""
 spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ format f s
 spec (N s)     = H.N s
+spec (Ref r)   = H.Ref (spec r)
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = s :+: S "&#770;" 
@@ -73,8 +75,8 @@ createLayout (l:[]) = [lay l]
 createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> H.LayoutObj
-lay (Table hdr lls)           = 
-  H.Table ["table"] $ (map spec hdr) : (map (map spec) lls)
+lay x@(Table hdr lls t b)     = H.Table ["table"] 
+  ((map spec hdr) : (map (map spec) lls)) (spec (makeRef x)) b (spec t)
 lay (Section depth title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title)):(createLayout contents))

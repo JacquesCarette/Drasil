@@ -19,7 +19,7 @@ data Spec where
   U     :: (Render r) => r -> Spec  -- Unicode for special characters
   F     :: FormatC -> Spec -> Spec  -- Special formatting for certain symbols & special
                                     -- chars (e.g. hat, dot, etc.)
-  Ref   :: Spec -> Spec             -- Needs helper func to create Ref
+  Ref   :: RefType -> Spec -> Spec  -- Needs helper func to create Ref
                                     -- See Reference.hs
 --Moving this here to avoid cyclic imports
 data USymb = Unitless
@@ -30,7 +30,15 @@ data USymb = Unitless
                                 --  necessary for things like J/(kg*C)
 -- Language of unit equations, to define a unit relative
 -- to another
+data RefType = Tab
+             | Fig
+             | Sec Int
 
+instance Show RefType where
+  show Tab     = "Table"
+  show Fig     = "Figure"
+  show (Sec _) = "Section"
+  
 --Maybe spec could become a functor/applicative/monad?
 -- (if we generalize mapping somehow)
 sMap :: (String->String) -> Spec -> Spec
@@ -39,4 +47,4 @@ sMap f (a :-: b) = sMap f a :-: sMap f b
 sMap f (a :^: b) = sMap f a :^: sMap f b
 sMap f (a :+: b) = sMap f a :+: sMap f b
 sMap f (a :/: b) = sMap f a :/: sMap f b
-sMap _ a = a
+sMap _ a = a

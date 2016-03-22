@@ -67,7 +67,7 @@ p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = uSymb s
 p_spec HARDNL     = "<br />"
-p_spec (Ref a)    = p_spec a
+p_spec (Ref r a)  = "<a href=#" ++ p_spec a ++ ">" ++ "this " ++ show r ++ "</a>"
 
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x

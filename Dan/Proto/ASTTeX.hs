@@ -3,7 +3,7 @@ module ASTTeX where
 
 import ASTInternal (Variable)
 import Symbol (Symbol)
-import Spec (USymb)
+import Spec (USymb, RefType)
 import ASTCode (Code)
 
 data Expr = Var  Variable
@@ -29,7 +29,7 @@ data Spec = E Expr
           | Spec :/: Spec -- frac
           | Sy USymb
           | N Symbol
-          | Ref Spec
+          | Ref RefType Spec
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.

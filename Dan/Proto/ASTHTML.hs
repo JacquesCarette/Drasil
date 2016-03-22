@@ -3,7 +3,7 @@ module ASTHTML where
 
 import ASTInternal (Variable)
 import Symbol (Symbol)
-import Spec (USymb)
+import Spec (USymb, RefType)
 import ASTCode (Code)
 
 data Expr = Var   Variable
@@ -30,7 +30,7 @@ data Spec = E Expr
           | Sy USymb
           | N Symbol
           | HARDNL
-          | Ref Spec
+          | Ref RefType Spec
 
 data Document = Document Title Author [LayoutObj]
 type Title    = Spec

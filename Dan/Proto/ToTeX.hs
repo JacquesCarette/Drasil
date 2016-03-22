@@ -57,7 +57,7 @@ spec Empty     = T.S ""
 spec (U u)     = T.S $ render TeX u
 spec (F f s)   = spec $ format f s
 spec (N s)     = T.N s
-spec (Ref r)   = T.Ref (spec r)
+spec (Ref t r)   = T.Ref t (spec r)
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -77,7 +77,7 @@ createLayout (l:ls) = lay l : createLayout ls
 lay :: LayoutObj -> T.LayoutObj
 lay x@(Table hdr lls t b) 
   | length hdr == length (head lls) = T.Table ((map spec hdr) : 
-      (map (map spec) lls)) (spec (makeRef x)) b (spec t)
+      (map (map spec) lls)) (spec (getRefName x)) b (spec t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
@@ -92,7 +92,7 @@ lay (BulletList cs)           = T.List T.Item $ map spec cs
 lay (NumberedList cs)         = T.List T.Enum $ map spec cs
 lay (SimpleList cs)           = T.List T.Simple $ concat $
   map (\(f,s) -> [spec f, spec s]) cs
-lay x@(Figure c f)            = T.Figure (spec (makeRef x)) (spec c) f
+lay x@(Figure c f)            = T.Figure (spec (getRefName x)) (spec c) f
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

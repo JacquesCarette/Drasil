@@ -79,7 +79,7 @@ p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = runReader (uSymbPrint s) Plain
 p_spec HARDNL     = "\\newline"
-p_spec (Ref r)    = p_spec r
+p_spec (Ref t r)  = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String
 symbol NA               = ""
@@ -165,7 +165,7 @@ getCon (_ :/: _) = Equation -- Fractions are always equations.
 getCon (Sy _)    = Plain
 getCon (N _)     = Equation
 getCon HARDNL    = Plain
-getCon (Ref _)   = Plain
+getCon (Ref _ _)   = Plain
 
 
 lPrint :: Spec -> Reader Context String

@@ -31,7 +31,7 @@ numberedTMEquations = False
 defaultSRSparams :: [DocParams]
 defaultSRSparams = [
   DocClass  [] "article",
-  UsePackages ["booktabs","longtable","listings","graphics"]
+  UsePackages ["booktabs","longtable","listings","graphics","hyperref"]
   ]
 
 defaultLPMparams :: [DocParams]

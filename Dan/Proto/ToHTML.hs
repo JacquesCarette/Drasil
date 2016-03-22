@@ -57,7 +57,7 @@ spec Empty     = H.S ""
 spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ format f s
 spec (N s)     = H.N s
-spec (Ref r)   = H.Ref (spec r)
+spec (Ref t r)   = H.Ref t (spec r)
 
 format :: FormatC -> Spec -> Spec
 format Hat    s = s :+: S "&#770;" 
@@ -76,7 +76,7 @@ createLayout (l:ls) = lay l : createLayout ls
 
 lay :: LayoutObj -> H.LayoutObj
 lay x@(Table hdr lls t b)     = H.Table ["table"] 
-  ((map spec hdr) : (map (map spec) lls)) (spec (makeRef x)) b (spec t)
+  ((map spec hdr) : (map (map spec) lls)) (spec (getRefName x)) b (spec t)
 lay (Section depth title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title)):(createLayout contents))
@@ -89,7 +89,7 @@ lay (BulletList cs)           = H.List H.Unordered $ map spec cs
 lay (NumberedList cs)         = H.List H.Ordered $ map spec cs
 lay (SimpleList cs)           = H.List H.Simple $ 
   map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
-lay x@(Figure c f)            = H.Figure (spec (makeRef x)) (spec c) f
+lay x@(Figure c f)            = H.Figure (spec (getRefName x)) (spec c) f
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [

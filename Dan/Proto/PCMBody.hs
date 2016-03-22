@@ -5,7 +5,9 @@ import Data.Char (toLower)
 import Data.List (intersperse)
 import Helpers
 import PCMExample
-import Spec (Spec(..),sMap)
+import Spec (Spec(..),sMap) --May need to update imports to hide Ref.
+                            --More likely setup an API or something to
+                            --Restrict access for novice users.
 import Format (FormatC(..))
 import Unit (Unit(..), UnitDefn(..))
 import SI_Units 
@@ -101,7 +103,7 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+
 s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+: 
   S ": " :+: (c ^. descr)) [thermFluxU, heat_capacity]
   
-s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,fig_tank,s4_1_2_list]
+s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,s4_1_2_list,fig_tank]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
   (makeRef fig_tank) :+: S ", includes the following elements:"

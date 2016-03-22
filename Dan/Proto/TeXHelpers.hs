@@ -2,7 +2,7 @@
 module TeXHelpers where
 
 import Text.PrettyPrint
-import Config (tableWidth)
+import Config (tableWidth, numberedSections)
 import Helpers
 
 caption, label :: String -> Doc
@@ -53,8 +53,8 @@ sec :: Int -> String -> Doc
 sec d b1 
   | d < 0 = error "Cannot have section with negative depth"
   | d > 2 = error "Section depth must be from 0-2"
-  | otherwise = bslash <> text (concat $ replicate d "sub") <> text "section*" 
-      <> br b1
+  | otherwise = bslash <> text (concat $ replicate d "sub") <> text "section" 
+      <> (if (not numberedSections) then text "*" else empty) <> br b1
 
 newline :: Doc
 newline = bslash <> text "newline"

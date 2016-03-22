@@ -106,7 +106,7 @@ s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+:
 s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,s4_1_2_list,fig_tank]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
-  (makeRef fig_tank) :+: S ", includes the following elements:"
+  (makeRef s4) :+: S ", includes the following elements:"
 
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
             N (ht_flux_C ^. symbol)) "TankWaterOnly.png"

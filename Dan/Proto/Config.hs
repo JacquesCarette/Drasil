@@ -24,7 +24,10 @@ numberedDDEquations :: Bool
 numberedDDEquations = False --Does not affect HTML
 
 numberedTMEquations :: Bool
-numberedTMEquations = False
+numberedTMEquations = False -- TeX only
+
+numberedSections :: Bool -- TeX only
+numberedSections = True
 
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
   -- you can create your own parameter function and replace the one above.
@@ -40,7 +43,7 @@ defaultLPMparams = [
   UsePackages ["xr"],
   ExDoc "L-" "hghc_SRS"
   ]
-
+  
 --column width for data definitions (fraction of LaTeX textwidth)
 colAwidth, colBwidth :: Double
 colAwidth = 0.2

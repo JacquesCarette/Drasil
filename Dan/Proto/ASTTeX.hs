@@ -45,7 +45,7 @@ type Filepath = String
 type Caption  = Spec
 
 data LayoutObj = Table [[Spec]] Label Bool Title
-               | Section Depth Title [LayoutObj]
+               | Section Depth Title [LayoutObj] Label
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code

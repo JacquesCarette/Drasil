@@ -53,14 +53,15 @@ listpackages (p:[]) = usepackage p
 listpackages (p:ps) = usepackage p $$ listpackages ps
 
 printLO :: LayoutObj -> Doc
-printLO (Section d t contents) = sec d (pCon Plain t) $$ print contents
-printLO (Paragraph contents)   = text (pCon Plain contents)
-printLO (EqnBlock contents)    = text $ makeEquation contents
-printLO (Table rows r bl t)    = makeTable rows (pCon Plain r) bl (pCon Plain t)
-printLO (CodeBlock c)          = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPs)= makeDefn dtype ssPs
-printLO (List lt is)           = makeList lt is
-printLO (Figure r c f)         = makeFigure (pCon Plain r) (pCon Plain c) f
+printLO x@(Section d t con l) = sec d (pCon Plain t) $$ label (pCon Plain l) 
+                                $$ print con
+printLO (Paragraph contents)    = text (pCon Plain contents)
+printLO (EqnBlock contents)     = text $ makeEquation contents
+printLO (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
+printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
+printLO (Definition dtype ssPs) = makeDefn dtype ssPs
+printLO (List lt is)            = makeList lt is
+printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l

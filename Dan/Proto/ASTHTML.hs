@@ -45,7 +45,7 @@ type Caption  = Spec
 data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Header Int Contents
                | Paragraph Contents
-               | HDiv Tags [LayoutObj]
+               | HDiv Tags [LayoutObj] Label
                | Tagless Contents
                | CodeBlock Code
                | Definition String [(String,LayoutObj)]

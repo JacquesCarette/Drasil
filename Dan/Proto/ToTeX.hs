@@ -81,8 +81,8 @@ lay x@(Table hdr lls t b)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
-lay (Section depth title layoutComponents) = 
-  T.Section depth (spec title) (createLayout layoutComponents)
+lay x@(Section depth title layComps) = 
+  T.Section depth (spec title) (createLayout layComps) (spec $ getRefName x)
 lay (Paragraph c)             = T.Paragraph (spec c)
 lay (EqnBlock c)              = T.EqnBlock (spec c)
 lay (CodeBlock c)             = T.CodeBlock c

@@ -77,11 +77,13 @@ createLayout (l:ls) = lay l : createLayout ls
 lay :: LayoutObj -> H.LayoutObj
 lay x@(Table hdr lls t b)     = H.Table ["table"] 
   ((map spec hdr) : (map (map spec) lls)) (spec (getRefName x)) b (spec t)
-lay (Section depth title contents) = 
+lay x@(Section depth title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
-  ((H.Header (depth+2) (spec title)):(createLayout contents))
+  ((H.Header (depth+2) (spec title)):(createLayout contents)) 
+  (spec $ getRefName x)
 lay (Paragraph c)             = H.Paragraph (spec c)
-lay (EqnBlock c)              = H.HDiv ["equation"] [H.Tagless (spec c)]
+lay (EqnBlock c)              = H.HDiv ["equation"] [H.Tagless (spec c)] 
+                                (spec Empty)
 lay (CodeBlock c)             = H.CodeBlock c
 lay (Definition c@(Data _))   = H.Definition "Data" $ makePairs c
 lay (Definition c@(Theory _)) = H.Definition "Theory" $ makePairs c
@@ -95,12 +97,13 @@ makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)]),
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (spec Empty)),
   ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
   ("Label",       H.Paragraph $ H.S "T:" H.:+: (H.S $ c ^. name)),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))]),
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
+                  (spec Empty)),
   ("Description", H.Paragraph (spec (c ^. descr)))
   ]
 makePairs General = error "Not yet implemented"

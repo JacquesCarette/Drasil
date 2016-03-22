@@ -31,7 +31,8 @@ build fn (Document t a c) =
   ))
   
 printLO :: LayoutObj -> Doc
-printLO (HDiv ts layoutObs)     = div_tag ts (vcat (map printLO layoutObs))
+printLO (HDiv ts layoutObs l)   = refwrap (p_spec l) $ 
+                                  div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
 printLO (Tagless contents)      = text $ p_spec contents
 printLO (Table ts rows r b t)   = makeTable ts rows (p_spec r) b (p_spec t)
@@ -67,7 +68,8 @@ p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = uSymb s
 p_spec HARDNL     = "<br />"
-p_spec (Ref r a)  = "<a href=#" ++ p_spec a ++ ">" ++ "this " ++ show r ++ "</a>"
+p_spec (Ref r a)  = "<a href=#" ++ p_spec a ++ ">" ++ 
+                    "this " ++ show r ++ "</a>"
 
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x

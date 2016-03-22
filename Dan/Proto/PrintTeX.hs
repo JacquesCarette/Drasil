@@ -10,8 +10,9 @@ import Control.Monad.Reader
 import ASTTeX
 import ToTeX
 import qualified ASTInternal as A
-import Spec (USymb(..))
-import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
+import Spec (USymb(..), RefType(..))
+import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth,
+              numberedSections)
 import Helpers
 import TeXHelpers
 import Unicode
@@ -53,8 +54,8 @@ listpackages (p:[]) = usepackage p
 listpackages (p:ps) = usepackage p $$ listpackages ps
 
 printLO :: LayoutObj -> Doc
-printLO x@(Section d t con l) = sec d (pCon Plain t) $$ label (pCon Plain l) 
-                                $$ print con
+printLO (Section d t con l)     = sec d (pCon Plain t) $$ label (pCon Plain l) 
+                                  $$ print con
 printLO (Paragraph contents)    = text (pCon Plain contents)
 printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
@@ -71,16 +72,20 @@ print l = foldr ($$) empty $ map printLO l
 -----------------------------------------------------------------
 
 p_spec :: Spec -> String
-p_spec (E ex)     = p_expr ex
-p_spec (a :+: s)  = p_spec a ++ p_spec s
-p_spec (a :-: s)  = p_spec a ++ "_" ++ brace (p_spec s)
-p_spec (a :^: s)  = p_spec a ++ "^" ++ brace (p_spec s)
-p_spec (a :/: s)  = "\\frac" ++ brace (p_spec a) ++ brace (p_spec s)
-p_spec (S s)      = s
-p_spec (N s)      = symbol s
-p_spec (Sy s)     = runReader (uSymbPrint s) Plain
-p_spec HARDNL     = "\\newline"
-p_spec (Ref t r)  = show t ++ "~\\ref" ++ brace (p_spec r)
+p_spec (E ex)      = p_expr ex
+p_spec (a :+: s)   = p_spec a ++ p_spec s
+p_spec (a :-: s)   = p_spec a ++ "_" ++ brace (p_spec s)
+p_spec (a :^: s)   = p_spec a ++ "^" ++ brace (p_spec s)
+p_spec (a :/: s)   = "\\frac" ++ brace (p_spec a) ++ brace (p_spec s)
+p_spec (S s)       = s
+p_spec (N s)       = symbol s
+p_spec (Sy s)      = runReader (uSymbPrint s) Plain
+p_spec HARDNL      = "\\newline"
+p_spec (Ref t@(Sec _) r) = if numberedSections 
+                           then show t ++ "~\\ref" ++ brace (p_spec r) 
+                           else error "Cannot create section reference " ++
+                            "unless using numbered sections"
+p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String
 symbol NA               = ""
@@ -270,6 +275,7 @@ makeDefTable dt ps@((_,d):_) = vcat [
   where defAc "Data" = text "DD:"
         defAc "Theory" = text "T:"
         defAc "General" = text "GD:"
+        defAc _ = error "See PrintTex.hs defAc in makeDefTable"
 
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create Defn table"

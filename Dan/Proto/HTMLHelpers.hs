@@ -36,6 +36,9 @@ caption t = wrap "p" ["caption"] (text t)
 refwrap :: String -> Doc -> Doc
 refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
+reflink :: String -> String -> String
+reflink id txt = "<a href=#" ++ id ++ ">" ++ txt ++ "</a>"
+
 image :: String -> String -> Doc
 image f c = 
   text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"></img>"

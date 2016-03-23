@@ -44,3 +44,19 @@ writeSec n
   | n == 0    = S "Sec:"
   | n == 1    = S "Subsec:"
   | otherwise = S $ (capitalize $ concat $ replicate n "sub") ++ "sec:"
+  
+-- Need to figure out Eq of specs or change ref to take String instead of Spec and use Strings throughout.  
+  
+-- getRefsTo :: Chunk c => c -> Document -> Spec
+-- getRefsTo c (Document _ _ (ls)) = concat $ intersperse (", ") $ 
+                                    -- map (findRef c) ls
+                                    
+-- findRef :: Chunk c => c -> LayoutObj -> [Spec]
+-- findRef c x@(Table _ d _ _)  = [checkTable (getRefName x) (getRefName c) d]
+-- findRef c x@(Section _ _ ls) = concat map (findSecRef x c ls)
+-- findRef c x@(Definition (Data c2)) = [checkChunk x c c2]
+-- findRef c x@(Definition (Theory c2)) = [checkChunk x c c2]
+-- findRef _ = []
+
+-- checkTable :: Chunk c => Spec -> c -> [[Spec]] -> Spec
+-- checkTable r c d = 

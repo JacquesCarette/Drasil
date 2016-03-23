@@ -31,7 +31,7 @@ s1, s1_intro, s1_1, s1_1_intro, s1_1_table, s1_2, s1_2_intro,
 
 pcm_srs :: Document  
 pcm_srs = Document (S "Software Requirements Specification for Solar Water " :+:
-          S "Heating Systems Incorporating Phase Change Material") 
+          S "Heating Systems") 
           (S "Thulasi Jegatheesan") [s1,s4]
 
 s1 = Section 0 (S "Reference Material") [s1_intro, s1_1, s1_2, s1_3]
@@ -106,7 +106,7 @@ s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+:
 s4_1_2 = Section 2 (physSysDescr ^. descr) [s4_1_2_intro,s4_1_2_list,fig_tank]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
-  (makeRef s4) :+: S ", includes the following elements:"
+  (makeRef fig_tank) :+: S ", includes the following elements:"
 
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
             N (ht_flux_C ^. symbol)) "TankWaterOnly.png"
@@ -120,7 +120,9 @@ s4_1_2_list = SimpleList $ [
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [s4_1_3_intro]
 s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
   S "temperature of the water, and material properties, the goal statement is"
---TODO: Simple list.
+
+s4_1_3_list = SimpleList $ [
+  (S "GS1", S "predict the " :+: (temp_water ^. descr) :+: " over time")]
 
 s4_2 = Section 1 (S "Solution Characteristics Specification") 
   [s4_2_intro,s4_2_1,s4_2_2]

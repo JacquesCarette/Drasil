@@ -25,9 +25,9 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 s1, s1_intro, s1_1, s1_1_intro, s1_1_table, s1_2, s1_2_intro, 
   s1_2_table, s1_3, s1_3_table,s4,s4_intro,s4_1,s4_1_intro,
-  s4_1_1,s4_1_1_intro,s4_1_1_bullets,s4_1_2,s4_1_2_intro,s4_1_3,
-  s4_1_3_intro,s4_2,s4_2_intro,s4_2_1,s4_2_1_intro,s4_2_2,
-  s4_2_2_intro:: LayoutObj
+  s4_1_1,s4_1_1_intro,s4_1_1_bullets,s4_1_2,s4_1_2_intro,s4_1_2_list,s4_1_3,
+  s4_1_3_intro,s4_1_3_list,s4_2,s4_2_intro,s4_2_1,s4_2_1_intro,s4_2_2,
+  s4_2_2_intro, fig_tank:: LayoutObj
 
 pcm_srs :: Document  
 pcm_srs = Document (S "Software Requirements Specification for Solar Water " :+:
@@ -117,12 +117,12 @@ s4_1_2_list = SimpleList $ [
   N (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
   S " into the water.)")]
 
-s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [s4_1_3_intro]
+s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [s4_1_3_intro,s4_1_3_list]
 s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
   S "temperature of the water, and material properties, the goal statement is"
 
 s4_1_3_list = SimpleList $ [
-  (S "GS1", S "predict the " :+: (temp_water ^. descr) :+: " over time")]
+  (S "GS1", S "predict the " :+: (temp_water ^. descr) :+: S " over time")]
 
 s4_2 = Section 1 (S "Solution Characteristics Specification") 
   [s4_2_intro,s4_2_1,s4_2_2]

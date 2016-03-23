@@ -37,7 +37,7 @@ printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
 printLO (Tagless contents)      = text $ p_spec contents
 printLO (Table ts rows r b t)   = makeTable ts rows (p_spec r) b (p_spec t)
 printLO (CodeBlock c)           = code $ printCode c
-printLO (Definition dtype ssPs) = makeDefn dtype ssPs
+printLO (Definition dt ssPs l)  = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t items)          = makeList t items
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
@@ -158,13 +158,12 @@ makeColumns ls = vcat $ map (td . text . p_spec) ls
 ------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
-makeDefn :: String -> [(String,LayoutObj)] -> Doc
-makeDefn _ []     = error "Empty definition"
-makeDefn dt ps    = wrap "table" [dtag dt] (makeDRows ps)
-  where dtag "Data" = "ddefn"
-        dtag "Theory" = "tdefn"
-        dtag "General" = "gdefn"
-        dtag _ = error "Attempting to create impossible definition (ToHTML)"
+makeDefn :: L.DType -> [(String,LayoutObj)] -> String -> Doc
+makeDefn _ [] _   = error "Empty definition"
+makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
+  where dtag (L.Data _)   = "ddefn"
+        dtag (L.Theory _) = "tdefn"
+        dtag (L.General)  = "gdefn"
 
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create defn table"

@@ -85,8 +85,7 @@ lay (Paragraph c)             = H.Paragraph (spec c)
 lay (EqnBlock c)              = H.HDiv ["equation"] [H.Tagless (spec c)] 
                                 (spec Empty)
 lay (CodeBlock c)             = H.CodeBlock c
-lay (Definition c@(Data _))   = H.Definition "Data" $ makePairs c
-lay (Definition c@(Theory _)) = H.Definition "Theory" $ makePairs c
+lay x@(Definition c) = H.Definition c (makePairs c) (spec $ getRefName x)
 lay (BulletList cs)           = H.List H.Unordered $ map spec cs
 lay (NumberedList cs)         = H.List H.Ordered $ map spec cs
 lay (SimpleList cs)           = H.List H.Simple $ 

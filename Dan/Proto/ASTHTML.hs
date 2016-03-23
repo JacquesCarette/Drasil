@@ -5,6 +5,7 @@ import ASTInternal (Variable)
 import Symbol (Symbol)
 import Spec (USymb, RefType)
 import ASTCode (Code)
+import LayoutObjs (DType (..))
 
 data Expr = Var   Variable
           | Dbl   Double
@@ -48,7 +49,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents
                | CodeBlock Code
-               | Definition String [(String,LayoutObj)]
+               | Definition DType [(String,LayoutObj)] Label
                | List ListType Items
                | Figure Label Caption Filepath
                -- | Span Tags Contents

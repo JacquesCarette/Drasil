@@ -49,7 +49,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Paragraph Contents
                | EqnBlock Contents
                | CodeBlock Code
-               | Definition String [(String,LayoutObj)]
+               | Definition [(String,LayoutObj)] Label
                | List ListType Items
                | Figure Label Caption Filepath
                

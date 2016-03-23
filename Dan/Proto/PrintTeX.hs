@@ -60,7 +60,7 @@ printLO (Paragraph contents)    = text (pCon Plain contents)
 printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
 printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition dtype ssPs) = makeDefn dtype ssPs
+printLO (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
 printLO (List lt is)            = makeList lt is
 printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
@@ -81,10 +81,10 @@ p_spec (S s)       = s
 p_spec (N s)       = symbol s
 p_spec (Sy s)      = runReader (uSymbPrint s) Plain
 p_spec HARDNL      = "\\newline"
-p_spec (Ref t@(Sec _) r) = if numberedSections 
-                           then show t ++ "~\\ref" ++ brace (p_spec r) 
-                           else error "Cannot create section reference " ++
-                            "unless using numbered sections"
+p_spec (Ref t@Sec r) = if numberedSections 
+                       then show t ++ "~\\ref" ++ brace (p_spec r) 
+                       else error "Cannot create section reference " ++
+                        "unless using numbered sections"
 p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String
@@ -254,9 +254,9 @@ getSyCon (FormatS _ s)       = getSyCon s
 ------------------BEGIN DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: String -> [(String,LayoutObj)] -> Doc
-makeDefn _ []      = error "Empty definition"
-makeDefn dt ps = beginDefn $$ makeDefTable dt ps $$ endDefn
+makeDefn :: [(String,LayoutObj)] -> String -> Doc
+makeDefn [] _ = error "Empty definition"
+makeDefn ps l = beginDefn $$ makeDefTable ps l $$ endDefn
 
 beginDefn :: Doc
 beginDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
@@ -264,18 +264,14 @@ beginDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth
 endDefn :: Doc  
 endDefn = text "\\end{minipage}" <> dbs
 
-makeDefTable :: String -> [(String,LayoutObj)] -> Doc
-makeDefTable _ []            = error "Trying to make empty Data Defn"
-makeDefTable dt ps@((_,d):_) = vcat [
+makeDefTable :: [(String,LayoutObj)] -> String -> Doc
+makeDefTable [] _ = error "Trying to make empty Data Defn"
+makeDefTable ps l = vcat [
   text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  text "\\toprule \\textbf{Refname} & \\textbf{" <> defAc dt <> printLO d <> text "}",
-  text "\\label{" <> defAc dt <> (printLO d) <> text "}",
+  text "\\toprule \\textbf{Refname} & \\textbf{" <> text l <> text "}",
+  label l,
   makeDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
-  where defAc "Data" = text "DD:"
-        defAc "Theory" = text "T:"
-        defAc "General" = text "GD:"
-        defAc _ = error "See PrintTex.hs defAc in makeDefTable"
 
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create Defn table"

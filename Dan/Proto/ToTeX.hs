@@ -83,16 +83,15 @@ lay x@(Table hdr lls t b)
                         show (length (head lls)) ++ " columns."
 lay x@(Section depth title layComps) = 
   T.Section depth (spec title) (createLayout layComps) (spec $ getRefName x)
-lay (Paragraph c)             = T.Paragraph (spec c)
-lay (EqnBlock c)              = T.EqnBlock (spec c)
-lay (CodeBlock c)             = T.CodeBlock c
-lay (Definition c@(Data _))   = T.Definition "Data" $ makePairs c
-lay (Definition c@(Theory _)) = T.Definition "Theory" $ makePairs c
-lay (BulletList cs)           = T.List T.Item $ map spec cs
-lay (NumberedList cs)         = T.List T.Enum $ map spec cs
-lay (SimpleList cs)           = T.List T.Simple $ concat $
-  map (\(f,s) -> [spec f, spec s]) cs
-lay x@(Figure c f)            = T.Figure (spec (getRefName x)) (spec c) f
+lay (Paragraph c)     = T.Paragraph (spec c)
+lay (EqnBlock c)      = T.EqnBlock (spec c)
+lay (CodeBlock c)     = T.CodeBlock c
+lay x@(Definition c)  = T.Definition (makePairs c) (spec $ getRefName x)
+lay (BulletList cs)   = T.List T.Item $ map spec cs
+lay (NumberedList cs) = T.List T.Enum $ map spec cs
+lay (SimpleList cs)   = T.List T.Simple $ concat $
+                          map (\(f,s) -> [spec f, spec s]) cs
+lay x@(Figure c f)    = T.Figure (spec (getRefName x)) (spec c) f
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

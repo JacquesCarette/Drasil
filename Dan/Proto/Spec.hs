@@ -5,6 +5,7 @@ module Spec where
 import Format (FormatC)
 import Unicode (Render)
 import Symbol
+
 --For writing chunks in a specification language that can be converted to TeX
 infixr 5 :+:
 data Spec where
@@ -32,12 +33,14 @@ data USymb = Unitless
 -- to another
 data RefType = Tab
              | Fig
-             | Sec Int
+             | Sec
+             | Def
 
 instance Show RefType where
-  show Tab     = "Table"
-  show Fig     = "Figure"
-  show (Sec _) = "Section"
+  show Tab = "Table"
+  show Fig = "Figure"
+  show Sec = "Section"
+  show Def = "Definition"
   
 --Maybe spec could become a functor/applicative/monad?
 -- (if we generalize mapping somehow)

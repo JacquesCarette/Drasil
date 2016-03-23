@@ -83,8 +83,10 @@ p_spec (Sy s)      = runReader (uSymbPrint s) Plain
 p_spec HARDNL      = "\\newline"
 p_spec (Ref t@Sec r) = if numberedSections 
                        then show t ++ "~\\ref" ++ brace (p_spec r) 
-                       else error "Cannot create section reference " ++
-                        "unless using numbered sections"
+                       else "\\hyperref" ++ sqbrac (p_spec r) ++ 
+                        brace (show t ++ "~" ++ p_spec r)
+p_spec (Ref t@Def r) = "\\hyperref" ++ sqbrac (p_spec r) ++ 
+                        brace (show t ++ "~" ++ p_spec r)
 p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String

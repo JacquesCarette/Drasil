@@ -81,16 +81,15 @@ lay x@(Section depth title contents) =
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title)):(createLayout contents)) 
   (spec $ getRefName x)
-lay (Paragraph c)             = H.Paragraph (spec c)
-lay (EqnBlock c)              = H.HDiv ["equation"] [H.Tagless (spec c)] 
-                                (spec Empty)
-lay (CodeBlock c)             = H.CodeBlock c
-lay x@(Definition c) = H.Definition c (makePairs c) (spec $ getRefName x)
-lay (BulletList cs)           = H.List H.Unordered $ map spec cs
-lay (NumberedList cs)         = H.List H.Ordered $ map spec cs
-lay (SimpleList cs)           = H.List H.Simple $ 
-  map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
-lay x@(Figure c f)            = H.Figure (spec (getRefName x)) (spec c) f
+lay (Paragraph c)     = H.Paragraph (spec c)
+lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (spec c)] (spec Empty)
+lay (CodeBlock c)     = H.CodeBlock c
+lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ getRefName x)
+lay (BulletList cs)   = H.List H.Unordered $ map spec cs
+lay (NumberedList cs) = H.List H.Ordered $ map spec cs
+lay (SimpleList cs)   = H.List H.Simple $ 
+                          map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
+lay x@(Figure c f)    = H.Figure (spec (getRefName x)) (spec c) f
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
@@ -100,7 +99,7 @@ makePairs (Data c) = [
   ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       H.Paragraph $ H.S "T:" H.:+: (H.S $ c ^. name)),
+  ("Label",       H.Paragraph $ H.S $ c ^. name),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
                   (spec Empty)),
   ("Description", H.Paragraph (spec (c ^. descr)))

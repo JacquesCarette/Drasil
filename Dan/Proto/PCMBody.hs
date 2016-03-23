@@ -153,7 +153,8 @@ s4_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s")
   (s4_2_2_intro:s4_2_2_TMods)
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
-  S "and laws that " :+: S (sWHS ^. name) :+: S " is based on."
+  S "and laws that " :+: S (sWHS ^. name) :+: S " is based on." 
+-- :+: foldr1 (:+:) (map makeRef s4_2_2_TMods) :+: S" " :+: makeRef s1
   
 s4_2_2_TMods :: [LayoutObj]
 s4_2_2_TMods = map Definition (map Theory [t1consThermE])

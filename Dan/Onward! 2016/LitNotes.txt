@@ -84,3 +84,79 @@ Literate Programming using noweb - Johnson & Johnson 2000
   - Good in-depth example of noweb in action
   - Conclusion makes good points on short-term investment for long-term gains
     - > initial effort = > quality = time saved in maintenance)
+    
+MathModelica - An Extensible Modeling ... with Integrated Graphics and Literate Programming - Fritzson, Gunnarrson, and Jirstrand 2002
+  - Combines Mathematica with Modelica
+  - Strictly used for modeling
+  - Has an interactive wysiwyg realization of LP
+  - Feels like we can get more out of this, not sure what.
+  
+AOPS: An Abstraction-Oriented Programming System for Literate Programming - Shum & Cook 1993
+  - "[Programmers] generally keep [the thought process that led to the program] in auxiliary documents, if it is generated at all"
+  - Web-like systems exist for C, C++, Smalltalk, Fortran
+    - Extensions include hierarchically structured document description and programming environments.
+  - LP not popular; Why?
+    - Language/text processor dependent
+    - Lack of flexibility on what to present/suppress (This is a great point!)
+  - AOPS = Programming lang & text processor independent literate programming system
+    - Write progs using levels of abstractions. Rules define highest lvl and all (in)directly used abstractions by that level.
+      - A rule is structured as: Name (delimited by some otherwise unused character, ex: @) = type body
+    - Fairly similar style to standard LP stuff like Web.
+    - Adds graphicdoc rule (graphical documentation)
+      - use word processor to compose graphics
+  - AOPS Tools:
+    - AOB (browser): Navigate source file by visiting nodes
+    - AOL (lister): Produce a listing containing selected portions of any subtree of the program tree
+      - When extracting requested code/doc, does not insert formatting commands
+    - AOP (processor): Extracts program source code.
+  - Phantom abstracting: Invisible to AOP, but helpful for understanding.
+  - Experimentally found LP leads to better consistency between code and documentation
+  
+A Case for Contemporary Literate Programming - Pieterse, Kourie, and Boake 2004
+  - LP Essentials -> program seen as doc explaining problem's sol'n to a human
+  - LP leads to better programs (more elegant, effective, transportable, understandable, & maintainabile)
+  - Literate Quality -> "The completed program is a literate work of art"
+  - Psychological Order -> "different modules ... are arranged into a logical order that will enhance [the program's] understanding"
+    - May be sig. diff from the order necessary for the computer.
+  - Integrated Documentation -> Code/Doc developed simultaneously.
+  - Cross references -> "Must have"
+  - Versimilitude -> generation of code & doc from same source doc
+  - Huge list of existing LP environments
+    - lots of good stuff (too much?) in there like: WYSIWYG, Interactive code/debugging, elucidative programming, & theme-based LP.
+  - Trends:
+    - Much said about advantages of proper doc [Heyman 1990, Kotula 2000]
+    - Much said about disadvantages of docs that don't match the system [Kotula 2000, Thimbleby 1986]
+    - Javadoc widely accepted => less resistance to emphasis on documentation
+    - IDEs support many LP essentials
+    - Ream2002: example of an LP environment implementing XML technology to integrate different tools.
+    
+ProgDoc - a Program Documentation System - Simonis 2003
+  - Good section on WEB drawbacks (pretty printing, extensibility, "one source")
+  - Good section on Javadoc and the like
+    - Stuck using Java & HTML as programming / typesetting languages (javadoc)
+    - DOC++ is similar to Javadoc, but for C++
+    - Doxygen can output to RTF, PDF, and Unix man-page
+    - DOC++ & Doxygen can create graphs (dependency, call, etc.)
+  - ProgDoc loses "one source" idea
+    - Essentially composed of two tools: pdhighlight and pdweave
+    
+A Multi-Language Computing Environment for Literate Programming and Reproducible Research - Schulte et al. 2012
+  - Decent background on LP and RR
+  - Table 1 -> Great comparison of LP tools
+  - Introduction to Org-Mode (emacs extension), supports:
+    - Structured documents (hierarchy)
+    - Metadata tagging
+    - Special Content (matrices, code, vectors, etc.)
+    - Code syntax (using #+name: where name is the name for the code chunk)
+    - Evaluation -> evaluated output of code shown by default
+    - Results -> Added to org-mode buffer using the #+results: tag
+    - Weave to HTML/LaTeX
+    - Tangle -> uses reference system identical to that of noweb
+    - Programming language independence
+
+What does Sustainability mean in and for Software Engineering - Penzenstadler 2013
+  - Relevant section = 4 (maybe some part of 3 as well)
+  - Improve software development process to improve sustainability
+    - Use of a common artefact model during development increases maintainability
+    - Producing energy aware software designs
+    - (The other points didn't seem to fit with what we're doing)

@@ -37,7 +37,7 @@ refwrap :: String -> Doc -> Doc
 refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
 reflink :: String -> String -> String
-reflink id txt = "<a href=#" ++ id ++ ">" ++ txt ++ "</a>"
+reflink ref txt = "<a href=#" ++ ref ++ ">" ++ txt ++ "</a>"
 
 image :: String -> String -> Doc
 image f c = 

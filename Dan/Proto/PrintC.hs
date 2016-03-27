@@ -1,8 +1,9 @@
 module PrintC where
 
 import ASTCode
-import Text.PrettyPrint
 import Helpers (paren, hat, ast, pls, slash, hyph)
+
+import Text.PrettyPrint
 
 newtype CType = CType { getType :: Type }
 
@@ -14,9 +15,7 @@ instance Show CType where
   show (CType DblType)     = "double"
   
 printCode :: Code -> Doc
-printCode (C [])     = empty
-printCode (C (m:[])) = printMethod m
-printCode (C (m:ms)) = printMethod m $$ printCode (C ms)
+printCode (C x) = vcat $ map printMethod x
 
 printMethod :: Method -> Doc
 printMethod (d, ss) = printDecl d <> text "{" $$ 
@@ -28,6 +27,7 @@ printDecl (MethDecl t n ds) = text (show (CType t)) <+> text n <>
   text (paren $ printArgs ds)
 printDecl _                 = error "Unimplemented declaration in PrintC"
   
+-- this should also be a fold
 printArgs :: [Declaration] -> String
 printArgs [] = ""
 printArgs ((ArgDecl t v):[])   = show (CType t) ++ " " ++ v
@@ -35,9 +35,7 @@ printArgs (x@(ArgDecl _ _):ds) = printArgs [x] ++ ", " ++ printArgs ds
 printArgs _ = error "Attempted to print non-argument as an argument. See PrintC"
 
 printStatements :: [Statement] -> Doc
-printStatements []     = empty
-printStatements (s:[]) = printStmt s
-printStatements (s:ss) = printStmt s $$ printStatements ss
+printStatements sl = vcat $ map printStmt sl
 
 printStmt :: Statement -> Doc
 printStmt (Return c) = text "return" <+> printCE c <> text ";"

@@ -5,7 +5,7 @@ import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTTeX as T
 import Unicode (render, Partial(..))
-import Format (Format(TeX), FormatC(..))
+import Format (Format(TeX), Accent(..))
 import EqChunk
 import RelationChunk
 import Unit
@@ -59,7 +59,7 @@ spec (F f s)   = spec $ format f s
 spec (N s)     = T.N s
 spec (Ref t r)   = T.Ref t (spec r)
 
-format :: FormatC -> Spec -> Spec
+format :: Accent -> Spec -> Spec
 format Hat    s = S "\\hat{" :+: s :+: S "}"
 format Vector s = S "\\bf{" :+: s :+: S "}"
 format Grave  s = S "\\`{" :+: s :+: S "}"

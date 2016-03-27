@@ -12,7 +12,7 @@ import Spec (USymb(..))
 import HTMLHelpers
 import Helpers
 import Unicode
-import Format (Format(HTML),FormatC(..))
+import Format (Format(HTML),Accent(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L

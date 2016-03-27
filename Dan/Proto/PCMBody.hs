@@ -8,7 +8,7 @@ import PCMExample
 import Spec (Spec(..),sMap) --May need to update imports to hide Ref.
                             --More likely setup an API or something to
                             --Restrict access for novice users.
-import Format (FormatC(..))
+import Format (Accent(..))
 import Unit (Unit(..), UnitDefn(..))
 import SI_Units 
 import Chunk

@@ -7,7 +7,7 @@ import Data.Char (toLower)
 
 import Example1
 import Spec (Spec(..))
-import Format (FormatC(..))
+import Format (Accent(..))
 import Unit (Unit(..))
 import SI_Units (si_units)
 import Chunk

@@ -2,7 +2,7 @@
 {-# LANGUAGE GADTs #-}
 module Spec where
 
-import Format (FormatC)
+import Format (Accent)
 import Unicode (Render)
 import Symbol
 
@@ -18,7 +18,7 @@ data Spec where
   (:/:) :: Spec -> Spec -> Spec     -- Fractions (Spec :/: Spec -> frac{Spec}{Spec} in TeX)
   Empty :: Spec                     -- Blank
   U     :: (Render r) => r -> Spec  -- Unicode for special characters
-  F     :: FormatC -> Spec -> Spec  -- Special formatting for certain symbols & special
+  F     :: Accent -> Spec -> Spec  -- Special formatting for certain symbols & special
                                     -- chars (e.g. hat, dot, etc.)
   Ref   :: RefType -> Spec -> Spec  -- Needs helper func to create Ref
                                     -- See Reference.hs

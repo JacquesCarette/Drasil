@@ -6,7 +6,7 @@ data Format = TeX | Plain | HTML
 
 --------------------------
 
-data FormatC = Hat
+data Accent = Hat
             | Vector
             | Grave
             | Acute

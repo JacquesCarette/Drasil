@@ -10,7 +10,7 @@ import PCMUnits
 import SymbolAlphabet
 import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
 -- import EqChunk (fromEqn,EqChunk(..))
-import Format (FormatC(..))
+import Format (Accent(..))
 import Spec (Spec(..))
 import Control.Lens ((^.))
 import Unit
@@ -51,8 +51,8 @@ mass        = makeUC "m" "mass" lM kilogram
 water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
 norm_vect   = makeUC "n_vect" "unit outward normal vector for a surface"
               (FormatS Vector (FormatS Hat lN)) unitless
-  -- How do I make a symbol that needs one (or more) FormatC? Add to Symbol or
-  -- pull FormatC out somehow?
+  -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
+  -- pull Accent out somehow?
 ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
 thFluxVect  = makeUC "q_vect" "thermal flux vector" (FormatS Vector lQ)
                   thermFluxU

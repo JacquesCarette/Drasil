@@ -5,7 +5,7 @@ import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTHTML as H
 import Unicode (render, Partial(..))
-import Format (Format(HTML), FormatC(..))
+import Format (Format(HTML), Accent(..))
 import EqChunk
 import RelationChunk
 import Unit
@@ -59,7 +59,7 @@ spec (F f s)   = spec $ format f s
 spec (N s)     = H.N s
 spec (Ref t r)   = H.Ref t (spec r)
 
-format :: FormatC -> Spec -> Spec
+format :: Accent -> Spec -> Spec
 format Hat    s = s :+: S "&#770;" 
 format Vector s = S "<b>" :+: s :+: S "</b>"
 format Grave  s = S "&" :+: s :+: S "grave;" --Only works on vowels.

@@ -4,23 +4,141 @@ Outline:
 
 1. Introduction
 
-- Our vision: Make better software.
-  - Increase qualities of software like maintainability, traceability, (reproducibility?), modifiability?, reusability (?), other relevant "ity"s
-  - Make it EASY!
-- Acknowledge it's a pipedream to apply this blanket to all software, restrict scope to software with a well understood knowledge base
-  - For the purposes of the paper we'll stick to using Scientific Software as our go-to for illustrative purposes.
-- LP had the right idea, but is too restricted! Let's make all Software Artifacts (Requirements, design doc, source code, build instructions, test cases, etc.) (all from standard SE practice) from a common knowledge base.
-- Drop the idea of "one source", instead have the idea of "common knowledge" libraries for common problems (i.e. theory behind heat transfer w/ conservation eqns).
+- Our vision: Make better software. (free developers from tech constraints?)
+  - Increase qualities of software like maintainability, traceability, 
+    (reproducibility?), modifiability?, reusability (?), other relevant "ity"s
+  - Make it EASY! -> Generate everything. Short-term time investment to 
+    create the "right" design, followed by plenty of long-term benefits!
+    
+- Acknowledge it's a pipedream to apply this blanket to all software, 
+  restrict scope to software with a well understood knowledge base 
+  (to be expanded on in a bit)
+  - For the purposes of the paper we'll stick to using Scientific Software as 
+    our go-to for illustrative purposes.
+    
+- LP had the right idea, but is too restricted! Let's make all Software 
+  Artifacts (Requirements, design doc, source code, build instructions, test 
+  cases, etc.) (all from standard SE practice) from a common knowledge base.
+  
+- Drop the idea of "one source", instead have the idea of "common knowledge" 
+  libraries for common problems (ex. theory behind heat transfer w/ 
+  conservation eqns; SI Unit library, etc.).
+  
 - Straight up: Our ideas aren't new. Even when Knuth introduced LP, he said 
   it wasn't any new ideas, just a combination of older ideas (Knuth 1984).
-  - We aren't being overly creative either, we're actually just breaking things down in a very practical manner so that we can actually DO it and make it work.
-- Taking a humble route to a grand vision.
+  - Others have done similar work (to be elaborated on in the bg section), but
+    they did not achieve the results we're aiming for. They were either aiming
+    for something else, spent too long creating a "grand design" and got nowhere
+    practically, or weren't brave enough to break things down to the smallest
+    necessary chunks.
+  - We aren't being overly creative either, we're actually just breaking 
+    things down in a very practical manner so that we can actually DO it and 
+    make it work.
+  - The success or failure of our approach hinges on the idea of a stable
+    knowledge base (mentioned earlier). Without that it cannot work (explain?).
+  - We believe we've assembled the "right" ideas to make this work.
+  
+- We're taking a (not so) humble, practical route to our grand vision.
 
 2. Drasil
 
+- Three main ideas behind Drasil:
+    1. Organized knowledge base
+      - Structured conceptually.
+      - Consists of Chunks.
+      - Broken down into the smallest possible pieces.
+    2. Recipes for creating artifacts!
+      - Each presents a different "view" of the same underlying knowledge.
+      - "Standard" recipes for certain types of artifacts which can be 
+        customized.
+    3. Build everything without being constrained by technology
+      - Don't worry about the display tech, prog lang, specification tech, etc.
+      - Free the user from having to worry about constraints in the tech they 
+        choose as output
+      - The generator will take care of everything once the recipes are in place
+
+- Upholding those ideas and implementing a framework around them will lead to 
+  enormous benefits in software qualities.
+  - Generation removes recurring problems like "feature creep" and "software 
+    bloat" (AmselEtAl2011)
+  
+- (The (preliminary) evidence?)
+
+2.1 Drasil in Action (a simple example)
+
+- Bust out the old standby of h_g and h_c example for this.
+- Show off the design again using the example (and pretty diagrams)
+- SI Unit library as obvious reusable chunks
+- Different outputs depending on what we want (show HTML vs. LaTeX?)
+
+- Advantages -> Software Certification, Designing for change, knowledge capture,
+                Verification, simplicity, etc.
+                
+- Disadvantages -> Short-term increase in effort, requires domain experts to 
+                   create the common knowledge libraries, MUST do everything 
+                   right (or really close to it) since it's an all-or-nothing
+                   output (can iterate, but not in a very meaningful way).
+                   
 3. Background / Lit Review
 
+- Reiterate these ideas are not new. Lots of work has been done by lots of smart
+  people and we're taking advantage of that.
+  
+-- 3.x Reproducible Research? Should we give a brief rundown here?  
+  
+3.1 The Current state of SC software development.
+
+- Lots of Kelly in here (grab highlights of notes on Kelly 2015 for this 
+  section).
+
+- "Software development is the science of abstractions" 
+  (Al-MaatiAndBoujarwah2002) --This needs to go somewhere, if we can work it in
+  (maybe 3.3).
+  
+3.2 Literate Programming
+
+- What is LP? Explain here! (lots of Knuth)
+
+- Why LP? Consistency! -> ShumAndCook1993 experimentally found that LP led to 
+  better consistency between code and documentation. Also keep in mind the 
+  findings of Heyman1990 and Kotula2000 that proper documentation leads to 
+  serious advantages and the common sense idea (discussed by Kotula2000 and 
+  Thimbleby1986) that there are huge disadvantages to having documentation that
+  does not match the system. Taken together LP (when used properly) already
+  improves the quality of software.
+
+- LP has not been popular... (ShumAndCook1993) (give breakdown of their AOPS
+  attempt to popularize LP) --Maybe merge this with the next bit
+
+- We've seen plenty of tools for LP: The first was web (Knuth1984), then 
+  similar tools were created for other languages: CWeb, noweb, javadoc, 
+  DOC++, Doxygen, ProgDoc and the list goes on.
+  - The multitude of tools helped to increase the understanding behind what LP
+    tools should be doing, even if it kept LP from the mainstream (Ramsey1994).
+  - 
+  
+- LP tools added new and interesting features: WYSIWYG editor (Fritzson...2002),
+  lang/text editor independence, using a text editor to compose graphics 
+  (ShumAndCook1993), etc.
+  
+- Case for Contemp. LP (Pieterse...2004)
+  
+3.3 Expanding LP: Literate Software Development
+
+- Talk a lot about the work of Al-Maati and Boujarwah 2002 (work in the main 
+  points from the notes I took).  
+  
+-- 3.4 Our inspiration? Where we want to go? What we're combining? etc.?
+
+
 4. Future work
+
+- Most of this can be ripped from the ICSE paper and expanded on.
     
 5. Concluding Remarks
+
+- The usual, "we're being practical and taking strides to achieve our vision".
+- Already see some benefits, but they'll be more noticeable on a larger scale
+    (more knowledge reuse).
+- 
 

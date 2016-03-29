@@ -1,0 +1,26 @@
+Outline:
+
+0. Abstract
+
+1. Introduction
+
+- Our vision: Make better software.
+  - Increase qualities of software like maintainability, traceability, (reproducibility?), modifiability?, reusability (?), other relevant "ity"s
+  - Make it EASY!
+- Acknowledge it's a pipedream to apply this blanket to all software, restrict scope to software with a well understood knowledge base
+  - For the purposes of the paper we'll stick to using Scientific Software as our go-to for illustrative purposes.
+- LP had the right idea, but is too restricted! Let's make all Software Artifacts (Requirements, design doc, source code, build instructions, test cases, etc.) (all from standard SE practice) from a common knowledge base.
+- Drop the idea of "one source", instead have the idea of "common knowledge" libraries for common problems (i.e. theory behind heat transfer w/ conservation eqns).
+- Straight up: Our ideas aren't new. Even when Knuth introduced LP, he said 
+  it wasn't any new ideas, just a combination of older ideas (Knuth 1984).
+  - We aren't being overly creative either, we're actually just breaking things down in a very practical manner so that we can actually DO it and make it work.
+- Taking a humble route to a grand vision.
+
+2. Drasil
+
+3. Background / Lit Review
+
+4. Future work
+    
+5. Concluding Remarks
+

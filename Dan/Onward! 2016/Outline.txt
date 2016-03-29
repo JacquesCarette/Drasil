@@ -4,11 +4,15 @@ Outline:
 
 1. Introduction
 
-- Our vision: Make better software. (free developers from tech constraints?)
+- Our vision: Make better software.
   - Increase qualities of software like maintainability, traceability, 
-    (reproducibility?), modifiability?, reusability (?), other relevant "ity"s
-  - Make it EASY! -> Generate everything. Short-term time investment to 
-    create the "right" design, followed by plenty of long-term benefits!
+    reproducibility, reusability.
+  - Make it such that some short-term investments really pay off in the 
+    long-term.  This is the fundamental trade-off: our technique is as
+    non-agile as it gets, while not being waterfall either.
+  - For example, our technique makes working on program families trivial,
+    at the cost of losing the capability of doing "local hacks" to "just
+    make things work".
     
 - Acknowledge it's a pipedream to apply this blanket to all software, 
   restrict scope to software with a well understood knowledge base 
@@ -22,7 +26,8 @@ Outline:
   
 - Drop the idea of "one source", instead have the idea of "common knowledge" 
   libraries for common problems (ex. theory behind heat transfer w/ 
-  conservation eqns; SI Unit library, etc.).
+  conservation eqns; SI Unit library, etc.).  Very much keep the idea of
+  "chunk" and of assembling things from chunks.
   
 - Straight up: Our ideas aren't new. Even when Knuth introduced LP, he said 
   it wasn't any new ideas, just a combination of older ideas (Knuth 1984).
@@ -69,7 +74,7 @@ Outline:
 - Bust out the old standby of h_g and h_c example for this.
 - Show off the design again using the example (and pretty diagrams)
 - SI Unit library as obvious reusable chunks
-- Different outputs depending on what we want (show HTML vs. LaTeX?)
+- Different outputs depending on what we want (show HTML vs. LaTeX)
 
 - Advantages -> Software Certification, Designing for change, knowledge capture,
                 Verification, simplicity, etc.
@@ -78,6 +83,20 @@ Outline:
                    create the common knowledge libraries, MUST do everything 
                    right (or really close to it) since it's an all-or-nothing
                    output (can iterate, but not in a very meaningful way).
+
+- pervasive bugs: an error in the knowledge base will tend to spread everywhere.
+  this can be regarded as an advantage (bugs are shallow and are fixed
+  quickly, as they break everything), or a disadvantage (single bugs can 
+  break everything). 
+
+  [If we want to be fancy, we can drag in the idea that most software operates
+   inside some paraconsistent logic, where rare paths do not bring down the
+   consistency of the whole, while we're suggesting working in a strict
+   logic.  This is indeed akin to the difference between advocates of 
+   dynamic typing who favour flexibility over assurance, and advocates of
+   static types, who prefer machine-checked assurance of (weak) properties.
+   This is another reason why our method is not universal, but rather for 
+   those domains which are well understood]
                    
 3. Background / Lit Review
 
@@ -115,7 +134,7 @@ Outline:
   DOC++, Doxygen, ProgDoc and the list goes on.
   - The multitude of tools helped to increase the understanding behind what LP
     tools should be doing, even if it kept LP from the mainstream (Ramsey1994).
-  - 
+  -  Parts of LP are standard in some domains (Haskell, Agda, R).
   
 - LP tools added new and interesting features: WYSIWYG editor (Fritzson...2002),
   lang/text editor independence, using a text editor to compose graphics 
@@ -123,7 +142,7 @@ Outline:
   
 - Case for Contemp. LP (Pieterse...2004)
   
-3.3 Expanding LP: Literate Software Development
+3.3 Expanding LP: Literate Software
 
 - Talk a lot about the work of Al-Maati and Boujarwah 2002 (work in the main 
   points from the notes I took).  

@@ -286,7 +286,8 @@ Units & $ML^0t^{-3}T^{-1}$\\ \midrule
 SI Units & $\mathrm{\frac{kW}{m^{2o}C}}$\\ \midrule
 Equation & $h_{c}$ =$
 \frac{2k_{c}h_{b}}{2k_{c}+\tau_{c}h_{b}}$\\ \midrule
-Description &  $h_{c}$ is the convective heat transfer coefficient between clad and coolant
+Description & $h_{c}$ is the convective heat transfer coefficient between clad
+and coolant
 \newline
 $k_{c}$ is the
 clad conductivity \newline
@@ -304,8 +305,10 @@ clad thickness
 The data definition of $h_c$ displays some interesting knowledge. It gives us
 the name for a concept, its description, a symbol to use for easier reference,
 its (SI) units, and its defining equation. Encapsulating all of this knowledge
-into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. We use
-an EqChunk as it allows us to capture all of the relevant knowledge.
+into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. Note
+that the equation for $h_c$ is written in our expression language (Expr) and the
+units are defined by a piece of common knowledge known as \verb|heat_transfer|. We
+use an EqChunk as it allows us to capture all of the relevant knowledge.
 
 \begin{figure}
 \begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small]
@@ -323,8 +326,57 @@ h_c = fromEqn "h_c"
 \label{fig:h_cChunk}
 \end{figure}
 
+On the topic of common knowledge, we can show an example alluded to previously,
+that of the SI unit library. The seven base SI units captured in Drasil are
+shown in Figure~\ref{fig:si_units}. The SI unit library also contains several
+derived units (for example: centigrade which is derived from kelvin) which we
+make use of later on in our example. The knowledge behind each unit and (in the
+case of derived units) their relation to the base units is captured in the
+relevant chunks.
 
-%What about common knowledge? Wa-bam SI Units. 
+\begin{figure*}
+\begin{lstlisting}[frame=single, showstringspaces=false]
+metre, second, kelvin, mole, kilogram, ampere, candela :: FundUnit
+metre    = fund "Metre"    "length (metre)"               "m"
+second   = fund "Second"   "time (second)"                "s"
+kelvin   = fund "Kelvin"   "temperature (kelvin)"         "K"
+mole     = fund "Mole"     "amount of substance (mole)"   "mol"
+kilogram = fund "Kilogram" "mass (kilogram)"              "kg"
+ampere   = fund "Ampere"   "electric current (ampere)"    "A"
+candela  = fund "Candela"  "luminous intensity (candela)" "cd"
+\end{lstlisting}
+\caption{The seven funamental SI Units in Drasil}
+\label{fig:si_units}
+\end{figure*}
+
+Now that we've shown a bit of knowledge capture, you may be wondering how to use
+it. This is where the recipes come in. Figure~\ref{fig:recipe} shows a portion
+of the recipe for creating our intended SRS view. The body of the simplified SRS
+is composed of two sections: \verb|s1| and \verb|s2|. We then show the
+definition of the first section which is titled "Table of Units" and includes an
+introductory paragraph and a table. This table simply extracts the symbol and
+description information from the SI units to display them in our view. It should
+be fairly obvious at this point, but these macro-scale layout objects (sections,
+tables, paragraphs, etc.) are specified using our document layout language.
+
+\begin{figure}[tb]
+\begin{lstlisting}[frame=single, 
+  showstringspaces=false, basicstyle=\scriptsize]
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2]
+
+s1 = Section (S "Table of Units") [intro, table]
+
+table = Table 
+ [S "Symbol", S "Description"] (mkTable
+   [(\x -> Sy (x ^. unit)),
+    (\x -> S (x ^. descr)) ] si_units)
+
+intro = Paragraph (S "Throughout this ...")
+\end{lstlisting}
+\caption{A portion of our simplified SRS recipe}
+\label{fig:recipe}
+\end{figure}
+
 %HTML vs LaTeX? Show raw code or pretty-version? Pretty version. 
 %Might need to screencap HTML and drop it in.
 

@@ -1,11 +1,14 @@
 \documentclass[preprint, 10pt]{sigplanconf}
 
 \usepackage{amsmath}
-
+\usepackage{booktabs}
+\usepackage{longtable}
 \usepackage{tikz}
+\usepackage{listings}
 \usetikzlibrary{positioning}
 \newcommand{\cL}{{\cal L}}
-
+\newcommand{\colAwidth}{0.1\textwidth}
+\newcommand{\colBwidth}{0.34\textwidth}
 \begin{document}
 
 \special{papersize=8.5in,11in}
@@ -266,8 +269,61 @@ For this section we will take a look at a simplified version of a Software
 Requirements Specification (SRS) for a fuel pin in a nuclear reactor (for more
 information on that particular SRS see~\cite{SmithAndKoothoor2016}).
 
-%introduce h_c/h_g 
-%show off some stuff 
+Starting off we will look at one specific term: $h_c$. In this example, $h_c$
+represents the convective heat transfer coefficient between the clad and
+coolant. The data definition for $h_c$ from the original SRS can be seen in
+Figure~\ref{fig:h_c}.
+
+\begin{figure}
+~\newline \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+\toprule \textbf{Number} & \textbf{DD2 \label{hc}}
+\\ \midrule 
+Label & 
+$h_{c}$
+\\ \midrule
+Units & $ML^0t^{-3}T^{-1}$\\ \midrule
+SI Units & $\mathrm{\frac{kW}{m^{2o}C}}$\\ \midrule
+Equation & $h_{c}$ =$
+\frac{2k_{c}h_{b}}{2k_{c}+\tau_{c}h_{b}}$\\ \midrule
+Description &  $h_{c}$ is the convective heat transfer coefficient between clad and coolant
+\newline
+$k_{c}$ is the
+clad conductivity \newline
+$h_{b}$ is the
+initial coolant film conductance \newline
+$\tau_{c}$ is the
+clad thickness 
+\newline
+%NOTE: Equation taken from the code\\ \midrule  Sources & source code \\ \bottomrule 
+\end{tabular} \end{minipage}\\ 
+\caption{Data definition for $h_c$ from the fuel pin SRS}
+\label{fig:h_c}
+\end{figure}
+
+The data definition of $h_c$ displays some interesting knowledge. It gives us
+the name for a concept, its description, a symbol to use for easier reference,
+its (SI) units, and its defining equation. Encapsulating all of this knowledge
+into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. We use
+an EqChunk as it allows us to capture all of the relevant knowledge.
+
+\begin{figure}
+\begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small]
+h_c_eq :: Expr
+h_c_eq = 2*(C k_c)*(C h_b) /
+  (2*(C k_c) + (C tau_c)*(C h_b))
+
+h_c :: EqChunk
+h_c = fromEqn "h_c" 
+ "convective heat transfer coefficient
+    between clad and coolant"
+ (sub h c) heat_transfer h_c_eq
+\end{lstlisting}
+\caption{The $h_c$ chunk in Drasil}
+\label{fig:h_cChunk}
+\end{figure}
+
+
 %What about common knowledge? Wa-bam SI Units. 
 %HTML vs LaTeX? Show raw code or pretty-version? Pretty version. 
 %Might need to screencap HTML and drop it in.

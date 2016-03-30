@@ -64,31 +64,29 @@ computing, artifact generation, software quality
 \section{Introduction}
 \label{sec:Intro}
 
-We have a vision to make better software. We want to increase software's
-maintainability, traceability, reproducibility, verifiability, and reusability.
-Our vision is to invest more in the short-term to provide outstanding long-term
-benefits and is where we see the fundamental trade-off in our technique: it is
-the complete opposite of agile-development while simultaneously throwing away
-the waterfall model.
+We want to make better software.  In particular, we are interested in
+increased maintainability, traceability, reproducibility, verifiability, and
+reusability.  Our approach is to invest (much) more in the short-term to provide
+outstanding long-term benefits. This is the fundamental trade-off in
+our work: we expect our methods to work very well for domains which are 
+well understood with known (but potentially enormous) design spaces.  We do
+not claim to tackle areas of software development where methodologies such
+as agile are well-suited.  But we firmly believe that there are domains --
+such as safety-critical applications -- where agile is not only ill-suited,
+it would be downright unprofessional to use such a methology in that setting.
 
-We intend to make working on program families trivial for the cost of losing the
-capability to create ``local hacks'' to ``just get things working''.
+Rather than talk in vague generalities, we will pick Scientific Computation
+(SC) for illustrative purporses throughout this paper.  But the fundamental
+ideas (and, in fact, our framework) should be applicable to any software
+domain which has well-established theoretical underpinnings, and a well
+understood translation of the theory into effective code.  SC is particularly
+well-suited as it is also replete with \emph{program families}.
 
-Before we get into more detail on the technique, let's start with an obvious
-disclaimer: it would be a pipe dream to claim we could use this technique over
-all software domains. In fact, the domain(s) we will be looking at are very
-restrictive, but highly useful. We have restricted the scope of our work to only
-those areas of software with a \emph{well understood} knowledge base.
-
-We will be sticking to using Scientific Computing (SC) software for illustrative
-purposes throughout this paper, but the fundamental ideas (and, in fact, our
-framework) should be applicable to any well understood software domain.
-
-We believe Literate Programming (LP) had the right idea, but in our opinion is
-far too restricted. Rather than just coupling the source code with its
-documentation, we want to build all of our software artifacts (requirements and
-design documents, source files, test cases, build instructions, etc.) from a
-singular common knowledge base.
+We believe that Knuth's Literate Programming (LP)~\cite{Knuth1984} contains
+some fundamental insights, but is too restricted (i.e. just to code).  Rather
+than restrict LP to just source code, we want to apply it to all software
+artifacts (requirements and design documents, source files, test cases, build
+instructions, user manuals, etc.) from a singular common knowledge base.
 
 We want to break away from the LP idea of ``one source'', instead introducing
 the idea of ``common knowledge'' libraries for problems that come up regularly.
@@ -100,6 +98,9 @@ the idea of the Syst\`{e}me International (SI) Units as another piece of
 We also very much want to keep the idea of ``chunks'' and assemble everything
 from chunks. How we do that will be discussed in more detail in
 Section~\ref{sec:Drasil}.
+
+We intend to make working on program families trivial for the cost of losing the
+capability to create ``local hacks'' to ``just get things working''.
 
 Another disclaimer before we go further: none of the ideas presented
 in this paper are new. We are building on a very longstanding history of work,

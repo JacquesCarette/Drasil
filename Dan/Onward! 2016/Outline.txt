@@ -6,10 +6,14 @@ Outline:
 
 - Our vision: Make better software.
   - Increase qualities of software like maintainability, traceability, 
-    reproducibility, reusability.
+    reproducibility, reusability. - [SS] suggest adding verifiability to the list
   - Make it such that some short-term investments really pay off in the 
     long-term.  This is the fundamental trade-off: our technique is as
-    non-agile as it gets, while not being waterfall either.
+    non-agile as it gets, while not being waterfall either. - [SS] the recommended
+	documentation is waterfall (rational), but with Drasil in place, couldn’t people
+	follow an agile development approach?  Drasil would support quick changes and
+	short increments of development.  Although we have focused on requirements,
+	the test cases could be the project drivers?
   - For example, our technique makes working on program families trivial,
     at the cost of losing the capability of doing "local hacks" to "just
     make things work".
@@ -65,7 +69,8 @@ Outline:
 - Upholding those ideas and implementing a framework around them will lead to 
   enormous benefits in software qualities.
   - Generation removes recurring problems like "feature creep" and "software 
-    bloat" (AmselEtAl2011)
+    bloat" (AmselEtAl2011) - [SS] This conclusion isn’t immediately obvious to me, 
+	I think we should explain why AmselEtAl made this statement.
   
 - (The (preliminary) evidence?)
 
@@ -82,7 +87,13 @@ Outline:
 - Disadvantages -> Short-term increase in effort, requires domain experts to 
                    create the common knowledge libraries, MUST do everything 
                    right (or really close to it) since it's an all-or-nothing
-                   output (can iterate, but not in a very meaningful way).
+                   output (can iterate, but not in a very meaningful way). 
+			- [SS] What do you mean that you cannot have meaningful iteration?
+			I thought one of the advantages of Drasil was being able to make
+			likely changes to create multiple family members.  Are you saying
+			that you need to plan for the entire family from the start?  That is, 
+			are you saying that it is difficult to add a likely change after the fact?
+
 
 - pervasive bugs: an error in the knowledge base will tend to spread everywhere.
   this can be regarded as an advantage (bugs are shallow and are fixed
@@ -103,7 +114,20 @@ Outline:
 - Reiterate these ideas are not new. Lots of work has been done by lots of smart
   people and we're taking advantage of that.
   
--- 3.x Reproducible Research? Should we give a brief rundown here?  
+-- 3.x Reproducible Research? Should we give a brief rundown here?
+	- [SS] I think we should give a brief rundown of reproducible research.
+	This is one of the advantages of Drasil.  The goal is to be able to 
+	reproduce any program family member.  In scientific software researchers
+	often “fiddle” with the assumptions and parameters.  It is entirely
+	conceivable that someone will forget which combination of variations led
+	to the results that they favoured.  With Drasil they can go to the original
+	recipes and reproduce everything.  If we think of the recipe to Drasil as a
+	runtime input, then the configuration of the software and the input
+	data for the simulation are both inputs.  We just need to capture this
+	information and we can reproduce results in the future.  I guess we need
+	to add to this a way to capture the configuration of the machine that the
+	software is running on.  Maybe we could introduce the idea of 
+	using a virtual machine?
   
 3.1 The Current state of SC software development.
 
@@ -114,7 +138,9 @@ Outline:
   (Al-MaatiAndBoujarwah2002) --This needs to go somewhere, if we can work it in
   (maybe 3.3).
   
-3.2 Literate Programming
+3.2 Literate Programming - [SS] I like the idea of reviewing LP, especially
+				the idea of highlighting why it hasn’t
+				become mainstream
 
 - What is LP? Explain here! (lots of Knuth)
 
@@ -128,6 +154,9 @@ Outline:
 
 - LP has not been popular... (ShumAndCook1993) (give breakdown of their AOPS
   attempt to popularize LP) --Maybe merge this with the next bit
+
+- [SS] There are relatively few examples of LP in SC, including Nedialkov2010 
+and PharrAndHumphreys2004.
 
 - We've seen plenty of tools for LP: The first was web (Knuth1984), then 
   similar tools were created for other languages: CWeb, noweb, javadoc, 

@@ -137,6 +137,51 @@ Outline:
 - "Software development is the science of abstractions" 
   (Al-MaatiAndBoujarwah2002) --This needs to go somewhere, if we can work it in
   (maybe 3.3).
+
+[SS] The following bullets are an initial attempt at summarizing the state
+of SC software development
+
+- For most SC developers the emphasis is on their science, not the software (Kelly), 
+as a consequence:
+	- developers naturally use an agile philosophy~\cite{AckroydEtAl2008, CarverEtAl2007,
+	  EasterbrookAndJohns2009, Segal2005} or an amethododical~\cite{Kelly2013}, or a
+	knowledge acquisition driven~\cite{Kelly2015}, process
+	- More than half of scientists state that they do not have a good understanding of 
+	software testing (Z. Merali. Computational science: Error, Why Scientific
+	 Programming does not Compute. Nature, 467(7317), 2010.) - further data on
+	limited automated testing for science in PatrickAndGilligan2016 (Software Engineering
+	for Science Book)
+	- QA has, ``a bad name among creative scientists and engineers''~\cite[p.~352]{Roache1998}
+	- scientists do not view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007}
+	- Reuse of knowledge in SC is not fulfilling its potential.  For instance, for mesh generators 
+	a large number of similar programs have been written. A survey by Owen (1998) shows 94 different 
+	mesh generator packages, with 61 of them generating triangular meshes, and 43 of these using the 
+	same algorithm of Delaunay triangulation. (These numbers need to be checked.  I think
+	there is a more recent reference to the survey.)
+	- tool use is limited, especially version control (Wilson2006)
+
+- Code generation has been successful in SC, but to date the emphasis has been on only one
+software artifact (the code).  Examples include
+	- Carette and Gaussian elimination, ATLAS, Blitz++, Spiral, FFT (KiselyovEtAl2004), …
+	- Dolphin
+
+- A rational approach has been shown to be advantageous
+	- The value of documentation and a structured process is illustrated by a survey
+	of statistical software for psychology~\cite{SmithEtAl2015-SS-TR,
+  	SmithEtAl2015SQJ}
+	- To study the impact of a document driven process on SC software, a case study
+	was performed on legacy software used for thermal analysis of a fuel pin in a
+	nuclear reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013} -  the redeveloped
+	version uncovered 27 issues in the previous documentation, ranging from trivial
+	to substantive.
+	- some previous errors in scientific code may have been uncovered if
+	rational documentation were used
+		- Sleipner oil rig
+		- protein (crystal?) retraction
+		- Patriot missile
+		- Seismic data processing (HattonAndRoberts1994)
+		- moment of area in metric versus imperial units
+
   
 3.2 Literate Programming - [SS] I like the idea of reviewing LP, especially
 				the idea of highlighting why it hasn’t

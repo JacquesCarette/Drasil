@@ -163,7 +163,7 @@ as a consequence:
 - Code generation has been successful in SC, but to date the emphasis has been on only one
 software artifact (the code).  Examples include
 	- Carette and Gaussian elimination, ATLAS, Blitz++, Spiral, FFT (KiselyovEtAl2004), …
-	- Dolphin
+	- FEniCS (LoggEtAl2012)
 
 - A rational approach has been shown to be advantageous
 	- The value of documentation and a structured process is illustrated by a survey

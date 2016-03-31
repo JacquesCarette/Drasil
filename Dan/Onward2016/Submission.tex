@@ -129,6 +129,181 @@ knowledge for use in our framework (effectively getting us nowhere).
 As it stands, we are on a (not so) humble, practical route to achieving our
 goals and improving the overall quality of software.
 
+\section{Requirements and inspiration}
+\label{sec:bg}
+
+As we mentioned previously, none of the ideas behind our approach are new. There
+has been a lot of work done by a lot of smart people and we are taking advantage
+of it. Before we get into those ideas, let us first take a look at the current
+state of SC software development, then we will discuss our goals and
+requirements, followed by the tools and techniques that inspired us. Finally we
+will sum conclude the section by discussing which ideas we intend to borrow and
+how we intend to bring everything together.
+
+\subsection{The current state of SC software development}
+\label{subsec:scdev}
+
+Most developers in SC software tend to put an emphasis on their science, not the
+software they are developing~\cite{Kelly}. %TODO: Fix citation, which year? 
+Consequently these developers tend to naturally use an agile
+philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
+Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
+driven~\cite{Kelly2015} process. These developers are scientists first and
+foremost and they do not view rigid, process-heavy approaches
+favourably~\cite{CarverEtAl2007}.
+
+More than half of these scientists do not have a good understanding of software
+testing~\cite{Merali2010}. In fact, there is very limited use of automated
+testing for scientific software~\cite{PatrickAndGilligan2016} and quality
+assurance has ``a bad name among creative scientists and
+engineers''~\cite[p.~352]{Roache1998}.
+
+Another problem in SC is that knowledge reuse is not fulfilling its potential.
+For instance, for mesh generators a large number of similar programs have been
+written. A survey~\cite{Owen1998} shows %94? TODO:CHECK NUMBER
+different mesh generator packages,
+with 61 of them generating triangular meshes, and %43? TODO:CHECK NUMBER
+of these using the same algorithm of Delaunay triangulation.
+
+Tool use in SC software development is also limited, especially the use of
+version control software~\cite{Wilson2006}.
+
+Code generation in SC has been successful, but thus far the focus has been on
+the creation of only one software artifact: the code. Examples include
+%TODO: List examples here -- Gaussian Elimination~\cite{CaretteXXXX}, ATLAS~\cite ...
+
+The lack of emphasis on more artifacts is disadvantageous to SC software
+developers. The value of documentation and a structured process is illustrated
+by a survey of statistical software for
+psychology~\cite{SmithEtAl2015-SS-TR,SmithEtAl2015SQJ}. A case study on the
+impact of a document driven process for SC software was performed on legacy
+software for thermal analysis of a fuel pin in a nuclear
+reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013}. The redeveloped version
+discovered 27 issues, ranging from trivial to substantive, within the previous
+documentation. If rational documentation were used more often, some previous
+errors in scientific code may have been uncovered. Examples include the Sleipner
+oil rig, protein retraction, the Patriot missile, and seismic data
+processing~\cite{HattonAndRoberts1994}.
+
+\subsection{Goals and requirements for our approach}
+
+The current state of SC software development informs our requirements. We want
+to tackle many of the problems stated therein, without requiring scientists to
+become professional software developers. Instead, we should simplify the
+development process by allowing them to focus on the science.
+
+First and foremost we want to improve software qualities, specifically
+maintainability, traceability, reproducibility, verifiability, and reusability.
+We believe the first step towards these improved qualities is a better
+understanding of the underlying knowledge behind the software itself.
+
+Being able to communicate this improved understanding is also necessary, as it
+will help with maintainability, reproducibility, and more down the road. What
+that means to us is ensuring that all software artifacts (requirements, design,
+source code, etc.) must be consistent and \emph{always} up to date.
+
+If we can essentially ``force'' the developer to always have consistent and up
+to date artifacts, without impeding their ability to develop (or wasting their
+time), then we believe we have already succeeded in improving the software. The
+less time a developer needs to spend maintaining and updating documentation, the
+more time they have to do other important things. 
+
+We also want to avoid one of the most classical software engineering mistakes:
+duplication. Knowledge should not be duplicated, regardless of how many times it
+must be displayed. If we can capture knowledge in an appropriate manner, then we
+can improve the reuse of that knowledge!
+
+Finally, we also believe that software we create should be reproducible. We want to ensure that given all of the appropriate knowledge surrounding a piece of software, scientists would be able to reproduce the software and any results obtained therein.
+
+To tackle our requirements, we need to understand a lot of what has come before. This includes (but is not limited to) methods for ensuring consistency across software artifacts and work done in the field of reproducible research.
+
+\subsection{Literate Programming}
+\label{subsec:lp}
+
+Literate programming is a programming methodology that was introduced by Knuth.
+The LP methodology changes the focus from writing programs which simply instruct
+the computer how to perform a task. Instead, the focus is now on explaining
+(\emph{to humans}) what we want the computer to do~\cite{Knuth1984}.
+
+In a literate program, the documentation and source code is all kept together in
+one source. Literate programs are developed by breaking down algorithms into
+small, easy to understand parts referred to as
+\emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}.
+These chunks are then explained, documented, and implemented in a way that
+promotes understanding -- they are not necessarily written in the order that the
+computer would read them, but rather a ``psychological
+order''~\cite{PieterseKourieAndBoake2004}. To get the working source code for a
+program written in the LP style, you run the \emph{tangle} process. Similarly,
+to extract and typeset the documentation you run the \emph{weave} process.
+
+LP has advantages beyond understandability. Using LP has been experimentally
+found to lead to better consistency between code and
+documentation~\cite{ShumAndCook1993}. As the program is developed, the
+documentation tends to be updated simultaneously as it surrounds the source
+code. We should also keep in mind that proper, consistent documentation leads to
+many advantages while developing or maintaining software~\cite{Heyman1990,
+Kotula2000}. When documentation does not match the system, it is a major
+detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Together, we can
+see how LP (when used properly) leads to more elegant, effective, maintainable,
+and understandable code~\cite{PieterseKourieAndBoake2004}.
+
+With all of the benefits of using LP it is fairly astounding that it has not
+been popular~\cite{ShumAndCook1993}. There are very few successful examples of
+LP in SC, two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
+``Physically Based Rendering: From Theory to
+Implementation''~\cite{PharrAndHumphreys2004}. Shum and Cook discuss the topic
+of LP's lack of popularity a fair bit and present the idea that it comes from
+two main issues:
+
+\begin{enumerate}
+\item Output language / text processor dependency.
+\item Lack of flexibility on what to present or suppress in the output.
+\end{enumerate}
+
+There have been attempts to address these issues. Many focused on changing or
+removing the output language or text processor dependency. For example CWeb (for
+the C language), noweb (programming language independent), javadoc (for Java),
+DOC++ (for C++), Doxygen (for multiple languages), and more. New tools came with new and interesting features, examples include:
+
+\begin{enumerate}
+\item What You See Is What You Get (WYSIWYG)
+editor~\cite{FritzsonGunnarssonAndJirstrand2002}.
+\item Graphicdoc rules (using a word processor to compose graphics in
+LP)~\cite{ShumAndCook1993}.
+\item Phantom abstracting~\cite{ShumAndCook1993}.
+\item Movement away from the idea of ``one source''~\cite{Simonis2003}.
+\end{enumerate}
+
+So many tools for LP have helped drive the understanding behind what exactly LP
+tools should be doing. On the other hand, the multitude of tools was preventing
+LP from becoming mainstream~\cite{Ramsey1994}. Nowadays, however, we can see
+parts of LP becoming standard in certain domains (for example: Haskell, Agda,
+and R support LP).
+
+\subsection{Expanding LP: Literate Software}
+
+A new methodology was proposed in 2002 by Al-Maati and Boujarwah called
+``Literate Software Development'' (LSD). It was designed as a combination and
+evolution of LP and Box Structure~\cite{AlMatiiAndBoujarwah2002}. Box Structure
+is the idea of views (system specifications, design, code) with each view being
+an abstraction communicating the same information in different levels of detail,
+for different purposes~\cite{Mills1986}.
+
+The main idea behind LSD was to overcome the disadvantages of LP and box
+structure. These disadvantages included: the inability of LP to specify
+interfaces between modules; the lack of ability to decompose boxes; a lack of
+tools to support box structure~\cite{Deck1996}; a lack of ability to implement
+the high-level analysis and design using box structures.
+
+WebBox, when implemented, expanded LP and box structures to include new chunk
+types; the ability to refine chunks into more chunks (and eventually Java code);
+the ability to specify interfaces and communication between boxes; and the
+ability to decompose boxes at any level.
+
+\subsection{Reproducible research} %Should this go here?
+\label{subsec:rr}
+
+
 \section{Drasil}
 \label{sec:Drasil}
 
@@ -535,150 +710,6 @@ more involved process.
 Adding new common knowledge libraries is also non-trivially difficult. These
 must be created by (or with the help of) domain experts to ensure the right
 knowledge is being captured in the right way.
-
-\section{Related work}
-\label{sec:bg}
-
-As we mentioned previously, none of the ideas behind Drasil are new. There has
-been a lot of work done by a lot of smart people and we are taking advantage of
-it. 
-
-%something about giving the reader an insight into why we do what we do.
-
-First let us take a look at the current state of SC software development, then
-we will discuss tools and techniques that came before us. 
-%TODO: Add in something about RR here.
-
-\subsection{The current state of SC software development}
-\label{subsec:scdev}
-
-Most developers in SC software tend to put an emphasis on their science, not the
-software they are developing~\cite{Kelly}. %TODO: Fix citation 
-Consequently these developers tend to naturally use an agile
-philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
-Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
-driven~\cite{Kelly2015} process. These developers are scientists first and
-foremost and they do not view rigid, process-heavy approaches
-favourably~\cite{CarverEtAl2007}.
-
-More than half of these scientists do not have a good understanding of software
-testing~\cite{Merali2010}. In fact, there is very limited use of automated
-testing for scientific software~\cite{PatrickAndGilligan2016} and quality
-assurance has ``a bad name among creative scientists and
-engineers''~\cite[p.~352]{Roache1998}.
-
-Another problem in SC is that knowledge reuse is not fulfilling its potential.
-For instance, for mesh generators a large number of similar programs have been
-written. A survey~\cite{Owen1998} shows %94? TODO:CHECK NUMBER
-different mesh generator packages,
-with 61 of them generating triangular meshes, and %43? TODO:CHECK NUMBER
-of these using the same algorithm of Delaunay triangulation.
-
-Tool use in SC software development is also limited, especially the use of
-version control software~\cite{Wilson2006}.
-
-Code generation in SC has been successful, but thus far the focus has been on
-the creation of only one software artifact: the code. Examples include
-%TODO: List examples here -- Gaussian Elimination~\cite{CaretteXXXX}, ATLAS~\cite ...
-
-The lack of emphasis on more artifacts is disadvantageous to SC software
-developers. The value of documentation and a structured process is illustrated
-by a survey of statistical software for
-psychology~\cite{SmithEtAl2015-SS-TR,SmithEtAl2015SQJ}. A case study on the
-impact of a document driven process for SC software was performed on legacy
-software for thermal analysis of a fuel pin in a nuclear
-reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013}. The redeveloped version
-discovered 27 issues, ranging from trivial to substantive, within the previous
-documentation. If rational documentation were used more often, some previous
-errors in scientific code may have been uncovered. Examples include the Sleipner
-oil rig, protein retraction, the Patriot missile, and seismic data
-processing~\cite{HattonAndRoberts1994}.
-
-\subsection{Reproducible research} %Should this go here?
-\label{subsec:rr}
-
-\subsection{Literate Programming}
-\label{subsec:lp}
-
-Literate programming is a programming methodology that was introduced by Knuth.
-The LP methodology changes the focus from writing programs which simply instruct
-the computer how to perform a task. Instead, the focus is now on explaining
-(\emph{to humans}) what we want the computer to do~\cite{Knuth1984}.
-
-In a literate program, the documentation and source code is all kept together in
-one source. Literate programs are developed by breaking down algorithms into
-small, easy to understand parts referred to as
-\emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}.
-These chunks are then explained, documented, and implemented in a way that
-promotes understanding -- they are not necessarily written in the order that the
-computer would read them, but rather a ``psychological
-order''~\cite{PieterseKourieAndBoake2004}. To get the working source code for a
-program written in the LP style, you run the \emph{tangle} process. Similarly,
-to extract and typeset the documentation you run the \emph{weave} process.
-
-LP has advantages beyond understandability. Using LP has been experimentally
-found to lead to better consistency between code and
-documentation~\cite{ShumAndCook1993}. As the program is developed, the
-documentation tends to be updated simultaneously as it surrounds the source
-code. We should also keep in mind that proper, consistent documentation leads to
-many advantages while developing or maintaining software~\cite{Heyman1990,
-Kotula2000}. When documentation does not match the system, it is a major
-detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Together, we can
-see how LP (when used properly) leads to more elegant, effective, maintainable,
-and understandable code~\cite{PieterseKourieAndBoake2004}.
-
-With all of the benefits of using LP it is fairly astounding that it has not
-been popular~\cite{ShumAndCook1993}. There are very few successful examples of
-LP in SC, two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
-``Physically Based Rendering: From Theory to
-Implementation''~\cite{PharrAndHumphreys2004}. Shum and Cook discuss the topic
-of LP's lack of popularity a fair bit and present the idea that it comes from
-two main issues:
-
-\begin{enumerate}
-\item Output language / text processor dependency.
-\item Lack of flexibility on what to present or suppress in the output.
-\end{enumerate}
-
-There have been attempts to address these issues. Many focused on changing or
-removing the output language or text processor dependency. For example CWeb (for
-the C language), noweb (programming language independent), javadoc (for Java),
-DOC++ (for C++), Doxygen (for multiple languages), and more. New tools came with new and interesting features, examples include:
-
-\begin{enumerate}
-\item What You See Is What You Get (WYSIWYG)
-editor~\cite{FritzsonGunnarssonAndJirstrand2002}.
-\item Graphicdoc rules (using a word processor to compose graphics in
-LP)~\cite{ShumAndCook1993}.
-\item Phantom abstracting~\cite{ShumAndCook1993}.
-\item Movement away from the idea of ``one source''~\cite{Simonis2003}.
-\end{enumerate}
-
-So many tools for LP have helped drive the understanding behind what exactly LP
-tools should be doing. On the other hand, the multitude of tools was preventing
-LP from becoming mainstream~\cite{Ramsey1994}. Nowadays, however, we can see
-parts of LP becoming standard in certain domains (for example: Haskell, Agda,
-and R support LP).
-
-\subsection{Expanding LP: Literate Software}
-
-A new methodology was proposed in 2002 by Al-Maati and Boujarwah called
-``Literate Software Development'' (LSD). It was designed as a combination and
-evolution of LP and Box Structure~\cite{AlMatiiAndBoujarwah2002}. Box Structure
-is the idea of views (system specifications, design, code) with each view being
-an abstraction communicating the same information in different levels of detail,
-for different purposes~\cite{Mills1986}.
-
-The main idea behind LSD was to overcome the disadvantages of LP and box
-structure. These disadvantages included: the inability of LP to specify
-interfaces between modules; the lack of ability to decompose boxes; a lack of
-tools to support box structure~\cite{Deck1996}; a lack of ability to implement
-the high-level analysis and design using box structures.
-
-WebBox, when implemented, expanded LP and box structures to include new chunk
-types; the ability to refine chunks into more chunks (and eventually Java code);
-the ability to specify interfaces and communication between boxes; and the
-ability to decompose boxes at any level.
 
 \clearpage
 \onecolumn

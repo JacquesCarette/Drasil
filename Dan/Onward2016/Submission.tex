@@ -264,7 +264,7 @@ The last piece of the puzzle is the generator. We use it to interpret the
 recipes, create intermediary representations of our desired views, and then
 pretty-print them.
 
-\subsection{Drasil in Action} 
+\subsection{Drasil in action} 
 \label{subsec:example}
 
 For this section we will take a look at a simplified version of a Software
@@ -524,7 +524,57 @@ Adding new common knowledge libraries is also non-trivially difficult. These
 must be created by (or with the help of) domain experts to ensure the right
 knowledge is being captured in the right way.
 
+\section{Related work}
+\label{sec:bg}
 
+As we mentioned previously, none of the ideas behind Drasil are new. There has
+been a lot of work done by a lot of smart people and we are taking advantage of
+it. 
+
+%something about giving the reader an insight into why we do what we do.
+
+First let us take a look at the current state of SC software development, then
+we will discuss tools and techniques that came before us. 
+%TODO: Add in something about RR here.
+
+\subsection{The current state of SC software development}
+\label{subsec:scdev}
+
+Most developers in SC software tend to put an emphasis on their science, not the
+software they are developing~\cite{Kelly}. %TODO: Fix citation 
+Consequently these developers tend to naturally use an agile
+philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
+Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
+driven~\cite{Kelly2015} process. These developers are scientists first and
+foremost and they do not view rigid, process-heavy approaches
+favourably~\cite{CarverEtAl2007}.
+
+More than half of these scientists do not have a good understanding of software
+testing~\cite{Merali2010}. In fact, there is very limited use of automated
+testing for scientific software~\cite{PatrickAndGilligan2016} and quality
+assurance has ``a bad name among creative scientists and
+engineers''~\cite[p.~352]{Roache1998}.
+
+Another problem in SC is that knowledge reuse is not fulfilling its potential.
+For instance, for mesh generators a large number of similar programs have been
+written. A survey~\cite{Owen1998} shows %94? TODO:CHECK NUMBER
+different mesh generator packages,
+with 61 of them generating triangular meshes, and %43? TODO:CHECK NUMBER
+of these using the same algorithm of Delaunay triangulation.
+
+Tool use in SC software development is also limited, especially the use of
+version control software~\cite{Wilson2006}.
+
+Code generation in SC has been successful, but thus far the focus has been on the creation of only one software artifact: the code. Examples include 
+%TODO: List examples here -- Gaussian Elimination~\cite{CaretteXXXX}, ATLAS~\cite ...
+
+The lack of emphasis on more artifacts is disadvantageous to SC software developers. The value of documentation and a structured process is illustrated by a survey of statistical software for psychology~\cite{SmithEtAl2015-SS-TR,SmithEtAl2015SQJ}. A case study on the impact of a document driven process for SC software was performed on legacy software for thermal analysis of a fuel pin in a nuclear reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013}. The redeveloped version discovered 27 issues, ranging from trivial to substantive, within the previous documentation. If rational documentation were used more often, some previous errors in scientific code may have been uncovered. Examples include the Sleipner oil rig, protein retraction, the Patriot missile, and seismic data processing~\cite{HattonAndRoberts1994}.
+
+\subsection{Reproducible research} %Should this go here?
+\label{subsec:rr}
+
+\subsection{Literate Programming}
+\label{subsec:lp}
 
 
 \clearpage

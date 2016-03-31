@@ -1,0 +1,243 @@
+Outline:
+
+0. Abstract
+
+1. Introduction
+
+- Our vision: Make better software.
+  - Increase qualities of software like maintainability, traceability, 
+    reproducibility, reusability. - [SS] suggest adding verifiability to the list
+  - Make it such that some short-term investments really pay off in the 
+    long-term.  This is the fundamental trade-off: our technique is as
+    non-agile as it gets, while not being waterfall either. - [SS] the recommended
+	documentation is waterfall (rational), but with Drasil in place, couldn’t people
+	follow an agile development approach?  Drasil would support quick changes and
+	short increments of development.  Although we have focused on requirements,
+	the test cases could be the project drivers?
+  - For example, our technique makes working on program families trivial,
+    at the cost of losing the capability of doing "local hacks" to "just
+    make things work".
+    
+- Acknowledge it's a pipedream to apply this blanket to all software, 
+  restrict scope to software with a well understood knowledge base 
+  (to be expanded on in a bit)
+  - For the purposes of the paper we'll stick to using Scientific Software as 
+    our go-to for illustrative purposes.
+    
+- LP had the right idea, but is too restricted! Let's make all Software 
+  Artifacts (Requirements, design doc, source code, build instructions, test 
+  cases, etc.) (all from standard SE practice) from a common knowledge base.
+  
+- Drop the idea of "one source", instead have the idea of "common knowledge" 
+  libraries for common problems (ex. theory behind heat transfer w/ 
+  conservation eqns; SI Unit library, etc.).  Very much keep the idea of
+  "chunk" and of assembling things from chunks.
+  
+- Straight up: Our ideas aren't new. Even when Knuth introduced LP, he said 
+  it wasn't any new ideas, just a combination of older ideas (Knuth 1984).
+  - Others have done similar work (to be elaborated on in the bg section), but
+    they did not achieve the results we're aiming for. They were either aiming
+    for something else, spent too long creating a "grand design" and got nowhere
+    practically, or weren't brave enough to break things down to the smallest
+    necessary chunks.
+  - We aren't being overly creative either, we're actually just breaking 
+    things down in a very practical manner so that we can actually DO it and 
+    make it work.
+  - The success or failure of our approach hinges on the idea of a stable
+    knowledge base (mentioned earlier). Without that it cannot work (explain?).
+  - We believe we've assembled the "right" ideas to make this work.
+  
+- We're taking a (not so) humble, practical route to our grand vision.
+
+X. Design --Where to put this / how to expand it?
+- Something about XML and style sheets. We chose to go with the embedded DSLs 
+  in Haskell. Main benefit: Haskell's type system immediately (at compile 
+  time) tells us if there are any problems in what we're doing.
+
+2. Drasil
+
+- Three main ideas behind Drasil:
+    1. Organized knowledge base
+      - Structured conceptually.
+      - Consists of Chunks.
+      - Broken down into the smallest possible pieces.
+    2. Recipes for creating artifacts!
+      - Each presents a different "view" of the same underlying knowledge.
+      - "Standard" recipes for certain types of artifacts which can be 
+        customized.
+    3. Build everything without being constrained by technology
+      - Don't worry about the display tech, prog lang, specification tech, etc.
+      - Free the user from having to worry about constraints in the tech they 
+        choose as output
+      - The generator will take care of everything once the recipes are in place
+
+- Upholding those ideas and implementing a framework around them will lead to 
+  enormous benefits in software qualities.
+  - Generation removes recurring problems like "feature creep" and "software 
+    bloat" (AmselEtAl2011) - [SS] This conclusion isn’t immediately obvious to me, 
+	I think we should explain why AmselEtAl made this statement.
+  
+- (The (preliminary) evidence?)
+
+2.1 Drasil in Action (a simple example)
+
+- Bust out the old standby of h_g and h_c example for this.
+- Show off the design again using the example (and pretty diagrams)
+- SI Unit library as obvious reusable chunks
+- Different outputs depending on what we want (show HTML vs. LaTeX)
+
+- Advantages -> Software Certification, Designing for change, knowledge capture,
+                Verification, simplicity, etc.
+                
+- Disadvantages -> Short-term increase in effort, requires domain experts to 
+                   create the common knowledge libraries, MUST do everything 
+                   right (or really close to it) since it's an all-or-nothing
+                   output (can iterate, but not in a very meaningful way). 
+			- [SS] What do you mean that you cannot have meaningful iteration?
+			I thought one of the advantages of Drasil was being able to make
+			likely changes to create multiple family members.  Are you saying
+			that you need to plan for the entire family from the start?  That is, 
+			are you saying that it is difficult to add a likely change after the fact?
+
+
+- pervasive bugs: an error in the knowledge base will tend to spread everywhere.
+  this can be regarded as an advantage (bugs are shallow and are fixed
+  quickly, as they break everything), or a disadvantage (single bugs can 
+  break everything). 
+
+  [If we want to be fancy, we can drag in the idea that most software operates
+   inside some paraconsistent logic, where rare paths do not bring down the
+   consistency of the whole, while we're suggesting working in a strict
+   logic.  This is indeed akin to the difference between advocates of 
+   dynamic typing who favour flexibility over assurance, and advocates of
+   static types, who prefer machine-checked assurance of (weak) properties.
+   This is another reason why our method is not universal, but rather for 
+   those domains which are well understood]
+    -- I think I understand what you mean here, but I have absolutely no idea how to work that in. Could you?
+                   
+3. Background / Lit Review
+
+- Reiterate these ideas are not new. Lots of work has been done by lots of smart
+  people and we're taking advantage of that.
+  
+-- 3.x Reproducible Research? Should we give a brief rundown here?
+	- [SS] I think we should give a brief rundown of reproducible research.
+	This is one of the advantages of Drasil.  The goal is to be able to 
+	reproduce any program family member.  In scientific software researchers
+	often “fiddle” with the assumptions and parameters.  It is entirely
+	conceivable that someone will forget which combination of variations led
+	to the results that they favoured.  With Drasil they can go to the original
+	recipes and reproduce everything.  If we think of the recipe to Drasil as a
+	runtime input, then the configuration of the software and the input
+	data for the simulation are both inputs.  We just need to capture this
+	information and we can reproduce results in the future.  I guess we need
+	to add to this a way to capture the configuration of the machine that the
+	software is running on.  Maybe we could introduce the idea of 
+	using a virtual machine?
+  
+3.1 The Current state of SC software development.
+
+- Lots of Kelly in here (grab highlights of notes on Kelly 2015 for this 
+  section).
+
+- "Software development is the science of abstractions" 
+  (Al-MaatiAndBoujarwah2002) --This needs to go somewhere, if we can work it in
+  (maybe 3.3).
+
+[SS] The following bullets are an initial attempt at summarizing the state
+of SC software development
+
+- For most SC developers the emphasis is on their science, not the software (Kelly), 
+as a consequence:
+	- developers naturally use an agile philosophy~\cite{AckroydEtAl2008, CarverEtAl2007,
+	  EasterbrookAndJohns2009, Segal2005} or an amethododical~\cite{Kelly2013}, or a
+	knowledge acquisition driven~\cite{Kelly2015}, process
+	- More than half of scientists state that they do not have a good understanding of 
+	software testing (Z. Merali. Computational science: Error, Why Scientific
+	 Programming does not Compute. Nature, 467(7317), 2010.) - further data on
+	limited automated testing for science in PatrickAndGilligan2016 (Software Engineering
+	for Science Book)
+	- QA has, ``a bad name among creative scientists and engineers''~\cite[p.~352]{Roache1998}
+	- scientists do not view rigid, process-heavy approaches, favourably~\cite{CarverEtAl2007}
+	- Reuse of knowledge in SC is not fulfilling its potential.  For instance, for mesh generators 
+	a large number of similar programs have been written. A survey by Owen (1998) shows 94 different 
+	mesh generator packages, with 61 of them generating triangular meshes, and 43 of these using the 
+	same algorithm of Delaunay triangulation. (These numbers need to be checked.  I think
+	there is a more recent reference to the survey.)
+	- tool use is limited, especially version control (Wilson2006)
+
+- Code generation has been successful in SC, but to date the emphasis has been on only one
+software artifact (the code).  Examples include
+	- Carette and Gaussian elimination, ATLAS, Blitz++, Spiral, FFT (KiselyovEtAl2004), …
+	- FEniCS (LoggEtAl2012)
+
+- A rational approach has been shown to be advantageous
+	- The value of documentation and a structured process is illustrated by a survey
+	of statistical software for psychology~\cite{SmithEtAl2015-SS-TR,
+  	SmithEtAl2015SQJ}
+	- To study the impact of a document driven process on SC software, a case study
+	was performed on legacy software used for thermal analysis of a fuel pin in a
+	nuclear reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013} -  the redeveloped
+	version uncovered 27 issues in the previous documentation, ranging from trivial
+	to substantive.
+	- some previous errors in scientific code may have been uncovered if
+	rational documentation were used
+		- Sleipner oil rig
+		- protein (crystal?) retraction
+		- Patriot missile
+		- Seismic data processing (HattonAndRoberts1994)
+		- moment of area in metric versus imperial units
+
+  
+3.2 Literate Programming - [SS] I like the idea of reviewing LP, especially
+				the idea of highlighting why it hasn’t
+				become mainstream
+
+- What is LP? Explain here! (lots of Knuth)
+
+- Why LP? Consistency! -> ShumAndCook1993 experimentally found that LP led to 
+  better consistency between code and documentation. Also keep in mind the 
+  findings of Heyman1990 and Kotula2000 that proper documentation leads to 
+  serious advantages and the common sense idea (discussed by Kotula2000 and 
+  Thimbleby1986) that there are huge disadvantages to having documentation that
+  does not match the system. Taken together LP (when used properly) already
+  improves the quality of software.
+
+- LP has not been popular... (ShumAndCook1993) (give breakdown of their AOPS
+  attempt to popularize LP) --Maybe merge this with the next bit
+
+- [SS] There are relatively few examples of LP in SC, including Nedialkov2010 
+and PharrAndHumphreys2004.
+
+- We've seen plenty of tools for LP: The first was web (Knuth1984), then 
+  similar tools were created for other languages: CWeb, noweb, javadoc, 
+  DOC++, Doxygen, ProgDoc and the list goes on.
+  - The multitude of tools helped to increase the understanding behind what LP
+    tools should be doing, even if it kept LP from the mainstream (Ramsey1994).
+  -  Parts of LP are standard in some domains (Haskell, Agda, R).
+  
+- LP tools added new and interesting features: WYSIWYG editor (Fritzson...2002),
+  lang/text editor independence, using a text editor to compose graphics 
+  (ShumAndCook1993), etc.
+  
+- Case for Contemp. LP (Pieterse...2004)
+  
+3.3 Expanding LP: Literate Software
+
+- Talk a lot about the work of Al-Maati and Boujarwah 2002 (work in the main 
+  points from the notes I took).  
+  
+-- 3.4 Our inspiration? Where we want to go? What we're combining? etc.?
+
+
+4. Future work
+
+- Most of this can be ripped from the ICSE paper and expanded on.
+    
+5. Concluding Remarks
+
+- The usual, "we're being practical and taking strides to achieve our vision".
+- Already see some benefits, but they'll be more noticeable on a larger scale
+    (more knowledge reuse).
+- 
+

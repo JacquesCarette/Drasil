@@ -1,0 +1,801 @@
+\documentclass[preprint, 10pt]{sigplanconf}
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{positioning}
+\newcommand{\cL}{{\cal L}}
+\newcommand{\colAwidth}{0.1\textwidth}
+\newcommand{\colBwidth}{0.34\textwidth}
+\begin{document}
+
+\special{papersize=8.5in,11in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+\conferenceinfo{Onward! '16}{October 30--November 4, 2016, Amsterdam, Netherlands}
+\copyrightyear{2016}
+\copyrightdata{978-1-nnnn-nnnn-n/yy/mm}
+\copyrightdoi{nnnnnnn.nnnnnnn}
+
+% Uncomment the publication rights you want to use.
+%\publicationrights{transferred}
+%\publicationrights{licensed}     % this is the default
+%\publicationrights{author-pays}
+
+\titlebanner{banner above paper title}        % These are ignored unless
+\preprintfooter{short description of paper}   % 'preprint' option specified.
+
+\title{Title Text}
+\subtitle{Subtitle Text, if any}
+
+\authorinfo{Dan Szymczak}
+           {McMaster University}
+           {szymczdm@mcmaster.ca}
+\authorinfo{Jacques Carette\and Spencer Smith}
+           {McMaster University}
+           {carette@mcmaster.ca / smiths@mcmaster.ca}
+
+\maketitle
+
+\begin{abstract}
+This will be filled in once we're done drafting. For now I'm putting in a solid
+block of text that will let me ramble on for a while when it comes down to the
+final abstract. Programmers are like gods of tiny universes. They create worlds
+according to their rules. If we think of software artifacts (that is, all
+documentation, build instructions, source code, etc.) as their own tiny worlds,
+a universe takes shape. Now think about what would happen if the laws of that
+universe were inconsistent between worlds. What if the laws of thermodynamics
+fundamentally changed as soon as you left Earth? Say goodbye to space travel.
+Keeping artifacts consistent with each other is hugely important in the software
+world, and Drasil aims to ensure it...
+\end{abstract}
+
+\category{CR-number}{subcategory}{third-level}
+
+% general terms are not compulsory anymore,
+% you may leave them out
+%\terms
+%term1, term2
+
+\keywords
+Literate software, knowledge capture, traceability, software engineering,scientific 
+computing, artifact generation, software quality
+
+\section{Introduction}
+\label{sec:Intro}
+
+We want to make better software.  In particular, we are interested in
+increased maintainability, traceability, reproducibility, verifiability, and
+reusability.  Our approach is to invest (much) more in the short-term to provide
+outstanding long-term benefits. This is the fundamental trade-off in
+our work: we expect our methods to work very well for domains which are 
+well understood with known (but potentially enormous) design spaces.  We do
+not claim to tackle areas of software development where methodologies such
+as agile are well-suited.  But we firmly believe that there are domains --
+such as safety-critical applications -- where agile is not only ill-suited,
+it would be downright unprofessional to use such a methology in that setting.
+
+Rather than talk in vague generalities, we will pick Scientific Computation
+(SC) for illustrative purporses throughout this paper.  But the fundamental
+ideas (and, in fact, our framework) should be applicable to any software
+domain which has well-established theoretical underpinnings, and a well
+understood translation of the theory into effective code.  SC is particularly
+well-suited as it is also replete with \emph{program families}.
+
+We believe that Knuth's Literate Programming (LP)~\cite{Knuth1984} contains
+some fundamental insights, but is too restricted (i.e. just to code).  Rather
+than restrict LP to just source code, we want to apply it to all software
+artifacts (requirements and design documents, source files, test cases, build
+instructions, user manuals, etc.).  In other words, our basic starting points is
+to ``chunk'' all aspects of the software construction process, and then weave the
+actual artifacts from those chunks.  We will discuss the details of how we do this
+in Section~\ref{sec:Drasil}.
+
+The LP idea of putting everything into a single source file will not scale
+in this way.  Instead, we introduce the idea of libraries of ``common knowledge''
+for concepts which tend to re-occur.  A low-level example would be the units
+from the Syst\`{e}me International (SI) Units as ``common knowledge'' that really
+ought to get defined only once, and then re-used.  A higher-level example would be
+the various components of the theory of heat transfer, including the conservation
+of energy equations.
+
+We should make it quite clear that none of the individual ideas presented
+in this paper are new.  Knuth himself
+said that ``I have simply combined a bunch of ideas that have been in the air
+for a long time'' when he coined LP~\cite{Knuth1984}. We are, however, taking these
+ideas and re-assembling them in novel ways.  Our principal aim is not a new
+software framework for doing literate software, but rather a framework which,
+over the long term, will allow us to do our own work (largely in scientific
+computation, but also in mechanized mathematics) much more effectively.  Our design
+is thus largely example-driven; we indeed have an industrial client who is funding
+this work, with the common aim of reducing the long-term cost of re-certifying
+scientific computation software as fit-for-use for certain safety critical 
+applications.  While the details of that are beyond the scope of this paper, they 
+are never far from our minds as we design and implement our framework.
+
+Others have done similar work (which we will get into in Section~\ref{sec:bg}),
+but they did not achieve the results we are envisioning. They either set their
+aims on other targets, spent too long creating a grand design and ended up
+without any real, practical results, or they simply were not brave enough to
+break things down into the smallest necessary chunks.
+
+We believe that we have assembled the right ideas to achieve our vision.
+The overall success or failure of our approach hinges on the idea of a stable,
+well understood knowledge base. If such knowledge does not exist, or cannot be
+adequately captured, our approach will not work.  Our claim then is that there 
+are areas of application where the knowledge not only exists, it can be adequately
+captured and operationalized in very effective ways.
+
+As it stands, we are on a (not so) humble, practical route to achieving our
+goals and improving the overall quality of (some scientific computation) software.
+
+\section{Drasil}
+\label{sec:Drasil}
+
+Our framework is called Drasil (shortened from \emph{Yggdrasil} from Norse
+Mythology, which is also known as the \emph{world tree}). It is currently being
+developed through a practical, example-driven approach in an effort to bring our
+vision to life. There are three main ideas driving Drasil's development:
+
+\begin{enumerate}
+\item Organize the knowledge base -- We want a knowledge base that we can
+structure conceptually (i.e. keep knowledge for a certain class of problems
+together). This is where chunks come into play: each chunk encapsulates a single
+piece of knowledge like a concept or a quantity. We want to break our knowledge
+base down into the smallest possible pieces.
+
+\item Use recipes to create artifacts -- We can think of each artifact in our
+software project as a different view of our knowledge base. We want to use
+recipes to specify exactly what information from the knowledge base is necessary
+for each artifact, and how that information should be displayed. For many
+artifacts we would like to have a standard recipe which can be quickly
+customized for the current problem and that is how we will avoid duplicating
+knowledge.
+
+\item Remove technology constraints -- We want to be able to create our software
+without worrying about the underlying technical constraints of our display or
+specification technology, programming language(s), etc. Anyone using Drasil
+should be able to work with the knowledge base and their recipes, then simply
+set their output technology and have the generator take care of all the
+technical details.
+\end{enumerate}
+
+We argue that by implementing Drasil around these ideas, we can see drastic
+improvements in software quality. In fact, using a generative approach we can
+avoid certain problems altogether. One obvious and recurring problem that comes
+to mind when upgrading software is ``feature creep'' or ``software
+bloat''~\cite{AmselEtAl2011}. With Drasil, a software upgrade will actually be a
+completely new piece of software that includes the previously desired
+functionality as well as the new upgrades. We will discuss further improvements
+in more detail after our example in Section~\ref{subsec:example}.
+
+\subsection{Drasil's current implementation}
+\label{subsec:current}
+
+Fundamentally, Drasil must be able to capture knowledge and produce different
+views of that knowledge. With our current implementation we have each individual
+piece of knowledge as a named \emph{chunk}. We are then able to manipulate our
+chunks through the use of a \emph{recipe}. Our \emph{generator} interprets the
+recipes to produce the final desired view. This view represents one of the many
+software artifacts mentioned in Section~\ref{sec:Intro}.
+
+As mentioned, we capture knowledge into named chunks, of which there
+are several varieties. Actually, we have a hierarchy of chunk types, where each
+new chunk encapsulates more than the previous one(s) (see
+Figure~\ref{fig:chunks} for an idea). The most basic \emph{chunk} represents a
+named piece of information. Above that we have named \emph{concepts} which
+introduce some descriptive information.
+
+A \emph{quantity} is a concept that has a symbolic representation, we can refer
+to the quantity by either its name or symbol. In a similar vein are
+\emph{units}, %need something more here -- (which encapsulates the units
+%attached to a concept)?? 
+and \emph{relation chunks} (which add the idea of a
+relation between some other pieces of knowledge).
+
+In an SC context, most of the knowledge we work with is represented as a
+quantity with some units, in other words a \emph{unital} chunk. Expanding on
+that, we can actually calculate values for many of these unital concepts. As
+such, we have \emph{eqchunks} which allow us to capture the equation along with
+everything else included in a unital chunk.
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}[node distance=6mm]
+  \tikzstyle{every node}=[draw,shape=rectangle, rounded corners,
+    text width=6em, text centered];
+  \node (ch)                     {Chunk (\emph{name})};
+  \node (co) [below = of ch]       {Concept (\emph{description})};
+  \node (qu) [below left = of co]  {Quantity (\emph{symbol})};
+  \node (rc) [below = of co]		   {RelationChunk (\emph{relation})};
+  \node (u ) [below right = of co] {Unit (\emph{unit})};
+  \node (uc) [below = of rc] 		{Unital};
+  \node (eq) [below = of uc]		   {EqChunk (\emph{equation})};
+
+  \draw [->, line width=2pt] (ch) -- (co);
+  \draw [->, line width=2pt] (co) -- (qu);
+  \draw [->, line width=2pt] (co) -- (rc);
+  \draw [->, line width=2pt] (co) -- (u );
+  \draw [->, line width=2pt] (qu) -- (uc);
+  \draw [->, line width=2pt] (u ) -- (uc);
+  \draw [->, line width=2pt] (uc) -- (eq);
+\end{tikzpicture}
+\end{center}
+\caption{Our current chunk design}
+\label{fig:chunks}
+\end{figure}
+
+Now with the means to encapsulate knowledge, we can turn our attention to our
+recipes. The recipes are implemented using a combination of embedded Domain
+Specific Languages (DSLs) in Haskell. We have currently implemented the
+following DSLs:
+
+\begin{enumerate}
+\item Expression language -- A simple expression language that allows us to
+capture knowledge relating to equations and mathematical operations. It
+includes, but is not limited to, operations such as addition, multiplication,
+negation, derivation, and exponentiation.
+
+\item Expression layout language -- A micro-scoped language for describing how
+expressions should appear. Expressions may need to use subscripts, superscripts,
+concatenated symbols, etc. to be properly displayed.
+
+\item Document layout language -- A macro-scoped language for describing how
+large-scale layout objects (tables, sections, figures, etc.) should appear.
+
+\item C Representation Language -- A DSL for representing parts of the C
+programming language inside the Drasil framework. This allows the generator to
+produce working C code.
+
+\item \LaTeX Representation Language -- A DSL for representing \LaTeX code
+inside of Drasil.
+
+\item HTML Representation Language -- A DSL for representing HTML within Drasil.
+\end{enumerate}
+
+Of the DSLs mentioned, we only actually have to write our recipes using three of
+them. Each of the representation languages are used strictly by the generator as
+an intermediary in the production of our desired views. We write our recipes
+using the document layout language, expression layout language, and expression
+language. We will discuss the particulars of each of these in more depth during
+our example (Section~\ref{subsec:example}).
+
+The last piece of the puzzle is the generator. We use it to interpret the
+recipes, create intermediary representations of our desired views, and then
+pretty-print them.
+
+\subsection{Drasil in action} 
+\label{subsec:example}
+
+For this section we will take a look at a simplified version of a Software
+Requirements Specification (SRS) for a fuel pin in a nuclear reactor (for more
+information on that particular SRS see~\cite{SmithAndKoothoor2016}).
+
+Starting off we will look at one specific term: $h_c$. In this example, $h_c$
+represents the convective heat transfer coefficient between the clad and
+coolant. The data definition for $h_c$ from the original SRS can be seen in
+Figure~\ref{fig:h_c}.
+
+\begin{figure}
+~\newline \noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+\toprule \textbf{Number} & \textbf{DD2 \label{hc}}
+\\ \midrule 
+Label & 
+$h_{c}$
+\\ \midrule
+Units & $ML^0t^{-3}T^{-1}$\\ \midrule
+SI Units & $\mathrm{\frac{kW}{m^{2o}C}}$\\ \midrule
+Equation & $h_{c}$ =$
+\frac{2k_{c}h_{b}}{2k_{c}+\tau_{c}h_{b}}$\\ \midrule
+Description & $h_{c}$ is the convective heat transfer coefficient between clad
+and coolant
+\newline
+$k_{c}$ is the
+clad conductivity \newline
+$h_{b}$ is the
+initial coolant film conductance \newline
+$\tau_{c}$ is the
+clad thickness 
+\newline
+%NOTE: Equation taken from the code\\ \midrule  Sources & source code \\ \bottomrule 
+\end{tabular} \end{minipage}\\ 
+\caption{Data definition for $h_c$ from the fuel pin SRS}
+\label{fig:h_c}
+\end{figure}
+
+The data definition of $h_c$ displays some interesting knowledge. It gives us
+the name for a concept, its description, a symbol to use for easier reference,
+its (SI) units, and its defining equation. Encapsulating all of this knowledge
+into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. Note
+that the equation for $h_c$ is written in our expression language (Expr) and it
+also includes references to chunks that $h_c$ depends on. These will come into
+play when we create the description for $h_c$ in the generated view, but we do
+not need to worry about them right now as that knowledge is stored elsewhere.
+The units for $h_c$ are defined by a piece of common knowledge known as
+\verb|heat_transfer|.
+
+\begin{figure}
+\begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small]
+h_c_eq :: Expr
+h_c_eq = 2*(C k_c)*(C h_b) /
+  (2*(C k_c) + (C tau_c)*(C h_b))
+
+h_c :: EqChunk
+h_c = fromEqn "h_c" 
+ "convective heat transfer coefficient
+    between clad and coolant"
+ (sub h c) heat_transfer h_c_eq
+\end{lstlisting}
+\caption{The $h_c$ chunk in Drasil}
+\label{fig:h_cChunk}
+\end{figure}
+
+On the topic of common knowledge, we can show an example alluded to previously,
+that of the SI unit library. The seven base SI units captured in Drasil are
+shown in Figure~\ref{fig:si_units}. The SI unit library also contains several
+derived units (for example: centigrade which is derived from kelvin) which we
+make use of later on in our example. The knowledge behind each unit and (in the
+case of derived units) their relation to the base units is captured in the
+relevant chunks.
+
+\begin{figure*}
+\begin{lstlisting}[frame=single, showstringspaces=false]
+metre, second, kelvin, mole, kilogram, ampere, candela :: FundUnit
+metre    = fund "Metre"    "length (metre)"               "m"
+second   = fund "Second"   "time (second)"                "s"
+kelvin   = fund "Kelvin"   "temperature (kelvin)"         "K"
+mole     = fund "Mole"     "amount of substance (mole)"   "mol"
+kilogram = fund "Kilogram" "mass (kilogram)"              "kg"
+ampere   = fund "Ampere"   "electric current (ampere)"    "A"
+candela  = fund "Candela"  "luminous intensity (candela)" "cd"
+\end{lstlisting}
+\caption{The seven funamental SI Units in Drasil}
+\label{fig:si_units}
+\end{figure*}
+
+Now that we've shown a bit of knowledge capture, you may be wondering how to use
+it. This is where the recipes come in. Figure~\ref{fig:recipe} shows a portion
+of the recipe for creating our intended SRS view. The body of the simplified SRS
+is composed of three sections: \verb|s1|, \verb|s2|, and \verb|s3|. We then show
+the definition of the first section (omitting the others for brevity) which is
+titled "Table of Units" and includes an introductory paragraph and a table. This
+table simply extracts the symbol and description information from the SI units
+to display them in our view. It should be fairly obvious at this point, but
+these macro-scale layout objects (sections, tables, paragraphs, etc.) are
+specified using our document layout language.
+
+\begin{figure}[tb]
+\begin{lstlisting}[frame=single, 
+  showstringspaces=false, basicstyle=\scriptsize]
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2,s3]
+
+s1 = Section (S "Table of Units") [intro, table]
+
+table = Table 
+ [S "Symbol", S "Description"] (mkTable
+   [(\x -> Sy (x ^. unit)),
+    (\x -> S (x ^. descr)) ] si_units)
+
+intro = Paragraph (S "Throughout this ...")
+\end{lstlisting}
+\caption{A portion of our simplified SRS recipe}
+\label{fig:recipe}
+\end{figure}
+
+With our recipe in place, we are now able to run it through the generator and
+see what it spits out. We've included the three sections of this simplified SRS
+in Appendix~\ref{appendix:SRS}, and what you see there is the typeset version of
+the generated LaTeX code. We are also able to output our view as an HTML
+document (Figure~\ref{fig:HTML_s1}).
+
+\begin{figure}
+\includegraphics[scale=0.5]{HTML_s1.png}
+\caption{Section 1 of the generated SRS (HTML version)}
+\label{fig:HTML_s1}
+\end{figure}
+
+Now if you recall the data definition from Figure~\ref{fig:h_c}, we will show
+the painstaking amount of work it takes to create (almost) that exact same
+table:
+
+\begin{lstlisting}
+s3_dd2 = Definition (Data h_c)
+\end{lstlisting}
+
+Again looking to the appendix, or to the HTML output (Figure~\ref{fig:HTML_s3} for
+the data definition), it should be easy to see that the recipe handled all of
+the layout details. The recipe actually goes one step further in that it found
+all of the chunk's dependencies and built the description by finding the
+appropriate knowledge related to the other chunks. This is configurable in that
+we can include short descriptions or verbose descriptions at this point in time.
+
+\begin{figure}
+\includegraphics[scale=0.6]{HTML_s3.png}
+\caption{Generated SRS data definition (HTML version)}
+\label{fig:HTML_s3}
+\end{figure}
+
+One last thing we'd like to show is the source code generation. The recipe is
+fairly straightforward in that we have:
+
+\begin{lstlisting}
+codesample = CodeBlock (toCode CLang Calc h_c)
+\end{lstlisting}
+
+All that says is \verb|codesample| is a block of code in the C language that
+calculates the value of $h_c$. Currently the only implemented output language is
+C, but we are planning to implement more and are designing around that coming
+change. The generator output for \verb|codesample| ends up looking like:
+
+\begin{lstlisting}[frame=single, 
+  showstringspaces=false, basicstyle=\scriptsize]
+double calc_h_c(double k_c, double h_b, double tau_c){
+    return (2 * k_c * h_b / (2 * k_c + tau_c * h_b));
+}
+\end{lstlisting}
+
+This is a fairly trivial piece of code, but it is a good example of how the
+source can be generated from the knowledge encapsulated in a chunk.
+
+\subsection{Advantages}
+\label{subsec:advantages}
+
+We have already experienced some of the advantages of using
+Drasil. During the knowledge capture phase of our example a seemingly trivial
+problem came up regarding the simplified SRS. One of the concepts was being
+referred to with multiple different descriptions. By capturing only the right
+description, the generator now ensures internal consistency.
+
+With that in mind, look at all of the previous figures (or
+Appendix~\ref{appendix:SRS}) and how many times knowledge has been copied into
+different places within one software artifact. Now imagine how many times that
+knowledge appears across all software artifacts. By using a generator, we avoid
+the problem of manually duplicating all of that information. It also ensures
+that should a piece of knowledge need to be updated, those updates will
+propagate throughout all of the artifacts \emph{automatically}. 
+	%if this wasn't academia I would write ``automagically''
+	
+Another great benefit to knowledge capture, especially in the SC domain, is that
+it promotes reuse. The SI units are a trivial example of a completely reusable
+knowledge library that will come up across many different problem domains
+(within and outside of SC). If we can build these common knowledge libraries for
+a multitude of problem domains, we believe it will aid in the creation of higher
+quality software overall and will allow developers and scientists to spend their
+time on more important things.
+
+Speaking of more important things, what about software certification? Many types
+of safety- or security-critical software must be certified. Depending on the
+certification process and regulatory body that means including different types
+of high-quality documents along with the source code. As we all know,
+requirements or algorithm choices can and do change throughout the software
+development process leading to a need for updated documentation. With Drasil we
+are able to ensure all of the software artifacts always remain consistent both
+internally and with each other.
+
+Drasil is meant to design for change. We mentioned previously
+(Section~\ref{sec:Intro}) that we intend to make working on program families
+trivial, and Drasil does just that. Implementing a likely change is as simple as
+adjusting a configuration file. If the knowledge has been properly captured, any
+likely changes will involve trivial modifications. In the event of an unforeseen
+change, modifying the recipe or (worse) the captured knowledge is still possible
+and should end up simplifying the development process.
+
+Finally, we need to verify our software and Drasil can help with that as well.
+We can include so-called ``sanity'' checks in the knowledge we capture that can
+be reused throughout the entire development process. A simple example of these
+types of checks can be seen in the \verb|Constraints| column of
+Table~\ref{tab:constraints}.
+
+\begin{table} 
+\centering
+\nocaptionrule \caption{Constraints on quantities}
+\begin{tabular}{|c|c|r|c|} \hline
+\textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \hline
+$L$ & $L > 0$ & 1.5 m & 10\% \\ \hline
+$D$ & $D > 0$ & 0.412 m & 10\% \\ \hline
+$V_P$ & $V_P > 0$ & 0.05 m$^3$	& 10\% \\ \hline
+$A_P$ & $A_P > 0$ & 1.2 m$^2$	& 10\% \\ \hline
+$\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
+\hline\end{tabular}
+\label{tab:constraints}
+\end{table}
+
+If we encapsulate the knowledge regarding thse constraints into the appropriate
+chunks, we can have Drasil automatically test them for us. For example: a chunk
+that contains the dimensions of a physical object should also constrain those
+dimensions to positive values.
+
+Another need in verification is traceability. With Drasil we have introduced
+complete traceability: every piece of knowledge can be tracked (through all
+software artifacts) to its source! We can also check that all chunks are
+actually necessary, since the recipes can automatically report which chunks they
+use.
+
+With all knowledge coming from unique chunks, we get one last added benefit
+(which can also be seen as a disadvantage): pervasive bugs. Any error in the
+knowledge base will spread through every artifact and even a single bug could
+break everything. However, we still see this as an advantage since the bugs tend
+to be fairly shallow, easy to fix, and now much harder to miss.
+
+\subsection{Disadvantages}
+\label{subsec:disadvantages}
+
+We mentioned one of the disadvantages in Section~\ref{sec:Intro}: the inability
+to create a local hack to get things working. With Drasil we have to take an
+all-or-nothing approach. Any hacks added to the generated artifact sources will
+be overwritten the next time anything is updated.
+
+With an all-or-nothing approach we also remove the ability to iterate in a
+meaningful way. We \emph{must} do everything right (or extremely close to it)
+the first time. Yes, we can still modify the program family member that we are
+generating and adapt it as necessary, but adding new knowledge becomes a much
+more involved process.
+
+Adding new common knowledge libraries is also non-trivially difficult. These
+must be created by (or with the help of) domain experts to ensure the right
+knowledge is being captured in the right way.
+
+\section{Related work}
+\label{sec:bg}
+
+As we mentioned previously, none of the ideas behind Drasil are new. There has
+been a lot of work done by a lot of smart people and we are taking advantage of
+it. 
+
+%something about giving the reader an insight into why we do what we do.
+
+First let us take a look at the current state of SC software development, then
+we will discuss tools and techniques that came before us. 
+%TODO: Add in something about RR here.
+
+\subsection{The current state of SC software development}
+\label{subsec:scdev}
+
+Most developers in SC software tend to put an emphasis on their science, not the
+software they are developing~\cite{Kelly}. %TODO: Fix citation 
+Consequently these developers tend to naturally use an agile
+philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
+Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
+driven~\cite{Kelly2015} process. These developers are scientists first and
+foremost and they do not view rigid, process-heavy approaches
+favourably~\cite{CarverEtAl2007}.
+
+More than half of these scientists do not have a good understanding of software
+testing~\cite{Merali2010}. In fact, there is very limited use of automated
+testing for scientific software~\cite{PatrickAndGilligan2016} and quality
+assurance has ``a bad name among creative scientists and
+engineers''~\cite[p.~352]{Roache1998}.
+
+Another problem in SC is that knowledge reuse is not fulfilling its potential.
+For instance, for mesh generators a large number of similar programs have been
+written. A survey~\cite{Owen1998} shows %94? TODO:CHECK NUMBER
+different mesh generator packages,
+with 61 of them generating triangular meshes, and %43? TODO:CHECK NUMBER
+of these using the same algorithm of Delaunay triangulation.
+
+Tool use in SC software development is also limited, especially the use of
+version control software~\cite{Wilson2006}.
+
+Code generation in SC has been successful, but thus far the focus has been on
+the creation of only one software artifact: the code. Examples include
+%TODO: List examples here -- Gaussian Elimination~\cite{CaretteXXXX}, ATLAS~\cite ...
+
+The lack of emphasis on more artifacts is disadvantageous to SC software
+developers. The value of documentation and a structured process is illustrated
+by a survey of statistical software for
+psychology~\cite{SmithEtAl2015-SS-TR,SmithEtAl2015SQJ}. A case study on the
+impact of a document driven process for SC software was performed on legacy
+software for thermal analysis of a fuel pin in a nuclear
+reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013}. The redeveloped version
+discovered 27 issues, ranging from trivial to substantive, within the previous
+documentation. If rational documentation were used more often, some previous
+errors in scientific code may have been uncovered. Examples include the Sleipner
+oil rig, protein retraction, the Patriot missile, and seismic data
+processing~\cite{HattonAndRoberts1994}.
+
+\subsection{Reproducible research} %Should this go here?
+\label{subsec:rr}
+
+\subsection{Literate Programming}
+\label{subsec:lp}
+
+Literate programming is a programming methodology that was introduced by Knuth.
+The LP methodology changes the focus from writing programs which simply instruct
+the computer how to perform a task. Instead, the focus is now on explaining
+(\emph{to humans}) what we want the computer to do~\cite{Knuth1984}.
+
+In a literate program, the documentation and source code is all kept together in
+one source. Literate programs are developed by breaking down algorithms into
+small, easy to understand parts referred to as
+\emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}.
+These chunks are then explained, documented, and implemented in a way that
+promotes understanding -- they are not necessarily written in the order that the
+computer would read them, but rather a ``psychological
+order''~\cite{PieterseKourieAndBoake2004}. To get the working source code for a
+program written in the LP style, you run the \emph{tangle} process. Similarly,
+to extract and typeset the documentation you run the \emph{weave} process.
+
+LP has advantages beyond understandability. Using LP has been experimentally
+found to lead to better consistency between code and
+documentation~\cite{ShumAndCook1993}. As the program is developed, the
+documentation tends to be updated simultaneously as it surrounds the source
+code. We should also keep in mind that proper, consistent documentation leads to
+many advantages while developing or maintaining software~\cite{Heyman1990,
+Kotula2000}. When documentation does not match the system, it is a major
+detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Together, we can
+see how LP (when used properly) leads to more elegant, effective, maintainable,
+and understandable code~\cite{PieterseKourieAndBoake2004}.
+
+With all of the benefits of using LP it is fairly astounding that it has not
+been popular~\cite{ShumAndCook1993}. There are very few successful examples of
+LP in SC, two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
+``Physically Based Rendering: From Theory to
+Implementation''~\cite{PharrAndHumphreys2004}. Shum and Cook discuss the topic
+of LP's lack of popularity a fair bit and present the idea that it comes from
+two main issues:
+
+\begin{enumerate}
+\item Output language / text processor dependency.
+\item Lack of flexibility on what to present or suppress in the output.
+\end{enumerate}
+
+There have been attempts to address these issues. Many focused on changing or
+removing the output language or text processor dependency. For example CWeb (for
+the C language), noweb (programming language independent), javadoc (for Java),
+DOC++ (for C++), Doxygen (for multiple languages), and more. New tools came with new and interesting features, examples include:
+
+\begin{enumerate}
+\item What You See Is What You Get (WYSIWYG)
+editor~\cite{FritzsonGunnarssonAndJirstrand2002}.
+\item Graphicdoc rules (using a word processor to compose graphics in
+LP)~\cite{ShumAndCook1993}.
+\item Phantom abstracting~\cite{ShumAndCook1993}.
+\item Movement away from the idea of ``one source''~\cite{Simonis2003}.
+\end{enumerate}
+
+So many tools for LP have helped drive the understanding behind what exactly LP
+tools should be doing. On the other hand, the multitude of tools was preventing
+LP from becoming mainstream~\cite{Ramsey1994}. Nowadays, however, we can see
+parts of LP becoming standard in certain domains (for example: Haskell, Agda,
+and R support LP).
+
+\subsection{Expanding LP: Literate Software}
+
+A new methodology was proposed in 2002 by Al-Maati and Boujarwah called
+``Literate Software Development'' (LSD). It was designed as a combination and
+evolution of LP and Box Structure~\cite{AlMatiiAndBoujarwah2002}. Box Structure
+is the idea of views (system specifications, design, code) with each view being
+an abstraction communicating the same information in different levels of detail,
+for different purposes~\cite{Mills1986}.
+
+The main idea behind LSD was to overcome the disadvantages of LP and box
+structure. These disadvantages included: the inability of LP to specify
+interfaces between modules; the lack of ability to decompose boxes; a lack of
+tools to support box structure~\cite{Deck1996}; a lack of ability to implement
+the high-level analysis and design using box structures.
+
+WebBox, when implemented, expanded LP and box structures to include new chunk
+types; the ability to refine chunks into more chunks (and eventually Java code);
+the ability to specify interfaces and communication between boxes; and the
+ability to decompose boxes at any level.
+
+\clearpage
+\onecolumn
+\appendix
+\section{Simplified SRS}
+\label{appendix:SRS}
+Here we see the typeset output of the LaTeX code for the simplified SRS example:
+
+\section*{Table of Units}
+\label{Sec:ToU}
+Throughout this document SI (Syst\`{e}me International
+d'Unit\'{e}s) is employed as the unit system. In addition to
+the basic units, several derived units are employed as
+described below. For each unit, the symbol is given followed
+by a description of the unit with the SI name in
+parentheses.
+\begin{longtable}{l p{8.5cm}}
+Symbol & Description\
+\\
+m & length (metre)\
+\\
+kg & mass (kilogram)\
+\\
+s & time (second)\
+\\
+K & temperature (kelvin)\
+\\
+mol & amount of substance (mole)\
+\\
+A & electric current (ampere)\
+\\
+cd & luminous intensity (candela)\
+\\
+${}^{\circ}$C & temperature (centigrade)\
+\\
+J & energy (joule)\
+\\
+W & power (watt)\
+\\
+cal & energy (calorie)\
+\\
+kW & power (kilowatt)\
+\\
+\label{Table:ToU}
+\end{longtable}
+\section*{Table of Symbols}
+\label{Sec:ToS}
+The table that follows summarizes the symbols used in this document along with
+their units. The choice of symbols was made with the goal of being consistent
+with the nuclear physics literature and that used in the FP manual. The SI units
+are listed in brackets following the definition of the symbol.
+\begin{longtable}{l l p{8.5cm}}
+Symbol & Description & Units\
+\\
+$h_{g}$ & effective heat transfer coefficient between clad
+and fuel surface & ${}^{\circ}$C$^{-1}$s$^{-3}$kg\
+\\
+$h_{c}$ & convective heat transfer coefficient between clad
+and coolant & ${}^{\circ}$C$^{-1}$s$^{-3}$kg\
+\\
+\label{Table:ToS}
+\end{longtable}
+\section*{Data Definitions}
+\label{Sec:DD}
+~\newline \noindent \begin{minipage}{.7\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:h.g}
+\label{DD:h.g}
+\\ \midrule \\
+Label & $h_{g}$
+\\ \midrule \\
+Units & ${}^{\circ}$C$^{-1}$s$^{-3}$kg
+\\ \midrule \\
+Equation & $h_{g}$ = $\frac{2h_{c}h_{p}}{2h_{c}+\tau{}_{c}h_{p}}$
+\\ \midrule \\
+Description & $h_{g}$ is the effective heat transfer
+coefficient between clad and fuel surface
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline \noindent \begin{minipage}{.7\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:h.c}
+\label{DD:h.c}
+\\ \midrule \\
+Label & $h_{c}$
+\\ \midrule \\
+Units & ${}^{\circ}$C$^{-1}$s$^{-3}$kg
+\\ \midrule \\
+Equation & $h_{c}$ = $\frac{2h_{c}h_{b}}{2h_{c}+\tau{}_{c}h_{b}}$
+\\ \midrule \\
+Description & $h_{c}$ is the convective heat transfer
+coefficient between clad and coolant
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+
+%\acks
+%
+%Acknowledgments, if needed.
+
+% We recommend abbrvnat bibliography style.
+\clearpage
+\twocolumn
+\bibliographystyle{abbrvnat}
+\bibliography{drasil}
+%
+% The bibliography should be embedded for final submission.
+%
+%\begin{thebibliography}{}
+%\softraggedright
+%
+%\bibitem[Smith et~al.(2009)Smith, Jones]{smith02}
+%P. Q. Smith, and X. Y. Jones. ...reference text...
+%
+%\end{thebibliography}
+
+
+\end{document}

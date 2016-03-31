@@ -61,7 +61,7 @@ s3_dd2 = Definition (Data h_c)
 
 s4 = Section 0 (S "Code -- Test") [s4c]
 
-s4c = CodeBlock (toCode CLang Calc h_g)
+s4c = CodeBlock (toCode CLang Calc h_c)
 
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =

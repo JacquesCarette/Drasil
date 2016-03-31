@@ -576,6 +576,12 @@ The lack of emphasis on more artifacts is disadvantageous to SC software develop
 \subsection{Literate Programming}
 \label{subsec:lp}
 
+Literate programming is a programming methodology that was introduced by Knuth. The LP methodology changes the focus from writing programs which simply instruct the computer how to perform a task. Instead, the focus is now on explaining (\emph{to humans}) what we want the computer to do~\cite{Knuth1984}.
+
+In a literate program, the documentation and source code is all kept together in one source. Literate programs are developed by breaking down algorithms into small, easy to understand parts referred to as \emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}. These chunks are then explained, documented, and implemented in a way that promotes understanding -- they are not necessarily written in the order that the computer would read them. To get the working source code for a program written in the LP style, you run the \emph{tangle} process. Similarly, to extract and typeset the documentation you run the \emph{weave} process.
+
+LP has advantages beyond understandability. Using LP has been experimentally found to lead to better consistency between code and documentation~\cite{ShumAndCook1993}. As the program is developed, the documentation tends to be updated simultaneously as it surrounds the source code. We should also keep in mind that proper, consistent documentation leads to many advantages while developing or maintaining software~\cite{Heyman1990, Kotula2000}. Also,
+
 
 \clearpage
 \onecolumn

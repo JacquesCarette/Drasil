@@ -18,7 +18,7 @@ tableWidth :: Double --in cm
 tableWidth = 10.5
 
 verboseDDDescription :: Bool
-verboseDDDescription = False
+verboseDDDescription = True
 
 numberedDDEquations :: Bool
 numberedDDEquations = False --Does not affect HTML

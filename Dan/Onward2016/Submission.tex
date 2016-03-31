@@ -306,9 +306,12 @@ The data definition of $h_c$ displays some interesting knowledge. It gives us
 the name for a concept, its description, a symbol to use for easier reference,
 its (SI) units, and its defining equation. Encapsulating all of this knowledge
 into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. Note
-that the equation for $h_c$ is written in our expression language (Expr) and the
-units are defined by a piece of common knowledge known as \verb|heat_transfer|. We
-use an EqChunk as it allows us to capture all of the relevant knowledge.
+that the equation for $h_c$ is written in our expression language (Expr) and it
+also includes references to chunks that $h_c$ depends on. These will come into
+play when we create the description for $h_c$ in the generated view, but we do
+not need to worry about them right now as that knowledge is stored elsewhere.
+The units for $h_c$ are defined by a piece of common knowledge known as
+\verb|heat_transfer|.
 
 \begin{figure}
 \begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small]
@@ -352,17 +355,18 @@ candela  = fund "Candela"  "luminous intensity (candela)" "cd"
 Now that we've shown a bit of knowledge capture, you may be wondering how to use
 it. This is where the recipes come in. Figure~\ref{fig:recipe} shows a portion
 of the recipe for creating our intended SRS view. The body of the simplified SRS
-is composed of two sections: \verb|s1| and \verb|s2|. We then show the
-definition of the first section which is titled "Table of Units" and includes an
-introductory paragraph and a table. This table simply extracts the symbol and
-description information from the SI units to display them in our view. It should
-be fairly obvious at this point, but these macro-scale layout objects (sections,
-tables, paragraphs, etc.) are specified using our document layout language.
+is composed of three sections: \verb|s1|, \verb|s2|, and \verb|s3|. We then show
+the definition of the first section (omitting the others for brevity) which is
+titled "Table of Units" and includes an introductory paragraph and a table. This
+table simply extracts the symbol and description information from the SI units
+to display them in our view. It should be fairly obvious at this point, but
+these macro-scale layout objects (sections, tables, paragraphs, etc.) are
+specified using our document layout language.
 
 \begin{figure}[tb]
 \begin{lstlisting}[frame=single, 
   showstringspaces=false, basicstyle=\scriptsize]
-srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2]
+srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2,s3]
 
 s1 = Section (S "Table of Units") [intro, table]
 
@@ -377,20 +381,172 @@ intro = Paragraph (S "Throughout this ...")
 \label{fig:recipe}
 \end{figure}
 
-%HTML vs LaTeX? Show raw code or pretty-version? Pretty version. 
-%Might need to screencap HTML and drop it in.
+With our recipe in place, we are now able to run it through the generator and
+see what it spits out. We've included the three sections of this simplified SRS
+in Appendix~\ref{appendix:SRS}, and what you see there is the typeset version of
+the generated LaTeX code. We are also able to output our view as an HTML
+document (Figure~\ref{fig:HTML_s1}).
 
+\begin{figure}
+\includegraphics[scale=0.5]{HTML_s1.png}
+\caption{Section 1 of the generated SRS (HTML version)}
+\label{fig:HTML_s1}
+\end{figure}
+
+Now if you recall the data definition from Figure~\ref{fig:h_c}, we will show
+the painstaking amount of work it takes to create (almost) that exact same
+table:
+
+\begin{lstlisting}
+s3_dd2 = Definition (Data h_c)
+\end{lstlisting}
+
+Again looking to the appendix, or to the HTML output (Figure~\ref{fig:HTML_s3} for
+the data definition), it should be easy to see that the recipe handled all of
+the layout details. The recipe actually goes one step further in that it found
+all of the chunk's dependencies and built the description by finding the
+appropriate knowledge related to the other chunks. This is configurable in that
+we can include short descriptions or verbose descriptions at this point in time.
+
+\begin{figure}
+\includegraphics[scale=0.6]{HTML_s3.png}
+\caption{Generated SRS data definition (HTML version)}
+\label{fig:HTML_s3}
+\end{figure}
+
+One last thing we'd like to show is the source code generation. The recipe is
+fairly straightforward in that we have:
+
+\begin{lstlisting}
+codesample = CodeBlock (toCode CLang Calc h_c)
+\end{lstlisting}
+
+All that says is \verb|codesample| is a block of code in the C language that
+calculates the value of $h_c$. Currently the only implemented output language is
+C, but we are planning to implement more and are designing around that coming
+change. The generator output for \verb|codesample| ends up looking like:
+
+\begin{lstlisting}[frame=single, 
+  showstringspaces=false, basicstyle=\scriptsize]
+double calc_h_c(double k_c, double h_b, double tau_c){
+    return (2 * k_c * h_b / (2 * k_c + tau_c * h_b));
+}
+\end{lstlisting}
+
+This is a fairly trivial piece of code, but it is a good example of how the
+source can be generated from the knowledge encapsulated in a chunk.
+
+\subsection{Advantages and Disadvantages}
+
+Zero knowledge duplication -- look at all of the previous figures (or
+Appendix~\ref{appendix:SRS}) and how many times knowledge has been copied into
+different places within one software artifact. Now imagine how many times that
+knowledge appears across all software artifacts. Generation avoids the problem
+of needing to manually duplicate all of that information. It also ensures that
+should a piece of knowledge need to be updated, the updates will propagate
+throughout all of the artifacts automatically.
+
+\clearpage
+\onecolumn
 \appendix
-\section{Appendix Title}
+\section{Simplified SRS}
+\label{appendix:SRS}
+Here we see the typeset output of the LaTeX code for the simplified SRS example:
 
-This is the text of the appendix, if you need one.
+\section*{Table of Units}
+\label{Sec:ToU}
+Throughout this document SI (Syst\`{e}me International
+d'Unit\'{e}s) is employed as the unit system. In addition to
+the basic units, several derived units are employed as
+described below. For each unit, the symbol is given followed
+by a description of the unit with the SI name in
+parentheses.
+\begin{longtable}{l p{8.5cm}}
+Symbol & Description\
+\\
+m & length (metre)\
+\\
+kg & mass (kilogram)\
+\\
+s & time (second)\
+\\
+K & temperature (kelvin)\
+\\
+mol & amount of substance (mole)\
+\\
+A & electric current (ampere)\
+\\
+cd & luminous intensity (candela)\
+\\
+${}^{\circ}$C & temperature (centigrade)\
+\\
+J & energy (joule)\
+\\
+W & power (watt)\
+\\
+cal & energy (calorie)\
+\\
+kW & power (kilowatt)\
+\\
+\label{Table:ToU}
+\end{longtable}
+\section*{Table of Symbols}
+\label{Sec:ToS}
+The table that follows summarizes the symbols used in this document along with
+their units. The choice of symbols was made with the goal of being consistent
+with the nuclear physics literature and that used in the FP manual. The SI units
+are listed in brackets following the definition of the symbol.
+\begin{longtable}{l l p{8.5cm}}
+Symbol & Description & Units\
+\\
+$h_{g}$ & effective heat transfer coefficient between clad
+and fuel surface & ${}^{\circ}$C$^{-1}$s$^{-3}$kg\
+\\
+$h_{c}$ & convective heat transfer coefficient between clad
+and coolant & ${}^{\circ}$C$^{-1}$s$^{-3}$kg\
+\\
+\label{Table:ToS}
+\end{longtable}
+\section*{Data Definitions}
+\label{Sec:DD}
+~\newline \noindent \begin{minipage}{.7\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:h.g}
+\label{DD:h.g}
+\\ \midrule \\
+Label & $h_{g}$
+\\ \midrule \\
+Units & ${}^{\circ}$C$^{-1}$s$^{-3}$kg
+\\ \midrule \\
+Equation & $h_{g}$ = $\frac{2h_{c}h_{p}}{2h_{c}+\tau{}_{c}h_{p}}$
+\\ \midrule \\
+Description & $h_{g}$ is the effective heat transfer
+coefficient between clad and fuel surface
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline \noindent \begin{minipage}{.7\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:h.c}
+\label{DD:h.c}
+\\ \midrule \\
+Label & $h_{c}$
+\\ \midrule \\
+Units & ${}^{\circ}$C$^{-1}$s$^{-3}$kg
+\\ \midrule \\
+Equation & $h_{c}$ = $\frac{2h_{c}h_{b}}{2h_{c}+\tau{}_{c}h_{b}}$
+\\ \midrule \\
+Description & $h_{c}$ is the convective heat transfer
+coefficient between clad and coolant
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 
-\acks
-
-Acknowledgments, if needed.
+%\acks
+%
+%Acknowledgments, if needed.
 
 % We recommend abbrvnat bibliography style.
-
+\clearpage
+\twocolumn
 \bibliographystyle{abbrvnat}
 \bibliography{drasil}
 %

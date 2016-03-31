@@ -49,6 +49,11 @@ Outline:
   
 - We're taking a (not so) humble, practical route to our grand vision.
 
+X. Design --Where to put this / how to expand it?
+- Something about XML and style sheets. We chose to go with the embedded DSLs 
+  in Haskell. Main benefit: Haskell's type system immediately (at compile 
+  time) tells us if there are any problems in what we're doing.
+
 2. Drasil
 
 - Three main ideas behind Drasil:
@@ -108,6 +113,7 @@ Outline:
    static types, who prefer machine-checked assurance of (weak) properties.
    This is another reason why our method is not universal, but rather for 
    those domains which are well understood]
+    -- I think I understand what you mean here, but I have absolutely no idea how to work that in. Could you?
                    
 3. Background / Lit Review
 

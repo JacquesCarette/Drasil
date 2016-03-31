@@ -436,15 +436,79 @@ double calc_h_c(double k_c, double h_b, double tau_c){
 This is a fairly trivial piece of code, but it is a good example of how the
 source can be generated from the knowledge encapsulated in a chunk.
 
-\subsection{Advantages and Disadvantages}
+\subsection{Advantages}
 
-Zero knowledge duplication -- look at all of the previous figures (or
+We have already experienced some of the advantages of using
+Drasil. During the knowledge capture phase of our example a seemingly trivial
+problem came up regarding the simplified SRS. One of the concepts was being
+referred to with multiple different descriptions. By capturing only the right
+description, the generator now ensures internal consistency.
+
+With that in mind, look at all of the previous figures (or
 Appendix~\ref{appendix:SRS}) and how many times knowledge has been copied into
 different places within one software artifact. Now imagine how many times that
-knowledge appears across all software artifacts. Generation avoids the problem
-of needing to manually duplicate all of that information. It also ensures that
-should a piece of knowledge need to be updated, the updates will propagate
-throughout all of the artifacts automatically.
+knowledge appears across all software artifacts. By using a generator, we avoid
+the problem of manually duplicating all of that information. It also ensures
+that should a piece of knowledge need to be updated, those updates will
+propagate throughout all of the artifacts \emph{automatically}. 
+	%if this wasn't academia I would write ``automagically''
+	
+Another great benefit to knowledge capture, especially in the SC domain, is that
+it promotes reuse. The SI units are a trivial example of a completely reusable
+knowledge library that will come up across many different problem domains
+(within and outside of SC). If we can build these common knowledge libraries for
+a multitude of problem domains, we believe it will aid in the creation of higher
+quality software overall and will allow developers and scientists to spend their
+time on more important things.
+
+Speaking of more important things, what about software certification? Many types
+of safety- or security-critical software must be certified. Depending on the
+certification process and regulatory body that means including different types
+of high-quality documents along with the source code. As we all know,
+requirements or algorithm choices can and do change throughout the software
+development process leading to a need for updated documentation. With Drasil we
+are able to ensure all of the software artifacts always remain consistent both
+internally and with each other.
+
+Drasil is meant to design for change. We mentioned previously
+(Section~\ref{sec:Intro}) that we intend to make working on program families
+trivial, and Drasil does just that. Implementing a likely change is as simple as
+adjusting a configuration file. If the knowledge has been properly captured, any
+likely changes will involve trivial modifications. In the event of an unforeseen
+change, modifying the recipe or (worse) the captured knowledge is still possible
+and should end up simplifying the development process.
+
+Finally, we need to verify our software and Drasil can help with that as well. We can include so-called ``sanity'' checks in the knowledge we capture that can be reused throughout the entire development process. A simple example of these types of checks can be seen in the \verb|Constraints| column of Table~\ref{tab:constraints}.
+
+\begin{table} 
+\centering
+\nocaptionrule \caption{Constraints on quantities}
+\begin{tabular}{|c|c|r|c|} \hline
+\textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \hline
+$L$ & $L > 0$ & 1.5 m & 10\% \\ \hline
+$D$ & $D > 0$ & 0.412 m & 10\% \\ \hline
+$V_P$ & $V_P > 0$ & 0.05 m$^3$	& 10\% \\ \hline
+$A_P$ & $A_P > 0$ & 1.2 m$^2$	& 10\% \\ \hline
+$\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
+\hline\end{tabular}
+\label{tab:constraints}
+\end{table}
+
+If we encapsulate the knowledge regarding thse constraints into the appropriate
+chunks, we can have Drasil automatically test them for us. For example: a chunk
+that contains the dimensions of a physical object should also constrain those
+dimensions to positive values.
+
+Another need in verification is traceability. With Drasil we have introduced complete traceability: every piece of knowledge can be tracked (through all software artifacts) to its source! We can also check that all chunks are actually necessary, since the recipes can automatically report which chunks they use.
+
+With all knowledge coming from unique chunks, we get one last added benefit (which can also be seen as a disadvantage): pervasive bugs. Any error in the knowledge base will spread through every artifact and even a single bug could break everything. However, we still see this as an advantage since the bugs tend to be fairly shallow, easy to fix, and now much harder to miss.
+
+\subsection{Disadvantages}
+
+%We mentioned one of the disadvantages in Section~\ref{sec:Intro}: the inability
+%to create a local hack to get things working. With Drasil it's an all-or-nothing
+%approach. Any hacks added to the generated artifact sources will be overwritten
+%the next time the generator is run.
 
 \clearpage
 \onecolumn

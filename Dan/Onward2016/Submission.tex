@@ -89,29 +89,32 @@ We believe that Knuth's Literate Programming (LP)~\cite{Knuth1984} contains
 some fundamental insights, but is too restricted (i.e. just to code).  Rather
 than restrict LP to just source code, we want to apply it to all software
 artifacts (requirements and design documents, source files, test cases, build
-instructions, user manuals, etc.) from a singular common knowledge base.
+instructions, user manuals, etc.).  In other words, our basic starting points is
+to ``chunk'' all aspects of the software construction process, and then weave the
+actual artifacts from those chunks.  We will discuss the details of how we do this
+in Section~\ref{sec:Drasil}.
 
-We want to break away from the LP idea of ``one source'', instead introducing
-the idea of ``common knowledge'' libraries for problems that come up regularly.
-For example: the theory behind heat transfer including the conservation of
-energy equations would be in a ``common knowledge'' library. We could also see
-the idea of the Syst\`{e}me International (SI) Units as another piece of
-``common knowledge''.
+The LP idea of putting everything into a single source file will not scale
+in this way.  Instead, we introduce the idea of libraries of ``common knowledge''
+for concepts which tend to re-occur.  A low-level example would be the units
+from the Syst\`{e}me International (SI) Units as ``common knowledge'' that really
+ought to get defined only once, and then re-used.  A higher-level example would be
+the various components of the theory of heat transfer, including the conservation
+of energy equations.
 
-We also very much want to keep the idea of ``chunks'' and assemble everything
-from chunks. How we do that will be discussed in more detail in
-Section~\ref{sec:Drasil}.
-
-We intend to make working on program families trivial for the cost of losing the
-capability to create ``local hacks'' to ``just get things working''.
-
-Another disclaimer before we go further: none of the ideas presented
-in this paper are new. We are building on a very longstanding history of work,
-and not being particularly creative with the ideas therein. Knuth himself even
+We should make it quite clear that none of the individual ideas presented
+in this paper are new.  Knuth himself
 said that ``I have simply combined a bunch of ideas that have been in the air
-for a long time'' when he coined LP~\cite{Knuth1984}. We are, however, taking old
-ideas and breaking them down into something practical that we can work with. We
-want to \emph{do} something, not spend years stuck in the design phase.
+for a long time'' when he coined LP~\cite{Knuth1984}. We are, however, taking these
+ideas and re-assembling them in novel ways.  Our principal aim is not a new
+software framework for doing literate software, but rather a framework which,
+over the long term, will allow us to do our own work (largely in scientific
+computation, but also in mechanized mathematics) much more effectively.  Our design
+is thus largely example-driven; we indeed have an industrial client who is funding
+this work, with the common aim of reducing the long-term cost of re-certifying
+scientific computation software as fit-for-use for certain safety critical 
+applications.  While the details of that are beyond the scope of this paper, they 
+are never far from our minds as we design and implement our framework.
 
 Others have done similar work (which we will get into in Section~\ref{sec:bg}),
 but they did not achieve the results we are envisioning. They either set their
@@ -121,13 +124,13 @@ break things down into the smallest necessary chunks.
 
 We believe that we have assembled the right ideas to achieve our vision.
 The overall success or failure of our approach hinges on the idea of a stable,
-well understood knowledge base. Without that we might as well give up and go
-home. If we do not understand the fundamentals behind the software we intend to
-create, then we will be unable to properly encapsulate that fundamental
-knowledge for use in our framework (effectively getting us nowhere).
+well understood knowledge base. If such knowledge does not exist, or cannot be
+adequately captured, our approach will not work.  Our claim then is that there 
+are areas of application where the knowledge not only exists, it can be adequately
+captured and operationalized in very effective ways.
 
 As it stands, we are on a (not so) humble, practical route to achieving our
-goals and improving the overall quality of software.
+goals and improving the overall quality of (some scientific computation) software.
 
 \section{Requirements and inspiration}
 \label{sec:bg}

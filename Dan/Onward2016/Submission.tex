@@ -264,7 +264,9 @@ The last piece of the puzzle is the generator. We use it to interpret the
 recipes, create intermediary representations of our desired views, and then
 pretty-print them.
 
-\subsection{Drasil in Action} \label{subsec:example}
+\subsection{Drasil in Action} 
+\label{subsec:example}
+
 For this section we will take a look at a simplified version of a Software
 Requirements Specification (SRS) for a fuel pin in a nuclear reactor (for more
 information on that particular SRS see~\cite{SmithAndKoothoor2016}).
@@ -437,6 +439,7 @@ This is a fairly trivial piece of code, but it is a good example of how the
 source can be generated from the knowledge encapsulated in a chunk.
 
 \subsection{Advantages}
+\label{subsec:advantages}
 
 We have already experienced some of the advantages of using
 Drasil. During the knowledge capture phase of our example a seemingly trivial
@@ -504,11 +507,25 @@ Another need in verification is traceability. With Drasil we have introduced com
 With all knowledge coming from unique chunks, we get one last added benefit (which can also be seen as a disadvantage): pervasive bugs. Any error in the knowledge base will spread through every artifact and even a single bug could break everything. However, we still see this as an advantage since the bugs tend to be fairly shallow, easy to fix, and now much harder to miss.
 
 \subsection{Disadvantages}
+\label{subsec:disadvantages}
 
-%We mentioned one of the disadvantages in Section~\ref{sec:Intro}: the inability
-%to create a local hack to get things working. With Drasil it's an all-or-nothing
-%approach. Any hacks added to the generated artifact sources will be overwritten
-%the next time the generator is run.
+We mentioned one of the disadvantages in Section~\ref{sec:Intro}: the inability
+to create a local hack to get things working. With Drasil we have to take an
+all-or-nothing approach. Any hacks added to the generated artifact sources will
+be overwritten the next time anything is updated.
+
+With an all-or-nothing approach we also remove the ability to iterate in a
+meaningful way. We \emph{must} do everything right (or extremely close to it)
+the first time. Yes, we can still modify the program family member that we are
+generating and adapt it as necessary, but adding new knowledge becomes a much
+more involved process.
+
+Adding new common knowledge libraries is also non-trivially difficult. These
+must be created by (or with the help of) domain experts to ensure the right
+knowledge is being captured in the right way.
+
+
+
 
 \clearpage
 \onecolumn

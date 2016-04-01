@@ -137,10 +137,10 @@ goals and improving the overall quality of (some scientific computation) softwar
 
 As we mentioned previously, none of the ideas behind our approach are new. There
 has been a lot of work done by a lot of smart people and we are taking advantage
-of it. Before we get into those ideas, let us first take a look at the current
+of it. Let us first take a look at the current
 state of SC software development, then we will discuss our goals and
 requirements, followed by the tools and techniques that inspired us. Finally we
-will conclude the section by discussing which ideas we intend to borrow and
+will conclude this section by discussing which ideas we intend to borrow and
 how we intend to bring everything together.
 
 \subsection{The current state of SC software development}
@@ -205,23 +205,24 @@ will help with maintainability, reproducibility, and more down the road. What
 that means to us is ensuring that all software artifacts (requirements, design,
 source code, etc.) must be consistent and \emph{always} up to date.
 
-If we can essentially ``force'' the developer to always have consistent and up
+If we can essentially \emph{force} the developer to always have consistent and up
 to date artifacts, without impeding their ability to develop (or wasting their
 time), then we believe we have already succeeded in improving the software. The
-less time a developer needs to spend maintaining and updating documentation, the
+less time a developer needs to spend maintaining and updating software, the
 more time they have to do other important things. 
 
 We also want to avoid one of the most classical software engineering mistakes:
 duplication. Knowledge should not be duplicated, regardless of how many times it
 must be displayed. If we can capture knowledge in an appropriate manner, then we
-can improve the reuse of that knowledge!
+can simply reuse that knowledge wherever necessary without needing to
+reimplement it.
 
-Finally, we also believe that software we create should be reproducible. We want
-to ensure that given all of the appropriate knowledge surrounding a piece of
-software, scientists would be able to reproduce the software and any results
+Finally, software (and results) should be reproducible. We want to ensure that
+given all of the appropriate knowledge surrounding a piece of software,
+scientists will be able to reproduce that piece of software and any results
 obtained therein.
 
-To tackle our requirements, we need to understand a lot of what has come before.
+To tackle our requirements we need to understand a lot of what has come before.
 This includes (but is not limited to) methods for ensuring consistency across
 software artifacts and work done in the field of reproducible research.
 
@@ -246,22 +247,23 @@ to extract and typeset the documentation you run the \emph{weave} process.
 
 LP has advantages beyond understandability. Using LP has been experimentally
 found to lead to better consistency between code and
-documentation~\cite{ShumAndCook1993}. As the program is developed, the
+documentation~\cite{ShumAndCook1993}. While the program is being developed, the
 documentation tends to be updated simultaneously as it surrounds the source
 code. We should also keep in mind that proper, consistent documentation leads to
 many advantages while developing or maintaining software~\cite{Heyman1990,
 Kotula2000}. When documentation does not match the system, it is a major
-detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Together, we can
-see how LP (when used properly) leads to more elegant, effective, maintainable,
-and understandable code~\cite{PieterseKourieAndBoake2004}.
+detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Taken together,
+we can see how LP (when used properly) leads to more elegant, effective,
+maintainable, and understandable code~\cite{PieterseKourieAndBoake2004}.
 
-With all of the benefits of using LP it is fairly astounding that it has not
-been popular~\cite{ShumAndCook1993}. There are very few successful examples of
-LP in SC, two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
+With all of the benefits of LP it is fairly astounding that it has not been very
+popular~\cite{ShumAndCook1993}. There are very few successful examples of LP in
+SC, however, two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
 ``Physically Based Rendering: From Theory to
-Implementation''~\cite{PharrAndHumphreys2004}. Shum and Cook discuss the topic
-of LP's lack of popularity a fair bit and present the idea that it comes from
-two main issues:
+Implementation''~\cite{PharrAndHumphreys2004}. The latter being both a literate
+program and textbook on the subject. Shum and Cook discuss the topic of LP's
+lack of popularity a fair bit and present the idea that it comes from two main
+issues:
 
 \begin{enumerate}
 \item Output language / text processor dependency.
@@ -271,11 +273,11 @@ two main issues:
 There have been attempts to address these issues. Many focused on changing or
 removing the output language or text processor dependency. For example CWeb (for
 the C language), noweb (programming language independent), javadoc (for Java),
-DOC++ (for C++), Doxygen (for multiple languages), and more. New tools came with
-new and interesting features, examples include:
+DOC++ (for C++), Doxygen (for multiple languages), and more. Many of these new
+tools came with new and interesting features, examples include:
 
 \begin{enumerate}
-\item What You See Is What You Get (WYSIWYG)
+\item A ``What You See Is What You Get'' (WYSIWYG)
 editor~\cite{FritzsonGunnarssonAndJirstrand2002}.
 \item Graphicdoc rules (using a word processor to compose graphics in
 LP)~\cite{ShumAndCook1993}.
@@ -283,11 +285,11 @@ LP)~\cite{ShumAndCook1993}.
 \item Movement away from the idea of ``one source''~\cite{Simonis2003}.
 \end{enumerate}
 
-So many tools for LP have helped drive the understanding behind what exactly LP
-tools should be doing. On the other hand, the multitude of tools was preventing
-LP from becoming mainstream~\cite{Ramsey1994}. Nowadays, however, we can see
-parts of LP becoming standard in certain domains (for example: Haskell, Agda,
-and R support LP).
+The development of so many tools for LP has helped drive the understanding
+behind exactly what LP tools should be doing. On the other hand, the multitude
+of tools was preventing LP from becoming mainstream~\cite{Ramsey1994}. Nowadays,
+however, we can see parts of LP becoming standard in certain domains (for
+example: Haskell, Agda, and R support LP).
 
 \subsection{Expanding LP: Literate Software}
 
@@ -302,14 +304,14 @@ The main idea behind LSD was to overcome the disadvantages of LP and box
 structure. These disadvantages included: the inability of LP to specify
 interfaces between modules; the lack of ability to decompose boxes; a lack of
 tools to support box structure~\cite{Deck1996}; a lack of ability to implement
-the high-level analysis and design using box structures.
+the high-level analysis and design created using box structures.
 
 WebBox, when implemented, expanded LP and box structures to include new chunk
 types; the ability to refine chunks into more chunks (and eventually Java code);
 the ability to specify interfaces and communication between boxes; and the
 ability to decompose boxes at any level.
 
-\subsection{Reproducible research} %Should this go here?
+\subsection{Reproducible research} 
 \label{subsec:rr}
 
 The term ``reproducible research'' is typically used to mean embedding
@@ -318,11 +320,12 @@ results described~\cite{SchulteEtAl2012}. Reproducibility of results is
 fundamental to the idea of good science.
 
 Gentleman and Temple Lang introduced a means for combining research reports with
-the relevant code, data, etc. This means is called a ``compendium'' and it
-encapsulates the full work of the author, as opposed to the publication version.
-It also allows the reader to re-run computations (and explicitly shows the
-computational details)~\cite{Lang2004}. The authors proposed that peer review
-and distribution of scientific work should be done using compendia.
+the relevant code, data, etc. This is called a ``compendium'' and it
+encapsulates the full work of the author, as opposed to just the publication
+version of their work. It also allows the reader to re-run computations (while
+explicitly showing the computational details)~\cite{Lang2004}. The authors
+proposed that peer review and distribution of scientific work should be done
+using compendia.
 
 Several tools have been developed for reproducible research (Sweave, SASweave,
 Statweave, Scribble, Org-mode, etc.) with the most popular being
@@ -336,19 +339,20 @@ artifacts consistent. First off, we love the idea of chunks. However, to achieve
 our goals we believe chunks should not be just pieces of code, but
 representations of knowledge. If we can ``capture'' knowledge about a concept
 within a chunk, then that knowledge can be reused readily. On that note, chunks
-also decrease the amount of duplication. If the knowledge regarding one
+can also decrease the amount of duplication. If the knowledge regarding one
 concept is stored in a chunk, we never need to duplicate it.
 
 The knowledge we would like to store should also help us increase the
-verifiability of the program. As such, we want to be storing specification-level
-knowledge, not code-level. If anything, we should be able to easily get to a
-code-level representation from the higher level knowledge.
+verifiability of the program -- we should be able to see all of the assumptions
+and derivations that the chunk relies on. As such, we want to be storing
+specification-level knowledge, not code-level. If anything, we should be able to
+easily get to a code-level representation from the higher level knowledge.
 
 Making sure the developer always keeps their artifacts consistent is difficult
 in the standard LP style. Documentation and chunks are kept together in one
 source, but changing one does not necessarily mean the other will be updated
 accordingly. As such, we want to ensure that all of our artifacts are being
-automatically updated each time the knowledge captured in a chunk changes. This
+automatically updated each time the knowledge base is updated. This
 also brings us to the idea of traceability: we should (at all times) be able to
 find where any concept or piece of code came from.
 
@@ -368,17 +372,19 @@ of our artifacts will consistently be up to date.
 \section{Drasil}
 \label{sec:Drasil}
 
-Our framework is called Drasil (shortened from \emph{Yggdrasil} from Norse
-Mythology, which is also known as the \emph{world tree}). It is currently being
-developed through a practical, example-driven approach in an effort to bring our
-vision to life. There are three main ideas driving Drasil's development:
+We are currently developing a framework called Drasil (shortened from
+\emph{Yggdrasil} from Norse Mythology, which is also known as the \emph{world
+tree}). To avoid getting lost in the design phase, we have opted to take a very
+practical and example-driven approach in implementing Drasil. There are three
+fundamental ideas behind our design thus far:
 
 \begin{enumerate}
 \item Organize the knowledge base -- We want a knowledge base that we can
 structure conceptually (i.e. keep knowledge for a certain class of problems
 together). This is where chunks come into play: each chunk encapsulates a single
-piece of knowledge like a concept or a quantity. We want to break our knowledge
-base down into the smallest possible pieces.
+piece of knowledge like a concept or a quantity. We want to keep knowledge in
+the smallest possible pieces while simultaneously organizing it into knowledge
+libraries.
 
 \item Use recipes to create artifacts -- We can think of each artifact in our
 software project as a different view of our knowledge base. We want to use
@@ -415,25 +421,24 @@ chunks through the use of a \emph{recipe}. Our \emph{generator} interprets the
 recipes to produce the final desired view. This view represents one of the many
 software artifacts mentioned in Section~\ref{sec:Intro}.
 
-As mentioned, we capture knowledge into named chunks, of which there
-are several varieties. Actually, we have a hierarchy of chunk types, where each
-new chunk encapsulates more than the previous one(s) (see
+There are several varieties of named chunks. In fact, we have a hierarchy of
+chunk types where each new chunk encapsulates more than the previous one(s) (see
 Figure~\ref{fig:chunks} for an idea). The most basic \emph{chunk} represents a
 named piece of information. Above that we have named \emph{concepts} which
 introduce some descriptive information.
 
-A \emph{quantity} is a concept that has a symbolic representation, we can refer
-to the quantity by either its name or symbol. In a similar vein are
-\emph{units}, %need something more here -- (which encapsulates the units
-%attached to a concept)?? 
-and \emph{relation chunks} (which add the idea of a
-relation between some other pieces of knowledge).
+A \emph{quantity} is a concept that has a symbolic representation (we can refer
+to it by either its name or symbol). In a similar vein are \emph{units}, 
+%need something more here -- (which encapsulates the units 
+%attached to aconcept)??
+and \emph{relation chunks} (which add the idea of a relation between some other
+pieces of knowledge).
 
 In an SC context, most of the knowledge we work with is represented as a
 quantity with some units, in other words a \emph{unital} chunk. Expanding on
 that, we can actually calculate values for many of these unital concepts. As
-such, we have \emph{eqchunks} which allow us to capture the equation along with
-everything else included in a unital chunk.
+such, we have \emph{equation chunks (EqChunks)} which allow us to capture the
+equation along with everything else included in a unital chunk.
 
 \begin{figure}
 \begin{center}
@@ -727,7 +732,8 @@ Table~\ref{tab:constraints}.
 \centering
 \nocaptionrule \caption{Constraints on quantities}
 \begin{tabular}{|c|c|r|c|} \hline
-\textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \hline
+\textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} &
+\textbf{Uncertainty}\\ \hline
 $L$ & $L > 0$ & 1.5 m & 10\% \\ \hline
 $D$ & $D > 0$ & 0.412 m & 10\% \\ \hline
 $V_P$ & $V_P > 0$ & 0.05 m$^3$	& 10\% \\ \hline
@@ -775,7 +781,10 @@ knowledge is being captured in the right way.
 \section{Future work}
 \label{sec:fw}
 
-Drasil is still in its early stages and currently is only producing one type of code (in the C language) and one type of document (the SRS). However, we have been greatly inspired and will continue to expand Drasil's implementation. Currently, we plan to:
+Drasil is still in its early stages and currently is only producing one type of
+code (in the C language) and one type of document (the SRS). However, we have
+been greatly inspired and will continue to expand Drasil's implementation.
+Currently, we plan to:
 
 \begin{enumerate}
 \item Generate code in more languages -- The next planned programming language

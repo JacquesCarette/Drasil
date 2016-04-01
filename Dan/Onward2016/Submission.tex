@@ -445,20 +445,21 @@ equation along with everything else included in a unital chunk.
 \begin{tikzpicture}[node distance=6mm]
   \tikzstyle{every node}=[draw,shape=rectangle, rounded corners,
     text width=6em, text centered];
-  \node (ch)                     {Chunk (\emph{name})};
+  \node (ch)                     	{Chunk (\emph{name})};
   \node (co) [below = of ch]       {Concept (\emph{description})};
-  \node (qu) [below left = of co]  {Quantity (\emph{symbol})};
-  \node (rc) [below = of co]		   {RelationChunk (\emph{relation})};
-  \node (u ) [below right = of co] {Unit (\emph{unit})};
-  \node (uc) [below = of rc] 		{Unital};
-  \node (eq) [below = of uc]		   {EqChunk (\emph{equation})};
+  \node (qu) [below = of co]  		{Quantity (\emph{symbol})};
+  \node (u ) [right = of qu] 		{Unit (\emph{unit})};
+  \node (uc) [below = of qu] 		{Unital};
+  \node (rc) [below left = of uc]	{RelationChunk (\emph{relation})};
+  \node (eq) [below = of uc]	{EqChunk (\emph{equation})};
 
   \draw [->, line width=2pt] (ch) -- (co);
+  \draw [->, line width=2pt] (co.west) -- (-2.77,-1.365) -- (rc); 
+		%No idea how to do this
   \draw [->, line width=2pt] (co) -- (qu);
-  \draw [->, line width=2pt] (co) -- (rc);
-  \draw [->, line width=2pt] (co) -- (u );
+  \draw [->, line width=2pt] (co.east) -- (2.95,-1.365) -- (u );
   \draw [->, line width=2pt] (qu) -- (uc);
-  \draw [->, line width=2pt] (u ) -- (uc);
+  \draw [->, line width=2pt] (u .south) -- (2.95,-4.28) -- (uc);
   \draw [->, line width=2pt] (uc) -- (eq);
 \end{tikzpicture}
 \end{center}

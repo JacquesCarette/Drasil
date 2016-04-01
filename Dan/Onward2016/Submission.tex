@@ -311,6 +311,22 @@ ability to decompose boxes at any level.
 \subsection{Reproducible research} %Should this go here?
 \label{subsec:rr}
 
+The term ``reproducible research'' is typically used to mean embedding
+executable code in research papers in order to allow readers to reproduce the
+results described~\cite{SchulteEtAl2012}. Reproducibility of results is
+fundamental to the idea of good science.
+
+Gentleman and Temple Lang introduced a means for combining research reports with
+the relevant code, data, etc. This means is called a ``compendium'' and it
+encapsulates the full work of the author, as opposed to the publication version.
+It also allows the reader to re-run computations (and explicitly shows the
+computational details)~\cite{Lang2004}. The authors proposed that peer review
+and distribution of scientific work should be done using compendia.
+
+Several tools have been developed for reproducible research (Sweave, SASweave,
+Statweave, Scribble, Org-mode, etc.) with the most popular being
+Sweave~\cite{SchulteEtAl2012}.
+
 \subsection{Bringing the ideas together}
 \label{subsec:ideas}
 
@@ -341,7 +357,8 @@ processes (one for documentation, one for source code) we effectively want to
 have one recipe for each software artifact, all of which can be used by a single
 standard generator. Recipes will allow us to trace exactly what knowledge is
 coming from which sources, as well as allow us to reproduce any software
-artifacts trivially.
+artifacts trivially. In fact, anyone with access to the recipes and knowledge
+base should then also be able to reproduce these artifacts.
 
 With the idea of chunks and recipes working together to create all of our
 software artifacts, we can expect software that is much easier to maintain. All
@@ -753,6 +770,38 @@ more involved process.
 Adding new common knowledge libraries is also non-trivially difficult. These
 must be created by (or with the help of) domain experts to ensure the right
 knowledge is being captured in the right way.
+
+\section{Future work}
+\label{sec:fw}
+
+Drasil is still in its early stages and currently is only producing one type of code (in the C language) and one type of document (the SRS). However, we have been greatly inspired and will continue to expand Drasil's implementation. Currently, we plan to:
+
+\begin{enumerate}
+\item Generate code in more languages -- The next planned programming language
+implementation is MATLAB, however, we plan to implement a variety of languages
+as potential outputs.
+\item Generate more artifact types -- We would like to see not only requirements
+and code, but also test cases, design documents, build instructions, user
+manuals and more! To do this we will be implementing new ``default'' recipes.
+\item Generate different document views -- We are currently able to generate the
+SRS with verbose or simplified data descriptions, but we would like to add a lot
+more configurability to the view. For example: being able to have a view of the
+requirements with full derivations of all equations from their sources vs.
+having requirements that simply state the necessary equations to solve.
+\item More types of information in chunks -- See Table~\ref{tab:constraints} for
+some ideas. We want to ensure we can encapsulate anything that comes our way.
+\item Use constraints to generate test cases -- Typical values are considered
+``reasonable'' values for realistic scenarios whereas physical constraints can
+be seen as hard limits on values (ex. density must always be positive, otherwise
+throw an error).
+\item Implement much larger examples -- We want to prove that Drasil can be
+scaled up to usable examples and not just toy problems. At the time of this
+writing, a larger example is currently being implemented. However, it is not
+complete enough to show off (yet).
+\end{enumerate}
+
+\section{Conclusion}
+\label{sec:conclusion}
 
 \clearpage
 \onecolumn

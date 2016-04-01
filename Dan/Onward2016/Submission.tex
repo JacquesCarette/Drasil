@@ -292,10 +292,10 @@ and R support LP).
 
 A new methodology was proposed in 2002 by Al-Maati and Boujarwah called
 ``Literate Software Development'' (LSD). It was designed as a combination and
-evolution of LP and Box Structure~\cite{AlMatiiAndBoujarwah2002}. Box Structure
+evolution of LP and Box Structure~\cite{Mills1986}. Box Structure
 is the idea of views (system specifications, design, code) with each view being
 an abstraction communicating the same information in different levels of detail,
-for different purposes~\cite{Mills1986}.
+for different purposes~\cite{AlMatiiAndBoujarwah2002}.
 
 The main idea behind LSD was to overcome the disadvantages of LP and box
 structure. These disadvantages included: the inability of LP to specify
@@ -313,6 +313,39 @@ ability to decompose boxes at any level.
 
 \subsection{Bringing the ideas together}
 \label{subsec:ideas}
+
+LP brings many great ideas to the table for helping us to keep our software
+artifacts consistent. First off, we love the idea of chunks. However, to achieve
+our goals we believe chunks should not be just pieces of code, but
+representations of knowledge. If we can ``capture'' knowledge about a concept
+within a chunk, then that knowledge can be reused readily. On that note, chunks
+also decrease the amount of duplication. If the knowledge regarding one
+concept is stored in a chunk, we never need to duplicate it.
+
+The knowledge we would like to store should also help us increase the
+verifiability of the program. As such, we want to be storing specification-level
+knowledge, not code-level. If anything, we should be able to easily get to a
+code-level representation from the higher level knowledge.
+
+Making sure the developer always keeps their artifacts consistent is difficult
+in the standard LP style. Documentation and chunks are kept together in one
+source, but changing one does not necessarily mean the other will be updated
+accordingly. As such, we want to ensure that all of our artifacts are being
+automatically updated each time the knowledge captured in a chunk changes. This
+also brings us to the idea of traceability: we should (at all times) be able to
+find where any concept or piece of code came from.
+
+Instead of the previous \verb|tangle| and \verb|weave| processes, we want to
+introduce the idea of recipes and a standard generator. Instead of having two
+processes (one for documentation, one for source code) we effectively want to
+have one recipe for each software artifact, all of which can be used by a single
+standard generator. Recipes will allow us to trace exactly what knowledge is
+coming from which sources, as well as allow us to reproduce any software
+artifacts trivially.
+
+With the idea of chunks and recipes working together to create all of our
+software artifacts, we can expect software that is much easier to maintain. All
+of our artifacts will consistently be up to date.
 
 \section{Drasil}
 \label{sec:Drasil}

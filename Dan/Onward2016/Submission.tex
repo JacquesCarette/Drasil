@@ -25,11 +25,11 @@
 %\publicationrights{licensed}     % this is the default
 %\publicationrights{author-pays}
 
-\titlebanner{banner above paper title}        % These are ignored unless
-\preprintfooter{short description of paper}   % 'preprint' option specified.
+%\titlebanner{Submitted to Onward! 2016}        % These are ignored unless
+%\preprintfooter{short description of paper}   % 'preprint' option specified.
 
-\title{Title Text}
-\subtitle{Subtitle Text, if any}
+\title{Knowledge-Based Software Engineering}
+\subtitle{A boring title if ever there were one}
 
 \authorinfo{Dan Szymczak}
            {McMaster University}
@@ -41,16 +41,16 @@
 \maketitle
 
 \begin{abstract}
-This will be filled in once we're done drafting. For now I'm putting in a solid
-block of text that will let me ramble on for a while when it comes down to the
-final abstract. Programmers are like gods of tiny universes. They create worlds
-according to their rules. If we think of software artifacts (that is, all
-documentation, build instructions, source code, etc.) as their own tiny worlds,
-a universe takes shape. Now think about what would happen if the laws of that
-universe were inconsistent between worlds. What if the laws of thermodynamics
-fundamentally changed as soon as you left Earth? Say goodbye to space travel.
-Keeping artifacts consistent with each other is hugely important in the software
-world, and Drasil aims to ensure it...
+%This will be filled in once we're done drafting. For now I'm putting in a solid
+%block of text that will let me ramble on for a while when it comes down to the
+%final abstract. Programmers are like gods of tiny universes. They create worlds
+%according to their rules. If we think of software artifacts (that is, all
+%documentation, build instructions, source code, etc.) as their own tiny worlds,
+%a universe takes shape. Now think about what would happen if the laws of that
+%universe were inconsistent between worlds. What if the laws of thermodynamics
+%fundamentally changed as soon as you left Earth? Say goodbye to space travel.
+%Keeping artifacts consistent with each other is hugely important in the software
+%world, and Drasil aims to ensure it...
 \end{abstract}
 
 \category{CR-number}{subcategory}{third-level}
@@ -423,9 +423,10 @@ software artifacts mentioned in Section~\ref{sec:Intro}.
 
 There are several varieties of named chunks. In fact, we have a hierarchy of
 chunk types where each new chunk encapsulates more than the previous one(s) (see
-Figure~\ref{fig:chunks} for an idea). The most basic \emph{chunk} represents a
-named piece of information. Above that we have named \emph{concepts} which
-introduce some descriptive information.
+Figure~\ref{fig:chunks} for an idea, the labels in parentheses are added
+knowledge). The most basic \emph{chunk} represents a named piece of information.
+Above that we have named \emph{concepts} which introduce some descriptive
+information.
 
 A \emph{quantity} is a concept that has a symbolic representation (we can refer
 to it by either its name or symbol). In a similar vein are \emph{units}, 
@@ -463,7 +464,7 @@ equation along with everything else included in a unital chunk.
   \draw [->, line width=2pt] (uc) -- (eq);
 \end{tikzpicture}
 \end{center}
-\caption{Our current chunk design}
+\caption{Our current chunk design (parentheses indicate newly added knowledge)}
 \label{fig:chunks}
 \end{figure}
 
@@ -474,13 +475,13 @@ following DSLs:
 
 \begin{enumerate}
 \item Expression language -- A simple expression language that allows us to
-capture knowledge relating to equations and mathematical operations. It
-includes, but is not limited to, operations such as addition, multiplication,
-negation, derivation, and exponentiation.
+capture knowledge relating to equations and mathematical operations. It includes
+operations such as addition, multiplication, derivation, and exponentiation
+among others.
 
 \item Expression layout language -- A micro-scoped language for describing how
-expressions should appear. Expressions may need to use subscripts, superscripts,
-concatenated symbols, etc. to be properly displayed.
+expressions should appear. Expressions may need to use a variety of inline
+layout modifiers (subscripts, superscripts, etc.) to be properly displayed.
 
 \item Document layout language -- A macro-scoped language for describing how
 large-scale layout objects (tables, sections, figures, etc.) should appear.
@@ -490,14 +491,17 @@ programming language inside the Drasil framework. This allows the generator to
 produce working C code.
 
 \item \LaTeX Representation Language -- A DSL for representing \LaTeX code
-inside of Drasil.
+inside of Drasil. As with the C representation, it is used by the generator to
+produce working \LaTeX code.
 
 \item HTML Representation Language -- A DSL for representing HTML within Drasil.
+Similar to the other representation languages as it is used by the
+generator to produce working HTML.
 \end{enumerate}
 
-Of the DSLs mentioned, we only actually have to write our recipes using three of
-them. Each of the representation languages are used strictly by the generator as
-an intermediary in the production of our desired views. We write our recipes
+Of the DSLs mentioned, we actually only require three of them to write our
+recipes. Each of the representation languages are used strictly by the generator
+as an intermediary in the production of our desired views. We write our recipes
 using the document layout language, expression layout language, and expression
 language. We will discuss the particulars of each of these in more depth during
 our example (Section~\ref{subsec:example}).
@@ -553,7 +557,7 @@ into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. Note
 that the equation for $h_c$ is written in our expression language (Expr) and it
 also includes references to chunks that $h_c$ depends on. These will come into
 play when we create the description for $h_c$ in the generated view, but we do
-not need to worry about them right now as that knowledge is stored elsewhere.
+not concern ourselves with them now as their knowledge is stored elsewhere.
 The units for $h_c$ are defined by a piece of common knowledge known as
 \verb|heat_transfer|.
 
@@ -628,7 +632,7 @@ intro = Paragraph (S "Throughout this ...")
 With our recipe in place, we are now able to run it through the generator and
 see what it spits out. We've included the three sections of this simplified SRS
 in Appendix~\ref{appendix:SRS}, and what you see there is the typeset version of
-the generated LaTeX code. We are also able to output our view as an HTML
+the generated \LaTeX code. We are also able to output our view as an HTML
 document (Figure~\ref{fig:HTML_s1}).
 
 \begin{figure}
@@ -661,11 +665,11 @@ we can include short descriptions or verbose descriptions at this point in time.
 One last thing we'd like to show is the source code generation. The recipe is
 fairly straightforward in that we have:
 
-\begin{lstlisting}
-codesample = CodeBlock (toCode CLang Calc h_c)
+\begin{lstlisting}[basicstyle=\small]
+cSample = CodeBlock (toCode CLang Calc h_c)
 \end{lstlisting}
 
-All that says is \verb|codesample| is a block of code in the C language that
+All that says is \verb|cSample| is a block of code in the C language that
 calculates the value of $h_c$. Currently the only implemented output language is
 C, but we are planning to implement more and are designing around that coming
 change. The generator output for \verb|codesample| ends up looking like:
@@ -678,7 +682,7 @@ double calc_h_c(double k_c, double h_b, double tau_c){
 \end{lstlisting}
 
 This is a fairly trivial piece of code, but it is a good example of how the
-source can be generated from the knowledge encapsulated in a chunk.
+source can be generated from the high-level knowledge encapsulated in a chunk.
 
 \subsection{Advantages}
 \label{subsec:advantages}
@@ -693,7 +697,7 @@ With that in mind, look at all of the previous figures (or
 Appendix~\ref{appendix:SRS}) and how many times knowledge has been copied into
 different places within one software artifact. Now imagine how many times that
 knowledge appears across all software artifacts. By using a generator, we avoid
-the problem of manually duplicating all of that information. It also ensures
+the problem of manually copying all of that information. It also ensures
 that should a piece of knowledge need to be updated, those updates will
 propagate throughout all of the artifacts \emph{automatically}. 
 	%if this wasn't academia I would write ``automagically''
@@ -713,7 +717,7 @@ of high-quality documents along with the source code. As we all know,
 requirements or algorithm choices can and do change throughout the software
 development process leading to a need for updated documentation. With Drasil we
 are able to ensure all of the software artifacts always remain consistent both
-internally and with each other.
+internally and with each other. %inter- and intra-artifact consistency
 
 Drasil is meant to design for change. We mentioned previously
 (Section~\ref{sec:Intro}) that we intend to make working on program families
@@ -764,10 +768,12 @@ to be fairly shallow, easy to fix, and now much harder to miss.
 \subsection{Disadvantages}
 \label{subsec:disadvantages}
 
-We mentioned one of the disadvantages in Section~\ref{sec:Intro}: the inability
-to create a local hack to get things working. With Drasil we have to take an
-all-or-nothing approach. Any hacks added to the generated artifact sources will
-be overwritten the next time anything is updated.
+We mentioned one disadvantage in Section~\ref{sec:Intro}: the inability to
+create a local hack to get things working. With Drasil we have to take an
+all-or-nothing approach. This can, however, be viewed as an advantage: it
+prevents the developer from adding undocumented knowledge to the project. Any
+hacks added to the generated artifact sources will be overwritten the next time
+anything is updated.
 
 With an all-or-nothing approach we also remove the ability to iterate in a
 meaningful way. We \emph{must} do everything right (or extremely close to it)
@@ -798,13 +804,15 @@ manuals and more! To do this we will be implementing new ``default'' recipes.
 SRS with verbose or simplified data descriptions, but we would like to add a lot
 more configurability to the view. For example: being able to have a view of the
 requirements with full derivations of all equations from their sources vs.
-having requirements that simply state the necessary equations to solve.
+having requirements that simply state the necessary equations to solve. Each
+view is intended for a different audience.
 \item More types of information in chunks -- See Table~\ref{tab:constraints} for
 some ideas. We want to ensure we can encapsulate anything that comes our way.
 \item Use constraints to generate test cases -- Typical values are considered
-``reasonable'' values for realistic scenarios whereas physical constraints can
-be seen as hard limits on values (ex. density must always be positive, otherwise
-throw an error).
+``reasonable'' values for realistic scenarios (if the user chooses values
+outside of the ``reasonable'' range, warn them but do not stop them) whereas
+physical constraints can be seen as hard limits on values (ex. density must
+always be positive, otherwise throw an error).
 \item Implement much larger examples -- We want to prove that Drasil can be
 scaled up to usable examples and not just toy problems. At the time of this
 writing, a larger example is currently being implemented. However, it is not
@@ -813,6 +821,7 @@ complete enough to show off (yet).
 
 \section{Conclusion}
 \label{sec:conclusion}
+
 
 \clearpage
 \onecolumn

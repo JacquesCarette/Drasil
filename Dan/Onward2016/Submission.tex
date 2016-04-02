@@ -409,7 +409,7 @@ software project as a different view of our knowledge base. We want to use
 recipes to specify exactly what information from the knowledge base is necessary
 for each artifact, and how that information should be displayed. For many
 artifacts we would like to have a standard recipe which can be quickly
-customized for the current problem and that is how we will avoid duplicating
+customized for the current problem, which is how we will avoid duplicating
 knowledge.
 
 \item Remove technology constraints -- We want to be able to create our software
@@ -420,7 +420,7 @@ set their output technology and have the generator take care of all the
 technical details.
 \end{enumerate}
 
-We argue that by implementing Drasil around these ideas, we can see drastic
+We argue that by implementing Drasil around these ideas, we will see drastic
 improvements in software quality. In fact, using a generative approach we can
 avoid certain problems altogether. One obvious and recurring problem that comes
 to mind when upgrading software is ``feature creep'' or ``software
@@ -521,7 +521,7 @@ Of the DSLs mentioned, we actually only require three of them to write our
 recipes. Each of the representation languages are used strictly by the generator
 as an intermediary in the production of our desired views. We write our recipes
 using the document layout language, expression layout language, and expression
-language. We will discuss the particulars of each of these in more depth during
+language. We will discuss the particulars of each of these in more depth as part of
 our example (Section~\ref{subsec:example}).
 
 The last piece of the puzzle is the generator. We use it to interpret the
@@ -571,7 +571,7 @@ clad thickness
 The data definition of $h_c$ displays some interesting knowledge. It gives us
 the name for a concept, its description, a symbol to use for easier reference,
 its (SI) units, and its defining equation. Encapsulating all of this knowledge
-into a chunk is not very difficult as shown in Figure~\ref{fig:h_cChunk}. Note
+into a chunk is not very difficult, as shown in Figure~\ref{fig:h_cChunk}. Note
 that the equation for $h_c$ is written in our expression language (Expr) and it
 also includes references to chunks that $h_c$ depends on. These will come into
 play when we create the description for $h_c$ in the generated view, but we do
@@ -598,7 +598,7 @@ h_c = fromEqn "h_c"
 On the topic of common knowledge, we can show an example alluded to previously,
 that of the SI unit library. The seven base SI units captured in Drasil are
 shown in Figure~\ref{fig:si_units}. The SI unit library also contains several
-derived units (for example: centigrade which is derived from kelvin) which we
+derived units (for example: Celsius which is derived from Kelvin) which we
 make use of later on in our example. The knowledge behind each unit and (in the
 case of derived units) their relation to the base units is captured in the
 relevant chunks.
@@ -660,8 +660,10 @@ document (Figure~\ref{fig:HTML_s1}).
 \end{figure}
 
 Now if you recall the data definition from Figure~\ref{fig:h_c}, we will show
-the painstaking amount of work it takes to create (almost) that exact same
-table:
+the significant amount of work it takes to create (almost) that exact same
+table: %SS - I think you are going for sarcasm here, but it doesn't come through
+       %very well in written language.  Maybe you should add a smiley face, or
+       %(sarcasm) in brackets?
 
 \begin{lstlisting}
 s3_dd2 = Definition (Data h_c)
@@ -672,7 +674,7 @@ the data definition), it should be easy to see that the recipe handled all of
 the layout details. The recipe actually goes one step further in that it found
 all of the chunk's dependencies and built the description by finding the
 appropriate knowledge related to the other chunks. This is configurable in that
-we can include short descriptions or verbose descriptions at this point in time.
+we can include short descriptions or verbose descriptions.
 
 \begin{figure}
 \includegraphics[scale=0.6]{HTML_s3.png}
@@ -709,15 +711,18 @@ We have already experienced some of the advantages of using
 Drasil. During the knowledge capture phase of our example a seemingly trivial
 problem came up regarding the simplified SRS. One of the concepts was being
 referred to with multiple different descriptions. By capturing only the right
-description, the generator now ensures internal consistency.
+description, the generator now ensures internal consistency. %SS - I don't
+                                %entirely understand this example.  Could you be
+                                %more specific?
 
 With that in mind, look at all of the previous figures (or
-Appendix~\ref{appendix:SRS}) and how many times knowledge has been copied into
+Appendix~\ref{appendix:SRS}) and see how many times knowledge has been copied into
 different places within one software artifact. Now imagine how many times that
 knowledge appears across all software artifacts. By using a generator, we avoid
 the problem of manually copying all of that information. It also ensures
 that should a piece of knowledge need to be updated, those updates will
-propagate throughout all of the artifacts \emph{automatically}. 
+propagate throughout all of the artifacts \emph{automatically}.  This is how we
+maintain consistency.
 	%if this wasn't academia I would write ``automagically''
 	
 Another great benefit to knowledge capture, especially in the SC domain, is that
@@ -726,7 +731,7 @@ knowledge library that will come up across many different problem domains
 (within and outside of SC). If we can build these common knowledge libraries for
 a multitude of problem domains, we believe it will aid in the creation of higher
 quality software overall and will allow developers and scientists to spend their
-time on more important things.
+time on more important things, like their science.
 
 Speaking of more important things, what about software certification? Many types
 of safety- or security-critical software must be certified. Depending on the
@@ -737,7 +742,7 @@ development process leading to a need for updated documentation. With Drasil we
 are able to ensure all of the software artifacts always remain consistent both
 internally and with each other. %inter- and intra-artifact consistency
 
-Drasil is meant to design for change. We mentioned previously
+Drasil is meant to support design for change. We mentioned previously
 (Section~\ref{sec:Intro}) that we intend to make working on program families
 trivial, and Drasil does just that. Implementing a likely change is as simple as
 adjusting a configuration file. If the knowledge has been properly captured, any
@@ -766,10 +771,12 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 \label{tab:constraints}
 \end{table}
 
-If we encapsulate the knowledge regarding thse constraints into the appropriate
+If we encapsulate the knowledge regarding these constraints into the appropriate
 chunks, we can have Drasil automatically test them for us. For example: a chunk
 that contains the dimensions of a physical object should also constrain those
 dimensions to positive values.
+
+%SS - later we can add the example of testing for conservation of thermal energy
 
 Another need in verification is traceability. With Drasil we have introduced
 complete traceability: every piece of knowledge can be tracked (through all
@@ -796,7 +803,7 @@ anything is updated.
 With an all-or-nothing approach we also remove the ability to iterate in a
 meaningful way. We \emph{must} do everything right (or extremely close to it)
 the first time. Yes, we can still modify the program family member that we are
-generating and adapt it as necessary, but adding new knowledge becomes a much
+generating and adapt as necessary, but adding new knowledge becomes a much
 more involved process.
 
 Adding new common knowledge libraries is also non-trivially difficult. These

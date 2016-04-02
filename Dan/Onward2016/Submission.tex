@@ -147,8 +147,8 @@ how we intend to bring everything together.
 \subsection{The current state of SC software development}
 \label{subsec:scdev}
 
-Most developers in SC software tend to put an emphasis on their science, not the
-software they are developing~\cite{Kelly}. %TODO: Fix citation, which year? 
+Most developers in SC software tend to put an emphasis on their science and not on good
+software development~\cite{Kelly2007}. 
 Consequently these developers tend to naturally use an agile
 philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
 Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
@@ -158,22 +158,20 @@ favourably~\cite{CarverEtAl2007}.
 
 More than half of these scientists do not have a good understanding of software
 testing~\cite{Merali2010}. In fact, there is very limited use of automated
-testing for scientific software~\cite{PatrickAndGilligan2016} and quality
+testing for scientific software~\cite{PatrickEtAl2015} and quality
 assurance has ``a bad name among creative scientists and
 engineers''~\cite[p.~352]{Roache1998}.
 
 Another problem in SC is that knowledge reuse is not fulfilling its potential.
 For instance, for mesh generators a large number of similar programs have been
-written. A survey~\cite{Owen1998} shows %94? TODO:CHECK NUMBER
-different mesh generator packages,
-with 61 of them generating triangular meshes, and %43? TODO:CHECK NUMBER
-of these using the same algorithm of Delaunay triangulation.
+written. A survey~\cite{Owen1998} shows 81 different mesh generator packages,
+with 52 of them generating triangular meshes, and 37 of these using the same
+algorithm of Delaunay triangulation.
 
 Tool use in SC software development is also limited, especially the use of
-version control software~\cite{Wilson2006}.
-
-Code generation in SC has been successful, but thus far the focus has been on
-the creation of only one software artifact: the code. Examples include
+version control software~\cite{Wilson2006}. However, code generation has been
+successful in SC, but thus far the focus has been on the creation of only one
+software artifact: the code. Examples include
 %TODO: List examples here -- Gaussian Elimination~\cite{CaretteXXXX}, ATLAS~\cite ...
 
 The lack of emphasis on more artifacts is disadvantageous to SC software
@@ -251,7 +249,7 @@ found to lead to better consistency between code and
 documentation~\cite{ShumAndCook1993}. While the program is being developed, the
 documentation tends to be updated simultaneously as it surrounds the source
 code. We should also keep in mind that proper, consistent documentation leads to
-many advantages while developing or maintaining software~\cite{Heyman1990,
+many advantages while developing or maintaining software~\cite{Hyman1990,
 Kotula2000}. When documentation does not match the system, it is a major
 detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Taken together,
 we can see how LP (when used properly) leads to more elegant, effective,
@@ -324,9 +322,9 @@ Gentleman and Temple Lang introduced a means for combining research reports with
 the relevant code, data, etc. This is called a ``compendium'' and it
 encapsulates the full work of the author, as opposed to just the publication
 version of their work. It also allows the reader to re-run computations (while
-explicitly showing the computational details)~\cite{Lang2004}. The authors
-proposed that peer review and distribution of scientific work should be done
-using compendia.
+explicitly showing the computational details)~\cite{GentlemanAndLang2012}. The
+authors proposed that peer review and distribution of scientific work should be
+done using compendia.
 
 Several tools have been developed for reproducible research (Sweave, SASweave,
 Statweave, Scribble, Org-mode, etc.) with the most popular being

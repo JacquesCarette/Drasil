@@ -707,11 +707,15 @@ source can be generated from the high-level knowledge encapsulated in a chunk.
 \subsection{Advantages}
 \label{subsec:advantages}
 
-We have already experienced some of the advantages of using
-Drasil. During the knowledge capture phase of our example a seemingly trivial
-problem came up regarding the simplified SRS. One of the concepts was being
-referred to with multiple different descriptions. By capturing only the right
-description, the generator now ensures internal consistency. %SS - I don't
+We have already experienced some of the advantages of using Drasil. During the
+knowledge capture phase of our example a seemingly trivial problem came up
+regarding the simplified SRS. One of the concepts was being referred to with
+multiple different descriptions. This led to an inconsistency in the
+understandability of the document: a symbol represented ``description A'', then
+halfway through the document the same symbol was explained as representing
+``description B''. These descriptions were similar, but ``description B'' was
+never used again. After capturing the (more) correct description, the generator
+ensured internal consistency and the document was easier to understand. %SS - I don't
                                 %entirely understand this example.  Could you be
                                 %more specific?
 

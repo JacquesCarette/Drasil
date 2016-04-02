@@ -137,27 +137,29 @@ captured and operationalized in very effective ways.
 As it stands, we are following a (not so) humble, practical route to achieving our
 goals and improving the overall quality of (some SC) software.
 
+%SS - I like when papers have a roadmap of what is coming, but with the limited
+%time we have, we can skip it this time around.
+
 \section{Requirements and Inspiration}
 \label{sec:bg}
 
-As we mentioned previously, none of the ideas behind our approach are new. There
-has been a lot of work done by a lot of smart people and we are taking advantage
-of it. Let us first take a look at the current
-state of SC software development, then we will discuss our goals and
-requirements, followed by the tools and techniques that inspired us. Finally we
-will conclude this section by discussing which ideas we intend to borrow and
-how we intend to bring everything together.
+As we mentioned previously, none of the ideas behind our approach are new. We
+are going to take advantage of the excellent work done by many others.  Let us
+first take a look at the current state of SC software development, then we will
+discuss our goals and requirements, followed by the tools and techniques that
+inspired us. Finally we will conclude this section by discussing which ideas we
+intend to borrow and how we intend to bring everything together.
 
 \subsection{The current state of SC software development}
 \label{subsec:scdev}
 
 Most developers in SC software tend to put an emphasis on their science and not on good
 software development~\cite{Kelly2007}. 
-Consequently these developers tend to naturally use an agile
+Consequently these developers tend to use an agile
 philosophy~\cite{AckroydEtAl2008, CarverEtAl2007, EasterbrookAndJohns2009,
 Segal2005} or an amethododical~\cite{Kelly2013}, or a knowledge acquisition
 driven~\cite{Kelly2015} process. These developers are scientists first and
-foremost and they do not view rigid, process-heavy approaches
+foremost and they do not usually view rigid, process-heavy approaches
 favourably~\cite{CarverEtAl2007}.
 
 More than half of these scientists do not have a good understanding of software
@@ -170,24 +172,32 @@ Another problem in SC is that knowledge reuse is not fulfilling its potential.
 For instance, for mesh generators a large number of similar programs have been
 written. A survey~\cite{Owen1998} shows 81 different mesh generator packages,
 with 52 of them generating triangular meshes, and 37 of these using the same
-algorithm of Delaunay triangulation.
+algorithm of Delaunay triangulation. %SS - I think the Owen reference is to a
+                                %web-page that no longer exists.  We should
+                                %probably find a better example in the future.
 
 Tool use in SC software development is also limited, especially the use of
-version control software~\cite{Wilson2006}. However, code generation has been
+version control software~\cite{Wilson2006}.  However, some advanced methods and
+techniques are being applied in SC.  For instance, code generation has been
 successful in SC, but thus far the focus has been on the creation of only one
-software artifact: the code. Examples include Gaussian elimination~\cite{Carette2006}, ATLAS, Blitz++, Spiral, FFT~\cite{KiselyovEtAl2004}, and FEniCS~\cite{LoggEtAl2012}.
+software artifact: the code. Examples include Gaussian
+elimination~\cite{Carette2006}, ATLAS, Blitz++, Spiral,
+FFT~\cite{KiselyovEtAl2004}, and FEniCS~\cite{LoggEtAl2012}.
 
 The lack of emphasis on more artifacts is disadvantageous to SC software
 developers. The value of documentation and a structured process is illustrated
 by a survey of statistical software for
 psychology~\cite{SmithEtAl2015-SS-TR,SmithEtAl2015SQJ}. A case study on the
-impact of a document driven process for SC software was performed on legacy
-software for thermal analysis of a fuel pin in a nuclear
+impact of a rational document driven process for SC software was performed on
+legacy software for thermal analysis of a fuel pin in a nuclear
 reactor~\cite{SmithAndKoothoor2016, SmithEtAl2013}. The redeveloped version
 discovered 27 issues, ranging from trivial to substantive, within the previous
 documentation. If rational documentation were used more often, some previous
-errors in scientific code may have been uncovered. Examples include the Sleipner
-oil rig, protein retraction, the Patriot missile, and seismic data
+errors in scientific code may have been uncovered. Previous SC software failures
+that might have benefited from a rational process include: the Sleipner A oil
+rig collapse~\cite[p.~38]{OliveiraAndStewart2006}, molecular protein structure
+retractions~\cite{Miller2006}, the Patriot missile
+disaster~\cite[p.~36]{OliveiraAndStewart2006}, and seismic data
 processing~\cite{HattonAndRoberts1994}.
 
 \subsection{Goals and requirements for our approach}
@@ -203,9 +213,9 @@ We believe the first step towards these improved qualities is a better
 understanding of the underlying knowledge behind the software itself.
 
 Being able to communicate this improved understanding is also necessary, as it
-will help with maintainability, reproducibility, and more down the road. What
-that means to us is ensuring that all software artifacts (requirements, design,
-source code, etc.) must be consistent and \emph{always} up to date.
+will help with maintainability, reproducibility, and more down the road.  This
+requires ensuring that all software artifacts (requirements, design,
+source code, etc.) are consistent and \emph{always} up to date.
 
 If we can essentially \emph{force} the developer to always have consistent and up
 to date artifacts, without impeding their ability to develop (or wasting their
@@ -222,21 +232,23 @@ reimplement it.
 Finally, software (and results) should be reproducible. We want to ensure that
 given all of the appropriate knowledge surrounding a piece of software,
 scientists will be able to reproduce that piece of software and any results
-obtained therein.
+obtained with it.
 
-To tackle our requirements we need to understand a lot of what has come before.
-This includes (but is not limited to) methods for ensuring consistency across
-software artifacts and work done in the field of reproducible research.
+To tackle our requirements we need to understand what has come before.  This
+includes (but is not limited to) methods for ensuring consistency across
+software artifacts and work done in the field of reproducible research.  The
+next section discusses an important tool for reproducible research: Literate
+Programming.
 
 \subsection{Literate Programming}
 \label{subsec:lp}
 
 Literate programming is a programming methodology that was introduced by Knuth.
-The LP methodology changes the focus from writing programs which simply instruct
-the computer how to perform a task. Instead, the focus is now on explaining
+The LP methodology changes the focus from writing programs that simply instruct
+the computer on how to perform a task. Instead, the focus is on explaining
 (\emph{to humans}) what we want the computer to do~\cite{Knuth1984}.
 
-In a literate program, the documentation and source code is all kept together in
+In a literate program, the documentation and source code are all kept together in
 one source. Literate programs are developed by breaking down algorithms into
 small, easy to understand parts referred to as
 \emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}.
@@ -258,13 +270,13 @@ detractor to software quality~\cite{Kotula2000, Thimbleby1986}. Taken together,
 we can see how LP (when used properly) leads to more elegant, effective,
 maintainable, and understandable code~\cite{PieterseKourieAndBoake2004}.
 
-With all of the benefits of LP it is fairly astounding that it has not been very
-popular~\cite{ShumAndCook1993}. There are very few successful examples of LP in
-SC, however, two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
+With all of the benefits of LP, it is fairly astounding that it has not been very
+popular~\cite{ShumAndCook1993}.  However, there are a few successful examples of LP in
+SC; two that come to mind are VNODE-LP~\cite{Nedialkov2006} and
 ``Physically Based Rendering: From Theory to
 Implementation''~\cite{PharrAndHumphreys2004}. The latter being both a literate
 program and textbook on the subject. Shum and Cook discuss the topic of LP's
-lack of popularity a fair bit and present the idea that it comes from two main
+lack of popularity and present the idea that it comes from two main
 issues:
 
 \begin{enumerate}
@@ -272,7 +284,7 @@ issues:
 \item Lack of flexibility on what to present or suppress in the output.
 \end{enumerate}
 
-There have been attempts to address these issues. Many focused on changing or
+There have been attempts to address these issues. Many have focused on changing or
 removing the output language or text processor dependency. For example CWeb (for
 the C language), noweb (programming language independent), javadoc (for Java),
 DOC++ (for C++), Doxygen (for multiple languages), and more. Many of these new
@@ -289,7 +301,7 @@ LP)~\cite{ShumAndCook1993}.
 
 The development of so many tools for LP has helped drive the understanding
 behind exactly what LP tools should be doing. On the other hand, the multitude
-of tools was preventing LP from becoming mainstream~\cite{Ramsey1994}. Nowadays,
+of tools is preventing LP from becoming mainstream~\cite{Ramsey1994}. Nowadays,
 however, we can see parts of LP becoming standard in certain domains (for
 example: Haskell, Agda, and R support LP).
 
@@ -313,13 +325,17 @@ types; the ability to refine chunks into more chunks (and eventually Java code);
 the ability to specify interfaces and communication between boxes; and the
 ability to decompose boxes at any level.
 
+% SS - At some point we should contrast LSD with Drasil.
+
 \subsection{Reproducible research} 
 \label{subsec:rr}
 
 The term ``reproducible research'' is typically used to mean embedding
-executable code in research papers in order to allow readers to reproduce the
+executable code in research papers to allow readers to reproduce the
 results described~\cite{SchulteEtAl2012}. Reproducibility of results is
-fundamental to the idea of good science.
+fundamental to the idea of good science. %SS - I'm not sure this is the main
+                                %thing that people mean when they say
+                                %reproducible research
 
 Gentleman and Temple Lang introduced a means for combining research reports with
 the relevant code, data, etc. This is called a ``compendium'' and it
@@ -336,7 +352,7 @@ Sweave~\cite{SchulteEtAl2012}.
 \subsection{Bringing the ideas together}
 \label{subsec:ideas}
 
-LP brings many great ideas to the table for helping us to keep our software
+LP brings many great ideas to the table for helping us keep our software
 artifacts consistent. First off, we love the idea of chunks. However, to achieve
 our goals we believe chunks should not be just pieces of code, but
 representations of knowledge. If we can ``capture'' knowledge about a concept
@@ -344,7 +360,7 @@ within a chunk, then that knowledge can be reused readily. On that note, chunks
 can also decrease the amount of duplication. If the knowledge regarding one
 concept is stored in a chunk, we never need to duplicate it.
 
-The knowledge we would like to store should also help us increase the
+The knowledge we would like to store should help us increase the
 verifiability of the program -- we should be able to see all of the assumptions
 and derivations that the chunk relies on. As such, we want to be storing
 specification-level knowledge, not code-level. If anything, we should be able to

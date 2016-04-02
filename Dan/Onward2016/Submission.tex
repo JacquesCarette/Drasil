@@ -1,5 +1,5 @@
 \documentclass[preprint, 10pt]{sigplanconf}
-
+\usepackage{url}
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -25,11 +25,11 @@
 %\publicationrights{licensed}     % this is the default
 %\publicationrights{author-pays}
 
-%\titlebanner{Submitted to Onward! 2016}        % These are ignored unless
-%\preprintfooter{short description of paper}   % 'preprint' option specified.
+\titlebanner{DRAFT -- Do not distribute}        % These are ignored unless
+\preprintfooter{Paper submission for Onward! 2016}   % 'preprint' option specified.
 
-\title{Knowledge-Based Software Engineering}
-\subtitle{A boring title if ever there were one}
+\title{Be Consistent}
+\subtitle{A Knowledge-Based Approach to Software Engineering}
 
 \authorinfo{Dan Szymczak}
            {McMaster University}
@@ -41,19 +41,20 @@
 \maketitle
 
 \begin{abstract}
-%This will be filled in once we're done drafting. For now I'm putting in a solid
-%block of text that will let me ramble on for a while when it comes down to the
-%final abstract. Programmers are like gods of tiny universes. They create worlds
-%according to their rules. If we think of software artifacts (that is, all
-%documentation, build instructions, source code, etc.) as their own tiny worlds,
-%a universe takes shape. Now think about what would happen if the laws of that
-%universe were inconsistent between worlds. What if the laws of thermodynamics
-%fundamentally changed as soon as you left Earth? Say goodbye to space travel.
-%Keeping artifacts consistent with each other is hugely important in the software
-%world, and Drasil aims to ensure it...
+Every developer should aim to create high-quality software. In many instances,
+software artifacts are not kept consistent or up-to-date. This lack of
+consistency negatively impacts the overall quality of the software, particularly
+its maintainability, traceability, and verifiability. We have combed through the
+work of others to find ideas we believe will contribute to better consistency
+and overall higher quality software. In combining these ideas, we have created a
+knowledge-based approach for software development. We believe that if there is a
+strong theoretical background in a given problem domain, and if it can be
+effectively operationalized, then our method will lead to long-term improvements
+in software quality for a (high) short-term investment. We have created a
+framework (Drasil) to demonstrate these ideas.
 \end{abstract}
 
-\category{CR-number}{subcategory}{third-level}
+%\category{CR-number}{subcategory}{third-level}
 
 % general terms are not compulsory anymore,
 % you may leave them out
@@ -939,6 +940,7 @@ coefficient between clad and coolant
 % We recommend abbrvnat bibliography style.
 \clearpage
 \twocolumn
+
 \bibliographystyle{abbrvnat}
 \bibliography{drasil}
 %

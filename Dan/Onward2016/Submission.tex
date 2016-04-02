@@ -62,22 +62,23 @@ framework (Drasil) to demonstrate these ideas.
 %term1, term2
 
 \keywords
-Literate software, knowledge capture, traceability, software engineering,scientific 
+Literate software, knowledge capture, traceability, software engineering, scientific 
 computing, artifact generation, software quality
 
 \section{Introduction}
 \label{sec:Intro}
 
 We want to make better software.  In particular, we are interested in
-increased maintainability, traceability, reproducibility, verifiability, and
+increasing maintainability, traceability, reproducibility, verifiability, and
 reusability.  Our approach is to invest (much) more in the short-term to provide
-outstanding long-term benefits. This is the fundamental trade-off in
-our work: we expect our methods to work very well for domains which are 
-well understood with known (but potentially enormous) design spaces.  We do
-not claim to tackle areas of software development where methodologies such
-as agile are well-suited.  But we firmly believe that there are domains --
-such as safety-critical applications -- where agile is not only ill-suited,
-it would be downright unprofessional to use such a methodology.
+outstanding long-term benefits. This is the fundamental trade-off in %SS - I
+                                %don't see the connection between these two sentences?
+our work: we expect our methods to work very well for domains that are well
+understood with known (but potentially enormous) design spaces.  We do not claim
+to tackle areas of software development where agile methods are
+well-suited.  But we firmly believe that there are domains -- such as
+safety-critical applications -- where agile is not only ill-suited, it would be
+downright unprofessional to use..
 
 Rather than talk in vague generalities, we will pick Scientific Computation
 (SC) for illustrative purposes throughout this paper.  But the fundamental
@@ -98,12 +99,12 @@ in Section~\ref{sec:Drasil}.
 The LP idea of putting everything into a single source file will not scale
 in this way.  Instead, we introduce the idea of libraries of ``common knowledge''
 for concepts which tend to re-occur.  A low-level example would be the units
-from the Syst\`{e}me International (SI) Units as ``common knowledge'' that really
-ought to get defined only once, and then re-used.  A higher-level example would be
+from the Syst\`{e}me International (SI) Units as ``common knowledge,'' which really
+ought to be defined only once, and then re-used.  A higher-level example would be
 the various components of the theory of heat transfer, including the conservation
-of energy equations.
+of energy equation.
 
-We should make it quite clear that none of the individual ideas presented
+We should make it clear that none of the individual ideas presented
 in this paper are new.  Knuth himself
 said that ``I have simply combined a bunch of ideas that have been in the air
 for a long time'' when he coined LP~\cite{Knuth1984}. We are, however, taking these
@@ -111,10 +112,13 @@ ideas and re-assembling them in novel ways.  Our principal aim is not a new
 software framework for doing literate software, but rather a framework which,
 over the long term, will allow us to do our own work (largely in scientific
 computation, but also in mechanized mathematics) much more effectively.  Our design
-is thus largely example-driven; we indeed have an industrial client who is funding
+is thus largely example-driven; we indeed have an industrial client who is
+partially funding
 this work, with the common aim of reducing the long-term cost of re-certifying
-scientific computation software as fit-for-use for certain safety critical 
-applications.  While the details of that are beyond the scope of this paper, they 
+SC software as fit-for-use for certain safety related %SS - the term safety
+                                %critical seems to be reserved for software
+                                %directly related to safety, like a real time control system 
+applications.  While the details of re-certification are beyond the scope of this paper, they 
 are never far from our minds as we design and implement our framework.
 
 Others have done similar work (which we will get into in Section~\ref{sec:bg}),
@@ -126,14 +130,14 @@ break things down into the smallest necessary chunks.
 We believe that we have assembled the right ideas to achieve our vision.
 The overall success or failure of our approach hinges on the idea of a stable,
 well understood knowledge base. If such knowledge does not exist, or cannot be
-adequately captured, our approach will not work.  Our claim then is that there 
+adequately captured, our approach will not work.  Our claim is that there 
 are areas of application where the knowledge not only exists, it can be adequately
 captured and operationalized in very effective ways.
 
-As it stands, we are on a (not so) humble, practical route to achieving our
-goals and improving the overall quality of (some scientific computation) software.
+As it stands, we are following a (not so) humble, practical route to achieving our
+goals and improving the overall quality of (some SC) software.
 
-\section{Requirements and inspiration}
+\section{Requirements and Inspiration}
 \label{sec:bg}
 
 As we mentioned previously, none of the ideas behind our approach are new. There

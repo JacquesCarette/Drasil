@@ -1,0 +1,103 @@
+Proposal Outline:
+
+Title Page:
+  - Title - "Literate Software for Well-Understood Domains"? 
+      -- No. Mention LS in bg
+    -- "A Knowledge-Based Approach to Software Engineering"
+    -- "Literate Development for Well-Understood Domains"
+  - Name
+  - Student Number
+  - macid / email
+  - McMaster University Department of Computing and Software
+  - "Proposal for Thesis Research in Partial Fulfillment of the Requirements for
+      the Degree of Doctor of Philosophy"
+  - Date
+  - Supervisors
+  
+Abstract:
+  - Fill in later
+  
+Introduction:
+  - Fill in later
+  
+State of the Art / BG / Lit Review:
+  - Small intro (In order to pursue this research, one must understand...)
+  - Put in sections corresponding to those in the Drasil papers.
+    1. Current state of SC software development
+      1.1 Challenges for developing Scientific Computing Software
+    2. Literate Programming
+    3. Expanding LP: Previous attempts -- Literate Software
+    4. Reproducible Research
+
+Research Objectives and Approach --Maybe split this into two sections?
+  - Essentially just restate "goals" and "bringing it together" from Onward papers
+  - Make sure to talk about taking a practical, example-driven approach focusing
+    on the creation of a framework (Drasil) to aid in using the KBA.
+    
+Current Work and Preliminary Results
+  - Explain the Drasil framework in its current state. Show chunk diagram 
+    (again), give code snippets and talk about the latest features.
+  - Prelim. results -- Very promising and in-line with the underlying
+      assumptions (big investment early for long term gains). 
+      Easy to maintain. Easy to update. Higher short-term investment
+  - Advantages (clear up the example from 3.3 Onward). 
+      Focus on lack of knowledge duplication and auto-generation.
+      Comment on reuse and reproducibility (using x library and recipes, 
+        it is easy to auto-gen the same version of the software artifacts).
+      Complete traceability - better for verification.
+      Unexpected advantage: pervasive bugs.
+  - Disadvantages: There are a few by design, namely "all or nothing" approach.
+      Addition of new libraries requires domain experts to be done properly.
+      
+Work Plan & Next Steps
+  - Detail next features to add
+  - Talk about summer students (and Steven) and exploratory nature of their
+      work. Using them to help us re-design and re-implement Drasil by finding
+      shortcomings/missing necessary features.
+  - Timeline:
+      Summer 2016: Experiment.
+            Implement multiple (3-4) large examples using Drasil, updating the
+              framework as new needs for features arise.
+      May 2nd 2016: Introduce summer students to Drasil and begin teaching them.
+      May 2016: Improve C output and implement MATLAB output in Drasil.
+      June/July 2016: Implement more artifact types in Drasil
+      August 2016: Submit results of summer experimentation to SEHPCCSE'16
+      September 2016: Overhaul the Drasil back-end to solidify necessary features
+                      and re-design parts of the implementation.
+      September 2016: Begin the last course for my PhD requirements.
+      October 2016: Meet with Ernie from OPG.
+      October 2016: Begin implementation of more knowledge capture.
+      November 13, 2016: (Hopefully) Present work at SEHPCCSE'16.
+      November 2016: Finish implementation of more KC.
+      December 2016: Finish coursework.
+      December 2016: Write a paper to submit to ??.
+      January 2016: Begin implementation of auto-gen'd test cases.
+      January 2017: Begin work on external syntax.
+      February 2017: Finish work on external syntax.
+      February 2017: Write a paper to submit to a Journal?
+      March 2017: Re-evaluate current Drasil implementation for usability. 
+        Work on making it as user-friendly as possible
+      April 2017: Find and collect more large-scale examples to be implemented 
+        and begin implementation of one.
+      April 2017: Meet with my committee.
+      May 2017: Write a paper to submit to SYNASC?
+      Summer 2017: Attempt to get summer students for second round of 
+        experimentation. Complete implementation of multiple large-scale 
+        examples.
+      August 2017: Write a paper to submit to (Journal ??) detailing results.
+      September 2017: Meet with Ernie from OPG.
+      Sept - Nov 2017: Update Drasil and perform a final evaluation.
+      Dec 2017: Begin writing up full PhD Thesis.
+      February 2018: Complete first draft of thesis and send to supervisors for 
+        comments.
+      March 2018: Begin editing thesis.
+      May 2018: Complete final thesis draft before defense.
+      June 1-14: Vacation.
+      June 21, 2018: Defend thesis.
+      July-August 2018: Make any necessary revisions to the thesis, 
+        if major: defend again;
+        if minor: submit the finished copy.
+        
+        
+  -- Need more papers!
+      

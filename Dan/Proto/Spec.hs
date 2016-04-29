@@ -13,7 +13,6 @@ data Spec where
   Sy    :: USymb -> Spec
   S     :: String -> Spec           -- Strings, used for Descriptions in Chunks
   (:+:) :: Spec -> Spec -> Spec     -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
-  (:/:) :: Spec -> Spec -> Spec     -- Fractions (Spec :/: Spec -> frac{Spec}{Spec} in TeX)
   Empty :: Spec                     -- Blank
   U     :: (Render r) => r -> Spec  -- Unicode for special characters
   F     :: Accent -> Spec -> Spec  -- Special formatting for certain symbols & special
@@ -45,6 +44,5 @@ instance Show RefType where
 sMap :: (String->String) -> Spec -> Spec
 sMap f (S a) = S (f a)
 sMap f (a :+: b) = sMap f a :+: sMap f b
-sMap f (a :/: b) = sMap f a :/: sMap f b
 sMap _ a = a
 

@@ -50,7 +50,6 @@ spec :: Spec -> H.Spec
 spec (S s)     = H.S s
 spec (Sy s)    = H.Sy s
 spec (a :+: b) = spec a H.:+: spec b
-spec (a :/: b) = spec a H.:/: spec b
 spec Empty     = H.S ""
 spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ accent f s

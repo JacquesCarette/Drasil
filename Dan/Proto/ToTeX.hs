@@ -50,7 +50,6 @@ spec :: Spec -> T.Spec
 spec (S s)     = T.S s
 spec (Sy s)    = T.Sy s
 spec (a :+: b) = spec a T.:+: spec b
-spec (a :-: b) = spec a T.:-: spec b
 spec (a :^: b) = spec a T.:^: spec b
 spec (a :/: b) = spec a T.:/: spec b
 spec Empty     = T.S ""

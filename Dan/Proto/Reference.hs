@@ -32,7 +32,6 @@ getRefName (NumberedList i) = error "NumberedList ref unimplemented"
 getRefName (SimpleList p)   = error "SimpleList ref unimplemented"
 
 simplify :: Spec -> Spec
-simplify (s1 :-: s2) = simplify s1 :-: simplify s2
 simplify (s1 :^: s2) = simplify s1 :^: simplify s2
 simplify (s1 :+: s2) = simplify s1 :+: simplify s2
 simplify (s1 :/: s2) = simplify s1 :/: simplify s2

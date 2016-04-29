@@ -90,7 +90,6 @@ p_spec (Ref t@Def r) = "\\hyperref" ++ sqbrac (p_spec r) ++
 p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String
-symbol NA               = ""
 symbol (Atomic s)       = s
 symbol (Special s)      = render TeX s
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
@@ -243,7 +242,6 @@ uSymbPrint (UDiv n d) = do
     _ -> return $ runReader (uSymbPrint n) c ++ "/" ++ runReader (uSymbPrint d) c
     
 getSyCon :: Symbol -> Context
-getSyCon NA                  = Plain
 getSyCon (Atomic _)          = Plain
 --getSyCon (Special Circle)  = Equation
   -- TODO: Need to figure this out, or figure out how to print catenations in a 

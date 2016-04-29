@@ -76,7 +76,6 @@ t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
 symbol :: Symbol -> String
-symbol NA               = ""
 symbol (Atomic s)       = s
 symbol (Special s)      = render HTML s
 symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)

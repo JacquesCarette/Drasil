@@ -21,7 +21,6 @@ data Symbol where
             --             [2]   [4]
   Catenate :: Symbol -> Symbol -> Symbol
             -- s1 -> s2 -> s1s2
-  NA       :: Symbol
   
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b

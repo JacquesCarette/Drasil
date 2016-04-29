@@ -16,7 +16,7 @@ import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth,
 import Helpers
 import TeXHelpers
 import Unicode
-import Format (Format(TeX),Accent(..))
+import Format (Format(TeX),Decoration(..))
 -- import Unit
 import Symbol (Symbol(..))
 import PrintC (printCode)
@@ -103,11 +103,12 @@ symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (FormatS f s) = sFormat f s
 
-sFormat :: Accent -> Symbol -> String
+sFormat :: Decoration -> Symbol -> String
 sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
 sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
-sFormat Grave  s = "\\`{" ++ symbol s ++ "}"
-sFormat Acute  s = "\\'{" ++ symbol s ++ "}"
+-- sFormat Grave  s = "\\`{" ++ symbol s ++ "}"
+-- sFormat Acute  s = "\\'{" ++ symbol s ++ "}"
+
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------

@@ -12,7 +12,7 @@ import Spec (USymb(..))
 import HTMLHelpers
 import Helpers
 import Unicode
-import Format (Format(HTML),Accent(..))
+import Format (Format(HTML),Decoration(..))
 import Symbol (Symbol(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
@@ -89,8 +89,6 @@ symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (FormatS Vector s)       = "<b>" ++ symbol s ++ "</b>"
 symbol (FormatS Hat s)          = symbol s ++ "&#770;"
-symbol (FormatS _ _) = error $ "Cannot use special formatting other than " ++ 
-                        "Vector or Hat on Symbols in HTML (see PrintHTML)"
 
 uSymb :: USymb -> String
 uSymb Unitless            = "unitless"

@@ -6,8 +6,5 @@ data Format = TeX | Plain | HTML
 
 --------------------------
 
-data Accent = Hat
-            | Vector
-            | Grave
-            | Acute
-  deriving Eq
+data Decoration = Hat | Vector deriving Eq
+data Accent = Grave | Acute deriving Eq

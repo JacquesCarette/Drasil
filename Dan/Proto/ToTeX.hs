@@ -5,7 +5,7 @@ import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTTeX as T
 import Unicode (render, Partial(..))
-import Format (Format(TeX), Accent(..))
+import Format (Format(TeX), Accent(..), Decoration(..))
 import EqChunk
 import RelationChunk
 import Unit
@@ -55,15 +55,17 @@ spec (a :^: b) = spec a T.:^: spec b
 spec (a :/: b) = spec a T.:/: spec b
 spec Empty     = T.S ""
 spec (U u)     = T.S $ render TeX u
-spec (F f s)   = spec $ format f s
+spec (F f s)   = spec $ accent f s
 spec (N s)     = T.N s
 spec (Ref t r)   = T.Ref t (spec r)
 
-format :: Accent -> Spec -> Spec
-format Hat    s = S "\\hat{" :+: s :+: S "}"
-format Vector s = S "\\bf{" :+: s :+: S "}"
-format Grave  s = S "\\`{" :+: s :+: S "}"
-format Acute  s = S "\\'{" :+: s :+: S "}"
+decorate :: Decoration -> Spec -> Spec
+decorate Hat    s = S "\\hat{" :+: s :+: S "}"
+decorate Vector s = S "\\bf{" :+: s :+: S "}"
+
+accent :: Accent -> Spec -> Spec
+accent Grave  s = S "\\`{" :+: s :+: S "}"
+accent Acute  s = S "\\'{" :+: s :+: S "}"
 
 makeDocument :: Document -> T.Document
 makeDocument (Document title author layout) = 

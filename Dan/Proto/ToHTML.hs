@@ -5,7 +5,7 @@ import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTHTML as H
 import Unicode (render, Partial(..))
-import Format (Format(HTML), Accent(..))
+import Format (Format(HTML), Accent(..), Decoration(..))
 import EqChunk
 import RelationChunk
 import Unit
@@ -55,15 +55,17 @@ spec (a :^: b) = spec a H.:^: spec b
 spec (a :/: b) = spec a H.:/: spec b
 spec Empty     = H.S ""
 spec (U u)     = H.S $ render HTML u
-spec (F f s)   = spec $ format f s
+spec (F f s)   = spec $ accent f s
 spec (N s)     = H.N s
 spec (Ref t r)   = H.Ref t (spec r)
 
-format :: Accent -> Spec -> Spec
-format Hat    s = s :+: S "&#770;" 
-format Vector s = S "<b>" :+: s :+: S "</b>"
-format Grave  s = S "&" :+: s :+: S "grave;" --Only works on vowels.
-format Acute  s = S "&" :+: s :+: S "acute;" --Only works on vowels.
+accent :: Accent -> Spec -> Spec
+accent Grave  s = S "&" :+: s :+: S "grave;" --Only works on vowels.
+accent Acute  s = S "&" :+: s :+: S "acute;" --Only works on vowels.
+
+decorate :: Decoration -> Spec -> Spec
+decorate Hat    s = s :+: S "&#770;" 
+decorate Vector s = S "<b>" :+: s :+: S "</b>"
 
 makeDocument :: Document -> H.Document
 makeDocument (Document title author layout) = 

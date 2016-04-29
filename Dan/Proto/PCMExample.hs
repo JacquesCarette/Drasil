@@ -10,7 +10,7 @@ import PCMUnits
 import SymbolAlphabet
 import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
 -- import EqChunk (fromEqn,EqChunk(..))
-import Format (Accent(..))
+import Format (Decoration(..))
 import Spec (Spec(..))
 import Control.Lens ((^.))
 import Unit

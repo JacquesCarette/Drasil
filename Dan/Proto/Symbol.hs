@@ -7,12 +7,12 @@
 
 module Symbol where
 import Unicode 
-import Format (Accent(..))
+import Format (Decoration(..))
 
 data Symbol where
   Atomic   :: String -> Symbol
   Special  :: Render a => a -> Symbol
-  FormatS  :: Accent -> Symbol -> Symbol
+  FormatS  :: Decoration -> Symbol -> Symbol
   Corners  :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
             --upleft  -> lowleft  -> upright  -> lowright -> base   -> out
             -- [1] -> [2] -> [3] -> [4] -> [5] -> out

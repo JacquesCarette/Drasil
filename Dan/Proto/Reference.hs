@@ -34,7 +34,7 @@ getRefName (SimpleList p)   = error "SimpleList ref unimplemented"
 simplify :: Spec -> Spec
 simplify (s1 :+: s2) = simplify s1 :+: simplify s2
 simplify (S s1)      = S (stringSimp s1)
-simplify (F _ s)     = s
+simplify (F _ s)     = S [s]
 simplify (Ref _ _)   = error "Attempting to simplify an existing reference"
 simplify _           = Empty
 

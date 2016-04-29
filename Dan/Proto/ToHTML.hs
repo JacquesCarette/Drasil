@@ -56,9 +56,9 @@ spec (F f s)   = spec $ accent f s
 spec (N s)     = H.N s
 spec (Ref t r)   = H.Ref t (spec r)
 
-accent :: Accent -> Spec -> Spec
-accent Grave  s = S "&" :+: s :+: S "grave;" --Only works on vowels.
-accent Acute  s = S "&" :+: s :+: S "acute;" --Only works on vowels.
+accent :: Accent -> Char -> Spec
+accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.
+accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 
 decorate :: Decoration -> Spec -> Spec
 decorate Hat    s = s :+: S "&#770;" 

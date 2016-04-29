@@ -60,9 +60,9 @@ decorate :: Decoration -> Spec -> Spec
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
 decorate Vector s = S "\\bf{" :+: s :+: S "}"
 
-accent :: Accent -> Spec -> Spec
-accent Grave  s = S "\\`{" :+: s :+: S "}"
-accent Acute  s = S "\\'{" :+: s :+: S "}"
+accent :: Accent -> Char -> Spec
+accent Grave  s = S $ "\\`{" ++ (s : "}")
+accent Acute  s = S $ "\\'{" ++ (s : "}")
 
 makeDocument :: Document -> T.Document
 makeDocument (Document title author layout) = 

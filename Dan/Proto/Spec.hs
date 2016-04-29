@@ -15,8 +15,8 @@ data Spec where
   (:+:) :: Spec -> Spec -> Spec     -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
   Empty :: Spec                     -- Blank
   U     :: (Render r) => r -> Spec  -- Unicode for special characters
-  F     :: Accent -> Spec -> Spec  -- Special formatting for certain symbols & special
-                                    -- chars (e.g. hat, dot, etc.)
+  F     :: Accent -> Char -> Spec  -- Special formatting for certain special
+                                    -- chars
   Ref   :: RefType -> Spec -> Spec  -- Needs helper func to create Ref
                                     -- See Reference.hs
 --Moving this here to avoid cyclic imports

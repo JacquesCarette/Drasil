@@ -41,8 +41,8 @@ s1_intro = Paragraph (S "This section records information for easy reference")
 s1_1 = Section 1 (S "Table of Units") [s1_1_intro, s1_1_table]
 
 s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
-           (F Grave (S "e")) :+: S "me International d'Unit" :+:
-           (F Acute (S "e")) :+: S "s) is employed as the unit system." :+:
+           (F Grave 'e') :+: S "me International d'Unit" :+:
+           (F Acute 'e') :+: S "s) is employed as the unit system." :+:
            S " In addition to the basic units, several derived units are" :+: 
            S " employed as described below. For each unit, the symbol is" :+: 
            S " given followed by a description of the unit followed by " :+: 

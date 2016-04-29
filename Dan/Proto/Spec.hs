@@ -12,7 +12,6 @@ data Spec where
   N     :: Symbol -> Spec
   Sy    :: USymb -> Spec
   S     :: String -> Spec           -- Strings, used for Descriptions in Chunks
-  (:^:) :: Spec -> Spec -> Spec     -- Superscript (Spec :^: Spec -> Spec^{Spec} in TeX)
   (:+:) :: Spec -> Spec -> Spec     -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
   (:/:) :: Spec -> Spec -> Spec     -- Fractions (Spec :/: Spec -> frac{Spec}{Spec} in TeX)
   Empty :: Spec                     -- Blank
@@ -45,7 +44,6 @@ instance Show RefType where
 -- (if we generalize mapping somehow)
 sMap :: (String->String) -> Spec -> Spec
 sMap f (S a) = S (f a)
-sMap f (a :^: b) = sMap f a :^: sMap f b
 sMap f (a :+: b) = sMap f a :+: sMap f b
 sMap f (a :/: b) = sMap f a :/: sMap f b
 sMap _ a = a

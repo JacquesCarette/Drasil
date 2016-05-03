@@ -5,7 +5,7 @@ import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTTeX as T
 import Unicode (render, Partial(..))
-import Format (Format(TeX), Accent(..), Decoration(..))
+import Format (Format(TeX))
 import EqChunk
 import RelationChunk
 import Unit

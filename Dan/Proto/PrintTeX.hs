@@ -16,9 +16,9 @@ import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth,
 import Helpers
 import TeXHelpers
 import Unicode
-import Format (Format(TeX),Decoration(..))
+import Format (Format(TeX))
 -- import Unit
-import Symbol (Symbol(..))
+import Symbol (Symbol(..),Decoration(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
 

@@ -12,8 +12,8 @@ import Spec (USymb(..))
 import HTMLHelpers
 import Helpers
 import Unicode
-import Format (Format(HTML),Decoration(..))
-import Symbol (Symbol(..))
+import Format (Format(HTML))
+import Symbol (Symbol(..), Decoration(..))
 import PrintC (printCode)
 import qualified LayoutObjs as L
 

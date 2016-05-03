@@ -6,8 +6,7 @@ import Data.List (intersperse)
 import Data.Char (toLower)
 
 import Example1
-import Spec (Spec(..))
-import Format (Accent(..))
+import Spec (Spec(..),Accent(..))
 import Unit (Unit(..))
 import SI_Units (si_units)
 import Chunk

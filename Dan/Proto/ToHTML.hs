@@ -5,7 +5,7 @@ import ASTInternal (Expr(..), Relation(..))
 import Spec
 import qualified ASTHTML as H
 import Unicode (render, Partial(..))
-import Format (Format(HTML), Accent(..), Decoration(..))
+import Format (Format(HTML))
 import EqChunk
 import RelationChunk
 import Unit

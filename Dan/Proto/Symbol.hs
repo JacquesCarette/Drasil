@@ -7,7 +7,8 @@
 
 module Symbol where
 import Unicode 
-import Format (Decoration(..))
+
+data Decoration = Hat | Vector deriving Eq
 
 data Symbol where
   Atomic   :: String -> Symbol

@@ -2,9 +2,10 @@
 {-# LANGUAGE GADTs #-}
 module Spec where
 
-import Format (Accent)
 import Unicode (Render)
 import Symbol
+
+data Accent = Grave | Acute deriving Eq
 
 --For writing chunks in a specification language that can be converted to TeX
 infixr 5 :+:

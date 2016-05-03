@@ -5,12 +5,12 @@ module Unit (
   , Unit(..), UnitEq(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn(..)                -- wrapper for 'Unit' class
-  , from_udefn, makeDerU, unitCon, unitless
+  , from_udefn, makeDerU, unitCon
   ) where
 
-import Chunk (ConceptChunk(..), Chunk(..), Concept(..),makeCC)
+import Chunk (ConceptChunk(..), Chunk(..), Concept(..))
 import Control.Lens (Simple, Lens, set, (^.))
-import Spec (Spec(..), USymb(..))
+import Spec (Spec(..), USymb)
 
 -- Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.
@@ -84,6 +84,3 @@ ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 instance Unit    UnitDefn where unit  = ulens unit
 instance Chunk   UnitDefn where name  = ulens name
 instance Concept UnitDefn where descr = ulens descr
-
-unitless :: FundUnit
-unitless = UD (makeCC "unitless" "unitless") Unitless

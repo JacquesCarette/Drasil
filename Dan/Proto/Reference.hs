@@ -3,7 +3,6 @@ module Reference where
 
 import LayoutObjs
 import Spec
-import Data.Char
 import Helpers
 import Chunk (name)
 import Control.Lens

@@ -77,7 +77,7 @@ lpmBody = Document ((S "Literate Programmer's Manual for ") :+:
   (S "and ") :+: (N $ h_c ^. symbol)) (S "Spencer Smith") [l1]
 
 l1 :: LayoutObj
-l1 = Section 0 (Empty) [ Paragraph (
+l1 = Paragraph (
   S "@ First we define the overall structure of the library of functions." :+:
   S "\n\n@c\n@<Header files@>@/\n@<Functions@>@/\n\n" :+:
   S "Although not necessary for this simple example, we will include the " :+:
@@ -86,4 +86,4 @@ l1 = Section 0 (Empty) [ Paragraph (
   S "@ This library will consist of a set of functions.\n\n" :+:
   S "@<Functions@>=\n@<Function to Calculate hg@>@/\n" :+: 
   S "@<Function to Calculate hc@>@/\n\n"  
-  )]
+  )

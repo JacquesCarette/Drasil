@@ -90,14 +90,9 @@ symbol (FormatS Vector s)       = "<b>" ++ symbol s ++ "</b>"
 symbol (FormatS Hat s)          = symbol s ++ "&#770;"
 
 uSymb :: USymb -> String
-uSymb Unitless            = "unitless"
 uSymb (UName s)           = symbol s
-uSymb (UProd l)           = foldr1 
-  (\x -> (if (x == "unitless") then (""++) else (++x))) (map uSymb l)
-uSymb (UPow Unitless _)   = uSymb Unitless
+uSymb (UProd l)           = foldr1 (\x -> (++x)) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
-uSymb (UDiv n Unitless)   = uSymb n
-uSymb (UDiv Unitless d)   = uSymb (UDiv (UName (Atomic "1")) d)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
 uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 

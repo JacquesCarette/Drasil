@@ -205,8 +205,6 @@ pCon :: Context -> Spec -> String
 pCon = \c t -> runReader (lPrint t) c
 
 uSymbPrint :: USymb -> Reader Context String --To fix unit printing will need this.
-uSymbPrint (Unitless) = do
-  return "unitless"
 uSymbPrint (UName n) = do
   c <- ask
   let cn = getSyCon n
@@ -218,20 +216,13 @@ uSymbPrint (UName n) = do
       _        -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
-  return $ foldr1 (\x -> if (x == "unitless") then (""++) else (++x)) 
+  return $ foldr1 (\x -> (++x)) 
     (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
-uSymbPrint (UPow Unitless _) = do
-  uSymbPrint Unitless
 uSymbPrint (UPow n p) = do
   c <- ask
   case c of
     Plain -> return $ runReader (uSymbPrint n) c ++ dollar ("^" ++ brace (show p))
     _     -> return $ runReader (uSymbPrint n) c ++ "^" ++ brace (show p)
-uSymbPrint (UDiv n Unitless) = do
-  uSymbPrint n
-uSymbPrint (UDiv Unitless d) = do
-  c <- ask
-  return $ "1/" ++ paren (runReader (uSymbPrint d) c)
 uSymbPrint (UDiv n d) = do
   c <- ask
   case d of -- 4 possible cases, 2 need parentheses, 2 don't

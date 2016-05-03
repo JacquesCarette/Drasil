@@ -86,8 +86,8 @@ symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbol (FormatS Vector s)       = "<b>" ++ symbol s ++ "</b>"
-symbol (FormatS Hat s)          = symbol s ++ "&#770;"
+symbol (Atop Vector s)       = "<b>" ++ symbol s ++ "</b>"
+symbol (Atop Hat s)          = symbol s ++ "&#770;"
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbol s

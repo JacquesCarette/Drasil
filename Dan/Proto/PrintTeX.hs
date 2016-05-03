@@ -100,13 +100,11 @@ symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ brace (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbol (FormatS f s) = sFormat f s
+symbol (Atop f s) = sFormat f s
 
 sFormat :: Decoration -> Symbol -> String
 sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
 sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
--- sFormat Grave  s = "\\`{" ++ symbol s ++ "}"
--- sFormat Acute  s = "\\'{" ++ symbol s ++ "}"
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
@@ -240,7 +238,7 @@ getSyCon (Atomic _)          = Plain
 getSyCon (Special _)         = Plain
 getSyCon (Catenate s1 _)     = getSyCon s1
 getSyCon (Corners _ _ _ _ s) = getSyCon s
-getSyCon (FormatS _ s)       = getSyCon s
+getSyCon (Atop _ s)          = getSyCon s
 
 -----------------------------------------------------------------
 ------------------BEGIN DATA DEFINITION PRINTING-----------------

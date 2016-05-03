@@ -13,7 +13,7 @@ data Decoration = Hat | Vector deriving Eq
 data Symbol where
   Atomic   :: String -> Symbol
   Special  :: Render a => a -> Symbol
-  FormatS  :: Decoration -> Symbol -> Symbol
+  Atop  :: Decoration -> Symbol -> Symbol
   Corners  :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
             --upleft  -> lowleft  -> upright  -> lowright -> base   -> out
             -- [1] -> [2] -> [3] -> [4] -> [5] -> out
@@ -31,3 +31,9 @@ sub b lr = Corners [] [] [] [lr] b
 
 sup :: Symbol -> Symbol -> Symbol
 sup b ur = Corners [] [] [ur] [] b
+
+hat :: Symbol -> Symbol
+hat = Atop Hat
+
+vec :: Symbol -> Symbol
+vec = Atop Vector

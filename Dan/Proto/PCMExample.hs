@@ -50,11 +50,11 @@ tank_L      = makeUC "L" "length of tank" cL metre
 mass        = makeUC "m" "mass" lM kilogram
 water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
 norm_vect   = makeVC "n_vect" "unit outward normal vector for a surface"
-              (FormatS Vector (FormatS Hat lN))
+              (vec $ hat lN)
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
 ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
-thFluxVect  = makeUC "q_vect" "thermal flux vector" (FormatS Vector lQ)
+thFluxVect  = makeUC "q_vect" "thermal flux vector" (vec lQ)
                   thermFluxU
 ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermFluxU
 ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU

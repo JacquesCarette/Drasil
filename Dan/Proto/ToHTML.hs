@@ -46,7 +46,7 @@ replace_divs (a :^ b) = H.Pow (replace_divs a) (replace_divs b)
 replace_divs (a :- b) = H.Sub (replace_divs a) (replace_divs b)
 replace_divs a        = expr a
 
-spec :: Spec -> H.Spec
+spec :: Sentence -> H.Spec
 spec (S s)     = H.S s
 spec (Sy s)    = H.Sy s
 spec (a :+: b) = spec a H.:+: spec b
@@ -55,11 +55,11 @@ spec (F f s)   = spec $ accent f s
 spec (N s)     = H.N s
 spec (Ref t r)   = H.Ref t (spec r)
 
-accent :: Accent -> Char -> Spec
+accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.
 accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 
-decorate :: Decoration -> Spec -> Spec
+decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = s :+: S "&#770;" 
 decorate Vector s = S "<b>" :+: s :+: S "</b>"
 

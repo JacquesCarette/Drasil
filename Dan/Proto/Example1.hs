@@ -9,7 +9,7 @@ import Unit (Unit(..), UDefn(..), DerUChunk(..), FundUnit(..),
 import Chunk (VarChunk(..), ConceptChunk(..), makeCC, makeVC)
 import EqChunk (EqChunk(..), fromEqn)
 import Symbol
-import Spec (USymb(..),Spec(..))
+import Spec (USymb(..),Sentence(..))
 
 import Control.Lens ((^.))
 

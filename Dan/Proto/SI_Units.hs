@@ -5,7 +5,7 @@ import Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..))
 import Unicode (Circle(..))
 import Symbol
-import Spec (USymb(..),Spec(..))
+import Spec (USymb(..),Sentence(..))
 
 import Control.Lens ((^.))
 
@@ -37,7 +37,7 @@ centigrade, joule, watt, calorie, kilowatt :: DerUChunk
 
 centigrade = DUC 
   (UD (CC "Centigrade" (S "temperature")) 
-      (UName (Catenate (Special Circle) (Atomic "C"))))
+      (UName (Concat [Special Circle, Atomic "C"])))
   (UShift 273.15 (kelvin ^. unit))
 
 joule = DUC
@@ -56,5 +56,5 @@ watt = DUC
 
 kilowatt = DUC
   (UD (CC "Kilowatt" (S "power"))
-      (UName $ Catenate (Atomic "k") (Atomic "W")))
+      (UName $ Concat [Atomic "k", Atomic "W"]))
   (UScale 1000 (watt ^. unit))

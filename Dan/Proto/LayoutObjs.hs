@@ -7,21 +7,21 @@ import RelationChunk
 import Spec
 import ASTCode
 
-type Title    = Spec
-type Contents = Spec
-type Author   = Spec
-type Item     = Spec
+type Title    = Sentence
+type Contents = Sentence
+type Author   = Sentence
+type Item     = Sentence
 type Bullets  = [Item]
 type Items    = [Item]
 type Depth    = Int
 type Pairs    = [(Title,Item)] -- Title: Item
 type Filepath = String
-type Label    = Spec
+type Label    = Sentence
 
 data Document = Document Title Author [LayoutObj]
 
 --Types of layout objects we deal with explicitly
-data LayoutObj = Table [Spec] [[Spec]] Title Bool
+data LayoutObj = Table [Sentence] [[Sentence]] Title Bool
   --table header data label showlabel?
                | Section Depth Title [LayoutObj] 
                   --Section = 0 depth, subsection = 1, subsub = 2 ... etc.

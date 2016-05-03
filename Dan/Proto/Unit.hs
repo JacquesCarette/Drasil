@@ -10,7 +10,7 @@ module Unit (
 
 import Chunk (ConceptChunk(..), Chunk(..), Concept(..))
 import Control.Lens (Simple, Lens, set, (^.))
-import Spec (Spec(..), USymb)
+import Spec (Sentence(..), USymb)
 
 -- Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.

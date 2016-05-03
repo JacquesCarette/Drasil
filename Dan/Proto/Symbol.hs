@@ -20,8 +20,8 @@ data Symbol where
             --  Visually:  [1]   [3]
             --    (out)       [5]
             --             [2]   [4]
-  Catenate :: Symbol -> Symbol -> Symbol
-            -- s1 -> s2 -> s1s2
+  Concat :: [ Symbol ]  -> Symbol
+            -- [s1, s2] -> s1s2
   
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b

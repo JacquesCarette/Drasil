@@ -6,7 +6,7 @@ import Chunk (Chunk(..), Concept(..), Quantity(..), VarChunk(..))
 import Unit (Unit(..), UnitDefn(..))
 import Symbol
 import Control.Lens (Simple, Lens, (^.), set)
-import Spec (Spec(..))
+import Spec (Sentence(..))
 
 --BEGIN HELPER FUNCTIONS--
 makeUC :: Unit u => String -> String -> Symbol -> u -> UnitalChunk

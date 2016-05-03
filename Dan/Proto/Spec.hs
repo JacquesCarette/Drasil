@@ -7,18 +7,20 @@ import Symbol
 
 data Accent = Grave | Acute deriving Eq
 
---For writing chunks in a specification language that can be converted to TeX
+-- For writing "sentences" via combining smaller elements
 infixr 5 :+:
-data Spec where
-  N     :: Symbol -> Spec
-  Sy    :: USymb -> Spec
-  S     :: String -> Spec           -- Strings, used for Descriptions in Chunks
-  (:+:) :: Spec -> Spec -> Spec     -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
-  U     :: (Render r) => r -> Spec  -- Unicode for special characters
-  F     :: Accent -> Char -> Spec  -- Special formatting for certain special
-                                    -- chars
-  Ref   :: RefType -> Spec -> Spec  -- Needs helper func to create Ref
+data Sentence where
+  N     :: Symbol -> Sentence
+  Sy    :: USymb -> Sentence
+  S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
+    -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
+  (:+:) :: Sentence -> Sentence -> Sentence     
+  U     :: (Render r) => r -> Sentence  -- special characters
+  F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
+                                       -- chars
+  Ref   :: RefType -> Sentence -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
+
 --Moving this here to avoid cyclic imports
 data USymb = UName Symbol
            | UProd [USymb]
@@ -27,6 +29,7 @@ data USymb = UName Symbol
                                 --  necessary for things like J/(kg*C)
 -- Language of unit equations, to define a unit relative
 -- to another
+
 data RefType = Tab
              | Fig
              | Sec
@@ -38,9 +41,8 @@ instance Show RefType where
   show Sec = "Section"
   show Def = "Definition"
   
---Maybe spec could become a functor/applicative/monad?
--- (if we generalize mapping somehow)
-sMap :: (String->String) -> Spec -> Spec
+-- this is a horrible hack that assumes too much from sentences!
+sMap :: (String->String) -> Sentence -> Sentence
 sMap f (S a) = S (f a)
 sMap f (a :+: b) = sMap f a :+: sMap f b
 sMap _ a = a

@@ -92,7 +92,7 @@ p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 symbol :: Symbol -> String
 symbol (Atomic s)       = s
 symbol (Special s)      = render TeX s
-symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
+symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ brace (symbol x)
@@ -236,7 +236,8 @@ getSyCon (Atomic _)          = Plain
   -- TODO: Need to figure this out, or figure out how to print catenations in a 
   --       better way.
 getSyCon (Special _)         = Plain
-getSyCon (Catenate s1 _)     = getSyCon s1
+getSyCon (Concat [])         = Plain
+getSyCon (Concat (s:_))      = getSyCon s
 getSyCon (Corners _ _ _ _ s) = getSyCon s
 getSyCon (Atop _ s)          = getSyCon s
 

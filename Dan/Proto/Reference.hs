@@ -8,7 +8,7 @@ import Chunk (name)
 import Control.Lens
 
 -- Creating References --
-makeRef :: LayoutObj -> Spec
+makeRef :: LayoutObj -> Sentence
 makeRef r = Ref (rType r) (getRefName r)
 
 rType :: LayoutObj -> RefType
@@ -19,7 +19,7 @@ rType (Definition _)  = Def
 rType _ = error "Attempting to reference unimplemented reference type"
 
 -- the need for this seems like a hack!
-getRefName :: LayoutObj -> Spec
+getRefName :: LayoutObj -> Sentence
 getRefName (Table h d l b)  = S "Table:" :+: simplify l
 getRefName (Section d t _)  = writeSec d :+: simplify t
 getRefName (Figure l _)     = S "Figure:" :+: simplify l
@@ -32,7 +32,7 @@ getRefName (NumberedList i) = error "NumberedList ref unimplemented"
 getRefName (SimpleList p)   = error "SimpleList ref unimplemented"
 
 -- what the heck is this function for ?
-simplify :: Spec -> Spec
+simplify :: Sentence -> Sentence
 simplify (s1 :+: s2) = simplify s1 :+: simplify s2
 simplify (S s1)      = S (stringSimp s1)
 simplify (F _ s)     = S [s]
@@ -45,28 +45,28 @@ stringSimp s = (map head (words s))
 repUnd :: String -> String
 repUnd s = map (\c -> if c == '_' then '.' else c) s
 
-writeSec :: Int -> Spec
+writeSec :: Int -> Sentence
 writeSec n
   | n < 0     = error "Illegal section depth. Must be positive."
   | n > 2     = error "Section too deep (Reference.hs)"
   | otherwise = S $ (capitalize $ (concat $ replicate n "sub") ++ "sec:")
   
-getDefName :: DType -> Spec
+getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. name))
 getDefName (Theory c) = S $ "T:" ++ stringSimp (repUnd (c ^. name))
   
--- Need to figure out Eq of specs or change ref to take String instead of Spec and use Strings throughout.  
+-- Need to figure out Eq of specs or change ref to take String instead of Sentence and use Strings throughout.  
   
--- getRefsTo :: Chunk c => c -> Document -> Spec
+-- getRefsTo :: Chunk c => c -> Document -> Sentence
 -- getRefsTo c (Document _ _ (ls)) = concat $ intersperse (", ") $ 
                                     -- map (findRef c) ls
                                     
--- findRef :: Chunk c => c -> LayoutObj -> [Spec]
+-- findRef :: Chunk c => c -> LayoutObj -> [Sentence]
 -- findRef c x@(Table _ d _ _)  = [checkTable (getRefName x) (getRefName c) d]
 -- findRef c x@(Section _ _ ls) = concat map (findSecRef x c ls)
 -- findRef c x@(Definition (Data c2)) = [checkChunk x c c2]
 -- findRef c x@(Definition (Theory c2)) = [checkChunk x c c2]
 -- findRef _ = []
 
--- checkTable :: Chunk c => Spec -> c -> [[Spec]] -> Spec
+-- checkTable :: Chunk c => Sentence -> c -> [[Sentence]] -> Sentence
 -- checkTable r c d = 

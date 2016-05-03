@@ -78,7 +78,7 @@ t_symbol s                        = symbol s
 symbol :: Symbol -> String
 symbol (Atomic s)       = s
 symbol (Special s)      = render HTML s
-symbol (Catenate s1 s2) = (symbol s1) ++ (symbol s2)
+symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)

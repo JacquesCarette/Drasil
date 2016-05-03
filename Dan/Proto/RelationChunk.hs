@@ -4,7 +4,7 @@ module RelationChunk (RelationChunk(..),makeRC) where
 import ASTInternal (Relation)
 import Chunk
 import Control.Lens (Simple, Lens)
-import Spec (Spec(..))
+import Spec (Sentence(..))
 
 data RelationChunk = RC
   { cc :: ConceptChunk
@@ -22,5 +22,5 @@ instance Concept RelationChunk where
 cp :: Simple Lens RelationChunk ConceptChunk
 cp f (RC a b) = fmap (\x -> RC x b) (f a)
 
-makeRC :: String -> Spec -> Relation -> RelationChunk
+makeRC :: String -> Sentence -> Relation -> RelationChunk
 makeRC nm desc rel = RC (CC nm desc) rel

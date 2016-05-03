@@ -46,7 +46,7 @@ replace_divs (a :^ b) = T.Pow (replace_divs a) (replace_divs b)
 replace_divs (a :- b) = T.Sub (replace_divs a) (replace_divs b)
 replace_divs a        = expr a
 
-spec :: Spec -> T.Spec
+spec :: Sentence -> T.Spec
 spec (S s)     = T.S s
 spec (Sy s)    = T.Sy s
 spec (a :+: b) = spec a T.:+: spec b
@@ -55,11 +55,11 @@ spec (F f s)   = spec $ accent f s
 spec (N s)     = T.N s
 spec (Ref t r)   = T.Ref t (spec r)
 
-decorate :: Decoration -> Spec -> Spec
+decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
 decorate Vector s = S "\\bf{" :+: s :+: S "}"
 
-accent :: Accent -> Char -> Spec
+accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")
 accent Acute  s = S $ "\\'{" ++ (s : "}")
 

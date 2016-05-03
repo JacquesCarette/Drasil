@@ -5,7 +5,7 @@ import Data.Char (toLower)
 import Data.List (intersperse)
 import Helpers
 import PCMExample
-import Spec (Spec(..),sMap, Accent(..)) --May need to update imports to hide Ref.
+import Spec (Sentence(..),sMap, Accent(..)) --May need to update imports to hide Ref.
                             --More likely setup an API or something to
                             --Restrict access for novice users.
 import Unit (Unit(..), UnitDefn(..))

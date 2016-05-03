@@ -10,7 +10,7 @@ import PCMUnits
 import SymbolAlphabet
 import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
 -- import EqChunk (fromEqn,EqChunk(..))
-import Spec (Spec(..))
+import Spec (Sentence(..))
 import Control.Lens ((^.))
 import RelationChunk
 
@@ -73,7 +73,7 @@ temp_init   = makeUC "T_init" "initial temperature"
 temp_water  = makeUC "T_W" "temperature of water" 
               (sub cT cW) centigrade
 temp_diff   = makeUC "deltaT" "temperature difference" 
-              (Catenate (Special Delta) cT) centigrade
+              (Concat [Special Delta, cT]) centigrade
 vol         = makeUC "V" "volume" cV m_3
 --tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
                 -- (sub cV (Atomic "tank")) m_3
@@ -118,7 +118,7 @@ cons_therm_rel :: Relation
 cons_therm_rel = (Neg (C gradient)) :. (C thFluxVect) + (C ht_gen_vol) := 
   (C density) * (C htCap) * (Deriv (C temp) (C time))
 
-t1descr :: Spec
+t1descr :: Sentence
 t1descr = 
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 

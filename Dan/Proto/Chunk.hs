@@ -16,7 +16,7 @@ class Chunk c where
 -- BEGIN CONCEPT --
 -- a concept has a description
 class Chunk c => Concept c where
-  descr :: Simple Lens c Spec
+  descr :: Simple Lens c Sentence
 -- END CONCEPT --
 
 -- BEGIN QUANTITY --
@@ -28,7 +28,7 @@ class Concept c => Quantity c where
 -------- BEGIN DATATYPES/INSTANCES --------
 
 -- BEGIN CONCEPTCHUNK --
-data ConceptChunk = CC String Spec
+data ConceptChunk = CC String Sentence
 instance Chunk ConceptChunk where
   name f (CC a b) = fmap (\x -> CC x b) (f a)
 instance Concept ConceptChunk where
@@ -37,7 +37,7 @@ instance Concept ConceptChunk where
 
 -- BEGIN VARCHUNK --
 data VarChunk = VC { vname :: String
-                   , vdesc :: Spec
+                   , vdesc :: Sentence
                    , vsymb :: Symbol}
 
 instance Eq VarChunk where

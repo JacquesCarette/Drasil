@@ -6,7 +6,7 @@ import Unit (Unit(..), UDefn(..), DerUChunk(..),
   makeDerU, unitCon)
 import Chunk (ConceptChunk(..))
 import Control.Lens ((^.))
-import Spec (USymb(..), Spec(..))
+import Spec (USymb(..), Sentence(..))
 
 --m^2--
 m_2 :: DerUChunk

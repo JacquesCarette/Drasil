@@ -20,9 +20,9 @@ rType _ = error "Attempting to reference unimplemented reference type"
 
 -- the need for this seems like a hack!
 getRefName :: LayoutObj -> Sentence
-getRefName (Table h d l b)  = S "Table:" :+: simplify l
-getRefName (Section d t _)  = writeSec d :+: simplify t
-getRefName (Figure l _)     = S "Figure:" :+: simplify l
+getRefName (Table h d l b)  = S "Table:" :+: inferName l
+getRefName (Section d t _)  = writeSec d :+: inferName t
+getRefName (Figure l _)     = S "Figure:" :+: inferName l
 getRefName (Paragraph c)    = error "Can't reference paragraphs" --yet
 getRefName (EqnBlock c)     = error "EqnBlock ref unimplemented"
 getRefName (CodeBlock c)    = error "Codeblock ref unimplemented"
@@ -31,16 +31,16 @@ getRefName (BulletList b)   = error "BulletList ref unimplemented"
 getRefName (NumberedList i) = error "NumberedList ref unimplemented"
 getRefName (SimpleList p)   = error "SimpleList ref unimplemented"
 
--- what the heck is this function for ?
-simplify :: Sentence -> Sentence
-simplify (s1 :+: s2) = simplify s1 :+: simplify s2
-simplify (S s1)      = S (stringSimp s1)
-simplify (F _ s)     = S [s]
-simplify (Ref _ _)   = error "Attempting to simplify an existing reference"
-simplify _           = S "" -- Was Empty.
+-- for now, magic: infer the name of sentences!
+inferName :: Sentence -> Sentence
+inferName (s1 :+: s2) = inferName s1 :+: inferName s2
+inferName (S s1)      = S (firstLetter s1)
+inferName (F _ s)     = S [s]
+inferName (Ref _ _)   = error "Attempting to infer the name an existing reference"
+inferName _           = S "" -- Was Empty.
 
-stringSimp :: String -> String
-stringSimp s = (map head (words s))
+firstLetter :: String -> String
+firstLetter = map head . words
 
 repUnd :: String -> String
 repUnd s = map (\c -> if c == '_' then '.' else c) s
@@ -53,7 +53,7 @@ writeSec n
   
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. name))
-getDefName (Theory c) = S $ "T:" ++ stringSimp (repUnd (c ^. name))
+getDefName (Theory c) = S $ "T:" ++ firstLetter (repUnd (c ^. name))
   
 -- Need to figure out Eq of specs or change ref to take String instead of Sentence and use Strings throughout.  
   

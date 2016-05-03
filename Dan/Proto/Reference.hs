@@ -18,6 +18,7 @@ rType (Section d _ _) = Sec
 rType (Definition _)  = Def
 rType _ = error "Attempting to reference unimplemented reference type"
 
+-- the need for this seems like a hack!
 getRefName :: LayoutObj -> Spec
 getRefName (Table h d l b)  = S "Table:" :+: simplify l
 getRefName (Section d t _)  = writeSec d :+: simplify t
@@ -30,12 +31,13 @@ getRefName (BulletList b)   = error "BulletList ref unimplemented"
 getRefName (NumberedList i) = error "NumberedList ref unimplemented"
 getRefName (SimpleList p)   = error "SimpleList ref unimplemented"
 
+-- what the heck is this function for ?
 simplify :: Spec -> Spec
 simplify (s1 :+: s2) = simplify s1 :+: simplify s2
 simplify (S s1)      = S (stringSimp s1)
 simplify (F _ s)     = S [s]
 simplify (Ref _ _)   = error "Attempting to simplify an existing reference"
-simplify _           = Empty
+simplify _           = S "" -- Was Empty.
 
 stringSimp :: String -> String
 stringSimp s = (map head (words s))

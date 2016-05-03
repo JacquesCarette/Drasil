@@ -50,7 +50,6 @@ spec :: Spec -> H.Spec
 spec (S s)     = H.S s
 spec (Sy s)    = H.Sy s
 spec (a :+: b) = spec a H.:+: spec b
-spec Empty     = H.S ""
 spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ accent f s
 spec (N s)     = H.N s
@@ -81,7 +80,7 @@ lay x@(Section depth title contents) =
   ((H.Header (depth+2) (spec title)):(createLayout contents)) 
   (spec $ getRefName x)
 lay (Paragraph c)     = H.Paragraph (spec c)
-lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (spec c)] (spec Empty)
+lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (spec c)] (H.S "")
 lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ getRefName x)
 lay (BulletList cs)   = H.List H.Unordered $ map spec cs
@@ -94,13 +93,13 @@ makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (spec Empty)),
+  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.S "")),
   ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
   ("Label",       H.Paragraph $ H.S $ c ^. name),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
-                  (spec Empty)),
+                  (H.S "")),
   ("Description", H.Paragraph (spec (c ^. descr)))
   ]
 makePairs General = error "Not yet implemented"

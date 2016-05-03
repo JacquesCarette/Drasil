@@ -13,7 +13,6 @@ data Spec where
   Sy    :: USymb -> Spec
   S     :: String -> Spec           -- Strings, used for Descriptions in Chunks
   (:+:) :: Spec -> Spec -> Spec     -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
-  Empty :: Spec                     -- Blank
   U     :: (Render r) => r -> Spec  -- Unicode for special characters
   F     :: Accent -> Char -> Spec  -- Special formatting for certain special
                                     -- chars

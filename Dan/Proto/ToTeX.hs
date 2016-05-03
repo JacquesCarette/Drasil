@@ -50,7 +50,6 @@ spec :: Spec -> T.Spec
 spec (S s)     = T.S s
 spec (Sy s)    = T.Sy s
 spec (a :+: b) = spec a T.:+: spec b
-spec Empty     = T.S ""
 spec (U u)     = T.S $ render TeX u
 spec (F f s)   = spec $ accent f s
 spec (N s)     = T.N s

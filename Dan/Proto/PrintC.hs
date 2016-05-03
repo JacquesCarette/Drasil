@@ -1,51 +1,48 @@
-module PrintC where
+module PrintC(printCode) where
 
 import ASTCode
 import Helpers (paren, hat, ast, pls, slash, hyph)
 
 import Text.PrettyPrint
 
-newtype CType = CType { getType :: Type }
+newtype CType = CType Type
 
-instance Show CType where
-  show (CType IntType)     = "int"
-  show (CType VoidType)    = "void"
-  show (CType StrType)     = "char*"
-  show (CType (PtrType t)) = "*" ++ show (CType t)
-  show (CType DblType)     = "double"
+ptype :: Type -> String
+ptype IntType     = "int"
+ptype VoidType    = "void"
+ptype StrType     = "char*"
+ptype (PtrType t) = "*" ++ ptype t
+ptype DblType     = "double"
   
-printCode :: Code -> Doc
-printCode (C x) = vcat $ map printMethod x
+instance Show CType where
+  show (CType t) = ptype t
 
-printMethod :: Method -> Doc
-printMethod (d, ss) = printDecl d <> text "{" $$ 
-  text "    " <> printStatements ss $$ -- TODO: update tabbing style
+printCode :: Code -> Doc
+printCode (C x) = vcat $ map method x
+
+method :: Method -> Doc
+method (d, ss) = methodDecl d <> text "{" $$ 
+  text "    " <> (vcat $ map stat ss) $$ -- TODO: update tabbing style
   text "}"
 
-printDecl :: Declaration -> Doc
-printDecl (MethDecl t n ds) = text (show (CType t)) <+> text n <> 
-  text (paren $ printArgs ds)
-printDecl _                 = error "Unimplemented declaration in PrintC"
+methodDecl :: MethodDecl -> Doc
+methodDecl (MethodDecl t n ds) = text (ptype t) <+> text n <> 
+  text (paren $ args ds)
   
--- this should also be a fold
-printArgs :: [Declaration] -> String
-printArgs [] = ""
-printArgs ((ArgDecl t v):[])   = show (CType t) ++ " " ++ v
-printArgs (x@(ArgDecl _ _):ds) = printArgs [x] ++ ", " ++ printArgs ds
-printArgs _ = error "Attempted to print non-argument as an argument. See PrintC"
+-- this should also be a fold; and it should go to Doc, not String!
+args :: [ArgsDecl] -> String
+args [] = ""
+args ((ArgsDecl t v):ds) = (ptype t ++ " " ++ v) ++ ", " ++ args ds
 
-printStatements :: [Statement] -> Doc
-printStatements sl = vcat $ map printStmt sl
+stat :: Statement -> Doc
+stat (Return c) = text "return" <+> code c <> text ";"
 
-printStmt :: Statement -> Doc
-printStmt (Return c) = text "return" <+> printCE c <> text ";"
-
-printCE :: CodeExpr -> Doc
-printCE (Var v)    = text v
-printCE (Int i)    = text (show i)
-printCE (Dbl d)    = text (show d)
-printCE (Pow b e)  = printCE b <> hat <> parens (printCE e)
-printCE (Mult x y) = printCE x <+> ast <+> printCE y
-printCE (Add x y)  = parens (printCE x <+> pls <+> printCE y)
-printCE (Div n d)  = parens (printCE n <+> slash <+> printCE d)
-printCE (Sub x y)  = parens (printCE x <+> hyph <+> printCE y)
+code :: CodeExpr -> Doc
+code (Var v)    = text v
+code (Int i)    = text (show i)
+code (Dbl d)    = text (show d)
+code (Pow b e)  = code b <> hat <> parens (code e)
+code (Mult x y) = code x <+> ast <+> code y
+code (Add x y)  = parens (code x <+> pls <+> code y)
+code (Div n d)  = parens (code n <+> slash <+> code d)
+code (Sub x y)  = parens (code x <+> hyph <+> code y)

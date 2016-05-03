@@ -10,13 +10,13 @@ import Chunk (name)
 toCode :: Lang -> CodeType -> EqChunk -> Code
 -- Name should be the name of what you are calculating. For example h_g
 toCode CLang Calc ec = C [
-  ((MethDecl DblType ("calc_"++(ec ^. name)) (makeArgs $ get_dep (equat ec))),
+  ((MethodDecl DblType ("calc_"++(ec ^. name)) (makeArgs $ get_dep (equat ec))),
   [Return (makeCode $ equat ec)])]
 -- toCode _ _ _ = error "Unimplemented code translation in ToCode.hs"
 
-makeArgs :: [String] -> [Declaration]
-makeArgs [] = []
-makeArgs (x:xs) = (ArgDecl DblType x) : makeArgs xs
+makeArgs :: [String] -> [ArgsDecl]
+makeArgs = map (ArgsDecl DblType)
+
 -- Currently assuming type of double for arguments as all examples involve
   -- calculations using known (or calculated) values.
 -- TODO: Add either a toggle or a field in chunks to declare their precision

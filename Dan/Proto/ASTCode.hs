@@ -4,10 +4,12 @@ module ASTCode where
 type Variable = String
 
 data Code = C [Method]
-type Method = (Declaration, [Statement])
+type Method = (MethodDecl, [Statement])
 
-data Declaration = MethDecl Type Name [Declaration]
-                 | ArgDecl Type Variable
+data MethodDecl = MethodDecl Type Name [ArgsDecl]
+
+data ArgsDecl = ArgsDecl Type Variable
+
 type Name = String
 
 data Type = IntType
@@ -29,3 +31,4 @@ data CodeExpr =  Var Variable
               
 data CodeType = Calc
 data Lang = CLang
+

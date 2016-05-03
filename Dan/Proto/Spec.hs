@@ -8,6 +8,14 @@ import Symbol
 data Accent = Grave | Acute deriving Eq
 
 -- For writing "sentences" via combining smaller elements
+
+-- Sentences are made up of some known vocabulary of things:
+-- - symbols
+-- - units (their visual representation)
+-- - words (via String)
+-- - special characters
+-- - accented letters
+-- - References to specific layout objects
 infixr 5 :+:
 data Sentence where
   N     :: Symbol -> Sentence

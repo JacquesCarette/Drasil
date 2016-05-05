@@ -13,6 +13,7 @@ import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
 import Spec (Sentence(..))
 import Control.Lens ((^.))
 import RelationChunk
+import Instances ()
 
 -- import Control.Lens ((^.))
 pcmSymbols :: [UnitalChunk]
@@ -122,8 +123,8 @@ t1descr :: Sentence
 t1descr = 
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 
-  (N $ htCap ^. symbol) :+: S " and density " :+: (N $ density ^. symbol) :+:
-  S ", where " :+: (N $ thFluxVect ^. symbol)) 
+  (U $ htCap ^. symbol) :+: S " and density " :+: (U $ density ^. symbol) :+:
+  S ", where " :+: (U $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.
   

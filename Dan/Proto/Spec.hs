@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs #-}
 module Spec where
 
@@ -10,7 +9,6 @@ data Accent = Grave | Acute deriving Eq
 -- For writing "sentences" via combining smaller elements
 
 -- Sentences are made up of some known vocabulary of things:
--- - symbols
 -- - units (their visual representation)
 -- - words (via String)
 -- - special characters
@@ -18,7 +16,6 @@ data Accent = Grave | Acute deriving Eq
 -- - References to specific layout objects
 infixr 5 :+:
 data Sentence where
-  N     :: Symbol -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
     -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
@@ -54,4 +51,3 @@ sMap :: (String->String) -> Sentence -> Sentence
 sMap f (S a) = S (f a)
 sMap f (a :+: b) = sMap f a :+: sMap f b
 sMap _ a = a
-

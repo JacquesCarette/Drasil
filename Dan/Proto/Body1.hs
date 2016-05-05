@@ -15,6 +15,7 @@ import RecipeTools
 import ToCode
 import ASTCode
 import LayoutObjs
+import Instances ()
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, 
   s3, s3_dd1, s3_dd2, s4, s4c :: LayoutObj
@@ -46,7 +47,7 @@ s2_intro = Paragraph $
   S "the symbol."
   
 s2_table = Table [S "Symbol", S "Description", S "Units"] (mkTable
-  [(\ch -> N (ch ^. symbol)) , 
+  [(\ch -> U (ch ^. symbol)) , 
    (\ch -> ch ^. descr), 
    (\ch -> Sy $ ch ^. unit)]
   [h_g,h_c])
@@ -65,15 +66,15 @@ s4c = CodeBlock (toCode CLang Calc h_c)
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =
   Document ((S "SRS for ") :+: 
-    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> N $ x ^. symbol) ls))))
+    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) ls))))
     (S author) body  
   
 srsBody,lpmBody :: Document
 srsBody = srs [h_g, h_c] "Spencer Smith" [s1, s2, s3, s4]
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
-  (N $ h_g ^. symbol) :+: 
-  (S "and ") :+: (N $ h_c ^. symbol)) (S "Spencer Smith") [l1]
+  (U $ h_g ^. symbol) :+: 
+  (S "and ") :+: (U $ h_c ^. symbol)) (S "Spencer Smith") [l1]
 
 l1 :: LayoutObj
 l1 = Paragraph (

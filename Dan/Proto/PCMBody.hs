@@ -16,8 +16,7 @@ import RecipeTools
 import PCMUnits
 import LayoutObjs
 import Reference
--- import ToCode
--- import ASTCode
+import Instances ()
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -63,7 +62,7 @@ s1_2_intro = Paragraph $
   S "with existing documentation for solar water heating systems."
   
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-  [(\ch -> N (ch ^. symbol)) , 
+  [(\ch -> U (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
    ]
@@ -108,12 +107,12 @@ s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
   (makeRef fig_tank) :+: S ", includes the following elements:"
 
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
-            N (ht_flux_C ^. symbol)) "TankWaterOnly.png"
+            U (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = SimpleList $ [
   (S "PS1", S "Tank containing water"), 
   (S "PS2", S "Heating coil at bottom of tank. (" :+:
-  N (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
+  U (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
   S " into the water.)")]
 
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [s4_1_3_intro,s4_1_3_list]

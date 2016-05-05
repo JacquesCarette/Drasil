@@ -52,7 +52,7 @@ spec (Sy s)    = H.Sy s
 spec (a :+: b) = spec a H.:+: spec b
 spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ accent f s
-spec (N s)     = H.N s
+-- spec (N s)     = H.N s
 spec (Ref t r)   = H.Ref t (spec r)
 
 accent :: Accent -> Char -> Sentence

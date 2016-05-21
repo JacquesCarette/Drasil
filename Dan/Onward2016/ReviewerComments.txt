@@ -1,0 +1,103 @@
+===========================================================================
+                           ONWARD16 Review #27A
+---------------------------------------------------------------------------
+Paper #27: Be Consistent: A Knowledge-Based Approach to Software
+           Engineering
+---------------------------------------------------------------------------
+
+                      Overall merit: 2. Weak reject
+
+                         ===== Paper summary =====
+
+The paper presents a knowledge-based approach for software development which combines various known ideas and helps improve traceability, maintainability, and verifiability. The key idea behind the work is based on three aspects: chunks, recipies, and generators. Chunks represent the actual knowledge base. Recipes represent what information from the knowledge base is necessary and how that information should be displayed. Finally, generators help generate the final artifact and abstracting these details from knowledge.
+
+                      ===== Comments for author =====
+
+They key idea of using chunks, recipies, and generators sounds good for providing a paradigm for software development.
+This reminds of other such popular paradigms such as model-view-controller for GUI/Web developement or latest Application
+Programming Interface (API) based development that resulted in a large number of reusable libraries. This can certainly help 
+improve the software development process in the area of scientific computation. Also, as authors mentioned in Section 3.3,
+certainly, this paradigm can help reduce the duplication of the same knowledge in different places.
+
+Although there are some advantages, the current paper has several issues that need to be addressed:
+1. The title is misleading. It appears as if it can address all forms of software development. The given solution may be
+suitable for scientific computation but i do not see how this can be applied to general software development for large
+products that include millions of lines of code.
+2. Authors have dedicated too much space for discussing existing work. Only in Page 4, their actual contributions are
+explained. It would be great, if they can reduce the sections that describe existing work and devote more for their contributions.
+3. The proposed paradigm may promote reuse but it is not clear how it can stop from going into bad practices when implemented
+in large projects. For example, consider a scenario where there are thousands of chunks. Without having easy search capabilities,
+developers may end up creating similar chunks for the same purposes. 
+4. There are many unsubstantiated claims in the paper. For example, in Page 7, authors mentioned that their "Drasil framework
+can ensure that all software artifacts always remain consistent both internally and with each other". How is this achieved?
+No illustrative examples are provided how this is actually achieved in their framework. Another similar example is the
+following claim "Implementing a likely change is as simple as adjusting a configuration file".
+
+Minor comments:
+there are a few typos in the paper:
+Page 1, Abstract, "combed"
+Page 7, Figure 4, "funamental"
+
+===========================================================================
+                           ONWARD16 Review #27B
+---------------------------------------------------------------------------
+Paper #27: Be Consistent: A Knowledge-Based Approach to Software
+           Engineering
+---------------------------------------------------------------------------
+
+                      Overall merit: 3. Weak accept
+
+                         ===== Paper summary =====
+
+This paper proposes an approach to software development based on the ideas
+of Literate Programming (LP). The authors extend LP to beyond just code, and
+with the main goal to keep all artifacts consistent.
+
+                      ===== Comments for author =====
+
+The problem is well-motivated, at least with respect to scientific computing
+(SC). I thought the crucial observation was that the approach is limited to
+domains that are well understood and stable, which is true of SC. The
+description of the approach is convincing and one worthy of an audience such
+as Onward!
+
+The only real question I have is how well the approach would work in other
+domains. The authors acknowledge the need for a good understanding of and
+stability regarding the domain (or so I interpret "well-established
+theoretical underpinnings"). How "well-established" does the domain need to
+be?  SC, being based on centuries of science, is very well-established. How
+many other domains are equally so? Is the technique limited to just SC, or
+are there domains that are "sufficiently" well-established for it to work? I
+think the paper can be strengthened by some more detailed discussion of the
+characteristics that are needed for success.
+
+The paper is generally well written and organised. I have only one minor
+comment to make in that regard. I tripped up on the comment (p5, para 1,
+column 1) "Above that we have named concepts..." In the diagram, the
+"concepts" box is below the "chunk" box.
+
+===========================================================================
+                           ONWARD16 Review #27C
+---------------------------------------------------------------------------
+Paper #27: Be Consistent: A Knowledge-Based Approach to Software
+           Engineering
+---------------------------------------------------------------------------
+
+                      Overall merit: 1. Reject
+
+                         ===== Paper summary =====
+
+This paper describes Drasil, a system for representing concepts in a DSL and compiling them into documentation and source code. Drasil aims to help developers work more effectively by enabling developers to work with higher level representations of knowledge. In Drasil, developers can describe “chunks” using a Haskell DSL that capture document markup or code at a slightly higher level of abstraction and are then used to generate both a specification document and code. The system is motivated and an example is briefly sketched of how it might be used for capturing textual descriptions and formulas involving SI units.
+
+                      ===== Comments for author =====
+
+Increasing software ilities is arguably the central and overarching goal of software engineering and a primary consideration in language design. This paper proposes to address this goal through the use of a more abstract representation of knowledge (“chunks”) to help reduce duplication and ensure that multiple artifacts are consistent by using the same underlying definition. The paper is ambitious in its aims, envisioning a new way for developers to interact with high level artifacts instead of directly with code or documentation.
+
+However, such goals are not novel. A panoply of techniques from macros to templating systems to software factories to DSLs all envision developers interacting with higher level abstractions of design ideas that centralize where ideas are expressed. A central goal of language design has long been to help developers express ideas at a higher level of abstraction. Indeed, the implementation of the system itself is nothing more than a DSL for a specific domain expressed in an existing language (Haskell) for writing such abstractions.
+
+It is entirely unclear what new idea is contributed in this paper and if or how it differs from existing techniques. The related work extensively summarizes literate programming, which helps to motivate the goals. But there is no comparison to other approaches to help developers work with abstractions. How does it vary from existing macro or templating approaches for centralizing knowledge in one place? What is the scope of where this technique might be preferable or applicable? Instead of presenting a generalizable idea, much of the design feels more of an ad-hoc example of using a DSL for generating code and documentation.
+
+Most of the paper consists of fairly high-level philosophy that never helps motivate the specific decisions chosen or differentiate the approach taken.
+
+The specific scenario of SI units is not compelling. It is unclear why it is important to have both a textual description and expressions for the SI units defined in one place. Even if this is the case, would a library for expressing such functionality be a better solution? Moreover, the macro approach taken introduces a number of substantial issues, such as reducing modularity in code. What are the benefits of macros over the alternatives?
+

@@ -1,14 +1,7 @@
-{-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.HeatTransfer where
-import Language.Drasil.Expr (Expr(..))
+
+import Language.Drasil
 import Language.Drasil.SI_Units
-import Language.Drasil.Unicode (Tau(..))
-import Language.Drasil.Unit (Unit(..), UDefn(..), DerUChunk(..), FundUnit(..),
-  from_udefn)
-import Language.Drasil.Chunk (VarChunk(..), ConceptChunk(..), makeCC, makeVC)
-import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
-import Language.Drasil.Symbol
-import Language.Drasil.Spec (USymb(..),Sentence(..))
 
 import Control.Lens ((^.))
 

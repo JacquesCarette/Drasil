@@ -8,6 +8,8 @@ Synopsis:	A framework for code and document generation for scientific software
 library
   exposed-modules:
     Language.Drasil
+  other-modules:
+    Language.Drasil.Expr
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

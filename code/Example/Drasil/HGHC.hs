@@ -6,15 +6,9 @@ import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Example.Drasil.HeatTransfer
-import Language.Drasil.Spec (Sentence(..),Accent(..))
-import Language.Drasil.Unit (Unit(..))
+
+import Language.Drasil
 import Language.Drasil.SI_Units (si_units)
-import Language.Drasil.Chunk
-import Language.Drasil.Misc
-import Language.Drasil.CCode.Import
-import Language.Drasil.CCode.AST
-import Language.Drasil.Document
-import Language.Drasil.Instances ()
 
 s1, s1_intro, s1_table, s2, s2_intro, s2_table, 
   s3, s3_dd1, s3_dd2, s4, s4c :: LayoutObj

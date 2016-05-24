@@ -1,20 +1,12 @@
-{-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.PCM.Example where
-import Language.Drasil.Expr (Expr(..), Relation(..))
-import Language.Drasil.SI_Units
-import Language.Drasil.Unicode (Tau(..), Delta(..), Rho(..), Nabla(..)) --, Phi(..))
-import Language.Drasil.Symbol
-import Language.Drasil.Chunk.Unital
-import Example.Drasil.PCM.Units
-import Language.Drasil.SymbolAlphabet
-import Language.Drasil.Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
--- import EqChunk (fromEqn,EqChunk(..))
-import Language.Drasil.Spec (Sentence(..))
-import Control.Lens ((^.))
-import Language.Drasil.Chunk.Relation
-import Language.Drasil.Instances ()
 
--- import Control.Lens ((^.))
+import Example.Drasil.PCM.Units
+
+import Language.Drasil
+import Language.Drasil.SI_Units
+
+import Control.Lens ((^.))
+
 pcmSymbols :: [UnitalChunk]
 pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap,htCap_Liq,htCap_W,tank_D,ht_gen_vol,
   ht_xfer_co,ht_xfer_CW,tank_L,mass,water_m, -- norm_vect, 
@@ -126,4 +118,3 @@ t1descr =
   S ", where " :+: (U $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.
-  

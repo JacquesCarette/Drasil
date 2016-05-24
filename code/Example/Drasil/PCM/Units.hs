@@ -1,11 +1,9 @@
 module Example.Drasil.PCM.Units where
 
+import Language.Drasil
 import Language.Drasil.SI_Units
-import Language.Drasil.Unit (Unit(..), UDefn(..), DerUChunk(..),
-  makeDerU, unitCon)
-import Language.Drasil.Chunk (ConceptChunk(..))
+
 import Control.Lens ((^.))
-import Language.Drasil.Spec (USymb(..), Sentence(..))
 
 --m^2--
 m_2 :: DerUChunk

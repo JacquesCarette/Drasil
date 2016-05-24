@@ -6,23 +6,31 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..)
+  , Expr(..), Relation(..)
   -- all the stuff from Unicode
   , Alpha(..), Circle(..), Delta(..), Nabla(..), Partial(..)
   , Phi(..), Rho(..), Tau(..)
   -- Unit
   , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), from_udefn
+  , makeDerU, unitCon
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
   , descr, Quantity(..)
   -- Chunk.Eq
   , EqChunk(..), fromEqn
+  -- Chunk.Unital
+  , UnitalChunk(..), makeUC
+  -- Chunk.Relation
+  , RelationChunk, makeRC
   -- Spec
   , USymb(..), Sentence(..), Accent(..)
   -- Document
   , LayoutObj(..), Document(..), DType(..)
   -- Symbol
-  , Symbol(..), sub, sup
+  , Symbol(..), sub, sup, vec, hat
+  -- SymbolAlphabet
+  , cA, cC, cD, cL, cT, cV, cW
+  , lG, lH, lM, lN, lQ, lT
   -- Misc
   , mkTable
 
@@ -32,7 +40,7 @@ module Language.Drasil (
   , Lang(CLang), CodeType(Calc)
 ) where
 
-import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Expr (Expr(..), Relation(..))
 import Language.Drasil.Output.Formats (DocType(SRS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..))
 import Language.Drasil.Recipe (Recipe(..))
@@ -40,8 +48,11 @@ import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
+import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..))
-import Language.Drasil.Symbol (Symbol(..), sub, sup)
+import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
+import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc (mkTable)
 import Language.Drasil.Instances ()
 import Language.Drasil.CCode.Import (toCode)

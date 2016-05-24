@@ -1,23 +1,14 @@
-{-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.PCM.Body where
+
 import Data.Char (toLower)
 import Data.List (intersperse)
-
-import Language.Drasil.Printing.Helpers
-import Example.Drasil.PCM.Example
-
-import Language.Drasil.Spec (Sentence(..),sMap, Accent(..)) --May need to update imports to hide Ref.
-                            --More likely setup an API or something to
-                            --Restrict access for novice users.
-import Language.Drasil.Unit (Unit(..), UnitDefn(..))
-import Language.Drasil.SI_Units 
-import Language.Drasil.Chunk
 import Control.Lens ((^.))
-import Language.Drasil.Misc
+
+import Example.Drasil.PCM.Example
 import Example.Drasil.PCM.Units
-import Language.Drasil.Document
-import Language.Drasil.Reference
-import Language.Drasil.Instances ()
+
+import Language.Drasil
+import Language.Drasil.SI_Units 
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]

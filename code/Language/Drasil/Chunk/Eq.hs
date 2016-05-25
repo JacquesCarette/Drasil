@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 module Language.Drasil.Chunk.Eq(EqChunk(..), fromEqn) where
 
 import Control.Lens (Simple, Lens)

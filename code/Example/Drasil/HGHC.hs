@@ -1,33 +1,21 @@
-{-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.HGHC where
+module Example.Drasil.HGHC(srsBody, lpmBody) where
 
 import Data.List (intersperse)
-import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Example.Drasil.HeatTransfer
+import Example.Drasil.Units
 
 import Language.Drasil
 import Language.Drasil.SI_Units (si_units)
 
-s1, s1_intro, s1_table, s2, s2_intro, s2_table, 
+vars :: [EqChunk]
+vars = [h_g, h_c]
+
+s1, s2, s2_intro, s2_table, 
   s3, s3_dd1, s3_dd2, s4, s4c :: LayoutObj
 
-s1 = Section 0 (S "Table of Units") [s1_intro, s1_table]
-
-s1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
-           (F Grave 'e') :+: S "me International d'Unit" :+:
-           (F Acute 'e') :+: S "s) is employed as the unit system." :+:
-           S " In addition to the basic units, several derived units are" :+: 
-           S " employed as described below. For each unit, the symbol is" :+: 
-           S " given followed by a description of the unit with the SI" :+: 
-           S " name in parentheses.")
-
-s1_table = Table [S "Symbol", S "Description"] (mkTable
-  [(\x -> Sy (x ^. unit)),
-   (\x -> (x ^. descr) :+: S (" (" ++ map toLower (x ^. name) ++ ")"))
-  ] si_units)
-  (S "Table of Units") False
+s1 = table_of_units si_units
 
 s2 = Section 0 (S "Table of Symbols") [s2_intro, s2_table]
 
@@ -43,14 +31,10 @@ s2_table = Table [S "Symbol", S "Description", S "Units"] (mkTable
   [(\ch -> U (ch ^. symbol)) , 
    (\ch -> ch ^. descr), 
    (\ch -> Sy $ ch ^. unit)]
-  [h_g,h_c])
+  vars)
   (S "Table of Symbols") False
 
-s3 = Section 0 (S "Data Definitions") [s3_dd1, s3_dd2]
-
-s3_dd1 = Definition (Data h_g)
-
-s3_dd2 = Definition (Data h_c)
+s3 = Section 0 (S "Data Definitions") $ map (Definition . Data) vars
 
 s4 = Section 0 (S "Code -- Test") [s4c]
 

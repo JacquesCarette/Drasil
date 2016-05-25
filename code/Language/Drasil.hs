@@ -11,8 +11,8 @@ module Language.Drasil (
   , Alpha(..), Circle(..), Delta(..), Nabla(..), Partial(..)
   , Phi(..), Rho(..), Tau(..)
   -- Unit
-  , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), from_udefn
-  , makeDerU, unitCon
+  , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
+  , from_udefn , makeDerU, unitCon
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
   , descr, Quantity(..)
@@ -23,9 +23,11 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationChunk, makeRC
   -- Spec
-  , USymb(..), Sentence(..), Accent(..)
+  , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
   , LayoutObj(..), Document(..), DType(..)
+  -- Reference
+  , makeRef
   -- Symbol
   , Symbol(..), sub, sup, vec, hat
   -- SymbolAlphabet
@@ -33,6 +35,8 @@ module Language.Drasil (
   , lG, lH, lM, lN, lQ, lT
   -- Misc
   , mkTable
+  -- Printing.Helpers
+  , capitalize, paren, sqbrac
 
   -- CCode.Import
   , toCode
@@ -50,10 +54,12 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
-import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..))
+import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
+import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc (mkTable)
 import Language.Drasil.Instances ()
+import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCode)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))

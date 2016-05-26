@@ -117,7 +117,7 @@ p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
 p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Mul x y)  = mul x y
 p_expr (Frac n d) = fraction (p_expr n) (p_expr d) --Found in Helpers
-p_expr (Div n d)  = p_expr n ++ "/" ++ p_expr d
+p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
@@ -125,9 +125,20 @@ p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 
 mul :: Expr -> Expr -> String
-mul x y@(Dbl _) = p_expr x ++ "*" ++ p_expr y
-mul x y@(Int _) = p_expr x ++ "*" ++ p_expr y
-mul x y         = p_expr x ++ p_expr y
+mul x y@(Dbl _)   = p_expr x ++ "*" ++ p_expr y
+mul x y@(Int _)   = p_expr x ++ "*" ++ p_expr y
+mul x y@(Add _ _) = p_expr x ++ paren (p_expr y)
+mul x y@(Sub _ _) = p_expr x ++ paren (p_expr y)
+mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
+mul x@(Sub _ _) y = paren (p_expr x) ++ p_expr y
+mul x y           = p_expr x ++ p_expr y
+
+divide :: Expr -> Expr -> String
+divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
 neg x@(Var _) = "-" ++ p_expr x

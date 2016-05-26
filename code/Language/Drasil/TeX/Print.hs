@@ -125,12 +125,12 @@ p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 
 mul :: Expr -> Expr -> String
+mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
+mul x@(Sub _ _) y = paren (p_expr x) ++ p_expr y
 mul x y@(Dbl _)   = p_expr x ++ "*" ++ p_expr y
 mul x y@(Int _)   = p_expr x ++ "*" ++ p_expr y
 mul x y@(Add _ _) = p_expr x ++ paren (p_expr y)
 mul x y@(Sub _ _) = p_expr x ++ paren (p_expr y)
-mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
-mul x@(Sub _ _) y = paren (p_expr x) ++ p_expr y
 mul x y           = p_expr x ++ p_expr y
 
 divide :: Expr -> Expr -> String

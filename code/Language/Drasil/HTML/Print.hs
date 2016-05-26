@@ -106,7 +106,7 @@ p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
 p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
 p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
-p_expr (Div a b)  = p_expr a ++ "/" ++ p_expr b
+p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = p_expr a ++ sup (p_expr b)
 p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
@@ -114,9 +114,20 @@ p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (Neg a)    = neg a
 
 mul :: Expr -> Expr -> String
+mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b
+mul a@(Sub _ _) b = paren (p_expr a) ++ p_expr b
 mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
+mul a b@(Add _ _) = p_expr a ++ paren (p_expr b)
+mul a b@(Sub _ _) = p_expr a ++ paren (p_expr b)
 mul a b         = p_expr a ++ p_expr b
+
+divide :: Expr -> Expr -> String
+divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
 neg a@(Var _) = "-" ++ p_expr a

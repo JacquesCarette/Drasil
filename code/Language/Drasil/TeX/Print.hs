@@ -153,12 +153,13 @@ neg x         = paren ("-" ++ p_expr x)
 -----------------------------------------------------------------
   
 makeTable :: [[Spec]] -> String -> Bool -> String -> Doc
-makeTable lls r bool t = text ("\\begin{longtable}" ++ brace (header lls)) 
+makeTable lls r bool t = text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)) 
   $$ makeRows lls $$ (if bool then caption t else empty) $$
-  label r $$ text "\\end{longtable}"
+  label r $$ text ("\\end{" ++ lt ++ "}")
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
                         brace (show tableWidth ++ "cm")
-
+        lt = "longtable" ++ (if not bool then "*" else "")
+        
 makeRows :: [[Spec]] -> Doc
 makeRows []     = empty
 makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs

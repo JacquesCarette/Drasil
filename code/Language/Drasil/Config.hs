@@ -33,7 +33,7 @@ numberedSections = True
 defaultSRSparams :: [DocParams]
 defaultSRSparams = [
   DocClass  [] "article",
-  UsePackages ["booktabs","longtable","listings","graphics","hyperref"]
+  UsePackages ["booktabs","longtable","listings","graphics","hyperref","caption"]
   ]
 
 defaultLPMparams :: [DocParams]

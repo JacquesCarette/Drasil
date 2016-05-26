@@ -2,6 +2,7 @@ module Example.Drasil.HeatTransfer where
 
 import Language.Drasil
 import Language.Drasil.SI_Units
+import Language.Drasil.SymbolAlphabet
 
 import Control.Lens ((^.))
 
@@ -22,14 +23,11 @@ heat_transfer_eqn = USynonym (UProd
   [kilogram ^. unit, UPow (second ^. unit) (-3),
    UPow (centigrade ^. unit) (-1)])
 
-h,c :: Symbol
-h = Atomic "h"
-c = Atomic "c"
 --------------- --------------- --------------- ---------------
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
 tau_c :: VarChunk
-tau_c = makeVC "tau_c" "clad thickness" (sub (Special Tau_L) c)
+tau_c = makeVC "tau_c" "clad thickness" ((Special Tau_L) `sub` lC)
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}
@@ -40,7 +38,7 @@ h_c_eq = 2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b))
 h_c :: EqChunk
 h_c = fromEqn "h_c" (S 
   "convective heat transfer coefficient between clad and coolant")
-  (sub h c) heat_transfer h_c_eq
+  (lH `sub` lC) heat_transfer h_c_eq
 
 -- --------------- --------------- --------------- ---------------
 -- {--------------- Begin h_g ---------------}
@@ -51,25 +49,25 @@ h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 h_g :: EqChunk
 h_g = fromEqn "h_g" (S
   "effective heat transfer coefficient between clad and fuel surface")
-  (sub h (Atomic "g")) heat_transfer h_g_eq
+  (lH `sub` lG) heat_transfer h_g_eq
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}
 --------------- --------------- --------------- ---------------
 
 h_b :: VarChunk
-h_b = makeVC "h_b" "initial coolant film conductance" (sub h (Atomic "b"))
+h_b = makeVC "h_b" "initial coolant film conductance" (lH `sub` lB)
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_p ---------------}
 --------------- --------------- --------------- ---------------
 
 h_p :: VarChunk
-h_p = makeVC "h_p" "initial gap film conductance" (sub h (Atomic "p"))
+h_p = makeVC "h_p" "initial gap film conductance" (lH `sub` lP)
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin k_c ---------------}
 --------------- --------------- --------------- ---------------
 
 k_c :: VarChunk
-k_c = makeVC "k_c" "clad conductivity" (sub h c)
+k_c = makeVC "k_c" "clad conductivity" (lK `sub` lC)

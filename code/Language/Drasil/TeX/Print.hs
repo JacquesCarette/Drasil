@@ -65,7 +65,7 @@ printLO (List lt is)            = makeList lt is
 printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
-print l = foldr ($$) empty $ map printLO l
+print l = foldr ($$) empty $ map (<> (text "\n")) $ map printLO l
 
 -----------------------------------------------------------------
 ------------------BEGIN SPEC PRINTING----------------------------

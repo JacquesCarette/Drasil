@@ -226,7 +226,7 @@ uSymbPrint (UName n) = do
       _        -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
-  return $ foldr1 (\x -> (++x)) 
+  return $ foldr1 (\x -> (x++)) 
     (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
 uSymbPrint (UPow n p) = do
   c <- ask

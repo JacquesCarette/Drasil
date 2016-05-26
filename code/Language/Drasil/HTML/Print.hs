@@ -90,7 +90,7 @@ symbol (Atop Hat s)          = symbol s ++ "&#770;"
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbol s
-uSymb (UProd l)           = foldr1 (\x -> (++x)) (map uSymb l)
+uSymb (UProd l)           = foldr1 (\x -> (x++)) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
 uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"

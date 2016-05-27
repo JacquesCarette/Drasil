@@ -1,0 +1,3 @@
+I needed to change the Unicode.hs file to include several additional symbols.  This also required changes to Drasil.hs to import the new unicode symbols (also made small addition to import all of the single letter Atomic shortcuts (lA, lB, ... lZ,  and  cA, cB, ... cZ).
+
+The changed files are included in the library_modifications folder in this directory -- I did not commit any changes to the library.

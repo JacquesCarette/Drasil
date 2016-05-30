@@ -17,8 +17,7 @@ s1, s2, s3, s4 :: LayoutObj
 s1 = table_of_units si_units
 s2 = table_of_symbols vars
 s3 = Section 0 (S "Data Definitions") $ map (Definition . Data) vars
-s4 = Section 0 (S "Test Space") ((map (CodeBlock . toCode CLang Calc) [h_c]) ++
-        [Paragraph (Quote (S "This is a quote with " :+: U (h_c ^. symbol)))])
+s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [h_c]
 
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =

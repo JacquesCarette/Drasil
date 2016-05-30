@@ -122,6 +122,12 @@ mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
 mul a b@(Add _ _) = p_expr a ++ paren (p_expr b)
 mul a b@(Sub _ _) = p_expr a ++ paren (p_expr b)
+mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ p_expr y
+mul x y@(Sym (Concat _)) = p_expr x ++ "*" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
+                            p_expr x ++ p_expr y
+mul x y@(Sym (Atomic s)) = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
+                            p_expr x ++ p_expr y
 mul a b         = p_expr a ++ p_expr b
 
 divide :: Expr -> Expr -> String

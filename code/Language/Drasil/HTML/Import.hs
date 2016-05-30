@@ -91,7 +91,7 @@ lay x@(Figure c f)    = H.Figure (spec (getRefName x)) (spec c) f
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
-  ("Label",       H.Paragraph $ H.S "DD: " H.:+: (H.N $ c ^. symbol)),
+  ("Label",       H.Paragraph $ H.N $ c ^. symbol),
   ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.S "")),
   ("Description", H.Paragraph (buildDDDescription c))

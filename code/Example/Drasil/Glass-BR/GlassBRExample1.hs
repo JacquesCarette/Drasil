@@ -205,7 +205,7 @@ calOfCap :: RelationChunk
 calOfCap = makeRC "Calculation of Capacity(LR)" capdescr cap_rel
 
 cap_rel :: Relation
-cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF)) -- multipilication sign 
+cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF)) 
 
 capdescr :: Sentence
 capdescr =
@@ -217,7 +217,7 @@ calOfDe :: RelationChunk
 calOfDe = makeRC "Calculation of Demand(q)" dedescr de_rel
 
 de_rel :: Relation
-de_rel = (C demand) := (C demand)  -- function?
+de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd] 
 
 dedescr :: Sentence
 dedescr = 
@@ -235,7 +235,7 @@ hFromt :: RelationChunk
 hFromt = makeRC "Minimum Thickness(h) from Nominal Thickness(t)" hFromtdescr hFromt_rel
 
 hFromt_rel :: Relation
-hFromt_rel = (C act_thick) := (C nom_thick) -- mapping?
+hFromt_rel = (C act_thick) := FCall (C act_thick) [C nom_thick]
 
 hFromtdescr :: Sentence
 hFromtdescr =
@@ -261,7 +261,7 @@ strDisFac :: RelationChunk
 strDisFac = makeRC "Stress Distribution Factor(J)" strDisFacdescr strDisFac_rel
 
 strDisFac_rel :: Relation
-strDisFac_rel = (C sdf) := (C sdf) -- function?
+strDisFac_rel = (C sdf) := FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFacdescr :: Sentence
 strDisFacdescr =
@@ -289,7 +289,7 @@ gTF :: RelationChunk
 gTF = makeRC "Glass Type Factor(GTF)" gTFdescr gTF_rel
 
 gTF_rel :: Relation
-gTF_rel = (C glaTyFac) := (C glaTyFac) -- mapping?
+gTF_rel = (C glaTyFac) := FCall (C glaTyFac) [C glass_type]
 
 gTFdescr :: Sentence
 gTFdescr = 
@@ -320,7 +320,7 @@ tolPre :: RelationChunk
 tolPre = makeRC "Tolerable Pressure(q_hat_tol)" tolPredescr tolPre_rel
 
 tolPre_rel :: Relation
-tolPre_rel = (C tolLoad) := (C tolLoad) -- function?
+tolPre_rel = (C tolLoad) := FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
 tolPredescr :: Sentence
 tolPredescr =

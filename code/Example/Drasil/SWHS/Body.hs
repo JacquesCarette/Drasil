@@ -6,7 +6,12 @@ import Data.Char (toLower)
 import Data.List (intersperse)
 import Control.Lens ((^.))
 
-import Example.Drasil.SWHS.Example
+import Example.Drasil.SWHS.Unitals
+import Example.Drasil.SWHS.Concepts
+import Example.Drasil.SWHS.TModel1
+import Example.Drasil.SWHS.TModel2
+import Example.Drasil.SWHS.TModel3
+import Example.Drasil.SWHS.DataDefs
 import Example.Drasil.SWHS.Units
 
 import Language.Drasil
@@ -140,10 +145,9 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
                 S "constrained in any way. Even when the process is not " :+:
                 S "waterfall, as Parnas and Clements [citation] point out, " :+:
                 S "the most logical way to present the documentation is " :+:
-                S "still to \"fake\" a rational design process.")]
+                S "still to " :+: Quote (S "fake") :+: S " a rational design process.")]
 
 --How to italicize words in sentence?
---How to include quotation marks?
 --How to cite?
 
 s2_2 = Section 1 (S "Scope of Requirements") [s2_2_contents]
@@ -331,11 +335,6 @@ s4_2_2 = Section 2 (thModel ^. descr :+: S "s") [s4_2_2_intro, s4_2_2_T1, s4_2_2
 
 s4_2_2_intro = Paragraph (S "This section focuses on the general equations" :+:
                S " and laws that SWHS is based on.")
-
-s4_2_2_T1, s4_2_2_T2, s4_2_2_T3 :: LayoutObj
-s4_2_2_T1 = Definition (Theory t1ConsThermE)
-s4_2_2_T2 = Definition (Theory t2SensHtE)
-s4_2_2_T3 = Definition (Theory t3LatHtE)
 
 --Theory has to be RelationChunk....
 --No way to include "Source" or "Ref. By" sections?

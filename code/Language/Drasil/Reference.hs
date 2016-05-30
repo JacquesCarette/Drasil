@@ -13,22 +13,22 @@ makeRef r = Ref (rType r) (getRefName r)
 rType :: LayoutObj -> RefType
 rType (Table _ _ _ _) = Tab
 rType (Figure _ _)    = Fig
-rType (Section d _ _) = Sec
+rType (Section _ _ _) = Sec
 rType (Definition _)  = Def
 rType _ = error "Attempting to reference unimplemented reference type"
 
 -- the need for this seems like a hack!
 getRefName :: LayoutObj -> Sentence
-getRefName (Table h d l b)  = S "Table:" :+: inferName l
+getRefName (Table _ _ l _)  = S "Table:" :+: inferName l
 getRefName (Section d t _)  = writeSec d :+: inferName t
 getRefName (Figure l _)     = S "Figure:" :+: inferName l
-getRefName (Paragraph c)    = error "Can't reference paragraphs" --yet
-getRefName (EqnBlock c)     = error "EqnBlock ref unimplemented"
-getRefName (CodeBlock c)    = error "Codeblock ref unimplemented"
+getRefName (Paragraph _)    = error "Can't reference paragraphs" --yet
+getRefName (EqnBlock _)     = error "EqnBlock ref unimplemented"
+getRefName (CodeBlock _)    = error "Codeblock ref unimplemented"
 getRefName (Definition d)   = getDefName d
-getRefName (BulletList b)   = error "BulletList ref unimplemented"
-getRefName (NumberedList i) = error "NumberedList ref unimplemented"
-getRefName (SimpleList p)   = error "SimpleList ref unimplemented"
+getRefName (BulletList _)   = error "BulletList ref unimplemented"
+getRefName (NumberedList _) = error "NumberedList ref unimplemented"
+getRefName (SimpleList _)   = error "SimpleList ref unimplemented"
 
 -- for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence

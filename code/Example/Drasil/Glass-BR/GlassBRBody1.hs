@@ -350,9 +350,9 @@ s7_list = SimpleList $
     S "data constraints mentioned in 6.2.5. If any of the input parameters is out of bounds, an error " :+:
     S "message is displayed and the calculations stop."),
   (S "R4", S "Output the input quantities from R1 and the known quantities from R2"),
-  (S "R5", S "If is_safe1 and is_safe2 (from T1 and T2) output the message 'For the given input parameters, " :+:
-    S "the glass is considered safe.' If the condition is false, then output the message 'For the given " :+:
-    S "input parameters, the glass is NOT considered safe.'"),
+  (S "R5", S "If is_safe1 and is_safe2 (from T1 and T2) output the message " :+: Quote (S "For the given " :+:
+    S "input parameters, the glass is considered safe.") :+: S " If the condition is false, then output the " :+:
+    S "message " :+: Quote (S "For the given input parameters, the glass is NOT considered safe.")),
   (S "R6", S "Output the following quantities: - Probability of breakage (" :+: (U $ prob_br ^. symbol) :+:    -- bullets in simplelist
     S ") (IM1) - Load Resistance (LR) (IM2) - Applied load (demand) (" :+: (U $ demand ^. symbol) :+: 
     S ") (IM3) - Actual thickness (" :+: (U $ act_thick ^. symbol) :+: S ") (DD1) - Load Duration Factor " :+:
@@ -385,20 +385,21 @@ s8_list = SimpleList $
 s9 = Section 0 (S "References") [s9_list]
 
 s9_list = SimpleList $
-  [(S "[1]", S "N. Koothoor, 'A document drive approach to certifying scientific computing software, Master's " :+:
-    S "thesis, McMaster University, Hamilton, Ontario, Canada, 2013."),
-  (S "[2]", S "W. S. Smith and L. Lai, 'A new requirements template for scientific computing,' in Proceedings of " :+:
-    S "the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques " :+:
-    S "and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt" :+: (F Acute 'e') :+:
-    S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International " :+:
-    S "Requirements Engineering Conference, 2005."),
-  (S "[3]", S "J. Robertson and S. Robertson, 'Volere requirements specification template edition 16.'" :+:
-    S " 'www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf', 2012."),
-  (S "[4]", S "ASTM Standards Committee, 'Standard practice for determining load resistance of glass in buildings,' " :+:
-    S "Standard E1300-09a, American Society for Testing and Material (ASTM), 2009."),
-  (S "[5]", S "ASTM,developed by subcommittee C1408,Book of standards 15.02, 'Standard specification for flat glass,C1036.'"),
-  (S "[6]", S "ASTM,developed by subcommittee C14.08,Book of standards 15.02, 'Specification for heat treated flat " :+:
-    S "glass-Kind HS, kind FT coated and uncoated glass,C1048.'")]
+  [(S "[1]", S "N. Koothoor, " :+: Quote (S "A document drive approach to certifying scientific computing software,") :+:
+    S " Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013."),
+  (S "[2]", S "W. S. Smith and L. Lai, " :+: Quote (S "A new requirements template for scientific computing,") :+:
+    S " in Proceedings of the First International Workshop on Situational Requirements Engineering Processes " :+:
+    S "- Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, " :+:
+    S "SREP'05 (J.Ralyt" :+: (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, " :+:
+    S "In conjunction with 13th IEEE International Requirements Engineering Conference, 2005."),
+  (S "[3]", S "J. Robertson and S. Robertson, " :+: Quote (S "Volere requirements specification template edition 16.") :+:
+    S " " :+: Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf") :+: S ", 2012."),
+  (S "[4]", S "ASTM Standards Committee, " :+: Quote (S "Standard practice for determining load resistance of glass in " :+:
+    S "buildings,") :+: S " Standard E1300-09a, American Society for Testing and Material (ASTM), 2009."),
+  (S "[5]", S "ASTM,developed by subcommittee C1408,Book of standards 15.02, " :+: Quote (S "Standard specification for " :+:
+    S "flat glass,C1036.")),
+  (S "[6]", S "ASTM,developed by subcommittee C14.08,Book of standards 15.02, " :+: Quote (S "Specification for heat " :+:
+    S "treated flat glass-Kind HS, kind FT coated and uncoated glass,C1048."))]
 
 s10 = Section 0 (S "Appendix") [s10_intro,fig_2,fig_3]
 

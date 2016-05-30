@@ -32,7 +32,7 @@ expr (Neg a)      = T.Neg  (expr a)
 expr (C c)        = T.Sym  (c ^. symbol)
 expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
                            (T.Mul (T.Sym (Special Partial)) (expr b))
---expr _ = error "Unimplemented expression transformation in ToTeX."
+expr (FCall f x)  = T.Call (expr f) (expr x)
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)

@@ -18,20 +18,21 @@ import Language.Drasil.Reference
 
 
 expr :: Expr -> H.Expr
-expr (V v)    = H.Var   v
-expr (Dbl d)  = H.Dbl   d
-expr (Int i)  = H.Int   i
-expr (a :* b) = H.Mul   (expr a) (expr b)
-expr (a :+ b) = H.Add   (expr a) (expr b)
-expr (a :/ b) = H.Frac  (replace_divs a) (replace_divs b)
-expr (a :^ b) = H.Pow   (expr a) (expr b)
-expr (a :- b) = H.Sub   (expr a) (expr b)
-expr (a :. b) = H.Dot   (expr a) (expr b)
-expr (Neg a)  = H.Neg   (expr a)
+expr (V v)       = H.Var   v
+expr (Dbl d)     = H.Dbl   d
+expr (Int i)     = H.Int   i
+expr (a :* b)    = H.Mul   (expr a) (expr b)
+expr (a :+ b)    = H.Add   (expr a) (expr b)
+expr (a :/ b)    = H.Frac  (replace_divs a) (replace_divs b)
+expr (a :^ b)    = H.Pow   (expr a) (expr b)
+expr (a :- b)    = H.Sub   (expr a) (expr b)
+expr (a :. b)    = H.Dot   (expr a) (expr b)
+expr (Neg a)     = H.Neg   (expr a)
 expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
                           (H.Mul (H.Sym (Special Partial)) (expr b))
-expr (C c)    = H.Sym   (c ^. symbol)
---expr _ = error "Unimplemented expression transformation in ToTeX."
+expr (C c)       = H.Sym   (c ^. symbol)
+expr (FCall f x) = H.Call (expr f) (expr x)
+
 
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)

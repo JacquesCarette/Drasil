@@ -112,6 +112,7 @@ p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (Neg a)    = neg a
+p_expr (Call f x) = p_expr f ++ paren (p_expr x)
 
 mul :: Expr -> Expr -> String
 mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b

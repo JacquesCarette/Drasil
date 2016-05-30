@@ -25,7 +25,8 @@ data Sentence where
                                        -- chars
   Ref   :: RefType -> Sentence -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
-
+  Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
+                                    
 --Moving this here to avoid cyclic imports
 data USymb = UName Symbol
            | UProd [USymb]

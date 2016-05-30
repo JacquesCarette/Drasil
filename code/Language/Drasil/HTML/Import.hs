@@ -52,7 +52,8 @@ spec (a :+: b) = spec a H.:+: spec b
 spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ accent f s
 -- spec (N s)     = H.N s
-spec (Ref t r)   = H.Ref t (spec r)
+spec (Ref t r) = H.Ref t (spec r)
+spec (Quote q) = H.S "\"" H.:+: spec q H.:+: H.S "\""
 
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.

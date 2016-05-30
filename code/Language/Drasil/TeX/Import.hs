@@ -54,6 +54,7 @@ spec (U u)     = T.S $ render TeX u --TODO: Need to know context before printing
 spec (F f s)   = spec $ accent f s
 -- spec (N s)     = T.N s
 spec (Ref t r)   = T.Ref t (spec r)
+spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"

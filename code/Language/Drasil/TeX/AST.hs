@@ -19,7 +19,7 @@ data Expr = Var  Variable
           | Eq   Expr Expr
           | Dot  Expr Expr
           | Neg  Expr
-          | Call Expr Expr
+          | Call Expr [Expr]
 
 infixr 5 :+:
 data Spec = E Expr

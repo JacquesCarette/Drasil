@@ -24,7 +24,9 @@ data Expr where
   Neg   :: Expr -> Expr
   Deriv :: Expr -> Expr -> Expr
   C     :: Quantity c => c -> Expr
-  FCall :: Expr -> Expr -> Expr --F(x) would be (FCall F x) or similar
+  FCall :: Expr -> [Expr] -> Expr --F(x) would be (FCall F [x]) or similar
+                                  --FCall accepts a list of params
+                                  --F(x,y) would be (FCall F [x,y]) or sim.
 
 infixr 4 :=
 data Relation where

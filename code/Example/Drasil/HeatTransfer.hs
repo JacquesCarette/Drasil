@@ -44,7 +44,7 @@ h_c = fromEqn "h_c" (S
 -- {--------------- Begin h_g ---------------}
 -- --------------- --------------- --------------- ---------------
 h_g_eq :: Expr
-h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
+h_g_eq = (FCall (C h_c) [C k_c, C h_p] :* (Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 
 h_g :: EqChunk
 h_g = fromEqn "h_g" (S

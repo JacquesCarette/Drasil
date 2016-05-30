@@ -31,7 +31,7 @@ expr (Neg a)     = H.Neg   (expr a)
 expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
                           (H.Mul (H.Sym (Special Partial)) (expr b))
 expr (C c)       = H.Sym   (c ^. symbol)
-expr (FCall f x) = H.Call (expr f) (expr x)
+expr (FCall f x) = H.Call (expr f) (map expr x)
 
 
 rel :: Relation -> H.Expr

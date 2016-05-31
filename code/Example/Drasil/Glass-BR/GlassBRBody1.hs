@@ -210,7 +210,7 @@ s6_1 = Section 1 (S "Problem Description") [s6_1_intro, s6_1_1, s6_1_2, s6_1_3]
 
 s6_1_intro = Paragraph $ S "A system is needed to efficiently and correctly" :+:
   S " predict the blast risk involved with the glass. " :+: S (gLassBR ^. name) :+:
-  S " is a computer program " :+: S "developed to interprete the inputs to give " :+:
+  S " is a computer program " :+: S "developed to interpret the inputs to give " :+:
   S "out the outputs which predicts whether the glass slab can withstand the " :+:
   S "blast under the conditions."
 
@@ -230,7 +230,7 @@ s6_1_2 = Section 2 (physSysDescr ^. descr) [s6_1_2_intro,s6_1_2_list,fig_glassbr
 s6_1_2_intro = Paragraph $ S "The physical system of Glass-BR, as shown in " :+:
   (makeRef fig_glassbr) :+: S ", includes the following elements:"
 
-fig_glassbr = Figure (S "The physical system") "phiscalsystimage.png"
+fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
   
 s6_1_2_list = SimpleList $ [
   (S "PS1", S "Glass Slab"), 
@@ -268,13 +268,13 @@ s6_2_1_list =SimpleList $ [
     S "laminated, or insulating glass constructions of rectangular shape with continuous " :+:
     S "lateral support along one, two, three, or four edges. This practice assumes " :+:
     S "that (1) the supported glass edges for two, three and four-sided support conditions are " :+:
-    S "simply supported and free to silp in plane; (2) glass supported on two sides " :+:
+    S "simply supported and free to slip in plane; (2) glass supported on two sides " :+:
     S "acts as a simply supported beam and (3) glass supported on one side acts as " :+:
     S "a cantilever."), 
   (S "A2", S "This practice does not apply to any form of wired, patterned, etched, " :+:
     S "sandblasted, drilled, notched, or grooved glass with surface and edge treatments " :+:
     S "that alter the glass strength."),
-  (S "A3", S "This system only considers the external exposion scenario for its calculations."),
+  (S "A3", S "This system only considers the external explosion scenario for its calculations."),
   (S "A4", S "Standard values used for calculation in Glass-BR are: (a) " :+: (U $ sflawParamM ^. symbol) :+:
     S " = 7 " :+: Sy (sflawParamM ^. unit) :+: S " (b) " :+: (U $ sflawParamK ^. symbol) :+: S " = 2.86 * 10^(-53) " :+:
     Sy (sflawParamK ^. unit) :+: S " (c) " :+: (U $ mod_elas ^. symbol) :+: S " = 7.17 * 10^7 " :+:
@@ -284,7 +284,7 @@ s6_2_1_list =SimpleList $ [
     (U $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in Glass-BR."),
   (S "A6", S "Boundary conditions for the glass slab is assumed to be 4-sided support for " :+:
     S "calculations"),
-  (S "A7", S "The response type considered in Glass_BR is flexural."),
+  (S "A7", S "The response type considered in Glass-BR is flexural."),
   (S "A8", S "With reference to A4 the value of load distribution factor (" :+: (U $ loadDF ^. symbol) :+:
     S ") is a constant in Glass-BR. It is calculated by the equation: " :+: (U $ loadDF ^. symbol) :+:
     S " = " :+: (U $ load_dur ^. symbol) :+: S ". Using this, " :+: (U $ loadDF ^. symbol) :+: S " = " :+:
@@ -405,8 +405,6 @@ s10 = Section 0 (S "Appendix") [s10_intro,fig_2,fig_3]
 
 s10_intro = Paragraph $
   S "This appendix holds the graphs (Figure 2 and Figure 3) used for interpolating values needed in the models."
-
--- figures not working
 
 fig_2 = Figure (S "Figure 2: 3 second equivalent pressure (" :+: U (demand ^. symbol) :+: S ") versus Stand off " :+:
   S "distance (SD) versus charge weight (" :+: U (sflawParamM ^. symbol) :+: S ")") "ASTM_F2248-09.png"

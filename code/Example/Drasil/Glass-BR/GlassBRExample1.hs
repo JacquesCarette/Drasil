@@ -124,7 +124,7 @@ gtf           = makeCC "Glass type factor (GTF)" "A multiplying factor for adjus
 lateral       = makeCC "Lateral" "Perpendicular to the glass surface"
 load          = makeCC "Load" "A uniformly distributed lateral pressure."
 specDeLoad    = makeCC "Specified design load" "The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority."
-lr            = makeCC "Load resistance" "The uniform lateral load that a glass construction can sustain based upon a given probablity of breakage and load duration."
+lr            = makeCC "Load resistance" "The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration."
 ldl           = makeCC "Load duration load" "Any load lasting approximately 30 days."
 nfl           = makeCC "Non-factored load (NFL)" "Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass."
 glassWL       = makeCC "Glass weight load" "The dead load component of the glass weight."
@@ -178,7 +178,7 @@ t2descr =
   (S "If is_safe2 = True, the glass is considered safe. is_safe1 (from T1) and is_safe2 " :+:
      S "are either both True or both False. ") :+: (U $ lRe ^. symbol) :+:
   (S " is the Load Resistance (also called capacity, as defined in IM2. ") :+: 
-    (U $ demand ^. symbol) :+: (S " (also refered as the demand) is " :+:
+    (U $ demand ^. symbol) :+: (S " (also referred as the demand) is " :+:
      S "the 3 second equivalent pressure, as defined in IM3.")
 
 --Instance Models--

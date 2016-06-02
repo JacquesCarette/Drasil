@@ -26,7 +26,7 @@ plate_len, risk_fun, plate_width, dim_max, dim_min,
   load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight:: UnitalChunk
 
 plate_len   = makeUC "a" "Plate length (long dimension)" lA millimetre
-plate_width = makeUC "b" "Plate width" lB millimetre
+plate_width = makeUC "b" "Plate width (long dimension)" lB millimetre
 dim_max     = makeUC "d_max" "Maximum value for one of the dimensions of the glass plate"
               (sub lD (Atomic "max")) millimetre
 dim_min     = makeUC "d_min" "Minimum value for one of the dimensions of the glass plate" 
@@ -54,7 +54,7 @@ eqTNTWeight = makeUC "w_TNT" "Explosive Mass in equivalent weight of TNT"
               (sub lW (Atomic "TNT")) kilogram
 
 ----Quantities--
-risk_fun    = makeUC "B" "Risk function (short dimension)" cB unitless
+risk_fun    = makeUC "B" "Risk function" cB unitless
 glass_type  = makeUC "g" "Glass type, g in {AN, HS, FT}" lG unitless
 is_safe1    = makeUC "is_safe1" "True when calculated probability is less than tolerable probability" 
               (Concat [lI,lS,(Atomic "_"),lS,lA,lF,lE,(Atomic "1")]) unitless
@@ -186,20 +186,12 @@ probOfBr :: RelationChunk
 probOfBr = makeRC "Probability of Glass Breakage" pbdescr pb_rel 
 
 pb_rel :: Relation
-pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))  -- equation for B?
+pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 
 pbdescr :: Sentence
 pbdescr =
-  ((U $ prob_br ^. symbol) :+: S " is the calculated probability of breakage. " :+:
-    S "B is the risk of failure. " :+: (U $ sflawParamM ^. symbol) :+: S ", " :+:
-    (U $ sflawParamK ^.symbol) :+: S " are the surface flaw parameters. " :+: 
-    (U $ plate_len ^.symbol) :+: S ", " :+: (U $ plate_width^.symbol) :+: S " are " :+:
-    S "dimensions of the plate, where (" :+: (U $ plate_len ^.symbol) :+: S " > " :+:
-    (U $ plate_width ^.symbol) :+: S "). " :+: (U $ mod_elas ^.symbol) :+: S " is the " :+:
-    S "modulus of elasticity. " :+: (U $ act_thick ^. symbol) :+: S " is the true " :+:
-    S "thickness, which is based on the nominal thickness. " :+: (U $ loadDF ^. symbol) :+:
-    S " is the Load Duration Factor. " :+: (U $ sdf ^. symbol) :+: S " is the stress " :+:
-    S "distribution factor.")
+  ((U $ prob_br ^. symbol) :+: S " is the calculated probability of breakage. :+:
+   (U $ risk_fun ^. symbol) :+: S " is the risk of failure.")
 
 calOfCap :: RelationChunk
 calOfCap = makeRC "Calculation of Capacity(LR)" capdescr cap_rel
@@ -231,6 +223,14 @@ dedescr =
     S " stand off distance where " :+: (U $ sd ^. symbol) :+: S " = .") --equation in sentence
 
 --Data Definitions--
+risk_eq :: Expr
+risk_eq = ((C sflawParamK):/((C plate_len):/(Int 1000):*(C plate_width):/(Int 1000)):^
+  ((C sflawParamM) - (Int 1))):*((C mod_elas):*(Int 1000):*((C act_thick):/(Int 1000)):^
+  (Int 2)):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
+
+risk :: EqChunk
+risk = fromEqn "B" (S "risk of failure") (cB) unitless risk_eq
+
 hFromt :: RelationChunk
 hFromt = makeRC "Minimum Thickness(h) from Nominal Thickness(t)" hFromtdescr hFromt_rel
 

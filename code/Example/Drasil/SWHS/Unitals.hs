@@ -127,7 +127,7 @@ melt_frac    = makeUC "phi" "melt fraction" (Special Phi_L) unitless
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will
 --they be able to call "heat_capacity" without having to write the
---code for that unit in a separate file
+--code for that unit in a separate file?
 
 --VarChunks--
 gradient :: VarChunk

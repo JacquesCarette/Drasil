@@ -30,18 +30,17 @@ s1, s1_intro, s1_1, s1_1_intro, s1_1_table, s1_2, s1_2_intro, s1_2_table,
   s4_1_1, s4_1_1_intro, s4_1_1_bullets, s4_1_2, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3, s4_1_3_intro, s4_1_3_list, s4_2, s4_2_intro, s4_2_1,
   s4_2_1_intro, s4_2_1_list, s4_2_2, s4_2_2_intro, s4_2_3, s4_2_3_intro,
-  s4_2_4, s4_2_4_intro, s4_2_5, s4_2_6, table1, 
-  s5, s5_intro, s5_1, s5_2,
-  s5_2_contents, s6, s6_list :: LayoutObj
+  s4_2_4, s4_2_4_intro, s4_2_5, s4_2_6, table1, s5, s5_intro, s5_1, s5_2,
+  s5_2_contents, s6, s6_list, s7, s7_table :: LayoutObj
   
 s2_intro, s2_1_contents, s2_3_contents, s4_2_5_intro, s4_2_6_intro, 
-  s5_1_list :: [LayoutObj]
+  s5_1_list, s7_intro :: [LayoutObj]
 
 swhs_srs :: Document
 swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
            S " Heating Systems with Phase Change Material")
            (S "Thulasi Jegatheesan, Brooks MacLachlan, and Spencer Smith")
-           [s1, s2, s3, s4, s5, s6]
+           [s1, s2, s3, s4, s5, s6, s7]
 
 --It is sometimes hard to remember to add new sections both here and above.
 
@@ -604,6 +603,51 @@ s6_list = SimpleList [(S "LC1", S "A4 - PCM is actually a poor thermal " :+:
           (S "LC6", S "A15 - Any real tank cannot be perfectly insulated " :+:
           S "and will lose heat.")]
 
---add referencing to assumptions?
+--add referencing to assumptions?		
+  
+s7 = Section 0 (S "Traceability Matrix") (s7_intro++[s7_table])
+
+s7_intro = [Paragraph (S "The purpose of this matrix is to provide an easy " :+:
+           S "reference on what has to be additionally modified if a certain" :+:
+           S " component is changed. Every time a component is changed, the " :+:
+           S "items in the column of that component that are marked with an " :+:
+           Quote (S "X") :+: S " should be modified as well."),
+           Paragraph (S "NOTE: The traceability matrix shown in " :+: makeRef s7_table :+:
+           S " is not the full traceability matrix for " :+: S (progName ^. name) :+:
+           S ". It is a subset developed to fit the matrix in one page. " :+:
+           S "Building a tool to automatically generate the graphical " :+:
+           S "representation of the matrix by scanning the labels and " :+:
+           S "reference can be future work.")]
+
+s7_table = Table [S "", S "T1", S "T2", S "T3", S "A1", S "A2", S "A3", 
+           S "A4", S "GD1", S "GD2", S "DD1", S "DD2", S "DD3", S "DD4"]
+           [[S "GD1", S "", S "", S "", S "", S "X", S "", S "", S "", S "",
+           S "", S "", S "", S ""],
+           [S "GD2", S "X", S "", S "", S "", S "X", S "X", S "X", S "X",
+           S "", S "", S "", S "", S ""],
+           [S "DD1", S "", S "", S "", S "", S "", S "", S "", S "X", S "",
+           S "", S "", S "", S ""],
+           [S "DD2", S "", S "", S "", S "", S "", S "X", S "X", S "X", S "",
+           S "", S "", S "", S ""],
+           [S "DD3", S "", S "", S "", S "", S "", S "", S "", S "", S "",
+           S "", S "", S "", S ""],
+           [S "DD4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
+           S "", S "", S "X", S ""],
+           [S "IM1", S "", S "", S "", S "", S "", S "", S "", S "", S "X",
+           S "X", S "X", S "", S ""],
+           [S "IM2", S "", S "", S "", S "", S "", S "", S "", S "", S "X",
+           S "", S "X", S "", S "X"],
+           [S "IM3", S "", S "X", S "", S "", S "", S "", S "", S "", S "",
+           S "", S "", S "", S ""],
+           [S "IM4", S "", S "X", S "X", S "", S "", S "", S "", S "", S "",
+           S "", S "X", S "X", S "X"],
+           [S "T1", S "", S "", S "", S "X", S "", S "", S "", S "", S "",
+           S "", S "", S "", S ""],
+           [S "T2", S "", S "", S "X", S "", S "", S "", S "", S "", S "",
+           S "", S "", S "", S ""],
+           [S "T3", S "", S "", S "", S "", S "", S "", S "", S "", S "",
+           S "", S "", S "", S "X"]]
+           (S "Traceability Matrix Showing the Connections Between Items " :+:
+           S "of Different Sections") True
 
 --References?

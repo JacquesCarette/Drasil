@@ -1,20 +1,14 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
-module ChipExample where
-import ASTInternal (Expr(..), Relation(..))
-import SI_Units
-import Unicode (Tau(..), Delta(..), Rho(..), Nabla(..), Phi(..),
-                Alpha(..), Omega(..), Zeta(..))
-import Symbol
-import UnitalChunk
-import ChipUnits
-import SymbolAlphabet
-import Chunk (ConceptChunk(..),VarChunk,symbol,makeCC,makeVC)
--- import EqChunk (fromEqn,EqChunk(..))
-import Spec (Sentence(..))
+
+module Example.Drasil.GamePhysics.ChipExample where
+
+import Example.Drasil.GamePhysics.ChipUnits
+
+import Language.Drasil
+import Language.Drasil.SI_Units
+
 import Control.Lens ((^.))
-import RelationChunk
-import Instances ()
 
 -- import Control.Lens ((^.))
 

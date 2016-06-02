@@ -1,12 +1,10 @@
 {-# OPTIONS -Wall #-}
-module ChipUnits where
+module Example.Drasil.GamePhysics.ChipUnits where
 
-import SI_Units
-import Unit (Unit(..), UDefn(..), DerUChunk(..),
-  makeDerU, unitCon)
-import Chunk (ConceptChunk(..))
+import Language.Drasil
+import Language.Drasil.SI_Units
+
 import Control.Lens ((^.))
-import Spec (USymb(..), Sentence(..))
 
 --s^2--
 s_2 :: DerUChunk

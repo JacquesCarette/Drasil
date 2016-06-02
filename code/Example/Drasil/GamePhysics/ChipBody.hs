@@ -1,22 +1,17 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
-module ChipBody where
+module Example.Drasil.GamePhysics.ChipBody where
+
 import Data.Char (toLower)
 import Data.List (intersperse)
-import Helpers
-import ChipExample
-import Spec (Sentence(..),sMap, Accent(..)) --May need to update imports to hide Ref.
-                            --More likely setup an API or something to
-                            --Restrict access for novice users.
-import Unit (Unit(..), UnitDefn(..))
-import SI_Units
-import Chunk
 import Control.Lens ((^.))
-import RecipeTools
-import ChipUnits
-import LayoutObjs
-import Reference
-import Instances ()
+
+import Example.Drasil.GamePhysics.ChipExample
+import Example.Drasil.GamePhysics.ChipUnits
+
+import Language.Drasil
+import Language.Drasil.SI_Units
+
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [newton, radians]

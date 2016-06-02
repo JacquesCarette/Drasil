@@ -26,7 +26,7 @@ plate_len, risk_fun, plate_width, dim_max, dim_min,
   load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight:: UnitalChunk
 
 plate_len   = makeUC "a" "Plate length (long dimension)" lA millimetre
-plate_width = makeUC "b" "Plate width (long dimension)" lB millimetre
+plate_width = makeUC "b" "Plate width (short dimension)" lB millimetre
 dim_max     = makeUC "d_max" "Maximum value for one of the dimensions of the glass plate"
               (sub lD (Atomic "max")) millimetre
 dim_min     = makeUC "d_min" "Minimum value for one of the dimensions of the glass plate" 

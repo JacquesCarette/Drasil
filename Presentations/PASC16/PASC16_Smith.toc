@@ -1,7 +1,0 @@
-\beamer@endinputifotherversion {3.36pt}
-\select@language {english}
-\beamer@sectionintoc {1}{Background}{3}{0}{1}
-\beamer@sectionintoc {2}{Literate Scientific Software}{7}{0}{2}
-\beamer@sectionintoc {3}{Drasil}{13}{0}{3}
-\beamer@sectionintoc {4}{Next Steps}{19}{0}{4}
-\beamer@sectionintoc {5}{Conclusions}{22}{0}{5}

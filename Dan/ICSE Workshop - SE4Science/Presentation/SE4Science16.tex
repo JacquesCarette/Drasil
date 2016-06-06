@@ -71,7 +71,7 @@
 % - Keep it simple, no one is interested in your street address.
 
 \date[Jan 12, 2016] % (optional, should be abbreviation of conference name)
-{SE4Science, May.\ 16, 2016}
+{SE4Science, May 16, 2016}
 % - Either use conference name or its abbreviation.
 % - Not really informative to the audience, more for people (including
 %   yourself) who are reading the slides online
@@ -349,6 +349,7 @@ generation, $T$ is the temperature, $\nabla$ is the del operator and $t$ is the 
 \begin{itemize}
 \item Recertification can be expensive and time consuming
 \item Change propagates through documentation
+\item Traceability and maintainability
 \item Recipes help with changing documentation standards
 \end{itemize}
 
@@ -386,6 +387,16 @@ generation, $T$ is the temperature, $\nabla$ is the del operator and $t$ is the 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}[fragile]
+
+%\frametitle{Excerpt from SRS}
+
+\begin{center}
+\includegraphics[scale=0.8]{SRS_Excerpt.pdf}
+\end{center}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]
 
 \frametitle{Example Recipe}
@@ -426,6 +437,9 @@ kelvin = fund "Kelvin" "temperature (kelvin)" "K"
 \begin{frame}[fragile]
 
 \frametitle{The $h_c$ Chunk}
+
+$$h_{c} = \frac{2k_{c} h_{b}}{2k_{c}+\tau_{c}h_{b}}$$
+~\newline
 
 \begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\small]
 h_c_eq :: Expr

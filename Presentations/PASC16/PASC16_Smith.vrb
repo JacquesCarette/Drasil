@@ -1,0 +1,16 @@
+
+\frametitle{Table of Symbols}
+
+\begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\small]
+h_c_eq :: Expr
+h_c_eq = 2*(C k_c)*(C h_b) /
+  (2*(C k_c) + (C tau_c)*(C h_b))
+
+h_c :: EqChunk
+h_c = fromEqn "h_c"
+ "convective heat transfer coefficient between
+    clad and coolant"
+   (sub h c) heat_transfer h_c_eq
+
+\end{lstlisting}
+

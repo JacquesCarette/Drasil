@@ -57,14 +57,14 @@
 \pagenumbering{roman}
 \begin{abstract}
 
-The current state of Scientific Computing software development leaves a lot of
+The current state of Scientific Computing software development leaves 
 room for improvement. I want to facilitate the improvement of qualities
 (maintainability, traceability, reproducibility, etc.) across all artifacts of a
 piece of software, without adding much effort for the developers. I believe a
 knowledge-based approach, which borrows ideas from literate programming, and
 involves a larger short-term investment from developers is the first step to
 improving software as a whole. I am creating a framework (Drasil) to facilitate
-this approach, focusing on avoiding knowledge duplication while improving
+this approach, focusing on avoiding knowledge duplication, while improving
 traceability and automating as much of the development process as possible.
 
 \end{abstract}
@@ -75,12 +75,13 @@ traceability and automating as much of the development process as possible.
 
 \section{Introduction}
 
-I want everyone to make better software. Specifically by improving software
-qualities such as maintainability, traceability, verifiability, reproducibility,
-and reusability. That may be too broad of a target, so I will be focusing on
-well-understood domains; specifically scientific computing (SC). To refine the
-idea even more, I want to focus on applications where agile development is
-ill-suited or completely unusable such as those that are safety-critical.
+I want everyone to make better software. I believe this can be achieved by
+improving software qualities such as maintainability, traceability,
+verifiability, reproducibility, and reusability. That may be too broad of a
+target, so I will be focusing on well-understood domains; specifically
+Scientific Computing (SC). To refine the idea even more, I want to focus on
+applications where agile development is ill-suited or completely unusable, such
+as those that are safety-critical.
 
 I think the first step to improving software as a whole is to improve each of
 the software artifacts. To that end, I would like to expand the ideas of
@@ -105,7 +106,7 @@ will avoid the majority of pitfalls related to underdevelopment of a
 design.
 
 Drasil employs techniques from literate programming and code generation
-in order to automate as much as possible in the software development process.
+to automate as much as possible in the software development process.
 
 \section{State of the Art}
 
@@ -221,15 +222,15 @@ domains (for example: Agda, Haskell, and R support LP).
 A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
 methodology called ``Literate Software Development''
 (LSD)~\cite{AlMatiiAndBoujarwah2002}. Box structure can be summarized as the
-idea of different views (ex. system specifications, design, code) which are
+idea of different views (ex.~system specifications, design, code) which are
 abstractions that communicate the same information in different levels of
 detail, for different purposes.
 
-LSD was developend with the intent to overcome the disadvantages of both LP and
-box structure. Specifically, it was intended to overcome LP's inability to
-specify interfaces between modules, box structure's inability to decompose boxes
-and the inability to implement the design created by box structures, as well as
-the lack of tools to support box structure~\cite{Deck1996}.
+LSD was developed with the intent to overcome the disadvantages of both LP and
+box structure. It was intended to overcome LP's inability to specify interfaces
+between modules, the inability to decompose boxes and implement the design
+created by box structures, as well as the lack of tools to support box
+structure~\cite{Deck1996}.
 
 %The main idea behind LSD was to overcome the disadvantages of LP and box
 %structure. These disadvantages included: the inability of LP to specify
@@ -240,7 +241,9 @@ the lack of tools to support box structure~\cite{Deck1996}.
 The framework developed for LSD, ``WebBox'', expanded LP and box structures in a
 variety of ways. It included new chunk types, the ability to refine chunks, the
 ability to specify interfaces and communication between boxes, and the ability
-to decompose boxes at any level.
+to decompose boxes at any level. However, literate software (and LSD) remain
+primarily code-focused with very little support for creating other software
+artifacts.
 
 \subsection{Reproducible Research}
 
@@ -249,7 +252,7 @@ Reproducible research has been used to mean embedding executable code in
 research papers to allow readers to reproduce the results
 described~\cite{SchulteEtAl2012}.
 
-Combining research reports with relevant code, data, etc. is not necessarily
+Combining research reports with relevant code, data, etc.\ is not necessarily
 easy, especially when dealing with the publication versions of an author's work.
 As such, the idea of \emph{compendia} were
 introduced~\cite{GentlemanAndLang2012} to provide a means of encapsulating the
@@ -260,26 +263,38 @@ work~\cite{GentlemanAndLang2012}.
 
 Currently, several tools have been developed for reproducible research
 including, but not limited to, Sweave, SASweave, Statweave, Scribble, and
-Org-mode. The most popular of those being Sweave~\cite{SchulteEtAl2012}.
+Org-mode. The most popular of those being Sweave~\cite{SchulteEtAl2012}. The
+aforementioned tools maintain a focus on code and certain computational details.
+It is my hope that the Drasil framework will one day surpass these tools due to
+its ability to simplify the creation of all software artifacts.
+
+%Code generation section?
 
 \section{Research Objectives and Approach}
 \subsection{Objectives}
 
 Looking at the current state of SC software development, there are many areas
-for improvement. The traditional approach for improving development would be to
-get better developers, which is not necessarily feasible for SC software due to
-resource limitations. My first objective, therefore, is to simplify the software
-development process by allowing scientists to focus on the science.
+for improvement particularly the need for applying better software engineering
+practices and improving knowledge reuse. The simplest approach for improving
+development would be to get better developers, which is not necessarily feasible
+for SC software. Software engineering education is not typically part of an SC
+developer's background, and having software engineers develop SC software is
+problematic because the software engineers typically lack the necessary domain
+knowledge. Domain experts require tools that simplify the software engineering
+process so they can do things the ``right'' way. My first objective, therefore,
+is to simplify the software development process by allowing scientists to focus
+on the science.
 
 My second objective is to increase software qualities (maintainability,
 traceability, reproducibility, verifiability, reusability, etc.) in SC software.
-The first step toward this improvement will be to better understand the
-scientific background of the software, hence the focus on science.
+The first step toward this improvement is to better understand the
+fundamental scientific background underlying said software. As such I will be
+focusing on understanding and capturing that knowledge.
 
 My third objective, a natural progression from the second, is better overall
 software artifacts (requirements and design documents, source code, etc.). It is
 a worrying trend that software artifacts tend to fall out of sync with each
-other over time, so ensuring they remain consistent is one way to improve.
+other over time, so ensuring they remain consistent is a means to improve.
 
 Furthermore, developers should not need to spend large swaths of time updating
 and maintaining their software. I would like to automate as much of the software
@@ -354,9 +369,9 @@ large-scale layout objects (tables, sections, figures, etc.) should appear.
 programming language inside the Drasil framework. This allows the generator to
 produce working C code.
 
-\item \LaTeX Representation Language -- A DSL for representing \LaTeX code
+\item \LaTeX{} Representation Language -- A DSL for representing \LaTeX{} code
 inside of Drasil. As with the C representation, it is used by the generator to
-produce working \LaTeX code.
+produce working \LaTeX{} code.
 
 \item HTML Representation Language -- A DSL for representing HTML within Drasil.
 Similar to the other representation languages as it is used by the
@@ -407,7 +422,7 @@ They are quantities with units.
 
 \textit{Equation} chunks continue to expand on \textit{Unital} chunks by
 allowing us to capture equations for calculating quantities. In a similar vein
-are \textit{Relation} chunks which allow us to relate two pieces of knowledge to
+are \textit{Relation} chunks, which allow us to relate two pieces of knowledge to
 each other.
 
 Now that knowledge has been encapsulated it is time to do something with it.
@@ -558,11 +573,11 @@ There are a few disadvantages to using the knowledge based approach with Drasil.
 The most obvious is the inability to include local hacks. Any human-modified
 generated file will lose its modifications the next time the generator is run.
 
-Drasil also forces a sort of all-or-nothing aproach which removes meaningful
-iteration. The implementation must be done right the first time (or very close
-to it), requiring more development time. Also, the longer a project's lifecycle,
-the more involved the process of adding or modifying existing knowledge can
-become.
+%Drasil also forces a sort of all-or-nothing aproach which removes meaningful
+%iteration. The implementation must be done right the first time (or very close
+%to it), requiring more development time. Also, the longer a project's lifecycle,
+%the more involved the process of adding or modifying existing knowledge can
+%become.
 
 Finally, creating common-knowledge libraries is fairly difficult as it requires
 a domain expert to be involved.
@@ -593,7 +608,7 @@ changes (in no particular order) are as follows:
 
 Over the summer (2016), three undergraduate students will be working on
 translating existing implementations of large examples into Drasil
-implementations. It is my hope that this experiment will provide insight onto
+implementations. It is my hope that this experiment will provide insight on
 any lacking features of Drasil, as well as how well the new approach works. A
 second PhD student will also be joining the project over the summer. His first
 task will involve implementing a large example and helping to expand Drasil.
@@ -619,17 +634,22 @@ for the rest of my tenure as a PhD student in broad strokes.
                       Finish PhD course requirements. 
                       
                       Meet with Ernie from OPG. 
-                      
-                      Write a paper.
+
 \\ \hline
       Winter 2016 & Implement external syntax for Drasil. 
+
+		Write a paper for ICSR (International Conference on Software Reuse).
       
-      								Write a journal paper.
+      Write a journal paper for Automated Software Engineering.
 \\ \hline
       Spring 2017 & Re-evaluate current Drasil implementation for usability. 
         Work on making it as user-friendly as possible. 
+
+		Submit a paper to Onward!
+		
+		Submit a paper to ASE (International Conference on Automated Software Engineering)
         
-        Meet with committee. 
+      Meet with committee. 
 \\ \hline
       Summer 2017 & Write a paper.
       

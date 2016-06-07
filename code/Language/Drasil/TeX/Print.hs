@@ -121,9 +121,12 @@ p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
+p_expr (Lt x y)   = p_expr x ++ "<" ++ p_expr y
+p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
+p_expr (Case ps)  = "\\left\\{\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}\\right\\}"
 
 mul :: Expr -> Expr -> String
 mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
@@ -155,6 +158,10 @@ neg x@(Sym _) = "-" ++ p_expr x
 neg   (Neg n) = p_expr n
 neg x         = paren ("-" ++ p_expr x)
 
+cases :: [(Expr,Expr)] -> String
+cases []     = error "Attempt to create case expression without cases"
+cases (p:[]) = p_expr (fst p) ++ ", & " ++ p_expr (snd p)
+cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases ps
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------

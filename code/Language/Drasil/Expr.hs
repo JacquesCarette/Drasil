@@ -27,7 +27,8 @@ data Expr where
   FCall :: Expr -> [Expr] -> Expr --F(x) would be (FCall F [x]) or similar
                                   --FCall accepts a list of params
                                   --F(x,y) would be (FCall F [x,y]) or sim.
-
+  Case  :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
+                                     -- each pair represents one case
 infixr 4 :=
 data Relation where
   (:=) :: Expr -> Expr -> Relation

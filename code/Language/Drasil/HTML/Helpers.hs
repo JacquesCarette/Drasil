@@ -5,6 +5,7 @@ import Text.PrettyPrint
 import Data.List (intersperse)
 
 import Language.Drasil.Document (Document)
+import Language.Drasil.HTML.AST (Expr)
 
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
 html      = wrap "html" []
@@ -66,6 +67,26 @@ makeCSS _ = vcat [
   text ".author {text-align:center;}",
   text ".paragraph {text-align:justify;}",
   vcat [
+    text ".cases {",
+    text "  display: inline-block;",
+    text "  vertical-align:middle;}"],
+  vcat [
+    text ".case {",
+    text "float: right;",
+    text "padding-left: 1em;}"],
+  vcat [
+    text ".cases > span {",
+    text "  display: block;",
+    text "  padding-top: 0.15em;",
+    text "  padding-left: 1.5em;}"],
+  vcat [
+    text ".casebr {",
+    text "  display: inline-block;",
+    text "  vertical-align: middle;",
+    text "  margin: 0 0.2em 0.4ex;",
+    text "  text-align: center;",
+    text "  font-size:500%;}"],
+  vcat [
     text ".caption {",
     text "text-align:center;",
     text "font-weight:bold;",
@@ -118,3 +139,14 @@ linkCSS fn =
 fraction :: String -> String -> String  
 fraction a b =
   render $ div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
+
+cases :: [(Expr,Expr)] -> (Expr -> String) -> String
+cases ps p_expr = render $ (span_tag ["casebr"] "{" $$ div_tag ["cases"] 
+                  (makeCases ps p_expr) $$
+                  span_tag ["casebr"] "}")
+
+makeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
+makeCases [] _ = empty
+makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) ++ " , " ++
+                            (render $ span_tag ["case"] (p_expr (snd p))))) $$
+                            makeCases ps p_expr)

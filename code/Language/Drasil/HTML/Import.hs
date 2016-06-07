@@ -32,11 +32,16 @@ expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a))
                           (H.Mul (H.Sym (Special Partial)) (expr b))
 expr (C c)       = H.Sym   (c ^. symbol)
 expr (FCall f x) = H.Call (expr f) (map expr x)
+expr (Case ps)   = if length ps < 2 then 
+                    error "Attempting to use multi-case expr incorrectly"
+                    else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 
 
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)
-rel _ = error "unimplemented relation, see ToHTML"
+rel (a :< b) = H.Lt (expr a) (expr b)
+rel (a :> b) = H.Gt (expr a) (expr b)
+--rel _ = error "unimplemented relation, see Language.Drasil.HTML.Import"
 
 replace_divs :: Expr -> H.Expr
 replace_divs (a :/ b) = H.Div (replace_divs a) (replace_divs b)
@@ -54,7 +59,7 @@ spec (U u)     = H.S $ render HTML u
 spec (F f s)   = spec $ accent f s
 -- spec (N s)     = H.N s
 spec (Ref t r) = H.Ref t (spec r)
-spec (Quote q) = H.S "\"" H.:+: spec q H.:+: H.S "\""
+spec (Quote q) = H.S "&quot;" H.:+: spec q H.:+: H.S "&quot;"
 
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.

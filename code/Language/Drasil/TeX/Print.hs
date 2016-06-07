@@ -11,7 +11,7 @@ import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Import
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
-import Language.Drasil.Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth,
+import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth, --tableWidth,
               numberedSections)
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers
@@ -163,8 +163,8 @@ makeTable :: [[Spec]] -> String -> Bool -> String -> Doc
 makeTable lls r bool t = text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)) 
   $$ makeRows lls $$ (if bool then caption t else empty) $$
   label r $$ text ("\\end{" ++ lt ++ "}")
-  where header l = concat (replicate ((length (head l))-1) "l ") ++ "p" ++ 
-                        brace (show tableWidth ++ "cm")
+  where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
+--                    ++ "p" ++ brace (show tableWidth ++ "cm")
         lt = "longtable" ++ (if not bool then "*" else "")
         
 makeRows :: [[Spec]] -> Doc
@@ -172,7 +172,7 @@ makeRows []     = empty
 makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
 
 makeColumns :: [Spec] -> String
-makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls) ++ "\\"
+makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls)
 
 -----------------------------------------------------------------
 ------------------BEGIN READER-----------------------------------

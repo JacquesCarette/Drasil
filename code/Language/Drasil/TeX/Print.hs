@@ -8,7 +8,7 @@ import Text.PrettyPrint hiding (render)
 import Control.Monad.Reader
 
 import Language.Drasil.TeX.AST
-import Language.Drasil.TeX.Import
+import Language.Drasil.TeX.Import hiding (sec)
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth, --tableWidth,

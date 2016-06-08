@@ -33,7 +33,8 @@ tau_c = makeVC "tau_c" "clad thickness" ((Special Tau_L) `sub` lC)
 {--------------- Begin h_c ---------------}
 --------------- --------------- --------------- ---------------
 h_c_eq :: Expr
-h_c_eq = 2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b))
+h_c_eq = Case [(2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b)), (C k_c :< C h_b)),
+               (2 * (C k_c), (C k_c :> C h_b))]
 
 h_c :: EqChunk
 h_c = fromEqn "h_c" (S 

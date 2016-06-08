@@ -15,8 +15,6 @@ import Language.Drasil.Chunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Reference
-
 
 expr :: Expr -> T.Expr
 expr (V v)        = T.Var  v
@@ -70,32 +68,36 @@ accent Grave  s = S $ "\\`{" ++ (s : "}")
 accent Acute  s = S $ "\\'{" ++ (s : "}")
 
 makeDocument :: Document -> T.Document
-makeDocument (Document title author layout) = 
-  T.Document (spec title) (spec author) (createLayout layout)
+makeDocument (Document title author sections) = 
+  T.Document (spec title) (spec author) (createLayout sections)
 
-createLayout :: [LayoutObj] -> [T.LayoutObj]
-createLayout []     = []
-createLayout (l:[]) = [lay l]
-createLayout (l:ls) = lay l : createLayout ls
+layout :: SecCons -> T.LayoutObj
+layout (Sub s) = sec s
+layout (Con c) = lay c
 
-lay :: LayoutObj -> T.LayoutObj
+createLayout :: Sections -> [T.LayoutObj]
+createLayout = map sec
+
+sec :: Section -> T.LayoutObj
+sec x@(Section depth title contents) = 
+  T.Section depth (spec title) (map layout contents) (spec $ refName x)
+
+lay :: Contents -> T.LayoutObj
 lay x@(Table hdr lls t b) 
   | length hdr == length (head lls) = T.Table ((map spec hdr) : 
-      (map (map spec) lls)) (spec (getRefName x)) b (spec t)
+      (map (map spec) lls)) (spec (refName x)) b (spec t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
-lay x@(Section depth title layComps) = 
-  T.Section depth (spec title) (createLayout layComps) (spec $ getRefName x)
 lay (Paragraph c)     = T.Paragraph (spec c)
 lay (EqnBlock c)      = T.EqnBlock (spec c)
 lay (CodeBlock c)     = T.CodeBlock c
-lay x@(Definition c)  = T.Definition (makePairs c) (spec $ getRefName x)
+lay x@(Definition c)  = T.Definition (makePairs c) (spec $ refName x)
 lay (BulletList cs)   = T.List T.Item $ map spec cs
 lay (NumberedList cs) = T.List T.Enum $ map spec cs
 lay (SimpleList cs)   = T.List T.Simple $ concat $
                           map (\(f,s) -> [spec f, spec s]) cs
-lay x@(Figure c f)    = T.Figure (spec (getRefName x)) (spec c) f
+lay x@(Figure c f)    = T.Figure (spec (refName x)) (spec c) f
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

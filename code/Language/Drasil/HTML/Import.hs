@@ -14,7 +14,6 @@ import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Reference
 
 
 expr :: Expr -> H.Expr
@@ -70,30 +69,34 @@ decorate Hat    s = s :+: S "&#770;"
 decorate Vector s = S "<b>" :+: s :+: S "</b>"
 
 makeDocument :: Document -> H.Document
-makeDocument (Document title author layout) = 
-  H.Document (spec title) (spec author) (createLayout layout)
+makeDocument (Document title author sections) = 
+  H.Document (spec title) (spec author) (createLayout sections)
 
-createLayout :: [LayoutObj] -> [H.LayoutObj]
-createLayout []     = []
-createLayout (l:[]) = [lay l]
-createLayout (l:ls) = lay l : createLayout ls
+layout :: SecCons -> H.LayoutObj
+layout (Sub s) = sec s
+layout (Con c) = lay c
+  
+createLayout :: [Section] -> [H.LayoutObj]
+createLayout = map sec
 
-lay :: LayoutObj -> H.LayoutObj
-lay x@(Table hdr lls t b)     = H.Table ["table"] 
-  ((map spec hdr) : (map (map spec) lls)) (spec (getRefName x)) b (spec t)
-lay x@(Section depth title contents) = 
+sec :: Section -> H.LayoutObj
+sec x@(Section depth title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
-  ((H.Header (depth+2) (spec title)):(createLayout contents)) 
-  (spec $ getRefName x)
+  ((H.Header (depth+2) (spec title)):(map layout contents)) 
+  (spec $ refName x)
+
+lay :: Contents -> H.LayoutObj
+lay x@(Table hdr lls t b)     = H.Table ["table"] 
+  ((map spec hdr) : (map (map spec) lls)) (spec (refName x)) b (spec t)
 lay (Paragraph c)     = H.Paragraph (spec c)
 lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (spec c)] (H.S "")
 lay (CodeBlock c)     = H.CodeBlock c
-lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ getRefName x)
+lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (BulletList cs)   = H.List H.Unordered $ map spec cs
 lay (NumberedList cs) = H.List H.Ordered $ map spec cs
 lay (SimpleList cs)   = H.List H.Simple $ 
                           map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
-lay x@(Figure c f)    = H.Figure (spec (getRefName x)) (spec c) f
+lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [

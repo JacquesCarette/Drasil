@@ -7,10 +7,10 @@ import Data.Char (toLower)
 
 import Language.Drasil
 
-table_of_units :: Unit s => [s] -> LayoutObj
-table_of_units u = Section 0 (S "Table of Units") [s1_intro, s1_table u]
+table_of_units :: Unit s => [s] -> Section
+table_of_units u = Section 0 (S "Table of Units") [Con s1_intro, Con (s1_table u)]
 
-s1_intro :: LayoutObj
+s1_intro :: Contents
 s1_intro = Paragraph 
   (S "Throughout this document SI (Syst" :+: (F Grave 'e') :+: 
    S "me International d'Unit" :+: (F Acute 'e') :+: 
@@ -20,7 +20,7 @@ s1_intro = Paragraph
    S " given followed by a description of the unit with the SI" :+: 
    S " name in parentheses.")
 
-s1_table :: Unit s => [s] -> LayoutObj
+s1_table :: Unit s => [s] -> Contents
 s1_table u = Table [S "Symbol", S "Description"] (mkTable
   [(\x -> Sy (x ^. unit)),
    (\x -> (x ^. descr) :+: S (" (" ++ map toLower (x ^. name) ++ ")"))

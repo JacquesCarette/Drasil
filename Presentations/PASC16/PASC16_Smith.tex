@@ -42,8 +42,8 @@
 \newcommand{\ddthedatadefnum}{DD\thedatadefnum}
 \newcommand{\ddref}[1]{DD\ref{#1}}
 
-\newcommand{\colAwidth}{0.2\textwidth}
-\newcommand{\colBwidth}{0.73\textwidth}
+\newcommand{\colAwidth}{0.1\textwidth}
+\newcommand{\colBwidth}{0.8\textwidth}
 
 \renewcommand{\arraystretch}{1.1} %so that tables with equations do not look crowded
 
@@ -111,24 +111,25 @@
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
+\hoffset=-.4in %removing side bar for these frames
+\begin{frame}[plain]
 
 \titlepage
 
 \end{frame}
-
+\hoffset=0in %restore
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
+% \begin{frame}
 
-\frametitle{Literate Scientific Software}
-\tableofcontents
-% You might wish to add the option [pausesections]
+% \frametitle{Literate Scientific Software}
+% \tableofcontents
+% % You might wish to add the option [pausesections]
 
-% make like a story - the phases - reason for, why works, advantages
-% changing the history a bit to make a more rational narrative
+% % make like a story - the phases - reason for, why works, advantages
+% % changing the history a bit to make a more rational narrative
 
-\end{frame}
+% \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -172,13 +173,11 @@
 
 \begin{frame}
 
-\frametitle{Solar Water Heating Tank}
+\frametitle{``Faked'' Rational Design Process}
 
 \begin{center}
-\includegraphics[scale=0.45]{Tank.pdf}
+\includegraphics[scale=0.6]{OverviewOfProcess.pdf}
 \end{center}
-
-\href{https://github.com/smiths/swhs}{https://github.com/smiths/swhs}
 
 \end{frame}
 
@@ -186,11 +185,13 @@
 
 \begin{frame}
 
-\frametitle{``Faked'' Rational Design Process}
+\frametitle{Solar Water Heating Tank}
 
 \begin{center}
-\includegraphics[scale=0.6]{OverviewOfProcess.pdf}
+\includegraphics[scale=0.45]{Tank.pdf}
 \end{center}
+
+\href{https://github.com/smiths/swhs}{https://github.com/smiths/swhs}
 
 \end{frame}
 
@@ -205,7 +206,7 @@
 \frametitle{Literate Scientific Software}
 
 \begin{center}
-\begin{tikzpicture}[node distance=6mm]
+\begin{tikzpicture}[node distance=5mm]
   \tikzstyle{every node}=[draw,shape=rectangle, rounded corners,
     text width=7em, text centered];
   \node (srs)                     	{SRS (\emph{LaTeX})};
@@ -218,11 +219,11 @@
   \node (code) [left = of make]       {C Code) (\emph{checks})};
   \node (matlab) [right = of make]       {Matlab (\emph{no checks})};
   \node (recipes) [below = 10mm of make]       {Recipes};
-  \node (units) [below = 10mm of recipes]       {W = J/s};
+  \node (units) [below = 10mm of recipes]       {W = J/s = kg m$^2$ s$^{-3}$};
   \node (eq) [left = of units]       {$-{\bf \nabla \cdot q} +q'''$ = $\rho C \frac{\partial T}{\partial t}$};
-  \node (descipt) [right = of units]       {description};
-  \node (constraint) [below = of units]       {$L \geq 0$};
-  \node (know) [left = of constraint]       {knowledge};
+  \node (descipt) [right = of units]       {$h_c$ is the heat transfer coeff between clad and coolant};
+  \node (constraint) [below = of units]       {$L > 0$};
+  \node (know) [left = of constraint]       {uncertainty, typical values etc.};
 
   \draw [shorten <=5mm, <-, line width=2pt] (make) -- (recipes);
   \draw [shorten <=5mm, ->, line width=2pt] (units) -- (recipes);
@@ -256,7 +257,7 @@
 
 \begin{frame}
 
-\frametitle{How Addresses Challenges}
+\frametitle{How LSS Addresses Challenges}
 
 \begin{itemize}
 \item Supports changing requirements and design
@@ -296,8 +297,11 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 \label{tab:pcm}
 \end{table}
 
+\begin{equation*}
+E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
+\end{equation*}
+
 \begin{itemize}
-\item ??Add latest from Brooks??
 \item Sanity checks captured and reused
 \item Generate guards against invalid input
 \item Generate test cases
@@ -310,17 +314,17 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 
 \frametitle{Reusability}
 
- \noindent
+\noindent
 \begin{minipage}{\columnwidth}
 \begin{tabular}{@{} p{\colAwidth}  p{\colBwidth}@{}}
 \toprule
-\textbf{Number}& \textbf{T1} \\
+\textbf{Num.}& \textbf{T1} \\
 \midrule
-Label&\bf Conservation of energy\\
+Label &\bf Conservation of energy\\
 \midrule
-Equation&  $-{\bf \nabla \cdot q} +q'''$ = $\rho C \frac{\partial T}{\partial t}$ \smallskip\\
+Eq &  $-{\bf \nabla \cdot q} +q'''$ = $\rho C \frac{\partial T}{\partial t}$ \smallskip\\
 \midrule
-Description & The above equation gives the conservation of energy for time 
+Descrip & The above equation gives the conservation of energy for time 
 varying heat transfer in a material of specific heat capacity $C$ and density $\rho$,
 where $\bf q$ is the thermal flux vector, $q'''$ is the volumetric heat
 generation, $T$ is the temperature, $\nabla$ is the del operator and $t$ is the time.\\
@@ -336,7 +340,24 @@ generation, $T$ is the temperature, $\nabla$ is the del operator and $t$ is the 
 
 \frametitle{Maintainability}
 
-show assumptions
+\begin{itemize}
+
+\item[A1:] The
+  only form of energy that is relevant for this problem is thermal energy.  All
+  other forms of energy, such as mechanical energy, are assumed to be
+  negligible [T1].
+
+\item[A2:] All heat transfer coefficients are constant over time [GD1].
+
+\item[A3:] The water in
+  the tank is fully mixed, so the temperature is the same throughout the entire
+  tank [GD2, DD2].
+
+\item[A4:] The PCM has the same temperature throughout [GD2, DD2, LC1].
+
+\item[A5:] etc.
+
+\end{itemize}
 
 \end{frame}
 
@@ -348,7 +369,7 @@ show assumptions
 
 \begin{itemize}
 \item Knowledge is explicitly stored for the future
-\item Recipes can be use to regenerate any artifacts
+\item Recipes used to regenerate all artifacts, not just code or results
 \item Recipes include build instructions
 \end{itemize}
 \end{frame}
@@ -407,93 +428,145 @@ show assumptions
 
 \begin{frame}[fragile]
 
-%\frametitle{Excerpt from SRS}
+\frametitle{Simple SRS from LaTeX}
 
-\begin{center}
-\includegraphics[scale=0.8]{SRS_Excerpt.pdf}
-\end{center}
+\href{run:SRS.pdf}{SRS from LaTeX}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
 
-\frametitle{Example Recipe}
+\hoffset=-.8in %removing side bar for these frames
+
+\begin{frame}[plain, fragile]
+
+%\frametitle{Example Recipe}
 
 \begin{lstlisting}[frame=none, 
-  showstringspaces=false, basicstyle=\small]
-srsBody = srs [h_g, h_c] "Spencer Smith" [s1,s2]
+  showstringspaces=false, basicstyle=\footnotesize]
+vars :: [EqChunk]
+vars = [h_g, h_c]
 
-s1 = Section (S "Table of Units") [intro, table]
+s1, s2, s3, s4 :: LayoutObj
+s1=table_of_units si_units
+s2=table_of_symbols vars
+s3=Section 0 (S "Data Definitions") $ map (Definition.Data) vars
+s4=Section 0 (S "Code") $ map (CodeBlock.toCode CLang Calc) [h_c]
 
-table = Table 
- [S "Symbol", S "Description"] (mkTable
-   [(\x -> Sy (x ^. unit)),
-    (\x -> S (x ^. descr)) ] si_units)
-
-intro = Paragraph (S "Throughout this ...")
+srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
+srs ls author body =
+  Document ((S "SRS for ") :+: 
+    (foldr1 (:+:) (intersperse (S " and ") 
+    (map (\x -> U $ x ^. symbol) ls))))
+    (S author) body  
+  
+srsBody :: Document
+srsBody = srs vars "Spencer Smith" [s1, s2, s3, s4]
 \end{lstlisting}
 \end{frame}
 
+\hoffset=0in %resetting side bar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]
+\hoffset=-.8in %removing side bar for these frames
 
-\frametitle{Reusable Chunks}
+\begin{frame}[plain, fragile]
 
-\begin{lstlisting}[frame=none, showstringspaces=false, 
-  basicstyle=\small]
-metre, second, kelvin :: FundUnit
-metre  = fund "Metre"  "length (metre)"       "m"
-second = fund "Second" "time (second)"        "s"
-kelvin = fund "Kelvin" "temperature (kelvin)" "K"
+%\frametitle{Example Recipe}
+
+\begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\footnotesize]
+
+table_of_symbols :: (Unit s, Quantity s) => [s] -> LayoutObj
+table_of_symbols ls=Section 0 (S "Table of Sym") [intro,table ls]
+
+intro :: LayoutObj
+intro = Paragraph $ 
+  S "The table that follows ..."
+  
+table :: (Unit s, Quantity s) => [s] -> LayoutObj
+table ls=Table [S "Symbol",S "Description",S "Units"] (mkTable
+  [(\ch -> U (ch ^. symbol)), 
+   (\ch -> ch ^. descr), 
+   (\ch -> Sy $ ch ^. unit)] ls)
+  (S "Table of Symbols") False
+
 \end{lstlisting}
-
 \end{frame}
 
+\hoffset=0in %resetting side bar
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]
+\hoffset=-.8in %removing side bar for these frames
 
-\frametitle{The $h_c$ Chunk}
+\begin{frame}[plain, fragile]
+
+%\frametitle{Example Recipe}
+
+\begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\footnotesize]
+
+fundamentals :: [FundUnit]
+fundamentals = [metre, kilogram, second, ...]
+
+derived :: [DerUChunk]
+derived = [centigrade, joule, watt, calorie, kilowatt]
+
+si_units :: [UnitDefn]
+si_units = map UU fundamentals ++ map UU derived
+
+------------- Fundamental SI Units ---------------------------------------------
+fund :: String -> String -> String -> FundUnit
+fund nam desc sym = UD (CC nam (S desc)) (UName $ Atomic sym)
+
+metre, kilogram, second, ... :: FundUnit
+metre    = fund "Metre"    "length"               "m"
+kilogram = fund "Kilogram" "mass"                 "kg"
+second   = fund "Second"   "time"                 "s"
+kelvin   = fund "Kelvin"   "temperature"          "K"
+mole     = fund "Mole"     "amount of substance"  "mol"
+ampere   = fund "Ampere"   "electric current"     "A"
+candela  = fund "Candela"  "luminous intensity"   "cd"
+
+\end{lstlisting}
+\end{frame}
+
+\hoffset=0in %resetting side bar
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hoffset=-0.8in %no side bar
+\begin{frame}[plain, fragile]
+
+%\frametitle{The $h_c$ Chunk}
 
 $$h_{c} = \frac{2k_{c} h_{b}}{2k_{c}+\tau_{c}h_{b}}$$
-~\newline
 
-\begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\small]
+\begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\footnotesize]
+
+heat_transfer :: DerUChunk
+heat_transfer = DUC (UD ht_con ht_symb) heat_transfer_eqn
+
+ht_con :: ConceptChunk
+ht_con = makeCC "Heat transfer" "Heat transfer"
+
+ht_symb :: USymb
+ht_symb = from_udefn heat_transfer_eqn
+
+heat_transfer_eqn = USynonym (UProd 
+  [kilogram ^. unit, UPow (second ^. unit) (-3),
+   UPow (centigrade ^. unit) (-1)])
+
 h_c_eq :: Expr
-h_c_eq = 2*(C k_c)*(C h_b) /
-  (2*(C k_c) + (C tau_c)*(C h_b))
+h_c_eq = 2*(C k_c)*(C h_b)/(2*(C k_c)+(C tau_c)*(C h_b))
 
 h_c :: EqChunk
-h_c = fromEqn "h_c" 
- "convective heat transfer coefficient between 
-    clad and coolant"
-   (sub h c) heat_transfer h_c_eq
+h_c = fromEqn "h_c" (S "convective heat transfer ...") 
+  (lH `sub` lC) heat_transfer h_c_eq
 
 \end{lstlisting}
 
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]
-
-\frametitle{Table of Symbols}
-
-\begin{lstlisting}[frame=none, showstringspaces=false, basicstyle=\small]
-h_c_eq :: Expr
-h_c_eq = 2*(C k_c)*(C h_b) /
-  (2*(C k_c) + (C tau_c)*(C h_b))
-
-h_c :: EqChunk
-h_c = fromEqn "h_c" 
- "convective heat transfer coefficient between 
-    clad and coolant"
-   (sub h c) heat_transfer h_c_eq
-
-\end{lstlisting}
-
-\end{frame}
+\hoffset=0in %resetting side bar
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -515,9 +588,35 @@ h_c = fromEqn "h_c"
 
 \begin{frame}
 
-\frametitle{Generate Code to Solve Instanced Models}
+\frametitle{Generate Code for IMs}
 
-part of IM2
+\noindent
+\begin{minipage}{\columnwidth}
+\begin{tabular}{@{} p{\colAwidth}  p{\colBwidth}@{}}
+\toprule
+% \textbf{Number}& \textbf{IM2} \\
+% \midrule
+% Label & \bf Energy balance on PCM to find $T_P$\\
+% \midrule
+Input&  $m_P$, $C_P^S$, $C_P^L$, $h_P$, $A_P$, $t_\text{final}$, $T_\text{init}$, $T_\text{melt}^P$,
+$T_W(t)$ from IM1\\
+\midrule
+Output & $T_P(t)$, $0 \leq t \leq t_\text{final}$, with initial 
+conditions, $T_W(0) = T_P(0) = T_\text{init}$ (A12), and $T_W(t)$ 
+from IM1, such that the following governing ODE is satisfied.  The
+specific ODE depends on $T_P$ as follows:\\
+&  $
+  \frac{dT_P}{dt} = \begin{cases}
+  \frac{dT_P}{dt} = \frac{1}{\tau^S_P}(T_W(t) - T_P(t)) & \text { if } T_P<T_\text{melt}^P\\
+  \frac{dT_P}{dt} = \frac{1}{\tau^L_P}(T_W(t) - T_P(t)) & \text { if } T_P>T_\text{melt}^P\\
+  0 & \text { if }  T_P=T_\text{melt}^P \\
+   ~ & \text{ and } 0 < \phi < 1\\
+  \end{cases}
+  $
+\\
+\bottomrule
+\end{tabular}
+\end{minipage}
 
 \end{frame}
 
@@ -536,8 +635,14 @@ part of IM2
 \item Game physics engine
 \end{itemize}
 \item Practical
-\item Decompose into small chunks
+\item Not trying to automate everything %trust developer
+\item Small chunks of knowledge
 \item Look for patterns
+\item Attempt to capture design decisions
+\begin{itemize}
+\item Version control
+\item Issue tracking
+\end{itemize}
 \end{itemize}
 
 \end{frame}
@@ -550,12 +655,12 @@ part of IM2
 
 \begin{frame}
 
-\frametitle{Conclusions}
+\frametitle{Concluding Remarks}
 
 \begin{itemize}
-\item SCS has the opportunity to lead other software fields by leveraging its
+\item SS has the opportunity to lead other software fields by leveraging its
   solid existing knowledge base
-\item DDD is feasible with a knowledge-based approach
+\item Document driven design is feasible with a knowledge-based approach
 \item Documentation for QA and software certification does not have to be
   painful, expensive or time consuming
 \item Drasil will be developed via practical case studies

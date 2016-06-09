@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Unit
 import Language.Drasil.Chunk
-import Control.Lens
+import Control.Lens hiding ((:>),(:<))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document

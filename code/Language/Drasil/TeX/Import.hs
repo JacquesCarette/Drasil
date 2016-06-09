@@ -1,6 +1,6 @@
 module Language.Drasil.TeX.Import where
 
-import Control.Lens
+import Control.Lens hiding ((:>),(:<))
 
 import Language.Drasil.Expr (Expr(..), Relation(..))
 import Language.Drasil.Expr.Extract

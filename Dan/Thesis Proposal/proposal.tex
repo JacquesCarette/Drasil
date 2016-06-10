@@ -115,13 +115,25 @@ made. With small changes, these updates can be done fairly quickly (though it
 may be tedious), but for larger changes the update process for each artifact is
 far more resource intensive. Oftentimes, these changes are not recorded across all artifacts due to a lack of resources.
 
-As artifacts in a software project begin to fall out of sync with each other, the qualities of the project as a whole suffer. Namely, traceability can be completely lost and maintaining the project becomes much more difficult.
+As artifacts in a software project begin to fall out of sync with each other,
+the qualities of the project as a whole suffer. This usually happens because
+these qualities (traceability, maintainability, verifiability, reproducibility,
+etc.) are hard to quantify and not seen as being as critical as traits such as
+correctness, accuracy, or performance.
+
+The impact on both traceability and maintainability arising from knowledge
+duplication is fairly obvious. When artifacts become inconsistent, traceability
+can be lost completely and maintenance becomes much more difficult. There are
+also impacts on other software qualities such as reproducibility and
+verifiability.
+
+
 
 %I intend to find a way to handle the massive amount
 %of inter-artifact knowledge duplication using a resource-friendly means. 
 %%Again, move to objectives?
 %
-%The issues arising from knowledge duplication impact both traceability and maintainability in fairly obvious ways. They also, however, impact other software qualities such as reproducibility and verifiability.
+%
 
 %OLD STUFF STARTS HERE
 I think the first step to improving software as a whole is to improve each of

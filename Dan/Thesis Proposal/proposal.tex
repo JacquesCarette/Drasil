@@ -95,12 +95,24 @@ suffer from a lack of high-quality software and tools. In many cases, SC
 developers are scientists first and lack a strong software engineering
 background.
 
+Scientists and engineers also heavily rely on models that share common
+mathematical/scientific knowledge. Common sense would dictate that these models
+should be created once and reused as necessary, across any applicable projects.
+However, that is often not the case as many models are reimplemented for each
+new project. Therefore, I intend to address this problem and hope to improve the
+reuse of knowledge for scientific models.
 
+Multiple implementations of the same model is not my only concern involving
+duplication. A typical software project involves many different software
+artifacts (requirements and design documents, test cases, source code, manuals,
+etc.), each of which contain (some subset of) the same underlying scientific
+knowledge. Essentially, this knowledge is duplicated as necessary into each of
+the requisite artifacts for a project. As the project evolves, some of this
+knowledge will inevitably change, leading to issues with inter-artifact
+consistency until someone manually updates each artifact after a change is
+made.
 
-%To refine the idea even more, I want to focus on
-%applications where agile development is ill-suited or completely unusable, such
-%as those that are safety-critical.
-
+%OLD STUFF STARTS HERE
 I think the first step to improving software as a whole is to improve each of
 the software artifacts. To that end, I would like to expand the ideas of
 literate programming (which I will discuss more in-depth in

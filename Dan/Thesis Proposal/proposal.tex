@@ -65,7 +65,7 @@ hard to achieve as finding the source of a
 piece of information is difficult among the possibilities. Over time
 this impacts the maintainability of a piece of software, as developers may not
 be able to track down the source of a problem. Also, with many duplicated
-information sources, it makes creating documentation more difficult, reducing a
+information sources, it makes creating documentation more tedious, reducing a
 developer's desire to produce and maintain high-quality documentation. I want to
 facilitate the improvement of qualities (maintainability, traceability,
 reproducibility, etc.) across all artifacts of a piece of software. I believe a
@@ -86,48 +86,64 @@ and improve the overall quality of software.
 
 \section{Introduction}
 
-I want everyone to make better software. I believe this can be achieved by
-improving software qualities such as maintainability, traceability,
-verifiability, reproducibility, and reusability. As that is too broad of a
-target, I will be focusing on well-understood domains; specifically Scientific
-Computing (SC). SC has a very rich, well-understood background, but tends to
-suffer from a lack of high-quality software and tools. In many cases, SC
-developers are scientists first and lack a strong software engineering
-background.
+%I want everyone to make better software. I believe this can be achieved by
+%improving software qualities such as maintainability, traceability,
+%verifiability, reproducibility, and reusability. As that is too broad of a
+%target, I will be focusing on well-understood domains; specifically Scientific
+%Computing (SC). SC has a very rich, well-understood background, but tends to
+%suffer from a lack of high-quality software and tools. In many cases, SC
+%developers are scientists first and lack a strong software engineering
+%background.
 
-Scientists and engineers also heavily rely on models that share common
-mathematical/scientific knowledge. Common sense would dictate that these models
-should be created once and reused as necessary, across any applicable projects.
-However, that is often not the case as many models are reimplemented for each
-new project. Therefore, I intend to address this problem and hope to improve the
-reuse of knowledge for scientific models. 
-%Maybe move the ``I intend'' to objectives?
+Scientists and engineers rely heavily on models that share common
+mathematical/scientific knowledge. These are shared, in textbook form, across
+many projects. However, when it comes to implementing software, this information
+is then duplicated for each project, as well as being duplicated within the
+project (in requirements, design documents, code and tests, for example). It
+should be possible to capture this knowledge once, and then re-use it, first
+within the same project but in different views (documents/contexts), then across
+many projects. I want to create a system that deals with this issue of
+information duplication, especially for the knowledge contained in scientific
+models.
 
-Multiple implementations of the same model is not my only concern involving
-duplication. A typical software project involves many different software
-artifacts (requirements and design documents, test cases, source code, manuals,
-etc.), each of which contain (some subset of) the same underlying scientific
-knowledge. Essentially, this knowledge is duplicated as necessary into each of
-the requisite artifacts for a project. As the project evolves, some of this
-knowledge will inevitably change, leading to issues with inter-artifact
-consistency until someone manually updates each artifact after the change is
-made. With small changes, these updates can be done fairly quickly (though it
-may be tedious), but for larger changes the update process for each artifact is
-far more resource intensive. Oftentimes, these changes are not recorded across all artifacts due to a lack of resources.
+As it stands, information duplication can have a direct impact on qualities such
+as maintainability, traceability, verifiability, and reproducibility. Consider a
+project containing (at least) these four software artifacts: Software Requirements
+Specification (SRS), design document, source code, and a testing document. As
+the project evolves, some of the knowledge contained within it will inevitably
+change due to changing requirements, new design decisions, technical or resource
+limitations, etc. Updating the software artifacts to reflect these changes is
+tedious; a developer must trace their way through each of the artifacts to
+ensure new information has been added (new requirements and/or design
+decisions), the change does not cause conflicts,
+%with existing requirements/design/assumptions/test cases 
+and any assumptions made or test cases to be used are still applicable (or are
+appropriately removed/updated).
+%Can I say the following?
+It is not uncommon for developers to lack the resources or motivation to update
+each artifact with every minor change.
 
 As artifacts in a software project begin to fall out of sync with each other,
-the qualities of the project as a whole suffer. This usually happens because
-these qualities (traceability, maintainability, verifiability, reproducibility,
-etc.) are hard to quantify and not seen as being as critical as traits such as
-correctness, accuracy, or performance.
+the qualities of the project as a whole suffer. Consider traceability: if the
+artifacts in a software project are inconsistent with each other, how can one
+accurately analyze a change or validate a requirement? On a similar note, how
+easy is it to maintain a system if one cannot track where a problem came from?
 
-The impact on both traceability and maintainability arising from knowledge
-duplication is fairly obvious. When artifacts become inconsistent, traceability
-can be lost completely and maintenance becomes much more difficult. There are
-also impacts on other software qualities such as reproducibility and
-verifiability.
+%TODO: I intend to ... Show that this is an opportunity for improvement.
 
 
+%
+%Multiple implementations of the same model is not my only concern involving
+%duplication. A typical software project involves many different software
+%artifacts (requirements and design documents, test cases, source code, manuals,
+%etc.), each of which contain (some subset of) the same underlying scientific
+%knowledge. Essentially, this knowledge is duplicated as necessary into each of
+%the requisite artifacts for a project. As the project evolves, some of this
+%knowledge will inevitably change, leading to issues with inter-artifact
+%consistency until someone manually updates each artifact after the change is
+%made. With small changes, these updates can be done fairly quickly (though it
+%may be tedious), but for larger changes the update process for each artifact is
+%far more resource intensive. Oftentimes, these changes are not recorded across all artifacts due to a lack of resources.
 
 %I intend to find a way to handle the massive amount
 %of inter-artifact knowledge duplication using a resource-friendly means. 
@@ -135,14 +151,27 @@ verifiability.
 %
 %
 
-%OLD STUFF STARTS HERE
 I think the first step to improving software as a whole is to improve each of
 the software artifacts. To that end, I would like to expand the ideas of
 literate programming (which I will discuss more in-depth in
 Section~\ref{sec:lp}). Specifically, I want to keep the idea of \textit{chunks}
 and expand its application to not only code snippets, but the fundamental
-knowledge underlying a piece of software.
+knowledge underlying a piece of software. I believe capturing this knowledge
+will be paramount to creating a new, so-called ``knowledge-based'' approach to
+software development.
 
+As improving all software is too broad of a target, I will be focusing on
+well-understood domains. I believe this is a necessary restriction because a
+knowledge-based approach will require a thoroughly well-understood background to
+facilitate the requisite knowledge capture. To that end, I will focus
+specifically on the domain of Scientific Computing (SC). SC has a very rich,
+well-understood background, which has already been documented in incredible
+detail. Also, in many cases, SC developers are scientists first and lack a
+strong software engineering background. It is my hope that my approach will
+be well-suited to SC developers as it will allow them to focus on the science.
+
+
+%OLD STUFF STARTS HERE
 I am not creating any individual new ideas. Instead, I want to combine ideas
 that have existed for some time and use them in a novel way. That is where
 the idea of a knowledge-based approach to literate software comes from.

@@ -108,16 +108,16 @@ models.
 
 As it stands, information duplication can have a direct impact on qualities such
 as maintainability, traceability, verifiability, and reproducibility. Consider a
-project containing (at least) these four software artifacts: Software Requirements
-Specification (SRS), design document, source code, and a testing document. As
-the project evolves, some of the knowledge contained within it will inevitably
-change due to changing requirements, new design decisions, technical or resource
-limitations, etc. Updating the software artifacts to reflect these changes is
-tedious; a developer must trace their way through each of the artifacts to
-ensure new information has been added (new requirements and/or design
-decisions), the change does not cause conflicts,
+project containing (at least) these four software artifacts: requirements
+document, design document, source code, and a testing document. As the project
+evolves, some of the knowledge contained within it will inevitably change due to
+changing requirements, new design decisions, technical or resource limitations,
+etc. Updating the software artifacts to reflect these changes is tedious; a
+developer must trace their way through each of the artifacts to ensure new
+information has been added (new requirements and/or design decisions, code
+implementation, and test cases), the change does not cause conflicts,
 %with existing requirements/design/assumptions/test cases 
-and any assumptions made or test cases to be used are still applicable (or are
+and any existing test cases or assumptions are still applicable (or are
 appropriately removed/updated).
 
 Now consider a software project with more artifacts: each change to the
@@ -131,28 +131,22 @@ the qualities of the project as a whole suffer. Consider traceability: if the
 artifacts in a software project are inconsistent with each other, how can one
 accurately analyze a change or validate a requirement? On a similar note, how
 easy is it to maintain a system if one cannot track where a problem came from?
+Also, certification becomes impossible until all of the artifacts have been
+updated, as it would be impossible to verify that the software is correct. I
+want to ensure that maintaining and updating software artifacts comes at very
+little cost to the developer.
 
-%TODO: I intend to ... Show that this is an opportunity for improvement.
+Up-to-date software artifacts are also incredibly important for scientists as a
+whole. Good science relies on replicable results; being able to reproduce the
+exact piece of software, as well as any inputs used in running a simulation is
+vital. Due to version changes, minor hacks, and undocumented modifications, it
+is often difficult for other scientists to reproduce the exact results from a
+given simulation. Would it not lead to higher confidence if we could reproduce
+and analyze the results of the original experiment? I want to help scientists
+ensure their work is easily reproducible by giving them a means of sharing how
+their software was built, as well as any necessary input or configuration data.
 
-
-%
-%Multiple implementations of the same model is not my only concern involving
-%duplication. A typical software project involves many different software
-%artifacts (requirements and design documents, test cases, source code, manuals,
-%etc.), each of which contain (some subset of) the same underlying scientific
-%knowledge. Essentially, this knowledge is duplicated as necessary into each of
-%the requisite artifacts for a project. As the project evolves, some of this
-%knowledge will inevitably change, leading to issues with inter-artifact
-%consistency until someone manually updates each artifact after the change is
-%made. With small changes, these updates can be done fairly quickly (though it
-%may be tedious), but for larger changes the update process for each artifact is
-%far more resource intensive. Oftentimes, these changes are not recorded across all artifacts due to a lack of resources.
-
-%I intend to find a way to handle the massive amount
-%of inter-artifact knowledge duplication using a resource-friendly means. 
-%%Again, move to objectives?
-%
-%
+%How to bridge this gap? TODO
 
 I think the first step to improving software as a whole is to improve each of
 the software artifacts. To that end, I would like to expand the ideas of
@@ -173,14 +167,12 @@ detail. Also, in many cases, SC developers are scientists first and lack a
 strong software engineering background. It is my hope that my approach will
 be well-suited to SC developers as it will allow them to focus on the science.
 
-
-%OLD STUFF STARTS HERE
-I am not creating any individual new ideas. Instead, I want to combine ideas
-that have existed for some time and use them in a novel way. That is where
-the idea of a knowledge-based approach to literate software comes from.
-Not only do I want to create better software using a process similar to
-literate programming, but I want to ensure that process will cover all
-necessary software artifacts.
+I do not believe I am creating any individual new ideas. Instead, I want to
+combine ideas that have existed for some time and use them in a novel way. That
+is where the idea of a knowledge-based approach to literate software comes from.
+Not only do I want to create better software using a process similar to literate
+programming, I want to ensure that process will cover all necessary software
+artifacts.
 
 To that end, I believe a tool will be necessary to facilitate my approach. 
 A framework known as ``Drasil'' is currently in development and will be explained in 

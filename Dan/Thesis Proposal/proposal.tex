@@ -288,20 +288,21 @@ flexibility on what should be presented or suppressed in the output.
 
 Many attempts to address the issues with LP's popularity have focused on
 changing or removing the output language or text processor dependency. Many new
-tools were developed such as: CWeb (for the C language), javadoc (for Java),
-DOC++ (for C++), Doxygen (for multiple languages), noweb (programming language
-independent), and more. The development of new tools led to the introduction of
-many new features including, but not limited to, a ``What You See Is What You
-Get'' (WYSIWYG) editor~\cite{FritzsonGunnarssonAndJirstrand2002}, phantom
+tools were developed such as: CWeb (for the C language), DOC++ (for C++), noweb
+(programming language independent), and more. Tools such as javadoc (for Java)
+and Doxygen (for multiple languages) were also influenced by LP. The development
+of new tools led to the introduction of many new features including, but not
+limited to, a ``What You See Is What You Get'' (WYSIWYG)
+editor~\cite{FritzsonGunnarssonAndJirstrand2002}, phantom
 abstracting~\cite{ShumAndCook1993}, and even movement away from the ``one
 source'' idea~\cite{Simonis2003}.
 
 While these tools did not bring LP into the mainstream~\cite{Ramsey1994}, they
 did help drive the understanding behind what exactly LP tools must do. Although
 LP is not yet mainstream, we can see it becoming more standardized in certain
-domains (for example: Agda, Haskell, and R support LP). I will use the knowledge
-gained throughout LP's history to help develop the Drasil framework into a
-full-featured and useful tool.
+domains (for example: Agda, Haskell, and R support LP to some extent). I will
+use the knowledge gained throughout LP's history to help develop the Drasil
+framework into a full-featured and useful tool.
 
 \subsection{Literate Software}
 
@@ -348,11 +349,12 @@ that compendia should be used for peer review and distribution of scientific
 work~\cite{GentlemanAndLang2012}.
 
 Currently, several tools have been developed for reproducible research
-including, but not limited to, Sweave, SASweave, Statweave, Scribble, and
-Org-mode. The most popular of those being Sweave~\cite{SchulteEtAl2012}. The
-aforementioned tools maintain a focus on code and certain computational details.
-It is my hope that the Drasil framework will one day surpass these tools due to
-its ability to simplify the creation of each software artifact.
+including, but not limited to, Sweave~\cite{SchulteEtAl2012}, SASweave~\cite{},
+Statweave~\cite{}, Scribble~\cite{}, and Org-mode~\cite{}. The most popular of
+those being Sweave~\cite{SchulteEtAl2012}. The aforementioned tools maintain a
+focus on code and certain computational details. It is my hope that the Drasil
+framework will one day surpass these tools due to its ability to simplify the
+creation of each software artifact.
 
 %Code generation section?
 
@@ -361,23 +363,22 @@ its ability to simplify the creation of each software artifact.
 
 Looking at the current state of SC software development, there are many areas
 for improvement particularly the need for applying better software engineering
-practices and improving knowledge reuse. The simplest approach for improving
-development would be to get better developers, which is not necessarily feasible
-for SC software. Software engineering education is not typically part of an SC
-developer's background, and having software engineers develop SC software is
-problematic because the software engineers typically lack the necessary domain
-knowledge. Domain experts require tools that simplify the software engineering
-process so they can do things the ``right'' way. My first objective, therefore,
-is to simplify the software development process by allowing scientists to focus
-on the science.
+practices and improving knowledge reuse. 
+%The simplest approach for improving
+%development would be to get better developers, which is not necessarily feasible
+%for SC software. Software engineering education is not typically part of an SC
+%developer's background, and having software engineers develop SC software is
+%problematic because the software engineers typically lack the necessary domain
+%knowledge. 
+Domain experts require tools that simplify the software engineering process so
+they can do things the ``right'' way. My first objective, therefore, is to
+simplify the software development process by allowing scientists to focus on the
+science. This objective, however, will not be achievable during the time frame I
+have alotted for my thesis, so I believe a more focused and attainable objective
+would be to create tool(s) which will enable knowledge-driven SC software
+development.
 
-My second objective is to increase software qualities (maintainability,
-traceability, reproducibility, verifiability, reusability, etc.) in SC software.
-The first step toward this improvement is to better understand the
-fundamental scientific background underlying said software. As such I will be
-focusing on understanding and capturing that knowledge.
-
-My third objective, a natural progression from the second, is better overall
+My third objective, is the production of better overall
 software artifacts (requirements and design documents, source code, etc.). It is
 a worrying trend that software artifacts tend to fall out of sync with each
 other over time, so ensuring they remain consistent is a means to improve.

@@ -64,8 +64,8 @@ stands, information duplication creates a number of problems. Traceability is
 hard to achieve as finding the source of a
 piece of information is difficult among the possibilities. Over time
 this impacts the maintainability of a piece of software, as developers may not
-be able to track down the source of a problem. Also, with many duplicated
-information sources, it makes creating documentation more tedious, reducing a
+be able to find the source of a problem. Also, with many duplicated
+information sources, creating documentation becomes more tedious, reducing a
 developer's desire to produce and maintain high-quality documentation. I want to
 facilitate the improvement of qualities (maintainability, traceability,
 reproducibility, etc.) across all artifacts of a piece of software. I believe a
@@ -132,19 +132,20 @@ artifacts in a software project are inconsistent with each other, how can one
 accurately analyze a change or validate a requirement? On a similar note, how
 easy is it to maintain a system if one cannot track where a problem came from?
 Also, certification becomes impossible until all of the artifacts have been
-updated, as it would be impossible to verify that the software is correct. I
-want to ensure that maintaining and updating software artifacts comes at very
-little cost to the developer.
+updated, as there is no way to verify/validate the software's correctness. I
+want to create a system that allows developers to maintain and update software
+artifacts at very little cost.
 
 Up-to-date software artifacts are also incredibly important for scientists as a
 whole. Good science relies on replicable results; being able to reproduce the
 exact piece of software, as well as any inputs used in running a simulation is
-vital. Due to version changes, minor hacks, and undocumented modifications, it
-is often difficult for other scientists to reproduce the exact results from a
-given simulation. Would it not lead to higher confidence if we could reproduce
-and analyze the results of the original experiment? I want to help scientists
-ensure their work is easily reproducible by giving them a means of sharing how
-their software was built, as well as any necessary input or configuration data.
+vital. Due to library version changes, minor hacks, and undocumented
+modifications, it is often difficult for other scientists to reproduce the exact
+results from a given simulation. Would it not lead to higher confidence if we
+could reproduce and analyze the results of the original experiment? I want to
+help scientists ensure their work is easily reproducible by giving them a means
+of sharing how their software was built, as well as any necessary input or
+configuration data.
 
 %How to bridge this gap? TODO
 
@@ -165,7 +166,8 @@ specifically on the domain of Scientific Computing (SC). SC has a very rich,
 well-understood background, which has already been documented in incredible
 detail. Also, in many cases, SC developers are scientists first and lack a
 strong software engineering background. It is my hope that my approach will
-be well-suited to SC developers as it will allow them to focus on the science.
+be well-suited to SC developers as it will allow them to focus more of their
+energy on the science than the software development.
 
 I do not believe I am creating any individual new ideas. Instead, I want to
 combine ideas that have existed for some time and use them in a novel way. That
@@ -278,14 +280,14 @@ VNODE-LP~\cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
 Implementation''~\cite{PharrAndHumphreys2004}. The latter being a literate
 program as well as a textbook. Shum and Cook discuss the topic of LP's lack of
 popularity and present the idea that it comes from a couple of main issues:
-dependency on a particular output language or text processor, the lack of
-flexibility on what should be presented/suppressed in the output.
+dependency on a particular output language or text processor, and the lack of
+flexibility on what should be presented or suppressed in the output.
 
 Many attempts to address the issues with LP's popularity have focused on
 changing or removing the output language or text processor dependency. Many new
 tools were developed such as: CWeb (for the C language), javadoc (for Java),
 DOC++ (for C++), Doxygen (for multiple languages), noweb (programming language
-independent), and more. The development of new tools led the introduction of
+independent), and more. The development of new tools led to the introduction of
 many new features including, but not limited to, a ``What You See Is What You
 Get'' (WYSIWYG) editor~\cite{FritzsonGunnarssonAndJirstrand2002}, phantom
 abstracting~\cite{ShumAndCook1993}, and even movement away from the ``one
@@ -294,7 +296,9 @@ source'' idea~\cite{Simonis2003}.
 While these tools did not bring LP into the mainstream~\cite{Ramsey1994}, they
 did help drive the understanding behind what exactly LP tools must do. Although
 LP is not yet mainstream, we can see it becoming more standardized in certain
-domains (for example: Agda, Haskell, and R support LP).
+domains (for example: Agda, Haskell, and R support LP). I will use the knowledge
+gained throughout LP's history to help develop the Drasil framework into a
+full-featured and useful tool.
 
 \subsection{Literate Software}
 
@@ -322,7 +326,7 @@ variety of ways. It included new chunk types, the ability to refine chunks, the
 ability to specify interfaces and communication between boxes, and the ability
 to decompose boxes at any level. However, literate software (and LSD) remain
 primarily code-focused with very little support for creating other software
-artifacts.
+artifacts. This is one area where I believe Drasil will outperform WebBox.
 
 \subsection{Reproducible Research}
 
@@ -345,7 +349,7 @@ including, but not limited to, Sweave, SASweave, Statweave, Scribble, and
 Org-mode. The most popular of those being Sweave~\cite{SchulteEtAl2012}. The
 aforementioned tools maintain a focus on code and certain computational details.
 It is my hope that the Drasil framework will one day surpass these tools due to
-its ability to simplify the creation of all software artifacts.
+its ability to simplify the creation of each software artifact.
 
 %Code generation section?
 
@@ -432,7 +436,7 @@ Specific Languages (eDSLs) in Haskell. I have currently implemented six eDSLs as
 follows:
 
 \begin{enumerate}
-\item Expression language -- A simple expression language that allows us to
+\item Expression language -- A simple expression language that allows one to
 capture knowledge relating to equations and mathematical operations. It includes
 operations such as addition, multiplication, derivation, and exponentiation
 among others.
@@ -517,11 +521,12 @@ using the representation languages, then pretty-prints the results.
 
 \subsection{Using Drasil}
 
-For this section I will touch on two case studies that I have used to motivate
-the development of Drasil. The first is a simplified version of a Software
+For this section I will touch on one of the case studies that I have used to
+motivate the development of Drasil. It is a simplified version of a Software
 Requirements Specification (SRS) for a fuel pin in a nuclear
-reactor~\cite{SmithAndKoothoor2016} and the second is a SRS for a solar water
-heating tank.
+reactor~\cite{SmithAndKoothoor2016}. While other case studies are being used to
+help motivate Drasil's development, they will not be shown explicitly at
+this time, as their results can be seen using the fuel pin example.
 
 Let's start by looking at a single term from the fuel pin SRS: $h_c$. This term
 represents the convective heat transfer coefficient between the clad and
@@ -632,8 +637,8 @@ intro = Paragraph (S "Throughout this ...")
 \label{fig:out}
 \end{figure}
 
-Already several advantages of using Drasil and a knowledge based approach are
-obvious. First off, there are no inconsistencies in the knowledge both within
+Already several advantages of using Drasil and a knowledge based approach become
+apparent First off, there are no inconsistencies in the knowledge both within
 and across artifacts. Manually copying knowledge is no longer necessary, and we
 can easily trace where a piece of knowledge came from. Should anything need
 updating, the updates will automatically propagate throughout the artifacts when
@@ -651,15 +656,8 @@ should update all of the artifacts and remove the bug.
 There are a few disadvantages to using the knowledge based approach with Drasil.
 The most obvious is the inability to include local hacks. Any human-modified
 generated file will lose its modifications the next time the generator is run.
-
-%Drasil also forces a sort of all-or-nothing aproach which removes meaningful
-%iteration. The implementation must be done right the first time (or very close
-%to it), requiring more development time. Also, the longer a project's lifecycle,
-%the more involved the process of adding or modifying existing knowledge can
-%become.
-
-Finally, creating common-knowledge libraries is fairly difficult as it requires
-a domain expert to be involved.
+Creating common-knowledge libraries is also fairly difficult as it requires the
+involvement of domain experts.
 
 \section{Work Plan and Next Steps}
 
@@ -708,7 +706,6 @@ task will involve implementing a large example and helping to expand Drasil.
                       Finish PhD course requirements. 
                       
                       Meet with Ernie from OPG. 
-
 \\ \hline
       Winter 2016 & Implement external syntax for Drasil. 
 
@@ -734,8 +731,7 @@ task will involve implementing a large example and helping to expand Drasil.
 \\ \hline
       Fall 2017 & Meet with Ernie from OPG. 
       
-								 Update Drasil and perform a final evaluation. 
-								 
+								 Update Drasil and perform a final evaluation. 			 
 \\ \hline
       Winter 2017 & Begin writing up full PhD Thesis.
 \\ \hline

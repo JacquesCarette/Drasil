@@ -286,23 +286,40 @@ popularity and present the idea that it comes from a couple of main issues:
 dependency on a particular output language or text processor, and the lack of
 flexibility on what should be presented or suppressed in the output.
 
+%--------------------------------------------------------------------------------
+
+I believe there are several other factors which contributed to LP's lack of
+popularity and slow adoption thus far. LP allows a developer to write their code
+and its documentation simultaneously. However, that documentation is used to
+explain the implementation; it is not necessarily used in the same way as
+artifacts that software engineers expect. LP also does not really simplify the
+development process: documentation and code must be written as usual, and there
+is the added effort of re-ordering the chunks. The only major benefits to the
+development process are that the chunks can be written in any order (allowing a
+more natural flow in development), the documentation and code are (in theory)
+updated simultaneously, and chunks can be automatically incorporated into the
+documentation (reducing some information duplication).
+
+%--------------------------------------------------------------------------------
+
 Many attempts to address the issues with LP's popularity have focused on
-changing or removing the output language or text processor dependency. Many new
-tools were developed such as: CWeb (for the C language), DOC++ (for C++), noweb
-(programming language independent), and more. Tools such as javadoc (for Java)
-and Doxygen (for multiple languages) were also influenced by LP. The development
-of new tools led to the introduction of many new features including, but not
-limited to, a ``What You See Is What You Get'' (WYSIWYG)
+changing or removing the output language or text processor dependency. Several
+new tools were developed such as: CWeb (for the C language), DOC++ (for C++),
+noweb (programming language independent), and more. Tools such as javadoc (for
+Java) and Doxygen (for multiple languages) were also influenced by LP.
+
+The development of new tools led to the introduction of many new features
+including, but not limited to, a ``What You See Is What You Get'' (WYSIWYG)
 editor~\cite{FritzsonGunnarssonAndJirstrand2002}, phantom
 abstracting~\cite{ShumAndCook1993}, and even movement away from the ``one
 source'' idea~\cite{Simonis2003}.
 
 While these tools did not bring LP into the mainstream~\cite{Ramsey1994}, they
-did help drive the understanding behind what exactly LP tools must do. Although
-LP is not yet mainstream, we can see it becoming more standardized in certain
-domains (for example: Agda, Haskell, and R support LP to some extent). I will
-use the knowledge gained throughout LP's history to help develop the Drasil
-framework into a full-featured and useful tool.
+did help drive the understanding behind what exactly LP tools must do. We can
+now see LP becoming more standardized in certain domains (for example: Agda,
+Haskell, and R support LP to some extent), even though it is not yet common
+practice. I intend to use the knowledge gained from the history of LP to develop
+the Drasil framework into a full-featured and useful tool.
 
 \subsection{Literate Software}
 

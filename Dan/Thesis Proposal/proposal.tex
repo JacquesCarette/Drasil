@@ -180,7 +180,7 @@ programming, I want to ensure that process will cover all necessary software
 artifacts.
 
 To that end, I believe a tool will be necessary to facilitate my approach. 
-A framework known as ``Drasil'' is currently in development and will be explained in 
+A framework known as \emph{Drasil} is currently in development and will be explained in 
 Section~\ref{sec:Drasil}. 
 
 %Development of Drasil is following a practical,
@@ -198,9 +198,9 @@ To pursue this line of research, first one needs to understand the history of
 research in several closely-related areas. Since I will be focusing on the
 improvement of SC software, the obvious starting point would be to look at the
 current state of SC software development and its challenges. Also, as I am
-intending to expand the ideas of literate programming, it is necessary to delve
-into sufficient depth on LP and why it has not been widely adapted as yet, as
-well as any attempts to expand or build upon it. Finally, with the idea of
+intending to expand the ideas of Literate Programming (LP), it is necessary to
+delve into sufficient depth on LP and why it has not been widely adapted as yet,
+as well as any attempts to expand or build upon it. Finally, with the idea of
 long-term maintainability, full traceability, and reproducibility in mind, I
 would be remiss if I did not look into the field of reproducible research.
 
@@ -277,8 +277,8 @@ those in mind we can see that more effective, maintainable code can be produced
 when (properly) using LP~\cite{PieterseKourieAndBoake2004}.
 
 Even with all of the benefits of LP, it has not been very
-popular~\cite{ShumAndCook1993}. Though it has not been popular, there are still
-several successful examples of LP's use in SC; two that come to mind are
+popular~\cite{ShumAndCook1993}. Still, there are
+several successful examples of LP's use in SC. Two such examples are
 VNODE-LP~\cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
 Implementation''~\cite{PharrAndHumphreys2004}. The latter being a literate
 program as well as a textbook. Shum and Cook discuss the topic of LP's lack of
@@ -391,11 +391,11 @@ Domain experts require tools that simplify the software engineering process so
 they can do things the ``right'' way. My first objective, therefore, is to
 simplify the software development process by allowing scientists to focus on the
 science. This objective, however, will not be achievable during the time frame I
-have alotted for my thesis, so I believe a more focused and attainable objective
-would be to create tool(s) which will enable knowledge-driven SC software
-development.
+have allotted for my thesis, so I believe a more focused and attainable
+objective would be to create tool(s) which will enable knowledge-driven SC
+software development.
 
-My third objective, is the production of better overall
+My second objective, is the production of better overall
 software artifacts (requirements and design documents, source code, etc.). It is
 a worrying trend that software artifacts tend to fall out of sync with each
 other over time, so ensuring they remain consistent is a means to improve.
@@ -412,18 +412,18 @@ software easily.
 
 To meet my objectives I am using a combination of existing ideas, which I have
 dubbed a \textit{knowledge-based} approach to software development. First off, I
-want to expand and use ideas from LP. Namely, the brilliant idea of chunks,
-however, it should be expanded to represent encapsulated knowledge. If the
-knowledge behind an underlying concept can be properly encapsulated, then it can
-easily be reused and duplication can be avoided. 
+want to expand and use ideas from LP. Namely, I want to keep the brilliant idea
+of chunks, however, it should be expanded to represent encapsulated knowledge,
+not just code. If the knowledge behind an underlying concept can be properly
+encapsulated, then it can easily be reused and duplication can be avoided.
 
 Knowledge encapsulation should be done at the specification level instead of the
 code level as was previously done in LP. It will include assumptions,
-derivations, equations, etc. and from there it will be a fairly simple and
+derivations, equations, etc.~and from there it will be a fairly simple and
 straightforward process to get a code representation. Specifically, the
-high-level knowledge can be used for the automatic generation of code.
-I believe this will simplify the development of software artifacts by allowing
-captured knowledge to be transformed and reused as necessary automatically.
+high-level knowledge can be used for the automatic generation of code. I believe
+this will simplify the development of software artifacts by automatically
+allowing captured knowledge to be transformed and reused as necessary.
 
 The standard LP style helps to increase consistency in documentation, but it
 does not go far enough. It is easy for a developer to update the code and/or
@@ -447,8 +447,8 @@ I also believe my approach will be useful for scientists because anyone who is
 given access to the recipes and chunks used in creating a piece of software will
 be able to reproduce that software exactly. 
 
-Currently, I am taking a practical, example-driven approach to create a framework
-(called \textit{Drasil}) to exemplify this knowledge-based approach to software
+Currently, I am taking a practical, example-driven approach to create a
+framework, Drasil, to exemplify this knowledge-based approach to software
 development. Thus far, the implementation of Drasil has been guided by some
 small and fairly specific case studies. However, I plan to continue expanding
 the framework through the use of larger, more varied case studies. More

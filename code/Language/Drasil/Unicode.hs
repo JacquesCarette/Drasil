@@ -6,17 +6,32 @@ class Render a where
 
 data Alpha  = Alpha_L
             | Alpha  
+data Beta   = Beta_L
+            | Beta
 data Circle = Circle
 data Delta  = Delta_L
             | Delta
+data Ell    = Ell
+data Gamma  = Gamma_L
+            | Gamma
+data Lambda = Lambda_L
+            | Lambda
+data LEQ    = LEQ
 data Nabla  = Nabla
+data Nu     = Nu_L
+            | Nu
+data Omega  = Omega_L
+            | Omega
 data Partial = Partial
 data Phi    = Phi_L
+            | Phi_V
             | Phi
 data Rho    = Rho_L
             | Rho
 data Tau    = Tau_L
             | Tau
+data Upsilon = Upsilon_L
+             | Upsilon
             
 --
 
@@ -25,10 +40,20 @@ instance Render Alpha where
   render TeX Alpha     = "\\Alpha{}"
   render Plain Alpha_L = "alpha"
   render Plain Alpha   = "uAlpha"
-  render HTML Alpha_L  = "alpha;"
-  render HTML Alpha    = "Alpha;"
+  render HTML Alpha_L  = "&alpha;"
+  render HTML Alpha    = "&Alpha;"
   
 -- 
+
+instance Render Beta where
+  render TeX Beta_L   = "\\beta{}"
+  render TeX Beta     = "\\Beta{}"
+  render Plain Beta_L = "beta"
+  render Plain Beta   = "uBeta"  
+  render HTML Beta_L  = "&beta;"
+  render HTML Beta    = "&Beta;"
+
+--
 
 instance Render Circle where
   render TeX Circle   = "${}^{\\circ}$"--temp $ workaround until unit printing's fixed.
@@ -47,10 +72,64 @@ instance Render Delta where
   
 --
 
+instance Render Ell where
+  render TeX Ell    = "\\ell{}"
+  render Plain Ell  = "ell"
+  render HTML Ell   = "&#8467;"
+
+--
+
+instance Render Gamma where
+  render TeX Gamma_L   = "\\gamma{}"
+  render TeX Gamma     = "\\Gamma{}"
+  render Plain Gamma_L = "gamma"
+  render Plain Gamma   = "uGamma"
+  render HTML Gamma_L  = "&gamma;"
+  render HTML Gamma    = "&Gamma;"
+
+--
+
+instance Render Lambda where
+  render TeX Lambda_L   = "\\lambda{}"
+  render TeX Lambda     = "\\Lambda{}"
+  render Plain Lambda_L = "lambda"
+  render Plain Lambda   = "uLambda"
+  render HTML Lambda_L  = "&lambda;"
+  render HTML Lambda    = "&Lambda;"
+
+--
+
+instance Render LEQ where
+  render TeX LEQ        = "\\leq{}"
+  render Plain LEQ      = "leq"
+  render HTML LEQ       = "&le;"
+  
+--
+
 instance Render Nabla where
   render TeX Nabla   = "\\nabla{}"
   render Plain Nabla = "nabla"
   render HTML Nabla  = "&nabla;"
+
+--
+
+instance Render Nu where
+  render TeX Nu_L   = "\\nu{}"
+  render TeX Nu     = "\\Nu{}"
+  render Plain Nu_L = "nu"
+  render Plain Nu   = "uNu"
+  render HTML Nu_L  = "&nu;"
+  render HTML Nu    = "&Nu;"
+
+--
+
+instance Render Omega where
+  render TeX Omega_L   = "\\omega{}"
+  render TeX Omega     = "\\Omega{}"
+  render Plain Omega_L = "omega"
+  render Plain Omega   = "uOmega"
+  render HTML Omega_L  = "&omega;"
+  render HTML Omega    = "&Omega;"
 
 --
 
@@ -62,10 +141,13 @@ instance Render Partial where
 
 instance Render Phi where
   render TeX Phi_L   = "\\phi{}"
+  render TeX Phi_V   = "\\varphi{}"
   render TeX Phi     = "\\Phi{}"
   render Plain Phi_L = "phi"
+  render Plain Phi_V = "varphi"
   render Plain Phi   = "uPhi"
   render HTML Phi_L  = "&phi;"
+  render HTML Phi_V  = "&phiv;"
   render HTML Phi    = "&Phi;"
   
 --
@@ -87,3 +169,13 @@ instance Render Tau where
   render Plain Tau   = "uTau"  
   render HTML Tau_L  = "&tau;"
   render HTML Tau    = "&Tau;"
+
+--
+
+instance Render Upsilon where
+  render TeX Upsilon_L   = "\\upsilon{}"
+  render TeX Upsilon     = "\\Upsilon{}"
+  render Plain Upsilon_L = "upsilon"
+  render Plain Upsilon   = "uUpsilon"  
+  render HTML Upsilon_L  = "&upsilon;"
+  render HTML Upsilon    = "&Upsilon;"

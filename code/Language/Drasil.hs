@@ -8,8 +8,8 @@ module Language.Drasil (
   -- Expr
   , Expr(..), Relation(..)
   -- all the stuff from Unicode
-  , Alpha(..), Circle(..), Delta(..), Nabla(..), Partial(..)
-  , Phi(..), Rho(..), Tau(..)
+  , Alpha(..), Beta(..), Circle(..), Delta(..), Ell(..), Gamma(..), Lambda(..), LEQ(..), Nabla(..)
+  , Nu(..), Omega(..), Partial(..), Phi(..), Rho(..), Tau(..), Upsilon(..)
   -- Unit
   , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
   , from_udefn , makeDerU, unitCon
@@ -31,8 +31,8 @@ module Language.Drasil (
   -- Symbol
   , Symbol(..), sub, sup, vec, hat
   -- SymbolAlphabet
-  , cA, cC, cD, cL, cT, cV, cW
-  , lG, lH, lM, lN, lQ, lT
+  , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
+  , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
   , mkTable
   -- Printing.Helpers

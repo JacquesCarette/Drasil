@@ -140,11 +140,13 @@ want to create a system that allows developers to maintain and update software
 artifacts at very little cost.
 
 Up-to-date software artifacts are also incredibly important for scientists as a
-whole. Good science relies on replicable results; being able to reproduce the
+whole. Good science relies on reproducible results; being able to reproduce the
 exact piece of software, as well as any inputs used in running a simulation is
 vital. Due to library version changes, minor hacks, and undocumented
 modifications, it is often difficult for other scientists to reproduce the exact
-results from a given simulation. Would it not lead to higher confidence if we
+results from a given simulation\cite{IonescuAndJansson2013}.
+%CITE IONESCU
+Would it not lead to higher confidence if we
 could reproduce and analyze the results of the original experiment? I want to
 help scientists ensure their work is easily reproducible by giving them a means
 of sharing how their software was built, as well as any necessary input or
@@ -241,17 +243,17 @@ Not everything about SC software development today is a negative. For example
 advanced techniques like code generation have been quite successful in SC. Some
 generation examples that come to mind are FEniCS~\cite{LoggEtAl2012},
 FFT~\cite{KiselyovEtAl2004}, Gaussian Elimination~\cite{Carette2006}, and
-Spiral. The focus of generation techniques, thus far, have been solely on one
-software artifact: the source code. Focusing solely on code is a disadvantage to
-SC software developers as the value of documentation, as well as a structured
-(or rational) process, have been repeatedly
+Spiral\cite{PuschelEtAl2005}. The focus of generation techniques, thus far, have
+been solely on one software artifact: the source code. Focusing solely on code
+is a disadvantage to SC software developers as the value of documentation, as
+well as a structured (or rational) process, have been repeatedly
 illustrated~\cite{SmithAndKoothoor2016, SmithEtAl2015-SS-TR, SmithEtAl2015SQJ,
 SmithEtAl2013}.
 
 \subsection{Literate Programming}
 \label{sec:lp}
 
-The LP methodology introduced by Knuth changes the focus from writing programs
+The LP method introduced by Knuth changes the focus from writing programs
 that simply instruct the computer on how to perform a task to explaining
 (\emph{to humans}) what we want the computer to do~\cite{Knuth1984}.
 
@@ -307,7 +309,9 @@ Many attempts to address the issues with LP's popularity have focused on
 changing or removing the output language or text processor dependency. Several
 new tools were developed such as: CWeb (for the C language), DOC++ (for C++),
 noweb (programming language independent), and more. Tools such as javadoc (for
-Java) and Doxygen (for multiple languages) were also influenced by LP.
+Java) and Doxygen (for multiple languages) were also influenced by LP, but
+differ in that they are merely document extraction tools. They do not contain
+the chunking features which allow for re-ordering algorithms.
 
 The development of new tools led to the introduction of many new features
 including, but not limited to, a ``What You See Is What You Get'' (WYSIWYG)
@@ -319,17 +323,27 @@ While these tools did not bring LP into the mainstream~\cite{Ramsey1994}, they
 did help drive the understanding behind what exactly LP tools must do. We can
 now see LP becoming more standardized in certain domains (for example: Agda,
 Haskell, and R support LP to some extent), even though it is not yet common
-practice. I intend to use the knowledge gained from the history of LP to develop
-the Drasil framework into a full-featured and useful tool.
+practice. R has good tool support, with the most popular being
+Sweave~\cite{Leisch2002}, however it is designed to dynamically create
+up-to-date reports or manuals by running embedded code as opposed to being used
+as part of the software development process. I intend to use the knowledge
+gained from the history of LP to develop the Drasil framework into a
+full-featured and useful tool.
 
 \subsection{Literate Software}
 
 A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
-methodology called ``Literate Software Development''
+method called ``Literate Software Development''
 (LSD)~\cite{AlMatiiAndBoujarwah2002}. Box structure can be summarized as the
-idea of different views (ex.~system specifications, design, code) which are
-abstractions that communicate the same information in different levels of
-detail, for different purposes.
+idea of different views which are abstractions that communicate the same
+information in different levels of detail, for different purposes. Box
+structures consist of black box, state machine, and clear box structures. The
+black box gives an external (user) view of the system and consists of stimuli
+and responses; the state machine makes the state data of the system visible (it
+defines the data stored between stimuli); and the clear box gives an internal
+(designer's) view describing how data are processed, typically referring to
+smaller black boxes~\cite{Mills1986}. These three structures can be nested as
+many times as necessary to describe a system.
 
 LSD was developed with the intent to overcome the disadvantages of both LP and
 box structure. It was intended to overcome LP's inability to specify interfaces
@@ -353,7 +367,13 @@ will outperform WebBox.
 
 \subsection{Reproducible Research}
 
-Being able to reproduce results is fundamental to the idea of good science.
+Being able to reproduce results, is fundamental to the idea of good science.
+When it comes to software projects, there are often many undocumented
+assumptions or modifications (including hacks) involved in the finished product.
+This can make replication impossible without the help of the original author,
+and in some cases reveal errors in the original author's
+work~\cite{IonescuAndJansson2013}.
+
 Reproducible research has been used to mean embedding executable code in
 research papers to allow readers to reproduce the results
 described~\cite{SchulteEtAl2012}.
@@ -372,9 +392,13 @@ including, but not limited to, Sweave~\cite{Leisch2002},
 SASweave~\cite{LenthEtAl2007}, Statweave~\cite{Lenth2009},
 Scribble~\cite{FlattEtAl2009}, and Org-mode~\cite{SchulteEtAl2012}. The most
 popular of those being Sweave~\cite{SchulteEtAl2012}. The aforementioned tools
-maintain a focus on code and certain computational details. It is my hope that
-the Drasil framework will one day surpass these tools due to its ability to
-simplify the creation of each software artifact.
+maintain a focus on code and certain computational details. Sweave,
+specifically, allows for embedding code into a document which is run as the
+document is being typeset so that up to date results are always included.
+However, Sweave (along with many other tools), still maintains a focus on
+producing a single, linear document. It is my hope that Drasil will outperform
+these existing tools due to its flexibility and its ability to create multiple
+artifacts from a knowledge base.
 
 \section{Research Objectives and Approach}
 \subsection{Objectives}
@@ -569,7 +593,6 @@ coolant. We can see the data definition for this term in Figure~\ref{fig:h_c}.
 Label & 
 $h_{c}$
 \\ \midrule
-Units & $ML^0t^{-3}T^{-1}$\\ \midrule
 SI Units & $\mathrm{\frac{kW}{m^{2o}C}}$\\ \midrule
 Equation & $h_{c}$ =$
 \frac{2k_{c}h_{b}}{2k_{c}+\tau_{c}h_{b}}$\\ \midrule

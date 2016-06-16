@@ -1,0 +1,38 @@
+Name:		Drasil
+Version:	0.0.4
+Cabal-Version:  >= 1.18
+Author:		Dan Szymczak, Jacques Carette, Spencer Smith
+build-type:     Simple
+Synopsis:	A framework for code and document generation for scientific software
+
+library
+  exposed-modules:
+    Language.Drasil
+  other-modules:
+    Language.Drasil.Expr
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  HS-Source-Dirs:  ../../..
+
+executable lss
+  main-is: Example/Drasil/SWHS/Main.hs
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  HS-Source-Dirs:  ../../..
+    
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/literate-scientific-software.git
+  subdir: code

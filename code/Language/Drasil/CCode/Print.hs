@@ -1,7 +1,7 @@
 module Language.Drasil.CCode.Print(printCode) where
 
 import Language.Drasil.CCode.AST
-import Language.Drasil.Printing.Helpers (paren, hat, ast, pls, slash, hyph)
+import Language.Drasil.Printing.Helpers (paren, hat, ast, pls, slash, hyph, eq, deq, leq, lt, geq, gt)
 
 import Text.PrettyPrint
 
@@ -35,7 +35,15 @@ args [] = ""
 args ((ArgsDecl t v):ds) = (ptype t ++ " " ++ v) ++ ", " ++ args ds
 
 stat :: Statement -> Doc
-stat (Return c) = text "return" <+> code c <> text ";"
+stat (Assign v e)               = text v <+> eq <+> code e <> text ";"
+stat (If e sthen Nothing)       = text "if" <+> text "(" <> code e <> text ")" <+> text "{" $$
+                                    text "    " <> (vcat $ map stat sthen) $$
+                                    text "}"
+stat (If e sthen (Just selse))  = stat (If e sthen Nothing) <+> text "else" <+> text "{" $$
+                                    text "    " <> (vcat $ map stat selse) $$
+                                    text "}"
+stat (Return c)                 = text "return" <+> code c <> text ";"
+
 
 code :: CodeExpr -> Doc
 code (Var v)    = text v
@@ -46,3 +54,8 @@ code (Mult x y) = code x <+> ast <+> code y
 code (Add x y)  = parens (code x <+> pls <+> code y)
 code (Div n d)  = parens (code n <+> slash <+> code d)
 code (Sub x y)  = parens (code x <+> hyph <+> code y)
+code (Eq x y)   = code x <+> deq <+> code y
+code (Leq x y)  = code x <+> leq <+> code y
+code (Lt x y)   = code x <+> lt <+> code y
+code (Geq x y)  = code x <+> geq <+> code y
+code (Gt x y)   = code x <+> gt <+> code y

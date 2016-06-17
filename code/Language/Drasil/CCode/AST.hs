@@ -2,9 +2,14 @@ module Language.Drasil.CCode.AST where
 
 type Variable = String
 
-data Code = C [Method]
+data Code = C Include [Method]
 
 type Method = (MethodDecl, [Statement])
+
+type Include = [Header]
+
+data Header = StdLibHeader
+            | StdIOHeader
 
 data MethodDecl = MethodDecl Type Name [ArgsDecl]
 
@@ -38,3 +43,4 @@ data CodeExpr =  Var Variable
               
 data CodeType = Calc
 data Lang = CLang
+

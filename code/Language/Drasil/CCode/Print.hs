@@ -1,7 +1,7 @@
 module Language.Drasil.CCode.Print(printCode) where
 
 import Language.Drasil.CCode.AST
-import Language.Drasil.Printing.Helpers (paren, hat, ast, pls, slash, hyph, eq, deq, leq, lt, geq, gt)
+import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, eq, deq, leq, lt, geq, gt, angbrac)
 
 import Text.PrettyPrint
 
@@ -13,12 +13,21 @@ ptype VoidType    = "void"
 ptype StrType     = "char*"
 ptype (PtrType t) = "*" ++ ptype t
 ptype DblType     = "double"
-  
+
+pheader :: Header -> String
+pheader StdLibHeader = "stdlib.h"
+pheader StdIOHeader  = "stdio.h"
+
 instance Show CType where
   show (CType t) = ptype t
 
 printCode :: Code -> Doc
-printCode (C x) = vcat $ map method x
+printCode (C i m)   = include i $+$
+                        text "" $+$
+                        (vcat $ map method m)
+
+include :: Include -> Doc
+include h = vcat $ map ((<+>) (text "#include")) $ map (text . angbrac . pheader) h
 
 method :: Method -> Doc
 method (d, ss) = methodDecl d <> text "{" $$ 
@@ -36,11 +45,11 @@ args ((ArgsDecl t v):ds) = (ptype t ++ " " ++ v) ++ ", " ++ args ds
 
 stat :: Statement -> Doc
 stat (Assign v e)               = text v <+> eq <+> code e <> text ";"
-stat (If e sthen Nothing)       = text "if" <+> text "(" <> code e <> text ")" <+> text "{" $$
-                                    text "    " <> (vcat $ map stat sthen) $$
+stat (If e sthen Nothing)       = text "if" <+> parens (code e) <+> text "{" $+$
+                                    indent (vcat $ map stat sthen) $+$
                                     text "}"
-stat (If e sthen (Just selse))  = stat (If e sthen Nothing) <+> text "else" <+> text "{" $$
-                                    text "    " <> (vcat $ map stat selse) $$
+stat (If e sthen (Just selse))  = stat (If e sthen Nothing) <+> text "else" <+> text "{" $+$
+                                    indent (vcat $ map stat selse) $+$
                                     text "}"
 stat (Return c)                 = text "return" <+> code c <> text ";"
 

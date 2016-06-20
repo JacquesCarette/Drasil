@@ -64,6 +64,7 @@ stat (If e sthen Nothing)       = text "if" <+> parens (code e) <+> text "{" $+$
 stat (If e sthen (Just selse))  = stat (If e sthen Nothing) <+> text "else" <+> text "{" $+$
                                     indent (vcat $ map stat selse) $+$
                                     text "}"
+stat (Print s)                  = text "printf" <> parens (text s) <> text ";"
 stat (Return c)                 = text "return" <+> code c <> text ";"
 
 

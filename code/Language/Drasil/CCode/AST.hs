@@ -26,6 +26,7 @@ data Type = IntType
 data Statement = Declare Type Variable (Maybe CodeExpr)
                | Assign Variable CodeExpr
                | If CodeExpr [Statement] (Maybe [Statement])
+               | Print String
                | Return CodeExpr
 
 data CodeExpr =  Var Variable

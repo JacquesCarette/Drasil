@@ -2,18 +2,18 @@ module Language.Drasil.CCode.AST where
 
 type Variable = String
 
-data Code = C Include [Method]
+data Code = C [Header] [VarDecl] [Method]
 
 type Method = (MethodDecl, [Statement])
-
-type Include = [Header]
 
 data Header = StdLibHeader
             | StdIOHeader
 
-data MethodDecl = MethodDecl Type Name [ArgsDecl]
+data VarDecl = VarDecl Type Variable
 
-data ArgsDecl = ArgsDecl Type Variable
+data MethodDecl = MethodDecl Type Name [VarDecl]
+
+--data ArgsDecl = ArgsDecl Type Variable
 
 type Name = String
 
@@ -22,8 +22,9 @@ data Type = IntType
           | StrType
           | PtrType Type
           | DblType
-          
-data Statement = Assign Variable CodeExpr
+
+data Statement = Declare Type Variable (Maybe CodeExpr)
+               | Assign Variable CodeExpr
                | If CodeExpr [Statement] (Maybe [Statement])
                | Return CodeExpr
 

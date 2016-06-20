@@ -22,12 +22,20 @@ instance Show CType where
   show (CType t) = ptype t
 
 printCode :: Code -> Doc
-printCode (C i m)   = include i $+$
+printCode (C h v m)   = (vcat $ map header h) $+$
+                        text "" $+$
+                        (vcat $ map varDecl v) $+$
                         text "" $+$
                         (vcat $ map method m)
 
-include :: Include -> Doc
-include h = vcat $ map ((<+>) (text "#include")) $ map (text . angbrac . pheader) h
+header :: Header -> Doc
+header h = text "#include" <+> (text . angbrac . pheader) h
+
+var :: VarDecl -> Doc
+var (VarDecl t v) = text (ptype t) <+> text v
+
+varDecl :: VarDecl -> Doc
+varDecl v = var v <> text ";"
 
 method :: Method -> Doc
 method (d, ss) = methodDecl d <> text "{" $$ 
@@ -35,15 +43,20 @@ method (d, ss) = methodDecl d <> text "{" $$
   text "}"
 
 methodDecl :: MethodDecl -> Doc
-methodDecl (MethodDecl t n ds) = text (ptype t) <+> text n <> 
-  text (paren $ args ds)
+methodDecl (MethodDecl t n ds) = text (ptype t) <+> text n <> parens (args ds)
   
 -- this should also be a fold; and it should go to Doc, not String!
-args :: [ArgsDecl] -> String
-args [] = ""
-args ((ArgsDecl t v):ds) = (ptype t ++ " " ++ v) ++ ", " ++ args ds
+--args :: [ArgsDecl] -> String
+--args [] = ""
+--args ((ArgsDecl t v):ds) = (ptype t ++ " " ++ v) ++ ", " ++ args ds
+
+args :: [VarDecl] -> Doc
+args [] = empty
+args ds = hsep $ punctuate (text ",") (map var ds)
 
 stat :: Statement -> Doc
+stat (Declare t v Nothing)      = text (ptype t) <+> text v <+> text ";"
+stat (Declare t v (Just e))     = text (ptype t) <+> stat (Assign v e)
 stat (Assign v e)               = text v <+> eq <+> code e <> text ";"
 stat (If e sthen Nothing)       = text "if" <+> parens (code e) <+> text "{" $+$
                                     indent (vcat $ map stat sthen) $+$

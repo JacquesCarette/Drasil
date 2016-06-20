@@ -8,6 +8,7 @@ import Language.Drasil.Output.Formats (DocType (SRS,LPM,Code,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
+import Language.Drasil.CCode.Print (genCode)
 import Language.Drasil.Document (Document)
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
@@ -32,6 +33,10 @@ prnt (Recipe (Website fn) body) =
      outh2 <- openFile (fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
+prnt (Recipe (Code fn) body) =
+  do outh <- openFile (fn ++ ".c") WriteMode
+     hPutStrLn outh $ render $ (genCode (Code fn) body)
+     hClose outh
 prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
 
 writeDoc :: Format -> DocType -> Document -> Doc

@@ -1,7 +1,9 @@
-module Language.Drasil.CCode.Print(printCode) where
+module Language.Drasil.CCode.Print(printCode, genCode) where
 
 import Language.Drasil.CCode.AST
 import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, eq, deq, leq, lt, geq, gt, angbrac)
+import qualified Language.Drasil.Output.Formats as A
+import qualified Language.Drasil.Document as L
 
 import Text.PrettyPrint
 
@@ -21,6 +23,10 @@ pheader StdIOHeader  = "stdio.h"
 instance Show CType where
   show (CType t) = ptype t
 
+-- temporary fix to generate code as a document
+genCode :: A.DocType -> L.Document -> Doc
+genCode (A.Code _) (L.Document _ _ ((L.CodeBlock c):[])) = printCode c
+
 printCode :: Code -> Doc
 printCode (C h v m)   = (vcat $ map header h) $+$
                         text "" $+$
@@ -38,9 +44,10 @@ varDecl :: VarDecl -> Doc
 varDecl v = var v <> text ";"
 
 method :: Method -> Doc
-method (d, ss) = methodDecl d <> text "{" $$ 
-  text "    " <> (vcat $ map stat ss) $$ -- TODO: update tabbing style
-  text "}"
+method (d, ss) = methodDecl d <> text "{" $+$
+  text "    " <> (vcat $ map stat ss) $+$ -- TODO: update tabbing style
+  text "}" $+$
+  text ""
 
 methodDecl :: MethodDecl -> Doc
 methodDecl (MethodDecl t n ds) = text (ptype t) <+> text n <> parens (args ds)
@@ -64,7 +71,7 @@ stat (If e sthen Nothing)       = text "if" <+> parens (code e) <+> text "{" $+$
 stat (If e sthen (Just selse))  = stat (If e sthen Nothing) <+> text "else" <+> text "{" $+$
                                     indent (vcat $ map stat selse) $+$
                                     text "}"
-stat (Print s)                  = text "printf" <> parens (text s) <> text ";"
+stat (Print s)                  = text "printf" <> parens (doubleQuotes (text s)) <> text ";"
 stat (Return c)                 = text "return" <+> code c <> text ";"
 
 

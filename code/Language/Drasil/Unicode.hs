@@ -12,6 +12,8 @@ data Circle = Circle
 data Delta  = Delta_L
             | Delta
 data Ell    = Ell
+data Eta    = Eta_L
+			| Eta
 data Gamma  = Gamma_L
             | Gamma
 data Lambda = Lambda_L
@@ -69,14 +71,24 @@ instance Render Delta where
   render Plain Delta   = "uDelta"
   render HTML Delta_L  = "&delta;"
   render HTML Delta    = "&Delta;"
-  
+
 --
 
 instance Render Ell where
   render TeX Ell    = "\\ell{}"
   render Plain Ell  = "ell"
   render HTML Ell   = "&#8467;"
+  
+--
 
+instance Render Eta where
+  render TeX Eta_L   = "\\eta{}"
+  render TeX Eta     = "\\Eta{}"
+  render Plain Eta_L = "eta"
+  render Plain Eta   = "uEta"
+  render HTML Eta_L  = "&eta;"
+  render HTML Eta    = "&Eta;"
+  
 --
 
 instance Render Gamma where

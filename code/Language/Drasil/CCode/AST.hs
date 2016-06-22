@@ -6,8 +6,10 @@ data Code = C [Header] [VarDecl] [Method]
 
 type Method = (MethodDecl, [Statement])
 
-data Header = StdLibHeader
-            | StdIOHeader
+data Header = Library HeaderName
+            | Local HeaderName
+
+type HeaderName = String
 
 data VarDecl = VarDecl Type Variable
 
@@ -27,6 +29,7 @@ data Statement = Declare Type Variable (Maybe CodeExpr)
                | Assign Variable CodeExpr
                | If CodeExpr [Statement] (Maybe [Statement])
                | Print String
+               | MethodCall Method [CodeExpr]
                | Return CodeExpr
 
 data CodeExpr =  Var Variable

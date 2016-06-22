@@ -17,7 +17,7 @@ s1, s2, s3, s4 :: LayoutObj
 s1 = table_of_units si_units
 s2 = table_of_symbols vars
 s3 = Section 0 (S "Data Definitions") $ map (Definition . Data) vars
-s4 = Section 0 (S "Code -- Test") $ [CodeBlock $ toCode CLang Calc vars]
+s4 = Section 0 (S "Code -- Test") $ [CodeBlock $ toCode CLang Calc vars "calc"]
 
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =
@@ -32,7 +32,7 @@ lpmBody = Document ((S "Literate Programmer's Manual for ") :+:
   (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) vars))))
   (S "Spencer Smith") [l1]
 
-codeBody = Document (S "") (S "") [CodeBlock $ toCode CLang Calc vars]
+codeBody = Document (S "") (S "") [CodeBlock $ toCode CLang Calc vars "calc"]
 
 l1 :: LayoutObj
 l1 = Paragraph (

@@ -1,7 +1,8 @@
 module Language.Drasil.CCode.Print(printCode, genCode) where
 
 import Language.Drasil.CCode.AST
-import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, eq, deq, leq, lt, geq, gt, angbrac)
+import Language.Drasil.CCode.Helpers
+import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, assign, eq, leq, lt, geq, gt, angbrac)
 import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Document as L
 
@@ -15,10 +16,6 @@ ptype VoidType    = "void"
 ptype StrType     = "char*"
 ptype (PtrType t) = "*" ++ ptype t
 ptype DblType     = "double"
-
-pheader :: Header -> String
-pheader StdLibHeader = "stdlib.h"
-pheader StdIOHeader  = "stdio.h"
 
 instance Show CType where
   show (CType t) = ptype t
@@ -35,7 +32,8 @@ printCode (C h v m)   = (vcat $ map header h) $+$
                         (vcat $ map method m)
 
 header :: Header -> Doc
-header h = text "#include" <+> (text . angbrac . pheader) h
+header (Library h) = text "#include" <+> (text . angbrac) (h++".h")
+header (Local h) = text "#include" <+> (doubleQuotes . text) (h++".h")
 
 var :: VarDecl -> Doc
 var (VarDecl t v) = text (ptype t) <+> text v
@@ -64,7 +62,7 @@ args ds = hsep $ punctuate (text ",") (map var ds)
 stat :: Statement -> Doc
 stat (Declare t v Nothing)      = text (ptype t) <+> text v <+> text ";"
 stat (Declare t v (Just e))     = text (ptype t) <+> stat (Assign v e)
-stat (Assign v e)               = text v <+> eq <+> code e <> text ";"
+stat (Assign v e)               = text v <+> assign <+> code e <> text ";"
 stat (If e sthen Nothing)       = text "if" <+> parens (code e) <+> text "{" $+$
                                     indent (vcat $ map stat sthen) $+$
                                     text "}"
@@ -72,6 +70,7 @@ stat (If e sthen (Just selse))  = stat (If e sthen Nothing) <+> text "else" <+> 
                                     indent (vcat $ map stat selse) $+$
                                     text "}"
 stat (Print s)                  = text "printf" <> parens (doubleQuotes (text s)) <> text ";"
+stat (MethodCall m a)           = text (getMethodName m) <> parens (hsep $ punctuate (text ",") (map code a)) <> text ";"
 stat (Return c)                 = text "return" <+> code c <> text ";"
 
 
@@ -84,7 +83,7 @@ code (Mult x y) = code x <+> ast <+> code y
 code (Add x y)  = parens (code x <+> pls <+> code y)
 code (Div n d)  = parens (code n <+> slash <+> code d)
 code (Sub x y)  = parens (code x <+> hyph <+> code y)
-code (Eq x y)   = code x <+> deq <+> code y
+code (Eq x y)   = code x <+> eq <+> code y
 code (Leq x y)  = code x <+> leq <+> code y
 code (Lt x y)   = code x <+> lt <+> code y
 code (Geq x y)  = code x <+> geq <+> code y

@@ -5,15 +5,15 @@ import Text.PrettyPrint
 import Data.Char
 
 --basic docs
-bslash,dbs,eq,deq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph :: Doc
+bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph :: Doc
 bslash = text "\\"
-dbs    = bslash <> bslash
-eq     = text "="
-deq    = eq <> eq
+dbs    = text "\\\\"
+assign = text "="
+eq     = text "=="
 lt     = text "<"
 gt     = text ">"
-leq    = lt <> eq
-geq    = gt <> eq
+leq    = text "<="
+geq    = text ">="
 dlr    = text "$"
 ast    = text "*"
 pls    = text "+"

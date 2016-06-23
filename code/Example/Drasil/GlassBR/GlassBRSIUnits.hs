@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module Language.Drasil.SI_Units2 where
+module Example.Drasil.GlassBR.GlassBRSIUnits where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..))
@@ -30,6 +30,7 @@ kelvin   = fund "Kelvin"   "temperature"          "K"
 mole     = fund "Mole"     "amount of substance"  "mol"
 ampere   = fund "Ampere"   "electric current"     "A"
 candela  = fund "Candela"  "luminous intensity"   "cd"
+unitless = fund "Unitless" "-"                    "unitless"
 
 ------------- END FUNDAMENTALS -------------------------------------------------
 

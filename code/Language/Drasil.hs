@@ -8,7 +8,7 @@ module Language.Drasil (
   -- Expr
   , Expr(..), Relation(..)
   -- all the stuff from Unicode
-  , Alpha(..), Beta(..), Circle(..), Delta(..), Ell(..), Gamma(..), Lambda(..), LEQ(..), Nabla(..)
+  , Alpha(..), Beta(..), Circle(..), Delta(..), Ell(..), Eta(..), Gamma(..), Lambda(..), LEQ(..), Nabla(..)
   , Nu(..), Omega(..), Partial(..), Phi(..), Rho(..), Tau(..), Upsilon(..)
   -- Unit
   , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)

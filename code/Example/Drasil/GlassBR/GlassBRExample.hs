@@ -1,13 +1,14 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
-module GlassBRExample1 where
+module Example.Drasil.GlassBR.GlassBRExample where
 import Language.Drasil.Expr (Expr(..), Relation(..))
-import Language.Drasil.SI_Units2
+import Example.Drasil.GlassBR.GlassBRSIUnits
 import Language.Drasil.Symbol
+import Language.Drasil.Chunk.Eq (EqChunk(..),fromEqn)
 import Language.Drasil.Chunk.Unital
-import GlassBRUnits1
+import Example.Drasil.GlassBR.GlassBRUnits
 import Language.Drasil.SymbolAlphabet
-import Language.Drasil.Chunk (ConceptChunk(..),VarChunk(..),symbol,makeCC,makeVC)
+import Language.Drasil.Chunk --(ConceptChunk(..),VarChunk(..),symbol,makeCC,makeVC)
 import Language.Drasil.Spec (Sentence(..))
 import Control.Lens((^.))
 import Language.Drasil.Chunk.Relation
@@ -37,11 +38,11 @@ sflawParamK = makeUC "k" "Surface flaw parameter" lK sFlawPU
 sflawParamM = makeUC "m" "Surface flaw parameter" lM sFlawPU
 demand      = makeUC "q" "Applied load (demand)" lQ kilopascal
 sd          = makeUC "SD" "Stand off distance which is represented in coordinates (SDx, SDy, SDz)"
-              (Concat [cS,cD]) metre
+              (Atomic "SD") metre
 sd_max      = makeUC "SD_max" "Maximum stand off distance permissible for input" 
-              (sub (Concat [cS,cD]) (Atomic "max")) metre
+              (sub (Atomic "SD") (Atomic "max")) metre
 sd_min      = makeUC "SD_min" "Minimum stand off distance permissible for input" 
-              (sub (Concat [cS,cD]) (Atomic "min")) metre
+              (sub (Atomic "SD") (Atomic "min")) metre
 nom_thick   = makeUC "t" "Nominal thickness t in (2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0" 
               lT millimetre
 load_dur    = makeUC "t_d" "Duration of load" (sub lT lD) second
@@ -57,9 +58,9 @@ eqTNTWeight = makeUC "w_TNT" "Explosive Mass in equivalent weight of TNT"
 risk_fun    = makeUC "B" "Risk function" cB unitless
 glass_type  = makeUC "g" "Glass type, g in {AN, HS, FT}" lG unitless
 is_safe1    = makeUC "is_safe1" "True when calculated probability is less than tolerable probability" 
-              (Concat [lI,lS,(Atomic "_"),lS,lA,lF,lE,(Atomic "1")]) unitless
+              (Atomic "is_safe1") unitless
 is_safe2    = makeUC "is_safe2" "True when load resistance (capacity) is greater than load (demand)" 
-              (Concat [lI,lS,(Atomic "_"),lS,lA,lF,lE,(Atomic "2")]) unitless
+              (Atomic "is_safe2") unitless
 sdf         = makeUC "J" "Stress distribution factor (Function)" cJ unitless
 sdf_tol     = makeUC "J_tol" "Stress distribution factor (Function) based on P_btol"
               (sub cJ (Atomic "tol")) unitless
@@ -139,14 +140,14 @@ sD            = makeCC "Stand off distance (SD)" "The distance from the glazing 
 
 ----Variables----
 variables :: [VarChunk]
-variables = [lRe, nonFL, glaTyFac, loadSF, loadDF]
+variables = [lRe, loadSF, tNT, ar_max, ar_min]
 
-lRe, nonFL, glaTyFac, loadSF, loadDF :: VarChunk
-lRe       = makeVC "LR" "Load Resistance" (Concat [cL,cR])
-nonFL     = makeVC "NFL" "Non-Factored Load" (Concat [cN,cF,cL])
-glaTyFac  = makeVC "GTF" "Glass Type Factor" (Concat [cG,cT,cF])
-loadSF    = makeVC "LSF" "Load Share Factor" (Concat [cL,cS,cF])
-loadDF    = makeVC "LDF" "Load Duration Factor" (Concat [cL,cD,cF])
+lRe, loadSF, tNT, ar_max, ar_min :: VarChunk
+lRe       = makeVC "LR" "Load Resistance" (Atomic "LR")
+loadSF    = makeVC "LSF" "Load Share Factor" (Atomic "LSF")
+tNT       = makeVC "TNT" "TNT Equivalent Factor" (Atomic "TNT")
+ar_max    = makeVC "AR_max" "Maximum Aspect Ratio" (sub (Atomic "AR") (Atomic "max"))
+ar_min    = makeVC "AR_min" "Minimum Aspect Ratio" (sub (Atomic "AR") (Atomic "min"))
 
 ----EqChunks----
 --Theoretical models--
@@ -190,7 +191,7 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 
 pbdescr :: Sentence
 pbdescr =
-  ((U $ prob_br ^. symbol) :+: S " is the calculated probability of breakage. :+:
+  ((U $ prob_br ^. symbol) :+: S " is the calculated probability of breakage. "  :+:
    (U $ risk_fun ^. symbol) :+: S " is the risk of failure.")
 
 calOfCap :: RelationChunk
@@ -231,119 +232,61 @@ risk_eq = ((C sflawParamK):/((C plate_len):/(Int 1000):*(C plate_width):/(Int 10
 risk :: EqChunk
 risk = fromEqn "B" (S "risk of failure") (cB) unitless risk_eq
 
-hFromt :: RelationChunk
-hFromt = makeRC "Minimum Thickness(h) from Nominal Thickness(t)" hFromtdescr hFromt_rel
+hFromt_eq :: Expr
+hFromt_eq = FCall (C act_thick) [C nom_thick]
 
-hFromt_rel :: Relation
-hFromt_rel = (C act_thick) := FCall (C act_thick) [C nom_thick]
-
-hFromtdescr :: Sentence
-hFromtdescr =
- ((U $ act_thick ^. symbol) :+: S " is a function that maps from the nominal " :+:
+hFromt :: EqChunk
+hFromt = fromEqn "h" (S " function that maps from the nominal " :+:
   S "thickness (" :+: (U $ nom_thick ^. symbol) :+: S ") to the minimum thickness, " :+:
   S "as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = " :+: 
   S "4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | t = 10.0 " :+:
   S "=> 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 => 18.26 | t = 22.0 " :+:
-  S " => 21.44)")
+  S " => 21.44)") (act_thick ^.symbol) millimetre hFromt_eq
 
-loadDurFac :: RelationChunk
-loadDurFac = makeRC "Load Duration Factor(LDF)" loadDurFacdescr loadDurFac_rel
+loadDF_eq :: Expr 
+loadDF_eq = ((C load_dur):/(Int 60)):^((C sflawParamM):/(Int 16))
 
-loadDurFac_rel :: Relation
-loadDurFac_rel = (C loadDF) := ((C load_dur):/(Int 60)):^((C sflawParamM):/(Int 16))
+loadDF :: EqChunk
+loadDF = fromEqn "LDF" (S "Load Duration Factor") (Atomic "LDF") unitless loadDF_eq
 
-loadDurFacdescr :: Sentence
-loadDurFacdescr =
-  ((U $ load_dur ^.symbol) :+: S " is the duration of the load. " :+: (U $ sflawParamM ^. symbol) :+:
-    S " is a surface flaw parameter")
+strDisFac_eq :: Expr
+strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
-strDisFac :: RelationChunk
-strDisFac = makeRC "Stress Distribution Factor(J)" strDisFacdescr strDisFac_rel
+strDisFac :: EqChunk
+strDisFac = fromEqn "J" (sdf ^. descr) (sdf ^. symbol) unitless strDisFac_eq
 
-strDisFac_rel :: Relation
-strDisFac_rel = (C sdf) := FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
+nonFL_eq :: Expr
+nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/(((C plate_len):^2):*((C plate_width):^2))
 
-strDisFacdescr :: Sentence
-strDisFacdescr =
-  ((U $ sdf ^. symbol) :+: S " is the stress distribution factor, which is obtained by " :+:
-    S "interpolating from the data shown in Figure 3. " :+: (U $ dimlessLoad ^. symbol) :+:
-    S " is the dimensionless load. " :+: (U $ plate_len ^.symbol) :+: S ", " :+: 
-    (U $ plate_width ^.symbol) :+: S " are dimensions of the plate, where (" :+: 
-    (U $ plate_len ^.symbol) :+: S " > " :+: (U $ plate_width ^.symbol) :+: S ").")
+nonFL :: EqChunk
+nonFL = fromEqn "NFL" (S "Non-Factored Load") (Atomic "NFL") unitless nonFL_eq
 
-nonFacLoad :: RelationChunk
-nonFacLoad = makeRC "Non-Factored Load" nonFLdescr nonFL_rel
+glaTyFac_eq :: Expr
+glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
-nonFL_rel :: Relation
-nonFL_rel = (C nonFL) := ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/(((C plate_len):^2):*((C plate_width):^2))
+glaTyFac :: EqChunk
+glaTyFac = fromEqn "NFL" (S "function that maps from the glass type (" :+: (U $ glass_type ^. symbol) :+:
+ S ") to a real number, as follows: " :+: (U $ glaTyFac ^.symbol) :+: S "(" :+: (U $ glass_type ^. symbol) :+:
+ S ") = (" :+: (U $ glass_type ^. symbol) :+: S " = AN => 1.0 |" :+: (U $ glass_type ^. symbol) :+: 
+ S " = FT => 4.0|" :+: (U $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: S "AN is annealed glass. "  :+:
+ S "FT is fully tempered glass. " :+: S "HS is heat strengthened glass.") (Atomic "GTF") unitless glaTyFac_eq
 
-nonFLdescr :: Sentence
-nonFLdescr =
-  ((U $ mod_elas ^. symbol) :+: S " is the modulus of elasticity. " :+: (U $ plate_len ^. symbol) :+:
-    S ", " :+: (U $ plate_width ^.symbol) :+: S " are the dimensions of the plate where (" :+:
-    (U $ plate_len ^. symbol) :+: S " > " :+: (U $ plate_width ^. symbol) :+: S "). " :+:
-    (U $ act_thick ^. symbol) :+: S " is the true thickness, which is based on the nominal thickness. " :+:
-    (U $ tolLoad ^. symbol) :+: S " is the tolerable pressure.")
+dL_eq :: Expr
+dL_eq = ((C demand):*((C plate_len):^(Int 2)):*((C plate_width):^(Int 2))):/((C mod_elas):*((C act_thick):^(Int 4)):*(C glaTyFac))
 
-gTF :: RelationChunk
-gTF = makeRC "Glass Type Factor(GTF)" gTFdescr gTF_rel
+dL :: EqChunk
+dL = fromEqn "q_hat" (dimlessLoad ^. descr) (dimlessLoad ^. symbol) unitless dL_eq
 
-gTF_rel :: Relation
-gTF_rel = (C glaTyFac) := FCall (C glaTyFac) [C glass_type]
+tolPre_eq :: Expr
+tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
-gTFdescr :: Sentence
-gTFdescr = 
-  ((U $ glaTyFac ^. symbol) :+: S " is a function that maps from the glass type (" :+:
-    (U $ glass_type ^. symbol) :+: S ") to a real number, as follows: " :+: (U $ glaTyFac ^.symbol) :+:
-    S "(" :+: (U $ glass_type ^. symbol) :+: S ") = (" :+: (U $ glass_type ^. symbol) :+:
-    S " = AN => 1.0 |" :+: (U $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+:  
-    (U $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: S "AN is annealed glass. "  :+:
-    S "FT is fully tempered glass. " :+: S "HS is heat strengthened glass.")
+tolPre :: EqChunk
+tolPre = fromEqn "q_hat_tol" (tolLoad ^. descr) (tolLoad ^. symbol) unitless tolPre_eq
 
-dL :: RelationChunk
-dL = makeRC "Dimensionless Load(q_hat)" dLdescr dL_rel
+tolStrDisFac_eq :: Expr
+tolStrDisFac_eq = (Int 1):/((Int 1):-(C pb_tol)):*(((C plate_len):/(Int 1000):*(C plate_width):/(Int 1000)):^
+  ((C sflawParamM) :- (Int 1)):/((C sflawParamK):*(((C mod_elas):*(Int 1000)):*((C act_thick):/(Int 1000)):^
+  (Int 2)):^(C sflawParamM):*(C loadDF)))
 
-dL_rel :: Relation
-dL_rel = (C tolLoad) := ((C demand):*((C plate_len):^(Int 2)):*((C plate_width):^(Int 2))):/((C mod_elas):*((C act_thick):^(Int 4)):*(C glaTyFac))
-
-dLdescr :: Sentence
-dLdescr =
-  ((U $ demand ^. symbol) :+: S " is the 3 second equivalent pressure. " :+: 
-    (U $ plate_len ^. symbol) :+: S ", " :+: (U $ plate_width ^. symbol) :+: 
-    S " are dimensions of the plate, where (" :+: (U $ plate_len ^. symbol) :+:
-    S " > " :+: (U $ plate_width ^. symbol) :+: S "). " :+: (U $ mod_elas ^. symbol) :+:
-    S " is the modulus of elasticity. " :+: (U $ act_thick ^. symbol) :+: 
-    S " is the true thickness, which is based on the nominal thickness. " :+:
-    (U $ glaTyFac ^. symbol) :+: S " is the Glass Type Factor.")
-
-tolPre :: RelationChunk
-tolPre = makeRC "Tolerable Pressure(q_hat_tol)" tolPredescr tolPre_rel
-
-tolPre_rel :: Relation
-tolPre_rel = (C tolLoad) := FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
-
-tolPredescr :: Sentence
-tolPredescr =
-  ((U $ tolLoad ^. symbol) :+: S " is the tolerable pressure which is obtained from " :+:
-    S "Figure 3 using " :+: (U $ sdf_tol ^. symbol) :+: S " and aspect ratio (" :+:
-    (U $ plate_len ^.symbol) :+: S "/" :+: (U $ plate_width ^. symbol) :+:
-    S ") as parameters using interpolation.")
-
-tolStrDisFac :: RelationChunk
-tolStrDisFac = makeRC "Tolerable Stress Distribution Factor(J_tol)" tolStrDisFacdescr tolStrDisFac_rel
-
-tolStrDisFac_rel :: Relation
-tolStrDisFac_rel = (C sdf_tol) := (Int 1) -- logarithm?
-
-tolStrDisFacdescr :: Sentence
-tolStrDisFacdescr =
-  ((U $ sdf_tol ^. symbol) :+: S " is the stress distribution factor calculated with reference to ":+:
-    (U $ pb_tol ^. symbol) :+: S ". " :+: (U $ plate_len ^. symbol) :+: S ", " :+: 
-    (U $ plate_width ^.symbol) :+: S " are the dimensions of the plate where (" :+:
-    (U $ plate_len ^. symbol) :+: S " > " :+: (U $ plate_width ^. symbol) :+: S "). " :+:
-    (U $ act_thick ^. symbol) :+: S " is the true thickness, which is based on the nominal thickness. " :+:
-    (U $ sflawParamM ^. symbol) :+: S ", " :+: (U $ sflawParamK ^. symbol) :+: 
-    S " are the surface flaw parameters. " :+: (U $ loadDF ^. symbol) :+: S " is the " :+:
-    S "Load Duration Factor. " :+: (U $ mod_elas ^. symbol) :+: S " is the modulus of " :+:
-    S "elasticity. " :+: (U $ pb_tol ^. symbol) :+: S " is the tolerable probability entered " :+:
-    S " by the user.")
+tolStrDisFac :: EqChunk
+tolStrDisFac = fromEqn "J_tol" (sdf_tol ^. descr) (sdf_tol ^. symbol) unitless tolStrDisFac_eq

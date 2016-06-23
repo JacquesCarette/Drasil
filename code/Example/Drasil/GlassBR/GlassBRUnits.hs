@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
-module GlassBRUnits1 where
+module Example.Drasil.GlassBR.GlassBRUnits where
 
-import Language.Drasil.SI_Units2
+import Example.Drasil.GlassBR.GlassBRSIUnits
 import Language.Drasil.Unit (Unit(..), UDefn(..), DerUChunk(..),
   makeDerU, unitCon)
 import Language.Drasil.Chunk ()

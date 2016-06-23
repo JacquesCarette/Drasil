@@ -16,7 +16,7 @@ swhsSymbols = [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,
   latentE_P,time,temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,
   t_init_melt,t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,
-  w_vol,deltaT,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W,melt_frac]
+  w_vol,deltaT,eta,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W,melt_frac]
 
 coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   htCap_S_P,htCap_V,htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,
@@ -24,7 +24,7 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,
   latentE_P,time,temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,
   t_init_melt,t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,
-  w_vol,deltaT,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W,melt_frac :: UnitalChunk
+  w_vol,deltaT,eta,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W,melt_frac :: UnitalChunk
 
 --symbol names can't begin with a capital
 
@@ -106,7 +106,7 @@ tank_vol     = makeUC "V_tank" "volume of the cylindrical tank" (sub cV (Atomic 
 w_vol        = makeUC "V_W" "volume of water" (sub cV cW) m_3
 deltaT       = makeUC "deltaT" "temperature difference" (Concat [Special Delta, cT]) 
                centigrade
--- eta          = makeUC "eta" "a constant" (Special Eta_L) unitless
+eta          = makeUC "eta" "a constant" (Special Eta_L) unitless
 density      = makeUC "rho" "density, mass per unit volume" (Special Rho_L)
                densityU
 pcm_density  = makeUC "rho_P" "density of PCM" (sub (Special Rho_L) cP)

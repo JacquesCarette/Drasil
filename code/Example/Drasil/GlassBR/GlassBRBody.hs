@@ -1,14 +1,14 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
-module GlassBRBody1 where
+module Example.Drasil.GlassBR.GlassBRBody where
 import Data.Char (toLower)
 import Language.Drasil.Printing.Helpers
-import GlassBRExample1
+import Example.Drasil.GlassBR.GlassBRExample
 import Language.Drasil.Spec (Sentence(..),sMap, Accent(..)) --May need to update imports to hide Ref.
                             --More likely setup an API or something to
                             --Restrict access for novice users.
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
-import Language.Drasil.SI_Units2 
+import Example.Drasil.GlassBR.GlassBRSIUnits 
 import Language.Drasil.Chunk
 import Control.Lens ((^.))
 import Language.Drasil.Misc
@@ -173,13 +173,11 @@ s5_intro = Paragraph $
 
 s5_1 = Section 1 (S "Product Use Case Table") [s5_1_table]
 
--- Todo: figure out how to include s5_1_table
-
--- s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", S "Input and Output"] (mkTable
---  [(\x -> S $ x),(\x -> S $ x), (\x -> S $ x), (\x -> S $ x)],
---  [("1", "Inputs", "User", "Characteristics of the glass slab and of the blast. Details in 5.2."),
---  ("2", "Output", "Glass-BR", "Whether or not the glass slab is safe for the calculated load and supporting calculated values")])
---  (S "Use Case Table") True
+s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", S "Input and Output"] (mkTable
+  [(\x -> S (x!!0)),(\x -> S (x!!1)), (\x -> S (x!!2)), (\x -> S (x!!3))]
+  [["1", "Inputs", "User", "Characteristics of the glass slab and of the blast. Details in 5.2."],
+  ["2", "Output", "Glass-BR", "Whether or not the glass slab is safe for the calculated load and supporting calculated values"]])
+  (S "Use Case Table") True
 
 s5_2 = Section 1 (S "Individual Product Use Cases") [s5_2_bullets]
 
@@ -307,7 +305,7 @@ s6_2_4_intro = Paragraph $ S "This section collects and defines all the data " :
   S "needed to build the instance models."
 
 s6_2_4_DDefns ::[LayoutObj] 
-s6_2_4_DDefns = map Definition (map Theory [hFromt,loadDurFac,strDisFac,nonFacLoad,gTF,dL,tolPre,
+s6_2_4_DDefns = map Definition (map Data [risk,hFromt,loadDF,strDisFac,nonFL,glaTyFac,dL,tolPre,
   tolStrDisFac])
 
 s6_2_5 = Section 2 (S "Data Constraints") [s6_2_5_intro,s6_2_5_table1,s6_2_5_table2,s6_2_5_intro2,s6_2_5_table3]
@@ -323,15 +321,41 @@ s6_2_5_intro = Paragraph $
   S "specification parameters used in Table 2. ARmax is the refers to the maximum aspect ratio " :+:
   S "for the plate of glass."
 
---Todo:
---s6_2_5_table1 =
---s6_2_5_table2 =
+s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
+  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),
+  (\x -> x!!4)] [[(U $ plate_len ^. symbol), (U $ plate_len ^. symbol) :+: S " > 0 and " :+: 
+  (U $ plate_len ^. symbol) :+: S "/" :+: (U $ plate_width ^. symbol) :+: S " > 1",
+  (U $ dim_min ^. symbol) :+: S " <= " :+: (U $ plate_len ^. symbol) :+: S " <= " :+: 
+  (U $ dim_max ^. symbol) :+: S " and " :+: (U $ plate_len ^. symbol) :+: S "/" :+: 
+  (U $ plate_width ^. symbol) :+: S " < " :+: (U $ ar_max ^. symbol), S "1500 " :+:
+  Sy (plate_len ^. unit), S "10%"], [(U $ plate_width ^. symbol), (U $ (plate_width ^. symbol)) 
+  :+: S " > 0 and " :+: (U $ plate_width ^. symbol) :+: S " < " :+: (U $ plate_len ^. symbol),
+  (U $ dim_min ^. symbol) :+: S " <= " :+: (U $ plate_width ^. symbol) :+: S " <= " :+: 
+  (U $ dim_max ^.symbol) :+: S " and " :+: (U $ plate_len ^. symbol) :+: S "/" :+: 
+  (U $ plate_width ^. symbol) :+: S " < " :+: (U $ ar_max ^. symbol), S "1200 " :+: 
+  Sy (plate_width ^. unit), S "10%"], [(U $ pb_tol ^. symbol), S "0 < " :+: 
+  (U $ pb_tol ^. symbol) :+: S " < 1", S "-", S "0.008", S "0.1%"], [(U $ char_weight ^. symbol), 
+  (U $ char_weight ^. symbol) :+: S " >= 0", (U $ cWeightMin ^. symbol) :+: S " < " :+: 
+  (U $ char_weight ^. symbol) :+: S " < " :+: (U $ cWeightMax ^. symbol), S "42 " :+: 
+  Sy (char_weight ^. unit), S "10%"],[(U $ tNT ^. symbol), (U $ tNT ^. symbol) :+: 
+  S " > 0", S "-", S "1", S "10%"], [(U $ sd ^. symbol), (U $ sd ^. symbol) :+: S " > 0", 
+  (U $ sd_min ^. symbol) :+: S " < " :+: (U $ sd ^. symbol) :+: S " < " :+: 
+  (U $ sd_max ^. symbol), S "45" :+: Sy (sd ^. unit), S "10%"]])
+  (S "Input Variables") True
+
+s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable [(\x -> U $ fst(x)),
+  (\x -> snd(x))] [(dim_min ^. symbol, S "0.1 " :+: Sy (sd ^. unit)), (dim_max ^.symbol, S "0.1 " :+:
+  Sy (sd ^. unit)),(ar_max ^. symbol, S "5"), (cWeightMin ^. symbol, S "4.5 " :+: Sy (cWeightMin ^. unit)),
+  (cWeightMax ^. symbol, S "910 " :+: Sy (cWeightMax ^. unit)), (sd_min ^. symbol, S "6 " :+: 
+  Sy (sd_min ^. unit)), (sd_max ^. symbol, S "130 " :+: Sy (sd_max ^. unit))])
+  (S "Specification Paramter Values") True
 
 s6_2_5_intro2 = Paragraph $
   S "Table 4 shows the constraints that must be satisfied by the output."
 
---Todo:
---s6_2_5_table3
+s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable [(\x -> U $ fst(x)),
+  (\x -> snd(x))] [(prob_br ^. symbol, S "0 < " :+: (U $ prob_br ^. symbol) :+: S " < 1")])
+  (S "Output Variables") True
 
 s7 = Section 0 (S "Fuctional Requirements") [s7_intro, s7_list, s7_1]
 

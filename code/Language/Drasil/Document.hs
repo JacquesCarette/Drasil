@@ -11,7 +11,7 @@ import Control.Lens ((^.))
 
 type Title    = Sentence
 type Author   = Sentence
-type Item     = Sentence
+type Item     = Contents
 type Bullets  = [Item]
 type Items    = [Item]
 type Depth    = Int

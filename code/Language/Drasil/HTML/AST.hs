@@ -40,7 +40,7 @@ data Document = Document Title Author [LayoutObj]
 type Title    = Spec
 type Author   = Spec
 type Contents = Spec
-type Items    = [Spec]
+type Items    = [LayoutObj]
 type Tags     = [String]
 type Label    = Spec
 type Filepath = String
@@ -53,13 +53,13 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Tagless Contents
                | CodeBlock Code
                | Definition DType [(String,LayoutObj)] Label
-               | List ListType Items
+               | List ListType
                | Figure Label Caption Filepath
                -- | Span Tags Contents
                
-data ListType = Ordered | Unordered | Simple
+data ListType = Ordered Items | Unordered Items | Simple [(Spec,LayoutObj)]
 
 instance Show ListType where
-  show Ordered   = "o"
-  show Unordered = "u"
-  show Simple    = error "Printing Simple list failed, see ASTHTML/PrintHTML"
+  show (Ordered _)   = "o"
+  show (Unordered _) = "u"
+  show (Simple _)    = error "Printing Simple list failed, see ASTHTML/PrintHTML"

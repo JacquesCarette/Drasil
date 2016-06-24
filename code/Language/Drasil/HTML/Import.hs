@@ -92,10 +92,9 @@ lay (Paragraph c)     = H.Paragraph (spec c)
 lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (spec c)] (H.S "")
 lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
-lay (BulletList cs)   = H.List H.Unordered $ map spec cs
-lay (NumberedList cs) = H.List H.Ordered $ map spec cs
-lay (SimpleList cs)   = H.List H.Simple $ 
-                          map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
+lay (BulletList cs)   = H.List $ H.Unordered (map lay cs)
+lay (NumberedList cs) = H.List $ H.Ordered (map lay cs)
+lay (SimpleList cs)   = H.List $ H.Simple (map (\(f,s) -> (spec f, lay s)) cs)
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 
 makePairs :: DType -> [(String,H.LayoutObj)]

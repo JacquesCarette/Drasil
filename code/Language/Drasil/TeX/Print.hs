@@ -61,7 +61,7 @@ printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
 printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
 printLO (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
-printLO (List lt is)            = makeList lt is
+printLO (List lt)               = makeList lt
 printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
@@ -320,17 +320,17 @@ makeEquation contents =
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
-makeList :: ListType -> [Spec] -> Doc
-makeList Simple items = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
-makeList t items = b (show t) $$ vcat (map item items) $$ e (show t)
+makeList :: ListType -> Doc
+makeList (Simple items) = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
+makeList t@(Item items) = b (show t) $$ vcat (map item items) $$ e (show t)
+makeList t@(Enum items) = b (show t) $$ vcat (map item items) $$ e (show t)
 
-item :: Spec -> Doc
-item = \s -> text ("\\item " ++ pCon Plain s)
+item :: LayoutObj -> Doc
+item = \s -> text ("\\item ") <> printLO s
 
-sim_item :: [Spec] -> [Doc]
+sim_item :: [(Spec,LayoutObj)] -> [Doc]
 sim_item [] = [empty]
-sim_item (_:[]) = error "Simple list printing went awry, a pair broke"
-sim_item (x:y:zs) = text ("\\item[" ++ pCon Plain x ++ ":] " ++ pCon Plain y) :
+sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> printLO y :
   sim_item zs
   
 -----------------------------------------------------------------

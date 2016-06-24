@@ -42,7 +42,7 @@ data Document = Document Title Author [LayoutObj]
 type Title    = Spec
 type Author   = Spec
 type Contents = Spec
-type Items    = [Spec]
+type Items    = [LayoutObj]
 type Depth    = Int
 type Label    = Spec
 type Filepath = String
@@ -54,12 +54,12 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | EqnBlock Contents
                | CodeBlock Code
                | Definition [(String,LayoutObj)] Label
-               | List ListType Items
+               | List ListType
                | Figure Label Caption Filepath
                
-data ListType = Item | Enum | Simple
+data ListType = Item Items | Enum Items | Simple [(Spec,LayoutObj)]
 
 instance Show ListType where
-  show Item = "itemize"
-  show Enum = "enumerate"
-  show Simple = error "Printing Simple list failed, see ASTTeX/PrintTeX"
+  show (Item _)   = "itemize"
+  show (Enum _)   = "enumerate"
+  show (Simple _) = error "Printing Simple list failed, see ASTTeX/PrintTeX"

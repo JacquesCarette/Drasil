@@ -39,7 +39,7 @@ printLO (Table ts rows r b t)   = makeTable ts rows (p_spec r) b (p_spec t)
 printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dt ssPs l)  = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents)     = h n $ text (p_spec contents)
-printLO (List t items)          = makeList t items
+printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 
 print :: [LayoutObj] -> Doc
@@ -187,11 +187,15 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
-makeList :: ListType -> [Spec] -> Doc
-makeList Simple items = div_tag ["list"] 
-  (vcat $ map (wrap "p" [] . text . p_spec) items)
-makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map
-  (wrap "li" [] . text . p_spec) items)
+makeList :: ListType -> Doc
+makeList (Simple items) = div_tag ["list"] 
+  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ ": ") <> (specialLOP e)))) items)
+    where specialLOP (Paragraph s) = text (p_spec s)
+          specialLOP x = printLO x
+makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
+  (wrap "li" [] . printLO) items)
+makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
+  (wrap "li" [] . printLO) items)
   
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------

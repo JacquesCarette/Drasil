@@ -92,8 +92,9 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+
   S "reducing ambiguity and making it easier to correctly understand the ":+:
   S "requirements:"
   
-s4_1_1_bullets = BulletList $ map (\c -> S (capitalize (c ^. name)) :+: 
-  S ": " :+: (c ^. descr)) [thermFluxU, heat_capacity]
+s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ S 
+  (capitalize (c ^. name)) :+: S ": " :+: (c ^. descr)) 
+  [thermFluxU, heat_capacity])
   
 s4_1_2 = Section 2 (physSysDescr ^. descr) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]
@@ -104,7 +105,7 @@ s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
             U (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
-s4_1_2_list = SimpleList $ [
+s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "PS1", S "Tank containing water"), 
   (S "PS2", S "Heating coil at bottom of tank. (" :+:
   U (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
@@ -116,7 +117,7 @@ s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro,
 s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
   S "temperature of the water, and material properties, the goal statement is"
 
-s4_1_3_list = SimpleList $ [
+s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "predict the " :+: (temp_water ^. descr) :+: S " over time")]
 
 s4_2 = Section 1 (S "Solution Characteristics Specification") 

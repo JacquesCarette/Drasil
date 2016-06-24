@@ -57,7 +57,10 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | List ListType
                | Figure Label Caption Filepath
                
-data ListType = Item Items | Enum Items | Simple [(Spec,LayoutObj)]
+data ListType = Item [ItemType] | Enum [ItemType] | Simple [(Spec,ItemType)]
+
+data ItemType = Flat Spec
+              | Nested Spec ListType
 
 instance Show ListType where
   show (Item _)   = "itemize"

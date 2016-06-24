@@ -57,9 +57,12 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Figure Label Caption Filepath
                -- | Span Tags Contents
                
-data ListType = Ordered Items | Unordered Items | Simple [(Spec,LayoutObj)]
+data ListType = Ordered [ItemType] | Unordered [ItemType]
+              | Simple [(Title,ItemType)]
+
+data ItemType = Flat Spec | Nested Spec ListType
 
 instance Show ListType where
   show (Ordered _)   = "o"
   show (Unordered _) = "u"
-  show (Simple _)    = error "Printing Simple list failed, see ASTHTML/PrintHTML"
+  show (Simple _)  = error "Printing Simple list failed, see ASTHTML/PrintHTML"

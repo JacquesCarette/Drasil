@@ -25,7 +25,8 @@ module Language.Drasil (
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
-  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), SecCons(..)
+  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
+    SecCons(..), ListType(..), ItemType (..)
   -- Reference
   , makeRef
   -- Symbol
@@ -47,7 +48,8 @@ module Language.Drasil (
 import Language.Drasil.Expr (Expr(..), Relation(..))
 import Language.Drasil.Output.Formats (DocType(SRS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
-                                 Section(..), Contents(..), SecCons(..))
+                                 Section(..), Contents(..), SecCons(..),
+                                 ListType(..),ItemType(..))
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it

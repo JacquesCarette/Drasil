@@ -11,11 +11,9 @@ import Control.Lens ((^.))
 
 type Title    = Sentence
 type Author   = Sentence
-type Item     = Contents
-type Bullets  = [Item]
-type Items    = [Item]
+type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
-type Pairs    = [(Title,Item)] -- Title: Item
+type Pair     = (Title,ItemType) -- Title: Item
 type Filepath = String
 type Label    = Sentence
 type Sections = [Section]
@@ -35,11 +33,16 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | EqnBlock Sentence
                | CodeBlock Code
                | Definition DType
-               | BulletList Bullets
-               | NumberedList Items
-               | SimpleList Pairs
+               | Enumeration ListType
                | Figure Label Filepath--Should use relative file path.
 
+data ListType = Bullet [ItemType]
+              | Number [ItemType] 
+              | Simple [Pair]
+         
+data ItemType = Flat Sentence 
+              | Nested Header ListType
+               
 -- Types of definitions
 data DType = Data EqChunk 
            | General 
@@ -60,9 +63,7 @@ instance LayoutObj Contents where
   refName (EqnBlock _)     = error "EqnBlock ref unimplemented"
   refName (CodeBlock _)    = error "Codeblock ref unimplemented"
   refName (Definition d)   = getDefName d
-  refName (BulletList _)   = error "BulletList ref unimplemented"
-  refName (NumberedList _) = error "NumberedList ref unimplemented"
-  refName (SimpleList _)   = error "SimpleList ref unimplemented"
+  refName (Enumeration _)  = error "List refs unimplemented"
   rType (Table _ _ _ _) = Tab
   rType (Figure _ _)    = Fig
   rType (Definition _)  = Def

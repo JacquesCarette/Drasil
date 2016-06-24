@@ -322,16 +322,19 @@ makeEquation contents =
 
 makeList :: ListType -> Doc
 makeList (Simple items) = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
-makeList t@(Item items) = b (show t) $$ vcat (map item items) $$ e (show t)
-makeList t@(Enum items) = b (show t) $$ vcat (map item items) $$ e (show t)
+makeList t@(Item items) = b (show t) $$ vcat (map p_item items) $$ e (show t)
+makeList t@(Enum items) = b (show t) $$ vcat (map p_item items) $$ e (show t)
 
-item :: LayoutObj -> Doc
-item = \s -> text ("\\item ") <> printLO s
+p_item :: ItemType -> Doc
+p_item (Flat s) = text ("\\item ") <> text (pCon Plain s)
+p_item (Nested t s) = vcat [text ("\\item ") <> text (pCon Plain t), makeList s]
 
-sim_item :: [(Spec,LayoutObj)] -> [Doc]
+sim_item :: [(Spec,ItemType)] -> [Doc]
 sim_item [] = [empty]
-sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> printLO y :
+sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> sp_item y :
   sim_item zs
+    where sp_item (Flat s) = text (pCon Plain s)
+          sp_item (Nested t s) = vcat [text (pCon Plain t), makeList s]
   
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------

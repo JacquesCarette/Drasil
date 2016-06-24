@@ -189,13 +189,15 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 
 makeList :: ListType -> Doc
 makeList (Simple items) = div_tag ["list"] 
-  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ ": ") <> (specialLOP e)))) items)
-    where specialLOP (Paragraph s) = text (p_spec s)
-          specialLOP x = printLO x
+  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ ": ") <> (p_item e)))) items)
 makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
-  (wrap "li" [] . printLO) items)
+  (wrap "li" [] . p_item) items)
 makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
-  (wrap "li" [] . printLO) items)
+  (wrap "li" [] . p_item) items)
+
+p_item :: ItemType -> Doc  
+p_item (Flat s) = text $ p_spec s
+p_item (Nested s l) = vcat [text (p_spec s),makeList l]
   
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------

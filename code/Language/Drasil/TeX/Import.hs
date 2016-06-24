@@ -93,11 +93,17 @@ lay (Paragraph c)     = T.Paragraph (spec c)
 lay (EqnBlock c)      = T.EqnBlock (spec c)
 lay (CodeBlock c)     = T.CodeBlock c
 lay x@(Definition c)  = T.Definition (makePairs c) (spec $ refName x)
-lay (BulletList cs)   = T.List $ T.Item (map lay cs)
-lay (NumberedList cs) = T.List $ T.Enum (map lay cs)
-lay (SimpleList cs)   = T.List $ T.Simple (concat $ 
-                          map (\(f,s) -> [(spec f, lay s)]) cs)
+lay (Enumeration cs)  = T.List $ makeL cs
 lay x@(Figure c f)    = T.Figure (spec (refName x)) (spec c) f
+
+makeL :: ListType -> T.ListType  
+makeL (Bullet bs) = T.Enum $ (map item bs)
+makeL (Number ns) = T.Item $ (map item ns)
+makeL (Simple ps) = T.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
+
+item :: ItemType -> T.ItemType
+item (Flat i) = T.Flat (spec i)
+item (Nested t s) = T.Nested (spec t) (makeL s) 
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

@@ -126,7 +126,7 @@ p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
-p_expr (Case ps)  = "\\left\\{\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}\\right\\}"
+p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 
 mul :: Expr -> Expr -> String
 mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y

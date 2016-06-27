@@ -117,6 +117,7 @@ p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
+p_expr (Op f es)  = p_op f es
 
 mul :: Expr -> Expr -> String
 mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b
@@ -205,3 +206,22 @@ p_item (Nested s l) = vcat [text (p_spec s),makeList l]
 
 makeFigure :: String -> String -> String -> Doc
 makeFigure r c f = refwrap r (image f c $$ caption c)
+
+-----------------------------------------------------------------
+------------------BEGIN EXPR OP PRINTING-------------------------
+-----------------------------------------------------------------
+p_op :: Function -> [Expr] -> String
+p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ paren (p_expr x)
+p_op (Summation _) _ = error "Something went wrong with a summation"
+p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ paren (p_expr x)
+p_op (Integral _) _  = error "Something went wrong with an integral" 
+p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
+p_op Abs _ = error "Abs should only take one expr."
+p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op _ _ = error "Something went wrong with an operation"
+
+makeBounds :: (Maybe Expr, Maybe Expr) -> String
+makeBounds (Nothing,Nothing) = ""
+makeBounds (Nothing,Just n) = sup (p_expr n)
+makeBounds (Just i, Nothing) = sub (p_expr i)
+makeBounds (Just i, Just n) = sub (p_expr i) ++ sup (p_expr n)

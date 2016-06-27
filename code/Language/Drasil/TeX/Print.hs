@@ -81,7 +81,7 @@ p_spec (S s)       = s
 p_spec (N s)       = symbol s
 p_spec (Sy s)      = runReader (uSymbPrint s) Plain
 p_spec HARDNL      = "\\newline"
-p_spec (Ref t@Sec r) = if numberedSections 
+p_spec (Ref t@Sect r) = if numberedSections 
                        then show t ++ "~\\ref" ++ brace (p_spec r) 
                        else "\\hyperref" ++ sqbrac (p_spec r) ++ 
                         brace (show t ++ "~" ++ p_spec r)
@@ -127,6 +127,7 @@ p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
+p_expr (Op f es)  = p_op f es
 
 mul :: Expr -> Expr -> String
 mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
@@ -348,3 +349,22 @@ makeFigure r c f =
     caption c, label r,
     e "center", e "figure"
   ]
+
+-----------------------------------------------------------------
+------------------BEGIN EXPR OP PRINTING-------------------------
+-----------------------------------------------------------------
+p_op :: Function -> [Expr] -> String
+p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
+p_op (Summation _) _ = error "Something went wrong with a summation"
+p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
+p_op (Integral _) _  = error "Something went wrong with an integral" 
+p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
+p_op Abs _ = error "Abs should only take one expr."
+p_op f (x:[]) = show f ++ brace (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op _ _ = error "Something went wrong with an operation"
+
+makeBounds :: (Maybe Expr, Maybe Expr) -> String
+makeBounds (Nothing,Nothing) = ""
+makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
+makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
+makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)

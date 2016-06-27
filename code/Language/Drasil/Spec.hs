@@ -38,13 +38,13 @@ data USymb = UName Symbol
 
 data RefType = Tab
              | Fig
-             | Sec
+             | Sect
              | Def
 
 instance Show RefType where
   show Tab = "Table"
   show Fig = "Figure"
-  show Sec = "Section"
+  show Sect = "Section"
   show Def = "Definition"
   
 -- this is a horrible hack that assumes too much from sentences!

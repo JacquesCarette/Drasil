@@ -23,7 +23,19 @@ data Expr = Var  Variable
           | Neg  Expr
           | Call Expr [Expr]
           | Case [(Expr,Expr)]
-
+          | Op Function [Expr]
+          
+data Function = Log
+           | Summation (Maybe Expr,Maybe Expr) --Sum (low,high) Bounds
+           | Abs
+           | Integral (Maybe Expr, Maybe Expr) --Integral (low,high) Bounds
+           | Sin
+           | Cos
+           | Tan
+           | Sec
+           | Csc
+           | Cot
+           
 infixr 5 :+:
 data Spec = E Expr
           | S String
@@ -66,3 +78,15 @@ instance Show ListType where
   show (Item _)   = "itemize"
   show (Enum _)   = "enumerate"
   show (Simple _) = error "Printing Simple list failed, see ASTTeX/PrintTeX"
+  
+instance Show Function where
+  show Log = "\\log"
+  show (Summation _) = "\\sum"
+  show Abs = ""
+  show (Integral _) = "\\int"
+  show Sin = "\\sin"
+  show Cos = "\\cos"
+  show Tan = "\\tan"
+  show Sec = "\\sec"
+  show Csc = "\\csc"
+  show Cot = "\\cot"

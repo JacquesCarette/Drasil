@@ -54,7 +54,7 @@ class LayoutObj l where
 
 instance LayoutObj Section where
   refName (Section d t _) = writeSec d :+: inferName t
-  rType _ = Sec
+  rType _ = Sect
 
 instance LayoutObj Contents where
   refName (Table _ _ l _)  = S "Table:" :+: inferName l

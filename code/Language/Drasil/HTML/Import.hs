@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 
-import Language.Drasil.Expr (Expr(..), Relation(..))
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (render, Partial(..))
@@ -34,7 +34,19 @@ expr (FCall f x) = H.Call (expr f) (map expr x)
 expr (Case ps)   = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
+expr (UnaryOp u e) = H.Op (ufunc u) [expr e]
 
+ufunc :: UFunc -> H.Function
+ufunc Log = H.Log
+ufunc (Summation (i,n)) = H.Summation (fmap expr i, fmap expr n)
+ufunc Abs = H.Abs
+ufunc (Integral (i,n)) = H.Integral (fmap expr i, fmap expr n)
+ufunc Sin = H.Sin
+ufunc Cos = H.Cos
+ufunc Tan = H.Tan
+ufunc Sec = H.Sec
+ufunc Csc = H.Csc
+ufunc Cot = H.Cot
 
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)

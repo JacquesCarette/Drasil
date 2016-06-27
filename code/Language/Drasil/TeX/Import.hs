@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens
 
-import Language.Drasil.Expr (Expr(..), Relation(..))
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -34,6 +34,19 @@ expr (FCall f x)  = T.Call (expr f) (map expr x)
 expr (Case ps)    = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
+expr (UnaryOp u e) = T.Op (ufunc u) [expr e]
+
+ufunc :: UFunc -> T.Function
+ufunc Log = T.Log
+ufunc (Summation (i,n)) = T.Summation (fmap expr i, fmap expr n)
+ufunc Abs = T.Abs
+ufunc (Integral (i,n)) = T.Integral (fmap expr i, fmap expr n)
+ufunc Sin = T.Sin
+ufunc Cos = T.Cos
+ufunc Tan = T.Tan
+ufunc Sec = T.Sec
+ufunc Csc = T.Csc
+ufunc Cot = T.Cot
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)

@@ -81,9 +81,9 @@ instance Show ListType where
 
 instance Show Function where
   show Log = "log"
-  show (Summation _) = "sum"
+  show (Summation _) = "&sum;"
   show Abs = ""
-  show (Integral _) = "int"
+  show (Integral _) = "&int;"
   show Sin = "sin"
   show Cos = "cos"
   show Tan = "tan"

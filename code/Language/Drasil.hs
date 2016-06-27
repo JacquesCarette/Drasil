@@ -6,7 +6,7 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation(..)
+  , Expr(..), Relation(..), UFunc(..)
   -- all the stuff from Unicode
   , Alpha(..), Circle(..), Delta(..), Nabla(..), Partial(..)
   , Phi(..), Rho(..), Tau(..)
@@ -45,7 +45,7 @@ module Language.Drasil (
   , Lang(CLang), CodeType(Calc)
 ) where
 
-import Language.Drasil.Expr (Expr(..), Relation(..))
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
 import Language.Drasil.Output.Formats (DocType(SRS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),

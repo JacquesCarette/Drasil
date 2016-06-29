@@ -55,7 +55,7 @@ w_E          = makeUC "E_W" "heat energy in the water" (sub cE cW) joule
 vol_ht_gen   = makeUC "g" "volumetric heat generation per unit volume" lG 
                thermFluxU 
 htTransCoeff = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
-coil_HTC     = makeUC "h_C" "convctive heat transfer coefficient between coil and water"
+coil_HTC     = makeUC "h_C" "convective heat transfer coefficient between coil and water"
                (sub lH cC) heat_transfer
 htFusion     = makeUC "H_f" "specific latent heat of fusion" (sub cH lF) specificE
 pcm_HTC      = makeUC "h_P" "convective heat transfer coefficient between PCM and water"
@@ -82,8 +82,8 @@ time         = makeUC "t" "time" lT second
 temp         = makeUC "T" "temperature" cT centigrade
 temp_boil    = makeUC "T_boil" "temperature at boiling point" (sub cT (Atomic "boil"))
                centigrade
-temp_C       = makeUC "T_C" "temperature of coil" (sub cT cC) centigrade
-temp_env     = makeUC "T_env" "temperature of environment" (sub cT (Atomic "env"))
+temp_C       = makeUC "T_C" "temperature of the heating coil" (sub cT cC) centigrade
+temp_env     = makeUC "T_env" "temperature of the environment" (sub cT (Atomic "env"))
                centigrade
 time_final   = makeUC "t_final" "final time" (sub lT (Atomic "final")) second
 temp_init    = makeUC "T_init" "initial temperature" (sub cT (Atomic "init"))
@@ -96,9 +96,9 @@ t_final_melt = makeUC "t^final_melt" "time at which melting of PCM ends"
                (sup (sub lT (Atomic "melt")) (Atomic "final")) second
 temp_melt_P  = makeUC "T^P_melt" "temperature at melting point for PCM"
                (sup (sub cT (Atomic "melt")) cP) centigrade
-temp_PCM     = makeUC "T_P" "temperature of phase change material" (sub cT cP)
+temp_PCM     = makeUC "T_P" "temperature of the phase change material" (sub cT cP)
                centigrade
-temp_W       = makeUC "temp_W" "temperature of water" (sub cT cW) centigrade
+temp_W       = makeUC "temp_W" "temperature of the water" (sub cT cW) centigrade
 volume       = makeUC "V" "volume" cV m_3
 pcm_vol      = makeUC "V_P" "volume of PCM" (sub cV cP) m_3
 tank_vol     = makeUC "V_tank" "volume of the cylindrical tank" (sub cV (Atomic "tank"))

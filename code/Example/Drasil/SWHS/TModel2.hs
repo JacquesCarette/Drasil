@@ -9,14 +9,16 @@ import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
-s4_2_2_T2 :: LayoutObj
+s4_2_2_T2 :: Contents
 s4_2_2_T2 = Definition (Theory t2SensHtE)
 
 t2SensHtE :: RelationChunk
 t2SensHtE = makeRC "Sensible heat energy" t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
-sensHtEEqn = (C sensHtE) := (C htCap_S) * (C mass) * (C deltaT)
+sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT), ((C temp) :< (C temp_melt))),
+                            ((C htCap_L) * (C mass) * (C deltaT), ((C temp_melt) :< (C temp))),
+                            ((C htCap_V) * (C mass) * (C deltaT), ((C temp_boil) :< (C temp)))]
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 

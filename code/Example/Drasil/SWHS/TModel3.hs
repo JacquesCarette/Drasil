@@ -8,16 +8,17 @@ import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
-s4_2_2_T3 :: LayoutObj
+s4_2_2_T3 :: Contents
 s4_2_2_T3 = Definition (Theory t3LatHtE)
 
 t3LatHtE :: RelationChunk
 t3LatHtE = makeRC "Latent heat energy" t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latentE) [C time] := Deriv (C latentE) (C tau)
+latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just 0, Just (C time))) (Deriv (FCall (C latentE) [C tau]) (C tau))
 
--- How to have integrals in equations
+-- Integrals need dTau at end
+-- Deriv is specifically partial derivative... how to do regular derivative?
 -- How to have conditions on a single equation
 
 t3descr :: Sentence

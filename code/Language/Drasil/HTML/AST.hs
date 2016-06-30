@@ -24,6 +24,7 @@ data Expr = Var   Variable
           | Call  Expr [Expr]
           | Case  [(Expr,Expr)]
           | Op Function [Expr]
+          | Grouping Expr
           
 data Function = Log
            | Summation (Maybe Expr,Maybe Expr) --Sum (low,high) Bounds

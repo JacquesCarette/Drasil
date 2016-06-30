@@ -35,6 +35,7 @@ expr (Case ps)   = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 expr (UnaryOp u e) = H.Op (ufunc u) [expr e]
+expr (Grouping e) = H.Grouping (expr e)
 
 ufunc :: UFunc -> H.Function
 ufunc Log = H.Log

@@ -35,6 +35,7 @@ expr (Case ps)    = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 expr (UnaryOp u e) = T.Op (ufunc u) [expr e]
+expr (Grouping e) = T.Grouping (expr e)
 
 ufunc :: UFunc -> T.Function
 ufunc Log = T.Log

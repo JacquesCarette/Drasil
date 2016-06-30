@@ -13,7 +13,7 @@ data Delta  = Delta_L
             | Delta
 data Ell    = Ell
 data Eta    = Eta_L
-			| Eta
+            | Eta
 data Gamma  = Gamma_L
             | Gamma
 data Lambda = Lambda_L
@@ -34,7 +34,6 @@ data Tau    = Tau_L
             | Tau
 data Upsilon = Upsilon_L
              | Upsilon
-            
 --
 
 instance Render Alpha where

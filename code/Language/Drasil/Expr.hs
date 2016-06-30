@@ -30,6 +30,7 @@ data Expr where
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
                                      -- each pair represents one case
   UnaryOp  :: UFunc  ->  Expr  -> Expr
+  Grouping :: Expr -> Expr
   -- BinaryOp :: BiFunc ->  Expr  -> Expr -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
   

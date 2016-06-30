@@ -118,6 +118,7 @@ p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
+p_expr (Grouping e) = paren (p_expr e)
 
 mul :: Expr -> Expr -> String
 mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b

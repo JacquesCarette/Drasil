@@ -24,6 +24,7 @@ dep (V _)       = []
 dep (FCall f x) = nub (dep f ++ (concat $ map dep x))
 dep (Case ls)   = nub (concat (map (dep . fst) ls))
 dep (UnaryOp _ e) = dep e
+dep (Grouping e) = dep e
 
 --Get a list of VarChunks from an equation in order to print
 vars :: Expr -> [VarChunk]
@@ -42,6 +43,7 @@ vars (V _)       = []
 vars (FCall f x) = nub (vars f ++ (concat $ map vars x))
 vars (Case ls)   = nub (concat (map (vars . fst) ls))
 vars (UnaryOp _ e) = vars e
+vars (Grouping e) = vars e
 
 -- Convert any chunk to a VarChunk as long as it is an instance of Quantity.
 -- Again, used for printing equations/descriptions mostly.

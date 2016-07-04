@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.GlassBR.GlassBRExample where
-import Language.Drasil.Expr (Expr(..), Relation(..))
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
 import Example.Drasil.GlassBR.GlassBRSIUnits
 import Language.Drasil.Symbol
 import Language.Drasil.Chunk.Eq (EqChunk(..),fromEqn)
@@ -20,11 +20,11 @@ glassBRSymbols = [plate_len, risk_fun, plate_width, dim_max, dim_min, mod_elas,
   sflawParamM, prob_br, pb_tol, demand, dimlessLoad, tolLoad,sd, sd_max,
   sd_min, nom_thick, load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight]
 
-plate_len, risk_fun, plate_width, dim_max, dim_min, 
-  mod_elas,glass_type, act_thick, is_safe1, is_safe2,
-  sdf, sdf_tol, sflawParamK, sflawParamM, prob_br, pb_tol, 
-  demand, dimlessLoad, tolLoad, sd, sd_max, sd_min, nom_thick, 
-  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight:: UnitalChunk
+plate_len, risk_fun, plate_width, dim_max, dim_min, mod_elas,glass_type, act_thick,
+  is_safe1, is_safe2, sdf, sdf_tol, sflawParamK, sflawParamM, prob_br, pb_tol, 
+  demand, dimlessLoad, tolLoad, sd, sdx, sdy, sdz, sd_max, sd_min, nom_thick,
+  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight, tNT, lRe, loadSF,
+  ar, ar_max, ar_min, gTF:: UnitalChunk
 
 plate_len   = makeUC "a" "Plate length (long dimension)" lA millimetre
 plate_width = makeUC "b" "Plate width (short dimension)" lB millimetre
@@ -39,11 +39,14 @@ sflawParamM = makeUC "m" "Surface flaw parameter" lM sFlawPU
 demand      = makeUC "q" "Applied load (demand)" lQ kilopascal
 sd          = makeUC "SD" "Stand off distance which is represented in coordinates (SDx, SDy, SDz)"
               (Atomic "SD") metre
+sdx         = makeUC "SD_x" "Stand off distance (x-component)" (sub (Atomic "SD") lX) metre
+sdy         = makeUC "SD_y" "Stand off distance (y-component)" (sub (Atomic "SD") lY) metre
+sdz         = makeUC "SD_z" "Stand off distance (z-component)" (sub (Atomic "SD") lZ) metre
 sd_max      = makeUC "SD_max" "Maximum stand off distance permissible for input" 
               (sub (Atomic "SD") (Atomic "max")) metre
 sd_min      = makeUC "SD_min" "Minimum stand off distance permissible for input" 
               (sub (Atomic "SD") (Atomic "min")) metre
-nom_thick   = makeUC "t" "Nominal thickness t in (2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0" 
+nom_thick   = makeUC "t" "Nominal thickness t in (2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0)" 
               lT millimetre
 load_dur    = makeUC "t_d" "Duration of load" (sub lT lD) second
 char_weight = makeUC "w" "Charge weight" lW kilogram
@@ -62,13 +65,20 @@ is_safe1    = makeUC "is_safe1" "True when calculated probability is less than t
 is_safe2    = makeUC "is_safe2" "True when load resistance (capacity) is greater than load (demand)" 
               (Atomic "is_safe2") unitless
 sdf         = makeUC "J" "Stress distribution factor (Function)" cJ unitless
-sdf_tol     = makeUC "J_tol" "Stress distribution factor (Function) based on P_btol"
+sdf_tol     = makeUC "J_tol" "Stress distribution factor (Function) based on Pbtol"
               (sub cJ (Atomic "tol")) unitless
 prob_br     = makeUC "P_b" "Probability of breakage" (sub cP lB) unitless
-pb_tol      = makeUC "P_btol" "Tolerable probablity of breakage" 
+pb_tol      = makeUC "P_btol" "Tolerable probability of breakage" 
               (sub cP (Atomic "btol")) unitless
 dimlessLoad = makeUC "q_hat" "Dimensionless load" (hat lQ) unitless
 tolLoad     = makeUC "q_hat_tol" "Tolerable load" (sub (hat lQ) (Atomic "tol")) unitless
+tNT         = makeUC "TNT" "TNT Equivalent Factor" (Atomic "TNT") unitless
+lRe         = makeUC "LR" "Load Resistance" (Atomic "LR") unitless
+loadSF      = makeUC "LSF" "Load Share Factor" (Atomic "LSF") unitless
+ar          = makeUC "AR" "Aspect Ratio" (Atomic "AR") unitless
+ar_max      = makeUC "AR_max" "Maximum Aspect Ratio" (sub (Atomic "AR") (Atomic "max")) unitless
+ar_min      = makeUC "AR_min" "Minimum Aspect Ratio" (sub (Atomic "AR") (Atomic "min")) unitless
+gTF         = makeUC "GTF" "Glass Type Factor" (Atomic "GTF") unitless
 
 ----Acronyms-----
 acronyms :: [ConceptChunk]
@@ -94,7 +104,7 @@ gLassBR       = makeCC "GlassBR" "Glass-BR"
 theoreticMod  = makeCC "T" "Theoretical Model"
 annealedGlass = makeCC "AN" "Annealed Glass"
 aspectR       = makeCC "AR" "Aspect Ratio"
-aspectRMax    = makeCC "AR_max" "Maximum Aspect Ratio"
+aspectRMax    = makeCC "ARmax" "Maximum Aspect Ratio"
 fullyTGlass   = makeCC "FT" "Fully Tempered Glass"
 glassTypeFac  = makeCC "GTF" "Glass Type Factor"
 heatSGlass    = makeCC "HS" "Heat Strengthened Glass"
@@ -132,24 +142,12 @@ glassWL       = makeCC "Glass weight load" "The dead load component of the glass
 sdl           = makeCC "Short duration load" "Any load lasting 3s or less."
 lsf           = makeCC "Load share (LSF) factor" "A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit."
 pb            = makeCC "Probability of breakage Pb" "The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000."
-specA         = makeCC "Specifying authority" "The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the apprpriate values used to calculate the specified design load, and furnishing other information required to perform this practice."
+specA         = makeCC "Specifying authority" "The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice."
 blaReGLa      = makeCC "Blast resistant glazing" "Glazing that provides protection against air blast pressure generated by explosions."
 eqTNTChar     = makeCC "Equivalent TNT charge mass" "Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat."
 sD            = makeCC "Stand off distance (SD)" "The distance from the glazing surface to the centroid of a hemispherical high explosive charge."
 
 
-----Variables----
-variables :: [VarChunk]
-variables = [lRe, loadSF, tNT, ar_max, ar_min]
-
-lRe, loadSF, tNT, ar_max, ar_min :: VarChunk
-lRe       = makeVC "LR" "Load Resistance" (Atomic "LR")
-loadSF    = makeVC "LSF" "Load Share Factor" (Atomic "LSF")
-tNT       = makeVC "TNT" "TNT Equivalent Factor" (Atomic "TNT")
-ar_max    = makeVC "AR_max" "Maximum Aspect Ratio" (sub (Atomic "AR") (Atomic "max"))
-ar_min    = makeVC "AR_min" "Minimum Aspect Ratio" (sub (Atomic "AR") (Atomic "min"))
-
-----EqChunks----
 --Theoretical models--
 t1SafetyReq :: RelationChunk
 t1SafetyReq = makeRC "Safety Requirement-1" t1descr safety_require1_rel
@@ -225,9 +223,9 @@ dedescr =
 
 --Data Definitions--
 risk_eq :: Expr
-risk_eq = ((C sflawParamK):/((C plate_len):/(Int 1000):*(C plate_width):/(Int 1000)):^
-  ((C sflawParamM) - (Int 1))):*((C mod_elas):*(Int 1000):*((C act_thick):/(Int 1000)):^
-  (Int 2)):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
+risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*((C plate_width):/(Int 1000)))):^
+  ((C sflawParamM) - (Int 1))):*(Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick):/(Int 1000))):^
+  (Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
 
 risk :: EqChunk
 risk = fromEqn "B" (S "risk of failure") (cB) unitless risk_eq
@@ -244,7 +242,7 @@ hFromt = fromEqn "h" (S " function that maps from the nominal " :+:
   S " => 21.44)") (act_thick ^.symbol) millimetre hFromt_eq
 
 loadDF_eq :: Expr 
-loadDF_eq = ((C load_dur):/(Int 60)):^((C sflawParamM):/(Int 16))
+loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 
 loadDF :: EqChunk
 loadDF = fromEqn "LDF" (S "Load Duration Factor") (Atomic "LDF") unitless loadDF_eq
@@ -256,7 +254,7 @@ strDisFac :: EqChunk
 strDisFac = fromEqn "J" (sdf ^. descr) (sdf ^. symbol) unitless strDisFac_eq
 
 nonFL_eq :: Expr
-nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/(((C plate_len):^2):*((C plate_width):^2))
+nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: EqChunk
 nonFL = fromEqn "NFL" (S "Non-Factored Load") (Atomic "NFL") unitless nonFL_eq
@@ -272,7 +270,7 @@ glaTyFac = fromEqn "NFL" (S "function that maps from the glass type (" :+: (U $ 
  S "FT is fully tempered glass. " :+: S "HS is heat strengthened glass.") (Atomic "GTF") unitless glaTyFac_eq
 
 dL_eq :: Expr
-dL_eq = ((C demand):*((C plate_len):^(Int 2)):*((C plate_width):^(Int 2))):/((C mod_elas):*((C act_thick):^(Int 4)):*(C glaTyFac))
+dL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2))):/((C mod_elas):*((C act_thick):^(Int 4)):*(C glaTyFac))
 
 dL :: EqChunk
 dL = fromEqn "q_hat" (dimlessLoad ^. descr) (dimlessLoad ^. symbol) unitless dL_eq
@@ -284,9 +282,9 @@ tolPre :: EqChunk
 tolPre = fromEqn "q_hat_tol" (tolLoad ^. descr) (tolLoad ^. symbol) unitless tolPre_eq
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = (Int 1):/((Int 1):-(C pb_tol)):*(((C plate_len):/(Int 1000):*(C plate_width):/(Int 1000)):^
-  ((C sflawParamM) :- (Int 1)):/((C sflawParamK):*(((C mod_elas):*(Int 1000)):*((C act_thick):/(Int 1000)):^
-  (Int 2)):^(C sflawParamM):*(C loadDF)))
+tolStrDisFac_eq = UnaryOp Log (UnaryOp Log ((Int 1):/((Int 1):-(C pb_tol))):*((Grouping (((C plate_len):/(Int 1000)):*((C plate_width):/(Int 1000)))):^
+  ((C sflawParamM) :- (Int 1)):/((C sflawParamK):*(Grouping (Grouping ((C mod_elas):*(Int 1000)):*(Grouping ((C act_thick):/(Int 1000))):^
+  (Int 2))):^(C sflawParamM):*(C loadDF))))
 
 tolStrDisFac :: EqChunk
 tolStrDisFac = fromEqn "J_tol" (sdf_tol ^. descr) (sdf_tol ^. symbol) unitless tolStrDisFac_eq

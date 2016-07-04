@@ -61,7 +61,7 @@ kilowatt = DUC
   (UScale 1000 (watt ^. unit))
 
 pascal = DUC
-  (UD (CC "Pascal" (S "pressure")) (UName $ Concat [Atomic "P", Atomic "a"]))
+  (UD (CC "Pascal" (S "pressure")) (UName $ (Atomic "Pa")))
   (USynonym (UProd [(kilogram ^. unit), (UPow (metre ^. unit) (-1)),
                       (UPow (second ^. unit) (-2))]))
 
@@ -71,13 +71,14 @@ newton = DUC
 
 millimetre = DUC
   (UD (CC "Millimetre" (S "length"))
-      (UName $ Concat [Atomic "m", Atomic "m"]))
+      (UName $ (Atomic "mm")))
   (UScale 0.0001 (metre ^. unit))
 
 kilopascal = DUC
   (UD (CC "Kilopascal" (S "pressure"))
-      (UName $ Concat [Atomic "K", Atomic "P", Atomic "a"]))
+      (UName $ Concat [Atomic "k", Atomic "Pa"]))
   (UScale 1000 (pascal ^. unit))
+
 
 
 

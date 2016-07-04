@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 
-import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (render, Partial(..))
@@ -34,6 +34,9 @@ expr (FCall f x) = H.Call (expr f) (map expr x)
 expr (Case ps)   = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
+expr e@(_ := _)  = rel e
+expr e@(_ :> _)  = rel e
+expr e@(_ :< _)  = rel e
 expr (UnaryOp u e) = H.Op (ufunc u) [expr e]
 expr (Grouping e) = H.Grouping (expr e)
 
@@ -53,7 +56,7 @@ rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)
 rel (a :< b) = H.Lt (expr a) (expr b)
 rel (a :> b) = H.Gt (expr a) (expr b)
---rel _ = error "unimplemented relation, see Language.Drasil.HTML.Import"
+rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 replace_divs :: Expr -> H.Expr
 replace_divs (a :/ b) = H.Div (replace_divs a) (replace_divs b)

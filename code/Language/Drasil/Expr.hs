@@ -6,11 +6,14 @@ import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 
 import Language.Drasil.Chunk (Quantity)
 
+type Relation = Expr
+
 infixr 8 :^
 infixl 7 :*
 infixl 7 :/
 infixl 6 :+
 infixl 6 :-
+infixr 4 :=
 data Expr where
   V        :: Variable -> Expr
   Dbl      :: Double -> Expr
@@ -33,12 +36,9 @@ data Expr where
   Grouping :: Expr -> Expr
   -- BinaryOp :: BiFunc ->  Expr  -> Expr -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
-  
-infixr 4 :=
-data Relation where
-  (:=) :: Expr -> Expr -> Relation
-  (:<) :: Expr -> Expr -> Relation
-  (:>) :: Expr -> Expr -> Relation
+  (:=) :: Expr -> Expr -> Expr
+  (:<) :: Expr -> Expr -> Expr
+  (:>) :: Expr -> Expr -> Expr
  
 type Variable = String
 

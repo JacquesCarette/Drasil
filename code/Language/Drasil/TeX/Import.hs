@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
 
-import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -34,6 +34,9 @@ expr (FCall f x)  = T.Call (expr f) (map expr x)
 expr (Case ps)    = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
+expr x@(_ := _)   = rel x
+expr x@(_ :> _)   = rel x
+expr x@(_ :< _)   = rel x
 expr (UnaryOp u e) = T.Op (ufunc u) [expr e]
 expr (Grouping e) = T.Grouping (expr e)
 
@@ -53,7 +56,7 @@ rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
---rel _ = error "unimplemented relation, see Language.Drasil.TeX.Import"
+rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 replace_divs :: Expr -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)

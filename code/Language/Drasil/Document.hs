@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.Relation
 import Language.Drasil.Spec (Sentence(..), RefType(..))
 import Language.Drasil.CCode.AST (Code) -- This is clearly wrong!
 import Language.Drasil.RefHelpers
+import Language.Drasil.Expr
 import Control.Lens ((^.))
 
 type Title    = Sentence
@@ -30,7 +31,7 @@ data Section = Section Depth Title [SecCons]
 data Contents = Table [Sentence] [[Sentence]] Title Bool
   --table header data label showlabel?
                | Paragraph Sentence
-               | EqnBlock Sentence
+               | EqnBlock Expr
                | CodeBlock Code
                | Definition DType
                | Enumeration ListType

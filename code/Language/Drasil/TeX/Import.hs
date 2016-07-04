@@ -104,7 +104,7 @@ lay x@(Table hdr lls t b)
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
 lay (Paragraph c)     = T.Paragraph (spec c)
-lay (EqnBlock c)      = T.EqnBlock (spec c)
+lay (EqnBlock c)      = T.EqnBlock (T.E (expr c))
 lay (CodeBlock c)     = T.CodeBlock c
 lay x@(Definition c)  = T.Definition (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = T.List $ makeL cs

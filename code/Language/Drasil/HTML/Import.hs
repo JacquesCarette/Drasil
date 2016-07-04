@@ -102,7 +102,7 @@ lay :: Contents -> H.LayoutObj
 lay x@(Table hdr lls t b)     = H.Table ["table"] 
   ((map spec hdr) : (map (map spec) lls)) (spec (refName x)) b (spec t)
 lay (Paragraph c)     = H.Paragraph (spec c)
-lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (spec c)] (H.S "")
+lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (H.E (expr c))] (H.S "")
 lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs

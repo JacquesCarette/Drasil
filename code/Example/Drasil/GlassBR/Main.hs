@@ -1,4 +1,4 @@
-module Example.Drasil.GlassBR.GlassBRMain where
+module Main where
 import Language.Drasil.Output.Formats (DocType(SRS,LPM,Website))
 import Example.Drasil.GlassBR.GlassBRBody (glassBR_srs)
 import Language.Drasil.Recipe (Recipe(..))

@@ -1,11 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Example.Drasil.GlassBR.GlassBRSIUnits where
-import Language.Drasil.Chunk (ConceptChunk(..))
-import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..))
-import Language.Drasil.Unicode (Circle(..))
-import Language.Drasil.Symbol
-import Language.Drasil.Spec (USymb(..),Sentence(..))
+import Language.Drasil
 
 import Control.Lens ((^.))
 
@@ -22,7 +17,7 @@ si_units = map UU fundamentals ++ map UU derived
 fund :: String -> String -> String -> FundUnit
 fund nam desc sym = UD (CC nam (S desc)) (UName $ Atomic sym)
 
-metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
+metre, kilogram, second, kelvin, mole, ampere, candela, unitless :: FundUnit
 metre    = fund "Metre"    "length"               "m"
 kilogram = fund "Kilogram" "mass"                 "kg"
 second   = fund "Second"   "time"                 "s"

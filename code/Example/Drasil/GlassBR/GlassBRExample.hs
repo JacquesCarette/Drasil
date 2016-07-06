@@ -1,18 +1,14 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.GlassBR.GlassBRExample where
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
+
 import Example.Drasil.GlassBR.GlassBRSIUnits
-import Language.Drasil.Symbol
-import Language.Drasil.Chunk.Eq (EqChunk(..),fromEqn)
-import Language.Drasil.Chunk.Unital
 import Example.Drasil.GlassBR.GlassBRUnits
-import Language.Drasil.SymbolAlphabet
-import Language.Drasil.Chunk --(ConceptChunk(..),VarChunk(..),symbol,makeCC,makeVC)
-import Language.Drasil.Spec (Sentence(..))
+
+import Language.Drasil
+
 import Control.Lens((^.))
-import Language.Drasil.Chunk.Relation
-import Language.Drasil.Instances ()
+
 
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, risk_fun, plate_width, dim_max, dim_min, mod_elas,

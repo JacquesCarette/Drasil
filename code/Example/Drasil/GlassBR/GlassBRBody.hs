@@ -2,19 +2,12 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.GlassBR.GlassBRBody where
 import Data.Char (toLower)
-import Language.Drasil.Printing.Helpers
-import Example.Drasil.GlassBR.GlassBRExample
-import Language.Drasil.Spec (Sentence(..),sMap, Accent(..)) --May need to update imports to hide Ref.
-                            --More likely setup an API or something to
-                            --Restrict access for novice users.
-import Language.Drasil.Unit (Unit(..), UnitDefn(..))
-import Example.Drasil.GlassBR.GlassBRSIUnits 
-import Language.Drasil.Chunk
 import Control.Lens ((^.))
-import Language.Drasil.Misc
-import Language.Drasil.Document
-import Language.Drasil.Reference
-import Language.Drasil.Instances ()
+
+import Language.Drasil
+
+import Example.Drasil.GlassBR.GlassBRExample
+import Example.Drasil.GlassBR.GlassBRSIUnits 
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

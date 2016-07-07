@@ -5,7 +5,7 @@ import Text.PrettyPrint
 import Data.Char
 
 --basic docs
-bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph :: Doc
+bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab :: Doc
 bslash = text "\\"
 dbs    = text "\\\\"
 assign = text "="
@@ -20,6 +20,7 @@ pls    = text "+"
 hat    = text "^"
 slash  = text "/"
 hyph   = text "-"
+tab    = text "\t"
 
 sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"

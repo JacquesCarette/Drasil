@@ -32,11 +32,11 @@ s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
   s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
-  s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, table1, s5_intro,
-  s5_2_contents, s6_list, s7_table :: Contents
+  s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_intro, 
+  table1, s5_intro, s5_2_contents, s6_list, s7_table :: Contents
   
 s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, s4_2_5_deriv1,
-  s4_2_5_deriv2, s4_2_6_intro, s4_2_7_deriv, s5_1_list, s7_intro :: [Contents]
+  s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro :: [Contents]
 
 swhs_srs :: Document
 swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
@@ -284,7 +284,7 @@ s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat (S "T
 
 fig_tank = Figure (S "Solar water heating tank, with " :+: (ht_flux_C ^. descr) :+:
            S " of " :+: U (ht_flux_C ^. symbol) :+: S " and " :+: (ht_flux_P ^. descr) :+:
-           S " of " :+: U (ht_flux_P ^. symbol)) "Tank.png"
+           S " of " :+: U (ht_flux_P ^. symbol)) "../../../Tank.png"
 
 -- Lots of specifics...
 
@@ -333,8 +333,9 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat (S "T
               (S (assumption ^. name) :+: S "2", Flat (S "All heat transfer coefficients are constant over" :+:
               S " time [GD1].")),
               (S (assumption ^. name) :+: S "3", Flat (S "The water in the tank is fully  mixed, so the " :+:
-              S "temperature is the same throughout the entire tank [GD2, DD2].")),
-              (S (assumption ^. name) :+: S "4", Flat (S "The " :+: S (phsChgMtrl ^. name) :+: S " has the same temperature throughout [GD2, DD2, LC1].")),
+              S "temperature is the same throughout the entire tank [GD2, " :+: makeRef s4_2_4_DD2 :+: S "].")),
+              (S (assumption ^. name) :+: S "4", Flat (S "The " :+: S (phsChgMtrl ^. name) :+: S " has the " :+:
+              S "same temperature throughout [GD2, " :+: makeRef s4_2_4_DD2 :+: S ", LC1].")),
               (S (assumption ^. name) :+: S "5", Flat (S "Density of the water and " :+: S (phsChgMtrl ^. name) :+: S " have no spatial " :+:
               S "variation; that is, they are each constant over their " :+:
               S "entire " :+: (volume ^. descr) :+: S " [GD2].")),
@@ -348,7 +349,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat (S "T
               (S (assumption ^. name) :+: S "9", Flat (S "The temperature of the heating coil does not " :+:
               S "vary along its length [" :+: makeRef s4_2_4_DD1 :+: S ", LC3].")),
               (S (assumption ^. name) :+: S "10", Flat (S "Newton's law of convective cooling applies " :+:
-              S "between the water and the PCM [DD2].")),
+              S "between the water and the PCM [" :+: makeRef s4_2_4_DD2 :+: S "].")),
               (S (assumption ^. name) :+: S "11", Flat (S "The model only accounts for charging of the tank" :+:
               S ", not discharging. The temperature of the water and PCM " :+:
               S "can only increase, or remain constant; they do not decrease" :+:
@@ -602,9 +603,9 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = Section 2 (S "Data Constraints") ((map Con s4_2_6_intro)++[Con table1])
+s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro, Con table1]
 
-s4_2_6_intro = [Paragraph ((makeRef table1) :+: S " show the data " :+:
+s4_2_6_intro = Paragraph ((makeRef table1) :+: S " show the data " :+:
                S "constraints on the input and output variables, respectively" :+:
                S ". The column for physical constraints gives the physical " :+:
                S "limitations on the range of values that can be taken by " :+:
@@ -617,12 +618,11 @@ s4_2_6_intro = [Paragraph ((makeRef table1) :+: S " show the data " :+:
                S "an estimate of the confidence with which the physical " :+:
                S "quantities can be measured. This information would be " :+:
                S "part of the input if one were performing an uncertainty " :+:
-               S "quantification exercise."), Paragraph (S "The specification" :+:
-               S " parameters in " :+: makeRef table1 :+: S " are listed in " :+:
-               S "Table 2.")]
+               S "quantification exercise.")
 
 -- Completely general paragraph.
---Reference Table 2 above
+-- I do not think Table 2 will end up being necessary for the Drasil version
+---- The info from table 2 will likely end up in table 1.
 
 inputVar :: [UnitalChunk]
 inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,

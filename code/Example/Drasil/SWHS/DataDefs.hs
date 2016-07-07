@@ -9,7 +9,7 @@ import Language.Drasil.SI_Units
 import Control.Lens ((^.))
 
 dd1HtFluxC :: EqChunk
-dd1HtFluxC = fromEqn "Heat flux out of coil" dd1descr (ht_flux_C ^. symbol) thermFluxU htFluxCEqn
+dd1HtFluxC = fromEqn "q_C" dd1descr (ht_flux_C ^. symbol) thermFluxU htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
@@ -34,7 +34,7 @@ dd1descr = (S "heat flux out of the coil.")
 --Can't include info in description beyond definition of variables?
 
 dd2HtFluxP :: EqChunk
-dd2HtFluxP = fromEqn "Heat flux into PCM" dd2descr (ht_flux_P ^. symbol) thermFluxU htFluxPEqn
+dd2HtFluxP = fromEqn "q_P" dd2descr (ht_flux_P ^. symbol) thermFluxU htFluxPEqn
 
 htFluxPEqn :: Expr
 htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] - FCall (C temp_PCM) [C time])
@@ -43,7 +43,7 @@ dd2descr :: Sentence
 dd2descr = (S "heat flux into the PCM.")
 
 dd3HtFusion :: EqChunk
-dd3HtFusion = fromEqn "Specific latent heat of fusion" dd3descr (htFusion ^. symbol) specificE htFusionEqn
+dd3HtFusion = fromEqn "H_f" dd3descr (htFusion ^. symbol) specificE htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)
@@ -53,7 +53,7 @@ dd3descr = (S "amount of heat energy required to completely melt a unit " :+:
            S "mass of a substance.")
 
 dd4MeltFrac :: EqChunk
-dd4MeltFrac = fromEqn "Melt fraction" dd4descr (melt_frac ^. symbol) unitless melt_frac_eqn
+dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless melt_frac_eqn
 
 melt_frac_eqn :: Expr
 melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))

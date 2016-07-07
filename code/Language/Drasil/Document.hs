@@ -3,6 +3,7 @@ module Language.Drasil.Document where
 
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.Module
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.CCode.AST (Code) -- This is clearly wrong!
 
@@ -32,6 +33,7 @@ data LayoutObj = Table [Sentence] [[Sentence]] Title Bool
                | NumberedList Items
                | SimpleList Pairs
                | Figure Label Filepath--Should use relative file path.
+               | Module ModuleChunk
 
 -- Types of definitions
 data DType = Data EqChunk 

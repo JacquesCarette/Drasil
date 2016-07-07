@@ -27,6 +27,7 @@ genTeX typ doc = build typ $ makeDocument doc
 
 build :: A.DocType -> Document -> Doc
 build (A.SRS _) doc   = buildSRS srsTeXParams doc
+build (A.MG _) doc     = buildSRS srsTeXParams doc   -- temporary
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
 build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
@@ -63,6 +64,7 @@ printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
 printLO (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
 printLO (List lt is)            = makeList lt is
 printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
+printLO (Module contents)       = text ""
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map (<> (text "\n")) $ map printLO l

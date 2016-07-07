@@ -96,6 +96,7 @@ lay (NumberedList cs) = T.List T.Enum $ map spec cs
 lay (SimpleList cs)   = T.List T.Simple $ concat $
                           map (\(f,s) -> [spec f, spec s]) cs
 lay x@(Figure c f)    = T.Figure (spec (getRefName x)) (spec c) f
+lay (Module m)        = T.Module $ T.S ""
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

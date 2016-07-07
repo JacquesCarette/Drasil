@@ -8,7 +8,7 @@ import Text.PrettyPrint hiding (render)
 import Control.Monad.Reader
 
 import Language.Drasil.TeX.AST
-import Language.Drasil.TeX.Import
+import Language.Drasil.TeX.Import hiding (sec)
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth, --tableWidth,
@@ -61,7 +61,7 @@ printLO (EqnBlock contents)     = text $ makeEquation contents
 printLO (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
 printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
 printLO (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
-printLO (List lt is)            = makeList lt is
+printLO (List lt)               = makeList lt
 printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
@@ -81,7 +81,7 @@ p_spec (S s)       = s
 p_spec (N s)       = symbol s
 p_spec (Sy s)      = runReader (uSymbPrint s) Plain
 p_spec HARDNL      = "\\newline"
-p_spec (Ref t@Sec r) = if numberedSections 
+p_spec (Ref t@Sect r) = if numberedSections 
                        then show t ++ "~\\ref" ++ brace (p_spec r) 
                        else "\\hyperref" ++ sqbrac (p_spec r) ++ 
                         brace (show t ++ "~" ++ p_spec r)
@@ -126,7 +126,9 @@ p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
-p_expr (Case ps)  = "\\left\\{\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}\\right\\}"
+p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
+p_expr (Op f es)  = p_op f es
+p_expr (Grouping x) = paren (p_expr x)
 
 mul :: Expr -> Expr -> String
 mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
@@ -320,18 +322,21 @@ makeEquation contents =
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
-makeList :: ListType -> [Spec] -> Doc
-makeList Simple items = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
-makeList t items = b (show t) $$ vcat (map item items) $$ e (show t)
+makeList :: ListType -> Doc
+makeList (Simple items) = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
+makeList t@(Item items) = b (show t) $$ vcat (map p_item items) $$ e (show t)
+makeList t@(Enum items) = b (show t) $$ vcat (map p_item items) $$ e (show t)
 
-item :: Spec -> Doc
-item = \s -> text ("\\item " ++ pCon Plain s)
+p_item :: ItemType -> Doc
+p_item (Flat s) = text ("\\item ") <> text (pCon Plain s)
+p_item (Nested t s) = vcat [text ("\\item ") <> text (pCon Plain t), makeList s]
 
-sim_item :: [Spec] -> [Doc]
+sim_item :: [(Spec,ItemType)] -> [Doc]
 sim_item [] = [empty]
-sim_item (_:[]) = error "Simple list printing went awry, a pair broke"
-sim_item (x:y:zs) = text ("\\item[" ++ pCon Plain x ++ ":] " ++ pCon Plain y) :
+sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> sp_item y :
   sim_item zs
+    where sp_item (Flat s) = text (pCon Plain s)
+          sp_item (Nested t s) = vcat [text (pCon Plain t), makeList s]
   
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
@@ -345,3 +350,22 @@ makeFigure r c f =
     caption c, label r,
     e "center", e "figure"
   ]
+
+-----------------------------------------------------------------
+------------------BEGIN EXPR OP PRINTING-------------------------
+-----------------------------------------------------------------
+p_op :: Function -> [Expr] -> String
+p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
+p_op (Summation _) _ = error "Something went wrong with a summation"
+p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
+p_op (Integral _) _  = error "Something went wrong with an integral" 
+p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
+p_op Abs _ = error "Abs should only take one expr."
+p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op _ _ = error "Something went wrong with an operation"
+
+makeBounds :: (Maybe Expr, Maybe Expr) -> String
+makeBounds (Nothing,Nothing) = ""
+makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
+makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
+makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)

@@ -2,11 +2,8 @@
 module Example.Drasil.GlassBR.GlassBRUnits where
 
 import Example.Drasil.GlassBR.GlassBRSIUnits
-import Language.Drasil.Unit (Unit(..), UDefn(..), DerUChunk(..),
-  makeDerU, unitCon)
-import Language.Drasil.Chunk ()
 import Control.Lens ((^.))
-import Language.Drasil.Spec (USymb(..))
+import Language.Drasil
 
 --N^(-7)*m^12--
 sFlawPU :: DerUChunk

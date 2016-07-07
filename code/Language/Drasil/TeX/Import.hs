@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
 
-import Language.Drasil.Expr (Expr(..), Relation(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -15,8 +15,6 @@ import Language.Drasil.Chunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Reference
-
 
 expr :: Expr -> T.Expr
 expr (V v)        = T.Var  v
@@ -36,12 +34,29 @@ expr (FCall f x)  = T.Call (expr f) (map expr x)
 expr (Case ps)    = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
+expr x@(_ := _)   = rel x
+expr x@(_ :> _)   = rel x
+expr x@(_ :< _)   = rel x
+expr (UnaryOp u e) = T.Op (ufunc u) [expr e]
+expr (Grouping e) = T.Grouping (expr e)
+
+ufunc :: UFunc -> T.Function
+ufunc Log = T.Log
+ufunc (Summation (i,n)) = T.Summation (fmap expr i, fmap expr n)
+ufunc Abs = T.Abs
+ufunc (Integral (i,n)) = T.Integral (fmap expr i, fmap expr n)
+ufunc Sin = T.Sin
+ufunc Cos = T.Cos
+ufunc Tan = T.Tan
+ufunc Sec = T.Sec
+ufunc Csc = T.Csc
+ufunc Cot = T.Cot
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
---rel _ = error "unimplemented relation, see Language.Drasil.TeX.Import"
+rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 replace_divs :: Expr -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)
@@ -70,32 +85,42 @@ accent Grave  s = S $ "\\`{" ++ (s : "}")
 accent Acute  s = S $ "\\'{" ++ (s : "}")
 
 makeDocument :: Document -> T.Document
-makeDocument (Document title author layout) = 
-  T.Document (spec title) (spec author) (createLayout layout)
+makeDocument (Document title author sections) = 
+  T.Document (spec title) (spec author) (createLayout sections)
 
-createLayout :: [LayoutObj] -> [T.LayoutObj]
-createLayout []     = []
-createLayout (l:[]) = [lay l]
-createLayout (l:ls) = lay l : createLayout ls
+layout :: SecCons -> T.LayoutObj
+layout (Sub s) = sec s
+layout (Con c) = lay c
 
-lay :: LayoutObj -> T.LayoutObj
+createLayout :: Sections -> [T.LayoutObj]
+createLayout = map sec
+
+sec :: Section -> T.LayoutObj
+sec x@(Section depth title contents) = 
+  T.Section depth (spec title) (map layout contents) (spec $ refName x)
+
+lay :: Contents -> T.LayoutObj
 lay x@(Table hdr lls t b) 
   | length hdr == length (head lls) = T.Table ((map spec hdr) : 
-      (map (map spec) lls)) (spec (getRefName x)) b (spec t)
+      (map (map spec) lls)) (spec (refName x)) b (spec t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
-lay x@(Section depth title layComps) = 
-  T.Section depth (spec title) (createLayout layComps) (spec $ getRefName x)
 lay (Paragraph c)     = T.Paragraph (spec c)
-lay (EqnBlock c)      = T.EqnBlock (spec c)
+lay (EqnBlock c)      = T.EqnBlock (T.E (expr c))
 lay (CodeBlock c)     = T.CodeBlock c
-lay x@(Definition c)  = T.Definition (makePairs c) (spec $ getRefName x)
-lay (BulletList cs)   = T.List T.Item $ map spec cs
-lay (NumberedList cs) = T.List T.Enum $ map spec cs
-lay (SimpleList cs)   = T.List T.Simple $ concat $
-                          map (\(f,s) -> [spec f, spec s]) cs
-lay x@(Figure c f)    = T.Figure (spec (getRefName x)) (spec c) f
+lay x@(Definition c)  = T.Definition (makePairs c) (spec $ refName x)
+lay (Enumeration cs)  = T.List $ makeL cs
+lay x@(Figure c f)    = T.Figure (spec (refName x)) (spec c) f
+
+makeL :: ListType -> T.ListType  
+makeL (Bullet bs) = T.Enum $ (map item bs)
+makeL (Number ns) = T.Item $ (map item ns)
+makeL (Simple ps) = T.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
+
+item :: ItemType -> T.ItemType
+item (Flat i) = T.Flat (spec i)
+item (Nested t s) = T.Nested (spec t) (makeL s) 
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [

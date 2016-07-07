@@ -22,7 +22,7 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   htCap_S_P,htCap_V,htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,
   htTransCoeff,coil_HTC,htFusion,pcm_HTC,tank_length,mass,pcm_mass,w_mass,norm_vect,
   ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,
-  latentE_P,time,temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,
+  latentE_P,surface,time,temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,
   t_init_melt,t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,
   w_vol,deltaT,eta,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W,melt_frac :: UnitalChunk
 
@@ -55,7 +55,7 @@ w_E          = makeUC "E_W" "heat energy in the water" (sub cE cW) joule
 vol_ht_gen   = makeUC "g" "volumetric heat generation per unit volume" lG 
                thermFluxU 
 htTransCoeff = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
-coil_HTC     = makeUC "h_C" "convctive heat transfer coefficient between coil and water"
+coil_HTC     = makeUC "h_C" "convective heat transfer coefficient between coil and water"
                (sub lH cC) heat_transfer
 htFusion     = makeUC "H_f" "specific latent heat of fusion" (sub cH lF) specificE
 pcm_HTC      = makeUC "h_P" "convective heat transfer coefficient between PCM and water"
@@ -72,18 +72,19 @@ norm_vect    = makeUC "n_vect" "unit outward normal vector for a surface"
 ht_flux      = makeUC "q" "heat flux" lQ thermFluxU
 latentE      = makeUC "Q" "latent heat energy" cQ joule
 thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermFluxU
-ht_flux_C    = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermFluxU
-ht_flux_in   = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU
-ht_flux_out  = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermFluxU
-ht_flux_P    = makeUC "q_P" "heat flux into phase change material" (sub lQ cP) 
+ht_flux_C    = makeUC "q_C" "heat flux into the water from the coil" (sub lQ cC) thermFluxU
+ht_flux_in   = makeUC "q_in" "heat flux input" (sub lQ (Atomic "in")) thermFluxU
+ht_flux_out  = makeUC "q_out" "heat flux output" (sub lQ (Atomic "out")) thermFluxU
+ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water" (sub lQ cP) 
                thermFluxU
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" (sub cQ cP) joule
+surface      = makeUC "S" "symbol representing a surface" (cS) unitless
 time         = makeUC "t" "time" lT second 
 temp         = makeUC "T" "temperature" cT centigrade
 temp_boil    = makeUC "T_boil" "temperature at boiling point" (sub cT (Atomic "boil"))
                centigrade
-temp_C       = makeUC "T_C" "temperature of coil" (sub cT cC) centigrade
-temp_env     = makeUC "T_env" "temperature of environment" (sub cT (Atomic "env"))
+temp_C       = makeUC "T_C" "temperature of the heating coil" (sub cT cC) centigrade
+temp_env     = makeUC "T_env" "temperature of the environment" (sub cT (Atomic "env"))
                centigrade
 time_final   = makeUC "t_final" "final time" (sub lT (Atomic "final")) second
 temp_init    = makeUC "T_init" "initial temperature" (sub cT (Atomic "init"))
@@ -96,9 +97,9 @@ t_final_melt = makeUC "t^final_melt" "time at which melting of PCM ends"
                (sup (sub lT (Atomic "melt")) (Atomic "final")) second
 temp_melt_P  = makeUC "T^P_melt" "temperature at melting point for PCM"
                (sup (sub cT (Atomic "melt")) cP) centigrade
-temp_PCM     = makeUC "T_P" "temperature of phase change material" (sub cT cP)
+temp_PCM     = makeUC "T_P" "temperature of the phase change material" (sub cT cP)
                centigrade
-temp_W       = makeUC "temp_W" "temperature of water" (sub cT cW) centigrade
+temp_W       = makeUC "temp_W" "temperature of the water" (sub cT cW) centigrade
 volume       = makeUC "V" "volume" cV m_3
 pcm_vol      = makeUC "V_P" "volume of PCM" (sub cV cP) m_3
 tank_vol     = makeUC "V_tank" "volume of the cylindrical tank" (sub cV (Atomic "tank"))
@@ -106,7 +107,7 @@ tank_vol     = makeUC "V_tank" "volume of the cylindrical tank" (sub cV (Atomic 
 w_vol        = makeUC "V_W" "volume of water" (sub cV cW) m_3
 deltaT       = makeUC "deltaT" "temperature difference" (Concat [Special Delta, cT]) 
                centigrade
-eta          = makeUC "eta" "a constant" (Special Eta_L) unitless
+eta          = makeUC "eta" "ODE parameter" (Special Eta_L) unitless
 density      = makeUC "rho" "density, mass per unit volume" (Special Rho_L)
                densityU
 pcm_density  = makeUC "rho_P" "density of PCM" (sub (Special Rho_L) cP)
@@ -115,9 +116,9 @@ w_density    = makeUC "rho_W" "density of water" (sub (Special Rho_L) cW)
                densityU
 tau          = makeUC "tau" "dummy variable for integration over time" 
                (Special Tau_L) second
-tau_L_P      = makeUC "tau_L_P" "a constant" (sup (sub (Special Tau_L) cP) cL) second
-tau_S_P      = makeUC "tau_S_P" "a constant" (sup (sub (Special Tau_L) cP) cS) second
-tau_W        = makeUC "tau_W" "a constant" (sub (Special Tau_L) cW) second
+tau_L_P      = makeUC "tau_L_P" "ODE parameter for liquid PCM" (sup (sub (Special Tau_L) cP) cL) second
+tau_S_P      = makeUC "tau_S_P" "ODE parameter for solid PCM" (sup (sub (Special Tau_L) cP) cS) second
+tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Special Tau_L) cW) second
 melt_frac    = makeUC "phi" "melt fraction" (Special Phi_L) unitless
 
 --Created a "unitless" unit in SWHSUnits.hs so that i didn't need varChunks.

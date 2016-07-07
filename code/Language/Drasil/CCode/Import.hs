@@ -7,6 +7,8 @@ import Language.Drasil.CCode.Helpers
 import qualified Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract (dep)
 import Language.Drasil.Chunk.Eq
+import qualified Language.Drasil.Chunk.Method as Meth
+import qualified Language.Drasil.Chunk.Module as Mod
 import Language.Drasil.Chunk (name)
 import Data.List (nub)
 
@@ -14,18 +16,28 @@ import Data.List (nub)
 --toCode :: Lang -> CodeType -> EqChunk -> Code
 --toCode CLang Calc ec = C [StdLibHeader, StdIOHeader] [VarDecl IntType "gVar", VarDecl DblType "gVar2"] [(MethodDecl DblType "test" [VarDecl DblType "a", VarDecl DblType "b"], [Declare DblType "f" (Just $ Dbl 20), Assign "a" (Int $ -1), If (Leq (Var "a") (Var "b")) [(Return (Int 1))] (Just [(Return (Int 0))]), Return (Var "a")])]
 
-toCode :: Lang -> CodeType -> [EqChunk] -> String -> Code
+--toCode :: Lang -> CodeType -> [EqChunk] -> String -> Code
 -- hard-coded standard header file includes for now
-toCode CLang Calc ecs moduleName    = let methods = map (\x -> makeMethod x moduleName) ecs
-                                          testMethods = map makeTest methods
-                                          testMain = makeTestMain testMethods
-                                      in C (stdHeaders ++ testHeaders) [errorDecl] (methods ++ testMethods ++ [errorMethod moduleName] ++ [testMain])
+--toCode CLang Calc ecs moduleName    = let methods = map (\x -> makeMethod x moduleName) ecs
+--                                          testMethods = map makeTest methods
+--                                          testMain = makeTestMain testMethods
+--                                      in C (stdHeaders ++ testHeaders) [errorDecl] (methods ++ testMethods ++ [errorMethod moduleName] ++ [testMain])
 -- toCode _ _ _ = error "Unimplemented code translation in ToCode.hs"
 
-makeMethod :: EqChunk -> String -> Method
-makeMethod ec moduleName = ((MethodDecl DblType (moduleName ++ "_" ++ (ec ^. name)) (makeArgs $ dep (equat ec))),
-                            (makeDivZeroGuards $ getDenoms $ equat ec) ++ [Assign errorCode (Int 0), Return (makeCode $ equat ec)])
+toCodeModule :: Lang -> Mod.ModuleChunk -> Code
+toCodeModule CLang mod    = let methods = map makeMethod (Mod.method mod)
+                                testMethods = map makeTest methods
+                                testMain = makeTestMain testMethods
+                            in C (stdHeaders ++ testHeaders) [errorDecl] (methods ++ testMethods ++ [errorMethod ((Mod.cc mod) ^. name)] ++ [testMain])
 
+
+--makeMethod :: EqChunk -> String -> Method
+--makeMethod ec moduleName = ((MethodDecl DblType (moduleName ++ "_" ++ (ec ^. name)) (makeArgs $ dep (equat ec))),
+--                           (makeDivZeroGuards $ getDenoms $ equat ec) ++ [Assign errorCode (Int 0), Return (makeCode $ equat ec)])
+
+makeMethod :: Meth.MethodChunk -> Method
+makeMethod meth@(Meth.MeC { Meth.mType = Meth.Calc eq }) = ((MethodDecl DblType ("calc_" ++ ((Meth.cc meth) ^. name)) (makeArgs $ map (^. name) (Meth.input meth))),
+                            (makeDivZeroGuards $ getDenoms $ eq) ++ [Assign errorCode (Int 0), Return (makeCode $ eq)])
 
 makeTest :: Method -> Method
 makeTest m = ((MethodDecl VoidType ("test_"++(getMethodName m)) []), [])

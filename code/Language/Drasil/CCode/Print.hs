@@ -2,6 +2,8 @@ module Language.Drasil.CCode.Print(printCode, genCode) where
 
 import Language.Drasil.CCode.AST
 import Language.Drasil.CCode.Helpers
+import Language.Drasil.CCode.Import
+import qualified Language.Drasil.Chunk.Module as Mod
 import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, assign, eq, leq, lt, geq, gt, angbrac)
 import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Document as L
@@ -21,8 +23,8 @@ instance Show CType where
   show (CType t) = ptype t
 
 -- temporary fix to generate code as a document
-genCode :: A.DocType -> L.Document -> Doc
-genCode (A.Code _) (L.Document _ _ ((L.CodeBlock c):[])) = printCode c
+genCode :: Mod.ModuleChunk -> Doc
+genCode mod = printCode $ toCodeModule CLang mod
 
 printCode :: Code -> Doc
 printCode (C h v m)   = (vcat $ map header h) $+$

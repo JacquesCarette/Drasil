@@ -20,6 +20,8 @@ module Language.Drasil (
   , EqChunk(..), fromEqn
   -- Chunk.Unital
   , UnitalChunk(..), makeUC
+  -- Chunk.MUChunk
+  , MUChunk(..)
   -- Chunk.Relation
   , RelationChunk, makeRC
   -- Spec
@@ -53,6 +55,7 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
+import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)

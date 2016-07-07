@@ -26,7 +26,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
-  s4_2_6, s5, s5_1, s5_2, s6, s7 :: Section
+  s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
 s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
   s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
@@ -35,8 +35,8 @@ s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, table1, s5_intro,
   s5_2_contents, s6_list, s7_table :: Contents
   
-s2_intro, s2_1_contents, s2_3_contents, s4_2_5_intro, s4_2_6_intro, 
-  s5_1_list, s7_intro :: [Contents]
+s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, s4_2_5_deriv1,
+  s4_2_5_deriv2, s4_2_6_intro, s4_2_7_deriv, s5_1_list, s7_intro :: [Contents]
 
 swhs_srs :: Document
 swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
@@ -294,15 +294,15 @@ s4_1_3_intro = Paragraph (S "Given the temperature of the coil, initial " :+:
                S "conditions for the temperature of the water and the " :+: S (phsChgMtrl ^. name) :+: S ", " :+:
                S "and material properties, the " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are:")
 
-s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat (S "predict the water temperature over time;")),
-              (S (goalStmt ^. name) :+: S "2", Flat (S "predict the PCM temperature over time;")),
-              (S (goalStmt ^. name) :+: S "3", Flat (S "predict the change in the energy of the water over time;")),
-              (S (goalStmt ^. name) :+: S "4", Flat (S "predict the change in the energy of the PCM over time"))])
+s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat (S "Predict the water temperature over time.")),
+              (S (goalStmt ^. name) :+: S "2", Flat (S "Predict the PCM temperature over time.")),
+              (S (goalStmt ^. name) :+: S "3", Flat (S "Predict the change in the energy of the water over time.")),
+              (S (goalStmt ^. name) :+: S "4", Flat (S "Predict the change in the energy of the PCM over time."))])
 
 --Given how frequently these sorts of lists occur, could they be semi automated?
 --Would only type "goalStmt ^. name" once, and then a list of the right side statements.
 
-s4_2 = Section 1 (S "Solution Characteristics Specification") [Con s4_2_intro, Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
+s4_2 = Section 1 (S "Solution Characteristics Specification") [Con s4_2_intro, Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, Sub s4_2_7]
 
 s4_2_intro = Paragraph (S "The " :+: (sMap (map toLower) (inModel ^. descr)) :+: S "s (" :+: S (ordDiffEq ^. name) :+: S "s) that govern " :+:
              S (progName ^. name) :+: S " are" :+:
@@ -386,24 +386,65 @@ s4_2_2_intro = Paragraph (S "This section focuses on the general equations" :+:
 
 --No subsubsubsections... may make things difficult for derivation sections coming up
 
-s4_2_3 = Section 2 (genDefn ^. descr :+: S "s") [Con s4_2_3_intro]
+s4_2_3 = Section 2 (genDefn ^. descr :+: S "s") ((Con s4_2_3_intro):(map Con s4_2_3_deriv))
 
 s4_2_3_intro = Paragraph (S "This section collects the laws and equations " :+:
                S "that will be used in deriving the " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s, which" :+:
                S " in turn are used to build the " :+: (sMap (map toLower) (inModel ^. descr)) :+: S "s.")
 
--- General paragraph, just need to reference lowercase concepts.
+-- General paragraph
  
 -- s4_2_3_GDs :: [LayoutObj]
 -- s4_2_3_GDs = map Definition (map General [gd1NewtonCooling])
 
 --General definitions not yet implemented
 
+s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of change of temperature:"),
+               Paragraph (S "Integrating " :+: makeRef s4_2_2_T1 :+: S " over" :+:
+               S " a volume (" :+: U (volume ^. symbol) :+: S "), we have"),
+               EqnBlock (Neg (UnaryOp (Integral (Just (C volume), Nothing))
+               ((C gradient) :. (C thFluxVect))) + UnaryOp (Integral (Just (C volume), Nothing))
+               (C vol_ht_gen) := UnaryOp (Integral (Just (C volume), Nothing))
+               ((C density) * (C htCap) * Deriv (C temp) (C time))),
+               Paragraph (S "Applying Gauss's Divergence theorem to the first" :+:
+               S " term over the surface S of the volume, with " :+: U (thFluxVect ^. symbol) :+:
+               S " as the thermal flux vector for the surface and " :+: U (norm_vect ^. symbol) :+:
+               S " as a unit outward normal for the surface,"),
+               EqnBlock (Neg (UnaryOp (Integral (Just (C surface), Nothing)) 
+               ((C thFluxVect) :. (C norm_vect))) + UnaryOp (Integral (Just (C volume), Nothing))
+               (C vol_ht_gen) := UnaryOp (Integral (Just (C volume), Nothing))
+               ((C density) * (C htCap) * Deriv (C temp) (C time))),
+               Paragraph (S "We consider an arbitrary volume. The volumetric" :+:
+               S " heat generation is assumed constant. Then (1) can be " :+:
+               S "written as:"),
+               EqnBlock ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) +
+               (C vol_ht_gen) * (C volume) := UnaryOp (Integral (Just (C volume), Nothing))
+               ((C density) * (C htCap) * Deriv (C temp) (C time))),
+               Paragraph (S "where " :+: U (ht_flux_in ^. symbol) :+: S ", " :+:
+               U (ht_flux_out ^. symbol) :+: S ", " :+: U (in_SA ^. symbol) :+:
+               S ", and " :+: U (out_SA ^. symbol) :+: S " are explained in " :+:
+               S "GD2. Assuming " :+: U (density ^. symbol) :+: S ", " :+:
+               U (htCap ^. symbol) :+: S " and " :+: U (temp ^. symbol) :+:
+               S " are constant over the volume, which is true in our case " :+:
+               S "by assumptions (A3), (A4), (A5), and (A6), we have"),
+               EqnBlock ((C density) * (C htCap) * (C volume) * Deriv (C temp) (C time) :=
+               (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + (C vol_ht_gen) * (C volume)),
+               Paragraph (S "Using the fact that " :+: U (density ^. symbol) :+:
+               S "=" :+: U (mass ^. symbol) :+: S "/" :+: U (volume ^. symbol) :+:
+               S ", (2) can be written as"),
+               EqnBlock ((C mass) * (C htCap) * Deriv (C temp) (C time) :=
+               (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
+               (C vol_ht_gen) * (C volume))]
+
+-- Created a unitalChunk for "S"... should I add it to table of symbols?
+-- Add references to above when available (assumptions, GDs)
+-- Replace relevant Derivs with the regular derivative when it is available
+
 s4_2_4 = Section 2 (dataDefn ^. descr :+: S "s") [Con s4_2_4_intro, Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3, Con s4_2_4_DD4]
 
 s4_2_4_intro = Paragraph (S "This section collects and defines all the " :+:
-               S "data needed to build the " :+: (sMap (map toLower) (inModel ^. descr)) :+: S "s. The dimension" :+:
-               S " of each quantity is also given.")
+               S "data needed to build the " :+: (sMap (map toLower) (inModel ^. descr)) :+:
+               S "s. The dimension of each quantity is also given.")
 
 -- General paragraph, just need to reference lowercase instance model.
 
@@ -417,7 +458,7 @@ s4_2_4_DD4 = Definition (Data dd4MeltFrac)
 --There is no actual label
 --Units section doesn't appear
 
-s4_2_5 = Section 2 (inModel ^. descr :+: S "s") (map Con s4_2_5_intro)
+s4_2_5 = Section 2 (inModel ^. descr :+: S "s") ((map Con s4_2_5_intro) ++ (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
 
 s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S " in " :+: (makeRef s4_1) :+: S " into one which" :+:
@@ -435,8 +476,131 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "energy of the " :+: S (phsChgMtrl ^. name) :+: S " depend on the phase change.")]
 
 --Instance Models aren't implemented yet
-
 -- Some specific info here on the order in which IMs are solved... probably can be captured.
+
+s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on water:"),
+                Paragraph (S "To find the rate of change of " :+: U (temp_W ^. symbol) :+:
+                S ", we look at the energy balance on water. The volume " :+:
+                S "being considered is the " :+: (w_vol ^. descr) :+: S " " :+:
+                U (w_vol ^. symbol) :+: S ", which has " :+: (w_mass ^. descr) :+:
+                S " " :+: U (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. descr) :+: 
+                S ", " :+: U (htCap_W ^. symbol) :+: S ". " :+: U (ht_flux_C ^. symbol) :+:
+                S " represents the " :+: (ht_flux_C ^. descr) :+: S " and " :+:
+                U (ht_flux_P ^. symbol) :+: S " represents the " :+: (ht_flux_P ^. descr) :+:
+                S ", over " :+: (coil_SA ^. descr) :+: S " and " :+: (pcm_SA ^. descr) :+:
+                S " of " :+: U (coil_SA ^. symbol) :+: S " and " :+: U (pcm_SA ^. symbol) :+:
+                S ", respectively. No heat transfer occurs to the outside " :+:
+                S "of the tank, since it has been assumed to be perfectly " :+:
+                S "insulated (A15). Assuming no " :+: (vol_ht_gen ^. descr) :+:
+                S " (A16), " :+: U (vol_ht_gen ^. symbol) :+: S "=0. Therefore" :+:
+                S ", the equation for GD2 can be written as:"),
+                EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) :=
+                (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
+                Paragraph(S "Using " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
+                makeRef s4_2_4_DD2 :+: S " for " :+: U (ht_flux_C ^. symbol) :+:
+                S " and " :+: U (ht_flux_P ^. symbol) :+: S " respectively, " :+:
+                S "this can be written as:"),
+                EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) :=
+                (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
+                (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
+                Paragraph (S "Dividing (3) by " :+: U (w_mass ^. symbol) :+:
+                U (htCap_W ^. symbol) :+: S ", we obtain:"),
+                EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * (C coil_SA)) /
+                ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) -
+                ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
+                Paragraph (S "Factoring the negative sign out of the second" :+:
+                S " term of the RHS of Equation (4) and multiplying it by " :+:
+                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: S "/" :+:
+                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: S " yields,"),
+                EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * (C coil_SA)) /
+                ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
+                ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * (C coil_SA)) *
+                ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * (C htCap_W)) *
+                ((C temp_PCM) - (C temp_W))),
+                Paragraph (S "which simplifies to:"),
+                EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * (C coil_SA)) /
+                ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
+                ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) * (C coil_SA)) *
+                ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * (C htCap_W)) *
+                ((C temp_PCM) - (C temp_W))),
+                Paragraph (S "Setting " :+: U (tau_W ^. symbol) :+: S "=" :+:
+                U (w_mass ^. symbol) :+: U (htCap_W ^. symbol) :+: S "/" :+:
+                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: S " and " :+:
+                U (eta ^. symbol) :+: S "=" :+: U (pcm_HTC ^. symbol) :+:
+                U (pcm_SA ^. symbol) :+: S "/" :+: U (coil_HTC ^. symbol) :+:
+                U (coil_SA ^. symbol) :+: S ", Equation (5) can be written " :+:
+                S "as:"),
+                EqnBlock (Deriv (C temp_W) (C time) := (1 / (C tau_W)) *
+                ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
+                ((C temp_PCM) - (C temp_W))),
+                Paragraph (S "Finally, factoring out 1/" :+: U (tau_W ^. symbol) :+:
+                S ", we are left with the governing " :+: S (ordDiffEq ^. name) :+:
+                S " for IM1:"),
+                EqnBlock (Deriv (C temp_W) (C time) := (1 / (C tau_W)) *
+                (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - (C temp_W))))
+                ]
+
+-- Add IM, GD, A, and EqnBlock references when available
+-- Replace Derivs with regular derivative when available
+-- Fractions in paragraph?
+
+s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
+                S " the " :+: S (phsChgMtrl ^. name) :+: S " during sensible " :+:
+                S "heating phase"),
+                Paragraph (S "To find the rate of change of " :+: U (temp_PCM ^. symbol) :+:
+                S ", we look at the energy balance on the " :+: S (phsChgMtrl ^. name) :+:
+                S ". The " :+: (volume ^. descr) :+: S " being considered is " :+:
+                S "the " :+: (pcm_vol ^. descr) :+: S ", " :+: U (pcm_vol ^. symbol) :+:
+                S ". The derivation that follows is initially for the solid " :+:
+                S (phsChgMtrl ^. name) :+: S ". The " :+: (pcm_mass ^. descr) :+:
+                S " is " :+: U (pcm_mass ^. symbol) :+: S " and the " :+:
+                (htCap_S_P ^. descr) :+: S " is " :+: U (htCap_S_P ^. symbol) :+:
+                S ". The " :+: (ht_flux_P ^. descr) :+: S " is " :+: U (ht_flux_P ^. symbol) :+:
+                S " over " :+: (pcm_SA ^. descr) :+: S " " :+: U (pcm_SA ^. symbol) :+:
+                S ". There is no " :+: (ht_flux_out ^. descr) :+: S ". " :+:
+                S "Assuming no " :+: (vol_ht_gen ^. descr) :+: S " (A16), " :+:
+                U (vol_ht_gen ^. symbol) :+: S "=0, the equation for GD2 " :+:
+                S "can be written as:"),
+                EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) (C time) :=
+                (C ht_flux_P) * (C pcm_SA)),
+                Paragraph (S "Using " :+: makeRef s4_2_4_DD2 :+: S " for " :+:
+                U (ht_flux_P ^. symbol) :+: S ", this equation can be written" :+:
+                S " as:"),
+                EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) (C time) :=
+                (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
+                Paragraph (S "Dividing by " :+: U (pcm_mass ^. symbol) :+:
+                U (htCap_S_P ^. symbol) :+: S " we obtain:"),
+                EqnBlock (Deriv (C temp_PCM) (C time) := ((C pcm_HTC) * (C pcm_SA)) /
+                ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - (C temp_PCM))),
+                Paragraph (S "Setting " :+: U (tau_S_P ^. symbol) :+: S "=" :+:
+                U (pcm_mass ^. symbol) :+: U (htCap_S_P ^. symbol) :+: S "/" :+:
+                U (pcm_HTC ^. symbol) :+: U (pcm_SA ^. symbol) :+: S ", " :+:
+                S "this can be written as:"),
+                EqnBlock (Deriv (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
+                ((C temp_W) - (C temp_PCM))),
+                Paragraph (S "Equation (6) applied for the solid " :+: S (phsChgMtrl ^. name) :+:
+                S ". In the case where all of the " :+: S (phsChgMtrl ^. name) :+:
+                S " is melted, the same derivation applies, except that " :+:
+                U (htCap_S_P ^. symbol) :+: S " is replaced by " :+: U (htCap_L_P ^. symbol) :+:
+                S ", and thus " :+: U (tau_S_P ^. symbol) :+: S " is replaced by " :+:
+                U (tau_L_P ^. symbol) :+: S ". Although a small change in " :+:
+                S "surface area would be expected with melting, this is not" :+:
+                S " included, since the volume change of the " :+: S (phsChgMtrl ^. name) :+:
+                S " with melting is assumed to be negligible (A17)."),
+                Paragraph (S "In the case where " :+: U (temp_PCM ^. symbol) :+:
+                S "=" :+: U (temp_melt_P ^. symbol) :+: S " and not all of " :+:
+                S "the " :+: S (phsChgMtrl ^. name) :+: S " is melted, the " :+:
+                (temp_PCM ^. descr) :+: S " does not change. Therefore, in " :+:
+                S "this case d" :+: U (temp_PCM ^. symbol) :+: S "/d" :+:
+                U (time ^. symbol) :+: S "=0."),
+                Paragraph (S "This derivation does not consider the boiling " :+:
+                S "of the " :+: S (phsChgMtrl ^. name) :+: S ", as the " :+:
+                S (phsChgMtrl ^. name) :+: S " is assumed to either be in" :+:
+                S " a solid or liquid state (A18).")]
+
+-- Add GD, A, and EqnBlock references when available
+-- Replace Derivs with regular derivative when available
+-- Derivative notation in paragraph?
 
 s4_2_6 = Section 2 (S "Data Constraints") ((map Con s4_2_6_intro)++[Con table1])
 
@@ -494,77 +658,37 @@ table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
 
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
--- s4_2_7 = Section 2 (S "Properties of a Correct Solution") s4_2_7_deriv
+s4_2_7 = Section 2 (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
--- s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the law " :+:
-               -- S "of conservation of energy. This law is represented by " :+:
-               -- makeRef s4_2_2_T1 :+: S ". Since there is no internal heat" :+:
-               -- S "generation (A16), " :+: S "GD2 can be simplified to"), 
-               -- EqnBlock (U (ht_flux_in ^. symbol) :+: U (in_SA ^. symbol) :+: 
-               -- S "-" :+: U (ht_flux_out ^. symbol) :+: U (out_SA ^. symbol) :+: 
-               -- S "=" :+: U (mass ^. symbol) :+: U (htCap ^. symbol) :+:
-               -- ((S "d" :+: U (temp ^. symbol)) :/: (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "Applying this to the water in the system, the " :+:
-               -- S "equation becomes"),
-               -- EqnBlock (U (ht_flux_C ^. symbol) :+: U (coil_SA ^. symbol) :+:
-               -- S "-" :+: U (ht_flux_P ^. symbol) :+: U (pcm_SA ^. symbol) :+:
-               -- S "=" :+: U (w_mass ^. symbol) :+: U (htCap_W ^. symbol) :+:
-               -- ((S "d" :+: U (temp_W ^. symbol)) :/: (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "With regards to PCM, the only heat flux is " :+:
-               -- S "between PCM and water. Thus, GD2 for solid PCM is"),
-               -- EqnBlock (U (ht_flux_P ^. symbol) :+: U (pcm_SA ^. symbol) :+:
-               -- S "=" :+: U (pcm_mass ^. symbol) :+: U (ht_flux_S_P ^. symbol) :+:
-               -- ((S "d" :+: U (temp_PCM ^. symbol)) :/: (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "Similarly, GD2 for liquid PCM yields"),
-               -- EqnBlock (U (ht_flux_P ^. symbol) :+: U (pcm_SA ^. symbol) :+:
-               -- S "=" :+: U (pcm_mass ^. symbol) :+: U (htCap_L_P ^. symbol) :+:
-               -- ((S "d" :+: U (temp_PCM ^. symbol)) :/: (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "Adding equations (7) and (8) results in an overall" :+:
-               -- S " energy balance equation for the case where PCM is solid."),
-               -- EqnBlock (U (ht_flux_C ^. symbol) :+: U (coil_SA ^. symbol) :+:
-               -- S "=" :+: U (w_mass ^. symbol) :+: U (htCap_W ^. symbol) :+:
-               -- ((S "d" :+: U (temp_W ^. symbol)) :/: (S "d" :+: U (time ^. symbol))) :+:
-               -- S "+" :+: U (pcm_mass ^. symbol) :+: U (ht_flux_S_P ^. symbol) :+:
-               -- ((S "d" :+: U (temp_PCM ^. symbol)) :/: (S "d" :+: U (time ^. symbol)))),
-               -- Paragraph (S "Substituting " :+: makeRef s4_2_4_DD1 :+: S "yields"),
-               -- EqnBlock (U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+:
-               -- S "(" :+: U (temp_C ^. symbol) :+: S "-" :+: U (temp_W ^. symbol) :+:
-               -- S "(" :+: U (time ^. symbol) :+: S "))=" :+: U (w_mass ^. symbol) :+:
-               -- U (htCap_W ^. symbol) :+: ((S "d" :+: U (temp_W ^. symbol)) :/:
-               -- (S "d" :+: U (time ^. symbol))) :+: S "+" :+: U (pcm_mass ^. symbol) :+:
-               -- U (ht_flux_S_P ^. symbol) :+: ((S "d" :+: U (temp_PCM ^. symbol)) :/:
-               -- (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "Similarly, the overall energy balance for " :+:
-               -- S "liquid PCM is"),
-               -- EqnBlock (U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+:
-               -- S "(" :+: U (temp_C ^. symbol) :+: S "-" :+: U (temp_W ^. symbol) :+:
-               -- S "(" :+: U (time ^. symbol) :+: S "))=" :+: U (w_mass ^. symbol) :+:
-               -- U (htCap_W ^. symbol) :+: ((S "d" :+: U (temp_W ^. symbol)) :/:
-               -- (S "d" :+: U (time ^. symbol))) :+: S "+" :+: U (pcm_mass ^. symbol) :+:
-               -- U (ht_flux_L_P ^. symbol) :+: ((S "d" :+: U (temp_PCM ^. symbol)) :/:
-               -- (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "For the case where PCM is in the process of " :+:
-               -- S "melting, its temperature does not change (IM2). Thus, " :+:
-               -- S "the overall energy balance is simply equation (7), which " :+:
-               -- S "when combined with " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
-               -- makeRef s4_2_4_DD2 :+: " becomes"),
-               -- EqnBlock (U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+:
-               -- S "(" :+: U (temp_C ^. symbol) :+: S "-" :+: U (temp_W ^. symbol) :+:
-               -- S "(" :+: U (time ^. symbol) :+: S "))-" :+: U (pcm_HTC ^. symbol) :+:
-               -- U (pcm_SA ^. symbol) :+: S "(" :+: U (temp_W ^. symbol) :+:
-               -- S "(" :+: U (time ^. symbol) :+: S ")-" :+: U (temp_melt_P ^. symbol) :+:
-               -- S ")=" :+: U (w_mass ^. symbol) :+: U (htCap_W ^. symbol) :+:
-               -- ((S "d" :+: U (temp_W ^. symbol)) :/: (S "d" :+: U (time ^. symbol))) :+: S "."),
-               -- Paragraph (S "Equations (9) and (11) can be used as \"sanity\"" :+:
-               -- S " checks to gain confidence in any solution computed by " :+:
-               -- S (progName ^. name) :+: S "."]
- 
---I much prefer a reference like "T1" compared to the reference above
-----which does "Definition T:Cote"
+s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the law " :+:
+               S "of conservation of energy. This means that the energy " :+:
+               S "change in the water should equal the difference between" :+:
+               S " the total energy input from the coil and the energy " :+:
+               S "output to the PCM. This can be shown as an equation by" :+:
+               S " taking " :+: makeRef s4_2_4_DD1 :+: S " and " :+: makeRef s4_2_4_DD2 :+:
+               S ", multiplying each by their respective surface area of " :+:
+               S "heat transfer, and integrating each over the simulation " :+:
+               S "time, as follows:"),
+               EqnBlock ((C w_E) := UnaryOp (Integral (Just 0, Just (C time))) 
+               ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) [C time])) -
+               UnaryOp (Integral (Just 0, Just (C time))) ((C pcm_HTC) * (C pcm_SA) *
+               ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM) [C time])))),
+               Paragraph (S "In addition, the energy change in the PCM should" :+:
+               S " equal the energy input to the PCM from the water. This can" :+:
+               S " be expressed as"),
+               EqnBlock ((C pcm_E) := UnaryOp (Integral (Just 0, Just (C time)))
+               ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM)
+               [C time])))),
+               Paragraph (S "Equations (reference) and (reference) can be used " :+:
+               S "as " :+: Quote (S "sanity") :+: S "checks to gain confidence in " :+:
+               S "any solution computed by " :+: S (progName ^. name) :+: S "." :+:
+               S " The relative error between the results computed by " :+: S (progName ^. name) :+:
+               S " and the results calculated from the right sides of these " :+:
+               S "equations should be less than 0.001% (R9).")]
 
---How to do fractions in equations?
----- I feel like :/: should work but it is not being recognized...
---Should I even be using EqnBlock?
+-- Remember to insert references in above derivation when available
+-- 
+
 
 s5 = Section 0 ((requirement ^. descr) :+: S "s") [Con s5_intro, Sub s5_1, Sub s5_2]
 
@@ -589,14 +713,9 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat (S "I
             S "for IM1 to IM4, as follows, where " :+: U (w_vol ^. symbol) :+: S " is " :+:
             S "the " :+: (w_vol ^. descr) :+: S " and " :+: U (tank_vol ^. symbol) :+:
             S " is the " :+: (tank_vol ^. descr) :+: S "."))]),
-            EqnBlock (U (w_mass ^. symbol) :+: S "=" :+: U (w_vol ^. symbol) :+:
-            U (w_density ^. symbol) :+: S "=(" :+: U (tank_vol ^. symbol) :+:
-            S "-" :+: U (pcm_vol ^. symbol) :+: S ")" :+: U (w_density ^. symbol) :+:
-            S "=(" :+:  S "(" :+: U (diam ^. symbol) :+: S "/2)" :+: S "2" :+:
-            U (tank_length ^. symbol) :+: S "-" :+: U (pcm_vol ^. symbol) :+:
-            S ")" :+: U (w_density ^. symbol)),
-            EqnBlock (U (pcm_mass ^. symbol) :+: S "=" :+: U (pcm_vol ^. symbol) :+:
-            U (pcm_density ^. symbol) :+: S ","),
+            EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) - (C pcm_vol)) * (C w_density) :=
+            (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density)),
+            EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
             Enumeration (Simple [(S (requirement ^. name) :+: S "3", Flat (S "Verify that the inputs satisfy the required physical" :+:
             S " constraints shown in " :+: makeRef table1 :+: S ".")),
             (S (requirement ^. name) :+: S "4", Flat (S "Output the input quantities and derived quantities " :+:
@@ -616,15 +735,19 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat (S "I
             (S (requirement ^. name) :+: S "8", Flat (S "Calculate and output the " :+: (pcm_E ^. descr) :+: S " (" :+:
             U (pcm_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
             S "over the simulation time (from IM4).")),
-            (S (requirement ^. name) :+: S "9", Flat (S "Calculate and output the time at which the " :+: S (phsChgMtrl ^. name) :+: S " begins" :+:
+            (S (requirement ^. name) :+: S "9", Flat (S "Verify that the " :+:
+            S "energy outputs (" :+: U (w_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+:
+            S ") and " :+: U (pcm_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+:
+            S ")) follow the law of conservation of energy, as outlined in " :+:
+            makeRef s4_2_7 :+: S ", with relative error no greater than 0.001%.")),
+            (S (requirement ^. name) :+: S "10", Flat (S "Calculate and output the time at which the " :+: S (phsChgMtrl ^. name) :+: S " begins" :+:
             S " to melt " :+: U (t_init_melt ^. symbol) :+: S " (from IM2).")),
-            (S (requirement ^. name) :+: S "10", Flat (S "Calculate and output the time at which the " :+: S (phsChgMtrl ^. name) :+:
+            (S (requirement ^. name) :+: S "11", Flat (S "Calculate and output the time at which the " :+: S (phsChgMtrl ^. name) :+:
             S " stops melting " :+: U (t_final_melt ^. symbol) :+: S " (from IM2)."))])
             ]
 
 --How to include pi?
 --How to add exponents?
---How to add equations in SimpleLists? 
 
 s5_2 = Section 1 (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") [Con s5_2_contents]
 
@@ -706,6 +829,5 @@ s7_table = Table [S "", S "T1", S "T2", S "T3", S "A1", S "A2", S "A3",
            (S "Traceability Matrix Showing the Connections Between Items " :+:
            S "of Different Sections") True
 
--- This table being automated = The Dream!!
 
 --References?

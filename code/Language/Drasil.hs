@@ -2,7 +2,7 @@
 {- note that SI_Units is really like a separate 'database', so is not included -}
 module Language.Drasil (
   -- Output.Formats
-    DocType(SRS,LPM,Website,Code)
+    DocType(SRS,MG,LPM,Website,Code)
   -- Recipe
   , Recipe(..)
   -- Expr
@@ -22,6 +22,10 @@ module Language.Drasil (
   , UnitalChunk(..), makeUC
   -- Chunk.Relation
   , RelationChunk, makeRC
+  -- Chunk.Method
+  , MethodChunk, fromEC
+  -- Chunk.Module
+  , ModuleChunk, makeModule
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
@@ -39,13 +43,13 @@ module Language.Drasil (
   , capitalize, paren, sqbrac
 
   -- CCode.Import
-  , toCode
+  , toCodeModule
   -- CCode.AST
   , Lang(CLang), CodeType(Calc)
 ) where
 
 import Language.Drasil.Expr (Expr(..), Relation(..))
-import Language.Drasil.Output.Formats (DocType(SRS,LPM,Website,Code))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,LPM,Website,Code))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..))
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
@@ -54,6 +58,8 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
+import Language.Drasil.Chunk.Method
+import Language.Drasil.Chunk.Module
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
@@ -61,5 +67,6 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc (mkTable)
 import Language.Drasil.Instances ()
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
-import Language.Drasil.CCode.Import (toCode)
+import Language.Drasil.CCode.Import (toCodeModule)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
+

@@ -4,24 +4,35 @@ module Language.Drasil.Generate (gen) where
 import System.IO
 import Text.PrettyPrint.HughesPJ
 
-import Language.Drasil.Output.Formats (DocType (SRS,LPM,Code,Website))
+import Control.Lens ((^.))
+import Language.Drasil.Output.Formats (DocType (SRS,MG,LPM,Code,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.CCode.Print (genCode)
-import Language.Drasil.Document (Document)
+import Language.Drasil.Make.Print (genMake)
+import Language.Drasil.Document (Document(..), LayoutObj(..))
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
+import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Module
 
 -- Generate a number of artifacts based on a list of recipes.
 gen :: [Recipe] -> IO ()
-gen rl = mapM_ prnt rl
+gen rl =
+  do mapM_ prnt rl
+     prntMake rl
 
 prnt :: Recipe -> IO ()
 prnt (Recipe (SRS fn) body) = 
   do outh <- openFile (fn ++ ".tex") WriteMode
      hPutStrLn outh $ render $ (writeDoc TeX (SRS fn) body)
      hClose outh
+prnt (Recipe (MG fn) body) =
+  do outh <- openFile (fn ++ ".tex") WriteMode
+     hPutStrLn outh $ render $ (writeDoc TeX (MG fn) body)
+     hClose outh
+     prntCode body
 prnt (Recipe (LPM fn) body) = 
   do outh <- openFile (fn ++ ".w") WriteMode
      hPutStrLn outh $ render $ (writeDoc TeX (LPM fn) body)
@@ -33,11 +44,23 @@ prnt (Recipe (Website fn) body) =
      outh2 <- openFile (fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
-prnt (Recipe (Code fn) body) =
-  do outh <- openFile (fn ++ ".c") WriteMode
-     hPutStrLn outh $ render $ (genCode (Code fn) body)
-     hClose outh
 prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
+
+prntCode :: Document -> IO ()
+prntCode (Document _ _ los) = prntCode' los
+  where   prntCode' []               = return ()
+          prntCode' ((Module m):los) = do outh <- openFile (m ^. name ++ ".c") WriteMode
+                                          hPutStrLn outh $ render $ genCode m
+                                          hClose outh
+                                          prntCode' los
+          prntCode' (_:los)          = prntCode' los
+
+
+prntMake :: [Recipe] -> IO ()
+prntMake rl =
+  do outh <- openFile ("Makefile") WriteMode
+     hPutStrLn outh $ render $ genMake (map (\(Recipe x _) -> x) rl)
+     hClose outh
 
 writeDoc :: Format -> DocType -> Document -> Doc
 writeDoc TeX  = genTeX

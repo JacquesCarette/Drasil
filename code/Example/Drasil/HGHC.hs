@@ -1,4 +1,4 @@
-module Example.Drasil.HGHC(srsBody, lpmBody, codeBody) where
+module Example.Drasil.HGHC(srsBody, lpmBody, mgBody) where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
@@ -17,22 +17,32 @@ s1, s2, s3, s4 :: LayoutObj
 s1 = table_of_units si_units
 s2 = table_of_symbols vars
 s3 = Section 0 (S "Data Definitions") $ map (Definition . Data) vars
-s4 = Section 0 (S "Code -- Test") $ [CodeBlock $ toCode CLang Calc vars "calc"]
+s4 = Section 0 (S "Code -- Test") $ [CodeBlock $ toCodeModule CLang mod_calc]
+
+m1 :: LayoutObj
+m1 = Module mod_calc
 
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =
   Document ((S "SRS for ") :+: 
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) ls))))
-    (S author) body  
+    (S author) body
+
+mg :: Quantity s => [s] -> String -> [LayoutObj] -> Document
+mg ls author body =
+  Document ((S "MG for ") :+:
+    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) ls))))
+    (S author) body
   
-srsBody,lpmBody,codeBody :: Document
+srsBody,mgBody,lpmBody :: Document
 srsBody = srs vars "Spencer Smith" [s1, s2, s3, s4]
+
+mgBody = mg vars "Spencer Smith" [m1]
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) vars))))
   (S "Spencer Smith") [l1]
 
-codeBody = Document (S "") (S "") [CodeBlock $ toCode CLang Calc vars "calc"]
 
 l1 :: LayoutObj
 l1 = Paragraph (

@@ -1,8 +1,11 @@
 module Example.Drasil.SWHS.TModel2 where
 
+import Data.Char (toLower)
+
 import Example.Drasil.SWHS.Units
 import Example.Drasil.SWHS.Unitals
 import Example.Drasil.SWHS.TModel3
+import Example.Drasil.SWHS.Concepts
 
 import Language.Drasil
 import Language.Drasil.SI_Units
@@ -23,24 +26,28 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT), ((C temp
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
 t2descr :: Sentence
-t2descr = (U (sensHtE ^. symbol) :+: S " is the change in sensible heat " :+:
-          S "energy (" :+: Sy (joule ^. unit) :+: S "). " :+: U (htCap_S ^. symbol) :+: 
+t2descr = (U (sensHtE ^. symbol) :+: S " is the change in " :+:
+          (sMap (map toLower) (S (sens_heat ^. name))) :+: S " energy (" :+:
+          Sy (joule ^. unit) :+: S "). " :+: U (htCap_S ^. symbol) :+: 
           S ", " :+: U (htCap_L ^. symbol) :+: S ", " :+: U (htCap_V ^. symbol) :+:
-          S " are the specific heat capacities of a solid, liquid, and vapour, " :+:
-          S "respectively (" :+: Sy (htCap ^. unit) :+: S "). " :+: U (mass ^. symbol) :+: 
-          S " is the mass (" :+: Sy (mass ^. unit) :+: S "). " :+: U (temp ^. symbol) :+: 
-          S " is the temperature (" :+: Sy (temp ^. unit) :+: S"), and " :+: 
-          U (deltaT ^. symbol) :+: S " is the change in temperature (" :+: Sy (deltaT ^. unit) :+:
-          S "). " :+: U (temp_melt ^. symbol) :+: S " and " :+: U (temp_boil ^. symbol) :+:
-          S " are the melting and boiling points, respectively (" :+: Sy (temp ^. unit) :+:
-          S "). Sensible heating occurs as long as the material does not " :+: 
-          S "reach a temperature where a phase change occurs. A phase change" :+:
+          S " are the " :+: (htCap_S ^. descr) :+: S ", " :+: (htCap_L ^. descr) :+:
+          S ", and " :+: (htCap_V ^. descr) :+: S ", respectively (" :+:
+          Sy (htCap ^. unit) :+: S "). " :+: U (mass ^. symbol) :+: 
+          S " is the " :+: (mass ^. descr) :+: S " (" :+: Sy (mass ^. unit) :+:
+          S "). " :+: U (temp ^. symbol) :+: S " is the " :+:
+          (temp ^. descr) :+: S " (" :+: Sy (temp ^. unit) :+: S "), and " :+: 
+          U (deltaT ^. symbol) :+: S " is the " :+: (deltaT ^. descr) :+: S " (" :+:
+          Sy (deltaT ^. unit) :+: S "). " :+: U (temp_melt ^. symbol) :+: S " and " :+:
+          U (temp_boil ^. symbol) :+: S " are the " :+: (temp_melt ^. descr) :+:
+          S " and " :+: (temp_boil ^. descr) :+: S ", respectively (" :+: Sy (temp ^. unit) :+:
+          S "). " :+: (sens_heat ^. descr) :+: S " occurs as long as the material does not " :+: 
+          S "reach a " :+: (temp ^. descr) :+: S " where a " :+: (sMap (map toLower) (S (phs_change ^. name))) :+: 
+          S " occurs. A " :+: (sMap (map toLower) (S (phs_change ^. name))) :+:
           S " occurs if " :+: U (temp ^. symbol) :+: S "=" :+: U (temp_boil ^. symbol) :+:
           S " or " :+: U (temp ^. symbol) :+: S "=" :+: U (temp_melt ^. symbol) :+: 
-          S ". If this is the case, refer to " :+: makeRef s4_2_2_T3 :+: S ", Latent heat energy.")
+          S ". If this is the case, refer to " :+: makeRef s4_2_2_T3 :+: S ", " :+:
+          S (latent_heat ^. name) :+: S " energy.")
 
---Can't reference sections from SWHSBody!!
-----importing would cause a cyclic import
 --How to have new lines in the description? 
 --Can't have relation and equation chunks together since they are called in a list
 ----You can, you just can't map "Definition" over a list, you have to do each separately

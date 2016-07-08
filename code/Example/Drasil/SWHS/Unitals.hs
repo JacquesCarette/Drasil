@@ -48,10 +48,10 @@ htCap_V      = makeUC "C^V" "specific heat capacity of a vapour" (sup cC cV)
 htCap_W      = makeUC "C_W" "specific heat capacity of water" (sub cC cW) heat_capacity
 diam         = makeUC "D" "diameter of tank" cD metre
 sensHtE      = makeUC "E" "sensible heat energy" cE joule
-pcm_initMltE = makeUC "E^init_Pmelt" ("heat energy in the PCM at the instant " ++
+pcm_initMltE = makeUC "E^init_Pmelt" ("change in heat energy in the PCM at the instant " ++
                "when melting begins") (sup (sub cE (Atomic "Pmelt")) (Atomic "init")) joule
-pcm_E        = makeUC "E_P" "heat energy in the PCM" (sub cE cP) joule
-w_E          = makeUC "E_W" "heat energy in the water" (sub cE cW) joule
+pcm_E        = makeUC "E_P" "change in heat energy in the PCM" (sub cE cP) joule
+w_E          = makeUC "E_W" "change in heat energy in the water" (sub cE cW) joule
 vol_ht_gen   = makeUC "g" "volumetric heat generation per unit volume" lG 
                thermFluxU 
 htTransCoeff = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
@@ -78,10 +78,10 @@ ht_flux_out  = makeUC "q_out" "heat flux output" (sub lQ (Atomic "out")) thermFl
 ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water" (sub lQ cP) 
                thermFluxU
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" (sub cQ cP) joule
-surface      = makeUC "S" "symbol representing a surface" (cS) unitless
+surface      = makeUC "S" "surface" (cS) unitless
 time         = makeUC "t" "time" lT second 
 temp         = makeUC "T" "temperature" cT centigrade
-temp_boil    = makeUC "T_boil" "temperature at boiling point" (sub cT (Atomic "boil"))
+temp_boil    = makeUC "T_boil" "boiling point temperature" (sub cT (Atomic "boil"))
                centigrade
 temp_C       = makeUC "T_C" "temperature of the heating coil" (sub cT cC) centigrade
 temp_env     = makeUC "T_env" "temperature of the environment" (sub cT (Atomic "env"))
@@ -89,13 +89,13 @@ temp_env     = makeUC "T_env" "temperature of the environment" (sub cT (Atomic "
 time_final   = makeUC "t_final" "final time" (sub lT (Atomic "final")) second
 temp_init    = makeUC "T_init" "initial temperature" (sub cT (Atomic "init"))
                centigrade
-temp_melt    = makeUC "T_melt" "temperature at melting point" (sub cT (Atomic "melt"))
+temp_melt    = makeUC "T_melt" "melting point temperature" (sub cT (Atomic "melt"))
                centigrade
 t_init_melt  = makeUC "t^init_melt" "time at which melting of PCM begins"
                (sup (sub lT (Atomic "melt")) (Atomic "init")) second
 t_final_melt = makeUC "t^final_melt" "time at which melting of PCM ends"
                (sup (sub lT (Atomic "melt")) (Atomic "final")) second
-temp_melt_P  = makeUC "T^P_melt" "temperature at melting point for PCM"
+temp_melt_P  = makeUC "T^P_melt" "melting point temperature for PCM"
                (sup (sub cT (Atomic "melt")) cP) centigrade
 temp_PCM     = makeUC "T_P" "temperature of the phase change material" (sub cT cP)
                centigrade
@@ -105,10 +105,10 @@ pcm_vol      = makeUC "V_P" "volume of PCM" (sub cV cP) m_3
 tank_vol     = makeUC "V_tank" "volume of the cylindrical tank" (sub cV (Atomic "tank"))
                m_3
 w_vol        = makeUC "V_W" "volume of water" (sub cV cW) m_3
-deltaT       = makeUC "deltaT" "temperature difference" (Concat [Special Delta, cT]) 
+deltaT       = makeUC "deltaT" "change in temperature" (Concat [Special Delta, cT]) 
                centigrade
 eta          = makeUC "eta" "ODE parameter" (Special Eta_L) unitless
-density      = makeUC "rho" "density, mass per unit volume" (Special Rho_L)
+density      = makeUC "rho" "density" (Special Rho_L)
                densityU
 pcm_density  = makeUC "rho_P" "density of PCM" (sub (Special Rho_L) cP)
                densityU

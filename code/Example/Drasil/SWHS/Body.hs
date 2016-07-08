@@ -78,7 +78,7 @@ s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
 s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
              S " symbols used in this document along with their units" :+:
              S ". The choice of symbols was made to be consistent" :+:
-             S " with the heat transfer literature and with existing" :+:
+             S " with the " :+: (heat_trans ^. descr) :+: S " literature and with existing" :+:
              S " documentation for " :+: (sMap (map toLower) (progName ^. descr)) :+: S "s. The " :+:
              S "symbols are listed in alphabetical order.")
 
@@ -106,31 +106,35 @@ s2 = Section 0 (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
            S "availability, and negative environmental impact of " :+:
            S "fossil fuels, there is a higher demand for renewable" :+:
-           S " energy sources and energy storage technology. Solar water " :+:
-           S "heating systems incorporating " :+: (phsChgMtrl ^. descr) :+:
-           S " (" :+: S (phsChgMtrl ^. name) :+: S ") " :+:
+           S " energy sources and energy storage technology. " :+:
+           (swhs_pcm ^. descr) :+: S " (" :+: S (phsChgMtrl ^. name) :+: S ") " :+:
            S "use a renewable energy source and provide a novel way of " :+:
-           S "storing energy. Solar water heating systems with PCM improve" :+:
-           S " over the traditional solar heating systems because of their" :+:
-           S " smaller size. The smaller size is possible because of the " :+:
-           S "ability of PCM to store thermal energy as latent heat, which " :+:
-           S "allows higher thermal energy storage capacity per unit weight."),
+           S "storing energy. " :+: S (swhs_pcm ^. name) :+: S " improve" :+:
+           S " over the traditional " :+: (sMap (map toLower) (progName ^. descr)) :+: 
+           S "s because of their" :+: S " smaller size. The smaller size is possible because of the " :+:
+           S "ability of " :+: S (phsChgMtrl ^. name) :+: S " to store " :+:
+           (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " as " :+:
+           (sMap (map toLower) (S (latent_heat ^. name))) :+: S ", which allows higher " :+:
+           (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " storage capacity" :+:
+           S " per unit weight."),
            Paragraph (S " The following section provides an overview of the " :+:
            (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+: 
-           S ") for a solar water heating system that incorporates PCM. The " :+:
+           S ") for " :+: S (swhs_pcm ^. name) :+: S ". The " :+:
            S "developed program will be referred to as " :+: (progName ^. descr) :+:
            S " (" :+: S (progName ^. name) :+: S "). This section " :+:
            S "explains the purpose of this document, the scope of the system" :+:
            S ", the organization of the document and the characteristics of " :+:
            S "the intended readers.")]
 
+-- ConceptChunks... Sometimes capitalized, sometimes not, sometimes plural, sometimes not, sometimes need to be used in different tenses. How to accomodate all this?
 -- The first part of this paragraph is specific.
 
 s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_contents)
 
 s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
-                S "describe the modelling of solar water heating systems " :+:
-                S "incorporating PCM. The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: S "s and " :+: (sMap (map toLower) (thModel ^. descr)) :+: S "s used" :+:
+                S "describe the modelling of " :+: S (swhs_pcm ^. name) :+:
+                S ". The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: 
+                S "s and " :+: (sMap (map toLower) (thModel ^. descr)) :+: S "s used" :+:
                 S " in the " :+: S (progName ^. name) :+: S " code are " :+:
                 S "provided, with an emphasis on explicitly identifying " :+:
                 (sMap (map toLower) (assumption ^. descr)) :+: S "s and unambiguous definitions. This document " :+:
@@ -143,12 +147,12 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
                 S "for subsequent development phases, including writing the " :+:
                 S "design specification and the software verification and " :+:
                 S "validation plan. The design document will show how the " :+:
-                S "requirements are to be realized, including decisions on " :+:
-                S "the numerical algorithms and programming environment. " :+:
-                S "The verification and validation plan will show the steps" :+:
-                S " that will be used to increase confidence in the software" :+:
-                S " documentation and the implementation. Although the " :+:
-                S (srs ^. name) :+:
+                (sMap (map toLower) (requirement ^. descr)) :+: S "s are to" :+:
+                S " be realized, including decisions on the numerical " :+:
+                S "algorithms and programming environment. The verification" :+:
+                S " and validation plan will show the steps that will be " :+:
+                S "used to increase confidence in the software documentation" :+:
+                S " and the implementation. Although the " :+: S (srs ^. name) :+:
                 S " fits in a series of documents that follow the so-called " :+:
                 S "waterfall model, the actual development process is not " :+:
                 S "constrained in any way. Even when the process is not " :+:
@@ -156,25 +160,27 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
                 S "the most logical way to present the documentation is " :+:
                 S "still to " :+: Quote (S "fake") :+: S " a rational design process.")]
 
--- This paragraph is mostly general
----- "solar water heating systems incorporating PCM" is something that is
----- repeated and seems like it could be captured.				
+-- This paragraph is mostly general			
 --How to italicize words in sentence?
 --How to cite?
 
 s2_2 = Section 1 (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
-                S "to thermal analysis of a single solar water heating" :+:
-                S " tank incorporating PCM. Given the appropriate inputs, " :+:
-                S "the code for " :+: S (progName ^. name) :+: S " is " :+:
-                S "intended to predict the temperature and energy " :+:
-                S "histories for the water and the PCM. This entire document" :+:
+                S "to " :+: (sMap (map toLower) (S (thermal_analysis ^. name))) :+:
+                S " of a single " :+: (tank_pcm ^. descr) :+: S ". Given the " :+:
+                S "appropriate inputs, the code for " :+: S (progName ^. name) :+:
+                S " is intended to predict the " :+: (temp ^. descr) :+: S " and " :+:
+                (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " histories for the " :+:
+                (sMap (map toLower) (S (water ^. name))) :+: S " and the " :+:
+                S (phsChgMtrl ^. name) :+: S ". This entire document" :+:
                 S " is written assuming that the substances inside the " :+:
-                S "heating tank are water and " :+: S (phsChgMtrl ^. name) :+: S ".")
+                (sMap (map toLower) (tank ^. descr)) :+: S " are " :+: (sMap (map toLower) (S (water ^. name))) :+:
+                S " and " :+: S (phsChgMtrl ^. name) :+: S ".")
 
 -- Lots of specific concepts in this paragraph that can likely be captured.
 ----Heating tank, temperature and energy
+-- The fact that "PCM" must always be capital is especially making things difficult with concept chunks involving PCM.
 
 s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_contents)
 
@@ -190,7 +196,7 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" :+:
                 S " and trace back to find any additional information they " :+:
                 S "require. The " :+: (sMap (map toLower) (inModel ^. descr)) :+: S "s provide the " :+: (ordDiffEq ^. descr) :+:
                 S " (" :+: S (ordDiffEq ^. name) :+: S "s) and algebraic equations that model " :+:
-                S "the solar water heating system with PCM. " :+: S (progName ^. name) :+:
+                S "the " :+: S (swhs_pcm ^. name) :+: S ". " :+: S (progName ^. name) :+:
                 S " solves these " :+: S (ordDiffEq ^. name) :+: S "s."),
                 Paragraph (S "The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are refined to the " :+:
                 (sMap (map toLower) (thModel ^. descr)) :+: S "s, and " :+: (sMap (map toLower) (thModel ^. descr)) :+: S "s to the " :+:
@@ -198,7 +204,8 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" :+:
                 (sMap (map toLower) (inModel ^. descr)) :+: S "s (" :+: makeRef s4_2_5 :+:
                 S ") to be solved are referred to as IM1 to IM4.")]
 
--- Mostly general paragraphs, except for "solar water heating system with PCM" (could be "incorporating PCM").
+
+-- The swhs_pcm reference at the end of the first paragraph would be better if singular, but concept is plural.
 -- IM1 to IM4 : reference later
 
 -- how to cite/reference?
@@ -222,7 +229,7 @@ s3_1_contents = Paragraph (S "The end user of " :+: S (progName ^. name) :+: S "
                 S "understanding of undergraduate Level 1 Calculus and " :+:
                 S "Physics.")
 
--- Can we capture "UG Level 1 Calculus" and "UG Level 1 Physics"? 
+-- Should "UG Level 1 Calculus" and "UG Level 1 Physics" be concepts?
 
 s3_2 = Section 1 (S "System Constraints") [Con s3_2_contents]
 
@@ -239,18 +246,17 @@ s4_intro = Paragraph (S "This section first presents the problem " :+:
            (sMap (map toLower) (assumption ^. descr)) :+: S "s, " :+: (sMap (map toLower) (thModel ^. descr)) :+: 
            S "s, " :+: (sMap (map toLower) (genDefn ^. descr)) :+: S "s, " :+: 
            (sMap (map toLower) (dataDefn ^. descr)) :+: S "s, and finally the " :+:
-           (sMap (map toLower) (inModel ^. descr)) :+: S "s (" :+: S (ordDiffEq ^. name) :+: S "s) that model the solar water heating" :+:
-           S " tank with PCM.")
+           (sMap (map toLower) (inModel ^. descr)) :+: S "s (" :+:
+           S (ordDiffEq ^. name) :+: S "s) that model the " :+: 
+           S (swhs_pcm ^. name) :+: S ".")
 
--- SWHS with PCM comes up again. 
+-- The swhs_pcm reference at the end would be better if singular, but concept is plural.
 
 s4_1 = Section 1 (S "Problem Description") [Con s4_1_intro, Sub s4_1_1, Sub s4_1_2, Sub s4_1_3]
 
 s4_1_intro = Paragraph (S (progName ^. name) :+: S " is a computer program developed to " :+:
-             S "investigate the effect of employing PCM within a solar " :+:
-             S "water heating tank.")
-
--- specific to SWHS... "employing PCM within a SWHT" is "SWHS incorporating PCM" backwards.
+             S "investigate the effect of employing " :+: S (phsChgMtrl ^. name) :+: 
+             S " within a " :+: (sMap (map toLower) (tank ^. descr)) :+: S ".")
 
 s4_1_1 = Section 2 (S "Terminology and Definitions") [Con s4_1_1_intro, Con s4_1_1_bullets]
 
@@ -268,36 +274,43 @@ s4_1_1_bullets = Enumeration (Bullet $ map (\c -> Flat (S (c ^. name) :+:
 --For now, added Concepts.hs to hold ConceptChunks.
 --Included heat flux and specific heat even though they are already in SWHSUnits
 
-s4_1_2 = Section 2 (S "Physical System Description") [Con s4_1_2_intro, Con s4_1_2_list, Con fig_tank]
+s4_1_2 = Section 2 (physSyst ^. descr) [Con s4_1_2_intro, Con s4_1_2_list, Con fig_tank]
 
 s4_1_2_intro = Paragraph (S "The physical system of " :+: S (progName ^. name) :+: S ", as shown in " :+:
                (makeRef fig_tank) :+: S ", includes the following elements:")
 
 -- General paragraph.
 
-s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat (S "Tank containing water.")),
-              (S (physSyst ^. name) :+: S "2", Flat (S "Heating coil at bottom of tank. (" :+:
+s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat (S (tank ^. name) :+: 
+              S " containing " :+: (sMap (map toLower) (S (water ^. name))) :+: S ".")),
+              (S (physSyst ^. name) :+: S "2", Flat (S (coil ^. name) :+: S " at bottom of " :+:
+              (sMap (map toLower) (S (tank ^. name))) :+: S ". (" :+:
               U (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
-              S " into the water.)")),
-              (S (physSyst ^. name) :+: S "3", Flat (S (phsChgMtrl ^. name) :+: S " suspended in tank. (" :+: U (ht_flux_P ^. symbol) :+:
-              S " represents the " :+: (ht_flux_P ^. descr) :+: S " from the water.)"))])
+              S ".)")),
+              (S (physSyst ^. name) :+: S "3", Flat (S (phsChgMtrl ^. name) :+: 
+              S " suspended in " :+: (sMap (map toLower) (S (tank ^. name)))  :+:
+              S ". (" :+: U (ht_flux_P ^. symbol) :+: S " represents the " :+:
+              (ht_flux_P ^. descr) :+: S ".)"))])
 
-fig_tank = Figure (S "Solar water heating tank, with " :+: (ht_flux_C ^. descr) :+:
+fig_tank = Figure ((tank ^. descr) :+: S ", with " :+: (ht_flux_C ^. descr) :+:
            S " of " :+: U (ht_flux_C ^. symbol) :+: S " and " :+: (ht_flux_P ^. descr) :+:
            S " of " :+: U (ht_flux_P ^. symbol)) "../../../Tank.png"
 
--- Lots of specifics...
-
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro, Con s4_1_3_list]
 
-s4_1_3_intro = Paragraph (S "Given the temperature of the coil, initial " :+:
-               S "conditions for the temperature of the water and the " :+: S (phsChgMtrl ^. name) :+: S ", " :+:
-               S "and material properties, the " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are:")
+s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. descr) :+: S ", initial " :+:
+               S "conditions for the " :+: (temp_W ^. descr) :+: S " and the " :+: 
+               S (phsChgMtrl ^. name) :+: S ", " :+: S "and material properties, the " :+:
+               (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are:")
 
-s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat (S "Predict the water temperature over time.")),
-              (S (goalStmt ^. name) :+: S "2", Flat (S "Predict the PCM temperature over time.")),
-              (S (goalStmt ^. name) :+: S "3", Flat (S "Predict the change in the energy of the water over time.")),
-              (S (goalStmt ^. name) :+: S "4", Flat (S "Predict the change in the energy of the PCM over time."))])
+s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat (S "Predict the " :+:
+              (temp_W ^. descr) :+: S " over " :+: (time ^. descr) :+: S ".")),
+              (S (goalStmt ^. name) :+: S "2", Flat (S "Predict the " :+: (temp_PCM ^. descr) :+:
+              S " over " :+: (time ^. descr) :+: S ".")),
+              (S (goalStmt ^. name) :+: S "3", Flat (S "Predict the " :+: (w_E ^. descr) :+:
+              S " over " :+: (time ^. descr) :+: S ".")),
+              (S (goalStmt ^. name) :+: S "4", Flat (S "Predict the " :+: (pcm_E ^. descr) :+:
+              S " over " :+: (time ^. descr) :+: S "."))])
 
 --Given how frequently these sorts of lists occur, could they be semi automated?
 --Would only type "goalStmt ^. name" once, and then a list of the right side statements.
@@ -324,54 +337,81 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem " :+:
                S "], " :+: (sMap (map toLower) (inModel ^. descr)) :+: S " [" :+: S (inModel ^. name) :+: S "], or " :+: (sMap (map toLower) (likelyChg ^. descr)) :+:
                S " [" :+: S (likelyChg ^. name) :+: S "], in which the respective " :+: (sMap (map toLower) (assumption ^. descr)) :+: S " is used.") 
 
--- General paragraph, but can "physical system" be referenced? physSyst is "Physical System Description"
+-- General paragraph
 
-s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat (S "The only form of energy that is " :+:
-              S "relevant for this problem is thermal energy. All other " :+:
-              S "forms of energy, such as mechanical energy, are assumed " :+:
-              S "to be negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),
-              (S (assumption ^. name) :+: S "2", Flat (S "All heat transfer coefficients are constant over" :+:
-              S " time [GD1].")),
-              (S (assumption ^. name) :+: S "3", Flat (S "The water in the tank is fully  mixed, so the " :+:
-              S "temperature is the same throughout the entire tank [GD2, " :+: makeRef s4_2_4_DD2 :+: S "].")),
-              (S (assumption ^. name) :+: S "4", Flat (S "The " :+: S (phsChgMtrl ^. name) :+: S " has the " :+:
-              S "same temperature throughout [GD2, " :+: makeRef s4_2_4_DD2 :+: S ", LC1].")),
-              (S (assumption ^. name) :+: S "5", Flat (S "Density of the water and " :+: S (phsChgMtrl ^. name) :+: S " have no spatial " :+:
+s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat (S "The" :+:
+              S " only form of energy that is relevant for this problem is " :+:
+              (sMap (map toLower) (S (thermal_energy ^. name))) :+: S ". All" :+:
+              S " other forms of energy, such as " :+: (sMap (map toLower) (S (mech_energy ^. name))) :+:
+              S ", are assumed to be negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),
+              (S (assumption ^. name) :+: S "2", Flat (S "All " :+: (heat_trans ^. descr) :+:
+              S " coefficients are constant over " :+: (time ^. descr) :+: S " [GD1].")),
+              (S (assumption ^. name) :+: S "3", Flat (S "The " :+: (sMap (map toLower) (S (water ^. name))) :+:
+              S " in the " :+: (sMap (map toLower) (S (tank ^. name))) :+:
+              S " is fully mixed, so the " :+: (temp_W ^. descr) :+: S " is" :+:
+              S " the same throughout the entire " :+: (sMap (map toLower) (S (tank ^. name))) :+:
+              S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S "].")),
+              (S (assumption ^. name) :+: S "4", Flat (S "The " :+: (temp_PCM ^. descr) :+:
+              S " is the same throughout the " :+: (pcm_vol ^. descr) :+: 
+              S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S ", LC1].")),
+              (S (assumption ^. name) :+: S "5", Flat (S "The " :+: (w_density ^. descr) :+:
+              S " and " :+: (pcm_density ^. descr) :+: S " have no spatial " :+:
               S "variation; that is, they are each constant over their " :+:
               S "entire " :+: (volume ^. descr) :+: S " [GD2].")),
-              (S (assumption ^. name) :+: S "6", Flat (S "Specific heat capacity of the water and PCM have" :+:
-              S " no spatial variation; that is, they are each constant " :+:
+              (S (assumption ^. name) :+: S "6", Flat (S "The " :+: (htCap_W ^. descr) :+:
+              S ", " :+: (htCap_S_P ^. descr) :+: S ", and " :+: (htCap_L_P ^. descr) :+:
+              S " have no spatial variation; that is, they are each constant " :+:
               S "over their entire " :+: (volume ^. descr) :+: S " [GD2].")),
-              (S (assumption ^. name) :+: S "7", Flat (S "Newton's law of convective cooling applies " :+:
-              S "between the coil and the water [" :+: makeRef s4_2_4_DD1 :+: S "].")),
-              (S (assumption ^. name) :+: S "8", Flat (S "The temperature of the heating coil is constant " :+:
-              S "over time [" :+: makeRef s4_2_4_DD1 :+: S ", LC2].")),
-              (S (assumption ^. name) :+: S "9", Flat (S "The temperature of the heating coil does not " :+:
-              S "vary along its length [" :+: makeRef s4_2_4_DD1 :+: S ", LC3].")),
-              (S (assumption ^. name) :+: S "10", Flat (S "Newton's law of convective cooling applies " :+:
-              S "between the water and the PCM [" :+: makeRef s4_2_4_DD2 :+: S "].")),
-              (S (assumption ^. name) :+: S "11", Flat (S "The model only accounts for charging of the tank" :+:
-              S ", not discharging. The temperature of the water and PCM " :+:
-              S "can only increase, or remain constant; they do not decrease" :+:
-              S ". This implies that the " :+: (temp_init ^. descr) :+: S " (A12) is " :+:
-              S "less than (or equal) to the temperature of the coil [IM1, LC4].")),
-              (S (assumption ^. name) :+: S "12", Flat (S "The " :+: (temp_init ^. descr) :+: S " of the water and the " :+:
-              S "PCM is the same [IM1, IM2, LC5].")),
-              (S (assumption ^. name) :+: S "13", Flat (S "The simulation will start with the " :+: S (phsChgMtrl ^. name) :+: S " in solid" :+:
-              S " form [IM2, IM4].")),
-              (S (assumption ^. name) :+: S "14", Flat (S "The operating temperature range of the system is " :+:
-              S "such that the water is always in liquid form. That is, the " :+:
-              S "temperature will not drop below the melting point of water," :+:
-              S " or rise above its boiling point [IM1, IM3].")),
-              (S (assumption ^. name) :+: S "15", Flat (S "The tank is perfectly insulated so that there is " :+:
-              S "no heat loss from the tank [IM1, LC6].")),
-              (S (assumption ^. name) :+: S "16", Flat (S "No internal heat is generated by either the water" :+:
-              S " or the PCM; therefore, the " :+: (vol_ht_gen ^. descr) :+: S " is " :+:
-              S "zero [IM1, IM2].")),
-              (S (assumption ^. name) :+: S "17", Flat (S "The volume change of the " :+: S (phsChgMtrl ^. name) :+: S " due to melting is " :+:
-              S "negligible [IM2].")),
-              (S (assumption ^. name) :+: S "18", Flat (S "The " :+: S (phsChgMtrl ^. name) :+: S " is either in a liquid or solid state, but" :+:
-              S " not a gas [IM2, IM4]."))])
+              (S (assumption ^. name) :+: S "7", Flat ((law_cooling ^. descr) :+: 
+              S " applies between the " :+: (sMap (map toLower) (S (coil ^. name))) :+:
+              S " and the " :+: (sMap (map toLower) (S (water ^. name))) :+: 
+              S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
+              (S (assumption ^. name) :+: S "8", Flat (S "The " :+: (temp_C ^. descr) :+:
+              S " is constant over " :+: (time ^. descr) :+: S " [" :+:
+              makeRef s4_2_4_DD1 :+: S ", LC2].")),
+              (S (assumption ^. name) :+: S "9", Flat (S "The " :+: (temp_C ^. descr) :+: 
+              S " does not vary along its length [" :+: makeRef s4_2_4_DD1 :+: S ", LC3].")),
+              (S (assumption ^. name) :+: S "10", Flat ((law_cooling ^. descr) :+:
+              S " applies between the " :+: (sMap (map toLower) (S (water ^. name))) :+:
+              S " and the " :+: S (phsChgMtrl ^. name) :+: S " [" :+:
+              makeRef s4_2_4_DD2 :+: S "].")),
+              (S (assumption ^. name) :+: S "11", Flat (S "The model only accounts for " :+:
+              (sMap (map toLower) (charging ^. descr)) :+: S ", not " :+:
+              (sMap (map toLower) (S (discharging ^. name))) :+:
+              S ". The " :+: (temp_W ^. descr) :+: S " and " :+: 
+              (temp_PCM ^. descr) :+: S " can only increase, or remain constant;" :+:
+              S " they do not decrease. This implies that the " :+:
+              (temp_init ^. descr) :+: S " (A12) is less than (or equal)" :+:
+              S " to the " :+: (temp_C ^. descr) :+: S " [IM1, LC4].")),
+              (S (assumption ^. name) :+: S "12", Flat (S "The " :+:
+              (temp_init ^. descr) :+: S " of the " :+: (sMap (map toLower) (S (water ^. name))) :+: 
+              S " and the " :+: S (phsChgMtrl ^. name) :+: S " is the same" :+:
+              S " [IM1, IM2, LC5].")),
+              (S (assumption ^. name) :+: S "13", Flat (S "The simulation will start with the " :+:
+              S (phsChgMtrl ^. name) :+: S " in a " :+: (sMap (map toLower) (solid ^. descr)) :+:
+              S " [IM2, IM4].")),
+              (S (assumption ^. name) :+: S "14", Flat (S "The operating " :+:
+              (temp ^. descr) :+: S " range of the system is " :+:
+              S "such that the " :+: (sMap (map toLower) (S (water ^. name))) :+:
+              S " is always in " :+: (liquid ^. descr) :+: S ". That is, the " :+:
+              (temp ^. descr) :+: S " will not drop below the " :+:
+              (temp_melt ^. descr) :+: S " of " :+: (sMap (map toLower) (S (water ^. name))) :+:
+              S ", or rise above its " :+: (temp_boil ^. descr) :+: S " [IM1, IM3].")),
+              (S (assumption ^. name) :+: S "15", Flat (S "The " :+:
+              (sMap (map toLower) (S (tank ^. name))) :+: S " is " :+: S (perfect_insul ^. name) :+:
+              S " so that there is no heat loss from the " :+: 
+              (sMap (map toLower) (S (tank ^. name))) :+: S " [IM1, LC6].")),
+              (S (assumption ^. name) :+: S "16", Flat (S "No internal heat" :+:
+              S " is generated by either the " :+: (sMap (map toLower) (S (water ^. name))) :+:
+              S " or the " :+: S (phsChgMtrl ^. name) :+: S "; therefore, " :+: 
+              S "the " :+: (vol_ht_gen ^. descr) :+: S " is zero [IM1, IM2].")),
+              (S (assumption ^. name) :+: S "17", Flat (S "The volume change of the " :+:
+              S (phsChgMtrl ^. name) :+: S " due to " :+: (sMap (map toLower) (S (melting ^. name))) :+: 
+              S " is negligible [IM2].")),
+              (S (assumption ^. name) :+: S "18", Flat (S "The " :+: S (phsChgMtrl ^. name) :+:
+              S " is either in a " :+: (liquid ^. descr) :+: S " or a " :+:
+              (solid ^. descr) :+: S " but not a " :+: (gaseous ^. descr) :+:
+              S " [IM2, IM4]."))])
 
 -- Can booktabs colored links be used? The box links completely cover nearby punctuation.
 
@@ -400,39 +440,42 @@ s4_2_3_intro = Paragraph (S "This section collects the laws and equations " :+:
 
 --General definitions not yet implemented
 
-s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of change of temperature:"),
+s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of change of " :+:
+               (temp ^. descr) :+: S ":"),
                Paragraph (S "Integrating " :+: makeRef s4_2_2_T1 :+: S " over" :+:
-               S " a volume (" :+: U (volume ^. symbol) :+: S "), we have"),
+               S " a " :+: (volume ^. descr) :+: S " (" :+: U (volume ^. symbol) :+: S "), we have:"),
                EqnBlock (Neg (UnaryOp (Integral (Just (C volume), Nothing))
                ((C gradient) :. (C thFluxVect))) + UnaryOp (Integral (Just (C volume), Nothing))
                (C vol_ht_gen) := UnaryOp (Integral (Just (C volume), Nothing))
                ((C density) * (C htCap) * Deriv (C temp) (C time))),
-               Paragraph (S "Applying Gauss's Divergence theorem to the first" :+:
-               S " term over the surface S of the volume, with " :+: U (thFluxVect ^. symbol) :+:
-               S " as the thermal flux vector for the surface and " :+: U (norm_vect ^. symbol) :+:
-               S " as a unit outward normal for the surface,"),
+               Paragraph (S "Applying " :+: (gauss_div ^. descr) :+: S " to the first" :+:
+               S " term over the " :+: (surface ^. descr) :+: S " " :+: U (surface ^. symbol) :+: 
+               S " of the " :+: (volume ^. descr) :+: S ", with " :+: U (thFluxVect ^. symbol) :+:
+               S " as the " :+: (thFluxVect ^. descr) :+: S " for the " :+:
+               (surface ^. descr) :+: S " and " :+: U (norm_vect ^. symbol) :+:
+               S " as a " :+: (norm_vect ^. descr) :+: S ":"),
                EqnBlock (Neg (UnaryOp (Integral (Just (C surface), Nothing)) 
                ((C thFluxVect) :. (C norm_vect))) + UnaryOp (Integral (Just (C volume), Nothing))
                (C vol_ht_gen) := UnaryOp (Integral (Just (C volume), Nothing))
                ((C density) * (C htCap) * Deriv (C temp) (C time))),
-               Paragraph (S "We consider an arbitrary volume. The volumetric" :+:
-               S " heat generation is assumed constant. Then (1) can be " :+:
-               S "written as:"),
+               Paragraph (S "We consider an arbitrary " :+: (volume ^. descr) :+: 
+               S ". The " :+: (vol_ht_gen ^. descr) :+: S " is assumed constant." :+:
+               S " Then (1) can be written as:"),
                EqnBlock ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) +
                (C vol_ht_gen) * (C volume) := UnaryOp (Integral (Just (C volume), Nothing))
                ((C density) * (C htCap) * Deriv (C temp) (C time))),
-               Paragraph (S "where " :+: U (ht_flux_in ^. symbol) :+: S ", " :+:
+               Paragraph (S "Where " :+: U (ht_flux_in ^. symbol) :+: S ", " :+:
                U (ht_flux_out ^. symbol) :+: S ", " :+: U (in_SA ^. symbol) :+:
                S ", and " :+: U (out_SA ^. symbol) :+: S " are explained in " :+:
                S "GD2. Assuming " :+: U (density ^. symbol) :+: S ", " :+:
                U (htCap ^. symbol) :+: S " and " :+: U (temp ^. symbol) :+:
-               S " are constant over the volume, which is true in our case " :+:
-               S "by assumptions (A3), (A4), (A5), and (A6), we have"),
+               S " are constant over the " :+: (volume ^. descr) :+: S ", which is true in our case " :+:
+               S "by " :+: (assumption ^. descr) :+: S "s (A3), (A4), (A5), and (A6), we have:"),
                EqnBlock ((C density) * (C htCap) * (C volume) * Deriv (C temp) (C time) :=
                (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + (C vol_ht_gen) * (C volume)),
                Paragraph (S "Using the fact that " :+: U (density ^. symbol) :+:
                S "=" :+: U (mass ^. symbol) :+: S "/" :+: U (volume ^. symbol) :+:
-               S ", (2) can be written as"),
+               S ", (2) can be written as:"),
                EqnBlock ((C mass) * (C htCap) * Deriv (C temp) (C time) :=
                (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
                (C vol_ht_gen) * (C volume))]
@@ -447,17 +490,7 @@ s4_2_4_intro = Paragraph (S "This section collects and defines all the " :+:
                S "data needed to build the " :+: (sMap (map toLower) (inModel ^. descr)) :+:
                S "s. The dimension of each quantity is also given.")
 
--- General paragraph, just need to reference lowercase instance model.
-
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: Contents
-s4_2_4_DD1 = Definition (Data dd1HtFluxC)
-s4_2_4_DD2 = Definition (Data dd2HtFluxP)
-s4_2_4_DD3 = Definition (Data dd3HtFusion)
-s4_2_4_DD4 = Definition (Data dd4MeltFrac)
-
---Symbol appears as "Label"
---There is no actual label
---Units section doesn't appear
+-- General paragraph
 
 s4_2_5 = Section 2 (inModel ^. descr :+: S "s") ((map Con s4_2_5_intro) ++ (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
 
@@ -473,28 +506,31 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "solution for " :+: U (temp_W ^. symbol) :+: S " and " :+:
                U (temp_PCM ^. symbol) :+: S " depend on one another. IM3 " :+:
                S "can be solved once IM1 has been solved. The solution of " :+:
-               S "IM2 and IM4 are also coupled, since the temperature and " :+:
-               S "energy of the " :+: S (phsChgMtrl ^. name) :+: S " depend on the phase change.")]
+               S "IM2 and IM4 are also coupled, since the " :+: (temp_PCM ^. descr) :+:
+               S " and " :+: (pcm_E ^. descr) :+: S " depend on the " :+:
+               (sMap (map toLower) (S (phs_change ^. name))) :+: S ".")]
 
---Instance Models aren't implemented yet
--- Some specific info here on the order in which IMs are solved... probably can be captured.
+-- Instance Models aren't implemented yet
+-- Some specific info here on the order in which IMs are solved... maybe can be captured.
 
-s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on water:"),
+s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+: (sMap (map toLower) (S (water ^. name))) :+: S ":"),
                 Paragraph (S "To find the rate of change of " :+: U (temp_W ^. symbol) :+:
-                S ", we look at the energy balance on water. The volume " :+:
-                S "being considered is the " :+: (w_vol ^. descr) :+: S " " :+:
-                U (w_vol ^. symbol) :+: S ", which has " :+: (w_mass ^. descr) :+:
-                S " " :+: U (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. descr) :+: 
-                S ", " :+: U (htCap_W ^. symbol) :+: S ". " :+: U (ht_flux_C ^. symbol) :+:
-                S " represents the " :+: (ht_flux_C ^. descr) :+: S " and " :+:
-                U (ht_flux_P ^. symbol) :+: S " represents the " :+: (ht_flux_P ^. descr) :+:
-                S ", over " :+: (coil_SA ^. descr) :+: S " and " :+: (pcm_SA ^. descr) :+:
+                S ", we look at the energy balance on " :+: (sMap (map toLower) (S (water ^. name))) :+:
+                S ". The " :+: (volume ^. descr) :+: S " being considered is " :+:
+                S "the " :+: (w_vol ^. descr) :+: S " " :+: U (w_vol ^. symbol) :+:
+                S ", which has " :+: (w_mass ^. descr) :+: S " " :+: U (w_mass ^. symbol) :+:
+                S " and " :+: (htCap_W ^. descr) :+: S ", " :+: U (htCap_W ^. symbol) :+:
+                S ". " :+: U (ht_flux_C ^. symbol) :+: S " represents the " :+:
+                (ht_flux_C ^. descr) :+: S " and " :+: U (ht_flux_P ^. symbol) :+:
+                S " represents the " :+: (ht_flux_P ^. descr) :+: S ", over " :+:
+                (coil_SA ^. descr) :+: S " and " :+: (pcm_SA ^. descr) :+:
                 S " of " :+: U (coil_SA ^. symbol) :+: S " and " :+: U (pcm_SA ^. symbol) :+:
-                S ", respectively. No heat transfer occurs to the outside " :+:
-                S "of the tank, since it has been assumed to be perfectly " :+:
-                S "insulated (A15). Assuming no " :+: (vol_ht_gen ^. descr) :+:
-                S " (A16), " :+: U (vol_ht_gen ^. symbol) :+: S "=0. Therefore" :+:
-                S ", the equation for GD2 can be written as:"),
+                S ", respectively. No " :+: (heat_trans ^. descr) :+: S " occurs to the " :+:
+                S "outside of the " :+: (sMap (map toLower) (S (tank ^. name))) :+:
+                S ", since it has been assumed to be " :+: S (perfect_insul ^. name) :+: 
+                S " (A15)." :+: S " Assuming no " :+: (vol_ht_gen ^. descr) :+: S " (A16), " :+:
+                U (vol_ht_gen ^. symbol) :+: S "=0. Therefore, the equation" :+:
+                S " for GD2 can be written as:"),
                 EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) :=
                 (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
                 Paragraph(S "Using " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
@@ -510,15 +546,16 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on water:"),
                 ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) -
                 ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
                 Paragraph (S "Factoring the negative sign out of the second" :+:
-                S " term of the RHS of Equation (4) and multiplying it by " :+:
-                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: S "/" :+:
-                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: S " yields,"),
+                S " term of the " :+: S (rightSide ^. name) :+: S " of Equation (4)" :+: 
+                S " and multiplying it by " :+: U (coil_HTC ^. symbol) :+:
+                U (coil_SA ^. symbol) :+: S "/" :+: U (coil_HTC ^. symbol) :+:
+                 U (coil_SA ^. symbol) :+: S " yields:"),
                 EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * (C coil_SA)) /
                 ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
                 ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * (C coil_SA)) *
                 ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * (C htCap_W)) *
                 ((C temp_PCM) - (C temp_W))),
-                Paragraph (S "which simplifies to:"),
+                Paragraph (S "Which simplifies to:"),
                 EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * (C coil_SA)) /
                 ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
                 ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) * (C coil_SA)) *
@@ -541,19 +578,20 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on water:"),
                 (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - (C temp_W))))
                 ]
 
+-- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
-                S " the " :+: S (phsChgMtrl ^. name) :+: S " during sensible " :+:
-                S "heating phase"),
+                S " the " :+: S (phsChgMtrl ^. name) :+: S " during " :+: (sMap (map toLower) (sens_heat ^. descr)) :+:
+                S " phase:"),
                 Paragraph (S "To find the rate of change of " :+: U (temp_PCM ^. symbol) :+:
                 S ", we look at the energy balance on the " :+: S (phsChgMtrl ^. name) :+:
                 S ". The " :+: (volume ^. descr) :+: S " being considered is " :+:
                 S "the " :+: (pcm_vol ^. descr) :+: S ", " :+: U (pcm_vol ^. symbol) :+:
-                S ". The derivation that follows is initially for the solid " :+:
-                S (phsChgMtrl ^. name) :+: S ". The " :+: (pcm_mass ^. descr) :+:
+                S ". The derivation that follows is initially for the " :+: (sMap (map toLower) (S (solid ^. name))) :+: 
+                S " " :+: S (phsChgMtrl ^. name) :+: S ". The " :+: (pcm_mass ^. descr) :+:
                 S " is " :+: U (pcm_mass ^. symbol) :+: S " and the " :+:
                 (htCap_S_P ^. descr) :+: S " is " :+: U (htCap_S_P ^. symbol) :+:
                 S ". The " :+: (ht_flux_P ^. descr) :+: S " is " :+: U (ht_flux_P ^. symbol) :+:
@@ -579,25 +617,28 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S "this can be written as:"),
                 EqnBlock (Deriv (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
                 ((C temp_W) - (C temp_PCM))),
-                Paragraph (S "Equation (6) applied for the solid " :+: S (phsChgMtrl ^. name) :+:
-                S ". In the case where all of the " :+: S (phsChgMtrl ^. name) :+:
-                S " is melted, the same derivation applies, except that " :+:
-                U (htCap_S_P ^. symbol) :+: S " is replaced by " :+: U (htCap_L_P ^. symbol) :+:
-                S ", and thus " :+: U (tau_S_P ^. symbol) :+: S " is replaced by " :+:
+                Paragraph (S "Equation (6) applies for the " :+: (sMap (map toLower) (S (solid ^. name))) :+: 
+                S " " :+: S (phsChgMtrl ^. name) :+: S ". In the case where all of " :+:
+                S "the " :+: S (phsChgMtrl ^. name) :+: S " is melted, the same " :+:
+                S "derivation applies, except that " :+: U (htCap_S_P ^. symbol) :+:
+                S " is replaced by " :+: U (htCap_L_P ^. symbol) :+: S ", and thus " :+:
+                U (tau_S_P ^. symbol) :+: S " is replaced by " :+:
                 U (tau_L_P ^. symbol) :+: S ". Although a small change in " :+:
-                S "surface area would be expected with melting, this is not" :+:
-                S " included, since the volume change of the " :+: S (phsChgMtrl ^. name) :+:
-                S " with melting is assumed to be negligible (A17)."),
+                S "surface area would be expected with " :+: (sMap (map toLower) (S (melting ^. name))) :+:
+                S ", this is not included, since the " :+: (volume ^. descr) :+:
+                S " change of the " :+: S (phsChgMtrl ^. name) :+: S " with " :+:
+                (sMap (map toLower) (S (melting ^. name))):+: S " is assumed " :+:
+                S "to be negligible (A17)."),
                 Paragraph (S "In the case where " :+: U (temp_PCM ^. symbol) :+:
                 S "=" :+: U (temp_melt_P ^. symbol) :+: S " and not all of " :+:
                 S "the " :+: S (phsChgMtrl ^. name) :+: S " is melted, the " :+:
                 (temp_PCM ^. descr) :+: S " does not change. Therefore, in " :+:
                 S "this case d" :+: U (temp_PCM ^. symbol) :+: S "/d" :+:
                 U (time ^. symbol) :+: S "=0."),
-                Paragraph (S "This derivation does not consider the boiling " :+:
-                S "of the " :+: S (phsChgMtrl ^. name) :+: S ", as the " :+:
+                Paragraph (S "This derivation does not consider the " :+: (sMap (map toLower) (S (boiling ^. name))) :+:
+                S " of the " :+: S (phsChgMtrl ^. name) :+: S ", as the " :+:
                 S (phsChgMtrl ^. name) :+: S " is assumed to either be in" :+:
-                S " a solid or liquid state (A18).")]
+                S " a " :+: (solid ^. descr) :+: S " or a " :+: (liquid ^. descr) :+: S " (A18).")]
 
 -- Add GD, A, and EqnBlock references when available
 -- Replace Derivs with regular derivative when available
@@ -660,21 +701,24 @@ table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
 
 s4_2_7 = Section 2 (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
-s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the law " :+:
-               S "of conservation of energy. This means that the energy " :+:
-               S "change in the water should equal the difference between" :+:
-               S " the total energy input from the coil and the energy " :+:
-               S "output to the PCM. This can be shown as an equation by" :+:
-               S " taking " :+: makeRef s4_2_4_DD1 :+: S " and " :+: makeRef s4_2_4_DD2 :+:
+s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+: 
+               (sMap (map toLower) (S (law_cons_energy ^. name))) :+:
+               S ". This means that the " :+: (w_E ^. descr) :+:
+               S " should equal the difference between " :+:
+               S " the total energy input from the " :+: (sMap (map toLower) (S (coil ^. name))) :+:
+               S " and the energy output to the " :+: S (phsChgMtrl ^. name) :+:
+               S ". This can be shown as an equation by taking " :+:
+               makeRef s4_2_4_DD1 :+: S " and " :+: makeRef s4_2_4_DD2 :+:
                S ", multiplying each by their respective surface area of " :+:
-               S "heat transfer, and integrating each over the simulation " :+:
-               S "time, as follows:"),
+               (heat_transfer ^. descr) :+: S ", and integrating each over the simulation " :+:
+               (time ^. descr) :+: S ", as follows:"),
                EqnBlock ((C w_E) := UnaryOp (Integral (Just 0, Just (C time))) 
                ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) [C time])) -
                UnaryOp (Integral (Just 0, Just (C time))) ((C pcm_HTC) * (C pcm_SA) *
                ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM) [C time])))),
-               Paragraph (S "In addition, the energy change in the PCM should" :+:
-               S " equal the energy input to the PCM from the water. This can" :+:
+               Paragraph (S "In addition, the " :+: (pcm_E ^. descr) :+: S " should" :+:
+               S " equal the energy input to the " :+: S (phsChgMtrl ^. name) :+: S " from the " :+: 
+               (sMap (map toLower) (S (water ^. name))) :+: S ". This can" :+:
                S " be expressed as"),
                EqnBlock ((C pcm_E) := UnaryOp (Integral (Just 0, Just (C time)))
                ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM)
@@ -683,8 +727,8 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the law " :+:
                S "as " :+: Quote (S "sanity") :+: S "checks to gain confidence in " :+:
                S "any solution computed by " :+: S (progName ^. name) :+: S "." :+:
                S " The relative error between the results computed by " :+: S (progName ^. name) :+:
-               S " and the results calculated from the right sides of these " :+:
-               S "equations should be less than 0.001% (R9).")]
+               S " and the results calculated from the " :+: S (rightSide ^. name) :+: 
+               S " of these equations should be less than 0.001% (R9).")]
 
 -- Remember to insert references in above derivation when available
 -- 
@@ -702,48 +746,54 @@ s5_intro = Paragraph (S "This section provides the functional " :+: (sMap (map t
 s5_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s") (map Con s5_1_list)
 
 s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat (S "Input the following quantities, " :+:
-            S "which define the tank parameters, material properties" :+:
-            S " and initial conditions:"))]), 
+            S "which define the " :+: (sMap (map toLower) (S (tank ^. name))) :+: 
+            S " parameters, material properties and initial conditions:"))]), 
             (Table [S "symbol", S "unit", S "description"] (mkTable
             [(\ch -> U (ch ^. symbol)),
             (\ch -> Sy (ch ^. unit)),
             (\ch -> ch ^. descr)
-            ] inputVar) (S "Input Variable Requirement") False),
-            Enumeration (Simple [(S (requirement ^. name) :+: S "2", Flat (S "Use the inputs in R1 to find the mass needed " :+:
-            S "for IM1 to IM4, as follows, where " :+: U (w_vol ^. symbol) :+: S " is " :+:
-            S "the " :+: (w_vol ^. descr) :+: S " and " :+: U (tank_vol ^. symbol) :+:
-            S " is the " :+: (tank_vol ^. descr) :+: S "."))]),
+            ] inputVar) (S "Input Variable " :+: (requirement ^. descr)) False),
+            Enumeration (Simple [(S (requirement ^. name) :+: S "2", Flat (S "Use the inputs in R1 to find the " :+:
+            (mass ^. descr) :+: S " needed for IM1 to IM4, as follows, where " :+:
+            U (w_vol ^. symbol) :+: S " is the " :+:(w_vol ^. descr) :+:
+            S " and " :+: U (tank_vol ^. symbol) :+: S " is the " :+:
+            (tank_vol ^. descr) :+: S "."))]),
             EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) - (C pcm_vol)) * (C w_density) :=
             (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density)),
             EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
             Enumeration (Simple [(S (requirement ^. name) :+: S "3", Flat (S "Verify that the inputs satisfy the required physical" :+:
             S " constraints shown in " :+: makeRef table1 :+: S ".")),
-            (S (requirement ^. name) :+: S "4", Flat (S "Output the input quantities and derived quantities " :+:
-            S "in the following list: the quantities from R1, the masses " :+:
+            (S (requirement ^. name) :+: S "4", Flat (S "Output the input" :+: 
+            S " quantities and derived quantities in the following list: "  :+:
+            S "the quantities from R1, the " :+: (mass ^. descr) :+: S "es " :+:
             S "from R2, " :+: U (tau_W ^. symbol) :+: S " (from IM1), " :+: U (eta ^. symbol) :+: S " (from IM1), " :+:
             U (tau_S_P ^. symbol) :+: S " (from IM2) and " :+: U (tau_L_P ^. symbol) :+:
             S " (from IM2).")),
             (S (requirement ^. name) :+: S "5", Flat (S "Calculate and output the " :+: (temp_W ^. descr) :+: S " (" :+:
             U (temp_W ^. symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
-            S "over the simulation time (from IM1).")),
+            S "over the simulation " :+: (time ^. descr) :+: S " (from IM1).")),
             (S (requirement ^. name) :+: S "6", Flat (S "Calculate and output the " :+: (temp_PCM ^. descr) :+: S " (" :+:
             U (temp_PCM ^. symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
-            S "over the simulation time (from IM2).")),
+            S "over the simulation " :+: (time ^. descr) :+: S " (from IM2).")),
             (S (requirement ^. name) :+: S "7", Flat (S "Calculate and output the " :+: (w_E ^. descr) :+: S " (" :+:
             U (w_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
-            S "over the simulation time (from IM3).")),
+            S "over the simulation " :+: (time ^. descr) :+: S " (from IM3).")),
             (S (requirement ^. name) :+: S "8", Flat (S "Calculate and output the " :+: (pcm_E ^. descr) :+: S " (" :+:
             U (pcm_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
-            S "over the simulation time (from IM4).")),
+            S "over the simulation " :+: (time ^. descr) :+: S " (from IM4).")),
             (S (requirement ^. name) :+: S "9", Flat (S "Verify that the " :+:
             S "energy outputs (" :+: U (w_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+:
             S ") and " :+: U (pcm_E ^. symbol) :+: S "(" :+: U (time ^. symbol) :+:
-            S ")) follow the law of conservation of energy, as outlined in " :+:
-            makeRef s4_2_7 :+: S ", with relative error no greater than 0.001%.")),
-            (S (requirement ^. name) :+: S "10", Flat (S "Calculate and output the time at which the " :+: S (phsChgMtrl ^. name) :+: S " begins" :+:
+            S ")) follow the " :+: (sMap (map toLower) (S (law_cons_energy ^. name))) :+:
+            S ", as outlined in " :+: makeRef s4_2_7 :+: S ", with relative error " :+:
+            S "no greater than 0.001%.")),
+            (S (requirement ^. name) :+: S "10", Flat (S "Calculate and output the " :+:
+            (time ^. descr) :+: S " at which the " :+: S (phsChgMtrl ^. name) :+: S " begins" :+:
             S " to melt " :+: U (t_init_melt ^. symbol) :+: S " (from IM2).")),
-            (S (requirement ^. name) :+: S "11", Flat (S "Calculate and output the time at which the " :+: S (phsChgMtrl ^. name) :+:
-            S " stops melting " :+: U (t_final_melt ^. symbol) :+: S " (from IM2)."))])
+            (S (requirement ^. name) :+: S "11", Flat (S "Calculate and output the " :+:
+            (time ^. descr) :+: S " at which the " :+: S (phsChgMtrl ^. name) :+:
+            S " stops " :+: (sMap (map toLower) (S (melting ^. name))) :+: S " " :+:
+            U (t_final_melt ^. symbol) :+: S " (from IM2)."))])
             ]
 
 --How to include pi?
@@ -763,24 +813,29 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" :+:
 
 s6 = Section 0 ((likelyChg ^. descr) :+: S "s") [Con s6_list]
 
-s6_list = Enumeration (Simple [(S (likelyChg ^. name) :+: S "1", Flat (S "A4 - " :+: S (phsChgMtrl ^. name) :+: S " is actually a poor thermal " :+:
-          S "conductor, so the assumption of uniform " :+: (temp_PCM ^. descr) :+: S " is " :+:
-          S "not likely.")), 
+s6_list = Enumeration (Simple [(S (likelyChg ^. name) :+: S "1", Flat (S "A4 - " :+:
+          S (phsChgMtrl ^. name) :+: S " is actually a poor " :+: (sMap (map toLower) (S (thermal_conductor ^. name))) :+:
+          S ", so the " :+: (sMap (map toLower) (assumption ^. descr)) :+:
+          S " of uniform " :+: (temp_PCM ^. descr) :+: S " is not likely.")),
           (S (likelyChg ^. name) :+: S "2", Flat (S "A8 - The " :+: (temp_C ^. descr) :+:
           S " will change over the course of the day, depending" :+:
           S " on the energy received from the sun.")),
-          (S (likelyChg ^. name) :+: S "3", Flat (S "A9 - The temperature of the water in the coil will " :+:
-          S "actually change along its length as the water cools.")),
-          (S (likelyChg ^. name) :+: S "4", Flat (S "A11 - The model currently only accounts for charging " :+:
-          S "of the tank. A more complete model would also account for " :+:
-          S "discharging of the tank.")),
+          (S (likelyChg ^. name) :+: S "3", Flat (S "A9 - The " :+: (temp_C ^. descr) :+:
+          S " will actually change along its length as the " :+: 
+          (sMap (map toLower) (S (water ^. name))) :+: S " within it cools.")),
+          (S (likelyChg ^. name) :+: S "4", Flat (S "A11 - The model currently only " :+: 
+          S "accounts for " :+: (sMap (map toLower) (charging ^. descr)) :+:
+          S ". A more complete model would also account for " :+: 
+          (sMap (map toLower) (discharging ^. descr)) :+: S ".")),
           (S (likelyChg ^. name) :+: S "5", Flat (S "A12 - To add more flexibility to the simulation, " :+:
-          S "the " :+: (temp_init ^. descr) :+: S " of the water and the PCM could be " :+:
+          S "the " :+: (temp_init ^. descr) :+: S " of the " :+: (sMap (map toLower) (S (water ^. name))) :+: 
+          S " and the " :+: S (phsChgMtrl ^. name) :+: S " could be " :+:
           S "allowed to have different values.")),
-          (S (likelyChg ^. name) :+: S "6", Flat (S "A15 - Any real tank cannot be perfectly insulated " :+:
-          S "and will lose heat."))])
+          (S (likelyChg ^. name) :+: S "6", Flat (S "A15 - Any real " :+:
+          (sMap (map toLower) (S (tank ^. name))) :+: S " cannot be " :+:
+          S (perfect_insul ^. name) :+: S " and will lose heat."))])
 
---add referencing to assumptions?		
+--add referencing to assumptions?
   
 s7 = Section 0 (S "Traceability Matrix") ((map Con s7_intro)++[Con s7_table])
 

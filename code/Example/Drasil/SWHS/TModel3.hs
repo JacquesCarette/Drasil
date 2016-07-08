@@ -1,7 +1,11 @@
 module Example.Drasil.SWHS.TModel3 where
 
+import Data.Char (toLower)
+
 import Example.Drasil.SWHS.Units
 import Example.Drasil.SWHS.Unitals
+import Example.Drasil.SWHS.DataDefs
+import Example.Drasil.SWHS.Concepts
 
 import Language.Drasil
 import Language.Drasil.SI_Units
@@ -22,14 +26,17 @@ latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just 0, Just (C tim
 -- How to have conditions on a single equation
 
 t3descr :: Sentence
-t3descr = (U (latentE ^. symbol) :+: S " is the change in thermal energy (" :+:
-          Sy (joule ^. unit) :+: S "), latent heat energy. <Integral> is " :+:
-          S "the rate of change of " :+: U (latentE ^. symbol) :+: S " with" :+:
-          S " respect to time " :+: U (tau ^. symbol) :+: S " (" :+: Sy (tau ^. unit) :+:
-          S "). " :+: U (time ^. symbol) :+: S " is the time (" :+: Sy (time ^. unit) :+:
-          S ") elapsed, as long as the phase change is not complete. The " :+:
-          S "status of the phase change depends on the melt fraction DD4. " :+:
-          U (temp_melt ^. symbol) :+: S " and " :+: U (temp_boil ^. symbol) :+:
-          S " are the melting and boiling points, respectively (" :+:
-          Sy (temp ^. unit) :+: S "). Latent heating stops when all material" :+:
-          S " has changed to the new phase.")
+t3descr = (U (latentE ^. symbol) :+: S " is the change in " :+: (sMap (map toLower) (S (thermal_energy ^. name))) :+: 
+          S " (" :+: Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) (S (latent_heat ^. name))) :+: 
+          S " energy. <Integral> is the rate of change of " :+: U (latentE ^. symbol) :+:
+          S " with respect to " :+: (time ^. descr) :+: S " " :+: U (tau ^. symbol) :+: S " (" :+:
+          Sy (tau ^. unit) :+: S "). " :+: U (time ^. symbol) :+: S " is the " :+:
+          (time ^. descr) :+: S " (" :+: Sy (time ^. unit) :+:
+          S ") elapsed, as long as the " :+: (sMap (map toLower) (S (phs_change ^. name))) :+: 
+          S " is not complete. The status of the " :+: (sMap (map toLower) (S (phs_change ^. name))) :+:
+          S " depends on the " :+: (melt_frac ^. descr) :+: S ", " :+: makeRef s4_2_4_DD4 :+:
+          S ". " :+: U (temp_melt ^. symbol) :+: S " and " :+: U (temp_boil ^. symbol) :+:
+          S " are the " :+: (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
+          S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: (latent_heat ^. descr) :+:
+          S " stops when all material has changed to the new phase.")
+          

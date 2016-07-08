@@ -11,33 +11,16 @@ data MUChunk where --May have Unit chunk
   HasNot :: Quantity c => c -> MUChunk --Could accidentally add Unital
 
 instance Chunk MUChunk where
-  name = q . name
+  name = mulens name
   
 instance Concept MUChunk where
-  descr = q . descr
+  descr = mulens descr
 
 instance Quantity MUChunk where
-  symbol = q . symbol
+  symbol = mulens symbol
   
 -- instance Unit MUChunk where
 
-  
--- HELPERS --  
-qlens :: (forall c. Quantity c => Simple Lens c a) -> Simple Lens Q a
-qlens l f (Q a) = fmap (\x -> Q (set l x a)) (f (a ^. l))
-
-data Q where
-  Q :: Quantity c => c -> Q
-  
-instance Chunk Q where 
-  name = qlens name
-
-instance Concept Q where 
-  descr = qlens descr
-
-instance Quantity Q where
-  symbol = qlens symbol
-
-q :: Simple Lens MUChunk Q
-q f (HasNot a) = fmap (\(Q x) -> HasNot x) (f (Q a))
-q f (Has (UC a b)) = fmap (\(Q x) -> (Has (UC x b))) (f (Q a))
+mulens :: (forall c. Quantity c => Simple Lens c a) -> Simple Lens MUChunk a
+mulens l f (Has a) = fmap (\x -> Has (set l x a)) (f (a ^. l))
+mulens l f (HasNot a) = fmap (\x -> HasNot (set l x a)) (f (a ^. l))

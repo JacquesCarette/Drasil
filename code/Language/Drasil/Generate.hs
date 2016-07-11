@@ -16,6 +16,7 @@ import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
+import Language.Drasil.Config (outLang)
 
 -- Generate a number of artifacts based on a list of recipes.
 gen :: [Recipe] -> IO ()
@@ -47,13 +48,13 @@ prnt (Recipe (Website fn) body) =
 prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
 
 prntCode :: Document -> IO ()
-prntCode (Document _ _ los) = prntCode' los
-  where   prntCode' []               = return ()
-          prntCode' ((Module m):los) = do outh <- openFile (m ^. name ++ ".c") WriteMode
-                                          hPutStrLn outh $ render $ genCode m
-                                          hClose outh
-                                          prntCode' los
-          prntCode' (_:los)          = prntCode' los
+prntCode (Document _ _ los) = mapM_ prntCode' (getModules los)
+  where   getModules []                 = []
+          getModules ((Module m):los)   = (genCode outLang m) ++ getModules los
+          getModules (_:los)            = getModules los
+          prntCode' (name, code)        = do outh <- openFile name WriteMode
+                                             hPutStrLn outh $ render $ code
+                                             hClose outh
 
 
 prntMake :: [Recipe] -> IO ()

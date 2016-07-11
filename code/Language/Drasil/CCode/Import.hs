@@ -28,8 +28,19 @@ toCodeModule :: Lang -> Mod.ModuleChunk -> Code
 toCodeModule CLang mod    = let methods = map makeMethod (Mod.method mod)
                                 testMethods = map makeTest methods
                                 testMain = makeTestMain testMethods
-                            in C (stdHeaders ++ testHeaders) [errorDecl] (methods ++ testMethods ++ [errorMethod ((Mod.cc mod) ^. name)] ++ [testMain])
+                            in C ( stdHeaders
+                                   ++ testHeaders
+                                   ++ [Local ((Mod.cc mod) ^. name)]
+                                 )
+                                 [errorDecl]
+                                 ( methods
+                                   ++ testMethods
+                                   ++ [errorMethod ((Mod.cc mod) ^. name)]
+                                   ++ [testMain]
+                                 )
 
+toHeader :: Lang -> Code -> Code
+toHeader CLang (C _ _ m)  = H $ map (\(x, _) -> x) m
 
 --makeMethod :: EqChunk -> String -> Method
 --makeMethod ec moduleName = ((MethodDecl DblType (moduleName ++ "_" ++ (ec ^. name)) (makeArgs $ dep (equat ec))),

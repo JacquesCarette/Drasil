@@ -4,11 +4,13 @@ import Language.Drasil.CCode.AST
 import Language.Drasil.CCode.Helpers
 import Language.Drasil.CCode.Import
 import qualified Language.Drasil.Chunk.Module as Mod
+import Language.Drasil.Chunk
 import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, assign, eq, leq, lt, geq, gt, angbrac)
 import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Document as L
 
 import Text.PrettyPrint
+import Control.Lens ((^.))
 
 newtype CType = CType Type
 
@@ -22,9 +24,16 @@ ptype DblType     = "double"
 instance Show CType where
   show (CType t) = ptype t
 
--- temporary fix to generate code as a document
-genCode :: Mod.ModuleChunk -> Doc
-genCode mod = printCode $ toCodeModule CLang mod
+genCode :: Lang -> Mod.ModuleChunk -> [(String, Doc)]
+genCode CLang mod = let code = toCodeModule CLang mod
+                        codeDoc = printCode code
+                        headerDoc = printCode $ toHeader CLang code
+                    in  [ ( mod ^. name ++ ".c" , codeDoc) ,
+                          ( mod ^. name ++ ".h" , headerDoc)
+                        ]
+
+--genHeader :: Code -> Doc
+--genHeader (C _)
 
 printCode :: Code -> Doc
 printCode (C h v m)   = (vcat $ map header h) $+$
@@ -32,6 +41,7 @@ printCode (C h v m)   = (vcat $ map header h) $+$
                         (vcat $ map varDecl v) $+$
                         text "" $+$
                         (vcat $ map method m)
+printCode (H md)      = (vcat $ map methodDecl md)
 
 header :: Header -> Doc
 header (Library h) = text "#include" <+> (text . angbrac) (h++".h")

@@ -3,7 +3,7 @@ module Language.Drasil.CCode.AST where
 type Variable = String
 
 data Code = C [Header] [VarDecl] [Method]
-          | H [MethodDecl]
+          | H Name [MethodDecl]
 
 type Method = (MethodDecl, [Statement])
 

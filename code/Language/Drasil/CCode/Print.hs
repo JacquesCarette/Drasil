@@ -8,6 +8,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, assign, eq, leq, lt, geq, gt, angbrac)
 import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Document as L
+import Data.Char (toUpper)
 
 import Text.PrettyPrint
 import Control.Lens ((^.))
@@ -27,7 +28,7 @@ instance Show CType where
 genCode :: Lang -> Mod.ModuleChunk -> [(String, Doc)]
 genCode CLang mod = let code = toCodeModule CLang mod
                         codeDoc = printCode code
-                        headerDoc = printCode $ toHeader CLang code
+                        headerDoc = printCode $ toHeader CLang (mod ^. name) code
                     in  [ ( mod ^. name ++ ".c" , codeDoc) ,
                           ( mod ^. name ++ ".h" , headerDoc)
                         ]
@@ -41,7 +42,14 @@ printCode (C h v m)   = (vcat $ map header h) $+$
                         (vcat $ map varDecl v) $+$
                         text "" $+$
                         (vcat $ map method m)
-printCode (H md)      = (vcat $ map methodDecl md)
+printCode (H n md)    = let def = map toUpper n ++ "_H_INCLUDED"
+                        in  text ("#ifndef " ++ def) $+$
+                            text ("#define " ++ def) $+$
+                            text "" $+$
+                            (vcat $ map (\x -> methodDecl x <> text ";") md) $+$
+                            text "" $+$
+                            text ("#endif")
+
 
 header :: Header -> Doc
 header (Library h) = text "#include" <+> (text . angbrac) (h++".h")

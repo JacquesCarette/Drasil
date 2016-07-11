@@ -39,8 +39,8 @@ toCodeModule CLang mod    = let methods = map makeMethod (Mod.method mod)
                                    ++ [testMain]
                                  )
 
-toHeader :: Lang -> Code -> Code
-toHeader CLang (C _ _ m)  = H $ map (\(x, _) -> x) m
+toHeader :: Lang -> Name -> Code -> Code
+toHeader CLang n (C _ _ m)  = H n $ map (\(x, _) -> x) m
 
 --makeMethod :: EqChunk -> String -> Method
 --makeMethod ec moduleName = ((MethodDecl DblType (moduleName ++ "_" ++ (ec ^. name)) (makeArgs $ dep (equat ec))),

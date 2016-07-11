@@ -15,7 +15,8 @@ library
     lens >= 4.12,
     containers >= 0.5.5.1,
     pretty >= 1.1.1.1,
-    mtl >= 2.2.1
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -26,7 +27,8 @@ executable lss
     lens >= 4.12,
     containers >= 0.5.5.1,
     pretty >= 1.1.1.1,
-    mtl >= 2.2.1
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2
   default-language: Haskell2010
   ghc-options:      -Wall
     

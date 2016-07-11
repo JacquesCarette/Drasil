@@ -5,6 +5,7 @@ import System.IO
 import Text.PrettyPrint.HughesPJ
 
 import Control.Lens ((^.))
+import System.Directory
 import Language.Drasil.Output.Formats (DocType (SRS,MG,LPM,Code,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
@@ -26,23 +27,27 @@ gen rl =
 
 prnt :: Recipe -> IO ()
 prnt (Recipe (SRS fn) body) = 
-  do outh <- openFile (fn ++ ".tex") WriteMode
+  do createDirectoryIfMissing False "SRS"
+     outh <- openFile ("SRS/" ++ fn ++ ".tex") WriteMode
      hPutStrLn outh $ render $ (writeDoc TeX (SRS fn) body)
      hClose outh
 prnt (Recipe (MG fn) body) =
-  do outh <- openFile (fn ++ ".tex") WriteMode
+  do createDirectoryIfMissing False "MG"
+     outh <- openFile ("MG/" ++ fn ++ ".tex") WriteMode
      hPutStrLn outh $ render $ (writeDoc TeX (MG fn) body)
      hClose outh
      prntCode body
 prnt (Recipe (LPM fn) body) = 
-  do outh <- openFile (fn ++ ".w") WriteMode
+  do createDirectoryIfMissing False "LPM"
+     outh <- openFile ("LPM/" ++ fn ++ ".w") WriteMode
      hPutStrLn outh $ render $ (writeDoc TeX (LPM fn) body)
      hClose outh
 prnt (Recipe (Website fn) body) =
-  do outh <- openFile (fn ++ ".html") WriteMode
+  do createDirectoryIfMissing False "Website"
+     outh <- openFile ("Website/" ++ fn ++ ".html") WriteMode
      hPutStrLn outh $ render $ (writeDoc HTML (Website fn) body)
      hClose outh
-     outh2 <- openFile (fn ++ ".css") WriteMode
+     outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
 prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
@@ -52,7 +57,8 @@ prntCode (Document _ _ los) = mapM_ prntCode' (getModules los)
   where   getModules []                 = []
           getModules ((Module m):los)   = (genCode outLang m) ++ getModules los
           getModules (_:los)            = getModules los
-          prntCode' (name, code)        = do outh <- openFile name WriteMode
+          prntCode' (name, code)        = do createDirectoryIfMissing False "Code"
+                                             outh <- openFile ("Code/" ++ name) WriteMode
                                              hPutStrLn outh $ render $ code
                                              hClose outh
 

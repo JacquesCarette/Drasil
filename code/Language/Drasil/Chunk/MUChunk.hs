@@ -4,10 +4,10 @@ module Language.Drasil.Chunk.MUChunk (MUChunk(..)) where
 import Control.Lens (Simple, Lens, (^.), set)
 
 import Language.Drasil.Chunk (Chunk(..), Concept(..), Quantity(..))
-import Language.Drasil.Chunk.Unital (UnitalChunk(..))
+import Language.Drasil.Unit (Unit)
 
 data MUChunk where --May have Unit chunk
-  Has :: UnitalChunk -> MUChunk
+  Has :: (Quantity h, Unit h) => h -> MUChunk
   HasNot :: Quantity c => c -> MUChunk --Could accidentally add Unital
 
 instance Chunk MUChunk where

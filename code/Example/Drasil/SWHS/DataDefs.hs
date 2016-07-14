@@ -22,25 +22,14 @@ htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 dd1descr :: Sentence
 dd1descr = (ht_flux_C ^. descr)
 
--- dd1descr :: Sentence
--- dd1descr = (U (temp_C ^. symbol) :+: S " is the temperature of the coil. " :+:
-           -- U (temp_W ^. symbol) :+: S " is the temperature of the water. " :+:
-           -- S "The heat flux out of the coil, " :+: U (ht_flux_C ^. symbol) :+:
-           -- S ", is found by assuming that Newton's Law of Cooling applies" :+:
-           -- S " (A7). This law (GD1) is used on the surface of the coil, " :+:
-           -- S "which has area " :+: U (coil_SA ^. symbol) :+: S " and heat" :+:
-           -- S " transfer coefficient " :+: U (coil_HTC ^. symbol) :+: S "." :+:
-           -- S " This equation assumes that the temperature of the coil is " :+:
-           -- S "constant over time (A8) and that it does not vary along the " :+:
-           -- S "length of the coil (A9).")
-
 --Can't include info in description beyond definition of variables?
 
 dd2HtFluxP :: EqChunk
 dd2HtFluxP = fromEqn "q_P" dd2descr (ht_flux_P ^. symbol) thermFluxU htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] - FCall (C temp_PCM) [C time])
+htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] - 
+             FCall (C temp_PCM) [C time])
 
 dd2descr :: Sentence
 dd2descr = (ht_flux_P ^. descr)
@@ -52,19 +41,21 @@ htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)
 
 dd3descr :: Sentence
-dd3descr = (S "amount of " :+: (sMap (map toLower) (S (thermal_energy ^. name))) :+:
-           S " required to completely melt a unit " :+:
-           (mass ^. descr) :+: S " of a substance.")
+dd3descr = (S "amount of " :+: (sMap (map toLower) (S (thermal_energy ^. name)))
+           :+: S " required to completely melt a unit " :+: (mass ^. descr) :+:
+           S " of a substance.")
 
 dd4MeltFrac :: EqChunk
-dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless melt_frac_eqn
+dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless 
+              melt_frac_eqn
 
 melt_frac_eqn :: Expr
 melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 
 dd4descr :: Sentence
-dd4descr = (S "fraction of the " :+: S (phsChgMtrl ^. name) :+: S " that is " :+:
-           (sMap (map toLower) (S (liquid ^. name))) :+: S ".")
+dd4descr = (S "fraction of the " :+: S (phsChgMtrl ^. name) :+: 
+           S " that is " :+: (sMap (map toLower) (S (liquid ^. name))) :+: 
+           S ".")
 
 --Need to add units to data definition descriptions
 

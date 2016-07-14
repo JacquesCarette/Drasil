@@ -29,7 +29,8 @@ densityU_eqn = USynonym (UDiv (kilogram ^. unit) (m_3 ^. unit))
 
 --J/kg--
 specificE :: DerUChunk
-specificE = makeDerU (CC "specific energy" (S "energy per unit mass")) specificE_eqn
+specificE = makeDerU (CC "specific energy" (S "energy per unit mass")) 
+            specificE_eqn
 
 specificE_eqn ::UDefn
 specificE_eqn = USynonym (UDiv (joule ^. unit) (kilogram ^. unit))

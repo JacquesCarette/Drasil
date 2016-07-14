@@ -1,10 +1,17 @@
 {-# OPTIONS -Wall #-}
-module Example.Drasil.GamePhysics.ChipUnits where
+module Example.Drasil.GamePhysics.ChipmunkUnits where
 
 import Language.Drasil
 import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
+
+--Fundamental Units--
+newton, radians, unitless :: FundUnit
+newton  = fund "Newton"  "force" "N"
+radians = fund "Radians" "angle" "rad"
+--unitless
+unitless = fund "Unitless" "unitless" "unitless"
 
 --s^2--
 s_2 :: DerUChunk

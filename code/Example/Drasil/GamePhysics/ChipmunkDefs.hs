@@ -1,101 +1,103 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
 
-module Example.Drasil.GamePhysics.ChipExample where
+module Example.Drasil.GamePhysics.ChipmunkDefs where
 
-import Example.Drasil.GamePhysics.ChipUnits
+import Example.Drasil.GamePhysics.ChipmunkUnits
 
 import Language.Drasil
 import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
--- import Control.Lens ((^.))
-
-accel, angAccel, restCoeff, disp, prt_axisDist, force, gravAccel,        gravConst, momtInert, impulse, springConst, len, mass, angVel, initPos, finalPos, cmPos, forcePos, orientation, frc_axisDist, density, time, torque, initVel, finalVel, volume, springDisp, dampCoeff, mass_1, mass_2, force_1, force_2, centreDist, centreDisp, sqrDist :: UnitalChunk
+accel, angAccel, restCoef, force, gravAccel, gravConst, momtInert, impulse,
+  mass, normalVect, angVel, position, orientation, dist, disp, time, torque,
+  angDisp, vel :: UnitalChunk
 
 chipSymbols :: [UnitalChunk]
-chipSymbols = [accel, angAccel, restCoeff, disp, prt_axisDist, force,
-  gravAccel, gravConst, momtInert, impulse, springConst, len, mass, angVel, initPos, finalPos, cmPos, forcePos, orientation, frc_axisDist, density, time, torque, initVel, finalVel, volume, springDisp, dampCoeff]
+chipSymbols = [accel, angAccel, restCoef, force, gravAccel, gravConst,
+  momtInert, impulse, mass, normalVect, angVel, position, orientation, dist,
+  disp, time, torque, angDisp, vel]
 
-accel       = makeUC "a" "acceleration" lA accelU
+accel       = makeUC "a" "acceleration" (vec lA) accelU
 angAccel    = makeUC "alpha" "angular acceleration" (Special Alpha_L) angAccelU
-restCoeff   = makeUC "C_R" "coefficient of restitution" (sub cC cR) unitless
-disp        = makeUC "d" "displacement" lD metre
-prt_axisDist = makeUC "d_p" "distance between particle and the axis of rotation"
-                      (sub lD lP) metre
+restCoef   = makeUC "C_R" "coefficient of restitution" (sub cC cR) unitless
 force       = makeUC "F" "force" (vec cF) newton
-
--- crude fixes for Newton's Third Law
-force_1     = makeUC "F_1" "force on second object by first" (sub (vec cF) (Atomic "1")) newton
-force_2     = makeUC "F_2" "force on first object by second" (sub (vec cF) (Atomic "2")) newton
--- end crude fixes
-
-gravAccel   = makeUC "g" "acceleration due to gravity" lG newton
+-- how do I include numbers for constants? --
+gravAccel   = makeUC "g" "gravitational acceleration" lG newton
 gravConst   = makeUC "G" "gravitational constant" cG gravConstU
 momtInert   = makeUC "I" "moment of inertia" (vec cI) momtInertU
 impulse     = makeUC "J" "impulse" (vec cJ) impulseU
-springConst = makeUC "k" "spring constant" lK springConstU
-len         = makeUC "L" "length" cL metre
-
--- crude fixes for Newton's Universal Law of Gravitation
 mass        = makeUC "m" "mass" lM kilogram
-mass_1      = makeUC "m_1" "mass_1" (sub lM (Atomic "1")) kilogram
-mass_2      = makeUC "m_2" "mass_2" (sub lM (Atomic "2")) kilogram
-centreDist = makeUC "||r||" "distance between the centre of two objects"
-              (Atomic "||r||") metre
-sqrDist     = makeUC "||r||^2" ("square of the distance between the centre " ++
-              "of two objects") (sup (Atomic "||r||") (Atomic "2")) m_2
-centreDisp = makeUC "r" ("displacement vector between the centre of " ++
-               "two objects") (vec lR) metre
--- end crude fixes
-
+normalVect  = makeUC "n" "collision normal vector" (vec lN) metre
 angVel      = makeUC "omega" "angular velocity" (Special Omega_L) angVelU
-initPos     = makeUC "p_i" "initial position" (sub (vec lP) lI) metre
-finalPos    = makeUC "p_f" "final position" (sub (vec lP) lF) metre
-cmPos       = makeUC "p_com" "position of centre of mass"
-                     (sub (vec lP) (Atomic "com")) metre
-forcePos    = makeUC "p_force" ("position the force vector is acting on the" ++
-                     " object") (sub (vec lP) (Atomic "force")) metre
+position    = makeUC "p" "position" (vec lP) metre
 orientation = makeUC "phi" "orientation" (Special Phi_L) radians
-frc_axisDist = makeUC "r" "distance between the force and the axis of rotation"
-                      lR metre
-density     = makeUC "rho" "density" (Special Rho_L) densityU
+dist        = makeUC "r" "distance" lR metre
+disp        = makeUC "r" "displacement" (vec lR) metre
 time        = makeUC "t" "time" lT second
 torque      = makeUC "tau" "torque" (Special Tau_L) torqueU
-initVel     = makeUC "v_i" "initial velocity" (sub (vec lV) lI) velU
-finalVel    = makeUC "v_f" "final velocity" (sub (vec lV) lF) velU
-volume      = makeUC "V" "volume" cV m_3
-springDisp  = makeUC "X" "displacement of spring from equilibrium" cX metre
-dampCoeff   = makeUC "zeta" "damping coefficient" (Special Zeta_L) unitless
-
-{-
-----VarChunks----
-gradient :: VarChunk
-gradient = makeVC "gradient" "the gradient operator" (Special Nabla)
--}
+-- theta hasn't been implemented, using gamma for now --
+angDisp     = makeUC "theta" "angular displacement" (Special Gamma_L) radians
+vel         = makeUC "v" "velocity" (vec lV) velU
 
 ----Acronyms-----
-assumption, centreMass, dataDefn, genDefn, goalStmt, instanceMod, likelyChange, oDE, physSysDescr, requirement, softwareRS, theoreticMod :: ConceptChunk
+assumption, centreMass, dataDefn, genDefn, goalStmt, instMod, likelyChange, ode,
+  requirement, srs, theoMod :: ConceptChunk
 
 acronyms :: [ConceptChunk]
-acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt, instanceMod, likelyChange, physSysDescr, oDE, requirement, softwareRS, theoreticMod]
+acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt, instMod,
+  likelyChange, ode, requirement, srs, theoMod]
 
 assumption    = makeCC "A" "Assumption"
-centreMass    = makeCC "COM" "Centre of Mass"
+centreMass    = makeCC "CM" "Centre of Mass"
 dataDefn      = makeCC "DD" "Data Definition"
 genDefn       = makeCC "GD" "General Definition"
 goalStmt      = makeCC "GS"  "Goal Statement"
-instanceMod   = makeCC "IM" "Instance Model"
+instMod       = makeCC "IM" "Instance Model"
 likelyChange  = makeCC "LC" "Likely Change"
-oDE           = makeCC "ODE" "Ordinary Differential Equation"
-physSysDescr  = makeCC "PS" "Physical System Description"
+ode           = makeCC "ODE" "Ordinary Differential Equation"
 requirement   = makeCC "R" "Requirement"
-softwareRS    = makeCC "SRS" "Software Requirements Specification"
-theoreticMod  = makeCC "T" "Theoretical Model"
+srs           = makeCC "SRS" "Software Requirements Specification"
+theoMod       = makeCC "T" "Theoretical Model"
 
-----EqChunks----
+-- Concept Chunks --
+chipmunk, physLib, rigidBody, rigidBodies, velocity, vels, angularVel,
+  angularVels, fric, elast, ctrOfMass, cartesian, rightHand :: ConceptChunk
 
+concepts :: [ConceptChunk]
+concepts = [chipmunk, physLib, rigidBody, rigidBodies, velocity, vels,
+  angularVel, angularVels, fric, elast, ctrOfMass, cartesian, rightHand]
+
+-- is there a nice way to pluralize concepts when needed? --
+chipmunk    = makeCC "Chipmunk2D" "The name of this game physics library."
+physLib     = makeCC "physics library" ("A programming library which " ++
+  "provides functions for modelling physical phenomenon.")
+rigidBody   = makeCC "rigid body" ("A solid body in which deformation is " ++
+  "neglected.")
+velocity    = makeCC "velocity" "The rate of change of a body's position."
+angularVel  = makeCC "angular velocity" ("The rate of change of a body's " ++
+  "orientation.")
+fric        = makeCC "friction" ("The force resisting the relative motion " ++
+  "of two surfaces.")
+elast       = makeCC "elasticity" ("Ratio of the relative velocities " ++
+  "of two colliding objects after and before a collision.")
+ctrOfMass   = makeCC "center of mass" ("The mean location of the " ++
+  "distribution of mass of the object.")
+cartesian   = makeCC "Cartesian coordinates" ("A coordinate system that " ++
+  "specifies each point uniquely in a plane by a pair of numerical " ++
+  "coordinates.")
+rightHand   = makeCC "right-handed coordinate system" ("A coordinate " ++
+  "system where the positive z-axis comes out of the screen.")
+
+-- plural hacks (for 'irregular' plurals) --
+rigidBodies = makeCC "rigid bodies" ("A solid body in which deformation is " ++
+  "neglected.")
+vels        = makeCC "velocities" "The rate of change of a body's position."
+angularVels = makeCC "angular velocities" ("The rate of change of a body's " ++
+  "orientation.")
+
+{-
 --Theoretical models--
 
 --Newton's Second Law--
@@ -159,7 +161,7 @@ rotation_eq_rel = (C torque) := (C momtInert) * (C angAccel)
 t5descr :: Sentence
 t5descr = S "The net torque on an object is proportional to its angular " :+:
   S "acceleration."
-
+-}
 
 {-
 PCM Example kept for reference:

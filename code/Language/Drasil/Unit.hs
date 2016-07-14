@@ -1,15 +1,16 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Unit (
-    UDefn(..)        -- languages
-  , Unit(..), UnitEq(..)        -- classes
-  , FundUnit(..), DerUChunk(..) -- data-structures
-  , UnitDefn(..)                -- wrapper for 'Unit' class
+    UDefn(..)                        -- languages
+  , Unit(..), UnitEq(..), Unit'(..)  -- classes
+  , FundUnit(..), DerUChunk(..)      -- data-structures
+  , UnitDefn(..)                     -- wrapper for 'Unit' class
   , from_udefn, makeDerU, unitCon
   ) where
 
 import Control.Lens (Simple, Lens, set, (^.))
 
-import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), Concept(..))
+import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), Concept(..),
+         Quantity(..))
 import Language.Drasil.Spec (Sentence(..), USymb)
 
 -- Language of units (how to build them up)
@@ -25,6 +26,13 @@ class Concept u => Unit u where
 
 class UnitEq u where
    uniteq :: Simple Lens u UDefn
+
+-- There are some things we want to consider to "have units"
+-- even when they don't.  This occurs when we want to
+-- mix various Quantity, some of which will have units, and
+-- others that will be considered "unitless".
+class Quantity u => Unit' u where
+  unit' :: Simple Lens u (Maybe USymb)
 
 -- Can generate a default symbol
 from_udefn :: UDefn -> USymb

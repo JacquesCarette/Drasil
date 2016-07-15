@@ -5,9 +5,28 @@ import Text.PrettyPrint
 import Language.Drasil.Config (tableWidth, numberedSections)
 import Language.Drasil.Printing.Helpers
 
-caption, label :: String -> Doc
-caption c = text "\\caption" <> br c
-label l = text "\\label" <> br l
+-- Encapsulate some commands
+command :: String -> (String -> Doc)
+command s c = (bslash <> text s) <> br c
+
+caption, label, usepackage, title, author, count :: String -> Doc
+caption    = command "caption"
+label      = command "label"
+usepackage = command "usepackage"
+title      = command "title"
+author     = command "author"
+count      = command "count"
+
+-- Encapsulate environments
+b,e :: String -> Doc
+b s = bslash <> text ("begin" ++ brace s)
+e s = bslash <> text ("end" ++ brace s)
+
+mkEnv :: String -> (t -> Doc) -> t -> Doc
+mkEnv nm middle inp = 
+  text ("\\begin" ++ brace nm) $+$ 
+  middle inp $+$
+  text ("\\end" ++ brace nm)
 
 --Table making help
 lAndDim :: [[a]] -> String
@@ -20,31 +39,19 @@ docclass :: String -> String -> Doc
 docclass [] brac      = bslash <> text "documentclass" <> br brac
 docclass sqbrack brac = bslash <> text "documentclass" <> sq sqbrack <> br brac
 
-usepackage :: String -> Doc
-usepackage pkg = bslash <> text "usepackage" <> br pkg
-
 exdoc :: String -> String -> Doc
 exdoc [] d      = bslash <> text "externaldocument" <> br d
 exdoc sqbrack d = bslash <> text "externaldocument" <> sq sqbrack <> br d
 
-title :: String -> Doc
-title t = bslash <> text "title" <> br t
-
-author :: String -> Doc
-author a = bslash <> text "author" <> br a
-
-begin, endL, command :: Doc
+begin, endL, newcommand :: Doc
 begin   = bslash <> text "begin" <> br "document" $$ bslash <> text "maketitle"
 endL    = bslash <> text "end" <> br "document"
-command = bslash <> text "newcommand"
+newcommand = bslash <> text "newcommand"
 
 comm :: String -> String -> String -> Doc
-comm b1 [] [] = (command) <> br ("\\" ++ b1)
-comm b1 b2 [] = (command) <> br ("\\" ++ b1) <> br b2
-comm b1 b2 s1 = (command) <> br ("\\" ++ b1) <> sq s1 <> br b2
-
-count :: String -> Doc
-count b1 = bslash <> text "newcounter" <> br b1
+comm b1 [] [] = (newcommand) <> br ("\\" ++ b1)
+comm b1 b2 [] = (newcommand) <> br ("\\" ++ b1) <> br b2
+comm b1 b2 s1 = (newcommand) <> br ("\\" ++ b1) <> sq s1 <> br b2
 
 renewcomm :: String -> String -> Doc
 renewcomm b1 b2 = bslash <> text "renewcommand" <> br ("\\" ++ b1) <> br b2
@@ -76,6 +83,3 @@ arrayS  = renewcomm "arraystretch" "1.2"
 fraction :: String -> String -> String
 fraction n d = "\\frac{" ++ n ++ "}{" ++ d ++ "}"
 
-b,e :: String -> Doc
-b s = bslash <> text ("begin" ++ brace s)
-e s = bslash <> text ("end" ++ brace s)

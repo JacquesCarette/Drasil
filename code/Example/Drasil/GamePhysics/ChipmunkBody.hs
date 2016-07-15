@@ -16,13 +16,14 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_1_1,
-  s4_1_2, s4_2, s4_2_1, s4_2_2, s4_2_3, s5, s5_1, s5_2, s6, s7 :: Section
+  s4_1_2, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s5, s5_1, s5_2, s6,
+  s7 :: Section
 
 s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
   s2_2_intro, s3_intro, s3_1_intro, s3_2_intro, s4_intro, s4_1_intro,
   s4_1_1_intro, s4_1_1_bullets, s4_1_2_list, s4_2_1_intro, s4_2_1_list,
-  s4_2_2_intro, s5_intro, s5_1_list, s5_2_intro, s6_intro, s6_list, s7_intro,
-  s7_2dlist, s7_mid, s7_3dlist :: Contents
+  s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s5_intro, s5_1_list, s5_2_intro,
+  s6_intro, s6_list, s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
 s2_intro, s2_1_intro, s2_3_intro :: [Contents]
 
@@ -248,7 +249,7 @@ s4_1_2_list = Enumeration (Simple [
 
 -- 4.2 : Solution Characteristics Specification --
 s4_2 = Section 1 (S "Solution Characteristics Specification") [Sub s4_2_1,
-  Sub s4_2_2, Sub s4_2_3]
+  Sub s4_2_2, Sub s4_2_3, Sub s4_2_4]
 
 -- 4.2.1 : Assumptions --
 s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro,
@@ -293,15 +294,27 @@ s4_2_2_TMods = map Definition (map Theory tMods)
 -- 4.2.3 : General Definitions --
 
 s4_2_3 = Section 2 ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] ++
-  (map Con s4_2_3_GDefs))
+  {-(map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations " :+:
   S "that will be used in deriving the " :+: (sMap (map toLower)
   (dataDefn ^. descr)) :+: S "s, which in turn will be used to build the " :+:
   (sMap (map toLower) (instMod ^. descr)) :+: S "s."
 
+--gdefs not yet implemented --
+{-
 s4_2_3_GDefs :: [Contents]
 s4_2_3_GDefs = map Definition (map General gDefs)
+-}
+
+-- 4.2.4 : Data Definitions --
+
+s4_2_4 = Section 2 ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
+  (map Con s4_2_4_DDefs))
+
+s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
+  S "data needed to build the " :+: (instMod ^. descr) :+: S "s. The " :+:
+  S "dimension of each quantity is also given."
 
 
 -- SECTION 5 : REQUIREMENTS --

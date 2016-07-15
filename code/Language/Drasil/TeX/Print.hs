@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 module Language.Drasil.TeX.Print where
 
 import Prelude hiding (print)
@@ -11,16 +10,30 @@ import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Import hiding (sec)
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
-import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth, --tableWidth,
-              numberedSections)
+import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth,
+              numberedSections, SRSParams(..), LPMParams(..))
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.Unicode
 import Language.Drasil.Format (Format(TeX))
--- import Unit
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
+
+-----------------------------------------------------------------------------
+-- Printing monad
+--
+--  This code doesn't belong here, but is being developped here before it is
+-- pulled out to be used by all printers.
+--
+
+-- first, start with a specific data type
+data PrintLaTeX ctx a = PL { runPrint :: ctx -> a -> Doc }
+
+-- the main thing about this monad is that there's some context information
+-- that we can read.
+
+-----------------------------------------------------------------------------
 
 genTeX :: A.DocType -> L.Document -> Doc
 genTeX typ doc = build typ $ makeDocument doc
@@ -31,22 +44,15 @@ build (A.LPM _) doc   = buildLPM lpmTeXParams doc
 build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
-buildSRS :: [A.DocParams] -> Document -> Doc
-buildSRS ((A.DocClass sb b1) : (A.UsePackages ps) : []) (Document t a c) =
+buildSRS :: SRSParams -> Document -> Doc
+buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps)) (Document t a c) =
   docclass sb b1 $$ listpackages ps $$ title (pCon Plain t) $$ 
   author (p_spec a) $$ begin $$ print c $$ endL
-buildSRS _ _ = error "Invalid syntax in Document Parameters"
 
-buildLPM :: [A.DocParams] -> Document -> Doc
-buildLPM  ((A.DocClass sb b1) : (A.UsePackages ps) : xs) (Document t a c) =
-  docclass sb b1 $$ listpackages ps $$ moreDocParams xs $$
+buildLPM :: LPMParams -> Document -> Doc
+buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n)) (Document t a c) =
+  docclass sb b1 $$ listpackages ps $$ exdoc f n $$
   title (p_spec t) $$ author (p_spec a) $$ begin $$ print c $$ endL
-buildLPM _ _ = error "Invalid syntax in Document Parameters"
-
-moreDocParams :: [A.DocParams] -> Doc
-moreDocParams []                 = empty
-moreDocParams ((A.ExDoc f n):xs) = exdoc f n $$ moreDocParams xs
-moreDocParams _                  = error "Unexpected document parameters"
 
 listpackages :: [String] -> Doc
 listpackages []     = empty

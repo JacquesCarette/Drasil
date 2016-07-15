@@ -8,6 +8,6 @@ data DocType = SRS Filename     --Filename with no extension
              | Code Filename
              | Website Filename
              
-data DocParams = DocClass String String --SqBracks vs. Braces
-               | UsePackages [String] -- Package name list
-               | ExDoc String String --SqBracks vs. Braces
+data DocClass = DocClass String String -- Sqbracks vs Braces
+newtype UsePackages = UsePackages [String] -- Package name list
+data ExDoc = ExDoc String String -- SqBracks vs. Braces

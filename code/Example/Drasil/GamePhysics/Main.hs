@@ -1,6 +1,6 @@
 module Main where
 
-import Language.Drasil (DocType(SRS,LPM,Website))
+import Language.Drasil (DocType(SRS, Website))
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Generate (gen)
 

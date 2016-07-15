@@ -16,14 +16,15 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_1_1,
-  s4_1_2, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s5, s5_1, s5_2, s6,
-  s7 :: Section
+  s4_1_2, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6, s5, s5_1, s5_2,
+  s6, s7 :: Section
 
 s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
   s2_2_intro, s3_intro, s3_1_intro, s3_2_intro, s4_intro, s4_1_intro,
   s4_1_1_intro, s4_1_1_bullets, s4_1_2_list, s4_2_1_intro, s4_2_1_list,
-  s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s5_intro, s5_1_list, s5_2_intro,
-  s6_intro, s6_list, s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
+  s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_intro,
+  s4_2_6_table1, s4_2_6_table2, s5_intro, s5_1_list, s5_2_intro, s6_intro,
+  s6_list, s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
 s2_intro, s2_1_intro, s2_3_intro :: [Contents]
 
@@ -249,7 +250,7 @@ s4_1_2_list = Enumeration (Simple [
 
 -- 4.2 : Solution Characteristics Specification --
 s4_2 = Section 1 (S "Solution Characteristics Specification") [Sub s4_2_1,
-  Sub s4_2_2, Sub s4_2_3, Sub s4_2_4]
+  Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
 
 -- 4.2.1 : Assumptions --
 s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro,
@@ -308,7 +309,6 @@ s4_2_3_GDefs = map Definition (map General gDefs)
 -}
 
 -- 4.2.4 : Data Definitions --
-
 s4_2_4 = Section 2 ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
@@ -318,6 +318,64 @@ s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
 
 s4_2_4_DDefs :: [Contents]
 s4_2_4_DDefs = map Definition (map Data dDefs)
+
+-- 4.2.5 : Instance Models --
+s4_2_5 = Section 2 ((instMod ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
+  (map Con s4_2_5_IMods)-})
+
+s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
+  S "in " :+: (makeRef s4_1) :+: S " into one expressed in mathematical " :+:
+  S "terms. It uses concrete symbols defined in " :+: (makeRef s4_2_4) :+:
+  S "to replace the abstract symbols in the models identified in " :+:
+  (makeRef s4_2_2) :+: S " and " :+: (makeRef s4_2_3) :+: S "."
+
+-- Instance models not yet implemented
+-- s4_2_5_IMods :: [Contents]
+
+-- 4.2.6 : Data Constraints --
+s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
+  Con s4_2_6_table2]
+
+s4_2_6_intro = Paragraph $ S "Table 1 and 2 show the data constraints on " :+:
+  S "the input and output variables, respectively. The \"Physical " :+:
+  S "Constraints\" column gives the physica limitations on the range of " :+:
+  S "values that can be taken by the variable. The constraints are " :+:
+  S "conservative, to give the user of the model the flexibility to " :+:
+  S "experiment with unusual situations. The column of typical values is " :+:
+  S "intended to provide a feel for a common scenario."
+
+  -- currently unable to write relations in sentences, verbal explanations will
+  -- do for now
+  -- also how do I write 2pi
+
+s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] [
+  [U (mass ^. symbol), U (mass ^. symbol) :+: S " is greater than 0",
+   S "56.2 " :+: Sy (mass ^. unit)],
+  [U (momtInert ^. symbol), U (momtInert ^. symbol) :+: S " is G/E to 0",
+   S "74.5 " :+: Sy (momtInert ^. unit)],
+  [U (gravAccel ^. symbol), S "None", S "9.8 " :+: Sy (gravAccel ^. unit)],
+  [U (position ^. symbol), S "None", S "(0.412, 0.502) " :+:
+   Sy (position ^. unit)],
+  [U (vel ^. symbol), S "None", S "2.51 " :+: Sy (vel ^. unit)],
+  [U (restCoef ^. symbol), U (restCoef ^. symbol) :+: S " G/E to 0 and " :+:
+   U (restCoef ^. symbol) :+: S " less than 1", S "0.8"],
+  [U (orientation ^. symbol), U (orientation ^. symbol) :+: S " G/E to 0 " :+:
+   S "and " :+: U (orientation ^. symbol) :+: S " less than 2pi", S "pi/2 " :+:
+   Sy (orientation ^. unit)],
+  [U (angVel ^. symbol), S "None", S "2.1 " :+: Sy (angVel ^. unit)],
+  [U (force ^. symbol), S "None", S "98.1 " :+: Sy (force ^. unit)],
+  [U (torque ^. symbol), S "None", S "200 " :+: Sy (torque ^. unit)]
+  ]) (S "Table 1: Input Variables") True
+
+s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] [
+  [U (position ^. symbol), S "None"],
+  [U (vel ^. symbol), S "None"],
+  [U (orientation ^. symbol), U (orientation ^. symbol) :+: S " G/E to 0 " :+:
+   S "and " :+: U (orientation ^. symbol) :+: S " less than 2pi"],
+  [U (angVel ^. symbol), S "None"]
+  ]) (S "Table 2: Output Variables") True
 
 -- SECTION 5 : REQUIREMENTS --
 

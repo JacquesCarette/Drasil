@@ -1,74 +1,77 @@
-{-# OPTIONS -Wall #-} 
+{-# Language FlexibleInstances #-}
 module Language.Drasil.TeX.Print where
 
 import Prelude hiding (print)
 import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
 
-import Control.Monad.Reader
+import Control.Monad.Reader 
+import Control.Applicative hiding (empty)
 
 import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Import hiding (sec)
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
-import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth, --tableWidth,
-              numberedSections)
+import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth,
+              numberedSections, SRSParams(..), LPMParams(..))
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers
+import Language.Drasil.TeX.Monad
 import Language.Drasil.Unicode
 import Language.Drasil.Format (Format(TeX))
--- import Unit
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
 
 genTeX :: A.DocType -> L.Document -> Doc
-genTeX typ doc = build typ $ makeDocument doc
+genTeX typ doc = runPrint (build typ $ makeDocument doc) Text
 
-build :: A.DocType -> Document -> Doc
+build :: A.DocType -> Document -> D
 build (A.SRS _) doc   = buildSRS srsTeXParams doc
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
 build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
-buildSRS :: [A.DocParams] -> Document -> Doc
-buildSRS ((A.DocClass sb b1) : (A.UsePackages ps) : []) (Document t a c) =
-  docclass sb b1 $$ listpackages ps $$ title (pCon Plain t) $$ 
-  author (p_spec a) $$ begin $$ print c $$ endL
-buildSRS _ _ = error "Invalid syntax in Document Parameters"
+buildSRS :: SRSParams -> Document -> D
+buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps)) 
+         (Document t a c) = pure $
+  docclass sb b1 $$ 
+  listpackages ps $$ 
+  title (pCon Plain t) $$ 
+  author (p_spec a) $$ 
+  begin $$ print c $$ endL
 
-buildLPM :: [A.DocParams] -> Document -> Doc
-buildLPM  ((A.DocClass sb b1) : (A.UsePackages ps) : xs) (Document t a c) =
-  docclass sb b1 $$ listpackages ps $$ moreDocParams xs $$
-  title (p_spec t) $$ author (p_spec a) $$ begin $$ print c $$ endL
-buildLPM _ _ = error "Invalid syntax in Document Parameters"
-
-moreDocParams :: [A.DocParams] -> Doc
-moreDocParams []                 = empty
-moreDocParams ((A.ExDoc f n):xs) = exdoc f n $$ moreDocParams xs
-moreDocParams _                  = error "Unexpected document parameters"
+buildLPM :: LPMParams -> Document -> D
+buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n)) 
+          (Document t a c) = pure $
+  docclass sb b1 $$ 
+  listpackages ps $$ 
+  exdoc f n $$
+  title (p_spec t) $$ 
+  author (p_spec a) $$ 
+  begin $$ print c $$ endL
 
 listpackages :: [String] -> Doc
 listpackages []     = empty
 listpackages (p:[]) = usepackage p
 listpackages (p:ps) = usepackage p $$ listpackages ps
 
-printLO :: LayoutObj -> Doc
-printLO (Section d t con l)     = sec d (pCon Plain t) $$ label (pCon Plain l) 
+lo :: LayoutObj -> Doc
+lo (Section d t con l)     = sec d (pCon Plain t) $$ label (pCon Plain l) 
                                   $$ print con
-printLO (Paragraph contents)    = text (pCon Plain contents)
-printLO (EqnBlock contents)     = text $ makeEquation contents
-printLO (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
-printLO (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
-printLO (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
-printLO (List lt)               = makeList lt
-printLO (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
+lo (Paragraph contents)    = text (pCon Plain contents)
+lo (EqnBlock contents)     = text $ makeEquation contents
+lo (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
+lo (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
+lo (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
+lo (List lt)               = makeList lt
+lo (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
-print l = foldr ($$) empty $ map (<> (text "\n")) $ map printLO l
+print l = foldr ($$) empty $ map (<> (text "\n")) $ map lo l
 
 -----------------------------------------------------------------
-------------------BEGIN SPEC PRINTING----------------------------
+------------------ SPEC PRINTING----------------------------
 -----------------------------------------------------------------
 
 p_spec :: Spec -> String
@@ -107,7 +110,7 @@ sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
 sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
 
 -----------------------------------------------------------------
-------------------BEGIN EXPRESSION PRINTING----------------------
+------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 p_expr :: Expr -> String
 p_expr (Var v)    = v
@@ -165,7 +168,7 @@ cases []     = error "Attempt to create case expression without cases"
 cases (p:[]) = p_expr (fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases ps
 -----------------------------------------------------------------
-------------------BEGIN TABLE PRINTING---------------------------
+------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------
   
 makeTable :: [[Spec]] -> String -> Bool -> String -> Doc
@@ -184,7 +187,7 @@ makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls)
 
 -----------------------------------------------------------------
-------------------BEGIN READER-----------------------------------
+------------------ READER-----------------------------------
 -----------------------------------------------------------------
 
 data Context = Equation | EqnB | Plain deriving (Show, Eq)
@@ -270,7 +273,7 @@ getSyCon (Corners _ _ _ _ s) = getSyCon s
 getSyCon (Atop _ s)          = getSyCon s
 
 -----------------------------------------------------------------
-------------------BEGIN DATA DEFINITION PRINTING-----------------
+------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
 makeDefn :: [(String,LayoutObj)] -> String -> Doc
@@ -294,14 +297,14 @@ makeDefTable ps l = vcat [
 
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create Defn table"
-makeDRows ((f,d):[]) = dBoilerplate $$ text (f ++ " & ") <> printLO d
-makeDRows ((f,d):ps) = dBoilerplate $$ text (f ++ " & ") <> printLO d $$ 
+makeDRows ((f,d):[]) = dBoilerplate $$ text (f ++ " & ") <> lo d
+makeDRows ((f,d):ps) = dBoilerplate $$ text (f ++ " & ") <> lo d $$ 
                         makeDRows ps
 dBoilerplate :: Doc
 dBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
 -----------------------------------------------------------------
-------------------BEGIN CODE BLOCK PRINTING----------------------
+------------------ CODE BLOCK PRINTING----------------------
 -----------------------------------------------------------------
 
 codeHeader,codeFooter :: Doc
@@ -309,7 +312,7 @@ codeHeader = bslash <> text "begin" <> br "lstlisting"
 codeFooter = bslash <> text "end" <> br "lstlisting"
 
 -----------------------------------------------------------------
-------------------BEGIN EQUATION PRINTING------------------------
+------------------ EQUATION PRINTING------------------------
 -----------------------------------------------------------------
 
 makeEquation :: Spec -> String
@@ -319,7 +322,7 @@ makeEquation contents =
   --  on chunk (i.e. "eq:h_g" for h_g = ...
   
 -----------------------------------------------------------------
-------------------BEGIN LIST PRINTING----------------------------
+------------------ LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
 makeList :: ListType -> Doc
@@ -339,7 +342,7 @@ sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> sp_item y :
           sp_item (Nested t s) = vcat [text (pCon Plain t), makeList s]
   
 -----------------------------------------------------------------
-------------------BEGIN FIGURE PRINTING--------------------------
+------------------ FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 
 makeFigure :: String -> String -> String -> Doc
@@ -352,7 +355,7 @@ makeFigure r c f =
   ]
 
 -----------------------------------------------------------------
-------------------BEGIN EXPR OP PRINTING-------------------------
+------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
 p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)

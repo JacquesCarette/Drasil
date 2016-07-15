@@ -145,16 +145,16 @@ t2descr = S "Every action has an equal and opposite reaction. In other " :+:
 
 -- T3 : Newton's law of universal gravitation --
 
-mass_1, mass_2, dispUnit, norm, sqrDist :: UnitalChunk
+mass_1, mass_2, dispUnit, dispNorm, sqrDist :: UnitalChunk
 mass_1  = makeUC "m_1" "mass of the first body" (sub (mass ^. symbol)
   (Atomic "1")) kilogram
 mass_2  = makeUC "m_2" "mass of the second body" (sub (mass ^. symbol)
   (Atomic "2")) kilogram
 dispUnit = makeUC "rhat" "unit displacement vector" (vec (hat lR)) metre
 -- improvised norm symbols
-norm    = makeUC "||r||" "Euclidean norm" (Concat [Atomic "||", vec lR,
-  Atomic "||"]) metre
-sqrDist = makeUC "||r||^2" "squared distance" (sup (norm ^. symbol)
+dispNorm    = makeUC "||r||" "Euclidean norm of the displacement"
+  (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
+sqrDist = makeUC "||r||^2" "squared distance" (sup (dispNorm ^. symbol)
   (Atomic "2")) m_2
 
 t3NewtonLUG :: RelationChunk
@@ -163,10 +163,10 @@ t3NewtonLUG = makeRC "Newton's law of universal gravitation" t3descr
 
 newtonLUGRel :: Relation
 newtonLUGRel = (C force) :=
-  (C gravConst) * ((C mass_1) * (C mass_2) / ((C norm) :^ (fromInteger 2))) *
-  (C dispUnit) :=
-  (C gravConst) * ((C mass_1) * (C mass_2) / ((C norm) :^ (fromInteger 2))) *
-  ((C disp) / (C norm))
+  (C gravConst) * ((C mass_1) * (C mass_2) / ((C dispNorm) :^ (fromInteger 2)))
+  * (C dispUnit) :=
+  (C gravConst) * ((C mass_1) * (C mass_2) / ((C dispNorm) :^ (fromInteger 2)))
+  * ((C disp) / (C dispNorm))
 
 -- Can't include fractions with a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184))
@@ -184,13 +184,13 @@ t3descr = S "Two " :+: S (rigidBodies ^. name) :+: S " in the universe " :+:
   S "between them. The vector " :+: U (disp ^. symbol) :+: S " (" :+:
   Sy (disp ^. unit) :+: S ") is the " :+: (disp ^. descr) :+: S " between " :+:
   S "the centres of the " :+: S (rigidBodies ^. name) :+: S " and " :+:
-  U (norm ^. symbol) :+: S " (" :+: Sy (norm ^. unit) :+: S ") represents " :+:
-  S "the " :+: (norm ^. descr) :+: S ", or absolute distance between the " :+:
-  S "two. " :+: U (dispUnit ^. symbol) :+: S " denotes the " :+:
-  (dispUnit ^. descr) :+: S ", equivalent to the " :+: (disp ^. descr) :+:
-  S " divided by the " :+: (norm ^. descr) :+: S ", as shown above. " :+:
-  S "Finally, " :+: U (gravConst ^. symbol) :+: S " is the " :+:
-  (gravConst ^. descr) :+: S "."
+  U (dispNorm ^. symbol) :+: S " (" :+: Sy (dispNorm ^. unit) :+:
+  S ") represents " :+: S "the " :+: (dispNorm ^. descr) :+:
+  S ", or absolute distance between the " :+: S "two. " :+:
+  U (dispUnit ^. symbol) :+: S " denotes the " :+: (dispUnit ^. descr) :+:
+  S ", equivalent to the " :+: (disp ^. descr) :+: S " divided by the " :+:
+  (dispNorm ^. descr) :+: S ", as shown above. " :+: S "Finally, " :+:
+  U (gravConst ^. symbol) :+: S " is the " :+: (gravConst ^. descr) :+: S "."
 
 -- T4 : Chasles' theorem --
 
@@ -245,11 +245,15 @@ t5descr = S "The net " :+: (torque ^. descr) :+: S " " :+:
 
 -- Data Definitions --
 
+dDefs :: [EqChunk]
+dDefs = [dd1CtrOfMass, dd2linDisp, dd3linVel, dd4linAcc, dd5angDisp, dd6angVel,
+  dd7angAccel, dd8impulse]
+
 -- DD1 : Centre of mass --
 
-pos_CM :: UnitalChunk
-pos_CM = makeUC "p_CM" "position of the centre of mass"
-  (sub (position ^. symbol) (Atomic "CM")) metre
+pos_CM, mass_i, pos_i, mTot :: UnitalChunk
+pos_CM = makeUC "p_CM" ("the mass-weighted average position of a rigid " ++
+  "body's particles") (sub (position ^. symbol) (Atomic "CM")) metre
 mass_i = makeUC "m_i" "mass of the i-th particle" (sub (mass ^. symbol) lI)
   kilogram
 pos_i = makeUC "p_i" "position vector of the i-th particle"
@@ -260,5 +264,158 @@ dd1CtrOfMass :: EqChunk
 dd1CtrOfMass = fromEqn "p_CM" dd1descr (pos_CM ^. symbol) metre ctrOfMassEqn
 
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (C posCM) := (Summation (Nothing, Nothing) ((C mass_i) *
-  (C pos_i))) / (C mTot)
+ctrOfMassEqn = (UnaryOp (Summation (Nothing, Nothing))
+  (((C mass_i) * (C pos_i)))) / (C mTot)
+
+dd1descr :: Sentence
+dd1descr = pos_CM ^. descr
+
+-- DD2 : Linear displacement --
+
+dd2linDisp :: EqChunk
+dd2linDisp = fromEqn "r" dd2descr (Concat [(disp ^. symbol), Atomic "(",
+  (time ^. symbol), Atomic ")"]) metre dispEqn
+
+dispEqn :: Expr
+dispEqn = Deriv (FCall (C position) [C time]) (C time)
+
+dd2descr :: Sentence
+dd2descr = S "the linear " :+: (disp ^. descr) :+: S " of a " :+:
+  S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
+  S " " :+: U (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
+  S "), also equal to the derivative of its linear " :+: (position ^. descr) :+:
+  S " with respect to " :+: (time ^. descr) :+: S " " :+: U (time ^. symbol) :+:
+  S "."
+
+-- DD3 : Linear velocity --
+
+dd3linVel :: EqChunk
+dd3linVel = fromEqn "v" dd3descr (Concat [(vel ^. symbol), Atomic "(",
+  (time ^. symbol), Atomic ")"]) velU velEqn
+
+velEqn :: Expr
+velEqn = Deriv (FCall (C disp) [C time]) (C time)
+
+dd3descr :: Sentence
+dd3descr = S "the linear " :+: (vel ^. descr) :+: S " of a " :+:
+  S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
+  S " " :+: U (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
+  S "), also equal to the derivative of its linear " :+: (vel ^. descr) :+:
+  S " with respect to " :+: (time ^. descr) :+: S " " :+: U (time ^. symbol) :+:
+  S "."
+
+-- DD4 : Linear acceleration --
+
+dd4linAcc :: EqChunk
+dd4linAcc = fromEqn "a" dd4descr (Concat [(accel ^. symbol), Atomic "(",
+  (time ^. symbol), Atomic ")"]) accelU accelEqn
+
+accelEqn :: Expr
+accelEqn = Deriv (FCall (C vel) [C time]) (C time)
+
+dd4descr :: Sentence
+dd4descr = S "the linear " :+: (accel ^. descr) :+: S " of a " :+:
+  S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
+  S " " :+: U (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
+  S "), also equal to the derivative of its linear " :+: (accel ^. descr) :+:
+  S " with respect to " :+: (time ^. descr) :+: S " " :+: U (time ^. symbol) :+:
+  S "."
+
+-- DD5 : Angular displacement --
+
+dd5angDisp :: EqChunk
+dd5angDisp = fromEqn "theta" dd5descr (Concat [(angDisp ^. symbol),
+  Atomic "(", (time ^. symbol), Atomic ")"]) radians angDispEqn
+
+angDispEqn :: Expr
+angDispEqn = Deriv (FCall (C orientation) [C time]) (C time)
+
+dd5descr :: Sentence
+dd5descr = S "the " :+: (angDisp ^. descr) :+: S " of a " :+:
+  S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
+  S " " :+: U (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
+  S "), also equal to the derivative of its " :+: (orientation ^. descr) :+:
+  S " with respect to " :+: (time ^. descr) :+: S " " :+: U (time ^. symbol) :+:
+  S "."
+
+-- DD6 : Angular velocity --
+
+dd6angVel :: EqChunk
+dd6angVel = fromEqn "omega" dd6descr (Concat [(angVel ^. symbol), Atomic "(",
+  (time ^. symbol), Atomic ")"]) angVelU angVelEqn
+
+angVelEqn :: Expr
+angVelEqn = Deriv (FCall (C angDisp) [C time]) (C time)
+
+dd6descr :: Sentence
+dd6descr = S "the " :+: (angVel ^. descr) :+: S " of a " :+:
+  S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
+  S " " :+: U (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
+  S "), also equal to the derivative of its " :+: (angDisp ^. descr) :+:
+  S " with respect to " :+: (time ^. descr) :+: S " " :+: U (time ^. symbol) :+:
+  S "."
+
+-- DD7 : Angular acceleration --
+
+dd7angAccel :: EqChunk
+dd7angAccel = fromEqn "alpha" dd7descr (Concat [(angAccel ^. symbol),
+  Atomic "(", (time ^. symbol), Atomic ")"]) angAccelU angAccelEqn
+
+angAccelEqn :: Expr
+angAccelEqn = Deriv (FCall (C angVel) [C time]) (C time)
+
+dd7descr :: Sentence
+dd7descr = S "the " :+: (angAccel ^. descr) :+: S " of a " :+:
+  S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
+  S " " :+: U (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
+  S "), also equal to the derivative of its " :+: (angVel ^. descr) :+:
+  S " with respect to " :+: (time ^. descr) :+: S " " :+: U (time ^. symbol) :+:
+  S "."
+
+-- DD8 : Impulse for collision response --
+
+-- currently super crude, need norms and cross products --
+initRelVel, mass_A, mass_B, normalLen, contDisp_A, contDisp_B, perpLen_A,
+  momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
+
+initRelVel = makeUC "v_i^AB" "relative velocity between rigid bodies A and B"
+  (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
+mass_A = makeUC "m_A" "mass of rigid body A" (sub (mass ^. symbol) cA) kilogram
+mass_B = makeUC "m_B" "mass of rigid body B" (sub (mass ^. symbol) cB) kilogram
+normalLen = makeUC "||n||" "length of the normal vector" (Concat [Atomic "||",
+  (normalVect ^. symbol), Atomic "||"]) metre
+contDisp_A = makeUC "r_AP" ("displacement vector between the centre of " ++
+  "mass of rigid body A and contact point P") (sub (disp ^. symbol)
+  (Concat [cA, cP])) metre
+contDisp_B = makeUC "r_BP" ("displacement vector between the centre of " ++
+  "mass of rigid body B and contact point P") (sub (disp ^. symbol)
+  (Concat [cB, cP])) metre
+perpLen_A = makeUC "||r_AP x n||" ("length of the vector perpendicular " ++
+  "to the contact displacement vector of rigid body A")
+  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*",
+  (normalVect ^. symbol), Atomic "||"]) metre
+perpLen_B = makeUC "||r_BP x n||" ("length of the vector perpendicular " ++
+  "to the contact displacement vector of rigid body B")
+  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*",
+  (normalVect ^. symbol), Atomic "||"]) metre
+momtInert_A = makeUC "I_A" "moment of inertia of rigid body A"
+  (sub (momtInert ^. symbol) cA) momtInertU
+momtInert_B = makeUC "I_B" "moment of inertia of rigid body B"
+  (sub (momtInert ^. symbol) cB) momtInertU
+
+dd8impulse :: EqChunk
+dd8impulse = fromEqn "j" dd8descr lJ impulseU impulseEqn
+
+-- The last two terms in the denominator should be cross products
+impulseEqn :: Expr
+impulseEqn = ((Neg ((fromInteger 1) + (C restCoef))) * (C initRelVel) :.
+  (C normalVect)) / (((((fromInteger 1) / (C mass_A))) +
+  ((fromInteger 1) / (C mass_B))) * ((C normalLen) :^ (fromInteger 2)) +
+  (((C perpLen_A) :^ (fromInteger 2)) / (C momtInert_A)) +
+  (((C perpLen_B) :^ (fromInteger 2))/ (C momtInert_B)))
+
+dd8descr :: Sentence
+dd8descr = S "the " :+: (impulse ^. descr) :+: S " used to determine " :+:
+  S "collision response between two " :+: S (rigidBodies ^. name) :+: S "."
+
+-- Instance Models --

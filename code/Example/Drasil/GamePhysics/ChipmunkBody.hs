@@ -293,8 +293,8 @@ s4_2_2_TMods = map Definition (map Theory tMods)
 
 -- 4.2.3 : General Definitions --
 
-s4_2_3 = Section 2 ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] ++
-  {-(map Con s4_2_3_GDefs)-})
+s4_2_3 = Section 2 ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] {- ++
+  (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations " :+:
   S "that will be used in deriving the " :+: (sMap (map toLower)
@@ -316,6 +316,8 @@ s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
   S "data needed to build the " :+: (instMod ^. descr) :+: S "s. The " :+:
   S "dimension of each quantity is also given."
 
+s4_2_4_DDefs :: [Contents]
+s4_2_4_DDefs = map Definition (map Data dDefs)
 
 -- SECTION 5 : REQUIREMENTS --
 
@@ -360,7 +362,7 @@ s5_1_list = Enumeration (Simple [
    S (rigidBodies ^. name) :+: S ".")),
   (S (requirement ^. name) :+: S "7", Flat (S "Determine if any of the " :+:
    S (rigidBodies ^. name) :+: S " in the space have collided.")),
-  (S (requirement ^. name) :+: S "5", Flat (S "Determine the " :+:
+  (S (requirement ^. name) :+: S "8", Flat (S "Determine the " :+:
    (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
    S "period of " :+: (time ^. descr) :+: S " of the 2D " :+:
    S (rigidBodies ^. name) :+: S " that have undergone a collision."))])

@@ -10,12 +10,15 @@ import Language.Drasil.Unicode (render, Partial(..))
 import Language.Drasil.Format (Format(TeX))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.Module
 import Language.Drasil.Unit
 import Language.Drasil.Chunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Reference
+import Language.Drasil.Printing.Helpers
+import Data.List (intersperse)
 
 
 expr :: Expr -> T.Expr
@@ -96,7 +99,9 @@ lay (NumberedList cs) = T.List T.Enum $ map spec cs
 lay (SimpleList cs)   = T.List T.Simple $ concat $
                           map (\(f,s) -> [spec f, spec s]) cs
 lay x@(Figure c f)    = T.Figure (spec (getRefName x)) (spec c) f
-lay (Module m)        = T.Module $ T.S ""
+lay x@(Module depth m)=
+  T.Section depth (T.S $ (concat $ intersperse " " $ map capitalize $
+    words (m ^. name)) ++ " Module") (buildModuleDesc m) (spec $ getRefName x)
   
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [
@@ -132,3 +137,9 @@ descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
                       (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
+
+buildModuleDesc :: ModuleChunk -> [T.LayoutObj]
+buildModuleDesc m = [
+  T.Paragraph $ T.S "Secrets: " T.:+: (spec $ secret m),
+  T.Paragraph $ T.S "Services: " T.:+: (spec $ m ^. descr)
+  ]

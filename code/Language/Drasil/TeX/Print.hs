@@ -3,14 +3,14 @@ module Language.Drasil.TeX.Print where
 
 import Prelude hiding (print)
 import Data.List (intersperse)
-import Text.PrettyPrint hiding (render,empty,($+$),vcat,(<>))
+import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 
-import Control.Monad.Reader 
+import Control.Monad.Reader
 import Control.Applicative hiding (empty)
 
 import Language.Drasil.TeX.AST
-import Language.Drasil.TeX.Import hiding (sec)
+import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth,
@@ -24,8 +24,8 @@ import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
 
-genTeX :: A.DocType -> L.Document -> Doc
-genTeX typ doc = runPrint (build typ $ makeDocument doc) Text
+genTeX :: A.DocType -> L.Document -> TP.Doc
+genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
 
 build :: A.DocType -> Document -> D
 build (A.SRS _) doc   = buildSRS srsTeXParams doc
@@ -34,16 +34,16 @@ build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: SRSParams -> Document -> D
-buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps)) 
+buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
          (Document t a c) =
   docclass sb b1 %%
-  listpackages ps %% 
-  title (pCon Plain t) %% 
-  author (p_spec a) %% 
+  listpackages ps %%
+  title (pCon Plain t) %%
+  author (p_spec a) %%
   document (maketitle %% print c)
 
 buildLPM :: LPMParams -> Document -> D
-buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n)) 
+buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
           (Document t a c) =
   docclass sb b1 %%
   listpackages ps %%
@@ -55,16 +55,16 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
 listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
+-- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D
-lo (Section d t con l)     = sec d (pCon Plain t) %% label (pCon Plain l) 
-                                  %% print con
-lo (Paragraph contents)    = pure $ text (pCon Plain contents)
+lo (Section d t con l)     = sec d (pCon Plain t) %% label (spec l) %% print con
+lo (Paragraph contents)    = toText $ spec contents
 lo (EqnBlock contents)     = pure $ text $ makeEquation contents
-lo (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
+lo (Table rows r bl t)     = toText $ makeTable rows (spec r) bl (spec t)
 lo (CodeBlock c)           = code $ pure $ printCode c
-lo (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
-lo (List lt)               = makeList lt
-lo (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
+lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
+lo (List lt)               = toText $ makeList lt
+lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
 
 print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
@@ -83,17 +83,17 @@ p_spec (S s)       = s
 p_spec (N s)       = symbol s
 p_spec (Sy s)      = runReader (uSymbPrint s) Plain
 p_spec HARDNL      = "\\newline"
-p_spec (Ref t@Sect r) = if numberedSections 
-                       then show t ++ "~\\ref" ++ brace (p_spec r) 
-                       else "\\hyperref" ++ sqbrac (p_spec r) ++ 
+p_spec (Ref t@Sect r) = if numberedSections
+                       then show t ++ "~\\ref" ++ brace (p_spec r)
+                       else "\\hyperref" ++ sqbrac (p_spec r) ++
                         brace (show t ++ "~" ++ p_spec r)
-p_spec (Ref t@Def r) = "\\hyperref" ++ sqbrac (p_spec r) ++ 
+p_spec (Ref t@Def r) = "\\hyperref" ++ sqbrac (p_spec r) ++
                         brace (show t ++ "~" ++ p_spec r)
 p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String
-symbol (Atomic s)       = s
-symbol (Special s)      = render TeX s
+symbol (Atomic s)  = s
+symbol (Special s) = render TeX s
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -169,26 +169,64 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------
-  
-makeTable :: [[Spec]] -> String -> Bool -> String -> D
-makeTable lls r bool t = 
+
+makeTable :: [[Spec]] -> D -> Bool -> D -> D
+makeTable lls r bool t =
   pure (text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)))
   %% makeRows lls %% (if bool then caption t else empty) %%
   label r %% (pure $ text ("\\end{" ++ lt ++ "}"))
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
         lt = "longtable" ++ (if not bool then "*" else "")
-        
+
 makeRows :: [[Spec]] -> D
 makeRows []     = empty
-makeRows (c:cs) = pure (text (makeColumns c) $$ dbs) %% makeRows cs
+makeRows (c:cs) = makeColumns c %% pure dbs %% makeRows cs
 
-makeColumns :: [Spec] -> String
-makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls)
+makeColumns :: [Spec] -> D
+makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 -----------------------------------------------------------------
 ------------------ READER-----------------------------------
 -----------------------------------------------------------------
+
+needs :: Spec -> MathContext
+needs (a :+: b) = needs a `lub` needs b
+needs (S _)     = Text
+needs (E _)     = Math
+needs (_ :-: _) = Math --Sub/superscripts must be in Math ctxt.
+needs (_ :^: _) = Math
+needs (_ :/: _) = Math -- Fractions are always equations.
+needs (Sy _)    = Text
+needs (N _)     = Math
+needs HARDNL    = Text
+needs (Ref _ _)  = Text
+
+-- print all Spec through here
+spec :: Spec -> D
+spec a@(s :+: t) = s' <> t'
+  where 
+    ctx = const $ needs a
+    s' = switch ctx $ spec s
+    t' = switch ctx $ spec t
+spec (E ex)      = pure $ text $ p_expr ex
+spec (a :-: s)   = pure $ text $ p_spec a ++ "_" ++ brace (p_spec s)
+spec (a :^: s)   = pure $ text $ p_spec a ++ "^" ++ brace (p_spec s)
+spec (a :/: s)   = pure $ text $ "\\frac" ++ brace (p_spec a) ++ brace (p_spec s)
+spec (S s)       = pure $ text $ s
+spec (N s)       = pure $ text $ symbol s
+spec (Sy s)      = pure $ text $ runReader (uSymbPrint s) Plain
+spec HARDNL      = pure $ text $ "\\newline"
+spec (Ref t@Sect r) = pure $ text $ 
+                     if numberedSections
+                     then show t ++ "~\\ref" ++ brace (p_spec r)
+                     else "\\hyperref" ++ sqbrac (p_spec r) ++
+                      brace (show t ++ "~" ++ p_spec r)
+spec (Ref t@Def r) = pure $ text $
+                      "\\hyperref" ++ sqbrac (p_spec r) ++
+                      brace (show t ++ "~" ++ p_spec r)
+spec (Ref t r)   = pure $ text $ show t ++ "~\\ref" ++ brace (p_spec r)
+
 
 data Context = Equation | EqnB | Plain deriving (Show, Eq)
 
@@ -204,7 +242,6 @@ getCon (N _)     = Equation
 getCon HARDNL    = Plain
 getCon (Ref _ _)   = Plain
 
-
 lPrint :: Spec -> Reader Context String
 lPrint t@(s1 :+: s2) = do
   c <- ask
@@ -213,7 +250,7 @@ lPrint t@(s1 :+: s2) = do
   case c of
     EqnB -> return $ makeEquation t
     _    -> return $ pCon ca s1 ++ pCon cb s2
-    
+
 lPrint t = do
   c <- ask
   let ct = getCon t
@@ -223,7 +260,7 @@ lPrint t = do
       case ct of
         Equation -> return $ dollar (p_spec t)
         Plain    -> return $ p_spec t
-        EqnB     -> return $ makeEquation t 
+        EqnB     -> return $ makeEquation t
           --This will never run right now, but maybe eventually.
 
 pCon :: Context -> Spec -> String
@@ -237,11 +274,11 @@ uSymbPrint (UName n) = do
     return $ symbol n
   else
     case cn of
-      Equation -> return $ dollar $ symbol n 
+      Equation -> return $ dollar $ symbol n
       _        -> return $ symbol n
 uSymbPrint (UProd l) = do
   c <- ask
-  return $ foldr1 (\x -> (x++)) 
+  return $ foldr1 (\x -> (x++))
     (map ((\ctxt t -> runReader t ctxt) c) (map uSymbPrint l))
 uSymbPrint (UPow n p) = do
   c <- ask
@@ -251,16 +288,16 @@ uSymbPrint (UPow n p) = do
 uSymbPrint (UDiv n d) = do
   c <- ask
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    UProd _ -> return $ 
+    UProd _ -> return $
       runReader (uSymbPrint n) c ++ "/" ++ paren (runReader (uSymbPrint d) c)
     UDiv _ _ -> return $
       runReader (uSymbPrint n) c ++ "/" ++ paren (runReader (uSymbPrint d) c)
     _ -> return $ runReader (uSymbPrint n) c ++ "/" ++ runReader (uSymbPrint d) c
-    
+
 getSyCon :: Symbol -> Context
 getSyCon (Atomic _)          = Plain
 --getSyCon (Special Circle)  = Equation
-  -- TODO: Need to figure this out, or figure out how to print catenations in a 
+  -- TODO: Need to figure this out, or figure out how to print catenations in a
   --       better way.
 getSyCon (Special _)         = Plain
 getSyCon (Concat [])         = Plain
@@ -272,7 +309,7 @@ getSyCon (Atop _ s)          = getSyCon s
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: [(String,LayoutObj)] -> String -> D
+makeDefn :: [(String,LayoutObj)] -> D -> D
 makeDefn [] _ = error "Empty definition"
 makeDefn ps l = beginDefn %% makeDefTable ps l %% endDefn
 
@@ -283,34 +320,34 @@ beginDefn = (pure $ text "~") <> newline
 endDefn :: D
 endDefn = pure $ text "\\end{minipage}" TP.<> dbs
 
-makeDefTable :: [(String,LayoutObj)] -> String -> D
+makeDefTable :: [(String,LayoutObj)] -> D -> D
 makeDefTable [] _ = error "Trying to make empty Data Defn"
 makeDefTable ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  pure $ text "\\toprule \\textbf{Refname} & \\textbf{" TP.<> text l TP.<> text "}",
+  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
   label l,
-  makeDRows ps, 
+  makeDRows ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
 makeDRows :: [(String,LayoutObj)] -> D
 makeDRows []         = error "No fields to create Defn table"
 makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
-makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d 
+makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
                        %% makeDRows ps
 dBoilerplate :: D
-dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs 
+dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------
 -----------------------------------------------------------------
 
 makeEquation :: Spec -> String
-makeEquation contents = 
+makeEquation contents =
   ("\\begin{equation}" ++ p_spec contents ++ "\\end{equation}")
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
-  
+
 -----------------------------------------------------------------
 ------------------ LIST PRINTING----------------------------
 -----------------------------------------------------------------
@@ -330,13 +367,13 @@ sim_item ((x,y):zs) = (pure $ text ("\\item[" ++ pCon Plain x ++ ":] ")) <> sp_i
   sim_item zs
     where sp_item (Flat s) = pure $ text (pCon Plain s)
           sp_item (Nested t s) = vcat [pure $ text (pCon Plain t), makeList s]
-  
+
 -----------------------------------------------------------------
 ------------------ FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 
-makeFigure :: String -> String -> String -> D
-makeFigure r c f = 
+makeFigure :: D -> D -> String -> D
+makeFigure r c f =
   figure (center (
   vcat [
     includegraphics f,
@@ -351,7 +388,7 @@ p_op :: Function -> [Expr] -> String
 p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
-p_op (Integral _) _  = error "Something went wrong with an integral" 
+p_op (Integral _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.

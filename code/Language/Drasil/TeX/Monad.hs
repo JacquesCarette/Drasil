@@ -8,6 +8,8 @@ import qualified Text.PrettyPrint as TP
 import Control.Applicative hiding (empty)
 import Data.Monoid hiding ((<>))
 
+import qualified Language.Drasil.Printing.Helpers as H
+
 -----------------------------------------------------------------------------
 -- Printing monad
 --
@@ -15,7 +17,11 @@ import Data.Monoid hiding ((<>))
 -- first, start with a specific data type
 -- note that this is just the Reader Monad for now, but we might need
 -- to extend, so start there.
-data MathContext = Text | Math -- should not be exported
+
+-- there are just two contexts, test and math.  There are multiple ways
+-- of getting there: for Text, either being at the top-level or inside \text.
+-- for Math, either surrounded by $ or in \begin{equation} .. \end{equation}.
+data MathContext = Text | Math deriving Eq
 
 data PrintLaTeX a = PL { runPrint :: MathContext -> a }
 
@@ -31,6 +37,30 @@ instance Monad PrintLaTeX where
   m >>= k = PL $ \ctx -> 
     let a = runPrint m ctx in
     runPrint (k a) ctx
+
+-- MonadReader calls this 'local'.
+-- Switch contexts (including no-switch cases).  Adjust printing as necessary.
+switch :: (MathContext -> MathContext) -> PrintLaTeX TP.Doc -> PrintLaTeX TP.Doc
+switch f (PL g) = PL $ \c -> adjust c (f c) g
+  where
+    dollar = H.dlr
+    bstext = TP.text "\\text"
+    br     = \doc -> TP.text "{" TP.<> doc TP.<> TP.text "}"
+    adjust :: MathContext -> MathContext -> (MathContext -> TP.Doc) -> TP.Doc
+    adjust Math Math gen = gen Math
+    adjust Text Text gen = gen Text
+    -- we are producing Math, but want some Text embedded
+    adjust Math Text gen = bstext TP.<> br (gen Text)
+    -- we are producing Text, but want some Math embedded
+    adjust Text Math gen = dollar TP.<> (gen Math) TP.<> dollar
+
+toMath, toText :: D -> D
+toMath = switch (const Math)
+toText = switch (const Text)
+
+-- MonadReader calls this 'ask'
+get_ctx :: PrintLaTeX MathContext
+get_ctx = PL id
 
 -- convenient abbreviation
 type D = PrintLaTeX TP.Doc
@@ -51,3 +81,15 @@ instance Monoid (PrintLaTeX TP.Doc) where
 
 vcat :: [D] -> D
 vcat l = PL $ \ctx -> TP.vcat $ map (\x -> runPrint x ctx) l
+
+-- hcat . punctuate
+hpunctuate :: TP.Doc -> [D] -> D
+hpunctuate x l = PL $ \ctx -> 
+  TP.hcat $ TP.punctuate x $ map (\z -> runPrint z ctx) l
+ 
+--------
+-- MathContext operations
+lub :: MathContext -> MathContext -> MathContext
+lub Math Math = Math
+lub Text Text = Text
+lub _    _    = Text -- Text is top-most

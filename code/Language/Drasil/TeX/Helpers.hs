@@ -12,9 +12,19 @@ import Language.Drasil.TeX.Monad
 -- Infrastructre for defining commands, environments, etc.
 --   (calls to TP should only occur in this section)
 
+lb, rb :: D
+lb = pure $ text "{"
+rb = pure $ text "}"
+
+br :: D -> D
+br x = lb <> x <> rb
+
 -- Make 1-argument command
 command :: String -> (String -> D)
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
+
+commandD :: String -> (D -> D)
+commandD s c = (pure $ (H.bslash TP.<> text s)) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
@@ -52,14 +62,16 @@ empty = pure TP.empty
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-caption, label, usepackage, title, author, count, includegraphics :: String -> D
-caption         = command "caption"
-label           = command "label"
+usepackage, title, author, count, includegraphics :: String -> D
 usepackage      = command "usepackage"
 title           = command "title"
 author          = command "author"
 count           = command "count"
 includegraphics = command "includegraphics"
+
+caption, label :: D -> D
+caption         = commandD "caption"
+label           = commandD "label"
 
 maketitle, newline :: D
 maketitle = command0 "maketitle"

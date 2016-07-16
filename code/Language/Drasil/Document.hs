@@ -33,7 +33,7 @@ data LayoutObj = Table [Sentence] [[Sentence]] Title Bool
                | NumberedList Items
                | SimpleList Pairs
                | Figure Label Filepath--Should use relative file path.
-               | Module ModuleChunk
+               | Module Depth ModuleChunk
 
 -- Types of definitions
 data DType = Data EqChunk 

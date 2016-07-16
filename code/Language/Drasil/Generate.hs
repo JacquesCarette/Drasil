@@ -55,7 +55,7 @@ prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
 prntCode :: Document -> IO ()
 prntCode (Document _ _ los) = mapM_ prntCode' (getModules los)
   where   getModules []                 = []
-          getModules ((Module m):los)   = (genCode outLang m) ++ getModules los
+          getModules ((Module _ m):los) = (genCode outLang m) ++ getModules los
           getModules (_:los)            = getModules los
           prntCode' (name, code)        = do createDirectoryIfMissing False "Code"
                                              outh <- openFile ("Code/" ++ name) WriteMode

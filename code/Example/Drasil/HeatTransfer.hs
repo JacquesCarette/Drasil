@@ -79,4 +79,6 @@ meth_h_g = fromEC h_g
 meth_h_c = fromEC h_c
 
 mod_calc :: ModuleChunk
-mod_calc = makeModule "calc" (S "Calculates heat transfer coefficients") (S "The equations used to calculate heat transfer coefficients") [meth_h_g, meth_h_c]
+mod_calc = makeModule "calc" (S "Calculates heat transfer coefficients")
+  (S "The equations used to calculate heat transfer coefficients")
+  [meth_h_g, meth_h_c]

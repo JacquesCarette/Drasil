@@ -20,7 +20,7 @@ s3 = Section 0 (S "Data Definitions") $ map (Definition . Data) vars
 s4 = Section 0 (S "Code -- Test") $ [CodeBlock $ toCodeModule CLang mod_calc]
 
 m1 :: LayoutObj
-m1 = Module mod_calc
+m1 = Module 0 mod_calc
 
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =
@@ -36,7 +36,6 @@ mg ls author body =
   
 srsBody,mgBody,lpmBody :: Document
 srsBody = srs vars "Spencer Smith" [s1, s2, s3, s4]
-
 mgBody = mg vars "Spencer Smith" [m1]
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 

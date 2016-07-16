@@ -36,15 +36,15 @@ numberedSections = True
   -- you can create your own parameter function and replace the one above.
 defaultSRSparams :: SRSParams
 defaultSRSparams = SRSParams
-  (DocClass  [] "article")
+  (DocClass  Nothing "article")
   (UsePackages ["booktabs","longtable","listings","graphics","hyperref","caption",
   "amsmath"])
 
 defaultLPMparams :: LPMParams
 defaultLPMparams = LPMParams
-  (DocClass "article" "cweb-hy")
+  (DocClass (Just "article") "cweb-hy")
   (UsePackages ["xr"])
-  (ExDoc "L-" "hghc_SRS")
+  (ExDoc (Just "L-") "hghc_SRS")
   
 --column width for data definitions (fraction of LaTeX textwidth)
 colAwidth, colBwidth :: Double

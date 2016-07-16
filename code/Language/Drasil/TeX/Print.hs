@@ -362,8 +362,3 @@ makeBounds (Nothing,Nothing) = ""
 makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
 makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
 makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
-
----------
--- Hacks below, to be removed later
-empty :: D
-empty = PL $ const TP.empty

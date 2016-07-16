@@ -295,11 +295,11 @@ makeDefTable ps l = vcat [
 
 makeDRows :: [(String,LayoutObj)] -> D
 makeDRows []         = error "No fields to create Defn table"
-makeDRows ((f,d):[]) = (pure $ dBoilerplate $$ text (f ++ " & ")) <> lo d
-makeDRows ((f,d):ps) = (pure $ dBoilerplate $$ text (f ++ " & ")) <> lo d 
+makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
+makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d 
                        %% makeDRows ps
-dBoilerplate :: Doc
-dBoilerplate = dbs <+> text "\\midrule" <+> dbs 
+dBoilerplate :: D
+dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs 
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------

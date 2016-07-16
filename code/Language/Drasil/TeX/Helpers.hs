@@ -4,7 +4,7 @@ import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 import Control.Applicative (pure)
 
-import Language.Drasil.Config (tableWidth, numberedSections)
+import Language.Drasil.Config (numberedSections)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad
 
@@ -42,13 +42,6 @@ figure    = mkEnv "figure"
 center    = mkEnv "center"
 document  = mkEnv "document"
 
---Table making help
-lAndDim :: [[a]] -> String
-lAndDim []  = error "No fields provided"
-lAndDim [f] = concat (replicate ((length f)-1) "l ") ++ "p" ++ 
-  H.brace (show tableWidth ++ "cm")
-lAndDim _   = error "Unimplemented use of lAndDim in Helpers."
-  
 docclass :: String -> String -> D
 docclass [] brac      = pure $ text "\\documentclass" TP.<> H.br brac
 docclass sqbrack brac = pure $ text "\\documentclass" TP.<> H.sq sqbrack TP.<> H.br brac

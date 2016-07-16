@@ -7,6 +7,7 @@ import Language.Drasil.Unicode (render, Partial(..))
 import Language.Drasil.Format (Format(HTML))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.Module
 import Language.Drasil.Unit
 import Language.Drasil.Chunk
 import Control.Lens hiding ((:>),(:<))
@@ -15,6 +16,8 @@ import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Reference
+import Language.Drasil.Printing.Helpers
+import Data.List (intersperse)
 
 
 expr :: Expr -> H.Expr
@@ -94,6 +97,12 @@ lay (NumberedList cs) = H.List H.Ordered $ map spec cs
 lay (SimpleList cs)   = H.List H.Simple $ 
                           map (\(f,s) -> spec f H.:+: H.S ": " H.:+: spec s) cs
 lay x@(Figure c f)    = H.Figure (spec (getRefName x)) (spec c) f
+lay x@(Module depth m)=
+  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
+  ( (H.Header (depth+2)
+    (H.S $ (concat $ intersperse " " $
+      map capitalize $ words (m ^. name)) ++ " Module")):(buildModuleDesc m)
+  ) (spec $ getRefName x)
 
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
@@ -123,3 +132,9 @@ descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
   (H.S " is the " H.:+: (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
+
+buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
+buildModuleDesc m = [
+  H.Paragraph $ H.S "Secrets: " H.:+: (spec $ secret m),
+  H.Paragraph $ H.S "Services: " H.:+: (spec $ m ^. descr)
+  ]

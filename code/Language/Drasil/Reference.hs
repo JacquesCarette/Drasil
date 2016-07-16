@@ -3,7 +3,8 @@ module Language.Drasil.Reference where
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Language.Drasil.Printing.Helpers (capitalize)
-import Language.Drasil.Chunk (name)
+import Language.Drasil.Chunk (name,descr)
+import Language.Drasil.Chunk.Module
 import Control.Lens
 
 -- Creating References --
@@ -29,6 +30,7 @@ getRefName (Definition d)   = getDefName d
 getRefName (BulletList _)   = error "BulletList ref unimplemented"
 getRefName (NumberedList _) = error "NumberedList ref unimplemented"
 getRefName (SimpleList _)   = error "SimpleList ref unimplemented"
+getRefName (Module _ m)     = S "Module:" :+: inferName (m ^. descr)
 
 -- for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence

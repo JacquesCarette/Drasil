@@ -52,9 +52,7 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
   begin $$ print c $$ endL
 
 listpackages :: [String] -> Doc
-listpackages []     = empty
-listpackages (p:[]) = usepackage p
-listpackages (p:ps) = usepackage p $$ listpackages ps
+listpackages lp = foldr ($$) empty $ map usepackage lp
 
 lo :: LayoutObj -> Doc
 lo (Section d t con l)     = sec d (pCon Plain t) $$ label (pCon Plain l) 
@@ -62,13 +60,13 @@ lo (Section d t con l)     = sec d (pCon Plain t) $$ label (pCon Plain l)
 lo (Paragraph contents)    = text (pCon Plain contents)
 lo (EqnBlock contents)     = text $ makeEquation contents
 lo (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
-lo (CodeBlock c)           = codeHeader $$ printCode c $$ codeFooter
+lo (CodeBlock c)           = code (printCode c)
 lo (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
 lo (List lt)               = makeList lt
 lo (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
 print :: [LayoutObj] -> Doc
-print l = foldr ($$) empty $ map (<> (text "\n")) $ map lo l
+print l = foldr ($+$) empty $ map lo l
 
 -----------------------------------------------------------------
 ------------------ SPEC PRINTING----------------------------
@@ -226,10 +224,6 @@ lPrint t = do
         EqnB     -> return $ makeEquation t 
           --This will never run right now, but maybe eventually.
 
-bEq, eEq :: String    
-bEq = "\\begin{equation} " 
-eEq = "\\end{equation}"
-
 pCon :: Context -> Spec -> String
 pCon = \c t -> runReader (lPrint t) c
 
@@ -302,14 +296,6 @@ makeDRows ((f,d):ps) = dBoilerplate $$ text (f ++ " & ") <> lo d $$
                         makeDRows ps
 dBoilerplate :: Doc
 dBoilerplate = dbs <+> text "\\midrule" <+> dbs 
-
------------------------------------------------------------------
------------------- CODE BLOCK PRINTING----------------------
------------------------------------------------------------------
-
-codeHeader,codeFooter :: Doc
-codeHeader = bslash <> text "begin" <> br "lstlisting"
-codeFooter = bslash <> text "end" <> br "lstlisting"
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------

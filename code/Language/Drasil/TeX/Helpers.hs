@@ -22,11 +22,14 @@ b,e :: String -> Doc
 b s = bslash <> text ("begin" ++ brace s)
 e s = bslash <> text ("end" ++ brace s)
 
-mkEnv :: String -> (t -> Doc) -> t -> Doc
-mkEnv nm middle inp = 
+mkEnv :: String -> Doc -> Doc
+mkEnv nm d =
   text ("\\begin" ++ brace nm) $+$ 
-  middle inp $+$
+  d $+$
   text ("\\end" ++ brace nm)
+
+code :: Doc -> Doc
+code = mkEnv "lstlisting"
 
 --Table making help
 lAndDim :: [[a]] -> String

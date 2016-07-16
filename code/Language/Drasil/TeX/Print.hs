@@ -3,7 +3,8 @@ module Language.Drasil.TeX.Print where
 
 import Prelude hiding (print)
 import Data.List (intersperse)
-import Text.PrettyPrint hiding (render)
+import Text.PrettyPrint hiding (render,empty,($+$),vcat,(<>))
+import qualified Text.PrettyPrint as TP
 
 import Control.Monad.Reader 
 import Control.Applicative hiding (empty)
@@ -34,38 +35,38 @@ build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: SRSParams -> Document -> D
 buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps)) 
-         (Document t a c) = pure $
-  docclass sb b1 $$ 
-  listpackages ps $$ 
-  title (pCon Plain t) $$ 
-  author (p_spec a) $$ 
-  document (maketitle $$ print c)
+         (Document t a c) =
+  docclass sb b1 %%
+  listpackages ps %% 
+  title (pCon Plain t) %% 
+  author (p_spec a) %% 
+  document (maketitle %% print c)
 
 buildLPM :: LPMParams -> Document -> D
 buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n)) 
-          (Document t a c) = pure $
-  docclass sb b1 $$ 
-  listpackages ps $$ 
-  exdoc f n $$
-  title (p_spec t) $$ 
-  author (p_spec a) $$ 
-  document (maketitle $$ print c)
+          (Document t a c) =
+  docclass sb b1 %%
+  listpackages ps %%
+  exdoc f n %%
+  title (p_spec t) %%
+  author (p_spec a) %%
+  document (maketitle %% print c)
 
-listpackages :: [String] -> Doc
-listpackages lp = foldr ($$) empty $ map usepackage lp
+listpackages :: [String] -> D
+listpackages lp = foldr (%%) empty $ map usepackage lp
 
-lo :: LayoutObj -> Doc
-lo (Section d t con l)     = sec d (pCon Plain t) $$ label (pCon Plain l) 
-                                  $$ print con
-lo (Paragraph contents)    = text (pCon Plain contents)
-lo (EqnBlock contents)     = text $ makeEquation contents
+lo :: LayoutObj -> D
+lo (Section d t con l)     = sec d (pCon Plain t) %% label (pCon Plain l) 
+                                  %% print con
+lo (Paragraph contents)    = pure $ text (pCon Plain contents)
+lo (EqnBlock contents)     = pure $ text $ makeEquation contents
 lo (Table rows r bl t)     = makeTable rows (pCon Plain r) bl (pCon Plain t)
-lo (CodeBlock c)           = code (printCode c)
+lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = makeDefn ssPs (pCon Plain l)
 lo (List lt)               = makeList lt
 lo (Figure r c f)          = makeFigure (pCon Plain r) (pCon Plain c) f
 
-print :: [LayoutObj] -> Doc
+print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
 
 -----------------------------------------------------------------
@@ -169,17 +170,18 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 ------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------
   
-makeTable :: [[Spec]] -> String -> Bool -> String -> Doc
-makeTable lls r bool t = text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)) 
-  $$ makeRows lls $$ (if bool then caption t else empty) $$
-  label r $$ text ("\\end{" ++ lt ++ "}")
+makeTable :: [[Spec]] -> String -> Bool -> String -> D
+makeTable lls r bool t = 
+  pure (text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)))
+  %% makeRows lls %% (if bool then caption t else empty) %%
+  label r %% (pure $ text ("\\end{" ++ lt ++ "}"))
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
         lt = "longtable" ++ (if not bool then "*" else "")
         
-makeRows :: [[Spec]] -> Doc
+makeRows :: [[Spec]] -> D
 makeRows []     = empty
-makeRows (c:cs) = text (makeColumns c) $$ dbs $$ makeRows cs
+makeRows (c:cs) = pure (text (makeColumns c) $$ dbs) %% makeRows cs
 
 makeColumns :: [Spec] -> String
 makeColumns ls = (concat $ intersperse " & " $ map (pCon Plain) ls)
@@ -270,30 +272,32 @@ getSyCon (Atop _ s)          = getSyCon s
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: [(String,LayoutObj)] -> String -> Doc
+makeDefn :: [(String,LayoutObj)] -> String -> D
 makeDefn [] _ = error "Empty definition"
-makeDefn ps l = beginDefn $$ makeDefTable ps l $$ endDefn
+makeDefn ps l = beginDefn %% makeDefTable ps l %% endDefn
 
-beginDefn :: Doc
-beginDefn = text "~" <>newline<+> text "\\noindent \\begin{minipage}{\\textwidth}"
+beginDefn :: D
+beginDefn = (pure $ text "~") <> newline
+  %% (pure $ text "\\noindent \\begin{minipage}{\\textwidth}")
 
-endDefn :: Doc  
-endDefn = text "\\end{minipage}" <> dbs
+endDefn :: D
+endDefn = pure $ text "\\end{minipage}" TP.<> dbs
 
-makeDefTable :: [(String,LayoutObj)] -> String -> Doc
+makeDefTable :: [(String,LayoutObj)] -> String -> D
 makeDefTable [] _ = error "Trying to make empty Data Defn"
 makeDefTable ps l = vcat [
-  text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  text "\\toprule \\textbf{Refname} & \\textbf{" <> text l <> text "}",
+  pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
+  pure $ text "\\toprule \\textbf{Refname} & \\textbf{" TP.<> text l TP.<> text "}",
   label l,
-  makeDRows ps, dbs <+> text ("\\bottomrule \\end{tabular}")
+  makeDRows ps, 
+  pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
-makeDRows :: [(String,LayoutObj)] -> Doc
+makeDRows :: [(String,LayoutObj)] -> D
 makeDRows []         = error "No fields to create Defn table"
-makeDRows ((f,d):[]) = dBoilerplate $$ text (f ++ " & ") <> lo d
-makeDRows ((f,d):ps) = dBoilerplate $$ text (f ++ " & ") <> lo d $$ 
-                        makeDRows ps
+makeDRows ((f,d):[]) = (pure $ dBoilerplate $$ text (f ++ " & ")) <> lo d
+makeDRows ((f,d):ps) = (pure $ dBoilerplate $$ text (f ++ " & ")) <> lo d 
+                       %% makeDRows ps
 dBoilerplate :: Doc
 dBoilerplate = dbs <+> text "\\midrule" <+> dbs 
 
@@ -311,32 +315,33 @@ makeEquation contents =
 ------------------ LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
-makeList :: ListType -> Doc
+makeList :: ListType -> D
 makeList (Simple items) = itemize   $ vcat (sim_item items)
 makeList (Item items)   = itemize   $ vcat (map p_item items)
 makeList (Enum items)   = enumerate $ vcat (map p_item items)
 
-p_item :: ItemType -> Doc
-p_item (Flat s) = text ("\\item ") <> text (pCon Plain s)
-p_item (Nested t s) = vcat [text ("\\item ") <> text (pCon Plain t), makeList s]
+p_item :: ItemType -> D
+p_item (Flat s) = pure $ text ("\\item ") TP.<> text (pCon Plain s)
+p_item (Nested t s) = vcat [pure $ text ("\\item ") TP.<> text (pCon Plain t), makeList s]
 
-sim_item :: [(Spec,ItemType)] -> [Doc]
+sim_item :: [(Spec,ItemType)] -> [D]
 sim_item [] = [empty]
-sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> sp_item y :
+sim_item ((x,y):zs) = (pure $ text ("\\item[" ++ pCon Plain x ++ ":] ")) <> sp_item y :
   sim_item zs
-    where sp_item (Flat s) = text (pCon Plain s)
-          sp_item (Nested t s) = vcat [text (pCon Plain t), makeList s]
+    where sp_item (Flat s) = pure $ text (pCon Plain s)
+          sp_item (Nested t s) = vcat [pure $ text (pCon Plain t), makeList s]
   
 -----------------------------------------------------------------
 ------------------ FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 
-makeFigure :: String -> String -> String -> Doc
+makeFigure :: String -> String -> String -> D
 makeFigure r c f = 
   figure (center (
   vcat [
-    text "\\includegraphics" <> br f,
-    caption c, label r
+    includegraphics f,
+    caption c,
+    label r
   ] ) )
 
 -----------------------------------------------------------------
@@ -357,3 +362,8 @@ makeBounds (Nothing,Nothing) = ""
 makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
 makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
 makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
+
+---------
+-- Hacks below, to be removed later
+empty :: D
+empty = PL $ const TP.empty

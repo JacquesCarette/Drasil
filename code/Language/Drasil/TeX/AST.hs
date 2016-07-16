@@ -75,11 +75,6 @@ data ListType = Item [ItemType] | Enum [ItemType] | Simple [(Spec,ItemType)]
 data ItemType = Flat Spec
               | Nested Spec ListType
 
-instance Show ListType where
-  show (Item _)   = "itemize"
-  show (Enum _)   = "enumerate"
-  show (Simple _) = error "Printing Simple list failed, see ASTTeX/PrintTeX"
-  
 instance Show Function where
   show Log = "\\log"
   show (Summation _) = "\\sum"

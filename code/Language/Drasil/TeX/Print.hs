@@ -39,7 +39,7 @@ buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
   listpackages ps $$ 
   title (pCon Plain t) $$ 
   author (p_spec a) $$ 
-  begin $$ print c $$ endL
+  document (maketitle $$ print c)
 
 buildLPM :: LPMParams -> Document -> D
 buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n)) 
@@ -49,7 +49,7 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
   exdoc f n $$
   title (p_spec t) $$ 
   author (p_spec a) $$ 
-  begin $$ print c $$ endL
+  document (maketitle $$ print c)
 
 listpackages :: [String] -> Doc
 listpackages lp = foldr ($$) empty $ map usepackage lp
@@ -312,9 +312,9 @@ makeEquation contents =
 -----------------------------------------------------------------
 
 makeList :: ListType -> Doc
-makeList (Simple items) = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
-makeList t@(Item items) = b (show t) $$ vcat (map p_item items) $$ e (show t)
-makeList t@(Enum items) = b (show t) $$ vcat (map p_item items) $$ e (show t)
+makeList (Simple items) = itemize   $ vcat (sim_item items)
+makeList (Item items)   = itemize   $ vcat (map p_item items)
+makeList (Enum items)   = enumerate $ vcat (map p_item items)
 
 p_item :: ItemType -> Doc
 p_item (Flat s) = text ("\\item ") <> text (pCon Plain s)
@@ -333,12 +333,11 @@ sim_item ((x,y):zs) = text ("\\item[" ++ pCon Plain x ++ ":] ") <> sp_item y :
 
 makeFigure :: String -> String -> String -> Doc
 makeFigure r c f = 
+  figure (center (
   vcat [
-    b "figure", b "center",
     text "\\includegraphics" <> br f,
-    caption c, label r,
-    e "center", e "figure"
-  ]
+    caption c, label r
+  ] ) )
 
 -----------------------------------------------------------------
 ------------------ EXPR OP PRINTING-------------------------

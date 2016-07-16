@@ -17,19 +17,26 @@ title      = command "title"
 author     = command "author"
 count      = command "count"
 
--- Encapsulate environments
-b,e :: String -> Doc
-b s = bslash <> text ("begin" ++ brace s)
-e s = bslash <> text ("end" ++ brace s)
+command0 :: String -> Doc
+command0 s = bslash <> text s
 
+maketitle :: Doc
+maketitle = command0 "maketitle"
+
+-- Encapsulate environments
 mkEnv :: String -> Doc -> Doc
 mkEnv nm d =
   text ("\\begin" ++ brace nm) $+$ 
   d $+$
   text ("\\end" ++ brace nm)
 
-code :: Doc -> Doc
-code = mkEnv "lstlisting"
+code, itemize, enumerate, figure, center, document :: Doc -> Doc
+code      = mkEnv "lstlisting"
+itemize   = mkEnv "itemize"
+enumerate = mkEnv "enumerate"
+figure    = mkEnv "figure"
+center    = mkEnv "center"
+document  = mkEnv "document"
 
 --Table making help
 lAndDim :: [[a]] -> String
@@ -46,9 +53,7 @@ exdoc :: String -> String -> Doc
 exdoc [] d      = bslash <> text "externaldocument" <> br d
 exdoc sqbrack d = bslash <> text "externaldocument" <> sq sqbrack <> br d
 
-begin, endL, newcommand :: Doc
-begin   = bslash <> text "begin" <> br "document" $$ bslash <> text "maketitle"
-endL    = bslash <> text "end" <> br "document"
+newcommand :: Doc
 newcommand = bslash <> text "newcommand"
 
 comm :: String -> String -> String -> Doc

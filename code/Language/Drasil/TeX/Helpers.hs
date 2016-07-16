@@ -74,8 +74,8 @@ center    = mkEnv "center"
 document  = mkEnv "document"
 
 docclass, exdoc :: Maybe String -> String -> D
-docclass = command1o "\\documentclass"
-exdoc = command1o "\\externaldocument"
+docclass = command1o "documentclass"
+exdoc = command1o "externaldocument"
 
 sec :: Int -> String -> D
 sec d b1 

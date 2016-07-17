@@ -218,14 +218,14 @@ safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
 
 t1descr :: Sentence
 t1descr = 
-  S "If " :+: (U $ is_safe1 ^. symbol) :+: S " = True, the glass is " :+: 
-  S "considered safe. " :+: (U $ is_safe1 ^.symbol) :+: S " and " :+: 
-  (U $ is_safe2 ^. symbol) :+: S " (from " :+: 
+  S "If " :+: (P $ is_safe1 ^. symbol) :+: S " = True, the glass is " :+: 
+  S "considered safe. " :+: (P $ is_safe1 ^.symbol) :+: S " and " :+: 
+  (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either " :+:
-  S "both True or both False. " :+: (U $ prob_br ^. symbol) :+: 
+  S "both True or both False. " :+: (P $ prob_br ^. symbol) :+: 
   S " is the " :+: (sMap (map toLower) (prob_br ^. descr)) :+: 
   S ", as calculated in " :+: (makeRef (Definition (Theory probOfBr))) :+: 
-  S ". " :+: (U $ pb_tol ^. symbol) :+: S " is the " :+: 
+  S ". " :+: (P $ pb_tol ^. symbol) :+: S " is the " :+: 
   (sMap (map toLower) (pb_tol ^. descr)) :+: S " entered by the user."
 
 t2SafetyReq :: RelationChunk
@@ -238,14 +238,14 @@ safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 
 t2descr :: Sentence
 t2descr = 
-  S "If " :+: (U $ is_safe2 ^. symbol) :+: S " = True, the glass is " :+:
-  S "considered safe. " :+: (U $ is_safe1 ^. symbol) :+: S " (from " :+:
+  S "If " :+: (P $ is_safe2 ^. symbol) :+: S " = True, the glass is " :+:
+  S "considered safe. " :+: (P $ is_safe1 ^. symbol) :+: S " (from " :+:
   (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
-  (U $ is_safe2 ^. symbol) :+: S " are either both True or both False. " :+:   
-  (U $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. descr) :+: 
+  (P $ is_safe2 ^. symbol) :+: S " are either both True or both False. " :+:   
+  (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. descr) :+: 
   S " (also called capacity, as defined in " :+: 
   (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
-  (U $ demand ^. symbol) :+: S " (also referred as the demand) is the " :+:
+  (P $ demand ^. symbol) :+: S " (also referred as the demand) is the " :+:
   S "3 second equivalent pressure, as defined in " :+: 
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
@@ -258,9 +258,9 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 
 pbdescr :: Sentence
 pbdescr =
-  (U $ prob_br ^. symbol) :+: S " is the calculated " :+: 
+  (P $ prob_br ^. symbol) :+: S " is the calculated " :+: 
     (sMap (map toLower) (prob_br ^. descr)) :+: S ". "  :+: 
-    (U $ risk_fun ^. symbol) :+: S " is the " :+: (risk ^. descr) :+: S "."
+    (P $ risk_fun ^. symbol) :+: S " is the " :+: (risk ^. descr) :+: S "."
 
 calOfCap :: RelationChunk
 calOfCap = makeRC "Calculation of Capacity(LR)" capdescr cap_rel
@@ -270,10 +270,10 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (U $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. descr) :+: S ", which " :+:
-  S "is also called capacity. " :+: (U $ nonFL ^. symbol) :+: S " is the " :+:
-  (nonFL ^. descr) :+: S ". " :+: (U $ gTF ^. symbol) :+: S " is the " :+:
-  (gTF ^. descr) :+: S ". " :+: (U $ loadSF ^. symbol) :+: S " is the " :+:
+  (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. descr) :+: S ", which " :+:
+  S "is also called capacity. " :+: (P $ nonFL ^. symbol) :+: S " is the " :+:
+  (nonFL ^. descr) :+: S ". " :+: (P $ gTF ^. symbol) :+: S " is the " :+:
+  (gTF ^. descr) :+: S ". " :+: (P $ loadSF ^. symbol) :+: S " is the " :+:
   (loadSF ^. descr) :+: S "."
 
 calOfDe :: RelationChunk
@@ -284,17 +284,17 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 
 dedescr :: Sentence
 dedescr = 
-  (U $ demand ^. symbol) :+: S " or demand, is the 3 second equivalent " :+:
+  (P $ demand ^. symbol) :+: S " or demand, is the 3 second equivalent " :+:
     S "pressure obtained from Figure 2 by interpolation using stand off " :+:
-    S "distance (" :+: (U $ sd ^. symbol) :+: S ") and " :+: 
-    (U $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
-    (U $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
-    (U $ eqTNTWeight ^. symbol) :+: S " = " :+: (U $ char_weight ^. symbol) :+:
-    S " * TNT. " :+: (U $ char_weight ^. symbol) :+: S " is the " :+:
+    S "distance (" :+: (P $ sd ^. symbol) :+: S ") and " :+: 
+    (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
+    (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
+    (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
+    S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
     (sMap (map toLower) (char_weight ^. descr)) :+: S ". " :+: 
-    (U $ tNT ^. symbol) :+: S " is the " :+: (tNT ^. descr) :+: S ". " :+: 
-    (U $ sd ^.symbol) :+: S " is the stand off distance where " :+:
-    (U $ sd ^. symbol) :+: S " = ." --equation in sentence
+    (P $ tNT ^. symbol) :+: S " is the " :+: (tNT ^. descr) :+: S ". " :+: 
+    (P $ sd ^.symbol) :+: S " is the stand off distance where " :+:
+    (P $ sd ^. symbol) :+: S " = ." --equation in sentence
 
 --Data Definitions--
 risk_eq :: Expr
@@ -311,7 +311,7 @@ hFromt_eq = FCall (C act_thick) [C nom_thick]
 
 hFromt :: EqChunk
 hFromt = fromEqn "h" (S " function that maps from the nominal thickness (" :+:
- (U $ nom_thick ^. symbol) :+: S ") to the minimum thickness, as follows: " :+:
+ (P $ nom_thick ^. symbol) :+: S ") to the minimum thickness, as follows: " :+:
   S "h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = 4.0 " 
   :+: S "=> 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | " :+:
   S "t = 10.0 => 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 " :+:
@@ -342,11 +342,11 @@ glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: EqChunk
 glaTyFac = fromEqn "GTF" (S "function that maps from the glass type (" :+: 
-  (U $ glass_type ^. symbol) :+: S ") to a real number, as follows: " :+: 
-  (U $ glaTyFac ^.symbol) :+: S "(" :+: (U $ glass_type ^. symbol) :+: 
-  S ") = (" :+: (U $ glass_type ^. symbol) :+: S " = AN => 1.0|" :+: 
-  (U $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
-  (U $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: S "AN is " :+:
+  (P $ glass_type ^. symbol) :+: S ") to a real number, as follows: " :+: 
+  (P $ glaTyFac ^.symbol) :+: S "(" :+: (P $ glass_type ^. symbol) :+: 
+  S ") = (" :+: (P $ glass_type ^. symbol) :+: S " = AN => 1.0|" :+: 
+  (P $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
+  (P $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: S "AN is " :+:
   S "annealed glass. FT is fully tempered glass. HS is heat " :+:
   S "strengthened glass.") (Atomic "GTF") unitless glaTyFac_eq
 

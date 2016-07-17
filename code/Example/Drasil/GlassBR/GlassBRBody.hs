@@ -61,7 +61,7 @@ s1_2_intro = Paragraph $
   S "alphabetical order." 
   
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-  [(\ch -> U (ch ^. symbol)),  
+  [(\ch -> P (ch ^. symbol)),  
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
    ]
@@ -240,8 +240,8 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
     (sMap (map toLower) (S $ demandq ^. name)) :+: S " is the requirement " :+:
     S " which is the " :+: (demandq ^. descr) :+: S ". The second condition "
     :+: S "is to check whether the calculated probability (" :+: 
-    (U $ prob_br ^. symbol) :+: S ") is less than the tolerable probability (" 
-    :+: (U $ pb_tol ^. symbol) :+: S ") which is obtained from the user " :+:
+    (P $ prob_br ^. symbol) :+: S ") is less than the tolerable probability (" 
+    :+: (P $ pb_tol ^. symbol) :+: S ") which is obtained from the user " :+:
     S "as an input. If both conditions return true then it's shown that the " 
     :+: (sMap (map toLower) (glaSlab ^. descr)) :+: S " is safe to use, " :+: 
     S "else if both return false then the " :+: 
@@ -362,14 +362,14 @@ s6_2_1_eq3 = EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
 s6_2_1_eq4 = EqnBlock $ (C load_dur):=(Int 3)
 
   --  (Number $ map (\c -> Flat c) [
-  --  (U $ sflawParamM ^. symbol) :+: S " = 7 " :+: Sy (sflawParamM ^. unit), 
-  --  (U $ sflawParamK ^. symbol) :+: S " = 2.86 * 10^(-53) " :+: Sy (sflawParamK ^. unit), 
-  --  (U $ mod_elas ^. symbol) :+: S " = 7.17 * 10^7 " :+: Sy (mod_elas ^. unit),
-  --  (U $ load_dur ^. symbol) :+: S " = 3 " :+: Sy (load_dur ^. unit)]))] ++
+  --  (P $ sflawParamM ^. symbol) :+: S " = 7 " :+: Sy (sflawParamM ^. unit), 
+  --  (P $ sflawParamK ^. symbol) :+: S " = 2.86 * 10^(-53) " :+: Sy (sflawParamK ^. unit), 
+  --  (P $ mod_elas ^. symbol) :+: S " = 7.17 * 10^7 " :+: Sy (mod_elas ^. unit),
+  --  (P $ load_dur ^. symbol) :+: S " = 3 " :+: Sy (load_dur ^. unit)]))] ++
 s6_2_1_list2 = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "A5", S "Glass under consideration is assumed to be a single " :+:
     (sMap (map toLower) (S $ lite ^. name)) :+: S ". Hence the value of " :+: 
-    (U $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in " :+: 
+    (P $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in " :+: 
     (gLassBR ^. descr) :+: S "."),
   (S "A6", S "Boundary conditions for the " :+: 
     (sMap (map toLower) (glaSlab ^. descr)) :+: S " is assumed to be 4-sided "
@@ -378,10 +378,10 @@ s6_2_1_list2 = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
     S " is flexural."),
   (S "A8", S "With reference to A4 the value of " :+:
     (sMap (map toLower) (loadDF ^. descr)) :+: S " (" :+: 
-    (U $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. descr) 
+    (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. descr) 
     :+: S ". It is calculated by the equation: " :+: 
-    --(U $ loadDF ^. symbol) :+: S " = " :+: (U $ load_dur ^. symbol) :+: 
-    S ". Using this, " :+: (U $ loadDF ^. symbol) :+: S " = 0.27.")]
+    --(P $ loadDF ^. symbol) :+: S " = " :+: (P $ load_dur ^. symbol) :+: 
+    S ". Using this, " :+: (P $ loadDF ^. symbol) :+: S " = 0.27.")]
   --equation in sentence
 
 s6_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s") (map Con s6_2_2_TMods)
@@ -423,33 +423,33 @@ s6_2_5_intro = Paragraph $
   (makeRef s6_2_5_table2) :+: S ") gives the values of the specification " :+:
   S "parameters used in Table 2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S "). " :+: 
-  (U $ ar_max ^. symbol) :+: S " refers to the " :+:
+  (P $ ar_max ^. symbol) :+: S " refers to the " :+:
   (sMap (map toLower) (ar_max ^. descr)) :+: S " for the plate of glass."
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
 --  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),
---  (\x -> x!!4)] [[(U $ plate_len ^. symbol), (U $ plate_len ^. symbol) :+: S " > 0 and " :+: 
---  (U $ plate_len ^. symbol) :+: S "/" :+: (U $ plate_width ^. symbol) :+: S " > 1",
---  (U $ dim_min ^. symbol) :+: S " <= " :+: (U $ plate_len ^. symbol) :+: S " <= " :+: 
---  (U $ dim_max ^. symbol) :+: S " and " :+: (U $ plate_len ^. symbol) :+: S "/" :+: 
---  (U $ plate_width ^. symbol) :+: S " < " :+: (U $ ar_max ^. symbol), S "1500 " :+:
---  Sy (plate_len ^. unit), S "10%"], [(U $ plate_width ^. symbol), (U $ (plate_width ^. symbol)) 
---  :+: S " > 0 and " :+: (U $ plate_width ^. symbol) :+: S " < " :+: (U $ plate_len ^. symbol),
---  (U $ dim_min ^. symbol) :+: S " <= " :+: (U $ plate_width ^. symbol) :+: S " <= " :+: 
---  (U $ dim_max ^.symbol) :+: S " and " :+: (U $ plate_len ^. symbol) :+: S "/" :+: 
---  (U $ plate_width ^. symbol) :+: S " < " :+: (U $ ar_max ^. symbol), S "1200 " :+: 
---  Sy (plate_width ^. unit), S "10%"], [(U $ pb_tol ^. symbol), S "0 < " :+: 
---  (U $ pb_tol ^. symbol) :+: S " < 1", S "-", S "0.008", S "0.1%"], [(U $ char_weight ^. symbol), 
---  (U $ char_weight ^. symbol) :+: S " >= 0", (U $ cWeightMin ^. symbol) :+: S " < " :+: 
---  (U $ char_weight ^. symbol) :+: S " < " :+: (U $ cWeightMax ^. symbol), S "42 " :+: 
---  Sy (char_weight ^. unit), S "10%"],[(U $ tNT ^. symbol), (U $ tNT ^. symbol) :+: 
---  S " > 0", S "-", S "1", S "10%"], [(U $ sd ^. symbol), (U $ sd ^. symbol) :+: S " > 0", 
---  (U $ sd_min ^. symbol) :+: S " < " :+: (U $ sd ^. symbol) :+: S " < " :+: 
---  (U $ sd_max ^. symbol), S "45" :+: Sy (sd ^. unit), S "10%"]])
+--  (\x -> x!!4)] [[(P $ plate_len ^. symbol), (P $ plate_len ^. symbol) :+: S " > 0 and " :+: 
+--  (P $ plate_len ^. symbol) :+: S "/" :+: (P $ plate_width ^. symbol) :+: S " > 1",
+--  (P $ dim_min ^. symbol) :+: S " <= " :+: (P $ plate_len ^. symbol) :+: S " <= " :+: 
+--  (P $ dim_max ^. symbol) :+: S " and " :+: (P $ plate_len ^. symbol) :+: S "/" :+: 
+--  (P $ plate_width ^. symbol) :+: S " < " :+: (P $ ar_max ^. symbol), S "1500 " :+:
+--  Sy (plate_len ^. unit), S "10%"], [(P $ plate_width ^. symbol), (P $ (plate_width ^. symbol)) 
+--  :+: S " > 0 and " :+: (P $ plate_width ^. symbol) :+: S " < " :+: (P $ plate_len ^. symbol),
+--  (P $ dim_min ^. symbol) :+: S " <= " :+: (P $ plate_width ^. symbol) :+: S " <= " :+: 
+--  (P $ dim_max ^.symbol) :+: S " and " :+: (P $ plate_len ^. symbol) :+: S "/" :+: 
+--  (P $ plate_width ^. symbol) :+: S " < " :+: (P $ ar_max ^. symbol), S "1200 " :+: 
+--  Sy (plate_width ^. unit), S "10%"], [(P $ pb_tol ^. symbol), S "0 < " :+: 
+--  (P $ pb_tol ^. symbol) :+: S " < 1", S "-", S "0.008", S "0.1%"], [(P $ char_weight ^. symbol), 
+--  (P $ char_weight ^. symbol) :+: S " >= 0", (P $ cWeightMin ^. symbol) :+: S " < " :+: 
+--  (P $ char_weight ^. symbol) :+: S " < " :+: (P $ cWeightMax ^. symbol), S "42 " :+: 
+--  Sy (char_weight ^. unit), S "10%"],[(P $ tNT ^. symbol), (P $ tNT ^. symbol) :+: 
+--  S " > 0", S "-", S "1", S "10%"], [(P $ sd ^. symbol), (P $ sd ^. symbol) :+: S " > 0", 
+--  (P $ sd_min ^. symbol) :+: S " < " :+: (P $ sd ^. symbol) :+: S " < " :+: 
+--  (P $ sd_max ^. symbol), S "45" :+: Sy (sd ^. unit), S "10%"]])
 --  (S "Table 2: Input Variables") True
 
 s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable 
-  [(\x -> U $ fst(x)), (\x -> snd(x))] 
+  [(\x -> P $ fst x), (\x -> snd x)] 
   [(dim_min ^. symbol, S "0.1 " :+: Sy (sd ^. unit)), 
   (dim_max ^.symbol, S "0.1 " :+: Sy (sd ^. unit)),(ar_max ^. symbol, S "5"), 
   (cWeightMin ^. symbol, S "4.5 " :+: Sy (cWeightMin ^. unit)),
@@ -464,8 +464,8 @@ s6_2_5_intro2 = Paragraph $
   :+: S "that must be satisfied by the output."
 
 -- s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
---  [(\x -> U $ fst(x)), (\x -> snd(x))] 
---  [(prob_br ^. symbol, S "0 < " :+: (U $ prob_br ^. symbol) :+: S " < 1")])
+--  [(\x -> P $ fst(x)), (\x -> snd(x))] 
+--  [(prob_br ^. symbol, S "0 < " :+: (P $ prob_br ^. symbol) :+: S " < 1")])
 --  (S "Table4: Output Variables") True
 
 s7 = Section 0 ((requirement ^. descr) :+: S "s") [Sub s7_1, Sub s7_2]
@@ -486,7 +486,7 @@ s7_1_list1 = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
     (sMap (map toLower) (S $ blast ^. name)) :+: S ":")]
 
 s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-  [(\ch -> U (ch ^. symbol)),  
+  [(\ch -> P (ch ^. symbol)),  
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
    ]
@@ -497,11 +497,11 @@ s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 s7_1_list2 = Enumeration $ Simple $
   [(S "R2", Nested (S "The system shall set the known values as follows: ") 
     (Bullet $ map (\c -> Flat c) 
-      [(U $ sflawParamM ^. symbol) :+: S ", " :+: (U $ sflawParamK ^. symbol) 
-      :+: S ", " :+: (U $ mod_elas ^. symbol) :+: S ", " :+: 
-      (U $ load_dur ^. symbol) :+: S " following A4",
-      (U $ loadDF ^. symbol) :+: S " following A8",
-      (U $ loadSF ^. symbol) :+: S " following A5"]))] ++
+      [(P $ sflawParamM ^. symbol) :+: S ", " :+: (P $ sflawParamK ^. symbol) 
+      :+: S ", " :+: (P $ mod_elas ^. symbol) :+: S ", " :+: 
+      (P $ load_dur ^. symbol) :+: S " following A4",
+      (P $ loadDF ^. symbol) :+: S " following A8",
+      (P $ loadSF ^. symbol) :+: S " following A5"]))] ++
   map (\(a,b) -> (a, Flat b))
   [(S "R3", S "The system shall check the entered input values to ensure " :+:
     S "that they do not exceed the data constraints mentioned in " :+: 
@@ -509,8 +509,8 @@ s7_1_list2 = Enumeration $ Simple $
     S "bounds, an error message is displayed and the calculations stop."),
   (S "R4", S "Output the input quantities from R1 and the known quantities "
     :+: S "from R2."),
-  (S "R5", S "If " :+: (U $ is_safe1 ^. symbol) :+: S " and " :+:
-    (U $ is_safe2 ^. symbol) :+: S " (from " :+: 
+  (S "R5", S "If " :+: (P $ is_safe1 ^. symbol) :+: S " and " :+:
+    (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
     (makeRef (Definition (Theory t1SafetyReq))) :+: S " T1 and " :+: 
     (makeRef (Definition (Theory t2SafetyReq))) :+: S " T2) are true, " :+:
     S "output the message " :+: Quote (safeMessage ^. descr) :+: S " If " :+:
@@ -518,23 +518,23 @@ s7_1_list2 = Enumeration $ Simple $
     Quote (notSafe ^. descr))] ++
   [(S "R6", Nested (S "Output the following quantities:")
     (Bullet $ 
-      [Flat $ (prob_br ^. descr) :+: S " (" :+: (U $ prob_br ^. symbol) :+: 
+      [Flat $ (prob_br ^. descr) :+: S " (" :+: (P $ prob_br ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")"] ++
-      [Flat $ (lRe ^. descr) :+: S " (" :+: (U $ lRe ^. symbol) :+: S ") (" 
+      [Flat $ (lRe ^. descr) :+: S " (" :+: (P $ lRe ^. symbol) :+: S ") (" 
         :+: (makeRef (Definition (Theory calOfCap))) :+: S ")"] ++
-      [Flat $ (demand ^. descr) :+: S " (" :+: (U $ demand ^. symbol) :+: 
+      [Flat $ (demand ^. descr) :+: S " (" :+: (P $ demand ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Theory calOfDe))) :+: S ")"] ++
-      [Flat $ (act_thick ^. descr) :+: S " (" :+: (U $ act_thick ^. symbol) 
+      [Flat $ (act_thick ^. descr) :+: S " (" :+: (P $ act_thick ^. symbol) 
         :+: S ") (" :+: (makeRef (Definition (Data hFromt))) :+: S ")"] ++
-      map (\c -> Flat $ (c ^. descr) :+: S " (" :+: (U $ c ^. symbol) :+: 
+      map (\c -> Flat $ (c ^. descr) :+: S " (" :+: (P $ c ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Data c))) :+: S ")")
       [loadDF,strDisFac,nonFL]++
-      [Flat $ (gTF ^. descr) :+: S " (" :+: (U $ gTF ^. symbol) :+: 
+      [Flat $ (gTF ^. descr) :+: S " (" :+: (P $ gTF ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Data glaTyFac))) :+: S ")"] ++
-      map (\c -> Flat $ (c ^. descr) :+: S " (" :+: (U $ c ^. symbol) :+: 
+      map (\c -> Flat $ (c ^. descr) :+: S " (" :+: (P $ c ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Data c))) :+: S ")")
       [dL,tolPre,tolStrDisFac] ++
-      [Flat $ (ar ^. descr) :+: S " (" :+: (U $ ar ^. symbol) :+: 
+      [Flat $ (ar ^. descr) :+: S " (" :+: (P $ ar ^. symbol) :+: 
         --S " = a/b)"
         S ")"]))]
 
@@ -556,8 +556,8 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
     S "blast risk. In the future calculations can be added for the " :+:
     S "internal blast risk."),
   (S "LC2", S "A4, A8 - Currently the values for " :+: 
-    (U $ sflawParamM ^. symbol) :+: S ", " :+: (U $ sflawParamK ^. symbol) :+:
-    S ", and " :+: (U $ mod_elas ^. symbol) :+: S " are assumed to be the " :+:
+    (P $ sflawParamM ^. symbol) :+: S ", " :+: (P $ sflawParamK ^. symbol) :+:
+    S ", and " :+: (P $ mod_elas ^. symbol) :+: S " are assumed to be the " :+:
     S "same for all glass. In the future these values can be changed to " :+:
     S "variable inputs."),
   (S "LC3", S "A5 - The software may be changed to accommodate more than " :+:
@@ -602,13 +602,13 @@ s10_intro = Paragraph $
   (makeRef fig_3) :+: S ") used for interpolating values needed in the models."
 
 fig_2 = Figure (S "Figure 2: " :+: (demandq ^. descr) :+: S " (" :+: 
-  U (demand ^. symbol) :+: S ") versus " :+: (S $ sD ^. name) :+:
+  P (demand ^. symbol) :+: S ") versus " :+: (S $ sD ^. name) :+:
   S " versus " :+: (char_weight ^. descr) :+: S " (" :+: 
-  U (sflawParamM ^. symbol) :+: S ")") "ASTM_F2248-09.png"
+  P (sflawParamM ^. symbol) :+: S ")") "ASTM_F2248-09.png"
 
 fig_3 = Figure (S "Figure 3: Non dimensional " :+: 
   (sMap (map toLower) (S $ lateral ^. name)) :+: S " " :+:
   (sMap (map toLower) (S $ load ^. name)) :+: S " (" :+: 
-  U (dimlessLoad ^. symbol) :+: S ") versus " :+: (ar ^. descr) :+: S " (" :+:
-  U (ar ^. symbol) :+: S ") versus " :+: (sdf ^. descr) :+: S  " (" :+: 
-  U (sdf ^. symbol) :+: S ")") "ASTM_F2248-09_BeasonEtAl.png"
+  P (dimlessLoad ^. symbol) :+: S ") versus " :+: (ar ^. descr) :+: S " (" :+:
+  P (ar ^. symbol) :+: S ") versus " :+: (sdf ^. descr) :+: S  " (" :+: 
+  P (sdf ^. symbol) :+: S ")") "ASTM_F2248-09_BeasonEtAl.png"

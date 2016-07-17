@@ -2,7 +2,7 @@ module Language.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..))
-import Language.Drasil.Unicode (Circle(..))
+import Language.Drasil.Unicode (Special(Circle))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..),Sentence(..))
 

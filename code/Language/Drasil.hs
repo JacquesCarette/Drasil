@@ -8,8 +8,7 @@ module Language.Drasil (
   -- Expr
   , Expr(..), Relation, UFunc(..)
   -- all the stuff from Unicode
-  , Alpha(..), Beta(..), Circle(..), Delta(..), Ell(..), Eta(..), Gamma(..), Lambda(..), LEQ(..), Nabla(..)
-  , Nu(..), Omega(..), Partial(..), Phi(..), Rho(..), Tau(..), Upsilon(..)
+  , Greek(..), Special(..)
   -- Unit
   , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
   , from_udefn , makeDerU, unitCon
@@ -65,7 +64,6 @@ import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc (mkTable)
-import Language.Drasil.Instances ()
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCode)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))

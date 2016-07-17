@@ -18,11 +18,10 @@ import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth,
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
-import Language.Drasil.Unicode
-import Language.Drasil.Format (Format(TeX))
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
+import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 
 genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
@@ -38,7 +37,7 @@ buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
          (Document t a c) =
   docclass sb b1 %%
   listpackages ps %%
-  title (pCon Plain t) %%
+  title (spec t) %%
   author (p_spec a) %%
   document (maketitle %% print c)
 
@@ -48,7 +47,7 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
   docclass sb b1 %%
   listpackages ps %%
   exdoc f n %%
-  title (p_spec t) %%
+  title (spec t) %%
   author (p_spec a) %%
   document (maketitle %% print c)
 
@@ -83,6 +82,8 @@ p_spec (S s)       = s
 p_spec (N s)       = symbol s
 p_spec (Sy s)      = runReader (uSymbPrint s) Plain
 p_spec HARDNL      = "\\newline"
+p_spec (G g)       = unPL $ greek g
+p_spec (Sp s)      = unPL $ special s
 p_spec (Ref t@Sect r) = if numberedSections
                        then show t ++ "~\\ref" ++ brace (p_spec r)
                        else "\\hyperref" ++ sqbrac (p_spec r) ++
@@ -93,7 +94,8 @@ p_spec (Ref t r)   = show t ++ "~\\ref" ++ brace (p_spec r)
 
 symbol :: Symbol -> String
 symbol (Atomic s)  = s
-symbol (Special s) = render TeX s
+symbol (Special s) = unPL $ special s
+symbol (Greek g)   = unPL $ greek g
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -199,6 +201,8 @@ needs (_ :^: _) = Math
 needs (_ :/: _) = Math -- Fractions are always equations.
 needs (Sy _)    = Text
 needs (N _)     = Math
+needs (G _)     = Math
+needs (Sp _)    = Math
 needs HARDNL    = Text
 needs (Ref _ _)  = Text
 
@@ -210,12 +214,14 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex)      = pure $ text $ p_expr ex
-spec (a :-: s)   = pure $ text $ p_spec a ++ "_" ++ brace (p_spec s)
+spec (a :-: s)   = toMath $ pure $ text $ p_spec a ++ "_" ++ brace (p_spec s)
 spec (a :^: s)   = pure $ text $ p_spec a ++ "^" ++ brace (p_spec s)
 spec (a :/: s)   = pure $ text $ "\\frac" ++ brace (p_spec a) ++ brace (p_spec s)
 spec (S s)       = pure $ text $ s
-spec (N s)       = pure $ text $ symbol s
+spec (N s)       = toMath $ pure $ text $ symbol s
 spec (Sy s)      = pure $ text $ runReader (uSymbPrint s) Plain
+spec (G g)       = pure $ text $ unPL $ greek g
+spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
 spec (Ref t@Sect r) = pure $ text $ 
                      if numberedSections
@@ -238,6 +244,8 @@ getCon (_ :-: _) = Equation --Sub/superscripts must be in Equation ctxt.
 getCon (_ :^: _) = Equation
 getCon (_ :/: _) = Equation -- Fractions are always equations.
 getCon (Sy _)    = Plain
+getCon (G _)     = Equation
+getCon (Sp _)    = Equation
 getCon (N _)     = Equation
 getCon HARDNL    = Plain
 getCon (Ref _ _)   = Plain
@@ -300,6 +308,7 @@ getSyCon (Atomic _)          = Plain
   -- TODO: Need to figure this out, or figure out how to print catenations in a
   --       better way.
 getSyCon (Special _)         = Plain
+getSyCon (Greek _)           = Equation
 getSyCon (Concat [])         = Plain
 getSyCon (Concat (s:_))      = getSyCon s
 getSyCon (Corners _ _ _ _ s) = getSyCon s

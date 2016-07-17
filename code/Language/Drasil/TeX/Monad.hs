@@ -9,6 +9,7 @@ import Control.Applicative hiding (empty)
 import Data.Monoid hiding ((<>))
 
 import qualified Language.Drasil.Printing.Helpers as H
+import Language.Drasil.Unicode
 
 -----------------------------------------------------------------------------
 -- Printing monad
@@ -93,3 +94,41 @@ lub :: MathContext -> MathContext -> MathContext
 lub Math Math = Math
 lub Text Text = Text
 lub _    _    = Text -- Text is top-most
+
+-----------------
+-- Hacked up version, will get deleted
+data Latex = L { unPL :: String }
+
+instance RenderGreek Latex where
+  greek Alpha_L   = L "\\alpha{}"
+  greek Alpha     = L "\\Alpha{}"
+  greek Beta_L   = L "\\beta{}"
+  greek Beta     = L "\\Beta{}"
+  greek Delta_L   = L "\\delta{}"
+  greek Delta     = L "\\Delta{}"
+  greek Ell    = L "\\ell{}"
+  greek Eta_L   = L "\\eta{}"
+  greek Eta     = L "\\Eta{}"
+  greek Gamma_L   = L "\\gamma{}"
+  greek Gamma     = L "\\Gamma{}"
+  greek Lambda_L   = L "\\lambda{}"
+  greek Lambda     = L "\\Lambda{}"
+  greek Nabla   = L "\\nabla{}"
+  greek Nu_L   = L "\\nu{}"
+  greek Nu     = L "\\Nu{}"
+  greek Omega_L   = L "\\omega{}"
+  greek Omega     = L "\\Omega{}"
+  greek Phi_L   = L "\\phi{}"
+  greek Phi_V   = L "\\varphi{}"
+  greek Phi     = L "\\Phi{}"
+  greek Rho_L   = L "\\rho{}"
+  greek Rho     = L "\\Rho{}"
+  greek Tau_L   = L "\\tau{}"
+  greek Tau     = L "\\Tau{}"
+  greek Upsilon_L   = L "\\upsilon{}"
+  greek Upsilon     = L "\\Upsilon{}"
+
+instance RenderSpecial Latex where
+  special Circle   = L "${}^{\\circ}$"--temp $ workaround until unit printing's fixed.
+  special LEQ        = L "\\leq{}"
+  special Partial   = L "\\partial{}"

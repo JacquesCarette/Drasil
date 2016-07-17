@@ -62,16 +62,16 @@ empty = pure TP.empty
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-usepackage, title, author, count, includegraphics :: String -> D
+usepackage, author, count, includegraphics :: String -> D
 usepackage      = command "usepackage"
-title           = command "title"
 author          = command "author"
 count           = command "count"
 includegraphics = command "includegraphics"
 
-caption, label :: D -> D
+caption, label, title :: D -> D
 caption         = commandD "caption"
 label           = commandD "label"
+title           = commandD "title"
 
 maketitle, newline :: D
 maketitle = command0 "maketitle"

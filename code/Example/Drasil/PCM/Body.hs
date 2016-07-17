@@ -54,7 +54,7 @@ s1_2_intro = Paragraph $
   S "with existing documentation for solar water heating systems."
   
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-  [(\ch -> U (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
+  [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
    ]
@@ -103,12 +103,12 @@ s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
   (makeRef fig_tank) :+: S ", includes the following elements:"
 
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
-            U (ht_flux_C ^. symbol)) "TankWaterOnly.png"
+            P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "PS1", S "Tank containing water"), 
   (S "PS2", S "Heating coil at bottom of tank. (" :+:
-  U (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
+  P (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
   S " into the water.)")]
 
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro,

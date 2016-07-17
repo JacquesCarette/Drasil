@@ -1,8 +1,8 @@
-{-# OPTIONS -Wall #-} 
 module Language.Drasil.TeX.AST where
 
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.CCode.AST (Code)
 
@@ -46,6 +46,8 @@ data Spec = E Expr
           | Spec :/: Spec -- frac
           | Sy USymb
           | N Symbol
+          | G Greek
+          | Sp Special
           | Ref RefType Spec
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX

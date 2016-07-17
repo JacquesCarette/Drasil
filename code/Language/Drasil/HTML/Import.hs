@@ -3,8 +3,7 @@ module Language.Drasil.HTML.Import where
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
-import Language.Drasil.Unicode (render, Partial(..))
-import Language.Drasil.Format (Format(HTML))
+import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Unit
@@ -70,9 +69,10 @@ spec :: Sentence -> H.Spec
 spec (S s)     = H.S s
 spec (Sy s)    = H.Sy s
 spec (a :+: b) = spec a H.:+: spec b
-spec (U u)     = H.S $ render HTML u
+spec (G g)     = H.G g
+spec (Sp s)    = H.Sp s
+spec (P s)     = H.N s
 spec (F f s)   = spec $ accent f s
--- spec (N s)     = H.N s
 spec (Ref t r) = H.Ref t (spec r)
 spec (Quote q) = H.S "&quot;" H.:+: spec q H.:+: H.S "&quot;"
 

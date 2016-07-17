@@ -65,21 +65,21 @@ temp_init   = makeUC "T_init" "initial temperature"
 temp_water  = makeUC "T_W" "temperature of water" 
               (sub cT cW) centigrade
 temp_diff   = makeUC "deltaT" "temperature difference" 
-              (Concat [Special Delta, cT]) centigrade
+              (Concat [Greek Delta, cT]) centigrade
 vol         = makeUC "V" "volume" cV m_3
 --tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
                 -- (sub cV (Atomic "tank")) m_3
 water_vol   = makeUC "V_W" "volume of water" (sub cV cW) m_3
-density     = makeUC "rho" "density, mass per unit volume" (Special Rho_L) 
+density     = makeUC "rho" "density, mass per unit volume" (Greek Rho_L) 
               densityU
-water_dense = makeUC "rho_W" "density of water" (sub (Special Rho_L) cW) densityU
+water_dense = makeUC "rho_W" "density of water" (sub (Greek Rho_L) cW) densityU
 dummyVar    = makeUC "tau" "dummy variable for integration over time" 
-                (Special Tau_L) second
---melt_frac   = makeUC "Phi" "melt fraction" (Special Phi) unitless
+                (Greek Tau_L) second
+--melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
 ----VarChunks----
 gradient :: VarChunk
-gradient = makeVC "gradient" "the gradient operator" (Special Nabla)
+gradient = makeVC "gradient" "the gradient operator" (Greek Nabla)
 
 ----Acronyms-----
 acronyms :: [ConceptChunk]
@@ -114,7 +114,7 @@ t1descr :: Sentence
 t1descr = 
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 
-  (U $ htCap ^. symbol) :+: S " and density " :+: (U $ density ^. symbol) :+:
-  S ", where " :+: (U $ thFluxVect ^. symbol)) 
+  (P $ htCap ^. symbol) :+: S " and density " :+: (P $ density ^. symbol) :+:
+  S ", where " :+: (P $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.

@@ -129,6 +129,6 @@ instance RenderGreek Latex where
   greek Upsilon     = L "\\Upsilon{}"
 
 instance RenderSpecial Latex where
-  special Circle   = L "${}^{\\circ}$"--temp $ workaround until unit printing's fixed.
+  special Circle   = L "{}^{\\circ}"
   special LEQ        = L "\\leq{}"
   special Partial   = L "\\partial{}"

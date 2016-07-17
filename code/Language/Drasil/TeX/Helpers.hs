@@ -12,12 +12,19 @@ import Language.Drasil.TeX.Monad
 -- Infrastructre for defining commands, environments, etc.
 --   (calls to TP should only occur in this section)
 
-lb, rb :: D
-lb = pure $ text "{"
-rb = pure $ text "}"
-
-br :: D -> D
+br, sq, parens :: D -> D
 br x = lb <> x <> rb
+  where
+  lb = pure $ text "{"
+  rb = pure $ text "}"
+sq x = ls <> x <> rs
+  where
+  ls = pure $ text "["
+  rs = pure $ text "]"
+parens x = lp <> x <> rp
+  where
+  lp = pure $ text "("
+  rp = pure $ text ")"
 
 -- Make 1-argument command
 command :: String -> (String -> D)
@@ -30,6 +37,11 @@ commandD s c = (pure $ (H.bslash TP.<> text s)) <> br c
 command1o :: String -> Maybe String -> String -> D
 command1o s o c = pure $ (H.bslash TP.<> text s) TP.<>
   (maybe TP.empty H.sq o) TP.<> H.br c
+
+-- no braces!
+command1oD :: String -> Maybe D -> D -> D
+command1oD s o c = 
+  (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
 
 -- 0-argument command
 command0 :: String -> D
@@ -59,43 +71,62 @@ renewcomm b1 b2 = pure $ text "\\renewcommand" TP.<> H.br ("\\" ++ b1) TP.<> H.b
 empty :: D
 empty = pure TP.empty
 
+-- For sections
+genSec :: Int -> D
+genSec d
+  | d < 0 = error "Cannot have section with negative depth"
+  | d > 2 = error "Section depth must be from 0-2"
+  | otherwise = pure $ 
+     H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
+      TP.<> (if (not numberedSections) then text "*" else TP.empty) 
+
+-- For references
+ref, sref, hyperref :: String -> D -> D
+ref t x = (pure $ text (t ++ "~\\ref")) <> br x
+hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
+sref = if numberedSections then ref else hyperref
+
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-usepackage, author, count, includegraphics :: String -> D
+usepackage, count, includegraphics :: String -> D
 usepackage      = command "usepackage"
-author          = command "author"
 count           = command "count"
 includegraphics = command "includegraphics"
 
-caption, label, title :: D -> D
+author, caption, item, label, title :: D -> D
+author          = commandD "author"
 caption         = commandD "caption"
+item            = commandD "item"
 label           = commandD "label"
 title           = commandD "title"
+
+item' :: D -> D -> D
+item' bull s = command1oD "item" (Just bull) s
 
 maketitle, newline :: D
 maketitle = command0 "maketitle"
 newline = command0 "newline"
 
-code, itemize, enumerate, figure, center, document :: D -> D
+code, itemize, enumerate, figure, center, document, equation :: D -> D
 code      = mkEnv "lstlisting"
 itemize   = mkEnv "itemize"
 enumerate = mkEnv "enumerate"
 figure    = mkEnv "figure"
 center    = mkEnv "center"
 document  = mkEnv "document"
+equation  = mkEnv "equation"
 
 docclass, exdoc :: Maybe String -> String -> D
-docclass = command1o "\\documentclass"
-exdoc = command1o "\\externaldocument"
+docclass = command1o "documentclass"
+exdoc = command1o "externaldocument"
 
-sec :: Int -> String -> D
-sec d b1 
-  | d < 0 = error "Cannot have section with negative depth"
-  | d > 2 = error "Section depth must be from 0-2"
-  | otherwise = pure $ 
-      H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
-      TP.<> (if (not numberedSections) then text "*" else TP.empty) TP.<> H.br b1
+sec :: Int -> D -> D
+sec d b1 = genSec d <> br b1
+
+subscript, superscript :: D -> D -> D
+subscript a b = a <> (pure $ H.unders) <> br b
+superscript a b = a <> (pure $ H.hat) <> br b
 
 -- Macro / Command def'n --
 --TeX--
@@ -113,7 +144,5 @@ colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 
--- TODO
-fraction :: String -> String -> String
-fraction n d = "\\frac{" ++ n ++ "}{" ++ d ++ "}"
--- fraction = command2 "frac"
+fraction :: D -> D -> D
+fraction n d = command0 "frac" <> br n <> br d

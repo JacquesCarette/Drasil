@@ -1,26 +1,11 @@
-Name:		Drasil
+Name:		SSP
 Version:	0.0.4
 Cabal-Version:  >= 1.18
-Author:		Dan Szymczak, Jacques Carette, Spencer Smith
+Author:		?
 build-type:     Simple
-Synopsis:	A framework for code and document generation for scientific software
+Synopsis:	SSP Example for Drasil
 
-library
-  exposed-modules:
-    Language.Drasil
-  other-modules:
-    Language.Drasil.Expr
-  Build-Depends:
-    base >= 4.7,
-    lens >= 4.12,
-    containers >= 0.5.5.1,
-    pretty >= 1.1.1.1,
-    mtl >= 2.2.1
-  default-language: Haskell2010
-  ghc-options:      -Wall
-  HS-Source-Dirs:  ../../..
-
-executable lss
+executable ssp
   main-is: Example/Drasil/SSP/Main.hs
   Build-Depends:
     base >= 4.7,

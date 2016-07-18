@@ -6,12 +6,20 @@ import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
---Fundamental Units--
+----- Table of Units -----
+
+chipmunkSI :: [UnitDefn]
+chipmunkSI = map UU [metre, kilogram, second] ++ map UU [newton, radians]
+
+----- Fundamental Units -----
+
 newton, radians, unitless :: FundUnit
 newton  = fund "Newton"  "force" "N"
 radians = fund "Radians" "angle" "rad"
---unitless
+-- Unitless --
 unitless = fund "Unitless" "unitless" "unitless"
+
+----- Derived Units -----
 
 --s^2--
 s_2 :: DerUChunk

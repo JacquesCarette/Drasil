@@ -35,17 +35,21 @@ chip_srs = Document (S "Software Requirements Specification for Chipmunk2D")
 
 {-TODO: Split more keywords and definitions into chunks-}
 
+------------------------------------
 -- SECTION 1 : REFERENCE MATERIAL --
+------------------------------------
 
 s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2,
   Sub s1_3]
 
 s1_intro = Paragraph $ S "This section records information for easy reference."
 
+--------------------------
 -- 1.1 : Table of Units --
+--------------------------
+
 s1_1 = Section 1 (S "Table of Units") [Con s1_1_intro, Con s1_1_table]
 
--- general paragraph --
 s1_1_intro = Paragraph $ S "Throughout this document SI (Syst" :+:
            (F Grave 'e') :+: S "me International d'Unit" :+:
            (F Acute 'e') :+: S "s) is employed as the unit system." :+:
@@ -54,7 +58,6 @@ s1_1_intro = Paragraph $ S "Throughout this document SI (Syst" :+:
            S " given followed by a description of the unit followed by " :+:
            S "the SI name."
 
--- table of SI units --
 s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. unit)),
    (\x -> (x ^. descr)),
@@ -62,7 +65,10 @@ s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
   ] this_si)
   (S "Table of Units") False
 
+----------------------------
 -- 1.2 : Table of Symbols --
+----------------------------
+
 s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph $
@@ -72,7 +78,6 @@ s1_2_intro = Paragraph $
    S "the document, symbols in bold will represent vectors, and scalars " :+:
    S "otherwise. The symbols are listed in alphabetical order."
 
--- table of symbols --
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> U (ch ^. symbol)),
    (\ch -> Sy $ ch ^. unit),
@@ -81,7 +86,10 @@ s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   chipSymbols)
   (S "Table of Symbols") False
 
+--------------------------------------
 -- 1.3 : Abbreviations and Acronyms --
+--------------------------------------
+
 s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
@@ -90,7 +98,9 @@ s1_3_table = Table [S "Symbol", S "Description"] (mkTable
   acronyms)
   (S "Abbreviations and Acronyms") False
 
+------------------------------
 -- SECTION 2 : INTRODUCTION --
+------------------------------
 
 s2 = Section 0 (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
   Sub s2_3])
@@ -106,7 +116,10 @@ s2_intro = [Paragraph (S "Due to the rising cost of developing video " :+:
   S (physLib ^. name) :+: S "This section explains the purpose of this " :+:
   S "document, the scope of the system, and the organization of the document.")]
 
+-------------------------------
 -- 2.1 : Purpose of Document --
+-------------------------------
+
 s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
@@ -125,7 +138,10 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
   S "that will be used to increase confidence in the software " :+:
   S "documentation and the implementation.")]
 
+---------------------------------
 -- 2.2 : Scope of Requirements --
+---------------------------------
+
 s2_2 = Section 1 (S "Scope of " :+: (requirement ^. descr) :+: S "s")
   [Con s2_2_intro]
 
@@ -136,10 +152,13 @@ s2_2_intro = Paragraph $ S "The scope of the " :+:
   S ", " :+: S (chipmunk ^. name) :+: S " is intended to simulate how " :+:
   S "these " :+: S (rigidBodies ^. name) :+: S " interact with one another."
 
+-------------------------------------
 -- 2.3 : Organization of Documents --
+-------------------------------------
+
 s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_intro)
 
--- references pending --
+-- NOTE: References pending --
 s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
   S "template for an " :+: S (srs ^. name) :+: S " for scientific " :+:
   S "computing software proposed by [1] and [2]. The presentation follows " :+:
@@ -153,7 +172,9 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
   S "s, and the " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
   S "s to the " :+: (sMap (map toLower) (instMod ^. descr)) :+: S "s.")]
 
+--------------------------------------------
 -- SECTION 3 : GENERAL SYSTEM DESCRIPTION --
+--------------------------------------------
 
 s3 = Section 0 (S "General System Description") [Con s3_intro, Sub s3_1,
   Sub s3_2]
@@ -173,12 +194,12 @@ s3_2 = Section 1 (S "System Constraints") [Con s3_2_intro]
 
 s3_2_intro = Paragraph $ S "There are no system constraints."
 
+---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --
+---------------------------------------------
 
--- NOTE: Section 4 remains incomplete. General definitions, data definitions
--- and instance models have not been encoded.
--- Some require the summation and integral symbols which have yet to be
--- implemented.
+-- NOTE: Section 4 remains incomplete. General definitions and instance models
+-- have not been encoded.
 
 s4 = Section 0 (S "Specific System Description") [Con s4_intro, Sub s4_1,
   Sub s4_2]
@@ -189,7 +210,10 @@ s4_intro = Paragraph $ S "This section first presents the problem " :+:
   S "which presents the assumptions, theories, definitions that are used " :+:
   S "for the physics library."
 
+-------------------------------
 -- 4.1 : Problem Description --
+-------------------------------
+
 s4_1 = Section 1 (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
   Sub s4_1_2]
 
@@ -206,7 +230,10 @@ s4_1_intro = Paragraph $ S "Creating a gaming physics library is a " :+:
   S "physics library, game development will be more accessible to the " :+:
   S "masses and higher quality products will be produced."
 
+-----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
+-----------------------------------------
+
 s4_1_1 = Section 2 (S "Terminology and Definitions") [Con s4_1_1_intro,
   Con s4_1_1_bullets]
 
@@ -248,11 +275,17 @@ s4_1_2_list = Enumeration (Simple [
    (time ^. descr) :+: S " of " :+: S (rigidBodies ^. name) :+: S " that " :+:
    S "have undergone a collision."))])
 
+--------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
+--------------------------------------------------
+
 s4_2 = Section 1 (S "Solution Characteristics Specification") [Sub s4_2_1,
   Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
 
+-------------------------
 -- 4.2.1 : Assumptions --
+-------------------------
+
 s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro,
   Con s4_2_1_list]
 
@@ -292,7 +325,9 @@ s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
 s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map Definition (map Theory tMods)
 
+---------------------------------
 -- 4.2.3 : General Definitions --
+---------------------------------
 
 s4_2_3 = Section 2 ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
@@ -308,7 +343,10 @@ s4_2_3_GDefs :: [Contents]
 s4_2_3_GDefs = map Definition (map General gDefs)
 -}
 
+------------------------------
 -- 4.2.4 : Data Definitions --
+------------------------------
+
 s4_2_4 = Section 2 ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
@@ -319,7 +357,10 @@ s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
 s4_2_4_DDefs :: [Contents]
 s4_2_4_DDefs = map Definition (map Data dDefs)
 
+-----------------------------
 -- 4.2.5 : Instance Models --
+-----------------------------
+
 s4_2_5 = Section 2 ((instMod ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-})
 
@@ -332,7 +373,10 @@ s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
 -- Instance models not yet implemented
 -- s4_2_5_IMods :: [Contents]
 
+------------------------------
 -- 4.2.6 : Data Constraints --
+------------------------------
+
 s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
   Con s4_2_6_table2]
 
@@ -377,7 +421,9 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
   [U (angVel ^. symbol), S "None"]
   ]) (S "Table 2: Output Variables") True
 
+------------------------------
 -- SECTION 5 : REQUIREMENTS --
+------------------------------
 
 s5 = Section 0 (requirement ^. descr :+: S "s") [Con s5_intro, Sub s5_1,
   Sub s5_2]
@@ -388,7 +434,10 @@ s5_intro = Paragraph $ S "This section provides the functional " :+:
   (sMap (map toLower) (requirement ^. descr)) :+: S "s, the qualities that " :+:
   S "the software is expected to exhibit."
 
+-----------------------------------
 -- 5.1 : Functional Requirements --
+-----------------------------------
+
 s5_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s")
   [Con s5_1_list]
 
@@ -425,7 +474,10 @@ s5_1_list = Enumeration (Simple [
    S "period of " :+: (time ^. descr) :+: S " of the 2D " :+:
    S (rigidBodies ^. name) :+: S " that have undergone a collision."))])
 
+--------------------------------------
 -- 5.2 : Nonfunctional Requirements --
+--------------------------------------
+
 s5_2 = Section 1 (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s")
   [Con s5_2_intro]
 
@@ -434,7 +486,9 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance " :+:
    S "priority are: correctness, understandability, portability, " :+:
    S "reliability, and maintainability."
 
+--------------------------------
 -- SECTION 6 : LIKELY CHANGES --
+--------------------------------
 
 s6 = Section 0 ((likelyChange ^. descr) :+: S "s") [Con s6_intro, Con s6_list]
 
@@ -452,7 +506,9 @@ s6_list = Enumeration (Simple [
   (S (likelyChange ^. name) :+: S "4", Flat (S "The library may be " :+:
    S "expanded to include joints and constraints."))])
 
+-----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
+-----------------------------------------
 
 s7 = Section 0 (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
   Con s7_mid, Con s7_3dlist]
@@ -462,12 +518,12 @@ s7_intro = Paragraph $ S "As mentioned in " :+: (makeRef s4_1) :+:
   S "Similar 2D physics libraries are:"
 
 s7_2dlist = Enumeration (Bullet [
-  Flat (S "Box2D http://box2d.org/"),
-  Flat (S "Nape Physics Engine http://napephys.com/")])
+  Flat (S "Box2D: http://box2d.org/"),
+  Flat (S "Nape Physics Engine: http://napephys.com/")])
 
 s7_mid = Paragraph $ S "Free open source 3D game physics libraries include:"
 
 s7_3dlist = Enumeration (Bullet [
-  Flat (S "Bullet http://bulletphysics.org/"),
-  Flat (S "Open Dynamics Engine http://www.ode.org/"),
-  Flat (S "Newton Game Dynamics http://newtondynamics.com/")])
+  Flat (S "Bullet: http://bulletphysics.org/"),
+  Flat (S "Open Dynamics Engine: http://www.ode.org/"),
+  Flat (S "Newton Game Dynamics: http://newtondynamics.com/")])

@@ -19,7 +19,7 @@ intro = Paragraph $
   
 table :: (Unit s, Quantity s) => [s] -> Contents
 table ls = Table [S "Symbol", S "Description", S "Units"] (mkTable
-  [(\ch -> U (ch ^. symbol)) , 
+  [(\ch -> P (ch ^. symbol)) , 
    (\ch -> ch ^. descr), 
    (\ch -> Sy $ ch ^. unit)]
   ls)

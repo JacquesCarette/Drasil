@@ -22,7 +22,7 @@ s3 = Section 0 (S "Data Definitions") $ map (Con . Definition . Data) vars
 srs :: Quantity s => [s] -> String -> [Section] -> Document
 srs ls author body =
   Document ((S "SRS for ") :+: 
-    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) ls))))
+    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))
     (S author) body  
   
 srsBody :: Document

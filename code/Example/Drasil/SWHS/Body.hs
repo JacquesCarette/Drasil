@@ -3,7 +3,6 @@
 module Example.Drasil.SWHS.Body where
 
 import Data.Char (toLower)
-import Data.List (intersperse)
 import Control.Lens ((^.))
 
 import Example.Drasil.SWHS.Unitals
@@ -88,7 +87,7 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
 -- "heat transfer" is specific.
 
 s1_2_table = Table [S "Symbol", S "Unit", S "Description"] (mkTable
-  [(\ch -> U (ch ^. symbol)),
+  [(\ch -> P (ch ^. symbol)),
    (\ch -> Sy (ch ^. unit)),
    (\ch -> ch ^. descr)
    ] swhsSymbols)
@@ -316,16 +315,16 @@ s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat
               (S (water ^. name))) :+: S ".")),
               (S (physSyst ^. name) :+: S "2", Flat (S (coil ^. name) :+: 
               S " at bottom of " :+: (sMap (map toLower) (S (tank ^. name))) :+:
-              S ". (" :+: U (ht_flux_C ^. symbol) :+: S " represents the " :+:
+              S ". (" :+: P (ht_flux_C ^. symbol) :+: S " represents the " :+:
               (ht_flux_C ^. descr) :+: S ".)")),
               (S (physSyst ^. name) :+: S "3", Flat (S (phsChgMtrl ^. name) :+: 
               S " suspended in " :+: (sMap (map toLower) (S (tank ^. name))) :+:
-              S ". (" :+: U (ht_flux_P ^. symbol) :+: S " represents the " :+:
+              S ". (" :+: P (ht_flux_P ^. symbol) :+: S " represents the " :+:
               (ht_flux_P ^. descr) :+: S ".)"))])
 
 fig_tank = Figure ((tank ^. descr) :+: S ", with " :+: (ht_flux_C ^. descr) :+:
-           S " of " :+: U (ht_flux_C ^. symbol) :+: S " and " :+: 
-           (ht_flux_P ^. descr) :+: S " of " :+: U (ht_flux_P ^. symbol)) 
+           S " of " :+: P (ht_flux_C ^. symbol) :+: S " and " :+: 
+           (ht_flux_P ^. descr) :+: S " of " :+: P (ht_flux_P ^. symbol)) 
            "../../../Tank.png"
 
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro, 
@@ -511,7 +510,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                S "change of " :+: (temp ^. descr) :+: S ":"),
                Paragraph (S "Integrating " :+: makeRef s4_2_2_T1 :+: 
                S " over a " :+: (volume ^. descr) :+: S " (" :+:
-               U (volume ^. symbol) :+: S "), we have:"),
+               P (volume ^. symbol) :+: S "), we have:"),
                EqnBlock (Neg (UnaryOp (Integral (Just (C volume), Nothing))
                ((C gradient) :. (C thFluxVect))) + UnaryOp (Integral (Just 
                (C volume), Nothing)) (C vol_ht_gen) := UnaryOp (Integral (Just
@@ -519,11 +518,11 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                (C time))),
                Paragraph (S "Applying " :+: (gauss_div ^. descr) :+: S " to" :+:
                S " the first term over the " :+: (surface ^. descr) :+:
-               S " " :+: U (surface ^. symbol) :+: S " of the " :+: 
-               (volume ^. descr) :+: S ", with " :+: U (thFluxVect ^. 
+               S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
+               (volume ^. descr) :+: S ", with " :+: P (thFluxVect ^. 
                symbol) :+: S " as the " :+: (thFluxVect ^. descr) :+:
                S " for the " :+: (surface ^. descr) :+: S " and " :+:
-               U (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
+               P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
                descr) :+: S ":"),
                EqnBlock (Neg (UnaryOp (Integral (Just (C surface), Nothing)) 
                ((C thFluxVect) :. (C norm_vect))) + UnaryOp (Integral (Just 
@@ -537,20 +536,20 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
                (Just (C volume), Nothing)) ((C density) * (C htCap) * Deriv
                (C temp) (C time))),
-               Paragraph (S "Where " :+: U (ht_flux_in ^. symbol) :+: S ", " :+:
-               U (ht_flux_out ^. symbol) :+: S ", " :+: U (in_SA ^. symbol) :+:
-               S ", and " :+: U (out_SA ^. symbol) :+: S " are explained in" :+:
-               S " GD2. Assuming " :+: U (density ^. symbol) :+: S ", " :+:
-               U (htCap ^. symbol) :+: S " and " :+: U (temp ^. symbol) :+:
+               Paragraph (S "Where " :+: P (ht_flux_in ^. symbol) :+: S ", " :+:
+               P (ht_flux_out ^. symbol) :+: S ", " :+: P (in_SA ^. symbol) :+:
+               S ", and " :+: P (out_SA ^. symbol) :+: S " are explained in" :+:
+               S " GD2. Assuming " :+: P (density ^. symbol) :+: S ", " :+:
+               P (htCap ^. symbol) :+: S " and " :+: P (temp ^. symbol) :+:
                S " are constant over the " :+: (volume ^. descr) :+: S ", " :+: 
                S "which is true in our case by " :+: (assumption ^. descr) :+:
                S "s (A3), (A4), (A5), and (A6), we have:"),
                EqnBlock ((C density) * (C htCap) * (C volume) * Deriv (C temp) 
                (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
                (C out_SA) + (C vol_ht_gen) * (C volume)),
-               Paragraph (S "Using the fact that " :+: U (density ^. symbol) :+:
-               S "=" :+: U (mass ^. symbol) :+: S "/" :+: 
-               U (volume ^. symbol) :+: S ", (2) can be written as:"),
+               Paragraph (S "Using the fact that " :+: P (density ^. symbol) :+:
+               S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
+               P (volume ^. symbol) :+: S ", (2) can be written as:"),
                EqnBlock ((C mass) * (C htCap) * Deriv (C temp) (C time) :=
                (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
                (C vol_ht_gen) * (C volume))]
@@ -580,8 +579,8 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                (makeRef s4_2_3) :+: S "."), 
                Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." :+:
                S " The solutions for IM1 and IM2 are coupled since the " :+:
-               S "solution for " :+: U (temp_W ^. symbol) :+: S " and " :+:
-               U (temp_PCM ^. symbol) :+: S " depend on one another. IM3 " :+:
+               S "solution for " :+: P (temp_W ^. symbol) :+: S " and " :+:
+               P (temp_PCM ^. symbol) :+: S " depend on one another. IM3 " :+:
                S "can be solved once IM1 has been solved. The solution of " :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. descr) :+: S " and " :+: (pcm_E ^. descr) :+:
@@ -594,37 +593,37 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
 
 s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+: 
                 (sMap (map toLower) (S (water ^. name))) :+: S ":"),
-                Paragraph (S "To find the rate of change of " :+: U (temp_W ^.
+                Paragraph (S "To find the rate of change of " :+: P (temp_W ^.
                 symbol) :+: S ", we look at the energy balance on " :+:
                 (sMap (map toLower) (S (water ^. name))) :+: S ". The " :+: 
                 (volume ^. descr) :+: S " being considered is the " :+:
-                (w_vol ^. descr) :+: S " " :+: U (w_vol ^. symbol) :+:
+                (w_vol ^. descr) :+: S " " :+: P (w_vol ^. symbol) :+:
                 S ", which has " :+: (w_mass ^. descr) :+: S " " :+: 
-                U (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. descr) :+: 
-                S ", " :+: U (htCap_W ^. symbol) :+: S ". " :+: U (ht_flux_C ^. 
+                P (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. descr) :+: 
+                S ", " :+: P (htCap_W ^. symbol) :+: S ". " :+: P (ht_flux_C ^. 
                 symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
-                S " and " :+: U (ht_flux_P ^. symbol) :+: S " represents " :+:
+                S " and " :+: P (ht_flux_P ^. symbol) :+: S " represents " :+:
                 S "the " :+: (ht_flux_P ^. descr) :+: S ", over " :+:
                 (coil_SA ^. descr) :+: S " and " :+: (pcm_SA ^. descr) :+:
-                S " of " :+: U (coil_SA ^. symbol) :+: S " and " :+: 
-                U (pcm_SA ^. symbol) :+: S ", respectively. No " :+: 
+                S " of " :+: P (coil_SA ^. symbol) :+: S " and " :+: 
+                P (pcm_SA ^. symbol) :+: S ", respectively. No " :+: 
                 (heat_trans ^. descr) :+: S " occurs to the outside of the " :+:
                 (sMap (map toLower) (S (tank ^. name))) :+: S ", since it " :+:
                 S "has been assumed to be " :+: S (perfect_insul ^. name) :+: 
                 S " (A15)." :+: S " Assuming no " :+: (vol_ht_gen ^. descr) :+: 
-                S " (A16), " :+: U (vol_ht_gen ^. symbol) :+: S "=0. " :+:
+                S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: S "=0. " :+:
                 S "Therefore, the equation for GD2 can be written as:"),
                 EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) 
                 := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
                 Paragraph(S "Using " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
-                makeRef s4_2_4_DD2 :+: S " for " :+: U (ht_flux_C ^. symbol) :+:
-                S " and " :+: U (ht_flux_P ^. symbol) :+: S " respectively," :+:
+                makeRef s4_2_4_DD2 :+: S " for " :+: P (ht_flux_C ^. symbol) :+:
+                S " and " :+: P (ht_flux_P ^. symbol) :+: S " respectively," :+:
                 S " this can be written as:"),
                 EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) 
                 := (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
                 (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
-                Paragraph (S "Dividing (3) by " :+: U (w_mass ^. symbol) :+:
-                U (htCap_W ^. symbol) :+: S ", we obtain:"),
+                Paragraph (S "Dividing (3) by " :+: P (w_mass ^. symbol) :+:
+                P (htCap_W ^. symbol) :+: S ", we obtain:"),
                 EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * 
                 (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
                 (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
@@ -632,8 +631,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 Paragraph (S "Factoring the negative sign out of the second" :+:
                 S " term of the " :+: S (rightSide ^. name) :+: S " of " :+:
                 S "Equation (4) and multiplying it by " :+: 
-                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: S "/" :+: 
-                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: 
+                P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: S "/" :+: 
+                P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: 
                 S " yields:"),
                 EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * 
                 (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
@@ -646,17 +645,17 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
                 (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
                 (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
-                Paragraph (S "Setting " :+: U (tau_W ^. symbol) :+: S "=" :+:
-                U (w_mass ^. symbol) :+: U (htCap_W ^. symbol) :+: S "/" :+:
-                U (coil_HTC ^. symbol) :+: U (coil_SA ^. symbol) :+: 
-                S " and " :+: U (eta ^. symbol) :+: S "=" :+: U (pcm_HTC ^. 
-                symbol) :+: U (pcm_SA ^. symbol) :+: S "/" :+: U (coil_HTC ^.
-                symbol) :+: U (coil_SA ^. symbol) :+: S ", Equation (5) can" :+:
+                Paragraph (S "Setting " :+: P (tau_W ^. symbol) :+: S "=" :+:
+                P (w_mass ^. symbol) :+: P (htCap_W ^. symbol) :+: S "/" :+:
+                P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: 
+                S " and " :+: P (eta ^. symbol) :+: S "=" :+: P (pcm_HTC ^. 
+                symbol) :+: P (pcm_SA ^. symbol) :+: S "/" :+: P (coil_HTC ^.
+                symbol) :+: P (coil_SA ^. symbol) :+: S ", Equation (5) can" :+:
                 S " be written as:"),
                 EqnBlock (Deriv (C temp_W) (C time) := (1 / (C tau_W)) *
                 ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
                 ((C temp_PCM) - (C temp_W))),
-                Paragraph (S "Finally, factoring out 1/" :+: U (tau_W ^. 
+                Paragraph (S "Finally, factoring out 1/" :+: P (tau_W ^. 
                 symbol) :+: S ", we are left with the governing " :+:
                 S (ordDiffEq ^. name) :+: S " for IM1:"),
                 EqnBlock (Deriv (C temp_W) (C time) := (1 / (C tau_W)) *
@@ -672,38 +671,38 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S " the " :+: S (phsChgMtrl ^. name) :+: S " during " :+: 
                 (sMap (map toLower) (sens_heat ^. descr)) :+: S " phase:"),
-                Paragraph (S "To find the rate of change of " :+: U (temp_PCM ^.
+                Paragraph (S "To find the rate of change of " :+: P (temp_PCM ^.
                 symbol) :+: S ", we look at the energy balance on the " :+: 
                 S (phsChgMtrl ^. name) :+: S ". The " :+: (volume ^. descr) :+:
                 S " being considered is the " :+: (pcm_vol ^. descr) :+: 
-                S ", " :+: U (pcm_vol ^. symbol) :+: S ". The derivation " :+:
+                S ", " :+: P (pcm_vol ^. symbol) :+: S ". The derivation " :+:
                 S "that follows is initially for the " :+: (sMap (map toLower) 
                 (S (solid ^. name))) :+: S " " :+: S (phsChgMtrl ^. name) :+:
                 S ". The " :+: (pcm_mass ^. descr) :+: S " is " :+: 
-                U (pcm_mass ^. symbol) :+: S " and the " :+: (htCap_S_P ^. 
-                descr) :+: S " is " :+: U (htCap_S_P ^. symbol) :+: S ". " :+:
+                P (pcm_mass ^. symbol) :+: S " and the " :+: (htCap_S_P ^. 
+                descr) :+: S " is " :+: P (htCap_S_P ^. symbol) :+: S ". " :+:
                 S "The " :+: (ht_flux_P ^. descr) :+: S " is " :+: 
-                U (ht_flux_P ^. symbol) :+: S " over " :+: (pcm_SA ^. descr) :+:
-                S " " :+: U (pcm_SA ^. symbol) :+: S ". There is no " :+: 
+                P (ht_flux_P ^. symbol) :+: S " over " :+: (pcm_SA ^. descr) :+:
+                S " " :+: P (pcm_SA ^. symbol) :+: S ". There is no " :+: 
                 (ht_flux_out ^. descr) :+: S ". Assuming no " :+: (vol_ht_gen ^.
-                descr) :+: S " (A16), " :+: U (vol_ht_gen ^. symbol) :+: 
+                descr) :+: S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: 
                 S "=0, the equation for GD2 can be written as:"),
                 EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) 
                 (C time) := (C ht_flux_P) * (C pcm_SA)),
                 Paragraph (S "Using " :+: makeRef s4_2_4_DD2 :+: S " for " :+:
-                U (ht_flux_P ^. symbol) :+: S ", this equation can be " :+:
+                P (ht_flux_P ^. symbol) :+: S ", this equation can be " :+:
                 S "written as:"),
                 EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) 
                 (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
                 (C temp_PCM))),
-                Paragraph (S "Dividing by " :+: U (pcm_mass ^. symbol) :+:
-                U (htCap_S_P ^. symbol) :+: S " we obtain:"),
+                Paragraph (S "Dividing by " :+: P (pcm_mass ^. symbol) :+:
+                P (htCap_S_P ^. symbol) :+: S " we obtain:"),
                 EqnBlock (Deriv (C temp_PCM) (C time) := ((C pcm_HTC) * 
                 (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
                 (C temp_PCM))),
-                Paragraph (S "Setting " :+: U (tau_S_P ^. symbol) :+: S "=" :+:
-                U (pcm_mass ^. symbol) :+: U (htCap_S_P ^. symbol) :+: S "/" :+:
-                U (pcm_HTC ^. symbol) :+: U (pcm_SA ^. symbol) :+: S ", " :+:
+                Paragraph (S "Setting " :+: P (tau_S_P ^. symbol) :+: S "=" :+:
+                P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
+                P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) :+: S ", " :+:
                 S "this can be written as:"),
                 EqnBlock (Deriv (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
                 ((C temp_W) - (C temp_PCM))),
@@ -711,22 +710,22 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 toLower) (S (solid ^. name))) :+: S " " :+: S (phsChgMtrl ^. 
                 name) :+: S ". In the case where all of the " :+:
                 S (phsChgMtrl ^. name) :+: S " is melted, the same " :+:
-                S "derivation applies, except that " :+: U (htCap_S_P ^. 
-                symbol) :+: S " is replaced by " :+: U (htCap_L_P ^. symbol) :+:
-                S ", and thus " :+: U (tau_S_P ^. symbol) :+: S " is " :+: 
-                S "replaced by " :+: U (tau_L_P ^. symbol) :+: S ". " :+:
+                S "derivation applies, except that " :+: P (htCap_S_P ^. 
+                symbol) :+: S " is replaced by " :+: P (htCap_L_P ^. symbol) :+:
+                S ", and thus " :+: P (tau_S_P ^. symbol) :+: S " is " :+: 
+                S "replaced by " :+: P (tau_L_P ^. symbol) :+: S ". " :+:
                 S "Although a small change in surface area would be " :+:
                 S "expected with " :+: (sMap (map toLower) (S (melting ^. 
                 name))) :+: S ", this is not included, since the " :+:
                 (volume ^. descr) :+: S " change of the " :+: S (phsChgMtrl ^. 
                 name) :+: S " with " :+: (sMap (map toLower) (S (melting ^. 
                 name))) :+: S " is assumed to be negligible (A17)."),
-                Paragraph (S "In the case where " :+: U (temp_PCM ^. symbol) :+:
-                S "=" :+: U (temp_melt_P ^. symbol) :+: S " and not all of " :+:
+                Paragraph (S "In the case where " :+: P (temp_PCM ^. symbol) :+:
+                S "=" :+: P (temp_melt_P ^. symbol) :+: S " and not all of " :+:
                 S "the " :+: S (phsChgMtrl ^. name) :+: S " is melted, the " :+:
                 (temp_PCM ^. descr) :+: S " does not change. Therefore, in " :+:
-                S "this case d" :+: U (temp_PCM ^. symbol) :+: S "/d" :+:
-                U (time ^. symbol) :+: S "=0."),
+                S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
+                P (time ^. symbol) :+: S "=0."),
                 Paragraph (S "This derivation does not consider the " :+: 
                 (sMap (map toLower) (S (boiling ^. name))) :+: S " of the " :+: 
                 S (phsChgMtrl ^. name) :+: S ", as the " :+: S (phsChgMtrl ^. 
@@ -769,7 +768,7 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
          S "Typical Value", S "Uncertainty"] (mkTable
-         [\ch -> U (ch ^. symbol),
+         [\ch -> P (ch ^. symbol),
          \ch -> Sy (ch ^. unit),
          \ch -> Sy (ch ^. unit),
          \ch -> Sy (ch ^. unit),
@@ -842,15 +841,15 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             (sMap (map toLower) (S (tank ^. name))) :+: 
             S " parameters, material properties and initial conditions:"))]), 
             (Table [S "symbol", S "unit", S "description"] (mkTable
-            [(\ch -> U (ch ^. symbol)),
+            [(\ch -> P (ch ^. symbol)),
             (\ch -> Sy (ch ^. unit)),
             (\ch -> ch ^. descr)
             ] inputVar) (S "Input Variable " :+: (requirement ^. descr)) False),
             Enumeration (Simple [(S (requirement ^. name) :+: S "2", Flat 
             (S "Use the inputs in R1 to find the " :+: (mass ^. descr) :+:
             S " needed for IM1 to IM4, as follows, where " :+:
-            U (w_vol ^. symbol) :+: S " is the " :+:(w_vol ^. descr) :+:
-            S " and " :+: U (tank_vol ^. symbol) :+: S " is the " :+:
+            P (w_vol ^. symbol) :+: S " is the " :+:(w_vol ^. descr) :+:
+            S " and " :+: P (tank_vol ^. symbol) :+: S " is the " :+:
             (tank_vol ^. descr) :+: S "."))]),
             EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
             (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) - 
@@ -862,43 +861,43 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             (S (requirement ^. name) :+: S "4", Flat (S "Output the input" :+: 
             S " quantities and derived quantities in the following list: "  :+:
             S "the quantities from R1, the " :+: (mass ^. descr) :+: S "es " :+:
-            S "from R2, " :+: U (tau_W ^. symbol) :+: S " (from IM1), " :+: 
-            U (eta ^. symbol) :+: S " (from IM1), " :+: U (tau_S_P ^. 
-            symbol) :+: S " (from IM2) and " :+: U (tau_L_P ^. symbol) :+:
+            S "from R2, " :+: P (tau_W ^. symbol) :+: S " (from IM1), " :+: 
+            P (eta ^. symbol) :+: S " (from IM1), " :+: P (tau_S_P ^. 
+            symbol) :+: S " (from IM2) and " :+: P (tau_L_P ^. symbol) :+:
             S " (from IM2).")),
             (S (requirement ^. name) :+: S "5", Flat (S "Calculate and " :+:
-            S "output the " :+: (temp_W ^. descr) :+: S " (" :+: U (temp_W ^.
-            symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
+            S "output the " :+: (temp_W ^. descr) :+: S " (" :+: P (temp_W ^.
+            symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) " :+:
             S "over the simulation " :+: (time ^. descr) :+: S " (from IM1).")),
             (S (requirement ^. name) :+: S "6", Flat (S "Calculate and " :+: 
             S "output the " :+: (temp_PCM ^. descr) :+: S " (" :+:
-            U (temp_PCM ^. symbol) :+: S "(" :+: U (time ^. symbol) :+:
+            P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
             S ")) over the simulation " :+: (time ^. descr) :+: 
             S " (from IM2).")),
             (S (requirement ^. name) :+: S "7", Flat (S "Calculate and " :+: 
-            S " output the " :+: (w_E ^. descr) :+: S " (" :+: U (w_E ^. 
-            symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) " :+:
+            S " output the " :+: (w_E ^. descr) :+: S " (" :+: P (w_E ^. 
+            symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) " :+:
             S "over the simulation " :+: (time ^. descr) :+: S " (from IM3).")),
             (S (requirement ^. name) :+: S "8", Flat (S "Calculate and " :+: 
-            S "output the " :+: (pcm_E ^. descr) :+: S " (" :+: U (pcm_E ^.
-            symbol) :+: S "(" :+: U (time ^. symbol) :+: S ")) over the " :+:
+            S "output the " :+: (pcm_E ^. descr) :+: S " (" :+: P (pcm_E ^.
+            symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the " :+:
             S "simulation " :+: (time ^. descr) :+: S " (from IM4).")),
             (S (requirement ^. name) :+: S "9", Flat (S "Verify that the " :+:
-            S "energy outputs (" :+: U (w_E ^. symbol) :+: S "(" :+: U (time ^. 
-            symbol) :+: S ") and " :+: U (pcm_E ^. symbol) :+: S "(" :+:
-            U (time ^. symbol) :+: S ")) follow the " :+: (sMap (map toLower) 
+            S "energy outputs (" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
+            symbol) :+: S ") and " :+: P (pcm_E ^. symbol) :+: S "(" :+:
+            P (time ^. symbol) :+: S ")) follow the " :+: (sMap (map toLower) 
             (S (law_cons_energy ^. name))) :+: S ", as outlined in " :+: 
             makeRef s4_2_7 :+: S ", with relative error no greater than " :+:
             S "0.001%.")),
             (S (requirement ^. name) :+: S "10", Flat (S "Calculate and " :+: 
             S "output the " :+: (time ^. descr) :+: S " at which the " :+: 
             S (phsChgMtrl ^. name) :+: S " begins to melt " :+:
-            U (t_init_melt ^. symbol) :+: S " (from IM2).")),
+            P (t_init_melt ^. symbol) :+: S " (from IM2).")),
             (S (requirement ^. name) :+: S "11", Flat (S "Calculate and " :+: 
             S "output the " :+: (time ^. descr) :+: S " at which the " :+: 
             S (phsChgMtrl ^. name) :+:
             S " stops " :+: (sMap (map toLower) (S (melting ^. name))) :+: 
-            S " " :+: U (t_final_melt ^. symbol) :+: S " (from IM2)."))])
+            S " " :+: P (t_final_melt ^. symbol) :+: S " (from IM2)."))])
             ]
 
 --How to include pi?

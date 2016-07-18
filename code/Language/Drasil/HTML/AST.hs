@@ -1,8 +1,10 @@
+{-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
+import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.CCode.AST (Code) -- this seems wrong!
 import Language.Drasil.Document (DType (..))
 
@@ -38,16 +40,19 @@ data Function = Log
            | Cot
 
 infixr 5 :+:
-data Spec = E Expr
-          | S String
-          | Spec :+: Spec -- concat
-          | Spec :^: Spec -- superscript
-          | Spec :-: Spec -- subscript
-          | Spec :/: Spec -- frac
-          | Sy USymb
-          | N Symbol
-          | HARDNL
-          | Ref RefType Spec
+data Spec where
+  E :: Expr -> Spec
+  S :: String -> Spec
+  (:+:) :: Spec -> Spec -> Spec -- concat
+  (:^:) :: Spec -> Spec -> Spec -- superscript
+  (:-:) :: Spec -> Spec -> Spec -- subscript
+  (:/:) :: Spec -> Spec -> Spec -- frac
+  Sy :: USymb -> Spec
+  N :: Symbol -> Spec
+  G :: Greek -> Spec 
+  Sp :: Special -> Spec
+  HARDNL :: Spec
+  Ref :: RefType -> Spec -> Spec
 
 data Document = Document Title Author [LayoutObj]
 type Title    = Spec

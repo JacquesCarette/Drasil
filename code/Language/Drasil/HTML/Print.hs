@@ -12,10 +12,10 @@ import Language.Drasil.Spec (USymb(..))
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.Unicode
-import Language.Drasil.Format (Format(HTML))
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
+import Language.Drasil.HTML.Monad
 
 genHTML :: DocType -> L.Document -> Doc
 genHTML (Website fn) doc = build fn $ makeDocument doc
@@ -67,6 +67,8 @@ p_spec (a :/: b)  = fraction (p_spec a) (p_spec b)
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = uSymb s
+p_spec (G g)      = unPH $ greek g
+p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
 p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
 
@@ -76,9 +78,10 @@ t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
 symbol :: Symbol -> String
-symbol (Atomic s)       = s
-symbol (Special s)      = render HTML s
+symbol (Atomic s)  = s
+symbol (Special s) = unPH $ special s
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
+symbol (Greek g)   = unPH $ greek g
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)

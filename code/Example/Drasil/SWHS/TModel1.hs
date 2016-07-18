@@ -28,17 +28,17 @@ t1descr = (S "The above equation gives the " :+: (sMap (map toLower)
           (S (law_cons_energy ^. name))) :+: S " for " :+: (sMap (map toLower)
           (S (transient ^. name))) :+: S " " :+: (heat_trans ^. descr) :+:
           S " in a material of " :+: (htCap ^. descr) :+: S " " :+: 
-          U (htCap ^. symbol) :+: S " (" :+: Sy (htCap ^. unit) :+: S ") " :+:
+          P (htCap ^. symbol) :+: S " (" :+: Sy (htCap ^. unit) :+: S ") " :+:
           S "and " :+: (density ^. descr) :+: S ", " :+: 
-          U (density ^. symbol) :+: S " (" :+: Sy (density ^. unit) :+: 
-          S "), where " :+: U (thFluxVect ^. symbol) :+: S " is the " :+: 
+          P (density ^. symbol) :+: S " (" :+: Sy (density ^. unit) :+: 
+          S "), where " :+: P (thFluxVect ^. symbol) :+: S " is the " :+: 
           (thFluxVect ^. descr) :+: S " (" :+: Sy (thFluxVect ^. unit) :+:
-          S "), " :+: U (vol_ht_gen ^. symbol) :+: S " is the " :+: 
+          S "), " :+: P (vol_ht_gen ^. symbol) :+: S " is the " :+: 
           (vol_ht_gen ^. descr) :+: S " (" :+: Sy (vol_ht_gen ^. unit) :+: 
-          S "), " :+: U (temp ^. symbol) :+: S " is the " :+: 
+          S "), " :+: P (temp ^. symbol) :+: S " is the " :+: 
           (temp ^. descr) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
-          U (time ^. symbol) :+: S " is " :+: (time ^. descr) :+: S " (" :+: 
-          Sy (time ^. unit) :+: S "), and " :+: U (gradient ^. symbol) :+: 
+          P (time ^. symbol) :+: S " is " :+: (time ^. descr) :+: S " (" :+: 
+          Sy (time ^. unit) :+: S "), and " :+: P (gradient ^. symbol) :+: 
           S " is the " :+: (gradient ^. descr) :+: S ". For this equation " :+: 
           S "to apply, " :+: S "other forms of energy, such as " :+:
           (sMap (map toLower) (S (mech_energy ^. name))) :+: 

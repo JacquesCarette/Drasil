@@ -27,20 +27,20 @@ latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just 0,
 -- How to have conditions on a single equation
 
 t3descr :: Sentence
-t3descr = (U (latentE ^. symbol) :+: S " is the change in " :+:
+t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " (" :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
           (S (latent_heat ^. name))) :+: S " energy. <Integral> is the rate" :+:
-          S " of change of " :+: U (latentE ^. symbol) :+: S " with respect" :+:
-          S " to " :+: (time ^. descr) :+: S " " :+: U (tau ^. symbol) :+: 
-          S " (" :+: Sy (tau ^. unit) :+: S "). " :+: U (time ^. symbol) :+:
+          S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
+          S " to " :+: (time ^. descr) :+: S " " :+: P (tau ^. symbol) :+: 
+          S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
           S " is the " :+: (time ^. descr) :+: S " (" :+: Sy (time ^. unit) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
           (S (phs_change ^. name))) :+: S " is not complete. The status of " :+:
           S "the " :+: (sMap (map toLower) (S (phs_change ^. name))) :+:
           S " depends on the " :+: (melt_frac ^. descr) :+: S ", " :+: 
-          makeRef s4_2_4_DD4 :+: S ". " :+: U (temp_melt ^. symbol) :+:
-          S " and " :+: U (temp_boil ^. symbol) :+: S " are the " :+:
+          makeRef s4_2_4_DD4 :+: S ". " :+: P (temp_melt ^. symbol) :+:
+          S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
           (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+:
           (latent_heat ^. descr) :+: S " stops when all material has " :+:

@@ -125,23 +125,23 @@ tank_vol     = makeUC "V_tank" "volume of the cylindrical tank"
                (sub (volume ^. symbol) (Atomic "tank")) m_3
 w_vol        = makeUC "V_W" "volume of water" (sub (volume ^. symbol) cW) m_3
 deltaT       = makeUC "deltaT" "change in temperature" 
-               (Concat [Special Delta, (temp ^. symbol)]) centigrade
-eta          = makeUC "eta" "ODE parameter" (Special Eta_L) unitless
-density      = makeUC "rho" "density" (Special Rho_L)
+               (Concat [Greek Delta, (temp ^. symbol)]) centigrade
+eta          = makeUC "eta" "ODE parameter" (Greek Eta_L) unitless
+density      = makeUC "rho" "density" (Greek Rho_L)
                densityU
 pcm_density  = makeUC "rho_P" "density of PCM" (sub (density ^. symbol) cP)
                densityU
 w_density    = makeUC "rho_W" "density of water" (sub (density ^. symbol) cW)
                densityU
 tau          = makeUC "tau" "dummy variable for integration over time" 
-               (Special Tau_L) second
+               (Greek Tau_L) second
 tau_L_P      = makeUC "tau_L_P" "ODE parameter for liquid PCM" 
-               (sup (sub (Special Tau_L) cP) cL) second
+               (sup (sub (Greek Tau_L) cP) cL) second
 tau_S_P      = makeUC "tau_S_P" "ODE parameter for solid PCM" 
-               (sup (sub (Special Tau_L) cP) cS) second
-tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Special Tau_L) cW)
+               (sup (sub (Greek Tau_L) cP) cS) second
+tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Greek Tau_L) cW)
                second
-melt_frac    = makeUC "phi" "melt fraction" (Special Phi_L) unitless
+melt_frac    = makeUC "phi" "melt fraction" (Greek Phi_L) unitless
 
 --Created a "unitless" unit in SWHSUnits.hs so that i didn't need varChunks.
 
@@ -154,7 +154,7 @@ melt_frac    = makeUC "phi" "melt fraction" (Special Phi_L) unitless
 
 --VarChunks--
 gradient :: VarChunk
-gradient = makeVC "gradient" "gradient operator" (Special Nabla)
+gradient = makeVC "gradient" "gradient operator" (Greek Nabla)
 
 --General Definitions--
 -- gd1NewtonCooling :: RelationChunk

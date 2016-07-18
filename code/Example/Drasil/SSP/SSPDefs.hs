@@ -13,19 +13,19 @@ sspSymbols = [fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, 
 
 fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords, fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i, omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f, m, upsilon, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i, dv_i, dx_i, dy_i, s, p :: UnitalChunk
 
-fricAngle   = makeUC "varphi'" "effective angle of friction" (Concat [Special Phi_V, Atomic "'"]) degree
+fricAngle   = makeUC "varphi'" "effective angle of friction" (Concat [Greek Phi_V, Atomic "'"]) degree
 
 cohesion    = makeUC "c'" "effective cohesion" (Atomic "c'") pascal
 
-dryWeight   = makeUC "gamma" "unit weight of dry soil/ground layer" (Special Gamma_L) specific_weight
+dryWeight   = makeUC "gamma" "unit weight of dry soil/ground layer" (Greek Gamma_L) specific_weight
 
-satWeight   = makeUC "gamma_sat" "unit weight of saturated soil/ground layer" (sub (Special Gamma_L) (Atomic "Sat")) specific_weight
+satWeight   = makeUC "gamma_sat" "unit weight of saturated soil/ground layer" (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight
 
-waterWeight = makeUC "gamma_w" "unit weight of water" (sub (Special Gamma_L) lW) specific_weight
+waterWeight = makeUC "gamma_w" "unit weight of water" (sub (Greek Gamma_L) lW) specific_weight
 
 elastMod    = makeUC "E" "elastic modulus" cE pascal
 
-poisson     = makeUC "nu" "Poisson's ratio" (Special Nu_L) unitless
+poisson     = makeUC "nu" "Poisson's ratio" (Greek Nu_L) unitless
 
 coords      = makeUC "(x,y)" "cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y" (Atomic "(x,y)") metre
 
@@ -61,7 +61,7 @@ kc          = makeUC "K_c" "earthquake load factor; proportionality factor of fo
 
 hi          = makeUC "H_i" "interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i)" (sub cH lI) newton
 
-dHi         = makeUC "dH_i" "difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)" (sub (Concat [Special Delta, cH]) lI) newton
+dHi         = makeUC "dH_i" "difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)" (sub (Concat [Greek Delta, cH]) lI) newton
 
 ei          = makeUC "E_i" "interslice normal force being exerted between adjacent slices (for interslice index i)" (sub cE lI) newton
 
@@ -79,21 +79,21 @@ ni_star     = makeUC "N*_i" "effective normal force of a soil surface, neglectin
 
 qi          = makeUC "Q_i" "imposed surface load; a downward force acting into the surface from midpoint of slice i" (sub cQ lI) newton
 
-alpha_i     = makeUC "alpha_i" "angle of the base of the mass relative to the horizontal (for slice index i)" (sub (Special Alpha_L) lI) degree
+alpha_i     = makeUC "alpha_i" "angle of the base of the mass relative to the horizontal (for slice index i)" (sub (Greek Alpha_L) lI) degree
 
-beta_i      = makeUC "beta_i" "angle of the surface of the mass relative to the horizontal (for slice index i)" (sub (Special Beta_L) lI) degree
+beta_i      = makeUC "beta_i" "angle of the surface of the mass relative to the horizontal (for slice index i)" (sub (Greek Beta_L) lI) degree
 
-omega_i     = makeUC "omega_i" "angle of imposed surface load acting into the surface relative to the vertical (for slice index i)" (sub (Special Omega_L) lI) degree
+omega_i     = makeUC "omega_i" "angle of imposed surface load acting into the surface relative to the vertical (for slice index i)" (sub (Greek Omega_L) lI) degree
 
-lambda      = makeUC "lambda" "ratio between interslice normal and shear forces (applied to all interslices)" (Special Lambda_L) unitless
+lambda      = makeUC "lambda" "ratio between interslice normal and shear forces (applied to all interslices)" (Greek Lambda_L) unitless
 
 fi          = makeUC "f_i" "scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine" (sub lF lI) unitless
 
 bi          = makeUC "b_i" "base width of the slice in the x-ordinate direction only (for slice index i)" (sub lB lI) metre
 
-lbi         = makeUC "l_b,i" "total length of the base of a slice (for slice index i)" (sub (Special Ell) (Atomic "b,i")) metre
+lbi         = makeUC "l_b,i" "total length of the base of a slice (for slice index i)" (sub (Greek Ell) (Atomic "b,i")) metre
 
-lsi         = makeUC "l_s,i" "length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)" (sub (Special Ell) (Atomic "s,i")) metre
+lsi         = makeUC "l_s,i" "length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)" (sub (Greek Ell) (Atomic "s,i")) metre
 
 hi_2        = makeUC "h_i" "midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)" (sub lH lI) metre
 
@@ -103,9 +103,9 @@ f           = makeUC "F" "generic force; assumed 1D allowing a scalar" (cF) metr
 
 m           = makeUC "M" "moment of a body; assumed 2D allowing a scalar" (cM) newton_metre
 
-upsilon     = makeUC "Upsilon" "generic minimization function or algorithm" (Special Upsilon) unitless
+upsilon     = makeUC "Upsilon" "generic minimization function or algorithm" (Greek Upsilon) unitless
 
-delta       = makeUC "delta" "generic displacement of a body" (Special Delta_L) metre
+delta       = makeUC "delta" "generic displacement of a body" (Greek Delta_L) metre
 
 k           = makeUC "K" "stiffness (how much a body resists displacement when subject to a force)" (cK) newton_per_metre
 
@@ -121,13 +121,13 @@ k_tr        = makeUC "K_tr" "residual shear stiffness" (sub cK (Atomic "tr")) pa
 
 k_no        = makeUC "K_no" "residual normal stiffness" (sub cK (Atomic "no")) pascal
 
-du_i        = makeUC "du_i" "shear displacement of a slice (for slice index i)" (sub (Concat [Special Delta_L, Atomic "u"]) lI) metre
+du_i        = makeUC "du_i" "shear displacement of a slice (for slice index i)" (sub (Concat [Greek Delta_L, Atomic "u"]) lI) metre
 
-dv_i        = makeUC "dv_i" "normal displacement of a slice (for slice index i)" (sub (Concat [Special Delta_L, Atomic "v"]) lI) metre
+dv_i        = makeUC "dv_i" "normal displacement of a slice (for slice index i)" (sub (Concat [Greek Delta_L, Atomic "v"]) lI) metre
 
-dx_i        = makeUC "dx_i" "displacement of a slice in the x-ordinate direction (for slice index i)" (sub (Concat [Special Delta_L, Atomic "x"]) lI) metre
+dx_i        = makeUC "dx_i" "displacement of a slice in the x-ordinate direction (for slice index i)" (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre
 
-dy_i        = makeUC "dy_i" "displacement of a slice in the y-ordinate direction (for slice index i)" (sub (Concat [Special Delta_L, Atomic "y"]) lI) metre
+dy_i        = makeUC "dy_i" "displacement of a slice in the y-ordinate direction (for slice index i)" (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre
 
 
 ----Acronyms-----
@@ -162,4 +162,4 @@ fs_rel = (C fs) := (C p) / (C s)
 fs_desc :: Sentence
 fs_desc = 
   (S "The stability metric of the slope, known as the factor of safety (" :+: 
-  U (fs ^. symbol) :+: S "), is determined by the ratio of the shear force at the base of the slope (" :+: U (s ^. symbol) :+: S "), and the resistive shear (" :+: U (p ^. symbol) :+: S ").")
+  P (fs ^. symbol) :+: S "), is determined by the ratio of the shear force at the base of the slope (" :+: P (s ^. symbol) :+: S "), and the resistive shear (" :+: P (p ^. symbol) :+: S ").")

@@ -6,8 +6,7 @@ import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
-import Language.Drasil.Unicode (render, Partial(..))
-import Language.Drasil.Format (Format(TeX))
+import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Unit
@@ -70,9 +69,10 @@ spec :: Sentence -> T.Spec
 spec (S s)     = T.S s
 spec (Sy s)    = T.Sy s
 spec (a :+: b) = spec a T.:+: spec b
-spec (U u)     = T.S $ render TeX u --TODO: Need to know context before printing.
+spec (G g)     = T.G g
+spec (Sp s)    = T.Sp s
 spec (F f s)   = spec $ accent f s
--- spec (N s)     = T.N s
+spec (P s)     = T.N s
 spec (Ref t r)   = T.Ref t (spec r)
 spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
 

@@ -82,6 +82,10 @@ fric        = makeCC "friction" ("The force resisting the relative motion " ++
   "of two surfaces.")
 elast       = makeCC "elasticity" ("Ratio of the relative velocities " ++
   "of two colliding objects after and before a collision.")
+coll        = makeCC "collision" ("An encounter between particles resulting " ++
+  "in an exchange or transformation of energy.")
+space       = makeCC "space" ("A two-dimensional extent where objects and " ++
+  "events have relative positions and directions.")
 ctrOfMass   = makeCC "centre of mass" ("The mean location of the " ++
   "distribution of mass of the object.")
 cartesian   = makeCC "Cartesian coordinates" ("A coordinate system that " ++
@@ -416,6 +420,7 @@ impulseEqn = ((Neg ((fromInteger 1) + (C restCoef))) * (C initRelVel) :.
 
 dd8descr :: Sentence
 dd8descr = S "the " :+: (impulse ^. descr) :+: S " used to determine " :+:
-  S "collision response between two " :+: S (rigidBodies ^. name) :+: S "."
+  S (coll ^. name) :+: S " response between two " :+:
+  S (rigidBodies ^. name) :+: S "."
 
 -- Instance Models --

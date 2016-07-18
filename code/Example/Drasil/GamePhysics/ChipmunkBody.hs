@@ -273,7 +273,7 @@ s4_1_2_list = Enumeration (Simple [
    S (vels ^. name) :+: S ", determine the new " :+: (position ^. descr) :+:
    S "s and " :+: S (vels ^. name) :+: S " over a period of " :+:
    (time ^. descr) :+: S " of " :+: S (rigidBodies ^. name) :+: S " that " :+:
-   S "have undergone a collision."))])
+   S "have undergone a " :+: S (coll ^. name) :+: S "."))])
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -443,11 +443,10 @@ s5_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s")
 
 -- can't pull out plurals for rigidbodies, velocities without making separate
 -- chunks
--- TODO: potential chunks: space, collision
 s5_1_list = Enumeration (Simple [
-  (S (requirement ^. name) :+: S "1", Flat (S "Create a space for all " :+:
-   S "of the " :+: S (rigidBodies ^. name) :+: S " in the physical " :+:
-   S "simulation to interact in.")),
+  (S (requirement ^. name) :+: S "1", Flat (S "Create a " :+:
+   S (space ^. name) :+: S " for all of the " :+: S (rigidBodies ^. name) :+:
+   S " in the physical simulation to interact in.")),
   (S (requirement ^. name) :+: S "2", Flat (S "Input the initial " :+:
    (mass ^. descr) :+: S "es, " :+: S (vels ^. name) :+: S ", " :+:
    (orientation ^. descr) :+: S "s, " :+: S (angularVels ^. name) :+:
@@ -468,11 +467,13 @@ s5_1_list = Enumeration (Simple [
    S " over a period of " :+: (time ^. descr) :+: S " of the 2D " :+:
    S (rigidBodies ^. name) :+: S ".")),
   (S (requirement ^. name) :+: S "7", Flat (S "Determine if any of the " :+:
-   S (rigidBodies ^. name) :+: S " in the space have collided.")),
+   S (rigidBodies ^. name) :+: S " in the " :+: S (space ^. name) :+:
+   S " have collided.")),
   (S (requirement ^. name) :+: S "8", Flat (S "Determine the " :+:
    (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
    S "period of " :+: (time ^. descr) :+: S " of the 2D " :+:
-   S (rigidBodies ^. name) :+: S " that have undergone a collision."))])
+   S (rigidBodies ^. name) :+: S " that have undergone a " :+:
+   S (coll ^. name) :+: S "."))])
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --

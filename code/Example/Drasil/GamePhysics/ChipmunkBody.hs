@@ -107,15 +107,15 @@ s2 = Section 0 (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
 
 s2_intro = [Paragraph (S "Due to the rising cost of developing video " :+:
     S "games, developers are looking for ways to save time and money for " :+:
-    S "their projects. Using an open source physics library that is " :+:
-    S "reliable and free will cut down development costs and lead to " :+:
-    S "better quality products."),
+    S "their projects. Using an open source " :+: S (physLib ^. name) :+:
+    S " that is reliable and free will cut down development costs and lead " :+:
+    S "to better quality products."),
     Paragraph (S "The following section provides an overview of the " :+:
-    (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+: S ") for Chipmunk2D, " :+:
-    S "an open source 2D " :+: S (rigidBody ^. name) :+: S " " :+:
-    S (physLib ^. name) :+: S "This section explains the purpose of this " :+:
-    S "document, the scope of the system, and the organization of the " :+:
-    S "document.")]
+    (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+: S ") for " :+:
+    S (chipmunk ^. name) :+: S ", an open source " :+: S (twoD ^. name) :+:
+    S " " :+: S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
+    S ". This section explains the purpose of this document, the scope " :+:
+    S "of the system, and the organization of the document.")]
 
 -------------------------------
 -- 2.1 : Purpose of Document --
@@ -127,13 +127,12 @@ s2_1_intro :: [Contents]
 s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
-    S "open source 2D " :+: S (rigidBody ^. name) :+: S " " :+:
-    S (physLib ^. name) :+: S " used for games. The " :+: (sMap (map toLower)
-    (goalStmt ^. descr)) :+: S "s and " :+: (sMap (map toLower)
-    (theoMod ^. descr)) :+: S "s used in " :+: S (chipmunk ^. name) :+:
-    S " are provided. This document is intended to be used as a reference " :+:
-    S "to provide all necessary information to understand and verify the " :+:
-    S "model."),
+    S "open source " :+: S (twoD ^. name) :+: S " " :+: S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+: S " used for games. The " :+:
+    (sMap (map toLower) (goalStmt ^. descr)) :+: S "s and " :+:
+    (sMap (map toLower) (theoMod ^. descr)) :+: S "s used in " :+:
+    S (chipmunk ^. name) :+: S " are provided. This document is intended " :+:
+    S "to be used as a reference to provide all necessary information to " :+:
+    S "understand and verify the model."),
     Paragraph (S "This document will be used as a starting point for " :+:
     S "subsequent development phases, including writing the design " :+:
     S "specification and the software verification and validation plan. " :+:
@@ -155,8 +154,9 @@ s2_2 = Section 1 (S "Scope of " :+: (requirement ^. descr) :+: S "s")
 
 s2_2_intro = Paragraph $ S "The scope of the " :+:
     (sMap (map toLower) (requirement ^. descr)) :+: S "s includes the " :+:
-    S "physical simulation of 2D " :+: S (rigidBodies ^. name) :+:
-    S " acted on by forces. Given 2D " :+: S (rigidBodies ^. name) :+:
+    S "physical simulation of " :+: S (twoD ^. name) :+: S " " :+:
+    S (rigidBodies ^. name) :+: S " acted on by forces. Given " :+:
+    S (twoD ^. name) :+: S " " :+: S (rigidBodies ^. name) :+:
     S ", " :+: S (chipmunk ^. name) :+: S " is intended to simulate how " :+:
     S "these " :+: S (rigidBodies ^. name) :+: S " interact with one another."
 
@@ -176,8 +176,9 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
     S "follows the standard pattern of presenting goals, theories, " :+:
     S "definitions, and assumptions. For readers that would like a more " :+:
     S "bottom up approach, they can start reading the " :+:
-    (sMap (map toLower) (instMod ^. descr)) :+: S "s in Section 4.2.5 " :+:
-    S "and trace back to any additional information they require."),
+    (sMap (map toLower) (instMod ^. descr)) :+: S "s in " :+:
+    (makeRef s4_2_5) :+: S " and trace back to any additional information " :+:
+    S "they require."),
     Paragraph (S "The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
     S "s are refined to the " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
     S "s, and the " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
@@ -240,7 +241,7 @@ s4_intro = Paragraph $ S "This section first presents the problem " :+:
     S "solved. This is followed by the solution characteristics " :+:
     S "specification, which presents the " :+: (sMap (map toLower)
     (assumption ^. descr)) :+: S "s, theories, and definitions that are " :+:
-    S "used for the physics library."
+    S "used for the " :+: S (physLib ^. name) :+: S"."
 
 -------------------------------
 -- 4.1 : Problem Description --
@@ -252,19 +253,20 @@ s4_1_intro :: Contents
 s4_1 = Section 1 (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
     Sub s4_1_2]
 
-s4_1_intro = Paragraph $ S "Creating a gaming physics library is a " :+:
-    S "difficult task. Games need physics libraries that simulate objects " :+:
-    S "acting under physics conditions, while at the same time they need " :+:
-    S "to be efficient and fast enough to work in soft real-time during " :+:
-    S "the game. Developing a physics library from scratch takes a long " :+:
-    S "period of time and is very costly. These barriers of entry make it " :+:
-    S "difficult for game developers to include physics in their products. " :+:
-    S "There are a few free, open source and high quality physics " :+:
-    S "libraries available to be used for consumer products (" :+:
-    (makeRef s7) :+: S "). By creating a simple, lightweight, fast and " :+:
-    S "portable 2D rigid body physics library, game development will be " :+:
-    S "more accessible to the masses and higher quality products will be " :+:
-    S "produced."
+s4_1_intro = Paragraph $ S "Creating a gaming " :+: S (physLib ^. name) :+:
+    S " is a difficult task. Games need physics libraries that simulate " :+:
+    S "objects acting under various physical conditions, while " :+:
+    S "simultaneously being fast and efficient enough to work in soft " :+:
+    S "real-time during the game. Developing a " :+: S (physLib ^. name) :+:
+    S " from scratch takes a long period of time and is very costly, " :+:
+    S "presenting barriers of entry which make it difficult for game " :+:
+    S "developers to include physics in their products. There are a few " :+:
+    S "free, open source and high quality physics libraries available to " :+:
+    S "be used for consumer products (" :+: (makeRef s7) :+:
+    S "). By creating a simple, lightweight, fast and portable " :+:
+    S (twoD ^. name) :+: S " " :+: S (rigidBody ^. name) :+: S " " :+:
+    S (physLib ^. name) :+: S ", game development will be more accessible " :+:
+    S "to the masses and higher quality products will be produced."
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -299,17 +301,16 @@ s4_1_2_list = Enumeration (Simple [
     (S (goalStmt ^. name) :+: S "1", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (position ^. descr) :+: S "s and " :+:
     S (vels ^. name) :+: S ", and " :+: (force ^. descr) :+:
-    S "es applied on a set of " :+: S (rigidBodies ^. name) :+:
+    S "s applied on a set of " :+: S (rigidBodies ^. name) :+:
     S ", determine their new " :+: (position ^. descr) :+: S "s and " :+:
-    S (vels ^. name) :+: S " of the " :+: S "body over a period of " :+:
-    (time ^. descr) :+: S ".")),
+    S (vels ^. name) :+: S " over a period of " :+: (time ^. descr) :+: S ".")),
     (S (goalStmt ^. name) :+: S "2", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (orientation ^. descr) :+: S "s and " :+:
-    S (angularVels ^. name) :+: S ", and " :+: (force ^. descr) :+: S "es " :+:
+    S (angularVels ^. name) :+: S ", and " :+: (force ^. descr) :+: S "s " :+:
     S "applied on a set of " :+: S (rigidBodies ^. name) :+: S ", " :+:
     S "determine their new " :+: (orientation ^. descr) :+: S "s and " :+:
-    S (angularVels ^. name) :+: S " of the body over a period of " :+:
-    (time ^. descr) :+: S ".")),
+    S (angularVels ^. name) :+: S " over a period of " :+: (time ^. descr) :+:
+    S ".")),
     (S (goalStmt ^. name) :+: S "3", Flat (S "Given the initial " :+:
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " of a " :+:
     S "set of " :+: S (rigidBodies ^. name) :+: S ", determine if any of " :+:
@@ -357,7 +358,7 @@ s4_2_1_list = Enumeration (Simple [
     (S (assumption ^. name) :+: S "1", Flat (S "All objects are " :+:
     S (rigidBodies ^. name) :+: S ".")),
     (S (assumption ^. name) :+: S "2", Flat (S "All objects are " :+:
-    S "2D (two-dimensional).")),
+    S (twoD ^. name) :+: S ".")),
     (S (assumption ^. name) :+: S "3", Flat (S "The library uses a " :+:
     S (init (cartesian ^. name)) :+: S " system.")),
     (S (assumption ^. name) :+: S "4", Flat (S "The axes are defined using " :+:
@@ -382,7 +383,7 @@ s4_2_2 = Section 2 ((theoMod ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
     (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
-    S "the physics library is based on."
+    S "the " :+: S (physLib ^. name) :+: S " is based on."
 
 s4_2_2_TMods = map Definition (map Theory tMods)
 
@@ -439,7 +440,7 @@ s4_2_5 = Section 2 ((instMod ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
 s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
     S "in " :+: (makeRef s4_1) :+: S " into one expressed in mathematical " :+:
     S "terms. It uses concrete symbols defined in " :+: (makeRef s4_2_4) :+:
-    S "to replace the abstract symbols in the models identified in " :+:
+    S " to replace the abstract symbols in the models identified in " :+:
     (makeRef s4_2_2) :+: S " and " :+: (makeRef s4_2_3) :+: S "."
 
 -- Instance models not yet implemented --
@@ -540,20 +541,20 @@ s5_1_list = Enumeration (Simple [
     S "satisfy the required physical constraints.")),
     (S (requirement ^. name) :+: S "5", Flat (S "Determine the " :+:
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
-    S "period of " :+: (time ^. descr) :+: S " of the 2D " :+:
-    S (rigidBodies ^. name) :+: S " acted upon by a " :+: (force ^. descr) :+:
-    S ".")),
+    S "period of " :+: (time ^. descr) :+: S " of the " :+: S (twoD ^. name) :+:
+    S " " :+: S (rigidBodies ^. name) :+: S " acted upon by a " :+:
+    (force ^. descr) :+: S ".")),
     (S (requirement ^. name) :+: S "6", Flat (S "Determine the " :+:
     (orientation ^. descr) :+: S "s and " :+: S (angularVels ^. name) :+:
-    S " over a period of " :+: (time ^. descr) :+: S " of the 2D " :+:
-    S (rigidBodies ^. name) :+: S ".")),
+    S " over a period of " :+: (time ^. descr) :+: S " of the " :+:
+    S (twoD ^. name) :+: S " " :+: S (rigidBodies ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "7", Flat (S "Determine if any of the " :+:
     S (rigidBodies ^. name) :+: S " in the " :+: S (space ^. name) :+:
     S " have collided.")),
     (S (requirement ^. name) :+: S "8", Flat (S "Determine the " :+:
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
-    S "period of " :+: (time ^. descr) :+: S " of the 2D " :+:
-    S (rigidBodies ^. name) :+: S " that have undergone a " :+:
+    S "period of " :+: (time ^. descr) :+: S " of the " :+: S (twoD ^. name) :+:
+    S " " :+: S (rigidBodies ^. name) :+: S " that have undergone a " :+:
     S (coll ^. name) :+: S "."))])
 
 --------------------------------------
@@ -606,8 +607,8 @@ s7 = Section 0 (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
     Con s7_mid, Con s7_3dlist]
 
 s7_intro = Paragraph $ S "As mentioned in " :+: (makeRef s4_1) :+:
-    S ", there already exists free open source game physics libraries. " :+:
-    S "Similar 2D physics libraries are:"
+    S ", there already exist free open source game physics libraries. " :+:
+    S "Similar " :+: S (twoD ^. name) :+: S " physics libraries are:"
 
 s7_2dlist = Enumeration (Bullet [
     Flat (S "Box2D: http://box2d.org/"),

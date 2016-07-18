@@ -8,11 +8,11 @@ import Language.Drasil
 ----- Acronyms -----
 
 assumption, centreMass, dataDefn, genDefn, goalStmt, instMod, likelyChange, ode,
-    requirement, srs, theoMod :: ConceptChunk
+    requirement, srs, theoMod, twoD :: ConceptChunk
 
 chipmunkAcronyms :: [ConceptChunk]
 chipmunkAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
-    instMod, likelyChange, ode, requirement, srs, theoMod]
+    instMod, likelyChange, ode, requirement, srs, theoMod, twoD]
 
 assumption    = makeCC "A" "Assumption"
 centreMass    = makeCC "CM" "Centre of Mass"
@@ -25,6 +25,7 @@ ode           = makeCC "ODE" "Ordinary Differential Equation"
 requirement   = makeCC "R" "Requirement"
 srs           = makeCC "SRS" "Software Requirements Specification"
 theoMod       = makeCC "T" "Theoretical Model"
+twoD          = makeCC "2D" "Two-Dimensional"
 
 ----- General concepts -----
 

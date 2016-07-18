@@ -184,7 +184,7 @@ needs (Ref _ _)  = Text
 -- print all Spec through here
 spec :: Spec -> D
 spec a@(s :+: t) = s' <> t'
-  where 
+  where
     ctx = const $ needs a
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
@@ -217,7 +217,7 @@ p_unit (UName n) =
   switch (const cn) (pure $ text $ symbol n)
 p_unit (UProd l) = foldr (<>) empty (map p_unit l)
 p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (UDiv n d) = 
+p_unit (UDiv n d) =
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)
     UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)

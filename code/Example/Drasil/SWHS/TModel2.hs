@@ -28,29 +28,29 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT),
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
 t2descr :: Sentence
-t2descr = (U (sensHtE ^. symbol) :+: S " is the change in " :+:
+t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (S (sens_heat ^. name))) :+: S " energy (" :+:
-          Sy (joule ^. unit) :+: S "). " :+: U (htCap_S ^. symbol) :+: 
-          S ", " :+: U (htCap_L ^. symbol) :+: S ", " :+: 
-          U (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. descr) :+: 
+          Sy (joule ^. unit) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
+          S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
+          P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. descr) :+: 
           S ", " :+: (htCap_L ^. descr) :+: S ", and " :+: 
           (htCap_V ^. descr) :+: S ", respectively (" :+: Sy (htCap ^. unit) :+:
-          S "). " :+: U (mass ^. symbol) :+: S " is the " :+:
+          S "). " :+: P (mass ^. symbol) :+: S " is the " :+:
           (mass ^. descr) :+: S " (" :+: Sy (mass ^. unit) :+: S "). " :+:
-          U (temp ^. symbol) :+: S " is the " :+: (temp ^. descr) :+: S " (" :+:
-          Sy (temp ^. unit) :+: S "), and " :+: U (deltaT ^. symbol) :+:
+          P (temp ^. symbol) :+: S " is the " :+: (temp ^. descr) :+: S " (" :+:
+          Sy (temp ^. unit) :+: S "), and " :+: P (deltaT ^. symbol) :+:
           S " is the " :+: (deltaT ^. descr) :+: S " (" :+:
-          Sy (deltaT ^. unit) :+: S "). " :+: U (temp_melt ^. symbol) :+: 
-          S " and " :+: U (temp_boil ^. symbol) :+: S " are the " :+: 
+          Sy (deltaT ^. unit) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
+          S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
           (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
           (sens_heat ^. descr) :+: S " occurs as long as the material does " :+: 
           S "not reach a " :+: (temp ^. descr) :+: S " where a " :+: 
           (sMap (map toLower) (S (phs_change ^. name))) :+: S " occurs. A " :+:
           (sMap (map toLower) (S (phs_change ^. name))) :+: S " occurs if " :+:
-          U (temp ^. symbol) :+: S "=" :+: U (temp_boil ^. symbol) :+:
-          S " or " :+: U (temp ^. symbol) :+: S "=" :+: 
-          U (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 
+          P (temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:
+          S " or " :+: P (temp ^. symbol) :+: S "=" :+: 
+          P (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 
           makeRef s4_2_2_T3 :+: S ", " :+: S (latent_heat ^. name) :+: 
           S " energy.")
           

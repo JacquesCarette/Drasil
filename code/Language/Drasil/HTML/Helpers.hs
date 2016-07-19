@@ -129,7 +129,8 @@ makeCSS _ = vcat [
     text "  background: #faf8f0;",
     text "}"
     ],
-  text ".list {text-align:left;}"
+  text ".list {text-align:left;}",
+  text ".figure {max-width: 800px;}"
   ]
 
 linkCSS :: String -> Doc  

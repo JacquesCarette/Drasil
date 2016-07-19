@@ -28,7 +28,7 @@ data Greek = Alpha_L
            | Upsilon_L
            | Upsilon
 
-data Special = LEQ | Partial | Circle
+data Special = LEQ | Partial | Circle | UScore --underscore
 
 class RenderGreek r where
   greek :: Greek -> r

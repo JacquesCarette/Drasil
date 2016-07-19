@@ -47,3 +47,4 @@ instance RenderSpecial PrintHTML where
   special Circle  = PH "&deg;"
   special Partial  = PH "&part;"
   special LEQ       = PH "&le;"
+  special UScore  = PH "_"

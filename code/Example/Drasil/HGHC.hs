@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 import Example.Drasil.HeatTransfer
 import Example.Drasil.Units
 import Example.Drasil.TableOfSymbols
+import Example.Drasil.Modules
 
 import Language.Drasil
 import Language.Drasil.SI_Units (si_units)
@@ -19,8 +20,10 @@ s2 = table_of_symbols vars
 s3 = Section 0 (S "Data Definitions") $ map (Definition . Data) vars
 s4 = Section 0 (S "Code -- Test") $ [CodeBlock $ toCodeModule CLang mod_calc]
 
-m1 :: LayoutObj
-m1 = Module 0 mod_calc
+m1,m2,m3 :: LayoutObj
+m1 = Module 0 mod_hw
+m2 = Module 0 mod_behav
+m3 = Module 1 mod_calc
 
 srs :: Quantity s => [s] -> String -> [LayoutObj] -> Document
 srs ls author body =
@@ -36,7 +39,7 @@ mg ls author body =
   
 srsBody,mgBody,lpmBody :: Document
 srsBody = srs vars "Spencer Smith" [s1, s2, s3, s4]
-mgBody = mg vars "Spencer Smith" [m1]
+mgBody = mg vars "Spencer Smith" [m1, m2, m3]
   
 lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 
   (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) vars))))

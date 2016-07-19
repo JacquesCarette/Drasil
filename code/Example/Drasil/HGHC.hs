@@ -15,7 +15,7 @@ vars = [h_g, h_c]
 
 s1, s2, s3 :: Section --, s4 
 s1 = table_of_units si_units
-s2 = table_of_symbols vars
+s2 = table_of_symbols $ (map Has vars) ++ (map HasNot varChunks)
 s3 = Section 0 (S "Data Definitions") $ map (Con . Definition . Data) vars
 --s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [h_c]
 

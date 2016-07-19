@@ -3,6 +3,7 @@ module Example.Drasil.Modules where
 import Language.Drasil
 import Control.Lens ((^.))
 import Example.Drasil.HeatTransfer
+import Example.Drasil.Concepts
 
 -- Calc Modules
 meth_h_g, meth_h_c :: MethodChunk
@@ -15,7 +16,7 @@ mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
 mod_calc :: ModuleChunk
 mod_calc = makeImpModule mod_calc_desc
   (S "The equations used to calculate heat transfer coefficients")
-  "HGHC"
+  (program ^. name)
   [meth_h_g, meth_h_c]
 
 
@@ -29,7 +30,7 @@ mod_hw_desc = CC "hardware hiding"
 mod_hw :: ModuleChunk
 mod_hw = makeImpModule mod_hw_desc
   (S "The data structure and algorithm used to implement the virtual hardware.")
-  "OS"
+  (os ^. name)
   []
 
 

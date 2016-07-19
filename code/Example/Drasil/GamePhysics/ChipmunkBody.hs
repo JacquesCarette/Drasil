@@ -13,6 +13,7 @@ import Example.Drasil.GamePhysics.ChipmunkTMods
 import Example.Drasil.GamePhysics.ChipmunkDataDefs
 
 import Language.Drasil
+import Language.Drasil.Unit
 
 chipmunkSRS :: Document
 chipmunkSRS = Document
@@ -52,8 +53,8 @@ s1_1_intro = Paragraph $ S "Throughout this document SI (Syst" :+:
 s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
     [(\x -> Sy (x ^. unit)),
     (\x -> (x ^. descr)),
-    (\x -> S (x ^. name))
-    ] chipmunkSI)
+    (\x -> (sMap (map toLower) (S $ x ^. name)))]
+    cpSIUnits)
     (S "Table of Units") False
 
 ----------------------------
@@ -72,12 +73,16 @@ s1_2_intro = Paragraph $
     S "the document, symbols in bold will represent vectors, and scalars " :+:
     S "otherwise. The symbols are listed in alphabetical order."
 
+-- For mapping chunks with and without units --
+maybeUnits :: Maybe USymb -> Sentence
+maybeUnits (Just x) = Sy x
+maybeUnits Nothing = S ""
+
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
     [(\ch -> P (ch ^. symbol)),
-    (\ch -> Sy $ ch ^. unit),
-    (\ch -> ch ^. descr)
-    ]
-    chipmunkSymbols)
+    (\ch -> ch ^. descr),
+    (\ch -> maybeUnits (ch ^. unit'))]
+    cpSymbols)
     (S "Table of Symbols") False
 
 --------------------------------------
@@ -92,7 +97,7 @@ s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
     [(\ch -> S $ ch ^. name),
     (\ch -> ch ^. descr)]
-    chipmunkAcronyms)
+    cpAcronyms)
     (S "Abbreviations and Acronyms") False
 
 ------------------------------
@@ -385,7 +390,7 @@ s4_2_2 = Section 2 ((theoMod ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
     S "the " :+: S (physLib ^. name) :+: S " is based on."
 
-s4_2_2_TMods = map Definition (map Theory tMods)
+s4_2_2_TMods = map Definition (map Theory cpTMods)
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
@@ -424,7 +429,7 @@ s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
     S "data needed to build the " :+: (instMod ^. descr) :+: S "s. The " :+:
     S "dimension of each quantity is also given."
 
-s4_2_4_DDefs = map Definition (map Data dDefs)
+s4_2_4_DDefs = map Definition (map Data cpDDefs)
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -470,6 +475,8 @@ s4_2_6_intro = Paragraph $ S "Table 1 and 2 show the data constraints on " :+:
 -- How do I write 2pi in constraints?
 s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
     (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] [
+    [P (len ^. symbol), P (len ^. symbol) :+: S " is G/E to 0", S "44.2 " :+:
+    Sy (len ^. unit)],
     [P (mass ^. symbol), P (mass ^. symbol) :+: S " is greater than 0",
     S "56.2 " :+: Sy (mass ^. unit)],
     [P (momtInert ^. symbol), P (momtInert ^. symbol) :+: S " is G/E to 0",

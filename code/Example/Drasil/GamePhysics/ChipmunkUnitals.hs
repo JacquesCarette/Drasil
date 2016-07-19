@@ -11,26 +11,33 @@ import Control.Lens((^.))
 
 ----- Table of Symbols -----
 
-accel, angAccel, restCoef, force, gravAccel, gravConst, momtInert, impulse,
-    mass, normalVect, angVel, position, orientation, dist, disp, time, torque,
-    angDisp, vel :: UnitalChunk
+cpSymbols :: [MUChunk]
+cpSymbols = (map Has cpUnits) ++ (map HasNot cpUnitless)
 
-chipmunkSymbols :: [UnitalChunk]
-chipmunkSymbols = [accel, angAccel, restCoef, force, gravAccel, gravConst,
-    momtInert, impulse, mass, normalVect, angVel, position, orientation, dist,
-    disp, time, torque, angDisp, vel]
+-- Chunks with units --
+accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
+    impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
+    orientation, dist, disp, time, torque, angDisp, vel :: UnitalChunk
+
+cpUnits :: [UnitalChunk]
+cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
+    impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
+    orientation, dist, disp, time, torque, angDisp, vel]
 
 accel       = makeUC "a" "acceleration" (vec lA) accelU
 angAccel    = makeUC "alpha" "angular acceleration" (Greek Alpha_L) angAccelU
-restCoef   = makeUC "C_R" "coefficient of restitution" (sub cC cR) unitless
 force       = makeUC "F" "force" (vec cF) newton
 gravAccel   = makeUC "g" "gravitational acceleration" lG newton
 -- What would be the best way to represent universal constants
 -- like gravitational constant, and display their constant value?
 gravConst   = makeUC "G" "gravitational constant (6.673 * 10E-11)" cG gravConstU
 momtInert   = makeUC "I" "moment of inertia" (vec cI) momtInertU
-impulse     = makeUC "J" "impulse" (vec cJ) impulseU
+impulseVec  = makeUC "J" "impulse (vector)" (vec cJ) impulseU
+impulseScl  = makeUC "j" "impulse (scalar)" lJ impulseU
+len         = makeUC "L" "length" cL metre
 mass        = makeUC "m" "mass" lM kilogram
+iVect       = makeUC "i" "horizontal unit vector" (vec (hat lI)) metre
+jVect       = makeUC "j" "vertical unit vector" (vec (hat lJ)) metre
 normalVect  = makeUC "n" "collision normal vector" (vec lN) metre
 angVel      = makeUC "omega" "angular velocity" (Greek Omega_L) angVelU
 position    = makeUC "p" "position" (vec lP) metre
@@ -42,6 +49,15 @@ torque      = makeUC "tau" "torque" (Greek Tau_L) torqueU
 -- Theta hasn't been implemented, using Gamma for now
 angDisp     = makeUC "theta" "angular displacement" (Greek Gamma_L) radians
 vel         = makeUC "v" "velocity" (vec lV) velU
+
+-- Chunks without units --
+restCoef, numParticles :: VarChunk
+
+cpUnitless :: [VarChunk]
+cpUnitless = [restCoef, numParticles]
+
+restCoef   = makeVC "C_R" "coefficient of restitution" (sub cC cR)
+numParticles = makeVC "n" "number of particles in a rigid body" lN
 
 ----- Specific unitals needed for certain models and definitions -----
 

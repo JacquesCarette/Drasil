@@ -12,8 +12,8 @@ import Control.Lens ((^.))
 
 ----- Theoretical Models -----
 
-tMods :: [RelationChunk]
-tMods = [t1NewtonSL, t2NewtonTL, t3NewtonLUG, t4ChaslesThm, t5NewtonSLR]
+cpTMods :: [RelationChunk]
+cpTMods = [t1NewtonSL, t2NewtonTL, t3NewtonLUG, t4ChaslesThm, t5NewtonSLR]
 
 -- T1 : Newton's second law of motion --
 

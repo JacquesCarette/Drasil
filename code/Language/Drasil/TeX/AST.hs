@@ -58,7 +58,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Figure Label Caption Filepath
                | Module Contents
                
-data ListType = Item | Enum | Simple
+data ListType = Item | Enum | Simple | Desc
 
 instance Show ListType where
   show Item = "itemize"

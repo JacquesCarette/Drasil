@@ -20,6 +20,7 @@ import Language.Drasil.Printing.Helpers
 import Data.List (intersperse)
 
 
+
 expr :: Expr -> H.Expr
 expr (V v)       = H.Var   v
 expr (Dbl d)     = H.Dbl   d
@@ -135,6 +136,9 @@ descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
 
 buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
 buildModuleDesc m = [
-  H.Paragraph $ H.S "Secrets: " H.:+: (spec $ secret m),
-  H.Paragraph $ H.S "Services: " H.:+: (spec $ m ^. descr)
+  H.List H.Simple
+    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
+      H.S (bold "Services: ") H.:+: (spec $ m ^. descr)
+    ]
   ]
+  where bold = \x -> "<b>" ++ x ++ "</b>"

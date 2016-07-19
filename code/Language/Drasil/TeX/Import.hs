@@ -140,6 +140,8 @@ descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
 
 buildModuleDesc :: ModuleChunk -> [T.LayoutObj]
 buildModuleDesc m = [
-  T.Paragraph $ T.S "Secrets: " T.:+: (spec $ secret m),
-  T.Paragraph $ T.S "Services: " T.:+: (spec $ m ^. descr)
+  T.List T.Desc
+    [ T.S "Secrets", spec $ secret m,
+      T.S "Services", spec $ m ^. descr
+    ]
   ]

@@ -324,7 +324,9 @@ makeEquation contents =
 
 makeList :: ListType -> [Spec] -> Doc
 makeList Simple items = b "itemize" $$ vcat (sim_item items) $$ e "itemize"
+makeList Desc items = b "description" $$ vcat (sim_item items) $$ e "description"
 makeList t items = b (show t) $$ vcat (map item items) $$ e (show t)
+
 
 item :: Spec -> Doc
 item = \s -> text ("\\item " ++ pCon Plain s)

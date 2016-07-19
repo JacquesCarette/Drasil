@@ -138,7 +138,10 @@ buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
 buildModuleDesc m = [
   H.List H.Simple
     [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
-      H.S (bold "Services: ") H.:+: (spec $ m ^. descr)
+      H.S (bold "Services: ") H.:+: (spec $ m ^. descr),
+      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
     ]
   ]
   where bold = \x -> "<b>" ++ x ++ "</b>"
+        getImp (Just x) = x
+        getImp Nothing  = "-"

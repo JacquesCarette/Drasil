@@ -142,6 +142,10 @@ buildModuleDesc :: ModuleChunk -> [T.LayoutObj]
 buildModuleDesc m = [
   T.List T.Desc
     [ T.S "Secrets", spec $ secret m,
-      T.S "Services", spec $ m ^. descr
+      T.S "Services", spec $ m ^. descr,
+      T.S "Implemented By", T.S $ getImp $ imp m
     ]
   ]
+  where
+    getImp (Just x) = x
+    getImp Nothing  = "-"

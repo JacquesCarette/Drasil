@@ -144,4 +144,4 @@ buildModuleDesc m = [
   ]
   where bold = \x -> "<b>" ++ x ++ "</b>"
         getImp (Just x) = x
-        getImp Nothing  = "-"
+        getImp Nothing  = "--"

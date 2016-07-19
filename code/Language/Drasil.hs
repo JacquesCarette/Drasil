@@ -46,6 +46,8 @@ module Language.Drasil (
   , toCodeModule
   -- CCode.AST
   , Lang(CLang), CodeType(Calc)
+  -- Template
+  , mgModuleDecomp
 ) where
 
 import Language.Drasil.Expr (Expr(..), Relation(..))
@@ -69,4 +71,5 @@ import Language.Drasil.Instances ()
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCodeModule)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
+import Language.Drasil.Template
 

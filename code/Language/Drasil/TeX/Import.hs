@@ -148,4 +148,4 @@ buildModuleDesc m = [
   ]
   where
     getImp (Just x) = x
-    getImp Nothing  = "-"
+    getImp Nothing  = "--"

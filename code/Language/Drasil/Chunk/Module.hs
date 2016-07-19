@@ -1,4 +1,5 @@
-module Language.Drasil.Chunk.Module(ModuleChunk(..), makeModule) where
+module Language.Drasil.Chunk.Module(ModuleChunk(..), makeImpModule
+  , makeUnimpModule) where
 
 import Control.Lens (Simple, Lens)
 
@@ -7,7 +8,8 @@ import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
 
 -- BEGIN METHODCHUNK --
-data ModuleChunk = MoC { cc :: ConceptChunk, secret :: Sentence, method :: [MethodChunk] }
+data ModuleChunk = MoC { cc :: ConceptChunk, secret :: Sentence,
+  imp :: Maybe String, method :: [MethodChunk] }
 
 instance Chunk ModuleChunk where
   name = cl . name
@@ -18,8 +20,12 @@ instance Concept ModuleChunk where
 -- END METHODCHUNK --
 
 cl ::  Simple Lens ModuleChunk ConceptChunk
-cl f (MoC a b c) = fmap (\x -> MoC x b c) (f a)
+cl f (MoC a b c d) = fmap (\x -> MoC x b c d) (f a)
 
 
-makeModule :: String -> Sentence -> Sentence -> [MethodChunk] -> ModuleChunk
-makeModule nm desc secret methods = MoC (CC nm desc) secret methods
+makeImpModule :: ConceptChunk -> Sentence -> String -> [MethodChunk]
+                -> ModuleChunk
+makeImpModule cc secret imp method = MoC cc secret (Just imp) method
+
+makeUnimpModule :: ConceptChunk -> Sentence -> ModuleChunk
+makeUnimpModule cc secret = MoC cc secret Nothing []

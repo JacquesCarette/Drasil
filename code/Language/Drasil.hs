@@ -25,7 +25,7 @@ module Language.Drasil (
   -- Chunk.Method
   , MethodChunk, fromEC
   -- Chunk.Module
-  , ModuleChunk, makeModule
+  , ModuleChunk, makeImpModule, makeUnimpModule
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document

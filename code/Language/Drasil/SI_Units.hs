@@ -12,7 +12,8 @@ fundamentals :: [FundUnit]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
 derived :: [DerUChunk]
-derived = [centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre, kilopascal]
+derived = [centigrade, joule, watt, calorie, kilowatt, pascal, newton, 
+  millimetre, kilopascal, radians]
 
 si_units :: [UnitDefn]
 si_units = map UU fundamentals ++ map UU derived
@@ -77,3 +78,7 @@ kilopascal = DUC
   (UD (CC "Kilopascal" (S "pressure"))
       (UName $ Concat [Atomic "k", Atomic "Pa"]))
   (UScale 1000 (pascal ^. unit))
+
+radians = DUC
+    (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
+    (USynonym (UProd [metre ^. unit, UPow (metre ^. unit) (-1)]))

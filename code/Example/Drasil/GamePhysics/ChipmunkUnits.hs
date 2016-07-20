@@ -11,11 +11,18 @@ import Control.Lens ((^.))
 cpSIUnits :: [UnitDefn]
 cpSIUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
------ Fundamental Units -----
+----- Named Derived Units -----
 
-newton, radians :: FundUnit
-newton  = fund "Newton"  "force" "N"
-radians = fund "Radians" "angle" "rad"
+newton, radians :: DerUChunk
+
+newton = DUC
+    (UD (CC "Newton" (S "force")) (UName $ Atomic "N"))
+    (USynonym (UProd [kilogram ^. unit, metre ^. unit,
+                      UPow (second ^. unit) (-2)]))
+
+radians = DUC
+    (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
+    (USynonym (UProd [metre ^. unit, UPow (metre ^. unit) (-1)]))
 
 ----- Derived Units -----
 

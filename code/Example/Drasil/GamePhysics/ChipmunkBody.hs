@@ -12,8 +12,10 @@ import Example.Drasil.GamePhysics.ChipmunkConcepts
 import Example.Drasil.GamePhysics.ChipmunkTMods
 import Example.Drasil.GamePhysics.ChipmunkDataDefs
 
+import Example.Drasil.Units
+import Example.Drasil.TableOfSymbols
+
 import Language.Drasil
-import Language.Drasil.Unit
 
 chipmunkSRS :: Document
 chipmunkSRS = Document
@@ -28,8 +30,7 @@ chipmunkSRS = Document
 s1 :: Section
 s1_intro :: Contents
 
-s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2,
-    Sub s1_3]
+s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2]
 
 s1_intro = Paragraph $ S "This section records information for easy reference."
 
@@ -38,52 +39,24 @@ s1_intro = Paragraph $ S "This section records information for easy reference."
 --------------------------
 
 s1_1 :: Section
-s1_1_intro, s1_1_table :: Contents
-
-s1_1 = Section 1 (S "Table of Units") [Con s1_1_intro, Con s1_1_table]
-
-s1_1_intro = Paragraph $ S "Throughout this document SI (Syst" :+:
-           (F Grave 'e') :+: S "me International d'Unit" :+:
-           (F Acute 'e') :+: S "s) is employed as the unit system." :+:
-           S " In addition to the basic units, several derived units are" :+:
-           S " employed as described below. For each unit, the symbol is" :+:
-           S " given followed by a description of the unit followed by " :+:
-           S "the SI name."
-
-s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
-    [(\x -> Sy (x ^. unit)),
-    (\x -> (x ^. descr)),
-    (\x -> (sMap (map toLower) (S $ x ^. name)))]
-    cpSIUnits)
-    (S "Table of Units") False
+s1_1 = table_of_units cpSIUnits
 
 ----------------------------
 -- 1.2 : Table of Symbols --
 ----------------------------
 
 s1_2 :: Section
-s1_2_intro, s1_2_table :: Contents
+s1_2 = table_of_symbols cpSymbols
 
-s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
-
+{-
+-- Original introduction --
 s1_2_intro = Paragraph $
     S "The table that follows summarizes the symbols used in this " :+:
     S "document along with their units.  More specific instances of these " :+:
     S "symbols will be described in their respective sections. Throughout " :+:
     S "the document, symbols in bold will represent vectors, and scalars " :+:
     S "otherwise. The symbols are listed in alphabetical order."
-
--- For mapping chunks with and without units --
-maybeUnits :: Maybe USymb -> Sentence
-maybeUnits (Just x) = Sy x
-maybeUnits Nothing = S ""
-
-s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-    [(\ch -> P (ch ^. symbol)),
-    (\ch -> ch ^. descr),
-    (\ch -> maybeUnits (ch ^. unit'))]
-    cpSymbols)
-    (S "Table of Symbols") False
+-}
 
 --------------------------------------
 -- 1.3 : Abbreviations and Acronyms --

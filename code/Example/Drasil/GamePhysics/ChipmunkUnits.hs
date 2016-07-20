@@ -1,10 +1,30 @@
 {-# OPTIONS -Wall #-}
-module Example.Drasil.GamePhysics.ChipUnits where
+module Example.Drasil.GamePhysics.ChipmunkUnits where
 
 import Language.Drasil
 import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
+
+----- Table of Units -----
+
+cpSIUnits :: [UnitDefn]
+cpSIUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
+
+----- Named Derived Units -----
+
+newton, radians :: DerUChunk
+
+newton = DUC
+    (UD (CC "Newton" (S "force")) (UName $ Atomic "N"))
+    (USynonym (UProd [kilogram ^. unit, metre ^. unit,
+                      UPow (second ^. unit) (-2)]))
+
+radians = DUC
+    (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
+    (USynonym (UProd [metre ^. unit, UPow (metre ^. unit) (-1)]))
+
+----- Derived Units -----
 
 --s^2--
 s_2 :: DerUChunk

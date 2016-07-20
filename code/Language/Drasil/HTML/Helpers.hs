@@ -112,7 +112,7 @@ makeCSS _ = vcat [
   text "th, td {padding:1%;}",
   text ".tdefn {width:75%;margin-top:1%;margin-bottom:1%;}",
   text ".tdefn th {width:15%; padding:1%;}",
-  text ".ddefn, {width:75%;margin-top:1%;margin-bottom:1%;}",
+  text ".ddefn {width:75%;margin-top:1%;margin-bottom:1%;}",
   text ".section {width:80%; margin:0 auto;text-align:center;}",
   vcat [
     text ".code {",
@@ -129,7 +129,8 @@ makeCSS _ = vcat [
     text "  background: #faf8f0;",
     text "}"
     ],
-  text ".list {text-align:left;}"
+  text ".list {text-align:left;}",
+  text ".figure {max-width: 800px;}"
   ]
 
 linkCSS :: String -> Doc  

@@ -132,3 +132,4 @@ instance RenderSpecial Latex where
   special Circle   = L "{}^{\\circ}"
   special LEQ        = L "\\leq{}"
   special Partial   = L "\\partial{}"
+  special UScore   = L "\\_"

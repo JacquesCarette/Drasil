@@ -7,6 +7,9 @@ Eq.hs
   - Defines EqChunks (quantities with units 
       and defining equations).
 
+MUChunk.hs
+  - Defines MUChunks (chunks which may have units).
+
 Relation.hs
   - Defines Relation chunks (Concepts with relations 
       between other chunks).

@@ -4,8 +4,9 @@ module Example.Drasil.TableOfSymbols(table_of_symbols) where
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.Unit
 
-table_of_symbols :: (Unit s, Quantity s) => [s] -> Section
+table_of_symbols :: (Unit' s, Quantity s) => [s] -> Section
 table_of_symbols ls = Section 0 (S "Table of Symbols") [Con intro, Con (table ls)]
 
 intro :: Contents
@@ -17,10 +18,13 @@ intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-table :: (Unit s, Quantity s) => [s] -> Contents
+table :: (Unit' s, Quantity s) => [s] -> Contents
 table ls = Table [S "Symbol", S "Description", S "Units"] (mkTable
   [(\ch -> P (ch ^. symbol)) , 
    (\ch -> ch ^. descr), 
-   (\ch -> Sy $ ch ^. unit)]
+   (\ch -> maybeUnits (ch ^. unit'))]
   ls)
   (S "Table of Symbols") False
+
+maybeUnits (Just x) = Sy x
+maybeUnits Nothing = S ""

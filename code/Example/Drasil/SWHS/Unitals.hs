@@ -60,7 +60,7 @@ pcm_E        = makeUC "E_P" "change in heat energy in the PCM"
 w_E          = makeUC "E_W" "change in heat energy in the water" 
                (sub (sensHtE ^. symbol) cW) joule
 vol_ht_gen   = makeUC "g" "volumetric heat generation per unit volume" lG 
-               thermFluxU 
+               volHtGenU 
 htTransCoeff = makeUC "h" "convective heat transfer coefficient" lH 
                heat_transfer
 coil_HTC     = makeUC "h_C" ("convective heat transfer coefficient between " ++

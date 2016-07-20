@@ -12,7 +12,7 @@ fundamentals :: [FundUnit]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
 derived :: [DerUChunk]
-derived = [centigrade, joule, watt, calorie, kilowatt]
+derived = [centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre, kilopascal]
 
 si_units :: [UnitDefn]
 si_units = map UU fundamentals ++ map UU derived
@@ -32,7 +32,8 @@ candela  = fund "Candela"  "luminous intensity"   "cd"
 
 ------------- END FUNDAMENTALS -------------------------------------------------
 
-centigrade, joule, watt, calorie, kilowatt :: DerUChunk 
+centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre, 
+  kilopascal:: DerUChunk 
 
 centigrade = DUC 
   (UD (CC "Centigrade" (S "temperature")) 
@@ -57,3 +58,22 @@ kilowatt = DUC
   (UD (CC "Kilowatt" (S "power"))
       (UName $ Concat [Atomic "k", Atomic "W"]))
   (UScale 1000 (watt ^. unit))
+
+pascal = DUC
+  (UD (CC "Pascal" (S "pressure")) (UName $ (Atomic "Pa")))
+  (USynonym (UProd [(kilogram ^. unit), (UPow (metre ^. unit) (-1)),
+                      (UPow (second ^. unit) (-2))]))
+
+newton = DUC
+  (UD (CC "Newton" (S "force")) (UName $ Atomic "N"))
+  (USynonym (UProd [(kilogram ^. unit), (UPow (second ^. unit) (-2))]))
+
+millimetre = DUC
+  (UD (CC "Millimetre" (S "length"))
+      (UName $ (Atomic "mm")))
+  (UScale 0.0001 (metre ^. unit))
+
+kilopascal = DUC
+  (UD (CC "Kilopascal" (S "pressure"))
+      (UName $ Concat [Atomic "k", Atomic "Pa"]))
+  (UScale 1000 (pascal ^. unit))

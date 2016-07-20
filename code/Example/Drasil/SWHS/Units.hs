@@ -67,7 +67,3 @@ heat_transfer = makeDerU (unitCon "heat transfer") heat_transfer_eqn
 heat_transfer_eqn :: UDefn
 heat_transfer_eqn = USynonym (UDiv 
   (watt ^. unit) (UProd [m_2 ^. unit, centigrade ^. unit]))
-  
---unitless--
-unitless :: FundUnit
-unitless = fund "unitless" "no units" "unitless"

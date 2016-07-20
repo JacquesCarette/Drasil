@@ -45,25 +45,25 @@ dd3descr = (S "amount of " :+: (sMap (map toLower) (S (thermal_energy ^. name)))
            :+: S " required to completely melt a unit " :+: (mass ^. descr) :+:
            S " of a substance.")
 
-dd4MeltFrac :: EqChunk
-dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless 
+-- dd4MeltFrac :: EqChunk
+dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless
               melt_frac_eqn
 
-melt_frac_eqn :: Expr
-melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
+-- melt_frac_eqn :: Expr
+-- melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 
-dd4descr :: Sentence
-dd4descr = (S "fraction of the " :+: S (phsChgMtrl ^. name) :+: 
-           S " that is " :+: (sMap (map toLower) (S (liquid ^. name))) :+: 
-           S ".")
+-- dd4descr :: Sentence
+-- dd4descr = (S "fraction of the " :+: S (phsChgMtrl ^. name) :+: 
+           -- S " that is " :+: (sMap (map toLower) (S (liquid ^. name))) :+: 
+           -- S ".")
 
 --Need to add units to data definition descriptions
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: Contents
+s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3 :: Contents
 s4_2_4_DD1 = Definition (Data dd1HtFluxC)
 s4_2_4_DD2 = Definition (Data dd2HtFluxP)
 s4_2_4_DD3 = Definition (Data dd3HtFusion)
-s4_2_4_DD4 = Definition (Data dd4MeltFrac)
+--s4_2_4_DD4 = Definition (Data dd4MeltFrac)
 
 --Symbol appears as "Label"
 --There is no actual label

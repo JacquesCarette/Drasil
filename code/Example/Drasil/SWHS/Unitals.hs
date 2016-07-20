@@ -9,24 +9,28 @@ import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
-swhsSymbols :: [UnitalChunk]
-swhsSymbols = [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
+swhsSymbols :: [MUChunk]
+swhsSymbols = (map Has swhsUnits) ++ (map HasNot swhsUnitless)
+
+-- Symbols with Units --
+
+swhsUnits :: [UnitalChunk]
+swhsUnits = [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   htCap_S_P,htCap_V,htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,
   htTransCoeff,coil_HTC,htFusion,pcm_HTC,tank_length,mass,pcm_mass,w_mass,
-  norm_vect,ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,
+  ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,
   ht_flux_P,latentE_P,time,temp,temp_boil,temp_C,temp_env,time_final,temp_init,
   temp_melt,t_init_melt,t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,
-  tank_vol,w_vol,deltaT,eta,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,
-  tau_W,melt_frac]
+  tank_vol,w_vol,deltaT,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,
+  tau_W]
 
 coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,htTransCoeff,coil_HTC,
-  htFusion,pcm_HTC,tank_length,mass,pcm_mass,w_mass,norm_vect,ht_flux,latentE,
-  thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,surface,time,
+  htFusion,pcm_HTC,tank_length,mass,pcm_mass,w_mass,ht_flux,latentE,
+  thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,time,
   temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
-  eta,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W,
-  melt_frac :: UnitalChunk
+  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W :: UnitalChunk
 
 --symbol names can't begin with a capital
 
@@ -74,11 +78,6 @@ mass         = makeUC "m" "mass" lM kilogram
 pcm_mass     = makeUC "m_P" "mass of phase change material" 
                (sub (mass ^. symbol) cP) kilogram
 w_mass       = makeUC "m_W" "mass of water" (sub (mass ^. symbol) cW) kilogram
-norm_vect    = makeUC "n_vect" "unit outward normal vector for a surface"
-               (vec $ hat lN) unitless
---In example this was a varChunk for some reason
---I can't do that or else it wouldn't be included in the list
---What to do about units if unitless?
 ht_flux      = makeUC "q" "heat flux" lQ thermFluxU
 latentE      = makeUC "Q" "latent heat energy" cQ joule
 thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermFluxU
@@ -92,7 +91,6 @@ ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water"
                (sub (ht_flux ^. symbol) cP) thermFluxU
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" 
                (sub (latentE ^. symbol) cP) joule
-surface      = makeUC "S" "surface" (cS) unitless
 time         = makeUC "t" "time" lT second 
 temp         = makeUC "T" "temperature" cT centigrade
 temp_boil    = makeUC "T_boil" "boiling point temperature" 
@@ -126,7 +124,6 @@ tank_vol     = makeUC "V_tank" "volume of the cylindrical tank"
 w_vol        = makeUC "V_W" "volume of water" (sub (volume ^. symbol) cW) m_3
 deltaT       = makeUC "deltaT" "change in temperature" 
                (Concat [Greek Delta, (temp ^. symbol)]) centigrade
-eta          = makeUC "eta" "ODE parameter" (Greek Eta_L) unitless
 density      = makeUC "rho" "density" (Greek Rho_L)
                densityU
 pcm_density  = makeUC "rho_P" "density of PCM" (sub (density ^. symbol) cP)
@@ -141,11 +138,20 @@ tau_S_P      = makeUC "tau_S_P" "ODE parameter for solid PCM"
                (sup (sub (Greek Tau_L) cP) cS) second
 tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Greek Tau_L) cW)
                second
-melt_frac    = makeUC "phi" "melt fraction" (Greek Phi_L) unitless
 
---Created a "unitless" unit in SWHSUnits.hs so that i didn't need varChunks.
+-- Unitless symbols --
 
---Need to add eta to unicode
+swhsUnitless :: [VarChunk]
+
+swhsUnitless = [norm_vect, surface, eta, melt_frac]
+
+norm_vect, surface, eta, melt_frac :: VarChunk
+
+norm_vect    = makeVC "n_vect" "unit outward normal vector for a surface"
+               (vec $ hat lN)
+surface      = makeVC "S" "surface" (cS)
+eta          = makeVC "eta" "ODE parameter" (Greek Eta_L)
+melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
 
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will

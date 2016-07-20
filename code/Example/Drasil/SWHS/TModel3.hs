@@ -39,10 +39,11 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           (S (phs_change ^. name))) :+: S " is not complete. The status of " :+:
           S "the " :+: (sMap (map toLower) (S (phs_change ^. name))) :+:
           S " depends on the " :+: (melt_frac ^. descr) :+: S ", " :+: 
-          makeRef s4_2_4_DD4 :+: S ". " :+: P (temp_melt ^. symbol) :+:
+          makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
           (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+:
           (latent_heat ^. descr) :+: S " stops when all material has " :+:
           S "changed to the new phase.")
           
+-- Wrong DD reference above, change when DD4 is available

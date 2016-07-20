@@ -20,7 +20,7 @@ library
   ghc-options:      -Wall
   HS-Source-Dirs:  ../../..
 
-executable lss
+executable chipmunkdocs
   main-is: Example/Drasil/GamePhysics/Main.hs
   Build-Depends:
     base >= 4.7,

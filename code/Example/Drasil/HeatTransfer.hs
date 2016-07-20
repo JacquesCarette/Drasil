@@ -2,7 +2,6 @@ module Example.Drasil.HeatTransfer where
 
 import Language.Drasil
 import Language.Drasil.SI_Units
-import Language.Drasil.SymbolAlphabet
 
 import Control.Lens ((^.))
 
@@ -27,7 +26,7 @@ heat_transfer_eqn = USynonym (UProd
 {--------------- Begin tau_c ---------------}
 --------------- --------------- --------------- ---------------
 tau_c :: VarChunk
-tau_c = makeVC "tau_c" "clad thickness" ((Special Tau_L) `sub` lC)
+tau_c = makeVC "tau_c" "clad thickness" ((Greek Tau_L) `sub` lC)
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_c ---------------}

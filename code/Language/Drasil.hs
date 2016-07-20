@@ -6,10 +6,9 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation(..)
+  , Expr(..), Relation, UFunc(..)
   -- all the stuff from Unicode
-  , Alpha(..), Beta(..), Circle(..), Delta(..), Ell(..), Gamma(..), Lambda(..), LEQ(..), Nabla(..)
-  , Nu(..), Omega(..), Partial(..), Phi(..), Rho(..), Tau(..), Upsilon(..)
+  , Greek(..), Special(..)
   -- Unit
   , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
   , from_udefn , makeDerU, unitCon
@@ -20,6 +19,8 @@ module Language.Drasil (
   , EqChunk(..), fromEqn
   -- Chunk.Unital
   , UnitalChunk(..), makeUC
+  -- Chunk.MUChunk
+  , MUChunk(..)
   -- Chunk.Relation
   , RelationChunk, makeRC
   -- Chunk.Method
@@ -29,7 +30,8 @@ module Language.Drasil (
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
-  , LayoutObj(..), Document(..), DType(..)
+  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
+    SecCons(..), ListType(..), ItemType (..)
   -- Reference
   , makeRef
   -- Symbol
@@ -50,15 +52,19 @@ module Language.Drasil (
   , mgModuleDecomp
 ) where
 
-import Language.Drasil.Expr (Expr(..), Relation(..))
-import Language.Drasil.Output.Formats (DocType(SRS,MG,LPM,Website,Code))
-import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..))
+
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,LPM,Website))
+import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
+                                 Section(..), Contents(..), SecCons(..),
+                                 ListType(..),ItemType(..))
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
+import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
@@ -67,7 +73,6 @@ import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc (mkTable)
-import Language.Drasil.Instances ()
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCodeModule)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))

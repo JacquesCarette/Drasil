@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="SRS.css">
+<title>
+SRS for h<sub>g</sub> and h<sub>c</sub>
+</title>
+</head>
+<body>
+<div class="title">
+<h1>
+SRS for h<sub>g</sub> and h<sub>c</sub>
+</h1>
+</div>
+<div class="author">
+<h2>
+Spencer Smith
+</h2>
+</div>
+<a id="Sec:ToU">
+<div class="section">
+<h2>
+Table of Units
+</h2>
+<p class="paragraph">
+Throughout this document SI (Syst&egrave;me International d'Unit&eacute;s) is employed as the unit system. In addition to the basic units, several derived units are employed as described below. For each unit, the symbol is given followed by a description of the unit with the SI name in parentheses.
+</p>
+<a id="Table:ToU">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+length (metre)
+</td>
+</tr>
+<tr>
+<td>
+kg
+</td>
+<td>
+mass (kilogram)
+</td>
+</tr>
+<tr>
+<td>
+s
+</td>
+<td>
+time (second)
+</td>
+</tr>
+<tr>
+<td>
+K
+</td>
+<td>
+temperature (kelvin)
+</td>
+</tr>
+<tr>
+<td>
+mol
+</td>
+<td>
+amount of substance (mole)
+</td>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+electric current (ampere)
+</td>
+</tr>
+<tr>
+<td>
+cd
+</td>
+<td>
+luminous intensity (candela)
+</td>
+</tr>
+<tr>
+<td>
+&deg;C
+</td>
+<td>
+temperature (centigrade)
+</td>
+</tr>
+<tr>
+<td>
+J
+</td>
+<td>
+energy (joule)
+</td>
+</tr>
+<tr>
+<td>
+W
+</td>
+<td>
+power (watt)
+</td>
+</tr>
+<tr>
+<td>
+cal
+</td>
+<td>
+energy (calorie)
+</td>
+</tr>
+<tr>
+<td>
+kW
+</td>
+<td>
+power (kilowatt)
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:ToS">
+<div class="section">
+<h2>
+Table of Symbols
+</h2>
+<p class="paragraph">
+The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
+</p>
+<a id="Table:ToS">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Units
+</th>
+</tr>
+<tr>
+<td>
+h<sub>g</sub>
+</td>
+<td>
+effective heat transfer coefficient between clad and fuel surface
+</td>
+<td>
+kgs<sup>-3</sup>&deg;C<sup>-1</sup>
+</td>
+</tr>
+<tr>
+<td>
+h<sub>c</sub>
+</td>
+<td>
+convective heat transfer coefficient between clad and coolant
+</td>
+<td>
+kgs<sup>-3</sup>&deg;C<sup>-1</sup>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:DD">
+<div class="section">
+<h2>
+Data Definitions
+</h2>
+<a id="DD:h.g">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+h<sub>g</sub>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+kgs<sup>-3</sup>&deg;C<sup>-1</sup>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+h<sub>g</sub> = <div class="fraction">
+<span class="fup">
+2k<sub>c</sub>h<sub>p</sub>
+</span>
+<span class="fdn">
+2k<sub>c</sub>+&tau;<sub>c</sub>h<sub>p</sub>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+h<sub>g</sub> is the effective heat transfer coefficient between clad and fuel surface<br />k<sub>c</sub> is the clad conductivity<br />h<sub>p</sub> is the initial gap film conductance<br />&tau;<sub>c</sub> is the clad thickness
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="DD:h.c">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+h<sub>c</sub>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+kgs<sup>-3</sup>&deg;C<sup>-1</sup>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+h<sub>c</sub> = <div class="fraction">
+<span class="fup">
+2k<sub>c</sub>h<sub>b</sub>
+</span>
+<span class="fdn">
+2k<sub>c</sub>+&tau;<sub>c</sub>h<sub>b</sub>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+h<sub>c</sub> is the convective heat transfer coefficient between clad and coolant<br />k<sub>c</sub> is the clad conductivity<br />h<sub>b</sub> is the initial coolant film conductance<br />&tau;<sub>c</sub> is the clad thickness
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+</body>
+</html>

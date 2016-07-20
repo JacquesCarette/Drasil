@@ -1,40 +1,42 @@
 module Language.Drasil.Unicode where
-import Language.Drasil.Format
 
-class Render a where
-  render :: Format -> a -> String
+data Greek = Alpha_L
+           | Alpha  
+           | Beta_L
+           | Beta
+           | Delta_L
+           | Delta
+           | Ell
+           | Eta_L
+           | Eta
+           | Gamma_L
+           | Gamma
+           | Lambda_L
+           | Lambda
+           | Nabla
+           | Nu_L
+           | Nu
+           | Omega_L
+           | Omega
+           | Phi_L
+           | Phi_V
+           | Phi
+           | Rho_L
+           | Rho
+           | Tau_L
+           | Tau
+           | Upsilon_L
+           | Upsilon
 
-data Alpha  = Alpha_L
-            | Alpha  
-data Beta   = Beta_L
-            | Beta
-data Circle = Circle
-data Delta  = Delta_L
-            | Delta
-data Ell    = Ell
-data Gamma  = Gamma_L
-            | Gamma
-data Lambda = Lambda_L
-            | Lambda
-data LEQ    = LEQ
-data Nabla  = Nabla
-data Nu     = Nu_L
-            | Nu
-data Omega  = Omega_L
-            | Omega
-data Partial = Partial
-data Phi    = Phi_L
-            | Phi_V
-            | Phi
-data Rho    = Rho_L
-            | Rho
-data Tau    = Tau_L
-            | Tau
-data Upsilon = Upsilon_L
-             | Upsilon
-            
---
+data Special = LEQ | Partial | Circle
 
+class RenderGreek r where
+  greek :: Greek -> r
+
+class RenderSpecial r where
+  special :: Special -> r
+
+{-
 instance Render Alpha where
   render TeX Alpha_L   = "\\alpha{}"
   render TeX Alpha     = "\\Alpha{}"
@@ -69,14 +71,24 @@ instance Render Delta where
   render Plain Delta   = "uDelta"
   render HTML Delta_L  = "&delta;"
   render HTML Delta    = "&Delta;"
-  
+
 --
 
 instance Render Ell where
   render TeX Ell    = "\\ell{}"
   render Plain Ell  = "ell"
   render HTML Ell   = "&#8467;"
+  
+--
 
+instance Render Eta where
+  render TeX Eta_L   = "\\eta{}"
+  render TeX Eta     = "\\Eta{}"
+  render Plain Eta_L = "eta"
+  render Plain Eta   = "uEta"
+  render HTML Eta_L  = "&eta;"
+  render HTML Eta    = "&Eta;"
+  
 --
 
 instance Render Gamma where
@@ -179,3 +191,4 @@ instance Render Upsilon where
   render Plain Upsilon   = "uUpsilon"  
   render HTML Upsilon_L  = "&upsilon;"
   render HTML Upsilon    = "&Upsilon;"
+-}

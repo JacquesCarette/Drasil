@@ -123,11 +123,17 @@ implementation, and test cases), the change does not cause conflicts,
 and any existing test cases or assumptions are still applicable (or are
 appropriately removed/updated).
 
-Now consider a software project with more artifacts: each change to the
-knowledge becomes even more tedious to propagate.
-%Can I say the following?
-It is not uncommon for developers to lack the resources or motivation to update
-each artifact to accommodate every minor change.
+Now consider a software project which follows a rational design process as seen
+in Figure~\ref{fig:proc}. It consists of even more software artifacts, thus each
+change to the knowledge becomes even more tedious to propagate. It is not
+uncommon for developers to lack the resources or motivation to update each
+artifact to accommodate every minor change.
+
+\begin{figure}
+\label{fig:proc}
+\includegraphics[width=.95\textwidth]{OverviewOfProcess.pdf}
+\caption{Example Rational Design Process and its Software Artifacts}
+\end{figure}
 
 As artifacts in a software project begin to fall out of sync with each other,
 the qualities of the project as a whole suffer. Consider traceability: if the
@@ -412,8 +418,8 @@ practices and improving knowledge reuse.
 %developer's background, and having software engineers develop SC software is
 %problematic because the software engineers typically lack the necessary domain
 %knowledge. 
-Domain experts require tools that simplify the software engineering process so
-they can do things the ``right'' way. My first objective, therefore, is to
+Domain experts require tools that simplify the software engineering allowing
+them to do things the ``right'' way. My first objective, therefore, is to
 simplify the software development process by allowing scientists to focus on the
 science. This objective, however, will not be achievable during the time frame I
 have allotted for my thesis, so I believe a more focused and attainable
@@ -426,9 +432,9 @@ a worrying trend that software artifacts tend to fall out of sync with each
 other over time, so ensuring they remain consistent is a means to improve.
 
 Furthermore, developers should not need to spend large swaths of time updating
-and maintaining their software. I would like to automate as much of the software
+and maintaining their software. I want to automate as much of the software
 development process as possible. Automation will also allow developers to avoid
-some classical software mistakes such as duplication, previously mentioned in
+classical development mistakes such as duplication, previously mentioned in
 the survey by Owen~\cite{Owen1998}. It will also ensure reproducibility as, if
 done right, anyone will be able to automatically create and run the same
 software easily.
@@ -461,12 +467,19 @@ This automatic updating is achieved through generation. The idea is to have a
 standard generator which uses \textit{recipes} for the creation of artifacts.
 Each recipe essentially defines a different view of our knowledge-base (chunks).
 Since each recipe represents a different software artifact and pulls appropriate
-knowledge from reusable chunks, the artifacts will remain consistent and fully
-traceable; finding the source of a piece of information will be trivial. All
-artifacts will automatically be updated any time the generator is run, thus
-ensuring consistency is maintained. I believe this is one of the key features
-that will set my approach apart from those that have come before and will make
-it all the more useful for (SC) software developers.
+knowledge from reusable chunks (see Figure~\ref{fig:tree}), the artifacts will
+remain consistent and fully traceable; finding the source of a piece of
+information will be trivial. All artifacts will automatically be updated any
+time the generator is run, thus ensuring consistency is maintained. I believe
+this is one of the key features that will set my approach apart from those that
+have come before and will make it all the more useful for (SC) software
+developers.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{tree.png}
+\caption{Recipes pull relevant information from chunks (the roots of the tree) and combine them to create software artifacts (the leaves of the tree).}
+\label{fig:tree}
+\end{figure}
 
 I also believe my approach will be useful for scientists because anyone who is
 given access to the recipes and chunks used in creating a piece of software will
@@ -485,8 +498,8 @@ information regarding Drasil can be found in the next section.
 \subsection{The Drasil Framework}
 
 Drasil is currently being implemented as a combination of embedded Domain
-Specific Languages (eDSLs) in Haskell. I have currently implemented six eDSLs as
-follows:
+Specific Languages (eDSLs) in Haskell. Currently, six eDSLs have been implemented
+as follows:
 
 \begin{enumerate}
 \item Expression language -- A simple expression language that allows one to

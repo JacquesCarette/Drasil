@@ -12,10 +12,10 @@ import Language.Drasil.Spec (USymb(..))
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.Unicode
-import Language.Drasil.Format (Format(HTML))
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
+import Language.Drasil.HTML.Monad
 
 genHTML :: DocType -> L.Document -> Doc
 genHTML (Website fn) doc = build fn $ makeDocument doc
@@ -39,7 +39,7 @@ printLO (Table ts rows r b t)   = makeTable ts rows (p_spec r) b (p_spec t)
 printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dt ssPs l)  = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents)     = h n $ text (p_spec contents)
-printLO (List t items)          = makeList t items
+printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 
 print :: [LayoutObj] -> Doc
@@ -67,6 +67,8 @@ p_spec (a :/: b)  = fraction (p_spec a) (p_spec b)
 p_spec (S s)      = s
 p_spec (N s)      = symbol s
 p_spec (Sy s)     = uSymb s
+p_spec (G g)      = unPH $ greek g
+p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
 p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
 
@@ -76,9 +78,10 @@ t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
 symbol :: Symbol -> String
-symbol (Atomic s)       = s
-symbol (Special s)      = render HTML s
+symbol (Atomic s)  = s
+symbol (Special s) = unPH $ special s
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
+symbol (Greek g)   = unPH $ greek g
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
@@ -117,6 +120,8 @@ p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
+p_expr (Op f es)  = p_op f es
+p_expr (Grouping e) = paren (p_expr e)
 
 mul :: Expr -> Expr -> String
 mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b
@@ -187,11 +192,17 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
-makeList :: ListType -> [Spec] -> Doc
-makeList Simple items = div_tag ["list"] 
-  (vcat $ map (wrap "p" [] . text . p_spec) items)
-makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map
-  (wrap "li" [] . text . p_spec) items)
+makeList :: ListType -> Doc
+makeList (Simple items) = div_tag ["list"] 
+  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ ": ") <> (p_item e)))) items)
+makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
+  (wrap "li" [] . p_item) items)
+makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
+  (wrap "li" [] . p_item) items)
+
+p_item :: ItemType -> Doc  
+p_item (Flat s) = text $ p_spec s
+p_item (Nested s l) = vcat [text (p_spec s),makeList l]
   
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
@@ -199,3 +210,22 @@ makeList t items = wrap (show t ++ "l") ["list"] (vcat $ map
 
 makeFigure :: String -> String -> String -> Doc
 makeFigure r c f = refwrap r (image f c $$ caption c)
+
+-----------------------------------------------------------------
+------------------BEGIN EXPR OP PRINTING-------------------------
+-----------------------------------------------------------------
+p_op :: Function -> [Expr] -> String
+p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ paren (p_expr x)
+p_op (Summation _) _ = error "Something went wrong with a summation"
+p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ paren (p_expr x)
+p_op (Integral _) _  = error "Something went wrong with an integral" 
+p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
+p_op Abs _ = error "Abs should only take one expr."
+p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op _ _ = error "Something went wrong with an operation"
+
+makeBounds :: (Maybe Expr, Maybe Expr) -> String
+makeBounds (Nothing,Nothing) = ""
+makeBounds (Nothing,Just n) = sup (p_expr n)
+makeBounds (Just i, Nothing) = sub (p_expr i)
+makeBounds (Just i, Just n) = sub (p_expr i) ++ sup (p_expr n)

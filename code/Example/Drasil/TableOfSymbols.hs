@@ -5,10 +5,10 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-table_of_symbols :: (Unit s, Quantity s) => [s] -> LayoutObj
-table_of_symbols ls = Section 0 (S "Table of Symbols") [intro, table ls]
+table_of_symbols :: (Unit s, Quantity s) => [s] -> Section
+table_of_symbols ls = Section 0 (S "Table of Symbols") [Con intro, Con (table ls)]
 
-intro :: LayoutObj
+intro :: Contents
 intro = Paragraph $ 
   S "The table that follows summarizes the symbols used in this " :+:
   S "document along with their units.  The choice of symbols was " :+:
@@ -17,9 +17,9 @@ intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-table :: (Unit s, Quantity s) => [s] -> LayoutObj
+table :: (Unit s, Quantity s) => [s] -> Contents
 table ls = Table [S "Symbol", S "Description", S "Units"] (mkTable
-  [(\ch -> U (ch ^. symbol)) , 
+  [(\ch -> P (ch ^. symbol)) , 
    (\ch -> ch ^. descr), 
    (\ch -> Sy $ ch ^. unit)]
   ls)

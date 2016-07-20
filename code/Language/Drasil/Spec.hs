@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Render)
+import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Symbol
 
 data Accent = Grave | Acute deriving Eq
@@ -18,15 +18,18 @@ infixr 5 :+:
 data Sentence where
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
-    -- Concatenation of two Specs (e.g. delta :+: T -> deltaT)
-  (:+:) :: Sentence -> Sentence -> Sentence     
-  U     :: (Render r) => r -> Sentence  -- special characters
+  G     :: Greek -> Sentence
+  Sp    :: Special -> Sentence
+  P     :: Symbol -> Sentence
   F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
                                        -- chars
   Ref   :: RefType -> Sentence -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
+  -- Direct concatenation of two Specs (no implicit spaces!)
+  (:+:) :: Sentence -> Sentence -> Sentence     
+
 --Moving this here to avoid cyclic imports
 data USymb = UName Symbol
            | UProd [USymb]
@@ -38,13 +41,13 @@ data USymb = UName Symbol
 
 data RefType = Tab
              | Fig
-             | Sec
+             | Sect
              | Def
 
 instance Show RefType where
   show Tab = "Table"
   show Fig = "Figure"
-  show Sec = "Section"
+  show Sect = "Section"
   show Def = "Definition"
   
 -- this is a horrible hack that assumes too much from sentences!

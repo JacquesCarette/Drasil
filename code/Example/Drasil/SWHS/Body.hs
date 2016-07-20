@@ -325,7 +325,7 @@ s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat
 fig_tank = Figure ((tank ^. descr) :+: S ", with " :+: (ht_flux_C ^. descr) :+:
            S " of " :+: P (ht_flux_C ^. symbol) :+: S " and " :+: 
            (ht_flux_P ^. descr) :+: S " of " :+: P (ht_flux_P ^. symbol)) 
-           "../../../Tank.png"
+           "Tank.png"
 
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro, 
          Con s4_1_3_list]
@@ -1095,11 +1095,11 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also " :+:
             S "labels and reference can be future work.")]
 
 s7_fig1 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
-          S "Items of Different Sections") "../../../ATrace.png"
+          S "Items of Different Sections") "ATrace.png"
 
 s7_fig2 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
           (requirement ^. descr) :+: S "s, " :+: (inModel ^. descr) :+: 
-          S "s, and Data Constraints") "../../../RTrace.png"
+          S "s, and Data Constraints") "RTrace.png"
 
 --References?
 

@@ -13,7 +13,7 @@ m_2 = makeDerU (unitCon "square metres") m_2eqn
 m_2eqn :: UDefn
 m_2eqn = USynonym (UPow (metre ^. unit) (2))
 
---m^2--
+--m^3--
 m_3 :: DerUChunk
 m_3 = makeDerU (unitCon "cubic metres") m_3eqn
 
@@ -51,6 +51,14 @@ thermFluxU = makeDerU (CC "heat flux"
 
 thermFluxUeqn :: UDefn
 thermFluxUeqn = USynonym (UDiv (watt ^. unit) (m_2 ^. unit))
+
+--W/m^3--
+volHtGenU :: DerUChunk
+volHtGenU = makeDerU (CC "volumetric heat generation" 
+  (S "the rate of heat energy generation per unit volume")) volHtGenUeqn
+  
+volHtGenUeqn :: UDefn
+volHtGenUeqn = USynonym (UDiv (watt ^. unit) (m_3 ^. unit))
 
 --W/(m^2C)--  
 heat_transfer :: DerUChunk

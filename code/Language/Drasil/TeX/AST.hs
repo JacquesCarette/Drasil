@@ -71,7 +71,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Definition [(String,LayoutObj)] Label
                | List ListType
                | Figure Label Caption Filepath
-               | Module Contents Label
+               | Module String Label
                
 data ListType = Item [ItemType] | Enum [ItemType] | Simple [(Spec,ItemType)] | Desc [(Spec,ItemType)]
 

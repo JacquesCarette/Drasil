@@ -26,7 +26,7 @@ genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
 
 build :: A.DocType -> Document -> D
 build (A.SRS _) doc   = buildSRS srsTeXParams doc
-build (A.MG _) doc     = buildSRS srsTeXParams doc   -- temporary
+build (A.MG _) doc    = buildSRS srsTeXParams doc   -- temporary
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
 build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
@@ -63,7 +63,7 @@ lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List lt)               = toText $ makeList lt
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
-lo (Module con l)          = toText $ spec con
+lo (Module n l)          = toText $ makeModule n $ spec l
 
 print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
@@ -317,3 +317,11 @@ makeBounds (Nothing,Nothing) = ""
 makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
 makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
 makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
+
+
+-----------------------------------------------------------------
+------------------ MODULE PRINTING----------------------------
+-----------------------------------------------------------------
+
+makeModule :: String -> D -> D
+makeModule n l = description $ item' ((pure $ text "M") %% label l) (pure $ text n)

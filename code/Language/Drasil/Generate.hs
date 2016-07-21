@@ -55,12 +55,14 @@ prntCode :: Document -> IO ()
 prntCode (Document _ _ secs) = mapM_ prntCode'
   (concat (map (\(Section _ _ s) -> getModules s) secs))
   where getModules []                 = []
-        getModules ((Con (Module m)):los) = (genCode outLang m) ++ getModules los
-        getModules (_:los)            = getModules los
-        prntCode' (name, code)        = do createDirectoryIfMissing False "Code"
-                                           outh <- openFile ("Code/" ++ name) WriteMode
-                                           hPutStrLn outh $ render $ code
-                                           hClose outh
+        getModules ((Con (Module m)):los) = if null (method m)
+          then getModules los
+          else (genCode outLang m) ++ getModules los
+        getModules (_:los)     = getModules los
+        prntCode' (name, code) = do createDirectoryIfMissing False "Code"
+                                    outh <- openFile ("Code/" ++ name) WriteMode
+                                    hPutStrLn outh $ render $ code
+                                    hClose outh
 
 
 prntMake :: [Recipe] -> IO ()

@@ -116,9 +116,7 @@ lay (CodeBlock c)     = T.CodeBlock c
 lay x@(Definition c)  = T.Definition (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = T.List $ makeL cs
 lay x@(Figure c f)    = T.Figure (spec (refName x)) (spec c) f
-lay x@(Module m)      = T.Module (T.S "") (spec $ refName x)
---  T.Section depth (T.S $ (concat $ intersperse " " $ map capitalize $
-  --  words (m ^. name)) ++ " Module") (buildModuleDesc m) (spec $ refName x)
+lay x@(Module m)      = T.Module (formatName m) (spec $ refName x)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs) = T.Enum $ (map item bs)
@@ -165,14 +163,4 @@ descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+:
                       (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
 
---buildModuleDesc :: ModuleChunk -> [T.LayoutObj]
---buildModuleDesc m = [
---  T.List T.Desc
---    [ T.S "Secrets", spec $ secret m,
---      T.S "Services", spec $ m ^. descr,
---      T.S "Implemented By", T.S $ getImp $ imp m
---    ]
---  ]
---  where
---    getImp (Just x) = x
---    getImp Nothing  = "--"
+

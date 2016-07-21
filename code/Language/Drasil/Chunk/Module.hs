@@ -1,11 +1,13 @@
-module Language.Drasil.Chunk.Module(ModuleChunk(..), makeImpModule
+module Language.Drasil.Chunk.Module(ModuleChunk(..), formatName, makeImpModule
   , makeUnimpModule) where
 
-import Control.Lens (Simple, Lens)
+import Control.Lens (Simple, Lens, (^.))
+import Data.List (intersperse)
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Printing.Helpers
 
 -- BEGIN METHODCHUNK --
 data ModuleChunk = MoC { cc :: ConceptChunk, secret :: Sentence,
@@ -22,6 +24,10 @@ instance Concept ModuleChunk where
 cl ::  Simple Lens ModuleChunk ConceptChunk
 cl f (MoC a b c d) = fmap (\x -> MoC x b c d) (f a)
 
+
+formatName :: ModuleChunk -> String
+formatName m = (concat $ intersperse " " $
+  map capitalize $ words (m ^. name)) ++ " Module"
 
 makeImpModule :: ConceptChunk -> Sentence -> ConceptChunk -> [MethodChunk]
                 -> ModuleChunk

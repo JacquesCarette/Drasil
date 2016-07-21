@@ -15,6 +15,9 @@ import Language.Drasil.SI_Units (si_units)
 vars :: [EqChunk]
 vars = [h_g, h_c]
 
+modules :: [ModuleChunk]
+modules = [mod_hw, mod_behav, mod_calc]
+
 s1, s2, s3 :: Section --, s4 
 s1 = table_of_units si_units
 s2 = table_of_symbols $ (map Has vars) ++ (map HasNot varChunks)
@@ -43,7 +46,7 @@ mg ls author body =
     (S author) body
   
 mgBody :: Document
-mgBody = mg vars "Spencer Smith" [mgModuleDecomp [mod_hw, mod_behav, mod_calc]]
+mgBody = mg vars "Spencer Smith" [mgModuleHierarchy modules, mgModuleDecomp modules]
   
 -- lpmBody :: Document  
 -- lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 

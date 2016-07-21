@@ -49,7 +49,7 @@ module Language.Drasil (
   -- CCode.AST
   , Lang(CLang), CodeType(Calc)
   -- Template
-  , mgModuleDecomp
+  , mgModuleHierarchy, mgModuleDecomp
 ) where
 
 

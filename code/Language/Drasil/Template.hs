@@ -7,15 +7,30 @@ import Language.Drasil.Spec
 import Language.Drasil.Printing.Helpers
 
 import Control.Lens ((^.))
-import Data.List (nub, intersperse)
+import Data.List (nub)
 import Data.Maybe (fromJust)
+
+mgModuleHierarchy :: [ModuleChunk] -> Section
+mgModuleHierarchy mcs =
+  Section 0 (S "Module Hierarchy") (
+    [Con $ mgModuleHierarchyIntro]
+    ++ map (Con . Module) mcs
+  )
+
+mgModuleHierarchyIntro :: Contents
+mgModuleHierarchyIntro = Paragraph $
+  S "This section provides an overview of the module design. Modules are " :+:
+  S "summarized in a hierarchy decomposed by secrets in Table (todo). The " :+:
+  S "modules listed below, which are leaves in the hierarchy tree, are the " :+:
+  S "modules that will actually be implemented."
+
 
 mgModuleDecomp :: [ModuleChunk] -> Section
 mgModuleDecomp mcs =
-    Section 0 (S "Module Decomposition") (
-      [Con $ mgModuleDecompIntro mcs]
-      ++ map (Sub . mgModuleInfo) mcs
-    )
+  Section 0 (S "Module Decomposition") (
+    [Con $ mgModuleDecompIntro mcs]
+    ++ map (Sub . mgModuleInfo) mcs
+  )
 
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
@@ -42,9 +57,7 @@ mgModuleDecompIntro mcs =
 
 mgModuleInfo :: ModuleChunk -> Section
 mgModuleInfo mc = Section 1
-  ( S $ (concat $ intersperse " " $ map capitalize $
-    words (mc ^. name)) ++ " Module"
-  )
+  ( S $ (formatName mc) )
   [ Con $ Enumeration $ Desc
     [(S "Secrets", Flat (secret mc)),
      (S "Services", Flat (mc ^. descr)),

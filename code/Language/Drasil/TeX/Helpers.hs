@@ -108,14 +108,15 @@ maketitle, newline :: D
 maketitle = command0 "maketitle"
 newline = command0 "newline"
 
-code, itemize, enumerate, figure, center, document, equation :: D -> D
-code      = mkEnv "lstlisting"
-itemize   = mkEnv "itemize"
-enumerate = mkEnv "enumerate"
-figure    = mkEnv "figure"
-center    = mkEnv "center"
-document  = mkEnv "document"
-equation  = mkEnv "equation"
+code, itemize, enumerate, description, figure, center, document, equation :: D -> D
+code        = mkEnv "lstlisting"
+itemize     = mkEnv "itemize"
+enumerate   = mkEnv "enumerate"
+description = mkEnv "description"
+figure      = mkEnv "figure"
+center      = mkEnv "center"
+document    = mkEnv "document"
+equation    = mkEnv "equation"
 
 docclass, exdoc :: Maybe String -> String -> D
 docclass = command1o "documentclass"

@@ -37,11 +37,12 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Definition DType
                | Enumeration ListType
                | Figure Label Filepath--Should use relative file path.
-               | Module Depth ModuleChunk
+               | Module ModuleChunk
 
 data ListType = Bullet [ItemType]
               | Number [ItemType] 
               | Simple [Pair]
+              | Desc [Pair]
          
 data ItemType = Flat Sentence 
               | Nested Header ListType

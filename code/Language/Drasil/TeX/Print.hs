@@ -63,6 +63,7 @@ lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List lt)               = toText $ makeList lt
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
+lo (Module con l)          = toText $ spec con
 
 print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
@@ -281,7 +282,7 @@ p_item (Nested t s) = vcat [item (spec t), makeList s]
 
 sim_item :: [(Spec,ItemType)] -> [D]
 sim_item [] = [empty]
-sim_item ((x,y):zs) = item' (spec x) (sp_item y) : sim_item zs
+sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
     where sp_item (Flat s) = spec s
           sp_item (Nested t s) = vcat [spec t, makeList s]
 

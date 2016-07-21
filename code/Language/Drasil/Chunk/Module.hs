@@ -9,7 +9,7 @@ import Language.Drasil.Spec (Sentence(..))
 
 -- BEGIN METHODCHUNK --
 data ModuleChunk = MoC { cc :: ConceptChunk, secret :: Sentence,
-  imp :: Maybe String, method :: [MethodChunk] }
+  imp :: Maybe ConceptChunk, method :: [MethodChunk] }
 
 instance Chunk ModuleChunk where
   name = cl . name
@@ -23,7 +23,7 @@ cl ::  Simple Lens ModuleChunk ConceptChunk
 cl f (MoC a b c d) = fmap (\x -> MoC x b c d) (f a)
 
 
-makeImpModule :: ConceptChunk -> Sentence -> String -> [MethodChunk]
+makeImpModule :: ConceptChunk -> Sentence -> ConceptChunk -> [MethodChunk]
                 -> ModuleChunk
 makeImpModule cc secret imp method = MoC cc secret (Just imp) method
 

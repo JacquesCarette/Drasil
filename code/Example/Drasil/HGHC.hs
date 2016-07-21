@@ -1,4 +1,4 @@
-module Example.Drasil.HGHC(srsBody, lpmBody, mgBody) where
+module Example.Drasil.HGHC(srsBody, mgBody) where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
@@ -21,10 +21,10 @@ s2 = table_of_symbols vars
 s3 = Section 0 (S "Data Definitions") $ map (Con . Definition . Data) vars
 --s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [h_c]
 
-m1,m2,m3 :: LayoutObj
-m1 = Module 1 mod_hw
-m2 = Module 1 mod_behav
-m3 = Module 2 mod_calc
+--m1,m2,m3 :: LayoutObj
+--m1 = Module 1 mod_hw
+--m2 = Module 1 mod_behav
+--m3 = Module 2 mod_calc
 
 srs :: Quantity s => [s] -> String -> [Section] -> Document
 srs ls author body =
@@ -36,14 +36,14 @@ srsBody :: Document
 srsBody = srs vars "Spencer Smith" [s1, s2, s3]--, s4]
 
 
-mg :: Quantity s => [s] -> String -> [LayoutObj] -> Document
+mg :: Quantity s => [s] -> String -> [Section] -> Document
 mg ls author body =
   Document ((S "MG for ") :+:
-    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> U $ x ^. symbol) ls))))
+    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))
     (S author) body
   
 mgBody :: Document
-mgBody = mg vars "Spencer Smith" [mgModuleDecomp [os, program], m1, m2, m3]
+mgBody = mg vars "Spencer Smith" [mgModuleDecomp [mod_hw, mod_behav, mod_calc]]
   
 -- lpmBody :: Document  
 -- lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 

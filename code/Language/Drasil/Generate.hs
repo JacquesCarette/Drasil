@@ -6,13 +6,13 @@ import Text.PrettyPrint.HughesPJ
 
 import Control.Lens ((^.))
 import System.Directory
-import Language.Drasil.Output.Formats (DocType (SRS,MG,LPM,Code,Website))
+import Language.Drasil.Output.Formats (DocType (SRS,MG,LPM,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.CCode.Print (genCode)
 import Language.Drasil.Make.Print (genMake)
-import Language.Drasil.Document (Document(..), LayoutObj(..))
+import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Chunk
@@ -50,17 +50,17 @@ prnt (Recipe (Website fn) body) =
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
-prnt (Recipe (Code _) _) = error "Code DocType is not implemented yet"
 
 prntCode :: Document -> IO ()
-prntCode (Document _ _ los) = mapM_ prntCode' (getModules los)
-  where   getModules []                 = []
-          getModules ((Module _ m):los) = (genCode outLang m) ++ getModules los
-          getModules (_:los)            = getModules los
-          prntCode' (name, code)        = do createDirectoryIfMissing False "Code"
-                                             outh <- openFile ("Code/" ++ name) WriteMode
-                                             hPutStrLn outh $ render $ code
-                                             hClose outh
+prntCode (Document _ _ secs) = mapM_ prntCode'
+  (concat (map (\(Section _ _ s) -> getModules s) secs))
+  where getModules []                 = []
+        getModules ((Con (Module m)):los) = (genCode outLang m) ++ getModules los
+        getModules (_:los)            = getModules los
+        prntCode' (name, code)        = do createDirectoryIfMissing False "Code"
+                                           outh <- openFile ("Code/" ++ name) WriteMode
+                                           hPutStrLn outh $ render $ code
+                                           hClose outh
 
 
 prntMake :: [Recipe] -> IO ()

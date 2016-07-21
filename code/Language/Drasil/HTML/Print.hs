@@ -41,6 +41,7 @@ printLO (Definition dt ssPs l)  = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
+printLO (Module con l)          = paragraph $ text ""
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -195,6 +196,9 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 makeList :: ListType -> Doc
 makeList (Simple items) = div_tag ["list"] 
   (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ ": ") <> (p_item e)))) items)
+makeList (Desc items)   = div_tag ["list"]
+  (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (text (p_spec b ++ ": "))
+   <> (p_item e)))) items)
 makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
 makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map

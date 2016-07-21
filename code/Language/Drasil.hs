@@ -2,7 +2,7 @@
 {- note that SI_Units is really like a separate 'database', so is not included -}
 module Language.Drasil (
   -- Output.Formats
-    DocType(SRS,MG,LPM,Website,Code)
+    DocType(SRS,MG,LPM,Website)
   -- Recipe
   , Recipe(..)
   -- Expr

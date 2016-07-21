@@ -114,17 +114,18 @@ lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
-lay x@(Module depth m)=
-  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  ( (H.Header (depth+2)
-    (H.S $ (concat $ intersperse " " $
-      map capitalize $ words (m ^. name)) ++ " Module")):(buildModuleDesc m)
-  ) (spec $ getRefName x)
+lay x@(Module m)      = H.Module (H.S "") (spec $ refName x)
+--  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
+--  ( (H.Header (depth+2)
+--    (H.S $ (concat $ intersperse " " $
+--      map capitalize $ words (m ^. name)) ++ " Module")):(buildModuleDesc m)
+--  ) (spec $ getRefName x)
 
 makeL :: ListType -> H.ListType
 makeL (Bullet bs) = H.Unordered $ map item bs
 makeL (Number ns) = H.Ordered $ map item ns
 makeL (Simple ps) = H.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Desc ps)   = H.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
 
 item :: ItemType -> H.ItemType
 item (Flat i) = H.Flat (spec i)
@@ -159,14 +160,14 @@ descLines (vc:[])  = (H.N (vc ^. symbol) H.:+:
   (H.S " is the " H.:+: (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
 
-buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
-buildModuleDesc m = [
-  H.List H.Simple
-    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
-      H.S (bold "Services: ") H.:+: (spec $ m ^. descr),
-      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
-    ]
-  ]
-  where bold = \x -> "<b>" ++ x ++ "</b>"
-        getImp (Just x) = x
-        getImp Nothing  = "--"
+--buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
+--buildModuleDesc m = [
+--  H.List H.Simple
+--    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
+--      H.S (bold "Services: ") H.:+: (spec $ m ^. descr),
+--      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
+--    ]
+--  ]
+--  where bold = \x -> "<b>" ++ x ++ "</b>"
+--        getImp (Just x) = x
+--        getImp Nothing  = "--"

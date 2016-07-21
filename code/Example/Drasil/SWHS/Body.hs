@@ -13,6 +13,9 @@ import Example.Drasil.SWHS.TModel3
 import Example.Drasil.SWHS.DataDefs
 import Example.Drasil.SWHS.Units
 
+import Example.Drasil.Units
+import Example.Drasil.TableOfSymbols
+
 import Language.Drasil
 import Language.Drasil.SI_Units 
 
@@ -27,7 +30,7 @@ s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
+s1_intro, s1_3_table,
   s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
@@ -53,47 +56,21 @@ s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2,
 
 s1_intro = Paragraph (S "This section records information for easy reference.")
 
-s1_1 = Section 1 (S "Table of Units") [Con s1_1_intro, Con s1_1_table]
-
-s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
-             (F Grave 'e') :+: S "me International d'Unit" :+:
-             (F Acute 'e') :+: S "s) is employed as the unit system" :+:
-             S ". In addition to the basic units, several derived " :+:
-             S "units are used as described below. For each unit, " :+:
-             S "the symbol is given followed by a description of the" :+:
-             S " unit followed by the SI name.")
-
--- General paragraph except for SI units
-
-s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
-  [(\x -> Sy (x ^. unit)),
-   (\x -> (x ^. descr)),
-   (\x -> S (x ^. name))
-   ] this_si)
-  (S "Table of Units") False
+s1_1 = table_of_units this_si
   
 -- Is it possible to make tables look nicer? I.e. \hline
 
-s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+s1_2 = table_of_symbols swhsSymbols
 
-s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
-             S " symbols used in this document along with their units" :+:
-             S ". The choice of symbols was made to be consistent" :+:
-             S " with the " :+: (heat_trans ^. descr) :+: S " literature " :+:
-             S "and with existing documentation for " :+: (sMap (map toLower)
-             (progName ^. descr)) :+: S "s. The symbols are listed in " :+:
-             S "alphabetical order.")
+--s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
+             --S " symbols used in this document along with their units" :+:
+             --S ". The choice of symbols was made to be consistent" :+:
+             --S " with the " :+: (heat_trans ^. descr) :+: S " literature " :+:
+             --S "and with existing documentation for " :+: (sMap (map toLower)
+             --(progName ^. descr)) :+: S "s. The symbols are listed in " :+:
+             --S "alphabetical order.")
 
 -- "heat transfer" is specific.
-
-s1_2_table = Table [S "Symbol", S "Unit", S "Description"] (mkTable
-  [(\ch -> P (ch ^. symbol)),
-   (\ch -> Sy (ch ^. unit)),
-   (\ch -> ch ^. descr)
-   ] swhsSymbols)
-   (S "Table of Symbols") False
-
--- if the lambdas end up being similar for every table, can this be simplified?
   
 s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
 
@@ -325,7 +302,7 @@ s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat
 fig_tank = Figure ((tank ^. descr) :+: S ", with " :+: (ht_flux_C ^. descr) :+:
            S " of " :+: P (ht_flux_C ^. symbol) :+: S " and " :+: 
            (ht_flux_P ^. descr) :+: S " of " :+: P (ht_flux_P ^. symbol)) 
-           "../../../Tank.png"
+           "Tank.png"
 
 s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro, 
          Con s4_1_3_list]
@@ -559,7 +536,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
 -- Replace relevant Derivs with the regular derivative when it is available
 
 s4_2_4 = Section 2 (dataDefn ^. descr :+: S "s") [Con s4_2_4_intro, 
-         Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3, Con s4_2_4_DD4]
+         Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3]
 
 s4_2_4_intro = Paragraph (S "This section collects and defines all the " :+:
                S "data needed to build the " :+: (sMap (map toLower) (inModel ^.
@@ -975,7 +952,7 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to " :+:
 
 s7_table1 = Table [S "", makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
             makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 
-            makeRef s4_2_4_DD2, makeRef s4_2_4_DD3, makeRef s4_2_4_DD4, S "IM1",
+            makeRef s4_2_4_DD2, makeRef s4_2_4_DD3, makeRef s4_2_4_DD3, S "IM1",
             S "IM2", S "IM3", S "IM4"]
             [[makeRef s4_2_2_T1, S "", S "", S "", S "", S "", S "", S "", S "",
             S "", S "", S "", S "", S ""],
@@ -993,7 +970,7 @@ s7_table1 = Table [S "", makeRef s4_2_2_T1, makeRef s4_2_2_T2,
             S"", S "", S "", S "", S "", S ""],
             [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
             S"", S "", S "", S "", S ""],
-            [makeRef s4_2_4_DD4, S "", S "", S "", S "", S "", S "", S "",
+            [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "",
             S "X", S "", S "", S "", S "", S ""],
             [S "IM1", S "", S "", S "", S "", S "X", S "X", S "X", S "", S "",
             S "", S "X", S "", S ""],
@@ -1005,6 +982,8 @@ s7_table1 = Table [S "", makeRef s4_2_2_T1, makeRef s4_2_2_T2,
             S "", S "X", S "", S ""]]
             (S "Traceability Matrix Showing the Connections Between Items " :+:
             S "of Different Sections") True
+
+-- Wrong DD reference above, change when DD4 is available (twice)
 
 s7_table2 = Table [S "", S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
             S "R1", S "R2"]
@@ -1047,7 +1026,7 @@ s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
             S "", S "", S "X", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
             S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-            [makeRef s4_2_4_DD4, S "", S "", S "", S "", S "", S "", S "", S "",
+            [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
             S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "IM1", S "", S "", S "", S "", S "", S "", S "", S "", S "",
             S "", S "X", S "X", S "", S "X", S "X", S "X", S "", S ""],
@@ -1072,6 +1051,8 @@ s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
             (S "Traceability Matrix Showing the Connections Between " :+:
             (assumption ^. descr) :+: S "s and Other Items") True
 
+-- Wrong DD reference above, change when DD4 is available
+
 s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also " :+:
             S "to provide easy references on what has to be additionally " :+:
             S "modified if a certain component is changed. The arrows in " :+:
@@ -1095,11 +1076,11 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also " :+:
             S "labels and reference can be future work.")]
 
 s7_fig1 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
-          S "Items of Different Sections") "../../../ATrace.png"
+          S "Items of Different Sections") "ATrace.png"
 
 s7_fig2 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
           (requirement ^. descr) :+: S "s, " :+: (inModel ^. descr) :+: 
-          S "s, and Data Constraints") "../../../RTrace.png"
+          S "s, and Data Constraints") "RTrace.png"
 
 --References?
 

@@ -27,7 +27,7 @@ cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
 accel       = makeUC "a" "acceleration" (vec lA) accelU
 angAccel    = makeUC "alpha" "angular acceleration" (Greek Alpha_L) angAccelU
 force       = makeUC "F" "force" (vec cF) newton
-gravAccel   = makeUC "g" "gravitational acceleration" lG newton
+gravAccel   = makeUC "g" "gravitational acceleration" lG accelU
 -- What would be the best way to represent universal constants
 -- like gravitational constant, and display their constant value?
 gravConst   = makeUC "G" "gravitational constant (6.673 * 10E-11)" cG gravConstU

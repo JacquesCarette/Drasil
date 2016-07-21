@@ -10,7 +10,7 @@ module Language.Drasil (
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
-  , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
+  , Unit(..), Unit'(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
   , from_udefn , makeDerU, unitCon
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
@@ -36,7 +36,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable
+  , mkTable, unit'2Contents
   -- Printing.Helpers
   , capitalize, paren, sqbrac
 
@@ -63,7 +63,7 @@ import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
-import Language.Drasil.Misc (mkTable)
+import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCode)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))

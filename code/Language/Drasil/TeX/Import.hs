@@ -9,11 +9,11 @@ import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
-import Language.Drasil.Unit
 import Language.Drasil.Chunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
+import Language.Drasil.Misc (unit'2Contents)
 
 expr :: Expr -> T.Expr
 expr (V v)        = T.Var  v
@@ -125,7 +125,7 @@ item (Nested t s) = T.Nested (spec t) (makeL s)
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
-  ("Units",       T.Paragraph $ T.Sy $ c ^. unit),
+  ("Units",       T.Paragraph $ spec $ unit'2Contents c),
   ("Equation",    eqnStyleDD $ buildEqn c),
   ("Description", T.Paragraph (buildDDDescription c))
   ]

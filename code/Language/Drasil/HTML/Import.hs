@@ -6,13 +6,13 @@ import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
-import Language.Drasil.Unit
 import Language.Drasil.Chunk
 import Control.Lens hiding ((:>),(:<))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
+import Language.Drasil.Misc (unit'2Contents)
 
 
 expr :: Expr -> H.Expr
@@ -123,7 +123,7 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       H.Paragraph $ H.N $ c ^. symbol),
-  ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
+  ("Units",       H.Paragraph $ spec $ unit'2Contents c),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.S "")),
   ("Description", H.Paragraph (buildDDDescription c))
   ]

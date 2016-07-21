@@ -22,6 +22,7 @@ heat_transfer_eqn = USynonym (UProd
   [kilogram ^. unit, UPow (second ^. unit) (-3),
    UPow (centigrade ^. unit) (-1)])
    
+varChunks :: [VarChunk]
 varChunks = [tau_c, h_b, h_p, k_c]
 
 --------------- --------------- --------------- ---------------

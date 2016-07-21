@@ -10,8 +10,8 @@ import Language.Drasil
 assumption, centreMass, dataDefn, genDefn, goalStmt, instMod, likelyChange, ode,
     requirement, srs, theoMod, twoD :: ConceptChunk
 
-chipmunkAcronyms :: [ConceptChunk]
-chipmunkAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
+cpAcronyms :: [ConceptChunk]
+cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     instMod, likelyChange, ode, requirement, srs, theoMod, twoD]
 
 assumption    = makeCC "A" "Assumption"

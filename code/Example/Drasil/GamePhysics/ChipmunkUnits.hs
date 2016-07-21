@@ -8,16 +8,14 @@ import Control.Lens ((^.))
 
 ----- Table of Units -----
 
-chipmunkSI :: [UnitDefn]
-chipmunkSI = map UU [metre, kilogram, second] ++ map UU [newton, radians]
+cpSIUnits :: [UnitDefn]
+cpSIUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 ----- Fundamental Units -----
 
-newton, radians, unitless :: FundUnit
+newton, radians :: FundUnit
 newton  = fund "Newton"  "force" "N"
 radians = fund "Radians" "angle" "rad"
--- Unitless --
-unitless = fund "Unitless" "unitless" "unitless"
 
 ----- Derived Units -----
 

@@ -14,9 +14,9 @@ import Control.Lens ((^.))
 
 ----- Data Definitions -----
 
-dDefs :: [EqChunk]
-dDefs = [dd1CtrOfMass, dd2linDisp, dd3linVel, dd4linAcc, dd5angDisp, dd6angVel,
-    dd7angAccel, dd8impulse]
+cpDDefs :: [EqChunk]
+cpDDefs = [dd1CtrOfMass, dd2linDisp, dd3linVel, dd4linAcc, dd5angDisp,
+    dd6angVel, dd7angAccel, dd8impulse]
 
 -- DD1 : Centre of mass --
 
@@ -142,13 +142,12 @@ dd8impulse = fromEqn "j" dd8descr lJ impulseU impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
-impulseEqn = ((Neg ((fromInteger 1) + (C restCoef))) * (C initRelVel) :.
-    (C normalVect)) / (((((fromInteger 1) / (C mass_A))) +
-    ((fromInteger 1) / (C mass_B))) * ((C normalLen) :^ (fromInteger 2)) +
-    (((C perpLen_A) :^ (fromInteger 2)) / (C momtInert_A)) +
-    (((C perpLen_B) :^ (fromInteger 2))/ (C momtInert_B)))
+impulseEqn = ((Neg ((Int 1) + (C restCoef))) * (C initRelVel) :.
+    (C normalVect)) / (((((Int 1) / (C mass_A))) + ((Int 1) / (C mass_B))) *
+    ((C normalLen) :^ (Int 2)) +
+    (((C perpLen_A) :^ (Int 2)) / (C momtInert_A)) +
+    (((C perpLen_B) :^ (Int 2))/ (C momtInert_B)))
 
 dd8descr :: Sentence
-dd8descr = S "the " :+: (impulse ^. descr) :+: S " used to determine " :+:
-    S (coll ^. name) :+: S " response between two " :+:
-    S (rigidBodies ^. name)
+dd8descr = S "the " :+: (impulseScl ^. descr) :+: S " used to determine " :+:
+    S (coll ^. name) :+: S " response between two " :+: S (rigidBodies ^. name)

@@ -5,21 +5,6 @@ import Control.Lens ((^.))
 import Example.Drasil.HeatTransfer
 import Example.Drasil.Concepts
 
--- Calc Modules
-meth_h_g, meth_h_c :: MethodChunk
-meth_h_g = fromEC h_g
-meth_h_c = fromEC h_c
-
-mod_calc_desc :: ConceptChunk
-mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
-
-mod_calc :: ModuleChunk
-mod_calc = makeImpModule mod_calc_desc
-  (S "The equations used to calculate heat transfer coefficients")
-  program
-  [meth_h_g, meth_h_c]
-
-
 -- HW Hiding Module
 mod_hw_desc :: ConceptChunk
 mod_hw_desc = CC "hardware hiding"
@@ -32,6 +17,7 @@ mod_hw = makeImpModule mod_hw_desc
   (S "The data structure and algorithm used to implement the virtual hardware.")
   os
   []
+  Nothing
 
 
 -- Behaviour Hiding Module
@@ -47,3 +33,37 @@ mod_behav_desc = CC "behaviour hiding"
 mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule mod_behav_desc
   (S "The contents of the required behaviors.")
+  Nothing
+
+
+-- Calc Module
+meth_h_g, meth_h_c :: MethodChunk
+meth_h_g = fromEC h_g
+meth_h_c = fromEC h_c
+
+mod_calc_desc :: ConceptChunk
+mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
+
+mod_calc :: ModuleChunk
+mod_calc = makeImpModule mod_calc_desc
+  (S "The equations used to calculate heat transfer coefficients")
+  program
+  [meth_h_g, meth_h_c]
+  (Just mod_behav)
+
+
+-- fakes
+mod_f1_d :: ConceptChunk
+mod_f1_d = CC "fake1" (S "Does fake stuff")
+mod_f1 :: ModuleChunk
+mod_f1 = makeImpModule mod_f1_d (S "Fake things") program [] (Just mod_calc)
+
+mod_f2_d :: ConceptChunk
+mod_f2_d = CC "fake2" (S "Does fake stuff")
+mod_f2 :: ModuleChunk
+mod_f2 = makeImpModule mod_f2_d (S "Fake things") program [] (Just mod_calc)
+
+mod_f3_d :: ConceptChunk
+mod_f3_d = CC "fake3" (S "Does fake stuff")
+mod_f3 :: ModuleChunk
+mod_f3 = makeImpModule mod_f3_d (S "Fake things") program [] (Just mod_calc)

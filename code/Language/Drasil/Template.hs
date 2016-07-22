@@ -7,7 +7,7 @@ import Language.Drasil.Spec
 import Language.Drasil.Printing.Helpers
 
 import Control.Lens ((^.))
-import Data.List (nub)
+import Data.List (nub, (\\))
 import Data.Maybe (fromJust)
 
 mgModuleHierarchy :: [ModuleChunk] -> Section
@@ -15,6 +15,7 @@ mgModuleHierarchy mcs =
   Section 0 (S "Module Hierarchy") (
     [Con $ mgModuleHierarchyIntro]
     ++ map (Con . Module) mcs
+    ++ [Con $ mgHierarchy mcs]
   )
 
 mgModuleHierarchyIntro :: Contents
@@ -24,6 +25,48 @@ mgModuleHierarchyIntro = Paragraph $
   S "modules listed below, which are leaves in the hierarchy tree, are the " :+:
   S "modules that will actually be implemented."
 
+
+mgHierarchy :: [ModuleChunk] -> Contents
+mgHierarchy mcs = let mh = buildMH $ splitLevels mcs []
+                      cnt = length $ head mh
+                      hdr = map (\x -> S $ "Level " ++ show x) $ take cnt [1..]
+                  in Table hdr mh (S "") False
+
+buildMH :: [[ModuleChunk]] -> [[Sentence]]
+buildMH mcl = map (padBack (length mcl)) $ buildMH' Nothing mcl
+  where buildMH' _ []             = []
+        buildMH' _ ([]:_)         = []
+        buildMH' mLast ((mc:mcs):mcl) =
+          let nextCol = buildMH' (Just mc) mcl
+              padCnt = length nextCol - 1
+          in  if (hier mc == mLast)
+              then ((S $ formatName mc):replicate padCnt (S "")) `jCols` nextCol
+                ++ buildMH' mLast (mcs:mcl)
+              else buildMH' mLast (mcs:mcl)
+        padBack :: Int -> [Sentence] -> [Sentence]
+        padBack n s = s ++ replicate (n - length s) (S "")
+
+jCols :: [a] -> [[a]] -> [[a]]
+jCols [] [] = []
+jCols x []  = [x]
+jCols (x:xs) (y:ys) = [x:y] ++ jCols xs ys
+
+
+splitLevels :: [ModuleChunk] -> [[ModuleChunk]] -> [[ModuleChunk]]
+splitLevels [] sl  = sl
+splitLevels mcs [] = let level = splitLevelsInit mcs
+                     in  splitLevels (mcs \\ level) [level]
+  where splitLevelsInit []         = []
+        splitLevelsInit (mc:mcs)   = if   (hier mc == Nothing)
+                                     then mc:splitLevelsInit mcs
+                                     else splitLevelsInit mcs
+splitLevels mcs sl = let level = splitLevels' (last sl) mcs
+                     in  splitLevels (mcs \\ level) (sl ++ [level])
+  where splitLevels' _ []          = []
+        splitLevels' prev (mc:mcs) = let current = fromJust $ hier mc
+                                     in  if   current `elem` prev
+                                         then mc:splitLevels' prev mcs
+                                         else splitLevels' prev mcs
 
 mgModuleDecomp :: [ModuleChunk] -> Section
 mgModuleDecomp mcs =

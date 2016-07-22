@@ -153,7 +153,11 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
   pure (text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)))
-  %% makeRows lls %% (if bool then caption t else empty) %%
+  %% (pure (text "\\toprule"))
+  %% makeRows [head lls]
+  %% (pure (text "\\midrule"))
+  %% makeRows (tail lls) %% (if bool then caption t else empty)
+  %% (pure (text "\\bottomrule")) %%
   label r %% (pure $ text ("\\end{" ++ lt ++ "}"))
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
@@ -324,4 +328,4 @@ makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
 -----------------------------------------------------------------
 
 makeModule :: String -> D -> D
-makeModule n l = description $ item' ((pure $ text "M") %% label l) (pure $ text n)
+makeModule n l = description $ item' ((pure $ text "M") <> label l) (pure $ text n)

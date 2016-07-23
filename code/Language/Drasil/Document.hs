@@ -68,10 +68,11 @@ instance LayoutObj Contents where
   refName (CodeBlock _)    = error "Codeblock ref unimplemented"
   refName (Definition d)   = getDefName d
   refName (Enumeration _)  = error "List refs unimplemented"
-  refName (Module m)       = S $ "Module:" ++ firstLetter (m ^. name)
+  refName (Module m)       = S $ "Module:" ++ alphanumOnly (m ^. name)
   rType (Table _ _ _ _) = Tab
   rType (Figure _ _)    = Fig
   rType (Definition _)  = Def
+  rType (Module _)      = Mod
   rType _ = error "Attempting to reference unimplemented reference type"
   
 getDefName :: DType -> Sentence

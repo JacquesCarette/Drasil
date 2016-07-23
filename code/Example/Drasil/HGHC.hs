@@ -46,7 +46,7 @@ mg ls author body =
     (S author) body
   
 mgBody :: Document
-mgBody = mg vars "Spencer Smith" [mgModuleHierarchy modules, mgModuleDecomp modules]
+mgBody = mg vars "Spencer Smith" (makeMG modules)
   
 -- lpmBody :: Document  
 -- lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 

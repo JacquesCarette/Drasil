@@ -36,6 +36,7 @@ buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
          (Document t a c) =
   docclass sb b1 %%
   listpackages ps %%
+  preambledefs %%
   title (spec t) %%
   author (spec a) %%
   document (maketitle %% print c)
@@ -53,6 +54,9 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
 listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
+preambledefs :: D
+preambledefs = hyperConfig %% modcounter %% modnum
+
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D
 lo (Section d t con l)     = sec d (spec t) %% label (spec l) %% print con
@@ -63,7 +67,7 @@ lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List lt)               = toText $ makeList lt
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
-lo (Module n l)          = toText $ makeModule n $ spec l
+lo (Module n l)            = toText $ makeModule n $ spec l
 
 print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
@@ -156,9 +160,11 @@ makeTable lls r bool t =
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
-  %% makeRows (tail lls) %% (if bool then caption t else empty)
-  %% (pure (text "\\bottomrule")) %%
-  label r %% (pure $ text ("\\end{" ++ lt ++ "}"))
+  %% makeRows (tail lls)
+  %% (pure (text "\\bottomrule"))
+  %% (if bool then caption t else empty)
+  %% label r
+  %% (pure $ text ("\\end{" ++ lt ++ "}"))
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
         lt = "longtable" ++ (if not bool then "*" else "")
@@ -205,6 +211,7 @@ spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
 spec (Ref t@Sect r) = sref (show t) (spec r)
 spec (Ref t@Def r) = hyperref (show t) (spec r)
+spec (Ref t@Mod r) = mref (show t) (spec r)
 spec (Ref t r)   = ref (show t) (spec r)
 
 symbol_needs :: Symbol -> MathContext
@@ -328,4 +335,5 @@ makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
 -----------------------------------------------------------------
 
 makeModule :: String -> D -> D
-makeModule n l = description $ item' ((pure $ text "M") <> label l) (pure $ text n)
+makeModule n l = description $ item' ((pure $ text ("\\refstepcounter{modnum}"
+  ++ "\\mthemodnum")) <> label l <> (pure $ text ":")) (pure $ text n)

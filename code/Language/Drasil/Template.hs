@@ -1,36 +1,59 @@
-module Language.Drasil.Template where
+module Language.Drasil.Template(makeMG) where
 
 import Language.Drasil.Document
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Spec
 import Language.Drasil.Printing.Helpers
+import Language.Drasil.Reference
 
 import Control.Lens ((^.))
 import Data.List (nub, (\\))
-import Data.Maybe (fromJust)
+import Data.Maybe (fromJust, isNothing)
 
-mgModuleHierarchy :: [ModuleChunk] -> Section
-mgModuleHierarchy mcs =
-  Section 0 (S "Module Hierarchy") (
-    [Con $ mgModuleHierarchyIntro]
-    ++ map (Con . Module) mcs
-    ++ [Con $ mgHierarchy mcs]
-  )
+type MPair = (ModuleChunk, Maybe Contents)
 
-mgModuleHierarchyIntro :: Contents
-mgModuleHierarchyIntro = Paragraph $
+getChunks :: [MPair] -> [ModuleChunk]
+getChunks [] = []
+getChunks ((mc,_):mps) = mc:getChunks mps
+
+getMods :: [MPair] -> [Contents]
+getMods [] = []
+getMods ((_,Nothing):mps) = getMods mps
+getMods ((_,Just m):mps)  = m:getMods mps
+
+makeMG :: [ModuleChunk] -> [Section]
+makeMG mcs = let mpairs = map createMPair mcs
+  in [ mgModuleHierarchy mpairs,
+       mgModuleDecomp mpairs ]
+
+createMPair :: ModuleChunk -> MPair
+createMPair mc = if   (imp mc == Nothing)
+                 then (mc, Nothing)
+                 else (mc, Just $ Module mc)
+
+mgModuleHierarchy :: [MPair] -> Section
+mgModuleHierarchy mpairs = let hierTable = mgHierarchy $ getChunks mpairs
+  in  Section 0 (S "Module Hierarchy") (
+        [ Con $ mgModuleHierarchyIntro hierTable ]
+        ++ (map Con $ getMods mpairs)
+        ++ [Con hierTable]
+      )
+
+mgModuleHierarchyIntro :: Contents -> Contents
+mgModuleHierarchyIntro t@(Table _ _ _ _) = Paragraph $
   S "This section provides an overview of the module design. Modules are " :+:
-  S "summarized in a hierarchy decomposed by secrets in Table (todo). The " :+:
-  S "modules listed below, which are leaves in the hierarchy tree, are the " :+:
-  S "modules that will actually be implemented."
+  S "summarized in a hierarchy decomposed by secrets in " :+:
+  makeRef t :+:
+  S ". The modules listed below, which are leaves in the hierarchy tree, " :+:
+  S "are the modules that will actually be implemented."
 
 
 mgHierarchy :: [ModuleChunk] -> Contents
 mgHierarchy mcs = let mh = buildMH $ splitLevels mcs []
                       cnt = length $ head mh
                       hdr = map (\x -> S $ "Level " ++ show x) $ take cnt [1..]
-                  in Table hdr mh (S "") False
+                  in Table hdr mh (S "Module Hierarchy") True
 
 buildMH :: [[ModuleChunk]] -> [[Sentence]]
 buildMH mcl = map (padBack (length mcl)) $ buildMH' Nothing mcl
@@ -68,11 +91,11 @@ splitLevels mcs sl = let level = splitLevels' (last sl) mcs
                                          then mc:splitLevels' prev mcs
                                          else splitLevels' prev mcs
 
-mgModuleDecomp :: [ModuleChunk] -> Section
-mgModuleDecomp mcs =
+mgModuleDecomp :: [MPair] -> Section
+mgModuleDecomp mpairs =
   Section 0 (S "Module Decomposition") (
-    [Con $ mgModuleDecompIntro mcs]
-    ++ map (Sub . mgModuleInfo) mcs
+    [Con $ mgModuleDecompIntro $ getChunks mpairs]
+    ++ map (Sub . mgModuleInfo) mpairs
   )
 
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
@@ -98,15 +121,19 @@ mgModuleDecompIntro mcs =
                          then getImps ms
                          else (fromJust $ imp m):getImps ms
 
-mgModuleInfo :: ModuleChunk -> Section
-mgModuleInfo mc = Section 1
-  ( S $ (formatName mc) )
-  [ Con $ Enumeration $ Desc
-    [(S "Secrets", Flat (secret mc)),
-     (S "Services", Flat (mc ^. descr)),
-     (S "Implemented By", Flat (getImp $ imp mc))
+mgModuleInfo :: MPair -> Section
+mgModuleInfo (mc, m) = let title = if   isNothing m
+                                   then S (formatName mc)
+                                   else S (formatName mc) :+: S " (" :+:
+                                     (makeRef $ fromJust m) :+: S ")"
+  in Section 1
+    title
+    [ Con $ Enumeration $ Desc
+      [(S "Secrets", Flat (secret mc)),
+       (S "Services", Flat (mc ^. descr)),
+       (S "Implemented By", Flat (getImp $ imp mc))
+      ]
     ]
-  ]
-  where
-    getImp (Just x) = S (x ^. name)
-    getImp _        = S "--"
+    where
+      getImp (Just x) = S (x ^. name)
+      getImp _        = S "--"

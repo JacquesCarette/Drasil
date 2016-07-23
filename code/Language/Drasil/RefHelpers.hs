@@ -3,12 +3,15 @@ module Language.Drasil.RefHelpers where
 import Language.Drasil.Spec
 import Language.Drasil.Printing.Helpers (capitalize)
 
+import Data.Char (isAlphaNum)
+
 -- for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence
 inferName (s1 :+: s2) = inferName s1 :+: inferName s2
 inferName (S s1)      = S (firstLetter s1)
 inferName (F _ s)     = S [s]
-inferName (Ref _ _)   = error "Attempting to infer the name an existing reference"
+inferName (Ref _ _)   = S ""
+  -- error "Attempting to infer the name an existing reference"
 inferName _           = S "" -- Was Empty.
 
 firstLetter :: String -> String
@@ -16,6 +19,9 @@ firstLetter = map head . words
 
 repUnd :: String -> String
 repUnd s = map (\c -> if c == '_' then '.' else c) s
+
+alphanumOnly :: String -> String
+alphanumOnly = filter (isAlphaNum)
 
 writeSec :: Int -> Sentence
 writeSec n

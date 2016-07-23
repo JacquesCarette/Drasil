@@ -50,3 +50,13 @@ defaultLPMparams = LPMParams
 colAwidth, colBwidth :: Double
 colAwidth = 0.2
 colBwidth = 0.73
+
+--settings for hyperref
+hyperSettings :: String
+hyperSettings =
+     "bookmarks=true,"     -- show bookmarks bar?
+  ++ "colorlinks=true,"    -- false: boxed links; true: colored links
+  ++ "linkcolor=red,"      -- color of internal links
+  ++ "citecolor=blue,"     -- color of links to bibliography
+  ++ "filecolor=magenta,"  -- color of file links
+  ++ "urlcolor=cyan"       -- color of external links

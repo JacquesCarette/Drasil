@@ -48,7 +48,7 @@ module Language.Drasil (
   , toCodeModule
   -- CCode.AST
   , Lang(CLang), CodeType(Calc)
-  -- Template
+  -- DD
   , makeMG
 ) where
 
@@ -76,5 +76,5 @@ import Language.Drasil.Misc (mkTable)
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCodeModule)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
-import Language.Drasil.Template
+import Language.Drasil.Template.DD
 

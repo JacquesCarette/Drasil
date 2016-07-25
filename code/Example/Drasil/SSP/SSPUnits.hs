@@ -13,18 +13,6 @@ degree = UD (CC "Degree" (S "angle")) (UName (Special Circle))
 unitless :: FundUnit
 unitless = UD (CC "Unitless" (S "unitless")) (UName $ Atomic "unitless")
 
---newton--
-newton :: DerUChunk
-newton = DUC
-  (UD (CC "Newton" (S "force")) (UName $ Atomic "N"))
-  (USynonym (UDiv (UProd [kilogram ^. unit, metre ^. unit]) (UPow (second ^. unit) (2))))
-
---pascal--
-pascal :: DerUChunk
-pascal = DUC
-  (UD (CC "Pascal" (S "pressure")) (UName $ Atomic "Pa"))
-  (USynonym (UProd [newton ^. unit, UPow (metre ^. unit) (-2)]))
-
 --N/m^3--
 specific_weight :: DerUChunk
 specific_weight = makeDerU (CC "specific weight"

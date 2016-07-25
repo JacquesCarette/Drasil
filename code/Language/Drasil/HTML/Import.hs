@@ -114,7 +114,7 @@ lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
-lay x@(Module m)      = H.Module (H.S "") (spec $ refName x)
+lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 --  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
 --  ( (H.Header (depth+2)
 --    (H.S $ (concat $ intersperse " " $

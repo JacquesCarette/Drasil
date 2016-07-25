@@ -41,7 +41,7 @@ printLO (Definition dt ssPs l)  = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
-printLO (Module con l)          = paragraph $ text ""
+printLO (Module m l)            = makeModule m (p_spec l)
 
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
@@ -233,3 +233,8 @@ makeBounds (Nothing,Nothing) = ""
 makeBounds (Nothing,Just n) = sup (p_expr n)
 makeBounds (Just i, Nothing) = sub (p_expr i)
 makeBounds (Just i, Just n) = sub (p_expr i) ++ sup (p_expr n)
+
+
+
+makeModule :: String -> String -> Doc
+makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 
 import Example.Drasil.SSP.SSPDefs
 import Example.Drasil.SSP.SSPUnits
+import Example.Drasil.SSP.SSPModules
 
 import Language.Drasil
 import Language.Drasil.SI_Units 
@@ -17,6 +18,10 @@ ssp_srs :: Document
 ssp_srs = Document (S "Software Requirements Specification for Slope Stability " :+:
           S "Analysis") 
           (S "Henry Frankis") [s1, s2, s3, s4, s5, s6]
+
+ssp_mg :: Document
+ssp_mg = Document (S "Module Guide for Slope Stability Analysis")
+         (S "Henry Frankis") (makeMG modules)
 
 -- SECTION 1 --
 s1 = Section 0 (S "Reference Material") [s1_1, s1_2, s1_3]

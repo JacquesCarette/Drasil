@@ -16,7 +16,7 @@ vars :: [EqChunk]
 vars = [h_g, h_c]
 
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, mod_calc, mod_f1, mod_f2, mod_f3]
+modules = [mod_calc, mod_hw, mod_f1, mod_behav, mod_f2, mod_f3]
 
 s1, s2, s3 :: Section --, s4 
 s1 = table_of_units si_units

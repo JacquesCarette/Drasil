@@ -5,9 +5,12 @@ import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Language.Drasil.SI_Units
+import Language.Drasil.Unit
 
 import Example.Drasil.GlassBR.GlassBRExample
-import Example.Drasil.GlassBR.GlassBRSIUnits 
+import Example.Drasil.Units
+import Example.Drasil.TableOfSymbols(table_of_symbols)
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
@@ -15,17 +18,18 @@ this_si = map UU [metre, second] ++ map UU [pascal, newton]
 s1, s1_1,  s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10 :: Section
-s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table, s2_intro,
-  s2_1_intro1, s2_1_intro2, s2_2_intro, s2_3_intro1, s2_3_intro2, s3_intro, 
+
+s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, 
+  s1_3_table, s2_intro, s2_2_intro, s3_intro, 
   s3_1_intro, s3_2_intro, s4_intro, s4_1_bullets, s4_2_intro, s5_intro, 
   s5_1_table, s5_2_bullets, s6_intro, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
-  s6_2_1_list1, s6_2_1_eq1, s6_2_1_eq2, s6_2_1_eq3, s6_2_1_eq4 ,s6_2_1_list2, 
   s6_2_4_intro, s6_2_5_intro, --s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2, --s6_2_5_table3, 
-  s7_1_intro, s7_1_list1, s7_1_table, s7_1_list2, s7_2_intro, 
-  s8_list, s9_list, s10_intro, fig_glassbr, fig_2, fig_3 :: Contents
+  s7_1_intro, s7_2_intro, s8_list, s9_list, s10_intro, fig_glassbr,
+  fig_2, fig_3 :: Contents
 
+s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list :: [Contents]
 
 glassBR_srs :: Document  
 glassBR_srs = Document ((softwareRS ^. descr) :+: S " for " :+: 
@@ -37,36 +41,39 @@ s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2,
 
 s1_intro = Paragraph (S "This section records information for easy reference.")
 
-s1_1 = Section 1 (S "Table of Units") [Con s1_1_intro, Con s1_1_table]
+s1_1 = table_of_units this_si
 
-s1_1_intro = Paragraph $ 
-  S "Throughout this document SI (Syst" :+: (F Grave 'e') :+: S "me " :+:
-  S "International d'Unit" :+: (F Acute 'e') :+: S "s) is employed as " :+:
-  S "the unit system. In addition to the basic units, several derived " :+:
-  S "units are employed as described below. For each unit, the symbol is " :+: 
-  S "given followed by a description of the unit followed by the SI name."
+--s1_1_intro = Paragraph $ 
+--  S "Throughout this document SI (Syst" :+: (F Grave 'e') :+: S "me " :+:
+--  S "International d'Unit" :+: (F Acute 'e') :+: S "s) is employed as " :+:
+--  S "the unit system. In addition to the basic units, several derived " :+:
+--  S "units are employed as described below. For each unit, the symbol is " :+: 
+--  S "given followed by a description of the unit followed by the SI name."
 
-s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
-  [(\x -> Sy (x ^. unit)),
-   (\x -> (x ^. descr)),
-   (\x -> S (x ^. name))
-  ] this_si)
-  (S "Table of Units") True
+--s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
+--  [(\x -> Sy (x ^. unit)),
+--   (\x -> (x ^. descr)),
+--   (\x -> S (x ^. name))
+--  ] this_si)
+--  (S "Table of Units") True
 
-s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+s1_2 = table_of_symbols $ (map Has glassBRSymbols) ++ 
+  (map HasNot glassBRUnitless)
 
-s1_2_intro = Paragraph $ 
-  S "The table that follows summarizes the symbols used in this " :+:
-  S "document along with their units. The symbols are listed in " :+:
-  S "alphabetical order." 
+--s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+
+--s1_2_intro = Paragraph $ 
+--  S "The table that follows summarizes the symbols used in this " :+:
+--  S "document along with their units. The symbols are listed in " :+:
+--  S "alphabetical order." 
   
-s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-  [(\ch -> P (ch ^. symbol)),  
-   (\ch -> Sy $ ch ^. unit),
-   (\ch -> ch ^. descr)
-   ]
-  glassBRSymbols)
-  (S "Table of Symbols") False
+--s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
+--  [(\ch -> P (ch ^. symbol)),  
+--   (\ch -> Sy $ ch ^. unit),
+--   (\ch -> ch ^. descr)
+--   ]
+--  glassBRSymbols)
+--  (S "Table of Symbols") False
 
 s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
 
@@ -93,9 +100,10 @@ s2_intro = Paragraph $
   :+: S "the organization of the document: what the document is based on and "
   :+: S "intended to portray."
 
-s2_1 = Section 1 (S "Purpose of Document") [Con s2_1_intro1, Con s2_1_intro2]
+s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_intro)
 
-s2_1_intro1 = Paragraph $
+s2_1_intro = 
+  [Paragraph $
   S "The main purpose of this document is to predict whether a given " :+:
   (sMap (map toLower) (glaSlab ^. descr)) :+: S " is likely to resist a " :+:
   S "specified " :+: (sMap (map toLower) (S $ blast ^. name)) :+: S ". " :+:
@@ -107,9 +115,8 @@ s2_1_intro1 = Paragraph $
   S "to provide all information necessary to understand and verify the " :+:
   S "analysis. The " :+: S (softwareRS ^. name) :+: S " is abstract " :+:
   S "because the contents say what problem is being solved, but not how " :+:
-  S "to solve it."
-
-s2_1_intro2 = Paragraph $
+  S "to solve it.",
+  Paragraph $
   S "This document will be used as a starting point for subsequent " :+:
   S "development phases, including writing the design specification and " :+:
   S "the software verification and validation plan. The design document " :+:
@@ -117,23 +124,24 @@ s2_1_intro2 = Paragraph $
   S "decisions on the numerical algorithms and programming environment. " :+:
   S "The verification and validation plan will show the steps that will " :+:
   S "be used to increase confidence in the software documentation and " :+:
-  S "the implementation."
+  S "the implementation."]
 
-s2_2 = Section 1 (S "Scope of Requirements") [Con s2_2_intro]
+s2_2 = Section 1 (S "Scope of " :+: (requirement ^. descr) :+: S "s") 
+  [Con s2_2_intro]
 
 s2_2_intro = Paragraph $
-  S "The scope of the requirements includes getting all input parameters " :+:
-  S "related to the " :+: (sMap (map toLower) (glaSlab ^. descr)) :+: 
-  S " and also the parameters related to " :+: 
-  (sMap (map toLower) (S $ blastTy ^. name)) :+: S ". Given the input, " :+:
-  (gLassBR ^. descr) :+: S " is intended to use the data and predict " :+:
-  S "whether the " :+: (sMap (map toLower) (glaSlab ^. descr)) :+: 
-  S " is safe to use or not."
+  S "The scope of the " :+: (sMap (map toLower) (requirement ^. descr)) :+: 
+  S "s includes getting all input parameters related to the " :+: 
+  (sMap (map toLower) (glaSlab ^. descr)) :+: S " and also the parameters " :+:
+  S "related to " :+: (sMap (map toLower) (S $ blastTy ^. name)) :+: 
+  S ". Given the input, " :+: (gLassBR ^. descr) :+: S " is intended to " :+:
+  S "use the data and predict whether the " :+: 
+  (sMap (map toLower) (glaSlab ^. descr)) :+: S " is safe to use or not."
 
-s2_3 = Section 1 (S "Organization of Document") [Con s2_3_intro1, 
-  Con s2_3_intro2]
+s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_intro)
 
-s2_3_intro1 = Paragraph $
+s2_3_intro = 
+  [Paragraph $
   S "The organization of this document follows the template for an " :+: 
   S (softwareRS ^. name) :+: S " for scientific computing software " :+:
   S "proposed by [1] and [2] (in " :+: (makeRef s9) :+: S "), with " :+: 
@@ -143,15 +151,14 @@ s2_3_intro1 = Paragraph $
   S "s. For readers that would like a more bottom up approach, they can " :+:
   S "start reading the " :+: (sMap (map toLower) (dataDefn ^. descr)) :+:
   S "s in " :+: (makeRef s6_2_4) :+: S " and trace back to find any " :+:
-  S "additional information they require."
-
-s2_3_intro2 = Paragraph $
+  S "additional information they require.",
+  Paragraph $
   S "The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are " :+:
   S "refined to the " :+: (sMap (map toLower) (theoreticMod ^. descr)) :+:
   S "s, and " :+: (sMap (map toLower) (theoreticMod ^. descr)) :+: 
   S "s to the " :+: (sMap (map toLower) (instanceMod ^. descr)) :+: 
   S "s. The " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s " :+:
-  S "are used to support the definitions of the different models." 
+  S "are used to support the definitions of the different models."] 
 
 s3 = Section 0 (S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
@@ -274,20 +281,43 @@ s6_1_1 = Section 2 (S "Terminology and Definitions") [Con s6_1_1_intro,
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent "
   :+: S "sections and their meaning, with the purpose of reducing ambiguity "
-  :+: S "and making it easier to correctly understand the requirements. " :+:
-  S "All of the terms are extracted from [4] in " :+: (makeRef s9) :+: S "."
+  :+: S "and making it easier to correctly understand the " :+: 
+  (sMap (map toLower) (requirement ^. descr)) :+: S "s. All of the terms " :+:
+  S "are extracted from [4] in " :+: (makeRef s9) :+: S "."
 
 s6_1_1_bullets = Enumeration $ (Number $ 
-  map (\c -> Flat $ S (c ^. name) :+: S " - " :+: (c ^. descr)) [aR, gbr, lite] 
-  ++ [Nested (S (glassTy ^. name) :+: S ":") 
-  (Bullet $ map (\c -> Flat $ S (c ^. name) :+: S " - " :+: (c ^. descr)) 
-    [an, ft, hs])] ++
-  map (\c -> Flat $ S (c ^. name) :+: S " - " :+: (c ^. descr)) [gtf,lateral] 
-  ++ [Nested (S (load ^. name) :+: S":") 
-  (Bullet $ map (\c -> Flat $ S (c ^. name) :+: S " - " :+:(c ^. descr)) 
-    [specDeLoad, lr, ldl, nfl, glassWL, sdl])] ++ 
-  map (\c -> Flat $ S (c ^. name) :+: S " - " :+: (c ^. descr)) 
-    [lsf, pb, specA, blaReGLa, eqTNTChar, sD])
+  [Flat $ S ((aR ^. name) ++ " (" ++ (aspectR ^. name) ++ ") - ") :+: 
+  (aR ^. descr)] ++
+  map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. descr)) [gbr, lite] ++ 
+  [Nested (S ((glassTy ^. name) ++ ":")) (Bullet $ map (\c -> Flat c)
+    [(S ((an ^. name) ++ " (" ++ (annealedGlass ^. name) ++ ") - ") :+: 
+      (an ^. descr)),
+    (S ((ft ^. name) ++ " (" ++ (fullyTGlass ^. name) ++ ") - ") :+:
+      (ft ^. descr)),
+    (S ((hs ^. name) ++ " (" ++ (heatSGlass ^. name) ++ ") - ") :+:
+      (hs ^. descr))])] ++
+  map (\c -> Flat c)
+  [(S ((gtf ^. name) ++ " (" ++ (glassTypeFac ^. name) ++ ") - ") :+: 
+    (gtf ^. descr)),
+  (S ((lateral ^. name) ++ " - ") :+: (lateral ^. descr))] ++ 
+  [Nested (S ((load ^. name) ++ ":")) (Bullet $ map (\c -> Flat c)  
+    [(S ((specDeLoad ^. name) ++ " - ") :+: (specDeLoad ^. descr)),
+    (S ((lr ^. name) ++ " (" ++ (lResistance ^. name) ++ ") - ") :+: 
+      (lr ^. descr)),
+    (S ((ldl ^. name) ++ " - ") :+: (ldl ^. descr)),
+    (S ((nfl ^. name) ++ " (" ++ (nonFactorL ^. name) ++ ") - ") :+:
+      (nfl ^. descr))] ++ 
+    map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. descr))
+      [glassWL, sdl])] ++ 
+  map (\c -> Flat c)
+  [(S ((lsf ^. name) ++ " (" ++ (lShareFac ^. name) ++ ") - ") :+: 
+    (lsf ^. descr)),
+  (S ((pb ^. name) ++ " (") :+: (P $ prob_br ^. symbol) :+: S ") - " :+:
+    (pb ^. descr))] ++
+  map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. descr)) 
+  [specA, blaReGLa, eqTNTChar] ++
+  [Flat $ S ((sD ^. name) ++ " (") :+: (P $ sd ^. symbol) :+: S ") - " :+:
+  (sD ^. descr)])
   
 s6_1_2 = Section 2 (physSysDescr ^. descr) [Con s6_1_2_intro, Con s6_1_2_list, 
   Con fig_glassbr]
@@ -299,16 +329,16 @@ s6_1_2_intro = Paragraph $ S "The physical system of " :+: (gLassBR ^. descr)
 fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "PS1", (glaSlab ^. descr)), 
-  (S "PS2", S "The point of explosion. Where the bomb, or " :+:
-    (sMap (map toLower) (blast ^. descr)) :+: S ", is located. The " :+: 
-    (sMap (map toLower) (S (take 18 (sD ^. name)))) :+: S "  is the distance" 
-    :+: S " between the point of explosion and the glass.")]
+  (((S $ physSysDescr ^. name) :+: S "1"), (glaSlab ^. descr)), 
+  (((S $ physSysDescr ^. name) :+: S "2"), S "The point of explosion. " :+:
+    S "Where the bomb, or " :+: (sMap (map toLower) (blast ^. descr)) :+: 
+    S ", is located. The " :+: (sMap (map toLower) (S (sD ^. name))) 
+    :+: S "  is the distance between the point of explosion and the glass.")]
 
 s6_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "GS1", S "Analyze and predict whether the " :+:
+  (((S $ goalStmt ^. name) :+: S "1"), S "Analyze and predict whether the " :+:
     (sMap (map toLower) (glaSlab ^. descr)) :+: S " under consideration " :+:
     S "will be able to withstand the explosion of a certain degree which " :+:
     S "is calculated based on user input.")]
@@ -321,9 +351,8 @@ s6_2_intro = Paragraph $ S "This section explains all the " :+:
   (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s which are " :+:
   S "supported by the " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s."
   
-s6_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s6_2_1_intro, 
-  Con s6_2_1_list1, Con s6_2_1_eq1, Con s6_2_1_eq2, Con s6_2_1_eq3, 
-  Con s6_2_1_eq4, Con s6_2_1_list2]
+s6_2_1 = Section 2 (assumption ^. descr :+: S "s") ([Con s6_2_1_intro] ++
+  (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
   S "This section simplifies the original problem and helps in developing the " 
@@ -337,51 +366,52 @@ s6_2_1_intro = Paragraph $
   S (" " ++ sqbrac (instanceMod ^. name)) :+: S ", in which the respective " 
   :+: (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
 
-s6_2_1_list1 = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "A1", S "The standard E1300-09a for calculation applies only to " :+:
-    S "monolithic, laminated, or insulating glass constructions of " :+:
-    S "rectangular shape with continuous " :+: 
-    (sMap (map toLower) (S $ lateral ^. name)) :+:
-    S " support along one, two, three, or four edges. This practice assumes " 
-    :+: S "that (1) the supported glass edges for two, three and four-sided " 
-    :+: S "support conditions are simply supported and free to slip in plane; "
-    :+: S "(2) glass supported on two sides acts as a simply supported beam " 
-    :+: S "and (3) glass supported on one side acts as a cantilever."), 
-  (S "A2", S "This practice does not apply to any form of wired, patterned, "
-    :+: S "etched, sandblasted, drilled, notched, or grooved glass with " :+:
-    S "surface and edge treatments that alter the glass strength."),
-  (S "A3", S "This system only considers the external explosion scenario " :+:
-    S "for its calculations."),
-  (S "A4", S "Standard values used for calculation in " :+: (gLassBR ^. descr) 
-    :+: S " are: ")]
-    
-s6_2_1_eq1 = EqnBlock $ (C sflawParamM):=(Int 7)
-s6_2_1_eq2 = EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10)
-  :^(Neg (Int 53))
-s6_2_1_eq3 = EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
-s6_2_1_eq4 = EqnBlock $ (C load_dur):=(Int 3)
-
+s6_2_1_list = 
+  [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+    (((S $ assumption ^. name) :+: S "1"), S "The standard E1300-09a for " :+:
+      S "calculation applies only to monolithic, laminated, or insulating " :+:
+      S "glass constructions of rectangular shape with continuous " :+: 
+      (sMap (map toLower) (S $ lateral ^. name)) :+:
+      S " support along one, two, three, or four edges. This practice assumes " 
+      :+: S "that (1) the supported glass edges for two, three and four-sided " 
+      :+: S "support conditions are simply supported and free to slip in " :+:
+      S "plane; (2) glass supported on two sides acts as a simply supported " 
+      :+: S "beam and (3) glass supported on one side acts as a cantilever."), 
+    (((S $ assumption ^. name) :+: S "2"), S "This practice does not apply " 
+      :+: S "to any form of wired, patterned, etched, sandblasted, drilled, "
+      :+: S "notched, or grooved glass with surface and edge treatments " :+:
+      S "that alter the glass strength."),
+    (((S $ assumption ^. name) :+: S "3"), S "This system only considers " :+:
+      S "the external explosion scenario for its calculations."),
+    (((S $ assumption ^. name) :+: S "4"), S "Standard values used for " :+:
+      S "calculation in " :+: (gLassBR ^. descr) :+: S " are: ")]),
+    (EqnBlock $ (C sflawParamM):=(Int 7)),
+    (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
+      (Neg (Int 53))),
+    (EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)),
+    (EqnBlock $ (C load_dur):=(Int 3)),
   --  (Number $ map (\c -> Flat c) [
   --  (P $ sflawParamM ^. symbol) :+: S " = 7 " :+: Sy (sflawParamM ^. unit), 
   --  (P $ sflawParamK ^. symbol) :+: S " = 2.86 * 10^(-53) " :+: Sy (sflawParamK ^. unit), 
   --  (P $ mod_elas ^. symbol) :+: S " = 7.17 * 10^7 " :+: Sy (mod_elas ^. unit),
   --  (P $ load_dur ^. symbol) :+: S " = 3 " :+: Sy (load_dur ^. unit)]))] ++
-s6_2_1_list2 = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "A5", S "Glass under consideration is assumed to be a single " :+:
-    (sMap (map toLower) (S $ lite ^. name)) :+: S ". Hence the value of " :+: 
-    (P $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in " :+: 
-    (gLassBR ^. descr) :+: S "."),
-  (S "A6", S "Boundary conditions for the " :+: 
-    (sMap (map toLower) (glaSlab ^. descr)) :+: S " is assumed to be 4-sided "
-    :+: S "support for calculations."),
-  (S "A7", S "The response type considered in " :+: (gLassBR ^. descr) :+: 
-    S " is flexural."),
-  (S "A8", S "With reference to A4 the value of " :+:
-    (sMap (map toLower) (loadDF ^. descr)) :+: S " (" :+: 
-    (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. descr) 
-    :+: S ". It is calculated by the equation: " :+: 
-    --(P $ loadDF ^. symbol) :+: S " = " :+: (P $ load_dur ^. symbol) :+: 
-    S ". Using this, " :+: (P $ loadDF ^. symbol) :+: S " = 0.27.")]
+    (Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+    (((S $ assumption ^. name) :+: S "5"), S "Glass under consideration " :+:
+      S "is assumed to be a single " :+:
+      (sMap (map toLower) (S $ lite ^. name)) :+: S ". Hence the value of " :+: 
+      (P $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in " 
+      :+: (gLassBR ^. descr) :+: S "."),
+    (((S $ assumption ^. name) :+: S "6"), S "Boundary conditions for the " :+: 
+      (sMap (map toLower) (glaSlab ^. descr)) :+: S " is assumed to be 4-sided"
+      :+: S " support for calculations."),
+    (((S $ assumption ^. name) :+: S "7"), S "The response type considered in " 
+      :+: (gLassBR ^. descr) :+: S " is flexural."),
+    (((S $ assumption ^. name) :+: S "8"), S "With reference to A4 the value " 
+      :+: S "of " :+: (sMap (map toLower) (loadDF ^. descr)) :+: S " (" :+: 
+     (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. descr) 
+     :+: S ". It is calculated by the equation: " :+: 
+      --(P $ loadDF ^. symbol) :+: S " = " :+: (P $ load_dur ^. symbol) :+: 
+      S ". Using this, " :+: (P $ loadDF ^. symbol) :+: S " = 0.27.")])]
   --equation in sentence
 
 s6_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s") (map Con s6_2_2_TMods)
@@ -471,52 +501,70 @@ s6_2_5_intro2 = Paragraph $
 s7 = Section 0 ((requirement ^. descr) :+: S "s") [Sub s7_1, Sub s7_2]
 
 s7_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s") 
-  [Con s7_1_intro, Con s7_1_list1, Con s7_1_table, Con s7_1_list2]
+  ([Con s7_1_intro] ++ (map Con s7_1_list))
 
 s7_1_intro = Paragraph $
   S "The following section provides the functional " :+:
   (requirement ^. descr) :+: S "s, the business tasks that the software " :+:
   S "is expected to complete."
 
+table :: (Unit' s, Quantity s) => [s] -> Contents
+table ls = Table [S "Symbol", S "Description", S "Units"] (mkTable
+  [(\ch -> P (ch ^. symbol)) , 
+   (\ch -> ch ^. descr), 
+   (\ch -> maybeUnits (ch ^. unit'))]
+  ls)
+  (S "Table of Symbols") False
 
-s7_1_list1 = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(S "R1", S "Input the following quantities, which define the glass " :+:
-    S "dimensions, type of glass, tolerable probability of failure and " :+:
-    S "the characteristics of the " :+: 
-    (sMap (map toLower) (S $ blast ^. name)) :+: S ":")]
+maybeUnits (Just x) = Sy x
+maybeUnits Nothing = S ""
 
-s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
-  [(\ch -> P (ch ^. symbol)),  
-   (\ch -> Sy $ ch ^. unit),
-   (\ch -> ch ^. descr)
-   ]
-  [plate_len,plate_width,glass_type,pb_tol,sdx,sdy,sdz,nom_thick,tNT,
-  char_weight])
-  (S "Input Parameters") False
-
-s7_1_list2 = Enumeration $ Simple $
-  [(S "R2", Nested (S "The system shall set the known values as follows: ") 
-    (Bullet $ map (\c -> Flat c) 
+s7_1_list = 
+  [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
+    [(((S $ requirement ^. name) :+: S "1"), S "Input the following " :+:
+      S "quantities, which define the glass dimensions, " :+: 
+      (sMap (map toLower) (glassTy ^. descr)) :+: S ", tolerable probability "
+      :+: S "of failure and the characteristics of the " :+: 
+      (sMap (map toLower) (S $ blast ^. name)) :+: S ":")]),
+  (table $ (map Has [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
+  ++ (map HasNot [glass_type,pb_tol,tNT])),
+--s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
+--  [(\ch -> P (ch ^. symbol)),  
+--   (\ch -> maybeUnits $ ch ^. unit'),
+--   (\ch -> ch ^. descr)
+--   ]
+--  [plate_len,plate_width,glass_type,pb_tol,sdx,sdy,sdz,nom_thick,tNT,
+--  char_weight])
+--  (S "Input Parameters") False
+  (Enumeration $ Simple $
+  [(((S $ requirement ^. name) :+: S "2"), Nested (S "The system shall set" :+:
+    S " the known values as follows: ") (Bullet $ map (\c -> Flat c) 
       [(P $ sflawParamM ^. symbol) :+: S ", " :+: (P $ sflawParamK ^. symbol) 
       :+: S ", " :+: (P $ mod_elas ^. symbol) :+: S ", " :+: 
-      (P $ load_dur ^. symbol) :+: S " following A4",
-      (P $ loadDF ^. symbol) :+: S " following A8",
-      (P $ loadSF ^. symbol) :+: S " following A5"]))] ++
+      (P $ load_dur ^. symbol) :+: S " following " :+: 
+      (S $ assumption ^. name) :+:S "4",
+      (P $ loadDF ^. symbol) :+: S " following " :+: (S $ assumption ^. name) 
+      :+: S "8",
+      (P $ loadSF ^. symbol) :+: S " following " :+: (S $ assumption ^. name) 
+      :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
-  [(S "R3", S "The system shall check the entered input values to ensure " :+:
-    S "that they do not exceed the data constraints mentioned in " :+: 
-    (makeRef s6_2_5) :+: S ". If any of the input parameters is out of " :+:
-    S "bounds, an error message is displayed and the calculations stop."),
-  (S "R4", S "Output the input quantities from R1 and the known quantities "
-    :+: S "from R2."),
-  (S "R5", S "If " :+: (P $ is_safe1 ^. symbol) :+: S " and " :+:
-    (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
-    (makeRef (Definition (Theory t1SafetyReq))) :+: S " T1 and " :+: 
-    (makeRef (Definition (Theory t2SafetyReq))) :+: S " T2) are true, " :+:
+  [(((S $ requirement ^. name) :+: S "3"), S "The system shall check the " :+:
+    S "entered input values to ensure that they do not exceed the data " :+:
+    S "constraints mentioned in " :+: (makeRef s6_2_5) :+: S ". If any of " :+:
+    S "the input parameters is out of bounds, an error message is " :+:
+    S "displayed and the calculations stop."),
+  (((S $ requirement ^. name) :+: S "4"), S "Output the input quantities " :+:
+    S "from " :+: (S $ requirement ^. name) :+: S "1 and the known quantities "
+    :+: S "from " :+: (S $ requirement ^. name) :+: S "2."),
+  (((S $ requirement ^. name) :+: S "5"), S "If " :+: (P $ is_safe1 ^. symbol)
+    :+: S " and " :+: (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
+    (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
+    (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true, " :+:
     S "output the message " :+: Quote (safeMessage ^. descr) :+: S " If " :+:
     S "the condition is false, then output the message " :+: 
     Quote (notSafe ^. descr))] ++
-  [(S "R6", Nested (S "Output the following quantities:")
+  [(((S $ requirement ^. name) :+: S "6"), Nested (S "Output the following " 
+    :+: S "quantities:")
     (Bullet $ 
       [Flat $ (prob_br ^. descr) :+: S " (" :+: (P $ prob_br ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")"] ++
@@ -536,7 +584,7 @@ s7_1_list2 = Enumeration $ Simple $
       [dL,tolPre,tolStrDisFac] ++
       [Flat $ (ar ^. descr) :+: S " (" :+: (P $ ar ^. symbol) :+: 
         --S " = a/b)"
-        S ")"]))]
+        S ")"]))])]
 
 s7_2 = Section 1 (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") 
   [Con s7_2_intro]
@@ -545,27 +593,31 @@ s7_2_intro = Paragraph $
     S "Given the small size, and relative simplicity, of this problem, " :+:
     S "performance is not a priority. Any reasonable implementation will " :+:
     S "be very quick and use minimal storage. Rather than performance, " :+:
-    S "the priority nonfunctional requirements are correctness, " :+:
-    S "verifiability, understandability, reusability, maintainability and " :+:
-    S "portability."
+    S "the priority nonfunctional " :+: (S $ requirement ^. name) :+: 
+    S "s are correctness, verifiability, understandability, reusability, " :+:
+    S "maintainability and portability."
 
 s8 = Section 0 ((likelyChange ^. descr) :+: S "s") [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(S "LC1", S "A3 - The system currently only calculates for external " :+:
-    S "blast risk. In the future calculations can be added for the " :+:
-    S "internal blast risk."),
-  (S "LC2", S "A4, A8 - Currently the values for " :+: 
-    (P $ sflawParamM ^. symbol) :+: S ", " :+: (P $ sflawParamK ^. symbol) :+:
-    S ", and " :+: (P $ mod_elas ^. symbol) :+: S " are assumed to be the " :+:
-    S "same for all glass. In the future these values can be changed to " :+:
-    S "variable inputs."),
-  (S "LC3", S "A5 - The software may be changed to accommodate more than " :+:
-    S "a single " :+: (sMap (map toLower) (S $ lite ^. name)) :+: S "."),
-  (S "LC4", S "A6 - The software may be changed to accommodate more " :+:
-    S "boundary conditions than 4-sided support."),
-  (S "LC5", S "A7 - The software may be changed to consider more than just " 
-    :+: S "flexure of the glass.")]
+  [(((S $ likelyChange ^. name) :+: S "1"), ((S $ assumption ^. name) :+: 
+    S "3 - The system currently only calculates for external blast risk. " :+:
+    S "In the future calculations can be added for the internal blast risk.")),
+  (((S $ likelyChange ^. name) :+: S "2"), ((S $ assumption ^. name) :+:
+    S "4, " :+: (S $ assumption ^. name) :+: S "8 - Currently the values for " 
+    :+: (P $ sflawParamM ^. symbol) :+: S ", " :+: (P $ sflawParamK ^. symbol) 
+    :+: S ", and " :+: (P $ mod_elas ^. symbol) :+: S " are assumed to be the " 
+    :+: S "same for all glass. In the future these values can be changed to " 
+    :+: S "variable inputs.")),
+  (((S $ likelyChange ^. name) :+: S "3"), ((S $ assumption ^. name ) :+: 
+    S "5 - The software may be changed to accommodate more than a single " :+:
+    (sMap (map toLower) (S $ lite ^. name)) :+: S ".")),
+  (((S $ likelyChange ^. name) :+: S "4"), ((S $ assumption ^. name) :+: 
+    S "6 - The software may be changed to accommodate more boundary " :+:
+    S "conditions than 4-sided support.")),
+  (((S $ likelyChange ^. name) :+: S "5"), ((S $ assumption ^. name) :+: 
+    S "7 - The software may be changed to consider more than just flexure " :+:
+    S "of the glass."))]
 
 s9 = Section 0 (S "References") [Con s9_list]
 

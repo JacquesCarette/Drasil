@@ -35,7 +35,7 @@ s1_intro, s1_2_intro, s1_2_table, s1_3_table,
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_intro, 
-  table1, s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1, s7_table2,
+  s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1, s7_table2,
   s7_table3, s7_fig1, s7_fig2 :: Contents
   
 s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, 
@@ -448,7 +448,13 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               (S (assumption ^. name) :+: S "18", Flat (S "The " :+: 
               S (phsChgMtrl ^. name) :+: S " is either in a " :+:
               (liquid ^. descr) :+: S " or a " :+: (solid ^. descr) :+:
-              S " but not a " :+: (gaseous ^. descr) :+: S " [IM2, IM4]."))])
+              S " but not a " :+: (gaseous ^. descr) :+: S " [IM2, IM4].")),
+              (S (assumption ^. name) :+: S "19", Flat (S "The pressure in " :+:
+              S "the " :+: (sMap (map toLower) (S (tank ^. name))) :+:
+              S " is atmospheric, so the " :+: (temp_melt ^. descr) :+:
+              S " and " :+: (temp_boil ^. descr) :+: S " are 0" :+:
+              Sy (temp ^. unit) :+: S " and 100" :+: Sy (temp ^. unit) :+:
+              S ", respectively [IM1, IM3]."))])
               
 
 -- Can booktabs colored links be used? The box links completely cover nearby 
@@ -718,9 +724,9 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro, Con table1]
+s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro]
 
-s4_2_6_intro = Paragraph ((makeRef table1) :+: S " show the data " :+:
+s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data " :+:
                S "constraints on the input and output variables, " :+:
                S "respectively. The column for physical constraints gives " :+: 
                S "the physical limitations on the range of values that can " :+:
@@ -838,7 +844,7 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
             Enumeration (Simple [(S (requirement ^. name) :+: S "3", Flat 
             (S "Verify that the inputs satisfy the required physical" :+:
-            S " constraints shown in " :+: makeRef table1 :+: S ".")),
+            S " constraints shown in Table 1.")),
             (S (requirement ^. name) :+: S "4", Flat (S "Output the input" :+: 
             S " quantities and derived quantities in the following list: "  :+:
             S "the quantities from R1, the " :+: (mass ^. descr) :+: S "es " :+:
@@ -1012,46 +1018,48 @@ s7_table2 = Table [S "", S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
 
 s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
             S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
-            S "A15", S "A16", S "A17", S "A18"]
+            S "A15", S "A16", S "A17", S "A18", S "A19"]
             [[makeRef s4_2_2_T1, S "X", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
+            S ""],
             [makeRef s4_2_2_T2, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_2_T3, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "GD1", S "", S "X", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "GD2", S "", S "", S "X", S "X", S "X", S "X", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_4_DD1, S "", S "", S "", S "", S "", S "", S "X",
             S "X", S "X", S "", S "", S "", S "", S "", S "", S "", S "" , 
-            S ""],
+            S "", S ""],
             [makeRef s4_2_4_DD2, S "", S "", S "X", S "X", S "", S "", S "",
-            S "", S "", S "X", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "X", S "", S "", S "", S "", S "", S "", S "", S "",
+            S ""],
             [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "IM1", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "X", S "X", S "", S "X", S "X", S "X", S "", S ""],
+            S "", S "X", S "X", S "", S "X", S "X", S "X", S "", S "", S "X"],
             [S "IM2", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "X", S "X", S "", S "", S "X", S "X", S "X"],
+            S "", S "", S "X", S "X", S "", S "", S "X", S "X", S "X", S ""],
             [S "IM3", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "X", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "X", S "", S "", S "", S "", S "X"],
             [S "IM4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "X", S "", S "", S "", S "", S "X"],
+            S "", S "", S "", S "X", S "", S "", S "", S "", S "X", S ""],
             [S "LC1", S "", S "", S "", S "X", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC2", S "", S "", S "", S "", S "", S "", S "", S "X", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC3", S "", S "", S "", S "", S "", S "", S "", S "", S "X",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "X", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "X", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC5", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "X", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "X", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC6", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
-            S "", S "", S "", S "", S "", S "X", S "", S "", S ""]]
+            S "", S "", S "", S "", S "", S "X", S "", S "", S "", S ""]]
             (S "Traceability Matrix Showing the Connections Between " :+:
             (assumption ^. descr) :+: S "s and Other Items") True
 

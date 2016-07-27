@@ -62,7 +62,7 @@ melting = makeCC "Melting" "Phase change from solid to liquid"
 perfect_insul = makeCC "perfectly insulated" ("Describes the property of a " ++
                 "material not allowing heat transfer through its boundaries")
 phase_change_material = makeCC "Phase Change Material (PCM)" ("A substance " ++
-                        "that uses phase changes (melting) to absorb or " ++
+                        "that uses phase changes (such as melting) to absorb or " ++
                         "release large amounts of heat at a constant " ++
                         "temperature.")
 phs_change = makeCC "Phase change" "Change of state"

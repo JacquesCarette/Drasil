@@ -14,7 +14,7 @@ import Example.Drasil.SWHS.DataDefs
 import Example.Drasil.SWHS.Units
 
 import Example.Drasil.Units
-import Example.Drasil.TableOfSymbols
+import Example.Drasil.SWHS.TableOfSymbols
 
 import Language.Drasil
 import Language.Drasil.SI_Units 
@@ -30,7 +30,7 @@ s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s1_intro, s1_3_table,
+s1_intro, s1_2_intro, s1_2_table, s1_3_table,
   s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
@@ -60,17 +60,19 @@ s1_1 = table_of_units this_si
   
 -- Is it possible to make tables look nicer? I.e. \hline
 
-s1_2 = table_of_symbols swhsSymbols
+s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
 
---s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
-             --S " symbols used in this document along with their units" :+:
-             --S ". The choice of symbols was made to be consistent" :+:
-             --S " with the " :+: (heat_trans ^. descr) :+: S " literature " :+:
-             --S "and with existing documentation for " :+: (sMap (map toLower)
-             --(progName ^. descr)) :+: S "s. The symbols are listed in " :+:
-             --S "alphabetical order.")
+s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
+             S " symbols used in this document along with their units" :+:
+             S ". The choice of symbols was made to be consistent" :+:
+             S " with the " :+: (heat_trans ^. descr) :+: S " literature " :+:
+             S "and with existing documentation for " :+: (sMap (map toLower)
+             (progName ^. descr)) :+: S "s. The symbols are listed in " :+:
+             S "alphabetical order.")
 
 -- "heat transfer" is specific.
+
+s1_2_table = table swhsSymbols
   
 s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
 
@@ -474,7 +476,8 @@ s4_2_3_intro = Paragraph (S "This section collects the laws and equations " :+:
                S "that will be used in deriving the " :+: (sMap (map toLower) 
                (dataDefn ^. descr)) :+: S "s, which in turn are used to " :+:
                S "build the " :+: (sMap (map toLower) (inModel ^. descr)) :+: 
-               S "s.")
+               S "s. (General definitions are left out because they are not" :+:
+               S " currently implemented in Drasil.)")
 
 -- General paragraph
  
@@ -562,7 +565,8 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. descr) :+: S " and " :+: (pcm_E ^. descr) :+:
                S " depend on the " :+: (sMap (map toLower) (S (phs_change ^. 
-               name))) :+: S ".")]
+               name))) :+: S ". (Instance models are left out because they " :+:
+               S "are not currently implemented in Drasil.)")]
 
 -- Instance Models aren't implemented yet
 -- Some specific info here on the order in which IMs are solved... maybe can be 
@@ -729,7 +733,9 @@ s4_2_6_intro = Paragraph ((makeRef table1) :+: S " show the data " :+:
                S "uncertainty column provides an estimate of the confidence" :+:
                S " with which the physical quantities can be measured. This" :+:
                S " information would be part of the input if one were " :+:
-               S "performing an uncertainty quantification exercise.")
+               S "performing an uncertainty quantification exercise. (The " :+:
+               S "tables are left out because features they should use are " :+:
+               S "not yet implemented in Drasil.)")
 
 -- Completely general paragraph.
 -- I do not think Table 2 will end up being necessary for the Drasil version
@@ -743,14 +749,14 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 -- Typical values and constraints must be added to UC definitions for mkTable 
 -- to work here.
 
-table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
-         S "Typical Value", S "Uncertainty"] (mkTable
-         [\ch -> P (ch ^. symbol),
-         \ch -> Sy (ch ^. unit),
-         \ch -> Sy (ch ^. unit),
-         \ch -> Sy (ch ^. unit),
-         \ch -> Sy (ch ^. unit)] inputVar)
-         (S "Input Variables") True
+-- table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
+         -- S "Typical Value", S "Uncertainty"] (mkTable
+         -- [\ch -> P (ch ^. symbol),
+         -- \ch -> Sy (ch ^. unit),
+         -- \ch -> Sy (ch ^. unit),
+         -- \ch -> Sy (ch ^. unit),
+         -- \ch -> Sy (ch ^. unit)] inputVar)
+         -- (S "Input Variables") True
 
 -- Add constraints (and typical values) to the knowledge capture of each 
 -- variable, so that lambdas can be used to extract constraints?
@@ -795,8 +801,6 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                S " of these equations should be less than 0.001% (R9).")]
 
 -- Remember to insert references in above derivation when available
--- 
-
 
 s5 = Section 0 ((requirement ^. descr) :+: S "s") [Con s5_intro, Sub s5_1, 
      Sub s5_2]

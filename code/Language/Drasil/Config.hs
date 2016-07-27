@@ -37,7 +37,7 @@ numberedSections = True
 defaultSRSparams :: SRSParams
 defaultSRSparams = SRSParams
   (DocClass  Nothing "article")
-  (UsePackages ["booktabs","longtable","listings","graphics","hyperref","caption",
+  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
   "amsmath"])
 
 defaultLPMparams :: LPMParams

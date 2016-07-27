@@ -29,14 +29,14 @@ toCodeModule CLang mod    = let methods = map makeMethod (Mod.method mod)
                                 testMethods = map makeTest methods
                                 testMain = makeTestMain testMethods
                             in C ( stdHeaders
-                                   ++ testHeaders
+                       --            ++ testHeaders
                                    ++ [Local ((Mod.cc mod) ^. name)]
                                  )
                                  [errorDecl]
                                  ( methods
-                                   ++ testMethods
+                       --            ++ testMethods
                                    ++ [errorMethod ((Mod.cc mod) ^. name)]
-                                   ++ [testMain]
+                       --            ++ [testMain]
                                  )
 
 toHeader :: Lang -> Name -> Code -> Code

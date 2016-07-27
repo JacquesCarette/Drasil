@@ -2,7 +2,7 @@
 {- note that SI_Units is really like a separate 'database', so is not included -}
 module Language.Drasil (
   -- Output.Formats
-    DocType(SRS,MG,LPM,Website)
+    DocType(SRS,MG,MIS,LPM,Website)
   -- Recipe
   , Recipe(..)
   -- Expr
@@ -48,13 +48,13 @@ module Language.Drasil (
   , toCodeModule
   -- CCode.AST
   , Lang(CLang), CodeType(Calc)
-  -- DD
-  , makeMG
+  -- Template.DD
+  , makeDD
 ) where
 
 
 import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
-import Language.Drasil.Output.Formats (DocType(SRS,MG,LPM,Website))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),
                                  ListType(..),ItemType(..))

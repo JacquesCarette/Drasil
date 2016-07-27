@@ -1,4 +1,5 @@
-module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..), ExcType(..), fromEC) where
+module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..),
+  ExcType(..), fromEC) where
 
 import Control.Lens (Simple, Lens, (^.))
 
@@ -8,13 +9,18 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
 
 -- BEGIN METHODCHUNK --
-data MethodChunk = MeC { cc :: ConceptChunk, mType :: MethodType, input :: [VarChunk], output :: [VarChunk], exc :: [ExcType] }
+data MethodChunk = MeC { cc :: ConceptChunk, mType :: MethodType,
+                         input :: [VarChunk], output :: [VarChunk],
+                         exc :: [ExcType] }
 
 data MethodType = Calc Expr
                 | Input
                 | Output
 
 data ExcType = DivByZero
+
+instance Show ExcType where
+  show DivByZero = "Divide By Zero"
 
 instance Chunk MethodChunk where
   name = cl . name

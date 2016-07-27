@@ -19,9 +19,11 @@ ssp_srs = Document (S "Software Requirements Specification for Slope Stability "
           S "Analysis") 
           (S "Henry Frankis") [s1, s2, s3, s4, s5, s6]
 
+(mgBod, _) = makeDD modules
+
 ssp_mg :: Document
 ssp_mg = Document (S "Module Guide for Slope Stability Analysis")
-         (S "Henry Frankis") (makeMG modules)
+         (S "Henry Frankis") (mgBod)
 
 -- SECTION 1 --
 s1 = Section 0 (S "Reference Material") [s1_1, s1_2, s1_3]

@@ -1,4 +1,4 @@
-module Example.Drasil.HGHC(srsBody, mgBody) where
+module Example.Drasil.HGHC(srsBody, mgBody, misBody) where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
@@ -16,7 +16,7 @@ vars :: [EqChunk]
 vars = [h_g, h_c]
 
 modules :: [ModuleChunk]
-modules = [mod_calc, mod_hw, mod_f1, mod_behav, mod_f2, mod_f3]
+modules = [mod_calc, mod_hw, mod_behav]
 
 s1, s2, s3 :: Section --, s4 
 s1 = table_of_units si_units
@@ -29,24 +29,22 @@ s3 = Section 0 (S "Data Definitions") $ map (Con . Definition . Data) vars
 --m2 = Module 1 mod_behav
 --m3 = Module 2 mod_calc
 
-srs :: Quantity s => [s] -> String -> [Section] -> Document
-srs ls author body =
-  Document ((S "SRS for ") :+: 
-    (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))
-    (S author) body  
-  
-srsBody :: Document
-srsBody = srs vars "Spencer Smith" [s1, s2, s3]--, s4]
-
-
-mg :: Quantity s => [s] -> String -> [Section] -> Document
-mg ls author body =
-  Document ((S "MG for ") :+:
+doc :: Quantity s => String -> [s] -> String -> [Section] -> Document
+doc name ls author body =
+  Document ((S $ name ++ " for ") :+:
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))
     (S author) body
   
+srsBody :: Document
+srsBody = doc "SRS" vars "Spencer Smith" [s1, s2, s3]--, s4]
+
+(mgSecs, misSecs) = makeDD modules
+  
 mgBody :: Document
-mgBody = mg vars "Spencer Smith" (makeMG modules)
+mgBody = doc "MG" vars "Spencer Smith" mgSecs
+
+misBody :: Document
+misBody = doc "MIS" vars "Spencer Smith" misSecs
   
 -- lpmBody :: Document  
 -- lpmBody = Document ((S "Literate Programmer's Manual for ") :+: 

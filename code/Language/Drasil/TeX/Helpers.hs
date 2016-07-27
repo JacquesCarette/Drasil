@@ -76,7 +76,8 @@ empty = pure TP.empty
 genSec :: Int -> D
 genSec d
   | d < 0 = error "Cannot have section with negative depth"
-  | d > 2 = error "Section depth must be from 0-2"
+  | d > 3 = error "Section depth must be from 0-2"
+  | d == 3 = pure $ H.bslash TP.<> text "paragraph"
   | otherwise = pure $ 
      H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
@@ -143,8 +144,8 @@ counter = count "datadefnum"
 modcounter = count "modnum"
 
 bullet  = comm "blt"             "- "                Nothing
-ddefnum = comm "ddthedatadefnum" "DD\\thedatadefnum" Nothing
-ddref   = comm "ddref"           "DD\\ref{#1}"       (Just "1")
+ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
+ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
 colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
 

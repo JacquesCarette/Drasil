@@ -27,8 +27,8 @@ genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
 build :: A.DocType -> Document -> D
 build (A.SRS _) doc   = buildSRS srsTeXParams doc
 build (A.MG _) doc    = buildSRS srsTeXParams doc   -- temporary
+build (A.MIS _) doc   = buildSRS srsTeXParams doc   -- temporary
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
-build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: SRSParams -> Document -> D

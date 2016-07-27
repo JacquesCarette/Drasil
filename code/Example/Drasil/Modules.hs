@@ -50,20 +50,3 @@ mod_calc = makeImpModule mod_calc_desc
   program
   [meth_h_g, meth_h_c]
   (Just mod_behav)
-
-
--- fakes
-mod_f1_d :: ConceptChunk
-mod_f1_d = CC "fake1" (S "Does fake stuff")
-mod_f1 :: ModuleChunk
-mod_f1 = makeImpModule mod_f1_d (S "Fake things") program [] (Just mod_calc)
-
-mod_f2_d :: ConceptChunk
-mod_f2_d = CC "fake2" (S "Does fake stuff")
-mod_f2 :: ModuleChunk
-mod_f2 = makeImpModule mod_f2_d (S "Fake things") program [] (Just mod_calc)
-
-mod_f3_d :: ConceptChunk
-mod_f3_d = CC "fake3" (S "Does fake stuff")
-mod_f3 :: ModuleChunk
-mod_f3 = makeImpModule mod_f3_d (S "Fake things") program [] (Just mod_calc)

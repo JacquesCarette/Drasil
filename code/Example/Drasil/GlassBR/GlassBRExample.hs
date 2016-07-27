@@ -64,15 +64,17 @@ risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
 risk_fun    = makeVC "B" "Risk function" cB
 glass_type  = makeVC "g" "Glass type, g in {AN, HS, FT}" lG
 is_safe1    = makeVC "is_safe1" ("True when calculated probability is " ++
-  "less than tolerable probability") (Atomic "is_safe1")
+  "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
+  Atomic "safe1"])
 is_safe2    = makeVC "is_safe2" ("True when load resistance (capacity) " ++
-  "is greater than load (demand)") (Atomic "is_safe2")
+  "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
+  Atomic "safe2"])
 sdf         = makeVC "J" "Stress distribution factor (Function)" cJ
 sdf_tol     = makeVC "J_tol" ("Stress distribution factor (Function) " ++
   "based on Pbtol") (sub (sdf ^. symbol) (Atomic "tol"))
 prob_br     = makeVC "P_b" "Probability of breakage" (sub cP lB)
 pb_tol      = makeVC "P_btol" "Tolerable probability of breakage" 
-              (sub (prob_br ^. symbol) (Atomic "tol"))
+              (sub cP (Atomic "btol"))
 dimlessLoad = makeVC "q_hat" "Dimensionless load" (hat lQ)
 tolLoad     = makeVC "q_hat_tol" "Tolerable load" 
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))

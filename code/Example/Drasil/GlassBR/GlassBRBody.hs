@@ -10,7 +10,7 @@ import Language.Drasil.Unit
 
 import Example.Drasil.GlassBR.GlassBRExample
 import Example.Drasil.Units
-import Example.Drasil.TableOfSymbols(table_of_symbols)
+import Example.Drasil.GlassBR.TableOfSymbols
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
@@ -507,17 +507,6 @@ s7_1_intro = Paragraph $
   S "The following section provides the functional " :+:
   (requirement ^. descr) :+: S "s, the business tasks that the software " :+:
   S "is expected to complete."
-
-table :: (Unit' s, Quantity s) => [s] -> Contents
-table ls = Table [S "Symbol", S "Description", S "Units"] (mkTable
-  [(\ch -> P (ch ^. symbol)) , 
-   (\ch -> ch ^. descr), 
-   (\ch -> maybeUnits (ch ^. unit'))]
-  ls)
-  (S "Table of Symbols") False
-
-maybeUnits (Just x) = Sy x
-maybeUnits Nothing = S ""
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))

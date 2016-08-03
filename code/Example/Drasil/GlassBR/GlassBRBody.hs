@@ -17,7 +17,7 @@ this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s1, s1_1,  s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
-  s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10 :: Section
+  s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section
 
 s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, 
   s1_3_table, s2_intro, s2_2_intro, s3_intro, 
@@ -26,15 +26,16 @@ s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
   s6_2_4_intro, s6_2_5_intro, --s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2, --s6_2_5_table3, 
-  s7_1_intro, s7_2_intro, s8_list, s9_list, s10_intro, fig_glassbr,
-  fig_2, fig_3 :: Contents
+  s7_1_intro, s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
+  s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
+  fig_5, fig_6 :: Contents
 
-s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list :: [Contents]
+s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
 glassBR_srs :: Document  
 glassBR_srs = Document ((softwareRS ^. descr) :+: S " for " :+: 
   (gLassBR ^. descr)) (S "Nikitha Krithnan and Spencer Smith") 
-  [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10]
+  [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
 s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
   Sub s1_3]
@@ -144,7 +145,7 @@ s2_3_intro =
   [Paragraph $
   S "The organization of this document follows the template for an " :+: 
   S (softwareRS ^. name) :+: S " for scientific computing software " :+:
-  S "proposed by [1] and [2] (in " :+: (makeRef s9) :+: S "), with " :+: 
+  S "proposed by [1] and [2] (in " :+: (makeRef s10) :+: S "), with " :+: 
   S "some aspects taken from Volere template 16 [3]. The presentation " :+:
   S "follows the standard pattern of presenting goals, theories, " :+:
   S "definitions, and " :+: (sMap (map toLower) (assumption ^. descr)) :+:
@@ -283,7 +284,7 @@ s6_1_1_intro = Paragraph $
   :+: S "sections and their meaning, with the purpose of reducing ambiguity "
   :+: S "and making it easier to correctly understand the " :+: 
   (sMap (map toLower) (requirement ^. descr)) :+: S "s. All of the terms " :+:
-  S "are extracted from [4] in " :+: (makeRef s9) :+: S "."
+  S "are extracted from [4] in " :+: (makeRef s10) :+: S "."
 
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ S ((aR ^. name) ++ " (" ++ (aspectR ^. name) ++ ") - ") :+: 
@@ -417,12 +418,12 @@ s6_2_1_list =
 s6_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s") (map Con s6_2_2_TMods)
   
 s6_2_2_TMods :: [Contents]
-s6_2_2_TMods = map Definition (map Theory [t1SafetyReq,t2SafetyReq])
+s6_2_2_TMods = map Definition (map Theory tModels)
 
 s6_2_3 = Section 2 ((instanceMod ^. descr) :+: S "s") (map Con s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
-s6_2_3_IMods = map Definition (map Theory [probOfBr,calOfCap,calOfDe])
+s6_2_3_IMods = map Definition (map Theory iModels)
 
 s6_2_4 = Section 2 ((dataDefn ^. descr) :+: S "s") 
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
@@ -432,8 +433,7 @@ s6_2_4_intro = Paragraph $
   (sMap (map toLower) (instanceMod ^. descr)) :+: S "s."
 
 s6_2_4_DDefns ::[Contents] 
-s6_2_4_DDefns = map Definition (map Data [risk,hFromt,loadDF,strDisFac,nonFL,
-  glaTyFac,dL,tolPre,tolStrDisFac])
+s6_2_4_DDefns = map Definition (map Data dataDefns)
 
 s6_2_5 = Section 2 (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1, 
   Con s6_2_5_table2, Con s6_2_5_intro2] --, Con s6_2_5_table3]
@@ -608,9 +608,221 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
     S "7 - The software may be changed to consider more than just flexure " :+:
     S "of the glass."))]
 
-s9 = Section 0 (S "References") [Con s9_list]
+s9 = Section 0 (S "Traceability Matrices and Graphs") ([Con s9_intro1, 
+  Con s9_table1, Con s9_table2, Con s9_table3] ++ (map Con s9_intro2) ++ 
+  [Con fig_2, Con fig_3, Con fig_4])
 
-s9_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
+s9_intro1 = Paragraph $
+  S "The purpose of the traceability matrices is to provide easy references "
+  :+: S "on what has to be additionally modified if a certain component is "
+  :+: S "changed. Every time a component is changed, the items in the column "
+  :+: S "of that component that are marked with an " :+: Quote (S "X") :+:
+  S " should be modified as well. Table 5 (" :+: (makeRef s9_table1) :+: 
+  S ") shows the dependencies of " :+: 
+  (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s, " :+: 
+  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and " :+:
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S "s with each other. " :+:
+  S "Table 6 (" :+: (makeRef s9_table2) :+: S ") shows the dependencies of " :+:
+  (sMap (map toLower) (requirement ^. descr)) :+: S "s on " :+:
+  (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and data constraints. " :+:
+  S "Table 7 (" :+: (makeRef s9_table3) :+: S ") shows the dependencies of " 
+  :+: (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (likelyChange ^. descr)) :+: S "s and " :+:
+  (sMap (map toLower) (requirement ^. descr)) :+: S "s on the " :+:
+  (sMap (map toLower) (assumption ^. descr)) :+: S "s."
+
+s9_table1 = Table [S "", S "T1 (" :+: 
+  (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "T2 (" :+: 
+  (makeRef (Definition (Theory t2SafetyReq))) :+: S ")", S "IM1 (" :+:
+  (makeRef (Definition (Theory probOfBr))) :+: S ")", S "IM2 (" :+:
+  (makeRef (Definition (Theory calOfCap))) :+: S ")", S "IM3 (" :+:
+  (makeRef (Definition (Theory calOfDe))) :+: S ")", S "DD1 (" :+:
+  (makeRef (Definition (Data risk))) :+: S ")", S "DD2 (" :+:
+  (makeRef (Definition (Data hFromt))) :+: S ")", S "DD3 (" :+:
+  (makeRef (Definition (Data loadDF))) :+: S ")", S "DD4 (" :+:
+  (makeRef (Definition (Data strDisFac))) :+: S ")", S "DD5 (" :+:
+  (makeRef (Definition (Data nonFL))) :+: S ")", S "DD6 (" :+:
+  (makeRef (Definition (Data glaTyFac))) :+: S ")", S "DD7 (" :+:
+  (makeRef (Definition (Data dL))) :+: S ")", S "DD8 (" :+:
+  (makeRef (Definition (Data tolPre))) :+: S ")", S "DD9 (" :+:
+  (makeRef (Definition (Data tolStrDisFac))) :+: S ")"]
+  [[S "T1 (" :+: (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "",
+  S "X", S "X", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "",
+  S ""], 
+  [S "T2 (" :+: (makeRef (Definition (Theory t2SafetyReq))) :+: S ")", S "X",
+  S "", S "", S "X", S "X", S "", S "", S "", S "", S "", S "", S "", S "", 
+  S ""],
+  [S "IM1 (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")", S "",
+  S "", S "", S "", S "", S "X", S "X", S "X", S "X", S "", S "", S "", S "",
+  S ""],
+  [S "IM2 (" :+: (makeRef (Definition (Theory calOfCap))) :+: S ")", S "", 
+  S "", S "", S "", S "", S "", S "", S "", S "", S "X", S "X", S "", S "",
+  S ""],
+  [S "IM3 (" :+: (makeRef (Definition (Theory calOfDe))) :+: S ")", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "",
+  S ""],
+  [S "DD1 (" :+: (makeRef (Definition (Data risk))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "DD2 (" :+: (makeRef (Definition (Data hFromt))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "DD3 (" :+: (makeRef (Definition (Data loadDF))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "DD4 (" :+: (makeRef (Definition (Data strDisFac))) :+: S ")", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "X", S "",
+  S ""],
+  [S "DD5 (" :+: (makeRef (Definition (Data nonFL))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "X", S "", S "", S "", S "", S "", S "X", S ""],
+  [S "DD6 (" :+: (makeRef (Definition (Data glaTyFac))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "DD7 (" :+: (makeRef (Definition (Data dL))) :+: S ")", S "", S "", S "",
+  S "", S "X", S "", S "X", S "", S "", S "", S "X", S "", S "", S ""],
+  [S "DD8 (" :+: (makeRef (Definition (Data tolPre))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "X"],
+  [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
+  S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
+  S ""]]
+  (S "Traceability Matrix Showing the Connections Between Items of Different "
+    :+: S "Sections") True
+
+s9_table2 = Table [S "", S "T1 (" :+: 
+  (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "T2 (" :+: 
+  (makeRef (Definition (Theory t2SafetyReq))) :+: S ")", S "IM1 (" :+:
+  (makeRef (Definition (Theory probOfBr))) :+: S ")", S "IM2 (" :+:
+  (makeRef (Definition (Theory calOfCap))) :+: S ")", S "IM3 (" :+:
+  (makeRef (Definition (Theory calOfDe))) :+: S ")", S "DD1 (" :+:
+  (makeRef (Definition (Data risk))) :+: S ")", S "DD2 (" :+:
+  (makeRef (Definition (Data hFromt))) :+: S ")", S "DD3 (" :+:
+  (makeRef (Definition (Data loadDF))) :+: S ")", S "DD4 (" :+:
+  (makeRef (Definition (Data strDisFac))) :+: S ")", S "DD5 (" :+:
+  (makeRef (Definition (Data nonFL))) :+: S ")", S "DD6 (" :+:
+  (makeRef (Definition (Data glaTyFac))) :+: S ")", S "DD7 (" :+:
+  (makeRef (Definition (Data dL))) :+: S ")", S "DD8 (" :+:
+  (makeRef (Definition (Data tolPre))) :+: S ")", S "DD9 (" :+:
+  (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "Data Constraints (" 
+  :+: (makeRef s6_2_5) :+: S ")", S "R1 (in " :+: (makeRef s7_1) :+: S ")",
+  S "R2 (in " :+: (makeRef s7_1) :+: S ")"]
+  [[S "R1 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "R2 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "R3 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S"",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "X", S "", S ""],
+  [S "R4 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "X", S "X"],
+  [S "R5 (in " :+: (makeRef s7_1) :+: S ")", S "X", S "X", S "", S "", S "",
+  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+  [S "R6 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "X", S "X", S "X",
+  S "", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "", S "",
+  S ""]]
+  (S "Traceability Matrix Showing the Connections Between Requirements and "
+    :+: S "Other Items") True
+
+s9_table3 = Table [S "", S "A1 (in " :+: (makeRef s6_2_1) :+: S ")",
+  S "A2 (in " :+: (makeRef s6_2_1) :+: S ")", S "A3 (in " :+: 
+  (makeRef s6_2_1) :+: S ")", S "A4 (in " :+: (makeRef s6_2_1) :+: S ")",
+  S "A5 (in " :+: (makeRef s6_2_1) :+: S ")", S "A6 (in " :+:
+  (makeRef s6_2_1) :+: S ")", S "A7 (in " :+: (makeRef s6_2_1) :+: S ")",
+  S "A8 (in " :+: (makeRef s6_2_1) :+: S ")"]
+  [[S "T1 (" :+: (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "",
+  S "", S "", S "", S "", S "", S "", S ""],
+  [S "T2 (" :+: (makeRef (Definition (Theory t2SafetyReq))) :+: S ")", S "",
+  S "", S "", S "", S "", S "", S "", S ""],
+  [S "IM1 (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")", S "",
+  S "", S "", S "X", S "", S "X", S "X", S ""],
+  [S "IM2 (" :+: (makeRef (Definition (Theory calOfCap))) :+: S ")", S "",
+  S "", S "", S "", S "X", S "", S "", S ""],
+  [S "IM3 (" :+: (makeRef (Definition (Theory calOfDe))) :+: S ")", S "",
+  S "", S "", S "", S "", S "", S "", S ""],
+  [S "DD1 (" :+: (makeRef (Definition (Data risk))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S ""],
+  [S "DD2 (" :+: (makeRef (Definition (Data hFromt))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S ""],
+  [S "DD3 (" :+: (makeRef (Definition (Data loadDF))) :+: S ")", S "", S "",
+  S "", S "X", S "", S "", S "", S "X"],
+  [S "DD4 (" :+: (makeRef (Definition (Data strDisFac))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S ""],
+  [S "DD5 (" :+: (makeRef (Definition (Data nonFL))) :+: S ")", S "", S "",
+  S "", S "X", S "", S "", S "", S ""],
+  [S "DD6 (" :+: (makeRef (Definition (Data glaTyFac))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S ""],
+  [S "DD7 (" :+: (makeRef (Definition (Data dL))) :+: S ")", S "", S "", S "",
+  S "", S "X", S "", S "", S ""],
+  [S "DD8 (" :+: (makeRef (Definition (Data tolPre))) :+: S ")", S "", S "",
+  S "", S "", S "", S "", S "", S ""],
+  [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
+  S "", S "", S "X", S "", S "", S "", S ""],
+  [S "LC1 (in " :+: (makeRef s8) :+: S ")", S "", S "", S "X", S "", S "",
+  S "", S "", S ""],
+  [S "LC2 (in " :+: (makeRef s8) :+: S ")", S "", S "", S "", S "X", S "",
+  S "", S "", S "X"],
+  [S "LC3 (in " :+: (makeRef s8) :+: S ")", S "", S "", S "", S "", S "X",
+  S "", S "", S ""],
+  [S "LC4 (in " :+: (makeRef s8) :+: S ")", S "", S "", S "", S "", S "",
+  S "X", S "", S ""],
+  [S "LC5 (in " :+: (makeRef s8) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "X", S ""],
+  [S "R1 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S ""],
+  [S "R2 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "X", S "X",
+  S "", S "", S "X"],
+  [S "R3 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S ""],
+  [S "R4 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S ""],
+  [S "R5 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S ""],
+  [S "R6 (in " :+: (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
+  S "", S "", S ""]]
+  (S "Traceability Matrix Showing the Connections Between Assumptions and "
+    :+: S "Other Items") True
+
+s9_intro2 = 
+  [Paragraph $
+  S "The purpose of the traceability graphs is also to provide easy " :+: 
+  S "references on what has to be additionally modified if a certain " :+:
+  S "component is changed. The arrows in the graphs represent " :+:
+  S "dependencies. The component at the tail of an arrow is depended on " :+:
+  S "by the component at the head of that arrow. Therefore, if a " :+:
+  S "component is changed, the components that it points to should also " :+:
+  S "be changed. Figure 2 (" :+: (makeRef fig_2) :+: S ") shows the " :+:
+  S "dependencies of " :+: (sMap (map toLower) (theoreticMod ^. descr)) :+: 
+  S "s, " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and " :+:
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S "s on each other. " :+:
+  S "Figure 3 (" :+: (makeRef fig_3) :+: S ") shows the dependencies of " :+:
+  (sMap (map toLower) (requirement ^. descr)) :+: S "s on " :+:
+  (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s, " :+: 
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and data constraints. " :+:
+  S "Figure 4 (" :+: (makeRef fig_4) :+: S ") shows the dependencies of " :+:
+  (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s, " :+: 
+  (sMap (map toLower) (instanceMod ^. descr)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s, " :+: 
+  (sMap (map toLower) (requirement ^. descr)) :+: S "s and " :+:
+  (sMap (map toLower) (likelyChange ^. descr)) :+: S "s on " :+:
+  (sMap (map toLower) (assumption ^. descr)) :+: S "s.",
+  Paragraph $ 
+  S "NOTE: Building a tool to automatically generate the graphical " :+:
+  S "representation of the matrix by scanning the labels and reference " :+:
+  S "can be future work."]
+
+fig_2 = Figure (S "Figure 2: Traceability Matrix Showing the Connections " :+:
+  S "Between Items of Different Sections") "Trace.png"
+
+fig_3 = Figure (S "Figure 3: Traceability Matrix Showing the Connections " :+:
+  S "Between " :+: (requirement ^. descr) :+: S "s and Other Items") 
+  "RTrace.png"
+
+fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections " :+:
+  S "Between " :+: (assumption ^. descr) :+: S "s and Other Items")
+  "ATrace.png"
+
+s10 = Section 0 (S "References") [Con s10_list]
+
+s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor, " :+: Quote (S "A document drive approach to " :+:
     S "certifying scientific computing software,") :+: S " Master's thesis, "
   :+: S "McMaster University, Hamilton, Ontario, Canada, 2013."),
@@ -636,18 +848,18 @@ s9_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "15.02, " :+: Quote (S "Specification for heat treated flat glass-Kind " 
     :+: S "HS, kind FT coated and uncoated glass,C1048."))]
 
-s10 = Section 0 (S "Appendix") [Con s10_intro, Con fig_2, Con fig_3]
+s11 = Section 0 (S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
 
-s10_intro = Paragraph $
-  S "This appendix holds the graphs (" :+: (makeRef fig_2) :+: S " and " :+:
-  (makeRef fig_3) :+: S ") used for interpolating values needed in the models."
+s11_intro = Paragraph $
+  S "This appendix holds the graphs (" :+: (makeRef fig_5) :+: S " and " :+:
+  (makeRef fig_6) :+: S ") used for interpolating values needed in the models."
 
-fig_2 = Figure (S "Figure 2: " :+: (demandq ^. descr) :+: S " (" :+: 
+fig_5 = Figure (S "Figure 5: " :+: (demandq ^. descr) :+: S " (" :+: 
   P (demand ^. symbol) :+: S ") versus " :+: (S $ sD ^. name) :+:
   S " versus " :+: (char_weight ^. descr) :+: S " (" :+: 
   P (sflawParamM ^. symbol) :+: S ")") "ASTM_F2248-09.png"
 
-fig_3 = Figure (S "Figure 3: Non dimensional " :+: 
+fig_6 = Figure (S "Figure 6: Non dimensional " :+: 
   (sMap (map toLower) (S $ lateral ^. name)) :+: S " " :+:
   (sMap (map toLower) (S $ load ^. name)) :+: S " (" :+: 
   P (dimlessLoad ^. symbol) :+: S ") versus " :+: (ar ^. descr) :+: S " (" :+:

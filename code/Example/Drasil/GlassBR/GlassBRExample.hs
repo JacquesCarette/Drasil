@@ -229,6 +229,9 @@ notSafe       = makeCC "Not safe"
   ("For the given input parameters, the glass is NOT considered safe.")
 
 --Theoretical models--
+tModels :: [RelationChunk]
+tModels = [t1SafetyReq, t2SafetyReq]
+
 t1SafetyReq :: RelationChunk
 t1SafetyReq = makeRC "Safety Requirement-1" t1descr safety_require1_rel
 
@@ -236,7 +239,6 @@ safety_require1_rel :: Relation
 safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
 
 --relation within relation
-
 t1descr :: Sentence
 t1descr = 
   S "If " :+: (P $ is_safe1 ^. symbol) :+: S " = True, the glass is " :+: 
@@ -271,6 +273,9 @@ t2descr =
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
 --Instance Models--
+iModels :: [RelationChunk]
+iModels =[probOfBr, calOfCap, calOfDe]
+
 probOfBr :: RelationChunk
 probOfBr = makeRC "Probability of Glass Breakage" pbdescr pb_rel 
 
@@ -320,6 +325,10 @@ dedescr =
   --equation in sentence
 
 --Data Definitions--
+dataDefns :: [EqChunk]
+dataDefns = [risk,hFromt,loadDF,strDisFac,nonFL,glaTyFac,dL,tolPre,
+  tolStrDisFac]
+
 risk_eq :: Expr
 risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   ((C plate_width):/(Int 1000)))):^((C sflawParamM) - (Int 1))):*

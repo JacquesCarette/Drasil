@@ -27,6 +27,12 @@ module Language.Drasil (
   , MethodChunk, fromEC
   -- Chunk.Module
   , ModuleChunk, makeImpModule, makeUnimpModule
+  -- Chunk.Req
+  , ReqChunk(..)
+  -- Chunk.LC
+  , LCChunk(..)
+  -- Chunk.Other
+  , AssumpChunk, UCChunk
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
@@ -66,8 +72,11 @@ import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
+import Language.Drasil.Chunk.Req
+import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
+import Language.Drasil.Chunk.Other
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)

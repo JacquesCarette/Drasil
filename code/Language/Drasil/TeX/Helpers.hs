@@ -88,6 +88,10 @@ ref t x = (pure $ text (t ++ "~\\ref")) <> br x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
 sref = if numberedSections then ref else hyperref
 mref _ x = (pure $ text "M\\ref") <> br x
+rref _ x = (pure $ text "R\\ref") <> br x
+aref _ x = (pure $ text "A\\ref") <> br x
+lcref _ x = (pure $ text "LC\\ref") <> br x
+ucref _ x = (pure $ text "UC\\ref") <> br x
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
@@ -108,9 +112,11 @@ title           = commandD "title"
 item' :: D -> D -> D
 item' bull s = command1oD "item" (Just bull) s
 
-maketitle, newline :: D
+maketitle, maketoc, newline, newpage :: D
 maketitle = command0 "maketitle"
+maketoc = command0 "tableofcontents"
 newline = command0 "newline"
+newpage = command0 "newpage"
 
 code, itemize, enumerate, description, figure, center, document, equation :: D -> D
 code        = mkEnv "lstlisting"
@@ -136,12 +142,17 @@ superscript a b = a <> (pure $ H.hat) <> br b
 -- Macro / Command def'n --
 --TeX--
 srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
- , modcounter, modnum :: D
+ , modcounter, modnum, reqcounter, reqnum, assumpcounter, assumpnum
+ , lccounter, lcnum, uccounter, ucnum :: D
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
 counter = count "datadefnum"
 modcounter = count "modnum"
+reqcounter = count "reqnum"
+assumpcounter = count "assumpnum"
+lccounter = count "lcnum"
+uccounter = count "ucnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
@@ -150,6 +161,10 @@ colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
 
 modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
+reqnum    = comm "rthereqnum"        "R\\thereqnum"        Nothing
+assumpnum = comm "atheassumpnum"     "A\\theassumpnum"     Nothing
+lcnum     = comm "lcthelcnum"        "LC\\thelcnum"        Nothing
+ucnum     = comm "uctheucnum"        "UC\\theucnum"        Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 

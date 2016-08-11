@@ -5,11 +5,11 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Spec
 import Language.Drasil.Unicode
+import Language.Drasil.Reference
 
 import Data.List ((\\), intersperse)
 import Data.Maybe (fromJust, isNothing)
 import Data.List.Split (splitOn)
-
 
 type MPair = (ModuleChunk, Maybe Contents)
 
@@ -27,6 +27,9 @@ getMods [] = []
 getMods ((_,Nothing):mps) = getMods mps
 getMods ((_,Just m):mps)  = m:getMods mps
 
+--findMod :: ModuleChunk -> [MPair] -> Maybe Contents
+--findMod _ [] = Nothing
+--findMod mca ((mcb,m):mps) = if mca == mcb then m else findMod mca mps
 
 buildMH :: [[ModuleChunk]] -> [[Maybe ModuleChunk]]
 buildMH mcl = map (padBack (length mcl)) $ buildMH' Nothing mcl
@@ -90,3 +93,11 @@ getMISModules ((Module mc):ms) = if   null $ method mc
 convertName :: String -> Sentence
 convertName n = foldl1 (:+:) $ intersperse (Sp UScore) $
   map (S) (splitOn "_" n)
+
+
+--createLCPair :: LCChunk -> LCPair
+--createLCPair lcc = (lcc, )
+
+docOutline :: [(Section, Sentence)] -> Contents
+docOutline secDesc = Paragraph $ foldl1 (:+:) $ intersperse (S " ") $
+  map (\(sec, desc) -> (makeRef sec) :+: S " " :+: desc) secDesc

@@ -39,7 +39,7 @@ buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
   preambledefs %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% print c)
+  document (maketitle %% maketoc %% newpage %% print c)
 
 buildLPM :: LPMParams -> Document -> D
 buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
@@ -55,7 +55,8 @@ listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
 preambledefs :: D
-preambledefs = hyperConfig %% modcounter %% modnum
+preambledefs = hyperConfig %% modcounter %% modnum %% reqcounter %% reqnum
+  %% assumpcounter %% assumpnum %% lccounter %% lcnum %% uccounter %% ucnum
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D
@@ -68,6 +69,12 @@ lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List lt)               = toText $ makeList lt
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
 lo (Module n l)            = toText $ makeModule n $ spec l
+lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
+lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
+lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
+lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
+
+
 
 print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
@@ -212,6 +219,10 @@ spec HARDNL      = pure $ text $ "\\newline"
 spec (Ref t@Sect r) = sref (show t) (spec r)
 spec (Ref t@Def r) = hyperref (show t) (spec r)
 spec (Ref t@Mod r) = mref (show t) (spec r)
+spec (Ref t@Req r) = rref (show t) (spec r)
+spec (Ref t@Assump r) = aref (show t) (spec r)
+spec (Ref t@LC r) = lcref (show t) (spec r)
+spec (Ref t@UC r) = ucref (show t) (spec r)
 spec (Ref t r)   = ref (show t) (spec r)
 
 symbol_needs :: Symbol -> MathContext
@@ -337,3 +348,19 @@ makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
 makeModule :: String -> D -> D
 makeModule n l = description $ item' ((pure $ text ("\\refstepcounter{modnum}"
   ++ "\\mthemodnum")) <> label l <> (pure $ text ":")) (pure $ text n)
+
+makeReq :: D -> D -> D
+makeReq n l = description $ item' ((pure $ text ("\\refstepcounter{reqnum}"
+  ++ "\\rthereqnum")) <> label l <> (pure $ text ":")) n
+
+makeAssump :: D -> D -> D
+makeAssump n l = description $ item' ((pure $ text ("\\refstepcounter{assumpnum}"
+  ++ "\\atheassumpnum")) <> label l <> (pure $ text ":")) n
+
+makeLC :: D -> D -> D
+makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
+  ++ "\\lcthelcnum")) <> label l <> (pure $ text ":")) n
+
+makeUC :: D -> D -> D
+makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
+  ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n

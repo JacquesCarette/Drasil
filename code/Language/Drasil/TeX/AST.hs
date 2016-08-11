@@ -72,8 +72,15 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | List ListType
                | Figure Label Caption Filepath
                | Module String Label
+               | Requirement Contents Label
+               | Assumption Contents Label
+               | LikelyChange Contents Label
+               | UnlikelyChange Contents Label
                
-data ListType = Item [ItemType] | Enum [ItemType] | Simple [(Spec,ItemType)] | Desc [(Spec,ItemType)]
+data ListType = Item [ItemType]
+              | Enum [ItemType]
+              | Simple [(Spec,ItemType)]
+              | Desc [(Spec,ItemType)]
 
 data ItemType = Flat Spec
               | Nested Spec ListType

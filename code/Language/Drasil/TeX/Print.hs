@@ -26,8 +26,9 @@ genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
 
 build :: A.DocType -> Document -> D
 build (A.SRS _) doc   = buildSRS srsTeXParams doc
+build (A.MG _) doc    = buildSRS srsTeXParams doc   -- temporary
+build (A.MIS _) doc   = buildSRS srsTeXParams doc   -- temporary
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
-build (A.Code _) _    = error "Unimplemented (See PrintTeX)"
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildSRS :: SRSParams -> Document -> D
@@ -35,9 +36,10 @@ buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
          (Document t a c) =
   docclass sb b1 %%
   listpackages ps %%
+  preambledefs %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% print c)
+  document (maketitle %% maketoc %% newpage %% print c)
 
 buildLPM :: LPMParams -> Document -> D
 buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
@@ -52,6 +54,10 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
 listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
+preambledefs :: D
+preambledefs = hyperConfig %% modcounter %% modnum %% reqcounter %% reqnum
+  %% assumpcounter %% assumpnum %% lccounter %% lcnum %% uccounter %% ucnum
+
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D
 lo (Section d t con l)     = sec d (spec t) %% label (spec l) %% print con
@@ -62,12 +68,18 @@ lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List lt)               = toText $ makeList lt
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
+lo (Module n l)            = toText $ makeModule n $ spec l
+lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
+lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
+lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
+lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
+
+
 
 print :: [LayoutObj] -> D
 print l = foldr ($+$) empty $ map lo l
 
 ------------------ Symbol ----------------------------
-
 symbol :: Symbol -> String
 symbol (Atomic s)  = s
 symbol (Special s) = unPL $ special s
@@ -152,8 +164,14 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
   pure (text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)))
-  %% makeRows lls %% (if bool then caption t else empty) %%
-  label r %% (pure $ text ("\\end{" ++ lt ++ "}"))
+  %% (pure (text "\\toprule"))
+  %% makeRows [head lls]
+  %% (pure (text "\\midrule"))
+  %% makeRows (tail lls)
+  %% (pure (text "\\bottomrule"))
+  %% (if bool then caption t else empty)
+  %% label r
+  %% (pure $ text ("\\end{" ++ lt ++ "}"))
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
         lt = "longtable" ++ (if not bool then "*" else "")
@@ -200,6 +218,11 @@ spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
 spec (Ref t@Sect r) = sref (show t) (spec r)
 spec (Ref t@Def r) = hyperref (show t) (spec r)
+spec (Ref t@Mod r) = mref (show t) (spec r)
+spec (Ref t@Req r) = rref (show t) (spec r)
+spec (Ref t@Assump r) = aref (show t) (spec r)
+spec (Ref t@LC r) = lcref (show t) (spec r)
+spec (Ref t@UC r) = ucref (show t) (spec r)
 spec (Ref t r)   = ref (show t) (spec r)
 
 symbol_needs :: Symbol -> MathContext
@@ -271,6 +294,7 @@ makeEquation contents = equation (toMath $ spec contents)
 
 makeList :: ListType -> D
 makeList (Simple items) = itemize   $ vcat (sim_item items)
+makeList (Desc items)   = description $ vcat (sim_item items)
 makeList (Item items)   = itemize   $ vcat (map p_item items)
 makeList (Enum items)   = enumerate $ vcat (map p_item items)
 
@@ -280,7 +304,7 @@ p_item (Nested t s) = vcat [item (spec t), makeList s]
 
 sim_item :: [(Spec,ItemType)] -> [D]
 sim_item [] = [empty]
-sim_item ((x,y):zs) = item' (spec x) (sp_item y) : sim_item zs
+sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
     where sp_item (Flat s) = spec s
           sp_item (Nested t s) = vcat [spec t, makeList s]
 
@@ -315,3 +339,28 @@ makeBounds (Nothing,Nothing) = ""
 makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
 makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
 makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
+
+
+-----------------------------------------------------------------
+------------------ MODULE PRINTING----------------------------
+-----------------------------------------------------------------
+
+makeModule :: String -> D -> D
+makeModule n l = description $ item' ((pure $ text ("\\refstepcounter{modnum}"
+  ++ "\\mthemodnum")) <> label l <> (pure $ text ":")) (pure $ text n)
+
+makeReq :: D -> D -> D
+makeReq n l = description $ item' ((pure $ text ("\\refstepcounter{reqnum}"
+  ++ "\\rthereqnum")) <> label l <> (pure $ text ":")) n
+
+makeAssump :: D -> D -> D
+makeAssump n l = description $ item' ((pure $ text ("\\refstepcounter{assumpnum}"
+  ++ "\\atheassumpnum")) <> label l <> (pure $ text ":")) n
+
+makeLC :: D -> D -> D
+makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
+  ++ "\\lcthelcnum")) <> label l <> (pure $ text ":")) n
+
+makeUC :: D -> D -> D
+makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
+  ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n

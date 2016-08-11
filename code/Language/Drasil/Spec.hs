@@ -43,12 +43,22 @@ data RefType = Tab
              | Fig
              | Sect
              | Def
+             | Mod
+             | Req
+             | Assump
+             | LC
+             | UC
 
 instance Show RefType where
   show Tab = "Table"
   show Fig = "Figure"
   show Sect = "Section"
   show Def = "Definition"
+  show Mod = "Module"
+  show Req = "Requirement"
+  show Assump = "Assumption"
+  show LC = "Likely Change"
+  show UC = "Unlikely Change"
   
 -- this is a horrible hack that assumes too much from sentences!
 sMap :: (String->String) -> Sentence -> Sentence

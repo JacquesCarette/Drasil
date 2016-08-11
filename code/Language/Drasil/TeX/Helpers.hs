@@ -4,7 +4,7 @@ import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 import Control.Applicative (pure)
 
-import Language.Drasil.Config (numberedSections)
+import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad
 
@@ -67,6 +67,7 @@ comm b1 b2 s1 = command0 "newcommand" <> (pure $ H.br ("\\" ++ b1) TP.<>
 renewcomm :: String -> String -> D
 renewcomm b1 b2 = pure $ text "\\renewcommand" TP.<> H.br ("\\" ++ b1) TP.<> H.br b2
 
+
 -- Useful to have empty 
 empty :: D
 empty = pure TP.empty
@@ -75,23 +76,30 @@ empty = pure TP.empty
 genSec :: Int -> D
 genSec d
   | d < 0 = error "Cannot have section with negative depth"
-  | d > 2 = error "Section depth must be from 0-2"
+  | d > 3 = error "Section depth must be from 0-2"
+  | d == 3 = pure $ H.bslash TP.<> text "paragraph"
   | otherwise = pure $ 
      H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref :: String -> D -> D
+ref, sref, hyperref, mref :: String -> D -> D
 ref t x = (pure $ text (t ++ "~\\ref")) <> br x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
 sref = if numberedSections then ref else hyperref
-
+mref _ x = (pure $ text "M\\ref") <> br x
+rref _ x = (pure $ text "R\\ref") <> br x
+aref _ x = (pure $ text "A\\ref") <> br x
+lcref _ x = (pure $ text "LC\\ref") <> br x
+ucref _ x = (pure $ text "UC\\ref") <> br x
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
 usepackage, count, includegraphics :: String -> D
 usepackage      = command "usepackage"
-count           = command "count"
+-- changed to command "newcounter" from command "count" (I assume this was
+-- what was intended?)
+count           = command "newcounter"
 includegraphics = command "includegraphics"
 
 author, caption, item, label, title :: D -> D
@@ -104,18 +112,21 @@ title           = commandD "title"
 item' :: D -> D -> D
 item' bull s = command1oD "item" (Just bull) s
 
-maketitle, newline :: D
+maketitle, maketoc, newline, newpage :: D
 maketitle = command0 "maketitle"
+maketoc = command0 "tableofcontents"
 newline = command0 "newline"
+newpage = command0 "newpage"
 
-code, itemize, enumerate, figure, center, document, equation :: D -> D
-code      = mkEnv "lstlisting"
-itemize   = mkEnv "itemize"
-enumerate = mkEnv "enumerate"
-figure    = mkEnv "figure"
-center    = mkEnv "center"
-document  = mkEnv "document"
-equation  = mkEnv "equation"
+code, itemize, enumerate, description, figure, center, document, equation :: D -> D
+code        = mkEnv "lstlisting"
+itemize     = mkEnv "itemize"
+enumerate   = mkEnv "enumerate"
+description = mkEnv "description"
+figure      = mkEnv "figure"
+center      = mkEnv "center"
+document    = mkEnv "document"
+equation    = mkEnv "equation"
 
 docclass, exdoc :: Maybe String -> String -> D
 docclass = command1o "documentclass"
@@ -130,19 +141,35 @@ superscript a b = a <> (pure $ H.hat) <> br b
 
 -- Macro / Command def'n --
 --TeX--
-srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS :: D
+srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
+ , modcounter, modnum, reqcounter, reqnum, assumpcounter, assumpnum
+ , lccounter, lcnum, uccounter, ucnum :: D
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
 counter = count "datadefnum"
+modcounter = count "modnum"
+reqcounter = count "reqnum"
+assumpcounter = count "assumpnum"
+lccounter = count "lcnum"
+uccounter = count "ucnum"
 
 bullet  = comm "blt"             "- "                Nothing
-ddefnum = comm "ddthedatadefnum" "DD\\thedatadefnum" Nothing
-ddref   = comm "ddref"           "DD\\ref{#1}"       (Just "1")
+ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
+ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
 colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
+
+modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
+reqnum    = comm "rthereqnum"        "R\\thereqnum"        Nothing
+assumpnum = comm "atheassumpnum"     "A\\theassumpnum"     Nothing
+lcnum     = comm "lcthelcnum"        "LC\\thelcnum"        Nothing
+ucnum     = comm "uctheucnum"        "UC\\theucnum"        Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 
 fraction :: D -> D -> D
 fraction n d = command0 "frac" <> br n <> br d
+
+hyperConfig :: D
+hyperConfig = command "hypersetup" hyperSettings

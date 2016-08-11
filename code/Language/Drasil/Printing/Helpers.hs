@@ -5,29 +5,39 @@ import Text.PrettyPrint
 import Data.Char
 
 --basic docs
-bslash,dbs,eq,dlr,ast,pls,hat,slash,hyph,unders :: Doc
+bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc
 bslash = text "\\"
-dbs    = bslash <> bslash
-eq     = text "="
+dbs    = text "\\\\"
+assign = text "="
+eq     = text "=="
+lt     = text "<"
+gt     = text ">"
+leq    = text "<="
+geq    = text ">="
 dlr    = text "$"
 ast    = text "*"
 pls    = text "+"
 hat    = text "^"
 slash  = text "/"
 hyph   = text "-"
+tab    = text "\t"
 unders = text "_"
 
 sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
+indent :: Doc -> Doc
+indent = nest 4
+
 --basic plaintext manipulation
-paren,brace,dollar,quotes,sqbrac :: String -> String
+paren,brace,dollar,quotes,sqbrac,angbrac :: String -> String
 paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"
 quotes = \x -> "\"" ++ x ++ "\""
 sqbrac = \x -> "[" ++ x ++ "]"
+angbrac = \x -> "<" ++ x ++ ">"
 
 --capitalize
 capitalize :: String -> String

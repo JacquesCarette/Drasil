@@ -73,10 +73,12 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Definition DType [(String,LayoutObj)] Label
                | List ListType
                | Figure Label Caption Filepath
+               | Module String Label
                -- | Span Tags Contents
                
 data ListType = Ordered [ItemType] | Unordered [ItemType]
               | Simple [(Title,ItemType)]
+              | Desc [(Title,ItemType)]
 
 data ItemType = Flat Spec | Nested Spec ListType
 

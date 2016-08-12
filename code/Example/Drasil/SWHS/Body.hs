@@ -12,6 +12,8 @@ import Example.Drasil.SWHS.TModel2
 import Example.Drasil.SWHS.TModel3
 import Example.Drasil.SWHS.DataDefs
 import Example.Drasil.SWHS.Units
+import Example.Drasil.SWHS.Modules
+import Example.Drasil.SWHS.Changes
 
 import Example.Drasil.Units
 import Example.Drasil.SWHS.TableOfSymbols
@@ -50,6 +52,13 @@ swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
 --It is sometimes hard to remember to add new sections both here and above.
 
 -- Beginning of title could be automated
+
+(mgBod, _) = makeDD lcs ucs modules
+
+swhs_mg :: Document
+swhs_mg = Document (S "Module Guide for Solar Water Heating Systems " :+:
+          S "Incorporating Phase Change Material") (S "Thulasi Jegatheesan," :+:
+          S " Brooks MacLachlan, and Spencer Smith") (mgBod)
 
 s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
      Sub s1_3]

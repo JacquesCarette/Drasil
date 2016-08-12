@@ -63,7 +63,8 @@ mgIntro docDesc =
         S "decompose the software into modules.  We advocate a " :+:
         S "decomposition based on the principle of information hiding. " :+:
         S "This principle supports design for change, because the " :+:
-        S "``secrets'' that each module hides represent likely future " :+:
+        Quote (S "secrets") :+:
+        S " that each module hides represent likely future " :+:
         S "changes.  Design for change is valuable in SC, where " :+:
         S "modifications are frequent, especially during initial " :+:
         S "development as the solution space is explored." ,
@@ -190,8 +191,9 @@ mgModuleDecompIntro mcs =
        (x ^. name) ++ ", this means that the module is provided by the ")
        :+: (x ^. descr) :+: S ". ") ccs
   in Paragraph $
-    S "Modules are decomposed according to the principle of \"information " :+:
-    S "hiding\" proposed by Parnas. The Secrets field in a module " :+:
+    S "Modules are decomposed according to the principle of " :+:
+    Quote (S "information hiding") :+:
+    S " proposed by Parnas. The Secrets field in a module " :+:
     S "decomposition is a brief statement of the design decision hidden by " :+:
     S "the module. The Services field specifies what the module will do " :+:
     S "without documenting how to do it. For each module, a suggestion for " :+:

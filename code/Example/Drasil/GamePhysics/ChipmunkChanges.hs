@@ -27,7 +27,7 @@ lc2 = LCChunk (CC "rigid body"
 lc3 = LCChunk (CC "shape"
     (S "The data structure of the surface properties of an object such as " :+:
     S "the object's friction and elasticity."))
-    [mod_shape]
+    [mod_shape, mod_circle, mod_segment, mod_poly]
 
 lc4 = LCChunk (CC "space"
     (S "How all the rigid bodies and shapes interact together."))

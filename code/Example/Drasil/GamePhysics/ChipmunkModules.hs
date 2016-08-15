@@ -4,20 +4,20 @@ import Language.Drasil
 import Example.Drasil.GamePhysics.ChipmunkConcepts
 
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_space, mod_arbiter,
-    mod_control, mod_sw, mod_vector, mod_bb, mod_trans, mod_spatial, mod_coll,
-    mod_seq, mod_linked, mod_assoc]
+modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
+    mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, mod_vector, mod_bb,
+    mod_trans, mod_spatial, mod_coll, mod_seq, mod_linked, mod_assoc]
 
 -- M1: Hardware Hiding Module --
 
-mod_hw_desc :: ConceptChunk
-mod_hw_desc = CC "hardware hiding"
+mod_hw_serv :: ConceptChunk
+mod_hw_serv = CC "hardware hiding"
     (S "Serves as a virtual hardware used by the rest of the system. This " :+:
     S "module provides the interface between the hardware and the software." :+:
     S " So, the system can use it to display outputs or to accept inputs.")
 
 mod_hw :: ModuleChunk
-mod_hw = makeImpModule mod_hw_desc
+mod_hw = makeImpModule mod_hw_serv
     (S "The data structure and algorithm used to implement the virtual " :+:
     S "hardware.")
     os
@@ -26,8 +26,8 @@ mod_hw = makeImpModule mod_hw_desc
 
 -- Behaviour Hiding Module --
 
-mod_behav_desc :: ConceptChunk
-mod_behav_desc = CC "behaviour hiding"
+mod_behav_serv :: ConceptChunk
+mod_behav_serv = CC "behaviour hiding"
     (S "Includes programs that provide externally visible behavior of " :+:
     S "the system as specified in the software requirements specification " :+:
     S "(SRS) documents. This module serves as a communication layer " :+:
@@ -36,20 +36,20 @@ mod_behav_desc = CC "behaviour hiding"
     S "are changes in the SRS.")
 
 mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule mod_behav_desc
+mod_behav = makeUnimpModule mod_behav_serv
     (S "The contents of the required behaviors.")
     Nothing
 
 -- M2: Rigid Body Module --
 
-mod_body_desc :: ConceptChunk
-mod_body_desc = CC "rigid body"
+mod_body_serv :: ConceptChunk
+mod_body_serv = CC "rigid body"
     (S "Stores the physical properties of an object, such as mass, " :+:
     S "position, rotation, velocity, etc, and provides operations on rigid " :+:
     S "bodies, such as setting the mass and velocity of the body.")
 
 mod_body :: ModuleChunk
-mod_body = makeImpModule mod_body_desc
+mod_body = makeImpModule mod_body_serv
     (S "The data structure of a rigid body.")
     chipmunk
     []
@@ -57,55 +57,89 @@ mod_body = makeImpModule mod_body_desc
 
 -- M3: Shape Module --
 
-mod_shape_desc :: ConceptChunk
-mod_shape_desc = CC "shape"
+mod_shape_serv :: ConceptChunk
+mod_shape_serv = CC "shape"
     (S "Stores the surface properties of an object, such as friction or " :+:
     S "elasticity, and provides operations on shapes, such as setting its " :+:
     S "friction or elasticity.")
 
 mod_shape :: ModuleChunk
-mod_shape = makeImpModule mod_shape_desc
+mod_shape = makeImpModule mod_shape_serv
     (S "The data structure of a collision shape. Children: Circle Module, " :+:
     S "Segment Module, Polygon Module.")
     chipmunk
     []
     (Just mod_behav)
 
--- M4: Space Module --
+-- M4, M5, M6: Circle, Segment, Polygon Modules (M3 submodules) --
 
-mod_space_desc :: ConceptChunk
-mod_space_desc = CC "space"
+mod_circle_serv, mod_segment_serv, mod_poly_serv :: ConceptChunk
+mod_circle_serv = CC "circle"
+    (S "Provides operations on circles such as initializing a new circle, " :+:
+    S "calculating moment and area, etc.")
+mod_segment_serv = CC "segment"
+    (S "Provides operations on segments such as initializing a new " :+:
+    S "segment, calculating moment and area, etc.")
+mod_poly_serv = CC "poly"
+    (S "Provides operations on polygons such as initializing a new " :+:
+    S "polygon, calculating moment, area and centroid, etc.")
+
+mod_circle :: ModuleChunk
+mod_circle = makeImpModule mod_circle_serv
+    (S "The data structure for a circle shape.")
+    chipmunk
+    []
+    (Just mod_shape)
+
+mod_segment :: ModuleChunk
+mod_segment = makeImpModule mod_segment_serv
+    (S "The data structure for a segment shape.")
+    chipmunk
+    []
+    (Just mod_shape)
+
+mod_poly :: ModuleChunk
+mod_poly = makeImpModule mod_poly_serv
+    (S "The data structure for a polygon shape.")
+    chipmunk
+    []
+    (Just mod_shape)
+
+-- M7: Space Module --
+
+mod_space_serv :: ConceptChunk
+mod_space_serv = CC "space"
     (S "Controls how all the rigid bodies and shapes interact together.")
 
 mod_space :: ModuleChunk
-mod_space = makeImpModule mod_space_desc
+mod_space = makeImpModule mod_space_serv
     (S "The container for simulating objects.")
     chipmunk
     []
     (Just mod_behav)
 
--- M5: Arbiter Module --
+-- M8: Arbiter Module --
 
-mod_arbiter_desc :: ConceptChunk
-mod_arbiter_desc = CC "arbiter"
+mod_arbiter_serv :: ConceptChunk
+mod_arbiter_serv = CC "arbiter"
     (S "Stores all collision data, such as which bodies collided and " :+:
     S "their masses.")
 
 mod_arbiter :: ModuleChunk
-mod_arbiter = makeImpModule mod_arbiter_desc
+mod_arbiter = makeImpModule mod_arbiter_serv
     (S "The data structure containing collision information.")
     chipmunk
     []
     (Just mod_behav)
 
--- M6: Control Module --
+-- M9: Control Module --
 
-mod_control_desc :: ConceptChunk
-mod_control_desc = CC "control"
+mod_control_serv :: ConceptChunk
+mod_control_serv = CC "control"
     (S "Provides the main program.")
 
 mod_control :: ModuleChunk
-mod_control = makeImpModule mod_control_desc
+mod_control = makeImpModule mod_control_serv
     (S "The internal data types and algorithms for coordinating the " :+:
     S "running of the program.")
     chipmunk
@@ -114,126 +148,126 @@ mod_control = makeImpModule mod_control_desc
 
 -- Software Decision Module --
 
-mod_sw_desc :: ConceptChunk
-mod_sw_desc = CC "software decision"
+mod_sw_serv :: ConceptChunk
+mod_sw_serv = CC "software decision"
     (S "Includes data structures and algorithms used in the system that " :+:
     S "do not provide direct interaction with the user.")
 
 mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule mod_sw_desc
+mod_sw = makeUnimpModule mod_sw_serv
     (S "The design decision based on mathematical theorems, physical facts" :+:
     S ", or programming considerations. The secrets of this module are " :+:
     S "not described in the SRS.")
     Nothing
 
--- M7: Vector Module --
+-- M10: Vector Module --
 
-mod_vector_desc :: ConceptChunk
-mod_vector_desc = CC "vector"
+mod_vector_serv :: ConceptChunk
+mod_vector_serv = CC "vector"
     (S "Provides vector operations such as addition, scalar and vector " :+:
     S "multiplication, dot and cross products, rotations, etc.")
 
 mod_vector :: ModuleChunk
-mod_vector = makeImpModule mod_vector_desc
+mod_vector = makeImpModule mod_vector_serv
     (S "The data structure representing vectors.")
     chipmunk
     []
     (Just mod_sw)
 
--- M8: Bounding Box Module --
+-- M11: Bounding Box Module --
 
-mod_bb_desc :: ConceptChunk
-mod_bb_desc = CC "bounding box"
+mod_bb_serv :: ConceptChunk
+mod_bb_serv = CC "bounding box"
     (S "Provides constructors for bounding boxes and operations such as " :+:
     S "merging boxes, calculating their centroids and areas, etc.")
 
 mod_bb :: ModuleChunk
-mod_bb = makeImpModule mod_bb_desc
+mod_bb = makeImpModule mod_bb_serv
     (S "The data structure for representing axis-aligned bounding boxes.")
     chipmunk
     []
     (Just mod_sw)
 
--- M9: Transform Matrix Module --
+-- M12: Transform Matrix Module --
 
-mod_trans_desc :: ConceptChunk
-mod_trans_desc = CC "transform matrix"
+mod_trans_serv :: ConceptChunk
+mod_trans_serv = CC "transform matrix"
     (S "Provides constructors for affine transformation matrices, matrix " :+:
     S "operations such as inverse, transpose, multiplications, and " :+:
     S "operations for applying transformations to vectors and bounding boxes.")
 
 mod_trans :: ModuleChunk
-mod_trans = makeImpModule mod_trans_desc
+mod_trans = makeImpModule mod_trans_serv
     (S "The data structure representing transformation matrices.")
     chipmunk
     []
     (Just mod_sw)
 
--- M10: Spatial Index Module --
+-- M13: Spatial Index Module --
 
-mod_spatial_desc :: ConceptChunk
-mod_spatial_desc = CC "spatial index"
+mod_spatial_serv :: ConceptChunk
+mod_spatial_serv = CC "spatial index"
     (S "Provides spatial indexing operations and tracks the positions of " :+:
     S "bodies in the simulation space.")
 
 mod_spatial :: ModuleChunk
-mod_spatial = makeImpModule mod_spatial_desc
+mod_spatial = makeImpModule mod_spatial_serv
     (S "The data structures and algorithms for detecting collisions.")
     chipmunk
     []
     (Just mod_sw)
 
--- M11: Collision Solver Module --
+-- M14: Collision Solver Module --
 
-mod_coll_desc :: ConceptChunk
-mod_coll_desc = CC "collision solver"
+mod_coll_serv :: ConceptChunk
+mod_coll_serv = CC "collision solver"
     (S "Fast collision filtering, primitive shape-to-shape collision " :+:
     S "detection.")
 
 mod_coll :: ModuleChunk
-mod_coll = makeImpModule mod_coll_desc
+mod_coll = makeImpModule mod_coll_serv
     (S "The data structures and algorithms for detecting collisions.")
     chipmunk
     []
     (Just mod_sw)
 
--- M12: Sequence Data Structure Module --
+-- M15: Sequence Data Structure Module --
 
-mod_seq_desc :: ConceptChunk
-mod_seq_desc = CC "sequence data structure"
+mod_seq_serv :: ConceptChunk
+mod_seq_serv = CC "sequence data structure"
     (S "Provides array manipulation operations, such as building an array " :+:
     S ", accessing a specific entry, slicing an array, etc.")
 
 mod_seq :: ModuleChunk
-mod_seq = makeImpModule mod_seq_desc
+mod_seq = makeImpModule mod_seq_serv
     (S "The data structure for a sequence data type.")
     chipmunk
     []
     (Just mod_sw)
 
--- M13: Linked Data Structure Module --
+-- M16: Linked Data Structure Module --
 
-mod_linked_desc :: ConceptChunk
-mod_linked_desc = CC "linked data structure"
+mod_linked_serv :: ConceptChunk
+mod_linked_serv = CC "linked data structure"
     (S "Provides tree manipulation operations, such as building a tree, " :+:
     S "accessing a specific entry, etc.")
 
 mod_linked :: ModuleChunk
-mod_linked = makeImpModule mod_linked_desc
+mod_linked = makeImpModule mod_linked_serv
     (S "The data structure for a linked data type.")
     chipmunk
     []
     (Just mod_sw)
 
--- M14: Associative Data Structure Module --
+-- M17: Associative Data Structure Module --
 
-mod_assoc_desc :: ConceptChunk
-mod_assoc_desc = CC "associative data structure"
+mod_assoc_serv :: ConceptChunk
+mod_assoc_serv = CC "associative data structure"
     (S "Provides operations on hash tables, such as building a hash table, " :+:
     S "accessing a specific entry, etc.")
 
 mod_assoc :: ModuleChunk
-mod_assoc = makeImpModule mod_assoc_desc
+mod_assoc = makeImpModule mod_assoc_serv
     (S "The data structure for an associative data type.")
     chipmunk
     []

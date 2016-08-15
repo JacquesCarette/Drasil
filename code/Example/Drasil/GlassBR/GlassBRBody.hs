@@ -12,6 +12,9 @@ import Example.Drasil.GlassBR.GlassBRExample
 import Example.Drasil.Units
 import Example.Drasil.GlassBR.TableOfSymbols
 
+import Example.Drasil.GlassBR.GlassBRChanges
+import Example.Drasil.GlassBR.GlassBRModules
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
@@ -36,6 +39,13 @@ glassBR_srs :: Document
 glassBR_srs = Document ((softwareRS ^. descr) :+: S " for " :+: 
   (gLassBR ^. descr)) (S "Nikitha Krithnan and Spencer Smith") 
   [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
+
+(mgBod, _) = makeDD lcs ucs modules
+
+glassBR_mg :: Document
+glassBR_mg = Document (S "Module Guide for " :+: (gLassBR ^. descr))
+         (S "Spencer Smith and Thulasi Jegatheesan") (mgBod)
+
 
 s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
   Sub s1_3]

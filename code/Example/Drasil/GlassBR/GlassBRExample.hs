@@ -2,8 +2,8 @@
 {-# LANGUAGE FlexibleContexts #-} 
 module Example.Drasil.GlassBR.GlassBRExample where
 
-import Example.Drasil.GlassBR.GlassBRSIUnits
 import Example.Drasil.GlassBR.GlassBRUnits
+import Example.Drasil.GlassBR.GlassBRSIUnits
 
 import Language.Drasil
 

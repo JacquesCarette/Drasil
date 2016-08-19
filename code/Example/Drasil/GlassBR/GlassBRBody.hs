@@ -5,11 +5,11 @@ import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.SI_Units
 import Language.Drasil.Unit
 
 import Example.Drasil.GlassBR.GlassBRExample
 import Example.Drasil.Units
+import Example.Drasil.GlassBR.GlassBRSIUnits
 import Example.Drasil.GlassBR.TableOfSymbols
 
 import Example.Drasil.GlassBR.GlassBRChanges

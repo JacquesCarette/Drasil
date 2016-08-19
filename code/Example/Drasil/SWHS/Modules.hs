@@ -157,8 +157,8 @@ mod_ode_desc = CC "ODE solver" (S "Provides solvers that take the governing " :+
 
 mod_ode :: ModuleChunk
 mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: S (ordDiffEq ^. name) :+: S "s.") matlab [] []
-          (Just mod_sw)
+          S " first order " :+: S (ordDiffEq ^. name) :+: S "s.") matlab [] 
+          [mod_seq] (Just mod_sw)
 
 -- Plotting Module
 mod_plot_desc :: ConceptChunk
@@ -166,5 +166,5 @@ mod_plot_desc = CC "plotting" (S "Provides a plot function.")
 
 mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:
-           S "algorithms for plotting data graphically.") matlab [] [] 
+           S "algorithms for plotting data graphically.") matlab [] [mod_seq] 
            (Just mod_sw)

@@ -9,6 +9,7 @@ import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
@@ -73,7 +74,7 @@ spec (G g)     = T.G g
 spec (Sp s)    = T.Sp s
 spec (F f s)   = spec $ accent f s
 spec (P s)     = T.N s
-spec (Ref t r)   = T.Ref t (spec r)
+spec (Ref t r) = T.Ref t (spec r)
 spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
 
 decorate :: Decoration -> Sentence -> Sentence
@@ -101,22 +102,30 @@ sec x@(Section depth title contents) =
 
 lay :: Contents -> T.LayoutObj
 lay x@(Table hdr lls t b) 
-  | length hdr == length (head lls) = T.Table ((map spec hdr) : 
+  | null lls || length hdr == length (head lls) = T.Table ((map spec hdr) :
       (map (map spec) lls)) (spec (refName x)) b (spec t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
-lay (Paragraph c)     = T.Paragraph (spec c)
-lay (EqnBlock c)      = T.EqnBlock (T.E (expr c))
-lay (CodeBlock c)     = T.CodeBlock c
-lay x@(Definition c)  = T.Definition (makePairs c) (spec $ refName x)
-lay (Enumeration cs)  = T.List $ makeL cs
-lay x@(Figure c f)    = T.Figure (spec (refName x)) (spec c) f
+lay (Paragraph c)         = T.Paragraph (spec c)
+lay (EqnBlock c)          = T.EqnBlock (T.E (expr c))
+lay (CodeBlock c)         = T.CodeBlock c
+lay x@(Definition c)      = T.Definition (makePairs c) (spec $ refName x)
+lay (Enumeration cs)      = T.List $ makeL cs
+lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
+lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
+lay x@(Requirement r)     = T.Requirement (spec (r ^. descr)) (spec $ refName x)
+lay x@(Assumption a)      = T.Assumption (spec (a ^. descr)) (spec $ refName x)
+lay x@(LikelyChange lc)   = T.LikelyChange (spec (lc ^. descr))
+  (spec $ refName x)
+lay x@(UnlikelyChange uc) = T.UnlikelyChange (spec (uc ^. descr))
+  (spec $ refName x)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs) = T.Enum $ (map item bs)
 makeL (Number ns) = T.Item $ (map item ns)
 makeL (Simple ps) = T.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Desc ps)   = T.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
 
 item :: ItemType -> T.ItemType
 item (Flat i) = T.Flat (spec i)
@@ -156,3 +165,5 @@ descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
                       (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
+
+

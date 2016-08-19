@@ -139,7 +139,7 @@ assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,
   physSysDescr,requirement,softwareRS,sSA,theoreticMod :: ConceptChunk
   
 assumption    = makeCC "A" "Assumption"
-dataDefn      = makeCC "DD" "Data Definition"
+dataDefn      = makeCC "MG" "Data Definition"
 genDefn       = makeCC "GD" "General Definition"
 goalStmt      = makeCC "GS"  "Goal Statement"
 instanceMod   = makeCC "IM" "Instance Model"

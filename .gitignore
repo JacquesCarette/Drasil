@@ -15,3 +15,5 @@ cabal.config
 *.bbl
 /Physics Engine Families/Papers
 Main
+.idea
+*.iml

@@ -27,13 +27,13 @@ srs           = makeCC "SRS" "Software Requirements Specification"
 theoMod       = makeCC "T" "Theoretical Model"
 twoD          = makeCC "2D" "Two-Dimensional"
 
------ General concepts -----
+----- Physics concepts -----
 
 chipmunk, physLib, rigidBody, rigidBodies, velocity, vels, angularVel,
     angularVels, fric, elast, coll, space, ctrOfMass, cartesian,
     rightHand :: ConceptChunk
 
-chipmunk    = makeCC "Chipmunk2D" "The name of this game physics library."
+chipmunk    = makeCC "Chipmunk2D" "Chipmunk2D game physics library"
 physLib     = makeCC "physics library" ("A programming library which " ++
     "provides functions for modelling physical phenomenon.")
 rigidBody   = makeCC "rigid body" ("A solid body in which deformation is " ++
@@ -62,3 +62,10 @@ rigidBodies = makeCC "rigid bodies" ("A solid body in which deformation is " ++
 vels        = makeCC "velocities" "The rate of change of a body's position."
 angularVels = makeCC "angular velocities" ("The rate of change of a body's " ++
     "orientation.")
+
+-- Computer concepts --
+
+os, c :: ConceptChunk
+
+os = makeCC "OS" "Operating system"
+c = makeCC "C" "C programming language"

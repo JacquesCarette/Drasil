@@ -2,12 +2,21 @@ module Language.Drasil.CCode.AST where
 
 type Variable = String
 
-data Code = C [Method]
+data Code = C [Header] [VarDecl] [Method]
+          | H Name [MethodDecl]
+
 type Method = (MethodDecl, [Statement])
 
-data MethodDecl = MethodDecl Type Name [ArgsDecl]
+data Header = Library HeaderName
+            | Local HeaderName
 
-data ArgsDecl = ArgsDecl Type Variable
+type HeaderName = String
+
+data VarDecl = VarDecl Type Variable
+
+data MethodDecl = MethodDecl Type Name [VarDecl]
+
+--data ArgsDecl = ArgsDecl Type Variable
 
 type Name = String
 
@@ -16,8 +25,13 @@ data Type = IntType
           | StrType
           | PtrType Type
           | DblType
-          
-data Statement = Return CodeExpr --Currently the only necessary statement type.
+
+data Statement = Declare Type Variable (Maybe CodeExpr)
+               | Assign Variable CodeExpr
+               | If CodeExpr [Statement] (Maybe [Statement])
+               | Print String
+               | MethodCall Method [CodeExpr]
+               | Return CodeExpr
 
 data CodeExpr =  Var Variable
               | Int Integer
@@ -27,6 +41,11 @@ data CodeExpr =  Var Variable
               | Add CodeExpr CodeExpr
               | Div CodeExpr CodeExpr
               | Sub CodeExpr CodeExpr
+              | Leq CodeExpr CodeExpr
+              | Lt CodeExpr CodeExpr
+              | Geq CodeExpr CodeExpr
+              | Gt CodeExpr CodeExpr
+              | Eq CodeExpr CodeExpr
               
 data CodeType = Calc
 data Lang = CLang

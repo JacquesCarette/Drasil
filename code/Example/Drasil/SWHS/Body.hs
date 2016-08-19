@@ -12,9 +12,11 @@ import Example.Drasil.SWHS.TModel2
 import Example.Drasil.SWHS.TModel3
 import Example.Drasil.SWHS.DataDefs
 import Example.Drasil.SWHS.Units
+import Example.Drasil.SWHS.Modules
+import Example.Drasil.SWHS.Changes
 
 import Example.Drasil.Units
-import Example.Drasil.TableOfSymbols
+import Example.Drasil.SWHS.TableOfSymbols
 
 import Language.Drasil
 import Language.Drasil.SI_Units 
@@ -30,12 +32,12 @@ s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s1_intro, s1_3_table,
+s1_intro, s1_2_intro, s1_2_table, s1_3_table,
   s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_intro, 
-  table1, s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1, s7_table2,
+  s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1, s7_table2,
   s7_table3, s7_fig1, s7_fig2 :: Contents
   
 s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, 
@@ -47,30 +49,51 @@ swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
            (S "Thulasi Jegatheesan, Brooks MacLachlan, and Spencer Smith")
            [s1, s2, s3, s4, s5, s6, s7]
 
---It is sometimes hard to remember to add new sections both here and above.
+-- It is sometimes hard to remember to add new sections both here and above.
 
--- Beginning of title could be automated
+-- Title could be automated as long as program name is abstracted out
+
+-- Authors could be abstracted out (specifically, Spencer is an author for 
+-- multiple examples)
+
+(mgBod, _) = makeDD lcs ucs modules
+
+swhs_mg :: Document
+swhs_mg = Document (S "Module Guide for Solar Water Heating Systems " :+:
+          S "Incorporating Phase Change Material") (S "Thulasi Jegatheesan," :+:
+          S " Brooks MacLachlan, and Spencer Smith") (mgBod)
+
+-- Again, with program name abstracted out this title could be automated.
+
+-- As above, potentially abstract out author names.
 
 s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
      Sub s1_3]
 
 s1_intro = Paragraph (S "This section records information for easy reference.")
 
+-- This is the same between all examples (could be automated)
+
 s1_1 = table_of_units this_si
   
 -- Is it possible to make tables look nicer? I.e. \hline
 
-s1_2 = table_of_symbols swhsSymbols
+s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
 
---s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
-             --S " symbols used in this document along with their units" :+:
-             --S ". The choice of symbols was made to be consistent" :+:
-             --S " with the " :+: (heat_trans ^. descr) :+: S " literature " :+:
-             --S "and with existing documentation for " :+: (sMap (map toLower)
-             --(progName ^. descr)) :+: S "s. The symbols are listed in " :+:
-             --S "alphabetical order.")
+s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
+             S " symbols used in this document along with their units" :+:
+             S ". The choice of symbols was made to be consistent" :+:
+             S " with the " :+: (heat_trans ^. descr) :+: S " literature " :+:
+             S "and with existing documentation for " :+: (sMap (map toLower)
+             (progName ^. descr)) :+: S "s. The symbols are listed in " :+:
+             S "alphabetical order.")
 
--- "heat transfer" is specific.
+-- "heat transfer" and program name are specific, but otherwise this paragraph 
+-- is general. If it were to be automated, there is a sentence in the game 
+-- physics example about how symbols for vectors are bold, which would be 
+-- useful to include in the automated paragraph.
+
+s1_2_table = table swhsSymbols
   
 s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
 
@@ -79,6 +102,8 @@ s1_3_table = Table [S "Symbol", S "Description"] (mkTable
    (\ch -> ch ^. descr)
    ] acronyms)
    (S "Abbrevations and Acronyms") False
+   
+-- This section name and table structure are same between all examples.
    
 s2 = Section 0 (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2, 
      Sub s2_3])
@@ -110,7 +135,10 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
 -- ConceptChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
 -- accomodate all this?
--- The first part of this paragraph is specific.
+
+-- The second paragraph is general except for program name, and there is a 
+-- similar paragraph in each of the other examples. It can probably be 
+-- abstracted out.
 
 s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_contents)
 
@@ -145,7 +173,9 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
                 S "to present the documentation is still to " :+:
                 Quote (S "fake") :+: S " a rational design process.")]
 
--- This paragraph is mostly general			
+-- Besides program name, these two paragraphs are general, mostly repeated 
+-- between examples, and can be abstracted out.
+
 --How to italicize words in sentence?
 --How to cite?
 
@@ -165,10 +195,17 @@ s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
                 (sMap (map toLower) (S (water ^. name))) :+: S " and " :+:
                 S (phsChgMtrl ^. name) :+: S ".")
 
--- Lots of specific concepts in this paragraph that can likely be captured.
----- Heating tank, temperature and energy
+-- There is a similar paragraph in each example, but there's a lot of specific 
+-- info here. Would need to abstract out the object of analysis (i.e. solar 
+-- water heating tank incorporating PCM, 2D slope composed of homogeneous soil 
+-- layers, glass slab and blast, or 2D bodies acted on by forces) and also 
+-- abstract out the overall goal of the program (i.e. predict the temperature 
+-- and energy histories for the water and PCM, simulate how 2D rigid bodies 
+-- interact with each other, predict whether the glass slab is safe to use or 
+-- not, etc.). If that is done, then this paragraph can also be abstracted out.
+
 -- The fact that "PCM" must always be capital is especially making things 
--- difficult with concept chunks involving PCM.
+-- difficult with concept chunks involving PCM (can't use map toLower).
 
 s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_contents)
 
@@ -198,6 +235,13 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" :+:
                 (inModel ^. descr)) :+: S "s (" :+: makeRef s4_2_5 :+:
                 S ") to be solved are referred to as IM1 to IM4.")]
 
+-- This paragraph is mostly general (besides program name and number of IMs), 
+-- but there are some differences between the examples that I'm not sure how to 
+-- account for. Specifically, the glass example references a Volere paper that 
+-- is not used for the other examples. Besides that, this paragraph could 
+-- probably be abstracted out with some changes (i.e. the other examples don't 
+-- include the last sentence, so we might not need to know the number of IMs 
+-- after all if we just leave that sentence out)
 
 -- The swhs_pcm reference at the end of the first paragraph would be better if 
 -- singular, but concept is plural.
@@ -217,7 +261,7 @@ s3_intro = Paragraph (S "This section provides general information about " :+:
            S " its environment, and describes the user characteristics and" :+:
            S " the system constraints.")
 
--- Completely general paragraph
+-- Completely general paragraph, same between examples. Easily abstracted out.
 
 s3_1 = Section 1 (S "User Characteristics") [Con s3_1_contents]
 
@@ -225,14 +269,15 @@ s3_1_contents = Paragraph (S "The end user of " :+: S (progName ^. name) :+:
                 S " should have an understanding of undergraduate Level 1 " :+:
                 S "Calculus and Physics.")
 
--- Should "UG Level 1 Calculus" and "UG Level 1 Physics" be concepts?
+-- Some of these course names are repeated between examples, could potentially 
+-- be abstracted out.
 
 s3_2 = Section 1 (S "System Constraints") [Con s3_2_contents]
 
 s3_2_contents = Paragraph (S "There are no system constraints.")
 
--- Could be none or some. 
--- Not general in that sense, but nothing specific to SWHS.
+-- This is the same for all of our examples... but there could potentially be 
+-- system constraints in other projects so it can't be abstracted out as is...
 
 s4 = Section 0 (S "Specific System Description") [Con s4_intro, Sub s4_1, 
      Sub s4_2]
@@ -249,6 +294,9 @@ s4_intro = Paragraph (S "This section first presents the problem " :+:
            S (ordDiffEq ^. name) :+: S "s) that model the " :+: 
            S (swhs_pcm ^. name) :+: S ".")
 
+-- Completely general except for solar water heating tank (object of analysis) 
+-- and similar between all examples; can be abstracted out.
+ 
 -- The swhs_pcm reference at the end would be better if singular, but concept is
 -- plural.
 
@@ -260,6 +308,8 @@ s4_1_intro = Paragraph (S (progName ^. name) :+: S " is a computer program " :+:
              S (phsChgMtrl ^. name) :+: S " within a " :+: 
              (sMap (map toLower) (tank ^. descr)) :+: S ".")
 
+--  section is very different between all examples
+
 s4_1_1 = Section 2 (S "Terminology and Definitions") [Con s4_1_1_intro, 
          Con s4_1_1_bullets]
 
@@ -268,15 +318,17 @@ s4_1_1_intro = Paragraph (S "This subsection provides a list of terms " :+:
                S "meaning, with the purpose of reducing ambiguity and " :+:
                S "making it easier to correctly understand the requirements:")
 
--- Completely general paragraph.
+-- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
+-- GlassBR has an additional sentence with a reference at the end.)
 
 s4_1_1_bullets = Enumeration (Bullet $ map (\c -> Flat (S (c ^. name) :+:
                  S ": " :+: (c ^. descr))) [heat_flux, phase_change_material,
                  specific_heat, thermal_conduction, transient])
 
---Is this how I should be doing this BulletList?
---For now, added Concepts.hs to hold ConceptChunks.
---Included heat flux and specific heat even though they are already in SWHSUnits
+-- Structure of this list is same in all examples, probably can be automated.
+
+-- Included heat flux and specific heat in ConceptChunks even though they are 
+-- already in SWHSUnits
 
 s4_1_2 = Section 2 (physSyst ^. descr) [Con s4_1_2_intro, Con s4_1_2_list, 
          Con fig_tank]
@@ -285,7 +337,9 @@ s4_1_2_intro = Paragraph (S "The physical system of " :+: S (progName ^. name)
                :+: S ", as shown in " :+: (makeRef fig_tank) :+:
                S ", includes the following elements:")
 
--- General paragraph.
+-- Above paragraph is general except for progName and figure. However, not 
+-- every example has a physical system. Also, the SSP example is different, so 
+-- this paragraph can not be abstracted out as is.
 
 s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat
               (S (tank ^. name) :+: S " containing " :+: (sMap (map toLower) 
@@ -298,6 +352,9 @@ s4_1_2_list = Enumeration (Simple $ [(S (physSyst ^. name) :+: S "1", Flat
               S " suspended in " :+: (sMap (map toLower) (S (tank ^. name))) :+:
               S ". (" :+: P (ht_flux_P ^. symbol) :+: S " represents the " :+:
               (ht_flux_P ^. descr) :+: S ".)"))])
+
+-- Structure of list would be same between examples but content is completely 
+-- different
 
 fig_tank = Figure ((tank ^. descr) :+: S ", with " :+: (ht_flux_C ^. descr) :+:
            S " of " :+: P (ht_flux_C ^. symbol) :+: S " and " :+: 
@@ -313,6 +370,9 @@ s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. descr) :+: S ", " :+:
                S "material properties, the " :+:
                (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are:")
 
+-- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
+-- abstracted out if this paragraph were to be abstracted out.
+
 s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat 
               (S "Predict the " :+: (temp_W ^. descr) :+: S " over " :+:
               (time ^. descr) :+: S ".")),
@@ -324,9 +384,11 @@ s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat
               (S (goalStmt ^. name) :+: S "4", Flat (S "Predict the " :+:
               (pcm_E ^. descr) :+: S " over " :+: (time ^. descr) :+: S "."))])
 
---Given how frequently these sorts of lists occur, could they be semi automated?
---Would only type "goalStmt ^. name" once, and then a list of the right side 
---statements.
+-- List structure is repeated between examples. (For all of these lists I am 
+-- imagining the potential for something like what was done with the lists in 
+-- MG, where you define goals, assumptions, physical system components, etc. in 
+-- separate files, import them and pass them as arguments to some "makeSRS" 
+-- function and the rest is automated.)
 
 s4_2 = Section 1 (S "Solution Characteristics Specification") [Con s4_2_intro, 
        Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, 
@@ -341,7 +403,8 @@ s4_2_intro = Paragraph (S "The " :+: (sMap (map toLower) (inModel ^. descr)) :+:
              (sMap (map toLower) (inModel ^. descr)) :+: S "s " :+:
              S "can be verified.")
 
--- General paragraph.
+-- General besides progName, repeated in only one other example but it could be 
+-- used for all of them. So it can be abstracted out.
 
 s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro, 
          Con s4_2_1_list]
@@ -361,7 +424,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem " :+:
                name) :+: S "], in which the respective " :+:
                (sMap (map toLower) (assumption ^. descr)) :+: S " is used.") 
 
--- General paragraph
+-- General paragraph, repeated in every example. Can be abstracted out.
 
 s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat 
               (S "The only form of energy that is relevant for this problem" :+:
@@ -446,8 +509,15 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               (S (assumption ^. name) :+: S "18", Flat (S "The " :+: 
               S (phsChgMtrl ^. name) :+: S " is either in a " :+:
               (liquid ^. descr) :+: S " or a " :+: (solid ^. descr) :+:
-              S " but not a " :+: (gaseous ^. descr) :+: S " [IM2, IM4]."))])
-              
+              S " but not a " :+: (gaseous ^. descr) :+: S " [IM2, IM4].")),
+              (S (assumption ^. name) :+: S "19", Flat (S "The pressure in " :+:
+              S "the " :+: (sMap (map toLower) (S (tank ^. name))) :+:
+              S " is atmospheric, so the " :+: (temp_melt ^. descr) :+:
+              S " and " :+: (temp_boil ^. descr) :+: S " are 0" :+:
+              Sy (temp ^. unit) :+: S " and 100" :+: Sy (temp ^. unit) :+:
+              S ", respectively [IM1, IM3]."))])
+
+-- Again, list structure is same between all examples.
 
 -- Can booktabs colored links be used? The box links completely cover nearby 
 -- punctuation.
@@ -459,7 +529,8 @@ s4_2_2_intro = Paragraph (S "This section focuses on the general equations" :+:
                S " and laws that " :+: S (progName ^. name) :+: 
                S " is based on.")
 
--- General paragraph
+-- General paragraph (besides progName), repeated in all examples. Can be 
+-- abstracted out.
 
 -- Theory has to be RelationChunk....
 -- No way to include "Source" or "Ref. By" sections?
@@ -474,9 +545,11 @@ s4_2_3_intro = Paragraph (S "This section collects the laws and equations " :+:
                S "that will be used in deriving the " :+: (sMap (map toLower) 
                (dataDefn ^. descr)) :+: S "s, which in turn are used to " :+:
                S "build the " :+: (sMap (map toLower) (inModel ^. descr)) :+: 
-               S "s.")
+               S "s. (General definitions are left out because they are not" :+:
+               S " currently implemented in Drasil.)")
 
--- General paragraph
+-- General paragraph, repeated in one other example but could be included in 
+-- all. Can be abstracted out.
  
 -- s4_2_3_GDs :: [LayoutObj]
 -- s4_2_3_GDs = map Definition (map General [gd1NewtonCooling])
@@ -542,7 +615,8 @@ s4_2_4_intro = Paragraph (S "This section collects and defines all the " :+:
                S "data needed to build the " :+: (sMap (map toLower) (inModel ^.
                descr)) :+: S "s. The dimension of each quantity is also given.")
 
--- General paragraph
+-- General paragraph, repeated in most examples but would work for all. Can be 
+-- absracted out.
 
 s4_2_5 = Section 2 (inModel ^. descr :+: S "s") ((map Con s4_2_5_intro) ++ 
          (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
@@ -562,11 +636,14 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. descr) :+: S " and " :+: (pcm_E ^. descr) :+:
                S " depend on the " :+: (sMap (map toLower) (S (phs_change ^. 
-               name))) :+: S ".")]
+               name))) :+: S ". (Instance models are left out because they " :+:
+               S "are not currently implemented in Drasil.)")]
+
+-- The first paragraph is completely general and repeated in other examples. 
+-- The second paragraph is very specific, and the other examples don't even 
+-- include a paragraph analogous to this one.
 
 -- Instance Models aren't implemented yet
--- Some specific info here on the order in which IMs are solved... maybe can be 
--- captured.
 
 s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+: 
                 (sMap (map toLower) (S (water ^. name))) :+: S ":"),
@@ -714,9 +791,9 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro, Con table1]
+s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro]
 
-s4_2_6_intro = Paragraph ((makeRef table1) :+: S " show the data " :+:
+s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data " :+:
                S "constraints on the input and output variables, " :+:
                S "respectively. The column for physical constraints gives " :+: 
                S "the physical limitations on the range of values that can " :+:
@@ -729,9 +806,12 @@ s4_2_6_intro = Paragraph ((makeRef table1) :+: S " show the data " :+:
                S "uncertainty column provides an estimate of the confidence" :+:
                S " with which the physical quantities can be measured. This" :+:
                S " information would be part of the input if one were " :+:
-               S "performing an uncertainty quantification exercise.")
+               S "performing an uncertainty quantification exercise. (The " :+:
+               S "tables are left out because features they should use are " :+:
+               S "not yet implemented in Drasil.)")
 
--- Completely general paragraph.
+-- General paragraph, repeated between examples. Can be abstracted out.
+
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
@@ -743,14 +823,14 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 -- Typical values and constraints must be added to UC definitions for mkTable 
 -- to work here.
 
-table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
-         S "Typical Value", S "Uncertainty"] (mkTable
-         [\ch -> P (ch ^. symbol),
-         \ch -> Sy (ch ^. unit),
-         \ch -> Sy (ch ^. unit),
-         \ch -> Sy (ch ^. unit),
-         \ch -> Sy (ch ^. unit)] inputVar)
-         (S "Input Variables") True
+-- table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
+         -- S "Typical Value", S "Uncertainty"] (mkTable
+         -- [\ch -> P (ch ^. symbol),
+         -- \ch -> Sy (ch ^. unit),
+         -- \ch -> Sy (ch ^. unit),
+         -- \ch -> Sy (ch ^. unit),
+         -- \ch -> Sy (ch ^. unit)] inputVar)
+         -- (S "Input Variables") True
 
 -- Add constraints (and typical values) to the knowledge capture of each 
 -- variable, so that lambdas can be used to extract constraints?
@@ -782,7 +862,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                Paragraph (S "In addition, the " :+: (pcm_E ^. descr) :+: 
                S " should equal the energy input to the " :+: S (phsChgMtrl ^. 
                name) :+: S " from the " :+: (sMap (map toLower) (S (water ^.
-               name))) :+: S ". This can be expresse as"),
+               name))) :+: S ". This can be expressed as"),
                EqnBlock ((C pcm_E) := UnaryOp (Integral (Just 0, Just (C time)))
                ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
                (C temp_PCM) [C time])))),
@@ -794,9 +874,10 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                S "results calculated from the " :+: S (rightSide ^. name) :+: 
                S " of these equations should be less than 0.001% (R9).")]
 
--- Remember to insert references in above derivation when available
--- 
+-- Above section only occurs in this example (although maybe it SHOULD be in 
+-- the others).
 
+-- Remember to insert references in above derivation when available
 
 s5 = Section 0 ((requirement ^. descr) :+: S "s") [Con s5_intro, Sub s5_1, 
      Sub s5_2]
@@ -808,7 +889,7 @@ s5_intro = Paragraph (S "This section provides the functional " :+: (sMap (map
            descr)) :+:S "s, the qualities that the software is expected to " :+:
            S "exhibit.")
 
--- Completely general paragraph.
+-- General paragraph, repeated in every example. Can be abstracted out.
 
 s5_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s") 
        (map Con s5_1_list)
@@ -834,7 +915,7 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
             Enumeration (Simple [(S (requirement ^. name) :+: S "3", Flat 
             (S "Verify that the inputs satisfy the required physical" :+:
-            S " constraints shown in " :+: makeRef table1 :+: S ".")),
+            S " constraints shown in Table 1.")),
             (S (requirement ^. name) :+: S "4", Flat (S "Output the input" :+: 
             S " quantities and derived quantities in the following list: "  :+:
             S "the quantities from R1, the " :+: (mass ^. descr) :+: S "es " :+:
@@ -877,6 +958,8 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             S " " :+: P (t_final_melt ^. symbol) :+: S " (from IM2)."))])
             ]
 
+-- List structure same between all examples
+
 --How to include pi?
 --How to add exponents?
 
@@ -891,10 +974,16 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" :+:
                 descr)) :+: S "s are correctness, verifiability" :+:
                 S ", understandability, reusability, and maintainability.")
 
--- Specific info here... potentially can be captured though. Might require 
--- dropping some of the explanantion about small size, etc.
+-- The second sentence of the above paragraph is repeated in all examples (not 
+-- exactly, but the general idea is). The first sentence is not always 
+-- repeated, but it is always either stating that performance is a priority or 
+-- performance is not a priority. This is probably something that can be 
+-- abstracted out.
 
 s6 = Section 0 ((likelyChg ^. descr) :+: S "s") [Con s6_list]
+
+-- The game physics example has a short intro paragraph that can likely be 
+-- abstracted out and used for all examples.
 
 s6_list = Enumeration (Simple [(S (likelyChg ^. name) :+: S "1", Flat 
           (S "A4 - " :+: S (phsChgMtrl ^. name) :+: S " is actually a poor " :+:
@@ -919,6 +1008,8 @@ s6_list = Enumeration (Simple [(S (likelyChg ^. name) :+: S "1", Flat
           (S (likelyChg ^. name) :+: S "6", Flat (S "A15 - Any real " :+:
           (sMap (map toLower) (S (tank ^. name))) :+: S " cannot be " :+:
           S (perfect_insul ^. name) :+: S " and will lose heat."))])
+
+-- List structure same in all examples.
 
 --add referencing to assumptions?
   
@@ -948,7 +1039,10 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to " :+:
             (sMap (map toLower) (likelyChg ^. descr)) :+: S "s on the " :+:
             (assumption ^. descr) :+: S "s.")
 
--- Completely general paragraph.
+-- Completely general paragraph, and similar ones in other example, but slight 
+-- differences in what is included in each matrix. Perhaps we can abstract out 
+-- which types of items are associated with each matrix i.e. instance models, 
+-- assumptions, requirements, etc.. If so, this paragraph can be abstracted out.
 
 s7_table1 = Table [S "", makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
             makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 
@@ -1008,48 +1102,53 @@ s7_table2 = Table [S "", S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
 
 s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
             S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
-            S "A15", S "A16", S "A17", S "A18"]
+            S "A15", S "A16", S "A17", S "A18", S "A19"]
             [[makeRef s4_2_2_T1, S "X", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
+            S ""],
             [makeRef s4_2_2_T2, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_2_T3, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "GD1", S "", S "X", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "GD2", S "", S "", S "X", S "X", S "X", S "X", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_4_DD1, S "", S "", S "", S "", S "", S "", S "X",
             S "X", S "X", S "", S "", S "", S "", S "", S "", S "", S "" , 
-            S ""],
+            S "", S ""],
             [makeRef s4_2_4_DD2, S "", S "", S "X", S "X", S "", S "", S "",
-            S "", S "", S "X", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "X", S "", S "", S "", S "", S "", S "", S "", S "",
+            S ""],
             [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "IM1", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "X", S "X", S "", S "X", S "X", S "X", S "", S ""],
+            S "", S "X", S "X", S "", S "X", S "X", S "X", S "", S "", S "X"],
             [S "IM2", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "X", S "X", S "", S "", S "X", S "X", S "X"],
+            S "", S "", S "X", S "X", S "", S "", S "X", S "X", S "X", S ""],
             [S "IM3", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "X", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "X", S "", S "", S "", S "", S "X"],
             [S "IM4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "X", S "", S "", S "", S "", S "X"],
+            S "", S "", S "", S "X", S "", S "", S "", S "", S "X", S ""],
             [S "LC1", S "", S "", S "", S "X", S "", S "", S "", S "", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC2", S "", S "", S "", S "", S "", S "", S "", S "X", S "",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC3", S "", S "", S "", S "", S "", S "", S "", S "", S "X",
-            S "", S "", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "X", S "", S "", S "", S "", S "", S "", S ""],
+            S "", S "X", S "", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC5", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-            S "", S "", S "X", S "", S "", S "", S "", S "", S ""],
+            S "", S "", S "X", S "", S "", S "", S "", S "", S "", S ""],
             [S "LC6", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
-            S "", S "", S "", S "", S "", S "X", S "", S "", S ""]]
+            S "", S "", S "", S "", S "", S "X", S "", S "", S "", S ""]]
             (S "Traceability Matrix Showing the Connections Between " :+:
             (assumption ^. descr) :+: S "s and Other Items") True
+
+-- These matrices can probably be generated automatically when enough info is 
+-- abstracted out.
 
 -- Wrong DD reference above, change when DD4 is available
 
@@ -1074,6 +1173,8 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also " :+:
             Paragraph (S "NOTE: Building a tool to automatically generate " :+:
             S "the graphical representation of the matrix by scanning the " :+:
             S "labels and reference can be future work.")]
+
+-- Same comments on this paragraph as I had for s7_intro1. 
 
 s7_fig1 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
           S "Items of Different Sections") "ATrace.png"

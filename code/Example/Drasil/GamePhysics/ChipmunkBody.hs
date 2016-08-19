@@ -6,22 +6,36 @@ import Data.Char (toLower, toUpper)
 import Data.List (intersperse)
 import Control.Lens ((^.))
 
+import Language.Drasil
+
+import Example.Drasil.GamePhysics.Units
+import Example.Drasil.GamePhysics.TableOfSymbols
+
 import Example.Drasil.GamePhysics.ChipmunkUnits
 import Example.Drasil.GamePhysics.ChipmunkUnitals
 import Example.Drasil.GamePhysics.ChipmunkConcepts
 import Example.Drasil.GamePhysics.ChipmunkTMods
 import Example.Drasil.GamePhysics.ChipmunkDataDefs
 
-import Example.Drasil.Units
-import Example.Drasil.TableOfSymbols
-
-import Language.Drasil
+import Example.Drasil.GamePhysics.ChipmunkModules
+import Example.Drasil.GamePhysics.ChipmunkChanges
 
 chipmunkSRS :: Document
 chipmunkSRS = Document
     (S "Software Requirements Specification for " :+: S (chipmunk ^. name))
     (S "Alex Halliwushka and Luthfi Mawarid")
     [s1, s2, s3, s4, s5, s6, s7]
+
+chipmunkMG :: Document
+chipmunkMG = Document (S "Module Guide for " :+: S (chipmunk ^. name))
+    (S "Alex Halliwushka and Luthfi Mawarid") (mgBod)
+
+mgBod :: [Section]
+(mgBod, _) = makeDD lcs ucs modules
+
+-- =================================== --
+-- SOFTWARE REQUIREMENTS SPECIFICATION --
+-- =================================== --
 
 ------------------------------------
 -- SECTION 1 : REFERENCE MATERIAL --
@@ -46,17 +60,18 @@ s1_1 = table_of_units cpSIUnits
 ----------------------------
 
 s1_2 :: Section
-s1_2 = table_of_symbols cpSymbols
+s1_2_intro, s1_2_table :: Contents
 
-{-
--- Original introduction --
+s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+
 s1_2_intro = Paragraph $
     S "The table that follows summarizes the symbols used in this " :+:
     S "document along with their units.  More specific instances of these " :+:
     S "symbols will be described in their respective sections. Throughout " :+:
     S "the document, symbols in bold will represent vectors, and scalars " :+:
     S "otherwise. The symbols are listed in alphabetical order."
--}
+
+s1_2_table = table cpSymbols
 
 --------------------------------------
 -- 1.3 : Abbreviations and Acronyms --
@@ -105,12 +120,13 @@ s2_1_intro :: [Contents]
 s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
-    S "open source " :+: S (twoD ^. name) :+: S " " :+: S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+: S " used for games. The " :+:
-    (sMap (map toLower) (goalStmt ^. descr)) :+: S "s and " :+:
-    (sMap (map toLower) (theoMod ^. descr)) :+: S "s used in " :+:
-    S (chipmunk ^. name) :+: S " are provided. This document is intended " :+:
-    S "to be used as a reference to provide all necessary information to " :+:
-    S "understand and verify the model."),
+    S "open source " :+: S (twoD ^. name) :+: S " " :+:
+    S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
+    S " used for games. The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
+    S "s and " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
+    S "s used in " :+: S (chipmunk ^. name) :+: S " are provided. This " :+:
+    S "document is intended to be used as a reference to provide all " :+:
+    S "necessary information to understand and verify the model."),
     Paragraph (S "This document will be used as a starting point for " :+:
     S "subsequent development phases, including writing the design " :+:
     S "specification and the software verification and validation plan. " :+:

@@ -37,7 +37,7 @@ numberedSections = True
 defaultSRSparams :: SRSParams
 defaultSRSparams = SRSParams
   (DocClass  Nothing "article")
-  (UsePackages ["booktabs","longtable","listings","graphics","hyperref","caption",
+  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
   "amsmath"])
 
 defaultLPMparams :: LPMParams
@@ -50,3 +50,13 @@ defaultLPMparams = LPMParams
 colAwidth, colBwidth :: Double
 colAwidth = 0.2
 colBwidth = 0.73
+
+--settings for hyperref
+hyperSettings :: String
+hyperSettings =
+     "bookmarks=true,"     -- show bookmarks bar?
+  ++ "colorlinks=true,"    -- false: boxed links; true: colored links
+  ++ "linkcolor=red,"      -- color of internal links
+  ++ "citecolor=blue,"     -- color of links to bibliography
+  ++ "filecolor=magenta,"  -- color of file links
+  ++ "urlcolor=cyan"       -- color of external links

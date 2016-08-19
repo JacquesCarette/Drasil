@@ -6,6 +6,7 @@ import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk
 import Control.Lens hiding ((:>),(:<))
 import Language.Drasil.Expr.Extract
@@ -13,7 +14,6 @@ import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
-
 
 expr :: Expr -> H.Expr
 expr (V v)       = H.Var   v
@@ -110,11 +110,18 @@ lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
+lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
+--  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
+--  ( (H.Header (depth+2)
+--    (H.S $ (concat $ intersperse " " $
+--      map capitalize $ words (m ^. name)) ++ " Module")):(buildModuleDesc m)
+--  ) (spec $ getRefName x)
 
 makeL :: ListType -> H.ListType
 makeL (Bullet bs) = H.Unordered $ map item bs
 makeL (Number ns) = H.Ordered $ map item ns
 makeL (Simple ps) = H.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Desc ps)   = H.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
 
 item :: ItemType -> H.ItemType
 item (Flat i) = H.Flat (spec i)
@@ -148,3 +155,15 @@ descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
   (H.S " is the " H.:+: (spec (vc ^. descr))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
+
+--buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
+--buildModuleDesc m = [
+--  H.List H.Simple
+--    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
+--      H.S (bold "Services: ") H.:+: (spec $ m ^. descr),
+--      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
+--    ]
+--  ]
+--  where bold = \x -> "<b>" ++ x ++ "</b>"
+--        getImp (Just x) = x
+--        getImp Nothing  = "--"

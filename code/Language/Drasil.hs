@@ -2,7 +2,7 @@
 {- note that SI_Units is really like a separate 'database', so is not included -}
 module Language.Drasil (
   -- Output.Formats
-    DocType(SRS,LPM,Website)
+    DocType(SRS,MG,MIS,LPM,Website)
   -- Recipe
   , Recipe(..)
   -- Expr
@@ -23,6 +23,16 @@ module Language.Drasil (
   , MUChunk(..)
   -- Chunk.Relation
   , RelationChunk, makeRC
+  -- Chunk.Method
+  , MethodChunk, fromEC
+  -- Chunk.Module
+  , ModuleChunk, makeImpModule, makeUnimpModule
+  -- Chunk.Req
+  , ReqChunk(..)
+  -- Chunk.LC
+  , LCChunk(..)
+  -- Chunk.Other
+  , AssumpChunk, UCChunk
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
@@ -41,13 +51,16 @@ module Language.Drasil (
   , capitalize, paren, sqbrac
 
   -- CCode.Import
-  , toCode
+  , toCodeModule
   -- CCode.AST
   , Lang(CLang), CodeType(Calc)
+  -- Template.DD
+  , makeDD
 ) where
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
-import Language.Drasil.Output.Formats (DocType(SRS,LPM,Website))
+
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),
                                  ListType(..),ItemType(..))
@@ -59,11 +72,18 @@ import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
+import Language.Drasil.Chunk.Req
+import Language.Drasil.Chunk.LC
+import Language.Drasil.Chunk.Method
+import Language.Drasil.Chunk.Module
+import Language.Drasil.Chunk.Other
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
-import Language.Drasil.CCode.Import (toCode)
+import Language.Drasil.CCode.Import (toCodeModule)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
+import Language.Drasil.Template.DD
+

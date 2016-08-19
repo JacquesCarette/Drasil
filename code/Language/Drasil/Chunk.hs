@@ -30,6 +30,8 @@ class Concept c => Quantity c where
 
 -- BEGIN CONCEPTCHUNK --
 data ConceptChunk = CC String Sentence
+instance Eq ConceptChunk where
+  c1 == c2 = (c1 ^. name) == (c2 ^. name)
 instance Chunk ConceptChunk where
   name f (CC a b) = fmap (\x -> CC x b) (f a)
 instance Concept ConceptChunk where

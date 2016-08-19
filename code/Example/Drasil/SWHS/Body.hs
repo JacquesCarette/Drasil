@@ -1176,10 +1176,10 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also " :+:
 
 -- Same comments on this paragraph as I had for s7_intro1. 
 
-s7_fig1 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
+s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between " :+:
           S "Items of Different Sections") "ATrace.png"
 
-s7_fig2 = Figure (S "Traceability Matrix Showing the Connections Between " :+:
+s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between " :+:
           (requirement ^. descr) :+: S "s, " :+: (inModel ^. descr) :+: 
           S "s, and Data Constraints") "RTrace.png"
 

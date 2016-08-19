@@ -55,8 +55,9 @@ listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
 preambledefs :: D
-preambledefs = hyperConfig %% modcounter %% modnum %% reqcounter %% reqnum
-  %% assumpcounter %% assumpnum %% lccounter %% lcnum %% uccounter %% ucnum
+preambledefs = useTikz %% hyperConfig %% modcounter %% modnum %% reqcounter %%
+  reqnum %% assumpcounter %% assumpnum %% lccounter %% lcnum %% uccounter %%
+  ucnum
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D
@@ -73,7 +74,8 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
-
+lo (UsesHierarchy c)       = toText $ makeUH $
+                               map (\(a,b) -> (spec a, spec b)) c
 
 
 print :: [LayoutObj] -> D
@@ -364,3 +366,28 @@ makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
 makeUC :: D -> D -> D
 makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
   ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n
+
+
+
+makeUH :: [(D,D)] -> D
+makeUH c = mkEnv "figure" $
+  vcat $ [ centering,
+           pure $ text $ "\\resizebox{\\textwidth}{!}{",
+           pure $ text $ "\\tikz [>=stealth, shorten >=1pt]",
+           pure $ text $ (
+             "\\graph [layered layout, components go right top aligned, " ++
+             "minimum layers=3, nodes={ draw, thick, align=center, " ++
+             "inner xsep=0.5em, inner ysep=0.5em, text width=4em, " ++
+             "minimum size=4em, font=\\scriptsize, fill=white, " ++
+             "text opacity=1, fill opacity=0.8, " ++
+             "typeset={\\tikzgraphnodetext\\\\M\\ref{\\tikzgraphnodename}}}, " ++
+             "edges={thick, rounded corners}]"
+             ),
+           pure $ text "{"
+         ]
+     ++  map (\(a,b) -> a <> (pure $ text " -> ") <> b <> (pure $ text ";")) c
+     ++  [ pure $ text "};",
+           pure $ text "}",
+           caption $ pure $ text "Uses Hierarchy",
+           label $ pure $ text "Figure:UsesHierarchy"
+         ]

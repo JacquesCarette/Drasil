@@ -112,11 +112,12 @@ title           = commandD "title"
 item' :: D -> D -> D
 item' bull s = command1oD "item" (Just bull) s
 
-maketitle, maketoc, newline, newpage :: D
+maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc = command0 "tableofcontents"
 newline = command0 "newline"
 newpage = command0 "newpage"
+centering = command0 "centering"
 
 code, itemize, enumerate, description, figure, center, document, equation :: D -> D
 code        = mkEnv "lstlisting"
@@ -173,3 +174,13 @@ fraction n d = command0 "frac" <> br n <> br d
 
 hyperConfig :: D
 hyperConfig = command "hypersetup" hyperSettings
+
+
+
+useTikz :: D
+useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
+  command "pgfsysdriver" "pgfsys-pdftex.def" $+$
+  -- the above is a workaround..  temporary until TeX packages have been fixed
+  usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$
+  command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
+  command "usegdlibrary" "layered"

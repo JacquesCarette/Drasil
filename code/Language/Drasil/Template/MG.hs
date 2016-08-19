@@ -24,7 +24,7 @@ makeMG lccs uccs mcs = let mhier  = buildMH $ splitLevels mcs
                            s3 = mgModuleHierarchy mpairs hierTable
                            s4 = mgModuleDecomp mpairs
                            s5 = mgTrace lccs
-                           s6 = mgUses
+                           s6 = mgUses mcs
                            secDescr = [
                              (s2, S " lists the likely and unlikely " :+:
                                   S "changes of the software requirements.") ,
@@ -251,21 +251,30 @@ mgListModules :: [ModuleChunk] -> Sentence
 mgListModules mcs = foldl (:+:) (S "") $ intersperse (S ", ") $
   map (\x -> makeRef $ Module x) mcs
 
-mgUses :: Section
-mgUses =
-  Section 0 ( S "Uses Hierarchy" ) (
-    [ Con $ Paragraph $
-        S "In this section, the uses hierarchy between modules is " :+:
-        S "provided. Parnas said of two programs A and B that A uses B if " :+:
-        S "correct execution of B may be necessary for A to complete " :+:
-        S "the task described in its specification. That is, A uses B if " :+:
-        S "there exist situations in which the correct functioning of A " :+:
-        S "depends upon the availability of a correct implementation of B. " :+:
-        S "Figure **todo** illustrates the use hierarchy between the " :+:
-        S "modules. The graph is a directed acyclic graph (DAG). Each " :+:
-        S "level of the hierarchy offers a testable and usable subset of " :+:
-        S "the system, and modules in the higher level of the hierarchy " :+:
-        S "are essentially simpler because they use modules from the lower " :+:
-        S "levels."
-    ]
-  )
+mgUses :: [ModuleChunk] -> Section
+mgUses mcs = let uh = mgUH mcs
+  in Section 0 ( S "Uses Hierarchy" ) (
+       [ Con $ Paragraph $
+           S "In this section, the uses hierarchy between modules is " :+:
+           S "provided. Parnas said of two programs A and B that A uses B if " :+:
+           S "correct execution of B may be necessary for A to complete " :+:
+           S "the task described in its specification. That is, A uses B if " :+:
+           S "there exist situations in which the correct functioning of A " :+:
+           S "depends upon the availability of a correct implementation of B. " :+:
+           makeRef uh :+:
+           S " illustrates the uses hierarchy between the " :+:
+           S "modules. The graph is a directed acyclic graph (DAG). Each " :+:
+           S "level of the hierarchy offers a testable and usable subset of " :+:
+           S "the system, and modules in the higher level of the hierarchy " :+:
+           S "are essentially simpler because they use modules from the lower " :+:
+           S "levels.",
+         Con uh
+       ]
+     )
+
+mgUH :: [ModuleChunk] -> Contents
+mgUH mcs = UsesHierarchy $ makePairs mcs
+  where makePairs []      = []
+        makePairs (m:mcs) = if (null $ uses m)
+                            then makePairs mcs
+                            else (m, uses m):makePairs mcs

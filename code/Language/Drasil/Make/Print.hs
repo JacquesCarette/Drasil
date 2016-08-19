@@ -27,7 +27,7 @@ printTarget :: Target -> [Dependencies] -> Doc
 printTarget name deps = text (name ++ ": ") <+> hsep (map text deps)
 
 printLatexCmd :: Target -> Doc
-printLatexCmd t =   tab <> text ("pdflatex " ++ t) $+$
+printLatexCmd t =   tab <> text ("lualatex " ++ t) $+$
                     tab <> text ("-bibtex " ++ t) $+$
-                    tab <> text ("pdflatex " ++ t) $+$
-                    tab <> text ("pdflatex " ++ t)
+                    tab <> text ("lualatex " ++ t) $+$
+                    tab <> text ("lualatex " ++ t)

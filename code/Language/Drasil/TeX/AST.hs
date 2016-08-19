@@ -76,6 +76,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Assumption Contents Label
                | LikelyChange Contents Label
                | UnlikelyChange Contents Label
+               | UsesHierarchy [(Spec,Spec)]
                
 data ListType = Item [ItemType]
               | Enum [ItemType]

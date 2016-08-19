@@ -11,7 +11,8 @@ import Language.Drasil.Spec (Sentence(..))
 
 -- BEGIN METHODCHUNK --
 data ModuleChunk = MoC { cc :: ConceptChunk, secret :: Sentence,
-  imp :: Maybe ConceptChunk, method :: [MethodChunk], hier :: Maybe ModuleChunk}
+  imp :: Maybe ConceptChunk, method :: [MethodChunk], uses :: [ModuleChunk],
+  hier :: Maybe ModuleChunk }
 
 instance Chunk ModuleChunk where
   name = cl . name
@@ -25,7 +26,7 @@ instance Eq ModuleChunk where
 -- END METHODCHUNK --
 
 cl ::  Simple Lens ModuleChunk ConceptChunk
-cl f (MoC a b c d e) = fmap (\x -> MoC x b c d e) (f a)
+cl f (MoC a b c d e g) = fmap (\x -> MoC x b c d e g) (f a)
 
 
 formatName :: ModuleChunk -> String
@@ -35,8 +36,9 @@ formatName m = (concat $ intersperse " " $
         capFirst (c:cs) = toUpper c:cs
 
 makeImpModule :: ConceptChunk -> Sentence -> ConceptChunk -> [MethodChunk]
-  -> Maybe ModuleChunk -> ModuleChunk
-makeImpModule cc secret imp method hier = MoC cc secret (Just imp) method hier
+  -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
+makeImpModule cc secret imp method uses hier =
+  MoC cc secret (Just imp) method uses hier
 
 makeUnimpModule :: ConceptChunk -> Sentence -> Maybe ModuleChunk -> ModuleChunk
-makeUnimpModule cc secret hier = MoC cc secret Nothing [] hier
+makeUnimpModule cc secret hier = MoC cc secret Nothing [] [] hier

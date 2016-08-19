@@ -1,0 +1,74 @@
+\documentclass{beamer}
+
+\usepackage[english]{babel}
+
+\usepackage[latin1]{inputenc}
+
+\usepackage{times}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+
+\title[Drasil]{Drasil: From generating code to generating software}
+\subtitle{Generate Everything!}
+
+\author{\underline{Jacques Carette}, Spencer Smith, Dan Szymczak and
+Steven Palmer}
+
+\institute[McMaster University]{McMaster University}
+
+\date[Aug 2016]{WG 2.11, August 2016 Meeting}
+
+\beamertemplatenavigationsymbolsempty 
+
+\begin{document}
+
+%I will present some ongoing work that seeks to generate all the artefacts
+%involved in software (obviously code, but also specification documents, design
+%documents, tests, user manual, Makefiles, etc). In the context of software
+%which requires (re)certification, all of these artefacts are involved -- and
+%they normally contain a huge amount of duplicate information. Our approach is
+%to do very aggressive knowledge encapsulation, followed by relatively
+%straightforward generation passes. For domains (such as scientific computation)
+%where there is well-established theory, our preliminary experiments shows that
+%this works quite well. Note that we do NOT expect this to work so well in
+%domains without well-established theory.
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}
+Outline
+- context (no silver bullet)
+  - software (re)certification [sufficient evidence]
+    - requirements, software specification, software design, code, tests,
+       "theory manual", user manual
+    - massive amounts of *knowledge duplication*
+       => non-code artefacts do not get maintained well enough
+          OR are felt to be an expensive nuisance
+    - duplication harms traceability
+  - literate programming
+    - artefacts (like code) are not well organized for human understanding
+      nor do they promote human understanding
+
+- Goals
+  - no information duplication: 
+    - bug in one place, bug everywhere!
+    - huge up-front investment
+    - doesn't work if you have no theory.
+
+Good slides from Spencer
+5: SWHT
+6: theory -> software
+8: some sample information
+9: information example
+12: basic information infrastructure
+13: SRS
+14-17: internal DSL example
+18: module architecture example
+20: approach
+
+\end{frame}
+
+\end{document}

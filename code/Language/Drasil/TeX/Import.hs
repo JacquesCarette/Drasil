@@ -120,6 +120,7 @@ lay x@(LikelyChange lc)   = T.LikelyChange (spec (lc ^. descr))
   (spec $ refName x)
 lay x@(UnlikelyChange uc) = T.UnlikelyChange (spec (uc ^. descr))
   (spec $ refName x)
+lay x@(UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs) = T.Enum $ (map item bs)
@@ -144,6 +145,14 @@ makePairs (Theory c) = [
   ("Description", T.Paragraph (spec (c ^. descr)))
   ]
 makePairs General = error "Not yet implemented"
+
+makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
+makeUHPairs []          = []
+makeUHPairs ((m,ms):xs) = (buildPairs m ms) ++ makeUHPairs xs
+  where  buildPairs _ []       = []
+         buildPairs m1 (m2:ms) = (makeEntry m1, makeEntry m2):buildPairs m1 ms
+           where  makeEntry m = (spec $ refName $ Module m) T.:+:
+                                  (T.S "/") T.:+: (T.S $ formatName m)
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj

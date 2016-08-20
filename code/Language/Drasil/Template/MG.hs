@@ -4,10 +4,10 @@ import Language.Drasil.Document
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
-import Language.Drasil.Chunk.Req
+--import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec
-import Language.Drasil.Printing.Helpers
+--import Language.Drasil.Printing.Helpers
 import Language.Drasil.Reference
 import Language.Drasil.Template.Helpers
 
@@ -53,7 +53,7 @@ makeMG lccs uccs mcs = let mhier  = buildMH $ splitLevels mcs
 
 mgIntro :: Contents -> Section
 mgIntro docDesc =
-  Section 0 (S "Introduction") (
+  Section (S "Introduction") (
     [ Con $ Paragraph $
         S "Decomposing a system into modules is a commonly accepted " :+:
         S "approach to developing software.  A module is a work assignment " :+:
@@ -109,7 +109,7 @@ mgChanges :: [LCChunk] -> [UCChunk] -> Section
 mgChanges lccs uccs = let secLikely = mgLikelyChanges lccs
                           secUnlikely = mgUnlikelyChanges uccs
   in
-    Section 0 (S "Likely and Unlikely Changes") (
+    Section (S "Likely and Unlikely Changes") (
       [ Con $ Paragraph $
           S "This section lists possible changes to the system. According " :+:
           S "to the likeliness of the change, the possible changes are " :+:
@@ -123,14 +123,14 @@ mgChanges lccs uccs = let secLikely = mgLikelyChanges lccs
 
 mgLikelyChanges :: [LCChunk] -> Section
 mgLikelyChanges lccs =
-  Section 1 (S "Likely Changes") (
+  Section (S "Likely Changes") (
     [ Con mgLikelyChangesIntro ]
     ++ map (Con . LikelyChange) lccs
   )
 
 mgUnlikelyChanges :: [UCChunk] -> Section
 mgUnlikelyChanges uccs =
-  Section 1 (S "Unikely Changes") (
+  Section (S "Unikely Changes") (
     [ Con mgUnlikelyChangesIntro ]
     ++ map (Con . UnlikelyChange) uccs
   )
@@ -158,7 +158,7 @@ mgUnlikelyChangesIntro = Paragraph $
 
 mgModuleHierarchy :: [MPair] -> Contents -> Section
 mgModuleHierarchy mpairs hierTable =
-  Section 0 (S "Module Hierarchy") (
+  Section (S "Module Hierarchy") (
     [ Con $ mgModuleHierarchyIntro hierTable ]
     ++ (map Con $ getMods mpairs)
     ++ [Con hierTable]
@@ -180,7 +180,7 @@ mgHierarchy mh = let cnt = length $ head mh
 
 mgModuleDecomp :: [MPair] -> Section
 mgModuleDecomp mpairs = let levels = splitLevels $ getChunks mpairs
-  in Section 0 (S "Module Decomposition") (
+  in Section (S "Module Decomposition") (
        [Con $ mgModuleDecompIntro $ getChunks mpairs]
        ++ map (\x -> Sub (mgModuleInfo x levels)) mpairs
      )
@@ -214,8 +214,8 @@ mgModuleInfo (mc, m) ls = let title = if   isNothing m
                                    then S (formatName mc)
                                    else S (formatName mc) :+: S " (" :+:
                                           (makeRef $ fromJust m) :+: S ")"
-                              level = getLevel mc ls
-  in Section (1 + level)
+--                              level = getLevel mc ls
+  in Section
     title
     [ Con $ Enumeration $ Desc
       [(S "Secrets", Flat (secret mc)),
@@ -230,7 +230,7 @@ mgModuleInfo (mc, m) ls = let title = if   isNothing m
 
 mgTrace :: [LCChunk] -> Section
 mgTrace lccs = let lct = mgTraceLC lccs
-  in Section 0 ( S "Traceability Matrix") (
+  in Section ( S "Traceability Matrix") (
        [ Con $ Paragraph $
            S "This section shows two traceability matrices: between the " :+:
            S "modules and the requirements in Table **todo** and between " :+:
@@ -253,7 +253,7 @@ mgListModules mcs = foldl (:+:) (S "") $ intersperse (S ", ") $
 
 mgUses :: [ModuleChunk] -> Section
 mgUses mcs = let uh = mgUH mcs
-  in Section 0 ( S "Uses Hierarchy" ) (
+  in Section ( S "Uses Hierarchy" ) (
        [ Con $ Paragraph $
            S "In this section, the uses hierarchy between modules is " :+:
            S "provided. Parnas said of two programs A and B that A uses B if " :+:

@@ -60,7 +60,7 @@ prntDoc dt body = case dt of
 
 prntCode :: Document -> IO ()
 prntCode (Document _ _ secs) = mapM_ prntCode'
-  (concat (map (\(Section _ _ s) -> getModules s) secs))
+  (concat (map (\(Section _ s) -> getModules s) secs))
   where getModules []                 = []
         getModules ((Con (Module m)):los) = if null (method m)
           then getModules los

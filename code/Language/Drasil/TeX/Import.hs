@@ -89,16 +89,16 @@ makeDocument :: Document -> T.Document
 makeDocument (Document title author sections) = 
   T.Document (spec title) (spec author) (createLayout sections)
 
-layout :: SecCons -> T.LayoutObj
-layout (Sub s) = sec s
-layout (Con c) = lay c
+layout :: Int -> SecCons -> T.LayoutObj
+layout currDepth (Sub s) = sec (currDepth+1) s
+layout _         (Con c) = lay c
 
 createLayout :: Sections -> [T.LayoutObj]
-createLayout = map sec
+createLayout = map (sec 0)
 
-sec :: Section -> T.LayoutObj
-sec x@(Section depth title contents) = 
-  T.Section depth (spec title) (map layout contents) (spec $ refName x)
+sec :: Int -> Section -> T.LayoutObj
+sec depth x@(Section title contents) = 
+  T.Section depth (spec title) (map (layout depth) contents) (spec $ refName x)
 
 lay :: Contents -> T.LayoutObj
 lay x@(Table hdr lls t b) 

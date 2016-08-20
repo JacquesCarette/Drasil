@@ -14,7 +14,7 @@ makeMIS :: [ModuleChunk] -> [Section]
 makeMIS mcs = misIntro:map misModule mcs
 
 misIntro :: Section
-misIntro = Section 0 (S $ "Introduction")
+misIntro = Section (S $ "Introduction")
   [ Con $ Paragraph $
     S "The following document details the Module Interface Specifications " :+:
     S "for the implemented modules in a program that calculates . " :+:
@@ -24,13 +24,13 @@ misIntro = Section 0 (S $ "Introduction")
   ]
 
 misModule :: ModuleChunk -> Section
-misModule mc = Section 0 (S $ "MIS for " ++ formatName mc)
+misModule mc = Section (S $ "MIS for " ++ formatName mc)
   [ Sub $ misInterfaceSyntax mc,
     Sub $ misInterfaceSemantics mc ]
 
 misInterfaceSyntax :: ModuleChunk -> Section
-misInterfaceSyntax mc = Section 1 (S $ "Interface Syntax")
-  [ Sub $ Section 2 (S $ "Exported Access Programs")
+misInterfaceSyntax mc = Section (S $ "Interface Syntax")
+  [ Sub $ Section (S $ "Exported Access Programs")
     [ Con $ misExportedAP mc ]
   ]
 
@@ -46,13 +46,13 @@ misExportedAP mc = Table [S "Name", S "In", S "Out", S "Exceptions"]
 
 
 misInterfaceSemantics :: ModuleChunk -> Section
-misInterfaceSemantics mc = Section 1 (S $ "Interface Semantics")
-  [ Sub $ Section 2 (S $ "Access Program Semantics")
+misInterfaceSemantics mc = Section (S $ "Interface Semantics")
+  [ Sub $ Section (S $ "Access Program Semantics")
     (map (Sub . misAPSemantics) (method mc))
   ]
 
 misAPSemantics :: MethodChunk -> Section
-misAPSemantics mec = Section 3 (convertName (mec ^. name))
+misAPSemantics mec = Section (convertName (mec ^. name))
   [ Con $ Enumeration $ Desc
     [(S "Input", Flat $ foldl1 (:+:) $
         intersperse (S ", ") $ map (\x -> P $ x ^. symbol) (input mec)),

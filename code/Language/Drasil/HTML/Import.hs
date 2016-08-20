@@ -88,17 +88,17 @@ makeDocument :: Document -> H.Document
 makeDocument (Document title author sections) = 
   H.Document (spec title) (spec author) (createLayout sections)
 
-layout :: SecCons -> H.LayoutObj
-layout (Sub s) = sec s
-layout (Con c) = lay c
+layout :: Int -> SecCons -> H.LayoutObj
+layout currDepth (Sub s) = sec (currDepth+1) s
+layout _         (Con c) = lay c
   
 createLayout :: [Section] -> [H.LayoutObj]
-createLayout = map sec
+createLayout = map (sec 0)
 
-sec :: Section -> H.LayoutObj
-sec x@(Section depth title contents) = 
+sec :: Int -> Section -> H.LayoutObj
+sec depth x@(Section title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
-  ((H.Header (depth+2) (spec title)):(map layout contents)) 
+  ((H.Header (depth+2) (spec title)):(map (layout depth) contents)) 
   (spec $ refName x)
 
 lay :: Contents -> H.LayoutObj

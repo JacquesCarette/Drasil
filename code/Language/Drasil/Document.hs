@@ -28,8 +28,7 @@ data Document = Document Title Author Sections
 data SecCons = Sub Section
              | Con Contents
 
-data Section = Section Depth Title [SecCons]
-      --Section = 0 depth, subsection = 1, subsub = 2 ... etc.
+data Section = Section Title [SecCons]
 
 --Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool
@@ -65,7 +64,7 @@ class LayoutObj l where
   rType   :: l -> RefType
 
 instance LayoutObj Section where
-  refName (Section d t _) = writeSec d :+: inferName t
+  refName (Section t _) = S "Sec:" :+: inferName t
   rType _ = Sect
 
 instance LayoutObj Contents where

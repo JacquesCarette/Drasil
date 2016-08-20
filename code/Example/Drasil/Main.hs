@@ -13,10 +13,10 @@ docs = [Recipe (Website "SRS") srsBody,
         Recipe (Website "MIS") misBody,
         Recipe (SRS "SRS") srsBody,
         Recipe (MG "MG") mgBody,
-        Recipe (MIS "MIS") misBody
+        Recipe (MIS "MIS") misBody,
 --      Recipe (LPM "LPM")     lpmBody,
---      Recipe (SRS "PCM_SRS") pcm_srs,
---      Recipe (Website "PCM_SRS") pcm_srs,
+        Recipe (SRS "PCM_SRS") pcm_srs,
+        Recipe (Website "PCM_SRS") pcm_srs
        ]
 
 main :: IO ()            

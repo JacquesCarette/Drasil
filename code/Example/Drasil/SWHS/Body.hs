@@ -67,7 +67,7 @@ swhs_mg = Document (S "Module Guide for Solar Water Heating Systems " :+:
 
 -- As above, potentially abstract out author names.
 
-s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
+s1 = Section (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
      Sub s1_3]
 
 s1_intro = Paragraph (S "This section records information for easy reference.")
@@ -78,7 +78,7 @@ s1_1 = table_of_units this_si
   
 -- Is it possible to make tables look nicer? I.e. \hline
 
-s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+s1_2 = Section (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
              S " symbols used in this document along with their units" :+:
@@ -95,7 +95,7 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
 
 s1_2_table = table swhsSymbols
   
-s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
+s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
   [(\ch -> S (ch ^. name)),
@@ -105,7 +105,7 @@ s1_3_table = Table [S "Symbol", S "Description"] (mkTable
    
 -- This section name and table structure are same between all examples.
    
-s2 = Section 0 (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2, 
+s2 = Section (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2, 
      Sub s2_3])
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
@@ -140,7 +140,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
 -- similar paragraph in each of the other examples. It can probably be 
 -- abstracted out.
 
-s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_contents)
+s2_1 = Section (S "Purpose of Document") (map Con s2_1_contents)
 
 s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
                 S "describe the modelling of " :+: S (swhs_pcm ^. name) :+:
@@ -179,7 +179,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
 --How to italicize words in sentence?
 --How to cite?
 
-s2_2 = Section 1 (S "Scope of Requirements") [Con s2_2_contents]
+s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
                 S "to " :+: (sMap (map toLower) (S (thermal_analysis ^.
@@ -207,7 +207,7 @@ s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
-s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_contents)
+s2_3 = Section (S "Organization of Document") (map Con s2_3_contents)
 
 s2_3_contents = [Paragraph (S "The organization of this document follows" :+:
                 S " the template for an " :+: S (srs ^. name) :+: S " for " :+:
@@ -253,7 +253,7 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" :+:
 -- the sectioning? This would also improve the tediousness of declaring 
 -- LayoutObjs
 
-s3 = Section 0 (S "General System Description") [Con s3_intro, Sub s3_1, 
+s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1, 
      Sub s3_2]
 
 s3_intro = Paragraph (S "This section provides general information about " :+:
@@ -263,7 +263,7 @@ s3_intro = Paragraph (S "This section provides general information about " :+:
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
-s3_1 = Section 1 (S "User Characteristics") [Con s3_1_contents]
+s3_1 = Section (S "User Characteristics") [Con s3_1_contents]
 
 s3_1_contents = Paragraph (S "The end user of " :+: S (progName ^. name) :+: 
                 S " should have an understanding of undergraduate Level 1 " :+:
@@ -272,14 +272,14 @@ s3_1_contents = Paragraph (S "The end user of " :+: S (progName ^. name) :+:
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
-s3_2 = Section 1 (S "System Constraints") [Con s3_2_contents]
+s3_2 = Section (S "System Constraints") [Con s3_2_contents]
 
 s3_2_contents = Paragraph (S "There are no system constraints.")
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
 
-s4 = Section 0 (S "Specific System Description") [Con s4_intro, Sub s4_1, 
+s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1, 
      Sub s4_2]
 
 s4_intro = Paragraph (S "This section first presents the problem " :+:
@@ -300,7 +300,7 @@ s4_intro = Paragraph (S "This section first presents the problem " :+:
 -- The swhs_pcm reference at the end would be better if singular, but concept is
 -- plural.
 
-s4_1 = Section 1 (S "Problem Description") [Con s4_1_intro, Sub s4_1_1, 
+s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1, 
        Sub s4_1_2, Sub s4_1_3]
 
 s4_1_intro = Paragraph (S (progName ^. name) :+: S " is a computer program " :+:
@@ -310,7 +310,7 @@ s4_1_intro = Paragraph (S (progName ^. name) :+: S " is a computer program " :+:
 
 --  section is very different between all examples
 
-s4_1_1 = Section 2 (S "Terminology and Definitions") [Con s4_1_1_intro, 
+s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro, 
          Con s4_1_1_bullets]
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms " :+:
@@ -330,7 +330,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map (\c -> Flat (S (c ^. name) :+:
 -- Included heat flux and specific heat in ConceptChunks even though they are 
 -- already in SWHSUnits
 
-s4_1_2 = Section 2 (physSyst ^. descr) [Con s4_1_2_intro, Con s4_1_2_list, 
+s4_1_2 = Section (physSyst ^. descr) [Con s4_1_2_intro, Con s4_1_2_list, 
          Con fig_tank]
 
 s4_1_2_intro = Paragraph (S "The physical system of " :+: S (progName ^. name)
@@ -361,7 +361,7 @@ fig_tank = Figure ((tank ^. descr) :+: S ", with " :+: (ht_flux_C ^. descr) :+:
            (ht_flux_P ^. descr) :+: S " of " :+: P (ht_flux_P ^. symbol)) 
            "Tank.png"
 
-s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro, 
+s4_1_3 = Section ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro, 
          Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. descr) :+: S ", " :+:
@@ -390,7 +390,7 @@ s4_1_3_list = Enumeration (Simple [(S (goalStmt ^. name) :+: S "1", Flat
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
-s4_2 = Section 1 (S "Solution Characteristics Specification") [Con s4_2_intro, 
+s4_2 = Section (S "Solution Characteristics Specification") [Con s4_2_intro, 
        Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, 
        Sub s4_2_7]
 
@@ -406,7 +406,7 @@ s4_2_intro = Paragraph (S "The " :+: (sMap (map toLower) (inModel ^. descr)) :+:
 -- General besides progName, repeated in only one other example but it could be 
 -- used for all of them. So it can be abstracted out.
 
-s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro, 
+s4_2_1 = Section (assumption ^. descr :+: S "s") [Con s4_2_1_intro, 
          Con s4_2_1_list]
 
 s4_2_1_intro = Paragraph (S "This section simplifies the original problem " :+:
@@ -522,7 +522,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
 -- Can booktabs colored links be used? The box links completely cover nearby 
 -- punctuation.
 
-s4_2_2 = Section 2 (thModel ^. descr :+: S "s") [Con s4_2_2_intro, 
+s4_2_2 = Section (thModel ^. descr :+: S "s") [Con s4_2_2_intro, 
          Con s4_2_2_T1, Con s4_2_2_T2, Con s4_2_2_T3]
 
 s4_2_2_intro = Paragraph (S "This section focuses on the general equations" :+:
@@ -538,7 +538,7 @@ s4_2_2_intro = Paragraph (S "This section focuses on the general equations" :+:
 -- No subsubsubsections... may make things difficult for derivation sections
 -- coming up
 
-s4_2_3 = Section 2 (genDefn ^. descr :+: S "s") 
+s4_2_3 = Section (genDefn ^. descr :+: S "s") 
          ((Con s4_2_3_intro):(map Con s4_2_3_deriv))
 
 s4_2_3_intro = Paragraph (S "This section collects the laws and equations " :+:
@@ -608,7 +608,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
 -- Add references to above when available (assumptions, GDs)
 -- Replace relevant Derivs with the regular derivative when it is available
 
-s4_2_4 = Section 2 (dataDefn ^. descr :+: S "s") [Con s4_2_4_intro, 
+s4_2_4 = Section (dataDefn ^. descr :+: S "s") [Con s4_2_4_intro, 
          Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3]
 
 s4_2_4_intro = Paragraph (S "This section collects and defines all the " :+:
@@ -618,7 +618,7 @@ s4_2_4_intro = Paragraph (S "This section collects and defines all the " :+:
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = Section 2 (inModel ^. descr :+: S "s") ((map Con s4_2_5_intro) ++ 
+s4_2_5 = Section (inModel ^. descr :+: S "s") ((map Con s4_2_5_intro) ++ 
          (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
 
 s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
@@ -791,7 +791,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro]
+s4_2_6 = Section (S "Data Constraints") [Con s4_2_6_intro]
 
 s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data " :+:
                S "constraints on the input and output variables, " :+:
@@ -840,7 +840,7 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
-s4_2_7 = Section 2 (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
+s4_2_7 = Section (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
 s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+: 
                (sMap (map toLower) (S (law_cons_energy ^. name))) :+:
@@ -879,7 +879,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
 
 -- Remember to insert references in above derivation when available
 
-s5 = Section 0 ((requirement ^. descr) :+: S "s") [Con s5_intro, Sub s5_1, 
+s5 = Section ((requirement ^. descr) :+: S "s") [Con s5_intro, Sub s5_1, 
      Sub s5_2]
 
 s5_intro = Paragraph (S "This section provides the functional " :+: (sMap (map 
@@ -891,7 +891,7 @@ s5_intro = Paragraph (S "This section provides the functional " :+: (sMap (map
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s5_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s") 
+s5_1 = Section (S "Functional " :+: (requirement ^. descr) :+: S "s") 
        (map Con s5_1_list)
 
 s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat 
@@ -963,7 +963,7 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
 --How to include pi?
 --How to add exponents?
 
-s5_2 = Section 1 (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") 
+s5_2 = Section (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") 
        [Con s5_2_contents]
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" :+:
@@ -980,7 +980,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" :+:
 -- performance is not a priority. This is probably something that can be 
 -- abstracted out.
 
-s6 = Section 0 ((likelyChg ^. descr) :+: S "s") [Con s6_list]
+s6 = Section ((likelyChg ^. descr) :+: S "s") [Con s6_list]
 
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
@@ -1013,7 +1013,7 @@ s6_list = Enumeration (Simple [(S (likelyChg ^. name) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = Section 0 (S "Traceability Matrices and Graphs") ([Con s7_intro1, 
+s7 = Section (S "Traceability Matrices and Graphs") ([Con s7_intro1, 
      Con s7_table1, Con s7_table2, Con s7_table3] ++ (map Con s7_intro2) ++ 
      [Con s7_fig1, Con s7_fig2])
 

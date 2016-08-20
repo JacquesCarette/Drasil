@@ -7,7 +7,7 @@ import Language.Drasil
 import Language.Drasil.Unit
 
 table_of_symbols :: (Unit' s, Quantity s) => [s] -> Section
-table_of_symbols ls = Section 0 (S "Table of Symbols") [Con intro, Con (table ls)]
+table_of_symbols ls = Section (S "Table of Symbols") [Con intro, Con (table ls)]
 
 intro :: Contents
 intro = Paragraph $ 

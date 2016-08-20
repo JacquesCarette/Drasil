@@ -211,7 +211,7 @@ spec a@(s :+: t) = s' <> t'
 spec (E ex)      = toMath $ pure $ text $ p_expr ex
 spec (a :-: s)   = toMath $ subscript (spec a) (spec s)
 spec (a :^: s)   = toMath $ superscript (spec a) (spec s)
-spec (a :/: s)   = fraction (spec a) (spec s)
+spec (a :/: s)   = toMath $ fraction (spec a) (spec s)
 spec (S s)       = pure $ text s
 spec (N s)       = toMath $ pure $ text $ symbol s
 spec (Sy s)      = p_unit s
@@ -242,7 +242,7 @@ p_unit (UName n) =
   switch (const cn) (pure $ text $ symbol n)
 p_unit (UProd l) = foldr (<>) empty (map p_unit l)
 p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (UDiv n d) =
+p_unit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)
     UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
@@ -287,6 +287,8 @@ dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 
 makeEquation :: Spec -> D
 makeEquation contents = equation (toMath $ spec contents)
+  --This needs to be fixed. Equation blocks should not contain '$'
+
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
 

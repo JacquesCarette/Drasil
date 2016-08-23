@@ -9,7 +9,8 @@ import Language.Drasil.Template.MG
 import Language.Drasil.Template.MIS
 import Language.Drasil.Template.Helpers
 
-makeDD :: [LCChunk] -> [UCChunk] -> [ModuleChunk] -> ([Section], [Section])
-makeDD lccs uccs mcs = let (mg, modules) = makeMG lccs uccs mcs
-                           mis           = makeMIS $ getMISModules modules
-                       in  (mg, mis)
+makeDD :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
+  -> ([Section], [Section])
+makeDD lccs uccs rcs mcs = let (mg, modules) = makeMG lccs uccs rcs mcs
+                               mis           = makeMIS $ getMISModules modules
+                           in  (mg, mis)

@@ -4,7 +4,7 @@ import Text.PrettyPrint (text)
 import Control.Applicative (pure)
 import Data.List (nub)
 
-import Language.Drasil.Config (hyperSettings)
+import Language.Drasil.Config (hyperSettings, fontSize)
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
@@ -68,7 +68,7 @@ addDef UCCounter     = count "ucnum" %%
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let preamble = parseDoc los
-  in docclass Nothing "article" %%
+  in docclass (Just $ (show fontSize) ++ "pt") "article" %%
      (vcat $ listpackages preamble) %% (vcat $ listdefs preamble)
   where listpackages :: [Preamble] -> [D]
         listpackages []            = []

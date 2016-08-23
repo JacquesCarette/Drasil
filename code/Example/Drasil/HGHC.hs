@@ -38,7 +38,7 @@ doc name ls author body =
 srsBody :: Document
 srsBody = doc "SRS" vars "Spencer Smith" [s1, s2, s3]--, s4]
 
-(mgSecs, misSecs) = makeDD [] [] modules
+(mgSecs, misSecs) = makeDD [] [] [] modules
   
 mgBody :: Document
 mgBody = doc "MG" vars "Spencer Smith" mgSecs

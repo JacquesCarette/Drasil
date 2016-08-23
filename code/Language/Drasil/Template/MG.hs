@@ -4,7 +4,7 @@ import Language.Drasil.Document
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
---import Language.Drasil.Chunk.Req
+import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec
 --import Language.Drasil.Printing.Helpers
@@ -16,14 +16,16 @@ import Data.List (nub, intersperse)
 import Data.Maybe (fromJust, isNothing)
 
 
-makeMG :: [LCChunk] -> [UCChunk] -> [ModuleChunk] -> ([Section], [Contents])
-makeMG lccs uccs mcs = let mhier  = buildMH $ splitLevels mcs
+makeMG :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
+  -> ([Section], [Contents])
+makeMG lccs uccs rcs mcs =
+                       let mhier  = buildMH $ splitLevels mcs
                            mpairs = map createMPair (getMHOrder mhier)
                            hierTable = mgHierarchy $ formatMH mhier
                            s2 = mgChanges lccs uccs
                            s3 = mgModuleHierarchy mpairs hierTable
                            s4 = mgModuleDecomp mpairs
-                           s5 = mgTrace lccs
+                           s5 = mgTrace rcs lccs
                            s6 = mgUses mcs
                            secDescr = [
                              (s2, S " lists the likely and unlikely " :+:
@@ -228,15 +230,24 @@ mgModuleInfo (mc, m) ls = let title = if   isNothing m
       getImp _        = S "--"
 
 
-mgTrace :: [LCChunk] -> Section
-mgTrace lccs = let lct = mgTraceLC lccs
+mgTrace :: [ReqChunk] -> [LCChunk] -> Section
+mgTrace rcs lccs = let lct = mgTraceLC lccs
+                       rt  = mgTraceR rcs
   in Section ( S "Traceability Matrix") (
        [ Con $ Paragraph $
            S "This section shows two traceability matrices: between the " :+:
-           S "modules and the requirements in Table **todo** and between " :+:
-           S "the modules and the likely changes in " :+: makeRef lct :+: S ".",
+           S "modules and the requirements in " :+: makeRef rt :+: S " and " :+:
+           S "between the modules and the likely changes in " :+:
+           makeRef lct :+: S ".",
+         Con $ rt,
          Con $ lct ]
      )
+
+mgTraceR :: [ReqChunk] -> Contents
+mgTraceR rcs = Table [S "Requirement", S "Modules"]
+  (zipWith (\x y -> [x,y]) (map S (zipWith (++) (repeat "R") (map show [1..])))
+  (map (mgListModules . rRelatedModules) rcs))
+  (S "Trace Between Requirements and Modules") True
 
 mgTraceLC :: [LCChunk] -> Contents
 mgTraceLC lccs = Table [S "Likely Change", S "Modules"]

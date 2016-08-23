@@ -20,6 +20,9 @@ lpmTeXParams = defaultLPMparams
 tableWidth :: Double -- in cm
 tableWidth = 10.5
 
+fontSize :: Int
+fontSize = 12
+
 verboseDDDescription :: Bool
 verboseDDDescription = True
 

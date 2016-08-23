@@ -11,11 +11,12 @@ import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
-import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth,
-              SRSParams(..), LPMParams(..))
+import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
+              LPMParams(..))
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
+import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
@@ -25,18 +26,15 @@ genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
 
 build :: A.DocType -> Document -> D
-build (A.SRS _) doc   = buildSRS srsTeXParams doc
-build (A.MG _) doc    = buildSRS srsTeXParams doc   -- temporary
-build (A.MIS _) doc   = buildSRS srsTeXParams doc   -- temporary
+build (A.SRS _) doc   = buildStd doc
+build (A.MG _) doc    = buildStd doc
+build (A.MIS _) doc   = buildStd doc
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
-buildSRS :: SRSParams -> Document -> D
-buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
-         (Document t a c) =
-  docclass sb b1 %%
-  listpackages ps %%
-  preambledefs %%
+buildStd :: Document -> D
+buildStd (Document t a c) =
+  genPreamble c %%
   title (spec t) %%
   author (spec a) %%
   document (maketitle %% maketoc %% newpage %% print c)
@@ -53,11 +51,6 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
 
 listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
-
-preambledefs :: D
-preambledefs = useTikz %% hyperConfig %% modcounter %% modnum %% reqcounter %%
-  reqnum %% assumpcounter %% assumpnum %% lccounter %% lcnum %% uccounter %%
-  ucnum
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D

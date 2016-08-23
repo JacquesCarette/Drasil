@@ -8,9 +8,9 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{tikz}
+\usepackage{comment}
 
 \title[Drasil]{Drasil: From generating code to generating software}
-\subtitle{Generate Everything!}
 
 \author{\underline{Jacques Carette}, Spencer Smith, Dan Szymczak and
 Steven Palmer}
@@ -39,19 +39,49 @@ Steven Palmer}
 \end{frame}
 
 \begin{frame}
-Outline
-- context (no silver bullet)
-  - software (re)certification [sufficient evidence]
-    - requirements, software specification, software design, code, tests,
-       "theory manual", user manual
-    - massive amounts of *knowledge duplication*
-       => non-code artefacts do not get maintained well enough
-          OR are felt to be an expensive nuisance
-    - duplication harms traceability
-  - literate programming
-    - artefacts (like code) are not well organized for human understanding
-      nor do they promote human understanding
+\includegraphics{generate_all_the_things.jpg}
+\end{frame}
 
+\begin{frame}
+\includegraphics[width=\textwidth]{no_silver_bullet.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Context}
+{\Large software \onslide<2->{(re)}certification}
+\vspace*{.2cm}
+\begin{itemize}
+\item<3->All software artefacts:
+\begin{itemize}
+\item \textcolor{blue}{requirements, software specification, software design, code, 
+  tests, "theory manual", user manual}
+\end{itemize}
+\vspace*{.5cm}
+\item<4->Massive amounts of \textcolor{red}{knowledge duplication}
+\begin{itemize}
+  \item $\Rightarrow$
+       non-code artefacts do not get maintained well enough
+          OR are felt to be an expensive nuisance
+  \item duplication harms traceability
+\end{itemize}
+\end{itemize}
+\vfill
+\end{frame}
+
+\begin{frame}
+\frametitle{Literate Programming}
+What can we learn from it?
+\begin{enumerate}
+\item<2-> Code in most languages is not well organized for 
+  \textcolor{red}{human understanding}.
+\item<3-> Code in some languages can not \textcolor{red}{efficiently} be broken 
+down into very small pieces.
+\item<4-> Chunk labels add convenient \textcolor{red}{traceability} information.
+\end{enumerate}
+\end{frame}
+
+\begin{comment}
+\begin{frame}
 - Goals
   - no information duplication: 
     - bug in one place, bug everywhere!
@@ -70,5 +100,6 @@ Good slides from Spencer
 20: approach
 
 \end{frame}
+\end{comment}
 
 \end{document}

@@ -135,7 +135,7 @@ mod_ctrl = makeImpModule mod_ctrl_desc
   (S "The algorithm for coordinating the running of the program.")
   program
   []
-  [mod_sw, mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, 
+  [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc,
   mod_interp, mod_outputf]
   (Just mod_behav)
 

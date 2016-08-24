@@ -373,7 +373,7 @@ makeUH c = mkEnv "figure" $
              "\\graph [layered layout, components go right top aligned, " ++
              "minimum layers=3, nodes={ draw, thick, align=center, " ++
              "inner xsep=0.5em, inner ysep=0.5em, text width=4em, " ++
-             "minimum size=4em, font=\\scriptsize, fill=white, " ++
+             "minimum height=5em, font=\\scriptsize, fill=white, " ++
              "text opacity=1, fill opacity=0.8, " ++
              "typeset={\\tikzgraphnodetext\\\\M\\ref{\\tikzgraphnodename}}}, " ++
              "edges={thick, rounded corners}]"

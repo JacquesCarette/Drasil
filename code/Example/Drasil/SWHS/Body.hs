@@ -14,6 +14,7 @@ import Example.Drasil.SWHS.DataDefs
 import Example.Drasil.SWHS.Units
 import Example.Drasil.SWHS.Modules
 import Example.Drasil.SWHS.Changes
+import Example.Drasil.SWHS.Reqs
 
 import Example.Drasil.Units
 import Example.Drasil.SWHS.TableOfSymbols
@@ -56,7 +57,7 @@ swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
 -- Authors could be abstracted out (specifically, Spencer is an author for 
 -- multiple examples)
 
-(mgBod, _) = makeDD lcs ucs modules
+(mgBod, _) = makeDD lcs ucs reqs modules
 
 swhs_mg :: Document
 swhs_mg = Document (S "Module Guide for Solar Water Heating Systems " :+:

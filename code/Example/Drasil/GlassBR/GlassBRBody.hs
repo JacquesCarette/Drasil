@@ -14,6 +14,7 @@ import Example.Drasil.GlassBR.TableOfSymbols
 
 import Example.Drasil.GlassBR.GlassBRChanges
 import Example.Drasil.GlassBR.GlassBRModules
+import Example.Drasil.GlassBR.GlassBRReqs
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
@@ -40,14 +41,14 @@ glassBR_srs = Document ((softwareRS ^. descr) :+: S " for " :+:
   (gLassBR ^. descr)) (S "Nikitha Krithnan and Spencer Smith") 
   [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
-(mgBod, _) = makeDD lcs ucs modules
+(mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
 glassBR_mg = Document (S "Module Guide for " :+: (gLassBR ^. descr))
          (S "Spencer Smith and Thulasi Jegatheesan") (mgBod)
 
 
-s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
+s1 = Section(S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
   Sub s1_3]
 
 s1_intro = Paragraph (S "This section records information for easy reference.")
@@ -71,7 +72,7 @@ s1_1 = table_of_units this_si
 s1_2 = table_of_symbols $ (map Has glassBRSymbols) ++ 
   (map HasNot glassBRUnitless)
 
---s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+--s1_2 = Section (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
 
 --s1_2_intro = Paragraph $ 
 --  S "The table that follows summarizes the symbols used in this " :+:
@@ -86,7 +87,7 @@ s1_2 = table_of_symbols $ (map Has glassBRSymbols) ++
 --  glassBRSymbols)
 --  (S "Table of Symbols") False
 
-s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
+s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Abbreviations", S "Full Form"] (mkTable
   [(\ch -> S $ ch ^. name),
@@ -94,7 +95,7 @@ s1_3_table = Table [S "Abbreviations", S "Full Form"] (mkTable
   acronyms)
   (S "Abbreviations and Acronyms") False
 
-s2 = Section 0 (S "Introduction") [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
+s2 = Section(S "Introduction") [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
   S "Software is helpful to efficiently and correctly predict the blast " :+:
@@ -111,7 +112,7 @@ s2_intro = Paragraph $
   :+: S "the organization of the document: what the document is based on and "
   :+: S "intended to portray."
 
-s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_intro)
+s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = 
   [Paragraph $
@@ -137,7 +138,7 @@ s2_1_intro =
   S "be used to increase confidence in the software documentation and " :+:
   S "the implementation."]
 
-s2_2 = Section 1 (S "Scope of " :+: (requirement ^. descr) :+: S "s") 
+s2_2 = Section (S "Scope of " :+: (requirement ^. descr) :+: S "s") 
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $
@@ -149,7 +150,7 @@ s2_2_intro = Paragraph $
   S "use the data and predict whether the " :+: 
   (sMap (map toLower) (glaSlab ^. descr)) :+: S " is safe to use or not."
 
-s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_intro)
+s2_3 = Section (S "Organization of Document") (map Con s2_3_intro)
 
 s2_3_intro = 
   [Paragraph $
@@ -171,25 +172,25 @@ s2_3_intro =
   S "s. The " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s " :+:
   S "are used to support the definitions of the different models."] 
 
-s3 = Section 0 (S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
+s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
 s3_intro = Paragraph $
   S "This section describes the Stakeholders: the people who have an " :+:
   S "interest in the product."
 
-s3_1 = Section 1 (S "The Client") [Con s3_1_intro]
+s3_1 = Section (S "The Client") [Con s3_1_intro]
 
 s3_1_intro = Paragraph $
   S "The client for " :+: (gLassBR ^. descr) :+: S " is a company named " :+:
   S "Entuitive. It is developed by Dr. Manuel Campidelli. The client has " :+:
   S "the final say on acceptance of the product."
 
-s3_2 = Section 1 (S "The Customer") [Con s3_2_intro]
+s3_2 = Section (S "The Customer") [Con s3_2_intro]
 
 s3_2_intro = Paragraph $
   S "The customers are the end user of " :+: (gLassBR ^. descr) :+: S "."
 
-s4 = Section 0 (S "General System Description") [Con s4_intro, Sub s4_1, 
+s4 = Section(S "General System Description") [Con s4_intro, Sub s4_1, 
   Sub s4_2]
 
 s4_intro = Paragraph $
@@ -197,7 +198,7 @@ s4_intro = Paragraph $
   S "identifies the interface between the system and its environment, " :+:
   S "and describes the user characteristics and the system constraints."
 
-s4_1 = Section 1 (S "User Characteristics") [Con s4_1_bullets]
+s4_1 = Section (S "User Characteristics") [Con s4_1_bullets]
 
 s4_1_bullets = Enumeration $ Bullet $ map Flat
   [(S "The end user of " :+: (gLassBR ^. descr) :+: S " is expected to " :+:
@@ -208,12 +209,12 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   (S "The end user is expected to have basic computer literacy to handle " :+:
     S "the software.")]
 
-s4_2 = Section 1 (S "System Constraints") [Con s4_2_intro]
+s4_2 = Section (S "System Constraints") [Con s4_2_intro]
 
 s4_2_intro = Paragraph $
   S (notApp ^. name)
 
-s5 = Section 0 (S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
+s5 = Section(S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
 
 s5_intro = Paragraph $
   S "This section presents the scope of the project. It describes the " :+:
@@ -222,7 +223,7 @@ s5_intro = Paragraph $
   S "output, which defines the action of getting the input and displaying " :+:
   S "the output."
 
-s5_1 = Section 1 (S "Product Use Case Table") [Con s5_1_table]
+s5_1 = Section (S "Product Use Case Table") [Con s5_1_table]
 
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
@@ -237,7 +238,7 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   S "calculated values"]])
   (S "Table 1: Use Case Table") True
 
-s5_2 = Section 1 (S "Individual Product Use Cases") [Con s5_2_bullets]
+s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the user providing input to " :+: 
@@ -266,7 +267,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
     (sMap (map toLower) (glaSlab ^. descr)) :+: S " is considered unsafe. " :+:
     S "All the supporting calculated values are also displayed as output.")]
 
-s6 = Section 0 (S "Specific System Description") [Con s6_intro, Sub s6_1,
+s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 
@@ -275,7 +276,7 @@ s6_intro = Paragraph $
   S "the solution characteristics specification, which presents the " :+:
   (sMap (map toLower) (assumption ^. descr)) :+: S "s, theories, definitions."
 
-s6_1 = Section 1 (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
+s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
   Sub s6_1_2, Sub s6_1_3]
 
 s6_1_intro = Paragraph $ 
@@ -286,7 +287,7 @@ s6_1_intro = Paragraph $
   (sMap (map toLower) (glaSlab ^. descr)) :+: S " can withstand the " :+:
   (sMap (map toLower) (S $ blast ^. name)) :+: S " under the conditions."
 
-s6_1_1 = Section 2 (S "Terminology and Definitions") [Con s6_1_1_intro, 
+s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
   
 s6_1_1_intro = Paragraph $ 
@@ -330,7 +331,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   [Flat $ S ((sD ^. name) ++ " (") :+: (P $ sd ^. symbol) :+: S ") - " :+:
   (sD ^. descr)])
   
-s6_1_2 = Section 2 (physSysDescr ^. descr) [Con s6_1_2_intro, Con s6_1_2_list, 
+s6_1_2 = Section (physSysDescr ^. descr) [Con s6_1_2_intro, Con s6_1_2_list, 
   Con fig_glassbr]
 
 s6_1_2_intro = Paragraph $ S "The physical system of " :+: (gLassBR ^. descr) 
@@ -346,7 +347,7 @@ s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
     S ", is located. The " :+: (sMap (map toLower) (S (sD ^. name))) 
     :+: S "  is the distance between the point of explosion and the glass.")]
 
-s6_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s6_1_3_list]
+s6_1_3 = Section ((goalStmt ^. descr) :+: S "s") [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((S $ goalStmt ^. name) :+: S "1"), S "Analyze and predict whether the " :+:
@@ -354,7 +355,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
     S "will be able to withstand the explosion of a certain degree which " :+:
     S "is calculated based on user input.")]
 
-s6_2 = Section 1 (S "Solution Characteristics Specification") 
+s6_2 = Section (S "Solution Characteristics Specification") 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This section explains all the " :+:
@@ -362,7 +363,7 @@ s6_2_intro = Paragraph $ S "This section explains all the " :+:
   (sMap (map toLower) (theoreticMod ^. descr)) :+: S "s which are " :+:
   S "supported by the " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s."
   
-s6_2_1 = Section 2 (assumption ^. descr :+: S "s") ([Con s6_2_1_intro] ++
+s6_2_1 = Section (assumption ^. descr :+: S "s") ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
@@ -425,17 +426,17 @@ s6_2_1_list =
       S ". Using this, " :+: (P $ loadDF ^. symbol) :+: S " = 0.27.")])]
   --equation in sentence
 
-s6_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s") (map Con s6_2_2_TMods)
+s6_2_2 = Section ((theoreticMod ^. descr) :+: S "s") (map Con s6_2_2_TMods)
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
 
-s6_2_3 = Section 2 ((instanceMod ^. descr) :+: S "s") (map Con s6_2_3_IMods)
+s6_2_3 = Section ((instanceMod ^. descr) :+: S "s") (map Con s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = Section 2 ((dataDefn ^. descr) :+: S "s") 
+s6_2_4 = Section ((dataDefn ^. descr) :+: S "s") 
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
 
 s6_2_4_intro = Paragraph $ 
@@ -445,7 +446,7 @@ s6_2_4_intro = Paragraph $
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
 
-s6_2_5 = Section 2 (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1, 
+s6_2_5 = Section (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1, 
   Con s6_2_5_table2, Con s6_2_5_intro2] --, Con s6_2_5_table3]
 
 s6_2_5_intro = Paragraph $
@@ -508,9 +509,9 @@ s6_2_5_intro2 = Paragraph $
 --  [(prob_br ^. symbol, S "0 < " :+: (P $ prob_br ^. symbol) :+: S " < 1")])
 --  (S "Table4: Output Variables") True
 
-s7 = Section 0 ((requirement ^. descr) :+: S "s") [Sub s7_1, Sub s7_2]
+s7 = Section((requirement ^. descr) :+: S "s") [Sub s7_1, Sub s7_2]
 
-s7_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s") 
+s7_1 = Section (S "Functional " :+: (requirement ^. descr) :+: S "s") 
   ([Con s7_1_intro] ++ (map Con s7_1_list))
 
 s7_1_intro = Paragraph $
@@ -585,7 +586,7 @@ s7_1_list =
         --S " = a/b)"
         S ")"]))])]
 
-s7_2 = Section 1 (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") 
+s7_2 = Section (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") 
   [Con s7_2_intro]
 
 s7_2_intro = Paragraph $
@@ -596,7 +597,7 @@ s7_2_intro = Paragraph $
     S "s are correctness, verifiability, understandability, reusability, " :+:
     S "maintainability and portability."
 
-s8 = Section 0 ((likelyChange ^. descr) :+: S "s") [Con s8_list]
+s8 = Section((likelyChange ^. descr) :+: S "s") [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((S $ likelyChange ^. name) :+: S "1"), ((S $ assumption ^. name) :+: 
@@ -618,7 +619,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
     S "7 - The software may be changed to consider more than just flexure " :+:
     S "of the glass."))]
 
-s9 = Section 0 (S "Traceability Matrices and Graphs") ([Con s9_intro1, 
+s9 = Section(S "Traceability Matrices and Graphs") ([Con s9_intro1, 
   Con s9_table1, Con s9_table2, Con s9_table3] ++ (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
 
@@ -830,7 +831,7 @@ fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections " :+:
   S "Between " :+: (assumption ^. descr) :+: S "s and Other Items")
   "ATrace.png"
 
-s10 = Section 0 (S "References") [Con s10_list]
+s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor, " :+: Quote (S "A document drive approach to " :+:
@@ -858,7 +859,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "15.02, " :+: Quote (S "Specification for heat treated flat glass-Kind " 
     :+: S "HS, kind FT coated and uncoated glass,C1048."))]
 
-s11 = Section 0 (S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
+s11 = Section(S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
 
 s11_intro = Paragraph $
   S "This appendix holds the graphs (" :+: (makeRef fig_5) :+: S " and " :+:

@@ -35,8 +35,8 @@ tau_c = makeVC "tau_c" "clad thickness" ((Greek Tau_L) `sub` lC)
 {--------------- Begin h_c ---------------}
 --------------- --------------- --------------- ---------------
 h_c_eq :: Expr
-h_c_eq = UnaryOp (Summation (Just 
-  (Low ((makeVC "i" "" lI),0), High (C (makeVC "n" "" lN)))))
+h_c_eq = --UnaryOp (Summation (Just 
+  -- (Low ((makeVC "i" "" lI),0), High (C (makeVC "n" "" lN)))))
   (2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b)))
 
 h_c :: EqChunk

@@ -85,8 +85,13 @@ instance Fractional Expr where
 -- TODO: Move to its own file, not sure what to name it.
 --       Should be in Data.Drasil.???
 
+
+data Bound where
+  Low :: Quantity c => (c, Expr) -> Bound -- Symbol (for the index), Starting value
+  High :: Expr -> Bound -- Upper bound, could be a symbol (n), or a value.
+
 data UFunc = Log
-           | Summation (Maybe Expr,Maybe Expr) --Sum (low,high) Bounds
+           | Summation (Maybe (Bound, Bound)) --Sum (low,high) Bounds
            | Abs
            | Integral (Maybe Expr, Maybe Expr) --Integral (low,high) Bounds
            | Sin

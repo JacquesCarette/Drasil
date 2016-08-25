@@ -219,7 +219,7 @@ makeFigure r c f = refwrap r (image f c $$ caption c)
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
-p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ paren (p_expr x)
+p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ paren (p_expr x)
 p_op (Integral _) _  = error "Something went wrong with an integral" 
@@ -234,7 +234,9 @@ makeBounds (Nothing,Just n) = sup (p_expr n)
 makeBounds (Just i, Nothing) = sub (p_expr i)
 makeBounds (Just i, Just n) = sub (p_expr i) ++ sup (p_expr n)
 
-
+makeBound :: Maybe ((Symbol, Expr),Expr) -> String
+makeBound (Just ((s,v),hi)) = sub (symbol s ++"="++ p_expr v) ++ sup (p_expr hi)
+makeBound Nothing = ""
 
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

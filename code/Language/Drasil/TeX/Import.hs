@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -42,7 +42,12 @@ expr (Grouping e) = T.Grouping (expr e)
 
 ufunc :: UFunc -> T.Function
 ufunc Log = T.Log
-ufunc (Summation (i,n)) = T.Summation (fmap expr i, fmap expr n)
+ufunc (Summation (Just (Low (c,v), High h))) = 
+  T.Summation (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Summation (Just (High h, Low (c,v)))) = 
+  T.Summation (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Summation Nothing) = T.Summation Nothing
+ufunc (Summation _) = error "TeX/Import.hs Incorrect use of Summation"
 ufunc Abs = T.Abs
 ufunc (Integral (i,n)) = T.Integral (fmap expr i, fmap expr n)
 ufunc Sin = T.Sin
@@ -118,9 +123,9 @@ lay x@(Requirement r)     = T.Requirement (spec (r ^. descr)) (spec $ refName x)
 lay x@(Assumption a)      = T.Assumption (spec (a ^. descr)) (spec $ refName x)
 lay x@(LikelyChange lc)   = T.LikelyChange (spec (lc ^. descr))
   (spec $ refName x)
-lay x@(UnlikelyChange uc) = T.UnlikelyChange (spec (uc ^. descr))
+lay x@(UnlikelyChange unc) = T.UnlikelyChange (spec (unc ^. descr))
   (spec $ refName x)
-lay x@(UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
+lay (UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs) = T.Enum $ (map item bs)

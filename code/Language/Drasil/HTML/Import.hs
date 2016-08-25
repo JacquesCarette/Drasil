@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
@@ -41,7 +41,12 @@ expr (Grouping e) = H.Grouping (expr e)
 
 ufunc :: UFunc -> H.Function
 ufunc Log = H.Log
-ufunc (Summation (i,n)) = H.Summation (fmap expr i, fmap expr n)
+ufunc (Summation (Just (Low (c,v), High h))) = 
+  H.Summation (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Summation (Just (High h, Low (c,v)))) = 
+  H.Summation (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Summation Nothing) = H.Summation Nothing
+ufunc (Summation _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc Abs = H.Abs
 ufunc (Integral (i,n)) = H.Integral (fmap expr i, fmap expr n)
 ufunc Sin = H.Sin

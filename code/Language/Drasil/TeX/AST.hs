@@ -27,7 +27,7 @@ data Expr = Var  Variable
           | Grouping Expr
           
 data Function = Log
-           | Summation (Maybe Expr,Maybe Expr) --Sum (low,high) Bounds
+           | Summation (Maybe ((Symbol, Expr),Expr)) --Sum (low,high) Bounds
            | Abs
            | Integral (Maybe Expr, Maybe Expr) --Integral (low,high) Bounds
            | Sin

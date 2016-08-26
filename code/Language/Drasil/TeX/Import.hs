@@ -49,7 +49,12 @@ ufunc (Summation (Just (High h, Low (c,v)))) =
 ufunc (Summation Nothing) = T.Summation Nothing
 ufunc (Summation _) = error "TeX/Import.hs Incorrect use of Summation"
 ufunc Abs = T.Abs
-ufunc (Integral (i,n)) = T.Integral (fmap expr i, fmap expr n)
+ufunc (Integral (Just (Low (c,v), High h))) = 
+  T.Integral (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Integral (Just (High h, Low (c,v)))) = 
+  T.Integral (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Integral Nothing) = T.Integral Nothing
+ufunc (Integral _) = error "TeX/Import.hs Incorrect use of Integral"
 ufunc Sin = T.Sin
 ufunc Cos = T.Cos
 ufunc Tan = T.Tan

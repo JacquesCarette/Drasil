@@ -48,7 +48,12 @@ ufunc (Summation (Just (High h, Low (c,v)))) =
 ufunc (Summation Nothing) = H.Summation Nothing
 ufunc (Summation _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc Abs = H.Abs
-ufunc (Integral (i,n)) = H.Integral (fmap expr i, fmap expr n)
+ufunc (Integral (Just (Low (c,v), High h))) = 
+  H.Integral (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Integral (Just (High h, Low (c,v)))) = 
+  H.Integral (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Integral Nothing) = H.Integral Nothing
+ufunc (Integral _) = error "HTML/Import.hs Incorrect use of Integral"
 ufunc Sin = H.Sin
 ufunc Cos = H.Cos
 ufunc Tan = H.Tan

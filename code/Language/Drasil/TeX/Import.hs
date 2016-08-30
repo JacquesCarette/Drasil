@@ -45,17 +45,15 @@ expr (Grouping e)      = T.Grouping (expr e)
 
 ufunc :: UFunc -> T.Function
 ufunc Log = T.Log
-ufunc (Summation (Just (Low (c,v), High h))) = 
-  T.Summation (Just ((c ^. symbol, expr v), (expr h)))
-ufunc (Summation (Just (High h, Low (c,v)))) = 
-  T.Summation (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Summation (Just ((s,Low v), High h))) = 
+  T.Summation (Just ((s, expr v), (expr h)))
 ufunc (Summation Nothing) = T.Summation Nothing
 ufunc (Summation _) = error "TeX/Import.hs Incorrect use of Summation"
 ufunc Abs = T.Abs
-ufunc (Integral (Just (Low (c,v), High h))) = 
-  T.Integral (Just ((c ^. symbol, expr v), (expr h)))
-ufunc (Integral (Just (High h, Low (c,v)))) = 
-  T.Integral (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Integral (Just (Low v, High h))) = 
+  T.Integral (Just (expr v, expr h))
+ufunc (Integral (Just (High h, Low v))) = 
+  T.Integral (Just (expr v, expr h))
 ufunc (Integral Nothing) = T.Integral Nothing
 ufunc (Integral _) = error "TeX/Import.hs Incorrect use of Integral"
 ufunc Sin = T.Sin

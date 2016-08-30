@@ -44,17 +44,15 @@ expr (Grouping e)     = H.Grouping (expr e)
 
 ufunc :: UFunc -> H.Function
 ufunc Log = H.Log
-ufunc (Summation (Just (Low (c,v), High h))) = 
-  H.Summation (Just ((c ^. symbol, expr v), (expr h)))
-ufunc (Summation (Just (High h, Low (c,v)))) = 
-  H.Summation (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Summation (Just ((s, Low v), High h))) = 
+  H.Summation (Just ((s, expr v), expr h))
 ufunc (Summation Nothing) = H.Summation Nothing
 ufunc (Summation _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc Abs = H.Abs
-ufunc (Integral (Just (Low (c,v), High h))) = 
-  H.Integral (Just ((c ^. symbol, expr v), (expr h)))
-ufunc (Integral (Just (High h, Low (c,v)))) = 
-  H.Integral (Just ((c ^. symbol, expr v), (expr h)))
+ufunc (Integral (Just (Low v, High h))) = 
+  H.Integral (Just (expr v, expr h))
+ufunc (Integral (Just (High h, Low v))) = 
+  H.Integral (Just (expr v, expr h))
 ufunc (Integral Nothing) = H.Integral Nothing
 ufunc (Integral _) = error "HTML/Import.hs Incorrect use of Integral"
 ufunc Sin = H.Sin

@@ -5,6 +5,7 @@ module Language.Drasil.Expr where
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 
 import Language.Drasil.Chunk (Chunk(..), Quantity)
+import Language.Drasil.Symbol
 
 import Control.Lens ((^.))
 
@@ -45,7 +46,7 @@ data Expr where
 type Variable = String
 
 data DerivType = Part
-               | Total
+               | Total  
   deriving Eq
 
 instance Num Expr where
@@ -91,11 +92,12 @@ instance Fractional Expr where
 
 
 data Bound where
-  Low :: Quantity c => (c, Expr) -> Bound -- Symbol (for the index), Starting value
+  Low :: Expr -> Bound -- Starting value
   High :: Expr -> Bound -- Upper bound, could be a symbol (n), or a value.
-
+  
+  
 data UFunc = Log
-           | Summation (Maybe (Bound, Bound)) --Sum (low,high) Bounds
+           | Summation (Maybe ((Symbol,Bound), Bound)) --Sum (low,high) Bounds
            | Abs
            | Integral (Maybe (Bound, Bound)) --Integral (low,high) Bounds
            | Sin

@@ -29,7 +29,7 @@ data Expr = Var  Variable
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
            | Abs
-           | Integral (Maybe ((Symbol, Expr),Expr))
+           | Integral (Maybe (Expr,Expr))
            | Sin
            | Cos
            | Tan

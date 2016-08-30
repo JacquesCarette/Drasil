@@ -324,7 +324,7 @@ makeFigure r c f =
 p_op :: Function -> [Expr] -> String
 p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Integral bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
+p_op f@(Integral bs) (x:[]) = show f ++ makeIBound bs ++ brace (p_expr x)
 p_op (Integral _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
@@ -335,6 +335,11 @@ makeBound :: Maybe ((Symbol, Expr),Expr) -> String
 makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
                               "^" ++ brace (p_expr hi)
 makeBound Nothing = ""
+
+makeIBound :: Maybe (Expr,Expr) -> String
+makeIBound (Just (low, high)) = "_" ++ brace (p_expr low) ++ 
+                               "^" ++ brace (p_expr high)
+makeIBound Nothing = ""
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

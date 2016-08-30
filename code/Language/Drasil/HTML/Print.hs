@@ -221,7 +221,7 @@ makeFigure r c f = refwrap r (image f c $$ caption c)
 p_op :: Function -> [Expr] -> String
 p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Integral bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
+p_op f@(Integral bs) (x:[]) = show f ++ makeIBound bs ++ paren (p_expr x)
 p_op (Integral _) _  = error "Something went wrong with an integral" 
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
@@ -231,6 +231,10 @@ p_op _ _ = error "Something went wrong with an operation"
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String
 makeBound (Just ((s,v),hi)) = sub (symbol s ++"="++ p_expr v) ++ sup (p_expr hi)
 makeBound Nothing = ""
+
+makeIBound :: Maybe (Expr,Expr) -> String
+makeIBound (Just (low,high)) = sub (p_expr low) ++ sup (p_expr high)
+makeIBound Nothing = ""
 
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

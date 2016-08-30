@@ -232,9 +232,11 @@ makeBound :: Maybe ((Symbol, Expr),Expr) -> String
 makeBound (Just ((s,v),hi)) = sub (symbol s ++"="++ p_expr v) ++ sup (p_expr hi)
 makeBound Nothing = ""
 
-makeIBound :: Maybe (Expr,Expr) -> String
-makeIBound (Just (low,high)) = sub (p_expr low) ++ sup (p_expr high)
-makeIBound Nothing = ""
+makeIBound :: (Maybe Expr, Maybe Expr) -> String
+makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
+makeIBound (Just low, Nothing)   = sub (p_expr low)
+makeIBound (Nothing, Just high)  = sup (p_expr high)
+makeIBound (Nothing, Nothing)    = ""
 
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

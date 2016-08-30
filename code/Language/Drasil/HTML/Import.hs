@@ -49,12 +49,7 @@ ufunc (Summation (Just ((s, Low v), High h))) =
 ufunc (Summation Nothing) = H.Summation Nothing
 ufunc (Summation _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc Abs = H.Abs
-ufunc (Integral (Just (Low v, High h))) = 
-  H.Integral (Just (expr v, expr h))
-ufunc (Integral (Just (High h, Low v))) = 
-  H.Integral (Just (expr v, expr h))
-ufunc (Integral Nothing) = H.Integral Nothing
-ufunc (Integral _) = error "HTML/Import.hs Incorrect use of Integral"
+ufunc i@(Integral _) = integral i
 ufunc Sin = H.Sin
 ufunc Cos = H.Cos
 ufunc Tan = H.Tan
@@ -67,6 +62,22 @@ rel (a := b) = H.Eq (expr a) (expr b)
 rel (a :< b) = H.Lt (expr a) (expr b)
 rel (a :> b) = H.Gt (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
+
+integral :: UFunc -> H.Function
+integral (Integral (Just (Low v), Just (High h))) = 
+  H.Integral (Just (expr v), Just (expr h))
+integral (Integral (Just (High h), Just (Low v))) = 
+  H.Integral (Just (expr v), Just (expr h))
+integral (Integral (Just (Low v), Nothing)) = 
+  H.Integral (Just (expr v), Nothing)
+integral (Integral (Nothing, Just (Low v))) = 
+  H.Integral (Just (expr v), Nothing)
+integral (Integral (Just (High h), Nothing)) = 
+  H.Integral (Nothing, Just (expr h))
+integral (Integral (Nothing, Just (High h))) = 
+  H.Integral (Nothing, Just (expr h))
+integral (Integral (Nothing, Nothing)) = H.Integral (Nothing,Nothing)
+integral _ = error "TeX/Import.hs Incorrect use of Integral"
 
 replace_divs :: Expr -> H.Expr
 replace_divs (a :/ b) = H.Div (replace_divs a) (replace_divs b)

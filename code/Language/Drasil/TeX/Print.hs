@@ -336,10 +336,12 @@ makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
                               "^" ++ brace (p_expr hi)
 makeBound Nothing = ""
 
-makeIBound :: Maybe (Expr,Expr) -> String
-makeIBound (Just (low, high)) = "_" ++ brace (p_expr low) ++ 
-                               "^" ++ brace (p_expr high)
-makeIBound Nothing = ""
+makeIBound :: (Maybe Expr, Maybe Expr) -> String
+makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++ 
+                                   "^" ++ brace (p_expr high)
+makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
+makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
+makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

@@ -50,12 +50,7 @@ ufunc (Summation (Just ((s,Low v), High h))) =
 ufunc (Summation Nothing) = T.Summation Nothing
 ufunc (Summation _) = error "TeX/Import.hs Incorrect use of Summation"
 ufunc Abs = T.Abs
-ufunc (Integral (Just (Low v, High h))) = 
-  T.Integral (Just (expr v, expr h))
-ufunc (Integral (Just (High h, Low v))) = 
-  T.Integral (Just (expr v, expr h))
-ufunc (Integral Nothing) = T.Integral Nothing
-ufunc (Integral _) = error "TeX/Import.hs Incorrect use of Integral"
+ufunc i@(Integral _) = integral i
 ufunc Sin = T.Sin
 ufunc Cos = T.Cos
 ufunc Tan = T.Tan
@@ -68,6 +63,22 @@ rel (a := b) = T.Eq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
+
+integral :: UFunc -> T.Function
+integral (Integral (Just (Low v), Just (High h))) = 
+  T.Integral (Just (expr v), Just (expr h))
+integral (Integral (Just (High h), Just (Low v))) = 
+  T.Integral (Just (expr v), Just (expr h))
+integral (Integral (Just (Low v), Nothing)) = 
+  T.Integral (Just (expr v), Nothing)
+integral (Integral (Nothing, Just (Low v))) = 
+  T.Integral (Just (expr v), Nothing)
+integral (Integral (Just (High h), Nothing)) = 
+  T.Integral (Nothing, Just (expr h))
+integral (Integral (Nothing, Just (High h))) = 
+  T.Integral (Nothing, Just (expr h))
+integral (Integral (Nothing, Nothing)) = T.Integral (Nothing, Nothing)
+integral _ = error "TeX/Import.hs Incorrect use of Integral"
 
 replace_divs :: Expr -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)

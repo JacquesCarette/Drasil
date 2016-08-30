@@ -99,7 +99,7 @@ data Bound where
 data UFunc = Log
            | Summation (Maybe ((Symbol,Bound), Bound)) --Sum (low,high) Bounds
            | Abs
-           | Integral (Maybe (Bound, Bound)) --Integral (low,high) Bounds
+           | Integral ((Maybe Bound), (Maybe Bound)) --Integral (low,high) Bounds
            | Sin
            | Cos
            | Tan

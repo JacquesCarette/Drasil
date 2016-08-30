@@ -754,25 +754,29 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 (ht_flux_out ^. descr) :+: S ". Assuming no " :+: (vol_ht_gen ^.
                 descr) :+: S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: 
                 S "=0, the equation for GD2 can be written as:"),
-                EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) 
-                (C time) := (C ht_flux_P) * (C pcm_SA)),
-                Paragraph (S "Using " :+: makeRef s4_2_4_DD2 :+: S " for " :+:
-                P (ht_flux_P ^. symbol) :+: S ", this equation can be " :+:
-                S "written as:"),
-                EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) 
-                (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
-                (C temp_PCM))),
-                Paragraph (S "Dividing by " :+: P (pcm_mass ^. symbol) :+:
-                P (htCap_S_P ^. symbol) :+: S " we obtain:"),
-                EqnBlock (Deriv (C temp_PCM) (C time) := ((C pcm_HTC) * 
-                (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
-                (C temp_PCM))),
+                EqnBlock 
+                  ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+                  (C time) := (C ht_flux_P) * (C pcm_SA)),
+                  Paragraph (S "Using " :+: makeRef s4_2_4_DD2 :+: S " for " :+:
+                  P (ht_flux_P ^. symbol) :+: S ", this equation can be " :+:
+                  S "written as:"),
+                EqnBlock 
+                  ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+                  (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
+                  (C temp_PCM))),
+                  Paragraph (S "Dividing by " :+: P (pcm_mass ^. symbol) :+:
+                  P (htCap_S_P ^. symbol) :+: S " we obtain:"),
+                EqnBlock
+                  (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) * 
+                  (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
+                  (C temp_PCM))),
                 Paragraph (S "Setting " :+: P (tau_S_P ^. symbol) :+: S "=" :+:
                 P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
                 P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) :+: S ", " :+:
                 S "this can be written as:"),
-                EqnBlock (Deriv (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
-                ((C temp_W) - (C temp_PCM))),
+                EqnBlock 
+                  (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
+                  ((C temp_W) - (C temp_PCM))),
                 Paragraph (S "Equation (6) applies for the " :+: (sMap (map 
                 toLower) (S (solid ^. name))) :+: S " " :+: S (phsChgMtrl ^. 
                 name) :+: S ". In the case where all of the " :+:
@@ -867,18 +871,20 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                S "respective surface area of " :+: (heat_transfer ^. descr) :+:
                S ", and integrating each over the simulation " :+: (time ^. 
                descr) :+: S ", as follows:"),
-               EqnBlock ((C w_E) := UnaryOp (Integral (Just 0, Just (C time))) 
-               ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
-               [C time])) - UnaryOp (Integral (Just 0, Just (C time))) 
-               ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-               (FCall (C temp_PCM) [C time])))),
+               EqnBlock 
+                ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))) 
+                ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
+                [C time])) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))) 
+                ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
+                (FCall (C temp_PCM) [C time])))),
                Paragraph (S "In addition, the " :+: (pcm_E ^. descr) :+: 
                S " should equal the energy input to the " :+: S (phsChgMtrl ^. 
                name) :+: S " from the " :+: (sMap (map toLower) (S (water ^.
                name))) :+: S ". This can be expressed as"),
-               EqnBlock ((C pcm_E) := UnaryOp (Integral (Just 0, Just (C time)))
-               ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-               (C temp_PCM) [C time])))),
+               EqnBlock
+                ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))))
+                ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
+                (C temp_PCM) [C time])))),
                Paragraph (S "Equations (reference) and (reference) can be " :+:
                S "used as " :+: Quote (S "sanity") :+: S "checks to gain " :+: 
                S "confidence in any solution computed by " :+: S (progName ^. 

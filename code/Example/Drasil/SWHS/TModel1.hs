@@ -4,12 +4,11 @@ module Example.Drasil.SWHS.TModel1 where
 
 import Data.Char (toLower)
 
-import Example.Drasil.SWHS.Units
+
 import Example.Drasil.SWHS.Unitals
 import Example.Drasil.SWHS.Concepts
 
 import Language.Drasil
-import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
@@ -21,7 +20,7 @@ t1ConsThermE = makeRC "Conservation of thermal energy" t1descr consThermERel
 
 consThermERel :: Relation
 consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
-                (C density) * (C htCap) * (Deriv (C temp) (C time))
+                (C density) * (C htCap) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence
 t1descr = (S "The above equation gives the " :+: (sMap (map toLower) 

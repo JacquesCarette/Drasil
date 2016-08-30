@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -15,30 +15,33 @@ import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, number
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.SymbolAlphabet
 
 expr :: Expr -> T.Expr
-expr (V v)        = T.Var  v
-expr (Dbl d)      = T.Dbl  d
-expr (Int i)      = T.Int  i
-expr (a :* b)     = T.Mul  (expr a) (expr b)
-expr (a :+ b)     = T.Add  (expr a) (expr b)
-expr (a :/ b)     = T.Frac (replace_divs a) (replace_divs b)
-expr (a :^ b)     = T.Pow  (expr a) (expr b)
-expr (a :- b)     = T.Sub  (expr a) (expr b)
-expr (a :. b)     = T.Dot  (expr a) (expr b)
-expr (Neg a)      = T.Neg  (expr a)
-expr (C c)        = T.Sym  (c ^. symbol)
-expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
+expr (V v)             = T.Var  v
+expr (Dbl d)           = T.Dbl  d
+expr (Int i)           = T.Int  i
+expr (a :* b)          = T.Mul  (expr a) (expr b)
+expr (a :+ b)          = T.Add  (expr a) (expr b)
+expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
+expr (a :^ b)          = T.Pow  (expr a) (expr b)
+expr (a :- b)          = T.Sub  (expr a) (expr b)
+expr (a :. b)          = T.Dot  (expr a) (expr b)
+expr (Neg a)           = T.Neg  (expr a)
+expr (C c)             = T.Sym  (c ^. symbol)
+expr (Deriv Part a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
                            (T.Mul (T.Sym (Special Partial)) (expr b))
-expr (FCall f x)  = T.Call (expr f) (map expr x)
-expr (Case ps)    = if length ps < 2 then 
+expr (Deriv Total a b) = T.Frac (T.Mul (T.Sym lD) (expr a))
+                           (T.Mul (T.Sym lD) (expr b))
+expr (FCall f x)       = T.Call (expr f) (map expr x)
+expr (Case ps)         = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
-expr x@(_ := _)   = rel x
-expr x@(_ :> _)   = rel x
-expr x@(_ :< _)   = rel x
-expr (UnaryOp u e) = T.Op (ufunc u) [expr e]
-expr (Grouping e) = T.Grouping (expr e)
+expr x@(_ := _)        = rel x
+expr x@(_ :> _)        = rel x
+expr x@(_ :< _)        = rel x
+expr (UnaryOp u e)     = T.Op (ufunc u) [expr e]
+expr (Grouping e)      = T.Grouping (expr e)
 
 ufunc :: UFunc -> T.Function
 ufunc Log = T.Log

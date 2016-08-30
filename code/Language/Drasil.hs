@@ -6,7 +6,7 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, UFunc(..), Bound(..)
+  , Expr(..), Relation, UFunc(..), Bound(..), DerivType(..)
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -59,7 +59,7 @@ module Language.Drasil (
 ) where
 
 
-import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..), Bound(..))
+import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..), Bound(..),DerivType(..))
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),

@@ -108,7 +108,7 @@ t1consThermE = makeRC "Conservation of thermal energy" t1descr cons_therm_rel
 
 cons_therm_rel :: Relation
 cons_therm_rel = (Neg (C gradient)) :. (C thFluxVect) + (C ht_gen_vol) := 
-  (C density) * (C htCap) * (Deriv (C temp) (C time))
+  (C density) * (C htCap) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence
 t1descr = 

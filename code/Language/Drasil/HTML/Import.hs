@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
@@ -14,30 +14,33 @@ import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.SymbolAlphabet (lD)
 
 expr :: Expr -> H.Expr
-expr (V v)       = H.Var   v
-expr (Dbl d)     = H.Dbl   d
-expr (Int i)     = H.Int   i
-expr (a :* b)    = H.Mul   (expr a) (expr b)
-expr (a :+ b)    = H.Add   (expr a) (expr b)
-expr (a :/ b)    = H.Frac  (replace_divs a) (replace_divs b)
-expr (a :^ b)    = H.Pow   (expr a) (expr b)
-expr (a :- b)    = H.Sub   (expr a) (expr b)
-expr (a :. b)    = H.Dot   (expr a) (expr b)
-expr (Neg a)     = H.Neg   (expr a)
-expr (Deriv a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
+expr (V v)            = H.Var   v
+expr (Dbl d)          = H.Dbl   d
+expr (Int i)          = H.Int   i
+expr (a :* b)         = H.Mul   (expr a) (expr b)
+expr (a :+ b)         = H.Add   (expr a) (expr b)
+expr (a :/ b)         = H.Frac  (replace_divs a) (replace_divs b)
+expr (a :^ b)         = H.Pow   (expr a) (expr b)
+expr (a :- b)         = H.Sub   (expr a) (expr b)
+expr (a :. b)         = H.Dot   (expr a) (expr b)
+expr (Neg a)          = H.Neg   (expr a)
+expr (Deriv Part a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
                           (H.Mul (H.Sym (Special Partial)) (expr b))
-expr (C c)       = H.Sym   (c ^. symbol)
-expr (FCall f x) = H.Call (expr f) (map expr x)
-expr (Case ps)   = if length ps < 2 then 
+expr (Deriv Total a b)= H.Frac (H.Mul (H.Sym lD) (expr a)) 
+                          (H.Mul (H.Sym lD) (expr b))
+expr (C c)            = H.Sym   (c ^. symbol)
+expr (FCall f x)      = H.Call (expr f) (map expr x)
+expr (Case ps)        = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
-expr e@(_ := _)  = rel e
-expr e@(_ :> _)  = rel e
-expr e@(_ :< _)  = rel e
-expr (UnaryOp u e) = H.Op (ufunc u) [expr e]
-expr (Grouping e) = H.Grouping (expr e)
+expr e@(_ := _)       = rel e
+expr e@(_ :> _)       = rel e
+expr e@(_ :< _)       = rel e
+expr (UnaryOp u e)    = H.Op (ufunc u) [expr e]
+expr (Grouping e)     = H.Grouping (expr e)
 
 ufunc :: UFunc -> H.Function
 ufunc Log = H.Log

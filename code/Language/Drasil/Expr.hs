@@ -27,7 +27,7 @@ data Expr where
   (:-)     :: Expr -> Expr -> Expr
   (:.)     :: Expr -> Expr -> Expr
   Neg      :: Expr -> Expr
-  Deriv    :: Expr -> Expr -> Expr
+  Deriv    :: DerivType -> Expr -> Expr -> Expr
   C        :: Quantity c => c -> Expr
   FCall    :: Expr -> [Expr] -> Expr --F(x) is (FCall F [x]) or similar
                                   --FCall accepts a list of params
@@ -44,6 +44,10 @@ data Expr where
  
 type Variable = String
 
+data DerivType = Part
+               | Total
+  deriving Eq
+
 instance Num Expr where
   a + b = a :+ b
   a * b = a :* b
@@ -56,25 +60,25 @@ instance Num Expr where
 
 
 instance Eq Expr where
-  V a == V b             =  a == b
-  Dbl a == Dbl b         =  a == b
-  Int a == Int b         =  a == b
-  (:^) a b == (:^) c d   =  a == c && b == d
-  (:*) a b == (:*) c d   =  a == c && b == d || a == d && b == c
-  (:/) a b == (:/) c d   =  a == c && b == d
-  (:+) a b == (:+) c d   =  a == c && b == d || a == d && b == c
-  (:-) a b == (:-) c d   =  a == c && b == d
-  (:.) a b == (:.) c d   =  a == c && b == d || a == d && b == c
-  Neg a == Neg b         =  a == b
-  Deriv a b == Deriv c d =  a == c && b == d
-  C a == C b             =  (a ^. name) == (b ^. name)
-  FCall a b == FCall c d =  a == c && b == d
-  Case a == Case b       =  a == b
-  (:=) a b == (:=) c d   =  a == c && b == d || a == d && b == c
-  (:<) a b == (:<) c d   =  a == c && b == d
-  (:>) a b == (:>) c d   =  a == c && b == d
-  (:>) a b == (:<) c d   =  a == d && b == c
-  _ == _                 =  False
+  V a == V b                   =  a == b
+  Dbl a == Dbl b               =  a == b
+  Int a == Int b               =  a == b
+  (:^) a b == (:^) c d         =  a == c && b == d
+  (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
+  (:/) a b == (:/) c d         =  a == c && b == d
+  (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
+  (:-) a b == (:-) c d         =  a == c && b == d
+  (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
+  Neg a == Neg b               =  a == b
+  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
+  C a == C b                   =  (a ^. name) == (b ^. name)
+  FCall a b == FCall c d       =  a == c && b == d
+  Case a == Case b             =  a == b
+  (:=) a b == (:=) c d         =  a == c && b == d || a == d && b == c
+  (:<) a b == (:<) c d         =  a == c && b == d
+  (:>) a b == (:>) c d         =  a == c && b == d
+  (:>) a b == (:<) c d         =  a == d && b == c
+  _ == _                       =  False
 
 instance Fractional Expr where
   a / b = a :/ b

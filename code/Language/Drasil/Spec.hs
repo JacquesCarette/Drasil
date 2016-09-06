@@ -28,7 +28,7 @@ data Sentence where
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
   -- Direct concatenation of two Specs (no implicit spaces!)
-  (:+:) :: Sentence -> Sentence -> Sentence     
+  (:+:) :: Sentence -> Sentence -> Sentence   
 
 --Moving this here to avoid cyclic imports
 data USymb = UName Symbol

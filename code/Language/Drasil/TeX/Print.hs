@@ -261,7 +261,7 @@ makeDefTable [] _ = error "Trying to make empty Data Defn"
 makeDefTable ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
-  label l,
+  (pure $ text "\\phantomsection "), label l,
   makeDRows ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]

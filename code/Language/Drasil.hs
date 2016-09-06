@@ -15,6 +15,8 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
   , descr, Quantity(..)
+  -- Chunk.Constrained
+  , Constrained, ConstrainedMUC(..), fromMUC
   -- Chunk.Eq
   , EqChunk(..), fromEqn
   -- Chunk.Unital
@@ -59,7 +61,7 @@ module Language.Drasil (
 ) where
 
 
-import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..), Bound(..),DerivType(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),
@@ -68,6 +70,8 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Constrained (Constrained(..), 
+                                          ConstrainedMUC(..),fromMUC)
 import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))

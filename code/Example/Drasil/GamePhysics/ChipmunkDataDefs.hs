@@ -24,8 +24,8 @@ dd1CtrOfMass :: EqChunk
 dd1CtrOfMass = fromEqn "p_CM" dd1descr (pos_CM ^. symbol) metre ctrOfMassEqn
 
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (UnaryOp (Summation Nothing)
-    (((C mass_i) * (C pos_i)))) / (C mTot)
+ctrOfMassEqn = (UnaryOp (Summation Nothing
+    ((C mass_i) * (C pos_i)))) / (C mTot)
 
 dd1descr :: Sentence
 dd1descr = pos_CM ^. descr

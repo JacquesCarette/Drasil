@@ -29,7 +29,7 @@ data Expr = Var  Variable
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
            | Abs
-           | Integral ((Maybe Expr),(Maybe Expr))
+           | Integral ((Maybe Expr),(Maybe Expr)) Expr
            | Sin
            | Cos
            | Tan
@@ -90,7 +90,7 @@ instance Show Function where
   show Log = "\\log"
   show (Summation _) = "\\sum"
   show Abs = ""
-  show (Integral _) = "\\int"
+  show (Integral _ _) = "\\int"
   show Sin = "\\sin"
   show Cos = "\\cos"
   show Tan = "\\tan"

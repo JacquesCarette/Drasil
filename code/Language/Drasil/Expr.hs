@@ -35,7 +35,7 @@ data Expr where
                                   --F(x,y) would be (FCall F [x,y]) or sim.
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
                                      -- each pair represents one case
-  UnaryOp  :: UFunc  ->  Expr  -> Expr
+  UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
   -- BinaryOp :: BiFunc ->  Expr  -> Expr -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
@@ -96,13 +96,16 @@ data Bound where
   High :: Expr -> Bound -- Upper bound, could be a symbol (n), or a value.
   
   
-data UFunc = Log
-           | Summation (Maybe ((Symbol,Bound), Bound)) --Sum (low,high) Bounds
-           | Abs
-           | Integral ((Maybe Bound), (Maybe Bound)) --Integral (low,high) Bounds
-           | Sin
-           | Cos
-           | Tan
-           | Sec
-           | Csc
-           | Cot
+data UFunc where 
+  Log :: Expr -> UFunc
+  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc 
+    --Sum (maybe (index,starting point, ending point)) (sum expression)
+  Abs :: Expr -> UFunc
+  Integral :: Quantity c => ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
+    --Integral (low,high) Bounds (expression to integrate) (w.r.t. chunk)
+  Sin :: Expr -> UFunc
+  Cos :: Expr -> UFunc
+  Tan :: Expr -> UFunc
+  Sec :: Expr -> UFunc
+  Csc :: Expr -> UFunc
+  Cot :: Expr -> UFunc

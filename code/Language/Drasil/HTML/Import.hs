@@ -27,6 +27,8 @@ expr (a :^ b)         = H.Pow   (expr a) (expr b)
 expr (a :- b)         = H.Sub   (expr a) (expr b)
 expr (a :. b)         = H.Dot   (expr a) (expr b)
 expr (Neg a)          = H.Neg   (expr a)
+expr (Deriv Part a 1) = H.Mul (H.Sym (Special Partial)) (expr a)
+expr (Deriv Total a 1)= H.Mul (H.Sym lD) (expr a)
 expr (Deriv Part a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
                           (H.Mul (H.Sym (Special Partial)) (expr b))
 expr (Deriv Total a b)= H.Frac (H.Mul (H.Sym lD) (expr a)) 
@@ -39,23 +41,23 @@ expr (Case ps)        = if length ps < 2 then
 expr e@(_ := _)       = rel e
 expr e@(_ :> _)       = rel e
 expr e@(_ :< _)       = rel e
-expr (UnaryOp u e)    = H.Op (ufunc u) [expr e]
+expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 
-ufunc :: UFunc -> H.Function
-ufunc Log = H.Log
-ufunc (Summation (Just ((s, Low v), High h))) = 
-  H.Summation (Just ((s, expr v), expr h))
-ufunc (Summation Nothing) = H.Summation Nothing
-ufunc (Summation _) = error "HTML/Import.hs Incorrect use of Summation"
-ufunc Abs = H.Abs
-ufunc i@(Integral _) = integral i
-ufunc Sin = H.Sin
-ufunc Cos = H.Cos
-ufunc Tan = H.Tan
-ufunc Sec = H.Sec
-ufunc Csc = H.Csc
-ufunc Cot = H.Cot
+ufunc :: UFunc -> (H.Function, H.Expr)
+ufunc (Log e) = (H.Log, expr e)
+ufunc (Summation (Just (s, Low v, High h)) e) = 
+  (H.Summation (Just ((s, expr v), expr h)), (expr e))
+ufunc (Summation Nothing e) = (H.Summation Nothing,(expr e))
+ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Abs e) = (H.Abs, expr e)
+ufunc i@(Integral _ _ _) = integral i
+ufunc (Sin e) = (H.Sin, expr e)
+ufunc (Cos e) = (H.Cos, expr e)
+ufunc (Tan e) = (H.Tan, expr e)
+ufunc (Sec e) = (H.Sec, expr e)
+ufunc (Csc e) = (H.Csc, expr e)
+ufunc (Cot e) = (H.Cot, expr e)
 
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)
@@ -63,21 +65,25 @@ rel (a :< b) = H.Lt (expr a) (expr b)
 rel (a :> b) = H.Gt (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
-integral :: UFunc -> H.Function
-integral (Integral (Just (Low v), Just (High h))) = 
-  H.Integral (Just (expr v), Just (expr h))
-integral (Integral (Just (High h), Just (Low v))) = 
-  H.Integral (Just (expr v), Just (expr h))
-integral (Integral (Just (Low v), Nothing)) = 
-  H.Integral (Just (expr v), Nothing)
-integral (Integral (Nothing, Just (Low v))) = 
-  H.Integral (Just (expr v), Nothing)
-integral (Integral (Just (High h), Nothing)) = 
-  H.Integral (Nothing, Just (expr h))
-integral (Integral (Nothing, Just (High h))) = 
-  H.Integral (Nothing, Just (expr h))
-integral (Integral (Nothing, Nothing)) = H.Integral (Nothing,Nothing)
+integral :: UFunc -> (H.Function, H.Expr)
+integral (Integral (Just (Low v), Just (High h)) e wrtc) = 
+  (H.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Just (High h), Just (Low v)) e wrtc) = 
+  (H.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Just (Low v), Nothing) e wrtc) = 
+  (H.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
+integral (Integral (Nothing, Just (Low v)) e wrtc) = 
+  (H.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
+integral (Integral (Just (High h), Nothing) e wrtc) = 
+  (H.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Nothing, Just (High h)) e wrtc) = 
+  (H.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Nothing, Nothing) e wrtc) = 
+  (H.Integral (Nothing, Nothing) (int_wrt wrtc), expr e)
 integral _ = error "TeX/Import.hs Incorrect use of Integral"
+
+int_wrt :: Quantity c => c -> H.Expr
+int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
 
 replace_divs :: Expr -> H.Expr
 replace_divs (a :/ b) = H.Div (replace_divs a) (replace_divs b)

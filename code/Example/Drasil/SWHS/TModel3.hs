@@ -20,7 +20,7 @@ t3LatHtE = makeRC "Latent heat energy" t3descr latHtEEqn
 
 latHtEEqn :: Relation
 latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),
-            Just (High (C time)))) (Deriv Total (FCall (C latentE) [C tau]) (C tau))
+            Just (High (C time))) (Deriv Total (FCall (C latentE) [C tau]) (C tau)) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?

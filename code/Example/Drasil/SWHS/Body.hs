@@ -563,11 +563,12 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                S " over a " :+: (volume ^. descr) :+: S " (" :+:
                P (volume ^. symbol) :+: S "), we have:"),
                EqnBlock 
-                (Neg (UnaryOp (Integral (Just (Low (C volume)), Nothing))
-                ((C gradient) :. (C thFluxVect))) + UnaryOp (Integral (Just 
-                (Low (C volume)), Nothing)) (C vol_ht_gen) := 
-                UnaryOp (Integral (Just (Low (C volume)), Nothing)) 
-                ((C density) * (C htCap) * Deriv Part (C temp) (C time))),
+                ((Neg (UnaryOp (Integral (Just (Low (C volume)), Nothing)
+                ((C gradient) :. (C thFluxVect)) volume))) + 
+                UnaryOp (Integral (Just (Low (C volume)), Nothing) 
+                (C vol_ht_gen) volume) := 
+                UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
+                * (C htCap) * Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "Applying " :+: (gauss_div ^. descr) :+: S " to" :+:
                S " the first term over the " :+: (surface ^. descr) :+:
                S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
@@ -577,19 +578,20 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
                descr) :+: S ":"),
                EqnBlock 
-                (Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing)) 
-                ((C thFluxVect) :. (C norm_vect))) + UnaryOp (Integral (Just 
-                (Low (C volume)), Nothing)) (C vol_ht_gen) := 
-                UnaryOp (Integral (Just (Low (C volume)), Nothing)) 
-                ((C density) * (C htCap) * Deriv Part (C temp) (C time))),
+                ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
+                ((C thFluxVect) :. (C norm_vect)) surface))) + 
+                (UnaryOp (Integral (Just 
+                (Low (C volume)), Nothing) (C vol_ht_gen) volume)) := 
+                UnaryOp (Integral (Just (Low (C volume)), Nothing) 
+                ((C density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "We consider an arbitrary " :+: (volume ^. 
                descr) :+: S ". The " :+: (vol_ht_gen ^. descr) :+: S "is " :+:
                S "assumed constant. Then (1) can be written as:"),
                EqnBlock 
                 ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
                 (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
-                (Just (Low (C volume)), Nothing)) 
-                ((C density) * (C htCap) * Deriv Part (C temp) (C time))),
+                (Just (Low (C volume)), Nothing) ((C density) * (C htCap) *
+                Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "Where " :+: P (ht_flux_in ^. symbol) :+: S ", " :+:
                P (ht_flux_out ^. symbol) :+: S ", " :+: P (in_SA ^. symbol) :+:
                S ", and " :+: P (out_SA ^. symbol) :+: S " are explained in" :+:
@@ -599,14 +601,14 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                S "which is true in our case by " :+: (assumption ^. descr) :+:
                S "s (A3), (A4), (A5), and (A6), we have:"),
                EqnBlock 
-                ((C density) * (C htCap) * (C volume) * Deriv Part (C temp) 
+                ((C density) * (C htCap) * (C volume) * Deriv Total (C temp) 
                 (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
                 (C out_SA) + (C vol_ht_gen) * (C volume)),
                Paragraph (S "Using the fact that " :+: P (density ^. symbol) :+:
                S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
                P (volume ^. symbol) :+: S ", (2) can be written as:"),
                EqnBlock 
-                ((C mass) * (C htCap) * Deriv Part (C temp) (C time) :=
+                ((C mass) * (C htCap) * Deriv Total (C temp) (C time) :=
                 (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
                 (C vol_ht_gen) * (C volume))]
 
@@ -872,19 +874,19 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                S ", and integrating each over the simulation " :+: (time ^. 
                descr) :+: S ", as follows:"),
                EqnBlock 
-                ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))) 
+                ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
                 ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
-                [C time])) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))) 
+                [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
                 ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-                (FCall (C temp_PCM) [C time])))),
+                (FCall (C temp_PCM) [C time]))) time)),
                Paragraph (S "In addition, the " :+: (pcm_E ^. descr) :+: 
                S " should equal the energy input to the " :+: S (phsChgMtrl ^. 
                name) :+: S " from the " :+: (sMap (map toLower) (S (water ^.
                name))) :+: S ". This can be expressed as"),
                EqnBlock
-                ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))))
+                ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
                 ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-                (C temp_PCM) [C time])))),
+                (C temp_PCM) [C time]))) time)),
                Paragraph (S "Equations (reference) and (reference) can be " :+:
                S "used as " :+: Quote (S "sanity") :+: S "checks to gain " :+: 
                S "confidence in any solution computed by " :+: S (progName ^. 

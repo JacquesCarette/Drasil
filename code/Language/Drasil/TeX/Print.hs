@@ -224,7 +224,7 @@ symbol_needs :: Symbol -> MathContext
 symbol_needs (Atomic _)          = Text
 symbol_needs (Special _)         = Math
 symbol_needs (Greek _)           = Math
-symbol_needs (Concat [])         = Text
+symbol_needs (Concat [])         = Math
 symbol_needs (Concat (s:_))      = symbol_needs s
 symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
@@ -279,8 +279,7 @@ dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 -----------------------------------------------------------------
 
 makeEquation :: Spec -> D
-makeEquation contents = equation (spec contents)
-  --This needs to be fixed. Equation blocks should not contain '$'
+makeEquation contents = toEqn (spec contents)
 
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...

@@ -279,7 +279,7 @@ dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 -----------------------------------------------------------------
 
 makeEquation :: Spec -> D
-makeEquation contents = equation (toMath $ spec contents)
+makeEquation contents = equation (spec contents)
   --This needs to be fixed. Equation blocks should not contain '$'
 
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based

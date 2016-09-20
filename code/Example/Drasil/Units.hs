@@ -8,7 +8,7 @@ import Data.Char (toLower)
 import Language.Drasil
 
 table_of_units :: Unit s => [s] -> Section
-table_of_units u = Section 0 (S "Table of Units") [Con s1_intro, Con (s1_table u)]
+table_of_units u = Section (S "Table of Units") [Con s1_intro, Con (s1_table u)]
 
 s1_intro :: Contents
 s1_intro = Paragraph 

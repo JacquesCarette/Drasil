@@ -4,14 +4,15 @@ import Control.Lens (Simple, Lens)
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Unital
-import Language.Drasil.Unit (Unit(..))
+import Language.Drasil.Chunk.Unital (UnitalChunk(UC))
+import Language.Drasil.Chunk.MUChunk
+import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (Sentence(..))
 
 -- BEGIN EQCHUNK --
 data EqChunk = EC 
-  { uc :: UnitalChunk
+  { uc :: MUChunk
   , equat :: Expr
   }
 
@@ -25,14 +26,14 @@ instance Concept EqChunk where
 instance Quantity EqChunk where
   symbol = ul . symbol
 
-instance Unit EqChunk where
-  unit = ul . unit
+instance Unit' EqChunk where
+  unit' = ul . unit'
 -- END EQCHUNK --
 
 -- don't export this
-ul :: Simple Lens EqChunk UnitalChunk
+ul :: Simple Lens EqChunk MUChunk
 ul f (EC a b) = fmap (\x -> EC x b) (f a)
   
 -- useful
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> EqChunk
-fromEqn nm desc symb chunk eqn = EC (UC (VC nm desc symb) chunk) eqn
+fromEqn nm desc symb chunk eqn = EC (Has $ UC (VC nm desc symb) chunk) eqn

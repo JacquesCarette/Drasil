@@ -39,9 +39,12 @@ instance Monad PrintLaTeX where
     let a = runPrint m ctx in
     runPrint (k a) ctx
 
+-- convenient abbreviation
+type D = PrintLaTeX TP.Doc
+
 -- MonadReader calls this 'local'.
 -- Switch contexts (including no-switch cases).  Adjust printing as necessary.
-switch :: (MathContext -> MathContext) -> PrintLaTeX TP.Doc -> PrintLaTeX TP.Doc
+switch :: (MathContext -> MathContext) -> D -> D
 switch f (PL g) = PL $ \c -> adjust c (f c) g
   where
     dollar = H.dlr
@@ -62,9 +65,6 @@ toText = switch (const Text)
 -- MonadReader calls this 'ask'
 get_ctx :: PrintLaTeX MathContext
 get_ctx = PL id
-
--- convenient abbreviation
-type D = PrintLaTeX TP.Doc
 
 -- very convenient lifting of $$
 instance Monoid (PrintLaTeX TP.Doc) where

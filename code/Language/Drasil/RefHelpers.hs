@@ -23,11 +23,11 @@ repUnd s = map (\c -> if c == '_' then '.' else c) s
 alphanumOnly :: String -> String
 alphanumOnly = filter (isAlphaNum)
 
-writeSec :: Int -> Sentence
-writeSec n
-  | n < 0     = error "Illegal section depth. Must be positive."
-  | n > 3     = error "Section too deep (Reference.hs)"
-  | otherwise = S $ (capitalize $ (concat $ replicate n "sub") ++ "sec:")
+-- writeSec :: Int -> Sentence
+-- writeSec n
+  -- | n < 0     = error "Illegal section depth. Must be positive."
+  -- | n > 3     = error "Section too deep (Reference.hs)"
+  -- | otherwise = S $ (capitalize $ (concat $ replicate n "sub") ++ "sec:")
   
 -- Need to figure out Eq of specs or change ref to take String instead of Sentence and use Strings throughout.  
   

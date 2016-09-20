@@ -7,17 +7,13 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Unit
 import Language.Drasil.Chunk
 import Control.Lens hiding ((:>),(:<))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Reference
-import Language.Drasil.Printing.Helpers
-import Data.List (intersperse)
-
+import Language.Drasil.Misc (unit'2Contents)
 
 expr :: Expr -> H.Expr
 expr (V v)       = H.Var   v
@@ -92,17 +88,17 @@ makeDocument :: Document -> H.Document
 makeDocument (Document title author sections) = 
   H.Document (spec title) (spec author) (createLayout sections)
 
-layout :: SecCons -> H.LayoutObj
-layout (Sub s) = sec s
-layout (Con c) = lay c
+layout :: Int -> SecCons -> H.LayoutObj
+layout currDepth (Sub s) = sec (currDepth+1) s
+layout _         (Con c) = lay c
   
 createLayout :: [Section] -> [H.LayoutObj]
-createLayout = map sec
+createLayout = map (sec 0)
 
-sec :: Section -> H.LayoutObj
-sec x@(Section depth title contents) = 
+sec :: Int -> Section -> H.LayoutObj
+sec depth x@(Section title contents) = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
-  ((H.Header (depth+2) (spec title)):(map layout contents)) 
+  ((H.Header (depth+2) (spec title)):(map (layout depth) contents)) 
   (spec $ refName x)
 
 lay :: Contents -> H.LayoutObj
@@ -115,11 +111,7 @@ lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
---  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
---  ( (H.Header (depth+2)
---    (H.S $ (concat $ intersperse " " $
---      map capitalize $ words (m ^. name)) ++ " Module")):(buildModuleDesc m)
---  ) (spec $ getRefName x)
+lay (UsesHierarchy _) = H.Paragraph (H.S "")  -- need to implement!
 
 makeL :: ListType -> H.ListType
 makeL (Bullet bs) = H.Unordered $ map item bs
@@ -134,7 +126,7 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 makePairs :: DType -> [(String,H.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       H.Paragraph $ H.N $ c ^. symbol),
-  ("Units",       H.Paragraph $ H.Sy $ c ^. unit),
+  ("Units",       H.Paragraph $ spec $ unit'2Contents c),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.S "")),
   ("Description", H.Paragraph (buildDDDescription c))
   ]

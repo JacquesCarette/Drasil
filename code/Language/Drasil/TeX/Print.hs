@@ -11,11 +11,12 @@ import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
-import Language.Drasil.Config (srsTeXParams, lpmTeXParams, colAwidth, colBwidth,
-              SRSParams(..), LPMParams(..))
+import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
+              LPMParams(..))
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
+import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
@@ -25,18 +26,15 @@ genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
 
 build :: A.DocType -> Document -> D
-build (A.SRS _) doc   = buildSRS srsTeXParams doc
-build (A.MG _) doc    = buildSRS srsTeXParams doc   -- temporary
-build (A.MIS _) doc   = buildSRS srsTeXParams doc   -- temporary
+build (A.SRS _) doc   = buildStd doc
+build (A.MG _) doc    = buildStd doc
+build (A.MIS _) doc   = buildStd doc
 build (A.LPM _) doc   = buildLPM lpmTeXParams doc
 build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
-buildSRS :: SRSParams -> Document -> D
-buildSRS (SRSParams (A.DocClass sb b1) (A.UsePackages ps))
-         (Document t a c) =
-  docclass sb b1 %%
-  listpackages ps %%
-  preambledefs %%
+buildStd :: Document -> D
+buildStd (Document t a c) =
+  genPreamble c %%
   title (spec t) %%
   author (spec a) %%
   document (maketitle %% maketoc %% newpage %% print c)
@@ -54,10 +52,6 @@ buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
 listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
-preambledefs :: D
-preambledefs = hyperConfig %% modcounter %% modnum %% reqcounter %% reqnum
-  %% assumpcounter %% assumpnum %% lccounter %% lcnum %% uccounter %% ucnum
-
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> D
 lo (Section d t con l)     = sec d (spec t) %% label (spec l) %% print con
@@ -73,7 +67,8 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
-
+lo (UsesHierarchy c)       = toText $ makeUH $
+                               map (\(a,b) -> (spec a, spec b)) c
 
 
 print :: [LayoutObj] -> D
@@ -209,7 +204,7 @@ spec a@(s :+: t) = s' <> t'
 spec (E ex)      = toMath $ pure $ text $ p_expr ex
 spec (a :-: s)   = toMath $ subscript (spec a) (spec s)
 spec (a :^: s)   = toMath $ superscript (spec a) (spec s)
-spec (a :/: s)   = fraction (spec a) (spec s)
+spec (a :/: s)   = toMath $ fraction (spec a) (spec s)
 spec (S s)       = pure $ text s
 spec (N s)       = toMath $ pure $ text $ symbol s
 spec (Sy s)      = p_unit s
@@ -240,7 +235,7 @@ p_unit (UName n) =
   switch (const cn) (pure $ text $ symbol n)
 p_unit (UProd l) = foldr (<>) empty (map p_unit l)
 p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (UDiv n d) =
+p_unit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)
     UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
@@ -284,7 +279,9 @@ dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 -----------------------------------------------------------------
 
 makeEquation :: Spec -> D
-makeEquation contents = equation (toMath $ spec contents)
+makeEquation contents = equation (spec contents)
+  --This needs to be fixed. Equation blocks should not contain '$'
+
   --TODO: Add auto-generated labels -> Need to be able to ensure labeling based
   --  on chunk (i.e. "eq:h_g" for h_g = ...
 
@@ -364,3 +361,28 @@ makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
 makeUC :: D -> D -> D
 makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
   ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n
+
+
+
+makeUH :: [(D,D)] -> D
+makeUH c = mkEnv "figure" $
+  vcat $ [ centering,
+           pure $ text $ "\\resizebox{\\textwidth}{!}{",
+           pure $ text $ "\\tikz [>=stealth, shorten >=1pt]",
+           pure $ text $ (
+             "\\graph [layered layout, components go right top aligned, " ++
+             "minimum layers=3, nodes={ draw, thick, align=center, " ++
+             "inner xsep=0.5em, inner ysep=0.5em, text width=4em, " ++
+             "minimum height=5em, font=\\scriptsize, fill=white, " ++
+             "text opacity=1, fill opacity=0.8, " ++
+             "typeset={\\tikzgraphnodetext\\\\M\\ref{\\tikzgraphnodename}}}, " ++
+             "edges={thick, rounded corners}]"
+             ),
+           pure $ text "{"
+         ]
+     ++  map (\(a,b) -> a <> (pure $ text " -> ") <> b <> (pure $ text ";")) c
+     ++  [ pure $ text "};",
+           pure $ text "}",
+           caption $ pure $ text "Uses Hierarchy",
+           label $ pure $ text "Figure:UsesHierarchy"
+         ]

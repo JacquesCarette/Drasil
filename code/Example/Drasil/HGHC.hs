@@ -19,9 +19,9 @@ modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_behav]
 
 s1, s2, s3 :: Section --, s4 
-s1 = table_of_units si_units
-s2 = table_of_symbols $ (map Has vars) ++ (map HasNot varChunks)
-s3 = Section 0 (S "Data Definitions") $ map (Con . Definition . Data) vars
+s1 = table_of_units si_units -- probably want to not do all of them
+s2 = table_of_symbols $ (map uc vars) ++ (map HasNot varChunks)
+s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 --s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [h_c]
 
 --m1,m2,m3 :: LayoutObj
@@ -38,7 +38,7 @@ doc name ls author body =
 srsBody :: Document
 srsBody = doc "SRS" vars "Spencer Smith" [s1, s2, s3]--, s4]
 
-(mgSecs, misSecs) = makeDD [] [] modules
+(mgSecs, misSecs) = makeDD [] [] [] modules
   
 mgBody :: Document
 mgBody = doc "MG" vars "Spencer Smith" mgSecs

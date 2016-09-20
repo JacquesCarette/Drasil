@@ -6,16 +6,20 @@ import Data.Char (toLower, toUpper)
 import Data.List (intersperse)
 import Control.Lens ((^.))
 
+import Language.Drasil
+
+import Example.Drasil.GamePhysics.Units
+import Example.Drasil.GamePhysics.TableOfSymbols
+
 import Example.Drasil.GamePhysics.ChipmunkUnits
 import Example.Drasil.GamePhysics.ChipmunkUnitals
 import Example.Drasil.GamePhysics.ChipmunkConcepts
 import Example.Drasil.GamePhysics.ChipmunkTMods
 import Example.Drasil.GamePhysics.ChipmunkDataDefs
 
-import Example.Drasil.Units
-import Example.Drasil.TableOfSymbols
-
-import Language.Drasil
+import Example.Drasil.GamePhysics.ChipmunkModules
+import Example.Drasil.GamePhysics.ChipmunkChanges
+import Example.Drasil.GamePhysics.ChipmunkReqs
 
 chipmunkSRS :: Document
 chipmunkSRS = Document
@@ -23,14 +27,25 @@ chipmunkSRS = Document
     (S "Alex Halliwushka and Luthfi Mawarid")
     [s1, s2, s3, s4, s5, s6, s7]
 
+chipmunkMG :: Document
+chipmunkMG = Document (S "Module Guide for " :+: S (chipmunk ^. name))
+    (S "Alex Halliwushka and Luthfi Mawarid") (mgBod)
+
+mgBod :: [Section]
+(mgBod, _) = makeDD lcs ucs reqs modules
+
+-- =================================== --
+-- SOFTWARE REQUIREMENTS SPECIFICATION --
+-- =================================== --
+
 ------------------------------------
--- SECTION 1 : REFERENCE MATERIAL --
+-- Section : REFERENCE MATERIAL --
 ------------------------------------
 
 s1 :: Section
 s1_intro :: Contents
 
-s1 = Section 0 (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2]
+s1 = Section (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2]
 
 s1_intro = Paragraph $ S "This section records information for easy reference."
 
@@ -46,17 +61,18 @@ s1_1 = table_of_units cpSIUnits
 ----------------------------
 
 s1_2 :: Section
-s1_2 = table_of_symbols cpSymbols
+s1_2_intro, s1_2_table :: Contents
 
-{-
--- Original introduction --
+s1_2 = Section (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+
 s1_2_intro = Paragraph $
     S "The table that follows summarizes the symbols used in this " :+:
     S "document along with their units.  More specific instances of these " :+:
     S "symbols will be described in their respective sections. Throughout " :+:
     S "the document, symbols in bold will represent vectors, and scalars " :+:
     S "otherwise. The symbols are listed in alphabetical order."
--}
+
+s1_2_table = table cpSymbols
 
 --------------------------------------
 -- 1.3 : Abbreviations and Acronyms --
@@ -65,7 +81,7 @@ s1_2_intro = Paragraph $
 s1_3 :: Section
 s1_3_table :: Contents
 
-s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
+s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
     [(\ch -> S $ ch ^. name),
@@ -74,13 +90,13 @@ s1_3_table = Table [S "Symbol", S "Description"] (mkTable
     (S "Abbreviations and Acronyms") False
 
 ------------------------------
--- SECTION 2 : INTRODUCTION --
+-- Section : INTRODUCTION --
 ------------------------------
 
 s2 :: Section
 s2_intro :: [Contents]
 
-s2 = Section 0 (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
+s2 = Section (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
     Sub s2_3])
 
 s2_intro = [Paragraph (S "Due to the rising cost of developing video " :+:
@@ -102,15 +118,16 @@ s2_intro = [Paragraph (S "Due to the rising cost of developing video " :+:
 s2_1 :: Section
 s2_1_intro :: [Contents]
 
-s2_1 = Section 1 (S "Purpose of Document") (map Con s2_1_intro)
+s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
-    S "open source " :+: S (twoD ^. name) :+: S " " :+: S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+: S " used for games. The " :+:
-    (sMap (map toLower) (goalStmt ^. descr)) :+: S "s and " :+:
-    (sMap (map toLower) (theoMod ^. descr)) :+: S "s used in " :+:
-    S (chipmunk ^. name) :+: S " are provided. This document is intended " :+:
-    S "to be used as a reference to provide all necessary information to " :+:
-    S "understand and verify the model."),
+    S "open source " :+: S (twoD ^. name) :+: S " " :+:
+    S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
+    S " used for games. The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
+    S "s and " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
+    S "s used in " :+: S (chipmunk ^. name) :+: S " are provided. This " :+:
+    S "document is intended to be used as a reference to provide all " :+:
+    S "necessary information to understand and verify the model."),
     Paragraph (S "This document will be used as a starting point for " :+:
     S "subsequent development phases, including writing the design " :+:
     S "specification and the software verification and validation plan. " :+:
@@ -127,7 +144,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section 1 (S "Scope of " :+: (requirement ^. descr) :+: S "s")
+s2_2 = Section (S "Scope of " :+: (requirement ^. descr) :+: S "s")
     [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ S "The scope of the " :+:
@@ -145,7 +162,7 @@ s2_2_intro = Paragraph $ S "The scope of the " :+:
 s2_3 :: Section
 s2_3_intro :: [Contents]
 
-s2_3 = Section 1 (S "Organization of Document") (map Con s2_3_intro)
+s2_3 = Section (S "Organization of Document") (map Con s2_3_intro)
 
 -- NOTE: References pending --
 s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
@@ -163,13 +180,13 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
     S "s to the " :+: (sMap (map toLower) (instMod ^. descr)) :+: S "s.")]
 
 --------------------------------------------
--- SECTION 3 : GENERAL SYSTEM DESCRIPTION --
+-- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
 s3 :: Section
 s3_intro :: Contents
 
-s3 = Section 0 (S "General System Description") [Con s3_intro, Sub s3_1,
+s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1,
     Sub s3_2]
 
 s3_intro = Paragraph $ S "This section provides general information " :+:
@@ -184,7 +201,7 @@ s3_intro = Paragraph $ S "This section provides general information " :+:
 s3_1 :: Section
 s3_1_intro :: Contents
 
-s3_1 = Section 1 (S "User Characteristics") [Con s3_1_intro]
+s3_1 = Section (S "User Characteristics") [Con s3_1_intro]
 
 s3_1_intro = Paragraph $ S "The end user of " :+: S (chipmunk ^. name) :+:
     S " should have an understanding of first year programming concepts " :+:
@@ -197,7 +214,7 @@ s3_1_intro = Paragraph $ S "The end user of " :+: S (chipmunk ^. name) :+:
 s3_2 :: Section
 s3_2_intro :: Contents
 
-s3_2 = Section 1 (S "System Constraints") [Con s3_2_intro]
+s3_2 = Section (S "System Constraints") [Con s3_2_intro]
 
 s3_2_intro = Paragraph $ S "There are no system constraints."
 
@@ -211,7 +228,7 @@ s3_2_intro = Paragraph $ S "There are no system constraints."
 s4 :: Section
 s4_intro :: Contents
 
-s4 = Section 0 (S "Specific System Description") [Con s4_intro, Sub s4_1,
+s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,
     Sub s4_2]
 
 s4_intro = Paragraph $ S "This section first presents the problem " :+:
@@ -228,7 +245,7 @@ s4_intro = Paragraph $ S "This section first presents the problem " :+:
 s4_1 :: Section
 s4_1_intro :: Contents
 
-s4_1 = Section 1 (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
+s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
     Sub s4_1_2]
 
 s4_1_intro = Paragraph $ S "Creating a gaming " :+: S (physLib ^. name) :+:
@@ -253,7 +270,7 @@ s4_1_intro = Paragraph $ S "Creating a gaming " :+: S (physLib ^. name) :+:
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = Section 2 (S "Terminology and Definitions") [Con s4_1_1_intro,
+s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
     Con s4_1_1_bullets]
 
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms " :+:
@@ -273,7 +290,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map (\term -> Flat (
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_2_list]
+s4_1_2 = Section ((goalStmt ^. descr) :+: S "s") [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
     (S (goalStmt ^. name) :+: S "1", Flat (S "Given the physical " :+:
@@ -308,7 +325,7 @@ s4_1_2_list = Enumeration (Simple [
 
 s4_2 :: Section
 
-s4_2 = Section 1 (S "Solution Characteristics Specification") [Sub s4_2_1,
+s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
     Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
 
 -------------------------
@@ -318,7 +335,7 @@ s4_2 = Section 1 (S "Solution Characteristics Specification") [Sub s4_2_1,
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro,
+s4_2_1 = Section (assumption ^. descr :+: S "s") [Con s4_2_1_intro,
     Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -357,7 +374,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section 2 ((theoMod ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
+s4_2_2 = Section ((theoMod ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
     (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
@@ -373,7 +390,7 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = Section 2 ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] {- ++
+s4_2_3 = Section ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations " :+:
@@ -395,7 +412,7 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = Section 2 ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
+s4_2_4 = Section ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
     (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
@@ -412,7 +429,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 -- s4_2_5_IMods :: [Contents]
 
-s4_2_5 = Section 2 ((instMod ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
+s4_2_5 = Section ((instMod ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
     (map Con s4_2_5_IMods)-})
 
 s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
@@ -431,7 +448,7 @@ s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
 s4_2_6 :: Section
 s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = Section 2 (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
+s4_2_6 = Section (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
     Con s4_2_6_table2]
 
 s4_2_6_intro = Paragraph $ S "Table 1 and 2 show the data constraints on " :+:
@@ -484,7 +501,7 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = Section 0 (requirement ^. descr :+: S "s") [Con s5_intro, Sub s5_1,
+s5 = Section (requirement ^. descr :+: S "s") [Con s5_intro, Sub s5_1,
     Sub s5_2]
 
 s5_intro = Paragraph $ S "This section provides the functional " :+:
@@ -500,7 +517,7 @@ s5_intro = Paragraph $ S "This section provides the functional " :+:
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = Section 1 (S "Functional " :+: (requirement ^. descr) :+: S "s")
+s5_1 = Section (S "Functional " :+: (requirement ^. descr) :+: S "s")
     [Con s5_1_list]
 
 -- Currently need separate chunks for plurals like rigid bodies,
@@ -544,7 +561,7 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = Section 1 (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s")
+s5_2 = Section (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s")
     [Con s5_2_intro]
 
 s5_2_intro = Paragraph $ S "Games are resource intensive, so performance " :+:
@@ -559,7 +576,7 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance " :+:
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section 0 ((likelyChange ^. descr) :+: S "s") [Con s6_intro, Con s6_list]
+s6 = Section ((likelyChange ^. descr) :+: S "s") [Con s6_intro, Con s6_list]
 
 s6_intro = Paragraph $ S "This section lists the " :+: (sMap (map toLower)
     (likelyChange ^. descr)) :+: S "s to be made to the physics game library."
@@ -583,7 +600,7 @@ s6_list = Enumeration (Simple [
 s7 :: Section
 s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
-s7 = Section 0 (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
+s7 = Section (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
     Con s7_mid, Con s7_3dlist]
 
 s7_intro = Paragraph $ S "As mentioned in " :+: (makeRef s4_1) :+:

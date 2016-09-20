@@ -24,11 +24,11 @@ pcm_srs = Document (S "Software Requirements Specification for Solar Water " :+:
           S "Heating Systems") 
           (S "Thulasi Jegatheesan") [s1,s4]
 
-s1 = Section 0 (S "Reference Material") [Con s1_intro,Sub s1_1,Sub s1_2,Sub s1_3]
+s1 = Section (S "Reference Material") [Con s1_intro,Sub s1_1,Sub s1_2,Sub s1_3]
 
 s1_intro = Paragraph (S "This section records information for easy reference")
 
-s1_1 = Section 1 (S "Table of Units") [Con s1_1_intro,Con s1_1_table]
+s1_1 = Section (S "Table of Units") [Con s1_1_intro,Con s1_1_table]
 
 s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
            (F Grave 'e') :+: S "me International d'Unit" :+:
@@ -45,7 +45,7 @@ s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
   ] this_si)
   (S "Table of Units") True
 
-s1_2 = Section 1 (S "Table of Symbols") [Con s1_2_intro,Con s1_2_table]
+s1_2 = Section (S "Table of Symbols") [Con s1_2_intro,Con s1_2_table]
 
 s1_2_intro = Paragraph $ 
   S "The table that follows summarizes the symbols used in this " :+:
@@ -61,7 +61,7 @@ s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   pcmSymbols)
   (S "Table of Symbols") False
 
-s1_3 = Section 1 (S "Abbreviations and Acronyms") [Con s1_3_table]
+s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
   [(\ch -> S $ ch ^. name),
@@ -69,7 +69,7 @@ s1_3_table = Table [S "Symbol", S "Description"] (mkTable
   acronyms)
   (S "Abbreviations and Acronyms") False
 
-s4 = Section 0 (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
+s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 
 s4_intro = Paragraph $ S "This section first presents the problem " :+:
   S "description, which gives a high-level view of the problem to be solved" :+:
@@ -77,14 +77,14 @@ s4_intro = Paragraph $ S "This section first presents the problem " :+:
   S "which presents the assumptions, theories, definitions and finally the " :+:
   S "instance model (ODE) that models the solar water heating tank."
 
-s4_1 = Section 1 (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
+s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
                                             Sub s4_1_2,Sub s4_1_3]
 
 s4_1_intro = Paragraph $ S (sWHS ^. name) :+: S " is a computer program " :+:
   S "developed to investigate the heating of water in a solar water heating" :+:
   S " tank."
 
-s4_1_1 = Section 2 (S "Terminology and Definitions") [Con s4_1_1_intro,
+s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
   
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+:
@@ -96,7 +96,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ S
   (capitalize (c ^. name)) :+: S ": " :+: (c ^. descr)) 
   [thermFluxU, heat_capacity])
   
-s4_1_2 = Section 2 (physSysDescr ^. descr) [Con s4_1_2_intro,Con s4_1_2_list,
+s4_1_2 = Section (physSysDescr ^. descr) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:
@@ -111,7 +111,7 @@ s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   P (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. descr) :+:
   S " into the water.)")]
 
-s4_1_3 = Section 2 ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro,
+s4_1_3 = Section ((goalStmt ^. descr) :+: S "s") [Con s4_1_3_intro,
                                                     Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
@@ -120,7 +120,7 @@ s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "predict the " :+: (temp_water ^. descr) :+: S " over time")]
 
-s4_2 = Section 1 (S "Solution Characteristics Specification") 
+s4_2 = Section (S "Solution Characteristics Specification") 
   [Con s4_2_intro,Sub s4_2_1,Sub s4_2_2]
 
 s4_2_intro = Paragraph $ S "The " :+: 
@@ -132,7 +132,7 @@ s4_2_intro = Paragraph $ S "The " :+:
   S " and its derivation is also" :+: S " presented, so that the " :+: 
   (sMap (map toLower) (instanceMod ^. descr)) :+: S " can be verified."
   
-s4_2_1 = Section 2 (assumption ^. descr :+: S "s") [Con s4_2_1_intro]
+s4_2_1 = Section (assumption ^. descr :+: S "s") [Con s4_2_1_intro]
 
 s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   S "and helps in developing the theoretical model by filling in the " :+:
@@ -145,7 +145,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
 --TODO: Simple List
 
-s4_2_2 = Section 2 ((theoreticMod ^. descr) :+: S "s") 
+s4_2_2 = Section ((theoreticMod ^. descr) :+: S "s") 
   ((Con s4_2_2_intro):(map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:

@@ -28,8 +28,7 @@ data Document = Document Title Author Sections
 data SecCons = Sub Section
              | Con Contents
 
-data Section = Section Depth Title [SecCons]
-      --Section = 0 depth, subsection = 1, subsub = 2 ... etc.
+data Section = Section Title [SecCons]
 
 --Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool
@@ -45,6 +44,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Assumption AssumpChunk
                | LikelyChange LCChunk
                | UnlikelyChange UCChunk
+               | UsesHierarchy [(ModuleChunk,[ModuleChunk])]
 
 data ListType = Bullet [ItemType]
               | Number [ItemType] 
@@ -64,7 +64,7 @@ class LayoutObj l where
   rType   :: l -> RefType
 
 instance LayoutObj Section where
-  refName (Section d t _) = writeSec d :+: inferName t
+  refName (Section t _) = S "Sec:" :+: inferName t
   rType _ = Sect
 
 instance LayoutObj Contents where
@@ -75,11 +75,12 @@ instance LayoutObj Contents where
   refName (CodeBlock _)       = error "Codeblock ref unimplemented"
   refName (Definition d)      = getDefName d
   refName (Enumeration _)     = error "List refs unimplemented"
-  refName (Module m)          = S $ "Module:" ++ alphanumOnly (m ^. name)
-  refName (Requirement r)     = S $ "Req:" ++ alphanumOnly (r ^. name)
-  refName (Assumption a)      = S $ "Assump:" ++ alphanumOnly (a ^. name)
-  refName (LikelyChange lc)   = S $ "LC:" ++ alphanumOnly (lc ^. name)
-  refName (UnlikelyChange uc) = S $ "UC:" ++ alphanumOnly (uc ^. name)
+  refName (Module m)          = S $ "M" ++ alphanumOnly (m ^. name)
+  refName (Requirement r)     = S $ "R" ++ alphanumOnly (r ^. name)
+  refName (Assumption a)      = S $ "A" ++ alphanumOnly (a ^. name)
+  refName (LikelyChange lc)   = S $ "LC" ++ alphanumOnly (lc ^. name)
+  refName (UnlikelyChange uc) = S $ "UC" ++ alphanumOnly (uc ^. name)
+  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
   rType (Definition _)     = Def
@@ -88,6 +89,7 @@ instance LayoutObj Contents where
   rType (Assumption _)     = Assump
   rType (LikelyChange _)   = LC
   rType (UnlikelyChange _) = UC
+  rType (UsesHierarchy _)  = Fig
   rType _ = error "Attempting to reference unimplemented reference type"
   
 getDefName :: DType -> Sentence

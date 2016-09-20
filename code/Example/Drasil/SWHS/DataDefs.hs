@@ -46,8 +46,8 @@ dd3descr = (S "amount of " :+: (sMap (map toLower) (S (thermal_energy ^. name)))
            S " of a substance.")
 
 -- dd4MeltFrac :: EqChunk
-dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless
-              melt_frac_eqn
+--dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless
+              --melt_frac_eqn
 
 -- melt_frac_eqn :: Expr
 -- melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))

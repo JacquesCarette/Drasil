@@ -1,9 +1,9 @@
 {-# OPTIONS -Wall #-}
 module Example.Drasil.GlassBR.GlassBRUnits where
 
-import Example.Drasil.GlassBR.GlassBRSIUnits
 import Control.Lens ((^.))
 import Language.Drasil
+import Example.Drasil.GlassBR.GlassBRSIUnits
 
 --N^(-7)*m^12--
 sFlawPU :: DerUChunk

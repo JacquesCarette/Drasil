@@ -38,10 +38,11 @@ thModel     = makeCC "T" "Theoretical Model"
 ---ConceptChunks---
 
 boiling, charging, coil, discharging, gaseous, gauss_div, heat_flux, heat_trans, 
-  liquid, latent_heat, law_cons_energy, law_cooling, mech_energy, melting, 
-  perfect_insul, phase_change_material, phs_change, sens_heat, solid, 
-  specific_heat, swhs_pcm, tank, tank_pcm, thermal_analysis, thermal_conduction,
-  thermal_conductor, thermal_energy, transient, water :: ConceptChunk
+  liquid, latent_heat, law_cons_energy, law_cooling, matlab, mech_energy,
+  melting, os, perfect_insul, phase_change_material, phs_change, program, 
+  sens_heat, solid, specific_heat, swhs_pcm, tank, tank_pcm, thermal_analysis,
+  thermal_conduction, thermal_conductor, thermal_energy, transient, 
+  water :: ConceptChunk
 
 boiling = makeCC "Boiling" "Phase change from liquid to vapour"
 charging = makeCC "Charging" "Charging of the tank"
@@ -56,16 +57,19 @@ law_cons_energy = makeCC "Law of conservation of energy" "Energy is conserved"
 law_cooling = makeCC "Newton's law of cooling" ("Newton's law of convective " ++
               "cooling")
 liquid = makeCC "Liquid" "liquid state"
+matlab = makeCC "MATLAB" "MATLAB programming language"
 mech_energy = makeCC "Mechanical energy" ("The energy that comes from motion" ++
               " and position")
 melting = makeCC "Melting" "Phase change from solid to liquid"
+os = makeCC "OS" "operating system"
 perfect_insul = makeCC "perfectly insulated" ("Describes the property of a " ++
                 "material not allowing heat transfer through its boundaries")
 phase_change_material = makeCC "Phase Change Material (PCM)" ("A substance " ++
-                        "that uses phase changes (melting) to absorb or " ++
+                        "that uses phase changes (such as melting) to absorb or " ++
                         "release large amounts of heat at a constant " ++
                         "temperature.")
 phs_change = makeCC "Phase change" "Change of state"
+program = makeCC "SWHS" "SWHS program"
 sens_heat = makeCC "Sensible heat" "Sensible heating"
 solid = makeCC "Solid" "solid state"
 specific_heat = makeCC "Specific heat" "Heat capacity per unit mass."

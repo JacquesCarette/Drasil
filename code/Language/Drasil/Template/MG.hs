@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec
-import Language.Drasil.Printing.Helpers
+--import Language.Drasil.Printing.Helpers
 import Language.Drasil.Reference
 import Language.Drasil.Template.Helpers
 
@@ -16,15 +16,17 @@ import Data.List (nub, intersperse)
 import Data.Maybe (fromJust, isNothing)
 
 
-makeMG :: [LCChunk] -> [UCChunk] -> [ModuleChunk] -> ([Section], [Contents])
-makeMG lccs uccs mcs = let mhier  = buildMH $ splitLevels mcs
+makeMG :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
+  -> ([Section], [Contents])
+makeMG lccs uccs rcs mcs =
+                       let mhier  = buildMH $ splitLevels mcs
                            mpairs = map createMPair (getMHOrder mhier)
                            hierTable = mgHierarchy $ formatMH mhier
                            s2 = mgChanges lccs uccs
                            s3 = mgModuleHierarchy mpairs hierTable
                            s4 = mgModuleDecomp mpairs
-                           s5 = mgTrace lccs
-                           s6 = mgUses
+                           s5 = mgTrace rcs lccs
+                           s6 = mgUses mcs
                            secDescr = [
                              (s2, S " lists the likely and unlikely " :+:
                                   S "changes of the software requirements.") ,
@@ -53,7 +55,7 @@ makeMG lccs uccs mcs = let mhier  = buildMH $ splitLevels mcs
 
 mgIntro :: Contents -> Section
 mgIntro docDesc =
-  Section 0 (S "Introduction") (
+  Section (S "Introduction") (
     [ Con $ Paragraph $
         S "Decomposing a system into modules is a commonly accepted " :+:
         S "approach to developing software.  A module is a work assignment " :+:
@@ -63,7 +65,8 @@ mgIntro docDesc =
         S "decompose the software into modules.  We advocate a " :+:
         S "decomposition based on the principle of information hiding. " :+:
         S "This principle supports design for change, because the " :+:
-        S "``secrets'' that each module hides represent likely future " :+:
+        Quote (S "secrets") :+:
+        S " that each module hides represent likely future " :+:
         S "changes.  Design for change is valuable in SC, where " :+:
         S "modifications are frequent, especially during initial " :+:
         S "development as the solution space is explored." ,
@@ -108,7 +111,7 @@ mgChanges :: [LCChunk] -> [UCChunk] -> Section
 mgChanges lccs uccs = let secLikely = mgLikelyChanges lccs
                           secUnlikely = mgUnlikelyChanges uccs
   in
-    Section 0 (S "Likely and Unlikely Changes") (
+    Section (S "Likely and Unlikely Changes") (
       [ Con $ Paragraph $
           S "This section lists possible changes to the system. According " :+:
           S "to the likeliness of the change, the possible changes are " :+:
@@ -122,14 +125,14 @@ mgChanges lccs uccs = let secLikely = mgLikelyChanges lccs
 
 mgLikelyChanges :: [LCChunk] -> Section
 mgLikelyChanges lccs =
-  Section 1 (S "Likely Changes") (
+  Section (S "Likely Changes") (
     [ Con mgLikelyChangesIntro ]
     ++ map (Con . LikelyChange) lccs
   )
 
 mgUnlikelyChanges :: [UCChunk] -> Section
 mgUnlikelyChanges uccs =
-  Section 1 (S "Unikely Changes") (
+  Section (S "Unikely Changes") (
     [ Con mgUnlikelyChangesIntro ]
     ++ map (Con . UnlikelyChange) uccs
   )
@@ -157,7 +160,7 @@ mgUnlikelyChangesIntro = Paragraph $
 
 mgModuleHierarchy :: [MPair] -> Contents -> Section
 mgModuleHierarchy mpairs hierTable =
-  Section 0 (S "Module Hierarchy") (
+  Section (S "Module Hierarchy") (
     [ Con $ mgModuleHierarchyIntro hierTable ]
     ++ (map Con $ getMods mpairs)
     ++ [Con hierTable]
@@ -179,7 +182,7 @@ mgHierarchy mh = let cnt = length $ head mh
 
 mgModuleDecomp :: [MPair] -> Section
 mgModuleDecomp mpairs = let levels = splitLevels $ getChunks mpairs
-  in Section 0 (S "Module Decomposition") (
+  in Section (S "Module Decomposition") (
        [Con $ mgModuleDecompIntro $ getChunks mpairs]
        ++ map (\x -> Sub (mgModuleInfo x levels)) mpairs
      )
@@ -190,8 +193,9 @@ mgModuleDecompIntro mcs =
        (x ^. name) ++ ", this means that the module is provided by the ")
        :+: (x ^. descr) :+: S ". ") ccs
   in Paragraph $
-    S "Modules are decomposed according to the principle of \"information " :+:
-    S "hiding\" proposed by Parnas. The Secrets field in a module " :+:
+    S "Modules are decomposed according to the principle of " :+:
+    Quote (S "information hiding") :+:
+    S " proposed by Parnas. The Secrets field in a module " :+:
     S "decomposition is a brief statement of the design decision hidden by " :+:
     S "the module. The Services field specifies what the module will do " :+:
     S "without documenting how to do it. For each module, a suggestion for " :+:
@@ -212,8 +216,8 @@ mgModuleInfo (mc, m) ls = let title = if   isNothing m
                                    then S (formatName mc)
                                    else S (formatName mc) :+: S " (" :+:
                                           (makeRef $ fromJust m) :+: S ")"
-                              level = getLevel mc ls
-  in Section (1 + level)
+--                              level = getLevel mc ls
+  in Section
     title
     [ Con $ Enumeration $ Desc
       [(S "Secrets", Flat (secret mc)),
@@ -226,15 +230,24 @@ mgModuleInfo (mc, m) ls = let title = if   isNothing m
       getImp _        = S "--"
 
 
-mgTrace :: [LCChunk] -> Section
-mgTrace lccs = let lct = mgTraceLC lccs
-  in Section 0 ( S "Traceability Matrix") (
+mgTrace :: [ReqChunk] -> [LCChunk] -> Section
+mgTrace rcs lccs = let lct = mgTraceLC lccs
+                       rt  = mgTraceR rcs
+  in Section ( S "Traceability Matrix") (
        [ Con $ Paragraph $
            S "This section shows two traceability matrices: between the " :+:
-           S "modules and the requirements in Table **todo** and between " :+:
-           S "the modules and the likely changes in " :+: makeRef lct :+: S ".",
+           S "modules and the requirements in " :+: makeRef rt :+: S " and " :+:
+           S "between the modules and the likely changes in " :+:
+           makeRef lct :+: S ".",
+         Con $ rt,
          Con $ lct ]
      )
+
+mgTraceR :: [ReqChunk] -> Contents
+mgTraceR rcs = Table [S "Requirement", S "Modules"]
+  (zipWith (\x y -> [x,y]) (map S (zipWith (++) (repeat "R") (map show [1..])))
+  (map (mgListModules . rRelatedModules) rcs))
+  (S "Trace Between Requirements and Modules") True
 
 mgTraceLC :: [LCChunk] -> Contents
 mgTraceLC lccs = Table [S "Likely Change", S "Modules"]
@@ -249,21 +262,30 @@ mgListModules :: [ModuleChunk] -> Sentence
 mgListModules mcs = foldl (:+:) (S "") $ intersperse (S ", ") $
   map (\x -> makeRef $ Module x) mcs
 
-mgUses :: Section
-mgUses =
-  Section 0 ( S "Uses Hierarchy" ) (
-    [ Con $ Paragraph $
-        S "In this section, the uses hierarchy between modules is " :+:
-        S "provided. Parnas said of two programs A and B that A uses B if " :+:
-        S "correct execution of B may be necessary for A to complete " :+:
-        S "the task described in its specification. That is, A uses B if " :+:
-        S "there exist situations in which the correct functioning of A " :+:
-        S "depends upon the availability of a correct implementation of B. " :+:
-        S "Figure **todo** illustrates the use hierarchy between the " :+:
-        S "modules. The graph is a directed acyclic graph (DAG). Each " :+:
-        S "level of the hierarchy offers a testable and usable subset of " :+:
-        S "the system, and modules in the higher level of the hierarchy " :+:
-        S "are essentially simpler because they use modules from the lower " :+:
-        S "levels."
-    ]
-  )
+mgUses :: [ModuleChunk] -> Section
+mgUses mcs = let uh = mgUH mcs
+  in Section ( S "Uses Hierarchy" ) (
+       [ Con $ Paragraph $
+           S "In this section, the uses hierarchy between modules is " :+:
+           S "provided. Parnas said of two programs A and B that A uses B if " :+:
+           S "correct execution of B may be necessary for A to complete " :+:
+           S "the task described in its specification. That is, A uses B if " :+:
+           S "there exist situations in which the correct functioning of A " :+:
+           S "depends upon the availability of a correct implementation of B. " :+:
+           makeRef uh :+:
+           S " illustrates the uses hierarchy between the " :+:
+           S "modules. The graph is a directed acyclic graph (DAG). Each " :+:
+           S "level of the hierarchy offers a testable and usable subset of " :+:
+           S "the system, and modules in the higher level of the hierarchy " :+:
+           S "are essentially simpler because they use modules from the lower " :+:
+           S "levels.",
+         Con uh
+       ]
+     )
+
+mgUH :: [ModuleChunk] -> Contents
+mgUH mcs = UsesHierarchy $ makePairs mcs
+  where makePairs []      = []
+        makePairs (m:mcs) = if (null $ uses m)
+                            then makePairs mcs
+                            else (m, uses m):makePairs mcs

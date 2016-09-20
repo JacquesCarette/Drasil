@@ -8,17 +8,20 @@ outLang = CLang
 expandSymbols :: Bool
 expandSymbols = True
 
-data SRSParams = SRSParams DocClass UsePackages
+--data SRSParams = SRSParams DocClass UsePackages
 data LPMParams = LPMParams DocClass UsePackages ExDoc
 
-srsTeXParams :: SRSParams
-srsTeXParams = defaultSRSparams
+--srsTeXParams :: SRSParams
+--srsTeXParams = defaultSRSparams
 
 lpmTeXParams :: LPMParams
 lpmTeXParams = defaultLPMparams
 
 tableWidth :: Double -- in cm
 tableWidth = 10.5
+
+fontSize :: Int
+fontSize = 12
 
 verboseDDDescription :: Bool
 verboseDDDescription = True
@@ -34,11 +37,11 @@ numberedSections = True
 
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
   -- you can create your own parameter function and replace the one above.
-defaultSRSparams :: SRSParams
-defaultSRSparams = SRSParams
-  (DocClass  Nothing "article")
-  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
-  "amsmath"])
+--defaultSRSparams :: SRSParams
+--defaultSRSparams = SRSParams
+--  (DocClass  Nothing "article")
+--  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
+--  "amsmath"])
 
 defaultLPMparams :: LPMParams
 defaultLPMparams = LPMParams

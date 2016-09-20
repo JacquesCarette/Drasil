@@ -10,15 +10,11 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.Other
-import Language.Drasil.Unit
 import Language.Drasil.Chunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Reference
-import Language.Drasil.Printing.Helpers
-import Data.List (intersperse)
+import Language.Drasil.Misc (unit'2Contents)
 
 expr :: Expr -> T.Expr
 expr (V v)        = T.Var  v
@@ -93,16 +89,16 @@ makeDocument :: Document -> T.Document
 makeDocument (Document title author sections) = 
   T.Document (spec title) (spec author) (createLayout sections)
 
-layout :: SecCons -> T.LayoutObj
-layout (Sub s) = sec s
-layout (Con c) = lay c
+layout :: Int -> SecCons -> T.LayoutObj
+layout currDepth (Sub s) = sec (currDepth+1) s
+layout _         (Con c) = lay c
 
 createLayout :: Sections -> [T.LayoutObj]
-createLayout = map sec
+createLayout = map (sec 0)
 
-sec :: Section -> T.LayoutObj
-sec x@(Section depth title contents) = 
-  T.Section depth (spec title) (map layout contents) (spec $ refName x)
+sec :: Int -> Section -> T.LayoutObj
+sec depth x@(Section title contents) = 
+  T.Section depth (spec title) (map (layout depth) contents) (spec $ refName x)
 
 lay :: Contents -> T.LayoutObj
 lay x@(Table hdr lls t b) 
@@ -124,6 +120,7 @@ lay x@(LikelyChange lc)   = T.LikelyChange (spec (lc ^. descr))
   (spec $ refName x)
 lay x@(UnlikelyChange uc) = T.UnlikelyChange (spec (uc ^. descr))
   (spec $ refName x)
+lay x@(UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs) = T.Enum $ (map item bs)
@@ -138,7 +135,7 @@ item (Nested t s) = T.Nested (spec t) (makeL s)
 makePairs :: DType -> [(String,T.LayoutObj)]
 makePairs (Data c) = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
-  ("Units",       T.Paragraph $ T.Sy $ c ^. unit),
+  ("Units",       T.Paragraph $ spec $ unit'2Contents c),
   ("Equation",    eqnStyleDD $ buildEqn c),
   ("Description", T.Paragraph (buildDDDescription c))
   ]
@@ -148,6 +145,14 @@ makePairs (Theory c) = [
   ("Description", T.Paragraph (spec (c ^. descr)))
   ]
 makePairs General = error "Not yet implemented"
+
+makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
+makeUHPairs []          = []
+makeUHPairs ((m,ms):xs) = (buildPairs m ms) ++ makeUHPairs xs
+  where  buildPairs _ []       = []
+         buildPairs m1 (m2:ms) = (makeEntry m1, makeEntry m2):buildPairs m1 ms
+           where  makeEntry m = (spec $ refName $ Module m) T.:+:
+                                  (T.S "/") T.:+: (T.S $ formatName m)
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj

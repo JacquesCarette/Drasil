@@ -1,0 +1,25 @@
+Name:		SWHS
+Version:	0.0.4
+Cabal-Version:  >= 1.18
+Author:		?
+build-type:     Simple
+Synopsis:	Testing SWHS
+
+executable test
+  main-is: Example/Drasil/Testing/SWHSEqnBlockTest.hs
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  HS-Source-Dirs:  ../../..
+    
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/literate-scientific-software.git
+  subdir: code

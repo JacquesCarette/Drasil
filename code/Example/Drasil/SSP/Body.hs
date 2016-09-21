@@ -1,13 +1,13 @@
 {-# LANGUAGE FlexibleContexts #-} 
-module Drasil.SSP.SSPBody where
+module Drasil.SSP.Body where
 
 import Control.Lens ((^.))
 
-import Drasil.SSP.SSPDefs
-import Drasil.SSP.SSPUnits
-import Drasil.SSP.SSPModules
-import Drasil.SSP.SSPChanges
-import Drasil.SSP.SSPReqs
+import Drasil.SSP.Defs
+import Drasil.SSP.Units
+import Drasil.SSP.Modules
+import Drasil.SSP.Changes
+import Drasil.SSP.Reqs
 
 import Language.Drasil
 import Language.Drasil.SI_Units 

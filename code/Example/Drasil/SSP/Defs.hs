@@ -1,6 +1,6 @@
-module Drasil.SSP.SSPDefs where
+module Drasil.SSP.Defs where
 
-import Drasil.SSP.SSPUnits
+import Drasil.SSP.Units
 
 import Language.Drasil
 import Language.Drasil.SI_Units

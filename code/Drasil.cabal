@@ -1,15 +1,66 @@
-Name:		Drasil
-Version:	0.0.4
+Name:		drasil
+Version:	0.0.5
 Cabal-Version:  >= 1.18
-Author:		Dan Szymczak, Jacques Carette, Spencer Smith
+Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
 Synopsis:	A framework for code and document generation for scientific software
 
 library
   exposed-modules:
-    Language.Drasil
+    Language.Drasil,
+    Language.Drasil.SI_Units
   other-modules:
-    Language.Drasil.Expr
+      Language.Drasil.Expr
+    , Language.Drasil.Chunk
+    , Language.Drasil.Config
+    , Language.Drasil.Document
+    , Language.Drasil.Format
+    , Language.Drasil.Generate
+    , Language.Drasil.Misc
+    , Language.Drasil.Recipe
+    , Language.Drasil.RefHelpers
+    , Language.Drasil.Reference
+    , Language.Drasil.Spec
+    , Language.Drasil.Symbol
+    , Language.Drasil.SymbolAlphabet
+    , Language.Drasil.Unicode
+    , Language.Drasil.Unit
+    , Language.Drasil.CCode.AST
+    , Language.Drasil.CCode.Helpers
+    , Language.Drasil.CCode.Import
+    , Language.Drasil.CCode.Print
+    , Language.Drasil.CCode.Solver
+    , Language.Drasil.HTML.AST
+    , Language.Drasil.HTML.Helpers
+    , Language.Drasil.HTML.Import
+    , Language.Drasil.HTML.Print
+    , Language.Drasil.HTML.Monad
+    , Language.Drasil.TeX.AST
+    , Language.Drasil.TeX.Helpers
+    , Language.Drasil.TeX.Import
+    , Language.Drasil.TeX.Print
+    , Language.Drasil.TeX.Monad
+    , Language.Drasil.TeX.Preamble
+    , Language.Drasil.Chunk.Eq
+    , Language.Drasil.Chunk.LC
+    , Language.Drasil.Chunk.MUChunk
+    , Language.Drasil.Chunk.Method
+    , Language.Drasil.Chunk.Module
+    , Language.Drasil.Chunk.Other
+    , Language.Drasil.Chunk.Relation
+    , Language.Drasil.Chunk.Req
+    , Language.Drasil.Chunk.Unital
+    , Language.Drasil.Expr.Extract
+    , Language.Drasil.Make.AST
+    , Language.Drasil.Make.Helpers
+    , Language.Drasil.Make.Import
+    , Language.Drasil.Make.Print
+    , Language.Drasil.Output.Formats
+    , Language.Drasil.Printing.Helpers
+    , Language.Drasil.Template.DD
+    , Language.Drasil.Template.Helpers
+    , Language.Drasil.Template.MG
+    , Language.Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -22,7 +73,8 @@ library
   ghc-options:      -Wall
 
 executable lss
-  main-is: Example/Drasil/Main.hs
+  hs-source-dirs: Example
+  main-is: Drasil/Main.hs
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -30,9 +82,10 @@ executable lss
     pretty >= 1.1.1.1,
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
-    split >= 0.2.3.1
+    split >= 0.2.3.1,
+    drasil >= 0.0.5
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -O2
     
 source-repository head
   type:     git

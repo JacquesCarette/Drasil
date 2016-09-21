@@ -1,4 +1,4 @@
-module Example.Drasil.Concepts where
+module Drasil.Concepts where
 
 import Language.Drasil
 

@@ -1,5 +1,5 @@
 -- Standard code to make a table of symbols.
-module Example.Drasil.TableOfSymbols(table_of_symbols) where
+module Drasil.TableOfSymbols(table_of_symbols) where
 
 import Control.Lens ((^.))
 

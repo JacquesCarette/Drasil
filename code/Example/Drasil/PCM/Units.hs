@@ -1,4 +1,4 @@
-module Example.Drasil.PCM.Units where
+module Drasil.PCM.Units where
 
 import Language.Drasil
 import Language.Drasil.SI_Units

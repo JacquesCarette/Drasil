@@ -1,11 +1,9 @@
 module Main where
 
-import Language.Drasil (DocType(SRS,MG,MIS,LPM,Website))
-import Language.Drasil.Recipe (Recipe(..))
-import Language.Drasil.Generate (gen)
+import Language.Drasil (DocType(SRS,MG,MIS,LPM,Website),Recipe(..),gen)
 
-import Example.Drasil.HGHC (srsBody,mgBody,misBody) --,lpmBody
-import Example.Drasil.PCM.Body (pcm_srs)
+import Drasil.HGHC (srsBody,mgBody,misBody) --,lpmBody
+import Drasil.PCM.Body (pcm_srs)
 
 docs :: [Recipe]
 docs = [Recipe (Website "SRS") srsBody,

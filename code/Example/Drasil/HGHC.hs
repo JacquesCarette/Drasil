@@ -1,13 +1,12 @@
-module Example.Drasil.HGHC(srsBody, mgBody, misBody) where
+module Drasil.HGHC(srsBody, mgBody, misBody) where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
 
-import Example.Drasil.HeatTransfer
-import Example.Drasil.Units
-import Example.Drasil.TableOfSymbols
-import Example.Drasil.Modules
-import Example.Drasil.Concepts
+import Drasil.HeatTransfer
+import Drasil.Units
+import Drasil.TableOfSymbols
+import Drasil.Modules
 
 import Language.Drasil
 import Language.Drasil.SI_Units (si_units)
@@ -30,14 +29,15 @@ s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 --m3 = Module 2 mod_calc
 
 doc :: Quantity s => String -> [s] -> String -> [Section] -> Document
-doc name ls author body =
-  Document ((S $ name ++ " for ") :+:
+doc nam ls author body =
+  Document ((S $ nam ++ " for ") :+:
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))
     (S author) body
   
 srsBody :: Document
 srsBody = doc "SRS" vars "Spencer Smith" [s1, s2, s3]--, s4]
 
+mgSecs, misSecs :: [Section]
 (mgSecs, misSecs) = makeDD [] [] [] modules
   
 mgBody :: Document

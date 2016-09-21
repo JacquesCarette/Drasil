@@ -56,6 +56,8 @@ module Language.Drasil (
   , Lang(CLang), CodeType(Calc)
   -- Template.DD
   , makeDD
+  -- Generate
+  , gen
 ) where
 
 
@@ -86,4 +88,4 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCodeModule)
 import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
 import Language.Drasil.Template.DD
-
+import Language.Drasil.Generate

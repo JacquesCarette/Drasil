@@ -1,9 +1,8 @@
-module Example.Drasil.Modules where
+module Drasil.Modules where
 
 import Language.Drasil
-import Control.Lens ((^.))
-import Example.Drasil.HeatTransfer
-import Example.Drasil.Concepts
+import Drasil.HeatTransfer
+import Drasil.Concepts
 
 -- HW Hiding Module
 mod_hw_desc :: ConceptChunk

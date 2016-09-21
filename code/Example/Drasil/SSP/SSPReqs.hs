@@ -1,7 +1,7 @@
-module Example.Drasil.SSP.SSPReqs where
+module Drasil.SSP.SSPReqs where
 
 import Language.Drasil
-import Example.Drasil.SSP.SSPModules
+import Drasil.SSP.SSPModules
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11]

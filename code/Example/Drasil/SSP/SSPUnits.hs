@@ -1,4 +1,4 @@
-module Example.Drasil.SSP.SSPUnits where
+module Drasil.SSP.SSPUnits where
 
 import Language.Drasil
 import Language.Drasil.SI_Units

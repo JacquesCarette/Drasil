@@ -1,7 +1,7 @@
-module Example.Drasil.SSP.SSPModules where
+module Drasil.SSP.SSPModules where
 
 import Language.Drasil
-import Example.Drasil.SSP.SSPConcepts
+import Drasil.SSP.SSPConcepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,

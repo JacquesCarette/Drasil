@@ -1,4 +1,4 @@
-module Example.Drasil.SSP.SSPConcepts where
+module Drasil.SSP.SSPConcepts where
 
 import Language.Drasil
 

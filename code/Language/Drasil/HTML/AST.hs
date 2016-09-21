@@ -85,6 +85,7 @@ data ItemType = Flat Spec | Nested Spec ListType
 instance Show ListType where
   show (Ordered _)   = "o"
   show (Unordered _) = "u"
+  show (Desc _)    = error "Printing descriptive list failed"
   show (Simple _)  = error "Printing Simple list failed, see ASTHTML/PrintHTML"
 
 instance Show Function where

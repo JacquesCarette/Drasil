@@ -112,6 +112,10 @@ lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (UsesHierarchy _) = H.Paragraph (H.S "")  -- need to implement!
+lay (Requirement _)   = H.Paragraph (H.S "")  -- need to implement!
+lay (Assumption _)    = H.Paragraph (H.S "")  -- need to implement!
+lay (LikelyChange _)  = H.Paragraph (H.S "")  -- need to implement!
+lay (UnlikelyChange _)= H.Paragraph (H.S "")  -- need to implement!
 
 makeL :: ListType -> H.ListType
 makeL (Bullet bs) = H.Unordered $ map item bs

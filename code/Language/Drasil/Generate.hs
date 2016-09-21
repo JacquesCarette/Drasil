@@ -4,7 +4,6 @@ module Language.Drasil.Generate (gen) where
 import System.IO
 import Text.PrettyPrint.HughesPJ
 
-import Control.Lens ((^.))
 import System.Directory
 import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,LPM,Website))
 import Language.Drasil.TeX.Print (genTeX)
@@ -15,7 +14,6 @@ import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
-import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Config (outLang)
 
@@ -24,17 +22,17 @@ gen :: [Recipe] -> IO ()
 gen rl = mapM_ prnt rl
 
 prnt :: Recipe -> IO ()
-prnt (Recipe dt@(SRS fn) body) =
+prnt (Recipe dt@(SRS _) body) =
   do prntDoc dt body
      prntMake dt
-prnt (Recipe dt@(MG fn) body) =
+prnt (Recipe dt@(MG _) body) =
   do prntDoc dt body
      prntMake dt
      prntCode body
-prnt (Recipe dt@(MIS fn) body) =
+prnt (Recipe dt@(MIS _) body) =
   do prntDoc dt body
      prntMake dt
-prnt (Recipe dt@(LPM fn) body) =
+prnt (Recipe dt@(LPM _) body) =
   do prntDoc dt body
 prnt (Recipe dt@(Website fn) body) =
   do prntDoc dt body
@@ -49,25 +47,27 @@ prntDoc dt body = case dt of
   (MIS fn)     -> prntDoc' dt fn TeX body
   (LPM fn)     -> prntDoc' dt fn TeX body
   (Website fn) -> prntDoc' dt fn HTML body
-  where prntDoc' dt fn format body = do
-          createDirectoryIfMissing False $ show dt
-          outh <- openFile (show dt ++ "/" ++ fn ++ getExt format) WriteMode
-          hPutStrLn outh $ render $ (writeDoc format dt body)
+  where prntDoc' dt' fn format body' = do
+          createDirectoryIfMissing False $ show dt'
+          outh <- openFile (show dt' ++ "/" ++ fn ++ getExt format) WriteMode
+          hPutStrLn outh $ render $ (writeDoc format dt' body')
           hClose outh
-          where getExt TeX = ".tex"
+          where getExt TeX  = ".tex"
                 getExt HTML = ".html"
+                getExt _    = error "we can only write TeX/HTML (for now)"
 
 
 prntCode :: Document -> IO ()
 prntCode (Document _ _ secs) = mapM_ prntCode'
   (concat (map (\(Section _ s) -> getModules s) secs))
   where getModules []                 = []
-        getModules ((Con (Module m)):los) = if null (method m)
+        getModules ((Con (Module m)):los) =
+          if   null (method m)
           then getModules los
           else (genCode outLang m) ++ getModules los
         getModules (_:los)     = getModules los
-        prntCode' (name, code) = do createDirectoryIfMissing False "Code"
-                                    outh <- openFile ("Code/" ++ name) WriteMode
+        prntCode' (nm, code)   = do createDirectoryIfMissing False "Code"
+                                    outh <- openFile ("Code/" ++ nm) WriteMode
                                     hPutStrLn outh $ render $ code
                                     hClose outh
 

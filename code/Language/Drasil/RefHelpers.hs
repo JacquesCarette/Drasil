@@ -1,7 +1,6 @@
 module Language.Drasil.RefHelpers where
 
 import Language.Drasil.Spec
-import Language.Drasil.Printing.Helpers (capitalize)
 
 import Data.Char (isAlphaNum)
 

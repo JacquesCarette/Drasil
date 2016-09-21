@@ -1,6 +1,6 @@
 module Main where
 
-import Language.Drasil (DocType(SRS,MG,MIS,LPM,Website),Recipe(..),gen)
+import Language.Drasil (DocType(SRS,MG,MIS,Website),Recipe(..),gen)
 
 import Drasil.HGHC (srsBody,mgBody,misBody) --,lpmBody
 import Drasil.PCM.Body (pcm_srs)

@@ -83,7 +83,7 @@ genSec d
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref, mref :: String -> D -> D
+ref, sref, hyperref, mref, rref, aref, lcref, ucref :: String -> D -> D
 ref t x = (pure $ text (t ++ "~\\ref")) <> br x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
 sref = if numberedSections then ref else hyperref

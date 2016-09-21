@@ -29,7 +29,6 @@ library
     , Language.Drasil.CCode.Helpers
     , Language.Drasil.CCode.Import
     , Language.Drasil.CCode.Print
-    , Language.Drasil.CCode.Solver
     , Language.Drasil.HTML.AST
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Import

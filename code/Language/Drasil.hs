@@ -61,7 +61,7 @@ module Language.Drasil (
 ) where
 
 
-import Language.Drasil.Expr (Expr(..), Relation(..), UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),

@@ -5,7 +5,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 
-import Control.Applicative hiding (empty)
+--import Control.Applicative hiding (empty)
 
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
@@ -60,7 +60,7 @@ lo (EqnBlock contents)     = makeEquation contents
 lo (Table rows r bl t)     = toText $ makeTable rows (spec r) bl (spec t)
 lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
-lo (List lt)               = toText $ makeList lt
+lo (List l)                = toText $ makeList l
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
 lo (Module n l)            = toText $ makeModule n $ spec l
 lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
@@ -158,7 +158,7 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
-  pure (text (("\\begin{" ++ lt ++ "}") ++ brace (header lls)))
+  pure (text (("\\begin{" ++ ltab ++ "}") ++ brace (header lls)))
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
@@ -166,10 +166,10 @@ makeTable lls r bool t =
   %% (pure (text "\\bottomrule"))
   %% (if bool then caption t else empty)
   %% label r
-  %% (pure $ text ("\\end{" ++ lt ++ "}"))
+  %% (pure $ text ("\\end{" ++ ltab ++ "}"))
   where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
-        lt = "longtable" ++ (if not bool then "*" else "")
+        ltab = "longtable" ++ (if not bool then "*" else "")
 
 makeRows :: [[Spec]] -> D
 makeRows []     = empty

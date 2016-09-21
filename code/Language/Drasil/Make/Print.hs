@@ -3,7 +3,6 @@ module Language.Drasil.Make.Print where
 import Text.PrettyPrint hiding (render)
 
 import Language.Drasil.Output.Formats (DocType(..))
-import qualified Language.Drasil.Document as L
 import Language.Drasil.Make.AST
 import Language.Drasil.Make.Import
 import Language.Drasil.Make.Helpers
@@ -20,6 +19,7 @@ printRule (Phony, name, deps)   = text (".PHONY: " ++ name) $+$
                                   printTarget name deps
 printRule (TeX, name, _)        = printTarget (name ++ ".pdf") [(name ++ ".tex")] $+$
                                   printLatexCmd name
+printRule _                     = error "Unimplemented makefile rule"
 
 
 

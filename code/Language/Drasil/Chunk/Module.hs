@@ -37,8 +37,8 @@ formatName m = (concat $ intersperse " " $
 
 makeImpModule :: ConceptChunk -> Sentence -> ConceptChunk -> [MethodChunk]
   -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
-makeImpModule cc secret imp method uses hier =
-  MoC cc secret (Just imp) method uses hier
+makeImpModule cc' secret' imp' method' uses' hier' =
+  MoC cc' secret' (Just imp') method' uses' hier'
 
 makeUnimpModule :: ConceptChunk -> Sentence -> Maybe ModuleChunk -> ModuleChunk
-makeUnimpModule cc secret hier = MoC cc secret Nothing [] [] hier
+makeUnimpModule cc' secret' hier' = MoC cc' secret' Nothing [] [] hier'

@@ -34,7 +34,7 @@ candela  = fund "Candela"  "luminous intensity"   "cd"
 ------------- END FUNDAMENTALS -------------------------------------------------
 
 centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre, 
-  kilopascal:: DerUChunk 
+  kilopascal, radians :: DerUChunk
 
 centigrade = DUC 
   (UD (CC "Centigrade" (S "temperature")) 

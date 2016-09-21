@@ -2,8 +2,6 @@ module Language.Drasil.Make.Helpers where
 
 import Text.PrettyPrint
 
-import Language.Drasil.Make.AST
-
 
 osDefinitions :: Doc
 osDefinitions = text "ifeq \"$(OS)\" \"Windows_NT\"" $+$

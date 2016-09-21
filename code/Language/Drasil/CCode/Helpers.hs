@@ -1,9 +1,6 @@
 {-# OPTIONS -Wall #-} 
 module Language.Drasil.CCode.Helpers where
 
-import Text.PrettyPrint
-
-import Language.Drasil.Document (Document)
 import Language.Drasil.CCode.AST
 
 stdHeaders, testHeaders :: [Header]

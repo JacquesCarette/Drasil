@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-table_of_symbols :: (Unit' s, Quantity s) => [s] -> Section
+table_of_symbols :: (Unit' s) => [s] -> Section
 table_of_symbols ls = Section (S "Table of Symbols") [Con intro, Con (table ls)]
 
 intro :: Contents

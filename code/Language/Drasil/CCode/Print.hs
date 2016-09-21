@@ -5,9 +5,8 @@ import Language.Drasil.CCode.Helpers
 import Language.Drasil.CCode.Import
 import qualified Language.Drasil.Chunk.Module as Mod
 import Language.Drasil.Chunk
-import Language.Drasil.Printing.Helpers (indent, paren, hat, ast, pls, slash, hyph, assign, eq, leq, lt, geq, gt, angbrac)
-import qualified Language.Drasil.Output.Formats as A
-import qualified Language.Drasil.Document as L
+import Language.Drasil.Printing.Helpers (indent, hat, ast, pls, slash, hyph,
+  assign, eq, leq, lt, geq, gt, angbrac)
 import Data.Char (toUpper)
 
 import Text.PrettyPrint
@@ -26,11 +25,12 @@ instance Show CType where
   show (CType t) = ptype t
 
 genCode :: Lang -> Mod.ModuleChunk -> [(String, Doc)]
-genCode CLang mod = let code = toCodeModule CLang mod
-                        codeDoc = printCode code
-                        headerDoc = printCode $ toHeader CLang (mod ^. name) code
-                    in  [ ( mod ^. name ++ ".c" , codeDoc) ,
-                          ( mod ^. name ++ ".h" , headerDoc)
+genCode CLang mc  = let codeMod = toCodeModule CLang mc
+                        codeDoc = printCode codeMod
+                        headerDoc = printCode $
+                                      toHeader CLang (mc ^. name) codeMod
+                    in  [ ( mc ^. name ++ ".c" , codeDoc) ,
+                          ( mc ^. name ++ ".h" , headerDoc)
                         ]
 
 --genHeader :: Code -> Doc

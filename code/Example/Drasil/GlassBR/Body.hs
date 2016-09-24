@@ -1,4 +1,4 @@
-module Drasil.GlassBR.GlassBRBody where
+module Drasil.GlassBR.Body where
 import Data.Char (toLower)
 import Control.Lens ((^.))
 
@@ -8,11 +8,11 @@ import Data.Drasil.SI_Units
 import Drasil.Units
 import Drasil.TableOfSymbols
 
-import Drasil.GlassBR.GlassBRExample
+import Drasil.GlassBR.Example
 
-import Drasil.GlassBR.GlassBRChanges
-import Drasil.GlassBR.GlassBRModules
-import Drasil.GlassBR.GlassBRReqs
+import Drasil.GlassBR.Changes
+import Drasil.GlassBR.Modules
+import Drasil.GlassBR.Reqs
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

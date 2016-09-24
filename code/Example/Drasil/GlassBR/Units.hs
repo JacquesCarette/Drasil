@@ -1,4 +1,4 @@
-module Drasil.GlassBR.GlassBRUnits where
+module Drasil.GlassBR.Units where
 
 import Control.Lens ((^.))
 import Language.Drasil

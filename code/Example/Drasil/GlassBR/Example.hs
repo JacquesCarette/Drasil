@@ -1,6 +1,6 @@
-module Drasil.GlassBR.GlassBRExample where
+module Drasil.GlassBR.Example where
 
-import Drasil.GlassBR.GlassBRUnits
+import Drasil.GlassBR.Units
 
 import Language.Drasil
 import Data.Drasil.SI_Units

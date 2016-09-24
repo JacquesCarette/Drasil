@@ -1,7 +1,7 @@
-module Drasil.GlassBR.GlassBRModules where
+module Drasil.GlassBR.Modules where
 
 import Language.Drasil
-import Drasil.GlassBR.GlassBRConcepts
+import Drasil.GlassBR.Concepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, 

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.GlassBRConcepts where
+module Drasil.GlassBR.Concepts where
 
 import Language.Drasil
 

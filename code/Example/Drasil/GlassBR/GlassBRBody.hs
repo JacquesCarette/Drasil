@@ -4,10 +4,11 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-import Drasil.GlassBR.GlassBRExample
 import Drasil.Units
+import Drasil.TableOfSymbols
+
+import Drasil.GlassBR.GlassBRExample
 import Drasil.GlassBR.GlassBRSIUnits
-import Drasil.GlassBR.TableOfSymbols
 
 import Drasil.GlassBR.GlassBRChanges
 import Drasil.GlassBR.GlassBRModules

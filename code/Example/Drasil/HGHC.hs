@@ -9,7 +9,7 @@ import Drasil.TableOfSymbols
 import Drasil.Modules
 
 import Language.Drasil
-import Language.Drasil.SI_Units (si_units)
+import Data.Drasil.SI_Units (si_units)
 
 vars :: [EqChunk]
 vars = [h_g, h_c]

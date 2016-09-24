@@ -8,7 +8,7 @@ import Drasil.PCM.Example
 import Drasil.PCM.Units
 
 import Language.Drasil
-import Language.Drasil.SI_Units 
+import Data.Drasil.SI_Units 
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]

@@ -3,7 +3,7 @@ module Drasil.SSP.Defs where
 import Drasil.SSP.Units
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

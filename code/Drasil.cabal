@@ -1,5 +1,5 @@
 Name:		drasil
-Version:	0.0.5
+Version:	0.0.6
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -8,7 +8,7 @@ Synopsis:	A framework for code and document generation for scientific software
 library
   exposed-modules:
     Language.Drasil,
-    Language.Drasil.SI_Units
+    Data.Drasil.SI_Units
   other-modules:
       Language.Drasil.Expr
     , Language.Drasil.Chunk

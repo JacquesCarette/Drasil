@@ -1,4 +1,4 @@
-module Language.Drasil.SI_Units where
+module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..))

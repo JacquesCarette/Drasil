@@ -1,5 +1,4 @@
 {- re-export many things to simplify external use -}
-{- note that SI_Units is really like a separate 'database', so is not included -}
 module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,LPM,Website)
@@ -86,6 +85,6 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCodeModule)
-import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
+import Language.Drasil.CCode.AST (Lang(CLang), CodeType(..))
 import Language.Drasil.Template.DD
 import Language.Drasil.Generate

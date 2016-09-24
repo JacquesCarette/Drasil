@@ -10,7 +10,7 @@ import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 
 import Language.Drasil
-import Language.Drasil.SI_Units 
+import Data.Drasil.SI_Units 
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]

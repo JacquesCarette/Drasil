@@ -5,7 +5,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 
---import Control.Applicative hiding (empty)
+import Control.Applicative (pure)
 
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I

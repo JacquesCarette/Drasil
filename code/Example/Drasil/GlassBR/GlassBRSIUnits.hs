@@ -1,5 +1,4 @@
-{-# OPTIONS -Wall #-} 
-module Example.Drasil.GlassBR.GlassBRSIUnits where
+module Drasil.GlassBR.GlassBRSIUnits where
 import Language.Drasil
 
 import Control.Lens ((^.))

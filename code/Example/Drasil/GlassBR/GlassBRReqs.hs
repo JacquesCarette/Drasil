@@ -1,7 +1,7 @@
-module Example.Drasil.GlassBR.GlassBRReqs where
+module Drasil.GlassBR.GlassBRReqs where
 
 import Language.Drasil
-import Example.Drasil.GlassBR.GlassBRModules
+import Drasil.GlassBR.GlassBRModules
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6]

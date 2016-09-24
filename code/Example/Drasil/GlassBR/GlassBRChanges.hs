@@ -1,7 +1,7 @@
-module Example.Drasil.GlassBR.GlassBRChanges where
+module Drasil.GlassBR.GlassBRChanges where
 
 import Language.Drasil
-import Example.Drasil.GlassBR.GlassBRModules
+import Drasil.GlassBR.GlassBRModules
 
 lcs :: [LCChunk]
 lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]

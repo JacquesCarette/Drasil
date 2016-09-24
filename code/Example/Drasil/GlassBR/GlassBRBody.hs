@@ -1,20 +1,17 @@
-{-# OPTIONS -Wall #-} 
-{-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.GlassBR.GlassBRBody where
+module Drasil.GlassBR.GlassBRBody where
 import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.Unit
 
-import Example.Drasil.GlassBR.GlassBRExample
-import Example.Drasil.Units
-import Example.Drasil.GlassBR.GlassBRSIUnits
-import Example.Drasil.GlassBR.TableOfSymbols
+import Drasil.GlassBR.GlassBRExample
+import Drasil.Units
+import Drasil.GlassBR.GlassBRSIUnits
+import Drasil.GlassBR.TableOfSymbols
 
-import Example.Drasil.GlassBR.GlassBRChanges
-import Example.Drasil.GlassBR.GlassBRModules
-import Example.Drasil.GlassBR.GlassBRReqs
+import Drasil.GlassBR.GlassBRChanges
+import Drasil.GlassBR.GlassBRModules
+import Drasil.GlassBR.GlassBRReqs
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

@@ -53,37 +53,8 @@ s1_intro = Paragraph (S "This section records information for easy reference.")
 
 s1_1 = table_of_units this_si
 
---s1_1_intro = Paragraph $ 
---  S "Throughout this document SI (Syst" :+: (F Grave 'e') :+: S "me " :+:
---  S "International d'Unit" :+: (F Acute 'e') :+: S "s) is employed as " :+:
---  S "the unit system. In addition to the basic units, several derived " :+:
---  S "units are employed as described below. For each unit, the symbol is " :+: 
---  S "given followed by a description of the unit followed by the SI name."
-
---s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
---  [(\x -> Sy (x ^. unit)),
---   (\x -> (x ^. descr)),
---   (\x -> S (x ^. name))
---  ] this_si)
---  (S "Table of Units") True
-
 s1_2 = table_of_symbols $ (map Has glassBRSymbols) ++ 
   (map HasNot glassBRUnitless)
-
---s1_2 = Section (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
-
---s1_2_intro = Paragraph $ 
---  S "The table that follows summarizes the symbols used in this " :+:
---  S "document along with their units. The symbols are listed in " :+:
---  S "alphabetical order." 
-  
---s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
---  [(\ch -> P (ch ^. symbol)),  
---   (\ch -> Sy $ ch ^. unit),
---   (\ch -> ch ^. descr)
---   ]
---  glassBRSymbols)
---  (S "Table of Symbols") False
 
 s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 

@@ -15,7 +15,7 @@ module Language.Drasil (
   , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
   , descr, Quantity(..)
   -- Chunk.Eq
-  , EqChunk(..), fromEqn
+  , EqChunk(..), fromEqn, fromEqn'
   -- Chunk.Unital
   , UnitalChunk(..), makeUC
   -- Chunk.MUChunk
@@ -69,7 +69,7 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
+import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)

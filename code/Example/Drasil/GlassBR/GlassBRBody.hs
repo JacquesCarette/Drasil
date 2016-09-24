@@ -3,12 +3,12 @@ import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Data.Drasil.SI_Units
 
 import Drasil.Units
 import Drasil.TableOfSymbols
 
 import Drasil.GlassBR.GlassBRExample
-import Drasil.GlassBR.GlassBRSIUnits
 
 import Drasil.GlassBR.GlassBRChanges
 import Drasil.GlassBR.GlassBRModules

@@ -2,7 +2,7 @@ module Drasil.GlassBR.GlassBRUnits where
 
 import Control.Lens ((^.))
 import Language.Drasil
-import Drasil.GlassBR.GlassBRSIUnits
+import Data.Drasil.SI_Units
 
 --N^(-7)*m^12--
 sFlawPU :: DerUChunk

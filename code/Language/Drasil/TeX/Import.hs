@@ -146,7 +146,7 @@ lay x@(Requirement r)     = T.Requirement (spec (r ^. descr)) (spec $ refName x)
 lay x@(Assumption a)      = T.Assumption (spec (a ^. descr)) (spec $ refName x)
 lay x@(LikelyChange lc)   = T.LikelyChange (spec (lc ^. descr))
   (spec $ refName x)
-lay x@(UnlikelyChange unc) = T.UnlikelyChange (spec (unc ^. descr))
+lay x@(UnlikelyChange ucc)= T.UnlikelyChange (spec (ucc ^. descr))
   (spec $ refName x)
 lay (UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
 
@@ -177,10 +177,10 @@ makePairs General = error "Not yet implemented"
 makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
 makeUHPairs []          = []
 makeUHPairs ((m,ms):xs) = (buildPairs m ms) ++ makeUHPairs xs
-  where  buildPairs _ []       = []
-         buildPairs m1 (m2:ms) = (makeEntry m1, makeEntry m2):buildPairs m1 ms
-           where  makeEntry m = (spec $ refName $ Module m) T.:+:
-                                  (T.S "/") T.:+: (T.S $ formatName m)
+  where  buildPairs _ []        = []
+         buildPairs m1 (m2:ms') = (makeEntry m1, makeEntry m2):buildPairs m1 ms'
+           where  makeEntry m' = (spec $ refName $ Module m') T.:+:
+                                  (T.S "/") T.:+: (T.S $ formatName m')
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj

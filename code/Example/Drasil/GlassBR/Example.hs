@@ -1,11 +1,9 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.GlassBR.GlassBRExample where
+module Drasil.GlassBR.Example where
 
-import Example.Drasil.GlassBR.GlassBRUnits
-import Example.Drasil.GlassBR.GlassBRSIUnits
+import Drasil.GlassBR.Units
 
 import Language.Drasil
+import Data.Drasil.SI_Units
 
 import Control.Lens((^.))
 import Data.Char(toLower)
@@ -336,8 +334,8 @@ risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
 
 risk :: EqChunk
-risk = fromEqn (risk_fun ^. name) (S "risk of failure") (risk_fun ^. symbol) 
-  unitless risk_eq
+risk = fromEqn' (risk_fun ^. name) (S "risk of failure") (risk_fun ^. symbol) 
+  risk_eq
 
 hFromt_eq :: Expr
 hFromt_eq = FCall (C act_thick) [C nom_thick]
@@ -355,29 +353,29 @@ loadDF_eq :: Expr
 loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 
 loadDF :: EqChunk
-loadDF = fromEqn (lDurFac ^. name) (S "Load Duration Factor") (Atomic "LDF") 
-  unitless loadDF_eq
+loadDF = fromEqn' (lDurFac ^. name) (S "Load Duration Factor") (Atomic "LDF") 
+  loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: EqChunk
-strDisFac = fromEqn (sdf ^. name) (sdf ^. descr) (sdf ^. symbol) 
-  unitless strDisFac_eq
+strDisFac = fromEqn' (sdf ^. name) (sdf ^. descr) (sdf ^. symbol) 
+  strDisFac_eq
 
 nonFL_eq :: Expr
 nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: EqChunk
-nonFL = fromEqn (nonFactorL ^. name) (nonFactorL ^. descr) (Atomic "NFL") 
-  unitless nonFL_eq
+nonFL = fromEqn' (nonFactorL ^. name) (nonFactorL ^. descr) (Atomic "NFL") 
+  nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: EqChunk
-glaTyFac = fromEqn (glassTypeFac ^. name) (S "function that maps from " :+:
+glaTyFac = fromEqn' (glassTypeFac ^. name) (S "function that maps from " :+:
   S "the glass type (" :+: (P $ glass_type ^. symbol) :+: S ") to a real " :+:
   S "number, as follows: " :+: (P $ glaTyFac ^.symbol) :+: S "(" :+: 
   (P $ glass_type ^. symbol) :+: S ") = (" :+: (P $ glass_type ^. symbol) :+: 
@@ -389,22 +387,22 @@ glaTyFac = fromEqn (glassTypeFac ^. name) (S "function that maps from " :+:
   (sMap (map toLower) (fullyTGlass ^. descr)) :+: S (". " ++
   (heatSGlass ^. name) ++ " is ") :+: 
   (sMap (map toLower) (heatSGlass ^. descr)) :+: S ".") (Atomic "GTF") 
-  unitless glaTyFac_eq
+  glaTyFac_eq
 
 dL_eq :: Expr
 dL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
 
 dL :: EqChunk
-dL = fromEqn (dimlessLoad ^. name) (dimlessLoad ^. descr) 
-  (dimlessLoad ^. symbol) unitless dL_eq
+dL = fromEqn' (dimlessLoad ^. name) (dimlessLoad ^. descr) 
+  (dimlessLoad ^. symbol) dL_eq
 
 tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
 tolPre :: EqChunk
-tolPre = fromEqn (tolLoad ^. name) (tolLoad ^. descr) (tolLoad ^. symbol) 
-  unitless tolPre_eq
+tolPre = fromEqn' (tolLoad ^. name) (tolLoad ^. descr) (tolLoad ^. symbol) 
+  tolPre_eq
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = UnaryOp (Log (UnaryOp (Log ((Int 1):/((Int 1):-(C pb_tol))))
@@ -415,5 +413,5 @@ tolStrDisFac_eq = UnaryOp (Log (UnaryOp (Log ((Int 1):/((Int 1):-(C pb_tol))))
   (Int 2))):^(C sflawParamM):*(C loadDF)))))
 
 tolStrDisFac :: EqChunk
-tolStrDisFac = fromEqn (sdf_tol ^. name) (sdf_tol ^. descr) (sdf_tol ^. symbol) 
-  unitless tolStrDisFac_eq
+tolStrDisFac = fromEqn' (sdf_tol ^. name) (sdf_tol ^. descr) (sdf_tol ^. symbol) 
+  tolStrDisFac_eq

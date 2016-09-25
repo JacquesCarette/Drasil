@@ -1,17 +1,16 @@
-{-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.SSP.SSPBody where
+module Drasil.SSP.Body where
 
 import Control.Lens ((^.))
 
-import Example.Drasil.SSP.SSPDefs
-import Example.Drasil.SSP.SSPUnits
-import Example.Drasil.SSP.SSPModules
-import Example.Drasil.SSP.SSPChanges
-import Example.Drasil.SSP.SSPReqs
+import Drasil.SSP.Defs
+import Drasil.SSP.Units
+import Drasil.SSP.Modules
+import Drasil.SSP.Changes
+import Drasil.SSP.Reqs
 
 import Language.Drasil
-import Language.Drasil.SI_Units 
+import Data.Drasil.SI_Units 
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
@@ -21,22 +20,37 @@ ssp_srs = Document (S "Software Requirements Specification for Slope Stability "
           S "Analysis") 
           (S "Henry Frankis") [s1, s2, s3, s4, s5, s6]
 
+mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 ssp_mg :: Document
 ssp_mg = Document (S "Module Guide for Slope Stability Analysis")
          (S "Henry Frankis") (mgBod)
 
+
+s1, s2, s3, s4, s5, s6 :: Section
+
+s1_1, s1_2, s1_3, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
+  s2_p1, s2_p2, s2_1, s2_2, s2_3, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
+  s3_1, s3_2, s3_1_p1, s3_2_p1, s4_p1, s4_1, s4_2, s4_1_p1, s4_1_1, s4_1_2,
+  s4_1_3, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1,
+  s4_1_2_fig2, s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
+  s4_2_5, s4_2_6, s4_2_1_p1, s4_2_1_list, s4_2_2_p1, s5_p1, s5_1, s5_2,
+  s5_1_list, s5_1_table, s5_2_p1 :: SecCons
+
+s4_2_2_tmods :: [SecCons]
+
+
 -- SECTION 1 --
 s1 = Section (S "Reference Material") [s1_1, s1_2, s1_3]
 
 
 -- SECTION 1.1 --
-s1_1 = Sub $ Section (S "Table of Units") $ map Con [s1_1_intro, s1_1_table]
+s1_1 = Sub $ Section (S "Table of Units") [s1_1_intro, s1_1_table]
 
-s1_1_intro = Paragraph (S "Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.")
+s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.")
 
-s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
+s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. unit)),
    (\x -> (x ^. descr)),
    (\x -> S (x ^. name))
@@ -45,12 +59,12 @@ s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
 
   
 -- SECTION 1.2 --
-s1_2 = Sub $ Section (S "Table of Symbols") $ map Con [s1_2_intro, s1_2_table]
+s1_2 = Sub $ Section (S "Table of Symbols") [s1_2_intro, s1_2_table]
 
-s1_2_intro = Paragraph $ 
+s1_2_intro = Con $ Paragraph $
   S "A collection of the symbols that will be used in the models and equations of the program are summarized in the table below. Values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass."
   
-s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
+s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
@@ -60,9 +74,9 @@ s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 
   
 -- SECTION 1.3 --
-s1_3 = Sub $ Section (S "Abbreviations and Acronyms") [Con s1_3_table]
+s1_3 = Sub $ Section (S "Abbreviations and Acronyms") [s1_3_table]
 
-s1_3_table = Table [S "Symbol", S "Description"] (mkTable
+s1_3_table = Con $ Table [S "Symbol", S "Description"] (mkTable
   [(\ch -> S $ ch ^. name),
    (\ch -> ch ^. descr)]
   acronyms)
@@ -80,23 +94,23 @@ s2_p2 = Con $ Paragraph $ S "The following section provides an overview of the S
 
 
 -- SECTION 2.1 --
-s2_1 = Sub $ Section (S "Purpose") $ map Con [s2_1_p1, s2_1_p2]
+s2_1 = Sub $ Section (S "Purpose") [s2_1_p1, s2_1_p2]
 
-s2_1_p1 = Paragraph $ S "The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope."
+s2_1_p1 = Con $ Paragraph $ S "The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope."
 
-s2_1_p2 = Paragraph $ S "This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan.  The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment.  The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.  Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way.  Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process."
+s2_1_p2 = Con $ Paragraph $ S "This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan.  The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment.  The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.  Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way.  Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process."
 
 
 -- SECTION 2.2 --
-s2_2 = Sub $ Section (S "Scope of Requirements") [Con s2_2_p1]
+s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]
 
-s2_2_p1 = Paragraph $ S "The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope."
+s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope."
 
 
 -- SECTION 2.3 --
-s2_3 = Sub $ Section (S "Organization of Document") [Con s2_3_p1]
+s2_3 = Sub $ Section (S "Organization of Document") [s2_3_p1]
 
-s2_3_p1 = Paragraph $ S "The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef s4_2_5 :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef s4_2_2 :+: S ") and instance models (" :+: makeRef s4_2_5 :+: S ")."
+s2_3_p1 = Con $ Paragraph $ S "The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef sec_IMs :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
 
 
 
@@ -108,15 +122,15 @@ s3_p1 = Con $ Paragraph $ S "This section provides general information about the
 
 
 -- SECTION 3.1 --
-s3_1 = Sub $ Section (S "User Characteristics") [Con s3_1_p1]
+s3_1 = Sub $ Section (S "User Characteristics") [s3_1_p1]
 
-s3_1_p1 = Paragraph $ S "The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties."
+s3_1_p1 = Con $ Paragraph $ S "The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties."
 
 
 -- SECTION 3.2 --
-s3_2 = Sub $ Section (S "System Constraints") [Con s3_2_p1]
+s3_2 = Sub $ Section (S "System Constraints") [s3_2_p1]
 
-s3_2_p1 = Paragraph $ S "There are no system constraints."
+s3_2_p1 = Con $ Paragraph $ S "There are no system constraints."
 
 
 
@@ -134,9 +148,9 @@ s4_1_p1 = Con $ Paragraph $ S "SSA is a computer program developed to evaluate t
 
 
 -- SECTION 4.1.1 --
-s4_1_1 = Sub $ Section (S "Terminology") [Con s4_1_1_list]
+s4_1_1 = Sub $ Section (S "Terminology") [s4_1_1_list]
 
-s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "Factor of Safety", S "Stability metric. How likely a slip surface is to experience failure through slipping."), 
   (S "Critical Slip Surface", S "Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure."),
   (S "Stress", S "Forces that are exerted between planes internal to a larger body subject to external loading."),
@@ -151,28 +165,34 @@ s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   
 -- SECTION 4.1.2 --
 s4_1_2 = Sub $ Section (S "Physical System Description")
-  $ map Con [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
+  [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
 
-s4_1_2_p1 = Paragraph $ S "Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in " :+: (makeRef s4_1_2_fig1) :+: S "."
+s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in " :+: (makeRef fig_indexconv) :+: S "."
 
-s4_1_2_bullets = Enumeration $ Bullet $ map Flat [
+s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
   (S "Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from 1 " :+: P (Special LEQ) :+: S " i " :+: P (Special LEQ) :+: S " n-1."),
   (S "Slice properties convention is noted by i.")
   ]
   
-s4_1_2_p2 = Paragraph $ S "A free body diagram of the forces acting on the slice is displayed in " :+: (makeRef s4_1_2_fig2) :+: S "."
+s4_1_2_p2 = Con $ Paragraph $ S "A free body diagram of the forces acting on the slice is displayed in " :+: (makeRef fig_forceacting) :+: S "."
 
-s4_1_2_fig1 = Figure (S "Index convention for numbering slice and interslice force variables")  "IndexConvention.png"
+s4_1_2_fig1 = Con fig_indexconv
 
-s4_1_2_fig2 = Figure (S "Forces acting on a slice") "ForceDiagram.png"
+fig_indexconv :: Contents
+fig_indexconv = Figure (S "Index convention for numbering slice and interslice force variables")  "IndexConvention.png"
+
+s4_1_2_fig2 = Con fig_forceacting
+
+fig_forceacting :: Contents
+fig_forceacting = Figure (S "Forces acting on a slice") "ForceDiagram.png"
 
 
 -- SECTION 4.1.3 --
-s4_1_3 = Sub $ Section (S "Goal Statements") $ map Con [s4_1_3_p1, s4_1_3_list]
+s4_1_3 = Sub $ Section (S "Goal Statements") [s4_1_3_p1, s4_1_3_list]
 
-s4_1_3_p1 = Paragraph $ S "Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers."
+s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers."
 
-s4_1_3_list = Enumeration $ Simple $ [
+s4_1_3_list = Con $ Enumeration $ Simple $ [
   (S "GS1", Flat $ S "Evaluate local and global factors of safety along a given slip surface."),
   (S "GS2", Flat $ S "Identify the critical slip surface for the slope, with the lowest Factor of Safety."),
   (S "GS3", Flat $ S "Determine the displacement of the slope.")
@@ -181,17 +201,17 @@ s4_1_3_list = Enumeration $ Simple $ [
   
 -- SECTION 4.2 --
 s4_2 = Sub $ Section (S "Solution Characteristics Specification")
-  [s4_2_p1, s4_2_1, Sub s4_2_2, s4_2_3, s4_2_4, Sub s4_2_5, s4_2_6]
+  [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
-s4_2_p1 = Con $ Paragraph $ S "The instance models that govern SSA are presented in " :+: makeRef s4_2_5 :+: S ".  The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified."
+s4_2_p1 = Con $ Paragraph $ S "The instance models that govern SSA are presented in " :+: makeRef sec_IMs :+: S ".  The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified."
 
 
 -- SECTION 4.2.1 --
-s4_2_1 = Sub $ Section (S "Assumptions") $ map Con [s4_2_1_p1, s4_2_1_list]
+s4_2_1 = Sub $ Section (S "Assumptions") [s4_2_1_p1, s4_2_1_list]
 
-s4_2_1_p1 = Paragraph $ S "This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition, or the instance model, in which the respective assumption is used."
+s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition, or the instance model, in which the respective assumption is used."
 
-s4_2_1_list = Enumeration $ Simple $ [
+s4_2_1_list = Con $ Enumeration $ Simple $ [
   (S "A1", Flat $ S "The slip surface is concave with respect to the slope surface. The " :+: P (coords ^. symbol) :+: S " coordinates of the failure surface follow a monotonic function."),
   (S "A2", Flat $ S "The geometry of the slope, and the material properties of the soil layers are given as inputs."),
   (S "A3", Flat $ S "The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight."),
@@ -206,7 +226,10 @@ s4_2_1_list = Enumeration $ Simple $ [
 
   
 -- SECTION 4.2.2 --
-s4_2_2 = Section (S "Theoretical Models") (s4_2_2_p1:s4_2_2_tmods)
+s4_2_2 = Sub sec_TMs
+
+sec_TMs :: Section
+sec_TMs = Section (S "Theoretical Models") (s4_2_2_p1:s4_2_2_tmods)
 
 s4_2_2_p1 = Con $ Paragraph $ S "This section focuses on the general equations and laws that SSA is based on."
 
@@ -222,7 +245,10 @@ s4_2_4 = Sub $ Section (S "Data Definitions") []
 
 
 -- SECTION 4.2.5 --
-s4_2_5 = Section (S "Instance Models") []
+s4_2_5 = Sub sec_IMs
+
+sec_IMs :: Section
+sec_IMs = Section (S "Instance Models") []
 
 
 -- SECTION 4.2.6 --
@@ -240,10 +266,10 @@ s5_p1 = Con $ Paragraph $ S "This section provides the functional requirements, 
 
 -- SECTION 5.1 --
 s5_1 = Sub $ Section (S "Functional Requirements")
-  (map Con [s5_1_list, s5_1_table])
+  [s5_1_list, s5_1_table]
 
-s5_1_list = Enumeration $ Simple $ [
-  (S "R1", Flat $ S "Read the input file, and store the data. Necessary input data summarized in " :+: makeRef s5_1_table :+: S "."),
+s5_1_list = Con $ Enumeration $ Simple $ [
+  (S "R1", Flat $ S "Read the input file, and store the data. Necessary input data summarized in " :+: makeRef table_inputdata :+: S "."),
   (S "R2", Flat $ S "Generate potential critical slip surface's for the input slope."),
   (S "R3", Flat $ S "Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria."),
   (S "R4", Flat $ S "Prepare the slip surfaces for a method of slices or limit equilibrium analysis."),
@@ -256,7 +282,10 @@ s5_1_list = Enumeration $ Simple $ [
   (S "R11", Flat $ S "Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern price method.")
   ]
   
-s5_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
+s5_1_table = Con table_inputdata
+
+table_inputdata :: Contents
+table_inputdata =  Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
    (\ch -> Sy $ ch ^. unit),
    (\ch -> ch ^. descr)
@@ -266,9 +295,9 @@ s5_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   
 
 -- SECTION 5.2 --
-s5_2 = Sub $ Section (S "Nonfunctional Requirements") [Con s5_2_p1]
+s5_2 = Sub $ Section (S "Nonfunctional Requirements") [s5_2_p1]
 
-s5_2_p1 = Paragraph $ S "SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability."
+s5_2_p1 = Con $ Paragraph $ S "SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability."
 
 
 

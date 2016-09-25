@@ -1,7 +1,7 @@
-module Example.Drasil.HeatTransfer where
+module Drasil.HeatTransfer where
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

@@ -1,9 +1,9 @@
-module Example.Drasil.PCM.Example where
+module Drasil.PCM.Example where
 
-import Example.Drasil.PCM.Units
+import Drasil.PCM.Units
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

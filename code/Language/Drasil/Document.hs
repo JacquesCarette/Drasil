@@ -75,11 +75,11 @@ instance LayoutObj Contents where
   refName (CodeBlock _)       = error "Codeblock ref unimplemented"
   refName (Definition d)      = getDefName d
   refName (Enumeration _)     = error "List refs unimplemented"
-  refName (Module m)          = S $ "M" ++ alphanumOnly (m ^. name)
-  refName (Requirement r)     = S $ "R" ++ alphanumOnly (r ^. name)
-  refName (Assumption a)      = S $ "A" ++ alphanumOnly (a ^. name)
-  refName (LikelyChange lc)   = S $ "LC" ++ alphanumOnly (lc ^. name)
-  refName (UnlikelyChange uc) = S $ "UC" ++ alphanumOnly (uc ^. name)
+  refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. name)
+  refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. name)
+  refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. name)
+  refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. name)
+  refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. name)
   refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
@@ -95,3 +95,4 @@ instance LayoutObj Contents where
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "MG:" ++ (repUnd (c ^. name))
 getDefName (Theory c) = S $ "T:" ++ firstLetter (repUnd (c ^. name))
+getDefName _          = error "Unimplemented definition type reference"

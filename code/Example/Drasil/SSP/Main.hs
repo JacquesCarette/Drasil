@@ -1,10 +1,8 @@
 module Main where
 
-import Language.Drasil (DocType(SRS,MG,Website))
-import Language.Drasil.Recipe (Recipe(..))
-import Language.Drasil.Generate (gen)
+import Language.Drasil (DocType(SRS,MG,Website),Recipe(Recipe),gen)
 
-import Example.Drasil.SSP.SSPBody (ssp_srs, ssp_mg)
+import Drasil.SSP.Body (ssp_srs, ssp_mg)
 
 docs :: [Recipe]
 docs = [Recipe (Website "SSP_SRS") ssp_srs,

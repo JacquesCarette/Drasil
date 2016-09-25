@@ -1,5 +1,4 @@
 {- re-export many things to simplify external use -}
-{- note that SI_Units is really like a separate 'database', so is not included -}
 module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,LPM,Website)
@@ -18,7 +17,7 @@ module Language.Drasil (
   -- Chunk.Constrained
   , Constrained, ConstrainedMUC(..), fromMUC
   -- Chunk.Eq
-  , EqChunk(..), fromEqn
+  , EqChunk(..), fromEqn, fromEqn'
   -- Chunk.Unital
   , UnitalChunk(..), makeUC
   -- Chunk.MUChunk
@@ -58,6 +57,8 @@ module Language.Drasil (
   , Lang(CLang), CodeType(Calc)
   -- Template.DD
   , makeDD
+  -- Generate
+  , gen
 ) where
 
 
@@ -70,9 +71,9 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained (Constrained(..), 
                                           ConstrainedMUC(..),fromMUC)
-import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
@@ -88,6 +89,6 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.CCode.Import (toCodeModule)
-import Language.Drasil.CCode.AST (Lang(CLang), CodeType(Calc))
+import Language.Drasil.CCode.AST (Lang(CLang), CodeType(..))
 import Language.Drasil.Template.DD
-
+import Language.Drasil.Generate

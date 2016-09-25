@@ -1,9 +1,9 @@
-module Example.Drasil.SSP.SSPDefs where
+module Drasil.SSP.Defs where
 
-import Example.Drasil.SSP.SSPUnits
+import Drasil.SSP.Units
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

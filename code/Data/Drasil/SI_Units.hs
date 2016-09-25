@@ -1,4 +1,4 @@
-module Language.Drasil.SI_Units where
+module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..))
@@ -34,7 +34,7 @@ candela  = fund "Candela"  "luminous intensity"   "cd"
 ------------- END FUNDAMENTALS -------------------------------------------------
 
 centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre, 
-  kilopascal:: DerUChunk 
+  kilopascal, radians :: DerUChunk
 
 centigrade = DUC 
   (UD (CC "Centigrade" (S "temperature")) 

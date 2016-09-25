@@ -83,7 +83,7 @@ genSec d
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref, mref :: String -> D -> D
+ref, sref, hyperref, mref, rref, aref, lcref, ucref :: String -> D -> D
 ref t x = (pure $ text (t ++ "~\\ref")) <> br x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
 sref = if numberedSections then ref else hyperref
@@ -184,3 +184,11 @@ useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$
   command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
   command "usegdlibrary" "layered"
+
+-----------------------------------------------------------------------------
+-- This 'belongs' in Monad, but it would make Monad depend on Helpers, which depends
+-- on Monad...
+
+-- toEqn is special; it switches to Math, but inserts an equation environment
+toEqn :: D -> D
+toEqn (PL g) = equation $ PL (\_ -> g Math)

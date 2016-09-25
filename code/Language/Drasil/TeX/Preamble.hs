@@ -80,8 +80,8 @@ genPreamble los = let preamble = parseDoc los
         listdefs (_:ds)        = listdefs ds
 
 parseDoc :: [LayoutObj] -> [Preamble]
-parseDoc los = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
-  (nub $ parseDoc' los)
+parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
+  (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
           (PreP LongTable):(PreP BookTabs):(PreP Caption):parseDoc' los

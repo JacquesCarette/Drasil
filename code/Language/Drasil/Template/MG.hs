@@ -173,18 +173,19 @@ mgModuleHierarchyIntro t@(Table _ _ _ _) = Paragraph $
   makeRef t :+:
   S ". The modules listed below, which are leaves in the hierarchy tree, " :+:
   S "are the modules that will actually be implemented."
+mgModuleHierarchyIntro _ = error "Contents type Table required"
 
 
 mgHierarchy :: [[Sentence]] -> Contents
 mgHierarchy mh = let cnt = length $ head mh
-                     hdr = map (\x -> S $ "Level " ++ show x) $ take cnt [1..]
+                     hdr = map (\x -> S $ "Level " ++ show x) $ take cnt [1::Int ..]
                  in  Table hdr mh (S "Module Hierarchy") True
 
 mgModuleDecomp :: [MPair] -> Section
-mgModuleDecomp mpairs = let levels = splitLevels $ getChunks mpairs
-  in Section (S "Module Decomposition") (
+mgModuleDecomp mpairs = --let levels = splitLevels $ getChunks mpairs
+    Section (S "Module Decomposition") (
        [Con $ mgModuleDecompIntro $ getChunks mpairs]
-       ++ map (\x -> Sub (mgModuleInfo x levels)) mpairs
+       ++ map (\x -> Sub (mgModuleInfo x)) mpairs
      )
 
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
@@ -211,12 +212,12 @@ mgModuleDecompIntro mcs =
                          then getImps ms
                          else (fromJust $ imp m):getImps ms
 
-mgModuleInfo :: MPair -> [[ModuleChunk]] -> Section
-mgModuleInfo (mc, m) ls = let title = if   isNothing m
+mgModuleInfo :: MPair -> Section
+mgModuleInfo (mc, m) = let title = if   isNothing m
                                    then S (formatName mc)
                                    else S (formatName mc) :+: S " (" :+:
                                           (makeRef $ fromJust m) :+: S ")"
---                              level = getLevel mc ls
+--
   in Section
     title
     [ Con $ Enumeration $ Desc
@@ -245,7 +246,7 @@ mgTrace rcs lccs = let lct = mgTraceLC lccs
 
 mgTraceR :: [ReqChunk] -> Contents
 mgTraceR rcs = Table [S "Requirement", S "Modules"]
-  (zipWith (\x y -> [x,y]) (map S (zipWith (++) (repeat "R") (map show [1..])))
+  (zipWith (\x y -> [x,y]) (map S (zipWith (++) (repeat "R") (map show [1::Int ..])))
   (map (mgListModules . rRelatedModules) rcs))
   (S "Trace Between Requirements and Modules") True
 
@@ -285,7 +286,7 @@ mgUses mcs = let uh = mgUH mcs
 
 mgUH :: [ModuleChunk] -> Contents
 mgUH mcs = UsesHierarchy $ makePairs mcs
-  where makePairs []      = []
-        makePairs (m:mcs) = if (null $ uses m)
-                            then makePairs mcs
-                            else (m, uses m):makePairs mcs
+  where makePairs []       = []
+        makePairs (m:mcs') = if (null $ uses m)
+                             then makePairs mcs'
+                             else (m, uses m):makePairs mcs'

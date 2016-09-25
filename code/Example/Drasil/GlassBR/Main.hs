@@ -1,8 +1,6 @@
 module Main where
-import Language.Drasil.Output.Formats (DocType(SRS,MG,Website))
-import Example.Drasil.GlassBR.GlassBRBody (glassBR_srs, glassBR_mg)
-import Language.Drasil.Recipe (Recipe(..))
-import Language.Drasil.Generate (gen)
+import Language.Drasil(DocType(SRS,MG,Website),Recipe(..),gen)
+import Drasil.GlassBR.Body (glassBR_srs, glassBR_mg)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "GlassBR_SRS")     glassBR_srs,

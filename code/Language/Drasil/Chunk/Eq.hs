@@ -1,4 +1,4 @@
-module Language.Drasil.Chunk.Eq(EqChunk(..), fromEqn) where
+module Language.Drasil.Chunk.Eq(EqChunk(..), fromEqn, fromEqn') where
 
 import Control.Lens (Simple, Lens)
 
@@ -34,6 +34,10 @@ instance Unit' EqChunk where
 ul :: Simple Lens EqChunk MUChunk
 ul f (EC a b) = fmap (\x -> EC x b) (f a)
   
--- useful
+-- useful: to be used for equations with units
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> EqChunk
 fromEqn nm desc symb chunk eqn = EC (Has $ UC (VC nm desc symb) chunk) eqn
+
+-- and without
+fromEqn' :: String -> Sentence -> Symbol -> Expr -> EqChunk
+fromEqn' nm desc symb eqn = EC (HasNot $ VC nm desc symb) eqn

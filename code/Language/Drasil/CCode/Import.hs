@@ -5,8 +5,6 @@ import Control.Lens
 import Language.Drasil.CCode.AST
 import Language.Drasil.CCode.Helpers
 import qualified Language.Drasil.Expr as E
-import Language.Drasil.Expr.Extract (dep)
-import Language.Drasil.Chunk.Eq
 import qualified Language.Drasil.Chunk.Method as Meth
 import qualified Language.Drasil.Chunk.Module as Mod
 import Language.Drasil.Chunk (name)
@@ -25,36 +23,47 @@ import Data.List (nub)
 -- toCode _ _ _ = error "Unimplemented code translation in ToCode.hs"
 
 toCodeModule :: Lang -> Mod.ModuleChunk -> Code
-toCodeModule CLang mod    = let methods = map makeMethod (Mod.method mod)
-                                testMethods = map makeTest methods
-                                testMain = makeTestMain testMethods
+toCodeModule CLang mc     = let methods = map makeMethod (Mod.method mc)
+                                --testMethods = map makeTest methods
+                                --testMain = makeTestMain testMethods
                             in C ( stdHeaders
                        --            ++ testHeaders
-                                   ++ [Local ((Mod.cc mod) ^. name)]
+                                   ++ [Local ((Mod.cc mc) ^. name)]
                                  )
                                  [errorDecl]
                                  ( methods
                        --            ++ testMethods
-                                   ++ [errorMethod ((Mod.cc mod) ^. name)]
+                                   ++ [errorMethod ((Mod.cc mc) ^. name)]
                        --            ++ [testMain]
                                  )
 
 toHeader :: Lang -> Name -> Code -> Code
 toHeader CLang n (C _ _ m)  = H n $ map (\(x, _) -> x) m
+toHeader CLang _ (H _ _)    = error "Already a header"
 
 --makeMethod :: EqChunk -> String -> Method
 --makeMethod ec moduleName = ((MethodDecl DblType (moduleName ++ "_" ++ (ec ^. name)) (makeArgs $ dep (equat ec))),
 --                           (makeDivZeroGuards $ getDenoms $ equat ec) ++ [Assign errorCode (Int 0), Return (makeCode $ equat ec)])
 
 makeMethod :: Meth.MethodChunk -> Method
-makeMethod meth@(Meth.MeC { Meth.mType = Meth.Calc eq }) = ((MethodDecl DblType ("calc_" ++ ((Meth.cc meth) ^. name)) (makeArgs $ map (^. name) (Meth.input meth))),
-                            (makeDivZeroGuards $ getDenoms $ eq) ++ [Assign errorCode (Int 0), Return (makeCode $ eq)])
+makeMethod meth@(Meth.MeC { Meth.mType = Meth.Calc eq }) =
+  ( (MethodDecl DblType ("calc_" ++ ((Meth.cc meth) ^. name))
+      (makeArgs $ map (^. name) (Meth.input meth))),
+    (makeDivZeroGuards $ getDenoms $ eq)
+      ++ [Assign errorCode (Int 0), Return (makeCode $ eq)]
+  )
+makeMethod _ = error "Unimplemented method type"
 
 makeTest :: Method -> Method
 makeTest m = ((MethodDecl VoidType ("test_"++(getMethodName m)) []), [])
 
 makeTestMain :: [Method] -> Method
-makeTestMain tests = ((MethodDecl IntType "main" []), [MethodCall testBegin []] ++ (map (\x -> MethodCall runTest [Var $ getMethodName x]) tests) ++ [MethodCall testEnd []])
+makeTestMain tests =
+  (  (MethodDecl IntType "main" []),
+     [MethodCall testBegin []]
+       ++ (map (\x -> MethodCall runTest [Var $ getMethodName x]) tests)
+       ++ [MethodCall testEnd []]
+  )
 
 makeArgs :: [String] -> [VarDecl]
 makeArgs = map (VarDecl DblType)
@@ -77,10 +86,12 @@ makeCode (b E.:* e) = Mult (makeCode b) (makeCode e)
 makeCode (b E.:/ e) = Div (makeCode b) (makeCode e)
 makeCode (b E.:+ e) = Add (makeCode b) (makeCode e)
 makeCode (b E.:- e) = Sub (makeCode b) (makeCode e)
+makeCode _          = error "Unimplemented expression in code generation"
 
 makeDivZeroGuards :: [E.Expr] -> [Statement]
 makeDivZeroGuards []   = []
-makeDivZeroGuards (e:es) = (If (Eq (makeCode e) (Int 0)) [Assign errorCode (Int 1), Return (Int 0)] Nothing):makeDivZeroGuards es
+makeDivZeroGuards (e:es) = (If (Eq (makeCode e) (Int 0))
+  [Assign errorCode (Int 1), Return (Int 0)] Nothing):makeDivZeroGuards es
 
 -- list of expressions that occur in denominators for guarding against div by zero (duplicates removed)
 -- the list is reversed so that "deeper" denominators are guarded first (so that a denominator test itself

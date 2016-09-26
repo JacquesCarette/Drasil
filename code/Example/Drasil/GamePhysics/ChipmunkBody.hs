@@ -8,7 +8,7 @@ import Language.Drasil
 
 import Drasil.Units
 
-import Drasil.GamePhysics.TableOfSymbols
+import Drasil.TableOfSymbols
 
 import Drasil.GamePhysics.ChipmunkUnits
 import Drasil.GamePhysics.ChipmunkUnitals

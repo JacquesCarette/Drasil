@@ -1,7 +1,7 @@
-module Example.Drasil.GamePhysics.ChipmunkModules where
+module Drasil.GamePhysics.ChipmunkModules where
 
 import Language.Drasil
-import Example.Drasil.GamePhysics.ChipmunkConcepts
+import Drasil.GamePhysics.ChipmunkConcepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,

@@ -1,14 +1,11 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-}
+module Drasil.GamePhysics.ChipmunkDataDefs where
 
-module Example.Drasil.GamePhysics.ChipmunkDataDefs where
-
-import Example.Drasil.GamePhysics.ChipmunkUnits
-import Example.Drasil.GamePhysics.ChipmunkUnitals
-import Example.Drasil.GamePhysics.ChipmunkConcepts
+import Drasil.GamePhysics.ChipmunkUnits
+import Drasil.GamePhysics.ChipmunkUnitals
+import Drasil.GamePhysics.ChipmunkConcepts
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

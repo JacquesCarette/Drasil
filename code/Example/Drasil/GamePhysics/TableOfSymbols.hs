@@ -1,10 +1,9 @@
 -- Standard code to make a table of symbols.
-module Example.Drasil.GamePhysics.TableOfSymbols(table_of_symbols, table) where
+module Drasil.GamePhysics.TableOfSymbols(table_of_symbols, table) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Language.Drasil.Unit
 
 table_of_symbols :: (Unit' s, Quantity s) => [s] -> Section
 table_of_symbols ls = Section (S "Table of Symbols") [Con intro, Con (table ls)]

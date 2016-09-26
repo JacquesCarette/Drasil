@@ -1,7 +1,7 @@
-module Example.Drasil.GamePhysics.ChipmunkChanges where
+module Drasil.GamePhysics.ChipmunkChanges where
 
 import Language.Drasil
-import Example.Drasil.GamePhysics.ChipmunkModules
+import Drasil.GamePhysics.ChipmunkModules
 
 lcs :: [LCChunk]
 lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12, lc13,

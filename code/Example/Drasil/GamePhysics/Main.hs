@@ -1,10 +1,8 @@
 module Main where
 
-import Language.Drasil (DocType(SRS, MG, Website))
-import Language.Drasil.Recipe (Recipe(..))
-import Language.Drasil.Generate (gen)
+import Language.Drasil (DocType(SRS, MG, Website),Recipe(..),gen)
 
-import Example.Drasil.GamePhysics.ChipmunkBody (chipmunkSRS, chipmunkMG)
+import Drasil.GamePhysics.ChipmunkBody (chipmunkSRS, chipmunkMG)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "Chipmunk_SRS") chipmunkSRS,

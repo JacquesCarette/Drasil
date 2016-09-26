@@ -1,7 +1,7 @@
-module Example.Drasil.GamePhysics.ChipmunkReqs where
+module Drasil.GamePhysics.ChipmunkReqs where
 
 import Language.Drasil
-import Example.Drasil.GamePhysics.ChipmunkModules
+import Drasil.GamePhysics.ChipmunkModules
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6,r7,r8]

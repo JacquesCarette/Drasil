@@ -1,8 +1,7 @@
-{-# OPTIONS -Wall #-}
-module Example.Drasil.GamePhysics.ChipmunkUnits where
+module Drasil.GamePhysics.ChipmunkUnits where
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

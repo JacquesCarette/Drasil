@@ -1,7 +1,4 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-}
-
-module Example.Drasil.GamePhysics.ChipmunkConcepts where
+module Drasil.GamePhysics.ChipmunkConcepts where
 
 import Language.Drasil
 

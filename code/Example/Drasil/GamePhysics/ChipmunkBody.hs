@@ -1,6 +1,4 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-}
-module Example.Drasil.GamePhysics.ChipmunkBody where
+module Drasil.GamePhysics.ChipmunkBody where
 
 import Data.Char (toLower, toUpper)
 import Data.List (intersperse)
@@ -8,18 +6,18 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-import Example.Drasil.GamePhysics.Units
-import Example.Drasil.GamePhysics.TableOfSymbols
+import Drasil.GamePhysics.Units
+import Drasil.GamePhysics.TableOfSymbols
 
-import Example.Drasil.GamePhysics.ChipmunkUnits
-import Example.Drasil.GamePhysics.ChipmunkUnitals
-import Example.Drasil.GamePhysics.ChipmunkConcepts
-import Example.Drasil.GamePhysics.ChipmunkTMods
-import Example.Drasil.GamePhysics.ChipmunkDataDefs
+import Drasil.GamePhysics.ChipmunkUnits
+import Drasil.GamePhysics.ChipmunkUnitals
+import Drasil.GamePhysics.ChipmunkConcepts
+import Drasil.GamePhysics.ChipmunkTMods
+import Drasil.GamePhysics.ChipmunkDataDefs
 
-import Example.Drasil.GamePhysics.ChipmunkModules
-import Example.Drasil.GamePhysics.ChipmunkChanges
-import Example.Drasil.GamePhysics.ChipmunkReqs
+import Drasil.GamePhysics.ChipmunkModules
+import Drasil.GamePhysics.ChipmunkChanges
+import Drasil.GamePhysics.ChipmunkReqs
 
 chipmunkSRS :: Document
 chipmunkSRS = Document

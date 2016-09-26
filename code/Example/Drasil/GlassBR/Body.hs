@@ -39,6 +39,7 @@ glassBR_srs = Document ((softwareRS ^. descr) :+: S " for " :+:
   (gLassBR ^. descr)) (S "Nikitha Krithnan and Spencer Smith") 
   [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
+mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document

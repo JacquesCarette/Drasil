@@ -1,8 +1,8 @@
 {-# OPTIONS -Wall #-}
-module Example.Drasil.SWHS.Units where
+module Drasil.SWHS.Units where
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

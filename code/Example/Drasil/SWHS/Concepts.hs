@@ -1,13 +1,8 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.SWHS.Concepts where
-
-import Example.Drasil.SWHS.Units
+module Drasil.SWHS.Concepts where
 
 import Language.Drasil
-import Language.Drasil.SI_Units
-
-import Control.Lens ((^.))
 
 ---Acronyms---
 acronyms :: [ConceptChunk]

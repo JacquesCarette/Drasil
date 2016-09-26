@@ -1,11 +1,11 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.SWHS.Unitals where
+module Drasil.SWHS.Unitals where
 
-import Example.Drasil.SWHS.Units
+import Drasil.SWHS.Units
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

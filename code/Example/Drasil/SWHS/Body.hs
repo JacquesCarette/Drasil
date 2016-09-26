@@ -1,26 +1,26 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.SWHS.Body where
+module Drasil.SWHS.Body where
 
 import Data.Char (toLower)
 import Control.Lens ((^.))
 
-import Example.Drasil.SWHS.Unitals
-import Example.Drasil.SWHS.Concepts
-import Example.Drasil.SWHS.TModel1
-import Example.Drasil.SWHS.TModel2
-import Example.Drasil.SWHS.TModel3
-import Example.Drasil.SWHS.DataDefs
-import Example.Drasil.SWHS.Units
-import Example.Drasil.SWHS.Modules
-import Example.Drasil.SWHS.Changes
-import Example.Drasil.SWHS.Reqs
+import Drasil.SWHS.Unitals
+import Drasil.SWHS.Concepts
+import Drasil.SWHS.TModel1
+import Drasil.SWHS.TModel2
+import Drasil.SWHS.TModel3
+import Drasil.SWHS.DataDefs
+import Drasil.SWHS.Units
+import Drasil.SWHS.Modules
+import Drasil.SWHS.Changes
+import Drasil.SWHS.Reqs
 
-import Example.Drasil.Units
-import Example.Drasil.SWHS.TableOfSymbols
+import Drasil.Units
+import Drasil.SWHS.TableOfSymbols
 
 import Language.Drasil
-import Language.Drasil.SI_Units 
+import Data.Drasil.SI_Units 
 
 --Redundant import warnings
 
@@ -57,6 +57,7 @@ swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
 -- Authors could be abstracted out (specifically, Spencer is an author for 
 -- multiple examples)
 
+mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 swhs_mg :: Document

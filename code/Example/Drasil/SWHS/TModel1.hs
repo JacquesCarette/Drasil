@@ -1,12 +1,12 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.SWHS.TModel1 where
+module Drasil.SWHS.TModel1 where
 
 import Data.Char (toLower)
 
 
-import Example.Drasil.SWHS.Unitals
-import Example.Drasil.SWHS.Concepts
+import Drasil.SWHS.Unitals
+import Drasil.SWHS.Concepts
 
 import Language.Drasil
 

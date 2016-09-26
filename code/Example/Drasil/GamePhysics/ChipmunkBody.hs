@@ -6,7 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-import Drasil.GamePhysics.Units
+import Drasil.Units
+
 import Drasil.GamePhysics.TableOfSymbols
 
 import Drasil.GamePhysics.ChipmunkUnits

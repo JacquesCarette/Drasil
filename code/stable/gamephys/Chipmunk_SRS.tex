@@ -1,0 +1,461 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\title{Software Requirements Specification for Chipmunk2D}
+\author{Alex Halliwushka and Luthfi Mawarid}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Reference Material}
+\label{Sec:RM}
+This section records information for easy reference.
+\subsection{Table of Units}
+\label{Sec:ToU}
+Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed as the unit system. In addition to the basic units, several derived units are employed as described below. For each unit, the symbol is given followed by a description of the unit with the SI name in parentheses.
+\begin{longtable*}{l l}
+\toprule
+Symbol & Description
+\\
+\midrule
+m & length (metre)
+\\
+kg & mass (kilogram)
+\\
+s & time (second)
+\\
+N & force (newton)
+\\
+rad & angle (radians)
+\\
+\bottomrule
+\label{Table:ToU}
+\end{longtable*}
+\subsection{Table of Symbols}
+\label{Sec:ToS}
+The table that follows summarizes the symbols used in this document along with their units.  More specific instances of these symbols will be described in their respective sections. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
+\begin{longtable*}{l l l}
+\toprule
+Symbol & Description & Units
+\\
+\midrule
+$\mathbf{a}$ & acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$\alpha{}$ & angular acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
+\\
+$\mathbf{F}$ & force & N
+\\
+$g$ & gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$G$ & gravitational constant (6.673 * 10E-11) & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
+\\
+$\mathbf{I}$ & moment of inertia & kg$\text{m}^{2}$
+\\
+$\mathbf{J}$ & impulse (vector) & Ns
+\\
+$j$ & impulse (scalar) & Ns
+\\
+$L$ & length & m
+\\
+$m$ & mass & kg
+\\
+$\mathbf{\hat{i}}$ & horizontal unit vector & m
+\\
+$\mathbf{\hat{j}}$ & vertical unit vector & m
+\\
+$\mathbf{n}$ & collision normal vector & m
+\\
+$\omega{}$ & angular velocity & $\frac{\text{rad}}{\text{s}}$
+\\
+$\mathbf{p}$ & position & m
+\\
+$\phi{}$ & orientation & rad
+\\
+$r$ & distance & m
+\\
+$\mathbf{r}$ & displacement & m
+\\
+$t$ & time & s
+\\
+$\tau{}$ & torque & Nm
+\\
+$\gamma{}$ & angular displacement & rad
+\\
+$\mathbf{v}$ & velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$C_{R}$ & coefficient of restitution & 
+\\
+$n$ & number of particles in a rigid body & 
+\\
+\bottomrule
+\label{Table:ToS}
+\end{longtable*}
+\section{Introduction}
+\label{Sec:I}
+Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
+The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D, an open source 2D rigid body physics library. This section explains the purpose of this document, the scope of the system, and the organization of the document.
+\subsection{Purpose of Document}
+\label{Sec:PoD}
+This document descibes the modeling of an open source 2D rigid body physics library used for games. The goal statements and theoretical models used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+\subsection{Scope of Requirements}
+\label{Sec:SoRs}
+The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given 2D rigid bodies, Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
+\subsection{Organization of Document}
+\label{Sec:OoD}
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to any additional information they require.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
+\section{General System Description}
+\label{Sec:GSD}
+This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+\subsection{User Characteristics}
+\label{Sec:UC}
+The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
+\subsection{System Constraints}
+\label{Sec:SC}
+There are no system constraints.
+\section{Specific System Description}
+\label{Sec:SSD}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
+\subsection{Problem Description}
+\label{Sec:PD}
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:OS}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+\subsubsection{Terminology and Definitions}
+\label{Sec:TaD}
+This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+\begin{enumerate}
+\item{Rigid body: A solid body in which deformation is neglected.}
+\item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
+\item{Centre of mass: The mean location of the distribution of mass of the object.}
+\item{Cartesian coordinates: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
+\item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
+\end{enumerate}
+\subsubsection{Goal Statements}
+\label{Sec:GSs}
+\begin{itemize}
+\item[GS1:]Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
+\item[GS2:]Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
+\item[GS3:]Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
+\item[GS4:]Given the physical properties, initial linear and angular positions and velocities, determine the new positions and velocities over a period of time of rigid bodies that have undergone a collision.
+\end{itemize}
+\subsection{Solution Characteristics Specification}
+\label{Sec:SCS}
+\subsubsection{Assumptions}
+\label{Sec:As}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+\begin{itemize}
+\item[A1:]All objects are rigid bodies.
+\item[A2:]All objects are 2D.
+\item[A3:]The library uses a Cartesian coordinate system.
+\item[A4:]The axes are defined using right-handed coordinate system.
+\item[A5:]All rigid bodies collisions are vertex-to-edge collisions.
+\item[A6:]There is no damping involved throughout the simulation.
+\item[A7:]There are no constraints and joints involved throughout the simulation.
+\end{itemize}
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+This section focuses on the general equations the physics library is based on.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:Nslom}
+\phantomsection 
+\label{T:Nslom}
+\\ \midrule \\
+Label & Newton's second law of motion
+\\ \midrule \\
+Equation & $\mathbf{F}=m\mathbf{a}$
+\\ \midrule \\
+Description & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proprotionality.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:Ntlom}
+\phantomsection 
+\label{T:Ntlom}
+\\ \midrule \\
+Label & Newton's third law of motion
+\\ \midrule \\
+Equation & $\mathbf{F}_{1}=-\mathbf{F}_{2}$
+\\ \midrule \\
+Description & Every action has an equal and opposite reaction. In other words, the force $\mathbf{F}_{1}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force $\mathbf{F}_{2}$ (N) exerted on the first rigid body by the second.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:Nloug}
+\phantomsection 
+\label{T:Nloug}
+\\ \midrule \\
+Label & Newton's law of universal gravitation
+\\ \midrule \\
+Equation & $\mathbf{F}=G\frac{m_{1}m_{2}}{||\mathbf{r}||^{2}}\mathbf{\hat{r}}=G\frac{m_{1}m_{2}}{||\mathbf{r}||^{2}}\frac{\mathbf{r}}{||\mathbf{r}||}$
+\\ \midrule \\
+Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, $m_{1}$ and $m_{2}$ (kg), and inversely proportional to the squared distance $||\mathbf{r}||^{2}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the unit displacement vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ( $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:Ct}
+\phantomsection 
+\label{T:Ct}
+\\ \midrule \\
+Label & Chasles' theorem
+\\ \midrule \\
+Equation & $\mathbf{v}_{B}=\mathbf{v}_{O}+\omega{}\mathbf{r}_{OB}$
+\\ \midrule \\
+Description & The linear velocity $\mathbf{v}_{B}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity $\mathbf{v}_{O}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $\omega{}$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, $\mathbf{r}_{OB}$ (m).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:Nslfrm}
+\phantomsection 
+\label{T:Nslfrm}
+\\ \midrule \\
+Label & Newton's second law for rotational motion
+\\ \midrule \\
+Equation & $\tau{}=\mathbf{I}\alpha{}$
+\\ \midrule \\
+Description & The net torque $\tau{}$ (Nm) on a rigid body is proportional to its angular acceleration $\alpha{}$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used in deriving the data definitions, which in turn will be used to build the instance models.
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the Instance Models. The dimension of each quantity is also given.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:p.CM}
+\phantomsection 
+\label{MG:p.CM}
+\\ \midrule \\
+Label & $\mathbf{p}_{CM}$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & $\mathbf{p}_{CM}$ = $\frac{\sum{m_{i}\mathbf{p}_{i}}}{M}$
+\\ \midrule \\
+Description & $\mathbf{p}_{CM}$ is the the mass-weighted average position of a rigid body's particles\newline$m_{i}$ is the mass of the i-th particle\newline$\mathbf{p}_{i}$ is the position vector of the i-th particle\newline$M$ is the total mass of the rigid body
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:r}
+\phantomsection 
+\label{MG:r}
+\\ \midrule \\
+Label & $\mathbf{r}(t)$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & $\mathbf{r}(t)$ = $\frac{d\mathbf{p}(t)}{dt}$
+\\ \midrule \\
+Description & $\mathbf{r}(t)$ is the the linear displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear position with respect to time $t$\newline$\mathbf{p}$ is the position\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:v}
+\phantomsection 
+\label{MG:v}
+\\ \midrule \\
+Label & $\mathbf{v}(t)$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & $\mathbf{v}(t)$ = $\frac{d\mathbf{r}(t)}{dt}$
+\\ \midrule \\
+Description & $\mathbf{v}(t)$ is the the linear velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear velocity with respect to time $t$\newline$\mathbf{r}$ is the displacement\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:a}
+\phantomsection 
+\label{MG:a}
+\\ \midrule \\
+Label & $\mathbf{a}(t)$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+\\ \midrule \\
+Equation & $\mathbf{a}(t)$ = $\frac{d\mathbf{v}(t)}{dt}$
+\\ \midrule \\
+Description & $\mathbf{a}(t)$ is the the linear acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear acceleration with respect to time $t$\newline$\mathbf{v}$ is the velocity\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:theta}
+\phantomsection 
+\label{MG:theta}
+\\ \midrule \\
+Label & $\gamma{}(t)$
+\\ \midrule \\
+Units & rad
+\\ \midrule \\
+Equation & $\gamma{}(t)$ = $\frac{d\phi{}(t)}{dt}$
+\\ \midrule \\
+Description & $\gamma{}(t)$ is the the angular displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its orientation with respect to time $t$\newline$\phi{}$ is the orientation\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:omega}
+\phantomsection 
+\label{MG:omega}
+\\ \midrule \\
+Label & $\omega{}(t)$
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}}$
+\\ \midrule \\
+Equation & $\omega{}(t)$ = $\frac{d\gamma{}(t)}{dt}$
+\\ \midrule \\
+Description & $\omega{}(t)$ is the the angular velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular displacement with respect to time $t$\newline$\gamma{}$ is the angular displacement\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:alpha}
+\phantomsection 
+\label{MG:alpha}
+\\ \midrule \\
+Label & $\alpha{}(t)$
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}^{2}}$
+\\ \midrule \\
+Equation & $\alpha{}(t)$ = $\frac{d\omega{}(t)}{dt}$
+\\ \midrule \\
+Description & $\alpha{}(t)$ is the the angular acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular velocity with respect to time $t$\newline$\omega{}$ is the angular velocity\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:j}
+\phantomsection 
+\label{MG:j}
+\\ \midrule \\
+Label & $j$
+\\ \midrule \\
+Units & Ns
+\\ \midrule \\
+Equation & $j$ = $\frac{(-1+C_{R})\mathbf{v}_{i}^{AB}\cdot{}\mathbf{n}}{(1/m_{A}+1/m_{B})||\mathbf{n}||^{2}+||\mathbf{r}_{AP}*\mathbf{n}||^{2}/\mathbf{I}_{A}+||\mathbf{r}_{BP}*\mathbf{n}||^{2}/\mathbf{I}_{B}}$
+\\ \midrule \\
+Description & $j$ is the the impulse (scalar) used to determine collision response between two rigid bodies\newline$C_{R}$ is the coefficient of restitution\newline$\mathbf{v}_{i}^{AB}$ is the relative velocity between rigid bodies A and B\newline$\mathbf{n}$ is the collision normal vector\newline$m_{A}$ is the mass of rigid body A\newline$m_{B}$ is the mass of rigid body B\newline$||\mathbf{n}||$ is the length of the normal vector\newline$||\mathbf{r}_{AP}*\mathbf{n}||$ is the length of the vector perpendicular to the contact displacement vector of rigid body A\newline$\mathbf{I}_{A}$ is the moment of inertia of rigid body A\newline$||\mathbf{r}_{BP}*\mathbf{n}||$ is the length of the vector perpendicular to the contact displacement vector of rigid body B\newline$\mathbf{I}_{B}$ is the moment of inertia of rigid body B
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+This section transforms the problem defined in Section~\ref{Sec:PD} into one expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
+\subsubsection{Data Constraints}
+\label{Sec:DC}
+Table 1 and 2 show the data constraints on the input and output variables, respectively. The ``Physical Constraints" column gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+\begin{longtable}{l l l}
+\toprule
+Var & Physical Constraints & Typical Value
+\\
+\midrule
+$L$ & $L$ is G/E to 0 & 44.2 m
+\\
+$m$ & $m$ is greater than 0 & 56.2 kg
+\\
+$\mathbf{I}$ & $\mathbf{I}$ is G/E to 0 & 74.5 kg$\text{m}^{2}$
+\\
+$g$ & None & 9.8 $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$\mathbf{p}$ & None & (0.412, 0.502) m
+\\
+$\mathbf{v}$ & None & 2.51 $\frac{\text{m}}{\text{s}}$
+\\
+$C_{R}$ & $C_{R}$ G/E to 0 and $C_{R}$ less than 1 & 0.8
+\\
+$\phi{}$ & $\phi{}$ G/E to 0 and $\phi{}$ less than 2pi & pi/2 rad
+\\
+$\omega{}$ & None & 2.1 $\frac{\text{rad}}{\text{s}}$
+\\
+$\mathbf{F}$ & None & 98.1 N
+\\
+$\tau{}$ & None & 200 Nm
+\\
+\bottomrule
+\caption{Table 1: Input Variables}
+\label{Table:T1IV}
+\end{longtable}
+\begin{longtable}{l l}
+\toprule
+Var & Physical Constraints
+\\
+\midrule
+$\mathbf{p}$ & None
+\\
+$\mathbf{v}$ & None
+\\
+$\phi{}$ & $\phi{}$ G/E to 0 and $\phi{}$ less than 2pi
+\\
+$\omega{}$ & None
+\\
+\bottomrule
+\caption{Table 2: Output Variables}
+\label{Table:T2OV}
+\end{longtable}
+\section{Requirements}
+\label{Sec:Rs}
+This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
+\subsection{Functional Requirements}
+\label{Sec:FRs}
+\begin{itemize}
+\item[R1:]Create a space for all of the rigid bodies in the physical simulation to interact in.
+\item[R2:]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
+\item[R3:]Input the surface properties of the bodies, such as friction or elasticity.
+\item[R4:]Verify that the inputs satisfy the required physical constraints.
+\item[R5:]Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
+\item[R6:]Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
+\item[R7:]Determine if any of the rigid bodies in the space have collided.
+\item[R8:]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
+\end{itemize}
+\subsection{Nonfunctional Requirements}
+\label{Sec:NRs}
+Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
+\section{Likely Changes}
+\label{Sec:LCs}
+This section lists the likely changes to be made to the physics game library.
+\begin{itemize}
+\item[LC1:]The internal ODE-solving algorithm used by the library may change in the future.
+\item[LC2:]The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
+\item[LC3:]The library may be expanded to include motion with damping.
+\item[LC4:]The library may be expanded to include joints and constraints.
+\end{itemize}
+\section{Off-the-Shelf Solutions}
+\label{Sec:OS}
+As mentioned in Section~\ref{Sec:PD}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+\begin{enumerate}
+\item{Box2D: http://box2d.org/}
+\item{Nape Physics Engine: http://napephys.com/}
+\end{enumerate}
+Free open source 3D game physics libraries include:
+\begin{enumerate}
+\item{Bullet: http://bulletphysics.org/}
+\item{Open Dynamics Engine: http://www.ode.org/}
+\item{Newton Game Dynamics: http://newtondynamics.com/}
+\end{enumerate}
+\end{document}

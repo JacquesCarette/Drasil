@@ -1,0 +1,453 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{luatex85}
+\def\pgfsysdriver{pgfsys-pdftex.def}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{graphs}
+\usetikzlibrary{graphdrawing}
+\usegdlibrary{layered}
+\newcounter{lcnum}
+\newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
+\newcounter{modnum}
+\newcommand{\mthemodnum}{M\themodnum}
+\title{Module Guide for Chipmunk2D}
+\author{Alex Halliwushka and Luthfi Mawarid}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Introduction}
+\label{Sec:I}
+Decomposing a system into modules is a commonly accepted approach to developing software.  A module is a work assignment for a programmer or programming team. In the best practices for scientific computing, Wilson et al advise a modular design, but are silent on the criteria to use to decompose the software into modules.  We advocate a decomposition based on the principle of information hiding. This principle supports design for change, because the ``secrets" that each module hides represent likely future changes.  Design for change is valuable in SC, where modifications are frequent, especially during initial development as the solution space is explored.
+Our design follows the rules laid out by Parnas, as follows:
+\begin{enumerate}
+\item{System details that are likely to change independently should be the secrets of separate modules.}
+\item{Any other program that requires information stored in a module's data structures must obtain it by calling access programs belonging to that module.}
+\end{enumerate}
+After completing the first stage of the design, the Software Requirements Specification (SRS), the Module Guide (MG) is developed. The MG specifies the modular structure of the system and is intended to allow both designers and maintainers to easily identify the parts of the software.  The potential readers of this document are as follows:
+\begin{enumerate}
+\item{New project members: This document can be a guide for a new project member to easily understand the overall structure and quickly find the relevant modules they are searching for.}
+\item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
+\item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
+\end{enumerate}
+Section~\ref{Sec:LaUC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
+\section{Likely and Unlikely Changes}
+\label{Sec:LaUC}
+This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LC} and unlikely changes are listed in Section~\ref{Sec:UC}
+\subsection{Likely Changes}
+\label{Sec:LC}
+Likely changes are the source of the information that is to be hidden inside the modules. Ideally, changing one of the likely changes will only require changing the one module that hides the associated decision. The approach adapted here is called design for change.
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LChardware}:]The specific hardware on which the software is running.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCrigidbody}:]The data structure of the physical properties of an object such as the object's mass, position and velocity.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCshape}:]The data structure of the surface properties of an object such as the object's friction and elasticity.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCspace}:]How all the rigid bodies and shapes interact together.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCarbiter}:]The data structure containing collision information such as the objects that collide and their masses.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCcontrol}:]How the overall control of the simulation is orchestrated, including the input and output of data.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCvector}:]The implementation of mathematical vectors.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCbb}:]The implementation of bounding box structures
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCtransform}:]The implementation of affine transformation matrices.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCspatialindex}:]How the simulation space is spatially indexed.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCcollision}:]The algorithms used for solving collisions.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCarray}:]The implementation of the sequence (array) data structure.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCtree}:]The implementation of the linked (tree) data structure.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LChashtable}:]The implementation of the associative (hash table) data structure.
+\end{description}
+\subsection{Unikely Changes}
+\label{Sec:UC}
+The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCIO}:]Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCinputsource}:]There will always be a source of input data external to the software.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCoutput}:]Output data are displayed to the output device.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCgoal}:]The goal of the system is to simulate the interactions of 2D rigid bodies.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCCartesian}:]A Cartesian coordinate system is used.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCrigid}:]All objects are rigid bodies.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC2D}:]All objects are 2D.
+\end{description}
+\section{Module Hierarchy}
+\label{Sec:MH}
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mhardwarehiding}:]Hardware Hiding Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mrigidbody}:]Rigid Body Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mshape}:]Shape Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mcircle}:]Circle Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Msegment}:]Segment Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mpoly}:]Poly Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mspace}:]Space Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Marbiter}:]Arbiter Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mcontrol}:]Control Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mvector}:]Vector Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mboundingbox}:]Bounding Box Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mtransformmatrix}:]Transform Matrix Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mspatialindex}:]Spatial Index Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mcollisionsolver}:]Collision Solver Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Msequencedatastructure}:]Sequence Data Structure Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mlinkeddatastructure}:]Linked Data Structure Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Massociativedatastructure}:]Associative Data Structure Module
+\end{description}
+\begin{longtable}{l l l}
+\toprule
+Level 1 & Level 2 & Level 3
+\\
+\midrule
+Hardware Hiding Module &  & 
+\\
+Behaviour Hiding Module & Rigid Body Module & 
+\\
+ & Shape Module & Circle Module
+\\
+ &  & Segment Module
+\\
+ &  & Poly Module
+\\
+ & Space Module & 
+\\
+ & Arbiter Module & 
+\\
+ & Control Module & 
+\\
+Software Decision Module & Vector Module & 
+\\
+ & Bounding Box Module & 
+\\
+ & Transform Matrix Module & 
+\\
+ & Spatial Index Module & 
+\\
+ & Collision Solver Module & 
+\\
+ & Sequence Data Structure Module & 
+\\
+ & Linked Data Structure Module & 
+\\
+ & Associative Data Structure Module & 
+\\
+\bottomrule
+\caption{Module Hierarchy}
+\label{Table:MH}
+\end{longtable}
+\section{Module Decomposition}
+\label{Sec:MD}
+Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the Operating system. If the entry is Chipmunk2D, this means that the module is provided by the Chipmunk2D game physics library. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
+\subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
+\label{Sec:HHM()}
+\begin{description}
+\item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
+\item[Services:]Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software. So, the system can use it to display outputs or to accept inputs.
+\item[Implemented By:]OS
+\end{description}
+\subsection{Behaviour Hiding Module}
+\label{Sec:BHM}
+\begin{description}
+\item[Secrets:]The contents of the required behaviors.
+\item[Services:]Includes programs that provide externally visible behavior of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
+\item[Implemented By:]--
+\end{description}
+\subsection{Rigid Body Module (M\ref{Mrigidbody})}
+\label{Sec:RBM()}
+\begin{description}
+\item[Secrets:]The data structure of a rigid body.
+\item[Services:]Stores the physical properties of an object, such as mass, position, rotation, velocity, etc, and provides operations on rigid bodies, such as setting the mass and velocity of the body.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Shape Module (M\ref{Mshape})}
+\label{Sec:SM()}
+\begin{description}
+\item[Secrets:]The data structure of a collision shape. Children: Circle Module, Segment Module, Polygon Module.
+\item[Services:]Stores the surface properties of an object, such as friction or elasticity, and provides operations on shapes, such as setting its friction or elasticity.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Circle Module (M\ref{Mcircle})}
+\label{Sec:CM()}
+\begin{description}
+\item[Secrets:]The data structure for a circle shape.
+\item[Services:]Provides operations on circles such as initializing a new circle, calculating moment and area, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Segment Module (M\ref{Msegment})}
+\label{Sec:SM()}
+\begin{description}
+\item[Secrets:]The data structure for a segment shape.
+\item[Services:]Provides operations on segments such as initializing a new segment, calculating moment and area, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Poly Module (M\ref{Mpoly})}
+\label{Sec:PM()}
+\begin{description}
+\item[Secrets:]The data structure for a polygon shape.
+\item[Services:]Provides operations on polygons such as initializing a new polygon, calculating moment, area and centroid, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Space Module (M\ref{Mspace})}
+\label{Sec:SM()}
+\begin{description}
+\item[Secrets:]The container for simulating objects.
+\item[Services:]Controls how all the rigid bodies and shapes interact together.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Arbiter Module (M\ref{Marbiter})}
+\label{Sec:AM()}
+\begin{description}
+\item[Secrets:]The data structure containing collision information.
+\item[Services:]Stores all collision data, such as which bodies collided and their masses.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Control Module (M\ref{Mcontrol})}
+\label{Sec:CM()}
+\begin{description}
+\item[Secrets:]The internal data types and algorithms for coordinating the running of the program.
+\item[Services:]Provides the main program.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Software Decision Module}
+\label{Sec:SDM}
+\begin{description}
+\item[Secrets:]The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
+\item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
+\item[Implemented By:]--
+\end{description}
+\subsection{Vector Module (M\ref{Mvector})}
+\label{Sec:VM()}
+\begin{description}
+\item[Secrets:]The data structure representing vectors.
+\item[Services:]Provides vector operations such as addition, scalar and vector multiplication, dot and cross products, rotations, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Bounding Box Module (M\ref{Mboundingbox})}
+\label{Sec:BBM()}
+\begin{description}
+\item[Secrets:]The data structure for representing axis-aligned bounding boxes.
+\item[Services:]Provides constructors for bounding boxes and operations such as merging boxes, calculating their centroids and areas, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Transform Matrix Module (M\ref{Mtransformmatrix})}
+\label{Sec:TMM()}
+\begin{description}
+\item[Secrets:]The data structure representing transformation matrices.
+\item[Services:]Provides constructors for affine transformation matrices, matrix operations such as inverse, transpose, multiplications, and operations for applying transformations to vectors and bounding boxes.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Spatial Index Module (M\ref{Mspatialindex})}
+\label{Sec:SIM()}
+\begin{description}
+\item[Secrets:]The data structures and algorithms for detecting collisions.
+\item[Services:]Provides spatial indexing operations and tracks the positions of bodies in the simulation space.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Collision Solver Module (M\ref{Mcollisionsolver})}
+\label{Sec:CSM()}
+\begin{description}
+\item[Secrets:]The data structures and algorithms for detecting collisions.
+\item[Services:]Fast collision filtering, primitive shape-to-shape collision detection.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Sequence Data Structure Module (M\ref{Msequencedatastructure})}
+\label{Sec:SDSM()}
+\begin{description}
+\item[Secrets:]The data structure for a sequence data type.
+\item[Services:]Provides array manipulation operations, such as building an array , accessing a specific entry, slicing an array, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Linked Data Structure Module (M\ref{Mlinkeddatastructure})}
+\label{Sec:LDSM()}
+\begin{description}
+\item[Secrets:]The data structure for a linked data type.
+\item[Services:]Provides tree manipulation operations, such as building a tree, accessing a specific entry, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\subsection{Associative Data Structure Module (M\ref{Massociativedatastructure})}
+\label{Sec:ADSM()}
+\begin{description}
+\item[Secrets:]The data structure for an associative data type.
+\item[Services:]Provides operations on hash tables, such as building a hash table, accessing a specific entry, etc.
+\item[Implemented By:]Chipmunk2D
+\end{description}
+\section{Traceability Matrix}
+\label{Sec:TM}
+This section shows two traceability matrices: between the modules and the requirements in Table~\ref{Table:TBRaM} and between the modules and the likely changes in Table~\ref{Table:TBLCaM}.
+\begin{longtable}{l l}
+\toprule
+Requirement & Modules
+\\
+\midrule
+R1 & M\ref{Mspace}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}
+\\
+R2 & M\ref{Mrigidbody}, M\ref{Mcontrol}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+\\
+R3 & M\ref{Mshape}, M\ref{Mcircle}, M\ref{Msegment}, M\ref{Mpoly}, M\ref{Mcontrol}, M\ref{Mvector}
+\\
+R4 & M\ref{Mrigidbody}, M\ref{Mshape}, M\ref{Mcircle}, M\ref{Msegment}, M\ref{Mpoly}, M\ref{Mspace}, M\ref{Mcontrol}
+\\
+R5 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+\\
+R6 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+\\
+R7 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Mboundingbox}, M\ref{Mspatialindex}, M\ref{Mcollisionsolver}, M\ref{Mlinkeddatastructure}, M\ref{Massociativedatastructure}
+\\
+R8 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Marbiter}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+\\
+\bottomrule
+\caption{Trace Between Requirements and Modules}
+\label{Table:TBRaM}
+\end{longtable}
+\begin{longtable}{l l}
+\toprule
+Likely Change & Modules
+\\
+\midrule
+LC\ref{LChardware} & M\ref{Mhardwarehiding}
+\\
+LC\ref{LCrigidbody} & M\ref{Mrigidbody}
+\\
+LC\ref{LCshape} & M\ref{Mshape}, M\ref{Mcircle}, M\ref{Msegment}, M\ref{Mpoly}
+\\
+LC\ref{LCspace} & M\ref{Mspace}
+\\
+LC\ref{LCarbiter} & M\ref{Marbiter}
+\\
+LC\ref{LCcontrol} & M\ref{Mcontrol}
+\\
+LC\ref{LCvector} & M\ref{Mvector}
+\\
+LC\ref{LCbb} & M\ref{Mboundingbox}
+\\
+LC\ref{LCtransform} & M\ref{Mvector}
+\\
+LC\ref{LCspatialindex} & M\ref{Mspatialindex}
+\\
+LC\ref{LCcollision} & M\ref{Mcollisionsolver}
+\\
+LC\ref{LCarray} & M\ref{Msequencedatastructure}
+\\
+LC\ref{LCtree} & M\ref{Mlinkeddatastructure}
+\\
+LC\ref{LChashtable} & M\ref{Massociativedatastructure}
+\\
+\bottomrule
+\caption{Trace Between Likely Changes and Modules}
+\label{Table:TBLCaM}
+\end{longtable}
+\section{Uses Hierarchy}
+\label{Sec:UH}
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHierarchy} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+\begin{figure}
+\centering
+\resizebox{\textwidth}{!}{
+\tikz [>=stealth, shorten >=1pt]
+\graph [layered layout, components go right top aligned, minimum layers=3, nodes={ draw, thick, align=center, inner xsep=0.5em, inner ysep=0.5em, text width=4em, minimum height=5em, font=\scriptsize, fill=white, text opacity=1, fill opacity=0.8, typeset={\tikzgraphnodetext\\M\ref{\tikzgraphnodename}}}, edges={thick, rounded corners}]
+{
+Mrigidbody/Rigid Body Module -> Mspatialindex/Spatial Index Module;
+Mrigidbody/Rigid Body Module -> Mtransformmatrix/Transform Matrix Module;
+Mrigidbody/Rigid Body Module -> Mvector/Vector Module;
+Mrigidbody/Rigid Body Module -> Mspace/Space Module;
+Mshape/Shape Module -> Mtransformmatrix/Transform Matrix Module;
+Mshape/Shape Module -> Mboundingbox/Bounding Box Module;
+Mshape/Shape Module -> Mvector/Vector Module;
+Mshape/Shape Module -> Mrigidbody/Rigid Body Module;
+Mshape/Shape Module -> Mspace/Space Module;
+Mspace/Space Module -> Mboundingbox/Bounding Box Module;
+Mspace/Space Module -> Mspatialindex/Spatial Index Module;
+Mspace/Space Module -> Massociativedatastructure/Associative Data Structure Module;
+Mspace/Space Module -> Msequencedatastructure/Sequence Data Structure Module;
+Mspace/Space Module -> Mspatialindex/Spatial Index Module;
+Marbiter/Arbiter Module -> Mshape/Shape Module;
+Marbiter/Arbiter Module -> Mrigidbody/Rigid Body Module;
+Marbiter/Arbiter Module -> Mvector/Vector Module;
+Mcontrol/Control Module -> Marbiter/Arbiter Module;
+Mcontrol/Control Module -> Mhardwarehiding/Hardware Hiding Module;
+Mboundingbox/Bounding Box Module -> Mvector/Vector Module;
+Mtransformmatrix/Transform Matrix Module -> Mboundingbox/Bounding Box Module;
+Mspatialindex/Spatial Index Module -> Mboundingbox/Bounding Box Module;
+Mspatialindex/Spatial Index Module -> Mvector/Vector Module;
+Mspatialindex/Spatial Index Module -> Mcollisionsolver/Collision Solver Module;
+Mspatialindex/Spatial Index Module -> Mlinkeddatastructure/Linked Data Structure Module;
+Mcollisionsolver/Collision Solver Module -> Mboundingbox/Bounding Box Module;
+Mcollisionsolver/Collision Solver Module -> Mvector/Vector Module;
+Mcollisionsolver/Collision Solver Module -> Mlinkeddatastructure/Linked Data Structure Module;
+};
+}
+\caption{Uses Hierarchy}
+\label{Figure:UsesHierarchy}
+\end{figure}
+\end{document}

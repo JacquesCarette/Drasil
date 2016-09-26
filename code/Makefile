@@ -2,8 +2,9 @@ SWHS_PREF = SWHS_
 LSS_PREF = $(empty)
 SSP_PREF = SSP_
 GLASS_PREF = GlassBR_
+GAME_PREF = Chipmunk_
 
-TESTS = swhs lss ssp glassbr
+TESTS = swhs lss ssp glassbr gamephys
 
 all: $(TESTS)
 	@echo "DONE"
@@ -39,6 +40,14 @@ glassbr:
 	- diff ./stable/glassbr/$(GLASS_PREF)MG.tex ./MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log
 	- diff ./stable/glassbr/$(GLASS_PREF)SRS.css ./Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log
 	- diff ./stable/glassbr/$(GLASS_PREF)SRS.html ./Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log
+	
+gamephys:
+	cabal build chipmunkdocs
+	./dist/build/chipmunkdocs/chipmunkdocs
+	- diff ./stable/gamephys/$(GAME_PREF)SRS.tex ./SRS/$(GAME_PREF)SRS.tex > $(GAME_PREF)log.log
+	- diff ./stable/gamephys/$(GAME_PREF)MG.tex ./MG/$(GAME_PREF)MG.tex >> $(GAME_PREF)log.log
+	- diff ./stable/gamephys/$(GAME_PREF)SRS.css ./Website/$(GAME_PREF)SRS.css >> $(GAME_PREF)log.log
+	- diff ./stable/gamephys/$(GAME_PREF)SRS.html ./Website/$(GAME_PREF)SRS.html >> $(GAME_PREF)log.log
 	
 clean: clean_logs
 	rm -r ./SRS ./Website ./MIS ./MG ./Code ./dist

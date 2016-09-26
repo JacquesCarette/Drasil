@@ -1,0 +1,1539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="Chipmunk_SRS.css">
+<title>
+Software Requirements Specification for Chipmunk2D
+</title>
+</head>
+<body>
+<div class="title">
+<h1>
+Software Requirements Specification for Chipmunk2D
+</h1>
+</div>
+<div class="author">
+<h2>
+Alex Halliwushka and Luthfi Mawarid
+</h2>
+</div>
+<a id="Sec:RM">
+<div class="section">
+<h2>
+Reference Material
+</h2>
+<p class="paragraph">
+This section records information for easy reference.
+</p>
+<a id="Sec:ToU">
+<div class="subsection">
+<h3>
+Table of Units
+</h3>
+<p class="paragraph">
+Throughout this document SI (Syst&egrave;me International d'Unit&eacute;s) is employed as the unit system. In addition to the basic units, several derived units are employed as described below. For each unit, the symbol is given followed by a description of the unit with the SI name in parentheses.
+</p>
+<a id="Table:ToU">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+length (metre)
+</td>
+</tr>
+<tr>
+<td>
+kg
+</td>
+<td>
+mass (kilogram)
+</td>
+</tr>
+<tr>
+<td>
+s
+</td>
+<td>
+time (second)
+</td>
+</tr>
+<tr>
+<td>
+N
+</td>
+<td>
+force (newton)
+</td>
+</tr>
+<tr>
+<td>
+rad
+</td>
+<td>
+angle (radians)
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:ToS">
+<div class="subsection">
+<h3>
+Table of Symbols
+</h3>
+<p class="paragraph">
+The table that follows summarizes the symbols used in this document along with their units.  More specific instances of these symbols will be described in their respective sections. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
+</p>
+<a id="Table:ToS">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Units
+</th>
+</tr>
+<tr>
+<td>
+<b>a</b>
+</td>
+<td>
+acceleration
+</td>
+<td>
+m/(s<sup>2</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&alpha;
+</td>
+<td>
+angular acceleration
+</td>
+<td>
+rad/(s<sup>2</sup>)
+</td>
+</tr>
+<tr>
+<td>
+<b>F</b>
+</td>
+<td>
+force
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+g
+</td>
+<td>
+gravitational acceleration
+</td>
+<td>
+m/(s<sup>2</sup>)
+</td>
+</tr>
+<tr>
+<td>
+G
+</td>
+<td>
+gravitational constant (6.673 * 10E-11)
+</td>
+<td>
+m<sup>3</sup>/(kgs<sup>2</sup>)
+</td>
+</tr>
+<tr>
+<td>
+<b>I</b>
+</td>
+<td>
+moment of inertia
+</td>
+<td>
+kgm<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<b>J</b>
+</td>
+<td>
+impulse (vector)
+</td>
+<td>
+Ns
+</td>
+</tr>
+<tr>
+<td>
+j
+</td>
+<td>
+impulse (scalar)
+</td>
+<td>
+Ns
+</td>
+</tr>
+<tr>
+<td>
+L
+</td>
+<td>
+length
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+mass
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+<b>i&#770;</b>
+</td>
+<td>
+horizontal unit vector
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<b>j&#770;</b>
+</td>
+<td>
+vertical unit vector
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<b>n</b>
+</td>
+<td>
+collision normal vector
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+&omega;
+</td>
+<td>
+angular velocity
+</td>
+<td>
+rad/s
+</td>
+</tr>
+<tr>
+<td>
+<b>p</b>
+</td>
+<td>
+position
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+&phi;
+</td>
+<td>
+orientation
+</td>
+<td>
+rad
+</td>
+</tr>
+<tr>
+<td>
+r
+</td>
+<td>
+distance
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<b>r</b>
+</td>
+<td>
+displacement
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+t
+</td>
+<td>
+time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+&tau;
+</td>
+<td>
+torque
+</td>
+<td>
+Nm
+</td>
+</tr>
+<tr>
+<td>
+&gamma;
+</td>
+<td>
+angular displacement
+</td>
+<td>
+rad
+</td>
+</tr>
+<tr>
+<td>
+<b>v</b>
+</td>
+<td>
+velocity
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
+C<sub>R</sub>
+</td>
+<td>
+coefficient of restitution
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+n
+</td>
+<td>
+number of particles in a rigid body
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:I">
+<div class="section">
+<h2>
+Introduction
+</h2>
+<p class="paragraph">
+Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
+</p>
+<p class="paragraph">
+The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D, an open source 2D rigid body physics library. This section explains the purpose of this document, the scope of the system, and the organization of the document.
+</p>
+<a id="Sec:PoD">
+<div class="subsection">
+<h3>
+Purpose of Document
+</h3>
+<p class="paragraph">
+This document descibes the modeling of an open source 2D rigid body physics library used for games. The goal statements and theoretical models used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+</p>
+<p class="paragraph">
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+</p>
+</div>
+</a>
+<a id="Sec:SoRs">
+<div class="subsection">
+<h3>
+Scope of Requirements
+</h3>
+<p class="paragraph">
+The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given 2D rigid bodies, Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
+</p>
+</div>
+</a>
+<a id="Sec:OoD">
+<div class="subsection">
+<h3>
+Organization of Document
+</h3>
+<p class="paragraph">
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>this Section</a> and trace back to any additional information they require.
+</p>
+<p class="paragraph">
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:GSD">
+<div class="section">
+<h2>
+General System Description
+</h2>
+<p class="paragraph">
+This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+</p>
+<a id="Sec:UC">
+<div class="subsection">
+<h3>
+User Characteristics
+</h3>
+<p class="paragraph">
+The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
+</p>
+</div>
+</a>
+<a id="Sec:SC">
+<div class="subsection">
+<h3>
+System Constraints
+</h3>
+<p class="paragraph">
+There are no system constraints.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SSD">
+<div class="section">
+<h2>
+Specific System Description
+</h2>
+<p class="paragraph">
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
+</p>
+<a id="Sec:PD">
+<div class="subsection">
+<h3>
+Problem Description
+</h3>
+<p class="paragraph">
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:OS>this Section</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+</p>
+<a id="Sec:TaD">
+<div class="subsubsection">
+<h4>
+Terminology and Definitions
+</h4>
+<p class="paragraph">
+This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+</p>
+<ul class="list">
+<li>
+Rigid body: A solid body in which deformation is neglected.
+</li>
+<li>
+Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.
+</li>
+<li>
+Centre of mass: The mean location of the distribution of mass of the object.
+</li>
+<li>
+Cartesian coordinates: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.
+</li>
+<li>
+Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.
+</li>
+</ul>
+</div>
+</a>
+<a id="Sec:GSs">
+<div class="subsubsection">
+<h4>
+Goal Statements
+</h4>
+<div class="list">
+<p>
+GS1: Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
+</p>
+<p>
+GS2: Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
+</p>
+<p>
+GS3: Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
+</p>
+<p>
+GS4: Given the physical properties, initial linear and angular positions and velocities, determine the new positions and velocities over a period of time of rigid bodies that have undergone a collision.
+</p>
+</div>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SCS">
+<div class="subsection">
+<h3>
+Solution Characteristics Specification
+</h3>
+<a id="Sec:As">
+<div class="subsubsection">
+<h4>
+Assumptions
+</h4>
+<p class="paragraph">
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+</p>
+<div class="list">
+<p>
+A1: All objects are rigid bodies.
+</p>
+<p>
+A2: All objects are 2D.
+</p>
+<p>
+A3: The library uses a Cartesian coordinate system.
+</p>
+<p>
+A4: The axes are defined using right-handed coordinate system.
+</p>
+<p>
+A5: All rigid bodies collisions are vertex-to-edge collisions.
+</p>
+<p>
+A6: There is no damping involved throughout the simulation.
+</p>
+<p>
+A7: There are no constraints and joints involved throughout the simulation.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:TMs">
+<div class="subsubsection">
+<h4>
+Theoretical Models
+</h4>
+<p class="paragraph">
+This section focuses on the general equations the physics library is based on.
+</p>
+<a id="T:Nslom">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's second law of motion
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>F</b>=m<b>a</b>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The net force <b>F</b> (N) on a rigid body is proportional to the acceleration <b>a</b> (m/(s<sup>2</sup>)) of the rigid body, where m (kg) denotes the mass of the rigid body as the constant of proprotionality.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:Ntlom">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's third law of motion
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>F</b><sub>1</sub>=-<b>F</b><sub>2</sub>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Every action has an equal and opposite reaction. In other words, the force <b>F</b><sub>1</sub> (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force <b>F</b><sub>2</sub> (N) exerted on the first rigid body by the second.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:Nloug">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's law of universal gravitation
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>F</b>=G<div class="fraction">
+<span class="fup">
+m<sub>1</sub>m<sub>2</sub>
+</span>
+<span class="fdn">
+||<b>r</b>||<sup>2</sup>
+</span>
+</div><b>r&#770;</b>=G<div class="fraction">
+<span class="fup">
+m<sub>1</sub>m<sub>2</sub>
+</span>
+<span class="fdn">
+||<b>r</b>||<sup>2</sup>
+</span>
+</div><div class="fraction">
+<span class="fup">
+<b>r</b>
+</span>
+<span class="fdn">
+||<b>r</b>||
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Two rigid bodies in the universe attract each other with a force <b>F</b> (N) that is directly proportional to the product of their masses, m<sub>1</sub> and m<sub>2</sub> (kg), and inversely proportional to the squared distance ||<b>r</b>||<sup>2</sup> (m<sup>2</sup>) between them. The vector <b>r</b> (m) is the displacement between the centres of the rigid bodies and ||<b>r</b>|| (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <b>r&#770;</b> denotes the unit displacement vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, G is the gravitational constant (6.673 * 10E-11) ( m<sup>3</sup>/(kgs<sup>2</sup>)).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:Ct">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Chasles' theorem
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>v</b><sub>B</sub>=<b>v</b><sub>O</sub>+&omega;<b>r</b><sub>OB</sub>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The linear velocity <b>v</b><sub>B</sub> (m/s) of any point B in a rigid body is the sum of the linear velocity <b>v</b><sub>O</sub> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity &omega; (rad/s) and the displacement vector between the origin and point B, <b>r</b><sub>OB</sub> (m).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:Nslfrm">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's second law for rotational motion
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&tau;=<b>I</b>&alpha;
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The net torque &tau; (Nm) on a rigid body is proportional to its angular acceleration &alpha; (rad/(s<sup>2</sup>)). Here, <b>I</b> (kgm<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:GDs">
+<div class="subsubsection">
+<h4>
+General Definitions
+</h4>
+<p class="paragraph">
+This section collects the laws and equations that will be used in deriving the data definitions, which in turn will be used to build the instance models.
+</p>
+</div>
+</a>
+<a id="Sec:DDs">
+<div class="subsubsection">
+<h4>
+Data Definitions
+</h4>
+<p class="paragraph">
+This section collects and defines all the data needed to build the Instance Models. The dimension of each quantity is also given.
+</p>
+<a id="MG:p.CM">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+<b>p</b><sub>CM</sub>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>p</b><sub>CM</sub> = <div class="fraction">
+<span class="fup">
+&sum;(m<sub>i</sub><b>p</b><sub>i</sub>)
+</span>
+<span class="fdn">
+M
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+<b>p</b><sub>CM</sub> is the the mass-weighted average position of a rigid body's particles<br />m<sub>i</sub> is the mass of the i-th particle<br /><b>p</b><sub>i</sub> is the position vector of the i-th particle<br />M is the total mass of the rigid body
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:r">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+<b>r</b>(t)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>r</b>(t) = <div class="fraction">
+<span class="fup">
+d<b>p</b>(t)
+</span>
+<span class="fdn">
+dt
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+<b>r</b>(t) is the the linear displacement of a rigid body as a function of time t (s), also equal to the derivative of its linear position with respect to time t<br /><b>p</b> is the position<br />t is the time
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:v">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+<b>v</b>(t)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>v</b>(t) = <div class="fraction">
+<span class="fup">
+d<b>r</b>(t)
+</span>
+<span class="fdn">
+dt
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+<b>v</b>(t) is the the linear velocity of a rigid body as a function of time t (s), also equal to the derivative of its linear velocity with respect to time t<br /><b>r</b> is the displacement<br />t is the time
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:a">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+<b>a</b>(t)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/(s<sup>2</sup>)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>a</b>(t) = <div class="fraction">
+<span class="fup">
+d<b>v</b>(t)
+</span>
+<span class="fdn">
+dt
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+<b>a</b>(t) is the the linear acceleration of a rigid body as a function of time t (s), also equal to the derivative of its linear acceleration with respect to time t<br /><b>v</b> is the velocity<br />t is the time
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:theta">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+&gamma;(t)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+rad
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&gamma;(t) = <div class="fraction">
+<span class="fup">
+d&phi;(t)
+</span>
+<span class="fdn">
+dt
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+&gamma;(t) is the the angular displacement of a rigid body as a function of time t (s), also equal to the derivative of its orientation with respect to time t<br />&phi; is the orientation<br />t is the time
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:omega">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+&omega;(t)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+rad/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&omega;(t) = <div class="fraction">
+<span class="fup">
+d&gamma;(t)
+</span>
+<span class="fdn">
+dt
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+&omega;(t) is the the angular velocity of a rigid body as a function of time t (s), also equal to the derivative of its angular displacement with respect to time t<br />&gamma; is the angular displacement<br />t is the time
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:alpha">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+&alpha;(t)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+rad/(s<sup>2</sup>)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&alpha;(t) = <div class="fraction">
+<span class="fup">
+d&omega;(t)
+</span>
+<span class="fdn">
+dt
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+&alpha;(t) is the the angular acceleration of a rigid body as a function of time t (s), also equal to the derivative of its angular velocity with respect to time t<br />&omega; is the angular velocity<br />t is the time
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:j">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+j
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Ns
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+j = <div class="fraction">
+<span class="fup">
+(-1+C<sub>R</sub>)<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
+</span>
+<span class="fdn">
+(1/m<sub>A</sub>+1/m<sub>B</sub>)||<b>n</b>||<sup>2</sup>+||<b>r</b><sub>AP</sub>*<b>n</b>||<sup>2</sup>/<b>I</b><sub>A</sub>+||<b>r</b><sub>BP</sub>*<b>n</b>||<sup>2</sup>/<b>I</b><sub>B</sub>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+j is the the impulse (scalar) used to determine collision response between two rigid bodies<br />C<sub>R</sub> is the coefficient of restitution<br /><b>v</b><sub>i</sub><sup>AB</sup> is the relative velocity between rigid bodies A and B<br /><b>n</b> is the collision normal vector<br />m<sub>A</sub> is the mass of rigid body A<br />m<sub>B</sub> is the mass of rigid body B<br />||<b>n</b>|| is the length of the normal vector<br />||<b>r</b><sub>AP</sub>*<b>n</b>|| is the length of the vector perpendicular to the contact displacement vector of rigid body A<br /><b>I</b><sub>A</sub> is the moment of inertia of rigid body A<br />||<b>r</b><sub>BP</sub>*<b>n</b>|| is the length of the vector perpendicular to the contact displacement vector of rigid body B<br /><b>I</b><sub>B</sub> is the moment of inertia of rigid body B
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:IMs">
+<div class="subsubsection">
+<h4>
+Instance Models
+</h4>
+<p class="paragraph">
+This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>this Section</a> and <a href=#Sec:GDs>this Section</a>.
+</p>
+</div>
+</a>
+<a id="Sec:DC">
+<div class="subsubsection">
+<h4>
+Data Constraints
+</h4>
+<p class="paragraph">
+Table 1 and 2 show the data constraints on the input and output variables, respectively. The &quot;Physical Constraints&quot; column gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+</p>
+<a id="Table:T1IV">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+<th>
+Typical Value
+</th>
+</tr>
+<tr>
+<td>
+L
+</td>
+<td>
+L is G/E to 0
+</td>
+<td>
+44.2 m
+</td>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+m is greater than 0
+</td>
+<td>
+56.2 kg
+</td>
+</tr>
+<tr>
+<td>
+<b>I</b>
+</td>
+<td>
+<b>I</b> is G/E to 0
+</td>
+<td>
+74.5 kgm<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+g
+</td>
+<td>
+None
+</td>
+<td>
+9.8 m/(s<sup>2</sup>)
+</td>
+</tr>
+<tr>
+<td>
+<b>p</b>
+</td>
+<td>
+None
+</td>
+<td>
+(0.412, 0.502) m
+</td>
+</tr>
+<tr>
+<td>
+<b>v</b>
+</td>
+<td>
+None
+</td>
+<td>
+2.51 m/s
+</td>
+</tr>
+<tr>
+<td>
+C<sub>R</sub>
+</td>
+<td>
+C<sub>R</sub> G/E to 0 and C<sub>R</sub> less than 1
+</td>
+<td>
+0.8
+</td>
+</tr>
+<tr>
+<td>
+&phi;
+</td>
+<td>
+&phi; G/E to 0 and &phi; less than 2pi
+</td>
+<td>
+pi/2 rad
+</td>
+</tr>
+<tr>
+<td>
+&omega;
+</td>
+<td>
+None
+</td>
+<td>
+2.1 rad/s
+</td>
+</tr>
+<tr>
+<td>
+<b>F</b>
+</td>
+<td>
+None
+</td>
+<td>
+98.1 N
+</td>
+</tr>
+<tr>
+<td>
+&tau;
+</td>
+<td>
+None
+</td>
+<td>
+200 Nm
+</td>
+</tr>
+</table>
+<p class="caption">
+Table 1: Input Variables
+</p>
+</a>
+<a id="Table:T2OV">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+</tr>
+<tr>
+<td>
+<b>p</b>
+</td>
+<td>
+None
+</td>
+</tr>
+<tr>
+<td>
+<b>v</b>
+</td>
+<td>
+None
+</td>
+</tr>
+<tr>
+<td>
+&phi;
+</td>
+<td>
+&phi; G/E to 0 and &phi; less than 2pi
+</td>
+</tr>
+<tr>
+<td>
+&omega;
+</td>
+<td>
+None
+</td>
+</tr>
+</table>
+<p class="caption">
+Table 2: Output Variables
+</p>
+</a>
+</div>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:Rs">
+<div class="section">
+<h2>
+Requirements
+</h2>
+<p class="paragraph">
+This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
+</p>
+<a id="Sec:FRs">
+<div class="subsection">
+<h3>
+Functional Requirements
+</h3>
+<div class="list">
+<p>
+R1: Create a space for all of the rigid bodies in the physical simulation to interact in.
+</p>
+<p>
+R2: Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
+</p>
+<p>
+R3: Input the surface properties of the bodies, such as friction or elasticity.
+</p>
+<p>
+R4: Verify that the inputs satisfy the required physical constraints.
+</p>
+<p>
+R5: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
+</p>
+<p>
+R6: Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
+</p>
+<p>
+R7: Determine if any of the rigid bodies in the space have collided.
+</p>
+<p>
+R8: Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:NRs">
+<div class="subsection">
+<h3>
+Nonfunctional Requirements
+</h3>
+<p class="paragraph">
+Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:LCs">
+<div class="section">
+<h2>
+Likely Changes
+</h2>
+<p class="paragraph">
+This section lists the likely changes to be made to the physics game library.
+</p>
+<div class="list">
+<p>
+LC1: The internal ODE-solving algorithm used by the library may change in the future.
+</p>
+<p>
+LC2: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
+</p>
+<p>
+LC3: The library may be expanded to include motion with damping.
+</p>
+<p>
+LC4: The library may be expanded to include joints and constraints.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:OS">
+<div class="section">
+<h2>
+Off-the-Shelf Solutions
+</h2>
+<p class="paragraph">
+As mentioned in <a href=#Sec:PD>this Section</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+</p>
+<ul class="list">
+<li>
+Box2D: http://box2d.org/
+</li>
+<li>
+Nape Physics Engine: http://napephys.com/
+</li>
+</ul>
+<p class="paragraph">
+Free open source 3D game physics libraries include:
+</p>
+<ul class="list">
+<li>
+Bullet: http://bulletphysics.org/
+</li>
+<li>
+Open Dynamics Engine: http://www.ode.org/
+</li>
+<li>
+Newton Game Dynamics: http://newtondynamics.com/
+</li>
+</ul>
+</div>
+</a>
+</body>
+</html>

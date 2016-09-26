@@ -1,14 +1,13 @@
-module Example.Drasil.SWHS.TModel3 where
+module Drasil.SWHS.TModel3 where
 
 import Data.Char (toLower)
 
-import Example.Drasil.SWHS.Units
-import Example.Drasil.SWHS.Unitals
-import Example.Drasil.SWHS.DataDefs
-import Example.Drasil.SWHS.Concepts
+import Drasil.SWHS.Unitals
+import Drasil.SWHS.DataDefs
+import Drasil.SWHS.Concepts
 
 import Language.Drasil
-import Language.Drasil.SI_Units
+import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
@@ -19,8 +18,8 @@ t3LatHtE :: RelationChunk
 t3LatHtE = makeRC "Latent heat energy" t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just 0,
-            Just (C time))) (Deriv (FCall (C latentE) [C tau]) (C tau))
+latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),
+            Just (High (C time))) (Deriv Total (FCall (C latentE) [C tau]) (C tau)) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?

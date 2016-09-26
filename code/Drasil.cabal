@@ -130,7 +130,21 @@ executable chipmunkdocs
     drasil >= 0.0.6
   default-language: Haskell2010
   ghc-options:      -Wall
-
+  
+executable swhs
+  hs-source-dirs: Example
+  main-is: Drasil/SWHS/Main.hs
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil >= 0.0.6
+  default-language: Haskell2010
+  ghc-options:      -Wall
 
 source-repository head
   type:     git

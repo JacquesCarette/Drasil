@@ -1,26 +1,26 @@
 {-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
-module Example.Drasil.SWHS.Body where
+module Drasil.SWHS.Body where
 
 import Data.Char (toLower)
 import Control.Lens ((^.))
 
-import Example.Drasil.SWHS.Unitals
-import Example.Drasil.SWHS.Concepts
-import Example.Drasil.SWHS.TModel1
-import Example.Drasil.SWHS.TModel2
-import Example.Drasil.SWHS.TModel3
-import Example.Drasil.SWHS.DataDefs
-import Example.Drasil.SWHS.Units
-import Example.Drasil.SWHS.Modules
-import Example.Drasil.SWHS.Changes
-import Example.Drasil.SWHS.Reqs
+import Drasil.SWHS.Unitals
+import Drasil.SWHS.Concepts
+import Drasil.SWHS.TModel1
+import Drasil.SWHS.TModel2
+import Drasil.SWHS.TModel3
+import Drasil.SWHS.DataDefs
+import Drasil.SWHS.Units
+import Drasil.SWHS.Modules
+import Drasil.SWHS.Changes
+import Drasil.SWHS.Reqs
 
-import Example.Drasil.Units
-import Example.Drasil.SWHS.TableOfSymbols
+import Drasil.Units
+import Drasil.SWHS.TableOfSymbols
 
 import Language.Drasil
-import Language.Drasil.SI_Units 
+import Data.Drasil.SI_Units 
 
 --Redundant import warnings
 
@@ -57,6 +57,7 @@ swhs_srs = Document (S "Software Requirements Specification for Solar Water" :+:
 -- Authors could be abstracted out (specifically, Spencer is an author for 
 -- multiple examples)
 
+mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 swhs_mg :: Document
@@ -562,11 +563,13 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                Paragraph (S "Integrating " :+: makeRef s4_2_2_T1 :+: 
                S " over a " :+: (volume ^. descr) :+: S " (" :+:
                P (volume ^. symbol) :+: S "), we have:"),
-               EqnBlock (Neg (UnaryOp (Integral (Just (C volume), Nothing))
-               ((C gradient) :. (C thFluxVect))) + UnaryOp (Integral (Just 
-               (C volume), Nothing)) (C vol_ht_gen) := UnaryOp (Integral (Just
-               (C volume), Nothing)) ((C density) * (C htCap) * Deriv (C temp) 
-               (C time))),
+               EqnBlock 
+                ((Neg (UnaryOp (Integral (Just (Low (C volume)), Nothing)
+                ((C gradient) :. (C thFluxVect)) volume))) + 
+                UnaryOp (Integral (Just (Low (C volume)), Nothing) 
+                (C vol_ht_gen) volume) := 
+                UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
+                * (C htCap) * Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "Applying " :+: (gauss_div ^. descr) :+: S " to" :+:
                S " the first term over the " :+: (surface ^. descr) :+:
                S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
@@ -575,18 +578,21 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                S " for the " :+: (surface ^. descr) :+: S " and " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
                descr) :+: S ":"),
-               EqnBlock (Neg (UnaryOp (Integral (Just (C surface), Nothing)) 
-               ((C thFluxVect) :. (C norm_vect))) + UnaryOp (Integral (Just 
-               (C volume), Nothing)) (C vol_ht_gen) := UnaryOp (Integral (Just 
-               (C volume), Nothing)) ((C density) * (C htCap) * Deriv (C temp) 
-               (C time))),
+               EqnBlock 
+                ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
+                ((C thFluxVect) :. (C norm_vect)) surface))) + 
+                (UnaryOp (Integral (Just 
+                (Low (C volume)), Nothing) (C vol_ht_gen) volume)) := 
+                UnaryOp (Integral (Just (Low (C volume)), Nothing) 
+                ((C density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "We consider an arbitrary " :+: (volume ^. 
                descr) :+: S ". The " :+: (vol_ht_gen ^. descr) :+: S "is " :+:
                S "assumed constant. Then (1) can be written as:"),
-               EqnBlock ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
-               (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
-               (Just (C volume), Nothing)) ((C density) * (C htCap) * Deriv
-               (C temp) (C time))),
+               EqnBlock 
+                ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
+                (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
+                (Just (Low (C volume)), Nothing) ((C density) * (C htCap) *
+                Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "Where " :+: P (ht_flux_in ^. symbol) :+: S ", " :+:
                P (ht_flux_out ^. symbol) :+: S ", " :+: P (in_SA ^. symbol) :+:
                S ", and " :+: P (out_SA ^. symbol) :+: S " are explained in" :+:
@@ -595,15 +601,17 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                S " are constant over the " :+: (volume ^. descr) :+: S ", " :+: 
                S "which is true in our case by " :+: (assumption ^. descr) :+:
                S "s (A3), (A4), (A5), and (A6), we have:"),
-               EqnBlock ((C density) * (C htCap) * (C volume) * Deriv (C temp) 
-               (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
-               (C out_SA) + (C vol_ht_gen) * (C volume)),
+               EqnBlock 
+                ((C density) * (C htCap) * (C volume) * Deriv Total (C temp) 
+                (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
+                (C out_SA) + (C vol_ht_gen) * (C volume)),
                Paragraph (S "Using the fact that " :+: P (density ^. symbol) :+:
                S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
                P (volume ^. symbol) :+: S ", (2) can be written as:"),
-               EqnBlock ((C mass) * (C htCap) * Deriv (C temp) (C time) :=
-               (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
-               (C vol_ht_gen) * (C volume))]
+               EqnBlock 
+                ((C mass) * (C htCap) * Deriv Total (C temp) (C time) :=
+                (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
+                (C vol_ht_gen) * (C volume))]
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)
@@ -668,38 +676,43 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 S " (A15)." :+: S " Assuming no " :+: (vol_ht_gen ^. descr) :+: 
                 S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: S "=0. " :+:
                 S "Therefore, the equation for GD2 can be written as:"),
-                EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) 
-                := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
+                EqnBlock 
+                  ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
+                  := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
                 Paragraph(S "Using " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
                 makeRef s4_2_4_DD2 :+: S " for " :+: P (ht_flux_C ^. symbol) :+:
                 S " and " :+: P (ht_flux_P ^. symbol) :+: S " respectively," :+:
                 S " this can be written as:"),
-                EqnBlock ((C w_mass) * (C htCap_W) * Deriv (C temp_W) (C time) 
-                := (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
-                (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
+                EqnBlock 
+                  ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
+                  := (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
+                  (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
                 Paragraph (S "Dividing (3) by " :+: P (w_mass ^. symbol) :+:
                 P (htCap_W ^. symbol) :+: S ", we obtain:"),
-                EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * 
-                (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
-                (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
-                (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
+                EqnBlock 
+                  (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+                  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
+                  (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
+                  (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
                 Paragraph (S "Factoring the negative sign out of the second" :+:
                 S " term of the " :+: S (rightSide ^. name) :+: S " of " :+:
                 S "Equation (4) and multiplying it by " :+: 
                 P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: S "/" :+: 
                 P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: 
                 S " yields:"),
-                EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * 
-                (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
-                (C temp_W)) + ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * 
-                (C coil_SA)) * ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * 
-                (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
+                EqnBlock 
+                  (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+                  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
+                  (C temp_W)) + ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * 
+                  (C coil_SA)) * ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * 
+                  (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
                 Paragraph (S "Which simplifies to:"),
-                EqnBlock (Deriv (C temp_W) (C time) := ((C coil_HTC) * 
-                (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-                (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
-                (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
-                (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
+                EqnBlock 
+                  (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+                  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
+                  (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
+                  (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
+                  (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
                 Paragraph (S "Setting " :+: P (tau_W ^. symbol) :+: S "=" :+:
                 P (w_mass ^. symbol) :+: P (htCap_W ^. symbol) :+: S "/" :+:
                 P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: 
@@ -707,15 +720,17 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 symbol) :+: P (pcm_SA ^. symbol) :+: S "/" :+: P (coil_HTC ^.
                 symbol) :+: P (coil_SA ^. symbol) :+: S ", Equation (5) can" :+:
                 S " be written as:"),
-                EqnBlock (Deriv (C temp_W) (C time) := (1 / (C tau_W)) *
-                ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
-                ((C temp_PCM) - (C temp_W))),
+                EqnBlock
+                  (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+                  ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
+                  ((C temp_PCM) - (C temp_W))),
                 Paragraph (S "Finally, factoring out 1/" :+: P (tau_W ^. 
                 symbol) :+: S ", we are left with the governing " :+:
                 S (ordDiffEq ^. name) :+: S " for IM1:"),
-                EqnBlock (Deriv (C temp_W) (C time) := (1 / (C tau_W)) *
-                (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - 
-                (C temp_W))))
+                EqnBlock
+                  (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+                  (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - 
+                  (C temp_W))))
                 ]
 
 -- Should "energy balance" be a concept?
@@ -742,25 +757,29 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 (ht_flux_out ^. descr) :+: S ". Assuming no " :+: (vol_ht_gen ^.
                 descr) :+: S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: 
                 S "=0, the equation for GD2 can be written as:"),
-                EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) 
-                (C time) := (C ht_flux_P) * (C pcm_SA)),
-                Paragraph (S "Using " :+: makeRef s4_2_4_DD2 :+: S " for " :+:
-                P (ht_flux_P ^. symbol) :+: S ", this equation can be " :+:
-                S "written as:"),
-                EqnBlock ((C pcm_mass) * (C htCap_S_P) * Deriv (C temp_PCM) 
-                (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
-                (C temp_PCM))),
-                Paragraph (S "Dividing by " :+: P (pcm_mass ^. symbol) :+:
-                P (htCap_S_P ^. symbol) :+: S " we obtain:"),
-                EqnBlock (Deriv (C temp_PCM) (C time) := ((C pcm_HTC) * 
-                (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
-                (C temp_PCM))),
+                EqnBlock 
+                  ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+                  (C time) := (C ht_flux_P) * (C pcm_SA)),
+                  Paragraph (S "Using " :+: makeRef s4_2_4_DD2 :+: S " for " :+:
+                  P (ht_flux_P ^. symbol) :+: S ", this equation can be " :+:
+                  S "written as:"),
+                EqnBlock 
+                  ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+                  (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
+                  (C temp_PCM))),
+                  Paragraph (S "Dividing by " :+: P (pcm_mass ^. symbol) :+:
+                  P (htCap_S_P ^. symbol) :+: S " we obtain:"),
+                EqnBlock
+                  (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) * 
+                  (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
+                  (C temp_PCM))),
                 Paragraph (S "Setting " :+: P (tau_S_P ^. symbol) :+: S "=" :+:
                 P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
                 P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) :+: S ", " :+:
                 S "this can be written as:"),
-                EqnBlock (Deriv (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
-                ((C temp_W) - (C temp_PCM))),
+                EqnBlock 
+                  (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
+                  ((C temp_W) - (C temp_PCM))),
                 Paragraph (S "Equation (6) applies for the " :+: (sMap (map 
                 toLower) (S (solid ^. name))) :+: S " " :+: S (phsChgMtrl ^. 
                 name) :+: S ". In the case where all of the " :+:
@@ -855,18 +874,20 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                S "respective surface area of " :+: (heat_transfer ^. descr) :+:
                S ", and integrating each over the simulation " :+: (time ^. 
                descr) :+: S ", as follows:"),
-               EqnBlock ((C w_E) := UnaryOp (Integral (Just 0, Just (C time))) 
-               ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
-               [C time])) - UnaryOp (Integral (Just 0, Just (C time))) 
-               ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-               (FCall (C temp_PCM) [C time])))),
+               EqnBlock 
+                ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
+                ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
+                [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
+                ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
+                (FCall (C temp_PCM) [C time]))) time)),
                Paragraph (S "In addition, the " :+: (pcm_E ^. descr) :+: 
                S " should equal the energy input to the " :+: S (phsChgMtrl ^. 
                name) :+: S " from the " :+: (sMap (map toLower) (S (water ^.
                name))) :+: S ". This can be expressed as"),
-               EqnBlock ((C pcm_E) := UnaryOp (Integral (Just 0, Just (C time)))
-               ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-               (C temp_PCM) [C time])))),
+               EqnBlock
+                ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
+                ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
+                (C temp_PCM) [C time]))) time)),
                Paragraph (S "Equations (reference) and (reference) can be " :+:
                S "used as " :+: Quote (S "sanity") :+: S "checks to gain " :+: 
                S "confidence in any solution computed by " :+: S (progName ^. 

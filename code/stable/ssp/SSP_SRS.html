@@ -1,0 +1,1342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="SSP_SRS.css">
+<title>
+Software Requirements Specification for Slope Stability Analysis
+</title>
+</head>
+<body>
+<div class="title">
+<h1>
+Software Requirements Specification for Slope Stability Analysis
+</h1>
+</div>
+<div class="author">
+<h2>
+Henry Frankis
+</h2>
+</div>
+<a id="Sec:RM">
+<div class="section">
+<h2>
+Reference Material
+</h2>
+<a id="Sec:ToU">
+<div class="subsection">
+<h3>
+Table of Units
+</h3>
+<p class="paragraph">
+Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.
+</p>
+<a id="Table:ToU">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Name
+</th>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+length
+</td>
+<td>
+Metre
+</td>
+</tr>
+<tr>
+<td>
+&deg;
+</td>
+<td>
+angle
+</td>
+<td>
+Degree
+</td>
+</tr>
+<tr>
+<td>
+N
+</td>
+<td>
+force
+</td>
+<td>
+Newton
+</td>
+</tr>
+<tr>
+<td>
+Pa
+</td>
+<td>
+pressure
+</td>
+<td>
+Pascal
+</td>
+</tr>
+</table>
+<p class="caption">
+Table of Units
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:ToS">
+<div class="subsection">
+<h3>
+Table of Symbols
+</h3>
+<p class="paragraph">
+A collection of the symbols that will be used in the models and equations of the program are summarized in the table below. Values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
+</p>
+<a id="Table:ToS">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Units
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+&phiv;'
+</td>
+<td>
+&deg;
+</td>
+<td>
+effective angle of friction
+</td>
+</tr>
+<tr>
+<td>
+c'
+</td>
+<td>
+Pa
+</td>
+<td>
+effective cohesion
+</td>
+</tr>
+<tr>
+<td>
+&gamma;
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+<td>
+unit weight of dry soil/ground layer
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>Sat</sub>
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+<td>
+unit weight of saturated soil/ground layer
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>w</sub>
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+<td>
+unit weight of water
+</td>
+</tr>
+<tr>
+<td>
+E
+</td>
+<td>
+Pa
+</td>
+<td>
+elastic modulus
+</td>
+</tr>
+<tr>
+<td>
+&nu;
+</td>
+<td>
+unitless
+</td>
+<td>
+Poisson's ratio
+</td>
+</tr>
+<tr>
+<td>
+(x,y)
+</td>
+<td>
+m
+</td>
+<td>
+cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
+</td>
+</tr>
+<tr>
+<td>
+y<sub>wt,i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i
+</td>
+</tr>
+<tr>
+<td>
+y<sub>us,i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i
+</td>
+</tr>
+<tr>
+<td>
+y<sub>slip,i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i
+</td>
+</tr>
+<tr>
+<td>
+x<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+the x ordinate; refers to either slice i midpoint, or slice interface i
+</td>
+</tr>
+<tr>
+<td>
+({x<sub>cs</sub>},{y<sub>cs</sub>})
+</td>
+<td>
+m
+</td>
+<td>
+the set of x and y coordinates that describe the vertices of the critical slip surface
+</td>
+</tr>
+<tr>
+<td>
+FS
+</td>
+<td>
+unitless
+</td>
+<td>
+global factor of safety describing the stability of a surface in a slope
+</td>
+</tr>
+<tr>
+<td>
+FS<sub>Loc,i</sub>
+</td>
+<td>
+unitless
+</td>
+<td>
+local factor of safety specific to a slice i
+</td>
+</tr>
+<tr>
+<td>
+S<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+mobilized shear force for slice i
+</td>
+</tr>
+<tr>
+<td>
+P<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+shear resistance; Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure
+</td>
+</tr>
+<tr>
+<td>
+T<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+mobilized shear force without the influence of interslice forces for slice i
+</td>
+</tr>
+<tr>
+<td>
+R<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+shear resistance without the influence of interslice forces for slice i
+</td>
+</tr>
+<tr>
+<td>
+W<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+weight; downward force caused by gravity on slice i
+</td>
+</tr>
+<tr>
+<td>
+K<sub>c</sub>
+</td>
+<td>
+unitless
+</td>
+<td>
+earthquake load factor; proportionality factor of force that weight pushes outwards; caused by seismic earth movements
+</td>
+</tr>
+<tr>
+<td>
+H<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+&Delta;H<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+E<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+interslice normal force being exerted between adjacent slices (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+X<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+interslice shear force being exerted between adjacent slices (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+U<sub>b,i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+base hydrostatic force arising from water pressure within the slice (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+U<sub>t,i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+N<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+total reactive force for a soil surface subject to a body resting on it
+</td>
+</tr>
+<tr>
+<td>
+N'<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+effective normal force of a soil surface, subtracting pore water reactive force from total reactive force
+</td>
+</tr>
+<tr>
+<td>
+N*<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+effective normal force of a soil surface, neglecting the influence of interslice forces
+</td>
+</tr>
+<tr>
+<td>
+Q<sub>i</sub>
+</td>
+<td>
+N
+</td>
+<td>
+imposed surface load; a downward force acting into the surface from midpoint of slice i
+</td>
+</tr>
+<tr>
+<td>
+&alpha;<sub>i</sub>
+</td>
+<td>
+&deg;
+</td>
+<td>
+angle of the base of the mass relative to the horizontal (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&beta;<sub>i</sub>
+</td>
+<td>
+&deg;
+</td>
+<td>
+angle of the surface of the mass relative to the horizontal (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&omega;<sub>i</sub>
+</td>
+<td>
+&deg;
+</td>
+<td>
+angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&lambda;
+</td>
+<td>
+unitless
+</td>
+<td>
+ratio between interslice normal and shear forces (applied to all interslices)
+</td>
+</tr>
+<tr>
+<td>
+f<sub>i</sub>
+</td>
+<td>
+unitless
+</td>
+<td>
+scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine
+</td>
+</tr>
+<tr>
+<td>
+b<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+base width of the slice in the x-ordinate direction only (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&#8467;<sub>b,i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+total length of the base of a slice (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&#8467;<sub>s,i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)
+</td>
+</tr>
+<tr>
+<td>
+n
+</td>
+<td>
+unitless
+</td>
+<td>
+number of slices the slip mass has been divided into
+</td>
+</tr>
+<tr>
+<td>
+F
+</td>
+<td>
+m
+</td>
+<td>
+generic force; assumed 1D allowing a scalar
+</td>
+</tr>
+<tr>
+<td>
+M
+</td>
+<td>
+Nm
+</td>
+<td>
+moment of a body; assumed 2D allowing a scalar
+</td>
+</tr>
+<tr>
+<td>
+&Upsilon;
+</td>
+<td>
+unitless
+</td>
+<td>
+generic minimization function or algorithm
+</td>
+</tr>
+<tr>
+<td>
+&delta;
+</td>
+<td>
+m
+</td>
+<td>
+generic displacement of a body
+</td>
+</tr>
+<tr>
+<td>
+K
+</td>
+<td>
+N/m
+</td>
+<td>
+stiffness (how much a body resists displacement when subject to a force)
+</td>
+</tr>
+<tr>
+<td>
+K<sub>st,i</sub>
+</td>
+<td>
+Pa
+</td>
+<td>
+shear stiffness of an interslice surface, without length adjustment (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+K<sub>bt,i</sub>
+</td>
+<td>
+Pa
+</td>
+<td>
+shear stiffness of a slice base surface, without length adjustment (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+K<sub>sn,i</sub>
+</td>
+<td>
+Pa
+</td>
+<td>
+normal stiffness of an interslice surface, without length adjustment (for interslice index i)
+</td>
+</tr>
+<tr>
+<td>
+K<sub>bn,i</sub>
+</td>
+<td>
+Pa
+</td>
+<td>
+normal stiffness of a slice base surface, without length adjustment (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+K<sub>tr</sub>
+</td>
+<td>
+Pa
+</td>
+<td>
+residual shear stiffness
+</td>
+</tr>
+<tr>
+<td>
+K<sub>no</sub>
+</td>
+<td>
+Pa
+</td>
+<td>
+residual normal stiffness
+</td>
+</tr>
+<tr>
+<td>
+&delta;u<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+shear displacement of a slice (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&delta;v<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+normal displacement of a slice (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&delta;x<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+displacement of a slice in the x-ordinate direction (for slice index i)
+</td>
+</tr>
+<tr>
+<td>
+&delta;y<sub>i</sub>
+</td>
+<td>
+m
+</td>
+<td>
+displacement of a slice in the y-ordinate direction (for slice index i)
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:AaA">
+<div class="subsection">
+<h3>
+Abbreviations and Acronyms
+</h3>
+<a id="Table:AaA">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+Assumption
+</td>
+</tr>
+<tr>
+<td>
+MG
+</td>
+<td>
+Data Definition
+</td>
+</tr>
+<tr>
+<td>
+GD
+</td>
+<td>
+General Definition
+</td>
+</tr>
+<tr>
+<td>
+GS
+</td>
+<td>
+Goal Statement
+</td>
+</tr>
+<tr>
+<td>
+IM
+</td>
+<td>
+Instance Model
+</td>
+</tr>
+<tr>
+<td>
+LC
+</td>
+<td>
+Likely Change
+</td>
+</tr>
+<tr>
+<td>
+PS
+</td>
+<td>
+Physical System Description
+</td>
+</tr>
+<tr>
+<td>
+R
+</td>
+<td>
+Requirement
+</td>
+</tr>
+<tr>
+<td>
+SRS
+</td>
+<td>
+Software Requirements Specification
+</td>
+</tr>
+<tr>
+<td>
+SSA
+</td>
+<td>
+Slope Stability Analysis
+</td>
+</tr>
+<tr>
+<td>
+T
+</td>
+<td>
+Theoretical Model
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:I">
+<div class="section">
+<h2>
+Introduction
+</h2>
+<p class="paragraph">
+A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety.
+</p>
+<p class="paragraph">
+The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers.
+</p>
+<a id="Sec:P">
+<div class="subsection">
+<h3>
+Purpose
+</h3>
+<p class="paragraph">
+The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
+</p>
+<p class="paragraph">
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan.  The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment.  The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.  Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way.  Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process.
+</p>
+</div>
+</a>
+<a id="Sec:SoR">
+<div class="subsection">
+<h3>
+Scope of Requirements
+</h3>
+<p class="paragraph">
+The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
+</p>
+</div>
+</a>
+<a id="Sec:OoD">
+<div class="subsection">
+<h3>
+Organization of Document
+</h3>
+<p class="paragraph">
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IM>this Section</a> and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (<a href=#Sec:TM>this Section</a>) and instance models (<a href=#Sec:IM>this Section</a>).
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:GSD">
+<div class="section">
+<h2>
+General System Description
+</h2>
+<p class="paragraph">
+This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+</p>
+<a id="Sec:UC">
+<div class="subsection">
+<h3>
+User Characteristics
+</h3>
+<p class="paragraph">
+The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
+</p>
+</div>
+</a>
+<a id="Sec:SC">
+<div class="subsection">
+<h3>
+System Constraints
+</h3>
+<p class="paragraph">
+There are no system constraints.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SSD">
+<div class="section">
+<h2>
+Specific System Description
+</h2>
+<p class="paragraph">
+This section first presents the problem description, which gives a high-level view of the problem to be solved.  This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope.
+</p>
+<a id="Sec:PD">
+<div class="subsection">
+<h3>
+Problem Description
+</h3>
+<p class="paragraph">
+SSA is a computer program developed to evaluate the factor of safety of a slopes slip surface and to calculate the displacement that the slope will experience.
+</p>
+<a id="Sec:T">
+<div class="subsubsection">
+<h4>
+Terminology
+</h4>
+<div class="list">
+<p>
+Factor of Safety: Stability metric. How likely a slip surface is to experience failure through slipping.
+</p>
+<p>
+Critical Slip Surface: Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
+</p>
+<p>
+Stress: Forces that are exerted between planes internal to a larger body subject to external loading.
+</p>
+<p>
+Strain: Stress forces that result in deformation of the body/plane.
+</p>
+<p>
+Normal Force: A force applied perpendicular to the plane of the material.
+</p>
+<p>
+Shear Force: A force applied parallel to the plane of the material.
+</p>
+<p>
+Tension: A stress the causes displacement of the body away from it's center.
+</p>
+<p>
+Compression: A stress the causes displacement of the body towards it's center.
+</p>
+<p>
+Plane Strain: The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominate dimensions direction are the ones that can be approximated as 0.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:PSD">
+<div class="subsubsection">
+<h4>
+Physical System Description
+</h4>
+<p class="paragraph">
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:Icfnsaifv>this Figure</a>.
+</p>
+<ul class="list">
+<li>
+Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from 1 &le; i &le; n-1.
+</li>
+<li>
+Slice properties convention is noted by i.
+</li>
+</ul>
+<p class="paragraph">
+A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:Faoas>this Figure</a>.
+</p>
+<a id="Figure:Icfnsaifv">
+<img class="figure" src="IndexConvention.png" alt="Index convention for numbering slice and interslice force variables"></img>
+<p class="caption">
+Index convention for numbering slice and interslice force variables
+</p>
+</a>
+<a id="Figure:Faoas">
+<img class="figure" src="ForceDiagram.png" alt="Forces acting on a slice"></img>
+<p class="caption">
+Forces acting on a slice
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:GS">
+<div class="subsubsection">
+<h4>
+Goal Statements
+</h4>
+<p class="paragraph">
+Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers.
+</p>
+<div class="list">
+<p>
+GS1: Evaluate local and global factors of safety along a given slip surface.
+</p>
+<p>
+GS2: Identify the critical slip surface for the slope, with the lowest Factor of Safety.
+</p>
+<p>
+GS3: Determine the displacement of the slope.
+</p>
+</div>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SCS">
+<div class="subsection">
+<h3>
+Solution Characteristics Specification
+</h3>
+<p class="paragraph">
+The instance models that govern SSA are presented in <a href=#Sec:IM>this Section</a>.  The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+</p>
+<a id="Sec:A">
+<div class="subsubsection">
+<h4>
+Assumptions
+</h4>
+<p class="paragraph">
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition, or the instance model, in which the respective assumption is used.
+</p>
+<div class="list">
+<p>
+A1: The slip surface is concave with respect to the slope surface. The (x,y) coordinates of the failure surface follow a monotonic function.
+</p>
+<p>
+A2: The geometry of the slope, and the material properties of the soil layers are given as inputs.
+</p>
+<p>
+A3: The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
+</p>
+<p>
+A4: Soil layers are treated as if they have isotropic properties.
+</p>
+<p>
+A5: Interslice normal and shear forces have a linear relationship, proportional to a constant (&lambda;) and an interslice force function (f<sub>i</sub>) depending on x position.
+</p>
+<p>
+A6: Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety (FS), and the Coulomb sliding law.
+</p>
+<p>
+A7: The stress-strain curve for interslice relationships is linear with a constant slope.
+</p>
+<p>
+A8: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+</p>
+<p>
+A9: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
+</p>
+<p>
+A10: The surface and base of a slice between interslice nodes are approximated as straight lines.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:TM">
+<div class="subsubsection">
+<h4>
+Theoretical Models
+</h4>
+<p class="paragraph">
+This section focuses on the general equations and laws that SSA is based on.
+</p>
+<a id="T:FoS">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Factor of Safety
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+FS=<div class="fraction">
+<span class="fup">
+P
+</span>
+<span class="fdn">
+S
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The stability metric of the slope, known as the factor of safety (FS), is determined by the ratio of the shear force at the base of the slope (S), and the resistive shear (P).
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:GD">
+<div class="subsubsection">
+<h4>
+General Definitions
+</h4>
+</div>
+</a>
+<a id="Sec:DD">
+<div class="subsubsection">
+<h4>
+Data Definitions
+</h4>
+</div>
+</a>
+<a id="Sec:IM">
+<div class="subsubsection">
+<h4>
+Instance Models
+</h4>
+</div>
+</a>
+<a id="Sec:DC">
+<div class="subsubsection">
+<h4>
+Data Constraints
+</h4>
+</div>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:R">
+<div class="section">
+<h2>
+Requirements
+</h2>
+<p class="paragraph">
+This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
+</p>
+<a id="Sec:FR">
+<div class="subsection">
+<h3>
+Functional Requirements
+</h3>
+<div class="list">
+<p>
+R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:Id>this Table</a>.
+</p>
+<p>
+R2: Generate potential critical slip surface's for the input slope.
+</p>
+<p>
+R3: Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
+</p>
+<p>
+R4: Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
+</p>
+<p>
+R5: Calculate the factors of safety of the slip surfaces.
+</p>
+<p>
+R6: Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
+</p>
+<p>
+R7: Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
+</p>
+<p>
+R8: Repeat requirements R3 to R7 until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
+</p>
+<p>
+R9: Prepare the critical slip surface for method of slices or limit equilibrium analysis.
+</p>
+<p>
+R10: Calculate the factor of safety of the critical slip surface using the Morgenstern price method.
+</p>
+<p>
+R11: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern price method.
+</p>
+</div>
+<a id="Table:Id">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Units
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+(x,y)
+</td>
+<td>
+m
+</td>
+<td>
+cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
+</td>
+</tr>
+<tr>
+<td>
+E
+</td>
+<td>
+Pa
+</td>
+<td>
+elastic modulus
+</td>
+</tr>
+<tr>
+<td>
+c'
+</td>
+<td>
+Pa
+</td>
+<td>
+effective cohesion
+</td>
+</tr>
+<tr>
+<td>
+&nu;
+</td>
+<td>
+unitless
+</td>
+<td>
+Poisson's ratio
+</td>
+</tr>
+<tr>
+<td>
+&phiv;'
+</td>
+<td>
+&deg;
+</td>
+<td>
+effective angle of friction
+</td>
+</tr>
+<tr>
+<td>
+&gamma;
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+<td>
+unit weight of dry soil/ground layer
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>Sat</sub>
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+<td>
+unit weight of saturated soil/ground layer
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>w</sub>
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+<td>
+unit weight of water
+</td>
+</tr>
+</table>
+<p class="caption">
+Input data
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:NR">
+<div class="subsection">
+<h3>
+Nonfunctional Requirements
+</h3>
+<p class="paragraph">
+SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:LC">
+<div class="section">
+<h2>
+Likely Changes
+</h2>
+</div>
+</a>
+</body>
+</html>

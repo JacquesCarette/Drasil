@@ -261,7 +261,7 @@ makeDefTable [] _ = error "Trying to make empty Data Defn"
 makeDefTable ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
-  label l,
+  (pure $ text "\\phantomsection "), label l,
   makeDRows ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
@@ -321,21 +321,27 @@ makeFigure r c f =
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
-p_op f@(Summation (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
+p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Integral (i,n)) (x:[]) = show f ++ makeBounds (i,n) ++ brace (p_expr x)
-p_op (Integral _) _  = error "Something went wrong with an integral"
+p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 
+  brace (p_expr x ++ p_expr wrtc)
+p_op (Integral _ _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
-makeBounds :: (Maybe Expr, Maybe Expr) -> String
-makeBounds (Nothing,Nothing) = ""
-makeBounds (Nothing,Just n) = "^" ++ brace (p_expr n)
-makeBounds (Just i, Nothing) = "_" ++ brace (p_expr i)
-makeBounds (Just i, Just n) = "_" ++ brace (p_expr i) ++ "^" ++ brace (p_expr n)
+makeBound :: Maybe ((Symbol, Expr),Expr) -> String
+makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
+                              "^" ++ brace (p_expr hi)
+makeBound Nothing = ""
 
+makeIBound :: (Maybe Expr, Maybe Expr) -> String
+makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++ 
+                                   "^" ++ brace (p_expr high)
+makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
+makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
+makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

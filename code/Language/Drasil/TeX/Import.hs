@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -15,48 +15,76 @@ import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, number
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.SymbolAlphabet
 
 expr :: Expr -> T.Expr
-expr (V v)        = T.Var  v
-expr (Dbl d)      = T.Dbl  d
-expr (Int i)      = T.Int  i
-expr (a :* b)     = T.Mul  (expr a) (expr b)
-expr (a :+ b)     = T.Add  (expr a) (expr b)
-expr (a :/ b)     = T.Frac (replace_divs a) (replace_divs b)
-expr (a :^ b)     = T.Pow  (expr a) (expr b)
-expr (a :- b)     = T.Sub  (expr a) (expr b)
-expr (a :. b)     = T.Dot  (expr a) (expr b)
-expr (Neg a)      = T.Neg  (expr a)
-expr (C c)        = T.Sym  (c ^. symbol)
-expr (Deriv a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
+expr (V v)             = T.Var  v
+expr (Dbl d)           = T.Dbl  d
+expr (Int i)           = T.Int  i
+expr (a :* b)          = T.Mul  (expr a) (expr b)
+expr (a :+ b)          = T.Add  (expr a) (expr b)
+expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
+expr (a :^ b)          = T.Pow  (expr a) (expr b)
+expr (a :- b)          = T.Sub  (expr a) (expr b)
+expr (a :. b)          = T.Dot  (expr a) (expr b)
+expr (Neg a)           = T.Neg  (expr a)
+expr (C c)             = T.Sym  (c ^. symbol)
+expr (Deriv Part a 1)  = T.Mul (T.Sym (Special Partial)) (expr a)
+expr (Deriv Total a 1) = T.Mul (T.Sym lD) (expr a)
+expr (Deriv Part a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
                            (T.Mul (T.Sym (Special Partial)) (expr b))
-expr (FCall f x)  = T.Call (expr f) (map expr x)
-expr (Case ps)    = if length ps < 2 then 
+expr (Deriv Total a b) = T.Frac (T.Mul (T.Sym lD) (expr a))
+                           (T.Mul (T.Sym lD) (expr b))
+expr (FCall f x)       = T.Call (expr f) (map expr x)
+expr (Case ps)         = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
-expr x@(_ := _)   = rel x
-expr x@(_ :> _)   = rel x
-expr x@(_ :< _)   = rel x
-expr (UnaryOp u e) = T.Op (ufunc u) [expr e]
-expr (Grouping e) = T.Grouping (expr e)
+expr x@(_ := _)        = rel x
+expr x@(_ :> _)        = rel x
+expr x@(_ :< _)        = rel x
+expr (UnaryOp u)     = (\(x,y) -> T.Op x [y]) (ufunc u)
+expr (Grouping e)      = T.Grouping (expr e)
 
-ufunc :: UFunc -> T.Function
-ufunc Log = T.Log
-ufunc (Summation (i,n)) = T.Summation (fmap expr i, fmap expr n)
-ufunc Abs = T.Abs
-ufunc (Integral (i,n)) = T.Integral (fmap expr i, fmap expr n)
-ufunc Sin = T.Sin
-ufunc Cos = T.Cos
-ufunc Tan = T.Tan
-ufunc Sec = T.Sec
-ufunc Csc = T.Csc
-ufunc Cot = T.Cot
+ufunc :: UFunc -> (T.Function, T.Expr)
+ufunc (Log e) = (T.Log, expr e)
+ufunc (Summation (Just (s, Low v, High h)) e) = 
+  (T.Summation (Just ((s, expr v), expr h)), expr e)
+ufunc (Summation Nothing e) = (T.Summation Nothing, expr e)
+ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Abs e) = (T.Abs, expr e)
+ufunc i@(Integral _ _ _) = integral i
+ufunc (Sin e) = (T.Sin, expr e)
+ufunc (Cos e) = (T.Cos, expr e)
+ufunc (Tan e) = (T.Tan, expr e)
+ufunc (Sec e) = (T.Sec, expr e)
+ufunc (Csc e) = (T.Csc, expr e)
+ufunc (Cot e) = (T.Cot, expr e)
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
+
+integral :: UFunc -> (T.Function, T.Expr)
+integral (Integral (Just (Low v), Just (High h)) e wrtc) = 
+  (T.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Just (High h), Just (Low v)) e wrtc) = 
+  (T.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Just (Low v), Nothing) e wrtc) = 
+  (T.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
+integral (Integral (Nothing, Just (Low v)) e wrtc) = 
+  (T.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
+integral (Integral (Just (High h), Nothing) e wrtc) = 
+  (T.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Nothing, Just (High h)) e wrtc) = 
+  (T.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
+integral (Integral (Nothing, Nothing) e wrtc) = 
+  (T.Integral (Nothing, Nothing) (int_wrt wrtc), expr e)
+integral _ = error "TeX/Import.hs Incorrect use of Integral"
+
+int_wrt :: Quantity c => c -> T.Expr
+int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
 
 replace_divs :: Expr -> T.Expr
 replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)

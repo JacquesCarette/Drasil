@@ -1,4 +1,4 @@
-{-# OPTIONS -Wall #-} 
+{-# OPTIONS -Wall #-}
 module Language.Drasil.Chunk where
 
 import Control.Lens

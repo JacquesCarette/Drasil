@@ -1,10 +1,10 @@
-module Example.Drasil.SWHS.Changes where
+module Drasil.SWHS.Changes where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Example.Drasil.SWHS.Modules
-import Example.Drasil.SWHS.Concepts
+import Drasil.SWHS.Modules
+import Drasil.SWHS.Concepts
 
 lcs :: [LCChunk]
 lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12]

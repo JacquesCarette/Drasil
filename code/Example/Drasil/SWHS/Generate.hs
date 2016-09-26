@@ -1,10 +1,8 @@
-module Example.Drasil.SWHS.Generate where
+module Drasil.SWHS.Generate where
 
-import Language.Drasil (DocType(SRS,MG,Website))
-import Language.Drasil.Recipe (Recipe(..))
-import Language.Drasil.Generate (gen)
+import Language.Drasil (DocType(SRS,MG,Website), Recipe(..), gen)
 
-import Example.Drasil.SWHS.Body (swhs_srs, swhs_mg)
+import Drasil.SWHS.Body (swhs_srs, swhs_mg)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "SWHS_SRS") swhs_srs,

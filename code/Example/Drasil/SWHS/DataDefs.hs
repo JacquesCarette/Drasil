@@ -1,13 +1,12 @@
-module Example.Drasil.SWHS.DataDefs where
+module Drasil.SWHS.DataDefs where
 
 import Data.Char (toLower)
 
-import Example.Drasil.SWHS.Units
-import Example.Drasil.SWHS.Unitals
-import Example.Drasil.SWHS.Concepts
+import Drasil.SWHS.Units
+import Drasil.SWHS.Unitals
+import Drasil.SWHS.Concepts
 
 import Language.Drasil
-import Language.Drasil.SI_Units
 
 import Control.Lens ((^.))
 

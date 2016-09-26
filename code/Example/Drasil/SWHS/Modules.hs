@@ -1,10 +1,10 @@
-module Example.Drasil.SWHS.Modules where
+module Drasil.SWHS.Modules where
 
 import Data.Char (toLower)
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Example.Drasil.SWHS.Concepts
+import Drasil.SWHS.Concepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,

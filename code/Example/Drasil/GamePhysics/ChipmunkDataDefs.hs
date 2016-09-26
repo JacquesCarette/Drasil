@@ -21,8 +21,8 @@ dd1CtrOfMass :: EqChunk
 dd1CtrOfMass = fromEqn "p_CM" dd1descr (pos_CM ^. symbol) metre ctrOfMassEqn
 
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (UnaryOp (Summation (Nothing, Nothing))
-    (((C mass_i) * (C pos_i)))) / (C mTot)
+ctrOfMassEqn = (UnaryOp (Summation Nothing
+    ((C mass_i) * (C pos_i)))) / (C mTot)
 
 dd1descr :: Sentence
 dd1descr = pos_CM ^. descr
@@ -34,7 +34,7 @@ dd2linDisp = fromEqn "r" dd2descr (Concat [(disp ^. symbol), Atomic "(",
     (time ^. symbol), Atomic ")"]) metre dispEqn
 
 dispEqn :: Expr
-dispEqn = Deriv (FCall (C position) [C time]) (C time)
+dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
 
 dd2descr :: Sentence
 dd2descr = S "the linear " :+: (disp ^. descr) :+: S " of a " :+:
@@ -51,7 +51,7 @@ dd3linVel = fromEqn "v" dd3descr (Concat [(vel ^. symbol), Atomic "(",
     (time ^. symbol), Atomic ")"]) velU velEqn
 
 velEqn :: Expr
-velEqn = Deriv (FCall (C disp) [C time]) (C time)
+velEqn = Deriv Total (FCall (C disp) [C time]) (C time)
 
 dd3descr :: Sentence
 dd3descr = S "the linear " :+: (vel ^. descr) :+: S " of a " :+:
@@ -68,7 +68,7 @@ dd4linAcc = fromEqn "a" dd4descr (Concat [(accel ^. symbol), Atomic "(",
     (time ^. symbol), Atomic ")"]) accelU accelEqn
 
 accelEqn :: Expr
-accelEqn = Deriv (FCall (C vel) [C time]) (C time)
+accelEqn = Deriv Total (FCall (C vel) [C time]) (C time)
 
 dd4descr :: Sentence
 dd4descr = S "the linear " :+: (accel ^. descr) :+: S " of a " :+:
@@ -85,7 +85,7 @@ dd5angDisp = fromEqn "theta" dd5descr (Concat [(angDisp ^. symbol),
   Atomic "(", (time ^. symbol), Atomic ")"]) radians angDispEqn
 
 angDispEqn :: Expr
-angDispEqn = Deriv (FCall (C orientation) [C time]) (C time)
+angDispEqn = Deriv Total (FCall (C orientation) [C time]) (C time)
 
 dd5descr :: Sentence
 dd5descr = S "the " :+: (angDisp ^. descr) :+: S " of a " :+:
@@ -102,7 +102,7 @@ dd6angVel = fromEqn "omega" dd6descr (Concat [(angVel ^. symbol), Atomic "(",
     (time ^. symbol), Atomic ")"]) angVelU angVelEqn
 
 angVelEqn :: Expr
-angVelEqn = Deriv (FCall (C angDisp) [C time]) (C time)
+angVelEqn = Deriv Total (FCall (C angDisp) [C time]) (C time)
 
 dd6descr :: Sentence
 dd6descr = S "the " :+: (angVel ^. descr) :+: S " of a " :+:
@@ -119,7 +119,7 @@ dd7angAccel = fromEqn "alpha" dd7descr (Concat [(angAccel ^. symbol),
     Atomic "(", (time ^. symbol), Atomic ")"]) angAccelU angAccelEqn
 
 angAccelEqn :: Expr
-angAccelEqn = Deriv (FCall (C angVel) [C time]) (C time)
+angAccelEqn = Deriv Total (FCall (C angVel) [C time]) (C time)
 
 dd7descr :: Sentence
 dd7descr = S "the " :+: (angAccel ^. descr) :+: S " of a " :+:

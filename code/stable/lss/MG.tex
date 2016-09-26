@@ -1,0 +1,129 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{luatex85}
+\def\pgfsysdriver{pgfsys-pdftex.def}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{graphs}
+\usetikzlibrary{graphdrawing}
+\usegdlibrary{layered}
+\newcounter{modnum}
+\newcommand{\mthemodnum}{M\themodnum}
+\title{MG for $h_{g}$ and $h_{c}$}
+\author{Spencer Smith}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Introduction}
+\label{Sec:I}
+Decomposing a system into modules is a commonly accepted approach to developing software.  A module is a work assignment for a programmer or programming team. In the best practices for scientific computing, Wilson et al advise a modular design, but are silent on the criteria to use to decompose the software into modules.  We advocate a decomposition based on the principle of information hiding. This principle supports design for change, because the ``secrets" that each module hides represent likely future changes.  Design for change is valuable in SC, where modifications are frequent, especially during initial development as the solution space is explored.
+Our design follows the rules laid out by Parnas, as follows:
+\begin{enumerate}
+\item{System details that are likely to change independently should be the secrets of separate modules.}
+\item{Any other program that requires information stored in a module's data structures must obtain it by calling access programs belonging to that module.}
+\end{enumerate}
+After completing the first stage of the design, the Software Requirements Specification (SRS), the Module Guide (MG) is developed. The MG specifies the modular structure of the system and is intended to allow both designers and maintainers to easily identify the parts of the software.  The potential readers of this document are as follows:
+\begin{enumerate}
+\item{New project members: This document can be a guide for a new project member to easily understand the overall structure and quickly find the relevant modules they are searching for.}
+\item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
+\item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
+\end{enumerate}
+Section~\ref{Sec:LaUC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
+\section{Likely and Unlikely Changes}
+\label{Sec:LaUC}
+This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LC} and unlikely changes are listed in Section~\ref{Sec:UC}
+\subsection{Likely Changes}
+\label{Sec:LC}
+Likely changes are the source of the information that is to be hidden inside the modules. Ideally, changing one of the likely changes will only require changing the one module that hides the associated decision. The approach adapted here is called design for change.
+\subsection{Unikely Changes}
+\label{Sec:UC}
+The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
+\section{Module Hierarchy}
+\label{Sec:MH}
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mhardwarehiding}:]Hardware Hiding Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mcalc}:]Calc Module
+\end{description}
+\begin{longtable}{l l}
+\toprule
+Level 1 & Level 2
+\\
+\midrule
+Hardware Hiding Module & 
+\\
+Behaviour Hiding Module & Calc Module
+\\
+\bottomrule
+\caption{Module Hierarchy}
+\label{Table:MH}
+\end{longtable}
+\section{Module Decomposition}
+\label{Sec:MD}
+Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is HGHC, this means that the module is provided by the HGHC program. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
+\subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
+\label{Sec:HHM()}
+\begin{description}
+\item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
+\item[Services:]Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software. So, the system can use it to display outputs or to accept inputs.
+\item[Implemented By:]OS
+\end{description}
+\subsection{Behaviour Hiding Module}
+\label{Sec:BHM}
+\begin{description}
+\item[Secrets:]The contents of the required behaviors.
+\item[Services:]Includes programs that provide externally visible behavior of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
+\item[Implemented By:]--
+\end{description}
+\subsection{Calc Module (M\ref{Mcalc})}
+\label{Sec:CM()}
+\begin{description}
+\item[Secrets:]The equations used to calculate heat transfer coefficients
+\item[Services:]Calculates heat transfer coefficients
+\item[Implemented By:]HGHC
+\end{description}
+\section{Traceability Matrix}
+\label{Sec:TM}
+This section shows two traceability matrices: between the modules and the requirements in Table~\ref{Table:TBRaM} and between the modules and the likely changes in Table~\ref{Table:TBLCaM}.
+\begin{longtable}{l l}
+\toprule
+Requirement & Modules
+\\
+\midrule
+\bottomrule
+\caption{Trace Between Requirements and Modules}
+\label{Table:TBRaM}
+\end{longtable}
+\begin{longtable}{l l}
+\toprule
+Likely Change & Modules
+\\
+\midrule
+\bottomrule
+\caption{Trace Between Likely Changes and Modules}
+\label{Table:TBLCaM}
+\end{longtable}
+\section{Uses Hierarchy}
+\label{Sec:UH}
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHierarchy} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+\begin{figure}
+\centering
+\resizebox{\textwidth}{!}{
+\tikz [>=stealth, shorten >=1pt]
+\graph [layered layout, components go right top aligned, minimum layers=3, nodes={ draw, thick, align=center, inner xsep=0.5em, inner ysep=0.5em, text width=4em, minimum height=5em, font=\scriptsize, fill=white, text opacity=1, fill opacity=0.8, typeset={\tikzgraphnodetext\\M\ref{\tikzgraphnodename}}}, edges={thick, rounded corners}]
+{
+};
+}
+\caption{Uses Hierarchy}
+\label{Figure:UsesHierarchy}
+\end{figure}
+\end{document}

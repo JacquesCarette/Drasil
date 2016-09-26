@@ -1,0 +1,4031 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="GlassBR_SRS.css">
+<title>
+Software Requirements Specification for Glass-BR
+</title>
+</head>
+<body>
+<div class="title">
+<h1>
+Software Requirements Specification for Glass-BR
+</h1>
+</div>
+<div class="author">
+<h2>
+Nikitha Krithnan and Spencer Smith
+</h2>
+</div>
+<a id="Sec:RM">
+<div class="section">
+<h2>
+Reference Material
+</h2>
+<p class="paragraph">
+This section records information for easy reference.
+</p>
+<a id="Sec:ToU">
+<div class="subsection">
+<h3>
+Table of Units
+</h3>
+<p class="paragraph">
+Throughout this document SI (Syst&egrave;me International d'Unit&eacute;s) is employed as the unit system. In addition to the basic units, several derived units are employed as described below. For each unit, the symbol is given followed by a description of the unit with the SI name in parentheses.
+</p>
+<a id="Table:ToU">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+length (metre)
+</td>
+</tr>
+<tr>
+<td>
+s
+</td>
+<td>
+time (second)
+</td>
+</tr>
+<tr>
+<td>
+Pa
+</td>
+<td>
+pressure (pascal)
+</td>
+</tr>
+<tr>
+<td>
+N
+</td>
+<td>
+force (newton)
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:ToS">
+<div class="subsection">
+<h3>
+Table of Symbols
+</h3>
+<p class="paragraph">
+The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
+</p>
+<a id="Table:ToS">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Units
+</th>
+</tr>
+<tr>
+<td>
+a
+</td>
+<td>
+Plate length (long dimension)
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+b
+</td>
+<td>
+Plate width (short dimension)
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+d<sub>max</sub>
+</td>
+<td>
+Maximum value for one of the dimensions of the glass plate
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+d<sub>min</sub>
+</td>
+<td>
+Minimum value for one of the dimensions of the glass plate
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+E
+</td>
+<td>
+Modulus of elasticity of glass
+</td>
+<td>
+kPa
+</td>
+</tr>
+<tr>
+<td>
+h
+</td>
+<td>
+Actual thickness
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+k
+</td>
+<td>
+Surface flaw parameter
+</td>
+<td>
+N<sup>-7</sup>m<sup>12</sup>
+</td>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+Surface flaw parameter
+</td>
+<td>
+N<sup>-7</sup>m<sup>12</sup>
+</td>
+</tr>
+<tr>
+<td>
+q
+</td>
+<td>
+Applied load (demand)
+</td>
+<td>
+kPa
+</td>
+</tr>
+<tr>
+<td>
+SD
+</td>
+<td>
+Stand off distance which is represented in coordinates (SDx, SDy, SDz)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>max</sub>
+</td>
+<td>
+Maximum stand off distance permissible for input
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>min</sub>
+</td>
+<td>
+Minimum stand off distance permissible for input
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+t
+</td>
+<td>
+Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+t<sub>d</sub>
+</td>
+<td>
+Duration of load
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+w
+</td>
+<td>
+Charge weight
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+w<sub>max</sub>
+</td>
+<td>
+Maximum permissible input charge weight
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+w<sub>min</sub>
+</td>
+<td>
+Minimum permissible input charge weight
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+w<sub>TNT</sub>
+</td>
+<td>
+Explosive Mass in equivalent weight of TNT
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+B
+</td>
+<td>
+Risk function
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+g
+</td>
+<td>
+Glass type, g in {AN, HS, FT}
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+is_safe1
+</td>
+<td>
+True when calculated probability is less than tolerable probability
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+is_safe2
+</td>
+<td>
+True when load resistance (capacity) is greater than load (demand)
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+J
+</td>
+<td>
+Stress distribution factor (Function)
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+J<sub>tol</sub>
+</td>
+<td>
+Stress distribution factor (Function) based on Pbtol
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+P<sub>b</sub>
+</td>
+<td>
+Probability of breakage
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+P<sub>btol</sub>
+</td>
+<td>
+Tolerable probability of breakage
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+q&#770;
+</td>
+<td>
+Dimensionless load
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+q&#770;<sub>tol</sub>
+</td>
+<td>
+Tolerable load
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:AaA">
+<div class="subsection">
+<h3>
+Abbreviations and Acronyms
+</h3>
+<a id="Table:AaA">
+<table class="table">
+<tr>
+<th>
+Abbreviations
+</th>
+<th>
+Full Form
+</th>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+Assumption
+</td>
+</tr>
+<tr>
+<td>
+AN
+</td>
+<td>
+Annealed Glass
+</td>
+</tr>
+<tr>
+<td>
+AR
+</td>
+<td>
+Aspect Ratio
+</td>
+</tr>
+<tr>
+<td>
+ARmax
+</td>
+<td>
+Maximum Aspect Ratio
+</td>
+</tr>
+<tr>
+<td>
+DD
+</td>
+<td>
+Data Definition
+</td>
+</tr>
+<tr>
+<td>
+FT
+</td>
+<td>
+Fully Tempered Glass
+</td>
+</tr>
+<tr>
+<td>
+GS
+</td>
+<td>
+Goal Statement
+</td>
+</tr>
+<tr>
+<td>
+GTF
+</td>
+<td>
+Glass Type Factor
+</td>
+</tr>
+<tr>
+<td>
+HS
+</td>
+<td>
+Heat Strengthened Glass
+</td>
+</tr>
+<tr>
+<td>
+IG
+</td>
+<td>
+Insulating Glass
+</td>
+</tr>
+<tr>
+<td>
+IM
+</td>
+<td>
+Instance Model
+</td>
+</tr>
+<tr>
+<td>
+LC
+</td>
+<td>
+Likely Change
+</td>
+</tr>
+<tr>
+<td>
+LDF
+</td>
+<td>
+Load Duration Factor
+</td>
+</tr>
+<tr>
+<td>
+LG
+</td>
+<td>
+Laminated Glass
+</td>
+</tr>
+<tr>
+<td>
+LR
+</td>
+<td>
+Load Resistance
+</td>
+</tr>
+<tr>
+<td>
+LSF
+</td>
+<td>
+Load Share Factor
+</td>
+</tr>
+<tr>
+<td>
+N/A
+</td>
+<td>
+Not Applicable
+</td>
+</tr>
+<tr>
+<td>
+NFL
+</td>
+<td>
+Non-Factored Load
+</td>
+</tr>
+<tr>
+<td>
+PS
+</td>
+<td>
+Physical System Description
+</td>
+</tr>
+<tr>
+<td>
+R
+</td>
+<td>
+Requirement
+</td>
+</tr>
+<tr>
+<td>
+SRS
+</td>
+<td>
+Software Requirements Specification
+</td>
+</tr>
+<tr>
+<td>
+T
+</td>
+<td>
+Theoretical Model
+</td>
+</tr>
+<tr>
+<td>
+TNT
+</td>
+<td>
+TNT (Trinitrotoluene) Equivalent Factor
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:I">
+<div class="section">
+<h2>
+Introduction
+</h2>
+<p class="paragraph">
+Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called Glass-BR aims to predict the blast risk involved with the glass slab using an intuitive interface. The following section provides an overview of the Software Requirements Specification (SRS) for Glass-BR. This section explains the purpose of the document is designed to fulfil, the scope of the requirements and the organization of the document: what the document is based on and intended to portray.
+</p>
+<a id="Sec:PoD">
+<div class="subsection">
+<h3>
+Purpose of Document
+</h3>
+<p class="paragraph">
+The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the Glass-BR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
+</p>
+<p class="paragraph">
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+</p>
+</div>
+</a>
+<a id="Sec:SoRs">
+<div class="subsection">
+<h3>
+Scope of Requirements
+</h3>
+<p class="paragraph">
+The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, Glass-BR is intended to use the data and predict whether the glass slab is safe to use or not.
+</p>
+</div>
+</a>
+<a id="Sec:OoD">
+<div class="subsection">
+<h3>
+Organization of Document
+</h3>
+<p class="paragraph">
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:R>this Section</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DDs>this Section</a> and trace back to find any additional information they require.
+</p>
+<p class="paragraph">
+The goal statements are refined to the theoretical models, and theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:S">
+<div class="section">
+<h2>
+Stakeholders
+</h2>
+<p class="paragraph">
+This section describes the Stakeholders: the people who have an interest in the product.
+</p>
+<a id="Sec:TC">
+<div class="subsection">
+<h3>
+The Client
+</h3>
+<p class="paragraph">
+The client for Glass-BR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
+</p>
+</div>
+</a>
+<a id="Sec:TC">
+<div class="subsection">
+<h3>
+The Customer
+</h3>
+<p class="paragraph">
+The customers are the end user of Glass-BR.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:GSD">
+<div class="section">
+<h2>
+General System Description
+</h2>
+<p class="paragraph">
+This section provides general information about the system, identifies the interface between the system and its environment, and describes the user characteristics and the system constraints.
+</p>
+<a id="Sec:UC">
+<div class="subsection">
+<h3>
+User Characteristics
+</h3>
+<ul class="list">
+<li>
+The end user of Glass-BR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil or structural engineering.
+</li>
+<li>
+The end user is expected to have an understanding of theory behind glass breakage and blast risk.
+</li>
+<li>
+The end user is expected to have basic computer literacy to handle the software.
+</li>
+</ul>
+</div>
+</a>
+<a id="Sec:SC">
+<div class="subsection">
+<h3>
+System Constraints
+</h3>
+<p class="paragraph">
+N/A
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SotP">
+<div class="section">
+<h2>
+Scope of the Project
+</h2>
+<p class="paragraph">
+This section presents the scope of the project. It describes the expected use of Glass-BR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
+</p>
+<a id="Sec:PUCT">
+<div class="subsection">
+<h3>
+Product Use Case Table
+</h3>
+<a id="Table:T1UCT">
+<table class="table">
+<tr>
+<th>
+Use Case NO.
+</th>
+<th>
+Use Case Name
+</th>
+<th>
+Actor
+</th>
+<th>
+Input and Output
+</th>
+</tr>
+<tr>
+<td>
+1
+</td>
+<td>
+Inputs
+</td>
+<td>
+User
+</td>
+<td>
+Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IPUC>this Section</a>
+</td>
+</tr>
+<tr>
+<td>
+2
+</td>
+<td>
+Output
+</td>
+<td>
+Glass-BR
+</td>
+<td>
+Whether or not the glass slab is safe for the calculated load and supporting calculated values
+</td>
+</tr>
+</table>
+<p class="caption">
+Table 1: Use Case Table
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:IPUC">
+<div class="subsection">
+<h3>
+Individual Product Use Cases
+</h3>
+<ul class="list">
+<li>
+Use Case 1 refers to the user providing input to Glass-BR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.
+</li>
+<li>
+ Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement  which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (P<sub>b</sub>) is less than the tolerable probability (P<sub>btol</sub>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+</li>
+</ul>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SSD">
+<div class="section">
+<h2>
+Specific System Description
+</h2>
+<p class="paragraph">
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions.
+</p>
+<a id="Sec:PD">
+<div class="subsection">
+<h3>
+Problem Description
+</h3>
+<p class="paragraph">
+A system is needed to efficiently and correctly predict the blast risk involved with the glass. Glass-BR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
+</p>
+<a id="Sec:TaD">
+<div class="subsubsection">
+<h4>
+Terminology and Definitions
+</h4>
+<p class="paragraph">
+This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:R>this Section</a>.
+</p>
+<ol class="list">
+<li>
+Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
+</li>
+<li>
+Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.
+</li>
+<li>
+Lite - Pieces of glass that are cut, prepared, and used to create the window or door.
+</li>
+<li>
+Glass Types:
+<ul class="list">
+<li>
+Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5] in Reference.
+</li>
+<li>
+Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6] in Reference.
+</li>
+<li>
+Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [6] in Reference.
+</li>
+</ul>
+</li>
+<li>
+Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
+</li>
+<li>
+Lateral - Perpendicular to the glass surface.
+</li>
+<li>
+Load:
+<ul class="list">
+<li>
+Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.
+</li>
+<li>
+Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4] in Reference.
+</li>
+<li>
+Long duration load - Any load lasting approximately 30 days.
+</li>
+<li>
+Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.
+</li>
+<li>
+Glass weight load - The dead load component of the glass weight.
+</li>
+<li>
+Short duration load - Any load lasting 3s or less.
+</li>
+</ul>
+</li>
+<li>
+Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
+</li>
+<li>
+Probability of breakage (P<sub>b</sub>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.
+</li>
+<li>
+Specifying authority - The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice.
+</li>
+<li>
+Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.
+</li>
+<li>
+Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.
+</li>
+<li>
+Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge.
+</li>
+</ol>
+</div>
+</a>
+<a id="Sec:PSD">
+<div class="subsubsection">
+<h4>
+Physical System Description
+</h4>
+<p class="paragraph">
+The physical system of Glass-BR as shown in <a href=#Figure:Tps>this Figure</a>, includes the following elements:
+</p>
+<div class="list">
+<p>
+PS1: Glass slab
+</p>
+<p>
+PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance  is the distance between the point of explosion and the glass.
+</p>
+</div>
+<a id="Figure:Tps">
+<img class="figure" src="physicalsystimage.png" alt="The physical system"></img>
+<p class="caption">
+The physical system
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:GSs">
+<div class="subsubsection">
+<h4>
+Goal Statements
+</h4>
+<div class="list">
+<p>
+GS1: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+</p>
+</div>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SCS">
+<div class="subsection">
+<h3>
+Solution Characteristics Specification
+</h3>
+<p class="paragraph">
+This section explains all the assumptions considered and the theoretical models which are supported by the data definitions.
+</p>
+<a id="Sec:As">
+<div class="subsubsection">
+<h4>
+Assumptions
+</h4>
+<p class="paragraph">
+This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition [DD], or instance model [IM], in which the respective assumption is used.
+</p>
+<div class="list">
+<p>
+A1: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+</p>
+<p>
+A2: This practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+</p>
+<p>
+A3: This system only considers the external explosion scenario for its calculations.
+</p>
+<p>
+A4: Standard values used for calculation in Glass-BR are: 
+</p>
+</div>
+<a id="">
+<div class="equation">
+m=7
+</div>
+</a>
+<a id="">
+<div class="equation">
+k=(2.86)10<sup>-53</sup>
+</div>
+</a>
+<a id="">
+<div class="equation">
+E=(7.17)10<sup>7</sup>
+</div>
+</a>
+<a id="">
+<div class="equation">
+t<sub>d</sub>=3
+</div>
+</a>
+<div class="list">
+<p>
+A5: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in Glass-BR.
+</p>
+<p>
+A6: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+</p>
+<p>
+A7: The response type considered in Glass-BR is flexural.
+</p>
+<p>
+A8: With reference to A4 the value of load duration factor (LDF) is a constant in Glass-BR. It is calculated by the equation: . Using this, LDF = 0.27.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:TMs">
+<div class="subsubsection">
+<h4>
+Theoretical Models
+</h4>
+<a id="T:SR">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Safety Requirement-1
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+is_safe1=P<sub>b</sub>&lt;P<sub>btol</sub>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+If is_safe1 = True, the glass is considered safe. is_safe1 and is_safe2 (from <a href=#T:SR>this Definition</a>) are either both True or both False. P<sub>b</sub> is the probability of breakage, as calculated in <a href=#T:PoGB>this Definition</a>. P<sub>btol</sub> is the tolerable probability of breakage entered by the user.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:SR">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Safety Requirement-2
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+is_safe2=LR&gt;q
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:SR>this Definition</a> and is_safe2 are either both True or both False. LR is the Load Resistance (also called capacity, as defined in <a href=#T:CoC>this Definition</a>. q (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:CoD>this Definition</a>.
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:IMs">
+<div class="subsubsection">
+<h4>
+Instance Models
+</h4>
+<a id="T:PoGB">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Probability of Glass Breakage
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+P<sub>b</sub>=1-e<sup>-B</sup>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+P<sub>b</sub> is the calculated probability of breakage. B is the risk of failure.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:CoC">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Calculation of Capacity(LR)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+LR=NFL*GTF*LSF
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+LR is the Load Resistance, which is also called capacity. NFL is the Non-Factored Load. GTF is the Glass Type Factor. LSF is the Load Share Factor.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:CoD">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Calculation of Demand(q)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+q=q(w<sub>TNT</sub>,SD)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and w<sub>TNT</sub> as parameters. w<sub>TNT</sub> is defined as w<sub>TNT</sub> = w * TNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD = .
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:DDs">
+<div class="subsubsection">
+<h4>
+Data Definitions
+</h4>
+<p class="paragraph">
+This section collects and defines all the data needed to build the instance models.
+</p>
+<a id="MG:B">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+B
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+B = <div class="fraction">
+<span class="fup">
+k
+</span>
+<span class="fdn">
+(<div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+1000
+</span>
+</div><div class="fraction">
+<span class="fup">
+b
+</span>
+<span class="fdn">
+1000
+</span>
+</div>)<sup>m-1</sup>
+</span>
+</div>((E*1000)(<div class="fraction">
+<span class="fup">
+h
+</span>
+<span class="fdn">
+1000
+</span>
+</div>)<sup>2</sup>)<sup>m</sup>*LDFe<sup>J</sup>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+B is the risk of failure<br />k is the Surface flaw parameter<br />a is the Plate length (long dimension)<br />b is the Plate width (short dimension)<br />m is the Surface flaw parameter<br />E is the Modulus of elasticity of glass<br />h is the Actual thickness<br />LDF is the Load Duration Factor<br />J is the Stress distribution factor (Function)
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:h">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+h
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+mm
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+h = h(t)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+h is the  function that maps from the nominal thickness (t) to the minimum thickness, as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = 4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | t = 10.0 => 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 => 18.26 | t = 22.0 => 21.44)<br />h is the Actual thickness<br />t is the Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:LDF">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+LDF
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+LDF = (<div class="fraction">
+<span class="fup">
+t<sub>d</sub>
+</span>
+<span class="fdn">
+60
+</span>
+</div>)<sup><div class="fraction">
+<span class="fup">
+m
+</span>
+<span class="fdn">
+16
+</span>
+</div></sup>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+LDF is the Load Duration Factor<br />t<sub>d</sub> is the Duration of load<br />m is the Surface flaw parameter
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:J">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+J
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+J = J(q&#770;,<div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div>)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+J is the Stress distribution factor (Function)<br />J is the Stress distribution factor (Function)<br />q&#770; is the Dimensionless load<br />a is the Plate length (long dimension)<br />b is the Plate width (short dimension)
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:NFL">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+NFL
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+NFL = <div class="fraction">
+<span class="fup">
+q&#770;<sub>tol</sub>Eh<sup>4</sup>
+</span>
+<span class="fdn">
+(ab)<sup>2</sup>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+NFL is the Non-Factored Load<br />q&#770;<sub>tol</sub> is the Tolerable load<br />E is the Modulus of elasticity of glass<br />h is the Actual thickness<br />a is the Plate length (long dimension)<br />b is the Plate width (short dimension)
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:GTF">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+GTF
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+GTF = GTF(g)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+GTF is the function that maps from the glass type (g) to a real number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|g = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.<br />GTF is the function that maps from the glass type (g) to a real number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|g = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.<br />g is the Glass type, g in {AN, HS, FT}
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:q.hat">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+q&#770;
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+q&#770; = <div class="fraction">
+<span class="fup">
+q(ab)<sup>2</sup>
+</span>
+<span class="fdn">
+Eh<sup>4</sup>*GTF
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+q&#770; is the Dimensionless load<br />q is the Applied load (demand)<br />a is the Plate length (long dimension)<br />b is the Plate width (short dimension)<br />E is the Modulus of elasticity of glass<br />h is the Actual thickness<br />GTF is the Glass Type Factor
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:q.hat.tol">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+q&#770;<sub>tol</sub>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+q&#770;<sub>tol</sub> = q&#770;<sub>tol</sub>(J<sub>tol</sub>,<div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div>)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+q&#770;<sub>tol</sub> is the Tolerable load<br />q&#770;<sub>tol</sub> is the Tolerable load<br />J<sub>tol</sub> is the Stress distribution factor (Function) based on Pbtol<br />a is the Plate length (long dimension)<br />b is the Plate width (short dimension)
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="MG:J.tol">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+J<sub>tol</sub>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+J<sub>tol</sub> = log(log(<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+1-P<sub>btol</sub>
+</span>
+</div>)<div class="fraction">
+<span class="fup">
+(<div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+1000
+</span>
+</div><div class="fraction">
+<span class="fup">
+b
+</span>
+<span class="fdn">
+1000
+</span>
+</div>)<sup>m-1</sup>
+</span>
+<span class="fdn">
+k((E*1000)(<div class="fraction">
+<span class="fup">
+h
+</span>
+<span class="fdn">
+1000
+</span>
+</div>)<sup>2</sup>)<sup>m</sup>*LDF
+</span>
+</div>)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+J<sub>tol</sub> is the Stress distribution factor (Function) based on Pbtol<br />P<sub>btol</sub> is the Tolerable probability of breakage<br />a is the Plate length (long dimension)<br />b is the Plate width (short dimension)<br />m is the Surface flaw parameter<br />k is the Surface flaw parameter<br />E is the Modulus of elasticity of glass<br />h is the Actual thickness<br />LDF is the Load Duration Factor
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:DC">
+<div class="subsubsection">
+<h4>
+Data Constraints
+</h4>
+<p class="paragraph">
+Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can  be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (<a href=#Table:T3SPV>this Table</a>) gives the values of the specification parameters used in Table 2 (). AR<sub>max</sub> refers to the maximum aspect ratio for the plate of glass.
+</p>
+<a id="Table:T3SPV">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Value
+</th>
+</tr>
+<tr>
+<td>
+d<sub>min</sub>
+</td>
+<td>
+0.1 m
+</td>
+</tr>
+<tr>
+<td>
+d<sub>max</sub>
+</td>
+<td>
+0.1 m
+</td>
+</tr>
+<tr>
+<td>
+AR<sub>max</sub>
+</td>
+<td>
+5
+</td>
+</tr>
+<tr>
+<td>
+w<sub>min</sub>
+</td>
+<td>
+4.5 kg
+</td>
+</tr>
+<tr>
+<td>
+w<sub>max</sub>
+</td>
+<td>
+910 kg
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>min</sub>
+</td>
+<td>
+6 m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>max</sub>
+</td>
+<td>
+130 m
+</td>
+</tr>
+</table>
+<p class="caption">
+Table 3: Specification Parameter Values
+</p>
+</a>
+<p class="paragraph">
+Table 4 () shows the constraints that must be satisfied by the output.
+</p>
+</div>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:Rs">
+<div class="section">
+<h2>
+Requirements
+</h2>
+<a id="Sec:FRs">
+<div class="subsection">
+<h3>
+Functional Requirements
+</h3>
+<p class="paragraph">
+The following section provides the functional Requirements, the business tasks that the software is expected to complete.
+</p>
+<div class="list">
+<p>
+R1: Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
+</p>
+</div>
+<a id="Table:ToS">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Units
+</th>
+</tr>
+<tr>
+<td>
+a
+</td>
+<td>
+Plate length (long dimension)
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+b
+</td>
+<td>
+Plate width (short dimension)
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>x</sub>
+</td>
+<td>
+Stand off distance (x-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>y</sub>
+</td>
+<td>
+Stand off distance (y-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>z</sub>
+</td>
+<td>
+Stand off distance (z-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+t
+</td>
+<td>
+Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+</td>
+<td>
+mm
+</td>
+</tr>
+<tr>
+<td>
+w
+</td>
+<td>
+Charge weight
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+g
+</td>
+<td>
+Glass type, g in {AN, HS, FT}
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+P<sub>btol</sub>
+</td>
+<td>
+Tolerable probability of breakage
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+TNT
+</td>
+<td>
+TNT equivalent factor
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+</a>
+<div class="list">
+<p>
+R2: The system shall set the known values as follows: 
+    <ul class="list">
+    <li>
+    m, k, E, t<sub>d</sub> following A4
+    </li>
+    <li>
+    LDF following A8
+    </li>
+    <li>
+    LSF following A5
+    </li>
+    </ul>
+</p>
+<p>
+R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DC>this Section</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+</p>
+<p>
+R4: Output the input quantities from R1 and the known quantities from R2.
+</p>
+<p>
+R5: If is_safe1 and is_safe2 (from <a href=#T:SR>this Definition</a> and <a href=#T:SR>this Definition</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+</p>
+<p>
+R6: Output the following quantities:
+    <ul class="list">
+    <li>
+    Probability of breakage (P<sub>b</sub>) (<a href=#T:PoGB>this Definition</a>)
+    </li>
+    <li>
+    Load Resistance (LR) (<a href=#T:CoC>this Definition</a>)
+    </li>
+    <li>
+    Applied load (demand) (q) (<a href=#T:CoD>this Definition</a>)
+    </li>
+    <li>
+    Actual thickness (h) (<a href=#MG:h>this Definition</a>)
+    </li>
+    <li>
+    Load Duration Factor (LDF) (<a href=#MG:LDF>this Definition</a>)
+    </li>
+    <li>
+    Stress distribution factor (Function) (J) (<a href=#MG:J>this Definition</a>)
+    </li>
+    <li>
+    Non-Factored Load (NFL) (<a href=#MG:NFL>this Definition</a>)
+    </li>
+    <li>
+    Glass Type Factor (GTF) (<a href=#MG:GTF>this Definition</a>)
+    </li>
+    <li>
+    Dimensionless load (q&#770;) (<a href=#MG:q.hat>this Definition</a>)
+    </li>
+    <li>
+    Tolerable load (q&#770;<sub>tol</sub>) (<a href=#MG:q.hat.tol>this Definition</a>)
+    </li>
+    <li>
+    Stress distribution factor (Function) based on Pbtol (J<sub>tol</sub>) (<a href=#MG:J.tol>this Definition</a>)
+    </li>
+    <li>
+    Aspect Ratio (AR)
+    </li>
+    </ul>
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:NRs">
+<div class="subsection">
+<h3>
+Nonfunctional Requirements
+</h3>
+<p class="paragraph">
+Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority nonfunctional Rs are correctness, verifiability, understandability, reusability, maintainability and portability.
+</p>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:LCs">
+<div class="section">
+<h2>
+Likely Changes
+</h2>
+<div class="list">
+<p>
+LC1: A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
+</p>
+<p>
+LC2: A4, A8 - Currently the values for m, k, and E are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+</p>
+<p>
+LC3: A5 - The software may be changed to accommodate more than a single lite.
+</p>
+<p>
+LC4: A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
+</p>
+<p>
+LC5: A7 - The software may be changed to consider more than just flexure of the glass.
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:TMaG">
+<div class="section">
+<h2>
+Traceability Matrices and Graphs
+</h2>
+<p class="paragraph">
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. Table 5 (<a href=#Table:TMStCBIoDS>this Table</a>) shows the dependencies of theoretical models, data definitions and instance models with each other. Table 6 (<a href=#Table:TMStCBRaOI>this Table</a>) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Table 7 (<a href=#Table:TMStCBAaOI>this Table</a>) shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
+</p>
+<a id="Table:TMStCBIoDS">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+T1 (<a href=#T:SR>this Definition</a>)
+</th>
+<th>
+T2 (<a href=#T:SR>this Definition</a>)
+</th>
+<th>
+IM1 (<a href=#T:PoGB>this Definition</a>)
+</th>
+<th>
+IM2 (<a href=#T:CoC>this Definition</a>)
+</th>
+<th>
+IM3 (<a href=#T:CoD>this Definition</a>)
+</th>
+<th>
+DD1 (<a href=#MG:B>this Definition</a>)
+</th>
+<th>
+DD2 (<a href=#MG:h>this Definition</a>)
+</th>
+<th>
+DD3 (<a href=#MG:LDF>this Definition</a>)
+</th>
+<th>
+DD4 (<a href=#MG:J>this Definition</a>)
+</th>
+<th>
+DD5 (<a href=#MG:NFL>this Definition</a>)
+</th>
+<th>
+DD6 (<a href=#MG:GTF>this Definition</a>)
+</th>
+<th>
+DD7 (<a href=#MG:q.hat>this Definition</a>)
+</th>
+<th>
+DD8 (<a href=#MG:q.hat.tol>this Definition</a>)
+</th>
+<th>
+DD9 (<a href=#MG:J.tol>this Definition</a>)
+</th>
+</tr>
+<tr>
+<td>
+T1 (<a href=#T:SR>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+T2 (<a href=#T:SR>this Definition</a>)
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM1 (<a href=#T:PoGB>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM2 (<a href=#T:CoC>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM3 (<a href=#T:CoD>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD1 (<a href=#MG:B>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD2 (<a href=#MG:h>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD3 (<a href=#MG:LDF>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD4 (<a href=#MG:J>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD5 (<a href=#MG:NFL>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD6 (<a href=#MG:GTF>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD7 (<a href=#MG:q.hat>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD8 (<a href=#MG:q.hat.tol>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+DD9 (<a href=#MG:J.tol>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Items of Different Sections
+</p>
+</a>
+<a id="Table:TMStCBRaOI">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+T1 (<a href=#T:SR>this Definition</a>)
+</th>
+<th>
+T2 (<a href=#T:SR>this Definition</a>)
+</th>
+<th>
+IM1 (<a href=#T:PoGB>this Definition</a>)
+</th>
+<th>
+IM2 (<a href=#T:CoC>this Definition</a>)
+</th>
+<th>
+IM3 (<a href=#T:CoD>this Definition</a>)
+</th>
+<th>
+DD1 (<a href=#MG:B>this Definition</a>)
+</th>
+<th>
+DD2 (<a href=#MG:h>this Definition</a>)
+</th>
+<th>
+DD3 (<a href=#MG:LDF>this Definition</a>)
+</th>
+<th>
+DD4 (<a href=#MG:J>this Definition</a>)
+</th>
+<th>
+DD5 (<a href=#MG:NFL>this Definition</a>)
+</th>
+<th>
+DD6 (<a href=#MG:GTF>this Definition</a>)
+</th>
+<th>
+DD7 (<a href=#MG:q.hat>this Definition</a>)
+</th>
+<th>
+DD8 (<a href=#MG:q.hat.tol>this Definition</a>)
+</th>
+<th>
+DD9 (<a href=#MG:J.tol>this Definition</a>)
+</th>
+<th>
+Data Constraints (<a href=#Sec:DC>this Section</a>)
+</th>
+<th>
+R1 (in <a href=#Sec:FRs>this Section</a>)
+</th>
+<th>
+R2 (in <a href=#Sec:FRs>this Section</a>)
+</th>
+</tr>
+<tr>
+<td>
+R1 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R2 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R3 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R4 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+R5 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R6 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Requirements and Other Items
+</p>
+</a>
+<a id="Table:TMStCBAaOI">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+A1 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A2 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A3 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A4 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A5 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A6 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A7 (in <a href=#Sec:As>this Section</a>)
+</th>
+<th>
+A8 (in <a href=#Sec:As>this Section</a>)
+</th>
+</tr>
+<tr>
+<td>
+T1 (<a href=#T:SR>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+T2 (<a href=#T:SR>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM1 (<a href=#T:PoGB>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM2 (<a href=#T:CoC>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM3 (<a href=#T:CoD>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD1 (<a href=#MG:B>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD2 (<a href=#MG:h>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD3 (<a href=#MG:LDF>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+DD4 (<a href=#MG:J>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD5 (<a href=#MG:NFL>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD6 (<a href=#MG:GTF>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD7 (<a href=#MG:q.hat>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD8 (<a href=#MG:q.hat.tol>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD9 (<a href=#MG:J.tol>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC1 (in <a href=#Sec:LCs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC2 (in <a href=#Sec:LCs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+LC3 (in <a href=#Sec:LCs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC4 (in <a href=#Sec:LCs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC5 (in <a href=#Sec:LCs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R1 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R2 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+</tr>
+<tr>
+<td>
+R3 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R4 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R5 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R6 (in <a href=#Sec:FRs>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Assumptions and Other Items
+</p>
+</a>
+<p class="paragraph">
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure 2 (<a href=#Figure:F2TMStCBIoDS>this Figure</a>) shows the dependencies of theoretical models, data definitions and instance models on each other. Figure 3 (<a href=#Figure:F3TMStCBRsaOI>this Figure</a>) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Figure 4 (<a href=#Figure:F4TMStCBAsaOI>this Figure</a>) shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
+</p>
+<p class="paragraph">
+NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
+</p>
+<a id="Figure:F2TMStCBIoDS">
+<img class="figure" src="Trace.png" alt="Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections"></img>
+<p class="caption">
+Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections
+</p>
+</a>
+<a id="Figure:F3TMStCBRsaOI">
+<img class="figure" src="RTrace.png" alt="Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items"></img>
+<p class="caption">
+Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items
+</p>
+</a>
+<a id="Figure:F4TMStCBAsaOI">
+<img class="figure" src="ATrace.png" alt="Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items"></img>
+<p class="caption">
+Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:R">
+<div class="section">
+<h2>
+References
+</h2>
+<div class="list">
+<p>
+[1]: N. Koothoor, &quot;A document drive approach to certifying scientific computing software,&quot; Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+</p>
+<p>
+[2]: W. S. Smith and L. Lai, &quot;A new requirements template for scientific computing,&quot; in Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt&eacute;, P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International Requirements Engineering Conference, 2005.
+</p>
+<p>
+[3]: J. Robertson and S. Robertson, &quot;Volere requirements specification template edition 16.&quot; &quot;www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf&quot;, 2012.
+</p>
+<p>
+[4]: ASTM Standards Committee, &quot;Standard practice for determining load resistance of glass in buildings,&quot; Standard E1300-09a, American Society for Testing and Material (ASTM), 2009.
+</p>
+<p>
+[5]: ASTM, developed by subcommittee C1408,Book of standards 15.02, &quot;Standard specification for flat glass,C1036.&quot;
+</p>
+<p>
+[6]: ASTM, developed by subcommittee C14.08,Book of standards 15.02, &quot;Specification for heat treated flat glass-Kind HS, kind FT coated and uncoated glass,C1048.&quot;
+</p>
+</div>
+</div>
+</a>
+<a id="Sec:A">
+<div class="section">
+<h2>
+Appendix
+</h2>
+<p class="paragraph">
+This appendix holds the graphs (<a href=#Figure:F53sdep()vSodvCw()>this Figure</a> and <a href=#Figure:F6Ndll()vAR()vSdf(()>this Figure</a>) used for interpolating values needed in the models.
+</p>
+<a id="Figure:F53sdep()vSodvCw()">
+<img class="figure" src="ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (q) versus Stand off distance versus Charge weight (m)"></img>
+<p class="caption">
+Figure 5: 3 second duration equivalent pressure (q) versus Stand off distance versus Charge weight (m)
+</p>
+</a>
+<a id="Figure:F6Ndll()vAR()vSdf(()">
+<img class="figure" src="ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (q&#770;) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (J)"></img>
+<p class="caption">
+Figure 6: Non dimensional lateral load (q&#770;) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (J)
+</p>
+</a>
+</div>
+</a>
+</body>
+</html>

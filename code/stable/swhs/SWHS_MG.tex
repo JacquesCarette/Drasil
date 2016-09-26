@@ -1,0 +1,388 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{luatex85}
+\def\pgfsysdriver{pgfsys-pdftex.def}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{graphs}
+\usetikzlibrary{graphdrawing}
+\usegdlibrary{layered}
+\newcounter{lcnum}
+\newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
+\newcounter{modnum}
+\newcommand{\mthemodnum}{M\themodnum}
+\title{Module Guide for Solar Water Heating Systems Incorporating Phase Change Material}
+\author{Thulasi Jegatheesan, Brooks MacLachlan, and Spencer Smith}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Introduction}
+\label{Sec:I}
+Decomposing a system into modules is a commonly accepted approach to developing software.  A module is a work assignment for a programmer or programming team. In the best practices for scientific computing, Wilson et al advise a modular design, but are silent on the criteria to use to decompose the software into modules.  We advocate a decomposition based on the principle of information hiding. This principle supports design for change, because the ``secrets" that each module hides represent likely future changes.  Design for change is valuable in SC, where modifications are frequent, especially during initial development as the solution space is explored.
+Our design follows the rules laid out by Parnas, as follows:
+\begin{enumerate}
+\item{System details that are likely to change independently should be the secrets of separate modules.}
+\item{Any other program that requires information stored in a module's data structures must obtain it by calling access programs belonging to that module.}
+\end{enumerate}
+After completing the first stage of the design, the Software Requirements Specification (SRS), the Module Guide (MG) is developed. The MG specifies the modular structure of the system and is intended to allow both designers and maintainers to easily identify the parts of the software.  The potential readers of this document are as follows:
+\begin{enumerate}
+\item{New project members: This document can be a guide for a new project member to easily understand the overall structure and quickly find the relevant modules they are searching for.}
+\item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
+\item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
+\end{enumerate}
+Section~\ref{Sec:LaUC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
+\section{Likely and Unlikely Changes}
+\label{Sec:LaUC}
+This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LC} and unlikely changes are listed in Section~\ref{Sec:UC}
+\subsection{Likely Changes}
+\label{Sec:LC}
+Likely changes are the source of the information that is to be hidden inside the modules. Ideally, changing one of the likely changes will only require changing the one module that hides the associated decision. The approach adapted here is called design for change.
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LChardware}:]The specific hardware on which the software is running.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCinputformat}:]The format of the initial input data.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCparameters}:]The format of the input parameters.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCinputverification}:]The constraints on the input parameters.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCoutputformat}:]The format of the final output data.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCoutputverification}:]The constraints on the output results.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCtemp}:]How the governing ODEs are defined using the input parameters.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCenergy}:]How the energy equations are defined using the input parameters.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCcontrol}:]How the overall control of the calculations is orchestrated.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCsequence}:]The implementation for the sequence (array) data structure.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCode}:]The algorithm used for the ODE solver.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LCplot}:]The implementation of plotting data.
+\end{description}
+\subsection{Unikely Changes}
+\label{Sec:UC}
+The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCIO}:]Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCinputsource}:]There will always be a source of input data external to the software.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCoutput}:]Output data are displayed to the output device.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCgoal}:]The goal of the system is to calculate temperatures and energies.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCodes}:]The ODEs for temperature can be defined using parameters defined in the input parameters module.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UCenergy}:]The energy equations can be defined using the parameters defined in the input parameters module.
+\end{description}
+\section{Module Hierarchy}
+\label{Sec:MH}
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mhardwarehiding}:]Hardware Hiding Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Minputformat}:]Input Format Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Minputparameters}:]Input Parameters Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Minputverification}:]Input Verification Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Moutputformat}:]Output Format Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Moutputverification}:]Output Verification Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{MtemperatureODEs}:]Temperature ODEs Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Menergyequations}:]Energy Equations Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mcontrol}:]Control Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Msequencedatastructure}:]Sequence Data Structure Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{MODEsolver}:]ODE Solver Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mplotting}:]Plotting Module
+\end{description}
+\begin{longtable}{l l}
+\toprule
+Level 1 & Level 2
+\\
+\midrule
+Hardware Hiding Module & 
+\\
+Behaviour Hiding Module & Input Format Module
+\\
+ & Input Parameters Module
+\\
+ & Input Verification Module
+\\
+ & Output Format Module
+\\
+ & Output Verification Module
+\\
+ & Temperature ODEs Module
+\\
+ & Energy Equations Module
+\\
+ & Control Module
+\\
+Software Decision Module & Sequence Data Structure Module
+\\
+ & ODE Solver Module
+\\
+ & Plotting Module
+\\
+\bottomrule
+\caption{Module Hierarchy}
+\label{Table:MH}
+\end{longtable}
+\section{Module Decomposition}
+\label{Sec:MD}
+Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is SWHS, this means that the module is provided by the SWHS program. If the entry is MATLAB, this means that the module is provided by the MATLAB programming language. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
+\subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
+\label{Sec:HHM()}
+\begin{description}
+\item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
+\item[Services:]Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software. So, the system can use it to display outputs or to accept inputs.
+\item[Implemented By:]OS
+\end{description}
+\subsection{Behaviour Hiding Module}
+\label{Sec:BHM}
+\begin{description}
+\item[Secrets:]The contents of the required behaviours.
+\item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
+\item[Implemented By:]--
+\end{description}
+\subsection{Input Format Module (M\ref{Minputformat})}
+\label{Sec:IFM()}
+\begin{description}
+\item[Secrets:]The format and structure of the input data.
+\item[Services:]Converts the input data into the data structure used by the input parameters module.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Input Parameters Module (M\ref{Minputparameters})}
+\label{Sec:IPM()}
+\begin{description}
+\item[Secrets:]The format and structure of the input parameters.
+\item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Input Verification Module (M\ref{Minputverification})}
+\label{Sec:IVM()}
+\begin{description}
+\item[Secrets:]The format and structure of the physical and software constraints.
+\item[Services:]Verifies that the input parameters comply with physical and software constraints. Throws an error if a parameter violates a physical constraint. Throws a warning if a parameter violates a software constraint.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Output Format Module (M\ref{Moutputformat})}
+\label{Sec:OFM()}
+\begin{description}
+\item[Secrets:]The format and structure of the output data.
+\item[Services:]Outputs the results of the calculations, including the input parameters, temperatures, energies, and times when melting starts and stops.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Output Verification Module (M\ref{Moutputverification})}
+\label{Sec:OVM()}
+\begin{description}
+\item[Secrets:]The algorithm used to approximate expected results.
+\item[Services:]Verifies that the output energy results follow the law of conservation of energy. Throws a warning if the relative error exceeds the error threshold.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Temperature ODEs Module (M\ref{MtemperatureODEs})}
+\label{Sec:TOM()}
+\begin{description}
+\item[Secrets:]The ODEs for solving the temperature, using the input parameters.
+\item[Services:]Defines the ODEs using the parameters in the input parameters module.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Energy Equations Module (M\ref{Menergyequations})}
+\label{Sec:EEM()}
+\begin{description}
+\item[Secrets:]The equations for solving for the energies using the input parameters.
+\item[Services:]Defines the energy equations using the parameters in the input parameters module.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Control Module (M\ref{Mcontrol})}
+\label{Sec:CM()}
+\begin{description}
+\item[Secrets:]The algorithm for coordinating the running of the program.
+\item[Services:]Provides the main program.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Software Decision Module}
+\label{Sec:SDM}
+\begin{description}
+\item[Secrets:]The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
+\item[Services:]Includes data structure and algorithms used in the system that do not provide direct interaction with the user.
+\item[Implemented By:]--
+\end{description}
+\subsection{Sequence Data Structure Module (M\ref{Msequencedatastructure})}
+\label{Sec:SDSM()}
+\begin{description}
+\item[Secrets:]The data structure for a sequence data type.
+\item[Services:]Provides array manipulation, including building an array, accessing a specific entry, slicing an array, etc.
+\item[Implemented By:]MATLAB
+\end{description}
+\subsection{ODE Solver Module (M\ref{MODEsolver})}
+\label{Sec:OSM()}
+\begin{description}
+\item[Secrets:]The algorithm to solve a system of first order ODEs.
+\item[Services:]Provides solvers that take the governing equation, initial conditions, and numerical parameters, and solve them.
+\item[Implemented By:]MATLAB
+\end{description}
+\subsection{Plotting Module (M\ref{Mplotting})}
+\label{Sec:PM()}
+\begin{description}
+\item[Secrets:]The data structures and algorithms for plotting data graphically.
+\item[Services:]Provides a plot function.
+\item[Implemented By:]MATLAB
+\end{description}
+\section{Traceability Matrix}
+\label{Sec:TM}
+This section shows two traceability matrices: between the modules and the requirements in Table~\ref{Table:TBRaM} and between the modules and the likely changes in Table~\ref{Table:TBLCaM}.
+\begin{longtable}{l l}
+\toprule
+Requirement & Modules
+\\
+\midrule
+R1 & M\ref{Mhardwarehiding}, M\ref{Minputformat}, M\ref{Minputparameters}, M\ref{Mcontrol}
+\\
+R2 & M\ref{Minputformat}, M\ref{Minputparameters}
+\\
+R3 & M\ref{Minputverification}
+\\
+R4 & M\ref{Moutputformat}, M\ref{Mcontrol}
+\\
+R5 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{MODEsolver}, M\ref{Mplotting}
+\\
+R6 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{MODEsolver}, M\ref{Mplotting}
+\\
+R7 & M\ref{Moutputformat}, M\ref{Menergyequations}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{Mplotting}
+\\
+R8 & M\ref{Moutputformat}, M\ref{Menergyequations}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{Mplotting}
+\\
+R9 & M\ref{Moutputverification}
+\\
+R10 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Mcontrol}
+\\
+R11 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Menergyequations}, M\ref{Mcontrol}
+\\
+\bottomrule
+\caption{Trace Between Requirements and Modules}
+\label{Table:TBRaM}
+\end{longtable}
+\begin{longtable}{l l}
+\toprule
+Likely Change & Modules
+\\
+\midrule
+LC\ref{LChardware} & M\ref{Mhardwarehiding}
+\\
+LC\ref{LCinputformat} & M\ref{Minputformat}
+\\
+LC\ref{LCparameters} & M\ref{Minputparameters}
+\\
+LC\ref{LCinputverification} & M\ref{Minputverification}
+\\
+LC\ref{LCoutputformat} & M\ref{Moutputformat}
+\\
+LC\ref{LCoutputverification} & M\ref{Moutputverification}
+\\
+LC\ref{LCtemp} & M\ref{MtemperatureODEs}
+\\
+LC\ref{LCenergy} & M\ref{Menergyequations}
+\\
+LC\ref{LCcontrol} & M\ref{Mcontrol}
+\\
+LC\ref{LCsequence} & M\ref{Msequencedatastructure}
+\\
+LC\ref{LCode} & M\ref{MODEsolver}
+\\
+LC\ref{LCplot} & M\ref{Mplotting}
+\\
+\bottomrule
+\caption{Trace Between Likely Changes and Modules}
+\label{Table:TBLCaM}
+\end{longtable}
+\section{Uses Hierarchy}
+\label{Sec:UH}
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHierarchy} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+\begin{figure}
+\centering
+\resizebox{\textwidth}{!}{
+\tikz [>=stealth, shorten >=1pt]
+\graph [layered layout, components go right top aligned, minimum layers=3, nodes={ draw, thick, align=center, inner xsep=0.5em, inner ysep=0.5em, text width=4em, minimum height=5em, font=\scriptsize, fill=white, text opacity=1, fill opacity=0.8, typeset={\tikzgraphnodetext\\M\ref{\tikzgraphnodename}}}, edges={thick, rounded corners}]
+{
+Minputformat/Input Format Module -> Mhardwarehiding/Hardware Hiding Module;
+Minputformat/Input Format Module -> Minputparameters/Input Parameters Module;
+Minputformat/Input Format Module -> Msequencedatastructure/Sequence Data Structure Module;
+Minputparameters/Input Parameters Module -> Msequencedatastructure/Sequence Data Structure Module;
+Minputverification/Input Verification Module -> Minputparameters/Input Parameters Module;
+Minputverification/Input Verification Module -> Msequencedatastructure/Sequence Data Structure Module;
+Moutputformat/Output Format Module -> Mhardwarehiding/Hardware Hiding Module;
+Moutputformat/Output Format Module -> Minputparameters/Input Parameters Module;
+Moutputformat/Output Format Module -> Msequencedatastructure/Sequence Data Structure Module;
+Moutputverification/Output Verification Module -> Minputparameters/Input Parameters Module;
+Moutputverification/Output Verification Module -> Msequencedatastructure/Sequence Data Structure Module;
+MtemperatureODEs/Temperature ODEs Module -> Minputparameters/Input Parameters Module;
+MtemperatureODEs/Temperature ODEs Module -> Msequencedatastructure/Sequence Data Structure Module;
+Menergyequations/Energy Equations Module -> Minputparameters/Input Parameters Module;
+Menergyequations/Energy Equations Module -> Msequencedatastructure/Sequence Data Structure Module;
+Mcontrol/Control Module -> Mhardwarehiding/Hardware Hiding Module;
+Mcontrol/Control Module -> Minputparameters/Input Parameters Module;
+Mcontrol/Control Module -> Minputformat/Input Format Module;
+Mcontrol/Control Module -> Minputverification/Input Verification Module;
+Mcontrol/Control Module -> MtemperatureODEs/Temperature ODEs Module;
+Mcontrol/Control Module -> Menergyequations/Energy Equations Module;
+Mcontrol/Control Module -> MODEsolver/ODE Solver Module;
+Mcontrol/Control Module -> Mplotting/Plotting Module;
+Mcontrol/Control Module -> Moutputverification/Output Verification Module;
+Mcontrol/Control Module -> Moutputformat/Output Format Module;
+Mcontrol/Control Module -> Msequencedatastructure/Sequence Data Structure Module;
+MODEsolver/ODE Solver Module -> Msequencedatastructure/Sequence Data Structure Module;
+Mplotting/Plotting Module -> Msequencedatastructure/Sequence Data Structure Module;
+};
+}
+\caption{Uses Hierarchy}
+\label{Figure:UsesHierarchy}
+\end{figure}
+\end{document}

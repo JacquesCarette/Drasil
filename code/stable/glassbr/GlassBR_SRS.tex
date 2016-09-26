@@ -1,0 +1,799 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{graphics}
+\title{Software Requirements Specification for Glass-BR}
+\author{Nikitha Krithnan and Spencer Smith}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Reference Material}
+\label{Sec:RM}
+This section records information for easy reference.
+\subsection{Table of Units}
+\label{Sec:ToU}
+Throughout this document SI (Syst\`{e}me International d'Unit\'{e}s) is employed as the unit system. In addition to the basic units, several derived units are employed as described below. For each unit, the symbol is given followed by a description of the unit with the SI name in parentheses.
+\begin{longtable*}{l l}
+\toprule
+Symbol & Description
+\\
+\midrule
+m & length (metre)
+\\
+s & time (second)
+\\
+Pa & pressure (pascal)
+\\
+N & force (newton)
+\\
+\bottomrule
+\label{Table:ToU}
+\end{longtable*}
+\subsection{Table of Symbols}
+\label{Sec:ToS}
+The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
+\begin{longtable*}{l l l}
+\toprule
+Symbol & Description & Units
+\\
+\midrule
+$a$ & Plate length (long dimension) & mm
+\\
+$b$ & Plate width (short dimension) & mm
+\\
+$d_{max}$ & Maximum value for one of the dimensions of the glass plate & mm
+\\
+$d_{min}$ & Minimum value for one of the dimensions of the glass plate & mm
+\\
+$E$ & Modulus of elasticity of glass & kPa
+\\
+$h$ & Actual thickness & mm
+\\
+$k$ & Surface flaw parameter & $\text{N}^{-7}$$\text{m}^{12}$
+\\
+$m$ & Surface flaw parameter & $\text{N}^{-7}$$\text{m}^{12}$
+\\
+$q$ & Applied load (demand) & kPa
+\\
+$SD$ & Stand off distance which is represented in coordinates (SDx, SDy, SDz) & m
+\\
+$SD_{max}$ & Maximum stand off distance permissible for input & m
+\\
+$SD_{min}$ & Minimum stand off distance permissible for input & m
+\\
+$t$ & Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} & mm
+\\
+$t_{d}$ & Duration of load & s
+\\
+$w$ & Charge weight & kg
+\\
+$w_{max}$ & Maximum permissible input charge weight & kg
+\\
+$w_{min}$ & Minimum permissible input charge weight & kg
+\\
+$w_{TNT}$ & Explosive Mass in equivalent weight of TNT & kg
+\\
+$B$ & Risk function & 
+\\
+$g$ & Glass type, g in {AN, HS, FT} & 
+\\
+$is\_safe1$ & True when calculated probability is less than tolerable probability & 
+\\
+$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
+\\
+$J$ & Stress distribution factor (Function) & 
+\\
+$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & 
+\\
+$P_{b}$ & Probability of breakage & 
+\\
+$P_{btol}$ & Tolerable probability of breakage & 
+\\
+$\hat{q}$ & Dimensionless load & 
+\\
+$\hat{q}_{tol}$ & Tolerable load & 
+\\
+\bottomrule
+\label{Table:ToS}
+\end{longtable*}
+\subsection{Abbreviations and Acronyms}
+\label{Sec:AaA}
+\begin{longtable*}{l l}
+\toprule
+Abbreviations & Full Form
+\\
+\midrule
+A & Assumption
+\\
+AN & Annealed Glass
+\\
+AR & Aspect Ratio
+\\
+ARmax & Maximum Aspect Ratio
+\\
+DD & Data Definition
+\\
+FT & Fully Tempered Glass
+\\
+GS & Goal Statement
+\\
+GTF & Glass Type Factor
+\\
+HS & Heat Strengthened Glass
+\\
+IG & Insulating Glass
+\\
+IM & Instance Model
+\\
+LC & Likely Change
+\\
+LDF & Load Duration Factor
+\\
+LG & Laminated Glass
+\\
+LR & Load Resistance
+\\
+LSF & Load Share Factor
+\\
+N/A & Not Applicable
+\\
+NFL & Non-Factored Load
+\\
+PS & Physical System Description
+\\
+R & Requirement
+\\
+SRS & Software Requirements Specification
+\\
+T & Theoretical Model
+\\
+TNT & TNT (Trinitrotoluene) Equivalent Factor
+\\
+\bottomrule
+\label{Table:AaA}
+\end{longtable*}
+\section{Introduction}
+\label{Sec:I}
+Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called Glass-BR aims to predict the blast risk involved with the glass slab using an intuitive interface. The following section provides an overview of the Software Requirements Specification (SRS) for Glass-BR. This section explains the purpose of the document is designed to fulfil, the scope of the requirements and the organization of the document: what the document is based on and intended to portray.
+\subsection{Purpose of Document}
+\label{Sec:PoD}
+The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the Glass-BR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+\subsection{Scope of Requirements}
+\label{Sec:SoRs}
+The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, Glass-BR is intended to use the data and predict whether the glass slab is safe to use or not.
+\subsection{Organization of Document}
+\label{Sec:OoD}
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:R}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DDs} and trace back to find any additional information they require.
+The goal statements are refined to the theoretical models, and theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
+\section{Stakeholders}
+\label{Sec:S}
+This section describes the Stakeholders: the people who have an interest in the product.
+\subsection{The Client}
+\label{Sec:TC}
+The client for Glass-BR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
+\subsection{The Customer}
+\label{Sec:TC}
+The customers are the end user of Glass-BR.
+\section{General System Description}
+\label{Sec:GSD}
+This section provides general information about the system, identifies the interface between the system and its environment, and describes the user characteristics and the system constraints.
+\subsection{User Characteristics}
+\label{Sec:UC}
+\begin{enumerate}
+\item{The end user of Glass-BR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil or structural engineering.}
+\item{The end user is expected to have an understanding of theory behind glass breakage and blast risk.}
+\item{The end user is expected to have basic computer literacy to handle the software.}
+\end{enumerate}
+\subsection{System Constraints}
+\label{Sec:SC}
+N/A
+\section{Scope of the Project}
+\label{Sec:SotP}
+This section presents the scope of the project. It describes the expected use of Glass-BR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
+\subsection{Product Use Case Table}
+\label{Sec:PUCT}
+\begin{longtable}{l l l l}
+\toprule
+Use Case NO. & Use Case Name & Actor & Input and Output
+\\
+\midrule
+1 & Inputs & User & Characteristics of the glass slab and of the blast. Details in Section~\ref{Sec:IPUC}
+\\
+2 & Output & Glass-BR & Whether or not the glass slab is safe for the calculated load and supporting calculated values
+\\
+\bottomrule
+\caption{Table 1: Use Case Table}
+\label{Table:T1UCT}
+\end{longtable}
+\subsection{Individual Product Use Cases}
+\label{Sec:IPUC}
+\begin{enumerate}
+\item{Use Case 1 refers to the user providing input to Glass-BR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.}
+\item{ Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement  which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability ($P_{b}$) is less than the tolerable probability ($P_{btol}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.}
+\end{enumerate}
+\section{Specific System Description}
+\label{Sec:SSD}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions.
+\subsection{Problem Description}
+\label{Sec:PD}
+A system is needed to efficiently and correctly predict the blast risk involved with the glass. Glass-BR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
+\subsubsection{Terminology and Definitions}
+\label{Sec:TaD}
+This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in Section~\ref{Sec:R}.
+\begin{itemize}
+\item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
+\item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
+\item{Lite - Pieces of glass that are cut, prepared, and used to create the window or door.}
+\item{Glass Types:}
+\begin{enumerate}
+\item{Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5] in Reference.}
+\item{Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6] in Reference.}
+\item{Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [6] in Reference.}
+\end{enumerate}
+\item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
+\item{Lateral - Perpendicular to the glass surface.}
+\item{Load:}
+\begin{enumerate}
+\item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
+\item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4] in Reference.}
+\item{Long duration load - Any load lasting approximately 30 days.}
+\item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
+\item{Glass weight load - The dead load component of the glass weight.}
+\item{Short duration load - Any load lasting 3s or less.}
+\end{enumerate}
+\item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
+\item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
+\item{Specifying authority - The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice.}
+\item{Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.}
+\item{Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.}
+\item{Stand off distance ($SD$) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge.}
+\end{itemize}
+\subsubsection{Physical System Description}
+\label{Sec:PSD}
+The physical system of Glass-BR as shown in Figure~\ref{Figure:Tps}, includes the following elements:
+\begin{itemize}
+\item[PS1:]Glass slab
+\item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance  is the distance between the point of explosion and the glass.
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics{physicalsystimage.png}
+\caption{The physical system}
+\label{Figure:Tps}
+\end{center}
+\end{figure}
+\subsubsection{Goal Statements}
+\label{Sec:GSs}
+\begin{itemize}
+\item[GS1:]Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+\end{itemize}
+\subsection{Solution Characteristics Specification}
+\label{Sec:SCS}
+This section explains all the assumptions considered and the theoretical models which are supported by the data definitions.
+\subsubsection{Assumptions}
+\label{Sec:As}
+This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition [DD], or instance model [IM], in which the respective assumption is used.
+\begin{itemize}
+\item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+\item[A2:]This practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+\item[A3:]This system only considers the external explosion scenario for its calculations.
+\item[A4:]Standard values used for calculation in Glass-BR are: 
+\end{itemize}
+\begin{equation}
+m=7
+\end{equation}
+\begin{equation}
+k=(2.86)10^{-53}
+\end{equation}
+\begin{equation}
+E=(7.17)10^{7}
+\end{equation}
+\begin{equation}
+t_{d}=3
+\end{equation}
+\begin{itemize}
+\item[A5:]Glass under consideration is assumed to be a single lite. Hence the value of $LSF$ is equal to 1 for all calculations in Glass-BR.
+\item[A6:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+\item[A7:]The response type considered in Glass-BR is flexural.
+\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in Glass-BR. It is calculated by the equation: . Using this, $LDF$ = 0.27.
+\end{itemize}
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:SR}
+\phantomsection 
+\label{T:SR}
+\\ \midrule \\
+Label & Safety Requirement-1
+\\ \midrule \\
+Equation & $is\_safe1=P_{b}<P_{btol}$
+\\ \midrule \\
+Description & If $is\_safe1$ = True, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:SR]{Definition~T:SR}) are either both True or both False. $P_{b}$ is the probability of breakage, as calculated in \hyperref[T:PoGB]{Definition~T:PoGB}. $P_{btol}$ is the tolerable probability of breakage entered by the user.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:SR}
+\phantomsection 
+\label{T:SR}
+\\ \midrule \\
+Label & Safety Requirement-2
+\\ \midrule \\
+Equation & $is\_safe2=LR>q$
+\\ \midrule \\
+Description & If $is\_safe2$ = True, the glass is considered safe. $is\_safe1$ (from \hyperref[T:SR]{Definition~T:SR} and $is\_safe2$ are either both True or both False. $LR$ is the Load Resistance (also called capacity, as defined in \hyperref[T:CoC]{Definition~T:CoC}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:CoD]{Definition~T:CoD}.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:PoGB}
+\phantomsection 
+\label{T:PoGB}
+\\ \midrule \\
+Label & Probability of Glass Breakage
+\\ \midrule \\
+Equation & $P_{b}=1-e^{-B}$
+\\ \midrule \\
+Description & $P_{b}$ is the calculated probability of breakage. $B$ is the risk of failure.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:CoC}
+\phantomsection 
+\label{T:CoC}
+\\ \midrule \\
+Label & Calculation of Capacity(LR)
+\\ \midrule \\
+Equation & $LR=NFL*GTF*LSF$
+\\ \midrule \\
+Description & $LR$ is the Load Resistance, which is also called capacity. $NFL$ is the Non-Factored Load. $GTF$ is the Glass Type Factor. $LSF$ is the Load Share Factor.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:CoD}
+\phantomsection 
+\label{T:CoD}
+\\ \midrule \\
+Label & Calculation of Demand(q)
+\\ \midrule \\
+Equation & $q=q(w_{TNT},SD)$
+\\ \midrule \\
+Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD$ = .
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:B}
+\phantomsection 
+\label{MG:B}
+\\ \midrule \\
+Label & $B$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $B$ = $\frac{k}{(\frac{a}{1000}\frac{b}{1000})^{m-1}}((E*1000)(\frac{h}{1000})^{2})^{m}*LDFe^{J}$
+\\ \midrule \\
+Description & $B$ is the risk of failure\newline$k$ is the Surface flaw parameter\newline$a$ is the Plate length (long dimension)\newline$b$ is the Plate width (short dimension)\newline$m$ is the Surface flaw parameter\newline$E$ is the Modulus of elasticity of glass\newline$h$ is the Actual thickness\newline$LDF$ is the Load Duration Factor\newline$J$ is the Stress distribution factor (Function)
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:h}
+\phantomsection 
+\label{MG:h}
+\\ \midrule \\
+Label & $h$
+\\ \midrule \\
+Units & mm
+\\ \midrule \\
+Equation & $h$ = $h(t)$
+\\ \midrule \\
+Description & $h$ is the  function that maps from the nominal thickness ($t$) to the minimum thickness, as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = 4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | t = 10.0 => 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 => 18.26 | t = 22.0 => 21.44)\newline$h$ is the Actual thickness\newline$t$ is the Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:LDF}
+\phantomsection 
+\label{MG:LDF}
+\\ \midrule \\
+Label & $LDF$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $LDF$ = $(\frac{t_{d}}{60})^{\frac{m}{16}}$
+\\ \midrule \\
+Description & $LDF$ is the Load Duration Factor\newline$t_{d}$ is the Duration of load\newline$m$ is the Surface flaw parameter
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:J}
+\phantomsection 
+\label{MG:J}
+\\ \midrule \\
+Label & $J$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $J$ = $J(\hat{q},\frac{a}{b})$
+\\ \midrule \\
+Description & $J$ is the Stress distribution factor (Function)\newline$J$ is the Stress distribution factor (Function)\newline$\hat{q}$ is the Dimensionless load\newline$a$ is the Plate length (long dimension)\newline$b$ is the Plate width (short dimension)
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:NFL}
+\phantomsection 
+\label{MG:NFL}
+\\ \midrule \\
+Label & $NFL$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $NFL$ = $\frac{\hat{q}_{tol}Eh^{4}}{(ab)^{2}}$
+\\ \midrule \\
+Description & $NFL$ is the Non-Factored Load\newline$\hat{q}_{tol}$ is the Tolerable load\newline$E$ is the Modulus of elasticity of glass\newline$h$ is the Actual thickness\newline$a$ is the Plate length (long dimension)\newline$b$ is the Plate width (short dimension)
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:GTF}
+\phantomsection 
+\label{MG:GTF}
+\\ \midrule \\
+Label & $GTF$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $GTF$ = $GTF(g)$
+\\ \midrule \\
+Description & $GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$g$ is the Glass type, g in {AN, HS, FT}
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:q.hat}
+\phantomsection 
+\label{MG:q.hat}
+\\ \midrule \\
+Label & $\hat{q}$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $\hat{q}$ = $\frac{q(ab)^{2}}{Eh^{4}*GTF}$
+\\ \midrule \\
+Description & $\hat{q}$ is the Dimensionless load\newline$q$ is the Applied load (demand)\newline$a$ is the Plate length (long dimension)\newline$b$ is the Plate width (short dimension)\newline$E$ is the Modulus of elasticity of glass\newline$h$ is the Actual thickness\newline$GTF$ is the Glass Type Factor
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:q.hat.tol}
+\phantomsection 
+\label{MG:q.hat.tol}
+\\ \midrule \\
+Label & $\hat{q}_{tol}$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $\hat{q}_{tol}$ = $\hat{q}_{tol}(J_{tol},\frac{a}{b})$
+\\ \midrule \\
+Description & $\hat{q}_{tol}$ is the Tolerable load\newline$\hat{q}_{tol}$ is the Tolerable load\newline$J_{tol}$ is the Stress distribution factor (Function) based on Pbtol\newline$a$ is the Plate length (long dimension)\newline$b$ is the Plate width (short dimension)
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{MG:J.tol}
+\phantomsection 
+\label{MG:J.tol}
+\\ \midrule \\
+Label & $J_{tol}$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $J_{tol}$ = $\log(\log(\frac{1}{1-P_{btol}})\frac{(\frac{a}{1000}\frac{b}{1000})^{m-1}}{k((E*1000)(\frac{h}{1000})^{2})^{m}*LDF})$
+\\ \midrule \\
+Description & $J_{tol}$ is the Stress distribution factor (Function) based on Pbtol\newline$P_{btol}$ is the Tolerable probability of breakage\newline$a$ is the Plate length (long dimension)\newline$b$ is the Plate width (short dimension)\newline$m$ is the Surface flaw parameter\newline$k$ is the Surface flaw parameter\newline$E$ is the Modulus of elasticity of glass\newline$h$ is the Actual thickness\newline$LDF$ is the Load Duration Factor
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+\subsubsection{Data Constraints}
+\label{Sec:DC}
+Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can  be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table 2 (). $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+\begin{longtable}{l l}
+\toprule
+Var & Value
+\\
+\midrule
+$d_{min}$ & 0.1 m
+\\
+$d_{max}$ & 0.1 m
+\\
+$AR_{max}$ & 5
+\\
+$w_{min}$ & 4.5 kg
+\\
+$w_{max}$ & 910 kg
+\\
+$SD_{min}$ & 6 m
+\\
+$SD_{max}$ & 130 m
+\\
+\bottomrule
+\caption{Table 3: Specification Parameter Values}
+\label{Table:T3SPV}
+\end{longtable}
+Table 4 () shows the constraints that must be satisfied by the output.
+\section{Requirements}
+\label{Sec:Rs}
+\subsection{Functional Requirements}
+\label{Sec:FRs}
+The following section provides the functional Requirements, the business tasks that the software is expected to complete.
+\begin{itemize}
+\item[R1:]Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
+\end{itemize}
+\begin{longtable*}{l l l}
+\toprule
+Symbol & Description & Units
+\\
+\midrule
+$a$ & Plate length (long dimension) & mm
+\\
+$b$ & Plate width (short dimension) & mm
+\\
+$SD_{x}$ & Stand off distance (x-component) & m
+\\
+$SD_{y}$ & Stand off distance (y-component) & m
+\\
+$SD_{z}$ & Stand off distance (z-component) & m
+\\
+$t$ & Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} & mm
+\\
+$w$ & Charge weight & kg
+\\
+$g$ & Glass type, g in {AN, HS, FT} & 
+\\
+$P_{btol}$ & Tolerable probability of breakage & 
+\\
+$TNT$ & TNT equivalent factor & 
+\\
+\bottomrule
+\label{Table:ToS}
+\end{longtable*}
+\begin{itemize}
+\item[R2:]The system shall set the known values as follows: 
+          \begin{enumerate}
+          \item{$m$, $k$, $E$, $t_{d}$ following A4}
+          \item{$LDF$ following A8}
+          \item{$LSF$ following A5}
+          \end{enumerate}
+\item[R3:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DC}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+\item[R4:]Output the input quantities from R1 and the known quantities from R2.
+\item[R5:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:SR]{Definition~T:SR} and \hyperref[T:SR]{Definition~T:SR}) are true, output the message ``For the given input parameters, the glass is considered safe." If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe."
+\item[R6:]Output the following quantities:
+          \begin{enumerate}
+          \item{Probability of breakage ($P_{b}$) (\hyperref[T:PoGB]{Definition~T:PoGB})}
+          \item{Load Resistance ($LR$) (\hyperref[T:CoC]{Definition~T:CoC})}
+          \item{Applied load (demand) ($q$) (\hyperref[T:CoD]{Definition~T:CoD})}
+          \item{Actual thickness ($h$) (\hyperref[MG:h]{Definition~MG:h})}
+          \item{Load Duration Factor ($LDF$) (\hyperref[MG:LDF]{Definition~MG:LDF})}
+          \item{Stress distribution factor (Function) ($J$) (\hyperref[MG:J]{Definition~MG:J})}
+          \item{Non-Factored Load ($NFL$) (\hyperref[MG:NFL]{Definition~MG:NFL})}
+          \item{Glass Type Factor ($GTF$) (\hyperref[MG:GTF]{Definition~MG:GTF})}
+          \item{Dimensionless load ($\hat{q}$) (\hyperref[MG:q.hat]{Definition~MG:q.hat})}
+          \item{Tolerable load ($\hat{q}_{tol}$) (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol})}
+          \item{Stress distribution factor (Function) based on Pbtol ($J_{tol}$) (\hyperref[MG:J.tol]{Definition~MG:J.tol})}
+          \item{Aspect Ratio ($AR$)}
+          \end{enumerate}
+\end{itemize}
+\subsection{Nonfunctional Requirements}
+\label{Sec:NRs}
+Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority nonfunctional Rs are correctness, verifiability, understandability, reusability, maintainability and portability.
+\section{Likely Changes}
+\label{Sec:LCs}
+\begin{itemize}
+\item[LC1:]A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
+\item[LC2:]A4, A8 - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+\item[LC3:]A5 - The software may be changed to accommodate more than a single lite.
+\item[LC4:]A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[LC5:]A7 - The software may be changed to consider more than just flexure of the glass.
+\end{itemize}
+\section{Traceability Matrices and Graphs}
+\label{Sec:TMaG}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table 5 (Table~\ref{Table:TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models with each other. Table 6 (Table~\ref{Table:TMStCBRaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Table 7 (Table~\ref{Table:TMStCBAaOI}) shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
+\begin{longtable}{l l l l l l l l l l l l l l l}
+\toprule
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[MG:B]{Definition~MG:B}) & DD2 (\hyperref[MG:h]{Definition~MG:h}) & DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) & DD4 (\hyperref[MG:J]{Definition~MG:J}) & DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) & DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) & DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) & DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) & DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol})
+\\
+\midrule
+T1 (\hyperref[T:SR]{Definition~T:SR}) &  & X & X &  &  &  &  &  &  &  &  &  &  & 
+\\
+T2 (\hyperref[T:SR]{Definition~T:SR}) & X &  &  & X & X &  &  &  &  &  &  &  &  & 
+\\
+IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) &  &  &  &  &  & X & X & X & X &  &  &  &  & 
+\\
+IM2 (\hyperref[T:CoC]{Definition~T:CoC}) &  &  &  &  &  &  &  &  &  & X & X &  &  & 
+\\
+IM3 (\hyperref[T:CoD]{Definition~T:CoD}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+DD1 (\hyperref[MG:B]{Definition~MG:B}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+DD2 (\hyperref[MG:h]{Definition~MG:h}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+DD4 (\hyperref[MG:J]{Definition~MG:J}) &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) &  &  &  &  &  &  & X &  &  &  &  &  & X & 
+\\
+DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) &  &  &  &  & X &  & X &  &  &  & X &  &  & 
+\\
+DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\\
+DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
+\label{Table:TMStCBIoDS}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l}
+\toprule
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[MG:B]{Definition~MG:B}) & DD2 (\hyperref[MG:h]{Definition~MG:h}) & DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) & DD4 (\hyperref[MG:J]{Definition~MG:J}) & DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) & DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) & DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) & DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) & DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FRs}) & R2 (in Section~\ref{Sec:FRs})
+\\
+\midrule
+R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+R2 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+R3 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+R4 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
+\\
+R5 (in Section~\ref{Sec:FRs}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+R6 (in Section~\ref{Sec:FRs}) &  &  & X & X & X &  & X & X & X & X & X & X & X & X &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
+\label{Table:TMStCBRaOI}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l}
+\toprule
+ & A1 (in Section~\ref{Sec:As}) & A2 (in Section~\ref{Sec:As}) & A3 (in Section~\ref{Sec:As}) & A4 (in Section~\ref{Sec:As}) & A5 (in Section~\ref{Sec:As}) & A6 (in Section~\ref{Sec:As}) & A7 (in Section~\ref{Sec:As}) & A8 (in Section~\ref{Sec:As})
+\\
+\midrule
+T1 (\hyperref[T:SR]{Definition~T:SR}) &  &  &  &  &  &  &  & 
+\\
+T2 (\hyperref[T:SR]{Definition~T:SR}) &  &  &  &  &  &  &  & 
+\\
+IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) &  &  &  & X &  & X & X & 
+\\
+IM2 (\hyperref[T:CoC]{Definition~T:CoC}) &  &  &  &  & X &  &  & 
+\\
+IM3 (\hyperref[T:CoD]{Definition~T:CoD}) &  &  &  &  &  &  &  & 
+\\
+DD1 (\hyperref[MG:B]{Definition~MG:B}) &  &  &  &  &  &  &  & 
+\\
+DD2 (\hyperref[MG:h]{Definition~MG:h}) &  &  &  &  &  &  &  & 
+\\
+DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) &  &  &  & X &  &  &  & X
+\\
+DD4 (\hyperref[MG:J]{Definition~MG:J}) &  &  &  &  &  &  &  & 
+\\
+DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) &  &  &  & X &  &  &  & 
+\\
+DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) &  &  &  &  &  &  &  & 
+\\
+DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) &  &  &  &  & X &  &  & 
+\\
+DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) &  &  &  &  &  &  &  & 
+\\
+DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) &  &  &  & X &  &  &  & 
+\\
+LC1 (in Section~\ref{Sec:LCs}) &  &  & X &  &  &  &  & 
+\\
+LC2 (in Section~\ref{Sec:LCs}) &  &  &  & X &  &  &  & X
+\\
+LC3 (in Section~\ref{Sec:LCs}) &  &  &  &  & X &  &  & 
+\\
+LC4 (in Section~\ref{Sec:LCs}) &  &  &  &  &  & X &  & 
+\\
+LC5 (in Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X & 
+\\
+R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+\\
+R2 (in Section~\ref{Sec:FRs}) &  &  &  & X & X &  &  & X
+\\
+R3 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+\\
+R4 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+\\
+R5 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+\\
+R6 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Table:TMStCBAaOI}
+\end{longtable}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure 2 (Figure~\ref{Figure:F2TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models on each other. Figure 3 (Figure~\ref{Figure:F3TMStCBRsaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Figure 4 (Figure~\ref{Figure:F4TMStCBAsaOI}) shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
+NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
+\begin{figure}
+\begin{center}
+\includegraphics{Trace.png}
+\caption{Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections}
+\label{Figure:F2TMStCBIoDS}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics{RTrace.png}
+\caption{Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items}
+\label{Figure:F3TMStCBRsaOI}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics{ATrace.png}
+\caption{Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Figure:F4TMStCBAsaOI}
+\end{center}
+\end{figure}
+\section{References}
+\label{Sec:R}
+\begin{itemize}
+\item[[1]:]N. Koothoor, ``A document drive approach to certifying scientific computing software," Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+\item[[2]:]W. S. Smith and L. Lai, ``A new requirements template for scientific computing," in Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt\'{e}, P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International Requirements Engineering Conference, 2005.
+\item[[3]:]J. Robertson and S. Robertson, ``Volere requirements specification template edition 16." ``www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf", 2012.
+\item[[4]:]ASTM Standards Committee, ``Standard practice for determining load resistance of glass in buildings," Standard E1300-09a, American Society for Testing and Material (ASTM), 2009.
+\item[[5]:]ASTM, developed by subcommittee C1408,Book of standards 15.02, ``Standard specification for flat glass,C1036."
+\item[[6]:]ASTM, developed by subcommittee C14.08,Book of standards 15.02, ``Specification for heat treated flat glass-Kind HS, kind FT coated and uncoated glass,C1048."
+\end{itemize}
+\section{Appendix}
+\label{Sec:A}
+This appendix holds the graphs (Figure~\ref{Figure:F53sdep()vSodvCw()} and Figure~\ref{Figure:F6Ndll()vAR()vSdf(()}) used for interpolating values needed in the models.
+\begin{figure}
+\begin{center}
+\includegraphics{ASTM_F2248-09.png}
+\caption{Figure 5: 3 second duration equivalent pressure ($q$) versus Stand off distance versus Charge weight ($m$)}
+\label{Figure:F53sdep()vSodvCw()}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics{ASTM_F2248-09_BeasonEtAl.png}
+\caption{Figure 6: Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio ($AR$) versus Stress distribution factor (Function) ($J$)}
+\label{Figure:F6Ndll()vAR()vSdf(()}
+\end{center}
+\end{figure}
+\end{document}

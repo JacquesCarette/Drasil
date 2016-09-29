@@ -7,7 +7,7 @@ GAME_PREF = Chipmunk_
 TESTS = swhs lss ssp glassbr gamephys
 
 all: $(TESTS)
-	@echo "DONE"
+	sh log_check.sh
 
 swhs:
 	cabal build swhs

@@ -5,7 +5,8 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, UFunc(..), Bound(..), DerivType(..)
+  , Expr(..), Relation, UFunc(..), Bound(..), DerivType(..), log, abs, sin, cos
+  , tan, sec, csc, cot
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -61,8 +62,9 @@ module Language.Drasil (
   , gen
 ) where
 
-
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
+import Prelude hiding (log, abs, sin, cos, tan)
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..),
+                             log, abs, sin, cos, tan, sec, csc, cot)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
                                  Section(..), Contents(..), SecCons(..),

@@ -135,6 +135,6 @@ cot e = UnaryOp (Cot e)
 data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
   
-cross :: Expr -> Expr -> Expr
-cross e1 e2 = BinaryOp (Cross e1 e2)
+--cross :: Expr -> Expr -> Expr
+--cross e1 e2 = BinaryOp (Cross e1 e2)
   

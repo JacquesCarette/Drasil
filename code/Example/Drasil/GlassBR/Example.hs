@@ -7,6 +7,7 @@ import Data.Drasil.SI_Units
 
 import Control.Lens((^.))
 import Data.Char(toLower)
+import Prelude hiding (log)
 
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
@@ -405,12 +406,12 @@ tolPre = fromEqn' (tolLoad ^. name) (tolLoad ^. descr) (tolLoad ^. symbol)
   tolPre_eq
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = UnaryOp (Log (UnaryOp (Log ((Int 1):/((Int 1):-(C pb_tol))))
+tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))
   :*((Grouping (((C plate_len):/(Int 1000)):*((C plate_width):/(Int 1000)))):^
   ((C sflawParamM) :- (Int 1)):/((C sflawParamK):*
   (Grouping (Grouping ((C mod_elas):*(Int 1000)):*
   (Grouping ((C act_thick):/(Int 1000))):^
-  (Int 2))):^(C sflawParamM):*(C loadDF)))))
+  (Int 2))):^(C sflawParamM):*(C loadDF))))
 
 tolStrDisFac :: EqChunk
 tolStrDisFac = fromEqn' (sdf_tol ^. name) (sdf_tol ^. descr) (sdf_tol ^. symbol) 

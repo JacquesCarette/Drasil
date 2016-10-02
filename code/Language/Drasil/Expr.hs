@@ -37,7 +37,7 @@ data Expr where
                                      -- each pair represents one case
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
-  -- BinaryOp :: BiFunc ->  Expr  -> Expr -> Expr
+  -- BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
   (:=) :: Expr -> Expr -> Expr
   (:<) :: Expr -> Expr -> Expr
@@ -87,9 +87,7 @@ instance Fractional Expr where
 
   
 --Known math functions. 
--- TODO: Move to its own file, not sure what to name it.
---       Should be in Data.Drasil.???
-
+-- TODO: Move the below to a separate file somehow. How to go about it?
 
 data Bound where
   Low :: Expr -> Bound -- Starting value
@@ -109,3 +107,34 @@ data UFunc where
   Sec :: Expr -> UFunc
   Csc :: Expr -> UFunc
   Cot :: Expr -> UFunc
+  
+log :: Expr -> Expr
+log e = UnaryOp (Log e)
+
+abs :: Expr -> Expr 
+abs e = UnaryOp (Abs e)
+
+sin :: Expr -> Expr
+sin e = UnaryOp (Sin e)
+
+cos :: Expr -> Expr 
+cos e = UnaryOp (Cos e)
+
+tan :: Expr -> Expr
+tan e = UnaryOp (Tan e)
+
+sec :: Expr -> Expr 
+sec e = UnaryOp (Sec e)
+
+csc :: Expr -> Expr
+csc e = UnaryOp (Csc e)
+
+cot :: Expr -> Expr 
+cot e = UnaryOp (Cot e)
+
+data BiFunc where
+  Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
+  
+cross :: Expr -> Expr -> Expr
+cross e1 e2 = BinaryOp (Cross e1 e2)
+  

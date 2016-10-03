@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Extract(dep, vars, toVC) where
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 
-import Language.Drasil.Expr (Expr(..), UFunc(..))
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
 import Language.Drasil.Chunk (VarChunk(..), Quantity, name, symbol, descr)
 
 --Get dependency from equation  
@@ -28,6 +28,7 @@ dep (a :< b)      = nub (dep a ++ dep b)
 dep (a :> b)      = nub (dep a ++ dep b)
 dep (UnaryOp u)   = dep (unpack u)
 dep (Grouping e)  = dep e
+dep (BinaryOp b)  = nub (concat $ map dep (binop b))
 
 --Get a list of VarChunks from an equation in order to print
 vars :: Expr -> [VarChunk]
@@ -48,8 +49,9 @@ vars (Case ls)     = nub (concat (map (vars . fst) ls))
 vars (a := b)      = nub (vars a ++ vars b)
 vars (a :> b)      = nub (vars a ++ vars b)
 vars (a :< b)      = nub (vars a ++ vars b)
-vars (UnaryOp u) = vars (unpack u)
+vars (UnaryOp u)   = vars (unpack u)
 vars (Grouping e)  = vars e
+vars (BinaryOp b)  = nub (concat $ map vars (binop b))
 
 unpack :: UFunc -> Expr
 unpack (Log e) = e
@@ -62,6 +64,11 @@ unpack (Tan e) = e
 unpack (Sec e) = e
 unpack (Csc e) = e
 unpack (Cot e) = e
+
+binop :: BiFunc -> [Expr]
+binop (Cross e f) = [e,f]
+
+
 -- Convert any chunk to a VarChunk as long as it is an instance of Quantity.
 -- Again, used for printing equations/descriptions mostly.
 toVC :: Quantity c => c -> VarChunk

@@ -36,6 +36,7 @@ data Function = Log
            | Sec
            | Csc
            | Cot
+           | Cross
            
 infixr 5 :+:
 data Spec = E Expr
@@ -97,3 +98,4 @@ instance Show Function where
   show Sec = "\\sec"
   show Csc = "\\csc"
   show Cot = "\\cot"
+  show Cross = "\\times"

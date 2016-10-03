@@ -321,6 +321,7 @@ makeFigure r c f =
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
+p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 
@@ -342,6 +343,11 @@ makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
 makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
 makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
+
+binfix_op :: Function -> [Expr] -> String
+binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
+binfix_op _ _ = error "Attempting to print binary operator with inappropriate" ++
+                   "number of operands (should be 2)"
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

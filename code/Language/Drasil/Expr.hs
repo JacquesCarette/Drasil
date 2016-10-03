@@ -37,7 +37,7 @@ data Expr where
                                      -- each pair represents one case
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
-  -- BinaryOp :: BiFunc -> Expr
+  BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
   (:=) :: Expr -> Expr -> Expr
   (:<) :: Expr -> Expr -> Expr
@@ -135,6 +135,6 @@ cot e = UnaryOp (Cot e)
 data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
   
---cross :: Expr -> Expr -> Expr
---cross e1 e2 = BinaryOp (Cross e1 e2)
+cross :: Expr -> Expr -> Expr
+cross e1 e2 = BinaryOp (Cross e1 e2)
   

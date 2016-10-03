@@ -1,6 +1,7 @@
 module Language.Drasil.HTML.Import where
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
+                             Bound(..),DerivType(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
@@ -43,6 +44,7 @@ expr e@(_ :> _)       = rel e
 expr e@(_ :< _)       = rel e
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
+expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
 
 ufunc :: UFunc -> (H.Function, H.Expr)
 ufunc (Log e) = (H.Log, expr e)
@@ -58,6 +60,9 @@ ufunc (Tan e) = (H.Tan, expr e)
 ufunc (Sec e) = (H.Sec, expr e)
 ufunc (Csc e) = (H.Csc, expr e)
 ufunc (Cot e) = (H.Cot, expr e)
+
+bfunc :: BiFunc -> (H.Function, [H.Expr])
+bfunc (Cross e1 e2) = (H.Cross, map expr [e1,e2])
 
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)

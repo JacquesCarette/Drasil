@@ -2,7 +2,8 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
 
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), Bound(..),DerivType(..))
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
+                             Bound(..),DerivType(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -42,8 +43,9 @@ expr (Case ps)         = if length ps < 2 then
 expr x@(_ := _)        = rel x
 expr x@(_ :> _)        = rel x
 expr x@(_ :< _)        = rel x
-expr (UnaryOp u)     = (\(x,y) -> T.Op x [y]) (ufunc u)
+expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
+expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
 
 ufunc :: UFunc -> (T.Function, T.Expr)
 ufunc (Log e) = (T.Log, expr e)
@@ -59,6 +61,9 @@ ufunc (Tan e) = (T.Tan, expr e)
 ufunc (Sec e) = (T.Sec, expr e)
 ufunc (Csc e) = (T.Csc, expr e)
 ufunc (Cot e) = (T.Cot, expr e)
+
+bfunc :: BiFunc -> (T.Function, [T.Expr])
+bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)

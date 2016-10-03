@@ -219,6 +219,7 @@ makeFigure r c f = refwrap r (image f c $$ caption c)
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
+p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Integral bs wrtc) (x:[]) = 
@@ -238,6 +239,11 @@ makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
 makeIBound (Just low, Nothing)   = sub (p_expr low)
 makeIBound (Nothing, Just high)  = sup (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
+
+binfix_op :: Function -> [Expr] -> String
+binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
+binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
+                   "number of operands (should be 2)"
 
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

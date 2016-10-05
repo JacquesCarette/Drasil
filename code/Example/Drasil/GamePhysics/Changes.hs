@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.ChipmunkChanges where
+module Drasil.GamePhysics.Changes where
 
 import Language.Drasil
 import Drasil.GamePhysics.ChipmunkModules

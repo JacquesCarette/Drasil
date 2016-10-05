@@ -17,7 +17,7 @@ import Drasil.GamePhysics.ChipmunkTMods
 import Drasil.GamePhysics.ChipmunkDataDefs
 
 import Drasil.GamePhysics.ChipmunkModules
-import Drasil.GamePhysics.ChipmunkChanges
+import Drasil.GamePhysics.Changes
 import Drasil.GamePhysics.ChipmunkReqs
 
 chipmunkSRS :: Document

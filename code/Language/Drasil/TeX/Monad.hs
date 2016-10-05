@@ -6,7 +6,7 @@ import Text.PrettyPrint (($$))
 import qualified Text.PrettyPrint as TP
 
 import Control.Applicative hiding (empty)
-import Data.Monoid()
+import Data.Monoid (Monoid(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.Unicode

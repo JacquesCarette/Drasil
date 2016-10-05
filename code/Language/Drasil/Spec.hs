@@ -30,14 +30,14 @@ data Sentence where
   -- Direct concatenation of two Specs (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
 
+-- Language of unit equations, to define a unit relative
+-- to another
 --Moving this here to avoid cyclic imports
 data USymb = UName Symbol
            | UProd [USymb]
            | UPow USymb Integer --can be negative, should not be 0
            | UDiv USymb USymb   --Get proper division (not neg pow)
                                 --  necessary for things like J/(kg*C)
--- Language of unit equations, to define a unit relative
--- to another
 
 data RefType = Tab
              | Fig

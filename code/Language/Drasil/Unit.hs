@@ -5,13 +5,14 @@ module Language.Drasil.Unit (
   , FundUnit(..), DerUChunk(..)      -- data-structures
   , UnitDefn(..)                     -- wrapper for 'Unit' class
   , from_udefn, makeDerU, unitCon
+  , (^:), new_unit
   ) where
 
 import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), Concept(..),
          Quantity(..))
-import Language.Drasil.Spec (Sentence(..), USymb)
+import Language.Drasil.Spec (Sentence(..), USymb(..))
 
 -- Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.
@@ -92,3 +93,10 @@ ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 instance Unit    UnitDefn where unit  = ulens unit
 instance Chunk   UnitDefn where name  = ulens name
 instance Concept UnitDefn where descr = ulens descr
+
+--- These conveniences go here, because we need the class
+(^:) :: Unit u => u -> Integer -> USymb
+u ^: i = UPow (u ^. unit) i
+
+new_unit :: String -> USymb -> DerUChunk
+new_unit s u = makeDerU (unitCon s) (USynonym u)

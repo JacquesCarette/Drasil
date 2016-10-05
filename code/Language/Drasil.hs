@@ -12,6 +12,7 @@ module Language.Drasil (
   -- Unit
   , Unit(..), Unit'(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
   , from_udefn , makeDerU, unitCon
+  , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
   , descr, Quantity(..)

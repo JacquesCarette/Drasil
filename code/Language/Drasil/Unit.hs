@@ -5,7 +5,7 @@ module Language.Drasil.Unit (
   , FundUnit(..), DerUChunk(..)      -- data-structures
   , UnitDefn(..)                     -- wrapper for 'Unit' class
   , from_udefn, makeDerU, unitCon
-  , (^:), new_unit
+  , (^:), (/:), (*:), new_unit
   ) where
 
 import Control.Lens (Simple, Lens, set, (^.))
@@ -98,5 +98,10 @@ instance Concept UnitDefn where descr = ulens descr
 (^:) :: Unit u => u -> Integer -> USymb
 u ^: i = UPow (u ^. unit) i
 
+(/:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
+u1 /: u2 = UDiv (u1 ^. unit) (u2 ^. unit)
+
+(*:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
+u1 *: u2 = UProd [(u1 ^. unit), (u2 ^. unit)]
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)

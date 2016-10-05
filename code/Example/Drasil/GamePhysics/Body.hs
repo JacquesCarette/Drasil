@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.ChipmunkBody where
+module Drasil.GamePhysics.Body where
 
 import Data.Char (toLower, toUpper)
 import Data.List (intersperse)

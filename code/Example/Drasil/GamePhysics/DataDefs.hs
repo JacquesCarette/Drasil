@@ -1,7 +1,7 @@
-module Drasil.GamePhysics.ChipmunkDataDefs where
+module Drasil.GamePhysics.DataDefs where
 
-import Drasil.GamePhysics.ChipmunkUnits
-import Drasil.GamePhysics.ChipmunkUnitals
+import Drasil.GamePhysics.Units
+import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 
 import Language.Drasil

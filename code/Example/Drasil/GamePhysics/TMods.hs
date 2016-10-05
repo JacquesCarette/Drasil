@@ -1,6 +1,6 @@
-module Drasil.GamePhysics.ChipmunkTMods where
+module Drasil.GamePhysics.TMods where
 
-import Drasil.GamePhysics.ChipmunkUnitals
+import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 
 import Language.Drasil

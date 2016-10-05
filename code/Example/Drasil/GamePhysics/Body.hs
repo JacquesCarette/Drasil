@@ -10,15 +10,15 @@ import Drasil.Units
 
 import Drasil.TableOfSymbols
 
-import Drasil.GamePhysics.ChipmunkUnits
-import Drasil.GamePhysics.ChipmunkUnitals
+import Drasil.GamePhysics.Units
+import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
-import Drasil.GamePhysics.ChipmunkTMods
-import Drasil.GamePhysics.ChipmunkDataDefs
+import Drasil.GamePhysics.TMods
+import Drasil.GamePhysics.DataDefs
 
-import Drasil.GamePhysics.ChipmunkModules
+import Drasil.GamePhysics.Modules
 import Drasil.GamePhysics.Changes
-import Drasil.GamePhysics.ChipmunkReqs
+import Drasil.GamePhysics.Reqs
 
 chipmunkSRS :: Document
 chipmunkSRS = Document

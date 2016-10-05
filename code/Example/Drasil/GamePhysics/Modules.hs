@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.ChipmunkModules where
+module Drasil.GamePhysics.Modules where
 
 import Language.Drasil
 import Drasil.GamePhysics.Concepts

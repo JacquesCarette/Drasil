@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.ChipmunkUnits where
+module Drasil.GamePhysics.Units where
 
 import Language.Drasil
 import Data.Drasil.SI_Units

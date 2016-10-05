@@ -2,7 +2,7 @@ module Drasil.GamePhysics.ChipmunkDataDefs where
 
 import Drasil.GamePhysics.ChipmunkUnits
 import Drasil.GamePhysics.ChipmunkUnitals
-import Drasil.GamePhysics.ChipmunkConcepts
+import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units

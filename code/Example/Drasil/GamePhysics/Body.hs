@@ -12,7 +12,7 @@ import Drasil.TableOfSymbols
 
 import Drasil.GamePhysics.ChipmunkUnits
 import Drasil.GamePhysics.ChipmunkUnitals
-import Drasil.GamePhysics.ChipmunkConcepts
+import Drasil.GamePhysics.Concepts
 import Drasil.GamePhysics.ChipmunkTMods
 import Drasil.GamePhysics.ChipmunkDataDefs
 

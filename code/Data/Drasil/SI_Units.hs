@@ -54,7 +54,7 @@ centigrade = DUC
 
 joule = DUC
     (UD (CC "Joule" (S "energy")) (UName $ Atomic "J"))
-    (USynonym (UProd [kilogram ^. unit, UPow (metre ^. unit) 2,
+    (USynonym (UProd [kilogram ^. unit, m_2 ^. unit,
                       UPow (second ^. unit) (-2)]))
 
 calorie = DUC

@@ -1,6 +1,5 @@
 module Drasil.GamePhysics.DataDefs where
 
-import Drasil.GamePhysics.Units
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 

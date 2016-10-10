@@ -1,7 +1,7 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..))
+  UnitDefn(..), new_unit, (^:))
 import Language.Drasil.Unicode (Special(Circle))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..),Sentence(..))
@@ -31,7 +31,18 @@ mole     = fund "Mole"     "amount of substance"  "mol"
 ampere   = fund "Ampere"   "electric current"     "A"
 candela  = fund "Candela"  "luminous intensity"   "cd"
 
-------------- END FUNDAMENTALS -------------------------------------------------
+------------- Commonly defined units -------------------------------------------
+
+-- Some of these units are easiest to define via others less common names, 
+-- which we define first.
+s_2 :: DerUChunk
+s_2 = new_unit "seconds squared" $ second ^: 2
+
+m_2, m_3 :: DerUChunk
+m_2 = new_unit "square metres"   $ metre ^: 2
+m_3 = new_unit "cubic metres"    $ metre ^: 3
+
+-- And now for the ones with 'common' names
 
 centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre, 
   kilopascal, radians :: DerUChunk

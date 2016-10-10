@@ -12,13 +12,6 @@ cpSIUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 ----- Derived Units -----
 
-s_2 :: DerUChunk
-s_2 = new_unit "seconds squared" $ second ^: 2
-
-m_2, m_3 :: DerUChunk
-m_2 = new_unit "square metres"   $ metre ^: 2
-m_3 = new_unit "cubic metres"    $ metre ^: 3
-
 velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
 velU   = new_unit "velocity"     $ metre /: second
 accelU = new_unit "acceleration" $ metre /: s_2

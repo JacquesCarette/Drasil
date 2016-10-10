@@ -6,20 +6,6 @@ import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
---m^2--
-m_2 :: DerUChunk
-m_2 = makeDerU (unitCon "square metres") m_2eqn
-
-m_2eqn :: UDefn
-m_2eqn = USynonym (UPow (metre ^. unit) (2))
-
---m^3--
-m_3 :: DerUChunk
-m_3 = makeDerU (unitCon "cubic metres") m_3eqn
-
-m_3eqn :: UDefn
-m_3eqn = USynonym (UPow (metre ^. unit) (3))
-
 --kg/m^3--
 densityU :: DerUChunk
 densityU = makeDerU (unitCon "density") densityU_eqn

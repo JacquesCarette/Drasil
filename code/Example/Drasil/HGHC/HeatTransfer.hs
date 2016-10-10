@@ -1,4 +1,4 @@
-module Drasil.HeatTransfer where
+module Drasil.HGHC.HeatTransfer where
 
 import Language.Drasil
 import Data.Drasil.SI_Units

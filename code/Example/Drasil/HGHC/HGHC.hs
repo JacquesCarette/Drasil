@@ -1,12 +1,12 @@
-module Drasil.HGHC(srsBody, mgBody, misBody) where
+module Drasil.HGHC.HGHC(srsBody, mgBody, misBody) where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
 
-import Drasil.HeatTransfer
+import Drasil.HGHC.HeatTransfer
 import Drasil.Units
 import Drasil.TableOfSymbols
-import Drasil.Modules
+import Drasil.HGHC.Modules
 
 import Language.Drasil
 import Data.Drasil.SI_Units (si_units)

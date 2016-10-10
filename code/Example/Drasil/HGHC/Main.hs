@@ -2,8 +2,7 @@ module Main where
 
 import Language.Drasil (DocType(SRS,MG,MIS,Website),Recipe(..),gen)
 
-import Drasil.HGHC (srsBody,mgBody,misBody)
-import Drasil.PCM.Body (pcm_srs)
+import Drasil.HGHC.HGHC (srsBody,mgBody,misBody)
 
 docs :: [Recipe]
 docs = [Recipe (Website "SRS") srsBody,
@@ -11,9 +10,7 @@ docs = [Recipe (Website "SRS") srsBody,
         Recipe (Website "MIS") misBody,
         Recipe (SRS "SRS") srsBody,
         Recipe (MG "MG") mgBody,
-        Recipe (MIS "MIS") misBody,
-        Recipe (SRS "PCM_SRS") pcm_srs,
-        Recipe (Website "PCM_SRS") pcm_srs
+        Recipe (MIS "MIS") misBody
        ]
 
 main :: IO ()            

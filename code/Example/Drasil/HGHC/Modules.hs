@@ -1,7 +1,7 @@
-module Drasil.Modules where
+module Drasil.HGHC.Modules where
 
 import Language.Drasil
-import Drasil.HeatTransfer
+import Drasil.HGHC.HeatTransfer
 import Drasil.Concepts
 
 -- HW Hiding Module

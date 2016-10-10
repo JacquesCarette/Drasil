@@ -16,7 +16,7 @@ import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
 
-import Drasil.Units
+import Drasil.TableOfUnits
 import Drasil.SWHS.TableOfSymbols
 
 import Language.Drasil

@@ -1,6 +1,6 @@
 -- Standard code to make a table of units
 -- First true example of a (small!) recipe.
-module Drasil.Units(table_of_units) where
+module Drasil.TableOfUnits(table_of_units) where
 
 import Control.Lens ((^.))
 import Data.Char (toLower)

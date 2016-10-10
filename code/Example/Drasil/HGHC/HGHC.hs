@@ -4,7 +4,7 @@ import Data.List (intersperse)
 import Control.Lens ((^.))
 
 import Drasil.HGHC.HeatTransfer
-import Drasil.Units
+import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.HGHC.Modules
 

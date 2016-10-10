@@ -6,9 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-import Drasil.Units
-
 import Drasil.TableOfSymbols
+import Drasil.TableOfUnits
 
 import Drasil.GamePhysics.Units
 import Drasil.GamePhysics.Unitals

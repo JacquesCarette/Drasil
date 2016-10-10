@@ -1,3 +1,4 @@
+#!/bin/sh
 SWHS_PREF="SWHS_"
 LSS_PREF=""
 SSP_PREF="SSP_"

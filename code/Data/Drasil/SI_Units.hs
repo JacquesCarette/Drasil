@@ -1,7 +1,7 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..), new_unit, (^:))
+  UnitDefn(..), new_unit, (^:), (/:), (*:))
 import Language.Drasil.Unicode (Special(Circle))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..),Sentence(..))
@@ -63,7 +63,7 @@ calorie = DUC
 
 watt = DUC
   (UD (CC "Watt" (S "power")) (UName $ Atomic "W"))
-  (USynonym (UProd [kilogram ^. unit, UPow (metre ^. unit)2, 
+  (USynonym (UProd [kilogram ^. unit, m_2 ^. unit,
                     UPow (second ^. unit) (-3)]))
 
 kilowatt = DUC
@@ -93,3 +93,19 @@ kilopascal = DUC
 radians = DUC
     (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
     (USynonym (UProd [metre ^. unit, UPow (metre ^. unit) (-1)]))
+
+velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
+velU         = new_unit "velocity"             $ metre /: second
+accelU       = new_unit "acceleration"         $ metre /: s_2
+
+angVelU      = new_unit "angular velocity"     $ radians /: second
+angAccelU    = new_unit "angular acceleration" $ radians /: s_2
+momtInertU   = new_unit "moment of inertia"    $ kilogram *: s_2
+densityU     = new_unit "density"              $ kilogram /: m_3
+
+impulseU, springConstU, torqueU :: DerUChunk
+impulseU     = new_unit "impulse"              $ newton *: second
+springConstU = new_unit "spring constant"      $ newton /: metre
+torqueU      = new_unit "torque"               $ newton *: metre
+
+

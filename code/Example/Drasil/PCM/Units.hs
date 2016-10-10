@@ -5,13 +5,6 @@ import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
---kg/m^3--
-densityU :: DerUChunk
-densityU = makeDerU (unitCon "density") densityU_eqn
-
-densityU_eqn :: UDefn
-densityU_eqn = USynonym (UDiv (kilogram ^. unit) (m_3 ^. unit))
-
 --J/(kg*C)--
 heat_capacity :: DerUChunk
 heat_capacity = makeDerU (CC "specific heat"

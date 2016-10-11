@@ -184,7 +184,7 @@ Software Decision Module & Sequence Data Structure Module
 \end{longtable}
 \section{Module Decomposition}
 \label{Sec:MD}
-Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is HGHC, this means that the module is provided by the HGHC program. If the entry is MATLAB, this means that the module is provided by the MATLAB programming language. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
+Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is program, this means that the module is provided by the program. If the entry is MATLAB, this means that the module is provided by the MATLAB programming language. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
 \subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
 \label{Sec:HHM()}
 \begin{description}
@@ -204,70 +204,70 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \begin{description}
 \item[Secrets:]The algorithm for coordinating the running of the program.
 \item[Services:]Provides the main program.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Input Format Module (M\ref{Minputformat})}
 \label{Sec:IFM()}
 \begin{description}
 \item[Secrets:]The format and structure of the input data.
 \item[Services:]Reads the input data from an input file, and/or prompted command line inputs. Input data includes the x,y coordinates of the slope, with a set of coordinates for each layer. For each layer it's soil properties of effective angle of friction, effective cohesion, dry unit weight, saturated unit weight, elastic modulus, and Poisson's ratio are stored in vectors of soil properties. If a piezometric surface exists in the slope it's coordinates and the unit weight of water are also included in the input. Lastly an expected range for the entrance and exit points of the critical slip surface are inputted.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Output Format Module (M\ref{Moutputformat})}
 \label{Sec:OFM()}
 \begin{description}
 \item[Secrets:]The format and structure of the output data.
 \item[Services:]Outputs the results of the calculations, including the factor of safety for the critical slip calculated by the Morgenstern Price Module and Rigid Finite Element Method Module, and a plot of the critical slip surface on the slope geometry, with the showing the element displacements as calculated by the RFEM Module.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Genetic Algorithm Module (M\ref{Mgeneticalgorithm})}
 \label{Sec:GAM()}
 \begin{description}
 \item[Secrets:]Algorithm to identify the slip surface that has the minimum factor of safety, based on the inputs.
 \item[Services:]Searches the slope for the critical slip surface with the minimum factor of safety
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Kinetic Admissibility Module (M\ref{Mkineticadmissibility})}
 \label{Sec:KAM()}
 \begin{description}
 \item[Secrets:]Algorithm to determine if a given slip surface passes or fails a set of admissibility criteria.
 \item[Services:]Some slip surfaces are physically unlikely or impossible to occur in a slip surface, such as slip surfaces containing sharp angles, or going above the slope surface. Ensures randomly generated or mutated slopes from the Genetic Algorithm Module are physically possible according to the criteria of the Kinematic Admissibility Module.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Slip Slicer Module (M\ref{Mslipslicer})}
 \label{Sec:SSM()}
 \begin{description}
 \item[Secrets:]Algorithm to determine the coordinates of where the slip surface interslice nodes occur.
 \item[Services:]When preparing a slip surface for analysis by the Morgenstern Price Module or the RFEM Module, the x-coordinates defining the boundaries of the slices are identified and stored in a vector.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Slip Weighting Module (M\ref{Mslipweighting})}
 \label{Sec:SWM()}
 \begin{description}
 \item[Secrets:]The weighting for each slip surface in a set of slip surfaces, based on each slip surfaces factor of safety.
 \item[Services:]Weights a set of slip surfaces generated by the Genetic Algorithm Module based on their factors of safety. A slip surface with a low factor of safety will have a high weight as it is more likely to be or to lead to generation of the critical slip surface.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Morgenstern Price Solver Module (M\ref{Mmorgensternpricesolver})}
 \label{Sec:MPSM()}
 \begin{description}
 \item[Secrets:]The factor of safety of a given slip surface.
 \item[Services:]Calculates the factor of safety of a given slip surface, through implementation of a Morgenstern Price slope stability analysis method.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{RFEM Solver Module (M\ref{MRFEMsolver})}
 \label{Sec:RSM()}
 \begin{description}
 \item[Secrets:]The algorithm to perform a Rigid Finite Element Method analysis of the slope.
 \item[Services:]Calculate the global factor of safety, local slice factors of safety, and local slice displacements of a given slip surface under given conditions, through implementation of a rigid finite element slope stability analysis method.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Slice Property Sorter Module (M\ref{Mslicepropertysorter})}
 \label{Sec:SPSM()}
 \begin{description}
 \item[Secrets:]Algorithm to assigns soil properties to slices based on the location of the slice with respect to the different soil layers.
 \item[Services:]When performing slip analysis with the RFEM Solver Module or Morgenstern Price Module, the base and interslice surfaces of each slice in the analysis requires a soil constant. Slice Property Sorter Module identifies which soil layer the surface is in to assign properties from that soil layer, and uses a weighting scheme when the surface crosses multiple soil layers.
-\item[Implemented By:]HGHC
+\item[Implemented By:]program
 \end{description}
 \subsection{Software Decision Module}
 \label{Sec:SDM}

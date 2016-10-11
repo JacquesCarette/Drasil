@@ -4,6 +4,14 @@ import Language.Drasil
 import Drasil.HGHC.HeatTransfer
 import Drasil.Concepts
 
+import Control.Lens ((^.))
+
+self :: ConceptChunk
+self = CC "HGHC" (S "HGHC")
+
+executable :: ConceptChunk
+executable = CC (self ^. name) (self ^. descr :+: (S " ") :+: program ^. descr)
+
 -- HW Hiding Module
 mod_hw_desc :: ConceptChunk
 mod_hw_desc = CC "hardware hiding"
@@ -47,7 +55,7 @@ mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
 mod_calc :: ModuleChunk
 mod_calc = makeImpModule mod_calc_desc
   (S "The equations used to calculate heat transfer coefficients")
-  program
+  executable
   [meth_h_g, meth_h_c]
   []
   (Just mod_behav)

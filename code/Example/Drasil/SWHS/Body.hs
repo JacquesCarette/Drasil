@@ -17,7 +17,7 @@ import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
 
 import Drasil.TableOfUnits
-import Drasil.SWHS.TableOfSymbols
+import Drasil.TableOfSymbols
 
 import Language.Drasil
 import Data.Drasil.SI_Units 

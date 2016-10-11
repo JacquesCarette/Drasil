@@ -22,7 +22,8 @@ melting = makeCC "Melting"
   "Phase change from solid to liquid"
 phase_change = makeCC "Phase change" "Change of state"
 sens_heat = makeCC "Sensible heat" "Sensible heating"
-specific_heat = makeCC "Specific heat" "Heat capacity per unit mass."
+specific_heat = makeCC "Specific heat" "Heat capacity per unit mass." 
+  --Specific Heat needs to be removed and replaced with a UnitalChunk
 thermal_analysis = makeCC "Thermal analysis" ("The study of material " ++
                    "properties as they change with temperature")
 thermal_conduction = makeCC "Thermal conduction" ("The transfer of heat " ++

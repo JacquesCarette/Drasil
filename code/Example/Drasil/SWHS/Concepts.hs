@@ -17,14 +17,16 @@ progName    = makeCC "SWHS" "Solar Water Heating System"
 
 ---ConceptChunks---
 
-charging, coil, discharging, gauss_div, matlab, mech_energy, os, perfect_insul,
-  phase_change_material, program, swhs_pcm, tank, tank_pcm, transient, 
-  water :: ConceptChunk
+charging, coil, discharging, gauss_div, heat_flux, matlab, mech_energy, os,
+  perfect_insul, phase_change_material, program, specific_heat, swhs_pcm, tank,
+  tank_pcm, transient, water :: ConceptChunk
 
 charging = makeCC "Charging" "Charging of the tank"
 coil = makeCC "Heating coil" "Coil in tank that heats by absorbing solar energy"
 discharging = makeCC "Discharging" "Discharging of the tank"
 gauss_div = makeCC "Gauss's Divergence theorem" "Gauss's Divergence theorem"
+heat_flux = makeCC "Heat flux" "The rate of heat energy transfer per unit area."
+  --FIXME: Heat flux needs to be a Unital Chunk
 matlab = makeCC "MATLAB" "MATLAB programming language"
 mech_energy = makeCC "Mechanical energy" ("The energy that comes from motion" ++
               " and position")
@@ -36,6 +38,8 @@ phase_change_material = makeCC "Phase Change Material (PCM)" ("A substance " ++
                         "release large amounts of heat at a constant " ++
                         "temperature.")
 program = makeCC "SWHS" "SWHS program"
+specific_heat = makeCC "Specific heat" "Heat capacity per unit mass." 
+  --FIXME: Specific Heat needs to be a UnitalChunk
 swhs_pcm = makeCC "solar water heating systems incorporating PCM" ("Solar " ++
            "water heating systems incorporating phase change material")
 tank = makeCC "Tank" "Solar water heating tank"

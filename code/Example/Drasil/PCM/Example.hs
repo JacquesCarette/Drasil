@@ -3,7 +3,9 @@ module Drasil.PCM.Example where
 import Drasil.PCM.Units
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Documentation
 
 import Control.Lens ((^.))
 
@@ -86,20 +88,11 @@ acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
   physSysDescr,requirement,softwareRS,sWHS,theoreticMod]
   
-assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
-  physSysDescr,requirement,softwareRS,sWHS,theoreticMod :: ConceptChunk
-assumption    = makeCC "A" "Assumption"
-dataDefn      = makeCC "DD" "Data Definition"
-genDefn       = makeCC "GD" "General Definition"
-goalStmt      = makeCC "GS"  "Goal Statement"
-instanceMod   = makeCC "IM" "Instance Model"
-likelyChange  = makeCC "LC" "Likely Change"
+oDE, physSysDescr, sWHS :: ConceptChunk
+
 oDE           = makeCC "ODE" "Ordinary Differential Equation"
 physSysDescr  = makeCC "PS" "Physical System Description"
-requirement   = makeCC "R" "Requirement"
-softwareRS    = makeCC "SRS" "Software Requirements Specification"
 sWHS          = makeCC "SWHS" "Solar Water Heating System"
-theoreticMod  = makeCC "T" "Theoretical Model"
 
 ----EqChunks----
 --Theoretical models--

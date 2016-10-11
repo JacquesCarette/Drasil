@@ -20,9 +20,17 @@ import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units 
+import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.Thermodynamics
 
 --Redundant import warnings
+
+acronyms :: [ConceptChunk]
+acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
+  phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -456,7 +464,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               (htCap_L_P ^. descr) :+: S " have no spatial variation; that " :+:
               S "is, they are each constant over their entire " :+:
               (volume ^. descr) :+: S " [GD2].")),
-              (S (assumption ^. name) :+: S "7", Flat ((law_cooling ^.
+              (S (assumption ^. name) :+: S "7", Flat ((law_conv_cooling ^.
               descr) :+: S " applies between the " :+: (sMap (map toLower) (S
               (coil ^. name))) :+: S " and the " :+: (sMap (map toLower) (S
               (water ^. name))) :+: S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
@@ -466,7 +474,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               (S (assumption ^. name) :+: S "9", Flat (S "The " :+: (temp_C ^.
               descr) :+: S " does not vary along its length [" :+:
               makeRef s4_2_4_DD1 :+: S ", LC3].")),
-              (S (assumption ^. name) :+: S "10", Flat ((law_cooling ^. 
+              (S (assumption ^. name) :+: S "10", Flat ((law_conv_cooling ^. 
               descr) :+: S " applies between the " :+: (sMap (map toLower) (S
               (water ^. name))) :+: S " and the " :+: S (phsChgMtrl ^. name) :+:
               S " [" :+: makeRef s4_2_4_DD2 :+: S "].")),
@@ -644,7 +652,7 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "can be solved once IM1 has been solved. The solution of " :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. descr) :+: S " and " :+: (pcm_E ^. descr) :+:
-               S " depend on the " :+: (sMap (map toLower) (S (phs_change ^. 
+               S " depend on the " :+: (sMap (map toLower) (S (phase_change ^. 
                name))) :+: S ". (Instance models are left out because they " :+:
                S "are not currently implemented in Drasil.)")]
 

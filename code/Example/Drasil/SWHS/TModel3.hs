@@ -4,10 +4,11 @@ import Data.Char (toLower)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.DataDefs
-import Drasil.SWHS.Concepts
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 
@@ -35,8 +36,8 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
           S " is the " :+: (time ^. descr) :+: S " (" :+: Sy (time ^. unit) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
-          (S (phs_change ^. name))) :+: S " is not complete. The status of " :+:
-          S "the " :+: (sMap (map toLower) (S (phs_change ^. name))) :+:
+          (S (phase_change ^. name))) :+: S " is not complete. The status of " :+:
+          S "the " :+: (sMap (map toLower) (S (phase_change ^. name))) :+:
           S " depends on the " :+: (melt_frac ^. descr) :+: S ", " :+: 
           makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:

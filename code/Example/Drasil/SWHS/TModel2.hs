@@ -4,10 +4,11 @@ import Data.Char (toLower)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.TModel3
-import Drasil.SWHS.Concepts
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 
@@ -45,8 +46,8 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
           (sens_heat ^. descr) :+: S " occurs as long as the material does " :+: 
           S "not reach a " :+: (temp ^. descr) :+: S " where a " :+: 
-          (sMap (map toLower) (S (phs_change ^. name))) :+: S " occurs. A " :+:
-          (sMap (map toLower) (S (phs_change ^. name))) :+: S " occurs if " :+:
+          (sMap (map toLower) (S (phase_change ^. name))) :+: S " occurs. A " :+:
+          (sMap (map toLower) (S (phase_change ^. name))) :+: S " occurs if " :+:
           P (temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:
           S " or " :+: P (temp ^. symbol) :+: S "=" :+: 
           P (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 

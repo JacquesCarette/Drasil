@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Drasil.SWHS.Concepts
+import Data.Drasil.Concepts.Documentation
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,

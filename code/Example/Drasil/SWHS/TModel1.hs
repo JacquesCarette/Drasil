@@ -4,11 +4,12 @@ module Drasil.SWHS.TModel1 where
 
 import Data.Char (toLower)
 
-
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
 
 import Language.Drasil
+
+import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 

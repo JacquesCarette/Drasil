@@ -92,7 +92,7 @@ kilopascal = DUC
 
 radians = DUC
     (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
-    (USynonym (UProd [metre ^. unit, UPow (metre ^. unit) (-1)]))
+    (USynonym (metre /: metre))
 
 velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
 velU         = new_unit "velocity"             $ metre /: second

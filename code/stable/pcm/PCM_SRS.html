@@ -1,0 +1,756 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="PCM_SRS.css">
+<title>
+Software Requirements Specification for Solar Water Heating Systems
+</title>
+</head>
+<body>
+<div class="title">
+<h1>
+Software Requirements Specification for Solar Water Heating Systems
+</h1>
+</div>
+<div class="author">
+<h2>
+Thulasi Jegatheesan
+</h2>
+</div>
+<a id="Sec:RM">
+<div class="section">
+<h2>
+Reference Material
+</h2>
+<p class="paragraph">
+This section records information for easy reference
+</p>
+<a id="Sec:ToU">
+<div class="subsection">
+<h3>
+Table of Units
+</h3>
+<p class="paragraph">
+Throughout this document SI (Syst&egrave;me International d'Unit&eacute;s) is employed as the unit system. In addition to the basic units, several derived units are employed as described below. For each unit, the symbol is given followed by a description of the unit followed by the SI name.
+</p>
+<a id="Table:ToU">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Name
+</th>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+length
+</td>
+<td>
+Metre
+</td>
+</tr>
+<tr>
+<td>
+kg
+</td>
+<td>
+mass
+</td>
+<td>
+Kilogram
+</td>
+</tr>
+<tr>
+<td>
+s
+</td>
+<td>
+time
+</td>
+<td>
+Second
+</td>
+</tr>
+<tr>
+<td>
+&deg;C
+</td>
+<td>
+temperature
+</td>
+<td>
+Centigrade
+</td>
+</tr>
+<tr>
+<td>
+J
+</td>
+<td>
+energy
+</td>
+<td>
+Joule
+</td>
+</tr>
+<tr>
+<td>
+W
+</td>
+<td>
+power
+</td>
+<td>
+Watt
+</td>
+</tr>
+</table>
+<p class="caption">
+Table of Units
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:ToS">
+<div class="subsection">
+<h3>
+Table of Symbols
+</h3>
+<p class="paragraph">
+The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems.
+</p>
+<a id="Table:ToS">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Units
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+A<sub>C</sub>
+</td>
+<td>
+m<sup>2</sup>
+</td>
+<td>
+coil surface area
+</td>
+</tr>
+<tr>
+<td>
+A<sub>in</sub>
+</td>
+<td>
+m<sup>2</sup>
+</td>
+<td>
+surface area over which heat is transferred in
+</td>
+</tr>
+<tr>
+<td>
+A<sub>out</sub>
+</td>
+<td>
+m<sup>2</sup>
+</td>
+<td>
+surface area over which heat is transferred out
+</td>
+</tr>
+<tr>
+<td>
+C
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+<td>
+specific heat capacity
+</td>
+</tr>
+<tr>
+<td>
+C<sup>L</sup>
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+<td>
+specific heat capacity of a liquid
+</td>
+</tr>
+<tr>
+<td>
+C<sub>W</sub>
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+<td>
+specific heat capacity of water
+</td>
+</tr>
+<tr>
+<td>
+D
+</td>
+<td>
+m
+</td>
+<td>
+diameter of tank
+</td>
+</tr>
+<tr>
+<td>
+g
+</td>
+<td>
+W/(m<sup>2</sup>)
+</td>
+<td>
+volumetric heat generation per unit volume
+</td>
+</tr>
+<tr>
+<td>
+h
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+<td>
+convective heat transfer coefficient
+</td>
+</tr>
+<tr>
+<td>
+h<sub>C</sub>
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+<td>
+convective heat transfer between coil and water
+</td>
+</tr>
+<tr>
+<td>
+L
+</td>
+<td>
+m
+</td>
+<td>
+length of tank
+</td>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+kg
+</td>
+<td>
+mass
+</td>
+</tr>
+<tr>
+<td>
+m<sub>W</sub>
+</td>
+<td>
+kg
+</td>
+<td>
+mass of water
+</td>
+</tr>
+<tr>
+<td>
+q
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+<td>
+heat flux
+</td>
+</tr>
+<tr>
+<td>
+<b>q</b>
+</td>
+<td>
+W/(m<sup>2</sup>)
+</td>
+<td>
+thermal flux vector
+</td>
+</tr>
+<tr>
+<td>
+q<sub>C</sub>
+</td>
+<td>
+W/(m<sup>2</sup>)
+</td>
+<td>
+heat flux from coil
+</td>
+</tr>
+<tr>
+<td>
+q<sub>in</sub>
+</td>
+<td>
+W/(m<sup>2</sup>)
+</td>
+<td>
+heat flux in
+</td>
+</tr>
+<tr>
+<td>
+q<sub>out</sub>
+</td>
+<td>
+W/(m<sup>2</sup>)
+</td>
+<td>
+heat flux out
+</td>
+</tr>
+<tr>
+<td>
+t
+</td>
+<td>
+s
+</td>
+<td>
+time
+</td>
+</tr>
+<tr>
+<td>
+T
+</td>
+<td>
+&deg;C
+</td>
+<td>
+temperature
+</td>
+</tr>
+<tr>
+<td>
+T<sub>C</sub>
+</td>
+<td>
+&deg;C
+</td>
+<td>
+temperature of coil
+</td>
+</tr>
+<tr>
+<td>
+T<sub>env</sub>
+</td>
+<td>
+&deg;C
+</td>
+<td>
+temperature of environment
+</td>
+</tr>
+<tr>
+<td>
+t<sub>final</sub>
+</td>
+<td>
+s
+</td>
+<td>
+time
+</td>
+</tr>
+<tr>
+<td>
+T<sub>init</sub>
+</td>
+<td>
+&deg;C
+</td>
+<td>
+initial temperature
+</td>
+</tr>
+<tr>
+<td>
+T<sub>W</sub>
+</td>
+<td>
+&deg;C
+</td>
+<td>
+temperature of water
+</td>
+</tr>
+<tr>
+<td>
+&Delta;T
+</td>
+<td>
+&deg;C
+</td>
+<td>
+temperature difference
+</td>
+</tr>
+<tr>
+<td>
+V
+</td>
+<td>
+m<sup>3</sup>
+</td>
+<td>
+volume
+</td>
+</tr>
+<tr>
+<td>
+V<sub>W</sub>
+</td>
+<td>
+m<sup>3</sup>
+</td>
+<td>
+volume of water
+</td>
+</tr>
+<tr>
+<td>
+&rho;
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+<td>
+density, mass per unit volume
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>W</sub>
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+<td>
+density of water
+</td>
+</tr>
+<tr>
+<td>
+&tau;
+</td>
+<td>
+s
+</td>
+<td>
+dummy variable for integration over time
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:AaA">
+<div class="subsection">
+<h3>
+Abbreviations and Acronyms
+</h3>
+<a id="Table:AaA">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+Assumption
+</td>
+</tr>
+<tr>
+<td>
+DD
+</td>
+<td>
+Data Definition
+</td>
+</tr>
+<tr>
+<td>
+GD
+</td>
+<td>
+General Definition
+</td>
+</tr>
+<tr>
+<td>
+GS
+</td>
+<td>
+Goal Statement
+</td>
+</tr>
+<tr>
+<td>
+IM
+</td>
+<td>
+Instance Model
+</td>
+</tr>
+<tr>
+<td>
+LC
+</td>
+<td>
+Likely Change
+</td>
+</tr>
+<tr>
+<td>
+ODE
+</td>
+<td>
+Ordinary Differential Equation
+</td>
+</tr>
+<tr>
+<td>
+PS
+</td>
+<td>
+Physical System Description
+</td>
+</tr>
+<tr>
+<td>
+R
+</td>
+<td>
+Requirement
+</td>
+</tr>
+<tr>
+<td>
+SRS
+</td>
+<td>
+Software Requirements Specification
+</td>
+</tr>
+<tr>
+<td>
+SWHS
+</td>
+<td>
+Solar Water Heating System
+</td>
+</tr>
+<tr>
+<td>
+T
+</td>
+<td>
+Theoretical Model
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SSD">
+<div class="section">
+<h2>
+Specific System Description
+</h2>
+<p class="paragraph">
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
+</p>
+<a id="Sec:PD">
+<div class="subsection">
+<h3>
+Problem Description
+</h3>
+<p class="paragraph">
+SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
+</p>
+<a id="Sec:TaD">
+<div class="subsubsection">
+<h4>
+Terminology and Definitions
+</h4>
+<p class="paragraph">
+This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+</p>
+<ul class="list">
+<li>
+Heat flux: the rate of heat energy transfer per unit area
+</li>
+<li>
+Specific heat: heat capacity per unit mass
+</li>
+</ul>
+</div>
+</a>
+<a id="Sec:PSD">
+<div class="subsubsection">
+<h4>
+Physical System Description
+</h4>
+<p class="paragraph">
+The physical system of SWHS, as shown in <a href=#Figure:Swhtwhffco>this Figure</a>, includes the following elements:
+</p>
+<div class="list">
+<p>
+PS1: Tank containing water
+</p>
+<p>
+PS2: Heating coil at bottom of tank. (q<sub>C</sub> represents the heat flux from coil into the water.)
+</p>
+</div>
+<a id="Figure:Swhtwhffco">
+<img class="figure" src="TankWaterOnly.png" alt="Solar water heating tank, with heat flux from coil of q<sub>C</sub>"></img>
+<p class="caption">
+Solar water heating tank, with heat flux from coil of q<sub>C</sub>
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:GSs">
+<div class="subsubsection">
+<h4>
+Goal Statements
+</h4>
+<p class="paragraph">
+Given the temperature of the coil, initial temperature of the water, and material properties, the goal statement is
+</p>
+<div class="list">
+<p>
+GS1: predict the temperature of water over time
+</p>
+</div>
+</div>
+</a>
+</div>
+</a>
+<a id="Sec:SCS">
+<div class="subsection">
+<h3>
+Solution Characteristics Specification
+</h3>
+<p class="paragraph">
+The instance model (ODE) that governs SWHS is presented in . The information to understand the meaning of the instance model and its derivation is also presented, so that the instance model can be verified.
+</p>
+<a id="Sec:As">
+<div class="subsubsection">
+<h4>
+Assumptions
+</h4>
+<p class="paragraph">
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+</p>
+</div>
+</a>
+<a id="Sec:TMs">
+<div class="subsubsection">
+<h4>
+Theoretical Models
+</h4>
+<p class="paragraph">
+This section focuses on the general equations and laws that SWHS is based on.
+</p>
+<a id="T:Cote">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Conservation of thermal energy
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+-&nabla;&sdot;<b>q</b>+g=&rho;C<div class="fraction">
+<span class="fup">
+&part;T
+</span>
+<span class="fdn">
+&part;t
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+This equation gives the conservation of energy for time varying heat transfer in a material of specific heat capacity C and density &rho;, where <b>q</b>
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+</div>
+</a>
+</div>
+</a>
+</body>
+</html>

@@ -85,8 +85,8 @@ gradient = makeVC "gradient" "the gradient operator" (Greek Nabla)
 
 ----Acronyms-----
 acronyms :: [ConceptChunk]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
-  physSysDescr,requirement,softwareRS,sWHS,theoreticMod]
+acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,oDE,
+  physSyst,requirement,srs,sWHS,thModel]
   
 oDE, physSysDescr, sWHS :: ConceptChunk
 

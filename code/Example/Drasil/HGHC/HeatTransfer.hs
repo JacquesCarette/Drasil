@@ -1,7 +1,9 @@
 module Drasil.HGHC.HeatTransfer where
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 
@@ -9,10 +11,7 @@ import Control.Lens ((^.))
 -- Need some derived units.  For now, put them here, but need to think
 -- about where they really ought to go.
 heat_transfer :: DerUChunk
-heat_transfer = DUC (UD ht_con ht_symb) heat_transfer_eqn
-
-ht_con :: ConceptChunk
-ht_con = makeCC "Heat transfer" "Heat transfer"
+heat_transfer = DUC (UD heat_trans ht_symb) heat_transfer_eqn
 
 ht_symb :: USymb
 ht_symb = from_udefn heat_transfer_eqn

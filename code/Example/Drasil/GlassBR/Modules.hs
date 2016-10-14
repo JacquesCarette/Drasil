@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Modules where
 
 import Language.Drasil
-import Drasil.Concepts (os)
+import Data.Drasil.Concepts.Software (os)
 import Drasil.GlassBR.Concepts
 
 modules :: [ModuleChunk]

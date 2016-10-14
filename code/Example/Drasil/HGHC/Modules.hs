@@ -2,7 +2,7 @@ module Drasil.HGHC.Modules where
 
 import Language.Drasil
 import Drasil.HGHC.HeatTransfer
-import Drasil.Concepts
+import Data.Drasil.Concepts.Software
 
 import Control.Lens ((^.))
 

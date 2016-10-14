@@ -1,6 +1,8 @@
 module Drasil.GamePhysics.Modules where
 
 import Language.Drasil
+import Data.Drasil.Concepts.Software
+
 import Drasil.GamePhysics.Concepts
 
 modules :: [ModuleChunk]

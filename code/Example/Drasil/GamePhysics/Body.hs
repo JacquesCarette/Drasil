@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Software
 
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits

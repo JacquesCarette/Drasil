@@ -4,6 +4,7 @@ import Drasil.GlassBR.Units
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Documentation
 
 import Control.Lens((^.))
 import Data.Char(toLower)
@@ -90,25 +91,14 @@ gTF         = makeVC "GTF" "Glass Type Factor" (Atomic "GTF")
 ----Acronyms-----
 acronyms :: [ConceptChunk]
 acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
-  goalStmt,glassTypeFac,heatSGlass,iGlass,instanceMod,likelyChange,lDurFac,
-  lGlass,lResistance,lShareFac,notApp,nonFactorL,physSysDescr,requirement,
-  softwareRS,theoreticMod,eqTNT]
+  goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
+  lGlass,lResistance,lShareFac,notApp,nonFactorL,physSyst,requirement,
+  srs,thModel,eqTNT]
   
-assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,
-  physSysDescr,requirement,softwareRS,gLassBR,theoreticMod, annealedGlass,
-  aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,iGlass,lDurFac,
-  lGlass,lResistance,lShareFac,notApp,nonFactorL,eqTNT :: ConceptChunk
-assumption    = makeCC "A" "Assumption"
-dataDefn      = makeCC "DD" "Data Definition"
-genDefn       = makeCC "GD" "General Definition"
-goalStmt      = makeCC "GS"  "Goal Statement"
-instanceMod   = makeCC "IM" "Instance Model"
-likelyChange  = makeCC "LC" "Likely Change"
-physSysDescr  = makeCC "PS" "Physical System Description"
-requirement   = makeCC "R" "Requirement"
-softwareRS    = makeCC "SRS" "Software Requirements Specification"
+gLassBR, annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
+  iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,nonFactorL,
+  eqTNT :: ConceptChunk
 gLassBR       = makeCC "GlassBR" "Glass-BR"
-theoreticMod  = makeCC "T" "Theoretical Model"
 annealedGlass = makeCC "AN" "Annealed Glass"
 aspectR       = makeCC "AR" "Aspect Ratio"
 aspectRMax    = makeCC "ARmax" "Maximum Aspect Ratio"

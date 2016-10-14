@@ -1,27 +1,18 @@
 module Drasil.GamePhysics.Concepts where
 
 import Language.Drasil
+import Data.Drasil.Concepts.Documentation
 
 ----- Acronyms -----
 
-assumption, centreMass, dataDefn, genDefn, goalStmt, instMod, likelyChange, ode,
-    requirement, srs, theoMod, twoD :: ConceptChunk
+centreMass, ode, twoD :: ConceptChunk
 
 cpAcronyms :: [ConceptChunk]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
-    instMod, likelyChange, ode, requirement, srs, theoMod, twoD]
+    inModel, likelyChg, ode, requirement, srs, thModel, twoD]
 
-assumption    = makeCC "A" "Assumption"
 centreMass    = makeCC "CM" "Centre of Mass"
-dataDefn      = makeCC "DD" "Data Definition"
-genDefn       = makeCC "GD" "General Definition"
-goalStmt      = makeCC "GS"  "Goal Statement"
-instMod       = makeCC "IM" "Instance Model"
-likelyChange  = makeCC "LC" "Likely Change"
 ode           = makeCC "ODE" "Ordinary Differential Equation"
-requirement   = makeCC "R" "Requirement"
-srs           = makeCC "SRS" "Software Requirements Specification"
-theoMod       = makeCC "T" "Theoretical Model"
 twoD          = makeCC "2D" "Two-Dimensional"
 
 ----- Physics concepts -----

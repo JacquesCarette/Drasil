@@ -12,6 +12,7 @@ library
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics
     Data.Drasil.Concepts.PhysicalProperties
+    Data.Drasil.Concepts.Physics
     Data.Drasil.Concepts.Software
   other-modules:
       Language.Drasil.Expr

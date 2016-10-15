@@ -7,6 +7,8 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.PhysicalProperties
 
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
@@ -281,7 +283,7 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms " :+:
 s4_1_1_bullets = Enumeration (Bullet $ map (\term -> Flat (
     S ((\word -> (toUpper . head $ word) : (tail word)) (term ^. name)) :+:
     S ": " :+: (term ^. descr)))
-    [rigidBody, elast, ctrOfMass, cartesian, rightHand])
+    [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
@@ -317,7 +319,7 @@ s4_1_2_list = Enumeration (Simple [
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+:
     S " over a period of " :+: (time ^. descr) :+: S " of " :+:
     S (rigidBodies ^. name) :+: S " that have undergone a " :+:
-    S (coll ^. name) :+: S "."))])
+    S (collision ^. name) :+: S "."))])
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -359,8 +361,8 @@ s4_2_1_list = Enumeration (Simple [
     (S (assumption ^. name) :+: S "4", Flat (S "The axes are defined using " :+:
     S (rightHand ^. name) :+: S ".")),
     (S (assumption ^. name) :+: S "5", Flat (S "All " :+:
-    S (rigidBodies ^. name) :+: S " " :+: S (coll ^. name) :+:
-    S "s are vertex-to-edge " :+: S (coll ^. name) :+: S "s.")),
+    S (rigidBodies ^. name) :+: S " " :+: S (collision ^. name) :+:
+    S "s are vertex-to-edge " :+: S (collision ^. name) :+: S "s.")),
     (S (assumption ^. name) :+: S "6", Flat (S "There is no damping " :+:
     S "involved throughout the simulation.")),
     (S (assumption ^. name) :+: S "7", Flat (S "There are no constraints " :+:
@@ -532,8 +534,8 @@ s5_1_list = Enumeration (Simple [
     S " of, " :+: S "and " :+: (force ^. descr) :+: S "s applied on " :+:
     S (rigidBodies ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "3", Flat (S "Input the surface " :+:
-    S "properties of the bodies, such as " :+: S (fric ^. name) :+: S " or " :+:
-    S (elast ^. name) :+: S ".")),
+    S "properties of the bodies, such as " :+: S (friction ^. name) :+: S " or " :+:
+    S (elasticity ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "4", Flat (S "Verify that the inputs " :+:
     S "satisfy the required physical constraints.")),
     (S (requirement ^. name) :+: S "5", Flat (S "Determine the " :+:
@@ -552,7 +554,7 @@ s5_1_list = Enumeration (Simple [
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
     S "period of " :+: (time ^. descr) :+: S " of the " :+: S (twoD ^. name) :+:
     S " " :+: S (rigidBodies ^. name) :+: S " that have undergone a " :+:
-    S (coll ^. name) :+: S "."))])
+    S (collision ^. name) :+: S "."))])
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -587,7 +589,7 @@ s6_list = Enumeration (Simple [
     S "change in the future.")),
     (S (likelyChg ^. name) :+: S "2", Flat (S "The library may be " :+:
     S "expanded to deal with edge-to-edge and vertex-to-vertex " :+:
-    S (coll ^. name) :+: S "s.")),
+    S (collision ^. name) :+: S "s.")),
     (S (likelyChg ^. name) :+: S "3", Flat (S "The library may be " :+:
     S "expanded to include motion with damping.")),
     (S (likelyChg ^. name) :+: S "4", Flat (S "The library may be " :+:

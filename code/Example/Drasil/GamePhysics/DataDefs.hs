@@ -5,6 +5,7 @@ import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Physics
 
 import Control.Lens ((^.))
 
@@ -128,7 +129,7 @@ dd7descr = S "the " :+: (angAccel ^. descr) :+: S " of a " :+:
     S " with respect to " :+: (time ^. descr) :+: S " " :+:
     P (time ^. symbol)
 
--- DD8 : Impulse for collision response --
+-- DD8 : Impulse for collisionision response --
 
 -- Currently a super crude implementation requiring lots of custom chunks;
 -- need norms and cross products
@@ -146,4 +147,4 @@ impulseEqn = ((Neg ((Int 1) + (C restCoef))) * (C initRelVel) :.
 
 dd8descr :: Sentence
 dd8descr = S "the " :+: (impulseScl ^. descr) :+: S " used to determine " :+:
-    S (coll ^. name) :+: S " response between two " :+: S (rigidBodies ^. name)
+    S (collision ^. name) :+: S " response between two " :+: S (rigidBodies ^. name)

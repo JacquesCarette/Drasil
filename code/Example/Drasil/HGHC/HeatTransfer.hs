@@ -20,7 +20,7 @@ h_c_eq = --UnaryOp (Summation (Just
   -- (Low ((makeVC "i" "" lI),0), High (C (makeVC "n" "" lN)))))
   (2 * (C k_c) * (C h_b) / (2 * (C k_c) + (C tau_c) * (C h_b)))
 
-h_c :: EqChunk
+h_c :: QDefinition
 h_c = fromEqn "h_c" (S 
   "convective heat transfer coefficient between clad and coolant")
   (lH `sub` lC) heat_transfer h_c_eq
@@ -31,7 +31,7 @@ h_c = fromEqn "h_c" (S
 h_g_eq :: Expr
 h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 
-h_g :: EqChunk
+h_g :: QDefinition
 h_g = fromEqn "h_g" (S
   "effective heat transfer coefficient between clad and fuel surface")
   (lH `sub` lG) heat_transfer h_g_eq

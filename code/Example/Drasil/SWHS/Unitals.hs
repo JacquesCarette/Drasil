@@ -78,17 +78,17 @@ mass         = makeUC "m" "mass" lM kilogram
 pcm_mass     = makeUC "m_P" "mass of phase change material" 
                (sub (mass ^. symbol) cP) kilogram
 w_mass       = makeUC "m_W" "mass of water" (sub (mass ^. symbol) cW) kilogram
-ht_flux      = makeUC "q" "heat flux" lQ thermFluxU
+ht_flux      = makeUC "q" "heat flux" lQ thermal_flux
 latentE      = makeUC "Q" "latent heat energy" cQ joule
-thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermFluxU
+thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermal_flux
 ht_flux_C    = makeUC "q_C" "heat flux into the water from the coil" 
-               (sub (ht_flux ^. symbol) cC) thermFluxU
+               (sub (ht_flux ^. symbol) cC) thermal_flux
 ht_flux_in   = makeUC "q_in" "heat flux input" 
-               (sub (ht_flux ^. symbol) (Atomic "in")) thermFluxU
+               (sub (ht_flux ^. symbol) (Atomic "in")) thermal_flux
 ht_flux_out  = makeUC "q_out" "heat flux output" 
-               (sub (ht_flux ^. symbol) (Atomic "out")) thermFluxU
+               (sub (ht_flux ^. symbol) (Atomic "out")) thermal_flux
 ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water" 
-               (sub (ht_flux ^. symbol) cP) thermFluxU
+               (sub (ht_flux ^. symbol) cP) thermal_flux
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" 
                (sub (latentE ^. symbol) cP) joule
 time         = makeUC "t" "time" lT second 

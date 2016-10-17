@@ -6,9 +6,9 @@ GLASS_PREF="GlassBR_"
 GAME_PREF="Chipmunk_"
 PCM_PREF="PCM_"
 log="log.log"
-
+#
 errors="no"
-
+#
 if [ -s $SWHS_PREF$log ]; then
   echo "-------------------------------------------"
   echo "- $SWHS_PREF$log IS NOT EMPTY -- DIFFERENCE"

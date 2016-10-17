@@ -1,7 +1,7 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..), new_unit, (^:), (/:), (*:))
+  UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU)
 import Language.Drasil.Unicode (Special(Circle))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..),Sentence(..))
@@ -107,3 +107,15 @@ impulseU, springConstU, torqueU :: DerUChunk
 impulseU     = new_unit "impulse"              $ newton *: second
 springConstU = new_unit "spring constant"      $ newton /: metre
 torqueU      = new_unit "torque"               $ newton *: metre
+
+heat_capacity :: DerUChunk
+heat_capacity = makeDerU (CC "specific heat" (S "heat capacity per unit mass")) $
+  USynonym (UDiv (joule ^. unit) (UProd [kilogram ^. unit, centigrade ^. unit]))
+
+thermal_flux :: DerUChunk
+thermal_flux = makeDerU (CC "heat flux"
+  (S "the rate of heat energy transfer per unit area")) $ USynonym (watt /: m_2)
+
+heat_transfer :: DerUChunk
+heat_transfer = new_unit "heat transfer" $ (UDiv
+  (watt ^. unit) (UProd [m_2 ^. unit, centigrade ^. unit]))

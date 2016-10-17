@@ -14,23 +14,6 @@ specificE = makeDerU (CC "specific energy" (S "energy per unit mass"))
 specificE_eqn ::UDefn
 specificE_eqn = USynonym (UDiv (joule ^. unit) (kilogram ^. unit))
 
---J/(kg*C)--
-heat_capacity :: DerUChunk
-heat_capacity = makeDerU (CC "specific heat"
-  (S "heat capacity per unit mass")) heat_cap_eqn
-
-heat_cap_eqn :: UDefn
-heat_cap_eqn = USynonym (UDiv 
-  (joule ^. unit) (UProd [kilogram ^. unit, centigrade ^. unit]))
-
---W/m^2--
-thermFluxU :: DerUChunk
-thermFluxU = makeDerU (CC "heat flux" 
-  (S "the rate of heat energy transfer per unit area")) thermFluxUeqn
-
-thermFluxUeqn :: UDefn
-thermFluxUeqn = USynonym (UDiv (watt ^. unit) (m_2 ^. unit))
-
 --W/m^3--
 volHtGenU :: DerUChunk
 volHtGenU = makeDerU (CC "volumetric heat generation" 
@@ -38,11 +21,3 @@ volHtGenU = makeDerU (CC "volumetric heat generation"
   
 volHtGenUeqn :: UDefn
 volHtGenUeqn = USynonym (UDiv (watt ^. unit) (m_3 ^. unit))
-
---W/(m^2C)--  
-heat_transfer :: DerUChunk
-heat_transfer = makeDerU (unitCon "heat transfer") heat_transfer_eqn
-
-heat_transfer_eqn :: UDefn
-heat_transfer_eqn = USynonym (UDiv 
-  (watt ^. unit) (UProd [m_2 ^. unit, centigrade ^. unit]))

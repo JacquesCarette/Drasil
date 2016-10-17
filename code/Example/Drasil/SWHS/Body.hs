@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 {-# LANGUAGE FlexibleContexts #-} 
 module Drasil.SWHS.Body where
 
@@ -11,7 +10,6 @@ import Drasil.SWHS.TModel1
 import Drasil.SWHS.TModel2
 import Drasil.SWHS.TModel3
 import Drasil.SWHS.DataDefs
-import Drasil.SWHS.Units
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs

@@ -3,25 +3,6 @@ module Drasil.HGHC.HeatTransfer where
 import Language.Drasil
 import Data.Drasil.SI_Units
 
-import Control.Lens ((^.))
-
------
--- Need some derived units.  For now, put them here, but need to think
--- about where they really ought to go.
-heat_transfer :: DerUChunk
-heat_transfer = DUC (UD ht_con ht_symb) heat_transfer_eqn
-
-ht_con :: ConceptChunk
-ht_con = makeCC "Heat transfer" "Heat transfer"
-
-ht_symb :: USymb
-ht_symb = from_udefn heat_transfer_eqn
-
-heat_transfer_eqn :: UDefn
-heat_transfer_eqn = USynonym (UProd 
-  [kilogram ^. unit, UPow (second ^. unit) (-3),
-   UPow (centigrade ^. unit) (-1)])
-   
 varChunks :: [VarChunk]
 varChunks = [tau_c, h_b, h_p, k_c]
 

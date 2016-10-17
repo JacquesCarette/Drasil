@@ -1,7 +1,5 @@
 module Drasil.PCM.Example where
 
-import Drasil.PCM.Units
-
 import Language.Drasil
 import Data.Drasil.SI_Units
 
@@ -34,7 +32,7 @@ htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
               heat_capacity
 tank_D      = makeUC "D" "diameter of tank" cD metre
 ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" lG
-              thermFluxU
+              thermal_flux
 ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
 ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
               (sub lH cC) heat_transfer
@@ -47,10 +45,10 @@ norm_vect   = makeVC "n_vect" "unit outward normal vector for a surface"
   -- pull Accent out somehow?
 ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
 thFluxVect  = makeUC "q_vect" "thermal flux vector" (vec lQ)
-                  thermFluxU
-ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermFluxU
-ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU
-ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermFluxU
+                  thermal_flux
+ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermal_flux
+ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermal_flux
+ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermal_flux
 time        = makeUC "t" "time" lT second
 temp        = makeUC "T" "temperature" cT centigrade
 -- temp_boil   = makeUC "T_boil" "temperature at boiling point" 

@@ -12,14 +12,8 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 
 -- M1: Hardware Hiding Module --
 
-mod_hw_serv :: ConceptChunk
-mod_hw_serv = CC "hardware hiding"
-    (S "Serves as a virtual hardware used by the rest of the system. This " :+:
-    S "module provides the interface between the hardware and the software." :+:
-    S " So, the system can use it to display outputs or to accept inputs.")
-
 mod_hw :: ModuleChunk
-mod_hw = makeImpModule mod_hw_serv
+mod_hw = makeImpModule modHWHiding
     (S "The data structure and algorithm used to implement the virtual " :+:
     S "hardware.")
     os
@@ -29,17 +23,8 @@ mod_hw = makeImpModule mod_hw_serv
 
 -- Behaviour Hiding Module --
 
-mod_behav_serv :: ConceptChunk
-mod_behav_serv = CC "behaviour hiding"
-    (S "Includes programs that provide externally visible behavior of " :+:
-    S "the system as specified in the software requirements specification " :+:
-    S "(SRS) documents. This module serves as a communication layer " :+:
-    S "between the hardware-hiding module and the software decision " :+:
-    S "module. The programs in this module will need to change if there " :+:
-    S "are changes in the SRS.")
-
 mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule mod_behav_serv
+mod_behav = makeUnimpModule modBehavHiding
     (S "The contents of the required behaviors.")
     Nothing
 
@@ -144,12 +129,8 @@ mod_arbiter = makeImpModule mod_arbiter_serv
 
 -- M9: Control Module --
 
-mod_control_serv :: ConceptChunk
-mod_control_serv = CC "control"
-    (S "Provides the main program.")
-
 mod_control :: ModuleChunk
-mod_control = makeImpModule mod_control_serv
+mod_control = makeImpModule modControl
     (S "The internal data types and algorithms for coordinating the " :+:
     S "running of the program.")
     chipmunk
@@ -159,13 +140,8 @@ mod_control = makeImpModule mod_control_serv
 
 -- Software Decision Module --
 
-mod_sw_serv :: ConceptChunk
-mod_sw_serv = CC "software decision"
-    (S "Includes data structures and algorithms used in the system that " :+:
-    S "do not provide direct interaction with the user.")
-
 mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule mod_sw_serv
+mod_sw = makeUnimpModule modSfwrDecision
     (S "The design decision based on mathematical theorems, physical facts" :+:
     S ", or programming considerations. The secrets of this module are " :+:
     S "not described in the SRS.")

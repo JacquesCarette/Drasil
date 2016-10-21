@@ -9,14 +9,8 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
            mod_sps, mod_sw, mod_sds, mod_rng, mod_plot]
 
 -- HW Hiding Module
-mod_hw_desc :: ConceptChunk
-mod_hw_desc = CC "hardware hiding"
-  (S "Serves as a virtual hardware used by the rest of the system. This " :+:
-   S "module provides the interface between the hardware and the software. " :+:
-   S "So, the system can use it to display outputs or to accept inputs.")
-
 mod_hw :: ModuleChunk
-mod_hw = makeImpModule mod_hw_desc
+mod_hw = makeImpModule modHWHiding
   (S "The data structure and algorithm used to implement the virtual hardware.")
   os
   []
@@ -24,27 +18,15 @@ mod_hw = makeImpModule mod_hw_desc
   Nothing
 
 -- Behaviour Hiding Module
-mod_behav_desc :: ConceptChunk
-mod_behav_desc = CC "behaviour hiding"
-  (S "Includes programs that provide externally visible behavior of " :+:
-   S "the system as specified in the software requirements specification " :+:
-   S "(SRS) documents. This module serves as a communication layer between " :+:
-   S "the hardware-hiding module and the software decision module. The " :+:
-   S "programs in this module will need to change if there are changes " :+:
-   S "in the SRS.")
-
 mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule mod_behav_desc
+mod_behav = makeUnimpModule modBehavHiding
   (S "The contents of the required behaviors.")
   Nothing
 
 
 -- Control module
-mod_ctrl_desc :: ConceptChunk
-mod_ctrl_desc = CC "control" (S "Provides the main program.")
-
 mod_ctrl :: ModuleChunk
-mod_ctrl = makeImpModule mod_ctrl_desc
+mod_ctrl = makeImpModule modControl
   (S "The algorithm for coordinating the running of the program.")
   program
   []
@@ -213,13 +195,8 @@ mod_sps = makeImpModule mod_sps_desc
    (Just mod_behav)
 
 -- sfwr dec module
-mod_sw_desc :: ConceptChunk
-mod_sw_desc = CC "software decision"
-  (S "Includes a data structure and algorithms used in the " :+:
-   S "system that do not provide direct interaction with the user.")
-
 mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule mod_sw_desc
+mod_sw = makeUnimpModule modSfwrDecision
   (S "The design decision based on mathematical theorems, " :+:
    S "physical facts, or programming considerations. The secrets of this " :+:
    S "module are not described in the SRS.")

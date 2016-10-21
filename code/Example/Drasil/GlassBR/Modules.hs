@@ -31,16 +31,8 @@ mod_inputf = makeImpModule modInputFormat
   [mod_hw, mod_inputp]
   (Just mod_behav)
 
--- input parameters module
-mod_inputp_desc :: ConceptChunk
-mod_inputp_desc = CC "input parameters"
-  (S "Stores the parameters needed for the program, including material " :+:
-   S "properties, processing conditions and numerical parameters. The " :+:
-   S "values can be read as needed. This module knows how many parameters " :+:
-   S "it stores.")
-
 mod_inputp :: ModuleChunk
-mod_inputp = makeImpModule mod_inputp_desc
+mod_inputp = makeImpModule modInputParams
   (S "The format and structure of the input parameters.")
   glassBRProg
   []

@@ -1,6 +1,10 @@
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
+import Data.Drasil.Concepts.Documentation (srs)
+
+import Control.Lens ((^.))
+import Data.Char (toLower)
 
 program, os, matlab, physLib, c :: ConceptChunk
 c       = makeCC "C" "C programming language"
@@ -19,13 +23,14 @@ modHWHiding = CC "hardware hiding"
    S " So, the system can use it to display outputs or to accept inputs.")
    
 modBehavHiding :: ConceptChunk
-modBehavHiding = CC "behaviour hiding"
-    (S "Includes programs that provide externally visible behavior of " :+:
-    S "the system as specified in the software requirements specification " :+:
-    S "(SRS) documents. This module serves as a communication layer " :+:
-    S "between the hardware-hiding module and the software decision " :+:
-    S "module. The programs in this module will need to change if there " :+:
-    S "are changes in the SRS.")
+modBehavHiding = CC "behaviour hiding" (S "Includes programs that provide " :+:
+                 S "externally visible behaviour of the system as specified" :+:
+                 S " in the " :+: (sMap (map toLower) (srs ^. descr)) :+:
+                 S " (" :+: S (srs ^. name) :+: S ") documents. This module" :+:
+                 S " serves as a communication layer between the hardware-" :+:
+                 S "hiding module and the software decision module. The " :+:
+                 S "programs in this module will need to change if there " :+:
+                 S "are changes in the " :+: S (srs ^. name) :+: S ".")
     
 modControl :: ConceptChunk
 modControl = CC "control" (S "Provides the main program.")
@@ -40,10 +45,24 @@ modInputFormat = CC "input format"
   (S "Converts the input data into the data structure used by the input " :+:
    S "parameters module.")
    
+modInputParams :: ConceptChunk
+modInputParams = CC "input parameters" (S "Stores the parameters needed " :+:
+                  S "for the program, including material properties, " :+:
+                  S "processing conditions, and numerical parameters. The " :+:
+                  S "values can be read as needed. This module knows how " :+:
+                  S "many parameters it stores.")
+   
 modInputConstraints :: ConceptChunk
 modInputConstraints = CC "input constraints"
   (S "Defines the constraints on the input data and gives an error if " :+:
    S "a constraint is violated.")
+   
+modInputVerif :: ConceptChunk
+modInputVerif = CC "input verification" (S "Verifies that the input " :+:
+                  S "parameters comply with physical and software " :+: 
+                  S "constraints. Throws an error if a parameter violates a" :+:
+                  S " physical constraint. Throws a warning if a parameter " :+:
+                  S "violates a software constraint.")
    
 modDerivedVals :: ConceptChunk
 modDerivedVals = CC "derived values"

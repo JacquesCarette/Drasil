@@ -35,7 +35,7 @@ cl :: Simple Lens MethodChunk ConceptChunk
 cl f (MeC a b c d e) = fmap (\x -> MeC x b c d e) (f a)
 
 
-fromEC :: EqChunk -> MethodChunk
+fromEC :: QDefinition -> MethodChunk
 fromEC ec = let exc' = if (checkDiv $ equat ec) then [DivByZero] else []
             in  MeC (toCC $ uc ec) (Calc $ equat ec) (vars $ equat ec)
                   [(toVC $ uc ec)] exc'

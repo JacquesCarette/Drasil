@@ -19,7 +19,7 @@ module Language.Drasil (
   -- Chunk.Constrained
   , Constrained, ConstrainedMUC(..), fromMUC
   -- Chunk.Eq
-  , EqChunk(..), fromEqn, fromEqn'
+  , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
   , UnitalChunk(..), makeUC
   -- Chunk.MUChunk
@@ -74,7 +74,7 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn, fromEqn')
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained (Constrained(..), 
                                           ConstrainedMUC(..),fromMUC)
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)

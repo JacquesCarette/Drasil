@@ -55,7 +55,7 @@ data ItemType = Flat Sentence
               | Nested Header ListType
                
 -- Types of definitions
-data DType = Data EqChunk 
+data DType = Data QDefinition 
            | General 
            | Theory RelationChunk
 

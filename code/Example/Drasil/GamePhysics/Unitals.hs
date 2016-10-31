@@ -1,7 +1,5 @@
 module Drasil.GamePhysics.Unitals where
 
-import Drasil.GamePhysics.Units
-
 import Language.Drasil
 import Data.Drasil.SI_Units
 

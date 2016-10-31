@@ -5,11 +5,11 @@ import Data.List (intersperse)
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Data.Drasil.SI_Units
 
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
 
-import Drasil.GamePhysics.Units
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 import Drasil.GamePhysics.TMods
@@ -51,8 +51,9 @@ s1_intro = Paragraph $ S "This section records information for easy reference."
 -- 1.1 : Table of Units --
 --------------------------
 
+-- should be computed!
 s1_1 :: Section
-s1_1 = table_of_units cpSIUnits
+s1_1 = table_of_units $ map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 ----------------------------
 -- 1.2 : Table of Symbols --

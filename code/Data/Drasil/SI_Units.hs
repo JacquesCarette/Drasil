@@ -108,6 +108,9 @@ impulseU     = new_unit "impulse"              $ newton *: second
 springConstU = new_unit "spring constant"      $ newton /: metre
 torqueU      = new_unit "torque"               $ newton *: metre
 
+---
+-- likely these should be moved elsewhere
+
 heat_capacity :: DerUChunk
 heat_capacity = makeDerU (CC "specific heat" (S "heat capacity per unit mass")) $
   USynonym (UDiv (joule ^. unit) (UProd [kilogram ^. unit, centigrade ^. unit]))
@@ -119,3 +122,10 @@ thermal_flux = makeDerU (CC "heat flux"
 heat_transfer :: DerUChunk
 heat_transfer = new_unit "heat transfer" $ (UDiv
   (watt ^. unit) (UProd [m_2 ^. unit, centigrade ^. unit]))
+
+--
+
+gravConstU :: DerUChunk
+gravConstU = makeDerU (CC "gravitational constant" (S "universal gravitational constant")) $
+   USynonym (UDiv (m_3 ^. unit) (UProd [kilogram ^. unit, s_2 ^. unit]))
+

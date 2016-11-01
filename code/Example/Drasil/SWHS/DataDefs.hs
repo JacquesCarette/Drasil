@@ -4,10 +4,11 @@ import Data.Char (toLower)
 
 import Drasil.SWHS.Units
 import Drasil.SWHS.Unitals
-import Drasil.SWHS.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+
+import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 

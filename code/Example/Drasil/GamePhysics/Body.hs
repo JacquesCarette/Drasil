@@ -7,6 +7,11 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.SI_Units
 
+import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.PhysicalProperties
+
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
 
@@ -123,7 +128,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
     S "open source " :+: S (twoD ^. name) :+: S " " :+:
     S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
     S " used for games. The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
-    S "s and " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
+    S "s and " :+: (sMap (map toLower) (thModel ^. descr)) :+:
     S "s used in " :+: S (chipmunk ^. name) :+: S " are provided. This " :+:
     S "document is intended to be used as a reference to provide all " :+:
     S "necessary information to understand and verify the model."),
@@ -170,13 +175,13 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
     S "follows the standard pattern of presenting goals, theories, " :+:
     S "definitions, and assumptions. For readers that would like a more " :+:
     S "bottom up approach, they can start reading the " :+:
-    (sMap (map toLower) (instMod ^. descr)) :+: S "s in " :+:
+    (sMap (map toLower) (inModel ^. descr)) :+: S "s in " :+:
     (makeRef s4_2_5) :+: S " and trace back to any additional information " :+:
     S "they require."),
     Paragraph (S "The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
-    S "s are refined to the " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
-    S "s, and the " :+: (sMap (map toLower) (theoMod ^. descr)) :+:
-    S "s to the " :+: (sMap (map toLower) (instMod ^. descr)) :+: S "s.")]
+    S "s are refined to the " :+: (sMap (map toLower) (thModel ^. descr)) :+:
+    S "s, and the " :+: (sMap (map toLower) (thModel ^. descr)) :+:
+    S "s to the " :+: (sMap (map toLower) (inModel ^. descr)) :+: S "s.")]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -280,7 +285,7 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms " :+:
 s4_1_1_bullets = Enumeration (Bullet $ map (\term -> Flat (
     S ((\word -> (toUpper . head $ word) : (tail word)) (term ^. name)) :+:
     S ": " :+: (term ^. descr)))
-    [rigidBody, elast, ctrOfMass, cartesian, rightHand])
+    [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
@@ -316,7 +321,7 @@ s4_1_2_list = Enumeration (Simple [
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+:
     S " over a period of " :+: (time ^. descr) :+: S " of " :+:
     S (rigidBodies ^. name) :+: S " that have undergone a " :+:
-    S (coll ^. name) :+: S "."))])
+    S (collision ^. name) :+: S "."))])
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -343,9 +348,9 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
     S "missing information for the physical system. The numbers given in " :+:
     S "the square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ")
     (map (\ch -> (sMap (map toLower) (ch ^. descr)) :+: S (" " ++
-    sqbrac (ch ^. name))) [theoMod, genDefn, dataDefn, instMod])) :+:
-    S ", or " :+: (sMap (map toLower) $ likelyChange ^. descr) :+: S (" " ++
-    sqbrac (likelyChange ^. name)) :+: S ", in which the respective " :+:
+    sqbrac (ch ^. name))) [thModel, genDefn, dataDefn, inModel])) :+:
+    S ", or " :+: (sMap (map toLower) $ likelyChg ^. descr) :+: S (" " ++
+    sqbrac (likelyChg ^. name)) :+: S ", in which the respective " :+:
     (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
 
 s4_2_1_list = Enumeration (Simple [
@@ -358,8 +363,8 @@ s4_2_1_list = Enumeration (Simple [
     (S (assumption ^. name) :+: S "4", Flat (S "The axes are defined using " :+:
     S (rightHand ^. name) :+: S ".")),
     (S (assumption ^. name) :+: S "5", Flat (S "All " :+:
-    S (rigidBodies ^. name) :+: S " " :+: S (coll ^. name) :+:
-    S "s are vertex-to-edge " :+: S (coll ^. name) :+: S "s.")),
+    S (rigidBodies ^. name) :+: S " " :+: S (collision ^. name) :+:
+    S "s are vertex-to-edge " :+: S (collision ^. name) :+: S "s.")),
     (S (assumption ^. name) :+: S "6", Flat (S "There is no damping " :+:
     S "involved throughout the simulation.")),
     (S (assumption ^. name) :+: S "7", Flat (S "There are no constraints " :+:
@@ -373,7 +378,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section ((theoMod ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
+s4_2_2 = Section ((thModel ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
     (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
@@ -395,7 +400,7 @@ s4_2_3 = Section ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] {- ++
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations " :+:
   S "that will be used in deriving the " :+: (sMap (map toLower)
   (dataDefn ^. descr)) :+: S "s, which in turn will be used to build the " :+:
-  (sMap (map toLower) (instMod ^. descr)) :+: S "s."
+  (sMap (map toLower) (inModel ^. descr)) :+: S "s."
 
 -- GDefs not yet implemented --
 {-
@@ -415,7 +420,7 @@ s4_2_4 = Section ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
     (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
-    S "data needed to build the " :+: (instMod ^. descr) :+: S "s. The " :+:
+    S "data needed to build the " :+: (inModel ^. descr) :+: S "s. The " :+:
     S "dimension of each quantity is also given."
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
@@ -428,7 +433,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 -- s4_2_5_IMods :: [Contents]
 
-s4_2_5 = Section ((instMod ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
+s4_2_5 = Section ((inModel ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
     (map Con s4_2_5_IMods)-})
 
 s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
@@ -531,8 +536,8 @@ s5_1_list = Enumeration (Simple [
     S " of, " :+: S "and " :+: (force ^. descr) :+: S "s applied on " :+:
     S (rigidBodies ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "3", Flat (S "Input the surface " :+:
-    S "properties of the bodies, such as " :+: S (fric ^. name) :+: S " or " :+:
-    S (elast ^. name) :+: S ".")),
+    S "properties of the bodies, such as " :+: S (friction ^. name) :+: S " or " :+:
+    S (elasticity ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "4", Flat (S "Verify that the inputs " :+:
     S "satisfy the required physical constraints.")),
     (S (requirement ^. name) :+: S "5", Flat (S "Determine the " :+:
@@ -551,7 +556,7 @@ s5_1_list = Enumeration (Simple [
     (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
     S "period of " :+: (time ^. descr) :+: S " of the " :+: S (twoD ^. name) :+:
     S " " :+: S (rigidBodies ^. name) :+: S " that have undergone a " :+:
-    S (coll ^. name) :+: S "."))])
+    S (collision ^. name) :+: S "."))])
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -575,21 +580,21 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance " :+:
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section ((likelyChange ^. descr) :+: S "s") [Con s6_intro, Con s6_list]
+s6 = Section ((likelyChg ^. descr) :+: S "s") [Con s6_intro, Con s6_list]
 
 s6_intro = Paragraph $ S "This section lists the " :+: (sMap (map toLower)
-    (likelyChange ^. descr)) :+: S "s to be made to the physics game library."
+    (likelyChg ^. descr)) :+: S "s to be made to the physics game library."
 
 s6_list = Enumeration (Simple [
-    (S (likelyChange ^. name) :+: S "1", Flat (S "The internal " :+:
+    (S (likelyChg ^. name) :+: S "1", Flat (S "The internal " :+:
     S (ode ^. name) :+: S "-solving algorithm used by the library may " :+:
     S "change in the future.")),
-    (S (likelyChange ^. name) :+: S "2", Flat (S "The library may be " :+:
+    (S (likelyChg ^. name) :+: S "2", Flat (S "The library may be " :+:
     S "expanded to deal with edge-to-edge and vertex-to-vertex " :+:
-    S (coll ^. name) :+: S "s.")),
-    (S (likelyChange ^. name) :+: S "3", Flat (S "The library may be " :+:
+    S (collision ^. name) :+: S "s.")),
+    (S (likelyChg ^. name) :+: S "3", Flat (S "The library may be " :+:
     S "expanded to include motion with damping.")),
-    (S (likelyChange ^. name) :+: S "4", Flat (S "The library may be " :+:
+    (S (likelyChg ^. name) :+: S "4", Flat (S "The library may be " :+:
     S "expanded to include joints and constraints."))])
 
 -----------------------------------------

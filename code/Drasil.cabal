@@ -14,6 +14,7 @@ library
     Data.Drasil.Concepts.PhysicalProperties
     Data.Drasil.Concepts.Physics
     Data.Drasil.Concepts.Software
+    Data.Drasil.Quantities.Thermodynamics
   other-modules:
       Language.Drasil.Expr
     , Language.Drasil.Chunk

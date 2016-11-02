@@ -63,3 +63,6 @@ makeCC nam des = CC nam (S des)
 
 makeVC :: String -> String -> Symbol -> VarChunk
 makeVC nam des sym = VC nam (S des) sym
+
+vcFromCC :: ConceptChunk -> Symbol -> VarChunk
+vcFromCC cc sym = VC (cc ^. name) (cc ^. descr) sym

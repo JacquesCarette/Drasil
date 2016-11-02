@@ -4,6 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Quantities.Thermodynamics
 
 import Control.Lens ((^.))
 
@@ -27,7 +28,7 @@ hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in"
               (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
               (sub cA (Atomic "out")) m_2
-htCap       = makeUC "C" "specific heat capacity" cC heat_capacity
+htCap       = uniC heat_cap_spec heat_capacity
 htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
               heat_capacity
 htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)

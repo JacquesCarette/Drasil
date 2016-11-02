@@ -21,7 +21,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
-  , UnitalChunk(..), makeUC
+  , UnitalChunk(..), makeUC, uniC
   -- Chunk.MUChunk
   , MUChunk(..)
   -- Chunk.Relation
@@ -77,7 +77,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained (Constrained(..), 
                                           ConstrainedMUC(..),fromMUC)
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, uniC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Chunk.Req

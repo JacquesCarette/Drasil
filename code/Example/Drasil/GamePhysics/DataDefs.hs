@@ -129,7 +129,7 @@ dd7descr = S "the " :+: (angAccel ^. descr) :+: S " of a " :+:
     S " with respect to " :+: (time ^. descr) :+: S " " :+:
     P (time ^. symbol)
 
--- DD8 : Impulse for collisionision response --
+-- DD8 : Impulse for collision response --
 
 -- Currently a super crude implementation requiring lots of custom chunks;
 -- need norms and cross products

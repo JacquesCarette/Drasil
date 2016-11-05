@@ -8,6 +8,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Physics
+import Data.Drasil.Quantities.Math
 
 import Control.Lens ((^.))
 
@@ -147,10 +148,8 @@ swhsUnitless :: [VarChunk]
 
 swhsUnitless = [norm_vect, surface, eta, melt_frac]
 
-norm_vect, eta, melt_frac :: VarChunk
+eta, melt_frac :: VarChunk
 
-norm_vect    = makeVC "n_vect" "unit outward normal vector for a surface"
-               (vec $ hat lN)
 eta          = makeVC "eta" "ODE parameter" (Greek Eta_L)
 melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
 

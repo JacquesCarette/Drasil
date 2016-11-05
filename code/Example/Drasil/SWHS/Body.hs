@@ -27,7 +27,7 @@ import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Thermodynamics
 
 import Data.Drasil.Quantities.Physics (surface)
-import Data.Drasil.Quantities.Math (gradient)
+import Data.Drasil.Quantities.Math (gradient, norm_vect)
 
 --Redundant import warnings
 

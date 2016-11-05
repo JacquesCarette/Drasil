@@ -10,5 +10,3 @@ solid   = makeCC "Solid" "solid state"
 
 ctrOfMass = makeCC "centre of mass" 
   "The mean location of the distribution of mass of the object."
-
-  

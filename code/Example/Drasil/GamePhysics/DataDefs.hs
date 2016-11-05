@@ -5,7 +5,8 @@ import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.Physics hiding (restitutionCoef)
+import Data.Drasil.Quantities.Physics (restitutionCoef)
 
 import Control.Lens ((^.))
 
@@ -139,7 +140,7 @@ dd8impulse = fromEqn "j" dd8descr lJ impulseU impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
-impulseEqn = ((Neg ((Int 1) + (C restCoef))) * (C initRelVel) :.
+impulseEqn = ((Neg ((Int 1) + (C restitutionCoef))) * (C initRelVel) :.
     (C normalVect)) / (((((Int 1) / (C mass_A))) + ((Int 1) / (C mass_B))) *
     ((C normalLen) :^ (Int 2)) +
     (((C perpLen_A) :^ (Int 2)) / (C momtInert_A)) +

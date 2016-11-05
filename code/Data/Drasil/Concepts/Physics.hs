@@ -3,8 +3,8 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Language.Drasil
 
-rigidBody, velocity, angularV, friction, elasticity,
-  collision, space, cartesian, rightHand :: ConceptChunk
+rigidBody, velocity, angularV, friction, elasticity, collision, space,
+  cartesian, rightHand, surface, restitutionCoef :: ConceptChunk
     
 rigidBody  = makeCC "rigid body" 
   "A solid body in which deformation is neglected."
@@ -22,6 +22,7 @@ space      = makeCC "space" ("A two-dimensional extent where objects and " ++
 cartesian  = makeCC "Cartesian coordinates" ("A coordinate system that " ++
     "specifies each point uniquely in a plane by a pair of numerical " ++
     "coordinates.")
-rightHand  = makeCC "right-handed coordinate system" 
+rightHand       = makeCC "right-handed coordinate system" 
   "A coordinate system where the positive z-axis comes out of the screen."
-surface = makeCC "S" "surface" 
+surface         = makeCC "S" "surface" 
+restitutionCoef = makeCC "C_R" "coefficient of restitution"

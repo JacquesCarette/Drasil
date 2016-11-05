@@ -9,8 +9,11 @@ import Data.Drasil.SI_Units
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.Physics hiding (restitutionCoef)
 import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.Math
+
+import Data.Drasil.Quantities.Physics (restitutionCoef)
 
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
@@ -479,8 +482,8 @@ s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
     [P (position ^. symbol), S "None", S "(0.412, 0.502) " :+:
     Sy (position ^. unit)],
     [P (vel ^. symbol), S "None", S "2.51 " :+: Sy (vel ^. unit)],
-    [P (restCoef ^. symbol), P (restCoef ^. symbol) :+: S " G/E to 0 and " :+:
-    P (restCoef ^. symbol) :+: S " less than 1", S "0.8"],
+    [P (restitutionCoef ^. symbol), P (restitutionCoef ^. symbol) :+: S " G/E to 0 and " :+:
+    P (restitutionCoef ^. symbol) :+: S " less than 1", S "0.8"],
     [P (orientation ^. symbol), P (orientation ^. symbol) :+: S " G/E to 0 " :+:
     S "and " :+: P (orientation ^. symbol) :+: S " less than 2pi", S "pi/2 " :+:
     Sy (orientation ^. unit)],

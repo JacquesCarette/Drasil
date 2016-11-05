@@ -2,6 +2,7 @@ module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Quantities.Physics
 
 import Control.Lens((^.))
 
@@ -47,12 +48,10 @@ angDisp     = makeUC "theta" "angular displacement" (Greek Gamma_L) radians
 vel         = makeUC "v" "velocity" (vec lV) velU
 
 -- Chunks without units --
-restCoef, numParticles :: VarChunk
-
 cpUnitless :: [VarChunk]
-cpUnitless = [restCoef, numParticles]
+cpUnitless = [restitutionCoef, numParticles]
 
-restCoef   = makeVC "C_R" "coefficient of restitution" (sub cC cR)
+numParticles :: VarChunk
 numParticles = makeVC "n" "number of particles in a rigid body" lN
 
 ----- Specific unitals needed for certain models and definitions -----

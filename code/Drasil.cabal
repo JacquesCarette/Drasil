@@ -18,6 +18,7 @@ library
     Data.Drasil.Quantities.Thermodynamics
     Data.Drasil.Quantities.Physics
     Data.Drasil.Quantities.Math
+    Data.Drasil.Units.Thermodynamics
   other-modules:
       Language.Drasil.Expr
     , Language.Drasil.Chunk

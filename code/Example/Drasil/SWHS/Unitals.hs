@@ -146,7 +146,7 @@ swhsUnitless :: [VarChunk]
 
 swhsUnitless = [norm_vect, surface, eta, melt_frac]
 
-norm_vect, surface, eta, melt_frac :: VarChunk
+norm_vect, eta, melt_frac :: VarChunk
 
 norm_vect    = makeVC "n_vect" "unit outward normal vector for a surface"
                (vec $ hat lN)

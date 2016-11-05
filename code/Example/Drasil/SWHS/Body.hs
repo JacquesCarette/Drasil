@@ -24,6 +24,9 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Thermodynamics
 
+import Data.Drasil.Quantities.Physics (surface)
+import Data.Drasil.Quantities.Math (gradient)
+
 --Redundant import warnings
 
 acronyms :: [ConceptChunk]

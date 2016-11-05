@@ -41,19 +41,19 @@ in_SA        = makeUC "A_in" "surface area over which heat is transferred in"
 out_SA       = makeUC "A_out" "surface area over which heat is transferred out"
                (sub cA (Atomic "out")) m_2
 pcm_SA       = makeUC "A_P" "phase change material surface area" (sub cA cP) m_2
-htCap        = makeUC "C" "specific heat capacity" cC heat_capacity
+htCap        = makeUC "C" "specific heat capacity" cC heat_cap_spec
 htCap_L      = makeUC "C^L" "specific heat capacity of a liquid" 
-               (sup (htCap ^. symbol) cL) heat_capacity
+               (sup (htCap ^. symbol) cL) heat_cap_spec
 htCap_L_P    = makeUC "C^L_P" "specific heat capacity of PCM as a liquid"
-               (sup (sub (htCap ^. symbol) cP) cL) heat_capacity
+               (sup (sub (htCap ^. symbol) cP) cL) heat_cap_spec
 htCap_S      = makeUC "C^S" "specific heat capacity of a solid" 
-               (sup (htCap ^. symbol) cS) heat_capacity
+               (sup (htCap ^. symbol) cS) heat_cap_spec
 htCap_S_P    = makeUC "C^S_P" "specific heat capacity of PCM as a solid"
-               (sup (sub (htCap ^. symbol) cP) cS) heat_capacity
+               (sup (sub (htCap ^. symbol) cP) cS) heat_cap_spec
 htCap_V      = makeUC "C^V" "specific heat capacity of a vapour" 
-               (sup (htCap ^. symbol) cV) heat_capacity
+               (sup (htCap ^. symbol) cV) heat_cap_spec
 htCap_W      = makeUC "C_W" "specific heat capacity of water" 
-               (sub (htCap ^. symbol) cW) heat_capacity
+               (sub (htCap ^. symbol) cW) heat_cap_spec
 diam         = makeUC "D" "diameter of tank" cD metre
 sensHtE      = makeUC "E" "sensible heat energy" cE joule
 pcm_initMltE = makeUC "E^init_Pmelt" ("change in heat energy in the PCM at " ++
@@ -155,7 +155,7 @@ melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
 
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will
---they be able to call "heat_capacity" without having to write the
+--they be able to call "heat_cap_spec" without having to write the
 --code for that unit in a separate file?
 
 --General Definitions--

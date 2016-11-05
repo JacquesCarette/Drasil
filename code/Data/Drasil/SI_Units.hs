@@ -111,8 +111,8 @@ torqueU      = new_unit "torque"               $ newton *: metre
 ---
 -- likely these should be moved elsewhere
 
-heat_capacity :: DerUChunk
-heat_capacity = makeDerU (CC "specific heat" (S "heat capacity per unit mass")) $
+heat_cap_spec :: DerUChunk --Specific heat capacity
+heat_cap_spec = makeDerU (CC "specific heat" (S "heat capacity per unit mass")) $
   USynonym (UDiv (joule ^. unit) (UProd [kilogram ^. unit, centigrade ^. unit]))
 
 thermal_flux :: DerUChunk

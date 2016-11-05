@@ -95,7 +95,7 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ S 
   (capitalize (c ^. name)) :+: S ": " :+: (c ^. descr)) 
-  [thermal_flux, heat_capacity])
+  [thermal_flux, heat_cap_spec])
   
 s4_1_2 = Section (physSysDescr ^. descr) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]

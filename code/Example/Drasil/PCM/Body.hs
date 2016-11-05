@@ -11,6 +11,8 @@ import Language.Drasil
 import Data.Drasil.SI_Units 
 import Data.Drasil.Concepts.Documentation
 
+import Data.Drasil.Units.Thermodynamics
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 

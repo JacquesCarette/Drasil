@@ -2,9 +2,12 @@ module Drasil.PCM.Example where
 
 import Language.Drasil
 
-import qualified Data.Drasil.SI_Units as U
+import Data.Drasil.SI_Units
+import qualified Data.Drasil.Units.Thermodynamics as U
+
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
+import Data.Drasil.Quantities.Math
 
 import Control.Lens ((^.))
 
@@ -23,25 +26,25 @@ coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
 norm_vect :: VarChunk
 
-coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) U.m_2
+coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
 hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
-              (sub cA (Atomic "in")) U.m_2
+              (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
-              (sub cA (Atomic "out")) U.m_2
+              (sub cA (Atomic "out")) m_2
 htCap       = uniC heat_cap_spec U.heat_cap_spec
 htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
               U.heat_cap_spec
 htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
               U.heat_cap_spec
-tank_D      = makeUC "D" "diameter of tank" cD U.metre
+tank_D      = makeUC "D" "diameter of tank" cD metre
 ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" lG
               U.thermal_flux
 ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH U.heat_transfer
 ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
               (sub lH cC) U.heat_transfer
-tank_L      = makeUC "L" "length of tank" cL U.metre
-mass        = makeUC "m" "mass" lM U.kilogram
-water_m     = makeUC "m_W" "mass of water" (sub lM cW) U.kilogram
+tank_L      = makeUC "L" "length of tank" cL metre
+mass        = makeUC "m" "mass" lM kilogram
+water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
 norm_vect   = makeVC "n_vect" "unit outward normal vector for a surface"
               (vec $ hat lN)
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
@@ -52,35 +55,31 @@ thFluxVect  = makeUC "q_vect" "thermal flux vector" (vec lQ)
 ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) U.thermal_flux
 ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) U.thermal_flux
 ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) U.thermal_flux
-time        = makeUC "t" "time" lT U.second
-temp        = makeUC "T" "temperature" cT U.centigrade
+time        = makeUC "t" "time" lT second
+temp        = makeUC "T" "temperature" cT centigrade
 -- temp_boil   = makeUC "T_boil" "temperature at boiling point" 
               -- (sub cT (Atomic "boil")) centigrade
 temp_coil   = makeUC "T_coil" "temperature of coil" 
-              (sub cT cC) U.centigrade
+              (sub cT cC) centigrade
 temp_env    = makeUC "T_env" "temperature of environment" 
-              (sub cT (Atomic "env")) U.centigrade
-time_final  = makeUC "t_final" "time" (sub lT (Atomic "final")) U.second
+              (sub cT (Atomic "env")) centigrade
+time_final  = makeUC "t_final" "time" (sub lT (Atomic "final")) second
 temp_init   = makeUC "T_init" "initial temperature" 
-              (sub cT (Atomic "init")) U.centigrade
+              (sub cT (Atomic "init")) centigrade
 temp_water  = makeUC "T_W" "temperature of water" 
-              (sub cT cW) U.centigrade
+              (sub cT cW) centigrade
 temp_diff   = makeUC "deltaT" "temperature difference" 
-              (Concat [Greek Delta, cT]) U.centigrade
-vol         = makeUC "V" "volume" cV U.m_3
+              (Concat [Greek Delta, cT]) centigrade
+vol         = makeUC "V" "volume" cV m_3
 --tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
                 -- (sub cV (Atomic "tank")) m_3
-water_vol   = makeUC "V_W" "volume of water" (sub cV cW) U.m_3
+water_vol   = makeUC "V_W" "volume of water" (sub cV cW) m_3
 density     = makeUC "rho" "density, mass per unit volume" (Greek Rho_L) 
-              U.densityU
-water_dense = makeUC "rho_W" "density of water" (sub (Greek Rho_L) cW) U.densityU
+              densityU
+water_dense = makeUC "rho_W" "density of water" (sub (Greek Rho_L) cW) densityU
 dummyVar    = makeUC "tau" "dummy variable for integration over time" 
-                (Greek Tau_L) U.second
+                (Greek Tau_L) second
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
-
-----VarChunks----
-gradient :: VarChunk
-gradient = makeVC "gradient" "the gradient operator" (Greek Nabla)
 
 ----Acronyms-----
 acronyms :: [ConceptChunk]

@@ -2,8 +2,7 @@ module Drasil.HGHC.HeatTransfer where
 
 import Language.Drasil
 
-import Data.Drasil.SI_Units
-import Data.Drasil.Concepts.Thermodynamics
+import Data.Drasil.Units.Thermodynamics (heat_transfer)
 
 varChunks :: [VarChunk]
 varChunks = [tau_c, h_b, h_p, k_c]

@@ -6,7 +6,7 @@ import Drasil.SWHS.Units
 import Drasil.SWHS.Unitals
 
 import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 import Data.Drasil.Concepts.Thermodynamics
 

@@ -6,6 +6,7 @@ import Drasil.SWHS.Units
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Quantities.Physics
 
 import Control.Lens ((^.))
 
@@ -149,7 +150,6 @@ norm_vect, surface, eta, melt_frac :: VarChunk
 
 norm_vect    = makeVC "n_vect" "unit outward normal vector for a surface"
                (vec $ hat lN)
-surface      = makeVC "S" "surface" (cS)
 eta          = makeVC "eta" "ODE parameter" (Greek Eta_L)
 melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
 
@@ -157,10 +157,6 @@ melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
 --I.e. Anytime someone writes a program involving heat capacity will
 --they be able to call "heat_capacity" without having to write the
 --code for that unit in a separate file?
-
---VarChunks--
-gradient :: VarChunk
-gradient = makeVC "gradient" "gradient operator" (Greek Nabla)
 
 --General Definitions--
 -- gd1NewtonCooling :: RelationChunk

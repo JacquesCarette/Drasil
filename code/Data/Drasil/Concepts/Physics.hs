@@ -24,3 +24,4 @@ cartesian  = makeCC "Cartesian coordinates" ("A coordinate system that " ++
     "coordinates.")
 rightHand  = makeCC "right-handed coordinate system" 
   "A coordinate system where the positive z-axis comes out of the screen."
+surface = makeCC "S" "surface" 

@@ -89,6 +89,7 @@ ar_min      = makeVC "AR_min" "Minimum Aspect Ratio"
 gTF         = makeVC "GTF" "Glass Type Factor" (Atomic "GTF")
 
 ----Acronyms-----
+-- FIXME: Use actual acronyms instead of CCs.
 acronyms :: [ConceptChunk]
 acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
@@ -116,6 +117,9 @@ eqTNT         = makeCC "TNT" "TNT (Trinitrotoluene) Equivalent Factor"
 
 
 ----Terminology---- 
+
+-- TODO: See if we can make some of these terms less specific and/or
+--    parameterized.
 terms :: [ConceptChunk]
 terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, 
   lr, ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, sD]

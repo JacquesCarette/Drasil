@@ -11,6 +11,8 @@ import Control.Lens ((^.))
 
 centreMass, twoD :: ConceptChunk
 
+-- FIXME: Create actual acronyms instead of using CCs.
+
 cpAcronyms :: [ConceptChunk]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     inModel, likelyChg, ode, requirement, srs, thModel, twoD]

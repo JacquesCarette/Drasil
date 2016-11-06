@@ -94,6 +94,8 @@ radians = DUC
     (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
     (USynonym (metre /: metre))
 
+-- FIXME: These should probably be moved elsewhere --
+    
 velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
 velU         = new_unit "velocity"             $ metre /: second
 accelU       = new_unit "acceleration"         $ metre /: s_2
@@ -107,10 +109,6 @@ impulseU, springConstU, torqueU :: DerUChunk
 impulseU     = new_unit "impulse"              $ newton *: second
 springConstU = new_unit "spring constant"      $ newton /: metre
 torqueU      = new_unit "torque"               $ newton *: metre
-
----
--- likely these should be moved elsewhere
---
 
 gravConstU :: DerUChunk
 gravConstU = makeDerU (CC "gravitational constant" (S "universal gravitational constant")) $

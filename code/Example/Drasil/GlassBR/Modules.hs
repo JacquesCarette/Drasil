@@ -73,6 +73,8 @@ mod_derivedv = makeImpModule modDerivedVals
   (Just mod_behav)
 
 -- calculations module
+
+-- TODO: Maybe this could be parameterized.
 mod_calc_desc :: ConceptChunk
 mod_calc_desc = CC "calculations"
   (S "Defines the equations for solving for the probability of glass " :+:

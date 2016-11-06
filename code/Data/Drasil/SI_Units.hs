@@ -94,6 +94,11 @@ radians = DUC
     (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
     (USynonym (metre /: metre))
 
+-- FIXME: Need to add pi 
+--degrees = DUC
+  --  (UD (CC "Degrees" (S "angle")) (UName (Special Circle)))
+  --  Equiv to pi/180 rad.
+
 -- FIXME: These should probably be moved elsewhere --
     
 velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
@@ -109,6 +114,11 @@ impulseU, springConstU, torqueU :: DerUChunk
 impulseU     = new_unit "impulse"              $ newton *: second
 springConstU = new_unit "spring constant"      $ newton /: metre
 torqueU      = new_unit "torque"               $ newton *: metre
+
+-- Should we allow multiple different unit names for the same units?
+momentOfForceU, stiffnessU :: DerUChunk
+momentOfForceU = new_unit "moment of force"    $ newton *: metre
+stiffnessU     = new_unit "stiffness"          $ newton /: metre 
 
 gravConstU :: DerUChunk
 gravConstU = makeDerU (CC "gravitational constant" (S "universal gravitational constant")) $

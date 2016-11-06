@@ -2,6 +2,8 @@ module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil
 
+--FIXME: Use actual Acronyms instead of CCs.
+
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel :: ConceptChunk
 

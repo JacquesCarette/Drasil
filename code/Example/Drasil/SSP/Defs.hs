@@ -4,9 +4,11 @@ import Drasil.SSP.Units
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Documentation
 
 import Control.Lens ((^.))
 
+--FIXME: Remove unitless and use MUChunks
 -- import Control.Lens ((^.))
 sspSymbols :: [UnitalChunk]
 sspSymbols = [fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords, fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i, omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f, m, upsilon, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i, dv_i, dx_i, dy_i]
@@ -101,13 +103,13 @@ n           = makeUC "n" "number of slices the slip mass has been divided into" 
 
 f           = makeUC "F" "generic force; assumed 1D allowing a scalar" (cF) metre
 
-m           = makeUC "M" "moment of a body; assumed 2D allowing a scalar" (cM) newton_metre
+m           = makeUC "M" "moment of a body; assumed 2D allowing a scalar" (cM) momentOfForceU
 
 upsilon     = makeUC "Upsilon" "generic minimization function or algorithm" (Greek Upsilon) unitless
 
 delta       = makeUC "delta" "generic displacement of a body" (Greek Delta_L) metre
 
-k           = makeUC "K" "stiffness (how much a body resists displacement when subject to a force)" (cK) newton_per_metre
+k           = makeUC "K" "stiffness (how much a body resists displacement when subject to a force)" (cK) stiffnessU
 
 k_sti       = makeUC "K_st,i" "shear stiffness of an interslice surface, without length adjustment (for interslice index i)" (sub cK (Atomic "st,i")) pascal
 
@@ -131,25 +133,13 @@ dy_i        = makeUC "dy_i" "displacement of a slice in the y-ordinate direction
 
 
 ----Acronyms-----
+-- FIXME: Use acronyms
 acronyms :: [ConceptChunk]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,
-  physSysDescr,requirement,softwareRS,sSA,theoreticMod]
+acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
+  physSyst,requirement,srs,sSA,thModel]
   
-assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,
-  physSysDescr,requirement,softwareRS,sSA,theoreticMod :: ConceptChunk
-  
-assumption    = makeCC "A" "Assumption"
-dataDefn      = makeCC "MG" "Data Definition"
-genDefn       = makeCC "GD" "General Definition"
-goalStmt      = makeCC "GS"  "Goal Statement"
-instanceMod   = makeCC "IM" "Instance Model"
-likelyChange  = makeCC "LC" "Likely Change"
-physSysDescr  = makeCC "PS" "Physical System Description"
-requirement   = makeCC "R" "Requirement"
-softwareRS    = makeCC "SRS" "Software Requirements Specification"
-sSA           = makeCC "SSA" "Slope Stability Analysis"
-theoreticMod  = makeCC "T" "Theoretical Model"
-
+sSA :: ConceptChunk
+sSA = makeCC "SSA" "Slope Stability Analysis"
 
 
 ----Theoretical Models----

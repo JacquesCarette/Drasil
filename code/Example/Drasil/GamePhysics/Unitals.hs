@@ -4,6 +4,8 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Quantities.Physics
 
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
+
 import Control.Lens((^.))
 
 ----- Table of Symbols -----
@@ -32,7 +34,7 @@ momtInert   = makeUC "I" "moment of inertia" (vec cI) momtInertU
 impulseVec  = makeUC "J" "impulse (vector)" (vec cJ) impulseU
 impulseScl  = makeUC "j" "impulse (scalar)" lJ impulseU
 len         = makeUC "L" "length" cL metre
-mass        = makeUC "m" "mass" lM kilogram
+mass        = ucFromVC QPP.mass kilogram
 iVect       = makeUC "i" "horizontal unit vector" (vec (hat lI)) metre
 jVect       = makeUC "j" "vertical unit vector" (vec (hat lJ)) metre
 normalVect  = makeUC "n" "collision normal vector" (vec lN) metre

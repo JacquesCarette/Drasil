@@ -16,6 +16,7 @@ library
     Data.Drasil.Concepts.Software
     Data.Drasil.Concepts.Math
     Data.Drasil.Quantities.Thermodynamics
+    Data.Drasil.Quantities.PhysicalProperties
     Data.Drasil.Quantities.Physics
     Data.Drasil.Quantities.Math
     Data.Drasil.Units.Thermodynamics

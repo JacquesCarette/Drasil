@@ -10,7 +10,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics hiding (restitutionCoef)
-import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
 import Data.Drasil.Concepts.Math
 
 import Data.Drasil.Quantities.Physics (restitutionCoef)

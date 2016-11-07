@@ -23,7 +23,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics (heat_transfer)
 
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
 import Data.Drasil.Concepts.Thermodynamics
 
 import Data.Drasil.Quantities.Physics (surface)

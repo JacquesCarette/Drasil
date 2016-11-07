@@ -4,6 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Units.Thermodynamics as U
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
@@ -24,14 +25,13 @@ coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
   ht_flux_C,ht_flux_in,ht_flux_out,time,temp,--temp_boil,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
-norm_vect :: VarChunk
 
 coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
 hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
               (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
               (sub cA (Atomic "out")) m_2
-htCap       = uniC heat_cap_spec U.heat_cap_spec
+htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
 htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
               U.heat_cap_spec
 htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
@@ -43,10 +43,9 @@ ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH U.heat_transf
 ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
               (sub lH cC) U.heat_transfer
 tank_L      = makeUC "L" "length of tank" cL metre
-mass        = makeUC "m" "mass" lM kilogram
-water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
-norm_vect   = makeVC "n_vect" "unit outward normal vector for a surface"
-              (vec $ hat lN)
+mass        = ucFromVC QPP.mass kilogram
+water_m     = makeUC "m_W" ((QPP.mass ^. name) ++ " of water") 
+                (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
 ht_flux     = makeUC "q" "heat flux" lQ U.heat_transfer

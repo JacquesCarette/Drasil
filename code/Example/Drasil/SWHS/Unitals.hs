@@ -9,6 +9,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Physics
 import Data.Drasil.Quantities.Math
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Control.Lens ((^.))
 
@@ -77,7 +78,7 @@ htFusion     = makeUC "H_f" "specific latent heat of fusion" (sub cH lF)
 pcm_HTC      = makeUC "h_P" ("convective heat transfer coefficient between " ++
                "PCM and water") (sub lH cP) heat_transfer
 tank_length  = makeUC "L" "length of tank" cL metre
-mass         = makeUC "m" "mass" lM kilogram
+mass         = ucFromVC QPP.mass kilogram
 pcm_mass     = makeUC "m_P" "mass of phase change material" 
                (sub (mass ^. symbol) cP) kilogram
 w_mass       = makeUC "m_W" "mass of water" (sub (mass ^. symbol) cW) kilogram

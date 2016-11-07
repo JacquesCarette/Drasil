@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
-module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, uniC) where
+module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 
@@ -12,8 +12,8 @@ import Language.Drasil.Spec (Sentence(..))
 makeUC :: Unit u => String -> String -> Symbol -> u -> UnitalChunk
 makeUC nam desc sym un = UC (VC nam (S desc) sym) un
 
-uniC :: Unit u => VarChunk -> u -> UnitalChunk
-uniC vc un = UC vc un
+ucFromVC :: Unit u => VarChunk -> u -> UnitalChunk
+ucFromVC vc un = UC vc un
 
 qlens :: (forall c. Quantity c => Simple Lens c a) -> Simple Lens Q a
 qlens l f (Q a) = fmap (\x -> Q (set l x a)) (f (a ^. l))

@@ -93,6 +93,6 @@ instance LayoutObj Contents where
   rType _ = error "Attempting to reference unimplemented reference type"
   
 getDefName :: DType -> Sentence
-getDefName (Data c)   = S $ "MG:" ++ (repUnd (c ^. name))
+getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. name))
 getDefName (Theory c) = S $ "T:" ++ firstLetter (repUnd (c ^. name))
 getDefName _          = error "Unimplemented definition type reference"

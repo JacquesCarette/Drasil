@@ -4,7 +4,7 @@ import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
-import Data.Drasil.Concepts.Physics hiding (force)
+import Data.Drasil.Concepts.Physics (rigidBody)
 
 import Control.Lens ((^.))
 

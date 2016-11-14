@@ -4,7 +4,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Physics as CP
 
 surface, acceleration, angularAccel, restitutionCoef, force, momentOfInertia,
-  impulseS, impulseV, gravitationalAccel, gravitationalConst, displacement
+  impulseS, impulseV, gravitationalAccel, gravitationalConst, displacement,
   angularV, position, distance, angularDisplacement,time, torque, 
   velocity :: VarChunk
 

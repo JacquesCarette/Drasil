@@ -384,9 +384,9 @@ This section collects and defines all the data needed to build the instance mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:B}
+\toprule \textbf{Refname} & \textbf{DD:B}
 \phantomsection 
-\label{MG:B}
+\label{DD:B}
 \\ \midrule \\
 Label & $B$
 \\ \midrule \\
@@ -400,9 +400,9 @@ Description & $B$ is the risk of failure\newline$k$ is the Surface flaw paramete
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:h}
+\toprule \textbf{Refname} & \textbf{DD:h}
 \phantomsection 
-\label{MG:h}
+\label{DD:h}
 \\ \midrule \\
 Label & $h$
 \\ \midrule \\
@@ -416,9 +416,9 @@ Description & $h$ is the  function that maps from the nominal thickness ($t$) to
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:LDF}
+\toprule \textbf{Refname} & \textbf{DD:LDF}
 \phantomsection 
-\label{MG:LDF}
+\label{DD:LDF}
 \\ \midrule \\
 Label & $LDF$
 \\ \midrule \\
@@ -432,9 +432,9 @@ Description & $LDF$ is the Load Duration Factor\newline$t_{d}$ is the Duration o
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:J}
+\toprule \textbf{Refname} & \textbf{DD:J}
 \phantomsection 
-\label{MG:J}
+\label{DD:J}
 \\ \midrule \\
 Label & $J$
 \\ \midrule \\
@@ -448,9 +448,9 @@ Description & $J$ is the Stress distribution factor (Function)\newline$J$ is the
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:NFL}
+\toprule \textbf{Refname} & \textbf{DD:NFL}
 \phantomsection 
-\label{MG:NFL}
+\label{DD:NFL}
 \\ \midrule \\
 Label & $NFL$
 \\ \midrule \\
@@ -464,9 +464,9 @@ Description & $NFL$ is the Non-Factored Load\newline$\hat{q}_{tol}$ is the Toler
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:GTF}
+\toprule \textbf{Refname} & \textbf{DD:GTF}
 \phantomsection 
-\label{MG:GTF}
+\label{DD:GTF}
 \\ \midrule \\
 Label & $GTF$
 \\ \midrule \\
@@ -480,9 +480,9 @@ Description & $GTF$ is the function that maps from the glass type ($g$) to a rea
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:q.hat}
+\toprule \textbf{Refname} & \textbf{DD:q.hat}
 \phantomsection 
-\label{MG:q.hat}
+\label{DD:q.hat}
 \\ \midrule \\
 Label & $\hat{q}$
 \\ \midrule \\
@@ -496,9 +496,9 @@ Description & $\hat{q}$ is the Dimensionless load\newline$q$ is the Applied load
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:q.hat.tol}
+\toprule \textbf{Refname} & \textbf{DD:q.hat.tol}
 \phantomsection 
-\label{MG:q.hat.tol}
+\label{DD:q.hat.tol}
 \\ \midrule \\
 Label & $\hat{q}_{tol}$
 \\ \midrule \\
@@ -512,9 +512,9 @@ Description & $\hat{q}_{tol}$ is the Tolerable load\newline$\hat{q}_{tol}$ is th
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:J.tol}
+\toprule \textbf{Refname} & \textbf{DD:J.tol}
 \phantomsection 
-\label{MG:J.tol}
+\label{DD:J.tol}
 \\ \midrule \\
 Label & $J_{tol}$
 \\ \midrule \\
@@ -603,14 +603,14 @@ $TNT$ & TNT equivalent factor &
           \item{Probability of breakage ($P_{b}$) (\hyperref[T:PoGB]{Definition~T:PoGB})}
           \item{Load Resistance ($LR$) (\hyperref[T:CoC]{Definition~T:CoC})}
           \item{Applied load (demand) ($q$) (\hyperref[T:CoD]{Definition~T:CoD})}
-          \item{Actual thickness ($h$) (\hyperref[MG:h]{Definition~MG:h})}
-          \item{Load Duration Factor ($LDF$) (\hyperref[MG:LDF]{Definition~MG:LDF})}
-          \item{Stress distribution factor (Function) ($J$) (\hyperref[MG:J]{Definition~MG:J})}
-          \item{Non-Factored Load ($NFL$) (\hyperref[MG:NFL]{Definition~MG:NFL})}
-          \item{Glass Type Factor ($GTF$) (\hyperref[MG:GTF]{Definition~MG:GTF})}
-          \item{Dimensionless load ($\hat{q}$) (\hyperref[MG:q.hat]{Definition~MG:q.hat})}
-          \item{Tolerable load ($\hat{q}_{tol}$) (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol})}
-          \item{Stress distribution factor (Function) based on Pbtol ($J_{tol}$) (\hyperref[MG:J.tol]{Definition~MG:J.tol})}
+          \item{Actual thickness ($h$) (\hyperref[DD:h]{Definition~DD:h})}
+          \item{Load Duration Factor ($LDF$) (\hyperref[DD:LDF]{Definition~DD:LDF})}
+          \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:J]{Definition~DD:J})}
+          \item{Non-Factored Load ($NFL$) (\hyperref[DD:NFL]{Definition~DD:NFL})}
+          \item{Glass Type Factor ($GTF$) (\hyperref[DD:GTF]{Definition~DD:GTF})}
+          \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:q.hat]{Definition~DD:q.hat})}
+          \item{Tolerable load ($\hat{q}_{tol}$) (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol})}
+          \item{Stress distribution factor (Function) based on Pbtol ($J_{tol}$) (\hyperref[DD:J.tol]{Definition~DD:J.tol})}
           \item{Aspect Ratio ($AR$)}
           \end{enumerate}
 \end{itemize}
@@ -631,7 +631,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table 5 (Table~\ref{Table:TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models with each other. Table 6 (Table~\ref{Table:TMStCBRaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Table 7 (Table~\ref{Table:TMStCBAaOI}) shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[MG:B]{Definition~MG:B}) & DD2 (\hyperref[MG:h]{Definition~MG:h}) & DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) & DD4 (\hyperref[MG:J]{Definition~MG:J}) & DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) & DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) & DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) & DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) & DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol})
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:B]{Definition~DD:B}) & DD2 (\hyperref[DD:h]{Definition~DD:h}) & DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) & DD4 (\hyperref[DD:J]{Definition~DD:J}) & DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) & DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) & DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) & DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) & DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol})
 \\
 \midrule
 T1 (\hyperref[T:SR]{Definition~T:SR}) &  & X & X &  &  &  &  &  &  &  &  &  &  & 
@@ -644,23 +644,23 @@ IM2 (\hyperref[T:CoC]{Definition~T:CoC}) &  &  &  &  &  &  &  &  &  & X & X &  &
 \\
 IM3 (\hyperref[T:CoD]{Definition~T:CoD}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[MG:B]{Definition~MG:B}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:B]{Definition~DD:B}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[MG:h]{Definition~MG:h}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:h]{Definition~DD:h}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[MG:J]{Definition~MG:J}) &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+DD4 (\hyperref[DD:J]{Definition~DD:J}) &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) &  &  &  &  &  &  & X &  &  &  &  &  & X & 
+DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) &  &  &  &  &  &  & X &  &  &  &  &  & X & 
 \\
-DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) &  &  &  &  & X &  & X &  &  &  & X &  &  & 
+DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) &  &  &  &  & X &  & X &  &  &  & X &  &  & 
 \\
-DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -668,7 +668,7 @@ DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) &  &  &  &  &  &  & X & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[MG:B]{Definition~MG:B}) & DD2 (\hyperref[MG:h]{Definition~MG:h}) & DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) & DD4 (\hyperref[MG:J]{Definition~MG:J}) & DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) & DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) & DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) & DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) & DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FRs}) & R2 (in Section~\ref{Sec:FRs})
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:B]{Definition~DD:B}) & DD2 (\hyperref[DD:h]{Definition~DD:h}) & DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) & DD4 (\hyperref[DD:J]{Definition~DD:J}) & DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) & DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) & DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) & DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) & DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FRs}) & R2 (in Section~\ref{Sec:FRs})
 \\
 \midrule
 R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -702,23 +702,23 @@ IM2 (\hyperref[T:CoC]{Definition~T:CoC}) &  &  &  &  & X &  &  &
 \\
 IM3 (\hyperref[T:CoD]{Definition~T:CoD}) &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[MG:B]{Definition~MG:B}) &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:B]{Definition~DD:B}) &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[MG:h]{Definition~MG:h}) &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:h]{Definition~DD:h}) &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[MG:LDF]{Definition~MG:LDF}) &  &  &  & X &  &  &  & X
+DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) &  &  &  & X &  &  &  & X
 \\
-DD4 (\hyperref[MG:J]{Definition~MG:J}) &  &  &  &  &  &  &  & 
+DD4 (\hyperref[DD:J]{Definition~DD:J}) &  &  &  &  &  &  &  & 
 \\
-DD5 (\hyperref[MG:NFL]{Definition~MG:NFL}) &  &  &  & X &  &  &  & 
+DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) &  &  &  & X &  &  &  & 
 \\
-DD6 (\hyperref[MG:GTF]{Definition~MG:GTF}) &  &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[MG:q.hat]{Definition~MG:q.hat}) &  &  &  &  & X &  &  & 
+DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) &  &  &  &  & X &  &  & 
 \\
-DD8 (\hyperref[MG:q.hat.tol]{Definition~MG:q.hat.tol}) &  &  &  &  &  &  &  & 
+DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) &  &  &  &  &  &  &  & 
 \\
-DD9 (\hyperref[MG:J.tol]{Definition~MG:J.tol}) &  &  &  & X &  &  &  & 
+DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) &  &  &  & X &  &  &  & 
 \\
 LC1 (in Section~\ref{Sec:LCs}) &  &  & X &  &  &  &  & 
 \\

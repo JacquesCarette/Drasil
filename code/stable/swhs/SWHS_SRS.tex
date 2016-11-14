@@ -285,14 +285,14 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:Cote]{Definition~T:Cote}].
 \item[A2:]All heat transfer coefficients are constant over time [GD1].
-\item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[MG:q.P]{Definition~MG:q.P}].
-\item[A4:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[MG:q.P]{Definition~MG:q.P}, LC1].
+\item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[DD:q.P]{Definition~DD:q.P}].
+\item[A4:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[DD:q.P]{Definition~DD:q.P}, LC1].
 \item[A5:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
 \item[A6:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
-\item[A7:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[MG:q.C]{Definition~MG:q.C}].
-\item[A8:]The temperature of the heating coil is constant over time [\hyperref[MG:q.C]{Definition~MG:q.C}, LC2].
-\item[A9:]The temperature of the heating coil does not vary along its length [\hyperref[MG:q.C]{Definition~MG:q.C}, LC3].
-\item[A10:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[MG:q.P]{Definition~MG:q.P}].
+\item[A7:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[DD:q.C]{Definition~DD:q.C}].
+\item[A8:]The temperature of the heating coil is constant over time [\hyperref[DD:q.C]{Definition~DD:q.C}, LC2].
+\item[A9:]The temperature of the heating coil does not vary along its length [\hyperref[DD:q.C]{Definition~DD:q.C}, LC3].
+\item[A10:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[DD:q.P]{Definition~DD:q.P}].
 \item[A11:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC4].
 \item[A12:]The initial temperature of the water and the PCM is the same [IM1, IM2, LC5].
 \item[A13:]The simulation will start with the PCM in a solid state [IM2, IM4].
@@ -349,7 +349,7 @@ Label & Latent heat energy
 \\ \midrule \\
 Equation & $Q(t)=\int_{0}^{t}{\frac{dQ(\tau{})}{d\tau{}}d\tau{}}$
 \\ \midrule \\
-Description & $Q$ is the change in thermal energy (J), latent heat energy. <Integral> is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[MG:H.f]{Definition~MG:H.f}. $T_{melt}$ and $T_{boil}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}C$). Latent heating stops when all material has changed to the new phase.
+Description & $Q$ is the change in thermal energy (J), latent heat energy. <Integral> is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:H.f]{Definition~DD:H.f}. $T_{melt}$ and $T_{boil}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}C$). Latent heating stops when all material has changed to the new phase.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -382,9 +382,9 @@ This section collects and defines all the data needed to build the instance mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:q.C}
+\toprule \textbf{Refname} & \textbf{DD:q.C}
 \phantomsection 
-\label{MG:q.C}
+\label{DD:q.C}
 \\ \midrule \\
 Label & $q_{C}$
 \\ \midrule \\
@@ -398,9 +398,9 @@ Description & $q_{C}$ is the heat flux into the water from the coil\newline$h_{C
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:q.P}
+\toprule \textbf{Refname} & \textbf{DD:q.P}
 \phantomsection 
-\label{MG:q.P}
+\label{DD:q.P}
 \\ \midrule \\
 Label & $q_{P}$
 \\ \midrule \\
@@ -414,9 +414,9 @@ Description & $q_{P}$ is the heat flux into the PCM from water\newline$h_{P}$ is
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:H.f}
+\toprule \textbf{Refname} & \textbf{DD:H.f}
 \phantomsection 
-\label{MG:H.f}
+\label{DD:H.f}
 \\ \midrule \\
 Label & $H_{f}$
 \\ \midrule \\
@@ -436,7 +436,7 @@ To find the rate of change of $T_{W}$, we look at the energy balance on water. T
 \begin{equation}
 m_{W}C_{W}\frac{dT_{W}}{dt}=q_{C}A_{C}-q_{P}A_{P}
 \end{equation}
-Using \hyperref[MG:q.C]{Definition~MG:q.C} and \hyperref[MG:q.P]{Definition~MG:q.P} for $q_{C}$ and $q_{P}$ respectively, this can be written as:
+Using \hyperref[DD:q.C]{Definition~DD:q.C} and \hyperref[DD:q.P]{Definition~DD:q.P} for $q_{C}$ and $q_{P}$ respectively, this can be written as:
 \begin{equation}
 m_{W}C_{W}\frac{dT_{W}}{dt}=h_{C}A_{C}(T_{C}-T_{W})-h_{P}A_{P}(T_{W}-T_{P})
 \end{equation}
@@ -465,7 +465,7 @@ To find the rate of change of $T_{P}$, we look at the energy balance on the PCM.
 \begin{equation}
 m_{P}C_{P}^{S}\frac{dT_{P}}{dt}=q_{P}A_{P}
 \end{equation}
-Using \hyperref[MG:q.P]{Definition~MG:q.P} for $q_{P}$, this equation can be written as:
+Using \hyperref[DD:q.P]{Definition~DD:q.P} for $q_{P}$, this equation can be written as:
 \begin{equation}
 m_{P}C_{P}^{S}\frac{dT_{P}}{dt}=h_{P}A_{P}(T_{W}-T_{P})
 \end{equation}
@@ -485,7 +485,7 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 Tables 1 and 2 show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:PoaCS}
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between  the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[MG:q.C]{Definition~MG:q.C} and \hyperref[MG:q.P]{Definition~MG:q.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between  the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:q.C]{Definition~DD:q.C} and \hyperref[DD:q.P]{Definition~DD:q.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 \begin{equation}
 E_{W}=\int_{0}^{t}{h_{C}A_{C}(T_{C}-T_{W}(t))dt}-\int_{0}^{t}{h_{P}A_{P}(T_{W}(t)-T_{P}(t))dt}
 \end{equation}
@@ -582,7 +582,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRsaIMs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAsaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[T:Cote]{Definition~T:Cote} & \hyperref[T:She]{Definition~T:She} & \hyperref[T:Lhe]{Definition~T:Lhe} & GD1 & GD2 & \hyperref[MG:q.C]{Definition~MG:q.C} & \hyperref[MG:q.P]{Definition~MG:q.P} & \hyperref[MG:H.f]{Definition~MG:H.f} & \hyperref[MG:H.f]{Definition~MG:H.f} & IM1 & IM2 & IM3 & IM4
+ & \hyperref[T:Cote]{Definition~T:Cote} & \hyperref[T:She]{Definition~T:She} & \hyperref[T:Lhe]{Definition~T:Lhe} & GD1 & GD2 & \hyperref[DD:q.C]{Definition~DD:q.C} & \hyperref[DD:q.P]{Definition~DD:q.P} & \hyperref[DD:H.f]{Definition~DD:H.f} & \hyperref[DD:H.f]{Definition~DD:H.f} & IM1 & IM2 & IM3 & IM4
 \\
 \midrule
 \hyperref[T:Cote]{Definition~T:Cote} &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -595,13 +595,13 @@ GD1 &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 GD2 & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:q.C]{Definition~MG:q.C} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[DD:q.C]{Definition~DD:q.C} &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:q.P]{Definition~MG:q.P} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[DD:q.P]{Definition~DD:q.P} &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:H.f]{Definition~MG:H.f} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:H.f]{Definition~DD:H.f} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:H.f]{Definition~MG:H.f} &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[DD:H.f]{Definition~DD:H.f} &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
 IM1 &  &  &  &  & X & X & X &  &  &  & X &  & 
 \\
@@ -669,13 +669,13 @@ GD1 &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 GD2 &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:q.C]{Definition~MG:q.C} &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:q.C]{Definition~DD:q.C} &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:q.P]{Definition~MG:q.P} &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[DD:q.P]{Definition~DD:q.P} &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:H.f]{Definition~MG:H.f} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:H.f]{Definition~DD:H.f} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[MG:H.f]{Definition~MG:H.f} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:H.f]{Definition~DD:H.f} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 IM1 &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\

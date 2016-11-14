@@ -5,8 +5,8 @@ import Language.Drasil
 
 rigidBody, velocity, angularV, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
-  angularAccel, momentOfInertia, force, impulseS, impulseV, 
-  gravitationalAccel, gravitationalConst :: ConceptChunk
+  angularAccel, momentOfInertia, force, impulseS, impulseV, displacement,
+  gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,time, torque :: ConceptChunk
     
 rigidBody  = makeCC "rigid body" 
   "A solid body in which deformation is neglected."
@@ -26,6 +26,9 @@ cartesian  = makeCC "Cartesian coordinates" ("A coordinate system that " ++
     "coordinates.")
 rightHand  = makeCC "right-handed coordinate system" 
   "A coordinate system where the positive z-axis comes out of the screen."
+  
+-- The following feel like they're missing something/need to be more
+-- descriptive. See issue tracker for details.  
 surface    = nCC "surface" 
 restitutionCoef = nCC "coefficient of restitution"
 acceleration    = nCC "acceleration"
@@ -34,6 +37,13 @@ momentOfInertia = nCC "moment of inertia"
 force      = nCC "force"
 impulseV   = nCC "impulse (vector)"
 impulseS   = nCC "impulse (scalar)"
+position   = nCC "position"
+distance   = nCC "distance"
+displacement = nCC "displacement"
+angularDisplacement = nCC "angular displacement"
+time = nCC "time"
+torque = nCC "torque"
+
 
 gravitationalAccel = nCC "gravitational acceleration" 
 gravitationalConst = makeCC "gravitational constant" 

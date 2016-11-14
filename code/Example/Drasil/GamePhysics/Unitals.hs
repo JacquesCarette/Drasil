@@ -39,14 +39,14 @@ iVect       = makeUC "i" "horizontal unit vector" (vec (hat lI)) metre
 jVect       = makeUC "j" "vertical unit vector" (vec (hat lJ)) metre
 normalVect  = makeUC "n" "collision normal vector" (vec lN) metre
 angVel      = ucFromVC QP.angularV angVelU
-position    = makeUC "p" "position" (vec lP) metre
+position    = ucFromVC QP.position metre
 orientation = makeUC "phi" "orientation" (Greek Phi_L) radians
-dist        = makeUC "r" "distance" lR metre
-disp        = makeUC "r" "displacement" (vec lR) metre
-time        = makeUC "t" "time" lT second
-torque      = makeUC "tau" "torque" (Greek Tau_L) torqueU
-angDisp     = makeUC "theta" "angular displacement" (Greek Theta_L) radians
-vel         = makeUC "v" "velocity" (vec lV) velU
+dist        = ucFromVC QP.distance metre
+disp        = ucFromVC QP.displacement metre
+time        = ucFromVC QP.time second
+torque      = ucFromVC QP.torque torqueU
+angDisp     = ucFromVC QP.angularDisplacement radians
+vel         = ucFromVC QP.velocity velU
 
 -- Chunks without units --
 cpUnitless :: [VarChunk]
@@ -56,6 +56,8 @@ numParticles :: VarChunk
 numParticles = makeVC "n" "number of particles in a rigid body" lN
 
 ----- Specific unitals needed for certain models and definitions -----
+
+-- TODO: The following should all end up parameterized
 
 -- T2 --
 

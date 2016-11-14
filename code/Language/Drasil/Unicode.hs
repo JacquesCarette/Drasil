@@ -27,6 +27,8 @@ data Greek = Alpha_L
            | Rho
            | Tau_L
            | Tau
+           | Theta_L
+           | Theta
            | Upsilon_L
            | Upsilon
 

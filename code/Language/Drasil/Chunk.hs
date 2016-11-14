@@ -61,6 +61,10 @@ instance Quantity VarChunk where
 makeCC :: String -> String -> ConceptChunk
 makeCC nam des = CC nam (S des)
 
+-- For when name = descr (will likely become deprecated as the chunks become more descriptive).
+nCC :: String -> ConceptChunk 
+nCC n = makeCC n n
+
 makeVC :: String -> String -> Symbol -> VarChunk
 makeVC nam des sym = VC nam (S des) sym
 

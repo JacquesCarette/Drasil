@@ -4,7 +4,9 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil
 
 rigidBody, velocity, angularV, friction, elasticity, collision, space,
-  cartesian, rightHand, surface, restitutionCoef :: ConceptChunk
+  cartesian, rightHand, surface, restitutionCoef, acceleration,
+  angularAccel, momentOfInertia, force, impulseS, impulseV, 
+  gravitationalAccel, gravitationalConst :: ConceptChunk
     
 rigidBody  = makeCC "rigid body" 
   "A solid body in which deformation is neglected."
@@ -22,7 +24,17 @@ space      = makeCC "space" ("A two-dimensional extent where objects and " ++
 cartesian  = makeCC "Cartesian coordinates" ("A coordinate system that " ++
     "specifies each point uniquely in a plane by a pair of numerical " ++
     "coordinates.")
-rightHand       = makeCC "right-handed coordinate system" 
+rightHand  = makeCC "right-handed coordinate system" 
   "A coordinate system where the positive z-axis comes out of the screen."
-surface         = makeCC "S" "surface" 
-restitutionCoef = makeCC "C_R" "coefficient of restitution"
+surface    = nCC "surface" 
+restitutionCoef = nCC "coefficient of restitution"
+acceleration    = nCC "acceleration"
+angularAccel    = nCC "angular acceleration"
+momentOfInertia = nCC "moment of inertia"
+force      = nCC "force"
+impulseV   = nCC "impulse (vector)"
+impulseS   = nCC "impulse (scalar)"
+
+gravitationalAccel = nCC "gravitational acceleration" 
+gravitationalConst = makeCC "gravitational constant" 
+  "gravitational constant (6.673 * 10E-11)"

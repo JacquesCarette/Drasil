@@ -106,7 +106,7 @@ angVelEqn :: Expr
 angVelEqn = Deriv Total (FCall (C angDisp) [C time]) (C time)
 
 dd6descr :: Sentence
-dd6descr = S "the " :+: (angVel ^. descr) :+: S " of a " :+:
+dd6descr = S "the " :+: (S (angVel ^. name)) :+: S " of a " :+:
     S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
     S "), also equal to the derivative of its " :+: (angDisp ^. descr) :+:
@@ -126,7 +126,7 @@ dd7descr :: Sentence
 dd7descr = S "the " :+: (angAccel ^. descr) :+: S " of a " :+:
     S (rigidBody ^. name) :+: S " as a function of " :+: (time ^. descr) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its " :+: (angVel ^. descr) :+:
+    S "), also equal to the derivative of its " :+: (S (angVel ^. name)) :+:
     S " with respect to " :+: (time ^. descr) :+: S " " :+:
     P (time ^. symbol)
 

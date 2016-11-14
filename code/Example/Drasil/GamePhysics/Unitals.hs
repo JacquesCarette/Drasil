@@ -2,7 +2,7 @@ module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Quantities.Physics
+import qualified Data.Drasil.Quantities.Physics as QP
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
@@ -23,35 +23,34 @@ cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
     impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
     orientation, dist, disp, time, torque, angDisp, vel]
 
-accel       = makeUC "a" "acceleration" (vec lA) accelU
-angAccel    = makeUC "alpha" "angular acceleration" (Greek Alpha_L) angAccelU
-force       = makeUC "F" "force" (vec cF) newton
-gravAccel   = makeUC "g" "gravitational acceleration" lG accelU
+accel       = ucFromVC QP.acceleration accelU
+angAccel    = ucFromVC QP.angularAccel angAccelU
+force       = ucFromVC QP.force newton
+gravAccel   = ucFromVC QP.gravitationalAccel accelU
 -- What would be the best way to represent universal constants
 -- like gravitational constant, and display their constant value?
-gravConst   = makeUC "G" "gravitational constant (6.673 * 10E-11)" cG gravConstU
-momtInert   = makeUC "I" "moment of inertia" (vec cI) momtInertU
-impulseVec  = makeUC "J" "impulse (vector)" (vec cJ) impulseU
-impulseScl  = makeUC "j" "impulse (scalar)" lJ impulseU
-len         = makeUC "L" "length" cL metre
+gravConst   = ucFromVC QP.gravitationalConst gravConstU
+momtInert   = ucFromVC QP.momentOfInertia momtInertU
+impulseVec  = ucFromVC QP.impulseV impulseU
+impulseScl  = ucFromVC QP.impulseS impulseU
+len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
 iVect       = makeUC "i" "horizontal unit vector" (vec (hat lI)) metre
 jVect       = makeUC "j" "vertical unit vector" (vec (hat lJ)) metre
 normalVect  = makeUC "n" "collision normal vector" (vec lN) metre
-angVel      = makeUC "omega" "angular velocity" (Greek Omega_L) angVelU
+angVel      = ucFromVC QP.angularV angVelU
 position    = makeUC "p" "position" (vec lP) metre
 orientation = makeUC "phi" "orientation" (Greek Phi_L) radians
 dist        = makeUC "r" "distance" lR metre
 disp        = makeUC "r" "displacement" (vec lR) metre
 time        = makeUC "t" "time" lT second
 torque      = makeUC "tau" "torque" (Greek Tau_L) torqueU
--- Theta hasn't been implemented, using Gamma for now
-angDisp     = makeUC "theta" "angular displacement" (Greek Gamma_L) radians
+angDisp     = makeUC "theta" "angular displacement" (Greek Theta_L) radians
 vel         = makeUC "v" "velocity" (vec lV) velU
 
 -- Chunks without units --
 cpUnitless :: [VarChunk]
-cpUnitless = [restitutionCoef, numParticles]
+cpUnitless = [QP.restitutionCoef, numParticles]
 
 numParticles :: VarChunk
 numParticles = makeVC "n" "number of particles in a rigid body" lN

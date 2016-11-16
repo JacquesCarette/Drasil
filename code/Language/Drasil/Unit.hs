@@ -11,8 +11,8 @@ module Language.Drasil.Unit (
 import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), Concept(..),
-         Quantity(..))
-import Language.Drasil.Spec (Sentence(..), USymb(..))
+         Quantity(..), makeCC)
+import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.
@@ -45,7 +45,7 @@ makeDerU :: ConceptChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
 unitCon :: String -> ConceptChunk
-unitCon s = CC s (S s)
+unitCon s = makeCC s s
 ---------------------------------------------------------
 
 -- for defining fundamental units

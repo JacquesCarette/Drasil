@@ -24,4 +24,4 @@ cp :: Simple Lens RelationChunk ConceptChunk
 cp f (RC a b) = fmap (\x -> RC x b) (f a)
 
 makeRC :: String -> Sentence -> Relation -> RelationChunk
-makeRC nm desc rel = RC (CC nm desc) rel
+makeRC nm desc rel = RC (ccWithDescrSent nm desc) rel

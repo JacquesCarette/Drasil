@@ -147,11 +147,15 @@ lay x@(Definition c)      = T.Definition (makePairs c) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
-lay x@(Requirement r)     = T.Requirement (spec (r ^. descr)) (spec $ refName x)
-lay x@(Assumption a)      = T.Assumption (spec (a ^. descr)) (spec $ refName x)
-lay x@(LikelyChange lc)   = T.LikelyChange (spec (lc ^. descr))
+lay x@(Requirement r)     = 
+  T.Requirement (spec (r ^. descr)) (spec $ refName x)
+lay x@(Assumption a)      = 
+  T.Assumption (spec (a ^. descr)) (spec $ refName x)
+lay x@(LikelyChange lc)   = 
+  T.LikelyChange (spec (lc ^. descr))
   (spec $ refName x)
-lay x@(UnlikelyChange ucc)= T.UnlikelyChange (spec (ucc ^. descr))
+lay x@(UnlikelyChange ucc)= 
+  T.UnlikelyChange (spec (ucc ^. descr))
   (spec $ refName x)
 lay (UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
 

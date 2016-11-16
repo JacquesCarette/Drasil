@@ -4,7 +4,7 @@ import Control.Lens (Simple, Lens)
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Unital (UnitalChunk(UC))
+import Language.Drasil.Chunk.Unital (ucFromVC)
 import Language.Drasil.Chunk.MUChunk
 import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Symbol (Symbol)
@@ -36,8 +36,10 @@ ul f (EC a b) = fmap (\x -> EC x b) (f a)
   
 -- useful: to be used for equations with units
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> QDefinition
-fromEqn nm desc symb chunk eqn = EC (Has $ UC (VC nm desc symb) chunk) eqn
+fromEqn nm desc symb chunk eqn = 
+  EC (Has $ ucFromVC (vcFromCC (ccWithDescrSent nm desc) symb) chunk) eqn
 
 -- and without
 fromEqn' :: String -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc symb eqn = EC (HasNot $ VC nm desc symb) eqn
+fromEqn' nm desc symb eqn = 
+  EC (HasNot $ vcFromCC (ccWithDescrSent nm desc) symb) eqn

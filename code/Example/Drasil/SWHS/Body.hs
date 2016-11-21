@@ -874,7 +874,7 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 s4_2_7 = Section (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
 s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+: 
-               (sMap (map toLower) (S (law_cons_energy ^. name))) :+:
+               (sMap (map toLower) (law_cons_energy ^. descr)) :+:
                S ". This means that the " :+: (w_E ^. descr) :+:
                S " should equal the difference between " :+:
                S " the total energy input from the " :+: (sMap (map toLower) 
@@ -977,7 +977,7 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             S "energy outputs (" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
             symbol) :+: S ") and " :+: P (pcm_E ^. symbol) :+: S "(" :+:
             P (time ^. symbol) :+: S ")) follow the " :+: (sMap (map toLower) 
-            (S (law_cons_energy ^. name))) :+: S ", as outlined in " :+: 
+            (law_cons_energy ^. descr)) :+: S ", as outlined in " :+: 
             makeRef s4_2_7 :+: S ", with relative error no greater than " :+:
             S "0.001%.")),
             (S (requirement ^. name) :+: S "10", Flat (S "Calculate and " :+: 

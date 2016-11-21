@@ -26,7 +26,7 @@ consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
 
 t1descr :: Sentence
 t1descr = (S "The above equation gives the " :+: (sMap (map toLower) 
-          (S (law_cons_energy ^. name))) :+: S " for " :+: (sMap (map toLower)
+          (law_cons_energy ^. descr)) :+: S " for " :+: (sMap (map toLower)
           (S (transient ^. name))) :+: S " " :+: (heat_trans ^. descr) :+:
           S " in a material of " :+: (htCap ^. descr) :+: S " " :+: 
           P (htCap ^. symbol) :+: S " (" :+: Sy (htCap ^. unit) :+: S ") " :+:

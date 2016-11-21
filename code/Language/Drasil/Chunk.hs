@@ -8,17 +8,6 @@ import Language.Drasil.Spec
 
 -------- BEGIN CLASSES --------
 
-data Term = Simple Sentence
-          | Verbose Sentence Sentence
-
-class Terminology t where
-  getTerm :: t -> Sentence
-  
---FIXME: This will need to be decided later (depending on what the Recipe calls for)
-instance Terminology Term where
-  getTerm (Simple t) = t
-  getTerm (Verbose s t) = s 
-  
 -- BEGIN CHUNK --
 -- a chunk has a name
 class Chunk c where
@@ -28,7 +17,7 @@ class Chunk c where
 -- BEGIN CONCEPT --
 -- a concept has a description
 class Chunk c => Concept c where
-  descr :: (Terminology t) => Simple Lens c t
+  descr :: Simple Lens c Sentence
 -- END CONCEPT --
 
 -- BEGIN QUANTITY --
@@ -37,10 +26,19 @@ class Concept c => Quantity c where
   symbol :: Simple Lens c Symbol
 -- END QUANTITY --
 
+-- BEGIN CONCEPTDEFINITION --
+-- Used for so called "verbose" concepts which have both a short name (term)
+-- And long description.
+class Concept c => ConceptDefinition c where
+  cdefn :: Simple Lens c Sentence
+  
+class Concept c => ConceptDefinition' c where
+  cdefn' :: Simple Lens c (Maybe Sentence)
 -------- BEGIN DATATYPES/INSTANCES --------
 
 -- BEGIN CONCEPTCHUNK --
-data ConceptChunk = CC String Term
+--Equivalent to a "term" concept
+data ConceptChunk = CC String Sentence 
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 instance Chunk ConceptChunk where
@@ -49,9 +47,22 @@ instance Concept ConceptChunk where
   descr f (CC a b) = fmap (\x -> CC a x) (f b)
 -- END CONCEPTCHUNK --
 
+-- BEGIN DEFINEDTERM --
+-- DefinedTerm = DCC Name   Term    Definition
+data DefinedTerm = DCC String Sentence Sentence
+instance Eq DefinedTerm where
+  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+instance Chunk DefinedTerm where
+  name f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
+instance Concept DefinedTerm where
+  descr f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
+instance ConceptDefinition DefinedTerm where
+  cdefn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
+
+
 -- BEGIN VARCHUNK --
 data VarChunk = VC { vname :: String
-                   , vdesc :: Term
+                   , vdesc :: Sentence
                    , vsymb :: Symbol}
 
 instance Eq VarChunk where
@@ -70,22 +81,20 @@ instance Quantity VarChunk where
 
 
 --Helper Function(s)--
--- FIXME: USE OF Simple HERE IS TEMPORARY WORK AROUND TO GET THINGS
---  WORKING AGAIN BEFORE NEXT CLEANUP STEP
 
 makeCC :: String -> String -> ConceptChunk
-makeCC nam des = CC nam (Simple $ S des)
+makeCC nam des = CC nam (S des)
 
 --Currently only used by RelationChunk and EqChunk
 ccWithDescrSent :: String -> Sentence -> ConceptChunk
-ccWithDescrSent n d = CC n (Simple d)
+ccWithDescrSent n d = CC n d
 
 -- For when name = descr (will likely become deprecated as the chunks become more descriptive).
 nCC :: String -> ConceptChunk 
 nCC n = makeCC n n
 
 makeVC :: String -> String -> Symbol -> VarChunk
-makeVC nam des sym = VC nam (Simple $ S des) sym
+makeVC nam des sym = VC nam (S des) sym
 
 vcFromCC :: ConceptChunk -> Symbol -> VarChunk
 vcFromCC cc sym = VC (cc ^. name) (cc ^. descr) sym

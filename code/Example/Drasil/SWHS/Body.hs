@@ -468,7 +468,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               S "is, they are each constant over their entire " :+:
               (volume ^. descr) :+: S " [GD2].")),
               (S (assumption ^. name) :+: S "7", Flat ((law_conv_cooling ^.
-              descr) :+: S " applies between the " :+: (sMap (map toLower) (S
+              cdefn) :+: S " applies between the " :+: (sMap (map toLower) (S
               (coil ^. name))) :+: S " and the " :+: (sMap (map toLower) (S
               (water ^. name))) :+: S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
               (S (assumption ^. name) :+: S "8", Flat (S "The " :+: (temp_C ^. 
@@ -478,7 +478,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               descr) :+: S " does not vary along its length [" :+:
               makeRef s4_2_4_DD1 :+: S ", LC3].")),
               (S (assumption ^. name) :+: S "10", Flat ((law_conv_cooling ^. 
-              descr) :+: S " applies between the " :+: (sMap (map toLower) (S
+              cdefn) :+: S " applies between the " :+: (sMap (map toLower) (S
               (water ^. name))) :+: S " and the " :+: S (phsChgMtrl ^. name) :+:
               S " [" :+: makeRef s4_2_4_DD2 :+: S "].")),
               (S (assumption ^. name) :+: S "11", Flat (S "The model only " :+:

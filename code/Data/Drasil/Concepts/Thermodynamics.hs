@@ -2,9 +2,9 @@ module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
 
-boiling,law_cons_energy :: DefinedTerm
+boiling,law_cons_energy, law_conv_cooling :: DefinedTerm
 
-heat_trans, heat_cap_spec, latent_heat, law_conv_cooling, 
+heat_trans, heat_cap_spec, latent_heat,  
   melting, phase_change, sens_heat, thermal_analysis, 
   thermal_conduction, thermal_conductor, thermal_energy :: ConceptChunk
 
@@ -17,7 +17,7 @@ latent_heat = makeCC "Latent heat"
   "Latent heating"
 law_cons_energy = makeDCC "law_cons_energy" "Law of conservation of energy" 
   "Energy is conserved"
-law_conv_cooling = makeCC "Newton's law of cooling" 
+law_conv_cooling = makeDCC "law_conv_cooling" "Newton's law of cooling" 
   "Newton's law of convective cooling"
 melting = makeCC "Melting" 
   "Phase change from solid to liquid"

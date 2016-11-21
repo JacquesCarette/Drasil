@@ -20,6 +20,8 @@ module Language.Drasil (
   , Constrained, ConstrainedMUC(..), fromMUC
   -- Chunk.MDefinedConcept
   , MDefinedConcept(..)
+  -- Chunk.DefinedQuantity
+  , DefinedQuantity(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
@@ -77,6 +79,7 @@ import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.MDefinedConcept (MDefinedConcept(..))
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..))
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained (Constrained(..), 
                                           ConstrainedMUC(..),fromMUC)

@@ -85,6 +85,9 @@ instance Quantity VarChunk where
 makeCC :: String -> String -> ConceptChunk
 makeCC nam des = CC nam (S des)
 
+makeDCC :: String -> String -> String -> DefinedTerm
+makeDCC nam term des = DCC nam (S term) (S des)
+
 --Currently only used by RelationChunk and EqChunk
 ccWithDescrSent :: String -> Sentence -> ConceptChunk
 ccWithDescrSent n d = CC n d

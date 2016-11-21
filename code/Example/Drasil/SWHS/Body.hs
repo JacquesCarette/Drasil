@@ -751,7 +751,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
 
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S " the " :+: S (phsChgMtrl ^. name) :+: S " during " :+: 
-                (sMap (map toLower) (sens_heat ^. descr)) :+: S " phase:"),
+                (sMap (map toLower) (sens_heat ^. cdefn)) :+: S " phase:"),
                 Paragraph (S "To find the rate of change of " :+: P (temp_PCM ^.
                 symbol) :+: S ", we look at the energy balance on the " :+: 
                 S (phsChgMtrl ^. name) :+: S ". The " :+: (volume ^. descr) :+:

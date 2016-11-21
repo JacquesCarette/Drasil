@@ -36,8 +36,8 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
           S " is the " :+: (time ^. descr) :+: S " (" :+: Sy (time ^. unit) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
-          (S (phase_change ^. name))) :+: S " is not complete. The status of " :+:
-          S "the " :+: (sMap (map toLower) (S (phase_change ^. name))) :+:
+          (phase_change ^. descr)) :+: S " is not complete. The status of " :+:
+          S "the " :+: (sMap (map toLower) (phase_change ^. descr)) :+:
           S " depends on the " :+: (melt_frac ^. descr) :+: S ", " :+: 
           makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:

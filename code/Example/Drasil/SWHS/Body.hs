@@ -655,8 +655,8 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "can be solved once IM1 has been solved. The solution of " :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. descr) :+: S " and " :+: (pcm_E ^. descr) :+:
-               S " depend on the " :+: (sMap (map toLower) (S (phase_change ^. 
-               name))) :+: S ". (Instance models are left out because they " :+:
+               S " depend on the " :+: (sMap (map toLower) (phase_change ^. 
+               descr)) :+: S ". (Instance models are left out because they " :+:
                S "are not currently implemented in Drasil.)")]
 
 -- The first paragraph is completely general and repeated in other examples. 

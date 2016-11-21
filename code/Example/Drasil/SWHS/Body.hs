@@ -195,8 +195,8 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
 s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
-                S "to " :+: (sMap (map toLower) (S (thermal_analysis ^.
-                name))) :+: S " of a single " :+: (tank_pcm ^. descr) :+: 
+                S "to " :+: (sMap (map toLower) (thermal_analysis ^.
+                descr)) :+: S " of a single " :+: (tank_pcm ^. descr) :+: 
                 S ". Given the appropriate inputs, the code for " :+:
                 S (progName ^. name) :+: S " is intended to predict the " :+:
                 (temp ^. descr) :+: S " and " :+: (sMap (map toLower) (S 

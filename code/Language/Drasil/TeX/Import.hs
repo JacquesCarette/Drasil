@@ -194,11 +194,11 @@ eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
 eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
   
-buildEqn :: EqChunk -> T.Spec  
+buildEqn :: QDefinition -> T.Spec  
 buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
-buildDDDescription :: EqChunk -> T.Spec
+buildDDDescription :: QDefinition -> T.Spec
 buildDDDescription c = descLines (
   (toVC c):(if verboseDDDescription then vars $ equat c else []))
 

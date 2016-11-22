@@ -1,9 +1,14 @@
 module Drasil.PCM.Example where
 
-import Drasil.PCM.Units
-
 import Language.Drasil
+
 import Data.Drasil.SI_Units
+import qualified Data.Drasil.Units.Thermodynamics as U
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
+
+import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Quantities.Thermodynamics
+import Data.Drasil.Quantities.Math
 
 import Control.Lens ((^.))
 
@@ -20,37 +25,35 @@ coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
   ht_flux_C,ht_flux_in,ht_flux_out,time,temp,--temp_boil,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
-norm_vect :: VarChunk
 
 coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
 hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
               (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
               (sub cA (Atomic "out")) m_2
-htCap       = makeUC "C" "specific heat capacity" cC heat_capacity
+htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
 htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
-              heat_capacity
+              U.heat_cap_spec
 htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
-              heat_capacity
+              U.heat_cap_spec
 tank_D      = makeUC "D" "diameter of tank" cD metre
 ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" lG
-              thermFluxU
-ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH heat_transfer
+              U.thermal_flux
+ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH U.heat_transfer
 ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
-              (sub lH cC) heat_transfer
+              (sub lH cC) U.heat_transfer
 tank_L      = makeUC "L" "length of tank" cL metre
-mass        = makeUC "m" "mass" lM kilogram
-water_m     = makeUC "m_W" "mass of water" (sub lM cW) kilogram
-norm_vect   = makeVC "n_vect" "unit outward normal vector for a surface"
-              (vec $ hat lN)
+mass        = ucFromVC QPP.mass kilogram
+water_m     = makeUC "m_W" ((QPP.mass ^. name) ++ " of water") 
+                (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
-ht_flux     = makeUC "q" "heat flux" lQ heat_transfer
+ht_flux     = makeUC "q" "heat flux" lQ U.heat_transfer
 thFluxVect  = makeUC "q_vect" "thermal flux vector" (vec lQ)
-                  thermFluxU
-ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) thermFluxU
-ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) thermFluxU
-ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) thermFluxU
+                  U.thermal_flux
+ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) U.thermal_flux
+ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) U.thermal_flux
+ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) U.thermal_flux
 time        = makeUC "t" "time" lT second
 temp        = makeUC "T" "temperature" cT centigrade
 -- temp_boil   = makeUC "T_boil" "temperature at boiling point" 
@@ -77,29 +80,16 @@ dummyVar    = makeUC "tau" "dummy variable for integration over time"
                 (Greek Tau_L) second
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
-----VarChunks----
-gradient :: VarChunk
-gradient = makeVC "gradient" "the gradient operator" (Greek Nabla)
-
 ----Acronyms-----
 acronyms :: [ConceptChunk]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
-  physSysDescr,requirement,softwareRS,sWHS,theoreticMod]
+acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,oDE,
+  physSyst,requirement,srs,sWHS,thModel]
   
-assumption,dataDefn,genDefn,goalStmt,instanceMod,likelyChange,oDE,
-  physSysDescr,requirement,softwareRS,sWHS,theoreticMod :: ConceptChunk
-assumption    = makeCC "A" "Assumption"
-dataDefn      = makeCC "DD" "Data Definition"
-genDefn       = makeCC "GD" "General Definition"
-goalStmt      = makeCC "GS"  "Goal Statement"
-instanceMod   = makeCC "IM" "Instance Model"
-likelyChange  = makeCC "LC" "Likely Change"
+oDE, physSysDescr, sWHS :: ConceptChunk
+
 oDE           = makeCC "ODE" "Ordinary Differential Equation"
 physSysDescr  = makeCC "PS" "Physical System Description"
-requirement   = makeCC "R" "Requirement"
-softwareRS    = makeCC "SRS" "Software Requirements Specification"
 sWHS          = makeCC "SWHS" "Solar Water Heating System"
-theoreticMod  = makeCC "T" "Theoretical Model"
 
 ----EqChunks----
 --Theoretical models--

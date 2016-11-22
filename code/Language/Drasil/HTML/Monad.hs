@@ -33,6 +33,8 @@ instance RenderGreek PrintHTML where
   greek Nu    = PH "&Nu;"
   greek Omega_L  = PH "&omega;"
   greek Omega    = PH "&Omega;"
+  greek Pi_L   = PH "&pi;"
+  greek Pi     = PH "&Pi;"
   greek Phi_L  = PH "&phi;"
   greek Phi_V  = PH "&phiv;"
   greek Phi    = PH "&Phi;"
@@ -40,6 +42,8 @@ instance RenderGreek PrintHTML where
   greek Rho    = PH "&Rho;"
   greek Tau_L  = PH "&tau;"
   greek Tau    = PH "&Tau;"
+  greek Theta_L = PH "&theta;"
+  greek Theta   = PH "&Theta;"
   greek Upsilon_L  = PH "&upsilon;"
   greek Upsilon    = PH "&Upsilon;"
 

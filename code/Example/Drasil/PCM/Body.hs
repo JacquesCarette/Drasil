@@ -5,10 +5,13 @@ import Data.List (intersperse)
 import Control.Lens ((^.))
 
 import Drasil.PCM.Example
-import Drasil.PCM.Units
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units 
+import Data.Drasil.Concepts.Documentation
+
+import Data.Drasil.Units.Thermodynamics
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -94,7 +97,7 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that " :+
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ S 
   (capitalize (c ^. name)) :+: S ": " :+: (c ^. descr)) 
-  [thermFluxU, heat_capacity])
+  [thermal_flux, heat_cap_spec])
   
 s4_1_2 = Section (physSysDescr ^. descr) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]
@@ -124,13 +127,13 @@ s4_2 = Section (S "Solution Characteristics Specification")
   [Con s4_2_intro,Sub s4_2_1,Sub s4_2_2]
 
 s4_2_intro = Paragraph $ S "The " :+: 
-  (sMap (map toLower) (instanceMod ^. descr)) :+:
+  (sMap (map toLower) (inModel ^. descr)) :+:
   S (" " ++ (paren $ oDE ^. name)) :+: S " that governs " :+: 
   S (sWHS ^. name) :+: S " is presented in " :+: --TODO: Subsec reference
   S ". The information to understand the meaning of the " :+:
-  (sMap (map toLower) (instanceMod ^. descr)) :+: 
+  (sMap (map toLower) (inModel ^. descr)) :+: 
   S " and its derivation is also" :+: S " presented, so that the " :+: 
-  (sMap (map toLower) (instanceMod ^. descr)) :+: S " can be verified."
+  (sMap (map toLower) (inModel ^. descr)) :+: S " can be verified."
   
 s4_2_1 = Section (assumption ^. descr :+: S "s") [Con s4_2_1_intro]
 
@@ -139,13 +142,13 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   S "missing information for the physical system. The numbers given in the " :+:
   S "square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ") 
   (map (\ch -> (sMap (map toLower) (ch ^. descr)) :+: S (" " ++ 
-  sqbrac (ch ^. name))) [theoreticMod, genDefn, dataDefn, instanceMod])) :+: 
-  S ", or " :+: (sMap (map toLower) $ likelyChange ^. descr) :+: S (" " ++ 
-  sqbrac (likelyChange ^. name)) :+: S ", in which the respective " :+: 
+  sqbrac (ch ^. name))) [thModel, genDefn, dataDefn, inModel])) :+: 
+  S ", or " :+: (sMap (map toLower) $ likelyChg ^. descr) :+: S (" " ++ 
+  sqbrac (likelyChg ^. name)) :+: S ", in which the respective " :+: 
   (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
 --TODO: Simple List
 
-s4_2_2 = Section ((theoreticMod ^. descr) :+: S "s") 
+s4_2_2 = Section ((thModel ^. descr) :+: S "s") 
   ((Con s4_2_2_intro):(map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:

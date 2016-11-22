@@ -1134,10 +1134,10 @@ A1: The only form of energy that is relevant for this problem is thermal energy.
 A2: All heat transfer coefficients are constant over time [GD1].
 </p>
 <p>
-A3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#MG:q.P>this Definition</a>].
+A3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:q.P>this Definition</a>].
 </p>
 <p>
-A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#MG:q.P>this Definition</a>, LC1].
+A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:q.P>this Definition</a>, LC1].
 </p>
 <p>
 A5: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
@@ -1146,16 +1146,16 @@ A5: The density of water and density of PCM have no spatial variation; that is, 
 A6: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
 </p>
 <p>
-A7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#MG:q.C>this Definition</a>].
+A7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:q.C>this Definition</a>].
 </p>
 <p>
-A8: The temperature of the heating coil is constant over time [<a href=#MG:q.C>this Definition</a>, LC2].
+A8: The temperature of the heating coil is constant over time [<a href=#DD:q.C>this Definition</a>, LC2].
 </p>
 <p>
-A9: The temperature of the heating coil does not vary along its length [<a href=#MG:q.C>this Definition</a>, LC3].
+A9: The temperature of the heating coil does not vary along its length [<a href=#DD:q.C>this Definition</a>, LC3].
 </p>
 <p>
-A10: Newton's law of convective cooling applies between the water and the PCM [<a href=#MG:q.P>this Definition</a>].
+A10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:q.P>this Definition</a>].
 </p>
 <p>
 A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC4].
@@ -1333,7 +1333,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Q is the change in thermal energy (J), latent heat energy. <Integral> is the rate of change of Q with respect to time &tau; (s). t is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#MG:H.f>this Definition</a>. T<sub>melt</sub> and T<sub>boil</sub> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+Q is the change in thermal energy (J), latent heat energy. <Integral> is the rate of change of Q with respect to time &tau; (s). t is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:H.f>this Definition</a>. T<sub>melt</sub> and T<sub>boil</sub> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
 </p>
 </td>
 </tr>
@@ -1437,7 +1437,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
-<a id="MG:q.C">
+<a id="DD:q.C">
 <table class="ddefn">
 <tr>
 <th>
@@ -1483,7 +1483,7 @@ q<sub>C</sub> is the heat flux into the water from the coil<br />h<sub>C</sub> i
 </tr>
 </table>
 </a>
-<a id="MG:q.P">
+<a id="DD:q.P">
 <table class="ddefn">
 <tr>
 <th>
@@ -1529,7 +1529,7 @@ q<sub>P</sub> is the heat flux into the PCM from water<br />h<sub>P</sub> is the
 </tr>
 </table>
 </a>
-<a id="MG:H.f">
+<a id="DD:H.f">
 <table class="ddefn">
 <tr>
 <th>
@@ -1614,7 +1614,7 @@ dt
 </div>
 </a>
 <p class="paragraph">
-Using <a href=#MG:q.C>this Definition</a> and <a href=#MG:q.P>this Definition</a> for q<sub>C</sub> and q<sub>P</sub> respectively, this can be written as:
+Using <a href=#DD:q.C>this Definition</a> and <a href=#DD:q.P>this Definition</a> for q<sub>C</sub> and q<sub>P</sub> respectively, this can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1785,7 +1785,7 @@ dt
 </div>
 </a>
 <p class="paragraph">
-Using <a href=#MG:q.P>this Definition</a> for q<sub>P</sub>, this equation can be written as:
+Using <a href=#DD:q.P>this Definition</a> for q<sub>P</sub>, this equation can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1870,7 +1870,7 @@ Tables 1 and 2 show the data constraints on the input and output variables, resp
 Properties of a Correct Solution
 </h4>
 <p class="paragraph">
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between  the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#MG:q.C>this Definition</a> and <a href=#MG:q.P>this Definition</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between  the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:q.C>this Definition</a> and <a href=#DD:q.P>this Definition</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
 <a id="">
 <div class="equation">
@@ -2236,16 +2236,16 @@ GD1
 GD2
 </th>
 <th>
-<a href=#MG:q.C>this Definition</a>
+<a href=#DD:q.C>this Definition</a>
 </th>
 <th>
-<a href=#MG:q.P>this Definition</a>
+<a href=#DD:q.P>this Definition</a>
 </th>
 <th>
-<a href=#MG:H.f>this Definition</a>
+<a href=#DD:H.f>this Definition</a>
 </th>
 <th>
-<a href=#MG:H.f>this Definition</a>
+<a href=#DD:H.f>this Definition</a>
 </th>
 <th>
 IM1
@@ -2482,7 +2482,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:q.C>this Definition</a>
+<a href=#DD:q.C>this Definition</a>
 </td>
 <td>
 
@@ -2526,7 +2526,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:q.P>this Definition</a>
+<a href=#DD:q.P>this Definition</a>
 </td>
 <td>
 
@@ -2570,7 +2570,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:H.f>this Definition</a>
+<a href=#DD:H.f>this Definition</a>
 </td>
 <td>
 
@@ -2614,7 +2614,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:H.f>this Definition</a>
+<a href=#DD:H.f>this Definition</a>
 </td>
 <td>
 
@@ -3636,7 +3636,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:q.C>this Definition</a>
+<a href=#DD:q.C>this Definition</a>
 </td>
 <td>
 
@@ -3698,7 +3698,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:q.P>this Definition</a>
+<a href=#DD:q.P>this Definition</a>
 </td>
 <td>
 
@@ -3760,7 +3760,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:H.f>this Definition</a>
+<a href=#DD:H.f>this Definition</a>
 </td>
 <td>
 
@@ -3822,7 +3822,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#MG:H.f>this Definition</a>
+<a href=#DD:H.f>this Definition</a>
 </td>
 <td>
 

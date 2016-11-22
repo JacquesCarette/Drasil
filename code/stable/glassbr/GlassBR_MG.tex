@@ -164,7 +164,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:BHM}
 \begin{description}
 \item[Secrets:]The contents of the required behaviors.
-\item[Services:]Includes programs that provide externally visible behavior of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
+\item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
 \item[Implemented By:]--
 \end{description}
 \subsection{Input Format Module (M\ref{Minputformat})}
@@ -178,7 +178,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:IPM()}
 \begin{description}
 \item[Secrets:]The format and structure of the input parameters.
-\item[Services:]Stores the parameters needed for the program, including material properties, processing conditions and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
+\item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
 \item[Implemented By:]Glass-BR
 \end{description}
 \subsection{Input Constraints Module (M\ref{Minputconstraints})}
@@ -227,7 +227,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:SDM}
 \begin{description}
 \item[Secrets:]The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
-\item[Services:]Includes a data structure and algorithms used in the system that do not provide direct interaction with the user.
+\item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
 \subsection{Interpolation Module (M\ref{Minterpolation})}

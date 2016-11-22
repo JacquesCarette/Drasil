@@ -9,6 +9,17 @@ library
   exposed-modules:
     Language.Drasil,
     Data.Drasil.SI_Units
+    Data.Drasil.Concepts.Documentation
+    Data.Drasil.Concepts.Thermodynamics
+    Data.Drasil.Concepts.PhysicalProperties
+    Data.Drasil.Concepts.Physics
+    Data.Drasil.Concepts.Software
+    Data.Drasil.Concepts.Math
+    Data.Drasil.Quantities.Thermodynamics
+    Data.Drasil.Quantities.PhysicalProperties
+    Data.Drasil.Quantities.Physics
+    Data.Drasil.Quantities.Math
+    Data.Drasil.Units.Thermodynamics
   other-modules:
       Language.Drasil.Expr
     , Language.Drasil.Chunk

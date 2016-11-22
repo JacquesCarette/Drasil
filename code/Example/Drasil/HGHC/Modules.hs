@@ -2,7 +2,7 @@ module Drasil.HGHC.Modules where
 
 import Language.Drasil
 import Drasil.HGHC.HeatTransfer
-import Drasil.Concepts
+import Data.Drasil.Concepts.Software
 
 import Control.Lens ((^.))
 
@@ -13,14 +13,8 @@ executable :: ConceptChunk
 executable = CC (self ^. name) (self ^. descr :+: (S " ") :+: program ^. descr)
 
 -- HW Hiding Module
-mod_hw_desc :: ConceptChunk
-mod_hw_desc = CC "hardware hiding"
-  (S "Serves as a virtual hardware used by the rest of the system. This " :+:
-   S "module provides the interface between the hardware and the software. " :+:
-   S "So, the system can use it to display outputs or to accept inputs.")
-
 mod_hw :: ModuleChunk
-mod_hw = makeImpModule mod_hw_desc
+mod_hw = makeImpModule modHWHiding
   (S "The data structure and algorithm used to implement the virtual hardware.")
   os
   []
@@ -29,17 +23,8 @@ mod_hw = makeImpModule mod_hw_desc
 
 
 -- Behaviour Hiding Module
-mod_behav_desc :: ConceptChunk
-mod_behav_desc = CC "behaviour hiding"
-  (S "Includes programs that provide externally visible behavior of " :+:
-   S "the system as specified in the software requirements specification " :+:
-   S "(SRS) documents. This module serves as a communication layer between " :+:
-   S "the hardware-hiding module and the software decision module. The " :+:
-   S "programs in this module will need to change if there are changes " :+:
-   S "in the SRS.")
-
 mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule mod_behav_desc
+mod_behav = makeUnimpModule modBehavHiding
   (S "The contents of the required behaviors.")
   Nothing
 

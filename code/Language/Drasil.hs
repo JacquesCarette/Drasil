@@ -14,14 +14,14 @@ module Language.Drasil (
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC
+  , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC, vcFromCC, nCC
   , descr, Quantity(..)
   -- Chunk.Constrained
   , Constrained, ConstrainedMUC(..), fromMUC
   -- Chunk.Eq
-  , EqChunk(..), fromEqn, fromEqn'
+  , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
-  , UnitalChunk(..), makeUC
+  , UnitalChunk(..), makeUC, ucFromVC
   -- Chunk.MUChunk
   , MUChunk(..)
   -- Chunk.Relation
@@ -74,10 +74,10 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Eq (EqChunk(..), fromEqn, fromEqn')
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained (Constrained(..), 
                                           ConstrainedMUC(..),fromMUC)
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, ucFromVC)
 import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Chunk.Req

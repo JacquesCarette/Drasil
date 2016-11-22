@@ -175,11 +175,11 @@ makePairs (Theory c) = [
   ]
 makePairs General = error "Not yet implemented"
   
-buildEqn :: EqChunk -> H.Spec  
+buildEqn :: QDefinition -> H.Spec  
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
-buildDDDescription :: EqChunk -> H.Spec
+buildDDDescription :: QDefinition -> H.Spec
 buildDDDescription c = descLines (
   (toVC c):(if verboseDDDescription then (vars (equat c)) else []))
 

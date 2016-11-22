@@ -18,6 +18,8 @@ data Greek = Alpha_L
            | Nu
            | Omega_L
            | Omega
+           | Pi_L
+           | Pi
            | Phi_L
            | Phi_V
            | Phi
@@ -25,6 +27,8 @@ data Greek = Alpha_L
            | Rho
            | Tau_L
            | Tau
+           | Theta_L
+           | Theta
            | Upsilon_L
            | Upsilon
 

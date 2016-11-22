@@ -1,7 +1,7 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk (ConceptChunk(..))
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..), new_unit, (^:), (/:), (*:))
+  UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU)
 import Language.Drasil.Unicode (Special(Circle))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..),Sentence(..))
@@ -92,8 +92,15 @@ kilopascal = DUC
 
 radians = DUC
     (UD (CC "Radians" (S "angle")) (UName $ Atomic "rad"))
-    (USynonym (UProd [metre ^. unit, UPow (metre ^. unit) (-1)]))
+    (USynonym (metre /: metre))
 
+-- FIXME: Need to add pi 
+--degrees = DUC
+  --  (UD (CC "Degrees" (S "angle")) (UName (Special Circle)))
+  --  Equiv to pi/180 rad.
+
+-- FIXME: These should probably be moved elsewhere --
+    
 velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
 velU         = new_unit "velocity"             $ metre /: second
 accelU       = new_unit "acceleration"         $ metre /: s_2
@@ -107,3 +114,13 @@ impulseU, springConstU, torqueU :: DerUChunk
 impulseU     = new_unit "impulse"              $ newton *: second
 springConstU = new_unit "spring constant"      $ newton /: metre
 torqueU      = new_unit "torque"               $ newton *: metre
+
+-- Should we allow multiple different unit names for the same units?
+momentOfForceU, stiffnessU :: DerUChunk
+momentOfForceU = new_unit "moment of force"    $ newton *: metre
+stiffnessU     = new_unit "stiffness"          $ newton /: metre 
+
+gravConstU :: DerUChunk
+gravConstU = makeDerU (CC "gravitational constant" (S "universal gravitational constant")) $
+   USynonym (UDiv (m_3 ^. unit) (UProd [kilogram ^. unit, s_2 ^. unit]))
+

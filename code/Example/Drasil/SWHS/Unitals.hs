@@ -6,6 +6,10 @@ import Drasil.SWHS.Units
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Units.Thermodynamics
+import Data.Drasil.Quantities.Physics (surface)
+import Data.Drasil.Quantities.Math
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Control.Lens ((^.))
 
@@ -40,19 +44,19 @@ in_SA        = makeUC "A_in" "surface area over which heat is transferred in"
 out_SA       = makeUC "A_out" "surface area over which heat is transferred out"
                (sub cA (Atomic "out")) m_2
 pcm_SA       = makeUC "A_P" "phase change material surface area" (sub cA cP) m_2
-htCap        = makeUC "C" "specific heat capacity" cC heat_capacity
+htCap        = makeUC "C" "specific heat capacity" cC heat_cap_spec
 htCap_L      = makeUC "C^L" "specific heat capacity of a liquid" 
-               (sup (htCap ^. symbol) cL) heat_capacity
+               (sup (htCap ^. symbol) cL) heat_cap_spec
 htCap_L_P    = makeUC "C^L_P" "specific heat capacity of PCM as a liquid"
-               (sup (sub (htCap ^. symbol) cP) cL) heat_capacity
+               (sup (sub (htCap ^. symbol) cP) cL) heat_cap_spec
 htCap_S      = makeUC "C^S" "specific heat capacity of a solid" 
-               (sup (htCap ^. symbol) cS) heat_capacity
+               (sup (htCap ^. symbol) cS) heat_cap_spec
 htCap_S_P    = makeUC "C^S_P" "specific heat capacity of PCM as a solid"
-               (sup (sub (htCap ^. symbol) cP) cS) heat_capacity
+               (sup (sub (htCap ^. symbol) cP) cS) heat_cap_spec
 htCap_V      = makeUC "C^V" "specific heat capacity of a vapour" 
-               (sup (htCap ^. symbol) cV) heat_capacity
+               (sup (htCap ^. symbol) cV) heat_cap_spec
 htCap_W      = makeUC "C_W" "specific heat capacity of water" 
-               (sub (htCap ^. symbol) cW) heat_capacity
+               (sub (htCap ^. symbol) cW) heat_cap_spec
 diam         = makeUC "D" "diameter of tank" cD metre
 sensHtE      = makeUC "E" "sensible heat energy" cE joule
 pcm_initMltE = makeUC "E^init_Pmelt" ("change in heat energy in the PCM at " ++
@@ -74,21 +78,21 @@ htFusion     = makeUC "H_f" "specific latent heat of fusion" (sub cH lF)
 pcm_HTC      = makeUC "h_P" ("convective heat transfer coefficient between " ++
                "PCM and water") (sub lH cP) heat_transfer
 tank_length  = makeUC "L" "length of tank" cL metre
-mass         = makeUC "m" "mass" lM kilogram
+mass         = ucFromVC QPP.mass kilogram
 pcm_mass     = makeUC "m_P" "mass of phase change material" 
                (sub (mass ^. symbol) cP) kilogram
 w_mass       = makeUC "m_W" "mass of water" (sub (mass ^. symbol) cW) kilogram
-ht_flux      = makeUC "q" "heat flux" lQ thermFluxU
+ht_flux      = makeUC "q" "heat flux" lQ thermal_flux
 latentE      = makeUC "Q" "latent heat energy" cQ joule
-thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermFluxU
+thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermal_flux
 ht_flux_C    = makeUC "q_C" "heat flux into the water from the coil" 
-               (sub (ht_flux ^. symbol) cC) thermFluxU
+               (sub (ht_flux ^. symbol) cC) thermal_flux
 ht_flux_in   = makeUC "q_in" "heat flux input" 
-               (sub (ht_flux ^. symbol) (Atomic "in")) thermFluxU
+               (sub (ht_flux ^. symbol) (Atomic "in")) thermal_flux
 ht_flux_out  = makeUC "q_out" "heat flux output" 
-               (sub (ht_flux ^. symbol) (Atomic "out")) thermFluxU
+               (sub (ht_flux ^. symbol) (Atomic "out")) thermal_flux
 ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water" 
-               (sub (ht_flux ^. symbol) cP) thermFluxU
+               (sub (ht_flux ^. symbol) cP) thermal_flux
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" 
                (sub (latentE ^. symbol) cP) joule
 time         = makeUC "t" "time" lT second 
@@ -145,22 +149,15 @@ swhsUnitless :: [VarChunk]
 
 swhsUnitless = [norm_vect, surface, eta, melt_frac]
 
-norm_vect, surface, eta, melt_frac :: VarChunk
+eta, melt_frac :: VarChunk
 
-norm_vect    = makeVC "n_vect" "unit outward normal vector for a surface"
-               (vec $ hat lN)
-surface      = makeVC "S" "surface" (cS)
 eta          = makeVC "eta" "ODE parameter" (Greek Eta_L)
 melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
 
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will
---they be able to call "heat_capacity" without having to write the
+--they be able to call "heat_cap_spec" without having to write the
 --code for that unit in a separate file?
-
---VarChunks--
-gradient :: VarChunk
-gradient = makeVC "gradient" "gradient operator" (Greek Nabla)
 
 --General Definitions--
 -- gd1NewtonCooling :: RelationChunk

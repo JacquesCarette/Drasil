@@ -11,7 +11,7 @@ import Drasil.HGHC.Modules
 import Language.Drasil
 import Data.Drasil.SI_Units (si_units)
 
-vars :: [EqChunk]
+vars :: [QDefinition]
 vars = [h_g, h_c]
 
 modules :: [ModuleChunk]

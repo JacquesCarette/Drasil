@@ -4,6 +4,7 @@ import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
+import Data.Drasil.Concepts.Physics (rigidBody)
 
 import Control.Lens ((^.))
 
@@ -107,7 +108,7 @@ t4descr = S "The linear " :+: (vel ^. descr) :+: S " " :+:
     S " (" :+: Sy (vel_O ^. unit) :+: S ") of the " :+:
     S (rigidBody ^. name) :+: S " at the origin (axis of rotation) and the " :+:
     S "resultant vector from the cross product of the " :+:
-    S (rigidBody ^. name) :+: S "'s " :+: (angVel ^. descr) :+: S " " :+:
+    S (rigidBody ^. name) :+: S "'s " :+: (S (angVel ^. name)) :+: S " " :+:
     P (angVel ^. symbol) :+: S " (" :+: Sy (angVel ^. unit) :+:
     S ") and the " :+: (r_OB ^. descr) :+: S ", " :+: P (r_OB ^. symbol) :+:
     S " (" :+: Sy (r_OB ^. unit) :+: S ")."

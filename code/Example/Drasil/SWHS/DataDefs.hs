@@ -4,27 +4,29 @@ import Data.Char (toLower)
 
 import Drasil.SWHS.Units
 import Drasil.SWHS.Unitals
-import Drasil.SWHS.Concepts
 
 import Language.Drasil
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
+
+import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 
-dd1HtFluxC :: EqChunk
-dd1HtFluxC = fromEqn "q_C" dd1descr (ht_flux_C ^. symbol) thermFluxU htFluxCEqn
+dd1HtFluxC :: QDefinition
+dd1HtFluxC = fromEqn "q_C" dd1descr (ht_flux_C ^. symbol) thermal_flux htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 
---Function calls for the left side of an EqChunk?
+--Function calls for the left side of an QDefinition?
 
 dd1descr :: Sentence
 dd1descr = (ht_flux_C ^. descr)
 
 --Can't include info in description beyond definition of variables?
 
-dd2HtFluxP :: EqChunk
-dd2HtFluxP = fromEqn "q_P" dd2descr (ht_flux_P ^. symbol) thermFluxU htFluxPEqn
+dd2HtFluxP :: QDefinition
+dd2HtFluxP = fromEqn "q_P" dd2descr (ht_flux_P ^. symbol) thermal_flux htFluxPEqn
 
 htFluxPEqn :: Expr
 htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] - 
@@ -33,7 +35,7 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
 dd2descr :: Sentence
 dd2descr = (ht_flux_P ^. descr)
 
-dd3HtFusion :: EqChunk
+dd3HtFusion :: QDefinition
 dd3HtFusion = fromEqn "H_f" dd3descr (htFusion ^. symbol) specificE htFusionEqn
 
 htFusionEqn :: Expr
@@ -44,7 +46,7 @@ dd3descr = (S "amount of " :+: (sMap (map toLower) (S (thermal_energy ^. name)))
            :+: S " required to completely melt a unit " :+: (mass ^. descr) :+:
            S " of a substance.")
 
--- dd4MeltFrac :: EqChunk
+-- dd4MeltFrac :: QDefinition
 --dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless
               --melt_frac_eqn
 

@@ -28,7 +28,7 @@ latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),
 
 t3descr :: Sentence
 t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
-          (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " (" :+:
+          (sMap (map toLower) (thermal_energy ^. descr)) :+: S " (" :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
           (S (latent_heat ^. name))) :+: S " energy. <Integral> is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:

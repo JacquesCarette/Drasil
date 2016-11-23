@@ -3,9 +3,9 @@ module Data.Drasil.Concepts.Thermodynamics where
 import Language.Drasil
 
 boiling,law_cons_energy, law_conv_cooling, melting, phase_change,
-  sens_heat, thermal_analysis, thermal_conduction :: DefinedTerm
+  sens_heat, thermal_analysis, thermal_conduction, thermal_energy :: DefinedTerm
 
-heat_trans, heat_cap_spec, latent_heat, thermal_conductor, thermal_energy :: ConceptChunk
+heat_trans, heat_cap_spec, latent_heat, thermal_conductor :: ConceptChunk
 
 boiling = makeDCC "boiling" "Boiling" 
   "Phase change from liquid to vapour"
@@ -29,4 +29,5 @@ thermal_conduction = makeDCC "thermal_conduction" "Thermal conduction"
   "The transfer of heat energy through a substance."
 thermal_conductor = makeCC "Thermal conductor" ("An object through which " ++
                     "thermal energy can be transferred")
-thermal_energy = makeCC "Thermal energy" "The energy that comes from heat."
+thermal_energy = makeDCC "thermal_energy" "Thermal energy"
+  "The energy that comes from heat."

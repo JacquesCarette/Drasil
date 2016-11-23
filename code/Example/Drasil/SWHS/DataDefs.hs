@@ -42,7 +42,7 @@ htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)
 
 dd3descr :: Sentence
-dd3descr = (S "amount of " :+: (sMap (map toLower) (S (thermal_energy ^. name)))
+dd3descr = (S "amount of " :+: (sMap (map toLower) (thermal_energy ^. descr))
            :+: S " required to completely melt a unit " :+: (mass ^. descr) :+:
            S " of a substance.")
 

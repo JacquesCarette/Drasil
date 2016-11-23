@@ -132,10 +132,10 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
            descr)) :+: S "s because of their smaller size. The smaller size" :+:
            S " is possible because of the ability of " :+: 
            S (phsChgMtrl ^. name) :+: S " to store " :+:
-           (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " as " :+:
+           (sMap (map toLower) (thermal_energy ^. descr)) :+: S " as " :+:
            (sMap (map toLower) (S (latent_heat ^. name))) :+: S ", which " :+:
-           S "allows higher " :+: (sMap (map toLower) (S (thermal_energy ^. 
-           name))) :+: S " storage capacity per unit weight."),
+           S "allows higher " :+: (sMap (map toLower) (thermal_energy ^. 
+           descr)) :+: S " storage capacity per unit weight."),
            Paragraph (S " The following section provides an overview of the" :+:
            S " " :+: (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+:
            S ") for " :+: S (swhs_pcm ^. name) :+: S ". The developed " :+:
@@ -199,8 +199,8 @@ s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
                 descr)) :+: S " of a single " :+: (tank_pcm ^. descr) :+: 
                 S ". Given the appropriate inputs, the code for " :+:
                 S (progName ^. name) :+: S " is intended to predict the " :+:
-                (temp ^. descr) :+: S " and " :+: (sMap (map toLower) (S 
-                (thermal_energy ^. name))) :+: S " histories for the " :+:
+                (temp ^. descr) :+: S " and " :+: (sMap (map toLower)  
+                (thermal_energy ^. descr)) :+: S " histories for the " :+:
                 (sMap (map toLower) (S (water ^. name))) :+: S " and the " :+:
                 S (phsChgMtrl ^. name) :+: S ". This entire document" :+:
                 S " is written assuming that the substances inside the " :+:
@@ -445,7 +445,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem " :+:
 
 s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat 
               (S "The only form of energy that is relevant for this problem" :+:
-              S " is " :+: (sMap (map toLower) (S (thermal_energy ^. name))) :+:
+              S " is " :+: (sMap (map toLower) (thermal_energy ^. descr)) :+:
               S ". All other forms of energy, such as " :+: (sMap (map toLower) 
               (S (mech_energy ^. name))) :+: S ", are assumed to be " :+:
               S "negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),

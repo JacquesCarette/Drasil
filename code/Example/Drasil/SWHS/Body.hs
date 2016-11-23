@@ -592,7 +592,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                symbol) :+: S " as the " :+: (thFluxVect ^. descr) :+:
                S " for the " :+: (surface ^. descr) :+: S " and " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
-               descr) :+: S ":"),
+               cdefn) :+: S ":"),
                EqnBlock 
                 ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
                 ((C thFluxVect) :. (C norm_vect)) surface))) + 

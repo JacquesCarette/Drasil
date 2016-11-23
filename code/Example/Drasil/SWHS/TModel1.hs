@@ -40,7 +40,7 @@ t1descr = (S "The above equation gives the " :+: (sMap (map toLower)
           (temp ^. descr) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
           P (time ^. symbol) :+: S " is " :+: (time ^. descr) :+: S " (" :+: 
           Sy (time ^. unit) :+: S "), and " :+: P (gradient ^. symbol) :+: 
-          S " is the " :+: (gradient ^. descr) :+: S ". For this equation " :+: 
+          S " is the " :+: (gradient ^. cdefn) :+: S ". For this equation " :+: 
           S "to apply, " :+: S "other forms of energy, such as " :+:
           (sMap (map toLower) (S (mech_energy ^. name))) :+: 
           S ", are assumed to be negligible in the system (A1).")

@@ -3,14 +3,13 @@ module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 
-import Language.Drasil.Chunk (Chunk(..), Concept(..), Quantity(..), VarChunk(..))
+import Language.Drasil.Chunk (Chunk(..), Concept(..), Quantity(..), VarChunk(..), makeCC, vcFromCC)
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
-import Language.Drasil.Spec (Sentence(..))
 
 --BEGIN HELPER FUNCTIONS--
 makeUC :: Unit u => String -> String -> Symbol -> u -> UnitalChunk
-makeUC nam desc sym un = UC (VC nam (S desc) sym) un
+makeUC nam desc sym un = UC (vcFromCC (makeCC nam desc) sym) un
 
 ucFromVC :: Unit u => VarChunk -> u -> UnitalChunk
 ucFromVC vc un = UC vc un

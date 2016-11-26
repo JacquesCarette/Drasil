@@ -26,10 +26,19 @@ class Concept c => Quantity c where
   symbol :: Simple Lens c Symbol
 -- END QUANTITY --
 
+-- BEGIN CONCEPTDEFINITION --
+-- Used for so called "verbose" concepts which have both a short name (term)
+-- And long description.
+class Concept c => ConceptDefinition c where
+  cdefn :: Simple Lens c Sentence
+  
+class Concept c => ConceptDefinition' c where
+  cdefn' :: Simple Lens c (Maybe Sentence)
 -------- BEGIN DATATYPES/INSTANCES --------
 
 -- BEGIN CONCEPTCHUNK --
-data ConceptChunk = CC String Sentence
+--Equivalent to a "term" concept
+data ConceptChunk = CC String Sentence 
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 instance Chunk ConceptChunk where
@@ -37,6 +46,19 @@ instance Chunk ConceptChunk where
 instance Concept ConceptChunk where
   descr f (CC a b) = fmap (\x -> CC a x) (f b)
 -- END CONCEPTCHUNK --
+
+-- BEGIN DEFINEDTERM --
+-- DefinedTerm = DCC Name   Term    Definition
+data DefinedTerm = DCC String Sentence Sentence
+instance Eq DefinedTerm where
+  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+instance Chunk DefinedTerm where
+  name f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
+instance Concept DefinedTerm where
+  descr f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
+instance ConceptDefinition DefinedTerm where
+  cdefn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
+
 
 -- BEGIN VARCHUNK --
 data VarChunk = VC { vname :: String
@@ -57,9 +79,18 @@ instance Quantity VarChunk where
 
 -- END VARCHUNK --
 
+
 --Helper Function(s)--
+
 makeCC :: String -> String -> ConceptChunk
 makeCC nam des = CC nam (S des)
+
+makeDCC :: String -> String -> String -> DefinedTerm
+makeDCC nam term des = DCC nam (S term) (S des)
+
+--Currently only used by RelationChunk and EqChunk
+ccWithDescrSent :: String -> Sentence -> ConceptChunk
+ccWithDescrSent n d = CC n d
 
 -- For when name = descr (will likely become deprecated as the chunks become more descriptive).
 nCC :: String -> ConceptChunk 

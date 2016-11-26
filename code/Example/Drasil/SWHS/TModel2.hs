@@ -29,7 +29,7 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT),
 
 t2descr :: Sentence
 t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
-          (sMap (map toLower) (S (sens_heat ^. name))) :+: S " energy (" :+:
+          (sMap (map toLower) (sens_heat ^. descr)) :+: S " energy (" :+:
           Sy (joule ^. unit) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
           S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
           P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. descr) :+: 
@@ -44,10 +44,10 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
           (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
-          (sens_heat ^. descr) :+: S " occurs as long as the material does " :+: 
+          (sens_heat ^. cdefn) :+: S " occurs as long as the material does " :+: 
           S "not reach a " :+: (temp ^. descr) :+: S " where a " :+: 
-          (sMap (map toLower) (S (phase_change ^. name))) :+: S " occurs. A " :+:
-          (sMap (map toLower) (S (phase_change ^. name))) :+: S " occurs if " :+:
+          (sMap (map toLower) (phase_change ^. descr)) :+: S " occurs. A " :+:
+          (sMap (map toLower) (phase_change ^. descr)) :+: S " occurs if " :+:
           P (temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:
           S " or " :+: P (temp ^. symbol) :+: S "=" :+: 
           P (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 

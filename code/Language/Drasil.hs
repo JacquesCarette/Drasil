@@ -14,10 +14,14 @@ module Language.Drasil (
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), ConceptChunk(..), makeCC, makeVC, vcFromCC, nCC
-  , descr, Quantity(..)
+  , Chunk(..), VarChunk(..), ConceptChunk(..), DefinedTerm, makeCC, makeVC
+  , vcFromCC, nCC, makeDCC, descr, Quantity(..), cdefn, cdefn'
   -- Chunk.Constrained
   , Constrained, ConstrainedMUC(..), fromMUC
+  -- Chunk.MDefinedConcept
+  , MDefinedConcept(..)
+  -- Chunk.DefinedQuantity
+  , DefinedQuantity(..), dqFromDCC
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
@@ -74,6 +78,8 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.MDefinedConcept (MDefinedConcept(..))
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..), dqFromDCC)
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained (Constrained(..), 
                                           ConstrainedMUC(..),fromMUC)

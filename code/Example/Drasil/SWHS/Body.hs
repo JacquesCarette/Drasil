@@ -132,10 +132,10 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
            descr)) :+: S "s because of their smaller size. The smaller size" :+:
            S " is possible because of the ability of " :+: 
            S (phsChgMtrl ^. name) :+: S " to store " :+:
-           (sMap (map toLower) (S (thermal_energy ^. name))) :+: S " as " :+:
+           (sMap (map toLower) (thermal_energy ^. descr)) :+: S " as " :+:
            (sMap (map toLower) (S (latent_heat ^. name))) :+: S ", which " :+:
-           S "allows higher " :+: (sMap (map toLower) (S (thermal_energy ^. 
-           name))) :+: S " storage capacity per unit weight."),
+           S "allows higher " :+: (sMap (map toLower) (thermal_energy ^. 
+           descr)) :+: S " storage capacity per unit weight."),
            Paragraph (S " The following section provides an overview of the" :+:
            S " " :+: (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+:
            S ") for " :+: S (swhs_pcm ^. name) :+: S ". The developed " :+:
@@ -195,12 +195,12 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to " :+:
 s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
-                S "to " :+: (sMap (map toLower) (S (thermal_analysis ^.
-                name))) :+: S " of a single " :+: (tank_pcm ^. descr) :+: 
+                S "to " :+: (sMap (map toLower) (thermal_analysis ^.
+                descr)) :+: S " of a single " :+: (tank_pcm ^. descr) :+: 
                 S ". Given the appropriate inputs, the code for " :+:
                 S (progName ^. name) :+: S " is intended to predict the " :+:
-                (temp ^. descr) :+: S " and " :+: (sMap (map toLower) (S 
-                (thermal_energy ^. name))) :+: S " histories for the " :+:
+                (temp ^. descr) :+: S " and " :+: (sMap (map toLower)  
+                (thermal_energy ^. descr)) :+: S " histories for the " :+:
                 (sMap (map toLower) (S (water ^. name))) :+: S " and the " :+:
                 S (phsChgMtrl ^. name) :+: S ". This entire document" :+:
                 S " is written assuming that the substances inside the " :+:
@@ -334,10 +334,14 @@ s4_1_1_intro = Paragraph (S "This subsection provides a list of terms " :+:
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
 
-s4_1_1_bullets = Enumeration (Bullet $ map (\c -> Flat (S (c ^. name) :+:
-                 S ": " :+: (c ^. descr))) [heat_flux, phase_change_material,
-                 specific_heat, thermal_conduction, transient])
+s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [SimpleT heat_flux,
+                    SimpleT phase_change_material, SimpleT specific_heat, 
+                    DefinedT thermal_conduction, SimpleT transient])
 
+s411_bullet_map_f :: MDefinedConcept -> ItemType
+s411_bullet_map_f (SimpleT c) = Flat (S (c^.name) :+: S ": " :+: (c ^. descr))
+s411_bullet_map_f (DefinedT c) = Flat ((c ^. descr) :+: S ": " :+: (c ^. cdefn))
+                 
 -- Structure of this list is same in all examples, probably can be automated.
 
 -- Included heat flux and specific heat in ConceptChunks even though they are 
@@ -441,7 +445,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem " :+:
 
 s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat 
               (S "The only form of energy that is relevant for this problem" :+:
-              S " is " :+: (sMap (map toLower) (S (thermal_energy ^. name))) :+:
+              S " is " :+: (sMap (map toLower) (thermal_energy ^. descr)) :+:
               S ". All other forms of energy, such as " :+: (sMap (map toLower) 
               (S (mech_energy ^. name))) :+: S ", are assumed to be " :+:
               S "negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),
@@ -468,7 +472,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               S "is, they are each constant over their entire " :+:
               (volume ^. descr) :+: S " [GD2].")),
               (S (assumption ^. name) :+: S "7", Flat ((law_conv_cooling ^.
-              descr) :+: S " applies between the " :+: (sMap (map toLower) (S
+              cdefn) :+: S " applies between the " :+: (sMap (map toLower) (S
               (coil ^. name))) :+: S " and the " :+: (sMap (map toLower) (S
               (water ^. name))) :+: S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
               (S (assumption ^. name) :+: S "8", Flat (S "The " :+: (temp_C ^. 
@@ -478,7 +482,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. name) :+: S "1", Flat
               descr) :+: S " does not vary along its length [" :+:
               makeRef s4_2_4_DD1 :+: S ", LC3].")),
               (S (assumption ^. name) :+: S "10", Flat ((law_conv_cooling ^. 
-              descr) :+: S " applies between the " :+: (sMap (map toLower) (S
+              cdefn) :+: S " applies between the " :+: (sMap (map toLower) (S
               (water ^. name))) :+: S " and the " :+: S (phsChgMtrl ^. name) :+:
               S " [" :+: makeRef s4_2_4_DD2 :+: S "].")),
               (S (assumption ^. name) :+: S "11", Flat (S "The model only " :+:
@@ -588,7 +592,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                symbol) :+: S " as the " :+: (thFluxVect ^. descr) :+:
                S " for the " :+: (surface ^. descr) :+: S " and " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
-               descr) :+: S ":"),
+               cdefn) :+: S ":"),
                EqnBlock 
                 ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
                 ((C thFluxVect) :. (C norm_vect)) surface))) + 
@@ -655,8 +659,8 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "can be solved once IM1 has been solved. The solution of " :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. descr) :+: S " and " :+: (pcm_E ^. descr) :+:
-               S " depend on the " :+: (sMap (map toLower) (S (phase_change ^. 
-               name))) :+: S ". (Instance models are left out because they " :+:
+               S " depend on the " :+: (sMap (map toLower) (phase_change ^. 
+               descr)) :+: S ". (Instance models are left out because they " :+:
                S "are not currently implemented in Drasil.)")]
 
 -- The first paragraph is completely general and repeated in other examples. 
@@ -751,7 +755,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
 
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S " the " :+: S (phsChgMtrl ^. name) :+: S " during " :+: 
-                (sMap (map toLower) (sens_heat ^. descr)) :+: S " phase:"),
+                (sMap (map toLower) (sens_heat ^. cdefn)) :+: S " phase:"),
                 Paragraph (S "To find the rate of change of " :+: P (temp_PCM ^.
                 symbol) :+: S ", we look at the energy balance on the " :+: 
                 S (phsChgMtrl ^. name) :+: S ". The " :+: (volume ^. descr) :+:
@@ -874,7 +878,7 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 s4_2_7 = Section (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
 s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+: 
-               (sMap (map toLower) (S (law_cons_energy ^. name))) :+:
+               (sMap (map toLower) (law_cons_energy ^. descr)) :+:
                S ". This means that the " :+: (w_E ^. descr) :+:
                S " should equal the difference between " :+:
                S " the total energy input from the " :+: (sMap (map toLower) 
@@ -977,7 +981,7 @@ s5_1_list = [Enumeration (Simple [(S (requirement ^. name) :+: S "1", Flat
             S "energy outputs (" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
             symbol) :+: S ") and " :+: P (pcm_E ^. symbol) :+: S "(" :+:
             P (time ^. symbol) :+: S ")) follow the " :+: (sMap (map toLower) 
-            (S (law_cons_energy ^. name))) :+: S ", as outlined in " :+: 
+            (law_cons_energy ^. descr)) :+: S ", as outlined in " :+: 
             makeRef s4_2_7 :+: S ", with relative error no greater than " :+:
             S "0.001%.")),
             (S (requirement ^. name) :+: S "10", Flat (S "Calculate and " :+: 

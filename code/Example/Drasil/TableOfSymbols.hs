@@ -1,12 +1,14 @@
+{-# LANGUAGE Rank2Types #-}
 -- Standard code to make a table of symbols.
-module Drasil.TableOfSymbols(table_of_symbols,table) where
+module Drasil.TableOfSymbols(table_of_symbols,table, defaultF, cdefnF) where
 
 import Control.Lens ((^.))
 
 import Language.Drasil
 
-table_of_symbols :: (Unit' s) => [s] -> Section
-table_of_symbols ls = Section (S "Table of Symbols") [Con intro, Con (table ls)]
+table_of_symbols :: (Unit' s) => [s] -> (s -> Sentence) -> Section
+table_of_symbols ls f = Section (S "Table of Symbols") 
+  [Con intro, Con (table ls f)]
 
 intro :: Contents
 intro = Paragraph $ 
@@ -17,10 +19,18 @@ intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-table :: (Unit' s) => [s] -> Contents
-table ls = Table [S "Symbol", S "Description", S "Units"] (mkTable
+table :: (Unit' s) => [s] -> (s -> Sentence) -> Contents
+table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
   [(\ch -> P (ch ^. symbol)) , 
-   (\ch -> ch ^. descr), 
+   (\ch -> f ch), 
    unit'2Contents]
   ls)
   (S "Table of Symbols") False
+  
+defaultF :: (Unit' s) => s -> Sentence
+defaultF = \s -> s ^. descr
+
+cdefnF :: (Unit' s, ConceptDefinition' s) => s -> Sentence
+cdefnF = \s -> unWrap s (s ^. cdefn')
+  where unWrap _ (Just s) = s
+        unWrap c (Nothing) = c ^. descr

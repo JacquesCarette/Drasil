@@ -1024,7 +1024,7 @@ s6 = Section ((likelyChg ^. descr) :+: S "s") [Con s6_list]
 
 s6_list = Enumeration (Simple [(S (likelyChg ^. name) :+: S "1", Flat 
           (S "A4 - " :+: S (phsChgMtrl ^. name) :+: S " is actually a poor " :+:
-          (sMap (map toLower) (S (thermal_conductor ^. name))) :+: S ", so " :+:
+          (sMap (map toLower) (thermal_conductor ^. descr)) :+: S ", so " :+:
           S "the " :+: (sMap (map toLower) (assumption ^. descr)) :+:
           S " of uniform " :+: (temp_PCM ^. descr) :+: S " is not likely.")),
           (S (likelyChg ^. name) :+: S "2", Flat (S "A8 - The " :+: (temp_C ^. 

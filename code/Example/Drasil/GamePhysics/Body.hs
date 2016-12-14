@@ -80,7 +80,7 @@ s1_2_intro = Paragraph $
     S "the document, symbols in bold will represent vectors, and scalars " :+:
     S "otherwise. The symbols are listed in alphabetical order."
 
-s1_2_table = table cpSymbols
+s1_2_table = table cpSymbols defaultF
 
 --------------------------------------
 -- 1.3 : Abbreviations and Acronyms --

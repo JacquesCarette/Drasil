@@ -19,7 +19,7 @@ modules = [mod_calc, mod_hw, mod_behav]
 
 s1, s2, s3 :: Section --, s4 
 s1 = table_of_units si_units -- probably want to not do all of them
-s2 = table_of_symbols $ (map uc vars) ++ (map HasNot varChunks)
+s2 = table_of_symbols ((map uc vars) ++ (map HasNot varChunks)) defaultF
 s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 --s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [h_c]
 

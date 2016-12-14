@@ -106,7 +106,7 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
 -- physics example about how symbols for vectors are bold, which would be 
 -- useful to include in the automated paragraph.
 
-s1_2_table = table swhsSymbols cdefnF
+s1_2_table = table swhsSymbols defaultF
   
 s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 

@@ -2,17 +2,17 @@ module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
 
-boiling,law_cons_energy, law_conv_cooling, melting, phase_change,
+boiling,law_cons_energy, law_conv_cooling, latent_heat, melting, phase_change,
   sens_heat, thermal_analysis, thermal_conduction, thermal_energy :: DefinedTerm
 
-heat_trans, heat_cap_spec, latent_heat, thermal_conductor :: ConceptChunk
+heat_trans, heat_cap_spec, thermal_conductor :: ConceptChunk
 
 boiling = makeDCC "boiling" "Boiling" 
   "Phase change from liquid to vapour"
 heat_trans = makeCC "Heat transfer" 
   "heat transfer"
 heat_cap_spec = makeCC "C" "specific heat capacity"
-latent_heat = makeCC "Latent heat" 
+latent_heat = makeDCC "latent_heat" "Latent heat" 
   "Latent heating"
 law_cons_energy = makeDCC "law_cons_energy" "Law of conservation of energy" 
   "Energy is conserved"

@@ -30,7 +30,7 @@ t3descr :: Sentence
 t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (thermal_energy ^. descr)) :+: S " (" :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
-          (S (latent_heat ^. name))) :+: S " energy. <Integral> is the rate" :+:
+          (latent_heat ^. descr)) :+: S " energy. <Integral> is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
           S " to " :+: (time ^. descr) :+: S " " :+: P (tau ^. symbol) :+: 
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
@@ -43,7 +43,7 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
           (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+:
-          (latent_heat ^. descr) :+: S " stops when all material has " :+:
+          (latent_heat ^. cdefn) :+: S " stops when all material has " :+:
           S "changed to the new phase.")
           
 -- Wrong DD reference above, change when DD4 is available

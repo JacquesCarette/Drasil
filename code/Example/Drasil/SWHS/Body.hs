@@ -133,7 +133,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
            S " is possible because of the ability of " :+: 
            S (phsChgMtrl ^. name) :+: S " to store " :+:
            (sMap (map toLower) (thermal_energy ^. descr)) :+: S " as " :+:
-           (sMap (map toLower) (S (latent_heat ^. name))) :+: S ", which " :+:
+           (sMap (map toLower) (latent_heat ^. descr)) :+: S ", which " :+:
            S "allows higher " :+: (sMap (map toLower) (thermal_energy ^. 
            descr)) :+: S " storage capacity per unit weight."),
            Paragraph (S " The following section provides an overview of the" :+:

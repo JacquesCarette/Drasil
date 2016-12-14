@@ -51,7 +51,7 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           P (temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:
           S " or " :+: P (temp ^. symbol) :+: S "=" :+: 
           P (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 
-          makeRef s4_2_2_T3 :+: S ", " :+: S (latent_heat ^. name) :+: 
+          makeRef s4_2_2_T3 :+: S ", " :+: (latent_heat ^. descr) :+: 
           S " energy.")
           
 

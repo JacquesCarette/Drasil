@@ -44,9 +44,11 @@ module Language.Drasil (
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
-    SecCons(..), ListType(..), ItemType (..)
+    SecCons(..), ListType(..), ItemType(..)
   -- Reference
   , makeRef
+  -- Space
+  , Space(..)
   -- Symbol
   , Symbol(..), sub, sup, vec, hat
   -- SymbolAlphabet
@@ -91,6 +93,7 @@ import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)

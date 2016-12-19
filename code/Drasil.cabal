@@ -31,6 +31,7 @@ library
     , Language.Drasil.Recipe
     , Language.Drasil.RefHelpers
     , Language.Drasil.Reference
+    , Language.Drasil.Space
     , Language.Drasil.Spec
     , Language.Drasil.Symbol
     , Language.Drasil.SymbolAlphabet

@@ -6,7 +6,7 @@ import Control.Lens (Simple, Lens)
 import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.MUChunk
---[S/Q] import Language.Drasil.Unit (Unit'(..))
+import Language.Drasil.Unit (Unit'(..))
 
 
 class Constrained c where

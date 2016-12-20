@@ -6,7 +6,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Unital (ucFromVC)
 import Language.Drasil.Chunk.MUChunk
-import Language.Drasil.Unit (Unit(..)) --[S/Q] , Unit'(..)
+import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (Sentence(..))
 
@@ -26,9 +26,11 @@ instance Concept QDefinition where
 instance SymbolForm QDefinition where
   symbol = ul . symbol
 
---[S/Q]
---instance Unit' QDefinition where
---  unit' = ul . unit'
+instance Quantity QDefinition where
+  -- DO SOMETHING
+  
+instance Unit' QDefinition where
+  unit' = ul . unit'
 -- END EQCHUNK --
 
 -- don't export this

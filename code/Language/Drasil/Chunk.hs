@@ -21,6 +21,8 @@ class Chunk c => Concept c where
   descr :: Simple Lens c Sentence
 -- END CONCEPT --
 
+--FIXME: Will need to be a "Chunk" not "Concept" after Steven's work is
+-- merged into the main branch.
 class Concept c => SymbolForm c where
   symbol :: Simple Lens c Symbol
   
@@ -28,10 +30,12 @@ class Concept c => SymbolForm c where
 -- Then this will need to be renamed.
 -- Necessary for any places which already exist where the 
 --  "new" Quantity will be needed
---class Chunk c => Quant c where
---  typ      :: Simple Lens c Space
---  get_symb :: SymbolForm s => Maybe s
---  get_unit :: Unit u => Maybe u --Commented out for now
+class Concept c => Quantity c where
+  typ      :: Simple Lens c Space
+--  get_symb :: SymbolForm s => Maybe s --FIXME: Placeholder, see below 
+                                            -- (also, will not work as is)
+--  get_unit :: Unit u => Maybe u --FIXME: Commented out for now until Steven's
+                                      -- work has been merged in.
 
 -- BEGIN CONCEPTDEFINITION --
 -- Used for so called "verbose" concepts which have both a short name (term)

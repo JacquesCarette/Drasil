@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 import Control.Lens (Simple, Lens, (^.), set)
 
 import Language.Drasil.Chunk (Chunk(..), Concept(..), SymbolForm(..), 
-  VarChunk(..), makeCC, vcFromCC)
+  VarChunk(..), makeCC, vcFromCC, Quantity(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
 
@@ -55,6 +55,9 @@ instance Concept UnitalChunk where
 instance SymbolForm UnitalChunk where
   symbol = q . symbol
 
+instance Quantity UnitalChunk where
+  --DO SOMETHING
+  
 instance Unit UnitalChunk where
   unit = u . unit
 -- END UNITALCHUNK ----

@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Unit (
     UDefn(..)                        -- languages
-  , Unit(..), UnitEq(..) --[S/Q] , Unit'(..)  -- classes
+  , Unit(..), UnitEq(..), Unit'(..)  -- classes
   , FundUnit(..), DerUChunk(..)      -- data-structures
   , UnitDefn(..)                     -- wrapper for 'Unit' class
   , from_udefn, makeDerU, unitCon
@@ -11,7 +11,7 @@ module Language.Drasil.Unit (
 import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), Concept(..),
-         SymbolForm(..), makeCC) --[S/Q]
+         SymbolForm(..), Quantity(..), makeCC)
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
@@ -33,10 +33,8 @@ class UnitEq u where
 -- mix various Quantity, some of which will have units, and
 -- others that will be considered "unitless".
 
---[S/Q]
-
---class Quant u => Unit' u where
---  unit' :: Simple Lens u (Maybe USymb)
+class Quantity u => Unit' u where
+  unit' :: Simple Lens u (Maybe USymb)
 
 -- Can generate a default symbol
 from_udefn :: UDefn -> USymb

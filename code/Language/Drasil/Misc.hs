@@ -12,5 +12,6 @@ mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
 -- where should this go?
-unit'2Contents :: Unit' u => u -> Sentence
-unit'2Contents x = maybe (S "") Sy (x ^. unit')
+--[S/Q]
+--unit'2Contents :: Unit' u => u -> Sentence
+--unit'2Contents x = maybe (S "") Sy (x ^. unit')

@@ -17,7 +17,7 @@ instance Concept DefinedQuantity where
   descr = dql . descr
 instance ConceptDefinition DefinedQuantity where
   cdefn = dql . cdefn
-instance Quantity DefinedQuantity where
+instance SymbolForm DefinedQuantity where
   symbol f (DQ a b) = fmap (\x -> DQ a x) (f b)
 
 dqFromDCC :: DefinedTerm -> Symbol -> DefinedQuantity

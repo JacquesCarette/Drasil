@@ -6,7 +6,7 @@ import Control.Lens (Simple, Lens)
 import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.MUChunk
-import Language.Drasil.Unit (Unit'(..))
+--[S/Q] import Language.Drasil.Unit (Unit'(..))
 
 
 class Constrained c where
@@ -32,11 +32,12 @@ instance Chunk ConstrainedMUC where
 instance Concept ConstrainedMUC where
   descr = ul . descr
   
-instance Quantity ConstrainedMUC where
+instance SymbolForm ConstrainedMUC where
   symbol = ul . symbol
   
-instance Unit' ConstrainedMUC where
-  unit' = ul . unit'
+--[S/Q]
+-- instance Unit' ConstrainedMUC where
+--  unit' = ul . unit'
   
 instance Constrained ConstrainedMUC where
   physConstraints f (CMUC a b c d) = fmap (\x -> CMUC a x c d) (f b)

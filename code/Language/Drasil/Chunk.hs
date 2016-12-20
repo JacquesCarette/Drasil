@@ -5,6 +5,7 @@ import Control.Lens
 
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
+import Language.Drasil.Space
 
 -------- BEGIN CLASSES --------
 
@@ -20,11 +21,17 @@ class Chunk c => Concept c where
   descr :: Simple Lens c Sentence
 -- END CONCEPT --
 
--- BEGIN QUANTITY --
--- a quantity is a concept that can be represented graphically
-class Concept c => Quantity c where
+class Concept c => SymbolForm c where
   symbol :: Simple Lens c Symbol
--- END QUANTITY --
+  
+-- Placeholder class until SymbolForm has been split from Quantity,
+-- Then this will need to be renamed.
+-- Necessary for any places which already exist where the 
+--  "new" Quantity will be needed
+--class Chunk c => Quant c where
+--  typ      :: Simple Lens c Space
+--  get_symb :: SymbolForm s => Maybe s
+--  get_unit :: Unit u => Maybe u --Commented out for now
 
 -- BEGIN CONCEPTDEFINITION --
 -- Used for so called "verbose" concepts which have both a short name (term)
@@ -74,7 +81,7 @@ instance Chunk VarChunk where
 instance Concept VarChunk where
   descr f (VC n d s) = fmap (\x -> VC n x s) (f d)
 
-instance Quantity VarChunk where
+instance SymbolForm VarChunk where
   symbol f (VC n d s) = fmap (\x -> VC n d x) (f s)
 
 -- END VARCHUNK --

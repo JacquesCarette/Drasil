@@ -5,7 +5,7 @@ import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
-import Language.Drasil.Chunk (VarChunk(..), Quantity, name, symbol, descr)
+import Language.Drasil.Chunk (VarChunk(..), SymbolForm, name, symbol, descr)
 
 --Get dependency from equation  
 dep :: Expr -> [String]
@@ -69,7 +69,7 @@ binop :: BiFunc -> [Expr]
 binop (Cross e f) = [e,f]
 
 
--- Convert any chunk to a VarChunk as long as it is an instance of Quantity.
+-- Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
 -- Again, used for printing equations/descriptions mostly.
-toVC :: Quantity c => c -> VarChunk
+toVC :: SymbolForm c => c -> VarChunk
 toVC c = VC (c ^. name) (c ^. descr) (c ^. symbol)

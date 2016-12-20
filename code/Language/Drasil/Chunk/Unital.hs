@@ -3,7 +3,8 @@ module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 
-import Language.Drasil.Chunk (Chunk(..), Concept(..), Quantity(..), VarChunk(..), makeCC, vcFromCC)
+import Language.Drasil.Chunk (Chunk(..), Concept(..), SymbolForm(..), 
+  VarChunk(..), makeCC, vcFromCC)
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
 
@@ -14,7 +15,7 @@ makeUC nam desc sym un = UC (vcFromCC (makeCC nam desc) sym) un
 ucFromVC :: Unit u => VarChunk -> u -> UnitalChunk
 ucFromVC vc un = UC vc un
 
-qlens :: (forall c. Quantity c => Simple Lens c a) -> Simple Lens Q a
+qlens :: (forall c. SymbolForm c => Simple Lens c a) -> Simple Lens Q a
 qlens l f (Q a) = fmap (\x -> Q (set l x a)) (f (a ^. l))
 
 -- these don't get exported
@@ -29,7 +30,7 @@ u f (UC a b) = fmap (\(UU x) -> UC a x) (f (UU b))
 
 -- BEGIN Q --
 data Q where
-  Q :: Quantity c => c -> Q
+  Q :: SymbolForm c => c -> Q
 
 instance Chunk Q where 
   name = qlens name
@@ -37,13 +38,13 @@ instance Chunk Q where
 instance Concept Q where 
   descr = qlens descr
 
-instance Quantity Q where
+instance SymbolForm Q where
   symbol = qlens symbol
 -- END Q ----
 
 -- BEGIN UNITALCHUNK --
 data UnitalChunk where
-  UC :: (Quantity c, Unit u) => c -> u -> UnitalChunk
+  UC :: (SymbolForm c, Unit u) => c -> u -> UnitalChunk
 
 instance Chunk UnitalChunk where
   name = q . name
@@ -51,7 +52,7 @@ instance Chunk UnitalChunk where
 instance Concept UnitalChunk where
   descr = q . descr
 
-instance Quantity UnitalChunk where
+instance SymbolForm UnitalChunk where
   symbol = q . symbol
 
 instance Unit UnitalChunk where

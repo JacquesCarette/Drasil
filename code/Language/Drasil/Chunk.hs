@@ -32,12 +32,10 @@ class NamedIdea c => Quantity c where
 --  get_unit :: Unit u => Maybe u --FIXME: Commented out for now until Steven's
                                       -- work has been merged in.
 
--- BEGIN CONCEPTDEFINITION --
--- Used for so called "verbose" concepts which have both a short name (term)
--- And long description.
-class NamedIdea c => ConceptDefinition c where
-  cdefn :: Simple Lens c Sentence
+class NamedIdea c => Concept c where
+  defn :: Simple Lens c Sentence
   
+-- FIXME: Make this unnecessary
 class NamedIdea c => ConceptDefinition' c where
   cdefn' :: Simple Lens c (Maybe Sentence)
 -------- BEGIN DATATYPES/INSTANCES --------
@@ -62,8 +60,8 @@ instance Chunk DefinedTerm where
   id f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
 instance NamedIdea DefinedTerm where
   term f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
-instance ConceptDefinition DefinedTerm where
-  cdefn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
+instance Concept DefinedTerm where
+  defn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
 
 
 -- BEGIN VARCHUNK --

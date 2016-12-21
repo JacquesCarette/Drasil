@@ -6,7 +6,7 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk
 
 data MDefinedConcept where 
-  DefinedT :: (NamedIdea h, ConceptDefinition h) => h -> MDefinedConcept
+  DefinedT :: (NamedIdea h, Concept h) => h -> MDefinedConcept
   SimpleT :: NamedIdea c => c -> MDefinedConcept
   
 instance Chunk MDefinedConcept where
@@ -20,7 +20,7 @@ instance NamedIdea MDefinedConcept where
 -- cdefn is used. For terms with only simple definitions, we should let the 
 -- recipe decide what to do (ie. reuse the simple def'n, or leave it blank)
 instance ConceptDefinition' MDefinedConcept where
-  cdefn' f (DefinedT h) = fmap (DefinedT . maybe h (\t -> set cdefn t h)) (f $ Just $ h ^. cdefn)
+  cdefn' f (DefinedT h) = fmap (DefinedT . maybe h (\t -> set defn t h)) (f $ Just $ h ^. defn)
   cdefn' f (SimpleT h) = fmap (SimpleT . maybe h (\_ -> h)) (f $ Nothing)
 
 -- utilities which should not be exported

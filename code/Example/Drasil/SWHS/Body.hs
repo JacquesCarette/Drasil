@@ -340,7 +340,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [SimpleT heat_flux,
 
 s411_bullet_map_f :: MDefinedConcept -> ItemType
 s411_bullet_map_f (SimpleT c) = Flat (S (c^. id) :+: S ": " :+: (c ^. term))
-s411_bullet_map_f (DefinedT c) = Flat ((c ^. term) :+: S ": " :+: (c ^. cdefn))
+s411_bullet_map_f (DefinedT c) = Flat ((c ^. term) :+: S ": " :+: (c ^. defn))
                  
 -- Structure of this list is same in all examples, probably can be automated.
 
@@ -472,7 +472,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. id) :+: S "1", Flat
               S "is, they are each constant over their entire " :+:
               (volume ^. term) :+: S " [GD2].")),
               (S (assumption ^. id) :+: S "7", Flat ((law_conv_cooling ^.
-              cdefn) :+: S " applies between the " :+: (sMap (map toLower) (S
+              defn) :+: S " applies between the " :+: (sMap (map toLower) (S
               (coil ^. id))) :+: S " and the " :+: (sMap (map toLower) (S
               (water ^. id))) :+: S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
               (S (assumption ^. id) :+: S "8", Flat (S "The " :+: (temp_C ^. 
@@ -482,7 +482,7 @@ s4_2_1_list = Enumeration (Simple [(S (assumption ^. id) :+: S "1", Flat
               term) :+: S " does not vary along its length [" :+:
               makeRef s4_2_4_DD1 :+: S ", LC3].")),
               (S (assumption ^. id) :+: S "10", Flat ((law_conv_cooling ^. 
-              cdefn) :+: S " applies between the " :+: (sMap (map toLower) (S
+              defn) :+: S " applies between the " :+: (sMap (map toLower) (S
               (water ^. id))) :+: S " and the " :+: S (phsChgMtrl ^. id) :+:
               S " [" :+: makeRef s4_2_4_DD2 :+: S "].")),
               (S (assumption ^. id) :+: S "11", Flat (S "The model only " :+:
@@ -592,7 +592,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                symbol) :+: S " as the " :+: (thFluxVect ^. term) :+:
                S " for the " :+: (surface ^. term) :+: S " and " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
-               cdefn) :+: S ":"),
+               defn) :+: S ":"),
                EqnBlock 
                 ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
                 ((C thFluxVect) :. (C norm_vect)) surface))) + 
@@ -755,7 +755,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
 
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S " the " :+: S (phsChgMtrl ^. id) :+: S " during " :+: 
-                (sMap (map toLower) (sens_heat ^. cdefn)) :+: S " phase:"),
+                (sMap (map toLower) (sens_heat ^. defn)) :+: S " phase:"),
                 Paragraph (S "To find the rate of change of " :+: P (temp_PCM ^.
                 symbol) :+: S ", we look at the energy balance on the " :+: 
                 S (phsChgMtrl ^. id) :+: S ". The " :+: (volume ^. term) :+:

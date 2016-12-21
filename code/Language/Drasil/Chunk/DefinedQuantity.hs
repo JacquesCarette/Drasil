@@ -15,8 +15,8 @@ instance Chunk DefinedQuantity where
   id = dql . id
 instance NamedIdea DefinedQuantity where
   term = dql . term
-instance ConceptDefinition DefinedQuantity where
-  cdefn = dql . cdefn
+instance Concept DefinedQuantity where
+  defn = dql . defn
 instance SymbolForm DefinedQuantity where
   symbol f (DQ a b) = fmap (\x -> DQ a x) (f b)
 

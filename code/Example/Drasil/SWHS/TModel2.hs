@@ -44,7 +44,7 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
           (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
-          (sens_heat ^. cdefn) :+: S " occurs as long as the material does " :+: 
+          (sens_heat ^. defn) :+: S " occurs as long as the material does " :+: 
           S "not reach a " :+: (temp ^. term) :+: S " where a " :+: 
           (sMap (map toLower) (phase_change ^. term)) :+: S " occurs. A " :+:
           (sMap (map toLower) (phase_change ^. term)) :+: S " occurs if " :+:

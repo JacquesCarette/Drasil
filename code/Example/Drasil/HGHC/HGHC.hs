@@ -28,7 +28,7 @@ s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 --m2 = Module 1 mod_behav
 --m3 = Module 2 mod_calc
 
-doc :: (Quantity s, SymbolForm s) => String -> [s] -> String -> [Section] -> Document
+doc :: SymbolForm s => String -> [s] -> String -> [Section] -> Document
 doc nam ls author body =
   Document ((S $ nam ++ " for ") :+:
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))

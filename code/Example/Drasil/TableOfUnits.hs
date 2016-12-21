@@ -4,7 +4,7 @@ module Drasil.TableOfUnits(table_of_units) where
 
 import Control.Lens ((^.))
 import Data.Char (toLower)
-
+import Prelude hiding (id)
 import Language.Drasil
 
 table_of_units :: Unit s => [s] -> Section
@@ -23,7 +23,7 @@ s1_intro = Paragraph
 s1_table :: Unit s => [s] -> Contents
 s1_table u = Table [S "Symbol", S "Description"] (mkTable
   [(\x -> Sy (x ^. unit)),
-   (\x -> (x ^. term) :+: S (" (" ++ map toLower (x ^. name) ++ ")"))
+   (\x -> (x ^. term) :+: S (" (" ++ map toLower (x ^. id) ++ ")"))
   ] u)
   (S "Table of Units") False
 

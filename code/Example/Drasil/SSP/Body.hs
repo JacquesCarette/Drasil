@@ -8,7 +8,7 @@ import Drasil.SSP.Units
 import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
-
+import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.SI_Units 
 
@@ -53,7 +53,7 @@ s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil th
 s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. unit)),
    (\x -> (x ^. term)),
-   (\x -> S (x ^. name))
+   (\x -> S (x ^. id))
   ] this_si)
   (S "Table of Units") True
 
@@ -77,7 +77,7 @@ s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
 s1_3 = Sub $ Section (S "Abbreviations and Acronyms") [s1_3_table]
 
 s1_3_table = Con $ Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> S $ ch ^. name),
+  [(\ch -> S $ ch ^. id),
    (\ch -> ch ^. term)]
   acronyms)
   (S "Abbreviations and Acronyms") False

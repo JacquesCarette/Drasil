@@ -3,9 +3,9 @@ module Language.Drasil.Expr.Extract(dep, vars, toVC) where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
-
+import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
-import Language.Drasil.Chunk (VarChunk(..), SymbolForm, name, symbol, term)
+import Language.Drasil.Chunk (VarChunk(..), SymbolForm, id, symbol, term)
 import Language.Drasil.Space  -- need this for code generation
 
 --Get dependency from equation  
@@ -18,7 +18,7 @@ dep (a :- b)      = nub (dep a ++ dep b)
 dep (a :. b)      = nub (dep a ++ dep b)
 dep (Deriv _ a b) = nub (dep a ++ dep b)
 dep (Neg e)       = dep e
-dep (C c)         = [c ^. name]
+dep (C c)         = [c ^. id]
 dep (Int _)       = []
 dep (Dbl _)       = []
 dep (V _)         = []
@@ -75,4 +75,4 @@ binop (Cross e f) = [e,f]
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational
 toVC :: SymbolForm c => c -> VarChunk
-toVC c = VC (c ^. name) (c ^. term) (c ^. symbol) (Rational)
+toVC c = VC (c ^. id) (c ^. term) (c ^. symbol) (Rational)

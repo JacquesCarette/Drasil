@@ -1,7 +1,7 @@
 module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<))
-
+import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
                              Bound(..),DerivType(..))
 import Language.Drasil.Expr.Extract
@@ -178,7 +178,7 @@ makePairs (Data c) = [
   ("Description", T.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       T.Paragraph $ T.S $ c ^. name),
+  ("Label",       T.Paragraph $ T.S $ c ^. id),
   ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
   ("Description", T.Paragraph (spec (c ^. term)))
   ]

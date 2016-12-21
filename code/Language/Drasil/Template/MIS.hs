@@ -1,5 +1,5 @@
 module Language.Drasil.Template.MIS (makeMIS) where
-
+import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Language.Drasil.Chunk
@@ -37,7 +37,7 @@ misInterfaceSyntax mc = Section (S $ "Interface Syntax")
 -- var types not implemented yet so just map to "real" for now
 misExportedAP :: ModuleChunk -> Contents
 misExportedAP mc = Table [S "Name", S "In", S "Out", S "Exceptions"]
-  ( map ( \x -> (convertName (x ^. name)) :
+  ( map ( \x -> (convertName (x ^. id)) :
                 (S $ concat $ intersperse ", " $ map (\_ -> "real") (input x)) :
                 (S $ concat $ intersperse ", " $ map (\_ -> "real") (output x)) :
                 (S $ concat $ intersperse ", " $ map show (exc x)) :
@@ -52,7 +52,7 @@ misInterfaceSemantics mc = Section (S $ "Interface Semantics")
   ]
 
 misAPSemantics :: MethodChunk -> Section
-misAPSemantics mec = Section (convertName (mec ^. name))
+misAPSemantics mec = Section (convertName (mec ^. id))
   [ Con $ Enumeration $ Desc
     [(S "Input", Flat $ foldl (:+:) (S "") $
         intersperse (S ", ") $ map (\x -> P $ x ^. symbol) (input mec)),

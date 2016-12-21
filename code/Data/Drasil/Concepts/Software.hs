@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (srs)
-
+import Prelude hiding (id)
 import Control.Lens ((^.))
 import Data.Char (toLower)
 
@@ -26,11 +26,11 @@ modBehavHiding :: ConceptChunk
 modBehavHiding = CC "behaviour hiding" (S "Includes programs that provide " :+:
                  S "externally visible behaviour of the system as specified" :+:
                  S " in the " :+: (sMap (map toLower) (srs ^. term)) :+:
-                 S " (" :+: S (srs ^. name) :+: S ") documents. This module" :+:
+                 S " (" :+: S (srs ^. id) :+: S ") documents. This module" :+:
                  S " serves as a communication layer between the hardware-" :+:
                  S "hiding module and the software decision module. The " :+:
                  S "programs in this module will need to change if there " :+:
-                 S "are changes in the " :+: S (srs ^. name) :+: S ".")
+                 S "are changes in the " :+: S (srs ^. id) :+: S ".")
     
 modControl :: ConceptChunk
 modControl = CC "control" (S "Provides the main program.")

@@ -3,14 +3,14 @@ module Drasil.HGHC.Modules where
 import Language.Drasil
 import Drasil.HGHC.HeatTransfer
 import Data.Drasil.Concepts.Software
-
+import Prelude hiding (id)
 import Control.Lens ((^.))
 
 self :: ConceptChunk
 self = CC "HGHC" (S "HGHC")
 
 executable :: ConceptChunk
-executable = CC (self ^. name) (self ^. term :+: (S " ") :+: program ^. term)
+executable = CC (self ^. id) (self ^. term :+: (S " ") :+: program ^. term)
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk
@@ -38,7 +38,7 @@ mod_inputp = makeRecord modInputParams (S "The format and structure of " :+:
 --input format
 meth_input :: MethodChunk
 meth_input = makeStdInputMethod (makeVC "params" "input parameters" cP)
-  --(QObj (mod_inputp ^. name)))
+  --(QObj (mod_inputp ^. id)))
 
 mod_inputf :: ModuleChunk
 mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:

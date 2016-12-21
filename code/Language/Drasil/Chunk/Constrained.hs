@@ -2,7 +2,7 @@ module Language.Drasil.Chunk.Constrained(Constrained(..),
     ConstrainedMUC(..),fromMUC) where
 
 import Control.Lens (Simple, Lens)
-
+import Prelude hiding (id)
 import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.MUChunk
@@ -26,7 +26,7 @@ data ConstrainedMUC = CMUC
   }
   
 instance Chunk ConstrainedMUC where
-  name = ul . name
+  id = ul . id
 
 instance NamedIdea ConstrainedMUC where
   term = ul . term

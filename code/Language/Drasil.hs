@@ -65,7 +65,7 @@ module Language.Drasil (
   , gen, genCode
 ) where
 
-import Prelude hiding (log, abs, sin, cos, tan)
+import Prelude hiding (log, abs, sin, cos, tan, id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
                Bound(..),DerivType(..), log, abs, sin, cos, tan, sec, csc, cot)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))

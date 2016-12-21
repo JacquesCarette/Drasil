@@ -1,7 +1,7 @@
 module Language.Drasil.Chunk.Req(ReqChunk(..)) where
 
 import Control.Lens (Simple, Lens)
-
+import Prelude hiding (id)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 
@@ -12,7 +12,7 @@ data ReqChunk = ReqChunk
   }
 
 instance Chunk ReqChunk where
-  name = cl . name
+  id = cl . id
 
 instance NamedIdea ReqChunk where
   term = cl . term

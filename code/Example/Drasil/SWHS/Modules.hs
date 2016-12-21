@@ -1,5 +1,5 @@
 module Drasil.SWHS.Modules where
-
+import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Concepts
 import Data.Drasil.Concepts.Documentation
@@ -66,11 +66,11 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
 mod_temp_desc = CC "temperature ODEs" (S "Defines the " :+: 
-                S (ordDiffEq ^. name) :+: S "s using the parameters in the " :+:
+                S (ordDiffEq ^. id) :+: S "s using the parameters in the " :+:
                 S "input parameters module.")
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: S (ordDiffEq ^. name) :+:
+mod_temp = makeImpModule mod_temp_desc (S "The " :+: S (ordDiffEq ^. id) :+:
            S "s for solving the temperature, using the input parameters.")
            swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
@@ -96,7 +96,7 @@ mod_sw :: ModuleChunk
 mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
          S "mathematical theorems, physical facts, or programming " :+:
          S "considerations. The secrets of this module are not described " :+:
-         S "in the " :+: S (srs ^. name) :+: S ".") Nothing
+         S "in the " :+: S (srs ^. id) :+: S ".") Nothing
 
 -- Sequence Data Structure Module
 mod_seq_desc :: ConceptChunk
@@ -116,7 +116,7 @@ mod_ode_desc = CC "ODE solver" (S "Provides solvers that take the governing " :+
 
 mod_ode :: ModuleChunk
 mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: S (ordDiffEq ^. name) :+: S "s.") matlab [] [] 
+          S " first order " :+: S (ordDiffEq ^. id) :+: S "s.") matlab [] [] 
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module

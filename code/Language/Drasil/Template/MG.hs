@@ -1,5 +1,5 @@
 module Language.Drasil.Template.MG(makeMG) where
-
+import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
@@ -191,7 +191,7 @@ mgModuleDecomp mpairs = --let levels = splitLevels $ getChunks mpairs
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
   let impl ccs = foldl1 (:+:) $ map (\x -> (S $ "If the entry is " ++
-       (x ^. name) ++ ", this means that the module is provided by the ")
+       (x ^. id) ++ ", this means that the module is provided by the ")
        :+: (x ^. term) :+: S ". ") ccs
   in Paragraph $
     S "Modules are decomposed according to the principle of " :+:
@@ -227,7 +227,7 @@ mgModuleInfo (mc, m) = let title = if   isNothing m
       ]
     ]
     where
-      getImp (Just x) = S (x ^. name)
+      getImp (Just x) = S (x ^. id)
       getImp _        = S "--"
 
 

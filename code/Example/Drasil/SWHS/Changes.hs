@@ -1,7 +1,7 @@
 module Drasil.SWHS.Changes where
 
 import Control.Lens ((^.))
-
+import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Concepts
@@ -32,7 +32,7 @@ lc5 = LCChunk (CC "outputformat" (S "The format of the final output data."))
 lc6 = LCChunk (CC "outputverification" (S "The constraints on the output " :+:
       S "results.")) [mod_outputv]
 
-lc7 = LCChunk (CC "temp" (S "How the governing " :+: S (ordDiffEq ^. name) :+:
+lc7 = LCChunk (CC "temp" (S "How the governing " :+: S (ordDiffEq ^. id) :+:
       S "s are defined using the input parameters.")) [mod_temp]
 
 lc8 = LCChunk (CC "energy" (S "How the energy equations are defined using " :+:
@@ -45,7 +45,7 @@ lc10 = LCChunk (CC "sequence" (S "The implementation for the sequence " :+:
        S "(array) data structure.")) [mod_seq]
 
 lc11 = LCChunk (CC "ode" (S "The algorithm used for the " :+: 
-       S (ordDiffEq ^. name) :+: S " solver.")) [mod_ode]
+       S (ordDiffEq ^. id) :+: S " solver.")) [mod_ode]
 
 lc12 = LCChunk (CC "plot" (S "The implementation of plotting data.")) [mod_plot]
 
@@ -63,7 +63,7 @@ uc3 = CC "output" (S "Output data are displayed to the output device.")
 uc4 = CC "goal" (S "The goal of the system is to calculate temperatures and" :+:
       S " energies.")
 
-uc5 = CC "odes" (S "The " :+: S (ordDiffEq ^. name) :+: S "s for " :+:
+uc5 = CC "odes" (S "The " :+: S (ordDiffEq ^. id) :+: S "s for " :+:
       S "temperature can be defined using parameters defined in the input " :+:
       S "parameters module.")
 

@@ -1,5 +1,5 @@
 module Language.Drasil.HTML.Import where
-
+import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
                              Bound(..),DerivType(..))
 import Language.Drasil.Spec
@@ -168,7 +168,7 @@ makePairs (Data c) = [
   ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       H.Paragraph $ H.S $ c ^. name),
+  ("Label",       H.Paragraph $ H.S $ c ^. id),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
                   (H.S "")),
   ("Description", H.Paragraph (spec (c ^. term)))

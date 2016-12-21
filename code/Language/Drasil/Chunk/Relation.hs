@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Relation(RelationChunk(..),makeRC) where
 
 import Control.Lens (Simple, Lens)
-
+import Prelude hiding (id)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Chunk
 import Language.Drasil.Spec (Sentence(..))
@@ -13,7 +13,7 @@ data RelationChunk = RC
   }
 
 instance Chunk RelationChunk where
-  name = cp . name
+  id = cp . id
 
 instance NamedIdea RelationChunk where
   term = cp . term

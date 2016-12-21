@@ -3,7 +3,7 @@
 module Language.Drasil.Expr where
 
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
-
+import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..), SymbolForm)
 import Language.Drasil.Symbol
 
@@ -72,7 +72,7 @@ instance Eq Expr where
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
-  C a == C b                   =  (a ^. name) == (b ^. name)
+  C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   (:=) a b == (:=) c d         =  a == c && b == d || a == d && b == c

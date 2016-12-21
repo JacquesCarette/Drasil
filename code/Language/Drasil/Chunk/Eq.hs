@@ -1,7 +1,7 @@
 module Language.Drasil.Chunk.Eq(QDefinition(..), fromEqn, fromEqn') where
 
 import Control.Lens (Simple, Lens)
-
+import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Unital (ucFromVC)
@@ -18,7 +18,7 @@ data QDefinition = EC
 
 -- this works because UnitalChunk is a Chunk
 instance Chunk QDefinition where
-  name = ul . name
+  id = ul . id
 
 instance NamedIdea QDefinition where
   term = ul . term

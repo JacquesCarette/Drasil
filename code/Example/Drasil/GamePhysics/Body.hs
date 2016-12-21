@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Body where
 import Data.Char (toLower, toUpper)
 import Data.List (intersperse)
 import Control.Lens ((^.))
-
+import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.SI_Units
 
@@ -30,12 +30,12 @@ import Drasil.GamePhysics.Reqs
 
 chipmunkSRS :: Document
 chipmunkSRS = Document
-    (S "Software Requirements Specification for " :+: S (chipmunk ^. name))
+    (S "Software Requirements Specification for " :+: S (chipmunk ^. id))
     (S "Alex Halliwushka and Luthfi Mawarid")
     [s1, s2, s3, s4, s5, s6, s7]
 
 chipmunkMG :: Document
-chipmunkMG = Document (S "Module Guide for " :+: S (chipmunk ^. name))
+chipmunkMG = Document (S "Module Guide for " :+: S (chipmunk ^. id))
     (S "Alex Halliwushka and Luthfi Mawarid") (mgBod)
 
 mgBod :: [Section]
@@ -92,7 +92,7 @@ s1_3_table :: Contents
 s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
-    [(\ch -> S $ ch ^. name),
+    [(\ch -> S $ ch ^. id),
     (\ch -> ch ^. term)]
     cpAcronyms)
     (S "Abbreviations and Acronyms") False
@@ -109,13 +109,13 @@ s2 = Section (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
 
 s2_intro = [Paragraph (S "Due to the rising cost of developing video " :+:
     S "games, developers are looking for ways to save time and money for " :+:
-    S "their projects. Using an open source " :+: S (physLib ^. name) :+:
+    S "their projects. Using an open source " :+: S (physLib ^. id) :+:
     S " that is reliable and free will cut down development costs and lead " :+:
     S "to better quality products."),
     Paragraph (S "The following section provides an overview of the " :+:
-    (srs ^. term) :+: S " (" :+: S (srs ^. name) :+: S ") for " :+:
-    S (chipmunk ^. name) :+: S ", an open source " :+: S (twoD ^. name) :+:
-    S " " :+: S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
+    (srs ^. term) :+: S " (" :+: S (srs ^. id) :+: S ") for " :+:
+    S (chipmunk ^. id) :+: S ", an open source " :+: S (twoD ^. id) :+:
+    S " " :+: S (rigidBody ^. id) :+: S " " :+: S (physLib ^. id) :+:
     S ". This section explains the purpose of this document, the scope " :+:
     S "of the system, and the organization of the document.")]
 
@@ -129,11 +129,11 @@ s2_1_intro :: [Contents]
 s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
-    S "open source " :+: S (twoD ^. name) :+: S " " :+:
-    S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
+    S "open source " :+: S (twoD ^. id) :+: S " " :+:
+    S (rigidBody ^. id) :+: S " " :+: S (physLib ^. id) :+:
     S " used for games. The " :+: (sMap (map toLower) (goalStmt ^. term)) :+:
     S "s and " :+: (sMap (map toLower) (thModel ^. term)) :+:
-    S "s used in " :+: S (chipmunk ^. name) :+: S " are provided. This " :+:
+    S "s used in " :+: S (chipmunk ^. id) :+: S " are provided. This " :+:
     S "document is intended to be used as a reference to provide all " :+:
     S "necessary information to understand and verify the model."),
     Paragraph (S "This document will be used as a starting point for " :+:
@@ -157,11 +157,11 @@ s2_2 = Section (S "Scope of " :+: (requirement ^. term) :+: S "s")
 
 s2_2_intro = Paragraph $ S "The scope of the " :+:
     (sMap (map toLower) (requirement ^. term)) :+: S "s includes the " :+:
-    S "physical simulation of " :+: S (twoD ^. name) :+: S " " :+:
-    S (rigidBodies ^. name) :+: S " acted on by forces. Given " :+:
-    S (twoD ^. name) :+: S " " :+: S (rigidBodies ^. name) :+:
-    S ", " :+: S (chipmunk ^. name) :+: S " is intended to simulate how " :+:
-    S "these " :+: S (rigidBodies ^. name) :+: S " interact with one another."
+    S "physical simulation of " :+: S (twoD ^. id) :+: S " " :+:
+    S (rigidBodies ^. id) :+: S " acted on by forces. Given " :+:
+    S (twoD ^. id) :+: S " " :+: S (rigidBodies ^. id) :+:
+    S ", " :+: S (chipmunk ^. id) :+: S " is intended to simulate how " :+:
+    S "these " :+: S (rigidBodies ^. id) :+: S " interact with one another."
 
 -------------------------------------
 -- 2.3 : Organization of Documents --
@@ -174,7 +174,7 @@ s2_3 = Section (S "Organization of Document") (map Con s2_3_intro)
 
 -- NOTE: References pending --
 s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
-    S "template for an " :+: S (srs ^. name) :+: S " for scientific " :+:
+    S "template for an " :+: S (srs ^. id) :+: S " for scientific " :+:
     S "computing software proposed by [1] and [2]. The presentation " :+:
     S "follows the standard pattern of presenting goals, theories, " :+:
     S "definitions, and assumptions. For readers that would like a more " :+:
@@ -211,7 +211,7 @@ s3_1_intro :: Contents
 
 s3_1 = Section (S "User Characteristics") [Con s3_1_intro]
 
-s3_1_intro = Paragraph $ S "The end user of " :+: S (chipmunk ^. name) :+:
+s3_1_intro = Paragraph $ S "The end user of " :+: S (chipmunk ^. id) :+:
     S " should have an understanding of first year programming concepts " :+:
     S "and an understanding of high school physics."
 
@@ -244,7 +244,7 @@ s4_intro = Paragraph $ S "This section first presents the problem " :+:
     S "solved. This is followed by the solution characteristics " :+:
     S "specification, which presents the " :+: (sMap (map toLower)
     (assumption ^. term)) :+: S "s, theories, and definitions that are " :+:
-    S "used for the " :+: S (physLib ^. name) :+: S"."
+    S "used for the " :+: S (physLib ^. id) :+: S"."
 
 -------------------------------
 -- 4.1 : Problem Description --
@@ -256,19 +256,19 @@ s4_1_intro :: Contents
 s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
     Sub s4_1_2]
 
-s4_1_intro = Paragraph $ S "Creating a gaming " :+: S (physLib ^. name) :+:
+s4_1_intro = Paragraph $ S "Creating a gaming " :+: S (physLib ^. id) :+:
     S " is a difficult task. Games need physics libraries that simulate " :+:
     S "objects acting under various physical conditions, while " :+:
     S "simultaneously being fast and efficient enough to work in soft " :+:
-    S "real-time during the game. Developing a " :+: S (physLib ^. name) :+:
+    S "real-time during the game. Developing a " :+: S (physLib ^. id) :+:
     S " from scratch takes a long period of time and is very costly, " :+:
     S "presenting barriers of entry which make it difficult for game " :+:
     S "developers to include physics in their products. There are a few " :+:
     S "free, open source and high quality physics libraries available to " :+:
     S "be used for consumer products (" :+: (makeRef s7) :+:
     S "). By creating a simple, lightweight, fast and portable " :+:
-    S (twoD ^. name) :+: S " " :+: S (rigidBody ^. name) :+: S " " :+:
-    S (physLib ^. name) :+: S ", game development will be more accessible " :+:
+    S (twoD ^. id) :+: S " " :+: S (rigidBody ^. id) :+: S " " :+:
+    S (physLib ^. id) :+: S ", game development will be more accessible " :+:
     S "to the masses and higher quality products will be produced."
 
 -----------------------------------------
@@ -287,7 +287,7 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms " :+:
     S "understand the requirements:"
 
 s4_1_1_bullets = Enumeration (Bullet $ map (\t -> Flat (
-    S ((\word -> (toUpper . head $ word) : (tail word)) (t ^. name)) :+:
+    S ((\word -> (toUpper . head $ word) : (tail word)) (t ^. id)) :+:
     S ": " :+: (t ^. term)))
     [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
 
@@ -301,31 +301,31 @@ s4_1_2_list :: Contents
 s4_1_2 = Section ((goalStmt ^. term) :+: S "s") [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
-    (S (goalStmt ^. name) :+: S "1", Flat (S "Given the physical " :+:
+    (S (goalStmt ^. id) :+: S "1", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (position ^. term) :+: S "s and " :+:
-    S (vels ^. name) :+: S ", and " :+: (force ^. term) :+:
-    S "s applied on a set of " :+: S (rigidBodies ^. name) :+:
+    S (vels ^. id) :+: S ", and " :+: (force ^. term) :+:
+    S "s applied on a set of " :+: S (rigidBodies ^. id) :+:
     S ", determine their new " :+: (position ^. term) :+: S "s and " :+:
-    S (vels ^. name) :+: S " over a period of " :+: (time ^. term) :+: S ".")),
-    (S (goalStmt ^. name) :+: S "2", Flat (S "Given the physical " :+:
+    S (vels ^. id) :+: S " over a period of " :+: (time ^. term) :+: S ".")),
+    (S (goalStmt ^. id) :+: S "2", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (orientation ^. term) :+: S "s and " :+:
-    S (angularVels ^. name) :+: S ", and " :+: (force ^. term) :+: S "s " :+:
-    S "applied on a set of " :+: S (rigidBodies ^. name) :+: S ", " :+:
+    S (angularVels ^. id) :+: S ", and " :+: (force ^. term) :+: S "s " :+:
+    S "applied on a set of " :+: S (rigidBodies ^. id) :+: S ", " :+:
     S "determine their new " :+: (orientation ^. term) :+: S "s and " :+:
-    S (angularVels ^. name) :+: S " over a period of " :+: (time ^. term) :+:
+    S (angularVels ^. id) :+: S " over a period of " :+: (time ^. term) :+:
     S ".")),
-    (S (goalStmt ^. name) :+: S "3", Flat (S "Given the initial " :+:
-    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+: S " of a " :+:
-    S "set of " :+: S (rigidBodies ^. name) :+: S ", determine if any of " :+:
+    (S (goalStmt ^. id) :+: S "3", Flat (S "Given the initial " :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. id) :+: S " of a " :+:
+    S "set of " :+: S (rigidBodies ^. id) :+: S ", determine if any of " :+:
     S "them will collide with one another over a period of " :+:
     (time ^. term) :+: S ".")),
-    (S (goalStmt ^. name) :+: S "4", Flat (S "Given the physical " :+:
+    (S (goalStmt ^. id) :+: S "4", Flat (S "Given the physical " :+:
     S "properties, initial linear and angular " :+: (position ^. term) :+:
-    S "s and " :+: S (vels ^. name) :+: S ", determine the new " :+:
-    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+:
+    S "s and " :+: S (vels ^. id) :+: S ", determine the new " :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. id) :+:
     S " over a period of " :+: (time ^. term) :+: S " of " :+:
-    S (rigidBodies ^. name) :+: S " that have undergone a " :+:
-    S (collision ^. name) :+: S "."))])
+    S (rigidBodies ^. id) :+: S " that have undergone a " :+:
+    S (collision ^. id) :+: S "."))])
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -352,26 +352,26 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
     S "missing information for the physical system. The numbers given in " :+:
     S "the square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ")
     (map (\ch -> (sMap (map toLower) (ch ^. term)) :+: S (" " ++
-    sqbrac (ch ^. name))) [thModel, genDefn, dataDefn, inModel])) :+:
+    sqbrac (ch ^. id))) [thModel, genDefn, dataDefn, inModel])) :+:
     S ", or " :+: (sMap (map toLower) $ likelyChg ^. term) :+: S (" " ++
-    sqbrac (likelyChg ^. name)) :+: S ", in which the respective " :+:
+    sqbrac (likelyChg ^. id)) :+: S ", in which the respective " :+:
     (sMap (map toLower) $ assumption ^. term) :+: S " is used."
 
 s4_2_1_list = Enumeration (Simple [
-    (S (assumption ^. name) :+: S "1", Flat (S "All objects are " :+:
-    S (rigidBodies ^. name) :+: S ".")),
-    (S (assumption ^. name) :+: S "2", Flat (S "All objects are " :+:
-    S (twoD ^. name) :+: S ".")),
-    (S (assumption ^. name) :+: S "3", Flat (S "The library uses a " :+:
-    S (init (cartesian ^. name)) :+: S " system.")),
-    (S (assumption ^. name) :+: S "4", Flat (S "The axes are defined using " :+:
-    S (rightHand ^. name) :+: S ".")),
-    (S (assumption ^. name) :+: S "5", Flat (S "All " :+:
-    S (rigidBodies ^. name) :+: S " " :+: S (collision ^. name) :+:
-    S "s are vertex-to-edge " :+: S (collision ^. name) :+: S "s.")),
-    (S (assumption ^. name) :+: S "6", Flat (S "There is no damping " :+:
+    (S (assumption ^. id) :+: S "1", Flat (S "All objects are " :+:
+    S (rigidBodies ^. id) :+: S ".")),
+    (S (assumption ^. id) :+: S "2", Flat (S "All objects are " :+:
+    S (twoD ^. id) :+: S ".")),
+    (S (assumption ^. id) :+: S "3", Flat (S "The library uses a " :+:
+    S (init (cartesian ^. id)) :+: S " system.")),
+    (S (assumption ^. id) :+: S "4", Flat (S "The axes are defined using " :+:
+    S (rightHand ^. id) :+: S ".")),
+    (S (assumption ^. id) :+: S "5", Flat (S "All " :+:
+    S (rigidBodies ^. id) :+: S " " :+: S (collision ^. id) :+:
+    S "s are vertex-to-edge " :+: S (collision ^. id) :+: S "s.")),
+    (S (assumption ^. id) :+: S "6", Flat (S "There is no damping " :+:
     S "involved throughout the simulation.")),
-    (S (assumption ^. name) :+: S "7", Flat (S "There are no constraints " :+:
+    (S (assumption ^. id) :+: S "7", Flat (S "There are no constraints " :+:
     S "and joints involved throughout the simulation."))])
 
 --------------------------------
@@ -386,7 +386,7 @@ s4_2_2 = Section ((thModel ^. term) :+: S "s") ([Con s4_2_2_intro] ++
     (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
-    S "the " :+: S (physLib ^. name) :+: S " is based on."
+    S "the " :+: S (physLib ^. id) :+: S " is based on."
 
 s4_2_2_TMods = map Definition (map Theory cpTMods)
 
@@ -531,36 +531,36 @@ s5_1 = Section (S "Functional " :+: (requirement ^. term) :+: S "s")
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
 s5_1_list = Enumeration (Simple [
-    (S (requirement ^. name) :+: S "1", Flat (S "Create a " :+:
-    S (space ^. name) :+: S " for all of the " :+: S (rigidBodies ^. name) :+:
+    (S (requirement ^. id) :+: S "1", Flat (S "Create a " :+:
+    S (space ^. id) :+: S " for all of the " :+: S (rigidBodies ^. id) :+:
     S " in the physical simulation to interact in.")),
-    (S (requirement ^. name) :+: S "2", Flat (S "Input the initial " :+:
-    (mass ^. term) :+: S "es, " :+: S (vels ^. name) :+: S ", " :+:
-    (orientation ^. term) :+: S "s, " :+: S (angularVels ^. name) :+:
+    (S (requirement ^. id) :+: S "2", Flat (S "Input the initial " :+:
+    (mass ^. term) :+: S "es, " :+: S (vels ^. id) :+: S ", " :+:
+    (orientation ^. term) :+: S "s, " :+: S (angularVels ^. id) :+:
     S " of, " :+: S "and " :+: (force ^. term) :+: S "s applied on " :+:
-    S (rigidBodies ^. name) :+: S ".")),
-    (S (requirement ^. name) :+: S "3", Flat (S "Input the surface " :+:
-    S "properties of the bodies, such as " :+: S (friction ^. name) :+: S " or " :+:
-    S (elasticity ^. name) :+: S ".")),
-    (S (requirement ^. name) :+: S "4", Flat (S "Verify that the inputs " :+:
+    S (rigidBodies ^. id) :+: S ".")),
+    (S (requirement ^. id) :+: S "3", Flat (S "Input the surface " :+:
+    S "properties of the bodies, such as " :+: S (friction ^. id) :+: S " or " :+:
+    S (elasticity ^. id) :+: S ".")),
+    (S (requirement ^. id) :+: S "4", Flat (S "Verify that the inputs " :+:
     S "satisfy the required physical constraints.")),
-    (S (requirement ^. name) :+: S "5", Flat (S "Determine the " :+:
-    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
-    S "period of " :+: (time ^. term) :+: S " of the " :+: S (twoD ^. name) :+:
-    S " " :+: S (rigidBodies ^. name) :+: S " acted upon by a " :+:
+    (S (requirement ^. id) :+: S "5", Flat (S "Determine the " :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. id) :+: S " over a " :+:
+    S "period of " :+: (time ^. term) :+: S " of the " :+: S (twoD ^. id) :+:
+    S " " :+: S (rigidBodies ^. id) :+: S " acted upon by a " :+:
     (force ^. term) :+: S ".")),
-    (S (requirement ^. name) :+: S "6", Flat (S "Determine the " :+:
-    (orientation ^. term) :+: S "s and " :+: S (angularVels ^. name) :+:
+    (S (requirement ^. id) :+: S "6", Flat (S "Determine the " :+:
+    (orientation ^. term) :+: S "s and " :+: S (angularVels ^. id) :+:
     S " over a period of " :+: (time ^. term) :+: S " of the " :+:
-    S (twoD ^. name) :+: S " " :+: S (rigidBodies ^. name) :+: S ".")),
-    (S (requirement ^. name) :+: S "7", Flat (S "Determine if any of the " :+:
-    S (rigidBodies ^. name) :+: S " in the " :+: S (space ^. name) :+:
+    S (twoD ^. id) :+: S " " :+: S (rigidBodies ^. id) :+: S ".")),
+    (S (requirement ^. id) :+: S "7", Flat (S "Determine if any of the " :+:
+    S (rigidBodies ^. id) :+: S " in the " :+: S (space ^. id) :+:
     S " have collided.")),
-    (S (requirement ^. name) :+: S "8", Flat (S "Determine the " :+:
-    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
-    S "period of " :+: (time ^. term) :+: S " of the " :+: S (twoD ^. name) :+:
-    S " " :+: S (rigidBodies ^. name) :+: S " that have undergone a " :+:
-    S (collision ^. name) :+: S "."))])
+    (S (requirement ^. id) :+: S "8", Flat (S "Determine the " :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. id) :+: S " over a " :+:
+    S "period of " :+: (time ^. term) :+: S " of the " :+: S (twoD ^. id) :+:
+    S " " :+: S (rigidBodies ^. id) :+: S " that have undergone a " :+:
+    S (collision ^. id) :+: S "."))])
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -590,15 +590,15 @@ s6_intro = Paragraph $ S "This section lists the " :+: (sMap (map toLower)
     (likelyChg ^. term)) :+: S "s to be made to the physics game library."
 
 s6_list = Enumeration (Simple [
-    (S (likelyChg ^. name) :+: S "1", Flat (S "The internal " :+:
-    S (ode ^. name) :+: S "-solving algorithm used by the library may " :+:
+    (S (likelyChg ^. id) :+: S "1", Flat (S "The internal " :+:
+    S (ode ^. id) :+: S "-solving algorithm used by the library may " :+:
     S "change in the future.")),
-    (S (likelyChg ^. name) :+: S "2", Flat (S "The library may be " :+:
+    (S (likelyChg ^. id) :+: S "2", Flat (S "The library may be " :+:
     S "expanded to deal with edge-to-edge and vertex-to-vertex " :+:
-    S (collision ^. name) :+: S "s.")),
-    (S (likelyChg ^. name) :+: S "3", Flat (S "The library may be " :+:
+    S (collision ^. id) :+: S "s.")),
+    (S (likelyChg ^. id) :+: S "3", Flat (S "The library may be " :+:
     S "expanded to include motion with damping.")),
-    (S (likelyChg ^. name) :+: S "4", Flat (S "The library may be " :+:
+    (S (likelyChg ^. id) :+: S "4", Flat (S "The library may be " :+:
     S "expanded to include joints and constraints."))])
 
 -----------------------------------------
@@ -613,7 +613,7 @@ s7 = Section (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
 
 s7_intro = Paragraph $ S "As mentioned in " :+: (makeRef s4_1) :+:
     S ", there already exist free open source game physics libraries. " :+:
-    S "Similar " :+: S (twoD ^. name) :+: S " physics libraries are:"
+    S "Similar " :+: S (twoD ^. id) :+: S " physics libraries are:"
 
 s7_2dlist = Enumeration (Bullet [
     Flat (S "Box2D: http://box2d.org/"),

@@ -3,7 +3,7 @@ module Language.Drasil.Generate (gen, genCode) where
 
 import System.IO
 import Text.PrettyPrint.HughesPJ
-
+import Prelude hiding (id)
 import System.Directory
 import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,LPM,Website))
 import Language.Drasil.TeX.Print (genTeX)
@@ -95,7 +95,7 @@ prntCode cc mcs = let absCode = toCode cc mcs
                       code l  = makeCode l
                         (Options Nothing Nothing Nothing (Just "Code"))
                         (map (\mc ->
-                          makeClassNameValid $ (modcc mc) ^. name) mcs)
+                          makeClassNameValid $ (modcc mc) ^. id) mcs)
                         absCode
                       writeCode c lang = do
                         let newDir = c ++ "/" ++ lang

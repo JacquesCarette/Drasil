@@ -1,7 +1,7 @@
 module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..), dqFromDCC) where
 
 import Control.Lens (Simple, Lens, (^.))
-
+import Prelude hiding (id)
 import Language.Drasil.Chunk
 import Language.Drasil.Symbol
 
@@ -10,9 +10,9 @@ data DefinedQuantity =
      , sy :: Symbol }
 
 instance Eq DefinedQuantity where
-  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+  c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk DefinedQuantity where
-  name = dql . name
+  id = dql . id
 instance NamedIdea DefinedQuantity where
   term = dql . term
 instance ConceptDefinition DefinedQuantity where

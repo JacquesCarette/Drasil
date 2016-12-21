@@ -8,6 +8,8 @@ module Language.Drasil.Unit (
   , (^:), (/:), (*:), new_unit
   ) where
 
+import Prelude hiding (id)
+
 import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), NamedIdea(..),
@@ -57,7 +59,7 @@ vc :: Simple Lens FundUnit ConceptChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
 instance Chunk FundUnit where
-  name = vc . name
+  id = vc . id
 
 instance NamedIdea FundUnit where
   term = vc . term
@@ -72,7 +74,7 @@ data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
-instance Chunk   DerUChunk where name  = duc . name
+instance Chunk   DerUChunk where id  = duc . id
 instance NamedIdea DerUChunk where term = duc . term
 instance Unit    DerUChunk where unit  = duc . unit
 
@@ -92,7 +94,7 @@ ulens :: (forall u. Unit u => Simple Lens u a) -> Simple Lens UnitDefn a
 ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 
 instance Unit    UnitDefn where unit  = ulens unit
-instance Chunk   UnitDefn where name  = ulens name
+instance Chunk   UnitDefn where id  = ulens id
 instance NamedIdea UnitDefn where term = ulens term
 
 --- These conveniences go here, because we need the class

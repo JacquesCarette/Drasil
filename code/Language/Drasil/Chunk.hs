@@ -6,14 +6,12 @@ import Control.Lens
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
 import Language.Drasil.Space
+import Prelude hiding (id)
 
 -------- BEGIN CLASSES --------
 
--- BEGIN CHUNK --
--- a chunk has a name
 class Chunk c where
-  name :: Simple Lens c String
--- END CHUNK --
+  id :: Simple Lens c String
   
 class Chunk c => NamedIdea c where
   term :: Simple Lens c Sentence
@@ -48,9 +46,9 @@ class NamedIdea c => ConceptDefinition' c where
 --Equivalent to a "term" concept
 data ConceptChunk = CC String Sentence 
 instance Eq ConceptChunk where
-  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+  c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk ConceptChunk where
-  name f (CC a b) = fmap (\x -> CC x b) (f a)
+  id f (CC a b) = fmap (\x -> CC x b) (f a)
 instance NamedIdea ConceptChunk where
   term f (CC a b) = fmap (\x -> CC a x) (f b)
 -- END CONCEPTCHUNK --
@@ -59,9 +57,9 @@ instance NamedIdea ConceptChunk where
 -- DefinedTerm = DCC Name   Term    Definition
 data DefinedTerm = DCC String Sentence Sentence
 instance Eq DefinedTerm where
-  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+  c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk DefinedTerm where
-  name f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
+  id f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
 instance NamedIdea DefinedTerm where
   term f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
 instance ConceptDefinition DefinedTerm where
@@ -72,16 +70,16 @@ instance ConceptDefinition DefinedTerm where
 
 -- the code generation system needs VC to have a type (for now)
 -- I added vtyp so that it compiles
-data VarChunk = VC { vname :: String
+data VarChunk = VC { vid :: String
                    , vdesc :: Sentence
                    , vsymb :: Symbol
                    , vtyp  :: Space }
 
 instance Eq VarChunk where
-  c1 == c2 = (c1 ^. name) == (c2 ^. name)
+  c1 == c2 = (c1 ^. id) == (c2 ^. id)
 
 instance Chunk VarChunk where
-  name f (VC n d s t) = fmap (\x -> VC x d s t) (f n)
+  id f (VC n d s t) = fmap (\x -> VC x d s t) (f n)
 
 instance NamedIdea VarChunk where
   term f (VC n d s t) = fmap (\x -> VC n x s t) (f d)
@@ -98,10 +96,10 @@ instance Quantity VarChunk where
 --Helper Function(s)--
 
 makeCC :: String -> String -> ConceptChunk
-makeCC nam des = CC nam (S des)
+makeCC i des = CC i (S des)
 
 makeDCC :: String -> String -> String -> DefinedTerm
-makeDCC nam ter des = DCC nam (S ter) (S des)
+makeDCC i ter des = DCC i (S ter) (S des)
 
 --Currently only used by RelationChunk and EqChunk
 ccWithDescrSent :: String -> Sentence -> ConceptChunk
@@ -114,7 +112,7 @@ nCC n = makeCC n n
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Rational type so it compiles
 makeVC :: String -> String -> Symbol -> VarChunk
-makeVC nam des sym = VC nam (S des) sym Rational
+makeVC i des sym = VC i (S des) sym Rational
 
 vcFromCC :: ConceptChunk -> Symbol -> VarChunk
-vcFromCC cc sym = VC (cc ^. name) (cc ^. term) sym Rational
+vcFromCC cc sym = VC (cc ^. id) (cc ^. term) sym Rational

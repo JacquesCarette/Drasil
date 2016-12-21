@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Document where
-
-import Language.Drasil.Chunk (name)
+import Prelude hiding (id)
+import Language.Drasil.Chunk (id)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
@@ -77,11 +77,11 @@ instance LayoutObj Contents where
 --  refName (CodeBlock _)       = error "Codeblock ref unimplemented"
   refName (Definition d)      = getDefName d
   refName (Enumeration _)     = error "List refs unimplemented"
-  refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. name)
-  refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. name)
-  refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. name)
-  refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. name)
-  refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. name)
+  refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. id)
+  refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. id)
+  refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. id)
+  refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
+  refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
   rType (Table _ _ _ _)    = Tab
@@ -97,6 +97,6 @@ instance LayoutObj Contents where
   rType _ = error "Attempting to reference unimplemented reference type"
   
 getDefName :: DType -> Sentence
-getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. name))
-getDefName (Theory c) = S $ "T:" ++ firstLetter (repUnd (c ^. name))
+getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
+getDefName (Theory c) = S $ "T:" ++ firstLetter (repUnd (c ^. id))
 getDefName _          = error "Unimplemented definition type reference"

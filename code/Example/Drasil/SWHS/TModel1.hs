@@ -8,7 +8,7 @@ import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
 
 import Language.Drasil
-
+import Prelude hiding (id)
 import Data.Drasil.Concepts.Thermodynamics
 import Data.Drasil.Quantities.Math (gradient)
 
@@ -27,7 +27,7 @@ consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
 t1descr :: Sentence
 t1descr = (S "The above equation gives the " :+: (sMap (map toLower) 
           (law_cons_energy ^. term)) :+: S " for " :+: (sMap (map toLower)
-          (S (transient ^. name))) :+: S " " :+: (heat_trans ^. term) :+:
+          (S (transient ^. id))) :+: S " " :+: (heat_trans ^. term) :+:
           S " in a material of " :+: (htCap ^. term) :+: S " " :+: 
           P (htCap ^. symbol) :+: S " (" :+: Sy (htCap ^. unit) :+: S ") " :+:
           S "and " :+: (density ^. term) :+: S ", " :+: 
@@ -42,7 +42,7 @@ t1descr = (S "The above equation gives the " :+: (sMap (map toLower)
           Sy (time ^. unit) :+: S "), and " :+: P (gradient ^. symbol) :+: 
           S " is the " :+: (gradient ^. cdefn) :+: S ". For this equation " :+: 
           S "to apply, " :+: S "other forms of energy, such as " :+:
-          (sMap (map toLower) (S (mech_energy ^. name))) :+: 
+          (sMap (map toLower) (S (mech_energy ^. id))) :+: 
           S ", are assumed to be negligible in the system (A1).")
 
 --referencing within a simple list is not yet implemented.

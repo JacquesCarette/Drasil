@@ -1,7 +1,7 @@
 module Language.Drasil.Chunk.LC(LCChunk(..)) where
 
 import Control.Lens (Simple, Lens)
-
+import Prelude hiding (id)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 
@@ -12,7 +12,7 @@ data LCChunk = LCChunk
   }
 
 instance Chunk LCChunk where
-  name = cl . name
+  id = cl . id
 
 instance NamedIdea LCChunk where
   term = cl . term

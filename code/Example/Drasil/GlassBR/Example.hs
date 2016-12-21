@@ -5,10 +5,9 @@ import Drasil.GlassBR.Units
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
-
 import Control.Lens((^.))
 import Data.Char(toLower)
-import Prelude hiding (log)
+import Prelude hiding (log, id)
 
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
@@ -159,11 +158,11 @@ hs            = makeCC "Heat strengthened glass"
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6] in Reference.")
 gtf           = makeCC "Glass type factor" 
-  ("A multiplying factor for adjusting the " ++ (lResistance ^. name) ++
-    " of different glass type, that is, " ++ (annealedGlass ^. name) ++ 
-    ", " ++ (heatSGlass ^. name) ++ ", or " ++ (fullyTGlass ^. name) ++ 
-    " in monolithic glass, " ++ (lGlass ^. name) ++ " (Laminated Glass), " ++
-    "or " ++ (iGlass ^. name) ++ " (Insulating Glass) constructions.")
+  ("A multiplying factor for adjusting the " ++ (lResistance ^. id) ++
+    " of different glass type, that is, " ++ (annealedGlass ^. id) ++ 
+    ", " ++ (heatSGlass ^. id) ++ ", or " ++ (fullyTGlass ^. id) ++ 
+    " in monolithic glass, " ++ (lGlass ^. id) ++ " (Laminated Glass), " ++
+    "or " ++ (iGlass ^. id) ++ " (Insulating Glass) constructions.")
 lateral       = makeCC "Lateral" "Perpendicular to the glass surface."
 load          = makeCC "Load" "A uniformly distributed lateral pressure."
 specDeLoad    = makeCC "Specified design load" 
@@ -178,15 +177,15 @@ ldl           = makeCC "Long duration load"
 nfl           = makeCC "Non-factored load"
   ("Three second duration uniform load associated with a probability of " ++
     "breakage less than or equal to 8 lites per 1000 for monolithic " ++
-    (annealedGlass ^. name) ++ " glass.")
+    (annealedGlass ^. id) ++ " glass.")
 glassWL       = makeCC "Glass weight load" 
   ("The dead load component of the glass weight.")
 sdl           = makeCC "Short duration load" "Any load lasting 3s or less."
 lsf           = makeCC "Load share factor" 
   ("A multiplying factor derived from the load sharing between the double " ++
     "glazing, of equal or different thickness's and types (including the " ++
-    "layered behaviour of " ++ (lGlass ^. name) ++ " under long duration " ++
-    "loads), in a sealed " ++ (iGlass ^. name) ++ " unit.")
+    "layered behaviour of " ++ (lGlass ^. id) ++ " under long duration " ++
+    "loads), in a sealed " ++ (iGlass ^. id) ++ " unit.")
 pb            = makeCC "Probability of breakage" 
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
@@ -261,7 +260,7 @@ t2descr =
   (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. term) :+: 
   S " (also called capacity, as defined in " :+: 
   (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
-  (P $ demand ^. symbol) :+: S (" (also referred as the " ++ (demandq ^. name)
+  (P $ demand ^. symbol) :+: S (" (also referred as the " ++ (demandq ^. id)
   ++ ") is the ") :+: (demandq ^. term) :+: S ", as defined in " :+: 
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
@@ -304,16 +303,16 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 dedescr :: Sentence
 dedescr = 
   (P $ demand ^. symbol) :+: S " or " :+: 
-  (sMap (map toLower) (S $ demandq ^. name)) :+: S ", is the " :+:
+  (sMap (map toLower) (S $ demandq ^. id)) :+: S ", is the " :+:
   (demandq ^. term) :+: S " obtained from Figure 2 by interpolation using " 
-  :+: (sMap (map toLower) (S $ sD ^. name)) :+: S " (" :+: (P $ sd ^. symbol) 
+  :+: (sMap (map toLower) (S $ sD ^. id)) :+: S " (" :+: (P $ sd ^. symbol) 
   :+: S ") and " :+: (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
   (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
   (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
   S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
   (sMap (map toLower) (char_weight ^. term)) :+: S ". " :+: 
   (P $ tNT ^. symbol) :+: S " is the " :+: (tNT ^. term) :+: S ". " :+: 
-  (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (S $ sD ^. name))
+  (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (S $ sD ^. id))
   :+: S " where " :+: (P $ sd ^. symbol) :+: S " = ." 
   --equation in sentence
 
@@ -329,14 +328,14 @@ risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
 
 risk :: QDefinition
-risk = fromEqn' (risk_fun ^. name) (S "risk of failure") (risk_fun ^. symbol) 
+risk = fromEqn' (risk_fun ^. id) (S "risk of failure") (risk_fun ^. symbol) 
   risk_eq
 
 hFromt_eq :: Expr
 hFromt_eq = FCall (C act_thick) [C nom_thick]
 
 hFromt :: QDefinition
-hFromt = fromEqn (act_thick ^. name) (S " function that maps from the " :+:
+hFromt = fromEqn (act_thick ^. id) (S " function that maps from the " :+:
   S "nominal thickness (" :+: (P $ nom_thick ^. symbol) :+: S ") to the " :+:
   S "minimum thickness, as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => " :+:
   S "2.59 | t = 3.0 => 2.92 | t = 4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 " :+:
@@ -348,14 +347,14 @@ loadDF_eq :: Expr
 loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. name) (S "Load Duration Factor") (Atomic "LDF") 
+loadDF = fromEqn' (lDurFac ^. id) (S "Load Duration Factor") (Atomic "LDF") 
   loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: QDefinition
-strDisFac = fromEqn' (sdf ^. name) (sdf ^. term) (sdf ^. symbol) 
+strDisFac = fromEqn' (sdf ^. id) (sdf ^. term) (sdf ^. symbol) 
   strDisFac_eq
 
 nonFL_eq :: Expr
@@ -363,24 +362,24 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. name) (nonFactorL ^. term) (Atomic "NFL") 
+nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") 
   nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: QDefinition
-glaTyFac = fromEqn' (glassTypeFac ^. name) (S "function that maps from " :+:
+glaTyFac = fromEqn' (glassTypeFac ^. id) (S "function that maps from " :+:
   S "the glass type (" :+: (P $ glass_type ^. symbol) :+: S ") to a real " :+:
   S "number, as follows: " :+: (P $ glaTyFac ^.symbol) :+: S "(" :+: 
   (P $ glass_type ^. symbol) :+: S ") = (" :+: (P $ glass_type ^. symbol) :+: 
   S " = AN => 1.0|" :+: (P $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
   (P $ glass_type ^. symbol) :+: S (" = HS => 2.0). " ++ 
-  (annealedGlass ^. name) ++ " is ") :+: 
+  (annealedGlass ^. id) ++ " is ") :+: 
   (sMap (map toLower) (annealedGlass ^. term)) :+: S (". " ++ 
-  (fullyTGlass ^. name) ++ " is ") :+: 
+  (fullyTGlass ^. id) ++ " is ") :+: 
   (sMap (map toLower) (fullyTGlass ^. term)) :+: S (". " ++
-  (heatSGlass ^. name) ++ " is ") :+: 
+  (heatSGlass ^. id) ++ " is ") :+: 
   (sMap (map toLower) (heatSGlass ^. term)) :+: S ".") (Atomic "GTF") 
   glaTyFac_eq
 
@@ -389,14 +388,14 @@ dL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
 
 dL :: QDefinition
-dL = fromEqn' (dimlessLoad ^. name) (dimlessLoad ^. term) 
+dL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
   (dimlessLoad ^. symbol) dL_eq
 
 tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
 tolPre :: QDefinition
-tolPre = fromEqn' (tolLoad ^. name) (tolLoad ^. term) (tolLoad ^. symbol) 
+tolPre = fromEqn' (tolLoad ^. id) (tolLoad ^. term) (tolLoad ^. symbol) 
   tolPre_eq
 
 tolStrDisFac_eq :: Expr
@@ -408,5 +407,5 @@ tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))
   (Int 2))):^(C sflawParamM):*(C loadDF))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = fromEqn' (sdf_tol ^. name) (sdf_tol ^. term) (sdf_tol ^. symbol) 
+tolStrDisFac = fromEqn' (sdf_tol ^. id) (sdf_tol ^. term) (sdf_tol ^. symbol) 
   tolStrDisFac_eq

@@ -2,7 +2,7 @@ module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..),
   ExcType(..), IOType(..), fromEC, makeStdInputMethod) where
 
 import Control.Lens (Simple, Lens, (^.))
-
+import Prelude hiding (id)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq
@@ -26,7 +26,7 @@ instance Show ExcType where
   show DivByZero = "Divide By Zero"
 
 instance Chunk MethodChunk where
-  name = cl . name
+  id = cl . id
 
 instance NamedIdea MethodChunk where
   term = cl . term
@@ -59,4 +59,4 @@ checkDiv _        = False
 
 
 toCC :: NamedIdea c => c -> ConceptChunk
-toCC c = CC (c ^. name) (c ^. term)
+toCC c = CC (c ^. id) (c ^. term)

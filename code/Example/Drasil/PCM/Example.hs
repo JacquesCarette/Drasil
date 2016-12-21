@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Units.Thermodynamics as U
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
-
+import Prelude hiding (id)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Math
@@ -44,7 +44,7 @@ ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water"
               (sub lH cC) U.heat_transfer
 tank_L      = makeUC "L" "length of tank" cL metre
 mass        = ucFromVC QPP.mass kilogram
-water_m     = makeUC "m_W" ((QPP.mass ^. name) ++ " of water") 
+water_m     = makeUC "m_W" ((QPP.mass ^. id) ++ " of water") 
                 (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?

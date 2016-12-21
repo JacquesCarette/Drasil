@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.MDefinedConcept where
 
 import Control.Lens (Simple, Lens, (^.), set)
-
+import Prelude hiding (id)
 import Language.Drasil.Chunk
 
 data MDefinedConcept where 
@@ -10,7 +10,7 @@ data MDefinedConcept where
   SimpleT :: NamedIdea c => c -> MDefinedConcept
   
 instance Chunk MDefinedConcept where
-  name = dclens name
+  id = dclens id
   
 instance NamedIdea MDefinedConcept where
   term = dclens term

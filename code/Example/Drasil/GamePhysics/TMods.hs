@@ -5,7 +5,7 @@ import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
 import Data.Drasil.Concepts.Physics (rigidBody)
-
+import Prelude hiding (id)
 import Control.Lens ((^.))
 
 ----- Theoretical Models -----
@@ -24,12 +24,12 @@ newtonSLRel = (C force) := (C mass) * (C accel)
 t1descr :: Sentence
 t1descr = S "The net " :+: (force ^. term) :+: S " " :+:
     P (force ^. symbol) :+: S " (" :+: Sy (force ^. unit) :+: S ") on a " :+:
-    S (rigidBody ^. name) :+: S " is proportional to the " :+:
+    S (rigidBody ^. id) :+: S " is proportional to the " :+:
     (accel ^. term) :+: S " " :+: P (accel ^. symbol) :+: S " (" :+:
-    Sy (accel ^. unit) :+: S ") of the " :+: S (rigidBody ^. name) :+:
+    Sy (accel ^. unit) :+: S ") of the " :+: S (rigidBody ^. id) :+:
     S ", where " :+: P (mass ^. symbol) :+: S " (" :+: Sy (mass ^. unit) :+:
     S ") denotes the " :+: (mass ^. term) :+: S " of the " :+:
-    S (rigidBody ^. name) :+: S " as the constant of proprotionality."
+    S (rigidBody ^. id) :+: S " as the constant of proprotionality."
 
 -- T2 : Newton's third law of motion --
 
@@ -43,10 +43,10 @@ t2descr :: Sentence
 t2descr = S "Every action has an equal and opposite reaction. In other " :+:
     S "words, the " :+: (force ^. term) :+: S " " :+: P (force_1 ^. symbol) :+:
     S " (" :+: Sy (force_1 ^. unit) :+: S ") exerted on the second " :+:
-    S (rigidBody ^. name) :+: S " by the first is equal in magnitude and " :+:
+    S (rigidBody ^. id) :+: S " by the first is equal in magnitude and " :+:
     S "in the opposite direction to the " :+: (force ^. term) :+: S " " :+:
     P (force_2 ^. symbol) :+: S " (" :+: Sy (force_2 ^. unit) :+:
-    S ") exerted on the first " :+: S (rigidBody ^. name) :+:
+    S ") exerted on the first " :+: S (rigidBody ^. id) :+:
     S " by the second."
 
 -- T3 : Newton's law of universal gravitation --
@@ -70,7 +70,7 @@ newtonLUGRel = (C force) :=
 -- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
 
 t3descr :: Sentence
-t3descr = S "Two " :+: S (rigidBodies ^. name) :+: S " in the universe " :+:
+t3descr = S "Two " :+: S (rigidBodies ^. id) :+: S " in the universe " :+:
     S "attract each other with a " :+: (force ^. term) :+: S " " :+:
     P (force ^. symbol) :+: S " (" :+: Sy (force ^. unit) :+: S ") " :+:
     S "that is directly proportional to the product of their " :+:
@@ -80,7 +80,7 @@ t3descr = S "Two " :+: S (rigidBodies ^. name) :+: S " in the universe " :+:
     P (sqrDist ^. symbol) :+: S " (" :+: Sy (sqrDist ^. unit) :+: S ") " :+:
     S "between them. The vector " :+: P (disp ^. symbol) :+: S " (" :+:
     Sy (disp ^. unit) :+: S ") is the " :+: (disp ^. term) :+:
-    S " between the centres of the " :+: S (rigidBodies ^. name) :+:
+    S " between the centres of the " :+: S (rigidBodies ^. id) :+:
     S " and " :+: P (dispNorm ^. symbol) :+: S " (" :+:
     Sy (dispNorm ^. unit) :+: S ") represents " :+: S "the " :+:
     (dispNorm ^. term) :+: S ", or absolute distance between the " :+:
@@ -103,12 +103,12 @@ chaslesRel = (C vel_B) := (C vel_O) + ((C angVel) * (C r_OB))
 t4descr :: Sentence
 t4descr = S "The linear " :+: (vel ^. term) :+: S " " :+:
     P (vel_B ^. symbol) :+: S " (" :+: Sy (vel_B ^. unit) :+: S ") of any " :+:
-    S "point B in a " :+: S (rigidBody ^. name) :+: S " is the sum of the " :+:
+    S "point B in a " :+: S (rigidBody ^. id) :+: S " is the sum of the " :+:
     S "linear " :+: (vel ^. term) :+: S " " :+: P (vel_O ^. symbol) :+:
     S " (" :+: Sy (vel_O ^. unit) :+: S ") of the " :+:
-    S (rigidBody ^. name) :+: S " at the origin (axis of rotation) and the " :+:
+    S (rigidBody ^. id) :+: S " at the origin (axis of rotation) and the " :+:
     S "resultant vector from the cross product of the " :+:
-    S (rigidBody ^. name) :+: S "'s " :+: (S (angVel ^. name)) :+: S " " :+:
+    S (rigidBody ^. id) :+: S "'s " :+: (S (angVel ^. id)) :+: S " " :+:
     P (angVel ^. symbol) :+: S " (" :+: Sy (angVel ^. unit) :+:
     S ") and the " :+: (r_OB ^. term) :+: S ", " :+: P (r_OB ^. symbol) :+:
     S " (" :+: Sy (r_OB ^. unit) :+: S ")."
@@ -128,10 +128,10 @@ newtonSLRRel = (C torque) := (C momtInert) * (C angAccel)
 t5descr :: Sentence
 t5descr = S "The net " :+: (torque ^. term) :+: S " " :+:
     P (torque ^. symbol) :+: S " (" :+: Sy (torque ^. unit) :+: S ") on a " :+:
-    S (rigidBody ^. name) :+: S " is proportional to its " :+:
+    S (rigidBody ^. id) :+: S " is proportional to its " :+:
     (angAccel ^. term) :+: S " " :+: P (angAccel ^. symbol) :+: S " (" :+:
     Sy (angAccel ^. unit) :+: S "). Here, " :+: P (momtInert ^. symbol) :+:
     S " (" :+: Sy (momtInert ^. unit) :+: S ") denotes the " :+:
-    (momtInert ^. term) :+: S " of the " :+: S (rigidBody ^. name) :+:
-    S ". We also assume that all " :+: S (rigidBodies ^. name) :+:
+    (momtInert ^. term) :+: S " of the " :+: S (rigidBody ^. id) :+:
+    S ". We also assume that all " :+: S (rigidBodies ^. id) :+:
     S " involved are two-dimensional (A2)."

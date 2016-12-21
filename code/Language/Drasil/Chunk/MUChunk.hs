@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.MUChunk (MUChunk(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
-
+import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), Quantity(..))
 import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Space
@@ -12,7 +12,7 @@ data MUChunk where --May have Unit chunk
   HasNot :: SymbolForm c => c -> MUChunk --Could accidentally add Unital
 
 instance Chunk MUChunk where
-  name = mulens name
+  id = mulens id
   
 instance NamedIdea MUChunk where
   term = mulens term

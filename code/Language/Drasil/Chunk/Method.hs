@@ -1,5 +1,5 @@
 module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..),
-  ExcType(..), fromEC) where
+  ExcType(..), IOType(..), fromEC, makeStdInputMethod) where
 
 import Control.Lens (Simple, Lens, (^.))
 
@@ -9,13 +9,16 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
 
 -- BEGIN METHODCHUNK --
-data MethodChunk = MeC { cc :: ConceptChunk, mType :: MethodType,
+data MethodChunk = MeC { methcc :: ConceptChunk, mType :: MethodType,
                          input :: [VarChunk], output :: [VarChunk],
                          exc :: [ExcType] }
 
-data MethodType = Calc Expr
-                | Input
-                | Output
+data MethodType = MCalc QDefinition
+                | MInput IOType VarChunk
+                | MOutput IOType VarChunk
+
+data IOType = IOStd
+            | IOFile
 
 data ExcType = DivByZero
 
@@ -37,8 +40,11 @@ cl f (MeC a b c d e) = fmap (\x -> MeC x b c d e) (f a)
 
 fromEC :: QDefinition -> MethodChunk
 fromEC ec = let exc' = if (checkDiv $ equat ec) then [DivByZero] else []
-            in  MeC (toCC $ uc ec) (Calc $ equat ec) (vars $ equat ec)
+            in  MeC (toCC $ uc ec) (MCalc $ ec) (vars $ equat ec)
                   [(toVC $ uc ec)] exc'
+
+makeStdInputMethod :: VarChunk -> MethodChunk
+makeStdInputMethod vc = MeC (toCC $ vc) (MInput IOStd vc) [] [vc] []
 
 -- don't export
 checkDiv :: Expr -> Bool

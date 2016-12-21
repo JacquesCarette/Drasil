@@ -10,3 +10,4 @@ data Space where
   Char :: Space
   String :: Space
   Vect :: Space -> Space
+  Obj :: String -> Space

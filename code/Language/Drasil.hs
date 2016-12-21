@@ -32,9 +32,9 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationChunk, makeRC
   -- Chunk.Method
-  , MethodChunk, fromEC
+  , MethodChunk, fromEC, makeStdInputMethod
   -- Chunk.Module
-  , ModuleChunk, makeImpModule, makeUnimpModule
+  , ModuleChunk, makeRecord, makeImpModule, makeUnimpModule
   -- Chunk.Req
   , ReqChunk(..)
   -- Chunk.LC
@@ -59,15 +59,10 @@ module Language.Drasil (
   , mkTable, unit'2Contents
   -- Printing.Helpers
   , capitalize, paren, sqbrac
-
-  -- CCode.Import
-  , toCodeModule
-  -- CCode.AST
-  , Lang(CLang), CodeType(Calc)
   -- Template.DD
   , makeDD
   -- Generate
-  , gen
+  , gen, genCode
 ) where
 
 import Prelude hiding (log, abs, sin, cos, tan)
@@ -101,7 +96,5 @@ import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
-import Language.Drasil.CCode.Import (toCodeModule)
-import Language.Drasil.CCode.AST (Lang(CLang), CodeType(..))
 import Language.Drasil.Template.DD
 import Language.Drasil.Generate

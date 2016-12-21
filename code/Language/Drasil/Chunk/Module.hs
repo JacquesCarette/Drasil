@@ -1,5 +1,5 @@
 module Language.Drasil.Chunk.Module(ModuleChunk(..), formatName, makeImpModule
-  , makeUnimpModule) where
+  , makeUnimpModule, makeRecord) where
 
 import Control.Lens (Simple, Lens, (^.))
 import Data.List (intersperse)
@@ -10,9 +10,9 @@ import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
 
 -- BEGIN METHODCHUNK --
-data ModuleChunk = MoC { cc :: ConceptChunk, secret :: Sentence,
-  imp :: Maybe ConceptChunk, method :: [MethodChunk], uses :: [ModuleChunk],
-  hier :: Maybe ModuleChunk }
+data ModuleChunk = MoC { modcc :: ConceptChunk, secret :: Sentence,
+  imp :: Maybe ConceptChunk, field :: [VarChunk],
+  method :: [MethodChunk], uses :: [ModuleChunk], hier :: Maybe ModuleChunk }
 
 instance Chunk ModuleChunk where
   name = cl . name
@@ -26,7 +26,7 @@ instance Eq ModuleChunk where
 -- END METHODCHUNK --
 
 cl ::  Simple Lens ModuleChunk ConceptChunk
-cl f (MoC a b c d e g) = fmap (\x -> MoC x b c d e g) (f a)
+cl f (MoC a b c d e g h) = fmap (\x -> MoC x b c d e g h) (f a)
 
 
 formatName :: ModuleChunk -> String
@@ -35,10 +35,15 @@ formatName m = (concat $ intersperse " " $
   where capFirst [] = []
         capFirst (c:cs) = toUpper c:cs
 
-makeImpModule :: ConceptChunk -> Sentence -> ConceptChunk -> [MethodChunk]
+makeRecord :: ConceptChunk -> Sentence -> ConceptChunk -> [VarChunk]
   -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
-makeImpModule cc' secret' imp' method' uses' hier' =
-  MoC cc' secret' (Just imp') method' uses' hier'
+makeRecord cc' secret' imp' field' uses' hier' =
+  MoC cc' secret' (Just imp') field' [] uses' hier'
+
+makeImpModule :: ConceptChunk -> Sentence -> ConceptChunk -> [VarChunk]
+  -> [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
+makeImpModule cc' secret' imp' field' method' uses' hier' =
+  MoC cc' secret' (Just imp') field' method' uses' hier'
 
 makeUnimpModule :: ConceptChunk -> Sentence -> Maybe ModuleChunk -> ModuleChunk
-makeUnimpModule cc' secret' hier' = MoC cc' secret' Nothing [] [] hier'
+makeUnimpModule cc' secret' hier' = MoC cc' secret' Nothing [] [] [] hier'

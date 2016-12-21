@@ -9,7 +9,6 @@ import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec (Sentence(..), RefType(..))
-import Language.Drasil.CCode.AST (Code) -- This is clearly wrong!
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
 import Control.Lens ((^.))
@@ -18,6 +17,8 @@ type Title    = Sentence
 type Author   = Sentence
 type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
+type Width    = Float
+type Height   = Float
 type Pair     = (Title,ItemType) -- Title: Item
 type Filepath = String
 type Label    = Sentence
@@ -35,7 +36,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
   --table header data label showlabel?
                | Paragraph Sentence
                | EqnBlock Expr
-               | CodeBlock Code
+     --          | CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
                | Enumeration ListType
                | Figure Label Filepath--Should use relative file path.
@@ -44,7 +45,8 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Assumption AssumpChunk
                | LikelyChange LCChunk
                | UnlikelyChange UCChunk
-               | UsesHierarchy [(ModuleChunk,[ModuleChunk])]
+     --          | UsesHierarchy [(ModuleChunk,[ModuleChunk])]
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
 
 data ListType = Bullet [ItemType]
               | Number [ItemType] 
@@ -72,7 +74,7 @@ instance LayoutObj Contents where
   refName (Figure l _)        = S "Figure:" :+: inferName l
   refName (Paragraph _)       = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)        = error "EqnBlock ref unimplemented"
-  refName (CodeBlock _)       = error "Codeblock ref unimplemented"
+--  refName (CodeBlock _)       = error "Codeblock ref unimplemented"
   refName (Definition d)      = getDefName d
   refName (Enumeration _)     = error "List refs unimplemented"
   refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. name)
@@ -80,7 +82,8 @@ instance LayoutObj Contents where
   refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. name)
   refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. name)
   refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. name)
-  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
+--  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
+  refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
   rType (Definition _)     = Def
@@ -89,7 +92,8 @@ instance LayoutObj Contents where
   rType (Assumption _)     = Assump
   rType (LikelyChange _)   = LC
   rType (UnlikelyChange _) = UC
-  rType (UsesHierarchy _)  = Fig
+--  rType (UsesHierarchy _)  = Fig
+  rType (Graph _ _ _ _)    = Fig
   rType _ = error "Attempting to reference unimplemented reference type"
   
 getDefName :: DType -> Sentence

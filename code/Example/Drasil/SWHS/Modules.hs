@@ -15,7 +15,7 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
 -- HW Hiding Module
 mod_hw :: ModuleChunk
 mod_hw = makeImpModule modHWHiding (S "The data structure and algorithm " :+:
-         S "used to implement the virtual hardware.") os [] [] Nothing
+         S "used to implement the virtual hardware.") os [] [] [] Nothing
 
 -- Behaviour Hiding Module
 mod_behav :: ModuleChunk
@@ -25,18 +25,18 @@ mod_behav = makeUnimpModule modBehavHiding (S "The contents of the required" :+:
 -- Input Format Module
 mod_inputf :: ModuleChunk
 mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:
-             S "the input data.") swhsProg [] [mod_hw, mod_inputp, mod_seq] 
+             S "the input data.") swhsProg [] [] [mod_hw, mod_inputp, mod_seq] 
              (Just mod_behav)
 
 -- Input Parameters Module
 mod_inputp :: ModuleChunk
 mod_inputp = makeImpModule modInputParams (S "The format and structure of " :+:
-             S "the input parameters.") swhsProg [] [mod_seq] (Just mod_behav)
+             S "the input parameters.") swhsProg [] [] [mod_seq] (Just mod_behav)
 
 -- Input Verification Module
 mod_inputv :: ModuleChunk
 mod_inputv = makeImpModule modInputVerif (S "The format and structure of " :+:
-             S "the physical and software constraints.") swhsProg [] 
+             S "the physical and software constraints.") swhsProg [] [] 
              [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Output Format Module
@@ -48,7 +48,7 @@ mod_outputf_desc = CC "output format" (S "Outputs the results of the " :+:
 
 mod_outputf :: ModuleChunk
 mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
-              S "of the output data.") swhsProg [] [mod_hw, mod_inputp, mod_seq] 
+              S "of the output data.") swhsProg [] [] [mod_hw, mod_inputp, mod_seq] 
               (Just mod_behav)
 
 -- Output Verification Module
@@ -60,7 +60,7 @@ mod_outputv_desc = CC "output verification" (S "Verifies that the output " :+:
 
 mod_outputv :: ModuleChunk
 mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
-              S "approximate expected results.") swhsProg [] 
+              S "approximate expected results.") swhsProg [] [] 
               [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Temperature ODEs Module
@@ -72,7 +72,7 @@ mod_temp_desc = CC "temperature ODEs" (S "Defines the " :+:
 mod_temp :: ModuleChunk
 mod_temp = makeImpModule mod_temp_desc (S "The " :+: S (ordDiffEq ^. name) :+:
            S "s for solving the temperature, using the input parameters.")
-           swhsProg [] [mod_inputp, mod_seq] (Just mod_behav)
+           swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Energy Equations Module
 mod_ener_desc :: ConceptChunk
@@ -81,13 +81,13 @@ mod_ener_desc = CC "energy equations" (S "Defines the energy equations " :+:
 
 mod_ener :: ModuleChunk
 mod_ener = makeImpModule mod_ener_desc (S "The equations for solving for " :+:
-           S "the energies using the input parameters.") swhsProg [] 
+           S "the energies using the input parameters.") swhsProg [] [] 
            [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Control Module
 mod_ctrl :: ModuleChunk
 mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:
-           S "the running of the program.") swhsProg [] [mod_hw, mod_inputp, 
+           S "the running of the program.") swhsProg [] [] [mod_hw, mod_inputp, 
            mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
            mod_outputv, mod_outputf, mod_seq] (Just mod_behav)
 
@@ -106,7 +106,7 @@ mod_seq_desc = CC "sequence data structure" (S "Provides array manipulation" :+:
 
 mod_seq :: ModuleChunk
 mod_seq = makeImpModule mod_seq_desc (S "The data structure for a sequence " :+:
-          S "data type.") matlab [] [] (Just mod_sw)
+          S "data type.") matlab [] [] [] (Just mod_sw)
 
 -- ODE Solver Module
 mod_ode_desc :: ConceptChunk
@@ -116,7 +116,7 @@ mod_ode_desc = CC "ODE solver" (S "Provides solvers that take the governing " :+
 
 mod_ode :: ModuleChunk
 mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: S (ordDiffEq ^. name) :+: S "s.") matlab [] 
+          S " first order " :+: S (ordDiffEq ^. name) :+: S "s.") matlab [] [] 
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module
@@ -125,5 +125,5 @@ mod_plot_desc = CC "plotting" (S "Provides a plot function.")
 
 mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:
-           S "algorithms for plotting data graphically.") matlab [] [mod_seq] 
+           S "algorithms for plotting data graphically.") matlab [] [] [mod_seq] 
            (Just mod_sw)

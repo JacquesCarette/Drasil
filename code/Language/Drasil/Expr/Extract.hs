@@ -6,6 +6,7 @@ import Control.Lens hiding ((:<),(:>))
 
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
 import Language.Drasil.Chunk (VarChunk(..), SymbolForm, name, symbol, descr)
+import Language.Drasil.Space  -- need this for code generation
 
 --Get dependency from equation  
 dep :: Expr -> [String]
@@ -71,5 +72,7 @@ binop (Cross e f) = [e,f]
 
 -- Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
 -- Again, used for printing equations/descriptions mostly.
+-- Steven edit:  need this to have a type for code generation
+--   setting to all to rational
 toVC :: SymbolForm c => c -> VarChunk
-toVC c = VC (c ^. name) (c ^. descr) (c ^. symbol)
+toVC c = VC (c ^. name) (c ^. descr) (c ^. symbol) (Rational)

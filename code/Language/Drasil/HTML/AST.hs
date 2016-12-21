@@ -5,7 +5,6 @@ import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
-import Language.Drasil.CCode.AST (Code) -- this seems wrong!
 import Language.Drasil.Document (DType (..))
 
 data Expr = Var   Variable
@@ -70,7 +69,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Paragraph Contents
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents
-               | CodeBlock Code
+             --  | CodeBlock Code
                | Definition DType [(String,LayoutObj)] Label
                | List ListType
                | Figure Label Caption Filepath

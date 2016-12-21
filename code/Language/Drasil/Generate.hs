@@ -1,5 +1,5 @@
 {-# OPTIONS -Wall #-} 
-module Language.Drasil.Generate (gen) where
+module Language.Drasil.Generate (gen, genCode) where
 
 import System.IO
 import Text.PrettyPrint.HughesPJ
@@ -9,13 +9,23 @@ import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,LPM,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
-import Language.Drasil.CCode.Print (genCode)
+import Language.Drasil.Code.Import (toCode)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Config (outLang)
+import Language.Drasil.Chunk
+import Language.Drasil.Code.Imperative.LanguageRenderer
+import Language.Drasil.Code.Imperative.Helpers
+import Control.Lens
+
+
+-- temporary
+import Language.Drasil.Code.Code
+import Language.Drasil.Code.CodeTest
+import Language.Drasil.Code.CodeGeneration
+import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 
 -- Generate a number of artifacts based on a list of recipes.
 gen :: [Recipe] -> IO ()
@@ -28,7 +38,7 @@ prnt (Recipe dt@(SRS _) body) =
 prnt (Recipe dt@(MG _) body) =
   do prntDoc dt body
      prntMake dt
-     prntCode body
+--     prntCode body
 prnt (Recipe dt@(MIS _) body) =
   do prntDoc dt body
      prntMake dt
@@ -57,21 +67,6 @@ prntDoc dt body = case dt of
                 getExt _    = error "we can only write TeX/HTML (for now)"
 
 
-prntCode :: Document -> IO ()
-prntCode (Document _ _ secs) = mapM_ prntCode'
-  (concat (map (\(Section _ s) -> getModules s) secs))
-  where getModules []                 = []
-        getModules ((Con (Module m)):los) =
-          if   null (method m)
-          then getModules los
-          else (genCode outLang m) ++ getModules los
-        getModules (_:los)     = getModules los
-        prntCode' (nm, code)   = do createDirectoryIfMissing False "Code"
-                                    outh <- openFile ("Code/" ++ nm) WriteMode
-                                    hPutStrLn outh $ render $ code
-                                    hClose outh
-
-
 prntMake :: DocType -> IO ()
 prntMake dt =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
@@ -82,3 +77,40 @@ writeDoc :: Format -> DocType -> Document -> Doc
 writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
+
+
+
+genCode :: ConceptChunk -> [ModuleChunk] -> IO ()
+genCode cc mcs = prntCode cc (getCodeModules cc mcs)
+  where getCodeModules :: ConceptChunk -> [ModuleChunk] -> [ModuleChunk]
+        getCodeModules _ [] = []
+        getCodeModules cc' ((mc@(MoC {imp = Just cc''})):mcs') =
+          if cc' == cc'' then mc:getCodeModules cc' mcs' else getCodeModules cc' mcs'
+        getCodeModules cc' (mc:mcs') = getCodeModules cc' mcs'
+
+
+-- generate code for all supported languages (will add language selection later)
+prntCode :: ConceptChunk -> [ModuleChunk] -> IO ()
+prntCode cc mcs = let absCode = toCode cc mcs
+                      code l  = makeCode l
+                        (Options Nothing Nothing Nothing (Just "Code"))
+                        (map (\mc ->
+                          makeClassNameValid $ (modcc mc) ^. name) mcs)
+                        absCode
+                      writeCode c lang = do
+                        let newDir = c ++ "/" ++ lang
+                        createDirectoryIfMissing False newDir
+                        setCurrentDirectory newDir
+                        createCodeFiles $ code lang
+
+                  in  do
+                      workingDir <- getCurrentDirectory
+                      let writeCode' = writeCode workingDir
+                      writeCode' cppLabel
+                      writeCode' javaLabel
+                      writeCode' luaLabel
+                      writeCode' cSharpLabel
+                      writeCode' goolLabel
+                      writeCode' objectiveCLabel
+                      writeCode' pythonLabel
+                      setCurrentDirectory workingDir

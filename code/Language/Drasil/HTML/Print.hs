@@ -13,7 +13,6 @@ import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
-import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
 
@@ -36,7 +35,7 @@ printLO (HDiv ts layoutObs l)   = refwrap (p_spec l) $
 printLO (Paragraph contents)    = paragraph $ text (p_spec contents)
 printLO (Tagless contents)      = text $ p_spec contents
 printLO (Table ts rows r b t)   = makeTable ts rows (p_spec r) b (p_spec t)
-printLO (CodeBlock c)           = code $ printCode c
+--printLO (CodeBlock c)           = code $ printCode c
 printLO (Definition dt ssPs l)  = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t

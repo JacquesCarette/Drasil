@@ -15,7 +15,7 @@ vars :: [QDefinition]
 vars = [h_g, h_c]
 
 modules :: [ModuleChunk]
-modules = [mod_calc, mod_hw, mod_behav]
+modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav]
 
 s1, s2, s3 :: Section --, s4 
 s1 = table_of_units si_units -- probably want to not do all of them

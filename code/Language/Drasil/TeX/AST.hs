@@ -4,7 +4,7 @@ import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
-import Language.Drasil.CCode.AST (Code)
+
 
 data Expr = Var  Variable
           | Dbl  Double
@@ -60,6 +60,8 @@ type Author   = Spec
 type Contents = Spec
 type Items    = [LayoutObj]
 type Depth    = Int
+type Width    = Float
+type Height   = Float
 type Label    = Spec
 type Filepath = String
 type Caption  = Spec
@@ -68,7 +70,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Section Depth Title [LayoutObj] Label
                | Paragraph Contents
                | EqnBlock Contents
-               | CodeBlock Code
+             --  | CodeBlock Code
                | Definition [(String,LayoutObj)] Label
                | List ListType
                | Figure Label Caption Filepath
@@ -77,7 +79,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Assumption Contents Label
                | LikelyChange Contents Label
                | UnlikelyChange Contents Label
-               | UsesHierarchy [(Spec,Spec)]
+               | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
                
 data ListType = Item [ItemType]
               | Enum [ItemType]

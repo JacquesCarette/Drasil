@@ -4,6 +4,7 @@ import Prelude hiding (print)
 import Data.List (intersperse)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
+import Data.Maybe (isNothing, fromJust)
 
 import Control.Applicative (pure)
 
@@ -18,7 +19,6 @@ import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
-import Language.Drasil.CCode.Print (printCode)
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 
@@ -58,7 +58,7 @@ lo (Section d t con l)     = sec d (spec t) %% label (spec l) %% print con
 lo (Paragraph contents)    = toText $ spec contents
 lo (EqnBlock contents)     = makeEquation contents
 lo (Table rows r bl t)     = toText $ makeTable rows (spec r) bl (spec t)
-lo (CodeBlock c)           = code $ pure $ printCode c
+--lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List l)                = toText $ makeList l
 lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
@@ -67,8 +67,19 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
-lo (UsesHierarchy c)       = toText $ makeUH $
-                               map (\(a,b) -> (spec a, spec b)) c
+lo (Graph ps w h c l)      = toText $ makeGraph
+                               (map (\(a,b) -> (spec a, spec b)) ps)
+                               (if isNothing w
+                                  then (pure $ text "")
+                                  else (pure $ text $ "text width = " ++
+                                         (show $ fromJust w) ++ "em, ")
+                               )
+                               (if isNothing w
+                                  then (pure $ text "")
+                                  else (pure $ text $ "minimum height = " ++
+                                         (show $ fromJust h) ++ "em, ")
+                               )
+                               (spec c) (spec l)
 
 
 print :: [LayoutObj] -> D
@@ -375,25 +386,26 @@ makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
 
 
 
-makeUH :: [(D,D)] -> D
-makeUH c = mkEnv "figure" $
+makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
+makeGraph ps w h c l =
+  mkEnv "figure" $
   vcat $ [ centering,
-           pure $ text $ "\\resizebox{\\textwidth}{!}{",
-           pure $ text $ "\\tikz [>=stealth, shorten >=1pt]",
-           pure $ text $ (
-             "\\graph [layered layout, components go right top aligned, " ++
-             "minimum layers=3, nodes={ draw, thick, align=center, " ++
-             "inner xsep=0.5em, inner ysep=0.5em, text width=4em, " ++
-             "minimum height=5em, font=\\scriptsize, fill=white, " ++
-             "text opacity=1, fill opacity=0.8, " ++
-             "typeset={\\tikzgraphnodetext\\\\M\\ref{\\tikzgraphnodename}}}, " ++
-             "edges={thick, rounded corners}]"
-             ),
-           pure $ text "{"
+           pure $ text "\\begin{adjustbox}{max width=\\textwidth}",
+           pure $ text "\\begin{tikzpicture}[>=latex,line join=bevel]",
+           (pure $ text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
+             w <> h <> (pure $ text "font=\\Large, align=center]"),
+           pure $ text "\\begin{dot2tex}[dot, codeonly, options=-t raw]",
+           pure $ text "digraph G {",
+           pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
+           pure $ text "node [style = \"n\"];"
          ]
-     ++  map (\(a,b) -> a <> (pure $ text " -> ") <> b <> (pure $ text ";")) c
-     ++  [ pure $ text "};",
-           pure $ text "}",
-           caption $ pure $ text "Uses Hierarchy",
-           label $ pure $ text "Figure:UsesHierarchy"
+     ++  map (\(a,b) -> (quotes a) <> (pure $ text " -> ") <> (quotes b) <>
+                (pure $ text ";")) ps
+     ++  [ pure $ text "}",
+           pure $ text "\\end{dot2tex}",
+           pure $ text "\\end{tikzpicture}",
+           pure $ text "\\end{adjustbox}",
+           caption c,
+           label l
          ]
+  where quotes x = (pure $ text "\"") <> x <> (pure $ text "\"")

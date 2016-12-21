@@ -72,21 +72,28 @@ instance ConceptDefinition DefinedTerm where
 
 
 -- BEGIN VARCHUNK --
+
+-- the code generation system needs VC to have a type (for now)
+-- I added vtyp so that it compiles
 data VarChunk = VC { vname :: String
                    , vdesc :: Sentence
-                   , vsymb :: Symbol}
+                   , vsymb :: Symbol
+                   , vtyp  :: Space }
 
 instance Eq VarChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 
 instance Chunk VarChunk where
-  name f (VC n d s) = fmap (\x -> VC x d s) (f n)
+  name f (VC n d s t) = fmap (\x -> VC x d s t) (f n)
 
 instance Concept VarChunk where
-  descr f (VC n d s) = fmap (\x -> VC n x s) (f d)
+  descr f (VC n d s t) = fmap (\x -> VC n x s t) (f d)
 
 instance SymbolForm VarChunk where
-  symbol f (VC n d s) = fmap (\x -> VC n d x) (f s)
+  symbol f (VC n d s t) = fmap (\x -> VC n d x t) (f s)
+  
+instance Quantity VarChunk where
+  typ f (VC n d s t) = fmap (\x -> VC n d s x) (f t)
 
 -- END VARCHUNK --
 
@@ -107,8 +114,10 @@ ccWithDescrSent n d = CC n d
 nCC :: String -> ConceptChunk 
 nCC n = makeCC n n
 
+-- the code generation system needs VC to have a type (for now)
+-- Setting all varchunks to have Rational type so it compiles
 makeVC :: String -> String -> Symbol -> VarChunk
-makeVC nam des sym = VC nam (S des) sym
+makeVC nam des sym = VC nam (S des) sym Rational
 
 vcFromCC :: ConceptChunk -> Symbol -> VarChunk
-vcFromCC cc sym = VC (cc ^. name) (cc ^. descr) sym
+vcFromCC cc sym = VC (cc ^. name) (cc ^. descr) sym Rational

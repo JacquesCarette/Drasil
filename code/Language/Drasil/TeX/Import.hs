@@ -142,7 +142,7 @@ lay x@(Table hdr lls t b)
                         show (length (head lls)) ++ " columns."
 lay (Paragraph c)         = T.Paragraph (spec c)
 lay (EqnBlock c)          = T.EqnBlock (T.E (expr c))
-lay (CodeBlock c)         = T.CodeBlock c
+--lay (CodeBlock c)         = T.CodeBlock c
 lay x@(Definition c)      = T.Definition (makePairs c) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
@@ -157,7 +157,8 @@ lay x@(LikelyChange lc)   =
 lay x@(UnlikelyChange ucc)= 
   T.UnlikelyChange (spec (ucc ^. descr))
   (spec $ refName x)
-lay (UsesHierarchy c)   = T.UsesHierarchy (makeUHPairs c)
+lay x@(Graph ps w h t)    = T.Graph (map (\(x,y) -> (spec x, spec y)) ps)
+                              w h (spec t) (spec $ refName x)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs) = T.Enum $ (map item bs)

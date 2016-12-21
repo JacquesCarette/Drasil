@@ -19,6 +19,7 @@ mod_hw = makeImpModule modHWHiding
   os
   []
   []
+  []
   Nothing
 
 
@@ -27,6 +28,22 @@ mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule modBehavHiding
   (S "The contents of the required behaviors.")
   Nothing
+
+  
+-- input param module
+mod_inputp :: ModuleChunk
+mod_inputp = makeRecord modInputParams (S "The format and structure of " :+:
+             S "the input parameters.") executable varChunks [] (Just mod_behav)
+
+--input format
+meth_input :: MethodChunk
+meth_input = makeStdInputMethod (makeVC "params" "input parameters" cP)
+  --(QObj (mod_inputp ^. name)))
+
+mod_inputf :: ModuleChunk
+mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:
+             S "the input data.") executable [] [meth_input] [mod_inputp]
+             (Just mod_behav)
 
 
 -- Calc Module
@@ -41,6 +58,7 @@ mod_calc :: ModuleChunk
 mod_calc = makeImpModule mod_calc_desc
   (S "The equations used to calculate heat transfer coefficients")
   executable
+  []
   [meth_h_g, meth_h_c]
   []
   (Just mod_behav)

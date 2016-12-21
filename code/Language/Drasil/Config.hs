@@ -1,9 +1,6 @@
 module Language.Drasil.Config where
 import Language.Drasil.Output.Formats
-import Language.Drasil.CCode.AST (Lang(..)) -- this seems wrong
 
-outLang :: Lang
-outLang = CLang
 
 expandSymbols :: Bool
 expandSymbols = True

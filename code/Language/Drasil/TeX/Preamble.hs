@@ -23,6 +23,8 @@ data Package = AMSMath
              | Listings
              | LongTable
              | Tikz
+             | Dot2Tex
+             | AdjustBox
              deriving Eq
 
 addPackage :: Package -> D
@@ -35,16 +37,10 @@ addPackage HyperRef  = usepackage "hyperref" %%
                        command "hypersetup" hyperSettings
 addPackage Listings  = usepackage "listings"
 addPackage LongTable = usepackage "longtable"
-addPackage Tikz      = usepackage "luatex85" %%
-                       (pure $ text "\\def") <>
-                         command "pgfsysdriver" "pgfsys-pdftex.def" %%
-                          -- the above is a workaround..
-                          -- temporary until TeX packages have been fixed
-                       usepackage "tikz" %%
-                       command "usetikzlibrary" "arrows.meta" %%
-                       command "usetikzlibrary" "graphs" %%
-                       command "usetikzlibrary" "graphdrawing" %%
-                       command "usegdlibrary" "layered"
+addPackage Tikz      = usepackage "tikz" %%
+                       command "usetikzlibrary" "arrows.meta, shapes"
+addPackage Dot2Tex   = usepackage "dot2texi"
+addPackage AdjustBox = usepackage "adjustbox"
 
 data Def = AssumpCounter
          | LCCounter
@@ -87,8 +83,8 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
           (PreP LongTable):(PreP BookTabs):(PreP Caption):parseDoc' los
         parseDoc' ((Section _ _ slos _):los) =
           (parseDoc' slos ++ parseDoc' los)
-        parseDoc' ((CodeBlock _):los) =
-          (PreP Listings):parseDoc' los
+   --     parseDoc' ((CodeBlock _):los) =
+   --       (PreP Listings):parseDoc' los
         parseDoc' ((Definition ps _):los) =
           (parseDoc' (map snd ps)) ++
           (PreP LongTable):(PreP BookTabs):parseDoc' los
@@ -104,7 +100,8 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
           (PreD LCCounter):parseDoc' los
         parseDoc' ((UnlikelyChange _ _):los) =
           (PreD UCCounter):parseDoc' los
-        parseDoc' ((UsesHierarchy _):los) =
-          (PreD ModCounter):(PreP Caption):(PreP Tikz):parseDoc' los
+        parseDoc' ((Graph _ _ _ _ _):los) =
+          (PreP Caption):(PreP Tikz):(PreP Dot2Tex):(PreP AdjustBox):
+          parseDoc' los
         parseDoc' (_:los) =
           parseDoc' los

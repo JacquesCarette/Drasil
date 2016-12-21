@@ -139,12 +139,12 @@ lay x@(Table hdr lls t b)     = H.Table ["table"]
   ((map spec hdr) : (map (map spec) lls)) (spec (refName x)) b (spec t)
 lay (Paragraph c)     = H.Paragraph (spec c)
 lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (H.E (expr c))] (H.S "")
-lay (CodeBlock c)     = H.CodeBlock c
+--lay (CodeBlock c)     = H.CodeBlock c
 lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
-lay (UsesHierarchy _) = H.Paragraph (H.S "")  -- need to implement!
+lay (Graph _ _ _ _)   = H.Paragraph (H.S "")  -- need to implement!
 lay (Requirement _)   = H.Paragraph (H.S "")  -- need to implement!
 lay (Assumption _)    = H.Paragraph (H.S "")  -- need to implement!
 lay (LikelyChange _)  = H.Paragraph (H.S "")  -- need to implement!

@@ -14,6 +14,7 @@ mod_hw = makeImpModule modHWHiding
   os
   []
   []
+  []
   Nothing
 
 -- Behaviour Hiding Module
@@ -28,6 +29,7 @@ mod_inputf = makeImpModule modInputFormat
   (S "The format and structure of the input data.")
   glassBRProg
   []
+  []
   [mod_hw, mod_inputp]
   (Just mod_behav)
 
@@ -35,6 +37,7 @@ mod_inputp :: ModuleChunk
 mod_inputp = makeImpModule modInputParams
   (S "The format and structure of the input parameters.")
   glassBRProg
+  []
   []
   [mod_inputc]
   (Just mod_behav)
@@ -44,6 +47,7 @@ mod_inputc :: ModuleChunk
 mod_inputc = makeImpModule modInputConstraints
   (S "The constraints on the input data.")
   glassBRProg
+  []
   []
   []
   (Just mod_behav)
@@ -60,6 +64,7 @@ mod_outputf = makeImpModule mod_outputf_desc
   (S "The format and structure of the output data.")
   glassBRProg
   []
+  []
   [mod_hw, mod_inputp]
   (Just mod_behav)
 
@@ -68,6 +73,7 @@ mod_derivedv :: ModuleChunk
 mod_derivedv = makeImpModule modDerivedVals
   (S "The transformations from initial inputs to derived quantities.")
   glassBRProg
+  []
   []
   [mod_inputp]
   (Just mod_behav)
@@ -87,6 +93,7 @@ mod_calc = makeImpModule mod_calc_desc
    S "capacity, and demand, using the input parameters.")
    glassBRProg
    []
+   []
    [mod_inputp]
    (Just mod_behav)
 
@@ -96,6 +103,7 @@ mod_ctrl :: ModuleChunk
 mod_ctrl = makeImpModule modControl
   (S "The algorithm for coordinating the running of the program.")
   glassBRProg
+  []
   []
   [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc,
   mod_interp, mod_outputf]
@@ -107,6 +115,7 @@ mod_interpd :: ModuleChunk
 mod_interpd = makeImpModule modInterpData
   (S "The format and structure of the data used for interpolation.")
    glassBRProg
+   []
    []
    []
    (Just mod_behav)
@@ -126,6 +135,7 @@ mod_interp :: ModuleChunk
 mod_interp = makeImpModule modInterpolation
   (S "The interpolation algorithm.")
    glassBRProg
+   []
    []
    [mod_interpd]
    (Just mod_sw)

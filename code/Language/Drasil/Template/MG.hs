@@ -285,8 +285,12 @@ mgUses mcs = let uh = mgUH mcs
      )
 
 mgUH :: [ModuleChunk] -> Contents
-mgUH mcs = UsesHierarchy $ makePairs mcs
+mgUH mcs = Graph (makePairs mcs) (Just 10) (Just 8) (S "Uses Hierarchy")
   where makePairs []       = []
         makePairs (m:mcs') = if (null $ uses m)
                              then makePairs mcs'
-                             else (m, uses m):makePairs mcs'
+                             else makePairs' m (uses m) ++ makePairs mcs'
+          where makePairs' _ []       = []
+                makePairs' m1 (m2:ms) = (entry m1, entry m2):makePairs' m1 ms
+                  where entry m = S (formatName m) :+:
+                                  S " (" :+: (makeRef $ Module m) :+: S ")"

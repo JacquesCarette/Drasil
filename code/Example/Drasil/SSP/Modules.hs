@@ -15,6 +15,7 @@ mod_hw = makeImpModule modHWHiding
   os
   []
   []
+  []
   Nothing
 
 -- Behaviour Hiding Module
@@ -29,6 +30,7 @@ mod_ctrl :: ModuleChunk
 mod_ctrl = makeImpModule modControl
   (S "The algorithm for coordinating the running of the program.")
   program
+  []
   []
   [mod_inputf, mod_outputf, mod_genalg]
   (Just mod_behav)
@@ -52,6 +54,7 @@ mod_inputf = makeImpModule mod_inputf_desc
   (S "The format and structure of the input data.")
   program
   []
+  []
   [mod_hw]
   (Just mod_behav)
 
@@ -70,6 +73,7 @@ mod_outputf = makeImpModule mod_outputf_desc
   (S "The format and structure of the output data.")
   program
   []
+  []
   [mod_plot, mod_slipslicer, mod_mp, mod_rfem]
   (Just mod_behav)
 
@@ -84,6 +88,7 @@ mod_genalg = makeImpModule mod_genalg_desc
   (S "Algorithm to identify the slip surface that has the " :+:
    S "minimum factor of safety, based on the inputs.")
    program
+   []
    []
    [mod_slipslicer, mod_kinadm, mod_rng, mod_slipweight, mod_mp]
    (Just mod_behav)
@@ -105,6 +110,7 @@ mod_kinadm = makeImpModule mod_kinadm_desc
    program
    []
    []
+   []
    (Just mod_behav)
 
 -- slip slicer module
@@ -120,6 +126,7 @@ mod_slipslicer = makeImpModule mod_slipslicer_desc
   (S "Algorithm to determine the coordinates of where the " :+:
    S "slip surface interslice nodes occur.")
    program
+   []
    []
    []
    (Just mod_behav)
@@ -140,6 +147,7 @@ mod_slipweight = makeImpModule mod_slipweight_desc
   program
   []
   []
+  []
   (Just mod_behav)
 
 -- morg price solver module
@@ -153,6 +161,7 @@ mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
   (S "The factor of safety of a given slip surface.")
   program
+  []
   []
   [mod_sps]
   (Just mod_behav)
@@ -170,6 +179,7 @@ mod_rfem = makeImpModule mod_rfem_desc
   (S "The algorithm to perform a Rigid Finite Element Method " :+:
    S "analysis of the slope.")
    program
+   []
    []
    [mod_sps]
    (Just mod_behav)
@@ -190,6 +200,7 @@ mod_sps = makeImpModule mod_sps_desc
   (S "Algorithm to assigns soil properties to slices based " :+:
    S "on the location of the slice with respect to the different soil layers.")
    program
+   []
    []
    []
    (Just mod_behav)
@@ -214,6 +225,7 @@ mod_sds = makeImpModule mod_sds_desc
    matlab
    []
    []
+   []
    (Just mod_sw)
 
 -- rng module
@@ -229,6 +241,7 @@ mod_rng = makeImpModule mod_rng_desc
    matlab
    []
    []
+   []
    (Just mod_sw)
 
 -- plotting module
@@ -240,6 +253,7 @@ mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc
   (S "The data structures and algorithms for plotting data graphically")
    matlab
+   []
    []
    [mod_hw]
    (Just mod_sw)

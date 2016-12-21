@@ -20,8 +20,8 @@ data QDefinition = EC
 instance Chunk QDefinition where
   name = ul . name
 
-instance Concept QDefinition where
-  descr = ul . descr
+instance NamedIdea QDefinition where
+  term = ul . term
 
 instance SymbolForm QDefinition where
   symbol = ul . symbol

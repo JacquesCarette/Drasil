@@ -15,8 +15,8 @@ data RelationChunk = RC
 instance Chunk RelationChunk where
   name = cp . name
 
-instance Concept RelationChunk where
-  descr = cp . descr
+instance NamedIdea RelationChunk where
+  term = cp . term
 
 
 -- don't export this

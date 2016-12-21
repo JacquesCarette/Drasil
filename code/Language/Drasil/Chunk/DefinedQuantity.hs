@@ -13,8 +13,8 @@ instance Eq DefinedQuantity where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 instance Chunk DefinedQuantity where
   name = dql . name
-instance Concept DefinedQuantity where
-  descr = dql . descr
+instance NamedIdea DefinedQuantity where
+  term = dql . term
 instance ConceptDefinition DefinedQuantity where
   cdefn = dql . cdefn
 instance SymbolForm DefinedQuantity where

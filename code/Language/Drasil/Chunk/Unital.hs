@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 
-import Language.Drasil.Chunk (Chunk(..), Concept(..), SymbolForm(..), 
+import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), 
   VarChunk(..), makeCC, vcFromCC, Quantity(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
@@ -35,8 +35,8 @@ data Q where
 instance Chunk Q where 
   name = qlens name
 
-instance Concept Q where 
-  descr = qlens descr
+instance NamedIdea Q where 
+  term = qlens term
 
 instance SymbolForm Q where
   symbol = qlens symbol
@@ -49,8 +49,8 @@ data UnitalChunk where
 instance Chunk UnitalChunk where
   name = q . name
 
-instance Concept UnitalChunk where
-  descr = q . descr
+instance NamedIdea UnitalChunk where
+  term = q . term
 
 instance SymbolForm UnitalChunk where
   symbol = q . symbol

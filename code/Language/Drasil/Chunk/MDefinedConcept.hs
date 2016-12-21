@@ -6,14 +6,14 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Language.Drasil.Chunk
 
 data MDefinedConcept where 
-  DefinedT :: (Concept h, ConceptDefinition h) => h -> MDefinedConcept
-  SimpleT :: Concept c => c -> MDefinedConcept
+  DefinedT :: (NamedIdea h, ConceptDefinition h) => h -> MDefinedConcept
+  SimpleT :: NamedIdea c => c -> MDefinedConcept
   
 instance Chunk MDefinedConcept where
   name = dclens name
   
-instance Concept MDefinedConcept where
-  descr = dclens descr
+instance NamedIdea MDefinedConcept where
+  term = dclens term
   
 -- Unlike MUChunk where we want a "unitless" (ie. blank) unit for those
 -- quantities that should be unitless, we want something anytime
@@ -24,7 +24,7 @@ instance ConceptDefinition' MDefinedConcept where
   cdefn' f (SimpleT h) = fmap (SimpleT . maybe h (\_ -> h)) (f $ Nothing)
 
 -- utilities which should not be exported
-dclens :: (forall c. Concept c => Simple Lens c a) -> Simple Lens MDefinedConcept a
+dclens :: (forall c. NamedIdea c => Simple Lens c a) -> Simple Lens MDefinedConcept a
 dclens l f (DefinedT a) = fmap (\x -> DefinedT (set l x a)) (f (a ^. l))
 dclens l f (SimpleT a) = fmap (\x -> SimpleT (set l x a)) (f (a ^. l))
 

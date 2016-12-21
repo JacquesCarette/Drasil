@@ -148,14 +148,14 @@ lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
 lay x@(Requirement r)     = 
-  T.Requirement (spec (r ^. descr)) (spec $ refName x)
+  T.Requirement (spec (r ^. term)) (spec $ refName x)
 lay x@(Assumption a)      = 
-  T.Assumption (spec (a ^. descr)) (spec $ refName x)
+  T.Assumption (spec (a ^. term)) (spec $ refName x)
 lay x@(LikelyChange lc)   = 
-  T.LikelyChange (spec (lc ^. descr))
+  T.LikelyChange (spec (lc ^. term))
   (spec $ refName x)
 lay x@(UnlikelyChange ucc)= 
-  T.UnlikelyChange (spec (ucc ^. descr))
+  T.UnlikelyChange (spec (ucc ^. term))
   (spec $ refName x)
 lay x@(Graph ps w h t)    = T.Graph (map (\(x,y) -> (spec x, spec y)) ps)
                               w h (spec t) (spec $ refName x)
@@ -180,7 +180,7 @@ makePairs (Data c) = [
 makePairs (Theory c) = [
   ("Label",       T.Paragraph $ T.S $ c ^. name),
   ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
-  ("Description", T.Paragraph (spec (c ^. descr)))
+  ("Description", T.Paragraph (spec (c ^. term)))
   ]
 makePairs General = error "Not yet implemented"
 
@@ -210,7 +210,7 @@ buildDDDescription c = descLines (
 descLines :: [VarChunk] -> T.Spec  
 descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
-                      (spec (vc ^. descr))))
+                      (spec (vc ^. term))))
 descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
 
 

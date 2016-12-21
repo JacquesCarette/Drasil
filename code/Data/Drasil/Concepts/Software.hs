@@ -25,7 +25,7 @@ modHWHiding = CC "hardware hiding"
 modBehavHiding :: ConceptChunk
 modBehavHiding = CC "behaviour hiding" (S "Includes programs that provide " :+:
                  S "externally visible behaviour of the system as specified" :+:
-                 S " in the " :+: (sMap (map toLower) (srs ^. descr)) :+:
+                 S " in the " :+: (sMap (map toLower) (srs ^. term)) :+:
                  S " (" :+: S (srs ^. name) :+: S ") documents. This module" :+:
                  S " serves as a communication layer between the hardware-" :+:
                  S "hiding module and the software decision module. The " :+:

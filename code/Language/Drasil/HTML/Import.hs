@@ -171,7 +171,7 @@ makePairs (Theory c) = [
   ("Label",       H.Paragraph $ H.S $ c ^. name),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
                   (H.S "")),
-  ("Description", H.Paragraph (spec (c ^. descr)))
+  ("Description", H.Paragraph (spec (c ^. term)))
   ]
 makePairs General = error "Not yet implemented"
   
@@ -186,14 +186,14 @@ buildDDDescription c = descLines (
 descLines :: [VarChunk] -> H.Spec  
 descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
-  (H.S " is the " H.:+: (spec (vc ^. descr))))
+  (H.S " is the " H.:+: (spec (vc ^. term))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
 
 --buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
 --buildModuleDesc m = [
 --  H.List H.Simple
 --    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
---      H.S (bold "Services: ") H.:+: (spec $ m ^. descr),
+--      H.S (bold "Services: ") H.:+: (spec $ m ^. term),
 --      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
 --    ]
 --  ]

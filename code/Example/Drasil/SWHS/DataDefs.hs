@@ -21,7 +21,7 @@ htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 --Function calls for the left side of an QDefinition?
 
 dd1descr :: Sentence
-dd1descr = (ht_flux_C ^. descr)
+dd1descr = (ht_flux_C ^. term)
 
 --Can't include info in description beyond definition of variables?
 
@@ -33,7 +33,7 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
              FCall (C temp_PCM) [C time])
 
 dd2descr :: Sentence
-dd2descr = (ht_flux_P ^. descr)
+dd2descr = (ht_flux_P ^. term)
 
 dd3HtFusion :: QDefinition
 dd3HtFusion = fromEqn "H_f" dd3descr (htFusion ^. symbol) specificE htFusionEqn
@@ -42,8 +42,8 @@ htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)
 
 dd3descr :: Sentence
-dd3descr = (S "amount of " :+: (sMap (map toLower) (thermal_energy ^. descr))
-           :+: S " required to completely melt a unit " :+: (mass ^. descr) :+:
+dd3descr = (S "amount of " :+: (sMap (map toLower) (thermal_energy ^. term))
+           :+: S " required to completely melt a unit " :+: (mass ^. term) :+:
            S " of a substance.")
 
 -- dd4MeltFrac :: QDefinition

@@ -29,29 +29,29 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT),
 
 t2descr :: Sentence
 t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
-          (sMap (map toLower) (sens_heat ^. descr)) :+: S " energy (" :+:
+          (sMap (map toLower) (sens_heat ^. term)) :+: S " energy (" :+:
           Sy (joule ^. unit) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
           S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
-          P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. descr) :+: 
-          S ", " :+: (htCap_L ^. descr) :+: S ", and " :+: 
-          (htCap_V ^. descr) :+: S ", respectively (" :+: Sy (htCap ^. unit) :+:
+          P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. term) :+: 
+          S ", " :+: (htCap_L ^. term) :+: S ", and " :+: 
+          (htCap_V ^. term) :+: S ", respectively (" :+: Sy (htCap ^. unit) :+:
           S "). " :+: P (mass ^. symbol) :+: S " is the " :+:
-          (mass ^. descr) :+: S " (" :+: Sy (mass ^. unit) :+: S "). " :+:
-          P (temp ^. symbol) :+: S " is the " :+: (temp ^. descr) :+: S " (" :+:
+          (mass ^. term) :+: S " (" :+: Sy (mass ^. unit) :+: S "). " :+:
+          P (temp ^. symbol) :+: S " is the " :+: (temp ^. term) :+: S " (" :+:
           Sy (temp ^. unit) :+: S "), and " :+: P (deltaT ^. symbol) :+:
-          S " is the " :+: (deltaT ^. descr) :+: S " (" :+:
+          S " is the " :+: (deltaT ^. term) :+: S " (" :+:
           Sy (deltaT ^. unit) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
-          (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
+          (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
           (sens_heat ^. cdefn) :+: S " occurs as long as the material does " :+: 
-          S "not reach a " :+: (temp ^. descr) :+: S " where a " :+: 
-          (sMap (map toLower) (phase_change ^. descr)) :+: S " occurs. A " :+:
-          (sMap (map toLower) (phase_change ^. descr)) :+: S " occurs if " :+:
+          S "not reach a " :+: (temp ^. term) :+: S " where a " :+: 
+          (sMap (map toLower) (phase_change ^. term)) :+: S " occurs. A " :+:
+          (sMap (map toLower) (phase_change ^. term)) :+: S " occurs if " :+:
           P (temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:
           S " or " :+: P (temp ^. symbol) :+: S "=" :+: 
           P (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 
-          makeRef s4_2_2_T3 :+: S ", " :+: (latent_heat ^. descr) :+: 
+          makeRef s4_2_2_T3 :+: S ", " :+: (latent_heat ^. term) :+: 
           S " energy.")
           
 

@@ -36,15 +36,15 @@ s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
 s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
 glassBR_srs :: Document  
-glassBR_srs = Document ((srs ^. descr) :+: S " for " :+: 
-  (gLassBR ^. descr)) (S "Nikitha Krithnan and Spencer Smith") 
+glassBR_srs = Document ((srs ^. term) :+: S " for " :+: 
+  (gLassBR ^. term)) (S "Nikitha Krithnan and Spencer Smith") 
   [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = Document (S "Module Guide for " :+: (gLassBR ^. descr))
+glassBR_mg = Document (S "Module Guide for " :+: (gLassBR ^. term))
          (S "Spencer Smith and Thulasi Jegatheesan") (mgBod)
 
 
@@ -62,7 +62,7 @@ s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Abbreviations", S "Full Form"] (mkTable
   [(\ch -> S $ ch ^. name),
-   (\ch -> ch ^. descr)]
+   (\ch -> ch ^. term)]
   acronyms)
   (S "Abbreviations and Acronyms") False
 
@@ -70,15 +70,15 @@ s2 = Section(S "Introduction") [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
   S "Software is helpful to efficiently and correctly predict the blast " :+:
-  S "risk involved with the " :+: (sMap (map toLower) (glaSlab ^. descr)) :+: 
+  S "risk involved with the " :+: (sMap (map toLower) (glaSlab ^. term)) :+: 
   S ". The " :+: (sMap (map toLower) (S $ blast ^. name)) :+: S " under " :+:
-  S "consideration is " :+: (sMap (map toLower) (blast ^. descr)) :+: S "." :+: 
-  S " The software, herein called " :+: (gLassBR ^. descr) :+: S " aims to " :+:
+  S "consideration is " :+: (sMap (map toLower) (blast ^. term)) :+: S "." :+: 
+  S " The software, herein called " :+: (gLassBR ^. term) :+: S " aims to " :+:
   S "predict the blast risk involved with the " :+: 
-  (sMap (map toLower) (glaSlab ^.descr)) :+: S " using an intuitive " :+:
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " using an intuitive " :+:
   S "interface. The following section provides an overview of the " :+: 
-  (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+: S ") for "
-  :+: (gLassBR ^. descr) :+: S ". This section explains the purpose of the " 
+  (srs ^. term) :+: S " (" :+: S (srs ^. name) :+: S ") for "
+  :+: (gLassBR ^. term) :+: S ". This section explains the purpose of the " 
   :+: S "document is designed to fulfil, the scope of the requirements and " 
   :+: S "the organization of the document: what the document is based on and "
   :+: S "intended to portray."
@@ -88,12 +88,12 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1_intro = 
   [Paragraph $
   S "The main purpose of this document is to predict whether a given " :+:
-  (sMap (map toLower) (glaSlab ^. descr)) :+: S " is likely to resist a " :+:
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " is likely to resist a " :+:
   S "specified " :+: (sMap (map toLower) (S $ blast ^. name)) :+: S ". " :+:
-  S "The goals and " :+: (sMap (map toLower) (thModel ^. descr)) :+:
-  S "s used in the " :+: (gLassBR ^. descr) :+: S " code are provided, " :+:
+  S "The goals and " :+: (sMap (map toLower) (thModel ^. term)) :+:
+  S "s used in the " :+: (gLassBR ^. term) :+: S " code are provided, " :+:
   S "with an emphasis on explicitly identifying " :+: 
-  (sMap (map toLower) (assumption ^. descr)) :+: S "s and unambiguous " :+:
+  (sMap (map toLower) (assumption ^. term)) :+: S "s and unambiguous " :+:
   S "definitions. This document is intended to be used as a reference " :+:
   S "to provide all information necessary to understand and verify the " :+:
   S "analysis. The " :+: S (srs ^. name) :+: S " is abstract " :+:
@@ -109,17 +109,17 @@ s2_1_intro =
   S "be used to increase confidence in the software documentation and " :+:
   S "the implementation."]
 
-s2_2 = Section (S "Scope of " :+: (requirement ^. descr) :+: S "s") 
+s2_2 = Section (S "Scope of " :+: (requirement ^. term) :+: S "s") 
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $
-  S "The scope of the " :+: (sMap (map toLower) (requirement ^. descr)) :+: 
+  S "The scope of the " :+: (sMap (map toLower) (requirement ^. term)) :+: 
   S "s includes getting all input parameters related to the " :+: 
-  (sMap (map toLower) (glaSlab ^. descr)) :+: S " and also the parameters " :+:
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " and also the parameters " :+:
   S "related to " :+: (sMap (map toLower) (S $ blastTy ^. name)) :+: 
-  S ". Given the input, " :+: (gLassBR ^. descr) :+: S " is intended to " :+:
+  S ". Given the input, " :+: (gLassBR ^. term) :+: S " is intended to " :+:
   S "use the data and predict whether the " :+: 
-  (sMap (map toLower) (glaSlab ^. descr)) :+: S " is safe to use or not."
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " is safe to use or not."
 
 s2_3 = Section (S "Organization of Document") (map Con s2_3_intro)
 
@@ -130,17 +130,17 @@ s2_3_intro =
   S "proposed by [1] and [2] (in " :+: (makeRef s10) :+: S "), with " :+: 
   S "some aspects taken from Volere template 16 [3]. The presentation " :+:
   S "follows the standard pattern of presenting goals, theories, " :+:
-  S "definitions, and " :+: (sMap (map toLower) (assumption ^. descr)) :+:
+  S "definitions, and " :+: (sMap (map toLower) (assumption ^. term)) :+:
   S "s. For readers that would like a more bottom up approach, they can " :+:
-  S "start reading the " :+: (sMap (map toLower) (dataDefn ^. descr)) :+:
+  S "start reading the " :+: (sMap (map toLower) (dataDefn ^. term)) :+:
   S "s in " :+: (makeRef s6_2_4) :+: S " and trace back to find any " :+:
   S "additional information they require.",
   Paragraph $
-  S "The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+: S "s are " :+:
-  S "refined to the " :+: (sMap (map toLower) (thModel ^. descr)) :+:
-  S "s, and " :+: (sMap (map toLower) (thModel ^. descr)) :+: 
-  S "s to the " :+: (sMap (map toLower) (inModel ^. descr)) :+: 
-  S "s. The " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s " :+:
+  S "The " :+: (sMap (map toLower) (goalStmt ^. term)) :+: S "s are " :+:
+  S "refined to the " :+: (sMap (map toLower) (thModel ^. term)) :+:
+  S "s, and " :+: (sMap (map toLower) (thModel ^. term)) :+: 
+  S "s to the " :+: (sMap (map toLower) (inModel ^. term)) :+: 
+  S "s. The " :+: (sMap (map toLower) (dataDefn ^. term)) :+: S "s " :+:
   S "are used to support the definitions of the different models."] 
 
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
@@ -152,14 +152,14 @@ s3_intro = Paragraph $
 s3_1 = Section (S "The Client") [Con s3_1_intro]
 
 s3_1_intro = Paragraph $
-  S "The client for " :+: (gLassBR ^. descr) :+: S " is a company named " :+:
+  S "The client for " :+: (gLassBR ^. term) :+: S " is a company named " :+:
   S "Entuitive. It is developed by Dr. Manuel Campidelli. The client has " :+:
   S "the final say on acceptance of the product."
 
 s3_2 = Section (S "The Customer") [Con s3_2_intro]
 
 s3_2_intro = Paragraph $
-  S "The customers are the end user of " :+: (gLassBR ^. descr) :+: S "."
+  S "The customers are the end user of " :+: (gLassBR ^. term) :+: S "."
 
 s4 = Section(S "General System Description") [Con s4_intro, Sub s4_1, 
   Sub s4_2]
@@ -172,7 +172,7 @@ s4_intro = Paragraph $
 s4_1 = Section (S "User Characteristics") [Con s4_1_bullets]
 
 s4_1_bullets = Enumeration $ Bullet $ map Flat
-  [(S "The end user of " :+: (gLassBR ^. descr) :+: S " is expected to " :+:
+  [(S "The end user of " :+: (gLassBR ^. term) :+: S " is expected to " :+:
     S "have completed at least the equivalent of the second year of an " :+:
     S "undergraduate degree in civil or structural engineering."),
   (S "The end user is expected to have an understanding of theory behind " :+:
@@ -189,7 +189,7 @@ s5 = Section(S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
 
 s5_intro = Paragraph $
   S "This section presents the scope of the project. It describes the " :+:
-  S "expected use of " :+: (gLassBR ^. descr) :+: S " as well as the " :+:
+  S "expected use of " :+: (gLassBR ^. term) :+: S " as well as the " :+:
   S "inputs and outputs of each action. The use cases are input and " :+:
   S "output, which defines the action of getting the input and displaying " :+:
   S "the output."
@@ -200,11 +200,11 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", S "Inputs", S "User", S "Characteristics of the " :+:
-  (sMap (map toLower) (glaSlab ^. descr)) :+: S " and of the " :+:
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " and of the " :+:
   (sMap (map toLower) (S $ blast ^. name)) :+: S ". Details in " :+: 
   (makeRef s5_2)],
-  [S "2", S "Output", (gLassBR ^. descr), S "Whether or not the " :+:
-  (sMap (map toLower) (glaSlab ^. descr)) :+: S " is safe for the calculated "
+  [S "2", S "Output", (gLassBR ^. term), S "Whether or not the " :+:
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " is safe for the calculated "
   :+: (sMap (map toLower) (S $ load ^. name)) :+: S " and supporting " :+:
   S "calculated values"]])
   (S "Table 1: Use Case Table") True
@@ -213,29 +213,29 @@ s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the user providing input to " :+: 
-    (gLassBR ^. descr) :+: S " for use within the analysis. There are two " :+:
+    (gLassBR ^. term) :+: S " for use within the analysis. There are two " :+:
     S "classes of inputs: " :+: (sMap (map toLower) (S $ glassGeo ^. name)) :+:
     S " and " :+: (sMap (map toLower) (S $ blastTy ^. name)) :+: S ". " :+:
-    (glassGeo ^. descr) :+: S " " :+: (blastTy ^. descr) :+: S " These " :+:
-    S "parameters describe " :+: (sMap (map toLower) (char_weight ^. descr)) 
+    (glassGeo ^. term) :+: S " " :+: (blastTy ^. term) :+: S " These " :+:
+    S "parameters describe " :+: (sMap (map toLower) (char_weight ^. term)) 
     :+: S " and stand off " :+: (sMap (map toLower) (S $ blast ^. name)) :+:
     S ". Another input the user gives is the tolerable value of " :+:
-    (sMap (map toLower) (prob_br ^. descr)) :+: S "."),
-  (S " Use Case 2 " :+: (gLassBR ^. descr) :+: S " outputs if the " :+:
-    (sMap (map toLower) (glaSlab ^. descr)) :+: S " will be safe by " :+:
+    (sMap (map toLower) (prob_br ^. term)) :+: S "."),
+  (S " Use Case 2 " :+: (gLassBR ^. term) :+: S " outputs if the " :+:
+    (sMap (map toLower) (glaSlab ^. term)) :+: S " will be safe by " :+:
     S "comparing whether " :+: (sMap (map toLower) (S $ capacity ^. name)) :+:
     S " is greater than " :+: (sMap (map toLower) (S $ demandq ^. name)) :+:
     S ". " :+: (S $ capacity ^.name) :+: S " is the " :+:
-    (sMap (map toLower) (capacity ^. descr)) :+: S " and " :+:
+    (sMap (map toLower) (capacity ^. term)) :+: S " and " :+:
     (sMap (map toLower) (S $ demandq ^. name)) :+: S " is the requirement " :+:
-    S " which is the " :+: (demandq ^. descr) :+: S ". The second condition "
+    S " which is the " :+: (demandq ^. term) :+: S ". The second condition "
     :+: S "is to check whether the calculated probability (" :+: 
     (P $ prob_br ^. symbol) :+: S ") is less than the tolerable probability (" 
     :+: (P $ pb_tol ^. symbol) :+: S ") which is obtained from the user " :+:
     S "as an input. If both conditions return true then it's shown that the " 
-    :+: (sMap (map toLower) (glaSlab ^. descr)) :+: S " is safe to use, " :+: 
+    :+: (sMap (map toLower) (glaSlab ^. term)) :+: S " is safe to use, " :+: 
     S "else if both return false then the " :+: 
-    (sMap (map toLower) (glaSlab ^. descr)) :+: S " is considered unsafe. " :+:
+    (sMap (map toLower) (glaSlab ^. term)) :+: S " is considered unsafe. " :+:
     S "All the supporting calculated values are also displayed as output.")]
 
 s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
@@ -245,17 +245,17 @@ s6_intro = Paragraph $
   S "This section first presents the problem description, which gives a " :+:
   S "high-level view of the problem to be solved. This is followed by " :+:
   S "the solution characteristics specification, which presents the " :+:
-  (sMap (map toLower) (assumption ^. descr)) :+: S "s, theories, definitions."
+  (sMap (map toLower) (assumption ^. term)) :+: S "s, theories, definitions."
 
 s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
   Sub s6_1_2, Sub s6_1_3]
 
 s6_1_intro = Paragraph $ 
   S "A system is needed to efficiently and correctly predict the blast " :+:
-  S "risk involved with the glass. " :+: (gLassBR ^. descr) :+: S " is a " :+:
+  S "risk involved with the glass. " :+: (gLassBR ^. term) :+: S " is a " :+:
   S "computer program developed to interpret the inputs to give out the " :+:
   S "outputs which predicts whether the " :+: 
-  (sMap (map toLower) (glaSlab ^. descr)) :+: S " can withstand the " :+:
+  (sMap (map toLower) (glaSlab ^. term)) :+: S " can withstand the " :+:
   (sMap (map toLower) (S $ blast ^. name)) :+: S " under the conditions."
 
 s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
@@ -265,64 +265,64 @@ s6_1_1_intro = Paragraph $
   S "This subsection provides a list of terms that are used in subsequent "
   :+: S "sections and their meaning, with the purpose of reducing ambiguity "
   :+: S "and making it easier to correctly understand the " :+: 
-  (sMap (map toLower) (requirement ^. descr)) :+: S "s. All of the terms " :+:
+  (sMap (map toLower) (requirement ^. term)) :+: S "s. All of the terms " :+:
   S "are extracted from [4] in " :+: (makeRef s10) :+: S "."
 
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ S ((aR ^. name) ++ " (" ++ (aspectR ^. name) ++ ") - ") :+: 
-  (aR ^. descr)] ++
-  map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. descr)) [gbr, lite] ++ 
+  (aR ^. term)] ++
+  map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. term)) [gbr, lite] ++ 
   [Nested (S ((glassTy ^. name) ++ ":")) (Bullet $ map (\c -> Flat c)
     [(S ((an ^. name) ++ " (" ++ (annealedGlass ^. name) ++ ") - ") :+: 
-      (an ^. descr)),
+      (an ^. term)),
     (S ((ft ^. name) ++ " (" ++ (fullyTGlass ^. name) ++ ") - ") :+:
-      (ft ^. descr)),
+      (ft ^. term)),
     (S ((hs ^. name) ++ " (" ++ (heatSGlass ^. name) ++ ") - ") :+:
-      (hs ^. descr))])] ++
+      (hs ^. term))])] ++
   map (\c -> Flat c)
   [(S ((gtf ^. name) ++ " (" ++ (glassTypeFac ^. name) ++ ") - ") :+: 
-    (gtf ^. descr)),
-  (S ((lateral ^. name) ++ " - ") :+: (lateral ^. descr))] ++ 
+    (gtf ^. term)),
+  (S ((lateral ^. name) ++ " - ") :+: (lateral ^. term))] ++ 
   [Nested (S ((load ^. name) ++ ":")) (Bullet $ map (\c -> Flat c)  
-    [(S ((specDeLoad ^. name) ++ " - ") :+: (specDeLoad ^. descr)),
+    [(S ((specDeLoad ^. name) ++ " - ") :+: (specDeLoad ^. term)),
     (S ((lr ^. name) ++ " (" ++ (lResistance ^. name) ++ ") - ") :+: 
-      (lr ^. descr)),
-    (S ((ldl ^. name) ++ " - ") :+: (ldl ^. descr)),
+      (lr ^. term)),
+    (S ((ldl ^. name) ++ " - ") :+: (ldl ^. term)),
     (S ((nfl ^. name) ++ " (" ++ (nonFactorL ^. name) ++ ") - ") :+:
-      (nfl ^. descr))] ++ 
-    map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. descr))
+      (nfl ^. term))] ++ 
+    map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. term))
       [glassWL, sdl])] ++ 
   map (\c -> Flat c)
   [(S ((lsf ^. name) ++ " (" ++ (lShareFac ^. name) ++ ") - ") :+: 
-    (lsf ^. descr)),
+    (lsf ^. term)),
   (S ((pb ^. name) ++ " (") :+: (P $ prob_br ^. symbol) :+: S ") - " :+:
-    (pb ^. descr))] ++
-  map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. descr)) 
+    (pb ^. term))] ++
+  map (\c -> Flat $ S ((c ^. name) ++ " - ") :+: (c ^. term)) 
   [specA, blaReGLa, eqTNTChar] ++
   [Flat $ S ((sD ^. name) ++ " (") :+: (P $ sd ^. symbol) :+: S ") - " :+:
-  (sD ^. descr)])
+  (sD ^. term)])
   
-s6_1_2 = Section (physSyst ^. descr) [Con s6_1_2_intro, Con s6_1_2_list, 
+s6_1_2 = Section (physSyst ^. term) [Con s6_1_2_intro, Con s6_1_2_list, 
   Con fig_glassbr]
 
-s6_1_2_intro = Paragraph $ S "The physical system of " :+: (gLassBR ^. descr) 
+s6_1_2_intro = Paragraph $ S "The physical system of " :+: (gLassBR ^. term) 
   :+: S " as shown in " :+: (makeRef fig_glassbr) :+: S ", includes the " :+:
   S "following elements:"
 
 fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((S $ physSyst ^. name) :+: S "1"), (glaSlab ^. descr)), 
+  (((S $ physSyst ^. name) :+: S "1"), (glaSlab ^. term)), 
   (((S $ physSyst ^. name) :+: S "2"), S "The point of explosion. " :+:
-    S "Where the bomb, or " :+: (sMap (map toLower) (blast ^. descr)) :+: 
+    S "Where the bomb, or " :+: (sMap (map toLower) (blast ^. term)) :+: 
     S ", is located. The " :+: (sMap (map toLower) (S (sD ^. name))) 
     :+: S "  is the distance between the point of explosion and the glass.")]
 
-s6_1_3 = Section ((goalStmt ^. descr) :+: S "s") [Con s6_1_3_list]
+s6_1_3 = Section ((goalStmt ^. term) :+: S "s") [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((S $ goalStmt ^. name) :+: S "1"), S "Analyze and predict whether the " :+:
-    (sMap (map toLower) (glaSlab ^. descr)) :+: S " under consideration " :+:
+    (sMap (map toLower) (glaSlab ^. term)) :+: S " under consideration " :+:
     S "will be able to withstand the explosion of a certain degree which " :+:
     S "is calculated based on user input.")]
 
@@ -330,24 +330,24 @@ s6_2 = Section (S "Solution Characteristics Specification")
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This section explains all the " :+:
-  (sMap (map toLower) (assumption ^. descr)) :+: S "s considered and the " :+:
-  (sMap (map toLower) (thModel ^. descr)) :+: S "s which are " :+:
-  S "supported by the " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s."
+  (sMap (map toLower) (assumption ^. term)) :+: S "s considered and the " :+:
+  (sMap (map toLower) (thModel ^. term)) :+: S "s which are " :+:
+  S "supported by the " :+: (sMap (map toLower) (dataDefn ^. term)) :+: S "s."
   
-s6_2_1 = Section (assumption ^. descr :+: S "s") ([Con s6_2_1_intro] ++
+s6_2_1 = Section (assumption ^. term :+: S "s") ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
   S "This section simplifies the original problem and helps in developing the " 
-  :+: (sMap (map toLower) (thModel ^. descr)) :+: 
+  :+: (sMap (map toLower) (thModel ^. term)) :+: 
   S (" " ++ sqbrac (thModel ^. name)) :+: S " by filling in the missing " 
   :+: S "information for the physical system. The numbers given in the " :+:
   S "square brackets refer to the " :+: 
-  (sMap (map toLower) (dataDefn ^. descr)) :+:
+  (sMap (map toLower) (dataDefn ^. term)) :+:
   S (" " ++ sqbrac (dataDefn ^. name)) :+: S ", or " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: 
+  (sMap (map toLower) (inModel ^. term)) :+: 
   S (" " ++ sqbrac (inModel ^. name)) :+: S ", in which the respective " 
-  :+: (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
+  :+: (sMap (map toLower) $ assumption ^. term) :+: S " is used."
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
@@ -367,7 +367,7 @@ s6_2_1_list =
     (((S $ assumption ^. name) :+: S "3"), S "This system only considers " :+:
       S "the external explosion scenario for its calculations."),
     (((S $ assumption ^. name) :+: S "4"), S "Standard values used for " :+:
-      S "calculation in " :+: (gLassBR ^. descr) :+: S " are: ")]),
+      S "calculation in " :+: (gLassBR ^. term) :+: S " are: ")]),
     (EqnBlock $ (C sflawParamM):=(Int 7)),
     (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
       (Neg (Int 53))),
@@ -383,36 +383,36 @@ s6_2_1_list =
       S "is assumed to be a single " :+:
       (sMap (map toLower) (S $ lite ^. name)) :+: S ". Hence the value of " :+: 
       (P $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in " 
-      :+: (gLassBR ^. descr) :+: S "."),
+      :+: (gLassBR ^. term) :+: S "."),
     (((S $ assumption ^. name) :+: S "6"), S "Boundary conditions for the " :+: 
-      (sMap (map toLower) (glaSlab ^. descr)) :+: S " is assumed to be 4-sided"
+      (sMap (map toLower) (glaSlab ^. term)) :+: S " is assumed to be 4-sided"
       :+: S " support for calculations."),
     (((S $ assumption ^. name) :+: S "7"), S "The response type considered in " 
-      :+: (gLassBR ^. descr) :+: S " is flexural."),
+      :+: (gLassBR ^. term) :+: S " is flexural."),
     (((S $ assumption ^. name) :+: S "8"), S "With reference to A4 the value " 
-      :+: S "of " :+: (sMap (map toLower) (loadDF ^. descr)) :+: S " (" :+: 
-     (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. descr) 
+      :+: S "of " :+: (sMap (map toLower) (loadDF ^. term)) :+: S " (" :+: 
+     (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. term) 
      :+: S ". It is calculated by the equation: " :+: 
       --(P $ loadDF ^. symbol) :+: S " = " :+: (P $ load_dur ^. symbol) :+: 
       S ". Using this, " :+: (P $ loadDF ^. symbol) :+: S " = 0.27.")])]
   --equation in sentence
 
-s6_2_2 = Section ((thModel ^. descr) :+: S "s") (map Con s6_2_2_TMods)
+s6_2_2 = Section ((thModel ^. term) :+: S "s") (map Con s6_2_2_TMods)
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
 
-s6_2_3 = Section ((inModel ^. descr) :+: S "s") (map Con s6_2_3_IMods)
+s6_2_3 = Section ((inModel ^. term) :+: S "s") (map Con s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = Section ((dataDefn ^. descr) :+: S "s") 
+s6_2_4 = Section ((dataDefn ^. term) :+: S "s") 
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
 
 s6_2_4_intro = Paragraph $ 
   S "This section collects and defines all the data needed to build the " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s."
+  (sMap (map toLower) (inModel ^. term)) :+: S "s."
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
@@ -436,7 +436,7 @@ s6_2_5_intro = Paragraph $
   S "parameters used in Table 2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S "). " :+: 
   (P $ ar_max ^. symbol) :+: S " refers to the " :+:
-  (sMap (map toLower) (ar_max ^. descr)) :+: S " for the plate of glass."
+  (sMap (map toLower) (ar_max ^. term)) :+: S " for the plate of glass."
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
 --  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),
@@ -480,21 +480,21 @@ s6_2_5_intro2 = Paragraph $
 --  [(prob_br ^. symbol, S "0 < " :+: (P $ prob_br ^. symbol) :+: S " < 1")])
 --  (S "Table4: Output Variables") True
 
-s7 = Section((requirement ^. descr) :+: S "s") [Sub s7_1, Sub s7_2]
+s7 = Section((requirement ^. term) :+: S "s") [Sub s7_1, Sub s7_2]
 
-s7_1 = Section (S "Functional " :+: (requirement ^. descr) :+: S "s") 
+s7_1 = Section (S "Functional " :+: (requirement ^. term) :+: S "s") 
   ([Con s7_1_intro] ++ (map Con s7_1_list))
 
 s7_1_intro = Paragraph $
   S "The following section provides the functional " :+:
-  (requirement ^. descr) :+: S "s, the business tasks that the software " :+:
+  (requirement ^. term) :+: S "s, the business tasks that the software " :+:
   S "is expected to complete."
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
     [(((S $ requirement ^. name) :+: S "1"), S "Input the following " :+:
       S "quantities, which define the glass dimensions, " :+: 
-      (sMap (map toLower) (glassTy ^. descr)) :+: S ", tolerable probability "
+      (sMap (map toLower) (glassTy ^. term)) :+: S ", tolerable probability "
       :+: S "of failure and the characteristics of the " :+: 
       (sMap (map toLower) (S $ blast ^. name)) :+: S ":")]),
   (table ((map Has [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
@@ -502,7 +502,7 @@ s7_1_list =
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 --  [(\ch -> P (ch ^. symbol)),  
 --   (\ch -> maybeUnits $ ch ^. unit'),
---   (\ch -> ch ^. descr)
+--   (\ch -> ch ^. term)
 --   ]
 --  [plate_len,plate_width,glass_type,pb_tol,sdx,sdy,sdz,nom_thick,tNT,
 --  char_weight])
@@ -531,33 +531,33 @@ s7_1_list =
     :+: S " and " :+: (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
     (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
     (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true, " :+:
-    S "output the message " :+: Quote (safeMessage ^. descr) :+: S " If " :+:
+    S "output the message " :+: Quote (safeMessage ^. term) :+: S " If " :+:
     S "the condition is false, then output the message " :+: 
-    Quote (notSafe ^. descr))] ++
+    Quote (notSafe ^. term))] ++
   [(((S $ requirement ^. name) :+: S "6"), Nested (S "Output the following " 
     :+: S "quantities:")
     (Bullet $ 
-      [Flat $ (prob_br ^. descr) :+: S " (" :+: (P $ prob_br ^. symbol) :+: 
+      [Flat $ (prob_br ^. term) :+: S " (" :+: (P $ prob_br ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")"] ++
-      [Flat $ (lRe ^. descr) :+: S " (" :+: (P $ lRe ^. symbol) :+: S ") (" 
+      [Flat $ (lRe ^. term) :+: S " (" :+: (P $ lRe ^. symbol) :+: S ") (" 
         :+: (makeRef (Definition (Theory calOfCap))) :+: S ")"] ++
-      [Flat $ (demand ^. descr) :+: S " (" :+: (P $ demand ^. symbol) :+: 
+      [Flat $ (demand ^. term) :+: S " (" :+: (P $ demand ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Theory calOfDe))) :+: S ")"] ++
-      [Flat $ (act_thick ^. descr) :+: S " (" :+: (P $ act_thick ^. symbol) 
+      [Flat $ (act_thick ^. term) :+: S " (" :+: (P $ act_thick ^. symbol) 
         :+: S ") (" :+: (makeRef (Definition (Data hFromt))) :+: S ")"] ++
-      map (\c -> Flat $ (c ^. descr) :+: S " (" :+: (P $ c ^. symbol) :+: 
+      map (\c -> Flat $ (c ^. term) :+: S " (" :+: (P $ c ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Data c))) :+: S ")")
       [loadDF,strDisFac,nonFL]++
-      [Flat $ (gTF ^. descr) :+: S " (" :+: (P $ gTF ^. symbol) :+: 
+      [Flat $ (gTF ^. term) :+: S " (" :+: (P $ gTF ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Data glaTyFac))) :+: S ")"] ++
-      map (\c -> Flat $ (c ^. descr) :+: S " (" :+: (P $ c ^. symbol) :+: 
+      map (\c -> Flat $ (c ^. term) :+: S " (" :+: (P $ c ^. symbol) :+: 
         S ") (" :+: (makeRef (Definition (Data c))) :+: S ")")
       [dL,tolPre,tolStrDisFac] ++
-      [Flat $ (ar ^. descr) :+: S " (" :+: (P $ ar ^. symbol) :+: 
+      [Flat $ (ar ^. term) :+: S " (" :+: (P $ ar ^. symbol) :+: 
         --S " = a/b)"
         S ")"]))])]
 
-s7_2 = Section (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s") 
+s7_2 = Section (S "Nonfunctional " :+: (requirement ^. term) :+: S "s") 
   [Con s7_2_intro]
 
 s7_2_intro = Paragraph $
@@ -568,7 +568,7 @@ s7_2_intro = Paragraph $
     S "s are correctness, verifiability, understandability, reusability, " :+:
     S "maintainability and portability."
 
-s8 = Section((likelyChg ^. descr) :+: S "s") [Con s8_list]
+s8 = Section((likelyChg ^. term) :+: S "s") [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((S $ likelyChg ^. name) :+: S "1"), ((S $ assumption ^. name) :+: 
@@ -601,21 +601,21 @@ s9_intro1 = Paragraph $
   :+: S "of that component that are marked with an " :+: Quote (S "X") :+:
   S " should be modified as well. Table 5 (" :+: (makeRef s9_table1) :+: 
   S ") shows the dependencies of " :+: 
-  (sMap (map toLower) (thModel ^. descr)) :+: S "s, " :+: 
-  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s with each other. " :+:
+  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+: 
+  (sMap (map toLower) (dataDefn ^. term)) :+: S "s and " :+:
+  (sMap (map toLower) (inModel ^. term)) :+: S "s with each other. " :+:
   S "Table 6 (" :+: (makeRef s9_table2) :+: S ") shows the dependencies of " :+:
-  (sMap (map toLower) (requirement ^. descr)) :+: S "s on " :+:
-  (sMap (map toLower) (thModel ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and data constraints. " :+:
+  (sMap (map toLower) (requirement ^. term)) :+: S "s on " :+:
+  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. term)) :+: S "s and data constraints. " :+:
   S "Table 7 (" :+: (makeRef s9_table3) :+: S ") shows the dependencies of " 
-  :+: (sMap (map toLower) (thModel ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (likelyChg ^. descr)) :+: S "s and " :+:
-  (sMap (map toLower) (requirement ^. descr)) :+: S "s on the " :+:
-  (sMap (map toLower) (assumption ^. descr)) :+: S "s."
+  :+: (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (likelyChg ^. term)) :+: S "s and " :+:
+  (sMap (map toLower) (requirement ^. term)) :+: S "s on the " :+:
+  (sMap (map toLower) (assumption ^. term)) :+: S "s."
 
 s9_table1 = Table [S "", S "T1 (" :+: 
   (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "T2 (" :+: 
@@ -771,21 +771,21 @@ s9_intro2 =
   S "by the component at the head of that arrow. Therefore, if a " :+:
   S "component is changed, the components that it points to should also " :+:
   S "be changed. Figure 2 (" :+: (makeRef fig_2) :+: S ") shows the " :+:
-  S "dependencies of " :+: (sMap (map toLower) (thModel ^. descr)) :+: 
-  S "s, " :+: (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s on each other. " :+:
+  S "dependencies of " :+: (sMap (map toLower) (thModel ^. term)) :+: 
+  S "s, " :+: (sMap (map toLower) (dataDefn ^. term)) :+: S "s and " :+:
+  (sMap (map toLower) (inModel ^. term)) :+: S "s on each other. " :+:
   S "Figure 3 (" :+: (makeRef fig_3) :+: S ") shows the dependencies of " :+:
-  (sMap (map toLower) (requirement ^. descr)) :+: S "s on " :+:
-  (sMap (map toLower) (thModel ^. descr)) :+: S "s, " :+: 
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s and data constraints. " :+:
+  (sMap (map toLower) (requirement ^. term)) :+: S "s on " :+:
+  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+: 
+  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. term)) :+: S "s and data constraints. " :+:
   S "Figure 4 (" :+: (makeRef fig_4) :+: S ") shows the dependencies of " :+:
-  (sMap (map toLower) (thModel ^. descr)) :+: S "s, " :+: 
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. descr)) :+: S "s, " :+: 
-  (sMap (map toLower) (requirement ^. descr)) :+: S "s and " :+:
-  (sMap (map toLower) (likelyChg ^. descr)) :+: S "s on " :+:
-  (sMap (map toLower) (assumption ^. descr)) :+: S "s.",
+  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+: 
+  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. term)) :+: S "s, " :+: 
+  (sMap (map toLower) (requirement ^. term)) :+: S "s and " :+:
+  (sMap (map toLower) (likelyChg ^. term)) :+: S "s on " :+:
+  (sMap (map toLower) (assumption ^. term)) :+: S "s.",
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical " :+:
   S "representation of the matrix by scanning the labels and reference " :+:
@@ -795,11 +795,11 @@ fig_2 = Figure (S "Figure 2: Traceability Matrix Showing the Connections " :+:
   S "Between Items of Different Sections") "Trace.png"
 
 fig_3 = Figure (S "Figure 3: Traceability Matrix Showing the Connections " :+:
-  S "Between " :+: (requirement ^. descr) :+: S "s and Other Items") 
+  S "Between " :+: (requirement ^. term) :+: S "s and Other Items") 
   "RTrace.png"
 
 fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections " :+:
-  S "Between " :+: (assumption ^. descr) :+: S "s and Other Items")
+  S "Between " :+: (assumption ^. term) :+: S "s and Other Items")
   "ATrace.png"
 
 s10 = Section(S "References") [Con s10_list]
@@ -836,14 +836,14 @@ s11_intro = Paragraph $
   S "This appendix holds the graphs (" :+: (makeRef fig_5) :+: S " and " :+:
   (makeRef fig_6) :+: S ") used for interpolating values needed in the models."
 
-fig_5 = Figure (S "Figure 5: " :+: (demandq ^. descr) :+: S " (" :+: 
+fig_5 = Figure (S "Figure 5: " :+: (demandq ^. term) :+: S " (" :+: 
   P (demand ^. symbol) :+: S ") versus " :+: (S $ sD ^. name) :+:
-  S " versus " :+: (char_weight ^. descr) :+: S " (" :+: 
+  S " versus " :+: (char_weight ^. term) :+: S " (" :+: 
   P (sflawParamM ^. symbol) :+: S ")") "ASTM_F2248-09.png"
 
 fig_6 = Figure (S "Figure 6: Non dimensional " :+: 
   (sMap (map toLower) (S $ lateral ^. name)) :+: S " " :+:
   (sMap (map toLower) (S $ load ^. name)) :+: S " (" :+: 
-  P (dimlessLoad ^. symbol) :+: S ") versus " :+: (ar ^. descr) :+: S " (" :+:
-  P (ar ^. symbol) :+: S ") versus " :+: (sdf ^. descr) :+: S  " (" :+: 
+  P (dimlessLoad ^. symbol) :+: S ") versus " :+: (ar ^. term) :+: S " (" :+:
+  P (ar ^. symbol) :+: S ") versus " :+: (sdf ^. term) :+: S  " (" :+: 
   P (sdf ^. symbol) :+: S ")") "ASTM_F2248-09_BeasonEtAl.png"

@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.MUChunk (MUChunk(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 
-import Language.Drasil.Chunk (Chunk(..), Concept(..), SymbolForm(..), Quantity(..))
+import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), Quantity(..))
 import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Space
 
@@ -14,8 +14,8 @@ data MUChunk where --May have Unit chunk
 instance Chunk MUChunk where
   name = mulens name
   
-instance Concept MUChunk where
-  descr = mulens descr
+instance NamedIdea MUChunk where
+  term = mulens term
 
 instance SymbolForm MUChunk where
   symbol = mulens symbol

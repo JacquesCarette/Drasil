@@ -6,7 +6,6 @@ import Control.Lens (Simple, Lens)
 import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.MUChunk
-import Language.Drasil.Unit (Unit'(..))
 
 
 class Constrained c where
@@ -29,8 +28,8 @@ data ConstrainedMUC = CMUC
 instance Chunk ConstrainedMUC where
   name = ul . name
 
-instance Concept ConstrainedMUC where
-  descr = ul . descr
+instance NamedIdea ConstrainedMUC where
+  term = ul . term
   
 instance SymbolForm ConstrainedMUC where
   symbol = ul . symbol

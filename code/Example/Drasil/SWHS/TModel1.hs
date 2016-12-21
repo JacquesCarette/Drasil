@@ -26,19 +26,19 @@ consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
 
 t1descr :: Sentence
 t1descr = (S "The above equation gives the " :+: (sMap (map toLower) 
-          (law_cons_energy ^. descr)) :+: S " for " :+: (sMap (map toLower)
-          (S (transient ^. name))) :+: S " " :+: (heat_trans ^. descr) :+:
-          S " in a material of " :+: (htCap ^. descr) :+: S " " :+: 
+          (law_cons_energy ^. term)) :+: S " for " :+: (sMap (map toLower)
+          (S (transient ^. name))) :+: S " " :+: (heat_trans ^. term) :+:
+          S " in a material of " :+: (htCap ^. term) :+: S " " :+: 
           P (htCap ^. symbol) :+: S " (" :+: Sy (htCap ^. unit) :+: S ") " :+:
-          S "and " :+: (density ^. descr) :+: S ", " :+: 
+          S "and " :+: (density ^. term) :+: S ", " :+: 
           P (density ^. symbol) :+: S " (" :+: Sy (density ^. unit) :+: 
           S "), where " :+: P (thFluxVect ^. symbol) :+: S " is the " :+: 
-          (thFluxVect ^. descr) :+: S " (" :+: Sy (thFluxVect ^. unit) :+:
+          (thFluxVect ^. term) :+: S " (" :+: Sy (thFluxVect ^. unit) :+:
           S "), " :+: P (vol_ht_gen ^. symbol) :+: S " is the " :+: 
-          (vol_ht_gen ^. descr) :+: S " (" :+: Sy (vol_ht_gen ^. unit) :+: 
+          (vol_ht_gen ^. term) :+: S " (" :+: Sy (vol_ht_gen ^. unit) :+: 
           S "), " :+: P (temp ^. symbol) :+: S " is the " :+: 
-          (temp ^. descr) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
-          P (time ^. symbol) :+: S " is " :+: (time ^. descr) :+: S " (" :+: 
+          (temp ^. term) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
+          P (time ^. symbol) :+: S " is " :+: (time ^. term) :+: S " (" :+: 
           Sy (time ^. unit) :+: S "), and " :+: P (gradient ^. symbol) :+: 
           S " is the " :+: (gradient ^. cdefn) :+: S ". For this equation " :+: 
           S "to apply, " :+: S "other forms of energy, such as " :+:

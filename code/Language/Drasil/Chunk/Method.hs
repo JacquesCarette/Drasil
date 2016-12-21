@@ -28,8 +28,8 @@ instance Show ExcType where
 instance Chunk MethodChunk where
   name = cl . name
 
-instance Concept MethodChunk where
-  descr = cl . descr
+instance NamedIdea MethodChunk where
+  term = cl . term
 
 -- END METHODCHUNK --
 
@@ -58,5 +58,5 @@ checkDiv (b :- e) = checkDiv b || checkDiv e
 checkDiv _        = False
 
 
-toCC :: Concept c => c -> ConceptChunk
-toCC c = CC (c ^. name) (c ^. descr)
+toCC :: NamedIdea c => c -> ConceptChunk
+toCC c = CC (c ^. name) (c ^. term)

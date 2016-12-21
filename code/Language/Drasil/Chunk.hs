@@ -15,22 +15,19 @@ class Chunk c where
   name :: Simple Lens c String
 -- END CHUNK --
   
--- BEGIN CONCEPT --
--- a concept has a description
-class Chunk c => Concept c where
-  descr :: Simple Lens c Sentence
--- END CONCEPT --
+class Chunk c => NamedIdea c where
+  term :: Simple Lens c Sentence
 
 --FIXME: Will need to be a "Chunk" not "Concept" after Steven's work is
 -- merged into the main branch.
-class Concept c => SymbolForm c where
+class NamedIdea c => SymbolForm c where
   symbol :: Simple Lens c Symbol
   
 -- Placeholder class until SymbolForm has been split from Quantity,
 -- Then this will need to be renamed.
 -- Necessary for any places which already exist where the 
 --  "new" Quantity will be needed
-class Concept c => Quantity c where
+class NamedIdea c => Quantity c where
   typ      :: Simple Lens c Space
 --  get_symb :: SymbolForm s => Maybe s --FIXME: Placeholder, see below 
                                             -- (also, will not work as is)
@@ -40,10 +37,10 @@ class Concept c => Quantity c where
 -- BEGIN CONCEPTDEFINITION --
 -- Used for so called "verbose" concepts which have both a short name (term)
 -- And long description.
-class Concept c => ConceptDefinition c where
+class NamedIdea c => ConceptDefinition c where
   cdefn :: Simple Lens c Sentence
   
-class Concept c => ConceptDefinition' c where
+class NamedIdea c => ConceptDefinition' c where
   cdefn' :: Simple Lens c (Maybe Sentence)
 -------- BEGIN DATATYPES/INSTANCES --------
 
@@ -54,8 +51,8 @@ instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 instance Chunk ConceptChunk where
   name f (CC a b) = fmap (\x -> CC x b) (f a)
-instance Concept ConceptChunk where
-  descr f (CC a b) = fmap (\x -> CC a x) (f b)
+instance NamedIdea ConceptChunk where
+  term f (CC a b) = fmap (\x -> CC a x) (f b)
 -- END CONCEPTCHUNK --
 
 -- BEGIN DEFINEDTERM --
@@ -65,8 +62,8 @@ instance Eq DefinedTerm where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)
 instance Chunk DefinedTerm where
   name f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
-instance Concept DefinedTerm where
-  descr f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
+instance NamedIdea DefinedTerm where
+  term f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
 instance ConceptDefinition DefinedTerm where
   cdefn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
 
@@ -86,8 +83,8 @@ instance Eq VarChunk where
 instance Chunk VarChunk where
   name f (VC n d s t) = fmap (\x -> VC x d s t) (f n)
 
-instance Concept VarChunk where
-  descr f (VC n d s t) = fmap (\x -> VC n x s t) (f d)
+instance NamedIdea VarChunk where
+  term f (VC n d s t) = fmap (\x -> VC n x s t) (f d)
 
 instance SymbolForm VarChunk where
   symbol f (VC n d s t) = fmap (\x -> VC n d x t) (f s)
@@ -104,7 +101,7 @@ makeCC :: String -> String -> ConceptChunk
 makeCC nam des = CC nam (S des)
 
 makeDCC :: String -> String -> String -> DefinedTerm
-makeDCC nam term des = DCC nam (S term) (S des)
+makeDCC nam ter des = DCC nam (S ter) (S des)
 
 --Currently only used by RelationChunk and EqChunk
 ccWithDescrSent :: String -> Sentence -> ConceptChunk
@@ -120,4 +117,4 @@ makeVC :: String -> String -> Symbol -> VarChunk
 makeVC nam des sym = VC nam (S des) sym Rational
 
 vcFromCC :: ConceptChunk -> Symbol -> VarChunk
-vcFromCC cc sym = VC (cc ^. name) (cc ^. descr) sym Rational
+vcFromCC cc sym = VC (cc ^. name) (cc ^. term) sym Rational

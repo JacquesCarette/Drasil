@@ -239,10 +239,10 @@ t1descr =
   (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either " :+:
   S "both True or both False. " :+: (P $ prob_br ^. symbol) :+: 
-  S " is the " :+: (sMap (map toLower) (prob_br ^. descr)) :+: 
+  S " is the " :+: (sMap (map toLower) (prob_br ^. term)) :+: 
   S ", as calculated in " :+: (makeRef (Definition (Theory probOfBr))) :+: 
   S ". " :+: (P $ pb_tol ^. symbol) :+: S " is the " :+: 
-  (sMap (map toLower) (pb_tol ^. descr)) :+: S " entered by the user."
+  (sMap (map toLower) (pb_tol ^. term)) :+: S " entered by the user."
 
 t2SafetyReq :: RelationChunk
 t2SafetyReq = makeRC "Safety Requirement-2" t2descr safety_require2_rel
@@ -258,11 +258,11 @@ t2descr =
   S "considered safe. " :+: (P $ is_safe1 ^. symbol) :+: S " (from " :+:
   (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
   (P $ is_safe2 ^. symbol) :+: S " are either both True or both False. " :+:   
-  (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. descr) :+: 
+  (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. term) :+: 
   S " (also called capacity, as defined in " :+: 
   (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
   (P $ demand ^. symbol) :+: S (" (also referred as the " ++ (demandq ^. name)
-  ++ ") is the ") :+: (demandq ^. descr) :+: S ", as defined in " :+: 
+  ++ ") is the ") :+: (demandq ^. term) :+: S ", as defined in " :+: 
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
 --Instance Models--
@@ -278,8 +278,8 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 pbdescr :: Sentence
 pbdescr =
   (P $ prob_br ^. symbol) :+: S " is the calculated " :+: 
-    (sMap (map toLower) (prob_br ^. descr)) :+: S ". "  :+: 
-    (P $ risk_fun ^. symbol) :+: S " is the " :+: (risk ^. descr) :+: S "."
+    (sMap (map toLower) (prob_br ^. term)) :+: S ". "  :+: 
+    (P $ risk_fun ^. symbol) :+: S " is the " :+: (risk ^. term) :+: S "."
 
 calOfCap :: RelationChunk
 calOfCap = makeRC "Calculation of Capacity(LR)" capdescr cap_rel
@@ -289,11 +289,11 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. descr) :+: S ", which " :+:
+  (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. term) :+: S ", which " :+:
   S "is also called capacity. " :+: (P $ nonFL ^. symbol) :+: S " is the " :+:
-  (nonFL ^. descr) :+: S ". " :+: (P $ gTF ^. symbol) :+: S " is the " :+:
-  (gTF ^. descr) :+: S ". " :+: (P $ loadSF ^. symbol) :+: S " is the " :+:
-  (loadSF ^. descr) :+: S "."
+  (nonFL ^. term) :+: S ". " :+: (P $ gTF ^. symbol) :+: S " is the " :+:
+  (gTF ^. term) :+: S ". " :+: (P $ loadSF ^. symbol) :+: S " is the " :+:
+  (loadSF ^. term) :+: S "."
 
 calOfDe :: RelationChunk
 calOfDe = makeRC "Calculation of Demand(q)" dedescr de_rel
@@ -305,14 +305,14 @@ dedescr :: Sentence
 dedescr = 
   (P $ demand ^. symbol) :+: S " or " :+: 
   (sMap (map toLower) (S $ demandq ^. name)) :+: S ", is the " :+:
-  (demandq ^. descr) :+: S " obtained from Figure 2 by interpolation using " 
+  (demandq ^. term) :+: S " obtained from Figure 2 by interpolation using " 
   :+: (sMap (map toLower) (S $ sD ^. name)) :+: S " (" :+: (P $ sd ^. symbol) 
   :+: S ") and " :+: (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
   (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
   (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
   S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
-  (sMap (map toLower) (char_weight ^. descr)) :+: S ". " :+: 
-  (P $ tNT ^. symbol) :+: S " is the " :+: (tNT ^. descr) :+: S ". " :+: 
+  (sMap (map toLower) (char_weight ^. term)) :+: S ". " :+: 
+  (P $ tNT ^. symbol) :+: S " is the " :+: (tNT ^. term) :+: S ". " :+: 
   (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (S $ sD ^. name))
   :+: S " where " :+: (P $ sd ^. symbol) :+: S " = ." 
   --equation in sentence
@@ -355,7 +355,7 @@ strDisFac_eq :: Expr
 strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: QDefinition
-strDisFac = fromEqn' (sdf ^. name) (sdf ^. descr) (sdf ^. symbol) 
+strDisFac = fromEqn' (sdf ^. name) (sdf ^. term) (sdf ^. symbol) 
   strDisFac_eq
 
 nonFL_eq :: Expr
@@ -363,7 +363,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. name) (nonFactorL ^. descr) (Atomic "NFL") 
+nonFL = fromEqn' (nonFactorL ^. name) (nonFactorL ^. term) (Atomic "NFL") 
   nonFL_eq
 
 glaTyFac_eq :: Expr
@@ -377,11 +377,11 @@ glaTyFac = fromEqn' (glassTypeFac ^. name) (S "function that maps from " :+:
   S " = AN => 1.0|" :+: (P $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
   (P $ glass_type ^. symbol) :+: S (" = HS => 2.0). " ++ 
   (annealedGlass ^. name) ++ " is ") :+: 
-  (sMap (map toLower) (annealedGlass ^. descr)) :+: S (". " ++ 
+  (sMap (map toLower) (annealedGlass ^. term)) :+: S (". " ++ 
   (fullyTGlass ^. name) ++ " is ") :+: 
-  (sMap (map toLower) (fullyTGlass ^. descr)) :+: S (". " ++
+  (sMap (map toLower) (fullyTGlass ^. term)) :+: S (". " ++
   (heatSGlass ^. name) ++ " is ") :+: 
-  (sMap (map toLower) (heatSGlass ^. descr)) :+: S ".") (Atomic "GTF") 
+  (sMap (map toLower) (heatSGlass ^. term)) :+: S ".") (Atomic "GTF") 
   glaTyFac_eq
 
 dL_eq :: Expr
@@ -389,14 +389,14 @@ dL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
 
 dL :: QDefinition
-dL = fromEqn' (dimlessLoad ^. name) (dimlessLoad ^. descr) 
+dL = fromEqn' (dimlessLoad ^. name) (dimlessLoad ^. term) 
   (dimlessLoad ^. symbol) dL_eq
 
 tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
 tolPre :: QDefinition
-tolPre = fromEqn' (tolLoad ^. name) (tolLoad ^. descr) (tolLoad ^. symbol) 
+tolPre = fromEqn' (tolLoad ^. name) (tolLoad ^. term) (tolLoad ^. symbol) 
   tolPre_eq
 
 tolStrDisFac_eq :: Expr
@@ -408,5 +408,5 @@ tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))
   (Int 2))):^(C sflawParamM):*(C loadDF))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = fromEqn' (sdf_tol ^. name) (sdf_tol ^. descr) (sdf_tol ^. symbol) 
+tolStrDisFac = fromEqn' (sdf_tol ^. name) (sdf_tol ^. term) (sdf_tol ^. symbol) 
   tolStrDisFac_eq

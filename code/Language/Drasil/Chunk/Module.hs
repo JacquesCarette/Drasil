@@ -17,8 +17,8 @@ data ModuleChunk = MoC { modcc :: ConceptChunk, secret :: Sentence,
 instance Chunk ModuleChunk where
   name = cl . name
 
-instance Concept ModuleChunk where
-  descr = cl . descr
+instance NamedIdea ModuleChunk where
+  term = cl . term
 
 instance Eq ModuleChunk where
   c1 == c2 = (c1 ^. name) == (c2 ^. name)

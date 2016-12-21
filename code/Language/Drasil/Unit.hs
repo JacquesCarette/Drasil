@@ -10,8 +10,8 @@ module Language.Drasil.Unit (
 
 import Control.Lens (Simple, Lens, set, (^.))
 
-import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), Concept(..),
-         SymbolForm(..), Quantity(..), makeCC)
+import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), NamedIdea(..),
+        Quantity(..), makeCC)
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
@@ -22,7 +22,7 @@ data UDefn = USynonym USymb      -- to define straight synonyms
            | UScale Double USymb -- scale, i.e. *
            | UShift Double USymb -- shift, i.e. +
 
-class Concept u => Unit u where
+class NamedIdea u => Unit u where
    unit :: Simple Lens u USymb
 
 class UnitEq u where
@@ -59,8 +59,8 @@ vc f (UD a b) = fmap (\x -> UD x b) (f a)
 instance Chunk FundUnit where
   name = vc . name
 
-instance Concept FundUnit where
-  descr = vc . descr
+instance NamedIdea FundUnit where
+  term = vc . term
 
 instance Unit FundUnit where
   unit f (UD a b) = fmap (\x -> UD a x) (f b)
@@ -73,7 +73,7 @@ duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
 instance Chunk   DerUChunk where name  = duc . name
-instance Concept DerUChunk where descr = duc . descr
+instance NamedIdea DerUChunk where term = duc . term
 instance Unit    DerUChunk where unit  = duc . unit
 
 instance UnitEq DerUChunk where
@@ -93,7 +93,7 @@ ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 
 instance Unit    UnitDefn where unit  = ulens unit
 instance Chunk   UnitDefn where name  = ulens name
-instance Concept UnitDefn where descr = ulens descr
+instance NamedIdea UnitDefn where term = ulens term
 
 --- These conveniences go here, because we need the class
 (^:) :: Unit u => u -> Integer -> USymb

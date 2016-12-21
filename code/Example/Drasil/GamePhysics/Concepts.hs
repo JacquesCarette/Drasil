@@ -27,6 +27,6 @@ chipmunk    = makeCC "Chipmunk2D" "Chipmunk2D game physics library"
 -- Chunks to accommodate 'irregular' plurals --
 -- FIXME: Figure out a way around creating duplicate chunks for irregular
 --    plurals.
-rigidBodies = CC "rigid bodies" (rigidBody ^. descr)
-vels        = CC "velocities" (velocity ^. descr)
-angularVels = CC "angular velocities" (angularV ^. descr)
+rigidBodies = CC "rigid bodies" (rigidBody ^. term)
+vels        = CC "velocities" (velocity ^. term)
+angularVels = CC "angular velocities" (angularV ^. term)

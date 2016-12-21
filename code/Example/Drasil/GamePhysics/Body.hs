@@ -93,7 +93,7 @@ s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
     [(\ch -> S $ ch ^. name),
-    (\ch -> ch ^. descr)]
+    (\ch -> ch ^. term)]
     cpAcronyms)
     (S "Abbreviations and Acronyms") False
 
@@ -113,7 +113,7 @@ s2_intro = [Paragraph (S "Due to the rising cost of developing video " :+:
     S " that is reliable and free will cut down development costs and lead " :+:
     S "to better quality products."),
     Paragraph (S "The following section provides an overview of the " :+:
-    (srs ^. descr) :+: S " (" :+: S (srs ^. name) :+: S ") for " :+:
+    (srs ^. term) :+: S " (" :+: S (srs ^. name) :+: S ") for " :+:
     S (chipmunk ^. name) :+: S ", an open source " :+: S (twoD ^. name) :+:
     S " " :+: S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
     S ". This section explains the purpose of this document, the scope " :+:
@@ -131,8 +131,8 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
     S "open source " :+: S (twoD ^. name) :+: S " " :+:
     S (rigidBody ^. name) :+: S " " :+: S (physLib ^. name) :+:
-    S " used for games. The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
-    S "s and " :+: (sMap (map toLower) (thModel ^. descr)) :+:
+    S " used for games. The " :+: (sMap (map toLower) (goalStmt ^. term)) :+:
+    S "s and " :+: (sMap (map toLower) (thModel ^. term)) :+:
     S "s used in " :+: S (chipmunk ^. name) :+: S " are provided. This " :+:
     S "document is intended to be used as a reference to provide all " :+:
     S "necessary information to understand and verify the model."),
@@ -140,7 +140,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
     S "subsequent development phases, including writing the design " :+:
     S "specification and the software verification and validation plan. " :+:
     S "The design document will show how the " :+:
-    (sMap (map toLower) (requirement ^. descr)) :+: S "s are to be " :+:
+    (sMap (map toLower) (requirement ^. term)) :+: S "s are to be " :+:
     S "realized. The verification and validation plan will show the steps " :+:
     S "that will be used to increase confidence in the software " :+:
     S "documentation and the implementation.")]
@@ -152,11 +152,11 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an " :+:
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section (S "Scope of " :+: (requirement ^. descr) :+: S "s")
+s2_2 = Section (S "Scope of " :+: (requirement ^. term) :+: S "s")
     [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ S "The scope of the " :+:
-    (sMap (map toLower) (requirement ^. descr)) :+: S "s includes the " :+:
+    (sMap (map toLower) (requirement ^. term)) :+: S "s includes the " :+:
     S "physical simulation of " :+: S (twoD ^. name) :+: S " " :+:
     S (rigidBodies ^. name) :+: S " acted on by forces. Given " :+:
     S (twoD ^. name) :+: S " " :+: S (rigidBodies ^. name) :+:
@@ -179,13 +179,13 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the " :+:
     S "follows the standard pattern of presenting goals, theories, " :+:
     S "definitions, and assumptions. For readers that would like a more " :+:
     S "bottom up approach, they can start reading the " :+:
-    (sMap (map toLower) (inModel ^. descr)) :+: S "s in " :+:
+    (sMap (map toLower) (inModel ^. term)) :+: S "s in " :+:
     (makeRef s4_2_5) :+: S " and trace back to any additional information " :+:
     S "they require."),
-    Paragraph (S "The " :+: (sMap (map toLower) (goalStmt ^. descr)) :+:
-    S "s are refined to the " :+: (sMap (map toLower) (thModel ^. descr)) :+:
-    S "s, and the " :+: (sMap (map toLower) (thModel ^. descr)) :+:
-    S "s to the " :+: (sMap (map toLower) (inModel ^. descr)) :+: S "s.")]
+    Paragraph (S "The " :+: (sMap (map toLower) (goalStmt ^. term)) :+:
+    S "s are refined to the " :+: (sMap (map toLower) (thModel ^. term)) :+:
+    S "s, and the " :+: (sMap (map toLower) (thModel ^. term)) :+:
+    S "s to the " :+: (sMap (map toLower) (inModel ^. term)) :+: S "s.")]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -243,7 +243,7 @@ s4_intro = Paragraph $ S "This section first presents the problem " :+:
     S "description, which gives a high-level view of the problem to be " :+:
     S "solved. This is followed by the solution characteristics " :+:
     S "specification, which presents the " :+: (sMap (map toLower)
-    (assumption ^. descr)) :+: S "s, theories, and definitions that are " :+:
+    (assumption ^. term)) :+: S "s, theories, and definitions that are " :+:
     S "used for the " :+: S (physLib ^. name) :+: S"."
 
 -------------------------------
@@ -286,9 +286,9 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms " :+:
     S "purpose of reducing ambiguity and making it easier to correctly " :+:
     S "understand the requirements:"
 
-s4_1_1_bullets = Enumeration (Bullet $ map (\term -> Flat (
-    S ((\word -> (toUpper . head $ word) : (tail word)) (term ^. name)) :+:
-    S ": " :+: (term ^. descr)))
+s4_1_1_bullets = Enumeration (Bullet $ map (\t -> Flat (
+    S ((\word -> (toUpper . head $ word) : (tail word)) (t ^. name)) :+:
+    S ": " :+: (t ^. term)))
     [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
 
 -----------------------------
@@ -298,32 +298,32 @@ s4_1_1_bullets = Enumeration (Bullet $ map (\term -> Flat (
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = Section ((goalStmt ^. descr) :+: S "s") [Con s4_1_2_list]
+s4_1_2 = Section ((goalStmt ^. term) :+: S "s") [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
     (S (goalStmt ^. name) :+: S "1", Flat (S "Given the physical " :+:
-    S "properties, initial " :+: (position ^. descr) :+: S "s and " :+:
-    S (vels ^. name) :+: S ", and " :+: (force ^. descr) :+:
+    S "properties, initial " :+: (position ^. term) :+: S "s and " :+:
+    S (vels ^. name) :+: S ", and " :+: (force ^. term) :+:
     S "s applied on a set of " :+: S (rigidBodies ^. name) :+:
-    S ", determine their new " :+: (position ^. descr) :+: S "s and " :+:
-    S (vels ^. name) :+: S " over a period of " :+: (time ^. descr) :+: S ".")),
+    S ", determine their new " :+: (position ^. term) :+: S "s and " :+:
+    S (vels ^. name) :+: S " over a period of " :+: (time ^. term) :+: S ".")),
     (S (goalStmt ^. name) :+: S "2", Flat (S "Given the physical " :+:
-    S "properties, initial " :+: (orientation ^. descr) :+: S "s and " :+:
-    S (angularVels ^. name) :+: S ", and " :+: (force ^. descr) :+: S "s " :+:
+    S "properties, initial " :+: (orientation ^. term) :+: S "s and " :+:
+    S (angularVels ^. name) :+: S ", and " :+: (force ^. term) :+: S "s " :+:
     S "applied on a set of " :+: S (rigidBodies ^. name) :+: S ", " :+:
-    S "determine their new " :+: (orientation ^. descr) :+: S "s and " :+:
-    S (angularVels ^. name) :+: S " over a period of " :+: (time ^. descr) :+:
+    S "determine their new " :+: (orientation ^. term) :+: S "s and " :+:
+    S (angularVels ^. name) :+: S " over a period of " :+: (time ^. term) :+:
     S ".")),
     (S (goalStmt ^. name) :+: S "3", Flat (S "Given the initial " :+:
-    (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " of a " :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+: S " of a " :+:
     S "set of " :+: S (rigidBodies ^. name) :+: S ", determine if any of " :+:
     S "them will collide with one another over a period of " :+:
-    (time ^. descr) :+: S ".")),
+    (time ^. term) :+: S ".")),
     (S (goalStmt ^. name) :+: S "4", Flat (S "Given the physical " :+:
-    S "properties, initial linear and angular " :+: (position ^. descr) :+:
+    S "properties, initial linear and angular " :+: (position ^. term) :+:
     S "s and " :+: S (vels ^. name) :+: S ", determine the new " :+:
-    (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+:
-    S " over a period of " :+: (time ^. descr) :+: S " of " :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+:
+    S " over a period of " :+: (time ^. term) :+: S " of " :+:
     S (rigidBodies ^. name) :+: S " that have undergone a " :+:
     S (collision ^. name) :+: S "."))])
 
@@ -343,7 +343,7 @@ s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section (assumption ^. descr :+: S "s") [Con s4_2_1_intro,
+s4_2_1 = Section (assumption ^. term :+: S "s") [Con s4_2_1_intro,
     Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -351,11 +351,11 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
     S "and helps in developing the theoretical model by filling in the " :+:
     S "missing information for the physical system. The numbers given in " :+:
     S "the square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ")
-    (map (\ch -> (sMap (map toLower) (ch ^. descr)) :+: S (" " ++
+    (map (\ch -> (sMap (map toLower) (ch ^. term)) :+: S (" " ++
     sqbrac (ch ^. name))) [thModel, genDefn, dataDefn, inModel])) :+:
-    S ", or " :+: (sMap (map toLower) $ likelyChg ^. descr) :+: S (" " ++
+    S ", or " :+: (sMap (map toLower) $ likelyChg ^. term) :+: S (" " ++
     sqbrac (likelyChg ^. name)) :+: S ", in which the respective " :+:
-    (sMap (map toLower) $ assumption ^. descr) :+: S " is used."
+    (sMap (map toLower) $ assumption ^. term) :+: S " is used."
 
 s4_2_1_list = Enumeration (Simple [
     (S (assumption ^. name) :+: S "1", Flat (S "All objects are " :+:
@@ -382,7 +382,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section ((thModel ^. descr) :+: S "s") ([Con s4_2_2_intro] ++
+s4_2_2 = Section ((thModel ^. term) :+: S "s") ([Con s4_2_2_intro] ++
     (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
@@ -398,13 +398,13 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = Section ((genDefn ^. descr) :+: S "s") ([Con s4_2_3_intro] {- ++
+s4_2_3 = Section ((genDefn ^. term) :+: S "s") ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations " :+:
   S "that will be used in deriving the " :+: (sMap (map toLower)
-  (dataDefn ^. descr)) :+: S "s, which in turn will be used to build the " :+:
-  (sMap (map toLower) (inModel ^. descr)) :+: S "s."
+  (dataDefn ^. term)) :+: S "s, which in turn will be used to build the " :+:
+  (sMap (map toLower) (inModel ^. term)) :+: S "s."
 
 -- GDefs not yet implemented --
 {-
@@ -420,11 +420,11 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = Section ((dataDefn ^. descr) :+: S "s") ([Con s4_2_4_intro] ++
+s4_2_4 = Section ((dataDefn ^. term) :+: S "s") ([Con s4_2_4_intro] ++
     (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ S "This section collects and defines all the " :+:
-    S "data needed to build the " :+: (inModel ^. descr) :+: S "s. The " :+:
+    S "data needed to build the " :+: (inModel ^. term) :+: S "s. The " :+:
     S "dimension of each quantity is also given."
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
@@ -437,7 +437,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 -- s4_2_5_IMods :: [Contents]
 
-s4_2_5 = Section ((inModel ^. descr) :+: S "s") ([Con s4_2_5_intro] {- ++
+s4_2_5 = Section ((inModel ^. term) :+: S "s") ([Con s4_2_5_intro] {- ++
     (map Con s4_2_5_IMods)-})
 
 s4_2_5_intro = Paragraph $ S "This section transforms the problem defined " :+:
@@ -509,13 +509,13 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = Section (requirement ^. descr :+: S "s") [Con s5_intro, Sub s5_1,
+s5 = Section (requirement ^. term :+: S "s") [Con s5_intro, Sub s5_1,
     Sub s5_2]
 
 s5_intro = Paragraph $ S "This section provides the functional " :+:
-    (sMap (map toLower) (requirement ^. descr)) :+: S "s, the business " :+:
+    (sMap (map toLower) (requirement ^. term)) :+: S "s, the business " :+:
     S "tasks that the software is expected to complete, and the " :+:
-    S "nonfunctional " :+: (sMap (map toLower) (requirement ^. descr)) :+:
+    S "nonfunctional " :+: (sMap (map toLower) (requirement ^. term)) :+:
     S "s, the qualities that the software is expected to exhibit."
 
 -----------------------------------
@@ -525,7 +525,7 @@ s5_intro = Paragraph $ S "This section provides the functional " :+:
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = Section (S "Functional " :+: (requirement ^. descr) :+: S "s")
+s5_1 = Section (S "Functional " :+: (requirement ^. term) :+: S "s")
     [Con s5_1_list]
 
 -- Currently need separate chunks for plurals like rigid bodies,
@@ -535,9 +535,9 @@ s5_1_list = Enumeration (Simple [
     S (space ^. name) :+: S " for all of the " :+: S (rigidBodies ^. name) :+:
     S " in the physical simulation to interact in.")),
     (S (requirement ^. name) :+: S "2", Flat (S "Input the initial " :+:
-    (mass ^. descr) :+: S "es, " :+: S (vels ^. name) :+: S ", " :+:
-    (orientation ^. descr) :+: S "s, " :+: S (angularVels ^. name) :+:
-    S " of, " :+: S "and " :+: (force ^. descr) :+: S "s applied on " :+:
+    (mass ^. term) :+: S "es, " :+: S (vels ^. name) :+: S ", " :+:
+    (orientation ^. term) :+: S "s, " :+: S (angularVels ^. name) :+:
+    S " of, " :+: S "and " :+: (force ^. term) :+: S "s applied on " :+:
     S (rigidBodies ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "3", Flat (S "Input the surface " :+:
     S "properties of the bodies, such as " :+: S (friction ^. name) :+: S " or " :+:
@@ -545,20 +545,20 @@ s5_1_list = Enumeration (Simple [
     (S (requirement ^. name) :+: S "4", Flat (S "Verify that the inputs " :+:
     S "satisfy the required physical constraints.")),
     (S (requirement ^. name) :+: S "5", Flat (S "Determine the " :+:
-    (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
-    S "period of " :+: (time ^. descr) :+: S " of the " :+: S (twoD ^. name) :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
+    S "period of " :+: (time ^. term) :+: S " of the " :+: S (twoD ^. name) :+:
     S " " :+: S (rigidBodies ^. name) :+: S " acted upon by a " :+:
-    (force ^. descr) :+: S ".")),
+    (force ^. term) :+: S ".")),
     (S (requirement ^. name) :+: S "6", Flat (S "Determine the " :+:
-    (orientation ^. descr) :+: S "s and " :+: S (angularVels ^. name) :+:
-    S " over a period of " :+: (time ^. descr) :+: S " of the " :+:
+    (orientation ^. term) :+: S "s and " :+: S (angularVels ^. name) :+:
+    S " over a period of " :+: (time ^. term) :+: S " of the " :+:
     S (twoD ^. name) :+: S " " :+: S (rigidBodies ^. name) :+: S ".")),
     (S (requirement ^. name) :+: S "7", Flat (S "Determine if any of the " :+:
     S (rigidBodies ^. name) :+: S " in the " :+: S (space ^. name) :+:
     S " have collided.")),
     (S (requirement ^. name) :+: S "8", Flat (S "Determine the " :+:
-    (position ^. descr) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
-    S "period of " :+: (time ^. descr) :+: S " of the " :+: S (twoD ^. name) :+:
+    (position ^. term) :+: S "s and " :+: S (vels ^. name) :+: S " over a " :+:
+    S "period of " :+: (time ^. term) :+: S " of the " :+: S (twoD ^. name) :+:
     S " " :+: S (rigidBodies ^. name) :+: S " that have undergone a " :+:
     S (collision ^. name) :+: S "."))])
 
@@ -569,7 +569,7 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = Section (S "Nonfunctional " :+: (requirement ^. descr) :+: S "s")
+s5_2 = Section (S "Nonfunctional " :+: (requirement ^. term) :+: S "s")
     [Con s5_2_intro]
 
 s5_2_intro = Paragraph $ S "Games are resource intensive, so performance " :+:
@@ -584,10 +584,10 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance " :+:
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section ((likelyChg ^. descr) :+: S "s") [Con s6_intro, Con s6_list]
+s6 = Section ((likelyChg ^. term) :+: S "s") [Con s6_intro, Con s6_list]
 
 s6_intro = Paragraph $ S "This section lists the " :+: (sMap (map toLower)
-    (likelyChg ^. descr)) :+: S "s to be made to the physics game library."
+    (likelyChg ^. term)) :+: S "s to be made to the physics game library."
 
 s6_list = Enumeration (Simple [
     (S (likelyChg ^. name) :+: S "1", Flat (S "The internal " :+:

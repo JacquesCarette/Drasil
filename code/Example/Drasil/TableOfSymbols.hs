@@ -28,9 +28,9 @@ table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
   (S "Table of Symbols") False
   
 defaultF :: (Unit' s) => s -> Sentence
-defaultF = \s -> s ^. descr
+defaultF = \s -> s ^. term
 
 cdefnF :: (Unit' s, ConceptDefinition' s) => s -> Sentence
 cdefnF = \s -> unWrap s (s ^. cdefn')
   where unWrap _ (Just s) = s
-        unWrap c (Nothing) = c ^. descr
+        unWrap c (Nothing) = c ^. term

@@ -192,7 +192,7 @@ mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
   let impl ccs = foldl1 (:+:) $ map (\x -> (S $ "If the entry is " ++
        (x ^. name) ++ ", this means that the module is provided by the ")
-       :+: (x ^. descr) :+: S ". ") ccs
+       :+: (x ^. term) :+: S ". ") ccs
   in Paragraph $
     S "Modules are decomposed according to the principle of " :+:
     Quote (S "information hiding") :+:
@@ -222,7 +222,7 @@ mgModuleInfo (mc, m) = let title = if   isNothing m
     title
     [ Con $ Enumeration $ Desc
       [(S "Secrets", Flat (secret mc)),
-       (S "Services", Flat (mc ^. descr)),
+       (S "Services", Flat (mc ^. term)),
        (S "Implemented By", Flat (getImp $ imp mc))
       ]
     ]

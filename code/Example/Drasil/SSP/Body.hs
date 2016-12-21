@@ -52,7 +52,7 @@ s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil th
 
 s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. unit)),
-   (\x -> (x ^. descr)),
+   (\x -> (x ^. term)),
    (\x -> S (x ^. name))
   ] this_si)
   (S "Table of Units") True
@@ -67,7 +67,7 @@ s1_2_intro = Con $ Paragraph $
 s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
-   (\ch -> ch ^. descr)
+   (\ch -> ch ^. term)
    ]
   sspSymbols)
   (S "Table of Symbols") False
@@ -78,7 +78,7 @@ s1_3 = Sub $ Section (S "Abbreviations and Acronyms") [s1_3_table]
 
 s1_3_table = Con $ Table [S "Symbol", S "Description"] (mkTable
   [(\ch -> S $ ch ^. name),
-   (\ch -> ch ^. descr)]
+   (\ch -> ch ^. term)]
   acronyms)
   (S "Abbreviations and Acronyms") False
   
@@ -288,7 +288,7 @@ table_inputdata :: Contents
 table_inputdata =  Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
    (\ch -> Sy $ ch ^. unit),
-   (\ch -> ch ^. descr)
+   (\ch -> ch ^. term)
    ]
   [coords, elastMod, cohesion, poisson, fricAngle, dryWeight, satWeight, waterWeight])
   (S "Input data") True

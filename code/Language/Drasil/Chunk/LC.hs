@@ -14,8 +14,8 @@ data LCChunk = LCChunk
 instance Chunk LCChunk where
   name = cl . name
 
-instance Concept LCChunk where
-  descr = cl . descr
+instance NamedIdea LCChunk where
+  term = cl . term
 -- END LCCHUNK --
 
 -- don't export this

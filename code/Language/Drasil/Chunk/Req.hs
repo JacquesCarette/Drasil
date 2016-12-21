@@ -14,8 +14,8 @@ data ReqChunk = ReqChunk
 instance Chunk ReqChunk where
   name = cl . name
 
-instance Concept ReqChunk where
-  descr = cl . descr
+instance NamedIdea ReqChunk where
+  term = cl . term
 -- END REQCHUNK --
 
 -- don't export this

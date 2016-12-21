@@ -28,20 +28,20 @@ latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),
 
 t3descr :: Sentence
 t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
-          (sMap (map toLower) (thermal_energy ^. descr)) :+: S " (" :+:
+          (sMap (map toLower) (thermal_energy ^. term)) :+: S " (" :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
-          (latent_heat ^. descr)) :+: S " energy. <Integral> is the rate" :+:
+          (latent_heat ^. term)) :+: S " energy. <Integral> is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
-          S " to " :+: (time ^. descr) :+: S " " :+: P (tau ^. symbol) :+: 
+          S " to " :+: (time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
-          S " is the " :+: (time ^. descr) :+: S " (" :+: Sy (time ^. unit) :+:
+          S " is the " :+: (time ^. term) :+: S " (" :+: Sy (time ^. unit) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
-          (phase_change ^. descr)) :+: S " is not complete. The status of " :+:
-          S "the " :+: (sMap (map toLower) (phase_change ^. descr)) :+:
-          S " depends on the " :+: (melt_frac ^. descr) :+: S ", " :+: 
+          (phase_change ^. term)) :+: S " is not complete. The status of " :+:
+          S "the " :+: (sMap (map toLower) (phase_change ^. term)) :+:
+          S " depends on the " :+: (melt_frac ^. term) :+: S ", " :+: 
           makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
-          (temp_melt ^. descr) :+: S " and " :+: (temp_boil ^. descr) :+:
+          (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+:
           (latent_heat ^. cdefn) :+: S " stops when all material has " :+:
           S "changed to the new phase.")

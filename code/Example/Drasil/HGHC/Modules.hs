@@ -10,7 +10,7 @@ self :: ConceptChunk
 self = CC "HGHC" (S "HGHC")
 
 executable :: ConceptChunk
-executable = CC (self ^. name) (self ^. descr :+: (S " ") :+: program ^. descr)
+executable = CC (self ^. name) (self ^. term :+: (S " ") :+: program ^. term)
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk

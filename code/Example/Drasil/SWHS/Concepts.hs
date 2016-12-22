@@ -5,7 +5,7 @@ module Drasil.SWHS.Concepts where
 import Language.Drasil
 
 ---Acronyms---
-ordDiffEq,phsChgMtrl,rightSide,progName :: ConceptChunk
+ordDiffEq,phsChgMtrl,rightSide,progName :: NamedChunk
 
 ordDiffEq   = makeCC "ODE" "Ordinary Differential Equation"
 phsChgMtrl  = makeCC "PCM" "Phase Change Material"
@@ -15,11 +15,11 @@ progName    = makeCC "SWHS" "Solar Water Heating System"
 -- I want to include SI as an acronym, but I can't find a way for the 
 -- description to have accents when using makeCC.
 
----ConceptChunks---
+---NamedChunks---
 
 charging, coil, discharging, gauss_div, heat_flux, mech_energy,
   perfect_insul, phase_change_material, specific_heat, swhs_pcm, swhsProg, tank,
-  tank_pcm, transient, water :: ConceptChunk
+  tank_pcm, transient, water :: NamedChunk
 
 charging = makeCC "Charging" "Charging of the tank"
 coil = makeCC "Heating coil" "Coil in tank that heats by absorbing solar energy"

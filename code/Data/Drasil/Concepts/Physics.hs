@@ -6,7 +6,7 @@ import Language.Drasil
 rigidBody, velocity, angularV, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
   angularAccel, momentOfInertia, force, impulseS, impulseV, displacement,
-  gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,time, torque :: ConceptChunk
+  gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,time, torque :: NamedChunk
     
 rigidBody  = makeCC "rigid body" 
   "A solid body in which deformation is neglected."

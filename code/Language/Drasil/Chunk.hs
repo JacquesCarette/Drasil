@@ -40,27 +40,23 @@ class NamedIdea c => ConceptDefinition' c where
   cdefn' :: Simple Lens c (Maybe Sentence)
 -------- BEGIN DATATYPES/INSTANCES --------
 
--- BEGIN CONCEPTCHUNK --
---Equivalent to a "term" concept
-data ConceptChunk = CC String Sentence 
+
+data NamedChunk = CC String Sentence 
+instance Eq NamedChunk where
+  c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Chunk NamedChunk where
+  id f (CC a b) = fmap (\x -> CC x b) (f a)
+instance NamedIdea NamedChunk where
+  term f (CC a b) = fmap (\x -> CC a x) (f b)
+
+data ConceptChunk = DCC String Sentence Sentence
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk ConceptChunk where
-  id f (CC a b) = fmap (\x -> CC x b) (f a)
-instance NamedIdea ConceptChunk where
-  term f (CC a b) = fmap (\x -> CC a x) (f b)
--- END CONCEPTCHUNK --
-
--- BEGIN DEFINEDTERM --
--- DefinedTerm = DCC Name   Term    Definition
-data DefinedTerm = DCC String Sentence Sentence
-instance Eq DefinedTerm where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk DefinedTerm where
   id f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
-instance NamedIdea DefinedTerm where
+instance NamedIdea ConceptChunk where
   term f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
-instance Concept DefinedTerm where
+instance Concept ConceptChunk where
   defn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
 
 
@@ -93,18 +89,18 @@ instance Quantity VarChunk where
 
 --Helper Function(s)--
 
-makeCC :: String -> String -> ConceptChunk
+makeCC :: String -> String -> NamedChunk
 makeCC i des = CC i (S des)
 
-makeDCC :: String -> String -> String -> DefinedTerm
+makeDCC :: String -> String -> String -> ConceptChunk
 makeDCC i ter des = DCC i (S ter) (S des)
 
 --Currently only used by RelationChunk and EqChunk
-ccWithDescrSent :: String -> Sentence -> ConceptChunk
+ccWithDescrSent :: String -> Sentence -> NamedChunk
 ccWithDescrSent n d = CC n d
 
 -- For when name = descr (will likely become deprecated as the chunks become more descriptive).
-nCC :: String -> ConceptChunk 
+nCC :: String -> NamedChunk 
 nCC n = makeCC n n
 
 -- the code generation system needs VC to have a type (for now)
@@ -112,5 +108,5 @@ nCC n = makeCC n n
 makeVC :: String -> String -> Symbol -> VarChunk
 makeVC i des sym = VC i (S des) sym Rational
 
-vcFromCC :: ConceptChunk -> Symbol -> VarChunk
+vcFromCC :: NamedChunk -> Symbol -> VarChunk
 vcFromCC cc sym = VC (cc ^. id) (cc ^. term) sym Rational

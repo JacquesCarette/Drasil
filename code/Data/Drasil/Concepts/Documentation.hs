@@ -5,7 +5,7 @@ import Language.Drasil
 --FIXME: Use actual Acronyms instead of CCs.
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel :: ConceptChunk
+  requirement, srs, thModel :: NamedChunk
 
 assumption  = makeCC "A" "Assumption"
 dataDefn    = makeCC "DD" "Data Definition"

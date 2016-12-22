@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
 
 -- BEGIN METHODCHUNK --
-data MethodChunk = MeC { methcc :: ConceptChunk, mType :: MethodType,
+data MethodChunk = MeC { methcc :: NamedChunk, mType :: MethodType,
                          input :: [VarChunk], output :: [VarChunk],
                          exc :: [ExcType] }
 
@@ -34,7 +34,7 @@ instance NamedIdea MethodChunk where
 -- END METHODCHUNK --
 
 -- don't export this
-cl :: Simple Lens MethodChunk ConceptChunk
+cl :: Simple Lens MethodChunk NamedChunk
 cl f (MeC a b c d e) = fmap (\x -> MeC x b c d e) (f a)
 
 
@@ -58,5 +58,5 @@ checkDiv (b :- e) = checkDiv b || checkDiv e
 checkDiv _        = False
 
 
-toCC :: NamedIdea c => c -> ConceptChunk
+toCC :: NamedIdea c => c -> NamedChunk
 toCC c = CC (c ^. id) (c ^. term)

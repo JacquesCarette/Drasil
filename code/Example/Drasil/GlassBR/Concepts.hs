@@ -2,5 +2,5 @@ module Drasil.GlassBR.Concepts where
 
 import Language.Drasil
 
-glassBRProg :: ConceptChunk
+glassBRProg :: NamedChunk
 glassBRProg = CC "Glass-BR" (S "Glass-BR program")

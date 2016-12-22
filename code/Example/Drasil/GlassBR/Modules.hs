@@ -53,7 +53,7 @@ mod_inputc = makeImpModule modInputConstraints
   (Just mod_behav)
 
 -- output format module
-mod_outputf_desc :: ConceptChunk
+mod_outputf_desc :: NamedChunk
 mod_outputf_desc = CC "output format"
   (S "Outputs the results of the calculations, including the input " :+:
    S "parameters, the demand, the capacity, the probability of breakage, " :+:
@@ -81,7 +81,7 @@ mod_derivedv = makeImpModule modDerivedVals
 -- calculations module
 
 -- TODO: Maybe this could be parameterized.
-mod_calc_desc :: ConceptChunk
+mod_calc_desc :: NamedChunk
 mod_calc_desc = CC "calculations"
   (S "Defines the equations for solving for the probability of glass " :+:
    S "breakage, demand, and capacity using the parameters in the input " :+:

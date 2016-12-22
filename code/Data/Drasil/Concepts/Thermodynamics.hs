@@ -4,9 +4,9 @@ import Language.Drasil
 
 boiling,law_cons_energy, law_conv_cooling, latent_heat, melting, phase_change,
   sens_heat, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor :: DefinedTerm
+  thermal_conductor :: ConceptChunk
 
-heat_trans, heat_cap_spec :: ConceptChunk
+heat_trans, heat_cap_spec :: NamedChunk
 
 boiling = makeDCC "boiling" "Boiling" 
   "Phase change from liquid to vapour"

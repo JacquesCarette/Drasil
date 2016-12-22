@@ -6,7 +6,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Symbol
 
 data DefinedQuantity = 
-  DQ { dt :: DefinedTerm
+  DQ { dt :: ConceptChunk
      , sy :: Symbol }
 
 instance Eq DefinedQuantity where
@@ -20,9 +20,9 @@ instance Concept DefinedQuantity where
 instance SymbolForm DefinedQuantity where
   symbol f (DQ a b) = fmap (\x -> DQ a x) (f b)
 
-dqFromDCC :: DefinedTerm -> Symbol -> DefinedQuantity
+dqFromDCC :: ConceptChunk -> Symbol -> DefinedQuantity
 dqFromDCC c s = DQ c s
 
 -- don't export the dql
-dql :: Simple Lens DefinedQuantity DefinedTerm
+dql :: Simple Lens DefinedQuantity ConceptChunk
 dql f (DQ a b) = fmap (\x -> DQ x b) (f a)

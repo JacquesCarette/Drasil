@@ -31,7 +31,7 @@ import Data.Drasil.Quantities.Math (gradient, norm_vect)
 
 --Redundant import warnings
 
-acronyms :: [ConceptChunk]
+acronyms :: [NamedChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 
@@ -145,7 +145,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing " :+:
            S "organization of the document and the characteristics of " :+:
            S "the intended readers.")]
 
--- ConceptChunks... Sometimes capitalized, sometimes not, sometimes plural, 
+-- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
 -- accomodate all this?
 
@@ -344,7 +344,7 @@ s411_bullet_map_f (DefinedT c) = Flat ((c ^. term) :+: S ": " :+: (c ^. defn))
                  
 -- Structure of this list is same in all examples, probably can be automated.
 
--- Included heat flux and specific heat in ConceptChunks even though they are 
+-- Included heat flux and specific heat in NamedChunks even though they are 
 -- already in SWHSUnits
 
 s4_1_2 = Section (physSyst ^. term) [Con s4_1_2_intro, Con s4_1_2_list, 

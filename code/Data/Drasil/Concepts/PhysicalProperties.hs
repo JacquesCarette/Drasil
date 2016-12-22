@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
 
-gaseous, liquid, solid, ctrOfMass, mass, length :: ConceptChunk
+gaseous, liquid, solid, ctrOfMass, mass, length :: NamedChunk
 
 gaseous = makeCC "Gas" "gaseous state"
 liquid  = makeCC "Liquid" "liquid state"

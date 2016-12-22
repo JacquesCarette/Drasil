@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.Helpers
 import Language.Drasil.Space as S
 import Language.Drasil.Chunk as C
 
-toCode :: ConceptChunk -> [ModuleChunk] -> AbstractCode
+toCode :: NamedChunk -> [ModuleChunk] -> AbstractCode
 toCode prog mcs = AbsCode $ Pack (prog ^. id) (makeModules mcs)
 
 makeModules :: [ModuleChunk] -> [Class]

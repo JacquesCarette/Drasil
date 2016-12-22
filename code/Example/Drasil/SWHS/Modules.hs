@@ -40,7 +40,7 @@ mod_inputv = makeImpModule modInputVerif (S "The format and structure of " :+:
              [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Output Format Module
-mod_outputf_desc :: ConceptChunk
+mod_outputf_desc :: NamedChunk
 mod_outputf_desc = CC "output format" (S "Outputs the results of the " :+:
                    S "calculations, including the input parameters, " :+:
                    S "temperatures, energies, and times when melting starts" :+:
@@ -52,7 +52,7 @@ mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
               (Just mod_behav)
 
 -- Output Verification Module
-mod_outputv_desc :: ConceptChunk
+mod_outputv_desc :: NamedChunk
 mod_outputv_desc = CC "output verification" (S "Verifies that the output " :+:
                    S "energy results follow the law of conservation of " :+:
                    S "energy. Throws a warning if the relative error " :+:
@@ -64,7 +64,7 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
               [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Temperature ODEs Module
-mod_temp_desc :: ConceptChunk
+mod_temp_desc :: NamedChunk
 mod_temp_desc = CC "temperature ODEs" (S "Defines the " :+: 
                 S (ordDiffEq ^. id) :+: S "s using the parameters in the " :+:
                 S "input parameters module.")
@@ -75,7 +75,7 @@ mod_temp = makeImpModule mod_temp_desc (S "The " :+: S (ordDiffEq ^. id) :+:
            swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Energy Equations Module
-mod_ener_desc :: ConceptChunk
+mod_ener_desc :: NamedChunk
 mod_ener_desc = CC "energy equations" (S "Defines the energy equations " :+:
                 S "using the parameters in the input parameters module.")
 
@@ -99,7 +99,7 @@ mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
          S "in the " :+: S (srs ^. id) :+: S ".") Nothing
 
 -- Sequence Data Structure Module
-mod_seq_desc :: ConceptChunk
+mod_seq_desc :: NamedChunk
 mod_seq_desc = CC "sequence data structure" (S "Provides array manipulation" :+:
                S ", including building an array, accessing a specific entry" :+:
                S ", slicing an array, etc.")
@@ -109,7 +109,7 @@ mod_seq = makeImpModule mod_seq_desc (S "The data structure for a sequence " :+:
           S "data type.") matlab [] [] [] (Just mod_sw)
 
 -- ODE Solver Module
-mod_ode_desc :: ConceptChunk
+mod_ode_desc :: NamedChunk
 mod_ode_desc = CC "ODE solver" (S "Provides solvers that take the governing " :+:
           S "equation, initial conditions, and numerical parameters, and " :+:
           S "solve them.")
@@ -120,7 +120,7 @@ mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module
-mod_plot_desc :: ConceptChunk
+mod_plot_desc :: NamedChunk
 mod_plot_desc = CC "plotting" (S "Provides a plot function.")
 
 mod_plot :: ModuleChunk

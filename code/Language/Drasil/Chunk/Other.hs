@@ -2,6 +2,6 @@ module Language.Drasil.Chunk.Other where
 
 import Language.Drasil.Chunk
 
-type AssumpChunk = ConceptChunk
+type AssumpChunk = NamedChunk
 -- unlikely change
-type UCChunk = ConceptChunk
+type UCChunk = NamedChunk

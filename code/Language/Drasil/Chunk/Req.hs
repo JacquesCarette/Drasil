@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Module
 
 -- BEGIN REQCHUNK --
 data ReqChunk = ReqChunk
-  { rCC :: ConceptChunk
+  { rCC :: NamedChunk
   , rRelatedModules :: [ModuleChunk]
   }
 
@@ -19,5 +19,5 @@ instance NamedIdea ReqChunk where
 -- END REQCHUNK --
 
 -- don't export this
-cl :: Simple Lens ReqChunk ConceptChunk
+cl :: Simple Lens ReqChunk NamedChunk
 cl f (ReqChunk a b) = fmap (\x -> ReqChunk x b) (f a)

@@ -81,11 +81,11 @@ dummyVar    = makeUC "tau" "dummy variable for integration over time"
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
 ----Acronyms-----
-acronyms :: [ConceptChunk]
+acronyms :: [NamedChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,oDE,
   physSyst,requirement,srs,sWHS,thModel]
   
-oDE, physSysDescr, sWHS :: ConceptChunk
+oDE, physSysDescr, sWHS :: NamedChunk
 
 oDE           = makeCC "ODE" "Ordinary Differential Equation"
 physSysDescr  = makeCC "PS" "Physical System Description"

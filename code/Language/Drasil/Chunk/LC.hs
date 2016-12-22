@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Module
 
 -- BEGIN LCCHUNK (likely change chunk) --
 data LCChunk = LCChunk
-  { lcCC :: ConceptChunk
+  { lcCC :: NamedChunk
   , lcRelatedModules :: [ModuleChunk]
   }
 
@@ -19,5 +19,5 @@ instance NamedIdea LCChunk where
 -- END LCCHUNK --
 
 -- don't export this
-cl :: Simple Lens LCChunk ConceptChunk
+cl :: Simple Lens LCChunk NamedChunk
 cl f (LCChunk a b) = fmap (\x -> LCChunk x b) (f a)

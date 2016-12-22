@@ -80,9 +80,9 @@ writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 
 
-genCode :: ConceptChunk -> [ModuleChunk] -> IO ()
+genCode :: NamedChunk -> [ModuleChunk] -> IO ()
 genCode cc mcs = prntCode cc (getCodeModules cc mcs)
-  where getCodeModules :: ConceptChunk -> [ModuleChunk] -> [ModuleChunk]
+  where getCodeModules :: NamedChunk -> [ModuleChunk] -> [ModuleChunk]
         getCodeModules _ [] = []
         getCodeModules cc' ((mc@(MoC {imp = Just cc''})):mcs') =
           if cc' == cc'' then mc:getCodeModules cc' mcs' else getCodeModules cc' mcs'
@@ -90,7 +90,7 @@ genCode cc mcs = prntCode cc (getCodeModules cc mcs)
 
 
 -- generate code for all supported languages (will add language selection later)
-prntCode :: ConceptChunk -> [ModuleChunk] -> IO ()
+prntCode :: NamedChunk -> [ModuleChunk] -> IO ()
 prntCode cc mcs = let absCode = toCode cc mcs
                       code l  = makeCode l
                         (Options Nothing Nothing Nothing (Just "Code"))

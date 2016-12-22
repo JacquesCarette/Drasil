@@ -6,10 +6,10 @@ import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-self :: ConceptChunk
+self :: NamedChunk
 self = CC "HGHC" (S "HGHC")
 
-executable :: ConceptChunk
+executable :: NamedChunk
 executable = CC (self ^. id) (self ^. term :+: (S " ") :+: program ^. term)
 
 -- HW Hiding Module
@@ -51,7 +51,7 @@ meth_h_g, meth_h_c :: MethodChunk
 meth_h_g = fromEC h_g
 meth_h_c = fromEC h_c
 
-mod_calc_desc :: ConceptChunk
+mod_calc_desc :: NamedChunk
 mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
 
 mod_calc :: ModuleChunk

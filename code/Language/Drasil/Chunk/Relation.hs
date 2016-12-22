@@ -8,7 +8,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Spec (Sentence(..))
 
 data RelationChunk = RC
-  { cc :: ConceptChunk
+  { cc :: NamedChunk
   , relat :: Relation
   }
 
@@ -20,7 +20,7 @@ instance NamedIdea RelationChunk where
 
 
 -- don't export this
-cp :: Simple Lens RelationChunk ConceptChunk
+cp :: Simple Lens RelationChunk NamedChunk
 cp f (RC a b) = fmap (\x -> RC x b) (f a)
 
 makeRC :: String -> Sentence -> Relation -> RelationChunk

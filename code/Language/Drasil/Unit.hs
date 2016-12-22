@@ -12,8 +12,8 @@ import Prelude hiding (id)
 
 import Control.Lens (Simple, Lens, set, (^.))
 
-import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), NamedIdea(..),
-        Quantity(..), makeCC)
+import Language.Drasil.Chunk (NamedChunk(..), Chunk(..), NamedIdea(..),
+        Concept(..), Quantity(..), makeCC)
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
@@ -44,18 +44,18 @@ from_udefn (USynonym x) = x
 from_udefn (UScale _ s) = s
 from_udefn (UShift _ s) = s
 
-makeDerU :: ConceptChunk -> UDefn -> DerUChunk
+makeDerU :: NamedChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
-unitCon :: String -> ConceptChunk
+unitCon :: String -> NamedChunk
 unitCon s = makeCC s s
 ---------------------------------------------------------
 
 -- for defining fundamental units
-data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
+data FundUnit = UD { _vc :: NamedChunk, _u :: USymb }
 
 -- don't export this
-vc :: Simple Lens FundUnit ConceptChunk
+vc :: Simple Lens FundUnit NamedChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
 instance Chunk FundUnit where

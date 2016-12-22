@@ -14,7 +14,7 @@ module Language.Drasil (
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), ConceptChunk(..), DefinedTerm, makeCC, makeVC
+  , Chunk(..), VarChunk(..), NamedChunk(..), ConceptChunk(..), makeCC, makeVC
   , vcFromCC, nCC, makeDCC, term, SymbolForm(..), defn, cdefn'
   , ConceptDefinition', Quantity(..)
   -- Chunk.Constrained

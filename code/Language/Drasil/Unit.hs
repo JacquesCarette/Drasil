@@ -12,8 +12,8 @@ import Prelude hiding (id)
 
 import Control.Lens (Simple, Lens, set, (^.))
 
-import Language.Drasil.Chunk (NamedChunk(..), Chunk(..), NamedIdea(..),
-        Concept(..), Quantity(..), makeCC)
+import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), NamedIdea(..),
+        Concept(..), Quantity(..), makeDCC)
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
@@ -24,7 +24,7 @@ data UDefn = USynonym USymb      -- to define straight synonyms
            | UScale Double USymb -- scale, i.e. *
            | UShift Double USymb -- shift, i.e. +
 
-class NamedIdea u => Unit u where
+class Concept u => Unit u where
    unit :: Simple Lens u USymb
 
 class UnitEq u where
@@ -44,18 +44,19 @@ from_udefn (USynonym x) = x
 from_udefn (UScale _ s) = s
 from_udefn (UShift _ s) = s
 
-makeDerU :: NamedChunk -> UDefn -> DerUChunk
+makeDerU :: ConceptChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
-unitCon :: String -> NamedChunk
-unitCon s = makeCC s s
+--FIXME: Make this use a meaningful identifier.
+unitCon :: String -> ConceptChunk
+unitCon s = makeDCC s s s
 ---------------------------------------------------------
 
 -- for defining fundamental units
-data FundUnit = UD { _vc :: NamedChunk, _u :: USymb }
+data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
 
 -- don't export this
-vc :: Simple Lens FundUnit NamedChunk
+vc :: Simple Lens FundUnit ConceptChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
 instance Chunk FundUnit where
@@ -64,6 +65,9 @@ instance Chunk FundUnit where
 instance NamedIdea FundUnit where
   term = vc . term
 
+instance Concept FundUnit where
+  defn = vc . defn
+  
 instance Unit FundUnit where
   unit f (UD a b) = fmap (\x -> UD a x) (f b)
 
@@ -74,9 +78,10 @@ data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
-instance Chunk   DerUChunk where id  = duc . id
+instance Chunk     DerUChunk where id  = duc . id
 instance NamedIdea DerUChunk where term = duc . term
-instance Unit    DerUChunk where unit  = duc . unit
+instance Concept   DerUChunk where defn = duc . defn
+instance Unit      DerUChunk where unit  = duc . unit
 
 instance UnitEq DerUChunk where
   uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)
@@ -93,9 +98,10 @@ data UnitDefn where
 ulens :: (forall u. Unit u => Simple Lens u a) -> Simple Lens UnitDefn a
 ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 
-instance Unit    UnitDefn where unit  = ulens unit
-instance Chunk   UnitDefn where id  = ulens id
+instance Chunk     UnitDefn where id   = ulens id
 instance NamedIdea UnitDefn where term = ulens term
+instance Concept   UnitDefn where defn = ulens defn
+instance Unit      UnitDefn where unit = ulens unit
 
 --- These conveniences go here, because we need the class
 (^:) :: Unit u => u -> Integer -> USymb

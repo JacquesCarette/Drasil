@@ -21,16 +21,14 @@ class Chunk c => NamedIdea c where
 class NamedIdea c => SymbolForm c where
   symbol :: Simple Lens c Symbol
   
--- Placeholder class until SymbolForm has been split from Quantity,
--- Then this will need to be renamed.
--- Necessary for any places which already exist where the 
---  "new" Quantity will be needed
+--Quantity will need to be moved to its own module so we can import Unit
+-- FIXME: Trying to figure out how to implement the "May Have" relation
+--        In the class hierarchy. Once I get it for Symbol, I'll move
+--        Quantity to a new module and work on getting Unit operational.
 class NamedIdea c => Quantity c where
   typ      :: Simple Lens c Space
---  get_symb :: SymbolForm s => Maybe s --FIXME: Placeholder, see below 
-                                            -- (also, will not work as is)
---  get_unit :: Unit u => Maybe u --FIXME: Commented out for now until Steven's
-                                      -- work has been merged in.
+--  getSymb  :: SymbolForm s => Maybe (Simple Lens c s)
+--  getUnit  :: Unit u => Maybe (Simple Lens c u)
 
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence

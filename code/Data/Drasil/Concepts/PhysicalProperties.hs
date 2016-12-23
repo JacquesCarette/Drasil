@@ -2,14 +2,14 @@ module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
 
-gaseous, liquid, solid, ctrOfMass, mass, length :: NamedChunk
+gaseous, liquid, solid, ctrOfMass, mass, length :: ConceptChunk
 
-gaseous = makeCC "Gas" "gaseous state"
-liquid  = makeCC "Liquid" "liquid state"
-solid   = makeCC "Solid" "solid state"
+gaseous = dcc "gaseous" "Gas" "gaseous state"
+liquid  = dcc "liquid" "Liquid" "liquid state"
+solid   = dcc "solid" "Solid" "solid state"
 
-ctrOfMass = makeCC "centre of mass" 
+ctrOfMass = dcc "ctrOfMass" "centre of mass" 
   "The mean location of the distribution of mass of the object."
 
-mass = nCC "mass"
-length = nCC "length"
+mass = dcc "mass" "mass" "mass"
+length = dcc "length" "length" "length"

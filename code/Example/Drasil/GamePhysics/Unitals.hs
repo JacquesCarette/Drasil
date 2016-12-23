@@ -11,7 +11,8 @@ import Control.Lens((^.))
 ----- Table of Symbols -----
 
 cpSymbols :: [MUChunk]
-cpSymbols = (map Has cpUnits) ++ (map HasNot cpUnitless)
+cpSymbols = (map Has cpUnits) ++ [HasNot QP.restitutionCoef] ++ 
+  (map HasNot cpUnitless)
 
 -- Chunks with units --
 accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
@@ -50,7 +51,7 @@ vel         = ucFromVC QP.velocity velU
 
 -- Chunks without units --
 cpUnitless :: [VarChunk]
-cpUnitless = [QP.restitutionCoef, numParticles]
+cpUnitless = [numParticles]
 
 numParticles :: VarChunk
 numParticles = makeVC "n" "number of particles in a rigid body" lN

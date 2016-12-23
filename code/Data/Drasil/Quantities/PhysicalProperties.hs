@@ -3,8 +3,9 @@ module Data.Drasil.Quantities.PhysicalProperties where
 import Language.Drasil
 import Data.Drasil.Concepts.PhysicalProperties as CPP
 
-mass :: VarChunk
-mass = vcFromCC CPP.mass lM
+--FIXME: Space hacks
+mass :: ConVar
+mass = cv CPP.mass lM Rational
 
-length :: VarChunk
-length = vcFromCC CPP.length cL
+length :: ConVar
+length = cv CPP.length cL Rational

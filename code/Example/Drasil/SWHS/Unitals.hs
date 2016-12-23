@@ -14,7 +14,8 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 import Control.Lens ((^.))
 
 swhsSymbols :: [MUChunk]
-swhsSymbols = (map Has swhsUnits) ++ [HasNot norm_vect] ++ (map HasNot swhsUnitless)
+swhsSymbols = (map Has swhsUnits) ++ [HasNot norm_vect] ++ [HasNot surface] ++ 
+  (map HasNot swhsUnitless)
 
 -- Symbols with Units --
 
@@ -148,7 +149,7 @@ tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Greek Tau_L) cW)
 swhsUnitless :: [VarChunk]
 -- norm_vect used to go here, but due to type change it is no longer included
 -- in this list.
-swhsUnitless = [surface, eta, melt_frac]
+swhsUnitless = [eta, melt_frac]
 
 eta, melt_frac :: VarChunk
 

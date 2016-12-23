@@ -9,6 +9,7 @@ import Prelude hiding (id)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Math
+import Data.Drasil.Concepts.Math (ode) 
 
 import Control.Lens ((^.))
 
@@ -81,15 +82,12 @@ dummyVar    = makeUC "tau" "dummy variable for integration over time"
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
 ----Acronyms-----
-acronyms :: [NamedChunk]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,oDE,
+acronyms :: [ConceptChunk]
+acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   physSyst,requirement,srs,sWHS,thModel]
   
-oDE, physSysDescr, sWHS :: NamedChunk
-
-oDE           = makeCC "ODE" "Ordinary Differential Equation"
-physSysDescr  = makeCC "PS" "Physical System Description"
-sWHS          = makeCC "SWHS" "Solar Water Heating System"
+sWHS :: ConceptChunk
+sWHS = dcc "sWHS" "SWHS" "Solar Water Heating System"
 
 ----EqChunks----
 --Theoretical models--

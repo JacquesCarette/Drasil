@@ -6,24 +6,24 @@ import Data.Drasil.Concepts.Physics as CP
 surface, acceleration, angularAccel, restitutionCoef, force, momentOfInertia,
   impulseS, impulseV, gravitationalAccel, gravitationalConst, displacement,
   angularV, position, distance, angularDisplacement,time, torque, 
-  velocity :: VarChunk
+  velocity :: ConVar
 
-surface = vcFromCC CP.surface cS --Maybe should be physical property?
-restitutionCoef = vcFromCC CP.restitutionCoef (sub cC cR)
-acceleration = vcFromCC CP.acceleration (vec lA)
-angularAccel = vcFromCC CP.angularAccel (Greek Alpha_L)
-angularV = vcFromCC CP.angularV (Greek Omega_L)
-force = vcFromCC CP.force (vec cF)
-momentOfInertia = vcFromCC CP.momentOfInertia (vec cI)
-impulseV = vcFromCC CP.impulseV (vec cJ)
-impulseS = vcFromCC CP.impulseS lJ
-position = vcFromCC CP.position (vec lP)
-distance = vcFromCC CP.distance lR
-displacement = vcFromCC CP.displacement (vec lR)
-time = vcFromCC CP.time lT
-torque = vcFromCC CP.torque (Greek Tau_L)
-angularDisplacement = vcFromCC CP.angularDisplacement (Greek Theta_L)
-velocity = vcFromCC CP.velocity (vec lV)
+surface = cvR CP.surface cS --Maybe should be physical property?
+restitutionCoef = cvR CP.restitutionCoef (sub cC cR)
+acceleration = cvR CP.acceleration (vec lA)
+angularAccel = cvR CP.angularAccel (Greek Alpha_L)
+angularV = cvR CP.angularV (Greek Omega_L)
+force = cvR CP.force (vec cF)
+momentOfInertia = cvR CP.momentOfInertia (vec cI)
+impulseV = cvR CP.impulseV (vec cJ)
+impulseS = cvR CP.impulseS lJ
+position = cvR CP.position (vec lP)
+distance = cvR CP.distance lR
+displacement = cvR CP.displacement (vec lR)
+time = cvR CP.time lT
+torque = cvR CP.torque (Greek Tau_L)
+angularDisplacement = cvR CP.angularDisplacement (Greek Theta_L)
+velocity = cvR CP.velocity (vec lV)
 
-gravitationalAccel = vcFromCC CP.gravitationalAccel lG
-gravitationalConst = vcFromCC CP.gravitationalConst cG
+gravitationalAccel = cvR CP.gravitationalAccel lG
+gravitationalConst = cvR CP.gravitationalConst cG

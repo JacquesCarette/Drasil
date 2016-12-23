@@ -10,15 +10,16 @@ import Control.Lens ((^.))
 -- FIXME: Pull this out.
 
 degree :: FundUnit
-degree = UD (CC "Degree" (S "angle")) (UName (Special Circle))
+degree = UD (dcc "degree" "Degree" "angle") (UName (Special Circle))
 
 --unitless--
 
 -- FIXME: Remove this.
 unitless :: FundUnit
-unitless = UD (CC "Unitless" (S "unitless")) (UName $ Atomic "unitless")
+unitless = UD (dcc "unitless" "Unitless" "unitless") (UName $ Atomic "unitless")
 
 --N/m^3--
 specific_weight :: DerUChunk
-specific_weight = makeDerU (CC "specific weight"
-  (S "weight per unit volume")) (USynonym (UDiv (newton ^. unit) (UPow (metre ^. unit) (3))))
+specific_weight = makeDerU (dcc "specific_weight" "specific weight" 
+  "weight per unit volume") $
+  USynonym (UDiv (newton ^. unit) (UPow (metre ^. unit) (3)))

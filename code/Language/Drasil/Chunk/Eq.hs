@@ -9,6 +9,7 @@ import Language.Drasil.Chunk.MUChunk
 import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Space
 
 -- BEGIN EQCHUNK --
 data QDefinition = EC 
@@ -38,11 +39,13 @@ ul :: Simple Lens QDefinition MUChunk
 ul f (EC a b) = fmap (\x -> EC x b) (f a)
   
 -- useful: to be used for equations with units
+--FIXME: Space hack
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
-  EC (Has $ ucFromVC (vcFromCC (ccWithDescrSent nm desc) symb) chunk) eqn
+  EC (Has $ ucFromVC (cv (dccWDS nm nm desc) symb Rational) chunk) eqn
 
 -- and without
+--FIXME: Space hack
 fromEqn' :: String -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
-  EC (HasNot $ vcFromCC (ccWithDescrSent nm desc) symb) eqn
+  EC (HasNot $ cv (dccWDS nm nm desc) symb Rational) eqn

@@ -89,7 +89,7 @@ gTF         = makeVC "GTF" "Glass Type Factor" (Atomic "GTF")
 
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
-acronyms :: [NamedChunk]
+acronyms :: [ConceptChunk]
 acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
   lGlass,lResistance,lShareFac,notApp,nonFactorL,physSyst,requirement,
@@ -97,22 +97,22 @@ acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
   
 gLassBR, annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
   iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,nonFactorL,
-  eqTNT :: NamedChunk
-gLassBR       = makeCC "GlassBR" "Glass-BR"
-annealedGlass = makeCC "AN" "Annealed Glass"
-aspectR       = makeCC "AR" "Aspect Ratio"
-aspectRMax    = makeCC "ARmax" "Maximum Aspect Ratio"
-fullyTGlass   = makeCC "FT" "Fully Tempered Glass"
-glassTypeFac  = makeCC "GTF" "Glass Type Factor"
-heatSGlass    = makeCC "HS" "Heat Strengthened Glass"
-iGlass        = makeCC "IG" "Insulating Glass"
-lDurFac       = makeCC "LDF" "Load Duration Factor"
-lGlass        = makeCC "LG" "Laminated Glass"
-lResistance   = makeCC "LR" "Load Resistance"
-lShareFac     = makeCC "LSF" "Load Share Factor"
-notApp        = makeCC "N/A" "Not Applicable"
-nonFactorL    = makeCC "NFL" "Non-Factored Load"
-eqTNT         = makeCC "TNT" "TNT (Trinitrotoluene) Equivalent Factor"
+  eqTNT :: ConceptChunk
+gLassBR       = dcc "gLassBR" "GlassBR" "Glass-BR"
+annealedGlass = dcc "annealedGlass" "AN" "Annealed Glass"
+aspectR       = dcc "aspectR" "AR" "Aspect Ratio"
+aspectRMax    = dcc "aspectRMax" "ARmax" "Maximum Aspect Ratio"
+fullyTGlass   = dcc "fullyTGlass" "FT" "Fully Tempered Glass"
+glassTypeFac  = dcc "glassTypeFac" "GTF" "Glass Type Factor"
+heatSGlass    = dcc "heatSGlass" "HS" "Heat Strengthened Glass"
+iGlass        = dcc "iGlass" "IG" "Insulating Glass"
+lDurFac       = dcc "lDurFac" "LDF" "Load Duration Factor"
+lGlass        = dcc "lGlass" "LG" "Laminated Glass"
+lResistance   = dcc "lResistance" "LR" "Load Resistance"
+lShareFac     = dcc "lShareFac" "LSF" "Load Share Factor"
+notApp        = dcc "notApp" "N/A" "Not Applicable"
+nonFactorL    = dcc "nonFactorL" "NFL" "Non-Factored Load"
+eqTNT         = dcc "eqTNT" "TNT" "TNT (Trinitrotoluene) Equivalent Factor"
 
 
 ----Terminology---- 

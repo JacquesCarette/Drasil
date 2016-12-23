@@ -9,16 +9,16 @@ import Control.Lens ((^.))
 
 ----- Acronyms -----
 
-centreMass, twoD :: NamedChunk
+centreMass, twoD :: ConceptChunk
 
 -- FIXME: Create actual acronyms instead of using CCs.
 
-cpAcronyms :: [NamedChunk]
+cpAcronyms :: [ConceptChunk]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     inModel, likelyChg, ode, requirement, srs, thModel, twoD]
 
-centreMass    = makeCC "CM" "Centre of Mass"
-twoD          = makeCC "2D" "Two-Dimensional"
+centreMass    = dcc "centreMass" "CM" "Centre of Mass"
+twoD          = dcc "twoD" "2D" "Two-Dimensional"
 
 chipmunk, rigidBodies, vels, angularVels :: NamedChunk
 

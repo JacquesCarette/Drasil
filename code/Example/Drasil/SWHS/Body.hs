@@ -31,7 +31,7 @@ import Data.Drasil.Quantities.Math (gradient, norm_vect)
 
 --Redundant import warnings
 
-acronyms :: [NamedChunk]
+acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 

@@ -4,15 +4,13 @@ import Language.Drasil
 
 boiling,law_cons_energy, law_conv_cooling, latent_heat, melting, phase_change,
   sens_heat, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor :: ConceptChunk
-
-heat_trans, heat_cap_spec :: NamedChunk
+  thermal_conductor, heat_cap_spec, heat_trans :: ConceptChunk
 
 boiling = makeDCC "boiling" "Boiling" 
   "Phase change from liquid to vapour"
-heat_trans = makeCC "Heat transfer" 
+heat_trans = dcc "heat_trans" "Heat transfer" 
   "heat transfer"
-heat_cap_spec = makeCC "C" "specific heat capacity"
+heat_cap_spec = dcc "heat_cap_spec" "C" "specific heat capacity"
 latent_heat = makeDCC "latent_heat" "Latent heat" 
   "Latent heating"
 law_cons_energy = makeDCC "law_cons_energy" "Law of conservation of energy" 

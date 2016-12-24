@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Helpers (
 import Control.Monad (filterM)
 import Data.Char (toUpper)
 import Data.String.Utils (replace)
-import Data.List (elem,nub,intersperse,sort)
+import Data.List (nub,intersperse,sort)
 import Text.PrettyPrint.HughesPJ
 
 renderFunc :: (a -> Doc) -> a -> String

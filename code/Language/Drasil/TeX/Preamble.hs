@@ -1,7 +1,5 @@
 module Language.Drasil.TeX.Preamble(genPreamble) where
 
-import Text.PrettyPrint (text)
-import Control.Applicative (pure)
 import Data.List (nub)
 
 import Language.Drasil.Config (hyperSettings, fontSize)

@@ -23,6 +23,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 data Configuration = Config {genLang :: String, exImp :: (Maybe String), opts :: Options}
     deriving Show
 
+cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel,
+  luaLabel :: String
 cSharpLabel = "C#"
 cppLabel = "C++"
 goolLabel = "GOOL"
@@ -53,10 +55,14 @@ configDef = emptyDef
 configLexer :: P.TokenParser st
 configLexer = P.makeTokenParser configDef
 
-commaSep1   = P.commaSep1 configLexer
+identifier :: Parser String
 identifier  = P.identifier configLexer
+
+reserved, reservedOp :: String -> Parser ()
 reserved    = P.reserved configLexer
 reservedOp  = P.reservedOp configLexer
+
+whiteSpace :: Parser ()
 whiteSpace  = P.whiteSpace configLexer
 
 -----------------------

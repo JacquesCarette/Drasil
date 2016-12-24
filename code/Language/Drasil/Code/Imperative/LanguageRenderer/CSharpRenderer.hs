@@ -7,15 +7,13 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
 import Language.Drasil.Code.Imperative.LanguageRenderer
-import Language.Drasil.Code.Imperative.Helpers (angles,blank,oneTab,oneTabbed,
-                                                vimap,vibmap)
+import Language.Drasil.Code.Imperative.Helpers (oneTab, vibmap)
 
-import Data.List (intersperse)
 import Prelude hiding (print)
 import Text.PrettyPrint.HughesPJ
 
 csharpConfig :: Options -> Config -> Config
-csharpConfig options c = 
+csharpConfig _ c = 
     Config {
         renderCode = renderCode' c,
         
@@ -53,7 +51,9 @@ csharpConfig options c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDocD c, objAccessDoc = objAccessDocD c,
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDocD c,
-        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c
+        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
+
+        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)"
     }
 
 -- short names, packaged up above (and used below)

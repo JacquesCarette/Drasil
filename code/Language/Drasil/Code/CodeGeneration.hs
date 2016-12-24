@@ -51,9 +51,6 @@ makeCode l options lbls code  =
 listLabels :: [String] -> String
 listLabels ns = intercalate ", " (init ns) ++ ", or " ++ last ns
 
-quoteString :: String -> String
-quoteString s = "\"" ++ s ++ "\""
-
 ------------------
 -- IO Functions --
 ------------------

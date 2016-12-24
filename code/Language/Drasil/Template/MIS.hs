@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Template.Helpers
 
-import Data.List (intersperse, concat)
+import Data.List (intersperse)
 import Control.Lens ((^.))
 
 makeMIS :: [ModuleChunk] -> [Section]

@@ -5,12 +5,12 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.AST 
+  hiding (comment,bool,int,float,char,tryBody,catchBody,initState,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
-import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,
+import Language.Drasil.Code.Imperative.Helpers (blank,
                                                 oneTab,oneTabbed,vmap,vibmap)
 
-import Data.List (intersperse)
 import Prelude hiding (break,print,return)
 import Text.PrettyPrint.HughesPJ hiding (Str)
 
@@ -59,7 +59,9 @@ cppConfig options c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDocD c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c
+        methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
+
+        getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
 -- for convenience
@@ -144,7 +146,7 @@ funcDoc' :: Config -> Function -> Doc
 funcDoc' c (Func n vs) = ptrAccess <> funcAppDoc c n vs
 funcDoc' c (Get n) = ptrAccess <> funcAppDoc c (getterName n) []
 funcDoc' c (Set n v) = ptrAccess <> funcAppDoc c (setterName n) [v]
-funcDoc' _ (IndexOf var) = error "IndexOf function must be rendered at the ObjAccess level in C++"
+funcDoc' _ (IndexOf _) = error "IndexOf function must be rendered at the ObjAccess level in C++"
 funcDoc' c ListSize = dot <> funcAppDoc c "size" []
 funcDoc' c (ListAccess i) = dot <> funcAppDoc c "at" [i]
 funcDoc' c (ListAdd _ v) = dot <> funcAppDoc c "push_back" [v]
@@ -192,7 +194,7 @@ classDoc' c ft@(Header) _ (Class n p _ vs fs) =
         rbrace <> endStatement c]
 classDoc' c ft@(Source) _ (Class n _ _ vs fs) = methodListDoc c ft n $ fs ++ [destructor c n vs]
 classDoc' _ (Header) _ (MainClass _ _ _) = empty
-classDoc' c ft m (MainClass _ vs fs) = vcat [
+classDoc' c ft _ (MainClass _ vs fs) = vcat [
     stateListDoc c vs,
     stateBlank,
     methodListDoc c ft "" fs]
@@ -200,8 +202,8 @@ classDoc' c ft m (MainClass _ vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v (IndexOf vr) = funcAppDoc c "find" [v $. IterBegin, v $. IterEnd, vr] <+> text "-" <+> valueDoc c (v $. IterBegin)
-objAccessDoc' c v f@(Floor) = funcAppDoc c "floor" [v]
-objAccessDoc' c v f@(Ceiling) = funcAppDoc c "ceil" [v]
+objAccessDoc' c v   (Floor) = funcAppDoc c "floor" [v]
+objAccessDoc' c v   (Ceiling) = funcAppDoc c "ceil" [v]
 objAccessDoc' c v f = objAccessDocD c v f
 
 paramDoc' :: Config -> Parameter -> Doc
@@ -209,7 +211,7 @@ paramDoc' c (StateParam n t@(List _ _)) = stateType c t Dec <+> text "&" <> text
 paramDoc' c p = paramDocD c p
 
 printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' c newLn _ v@(ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
+printDoc' _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
 printDoc' c newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printStr "[",
     statementDoc c NoLoop $ ValState $ FuncApp "copy" [v $. IterBegin, v $. IterEnd, FuncApp iter [Var "std::cout", litString ","]],
@@ -233,7 +235,7 @@ methodListDoc' c f@(Header) m fs = vmap (methodDoc c f m) fs
 methodListDoc' c f m fs = methodListDocD c f m fs
 
 valueDoc' :: Config -> Value -> Doc
-valueDoc' c (EnumElement en e) = text e
+valueDoc' _ (EnumElement _ e) = text e
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
@@ -246,7 +248,7 @@ isDtor ('~':_) = True
 isDtor _ = False
 
 destructor :: Config -> Label -> [StateVar] -> Method
-destructor c n vs =
+destructor _ n vs =
     let checkDelPriority s@(StateVar _ _ _ _ del) | del < alwaysDel   = []
                                                   | otherwise         = [s]
         deleteVars = concatMap checkDelPriority vs

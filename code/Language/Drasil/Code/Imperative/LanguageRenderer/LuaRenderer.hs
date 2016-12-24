@@ -5,16 +5,16 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.AST 
+  hiding (comment,bool,int,float,char,forBody,tryBody,catchBody)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,vmap,vibmap)
 
-import Data.List (intersperse)
 import Prelude hiding (break,print,return)
 import Text.PrettyPrint.HughesPJ
 
 luaConfig :: Options -> Config -> Config
-luaConfig options c = 
+luaConfig _ c = 
     Config {
         renderCode = renderCode' c,
         
@@ -52,7 +52,9 @@ luaConfig options c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = \_ -> empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c
+        methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
+
+        getEnv = \_ -> error "getEnv not implemented in Lua (yet)"
     }
 
 -- convenience
@@ -71,7 +73,7 @@ include' :: Label -> Doc
 include' n = incl <+> quotes (text n)
 
 luastateType :: Config -> StateType -> DecDef -> Doc
-luastateType _ (List _ t) _  = braces (empty)
+luastateType _ (List _ _) _  = braces (empty)
 luastateType _ (Base _) _    = empty
 luastateType _ (Type name) _ = text name <> colon <> text initName
 luastateType c s d           = stateTypeD c s d
@@ -154,9 +156,9 @@ conditionalDoc' c cnd = conditionalDocD' c cnd
 
 declarationDoc' :: Config -> Declaration -> Doc
 declarationDoc' _ (VarDec _ _) = empty
-declarationDoc' c (ListDec lt n t s) = text n <+> equals <+> stateType c (List lt t) Dec
-declarationDoc' c (ListDecValues _ n t vs) = text n <+> equals <+> braces (callFuncParamList c vs)
-declarationDoc' c (VarDecDef n t v) = text n <+> equals <+> valueDoc c v
+declarationDoc' c (ListDec lt n t _) = text n <+> equals <+> stateType c (List lt t) Dec
+declarationDoc' c (ListDecValues _ n _ vs) = text n <+> equals <+> braces (callFuncParamList c vs)
+declarationDoc' c (VarDecDef n _ v) = text n <+> equals <+> valueDoc c v
 declarationDoc' c (ConstDecDef n l) = declarationDoc c $ VarDecDef n (Base $ typeOfLit l) (Lit l)
 declarationDoc' c d = declarationDocD c d
 
@@ -174,7 +176,7 @@ funcDoc' _ (Cast _) = empty
 funcDoc' c (Func n vs) = colon <> funcAppDoc c n vs
 funcDoc' c (Get n) = colon <> funcAppDoc c (getterName n) []
 funcDoc' c (Set n v) = colon <> funcAppDoc c (setterName n) [v]
-funcDoc' _ (IndexOf var) = text indexOf
+funcDoc' _ (IndexOf _) = text indexOf
 funcDoc' _ (ListSize) = text "#"
 funcDoc' c (ListAccess i) = brackets $ valueDoc c $ listIndex i
 funcDoc' _ (ListAdd _ _) = text "table" <> dot <> text "insert"
@@ -191,7 +193,7 @@ iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (Binar
         oneTab $ bodyDoc c b,
         blockEnd c]
 iterationDoc' _ (For _ _ _ _) = error "Lua: Generic form of For statement not yet implemented. Use an integer index and a Less conditional, or replace with a ForEach."
-iterationDoc' c (ForEach i listVar@(ListVar _ t) b) = vcat [
+iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = vcat [
     iterForEachLabel c <+> text (keyLabel i) <> comma <> text i <+> iterInLabel c <+> funcAppDoc c "ipairs" [listVar] <+> blockStart c,
     oneTab $ bodyDoc c b,
     blockEnd c]
@@ -215,8 +217,8 @@ objAccessDoc' c v (Cast _) = valueDoc c v
 objAccessDoc' c v f@(ListSize) = funcDoc c f <> parens (valueDoc c v)
 objAccessDoc' c v f@(ListAdd i e) = funcDoc c f <> parens (callFuncParamList c [v, listIndex i, e])       --add 1 to account for Lua's 1-indexed lists
 objAccessDoc' c v f@(IndexOf var) = funcDoc c f <> parens (callFuncParamList c [v, var])
-objAccessDoc' c v f@(Floor) = funcAppDoc c "math.floor" [v]
-objAccessDoc' c v f@(Ceiling) = funcAppDoc c "math.ceil" [v]
+objAccessDoc' c v   (Floor) = funcAppDoc c "math.floor" [v]
+objAccessDoc' c v   (Ceiling) = funcAppDoc c "math.ceil" [v]
 objAccessDoc' c v f = objAccessDocD c v f
           
 objVarDoc' :: Config -> Value -> Value -> Doc
@@ -268,5 +270,5 @@ listIndex :: Value -> Value     --AbstractCode lists are 0-indexed, but Lua's ar
 listIndex i = i #+ litInt 1
 
 transDecLine :: Config -> FileType -> Label -> Method -> Doc
-transDecLine c _ m (Method n _ t ps _) = text "function" <+> text m <> modColon <> text n <> parens (paramListDoc c ps)
+transDecLine c _ m (Method n _ _ ps _) = text "function" <+> text m <> modColon <> text n <> parens (paramListDoc c ps)
     where modColon = if null m then empty else colon

@@ -6,10 +6,8 @@ import Control.Lens hiding (makeFields, assign)
 import qualified Language.Drasil.Expr as E
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.MUChunk
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
-import Language.Drasil.Code.Code
 import Language.Drasil.Code.Imperative.AST as A
 import Language.Drasil.Code.Imperative.Helpers
 import Language.Drasil.Space as S
@@ -40,7 +38,7 @@ makeMethod meth@(MeC { mType = MCalc eq }) =
   pubMethod (A.typ $ makeType $ (uc eq) ^. C.typ) ("calc_" ++ ((methcc meth) ^. id))
   (map (\vc -> param (vc ^. id) (makeType (vc ^. C.typ))) (vars (equat eq)))
   (oneLiner $ return $ makeExpr (equat eq))
-makeMethod meth@(MeC { mType = MInput IOStd vc}) =
+makeMethod      (MeC { mType = MInput IOStd vc}) =
   pubMethod (A.typ $ makeType $ vc ^. C.typ) ("in_" ++ (vc ^. id)) []
   [ Block [ varDec (vc ^. id) (makeType $ vc ^. C.typ),
             assign (Var (vc ^. id)) (Input)

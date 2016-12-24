@@ -1,7 +1,6 @@
 module Language.Drasil.Code.CodeTest where
 
 import Prelude hiding (return)
-import Language.Drasil.Code.Code
 import Language.Drasil.Code.Imperative.AST
 import Language.Drasil.Code.Imperative.LanguageRenderer(Options(..))
 

@@ -9,11 +9,8 @@ module Language.Drasil.Code.Imperative.Helpers (
 import Control.Monad (filterM)
 import Data.Char (toUpper)
 import Data.String.Utils (replace)
-import Data.List (nub,intersperse,sort)
+import Data.List (nub,intersperse)
 import Text.PrettyPrint.HughesPJ
-
-renderFunc :: (a -> Doc) -> a -> String
-renderFunc f = render . f
 
 blank :: Doc
 blank = text ""
@@ -45,10 +42,8 @@ doubleQuotedText = doubleQuotes . text
 doubleQuoted :: (a -> String) -> a -> Doc
 doubleQuoted labeller = doubleQuotedText . labeller
 
-parensLength :: [a] -> Doc
-parensLength = parens . int . length
-
 capitalize :: String -> String
+capitalize [] = error "capitalize called on an emptry String"
 capitalize (c:cs) = (toUpper c):cs
 
 containsAll :: Eq a => [a] -> [a] -> Bool

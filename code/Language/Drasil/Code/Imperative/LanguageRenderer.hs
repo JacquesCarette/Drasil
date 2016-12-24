@@ -24,13 +24,15 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char,string)
+import Language.Drasil.Code.Imperative.AST 
+  hiding (comment,bool,int,float,char,string,cases,tryBody,catchBody,guard,
+          update,strats)
 import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,oneTab,
                             oneTabbed,himap,vibcat,vmap,vibmap)
 
 import qualified Data.Map as Map (fromList,lookup)
 import Data.List (find)
-import Prelude hiding (break,print,return)
+import Prelude hiding (break,print,return,last,mod)
 import Text.PrettyPrint.HughesPJ
 
 
@@ -302,7 +304,7 @@ funcDocD c (ListAdd i v) = dot <> funcAppDoc c "Insert" [i, v]
 funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
-funcDocD c (ListPopulate _ _) = empty
+funcDocD _ (ListPopulate _ _) = empty
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
 
@@ -334,7 +336,7 @@ litDocD (LitStr v) = doubleQuotedText v
 
 clsDecDocD :: Config -> Class -> Doc
 clsDecDocD c (Class n _ _ _ _) = (clsDec c) <+> text n <> endStatement c
-clsDecDocD c (Enum _ _ _) = empty
+clsDecDocD _ (Enum _ _ _) = empty
 clsDecDocD c m@(MainClass _ _ _) = clsDecDoc c $ convertToClass m
 
 clsDecListDocD :: Config -> [Class] -> Doc
@@ -364,8 +366,8 @@ objAccessDocD :: Config -> Value -> Function -> Doc
 objAccessDocD c (Self) (Func n vs) = funcAppDoc c n vs
 objAccessDocD _ _ (ListPopulate _ _) = empty
 objAccessDocD c v f@(Cast _) = funcDoc c f <> parens (valueDoc c v)
-objAccessDocD c v f@(Floor) = funcAppDoc c "Math.Floor" [v]
-objAccessDocD c v f@(Ceiling) = funcAppDoc c "Math.Ceiling" [v]
+objAccessDocD c v   (Floor) = funcAppDoc c "Math.Floor" [v]
+objAccessDocD c v   (Ceiling) = funcAppDoc c "Math.Ceiling" [v]
 objAccessDocD c v f = valueDoc c v <> funcDoc c f
 
 objVarDocD :: Config -> Value -> Value -> Doc
@@ -382,7 +384,7 @@ paramListDocD c ps = himap (text ", ") (paramDoc c) ps
 patternDocD :: Config -> Pattern -> Doc
 patternDocD c (State (InitState n s)) = declarationDoc c $ VarDecDef n (Base String) (litString s)
 patternDocD c (State (ChangeState n s)) = assignDoc c $ Assign (Var n) $ litString s
-patternDocD c (State (CheckState n [] _)) = error $ "FSM '" ++ n ++ "': CheckState called with empty case list."
+patternDocD _ (State (CheckState n [] _)) = error $ "FSM '" ++ n ++ "': CheckState called with empty case list."
 patternDocD c (State (CheckState n cs defBody)) = conditionalDoc c $ Switch (Var n) cases defBody
     where cases = map (\(s, b) -> (LitStr s, b)) cs
 patternDocD c (Strategy (RunStrategy n (Strats strats r) v)) =

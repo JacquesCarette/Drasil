@@ -27,7 +27,7 @@ class NamedIdea c => SymbolForm c where
 --        Quantity to a new module and work on getting Unit operational.
 class NamedIdea c => Quantity c where
   typ      :: Simple Lens c Space
---  getSymb  :: SymbolForm s => Maybe (Simple Lens c s)
+  getSymb  :: SymbolForm s => c -> Maybe s
 --  getUnit  :: Unit u => Maybe (Simple Lens c u)
 
 class NamedIdea c => Concept c where

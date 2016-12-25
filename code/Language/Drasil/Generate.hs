@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 module Language.Drasil.Generate (gen, genCode) where
 
 import System.IO
@@ -20,7 +19,6 @@ import Language.Drasil.Code.Imperative.LanguageRenderer
   hiding (body)
 import Language.Drasil.Code.Imperative.Helpers
 import Control.Lens
-
 
 -- temporary
 import Language.Drasil.Code.CodeGeneration
@@ -65,7 +63,6 @@ prntDoc dt body = case dt of
                 getExt HTML = ".html"
                 getExt _    = error "we can only write TeX/HTML (for now)"
 
-
 prntMake :: DocType -> IO ()
 prntMake dt =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
@@ -77,39 +74,37 @@ writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
-
-
 genCode :: NamedChunk -> [ModuleChunk] -> IO ()
 genCode cc mcs = prntCode cc (getCodeModules cc mcs)
   where getCodeModules :: NamedChunk -> [ModuleChunk] -> [ModuleChunk]
         getCodeModules _ [] = []
         getCodeModules cc' ((mc@(MoC {imp = Just cc''})):mcs') =
-          if cc' == cc'' then mc:getCodeModules cc' mcs' else getCodeModules cc' mcs'
+          if cc' == cc'' then mc:getCodeModules cc' mcs' 
+                         else getCodeModules cc' mcs'
         getCodeModules cc' (_:mcs') = getCodeModules cc' mcs'
-
 
 -- generate code for all supported languages (will add language selection later)
 prntCode :: NamedChunk -> [ModuleChunk] -> IO ()
-prntCode cc mcs = let absCode = toCode cc mcs
-                      code l  = makeCode l
-                        (Options Nothing Nothing Nothing (Just "Code"))
-                        (map (\mc ->
-                          makeClassNameValid $ (modcc mc) ^. id) mcs)
-                        absCode
-                      writeCode c lang = do
-                        let newDir = c ++ "/" ++ lang
-                        createDirectoryIfMissing False newDir
-                        setCurrentDirectory newDir
-                        createCodeFiles $ code lang
+prntCode cc mcs = 
+  let absCode = toCode cc mcs
+      code l  = makeCode l
+        (Options Nothing Nothing Nothing (Just "Code"))
+        (map (\mc -> makeClassNameValid $ (modcc mc) ^. id) mcs)
+        absCode
+      writeCode c lang = do
+        let newDir = c ++ "/" ++ lang
+        createDirectoryIfMissing False newDir
+        setCurrentDirectory newDir
+        createCodeFiles $ code lang
 
-                  in  do
-                      workingDir <- getCurrentDirectory
-                      let writeCode' = writeCode workingDir
-                      writeCode' cppLabel
-                      writeCode' javaLabel
-                      writeCode' luaLabel
-                      writeCode' cSharpLabel
-                      writeCode' goolLabel
-                      writeCode' objectiveCLabel
-                      writeCode' pythonLabel
-                      setCurrentDirectory workingDir
+  in  do
+      workingDir <- getCurrentDirectory
+      let writeCode' = writeCode workingDir
+      writeCode' cppLabel
+      writeCode' javaLabel
+      writeCode' luaLabel
+      writeCode' cSharpLabel
+      writeCode' goolLabel
+      writeCode' objectiveCLabel
+      writeCode' pythonLabel
+      setCurrentDirectory workingDir

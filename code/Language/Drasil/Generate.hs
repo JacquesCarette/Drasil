@@ -17,13 +17,12 @@ import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk
 import Language.Drasil.Code.Imperative.LanguageRenderer
+  hiding (body)
 import Language.Drasil.Code.Imperative.Helpers
 import Control.Lens
 
 
 -- temporary
-import Language.Drasil.Code.Code
-import Language.Drasil.Code.CodeTest
 import Language.Drasil.Code.CodeGeneration
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 
@@ -86,7 +85,7 @@ genCode cc mcs = prntCode cc (getCodeModules cc mcs)
         getCodeModules _ [] = []
         getCodeModules cc' ((mc@(MoC {imp = Just cc''})):mcs') =
           if cc' == cc'' then mc:getCodeModules cc' mcs' else getCodeModules cc' mcs'
-        getCodeModules cc' (mc:mcs') = getCodeModules cc' mcs'
+        getCodeModules cc' (_:mcs') = getCodeModules cc' mcs'
 
 
 -- generate code for all supported languages (will add language selection later)

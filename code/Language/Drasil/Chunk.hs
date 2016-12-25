@@ -1,4 +1,4 @@
-{-# OPTIONS -Wall #-}
+{-# Language GADTs #-}
 module Language.Drasil.Chunk where
 
 import Control.Lens
@@ -20,14 +20,17 @@ class Chunk c => NamedIdea c where
 -- merged into the main branch.
 class NamedIdea c => SymbolForm c where
   symbol :: Simple Lens c Symbol
-  
+ 
+-- capture an SF dictionary
+data SF where SF :: SymbolForm c => c -> SF
+
 --Quantity will need to be moved to its own module so we can import Unit
 -- FIXME: Trying to figure out how to implement the "May Have" relation
 --        In the class hierarchy. Once I get it for Symbol, I'll move
 --        Quantity to a new module and work on getting Unit operational.
 class NamedIdea c => Quantity c where
   typ      :: Simple Lens c Space
-  getSymb  :: SymbolForm s => c -> Maybe s
+  getSymb  :: c -> Maybe SF
 --  getUnit  :: Unit u => Maybe (Simple Lens c u)
 
 class NamedIdea c => Concept c where
@@ -80,6 +83,7 @@ instance SymbolForm VarChunk where
   symbol f (VC n d s t) = fmap (\x -> VC n d x t) (f s)
   
 instance Quantity VarChunk where
+  getSymb vc = Just $ SF vc 
   typ f (VC n d s t) = fmap (\x -> VC n d s x) (f t)
 
 -- END VARCHUNK --
@@ -103,6 +107,7 @@ instance SymbolForm ConVar where
   symbol f (CV c s t) = fmap (\x -> CV c x t) (f s)
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
+  getSymb = Just . SF 
 
 --FIXME: This should not be exported.
 cvl :: Simple Lens ConVar ConceptChunk

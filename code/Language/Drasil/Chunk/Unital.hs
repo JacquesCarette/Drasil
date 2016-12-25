@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), 
-  ConVar(..), dcc, cv, Quantity(..), Concept(..))
+  ConVar(..), dcc, cv, Quantity(..), Concept(..),SF(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -45,6 +45,9 @@ instance SymbolForm Q where
   
 instance Concept Q where
   defn = qlens defn
+
+instance Quantity Q where
+  getSymb = Just . SF
 -- END Q ----
 
 -- BEGIN UNITALCHUNK --
@@ -64,6 +67,7 @@ instance Concept UnitalChunk where
   defn = q . defn
 
 instance Quantity UnitalChunk where
+  getSymb uc = getSymb (uc ^. q)
   --DO SOMETHING
   
 instance Unit UnitalChunk where

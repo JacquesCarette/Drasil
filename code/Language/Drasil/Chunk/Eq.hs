@@ -28,6 +28,7 @@ instance SymbolForm QDefinition where
   symbol = ul . symbol
 
 instance Quantity QDefinition where
+  getSymb q = getSymb $ uc q
   -- DO SOMETHING
   
 instance Unit' QDefinition where

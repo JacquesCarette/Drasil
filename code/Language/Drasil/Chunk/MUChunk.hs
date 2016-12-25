@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.MUChunk (MUChunk(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
-import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), Quantity(..))
+import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), Quantity(..),SF(..))
 import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Space
 
@@ -21,7 +21,8 @@ instance SymbolForm MUChunk where
   symbol = mulens symbol
 
 instance Quantity MUChunk where
-  --FIXME: Do something
+  -- typ = mulens typ
+  getSymb = Just . SF
   
   
 instance Unit' MUChunk where

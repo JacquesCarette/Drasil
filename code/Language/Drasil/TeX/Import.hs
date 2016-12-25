@@ -157,7 +157,7 @@ lay x@(LikelyChange lc)   =
 lay x@(UnlikelyChange ucc)= 
   T.UnlikelyChange (spec (ucc ^. term))
   (spec $ refName x)
-lay x@(Graph ps w h t)    = T.Graph (map (\(x,y) -> (spec x, spec y)) ps)
+lay x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y, spec z)) ps)
                               w h (spec t) (spec $ refName x)
 
 makeL :: ListType -> T.ListType  

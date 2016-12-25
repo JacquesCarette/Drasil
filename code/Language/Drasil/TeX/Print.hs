@@ -399,7 +399,7 @@ makeGraph ps w h c l =
            pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
            pure $ text "node [style = \"n\"];"
          ]
-     ++  map (\(a,b) -> (quotes a) <> (pure $ text " -> ") <> (quotes b) <>
+     ++  map (\(a,b) -> (q a) <> (pure $ text " -> ") <> (q b) <>
                 (pure $ text ";")) ps
      ++  [ pure $ text "}",
            pure $ text "\\end{dot2tex}",
@@ -408,4 +408,4 @@ makeGraph ps w h c l =
            caption c,
            label l
          ]
-  where quotes x = (pure $ text "\"") <> x <> (pure $ text "\"")
+  where q x = (pure $ text "\"") <> x <> (pure $ text "\"")

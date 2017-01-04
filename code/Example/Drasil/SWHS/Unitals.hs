@@ -14,7 +14,7 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 import Control.Lens ((^.))
 
 swhsSymbols :: [CQSWrapper]
-swhsSymbols = (map qc swhsUnits) ++ (map qc swhsUnitless)
+swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
 
 -- Symbols with Units --
 

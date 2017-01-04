@@ -1,35 +1,61 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 
-module Language.Drasil.Chunk.Wrapper (qc, CQSWrapper) where
+module Language.Drasil.Chunk.Wrapper (cqs, qs, CQSWrapper, QSWrapper) where
 
 import Control.Lens (Simple, Lens, set, (^.))
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
 import Prelude hiding (id)
 
+{- Concept, Quantity, and Symbol Wrapper -}
 data CQSWrapper where
-  QC :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
-
+  CQS :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
+  
 instance Chunk CQSWrapper where
-  id = qclens id
+  id = cqslens id
   
 instance NamedIdea CQSWrapper where
-  term = qclens term
+  term = cqslens term
   
 instance Concept CQSWrapper where
-  defn = qclens defn
-
+  defn = cqslens defn
+  
 instance SymbolForm CQSWrapper where
-  symbol = qclens symbol
+  symbol = cqslens symbol
   
 instance Quantity CQSWrapper where
   getSymb = Just . SF
-  getUnit (QC a) = getUnit a
+  getUnit (CQS a) = getUnit a
   --FIXME: typ
 
-qc :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
-qc = QC
+cqs :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
+cqs = CQS
   
-qclens :: (forall c. (Quantity c, Concept c, SymbolForm c) => 
+cqslens :: (forall c. (Quantity c, Concept c, SymbolForm c) => 
   Simple Lens c a) -> Simple Lens CQSWrapper a
-qclens l f (QC a) = fmap (\x -> QC (set l x a)) (f (a ^. l))
+cqslens l f (CQS a) = fmap (\x -> CQS (set l x a)) (f (a ^. l))
+
+{- Quantity and Symbol Wrapper -}
+data QSWrapper where
+  QS :: (SymbolForm c, Quantity c) => c -> QSWrapper
+  
+instance Chunk QSWrapper where
+  id = qslens id
+  
+instance NamedIdea QSWrapper where
+  term = qslens term
+  
+instance SymbolForm QSWrapper where
+  symbol = qslens symbol
+  
+instance Quantity QSWrapper where
+  getSymb = Just . SF
+  getUnit (QS a) = getUnit a
+  --FIXME: typ
+
+qs :: (SymbolForm c, Quantity c) => c -> QSWrapper
+qs = QS
+  
+qslens :: (forall c. (Quantity c, SymbolForm c) => 
+  Simple Lens c a) -> Simple Lens QSWrapper a
+qslens l f (QS a) = fmap (\x -> QS (set l x a)) (f (a ^. l))

@@ -10,9 +10,9 @@ import Control.Lens((^.))
 
 ----- Table of Symbols -----
 
-cpSymbols :: [MUChunk]
-cpSymbols = (map Has cpUnits) ++ [HasNot QP.restitutionCoef] ++ 
-  (map HasNot cpUnitless)
+cpSymbols :: [QSWrapper]
+cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++ 
+  (map qs cpUnitless)
 
 -- Chunks with units --
 accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,

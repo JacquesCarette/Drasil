@@ -39,7 +39,7 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , qc, CQSWrapper
+  , cqs, qs, CQSWrapper, QSWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document

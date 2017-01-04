@@ -15,8 +15,9 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), NamedChunk(..), ConceptChunk(..), makeCC, makeVC
-  , vcFromCC, nCC, makeDCC, term, SymbolForm(..), defn, cdefn', dcc, dccWDS, cv
-  , ConceptDefinition', Quantity(..), ConVar(..), cvR
+  , vcFromCC, nCC, makeDCC, SymbolForm(..), cdefn', dcc, dccWDS, cv
+  , ConceptDefinition', Quantity(..), ConVar(..), cvR, NamedIdea(..)
+  , Concept(..)
   -- Chunk.MDefinedConcept
   , MDefinedConcept(..)
   -- Chunk.DefinedQuantity
@@ -38,7 +39,7 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , qc, QWrapper
+  , qc, CQSWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document

@@ -13,9 +13,8 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Control.Lens ((^.))
 
-swhsSymbols :: [QWrapper]
-swhsSymbols = (map qc swhsUnits) ++ (map qc [norm_vect, surface]) ++ 
-  (map qc swhsUnitless)
+swhsSymbols :: [CQSWrapper]
+swhsSymbols = (map qc swhsUnits) ++ (map qc swhsUnitless)
 
 -- Symbols with Units --
 
@@ -146,15 +145,15 @@ tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Greek Tau_L) cW)
 
 -- Unitless symbols --
 
-swhsUnitless :: [VarChunk]
+swhsUnitless :: [ConVar]
 -- norm_vect used to go here, but due to type change it is no longer included
 -- in this list.
-swhsUnitless = [eta, melt_frac]
+swhsUnitless = [norm_vect, surface, eta, melt_frac]
 
-eta, melt_frac :: VarChunk
+eta, melt_frac :: ConVar
 
-eta          = makeVC "eta" "ODE parameter" (Greek Eta_L)
-melt_frac    = makeVC "phi" "melt fraction" (Greek Phi_L)
+eta          = cvR (dcc "eta" "eta" "ODE parameter") (Greek Eta_L)
+melt_frac    = cvR (dcc "melt_frac" "phi" "melt fraction") (Greek Phi_L)
 
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will

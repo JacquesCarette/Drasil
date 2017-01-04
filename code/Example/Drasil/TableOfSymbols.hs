@@ -1,6 +1,6 @@
 {-# LANGUAGE Rank2Types #-}
 -- Standard code to make a table of symbols.
-module Drasil.TableOfSymbols(table_of_symbols,table, defaultF, cdefnF) where
+module Drasil.TableOfSymbols(table_of_symbols,table, defaultF, defnF) where
 
 import Control.Lens ((^.))
 
@@ -31,7 +31,5 @@ table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
 defaultF :: (Quantity s) => s -> Sentence
 defaultF = \s -> s ^. term
 
-cdefnF :: (Quantity s, ConceptDefinition' s) => s -> Sentence
-cdefnF = \s -> unWrap s (s ^. cdefn')
-  where unWrap _ (Just s) = s
-        unWrap c (Nothing) = c ^. term
+defnF :: Concept s => s -> Sentence
+defnF = \s -> s ^. defn

@@ -6,7 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 
-table_of_symbols :: (Unit' s, SymbolForm s) => [s] -> (s -> Sentence) -> Section
+table_of_symbols :: (Quantity s, SymbolForm s) => 
+  [s] -> (s -> Sentence) -> Section
 table_of_symbols ls f = Section (S "Table of Symbols") 
   [Con intro, Con (table ls f)]
 
@@ -19,7 +20,7 @@ intro = Paragraph $
   S "units are listed in brackets following the definition of " :+:
   S "the symbol."
   
-table :: (Unit' s, SymbolForm s) => [s] -> (s -> Sentence) -> Contents
+table :: (Quantity s, SymbolForm s) => [s] -> (s -> Sentence) -> Contents
 table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
   [(\ch -> P (ch ^. symbol)) , 
    (\ch -> f ch), 
@@ -27,10 +28,10 @@ table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
   ls)
   (S "Table of Symbols") False
   
-defaultF :: (Unit' s) => s -> Sentence
+defaultF :: (Quantity s) => s -> Sentence
 defaultF = \s -> s ^. term
 
-cdefnF :: (Unit' s, ConceptDefinition' s) => s -> Sentence
+cdefnF :: (Quantity s, ConceptDefinition' s) => s -> Sentence
 cdefnF = \s -> unWrap s (s ^. cdefn')
   where unWrap _ (Just s) = s
         unWrap c (Nothing) = c ^. term

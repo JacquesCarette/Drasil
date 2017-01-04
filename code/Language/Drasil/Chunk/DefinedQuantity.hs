@@ -1,3 +1,4 @@
+--THIS SHOULD BE DEPRECATED--
 module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..), dqFromDCC) where
 
 import Control.Lens (Simple, Lens, (^.))
@@ -19,6 +20,7 @@ instance Concept DefinedQuantity where
   defn = dql . defn
 instance SymbolForm DefinedQuantity where
   symbol f (DQ a b) = fmap (\x -> DQ a x) (f b)
+
 
 dqFromDCC :: ConceptChunk -> Symbol -> DefinedQuantity
 dqFromDCC c s = DQ c s

@@ -37,6 +37,8 @@ module Language.Drasil (
   , LCChunk(..)
   -- Chunk.Other
   , AssumpChunk, UCChunk
+  --Chunk.Wrapper
+  , qc, QWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
@@ -84,6 +86,7 @@ import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
+import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), sMap)
 import Language.Drasil.Reference (makeRef)

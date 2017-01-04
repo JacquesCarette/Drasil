@@ -13,9 +13,9 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Control.Lens ((^.))
 
-swhsSymbols :: [MUChunk]
-swhsSymbols = (map Has swhsUnits) ++ [HasNot norm_vect] ++ [HasNot surface] ++ 
-  (map HasNot swhsUnitless)
+swhsSymbols :: [QWrapper]
+swhsSymbols = (map qc swhsUnits) ++ (map qc [norm_vect, surface]) ++ 
+  (map qc swhsUnitless)
 
 -- Symbols with Units --
 

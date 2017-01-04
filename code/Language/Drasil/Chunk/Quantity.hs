@@ -15,7 +15,7 @@ class NamedIdea c => Quantity c where
   getUnit  :: c -> Maybe UnitDefn
 
 instance Quantity VarChunk where
-  getSymb vc = Just $ SF vc 
+  getSymb    = Just . SF 
   getUnit _  = Nothing
   typ f (VC n d s t) = fmap (\x -> VC n d s x) (f t)
   

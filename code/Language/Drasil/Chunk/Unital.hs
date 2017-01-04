@@ -4,7 +4,8 @@ module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), 
-  ConVar(..), dcc, cv, Quantity(..), Concept(..),SF(..))
+  ConVar(..), dcc, cv, Concept(..),SF(..))
+import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
 import Language.Drasil.Space

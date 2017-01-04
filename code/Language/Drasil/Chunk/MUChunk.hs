@@ -3,7 +3,8 @@ module Language.Drasil.Chunk.MUChunk (MUChunk(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
-import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), Quantity(..),SF(..))
+import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..),SF(..))
+import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Unit (Unit(..), Unit'(..))
 import Language.Drasil.Space
 

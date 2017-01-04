@@ -12,6 +12,7 @@ import Language.Drasil.Code.Imperative.AST as A
 import Language.Drasil.Code.Imperative.Helpers
 import Language.Drasil.Space as S
 import Language.Drasil.Chunk as C
+import Language.Drasil.Chunk.Quantity as Q
 
 toCode :: NamedChunk -> [ModuleChunk] -> AbstractCode
 toCode prog mcs = AbsCode $ Pack (prog ^. id) (makeModules mcs)
@@ -28,19 +29,19 @@ makeFields :: [VarChunk] -> [StateVar]
 makeFields = map makeField
 
 makeField :: VarChunk -> StateVar
-makeField vc = pubMVar 2 (makeType (vc ^. C.typ)) (vc ^. id)
+makeField vc = pubMVar 2 (makeType (vc ^. Q.typ)) (vc ^. id)
 
 makeMethods :: [MethodChunk] -> [Method]
 makeMethods = map makeMethod
 
 makeMethod :: MethodChunk -> Method
 makeMethod meth@(MeC { mType = MCalc eq }) =
-  pubMethod (A.typ $ makeType $ (uc eq) ^. C.typ) ("calc_" ++ ((methcc meth) ^. id))
-  (map (\vc -> param (vc ^. id) (makeType (vc ^. C.typ))) (vars (equat eq)))
+  pubMethod (A.typ $ makeType $ (uc eq) ^. Q.typ) ("calc_" ++ ((methcc meth) ^. id))
+  (map (\vc -> param (vc ^. id) (makeType (vc ^. Q.typ))) (vars (equat eq)))
   (oneLiner $ return $ makeExpr (equat eq))
 makeMethod      (MeC { mType = MInput IOStd vc}) =
-  pubMethod (A.typ $ makeType $ vc ^. C.typ) ("in_" ++ (vc ^. id)) []
-  [ Block [ varDec (vc ^. id) (makeType $ vc ^. C.typ),
+  pubMethod (A.typ $ makeType $ vc ^. Q.typ) ("in_" ++ (vc ^. id)) []
+  [ Block [ varDec (vc ^. id) (makeType $ vc ^. Q.typ),
             assign (Var (vc ^. id)) (Input)
           ]
   ]

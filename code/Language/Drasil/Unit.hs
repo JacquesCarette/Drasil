@@ -13,7 +13,8 @@ import Prelude hiding (id)
 import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (ConceptChunk(..), Chunk(..), NamedIdea(..),
-        Concept(..), Quantity(..), makeDCC)
+        Concept(..), makeDCC)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)

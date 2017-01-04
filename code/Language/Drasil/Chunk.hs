@@ -24,14 +24,8 @@ class NamedIdea c => SymbolForm c where
 -- capture an SF dictionary
 data SF where SF :: SymbolForm c => c -> SF
 
---Quantity will need to be moved to its own module so we can import Unit
--- FIXME: Trying to figure out how to implement the "May Have" relation
---        In the class hierarchy. Once I get it for Symbol, I'll move
---        Quantity to a new module and work on getting Unit operational.
-class NamedIdea c => Quantity c where
-  typ      :: Simple Lens c Space
-  getSymb  :: c -> Maybe SF
---  getUnit  :: Unit u => Maybe (Simple Lens c u)
+-- capture a unit dictionary
+--data U where U :: Unit c => c -> U
 
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
@@ -82,10 +76,6 @@ instance NamedIdea VarChunk where
 instance SymbolForm VarChunk where
   symbol f (VC n d s t) = fmap (\x -> VC n d x t) (f s)
   
-instance Quantity VarChunk where
-  getSymb vc = Just $ SF vc 
-  typ f (VC n d s t) = fmap (\x -> VC n d s x) (f t)
-
 -- END VARCHUNK --
 
 --FIXME: This is a temporary data structure created to advance the chunk
@@ -105,9 +95,6 @@ instance Concept ConVar where
   defn = cvl . defn
 instance SymbolForm ConVar where
   symbol f (CV c s t) = fmap (\x -> CV c x t) (f s)
-instance Quantity ConVar where
-  typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
-  getSymb = Just . SF 
 
 --FIXME: This should not be exported.
 cvl :: Simple Lens ConVar ConceptChunk

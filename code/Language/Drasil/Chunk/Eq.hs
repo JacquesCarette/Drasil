@@ -4,6 +4,7 @@ import Control.Lens (Simple, Lens)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.Unital (ucFromVC)
 import Language.Drasil.Chunk.MUChunk
 import Language.Drasil.Unit (Unit(..), Unit'(..))

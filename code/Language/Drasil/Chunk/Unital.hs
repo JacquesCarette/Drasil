@@ -47,8 +47,11 @@ instance SymbolForm Q where
 instance Concept Q where
   defn = qlens defn
 
+--FIXME: Add "typ"
 instance Quantity Q where
-  getSymb = Just . SF
+  getSymb   = Just . SF
+  getUnit _ = Nothing
+
 -- END Q ----
 
 -- BEGIN UNITALCHUNK --
@@ -67,9 +70,10 @@ instance SymbolForm UnitalChunk where
 instance Concept UnitalChunk where
   defn = q . defn
 
+--FIXME: Add "typ"
 instance Quantity UnitalChunk where
   getSymb uc = getSymb (uc ^. q)
-  --DO SOMETHING
+  getUnit uc = Just (uc ^. u)
   
 instance Unit UnitalChunk where
   unit = u . unit

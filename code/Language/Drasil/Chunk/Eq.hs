@@ -30,6 +30,7 @@ instance SymbolForm QDefinition where
 
 instance Quantity QDefinition where
   getSymb q = getSymb $ uc q
+  getUnit q = getUnit $ uc q
   -- DO SOMETHING
   
 {-instance Unit' QDefinition where

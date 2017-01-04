@@ -24,9 +24,6 @@ class NamedIdea c => SymbolForm c where
 -- capture an SF dictionary
 data SF where SF :: SymbolForm c => c -> SF
 
--- capture a unit dictionary
---data U where U :: Unit c => c -> U
-
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
   

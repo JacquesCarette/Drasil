@@ -1,9 +1,9 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Unit (
-    UDefn(..)                        -- languages
-  , Unit(..), UnitEq(..)             -- classes
-  , FundUnit(..), DerUChunk(..)      -- data-structures
-  , UnitDefn(..)                     -- wrapper for 'Unit' class
+    UDefn(..)                   -- languages
+  , Unit(..), UnitEq(..)        -- classes
+  , FundUnit(..), DerUChunk(..) -- data-structures
+  , UnitDefn(..)                -- wrapper for 'Unit' class
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   ) where

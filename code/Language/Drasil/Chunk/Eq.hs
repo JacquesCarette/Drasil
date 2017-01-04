@@ -7,7 +7,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.Unital (ucFromVC)
 import Language.Drasil.Chunk.MUChunk
-import Language.Drasil.Unit (Unit(..), Unit'(..))
+import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Space
@@ -32,8 +32,8 @@ instance Quantity QDefinition where
   getSymb q = getSymb $ uc q
   -- DO SOMETHING
   
-instance Unit' QDefinition where
-  unit' = ul . unit'
+{-instance Unit' QDefinition where
+  unit' = ul . unit'-}
 -- END EQCHUNK --
 
 -- don't export this

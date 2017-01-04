@@ -5,7 +5,7 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..),SF(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Unit (Unit(..), Unit'(..))
+import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Space
 
 data MUChunk where --May have Unit chunk
@@ -25,11 +25,11 @@ instance Quantity MUChunk where
   -- typ = mulens typ
   getSymb = Just . SF
   
-  
+{-  
 instance Unit' MUChunk where
   unit' f (Has    h) = fmap (Has . maybe h (\t -> set unit t h)) (f $ Just $ h^.unit)
   unit' f (HasNot h) = fmap (HasNot . maybe h (\_ -> h)) (f $ Nothing)
-
+-}
 -- utilities which should not be exported
 mulens :: (forall c. SymbolForm c => Simple Lens c a) -> Simple Lens MUChunk a
 mulens l f (Has a) = fmap (\x -> Has (set l x a)) (f (a ^. l))

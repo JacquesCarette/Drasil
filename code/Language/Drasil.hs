@@ -10,7 +10,7 @@ module Language.Drasil (
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
-  , Unit(..), Unit'(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
+  , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..)
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk

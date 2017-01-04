@@ -111,8 +111,8 @@ s1_2_table = table swhsSymbols defnF
 s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
 s1_3_table = Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> S (ch ^. id)),
-   (\ch -> ch ^. term)
+  [(\ch -> ch ^. term),
+   (\ch -> ch ^. defn)
    ] acronyms)
    (S "Abbrevations and Acronyms") False
    

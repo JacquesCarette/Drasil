@@ -35,10 +35,10 @@ makeMethods :: [MethodChunk] -> [Method]
 makeMethods = map makeMethod
 
 makeMethod :: MethodChunk -> Method
-makeMethod meth@(MeC { mType = MCalc eq }) =
-  pubMethod (A.typ $ makeType $ (uc eq) ^. Q.typ) ("calc_" ++ ((methcc meth) ^. id))
-  (map (\vc -> param (vc ^. id) (makeType (vc ^. Q.typ))) (vars (equat eq)))
-  (oneLiner $ return $ makeExpr (equat eq))
+makeMethod meth@(MeC { mType = MCalc (EC a b)}) =
+  pubMethod (A.typ $ makeType $ a ^. Q.typ) ("calc_" ++ ((methcc meth) ^. id))
+  (map (\vc -> param (vc ^. id) (makeType (vc ^. Q.typ))) (vars b))
+  (oneLiner $ return $ makeExpr b)
 makeMethod      (MeC { mType = MInput IOStd vc}) =
   pubMethod (A.typ $ makeType $ vc ^. Q.typ) ("in_" ++ (vc ^. id)) []
   [ Block [ varDec (vc ^. id) (makeType $ vc ^. Q.typ),

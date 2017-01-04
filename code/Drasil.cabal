@@ -67,7 +67,6 @@ library
     , Language.Drasil.Chunk.MDefinedConcept
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.LC
-    , Language.Drasil.Chunk.MUChunk
     , Language.Drasil.Chunk.Method
     , Language.Drasil.Chunk.Module
     , Language.Drasil.Chunk.Other

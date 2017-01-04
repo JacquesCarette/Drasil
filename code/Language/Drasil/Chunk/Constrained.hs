@@ -1,6 +1,5 @@
-module Language.Drasil.Chunk.Constrained(Constrained(..), 
-    ConstrainedMUC(..),fromMUC) where
-
+module Language.Drasil.Chunk.Constrained where
+{-
 import Control.Lens (Simple, Lens)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr, Relation)
@@ -47,4 +46,4 @@ ul :: Simple Lens ConstrainedMUC MUChunk
 ul f (CMUC a b c d) = fmap (\x -> CMUC x b c d) (f a)
 
 fromMUC :: MUChunk -> [Expr->Relation] -> [Expr->Relation] -> Expr -> ConstrainedMUC
-fromMUC muChunk pcs scs r = CMUC muChunk pcs scs r
+fromMUC muChunk pcs scs r = CMUC muChunk pcs scs r-}

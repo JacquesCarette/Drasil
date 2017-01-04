@@ -17,8 +17,6 @@ module Language.Drasil (
   , Chunk(..), VarChunk(..), NamedChunk(..), ConceptChunk(..), makeCC, makeVC
   , vcFromCC, nCC, makeDCC, term, SymbolForm(..), defn, cdefn', dcc, dccWDS, cv
   , ConceptDefinition', Quantity(..), ConVar(..), cvR
-  -- Chunk.Constrained
-  , Constrained, ConstrainedMUC(..), fromMUC
   -- Chunk.MDefinedConcept
   , MDefinedConcept(..)
   -- Chunk.DefinedQuantity
@@ -27,8 +25,6 @@ module Language.Drasil (
   , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
   , UnitalChunk(..), makeUC, ucFromVC
-  -- Chunk.MUChunk
-  , MUChunk(..)
   -- Chunk.Relation
   , RelationChunk, makeRC
   -- Chunk.Method
@@ -80,10 +76,8 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.MDefinedConcept (MDefinedConcept(..))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..), dqFromDCC)
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
-import Language.Drasil.Chunk.Constrained (Constrained(..), 
-                                          ConstrainedMUC(..),fromMUC)
+import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, ucFromVC)
-import Language.Drasil.Chunk.MUChunk (MUChunk(..))
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC

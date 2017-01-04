@@ -1,23 +1,26 @@
-module Language.Drasil.Chunk.Eq(QDefinition(..), fromEqn, fromEqn') where
+{-# LANGUAGE GADTs, Rank2Types #-}
+module Language.Drasil.Chunk.Eq 
+  (QDefinition(..), fromEqn, fromEqn', equat) where
 
-import Control.Lens (Simple, Lens)
+import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.Unital (ucFromVC)
-import Language.Drasil.Chunk.MUChunk
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Space
 
 -- BEGIN EQCHUNK --
-data QDefinition = EC 
-  { uc :: MUChunk
-  , equat :: Expr
-  }
+data QDefinition where
+  EC :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
 
+--Removed named record fields, so we want to not break things for now.
+equat :: QDefinition -> Expr 
+equat (EC _ b) = b
+  
 -- this works because UnitalChunk is a Chunk
 instance Chunk QDefinition where
   id = ul . id
@@ -29,8 +32,8 @@ instance SymbolForm QDefinition where
   symbol = ul . symbol
 
 instance Quantity QDefinition where
-  getSymb q = getSymb $ uc q
-  getUnit q = getUnit $ uc q
+  getSymb (EC a _) = getSymb a
+  getUnit (EC a _) = getUnit a
   -- DO SOMETHING
   
 {-instance Unit' QDefinition where
@@ -38,17 +41,39 @@ instance Quantity QDefinition where
 -- END EQCHUNK --
 
 -- don't export this
-ul :: Simple Lens QDefinition MUChunk
-ul f (EC a b) = fmap (\x -> EC x b) (f a)
+ul :: Simple Lens QDefinition E
+ul f (EC a b) = fmap (\(E x) -> EC x b) (f (E a))
+
+-- or this
+elens :: (forall c. (SymbolForm c, Quantity c) => Simple Lens c a) 
+  -> Simple Lens E a
+elens l f (E a) = fmap (\x -> E (set l x a)) (f (a ^. l))
+
+-- and especially not this
+data E where
+  E :: (SymbolForm c, Quantity c) => c -> E
+
+instance Chunk E where
+  id = elens id
+
+instance NamedIdea E where
+  term = elens term
+  
+instance SymbolForm E where 
+  symbol = elens symbol
+  
+instance Quantity E where
+  getSymb (E c) = getSymb c
+  getUnit (E c) = getUnit c
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
-  EC (Has $ ucFromVC (cv (dccWDS nm nm desc) symb Rational) chunk) eqn
+  EC (ucFromVC (cv (dccWDS nm nm desc) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack
 fromEqn' :: String -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
-  EC (HasNot $ cv (dccWDS nm nm desc) symb Rational) eqn
+  EC (cv (dccWDS nm nm desc) symb Rational) eqn

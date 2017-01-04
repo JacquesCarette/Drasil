@@ -37,11 +37,12 @@ instance NamedIdea MethodChunk where
 cl :: Simple Lens MethodChunk NamedChunk
 cl f (MeC a b c d e) = fmap (\x -> MeC x b c d e) (f a)
 
-
+--FIXME? Added a hack (pattern match) to make the modified EqChunk work
 fromEC :: QDefinition -> MethodChunk
-fromEC ec = let exc' = if (checkDiv $ equat ec) then [DivByZero] else []
-            in  MeC (toCC $ uc ec) (MCalc $ ec) (vars $ equat ec)
-                  [(toVC $ uc ec)] exc'
+fromEC ec@(EC a b) =
+  let exc' = if (checkDiv $ b) then [DivByZero] else []
+  in  MeC (toCC $ a) (MCalc $ ec) (vars $ b)
+      [(toVC $ a)] exc'
 
 makeStdInputMethod :: VarChunk -> MethodChunk
 makeStdInputMethod vc = MeC (toCC $ vc) (MInput IOStd vc) [] [vc] []

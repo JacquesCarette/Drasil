@@ -87,7 +87,7 @@ integral (Integral (Nothing, Nothing) e wrtc) =
   (H.Integral (Nothing, Nothing) (int_wrt wrtc), expr e)
 integral _ = error "TeX/Import.hs Incorrect use of Integral"
 
-int_wrt :: SymbolForm c => c -> H.Expr
+int_wrt :: (NamedIdea c, SymbolForm c) => c -> H.Expr
 int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
 
 replace_divs :: Expr -> H.Expr

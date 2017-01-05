@@ -4,7 +4,7 @@ module Language.Drasil.Expr where
 
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Prelude hiding (id)
-import Language.Drasil.Chunk (Chunk(..), SymbolForm)
+import Language.Drasil.Chunk (Chunk(..), SymbolForm, NamedIdea)
 import Language.Drasil.Symbol
 
 import Control.Lens ((^.))
@@ -29,7 +29,7 @@ data Expr where
   (:.)     :: Expr -> Expr -> Expr
   Neg      :: Expr -> Expr
   Deriv    :: DerivType -> Expr -> Expr -> Expr
-  C        :: SymbolForm c => c -> Expr
+  C        :: (NamedIdea c, SymbolForm c) => c -> Expr
   FCall    :: Expr -> [Expr] -> Expr --F(x) is (FCall F [x]) or similar
                                   --FCall accepts a list of params
                                   --F(x,y) would be (FCall F [x,y]) or sim.
@@ -99,7 +99,8 @@ data UFunc where
   Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc 
     --Sum (maybe (index,starting point, ending point)) (sum expression)
   Abs :: Expr -> UFunc
-  Integral :: SymbolForm c => ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
+  Integral :: (NamedIdea c, SymbolForm c) => 
+    ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
     --Integral (low,high) Bounds (expression to integrate) (w.r.t. chunk)
   Sin :: Expr -> UFunc
   Cos :: Expr -> UFunc

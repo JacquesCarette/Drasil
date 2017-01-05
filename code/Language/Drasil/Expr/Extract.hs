@@ -5,7 +5,8 @@ import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
-import Language.Drasil.Chunk (VarChunk(..), SymbolForm, id, symbol, term)
+import Language.Drasil.Chunk (NamedIdea, VarChunk(..), SymbolForm,
+                              id, symbol, term)
 import Language.Drasil.Space  -- need this for code generation
 
 --Get dependency from equation  
@@ -74,5 +75,5 @@ binop (Cross e f) = [e,f]
 -- Again, used for printing equations/descriptions mostly.
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational
-toVC :: SymbolForm c => c -> VarChunk
+toVC :: (NamedIdea c, SymbolForm c) => c -> VarChunk
 toVC c = VC (c ^. id) (c ^. term) (c ^. symbol) (Rational)

@@ -16,9 +16,7 @@ class Chunk c where
 class Chunk c => NamedIdea c where
   term :: Simple Lens c Sentence
 
---FIXME: Will need to be a "Chunk" not "Concept" after Steven's work is
--- merged into the main branch.
-class NamedIdea c => SymbolForm c where
+class Chunk c => SymbolForm c where
   symbol :: Simple Lens c Symbol
  
 -- capture an SF dictionary

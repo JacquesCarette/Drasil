@@ -1,8 +1,9 @@
 module Main where
 
-import Language.Drasil (DocType(SRS,MG,MIS,Website),Recipe(..),gen)
+import Language.Drasil (DocType(SRS,MG,MIS,Website),Recipe(..),gen,genCode)
 
-import Drasil.HGHC.HGHC (srsBody,mgBody,misBody)
+import Drasil.HGHC.HGHC (srsBody,mgBody,misBody,modules)
+import Drasil.HGHC.Modules (executable)
 
 docs :: [Recipe]
 docs = [Recipe (Website "SRS") srsBody,
@@ -16,3 +17,4 @@ docs = [Recipe (Website "SRS") srsBody,
 main :: IO ()            
 main = do
   gen docs
+  genCode executable modules

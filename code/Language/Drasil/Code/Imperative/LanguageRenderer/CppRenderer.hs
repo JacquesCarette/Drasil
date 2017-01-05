@@ -57,7 +57,7 @@ cppConfig options c =
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDocD c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
+        objVarDoc = objVarDocD c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, printFileDoc = printFileDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
 
@@ -97,6 +97,7 @@ cpptop c Source p = vcat [          --TODO remove includes if they aren't used
     include c ("\"" ++ p ++ cppHeaderExt ++ "\""),
     include c "<algorithm>",
     include c "<iostream>",
+    include c "<fstream>",
     include c "<iterator>",     --used only when printing a list
     include c "<string>",
     include c "<math.h>",       --used for Floor and Ceiling functions
@@ -219,6 +220,17 @@ printDoc' c newLn _ v@(ListVar _ t) = vcat [
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printStrLn else printStr
 printDoc' c newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
+    where endl = if newLn then text "<<" <+> text "std::endl" else empty
+
+printFileDoc' :: Config -> Value -> Bool -> StateType -> Value -> Doc
+printFileDoc' _ _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
+printFileDoc' c f newLn _ v@(ListVar _ t) = vcat [
+    statementDoc c NoLoop $ printFileStr f "[",
+    statementDoc c NoLoop $ ValState $ FuncApp "copy" [v $. IterBegin, v $. IterEnd, FuncApp iter [f, litString ","]],
+    statementDoc c Loop $ printLastStr "]"]
+    where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
+          printLastStr = if newLn then printFileStrLn f else printFileStr f
+printFileDoc' c f newLn _ v = valueDoc c f <+> text "<<" <+> valueDoc c v <+> endl
     where endl = if newLn then text "<<" <+> text "std::endl" else empty
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc

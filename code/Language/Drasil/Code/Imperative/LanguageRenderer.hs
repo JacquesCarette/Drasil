@@ -103,6 +103,7 @@ data Config = Config {
     paramListDoc :: [Parameter] -> Doc,
     patternDoc :: Pattern -> Doc,
     printDoc :: Bool -> StateType -> Value -> Doc,
+    printFileDoc :: Value -> Bool -> StateType -> Value -> Doc,
     retDoc :: Return -> Doc,
     scopeDoc :: Scope -> Doc,
     stateDoc :: StateVar -> Doc,
@@ -447,6 +448,7 @@ statementDocD c loc (ValState s) = valueDoc c s <> end c loc
 statementDocD c _ (CommentState s) = comment c s
 statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
 statementDocD c loc (PrintState newLn t v) = printDoc c newLn t v <> end c loc
+statementDocD c loc (PrintFileState f newLn t v) = printFileDoc c f newLn t v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 
@@ -454,6 +456,7 @@ stateTypeD :: Config -> StateType -> DecDef -> Doc
 stateTypeD c (List lt t@(List _ _)) _ = list c lt <> angles (space <> stateType c t Dec <> space)
 stateTypeD c (List lt t) _            = case t of Base Boolean -> bitArray c
                                                   _    -> list c lt <> angles (stateType c t Dec)
+stateTypeD _ (Base File) _       = text "File"
 stateTypeD _ (Base Boolean) _    = text "Boolean"
 stateTypeD _ (Base Integer) _    = text "int"
 stateTypeD _ (Base Float) _      = text "float"
@@ -517,6 +520,7 @@ valueDocD _ (Var v) = text v
 valueDocD c (EnumVar v) = valueDoc c $ Var v
 valueDocD c (ListVar v _) = valueDoc c $ Var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
+valueDocD c (FileVar v) = valueDoc c $ Var v
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
 valueDocD c Input = inputFunc c
 valueDocD c (Global s) = getEnv c s

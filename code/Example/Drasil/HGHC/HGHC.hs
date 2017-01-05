@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC(srsBody, mgBody, misBody) where
+module Drasil.HGHC.HGHC(srsBody, mgBody, misBody, modules) where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))

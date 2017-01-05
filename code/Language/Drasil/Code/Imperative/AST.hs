@@ -21,7 +21,8 @@ module Language.Drasil.Code.Imperative.AST (
     alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,params,
-    print,printLn,printStr,printStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
+    print,printLn,printStr,printStrLn,
+    printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace
 ) where
@@ -43,6 +44,7 @@ data Statement = AssignState Assignment | DeclState Declaration
                | CommentState Comment
                | FreeState Value
                | PrintState Bool StateType Value      --PrintState newLine type valueToPrint : print statement. Only Objective-C uses the StateType argument here, the other languages can infer enough from the Value-type.
+               | PrintFileState Value Bool StateType Value  --PrintFileState fileVar newLine type valtoprint
                | ExceptState Exception
                | PatternState Pattern           --deals with special design patterns
                   deriving Show
@@ -96,6 +98,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | EnumVar Label
            | ObjVar Value Value
            | ListVar Label StateType
+           | FileVar Label
            | Const Label
            | Global Label -- these are generation-time globals that will be filled-in
            | Arg Int                    --Arg argIndex : get command-line arguments. Should only be used in the Body of the MainMethod.
@@ -120,6 +123,7 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.
               | IterBegin | IterEnd
               | Floor | Ceiling
+              | FileOpen String
     deriving (Eq, Show)
 data Comment = Comment Label | CommentDelimit Label Int
     deriving (Eq, Show)
@@ -133,7 +137,7 @@ data UnaryOp = Negate | SquareRoot | Abs
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
     deriving (Eq, Show)
-data BaseType = Boolean | Integer | Float | Character | String
+data BaseType = Boolean | Integer | Float | Character | String | File
     deriving (Eq, Show)
 data StateType = List Permanence StateType | Base BaseType | Type Label | Iterator StateType | EnumType Label
     deriving (Eq, Show)
@@ -419,6 +423,19 @@ printStr = PrintState False string . litString
 
 printStrLn :: String -> Statement
 printStrLn = PrintState True string . litString
+
+-- file printing
+printFile :: Value -> StateType -> Value -> Statement
+printFile f = PrintFileState f False
+
+printFileLn :: Value -> StateType -> Value -> Statement
+printFileLn f = PrintFileState f True
+
+printFileStr :: Value -> String -> Statement
+printFileStr f = PrintFileState f False string . litString
+
+printFileStrLn :: Value -> String -> Statement
+printFileStrLn f = PrintFileState f True string . litString
 
 return :: Value -> Statement
 return = RetState . Ret

@@ -7,9 +7,10 @@ import Language.Drasil.Expr
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
+import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
 
 -- BEGIN METHODCHUNK --
-data MethodChunk = MeC { methcc :: NamedChunk, mType :: MethodType,
+data MethodChunk = MeC { methcc :: NWrapper, mType :: MethodType,
                          input :: [VarChunk], output :: [VarChunk],
                          exc :: [ExcType] }
 
@@ -34,18 +35,18 @@ instance NamedIdea MethodChunk where
 -- END METHODCHUNK --
 
 -- don't export this
-cl :: Simple Lens MethodChunk NamedChunk
+cl :: Simple Lens MethodChunk NWrapper
 cl f (MeC a b c d e) = fmap (\x -> MeC x b c d e) (f a)
 
 --FIXME? Added a hack (pattern match) to make the modified EqChunk work
 fromEC :: QDefinition -> MethodChunk
 fromEC ec@(EC a b) =
   let exc' = if (checkDiv $ b) then [DivByZero] else []
-  in  MeC (toCC $ a) (MCalc $ ec) (vars $ b)
+  in  MeC (nw a) (MCalc $ ec) (vars $ b)
       [(toVC $ a)] exc'
 
 makeStdInputMethod :: VarChunk -> MethodChunk
-makeStdInputMethod vc = MeC (toCC $ vc) (MInput IOStd vc) [] [vc] []
+makeStdInputMethod vc = MeC (nw vc) (MInput IOStd vc) [] [vc] []
 
 -- don't export
 checkDiv :: Expr -> Bool
@@ -57,7 +58,3 @@ checkDiv (b :* e) = checkDiv b || checkDiv e
 checkDiv (b :+ e) = checkDiv b || checkDiv e
 checkDiv (b :- e) = checkDiv b || checkDiv e
 checkDiv _        = False
-
-
-toCC :: NamedIdea c => c -> NamedChunk
-toCC c = CC (c ^. id) (c ^. term)

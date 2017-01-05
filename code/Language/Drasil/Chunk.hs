@@ -24,10 +24,6 @@ data SF where SF :: SymbolForm c => c -> SF
 
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
-  
--- FIXME: Make this unnecessary
-class NamedIdea c => ConceptDefinition' c where
-  cdefn' :: Simple Lens c (Maybe Sentence)
 -------- BEGIN DATATYPES/INSTANCES --------
 
 

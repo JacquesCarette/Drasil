@@ -15,6 +15,7 @@ import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Code.Imperative.LanguageRenderer
   hiding (body)
 import Language.Drasil.Code.Imperative.Helpers
@@ -74,17 +75,17 @@ writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
-genCode :: NamedChunk -> [ModuleChunk] -> IO ()
+genCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
 genCode cc mcs = prntCode cc (getCodeModules cc mcs)
-  where getCodeModules :: NamedChunk -> [ModuleChunk] -> [ModuleChunk]
+  where getCodeModules :: NamedIdea c => c -> [ModuleChunk] -> [ModuleChunk]
         getCodeModules _ [] = []
-        getCodeModules cc' ((mc@(MoC {imp = Just cc''})):mcs') =
-          if cc' == cc'' then mc:getCodeModules cc' mcs' 
+        getCodeModules cc' (mc:mcs') =
+          if (Just (nw cc')) == (imp mc) then mc:getCodeModules cc' mcs' 
                          else getCodeModules cc' mcs'
         getCodeModules cc' (_:mcs') = getCodeModules cc' mcs'
 
 -- generate code for all supported languages (will add language selection later)
-prntCode :: NamedChunk -> [ModuleChunk] -> IO ()
+prntCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
 prntCode cc mcs = 
   let absCode = toCode cc mcs
       code l  = makeCode l

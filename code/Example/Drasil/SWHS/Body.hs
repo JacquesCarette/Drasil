@@ -334,13 +334,12 @@ s4_1_1_intro = Paragraph (S "This subsection provides a list of terms " :+:
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
 
-s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [SimpleT heat_flux,
-                    SimpleT phase_change_material, SimpleT specific_heat, 
-                    DefinedT thermal_conduction, SimpleT transient])
+s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [heat_flux,
+                    phase_change_material, specific_heat, 
+                    thermal_conduction, transient])
 
-s411_bullet_map_f :: MDefinedConcept -> ItemType
-s411_bullet_map_f (SimpleT c) = Flat (S (c^. id) :+: S ": " :+: (c ^. term))
-s411_bullet_map_f (DefinedT c) = Flat ((c ^. term) :+: S ": " :+: (c ^. defn))
+s411_bullet_map_f :: Concept c => c -> ItemType
+s411_bullet_map_f c = Flat ((c ^. term) :+: S ": " :+: (c ^. defn))
                  
 -- Structure of this list is same in all examples, probably can be automated.
 

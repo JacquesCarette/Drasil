@@ -14,7 +14,7 @@ import Language.Drasil.Space as S
 import Language.Drasil.Chunk as C
 import Language.Drasil.Chunk.Quantity as Q
 
-toCode :: NamedChunk -> [ModuleChunk] -> AbstractCode
+toCode :: NamedIdea c => c -> [ModuleChunk] -> AbstractCode
 toCode prog mcs = AbsCode $ Pack (prog ^. id) (makeModules mcs)
 
 makeModules :: [ModuleChunk] -> [Class]

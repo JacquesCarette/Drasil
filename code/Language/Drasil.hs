@@ -15,11 +15,9 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), NamedChunk(..), ConceptChunk(..), makeCC, makeVC
-  , vcFromCC, nCC, makeDCC, SymbolForm(..), cdefn', dcc, dccWDS, cv
-  , ConceptDefinition', Quantity(..), ConVar(..), cvR, NamedIdea(..)
+  , vcFromCC, nCC, makeDCC, SymbolForm(..), dcc, dccWDS, cv 
+  , Quantity(..), ConVar(..), cvR, NamedIdea(..)
   , Concept(..)
-  -- Chunk.MDefinedConcept
-  , MDefinedConcept(..)
   -- Chunk.DefinedQuantity
   , DefinedQuantity(..), dqFromDCC
   -- Chunk.Eq
@@ -39,7 +37,7 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , cqs, qs, CQSWrapper, QSWrapper
+  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap
   -- Document
@@ -76,7 +74,6 @@ import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.MDefinedConcept (MDefinedConcept(..))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..), dqFromDCC)
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
 import Language.Drasil.Chunk.Constrained

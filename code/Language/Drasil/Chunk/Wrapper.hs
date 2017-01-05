@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 
-module Language.Drasil.Chunk.Wrapper (cqs, qs, CQSWrapper, QSWrapper) where
+module Language.Drasil.Chunk.Wrapper (cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper) where
 
 import Control.Lens (Simple, Lens, set, (^.))
 import Language.Drasil.Chunk
@@ -59,3 +59,23 @@ qs = QS
 qslens :: (forall c. (Quantity c, SymbolForm c) => 
   Simple Lens c a) -> Simple Lens QSWrapper a
 qslens l f (QS a) = fmap (\x -> QS (set l x a)) (f (a ^. l))
+
+{- NamedIdea Wrapper -}
+data NWrapper where
+  NW :: (NamedIdea c) => c -> NWrapper
+  
+instance Chunk NWrapper where
+  id = nlens id
+  
+instance NamedIdea NWrapper where
+  term = nlens term
+
+nw :: NamedIdea c => c -> NWrapper
+nw = NW
+
+nlens :: (forall c. (NamedIdea c) => 
+  Simple Lens c a) -> Simple Lens NWrapper a
+nlens l f (NW a) = fmap (\x -> NW (set l x a)) (f (a ^. l))
+
+instance Eq NWrapper where
+ a == b = (a ^. id) == (b ^. id)

@@ -56,7 +56,6 @@ instance SymbolForm Q where
 instance Concept Q where
   defn = qlens defn
 
---FIXME: Add "typ"
 instance Quantity Q where
   getSymb   = Just . SF
   getUnit _ = Nothing

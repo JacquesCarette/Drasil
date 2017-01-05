@@ -63,6 +63,7 @@ library
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.Quantity
+    , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.LC
     , Language.Drasil.Chunk.Method

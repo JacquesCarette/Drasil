@@ -18,8 +18,6 @@ module Language.Drasil (
   , vcFromCC, nCC, makeDCC, SymbolForm(..), dcc, dccWDS, cv 
   , Quantity(..), ConVar(..), cvR, NamedIdea(..)
   , Concept(..)
-  -- Chunk.DefinedQuantity
-  , DefinedQuantity(..), dqFromDCC
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn'
   -- Chunk.Unital
@@ -74,9 +72,8 @@ import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantity(..), dqFromDCC)
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn')
-import Language.Drasil.Chunk.Constrained
+--import Language.Drasil.Chunk.Constrained --TO BE REIMPLEMENTED SOON
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, ucFromVC)
 import Language.Drasil.Chunk.Relation(RelationChunk, makeRC)
 import Language.Drasil.Chunk.Req

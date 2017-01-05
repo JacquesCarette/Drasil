@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
 
 -- BEGIN METHODCHUNK --
 data ModuleChunk where 
-  MoC :: NamedIdea c => c -> Sentence -> Maybe c -> [VarChunk] -> 
+  MoC :: NWrapper -> Sentence -> Maybe NWrapper -> [VarChunk] -> 
     [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 
 instance Chunk ModuleChunk where
@@ -32,13 +32,13 @@ cl l f (MoC a b c d e g h) = fmap (\x -> MoC (set l x a) b c d e g h) (f (a ^. l
 
 --Rebuild names for things because we removed the named record.
 modcc :: ModuleChunk -> NWrapper
-modcc (MoC c _ _ _ _ _ _) = nw c
+modcc (MoC c _ _ _ _ _ _) = c
 
 secret :: ModuleChunk -> Sentence
 secret (MoC _ s _ _ _ _ _) = s
 
 imp :: ModuleChunk -> Maybe NWrapper
-imp (MoC _ _ c _ _ _ _) = fmap nw c
+imp (MoC _ _ c _ _ _ _) = c
 
 field :: ModuleChunk -> [VarChunk]
 field (MoC _ _ _ vs _ _ _) = vs
@@ -58,15 +58,15 @@ formatName m = (concat $ intersperse " " $
   where capFirst [] = []
         capFirst (c:cs) = toUpper c:cs
 
-makeRecord :: NamedChunk -> Sentence -> NamedChunk -> [VarChunk]
+makeRecord :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeRecord cc' secret' imp' field' uses' hier' =
-  MoC cc' secret' (Just imp') field' [] uses' hier'
+  MoC (nw cc') secret' (Just (nw imp')) field' [] uses' hier'
 
-makeImpModule :: NamedChunk -> Sentence -> NamedChunk -> [VarChunk]
+makeImpModule :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeImpModule cc' secret' imp' field' method' uses' hier' =
-  MoC cc' secret' (Just imp') field' method' uses' hier'
+  MoC (nw cc') secret' (Just (nw imp')) field' method' uses' hier'
 
-makeUnimpModule :: NamedChunk -> Sentence -> Maybe ModuleChunk -> ModuleChunk
-makeUnimpModule cc' secret' hier' = MoC cc' secret' Nothing [] [] [] hier'
+makeUnimpModule :: NamedIdea c => c -> Sentence -> Maybe ModuleChunk -> ModuleChunk
+makeUnimpModule cc' secret' hier' = MoC (nw cc') secret' Nothing [] [] [] hier'

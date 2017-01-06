@@ -110,6 +110,9 @@ ccWithDescrSent n d = CC n d
 dccWDS :: String -> String -> Sentence -> ConceptChunk
 dccWDS i t d = DCC i (S t) d
 
+ccStSS :: String -> Sentence -> Sentence -> ConceptChunk
+ccStSS i t d = DCC i t d
+
 -- For when name = descr (will likely become deprecated as the chunks become more descriptive).
 nCC :: String -> NamedChunk 
 nCC n = makeCC n n

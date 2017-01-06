@@ -70,10 +70,10 @@ instance Quantity E where
 --FIXME: Space hack
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
-  EC (ucFromVC (cv (dccWDS nm nm desc) symb Rational) chunk) eqn
+  EC (ucFromVC (cv (ccStSS nm desc desc) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack
 fromEqn' :: String -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
-  EC (cv (dccWDS nm nm desc) symb Rational) eqn
+  EC (cv (ccStSS nm desc desc) symb Rational) eqn

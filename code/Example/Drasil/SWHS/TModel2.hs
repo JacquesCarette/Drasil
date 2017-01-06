@@ -26,26 +26,27 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT),
                             (C deltaT), ((C temp_boil) :< (C temp)))]
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
-
+--FIXME: Figure out why some of these are "term" and some are "defn".
+--  The majority of them should be uniform.
 t2descr :: Sentence
 t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (sens_heat ^. term)) :+: S " energy (" :+:
           Sy (joule ^. unit) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
           S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
-          P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. term) :+: 
-          S ", " :+: (htCap_L ^. term) :+: S ", and " :+: 
-          (htCap_V ^. term) :+: S ", respectively (" :+: Sy (htCap ^. unit) :+:
+          P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. defn) :+: 
+          S ", " :+: (htCap_L ^. defn) :+: S ", and " :+: 
+          (htCap_V ^. defn) :+: S ", respectively (" :+: Sy (htCap ^. unit) :+:
           S "). " :+: P (mass ^. symbol) :+: S " is the " :+:
           (mass ^. term) :+: S " (" :+: Sy (mass ^. unit) :+: S "). " :+:
-          P (temp ^. symbol) :+: S " is the " :+: (temp ^. term) :+: S " (" :+:
+          P (temp ^. symbol) :+: S " is the " :+: (temp ^. defn) :+: S " (" :+:
           Sy (temp ^. unit) :+: S "), and " :+: P (deltaT ^. symbol) :+:
-          S " is the " :+: (deltaT ^. term) :+: S " (" :+:
+          S " is the " :+: (deltaT ^. defn) :+: S " (" :+:
           Sy (deltaT ^. unit) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
-          (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
+          (temp_melt ^. defn) :+: S " and " :+: (temp_boil ^. defn) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
           (sens_heat ^. defn) :+: S " occurs as long as the material does " :+: 
-          S "not reach a " :+: (temp ^. term) :+: S " where a " :+: 
+          S "not reach a " :+: (temp ^. defn) :+: S " where a " :+: 
           (sMap (map toLower) (phase_change ^. term)) :+: S " occurs. A " :+:
           (sMap (map toLower) (phase_change ^. term)) :+: S " occurs if " :+:
           P (temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:

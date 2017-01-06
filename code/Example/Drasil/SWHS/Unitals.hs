@@ -128,7 +128,7 @@ tank_vol     = makeUC "V_tank" "volume of the cylindrical tank"
 w_vol        = makeUC "V_W" "volume of water" (sub (volume ^. symbol) cW) m_3
 deltaT       = makeUC "deltaT" "change in temperature" 
                (Concat [Greek Delta, (temp ^. symbol)]) centigrade
-density      = makeUC "rho" "density" (Greek Rho_L)
+density      = makeUC "density" "density" (Greek Rho_L)
                densityU
 pcm_density  = makeUC "rho_P" "density of PCM" (sub (density ^. symbol) cP)
                densityU

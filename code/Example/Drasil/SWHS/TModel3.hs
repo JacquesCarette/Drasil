@@ -26,22 +26,25 @@ latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),
 -- Deriv is specifically partial derivative... how to do regular derivative?
 -- How to have conditions on a single equation
 
+
+--FIXME: Some of these things (like "time") need to be fixed, so the term
+-- is "time" and the defn makes more sense.
 t3descr :: Sentence
 t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (thermal_energy ^. term)) :+: S " (" :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
           (latent_heat ^. term)) :+: S " energy. <Integral> is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
-          S " to " :+: (time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
+          S " to " :+: (time ^. defn) :+: S " " :+: P (tau ^. symbol) :+: 
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
-          S " is the " :+: (time ^. term) :+: S " (" :+: Sy (time ^. unit) :+:
+          S " is the " :+: (time ^. defn) :+: S " (" :+: Sy (time ^. unit) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
           (phase_change ^. term)) :+: S " is not complete. The status of " :+:
           S "the " :+: (sMap (map toLower) (phase_change ^. term)) :+:
-          S " depends on the " :+: (melt_frac ^. term) :+: S ", " :+: 
+          S " depends on the " :+: (melt_frac ^. defn) :+: S ", " :+: 
           makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
-          (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
+          (temp_melt ^. defn) :+: S " and " :+: (temp_boil ^. defn) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+:
           (latent_heat ^. defn) :+: S " stops when all material has " :+:
           S "changed to the new phase.")

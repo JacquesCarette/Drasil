@@ -3,6 +3,7 @@ module Language.Drasil.Spec where
 
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Symbol
+import Data.Char (toLower)
 
 data Accent = Grave | Acute deriving Eq
 
@@ -65,3 +66,6 @@ sMap :: (String->String) -> Sentence -> Sentence
 sMap f (S a) = S (f a)
 sMap f (a :+: b) = sMap f a :+: sMap f b
 sMap _ a = a
+
+sLower :: Sentence -> Sentence
+sLower = sMap (map toLower)

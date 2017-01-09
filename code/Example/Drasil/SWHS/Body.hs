@@ -654,7 +654,7 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
                (temp_PCM ^. defn) :+: S " and " :+: (pcm_E ^. defn) :+:
                S " depend on the " :+: (sLower (phase_change ^. 
-               defn)) :+: S ". (Instance models are left out because they " :+:
+               term)) :+: S ". (Instance models are left out because they " :+:
                S "are not currently implemented in Drasil.)")]
 
 -- The first paragraph is completely general and repeated in other examples. 
@@ -871,7 +871,7 @@ inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 s4_2_7 = Section (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
 s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+: 
-               (sLower (law_cons_energy ^. defn)) :+:
+               (sLower (law_cons_energy ^. term)) :+:
                S ". This means that the " :+: (w_E ^. defn) :+:
                S " should equal the difference between " :+:
                S " the total energy input from the " :+: (sLower 
@@ -974,7 +974,7 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
             S "energy outputs (" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
             symbol) :+: S ") and " :+: P (pcm_E ^. symbol) :+: S "(" :+:
             P (time ^. symbol) :+: S ")) follow the " :+: (sLower 
-            (law_cons_energy ^. defn)) :+: S ", as outlined in " :+: 
+            (law_cons_energy ^. term)) :+: S ", as outlined in " :+: 
             makeRef s4_2_7 :+: S ", with relative error no greater than " :+:
             S "0.001%.")),
             ((requirement ^. term) :+: S "10", Flat (S "Calculate and " :+: 
@@ -1017,7 +1017,7 @@ s6 = Section ((likelyChg ^. defn) :+: S "s") [Con s6_list]
 
 s6_list = Enumeration (Simple [((likelyChg ^. term) :+: S "1", Flat 
           (S "A4 - " :+: (phsChgMtrl ^. term) :+: S " is actually a poor " :+:
-          (sLower (thermal_conductor ^. defn)) :+: S ", so " :+:
+          (sLower (thermal_conductor ^. term)) :+: S ", so " :+:
           S "the " :+: (sLower (assumption ^. defn)) :+:
           S " of uniform " :+: (temp_PCM ^. defn) :+: S " is not likely.")),
           ((likelyChg ^. term) :+: S "2", Flat (S "A8 - The " :+: (temp_C ^. 

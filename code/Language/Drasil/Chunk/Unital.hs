@@ -13,7 +13,7 @@ import Language.Drasil.Space
 --BEGIN HELPER FUNCTIONS--
 --FIXME: Space hack
 makeUC :: Unit u => String -> String -> Symbol -> u -> UnitalChunk
-makeUC nam desc sym un = UC (cv (dcc nam nam desc) sym Rational) un 
+makeUC nam desc sym un = UC (cv (dcc nam desc desc) sym Rational) un 
 
 ucFromVC :: Unit u => ConVar -> u -> UnitalChunk
 ucFromVC conv un = UC conv un

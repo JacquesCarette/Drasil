@@ -9,6 +9,9 @@ import Control.Lens((^.))
 import Data.Char(toLower)
 import Prelude hiding (log, id)
 
+--FIXME: There are three separate non-factored loads! 
+-- Two are (at least) linked, but the third is completely separate!
+
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
   act_thick, sflawParamK, sflawParamM, demand, sd, sd_max, sd_min, nom_thick,
@@ -304,7 +307,7 @@ dedescr :: Sentence
 dedescr = 
   (P $ demand ^. symbol) :+: S " or " :+: 
   (sMap (map toLower) (demandq ^. term)) :+: S ", is the " :+:
-  (demandq ^. term) :+: S " obtained from Figure 2 by interpolation using " 
+  (demandq ^. defn) :+: S " obtained from Figure 2 by interpolation using " 
   :+: (sMap (map toLower) (sD ^. term)) :+: S " (" :+: (P $ sd ^. symbol) 
   :+: S ") and " :+: (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
   (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
@@ -346,6 +349,9 @@ hFromt = fromEqn (act_thick ^. id) (S " function that maps from the " :+:
 loadDF_eq :: Expr 
 loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 
+--FIXME: Should we be using id here? My gut says no, but I'll look in 
+-- more depth shortly.
+-- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
 loadDF = fromEqn' (lDurFac ^. id) (S "Load Duration Factor") (Atomic "LDF") 
   loadDF_eq
@@ -362,7 +368,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") 
+nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. defn) (Atomic "NFL") 
   nonFL_eq
 
 glaTyFac_eq :: Expr

@@ -333,24 +333,24 @@ s6_2 = Section (S "Solution Characteristics Specification")
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This section explains all the " :+:
-  (sMap (map toLower) (assumption ^. term)) :+: S "s considered and the " :+:
-  (sMap (map toLower) (thModel ^. term)) :+: S "s which are " :+:
-  S "supported by the " :+: (sMap (map toLower) (dataDefn ^. term)) :+: S "s."
+  (sMap (map toLower) (assumption ^. defn)) :+: S "s considered and the " :+:
+  (sMap (map toLower) (thModel ^. defn)) :+: S "s which are " :+:
+  S "supported by the " :+: (sMap (map toLower) (dataDefn ^. defn)) :+: S "s."
   
-s6_2_1 = Section (assumption ^. term :+: S "s") ([Con s6_2_1_intro] ++
+s6_2_1 = Section (assumption ^. defn :+: S "s") ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
   S "This section simplifies the original problem and helps in developing the " 
-  :+: (sMap (map toLower) (thModel ^. term)) :+: 
+  :+: (sMap (map toLower) (thModel ^. defn)) :+: 
   S " [" :+: (thModel ^. term) :+: S "] by filling in the missing " 
   :+: S "information for the physical system. The numbers given in the " :+:
   S "square brackets refer to the " :+: 
-  (sMap (map toLower) (dataDefn ^. term)) :+:
+  (sMap (map toLower) (dataDefn ^. defn)) :+:
   S " [" :+: (dataDefn ^. term) :+: S "], or " :+:
-  (sMap (map toLower) (inModel ^. term)) :+: 
+  (sMap (map toLower) (inModel ^. defn)) :+: 
   S " [" :+: (inModel ^. term) :+: S "], in which the respective " 
-  :+: (sMap (map toLower) $ assumption ^. term) :+: S " is used."
+  :+: (sMap (map toLower) $ assumption ^. defn) :+: S " is used."
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
@@ -370,7 +370,7 @@ s6_2_1_list =
     (((assumption ^. term) :+: S "3"), S "This system only considers " :+:
       S "the external explosion scenario for its calculations."),
     (((assumption ^. term) :+: S "4"), S "Standard values used for " :+:
-      S "calculation in " :+: (gLassBR ^. term) :+: S " are: ")]),
+      S "calculation in " :+: (gLassBR ^. defn) :+: S " are: ")]),
     (EqnBlock $ (C sflawParamM):=(Int 7)),
     (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
       (Neg (Int 53))),
@@ -386,15 +386,15 @@ s6_2_1_list =
       S "is assumed to be a single " :+:
       (sMap (map toLower) (lite ^. term)) :+: S ". Hence the value of " :+: 
       (P $ loadSF ^. symbol) :+: S " is equal to 1 for all calculations in " 
-      :+: (gLassBR ^. term) :+: S "."),
+      :+: (gLassBR ^. defn) :+: S "."),
     (((assumption ^. term) :+: S "6"), S "Boundary conditions for the " :+: 
       (sMap (map toLower) (glaSlab ^. term)) :+: S " is assumed to be 4-sided"
       :+: S " support for calculations."),
     (((assumption ^. term) :+: S "7"), S "The response type considered in " 
-      :+: (gLassBR ^. term) :+: S " is flexural."),
+      :+: (gLassBR ^. defn) :+: S " is flexural."),
     (((assumption ^. term) :+: S "8"), S "With reference to A4 the value " 
       :+: S "of " :+: (sMap (map toLower) (loadDF ^. term)) :+: S " (" :+: 
-     (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. term) 
+     (P $ loadDF ^. symbol) :+: S ") is a constant in " :+: (gLassBR ^. defn) 
      :+: S ". It is calculated by the equation: " :+: 
       --(P $ loadDF ^. symbol) :+: S " = " :+: (P $ load_dur ^. symbol) :+: 
       S ". Using this, " :+: (P $ loadDF ^. symbol) :+: S " = 0.27.")])]
@@ -415,7 +415,7 @@ s6_2_4 = Section ((dataDefn ^. defn) :+: S "s")
 
 s6_2_4_intro = Paragraph $ 
   S "This section collects and defines all the data needed to build the " :+:
-  (sMap (map toLower) (inModel ^. term)) :+: S "s."
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s."
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)

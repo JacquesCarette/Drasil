@@ -6,10 +6,11 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 import Data.Char (toLower)
 
-program, os, matlab, physLib, c :: NamedChunk
+program, physLib, c :: NamedChunk
+matlab, os :: ConceptChunk
 c       = makeCC "C" "C programming language"
-matlab  = CC "MATLAB" (S "MATLAB programming language")
-os      = CC "OS" (S "operating system")
+matlab  = dcc "matlab" "MATLAB" "MATLAB programming language"
+os      = dcc "os" "OS" "operating system"
 physLib = makeCC "physics library" ("A programming library which " ++
     "provides functions for modelling physical phenomenon.")
 program = CC "program" (S "program")
@@ -25,12 +26,12 @@ modHWHiding = CC "hardware hiding"
 modBehavHiding :: NamedChunk
 modBehavHiding = CC "behaviour hiding" (S "Includes programs that provide " :+:
                  S "externally visible behaviour of the system as specified" :+:
-                 S " in the " :+: (sMap (map toLower) (srs ^. term)) :+:
-                 S " (" :+: S (srs ^. id) :+: S ") documents. This module" :+:
+                 S " in the " :+: (sMap (map toLower) (srs ^. defn)) :+:
+                 S " (" :+: (srs ^. term) :+: S ") documents. This module" :+:
                  S " serves as a communication layer between the hardware-" :+:
                  S "hiding module and the software decision module. The " :+:
                  S "programs in this module will need to change if there " :+:
-                 S "are changes in the " :+: S (srs ^. id) :+: S ".")
+                 S "are changes in the " :+: (srs ^. term) :+: S ".")
     
 modControl :: NamedChunk
 modControl = CC "control" (S "Provides the main program.")

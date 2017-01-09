@@ -119,105 +119,105 @@ eqTNT         = dcc "eqTNT" "TNT" "TNT (Trinitrotoluene) Equivalent Factor"
 
 -- TODO: See if we can make some of these terms less specific and/or
 --    parameterized.
-terms :: [NamedChunk]
+terms :: [ConceptChunk]
 terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, 
   lr, ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, sD]
 
 aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr, 
   ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, 
   sD, glaSlab, blast, blastTy, glassGeo, capacity, demandq, 
-  safeMessage, notSafe:: NamedChunk
+  safeMessage, notSafe:: ConceptChunk
   
-aR            = makeCC "Aspect ratio" 
+aR            = dcc "aR" "Aspect ratio" 
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
     "sides, the ratio of the length of one of the supported edges " ++
     "perpendicular to the free edge, to the length of the free edge, is " ++
     "equal to or greater than 0.5.")
-gbr           = makeCC "Glass breakage" 
+gbr           = dcc "gbr" "Glass breakage" 
   ("The fracture or breakage of any lite or ply in monolithic, laminated, " ++
     "or insulating glass.")
-lite          = makeCC "Lite" 
+lite          = dcc "lite" "Lite" 
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
-glassTy       = makeCC "Glass Types" "Type of glass"
-an            = makeCC "Annealed glass"
+glassTy       = dcc "glassTy" "Glass Types" "Type of glass"
+an            = dcc "an" "Annealed glass"
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5] in " ++
     "Reference.")
-ft            = makeCC "Fully tempered glass" 
+ft            = dcc "ft" "Fully tempered glass" 
   ("A flat and monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6] in " ++
     "Reference.")
-hs            = makeCC "Heat strengthened glass" 
+hs            = dcc "hs" "Heat strengthened glass" 
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6] in Reference.")
-gtf           = makeCC "Glass type factor" 
-  ("A multiplying factor for adjusting the " ++ (lResistance ^. id) ++
-    " of different glass type, that is, " ++ (annealedGlass ^. id) ++ 
-    ", " ++ (heatSGlass ^. id) ++ ", or " ++ (fullyTGlass ^. id) ++ 
-    " in monolithic glass, " ++ (lGlass ^. id) ++ " (Laminated Glass), " ++
-    "or " ++ (iGlass ^. id) ++ " (Insulating Glass) constructions.")
-lateral       = makeCC "Lateral" "Perpendicular to the glass surface."
-load          = makeCC "Load" "A uniformly distributed lateral pressure."
-specDeLoad    = makeCC "Specified design load" 
+gtf           = dccWDS "gtf" "Glass type factor" 
+  (S "A multiplying factor for adjusting the " :+: (lResistance ^. term) :+:
+  S " of different glass type, that is, " :+: (annealedGlass ^. term) :+: 
+  S ", " :+: (heatSGlass ^. term) :+: S ", or " :+: (fullyTGlass ^. term) :+: 
+  S " in monolithic glass, " :+: (lGlass ^. term) :+: S " (Laminated Glass), " :+:
+  S "or " :+: (iGlass ^. term) :+: S " (Insulating Glass) constructions.")
+lateral       = dcc "lateral" "Lateral" "Perpendicular to the glass surface."
+load          = dcc "load" "Load" "A uniformly distributed lateral pressure."
+specDeLoad    = dcc "specDeLoad" "Specified design load" 
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
-lr            = makeCC "Load resistance" 
+lr            = dcc "lr" "Load resistance" 
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
     "[4] in Reference.")
-ldl           = makeCC "Long duration load" 
+ldl           = dcc "ldl" "Long duration load" 
   ("Any load lasting approximately 30 days.")
-nfl           = makeCC "Non-factored load"
-  ("Three second duration uniform load associated with a probability of " ++
-    "breakage less than or equal to 8 lites per 1000 for monolithic " ++
-    (annealedGlass ^. id) ++ " glass.")
-glassWL       = makeCC "Glass weight load" 
+nfl           = dccWDS "nfl" "Non-factored load"
+  (S ("Three second duration uniform load associated with a probability of " ++
+    "breakage less than or equal to 8 lites per 1000 for monolithic ") :+:
+    (annealedGlass ^. term) :+: S " glass.")
+glassWL       = dcc "glassWL" "Glass weight load" 
   ("The dead load component of the glass weight.")
-sdl           = makeCC "Short duration load" "Any load lasting 3s or less."
-lsf           = makeCC "Load share factor" 
-  ("A multiplying factor derived from the load sharing between the double " ++
-    "glazing, of equal or different thickness's and types (including the " ++
-    "layered behaviour of " ++ (lGlass ^. id) ++ " under long duration " ++
-    "loads), in a sealed " ++ (iGlass ^. id) ++ " unit.")
-pb            = makeCC "Probability of breakage" 
+sdl           = dcc "sdl" "Short duration load" "Any load lasting 3s or less."
+lsf           = dccWDS "lsf" "Load share factor" 
+  (S "A multiplying factor derived from the load sharing between the double " :+:
+  S "glazing, of equal or different thickness's and types (including the " :+:
+  S "layered behaviour of " :+: (lGlass ^. term) :+: S " under long duration " :+:
+  S "loads), in a sealed " :+: (iGlass ^. term) :+: S " unit.")
+pb            = dcc "pb" "Probability of breakage" 
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
     "in lites per 1000.")
-specA         = makeCC "Specifying authority" 
+specA         = dcc "specA" "Specifying authority" 
   ("The design professional responsible for interpreting applicable " ++
     "regulations of authorities having jurisdiction and considering " ++
     "appropriate site specific factors to determine the appropriate " ++
     "values used to calculate the specified design load, and furnishing " ++
     "other information required to perform this practice.")
-blaReGLa      = makeCC "Blast resistant glazing" 
+blaReGLa      = dcc "blaReGLa" "Blast resistant glazing" 
   ("Glazing that provides protection against air blast pressure generated " ++
     "by explosions.")
-eqTNTChar     = makeCC "Equivalent TNT charge mass" 
+eqTNTChar     = dcc "eqTNTChar" "Equivalent TNT charge mass" 
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
-sD            = makeCC "Stand off distance" 
+sD            = dcc "sD" "Stand off distance" 
   ("The distance from the glazing surface to the centroid of a " ++
     "hemispherical high explosive charge.")
-glaSlab       = makeCC "Glass slab" "Glass slab"
-blast         = makeCC "Blast" "Any kind of man-made explosion"
-blastTy       = makeCC "Blast type" 
+glaSlab       = dcc "glaSlab" "Glass slab" "Glass slab"
+blast         = dcc "blast" "Blast" "Any kind of man-made explosion"
+blastTy       = dcc "blastTy" "Blast type" 
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")
-glassGeo      = makeCC "Glass geometry" 
+glassGeo      = dcc "glassGeo" "Glass geometry" 
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
-capacity      = makeCC "Capacity" "The load resistance calculated"
-demandq       = makeCC "Demand" "3 second duration equivalent pressure"
-safeMessage   = makeCC "Safe" 
+capacity      = dcc "capacity" "Capacity" "The load resistance calculated"
+demandq       = dcc "demandq" "Demand" "3 second duration equivalent pressure"
+safeMessage   = dcc "safeMessage" "Safe" 
   ("For the given input parameters, the glass is considered safe.")
-notSafe       = makeCC "Not safe" 
+notSafe       = dcc "notSafe" "Not safe" 
   ("For the given input parameters, the glass is NOT considered safe.")
 
 --Theoretical models--
@@ -260,8 +260,8 @@ t2descr =
   (P $ lRe ^. symbol) :+: S " is the " :+: (lRe ^. term) :+: 
   S " (also called capacity, as defined in " :+: 
   (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
-  (P $ demand ^. symbol) :+: S (" (also referred as the " ++ (demandq ^. id)
-  ++ ") is the ") :+: (demandq ^. term) :+: S ", as defined in " :+: 
+  (P $ demand ^. symbol) :+: S " (also referred as the " :+: (demandq ^. term)
+  :+: S ") is the " :+: (demandq ^. defn) :+: S ", as defined in " :+: 
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
 --Instance Models--
@@ -303,16 +303,16 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 dedescr :: Sentence
 dedescr = 
   (P $ demand ^. symbol) :+: S " or " :+: 
-  (sMap (map toLower) (S $ demandq ^. id)) :+: S ", is the " :+:
+  (sMap (map toLower) (demandq ^. term)) :+: S ", is the " :+:
   (demandq ^. term) :+: S " obtained from Figure 2 by interpolation using " 
-  :+: (sMap (map toLower) (S $ sD ^. id)) :+: S " (" :+: (P $ sd ^. symbol) 
+  :+: (sMap (map toLower) (sD ^. term)) :+: S " (" :+: (P $ sd ^. symbol) 
   :+: S ") and " :+: (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
   (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
   (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
   S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
   (sMap (map toLower) (char_weight ^. term)) :+: S ". " :+: 
   (P $ tNT ^. symbol) :+: S " is the " :+: (tNT ^. term) :+: S ". " :+: 
-  (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (S $ sD ^. id))
+  (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (sD ^. term))
   :+: S " where " :+: (P $ sd ^. symbol) :+: S " = ." 
   --equation in sentence
 
@@ -374,12 +374,12 @@ glaTyFac = fromEqn' (glassTypeFac ^. id) (S "function that maps from " :+:
   S "number, as follows: " :+: (P $ glaTyFac ^.symbol) :+: S "(" :+: 
   (P $ glass_type ^. symbol) :+: S ") = (" :+: (P $ glass_type ^. symbol) :+: 
   S " = AN => 1.0|" :+: (P $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
-  (P $ glass_type ^. symbol) :+: S (" = HS => 2.0). " ++ 
-  (annealedGlass ^. id) ++ " is ") :+: 
-  (sMap (map toLower) (annealedGlass ^. term)) :+: S (". " ++ 
-  (fullyTGlass ^. id) ++ " is ") :+: 
-  (sMap (map toLower) (fullyTGlass ^. term)) :+: S (". " ++
-  (heatSGlass ^. id) ++ " is ") :+: 
+  (P $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: 
+  (annealedGlass ^. term) :+: S " is " :+: 
+  (sMap (map toLower) (annealedGlass ^. term)) :+: S ". " :+: 
+  (fullyTGlass ^. term) :+: S " is " :+: 
+  (sMap (map toLower) (fullyTGlass ^. term)) :+: S ". " :+:
+  (heatSGlass ^. term) :+: S " is " :+: 
   (sMap (map toLower) (heatSGlass ^. term)) :+: S ".") (Atomic "GTF") 
   glaTyFac_eq
 

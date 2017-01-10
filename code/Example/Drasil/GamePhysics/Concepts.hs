@@ -20,9 +20,9 @@ cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
 centreMass    = dcc "centreMass" "CM" "Centre of Mass"
 twoD          = dcc "twoD" "2D" "Two-Dimensional"
 
-chipmunk, rigidBodies, vels, angularVels :: NamedChunk
-
-chipmunk    = makeCC "Chipmunk2D" "Chipmunk2D game physics library"
+rigidBodies, vels, angularVels :: NamedChunk
+chipmunk :: ConceptChunk
+chipmunk    = dcc "chipmunk" "Chipmunk2D" "Chipmunk2D game physics library"
 
 -- Chunks to accommodate 'irregular' plurals --
 -- FIXME: Figure out a way around creating duplicate chunks for irregular

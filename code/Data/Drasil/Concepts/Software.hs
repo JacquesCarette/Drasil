@@ -6,12 +6,12 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 import Data.Char (toLower)
 
-program, physLib, c :: NamedChunk
-matlab, os :: ConceptChunk
+program, c :: NamedChunk
+matlab, physLib, os :: ConceptChunk
 c       = makeCC "C" "C programming language"
 matlab  = dcc "matlab" "MATLAB" "MATLAB programming language"
 os      = dcc "os" "OS" "operating system"
-physLib = makeCC "physics library" ("A programming library which " ++
+physLib = dcc "physLib" "physics library" ("A programming library which " ++
     "provides functions for modelling physical phenomenon.")
 program = CC "program" (S "program")
 

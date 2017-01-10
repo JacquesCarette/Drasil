@@ -490,14 +490,14 @@ s7_1 = Section (S "Functional " :+: (requirement ^. defn) :+: S "s")
 
 s7_1_intro = Paragraph $
   S "The following section provides the functional " :+:
-  (requirement ^. term) :+: S "s, the business tasks that the software " :+:
+  (requirement ^. defn) :+: S "s, the business tasks that the software " :+:
   S "is expected to complete."
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
     [(((requirement ^. term) :+: S "1"), S "Input the following " :+:
       S "quantities, which define the glass dimensions, " :+: 
-      (sMap (map toLower) (glassTy ^. term)) :+: S ", tolerable probability "
+      (sMap (map toLower) (glassTy ^. defn)) :+: S ", tolerable probability "
       :+: S "of failure and the characteristics of the " :+: 
       (sMap (map toLower) (blast ^. term)) :+: S ":")]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
@@ -534,9 +534,9 @@ s7_1_list =
     :+: S " and " :+: (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
     (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
     (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true, " :+:
-    S "output the message " :+: Quote (safeMessage ^. term) :+: S " If " :+:
+    S "output the message " :+: Quote (safeMessage ^. defn) :+: S " If " :+:
     S "the condition is false, then output the message " :+: 
-    Quote (notSafe ^. term))] ++
+    Quote (notSafe ^. defn))] ++
   [(((requirement ^. term) :+: S "6"), Nested (S "Output the following " 
     :+: S "quantities:")
     (Bullet $ 
@@ -604,21 +604,21 @@ s9_intro1 = Paragraph $
   :+: S "of that component that are marked with an " :+: Quote (S "X") :+:
   S " should be modified as well. Table 5 (" :+: (makeRef s9_table1) :+: 
   S ") shows the dependencies of " :+: 
-  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+: 
-  (sMap (map toLower) (dataDefn ^. term)) :+: S "s and " :+:
-  (sMap (map toLower) (inModel ^. term)) :+: S "s with each other. " :+:
+  (sMap (map toLower) (thModel ^. defn)) :+: S "s, " :+: 
+  (sMap (map toLower) (dataDefn ^. defn)) :+: S "s and " :+:
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s with each other. " :+:
   S "Table 6 (" :+: (makeRef s9_table2) :+: S ") shows the dependencies of " :+:
-  (sMap (map toLower) (requirement ^. term)) :+: S "s on " :+:
-  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. term)) :+: S "s and data constraints. " :+:
+  (sMap (map toLower) (requirement ^. defn)) :+: S "s on " :+:
+  (sMap (map toLower) (thModel ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. defn)) :+: S "s and data constraints. " :+:
   S "Table 7 (" :+: (makeRef s9_table3) :+: S ") shows the dependencies of " 
-  :+: (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (likelyChg ^. term)) :+: S "s and " :+:
-  (sMap (map toLower) (requirement ^. term)) :+: S "s on the " :+:
-  (sMap (map toLower) (assumption ^. term)) :+: S "s."
+  :+: (sMap (map toLower) (thModel ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (likelyChg ^. defn)) :+: S "s and " :+:
+  (sMap (map toLower) (requirement ^. defn)) :+: S "s on the " :+:
+  (sMap (map toLower) (assumption ^. defn)) :+: S "s."
 
 s9_table1 = Table [S "", S "T1 (" :+: 
   (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "T2 (" :+: 
@@ -774,21 +774,21 @@ s9_intro2 =
   S "by the component at the head of that arrow. Therefore, if a " :+:
   S "component is changed, the components that it points to should also " :+:
   S "be changed. Figure 2 (" :+: (makeRef fig_2) :+: S ") shows the " :+:
-  S "dependencies of " :+: (sMap (map toLower) (thModel ^. term)) :+: 
-  S "s, " :+: (sMap (map toLower) (dataDefn ^. term)) :+: S "s and " :+:
-  (sMap (map toLower) (inModel ^. term)) :+: S "s on each other. " :+:
+  S "dependencies of " :+: (sMap (map toLower) (thModel ^. defn)) :+: 
+  S "s, " :+: (sMap (map toLower) (dataDefn ^. defn)) :+: S "s and " :+:
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s on each other. " :+:
   S "Figure 3 (" :+: (makeRef fig_3) :+: S ") shows the dependencies of " :+:
-  (sMap (map toLower) (requirement ^. term)) :+: S "s on " :+:
-  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+: 
-  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. term)) :+: S "s and data constraints. " :+:
+  (sMap (map toLower) (requirement ^. defn)) :+: S "s on " :+:
+  (sMap (map toLower) (thModel ^. defn)) :+: S "s, " :+: 
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. defn)) :+: S "s and data constraints. " :+:
   S "Figure 4 (" :+: (makeRef fig_4) :+: S ") shows the dependencies of " :+:
-  (sMap (map toLower) (thModel ^. term)) :+: S "s, " :+: 
-  (sMap (map toLower) (inModel ^. term)) :+: S "s, " :+:
-  (sMap (map toLower) (dataDefn ^. term)) :+: S "s, " :+: 
-  (sMap (map toLower) (requirement ^. term)) :+: S "s and " :+:
-  (sMap (map toLower) (likelyChg ^. term)) :+: S "s on " :+:
-  (sMap (map toLower) (assumption ^. term)) :+: S "s.",
+  (sMap (map toLower) (thModel ^. defn)) :+: S "s, " :+: 
+  (sMap (map toLower) (inModel ^. defn)) :+: S "s, " :+:
+  (sMap (map toLower) (dataDefn ^. defn)) :+: S "s, " :+: 
+  (sMap (map toLower) (requirement ^. defn)) :+: S "s and " :+:
+  (sMap (map toLower) (likelyChg ^. defn)) :+: S "s on " :+:
+  (sMap (map toLower) (assumption ^. defn)) :+: S "s.",
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical " :+:
   S "representation of the matrix by scanning the labels and reference " :+:
@@ -798,11 +798,11 @@ fig_2 = Figure (S "Figure 2: Traceability Matrix Showing the Connections " :+:
   S "Between Items of Different Sections") "Trace.png"
 
 fig_3 = Figure (S "Figure 3: Traceability Matrix Showing the Connections " :+:
-  S "Between " :+: (requirement ^. term) :+: S "s and Other Items") 
+  S "Between " :+: (requirement ^. defn) :+: S "s and Other Items") 
   "RTrace.png"
 
 fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections " :+:
-  S "Between " :+: (assumption ^. term) :+: S "s and Other Items")
+  S "Between " :+: (assumption ^. defn) :+: S "s and Other Items")
   "ATrace.png"
 
 s10 = Section(S "References") [Con s10_list]
@@ -839,7 +839,7 @@ s11_intro = Paragraph $
   S "This appendix holds the graphs (" :+: (makeRef fig_5) :+: S " and " :+:
   (makeRef fig_6) :+: S ") used for interpolating values needed in the models."
 
-fig_5 = Figure (S "Figure 5: " :+: (demandq ^. term) :+: S " (" :+: 
+fig_5 = Figure (S "Figure 5: " :+: (demandq ^. defn) :+: S " (" :+: 
   P (demand ^. symbol) :+: S ") versus " :+: (sD ^. term) :+:
   S " versus " :+: (char_weight ^. term) :+: S " (" :+: 
   P (sflawParamM ^. symbol) :+: S ")") "ASTM_F2248-09.png"

@@ -382,11 +382,11 @@ glaTyFac = fromEqn' (glassTypeFac ^. id) (S "function that maps from " :+:
   S " = AN => 1.0|" :+: (P $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
   (P $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: 
   (annealedGlass ^. term) :+: S " is " :+: 
-  (sMap (map toLower) (annealedGlass ^. term)) :+: S ". " :+: 
+  (sMap (map toLower) (annealedGlass ^. defn)) :+: S ". " :+: 
   (fullyTGlass ^. term) :+: S " is " :+: 
-  (sMap (map toLower) (fullyTGlass ^. term)) :+: S ". " :+:
+  (sMap (map toLower) (fullyTGlass ^. defn)) :+: S ". " :+:
   (heatSGlass ^. term) :+: S " is " :+: 
-  (sMap (map toLower) (heatSGlass ^. term)) :+: S ".") (Atomic "GTF") 
+  (sMap (map toLower) (heatSGlass ^. defn)) :+: S ".") (Atomic "GTF") 
   glaTyFac_eq
 
 dL_eq :: Expr

@@ -52,8 +52,8 @@ s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil th
 
 s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. unit)),
-   (\x -> (x ^. term)),
-   (\x -> S (x ^. id))
+   (\x -> (x ^. defn)),
+   (\x -> (x ^. term))
   ] this_si)
   (S "Table of Units") True
 
@@ -77,8 +77,8 @@ s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
 s1_3 = Sub $ Section (S "Abbreviations and Acronyms") [s1_3_table]
 
 s1_3_table = Con $ Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> S $ ch ^. id),
-   (\ch -> ch ^. term)]
+  [(\ch -> ch ^. term),
+   (\ch -> ch ^. defn)]
   acronyms)
   (S "Abbreviations and Acronyms") False
   

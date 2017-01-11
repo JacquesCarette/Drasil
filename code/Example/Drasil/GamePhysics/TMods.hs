@@ -79,13 +79,13 @@ t3descr = S "Two " :+: (rigidBodies ^. term) :+: S " in the universe " :+:
     S "inversely proportional to the " :+: (sqrDist ^. defn) :+: S " " :+:
     P (sqrDist ^. symbol) :+: S " (" :+: Sy (sqrDist ^. unit) :+: S ") " :+:
     S "between them. The vector " :+: P (disp ^. symbol) :+: S " (" :+:
-    Sy (disp ^. unit) :+: S ") is the " :+: (disp ^. defn) :+:
+    Sy (disp ^. unit) :+: S ") is the " :+: (disp ^. term) :+:
     S " between the centres of the " :+: (rigidBodies ^. term) :+:
     S " and " :+: P (dispNorm ^. symbol) :+: S " (" :+:
     Sy (dispNorm ^. unit) :+: S ") represents " :+: S "the " :+:
     (dispNorm ^. defn) :+: S ", or absolute distance between the " :+:
     S "two. " :+: P (dispUnit ^. symbol) :+: S " denotes the " :+:
-    (dispUnit ^. defn) :+: S ", equivalent to the " :+: (disp ^. defn) :+:
+    (dispUnit ^. defn) :+: S ", equivalent to the " :+: (disp ^. term) :+:
     S " divided by the " :+: (dispNorm ^. defn) :+: S ", as shown above. " :+:
     S "Finally, " :+: P (gravConst ^. symbol) :+: S " is the " :+:
     (gravConst ^. defn) :+: S " ( " :+: Sy (gravConst ^. unit) :+: S ")."

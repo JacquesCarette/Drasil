@@ -11,7 +11,8 @@ rigidBody, velocity, angularV, friction, elasticity, collision, space,
     
 rigidBody  = dcc "rigidBody" "rigid body" 
   "A solid body in which deformation is neglected."
-velocity   = dcc "velocity" "velocity" "The rate of change of a body's position."
+velocity   = dccWDS "velocity" "velocity" 
+  (S "The rate of change of a body's " :+: (position ^. term))
 angularV   = dcc "angularV" "angular velocity" 
   "The rate of change of a body's orientation."
 friction   = dcc "friction" "friction" 
@@ -28,22 +29,26 @@ cartesian  = dcc "cartesian" "Cartesian coordinate" ("A coordinate system that "
 rightHand  = dcc "rightHand" "right-handed coordinate system" 
   "A coordinate system where the positive z-axis comes out of the screen."
   
+  
+position   = dcc "position" "position" 
+  "an object's location relative to a reference point"
+acceleration = dccWDS "acceleration" "acceleration" 
+  (S "the rate of change of a body's " :+: (velocity ^. term))
+angularAccel = dccWDS "angularAccel" "angular acceleration" 
+  (S "the rate of change of a body's " :+: (angularV ^. term))  
+displacement = dccWDS "displacement" "displacement" 
+  (S "the change in " :+: (position ^. defn))
+
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
 surface    = dcc "surface" "surface" "surface" 
 restitutionCoef = dcc "restitutionCoef" "coefficient of restitution" 
   "coefficient of restitution"
-acceleration = dccWDS "acceleration" "acceleration" 
-  (S "the rate of change of a body's " :+: (velocity ^. term))
-angularAccel = dccWDS "angularAccel" "angular acceleration" 
-  (S "the rate of change of a body's " :+: (angularV ^. term))
 momentOfInertia = dcc "momentOfInertia" "moment of inertia" "moment of inertia"
 force      = dcc "force" "force" "force"
 impulseV   = dcc "impulseV" "impulse (vector)" "impulse (vector)"
 impulseS   = dcc "impulseS" "impulse (scalar)" "impulse (scalar)"
-position   = dcc "position" "position" "position"
 distance   = dcc "distance" "distance" "distance"
-displacement = dcc "displacement" "displacement" "displacement"
 angularDisplacement = dcc "angularDisplacement" "angular displacement"
   "angular displacement"
 time = dcc "time" "time" "time"

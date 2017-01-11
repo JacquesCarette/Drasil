@@ -38,11 +38,11 @@ dispEqn :: Expr
 dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
 
 dd2descr :: Sentence
-dd2descr = S "the linear " :+: (disp ^. defn) :+: S " of a " :+:
+dd2descr = S "the linear " :+: (disp ^. term) :+: S " of a " :+:
     (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
     S "), also equal to the derivative of its linear " :+:
-    (position ^. defn) :+: S " with respect to " :+: (time ^. defn) :+:
+    (position ^. term) :+: S " with respect to " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol)
 
 -- DD3 : Linear velocity --

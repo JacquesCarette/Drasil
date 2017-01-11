@@ -25,7 +25,7 @@ t1descr :: Sentence
 t1descr = S "The net " :+: (force ^. defn) :+: S " " :+:
     P (force ^. symbol) :+: S " (" :+: Sy (force ^. unit) :+: S ") on a " :+:
     (rigidBody ^. term) :+: S " is proportional to the " :+:
-    (accel ^. defn) :+: S " " :+: P (accel ^. symbol) :+: S " (" :+:
+    (accel ^. term) :+: S " " :+: P (accel ^. symbol) :+: S " (" :+:
     Sy (accel ^. unit) :+: S ") of the " :+: (rigidBody ^. term) :+:
     S ", where " :+: P (mass ^. symbol) :+: S " (" :+: Sy (mass ^. unit) :+:
     S ") denotes the " :+: (mass ^. defn) :+: S " of the " :+:
@@ -129,7 +129,7 @@ t5descr :: Sentence
 t5descr = S "The net " :+: (torque ^. defn) :+: S " " :+:
     P (torque ^. symbol) :+: S " (" :+: Sy (torque ^. unit) :+: S ") on a " :+:
     (rigidBody ^. term) :+: S " is proportional to its " :+:
-    (angAccel ^. defn) :+: S " " :+: P (angAccel ^. symbol) :+: S " (" :+:
+    (angAccel ^. term) :+: S " " :+: P (angAccel ^. symbol) :+: S " (" :+:
     Sy (angAccel ^. unit) :+: S "). Here, " :+: P (momtInert ^. symbol) :+:
     S " (" :+: Sy (momtInert ^. unit) :+: S ") denotes the " :+:
     (momtInert ^. defn) :+: S " of the " :+: (rigidBody ^. term) :+:

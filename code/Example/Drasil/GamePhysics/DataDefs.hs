@@ -72,10 +72,10 @@ accelEqn :: Expr
 accelEqn = Deriv Total (FCall (C vel) [C time]) (C time)
 
 dd4descr :: Sentence
-dd4descr = S "the linear " :+: (accel ^. defn) :+: S " of a " :+:
+dd4descr = S "the linear " :+: (accel ^. term) :+: S " of a " :+:
     (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its linear " :+: (accel ^. defn) :+:
+    S "), also equal to the derivative of its linear " :+: (accel ^. term) :+:
     S " with respect to " :+: (time ^. defn) :+: S " " :+:
     P (time ^. symbol)
 
@@ -123,7 +123,7 @@ angAccelEqn :: Expr
 angAccelEqn = Deriv Total (FCall (C angVel) [C time]) (C time)
 
 dd7descr :: Sentence
-dd7descr = S "the " :+: (angAccel ^. defn) :+: S " of a " :+:
+dd7descr = S "the " :+: (angAccel ^. term) :+: S " of a " :+:
     (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
     S "), also equal to the derivative of its " :+: ((angVel ^. term)) :+:

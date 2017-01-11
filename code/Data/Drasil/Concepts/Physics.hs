@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
+import Control.Lens ((^.))
 
 rigidBody, velocity, angularV, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
@@ -32,8 +33,10 @@ rightHand  = dcc "rightHand" "right-handed coordinate system"
 surface    = dcc "surface" "surface" "surface" 
 restitutionCoef = dcc "restitutionCoef" "coefficient of restitution" 
   "coefficient of restitution"
-acceleration = dcc "acceleration" "acceleration" "acceleration"
-angularAccel = dcc "angularAccel" "angular acceleration" "angular acceleration"
+acceleration = dccWDS "acceleration" "acceleration" 
+  (S "the rate of change of a body's " :+: (velocity ^. term))
+angularAccel = dccWDS "angularAccel" "angular acceleration" 
+  (S "the rate of change of a body's " :+: (angularV ^. term))
 momentOfInertia = dcc "momentOfInertia" "moment of inertia" "moment of inertia"
 force      = dcc "force" "force" "force"
 impulseV   = dcc "impulseV" "impulse (vector)" "impulse (vector)"

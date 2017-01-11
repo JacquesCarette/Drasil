@@ -42,6 +42,8 @@ force      = dcc "force" "force"
   "an interaction that tends to produce change in the motion of an object"
 surface    = dcc "surface" "surface"
   "the outer or topmost boundary of an object"
+distance   = dcc "distance" "distance" 
+  "the interval measured along a path connecting two locations"
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
@@ -50,7 +52,6 @@ restitutionCoef = dcc "restitutionCoef" "coefficient of restitution"
 momentOfInertia = dcc "momentOfInertia" "moment of inertia" "moment of inertia"
 impulseV   = dcc "impulseV" "impulse (vector)" "impulse (vector)"
 impulseS   = dcc "impulseS" "impulse (scalar)" "impulse (scalar)"
-distance   = dcc "distance" "distance" "distance"
 angularDisplacement = dcc "angularDisplacement" "angular displacement"
   "angular displacement"
 time = dcc "time" "time" "time"

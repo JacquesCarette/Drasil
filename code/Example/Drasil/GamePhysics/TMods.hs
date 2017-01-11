@@ -22,7 +22,7 @@ newtonSLRel :: Relation
 newtonSLRel = (C force) := (C mass) * (C accel)
 
 t1descr :: Sentence
-t1descr = S "The net " :+: (force ^. defn) :+: S " " :+:
+t1descr = S "The net " :+: (force ^. term) :+: S " " :+:
     P (force ^. symbol) :+: S " (" :+: Sy (force ^. unit) :+: S ") on a " :+:
     (rigidBody ^. term) :+: S " is proportional to the " :+:
     (accel ^. term) :+: S " " :+: P (accel ^. symbol) :+: S " (" :+:
@@ -41,10 +41,10 @@ newtonTLRel = (C force_1) := (Neg (C force_2))
 
 t2descr :: Sentence
 t2descr = S "Every action has an equal and opposite reaction. In other " :+:
-    S "words, the " :+: (force ^. defn) :+: S " " :+: P (force_1 ^. symbol) :+:
+    S "words, the " :+: (force ^. term) :+: S " " :+: P (force_1 ^. symbol) :+:
     S " (" :+: Sy (force_1 ^. unit) :+: S ") exerted on the second " :+:
     (rigidBody ^. term) :+: S " by the first is equal in magnitude and " :+:
-    S "in the opposite direction to the " :+: (force ^. defn) :+: S " " :+:
+    S "in the opposite direction to the " :+: (force ^. term) :+: S " " :+:
     P (force_2 ^. symbol) :+: S " (" :+: Sy (force_2 ^. unit) :+:
     S ") exerted on the first " :+: (rigidBody ^. term) :+:
     S " by the second."
@@ -71,7 +71,7 @@ newtonLUGRel = (C force) :=
 
 t3descr :: Sentence
 t3descr = S "Two " :+: (rigidBodies ^. term) :+: S " in the universe " :+:
-    S "attract each other with a " :+: (force ^. defn) :+: S " " :+:
+    S "attract each other with a " :+: (force ^. term) :+: S " " :+:
     P (force ^. symbol) :+: S " (" :+: Sy (force ^. unit) :+: S ") " :+:
     S "that is directly proportional to the product of their " :+:
     (mass ^. defn) :+: S "es, " :+: P (mass_1 ^. symbol) :+: S " and " :+:

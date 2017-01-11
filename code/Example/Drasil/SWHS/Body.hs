@@ -580,11 +580,11 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                 UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
                 * (C htCap) * Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "Applying " :+: (gauss_div ^. defn) :+: S " to" :+:
-               S " the first term over the " :+: (surface ^. defn) :+:
+               S " the first term over the " :+: (surface ^. term) :+:
                S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
                (volume ^. defn) :+: S ", with " :+: P (thFluxVect ^. 
                symbol) :+: S " as the " :+: (thFluxVect ^. defn) :+:
-               S " for the " :+: (surface ^. defn) :+: S " and " :+:
+               S " for the " :+: (surface ^. term) :+: S " and " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
                defn) :+: S ":"),
                EqnBlock 

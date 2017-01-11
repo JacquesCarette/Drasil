@@ -38,14 +38,16 @@ angularAccel = dccWDS "angularAccel" "angular acceleration"
   (S "the rate of change of a body's " :+: (angularV ^. term))  
 displacement = dccWDS "displacement" "displacement" 
   (S "the change in " :+: (position ^. defn))
+force      = dcc "force" "force" 
+  "an interaction that tends to produce change in the motion of an object"
+surface    = dcc "surface" "surface"
+  "the outer or topmost boundary of an object"
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
-surface    = dcc "surface" "surface" "surface" 
 restitutionCoef = dcc "restitutionCoef" "coefficient of restitution" 
   "coefficient of restitution"
 momentOfInertia = dcc "momentOfInertia" "moment of inertia" "moment of inertia"
-force      = dcc "force" "force" "force"
 impulseV   = dcc "impulseV" "impulse (vector)" "impulse (vector)"
 impulseS   = dcc "impulseS" "impulse (scalar)" "impulse (scalar)"
 distance   = dcc "distance" "distance" "distance"

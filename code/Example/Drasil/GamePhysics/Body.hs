@@ -9,7 +9,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction, 
-                                     rightHand, collision, space)
+                                     rightHand, collision, space, surface)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
 
@@ -308,13 +308,13 @@ s4_1_2 = Section ((goalStmt ^. defn) :+: S "s") [Con s4_1_2_list]
 s4_1_2_list = Enumeration (Simple [
     ((goalStmt ^. term) :+: S "1", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (position ^. term) :+: S "s and " :+:
-    (vels ^. term) :+: S ", and " :+: (force ^. defn) :+:
+    (vels ^. term) :+: S ", and " :+: (force ^. term) :+:
     S "s applied on a set of " :+: (rigidBodies ^. term) :+:
     S ", determine their new " :+: (position ^. term) :+: S "s and " :+:
     (vels ^. term) :+: S " over a period of " :+: (time ^. term) :+: S ".")),
     ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (orientation ^. defn) :+: S "s and " :+:
-    (angularVels ^. term) :+: S ", and " :+: (force ^. defn) :+: S "s " :+:
+    (angularVels ^. term) :+: S ", and " :+: (force ^. term) :+: S "s " :+:
     S "applied on a set of " :+: (rigidBodies ^. term) :+: S ", " :+:
     S "determine their new " :+: (orientation ^. defn) :+: S "s and " :+:
     (angularVels ^. term) :+: S " over a period of " :+: (time ^. defn) :+:
@@ -542,10 +542,11 @@ s5_1_list = Enumeration (Simple [
     ((requirement ^. term) :+: S "2", Flat (S "Input the initial " :+:
     (mass ^. defn) :+: S "es, " :+: (vels ^. term) :+: S ", " :+:
     (orientation ^. defn) :+: S "s, " :+: (angularVels ^. term) :+:
-    S " of, " :+: S "and " :+: (force ^. defn) :+: S "s applied on " :+:
+    S " of, " :+: S "and " :+: (force ^. term) :+: S "s applied on " :+:
     (rigidBodies ^. term) :+: S ".")),
-    ((requirement ^. term) :+: S "3", Flat (S "Input the surface " :+:
-    S "properties of the bodies, such as " :+: (friction ^. term) :+: S " or " :+:
+    ((requirement ^. term) :+: S "3", Flat (S "Input the " :+: 
+    (surface ^. term) :+: S " properties of the bodies, such as " :+: 
+    (friction ^. term) :+: S " or " :+:
     (elasticity ^. term) :+: S ".")),
     ((requirement ^. term) :+: S "4", Flat (S "Verify that the inputs " :+:
     S "satisfy the required physical constraints.")),

@@ -12,6 +12,7 @@ import Data.Drasil.Quantities.Math
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Control.Lens ((^.))
+import Prelude hiding (id)
 
 swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
@@ -148,7 +149,14 @@ tau_W        = makeUC "tau_W" "ODE parameter for water" (sub (Greek Tau_L) cW)
 swhsUnitless :: [ConVar]
 -- norm_vect used to go here, but due to type change it is no longer included
 -- in this list.
-swhsUnitless = [norm_vect, surface, eta, melt_frac]
+swhsUnitless = [norm_vect, surface_hack, eta, melt_frac]
+
+--FIXME: This is a hack to get surface to display "the old way" in the
+--        Table of Symbols. The current version of surface is much more
+--        verbose.
+surface_hack :: ConVar
+surface_hack = cv (ccStSS (surface ^. id) (surface ^. term) (S "surface")) 
+  (surface ^. symbol) (surface ^. typ)
 
 eta, melt_frac :: ConVar
 

@@ -285,10 +285,16 @@ s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms " :+:
     S "purpose of reducing ambiguity and making it easier to correctly " :+:
     S "understand the requirements:"
 
-s4_1_1_bullets = Enumeration (Bullet $ map (\t -> Flat (
-    (sMap capitalize (t ^. term)) :+:
-    S ": " :+: (t ^. defn)))
-    [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
+--FIXME: Handle plurals properly. This is a really bad hack.
+s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
+    [rigidBody, elasticity, ctrOfMass] ++ [termDefns cartesian] ++ 
+    map termDefn [rightHand])
+    where termDefn t = Flat (
+                    (sMap capitalize (t ^. term)) :+:
+                    S ": " :+: (t ^. defn))
+          termDefns t = Flat (
+                    (sMap capitalize (t ^. term)) :+:
+                    S "s: " :+: (t ^. defn))
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
@@ -301,7 +307,7 @@ s4_1_2 = Section ((goalStmt ^. defn) :+: S "s") [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
     ((goalStmt ^. term) :+: S "1", Flat (S "Given the physical " :+:
-    S "properties, initial " :+: (position ^. defn) :+: S "s and " :+:
+    S "properties, initial " :+: (position ^. term) :+: S "s and " :+:
     (vels ^. term) :+: S ", and " :+: (force ^. defn) :+:
     S "s applied on a set of " :+: (rigidBodies ^. term) :+:
     S ", determine their new " :+: (position ^. defn) :+: S "s and " :+:

@@ -26,7 +26,7 @@ ctrOfMassEqn = (UnaryOp (Summation Nothing
     ((C mass_i) * (C pos_i)))) / (C mTot)
 
 dd1descr :: Sentence
-dd1descr = pos_CM ^. term
+dd1descr = pos_CM ^. defn
 
 -- DD2 : Linear displacement --
 
@@ -38,11 +38,11 @@ dispEqn :: Expr
 dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
 
 dd2descr :: Sentence
-dd2descr = S "the linear " :+: (disp ^. term) :+: S " of a " :+:
-    S (rigidBody ^. id) :+: S " as a function of " :+: (time ^. term) :+:
+dd2descr = S "the linear " :+: (disp ^. defn) :+: S " of a " :+:
+    (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
     S "), also equal to the derivative of its linear " :+:
-    (position ^. term) :+: S " with respect to " :+: (time ^. term) :+:
+    (position ^. defn) :+: S " with respect to " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol)
 
 -- DD3 : Linear velocity --
@@ -56,10 +56,10 @@ velEqn = Deriv Total (FCall (C disp) [C time]) (C time)
 
 dd3descr :: Sentence
 dd3descr = S "the linear " :+: (vel ^. term) :+: S " of a " :+:
-    S (rigidBody ^. id) :+: S " as a function of " :+: (time ^. term) :+:
+    (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
     S "), also equal to the derivative of its linear " :+: (vel ^. term) :+:
-    S " with respect to " :+: (time ^. term) :+: S " " :+:
+    S " with respect to " :+: (time ^. defn) :+: S " " :+:
     P (time ^. symbol)
 
 -- DD4 : Linear acceleration --
@@ -72,11 +72,11 @@ accelEqn :: Expr
 accelEqn = Deriv Total (FCall (C vel) [C time]) (C time)
 
 dd4descr :: Sentence
-dd4descr = S "the linear " :+: (accel ^. term) :+: S " of a " :+:
-    S (rigidBody ^. id) :+: S " as a function of " :+: (time ^. term) :+:
+dd4descr = S "the linear " :+: (accel ^. defn) :+: S " of a " :+:
+    (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its linear " :+: (accel ^. term) :+:
-    S " with respect to " :+: (time ^. term) :+: S " " :+:
+    S "), also equal to the derivative of its linear " :+: (accel ^. defn) :+:
+    S " with respect to " :+: (time ^. defn) :+: S " " :+:
     P (time ^. symbol)
 
 -- DD5 : Angular displacement --
@@ -89,11 +89,11 @@ angDispEqn :: Expr
 angDispEqn = Deriv Total (FCall (C orientation) [C time]) (C time)
 
 dd5descr :: Sentence
-dd5descr = S "the " :+: (angDisp ^. term) :+: S " of a " :+:
-    S (rigidBody ^. id) :+: S " as a function of " :+: (time ^. term) :+:
+dd5descr = S "the " :+: (angDisp ^. defn) :+: S " of a " :+:
+    (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its " :+: (orientation ^. term) :+:
-    S " with respect to " :+: (time ^. term) :+: S " " :+:
+    S "), also equal to the derivative of its " :+: (orientation ^. defn) :+:
+    S " with respect to " :+: (time ^. defn) :+: S " " :+:
     P (time ^. symbol)
 
 -- DD6 : Angular velocity --
@@ -106,11 +106,11 @@ angVelEqn :: Expr
 angVelEqn = Deriv Total (FCall (C angDisp) [C time]) (C time)
 
 dd6descr :: Sentence
-dd6descr = S "the " :+: (S (angVel ^. id)) :+: S " of a " :+:
-    S (rigidBody ^. id) :+: S " as a function of " :+: (time ^. term) :+:
+dd6descr = S "the " :+: ((angVel ^. term)) :+: S " of a " :+:
+    (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its " :+: (angDisp ^. term) :+:
-    S " with respect to " :+: (time ^. term) :+: S " " :+:
+    S "), also equal to the derivative of its " :+: (angDisp ^. defn) :+:
+    S " with respect to " :+: (time ^. defn) :+: S " " :+:
     P (time ^. symbol)
 
 -- DD7 : Angular acceleration --
@@ -123,11 +123,11 @@ angAccelEqn :: Expr
 angAccelEqn = Deriv Total (FCall (C angVel) [C time]) (C time)
 
 dd7descr :: Sentence
-dd7descr = S "the " :+: (angAccel ^. term) :+: S " of a " :+:
-    S (rigidBody ^. id) :+: S " as a function of " :+: (time ^. term) :+:
+dd7descr = S "the " :+: (angAccel ^. defn) :+: S " of a " :+:
+    (rigidBody ^. term) :+: S " as a function of " :+: (time ^. defn) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its " :+: (S (angVel ^. id)) :+:
-    S " with respect to " :+: (time ^. term) :+: S " " :+:
+    S "), also equal to the derivative of its " :+: ((angVel ^. term)) :+:
+    S " with respect to " :+: (time ^. defn) :+: S " " :+:
     P (time ^. symbol)
 
 -- DD8 : Impulse for collision response --
@@ -147,5 +147,5 @@ impulseEqn = ((Neg ((Int 1) + (C restitutionCoef))) * (C initRelVel) :.
     (((C perpLen_B) :^ (Int 2))/ (C momtInert_B)))
 
 dd8descr :: Sentence
-dd8descr = S "the " :+: (impulseScl ^. term) :+: S " used to determine " :+:
-    S (collision ^. id) :+: S " response between two " :+: S (rigidBodies ^. id)
+dd8descr = S "the " :+: (impulseScl ^. defn) :+: S " used to determine " :+:
+    (collision ^. term) :+: S " response between two " :+: (rigidBodies ^. term)

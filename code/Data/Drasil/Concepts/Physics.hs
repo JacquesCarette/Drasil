@@ -21,7 +21,7 @@ collision  = dcc "collision" "collision" ("An encounter between particles result
     "in an exchange or transformation of energy.")
 space      = dcc "space" "space" ("A two-dimensional extent where objects and " ++
     "events have relative positions and directions.")
-cartesian  = dcc "cartesian" "Cartesian coordinates" ("A coordinate system that " ++
+cartesian  = dcc "cartesian" "Cartesian coordinate" ("A coordinate system that " ++
     "specifies each point uniquely in a plane by a pair of numerical " ++
     "coordinates.")
 rightHand  = dcc "rightHand" "right-handed coordinate system" 

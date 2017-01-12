@@ -26,16 +26,16 @@ t1descr :: Sentence
 t1descr = (S "The above equation gives the " :+: (sLower
           (law_cons_energy ^. term)) :+: S " for " :+: (sLower
           ((transient ^. term))) :+: S " " :+: (sLower (heat_trans ^. term)) :+:
-          S " in a material of " :+: (htCap ^. defn) :+: S " " :+: 
+          S " in a material of " :+: (htCap ^. term) :+: S " " :+: 
           P (htCap ^. symbol) :+: S " (" :+: Sy (htCap ^. unit) :+: S ") " :+:
-          S "and " :+: (density ^. defn) :+: S ", " :+: 
+          S "and " :+: (density ^. term) :+: S ", " :+: 
           P (density ^. symbol) :+: S " (" :+: Sy (density ^. unit) :+: 
           S "), where " :+: P (thFluxVect ^. symbol) :+: S " is the " :+: 
-          (thFluxVect ^. defn) :+: S " (" :+: Sy (thFluxVect ^. unit) :+:
+          (thFluxVect ^. term) :+: S " (" :+: Sy (thFluxVect ^. unit) :+:
           S "), " :+: P (vol_ht_gen ^. symbol) :+: S " is the " :+: 
-          (vol_ht_gen ^. defn) :+: S " (" :+: Sy (vol_ht_gen ^. unit) :+: 
+          (vol_ht_gen ^. term) :+: S " (" :+: Sy (vol_ht_gen ^. unit) :+: 
           S "), " :+: P (temp ^. symbol) :+: S " is the " :+: 
-          (temp ^. defn) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
+          (temp ^. term) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
           P (time ^. symbol) :+: S " is " :+: (time ^. term) :+: S " (" :+: 
           Sy (time ^. unit) :+: S "), and " :+: P (gradient ^. symbol) :+: 
           S " is the " :+: (gradient ^. defn) :+: S ". For this equation " :+: 

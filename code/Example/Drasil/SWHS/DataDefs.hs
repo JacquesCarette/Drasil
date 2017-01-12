@@ -1,14 +1,10 @@
 module Drasil.SWHS.DataDefs where
 
-import Data.Char (toLower)
-
 import Drasil.SWHS.Units
 import Drasil.SWHS.Unitals
 
 import Language.Drasil
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
-
-import Data.Drasil.Concepts.Thermodynamics
 
 import Control.Lens ((^.))
 
@@ -22,7 +18,7 @@ htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 --Function calls for the left side of an QDefinition?
 
 dd1descr :: Sentence
-dd1descr = (ht_flux_C ^. defn)
+dd1descr = (ht_flux_C ^. term)
 
 --Can't include info in description beyond definition of variables?
 
@@ -34,7 +30,7 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
              FCall (C temp_PCM) [C time])
 
 dd2descr :: Sentence
-dd2descr = (ht_flux_P ^. defn)
+dd2descr = (ht_flux_P ^. term)
 
 dd3HtFusion :: QDefinition
 dd3HtFusion = fromEqn "dd3HtFusion" dd3descr (htFusion ^. symbol) specificE htFusionEqn
@@ -43,9 +39,7 @@ htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)
 
 dd3descr :: Sentence
-dd3descr = (S "amount of " :+: (sMap (map toLower) (thermal_energy ^. term))
-           :+: S " required to completely melt a unit " :+: (mass ^. term) :+:
-           S " of a substance.")
+dd3descr = htFusion ^. defn
 
 -- dd4MeltFrac :: QDefinition
 --dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless

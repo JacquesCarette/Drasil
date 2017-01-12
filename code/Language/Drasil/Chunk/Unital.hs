@@ -1,19 +1,28 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
-module Language.Drasil.Chunk.Unital (UnitalChunk(..), makeUC, ucFromVC) where
+module Language.Drasil.Chunk.Unital 
+  ( UnitalChunk(..)
+  , makeUC
+  , makeUCWDS
+  , ucFromVC) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), 
-  ConVar(..), dcc, cv, Concept(..),SF(..))
+  ConVar(..), dcc, dccWDS, cv, Concept(..),SF(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
 import Language.Drasil.Space
+import Language.Drasil.Spec (Sentence)
 
 --BEGIN HELPER FUNCTIONS--
 --FIXME: Space hack
 makeUC :: Unit u => String -> String -> String -> Symbol -> u -> UnitalChunk
 makeUC nam term desc sym un = UC (cv (dcc nam term desc) sym Rational) un 
+
+--Better names will come later.
+makeUCWDS :: Unit u => String -> String -> Sentence -> Symbol -> u -> UnitalChunk
+makeUCWDS nam term desc sym un = UC (cv (dccWDS nam term desc) sym Rational) un 
 
 ucFromVC :: Unit u => ConVar -> u -> UnitalChunk
 ucFromVC conv un = UC conv un

@@ -106,7 +106,7 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
 -- physics example about how symbols for vectors are bold, which would be 
 -- useful to include in the automated paragraph.
 
-s1_2_table = table swhsSymbols defnF
+s1_2_table = table swhsSymbols (termExcept [cqs norm_vect])
   
 s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
 
@@ -199,7 +199,7 @@ s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
                 term)) :+: S " of a single " :+: (tank_pcm ^. defn) :+: 
                 S ". Given the appropriate inputs, the code for " :+:
                 (progName ^. term) :+: S " is intended to predict the " :+:
-                (temp ^. defn) :+: S " and " :+: (sLower  
+                (temp ^. term) :+: S " and " :+: (sLower  
                 (thermal_energy ^. term)) :+: S " histories for the " :+:
                 (sLower  (water ^. term)) :+: S " and the " :+:
                 (phsChgMtrl ^. term) :+: S ". This entire document" :+:
@@ -359,29 +359,31 @@ s4_1_2_intro = Paragraph (S "The physical system of " :+: (progName ^. term)
 s4_1_2_list = Enumeration (Simple $ [((physSyst ^. term) :+: S "1", Flat
               ((tank ^. term) :+: S " containing " :+: (sLower 
               ((water ^. term))) :+: S ".")),
+--
               ((physSyst ^. term) :+: S "2", Flat ((coil ^. term) :+: 
               S " at bottom of " :+: (sLower (tank ^. term)) :+:
               S ". (" :+: P (ht_flux_C ^. symbol) :+: S " represents the " :+:
-              (ht_flux_C ^. defn) :+: S ".)")),
+              (ht_flux_C ^. term) :+: S ".)")),
+--
               ((physSyst ^. term) :+: S "3", Flat ((phsChgMtrl ^. term) :+: 
               S " suspended in " :+: (sLower (tank ^. term)) :+:
               S ". (" :+: P (ht_flux_P ^. symbol) :+: S " represents the " :+:
-              (ht_flux_P ^. defn) :+: S ".)"))])
+              (ht_flux_P ^. term) :+: S ".)"))])
 
 -- Structure of list would be same between examples but content is completely 
 -- different
 
-fig_tank = Figure ((tank ^. defn) :+: S ", with " :+: (ht_flux_C ^. defn) :+:
+fig_tank = Figure ((tank ^. defn) :+: S ", with " :+: (ht_flux_C ^. term) :+:
            S " of " :+: P (ht_flux_C ^. symbol) :+: S " and " :+: 
-           (ht_flux_P ^. defn) :+: S " of " :+: P (ht_flux_P ^. symbol)) 
+           (ht_flux_P ^. term) :+: S " of " :+: P (ht_flux_P ^. symbol)) 
            "Tank.png"
 
 s4_1_3 = Section ((goalStmt ^. defn) :+: S "s") [Con s4_1_3_intro, 
          Con s4_1_3_list]
 
-s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. defn) :+: S ", " :+:
-               S "initial conditions for the " :+: (temp_W ^. defn) :+:
-               S " and the " :+: (temp_PCM ^. defn) :+: S ", and " :+:
+s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. term) :+: S ", " :+:
+               S "initial conditions for the " :+: (temp_W ^. term) :+:
+               S " and the " :+: (temp_PCM ^. term) :+: S ", and " :+:
                S "material properties, the " :+:
                (sLower (goalStmt ^. defn)) :+: S "s are:")
 
@@ -389,15 +391,18 @@ s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. defn) :+: S ", " :+:
 -- abstracted out if this paragraph were to be abstracted out.
 
 s4_1_3_list = Enumeration (Simple [((goalStmt ^. term) :+: S "1", Flat 
-              (S "Predict the " :+: (temp_W ^. defn) :+: S " over " :+:
+              (S "Predict the " :+: (temp_W ^. term) :+: S " over " :+:
               (time ^. term) :+: S ".")),
+--
               ((goalStmt ^. term) :+: S "2", Flat (S "Predict the " :+:
-              (temp_PCM ^. defn) :+: S " over " :+: (time ^. term) :+: 
+              (temp_PCM ^. term) :+: S " over " :+: (time ^. term) :+: 
               S ".")),
+--
               ((goalStmt ^. term) :+: S "3", Flat (S "Predict the " :+:
-              (w_E ^. defn) :+: S " over " :+: (time ^. term) :+: S ".")),
+              (w_E ^. term) :+: S " over " :+: (time ^. term) :+: S ".")),
+--
               ((goalStmt ^. term) :+: S "4", Flat (S "Predict the " :+:
-              (pcm_E ^. defn) :+: S " over " :+: (time ^. term) :+: S "."))])
+              (pcm_E ^. term) :+: S " over " :+: (time ^. term) :+: S "."))])
 
 -- List structure is repeated between examples. (For all of these lists I am 
 -- imagining the potential for something like what was done with the lists in 
@@ -453,25 +458,25 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               ((assumption ^. term) :+: S "3", Flat (S "The " :+: 
               (sLower ((water ^. term))) :+: S " in the " :+: 
               (sLower ((tank ^. term))) :+: S " is fully mixed, so " :+:
-              S "the " :+: (temp_W ^. defn) :+: S " is the same throughout" :+:
+              S "the " :+: (temp_W ^. term) :+: S " is the same throughout" :+:
               S " the entire " :+: (sLower ((tank ^. term))) :+:
               S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S "].")),
 --
               ((assumption ^. term) :+: S "4", Flat (S "The " :+: (temp_PCM ^.
-              defn) :+: S " is the same throughout the " :+: (pcm_vol ^. 
-              defn) :+: S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S ", LC1].")),
+              term) :+: S " is the same throughout the " :+: (pcm_vol ^. 
+              term) :+: S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S ", LC1].")),
 --
               ((assumption ^. term) :+: S "5", Flat (S "The " :+: 
-              (w_density ^. defn) :+: S " and " :+: (pcm_density ^. defn) :+:
+              (w_density ^. term) :+: S " and " :+: (pcm_density ^. term) :+:
               S " have no spatial variation; that is, they are each " :+:
-              S "constant over their entire " :+: (volume ^. defn) :+: 
+              S "constant over their entire " :+: (volume ^. term) :+: 
               S " [GD2].")),
 --
               ((assumption ^. term) :+: S "6", Flat (S "The " :+: (htCap_W ^.
-              defn) :+: S ", " :+: (htCap_S_P ^. defn) :+: S ", and " :+: 
-              (htCap_L_P ^. defn) :+: S " have no spatial variation; that " :+:
+              term) :+: S ", " :+: (htCap_S_P ^. term) :+: S ", and " :+: 
+              (htCap_L_P ^. term) :+: S " have no spatial variation; that " :+:
               S "is, they are each constant over their entire " :+:
-              (volume ^. defn) :+: S " [GD2].")),
+              (volume ^. term) :+: S " [GD2].")),
 --
               ((assumption ^. term) :+: S "7", Flat ((law_conv_cooling ^.
               defn) :+: S " applies between the " :+: (sLower (
@@ -479,11 +484,11 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               (water ^. term))) :+: S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
 --
               ((assumption ^. term) :+: S "8", Flat (S "The " :+: (temp_C ^. 
-              defn) :+: S " is constant over " :+: (time ^. term) :+:
+              term) :+: S " is constant over " :+: (time ^. term) :+:
               S " [" :+: makeRef s4_2_4_DD1 :+: S ", LC2].")),
 --
               ((assumption ^. term) :+: S "9", Flat (S "The " :+: (temp_C ^.
-              defn) :+: S " does not vary along its length [" :+:
+              term) :+: S " does not vary along its length [" :+:
               makeRef s4_2_4_DD1 :+: S ", LC3].")),
 --
               ((assumption ^. term) :+: S "10", Flat ((law_conv_cooling ^. 
@@ -494,14 +499,14 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               ((assumption ^. term) :+: S "11", Flat (S "The model only " :+:
               S "accounts for " :+: (sLower (charging ^. defn)) :+:
               S ", not " :+: (sLower ((discharging ^. term))) :+:
-              S ". The " :+: (temp_W ^. defn) :+: S " and " :+: 
-              (temp_PCM ^. defn) :+: S " can only increase, or remain " :+:
+              S ". The " :+: (temp_W ^. term) :+: S " and " :+: 
+              (temp_PCM ^. term) :+: S " can only increase, or remain " :+:
               S "constant; they do not decrease. This implies that the " :+:
-              (temp_init ^. defn) :+: S " (A12) is less than (or equal)" :+:
-              S " to the " :+: (temp_C ^. defn) :+: S " [IM1, LC4].")),
+              (temp_init ^. term) :+: S " (A12) is less than (or equal)" :+:
+              S " to the " :+: (temp_C ^. term) :+: S " [IM1, LC4].")),
 --
               ((assumption ^. term) :+: S "12", Flat (S "The " :+:
-              (temp_init ^. defn) :+: S " of the " :+: (sLower ( 
+              (temp_init ^. term) :+: S " of the " :+: (sLower ( 
               (water ^. term))) :+: S " and the " :+: (phsChgMtrl ^. term) :+:
               S " is the same" :+: S " [IM1, IM2, LC5].")),
 --
@@ -511,13 +516,13 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               S " [IM2, IM4].")),
 --
               ((assumption ^. term) :+: S "14", Flat (S "The operating " :+:
-              (temp ^. defn) :+: S " range of the system is " :+: S "such " :+:
+              (temp ^. term) :+: S " range of the system is " :+: S "such " :+:
               S "that the " :+: (sLower ((water ^. term))) :+:
               S " is always in " :+: (liquid ^. defn) :+: S ". That is, " :+:
-              S "the " :+: (temp ^. defn) :+: S " will not drop below the " :+:
-              (temp_melt ^. defn) :+: S " of " :+: (sLower 
+              S "the " :+: (temp ^. term) :+: S " will not drop below the " :+:
+              (temp_melt ^. term) :+: S " of " :+: (sLower 
               ((water ^. term))) :+: S ", or rise above its " :+: 
-              (temp_boil ^. defn) :+: S " [IM1, IM3].")),
+              (temp_boil ^. term) :+: S " [IM1, IM3].")),
 --
               ((assumption ^. term) :+: S "15", Flat (S "The " :+:
               (sLower ((tank ^. term))) :+: S " is " :+: 
@@ -528,7 +533,7 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               ((assumption ^. term) :+: S "16", Flat (S "No internal heat" :+:
               S " is generated by either the " :+: (sLower 
               ((water ^. term))) :+: S " or the " :+: (phsChgMtrl ^.
-              term) :+: S "; therefore, the " :+: (vol_ht_gen ^. defn) :+:
+              term) :+: S "; therefore, the " :+: (vol_ht_gen ^. term) :+:
               S " is zero [IM1, IM2].")),
 --
               ((assumption ^. term) :+: S "17", Flat (S "The volume " :+: 
@@ -543,8 +548,8 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
 --
               ((assumption ^. term) :+: S "19", Flat (S "The pressure in " :+:
               S "the " :+: (sLower ((tank ^. term))) :+:
-              S " is atmospheric, so the " :+: (temp_melt ^. defn) :+:
-              S " and " :+: (temp_boil ^. defn) :+: S " are 0" :+:
+              S " is atmospheric, so the " :+: (temp_melt ^. term) :+:
+              S " and " :+: (temp_boil ^. term) :+: S " are 0" :+:
               Sy (temp ^. unit) :+: S " and 100" :+: Sy (temp ^. unit) :+:
               S ", respectively [IM1, IM3]."))])
 
@@ -588,9 +593,9 @@ s4_2_3_intro = Paragraph (S "This section collects the laws and equations " :+:
 --General definitions not yet implemented
 
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
-               S "change of " :+: (temp ^. defn) :+: S ":"),
+               S "change of " :+: (temp ^. term) :+: S ":"),
                Paragraph (S "Integrating " :+: makeRef s4_2_2_T1 :+: 
-               S " over a " :+: (volume ^. defn) :+: S " (" :+:
+               S " over a " :+: (volume ^. term) :+: S " (" :+:
                P (volume ^. symbol) :+: S "), we have:"),
                EqnBlock 
                 ((Neg (UnaryOp (Integral (Just (Low (C volume)), Nothing)
@@ -602,8 +607,8 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                Paragraph (S "Applying " :+: (gauss_div ^. defn) :+: S " to" :+:
                S " the first term over the " :+: (surface ^. term) :+:
                S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
-               (volume ^. defn) :+: S ", with " :+: P (thFluxVect ^. 
-               symbol) :+: S " as the " :+: (thFluxVect ^. defn) :+:
+               (volume ^. term) :+: S ", with " :+: P (thFluxVect ^. 
+               symbol) :+: S " as the " :+: (thFluxVect ^. term) :+:
                S " for the " :+: (surface ^. term) :+: S " and " :+:
                P (norm_vect ^. symbol) :+: S " as a " :+: (norm_vect ^.
                defn) :+: S ":"),
@@ -615,7 +620,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                 UnaryOp (Integral (Just (Low (C volume)), Nothing) 
                 ((C density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
                Paragraph (S "We consider an arbitrary " :+: (volume ^. 
-               defn) :+: S ". The " :+: (vol_ht_gen ^. defn) :+: S "is " :+:
+               term) :+: S ". The " :+: (vol_ht_gen ^. term) :+: S "is " :+:
                S "assumed constant. Then (1) can be written as:"),
                EqnBlock 
                 ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
@@ -627,7 +632,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                S ", and " :+: P (out_SA ^. symbol) :+: S " are explained in" :+:
                S " GD2. Assuming " :+: P (density ^. symbol) :+: S ", " :+:
                P (htCap ^. symbol) :+: S " and " :+: P (temp ^. symbol) :+:
-               S " are constant over the " :+: (volume ^. defn) :+: S ", " :+: 
+               S " are constant over the " :+: (volume ^. term) :+: S ", " :+: 
                S "which is true in our case by " :+: (assumption ^. defn) :+:
                S "s (A3), (A4), (A5), and (A6), we have:"),
                EqnBlock 

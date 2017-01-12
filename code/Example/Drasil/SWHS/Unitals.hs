@@ -7,6 +7,7 @@ import Drasil.SWHS.Units
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics
+import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import qualified Data.Drasil.Quantities.Physics as QP (surface, time)
 import Data.Drasil.Quantities.Math
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
@@ -91,18 +92,17 @@ coil_HTC     = makeUC "h_C"
   "convective heat transfer coefficient between coil and water"
   "FIXME: Define this or remove the need for definitions"
   (sub (htTransCoeff ^. symbol) cC) heat_transfer
-htFusion     = makeUC "H_f" "specific latent heat of fusion" 
-  "FIXME: Define this or remove the need for definitions" (sub cH lF) specificE
+htFusion     = makeUCWDS "H_f" "specific latent heat of fusion" 
+  (S "amount of " :+: (sLower (thermal_energy ^. term)) :+:
+  S " required to completely melt a unit " :+: (mass ^. term) :+:
+  S " of a substance.") (sub cH lF) specificE
 pcm_HTC      = makeUC "h_P" 
   "convective heat transfer coefficient between PCM and water"
   "FIXME: Define this or remove the need for definitions" 
   (sub lH cP) heat_transfer
 tank_length  = makeUC "L" "length of tank" 
   "FIXME: Define this or remove the need for definitions" cL metre
-
---FIXME: Mass hack used to get desired output.
---    This will need to be changed, but brings up an interesting problem
-mass         = mass_HACK --ucFromVC QPP.mass kilogram
+mass         = ucFromVC QPP.mass kilogram
 pcm_mass     = makeUC "m_P" "mass of phase change material" 
   "FIXME: Define this or remove the need for definitions"
   (sub (mass ^. symbol) cP) kilogram
@@ -130,8 +130,7 @@ ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water"
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" 
   "FIXME: Define this or remove the need for definitions"
   (sub (latentE ^. symbol) cP) joule
---FIXME: Time hack. See below
-time         = time_HACK --ucFromVC QP.time second
+time         = ucFromVC QP.time second
 temp         = makeUC "T" "temperature" 
   "FIXME: Define this or remove the need for definitions" cT centigrade
 temp_boil    = makeUC "T_boil" "boiling point temperature" 
@@ -207,31 +206,14 @@ tau_W        = makeUC "tau_W" "ODE parameter for water"
 swhsUnitless :: [ConVar]
 -- norm_vect used to go here, but due to type change it is no longer included
 -- in this list.
-swhsUnitless = [norm_vect, surface_hack, eta, melt_frac]
+swhsUnitless = [norm_vect, QP.surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
 
-eta          = cvR (dcc "eta" "eta" "ODE parameter") (Greek Eta_L)
-melt_frac    = cvR (dcc "melt_frac" "phi" "melt fraction") (Greek Phi_L)
-
-
-
---HACKS--
---FIXME: These are hacks to get surface, time, and mass to display 
---      "the old way" in the Table of Symbols. The current version of 
---      surface is much more verbose, while time and mass are incomplete.
-surface_hack :: ConVar
-mass_HACK, time_HACK :: UnitalChunk
-surface_hack = cv (ccStSS (QP.surface ^. id) (QP.surface ^. term) (S "surface")) 
-  (QP.surface ^. symbol) (QP.surface ^. typ)
-time_HACK    = makeUC "time_HACK" "time" 
-  "FIXME: Define this or remove the need for definitions" lT second
-mass_HACK    = makeUC "mass_HACK" "mass" 
-  "FIXME: Define this or remove the need for definitions" lM kilogram
---END HACKS--
-
-
-
+eta          = cvR (dcc "eta" "ODE parameter" 
+  "FIXME: Define this or remove the need for definitions") (Greek Eta_L)
+melt_frac    = cvR (dcc "melt_frac" "melt fraction"
+  "FIXME: Define this or remove the need for definitions") (Greek Phi_L)
 
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will

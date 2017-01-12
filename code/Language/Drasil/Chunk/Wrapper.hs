@@ -14,6 +14,9 @@ data CQSWrapper where
 instance Chunk CQSWrapper where
   id = cqslens id
   
+instance Eq CQSWrapper where
+  a == b = (a ^. id) == (b ^. id)
+  
 instance NamedIdea CQSWrapper where
   term = cqslens term
   
@@ -41,6 +44,9 @@ data QSWrapper where
   
 instance Chunk QSWrapper where
   id = qslens id
+  
+instance Eq QSWrapper where
+  a == b = (a ^. id) == (b ^. id)
   
 instance NamedIdea QSWrapper where
   term = qslens term

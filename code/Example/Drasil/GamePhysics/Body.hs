@@ -543,7 +543,7 @@ s5_1_list = Enumeration (Simple [
     (space ^. term) :+: S " for all of the " :+: (rigidBodies ^. term) :+:
     S " in the physical simulation to interact in.")),
     ((requirement ^. term) :+: S "2", Flat (S "Input the initial " :+:
-    (mass ^. defn) :+: S "es, " :+: (vels ^. term) :+: S ", " :+:
+    (mass ^. term) :+: S "es, " :+: (vels ^. term) :+: S ", " :+:
     (orientation ^. defn) :+: S "s, " :+: (angularVels ^. term) :+:
     S " of, " :+: S "and " :+: (force ^. term) :+: S "s applied on " :+:
     (rigidBodies ^. term) :+: S ".")),

@@ -36,7 +36,7 @@ t1descr = (S "The above equation gives the " :+: (sLower
           (vol_ht_gen ^. defn) :+: S " (" :+: Sy (vol_ht_gen ^. unit) :+: 
           S "), " :+: P (temp ^. symbol) :+: S " is the " :+: 
           (temp ^. defn) :+: S " (" :+: Sy (temp ^. unit) :+: S "), " :+: 
-          P (time ^. symbol) :+: S " is " :+: (time ^. defn) :+: S " (" :+: 
+          P (time ^. symbol) :+: S " is " :+: (time ^. term) :+: S " (" :+: 
           Sy (time ^. unit) :+: S "), and " :+: P (gradient ^. symbol) :+: 
           S " is the " :+: (gradient ^. defn) :+: S ". For this equation " :+: 
           S "to apply, " :+: S "other forms of energy, such as " :+:

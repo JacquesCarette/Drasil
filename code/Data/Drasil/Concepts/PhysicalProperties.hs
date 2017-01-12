@@ -11,5 +11,5 @@ solid   = dcc "solid" "Solid" "solid state"
 ctrOfMass = dcc "ctrOfMass" "centre of mass" 
   "The mean location of the distribution of mass of the object."
 
-mass = dcc "mass" "mass" "mass"
-length = dcc "length" "length" "length"
+mass = dcc "mass" "mass" "FIXME: MISSING DEFINITION"
+length = dcc "length" "length" "FIXME: MISSING DEFINITION"

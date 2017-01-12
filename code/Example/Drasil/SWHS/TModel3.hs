@@ -35,9 +35,9 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
           (latent_heat ^. term)) :+: S " energy. <Integral> is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
-          S " to " :+: (time ^. defn) :+: S " " :+: P (tau ^. symbol) :+: 
+          S " to " :+: (time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:
-          S " is the " :+: (time ^. defn) :+: S " (" :+: Sy (time ^. unit) :+:
+          S " is the " :+: (time ^. term) :+: S " (" :+: Sy (time ^. unit) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
           (phase_change ^. term)) :+: S " is not complete. The status of " :+:
           S "the " :+: (sMap (map toLower) (phase_change ^. term)) :+:
@@ -46,7 +46,7 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
           (temp_melt ^. defn) :+: S " and " :+: (temp_boil ^. defn) :+:
           S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+:
-          (latent_heat ^. defn) :+: S " stops when all material has " :+:
+          (latent_heat ^. term) :+: S "ing stops when all material has " :+:
           S "changed to the new phase.")
           
 -- Wrong DD reference above, change when DD4 is available

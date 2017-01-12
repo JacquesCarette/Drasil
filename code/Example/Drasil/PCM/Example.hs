@@ -10,6 +10,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Math
 import Data.Drasil.Concepts.Math (ode) 
+import qualified Data.Drasil.Quantities.Physics as QP (time)
 
 import Control.Lens ((^.))
 
@@ -32,7 +33,7 @@ hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in"
               (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
               (sub cA (Atomic "out")) m_2
-htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
+htCap       = heat_cap_spec_HACK --ucFromVC heat_cap_spec U.heat_cap_spec
 htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
               U.heat_cap_spec
 htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
@@ -44,7 +45,7 @@ ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH U.heat_transf
 ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
               (sub lH cC) U.heat_transfer
 tank_L      = makeUC "L" "length of tank" cL metre
-mass        = ucFromVC QPP.mass kilogram
+mass        = mass_HACK --ucFromVC QPP.mass kilogram
 water_m     = makeUC "m_W" ((QPP.mass ^. id) ++ " of water") 
                 (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
@@ -55,7 +56,7 @@ thFluxVect  = makeUC "q_vect" "thermal flux vector" (vec lQ)
 ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) U.thermal_flux
 ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) U.thermal_flux
 ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) U.thermal_flux
-time        = makeUC "t" "time" lT second
+time        = time_HACK --ucFromVC QP.time second
 temp        = makeUC "T" "temperature" cT centigrade
 -- temp_boil   = makeUC "T_boil" "temperature at boiling point" 
               -- (sub cT (Atomic "boil")) centigrade
@@ -106,3 +107,10 @@ t1descr =
   S ", where " :+: (P $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.
+
+--HACKS
+time_HACK, mass_HACK, heat_cap_spec_HACK :: UnitalChunk
+time_HACK = makeUC "time_HACK" "time" lT second
+mass_HACK = makeUC "mass_HACK" "mass" lM kilogram
+heat_cap_spec_HACK = makeUC "heat_cap_spec_hack" "specific heat capacity" cC 
+  U.heat_cap_spec

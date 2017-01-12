@@ -28,7 +28,7 @@ t1descr = S "The net " :+: (force ^. term) :+: S " " :+:
     (accel ^. term) :+: S " " :+: P (accel ^. symbol) :+: S " (" :+:
     Sy (accel ^. unit) :+: S ") of the " :+: (rigidBody ^. term) :+:
     S ", where " :+: P (mass ^. symbol) :+: S " (" :+: Sy (mass ^. unit) :+:
-    S ") denotes the " :+: (mass ^. defn) :+: S " of the " :+:
+    S ") denotes the " :+: (mass ^. term) :+: S " of the " :+:
     (rigidBody ^. term) :+: S " as the constant of proprotionality."
 
 -- T2 : Newton's third law of motion --
@@ -74,7 +74,7 @@ t3descr = S "Two " :+: (rigidBodies ^. term) :+: S " in the universe " :+:
     S "attract each other with a " :+: (force ^. term) :+: S " " :+:
     P (force ^. symbol) :+: S " (" :+: Sy (force ^. unit) :+: S ") " :+:
     S "that is directly proportional to the product of their " :+:
-    (mass ^. defn) :+: S "es, " :+: P (mass_1 ^. symbol) :+: S " and " :+:
+    (mass ^. term) :+: S "es, " :+: P (mass_1 ^. symbol) :+: S " and " :+:
     P (mass_2 ^. symbol) :+: S " (" :+: Sy (mass ^. unit) :+: S "), and " :+:
     S "inversely proportional to the " :+: (sqrDist ^. defn) :+: S " " :+:
     P (sqrDist ^. symbol) :+: S " (" :+: Sy (sqrDist ^. unit) :+: S ") " :+:

@@ -390,14 +390,14 @@ s4_1_3_intro = Paragraph (S "Given the " :+: (temp_C ^. defn) :+: S ", " :+:
 
 s4_1_3_list = Enumeration (Simple [((goalStmt ^. term) :+: S "1", Flat 
               (S "Predict the " :+: (temp_W ^. defn) :+: S " over " :+:
-              (time ^. defn) :+: S ".")),
+              (time ^. term) :+: S ".")),
               ((goalStmt ^. term) :+: S "2", Flat (S "Predict the " :+:
-              (temp_PCM ^. defn) :+: S " over " :+: (time ^. defn) :+: 
+              (temp_PCM ^. defn) :+: S " over " :+: (time ^. term) :+: 
               S ".")),
               ((goalStmt ^. term) :+: S "3", Flat (S "Predict the " :+:
-              (w_E ^. defn) :+: S " over " :+: (time ^. defn) :+: S ".")),
+              (w_E ^. defn) :+: S " over " :+: (time ^. term) :+: S ".")),
               ((goalStmt ^. term) :+: S "4", Flat (S "Predict the " :+:
-              (pcm_E ^. defn) :+: S " over " :+: (time ^. defn) :+: S "."))])
+              (pcm_E ^. defn) :+: S " over " :+: (time ^. term) :+: S "."))])
 
 -- List structure is repeated between examples. (For all of these lists I am 
 -- imagining the potential for something like what was done with the lists in 
@@ -445,40 +445,52 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               S ". All other forms of energy, such as " :+: (sLower 
               ((mech_energy ^. term))) :+: S ", are assumed to be " :+:
               S "negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),
-              ((assumption ^. term) :+: S "2", Flat (S "All " :+: 
-              (heat_trans ^. defn) :+: S " coefficients are constant over " :+:
-              (time ^. defn) :+: S " [GD1].")),
-              ((assumption ^. term) :+: S "3", Flat (S "The " :+: (sLower ((water ^. term))) :+: S " in the " :+: (sLower ((tank ^. term))) :+: S " is fully mixed, so " :+:
+--
+              ((assumption ^. term) :+: S "2", Flat (S "All " :+: sLower
+              (heat_trans ^. term) :+: S " coefficients are constant over " :+:
+              (time ^. term) :+: S " [GD1].")),
+--
+              ((assumption ^. term) :+: S "3", Flat (S "The " :+: 
+              (sLower ((water ^. term))) :+: S " in the " :+: 
+              (sLower ((tank ^. term))) :+: S " is fully mixed, so " :+:
               S "the " :+: (temp_W ^. defn) :+: S " is the same throughout" :+:
               S " the entire " :+: (sLower ((tank ^. term))) :+:
               S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S "].")),
+--
               ((assumption ^. term) :+: S "4", Flat (S "The " :+: (temp_PCM ^.
               defn) :+: S " is the same throughout the " :+: (pcm_vol ^. 
               defn) :+: S " [GD2, " :+: makeRef s4_2_4_DD2 :+: S ", LC1].")),
+--
               ((assumption ^. term) :+: S "5", Flat (S "The " :+: 
               (w_density ^. defn) :+: S " and " :+: (pcm_density ^. defn) :+:
               S " have no spatial variation; that is, they are each " :+:
               S "constant over their entire " :+: (volume ^. defn) :+: 
               S " [GD2].")),
+--
               ((assumption ^. term) :+: S "6", Flat (S "The " :+: (htCap_W ^.
               defn) :+: S ", " :+: (htCap_S_P ^. defn) :+: S ", and " :+: 
               (htCap_L_P ^. defn) :+: S " have no spatial variation; that " :+:
               S "is, they are each constant over their entire " :+:
               (volume ^. defn) :+: S " [GD2].")),
+--
               ((assumption ^. term) :+: S "7", Flat ((law_conv_cooling ^.
               defn) :+: S " applies between the " :+: (sLower (
               (coil ^. term))) :+: S " and the " :+: (sLower (
               (water ^. term))) :+: S " [" :+: makeRef s4_2_4_DD1 :+: S "].")),
+--
               ((assumption ^. term) :+: S "8", Flat (S "The " :+: (temp_C ^. 
-              defn) :+: S " is constant over " :+: (time ^. defn) :+:
+              defn) :+: S " is constant over " :+: (time ^. term) :+:
               S " [" :+: makeRef s4_2_4_DD1 :+: S ", LC2].")),
+--
               ((assumption ^. term) :+: S "9", Flat (S "The " :+: (temp_C ^.
               defn) :+: S " does not vary along its length [" :+:
               makeRef s4_2_4_DD1 :+: S ", LC3].")),
+--
               ((assumption ^. term) :+: S "10", Flat ((law_conv_cooling ^. 
               defn) :+: S " applies between the " :+: (sLower (
               (water ^. term))) :+: S " and the " :+: (phsChgMtrl ^. term) :+:
               S " [" :+: makeRef s4_2_4_DD2 :+: S "].")),
+--
               ((assumption ^. term) :+: S "11", Flat (S "The model only " :+:
               S "accounts for " :+: (sLower (charging ^. defn)) :+:
               S ", not " :+: (sLower ((discharging ^. term))) :+:
@@ -487,14 +499,17 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               S "constant; they do not decrease. This implies that the " :+:
               (temp_init ^. defn) :+: S " (A12) is less than (or equal)" :+:
               S " to the " :+: (temp_C ^. defn) :+: S " [IM1, LC4].")),
+--
               ((assumption ^. term) :+: S "12", Flat (S "The " :+:
               (temp_init ^. defn) :+: S " of the " :+: (sLower ( 
               (water ^. term))) :+: S " and the " :+: (phsChgMtrl ^. term) :+:
               S " is the same" :+: S " [IM1, IM2, LC5].")),
+--
               ((assumption ^. term) :+: S "13", Flat (S "The simulation " :+:
               S "will start with the " :+: (phsChgMtrl ^. term) :+:
               S " in a " :+: (sLower (solid ^. defn)) :+:
               S " [IM2, IM4].")),
+--
               ((assumption ^. term) :+: S "14", Flat (S "The operating " :+:
               (temp ^. defn) :+: S " range of the system is " :+: S "such " :+:
               S "that the " :+: (sLower ((water ^. term))) :+:
@@ -503,24 +518,29 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
               (temp_melt ^. defn) :+: S " of " :+: (sLower 
               ((water ^. term))) :+: S ", or rise above its " :+: 
               (temp_boil ^. defn) :+: S " [IM1, IM3].")),
+--
               ((assumption ^. term) :+: S "15", Flat (S "The " :+:
               (sLower ((tank ^. term))) :+: S " is " :+: 
               (perfect_insul ^. term) :+: S " so that there is no heat " :+:
               S "loss from the " :+: (sLower ((tank ^. term))) :+:
               S " [IM1, LC6].")),
+--
               ((assumption ^. term) :+: S "16", Flat (S "No internal heat" :+:
               S " is generated by either the " :+: (sLower 
               ((water ^. term))) :+: S " or the " :+: (phsChgMtrl ^.
               term) :+: S "; therefore, the " :+: (vol_ht_gen ^. defn) :+:
               S " is zero [IM1, IM2].")),
+--
               ((assumption ^. term) :+: S "17", Flat (S "The volume " :+: 
               S "change of the " :+: (phsChgMtrl ^. term) :+: S " due to " :+: 
               (sLower ((melting ^. term))) :+: 
               S " is negligible [IM2].")),
+--
               ((assumption ^. term) :+: S "18", Flat (S "The " :+: 
               (phsChgMtrl ^. term) :+: S " is either in a " :+:
               (liquid ^. defn) :+: S " or a " :+: (solid ^. defn) :+:
               S " but not a " :+: (gaseous ^. defn) :+: S " [IM2, IM4].")),
+--
               ((assumption ^. term) :+: S "19", Flat (S "The pressure in " :+:
               S "the " :+: (sLower ((tank ^. term))) :+:
               S " is atmospheric, so the " :+: (temp_melt ^. defn) :+:
@@ -670,7 +690,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 (sLower ((water ^. term))) :+: S ". The " :+: 
                 (volume ^. defn) :+: S " being considered is the " :+:
                 (w_vol ^. defn) :+: S " " :+: P (w_vol ^. symbol) :+:
-                S ", which has " :+: (w_mass ^. defn) :+: S " " :+: 
+                S ", which has " :+: (w_mass ^. term) :+: S " " :+: 
                 P (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. defn) :+: 
                 S ", " :+: P (htCap_W ^. symbol) :+: S ". " :+: P (ht_flux_C ^. 
                 symbol) :+: S " represents the " :+: (ht_flux_C ^. defn) :+:
@@ -678,8 +698,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 S "the " :+: (ht_flux_P ^. defn) :+: S ", over " :+:
                 (coil_SA ^. defn) :+: S " and " :+: (pcm_SA ^. defn) :+:
                 S " of " :+: P (coil_SA ^. symbol) :+: S " and " :+: 
-                P (pcm_SA ^. symbol) :+: S ", respectively. No " :+: 
-                (heat_trans ^. defn) :+: S " occurs to the outside of the " :+:
+                P (pcm_SA ^. symbol) :+: S ", respectively. No " :+: sLower
+                (heat_trans ^. term) :+: S " occurs to the outside of the " :+:
                 (sLower ((tank ^. term))) :+: S ", since it " :+:
                 S "has been assumed to be " :+: (perfect_insul ^. term) :+: 
                 S " (A15)." :+: S " Assuming no " :+: (vol_ht_gen ^. defn) :+: 
@@ -749,7 +769,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
 
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S " the " :+: (phsChgMtrl ^. term) :+: S " during " :+: 
-                (sLower (sens_heat ^. defn)) :+: S " phase:"),
+                (sLower (sens_heat ^. term)) :+: S "ing phase:"),
                 Paragraph (S "To find the rate of change of " :+: P (temp_PCM ^.
                 symbol) :+: S ", we look at the energy balance on the " :+: 
                 (phsChgMtrl ^. term) :+: S ". The " :+: (volume ^. defn) :+:
@@ -757,7 +777,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S ", " :+: P (pcm_vol ^. symbol) :+: S ". The derivation " :+:
                 S "that follows is initially for the " :+: (sLower 
                 ((solid ^. term))) :+: S " " :+: (phsChgMtrl ^. term) :+:
-                S ". The " :+: (pcm_mass ^. defn) :+: S " is " :+: 
+                S ". The " :+: (pcm_mass ^. term) :+: S " is " :+: 
                 P (pcm_mass ^. symbol) :+: S " and the " :+: (htCap_S_P ^. 
                 defn) :+: S " is " :+: P (htCap_S_P ^. symbol) :+: S ". " :+:
                 S "The " :+: (ht_flux_P ^. defn) :+: S " is " :+: 
@@ -881,7 +901,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                makeRef s4_2_4_DD2 :+: S ", multiplying each by their " :+:
                S "respective surface area of " :+: (heat_transfer ^. defn) :+:
                S ", and integrating each over the simulation " :+: (time ^. 
-               defn) :+: S ", as follows:"),
+               term) :+: S ", as follows:"),
                EqnBlock 
                 ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
                 ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
@@ -933,8 +953,9 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
             (\ch -> Sy (ch ^. unit)),
             (\ch -> ch ^. defn)
             ] inputVar) (S "Input Variable " :+: (requirement ^. defn)) False),
+--
             Enumeration (Simple [((requirement ^. term) :+: S "2", Flat 
-            (S "Use the inputs in R1 to find the " :+: (mass ^. defn) :+:
+            (S "Use the inputs in R1 to find the " :+: (mass ^. term) :+:
             S " needed for IM1 to IM4, as follows, where " :+:
             P (w_vol ^. symbol) :+: S " is the " :+:(w_vol ^. defn) :+:
             S " and " :+: P (tank_vol ^. symbol) :+: S " is the " :+:
@@ -943,33 +964,40 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
             (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) - 
             (C pcm_vol)) * (C w_density)),
             EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
+--
             Enumeration (Simple [((requirement ^. term) :+: S "3", Flat 
             (S "Verify that the inputs satisfy the required physical" :+:
             S " constraints shown in Table 1.")),
+--
             ((requirement ^. term) :+: S "4", Flat (S "Output the input" :+: 
             S " quantities and derived quantities in the following list: "  :+:
-            S "the quantities from R1, the " :+: (mass ^. defn) :+: S "es " :+:
+            S "the quantities from R1, the " :+: (mass ^. term) :+: S "es " :+:
             S "from R2, " :+: P (tau_W ^. symbol) :+: S " (from IM1), " :+: 
             P (eta ^. symbol) :+: S " (from IM1), " :+: P (tau_S_P ^. 
             symbol) :+: S " (from IM2) and " :+: P (tau_L_P ^. symbol) :+:
             S " (from IM2).")),
+--
             ((requirement ^. term) :+: S "5", Flat (S "Calculate and " :+:
             S "output the " :+: (temp_W ^. defn) :+: S " (" :+: P (temp_W ^.
             symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) " :+:
-            S "over the simulation " :+: (time ^. defn) :+: S " (from IM1).")),
+            S "over the simulation " :+: (time ^. term) :+: S " (from IM1).")),
+--
             ((requirement ^. term) :+: S "6", Flat (S "Calculate and " :+: 
             S "output the " :+: (temp_PCM ^. defn) :+: S " (" :+:
             P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
-            S ")) over the simulation " :+: (time ^. defn) :+: 
+            S ")) over the simulation " :+: (time ^. term) :+: 
             S " (from IM2).")),
+--
             ((requirement ^. term) :+: S "7", Flat (S "Calculate and " :+: 
             S " output the " :+: (w_E ^. defn) :+: S " (" :+: P (w_E ^. 
             symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) " :+:
-            S "over the simulation " :+: (time ^. defn) :+: S " (from IM3).")),
+            S "over the simulation " :+: (time ^. term) :+: S " (from IM3).")),
+--
             ((requirement ^. term) :+: S "8", Flat (S "Calculate and " :+: 
             S "output the " :+: (pcm_E ^. defn) :+: S " (" :+: P (pcm_E ^.
             symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the " :+:
-            S "simulation " :+: (time ^. defn) :+: S " (from IM4).")),
+            S "simulation " :+: (time ^. term) :+: S " (from IM4).")),
+--
             ((requirement ^. term) :+: S "9", Flat (S "Verify that the " :+:
             S "energy outputs (" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
             symbol) :+: S ") and " :+: P (pcm_E ^. symbol) :+: S "(" :+:
@@ -977,12 +1005,14 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
             (law_cons_energy ^. term)) :+: S ", as outlined in " :+: 
             makeRef s4_2_7 :+: S ", with relative error no greater than " :+:
             S "0.001%.")),
+--
             ((requirement ^. term) :+: S "10", Flat (S "Calculate and " :+: 
-            S "output the " :+: (time ^. defn) :+: S " at which the " :+: 
+            S "output the " :+: (time ^. term) :+: S " at which the " :+: 
             (phsChgMtrl ^. term) :+: S " begins to melt " :+:
             P (t_init_melt ^. symbol) :+: S " (from IM2).")),
+--
             ((requirement ^. term) :+: S "11", Flat (S "Calculate and " :+: 
-            S "output the " :+: (time ^. defn) :+: S " at which the " :+: 
+            S "output the " :+: (time ^. term) :+: S " at which the " :+: 
             (phsChgMtrl ^. term) :+:
             S " stops " :+: (sLower ((melting ^. term))) :+: 
             S " " :+: P (t_final_melt ^. symbol) :+: S " (from IM2)."))])

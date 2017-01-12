@@ -7,9 +7,9 @@ import Drasil.SWHS.Units
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics
-import Data.Drasil.Quantities.Physics (surface)
+import qualified Data.Drasil.Quantities.Physics as QP (surface, time)
 import Data.Drasil.Quantities.Math
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -22,8 +22,8 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
 swhsUnits :: [UnitalChunk]
 swhsUnits = [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   htCap_S_P,htCap_V,htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,
-  htTransCoeff,coil_HTC,htFusion,pcm_HTC,tank_length,mass,pcm_mass,w_mass,
-  ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,
+  htTransCoeff,coil_HTC,htFusion,pcm_HTC,tank_length,mass,
+  pcm_mass,w_mass,ht_flux,latentE,thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,
   ht_flux_P,latentE_P,time,temp,temp_boil,temp_C,temp_env,time_final,temp_init,
   temp_melt,t_init_melt,t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,
   tank_vol,w_vol,deltaT,density,pcm_density,w_density,tau,tau_L_P,tau_S_P,
@@ -79,10 +79,14 @@ htFusion     = makeUC "H_f" "specific latent heat of fusion" (sub cH lF)
 pcm_HTC      = makeUC "h_P" ("convective heat transfer coefficient between " ++
                "PCM and water") (sub lH cP) heat_transfer
 tank_length  = makeUC "L" "length of tank" cL metre
-mass         = ucFromVC QPP.mass kilogram
+
+--FIXME: Mass hack used to get desired output.
+--    This will need to be changed, but brings up an interesting problem
+mass         = mass_HACK --ucFromVC QPP.mass kilogram
 pcm_mass     = makeUC "m_P" "mass of phase change material" 
-               (sub (mass ^. symbol) cP) kilogram
-w_mass       = makeUC "m_W" "mass of water" (sub (mass ^. symbol) cW) kilogram
+              (sub (mass ^. symbol) cP) kilogram
+w_mass       = makeUC "m_W" "mass of water" 
+              (sub (mass ^. symbol) cW) kilogram
 ht_flux      = makeUC "q" "heat flux" lQ thermal_flux
 latentE      = makeUC "Q" "latent heat energy" cQ joule
 thFluxVect   = makeUC "q_vect" "thermal flux vector" (vec lQ) thermal_flux
@@ -96,7 +100,8 @@ ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water"
                (sub (ht_flux ^. symbol) cP) thermal_flux
 latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" 
                (sub (latentE ^. symbol) cP) joule
-time         = makeUC "t" "time" lT second 
+--FIXME: Time hack. See below
+time         = time_HACK --ucFromVC QP.time second
 temp         = makeUC "T" "temperature" cT centigrade
 temp_boil    = makeUC "T_boil" "boiling point temperature" 
                (sub (temp ^. symbol) (Atomic "boil")) centigrade
@@ -151,17 +156,27 @@ swhsUnitless :: [ConVar]
 -- in this list.
 swhsUnitless = [norm_vect, surface_hack, eta, melt_frac]
 
---FIXME: This is a hack to get surface to display "the old way" in the
---        Table of Symbols. The current version of surface is much more
---        verbose.
-surface_hack :: ConVar
-surface_hack = cv (ccStSS (surface ^. id) (surface ^. term) (S "surface")) 
-  (surface ^. symbol) (surface ^. typ)
-
 eta, melt_frac :: ConVar
 
 eta          = cvR (dcc "eta" "eta" "ODE parameter") (Greek Eta_L)
 melt_frac    = cvR (dcc "melt_frac" "phi" "melt fraction") (Greek Phi_L)
+
+
+
+--HACKS--
+--FIXME: These are hacks to get surface, time, and mass to display 
+--      "the old way" in the Table of Symbols. The current version of 
+--      surface is much more verbose, while time and mass are incomplete.
+surface_hack :: ConVar
+mass_HACK, time_HACK :: UnitalChunk
+surface_hack = cv (ccStSS (QP.surface ^. id) (QP.surface ^. term) (S "surface")) 
+  (QP.surface ^. symbol) (QP.surface ^. typ)
+time_HACK    = makeUC "time_HACK" "time" lT second
+mass_HACK    = makeUC "mass_HACK" "mass" lM kilogram
+--END HACKS--
+
+
+
 
 --Units are stored in another file. Will these be universal?
 --I.e. Anytime someone writes a program involving heat capacity will

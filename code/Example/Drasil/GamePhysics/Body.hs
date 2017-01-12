@@ -312,23 +312,26 @@ s4_1_2_list = Enumeration (Simple [
     S "s applied on a set of " :+: (rigidBodies ^. term) :+:
     S ", determine their new " :+: (position ^. term) :+: S "s and " :+:
     (vels ^. term) :+: S " over a period of " :+: (time ^. term) :+: S ".")),
+--
     ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical " :+:
     S "properties, initial " :+: (orientation ^. defn) :+: S "s and " :+:
     (angularVels ^. term) :+: S ", and " :+: (force ^. term) :+: S "s " :+:
     S "applied on a set of " :+: (rigidBodies ^. term) :+: S ", " :+:
     S "determine their new " :+: (orientation ^. defn) :+: S "s and " :+:
-    (angularVels ^. term) :+: S " over a period of " :+: (time ^. defn) :+:
+    (angularVels ^. term) :+: S " over a period of " :+: (time ^. term) :+:
     S ".")),
+--
     ((goalStmt ^. term) :+: S "3", Flat (S "Given the initial " :+:
     (position ^. term) :+: S "s and " :+: (vels ^. term) :+: S " of a " :+:
     S "set of " :+: (rigidBodies ^. term) :+: S ", determine if any of " :+:
     S "them will collide with one another over a period of " :+:
     (time ^. term) :+: S ".")),
+--
     ((goalStmt ^. term) :+: S "4", Flat (S "Given the physical " :+:
     S "properties, initial linear and angular " :+: (position ^. term) :+:
     S "s and " :+: (vels ^. term) :+: S ", determine the new " :+:
     (position ^. term) :+: S "s and " :+: (vels ^. term) :+:
-    S " over a period of " :+: (time ^. defn) :+: S " of " :+:
+    S " over a period of " :+: (time ^. term) :+: S " of " :+:
     (rigidBodies ^. term) :+: S " that have undergone a " :+:
     (collision ^. term) :+: S "."))])
 
@@ -557,7 +560,7 @@ s5_1_list = Enumeration (Simple [
     (force ^. term) :+: S ".")),
     ((requirement ^. term) :+: S "6", Flat (S "Determine the " :+:
     (orientation ^. defn) :+: S "s and " :+: (angularVels ^. term) :+:
-    S " over a period of " :+: (time ^. defn) :+: S " of the " :+:
+    S " over a period of " :+: (time ^. term) :+: S " of the " :+:
     (twoD ^. term) :+: S " " :+: (rigidBodies ^. term) :+: S ".")),
     ((requirement ^. term) :+: S "7", Flat (S "Determine if any of the " :+:
     (rigidBodies ^. term) :+: S " in the " :+: (space ^. term) :+:

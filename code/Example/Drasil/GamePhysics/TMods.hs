@@ -126,12 +126,12 @@ newtonSLRRel = (C torque) := (C momtInert) * (C angAccel)
 -- without referencing the entire section or dividing each bullet into its own
 -- section.
 t5descr :: Sentence
-t5descr = S "The net " :+: (torque ^. defn) :+: S " " :+:
+t5descr = S "The net " :+: (torque ^. term) :+: S " " :+:
     P (torque ^. symbol) :+: S " (" :+: Sy (torque ^. unit) :+: S ") on a " :+:
     (rigidBody ^. term) :+: S " is proportional to its " :+:
     (angAccel ^. term) :+: S " " :+: P (angAccel ^. symbol) :+: S " (" :+:
     Sy (angAccel ^. unit) :+: S "). Here, " :+: P (momtInert ^. symbol) :+:
     S " (" :+: Sy (momtInert ^. unit) :+: S ") denotes the " :+:
-    (momtInert ^. defn) :+: S " of the " :+: (rigidBody ^. term) :+:
+    (momtInert ^. term) :+: S " of the " :+: (rigidBody ^. term) :+:
     S ". We also assume that all " :+: (rigidBodies ^. term) :+:
     S " involved are two-dimensional (A2)."

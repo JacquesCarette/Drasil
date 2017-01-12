@@ -47,18 +47,22 @@ distance   = dcc "distance" "distance"
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
+--TODO: The 'FIXME's below.
 restitutionCoef = dcc "restitutionCoef" "coefficient of restitution" 
-  "coefficient of restitution"
-momentOfInertia = dcc "momentOfInertia" "moment of inertia" "moment of inertia"
-impulseV   = dcc "impulseV" "impulse (vector)" "impulse (vector)"
-impulseS   = dcc "impulseS" "impulse (scalar)" "impulse (scalar)"
+  "FIXME: MISSING DEFINITION"
+momentOfInertia = dcc "momentOfInertia" "moment of inertia" 
+  "FIXME: MISSING DEFINITION"
+impulseV   = dcc "impulseV" "impulse (vector)" 
+  "FIXME: MISSING DEFINITION"
+impulseS   = dcc "impulseS" "impulse (scalar)" 
+  "FIXME: MISSING DEFINITION"
 angularDisplacement = dcc "angularDisplacement" "angular displacement"
-  "angular displacement"
-time = dcc "time" "time" "time"
-torque = dcc "torque" "torque" "torque"
+  "FIXME: MISSING DEFINITION"
+time = dcc "time" "time" "FIXME: MISSING DEFINITION"
+torque = dcc "torque" "torque" "FIXME: MISSING DEFINITION"
 
 
 gravitationalAccel = dcc "gravitationalAccel" "gravitational acceleration" 
-  "gravitational acceleration" 
+  "FIXME: MISSING DEFINITION"
 gravitationalConst = dcc "gravitationalConst" "gravitational constant" 
   "gravitational constant (6.673 * 10E-11)"

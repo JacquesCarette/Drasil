@@ -97,4 +97,7 @@ instance Quantity UnitalChunk where
   
 instance Unit UnitalChunk where
   unit = u . unit
+  
+instance Eq UnitalChunk where
+  a == b = (a ^. id) == (b ^. id)
 -- END UNITALCHUNK ----

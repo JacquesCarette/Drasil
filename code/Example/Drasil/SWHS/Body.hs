@@ -677,7 +677,7 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" :+:
                P (temp_PCM ^. symbol) :+: S " depend on one another. IM3 " :+:
                S "can be solved once IM1 has been solved. The solution of " :+:
                S "IM2 and IM4 are also coupled, since the " :+: 
-               (temp_PCM ^. defn) :+: S " and " :+: (pcm_E ^. defn) :+:
+               (temp_PCM ^. term) :+: S " and " :+: (pcm_E ^. term) :+:
                S " depend on the " :+: (sLower (phase_change ^. 
                term)) :+: S ". (Instance models are left out because they " :+:
                S "are not currently implemented in Drasil.)")]
@@ -693,21 +693,21 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on " :+:
                 Paragraph (S "To find the rate of change of " :+: P (temp_W ^.
                 symbol) :+: S ", we look at the energy balance on " :+:
                 (sLower ((water ^. term))) :+: S ". The " :+: 
-                (volume ^. defn) :+: S " being considered is the " :+:
-                (w_vol ^. defn) :+: S " " :+: P (w_vol ^. symbol) :+:
+                (volume ^. term) :+: S " being considered is the " :+:
+                (w_vol ^. term) :+: S " " :+: P (w_vol ^. symbol) :+:
                 S ", which has " :+: (w_mass ^. term) :+: S " " :+: 
-                P (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. defn) :+: 
+                P (w_mass ^. symbol) :+: S " and " :+: (htCap_W ^. term) :+: 
                 S ", " :+: P (htCap_W ^. symbol) :+: S ". " :+: P (ht_flux_C ^. 
-                symbol) :+: S " represents the " :+: (ht_flux_C ^. defn) :+:
+                symbol) :+: S " represents the " :+: (ht_flux_C ^. term) :+:
                 S " and " :+: P (ht_flux_P ^. symbol) :+: S " represents " :+:
-                S "the " :+: (ht_flux_P ^. defn) :+: S ", over " :+:
-                (coil_SA ^. defn) :+: S " and " :+: (pcm_SA ^. defn) :+:
+                S "the " :+: (ht_flux_P ^. term) :+: S ", over " :+:
+                (coil_SA ^. term) :+: S " and " :+: (pcm_SA ^. term) :+:
                 S " of " :+: P (coil_SA ^. symbol) :+: S " and " :+: 
                 P (pcm_SA ^. symbol) :+: S ", respectively. No " :+: sLower
                 (heat_trans ^. term) :+: S " occurs to the outside of the " :+:
                 (sLower ((tank ^. term))) :+: S ", since it " :+:
                 S "has been assumed to be " :+: (perfect_insul ^. term) :+: 
-                S " (A15)." :+: S " Assuming no " :+: (vol_ht_gen ^. defn) :+: 
+                S " (A15)." :+: S " Assuming no " :+: (vol_ht_gen ^. term) :+: 
                 S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: S "=0. " :+:
                 S "Therefore, the equation for GD2 can be written as:"),
                 EqnBlock 
@@ -777,19 +777,19 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 (sLower (sens_heat ^. term)) :+: S "ing phase:"),
                 Paragraph (S "To find the rate of change of " :+: P (temp_PCM ^.
                 symbol) :+: S ", we look at the energy balance on the " :+: 
-                (phsChgMtrl ^. term) :+: S ". The " :+: (volume ^. defn) :+:
-                S " being considered is the " :+: (pcm_vol ^. defn) :+: 
+                (phsChgMtrl ^. term) :+: S ". The " :+: (volume ^. term) :+:
+                S " being considered is the " :+: (pcm_vol ^. term) :+: 
                 S ", " :+: P (pcm_vol ^. symbol) :+: S ". The derivation " :+:
                 S "that follows is initially for the " :+: (sLower 
                 ((solid ^. term))) :+: S " " :+: (phsChgMtrl ^. term) :+:
                 S ". The " :+: (pcm_mass ^. term) :+: S " is " :+: 
                 P (pcm_mass ^. symbol) :+: S " and the " :+: (htCap_S_P ^. 
-                defn) :+: S " is " :+: P (htCap_S_P ^. symbol) :+: S ". " :+:
-                S "The " :+: (ht_flux_P ^. defn) :+: S " is " :+: 
-                P (ht_flux_P ^. symbol) :+: S " over " :+: (pcm_SA ^. defn) :+:
+                term) :+: S " is " :+: P (htCap_S_P ^. symbol) :+: S ". " :+:
+                S "The " :+: (ht_flux_P ^. term) :+: S " is " :+: 
+                P (ht_flux_P ^. symbol) :+: S " over " :+: (pcm_SA ^. term) :+:
                 S " " :+: P (pcm_SA ^. symbol) :+: S ". There is no " :+: 
-                (ht_flux_out ^. defn) :+: S ". Assuming no " :+: (vol_ht_gen ^.
-                defn) :+: S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: 
+                (ht_flux_out ^. term) :+: S ". Assuming no " :+: (vol_ht_gen ^.
+                term) :+: S " (A16), " :+: P (vol_ht_gen ^. symbol) :+: 
                 S "=0, the equation for GD2 can be written as:"),
                 EqnBlock 
                   ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
@@ -824,13 +824,13 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" :+:
                 S "Although a small change in surface area would be " :+:
                 S "expected with " :+: (sLower ((melting ^. 
                 term))) :+: S ", this is not included, since the " :+:
-                (volume ^. defn) :+: S " change of the " :+: (phsChgMtrl ^. 
+                (volume ^. term) :+: S " change of the " :+: (phsChgMtrl ^. 
                 term) :+: S " with " :+: (sLower ((melting ^. 
                 term))) :+: S " is assumed to be negligible (A17)."),
                 Paragraph (S "In the case where " :+: P (temp_PCM ^. symbol) :+:
                 S "=" :+: P (temp_melt_P ^. symbol) :+: S " and not all of " :+:
                 S "the " :+: (phsChgMtrl ^. term) :+: S " is melted, the " :+:
-                (temp_PCM ^. defn) :+: S " does not change. Therefore, in " :+:
+                (temp_PCM ^. term) :+: S " does not change. Therefore, in " :+:
                 S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
                 P (time ^. symbol) :+: S "=0."),
                 Paragraph (S "This derivation does not consider the " :+: 
@@ -897,14 +897,14 @@ s4_2_7 = Section (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
 
 s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+: 
                (sLower (law_cons_energy ^. term)) :+:
-               S ". This means that the " :+: (w_E ^. defn) :+:
+               S ". This means that the " :+: (w_E ^. term) :+:
                S " should equal the difference between " :+:
                S " the total energy input from the " :+: (sLower 
                ((coil ^. term))) :+: S " and the energy output to the " :+:
                (phsChgMtrl ^. term) :+: S ". This can be shown as an " :+:
                S "equation by taking " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
                makeRef s4_2_4_DD2 :+: S ", multiplying each by their " :+:
-               S "respective surface area of " :+: (heat_transfer ^. defn) :+:
+               S "respective surface area of " :+: (heat_transfer ^. term) :+:
                S ", and integrating each over the simulation " :+: (time ^. 
                term) :+: S ", as follows:"),
                EqnBlock 
@@ -913,7 +913,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                 [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
                 ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
                 (FCall (C temp_PCM) [C time]))) time)),
-               Paragraph (S "In addition, the " :+: (pcm_E ^. defn) :+: 
+               Paragraph (S "In addition, the " :+: (pcm_E ^. term) :+: 
                S " should equal the energy input to the " :+: (phsChgMtrl ^. 
                term) :+: S " from the " :+: (sLower ((water ^.
                term))) :+: S ". This can be expressed as"),
@@ -956,15 +956,15 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
             (Table [S "symbol", S "unit", S "description"] (mkTable
             [(\ch -> P (ch ^. symbol)),
             (\ch -> Sy (ch ^. unit)),
-            (\ch -> ch ^. defn)
-            ] inputVar) (S "Input Variable " :+: (requirement ^. defn)) False),
+            (\ch -> ch ^. term)] inputVar) 
+            (S "Input Variable " :+: (requirement ^. defn)) False),
 --
             Enumeration (Simple [((requirement ^. term) :+: S "2", Flat 
             (S "Use the inputs in R1 to find the " :+: (mass ^. term) :+:
             S " needed for IM1 to IM4, as follows, where " :+:
-            P (w_vol ^. symbol) :+: S " is the " :+:(w_vol ^. defn) :+:
+            P (w_vol ^. symbol) :+: S " is the " :+:(w_vol ^. term) :+:
             S " and " :+: P (tank_vol ^. symbol) :+: S " is the " :+:
-            (tank_vol ^. defn) :+: S "."))]),
+            (tank_vol ^. term) :+: S "."))]),
             EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
             (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) - 
             (C pcm_vol)) * (C w_density)),
@@ -983,23 +983,23 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
             S " (from IM2).")),
 --
             ((requirement ^. term) :+: S "5", Flat (S "Calculate and " :+:
-            S "output the " :+: (temp_W ^. defn) :+: S " (" :+: P (temp_W ^.
+            S "output the " :+: (temp_W ^. term) :+: S " (" :+: P (temp_W ^.
             symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) " :+:
             S "over the simulation " :+: (time ^. term) :+: S " (from IM1).")),
 --
             ((requirement ^. term) :+: S "6", Flat (S "Calculate and " :+: 
-            S "output the " :+: (temp_PCM ^. defn) :+: S " (" :+:
+            S "output the " :+: (temp_PCM ^. term) :+: S " (" :+:
             P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
             S ")) over the simulation " :+: (time ^. term) :+: 
             S " (from IM2).")),
 --
             ((requirement ^. term) :+: S "7", Flat (S "Calculate and " :+: 
-            S " output the " :+: (w_E ^. defn) :+: S " (" :+: P (w_E ^. 
+            S " output the " :+: (w_E ^. term) :+: S " (" :+: P (w_E ^. 
             symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) " :+:
             S "over the simulation " :+: (time ^. term) :+: S " (from IM3).")),
 --
             ((requirement ^. term) :+: S "8", Flat (S "Calculate and " :+: 
-            S "output the " :+: (pcm_E ^. defn) :+: S " (" :+: P (pcm_E ^.
+            S "output the " :+: (pcm_E ^. term) :+: S " (" :+: P (pcm_E ^.
             symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the " :+:
             S "simulation " :+: (time ^. term) :+: S " (from IM4).")),
 --
@@ -1054,22 +1054,27 @@ s6_list = Enumeration (Simple [((likelyChg ^. term) :+: S "1", Flat
           (S "A4 - " :+: (phsChgMtrl ^. term) :+: S " is actually a poor " :+:
           (sLower (thermal_conductor ^. term)) :+: S ", so " :+:
           S "the " :+: (sLower (assumption ^. defn)) :+:
-          S " of uniform " :+: (temp_PCM ^. defn) :+: S " is not likely.")),
+          S " of uniform " :+: (temp_PCM ^. term) :+: S " is not likely.")),
+--
           ((likelyChg ^. term) :+: S "2", Flat (S "A8 - The " :+: (temp_C ^. 
-          defn) :+: S " will change over the course of the day, depending" :+:
+          term) :+: S " will change over the course of the day, depending" :+:
           S " on the energy received from the sun.")),
+--
           ((likelyChg ^. term) :+: S "3", Flat (S "A9 - The " :+: (temp_C ^. 
-          defn) :+: S " will actually change along its length as the " :+:
+          term) :+: S " will actually change along its length as the " :+:
           (sLower ((water ^. term))) :+: S " within it cools.")),
+--
           ((likelyChg ^. term) :+: S "4", Flat (S "A11 - The model " :+:
           S "currently only accounts for " :+: (sLower (charging ^. 
           defn)) :+: S ". A more complete model would also account for " :+:
           (sLower (discharging ^. defn)) :+: S ".")),
+--
           ((likelyChg ^. term) :+: S "5", Flat (S "A12 - To add more " :+:
-          S " flexibility to the simulation, the " :+: (temp_init ^. defn) :+:
+          S " flexibility to the simulation, the " :+: (temp_init ^. term) :+:
           S " of the " :+: (sLower ((water ^. term))) :+: 
           S " and the " :+: (phsChgMtrl ^. term) :+: S " could be " :+:
           S "allowed to have different values.")),
+--
           ((likelyChg ^. term) :+: S "6", Flat (S "A15 - Any real " :+:
           (sLower ((tank ^. term))) :+: S " cannot be " :+:
           (perfect_insul ^. term) :+: S " and will lose heat."))])

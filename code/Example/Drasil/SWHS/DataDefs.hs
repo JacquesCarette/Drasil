@@ -13,7 +13,8 @@ import Data.Drasil.Concepts.Thermodynamics
 import Control.Lens ((^.))
 
 dd1HtFluxC :: QDefinition
-dd1HtFluxC = fromEqn "q_C" dd1descr (ht_flux_C ^. symbol) thermal_flux htFluxCEqn
+dd1HtFluxC = fromEqn "dd1HtFluxC" dd1descr (ht_flux_C ^. symbol) thermal_flux 
+  htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
@@ -26,7 +27,7 @@ dd1descr = (ht_flux_C ^. defn)
 --Can't include info in description beyond definition of variables?
 
 dd2HtFluxP :: QDefinition
-dd2HtFluxP = fromEqn "q_P" dd2descr (ht_flux_P ^. symbol) thermal_flux htFluxPEqn
+dd2HtFluxP = fromEqn "dd2HtFluxP" dd2descr (ht_flux_P ^. symbol) thermal_flux htFluxPEqn
 
 htFluxPEqn :: Expr
 htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] - 
@@ -36,7 +37,7 @@ dd2descr :: Sentence
 dd2descr = (ht_flux_P ^. defn)
 
 dd3HtFusion :: QDefinition
-dd3HtFusion = fromEqn "H_f" dd3descr (htFusion ^. symbol) specificE htFusionEqn
+dd3HtFusion = fromEqn "dd3HtFusion" dd3descr (htFusion ^. symbol) specificE htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)

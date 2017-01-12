@@ -33,7 +33,9 @@ t3descr :: Sentence
 t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (thermal_energy ^. term)) :+: S " (" :+:
           Sy (joule ^. unit) :+: S "), " :+: (sMap (map toLower) 
-          (latent_heat ^. term)) :+: S " energy. <Integral> is the rate" :+:
+          (latent_heat ^. term)) :+: S " energy. " :+:
+          S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE" :+: 
+          S "is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
           S " to " :+: (time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
           S " (" :+: Sy (tau ^. unit) :+: S "). " :+: P (time ^. symbol) :+:

@@ -15,3 +15,5 @@ mass = dcc "mass" "mass" "the quantity of matter in a body"
 length = dcc "length" "length" 
   ("the straight-line distance between two points along an object. " ++
   "Typically used to represent the size of an object from one end to the other.")
+  
+--TODO: Add density

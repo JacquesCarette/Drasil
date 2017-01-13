@@ -76,13 +76,14 @@ writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 genCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
-genCode cc mcs = prntCode cc (getCodeModules cc mcs)
-  where getCodeModules :: NamedIdea c => c -> [ModuleChunk] -> [ModuleChunk]
-        getCodeModules _ [] = []
-        getCodeModules cc' (mc:mcs') =
-          if (Just (nw cc')) == (imp mc) then mc:getCodeModules cc' mcs' 
-                         else getCodeModules cc' mcs'
-        getCodeModules cc' (_:mcs') = getCodeModules cc' mcs'
+genCode cc mcs = prntCode cc $ getCodeModules mcs
+  where getCodeModules :: [ModuleChunk] -> [ModuleChunk]
+        getCodeModules [] = []
+        getCodeModules (mc:mcs') =
+          if (generated mc)
+          then mc:getCodeModules mcs'
+          else getCodeModules mcs'
+        --getCodeModules cc' (_:mcs') = getCodeModules cc' mcs'
 
 -- generate code for all supported languages (will add language selection later)
 prntCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
@@ -102,10 +103,10 @@ prntCode cc mcs =
       workingDir <- getCurrentDirectory
       let writeCode' = writeCode workingDir
       writeCode' cppLabel
-      writeCode' javaLabel
-      writeCode' luaLabel
-      writeCode' cSharpLabel
-      writeCode' goolLabel
-      writeCode' objectiveCLabel
-      writeCode' pythonLabel
+ --     writeCode' javaLabel
+ --     writeCode' luaLabel
+ --     writeCode' cSharpLabel
+ --     writeCode' goolLabel
+ --     writeCode' objectiveCLabel
+ --     writeCode' pythonLabel
       setCurrentDirectory workingDir

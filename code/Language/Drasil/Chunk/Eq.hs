@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Eq 
-  (QDefinition(..), fromEqn, fromEqn', equat) where
+  (QDefinition(..), fromEqn, fromEqn', equat, getVC) where
 
 import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
@@ -32,6 +32,7 @@ instance SymbolForm QDefinition where
   symbol = ul . symbol
 
 instance Quantity QDefinition where
+  typ = ul . typ
   getSymb (EC a _) = getSymb a
   getUnit (EC a _) = getUnit a
   -- DO SOMETHING
@@ -63,6 +64,7 @@ instance SymbolForm E where
   symbol = elens symbol
   
 instance Quantity E where
+  typ = elens typ
   getSymb (E c) = getSymb c
   getUnit (E c) = getUnit c
   
@@ -77,3 +79,7 @@ fromEqn nm desc symb chunk eqn =
 fromEqn' :: String -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
   EC (cv (ccStSS nm desc desc) symb Rational) eqn
+
+
+getVC :: QDefinition -> VarChunk
+getVC qd = VC (qd ^. id) (qd ^. term) (qd ^. symbol) (qd ^. typ)

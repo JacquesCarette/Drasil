@@ -1,5 +1,6 @@
-module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..),
-  ExcType(..), IOType(..), fromEC, makeStdInputMethod) where
+module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..)
+  , ExcType(..), IOType(..), fromEC, makeStdInputMethod, makeFileInputMethod
+  , makeFileOutputMethod, makeMainMethod) where
 
 import Control.Lens (Simple, Lens, (^.))
 import Prelude hiding (id)
@@ -8,6 +9,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
+import qualified Language.Drasil.Code.Imperative.AST as A
 
 -- BEGIN METHODCHUNK --
 data MethodChunk = MeC { methcc :: NWrapper, mType :: MethodType,
@@ -16,10 +18,14 @@ data MethodChunk = MeC { methcc :: NWrapper, mType :: MethodType,
 
 data MethodType = MCalc QDefinition
                 | MInput IOType VarChunk
-                | MOutput IOType VarChunk
+                | MOutput IOType [VarChunk]
+                -- temporary for generating control module
+                | MCustom A.Body
+
+
 
 data IOType = IOStd
-            | IOFile
+            | IOFile String
 
 data ExcType = DivByZero
 
@@ -47,6 +53,15 @@ fromEC ec@(EC a b) =
 
 makeStdInputMethod :: VarChunk -> MethodChunk
 makeStdInputMethod vc = MeC (nw vc) (MInput IOStd vc) [] [vc] []
+
+makeFileInputMethod :: NamedChunk -> VarChunk -> String -> MethodChunk
+makeFileInputMethod cc' vc f = MeC (nw cc') (MInput (IOFile f) vc) [vc] [] []
+
+makeFileOutputMethod :: NamedChunk -> [VarChunk] -> String -> MethodChunk
+makeFileOutputMethod cc' vcs f = MeC (nw cc') (MOutput (IOFile f) vcs) vcs [] []
+
+makeMainMethod :: NamedChunk -> A.Body -> MethodChunk
+makeMainMethod cc' b = MeC (nw cc') (MCustom b) [] [] []
 
 -- don't export
 checkDiv :: Expr -> Bool

@@ -122,6 +122,9 @@ nCC n = makeCC n n
 makeVC :: String -> String -> Symbol -> VarChunk
 makeVC i des sym = VC i (S des) sym Rational
 
+makeVCObj :: String -> String -> Symbol -> String -> VarChunk
+makeVCObj i des sym s = VC i (S des) sym (Obj s)
+
 vcFromCC :: NamedChunk -> Symbol -> VarChunk
 vcFromCC cc sym = VC (cc ^. id) (cc ^. term) sym Rational
 

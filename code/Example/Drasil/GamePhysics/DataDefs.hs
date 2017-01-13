@@ -26,7 +26,7 @@ ctrOfMassEqn = (UnaryOp (Summation Nothing
     ((C mass_i) * (C pos_i)))) / (C mTot)
 
 dd1descr :: Sentence
-dd1descr = pos_CM ^. defn
+dd1descr = pos_CM ^. term
 
 -- DD2 : Linear displacement --
 
@@ -92,7 +92,7 @@ dd5descr :: Sentence
 dd5descr = (angDisp ^. term) :+: S " of a " :+:
     (rigidBody ^. term) :+: S " as a function of " :+: (time ^. term) :+:
     S " " :+: P (time ^. symbol) :+: S " (" :+: Sy (time ^. unit) :+:
-    S "), also equal to the derivative of its " :+: (orientation ^. defn) :+:
+    S "), also equal to the derivative of its " :+: (orientation ^. term) :+:
     S " with respect to " :+: (time ^. term) :+: S " " :+:
     P (time ^. symbol)
 

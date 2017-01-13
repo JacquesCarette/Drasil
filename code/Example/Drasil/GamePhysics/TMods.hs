@@ -76,17 +76,17 @@ t3descr = S "Two " :+: (rigidBodies ^. term) :+: S " in the universe " :+:
     S "that is directly proportional to the product of their " :+:
     (mass ^. term) :+: S "es, " :+: P (mass_1 ^. symbol) :+: S " and " :+:
     P (mass_2 ^. symbol) :+: S " (" :+: Sy (mass ^. unit) :+: S "), and " :+:
-    S "inversely proportional to the " :+: (sqrDist ^. defn) :+: S " " :+:
+    S "inversely proportional to the " :+: (sqrDist ^. term) :+: S " " :+:
     P (sqrDist ^. symbol) :+: S " (" :+: Sy (sqrDist ^. unit) :+: S ") " :+:
     S "between them. The vector " :+: P (disp ^. symbol) :+: S " (" :+:
     Sy (disp ^. unit) :+: S ") is the " :+: (disp ^. term) :+:
     S " between the centres of the " :+: (rigidBodies ^. term) :+:
     S " and " :+: P (dispNorm ^. symbol) :+: S " (" :+:
     Sy (dispNorm ^. unit) :+: S ") represents " :+: S "the " :+:
-    (dispNorm ^. defn) :+: S ", or absolute distance between the " :+:
+    (dispNorm ^. term) :+: S ", or absolute distance between the " :+:
     S "two. " :+: P (dispUnit ^. symbol) :+: S " denotes the " :+:
-    (dispUnit ^. defn) :+: S ", equivalent to the " :+: (disp ^. term) :+:
-    S " divided by the " :+: (dispNorm ^. defn) :+: S ", as shown above. " :+:
+    (dispUnit ^. term) :+: S ", equivalent to the " :+: (disp ^. term) :+:
+    S " divided by the " :+: (dispNorm ^. term) :+: S ", as shown above. " :+:
     S "Finally, " :+: P (gravConst ^. symbol) :+: S " is the " :+:
     (gravConst ^. defn) :+: S " ( " :+: Sy (gravConst ^. unit) :+: S ")."
 
@@ -110,7 +110,7 @@ t4descr = S "The linear " :+: (vel ^. term) :+: S " " :+:
     S "resultant vector from the cross product of the " :+:
     (rigidBody ^. term) :+: S "'s " :+: ((angVel ^. term)) :+: S " " :+:
     P (angVel ^. symbol) :+: S " (" :+: Sy (angVel ^. unit) :+:
-    S ") and the " :+: (r_OB ^. defn) :+: S ", " :+: P (r_OB ^. symbol) :+:
+    S ") and the " :+: (r_OB ^. term) :+: S ", " :+: P (r_OB ^. symbol) :+:
     S " (" :+: Sy (r_OB ^. unit) :+: S ")."
 
 -- T5 : Newton's second law for rotational motion --

@@ -314,10 +314,10 @@ s4_1_2_list = Enumeration (Simple [
     (vels ^. term) :+: S " over a period of " :+: (time ^. term) :+: S ".")),
 --
     ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical " :+:
-    S "properties, initial " :+: (orientation ^. defn) :+: S "s and " :+:
+    S "properties, initial " :+: (orientation ^. term) :+: S "s and " :+:
     (angularVels ^. term) :+: S ", and " :+: (force ^. term) :+: S "s " :+:
     S "applied on a set of " :+: (rigidBodies ^. term) :+: S ", " :+:
-    S "determine their new " :+: (orientation ^. defn) :+: S "s and " :+:
+    S "determine their new " :+: (orientation ^. term) :+: S "s and " :+:
     (angularVels ^. term) :+: S " over a period of " :+: (time ^. term) :+:
     S ".")),
 --
@@ -542,29 +542,36 @@ s5_1_list = Enumeration (Simple [
     ((requirement ^. term) :+: S "1", Flat (S "Create a " :+:
     (space ^. term) :+: S " for all of the " :+: (rigidBodies ^. term) :+:
     S " in the physical simulation to interact in.")),
+--
     ((requirement ^. term) :+: S "2", Flat (S "Input the initial " :+:
     (mass ^. term) :+: S "es, " :+: (vels ^. term) :+: S ", " :+:
-    (orientation ^. defn) :+: S "s, " :+: (angularVels ^. term) :+:
+    (orientation ^. term) :+: S "s, " :+: (angularVels ^. term) :+:
     S " of, " :+: S "and " :+: (force ^. term) :+: S "s applied on " :+:
     (rigidBodies ^. term) :+: S ".")),
+--
     ((requirement ^. term) :+: S "3", Flat (S "Input the " :+: 
     (surface ^. term) :+: S " properties of the bodies, such as " :+: 
     (friction ^. term) :+: S " or " :+:
     (elasticity ^. term) :+: S ".")),
+--
     ((requirement ^. term) :+: S "4", Flat (S "Verify that the inputs " :+:
     S "satisfy the required physical constraints.")),
+--
     ((requirement ^. term) :+: S "5", Flat (S "Determine the " :+:
     (position ^. term) :+: S "s and " :+: (vels ^. term) :+: S " over a " :+:
     S "period of " :+: (time ^. term) :+: S " of the " :+: (twoD ^. term) :+:
     S " " :+: (rigidBodies ^. term) :+: S " acted upon by a " :+:
     (force ^. term) :+: S ".")),
+--
     ((requirement ^. term) :+: S "6", Flat (S "Determine the " :+:
-    (orientation ^. defn) :+: S "s and " :+: (angularVels ^. term) :+:
+    (orientation ^. term) :+: S "s and " :+: (angularVels ^. term) :+:
     S " over a period of " :+: (time ^. term) :+: S " of the " :+:
     (twoD ^. term) :+: S " " :+: (rigidBodies ^. term) :+: S ".")),
+--
     ((requirement ^. term) :+: S "7", Flat (S "Determine if any of the " :+:
     (rigidBodies ^. term) :+: S " in the " :+: (space ^. term) :+:
     S " have collided.")),
+--
     ((requirement ^. term) :+: S "8", Flat (S "Determine the " :+:
     (position ^. term) :+: S "s and " :+: (vels ^. term) :+: S " over a " :+:
     S "period of " :+: (time ^. term) :+: S " of the " :+: (twoD ^. term) :+:

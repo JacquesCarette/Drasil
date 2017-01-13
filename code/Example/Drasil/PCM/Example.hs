@@ -28,58 +28,77 @@ coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
 
-coil_SA     = makeUC "A_C" "coil surface area" (sub cA cC) m_2
+coil_SA     = makeUC "A_C" "coil surface area" 
+  "FIXME: Define this or remove the need for definitions" (sub cA cC) m_2
 hIn_SA      = makeUC "A_in" "surface area over which heat is transferred in" 
-              (sub cA (Atomic "in")) m_2
+  "FIXME: Define this or remove the need for definitions" (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "A_out" "surface area over which heat is transferred out" 
-              (sub cA (Atomic "out")) m_2
-htCap       = heat_cap_spec_HACK --ucFromVC heat_cap_spec U.heat_cap_spec
-htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" (sup cC cL)
-              U.heat_cap_spec
-htCap_W     = makeUC "C_W" "specific heat capacity of water" (sub cC cW)
-              U.heat_cap_spec
-tank_D      = makeUC "D" "diameter of tank" cD metre
-ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" lG
-              U.thermal_flux
-ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" lH U.heat_transfer
-ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water" 
-              (sub lH cC) U.heat_transfer
-tank_L      = makeUC "L" "length of tank" cL metre
-mass        = mass_HACK --ucFromVC QPP.mass kilogram
-water_m     = makeUC "m_W" ((QPP.mass ^. id) ++ " of water") 
-                (sub (QPP.mass ^. symbol) cW) kilogram
+  "FIXME: Define this or remove the need for definitions" (sub cA (Atomic "out")) m_2
+htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
+htCap_Liq   = makeUC "C^L" "specific heat capacity of a liquid" 
+  "FIXME: Define this or remove the need for definitions" (sup cC cL) U.heat_cap_spec
+htCap_W     = makeUC "C_W" "specific heat capacity of water" 
+  "FIXME: Define this or remove the need for definitions" (sub cC cW) U.heat_cap_spec
+tank_D      = makeUC "D" "diameter of tank" 
+  "FIXME: Define this or remove the need for definitions" cD metre
+ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" 
+  "FIXME: Define this or remove the need for definitions" lG U.thermal_flux
+ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" 
+  "FIXME: Define this or remove the need for definitions" lH U.heat_transfer
+ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water"   "FIXME: Define this or remove the need for definitions" 
+  (sub lH cC) U.heat_transfer
+tank_L      = makeUC "L" "length of tank" 
+  "FIXME: Define this or remove the need for definitions" cL metre
+mass        = ucFromVC QPP.mass kilogram
+water_m     = makeUC "m_W" ((QPP.mass ^. id) ++ " of water")
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
-ht_flux     = makeUC "q" "heat flux" lQ U.heat_transfer
-thFluxVect  = makeUC "q_vect" "thermal flux vector" (vec lQ)
-                  U.thermal_flux
-ht_flux_C   = makeUC "q_C" "heat flux from coil" (sub lQ cC) U.thermal_flux
-ht_flux_in  = makeUC "q_in" "heat flux in" (sub lQ (Atomic "in")) U.thermal_flux
-ht_flux_out = makeUC "q_out" "heat flux out" (sub lQ (Atomic "out")) U.thermal_flux
-time        = time_HACK --ucFromVC QP.time second
-temp        = makeUC "T" "temperature" cT centigrade
--- temp_boil   = makeUC "T_boil" "temperature at boiling point" 
-              -- (sub cT (Atomic "boil")) centigrade
+ht_flux     = makeUC "q" "heat flux" 
+  "FIXME: Define this or remove the need for definitions" lQ U.heat_transfer
+thFluxVect  = makeUC "q_vect" "thermal flux vector" 
+  "FIXME: Define this or remove the need for definitions" (vec lQ) 
+  U.thermal_flux
+ht_flux_C   = makeUC "q_C" "heat flux from coil" 
+  "FIXME: Define this or remove the need for definitions" (sub lQ cC) 
+  U.thermal_flux
+ht_flux_in  = makeUC "q_in" "heat flux in" 
+  "FIXME: Define this or remove the need for definitions" (sub lQ (Atomic "in")) 
+  U.thermal_flux
+ht_flux_out = makeUC "q_out" "heat flux out" 
+  "FIXME: Define this or remove the need for definitions" (sub lQ (Atomic "out")) U.thermal_flux
+time        = ucFromVC QP.time second
+temp        = makeUC "T" "temperature" 
+  "FIXME: Define this or remove the need for definitions" cT centigrade
+-- temp_boil   = makeUC "T_boil" "temperature at boiling point" -- (sub cT (Atomic "boil")) centigrade
 temp_coil   = makeUC "T_coil" "temperature of coil" 
-              (sub cT cC) centigrade
+  "FIXME: Define this or remove the need for definitions" (sub cT cC) centigrade
 temp_env    = makeUC "T_env" "temperature of environment" 
-              (sub cT (Atomic "env")) centigrade
-time_final  = makeUC "t_final" "time" (sub lT (Atomic "final")) second
+  "FIXME: Define this or remove the need for definitions" (sub cT (Atomic "env")) 
+  centigrade
+time_final  = makeUC "t_final" "time" 
+  "FIXME: Define this or remove the need for definitions" (sub lT (Atomic "final")) second
 temp_init   = makeUC "T_init" "initial temperature" 
-              (sub cT (Atomic "init")) centigrade
+  "FIXME: Define this or remove the need for definitions" (sub cT (Atomic "init")) 
+  centigrade
 temp_water  = makeUC "T_W" "temperature of water" 
-              (sub cT cW) centigrade
+  "FIXME: Define this or remove the need for definitions" (sub cT cW) centigrade
 temp_diff   = makeUC "deltaT" "temperature difference" 
-              (Concat [Greek Delta, cT]) centigrade
-vol         = makeUC "V" "volume" cV m_3
---tank_vol    = makeUC "V_tank" "volume of the cylindrical tank" 
-                -- (sub cV (Atomic "tank")) m_3
-water_vol   = makeUC "V_W" "volume of water" (sub cV cW) m_3
-density     = makeUC "rho" "density, mass per unit volume" (Greek Rho_L) 
-              densityU
-water_dense = makeUC "rho_W" "density of water" (sub (Greek Rho_L) cW) densityU
-dummyVar    = makeUC "tau" "dummy variable for integration over time" 
-                (Greek Tau_L) second
+  "FIXME: Define this or remove the need for definitions" (Concat [Greek Delta, cT]) 
+  centigrade
+vol         = makeUC "V" "volume" 
+  "FIXME: Define this or remove the need for definitions" cV m_3
+--tank_vol    = makeUC "V_tank" "volume of the cylindrical tank"   -- (sub cV (Atomic "tank")) m_3
+water_vol   = makeUC "V_W" "volume of water" 
+  "FIXME: Define this or remove the need for definitions" (sub cV cW) m_3
+density     = makeUC "rho" "density, mass per unit volume" 
+  "FIXME: Define this or remove the need for definitions" (Greek Rho_L) densityU
+water_dense = makeUC "rho_W" "density of water" 
+  "FIXME: Define this or remove the need for definitions" (sub (Greek Rho_L) cW)
+  densityU
+dummyVar    = makeUC "tau" "dummy variable for integration over time"
+  "FIXME: Define this or remove the need for definitions" (Greek Tau_L) second
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
 ----Acronyms-----
@@ -107,10 +126,3 @@ t1descr =
   S ", where " :+: (P $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.
-
---HACKS
-time_HACK, mass_HACK, heat_cap_spec_HACK :: UnitalChunk
-time_HACK = makeUC "time_HACK" "time" lT second
-mass_HACK = makeUC "mass_HACK" "mass" lM kilogram
-heat_cap_spec_HACK = makeUC "heat_cap_spec_hack" "specific heat capacity" cC 
-  U.heat_cap_spec

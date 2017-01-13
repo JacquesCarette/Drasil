@@ -59,7 +59,7 @@ s1_2_intro = Paragraph $
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ ch ^. unit),
-   (\ch -> ch ^. defn)
+   (\ch -> ch ^. term)
    ]
   pcmSymbols)
   (S "Table of Symbols") False
@@ -111,7 +111,7 @@ fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of ":+:
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "PS1", S "Tank containing water"), 
   (S "PS2", S "Heating coil at bottom of tank. (" :+:
-  P (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. defn) :+:
+  P (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. term) :+:
   S " into the water.)")]
 
 s4_1_3 = Section ((goalStmt ^. defn) :+: S "s") [Con s4_1_3_intro,
@@ -121,7 +121,7 @@ s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:
   S "temperature of the water, and material properties, the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "GS1", S "predict the " :+: (temp_water ^. defn) :+: S " over time")]
+  (S "GS1", S "predict the " :+: (temp_water ^. term) :+: S " over time")]
 
 s4_2 = Section (S "Solution Characteristics Specification") 
   [Con s4_2_intro,Sub s4_2_1,Sub s4_2_2]

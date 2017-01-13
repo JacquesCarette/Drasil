@@ -36,12 +36,16 @@ impulseVec  = ucFromVC QP.impulseV impulseU
 impulseScl  = ucFromVC QP.impulseS impulseU
 len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
-iVect       = makeUC "i" "horizontal unit vector" (vec (hat lI)) metre
-jVect       = makeUC "j" "vertical unit vector" (vec (hat lJ)) metre
-normalVect  = makeUC "n" "collision normal vector" (vec lN) metre
+iVect       = makeUC "i" "horizontal unit vector" 
+  "FIXME: Define this or remove the need for definitions" (vec (hat lI)) metre
+jVect       = makeUC "j" "vertical unit vector" 
+  "FIXME: Define this or remove the need for definitions" (vec (hat lJ)) metre
+normalVect  = makeUC "n" "collision normal vector" 
+  "FIXME: Define this or remove the need for definitions"(vec lN) metre
 angVel      = ucFromVC QP.angularV angVelU
 position    = ucFromVC QP.position metre
-orientation = makeUC "phi" "orientation" (Greek Phi_L) radians
+orientation = makeUC "phi" "orientation" 
+  "FIXME: Define this or remove the need for definitions" (Greek Phi_L) radians
 dist        = ucFromVC QP.distance metre
 disp        = ucFromVC QP.displacement metre
 time        = ucFromVC QP.time second
@@ -65,45 +69,61 @@ numParticles = makeVC "n" "number of particles in a rigid body" lN
 force_1, force_2 :: UnitalChunk
 
 force_1 = makeUC "F_1" "force exerted by the first body (on another body)"
-    (sub (force ^. symbol) (Atomic "1")) newton
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (force ^. symbol) (Atomic "1")) newton
 force_2 = makeUC "F_2" "force exerted by the second body (on another body)"
-    (sub (force ^. symbol) (Atomic "2")) newton
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (force ^. symbol) (Atomic "2")) newton
 
 -- T3 --
 
 mass_1, mass_2, dispUnit, dispNorm, sqrDist :: UnitalChunk
 
-mass_1  = makeUC "m_1" "mass of the first body" (sub (mass ^. symbol)
-    (Atomic "1")) kilogram
-mass_2  = makeUC "m_2" "mass of the second body" (sub (mass ^. symbol)
-    (Atomic "2")) kilogram
-dispUnit = makeUC "rhat" "unit displacement vector" (vec (hat lR)) metre
+mass_1  = makeUC "m_1" "mass of the first body" 
+  "FIXME: Define this or remove the need for definitions"
+  (sub (mass ^. symbol) (Atomic "1")) kilogram
+mass_2  = makeUC "m_2" "mass of the second body" 
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (mass ^. symbol) (Atomic "2")) kilogram
+dispUnit = makeUC "rhat" "unit displacement vector" 
+  "FIXME: Define this or remove the need for definitions" (vec (hat lR)) metre
 -- Improvised norm symbols --
+--FIXME: Properly implement Norm
 dispNorm    = makeUC "||r||" "Euclidean norm of the displacement"
-    (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
-sqrDist = makeUC "||r||^2" "squared distance" (sup (dispNorm ^. symbol)
-    (Atomic "2")) m_2
+  "FIXME: Define this or remove the need for definitions" 
+  (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
+sqrDist = makeUC "||r||^2" "squared distance" 
+  "FIXME: Define this or remove the need for definitions" 
+  (sup (dispNorm ^. symbol) (Atomic "2")) m_2
 
 -- T4 --
 
 vel_B, vel_O, r_OB :: UnitalChunk
 
-vel_B   = makeUC "v_B" "velocity at point B" (sub (vel ^. symbol) cB) velU
-vel_O   = makeUC "v_O" "velocity at the origin" (sub (vel ^. symbol) cO) velU
+vel_B   = makeUC "v_B" "velocity at point B" 
+  "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cB) velU
+vel_O   = makeUC "v_O" "velocity at the origin" 
+  "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cO) velU
 r_OB    = makeUC "r_OB" "displacement vector between the origin and point B"
-    (sub (disp ^. symbol) (Concat [cO, cB])) metre
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (disp ^. symbol) (Concat [cO, cB])) metre
 
 -- DD1 --
 
 pos_CM, mass_i, pos_i, mTot :: UnitalChunk
 
 pos_CM = makeUC "p_CM" ("the mass-weighted average position of a rigid " ++
-    "body's particles") (sub (position ^. symbol) (Atomic "CM")) metre
-mass_i = makeUC "m_i" "mass of the i-th particle" (sub (mass ^. symbol) lI)
-    kilogram
+    "body's particles") 
+    "FIXME: Define this or remove the need for definitions" 
+    (sub (position ^. symbol) (Atomic "CM")) metre
+mass_i = makeUC "m_i" "mass of the i-th particle" 
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (mass ^. symbol) lI) kilogram
 pos_i = makeUC "p_i" "position vector of the i-th particle"
-    (sub (position ^. symbol) lI) metre
-mTot = makeUC "M" "total mass of the rigid body" cM kilogram
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (position ^. symbol) lI) metre
+mTot = makeUC "M" "total mass of the rigid body"
+  "FIXME: Define this or remove the need for definitions" cM kilogram
 
 -- DD8 --
 
@@ -111,26 +131,38 @@ initRelVel, mass_A, mass_B, normalLen, contDisp_A, contDisp_B, perpLen_A,
     momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
 
 initRelVel = makeUC "v_i^AB" "relative velocity between rigid bodies A and B"
-    (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
-mass_A = makeUC "m_A" "mass of rigid body A" (sub (mass ^. symbol) cA) kilogram
-mass_B = makeUC "m_B" "mass of rigid body B" (sub (mass ^. symbol) cB) kilogram
-normalLen = makeUC "||n||" "length of the normal vector" (Concat [Atomic "||",
-    (normalVect ^. symbol), Atomic "||"]) metre
+  "FIXME: Define this or remove the need for definitions"
+  (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
+mass_A = makeUC "m_A" "mass of rigid body A" 
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (mass ^. symbol) cA) kilogram
+mass_B = makeUC "m_B" "mass of rigid body B" 
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (mass ^. symbol) cB) kilogram
+normalLen = makeUC "||n||" "length of the normal vector" 
+  "FIXME: Define this or remove the need for definitions" 
+  (Concat [Atomic "||",(normalVect ^. symbol), Atomic "||"]) metre
 contDisp_A = makeUC "r_AP" ("displacement vector between the centre of " ++
-    "mass of rigid body A and contact point P") (sub (disp ^. symbol)
-    (Concat [cA, cP])) metre
+    "mass of rigid body A and contact point P") 
+    "FIXME: Define this or remove the need for definitions" 
+    (sub (disp ^. symbol) (Concat [cA, cP])) metre
 contDisp_B = makeUC "r_BP" ("displacement vector between the centre of " ++
-    "mass of rigid body B and contact point P") (sub (disp ^. symbol)
-    (Concat [cB, cP])) metre
+    "mass of rigid body B and contact point P")
+    "FIXME: Define this or remove the need for definitions" 
+    (sub (disp ^. symbol) (Concat [cB, cP])) metre
 perpLen_A = makeUC "||r_AP x n||" ("length of the vector perpendicular " ++
     "to the contact displacement vector of rigid body A")
+    "FIXME: Define this or remove the need for definitions" 
     (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*",
     (normalVect ^. symbol), Atomic "||"]) metre
 perpLen_B = makeUC "||r_BP x n||" ("length of the vector perpendicular " ++
     "to the contact displacement vector of rigid body B")
+    "FIXME: Define this or remove the need for definitions" 
     (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*",
     (normalVect ^. symbol), Atomic "||"]) metre
 momtInert_A = makeUC "I_A" "moment of inertia of rigid body A"
-    (sub (momtInert ^. symbol) cA) momtInertU
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (momtInert ^. symbol) cA) momtInertU
 momtInert_B = makeUC "I_B" "moment of inertia of rigid body B"
-    (sub (momtInert ^. symbol) cB) momtInertU
+  "FIXME: Define this or remove the need for definitions" 
+  (sub (momtInert ^. symbol) cB) momtInertU

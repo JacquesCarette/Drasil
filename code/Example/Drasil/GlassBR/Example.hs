@@ -21,39 +21,76 @@ plate_len, plate_width, dim_max, dim_min, mod_elas, act_thick, sflawParamK,
   sflawParamM, demand, sd, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitalChunk
 
-plate_len   = makeUC "a" "Plate length (long dimension)" lA millimetre
-plate_width = makeUC "b" "Plate width (short dimension)" lB millimetre
+plate_len   = makeUC "a" "Plate length (long dimension)" 
+  "FIXME: Define this or remove the need for definitions"
+  lA millimetre
+plate_width = makeUC "b" "Plate width (short dimension)" 
+  "FIXME: Define this or remove the need for definitions"
+  lB millimetre
 dim_max     = makeUC "d_max" ("Maximum value for one of the dimensions of " ++
-  "the glass plate") (sub lD (Atomic "max")) millimetre
+  "the glass plate") 
+  "FIXME: Define this or remove the need for definitions"
+  (sub lD (Atomic "max")) millimetre
 dim_min     = makeUC "d_min" ("Minimum value for one of the dimensions of " ++
-  "the glass plate") (sub lD (Atomic "min")) millimetre
-mod_elas    = makeUC "E" "Modulus of elasticity of glass" cE kilopascal
-act_thick   = makeUC "h" "Actual thickness" lH millimetre
-sflawParamK = makeUC "k" "Surface flaw parameter" lK sFlawPU
-sflawParamM = makeUC "m" "Surface flaw parameter" lM sFlawPU
-demand      = makeUC "q" "Applied load (demand)" lQ kilopascal
+  "the glass plate") 
+  "FIXME: Define this or remove the need for definitions"
+  (sub lD (Atomic "min")) millimetre
+mod_elas    = makeUC "E" "Modulus of elasticity of glass" 
+  "FIXME: Define this or remove the need for definitions"
+  cE kilopascal
+act_thick   = makeUC "h" "Actual thickness" 
+  "FIXME: Define this or remove the need for definitions"
+  lH millimetre
+sflawParamK = makeUC "k" "Surface flaw parameter" 
+  "FIXME: Define this or remove the need for definitions"
+  lK sFlawPU
+sflawParamM = makeUC "m" "Surface flaw parameter" 
+  "FIXME: Define this or remove the need for definitions"
+  lM sFlawPU
+demand      = makeUC "q" "Applied load (demand)" 
+  "FIXME: Define this or remove the need for definitions"
+  lQ kilopascal
 sd          = makeUC "SD" ("Stand off distance which is represented in " ++
-  "coordinates (SDx, SDy, SDz)") (Atomic "SD") metre
+  "coordinates (SDx, SDy, SDz)") 
+  "FIXME: Define this or remove the need for definitions"
+  (Atomic "SD") metre
 sdx         = makeUC "SD_x" "Stand off distance (x-component)" 
+  "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lX) metre
 sdy         = makeUC "SD_y" "Stand off distance (y-component)" 
+  "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lY) metre
 sdz         = makeUC "SD_z" "Stand off distance (z-component)" 
+  "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lZ) metre
 sd_max      = makeUC "SD_max" ("Maximum stand off distance permissible " ++
-  "for input") (sub (sd ^. symbol) (Atomic "max")) metre
+  "for input") 
+  "FIXME: Define this or remove the need for definitions"
+  (sub (sd ^. symbol) (Atomic "max")) metre
 sd_min      = makeUC "SD_min" ("Minimum stand off distance permissible " ++
-  "for input") (sub (sd ^. symbol) (Atomic "min")) metre
+  "for input") 
+  "FIXME: Define this or remove the need for definitions"
+  (sub (sd ^. symbol) (Atomic "min")) metre
 nom_thick   = makeUC "t" ("Nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
-  "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") lT millimetre
-load_dur    = makeUC "t_d" "Duration of load" (sub lT lD) second
-char_weight = makeUC "w" "Charge weight" lW kilogram
+  "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
+  "FIXME: Define this or remove the need for definitions"
+  lT millimetre
+load_dur    = makeUC "t_d" "Duration of load" 
+  "FIXME: Define this or remove the need for definitions"
+  (sub lT lD) second
+char_weight = makeUC "w" "Charge weight" 
+  "FIXME: Define this or remove the need for definitions"
+  lW kilogram
 cWeightMax  = makeUC "w_max" "Maximum permissible input charge weight" 
-              (sub (char_weight ^. symbol) (Atomic "max")) kilogram
+  "FIXME: Define this or remove the need for definitions"
+  (sub (char_weight ^. symbol) 
+  (Atomic "max")) kilogram
 cWeightMin  = makeUC "w_min" "Minimum permissible input charge weight" 
-              (sub (char_weight ^. symbol) (Atomic "min")) kilogram
+  "FIXME: Define this or remove the need for definitions"
+  (sub (char_weight ^. symbol) (Atomic "min")) kilogram
 eqTNTWeight = makeUC "w_TNT" "Explosive Mass in equivalent weight of TNT" 
-              (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
+  "FIXME: Define this or remove the need for definitions"
+  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, 

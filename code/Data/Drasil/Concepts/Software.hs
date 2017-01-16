@@ -6,14 +6,16 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 import Data.Char (toLower)
 
-program, c :: NamedChunk
-matlab, physLib, os :: ConceptChunk
-c       = makeCC "C" "C programming language"
+program, c, matlab, physLib, os :: ConceptChunk
+
+c       = dcc "c" "C" "C programming language"
 matlab  = dcc "matlab" "MATLAB" "MATLAB programming language"
 os      = dcc "os" "OS" "operating system"
 physLib = dcc "physLib" "physics library" ("A programming library which " ++
-    "provides functions for modelling physical phenomenon.")
-program = CC "program" (S "program")
+  "provides functions for modelling physical phenomenon.")
+program = dcc "program" "program" 
+  ("a series of coded software instructions to control the operation of a " ++
+  "computer or other machine.")
 
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 

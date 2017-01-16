@@ -196,7 +196,7 @@ s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
                 S "to " :+: (sLower (thermal_analysis ^.
-                term)) :+: S " of a single " :+: (tank_pcm ^. defn) :+: 
+                term)) :+: S " of a single " :+: (tank_pcm ^. term) :+: 
                 S ". Given the appropriate inputs, the code for " :+:
                 (progName ^. term) :+: S " is intended to predict the " :+:
                 (temp ^. term) :+: S " and " :+: (sLower  
@@ -604,7 +604,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                 (C vol_ht_gen) volume) := 
                 UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
                 * (C htCap) * Deriv Part (C temp) (C time)) volume)),
-               Paragraph (S "Applying " :+: (gauss_div ^. defn) :+: S " to" :+:
+               Paragraph (S "Applying " :+: (gauss_div ^. term) :+: S " to" :+:
                S " the first term over the " :+: (surface ^. term) :+:
                S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
                (volume ^. term) :+: S ", with " :+: P (thFluxVect ^. 

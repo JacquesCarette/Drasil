@@ -3,11 +3,13 @@
 module Drasil.SWHS.Concepts where
 
 import Language.Drasil
-
+import Data.Drasil.Concepts.Math (ode)
 ---Acronyms---
 ordDiffEq,phsChgMtrl,rightSide,progName :: ConceptChunk
 
-ordDiffEq   = dcc "ordDiffEq" "ODE" "Ordinary Differential Equation"
+ordDiffEq   = ode
+
+--FIXME: Acronyms
 phsChgMtrl  = dcc "phsChgMtrl" "PCM" "Phase Change Material"
 rightSide   = dcc "rightSide" "RHS" "Right Hand Side"
 progName    = dcc "progName" "SWHS" "Solar Water Heating System"
@@ -26,12 +28,13 @@ coil = dcc "coil" "Heating coil"
   "Coil in tank that heats by absorbing solar energy"
 discharging = dcc "discharging" "Discharging" "Discharging of the tank"
 gauss_div = dcc "gauss_div" "Gauss's Divergence theorem" 
-  "Gauss's Divergence theorem"
+  "FIXME: Define this"
 heat_flux = dcc "heat_flux" "Heat flux" 
   "The rate of heat energy transfer per unit area."
   --FIXME: Heat flux needs to be a Unital Chunk
 mech_energy = dcc "mech_energy" "Mechanical energy" 
   "The energy that comes from motion and position"
+--TODO: Physical property.
 perfect_insul = dcc "perfect_insul" "perfectly insulated" 
                 ("Describes the property of a " ++
                 "material not allowing heat transfer through its boundaries")
@@ -46,6 +49,6 @@ swhs_pcm = dcc "swhs_pcm" "solar water heating systems incorporating PCM"
   "Solar water heating systems incorporating phase change material"
 tank = dcc "tank" "Tank" "Solar water heating tank"
 tank_pcm = dcc "tank_pcm" "Solar water heating tank incorporating PCM" 
-  "solar water heating tank incorporating PCM"
+  "FIXME: Define this"
 transient = dcc "transient" "Transient" "Changing with time"
 water = dcc "water" "Water" "The liquid with which the tank is filled"

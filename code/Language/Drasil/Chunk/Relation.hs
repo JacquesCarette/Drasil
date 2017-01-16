@@ -30,4 +30,4 @@ cp :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens RelationChunk 
 cp l f (RC a b) = fmap (\x -> RC (set l x a) b) (f (a ^. l))
 
 makeRC :: String -> Sentence -> Relation -> RelationChunk
-makeRC nm desc rel = RC (ccWithDescrSent nm desc) rel
+makeRC nm desc rel = RC (ncWDS nm desc) rel

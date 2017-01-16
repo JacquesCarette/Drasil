@@ -104,8 +104,8 @@ makeDCC i ter des = DCC i (S ter) (S des)
 dcc = makeDCC
 
 --Currently only used by RelationChunk and EqChunk
-ccWithDescrSent :: String -> Sentence -> NamedChunk
-ccWithDescrSent n d = CC n d
+ncWDS :: String -> Sentence -> NamedChunk
+ncWDS n d = CC n d
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
 dccWDS i t d = DCC i (S t) d

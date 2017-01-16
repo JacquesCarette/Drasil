@@ -2,7 +2,7 @@ module Drasil.HGHC.HeatTransfer where
 
 import Language.Drasil
 
-import Data.Drasil.Units.Thermodynamics (heat_transfer)
+import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
 varChunks :: [VarChunk]
 varChunks = [tau_c, h_b, h_p, k_c]
@@ -24,7 +24,7 @@ h_c_eq = --UnaryOp (Summation (Just
 h_c :: QDefinition
 h_c = fromEqn "h_c" (S 
   "convective heat transfer coefficient between clad and coolant")
-  (lH `sub` lC) heat_transfer h_c_eq
+  (lH `sub` lC) heat_transfer_coef h_c_eq
 
 -- --------------- --------------- --------------- ---------------
 -- {--------------- Begin h_g ---------------}
@@ -35,7 +35,7 @@ h_g_eq = ((Int 2):*(C k_c):*(C h_p)) :/ ((Int 2):*(C k_c):+((C tau_c):*(C h_p)))
 h_g :: QDefinition
 h_g = fromEqn "h_g" (S
   "effective heat transfer coefficient between clad and fuel surface")
-  (lH `sub` lG) heat_transfer h_g_eq
+  (lH `sub` lG) heat_transfer_coef h_g_eq
 
 --------------- --------------- --------------- ---------------
 {--------------- Begin h_b ---------------}

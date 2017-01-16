@@ -87,11 +87,11 @@ w_E          = makeUC "E_W" "change in heat energy in the water"
 vol_ht_gen   = makeUC "g" "volumetric heat generation per unit volume" 
   "FIXME: Define this or remove the need for definitions" lG volHtGenU 
 htTransCoeff = makeUC "h" "convective heat transfer coefficient" 
-  "FIXME: Define this or remove the need for definitions" lH heat_transfer
+  "FIXME: Define this or remove the need for definitions" lH heat_transfer_coef
 coil_HTC     = makeUC "h_C" 
   "convective heat transfer coefficient between coil and water"
   "FIXME: Define this or remove the need for definitions"
-  (sub (htTransCoeff ^. symbol) cC) heat_transfer
+  (sub (htTransCoeff ^. symbol) cC) heat_transfer_coef
 htFusion     = makeUCWDS "H_f" "specific latent heat of fusion" 
   (S "amount of " :+: (sLower (thermal_energy ^. term)) :+:
   S " required to completely melt a unit " :+: (mass ^. term) :+:
@@ -99,7 +99,7 @@ htFusion     = makeUCWDS "H_f" "specific latent heat of fusion"
 pcm_HTC      = makeUC "h_P" 
   "convective heat transfer coefficient between PCM and water"
   "FIXME: Define this or remove the need for definitions" 
-  (sub lH cP) heat_transfer
+  (sub lH cP) heat_transfer_coef
 tank_length  = makeUC "L" "length of tank" 
   "FIXME: Define this or remove the need for definitions" cL metre
 mass         = ucFromVC QPP.mass kilogram

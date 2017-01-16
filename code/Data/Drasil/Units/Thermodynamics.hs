@@ -18,6 +18,6 @@ thermal_flux :: DerUChunk
 thermal_flux = makeDerU (dccWDS "thermal_flux" "heat flux"
   (S "the rate of heat energy transfer per unit area")) $ USynonym (watt /: m_2)
 
-heat_transfer :: DerUChunk
-heat_transfer = new_unit "heat transfer" $ (UDiv
+heat_transfer_coef :: DerUChunk
+heat_transfer_coef = new_unit "heat transfer coefficient" $ (UDiv
   (watt ^. unit) (UProd [m_2 ^. unit, centigrade ^. unit]))

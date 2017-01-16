@@ -44,9 +44,9 @@ tank_D      = makeUC "D" "diameter of tank"
 ht_gen_vol  = makeUC "g" "volumetric heat generation per unit volume" 
   "FIXME: Define this or remove the need for definitions" lG U.thermal_flux
 ht_xfer_co  = makeUC "h" "convective heat transfer coefficient" 
-  "FIXME: Define this or remove the need for definitions" lH U.heat_transfer
+  "FIXME: Define this or remove the need for definitions" lH U.heat_transfer_coef
 ht_xfer_CW  = makeUC "h_C" "convective heat transfer between coil and water"   "FIXME: Define this or remove the need for definitions" 
-  (sub lH cC) U.heat_transfer
+  (sub lH cC) U.heat_transfer_coef
 tank_L      = makeUC "L" "length of tank" 
   "FIXME: Define this or remove the need for definitions" cL metre
 mass        = ucFromVC QPP.mass kilogram
@@ -56,7 +56,7 @@ water_m     = makeUC "m_W" ((QPP.mass ^. id) ++ " of water")
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
 ht_flux     = makeUC "q" "heat flux" 
-  "FIXME: Define this or remove the need for definitions" lQ U.heat_transfer
+  "FIXME: Define this or remove the need for definitions" lQ U.heat_transfer_coef
 thFluxVect  = makeUC "q_vect" "thermal flux vector" 
   "FIXME: Define this or remove the need for definitions" (vec lQ) 
   U.thermal_flux

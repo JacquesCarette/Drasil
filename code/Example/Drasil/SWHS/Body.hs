@@ -19,7 +19,7 @@ import Drasil.TableOfSymbols
 import Language.Drasil
 
 import Data.Drasil.SI_Units 
-import Data.Drasil.Units.Thermodynamics (heat_transfer)
+import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
@@ -904,7 +904,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                (phsChgMtrl ^. term) :+: S ". This can be shown as an " :+:
                S "equation by taking " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
                makeRef s4_2_4_DD2 :+: S ", multiplying each by their " :+:
-               S "respective surface area of " :+: (heat_transfer ^. term) :+:
+               S "respective surface area of " :+: (heat_trans ^. term) :+:
                S ", and integrating each over the simulation " :+: (time ^. 
                term) :+: S ", as follows:"),
                EqnBlock 

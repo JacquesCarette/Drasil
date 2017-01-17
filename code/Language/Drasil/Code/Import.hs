@@ -2,6 +2,7 @@ module Language.Drasil.Code.Import where
 
 import Prelude hiding (return, id)
 import Control.Lens hiding (makeFields, assign, uses)
+import qualified Data.Set as Set
 
 import qualified Language.Drasil.Expr as E
 import Language.Drasil.Chunk.Method
@@ -15,40 +16,21 @@ import Language.Drasil.Chunk as C
 import Language.Drasil.Chunk.Quantity as Q
 
 toCode :: NamedIdea c => c -> [ModuleChunk] -> AbstractCode
-toCode prog mcs = AbsCode $ Pack (prog ^. id) (makeModules mcs [])
+toCode prog mcs = AbsCode $ Pack (prog ^. id)
+  (makeModules (filter generated mcs) [])
 
 makeModules :: [ModuleChunk] -> [Class] -> [Class]
 makeModules [] cs = cs
 makeModules (mc:mcs) cs =
-  if generated mc then
-    -- if dependencies haven't been built into Class types, postpone
-    if checkDependencies (uses mc) cs
-    then makeModules mcs (makeModule mc cs:cs)
-    else makeModules (mcs ++ [mc]) cs
-  else makeModules mcs cs
+  -- if dependencies haven't been built into Class types, postpone
+  if   Set.fromList (map
+         (\x -> makeClassNameValid $ (modcc x) ^. id)
+         (filter generated (uses mc)))
+       `Set.isSubsetOf`
+       Set.fromList (map className cs)
+  then makeModules mcs (makeModule mc cs:cs)
+  else makeModules (mcs ++ [mc]) cs
 
--- check if all dependencies have already been built into Class types
-checkDependencies :: [ModuleChunk] -> [Class] -> Bool
-checkDependencies [] _ = True
-checkDependencies (mc:mcs) classes =
-  if generated mc
-  then checkDependencies' (makeClassNameValid $ (modcc mc) ^. id) classes &&
-         checkDependencies mcs classes
-  else checkDependencies mcs classes
-  where checkDependencies' :: String -> [Class] -> Bool
-        checkDependencies' _ [] = False
-        checkDependencies' mn ((Class cn _ _ _ _):cs) =
-          if mn == cn
-          then True
-          else checkDependencies' mn cs
-        checkDependencies' mn ((MainClass cn _ _):cs) =
-          if mn == cn
-          then True
-          else checkDependencies' mn cs
-        checkDependencies' mn ((Enum cn _ _):cs) =
-          if mn == cn
-          then True
-          else checkDependencies' mn cs
 
 makeModule :: ModuleChunk -> [Class] -> Class
 makeModule mc cs = pubClass (makeClassNameValid $ (modcc mc) ^. id) noParent

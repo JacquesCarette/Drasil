@@ -47,9 +47,9 @@ mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:
 
 
 -- Calc Module
-meth_h_g, meth_h_c :: MethodChunk
-meth_h_g = fromEC h_g
-meth_h_c = fromEC h_c
+meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
+meth_htTransCladFuel = fromEC htTransCladFuel
+meth_htTransCladCool = fromEC htTransCladCool
 
 mod_calc_desc :: NamedChunk
 mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
@@ -59,6 +59,6 @@ mod_calc = makeImpModule mod_calc_desc
   (S "The equations used to calculate heat transfer coefficients")
   executable
   []
-  [meth_h_g, meth_h_c]
+  [meth_htTransCladFuel, meth_htTransCladCool]
   []
   (Just mod_behav)

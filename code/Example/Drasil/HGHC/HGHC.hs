@@ -12,7 +12,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units (si_units)
 
 vars :: [QDefinition]
-vars = [h_g, h_c]
+vars = [htTransCladFuel, htTransCladCool]
 
 modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav]
@@ -21,7 +21,7 @@ s1, s2, s3 :: Section --, s4
 s1 = table_of_units si_units -- probably want to not do all of them
 s2 = table_of_symbols ((map qs vars) ++ (map qs varChunks)) defaultF
 s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
---s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [h_c]
+--s4 = Section 0 (S "Code -- Test") $ map (CodeBlock . toCode CLang Calc) [htTransCladCool]
 
 --m1,m2,m3 :: LayoutObj
 --m1 = Module 1 mod_hw

@@ -68,6 +68,8 @@ instance Quantity E where
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
+--TODO: Create a version which doesn't use ConVar, but instead only 
+--     NamedIdeas if we decide the "new" unital needs only a named idea
 fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
   EC (ucFromVC (cv (ccStSS nm desc desc) symb Rational) chunk) eqn

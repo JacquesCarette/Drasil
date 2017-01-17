@@ -111,8 +111,9 @@ sWHS = dcc "sWHS" "SWHS" "Solar Water Heating System"
 
 ----EqChunks----
 --Theoretical models--
-t1consThermE :: RelationChunk
-t1consThermE = makeRC "Conservation of thermal energy" t1descr cons_therm_rel
+t1consThermE :: RelationConcept
+t1consThermE = makeRC "t1consThermE" "Conservation of thermal energy" 
+  t1descr cons_therm_rel
 
 cons_therm_rel :: Relation
 cons_therm_rel = (Neg (C gradient)) :. (C thFluxVect) + (C ht_gen_vol) := 

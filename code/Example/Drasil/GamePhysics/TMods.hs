@@ -10,13 +10,13 @@ import Control.Lens ((^.))
 
 ----- Theoretical Models -----
 
-cpTMods :: [RelationChunk]
+cpTMods :: [RelationConcept]
 cpTMods = [t1NewtonSL, t2NewtonTL, t3NewtonLUG, t4ChaslesThm, t5NewtonSLR]
 
 -- T1 : Newton's second law of motion --
 
-t1NewtonSL :: RelationChunk
-t1NewtonSL = makeRC "Newton's second law of motion" t1descr newtonSLRel
+t1NewtonSL :: RelationConcept
+t1NewtonSL = makeRC "t1NewtonSL" "Newton's second law of motion" t1descr newtonSLRel
 
 newtonSLRel :: Relation
 newtonSLRel = (C force) := (C mass) * (C accel)
@@ -33,8 +33,8 @@ t1descr = S "The net " :+: (force ^. term) :+: S " " :+:
 
 -- T2 : Newton's third law of motion --
 
-t2NewtonTL :: RelationChunk
-t2NewtonTL = makeRC "Newton's third law of motion" t2descr newtonTLRel
+t2NewtonTL :: RelationConcept
+t2NewtonTL = makeRC "t2NewtonTL" "Newton's third law of motion" t2descr newtonTLRel
 
 newtonTLRel :: Relation
 newtonTLRel = (C force_1) := (Neg (C force_2))
@@ -51,8 +51,8 @@ t2descr = S "Every action has an equal and opposite reaction. In other " :+:
 
 -- T3 : Newton's law of universal gravitation --
 
-t3NewtonLUG :: RelationChunk
-t3NewtonLUG = makeRC "Newton's law of universal gravitation" t3descr
+t3NewtonLUG :: RelationConcept
+t3NewtonLUG = makeRC "t3NewtonLUG" "Newton's law of universal gravitation" t3descr
     newtonLUGRel
 
 newtonLUGRel :: Relation
@@ -92,8 +92,8 @@ t3descr = S "Two " :+: (rigidBodies ^. term) :+: S " in the universe " :+:
 
 -- T4 : Chasles' theorem --
 
-t4ChaslesThm :: RelationChunk
-t4ChaslesThm = makeRC "Chasles' theorem" t4descr chaslesRel
+t4ChaslesThm :: RelationConcept
+t4ChaslesThm = makeRC "t4ChaslesThm" "Chasles' theorem" t4descr chaslesRel
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesRel :: Relation
@@ -115,8 +115,8 @@ t4descr = S "The linear " :+: (vel ^. term) :+: S " " :+:
 
 -- T5 : Newton's second law for rotational motion --
 
-t5NewtonSLR :: RelationChunk
-t5NewtonSLR = makeRC "Newton's second law for rotational motion" t5descr
+t5NewtonSLR :: RelationConcept
+t5NewtonSLR = makeRC "t5NewtonSLR" "Newton's second law for rotational motion" t5descr
   newtonSLRRel
 
 newtonSLRRel :: Relation

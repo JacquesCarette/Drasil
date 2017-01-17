@@ -76,14 +76,7 @@ writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 genCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
-genCode cc mcs = prntCode cc $ getCodeModules mcs
-  where getCodeModules :: [ModuleChunk] -> [ModuleChunk]
-        getCodeModules [] = []
-        getCodeModules (mc:mcs') =
-          if (generated mc)
-          then mc:getCodeModules mcs'
-          else getCodeModules mcs'
-        --getCodeModules cc' (_:mcs') = getCodeModules cc' mcs'
+genCode cc mcs = prntCode cc (filter generated mcs)
 
 -- generate code for all supported languages (will add language selection later)
 prntCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()

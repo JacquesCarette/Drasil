@@ -42,139 +42,139 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
 
 coil_SA      = makeUC "coil_SA" "coil surface area" 
   "FIXME: Define this or remove the need for definitions" (sub cA cC) m_2
-in_SA        = makeUC "A_in" "surface area over which heat is transferred in" 
+in_SA        = makeUC "in_SA" "surface area over which heat is transferred in" 
   "FIXME: Define this or remove the need for definitions" 
   (sub cA (Atomic "in")) m_2
-out_SA       = makeUC "A_out" "surface area over which heat is transferred out"
+out_SA       = makeUC "out_SA" "surface area over which heat is transferred out"
   "FIXME: Define this or remove the need for definitions"
   (sub cA (Atomic "out")) m_2
-pcm_SA       = makeUC "A_P" "phase change material surface area" 
+pcm_SA       = makeUC "pcm_SA" "phase change material surface area" 
   "FIXME: Define this or remove the need for definitions" (sub cA cP) m_2
-htCap        = makeUC "C" "specific heat capacity" 
+htCap        = makeUC "htCap" "specific heat capacity" 
   "FIXME: Define this or remove the need for definitions" cC heat_cap_spec
-htCap_L      = makeUC "C^L" "specific heat capacity of a liquid" 
+htCap_L      = makeUC "htCap_L" "specific heat capacity of a liquid" 
   "FIXME: Define this or remove the need for definitions" 
   (sup (htCap ^. symbol) cL) heat_cap_spec
-htCap_L_P    = makeUC "C^L_P" "specific heat capacity of PCM as a liquid"
+htCap_L_P    = makeUC "htCap_L_P" "specific heat capacity of PCM as a liquid"
   "FIXME: Define this or remove the need for definitions" 
   (sup (sub (htCap ^. symbol) cP) cL) heat_cap_spec
-htCap_S      = makeUC "C^S" "specific heat capacity of a solid" 
+htCap_S      = makeUC "htCap_S" "specific heat capacity of a solid" 
   "FIXME: Define this or remove the need for definitions" 
   (sup (htCap ^. symbol) cS) heat_cap_spec
-htCap_S_P    = makeUC "C^S_P" "specific heat capacity of PCM as a solid"
+htCap_S_P    = makeUC "htCap_S_P" "specific heat capacity of PCM as a solid"
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (htCap ^. symbol) cP) cS) heat_cap_spec
-htCap_V      = makeUC "C^V" "specific heat capacity of a vapour" 
+htCap_V      = makeUC "htCap_V" "specific heat capacity of a vapour" 
   "FIXME: Define this or remove the need for definitions"
   (sup (htCap ^. symbol) cV) heat_cap_spec
-htCap_W      = makeUC "C_W" "specific heat capacity of water" 
+htCap_W      = makeUC "htCap_W" "specific heat capacity of water" 
   "FIXME: Define this or remove the need for definitions"
   (sub (htCap ^. symbol) cW) heat_cap_spec
-diam         = makeUC "D" "diameter of tank" 
+diam         = makeUC "diam" "diameter of tank" 
   "FIXME: Define this or remove the need for definitions" cD metre
-sensHtE      = makeUC "E" "sensible heat energy" 
+sensHtE      = makeUC "sensHtE" "sensible heat energy" 
   "FIXME: Define this or remove the need for definitions" cE joule
-pcm_initMltE = makeUC "E^init_Pmelt" 
+pcm_initMltE = makeUC "pcm_initMltE" 
   "change in heat energy in the PCM at the instant when melting begins"
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (sensHtE ^. symbol) (Atomic "Pmelt")) (Atomic "init")) joule
-pcm_E        = makeUC "E_P" "change in heat energy in the PCM" 
+pcm_E        = makeUC "pcm_E" "change in heat energy in the PCM" 
   "FIXME: Define this or remove the need for definitions"
   (sub (sensHtE ^. symbol) cP) joule
-w_E          = makeUC "E_W" "change in heat energy in the water" 
+w_E          = makeUC "w_E" "change in heat energy in the water" 
   "FIXME: Define this or remove the need for definitions"
   (sub (sensHtE ^. symbol) cW) joule
-vol_ht_gen   = makeUC "g" "volumetric heat generation per unit volume" 
+vol_ht_gen   = makeUC "vol_ht_gen" "volumetric heat generation per unit volume" 
   "FIXME: Define this or remove the need for definitions" lG volHtGenU 
-htTransCoeff = makeUC "h" "convective heat transfer coefficient" 
+htTransCoeff = makeUC "htTransCoeff" "convective heat transfer coefficient" 
   "FIXME: Define this or remove the need for definitions" lH heat_transfer_coef
-coil_HTC     = makeUC "h_C" 
+coil_HTC     = makeUC "coil_HTC" 
   "convective heat transfer coefficient between coil and water"
   "FIXME: Define this or remove the need for definitions"
   (sub (htTransCoeff ^. symbol) cC) heat_transfer_coef
-htFusion     = makeUCWDS "H_f" "specific latent heat of fusion" 
+htFusion     = makeUCWDS "htFusion" "specific latent heat of fusion" 
   (S "amount of " :+: (sLower (thermal_energy ^. term)) :+:
   S " required to completely melt a unit " :+: (mass ^. term) :+:
   S " of a substance.") (sub cH lF) specificE
-pcm_HTC      = makeUC "h_P" 
+pcm_HTC      = makeUC "pcm_HTC" 
   "convective heat transfer coefficient between PCM and water"
   "FIXME: Define this or remove the need for definitions" 
   (sub lH cP) heat_transfer_coef
-tank_length  = makeUC "L" "length of tank" 
+tank_length  = makeUC "tank_length" "length of tank" 
   "FIXME: Define this or remove the need for definitions" cL metre
 mass         = ucFromVC QPP.mass kilogram
-pcm_mass     = makeUC "m_P" "mass of phase change material" 
+pcm_mass     = makeUC "pcm_mass" "mass of phase change material" 
   "FIXME: Define this or remove the need for definitions"
   (sub (mass ^. symbol) cP) kilogram
-w_mass       = makeUC "m_W" "mass of water" 
+w_mass       = makeUC "w_mass" "mass of water" 
   "FIXME: Define this or remove the need for definitions"
   (sub (mass ^. symbol) cW) kilogram
-ht_flux      = makeUC "q" "heat flux" 
+ht_flux      = makeUC "ht_flux" "heat flux" 
   "FIXME: Define this or remove the need for definitions" lQ thermal_flux
-latentE      = makeUC "Q" "latent heat energy" 
+latentE      = makeUC "latentE" "latent heat energy" 
   "FIXME: Define this or remove the need for definitions" cQ joule
-thFluxVect   = makeUC "q_vect" "thermal flux vector" 
+thFluxVect   = makeUC "thFluxVect" "thermal flux vector" 
   "FIXME: Define this or remove the need for definitions" (vec lQ) thermal_flux
-ht_flux_C    = makeUC "q_C" "heat flux into the water from the coil" 
+ht_flux_C    = makeUC "ht_flux_C" "heat flux into the water from the coil" 
   "FIXME: Define this or remove the need for definitions"
   (sub (ht_flux ^. symbol) cC) thermal_flux
-ht_flux_in   = makeUC "q_in" "heat flux input" 
+ht_flux_in   = makeUC "ht_flux_in" "heat flux input" 
   "FIXME: Define this or remove the need for definitions"
   (sub (ht_flux ^. symbol) (Atomic "in")) thermal_flux
-ht_flux_out  = makeUC "q_out" "heat flux output" 
+ht_flux_out  = makeUC "ht_flux_out" "heat flux output" 
   "FIXME: Define this or remove the need for definitions"
   (sub (ht_flux ^. symbol) (Atomic "out")) thermal_flux
-ht_flux_P    = makeUC "q_P" "heat flux into the PCM from water" 
+ht_flux_P    = makeUC "ht_flux_P" "heat flux into the PCM from water" 
   "FIXME: Define this or remove the need for definitions"
   (sub (ht_flux ^. symbol) cP) thermal_flux
-latentE_P    = makeUC "Q_P" "latent heat energy added to PCM" 
+latentE_P    = makeUC "latentE_P" "latent heat energy added to PCM" 
   "FIXME: Define this or remove the need for definitions"
   (sub (latentE ^. symbol) cP) joule
 time         = ucFromVC QP.time second
-temp         = makeUC "T" "temperature" 
+temp         = makeUC "temp" "temperature" 
   "FIXME: Define this or remove the need for definitions" cT centigrade
-temp_boil    = makeUC "T_boil" "boiling point temperature" 
+temp_boil    = makeUC "temp_boil" "boiling point temperature" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) (Atomic "boil")) centigrade
-temp_C       = makeUC "T_C" "temperature of the heating coil" 
+temp_C       = makeUC "temp_C" "temperature of the heating coil" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) cC) centigrade
-temp_env     = makeUC "T_env" "temperature of the environment" 
+temp_env     = makeUC "temp_env" "temperature of the environment" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) (Atomic "env")) centigrade
-time_final   = makeUC "t_final" "final time" 
+time_final   = makeUC "time_final" "final time" 
   "FIXME: Define this or remove the need for definitions"
   (sub (time ^. symbol) (Atomic "final")) second
-temp_init    = makeUC "T_init" "initial temperature" 
+temp_init    = makeUC "temp_init" "initial temperature" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) (Atomic "init")) centigrade
-temp_melt    = makeUC "T_melt" "melting point temperature" 
+temp_melt    = makeUC "temp_melt" "melting point temperature" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) (Atomic "melt")) centigrade
-t_init_melt  = makeUC "t^init_melt" "time at which melting of PCM begins"
+t_init_melt  = makeUC "t_init_melt" "time at which melting of PCM begins"
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "init")) second
-t_final_melt = makeUC "t^final_melt" "time at which melting of PCM ends"
+t_final_melt = makeUC "t_final_melt" "time at which melting of PCM ends"
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "final")) second
-temp_melt_P  = makeUC "T^P_melt" "melting point temperature for PCM"
+temp_melt_P  = makeUC "temp_melt_P" "melting point temperature for PCM"
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (temp ^. symbol) (Atomic "melt")) cP) centigrade
-temp_PCM     = makeUC "T_P" "temperature of the phase change material" 
+temp_PCM     = makeUC "temp_PCM" "temperature of the phase change material" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) cP) centigrade
 temp_W       = makeUC "temp_W" "temperature of the water" 
   "FIXME: Define this or remove the need for definitions"
   (sub (temp ^. symbol) cW) centigrade
-volume       = makeUC "V" "volume" 
+volume       = makeUC "volume" "volume" 
   "FIXME: Define this or remove the need for definitions" cV m_3
-pcm_vol      = makeUC "V_P" "volume of PCM" 
+pcm_vol      = makeUC "pcm_vol" "volume of PCM" 
   "FIXME: Define this or remove the need for definitions" 
   (sub (volume ^. symbol) cP) m_3
-tank_vol     = makeUC "V_tank" "volume of the cylindrical tank"
+tank_vol     = makeUC "tank_vol" "volume of the cylindrical tank"
   "FIXME: Define this or remove the need for definitions"
   (sub (volume ^. symbol) (Atomic "tank")) m_3
-w_vol        = makeUC "V_W" "volume of water" 
+w_vol        = makeUC "w_vol" "volume of water" 
   "FIXME: Define this or remove the need for definitions"
   (sub (volume ^. symbol) cW) m_3
 deltaT       = makeUC "deltaT" "change in temperature" 
@@ -182,10 +182,10 @@ deltaT       = makeUC "deltaT" "change in temperature"
   (Concat [Greek Delta, (temp ^. symbol)]) centigrade
 density      = makeUC "density" "density" 
   "FIXME: Define this or remove the need for definitions" (Greek Rho_L) densityU
-pcm_density  = makeUC "rho_P" "density of PCM"
+pcm_density  = makeUC "pcm_density" "density of PCM"
   "FIXME: Define this or remove the need for definitions"
   (sub (density ^. symbol) cP) densityU
-w_density    = makeUC "rho_W" "density of water"
+w_density    = makeUC "w_density" "density of water"
   "FIXME: Define this or remove the need for definitions"
   (sub (density ^. symbol) cW) densityU
 tau          = makeUC "tau" "dummy variable for integration over time" 

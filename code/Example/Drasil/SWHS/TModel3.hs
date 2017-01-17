@@ -15,8 +15,8 @@ import Control.Lens ((^.))
 s4_2_2_T3 :: Contents
 s4_2_2_T3 = Definition (Theory t3LatHtE)
 
-t3LatHtE :: RelationChunk
-t3LatHtE = makeRC "Latent heat energy" t3descr latHtEEqn
+t3LatHtE :: RelationConcept
+t3LatHtE = makeRC "t3LatHtE" "Latent heat energy" t3descr latHtEEqn
 
 latHtEEqn :: Relation
 latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),

@@ -59,7 +59,7 @@ data ItemType = Flat Sentence
 -- Types of definitions
 data DType = Data QDefinition 
            | General 
-           | Theory RelationChunk
+           | Theory RelationConcept
 
 class LayoutObj l where
   refName :: l -> Sentence

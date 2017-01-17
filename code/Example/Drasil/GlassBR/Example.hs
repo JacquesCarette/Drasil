@@ -261,11 +261,12 @@ notSafe       = dcc "notSafe" "Not safe"
   ("For the given input parameters, the glass is NOT considered safe.")
 
 --Theoretical models--
-tModels :: [RelationChunk]
+tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]
 
-t1SafetyReq :: RelationChunk
-t1SafetyReq = makeRC "Safety Requirement-1" t1descr safety_require1_rel
+t1SafetyReq :: RelationConcept
+t1SafetyReq = makeRC "t1SafetyReq" "Safety Requirement-1" 
+  t1descr safety_require1_rel
 
 safety_require1_rel :: Relation
 safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
@@ -283,8 +284,9 @@ t1descr =
   S ". " :+: (P $ pb_tol ^. symbol) :+: S " is the " :+: 
   (sMap (map toLower) (pb_tol ^. term)) :+: S " entered by the user."
 
-t2SafetyReq :: RelationChunk
-t2SafetyReq = makeRC "Safety Requirement-2" t2descr safety_require2_rel
+t2SafetyReq :: RelationConcept
+t2SafetyReq = makeRC "t2SafetyReq" "Safety Requirement-2" 
+  t2descr safety_require2_rel
 
 safety_require2_rel :: Relation
 safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
@@ -305,11 +307,11 @@ t2descr =
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
 --Instance Models--
-iModels :: [RelationChunk]
+iModels :: [RelationConcept]
 iModels =[probOfBr, calOfCap, calOfDe]
 
-probOfBr :: RelationChunk
-probOfBr = makeRC "Probability of Glass Breakage" pbdescr pb_rel 
+probOfBr :: RelationConcept
+probOfBr = makeRC "probOfBr" "Probability of Glass Breakage" pbdescr pb_rel 
 
 pb_rel :: Relation
 pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
@@ -320,8 +322,8 @@ pbdescr =
     (sMap (map toLower) (prob_br ^. term)) :+: S ". "  :+: 
     (P $ risk_fun ^. symbol) :+: S " is the " :+: (risk ^. term) :+: S "."
 
-calOfCap :: RelationChunk
-calOfCap = makeRC "Calculation of Capacity(LR)" capdescr cap_rel
+calOfCap :: RelationConcept
+calOfCap = makeRC "calOfCap" "Calculation of Capacity(LR)" capdescr cap_rel
 
 cap_rel :: Relation
 cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF)) 
@@ -334,8 +336,8 @@ capdescr =
   (gTF ^. term) :+: S ". " :+: (P $ loadSF ^. symbol) :+: S " is the " :+:
   (loadSF ^. term) :+: S "."
 
-calOfDe :: RelationChunk
-calOfDe = makeRC "Calculation of Demand(q)" dedescr de_rel
+calOfDe :: RelationConcept
+calOfDe = makeRC "calOfDe" "Calculation of Demand(q)" dedescr de_rel
 
 de_rel :: Relation
 de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd] 

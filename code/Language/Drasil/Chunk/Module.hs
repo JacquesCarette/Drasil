@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Module(ModuleChunk(..), formatName, makeImpModule
-  , makeUnimpModule, makeRecord, modcc, imp, hier, field, secret, uses, method) where
+  , makeImpModuleNoGen, makeUnimpModule, makeRecord, modcc, imp, hier, field
+  , secret, uses, method, generated) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Data.List (intersperse)
@@ -14,7 +15,7 @@ import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
 -- BEGIN METHODCHUNK --
 data ModuleChunk where 
   MoC :: NWrapper -> Sentence -> Maybe NWrapper -> [VarChunk] -> 
-    [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
+    [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> Bool -> ModuleChunk
 
 instance Chunk ModuleChunk where
   id = cl id
@@ -28,29 +29,32 @@ instance Eq ModuleChunk where
 -- END METHODCHUNK --
 
 cl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens ModuleChunk a
-cl l f (MoC a b c d e g h) = fmap (\x -> MoC (set l x a) b c d e g h) (f (a ^. l))
+cl l f (MoC a b c d e g h i) = fmap (\x -> MoC (set l x a) b c d e g h i) (f (a ^. l))
 
 --Rebuild names for things because we removed the named record.
 modcc :: ModuleChunk -> NWrapper
-modcc (MoC c _ _ _ _ _ _) = c
+modcc (MoC c _ _ _ _ _ _ _) = c
 
 secret :: ModuleChunk -> Sentence
-secret (MoC _ s _ _ _ _ _) = s
+secret (MoC _ s _ _ _ _ _ _) = s
 
 imp :: ModuleChunk -> Maybe NWrapper
-imp (MoC _ _ c _ _ _ _) = c
+imp (MoC _ _ c _ _ _ _ _) = c
 
 field :: ModuleChunk -> [VarChunk]
-field (MoC _ _ _ vs _ _ _) = vs
+field (MoC _ _ _ vs _ _ _ _) = vs
 
 method :: ModuleChunk -> [MethodChunk]
-method (MoC _ _ _ _ ms _ _) = ms
+method (MoC _ _ _ _ ms _ _ _) = ms
 
 uses :: ModuleChunk -> [ModuleChunk]
-uses (MoC _ _ _ _ _ us _ ) = us
+uses (MoC _ _ _ _ _ us _ _) = us
 
 hier :: ModuleChunk -> Maybe ModuleChunk
-hier (MoC _ _ _ _ _ _ h) = h
+hier (MoC _ _ _ _ _ _ h _) = h
+
+generated :: ModuleChunk -> Bool
+generated (MoC _ _ _ _ _ _ _ b) = b
 
 formatName :: ModuleChunk -> String
 formatName m = (concat $ intersperse " " $
@@ -61,12 +65,18 @@ formatName m = (concat $ intersperse " " $
 makeRecord :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeRecord cc' secret' imp' field' uses' hier' =
-  MoC (nw cc') secret' (Just (nw imp')) field' [] uses' hier'
+  MoC (nw cc') secret' (Just (nw imp')) field' [] uses' hier' True
 
 makeImpModule :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeImpModule cc' secret' imp' field' method' uses' hier' =
-  MoC (nw cc') secret' (Just (nw imp')) field' method' uses' hier'
+  MoC (nw cc') secret' (Just (nw imp')) field' method' uses' hier' True
+
+makeImpModuleNoGen :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
+  -> [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
+makeImpModuleNoGen cc' secret' imp' field' method' uses' hier' =
+  MoC (nw cc') secret' (Just (nw imp')) field' method' uses' hier' False
 
 makeUnimpModule :: NamedIdea c => c -> Sentence -> Maybe ModuleChunk -> ModuleChunk
 makeUnimpModule cc' secret' hier' = MoC (nw cc') secret' Nothing [] [] [] hier'
+  False

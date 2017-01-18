@@ -26,10 +26,10 @@ t1descr :: Sentence
 t1descr = S "The net" +:+ (force ^. term) +:+ P (force ^. symbol) +:+ 
   sParen (Sy (force ^. unit)) +:+ S "on a" +:+ (rigidBody ^. term) +:+ 
   S "is proportional to the" +:+ (accel ^. term) +:+ P (accel ^. symbol) +:+ 
-  sParen (Sy (accel ^. unit)) +:+ S "of the" +:+ (rigidBody ^. term) :+:
-  S ", where" +:+ P (mass ^. symbol) +:+ sParen (Sy (mass ^. unit)) +:+
-  S "denotes the" +:+ (mass ^. term) +:+ S "of the" +:+ (rigidBody ^. term) +:+
-  S "as the constant of proprotionality."
+  sParen (Sy (accel ^. unit)) +:+ S "of the" +:+ (rigidBody ^. term) `sC`
+  S "where" +:+ P (mass ^. symbol) +:+ sParen (Sy (mass ^. unit)) +:+
+  S "denotes the" +:+ (mass ^. term) +:+ S "of the" +:+ (rigidBody ^. term) +:+.
+  S "as the constant of proprotionality"
 
 -- T2 : Newton's third law of motion --
 
@@ -46,8 +46,7 @@ t2descr = S "Every action has an equal and opposite reaction. In other" +:+
   (rigidBody ^. term) +:+ S "by the first is equal in magnitude and" +:+
   S "in the opposite direction to the" +:+ (force ^. term) +:+
   P (force_2 ^. symbol) +:+ sParen (Sy (force_2 ^. unit)) +:+
-  S "exerted on the first" +:+ (rigidBody ^. term) +:+
-  S "by the second."
+  S "exerted on the first" +:+ (rigidBody ^. term) +:+. S "by the second"
 
 -- T3 : Newton's law of universal gravitation --
 
@@ -74,20 +73,20 @@ t3descr = S "Two" +:+ (rigidBodies ^. term) +:+ S "in the universe" +:+
   S "attract each other with a" +:+ (force ^. term) +:+ 
   P (force ^. symbol) +:+ sParen (Sy (force ^. unit)) +:+
   S "that is directly proportional to the product of their" +:+
-  (mass ^. term) :+: S "es," +:+ P (mass_1 ^. symbol) +:+ S "and" +:+
-  P (mass_2 ^. symbol) +:+ sParen (Sy (mass ^. unit)) :+: S ", and" +:+
+  (mass ^. term) :+: S "es" `sC` P (mass_1 ^. symbol) +:+ S "and" +:+
+  P (mass_2 ^. symbol) +:+ sParen (Sy (mass ^. unit)) `sC` S "and" +:+
   S "inversely proportional to the" +:+ (sqrDist ^. term) +:+
   P (sqrDist ^. symbol) +:+ sParen (Sy (sqrDist ^. unit)) +:+
   S "between them. The vector" +:+ P (disp ^. symbol) +:+ 
   sParen (Sy (disp ^. unit)) +:+ S "is the" +:+ (disp ^. term) +:+
   S "between the centres of the" +:+ (rigidBodies ^. term) +:+
   S "and" +:+ P (dispNorm ^. symbol) +:+ sParen (Sy (dispNorm ^. unit)) +:+ 
-  S "represents the" +:+ (dispNorm ^. term) :+: 
-  S ", or absolute distance between the two." +:+ P (dispUnit ^. symbol) +:+ 
-  S "denotes the" +:+ (dispUnit ^. term) :+: S ", equivalent to the" +:+
-  (disp ^. term) +:+ S "divided by the" +:+ (dispNorm ^. term) :+: 
-  S ", as shown above." +:+ S "Finally," +:+ P (gravConst ^. symbol) +:+ 
-  S "is the" +:+ (gravConst ^. defn) +:+ sParen (Sy (gravConst ^. unit)) :+: S "."
+  S "represents the" +:+. ((dispNorm ^. term) `sC`
+  S "or absolute distance between the two") +:+ P (dispUnit ^. symbol) +:+ 
+  S "denotes the" +:+ (dispUnit ^. term) `sC` S "equivalent to the" +:+
+  (disp ^. term) +:+ S "divided by the" +:+. ((dispNorm ^. term) `sC`
+  S "as shown above") +:+ S "Finally" `sC` P (gravConst ^. symbol) +:+ 
+  S "is the" +:+ (gravConst ^. defn) +:+. sParen (Sy (gravConst ^. unit))
 
 -- T4 : Chasles' theorem --
 
@@ -108,8 +107,7 @@ t4descr = S "The linear" +:+ (vel ^. term) +:+ P (vel_B ^. symbol) +:+
   S "resultant vector from the cross product of the" +:+
   (rigidBody ^. term) :+: S "'s" +:+ ((angVel ^. term)) +:+ 
   P (angVel ^. symbol) +:+ sParen (Sy (angVel ^. unit)) +:+ S "and the" +:+ 
-  (r_OB ^. term) :+: S "," +:+ P (r_OB ^. symbol) +:+ 
-  sParen (Sy (r_OB ^. unit)) :+: S "."
+  (r_OB ^. term) `sC` P (r_OB ^. symbol) +:+. sParen (Sy (r_OB ^. unit))
 
 -- T5 : Newton's second law for rotational motion --
 
@@ -126,8 +124,8 @@ newtonSLRRel = (C torque) := (C momtInert) * (C angAccel)
 t5descr :: Sentence
 t5descr = S "The net" +:+ (torque ^. term) +:+ P (torque ^. symbol) +:+ 
   sParen (Sy (torque ^. unit)) +:+ S "on a" +:+ (rigidBody ^. term) +:+ 
-  S "is proportional to its" +:+ (angAccel ^. term) +:+ P (angAccel ^. symbol) +:+
-  sParen (Sy (angAccel ^. unit)) :+: S ". Here," +:+ P (momtInert ^. symbol) +:+
+  S "is proportional to its" +:+ (angAccel ^. term) +:+ P (angAccel ^. symbol) +:+.
+  sParen (Sy (angAccel ^. unit)) +:+ S "Here" `sC` P (momtInert ^. symbol) +:+
   sParen (Sy (momtInert ^. unit)) +:+ S "denotes the" +:+ (momtInert ^. term) +:+
-  S "of the" +:+ (rigidBody ^. term) :+: S ". We also assume that all" +:+ 
-  (rigidBodies ^. term) +:+ S "involved are two-dimensional (A2)."
+  S "of the" +:+. (rigidBody ^. term) +:+ S "We also assume that all" +:+ 
+  (rigidBodies ^. term) +:+. S "involved are two-dimensional (A2)"

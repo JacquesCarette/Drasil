@@ -310,29 +310,27 @@ s4_1_2_list = Enumeration (Simple [
   (vels ^. term) :+: S ", and" +:+ (force ^. term) :+:
   S "s applied on a set of" +:+ (rigidBodies ^. term) :+:
   S ", determine their new" +:+ (position ^. term) :+: S "s and" +:+
-  (vels ^. term) +:+ S "over a period of" +:+ (time ^. term) :+: S ".")),
+  (vels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical" +:+
   S "properties, initial" +:+ (orientation ^. term) :+: S "s and" +:+
   (angularVels ^. term) :+: S ", and" +:+ (force ^. term) :+: S "s" +:+
   S "applied on a set of" +:+ (rigidBodies ^. term) :+: S "," +:+
   S "determine their new" +:+ (orientation ^. term) :+: S "s and" +:+
-  (angularVels ^. term) +:+ S "over a period of" +:+ (time ^. term) :+:
-  S ".")),
+  (angularVels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "3", Flat (S "Given the initial" +:+
   (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+ S "of a" +:+
   S "set of" +:+ (rigidBodies ^. term) :+: S ", determine if any of" +:+
-  S "them will collide with one another over a period of" +:+
-  (time ^. term) :+: S ".")),
+  S "them will collide with one another over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "4", Flat (S "Given the physical" +:+
   S "properties, initial linear and angular" +:+ (position ^. term) :+:
   S "s and" +:+ (vels ^. term) :+: S ", determine the new" +:+
   (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+
   S "over a period of" +:+ (time ^. term) +:+ S "of" +:+
-  (rigidBodies ^. term) +:+ S "that have undergone a" +:+
-  (collision ^. term) :+: S "."))])
+  (rigidBodies ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
+  ])
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -362,24 +360,24 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   (ch ^. term) :+: S "]")) [thModel, genDefn, dataDefn, inModel])) :+:
   S ", or" +:+ (sLower $ likelyChg ^. defn) +:+ (S "[" :+:
   (likelyChg ^. term) :+: S "]") :+: S ", in which the respective" +:+
-  (sLower $ assumption ^. defn) +:+ S "is used."
+  (sLower $ assumption ^. defn) +:+. S "is used"
 
 s4_2_1_list = Enumeration (Simple [
-  ((assumption ^. term) :+: S "1", Flat (S "All objects are" +:+
-  (rigidBodies ^. term) :+: S ".")),
-  ((assumption ^. term) :+: S "2", Flat (S "All objects are" +:+
-  (twoD ^. term) :+: S ".")),
+  ((assumption ^. term) :+: S "1", Flat (S "All objects are" +:+.
+  (rigidBodies ^. term))),
+  ((assumption ^. term) :+: S "2", Flat (S "All objects are" +:+.
+  (twoD ^. term))),
   ((assumption ^. term) :+: S "3", Flat (S "The library uses a" +:+
-  (cartesian ^. term) +:+ S "system.")),
-  ((assumption ^. term) :+: S "4", Flat (S "The axes are defined using" +:+
-  (rightHand ^. term) :+: S ".")),
+  (cartesian ^. term) +:+. S "system")),
+  ((assumption ^. term) :+: S "4", Flat (S "The axes are defined using" +:+.
+  (rightHand ^. term))),
   ((assumption ^. term) :+: S "5", Flat (S "All" +:+
   (rigidBodies ^. term) +:+ (collision ^. term) :+:
   S "s are vertex-to-edge" +:+ (collision ^. term) :+: S "s.")),
   ((assumption ^. term) :+: S "6", Flat (S "There is no damping" +:+
   S "involved throughout the simulation.")),
-  ((assumption ^. term) :+: S "7", Flat (S "There are no constraints" +:+
-  S "and joints involved throughout the simulation."))])
+  ((assumption ^. term) :+: S "7", Flat (S "There are no constraints" +:+.
+  S "and joints involved throughout the simulation"))])
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --
@@ -451,7 +449,7 @@ s4_2_5_intro = Paragraph $ S "This section transforms the problem defined" +:+
   S "in" +:+ (makeRef s4_1) +:+ S "into one expressed in mathematical" +:+
   S "terms. It uses concrete symbols defined in" +:+ (makeRef s4_2_4) +:+
   S "to replace the abstract symbols in the models identified in" +:+
-  (makeRef s4_2_2) +:+ S "and" +:+ (makeRef s4_2_3) :+: S "."
+  (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)
 
 -- Instance models not yet implemented --
 -- s4_2_5_IMods = ?
@@ -539,43 +537,41 @@ s5_1 = Section (S "Functional" +:+ (requirement ^. defn) :+: S "s")
 -- velocities, etc.
 s5_1_list = Enumeration (Simple [
   ((requirement ^. term) :+: S "1", Flat (S "Create a" +:+
-  (space ^. term) +:+ S "for all of the" +:+ (rigidBodies ^. term) +:+
-  S "in the physical simulation to interact in.")),
+  (space ^. term) +:+ S "for all of the" +:+ (rigidBodies ^. term) +:+.
+  S "in the physical simulation to interact in")),
 --
   ((requirement ^. term) :+: S "2", Flat (S "Input the initial" +:+
   (mass ^. term) :+: S "es," +:+ (vels ^. term) :+: S "," +:+
   (orientation ^. term) :+: S "s," +:+ (angularVels ^. term) +:+
-  S "of," +:+ S "and" +:+ (force ^. term) :+: S "s applied on" +:+
-  (rigidBodies ^. term) :+: S ".")),
+  S "of," +:+ S "and" +:+ (force ^. term) :+: S "s applied on" +:+.
+  (rigidBodies ^. term))),
 --
   ((requirement ^. term) :+: S "3", Flat (S "Input the" +:+ 
   (surface ^. term) +:+ S "properties of the bodies, such as" +:+ 
-  (friction ^. term) +:+ S "or" +:+
-  (elasticity ^. term) :+: S ".")),
+  (friction ^. term) +:+ S "or" +:+. (elasticity ^. term))),
 --
-  ((requirement ^. term) :+: S "4", Flat (S "Verify that the inputs" +:+
-  S "satisfy the required physical constraints.")),
+  ((requirement ^. term) :+: S "4", Flat (S "Verify that the inputs" +:+.
+  S "satisfy the required physical constraints")),
 --
   ((requirement ^. term) :+: S "5", Flat (S "Determine the" +:+
   (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+ S "over a" +:+
   S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
-  (rigidBodies ^. term) +:+ S "acted upon by a" +:+
-  (force ^. term) :+: S ".")),
+  (rigidBodies ^. term) +:+ S "acted upon by a" +:+. (force ^. term))),
 --
   ((requirement ^. term) :+: S "6", Flat (S "Determine the" +:+
   (orientation ^. term) :+: S "s and" +:+ (angularVels ^. term) :+:
   S " over a period of" +:+ (time ^. term) +:+ S "of the" +:+
-  (twoD ^. term) +:+ (rigidBodies ^. term) :+: S ".")),
+  (twoD ^. term) +:+. (rigidBodies ^. term))),
 --
   ((requirement ^. term) :+: S "7", Flat (S "Determine if any of the" +:+
-  (rigidBodies ^. term) +:+ S "in the" +:+ (space ^. term) +:+
-  S "have collided.")),
+  (rigidBodies ^. term) +:+ S "in the" +:+ (space ^. term) +:+.
+  S "have collided")),
 --
   ((requirement ^. term) :+: S "8", Flat (S "Determine the" +:+
   (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+ S "over a" +:+
   S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
-  (rigidBodies ^. term) +:+ S "that have undergone a" +:+
-  (collision ^. term) :+: S "."))])
+  (rigidBodies ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
+  ])
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --

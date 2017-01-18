@@ -68,7 +68,7 @@ mod_calc = makeImpModule mod_calc_desc
 -- Output Format Module
 meth_output :: MethodChunk
 meth_output = makeFileOutputMethod (CC "write_output" (S "Writes output to " :+:
-              S "to file.")) [getVC h_g, getVC h_c] "output"
+        S "to file.")) [getVC htTransCladFuel, getVC htTransCladCool] "output"
 
 mod_outputf_desc :: NamedChunk
 mod_outputf_desc = CC "output format" (S "Outputs the results of the " :+:

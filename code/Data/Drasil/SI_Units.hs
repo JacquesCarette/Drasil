@@ -20,6 +20,8 @@ si_units = map UU fundamentals ++ map UU derived
 
 ------------- Fundamental SI Units ---------------------------------------------
 fund :: String -> String -> String -> FundUnit
+--This is one case where I don't consider having "id" and "term" equal 
+-- a bad thing.
 fund nam desc sym = UD (makeDCC nam nam desc) (UName $ Atomic sym)
 
 metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit

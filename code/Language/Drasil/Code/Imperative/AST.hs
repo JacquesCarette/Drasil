@@ -9,12 +9,12 @@ module Language.Drasil.Code.Imperative.AST (
     Literal(..), Function(..),
     Expression(..), UnaryOp(..), BinaryOp(..),
     -- ** Overall AbstractCode Structure
-    BaseType(..), StateType(..), Permanence(..), MethodType(..),
+    BaseType(..), Mode(..), StateType(..), Permanence(..), MethodType(..),
     Scope(..), Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), Package(..),
     AbstractCode(..),
 
     -- * Convenience functions
-    bool,int,float,char,string,defaultValue,
+    bool,int,float,char,string,infile,outfile,defaultValue,
     true,false,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
@@ -98,12 +98,12 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | EnumVar Label
            | ObjVar Value Value
            | ListVar Label StateType
-           | FileVar Label
            | Const Label
            | Global Label -- these are generation-time globals that will be filled-in
            | Arg Int                    --Arg argIndex : get command-line arguments. Should only be used in the Body of the MainMethod.
            | Input          --Input : Get user keyboard input. Can only be assigned to string variables in some languages.
-              
+           | InputFile Value
+
     deriving (Eq, Show)
 data Literal = LitBool Bool
              | LitInt Integer
@@ -137,8 +137,9 @@ data UnaryOp = Negate | SquareRoot | Abs
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
     deriving (Eq, Show)
-data BaseType = Boolean | Integer | Float | Character | String | File
+data BaseType = Boolean | Integer | Float | Character | String | File Mode
     deriving (Eq, Show)
+data Mode = In | Out deriving (Eq, Show)
 data StateType = List Permanence StateType | Base BaseType | Type Label | Iterator StateType | EnumType Label
     deriving (Eq, Show)
 data Permanence = Static | Dynamic
@@ -178,12 +179,14 @@ data AbstractCode = AbsCode Package
 ---------------------------
 -- Convenience Functions --
 ---------------------------
-bool, int, float, char, string :: StateType
+bool, int, float, char, string, infile, outfile :: StateType
 bool = Base Boolean
 int = Base Integer
 float = Base Float
 char = Base Character
 string = Base String
+infile = Base $ File In
+outfile = Base $ File Out
 
 defaultValue :: BaseType -> Value
 defaultValue (Boolean) = false

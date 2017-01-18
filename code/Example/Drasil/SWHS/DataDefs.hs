@@ -8,38 +8,33 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 import Control.Lens ((^.))
 
+-- FIXME? This section looks strange. Some data defs are created using
+--    terms, some using defns, and some with a brand new description.
+--    I think this will need an overhaul after we fix Data Definitions.
+
 dd1HtFluxC :: QDefinition
-dd1HtFluxC = fromEqn "dd1HtFluxC" dd1descr (ht_flux_C ^. symbol) thermal_flux 
-  htFluxCEqn
+dd1HtFluxC = fromEqn "dd1HtFluxC" (ht_flux_C ^. term) (ht_flux_C ^. symbol) 
+  thermal_flux htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 
---Function calls for the left side of an QDefinition?
-
-dd1descr :: Sentence
-dd1descr = (ht_flux_C ^. term)
-
 --Can't include info in description beyond definition of variables?
 
 dd2HtFluxP :: QDefinition
-dd2HtFluxP = fromEqn "dd2HtFluxP" dd2descr (ht_flux_P ^. symbol) thermal_flux htFluxPEqn
+dd2HtFluxP = fromEqn "dd2HtFluxP" (ht_flux_P ^. term) (ht_flux_P ^. symbol) 
+  thermal_flux htFluxPEqn
 
 htFluxPEqn :: Expr
 htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] - 
              FCall (C temp_PCM) [C time])
 
-dd2descr :: Sentence
-dd2descr = (ht_flux_P ^. term)
-
 dd3HtFusion :: QDefinition
-dd3HtFusion = fromEqn "dd3HtFusion" dd3descr (htFusion ^. symbol) specificE htFusionEqn
+dd3HtFusion = fromEqn "dd3HtFusion" (htFusion ^. defn) (htFusion ^. symbol)
+  specificE htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)
-
-dd3descr :: Sentence
-dd3descr = htFusion ^. defn
 
 -- dd4MeltFrac :: QDefinition
 --dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless

@@ -1,14 +1,14 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Document where
 import Prelude hiding (id)
-import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk (id, term)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
-import Language.Drasil.Spec (Sentence(..), RefType(..))
+import Language.Drasil.Spec (Sentence(..), RefType(..), sMap)
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
 import Control.Lens ((^.))
@@ -59,7 +59,7 @@ data ItemType = Flat Sentence
 -- Types of definitions
 data DType = Data QDefinition 
            | General 
-           | Theory RelationChunk
+           | Theory RelationConcept
 
 class LayoutObj l where
   refName :: l -> Sentence
@@ -98,5 +98,5 @@ instance LayoutObj Contents where
   
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
-getDefName (Theory c) = S $ "T:" ++ firstLetter (repUnd (c ^. id))
+getDefName (Theory c) = S "T:" :+: (sMap ((map head) . words) (c ^. term))
 getDefName _          = error "Unimplemented definition type reference"

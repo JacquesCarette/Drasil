@@ -308,6 +308,7 @@ funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
+funcDocD c (FileOpen s) = dot <> funcAppDoc c "open" [litString s]
 
 includeD :: Label -> Label -> Doc
 includeD incl n = text incl <+> text n
@@ -456,7 +457,7 @@ stateTypeD :: Config -> StateType -> DecDef -> Doc
 stateTypeD c (List lt t@(List _ _)) _ = list c lt <> angles (space <> stateType c t Dec <> space)
 stateTypeD c (List lt t) _            = case t of Base Boolean -> bitArray c
                                                   _    -> list c lt <> angles (stateType c t Dec)
-stateTypeD _ (Base File) _       = text "File"
+stateTypeD _ (Base (File _)) _   = text "File"
 stateTypeD _ (Base Boolean) _    = text "Boolean"
 stateTypeD _ (Base Integer) _    = text "int"
 stateTypeD _ (Base Float) _      = text "float"
@@ -520,9 +521,9 @@ valueDocD _ (Var v) = text v
 valueDocD c (EnumVar v) = valueDoc c $ Var v
 valueDocD c (ListVar v _) = valueDoc c $ Var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
-valueDocD c (FileVar v) = valueDoc c $ Var v
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
 valueDocD c Input = inputFunc c
+valueDocD c (InputFile v) = error "This should be defined in each renderer"
 valueDocD c (Global s) = getEnv c s
 
 valueDocD' :: Config -> Value -> Doc

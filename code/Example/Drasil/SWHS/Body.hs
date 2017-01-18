@@ -19,7 +19,6 @@ import Drasil.TableOfSymbols
 import Language.Drasil
 
 import Data.Drasil.SI_Units 
-import Data.Drasil.Units.Thermodynamics (heat_transfer)
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
@@ -196,7 +195,7 @@ s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited " :+:
                 S "to " :+: (sLower (thermal_analysis ^.
-                term)) :+: S " of a single " :+: (tank_pcm ^. defn) :+: 
+                term)) :+: S " of a single " :+: (tank_pcm ^. term) :+: 
                 S ". Given the appropriate inputs, the code for " :+:
                 (progName ^. term) :+: S " is intended to predict the " :+:
                 (temp ^. term) :+: S " and " :+: (sLower  
@@ -604,7 +603,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of " :+:
                 (C vol_ht_gen) volume) := 
                 UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
                 * (C htCap) * Deriv Part (C temp) (C time)) volume)),
-               Paragraph (S "Applying " :+: (gauss_div ^. defn) :+: S " to" :+:
+               Paragraph (S "Applying " :+: (gauss_div ^. term) :+: S " to" :+:
                S " the first term over the " :+: (surface ^. term) :+:
                S " " :+: P (surface ^. symbol) :+: S " of the " :+: 
                (volume ^. term) :+: S ", with " :+: P (thFluxVect ^. 
@@ -904,7 +903,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the " :+:
                (phsChgMtrl ^. term) :+: S ". This can be shown as an " :+:
                S "equation by taking " :+: makeRef s4_2_4_DD1 :+: S " and " :+:
                makeRef s4_2_4_DD2 :+: S ", multiplying each by their " :+:
-               S "respective surface area of " :+: (heat_transfer ^. term) :+:
+               S "respective surface area of " :+: (heat_trans ^. term) :+:
                S ", and integrating each over the simulation " :+: (time ^. 
                term) :+: S ", as follows:"),
                EqnBlock 

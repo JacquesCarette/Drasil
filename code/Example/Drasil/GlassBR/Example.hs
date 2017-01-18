@@ -12,6 +12,8 @@ import Prelude hiding (log, id)
 --FIXME: There are three separate non-factored loads! 
 -- Two are (at least) linked, but the third is completely separate!
 
+--FIXME: Clean up symbols (use symbol alphabet where possible)
+
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
   act_thick, sflawParamK, sflawParamM, demand, sd, sd_max, sd_min, nom_thick,
@@ -21,74 +23,74 @@ plate_len, plate_width, dim_max, dim_min, mod_elas, act_thick, sflawParamK,
   sflawParamM, demand, sd, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitalChunk
 
-plate_len   = makeUC "a" "Plate length (long dimension)" 
+plate_len   = makeUC "plate_len" "Plate length (long dimension)" 
   "FIXME: Define this or remove the need for definitions"
   lA millimetre
-plate_width = makeUC "b" "Plate width (short dimension)" 
+plate_width = makeUC "plate_width" "Plate width (short dimension)" 
   "FIXME: Define this or remove the need for definitions"
   lB millimetre
-dim_max     = makeUC "d_max" ("Maximum value for one of the dimensions of " ++
+dim_max     = makeUC "dim_max" ("Maximum value for one of the dimensions of " ++
   "the glass plate") 
   "FIXME: Define this or remove the need for definitions"
   (sub lD (Atomic "max")) millimetre
-dim_min     = makeUC "d_min" ("Minimum value for one of the dimensions of " ++
+dim_min     = makeUC "dim_min" ("Minimum value for one of the dimensions of " ++
   "the glass plate") 
   "FIXME: Define this or remove the need for definitions"
   (sub lD (Atomic "min")) millimetre
-mod_elas    = makeUC "E" "Modulus of elasticity of glass" 
+mod_elas    = makeUC "mod_elas" "Modulus of elasticity of glass" 
   "FIXME: Define this or remove the need for definitions"
   cE kilopascal
-act_thick   = makeUC "h" "Actual thickness" 
+act_thick   = makeUC "act_thick" "Actual thickness" 
   "FIXME: Define this or remove the need for definitions"
   lH millimetre
-sflawParamK = makeUC "k" "Surface flaw parameter" 
+sflawParamK = makeUC "sflawParamK" "Surface flaw parameter" 
   "FIXME: Define this or remove the need for definitions"
   lK sFlawPU
-sflawParamM = makeUC "m" "Surface flaw parameter" 
+sflawParamM = makeUC "sflawParamM" "Surface flaw parameter" 
   "FIXME: Define this or remove the need for definitions"
   lM sFlawPU
-demand      = makeUC "q" "Applied load (demand)" 
+demand      = makeUC "demand" "Applied load (demand)" 
   "FIXME: Define this or remove the need for definitions"
   lQ kilopascal
-sd          = makeUC "SD" ("Stand off distance which is represented in " ++
+sd          = makeUC "sd" ("Stand off distance which is represented in " ++
   "coordinates (SDx, SDy, SDz)") 
   "FIXME: Define this or remove the need for definitions"
   (Atomic "SD") metre
-sdx         = makeUC "SD_x" "Stand off distance (x-component)" 
+sdx         = makeUC "sdx" "Stand off distance (x-component)" 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lX) metre
-sdy         = makeUC "SD_y" "Stand off distance (y-component)" 
+sdy         = makeUC "sdy" "Stand off distance (y-component)" 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lY) metre
-sdz         = makeUC "SD_z" "Stand off distance (z-component)" 
+sdz         = makeUC "sdz" "Stand off distance (z-component)" 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lZ) metre
-sd_max      = makeUC "SD_max" ("Maximum stand off distance permissible " ++
+sd_max      = makeUC "sd_max" ("Maximum stand off distance permissible " ++
   "for input") 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) (Atomic "max")) metre
-sd_min      = makeUC "SD_min" ("Minimum stand off distance permissible " ++
+sd_min      = makeUC "sd_min" ("Minimum stand off distance permissible " ++
   "for input") 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) (Atomic "min")) metre
-nom_thick   = makeUC "t" ("Nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
+nom_thick   = makeUC "nom_thick" ("Nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
   "FIXME: Define this or remove the need for definitions"
   lT millimetre
-load_dur    = makeUC "t_d" "Duration of load" 
+load_dur    = makeUC "load_dur" "Duration of load" 
   "FIXME: Define this or remove the need for definitions"
   (sub lT lD) second
-char_weight = makeUC "w" "Charge weight" 
+char_weight = makeUC "char_weight" "Charge weight" 
   "FIXME: Define this or remove the need for definitions"
   lW kilogram
-cWeightMax  = makeUC "w_max" "Maximum permissible input charge weight" 
+cWeightMax  = makeUC "cWeightMax" "Maximum permissible input charge weight" 
   "FIXME: Define this or remove the need for definitions"
   (sub (char_weight ^. symbol) 
   (Atomic "max")) kilogram
-cWeightMin  = makeUC "w_min" "Minimum permissible input charge weight" 
+cWeightMin  = makeUC "cWeightMin" "Minimum permissible input charge weight" 
   "FIXME: Define this or remove the need for definitions"
   (sub (char_weight ^. symbol) (Atomic "min")) kilogram
-eqTNTWeight = makeUC "w_TNT" "Explosive Mass in equivalent weight of TNT" 
+eqTNTWeight = makeUC "eqTNTWeight" "Explosive Mass in equivalent weight of TNT" 
   "FIXME: Define this or remove the need for definitions"
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
@@ -100,32 +102,32 @@ risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
   dimlessLoad, tolLoad, tNT, lRe, loadSF, ar, ar_max, ar_min, gTF :: VarChunk
 
 ----Quantities--
-risk_fun    = makeVC "B" "Risk function" cB
-glass_type  = makeVC "g" "Glass type, g in {AN, HS, FT}" lG
+risk_fun    = makeVC "risk_fun" "Risk function" cB
+glass_type  = makeVC "glass_type" "Glass type, g in {AN, HS, FT}" lG
 is_safe1    = makeVC "is_safe1" ("True when calculated probability is " ++
   "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
   Atomic "safe1"])
 is_safe2    = makeVC "is_safe2" ("True when load resistance (capacity) " ++
   "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
   Atomic "safe2"])
-sdf         = makeVC "J" "Stress distribution factor (Function)" cJ
-sdf_tol     = makeVC "J_tol" ("Stress distribution factor (Function) " ++
+sdf         = makeVC "sdf" "Stress distribution factor (Function)" cJ
+sdf_tol     = makeVC "sdf_tol" ("Stress distribution factor (Function) " ++
   "based on Pbtol") (sub (sdf ^. symbol) (Atomic "tol"))
-prob_br     = makeVC "P_b" "Probability of breakage" (sub cP lB)
-pb_tol      = makeVC "P_btol" "Tolerable probability of breakage" 
+prob_br     = makeVC "prob_br" "Probability of breakage" (sub cP lB)
+pb_tol      = makeVC "pb_tol" "Tolerable probability of breakage" 
               (sub cP (Atomic "btol"))
-dimlessLoad = makeVC "q_hat" "Dimensionless load" (hat lQ)
-tolLoad     = makeVC "q_hat_tol" "Tolerable load" 
+dimlessLoad = makeVC "dimlessLoad" "Dimensionless load" (hat lQ)
+tolLoad     = makeVC "tolLoad" "Tolerable load" 
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
-tNT         = makeVC "TNT" "TNT equivalent factor" (Atomic "TNT")
-lRe         = makeVC "LR" "Load Resistance" (Atomic "LR")
-loadSF      = makeVC "LSF" "Load Share Factor" (Atomic "LSF")
-ar          = makeVC "AR" "Aspect Ratio" (Atomic "AR")
-ar_max      = makeVC "AR_max" "Maximum Aspect Ratio" 
+tNT         = makeVC "tNT" "TNT equivalent factor" (Atomic "TNT")
+lRe         = makeVC "lRe" "Load Resistance" (Atomic "LR")
+loadSF      = makeVC "loadSF" "Load Share Factor" (Atomic "LSF")
+ar          = makeVC "ar" "Aspect Ratio" (Atomic "AR")
+ar_max      = makeVC "ar_max" "Maximum Aspect Ratio" 
   (sub (ar ^. symbol) (Atomic "max"))
-ar_min      = makeVC "AR_min" "Minimum Aspect Ratio" 
+ar_min      = makeVC "ar_min" "Minimum Aspect Ratio" 
   (sub (ar ^. symbol) (Atomic "min"))
-gTF         = makeVC "GTF" "Glass Type Factor" (Atomic "GTF")
+gTF         = makeVC "gTF" "Glass Type Factor" (Atomic "GTF")
 
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
@@ -261,11 +263,12 @@ notSafe       = dcc "notSafe" "Not safe"
   ("For the given input parameters, the glass is NOT considered safe.")
 
 --Theoretical models--
-tModels :: [RelationChunk]
+tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]
 
-t1SafetyReq :: RelationChunk
-t1SafetyReq = makeRC "Safety Requirement-1" t1descr safety_require1_rel
+t1SafetyReq :: RelationConcept
+t1SafetyReq = makeRC "t1SafetyReq" "Safety Requirement-1" 
+  t1descr safety_require1_rel
 
 safety_require1_rel :: Relation
 safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
@@ -283,8 +286,9 @@ t1descr =
   S ". " :+: (P $ pb_tol ^. symbol) :+: S " is the " :+: 
   (sMap (map toLower) (pb_tol ^. term)) :+: S " entered by the user."
 
-t2SafetyReq :: RelationChunk
-t2SafetyReq = makeRC "Safety Requirement-2" t2descr safety_require2_rel
+t2SafetyReq :: RelationConcept
+t2SafetyReq = makeRC "t2SafetyReq" "Safety Requirement-2" 
+  t2descr safety_require2_rel
 
 safety_require2_rel :: Relation
 safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
@@ -305,11 +309,11 @@ t2descr =
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 
 --Instance Models--
-iModels :: [RelationChunk]
+iModels :: [RelationConcept]
 iModels =[probOfBr, calOfCap, calOfDe]
 
-probOfBr :: RelationChunk
-probOfBr = makeRC "Probability of Glass Breakage" pbdescr pb_rel 
+probOfBr :: RelationConcept
+probOfBr = makeRC "probOfBr" "Probability of Glass Breakage" pbdescr pb_rel 
 
 pb_rel :: Relation
 pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
@@ -320,8 +324,8 @@ pbdescr =
     (sMap (map toLower) (prob_br ^. term)) :+: S ". "  :+: 
     (P $ risk_fun ^. symbol) :+: S " is the " :+: (risk ^. term) :+: S "."
 
-calOfCap :: RelationChunk
-calOfCap = makeRC "Calculation of Capacity(LR)" capdescr cap_rel
+calOfCap :: RelationConcept
+calOfCap = makeRC "calOfCap" "Calculation of Capacity(LR)" capdescr cap_rel
 
 cap_rel :: Relation
 cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF)) 
@@ -334,8 +338,8 @@ capdescr =
   (gTF ^. term) :+: S ". " :+: (P $ loadSF ^. symbol) :+: S " is the " :+:
   (loadSF ^. term) :+: S "."
 
-calOfDe :: RelationChunk
-calOfDe = makeRC "Calculation of Demand(q)" dedescr de_rel
+calOfDe :: RelationConcept
+calOfDe = makeRC "calOfDe" "Calculation of Demand(q)" dedescr de_rel
 
 de_rel :: Relation
 de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd] 
@@ -367,6 +371,10 @@ risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   (Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick)
   :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
 
+--FIXME? Maybe remove use of id, or not, since it's just setting an id.
+--        Should definitely look into how this chunk is used to make sure
+--        the current id makes sense. Same for the QDefns below.
+  
 risk :: QDefinition
 risk = fromEqn' (risk_fun ^. id) (S "risk of failure") (risk_fun ^. symbol) 
   risk_eq

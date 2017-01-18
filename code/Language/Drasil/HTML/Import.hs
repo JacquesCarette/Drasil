@@ -168,10 +168,10 @@ makePairs (Data c) = [
   ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       H.Paragraph $ H.S $ c ^. id),
+  ("Label",       H.Paragraph $ spec (c ^. term)),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
                   (H.S "")),
-  ("Description", H.Paragraph (spec (c ^. term)))
+  ("Description", H.Paragraph (spec (c ^. defn)))
   ]
 makePairs General = error "Not yet implemented"
   

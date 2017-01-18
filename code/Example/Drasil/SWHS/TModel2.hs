@@ -15,8 +15,8 @@ import Control.Lens ((^.))
 s4_2_2_T2 :: Contents
 s4_2_2_T2 = Definition (Theory t2SensHtE)
 
-t2SensHtE :: RelationChunk
-t2SensHtE = makeRC "Sensible heat energy" t2descr sensHtEEqn
+t2SensHtE :: RelationConcept
+t2SensHtE = makeRC "t2SensHtE" "Sensible heat energy" t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
 sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT), 

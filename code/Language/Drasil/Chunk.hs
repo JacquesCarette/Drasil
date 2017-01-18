@@ -104,8 +104,8 @@ makeDCC i ter des = DCC i (S ter) (S des)
 dcc = makeDCC
 
 --Currently only used by RelationChunk and EqChunk
-ccWithDescrSent :: String -> Sentence -> NamedChunk
-ccWithDescrSent n d = CC n d
+ncWDS :: String -> Sentence -> NamedChunk
+ncWDS n d = CC n d
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
 dccWDS i t d = DCC i (S t) d
@@ -121,6 +121,9 @@ nCC n = makeCC n n
 -- Setting all varchunks to have Rational type so it compiles
 makeVC :: String -> String -> Symbol -> VarChunk
 makeVC i des sym = VC i (S des) sym Rational
+
+makeVCObj :: String -> String -> Symbol -> String -> VarChunk
+makeVCObj i des sym s = VC i (S des) sym (Obj s)
 
 vcFromCC :: NamedChunk -> Symbol -> VarChunk
 vcFromCC cc sym = VC (cc ^. id) (cc ^. term) sym Rational

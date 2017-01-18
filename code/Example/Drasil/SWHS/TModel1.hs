@@ -15,8 +15,9 @@ import Control.Lens ((^.))
 s4_2_2_T1 :: Contents
 s4_2_2_T1 = Definition (Theory t1ConsThermE)
 
-t1ConsThermE :: RelationChunk
-t1ConsThermE = makeRC "Conservation of thermal energy" t1descr consThermERel
+t1ConsThermE :: RelationConcept
+t1ConsThermE = makeRC "t1ConsThermE" "Conservation of thermal energy" 
+  t1descr consThermERel
 
 consThermERel :: Relation
 consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=

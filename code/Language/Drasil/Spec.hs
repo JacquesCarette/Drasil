@@ -69,3 +69,9 @@ sMap _ a = a
 
 sLower :: Sentence -> Sentence
 sLower = sMap (map toLower)
+
+sParen :: Sentence -> Sentence
+sParen x = S "(" :+: x :+: S ")"
+
+(+:+) :: Sentence -> Sentence -> Sentence
+a +:+ b = a :+: S " " :+: b

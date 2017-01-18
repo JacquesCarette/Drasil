@@ -274,8 +274,8 @@ sSA = dcc "sSA" "SSA" "Slope Stability Analysis"
 
 
 ----Theoretical Models----
-fs_rc :: RelationChunk
-fs_rc = makeRC "Factor of Safety" fs_desc fs_rel
+fs_rc :: RelationConcept
+fs_rc = makeRC "fs_rc" "Factor of Safety" fs_desc fs_rel
 
 fs_rel :: Relation
 fs_rel = (C fs) := (C p) / (C s)

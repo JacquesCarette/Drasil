@@ -178,9 +178,9 @@ makePairs (Data c) = [
   ("Description", T.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       T.Paragraph $ T.S $ c ^. id),
+  ("Label",       T.Paragraph $ spec (c ^. term)),
   ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
-  ("Description", T.Paragraph (spec (c ^. term)))
+  ("Description", T.Paragraph (spec (c ^. defn)))
   ]
 makePairs General = error "Not yet implemented"
 

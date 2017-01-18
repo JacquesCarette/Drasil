@@ -57,7 +57,7 @@ cppConfig options c =
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDocD c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, printFileDoc = printFileDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, printFileDoc = printFileDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
 
@@ -78,6 +78,8 @@ renderCode' c ms (AbsCode p) = Code [
     fileCode c p ms Source (ext c)]
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
+cppstateType _ (Base (File In)) _    = text "ifstream"
+cppstateType _ (Base (File Out)) _   = text "ofstream"
 cppstateType _ (Base Boolean) _ = text "bool"
 cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
@@ -92,7 +94,9 @@ cpptop c Header p = vcat [
     include c $ "<" ++ render (list c Dynamic) ++ ">",
     blank,
     usingNameSpace c "std" (Just "string"),
-    usingNameSpace c "std" (Just $ render (list c Dynamic))]
+    usingNameSpace c "std" (Just $ render (list c Dynamic)),
+    usingNameSpace c "std" (Just "ifstream"),
+    usingNameSpace c "std" (Just "ofstream")]
 cpptop c Source p = vcat [          --TODO remove includes if they aren't used
     include c ("\"" ++ p ++ cppHeaderExt ++ "\""),
     include c "<algorithm>",
@@ -105,7 +109,9 @@ cpptop c Source p = vcat [          --TODO remove includes if they aren't used
     blank,
     usingNameSpace c p Nothing,
     usingNameSpace c "std" (Just "string"),
-    usingNameSpace c "std" (Just $ render (list c Dynamic))]
+    usingNameSpace c "std" (Just $ render (list c Dynamic)),
+    usingNameSpace c "std" (Just "ifstream"),
+    usingNameSpace c "std" (Just "ofstream")]
 
 cppbody :: Config -> FileType -> Label -> [Class] -> Doc
 cppbody c f@(Header) p cs = vcat [
@@ -124,6 +130,7 @@ cppbottom Source = empty
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
 assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
+assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
 assignDoc' c a = assignDocD c a
 
 declarationDoc' :: Config -> Declaration -> Doc
@@ -207,6 +214,10 @@ objAccessDoc' c v   (Floor) = funcAppDoc c "floor" [v]
 objAccessDoc' c v   (Ceiling) = funcAppDoc c "ceil" [v]
 objAccessDoc' c v f = objAccessDocD c v f
 
+objVarDoc' :: Config -> Value -> Value -> Doc
+objVarDoc' c (Self) v = valueDoc c v
+objVarDoc' c v1 v2 = valueDoc c v1 <> ptrAccess <> valueDoc c v2
+
 paramDoc' :: Config -> Parameter -> Doc
 paramDoc' c (StateParam n t@(List _ _)) = stateType c t Dec <+> text "&" <> text n
 paramDoc' c p = paramDocD c p
@@ -250,6 +261,7 @@ valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
+valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
 
 ----------------------

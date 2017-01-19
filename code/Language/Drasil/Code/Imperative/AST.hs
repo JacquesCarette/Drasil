@@ -14,7 +14,7 @@ module Language.Drasil.Code.Imperative.AST (
     AbstractCode(..),
 
     -- * Convenience functions
-    bool,int,float,char,string,infile,outfile,defaultValue,
+    bool,int,float,char,string,infile,outfile,obj,block,defaultValue,
     true,false,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
@@ -24,7 +24,8 @@ module Language.Drasil.Code.Imperative.AST (
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
-    getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace
+    getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
+    objDecNew, objDecNewVoid, var, objMethodCall, objMethodCallVoid, valStmt
 ) where
 
 import Data.List (zipWith4)
@@ -188,6 +189,12 @@ string = Base String
 infile = Base $ File In
 outfile = Base $ File Out
 
+obj :: Label -> StateType
+obj = Type
+
+block :: [Statement] -> Block
+block = Block
+
 defaultValue :: BaseType -> Value
 defaultValue (Boolean) = false
 defaultValue (Integer) = litInt 0
@@ -200,6 +207,9 @@ true = Lit $ LitBool True
 
 false :: Value
 false = Lit $ LitBool False
+
+var :: Label -> Value
+var = Var
 
 pubClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
 pubClass n p vs fs = Class n p Public vs fs
@@ -406,6 +416,13 @@ noParent = Nothing
 objDecDef :: Label -> StateType -> Value -> Statement
 objDecDef n t v = DeclState $ ObjDecDef n t v
 
+objDecNew :: Label -> StateType -> [Value] -> Statement
+objDecNew n t vs = DeclState $ ObjDecDef n t (StateObj t vs)
+
+-- declare new object with parameter-less constructor
+objDecNewVoid :: Label -> StateType -> Statement
+objDecNewVoid n t = objDecNew n t []
+
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]
 
@@ -475,6 +492,15 @@ zipBlockWith f a b = Block $ zipWith f a b
 
 zipBlockWith4 :: (a -> b -> c -> d -> Statement) -> [a] -> [b] -> [c] -> [d] -> Block
 zipBlockWith4 f a b c d = Block $ zipWith4 f a b c d
+
+objMethodCall :: Value -> Label -> [Value] -> Value
+objMethodCall o f ps = ObjAccess o $ Func f ps
+
+objMethodCallVoid :: Value -> Label -> Value
+objMethodCallVoid o f = objMethodCall o f []
+
+valStmt :: Value -> Statement
+valStmt = ValState
 
 -----------------------
 -- Comment Functions --

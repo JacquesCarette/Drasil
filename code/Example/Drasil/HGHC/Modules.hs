@@ -2,6 +2,7 @@ module Drasil.HGHC.Modules where
 
 import Language.Drasil
 import Language.Drasil.Code
+
 import Drasil.HGHC.HeatTransfer
 import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
@@ -90,28 +91,40 @@ mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
 -- Control Module
 main_func :: Body
 main_func =
-  [ Block
-    [ DeclState $ ObjDecDef "params" (Type "input_parameters")
-        (StateObj (Type "input_parameters") []),
-      DeclState $ ObjDecDef "in" (Type "input_format")
-        (StateObj (Type "input_format") []),
-      ValState $ ObjAccess (Var "in") (Func "read_input" [Var "params"]),
-      DeclState $ ObjDecDef "cal" (Type "calc")
-        (StateObj (Type "calc") []),
-      DeclState $ VarDecDef "h_g" float (ObjAccess (Var "cal")
-        (Func "calc_h_g" [
-          ObjVar (Var "params") (Var "k_c"),
-          ObjVar (Var "params") (Var "h_p"),
-          ObjVar (Var "params") (Var "tau_c")])),
-      DeclState $ VarDecDef "h_c" float (ObjAccess (Var "cal")
-        (Func "calc_h_c" [
-          ObjVar (Var "params") (Var "k_c"),
-          ObjVar (Var "params") (Var "h_b"),
-          ObjVar (Var "params") (Var "tau_c")])),
-      DeclState $ ObjDecDef "out" (Type "output_format")
-        (StateObj (Type "output_format") []),
-      ValState $ ObjAccess (Var "out") (Func "write_output"
-        [Var "h_g", Var "h_c"])
+  let labelParams = "params"
+      typeParams = obj "input_parameters"
+      labelIn = "in"
+      typeIn = obj "input_format"
+      labelCalc = "cal"
+      typeCalc = obj "calc"
+      labelOut = "out"
+      typeOut = obj "output_format"
+      labelCladThick = cladThick ^. id
+      labelCoolFilm = coolFilmCond ^. id
+      labelGapFilm = gapFilmCond ^. id
+      labelCladCond = cladCond ^. id
+      labelHg = htTransCladFuel ^. id
+      labelHc = htTransCladCool ^. id
+  in
+  [ block
+    [ objDecNewVoid labelParams typeParams,
+      objDecNewVoid labelIn typeIn,
+      valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams],
+      objDecNewVoid labelCalc typeCalc,
+      varDecDef labelHg float
+        ( objMethodCall (var labelCalc) ("calc_" ++ labelHg)
+          [ var labelParams $-> var labelCladCond,
+            var labelParams $-> var labelGapFilm,
+            var labelParams $-> var labelCladThick ] ),
+      varDecDef labelHc float
+        ( objMethodCall (var labelCalc) ("calc_" ++ labelHc)
+          [ var labelParams $-> var labelCladCond,
+            var labelParams $-> var labelCoolFilm,
+            var labelParams $-> var labelCladThick ] ),
+      objDecNewVoid labelOut typeOut,
+      valStmt $ objMethodCall (var labelOut) (meth_output ^. id)
+        [ var labelHg,
+          var labelHc ]
     ]
   ]
 

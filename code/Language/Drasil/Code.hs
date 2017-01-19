@@ -1,18 +1,7 @@
 {- re-export smart constructors for external code writing -}
 module Language.Drasil.Code (
-    Label,
-    Body, Block(..),
-    Statement(..), Pattern(..), StatePattern(..), StratPattern(..), Strategies(..), ObserverPattern(..), Assignment(..), Declaration(..), Conditional(..),
-    Iteration(..), Exception(..), Jump(..), Return(..), Value(..), Comment(..),
-    Literal(..), Function(..),
-    Expression(..), UnaryOp(..), BinaryOp(..),
-    -- ** Overall AbstractCode Structure
-    BaseType(..), Mode(..), StateType(..), Permanence(..), MethodType(..),
-    Scope(..), Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), Package(..),
-    AbstractCode(..),
-
-    -- * Convenience functions
-    bool,int,float,char,string,infile,outfile,defaultValue,true,false,
+    Body,
+    bool,int,float,char,string,infile,outfile,obj,block,defaultValue,true,false,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),
     (#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
@@ -23,7 +12,8 @@ module Language.Drasil.Code (
     printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
-    convertToMethod,bodyReplace,funcReplace,valListReplace
+    convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
+    objDecNewVoid,var,objMethodCall,objMethodCallVoid,valStmt
 ) where
 
 import Prelude hiding (break, print, return)

@@ -4,8 +4,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
     cppConfig
 ) where
 
+import Language.Drasil.Config(splitSource)
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST 
+import Language.Drasil.Code.Imperative.AST
   hiding (comment,bool,int,float,char,tryBody,catchBody,initState,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,
@@ -18,13 +19,13 @@ validListTypes :: [Label]
 validListTypes = ["deque", "vector"]
 
 cppConfig :: Options -> Config -> Config
-cppConfig options c = 
+cppConfig options c =
     let listType = case (cpplist options) of Nothing -> "vector"
                                              Just lt -> if lt `elem` validListTypes then lt
                                                         else error $ "Unsupported C++ list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
     in Config {
         renderCode = renderCode' c,
-        
+
         argsList         = text "argv",
         bitArray         = text "vector<bool>",
         commentStart     = doubleSlash,
@@ -45,14 +46,14 @@ cppConfig options c =
         printFunc        = text "std::cout",
         printLnFunc      = text "std::cout",
         stateType        = cppstateType c,
-        
+
         blockStart = lbrace, blockEnd = rbrace,
         ifBodyStart = blockStart c, elseIf = text "else if",
-        
+
         top    = cpptop c,
         body   = cppbody c,
         bottom = cppbottom,
-        
+
         assignDoc = assignDoc' c, binOpDoc = binOpDocD, bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
@@ -73,9 +74,13 @@ ptrAccess = text "->"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [
-    fileCode c p ms Header cppHeaderExt,
-    fileCode c p ms Source (ext c)]
+renderCode' c ms (AbsCode p) =
+    if splitSource
+    then Code $ (fileCodeSplit c p ms Header cppHeaderExt) ++
+                (fileCodeSplit c p ms Source (ext c))
+    else Code [ fileCode c p ms Header cppHeaderExt,
+                fileCode c p ms Source (ext c) ]
+
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
 cppstateType _ (Base (File In)) _    = text "ifstream"

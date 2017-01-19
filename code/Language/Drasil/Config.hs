@@ -60,3 +60,7 @@ hyperSettings =
   ++ "citecolor=blue,"     -- color of links to bibliography
   ++ "filecolor=magenta,"  -- color of file links
   ++ "urlcolor=cyan"       -- color of external links
+
+--split up generated code into source files based on modules
+splitSource :: Bool
+splitSource = True

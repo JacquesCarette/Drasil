@@ -26,4 +26,5 @@ module Language.Drasil.Code (
     convertToMethod,bodyReplace,funcReplace,valListReplace
 ) where
 
+import Prelude hiding (break, print, return)
 import Language.Drasil.Code.Imperative.AST

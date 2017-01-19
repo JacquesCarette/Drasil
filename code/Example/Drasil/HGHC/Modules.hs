@@ -1,6 +1,7 @@
 module Drasil.HGHC.Modules where
 
 import Language.Drasil
+import Language.Drasil.Code
 import Drasil.HGHC.HeatTransfer
 import Data.Drasil.Concepts.Software
 import Prelude hiding (id)

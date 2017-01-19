@@ -8,6 +8,7 @@ Synopsis:	A framework for code and document generation for scientific software
 library
   exposed-modules:
     Language.Drasil,
+    Language.Drasil.Code,
     Data.Drasil.SI_Units
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics

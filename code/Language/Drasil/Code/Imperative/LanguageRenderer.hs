@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     Config(..),
 
     -- * Language Parametric Functions
-    fileCode,
+    fileCode, fileCodeSplit,
     
     -- * Common Syntax
     classDec, dot, doubleSlash, forLabel, new,
@@ -123,6 +123,10 @@ data Config = Config {
 
 fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
 fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p $ map (clsWithName ms) ns)
+
+fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
+fileCodeSplit c (Pack p ms) ns f e = let classes = map (clsWithName ms) ns
+  in [(fileName c (className cls) ns ++ e, fileDoc c f p [cls]) | cls <- classes]
 
 fileDoc :: Config -> FileType -> Label -> [Class] -> Doc
 fileDoc c f p ms = vibcat [

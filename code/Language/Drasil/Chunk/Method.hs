@@ -12,9 +12,13 @@ import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
 import qualified Language.Drasil.Code.Imperative.AST as A
 
 -- BEGIN METHODCHUNK --
-data MethodChunk = MeC { methcc :: NWrapper, mType :: MethodType,
-                         input :: [VarChunk], output :: [VarChunk],
-                         exc :: [ExcType] }
+data MethodChunk = MeC
+  { methcc :: NWrapper   -- Name
+  , mType :: MethodType  -- Type
+  , input :: [VarChunk]  -- inputs
+  , output :: [VarChunk] -- outputs
+  , exc :: [ExcType]     -- exceptions
+  }
 
 data MethodType = MCalc QDefinition
                 | MInput IOType VarChunk

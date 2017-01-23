@@ -13,9 +13,17 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
 
 -- BEGIN METHODCHUNK --
+-- (Currently) used for module guide, MIS and code generation
 data ModuleChunk where 
-  MoC :: NWrapper -> Sentence -> Maybe NWrapper -> [VarChunk] -> 
-    [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> Bool -> ModuleChunk
+  MoC :: NWrapper          -- Name
+      -> Sentence          -- Secret
+      -> Maybe NWrapper    -- what implements this, if at all
+      -> [VarChunk]        -- module fields, aka state variables
+      -> [MethodChunk]     -- the methods offered by module
+      -> [ModuleChunk]     -- what modules this one depends on [extract!]
+      -> Maybe ModuleChunk -- Parent module, for documents [extract!]
+      -> Bool              -- Should this module be generated?
+      -> ModuleChunk
 
 instance Chunk ModuleChunk where
   id = cl id

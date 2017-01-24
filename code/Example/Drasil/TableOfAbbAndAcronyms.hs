@@ -16,7 +16,7 @@ table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
 --FIXME? Should it be "Description" or "Term" or something else?
 table :: (Concept s) => [s] -> Contents
 table ls = Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> ch ^. defn) , 
-   (\ch -> ch ^. term)]
+  [(\ch -> ch ^. term) , 
+   (\ch -> ch ^. defn)]
   ls)
   (S "Abbreviations and Acronyms") False

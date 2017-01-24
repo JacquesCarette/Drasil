@@ -51,7 +51,8 @@ mgBod :: [Section]
 s1 :: Section
 s1_intro :: Contents
 
-s1 = Section (S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2]
+s1 = Section (S "Reference Material") 
+  [Con s1_intro, Sub s1_1, Sub s1_2, Sub s1_3]
 
 s1_intro = Paragraph $ S "This section records information for easy reference."
 

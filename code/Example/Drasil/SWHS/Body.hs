@@ -15,6 +15,7 @@ import Drasil.SWHS.Reqs
 
 import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
+import Drasil.TableOfAbbAndAcronyms
 
 import Language.Drasil
 
@@ -42,7 +43,7 @@ s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s1_intro, s1_2_intro, s1_2_table, s1_3_table,
+s1_intro, s1_2_intro, s1_2_table,
   s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
@@ -107,13 +108,7 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" :+:
 
 s1_2_table = table swhsSymbols (termExcept [cqs norm_vect])
   
-s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
-
-s1_3_table = Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> ch ^. term),
-   (\ch -> ch ^. defn)
-   ] acronyms)
-   (S "Abbrevations and Acronyms") False
+s1_3 = table_of_abb_and_acronyms acronyms
    
 -- This section name and table structure are same between all examples.
    

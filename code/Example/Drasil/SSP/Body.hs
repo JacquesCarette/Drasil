@@ -12,6 +12,8 @@ import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.SI_Units 
 
+import Drasil.TableOfAbbAndAcronyms
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
@@ -30,7 +32,7 @@ ssp_mg = Document (S "Module Guide for Slope Stability Analysis")
 
 s1, s2, s3, s4, s5, s6 :: Section
 
-s1_1, s1_2, s1_3, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,
+s1_1, s1_2, s1_3, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
   s2_p1, s2_p2, s2_1, s2_2, s2_3, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
   s3_1, s3_2, s3_1_p1, s3_2_p1, s4_p1, s4_1, s4_2, s4_1_p1, s4_1_1, s4_1_2,
   s4_1_3, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1,
@@ -74,16 +76,7 @@ s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
 
   
 -- SECTION 1.3 --
-s1_3 = Sub $ Section (S "Abbreviations and Acronyms") [s1_3_table]
-
-s1_3_table = Con $ Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> ch ^. term),
-   (\ch -> ch ^. defn)]
-  acronyms)
-  (S "Abbreviations and Acronyms") False
-  
-  
-  
+s1_3 = Sub $ table_of_abb_and_acronyms acronyms
   
 -- SECTION 2 --
 s2 = Section (S "Introduction") [s2_p1, s2_p2, s2_1, s2_2, s2_3]

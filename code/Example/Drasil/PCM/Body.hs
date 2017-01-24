@@ -13,12 +13,14 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Units.Thermodynamics
 
+import Drasil.TableOfAbbAndAcronyms
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 s1, s1_1,s1_2, s1_3,s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
-s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s1_3_table,s4_intro,
+s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s4_intro,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
@@ -64,13 +66,7 @@ s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   pcmSymbols)
   (S "Table of Symbols") False
 
-s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
-
-s1_3_table = Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> ch ^. term),
-   (\ch -> ch ^. defn)]
-  acronyms)
-  (S "Abbreviations and Acronyms") False
+s1_3 = table_of_abb_and_acronyms acronyms
 
 s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 

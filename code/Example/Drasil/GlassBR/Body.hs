@@ -8,6 +8,7 @@ import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
 import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
+import Drasil.TableOfAbbAndAcronyms
 
 import Drasil.GlassBR.Example
 
@@ -23,7 +24,7 @@ s1, s1_1,  s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section
 
 s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, 
-  s1_3_table, s2_intro, s2_2_intro, s3_intro, 
+  s2_intro, s2_2_intro, s3_intro, 
   s3_1_intro, s3_2_intro, s4_intro, s4_1_bullets, s4_2_intro, s5_intro, 
   s5_1_table, s5_2_bullets, s6_intro, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
@@ -58,13 +59,7 @@ s1_1 = table_of_units this_si
 s1_2 = table_of_symbols ((map qs glassBRSymbols) ++ 
   (map qs glassBRUnitless)) defaultF
 
-s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
-
-s1_3_table = Table [S "Abbreviations", S "Full Form"] (mkTable
-  [(\ch -> ch ^. term),
-   (\ch -> ch ^. defn)]
-  acronyms)
-  (S "Abbreviations and Acronyms") False
+s1_3 = table_of_abb_and_acronyms acronyms
 
 s2 = Section(S "Introduction") [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 

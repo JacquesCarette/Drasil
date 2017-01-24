@@ -16,6 +16,7 @@ import Data.Drasil.Quantities.Physics (restitutionCoef)
 
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
+import Drasil.TableOfAbbAndAcronyms
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -85,15 +86,8 @@ s1_2_table = table cpSymbols defaultF
 --------------------------------------
 
 s1_3 :: Section
-s1_3_table :: Contents
 
-s1_3 = Section (S "Abbreviations and Acronyms") [Con s1_3_table]
-
-s1_3_table = Table [S "Symbol", S "Description"] (mkTable
-  [(\ch -> ch ^. defn),
-  (\ch -> ch ^. term)]
-  cpAcronyms)
-  (S "Abbreviations and Acronyms") False
+s1_3 = table_of_abb_and_acronyms cpAcronyms
 
 ------------------------------
 -- Section : INTRODUCTION --

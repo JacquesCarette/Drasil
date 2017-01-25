@@ -166,8 +166,8 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "writing the design specification and the software" +:+
   S "verification and validation plan. The design document" +:+
   S "will show how the" +:+ (sLower (requirement ^.
-  defn)) :+: S "s are to be realized, including decisions" +:+
-  S "on the numerical algorithms and programming environment" +:+.
+  defn)) :+: S "s are to be realized, including decisions" +:+.
+  S "on the numerical algorithms and programming environment" +:+
   S "The verification and validation plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
@@ -477,11 +477,11 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
 --
   ((assumption ^. term) :+: S "8", Flat (S "The" +:+ (temp_C ^. 
   term) +:+ S "is constant over" +:+ (time ^. term) +:+
-  S "[" :+: makeRef s4_2_4_DD1 `sC` "LC2].")),
+  S "[" :+: makeRef s4_2_4_DD1 `sC` S "LC2].")),
 --
   ((assumption ^. term) :+: S "9", Flat (S "The" +:+ (temp_C ^.
   term) +:+ S "does not vary along its length [" :+:
-  makeRef s4_2_4_DD1 `sC` "LC3].")),
+  makeRef s4_2_4_DD1 `sC` S "LC3].")),
 --
   ((assumption ^. term) :+: S "10", Flat ((law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+ (sLower (
@@ -1046,7 +1046,7 @@ s6_list = Enumeration (Simple [((likelyChg ^. term) :+: S "1", Flat
   S "of uniform" +:+ (temp_PCM ^. term) +:+. S "is not likely")),
 --
   ((likelyChg ^. term) :+: S "2", Flat (S "A8 - The" +:+ (temp_C ^. 
-  term) +:+. S "will change over the course of the day, depending" +:+
+  term) +:+ S "will change over the course of the day, depending" +:+.
   S "on the energy received from the sun")),
 --
   ((likelyChg ^. term) :+: S "3", Flat (S "A9 - The" +:+ (temp_C ^. 

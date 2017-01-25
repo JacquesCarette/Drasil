@@ -98,8 +98,8 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
   S "with the" +:+ (sLower (heat_trans ^. term)) :+: 
   S " literature" +:+
   S "and with existing documentation for" +:+ (sLower
-  (progName ^. defn)) :+: S "s. The symbols are listed in" +:+
-  S "alphabetical order.")
+  (progName ^. defn)) :+: S "s. The symbols are listed in" +:+.
+  S "alphabetical order")
 
 -- "heat transfer" and program name are specific, but otherwise this paragraph 
 -- is general. If it were to be automated, there is a sentence in the game 
@@ -117,11 +117,11 @@ s2 = Section (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
-  S "fossil fuels, there is a higher demand for renewable" +:+
-  S "energy sources and energy storage technology." +:+
+  S "fossil fuels, there is a higher demand for renewable" +:+.
+  S "energy sources and energy storage technology" +:+
   (swhs_pcm ^. defn) +:+ S "(" :+: (phsChgMtrl ^. term) :+: 
-  S ") use a renewable energy source and provide a novel way of" +:+
-  S "storing energy." +:+ (swhs_pcm ^. term) +:+ S "improve" +:+
+  S ") use a renewable energy source and provide a novel way of" +:+.
+  S "storing energy" +:+ (swhs_pcm ^. term) +:+ S "improve" +:+
   S "over the traditional" +:+ (sLower (progName ^. 
   defn)) :+: S "s because of their smaller size. The smaller size" +:+
   S "is possible because of the ability of" +:+ 
@@ -129,14 +129,14 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (sLower (thermal_energy ^. term)) +:+ S "as" +:+
   (sLower (latent_heat ^. term)) :+: S ", which" +:+
   S "allows higher" +:+ (sLower (thermal_energy ^. 
-  term)) +:+ S "storage capacity per unit weight."),
+  term)) +:+. S "storage capacity per unit weight"),
   Paragraph (S " The following section provides an overview of the" +:+ (srs ^. defn) +:+ S "(" :+: (srs ^. term) :+:
   S ") for" +:+ (swhs_pcm ^. term) :+: S ". The developed" +:+
   S "program will be referred to as" +:+ (progName ^. defn) +:+
   S "(" :+: (progName ^. term) :+: S "). This section explains" +:+
   S "the purpose of this document, the scope of the system, the" +:+
-  S "organization of the document and the characteristics of" +:+
-  S "the intended readers.")]
+  S "organization of the document and the characteristics of" +:+.
+  S "the intended readers")]
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
@@ -159,15 +159,15 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "to be used as a reference to provide ad hoc access to" +:+
   S "all information necessary to understand and verify the" +:+
   S "model. The" +:+ (srs ^. term) +:+ S "is abstract" +:+ 
-  S "because the contents say what problem is being solved," +:+
-  S "but do not say how to solve it."),
+  S "because the contents say what problem is being solved," +:+.
+  S "but do not say how to solve it"),
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
   S "writing the design specification and the software" +:+
   S "verification and validation plan. The design document" +:+
   S "will show how the" +:+ (sLower (requirement ^.
   defn)) :+: S "s are to be realized, including decisions" +:+
-  S "on the numerical algorithms and programming environment." +:+
+  S "on the numerical algorithms and programming environment" +:+.
   S "The verification and validation plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
@@ -177,7 +177,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
   S "to present the documentation is still to" +:+
-  Quote (S "fake") +:+ S "a rational design process.")]
+  Quote (S "fake") +:+. S "a rational design process")]
 
 -- Besides program name, these two paragraphs are general, mostly repeated 
 -- between examples, and can be abstracted out.
@@ -237,8 +237,8 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   (thModel ^. defn)) :+: S "s, and" +:+ (sLower 
   (thModel ^. defn)) :+: S "s to the" +:+ (sLower
   (inModel ^. defn)) :+: S "s. The" +:+ (sLower 
-  (inModel ^. defn)) :+: S "s (" :+: makeRef s4_2_5 :+:
-  S ") to be solved are referred to as IM1 to IM4.")]
+  (inModel ^. defn)) :+: S "s" +:+ sParen (makeRef s4_2_5) +:+. 
+  S "to be solved are referred to as IM1 to IM4")]
 
 -- This paragraph is mostly general (besides program name and number of IMs), 
 -- but there are some differences between the examples that I'm not sure how to 
@@ -263,16 +263,16 @@ s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1,
 
 s3_intro = Paragraph (S "This section provides general information about" +:+
   S "the system, identifies the interfaces between the system and" +:+
-  S "its environment, and describes the user characteristics and" +:+
-  S "the system constraints.")
+  S "its environment, and describes the user characteristics and" +:+.
+  S "the system constraints")
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
 s3_1 = Section (S "User Characteristics") [Con s3_1_contents]
 
 s3_1_contents = Paragraph (S "The end user of" +:+ (progName ^. term) :+: 
-  S " should have an understanding of undergraduate Level 1" +:+
-  S "Calculus and Physics.")
+  S " should have an understanding of undergraduate Level 1" +:+.
+  S "Calculus and Physics")
 
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
@@ -412,8 +412,8 @@ s4_2_intro = Paragraph (S "The" +:+ (sLower (inModel ^. defn)) :+:
   (makeRef s4_2_5) :+: S ". The information to understand the" +:+
   S "meaning of the" +:+ (sLower (inModel ^. defn)) :+:
   S "s and their derivation is also presented, so that the" +:+
-  (sLower (inModel ^. defn)) :+: S "s" +:+
-  S "can be verified.")
+  (sLower (inModel ^. defn)) :+: S "s" +:+.
+  S "can be verified")
 
 -- General besides progName, repeated in only one other example but it could be 
 -- used for all of them. So it can be abstracted out.
@@ -432,7 +432,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
   term) :+: S "]," +:+ (sLower (inModel ^. defn)) +:+
   S "[" :+: (inModel ^. term) :+: S "], or" +:+ (sLower (likelyChg ^. defn)) +:+ S "[" :+: (likelyChg ^. 
   term) :+: S "], in which the respective" +:+
-  (sLower (assumption ^. defn)) +:+ S "is used.") 
+  (sLower (assumption ^. defn)) +:+. S "is used") 
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
@@ -445,30 +445,30 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
 --
   ((assumption ^. term) :+: S "2", Flat (S "All" +:+ sLower
   (heat_trans ^. term) +:+ S "coefficients are constant over" +:+
-  (time ^. term) +:+ S "[GD1].")),
+  (time ^. term) +:+. S "[GD1]")),
 --
   ((assumption ^. term) :+: S "3", Flat (S "The" +:+ 
   (sLower ((water ^. term))) +:+ S "in the" +:+ 
   (sLower ((tank ^. term))) +:+ S "is fully mixed, so" +:+
   S "the" +:+ (temp_W ^. term) +:+ S "is the same throughout" +:+
   S "the entire" +:+ (sLower ((tank ^. term))) +:+
-  S "[GD2," +:+ makeRef s4_2_4_DD2 :+: S "].")),
+  S "[GD2" `sC` makeRef s4_2_4_DD2 :+: S "].")),
 --
   ((assumption ^. term) :+: S "4", Flat (S "The" +:+ (temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (pcm_vol ^. 
-  term) +:+ S "[GD2," +:+ makeRef s4_2_4_DD2 :+: S ", LC1].")),
+  term) +:+ S "[GD2" `sC` makeRef s4_2_4_DD2 `sC` S "LC1].")),
 --
   ((assumption ^. term) :+: S "5", Flat (S "The" +:+ 
   (w_density ^. term) +:+ S "and" +:+ (pcm_density ^. term) +:+
   S "have no spatial variation; that is, they are each" +:+
-  S "constant over their entire" +:+ (volume ^. term) :+: 
-  S " [GD2].")),
+  S "constant over their entire" +:+ (volume ^. term) +:+. 
+  S "[GD2]")),
 --
   ((assumption ^. term) :+: S "6", Flat (S "The" +:+ (htCap_W ^.
   term) :+: S "," +:+ (htCap_S_P ^. term) :+: S ", and" +:+ 
   (htCap_L_P ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (volume ^. term) +:+ S "[GD2].")),
+  (volume ^. term) +:+. S "[GD2]")),
 --
   ((assumption ^. term) :+: S "7", Flat ((law_conv_cooling ^.
   defn) +:+ S "applies between the" +:+ (sLower (
@@ -477,11 +477,11 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
 --
   ((assumption ^. term) :+: S "8", Flat (S "The" +:+ (temp_C ^. 
   term) +:+ S "is constant over" +:+ (time ^. term) +:+
-  S "[" :+: makeRef s4_2_4_DD1 :+: S ", LC2].")),
+  S "[" :+: makeRef s4_2_4_DD1 `sC` "LC2].")),
 --
   ((assumption ^. term) :+: S "9", Flat (S "The" +:+ (temp_C ^.
   term) +:+ S "does not vary along its length [" :+:
-  makeRef s4_2_4_DD1 :+: S ", LC3].")),
+  makeRef s4_2_4_DD1 `sC` "LC3].")),
 --
   ((assumption ^. term) :+: S "10", Flat ((law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+ (sLower (
@@ -495,17 +495,17 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
   (temp_PCM ^. term) +:+ S "can only increase, or remain" +:+
   S "constant; they do not decrease. This implies that the" +:+
   (temp_init ^. term) +:+ S "(A12) is less than (or equal)" +:+
-  S "to the" +:+ (temp_C ^. term) +:+ S "[IM1, LC4].")),
+  S "to the" +:+ (temp_C ^. term) +:+. S "[IM1, LC4]")),
 --
   ((assumption ^. term) :+: S "12", Flat (S "The" +:+
   (temp_init ^. term) +:+ S "of the" +:+ (sLower ( 
   (water ^. term))) +:+ S "and the" +:+ (phsChgMtrl ^. term) +:+
-  S "is the same" +:+ S "[IM1, IM2, LC5].")),
+  S "is the same" +:+. S "[IM1, IM2, LC5]")),
 --
   ((assumption ^. term) :+: S "13", Flat (S "The simulation" +:+
   S "will start with the" +:+ (phsChgMtrl ^. term) +:+
-  S "in a" +:+ (sLower (solid ^. defn)) +:+
-  S "[IM2, IM4].")),
+  S "in a" +:+ (sLower (solid ^. defn)) +:+.
+  S "[IM2, IM4]")),
 --
   ((assumption ^. term) :+: S "14", Flat (S "The operating" +:+
   (temp ^. term) +:+ S "range of the system is" +:+ S "such" +:+
@@ -513,37 +513,37 @@ s4_2_1_list = Enumeration (Simple [((assumption ^. term) :+: S "1", Flat
   S "is always in" +:+ (liquid ^. defn) :+: S ". That is," +:+
   S "the" +:+ (temp ^. term) +:+ S "will not drop below the" +:+
   (temp_melt ^. term) +:+ S "of" +:+ (sLower 
-  ((water ^. term))) :+: S ", or rise above its" +:+ 
-  (temp_boil ^. term) +:+ S "[IM1, IM3].")),
+  ((water ^. term))) :+: S ", or rise above its" +:+
+  (temp_boil ^. term) +:+. S "[IM1, IM3]")),
 --
   ((assumption ^. term) :+: S "15", Flat (S "The" +:+
   (sLower ((tank ^. term))) +:+ S "is" +:+ 
   (perfect_insul ^. term) +:+ S "so that there is no heat" +:+
-  S "loss from the" +:+ (sLower ((tank ^. term))) +:+
-  S "[IM1, LC6].")),
+  S "loss from the" +:+ (sLower ((tank ^. term))) +:+.
+  S "[IM1, LC6]")),
 --
   ((assumption ^. term) :+: S "16", Flat (S "No internal heat" +:+
   S "is generated by either the" +:+ (sLower 
   ((water ^. term))) +:+ S "or the" +:+ (phsChgMtrl ^.
-  term) :+: S "; therefore, the" +:+ (vol_ht_gen ^. term) +:+
-  S "is zero [IM1, IM2].")),
+  term) :+: S "; therefore, the" +:+ (vol_ht_gen ^. term) +:+.
+  S "is zero [IM1, IM2]")),
 --
   ((assumption ^. term) :+: S "17", Flat (S "The volume" +:+ 
   S "change of the" +:+ (phsChgMtrl ^. term) +:+ S "due to" +:+ 
-  (sLower ((melting ^. term))) :+: 
-  S " is negligible [IM2].")),
+  (sLower ((melting ^. term))) +:+.
+  S "is negligible [IM2]")),
 --
   ((assumption ^. term) :+: S "18", Flat (S "The" +:+ 
   (phsChgMtrl ^. term) +:+ S "is either in a" +:+
   (liquid ^. defn) +:+ S "or a" +:+ (solid ^. defn) +:+
-  S "but not a" +:+ (gaseous ^. defn) +:+ S "[IM2, IM4].")),
+  S "but not a" +:+ (gaseous ^. defn) +:+. S "[IM2, IM4]")),
 --
   ((assumption ^. term) :+: S "19", Flat (S "The pressure in" +:+
   S "the" +:+ (sLower ((tank ^. term))) +:+
   S "is atmospheric, so the" +:+ (temp_melt ^. term) +:+
   S "and" +:+ (temp_boil ^. term) +:+ S "are 0" :+:
-  Sy (temp ^. unit) +:+ S "and 100" :+: Sy (temp ^. unit) :+:
-  S ", respectively [IM1, IM3]."))])
+  Sy (temp ^. unit) +:+ S "and 100" :+: Sy (temp ^. unit) `sC`
+  S "respectively [IM1, IM3]."))])
 
 -- Again, list structure is same between all examples.
 
@@ -554,8 +554,8 @@ s4_2_2 = Section (thModel ^. defn :+: S "s") [Con s4_2_2_intro,
   Con s4_2_2_T1, Con s4_2_2_T2, Con s4_2_2_T3]
 
 s4_2_2_intro = Paragraph (S "This section focuses on the general equations" +:+
-  S "and laws that" +:+ (progName ^. term) :+: 
-  S " is based on.")
+  S "and laws that" +:+ (progName ^. term) +:+.
+  S "is based on")
 
 -- General paragraph (besides progName), repeated in all examples. Can be 
 -- abstracted out.
@@ -1020,13 +1020,13 @@ s5_1_list = [Enumeration (Simple [((requirement ^. term) :+: S "1", Flat
 s5_2 = Section (S "Nonfunctional" +:+ (requirement ^. defn) :+: S "s") 
   [Con s5_2_contents]
 
-s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" :+:
-  S ", of this problem, performance is not a priority. Any" +:+
+s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
+  S "of this problem, performance is not a priority. Any" +:+
   S "reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
   S "nonfunctional" +:+ (sLower (requirement ^. 
-  defn)) :+: S "s are correctness, verifiability" :+:
-  S ", understandability, reusability, and maintainability.")
+  defn)) :+: S "s are correctness, verifiability" `sC`
+  S "understandability, reusability, and maintainability.")
 
 -- The second sentence of the above paragraph is repeated in all examples (not 
 -- exactly, but the general idea is). The first sentence is not always 
@@ -1043,30 +1043,30 @@ s6_list = Enumeration (Simple [((likelyChg ^. term) :+: S "1", Flat
   (S "A4 -" +:+ (phsChgMtrl ^. term) +:+ S "is actually a poor" +:+
   (sLower (thermal_conductor ^. term)) :+: S ", so" +:+
   S "the" +:+ (sLower (assumption ^. defn)) +:+
-  S "of uniform" +:+ (temp_PCM ^. term) +:+ S "is not likely.")),
+  S "of uniform" +:+ (temp_PCM ^. term) +:+. S "is not likely")),
 --
   ((likelyChg ^. term) :+: S "2", Flat (S "A8 - The" +:+ (temp_C ^. 
-  term) +:+ S "will change over the course of the day, depending" +:+
-  S "on the energy received from the sun.")),
+  term) +:+. S "will change over the course of the day, depending" +:+
+  S "on the energy received from the sun")),
 --
   ((likelyChg ^. term) :+: S "3", Flat (S "A9 - The" +:+ (temp_C ^. 
   term) +:+ S "will actually change along its length as the" +:+
-  (sLower ((water ^. term))) +:+ S "within it cools.")),
+  (sLower ((water ^. term))) +:+. S "within it cools")),
 --
   ((likelyChg ^. term) :+: S "4", Flat (S "A11 - The model" +:+
-  S "currently only accounts for" +:+ (sLower (charging ^. 
-  defn)) :+: S ". A more complete model would also account for" +:+.
+  S "currently only accounts for" +:+. (sLower (charging ^. 
+  defn)) +:+ S "A more complete model would also account for" +:+.
   (sLower (discharging ^. defn)))),
 --
   ((likelyChg ^. term) :+: S "5", Flat (S "A12 - To add more" +:+
   S " flexibility to the simulation, the" +:+ (temp_init ^. term) +:+
   S "of the" +:+ (sLower ((water ^. term))) :+: 
-  S " and the" +:+ (phsChgMtrl ^. term) +:+ S "could be" +:+
-  S "allowed to have different values.")),
+  S " and the" +:+ (phsChgMtrl ^. term) +:+ S "could be" +:+.
+  S "allowed to have different values")),
 --
   ((likelyChg ^. term) :+: S "6", Flat (S "A15 - Any real" +:+
   (sLower ((tank ^. term))) +:+ S "cannot be" +:+
-  (perfect_insul ^. term) +:+ S "and will lose heat."))])
+  (perfect_insul ^. term) +:+. S "and will lose heat"))])
 
 -- List structure same in all examples.
 

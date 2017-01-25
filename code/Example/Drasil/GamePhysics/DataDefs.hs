@@ -1,7 +1,6 @@
 module Drasil.GamePhysics.DataDefs where
 
 import Drasil.GamePhysics.Unitals
-import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
@@ -147,4 +146,5 @@ impulseEqn = ((Neg ((Int 1) + (C restitutionCoef))) * (C initRelVel) :.
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence
 dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
-  (collision ^. term) +:+ S "response between two" +:+ (rigidBodies ^. term)
+  (collision ^. term) +:+ S "response between two" +:+ 
+  irregPlur (rigidBody ^. term)

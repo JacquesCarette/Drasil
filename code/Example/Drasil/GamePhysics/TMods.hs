@@ -1,7 +1,6 @@
 module Drasil.GamePhysics.TMods where
 
 import Drasil.GamePhysics.Unitals
-import Drasil.GamePhysics.Concepts
 
 import Language.Drasil
 import Data.Drasil.Concepts.Physics (rigidBody)
@@ -69,7 +68,7 @@ newtonLUGRel = (C force) :=
 -- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
 
 t3descr :: Sentence
-t3descr = S "Two" +:+ (rigidBodies ^. term) +:+ S "in the universe" +:+
+t3descr = S "Two" +:+ irregPlur (rigidBody ^. term) +:+ S "in the universe" +:+
   S "attract each other with a" +:+ (force ^. term) +:+ 
   P (force ^. symbol) +:+ sParen (Sy (force ^. unit)) +:+
   S "that is directly proportional to the product of their" +:+
@@ -79,7 +78,7 @@ t3descr = S "Two" +:+ (rigidBodies ^. term) +:+ S "in the universe" +:+
   P (sqrDist ^. symbol) +:+ sParen (Sy (sqrDist ^. unit)) +:+
   S "between them. The vector" +:+ P (disp ^. symbol) +:+ 
   sParen (Sy (disp ^. unit)) +:+ S "is the" +:+ (disp ^. term) +:+
-  S "between the centres of the" +:+ (rigidBodies ^. term) +:+
+  S "between the centres of the" +:+ irregPlur (rigidBody ^. term) +:+
   S "and" +:+ P (dispNorm ^. symbol) +:+ sParen (Sy (dispNorm ^. unit)) +:+ 
   S "represents the" +:+. ((dispNorm ^. term) `sC`
   S "or absolute distance between the two") +:+ P (dispUnit ^. symbol) +:+ 
@@ -128,4 +127,4 @@ t5descr = S "The net" +:+ (torque ^. term) +:+ P (torque ^. symbol) +:+
   sParen (Sy (angAccel ^. unit)) +:+ S "Here" `sC` P (momtInert ^. symbol) +:+
   sParen (Sy (momtInert ^. unit)) +:+ S "denotes the" +:+ (momtInert ^. term) +:+
   S "of the" +:+. (rigidBody ^. term) +:+ S "We also assume that all" +:+ 
-  (rigidBodies ^. term) +:+. S "involved are two-dimensional (A2)"
+  irregPlur (rigidBody ^. term) +:+. S "involved are two-dimensional (A2)"

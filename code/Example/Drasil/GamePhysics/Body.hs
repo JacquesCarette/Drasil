@@ -150,10 +150,11 @@ s2_2 = Section (S "Scope of" +:+ addS (requirement ^. defn))
 
 s2_2_intro = Paragraph $ S "The scope of the" +:+
   (addS (sLower (requirement ^. defn))) +:+ S "includes the" +:+
-  S "physical simulation of" +:+ (twoD ^. term) +:+ (rigidBodies ^. term) +:+
-  S "acted on by forces. Given" +:+ (twoD ^. term) +:+ (rigidBodies ^. term) `sC` 
-  (chipmunk ^. term) +:+ S "is intended to simulate how these" +:+
-  (rigidBodies ^. term) +:+. S "interact with one another"
+  S "physical simulation of" +:+ (twoD ^. term) +:+ 
+  irregPlur (rigidBody ^. term) +:+ S "acted on by forces. Given" +:+ 
+  (twoD ^. term) +:+ irregPlur (rigidBody ^. term) `sC` (chipmunk ^. term) +:+ 
+  S "is intended to simulate how these" +:+ irregPlur (rigidBody ^. term) +:+. 
+  S "interact with one another"
 
 -------------------------------------
 -- 2.3 : Organization of Documents --
@@ -304,26 +305,26 @@ s4_1_2_list = Enumeration (Simple [
   irregPlur (vel ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
   S "applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
   S "determine their new" +:+ addS (position ^. term) +:+ S "and" +:+
-  (vels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
+  irregPlur (vel ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical" +:+
   S "properties, initial" +:+ addS (orientation ^. term) +:+ S "and" +:+
-  (angularVels ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
-  S "applied on a set of" +:+ (rigidBodies ^. term) `sC`
+  irregPlur (angVel ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
+  S "applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
   S "determine their new" +:+ addS (orientation ^. term) +:+ S "and" +:+
-  (angularVels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
+  irregPlur (angVel ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "3", Flat (S "Given the initial" +:+
-  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+ S "of a" +:+
-  S "set of" +:+ (rigidBodies ^. term) `sC` S "determine if any of" +:+
+  addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+ S "of a" +:+
+  S "set of" +:+ irregPlur (rigidBody ^. term) `sC` S "determine if any of" +:+
   S "them will collide with one another over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "4", Flat (S "Given the physical" +:+
   S "properties, initial linear and angular" +:+ addS (position ^. term) +:+
-  S "and" +:+ (vels ^. term) `sC` S "determine the new" +:+
-  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+
+  S "and" +:+ irregPlur (vel ^. term) `sC` S "determine the new" +:+
+  addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+
   S "over a period of" +:+ (time ^. term) +:+ S "of" +:+
-  (rigidBodies ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
+  irregPlur (rigidBody ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
   ])
 
 --------------------------------------------------
@@ -358,7 +359,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
 
 s4_2_1_list = Enumeration (Simple [
   ((assumption ^. term) :+: S "1", Flat (S "All objects are" +:+.
-  (rigidBodies ^. term))),
+  irregPlur (rigidBody ^. term))),
   ((assumption ^. term) :+: S "2", Flat (S "All objects are" +:+.
   (twoD ^. term))),
   ((assumption ^. term) :+: S "3", Flat (S "The library uses a" +:+
@@ -366,7 +367,7 @@ s4_2_1_list = Enumeration (Simple [
   ((assumption ^. term) :+: S "4", Flat (S "The axes are defined using" +:+.
   (rightHand ^. term))),
   ((assumption ^. term) :+: S "5", Flat (S "All" +:+
-  (rigidBodies ^. term) +:+ addS (collision ^. term) +:+
+  irregPlur (rigidBody ^. term) +:+ addS (collision ^. term) +:+
   S "are vertex-to-edge" +:+. (addS (collision ^. term)))),
   ((assumption ^. term) :+: S "6", Flat (S "There is no damping" +:+.
   S "involved throughout the simulation")),
@@ -531,13 +532,13 @@ s5_1 = Section (S "Functional" +:+ addS (requirement ^. defn))
 -- velocities, etc.
 s5_1_list = Enumeration (Simple [
   ((requirement ^. term) :+: S "1", Flat (S "Create a" +:+
-  (space ^. term) +:+ S "for all of the" +:+ (rigidBodies ^. term) +:+.
+  (space ^. term) +:+ S "for all of the" +:+ irregPlur (rigidBody ^. term) +:+.
   S "in the physical simulation to interact in")),
 --
   ((requirement ^. term) :+: S "2", Flat (S "Input the initial" +:+
-  addES (mass ^. term) `sC` (vels ^. term) `sC` addS (orientation ^. term) `sC`
-  (angularVels ^. term) +:+ S "of" `sC` S "and" +:+ addS (force ^. term) +:+ 
-  S "applied on" +:+. (rigidBodies ^. term))),
+  addES (mass ^. term) `sC` irregPlur (vel ^. term) `sC` addS (orientation ^. term) `sC`
+  irregPlur (angVel ^. term) +:+ S "of" `sC` S "and" +:+ addS (force ^. term) +:+ 
+  S "applied on" +:+. irregPlur (rigidBody ^. term))),
 --
   ((requirement ^. term) :+: S "3", Flat (S "Input the" +:+ 
   (surface ^. term) +:+ S "properties of the bodies, such as" +:+ 
@@ -547,23 +548,23 @@ s5_1_list = Enumeration (Simple [
   S "satisfy the required physical constraints")),
 --
   ((requirement ^. term) :+: S "5", Flat (S "Determine the" +:+
-  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+ S "over a" +:+
+  addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+ S "over a" +:+
   S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
-  (rigidBodies ^. term) +:+ S "acted upon by a" +:+. (force ^. term))),
+  irregPlur (rigidBody ^. term) +:+ S "acted upon by a" +:+. (force ^. term))),
 --
   ((requirement ^. term) :+: S "6", Flat (S "Determine the" +:+
-  addS (orientation ^. term) +:+ S "and" +:+ (angularVels ^. term) :+:
+  addS (orientation ^. term) +:+ S "and" +:+ irregPlur (angVel ^. term) :+:
   S " over a period of" +:+ (time ^. term) +:+ S "of the" +:+
-  (twoD ^. term) +:+. (rigidBodies ^. term))),
+  (twoD ^. term) +:+. irregPlur (rigidBody ^. term))),
 --
   ((requirement ^. term) :+: S "7", Flat (S "Determine if any of the" +:+
-  (rigidBodies ^. term) +:+ S "in the" +:+ (space ^. term) +:+.
+  irregPlur (rigidBody ^. term) +:+ S "in the" +:+ (space ^. term) +:+.
   S "have collided")),
 --
   ((requirement ^. term) :+: S "8", Flat (S "Determine the" +:+
-  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+ S "over a" +:+
+  addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+ S "over a" +:+
   S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
-  (rigidBodies ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
+  irregPlur (rigidBody ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
   ])
 
 --------------------------------------

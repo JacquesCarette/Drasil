@@ -236,8 +236,9 @@ s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,
 s4_intro = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem to be" +:+
   S "solved. This is followed by the solution characteristics" +:+
-  S "specification, which presents the" +:+ (sLower (assumption ^. defn)) :+:
-  S "s, theories, and definitions that are used for the" +:+. (physLib ^. term)
+  S "specification, which presents the" +:+ 
+  addS (sLower (assumption ^. defn)) `sC`
+  S "theories, and definitions that are used for the" +:+. (physLib ^. term)
 
 -------------------------------
 -- 4.1 : Problem Description --
@@ -402,8 +403,8 @@ s4_2_3 = Section ( addS (genDefn ^. defn)) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+
-  S "that will be used in deriving the" +:+ (sLower
-  (dataDefn ^. defn)) :+: S "s, which in turn will be used to build the" +:+.
+  S "that will be used in deriving the" +:+ addS (sLower (dataDefn ^. defn)) `sC`
+  S "which in turn will be used to build the" +:+.
   (addS (sLower (inModel ^. defn)))
 
 -- GDefs not yet implemented --
@@ -513,10 +514,10 @@ s5 = Section (addS $ requirement ^. defn) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
 s5_intro = Paragraph $ S "This section provides the functional" +:+
-  (sLower (requirement ^. defn)) :+: S "s, the business" +:+
+  addS (sLower (requirement ^. defn)) `sC` S "the business" +:+
   S "tasks that the software is expected to complete, and the" +:+
-  S "nonfunctional" +:+. ((sLower (requirement ^. defn)) :+:
-  S "s, the qualities that the software is expected to exhibit")
+  S "nonfunctional" +:+. (addS (sLower (requirement ^. defn)) `sC`
+  S "the qualities that the software is expected to exhibit")
 
 -----------------------------------
 -- 5.1 : Functional Requirements --

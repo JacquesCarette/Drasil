@@ -144,7 +144,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section (S "Scope of" +:+ (requirement ^. defn) :+: S "s")
+s2_2 = Section (S "Scope of" +:+ addS (requirement ^. defn))
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ S "The scope of the" +:+
@@ -176,7 +176,7 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the" +:+
   Paragraph (S "The" +:+ (sLower (goalStmt ^. defn)) :+:
   S "s are refined to the" +:+ (sLower (thModel ^. defn)) :+: S "s, and the" +:+
   (sLower (thModel ^. defn)) :+: S "s to the" +:+. 
-  ((sLower (inModel ^. defn)) :+: S "s"))]
+  addS (sLower (inModel ^. defn)))]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -295,7 +295,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = Section ((goalStmt ^. defn) :+: S "s") [Con s4_1_2_list]
+s4_1_2 = Section (addS (goalStmt ^. defn)) [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
   ((goalStmt ^. term) :+: S "1", Flat (S "Given the physical" +:+
@@ -307,7 +307,7 @@ s4_1_2_list = Enumeration (Simple [
 --
   ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical" +:+
   S "properties, initial" +:+ (orientation ^. term) :+: S "s and" +:+
-  (angularVels ^. term) `sC` S "and" +:+ (force ^. term) :+: S "s" +:+
+  (angularVels ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
   S "applied on a set of" +:+ (rigidBodies ^. term) `sC`
   S "determine their new" +:+ (orientation ^. term) :+: S "s and" +:+
   (angularVels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
@@ -341,7 +341,7 @@ s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section (assumption ^. defn :+: S "s") [Con s4_2_1_intro,
+s4_2_1 = Section (addS $ assumption ^. defn) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -366,7 +366,7 @@ s4_2_1_list = Enumeration (Simple [
   (rightHand ^. term))),
   ((assumption ^. term) :+: S "5", Flat (S "All" +:+
   (rigidBodies ^. term) +:+ (collision ^. term) :+:
-  S "s are vertex-to-edge" +:+. ((collision ^. term) :+: S "s"))),
+  S "s are vertex-to-edge" +:+. (addS (collision ^. term)))),
   ((assumption ^. term) :+: S "6", Flat (S "There is no damping" +:+.
   S "involved throughout the simulation")),
   ((assumption ^. term) :+: S "7", Flat (S "There are no constraints" +:+.
@@ -380,7 +380,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section ((thModel ^. defn) :+: S "s") ([Con s4_2_2_intro] ++
+s4_2_2 = Section (addS (thModel ^. defn)) ([Con s4_2_2_intro] ++
   (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations" +:+
@@ -396,13 +396,13 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = Section ((genDefn ^. defn) :+: S "s") ([Con s4_2_3_intro] {- ++
+s4_2_3 = Section ( addS (genDefn ^. defn)) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+
   S "that will be used in deriving the" +:+ (sLower
   (dataDefn ^. defn)) :+: S "s, which in turn will be used to build the" +:+.
-  ((sLower (inModel ^. defn)) :+: S "s")
+  (addS (sLower (inModel ^. defn)))
 
 -- GDefs not yet implemented --
 {-
@@ -418,7 +418,7 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = Section ((dataDefn ^. defn) :+: S "s") ([Con s4_2_4_intro] ++
+s4_2_4 = Section (addS (dataDefn ^. defn)) ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ S "This section collects and defines all the" +:+
@@ -435,7 +435,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 -- s4_2_5_IMods :: [Contents]
 
-s4_2_5 = Section ((inModel ^. defn) :+: S "s") ([Con s4_2_5_intro] {- ++
+s4_2_5 = Section (addS (inModel ^. defn)) ([Con s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-})
 
 s4_2_5_intro = Paragraph $ S "This section transforms the problem defined" +:+
@@ -507,7 +507,7 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = Section (requirement ^. defn :+: S "s") [Con s5_intro, Sub s5_1,
+s5 = Section (addS $ requirement ^. defn) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
 s5_intro = Paragraph $ S "This section provides the functional" +:+
@@ -523,7 +523,7 @@ s5_intro = Paragraph $ S "This section provides the functional" +:+
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = Section (S "Functional" +:+ (requirement ^. defn) :+: S "s")
+s5_1 = Section (S "Functional" +:+ addS (requirement ^. defn))
   [Con s5_1_list]
 
 -- Currently need separate chunks for plurals like rigid bodies,
@@ -534,10 +534,9 @@ s5_1_list = Enumeration (Simple [
   S "in the physical simulation to interact in")),
 --
   ((requirement ^. term) :+: S "2", Flat (S "Input the initial" +:+
-  (mass ^. term) :+: S "es" `sC` (vels ^. term) `sC`
-  (orientation ^. term) :+: S "s" `sC` (angularVels ^. term) +:+
-  S "of" `sC` S "and" +:+ (force ^. term) :+: S "s applied on" +:+.
-  (rigidBodies ^. term))),
+  addES (mass ^. term) `sC` (vels ^. term) `sC` addS (orientation ^. term) `sC`
+  (angularVels ^. term) +:+ S "of" `sC` S "and" +:+ addS (force ^. term) +:+ 
+  S "applied on" +:+. (rigidBodies ^. term))),
 --
   ((requirement ^. term) :+: S "3", Flat (S "Input the" +:+ 
   (surface ^. term) +:+ S "properties of the bodies, such as" +:+ 
@@ -573,7 +572,7 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = Section (S "Nonfunctional" +:+ (requirement ^. defn) :+: S "s")
+s5_2 = Section (S "Nonfunctional" +:+ addS (requirement ^. defn))
   [Con s5_2_intro]
 
 s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+

@@ -81,3 +81,26 @@ a `sC` b = a :+: S "," +:+ b
 
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
+
+--This will likely need to be moved.
+data PluralType = AddS
+                | AddE
+                | AddES
+                | SelfPlur
+                | IrregPlur
+
+sPlur :: Sentence -> PluralType -> Sentence
+sPlur s@(S _) AddS = s :+: S "s"
+sPlur s@(S _) AddE = s :+: S "e"
+sPlur s@(S _) AddES = sPlur (sPlur s AddE) AddS
+--sPlur s@(S _) SelfPlur = s -- Is there any reason we'd want this?
+--sPlur (S sts) IrregPlur = --Get irregular plural from lookup.
+sPlur (a :+: b) pt = a :+: sPlur b pt
+sPlur a _ = S "MISSING PLURAL FOR:" :+: a
+
+addS, addE, addES :: Sentence -> Sentence
+
+addS = \s -> sPlur s AddS
+addE = \s -> sPlur s AddE
+addES = \s -> sPlur s AddES
+--selfPlur = id

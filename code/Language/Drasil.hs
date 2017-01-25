@@ -41,7 +41,7 @@ module Language.Drasil (
   , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap, sLower, sParen
-  , (+:+), (+:+.), sC, addS, addE, addES
+  , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
     SecCons(..), ListType(..), ItemType(..)
@@ -89,7 +89,7 @@ import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sMap, sLower, sParen, sC, (+:+), (+:+.),
-                              addS, addE, addES)
+                              addS, addE, addES, irregPlur)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet

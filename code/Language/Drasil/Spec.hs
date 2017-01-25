@@ -4,6 +4,7 @@ module Language.Drasil.Spec where
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Symbol
 import Data.Char (toLower)
+import Data.Drasil.Plurals (irregularPlurals, pLook)
 
 data Accent = Grave | Acute deriving Eq
 
@@ -94,13 +95,20 @@ sPlur s@(S _) AddS = s :+: S "s"
 sPlur s@(S _) AddE = s :+: S "e"
 sPlur s@(S _) AddES = sPlur (sPlur s AddE) AddS
 --sPlur s@(S _) SelfPlur = s -- Is there any reason we'd want this?
---sPlur (S sts) IrregPlur = --Get irregular plural from lookup.
+sPlur (S sts) IrregPlur = getIrreg sts
 sPlur (a :+: b) pt = a :+: sPlur b pt
-sPlur a _ = S "MISSING PLURAL FOR:" :+: a
+sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 
-addS, addE, addES :: Sentence -> Sentence
+addS, addE, addES, irregPlur :: Sentence -> Sentence
 
 addS = \s -> sPlur s AddS
 addE = \s -> sPlur s AddE
 addES = \s -> sPlur s AddES
+irregPlur = \s -> sPlur s IrregPlur
 --selfPlur = id
+
+getIrreg :: String -> Sentence
+getIrreg sts = S (message $ pLook toPlural irregularPlurals)
+  where toPlural = (last . words) sts
+        message (Just x) = unwords $ ((init . words) sts) ++ [x]
+        message (Nothing) = "MISSING PLURAL FOR:" ++ toPlural

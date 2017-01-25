@@ -300,8 +300,8 @@ s4_1_2 = Section (addS (goalStmt ^. defn)) [Con s4_1_2_list]
 s4_1_2_list = Enumeration (Simple [
   ((goalStmt ^. term) :+: S "1", Flat (S "Given the physical" +:+
   S "properties, initial" +:+ (position ^. term) :+: S "s and" +:+
-  (vels ^. term) `sC` S "and" +:+ (force ^. term) :+:
-  S "s applied on a set of" +:+ (rigidBodies ^. term) `sC`
+  irregPlur (vel ^. term) `sC` S "and" +:+ (force ^. term) :+:
+  S "s applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
   S "determine their new" +:+ (position ^. term) :+: S "s and" +:+
   (vels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --

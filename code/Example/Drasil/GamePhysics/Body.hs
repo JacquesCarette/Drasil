@@ -124,15 +124,16 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "open source" +:+ (twoD ^. term) +:+ (rigidBody ^. term) +:+ 
   (physLib ^. term) +:+ S "used for games. The" +:+ 
-  (sLower (goalStmt ^. defn)) :+: S "s and" +:+ (sLower (thModel ^. defn)) :+:
-  S "s used in" +:+ (chipmunk ^. term) +:+ S "are provided. This" +:+
+  (addS (sLower (goalStmt ^. defn))) +:+ S "and" +:+ 
+  (addS (sLower (thModel ^. defn))) +:+ S "used in" +:+ (chipmunk ^. term) +:+
+  S "are provided. This" +:+
   S "document is intended to be used as a reference to provide all" +:+.
   S "necessary information to understand and verify the model"),
   Paragraph (S "This document will be used as a starting point for" +:+
   S "subsequent development phases, including writing the design" +:+.
   S "specification and the software verification and validation plan" +:+
   S "The design document will show how the" +:+
-  (sLower (requirement ^. defn)) :+: S "s are to be" +:+
+  (addS (sLower (requirement ^. defn))) +:+ S "are to be" +:+
   S "realized. The verification and validation plan will show the steps" +:+
   S "that will be used to increase confidence in the software" +:+.
   S "documentation and the implementation")]
@@ -148,7 +149,7 @@ s2_2 = Section (S "Scope of" +:+ addS (requirement ^. defn))
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ S "The scope of the" +:+
-  (sLower (requirement ^. defn)) :+: S "s includes the" +:+
+  (addS (sLower (requirement ^. defn))) +:+ S "includes the" +:+
   S "physical simulation of" +:+ (twoD ^. term) +:+ (rigidBodies ^. term) +:+
   S "acted on by forces. Given" +:+ (twoD ^. term) +:+ (rigidBodies ^. term) `sC` 
   (chipmunk ^. term) +:+ S "is intended to simulate how these" +:+
@@ -171,11 +172,11 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the" +:+
   S "follows the standard pattern of presenting goals, theories" `sC`
   S "definitions, and assumptions. For readers that would like a more" +:+
   S "bottom up approach, they can start reading the" +:+
-  (sLower (inModel ^. defn)) :+: S "s in" +:+ (makeRef s4_2_5) +:+. 
+  (addS (sLower (inModel ^. defn))) +:+ S "in" +:+ (makeRef s4_2_5) +:+. 
   S "and trace back to any additional information they require"),
-  Paragraph (S "The" +:+ (sLower (goalStmt ^. defn)) :+:
-  S "s are refined to the" +:+ (sLower (thModel ^. defn)) :+: S "s, and the" +:+
-  (sLower (thModel ^. defn)) :+: S "s to the" +:+. 
+  Paragraph (S "The" +:+ addS (sLower (goalStmt ^. defn)) +:+
+  S "are refined to the" +:+ addS (sLower (thModel ^. defn)) `sC` 
+  S "and the" +:+ addS (sLower (thModel ^. defn)) +:+ S "to the" +:+. 
   addS (sLower (inModel ^. defn)))]
 
 --------------------------------------------
@@ -299,28 +300,28 @@ s4_1_2 = Section (addS (goalStmt ^. defn)) [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
   ((goalStmt ^. term) :+: S "1", Flat (S "Given the physical" +:+
-  S "properties, initial" +:+ (position ^. term) :+: S "s and" +:+
-  irregPlur (vel ^. term) `sC` S "and" +:+ (force ^. term) :+:
-  S "s applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
-  S "determine their new" +:+ (position ^. term) :+: S "s and" +:+
+  S "properties, initial" +:+ addS (position ^. term) +:+ S "and" +:+
+  irregPlur (vel ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
+  S "applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
+  S "determine their new" +:+ addS (position ^. term) +:+ S "and" +:+
   (vels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical" +:+
-  S "properties, initial" +:+ (orientation ^. term) :+: S "s and" +:+
+  S "properties, initial" +:+ addS (orientation ^. term) +:+ S "and" +:+
   (angularVels ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
   S "applied on a set of" +:+ (rigidBodies ^. term) `sC`
-  S "determine their new" +:+ (orientation ^. term) :+: S "s and" +:+
+  S "determine their new" +:+ addS (orientation ^. term) +:+ S "and" +:+
   (angularVels ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "3", Flat (S "Given the initial" +:+
-  (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+ S "of a" +:+
+  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+ S "of a" +:+
   S "set of" +:+ (rigidBodies ^. term) `sC` S "determine if any of" +:+
   S "them will collide with one another over a period of" +:+. (time ^. term))),
 --
   ((goalStmt ^. term) :+: S "4", Flat (S "Given the physical" +:+
-  S "properties, initial linear and angular" +:+ (position ^. term) :+:
-  S "s and" +:+ (vels ^. term) `sC` S "determine the new" +:+
-  (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+
+  S "properties, initial linear and angular" +:+ addS (position ^. term) +:+
+  S "and" +:+ (vels ^. term) `sC` S "determine the new" +:+
+  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+
   S "over a period of" +:+ (time ^. term) +:+ S "of" +:+
   (rigidBodies ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
   ])
@@ -365,8 +366,8 @@ s4_2_1_list = Enumeration (Simple [
   ((assumption ^. term) :+: S "4", Flat (S "The axes are defined using" +:+.
   (rightHand ^. term))),
   ((assumption ^. term) :+: S "5", Flat (S "All" +:+
-  (rigidBodies ^. term) +:+ (collision ^. term) :+:
-  S "s are vertex-to-edge" +:+. (addS (collision ^. term)))),
+  (rigidBodies ^. term) +:+ addS (collision ^. term) +:+
+  S "are vertex-to-edge" +:+. (addS (collision ^. term)))),
   ((assumption ^. term) :+: S "6", Flat (S "There is no damping" +:+.
   S "involved throughout the simulation")),
   ((assumption ^. term) :+: S "7", Flat (S "There are no constraints" +:+.
@@ -546,12 +547,12 @@ s5_1_list = Enumeration (Simple [
   S "satisfy the required physical constraints")),
 --
   ((requirement ^. term) :+: S "5", Flat (S "Determine the" +:+
-  (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+ S "over a" +:+
+  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+ S "over a" +:+
   S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
   (rigidBodies ^. term) +:+ S "acted upon by a" +:+. (force ^. term))),
 --
   ((requirement ^. term) :+: S "6", Flat (S "Determine the" +:+
-  (orientation ^. term) :+: S "s and" +:+ (angularVels ^. term) :+:
+  addS (orientation ^. term) +:+ S "and" +:+ (angularVels ^. term) :+:
   S " over a period of" +:+ (time ^. term) +:+ S "of the" +:+
   (twoD ^. term) +:+. (rigidBodies ^. term))),
 --
@@ -560,7 +561,7 @@ s5_1_list = Enumeration (Simple [
   S "have collided")),
 --
   ((requirement ^. term) :+: S "8", Flat (S "Determine the" +:+
-  (position ^. term) :+: S "s and" +:+ (vels ^. term) +:+ S "over a" +:+
+  addS (position ^. term) +:+ S "and" +:+ (vels ^. term) +:+ S "over a" +:+
   S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
   (rigidBodies ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
   ])
@@ -587,10 +588,10 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section ((likelyChg ^. defn) :+: S "s") [Con s6_intro, Con s6_list]
+s6 = Section (addS (likelyChg ^. defn)) [Con s6_intro, Con s6_list]
 
-s6_intro = Paragraph $ S "This section lists the" +:+. ((sLower
-  (likelyChg ^. defn)) :+: S "s to be made to the physics game library")
+s6_intro = Paragraph $ S "This section lists the" +:+. (addS (sLower
+  (likelyChg ^. defn)) +:+ S "to be made to the physics game library")
 
 s6_list = Enumeration (Simple [
   ((likelyChg ^. term) :+: S "1", Flat (S "The internal" +:+
@@ -598,7 +599,7 @@ s6_list = Enumeration (Simple [
   S "change in the future")),
   ((likelyChg ^. term) :+: S "2", Flat (S "The library may be" +:+
   S "expanded to deal with edge-to-edge and vertex-to-vertex" +:+.
-  ((collision ^. term) :+: S "s"))),
+  (addS (collision ^. term)))),
   ((likelyChg ^. term) :+: S "3", Flat (S "The library may be" +:+.
   S "expanded to include motion with damping")),
   ((likelyChg ^. term) :+: S "4", Flat (S "The library may be" +:+.

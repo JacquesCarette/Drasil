@@ -18,6 +18,7 @@ import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
+import Drasil.OrganizationOfSRS
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -176,10 +177,7 @@ s2_3_intro = [Paragraph (S "The organization of this document follows the" +:+
   S "bottom up approach, they can start reading the" +:+
   (addS (sLower (inModel ^. defn))) +:+ S "in" +:+ (makeRef s4_2_5) +:+. 
   S "and trace back to any additional information they require"),
-  Paragraph (S "The" +:+ addS (sLower (goalStmt ^. defn)) +:+
-  S "are refined to the" +:+ addS (sLower (thModel ^. defn)) `sC` 
-  S "and the" +:+ addS (sLower (thModel ^. defn)) +:+ S "to the" +:+. 
-  addS (sLower (inModel ^. defn)))]
+  Paragraph $ refineChain [goalStmt, thModel, inModel]]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

@@ -16,6 +16,7 @@ import Drasil.SWHS.Reqs
 import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
+import Drasil.OrganizationOfSRS
 
 import Language.Drasil
 
@@ -232,13 +233,16 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   term) :+: S "s) and algebraic equations that model the" +:+.
   (swhs_pcm ^. term) +:+ (progName ^. term) +:+
   S "solves these" +:+ (ordDiffEq ^. term) :+: S "s."),
-  Paragraph (S "The" +:+ (sLower (goalStmt ^. defn))
+  Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
+  {-
+  (S "The" +:+ (sLower (goalStmt ^. defn))
   :+: S "s are refined to the" +:+ (sLower 
   (thModel ^. defn)) :+: S "s, and" +:+ (sLower 
   (thModel ^. defn)) :+: S "s to the" +:+ (sLower
-  (inModel ^. defn)) :+: S "s. The" +:+ (sLower 
-  (inModel ^. defn)) :+: S "s" +:+ sParen (makeRef s4_2_5) +:+. 
-  S "to be solved are referred to as IM1 to IM4")]
+  (inModel ^. defn)) :+: S "s."
+  -}
+  S "The" +:+ addS (sLower (inModel ^. defn)) +:+ sParen (makeRef s4_2_5) +:+. 
+  S "to be solved are referred to as IM1 to IM4"]
 
 -- This paragraph is mostly general (besides program name and number of IMs), 
 -- but there are some differences between the examples that I'm not sure how to 

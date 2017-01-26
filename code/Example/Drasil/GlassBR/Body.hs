@@ -6,9 +6,11 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
+
 import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
+import Drasil.OrganizationOfSRS
 
 import Drasil.GlassBR.Example
 
@@ -130,14 +132,16 @@ s2_3_intro =
   S "start reading the" +:+ (sMap (map toLower) (dataDefn ^. defn)) :+:
   S "s in" +:+ (makeRef s6_2_4) +:+ S "and trace back to find any" +:+.
   S "additional information they require",
-  Paragraph $
+  Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
+  {-
   S "The" +:+ (sMap (map toLower) (goalStmt ^. defn)) :+: S "s are" +:+
   S "refined to the" +:+ (sMap (map toLower) (thModel ^. defn)) :+:
   S "s, and" +:+ (sMap (map toLower) (thModel ^. defn)) :+: 
   S "s to the" +:+ (sMap (map toLower) (inModel ^. defn)) :+: 
-  S "s. The" +:+ (sMap (map toLower) (dataDefn ^. defn)) :+: S "s" +:+.
+  -}
+  S "The" +:+ addS (sLower (dataDefn ^. defn)) +:+.
   S "are used to support the definitions of the different models"] 
-
+  
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
 s3_intro = Paragraph $

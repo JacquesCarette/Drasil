@@ -17,6 +17,7 @@ import Data.Drasil.Quantities.Physics (restitutionCoef)
 import Drasil.TableOfSymbols
 import Drasil.TableOfUnits
 import Drasil.TableOfAbbAndAcronyms
+import Drasil.SpecificSystemDescription
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -228,17 +229,8 @@ s3_2_intro = Paragraph $ S "There are no system constraints."
 -- have not been encoded.
 
 s4 :: Section
-s4_intro :: Contents
 
-s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,
-  Sub s4_2]
-
-s4_intro = Paragraph $ S "This section first presents the problem" +:+
-  S "description, which gives a high-level view of the problem to be" +:+
-  S "solved. This is followed by the solution characteristics" +:+
-  S "specification, which presents the" +:+ 
-  addS (sLower (assumption ^. defn)) `sC`
-  S "theories, and definitions that are used for the" +:+. (physLib ^. term)
+s4 = specSysDescr physLib [s4_1, s4_2]
 
 -------------------------------
 -- 4.1 : Problem Description --

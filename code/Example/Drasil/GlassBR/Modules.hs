@@ -12,7 +12,7 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf,
   mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_sw, mod_interp]
 
 mod_hw :: ModuleChunk
-mod_hw = makeImpModule modHWHiding
+mod_hw = makeImpModule hwHiding
   (S "The data structure and algorithm used to implement the virtual hardware.")
   os
   []

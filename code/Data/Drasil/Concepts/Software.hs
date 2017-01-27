@@ -19,11 +19,10 @@ program = dcc "program" "program"
 
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 
-modHWHiding :: NamedChunk
-modHWHiding = CC "hardware hiding" 
-  (S "Serves as a virtual hardware used by the rest of the system. This " :+:
-   S "module provides the interface between the hardware and the software." :+:
-   S " So, the system can use it to display outputs or to accept inputs.")
+hwHiding :: ConceptChunk
+hwHiding = dcc "hardware hiding" "hardware hiding"
+  ("Hides the exact details of the hardware, and provides a uniform interface" ++
+   "for the rest of the system to use.")
    
 modBehavHiding :: NamedChunk
 modBehavHiding = CC "behaviour hiding" (S "Includes programs that provide " :+:

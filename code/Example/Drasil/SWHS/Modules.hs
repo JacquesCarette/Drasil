@@ -14,7 +14,7 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk
-mod_hw = makeImpModule modHWHiding (S "The data structure and algorithm " :+:
+mod_hw = makeImpModule hwHiding (S "The data structure and algorithm " :+:
          S "used to implement the virtual hardware.") os [] [] [] Nothing
 
 -- Behaviour Hiding Module

@@ -16,7 +16,7 @@ executable = CC (self ^. id) (self ^. term :+: (S " ") :+: program ^. term)
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk
-mod_hw = makeImpModuleNoGen modHWHiding
+mod_hw = makeImpModuleNoGen hwHiding
   (S "The data structure and algorithm used to implement the virtual hardware.")
   os
   []

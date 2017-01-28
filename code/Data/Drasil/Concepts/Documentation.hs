@@ -22,13 +22,17 @@ thModel     = dcc "thModel" "T" "Theoretical Model"
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
-section, system, description, specific, symbol_, units_ :: NamedChunk
+section, system, description, specific, symbol_, units_, table_ :: NamedChunk
 section = makeCC "section" "Section"
 system = makeCC "system" "System"
 description = makeCC "description" "Description"
 specific = makeCC "specific" "Specific" -- ??
 symbol_ = makeCC "symbol" "Symbol"
 units_ = makeCC "units" "Units"
+table_ = makeCC "table" "Table"
+
+refmat :: NamedChunk
+refmat = makeCC "refmat" "Reference Material"
 
 -- compounds
 systemdescription, specificsystemdescription :: NamedChunk

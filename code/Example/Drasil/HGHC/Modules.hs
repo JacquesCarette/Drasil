@@ -31,11 +31,10 @@ mod_behav = makeUnimpModule modBehavHiding
   (S "The contents of the required behaviors.")
   Nothing
 
-  
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParams (S "The format and structure of " :+:
-             S "the input parameters.") executable varChunks [] (Just mod_behav)
+             S "the input parameters.") executable htVars [] (Just mod_behav)
 
 --input format
 meth_input :: MethodChunk

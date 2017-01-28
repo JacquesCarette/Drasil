@@ -8,6 +8,7 @@ module Drasil.TableOfSymbols
 import Control.Lens ((^.))
 
 import Language.Drasil
+import Data.Drasil.Concepts.Documentation
 
 table_of_symbols :: (Quantity s, SymbolForm s) => 
   [s] -> (s -> Sentence) -> Section
@@ -24,7 +25,7 @@ intro = Paragraph $
   S "the symbol."
   
 table :: (Quantity s, SymbolForm s) => [s] -> (s -> Sentence) -> Contents
-table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
+table ls f = Table (map (^.term) [symbol_, description, units_]) (mkTable
   [(\ch -> P (ch ^. symbol)) , 
    (\ch -> f ch), 
    unit'2Contents]

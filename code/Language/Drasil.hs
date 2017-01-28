@@ -44,7 +44,8 @@ module Language.Drasil (
   , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
-    SecCons(..), ListType(..), ItemType(..)
+    SecCons(..), ListType(..), ItemType(..),
+    section
   -- Reference
   , makeRef
   -- Space
@@ -69,8 +70,7 @@ import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
                Bound(..),DerivType(..), log, abs, sin, cos, tan, sec, csc, cot)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
-                                 Section(..), Contents(..), SecCons(..),
-                                 ListType(..),ItemType(..))
+  Section(..), Contents(..), SecCons(..), ListType(..),ItemType(..),section)
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it

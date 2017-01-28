@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 module Language.Drasil.Document where
 import Prelude hiding (id)
 import Language.Drasil.Chunk (id, term)
@@ -100,3 +99,11 @@ getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
 getDefName (Theory c) = S "T:" :+: (sMap ((map head) . words) (c ^. term))
 getDefName _          = error "Unimplemented definition type reference"
+
+---------------------------------------------------------------------------
+-- smart constructors and combinators for making instances of the above
+-- data types.  Over time, the types should no longer be exported, and 
+-- only these used
+
+section :: String -> Contents -> [Section] -> Section
+section title intro secs = Section (S title) (Con intro : map Sub secs)

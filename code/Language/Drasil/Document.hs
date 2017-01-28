@@ -105,5 +105,5 @@ getDefName _          = error "Unimplemented definition type reference"
 -- data types.  Over time, the types should no longer be exported, and 
 -- only these used
 
-section :: String -> Contents -> [Section] -> Section
-section title intro secs = Section (S title) (Con intro : map Sub secs)
+section :: Sentence -> Contents -> [Section] -> Section
+section title intro secs = Section title (Con intro : map Sub secs)

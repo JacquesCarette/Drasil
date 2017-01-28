@@ -9,6 +9,7 @@ library
   exposed-modules:
     Language.Drasil,
     Language.Drasil.Code,
+    Data.Drasil.Authors
     Data.Drasil.SI_Units
     Data.Drasil.Plurals
     Data.Drasil.Concepts.Documentation
@@ -30,6 +31,7 @@ library
     , Language.Drasil.Format
     , Language.Drasil.Generate
     , Language.Drasil.Misc
+    , Language.Drasil.People
     , Language.Drasil.Recipe
     , Language.Drasil.RefHelpers
     , Language.Drasil.Reference

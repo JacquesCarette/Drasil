@@ -59,7 +59,7 @@ s1_intro = Paragraph (S "This section records information for easy reference.")
 s1_1 = table_of_units this_si
 
 s1_2 = table_of_symbols ((map qs glassBRSymbols) ++ 
-  (map qs glassBRUnitless)) defaultF
+  (map qs glassBRUnitless)) (^.term)
 
 s1_3 = table_of_abb_and_acronyms acronyms
 
@@ -501,7 +501,7 @@ s7_1_list =
     +:+ S "of failure and the characteristics of the" +:+ 
     (sMap (map toLower) (blast ^. term)) :+: S ":")]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
-  ++ (map qs [glass_type,pb_tol,tNT])) defaultF ),
+  ++ (map qs [glass_type,pb_tol,tNT])) (^.term) ),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 --  [(\ch -> P (ch ^. symbol)),  
 --   (\ch -> maybeUnits $ ch ^. unit'),

@@ -1,10 +1,7 @@
-{-# LANGUAGE Rank2Types #-}
 -- Standard code to make a table of symbols.
 module Drasil.TableOfSymbols 
   ( table_of_symbols
   , table
-  , defaultF
-  , defnF
   , defnExcept
   , termExcept) where
 
@@ -34,18 +31,8 @@ table ls f = Table [S "Symbol", S "Description", S "Units"] (mkTable
   ls)
   (S "Table of Symbols") False
   
-defaultF :: (Quantity s) => s -> Sentence
-defaultF = \s -> s ^. term
-
-defnF :: Concept s => s -> Sentence
-defnF = \s -> s ^. defn
-
 defnExcept :: (Eq s, Concept s) => [s] -> (s -> Sentence)
-defnExcept xs = \x -> 
-  if (x `elem` xs) then (x ^. term)
-  else (x ^. defn)
+defnExcept xs x = if (x `elem` xs) then (x ^. term) else (x ^. defn)
   
 termExcept :: (Concept s, Eq s) => [s] -> (s -> Sentence)
-termExcept xs = \x -> 
-  if (x `elem` xs) then (x ^. defn)
-  else (x ^. term)
+termExcept xs x = if (x `elem` xs) then (x ^. defn) else (x ^. term)

@@ -22,6 +22,14 @@ thModel     = dcc "thModel" "T" "Theoretical Model"
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
+section, system, description, specific :: NamedChunk
 section = makeCC "section" "Section"
 system = makeCC "system" "System"
 description = makeCC "description" "Description"
+specific = makeCC "specific" "Specific" -- ??
+
+-- compounds
+systemdescription, specificsystemdescription :: NamedChunk
+systemdescription = compoundterm system description
+specificsystemdescription = compoundterm specific systemdescription
+

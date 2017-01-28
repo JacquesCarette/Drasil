@@ -1,7 +1,7 @@
 {-# Language GADTs #-}
 module Language.Drasil.Chunk where
 
-import Control.Lens
+import Control.Lens (Simple,Lens,(^.))
 
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
@@ -44,7 +44,6 @@ instance NamedIdea ConceptChunk where
   term f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
 instance Concept ConceptChunk where
   defn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
-
 
 -- BEGIN VARCHUNK --
 
@@ -134,3 +133,8 @@ cv = CV
 --FIXME: Remove this hack
 cvR :: ConceptChunk -> Symbol -> ConVar
 cvR c s = CV c s Rational
+
+----------------------
+-- various combinators
+compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
+compoundterm t1 t2 = CC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term))

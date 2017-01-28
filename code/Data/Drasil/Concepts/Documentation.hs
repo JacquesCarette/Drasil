@@ -18,3 +18,10 @@ physSyst    = dcc "physSyst" "PS" "Physical System Description"
 requirement = dcc "requirement" "R" "Requirement"
 srs         = dcc "srs" "SRS" "Software Requirements Specification"
 thModel     = dcc "thModel" "T" "Theoretical Model"
+
+---------------------------------------------------------------------
+
+-- concepts relating to the templates and their contents
+section = makeCC "section" "Section"
+system = makeCC "system" "System"
+description = makeCC "description" "Description"

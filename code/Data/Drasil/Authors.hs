@@ -6,6 +6,8 @@ spencerSmith :: Person
 spencerSmith = person "Spencer" "Smith"
 
 -- short versions for now
-luthfi, alex :: Person
+luthfi, alex, nikita, thulasi :: Person
 luthfi = person "Luthfi" "Mawarid"
 alex = person "Alex" "Halliwushka"
+nikita = person "Nikita" "Krithnan"
+thulasi = person "Thulasi" "Jegatheesan"

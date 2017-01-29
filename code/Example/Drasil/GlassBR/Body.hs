@@ -4,6 +4,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
 
@@ -38,17 +39,19 @@ s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
 
 s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
+srs_authors, mg_authors :: Sentence
+srs_authors = twoNames nikita spencerSmith
+mg_authors = twoNames spencerSmith thulasi
+
 glassBR_srs :: Document  
-glassBR_srs = Document ((srs ^. defn) +:+ S "for" +:+ 
-  (gLassBR ^. defn)) (S "Nikitha Krithnan and Spencer Smith") 
+glassBR_srs = Document ((srs ^. defn) +:+ S "for" +:+ (gLassBR ^. defn)) srs_authors
   [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = Document (S "Module Guide for" +:+ (gLassBR ^. term))
-     (S "Spencer Smith and Thulasi Jegatheesan") (mgBod)
+glassBR_mg = Document (S "Module Guide for" +:+ (gLassBR ^. term)) mg_authors mgBod
 
 
 s1 = Section(S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 

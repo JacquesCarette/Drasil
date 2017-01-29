@@ -9,6 +9,7 @@ import Drasil.PCM.Example
 import Language.Drasil
 
 import Data.Drasil.SI_Units 
+import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Units.Thermodynamics
@@ -25,9 +26,9 @@ s1_intro, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s4_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
 pcm_srs :: Document  
-pcm_srs = Document (S "Software Requirements Specification for Solar Water " :+:
-          S "Heating Systems") 
-          (S "Thulasi Jegatheesan") [s1,s4]
+pcm_srs = Document 
+  (S "Software Requirements Specification for Solar Water Heating Systems") 
+  (name thulasi) [s1,s4]
 
 s1 = Section (S "Reference Material") [Con s1_intro,Sub s1_1,Sub s1_2,Sub s1_3]
 

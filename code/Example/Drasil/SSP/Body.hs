@@ -1,16 +1,17 @@
-{-# LANGUAGE FlexibleContexts #-} 
 module Drasil.SSP.Body where
 
 import Control.Lens ((^.))
+import Prelude hiding (id)
+
+import Language.Drasil
+import Data.Drasil.SI_Units 
+import Data.Drasil.Authors
 
 import Drasil.SSP.Defs
 import Drasil.SSP.Units
 import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
-import Prelude hiding (id)
-import Language.Drasil
-import Data.Drasil.SI_Units 
 
 import Drasil.TableOfAbbAndAcronyms
 
@@ -18,17 +19,16 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_srs :: Document  
-ssp_srs = Document (S "Software Requirements Specification for Slope Stability " :+:
-          S "Analysis") 
-          (S "Henry Frankis") [s1, s2, s3, s4, s5, s6]
+ssp_srs = Document 
+  (S "Software Requirements Specification for Slope Stability Analysis") 
+  (name henryFrankis) [s1, s2, s3, s4, s5, s6]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 ssp_mg :: Document
 ssp_mg = Document (S "Module Guide for Slope Stability Analysis")
-         (S "Henry Frankis") (mgBod)
-
+         (name henryFrankis) (mgBod)
 
 s1, s2, s3, s4, s5, s6 :: Section
 
@@ -243,19 +243,13 @@ s4_2_5 = Sub sec_IMs
 sec_IMs :: Section
 sec_IMs = Section (S "Instance Models") []
 
-
 -- SECTION 4.2.6 --
 s4_2_6 = Sub $ Section (S "Data Constraints") []
-
-
-
-
 
 -- SECTION 5 --
 s5 = Section (S "Requirements") [s5_p1, s5_1, s5_2]
 
 s5_p1 = Con $ Paragraph $ S "This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit."
-
 
 -- SECTION 5.1 --
 s5_1 = Sub $ Section (S "Functional Requirements")
@@ -285,16 +279,11 @@ table_inputdata =  Table [S "Symbol", S "Units", S "Description"] (mkTable
    ]
   [coords, elastMod, cohesion, poisson, fricAngle, dryWeight, satWeight, waterWeight])
   (S "Input data") True
-  
-
+ 
 -- SECTION 5.2 --
 s5_2 = Sub $ Section (S "Nonfunctional Requirements") [s5_2_p1]
 
 s5_2_p1 = Con $ Paragraph $ S "SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability."
-
-
-
-
 
 -- SECTION 6 --
 s6 = Section (S "Likely Changes") []

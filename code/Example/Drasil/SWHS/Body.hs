@@ -1,8 +1,19 @@
-{-# LANGUAGE FlexibleContexts #-} 
 module Drasil.SWHS.Body where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
+
+import Language.Drasil
+import Data.Drasil.SI_Units 
+import Data.Drasil.Authors
+
+import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
+import Data.Drasil.Concepts.Thermodynamics
+
+import Data.Drasil.Quantities.Physics (surface)
+import Data.Drasil.Quantities.Math (gradient, norm_vect)
+
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
 import Drasil.SWHS.TModel1
@@ -17,19 +28,6 @@ import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
-
-import Language.Drasil
-
-import Data.Drasil.SI_Units 
-
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
-import Data.Drasil.Concepts.Thermodynamics
-
-import Data.Drasil.Quantities.Physics (surface)
-import Data.Drasil.Quantities.Math (gradient, norm_vect)
-
---Redundant import warnings
 
 acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
@@ -55,11 +53,13 @@ s1_intro, s1_2_intro, s1_2_table,
 s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2 :: [Contents]
 
+authors :: Sentence
+authors = manyNames [thulasi, brooks, spencerSmith]
+
 swhs_srs :: Document
 swhs_srs = Document (S "Software Requirements Specification for Solar Water" +:+
   S "Heating Systems with Phase Change Material")
-  (S "Thulasi Jegatheesan, Brooks MacLachlan, and Spencer Smith")
-  [s1, s2, s3, s4, s5, s6, s7]
+  authors [s1, s2, s3, s4, s5, s6, s7]
 
 -- It is sometimes hard to remember to add new sections both here and above.
 
@@ -73,8 +73,7 @@ mgBod :: [Section]
 
 swhs_mg :: Document
 swhs_mg = Document (S "Module Guide for Solar Water Heating Systems" +:+
-  S "Incorporating Phase Change Material") (S "Thulasi Jegatheesan" `sC`
-  S "Brooks MacLachlan, and Spencer Smith") (mgBod)
+  S "Incorporating Phase Change Material") authors mgBod
 
 -- Again, with program name abstracted out this title could be automated.
 

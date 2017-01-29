@@ -9,7 +9,9 @@ import Drasil.TableOfSymbols
 import Drasil.HGHC.Modules
 
 import Language.Drasil
+
 import Data.Drasil.SI_Units (si_units)
+import Data.Drasil.Authors (spencerSmith)
 
 vars :: [QDefinition]
 vars = [htTransCladFuel, htTransCladCool]
@@ -29,20 +31,20 @@ s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 --m2 = Module 1 mod_behav
 --m3 = Module 2 mod_calc
 
-doc :: SymbolForm s => String -> [s] -> String -> [Section] -> Document
+doc :: SymbolForm s => String -> [s] -> Sentence -> [Section] -> Document
 doc nam ls author body =
   Document ((S $ nam ++ " for ") :+:
     (foldr1 (:+:) (intersperse (S " and ") (map (\x -> P $ x ^. symbol) ls))))
-    (S author) body
+    author body
   
 srsBody :: Document
-srsBody = doc "SRS" vars "Spencer Smith" [s1, s2, s3]--, s4]
+srsBody = doc "SRS" vars (name spencerSmith) [s1, s2, s3]--, s4]
 
 mgSecs, misSecs :: [Section]
 (mgSecs, misSecs) = makeDD [] [] [] modules
   
 mgBody :: Document
-mgBody = doc "MG" vars "Spencer Smith" mgSecs
+mgBody = doc "MG" vars (name spencerSmith) mgSecs
 
 misBody :: Document
-misBody = doc "MIS" vars "Spencer Smith" misSecs
+misBody = doc "MIS" vars (name spencerSmith) misSecs

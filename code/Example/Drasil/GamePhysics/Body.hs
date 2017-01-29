@@ -5,6 +5,7 @@ import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.SI_Units
 
+import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction, 
@@ -29,15 +30,18 @@ import Drasil.GamePhysics.Modules
 import Drasil.GamePhysics.Changes
 import Drasil.GamePhysics.Reqs
 
+authors :: Sentence
+authors = twoNames alex luthfi
+
 chipmunkSRS :: Document
 chipmunkSRS = Document
   (S "Software Requirements Specification for" +:+ (chipmunk ^. term))
-  (S "Alex Halliwushka and Luthfi Mawarid")
+  authors
   [s1, s2, s3, s4, s5, s6, s7]
 
 chipmunkMG :: Document
 chipmunkMG = Document (S "Module Guide for" +:+ (chipmunk ^. term))
-  (S "Alex Halliwushka and Luthfi Mawarid") (mgBod)
+  authors (mgBod)
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules

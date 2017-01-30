@@ -7,9 +7,9 @@ spencerSmith = person "Spencer" "Smith"
 henryFrankis = person "Henry"   "Frankis"
 
 -- short versions for now
-luthfi, alex, nikita, thulasi, brooks :: Person
-luthfi  = person "Luthfi"  "Mawarid"
-alex    = person "Alex"    "Halliwushka"
-nikita  = person "Nikita"  "Krithnan"
-thulasi = person "Thulasi" "Jegatheesan"
-brooks  = person "Brooks"  "MacLachlan"
+luthfi, alex, nikitha, thulasi, brooks :: Person
+luthfi   = person "Luthfi"  "Mawarid"
+alex     = person "Alex"    "Halliwushka"
+nikitha  = person "Nikitha"  "Krithnan"
+thulasi  = person "Thulasi" "Jegatheesan"
+brooks   = person "Brooks"  "MacLachlan"

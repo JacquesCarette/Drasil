@@ -1,6 +1,6 @@
 module Drasil.SRS (srsDoc) where
 --Temporary file for keeping the "srs" document constructor until I figure out
--- a better place for it. Maybe Data.Drasil or wherever we'll keep Recipes.
+-- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 

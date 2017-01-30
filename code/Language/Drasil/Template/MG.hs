@@ -223,7 +223,8 @@ mgModuleInfo (mc, m) = let title = if   isNothing m
     title
     [ Con $ Enumeration $ Desc
       [(S "Secrets", Flat (secret mc)),
-       (S "Services", Flat (mc ^. term)),
+       (S "Services", Flat (mc ^. term)), --This is where the change 
+--    noted in comments on commit 0053aafe42cfa5 ... created a diff.
        (S "Implemented By", Flat (getImp $ imp mc))
       ]
     ]

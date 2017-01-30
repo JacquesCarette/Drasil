@@ -13,10 +13,12 @@ ordDiffEq   = ode
 phsChgMtrl  = dcc "phsChgMtrl" "PCM" "Phase Change Material"
 rightSide   = dcc "rightSide" "RHS" "Right Hand Side"
 progName    = dcc "progName" "SWHS" "Solar Water Heating System"
+
+swhsFull :: NamedChunk
 swhsFull    = 
 --FIXME: There should be a way to combine sWHS/progName and pcm to create
 -- this chunk. Compoundterm would work if we could inject "with" between terms.
-  dcc "swhsFull" "Solar Water Heating System with Phase Change Material"
+  makeCC "swhsFull" "Solar Water Heating System with Phase Change Material"
 -- I want to include SI as an acronym, but I can't find a way for the 
 -- description to have accents when using dcc.
 

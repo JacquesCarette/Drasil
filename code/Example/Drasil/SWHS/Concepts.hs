@@ -13,7 +13,10 @@ ordDiffEq   = ode
 phsChgMtrl  = dcc "phsChgMtrl" "PCM" "Phase Change Material"
 rightSide   = dcc "rightSide" "RHS" "Right Hand Side"
 progName    = dcc "progName" "SWHS" "Solar Water Heating System"
-
+swhsFull    = 
+--FIXME: There should be a way to combine sWHS/progName and pcm to create
+-- this chunk. Compoundterm would work if we could inject "with" between terms.
+  dcc "swhsFull" "Solar Water Heating System with Phase Change Material"
 -- I want to include SI as an acronym, but I can't find a way for the 
 -- description to have accents when using dcc.
 
@@ -23,6 +26,8 @@ charging, coil, discharging, gauss_div, heat_flux, mech_energy,
   perfect_insul, phase_change_material, specific_heat, swhs_pcm, swhsProg, tank,
   tank_pcm, transient, water :: ConceptChunk
 
+--FIXME: There are too many "swhs" chunks for very minor differences.
+  
 charging = dcc "charging" "Charging" "Charging of the tank"
 coil = dcc "coil" "Heating coil" 
   "Coil in tank that heats by absorbing solar energy"

@@ -38,6 +38,7 @@ mech_energy = dcc "mech_energy" "Mechanical energy"
 perfect_insul = dcc "perfect_insul" "perfectly insulated" 
                 ("Describes the property of a " ++
                 "material not allowing heat transfer through its boundaries")
+--FIXME: Remove " (PCM)" from the term and add an acronym instead.                
 phase_change_material = dcc "pcm" "Phase Change Material (PCM)" 
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")

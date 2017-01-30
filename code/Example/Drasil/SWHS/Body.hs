@@ -28,6 +28,7 @@ import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
+import Drasil.SRS
 
 acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
@@ -57,9 +58,7 @@ authors :: Sentence
 authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_srs :: Document
-swhs_srs = Document (S "Software Requirements Specification for Solar Water" +:+
-  S "Heating Systems with Phase Change Material")
-  authors [s1, s2, s3, s4, s5, s6, s7]
+swhs_srs = srsDoc swhsFull authors [s1, s2, s3, s4, s5, s6, s7]
 
 -- It is sometimes hard to remember to add new sections both here and above.
 

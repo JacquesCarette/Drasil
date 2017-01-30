@@ -12,9 +12,10 @@ import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
+import Drasil.SRS
 
 import Drasil.GlassBR.Example
-
+import Drasil.GlassBR.Concepts
 import Drasil.GlassBR.Changes
 import Drasil.GlassBR.Modules
 import Drasil.GlassBR.Reqs
@@ -44,8 +45,7 @@ srs_authors = twoNames nikitha spencerSmith
 mg_authors = twoNames spencerSmith thulasi
 
 glassBR_srs :: Document  
-glassBR_srs = Document ((srs ^. defn) +:+ S "for" +:+ (gLassBR ^. defn)) srs_authors
-  [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
+glassBR_srs = srsDoc glassBRProg srs_authors [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules

@@ -106,6 +106,8 @@ acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   physSyst,requirement,srs,sWHS,thModel]
   
+--FIXME: Term should be "Solar Water Heating System" and it should 
+--    have an acronym
 sWHS :: ConceptChunk
 sWHS = dcc "sWHS" "SWHS" "Solar Water Heating System"
 

@@ -20,6 +20,7 @@ import Drasil.TableOfUnits
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS
+import Drasil.SRS
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -34,10 +35,7 @@ authors :: Sentence
 authors = twoNames alex luthfi
 
 chipmunkSRS :: Document
-chipmunkSRS = Document
-  (S "Software Requirements Specification for" +:+ (chipmunk ^. term))
-  authors
-  [s1, s2, s3, s4, s5, s6, s7]
+chipmunkSRS = srsDoc chipmunk authors [s1, s2, s3, s4, s5, s6, s7]
 
 chipmunkMG :: Document
 chipmunkMG = Document (S "Module Guide for" +:+ (chipmunk ^. term))

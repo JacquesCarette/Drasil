@@ -40,7 +40,7 @@ s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
 s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
 srs_authors, mg_authors :: Sentence
-srs_authors = twoNames nikita spencerSmith
+srs_authors = twoNames nikitha spencerSmith
 mg_authors = twoNames spencerSmith thulasi
 
 glassBR_srs :: Document  

@@ -14,14 +14,13 @@ import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 
 import Drasil.TableOfAbbAndAcronyms
+import Drasil.SRS
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_srs :: Document  
-ssp_srs = Document 
-  (S "Software Requirements Specification for Slope Stability Analysis") 
-  (name henryFrankis) [s1, s2, s3, s4, s5, s6]
+ssp_srs = srsDoc sSA (name henryFrankis) [s1, s2, s3, s4, s5, s6]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules

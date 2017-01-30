@@ -269,6 +269,7 @@ acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
   physSyst,requirement,srs,sSA,thModel]
   
+--FIXME: Use an acronym and move "Slope Stability Analysis" to term.
 sSA :: ConceptChunk
 sSA = dcc "sSA" "SSA" "Slope Stability Analysis"
 

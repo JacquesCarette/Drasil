@@ -38,8 +38,7 @@ chipmunkSRS :: Document
 chipmunkSRS = srsDoc chipmunk authors [s1, s2, s3, s4, s5, s6, s7]
 
 chipmunkMG :: Document
-chipmunkMG = Document (S "Module Guide for" +:+ (chipmunk ^. term))
-  authors (mgBod)
+chipmunkMG = mgDoc chipmunk authors mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules

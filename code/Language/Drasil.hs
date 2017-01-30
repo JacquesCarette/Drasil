@@ -61,6 +61,8 @@ module Language.Drasil (
   , capitalize, paren, sqbrac
   -- Template.DD
   , makeDD
+  --Template.MG
+  , mgDoc
   -- Generate
   , gen, genCode
   -- People
@@ -98,5 +100,6 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Template.DD
+import Language.Drasil.Template.MG (mgDoc)
 import Language.Drasil.Generate
 import Language.Drasil.People (Person, person, HasName(..), twoNames, manyNames)

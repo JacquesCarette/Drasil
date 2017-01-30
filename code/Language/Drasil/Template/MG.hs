@@ -1,4 +1,4 @@
-module Language.Drasil.Template.MG(makeMG) where
+module Language.Drasil.Template.MG(makeMG, mgDoc) where
 import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Chunk
@@ -14,7 +14,11 @@ import Language.Drasil.Template.Helpers
 import Control.Lens ((^.))
 import Data.List (nub, intersperse)
 import Data.Maybe (fromJust, isNothing)
+import Data.Drasil.Concepts.Documentation (mg)
 
+mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
+mgDoc sys authors secs = 
+  Document ((mg ^. defn) +:+ S "for" +:+ (sys ^. term)) authors secs
 
 makeMG :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
   -> ([Section], [Contents])

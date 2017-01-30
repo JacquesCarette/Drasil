@@ -1,11 +1,12 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil
+import Language.Drasil.Chunk
+
 
 --FIXME: Use actual Acronyms instead of CCs.
-
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel :: ConceptChunk
+  requirement, srs, thModel, mg :: ConceptChunk
+
 --FIXME: These shouldn't be ConceptChunks or NamedIdeas, but should be
 --    Some subset of them, no?
 assumption  = dcc "assumption" "A" "Assumption"
@@ -18,6 +19,7 @@ physSyst    = dcc "physSyst" "PS" "Physical System Description"
 requirement = dcc "requirement" "R" "Requirement"
 srs         = dcc "srs" "SRS" "Software Requirements Specification"
 thModel     = dcc "thModel" "T" "Theoretical Model"
+mg          = dcc "mg" "MG" "Module Guide"
 
 ---------------------------------------------------------------------
 

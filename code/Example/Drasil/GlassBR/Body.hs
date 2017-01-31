@@ -51,7 +51,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = Document (S "Module Guide for" +:+ (gLassBR ^. term)) mg_authors mgBod
+glassBR_mg = mgDoc gLassBR mg_authors mgBod
 
 
 s1 = Section(S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 

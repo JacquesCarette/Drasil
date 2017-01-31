@@ -13,6 +13,7 @@ import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
 import Drasil.SRS
+import Drasil.ReferenceMaterial
 
 import Drasil.GlassBR.Example
 import Drasil.GlassBR.Concepts
@@ -27,8 +28,7 @@ s1, s1_1,  s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section
 
-s1_intro,  --s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, 
-  s2_intro, s2_2_intro, s3_intro, 
+s2_intro, s2_2_intro, s3_intro, 
   s3_1_intro, s3_2_intro, s4_intro, s4_1_bullets, s4_2_intro, s5_intro, 
   s5_1_table, s5_2_bullets, s6_intro, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
@@ -54,10 +54,7 @@ glassBR_mg :: Document
 glassBR_mg = mgDoc gLassBR mg_authors mgBod
 
 
-s1 = Section(S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
-  Sub s1_3]
-
-s1_intro = Paragraph (S "This section records information for easy reference.")
+s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = table_of_units this_si
 

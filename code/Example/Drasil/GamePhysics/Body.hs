@@ -160,21 +160,16 @@ s2_2_intro = Paragraph $ S "The scope of the" +:+
 -------------------------------------
 
 s2_3 :: Section
-s2_3_intro :: [Contents]
+s2_3_intro :: Sentence
 
-s2_3 = Section (S "Organization of Document") (map Con s2_3_intro)
+s2_3 = orgSec s2_3_intro inModel s4_2_5
 
 -- FIXME: Citations.
--- FIXME: Use more chunks in this description.
-s2_3_intro = [Paragraph (S "The organization of this document follows the" +:+
-  S "template for an" +:+ (srs ^. term) +:+ S "for scientific" +:+
-  S "computing software proposed by [1] and [2]. The presentation" +:+
-  S "follows the standard pattern of presenting goals, theories" `sC`
-  S "definitions, and assumptions. For readers that would like a more" +:+
-  S "bottom up approach, they can start reading the" +:+
-  (addS (sLower (inModel ^. defn))) +:+ S "in" +:+ (makeRef s4_2_5) +:+. 
-  S "and trace back to any additional information they require"),
-  Paragraph $ refineChain [goalStmt, thModel, inModel]]
+-- FIXME: This can probably be completely pulled out is we decide on the 
+--  right convention for the intro across examples.
+s2_3_intro = S "The organization of this document follows the" +:+
+  S "template for an" +:+ (srs ^. term) +:+ S "for scientific" +:+.
+  S "computing software proposed by [1] and [2]"
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

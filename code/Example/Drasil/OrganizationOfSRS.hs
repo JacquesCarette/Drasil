@@ -37,8 +37,8 @@ orgIntro intro bottom bottomSec trailingSentence= [ Paragraph $
   (foldl1 sC (map S ["goals", "theories", "definitions"])) `sC` 
   S "and assumptions. For readers that would like a more bottom up approach" `sC`
   S "they can start reading the" +:+ addS (sLower (bottom ^. defn)) +:+ 
-  S "in" +:+ (makeRef bottomSec) +:+ S "and trace back to any additional" +:+.
-  S "information they require",
+  S "in" +:+ (makeRef bottomSec) +:+. 
+  S "and trace back to find any additional information they require",
   Paragraph $ lastS trailingSentence ]
   where lastS Nothing = refineChain [goalStmt, thModel, inModel]
         lastS (Just t) = lastS Nothing +:+. t

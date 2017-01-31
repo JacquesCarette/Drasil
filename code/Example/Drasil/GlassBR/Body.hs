@@ -37,9 +37,9 @@ s2_intro, s2_2_intro, s3_intro,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
 
-s2_1_intro, s2_3_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
+s2_1_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
-srs_authors, mg_authors :: Sentence
+srs_authors, mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
 srs_authors = twoNames nikitha spencerSmith
 mg_authors = twoNames spencerSmith thulasi
 
@@ -117,29 +117,16 @@ s2_2_intro = Paragraph $
   S "use the data and predict whether the" +:+ 
   (sLower (glaSlab ^. term)) +:+. S "is safe to use or not"
 
-s2_3 = Section (S "Organization of Document") (map Con s2_3_intro)
+s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
-  [Paragraph $
   S "The organization of this document follows the template for an" +:+ 
   (srs ^. term) +:+ S "for scientific computing software" +:+
   S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
-  S "some aspects taken from Volere template 16 [3]. The presentation" +:+
-  S "follows the standard pattern of presenting goals, theories" `sC`
-  S "definitions, and" +:+. addS (sLower (assumption ^. defn)) +:+
-  S "For readers that would like a more bottom up approach, they can" +:+
-  S "start reading the" +:+ (sLower (dataDefn ^. defn)) :+:
-  S "s in" +:+ (makeRef s6_2_4) +:+ S "and trace back to find any" +:+.
-  S "additional information they require",
-  Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
-  {-
-  S "The" +:+ (sLower (goalStmt ^. defn)) :+: S "s are" +:+
-  S "refined to the" +:+ (sLower (thModel ^. defn)) :+:
-  S "s, and" +:+ (sLower (thModel ^. defn)) :+: 
-  S "s to the" +:+ (sLower (inModel ^. defn)) :+: 
-  -}
-  S "The" +:+ addS (sLower (dataDefn ^. defn)) +:+.
-  S "are used to support the definitions of the different models"] 
+  S "some aspects taken from Volere template 16 [3]."
+  
+s2_3_intro_end = S "The" +:+ addS (sLower (dataDefn ^. defn)) +:+
+  S "are used to support the definitions of the different models" 
   
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 

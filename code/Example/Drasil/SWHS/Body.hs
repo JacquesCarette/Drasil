@@ -71,8 +71,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 swhs_mg :: Document
-swhs_mg = Document (S "Module Guide for Solar Water Heating Systems" +:+
-  S "Incorporating Phase Change Material") authors mgBod
+swhs_mg = mgDoc swhsFull authors mgBod
 
 -- Again, with program name abstracted out this title could be automated.
 

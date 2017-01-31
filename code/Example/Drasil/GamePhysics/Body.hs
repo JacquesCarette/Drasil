@@ -21,6 +21,7 @@ import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS
 import Drasil.SRS
+import Drasil.ReferenceMaterial
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -52,12 +53,7 @@ mgBod :: [Section]
 ------------------------------------
 
 s1 :: Section
-s1_intro :: Contents
-
-s1 = Section (S "Reference Material") 
-  [Con s1_intro, Sub s1_1, Sub s1_2, Sub s1_3]
-
-s1_intro = Paragraph $ S "This section records information for easy reference."
+s1 = refSec [s1_1, s1_2, s1_3]
 
 --------------------------
 -- 1.1 : Table of Units --

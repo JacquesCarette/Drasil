@@ -26,8 +26,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 ssp_mg :: Document
-ssp_mg = Document (S "Module Guide for Slope Stability Analysis")
-         (name henryFrankis) (mgBod)
+ssp_mg = mgDoc sSA (name henryFrankis) mgBod
 
 s1, s2, s3, s4, s5, s6 :: Section
 

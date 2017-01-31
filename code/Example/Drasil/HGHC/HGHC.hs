@@ -33,7 +33,7 @@ s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 
 doc :: SymbolForm s => String -> [s] -> Sentence -> [Section] -> Document
 doc nam ls author body =
-  Document ((S $ nam ++ " for ") :+:
+  Document ((S nam +:+ S "for") +:+
     (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ x ^. symbol) ls))))
     author body
   

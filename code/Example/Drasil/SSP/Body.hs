@@ -15,6 +15,7 @@ import Drasil.SSP.Reqs
 
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.SRS
+import Drasil.ReferenceMaterial
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
@@ -28,9 +29,10 @@ mgBod :: [Section]
 ssp_mg :: Document
 ssp_mg = mgDoc sSA (name henryFrankis) mgBod
 
-s1, s2, s3, s4, s5, s6 :: Section
+s1, s1_1, s1_2, s1_3, s2, s3, s4, s5, s6 :: Section
 
-s1_1, s1_2, s1_3, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
+
+s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
   s2_p1, s2_p2, s2_1, s2_2, s2_3, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
   s3_1, s3_2, s3_1_p1, s3_2_p1, s4_p1, s4_1, s4_2, s4_1_p1, s4_1_1, s4_1_2,
   s4_1_3, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1,
@@ -41,10 +43,10 @@ s1_1, s1_2, s1_3, s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
 s4_2_2_tmods :: [SecCons]
 
 -- SECTION 1 --
-s1 = Section (S "Reference Material") [s1_1, s1_2, s1_3]
+s1 = refSec [s1_1, s1_2, s1_3]
 
 -- SECTION 1.1 --
-s1_1 = Sub $ Section (S "Table of Units") [s1_1_intro, s1_1_table]
+s1_1 = Section (S "Table of Units") [s1_1_intro, s1_1_table]
 
 s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.")
 
@@ -56,7 +58,7 @@ s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
   (S "Table of Units") True
 
 -- SECTION 1.2 --
-s1_2 = Sub $ Section (S "Table of Symbols") [s1_2_intro, s1_2_table]
+s1_2 = Section (S "Table of Symbols") [s1_2_intro, s1_2_table]
 
 s1_2_intro = Con $ Paragraph $
   S "A collection of the symbols that will be used in the models and equations of the program are summarized in the table below. Values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass."
@@ -70,7 +72,7 @@ s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
   (S "Table of Symbols") False
 
 -- SECTION 1.3 --
-s1_3 = Sub $ table_of_abb_and_acronyms acronyms
+s1_3 = table_of_abb_and_acronyms acronyms
   
 -- SECTION 2 --
 s2 = Section (S "Introduction") [s2_p1, s2_p2, s2_1, s2_2, s2_3]

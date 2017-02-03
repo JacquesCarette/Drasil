@@ -63,7 +63,7 @@ swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] this_si
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg s1_intro [ TUnits, TVerb s1_2, TVerb s1_3]) :
+mkSRS = RefSec (RefProg intro [ TUnits, TVerb s1_2, TVerb s1_3]) :
   map Verbatim [s2, s3, s4, s5, s6, s7]
 
 swhs_srs' :: Document

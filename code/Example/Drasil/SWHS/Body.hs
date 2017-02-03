@@ -30,6 +30,7 @@ import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
 import Drasil.SRS
 import Drasil.ReferenceMaterial
+import Drasil.DocumentLanguage
 
 acronyms :: [ConceptChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
@@ -57,6 +58,16 @@ s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro,
 
 authors :: Sentence
 authors = manyNames [thulasi, brooks, spencerSmith]
+
+swhs_si :: SystemInformation
+swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] this_si
+
+mkSRS :: DocDesc
+mkSRS = RefSec (RefProg s1_intro [ TUnits, TVerb s1_2, TVerb s1_3]) :
+  map Verbatim [s2, s3, s4, s5, s6, s7]
+
+swhs_srs' :: Document
+swhs_srs' = mkDoc mkSRS swhs_si
 
 swhs_srs :: Document
 swhs_srs = srsDoc swhsFull authors [s1, s2, s3, s4, s5, s6, s7]

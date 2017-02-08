@@ -6,7 +6,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Drasil.TableOfUnits (table_of_units)
-import Drasil.TableOfSymbols
+import Drasil.TableOfSymbols (table)
 
 import Data.Drasil.Concepts.Documentation (refmat, tsymb)
 
@@ -32,7 +32,7 @@ data SystemInformation where
 -- anything with 'Verb' in it should eventually go
 data RefTab where 
   TUnits :: RefTab
-  TSymb :: (SymbolForm s, Quantity s) => (s -> Sentence) -> Contents -> RefTab
+  TSymb :: Contents -> RefTab
   --FIXME: Pull out Contents as it's currently a verbatim "intro" to TSymb.
   TVerb :: Section -> RefTab
   -- add more here
@@ -71,11 +71,12 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _)  TUnits     l' = table_of_units u : l'
-    mkSubRef (SI _ _ _ _ v) (TSymb f c) l' = (mkTSymb v f c) : l'
-    mkSubRef _              (TVerb s)   l' = s : l'
+    mkSubRef (SI _ _ _ u _)  TUnits   l' = table_of_units u : l'
+    mkSubRef (SI _ _ _ _ v) (TSymb c) l' = (mkTSymb v (\x -> x^.term) c) : l'
+    mkSubRef _              (TVerb s) l' = s : l'
 
-mkTSymb :: (Quantity s, SymbolForm s) => [s] -> (s -> Sentence) -> Contents -> Section
+mkTSymb :: (Quantity e, SymbolForm e) => 
+  [e] -> (e -> Sentence) -> Contents -> Section
 mkTSymb v f c = Section (tsymb ^. term) (map Con [c, table v f])
 --  where lf Term = (^.term)
 --        lf Defn = (^.defn)

@@ -60,7 +60,7 @@ authors :: Sentence
 authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_si :: SystemInformation
-swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] this_si
+swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] this_si swhsSymbols
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [ TUnits, TVerb s1_2, TVerb s1_3]) :

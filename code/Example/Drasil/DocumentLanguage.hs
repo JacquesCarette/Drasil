@@ -6,9 +6,9 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Drasil.TableOfUnits (table_of_units)
-import Drasil.TableOfSymbols (table)
+import Drasil.TableOfSymbols (table, termExcept, defnExcept)
 
-import Data.Drasil.Concepts.Documentation (refmat, tsymb)
+import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
 ---------------------------------------------------------------------------
 -- Start the process of moving away from Document as the main internal
@@ -28,11 +28,20 @@ data SystemInformation where
   _units :: [d],
   _vars :: [e]
   } -> SystemInformation
+ SIC :: (Concept a, Concept b, HasName c, Unit d, SymbolForm e, Quantity e,
+  Concept e) => {
+  _sys :: a,
+  _kind :: b,
+  _authors :: [c],
+  _units :: [d],
+  _vars :: [e]
+  } -> SystemInformation
 
 -- anything with 'Verb' in it should eventually go
 data RefTab where 
   TUnits :: RefTab
   TSymb :: Contents -> RefTab
+  TSymb' :: LFunc -> Contents -> RefTab
   --FIXME: Pull out Contents as it's currently a verbatim "intro" to TSymb.
   TVerb :: Section -> RefTab
   -- add more here
@@ -40,22 +49,21 @@ data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
 data DocSection = Verbatim Section | RefSec RefSec
 
 -- Lens (lookup) functions (currently for TSymb)
-{-
+
 data LFunc where
   Term :: LFunc
   Defn :: LFunc
-  TermExcept :: Concept c => [c] -> LFunc
-  DefnExcept :: Concept c => [c] -> LFunc
--}
--- FIXME: Couldn't get this working with TSymb because of the types.
---        We don't necessarily need Concepts for a table of symbols,
---        just Quantity/SymbolForms and this approach didn't allow that.
+  TermExcept :: (Eq c, Concept c) => [c] -> LFunc
+  DefnExcept :: (Eq c, Concept c) => [c] -> LFunc
 
 type DocDesc = [DocSection]
 
 -- 
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _) = Document 
+  ((kind^.term) +:+ S "for" +:+ (sys^.term))
+  (manyNames authors) (mkSections si l)
+mkDoc l si@(SIC sys kind authors _ _) = Document 
   ((kind^.term) +:+ S "for" +:+ (sys^.term))
   (manyNames authors) (mkSections si l)
 
@@ -72,13 +80,24 @@ mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _)  TUnits   l' = table_of_units u : l'
-    mkSubRef (SI _ _ _ _ v) (TSymb con) l' = (mkTSymb v (^.term) con) : l'
+    mkSubRef (SIC _ _ _ u _) TUnits   l' = table_of_units u : l'
+    mkSubRef (SI _ _ _ _ v) (TSymb con) l' = 
+      (Section (tOfSymb^.term) (map Con [con, (table v (^.term))])) : l'
+    mkSubRef (SIC _ _ _ _ v) (TSymb con) l' = (mkTSymb v Term con) : l'
+    mkSubRef (SIC _ _ _ _ v) (TSymb' f con) l' = (mkTSymb v f con) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
-mkTSymb :: (Quantity e, SymbolForm e) => 
-  [e] -> (e -> Sentence) -> Contents -> Section
-mkTSymb v f c = Section (tsymb ^. term) (map Con [c, table v f])
---  where lf Term = (^.term)
---        lf Defn = (^.defn)
+mkTSymb :: (Quantity e, SymbolForm e, Concept e) => 
+  [e] -> LFunc -> Contents -> Section
+mkTSymb v f c = Section (tOfSymb ^. term) (map Con [c, table v (lf f)])
+  where lf Term = (^.term)
+        lf Defn = (^.defn)
 --        lf (TermExcept cs) = termExcept cs
 --        lf (DefnExcept cs) = defnExcept cs
+
+--tsymb constructor
+tsymb, tsymb' :: Contents -> RefTab
+tsymb intro = TSymb intro                --Default Term
+tsymb' intro = TSymb' Defn intro         --Default Defn
+tsymb'' :: Contents -> LFunc -> RefTab
+tsymb'' intro lfunc = TSymb' lfunc intro --Custom FIXME: Not yet implemented

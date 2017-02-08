@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation
 
 table_of_symbols :: (Quantity s, SymbolForm s) => 
   [s] -> (s -> Sentence) -> Section
-table_of_symbols ls f = Section (tsymb ^. term)
+table_of_symbols ls f = Section (tOfSymb ^. term)
   [Con intro, Con (table ls f)]
 
 intro :: Contents
@@ -30,7 +30,7 @@ table ls f = Table (map (^.term) [symbol_, description, units_]) (mkTable
    (\ch -> f ch), 
    unit'2Contents]
   ls)
-  (tsymb ^. term) False
+  (tOfSymb ^. term) False
   
 defnExcept :: (Eq s, Concept s) => [s] -> (s -> Sentence)
 defnExcept xs x = if (x `elem` xs) then (x ^. term) else (x ^. defn)

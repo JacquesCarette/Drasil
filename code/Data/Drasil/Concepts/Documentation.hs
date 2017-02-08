@@ -33,9 +33,9 @@ symbol_ = makeCC "symbol" "Symbol"
 units_ = makeCC "units" "Units"
 table_ = makeCC "table" "Table"
 
-refmat, tsymb :: NamedChunk
+refmat, tOfSymb :: NamedChunk
 refmat = makeCC "refmat" "Reference Material"
-tsymb = makeCC "tsymb" "Table of Symbols"
+tOfSymb = makeCC "tOfSymb" "Table of Symbols"
 
 -- compounds
 systemdescription, specificsystemdescription :: NamedChunk

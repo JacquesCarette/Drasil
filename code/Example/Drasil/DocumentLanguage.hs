@@ -72,7 +72,7 @@ mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _)  TUnits   l' = table_of_units u : l'
-    mkSubRef (SI _ _ _ _ v) (TSymb c) l' = (mkTSymb v (\x -> x^.term) c) : l'
+    mkSubRef (SI _ _ _ _ v) (TSymb con) l' = (mkTSymb v (^.term) con) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 mkTSymb :: (Quantity e, SymbolForm e) => 

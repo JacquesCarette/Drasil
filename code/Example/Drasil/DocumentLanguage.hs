@@ -21,20 +21,18 @@ type System = Sentence
 type DocKind = Sentence
 
 data SystemInformation where
- SI :: (Concept a, Concept b, HasName c, Unit d, SymbolForm e, Quantity e) => {
+--FIXME:
+--There should be a way to remove redundant "Quantity" constraint.
+-- I'm thinking for getting concepts that are also quantities, we could
+-- use a lookup of some sort from their internal (Drasil) ids.
+ SI :: (Concept a, Concept b, HasName c, Unit d,
+  Quantity e, Quantity f, Concept f) => {
   _sys :: a,
   _kind :: b,
   _authors :: [c],
   _units :: [d],
-  _vars :: [e]
-  } -> SystemInformation
- SIC :: (Concept a, Concept b, HasName c, Unit d, SymbolForm e, Quantity e,
-  Concept e) => {
-  _sys :: a,
-  _kind :: b,
-  _authors :: [c],
-  _units :: [d],
-  _vars :: [e]
+  _quants :: [e],
+  _concepts :: [f]
   } -> SystemInformation
 
 -- anything with 'Verb' in it should eventually go
@@ -60,10 +58,7 @@ type DocDesc = [DocSection]
 
 -- 
 mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI sys kind authors _ _) = Document 
-  ((kind^.term) +:+ S "for" +:+ (sys^.term))
-  (manyNames authors) (mkSections si l)
-mkDoc l si@(SIC sys kind authors _ _) = Document 
+mkDoc l si@(SI sys kind authors _ _ _) = Document 
   ((kind^.term) +:+ S "for" +:+ (sys^.term))
   (manyNames authors) (mkSections si l)
 
@@ -79,15 +74,13 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _)  TUnits   l' = table_of_units u : l'
-    mkSubRef (SIC _ _ _ u _) TUnits   l' = table_of_units u : l'
-    mkSubRef (SI _ _ _ _ v) (TSymb con) l' = 
+    mkSubRef (SI _ _ _ u _ _)  TUnits   l' = table_of_units u : l'
+    mkSubRef (SI _ _ _ _ v _) (TSymb con) l' = 
       (Section (tOfSymb^.term) (map Con [con, (table v (^.term))])) : l'
-    mkSubRef (SIC _ _ _ _ v) (TSymb con) l' = (mkTSymb v Term con) : l'
-    mkSubRef (SIC _ _ _ _ v) (TSymb' f con) l' = (mkTSymb v f con) : l'
+    mkSubRef (SI _ _ _ _ _ ccs) (TSymb' f con) l' = (mkTSymb ccs f con) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
-mkTSymb :: (Quantity e, SymbolForm e, Concept e) => 
+mkTSymb :: (Quantity e, Concept e) => 
   [e] -> LFunc -> Contents -> Section
 mkTSymb v f c = Section (tOfSymb ^. term) (map Con [c, table v (lf f)])
   where lf Term = (^.term)

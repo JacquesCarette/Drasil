@@ -60,7 +60,10 @@ authors :: Sentence
 authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_si :: SystemInformation
-swhs_si = SIC swhs_pcm srs [thulasi, brooks, spencerSmith] this_si swhsSymbols
+swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] 
+  this_si swhsSymbols swhsSymbols --Note: The second swhsSymbols here is 
+    -- Redundant b/c the unitals are not really concepts (yet). There
+    -- Will still likely be a better way to do this.
 
 {-
 This table is ALMOST correct (just the normal vector is wrong because it should

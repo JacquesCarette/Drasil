@@ -1,7 +1,7 @@
-{-# Language GADTs #-}
+{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk where
 
-import Control.Lens (Simple,Lens,(^.))
+import Control.Lens (Simple,Lens,(^.), set)
 
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
@@ -19,14 +19,24 @@ class Chunk c => NamedIdea c where
 class Chunk c => SymbolForm c where
   symbol :: Simple Lens c Symbol
  
--- capture an SF dictionary
-data SF where SF :: SymbolForm c => c -> SF
-
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
+
 -------- BEGIN DATATYPES/INSTANCES --------
 
+-- capture an SF dictionary
+data SF where 
+  SF :: SymbolForm c => c -> SF
+instance Chunk SF where
+  id = sfl id
+instance SymbolForm SF where
+  symbol = sfl symbol
+instance Eq SF where
+  (SF s1) == (SF s2) = (s1 ^. id) == (s2 ^. id)
 
+sfl :: (forall c. (SymbolForm c) => Simple Lens c a) -> Simple Lens SF a
+sfl l f (SF a) = fmap (\x -> SF (set l x a)) (f (a ^. l))
+  
 data NamedChunk = CC String Sentence 
 instance Eq NamedChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)

@@ -7,6 +7,8 @@ module Drasil.TableOfSymbols
 
 import Control.Lens ((^.))
 
+import Data.Maybe (isJust)
+
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
@@ -27,14 +29,12 @@ intro = Paragraph $
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 
 table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
 table ls f = Table (map (^.term) [symbol_, description, units_]) (mkTable
-  [(\ch -> (\(Just (SF t)) -> P (t ^. symbol)) (getSymb ch)),
+  [(\ch -> (\(Just t) -> P (t ^. symbol)) (getSymb ch)),
   (\ch -> f ch), 
   unit'2Contents]
   sls)
   (tOfSymb ^. term) False
-  where sls = filter (keep . getSymb) ls --Don't use catMaybes
-        keep (Just _) = True
-        keep (Nothing) = False
+  where sls = filter (isJust . getSymb) ls --Don't use catMaybes
   
 defnExcept :: (Eq s, Concept s) => [s] -> (s -> Sentence)
 defnExcept xs x = if (x `elem` xs) then (x ^. term) else (x ^. defn)

@@ -21,7 +21,7 @@ import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS
 import Drasil.SRS
-import Drasil.ReferenceMaterial
+import qualified Drasil.ReferenceMaterial as RM
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -32,14 +32,32 @@ import Drasil.GamePhysics.Modules
 import Drasil.GamePhysics.Changes
 import Drasil.GamePhysics.Reqs
 
-authors :: Sentence
-authors = twoNames alex luthfi
+import Drasil.DocumentLanguage
+
+authors :: People
+authors = [alex, luthfi]
+
+auths :: Sentence
+auths = twoNames alex luthfi
 
 chipmunkSRS :: Document
-chipmunkSRS = srsDoc chipmunk authors [s1, s2, s3, s4, s5, s6, s7]
+chipmunkSRS = srsDoc chipmunk auths [s1, s2, s3, s4, s5, s6, s7]
+
+chipmunkSRS' :: Document
+chipmunkSRS' = mkDoc mkSRS chipmunkSysInfo
+
+mkSRS :: DocDesc
+mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TVerb s1_3 ]) : 
+  map Verbatim [s2, s3, s4, s5, s6, s7]
+  
+chipmunkSysInfo :: SystemInformation
+chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [ConVar])
+
+chipUnits :: [UnitDefn]
+chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 chipmunkMG :: Document
-chipmunkMG = mgDoc chipmunk authors mgBod
+chipmunkMG = mgDoc chipmunk auths mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
@@ -53,7 +71,7 @@ mgBod :: [Section]
 ------------------------------------
 
 s1 :: Section
-s1 = refSec [s1_1, s1_2, s1_3]
+s1 = RM.refSec [s1_1, s1_2, s1_3]
 
 --------------------------
 -- 1.1 : Table of Units --

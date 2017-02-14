@@ -61,7 +61,7 @@ authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] 
-  this_si swhsSymbols swhsSymbols --Note: The second swhsSymbols here is 
+  this_si swhsSymbols (swhsSymbols) --Note: The second swhsSymbols here is 
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
 
@@ -70,8 +70,11 @@ This table is ALMOST correct (just the normal vector is wrong because it should
 be using defn).
 -}
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [ TUnits, tsymb s1_2_intro, TVerb s1_3]) :
-  map Verbatim [s2, s3, s4, s5, s6, s7]
+mkSRS = RefSec (RefProg intro [ TUnits, 
+                                tsymb'' s1_2_intro (TermExcept [norm_vect]),
+                                TVerb s1_3
+                              ]
+  ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS swhs_si

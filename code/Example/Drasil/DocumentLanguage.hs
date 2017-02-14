@@ -62,9 +62,7 @@ type DocDesc = [DocSection]
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _) = Document 
   ((kind^.term) +:+ S "for" +:+ (sys^.term))
-  (names authors) (mkSections si l)
-  where names (a : b : []) = twoNames a b
-        names as = manyNames as
+  (manyNames authors) (mkSections si l)
 
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l

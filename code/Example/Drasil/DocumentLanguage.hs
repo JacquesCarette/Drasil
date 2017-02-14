@@ -63,8 +63,7 @@ mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _) = Document 
   ((kind^.term) +:+ S "for" +:+ (sys^.term))
   (names authors) (mkSections si l)
-  where names (a:[]) = name a
-        names (a : b : []) = twoNames a b
+  where names (a : b : []) = twoNames a b
         names as = manyNames as
 
 mkSections :: SystemInformation -> DocDesc -> [Section]

@@ -1,6 +1,6 @@
 module Language.Drasil.People (People, Person, person, HasName, name, manyNames) where
 
-import Language.Drasil.Spec (Sentence(S,(:+:)),(+:+), sC)
+import Language.Drasil.Spec (Sentence(S),(+:+), sC)
 
 data Person = Person { _first :: String, _last :: String, _name :: Sentence}
 type People = [Person]

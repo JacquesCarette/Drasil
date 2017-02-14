@@ -66,7 +66,7 @@ module Language.Drasil (
   -- Generate
   , gen, genCode
   -- People
-  , People, Person, person, HasName, name, twoNames, manyNames
+  , People, Person, person, HasName, name, manyNames
 ) where
 
 import Prelude hiding (log, abs, sin, cos, tan, id, return, print, break)
@@ -102,5 +102,4 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Template.DD
 import Language.Drasil.Template.MG (mgDoc)
 import Language.Drasil.Generate
-import Language.Drasil.People (People, Person, person, HasName(..), 
-  twoNames, manyNames)
+import Language.Drasil.People (People, Person, person, HasName(..), manyNames)

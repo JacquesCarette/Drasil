@@ -42,8 +42,8 @@ s2_intro, s2_2_intro, s3_intro,
 s2_1_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
 srs_authors, mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
-srs_authors = twoNames nikitha spencerSmith
-mg_authors = twoNames spencerSmith thulasi
+srs_authors = manyNames [nikitha,spencerSmith]
+mg_authors = manyNames [spencerSmith,thulasi]
 
 authors :: People
 authors = [nikitha, spencerSmith]

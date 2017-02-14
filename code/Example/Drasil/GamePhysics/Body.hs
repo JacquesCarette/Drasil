@@ -38,7 +38,7 @@ authors :: People
 authors = [alex, luthfi]
 
 auths :: Sentence
-auths = twoNames alex luthfi
+auths = manyNames authors
 
 chipmunkSRS :: Document
 chipmunkSRS = srsDoc chipmunk auths [s1, s2, s3, s4, s5, s6, s7]

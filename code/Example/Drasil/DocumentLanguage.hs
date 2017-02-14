@@ -6,9 +6,11 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Drasil.TableOfUnits (table_of_units)
-import Drasil.TableOfSymbols (table, termExcept, defnExcept)
+import Drasil.TableOfSymbols (table)
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
+
+import Prelude hiding (id)
 
 ---------------------------------------------------------------------------
 -- Start the process of moving away from Document as the main internal
@@ -51,8 +53,8 @@ data DocSection = Verbatim Section | RefSec RefSec
 data LFunc where
   Term :: LFunc
   Defn :: LFunc
-  TermExcept :: (Eq c, Concept c) => [c] -> LFunc
-  DefnExcept :: (Eq c, Concept c) => [c] -> LFunc
+  TermExcept :: Concept c => [c] -> LFunc
+  DefnExcept :: Concept c => [c] -> LFunc
 
 type DocDesc = [DocSection]
 
@@ -85,12 +87,15 @@ mkTSymb :: (Quantity e, Concept e) =>
 mkTSymb v f c = Section (tOfSymb ^. term) (map Con [c, table v (lf f)])
   where lf Term = (^.term)
         lf Defn = (^.defn)
---        lf (TermExcept cs) = termExcept cs
---        lf (DefnExcept cs) = defnExcept cs
+        lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
+          (x ^. defn) else (x ^. term)) --Compare chunk ids, since we don't
+          --actually care about the chunks themselves in LFunc.
+        lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
+          (x ^. term) else (x ^. defn))
 
 --tsymb constructor
 tsymb, tsymb' :: Contents -> RefTab
 tsymb intro = TSymb intro                --Default Term
 tsymb' intro = TSymb' Defn intro         --Default Defn
 tsymb'' :: Contents -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro --Custom FIXME: Not yet implemented
+tsymb'' intro lfunc = TSymb' lfunc intro --Custom

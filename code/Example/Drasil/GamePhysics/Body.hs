@@ -62,6 +62,13 @@ chipmunkMG = mgDoc chipmunk auths mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
+--FIXME: The SRS has been partly switched over to the new docLang, so some of
+-- the sections below are now redundant. I have not removed them yet, because
+-- it makes it easier to test between the two different versions as changes
+-- are introduced. Once the SRS is entirely switched to docLang, the redundant
+-- sections should be removed.
+
+
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --

@@ -20,6 +20,8 @@ import Drasil.GlassBR.Changes
 import Drasil.GlassBR.Modules
 import Drasil.GlassBR.Reqs
 
+import Drasil.DocumentLanguage
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
@@ -43,8 +45,23 @@ srs_authors, mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
 srs_authors = twoNames nikitha spencerSmith
 mg_authors = twoNames spencerSmith thulasi
 
+authors :: People
+authors = [nikitha, spencerSmith]
+
 glassBR_srs :: Document  
 glassBR_srs = srsDoc glassBRProg srs_authors [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
+
+glassBR_srs' :: Document
+glassBR_srs' = mkDoc mkSRS glassSystInfo
+
+--FIXME: Missing ToS intro because this example was using the default 
+-- (nuclear literature related) intro.
+mkSRS :: DocDesc 
+mkSRS = RefSec (RefProg intro [TUnits, tsymb (Paragraph $ S ""), TVerb s1_3]) :
+  map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
+  
+glassSystInfo :: SystemInformation
+glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [ConVar])
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
@@ -52,13 +69,14 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc gLassBR mg_authors mgBod
 
+this_symbols :: [QSWrapper]
+this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
 
 s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = table_of_units this_si
 
-s1_2 = table_of_symbols ((map qs glassBRSymbols) ++ 
-  (map qs glassBRUnitless)) (^.term)
+s1_2 = table_of_symbols this_symbols (^.term)
 
 s1_3 = table_of_abb_and_acronyms acronyms
 

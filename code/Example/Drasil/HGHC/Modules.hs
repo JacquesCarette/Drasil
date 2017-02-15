@@ -9,10 +9,10 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 
 self :: NamedChunk
-self = CC "HGHC" (S "HGHC")
+self = ncWDS "HGHC" (S "HGHC")
 
 executable :: NamedChunk
-executable = CC (self ^. id) (self ^. term :+: (S " ") :+: program ^. term)
+executable = ncWDS (self ^. id) (self ^. term :+: (S " ") :+: program ^. term)
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk
@@ -38,7 +38,7 @@ mod_inputp = makeRecord modInputParams (S "The format and structure of " :+:
 
 --input format
 meth_input :: MethodChunk
-meth_input = makeFileInputMethod (CC "read_input" (S "Reads and stores " :+:
+meth_input = makeFileInputMethod (ncWDS "read_input" (S "Reads and stores " :+:
              S "input from file.")) (makeVCObj "params" "input parameters" cP
              (mod_inputp ^. id)) "input"
 
@@ -54,7 +54,7 @@ meth_htTransCladFuel = fromEC htTransCladFuel
 meth_htTransCladCool = fromEC htTransCladCool
 
 mod_calc_desc :: NamedChunk
-mod_calc_desc = CC "calc" (S "Calculates heat transfer coefficients")
+mod_calc_desc = ncWDS "calc" (S "Calculates heat transfer coefficients")
 
 mod_calc :: ModuleChunk
 mod_calc = makeImpModule mod_calc_desc
@@ -68,11 +68,11 @@ mod_calc = makeImpModule mod_calc_desc
 
 -- Output Format Module
 meth_output :: MethodChunk
-meth_output = makeFileOutputMethod (CC "write_output" (S "Writes output to " :+:
+meth_output = makeFileOutputMethod (ncWDS "write_output" (S "Writes output to " :+:
         S "to file.")) [getVC htTransCladFuel, getVC htTransCladCool] "output"
 
 mod_outputf_desc :: NamedChunk
-mod_outputf_desc = CC "output format" (S "Outputs the results of the " :+:
+mod_outputf_desc = ncWDS "output format" (S "Outputs the results of the " :+:
                    S "calculations, including the input parameters, " :+:
                    S "temperatures, energies, and times when melting starts" :+:
                    S " and stops.")
@@ -128,7 +128,7 @@ main_func =
   ]
 
 meth_main :: MethodChunk
-meth_main = makeMainMethod (CC "main" (S "Main method")) main_func
+meth_main = makeMainMethod (ncWDS "main" (S "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
 mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:

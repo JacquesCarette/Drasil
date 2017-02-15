@@ -57,7 +57,7 @@ mod_inputc = makeImpModule modInputConstraints
 
 -- output format module
 mod_outputf_desc :: NamedChunk
-mod_outputf_desc = CC "output format"
+mod_outputf_desc = ncWDS "output format"
   (S "Outputs the results of the calculations, including the input " :+:
    S "parameters, the demand, the capacity, the probability of breakage, " :+:
    S "and both safety requirements.")
@@ -85,7 +85,7 @@ mod_derivedv = makeImpModule modDerivedVals
 
 -- TODO: Maybe this could be parameterized.
 mod_calc_desc :: NamedChunk
-mod_calc_desc = CC "calculations"
+mod_calc_desc = ncWDS "calculations"
   (S "Defines the equations for solving for the probability of glass " :+:
    S "breakage, demand, and capacity using the parameters in the input " :+:
    S "parameters module.")

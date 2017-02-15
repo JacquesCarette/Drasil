@@ -41,7 +41,7 @@ mod_inputv = makeImpModule modInputVerif (S "The format and structure of " :+:
 
 -- Output Format Module
 mod_outputf_desc :: NamedChunk
-mod_outputf_desc = CC "output format" (S "Outputs the results of the " :+:
+mod_outputf_desc = ncWDS "output format" (S "Outputs the results of the " :+:
                    S "calculations, including the input parameters, " :+:
                    S "temperatures, energies, and times when melting starts" :+:
                    S " and stops.")
@@ -53,7 +53,7 @@ mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
 
 -- Output Verification Module
 mod_outputv_desc :: NamedChunk
-mod_outputv_desc = CC "output verification" (S "Verifies that the output " :+:
+mod_outputv_desc = ncWDS "output verification" (S "Verifies that the output " :+:
                    S "energy results follow the law of conservation of " :+:
                    S "energy. Throws a warning if the relative error " :+:
                    S "exceeds the error threshold.")
@@ -65,7 +65,7 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
 
 -- Temperature ODEs Module
 mod_temp_desc :: NamedChunk
-mod_temp_desc = CC "temperature ODEs" (S "Defines the " :+: 
+mod_temp_desc = ncWDS "temperature ODEs" (S "Defines the " :+: 
                 (ordDiffEq ^. term) :+: S "s using the parameters in the " :+:
                 S "input parameters module.")
 
@@ -76,7 +76,7 @@ mod_temp = makeImpModule mod_temp_desc (S "The " :+: (ordDiffEq ^. term) :+:
 
 -- Energy Equations Module
 mod_ener_desc :: NamedChunk
-mod_ener_desc = CC "energy equations" (S "Defines the energy equations " :+:
+mod_ener_desc = ncWDS "energy equations" (S "Defines the energy equations " :+:
                 S "using the parameters in the input parameters module.")
 
 mod_ener :: ModuleChunk
@@ -100,7 +100,7 @@ mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
 
 -- Sequence Data Structure Module
 mod_seq_desc :: NamedChunk
-mod_seq_desc = CC "sequence data structure" (S "Provides array manipulation" :+:
+mod_seq_desc = ncWDS "sequence data structure" (S "Provides array manipulation" :+:
                S ", including building an array, accessing a specific entry" :+:
                S ", slicing an array, etc.")
 
@@ -110,7 +110,7 @@ mod_seq = makeImpModule mod_seq_desc (S "The data structure for a sequence " :+:
 
 -- ODE Solver Module
 mod_ode_desc :: NamedChunk
-mod_ode_desc = CC "ODE solver" (S "Provides solvers that take the governing " :+:
+mod_ode_desc = ncWDS "ODE solver" (S "Provides solvers that take the governing " :+:
           S "equation, initial conditions, and numerical parameters, and " :+:
           S "solve them.")
 
@@ -121,7 +121,7 @@ mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
 
 -- Plotting Module
 mod_plot_desc :: NamedChunk
-mod_plot_desc = CC "plotting" (S "Provides a plot function.")
+mod_plot_desc = ncWDS "plotting" (S "Provides a plot function.")
 
 mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:

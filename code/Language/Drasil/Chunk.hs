@@ -15,12 +15,17 @@ class Chunk c where
   
 class Chunk c => NamedIdea c where
   term :: Simple Lens c Sentence
-
+  getA :: c -> Maybe Sentence
+  --Get Abbreviation/Acronym? These might need to be separated 
+  --depending on contexts, but for now I don't see a problem with it.
+  
 class Chunk c => SymbolForm c where
   symbol :: Simple Lens c Symbol
  
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
+
+
 
 -------- BEGIN DATATYPES/INSTANCES --------
 
@@ -37,13 +42,14 @@ instance Eq SF where
 sfl :: (forall c. (SymbolForm c) => Simple Lens c a) -> Simple Lens SF a
 sfl l f (SF a) = fmap (\x -> SF (set l x a)) (f (a ^. l))
   
-data NamedChunk = CC String Sentence 
+data NamedChunk = CC String Sentence (Maybe Sentence)
 instance Eq NamedChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk NamedChunk where
-  id f (CC a b) = fmap (\x -> CC x b) (f a)
+  id f (CC a b c) = fmap (\x -> CC x b c) (f a)
 instance NamedIdea NamedChunk where
-  term f (CC a b) = fmap (\x -> CC a x) (f b)
+  term f (CC a b c) = fmap (\x -> CC a x c) (f b)
+  getA (CC a b c) = c
 
 data ConceptChunk = DCC String Sentence Sentence
 instance Eq ConceptChunk where
@@ -105,7 +111,7 @@ cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
 --    Names here are confusing and bad.
 
 makeCC :: String -> String -> NamedChunk
-makeCC i des = CC i (S des)
+makeCC i des = CC i (S des) Nothing
 
 makeDCC, dcc :: String -> String -> String -> ConceptChunk
 makeDCC i ter des = DCC i (S ter) (S des)
@@ -114,7 +120,7 @@ dcc = makeDCC
 
 --Currently only used by RelationChunk and EqChunk
 ncWDS :: String -> Sentence -> NamedChunk
-ncWDS n d = CC n d
+ncWDS n d = CC n d Nothing
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
 dccWDS i t d = DCC i (S t) d
@@ -147,4 +153,4 @@ cvR c s = CV c s Rational
 ----------------------
 -- various combinators
 compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
-compoundterm t1 t2 = CC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term))
+compoundterm t1 t2 = CC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing

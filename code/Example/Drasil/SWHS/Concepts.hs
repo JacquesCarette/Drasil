@@ -18,7 +18,7 @@ swhsFull :: NamedChunk
 swhsFull    = 
 --FIXME: There should be a way to combine sWHS/progName and pcm to create
 -- this chunk. Compoundterm would work if we could inject "with" between terms.
-  makeCC "swhsFull" "Solar Water Heating Systems with Phase Change Material"
+  nc "swhsFull" "Solar Water Heating Systems with Phase Change Material"
 -- I want to include SI as an acronym, but I can't find a way for the 
 -- description to have accents when using dcc.
 

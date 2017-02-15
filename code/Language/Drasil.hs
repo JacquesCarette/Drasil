@@ -14,7 +14,7 @@ module Language.Drasil (
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), makeCC, ncWDS, makeVC
+  , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, makeVC
   , makeVCObj, vcFromCC, nCC, makeDCC, SymbolForm(..), dcc, dccWDS, cv, ccStSS
   , Quantity(..), ConVar(..), cvR, NamedIdea(..)
   , Concept(..), compoundterm

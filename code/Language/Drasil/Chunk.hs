@@ -42,14 +42,14 @@ instance Eq SF where
 sfl :: (forall c. (SymbolForm c) => Simple Lens c a) -> Simple Lens SF a
 sfl l f (SF a) = fmap (\x -> SF (set l x a)) (f (a ^. l))
   
-data NamedChunk = CC String Sentence (Maybe Sentence)
+data NamedChunk = NC String Sentence (Maybe Sentence)
 instance Eq NamedChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk NamedChunk where
-  id f (CC a b c) = fmap (\x -> CC x b c) (f a)
+  id f (NC a b c) = fmap (\x -> NC x b c) (f a)
 instance NamedIdea NamedChunk where
-  term f (CC a b c) = fmap (\x -> CC a x c) (f b)
-  getA (CC a b c) = c
+  term f (NC a b c) = fmap (\x -> NC a x c) (f b)
+  getA (NC a b c) = c
 
 data ConceptChunk = DCC String Sentence Sentence
 instance Eq ConceptChunk where
@@ -110,8 +110,8 @@ cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
 --FIXME: Rename things once data structures have been redesigned.
 --    Names here are confusing and bad.
 
-makeCC :: String -> String -> NamedChunk
-makeCC i des = CC i (S des) Nothing
+nc :: String -> String -> NamedChunk
+nc i des = NC i (S des) Nothing
 
 makeDCC, dcc :: String -> String -> String -> ConceptChunk
 makeDCC i ter des = DCC i (S ter) (S des)
@@ -120,7 +120,7 @@ dcc = makeDCC
 
 --Currently only used by RelationChunk and EqChunk
 ncWDS :: String -> Sentence -> NamedChunk
-ncWDS n d = CC n d Nothing
+ncWDS n d = NC n d Nothing
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
 dccWDS i t d = DCC i (S t) d
@@ -130,7 +130,7 @@ ccStSS i t d = DCC i t d
 
 -- For when name = descr (will likely become deprecated as the chunks become more descriptive).
 nCC :: String -> NamedChunk 
-nCC n = makeCC n n
+nCC n = nc n n
 
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Rational type so it compiles
@@ -153,4 +153,4 @@ cvR c s = CV c s Rational
 ----------------------
 -- various combinators
 compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
-compoundterm t1 t2 = CC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing
+compoundterm t1 t2 = NC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing

@@ -25,17 +25,17 @@ mg          = dcc "mg" "MG" "Module Guide"
 
 -- concepts relating to the templates and their contents
 section, system, description, specific, symbol_, units_, table_ :: NamedChunk
-section = makeCC "section" "Section"
-system = makeCC "system" "System"
-description = makeCC "description" "Description"
-specific = makeCC "specific" "Specific" -- ??
-symbol_ = makeCC "symbol" "Symbol"
-units_ = makeCC "units" "Units"
-table_ = makeCC "table" "Table"
+section = nc "section" "Section"
+system = nc "system" "System"
+description = nc "description" "Description"
+specific = nc "specific" "Specific" -- ??
+symbol_ = nc "symbol" "Symbol"
+units_ = nc "units" "Units"
+table_ = nc "table" "Table"
 
 refmat, tOfSymb :: NamedChunk
-refmat = makeCC "refmat" "Reference Material"
-tOfSymb = makeCC "tOfSymb" "Table of Symbols"
+refmat = nc "refmat" "Reference Material"
+tOfSymb = nc "tOfSymb" "Table of Symbols"
 
 -- compounds
 systemdescription, specificsystemdescription :: NamedChunk

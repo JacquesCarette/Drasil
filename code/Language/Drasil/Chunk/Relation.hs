@@ -3,7 +3,7 @@
 module Language.Drasil.Chunk.Relation
   ( NamedRelation, RelationConcept
   , makeNR, relat, cc
-  , nc, nrelat, makeRC
+  , namewrap, nrelat, makeRC
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -16,8 +16,8 @@ import Language.Drasil.Chunk.Wrapper
 data NamedRelation where 
   NR :: NamedIdea c => c -> Relation -> NamedRelation
 
-nc :: NamedRelation -> NWrapper
-nc (NR c _) = nw c
+namewrap :: NamedRelation -> NWrapper
+namewrap (NR c _) = nw c
 
 nrelat :: NamedRelation -> Relation
 nrelat (NR _ r) = r

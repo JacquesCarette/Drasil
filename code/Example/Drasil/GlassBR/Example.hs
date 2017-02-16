@@ -131,30 +131,34 @@ gTF         = makeVC "gTF" "Glass Type Factor" (Atomic "GTF")
 
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
-acronyms :: [ConceptChunk]
+acronyms :: [NamedChunk]
 acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
   lGlass,lResistance,lShareFac,notApp,nonFactorL,physSyst,requirement,
   srs,thModel,eqTNT]
   
-gLassBR, annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
+gLassBR :: ConceptChunk
+
+annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
   iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,nonFactorL,
-  eqTNT :: ConceptChunk
+  eqTNT :: NamedChunk
+--FIXME: So many of these are duplicates of other named chunks/concepts
+  
 gLassBR       = dcc "gLassBR" "GlassBR" "Glass-BR"
-annealedGlass = dcc "annealedGlass" "AN" "Annealed Glass"
-aspectR       = dcc "aspectR" "AR" "Aspect Ratio"
-aspectRMax    = dcc "aspectRMax" "ARmax" "Maximum Aspect Ratio"
-fullyTGlass   = dcc "fullyTGlass" "FT" "Fully Tempered Glass"
-glassTypeFac  = dcc "glassTypeFac" "GTF" "Glass Type Factor"
-heatSGlass    = dcc "heatSGlass" "HS" "Heat Strengthened Glass"
-iGlass        = dcc "iGlass" "IG" "Insulating Glass"
-lDurFac       = dcc "lDurFac" "LDF" "Load Duration Factor"
-lGlass        = dcc "lGlass" "LG" "Laminated Glass"
-lResistance   = dcc "lResistance" "LR" "Load Resistance"
-lShareFac     = dcc "lShareFac" "LSF" "Load Share Factor"
-notApp        = dcc "notApp" "N/A" "Not Applicable"
-nonFactorL    = dcc "nonFactorL" "NFL" "Non-Factored Load"
-eqTNT         = dcc "eqTNT" "TNT" "TNT (Trinitrotoluene) Equivalent Factor"
+annealedGlass = nc' "annealedGlass" "Annealed Glass" "AN"
+aspectR       = nc' "aspectR" "Aspect Ratio" "AR"
+aspectRMax    = nc' "aspectRMax" "Maximum Aspect Ratio" "ARmax"
+fullyTGlass   = nc' "fullyTGlass" "Fully Tempered Glass" "FT"
+glassTypeFac  = nc' "glassTypeFac" "Glass Type Factor" "GTF"
+heatSGlass    = nc' "heatSGlass" "Heat Strengthened Glass" "HS"
+iGlass        = nc' "iGlass" "Insulating Glass" "IG"
+lDurFac       = nc' "lDurFac" "Load Duration Factor" "LDF"
+lGlass        = nc' "lGlass" "Laminated Glass" "LG"
+lResistance   = nc' "lResistance" "Load Resistance" "LR"
+lShareFac     = nc' "lShareFac" "Load Share Factor" "LSF"
+notApp        = nc' "notApp" "Not Applicable" "N/A"
+nonFactorL    = nc' "nonFactorL" "Non-Factored Load" "NFL"
+eqTNT         = nc' "eqTNT" "TNT (Trinitrotoluene) Equivalent Factor" "TNT"
 
 
 ----Terminology---- 
@@ -200,11 +204,11 @@ hs            = dcc "hs" "Heat strengthened glass"
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6] in Reference.")
 gtf           = dccWDS "gtf" "Glass type factor" 
-  (S "A multiplying factor for adjusting the " :+: (lResistance ^. term) :+:
-  S " of different glass type, that is, " :+: (annealedGlass ^. term) :+: 
-  S ", " :+: (heatSGlass ^. term) :+: S ", or " :+: (fullyTGlass ^. term) :+: 
-  S " in monolithic glass, " :+: (lGlass ^. term) :+: S " (Laminated Glass), " :+:
-  S "or " :+: (iGlass ^. term) :+: S " (Insulating Glass) constructions.")
+  (S "A multiplying factor for adjusting the " :+: (getAcc lResistance) :+:
+  S " of different glass type, that is, " :+: (getAcc annealedGlass) :+: 
+  S ", " :+: (getAcc heatSGlass) :+: S ", or " :+: (getAcc fullyTGlass) :+: 
+  S " in monolithic glass, " :+: (getAcc lGlass) :+: S " (Laminated Glass), " :+:
+  S "or " :+: (getAcc iGlass) :+: S " (Insulating Glass) constructions.")
 lateral       = dcc "lateral" "Lateral" "Perpendicular to the glass surface."
 load          = dcc "load" "Load" "A uniformly distributed lateral pressure."
 specDeLoad    = dcc "specDeLoad" "Specified design load" 
@@ -219,15 +223,15 @@ ldl           = dcc "ldl" "Long duration load"
 nfl           = dccWDS "nfl" "Non-factored load"
   (S ("Three second duration uniform load associated with a probability of " ++
     "breakage less than or equal to 8 lites per 1000 for monolithic ") :+:
-    (annealedGlass ^. term) :+: S " glass.")
+    (getAcc annealedGlass) :+: S " glass.")
 glassWL       = dcc "glassWL" "Glass weight load" 
   ("The dead load component of the glass weight.")
 sdl           = dcc "sdl" "Short duration load" "Any load lasting 3s or less."
 lsf           = dccWDS "lsf" "Load share factor" 
   (S "A multiplying factor derived from the load sharing between the double " :+:
   S "glazing, of equal or different thickness's and types (including the " :+:
-  S "layered behaviour of " :+: (lGlass ^. term) :+: S " under long duration " :+:
-  S "loads), in a sealed " :+: (iGlass ^. term) :+: S " unit.")
+  S "layered behaviour of " :+: (getAcc lGlass) :+: S " under long duration " :+:
+  S "loads), in a sealed " :+: (getAcc iGlass) :+: S " unit.")
 pb            = dcc "pb" "Probability of breakage" 
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
@@ -413,7 +417,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. defn) (Atomic "NFL") 
+nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") 
   nonFL_eq
 
 glaTyFac_eq :: Expr
@@ -426,12 +430,12 @@ glaTyFac = fromEqn' (glassTypeFac ^. id) (S "function that maps from " :+:
   (P $ glass_type ^. symbol) :+: S ") = (" :+: (P $ glass_type ^. symbol) :+: 
   S " = AN => 1.0|" :+: (P $ glass_type ^. symbol) :+: S " = FT => 4.0|" :+: 
   (P $ glass_type ^. symbol) :+: S " = HS => 2.0). " :+: 
-  (annealedGlass ^. term) :+: S " is " :+: 
-  (sMap (map toLower) (annealedGlass ^. defn)) :+: S ". " :+: 
-  (fullyTGlass ^. term) :+: S " is " :+: 
-  (sMap (map toLower) (fullyTGlass ^. defn)) :+: S ". " :+:
-  (heatSGlass ^. term) :+: S " is " :+: 
-  (sMap (map toLower) (heatSGlass ^. defn)) :+: S ".") (Atomic "GTF") 
+  (getAcc annealedGlass) :+: S " is " :+: 
+  (sMap (map toLower) (annealedGlass ^. term)) :+: S ". " :+: 
+  (getAcc fullyTGlass) :+: S " is " :+: 
+  (sMap (map toLower) (fullyTGlass ^. term)) :+: S ". " :+:
+  (getAcc heatSGlass) :+: S " is " :+: 
+  (sMap (map toLower) (heatSGlass ^. term)) :+: S ".") (Atomic "GTF") 
   glaTyFac_eq
 
 dL_eq :: Expr

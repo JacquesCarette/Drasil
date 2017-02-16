@@ -265,13 +265,13 @@ dy_i        = makeUC "dy_i" "displacement of a slice in the y-ordinate direction
 
 ----Acronyms-----
 -- FIXME: Use acronyms
-acronyms :: [ConceptChunk]
+acronyms :: [NamedChunk]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
   physSyst,requirement,srs,sSA,thModel]
   
 --FIXME: Use an acronym and move "Slope Stability Analysis" to term.
-sSA :: ConceptChunk
-sSA = dcc "sSA" "SSA" "Slope Stability Analysis"
+sSA :: NamedChunk
+sSA = nc' "sSA" "Slope Stability Analysis" "SSA"
 
 
 ----Theoretical Models----

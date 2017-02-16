@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Documentation (mg)
 
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
-  Document ((mg ^. defn) +:+ S "for" +:+ (sys ^. term)) authors secs
+  Document ((mg ^. term) +:+ S "for" +:+ (sys ^. term)) authors secs
 
 makeMG :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
   -> ([Section], [Contents])

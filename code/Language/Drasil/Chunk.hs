@@ -61,20 +61,20 @@ instance Chunk NamedChunk where
   id f (NC a b c) = fmap (\x -> NC x b c) (f a)
 instance NamedIdea NamedChunk where
   term f (NC a b c) = fmap (\x -> NC a x c) (f b)
-  getA (NC a b c) = c
+  getA (NC _ _ c) = c
   
 nc :: String -> String -> NamedChunk
 nc i des = NC i (S des) Nothing
 
-nc' :: String -> String -> Sentence -> NamedChunk
-nc' i t acc = NC i (S t) (Just acc)
+nc' :: String -> String -> String -> NamedChunk
+nc' i t acc = NC i (S t) (Just (S acc))
 
 --Currently only used by RelationChunk and EqChunk
 ncWDS :: String -> Sentence -> NamedChunk
 ncWDS n d = NC n d Nothing
 
-ncWDS' :: String -> Sentence -> Sentence -> NamedChunk
-ncWDS' i t a = NC i t (Just a)
+ncWDS' :: String -> Sentence -> String -> NamedChunk
+ncWDS' i t a = NC i t (Just (S a))
 
 {-==============================
 ==== ConceptChunk

@@ -12,4 +12,4 @@ import Data.Drasil.Concepts.Documentation
 
 srsDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 srsDoc sys authors secs =
-  Document ((srs ^. defn) +:+ S "for" +:+ (sys ^. term)) authors secs
+  Document ((srs ^. term) +:+ S "for" +:+ (sys ^. term)) authors secs

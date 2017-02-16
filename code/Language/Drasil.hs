@@ -14,8 +14,9 @@ module Language.Drasil (
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, makeVC
-  , makeVCObj, vcFromCC, makeDCC, SymbolForm(..), dcc, dccWDS, cv, ccStSS
+  , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, nc'
+  , ncWDS', makeVC, makeVCObj, vcFromCC, makeDCC, SymbolForm(..)
+  , dcc, dccWDS, cv, ccStSS
   , Quantity(..), ConVar(..), cvR, NamedIdea(..)
   , Concept(..), compoundterm
   -- Chunk.Constrained
@@ -56,7 +57,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents
+  , mkTable, unit'2Contents, getAcc
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Template.DD

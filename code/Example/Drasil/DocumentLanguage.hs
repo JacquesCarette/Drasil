@@ -27,7 +27,7 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Concept a, Concept b, HasName c, Unit d,
+ SI :: (Concept a, NamedIdea b, HasName c, Unit d,
   Quantity e, Quantity f, Concept f) => {
   _sys :: a,
   _kind :: b,
@@ -43,6 +43,7 @@ data RefTab where
   TSymb :: Contents -> RefTab
   TSymb' :: LFunc -> Contents -> RefTab
   --FIXME: Pull out Contents as it's currently a verbatim "intro" to TSymb.
+  TAandA :: RefTab
   TVerb :: Section -> RefTab
   -- add more here
 data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue

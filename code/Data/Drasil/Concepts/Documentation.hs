@@ -5,21 +5,21 @@ import Language.Drasil.Chunk
 
 --FIXME: Use actual Acronyms instead of CCs.
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg :: ConceptChunk
+  requirement, srs, thModel, mg :: NamedChunk
 
 --FIXME: These shouldn't be ConceptChunks or NamedIdeas, but should be
 --    Some subset of them, no?
-assumption  = dcc "assumption" "A" "Assumption"
-dataDefn    = dcc "dataDefn" "DD" "Data Definition"
-genDefn     = dcc "genDefn" "GD" "General Definition"
-goalStmt    = dcc "goalStmt" "GS" "Goal Statement"
-inModel     = dcc "inModel" "IM" "Instance Model"
-likelyChg   = dcc "likelyChg" "LC" "Likely Change"
-physSyst    = dcc "physSyst" "PS" "Physical System Description"
-requirement = dcc "requirement" "R" "Requirement"
-srs         = dcc "srs" "SRS" "Software Requirements Specification"
-thModel     = dcc "thModel" "T" "Theoretical Model"
-mg          = dcc "mg" "MG" "Module Guide"
+assumption  = nc' "assumption" "Assumption" "A"
+dataDefn    = nc' "dataDefn" "Data Definition" "DD"
+genDefn     = nc' "genDefn" "General Definition" "GD"
+goalStmt    = nc' "goalStmt" "Goal Statement" "GS" 
+inModel     = nc' "inModel" "Instance Model" "IM" 
+likelyChg   = nc' "likelyChg" "Likely Change" "LC"
+physSyst    = nc' "physSyst" "Physical System Description" "PS" 
+requirement = nc' "requirement" "Requirement" "R"
+srs         = nc' "srs" "Software Requirements Specification" "SRS"
+thModel     = nc' "thModel" "Theoretical Model" "T"
+mg          = nc' "mg" "Module Guide" "MG" 
 
 ---------------------------------------------------------------------
 

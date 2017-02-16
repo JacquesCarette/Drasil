@@ -4,7 +4,6 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (srs)
 import Prelude hiding (id)
 import Control.Lens ((^.))
-import Data.Char (toLower)
 
 program, c, matlab, physLib, os :: ConceptChunk
 
@@ -27,12 +26,12 @@ hwHiding = dcc "hardware hiding" "hardware hiding"
 modBehavHiding :: NamedChunk
 modBehavHiding = ncWDS "behaviour hiding" (S "Includes programs that provide " :+:
                  S "externally visible behaviour of the system as specified" :+:
-                 S " in the " :+: (sMap (map toLower) (srs ^. defn)) :+:
-                 S " (" :+: (srs ^. term) :+: S ") documents. This module" :+:
+                 S " in the " :+: (sLower (srs ^. term)) :+:
+                 S " (" :+: (getAcc srs) :+: S ") documents. This module" :+:
                  S " serves as a communication layer between the hardware-" :+:
                  S "hiding module and the software decision module. The " :+:
                  S "programs in this module will need to change if there " :+:
-                 S "are changes in the " :+: (srs ^. term) :+: S ".")
+                 S "are changes in the " :+: (getAcc srs) :+: S ".")
     
 modControl :: NamedChunk
 modControl = ncWDS "control" (S "Provides the main program.")

@@ -7,16 +7,16 @@ import Prelude hiding (id)
 
 ----- Acronyms -----
 
-centreMass, twoD :: ConceptChunk
+centreMass, twoD :: NamedChunk
 
 -- FIXME: Create actual acronyms instead of using CCs.
 
-cpAcronyms :: [ConceptChunk]
+cpAcronyms :: [NamedChunk]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     inModel, likelyChg, ode, requirement, srs, thModel, twoD]
 
-centreMass    = dcc "centreMass" "CM" "Centre of Mass"
-twoD          = dcc "twoD" "2D" "Two-Dimensional"
+centreMass    = nc' "centreMass" "Centre of Mass" "CM"
+twoD          = nc' "twoD" "Two-Dimensional" "2D"
 
 chipmunk :: ConceptChunk
 

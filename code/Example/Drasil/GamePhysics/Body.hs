@@ -130,8 +130,8 @@ s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
   S "that is reliable and free will cut down development costs and lead" +:+.
   S "to better quality products"),
   Paragraph (S "The following section provides an overview of the" +:+
-  (srs ^. defn) +:+ sParen (srs ^. term) +:+ S "for" +:+
-  (chipmunk ^. term) `sC` S "an open source" +:+ (twoD ^. term) +:+ 
+  (srs ^. term) +:+ sParen (getAcc srs) +:+ S "for" +:+
+  (chipmunk ^. term) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
   (rigidBody ^. term) +:+. (physLib ^. term) +:+
   S "This section explains the purpose of this document, the scope" +:+.
   S "of the system, and the organization of the document")]
@@ -146,10 +146,10 @@ s2_1_intro :: [Contents]
 s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
-  S "open source" +:+ (twoD ^. term) +:+ (rigidBody ^. term) +:+ 
+  S "open source" +:+ (getAcc twoD) +:+ (rigidBody ^. term) +:+ 
   (physLib ^. term) +:+ S "used for games. The" +:+ 
-  (addS (sLower (goalStmt ^. defn))) +:+ S "and" +:+ 
-  (addS (sLower (thModel ^. defn))) +:+ S "used in" +:+ (chipmunk ^. term) +:+
+  (addS (sLower (goalStmt ^. term))) +:+ S "and" +:+ 
+  (addS (sLower (thModel ^. term))) +:+ S "used in" +:+ (chipmunk ^. term) +:+
   S "are provided. This" +:+
   S "document is intended to be used as a reference to provide all" +:+.
   S "necessary information to understand and verify the model"),
@@ -157,7 +157,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "subsequent development phases, including writing the design" +:+.
   S "specification and the software verification and validation plan" +:+
   S "The design document will show how the" +:+
-  (addS (sLower (requirement ^. defn))) +:+ S "are to be" +:+
+  (addS (sLower (requirement ^. term))) +:+ S "are to be" +:+
   S "realized. The verification and validation plan will show the steps" +:+
   S "that will be used to increase confidence in the software" +:+.
   S "documentation and the implementation")]
@@ -169,14 +169,14 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section (S "Scope of" +:+ addS (requirement ^. defn))
+s2_2 = Section (S "Scope of" +:+ addS (requirement ^. term))
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ S "The scope of the" +:+
-  (addS (sLower (requirement ^. defn))) +:+ S "includes the" +:+
-  S "physical simulation of" +:+ (twoD ^. term) +:+ 
+  (addS (sLower (requirement ^. term))) +:+ S "includes the" +:+
+  S "physical simulation of" +:+ (getAcc twoD) +:+ 
   irregPlur (rigidBody ^. term) +:+ S "acted on by forces. Given" +:+ 
-  (twoD ^. term) +:+ irregPlur (rigidBody ^. term) `sC` (chipmunk ^. term) +:+ 
+  (getAcc twoD) +:+ irregPlur (rigidBody ^. term) `sC` (chipmunk ^. term) +:+ 
   S "is intended to simulate how these" +:+ irregPlur (rigidBody ^. term) +:+. 
   S "interact with one another"
 
@@ -193,7 +193,7 @@ s2_3 = orgSec s2_3_intro inModel s4_2_5
 -- FIXME: This can probably be completely pulled out is we decide on the 
 --  right convention for the intro across examples.
 s2_3_intro = S "The organization of this document follows the" +:+
-  S "template for an" +:+ (srs ^. term) +:+ S "for scientific" +:+.
+  S "template for an" +:+ (getAcc srs) +:+ S "for scientific" +:+.
   S "computing software proposed by [1] and [2]"
 
 --------------------------------------------
@@ -268,7 +268,7 @@ s4_1_intro = Paragraph $ S "Creating a gaming" +:+ (physLib ^. term) +:+
   S "free, open source and high quality physics libraries available to" +:+
   S "be used for consumer products" +:+ sParen (makeRef s7) :+:
   S ". By creating a simple, lightweight, fast and portable" +:+
-  (twoD ^. term) +:+ (rigidBody ^. term) +:+ (physLib ^. term) `sC` 
+  (getAcc twoD) +:+ (rigidBody ^. term) +:+ (physLib ^. term) `sC` 
   S "game development will be more accessible" +:+.
   S "to the masses and higher quality products will be produced"
 
@@ -305,29 +305,29 @@ s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = Section (addS (goalStmt ^. defn)) [Con s4_1_2_list]
+s4_1_2 = Section (addS (goalStmt ^. term)) [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
-  ((goalStmt ^. term) :+: S "1", Flat (S "Given the physical" +:+
+  ((getAcc goalStmt) :+: S "1", Flat (S "Given the physical" +:+
   S "properties, initial" +:+ addS (position ^. term) +:+ S "and" +:+
   irregPlur (vel ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
   S "applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
   S "determine their new" +:+ addS (position ^. term) +:+ S "and" +:+
   irregPlur (vel ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
-  ((goalStmt ^. term) :+: S "2", Flat (S "Given the physical" +:+
+  ((getAcc goalStmt) :+: S "2", Flat (S "Given the physical" +:+
   S "properties, initial" +:+ addS (orientation ^. term) +:+ S "and" +:+
   irregPlur (angVel ^. term) `sC` S "and" +:+ addS (force ^. term) +:+
   S "applied on a set of" +:+ irregPlur (rigidBody ^. term) `sC`
   S "determine their new" +:+ addS (orientation ^. term) +:+ S "and" +:+
   irregPlur (angVel ^. term) +:+ S "over a period of" +:+. (time ^. term))),
 --
-  ((goalStmt ^. term) :+: S "3", Flat (S "Given the initial" +:+
+  ((getAcc goalStmt) :+: S "3", Flat (S "Given the initial" +:+
   addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+ S "of a" +:+
   S "set of" +:+ irregPlur (rigidBody ^. term) `sC` S "determine if any of" +:+
   S "them will collide with one another over a period of" +:+. (time ^. term))),
 --
-  ((goalStmt ^. term) :+: S "4", Flat (S "Given the physical" +:+
+  ((getAcc goalStmt) :+: S "4", Flat (S "Given the physical" +:+
   S "properties, initial linear and angular" +:+ addS (position ^. term) +:+
   S "and" +:+ irregPlur (vel ^. term) `sC` S "determine the new" +:+
   addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+
@@ -351,7 +351,7 @@ s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section (addS $ assumption ^. defn) [Con s4_2_1_intro,
+s4_2_1 = Section (addS $ assumption ^. term) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -359,27 +359,27 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   S "and helps in developing the theoretical model by filling in the" +:+
   S "missing information for the physical system. The numbers given in" +:+
   S "the square brackets refer to the" +:+ foldr1 sC 
-  (map (\ch -> (sLower (ch ^. defn)) +:+ (bterm ch)) 
+  (map (\ch -> (sLower (ch ^. term)) +:+ (bterm ch)) 
   [thModel, genDefn, dataDefn, inModel]) `sC` S "or" +:+ 
-  (sLower $ likelyChg ^. defn) +:+ (bterm likelyChg) `sC` 
-  S "in which the respective" +:+ (sLower $ assumption ^. defn) +:+. S "is used"
-  where bterm chunk = S "[" :+: (chunk ^. term) :+: S "]"
+  (sLower $ likelyChg ^. term) +:+ (bterm likelyChg) `sC` 
+  S "in which the respective" +:+ (sLower $ assumption ^. term) +:+. S "is used"
+  where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
 
 s4_2_1_list = Enumeration (Simple [
-  ((assumption ^. term) :+: S "1", Flat (S "All objects are" +:+.
+  ((getAcc assumption) :+: S "1", Flat (S "All objects are" +:+.
   irregPlur (rigidBody ^. term))),
-  ((assumption ^. term) :+: S "2", Flat (S "All objects are" +:+.
-  (twoD ^. term))),
-  ((assumption ^. term) :+: S "3", Flat (S "The library uses a" +:+
+  ((getAcc assumption) :+: S "2", Flat (S "All objects are" +:+.
+  (getAcc twoD))),
+  ((getAcc assumption) :+: S "3", Flat (S "The library uses a" +:+
   (cartesian ^. term) +:+. S "system")),
-  ((assumption ^. term) :+: S "4", Flat (S "The axes are defined using" +:+.
+  ((getAcc assumption) :+: S "4", Flat (S "The axes are defined using" +:+.
   (rightHand ^. term))),
-  ((assumption ^. term) :+: S "5", Flat (S "All" +:+
+  ((getAcc assumption) :+: S "5", Flat (S "All" +:+
   irregPlur (rigidBody ^. term) +:+ addS (collision ^. term) +:+
   S "are vertex-to-edge" +:+. (addS (collision ^. term)))),
-  ((assumption ^. term) :+: S "6", Flat (S "There is no damping" +:+.
+  ((getAcc assumption) :+: S "6", Flat (S "There is no damping" +:+.
   S "involved throughout the simulation")),
-  ((assumption ^. term) :+: S "7", Flat (S "There are no constraints" +:+.
+  ((getAcc assumption) :+: S "7", Flat (S "There are no constraints" +:+.
   S "and joints involved throughout the simulation"))])
 
 --------------------------------
@@ -390,7 +390,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section (addS (thModel ^. defn)) ([Con s4_2_2_intro] ++
+s4_2_2 = Section (addS (thModel ^. term)) ([Con s4_2_2_intro] ++
   (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations" +:+
@@ -406,13 +406,13 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = Section ( addS (genDefn ^. defn)) ([Con s4_2_3_intro] {- ++
+s4_2_3 = Section ( addS (genDefn ^. term)) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+
-  S "that will be used in deriving the" +:+ addS (sLower (dataDefn ^. defn)) `sC`
+  S "that will be used in deriving the" +:+ addS (sLower (dataDefn ^. term)) `sC`
   S "which in turn will be used to build the" +:+.
-  (addS (sLower (inModel ^. defn)))
+  (addS (sLower (inModel ^. term)))
 
 -- GDefs not yet implemented --
 {-
@@ -428,11 +428,11 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = Section (addS (dataDefn ^. defn)) ([Con s4_2_4_intro] ++
+s4_2_4 = Section (addS (dataDefn ^. term)) ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ S "This section collects and defines all the" +:+
-  S "data needed to build the" +:+ (inModel ^. defn) :+: S "s. The" +:+.
+  S "data needed to build the" +:+ (inModel ^. term) :+: S "s. The" +:+.
   S "dimension of each quantity is also given"
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
@@ -445,7 +445,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 -- s4_2_5_IMods :: [Contents]
 
-s4_2_5 = Section (addS (inModel ^. defn)) ([Con s4_2_5_intro] {- ++
+s4_2_5 = Section (addS (inModel ^. term)) ([Con s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-})
 
 s4_2_5_intro = Paragraph $ S "This section transforms the problem defined" +:+
@@ -517,13 +517,13 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = Section (addS $ requirement ^. defn) [Con s5_intro, Sub s5_1,
+s5 = Section (addS $ requirement ^. term) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
 s5_intro = Paragraph $ S "This section provides the functional" +:+
-  addS (sLower (requirement ^. defn)) `sC` S "the business" +:+
+  addS (sLower (requirement ^. term)) `sC` S "the business" +:+
   S "tasks that the software is expected to complete, and the" +:+
-  S "nonfunctional" +:+. (addS (sLower (requirement ^. defn)) `sC`
+  S "nonfunctional" +:+. (addS (sLower (requirement ^. term)) `sC`
   S "the qualities that the software is expected to exhibit")
 
 -----------------------------------
@@ -533,45 +533,45 @@ s5_intro = Paragraph $ S "This section provides the functional" +:+
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = Section (S "Functional" +:+ addS (requirement ^. defn))
+s5_1 = Section (S "Functional" +:+ addS (requirement ^. term))
   [Con s5_1_list]
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
 s5_1_list = Enumeration (Simple [
-  ((requirement ^. term) :+: S "1", Flat (S "Create a" +:+
+  ((getAcc requirement) :+: S "1", Flat (S "Create a" +:+
   (space ^. term) +:+ S "for all of the" +:+ irregPlur (rigidBody ^. term) +:+.
   S "in the physical simulation to interact in")),
 --
-  ((requirement ^. term) :+: S "2", Flat (S "Input the initial" +:+
+  ((getAcc requirement) :+: S "2", Flat (S "Input the initial" +:+
   addES (mass ^. term) `sC` irregPlur (vel ^. term) `sC` addS (orientation ^. term) `sC`
   irregPlur (angVel ^. term) +:+ S "of" `sC` S "and" +:+ addS (force ^. term) +:+ 
   S "applied on" +:+. irregPlur (rigidBody ^. term))),
 --
-  ((requirement ^. term) :+: S "3", Flat (S "Input the" +:+ 
+  ((getAcc requirement) :+: S "3", Flat (S "Input the" +:+ 
   (surface ^. term) +:+ S "properties of the bodies, such as" +:+ 
   (friction ^. term) +:+ S "or" +:+. (elasticity ^. term))),
 --
-  ((requirement ^. term) :+: S "4", Flat (S "Verify that the inputs" +:+.
+  ((getAcc requirement) :+: S "4", Flat (S "Verify that the inputs" +:+.
   S "satisfy the required physical constraints")),
 --
-  ((requirement ^. term) :+: S "5", Flat (S "Determine the" +:+
+  ((getAcc requirement) :+: S "5", Flat (S "Determine the" +:+
   addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+ S "over a" +:+
-  S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
+  S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (getAcc twoD) +:+ 
   irregPlur (rigidBody ^. term) +:+ S "acted upon by a" +:+. (force ^. term))),
 --
-  ((requirement ^. term) :+: S "6", Flat (S "Determine the" +:+
+  ((getAcc requirement) :+: S "6", Flat (S "Determine the" +:+
   addS (orientation ^. term) +:+ S "and" +:+ irregPlur (angVel ^. term) :+:
   S " over a period of" +:+ (time ^. term) +:+ S "of the" +:+
-  (twoD ^. term) +:+. irregPlur (rigidBody ^. term))),
+  (getAcc twoD) +:+. irregPlur (rigidBody ^. term))),
 --
-  ((requirement ^. term) :+: S "7", Flat (S "Determine if any of the" +:+
+  ((getAcc requirement) :+: S "7", Flat (S "Determine if any of the" +:+
   irregPlur (rigidBody ^. term) +:+ S "in the" +:+ (space ^. term) +:+.
   S "have collided")),
 --
-  ((requirement ^. term) :+: S "8", Flat (S "Determine the" +:+
+  ((getAcc requirement) :+: S "8", Flat (S "Determine the" +:+
   addS (position ^. term) +:+ S "and" +:+ irregPlur (vel ^. term) +:+ S "over a" +:+
-  S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (twoD ^. term) +:+ 
+  S "period of" +:+ (time ^. term) +:+ S "of the" +:+ (getAcc twoD) +:+ 
   irregPlur (rigidBody ^. term) +:+ S "that have undergone a" +:+. (collision ^. term)))
   ])
 
@@ -582,7 +582,7 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = Section (S "Nonfunctional" +:+ addS (requirement ^. defn))
+s5_2 = Section (S "Nonfunctional" +:+ addS (requirement ^. term))
   [Con s5_2_intro]
 
 s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+
@@ -597,21 +597,21 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section (addS (likelyChg ^. defn)) [Con s6_intro, Con s6_list]
+s6 = Section (addS (likelyChg ^. term)) [Con s6_intro, Con s6_list]
 
 s6_intro = Paragraph $ S "This section lists the" +:+. (addS (sLower
-  (likelyChg ^. defn)) +:+ S "to be made to the physics game library")
+  (likelyChg ^. term)) +:+ S "to be made to the physics game library")
 
 s6_list = Enumeration (Simple [
-  ((likelyChg ^. term) :+: S "1", Flat (S "The internal" +:+
-  (ode ^. term) :+: S "-solving algorithm used by the library may" +:+.
+  ((getAcc likelyChg) :+: S "1", Flat (S "The internal" +:+
+  (getAcc ode) :+: S "-solving algorithm used by the library may" +:+.
   S "change in the future")),
-  ((likelyChg ^. term) :+: S "2", Flat (S "The library may be" +:+
+  ((getAcc likelyChg) :+: S "2", Flat (S "The library may be" +:+
   S "expanded to deal with edge-to-edge and vertex-to-vertex" +:+.
   (addS (collision ^. term)))),
-  ((likelyChg ^. term) :+: S "3", Flat (S "The library may be" +:+.
+  ((getAcc likelyChg) :+: S "3", Flat (S "The library may be" +:+.
   S "expanded to include motion with damping")),
-  ((likelyChg ^. term) :+: S "4", Flat (S "The library may be" +:+.
+  ((getAcc likelyChg) :+: S "4", Flat (S "The library may be" +:+.
   S "expanded to include joints and constraints"))])
 
 -----------------------------------------
@@ -626,7 +626,7 @@ s7 = Section (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
   S "there already exist free open source game physics libraries") +:+
-  S "Similar" +:+ (twoD ^. term) +:+ S "physics libraries are:"
+  S "Similar" +:+ (getAcc twoD) +:+ S "physics libraries are:"
 
 s7_2dlist = Enumeration (Bullet [
   Flat (S "Box2D: http://box2d.org/"),

@@ -66,11 +66,11 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
 -- Temperature ODEs Module
 mod_temp_desc :: NamedChunk
 mod_temp_desc = ncWDS "temperature ODEs" (S "Defines the " :+: 
-                (ordDiffEq ^. term) :+: S "s using the parameters in the " :+:
+                (getAcc ordDiffEq) :+: S "s using the parameters in the " :+:
                 S "input parameters module.")
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: (ordDiffEq ^. term) :+:
+mod_temp = makeImpModule mod_temp_desc (S "The " :+: (getAcc ordDiffEq) :+:
            S "s for solving the temperature, using the input parameters.")
            swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
@@ -96,7 +96,7 @@ mod_sw :: ModuleChunk
 mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
          S "mathematical theorems, physical facts, or programming " :+:
          S "considerations. The secrets of this module are not described " :+:
-         S "in the " :+: (srs ^. term) :+: S ".") Nothing
+         S "in the " :+: (getAcc srs) :+: S ".") Nothing
 
 -- Sequence Data Structure Module
 mod_seq_desc :: NamedChunk
@@ -116,7 +116,7 @@ mod_ode_desc = ncWDS "ODE solver" (S "Provides solvers that take the governing "
 
 mod_ode :: ModuleChunk
 mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: (ordDiffEq ^. term) :+: S "s.") matlab [] [] 
+          S " first order " :+: (getAcc ordDiffEq) :+: S "s.") matlab [] [] 
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module

@@ -5,14 +5,14 @@ module Drasil.SWHS.Concepts where
 import Language.Drasil
 import Data.Drasil.Concepts.Math (ode)
 ---Acronyms---
-ordDiffEq,phsChgMtrl,rightSide,progName :: ConceptChunk
+ordDiffEq,phsChgMtrl,rightSide,progName :: NamedChunk
 
 ordDiffEq   = ode
 
 --FIXME: Acronyms
-phsChgMtrl  = dcc "phsChgMtrl" "PCM" "Phase Change Material"
-rightSide   = dcc "rightSide" "RHS" "Right Hand Side"
-progName    = dcc "progName" "SWHS" "Solar Water Heating System"
+phsChgMtrl  = nc' "phsChgMtrl" "Phase Change Material" "PCM"
+rightSide   = nc' "rightSide" "Right Hand Side" "RHS" 
+progName    = nc' "progName" "Solar Water Heating System" "SWHS" 
 
 swhsFull :: NamedChunk
 swhsFull    = 

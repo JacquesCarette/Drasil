@@ -1,0 +1,45 @@
+Outline:
+
+Main research problem
+  - High quality software should be the aim of every dev.
+  - Software artifacts tend to fall out of sync with each other over time, 
+    negatively impacting the overall software quality. This is most noticeable 
+    in the qualities of maintainability, traceability, and verifiability.
+  - Knowledge duplication in software artifacts -- lots of manual copy/pasting.
+
+Technical approach:
+  - Use ideas from Literate Programming.
+  - Drasil framework.
+  - Practical, example-driven.
+  - Frequent redesigns and refactoring -- Agile-like approach
+  - Knowledge Capture + Generation
+  - Chunks + Chunk Hierarchy
+  - Recipes 
+    - DSLs all the way down.
+    - Currently implementing new recipe DSL as intermediary
+  - Pictures: Chunk hierarchy + Abstraction of models, etc. (from meetings).
+  
+  
+Preliminary results:
+	Advantages 
+		- Knowledge capture 
+			- Common knowledge across different projects is captured once and 
+				reused where necessary. Ex. Cons_therm_energy across examples.
+		- Verification
+			- Traceability is guaranteed as everything is generated from the
+				knowledge-base. All chunks used by a recipe can be automatically
+				listed when necessary.
+			- Software becomes more easily maintainable when created with a 
+        knowledge-based approach using Drasil. Since there is a single unique 
+        source for knowledge, any mistakes will appear everywhere in the 
+        generated artifacts. This makes them much easier to find and to fix,
+        as only one source must be updated to propagate the fix through all 
+        the software artifacts.
+  Disadvantages
+    - Large up-front time investment as knowledge-base grows.
+    - Undocumented local hacks. 
+      - Generated artifacts should not be modified, which
+        means that local hacks should not be made. Any local changes will be 
+        overwritten the next time the generator is run. 
+      - Any local changes will be undocumented, or will require manual modification
+        of generated artifacts to document them.

@@ -58,6 +58,7 @@ instance Chunk Q where
 
 instance NamedIdea Q where 
   term = qlens term
+  getA (Q a) = getA a
 
 instance SymbolForm Q where
   symbol = qlens symbol
@@ -82,6 +83,7 @@ instance Chunk UnitalChunk where
 
 instance NamedIdea UnitalChunk where
   term = q . term
+  getA (UC c _) = getA c
 
 instance SymbolForm UnitalChunk where
   symbol = q . symbol

@@ -7,9 +7,11 @@ import Control.Lens ((^.))
 
 import Drasil.TableOfUnits (table_of_units)
 import Drasil.TableOfSymbols (table)
+import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
+import Data.Maybe (isJust)
 import Prelude hiding (id)
 
 ---------------------------------------------------------------------------
@@ -28,13 +30,14 @@ data SystemInformation where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (Concept a, NamedIdea b, HasName c, Unit d,
-  Quantity e, Quantity f, Concept f) => {
+  Quantity e, Quantity f, Concept f, NamedIdea g) => {
   _sys :: a,
   _kind :: b,
   _authors :: [c],
   _units :: [d],
   _quants :: [e],
-  _concepts :: [f]
+  _concepts :: [f],
+  _namedIdeas :: [g]
   } -> SystemInformation
 
 -- anything with 'Verb' in it should eventually go
@@ -61,7 +64,7 @@ type DocDesc = [DocSection]
 
 -- 
 mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI sys kind authors _ _ _) = Document 
+mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
   ((kind^.term) +:+ S "for" +:+ (sys^.term))
   (manyNames authors) (mkSections si l)
 
@@ -77,10 +80,11 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _ _)  TUnits   l' = table_of_units u : l'
-    mkSubRef (SI _ _ _ _ v _) (TSymb con) l' = 
+    mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
+    mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
       (Section (tOfSymb^.term) (map Con [con, (table v (^.term))])) : l'
-    mkSubRef (SI _ _ _ _ _ ccs) (TSymb' f con) l' = (mkTSymb ccs f con) : l'
+    mkSubRef (SI _ _ _ _ _ ccs _) (TSymb' f con) l' = (mkTSymb ccs f con) : l'
+    mkSubRef (SI _ _ _ _ v ccs n) TAandA l' = (table_of_abb_and_acronyms $ filter (isJust . getA) (map nw v ++ map nw ccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 mkTSymb :: (Quantity e, Concept e) => 

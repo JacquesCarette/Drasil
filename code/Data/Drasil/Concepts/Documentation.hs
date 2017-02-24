@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
 
 
 --FIXME: Use actual Acronyms instead of CCs.

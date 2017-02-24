@@ -1,5 +1,5 @@
 module Data.Drasil.SI_Units where
-import Language.Drasil.Chunk (makeDCC)
+import Language.Drasil.Chunk.Concept (makeDCC)
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU)
 import Language.Drasil.Unicode (Special(Circle))

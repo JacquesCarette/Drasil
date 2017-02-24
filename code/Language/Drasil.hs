@@ -80,6 +80,11 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.CommonIdea
+import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON

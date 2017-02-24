@@ -1,0 +1,128 @@
+% !TEX TS-program = pdflatex
+% !TEX encoding = UTF-8 Unicode
+
+% This is a simple template for a LaTeX document using the "article" class.
+% See "book", "report", "letter" for other types of document.
+
+\documentclass[twocolumn, 10pt]{article} % use larger type; default would be 10pt
+
+\usepackage[utf8]{inputenc} % set input encoding (not needed with XeLaTeX)
+
+\renewcommand{\rmdefault}{ptm}
+\usepackage[mtbold,noTS1]{mathtime}%
+
+%%% PAGE DIMENSIONS
+\usepackage{geometry} % to change the page dimensions
+\geometry{letterpaper} % or letterpaper (US) or a5paper or....
+% \geometry{margin=2in} % for example, change the margins to 2 inches all round
+% \geometry{landscape} % set up the page for landscape
+%   read geometry.pdf for detailed page layout information
+
+\usepackage{graphicx} % support the \includegraphics command and options
+
+% \usepackage[parfill]{parskip} % Activate to begin paragraphs with an empty line rather than an indent
+
+%%% PACKAGES
+\usepackage{booktabs} % for much better looking tables
+\usepackage{array} % for better arrays (eg matrices) in maths
+\usepackage{paralist} % very flexible & customisable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfig} % make it possible to include more than one captioned figure/table in a single float
+% These packages are all incorporated in the memoir class to one degree or another...
+
+%%% HEADERS & FOOTERS
+\usepackage{fancyhdr} % This should be set AFTER setting up the page geometry
+\pagestyle{empty} % options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0pt} % customise the layout...
+\lhead{}\chead{}\rhead{}
+\lfoot{}\cfoot{\thepage}\rfoot{}
+
+%%% SECTION TITLE APPEARANCE
+%\usepackage{sectsty}
+%\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+% (This matches ConTeXt defaults)
+
+%%% ToC (table of contents) APPEARANCE
+%\usepackage[nottoc,notlof,notlot]{tocbibind} % Put the bibliography in the ToC
+%\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents
+%\renewcommand{\cftsecfont}{\rmfamily\mdseries\upshape}
+%\renewcommand{\cftsecpagefont}{\rmfamily\mdseries\upshape} % No bold!
+
+%%% END Article customizations
+
+%%% The "real" document content comes below...
+
+\title{The Drasil Framework -- Poster}
+	%{Captured Knowledge and Artifact Generation:\\The Drasil Framework}
+\author{!!AUTHORS!!}
+%\date{} % Activate to display a given date or no date (if empty),
+         % otherwise the current date is printed 
+
+\begin{document}
+\maketitle
+
+%%\abstract{Do we need an abstract for a one-page extended abstract?}
+\section{Research Problem}
+
+Software artifacts contain a vast amount of knowledge duplication and
+transformation. A single piece of underlying knowledge should appear (in some
+form) in every artifact for a given piece of software. In certain domains,
+like Scientific Computing (SC),
+knowledge is duplicated across many different pieces of software. This
+duplication is almost exclusively performed manually, whether by copying/pasting
+from existing artifacts, or by transcription from another source (ie. a
+textbook).
+
+Artifacts tend to fall out of sync over their lifecycle,
+negatively impacting overall software quality. This is most noticeable 
+when it comes to maintainability, traceability, and particularly verifiability.
+A rational, document-driven design process has been proposed as one approach
+leading to higher quality software\cite{SmithAndKoothoor2016}.
+
+\section{Approach}
+
+We are using ideas from Literate Programming (LP) and Generative Programming
+(GP) to capture knowledge, reduce manual duplication, and generate software
+artifacts. We have created a framework, Drasil, to accomplish this through a
+practical, example-driven approach involving frequent redesigns and refactoring.
+
+In Drasil, knowledge is captured in ``chunks'', which are then used in
+conjunction with our ``recipes'' to generate software artifacts (requirements
+specifications, design documents, source code, etc.) in various formats.
+
+Recipes are built from a number of custom Domain Specific Languages (DSLs)
+embedded in Haskell. The recipes allow us to target our output to specific
+audiences, creating different ``views'' of our knowledge-base with minimal
+effort. These views can be large-scale (ex. different artifact types) or
+small-scale (ex. showing/hiding verbose descriptions within an artifact). We are
+currently implementing a new recipe DSL to gain a higher level of abstraction,
+which will be easier to work with than the previous implementation.
+
+%Chunks + Chunk Hierarchy
+%  - Recipes 
+%    - DSLs all the way down.
+%    - Currently implementing new recipe DSL as intermediary
+%  - Pictures: Chunk hierarchy + Abstraction of models, etc. (from meetings).
+  
+\section{Preliminary results}
+As of this writing, there are currently six example projects being redeveloped
+using Drasil. Advantages of the approach have already become clear.
+
+Knowledge capture has lead to reduced knowledge duplication. Common knowledge
+across different examples is captured once and reused as necessary. For example,
+conservation of thermal energy appears in multiple examples.
+
+Traceability is guaranteed as everything is generated from the knowledge-base. A
+recipe keeps track of all the chunks it uses, and so is easy to trace.
+
+Software becomes more maintainable when using Drasil as there is a single unique
+source for knowledge. Any mistakes in the knowledge-base will appear everywhere
+in the generated artifacts, making them easy to find and easier to fix. Only one
+source must be updated to propagate a fix through all artifacts.
+
+The main disadvantage to a knowledge-based approach is the large up-front investment in creating and expanding the knowledge base.
+
+\bibliographystyle{abbrv}
+\bibliography{drasil}
+
+\end{document}

@@ -54,7 +54,16 @@
 
 \title{The Drasil Framework -- Poster}
 	%{Captured Knowledge and Artifact Generation:\\The Drasil Framework}
-\author{!!AUTHORS!!}
+\author{
+  Daniel Szymczak
+  \and
+  Stephen Palmer
+  \and
+  Jacques Carette
+  \and
+  Spencer Smith\
+}
+
 %\date{} % Activate to display a given date or no date (if empty),
          % otherwise the current date is printed 
 
@@ -66,18 +75,17 @@
 
 Software artifacts contain a vast amount of knowledge duplication and
 transformation. A single piece of underlying knowledge should appear (in some
-form) in every artifact for a given piece of software. In certain domains,
+form) in every artifact for a given piece of software.
+
+In certain domains,
 like Scientific Computing (SC),
 knowledge is duplicated across many different pieces of software. This
 duplication is almost exclusively performed manually, whether by copying/pasting
-from existing artifacts, or by transcription from another source (ie. a
-textbook).
+from existing artifacts, or by transcription from another source such as a textbook.
 
 Artifacts tend to fall out of sync over their lifecycle,
 negatively impacting overall software quality. This is most noticeable 
 when it comes to maintainability, traceability, and particularly verifiability.
-A rational, document-driven design process has been proposed as one approach
-leading to higher quality software\cite{SmithAndKoothoor2016}.
 
 \section{Approach}
 
@@ -86,8 +94,8 @@ We are using ideas from Literate Programming (LP) and Generative Programming
 artifacts. We have created a framework, Drasil, to accomplish this through a
 practical, example-driven approach involving frequent redesigns and refactoring.
 
-In Drasil, knowledge is captured in ``chunks'', which are then used in
-conjunction with our ``recipes'' to generate software artifacts (requirements
+In Drasil, knowledge is captured in \textit{chunks}, which are then used in
+conjunction with our \textit{recipes} to generate software artifacts (requirements
 specifications, design documents, source code, etc.) in various formats.
 
 Recipes are built from a number of custom Domain Specific Languages (DSLs)
@@ -112,17 +120,20 @@ Knowledge capture has lead to reduced knowledge duplication. Common knowledge
 across different examples is captured once and reused as necessary. For example,
 conservation of thermal energy appears in multiple examples.
 
-Traceability is guaranteed as everything is generated from the knowledge-base. A
-recipe keeps track of all the chunks it uses, and so is easy to trace.
+Traceability is guaranteed as everything is generated from the knowledge-base.
+The recipe is aware of all necessary chunks and can easily produce a trace to
+a given knowledge source.
 
 Software becomes more maintainable when using Drasil as there is a single unique
 source for knowledge. Any mistakes in the knowledge-base will appear everywhere
 in the generated artifacts, making them easy to find and easier to fix. Only one
 source must be updated to propagate a fix through all artifacts.
 
-The main disadvantage to a knowledge-based approach is the large up-front investment in creating and expanding the knowledge base.
+There is one main disadvantage to a knowledge-based approach -- the large up-front
+investment in creating and expanding the knowledge base. However, we believe this
+investment is worthwhile for the long-term gains.
 
-\bibliographystyle{abbrv}
-\bibliography{drasil}
+%\bibliographystyle{abbrv}
+%\bibliography{drasil}
 
 \end{document}

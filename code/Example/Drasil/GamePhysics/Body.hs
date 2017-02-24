@@ -47,11 +47,12 @@ chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS chipmunkSysInfo
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TVerb s1_3 ]) : 
+mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TAandA ]) : 
   map Verbatim [s2, s3, s4, s5, s6, s7]
   
 chipmunkSysInfo :: SystemInformation
 chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [ConVar])
+  cpAcronyms --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]

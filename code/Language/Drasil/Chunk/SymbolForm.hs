@@ -5,6 +5,7 @@ import Language.Drasil.Chunk
 import Control.Lens (Simple, Lens, (^.), set)
 
 import Language.Drasil.Symbol
+import Prelude hiding (id)
 
 class Chunk c => SymbolForm c where
   symbol :: Simple Lens c Symbol

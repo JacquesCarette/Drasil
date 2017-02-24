@@ -8,6 +8,8 @@ import Data.List (intersperse)
 import Data.Char (toUpper)
 import Prelude hiding (id)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.Wrapper (nw, NWrapper)

@@ -10,6 +10,8 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.Wrapper
 

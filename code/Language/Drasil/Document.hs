@@ -1,6 +1,7 @@
 module Language.Drasil.Document where
 import Prelude hiding (id)
-import Language.Drasil.Chunk (id, term)
+import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module

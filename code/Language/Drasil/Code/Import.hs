@@ -8,6 +8,8 @@ import qualified Language.Drasil.Expr as E
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Code.Imperative.AST as A
 import Language.Drasil.Code.Imperative.Helpers

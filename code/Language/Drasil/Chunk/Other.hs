@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.Other where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
 
 type AssumpChunk = NamedChunk
 -- unlikely change

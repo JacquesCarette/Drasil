@@ -3,10 +3,15 @@ module Language.Drasil.Chunk.Concept where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.SymbolForm
 
 import Control.Lens (Simple, Lens, (^.), set)
 
 import Language.Drasil.Spec
+import Language.Drasil.Symbol
+import Language.Drasil.Space
+
+import Prelude hiding (id)
 
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence

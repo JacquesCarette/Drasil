@@ -7,6 +7,9 @@ module Language.Drasil.Chunk.Wrapper
 
 import Control.Lens (Simple, Lens, set, (^.))
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Quantity
 import Prelude hiding (id)
 

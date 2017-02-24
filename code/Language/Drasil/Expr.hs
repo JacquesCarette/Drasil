@@ -4,7 +4,9 @@ module Language.Drasil.Expr where
 
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Prelude hiding (id)
-import Language.Drasil.Chunk (Chunk(..), SymbolForm, NamedIdea)
+import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Chunk.SymbolForm (SymbolForm)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea)
 import Language.Drasil.Symbol
 
 import Control.Lens ((^.))

@@ -6,6 +6,8 @@ import Control.Lens (Simple, Lens, (^.))
 import Prelude hiding (id)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, NamedChunk, term)
+import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Wrapper (nw, NWrapper)

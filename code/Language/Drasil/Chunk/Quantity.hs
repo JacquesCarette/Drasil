@@ -5,7 +5,10 @@ module Language.Drasil.Chunk.Quantity where
 import Control.Lens
 
 import Language.Drasil.Space
-import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.VarChunk
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Unit
 import Prelude hiding (id)
 

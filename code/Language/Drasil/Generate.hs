@@ -15,6 +15,7 @@ import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea (NamedIdea)
 import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Code.Imperative.LanguageRenderer
   hiding (body)

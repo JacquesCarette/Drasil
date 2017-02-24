@@ -3,6 +3,7 @@ module Language.Drasil.Chunk.LC(LCChunk(..)) where
 import Control.Lens (Simple, Lens)
 import Prelude hiding (id)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea (NamedChunk, NamedIdea, term)
 import Language.Drasil.Chunk.Module
 
 -- BEGIN LCCHUNK (likely change chunk) --

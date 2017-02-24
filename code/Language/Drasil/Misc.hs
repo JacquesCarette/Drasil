@@ -3,7 +3,7 @@ module Language.Drasil.Misc where
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
-import Language.Drasil.Chunk (NamedIdea, getA)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA)
 
 import Control.Lens ((^.))
 

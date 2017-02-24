@@ -5,8 +5,10 @@ import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
-import Language.Drasil.Chunk (NamedIdea, VarChunk(..), SymbolForm,
-                              id, symbol, term)
+import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.VarChunk (VarChunk(..))
+import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation
 
 --Get dependency from equation  

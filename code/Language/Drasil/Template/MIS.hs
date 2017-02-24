@@ -5,6 +5,7 @@ import Language.Drasil.Spec
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Method
+import Language.Drasil.Chunk.SymbolForm (symbol)
 import Language.Drasil.Template.Helpers
 
 import Data.List (intersperse)

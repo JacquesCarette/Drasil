@@ -6,6 +6,8 @@ import Control.Lens (Simple, Lens, (^.), set)
 
 import Language.Drasil.Spec
 
+import Prelude hiding (id)
+
 class Chunk c => NamedIdea c where
   term :: Simple Lens c Sentence
   getA :: c -> Maybe Sentence

@@ -7,8 +7,10 @@ module Language.Drasil.Chunk.Unital
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
-import Language.Drasil.Chunk (Chunk(..), NamedIdea(..), SymbolForm(..), 
-  ConVar(..), dcc, dccWDS, cv, Concept(..),SF(..))
+import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.Concept (Concept(..), cv, dcc, dccWDS, ConVar(..))
+import Language.Drasil.Chunk.SymbolForm (SymbolForm(..), SF(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol

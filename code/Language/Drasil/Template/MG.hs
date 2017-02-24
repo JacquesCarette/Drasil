@@ -2,6 +2,7 @@ module Language.Drasil.Template.MG(makeMG, mgDoc) where
 import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req

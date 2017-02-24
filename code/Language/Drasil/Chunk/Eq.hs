@@ -6,7 +6,11 @@ import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.VarChunk (VarChunk, vc)
 import Language.Drasil.Chunk.Unital (ucFromVC)
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
@@ -84,4 +88,4 @@ fromEqn' nm desc symb eqn =
 
 
 getVC :: QDefinition -> VarChunk
-getVC qd = VC (qd ^. id) (qd ^. term) (qd ^. symbol) (qd ^. typ)
+getVC qd = vc (qd ^. id) (qd ^. term) (qd ^. symbol) (qd ^. typ)

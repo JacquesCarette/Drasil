@@ -9,6 +9,8 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
 import Language.Drasil.Space
+
+import Prelude hiding (id)
   
 data VarChunk = VC { vid :: String
                    , vdesc :: Sentence
@@ -32,6 +34,9 @@ instance SymbolForm VarChunk where
 -- Setting all varchunks to have Rational type so it compiles
 makeVC :: String -> String -> Symbol -> VarChunk
 makeVC i des sym = VC i (S des) sym Rational
+
+vc :: String -> Sentence -> Symbol -> Space -> VarChunk
+vc i d sy t = VC i d sy t
 
 makeVCObj :: String -> String -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC i (S des) sym (Obj s)

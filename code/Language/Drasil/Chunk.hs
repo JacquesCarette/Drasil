@@ -101,7 +101,8 @@ dccWDS i t d = DCC i (S t) d Nothing
 ccStSS :: String -> Sentence -> Sentence -> ConceptChunk
 ccStSS i t d = DCC i t d Nothing
 
-
+dcc' :: String -> String -> String -> String -> ConceptChunk
+dcc' i t d a = DCC i (S t) (S d) (Just (S a))
 
 {-==============================
 ==== VARCHUNK

@@ -57,11 +57,12 @@ glassBR_srs' = mkDoc mkSRS glassSystInfo
 --FIXME: Missing ToS intro because this example was using the default 
 -- (nuclear literature related) intro.
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg intro [TUnits, tsymb (Paragraph $ S ""), TVerb s1_3]) :
+mkSRS = RefSec (RefProg intro [TUnits, tsymb (Paragraph $ S ""), TAandA]) :
   map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [ConVar])
+  acronyms --FIXME: All named ideas, not just acronyms.
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules

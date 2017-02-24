@@ -23,6 +23,7 @@ class Chunk c => NamedIdea c where
   getA :: c -> Maybe Sentence
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
+  short :: c -> Sentence -- Get short form (if exists), else get term. 
   
 class Chunk c => SymbolForm c where
   symbol :: Simple Lens c Symbol
@@ -30,7 +31,8 @@ class Chunk c => SymbolForm c where
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
 
-
+class NamedIdea c => CommonIdea c where
+  abrv :: Simple Lens c Sentence
 
 -------- BEGIN DATATYPES/INSTANCES --------
 
@@ -62,6 +64,8 @@ instance Chunk NamedChunk where
 instance NamedIdea NamedChunk where
   term f (NC a b c) = fmap (\x -> NC a x c) (f b)
   getA (NC _ _ c) = c
+  short c@(NC _ _ Nothing) = c ^. term
+  short (NC _ _ (Just s)) = s
   
 nc :: String -> String -> NamedChunk
 nc i des = NC i (S des) Nothing

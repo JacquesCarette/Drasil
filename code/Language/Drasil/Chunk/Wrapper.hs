@@ -22,6 +22,7 @@ instance Eq CQSWrapper where
   
 instance NamedIdea CQSWrapper where
   term = cqslens term
+  getA (CQS a) = getA a
   
 instance Concept CQSWrapper where
   defn = cqslens defn
@@ -53,6 +54,7 @@ instance Eq QSWrapper where
   
 instance NamedIdea QSWrapper where
   term = qslens term
+  getA (QS a) = getA a
   
 instance SymbolForm QSWrapper where
   symbol = qslens symbol
@@ -78,6 +80,7 @@ instance Chunk NWrapper where
   
 instance NamedIdea NWrapper where
   term = nlens term
+  getA (NW a) = getA a
 
 nw :: NamedIdea c => c -> NWrapper
 nw = NW
@@ -98,6 +101,7 @@ instance Chunk CWrapper where
   
 instance NamedIdea CWrapper where
   term = clens term
+  getA (CW a) = getA a
   
 instance Concept CWrapper where
   defn = clens defn

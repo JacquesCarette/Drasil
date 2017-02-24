@@ -61,9 +61,11 @@ authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] 
-  this_si swhsSymbols (swhsSymbols) --Note: The second swhsSymbols here is 
+  this_si swhsSymbols (swhsSymbols) acronyms 
+  --Note: The second swhsSymbols here is 
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
+  --FIXME: Should be all Named, not just acronyms at the end.
 
 {-
 This table is ALMOST correct (just the normal vector is wrong because it should
@@ -72,7 +74,7 @@ be using defn).
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [ TUnits, 
                                 tsymb'' s1_2_intro (TermExcept [norm_vect]),
-                                TVerb s1_3
+                                TAandA
                               ]
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 

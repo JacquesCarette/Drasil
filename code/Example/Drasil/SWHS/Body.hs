@@ -138,7 +138,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+.
   S "energy sources and energy storage technology" +:+
-  (swhs_pcm ^. defn) +:+ S "(" :+: (getAcc phsChgMtrl) :+: 
+  (swhs_pcm ^. defn) +:+ S "(" :+: (short phsChgMtrl) :+: 
   S ") use a renewable energy source and provide a novel way of" +:+.
   S "storing energy" +:+ (swhs_pcm ^. term) +:+ S "improve" +:+
   S "over the traditional" +:+ (sLower (progName ^. term)) :+: 

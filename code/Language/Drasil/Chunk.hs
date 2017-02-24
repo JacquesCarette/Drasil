@@ -79,26 +79,27 @@ ncWDS' i t a = NC i t (Just (S a))
 {-==============================
 ==== ConceptChunk
 ==============================-}
-data ConceptChunk = DCC String Sentence Sentence
+data ConceptChunk = DCC String Sentence Sentence (Maybe Sentence)
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk ConceptChunk where
-  id f (DCC n t d) = fmap (\x -> DCC x t d) (f n)
+  id f (DCC n t d a) = fmap (\x -> DCC x t d a) (f n)
 instance NamedIdea ConceptChunk where
-  term f (DCC n t d) = fmap (\x -> DCC n x d) (f t)
+  term f (DCC n t d a) = fmap (\x -> DCC n x d a) (f t)
+  getA (DCC _ _ _ a) = a
 instance Concept ConceptChunk where
-  defn f (DCC n t d) = fmap (\x -> DCC n t x) (f d)
+  defn f (DCC n t d a) = fmap (\x -> DCC n t x a) (f d)
   
 makeDCC, dcc :: String -> String -> String -> ConceptChunk
-makeDCC i ter des = DCC i (S ter) (S des)
+makeDCC i ter des = DCC i (S ter) (S des) Nothing
 
 dcc = makeDCC
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
-dccWDS i t d = DCC i (S t) d
+dccWDS i t d = DCC i (S t) d Nothing
 
 ccStSS :: String -> Sentence -> Sentence -> ConceptChunk
-ccStSS i t d = DCC i t d
+ccStSS i t d = DCC i t d Nothing
 
 
 
@@ -121,6 +122,7 @@ instance Chunk VarChunk where
 
 instance NamedIdea VarChunk where
   term f (VC n d s t) = fmap (\x -> VC n x s t) (f d)
+  getA _ = Nothing
 
 instance SymbolForm VarChunk where
   symbol f (VC n d s t) = fmap (\x -> VC n d x t) (f s)
@@ -153,6 +155,7 @@ instance Chunk ConVar where
   id = cvl . id
 instance NamedIdea ConVar where
   term = cvl . term
+  getA (CV c _ _) = getA c
 instance Concept ConVar where
   defn = cvl . defn
 instance SymbolForm ConVar where

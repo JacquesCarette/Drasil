@@ -83,9 +83,10 @@ knowledge is duplicated across many different pieces of software. This
 duplication is almost exclusively performed manually, whether by copying/pasting
 from existing artifacts, or by transcription from another source such as a textbook.
 
-Artifacts tend to fall out of sync over their lifecycle,
-negatively impacting overall software quality. This is most noticeable 
-when it comes to maintainability, traceability, and particularly verifiability.
+Artifacts tend to fall out of sync as the software is updated 
+(especially code versus documentation),
+negatively impacting the overall software quality. This is most noticeable 
+when it comes to maintainability, traceability, and verifiability.
 
 \section{Approach}
 
@@ -95,16 +96,18 @@ artifacts. We have created a framework, Drasil, to accomplish this through a
 practical, example-driven approach involving frequent redesigns and refactoring.
 
 In Drasil, knowledge is captured in \textit{chunks}, which are then used in
-conjunction with our \textit{recipes} to generate software artifacts (requirements
-specifications, design documents, source code, etc.) in various formats.
+conjunction with our \textit{recipes} to generate software artifacts
+(requirements specifications, design documents, source code, etc.) in various
+formats.
 
 Recipes are built from a number of custom Domain Specific Languages (DSLs)
 embedded in Haskell. The recipes allow us to target our output to specific
 audiences, creating different ``views'' of our knowledge-base with minimal
 effort. These views can be large-scale (ex. different artifact types) or
-small-scale (ex. showing/hiding verbose descriptions within an artifact). We are
-currently implementing a new recipe DSL to gain a higher level of abstraction,
-which will be easier to work with than the previous implementation.
+small-scale (ex. showing/hiding verbose descriptions within an artifact).
+
+We are currently implementing a new recipe DSL to gain a higher level of
+abstraction, which will be easier to work with than the previous implementation.
 
 %Chunks + Chunk Hierarchy
 %  - Recipes 
@@ -117,21 +120,21 @@ As of this writing, there are currently six example projects being redeveloped
 using Drasil. Advantages of the approach have already become clear.
 
 Knowledge capture has lead to reduced knowledge duplication. Common knowledge
-across different examples is captured once and reused as necessary. For example,
-conservation of thermal energy appears in multiple examples.
+across examples is captured once and reused as necessary (ex. 
+conservation of thermal energy appears in several examples).
 
 Traceability is guaranteed as everything is generated from the knowledge-base.
 The recipe is aware of all necessary chunks and can easily produce a trace to
 a given knowledge source.
 
-Software becomes more maintainable when using Drasil as there is a single unique
+Drasil helps create more maintainable software as there is a single unique
 source for knowledge. Any mistakes in the knowledge-base will appear everywhere
 in the generated artifacts, making them easy to find and easier to fix. Only one
 source must be updated to propagate a fix through all artifacts.
 
-There is one main disadvantage to a knowledge-based approach -- the large up-front
+The one main disadvantage to a knowledge-based approach is the large up-front
 investment in creating and expanding the knowledge base. However, we believe this
-investment is worthwhile for the long-term gains.
+investment is worthwhile as it produces long-term gains.
 
 %\bibliographystyle{abbrv}
 %\bibliography{drasil}

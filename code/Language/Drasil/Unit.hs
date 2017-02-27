@@ -1,3 +1,4 @@
+{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Unit (
     UDefn(..)                   -- languages
   , Unit(..), UnitEq(..)        -- classes

@@ -17,7 +17,7 @@ module Language.Drasil (
   , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, nc'
   , ncWDS', makeVC, makeVCObj, vcFromCC, makeDCC, SymbolForm(..)
   , dcc, dccWDS, cv, ccStSS
-  , Quantity(..), ConVar(..), cvR, NamedIdea(..)
+  , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
   , Concept(..), compoundterm
   -- Chunk.Constrained
   , Constrained(..)

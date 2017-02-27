@@ -1,8 +1,7 @@
-{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.NamedIdea where
 
 import Language.Drasil.Chunk
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (Simple, Lens, (^.))
 
 import Language.Drasil.Spec
 
@@ -13,8 +12,11 @@ class Chunk c => NamedIdea c where
   getA :: c -> Maybe Sentence
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
-  short :: c -> Sentence -- Get short form (if exists), else get term. 
-  
+
+-- Get short form (if exists), else get term.
+short :: NamedIdea c => c -> Sentence
+short c = maybe (c^.term) (\x -> x) (getA c)
+
 -- === DATA TYPES/INSTANCES === --
 data NamedChunk = NC String Sentence (Maybe Sentence)
 instance Eq NamedChunk where
@@ -24,8 +26,6 @@ instance Chunk NamedChunk where
 instance NamedIdea NamedChunk where
   term f (NC a b c) = fmap (\x -> NC a x c) (f b)
   getA (NC _ _ c) = c
-  short c@(NC _ _ Nothing) = c ^. term
-  short (NC _ _ (Just s)) = s
   
 nc :: String -> String -> NamedChunk
 nc i des = NC i (S des) Nothing

@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.VarChunk
+import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Code.Imperative.AST as A
 import Language.Drasil.Code.Imperative.Helpers
@@ -76,7 +76,7 @@ makeMethod      mc@(MeC { mType = MInput (IOFile f) vc}) classList =
         makeAssignments _ = [assign (Var (vc ^. id))
           (InputFile (Var "inFile"))]
 
-makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) classList =
+makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) _ =
   pubMethod (Void) ((methcc mc) ^. id)
     (map (\x -> param (x ^. id) (makeType $ x ^. Q.typ)) vcs)
   [ Block [ varDec ("outFile") (outfile),
@@ -89,6 +89,9 @@ makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) classList =
 makeMethod (MeC { mType = MCustom b}) _ =
   MainMethod b
 
+makeMethod (MeC _ (MOutput IOStd _) _ _ _) _ =
+  error "oops, missing case (TODO)"
+
 makeType :: Space -> StateType
 makeType S.Rational = float
 makeType S.Boolean  = bool
@@ -96,6 +99,7 @@ makeType S.Integer  = int
 makeType S.Char     = char
 makeType S.String   = string
 makeType (S.Obj s)  = Type (makeClassNameValid s)
+makeType (S.Vect _) = error "(TODO) Vector?"
 
 getObjName :: Space -> String
 getObjName (S.Obj s)  = makeClassNameValid s

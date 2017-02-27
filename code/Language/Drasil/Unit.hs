@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Unit (
     UDefn(..)                   -- languages
   , Unit(..), UnitEq(..)        -- classes
@@ -57,7 +56,8 @@ instance Chunk FundUnit where
   id = vc . id
 
 instance NamedIdea FundUnit where
-  term = vc . term
+  term   = vc . term
+  getA c = getA (c ^. vc)
 
 instance Concept FundUnit where
   defn = vc . defn
@@ -73,7 +73,9 @@ duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
 instance Chunk     DerUChunk where id  = duc . id
-instance NamedIdea DerUChunk where term = duc . term
+instance NamedIdea DerUChunk where
+  term = duc . term
+  getA c = getA (c ^. duc)
 instance Concept   DerUChunk where defn = duc . defn
 instance Unit      DerUChunk where unit  = duc . unit
 
@@ -93,7 +95,9 @@ ulens :: (forall u. Unit u => Simple Lens u a) -> Simple Lens UnitDefn a
 ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 
 instance Chunk     UnitDefn where id   = ulens id
-instance NamedIdea UnitDefn where term = ulens term
+instance NamedIdea UnitDefn where
+  term = ulens term
+  getA (UU a) = getA a
 instance Concept   UnitDefn where defn = ulens defn
 instance Unit      UnitDefn where unit = ulens unit
 

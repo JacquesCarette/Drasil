@@ -20,11 +20,11 @@ import Language.Drasil.Spec (Sentence)
 --BEGIN HELPER FUNCTIONS--
 --FIXME: Space hack
 makeUC :: Unit u => String -> String -> String -> Symbol -> u -> UnitalChunk
-makeUC nam term desc sym un = UC (cv (dcc nam term desc) sym Rational) un 
+makeUC nam trm desc sym un = UC (cv (dcc nam trm desc) sym Rational) un
 
 --Better names will come later.
 makeUCWDS :: Unit u => String -> String -> Sentence -> Symbol -> u -> UnitalChunk
-makeUCWDS nam term desc sym un = UC (cv (dccWDS nam term desc) sym Rational) un 
+makeUCWDS nam trm desc sym un = UC (cv (dccWDS nam trm desc) sym Rational) un
 
 ucFromVC :: Unit u => ConVar -> u -> UnitalChunk
 ucFromVC conv un = UC conv un

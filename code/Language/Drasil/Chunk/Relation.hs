@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Relation
   ( NamedRelation, RelationConcept
@@ -29,6 +28,7 @@ instance Chunk NamedRelation where
 
 instance NamedIdea NamedRelation where
   term = cp term
+  getA (NR c _) = getA c
   
 data RelationConcept where 
   RC :: Concept c => c -> Relation -> RelationConcept
@@ -44,10 +44,10 @@ instance Chunk RelationConcept where
 
 instance NamedIdea RelationConcept where
   term = rcl term
+  getA (RC c _) = getA c
   
 instance Concept RelationConcept where
   defn = rcl defn
-
 
 -- don't export this
 rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a

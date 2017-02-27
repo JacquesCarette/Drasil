@@ -2,11 +2,11 @@ module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..)
   , ExcType(..), IOType(..), fromEC, makeStdInputMethod, makeFileInputMethod
   , makeFileOutputMethod, makeMainMethod) where
 
-import Control.Lens (Simple, Lens, (^.))
+import Control.Lens (Simple, Lens)
 import Prelude hiding (id)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, NamedChunk, term)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), NamedChunk)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Expr.Extract
@@ -28,8 +28,6 @@ data MethodType = MCalc QDefinition
                 -- temporary for generating control module
                 | MCustom A.Body
 
-
-
 data IOType = IOStd
             | IOFile String
 
@@ -43,6 +41,7 @@ instance Chunk MethodChunk where
 
 instance NamedIdea MethodChunk where
   term = cl . term
+  getA mc = getA (methcc mc)
 
 -- END METHODCHUNK --
 

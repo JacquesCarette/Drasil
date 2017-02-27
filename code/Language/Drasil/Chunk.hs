@@ -1,7 +1,6 @@
-{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk where
 
-import Control.Lens (Simple,Lens,(^.), set)
+import Control.Lens (Simple,Lens)
 
 import Prelude hiding (id)
 

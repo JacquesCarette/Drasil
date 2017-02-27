@@ -6,7 +6,7 @@ import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -31,6 +31,7 @@ instance Chunk QDefinition where
 
 instance NamedIdea QDefinition where
   term = ul . term
+  getA c = getA $ c ^. ul
 
 instance SymbolForm QDefinition where
   symbol = ul . symbol
@@ -63,6 +64,7 @@ instance Chunk E where
 
 instance NamedIdea E where
   term = elens term
+  getA (E a) = getA a
   
 instance SymbolForm E where 
   symbol = elens symbol

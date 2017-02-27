@@ -36,7 +36,7 @@ instance SymbolForm CQSWrapper where
 instance Quantity CQSWrapper where
   getSymb = Just . SF
   getUnit (CQS a) = getUnit a
-  --FIXME: typ
+  typ = cqslens typ
 
 cqs :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
 cqs = CQS
@@ -65,7 +65,7 @@ instance SymbolForm QSWrapper where
 instance Quantity QSWrapper where
   getSymb = Just . SF
   getUnit (QS a) = getUnit a
-  --FIXME: typ
+  typ = qslens typ
 
 qs :: (SymbolForm c, Quantity c) => c -> QSWrapper
 qs = QS

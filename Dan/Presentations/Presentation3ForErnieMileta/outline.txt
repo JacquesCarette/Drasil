@@ -1,0 +1,26 @@
+Presentation outline: 
+  Motivation
+    - Same as last time
+    - Add graphic of changing reqs to really hammer the point home
+  Last time - Simple example, recipes, chunks, KC, design, 
+    common/specific knowledge
+  Quick recap 
+    - Knowledge capture - capture knowledge once and reuse as appropriate
+        Why? Because duplication is bad.
+    - Generate all the things - All software artifacts (documents/code) should
+      be generated from the knowledge-base. No more duplication.
+  
+  What's new
+    - Drasil (name) - Inspiration from Yggdrasil - show picture and mix metaphors
+    - Multiple output formats! TeX (old) and HTML (new) - SHOW!
+    - No more hacking!
+    - Examples! SO MANY - Toy example still around, but + 4 others
+    - Steve! - New PhD student.
+      - Integrating GOOL for Code generation
+      - Working on design doc generation as well
+      - Implemented one of the examples
+    - Abstraction approach - Picture from Steve meeting
+    - New hierarchy of Chunks
+    - Common knowledge database
+    - New Recipe Language (old ones still around, but incrementally swapping over)
+      - SHOW IT

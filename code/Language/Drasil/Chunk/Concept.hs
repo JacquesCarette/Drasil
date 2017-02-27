@@ -1,11 +1,10 @@
-{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Concept where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm
 
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (Simple, Lens, (^.))
 
 import Language.Drasil.Spec
 import Language.Drasil.Symbol

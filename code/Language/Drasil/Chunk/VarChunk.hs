@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.VarChunk where
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens ((^.))
 
 import Language.Drasil.Symbol
 import Language.Drasil.Spec

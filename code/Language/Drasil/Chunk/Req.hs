@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Req(ReqChunk(..)) where
 import Control.Lens (Simple, Lens)
 import Prelude hiding (id)
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, NamedChunk, term)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(term,getA), NamedChunk)
 import Language.Drasil.Chunk.Module
 
 -- BEGIN REQCHUNK --
@@ -17,6 +17,7 @@ instance Chunk ReqChunk where
 
 instance NamedIdea ReqChunk where
   term = cl . term
+  getA = getA . rCC
 -- END REQCHUNK --
 
 -- don't export this

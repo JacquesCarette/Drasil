@@ -15,12 +15,13 @@ Presentation outline:
     - Multiple output formats! TeX (old) and HTML (new) - SHOW!
     - No more hacking!
     - Examples! SO MANY - Toy example still around, but + 4 others
+    - Common knowledge database - Thanks to examples
     - Steve! - New PhD student.
       - Integrating GOOL for Code generation
       - Working on design doc generation as well
       - Implemented one of the examples
     - Abstraction approach - Picture from Steve meeting
     - New hierarchy of Chunks
-    - Common knowledge database
     - New Recipe Language (old ones still around, but incrementally swapping over)
       - SHOW IT
+      - Why? EASIER TO WORK WITH! Better understanding!

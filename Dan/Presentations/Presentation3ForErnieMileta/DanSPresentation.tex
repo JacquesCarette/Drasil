@@ -207,7 +207,7 @@
 \frametitle{Last Time}
 \begin{itemize}
 \item Toy example
-\item ``Recipes'', ``chunks'', and \textit{knowledge capture}
+\item \textit{Knowledge capture}, \textit{chunks}, and \textit{recipes}
 \item Common/specific knowledge
 \item Drasil design
 \end{itemize}
@@ -220,7 +220,7 @@
 
 \frametitle{Recap - Knowledge Capture}
 \begin{center}
-\includegraphics[width=.6\textwidth]{KC.jpg}
+\includegraphics[width=.8\textwidth]{KC.jpg}
 \end{center}
 
 \end{frame}
@@ -231,7 +231,7 @@
 
 \frametitle{Recap - Generation}
 \begin{center}
-\includegraphics[width=.6\textwidth]{generate_all_the_things.jpg}
+\includegraphics[width=\textwidth]{generate_all_the_things.jpg}
 \end{center}
 
 \end{frame}
@@ -259,6 +259,7 @@
 
 \framesubtitle{Multiple Document Output Formats}
 
+%%% SHOW EXAMPLES HERE
 \begin{enumerate}
 \item TeX
 \item HTML
@@ -280,15 +281,94 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%D Maybe don't bother with slides for Recipe/Chunks/Global Chunks?
+\begin{frame}
+
+\frametitle{What's New}
+\framesubtitle{Summer Students -- Examples}
+
+\begin{itemize}
+\item Physics Engine
+\item Glass Safety Analysis
+\item Solar Water Heating Tank
+\item Slope Stability Analysis
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{What's New}
+\framesubtitle{Common Knowledge Base}
+
+\begin{center}
+\includegraphics[width=\textwidth]{books.jpg}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{What's New}
+\framesubtitle{Steven Palmer -- Brief Overview}
+
+PhD student since May 2016
+
+\begin{itemize}
+\item Implemented slope stability example
+\item Integrated GOOL for code generation
+\item Working on design document generation
+\item \ldots{} and more!
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Design Changes}
+\framesubtitle{Chunk Hierarchy -- Old}
+
+\large{
+\Tree[.\fbox{Chunk(\textit{name})}
+		[.\fbox{Concept(\textit{description})}
+			[.\fbox{Quantity(\textit{symbol})} ]
+			[.\fbox{Unit(\textit{unit})} ]
+		]
+	]
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Design Changes}
+\framesubtitle{Chunk Hierarchy -- New}
+
+\includegraphics[width=.6\textwidth]{hierarchy-redesign.png}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Design Changes}
+\framesubtitle{Abstraction}
+
+\includegraphics[width=\textwidth]{new_design2.pdf}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]
 
-\frametitle{Example: $h_g$ and $h_c$}
-
-\framesubtitle{The Recipe}
-
-%D PICTURE
+\frametitle{Design Changes}
+\framesubtitle{Recipes -- Old}
 
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize]
 srsBody = Document ((S "SRS for ") :+: 
@@ -306,39 +386,7 @@ s1_table = Table [S "Symbol", S "Description"] $ mkTable
 
 s1_intro = Paragraph (S "Throughout this ...
 \end{lstlisting} 
-\LARGE{\ldots}
-
-%The recipe is how we specify exactly what we want our view to look like.
-%\newline \newline
-%It tells the generator what information is needed and how that information
-%should be displayed.
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]
-\frametitle{Example: $h_g$ and $h_c$}
-\framesubtitle{Common Knowledge}
-
-%D PICTURE
-
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\tiny]
-metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
-metre    = fund "Metre"    "length (metre)"               "m"
-kilogram = fund "Kilogram" "mass (kilogram)"              "kg"
-second   = fund "Second"   "time (second)"                "s"
-kelvin   = fund "Kelvin"   "temperature (kelvin)"         "K"
-mole     = fund "Mole"     "amount of substance (mole)"   "mol"
-ampere   = fund "Ampere"   "electric current (ampere)"    "A"
-candela  = fund "Candela"  "luminous intensity (candela)" "cd"
-\end{lstlisting}
-
-%Global chunks are chunks that will often be reused across many different projects.
-%As such they are grouped with relevant related information and kept in 
-%specific source files.
-%\newline \newline
-%This example contains one set of global chunks: SI Units.
+\large{\ldots}
 
 \end{frame}
 
@@ -346,136 +394,26 @@ candela  = fund "Candela"  "luminous intensity (candela)" "cd"
 
 \begin{frame}[fragile]
 
-\frametitle{Example: $h_g$ and $h_c$}
+\frametitle{Design Changes}
+\framesubtitle{Recipes -- New}
 
-\framesubtitle{Specific Knowledge}
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize]
+mkSRS :: DocDesc
+mkSRS = RefSec (RefProg intro [
+	TUnits, 
+	tsymb'' s1_2_intro (TermExcept [norm_vect]),
+	TAandA
+	]) : 
+	map Verbatim [s2, s3, s4, s5, s6, s7]
 
-%D PICTURE
+swhs_si :: SystemInformation
+swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] 
+	this_si swhsSymbols (swhsSymbols) acronyms 
 
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
-h_c_eq :: Expr
-h_c_eq = ((Int 2):*(C k_c):*(C h_b)) :/ 
-    ((Int 2):*(C k_c) :+ ((C tau_c):*(C h_b)))
-
-h_c :: EqChunk
-h_c = EC (UC (VC "h_c" 
-    "convective heat transfer coefficient 
-        between clad and coolant"
-    (sub h c) ) heat_transfer) h_c_eq
-\end{lstlisting}
-
-%This example contains two obvious chunks that need to be declared:
-%$h_g$ and $h_c$.
-%\newline \newline
-%There are also a few less obvious chunks that need to be declared:
-%the values which $h_g$ and $h_c$ depend on in their equations. 
-%For example $\tau_c$, $k_c$, etc.
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section[The Design]{The Current Framework Design}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Framework Design}
-
-\framesubtitle{Chunks}
-
-%D Tree Diagram
-\large{
-\Tree[.\fbox{Chunk(\textit{name})}
-		[.\fbox{Concept(\textit{description})}
-			[.\fbox{Quantity(\textit{symbol})} ]
-			[.\fbox{Unit(\textit{unit})} ]
-		]
-	]
-}
-%Chunks come in many flavours:
-%The simplest type has only one field (name). Each more complex chunk builds off
-%this base and adds (at least) one new field. 
-%\newline \newline
-%All of the more complex chunks are built up from simpler chunks. 
-%\newline \newline
-%Currently there are a few different types of chunks including (but not limited
-%to) those for describing concepts and variables.
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Framework Design}
-
-\framesubtitle{Recipes}
-
-%D MICRO/MACRO LAYOUT Lang
-
-Micro-layout language:
-\begin{itemize}
-	\item subscripts
-	\item superscripts
-	\item concatenation
-	\item \ldots
-\end{itemize}
-
-%Recipes are specified using a domain-specific language.
-%\newline \newline
-%There will exist many types of Recipes, however currently only the SRS recipe
-%is working.
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Framework Design}
-
-\framesubtitle{Recipes}
-
-%D MICRO/MACRO LAYOUT Lang
-
-Macro-layout language:
-\begin{itemize}
-	\item Document
-	\item Section
-	\item Paragraph
-	\item Equation
-	\item Table
-	\item \ldots
-\end{itemize}
-
-%Recipes are specified using a domain-specific language.
-
-%There will exist many types of Recipes, however currently only the SRS recipe
-%is working.
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Framework Design}
-
-\framesubtitle{Benefits}
-
-%Big 2 are zero duplication of knowledge and traceability.
-
-\begin{enumerate}
-	\item Zero knowledge duplication
-	\item Traceability
-\end{enumerate}
-
-%D There are many other benefits:
-%  Improved understandability and reproducibility.
-%	Increased flexibility
-
+swhs_srs' :: Document
+swhs_srs' = mkDoc mkSRS swhs_si
+\end{lstlisting} 
+%%% EASIER TO WORK WITH / Better understanding of what a recipe should be
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -494,14 +432,11 @@ What next?
 \end{Large}
 
 \begin{itemize}
-\item Generate the rest of the example.
-\item Finish implementing different document "views".
-\begin{itemize}
-\item Ex. SRS with/without derivations.
-\end{itemize}
-\item Implement additional document types.
-\item Generate the source code. %D from the equations.
-\item Implement more examples.
+\item Recipe language %finish implementing
+\item Clean up examples
+\item Abstraction
+\item More artifacts
+\item More examples
 \end{itemize}
 \end{frame}
 

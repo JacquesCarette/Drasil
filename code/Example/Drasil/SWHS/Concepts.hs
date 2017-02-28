@@ -1,7 +1,6 @@
 module Drasil.SWHS.Concepts where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Math (ode)
 --- convenience
 fixme :: String
 fixme = "FIXME: Define this"

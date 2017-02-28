@@ -44,3 +44,9 @@ ncWDS' i t a = NC i t (Just (S a))
 -- various combinators
 compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
 compoundterm t1 t2 = NC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing
+
+-- we might want to eventually restrict the use of these via
+-- some kind of type system, which asserts that:
+-- 1. t1 `for` t2 means that t1 is a view onto t2
+for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for t1 t2 = (t1^.term) +:+ S " for " +:+ (t2^.term)

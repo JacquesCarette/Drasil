@@ -1,8 +1,4 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-} 
 module Drasil.SWHS.Unitals where
-
-import Drasil.SWHS.Units
 
 import Language.Drasil
 import Data.Drasil.SI_Units

@@ -5,12 +5,11 @@ import Language.Drasil
 fixme :: String
 fixme = "FIXME: Define this"
 ---Acronyms---
-phsChgMtrl,rightSide,progName :: NamedChunk
+phsChgMtrl,rightSide,progName :: CI
 
---FIXME: Acronyms
-phsChgMtrl  = nc' "phsChgMtrl" "Phase Change Material"      "PCM"
-rightSide   = nc' "rightSide"  "Right Hand Side"            "RHS" 
-progName    = nc' "progName"   "Solar Water Heating System" "SWHS" 
+phsChgMtrl  = commonidea "phsChgMtrl" "Phase Change Material"      "PCM"
+rightSide   = commonidea "rightSide"  "Right Hand Side"            "RHS" 
+progName    = commonidea "progName"   "Solar Water Heating System" "SWHS" 
 
 swhsFull :: NamedChunk
 swhsFull    = 

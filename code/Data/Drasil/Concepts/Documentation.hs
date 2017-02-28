@@ -1,25 +1,24 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
+import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, compoundterm)
 
-
---FIXME: Use actual Acronyms instead of CCs.
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg :: NamedChunk
+  requirement, srs, thModel, mg :: CI
 
 --FIXME: These shouldn't be ConceptChunks or NamedIdeas, but should be
 --    Some subset of them, no?
-assumption  = nc' "assumption" "Assumption" "A"
-dataDefn    = nc' "dataDefn" "Data Definition" "DD"
-genDefn     = nc' "genDefn" "General Definition" "GD"
-goalStmt    = nc' "goalStmt" "Goal Statement" "GS" 
-inModel     = nc' "inModel" "Instance Model" "IM" 
-likelyChg   = nc' "likelyChg" "Likely Change" "LC"
-physSyst    = nc' "physSyst" "Physical System Description" "PS" 
-requirement = nc' "requirement" "Requirement" "R"
-srs         = nc' "srs" "Software Requirements Specification" "SRS"
-thModel     = nc' "thModel" "Theoretical Model" "T"
-mg          = nc' "mg" "Module Guide" "MG" 
+assumption  = commonidea "assumption"  "Assumption" "A"
+dataDefn    = commonidea "dataDefn"    "Data Definition" "DD"
+genDefn     = commonidea "genDefn"     "General Definition" "GD"
+goalStmt    = commonidea "goalStmt"    "Goal Statement" "GS" 
+inModel     = commonidea "inModel"     "Instance Model" "IM" 
+likelyChg   = commonidea "likelyChg"   "Likely Change" "LC"
+physSyst    = commonidea "physSyst"    "Physical System Description" "PS" 
+requirement = commonidea "requirement" "Requirement" "R"
+srs         = commonidea "srs"         "Software Requirements Specification" "SRS"
+thModel     = commonidea "thModel"     "Theoretical Model" "T"
+mg          = commonidea "mg"          "Module Guide" "MG" 
 
 ---------------------------------------------------------------------
 

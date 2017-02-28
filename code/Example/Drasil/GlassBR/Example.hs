@@ -131,7 +131,7 @@ gTF         = makeVC "gTF" "Glass Type Factor" (Atomic "GTF")
 
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
-acronyms :: [NamedChunk]
+acronyms :: [CI]
 acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
   lGlass,lResistance,lShareFac,notApp,nonFactorL,physSyst,requirement,
@@ -141,24 +141,24 @@ gLassBR :: ConceptChunk
 
 annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
   iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,nonFactorL,
-  eqTNT :: NamedChunk
+  eqTNT :: CI
 --FIXME: So many of these are duplicates of other named chunks/concepts
   
 gLassBR       = dcc "gLassBR" "GlassBR" "Glass-BR"
-annealedGlass = nc' "annealedGlass" "Annealed Glass" "AN"
-aspectR       = nc' "aspectR" "Aspect Ratio" "AR"
-aspectRMax    = nc' "aspectRMax" "Maximum Aspect Ratio" "ARmax"
-fullyTGlass   = nc' "fullyTGlass" "Fully Tempered Glass" "FT"
-glassTypeFac  = nc' "glassTypeFac" "Glass Type Factor" "GTF"
-heatSGlass    = nc' "heatSGlass" "Heat Strengthened Glass" "HS"
-iGlass        = nc' "iGlass" "Insulating Glass" "IG"
-lDurFac       = nc' "lDurFac" "Load Duration Factor" "LDF"
-lGlass        = nc' "lGlass" "Laminated Glass" "LG"
-lResistance   = nc' "lResistance" "Load Resistance" "LR"
-lShareFac     = nc' "lShareFac" "Load Share Factor" "LSF"
-notApp        = nc' "notApp" "Not Applicable" "N/A"
-nonFactorL    = nc' "nonFactorL" "Non-Factored Load" "NFL"
-eqTNT         = nc' "eqTNT" "TNT (Trinitrotoluene) Equivalent Factor" "TNT"
+annealedGlass = commonidea "annealedGlass" "Annealed Glass" "AN"
+aspectR       = commonidea "aspectR" "Aspect Ratio" "AR"
+aspectRMax    = commonidea "aspectRMax" "Maximum Aspect Ratio" "ARmax"
+fullyTGlass   = commonidea "fullyTGlass" "Fully Tempered Glass" "FT"
+glassTypeFac  = commonidea "glassTypeFac" "Glass Type Factor" "GTF"
+heatSGlass    = commonidea "heatSGlass" "Heat Strengthened Glass" "HS"
+iGlass        = commonidea "iGlass" "Insulating Glass" "IG"
+lDurFac       = commonidea "lDurFac" "Load Duration Factor" "LDF"
+lGlass        = commonidea "lGlass" "Laminated Glass" "LG"
+lResistance   = commonidea "lResistance" "Load Resistance" "LR"
+lShareFac     = commonidea "lShareFac" "Load Share Factor" "LSF"
+notApp        = commonidea "notApp" "Not Applicable" "N/A"
+nonFactorL    = commonidea "nonFactorL" "Non-Factored Load" "NFL"
+eqTNT         = commonidea "eqTNT" "TNT (Trinitrotoluene) Equivalent Factor" "TNT"
 
 
 ----Terminology---- 

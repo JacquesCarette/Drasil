@@ -33,7 +33,7 @@ import Drasil.SRS
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
 
-acronyms :: [NamedChunk]
+acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 

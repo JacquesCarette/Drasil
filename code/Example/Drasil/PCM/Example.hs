@@ -102,14 +102,14 @@ dummyVar    = makeUC "dummyVar" "dummy variable for integration over time"
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
 ----Acronyms-----
-acronyms :: [NamedChunk]
+acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   physSyst,requirement,srs,sWHS,thModel]
   
 --FIXME: Term should be "Solar Water Heating System" and it should 
 --    have an acronym
-sWHS :: NamedChunk
-sWHS = nc' "sWHS" "Solar Water Heating System" "SWHS"
+sWHS :: CI
+sWHS = commonidea "sWHS" "Solar Water Heating System" "SWHS"
 
 ----EqChunks----
 --Theoretical models--

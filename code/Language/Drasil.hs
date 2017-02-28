@@ -19,7 +19,7 @@ module Language.Drasil (
   , dcc, dccWDS, cv, ccStSS
   , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
   , Concept(..), compoundterm
-  , CommonIdea(..)
+  , CommonIdea(..), commonidea, CI
   -- Chunk.Constrained
   , Constrained(..)
   -- Chunk.Eq

@@ -1,11 +1,11 @@
-module Language.Drasil.Chunk.CommonIdea where
+module Language.Drasil.Chunk.CommonIdea(CommonIdea(..), commonidea, CI) where
 
 import Prelude hiding (id)
 
 import Language.Drasil.Chunk (Chunk(id))
 import Language.Drasil.Chunk.NamedIdea
 import Control.Lens (Simple, Lens)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Spec (Sentence(S))
 
 class NamedIdea c => CommonIdea c where
   abrv :: Simple Lens c Sentence
@@ -20,3 +20,5 @@ instance NamedIdea CI where
 instance CommonIdea CI where
   abrv f (CI a b c) = fmap (\x -> CI a b x) (f c)
 
+commonidea :: String -> String -> String -> CI
+commonidea i nm ab = CI i (S nm) (S ab)

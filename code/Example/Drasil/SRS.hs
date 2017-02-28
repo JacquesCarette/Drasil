@@ -6,10 +6,7 @@ module Drasil.SRS (srsDoc) where
 
 import Language.Drasil
 
-import Control.Lens ((^.))
-
 import Data.Drasil.Concepts.Documentation
 
 srsDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
-srsDoc sys authors secs =
-  Document ((srs ^. term) +:+ S "for" +:+ (sys ^. term)) authors secs
+srsDoc sys authors secs = Document (srs `for` sys) authors secs

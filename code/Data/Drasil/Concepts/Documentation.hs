@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
-import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, compoundterm)
+import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, compoundterm, of_, ncs)
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg :: CI
@@ -28,13 +28,14 @@ system       = nc "system"       "System"
 description  = nc "description"  "Description"
 specific     = nc "specific"     "Specific" -- ??
 symbol_      = nc "symbol"       "Symbol"
+symbols      = nc "symbols"      "Symbols" -- Hack!
 units_       = nc "units"        "Units"
 table_       = nc "table"        "Table"
 introduction = nc "introduction" "Introduction"
 
 refmat, tOfSymb :: NamedChunk
-refmat       = nc "refmat"       "Reference Material"
-tOfSymb      = nc "tOfSymb"      "Table of Symbols"
+refmat       = nc  "refmat"      "Reference Material"
+tOfSymb      = ncs "tOfSymb"   $ table_ `of_` symbols
 
 -- compounds
 systemdescription, specificsystemdescription :: NamedChunk

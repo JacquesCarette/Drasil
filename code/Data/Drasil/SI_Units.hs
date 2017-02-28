@@ -1,5 +1,5 @@
 module Data.Drasil.SI_Units where
-import Language.Drasil.Chunk.Concept (makeDCC)
+import Language.Drasil.Chunk.Concept (makeDCC, dcc)
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU)
 import Language.Drasil.Unicode (Special(Circle))
@@ -127,3 +127,7 @@ gravConstU = makeDerU (makeDCC "gravConstU" "gravitational constant"
   "universal gravitational constant") $
    USynonym (UDiv (m_3 ^. unit) (UProd [kilogram ^. unit, s_2 ^. unit]))
 
+------
+specificE :: DerUChunk
+specificE = makeDerU (dcc "specificE" "specific energy" "energy per unit mass") $
+  USynonym (joule /: kilogram)

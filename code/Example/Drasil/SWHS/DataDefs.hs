@@ -1,9 +1,9 @@
 module Drasil.SWHS.DataDefs where
 
-import Drasil.SWHS.Units
 import Drasil.SWHS.Unitals
 
 import Language.Drasil
+import Data.Drasil.SI_Units (specificE)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 import Control.Lens ((^.))

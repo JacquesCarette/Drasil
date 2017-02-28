@@ -20,7 +20,7 @@ module Language.Drasil (
   , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
   , Concept(..), compoundterm
   , CommonIdea(..), commonidea, CI
-  , for
+  , for, of_
   -- Chunk.Constrained
   , Constrained(..)
   -- Chunk.Eq

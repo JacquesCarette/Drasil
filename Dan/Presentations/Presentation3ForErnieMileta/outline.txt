@@ -13,15 +13,26 @@ Presentation outline:
   What's new
     - Drasil (name) - Inspiration from Yggdrasil - show picture and mix metaphors
     - Multiple output formats! TeX (old) and HTML (new) - SHOW!
-    - No more hacking!
+    - No more hacking! (or at least, less)
     - Examples! SO MANY - Toy example still around, but + 4 others
     - Common knowledge database - Thanks to examples
     - Steve! - New PhD student.
-      - Integrating GOOL for Code generation
+      - Integrating GOOL for Code generation 
+        (C#,  C++,  Java,  Objective-C,  Python, and Lua.)
       - Working on design doc generation as well
       - Implemented one of the examples
-    - Abstraction approach - Picture from Steve meeting
+    - Abstraction approach - Picture from Steve meeting 
+      - Main point: were working low level, and are now up around instance graph
+      - Secondary point: Working our way to most abstract
     - New hierarchy of Chunks
     - New Recipe Language (old ones still around, but incrementally swapping over)
       - SHOW IT
       - Why? EASIER TO WORK WITH! Better understanding!
+      
+  Next Steps
+    - Finish recipe language implementation
+    - Clean up examples
+    - Work on next level of abstraction
+    - Get more examples implemented
+    - Generate more artifact types
+    - Summer students will help us once again, starting in May.

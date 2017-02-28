@@ -200,29 +200,10 @@ tau_W        = makeUC "tau_W" "ODE parameter for water"
 -- Unitless symbols --
 
 swhsUnitless :: [ConVar]
--- norm_vect used to go here, but due to type change it is no longer included
--- in this list.
 swhsUnitless = [norm_vect, QP.surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
-
 eta          = cvR (dcc "eta" "ODE parameter" 
   "FIXME: Define this or remove the need for definitions") (Greek Eta_L)
 melt_frac    = cvR (dcc "melt_frac" "melt fraction"
   "FIXME: Define this or remove the need for definitions") (Greek Phi_L)
-
---Units are stored in another file. Will these be universal?
---I.e. Anytime someone writes a program involving heat capacity will
---they be able to call "heat_cap_spec" without having to write the
---code for that unit in a separate file?
-
---General Definitions--
--- gd1NewtonCooling :: RelationChunk
--- gd1NewtonCooling = makeRC "Newton's law of cooling" gd1descr newtonCoolEqn
-
--- newtonCoolEqn :: Relation
--- newtonCoolEqn = (C ht_flux) * ((C time)) := 
-                -- (C htTransCoeff) * (C delta) * (C temp) * ((C time))
-
--- gd1descr :: Sentence
--- gd1descr = (S "Newton's law of cooling describes convective cooling...")

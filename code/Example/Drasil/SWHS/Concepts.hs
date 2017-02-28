@@ -2,13 +2,16 @@ module Drasil.SWHS.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (ode)
+--- convenience
+fixme :: String
+fixme = "FIXME: Define this"
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: NamedChunk
 
 --FIXME: Acronyms
-phsChgMtrl  = nc' "phsChgMtrl" "Phase Change Material" "PCM"
-rightSide   = nc' "rightSide" "Right Hand Side" "RHS" 
-progName    = nc' "progName" "Solar Water Heating System" "SWHS" 
+phsChgMtrl  = nc' "phsChgMtrl" "Phase Change Material"      "PCM"
+rightSide   = nc' "rightSide"  "Right Hand Side"            "RHS" 
+progName    = nc' "progName"   "Solar Water Heating System" "SWHS" 
 
 swhsFull :: NamedChunk
 swhsFull    = 
@@ -30,24 +33,20 @@ charging = dcc "charging" "Charging" "Charging of the tank"
 coil = dcc "coil" "Heating coil" 
   "Coil in tank that heats by absorbing solar energy"
 discharging = dcc "discharging" "Discharging" "Discharging of the tank"
-gauss_div = dcc "gauss_div" "Gauss's Divergence theorem" 
-  "FIXME: Define this"
-heat_flux = dcc "heat_flux" "Heat flux" 
-  "The rate of heat energy transfer per unit area."
+gauss_div = dcc "gauss_div" "Gauss's Divergence theorem" fixme
+heat_flux = dcc "heat_flux" "Heat flux" "The rate of heat energy transfer per unit area."
   --FIXME: Heat flux needs to be a Unital Chunk
 mech_energy = dcc "mech_energy" "Mechanical energy" 
   "The energy that comes from motion and position"
 --TODO: Physical property.
 perfect_insul = dcc "perfect_insul" "perfectly insulated" 
-                ("Describes the property of a " ++
-                "material not allowing heat transfer through its boundaries")
+  "Describes the property of a material not allowing heat transfer through its boundaries"
 --FIXME: Remove " (PCM)" from the term and add an acronym instead.                
 phase_change_material = dcc "pcm" "Phase Change Material (PCM)" 
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
 swhsProg = dcc "swhsProg" "SWHS" "SWHS program"
-specific_heat = dcc "specific_heat" "Specific heat" 
-  "Heat capacity per unit mass" 
+specific_heat = dcc "specific_heat" "Specific heat" "Heat capacity per unit mass" 
   --FIXME: Specific Heat needs to be a UnitalChunk
 swhs_pcm = dcc "swhs_pcm" "solar water heating systems incorporating PCM" 
   "Solar water heating systems incorporating phase change material"

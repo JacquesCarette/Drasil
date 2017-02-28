@@ -8,11 +8,10 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
-import Language.Drasil.Chunk.VarChunk
+import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Control.Lens hiding ((:>),(:<))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)

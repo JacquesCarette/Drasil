@@ -87,30 +87,17 @@ swhs_srs = srsDoc swhsFull authors [s1, s2, s3, s4, s5, s6, s7]
 
 -- It is sometimes hard to remember to add new sections both here and above.
 
--- Title could be automated as long as program name is abstracted out
-
--- Authors could be abstracted out (specifically, Spencer is an author for 
--- multiple examples)
-
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
 
--- Again, with program name abstracted out this title could be automated.
-
--- As above, potentially abstract out author names.
-
 s1 = refSec [s1_1, s1_2, s1_3]
-
--- This is the same between all examples (could be automated)
 
 s1_1 = table_of_units this_si
   
--- Is it possible to make tables look nicer? I.e. \hline
-
-s1_2 = Section (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+s1_2 = Section (tOfSymb^.term) [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
   S "symbols used in this document along with their units" :+:

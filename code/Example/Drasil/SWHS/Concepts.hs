@@ -1,13 +1,9 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-} 
 module Drasil.SWHS.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (ode)
 ---Acronyms---
-ordDiffEq,phsChgMtrl,rightSide,progName :: NamedChunk
-
-ordDiffEq   = ode
+phsChgMtrl,rightSide,progName :: NamedChunk
 
 --FIXME: Acronyms
 phsChgMtrl  = nc' "phsChgMtrl" "Phase Change Material" "PCM"

@@ -33,7 +33,7 @@ import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
 
 acronyms :: [NamedChunk]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ordDiffEq,
+acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 
 this_si :: [UnitDefn]
@@ -248,9 +248,9 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   makeRef s4_2_5 +:+ S "and trace back to find any" +:+
   S "additional information they require. The" +:+
   (sLower (inModel ^. term)) :+: S "s provide" +:+
-  S "the" +:+ (ordDiffEq ^. term) +:+ S "(" :+: (short ordDiffEq) :+: S "s) and algebraic equations that model the" +:+.
+  S "the" +:+ (ode ^. term) +:+ S "(" :+: (short ode) :+: S "s) and algebraic equations that model the" +:+.
   (swhs_pcm ^. term) +:+ (short progName) +:+
-  S "solves these" +:+ (short ordDiffEq) :+: S "s."),
+  S "solves these" +:+ (short ode) :+: S "s."),
   Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
   {-
   (S "The" +:+ (sLower (goalStmt ^. term))
@@ -318,7 +318,7 @@ s4_intro = Paragraph (S "This section first presents the problem" +:+
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
   (sLower (dataDefn ^. term)) :+: S "s, and finally" +:+
   S "the" +:+ (sLower (inModel ^. term)) :+: S "s (" :+:
-  (short ordDiffEq) :+: S "s) that model the" +:+. 
+  (short ode) :+: S "s) that model the" +:+. 
   (swhs_pcm ^. term))
 
 -- Completely general except for solar water heating tank (object of analysis) 
@@ -429,7 +429,7 @@ s4_2 = Section (S "Solution Characteristics Specification") [Con s4_2_intro,
   Sub s4_2_7]
 
 s4_2_intro = Paragraph (S "The" +:+ (sLower (inModel ^. term)) :+:
-  S "s (" :+: (short ordDiffEq) :+: S "s) that govern" +:+
+  S "s (" :+: (short ode) :+: S "s) that govern" +:+
   (short progName) +:+ S "are" +:+ S "presented in" +:+ 
   (makeRef s4_2_5) :+: S ". The information to understand the" +:+
   S "meaning of the" +:+ (sLower (inModel ^. term)) :+:
@@ -770,7 +770,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
    ((C temp_PCM) - (C temp_W))),
   Paragraph (S "Finally, factoring out 1/" :+: P (tau_W ^. 
   symbol) :+: S ", we are left with the governing" +:+
-  (short ordDiffEq) +:+ S "for IM1:"),
+  (short ode) +:+ S "for IM1:"),
   EqnBlock
    (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
    (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - 

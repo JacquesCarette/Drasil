@@ -31,7 +31,7 @@ lc5 = LCChunk (nc "outputformat" "The format of the final output data.")
 lc6 = LCChunk (nc "outputverification" ("The constraints on the output results."))
   [mod_outputv]
 
-lc7 = LCChunk (ncWDS "temp" (S "How the governing " :+: (getAcc ordDiffEq) :+:
+lc7 = LCChunk (ncWDS "temp" (S "How the governing " :+: (getAcc ode) :+:
   S "s are defined using the input parameters.")) [mod_temp]
 
 lc8 = LCChunk (nc "energy" ("How the energy equations are defined using " ++
@@ -44,7 +44,7 @@ lc10 = LCChunk (nc "sequence" ("The implementation for the sequence " ++
   "(array) data structure.")) [mod_seq]
 
 lc11 = LCChunk (ncWDS "ode" (S "The algorithm used for the " :+: 
-  (getAcc ordDiffEq) :+: S " solver.")) [mod_ode]
+  (getAcc ode) :+: S " solver.")) [mod_ode]
 
 lc12 = LCChunk (nc "plot" "The implementation of plotting data.") [mod_plot]
 
@@ -62,7 +62,7 @@ uc3 = nc "output" "Output data are displayed to the output device."
 uc4 = nc "goal" ("The goal of the system is to calculate temperatures and" ++
   " energies.")
 
-uc5 = ncWDS "odes" (S "The " :+: (getAcc ordDiffEq) :+: S "s for " :+:
+uc5 = ncWDS "odes" (S "The " :+: (getAcc ode) :+: S "s for " :+:
   S "temperature can be defined using parameters defined in the input " :+:
   S "parameters module.")
 

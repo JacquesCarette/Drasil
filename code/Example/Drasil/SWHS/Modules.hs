@@ -64,11 +64,11 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
 -- Temperature ODEs Module
 mod_temp_desc :: NamedChunk
 mod_temp_desc = ncWDS "temperature ODEs" (S "Defines the " :+: 
-                (getAcc ordDiffEq) :+: S "s using the parameters in the " :+:
+                (getAcc ode) :+: S "s using the parameters in the " :+:
                 S "input parameters module.")
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: (getAcc ordDiffEq) :+:
+mod_temp = makeImpModule mod_temp_desc (S "The " :+: (getAcc ode) :+:
            S "s for solving the temperature, using the input parameters.")
            swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
@@ -114,7 +114,7 @@ mod_ode_desc = ncWDS "ODE solver" (S "Provides solvers that take the governing "
 
 mod_ode :: ModuleChunk
 mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: (getAcc ordDiffEq) :+: S "s.") matlab [] [] 
+          S " first order " :+: (getAcc ode) :+: S "s.") matlab [] [] 
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module

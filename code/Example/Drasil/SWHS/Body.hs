@@ -29,8 +29,8 @@ import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
-import Drasil.SRS
-import Drasil.ReferenceMaterial
+import qualified Drasil.SRS as SRS
+import Drasil.ReferenceMaterial (refSec, intro)
 import Drasil.DocumentLanguage
 
 acronyms :: [CI]
@@ -73,17 +73,15 @@ This table is ALMOST correct (just the normal vector is wrong because it should
 be using defn).
 -}
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [ TUnits, 
-                                tsymb'' s1_2_intro (TermExcept [norm_vect]),
-                                TAandA
-                              ]
+mkSRS = RefSec (RefProg intro 
+  [ TUnits, tsymb'' s1_2_intro (TermExcept [norm_vect]), TAandA ]
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS swhs_si
 
 swhs_srs :: Document
-swhs_srs = srsDoc swhsFull authors [s1, s2, s3, s4, s5, s6, s7]
+swhs_srs = SRS.doc swhsFull authors [s1, s2, s3, s4, s5, s6, s7]
 
 -- It is sometimes hard to remember to add new sections both here and above.
 
@@ -119,8 +117,7 @@ s1_3 = table_of_abb_and_acronyms acronyms
   
 -- This section name and table structure are same between all examples.
   
-s2 = Section (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2, 
-  Sub s2_3])
+s2 = SRS.intro $ ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+

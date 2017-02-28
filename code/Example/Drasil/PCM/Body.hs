@@ -14,9 +14,9 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Units.Thermodynamics
 
-import Drasil.TableOfAbbAndAcronyms
-import Drasil.SRS
-import Drasil.ReferenceMaterial
+import           Drasil.TableOfAbbAndAcronyms
+import qualified Drasil.SRS as SRS
+import           Drasil.ReferenceMaterial
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -28,7 +28,7 @@ s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s4_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
 pcm_srs :: Document  
-pcm_srs = srsDoc sWHS (name thulasi) [s1,s4]
+pcm_srs = SRS.doc sWHS (name thulasi) [s1,s4]
 
 s1 = refSec [s1_1, s1_2, s1_3]
 

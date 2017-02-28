@@ -20,7 +20,7 @@ import Drasil.TableOfUnits
 import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS
-import Drasil.SRS
+import qualified Drasil.SRS as SRS
 import qualified Drasil.ReferenceMaterial as RM
 
 import Drasil.GamePhysics.Unitals
@@ -41,7 +41,7 @@ auths :: Sentence
 auths = manyNames authors
 
 chipmunkSRS :: Document
-chipmunkSRS = srsDoc chipmunk auths [s1, s2, s3, s4, s5, s6, s7]
+chipmunkSRS = SRS.doc chipmunk auths [s1, s2, s3, s4, s5, s6, s7]
 
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS chipmunkSysInfo

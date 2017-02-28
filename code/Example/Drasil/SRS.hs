@@ -1,4 +1,4 @@
-module Drasil.SRS (srsDoc) where
+module Drasil.SRS (doc, intro) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -8,5 +8,10 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation
 
-srsDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
-srsDoc sys authors secs = Document (srs `for` sys) authors secs
+import Control.Lens ((^.))
+
+doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
+doc sys authors secs = Document (srs `for` sys) authors secs
+
+intro :: [SecCons] -> Section
+intro l = Section (introduction^.term) l

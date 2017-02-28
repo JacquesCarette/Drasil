@@ -13,15 +13,15 @@ import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 
-import Drasil.TableOfAbbAndAcronyms
-import Drasil.SRS
-import Drasil.ReferenceMaterial
+import           Drasil.TableOfAbbAndAcronyms
+import qualified Drasil.SRS as SRS
+import           Drasil.ReferenceMaterial
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_srs :: Document  
-ssp_srs = srsDoc sSA (name henryFrankis) [s1, s2, s3, s4, s5, s6]
+ssp_srs = SRS.doc sSA (name henryFrankis) [s1, s2, s3, s4, s5, s6]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules

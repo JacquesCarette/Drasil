@@ -7,12 +7,12 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
 
-import Drasil.TableOfUnits
-import Drasil.TableOfSymbols
-import Drasil.TableOfAbbAndAcronyms
-import Drasil.OrganizationOfSRS
-import Drasil.SRS
-import Drasil.ReferenceMaterial
+import           Drasil.TableOfUnits
+import           Drasil.TableOfSymbols
+import           Drasil.TableOfAbbAndAcronyms
+import           Drasil.OrganizationOfSRS
+import qualified Drasil.SRS as SRS
+import           Drasil.ReferenceMaterial
 
 import Drasil.GlassBR.Example
 import Drasil.GlassBR.Concepts
@@ -49,7 +49,7 @@ authors :: People
 authors = [nikitha, spencerSmith]
 
 glassBR_srs :: Document  
-glassBR_srs = srsDoc glassBRProg srs_authors [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
+glassBR_srs = SRS.doc glassBRProg srs_authors [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
 glassBR_srs' :: Document
 glassBR_srs' = mkDoc mkSRS glassSystInfo

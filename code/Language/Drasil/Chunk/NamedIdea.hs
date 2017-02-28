@@ -30,6 +30,9 @@ instance NamedIdea NamedChunk where
 nc :: String -> String -> NamedChunk
 nc i des = NC i (S des) Nothing
 
+ncs :: String -> Sentence -> NamedChunk
+ncs i des = NC i des Nothing
+
 nc' :: String -> String -> String -> NamedChunk
 nc' i t acc = NC i (S t) (Just (S acc))
 

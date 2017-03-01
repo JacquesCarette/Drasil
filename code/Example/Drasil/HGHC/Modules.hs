@@ -12,7 +12,7 @@ self :: NamedChunk
 self = ncWDS "HGHC" (S "HGHC")
 
 executable :: NamedChunk
-executable = ncWDS (self ^. id) (self ^. term :+: (S " ") :+: program ^. term)
+executable = ncWDS' (self ^. id) (self ^. term :+: (S " ") :+: program ^. term) ("HGHC")
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk

@@ -5,11 +5,12 @@ import Data.Drasil.Concepts.Documentation (srs)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-program, c, matlab, physLib, os :: ConceptChunk
+program, c, matlab, physLib :: ConceptChunk
+os :: NamedChunk
 
 c       = dcc "c" "C" "C programming language"
 matlab  = dcc "matlab" "MATLAB" "MATLAB programming language"
-os      = dcc "os" "OS" "operating system"
+os      = nc' "os" "operating system" "OS"
 physLib = dcc "physLib" "physics library" ("A programming library which " ++
   "provides functions for modelling physical phenomenon.")
 program = dcc "program" "program" 

@@ -53,7 +53,7 @@ compoundterm t1 t2 = NC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
 for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for t1 t2 = (t1^.term) +:+ S " for " +:+ (t2^.term)
+for t1 t2 = (t1^.term) +:+ S "for" +:+ (t2^.term)
 
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-of_ t1 t2 = (t1^.term) +:+ S " of " +:+ (t2^.term)
+of_ t1 t2 = (t1^.term) +:+ S "of" +:+ (t2^.term)

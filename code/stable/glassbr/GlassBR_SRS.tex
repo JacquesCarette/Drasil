@@ -37,7 +37,7 @@ N & force (newton)
 \end{longtable*}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
+
 \begin{longtable*}{l l l}
 \toprule
 Symbol & Description & Units
@@ -106,7 +106,7 @@ $\hat{q}_{tol}$ & Tolerable load &
 \label{Sec:AaA}
 \begin{longtable*}{l l}
 \toprule
-Abbreviations & Full Form
+Symbol & Description
 \\
 \midrule
 A & Assumption
@@ -171,7 +171,7 @@ The scope of the requirements includes getting all input parameters related to t
 \subsection{Organization of Document}
 \label{Sec:OoD}
 The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:R}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DDs} and trace back to find any additional information they require.
-The goal statements are refined to the theoretical models, and theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:S}
 This section describes the Stakeholders: the people who have an interest in the product.
@@ -216,7 +216,7 @@ Use Case NO. & Use Case Name & Actor & Input and Output
 \label{Sec:IPUC}
 \begin{enumerate}
 \item{Use Case 1 refers to the user providing input to Glass-BR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.}
-\item{ Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement  which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability ($P_{b}$) is less than the tolerable probability ($P_{btol}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.}
+\item{ Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability ($P_{b}$) is less than the tolerable probability ($P_{btol}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.}
 \end{enumerate}
 \section{Specific System Description}
 \label{Sec:SSD}
@@ -260,7 +260,7 @@ This subsection provides a list of terms that are used in subsequent sections an
 The physical system of Glass-BR as shown in Figure~\ref{Figure:Tps}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Glass slab
-\item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance  is the distance between the point of explosion and the glass.
+\item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -284,7 +284,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 \item[A2:]This practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 \item[A3:]This system only considers the external explosion scenario for its calculations.
-\item[A4:]Standard values used for calculation in Glass-BR are: 
+\item[A4:]Standard values used for calculation in Glass-BR are:
 \end{itemize}
 \begin{equation}
 m=7
@@ -384,9 +384,9 @@ This section collects and defines all the data needed to build the instance mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:B}
+\toprule \textbf{Refname} & \textbf{DD:risk.fun}
 \phantomsection 
-\label{DD:B}
+\label{DD:risk.fun}
 \\ \midrule \\
 Label & $B$
 \\ \midrule \\
@@ -400,9 +400,9 @@ Description & $B$ is the risk of failure\newline$k$ is the Surface flaw paramete
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:h}
+\toprule \textbf{Refname} & \textbf{DD:act.thick}
 \phantomsection 
-\label{DD:h}
+\label{DD:act.thick}
 \\ \midrule \\
 Label & $h$
 \\ \midrule \\
@@ -416,9 +416,9 @@ Description & $h$ is the  function that maps from the nominal thickness ($t$) to
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:LDF}
+\toprule \textbf{Refname} & \textbf{DD:lDurFac}
 \phantomsection 
-\label{DD:LDF}
+\label{DD:lDurFac}
 \\ \midrule \\
 Label & $LDF$
 \\ \midrule \\
@@ -432,9 +432,9 @@ Description & $LDF$ is the Load Duration Factor\newline$t_{d}$ is the Duration o
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:J}
+\toprule \textbf{Refname} & \textbf{DD:sdf}
 \phantomsection 
-\label{DD:J}
+\label{DD:sdf}
 \\ \midrule \\
 Label & $J$
 \\ \midrule \\
@@ -448,9 +448,9 @@ Description & $J$ is the Stress distribution factor (Function)\newline$J$ is the
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:NFL}
+\toprule \textbf{Refname} & \textbf{DD:nonFactorL}
 \phantomsection 
-\label{DD:NFL}
+\label{DD:nonFactorL}
 \\ \midrule \\
 Label & $NFL$
 \\ \midrule \\
@@ -464,9 +464,9 @@ Description & $NFL$ is the Non-Factored Load\newline$\hat{q}_{tol}$ is the Toler
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:GTF}
+\toprule \textbf{Refname} & \textbf{DD:glassTypeFac}
 \phantomsection 
-\label{DD:GTF}
+\label{DD:glassTypeFac}
 \\ \midrule \\
 Label & $GTF$
 \\ \midrule \\
@@ -480,9 +480,9 @@ Description & $GTF$ is the function that maps from the glass type ($g$) to a rea
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:q.hat}
+\toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
 \phantomsection 
-\label{DD:q.hat}
+\label{DD:dimlessLoad}
 \\ \midrule \\
 Label & $\hat{q}$
 \\ \midrule \\
@@ -496,9 +496,9 @@ Description & $\hat{q}$ is the Dimensionless load\newline$q$ is the Applied load
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:q.hat.tol}
+\toprule \textbf{Refname} & \textbf{DD:tolLoad}
 \phantomsection 
-\label{DD:q.hat.tol}
+\label{DD:tolLoad}
 \\ \midrule \\
 Label & $\hat{q}_{tol}$
 \\ \midrule \\
@@ -512,9 +512,9 @@ Description & $\hat{q}_{tol}$ is the Tolerable load\newline$\hat{q}_{tol}$ is th
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:J.tol}
+\toprule \textbf{Refname} & \textbf{DD:sdf.tol}
 \phantomsection 
-\label{DD:J.tol}
+\label{DD:sdf.tol}
 \\ \midrule \\
 Label & $J_{tol}$
 \\ \midrule \\
@@ -603,14 +603,14 @@ $TNT$ & TNT equivalent factor &
           \item{Probability of breakage ($P_{b}$) (\hyperref[T:PoGB]{Definition~T:PoGB})}
           \item{Load Resistance ($LR$) (\hyperref[T:CoC]{Definition~T:CoC})}
           \item{Applied load (demand) ($q$) (\hyperref[T:CoD]{Definition~T:CoD})}
-          \item{Actual thickness ($h$) (\hyperref[DD:h]{Definition~DD:h})}
-          \item{Load Duration Factor ($LDF$) (\hyperref[DD:LDF]{Definition~DD:LDF})}
-          \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:J]{Definition~DD:J})}
-          \item{Non-Factored Load ($NFL$) (\hyperref[DD:NFL]{Definition~DD:NFL})}
-          \item{Glass Type Factor ($GTF$) (\hyperref[DD:GTF]{Definition~DD:GTF})}
-          \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:q.hat]{Definition~DD:q.hat})}
-          \item{Tolerable load ($\hat{q}_{tol}$) (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol})}
-          \item{Stress distribution factor (Function) based on Pbtol ($J_{tol}$) (\hyperref[DD:J.tol]{Definition~DD:J.tol})}
+          \item{Actual thickness ($h$) (\hyperref[DD:act.thick]{Definition~DD:act.thick})}
+          \item{Load Duration Factor ($LDF$) (\hyperref[DD:lDurFac]{Definition~DD:lDurFac})}
+          \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:sdf]{Definition~DD:sdf})}
+          \item{Non-Factored Load ($NFL$) (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL})}
+          \item{Glass Type Factor ($GTF$) (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac})}
+          \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
+          \item{Tolerable load ($\hat{q}_{tol}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
+          \item{Stress distribution factor (Function) based on Pbtol ($J_{tol}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
           \item{Aspect Ratio ($AR$)}
           \end{enumerate}
 \end{itemize}
@@ -631,7 +631,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table 5 (Table~\ref{Table:TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models with each other. Table 6 (Table~\ref{Table:TMStCBRaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Table 7 (Table~\ref{Table:TMStCBAaOI}) shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:B]{Definition~DD:B}) & DD2 (\hyperref[DD:h]{Definition~DD:h}) & DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) & DD4 (\hyperref[DD:J]{Definition~DD:J}) & DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) & DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) & DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) & DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) & DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol})
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) & DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) & DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) & DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})
 \\
 \midrule
 T1 (\hyperref[T:SR]{Definition~T:SR}) &  & X & X &  &  &  &  &  &  &  &  &  &  & 
@@ -644,23 +644,23 @@ IM2 (\hyperref[T:CoC]{Definition~T:CoC}) &  &  &  &  &  &  &  &  &  & X & X &  &
 \\
 IM3 (\hyperref[T:CoD]{Definition~T:CoD}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:B]{Definition~DD:B}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:h]{Definition~DD:h}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:J]{Definition~DD:J}) &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) &  &  &  &  &  &  & X &  &  &  &  &  & X & 
+DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) &  &  &  &  &  &  & X &  &  &  &  &  & X & 
 \\
-DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) &  &  &  &  & X &  & X &  &  &  & X &  &  & 
+DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  & X &  & X &  &  &  & X &  &  & 
 \\
-DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) &  &  &  &  &  &  & X & X &  &  &  &  &  & 
+DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -668,7 +668,7 @@ DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) &  &  &  &  &  &  & X & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:B]{Definition~DD:B}) & DD2 (\hyperref[DD:h]{Definition~DD:h}) & DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) & DD4 (\hyperref[DD:J]{Definition~DD:J}) & DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) & DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) & DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) & DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) & DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FRs}) & R2 (in Section~\ref{Sec:FRs})
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) & DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) & DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) & DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FRs}) & R2 (in Section~\ref{Sec:FRs})
 \\
 \midrule
 R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -702,23 +702,23 @@ IM2 (\hyperref[T:CoC]{Definition~T:CoC}) &  &  &  &  & X &  &  &
 \\
 IM3 (\hyperref[T:CoD]{Definition~T:CoD}) &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:B]{Definition~DD:B}) &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:h]{Definition~DD:h}) &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:LDF]{Definition~DD:LDF}) &  &  &  & X &  &  &  & X
+DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) &  &  &  & X &  &  &  & X
 \\
-DD4 (\hyperref[DD:J]{Definition~DD:J}) &  &  &  &  &  &  &  & 
+DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) &  &  &  &  &  &  &  & 
 \\
-DD5 (\hyperref[DD:NFL]{Definition~DD:NFL}) &  &  &  & X &  &  &  & 
+DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) &  &  &  & X &  &  &  & 
 \\
-DD6 (\hyperref[DD:GTF]{Definition~DD:GTF}) &  &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[DD:q.hat]{Definition~DD:q.hat}) &  &  &  &  & X &  &  & 
+DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  & X &  &  & 
 \\
-DD8 (\hyperref[DD:q.hat.tol]{Definition~DD:q.hat.tol}) &  &  &  &  &  &  &  & 
+DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  & 
 \\
-DD9 (\hyperref[DD:J.tol]{Definition~DD:J.tol}) &  &  &  & X &  &  &  & 
+DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  & X &  &  &  & 
 \\
 LC1 (in Section~\ref{Sec:LCs}) &  &  & X &  &  &  &  & 
 \\

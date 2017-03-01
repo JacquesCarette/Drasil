@@ -85,7 +85,7 @@ force (newton)
 Table of Symbols
 </h3>
 <p class="paragraph">
-The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
+
 </p>
 <a id="Table:ToS">
 <table class="table">
@@ -421,10 +421,10 @@ Abbreviations and Acronyms
 <table class="table">
 <tr>
 <th>
-Abbreviations
+Symbol
 </th>
 <th>
-Full Form
+Description
 </th>
 </tr>
 <tr>
@@ -657,7 +657,7 @@ Organization of Document
 The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:R>this Section</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DDs>this Section</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 </p>
 </div>
 </a>
@@ -805,7 +805,7 @@ Individual Product Use Cases
 Use Case 1 refers to the user providing input to Glass-BR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.
 </li>
 <li>
- Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement  which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (P<sub>b</sub>) is less than the tolerable probability (P<sub>btol</sub>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+ Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (P<sub>b</sub>) is less than the tolerable probability (P<sub>btol</sub>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </li>
 </ul>
 </div>
@@ -923,7 +923,7 @@ The physical system of Glass-BR as shown in <a href=#Figure:Tps>this Figure</a>,
 PS1: Glass slab
 </p>
 <p>
-PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance  is the distance between the point of explosion and the glass.
+PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 </p>
 </div>
 <a id="Figure:Tps">
@@ -975,7 +975,7 @@ A2: This practice does not apply to any form of wired, patterned, etched, sandbl
 A3: This system only considers the external explosion scenario for its calculations.
 </p>
 <p>
-A4: Standard values used for calculation in Glass-BR are: 
+A4: Standard values used for calculation in Glass-BR are:
 </p>
 </div>
 <a id="">
@@ -1216,7 +1216,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<a id="DD:B">
+<a id="DD:risk.fun">
 <table class="ddefn">
 <tr>
 <th>
@@ -1290,7 +1290,7 @@ B is the risk of failure<br />k is the Surface flaw parameter<br />a is the Plat
 </tr>
 </table>
 </a>
-<a id="DD:h">
+<a id="DD:act.thick">
 <table class="ddefn">
 <tr>
 <th>
@@ -1336,7 +1336,7 @@ h is the  function that maps from the nominal thickness (t) to the minimum thick
 </tr>
 </table>
 </a>
-<a id="DD:LDF">
+<a id="DD:lDurFac">
 <table class="ddefn">
 <tr>
 <th>
@@ -1396,7 +1396,7 @@ LDF is the Load Duration Factor<br />t<sub>d</sub> is the Duration of load<br />
 </tr>
 </table>
 </a>
-<a id="DD:J">
+<a id="DD:sdf">
 <table class="ddefn">
 <tr>
 <th>
@@ -1449,7 +1449,7 @@ J is the Stress distribution factor (Function)<br />J is the Stress distribution
 </tr>
 </table>
 </a>
-<a id="DD:NFL">
+<a id="DD:nonFactorL">
 <table class="ddefn">
 <tr>
 <th>
@@ -1502,7 +1502,7 @@ NFL is the Non-Factored Load<br />q&#770;<sub>tol</sub> is the Tolerable load<br
 </tr>
 </table>
 </a>
-<a id="DD:GTF">
+<a id="DD:glassTypeFac">
 <table class="ddefn">
 <tr>
 <th>
@@ -1548,7 +1548,7 @@ GTF is the function that maps from the glass type (g) to a real number, as follo
 </tr>
 </table>
 </a>
-<a id="DD:q.hat">
+<a id="DD:dimlessLoad">
 <table class="ddefn">
 <tr>
 <th>
@@ -1601,7 +1601,7 @@ q&#770; is the Dimensionless load<br />q is the Applied load (demand)<br />a is 
 </tr>
 </table>
 </a>
-<a id="DD:q.hat.tol">
+<a id="DD:tolLoad">
 <table class="ddefn">
 <tr>
 <th>
@@ -1654,7 +1654,7 @@ q&#770;<sub>tol</sub> is the Tolerable load<br />q&#770;<sub>tol</sub> is the To
 </tr>
 </table>
 </a>
-<a id="DD:J.tol">
+<a id="DD:sdf.tol">
 <table class="ddefn">
 <tr>
 <th>
@@ -2005,28 +2005,28 @@ R6: Output the following quantities:
     Applied load (demand) (q) (<a href=#T:CoD>this Definition</a>)
     </li>
     <li>
-    Actual thickness (h) (<a href=#DD:h>this Definition</a>)
+    Actual thickness (h) (<a href=#DD:act.thick>this Definition</a>)
     </li>
     <li>
-    Load Duration Factor (LDF) (<a href=#DD:LDF>this Definition</a>)
+    Load Duration Factor (LDF) (<a href=#DD:lDurFac>this Definition</a>)
     </li>
     <li>
-    Stress distribution factor (Function) (J) (<a href=#DD:J>this Definition</a>)
+    Stress distribution factor (Function) (J) (<a href=#DD:sdf>this Definition</a>)
     </li>
     <li>
-    Non-Factored Load (NFL) (<a href=#DD:NFL>this Definition</a>)
+    Non-Factored Load (NFL) (<a href=#DD:nonFactorL>this Definition</a>)
     </li>
     <li>
-    Glass Type Factor (GTF) (<a href=#DD:GTF>this Definition</a>)
+    Glass Type Factor (GTF) (<a href=#DD:glassTypeFac>this Definition</a>)
     </li>
     <li>
-    Dimensionless load (q&#770;) (<a href=#DD:q.hat>this Definition</a>)
+    Dimensionless load (q&#770;) (<a href=#DD:dimlessLoad>this Definition</a>)
     </li>
     <li>
-    Tolerable load (q&#770;<sub>tol</sub>) (<a href=#DD:q.hat.tol>this Definition</a>)
+    Tolerable load (q&#770;<sub>tol</sub>) (<a href=#DD:tolLoad>this Definition</a>)
     </li>
     <li>
-    Stress distribution factor (Function) based on Pbtol (J<sub>tol</sub>) (<a href=#DD:J.tol>this Definition</a>)
+    Stress distribution factor (Function) based on Pbtol (J<sub>tol</sub>) (<a href=#DD:sdf.tol>this Definition</a>)
     </li>
     <li>
     Aspect Ratio (AR)
@@ -2102,31 +2102,31 @@ IM2 (<a href=#T:CoC>this Definition</a>)
 IM3 (<a href=#T:CoD>this Definition</a>)
 </th>
 <th>
-DD1 (<a href=#DD:B>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>this Definition</a>)
 </th>
 <th>
-DD2 (<a href=#DD:h>this Definition</a>)
+DD2 (<a href=#DD:act.thick>this Definition</a>)
 </th>
 <th>
-DD3 (<a href=#DD:LDF>this Definition</a>)
+DD3 (<a href=#DD:lDurFac>this Definition</a>)
 </th>
 <th>
-DD4 (<a href=#DD:J>this Definition</a>)
+DD4 (<a href=#DD:sdf>this Definition</a>)
 </th>
 <th>
-DD5 (<a href=#DD:NFL>this Definition</a>)
+DD5 (<a href=#DD:nonFactorL>this Definition</a>)
 </th>
 <th>
-DD6 (<a href=#DD:GTF>this Definition</a>)
+DD6 (<a href=#DD:glassTypeFac>this Definition</a>)
 </th>
 <th>
-DD7 (<a href=#DD:q.hat>this Definition</a>)
+DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
 </th>
 <th>
-DD8 (<a href=#DD:q.hat.tol>this Definition</a>)
+DD8 (<a href=#DD:tolLoad>this Definition</a>)
 </th>
 <th>
-DD9 (<a href=#DD:J.tol>this Definition</a>)
+DD9 (<a href=#DD:sdf.tol>this Definition</a>)
 </th>
 </tr>
 <tr>
@@ -2366,7 +2366,7 @@ IM3 (<a href=#T:CoD>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:B>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>this Definition</a>)
 </td>
 <td>
 
@@ -2413,7 +2413,7 @@ DD1 (<a href=#DD:B>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:h>this Definition</a>)
+DD2 (<a href=#DD:act.thick>this Definition</a>)
 </td>
 <td>
 
@@ -2460,7 +2460,7 @@ DD2 (<a href=#DD:h>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:LDF>this Definition</a>)
+DD3 (<a href=#DD:lDurFac>this Definition</a>)
 </td>
 <td>
 
@@ -2507,7 +2507,7 @@ DD3 (<a href=#DD:LDF>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:J>this Definition</a>)
+DD4 (<a href=#DD:sdf>this Definition</a>)
 </td>
 <td>
 
@@ -2554,7 +2554,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:NFL>this Definition</a>)
+DD5 (<a href=#DD:nonFactorL>this Definition</a>)
 </td>
 <td>
 
@@ -2601,7 +2601,7 @@ X
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:GTF>this Definition</a>)
+DD6 (<a href=#DD:glassTypeFac>this Definition</a>)
 </td>
 <td>
 
@@ -2648,7 +2648,7 @@ DD6 (<a href=#DD:GTF>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:q.hat>this Definition</a>)
+DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
 </td>
 <td>
 
@@ -2695,7 +2695,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:q.hat.tol>this Definition</a>)
+DD8 (<a href=#DD:tolLoad>this Definition</a>)
 </td>
 <td>
 
@@ -2742,7 +2742,7 @@ X
 </tr>
 <tr>
 <td>
-DD9 (<a href=#DD:J.tol>this Definition</a>)
+DD9 (<a href=#DD:sdf.tol>this Definition</a>)
 </td>
 <td>
 
@@ -2814,31 +2814,31 @@ IM2 (<a href=#T:CoC>this Definition</a>)
 IM3 (<a href=#T:CoD>this Definition</a>)
 </th>
 <th>
-DD1 (<a href=#DD:B>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>this Definition</a>)
 </th>
 <th>
-DD2 (<a href=#DD:h>this Definition</a>)
+DD2 (<a href=#DD:act.thick>this Definition</a>)
 </th>
 <th>
-DD3 (<a href=#DD:LDF>this Definition</a>)
+DD3 (<a href=#DD:lDurFac>this Definition</a>)
 </th>
 <th>
-DD4 (<a href=#DD:J>this Definition</a>)
+DD4 (<a href=#DD:sdf>this Definition</a>)
 </th>
 <th>
-DD5 (<a href=#DD:NFL>this Definition</a>)
+DD5 (<a href=#DD:nonFactorL>this Definition</a>)
 </th>
 <th>
-DD6 (<a href=#DD:GTF>this Definition</a>)
+DD6 (<a href=#DD:glassTypeFac>this Definition</a>)
 </th>
 <th>
-DD7 (<a href=#DD:q.hat>this Definition</a>)
+DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
 </th>
 <th>
-DD8 (<a href=#DD:q.hat.tol>this Definition</a>)
+DD8 (<a href=#DD:tolLoad>this Definition</a>)
 </th>
 <th>
-DD9 (<a href=#DD:J.tol>this Definition</a>)
+DD9 (<a href=#DD:sdf.tol>this Definition</a>)
 </th>
 <th>
 Data Constraints (<a href=#Sec:DC>this Section</a>)
@@ -3369,7 +3369,7 @@ IM3 (<a href=#T:CoD>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:B>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>this Definition</a>)
 </td>
 <td>
 
@@ -3398,7 +3398,7 @@ DD1 (<a href=#DD:B>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:h>this Definition</a>)
+DD2 (<a href=#DD:act.thick>this Definition</a>)
 </td>
 <td>
 
@@ -3427,7 +3427,7 @@ DD2 (<a href=#DD:h>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:LDF>this Definition</a>)
+DD3 (<a href=#DD:lDurFac>this Definition</a>)
 </td>
 <td>
 
@@ -3456,7 +3456,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:J>this Definition</a>)
+DD4 (<a href=#DD:sdf>this Definition</a>)
 </td>
 <td>
 
@@ -3485,7 +3485,7 @@ DD4 (<a href=#DD:J>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:NFL>this Definition</a>)
+DD5 (<a href=#DD:nonFactorL>this Definition</a>)
 </td>
 <td>
 
@@ -3514,7 +3514,7 @@ X
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:GTF>this Definition</a>)
+DD6 (<a href=#DD:glassTypeFac>this Definition</a>)
 </td>
 <td>
 
@@ -3543,7 +3543,7 @@ DD6 (<a href=#DD:GTF>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:q.hat>this Definition</a>)
+DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
 </td>
 <td>
 
@@ -3572,7 +3572,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:q.hat.tol>this Definition</a>)
+DD8 (<a href=#DD:tolLoad>this Definition</a>)
 </td>
 <td>
 
@@ -3601,7 +3601,7 @@ DD8 (<a href=#DD:q.hat.tol>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD9 (<a href=#DD:J.tol>this Definition</a>)
+DD9 (<a href=#DD:sdf.tol>this Definition</a>)
 </td>
 <td>
 

@@ -157,7 +157,7 @@ m/(s<sup>2</sup>)
 G
 </td>
 <td>
-gravitational constant (6.673 * 10E-11)
+gravitational constant
 </td>
 <td>
 m<sup>3</sup>/(kgs<sup>2</sup>)
@@ -330,7 +330,7 @@ Nm
 </tr>
 <tr>
 <td>
-&gamma;
+&theta;
 </td>
 <td>
 angular displacement
@@ -370,6 +370,121 @@ number of particles in a rigid body
 </td>
 <td>
 
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:AaA">
+<div class="subsection">
+<h3>
+Abbreviations and Acronyms
+</h3>
+<a id="Table:AaA">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+</tr>
+<tr>
+<td>
+A
+</td>
+<td>
+Assumption
+</td>
+</tr>
+<tr>
+<td>
+CM
+</td>
+<td>
+Centre of Mass
+</td>
+</tr>
+<tr>
+<td>
+DD
+</td>
+<td>
+Data Definition
+</td>
+</tr>
+<tr>
+<td>
+GD
+</td>
+<td>
+General Definition
+</td>
+</tr>
+<tr>
+<td>
+GS
+</td>
+<td>
+Goal Statement
+</td>
+</tr>
+<tr>
+<td>
+IM
+</td>
+<td>
+Instance Model
+</td>
+</tr>
+<tr>
+<td>
+LC
+</td>
+<td>
+Likely Change
+</td>
+</tr>
+<tr>
+<td>
+ODE
+</td>
+<td>
+Ordinary Differential Equation
+</td>
+</tr>
+<tr>
+<td>
+R
+</td>
+<td>
+Requirement
+</td>
+</tr>
+<tr>
+<td>
+SRS
+</td>
+<td>
+Software Requirements Specification
+</td>
+</tr>
+<tr>
+<td>
+T
+</td>
+<td>
+Theoretical Model
+</td>
+</tr>
+<tr>
+<td>
+2D
+</td>
+<td>
+Two-Dimensional
 </td>
 </tr>
 </table>
@@ -418,7 +533,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>this Section</a> and trace back to any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>this Section</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
@@ -692,7 +807,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Two rigid bodies in the universe attract each other with a force <b>F</b> (N) that is directly proportional to the product of their masses, m<sub>1</sub> and m<sub>2</sub> (kg), and inversely proportional to the squared distance ||<b>r</b>||<sup>2</sup> (m<sup>2</sup>) between them. The vector <b>r</b> (m) is the displacement between the centres of the rigid bodies and ||<b>r</b>|| (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <b>r&#770;</b> denotes the unit displacement vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, G is the gravitational constant (6.673 * 10E-11) ( m<sup>3</sup>/(kgs<sup>2</sup>)).
+Two rigid bodies in the universe attract each other with a force <b>F</b> (N) that is directly proportional to the product of their masses, m<sub>1</sub> and m<sub>2</sub> (kg), and inversely proportional to the squared distance ||<b>r</b>||<sup>2</sup> (m<sup>2</sup>) between them. The vector <b>r</b> (m) is the displacement between the centres of the rigid bodies and ||<b>r</b>|| (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <b>r&#770;</b> denotes the unit displacement vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, G is the gravitational constant (6.673 * 10E-11) (m<sup>3</sup>/(kgs<sup>2</sup>)).
 </p>
 </td>
 </tr>
@@ -790,7 +905,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the Instance Models. The dimension of each quantity is also given.
 </p>
-<a id="MG:p.CM">
+<a id="DD:dd1CtrOfMass">
 <table class="ddefn">
 <tr>
 <th>
@@ -843,7 +958,7 @@ Description
 </tr>
 </table>
 </a>
-<a id="MG:r">
+<a id="DD:dd2linDisp">
 <table class="ddefn">
 <tr>
 <th>
@@ -890,13 +1005,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<b>r</b>(t) is the the linear displacement of a rigid body as a function of time t (s), also equal to the derivative of its linear position with respect to time t<br /><b>p</b> is the position<br />t is the time
+<b>r</b>(t) is the linear displacement of a rigid body as a function of time t (s), also equal to the derivative of its linear position with respect to time t<br /><b>p</b> is the position<br />t is the time
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="MG:v">
+<a id="DD:dd3linVel">
 <table class="ddefn">
 <tr>
 <th>
@@ -943,13 +1058,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<b>v</b>(t) is the the linear velocity of a rigid body as a function of time t (s), also equal to the derivative of its linear velocity with respect to time t<br /><b>r</b> is the displacement<br />t is the time
+<b>v</b>(t) is the linear velocity of a rigid body as a function of time t (s), also equal to the derivative of its linear velocity with respect to time t<br /><b>r</b> is the displacement<br />t is the time
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="MG:a">
+<a id="DD:dd4linAcc">
 <table class="ddefn">
 <tr>
 <th>
@@ -996,13 +1111,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<b>a</b>(t) is the the linear acceleration of a rigid body as a function of time t (s), also equal to the derivative of its linear acceleration with respect to time t<br /><b>v</b> is the velocity<br />t is the time
+<b>a</b>(t) is the linear acceleration of a rigid body as a function of time t (s), also equal to the derivative of its linear acceleration with respect to time t<br /><b>v</b> is the velocity<br />t is the time
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="MG:theta">
+<a id="DD:dd5angDisp">
 <table class="ddefn">
 <tr>
 <th>
@@ -1010,7 +1125,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-&gamma;(t)
+&theta;(t)
 </p>
 </td>
 </tr>
@@ -1031,7 +1146,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-&gamma;(t) = <div class="fraction">
+&theta;(t) = <div class="fraction">
 <span class="fup">
 d&phi;(t)
 </span>
@@ -1049,13 +1164,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-&gamma;(t) is the the angular displacement of a rigid body as a function of time t (s), also equal to the derivative of its orientation with respect to time t<br />&phi; is the orientation<br />t is the time
+&theta;(t) is the angular displacement of a rigid body as a function of time t (s), also equal to the derivative of its orientation with respect to time t<br />&phi; is the orientation<br />t is the time
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="MG:omega">
+<a id="DD:dd6angVel">
 <table class="ddefn">
 <tr>
 <th>
@@ -1086,7 +1201,7 @@ Equation
 <div class="equation">
 &omega;(t) = <div class="fraction">
 <span class="fup">
-d&gamma;(t)
+d&theta;(t)
 </span>
 <span class="fdn">
 dt
@@ -1102,13 +1217,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-&omega;(t) is the the angular velocity of a rigid body as a function of time t (s), also equal to the derivative of its angular displacement with respect to time t<br />&gamma; is the angular displacement<br />t is the time
+&omega;(t) is the angular velocity of a rigid body as a function of time t (s), also equal to the derivative of its angular displacement with respect to time t<br />&theta; is the angular displacement<br />t is the time
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="MG:alpha">
+<a id="DD:dd7angAccel">
 <table class="ddefn">
 <tr>
 <th>
@@ -1155,13 +1270,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-&alpha;(t) is the the angular acceleration of a rigid body as a function of time t (s), also equal to the derivative of its angular velocity with respect to time t<br />&omega; is the angular velocity<br />t is the time
+&alpha;(t) is the angular acceleration of a rigid body as a function of time t (s), also equal to the derivative of its angular velocity with respect to time t<br />&omega; is the angular velocity<br />t is the time
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="MG:j">
+<a id="DD:dd8impulse">
 <table class="ddefn">
 <tr>
 <th>
@@ -1208,7 +1323,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-j is the the impulse (scalar) used to determine collision response between two rigid bodies<br />C<sub>R</sub> is the coefficient of restitution<br /><b>v</b><sub>i</sub><sup>AB</sup> is the relative velocity between rigid bodies A and B<br /><b>n</b> is the collision normal vector<br />m<sub>A</sub> is the mass of rigid body A<br />m<sub>B</sub> is the mass of rigid body B<br />||<b>n</b>|| is the length of the normal vector<br />||<b>r</b><sub>AP</sub>*<b>n</b>|| is the length of the vector perpendicular to the contact displacement vector of rigid body A<br /><b>I</b><sub>A</sub> is the moment of inertia of rigid body A<br />||<b>r</b><sub>BP</sub>*<b>n</b>|| is the length of the vector perpendicular to the contact displacement vector of rigid body B<br /><b>I</b><sub>B</sub> is the moment of inertia of rigid body B
+j is the impulse (scalar) used to determine collision response between two rigid bodies<br />C<sub>R</sub> is the coefficient of restitution<br /><b>v</b><sub>i</sub><sup>AB</sup> is the relative velocity between rigid bodies A and B<br /><b>n</b> is the collision normal vector<br />m<sub>A</sub> is the mass of rigid body A<br />m<sub>B</sub> is the mass of rigid body B<br />||<b>n</b>|| is the length of the normal vector<br />||<b>r</b><sub>AP</sub>*<b>n</b>|| is the length of the vector perpendicular to the contact displacement vector of rigid body A<br /><b>I</b><sub>A</sub> is the moment of inertia of rigid body A<br />||<b>r</b><sub>BP</sub>*<b>n</b>|| is the length of the vector perpendicular to the contact displacement vector of rigid body B<br /><b>I</b><sub>B</sub> is the moment of inertia of rigid body B
 </p>
 </td>
 </tr>

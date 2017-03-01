@@ -52,7 +52,7 @@ $\mathbf{F}$ & force & N
 \\
 $g$ & gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$G$ & gravitational constant (6.673 * 10E-11) & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
+$G$ & gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
 \\
 $\mathbf{I}$ & moment of inertia & kg$\text{m}^{2}$
 \\
@@ -84,7 +84,7 @@ $t$ & time & s
 \\
 $\tau{}$ & torque & Nm
 \\
-$\gamma{}$ & angular displacement & rad
+$\theta{}$ & angular displacement & rad
 \\
 $\mathbf{v}$ & velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -94,6 +94,40 @@ $n$ & number of particles in a rigid body &
 \\
 \bottomrule
 \label{Table:ToS}
+\end{longtable*}
+\subsection{Abbreviations and Acronyms}
+\label{Sec:AaA}
+\begin{longtable*}{l l}
+\toprule
+Symbol & Description
+\\
+\midrule
+A & Assumption
+\\
+CM & Centre of Mass
+\\
+DD & Data Definition
+\\
+GD & General Definition
+\\
+GS & Goal Statement
+\\
+IM & Instance Model
+\\
+LC & Likely Change
+\\
+ODE & Ordinary Differential Equation
+\\
+R & Requirement
+\\
+SRS & Software Requirements Specification
+\\
+T & Theoretical Model
+\\
+2D & Two-Dimensional
+\\
+\bottomrule
+\label{Table:AaA}
 \end{longtable*}
 \section{Introduction}
 \label{Sec:I}
@@ -108,7 +142,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given 2D rigid bodies, Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
 \subsection{Organization of Document}
 \label{Sec:OoD}
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
 \label{Sec:GSD}
@@ -199,7 +233,7 @@ Label & Newton's law of universal gravitation
 \\ \midrule \\
 Equation & $\mathbf{F}=G\frac{m_{1}m_{2}}{||\mathbf{r}||^{2}}\mathbf{\hat{r}}=G\frac{m_{1}m_{2}}{||\mathbf{r}||^{2}}\frac{\mathbf{r}}{||\mathbf{r}||}$
 \\ \midrule \\
-Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, $m_{1}$ and $m_{2}$ (kg), and inversely proportional to the squared distance $||\mathbf{r}||^{2}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the unit displacement vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ( $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, $m_{1}$ and $m_{2}$ (kg), and inversely proportional to the squared distance $||\mathbf{r}||^{2}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the unit displacement vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -239,9 +273,9 @@ This section collects and defines all the data needed to build the Instance Mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:p.CM}
+\toprule \textbf{Refname} & \textbf{DD:dd1CtrOfMass}
 \phantomsection 
-\label{MG:p.CM}
+\label{DD:dd1CtrOfMass}
 \\ \midrule \\
 Label & $\mathbf{p}_{CM}$
 \\ \midrule \\
@@ -255,9 +289,9 @@ Description & $\mathbf{p}_{CM}$ is the the mass-weighted average position of a r
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:r}
+\toprule \textbf{Refname} & \textbf{DD:dd2linDisp}
 \phantomsection 
-\label{MG:r}
+\label{DD:dd2linDisp}
 \\ \midrule \\
 Label & $\mathbf{r}(t)$
 \\ \midrule \\
@@ -265,15 +299,15 @@ Units & m
 \\ \midrule \\
 Equation & $\mathbf{r}(t)$ = $\frac{d\mathbf{p}(t)}{dt}$
 \\ \midrule \\
-Description & $\mathbf{r}(t)$ is the the linear displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear position with respect to time $t$\newline$\mathbf{p}$ is the position\newline$t$ is the time
+Description & $\mathbf{r}(t)$ is the linear displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear position with respect to time $t$\newline$\mathbf{p}$ is the position\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:v}
+\toprule \textbf{Refname} & \textbf{DD:dd3linVel}
 \phantomsection 
-\label{MG:v}
+\label{DD:dd3linVel}
 \\ \midrule \\
 Label & $\mathbf{v}(t)$
 \\ \midrule \\
@@ -281,15 +315,15 @@ Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & $\mathbf{v}(t)$ = $\frac{d\mathbf{r}(t)}{dt}$
 \\ \midrule \\
-Description & $\mathbf{v}(t)$ is the the linear velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear velocity with respect to time $t$\newline$\mathbf{r}$ is the displacement\newline$t$ is the time
+Description & $\mathbf{v}(t)$ is the linear velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear velocity with respect to time $t$\newline$\mathbf{r}$ is the displacement\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:a}
+\toprule \textbf{Refname} & \textbf{DD:dd4linAcc}
 \phantomsection 
-\label{MG:a}
+\label{DD:dd4linAcc}
 \\ \midrule \\
 Label & $\mathbf{a}(t)$
 \\ \midrule \\
@@ -297,47 +331,47 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & $\mathbf{a}(t)$ = $\frac{d\mathbf{v}(t)}{dt}$
 \\ \midrule \\
-Description & $\mathbf{a}(t)$ is the the linear acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear acceleration with respect to time $t$\newline$\mathbf{v}$ is the velocity\newline$t$ is the time
+Description & $\mathbf{a}(t)$ is the linear acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear acceleration with respect to time $t$\newline$\mathbf{v}$ is the velocity\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:theta}
+\toprule \textbf{Refname} & \textbf{DD:dd5angDisp}
 \phantomsection 
-\label{MG:theta}
+\label{DD:dd5angDisp}
 \\ \midrule \\
-Label & $\gamma{}(t)$
+Label & $\theta{}(t)$
 \\ \midrule \\
 Units & rad
 \\ \midrule \\
-Equation & $\gamma{}(t)$ = $\frac{d\phi{}(t)}{dt}$
+Equation & $\theta{}(t)$ = $\frac{d\phi{}(t)}{dt}$
 \\ \midrule \\
-Description & $\gamma{}(t)$ is the the angular displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its orientation with respect to time $t$\newline$\phi{}$ is the orientation\newline$t$ is the time
+Description & $\theta{}(t)$ is the angular displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its orientation with respect to time $t$\newline$\phi{}$ is the orientation\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:omega}
+\toprule \textbf{Refname} & \textbf{DD:dd6angVel}
 \phantomsection 
-\label{MG:omega}
+\label{DD:dd6angVel}
 \\ \midrule \\
 Label & $\omega{}(t)$
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
-Equation & $\omega{}(t)$ = $\frac{d\gamma{}(t)}{dt}$
+Equation & $\omega{}(t)$ = $\frac{d\theta{}(t)}{dt}$
 \\ \midrule \\
-Description & $\omega{}(t)$ is the the angular velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular displacement with respect to time $t$\newline$\gamma{}$ is the angular displacement\newline$t$ is the time
+Description & $\omega{}(t)$ is the angular velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular displacement with respect to time $t$\newline$\theta{}$ is the angular displacement\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:alpha}
+\toprule \textbf{Refname} & \textbf{DD:dd7angAccel}
 \phantomsection 
-\label{MG:alpha}
+\label{DD:dd7angAccel}
 \\ \midrule \\
 Label & $\alpha{}(t)$
 \\ \midrule \\
@@ -345,15 +379,15 @@ Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & $\alpha{}(t)$ = $\frac{d\omega{}(t)}{dt}$
 \\ \midrule \\
-Description & $\alpha{}(t)$ is the the angular acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular velocity with respect to time $t$\newline$\omega{}$ is the angular velocity\newline$t$ is the time
+Description & $\alpha{}(t)$ is the angular acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular velocity with respect to time $t$\newline$\omega{}$ is the angular velocity\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{MG:j}
+\toprule \textbf{Refname} & \textbf{DD:dd8impulse}
 \phantomsection 
-\label{MG:j}
+\label{DD:dd8impulse}
 \\ \midrule \\
 Label & $j$
 \\ \midrule \\
@@ -361,7 +395,7 @@ Units & Ns
 \\ \midrule \\
 Equation & $j$ = $\frac{(-1+C_{R})\mathbf{v}_{i}^{AB}\cdot{}\mathbf{n}}{(1/m_{A}+1/m_{B})||\mathbf{n}||^{2}+||\mathbf{r}_{AP}*\mathbf{n}||^{2}/\mathbf{I}_{A}+||\mathbf{r}_{BP}*\mathbf{n}||^{2}/\mathbf{I}_{B}}$
 \\ \midrule \\
-Description & $j$ is the the impulse (scalar) used to determine collision response between two rigid bodies\newline$C_{R}$ is the coefficient of restitution\newline$\mathbf{v}_{i}^{AB}$ is the relative velocity between rigid bodies A and B\newline$\mathbf{n}$ is the collision normal vector\newline$m_{A}$ is the mass of rigid body A\newline$m_{B}$ is the mass of rigid body B\newline$||\mathbf{n}||$ is the length of the normal vector\newline$||\mathbf{r}_{AP}*\mathbf{n}||$ is the length of the vector perpendicular to the contact displacement vector of rigid body A\newline$\mathbf{I}_{A}$ is the moment of inertia of rigid body A\newline$||\mathbf{r}_{BP}*\mathbf{n}||$ is the length of the vector perpendicular to the contact displacement vector of rigid body B\newline$\mathbf{I}_{B}$ is the moment of inertia of rigid body B
+Description & $j$ is the impulse (scalar) used to determine collision response between two rigid bodies\newline$C_{R}$ is the coefficient of restitution\newline$\mathbf{v}_{i}^{AB}$ is the relative velocity between rigid bodies A and B\newline$\mathbf{n}$ is the collision normal vector\newline$m_{A}$ is the mass of rigid body A\newline$m_{B}$ is the mass of rigid body B\newline$||\mathbf{n}||$ is the length of the normal vector\newline$||\mathbf{r}_{AP}*\mathbf{n}||$ is the length of the vector perpendicular to the contact displacement vector of rigid body A\newline$\mathbf{I}_{A}$ is the moment of inertia of rigid body A\newline$||\mathbf{r}_{BP}*\mathbf{n}||$ is the length of the vector perpendicular to the contact displacement vector of rigid body B\newline$\mathbf{I}_{B}$ is the moment of inertia of rigid body B
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}

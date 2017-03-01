@@ -67,11 +67,7 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
-
-{-
-This table is ALMOST correct (just the normal vector is wrong because it should
-be using defn).
--}
+  
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 
   [ TUnits, tsymb'' s1_2_intro (TermExcept [norm_vect]), TAandA ]
@@ -193,7 +189,7 @@ s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The scope of the requirements is limited" +:+
   S "to" +:+ (sLower (thermal_analysis ^.
-  term)) +:+ S "of a single" +:+. (tank_pcm ^. term) +:+ 
+  term)) +:+ S "of a single" +:+. (tank_pcm ^. term) +:+ --FIXME: Caps issue
   S "Given the appropriate inputs, the code for" +:+
   (short progName) +:+ S "is intended to predict the" +:+
   (temp ^. term) +:+ S "and" +:+ (sLower  
@@ -338,7 +334,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [heat_flux,
    thermal_conduction, transient])
 
 s411_bullet_map_f :: Concept c => c -> ItemType
-s411_bullet_map_f c = Flat ((c ^. term) :+: S ":" +:+ (c ^. defn))
+s411_bullet_map_f c = Flat ((c ^. term) :+: S ":" +:+. (c ^. defn))
   
 -- Structure of this list is same in all examples, probably can be automated.
 
@@ -899,7 +895,7 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the" +:+
   (short phsChgMtrl) :+: S ". This can be shown as an" +:+
   S "equation by taking" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
   makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
-  S "respective surface area of" +:+ (heat_trans ^. term) :+:
+  S "respective surface area of" +:+ (sLower (heat_trans ^. term)) :+:
   S ", and integrating each over the simulation" +:+ (time ^. 
   term) :+: S ", as follows:"),
   EqnBlock 

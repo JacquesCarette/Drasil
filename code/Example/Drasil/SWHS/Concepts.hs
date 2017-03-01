@@ -32,7 +32,7 @@ coil = dcc "coil" "Heating coil"
   "Coil in tank that heats by absorbing solar energy"
 discharging = dcc "discharging" "Discharging" "Discharging of the tank"
 gauss_div = dcc "gauss_div" "Gauss's Divergence theorem" fixme
-heat_flux = dcc "heat_flux" "Heat flux" "The rate of heat energy transfer per unit area."
+heat_flux = dcc "heat_flux" "Heat flux" "The rate of heat energy transfer per unit area"
   --FIXME: Heat flux needs to be a Unital Chunk
 mech_energy = dcc "mech_energy" "Mechanical energy" 
   "The energy that comes from motion and position"

@@ -28,77 +28,64 @@ coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
   temp_coil,temp_env,time_final,temp_init,temp_water,temp_diff,vol,--tank_vol,
   water_vol,density,water_dense,dummyVar :: UnitalChunk
 
-coil_SA     = makeUC "coil_SA" "coil surface area" 
-  "FIXME: Define this or remove the need for definitions" (sub cA cC) m_2
+-- convenience
+fixme :: String
+fixme = "FIXME: Define this or remove the need for definitions"
+
+coil_SA     = makeUC "coil_SA" "coil surface area" fixme (sub cA cC) m_2
 hIn_SA      = makeUC "hIn_SA" "surface area over which heat is transferred in" 
-  "FIXME: Define this or remove the need for definitions" (sub cA (Atomic "in")) m_2
+  fixme (sub cA (Atomic "in")) m_2
 hOut_SA     = makeUC "hOut_SA" "surface area over which heat is transferred out" 
-  "FIXME: Define this or remove the need for definitions" (sub cA (Atomic "out")) m_2
+  fixme (sub cA (Atomic "out")) m_2
 htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
 htCap_Liq   = makeUC "htCap_Liq" "specific heat capacity of a liquid" 
-  "FIXME: Define this or remove the need for definitions" (sup cC cL) U.heat_cap_spec
+  fixme (sup cC cL) U.heat_cap_spec
 htCap_W     = makeUC "htCap_W" "specific heat capacity of water" 
-  "FIXME: Define this or remove the need for definitions" (sub cC cW) U.heat_cap_spec
-tank_D      = makeUC "tank_D" "diameter of tank" 
-  "FIXME: Define this or remove the need for definitions" cD metre
+  fixme (sub cC cW) U.heat_cap_spec
+tank_D      = makeUC "tank_D" "diameter of tank" fixme cD metre
 ht_gen_vol  = makeUC "ht_gen_vol" "volumetric heat generation per unit volume" 
-  "FIXME: Define this or remove the need for definitions" lG U.thermal_flux
+  fixme lG U.thermal_flux
 ht_xfer_co  = makeUC "ht_xfer_co" "convective heat transfer coefficient" 
-  "FIXME: Define this or remove the need for definitions" lH U.heat_transfer_coef
-ht_xfer_CW  = makeUC "ht_xfer_CW" "convective heat transfer between coil and water"   "FIXME: Define this or remove the need for definitions" 
-  (sub lH cC) U.heat_transfer_coef
-tank_L      = makeUC "tank_L" "length of tank" 
-  "FIXME: Define this or remove the need for definitions" cL metre
+  fixme lH U.heat_transfer_coef
+ht_xfer_CW  = makeUC "ht_xfer_CW" "convective heat transfer between coil and water" 
+  fixme (sub lH cC) U.heat_transfer_coef
+tank_L      = makeUC "tank_L" "length of tank" fixme cL metre
 mass        = ucFromVC QPP.mass kilogram
 water_m     = makeUC "water_m" ((QPP.mass ^. id) ++ " of water")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (QPP.mass ^. symbol) cW) kilogram
+  fixme (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
-ht_flux     = makeUC "ht_flux" "heat flux" 
-  "FIXME: Define this or remove the need for definitions" lQ U.heat_transfer_coef
+ht_flux     = makeUC "ht_flux" "heat flux" fixme lQ U.heat_transfer_coef
 thFluxVect  = makeUC "thFluxVect" "thermal flux vector" 
-  "FIXME: Define this or remove the need for definitions" (vec lQ) 
-  U.thermal_flux
+  fixme (vec lQ) U.thermal_flux
 ht_flux_C   = makeUC "ht_flux_C" "heat flux from coil" 
-  "FIXME: Define this or remove the need for definitions" (sub lQ cC) 
-  U.thermal_flux
+  fixme (sub lQ cC) U.thermal_flux
 ht_flux_in  = makeUC "ht_flux_in" "heat flux in" 
-  "FIXME: Define this or remove the need for definitions" (sub lQ (Atomic "in")) 
-  U.thermal_flux
+  fixme (sub lQ (Atomic "in")) U.thermal_flux
 ht_flux_out = makeUC "ht_flux_out" "heat flux out" 
-  "FIXME: Define this or remove the need for definitions" (sub lQ (Atomic "out")) U.thermal_flux
+  fixme (sub lQ (Atomic "out")) U.thermal_flux
 time        = ucFromVC QP.time second
-temp        = makeUC "temp" "temperature" 
-  "FIXME: Define this or remove the need for definitions" cT centigrade
--- temp_boil   = makeUC "T_boil" "temperature at boiling point" -- (sub cT (Atomic "boil")) centigrade
-temp_coil   = makeUC "temp_coil" "temperature of coil" 
-  "FIXME: Define this or remove the need for definitions" (sub cT cC) centigrade
+temp        = makeUC "temp" "temperature" fixme cT centigrade
+-- temp_boil   = makeUC "T_boil" "temperature at boiling point" -- (sub cT (Atomic "boil")) centigrade
+temp_coil   = makeUC "temp_coil" "temperature of coil" fixme (sub cT cC) centigrade
 temp_env    = makeUC "temp_env" "temperature of environment" 
-  "FIXME: Define this or remove the need for definitions" (sub cT (Atomic "env")) 
-  centigrade
+  fixme (sub cT (Atomic "env")) centigrade
 time_final  = makeUC "time_final" "time" 
-  "FIXME: Define this or remove the need for definitions" (sub lT (Atomic "final")) second
+  fixme (sub lT (Atomic "final")) second
 temp_init   = makeUC "temp_init" "initial temperature" 
-  "FIXME: Define this or remove the need for definitions" (sub cT (Atomic "init")) 
-  centigrade
-temp_water  = makeUC "temp_water" "temperature of water" 
-  "FIXME: Define this or remove the need for definitions" (sub cT cW) centigrade
+  fixme (sub cT (Atomic "init")) centigrade
+temp_water  = makeUC "temp_water" "temperature of water" fixme (sub cT cW) centigrade
 temp_diff   = makeUC "temp_diff" "temperature difference" 
-  "FIXME: Define this or remove the need for definitions" (Concat [Greek Delta, cT]) 
-  centigrade
-vol         = makeUC "vol" "volume" 
-  "FIXME: Define this or remove the need for definitions" cV m_3
---tank_vol    = makeUC "V_tank" "volume of the cylindrical tank"   -- (sub cV (Atomic "tank")) m_3
-water_vol   = makeUC "water_vol" "volume of water" 
-  "FIXME: Define this or remove the need for definitions" (sub cV cW) m_3
+  fixme (Concat [Greek Delta, cT]) centigrade
+vol         = makeUC "vol" "volume" fixme cV m_3
+--tank_vol    = makeUC "V_tank" "volume of the cylindrical tank"   -- (sub cV (Atomic "tank")) m_3
+water_vol   = makeUC "water_vol" "volume of water" fixme (sub cV cW) m_3
 density     = makeUC "density" "density, mass per unit volume" 
-  "FIXME: Define this or remove the need for definitions" (Greek Rho_L) densityU
+  fixme (Greek Rho_L) densityU
 water_dense = makeUC "water_dense" "density of water" 
-  "FIXME: Define this or remove the need for definitions" (sub (Greek Rho_L) cW)
-  densityU
+  fixme (sub (Greek Rho_L) cW) densityU
 dummyVar    = makeUC "dummyVar" "dummy variable for integration over time"
-  "FIXME: Define this or remove the need for definitions" (Greek Tau_L) second
+  fixme (Greek Tau_L) second
 --melt_frac   = makeUC "Phi" "melt fraction" (Greek Phi) unitless
 
 ----Acronyms-----
@@ -106,8 +93,6 @@ acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   physSyst,requirement,srs,sWHS,thModel]
   
---FIXME: Term should be "Solar Water Heating System" and it should 
---    have an acronym
 sWHS :: CI
 sWHS = commonidea "sWHS" "Solar Water Heating System" "SWHS"
 

@@ -92,7 +92,7 @@ s2_intro = Paragraph $
   S "predict the blast risk involved with the" +:+ 
   (sLower (glaSlab ^. term)) +:+ S "using an intuitive" +:+
   S "interface. The following section provides an overview of the" +:+ 
-  (srs ^. term) +:+ sParen (getAcc srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
+  (srs ^. term) +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This section explains the purpose of the" +:+
   S "document is designed to fulfil, the scope of the requirements and" +:+
   S "the organization of the document: what the document is based on and" +:+.
@@ -111,7 +111,7 @@ s2_1_intro =
   (sLower (assumption ^. term)) :+: S "s and unambiguous" +:+
   S "definitions. This document is intended to be used as a reference" +:+
   S "to provide all information necessary to understand and verify the" +:+
-  S "analysis. The" +:+ (getAcc srs) +:+ S "is abstract" +:+
+  S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what problem is being solved, but not how" +:+.
   S "to solve it",
   Paragraph $
@@ -140,7 +140,7 @@ s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
   S "The organization of this document follows the template for an" +:+ 
-  (getAcc srs) +:+ S "for scientific computing software" +:+
+  (short srs) +:+ S "for scientific computing software" +:+
   S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
   S "some aspects taken from Volere template 16 [3]."
   
@@ -187,7 +187,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
 s4_2 = Section (S "System Constraints") [Con s4_2_intro]
 
 s4_2_intro = Paragraph $
-  (getAcc notApp)
+  (short notApp)
 
 s5 = Section(S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
 
@@ -274,31 +274,31 @@ s6_1_1_intro = Paragraph $
   S "are extracted from [4] in" +:+. (makeRef s10)
 
 s6_1_1_bullets = Enumeration $ (Number $ 
-  [Flat $ ((aR ^. term) :+: sParenDash (getAcc aspectR)) :+: 
+  [Flat $ ((aR ^. term) :+: sParenDash (short aspectR)) :+: 
   (aR ^. defn)] ++
   map (\c -> Flat $ ((c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
   [Nested (((glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
-  [(((an ^. term) :+: sParenDash (getAcc annealedGlass)) :+: 
+  [(((an ^. term) :+: sParenDash (short annealedGlass)) :+: 
     (an ^. defn)),
-  (((ft ^. term) :+: sParenDash (getAcc fullyTGlass)) :+:
+  (((ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
     (ft ^. defn)),
-  (((hs ^. term) :+: sParenDash (getAcc heatSGlass)) :+:
+  (((hs ^. term) :+: sParenDash (short heatSGlass)) :+:
     (hs ^. defn))])] ++
   map (\c -> Flat c)
-  [(((gtf ^. term) :+: sParenDash (getAcc glassTypeFac)) :+: 
+  [(((gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
   (gtf ^. defn)),
   (((lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
   [Nested (((load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
   [(((specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
-  (((lr ^. term) :+: sParenDash (getAcc lResistance)) :+: --lr and lResistance should be the same concepts
+  (((lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
     (lr ^. defn)),
   (((ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
-  (((nfl ^. term) :+: sParenDash (getAcc nonFactorL)) :+: --Same for nfl and nonFactorL
+  (((nfl ^. term) :+: sParenDash (short nonFactorL)) :+: --Same for nfl and nonFactorL
     (nfl ^. defn))] ++ 
   map (\c -> Flat $ ((c ^. term) +:+ S "- ") :+: (c ^. defn))
     [glassWL, sdl])] ++ 
   map (\c -> Flat c)
-  [(((lsf ^. term) :+: sParenDash (getAcc lShareFac)) :+: 
+  [(((lsf ^. term) :+: sParenDash (short lShareFac)) :+: 
   (lsf ^. defn)),
   (((pb ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
   (pb ^. defn))] ++
@@ -318,8 +318,8 @@ s6_1_2_intro = Paragraph $ S "The physical system of" +:+ (gLassBR ^. defn)
 fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((getAcc physSyst) :+: S "1"), (glaSlab ^. term)), 
-  (((getAcc physSyst) :+: S "2"), S "The point of explosion." +:+
+  (((short physSyst) :+: S "1"), (glaSlab ^. term)), 
+  (((short physSyst) :+: S "2"), S "The point of explosion." +:+
   S "Where the bomb, or" +:+ (sLower (blast ^. defn)) `sC` 
   S "is located. The" +:+ (sLower ((sD ^. term))) 
   +:+ S "is the distance between the point of explosion and the glass.")]
@@ -329,7 +329,7 @@ s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 s6_1_3 = Section ((goalStmt ^. term) :+: S "s") [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((getAcc goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
+  (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
   (sLower (glaSlab ^. term)) +:+ S "under consideration" +:+
   S "will be able to withstand the explosion of a certain degree which" +:+.
   S "is calculated based on user input")]
@@ -348,18 +348,18 @@ s6_2_1 = Section (assumption ^. term :+: S "s") ([Con s6_2_1_intro] ++
 s6_2_1_intro = Paragraph $ 
   S "This section simplifies the original problem and helps in developing the" 
   +:+ (sLower (thModel ^. term)) +:+ 
-  S "[" :+: (getAcc thModel) :+: S "] by filling in the missing" 
+  S "[" :+: (short thModel) :+: S "] by filling in the missing" 
   +:+ S "information for the physical system. The numbers given in the" +:+
   S "square brackets refer to the" +:+ 
   (sLower (dataDefn ^. term)) +:+
-  S "[" :+: (getAcc dataDefn) :+: S "], or" +:+
+  S "[" :+: (short dataDefn) :+: S "], or" +:+
   (sLower (inModel ^. term)) +:+ 
-  S "[" :+: (getAcc inModel) :+: S "], in which the respective" +:+
+  S "[" :+: (short inModel) :+: S "], in which the respective" +:+
   (sLower $ assumption ^. term) +:+. S "is used"
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((getAcc assumption) :+: S "1"), S "The standard E1300-09a for" +:+
+  (((short assumption) :+: S "1"), S "The standard E1300-09a for" +:+
     S "calculation applies only to monolithic, laminated, or insulating" +:+
     S "glass constructions of rectangular shape with continuous" +:+ 
     (sLower (lateral ^. term)) +:+
@@ -368,13 +368,13 @@ s6_2_1_list =
     +:+ S "support conditions are simply supported and free to slip in" +:+
     S "plane; (2) glass supported on two sides acts as a simply supported" 
     +:+. S "beam and (3) glass supported on one side acts as a cantilever"), 
-  (((getAcc assumption) :+: S "2"), S "This practice does not apply" 
+  (((short assumption) :+: S "2"), S "This practice does not apply" 
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
     S "notched, or grooved glass with surface and edge treatments" +:+.
     S "that alter the glass strength"),
-  (((getAcc assumption) :+: S "3"), S "This system only considers" +:+.
+  (((short assumption) :+: S "3"), S "This system only considers" +:+.
     S "the external explosion scenario for its calculations"),
-  (((getAcc assumption) :+: S "4"), S "Standard values used for" +:+
+  (((short assumption) :+: S "4"), S "Standard values used for" +:+
     S "calculation in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
@@ -387,17 +387,17 @@ s6_2_1_list =
   --  (P $ mod_elas ^. symbol) +:+ S "= 7.17 * 10^7" +:+ Sy (mod_elas ^. unit),
   --  (P $ load_dur ^. symbol) +:+ S "= 3" +:+ Sy (load_dur ^. unit)]))] ++
   (Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((getAcc assumption) :+: S "5"), S "Glass under consideration" +:+
+  (((short assumption) :+: S "5"), S "Glass under consideration" +:+
     S "is assumed to be a single" +:+.
     (sLower (lite ^. term)) +:+ S "Hence the value of" +:+ 
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all calculations in" 
     +:+. (gLassBR ^. defn)),
-  (((getAcc assumption) :+: S "6"), S "Boundary conditions for the" +:+ 
+  (((short assumption) :+: S "6"), S "Boundary conditions for the" +:+ 
     (sLower (glaSlab ^. term)) +:+ S "is assumed to be 4-sided"
     +:+ S "support for calculations."),
-  (((getAcc assumption) :+: S "7"), S "The response type considered in" 
+  (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
-  (((getAcc assumption) :+: S "8"), S "With reference to A4 the value" 
+  (((short assumption) :+: S "8"), S "With reference to A4 the value" 
     +:+ S "of" +:+ (sLower (loadDF ^. term)) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
     (gLassBR ^. defn) +:+ S "It is calculated by the equation:" +:+
@@ -500,7 +500,7 @@ s7_1_intro = Paragraph $
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(((getAcc requirement) :+: S "1"), S "Input the following" +:+
+  [(((short requirement) :+: S "1"), S "Input the following" +:+
     S "quantities, which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
     +:+ S "of failure and the characteristics of the" +:+ 
@@ -516,32 +516,32 @@ s7_1_list =
 --  char_weight])
 --  (S "Input Parameters") False
   (Enumeration $ Simple $
-  [(((getAcc requirement) :+: S "2"), Nested (S "The system shall set" +:+
+  [(((short requirement) :+: S "2"), Nested (S "The system shall set" +:+
   S "the known values as follows: ") (Bullet $ map (\c -> Flat c) 
     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
-    S "following" +:+ (getAcc assumption) :+: S "4",
-    (P $ loadDF ^. symbol) +:+ S "following" +:+ (getAcc assumption) 
+    S "following" +:+ (short assumption) :+: S "4",
+    (P $ loadDF ^. symbol) +:+ S "following" +:+ (short assumption) 
     :+: S "8",
-    (P $ loadSF ^. symbol) +:+ S "following" +:+ (getAcc assumption) 
+    (P $ loadSF ^. symbol) +:+ S "following" +:+ (short assumption) 
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
-  [(((getAcc requirement) :+: S "3"), S "The system shall check the" +:+
+  [(((short requirement) :+: S "3"), S "The system shall check the" +:+
   S "entered input values to ensure that they do not exceed the data" +:+
   S "constraints mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
   S "the input parameters is out of bounds, an error message is" +:+.
   S "displayed and the calculations stop"),
-  (((getAcc requirement) :+: S "4"), S "Output the input quantities" +:+
-  S "from" +:+ (getAcc requirement) :+: S "1 and the known quantities"
-  +:+ S "from" +:+ (getAcc requirement) :+: S "2."),
-  (((getAcc requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
+  (((short requirement) :+: S "4"), S "Output the input quantities" +:+
+  S "from" +:+ (short requirement) :+: S "1 and the known quantities"
+  +:+ S "from" +:+ (short requirement) :+: S "2."),
+  (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
   (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true" `sC`
   S "output the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
   S "the condition is false, then output the message" +:+ 
   Quote (notSafe ^. defn))] ++
-  [(((getAcc requirement) :+: S "6"), Nested (S "Output the following"
+  [(((short requirement) :+: S "6"), Nested (S "Output the following"
   +:+ S "quantities:")
   (Bullet $ 
     [Flat $ (prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
@@ -571,29 +571,29 @@ s7_2_intro = Paragraph $
   S "Given the small size, and relative simplicity, of this problem" `sC`
   S "performance is not a priority. Any reasonable implementation will" +:+
   S "be very quick and use minimal storage. Rather than performance" `sC`
-  S "the priority nonfunctional" +:+ (getAcc requirement) :+: 
+  S "the priority nonfunctional" +:+ (short requirement) :+: 
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 
 s8 = Section((likelyChg ^. term) :+: S "s") [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(((getAcc likelyChg) :+: S "1"), ((getAcc assumption) :+: 
+  [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
   S "3 - The system currently only calculates for external blast risk." +:+.
   S "In the future calculations can be added for the internal blast risk")),
-  (((getAcc likelyChg) :+: S "2"), ((getAcc assumption) :+:
-  S "4" `sC` (getAcc assumption) :+: S "8 - Currently the values for"
+  (((short likelyChg) :+: S "2"), ((short assumption) :+:
+  S "4" `sC` (short assumption) :+: S "8 - Currently the values for"
   +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
   S "and" +:+ (P $ mod_elas ^. symbol) +:+ S "are assumed to be the"
   +:+ S "same for all glass. In the future these values can be changed to"
   +:+. S "variable inputs")),
-  (((getAcc likelyChg) :+: S "3"), ((getAcc assumption ) :+: 
+  (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
   S "5 - The software may be changed to accommodate more than a single" +:+.
   (sLower (lite ^. term)))),
-  (((getAcc likelyChg) :+: S "4"), ((getAcc assumption) :+: 
+  (((short likelyChg) :+: S "4"), ((short assumption) :+: 
   S "6 - The software may be changed to accommodate more boundary" +:+.
   S "conditions than 4-sided support")),
-  (((getAcc likelyChg) :+: S "5"), ((getAcc assumption) :+: 
+  (((short likelyChg) :+: S "5"), ((short assumption) :+: 
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 

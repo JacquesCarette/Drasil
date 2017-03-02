@@ -233,7 +233,7 @@ mgModuleInfo (mc, m) = let title = if   isNothing m
       ]
     ]
     where
-      getImp (Just x) = (x ^. term)
+      getImp (Just x) = (short x)
       getImp _        = S "--"
 
 

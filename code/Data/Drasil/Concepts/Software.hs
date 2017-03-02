@@ -5,11 +5,11 @@ import Data.Drasil.Concepts.Documentation (srs)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-program, c, matlab, physLib :: ConceptChunk
-os :: NamedChunk
+program, c, physLib :: ConceptChunk
+os, matlab :: NamedChunk
 
 c       = dcc "c" "C" "C programming language"
-matlab  = dcc "matlab" "MATLAB" "MATLAB programming language"
+matlab  = nc' "matlab" "MATLAB programming language" "MATLAB"
 os      = nc' "os" "operating system" "OS"
 physLib = dcc "physLib" "physics library" ("A programming library which " ++
   "provides functions for modelling physical phenomenon.")
@@ -22,7 +22,7 @@ program = dcc "program" "program"
 hwHiding :: ConceptChunk
 hwHiding = dcc "hwHiding" "hardware hiding" (
   "Hides the exact details of the hardware, and provides a uniform interface" ++
-  "for the rest of the system to use.")
+  " for the rest of the system to use.")
 
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" "behaviour hiding" (

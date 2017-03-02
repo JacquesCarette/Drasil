@@ -68,7 +68,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = mgDoc gLassBR mg_authors mgBod
+glassBR_mg = mgDoc glassBRProg mg_authors mgBod
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))

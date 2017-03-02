@@ -144,11 +144,11 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
 --TODO: Simple List
 
 s4_2_2 = Section ((thModel ^. term) :+: S "s") 
-  ((Con s4_2_2_intro):(map Con s4_2_2_TMods))
+  ((Con s4_2_2_intro):(Con s4_2_2_TMods):[])
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:
   S "and laws that " :+: (getAcc sWHS) :+: S " is based on." 
 -- :+: foldr1 (:+:) (map makeRef s4_2_2_TMods) :+: S" " :+: makeRef s1
   
-s4_2_2_TMods :: [Contents]
-s4_2_2_TMods = map (Definition) (map Theory [t1consThermE])
+s4_2_2_TMods :: Contents
+s4_2_2_TMods = Definition $ Theory t1consThermE

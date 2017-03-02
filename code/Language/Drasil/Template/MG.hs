@@ -1,4 +1,4 @@
-module Language.Drasil.Template.MG(makeMG, mgDoc) where
+module Language.Drasil.Template.MG(makeMG, mgDoc, mgDoc') where
 import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Chunk.NamedIdea
@@ -20,6 +20,11 @@ import Data.Drasil.Concepts.Documentation (mg)
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
   Document ((mg ^. term) +:+ S "for" +:+ (sys ^. term)) authors secs
+
+--When we want the short form in a title.  
+mgDoc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
+mgDoc' sys authors secs = 
+  Document ((mg ^. term) +:+ S "for" +:+ (short sys)) authors secs
 
 makeMG :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
   -> ([Section], [Contents])

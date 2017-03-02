@@ -39,11 +39,10 @@ mod_inputv = makeImpModule modInputVerif (S "The format and structure of " :+:
              [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Output Format Module
-mod_outputf_desc :: NamedChunk
-mod_outputf_desc = ncWDS "output format" (S "Outputs the results of the " :+:
-                   S "calculations, including the input parameters, " :+:
-                   S "temperatures, energies, and times when melting starts" :+:
-                   S " and stops.")
+mod_outputf_desc :: ConceptChunk
+mod_outputf_desc = dccWDS "mod_outputf_desc" "output format" (
+  S "Outputs the results of the calculations, including the input parameters," +:+
+  S "temperatures, energies, and times when melting starts and stops.")
 
 mod_outputf :: ModuleChunk
 mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
@@ -51,11 +50,12 @@ mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
               (Just mod_behav)
 
 -- Output Verification Module
-mod_outputv_desc :: NamedChunk
-mod_outputv_desc = ncWDS "output verification" (S "Verifies that the output " :+:
-                   S "energy results follow the law of conservation of " :+:
-                   S "energy. Throws a warning if the relative error " :+:
-                   S "exceeds the error threshold.")
+mod_outputv_desc :: ConceptChunk
+mod_outputv_desc = dccWDS "mod_outputv_desc" "output verification" (
+  S "Verifies that the output " :+:
+  S "energy results follow the law of conservation of " :+:
+  S "energy. Throws a warning if the relative error " :+:
+  S "exceeds the error threshold.")
 
 mod_outputv :: ModuleChunk
 mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
@@ -63,20 +63,21 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
               [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Temperature ODEs Module
-mod_temp_desc :: NamedChunk
-mod_temp_desc = ncWDS "temperature ODEs" (S "Defines the " :+: 
-                (getAcc ode) :+: S "s using the parameters in the " :+:
-                S "input parameters module.")
+mod_temp_desc :: ConceptChunk
+mod_temp_desc = dccWDS "mod_temp_desc" "temperature ODEs" (
+  S "Defines the" +:+ addS (short ode) +:+ S "using the parameters in the" +:+
+  S "input parameters module.")
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: (getAcc ode) :+:
+mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+:
            S "s for solving the temperature, using the input parameters.")
            swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Energy Equations Module
-mod_ener_desc :: NamedChunk
-mod_ener_desc = ncWDS "energy equations" (S "Defines the energy equations " :+:
-                S "using the parameters in the input parameters module.")
+mod_ener_desc :: ConceptChunk
+mod_ener_desc = dccWDS "mod_ener_desc" "energy equations" (
+  S "Defines the energy equations using the parameters in the input" +:+
+  S "parameters module.")
 
 mod_ener :: ModuleChunk
 mod_ener = makeImpModule mod_ener_desc (S "The equations for solving for " :+:
@@ -95,32 +96,33 @@ mod_sw :: ModuleChunk
 mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
          S "mathematical theorems, physical facts, or programming " :+:
          S "considerations. The secrets of this module are not described " :+:
-         S "in the " :+: (getAcc srs) :+: S ".") Nothing
+         S "in the " :+: (short srs) :+: S ".") Nothing
 
 -- Sequence Data Structure Module
-mod_seq_desc :: NamedChunk
-mod_seq_desc = ncWDS "sequence data structure" (S "Provides array manipulation" :+:
-               S ", including building an array, accessing a specific entry" :+:
-               S ", slicing an array, etc.")
+mod_seq_desc :: ConceptChunk
+mod_seq_desc = dccWDS "mod_seq_desc" "sequence data structure" 
+  (S "Provides array manipulation" :+:
+  S ", including building an array, accessing a specific entry" :+:
+  S ", slicing an array, etc.")
 
 mod_seq :: ModuleChunk
 mod_seq = makeImpModule mod_seq_desc (S "The data structure for a sequence " :+:
           S "data type.") matlab [] [] [] (Just mod_sw)
 
 -- ODE Solver Module
-mod_ode_desc :: NamedChunk
-mod_ode_desc = ncWDS "ODE solver" (S "Provides solvers that take the governing " :+:
-          S "equation, initial conditions, and numerical parameters, and " :+:
-          S "solve them.")
+mod_ode_desc :: ConceptChunk
+mod_ode_desc = dccWDS "mod_ode_desc" "ODE solver" (
+  S "Provides solvers that take the governing equation, initial conditions," +:+ 
+  S "and numerical parameters, and solve them.")
 
 mod_ode :: ModuleChunk
 mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: (getAcc ode) :+: S "s.") matlab [] [] 
+          S " first order " :+: (short ode) :+: S "s.") matlab [] [] 
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module
-mod_plot_desc :: NamedChunk
-mod_plot_desc = ncWDS "plotting" (S "Provides a plot function.")
+mod_plot_desc :: ConceptChunk
+mod_plot_desc = dcc "mod_plot_desc" "plotting" "Provides a plot function."
 
 mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:

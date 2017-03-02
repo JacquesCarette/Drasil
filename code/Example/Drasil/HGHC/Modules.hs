@@ -53,8 +53,8 @@ meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
 meth_htTransCladFuel = fromEC htTransCladFuel
 meth_htTransCladCool = fromEC htTransCladCool
 
-mod_calc_desc :: NamedChunk
-mod_calc_desc = ncWDS "calc" (S "Calculates heat transfer coefficients")
+mod_calc_desc :: ConceptChunk
+mod_calc_desc = dcc "mod_calc_desc" "calc" "Calculates heat transfer coefficients"
 
 mod_calc :: ModuleChunk
 mod_calc = makeImpModule mod_calc_desc
@@ -71,11 +71,12 @@ meth_output :: MethodChunk
 meth_output = makeFileOutputMethod (ncWDS "write_output" (S "Writes output to " :+:
         S "to file.")) [getVC htTransCladFuel, getVC htTransCladCool] "output"
 
-mod_outputf_desc :: NamedChunk
-mod_outputf_desc = ncWDS "output format" (S "Outputs the results of the " :+:
-                   S "calculations, including the input parameters, " :+:
-                   S "temperatures, energies, and times when melting starts" :+:
-                   S " and stops.")
+mod_outputf_desc :: ConceptChunk
+mod_outputf_desc = dccWDS "mod_outputf_desc" "output format" 
+  (S "Outputs the results of the " :+:
+  S "calculations, including the input parameters, " :+:
+  S "temperatures, energies, and times when melting starts" :+:
+  S " and stops.")
 
 mod_outputf :: ModuleChunk
 mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:

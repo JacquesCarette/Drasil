@@ -195,9 +195,9 @@ mgModuleDecomp mpairs = --let levels = splitLevels $ getChunks mpairs
 
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
-  let impl ccs = foldl1 (:+:) $ map (\x -> (S "If the entry is " :+:
-       (short x) :+: S ", this means that the module is provided by the "
-       :+: (x ^. term) :+: S ". ")) ccs 
+  let impl ccs = foldl1 (+:+) $ map (\x -> (S "If the entry is" +:+
+       (short x) `sC` S "this means that the module is provided by the" +:+.
+       (x ^. term))) ccs 
 --FIXME: The fields above should be (x ^. term) and (x ^.defn) respectively
   in Paragraph $
     S "Modules are decomposed according to the principle of " :+:
@@ -207,7 +207,7 @@ mgModuleDecompIntro mcs =
     S "the module. The Services field specifies what the module will do " :+:
     S "without documenting how to do it. For each module, a suggestion for " :+:
     S "the implementing software is given under the Implemented By title. " :+:
-    impl (nub $ getImps mcs) :+:
+    impl (nub $ getImps mcs) +:+
     S "Only the leaf modules in the hierarchy have to be implemented. If a " :+:
     S "dash (--) is shown, this means that the module is not a leaf and " :+:
     S "will not have to be implemented. Whether or not this module is " :+:

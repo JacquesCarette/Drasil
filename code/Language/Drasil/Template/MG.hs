@@ -2,6 +2,7 @@ module Language.Drasil.Template.MG(makeMG, mgDoc) where
 import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
@@ -227,7 +228,7 @@ mgModuleInfo (mc, m) = let title = if   isNothing m
     title
     [ Con $ Enumeration $ Desc
       [(S "Secrets", Flat (secret mc)),
-       (S "Services", Flat (mc ^. term)), --This is where the change 
+       (S "Services", Flat (mc ^. defn)), --This is where the change 
 --    noted in comments on commit 0053aafe42cfa5 ... created a diff.
        (S "Implemented By", Flat (getImp $ imp mc))
       ]

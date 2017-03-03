@@ -44,7 +44,7 @@ chipmunkSRS :: Document
 chipmunkSRS = SRS.doc chipmunk auths [s1, s2, s3, s4, s5, s6, s7]
 
 chipmunkSRS' :: Document
-chipmunkSRS' = mkDoc mkSRS chipmunkSysInfo
+chipmunkSRS' = mkDoc' mkSRS chipmunkSysInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TAandA ]) : 
@@ -59,7 +59,7 @@ chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
 
 chipmunkMG :: Document
-chipmunkMG = mgDoc chipmunk auths mgBod
+chipmunkMG = mgDoc' chipmunk auths mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
@@ -133,7 +133,7 @@ s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
   S "to better quality products"),
   Paragraph (S "The following section provides an overview of the" +:+
   (srs ^. term) +:+ sParen (getAcc srs) +:+ S "for" +:+
-  (chipmunk ^. term) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
+  (short chipmunk) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
   (rigidBody ^. term) +:+. (physLib ^. term) +:+
   S "This section explains the purpose of this document, the scope" +:+.
   S "of the system, and the organization of the document")]
@@ -151,7 +151,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "open source" +:+ (getAcc twoD) +:+ (rigidBody ^. term) +:+ 
   (physLib ^. term) +:+ S "used for games. The" +:+ 
   (addS (sLower (goalStmt ^. term))) +:+ S "and" +:+ 
-  (addS (sLower (thModel ^. term))) +:+ S "used in" +:+ (chipmunk ^. term) +:+
+  (addS (sLower (thModel ^. term))) +:+ S "used in" +:+ (short chipmunk) +:+
   S "are provided. This" +:+
   S "document is intended to be used as a reference to provide all" +:+.
   S "necessary information to understand and verify the model"),
@@ -178,7 +178,7 @@ s2_2_intro = Paragraph $ S "The scope of the" +:+
   (addS (sLower (requirement ^. term))) +:+ S "includes the" +:+
   S "physical simulation of" +:+ (getAcc twoD) +:+ 
   irregPlur (rigidBody ^. term) +:+ S "acted on by forces. Given" +:+ 
-  (getAcc twoD) +:+ irregPlur (rigidBody ^. term) `sC` (chipmunk ^. term) +:+ 
+  (getAcc twoD) +:+ irregPlur (rigidBody ^. term) `sC` (short chipmunk) +:+ 
   S "is intended to simulate how these" +:+ irregPlur (rigidBody ^. term) +:+. 
   S "interact with one another"
 
@@ -223,7 +223,7 @@ s3_1_intro :: Contents
 
 s3_1 = Section (S "User Characteristics") [Con s3_1_intro]
 
-s3_1_intro = Paragraph $ S "The end user of" +:+ (chipmunk ^. term) +:+
+s3_1_intro = Paragraph $ S "The end user of" +:+ (short chipmunk) +:+
   S "should have an understanding of first year programming concepts" +:+.
   S "and an understanding of high school physics"
 

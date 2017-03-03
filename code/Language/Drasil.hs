@@ -16,7 +16,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, nc', ncs
   , ncWDS', makeVC, makeVCObj, vcFromCC, makeDCC, SymbolForm(..)
-  , dcc, dccWDS, cv, ccStSS
+  , dcc, dccWDS, cv, ccStSS, dcc'
   , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
   , Concept(..), compoundterm
   , CommonIdea(..), commonidea, CI
@@ -65,7 +65,7 @@ module Language.Drasil (
   -- Template.DD
   , makeDD
   --Template.MG
-  , mgDoc
+  , mgDoc, mgDoc'
   -- Generate
   , gen, genCode
   -- People
@@ -108,6 +108,6 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Template.DD
-import Language.Drasil.Template.MG (mgDoc)
+import Language.Drasil.Template.MG (mgDoc, mgDoc')
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames)

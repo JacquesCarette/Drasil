@@ -15,5 +15,5 @@ cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
 centreMass    = commonidea "centreMass" "Centre of Mass" "CM"
 twoD          = commonidea "twoD" "Two-Dimensional" "2D"
 
-chipmunk :: ConceptChunk
-chipmunk    = dcc "chipmunk" "Chipmunk2D" "Chipmunk2D game physics library"
+chipmunk :: NamedChunk
+chipmunk    = nc' "chipmunk" "Chipmunk2D game physics library" "Chipmunk2D" 

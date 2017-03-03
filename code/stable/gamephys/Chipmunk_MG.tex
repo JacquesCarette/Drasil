@@ -6,13 +6,10 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
-\usepackage{luatex85}
-\def\pgfsysdriver{pgfsys-pdftex.def}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{graphs}
-\usetikzlibrary{graphdrawing}
-\usegdlibrary{layered}
+\usetikzlibrary{arrows.meta, shapes}
+\usepackage{dot2texi}
+\usepackage{adjustbox}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \newcounter{ucnum}
@@ -116,55 +113,55 @@ The module design should be as general as possible. However, a general system is
 \label{Sec:MH}
 This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mhardwarehiding}:]Hardware Hiding Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mrigidbody}:]Rigid Body Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodbodyserv}:]Rigid Body Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mshape}:]Shape Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodshapeserv}:]Shape Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mcircle}:]Circle Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodcircleserv}:]Circle Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Msegment}:]Segment Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodsegmentserv}:]Segment Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mpoly}:]Poly Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodpolyserv}:]Poly Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mspace}:]Space Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodspaceserv}:]Space Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Marbiter}:]Arbiter Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodarbiterserv}:]Arbiter Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mcontrol}:]Control Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mvector}:]Vector Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodvectorserv}:]Vector Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mboundingbox}:]Bounding Box Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodbbserv}:]Bounding Box Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mtransformmatrix}:]Transform Matrix Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodtransserv}:]Transform Matrix Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mspatialindex}:]Spatial Index Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodspatialserv}:]Spatial Index Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mcollisionsolver}:]Collision Solver Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodcollserv}:]Collision Solver Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Msequencedatastructure}:]Sequence Data Structure Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodseqserv}:]Sequence Data Structure Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mlinkeddatastructure}:]Linked Data Structure Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodlinkedserv}:]Linked Data Structure Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Massociativedatastructure}:]Associative Data Structure Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodassocserv}:]Associative Data Structure Module
 \end{description}
 \begin{longtable}{l l l}
 \toprule
@@ -210,11 +207,11 @@ Software Decision Module & Vector Module &
 \section{Module Decomposition}
 \label{Sec:MD}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is Chipmunk2D, this means that the module is provided by the Chipmunk2D game physics library. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
-\subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
+\subsection{Hardware Hiding Module (M\ref{MhwHiding})}
 \label{Sec:HHM()}
 \begin{description}
 \item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
-\item[Services:]Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software. So, the system can use it to display outputs or to accept inputs.
+\item[Services:]Hides the exact details of the hardware, and provides a uniform interface for the rest of the system to use.
 \item[Implemented By:]OS
 \end{description}
 \subsection{Behaviour Hiding Module}
@@ -224,56 +221,56 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
 \item[Implemented By:]--
 \end{description}
-\subsection{Rigid Body Module (M\ref{Mrigidbody})}
+\subsection{Rigid Body Module (M\ref{Mmodbodyserv})}
 \label{Sec:RBM()}
 \begin{description}
 \item[Secrets:]The data structure of a rigid body.
 \item[Services:]Stores the physical properties of an object, such as mass, position, rotation, velocity, etc, and provides operations on rigid bodies, such as setting the mass and velocity of the body.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Shape Module (M\ref{Mshape})}
+\subsection{Shape Module (M\ref{Mmodshapeserv})}
 \label{Sec:SM()}
 \begin{description}
 \item[Secrets:]The data structure of a collision shape. Children: Circle Module, Segment Module, Polygon Module.
 \item[Services:]Stores the surface properties of an object, such as friction or elasticity, and provides operations on shapes, such as setting its friction or elasticity.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Circle Module (M\ref{Mcircle})}
+\subsection{Circle Module (M\ref{Mmodcircleserv})}
 \label{Sec:CM()}
 \begin{description}
 \item[Secrets:]The data structure for a circle shape.
 \item[Services:]Provides operations on circles such as initializing a new circle, calculating moment and area, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Segment Module (M\ref{Msegment})}
+\subsection{Segment Module (M\ref{Mmodsegmentserv})}
 \label{Sec:SM()}
 \begin{description}
 \item[Secrets:]The data structure for a segment shape.
 \item[Services:]Provides operations on segments such as initializing a new segment, calculating moment and area, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Poly Module (M\ref{Mpoly})}
+\subsection{Poly Module (M\ref{Mmodpolyserv})}
 \label{Sec:PM()}
 \begin{description}
 \item[Secrets:]The data structure for a polygon shape.
 \item[Services:]Provides operations on polygons such as initializing a new polygon, calculating moment, area and centroid, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Space Module (M\ref{Mspace})}
+\subsection{Space Module (M\ref{Mmodspaceserv})}
 \label{Sec:SM()}
 \begin{description}
 \item[Secrets:]The container for simulating objects.
 \item[Services:]Controls how all the rigid bodies and shapes interact together.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Arbiter Module (M\ref{Marbiter})}
+\subsection{Arbiter Module (M\ref{Mmodarbiterserv})}
 \label{Sec:AM()}
 \begin{description}
 \item[Secrets:]The data structure containing collision information.
 \item[Services:]Stores all collision data, such as which bodies collided and their masses.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Control Module (M\ref{Mcontrol})}
+\subsection{Control Module (M\ref{MmodControl})}
 \label{Sec:CM()}
 \begin{description}
 \item[Secrets:]The internal data types and algorithms for coordinating the running of the program.
@@ -287,56 +284,56 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
-\subsection{Vector Module (M\ref{Mvector})}
+\subsection{Vector Module (M\ref{Mmodvectorserv})}
 \label{Sec:VM()}
 \begin{description}
 \item[Secrets:]The data structure representing vectors.
 \item[Services:]Provides vector operations such as addition, scalar and vector multiplication, dot and cross products, rotations, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Bounding Box Module (M\ref{Mboundingbox})}
+\subsection{Bounding Box Module (M\ref{Mmodbbserv})}
 \label{Sec:BBM()}
 \begin{description}
 \item[Secrets:]The data structure for representing axis-aligned bounding boxes.
 \item[Services:]Provides constructors for bounding boxes and operations such as merging boxes, calculating their centroids and areas, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Transform Matrix Module (M\ref{Mtransformmatrix})}
+\subsection{Transform Matrix Module (M\ref{Mmodtransserv})}
 \label{Sec:TMM()}
 \begin{description}
 \item[Secrets:]The data structure representing transformation matrices.
 \item[Services:]Provides constructors for affine transformation matrices, matrix operations such as inverse, transpose, multiplications, and operations for applying transformations to vectors and bounding boxes.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Spatial Index Module (M\ref{Mspatialindex})}
+\subsection{Spatial Index Module (M\ref{Mmodspatialserv})}
 \label{Sec:SIM()}
 \begin{description}
 \item[Secrets:]The data structures and algorithms for detecting collisions.
 \item[Services:]Provides spatial indexing operations and tracks the positions of bodies in the simulation space.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Collision Solver Module (M\ref{Mcollisionsolver})}
+\subsection{Collision Solver Module (M\ref{Mmodcollserv})}
 \label{Sec:CSM()}
 \begin{description}
 \item[Secrets:]The data structures and algorithms for detecting collisions.
 \item[Services:]Fast collision filtering, primitive shape-to-shape collision detection.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Sequence Data Structure Module (M\ref{Msequencedatastructure})}
+\subsection{Sequence Data Structure Module (M\ref{Mmodseqserv})}
 \label{Sec:SDSM()}
 \begin{description}
 \item[Secrets:]The data structure for a sequence data type.
 \item[Services:]Provides array manipulation operations, such as building an array , accessing a specific entry, slicing an array, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Linked Data Structure Module (M\ref{Mlinkeddatastructure})}
+\subsection{Linked Data Structure Module (M\ref{Mmodlinkedserv})}
 \label{Sec:LDSM()}
 \begin{description}
 \item[Secrets:]The data structure for a linked data type.
 \item[Services:]Provides tree manipulation operations, such as building a tree, accessing a specific entry, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
-\subsection{Associative Data Structure Module (M\ref{Massociativedatastructure})}
+\subsection{Associative Data Structure Module (M\ref{Mmodassocserv})}
 \label{Sec:ADSM()}
 \begin{description}
 \item[Secrets:]The data structure for an associative data type.
@@ -351,21 +348,21 @@ This section shows two traceability matrices: between the modules and the requir
 Requirement & Modules
 \\
 \midrule
-R1 & M\ref{Mspace}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}
+R1 & M\ref{Mmodspaceserv}, M\ref{MmodControl}, M\ref{Mmodseqserv}
 \\
-R2 & M\ref{Mrigidbody}, M\ref{Mcontrol}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+R2 & M\ref{Mmodbodyserv}, M\ref{MmodControl}, M\ref{Mmodvectorserv}, M\ref{Mmodtransserv}
 \\
-R3 & M\ref{Mshape}, M\ref{Mcircle}, M\ref{Msegment}, M\ref{Mpoly}, M\ref{Mcontrol}, M\ref{Mvector}
+R3 & M\ref{Mmodshapeserv}, M\ref{Mmodcircleserv}, M\ref{Mmodsegmentserv}, M\ref{Mmodpolyserv}, M\ref{MmodControl}, M\ref{Mmodvectorserv}
 \\
-R4 & M\ref{Mrigidbody}, M\ref{Mshape}, M\ref{Mcircle}, M\ref{Msegment}, M\ref{Mpoly}, M\ref{Mspace}, M\ref{Mcontrol}
+R4 & M\ref{Mmodbodyserv}, M\ref{Mmodshapeserv}, M\ref{Mmodcircleserv}, M\ref{Mmodsegmentserv}, M\ref{Mmodpolyserv}, M\ref{Mmodspaceserv}, M\ref{MmodControl}
 \\
-R5 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+R5 & M\ref{Mmodbodyserv}, M\ref{Mmodspaceserv}, M\ref{Mmodvectorserv}, M\ref{Mmodtransserv}
 \\
-R6 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+R6 & M\ref{Mmodbodyserv}, M\ref{Mmodspaceserv}, M\ref{Mmodvectorserv}, M\ref{Mmodtransserv}
 \\
-R7 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Mboundingbox}, M\ref{Mspatialindex}, M\ref{Mcollisionsolver}, M\ref{Mlinkeddatastructure}, M\ref{Massociativedatastructure}
+R7 & M\ref{Mmodbodyserv}, M\ref{Mmodspaceserv}, M\ref{Mmodbbserv}, M\ref{Mmodspatialserv}, M\ref{Mmodcollserv}, M\ref{Mmodlinkedserv}, M\ref{Mmodassocserv}
 \\
-R8 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Marbiter}, M\ref{Mvector}, M\ref{Mtransformmatrix}
+R8 & M\ref{Mmodbodyserv}, M\ref{Mmodspaceserv}, M\ref{Mmodarbiterserv}, M\ref{Mmodvectorserv}, M\ref{Mmodtransserv}
 \\
 \bottomrule
 \caption{Trace Between Requirements and Modules}
@@ -376,33 +373,33 @@ R8 & M\ref{Mrigidbody}, M\ref{Mspace}, M\ref{Marbiter}, M\ref{Mvector}, M\ref{Mt
 Likely Change & Modules
 \\
 \midrule
-LC\ref{LChardware} & M\ref{Mhardwarehiding}
+LC\ref{LChardware} & M\ref{MhwHiding}
 \\
-LC\ref{LCrigidbody} & M\ref{Mrigidbody}
+LC\ref{LCrigidbody} & M\ref{Mmodbodyserv}
 \\
-LC\ref{LCshape} & M\ref{Mshape}, M\ref{Mcircle}, M\ref{Msegment}, M\ref{Mpoly}
+LC\ref{LCshape} & M\ref{Mmodshapeserv}, M\ref{Mmodcircleserv}, M\ref{Mmodsegmentserv}, M\ref{Mmodpolyserv}
 \\
-LC\ref{LCspace} & M\ref{Mspace}
+LC\ref{LCspace} & M\ref{Mmodspaceserv}
 \\
-LC\ref{LCarbiter} & M\ref{Marbiter}
+LC\ref{LCarbiter} & M\ref{Mmodarbiterserv}
 \\
-LC\ref{LCcontrol} & M\ref{Mcontrol}
+LC\ref{LCcontrol} & M\ref{MmodControl}
 \\
-LC\ref{LCvector} & M\ref{Mvector}
+LC\ref{LCvector} & M\ref{Mmodvectorserv}
 \\
-LC\ref{LCbb} & M\ref{Mboundingbox}
+LC\ref{LCbb} & M\ref{Mmodbbserv}
 \\
-LC\ref{LCtransform} & M\ref{Mvector}
+LC\ref{LCtransform} & M\ref{Mmodvectorserv}
 \\
-LC\ref{LCspatialindex} & M\ref{Mspatialindex}
+LC\ref{LCspatialindex} & M\ref{Mmodspatialserv}
 \\
-LC\ref{LCcollision} & M\ref{Mcollisionsolver}
+LC\ref{LCcollision} & M\ref{Mmodcollserv}
 \\
-LC\ref{LCarray} & M\ref{Msequencedatastructure}
+LC\ref{LCarray} & M\ref{Mmodseqserv}
 \\
-LC\ref{LCtree} & M\ref{Mlinkeddatastructure}
+LC\ref{LCtree} & M\ref{Mmodlinkedserv}
 \\
-LC\ref{LChashtable} & M\ref{Massociativedatastructure}
+LC\ref{LChashtable} & M\ref{Mmodassocserv}
 \\
 \bottomrule
 \caption{Trace Between Likely Changes and Modules}
@@ -410,44 +407,49 @@ LC\ref{LChashtable} & M\ref{Massociativedatastructure}
 \end{longtable}
 \section{Uses Hierarchy}
 \label{Sec:UH}
-In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHierarchy} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UH} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
 \begin{figure}
 \centering
-\resizebox{\textwidth}{!}{
-\tikz [>=stealth, shorten >=1pt]
-\graph [layered layout, components go right top aligned, minimum layers=3, nodes={ draw, thick, align=center, inner xsep=0.5em, inner ysep=0.5em, text width=4em, minimum height=5em, font=\scriptsize, fill=white, text opacity=1, fill opacity=0.8, typeset={\tikzgraphnodetext\\M\ref{\tikzgraphnodename}}}, edges={thick, rounded corners}]
-{
-Mrigidbody/Rigid Body Module -> Mspatialindex/Spatial Index Module;
-Mrigidbody/Rigid Body Module -> Mtransformmatrix/Transform Matrix Module;
-Mrigidbody/Rigid Body Module -> Mvector/Vector Module;
-Mrigidbody/Rigid Body Module -> Mspace/Space Module;
-Mshape/Shape Module -> Mtransformmatrix/Transform Matrix Module;
-Mshape/Shape Module -> Mboundingbox/Bounding Box Module;
-Mshape/Shape Module -> Mvector/Vector Module;
-Mshape/Shape Module -> Mrigidbody/Rigid Body Module;
-Mshape/Shape Module -> Mspace/Space Module;
-Mspace/Space Module -> Mboundingbox/Bounding Box Module;
-Mspace/Space Module -> Mspatialindex/Spatial Index Module;
-Mspace/Space Module -> Massociativedatastructure/Associative Data Structure Module;
-Mspace/Space Module -> Msequencedatastructure/Sequence Data Structure Module;
-Mspace/Space Module -> Mspatialindex/Spatial Index Module;
-Marbiter/Arbiter Module -> Mshape/Shape Module;
-Marbiter/Arbiter Module -> Mrigidbody/Rigid Body Module;
-Marbiter/Arbiter Module -> Mvector/Vector Module;
-Mcontrol/Control Module -> Marbiter/Arbiter Module;
-Mcontrol/Control Module -> Mhardwarehiding/Hardware Hiding Module;
-Mboundingbox/Bounding Box Module -> Mvector/Vector Module;
-Mtransformmatrix/Transform Matrix Module -> Mboundingbox/Bounding Box Module;
-Mspatialindex/Spatial Index Module -> Mboundingbox/Bounding Box Module;
-Mspatialindex/Spatial Index Module -> Mvector/Vector Module;
-Mspatialindex/Spatial Index Module -> Mcollisionsolver/Collision Solver Module;
-Mspatialindex/Spatial Index Module -> Mlinkeddatastructure/Linked Data Structure Module;
-Mcollisionsolver/Collision Solver Module -> Mboundingbox/Bounding Box Module;
-Mcollisionsolver/Collision Solver Module -> Mvector/Vector Module;
-Mcollisionsolver/Collision Solver Module -> Mlinkeddatastructure/Linked Data Structure Module;
-};
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[>=latex,line join=bevel]
+\tikzstyle{n} = [draw, shape=rectangle, text width = 10.0em, minimum height = 8.0em, font=\Large, align=center]
+\begin{dot2tex}[dot, codeonly, options=-t raw]
+digraph G {
+graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
+node [style = "n"];
+"Rigid Body Module (M\ref{Mmodbodyserv})" -> "Spatial Index Module (M\ref{Mmodspatialserv})";
+"Rigid Body Module (M\ref{Mmodbodyserv})" -> "Transform Matrix Module (M\ref{Mmodtransserv})";
+"Rigid Body Module (M\ref{Mmodbodyserv})" -> "Vector Module (M\ref{Mmodvectorserv})";
+"Rigid Body Module (M\ref{Mmodbodyserv})" -> "Space Module (M\ref{Mmodspaceserv})";
+"Shape Module (M\ref{Mmodshapeserv})" -> "Transform Matrix Module (M\ref{Mmodtransserv})";
+"Shape Module (M\ref{Mmodshapeserv})" -> "Bounding Box Module (M\ref{Mmodbbserv})";
+"Shape Module (M\ref{Mmodshapeserv})" -> "Vector Module (M\ref{Mmodvectorserv})";
+"Shape Module (M\ref{Mmodshapeserv})" -> "Rigid Body Module (M\ref{Mmodbodyserv})";
+"Shape Module (M\ref{Mmodshapeserv})" -> "Space Module (M\ref{Mmodspaceserv})";
+"Space Module (M\ref{Mmodspaceserv})" -> "Bounding Box Module (M\ref{Mmodbbserv})";
+"Space Module (M\ref{Mmodspaceserv})" -> "Spatial Index Module (M\ref{Mmodspatialserv})";
+"Space Module (M\ref{Mmodspaceserv})" -> "Associative Data Structure Module (M\ref{Mmodassocserv})";
+"Space Module (M\ref{Mmodspaceserv})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Space Module (M\ref{Mmodspaceserv})" -> "Spatial Index Module (M\ref{Mmodspatialserv})";
+"Arbiter Module (M\ref{Mmodarbiterserv})" -> "Shape Module (M\ref{Mmodshapeserv})";
+"Arbiter Module (M\ref{Mmodarbiterserv})" -> "Rigid Body Module (M\ref{Mmodbodyserv})";
+"Arbiter Module (M\ref{Mmodarbiterserv})" -> "Vector Module (M\ref{Mmodvectorserv})";
+"Control Module (M\ref{MmodControl})" -> "Arbiter Module (M\ref{Mmodarbiterserv})";
+"Control Module (M\ref{MmodControl})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Bounding Box Module (M\ref{Mmodbbserv})" -> "Vector Module (M\ref{Mmodvectorserv})";
+"Transform Matrix Module (M\ref{Mmodtransserv})" -> "Bounding Box Module (M\ref{Mmodbbserv})";
+"Spatial Index Module (M\ref{Mmodspatialserv})" -> "Bounding Box Module (M\ref{Mmodbbserv})";
+"Spatial Index Module (M\ref{Mmodspatialserv})" -> "Vector Module (M\ref{Mmodvectorserv})";
+"Spatial Index Module (M\ref{Mmodspatialserv})" -> "Collision Solver Module (M\ref{Mmodcollserv})";
+"Spatial Index Module (M\ref{Mmodspatialserv})" -> "Linked Data Structure Module (M\ref{Mmodlinkedserv})";
+"Collision Solver Module (M\ref{Mmodcollserv})" -> "Bounding Box Module (M\ref{Mmodbbserv})";
+"Collision Solver Module (M\ref{Mmodcollserv})" -> "Vector Module (M\ref{Mmodvectorserv})";
+"Collision Solver Module (M\ref{Mmodcollserv})" -> "Linked Data Structure Module (M\ref{Mmodlinkedserv})";
 }
+\end{dot2tex}
+\end{tikzpicture}
+\end{adjustbox}
 \caption{Uses Hierarchy}
-\label{Figure:UsesHierarchy}
+\label{Figure:UH}
 \end{figure}
 \end{document}

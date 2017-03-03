@@ -8,16 +8,17 @@ import Data.List (intersperse)
 import Data.Char (toUpper)
 import Prelude hiding (id)
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
+import Language.Drasil.Chunk.Concept (Concept, defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
+import Language.Drasil.Chunk.Wrapper (cw, CWrapper, NWrapper, nw)
 
 -- BEGIN METHODCHUNK --
 -- (Currently) used for module guide, MIS and code generation
 data ModuleChunk where 
-  MoC :: NWrapper          -- Name
+  MoC :: CWrapper          -- Name
       -> Sentence          -- Secret
       -> Maybe NWrapper    -- what implements this, if at all
       -> [VarChunk]        -- module fields, aka state variables
@@ -32,17 +33,21 @@ instance Chunk ModuleChunk where
 
 instance NamedIdea ModuleChunk where
   term = cl term
+  getA (MoC c _ _ _ _ _ _ _) = getA c
 
 instance Eq ModuleChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
+  
+instance Concept ModuleChunk where
+  defn = cl defn
 
 -- END METHODCHUNK --
 
-cl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens ModuleChunk a
+cl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens ModuleChunk a
 cl l f (MoC a b c d e g h i) = fmap (\x -> MoC (set l x a) b c d e g h i) (f (a ^. l))
 
 --Rebuild names for things because we removed the named record.
-modcc :: ModuleChunk -> NWrapper
+modcc :: ModuleChunk -> CWrapper
 modcc (MoC c _ _ _ _ _ _ _) = c
 
 secret :: ModuleChunk -> Sentence
@@ -66,27 +71,30 @@ hier (MoC _ _ _ _ _ _ h _) = h
 generated :: ModuleChunk -> Bool
 generated (MoC _ _ _ _ _ _ _ b) = b
 
+--FIXME: Get rid of this entire function. It is a hack.
 formatName :: ModuleChunk -> String
 formatName m = (concat $ intersperse " " $
-  map capFirst $ words (m ^. id)) ++ " Module"
+  map capFirst $ words (unS (m ^. term))) ++ " Module"
   where capFirst [] = []
         capFirst (c:cs) = toUpper c:cs
+        unS (S s) = s
+        unS _ = error "unS can't be used here -- See Template/MG.hs \"formatName\""
 
-makeRecord :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
+makeRecord :: (Concept c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeRecord cc' secret' imp' field' uses' hier' =
-  MoC (nw cc') secret' (Just (nw imp')) field' [] uses' hier' True
+  MoC (cw cc') secret' (Just (nw imp')) field' [] uses' hier' True
 
-makeImpModule :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
+makeImpModule :: (Concept c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeImpModule cc' secret' imp' field' method' uses' hier' =
-  MoC (nw cc') secret' (Just (nw imp')) field' method' uses' hier' True
+  MoC (cw cc') secret' (Just (nw imp')) field' method' uses' hier' True
 
-makeImpModuleNoGen :: (NamedIdea c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
+makeImpModuleNoGen :: (Concept c1, NamedIdea c2) => c1 -> Sentence -> c2 -> [VarChunk]
   -> [MethodChunk] -> [ModuleChunk] -> Maybe ModuleChunk -> ModuleChunk
 makeImpModuleNoGen cc' secret' imp' field' method' uses' hier' =
-  MoC (nw cc') secret' (Just (nw imp')) field' method' uses' hier' False
+  MoC (cw cc') secret' (Just (nw imp')) field' method' uses' hier' False
 
-makeUnimpModule :: NamedIdea c => c -> Sentence -> Maybe ModuleChunk -> ModuleChunk
-makeUnimpModule cc' secret' hier' = MoC (nw cc') secret' Nothing [] [] [] hier'
+makeUnimpModule :: Concept c => c -> Sentence -> Maybe ModuleChunk -> ModuleChunk
+makeUnimpModule cc' secret' hier' = MoC (cw cc') secret' Nothing [] [] [] hier'
   False

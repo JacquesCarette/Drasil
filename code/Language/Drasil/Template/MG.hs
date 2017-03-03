@@ -1,7 +1,8 @@
-module Language.Drasil.Template.MG(makeMG, mgDoc) where
+module Language.Drasil.Template.MG(makeMG, mgDoc, mgDoc') where
 import Prelude hiding (id)
 import Language.Drasil.Document
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
@@ -19,6 +20,11 @@ import Data.Drasil.Concepts.Documentation (mg)
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
   Document ((mg ^. term) +:+ S "for" +:+ (sys ^. term)) authors secs
+
+--When we want the short form in a title.  
+mgDoc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
+mgDoc' sys authors secs = 
+  Document ((mg ^. term) +:+ S "for" +:+ (short sys)) authors secs
 
 makeMG :: [LCChunk] -> [UCChunk] -> [ReqChunk] -> [ModuleChunk]
   -> ([Section], [Contents])
@@ -194,9 +200,9 @@ mgModuleDecomp mpairs = --let levels = splitLevels $ getChunks mpairs
 
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
-  let impl ccs = foldl1 (:+:) $ map (\x -> (S "If the entry is " :+:
-       (short x) :+: S ", this means that the module is provided by the "
-       :+: (x ^. term) :+: S ". ")) ccs 
+  let impl ccs = foldl1 (+:+) $ map (\x -> (S "If the entry is" +:+
+       (short x) `sC` S "this means that the module is provided by the" +:+.
+       (x ^. term))) ccs 
 --FIXME: The fields above should be (x ^. term) and (x ^.defn) respectively
   in Paragraph $
     S "Modules are decomposed according to the principle of " :+:
@@ -206,7 +212,7 @@ mgModuleDecompIntro mcs =
     S "the module. The Services field specifies what the module will do " :+:
     S "without documenting how to do it. For each module, a suggestion for " :+:
     S "the implementing software is given under the Implemented By title. " :+:
-    impl (nub $ getImps mcs) :+:
+    impl (nub $ getImps mcs) +:+
     S "Only the leaf modules in the hierarchy have to be implemented. If a " :+:
     S "dash (--) is shown, this means that the module is not a leaf and " :+:
     S "will not have to be implemented. Whether or not this module is " :+:
@@ -227,13 +233,13 @@ mgModuleInfo (mc, m) = let title = if   isNothing m
     title
     [ Con $ Enumeration $ Desc
       [(S "Secrets", Flat (secret mc)),
-       (S "Services", Flat (mc ^. term)), --This is where the change 
+       (S "Services", Flat (mc ^. defn)), --This is where the change 
 --    noted in comments on commit 0053aafe42cfa5 ... created a diff.
        (S "Implemented By", Flat (getImp $ imp mc))
       ]
     ]
     where
-      getImp (Just x) = (x ^. term)
+      getImp (Just x) = (short x)
       getImp _        = S "--"
 
 

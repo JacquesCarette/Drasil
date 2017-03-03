@@ -6,13 +6,10 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
-\usepackage{luatex85}
-\def\pgfsysdriver{pgfsys-pdftex.def}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{graphs}
-\usetikzlibrary{graphdrawing}
-\usegdlibrary{layered}
+\usetikzlibrary{arrows.meta, shapes}
+\usepackage{dot2texi}
+\usepackage{adjustbox}
 \newcounter{modnum}
 \newcommand{\mthemodnum}{M\themodnum}
 \title{MG for $h_{g}$ and $h_{c}$}
@@ -49,10 +46,22 @@ The module design should be as general as possible. However, a general system is
 \label{Sec:MH}
 This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mhardwarehiding}:]Hardware Hiding Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mcalc}:]Calc Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodcalcdesc}:]Calc Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputParams}:]Input Parameters Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputFormat}:]Input Format Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodoutputfdesc}:]Output Format Module
+\end{description}
+\begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
 \end{description}
 \begin{longtable}{l l}
 \toprule
@@ -63,6 +72,14 @@ Hardware Hiding Module &
 \\
 Behaviour Hiding Module & Calc Module
 \\
+ & Input Parameters Module
+\\
+ & Input Format Module
+\\
+ & Output Format Module
+\\
+ & Control Module
+\\
 \bottomrule
 \caption{Module Hierarchy}
 \label{Table:MH}
@@ -70,11 +87,11 @@ Behaviour Hiding Module & Calc Module
 \section{Module Decomposition}
 \label{Sec:MD}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is HGHC, this means that the module is provided by the HGHC program. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
-\subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
+\subsection{Hardware Hiding Module (M\ref{MhwHiding})}
 \label{Sec:HHM()}
 \begin{description}
 \item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
-\item[Services:]Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software. So, the system can use it to display outputs or to accept inputs.
+\item[Services:]Hides the exact details of the hardware, and provides a uniform interface for the rest of the system to use.
 \item[Implemented By:]OS
 \end{description}
 \subsection{Behaviour Hiding Module}
@@ -84,11 +101,39 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
 \item[Implemented By:]--
 \end{description}
-\subsection{Calc Module (M\ref{Mcalc})}
+\subsection{Calc Module (M\ref{Mmodcalcdesc})}
 \label{Sec:CM()}
 \begin{description}
 \item[Secrets:]The equations used to calculate heat transfer coefficients
 \item[Services:]Calculates heat transfer coefficients
+\item[Implemented By:]HGHC
+\end{description}
+\subsection{Input Parameters Module (M\ref{MmodInputParams})}
+\label{Sec:IPM()}
+\begin{description}
+\item[Secrets:]The format and structure of the input parameters.
+\item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
+\item[Implemented By:]HGHC
+\end{description}
+\subsection{Input Format Module (M\ref{MmodInputFormat})}
+\label{Sec:IFM()}
+\begin{description}
+\item[Secrets:]The format and structure of the input data.
+\item[Services:]Converts the input data into the data structure used by the input parameters module.
+\item[Implemented By:]HGHC
+\end{description}
+\subsection{Output Format Module (M\ref{Mmodoutputfdesc})}
+\label{Sec:OFM()}
+\begin{description}
+\item[Secrets:]The format and structure of the output data.
+\item[Services:]Outputs the results of the calculations, including the input parameters, temperatures, energies, and times when melting starts and stops.
+\item[Implemented By:]HGHC
+\end{description}
+\subsection{Control Module (M\ref{MmodControl})}
+\label{Sec:CM()}
+\begin{description}
+\item[Secrets:]The algorithm for coordinating the running of the program.
+\item[Services:]Provides the main program.
 \item[Implemented By:]HGHC
 \end{description}
 \section{Traceability Matrix}
@@ -114,16 +159,29 @@ Likely Change & Modules
 \end{longtable}
 \section{Uses Hierarchy}
 \label{Sec:UH}
-In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHierarchy} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UH} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
 \begin{figure}
 \centering
-\resizebox{\textwidth}{!}{
-\tikz [>=stealth, shorten >=1pt]
-\graph [layered layout, components go right top aligned, minimum layers=3, nodes={ draw, thick, align=center, inner xsep=0.5em, inner ysep=0.5em, text width=4em, minimum height=5em, font=\scriptsize, fill=white, text opacity=1, fill opacity=0.8, typeset={\tikzgraphnodetext\\M\ref{\tikzgraphnodename}}}, edges={thick, rounded corners}]
-{
-};
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[>=latex,line join=bevel]
+\tikzstyle{n} = [draw, shape=rectangle, text width = 10.0em, minimum height = 8.0em, font=\Large, align=center]
+\begin{dot2tex}[dot, codeonly, options=-t raw]
+digraph G {
+graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
+node [style = "n"];
+"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Control Module (M\ref{MmodControl})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
+"Control Module (M\ref{MmodControl})" -> "Calc Module (M\ref{Mmodcalcdesc})";
+"Control Module (M\ref{MmodControl})" -> "Output Format Module (M\ref{Mmodoutputfdesc})";
 }
+\end{dot2tex}
+\end{tikzpicture}
+\end{adjustbox}
 \caption{Uses Hierarchy}
-\label{Figure:UsesHierarchy}
+\label{Figure:UH}
 \end{figure}
 \end{document}

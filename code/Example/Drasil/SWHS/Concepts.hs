@@ -22,9 +22,9 @@ swhsFull    =
 ---ConceptChunks---
 
 charging, coil, discharging, gauss_div, heat_flux, mech_energy,
-  perfect_insul, phase_change_material, specific_heat, swhs_pcm, swhsProg, tank,
+  perfect_insul, phase_change_material, specific_heat, swhs_pcm, tank,
   tank_pcm, transient, water :: ConceptChunk
-
+swhsProg :: NamedChunk
 --FIXME: There are too many "swhs" chunks for very minor differences.
   
 charging = dcc "charging" "Charging" "Charging of the tank"
@@ -43,7 +43,7 @@ perfect_insul = dcc "perfect_insul" "perfectly insulated"
 phase_change_material = dcc "pcm" "Phase Change Material (PCM)" 
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
-swhsProg = dcc "swhsProg" "SWHS" "SWHS program"
+swhsProg = nc' "swhsProg" "SWHS program" "SWHS"
 specific_heat = dcc "specific_heat" "Specific heat" "Heat capacity per unit mass" 
   --FIXME: Specific Heat needs to be a UnitalChunk
 swhs_pcm = dcc "swhs_pcm" "solar water heating systems incorporating PCM" 

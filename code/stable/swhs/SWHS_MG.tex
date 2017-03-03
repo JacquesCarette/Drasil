@@ -6,20 +6,17 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
-\usepackage{luatex85}
-\def\pgfsysdriver{pgfsys-pdftex.def}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta}
-\usetikzlibrary{graphs}
-\usetikzlibrary{graphdrawing}
-\usegdlibrary{layered}
+\usetikzlibrary{arrows.meta, shapes}
+\usepackage{dot2texi}
+\usepackage{adjustbox}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \newcounter{ucnum}
 \newcommand{\uctheucnum}{UC\theucnum}
 \newcounter{modnum}
 \newcommand{\mthemodnum}{M\themodnum}
-\title{Module Guide for Solar Water Heating Systems Incorporating Phase Change Material}
+\title{Module Guide for Solar Water Heating Systems with Phase Change Material}
 \author{Thulasi Jegatheesan, Brooks MacLachlan, and Spencer Smith}
 \begin{document}
 \maketitle
@@ -107,40 +104,40 @@ The module design should be as general as possible. However, a general system is
 \label{Sec:MH}
 This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mhardwarehiding}:]Hardware Hiding Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Minputformat}:]Input Format Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputFormat}:]Input Format Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Minputparameters}:]Input Parameters Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputParams}:]Input Parameters Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Minputverification}:]Input Verification Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputVerif}:]Input Verification Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Moutputformat}:]Output Format Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodoutputfdesc}:]Output Format Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Moutputverification}:]Output Verification Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodoutputvdesc}:]Output Verification Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MtemperatureODEs}:]Temperature ODEs Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodtempdesc}:]Temperature ODEs Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Menergyequations}:]Energy Equations Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodenerdesc}:]Energy Equations Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mcontrol}:]Control Module
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Msequencedatastructure}:]Sequence Data Structure Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodseqdesc}:]Sequence Data Structure Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MODEsolver}:]ODE Solver Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmododedesc}:]ODE Solver Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mplotting}:]Plotting Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodplotdesc}:]Plotting Module
 \end{description}
 \begin{longtable}{l l}
 \toprule
@@ -178,11 +175,11 @@ Software Decision Module & Sequence Data Structure Module
 \section{Module Decomposition}
 \label{Sec:MD}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is SWHS, this means that the module is provided by the SWHS program. If the entry is MATLAB, this means that the module is provided by the MATLAB programming language. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
-\subsection{Hardware Hiding Module (M\ref{Mhardwarehiding})}
+\subsection{Hardware Hiding Module (M\ref{MhwHiding})}
 \label{Sec:HHM()}
 \begin{description}
 \item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
-\item[Services:]Serves as a virtual hardware used by the rest of the system. This module provides the interface between the hardware and the software. So, the system can use it to display outputs or to accept inputs.
+\item[Services:]Hides the exact details of the hardware, and provides a uniform interface for the rest of the system to use.
 \item[Implemented By:]OS
 \end{description}
 \subsection{Behaviour Hiding Module}
@@ -192,56 +189,56 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
 \item[Implemented By:]--
 \end{description}
-\subsection{Input Format Module (M\ref{Minputformat})}
+\subsection{Input Format Module (M\ref{MmodInputFormat})}
 \label{Sec:IFM()}
 \begin{description}
 \item[Secrets:]The format and structure of the input data.
 \item[Services:]Converts the input data into the data structure used by the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Input Parameters Module (M\ref{Minputparameters})}
+\subsection{Input Parameters Module (M\ref{MmodInputParams})}
 \label{Sec:IPM()}
 \begin{description}
 \item[Secrets:]The format and structure of the input parameters.
 \item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Input Verification Module (M\ref{Minputverification})}
+\subsection{Input Verification Module (M\ref{MmodInputVerif})}
 \label{Sec:IVM()}
 \begin{description}
 \item[Secrets:]The format and structure of the physical and software constraints.
 \item[Services:]Verifies that the input parameters comply with physical and software constraints. Throws an error if a parameter violates a physical constraint. Throws a warning if a parameter violates a software constraint.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Output Format Module (M\ref{Moutputformat})}
+\subsection{Output Format Module (M\ref{Mmodoutputfdesc})}
 \label{Sec:OFM()}
 \begin{description}
 \item[Secrets:]The format and structure of the output data.
 \item[Services:]Outputs the results of the calculations, including the input parameters, temperatures, energies, and times when melting starts and stops.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Output Verification Module (M\ref{Moutputverification})}
+\subsection{Output Verification Module (M\ref{Mmodoutputvdesc})}
 \label{Sec:OVM()}
 \begin{description}
 \item[Secrets:]The algorithm used to approximate expected results.
 \item[Services:]Verifies that the output energy results follow the law of conservation of energy. Throws a warning if the relative error exceeds the error threshold.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Temperature ODEs Module (M\ref{MtemperatureODEs})}
+\subsection{Temperature ODEs Module (M\ref{Mmodtempdesc})}
 \label{Sec:TOM()}
 \begin{description}
 \item[Secrets:]The ODEs for solving the temperature, using the input parameters.
 \item[Services:]Defines the ODEs using the parameters in the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Energy Equations Module (M\ref{Menergyequations})}
+\subsection{Energy Equations Module (M\ref{Mmodenerdesc})}
 \label{Sec:EEM()}
 \begin{description}
 \item[Secrets:]The equations for solving for the energies using the input parameters.
 \item[Services:]Defines the energy equations using the parameters in the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Control Module (M\ref{Mcontrol})}
+\subsection{Control Module (M\ref{MmodControl})}
 \label{Sec:CM()}
 \begin{description}
 \item[Secrets:]The algorithm for coordinating the running of the program.
@@ -255,21 +252,21 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
-\subsection{Sequence Data Structure Module (M\ref{Msequencedatastructure})}
+\subsection{Sequence Data Structure Module (M\ref{Mmodseqdesc})}
 \label{Sec:SDSM()}
 \begin{description}
 \item[Secrets:]The data structure for a sequence data type.
 \item[Services:]Provides array manipulation, including building an array, accessing a specific entry, slicing an array, etc.
 \item[Implemented By:]MATLAB
 \end{description}
-\subsection{ODE Solver Module (M\ref{MODEsolver})}
+\subsection{ODE Solver Module (M\ref{Mmododedesc})}
 \label{Sec:OSM()}
 \begin{description}
 \item[Secrets:]The algorithm to solve a system of first order ODEs.
 \item[Services:]Provides solvers that take the governing equation, initial conditions, and numerical parameters, and solve them.
 \item[Implemented By:]MATLAB
 \end{description}
-\subsection{Plotting Module (M\ref{Mplotting})}
+\subsection{Plotting Module (M\ref{Mmodplotdesc})}
 \label{Sec:PM()}
 \begin{description}
 \item[Secrets:]The data structures and algorithms for plotting data graphically.
@@ -284,27 +281,27 @@ This section shows two traceability matrices: between the modules and the requir
 Requirement & Modules
 \\
 \midrule
-R1 & M\ref{Mhardwarehiding}, M\ref{Minputformat}, M\ref{Minputparameters}, M\ref{Mcontrol}
+R1 & M\ref{MhwHiding}, M\ref{MmodInputFormat}, M\ref{MmodInputParams}, M\ref{MmodControl}
 \\
-R2 & M\ref{Minputformat}, M\ref{Minputparameters}
+R2 & M\ref{MmodInputFormat}, M\ref{MmodInputParams}
 \\
-R3 & M\ref{Minputverification}
+R3 & M\ref{MmodInputVerif}
 \\
-R4 & M\ref{Moutputformat}, M\ref{Mcontrol}
+R4 & M\ref{Mmodoutputfdesc}, M\ref{MmodControl}
 \\
-R5 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{MODEsolver}, M\ref{Mplotting}
+R5 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmododedesc}, M\ref{Mmodplotdesc}
 \\
-R6 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{MODEsolver}, M\ref{Mplotting}
+R6 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmododedesc}, M\ref{Mmodplotdesc}
 \\
-R7 & M\ref{Moutputformat}, M\ref{Menergyequations}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{Mplotting}
+R7 & M\ref{Mmodoutputfdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmodplotdesc}
 \\
-R8 & M\ref{Moutputformat}, M\ref{Menergyequations}, M\ref{Mcontrol}, M\ref{Msequencedatastructure}, M\ref{Mplotting}
+R8 & M\ref{Mmodoutputfdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmodplotdesc}
 \\
-R9 & M\ref{Moutputverification}
+R9 & M\ref{Mmodoutputvdesc}
 \\
-R10 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Mcontrol}
+R10 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}
 \\
-R11 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Menergyequations}, M\ref{Mcontrol}
+R11 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}
 \\
 \bottomrule
 \caption{Trace Between Requirements and Modules}
@@ -315,29 +312,29 @@ R11 & M\ref{Moutputformat}, M\ref{MtemperatureODEs}, M\ref{Menergyequations}, M\
 Likely Change & Modules
 \\
 \midrule
-LC\ref{LChardware} & M\ref{Mhardwarehiding}
+LC\ref{LChardware} & M\ref{MhwHiding}
 \\
-LC\ref{LCinputformat} & M\ref{Minputformat}
+LC\ref{LCinputformat} & M\ref{MmodInputFormat}
 \\
-LC\ref{LCparameters} & M\ref{Minputparameters}
+LC\ref{LCparameters} & M\ref{MmodInputParams}
 \\
-LC\ref{LCinputverification} & M\ref{Minputverification}
+LC\ref{LCinputverification} & M\ref{MmodInputVerif}
 \\
-LC\ref{LCoutputformat} & M\ref{Moutputformat}
+LC\ref{LCoutputformat} & M\ref{Mmodoutputfdesc}
 \\
-LC\ref{LCoutputverification} & M\ref{Moutputverification}
+LC\ref{LCoutputverification} & M\ref{Mmodoutputvdesc}
 \\
-LC\ref{LCtemp} & M\ref{MtemperatureODEs}
+LC\ref{LCtemp} & M\ref{Mmodtempdesc}
 \\
-LC\ref{LCenergy} & M\ref{Menergyequations}
+LC\ref{LCenergy} & M\ref{Mmodenerdesc}
 \\
-LC\ref{LCcontrol} & M\ref{Mcontrol}
+LC\ref{LCcontrol} & M\ref{MmodControl}
 \\
-LC\ref{LCsequence} & M\ref{Msequencedatastructure}
+LC\ref{LCsequence} & M\ref{Mmodseqdesc}
 \\
-LC\ref{LCode} & M\ref{MODEsolver}
+LC\ref{LCode} & M\ref{Mmododedesc}
 \\
-LC\ref{LCplot} & M\ref{Mplotting}
+LC\ref{LCplot} & M\ref{Mmodplotdesc}
 \\
 \bottomrule
 \caption{Trace Between Likely Changes and Modules}
@@ -345,44 +342,49 @@ LC\ref{LCplot} & M\ref{Mplotting}
 \end{longtable}
 \section{Uses Hierarchy}
 \label{Sec:UH}
-In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHierarchy} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UH} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
 \begin{figure}
 \centering
-\resizebox{\textwidth}{!}{
-\tikz [>=stealth, shorten >=1pt]
-\graph [layered layout, components go right top aligned, minimum layers=3, nodes={ draw, thick, align=center, inner xsep=0.5em, inner ysep=0.5em, text width=4em, minimum height=5em, font=\scriptsize, fill=white, text opacity=1, fill opacity=0.8, typeset={\tikzgraphnodetext\\M\ref{\tikzgraphnodename}}}, edges={thick, rounded corners}]
-{
-Minputformat/Input Format Module -> Mhardwarehiding/Hardware Hiding Module;
-Minputformat/Input Format Module -> Minputparameters/Input Parameters Module;
-Minputformat/Input Format Module -> Msequencedatastructure/Sequence Data Structure Module;
-Minputparameters/Input Parameters Module -> Msequencedatastructure/Sequence Data Structure Module;
-Minputverification/Input Verification Module -> Minputparameters/Input Parameters Module;
-Minputverification/Input Verification Module -> Msequencedatastructure/Sequence Data Structure Module;
-Moutputformat/Output Format Module -> Mhardwarehiding/Hardware Hiding Module;
-Moutputformat/Output Format Module -> Minputparameters/Input Parameters Module;
-Moutputformat/Output Format Module -> Msequencedatastructure/Sequence Data Structure Module;
-Moutputverification/Output Verification Module -> Minputparameters/Input Parameters Module;
-Moutputverification/Output Verification Module -> Msequencedatastructure/Sequence Data Structure Module;
-MtemperatureODEs/Temperature ODEs Module -> Minputparameters/Input Parameters Module;
-MtemperatureODEs/Temperature ODEs Module -> Msequencedatastructure/Sequence Data Structure Module;
-Menergyequations/Energy Equations Module -> Minputparameters/Input Parameters Module;
-Menergyequations/Energy Equations Module -> Msequencedatastructure/Sequence Data Structure Module;
-Mcontrol/Control Module -> Mhardwarehiding/Hardware Hiding Module;
-Mcontrol/Control Module -> Minputparameters/Input Parameters Module;
-Mcontrol/Control Module -> Minputformat/Input Format Module;
-Mcontrol/Control Module -> Minputverification/Input Verification Module;
-Mcontrol/Control Module -> MtemperatureODEs/Temperature ODEs Module;
-Mcontrol/Control Module -> Menergyequations/Energy Equations Module;
-Mcontrol/Control Module -> MODEsolver/ODE Solver Module;
-Mcontrol/Control Module -> Mplotting/Plotting Module;
-Mcontrol/Control Module -> Moutputverification/Output Verification Module;
-Mcontrol/Control Module -> Moutputformat/Output Format Module;
-Mcontrol/Control Module -> Msequencedatastructure/Sequence Data Structure Module;
-MODEsolver/ODE Solver Module -> Msequencedatastructure/Sequence Data Structure Module;
-Mplotting/Plotting Module -> Msequencedatastructure/Sequence Data Structure Module;
-};
+\begin{adjustbox}{max width=\textwidth}
+\begin{tikzpicture}[>=latex,line join=bevel]
+\tikzstyle{n} = [draw, shape=rectangle, text width = 10.0em, minimum height = 8.0em, font=\Large, align=center]
+\begin{dot2tex}[dot, codeonly, options=-t raw]
+digraph G {
+graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
+node [style = "n"];
+"Input Format Module (M\ref{MmodInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Input Format Module (M\ref{MmodInputFormat})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Input Parameters Module (M\ref{MmodInputParams})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Input Verification Module (M\ref{MmodInputVerif})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Input Verification Module (M\ref{MmodInputVerif})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Control Module (M\ref{MmodControl})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
+"Control Module (M\ref{MmodControl})" -> "Input Verification Module (M\ref{MmodInputVerif})";
+"Control Module (M\ref{MmodControl})" -> "Temperature ODEs Module (M\ref{Mmodtempdesc})";
+"Control Module (M\ref{MmodControl})" -> "Energy Equations Module (M\ref{Mmodenerdesc})";
+"Control Module (M\ref{MmodControl})" -> "ODE Solver Module (M\ref{Mmododedesc})";
+"Control Module (M\ref{MmodControl})" -> "Plotting Module (M\ref{Mmodplotdesc})";
+"Control Module (M\ref{MmodControl})" -> "Output Verification Module (M\ref{Mmodoutputvdesc})";
+"Control Module (M\ref{MmodControl})" -> "Output Format Module (M\ref{Mmodoutputfdesc})";
+"Control Module (M\ref{MmodControl})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"ODE Solver Module (M\ref{Mmododedesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Plotting Module (M\ref{Mmodplotdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
 }
+\end{dot2tex}
+\end{tikzpicture}
+\end{adjustbox}
 \caption{Uses Hierarchy}
-\label{Figure:UsesHierarchy}
+\label{Figure:UH}
 \end{figure}
 \end{document}

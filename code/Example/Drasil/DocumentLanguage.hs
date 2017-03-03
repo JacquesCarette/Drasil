@@ -29,7 +29,7 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Concept a, NamedIdea b, HasName c, Unit d,
+ SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
   Quantity e, Quantity f, Concept f, NamedIdea g) => {
   _sys :: a,
   _kind :: b,
@@ -66,6 +66,12 @@ type DocDesc = [DocSection]
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
   ((kind^.term) +:+ S "for" +:+ (sys^.term))
+  (manyNames authors) (mkSections si l)
+
+--When we want to use the short form for titles.  
+mkDoc' :: DocDesc -> SystemInformation -> Document
+mkDoc' l si@(SI sys kind authors _ _ _ _) = Document 
+  ((kind^.term) +:+ S "for" +:+ (short sys))
   (manyNames authors) (mkSections si l)
 
 mkSections :: SystemInformation -> DocDesc -> [Section]

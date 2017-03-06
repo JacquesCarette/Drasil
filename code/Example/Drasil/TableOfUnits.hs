@@ -24,7 +24,7 @@ s1_intro = Paragraph
 unit_table :: Unit s => [s] -> Contents
 unit_table u = Table
   (map (^.term) [symbol_, description])  (mkTable
-  [(\x -> Sy (x ^. unit)),
+  [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn) :+: S " (" :+: sMap (map toLower) (x ^. term) :+: S ")")
   ] u)
   (S "Table of Units") False

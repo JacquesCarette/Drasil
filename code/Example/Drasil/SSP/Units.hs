@@ -22,4 +22,4 @@ unitless = UD (dcc "unitless" "Unitless" "unitless") (UName $ Atomic "unitless")
 specific_weight :: DerUChunk
 specific_weight = makeDerU (dcc "specific_weight" "specific weight" 
   "weight per unit volume") $
-  USynonym (UDiv (newton ^. unit) (UPow (metre ^. unit) (3)))
+  USynonym (UDiv (newton ^. usymb) (UPow (metre ^. usymb) (3)))

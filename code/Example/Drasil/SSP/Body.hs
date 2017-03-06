@@ -51,7 +51,7 @@ s1_1 = Section (S "Table of Units") [s1_1_intro, s1_1_table]
 s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.")
 
 s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
-  [(\x -> Sy (x ^. unit)),
+  [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (x ^. term))
   ] this_si)
@@ -65,7 +65,7 @@ s1_2_intro = Con $ Paragraph $
   
 s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ ch ^. unit),
+   (\ch -> Sy $ ch ^. usymb),
    (\ch -> ch ^. term)
    ]
   sspSymbols)
@@ -249,7 +249,7 @@ s5_1_table = Con table_inputdata
 table_inputdata :: Contents
 table_inputdata =  Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
-   (\ch -> Sy $ ch ^. unit),
+   (\ch -> Sy $ ch ^. usymb),
    (\ch -> ch ^. term)
    ]
   [coords, elastMod, cohesion, poisson, fricAngle, dryWeight, satWeight, waterWeight])

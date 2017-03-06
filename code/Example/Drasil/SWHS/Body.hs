@@ -543,7 +543,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   S "the" +:+ (sLower ((tank ^. term))) +:+
   S "is atmospheric, so the" +:+ (temp_melt ^. term) +:+
   S "and" +:+ (temp_boil ^. term) +:+ S "are 0" :+:
-  Sy (temp ^. unit) +:+ S "and 100" :+: Sy (temp ^. unit) `sC`
+  Sy (temp ^. usymb) +:+ S "and 100" :+: Sy (temp ^. usymb) `sC`
   S "respectively [IM1, IM3]."))])
 
 -- Again, list structure is same between all examples.
@@ -946,7 +946,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   S " parameters, material properties and initial conditions:"))]), 
   (Table [S "symbol", S "unit", S "description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
-  (\ch -> Sy (ch ^. unit)),
+  (\ch -> Sy (ch ^. usymb)),
   (\ch -> ch ^. term)] inputVar) 
   (S "Input Variable" +:+ (requirement ^. term)) False),
 --

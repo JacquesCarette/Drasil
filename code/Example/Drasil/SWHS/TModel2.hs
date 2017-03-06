@@ -32,20 +32,20 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT),
 t2descr :: Sentence
 t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           (sMap (map toLower) (sens_heat ^. term)) :+: S " energy (" :+:
-          Sy (joule ^. unit) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
+          Sy (joule ^. usymb) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
           S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
           P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. term) :+: 
           S ", " :+: (htCap_L ^. term) :+: S ", and " :+: 
-          (htCap_V ^. term) :+: S ", respectively (" :+: Sy (htCap ^. unit) :+:
+          (htCap_V ^. term) :+: S ", respectively (" :+: Sy (htCap ^. usymb) :+:
           S "). " :+: P (mass ^. symbol) :+: S " is the " :+:
-          (mass ^. term) :+: S " (" :+: Sy (mass ^. unit) :+: S "). " :+:
+          (mass ^. term) :+: S " (" :+: Sy (mass ^. usymb) :+: S "). " :+:
           P (temp ^. symbol) :+: S " is the " :+: (temp ^. term) :+: S " (" :+:
-          Sy (temp ^. unit) :+: S "), and " :+: P (deltaT ^. symbol) :+:
+          Sy (temp ^. usymb) :+: S "), and " :+: P (deltaT ^. symbol) :+:
           S " is the " :+: (deltaT ^. term) :+: S " (" :+:
-          Sy (deltaT ^. unit) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
+          Sy (deltaT ^. usymb) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
           (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
-          S ", respectively (" :+: Sy (temp ^. unit) :+: S "). " :+: 
+          S ", respectively (" :+: Sy (temp ^. usymb) :+: S "). " :+: 
           (sens_heat ^. term) :+: S "ing occurs as long as the material does " :+: 
           S "not reach a " :+: (temp ^. term) :+: S " where a " :+: 
           (sMap (map toLower) (phase_change ^. term)) :+: S " occurs. A " :+:

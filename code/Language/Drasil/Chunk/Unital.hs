@@ -3,7 +3,9 @@ module Language.Drasil.Chunk.Unital
   ( UnitalChunk(..)
   , makeUC
   , makeUCWDS
-  , ucFromVC) where
+  , ucFromVC
+  , NUChunk(..)
+  , Unital(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
@@ -16,6 +18,28 @@ import Language.Drasil.Unit (Unit(..), UnitDefn(..))
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 import Language.Drasil.Spec (Sentence)
+
+
+class Quantity c => Unital c where
+  unit :: c -> UnitDefn
+
+data NUChunk where --Named Unital...?
+  NU :: (Quantity c, SymbolForm s, Unit u) => c -> s -> u -> NUChunk
+instance Chunk NUChunk where
+  id = nql id
+instance NamedIdea NUChunk where
+  term = nql term
+  getA (NU qc _ _) = getA qc
+instance Quantity NUChunk where
+  typ = nql typ
+  getSymb (NU qc _ _)= getSymb qc
+  getUnit (NU _ _ u) = Just (UU u)
+instance Unital NUChunk where
+  unit (NU _ _ u) = UU u
+
+nql :: (forall c. (Quantity c) => Simple Lens c a) -> Simple Lens NUChunk a
+nql l f (NU qc s u) = fmap (\x -> NU (set l x qc) s u) (f (qc ^. l))
+
 
 --BEGIN HELPER FUNCTIONS--
 --FIXME: Space hack

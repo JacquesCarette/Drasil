@@ -38,7 +38,7 @@ dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
 dd2descr :: Sentence
 dd2descr = S "linear" +:+ (disp ^. term) +:+ S "of a" +:+
   (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
-  P (time ^. symbol) +:+ sParen (Sy (time ^. usymb)) `sC`
+  P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its linear" +:+ (position ^. term) +:+ 
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 
@@ -55,7 +55,7 @@ velEqn = Deriv Total (FCall (C disp) [C time]) (C time)
 dd3descr :: Sentence
 dd3descr = S "linear" +:+ (vel ^. term) +:+ S "of a" +:+
   (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
-  P (time ^. symbol) +:+ sParen (Sy (time ^. usymb)) `sC`
+  P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its linear" +:+ (vel ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 
@@ -72,7 +72,7 @@ accelEqn = Deriv Total (FCall (C vel) [C time]) (C time)
 dd4descr :: Sentence
 dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
   (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
-  P (time ^. symbol) +:+ sParen (Sy (time ^. usymb)) `sC`
+  P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its linear" +:+ (accel ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 
@@ -89,7 +89,7 @@ angDispEqn = Deriv Total (FCall (C orientation) [C time]) (C time)
 dd5descr :: Sentence
 dd5descr = (angDisp ^. term) +:+ S "of a" +:+
   (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
-  P (time ^. symbol) +:+ sParen (Sy (time ^. usymb)) `sC`
+  P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its" +:+ (orientation ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 
@@ -106,7 +106,7 @@ angVelEqn = Deriv Total (FCall (C angDisp) [C time]) (C time)
 dd6descr :: Sentence
 dd6descr = ((angVel ^. term)) +:+ S "of a" +:+
   (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
-  P (time ^. symbol) +:+ sParen (Sy (time ^. usymb)) `sC`
+  P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its" +:+ (angDisp ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 
@@ -123,7 +123,7 @@ angAccelEqn = Deriv Total (FCall (C angVel) [C time]) (C time)
 dd7descr :: Sentence
 dd7descr = (angAccel ^. term) +:+ S "of a" +:+
   (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+
-  P (time ^. symbol) +:+ sParen (Sy (time ^. usymb)) `sC`
+  P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its" +:+ ((angVel ^. term)) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 

@@ -484,23 +484,23 @@ s4_2_6_intro = Paragraph $ S "Table 1 and 2 show the data constraints on" +:+
 s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] [
   [P (len ^. symbol), P (len ^. symbol) +:+ S "is G/E to 0", S "44.2" +:+
-  Sy (len ^. usymb)],
+  Sy (unit_symb len)],
   [P (mass ^. symbol), P (mass ^. symbol) +:+ S "is greater than 0",
-  S "56.2" +:+ Sy (mass ^. usymb)],
+  S "56.2" +:+ Sy (unit_symb mass)],
   [P (momtInert ^. symbol), P (momtInert ^. symbol) +:+ S "is G/E to 0",
-  S "74.5" +:+ Sy (momtInert ^. usymb)],
-  [P (gravAccel ^. symbol), S "None", S "9.8" +:+ Sy (gravAccel ^. usymb)],
+  S "74.5" +:+ Sy (unit_symb momtInert)],
+  [P (gravAccel ^. symbol), S "None", S "9.8" +:+ Sy (unit_symb gravAccel)],
   [P (position ^. symbol), S "None", S "(0.412, 0.502)" +:+
-  Sy (position ^. usymb)],
-  [P (vel ^. symbol), S "None", S "2.51" +:+ Sy (vel ^. usymb)],
+  Sy (unit_symb position)],
+  [P (vel ^. symbol), S "None", S "2.51" +:+ Sy (unit_symb vel)],
   [P (restitutionCoef ^. symbol), P (restitutionCoef ^. symbol) +:+ S "G/E to 0 and" +:+
   P (restitutionCoef ^. symbol) +:+ S "less than 1", S "0.8"],
   [P (orientation ^. symbol), P (orientation ^. symbol) +:+ S "G/E to 0" +:+
   S "and" +:+ P (orientation ^. symbol) +:+ S "less than 2pi", S "pi/2" +:+
-  Sy (orientation ^. usymb)],
-  [P (angVel ^. symbol), S "None", S "2.1" +:+ Sy (angVel ^. usymb)],
-  [P (force ^. symbol), S "None", S "98.1" +:+ Sy (force ^. usymb)],
-  [P (torque ^. symbol), S "None", S "200" +:+ Sy (torque ^. usymb)]
+  Sy (unit_symb orientation)],
+  [P (angVel ^. symbol), S "None", S "2.1" +:+ Sy (unit_symb angVel)],
+  [P (force ^. symbol), S "None", S "98.1" +:+ Sy (unit_symb force)],
+  [P (torque ^. symbol), S "None", S "200" +:+ Sy (unit_symb torque)]
   ]) (S "Table 1: Input Variables") True
 
 s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]

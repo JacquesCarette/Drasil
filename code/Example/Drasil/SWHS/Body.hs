@@ -859,7 +859,7 @@ s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
-inputVar :: [UnitalChunk]
+inputVar :: [UWrapper]
 inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density, htCap_W, 
   coil_HTC, pcm_HTC, temp_init, time_final]

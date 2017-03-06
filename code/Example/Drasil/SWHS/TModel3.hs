@@ -35,8 +35,8 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           S " is the rate" :+:
           S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
           S " to " :+: (time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
-          S " (" :+: Sy (tau ^. usymb) :+: S "). " :+: P (time ^. symbol) :+:
-          S " is the " :+: (time ^. term) :+: S " (" :+: Sy (time ^. usymb) :+:
+          S " (" :+: Sy (unit_symb tau) :+: S "). " :+: P (time ^. symbol) :+:
+          S " is the " :+: (time ^. term) :+: S " (" :+: Sy (unit_symb time) :+:
           S ") elapsed, as long as the " :+: (sMap (map toLower)
           (phase_change ^. term)) :+: S " is not complete. The status of " :+:
           S "the " :+: (sMap (map toLower) (phase_change ^. term)) :+:
@@ -44,7 +44,7 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
           makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
           (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
-          S ", respectively (" :+: Sy (temp ^. usymb) :+: S "). " :+:
+          S ", respectively (" :+: Sy (unit_symb temp) :+: S "). " :+:
           (latent_heat ^. term) :+: S "ing stops when all material has " :+:
           S "changed to the new phase.")
           

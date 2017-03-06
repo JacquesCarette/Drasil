@@ -36,16 +36,16 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
           S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
           P (htCap_V ^. symbol) :+: S " are the " :+: (htCap_S ^. term) :+: 
           S ", " :+: (htCap_L ^. term) :+: S ", and " :+: 
-          (htCap_V ^. term) :+: S ", respectively (" :+: Sy (htCap ^. usymb) :+:
+          (htCap_V ^. term) :+: S ", respectively (" :+: Sy (unit_symb htCap) :+:
           S "). " :+: P (mass ^. symbol) :+: S " is the " :+:
-          (mass ^. term) :+: S " (" :+: Sy (mass ^. usymb) :+: S "). " :+:
+          (mass ^. term) :+: S " (" :+: Sy (unit_symb mass) :+: S "). " :+:
           P (temp ^. symbol) :+: S " is the " :+: (temp ^. term) :+: S " (" :+:
-          Sy (temp ^. usymb) :+: S "), and " :+: P (deltaT ^. symbol) :+:
+          Sy (unit_symb temp) :+: S "), and " :+: P (deltaT ^. symbol) :+:
           S " is the " :+: (deltaT ^. term) :+: S " (" :+:
-          Sy (deltaT ^. usymb) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
+          Sy (unit_symb deltaT) :+: S "). " :+: P (temp_melt ^. symbol) :+: 
           S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+: 
           (temp_melt ^. term) :+: S " and " :+: (temp_boil ^. term) :+:
-          S ", respectively (" :+: Sy (temp ^. usymb) :+: S "). " :+: 
+          S ", respectively (" :+: Sy (unit_symb temp) :+: S "). " :+: 
           (sens_heat ^. term) :+: S "ing occurs as long as the material does " :+: 
           S "not reach a " :+: (temp ^. term) :+: S " where a " :+: 
           (sMap (map toLower) (phase_change ^. term)) :+: S " occurs. A " :+:

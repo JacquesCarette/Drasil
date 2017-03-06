@@ -59,7 +59,7 @@ s1_2_intro = Paragraph $
   
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ ch ^. usymb),
+   (\ch -> Sy $ unit_symb ch),
    (\ch -> ch ^. term)
    ]
   pcmSymbols)

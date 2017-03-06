@@ -1,0 +1,120 @@
+\documentclass[12pt]{article}
+
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+      colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\newcommand{\NN}[1]{{\color{red}#1}}
+
+\newcommand{\colZwidth}{1.0\textwidth}
+\newcommand{\blt}{- } %used for bullets in a list
+\newcommand{\colAwidth}{0.2\textwidth}
+\newcommand{\colBwidth}{0.73\textwidth}
+\newcommand{\colCwidth}{0.1\textwidth}
+\newcommand{\colDwidth}{0.05\textwidth}
+\newcommand{\colEwidth}{0.8\textwidth}
+\newcommand{\colFwidth}{0.17\textwidth}
+\newcommand{\colGwidth}{0.5\textwidth}
+\newcommand{\colHwidth}{0.28\textwidth}
+\newcounter{defnum} %Definition Number
+\newcommand{\dthedefnum}{GD\thedefnum}
+\newcommand{\dref}[1]{GD\ref{#1}}
+\newcounter{datadefnum} %Datadefinition Number
+\newcommand{\ddthedatadefnum}{DD\thedatadefnum}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+\newcounter{theorynum} %Theory Number
+\newcommand{\tthetheorynum}{T\thetheorynum}
+\newcommand{\tref}[1]{T\ref{#1}}
+\newcounter{tablenum} %Table Number
+\newcommand{\tbthetablenum}{T\thetablenum}
+\newcommand{\tbref}[1]{TB\ref{#1}}
+\newcounter{assumpnum} %Assumption Number
+\newcommand{\atheassumpnum}{P\theassumpnum}
+\newcommand{\aref}[1]{A\ref{#1}}
+\newcounter{goalnum} %Goal Number
+\newcommand{\gthegoalnum}{P\thegoalnum}
+\newcommand{\gsref}[1]{GS\ref{#1}}
+\newcounter{instnum} %Instance Number
+\newcommand{\itheinstnum}{IM\theinstnum}
+\newcommand{\iref}[1]{IM\ref{#1}}
+\newcommand{\tclad}{T_\text{CL}}
+\newcommand{\degree}{\ensuremath{^\circ}}
+\newcommand{\progname}{SWHS}
+
+%\oddsidemargin 0mm
+%\evensidemargin 0mm
+%\textwidth 160mm
+%\textheight 200mm
+\usepackage{fullpage}
+
+\begin{document}
+
+\title{Verification and Validation Report for Solar Water Heating Systems
+  Incorporating Phase Change Material} 
+\author{Maya Grab and Brooks MacLachlan}
+\date{\today}
+	
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+This document is a report on the results of a testing suite for a Solar Water 
+Heating System incorporating Phase Change Material simulator.
+\\Detailed descriptions of the tests executed can be found in the Verification 
+and Validation Plan document.
+
+\section{System Tests}
+
+\subsection{Faulty Input}
+The following tests have failed by verification:
+
+\begin{center}
+	\begin{longtable}{ | r | p{3cm} | p{4cm} | p{4cm} | p{4cm} | p{4cm}|}
+	\caption{Faulty Input Cases} \\ \hline \label{TblInputVar} 
+	No. & Input & Expected Outcome & Expected MsgID & Actual MsgID \\ \hline
+	40 & $T_{\text{init}} = 45$ &error: Tinit must be $< 0$ Tmelt & input:TinitTmelt & MATLAB:badsubscript \\ \hline
+	\end{longtable}
+\end{center}
+
+\subsection{Closed Form Solution for Latent Heating}
+The relative error between the closed form solution for water temperature and the simulator solution was 0.0046.
+
+\subsection{Alternative Algorithm}
+When comparing the output of a simulator using the ode23 solver to this simulator (using ode45), there was zero difference in the results in all cases.
+
+\subsection{Comparison to Original Implementation}
+All tests passed with a relative tolerance of 0.002.
+
+
+\section{Unit Tests}
+
+\subsection{Temperature Modules}
+All tests passed within a relative tolerance of 1e-06.
+
+\subsection{Energy Modules}
+All tests passed within a relative tolerance of 1e-08.
+
+\subsection{Event Modules} 
+All tests passed within a relative tolerance of 1e-08.
+
+\end{document}

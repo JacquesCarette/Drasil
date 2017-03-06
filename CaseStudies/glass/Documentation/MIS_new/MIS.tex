@@ -1,0 +1,369 @@
+\documentclass[12pt,fleqn]{article}
+
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{tabto}
+
+\oddsidemargin 0mm
+\evensidemargin 0mm
+\textwidth 160mm
+\textheight 200mm
+\renewcommand\baselinestretch{1.0}
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\newcounter{stepnum}
+
+\begin {document}
+
+\section* {Parameters Module}
+
+\subsection* {Template Module}
+
+param
+
+\subsection* {Uses}
+
+N/A
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Constants}
+
+\begin{tabular}{| l | l | l |}
+\hline
+\textbf{Constant name} & \textbf{Type} & \textbf{Value}\\
+\hline
+$E$ & real & $7.17 \times 10^{7}$\\
+\hline
+$TD$ & real &  $3.0$\\
+\hline
+$M$ & real & $7.0$\\
+\hline
+$MK$ & real & $2.86 \times 10^{-53}$\\
+\hline
+$LSF$ & real & $1.0$\\
+\hline
+\end{tabular}
+
+\subsubsection* {Exported Types}
+
+Param = ?
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+new Param &  & Param & ~\\
+\hline
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+
+\begin{tabular}{| l | l |}
+\hline
+\textbf{Variable name} & \textbf{Type}\\
+\hline
+$a$ & real\\
+\hline
+$b$ & real\\
+\hline
+$t$ & real\\
+\hline
+$w$ & real\\
+\hline
+$tnt$ & real\\
+\hline
+$pbtol$ & real\\
+\hline
+$asprat$ & real\\
+\hline
+$sd$ & real\\
+\hline
+$h$ & real\\
+\hline
+$gtf$ & real\\
+\hline
+$ldf$ & real\\
+\hline
+$wtnt$ & real\\
+\hline
+$sdvect$ & sequence [3] of real\\
+\hline
+$gt$ & String\\
+\hline
+\end{tabular}
+
+\subsubsection* {State Invariant}
+None
+
+\subsubsection* {Assumptions}
+None
+
+\subsubsection* {Access Routine Semantics}
+
+\noindent new Param:
+\begin{itemize}
+\item transition: \begin{itemize}
+                        \item[] $a$ \tabto{2cm} $:= 0.0$
+                        \item[] $b$ \tabto{2cm} $:= 0.0$
+                        \item[] $t$ \tabto{2cm} $ := 0.0$
+                        \item[] $w$ \tabto{2cm} $ := 0.0$
+                        \item[] $tnt$ \tabto{2cm} $ := 0.0$
+                        \item[] $pbtol$ \tabto{2cm} $ := 0.0$
+                        \item[] $asprat$ \tabto{2cm} $ := 0.0$
+                        \item[] $sd$ \tabto{2cm} $ := 0.0$
+                        \item[] $h$ \tabto{2cm} $ := 0.0$
+                        \item[] $gtf$ \tabto{2cm} $ := 0.0$
+                        \item[] $ldf$ \tabto{2cm} $ := 0.0$
+                        \item[] $wtnt$ \tabto{2cm} $ := 0.0$
+                        \item[] $sdvect$ \tabto{2cm} $ :=<0.0~,~ 0.0~,~ 0.0>$
+                        \item[] $b$ \tabto{2cm} $ := \textsc{``"}$
+                        
+                        \end{itemize}
+\item output: \begin{itemize}
+                    \item[] $out$ \tabto{2cm} $:= \mathit{self}$
+                    \end{itemize}
+\item exception: \begin{itemize}
+                        \item[] none
+                        \end{itemize}
+\end{itemize}
+
+\newpage
+
+\section* {Input Format Module}
+
+\subsection*{Module}
+
+inputFormat
+
+\subsection* {Uses}
+
+param
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+get\_input & string, Param &  & ~\\
+\hline
+
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection*{Environment Variables}
+$filesys$ : FileSystem Read
+
+\subsubsection* {Assumptions}
+None
+
+\subsubsection* {Access Routine Semantics}
+
+get\_input($filename, params$):
+\begin{itemize}
+\item transition: \begin{itemize}
+                        \item[] $filesys$ \tabto{3.5cm} $:= filename$
+                        \item[] $params.a$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.b$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.t$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.gt$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.w$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.tnt$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.sdvect[0]$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.sdvect[1]$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.sdvect[2]$ \tabto{3.5cm} $ := filesys.readline$
+                        \item[] $params.pbtol$ \tabto{3.5cm} $ := filesys.readline$
+                        
+                        \end{itemize}
+\item output: \begin{itemize}
+                   \item[] None
+                    \end{itemize}
+\item exception: \begin{itemize}
+                        \item[] None
+                        \end{itemize}
+\end{itemize}
+
+\newpage
+
+\section* {Input Constraints Module}
+
+\subsection*{Module}
+
+derivedValues
+
+\subsection* {Uses}
+
+param
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+derived\_params & Param & Param & ~\\
+\hline
+
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {Assumptions}
+None
+
+\subsubsection* {Access Routine Semantics}
+
+derived\_params($params$):
+\begin{itemize}
+\item transition: \begin{itemize}
+                        \item[] $params.asprat$ \tabto{3cm} $:= \dfrac{params.a}{params.b}$\\
+                        \item[] $params.sd$ \tabto{3cm} $ := \sqrt{params.sdvect[0]^2 + params.sdvect[1]^2 + params.sdvect[2]^2}$\\
+                        \item[] $params.ldf$ \tabto{3cm} $ := \dfrac{params.td}{60.0}^{\dfrac{params.m}{16.0}}$\\
+                        \item[] $params.wtnt$ \tabto{3cm} $ := params.w \times params.tnt$\\
+                        \item[] $params.h$ \tabto{3cm} $ := $ \tabto{3.6cm} $ (~params.t = 2.50 \implies 2.16$\\
+                                                     \tabto{3.6cm} $ |~params.t = 2.70 \implies 2.59$
+						     \tabto{3.6cm} $ |~params.t = 3.0 \implies 2.92$
+						     \tabto{3.6cm} $ |~params.t = 4.0 \implies 3.78$
+						     \tabto{3.6cm} $ |~params.t = 5.0 \implies 4.57$
+						     \tabto{3.6cm} $ |~params.t = 6.0 \implies 5.56$
+						     \tabto{3.6cm} $ |~params.t = 8.0 \implies 7.42$
+						     \tabto{3.6cm} $ |~params.t = 10.0 \implies 9.02$
+						     \tabto{3.6cm} $ |~params.t = 12.0 \implies 11.91$
+						     \tabto{3.6cm} $ |~params.t = 16.0 \implies 15.09$
+						     \tabto{3.6cm} $ |~params.t = 19.0 \implies 18.26$
+						     \tabto{3.6cm} $ |~params.t = 22.0 \implies 21.44$
+                                                     \tabto{3.6cm} $ |~[ otherwise ] \implies 0.0~)$\\
+                        \item[] $params.gtf$ \tabto{3cm} $ := $ \tabto{3.6cm} $ (~params.gt = \textrm{``AN''} \vee params.gt = \textrm{``an"} \implies 1.0$
+                                                                                    \tabto{3.6cm} $ |~params.gt = \textrm{``HS''} \vee params.gt = \textrm{``hs"} \implies 2.0$
+                                                                                    \tabto{3.6cm} $ |~params.gt = \textrm{``FT"'} \vee params.gt = \textrm{``ft"} \implies 3.0$
+                                                                                    \tabto{3.6cm} $ |~[otherwise] \implies 0.0~)$
+                        
+                        \end{itemize}
+\item output: \begin{itemize}
+                   \item[] $out$ \tabto{3.5cm} $ := params$
+                    \end{itemize}
+\item exception: \begin{itemize}
+                        \item[] None
+                        \end{itemize}
+\end{itemize}
+
+
+\newpage
+
+\section* {Input Verification Module}
+
+\subsection*{Module}
+
+checkConstraints
+
+\subsection* {Uses}
+
+param
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+check\_constraints & Param &  & INPUTERROR\\
+\hline
+
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {Assumptions}
+None
+
+\subsubsection* {Access Routine Semantics}
+
+check\_constraints($params$):
+\begin{itemize}
+\item transition: \begin{itemize}
+                        \item[] None
+                        \end{itemize}
+\item output: \begin{itemize}
+                    \item[] None
+                    \end{itemize}
+\newpage
+\item exception: \begin{itemize}
+                        \item[] $exc := $ \tabto{1.4cm} $ (~params.a \leq 0.0 \vee params.b \leq 0.0 \implies \textrm{INPUTERROR}$
+                                             \tabto{1.4cm} $ |~\neg (1.0 \leq params.asprat \leq 5.0) \implies \textrm{INPUTERROR}$ 
+                                             \tabto{1.4cm} $ |~params.t \notin \{ 2.50, 2.70, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0 \} $
+                                             \tabto{1.9cm} $\implies \textrm{INPUTERROR}$
+                                             \tabto{1.4cm} $ |~params.gt \notin \{ \textrm{``AN"}, \textrm{``an"}, \textrm{``HS"}, \textrm{``hs"}, \textrm{``FT"}, \textrm{``ft"} \} $ \tabto{1.9cm} $\implies \textrm{INPUTERROR}$
+                                             \tabto{1.4cm} $ |~params.tnt \leq 0.0 \implies \textrm{INPUTERROR}$
+                                             \tabto{1.4cm} $ |~\neg(4.5 \leq params.wtnt \leq 910.0) \implies \textrm{INPUTERROR}$
+                                             \tabto{1.4cm} $ |~\neg(6.0 \leq params.sd \leq 130.0) \implies \textrm{INPUTERROR}~)$
+                        \end{itemize}
+\end{itemize}
+
+\newpage
+
+\section* {Table Input Module}
+
+\subsection*{Module}
+
+readTable
+
+\subsection* {Uses}
+
+None
+
+\subsection* {Syntax}
+
+\subsubsection* {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+read\_table & string & sequence [2, ?, ?] of real & FILEERROR\\
+\hline
+
+\end{tabular}
+
+\subsection* {Semantics}
+
+\subsubsection* {State Variables}
+$contents$ : sequence [?, ?] of string
+
+\subsubsection* {Environment Variables}
+$filesys$ : FileSystem Read
+
+\subsubsection* {Assumptions}
+None
+
+\subsubsection* {Access Routine Semantics}
+
+read\_table($filename$):
+\begin{itemize}
+\item transition: \begin{itemize}
+                        \item[] $contents := map~splitOn(`,')~filesys.readall(filename)$
+                        \end{itemize}
+\item output: \begin{itemize}
+                    \item[] $out$ \tabto{1.5cm} $ := map~(\lambda x \rightarrow x[1:~:2])~contents~||~map~(\lambda x \rightarrow x[2:~:2])~contents$
+                    \end{itemize}
+\item exception: \begin{itemize}
+                        \item[] $exc := \neg filesys.exists(filename) \implies \textrm{FILEERROR}$
+                        \end{itemize}
+\end{itemize}
+
+\end {document}

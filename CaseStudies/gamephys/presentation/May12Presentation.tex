@@ -1,0 +1,392 @@
+\documentclass{beamer}
+
+\mode<presentation>
+{
+%  \usetheme{Hannover}
+\usetheme[width=0.7in]{Berkeley}
+% or ...
+
+  \setbeamercovered{transparent}
+  \usecolortheme{crane}
+  % or whatever (possibly just delete it)
+}
+
+\usepackage{longtable}
+\usepackage{qtree}
+
+\usepackage[english]{babel}
+% or whatever
+
+\usepackage[latin1]{inputenc}
+% or whatever
+
+\usepackage{utopia}
+\usepackage[T1]{fontenc}
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+\usepackage{hhline}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{array}
+%\usepackage{supertabular}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{totpages}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\usepackage{bm}
+
+\usepackage{listings}
+\newcommand{\blt}{- } %used for bullets in a list
+
+\newcounter{datadefnum} %Datadefinition Number
+\newcommand{\ddthedatadefnum}{DD\thedatadefnum}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+
+\newcommand{\colAwidth}{0.2\textwidth}
+\newcommand{\colBwidth}{0.73\textwidth}
+
+\renewcommand{\arraystretch}{.9} %so that tables with equations do not look crowded
+
+%\pgfdeclareimage[height=0.7cm]{logo}{McMasterLogo}
+%\title[\pgfuseimage{logo}]  % (optional, use only with long paper titles)
+\title{Chipmunk2D - Game Physics Engine}
+
+%\subtitle
+%{Include Only If Paper Has a Subtitle}
+
+\author[Slide \thepage~of \pageref{TotPages}] % (optional, use only with lots of
+                                              % authors)
+{Luthfi Mawarid}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[McMaster University] % (optional, but mostly needed)
+{
+  Computing and Software Department\\
+  Faculty of Engineering\\
+  McMaster University
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date[May 12, 2016] % (optional, should be abbreviation of conference name)
+{May.\ 12, 2016}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+\subject{computational science and engineering, software engineering, software
+  quality, literate programming, software requirements specification, document
+  driven design}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+%\pgfdeclareimage[height=0.5cm]{Mac-logo}{McMasterLogo}
+%\logo{\pgfuseimage{Mac-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>
+    \frametitle{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\beamertemplatenavigationsymbolsempty 
+
+% have SRS and LP open during the presentation
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+\titlepage
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Overview}
+\tableofcontents
+% You might wish to add the option [pausesections]
+
+% make like a story - the phases - reason for, why works, advantages
+% changing the history a bit to make a more rational narrative
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Purpose]{Purpose of the Software}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Purpose of the Software}
+
+\begin{itemize}
+	\item Free and reliable open-source physics library for game developers
+	\item Allows developers to implement realistic physics in their video games
+	\item Leads to production of higher quality games at little extra time and cost
+	\item Fast, portable and lightweight
+	\begin{itemize}
+		\item High reusability - bindings and ports are available in several other languages (e.g. Python, Java, Objective-C, C++, etc.)
+		\item Fast and lightweight - efficient and provides physics modelling functionalities without significantly increasing the resource cost of the games
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Inputs]{Software Inputs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Software Inputs}
+
+Software inputs mainly involve the initial physical properties of the rigid body (or bodies) being simulated, such as:
+
+\begin{itemize}
+	\item Initial kinematic properties of the rigid bodies (such as initial mass, velocity, position, orientation, angular velocity, etc.)
+	\item Surface and material properties of the bodies (such as friction, elasticity, coefficient of restitution, etc.)
+	\item Properties of constraints (such as the length of a pin joint, positions of where the bodies are held by the constraints, the error reduction parameter, etc.)
+\end{itemize}
+
+The software will validate and ensure that the inputs satisfy physical constraints.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	
+	\frametitle{Examples of Input Variables}
+	
+	\begin{center}
+	\begin{tabular}{||c | c | c||}
+		\hline 
+		Var & Quantity & Unit \\
+		\hline\hline 
+		\textit{d} & displacement & $m$ \\
+		\textit{v} & velocity & $m/s$ \\
+		\textit{a} & acceleration & $m/s^2$ \\
+		\textit{$C_R$} & coefficient of restitution & unitless \\
+		\textit{m} & mass & $kg$ \\
+		\textit{L} & length & $m$ \\
+		\textit{V} & volume & $m^3$ \\
+		\textit{k} & force constant & $N/m$ \\
+		\textit{$\rho$} & density & $kg/m^3$ \\
+		\textit{$\phi$} & orientation & $rad$ \\
+		\textit{$\omega$} & angular velocity & $rad/s$ \\
+		\textit{$\alpha$} & angular acceleration & $rad/s^2$ \\
+		\textit{$\zeta$} & damping coefficient & unitless \\
+		\hline 
+	\end{tabular}
+	\end{center}
+	
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Outputs]{Software Outputs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Software Outputs}
+
+\begin{itemize}
+	\item From the input data, Chipmunk will determine the kinematics of rigid bodies undergoing collision/acted upon by a force over a period of time
+	\item Outputs information such as velocity, force, angular velocity, etc. (see examples below)
+\end{itemize}
+
+\begin{center}
+	\begin{tabular}{|| c | c | c ||}
+		\hline
+		Var & Quantity & Unit \\
+		\hline\hline
+		\textit{p} & position & $m$ \\ %I'm not so sure about the units
+		\textit{v} & velocity & $m/s$ \\
+		\textit{F} & force & $N$ \\
+		\textit{$\phi$} & orientation & $rad$ \\
+		\textit{$\omega$} & angular velocity & $rad/s$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Design]{System Architecture and Design}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{System Architecture and Design}
+
+\begin{itemize}
+	\item Modularization - the library is divided (decomposed) into \textit{modules} based on information hiding and design for change
+	\item Each module has a specific role - usually contains a data structure implementation and a collection of related functions
+	\item Module hierarchy - 3 top-level modules:
+		\begin{itemize}
+			\item Hardware-hiding
+			\item Behavior-hiding
+			\item Software decision
+		\end{itemize}
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	
+\frametitle{System Architecture and Design}
+
+Modules are divided based on their 'secrets' (underlying algorithms and data structures in the implementation):
+
+\begin{itemize}
+	\item Abstraction - users don't need to know implementation details
+	\item Maintainability - makes it easier to maintain, debug and update implementation code (likely changes)
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Installation]{Installation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Installation}
+
+The release version provides three different build scripts:
+
+\begin{itemize}
+	\item XCode (for Mac/iPhones)
+	\item MSVC (Microsoft Visual Studio C++)
+	\item CMake build script
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Tests]{Test Cases}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+	
+\frametitle{Test Cases}
+
+\underline{System Testing} \\
+\vspace{5pt}
+Example: \textbf{Projectile motion} \\
+\vspace{5pt}
+Input: 
+\begin{align*}
+p_i & = \begin{bmatrix}
+50 \\
+50
+\end{bmatrix}
+\hspace{10pt}
+v_i = \begin{bmatrix}
+5 \\
+4
+\end{bmatrix}
+\hspace{10pt}
+a = \begin{bmatrix}
+0 \\
+-9.8
+\end{bmatrix} \\
+\vspace{10pt}
+t & = 0.5, 1.0, 1.5, 2.0 \,s
+\end{align*}
+Expected output: 
+\begin{align*}
+p_f = \begin{bmatrix}
+50 + 5t \\
+50 + 4t - 4.9t^2
+\end{bmatrix}
+\hspace{10pt}
+v_f = \begin{bmatrix}
+5 \\
+5 - 9.8t
+\end{bmatrix}
+\hspace{10pt}
+a = \begin{bmatrix}
+0 \\
+-9.8
+\end{bmatrix}
+\end{align*}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Test Cases}
+
+\underline{Unit Testing} \\
+\vspace{5pt}
+Example: \textbf{CPBody Module} 
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{sample-test}
+\label{fig:sample-test}
+\end{figure}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[References]{References}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{References}
+	\begin{itemize}
+		\item S. Lembcke. \textit{Chipmunk Game Dynamics Manual}[Web]. Available at https://chipmunk-physics.net/release/ChipmunkLatest-Docs/
+	\end{itemize}
+	
+	The following resources are all available at the se4sc repository:
+	
+	\begin{itemize}
+		\item A. Halliwushka. (2015, August 4.). \textit{Module Guide for Open Source Game Physics Library}[PDF]. 
+		\item A. Halliwushka. (2016, January 19.). \textit{Software Requirements Specification for Chipmunk2D}[PDF].
+		\item A. Halliwushka. (2015, June 14.). \textit{Verification and Validation Plan for Open Source Game Physics Library}[PDF].
+		\item S. Smith. (2015, June 4.). \textit{Modular Design}[Presentation].
+	\end{itemize}
+	
+\end{frame}
+
+\end{document}

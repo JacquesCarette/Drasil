@@ -52,45 +52,45 @@ centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre,
 centigrade = DUC 
   (UD (makeDCC "centigrade" "Centigrade" "temperature") 
       (UName (Concat [Special Circle, Atomic "C"])))
-  (UShift 273.15 (kelvin ^. unit))
+  (UShift 273.15 (kelvin ^. usymb))
 
 joule = DUC
     (UD (makeDCC "joule" "Joule" "energy") (UName $ Atomic "J"))
-    (USynonym (UProd [kilogram ^. unit, m_2 ^. unit,
-                      UPow (second ^. unit) (-2)]))
+    (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
+                      UPow (second ^. usymb) (-2)]))
 
 calorie = DUC
   (UD (makeDCC "calorie" "Calorie" "energy") (UName $ Atomic "cal"))
-  (UScale 4.184 (joule ^. unit))
+  (UScale 4.184 (joule ^. usymb))
 
 watt = DUC
   (UD (makeDCC "watt" "Watt" "power") (UName $ Atomic "W"))
-  (USynonym (UProd [kilogram ^. unit, m_2 ^. unit,
-                    UPow (second ^. unit) (-3)]))
+  (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
+                    UPow (second ^. usymb) (-3)]))
 
 kilowatt = DUC
   (UD (makeDCC "kilowatt" "Kilowatt" "power")
       (UName $ Concat [Atomic "k", Atomic "W"]))
-  (UScale 1000 (watt ^. unit))
+  (UScale 1000 (watt ^. usymb))
 
 pascal = DUC
   (UD (makeDCC "pascal" "Pascal" "pressure") (UName $ (Atomic "Pa")))
-  (USynonym (UProd [(kilogram ^. unit), (UPow (metre ^. unit) (-1)),
-                      (UPow (second ^. unit) (-2))]))
+  (USynonym (UProd [(kilogram ^. usymb), (UPow (metre ^. usymb) (-1)),
+                      (UPow (second ^. usymb) (-2))]))
 
 newton = DUC
   (UD (makeDCC "newton" "Newton" "force") (UName $ Atomic "N"))
-  (USynonym (UProd [(kilogram ^. unit), (UPow (second ^. unit) (-2))]))
+  (USynonym (UProd [(kilogram ^. usymb), (UPow (second ^. usymb) (-2))]))
 
 millimetre = DUC
   (UD (makeDCC "millimetre" "Millimetre" "length")
       (UName $ (Atomic "mm")))
-  (UScale 0.0001 (metre ^. unit))
+  (UScale 0.0001 (metre ^. usymb))
 
 kilopascal = DUC
   (UD (makeDCC "kilopascal" "Kilopascal" "pressure")
       (UName $ Concat [Atomic "k", Atomic "Pa"]))
-  (UScale 1000 (pascal ^. unit))
+  (UScale 1000 (pascal ^. usymb))
 
 radians = DUC
     (UD (makeDCC "radians" "Radians" "angle") (UName $ Atomic "rad"))
@@ -125,7 +125,7 @@ stiffnessU     = new_unit "stiffness"          $ newton /: metre
 gravConstU :: DerUChunk
 gravConstU = makeDerU (makeDCC "gravConstU" "gravitational constant" 
   "universal gravitational constant") $
-   USynonym (UDiv (m_3 ^. unit) (UProd [kilogram ^. unit, s_2 ^. unit]))
+   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))
 
 ------
 specificE :: DerUChunk

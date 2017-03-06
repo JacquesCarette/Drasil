@@ -4,16 +4,15 @@ module Language.Drasil.Chunk.Unital
   , makeUC
   , makeUCWDS
   , ucFromVC
-  , NUChunk
-  , nu
-  , nu'
+  , uc
+  , uc'
   , Unital(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), nc)
-import Language.Drasil.Chunk.Concept (Concept(..), cv, dcc, dccWDS, ConVar(..))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.Concept (Concept(..), dcc, dccWDS, ConVar(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm(..), SF(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Unit (Unit(..), UnitDefn(..))
@@ -22,134 +21,50 @@ import Language.Drasil.Space
 import Language.Drasil.Spec (Sentence)
 
 
-class Quantity c => Unital c where
+class (Concept c, Quantity c) => Unital c where
   unit :: c -> UnitDefn
 
-data NUChunk where --Named Unital...?
-  NU :: (NamedIdea c, Unit u) => c -> Symbol -> u -> Space -> NUChunk
-instance Chunk NUChunk where
+data UnitalChunk where --Named Unital...?
+  UC :: (Concept c, Unit u) => c -> Symbol -> u -> Space -> UnitalChunk
+instance Chunk UnitalChunk where
   id = nl id
-instance NamedIdea NUChunk where
+instance NamedIdea UnitalChunk where
   term = nl term
-  getA (NU qc _ _ _) = getA qc
-instance Quantity NUChunk where
-  typ f (NU named s u t) = fmap (\x -> NU named s u x) (f t)
+  getA (UC qc _ _ _) = getA qc
+instance Concept UnitalChunk where
+  defn = nl defn
+instance Quantity UnitalChunk where
+  typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
   getSymb = Just . SF
   getUnit = Just . unit
-instance Unital NUChunk where
-  unit (NU _ _ u _) = UU u
-instance SymbolForm NUChunk where
-  symbol f (NU n s u t) = fmap (\x -> NU n x u t) (f s)
+instance Unital UnitalChunk where
+  unit (UC _ _ u _) = UU u
+instance SymbolForm UnitalChunk where
+  symbol f (UC n s u t) = fmap (\x -> UC n x u t) (f s)
   
-nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens NUChunk a
-nl l f (NU qc s u t) = fmap (\x -> NU (set l x qc) s u t) (f (qc ^. l))
+nl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens UnitalChunk a
+nl l f (UC qc s u t) = fmap (\x -> UC (set l x qc) s u t) (f (qc ^. l))
 
-
--- FIXME: Temporarily hacking in the space for NU chunks, these can be fixed
+-- FIXME: Temporarily hacking in the space for UC chunks, these can be fixed
 -- with the use of other constructors.
 
-nu :: (NamedIdea c, Unit u) => c -> Symbol -> u -> NUChunk
-nu a b c = NU a b c Rational
+uc :: (Concept c, Unit u) => c -> Symbol -> u -> UnitalChunk
+uc a b c = UC a b c Rational
 
-nu' :: (Unit u) => String -> String -> Symbol -> u -> NUChunk
-nu' i t s u = NU (nc i t) s u Rational
-
-
-
-
-
-
-
-
+uc' :: (Unit u) => String -> String -> String -> Symbol -> u -> UnitalChunk
+uc' i t d s u = UC (dcc i t d) s u Rational
 
 --BEGIN HELPER FUNCTIONS--
 --FIXME: Space hack
 makeUC :: Unit u => String -> String -> String -> Symbol -> u -> UnitalChunk
-makeUC nam trm desc sym un = UC (cv (dcc nam trm desc) sym Rational) un
+makeUC = uc'
 
 --Better names will come later.
 makeUCWDS :: Unit u => String -> String -> Sentence -> Symbol -> u -> UnitalChunk
-makeUCWDS nam trm desc sym un = UC (cv (dccWDS nam trm desc) sym Rational) un
+makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Rational
 
+
+--FIXME: I don't like this (it's partly a relic), it should be a 
+-- different data structure which is an instance of Unital that has a convar
 ucFromVC :: Unit u => ConVar -> u -> UnitalChunk
-ucFromVC conv un = UC conv un
-
-{-
-FIXME? Should UC require a Quantity? 
-Or should we pull the "Space" out of the constructor and only
-require SymbolForm and Concept?
-Currently hacked in a need for Quantity as it doesn't break
-anything and allows for "typ" to work while more changes are made.
-I think we should take the latter approach (pull out "Space")
-once we're in a more stable position.
--}
-qlens :: (forall c. (Quantity c, SymbolForm c, Concept c) => Simple Lens c a) -> Simple Lens Q a
-qlens l f (Q a) = fmap (\x -> Q (set l x a)) (f (a ^. l))
-
--- these don't get exported
-q :: Simple Lens UnitalChunk Q
-q f (UC a b) = fmap (\(Q x) -> UC x b) (f (Q a))
-
-u :: Simple Lens UnitalChunk UnitDefn
-u f (UC a b) = fmap (\(UU x) -> UC a x) (f (UU b))
---END HELPER FUNCTIONS----
-
--------- BEGIN DATATYPES/INSTANCES --------
-
--- BEGIN Q --
-data Q where
-  Q :: (Quantity c, Concept c, SymbolForm c) => c -> Q
-
-instance Chunk Q where 
-  id = qlens id
-
-instance NamedIdea Q where 
-  term = qlens term
-  getA (Q a) = getA a
-
-instance SymbolForm Q where
-  symbol = qlens symbol
-  
-instance Concept Q where
-  defn = qlens defn
-
-instance Quantity Q where
-  getSymb   = Just . SF
-  getUnit _ = Nothing
-  typ = qlens typ
-
-
--- END Q ----
-
--- BEGIN UNITALCHUNK --
-data UnitalChunk where
-  UC :: (Quantity c, Concept c, SymbolForm c, Unit u) => c -> u -> UnitalChunk
-
-instance Chunk UnitalChunk where
-  id = q . id
-
-instance NamedIdea UnitalChunk where
-  term = q . term
-  getA (UC c _) = getA c
-
-instance SymbolForm UnitalChunk where
-  symbol = q . symbol
-  
-instance Concept UnitalChunk where
-  defn = q . defn
-
---FIXME: Add "typ"
-instance Quantity UnitalChunk where
-  getSymb uc = getSymb (uc ^. q)
-  getUnit uc = Just (uc ^. u)
-  typ = q . typ
-  
-instance Unit UnitalChunk where
-  usymb = u . usymb
-  
-instance Unital UnitalChunk where
-  unit (UC _ u) = UU u
-  
-instance Eq UnitalChunk where
-  a == b = (a ^. id) == (b ^. id)
--- END UNITALCHUNK ----
+ucFromVC conv un = uc conv (conv ^. symbol) un

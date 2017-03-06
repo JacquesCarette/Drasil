@@ -142,6 +142,8 @@ instance Unital UWrapper where
   unit (UW a) = unit a
 instance SymbolForm UWrapper where
   symbol = ulens symbol
+instance Concept UWrapper where
+  defn = ulens defn
   
 uw :: (Unital c, SymbolForm c) => c -> UWrapper
 uw = UW

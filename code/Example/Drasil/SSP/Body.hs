@@ -65,7 +65,7 @@ s1_2_intro = Con $ Paragraph $
   
 s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ ch ^. usymb),
+   (\ch -> Sy $ unit_symb ch),
    (\ch -> ch ^. term)
    ]
   sspSymbols)
@@ -249,7 +249,7 @@ s5_1_table = Con table_inputdata
 table_inputdata :: Contents
 table_inputdata =  Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
-   (\ch -> Sy $ ch ^. usymb),
+   (\ch -> Sy $ unit_symb ch),
    (\ch -> ch ^. term)
    ]
   [coords, elastMod, cohesion, poisson, fricAngle, dryWeight, satWeight, waterWeight])

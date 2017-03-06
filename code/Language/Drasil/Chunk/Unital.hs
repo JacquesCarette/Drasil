@@ -4,13 +4,15 @@ module Language.Drasil.Chunk.Unital
   , makeUC
   , makeUCWDS
   , ucFromVC
-  , NUChunk(..)
+  , NUChunk
+  , nu
+  , nu'
   , Unital(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), nc)
 import Language.Drasil.Chunk.Concept (Concept(..), cv, dcc, dccWDS, ConVar(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm(..), SF(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -24,21 +26,40 @@ class Quantity c => Unital c where
   unit :: c -> UnitDefn
 
 data NUChunk where --Named Unital...?
-  NU :: (Quantity c, SymbolForm s, Unit u) => c -> s -> u -> NUChunk
+  NU :: (NamedIdea c, Unit u) => c -> Symbol -> u -> Space -> NUChunk
 instance Chunk NUChunk where
-  id = nql id
+  id = nl id
 instance NamedIdea NUChunk where
-  term = nql term
-  getA (NU qc _ _) = getA qc
+  term = nl term
+  getA (NU qc _ _ _) = getA qc
 instance Quantity NUChunk where
-  typ = nql typ
-  getSymb (NU qc _ _)= getSymb qc
-  getUnit (NU _ _ u) = Just (UU u)
+  typ f (NU named s u t) = fmap (\x -> NU named s u x) (f t)
+  getSymb = Just . SF
+  getUnit = Just . unit
 instance Unital NUChunk where
-  unit (NU _ _ u) = UU u
+  unit (NU _ _ u _) = UU u
+instance SymbolForm NUChunk where
+  symbol f (NU n s u t) = fmap (\x -> NU n x u t) (f s)
+  
+nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens NUChunk a
+nl l f (NU qc s u t) = fmap (\x -> NU (set l x qc) s u t) (f (qc ^. l))
 
-nql :: (forall c. (Quantity c) => Simple Lens c a) -> Simple Lens NUChunk a
-nql l f (NU qc s u) = fmap (\x -> NU (set l x qc) s u) (f (qc ^. l))
+
+-- FIXME: Temporarily hacking in the space for NU chunks, these can be fixed
+-- with the use of other constructors.
+
+nu :: (NamedIdea c, Unit u) => c -> Symbol -> u -> NUChunk
+nu a b c = NU a b c Rational
+
+nu' :: (Unit u) => String -> String -> Symbol -> u -> NUChunk
+nu' i t s u = NU (nc i t) s u Rational
+
+
+
+
+
+
+
 
 
 --BEGIN HELPER FUNCTIONS--
@@ -125,6 +146,9 @@ instance Quantity UnitalChunk where
   
 instance Unit UnitalChunk where
   usymb = u . usymb
+  
+instance Unital UnitalChunk where
+  unit (UC _ u) = UU u
   
 instance Eq UnitalChunk where
   a == b = (a ^. id) == (b ^. id)

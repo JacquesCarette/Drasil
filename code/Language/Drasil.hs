@@ -26,7 +26,8 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC
   -- Chunk.Unital
-  , UnitalChunk(..), makeUC, makeUCWDS, ucFromVC, NUChunk(..), Unital(..)
+  , UnitalChunk(..), makeUC, makeUCWDS, ucFromVC
+  , NUChunk, Unital(..), nu, nu'
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC
   -- Chunk.Method
@@ -41,7 +42,7 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
+  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper, UWrapper, uw
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap, sLower, sParen
   , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
@@ -59,7 +60,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, getAcc
+  , mkTable, unit'2Contents, getAcc, unit_symb
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Template.DD
@@ -91,7 +92,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, makeUCWDS, ucFromVC
-                                  , NUChunk(..), Unital(..))
+                                  , NUChunk, nu, nu', Unital(..))
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, makeRC)
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC

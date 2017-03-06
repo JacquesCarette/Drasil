@@ -1,319 +1,208 @@
 \documentclass[12pt,fleqn]{article}
 
-\usepackage{graphicx}
-\usepackage{paralist}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{tabto}
-
-\oddsidemargin 0mm
-\evensidemargin 0mm
-\textwidth 160mm
-\textheight 200mm
-\renewcommand\baselinestretch{1.0}
-
-\pagestyle {plain}
-\pagenumbering{arabic}
-
-\newcounter{stepnum}
-
-\begin {document}
-
-\section* {Parameters Module}
-
-\subsection* {Template Module}
-
-param
-
-\subsection* {Uses}
-
-N/A
-
-\subsection* {Syntax}
-
-\subsubsection* {Exported Constants}
-
-\begin{tabular}{| l | l | l |}
-\hline
-\textbf{Constant name} & \textbf{Type} & \textbf{Value}\\
-\hline
-$E$ & real & $7.17 \times 10^{7}$\\
-\hline
-$TD$ & real &  $3.0$\\
-\hline
-$M$ & real & $7.0$\\
-\hline
-$MK$ & real & $2.86 \times 10^{-53}$\\
-\hline
-$LSF$ & real & $1.0$\\
-\hline
-\end{tabular}
-
-\subsubsection* {Exported Types}
-
-Param = ?
-
-\subsubsection* {Exported Access Programs}
-
-\begin{tabular}{| l | l | l | l |}
-\hline
-\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
-\hline
-new Param &  & Param & ~\\
-\hline
-\end{tabular}
-
-\subsection* {Semantics}
-
-\subsubsection* {State Variables}
-
-\begin{tabular}{| l | l |}
-\hline
-\textbf{Variable name} & \textbf{Type}\\
-\hline
-$a$ & real\\
-\hline
-$b$ & real\\
-\hline
-$t$ & real\\
-\hline
-$w$ & real\\
-\hline
-$tnt$ & real\\
-\hline
-$pbtol$ & real\\
-\hline
-$asprat$ & real\\
-\hline
-$sd$ & real\\
-\hline
-$h$ & real\\
-\hline
-$gtf$ & real\\
-\hline
-$ldf$ & real\\
-\hline
-$wtnt$ & real\\
-\hline
-$sdvect$ & sequence [3] of real\\
-\hline
-$gt$ & String\\
-\hline
-\end{tabular}
-
-\subsubsection* {State Invariant}
-None
-
-\subsubsection* {Assumptions}
-None
-
-\subsubsection* {Access Routine Semantics}
-
-\noindent new Param:
-\begin{itemize}
-\item transition: \begin{itemize}
-                        \item[] $a$ \tabto{2cm} $:= 0.0$
-                        \item[] $b$ \tabto{2cm} $:= 0.0$
-                        \item[] $t$ \tabto{2cm} $ := 0.0$
-                        \item[] $w$ \tabto{2cm} $ := 0.0$
-                        \item[] $tnt$ \tabto{2cm} $ := 0.0$
-                        \item[] $pbtol$ \tabto{2cm} $ := 0.0$
-                        \item[] $asprat$ \tabto{2cm} $ := 0.0$
-                        \item[] $sd$ \tabto{2cm} $ := 0.0$
-                        \item[] $h$ \tabto{2cm} $ := 0.0$
-                        \item[] $gtf$ \tabto{2cm} $ := 0.0$
-                        \item[] $ldf$ \tabto{2cm} $ := 0.0$
-                        \item[] $wtnt$ \tabto{2cm} $ := 0.0$
-                        \item[] $sdvect$ \tabto{2cm} $ :=<0.0~,~ 0.0~,~ 0.0>$
-                        \item[] $b$ \tabto{2cm} $ := \textsc{``"}$
-                        
-                        \end{itemize}
-\item output: \begin{itemize}
-                    \item[] $out$ \tabto{2cm} $:= \mathit{self}$
-                    \end{itemize}
-\item exception: \begin{itemize}
-                        \item[] none
-                        \end{itemize}
-\end{itemize}
-
-\newpage
-
-\section* {Input Format Module}
-
-\subsection*{Module}
-
-inputFormat
-
-\subsection* {Uses}
-
-param
-
-\subsection* {Syntax}
-
-\subsubsection* {Exported Access Programs}
-
-\begin{tabular}{| l | l | l | l |}
-\hline
-\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
-\hline
-get\_input & string, Param &  & ~\\
-\hline
-
-\end{tabular}
-
-\subsection* {Semantics}
-
-\subsubsection*{Environment Variables}
-$filesys$ : FileSystem Read
-
-\subsubsection* {Assumptions}
-None
-
-\subsubsection* {Access Routine Semantics}
-
-get\_input($filename, params$):
-\begin{itemize}
-\item transition: \begin{itemize}
-                        \item[] $filesys$ \tabto{3.5cm} $:= filename$
-                        \item[] $params.a$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.b$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.t$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.gt$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.w$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.tnt$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.sdvect[0]$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.sdvect[1]$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.sdvect[2]$ \tabto{3.5cm} $ := filesys.readline$
-                        \item[] $params.pbtol$ \tabto{3.5cm} $ := filesys.readline$
-                        
-                        \end{itemize}
-\item output: \begin{itemize}
-                   \item[] None
-                    \end{itemize}
-\item exception: \begin{itemize}
-                        \item[] None
-                        \end{itemize}
-\end{itemize}
-
-\newpage
-
-\section* {Input Constraints Module}
-
-\subsection*{Module}
-
-derivedValues
-
-\subsection* {Uses}
-
-param
-
-\subsection* {Syntax}
-
-\subsubsection* {Exported Access Programs}
-
-\begin{tabular}{| l | l | l | l |}
-\hline
-\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
-\hline
-derived\_params & Param & Param & ~\\
-\hline
-
-\end{tabular}
-
-\subsection* {Semantics}
-
-\subsubsection* {Assumptions}
-None
-
-\subsubsection* {Access Routine Semantics}
-
-derived\_params($params$):
-\begin{itemize}
-\item transition: \begin{itemize}
-                        \item[] $params.asprat$ \tabto{3cm} $:= \dfrac{params.a}{params.b}$\\
-                        \item[] $params.sd$ \tabto{3cm} $ := \sqrt{params.sdvect[0]^2 + params.sdvect[1]^2 + params.sdvect[2]^2}$\\
-                        \item[] $params.ldf$ \tabto{3cm} $ := \dfrac{params.td}{60.0}^{\dfrac{params.m}{16.0}}$\\
-                        \item[] $params.wtnt$ \tabto{3cm} $ := params.w \times params.tnt$\\
-                        \item[] $params.h$ \tabto{3cm} $ := $ \tabto{3.6cm} $ (~params.t = 2.50 \implies 2.16$\\
-                                                     \tabto{3.6cm} $ |~params.t = 2.70 \implies 2.59$
-						     \tabto{3.6cm} $ |~params.t = 3.0 \implies 2.92$
-						     \tabto{3.6cm} $ |~params.t = 4.0 \implies 3.78$
-						     \tabto{3.6cm} $ |~params.t = 5.0 \implies 4.57$
-						     \tabto{3.6cm} $ |~params.t = 6.0 \implies 5.56$
-						     \tabto{3.6cm} $ |~params.t = 8.0 \implies 7.42$
-						     \tabto{3.6cm} $ |~params.t = 10.0 \implies 9.02$
-						     \tabto{3.6cm} $ |~params.t = 12.0 \implies 11.91$
-						     \tabto{3.6cm} $ |~params.t = 16.0 \implies 15.09$
-						     \tabto{3.6cm} $ |~params.t = 19.0 \implies 18.26$
-						     \tabto{3.6cm} $ |~params.t = 22.0 \implies 21.44$
-                                                     \tabto{3.6cm} $ |~[ otherwise ] \implies 0.0~)$\\
-                        \item[] $params.gtf$ \tabto{3cm} $ := $ \tabto{3.6cm} $ (~params.gt = \textrm{``AN''} \vee params.gt = \textrm{``an"} \implies 1.0$
-                                                                                    \tabto{3.6cm} $ |~params.gt = \textrm{``HS''} \vee params.gt = \textrm{``hs"} \implies 2.0$
-                                                                                    \tabto{3.6cm} $ |~params.gt = \textrm{``FT"'} \vee params.gt = \textrm{``ft"} \implies 3.0$
-                                                                                    \tabto{3.6cm} $ |~[otherwise] \implies 0.0~)$
-                        
-                        \end{itemize}
-\item output: \begin{itemize}
-                   \item[] $out$ \tabto{3.5cm} $ := params$
-                    \end{itemize}
-\item exception: \begin{itemize}
-                        \item[] None
-                        \end{itemize}
-\end{itemize}
-
-
-\newpage
-
-\section* {Input Verification Module}
-
-\subsection*{Module}
-
-checkConstraints
-
-\subsection* {Uses}
-
-param
-
-\subsection* {Syntax}
-
-\subsubsection* {Exported Access Programs}
-
-\begin{tabular}{| l | l | l | l |}
-\hline
-\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
-\hline
-check\_constraints & Param &  & INPUTERROR\\
-\hline
-
-\end{tabular}
-
-\subsection* {Semantics}
-
-\subsubsection* {Assumptions}
-None
-
-\subsubsection* {Access Routine Semantics}
-
-check\_constraints($params$):
-\begin{itemize}
-\item transition: \begin{itemize}
-                        \item[] None
-                        \end{itemize}
-\item output: \begin{itemize}
-                    \item[] None
-                    \end{itemize}
-\newpage
-\item exception: \begin{itemize}
-                        \item[] $exc := $ \tabto{1.4cm} $ (~params.a \leq 0.0 \vee params.b \leq 0.0 \implies \textrm{INPUTERROR}$
-                                             \tabto{1.4cm} $ |~\neg (1.0 \leq params.asprat \leq 5.0) \implies \textrm{INPUTERROR}$ 
-                                             \tabto{1.4cm} $ |~params.t \notin \{ 2.50, 2.70, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0 \} $
-                                             \tabto{1.9cm} $\implies \textrm{INPUTERROR}$
-                                             \tabto{1.4cm} $ |~params.gt \notin \{ \textrm{``AN"}, \textrm{``an"}, \textrm{``HS"}, \textrm{``hs"}, \textrm{``FT"}, \textrm{``ft"} \} $ \tabto{1.9cm} $\implies \textrm{INPUTERROR}$
-                                             \tabto{1.4cm} $ |~params.tnt \leq 0.0 \implies \textrm{INPUTERROR}$
-                                             \tabto{1.4cm} $ |~\neg(4.5 \leq params.wtnt \leq 910.0) \implies \textrm{INPUTERROR}$
-                                             \tabto{1.4cm} $ |~\neg(6.0 \leq params.sd \leq 130.0) \implies \textrm{INPUTERROR}~)$
-                        \end{itemize}
-\end{itemize}
+\usepackage{MISLib}
+
+\begin{document}
+
+%% ------------------------------------------------------------------------------
+%% -------------- PARAMETERS MODULE SPECIFICATION -------------------------------
+%% ------------------------------------------------------------------------------
+\module{Parameters}{
+  moduleType = Template,
+  moduleName = param,
+  uses = ,
+  exportedConstants = {
+    E , \real , $7.17 \times 10^{7}$ ;
+    TD , \real ,  $3.0$ ;
+    M , \real , $7.0$ ;
+    MK , \real , $2.86 \times 10^{-53}$ ;
+    LSF , \real , $1.0$ 
+  },
+  exportedTypes = {
+    Param , ?
+  },
+  exportedAccessPrograms = {
+    Param , , Param , 
+  },
+  stateVariables = {
+    a , \real ;
+    b , \real ;
+    t , \real ;
+    w , \real ;
+    tnt , \real ;
+    pbtol , \real ;
+    asprat , \real ;
+    sd , \real ;
+    h , \real ;
+    gtf , \real ;
+    ldf , \real ;
+    wtnt , \real ;
+    sdvect , \seq[3]{\real} ;
+    gt , String  
+  },
+  environmentVariables = ,
+  accessRoutineSemantics = {
+    {
+      routineName = Param,
+      routineArgs = ,
+      transition = {
+        a, \realzero ;
+        b, \realzero ;
+        t, \realzero ;
+        w, \realzero ;
+        tnt, \realzero ;
+        pbtol, \realzero ;
+        asprat, \realzero ;
+        sd, \realzero ;
+        h, \realzero ;
+        gtf, \realzero ;
+        ldf, \realzero ;
+        wtnt, \realzero ;
+        sdvect, \seqval{\realzero, \realzero, \realzero} ;
+        gt, \emptystr ;
+      },
+      output = \self,
+      exception = ,
+    }
+  }
+}
+
+   
+%% ------------------------------------------------------------------------------
+%% -------------- INPUT FORMAT MODULE SPECIFICATION -----------------------------
+%% ------------------------------------------------------------------------------
+\module{Input Format}{
+  moduleType = ,
+  moduleName = inputFormat,
+  uses = param,
+  exportedConstants = ,
+  exportedTypes = ,
+  exportedAccessPrograms = {
+    get\_input , string , Param , 
+  },
+  stateVariables = ,
+  environmentVariables = {
+    filesys, \fsread
+  },
+  accessRoutineSemantics = {
+    {
+      routineName = get\_input,
+      routineArgs = {filename, p},
+      transition = {
+        filesys, filename;
+        p.a, filesys.readline ;
+        p.b, filesys.readline ;
+        p.t, filesys.readline ;
+        p.gt, filesys.readline ;
+        p.w, filesys.readline ;
+        p.tnt, filesys.readline ;
+        p.\seqAt{sdvect}{0}, filesys.readline ;
+        p.\seqAt{sdvect}{1}, filesys.readline ;
+        p.\seqAt{sdvect}{2}, filesys.readline ;
+        pbtol, filesys.readline
+      },
+      output = ,
+      exception = ,
+    }
+  }
+}
+
+
+%% ------------------------------------------------------------------------------
+%% -------------- INPUT CONSTRAINTS MODULE SPECIFICATION ------------------------
+%% ------------------------------------------------------------------------------
+\module{Input Constraints}{
+  moduleType = ,
+  moduleName = derivedValues,
+  uses = param,
+  exportedConstants = ,
+  exportedTypes = ,
+  exportedAccessPrograms = {
+    derived\_params , Param , Param , 
+  },
+  stateVariables = ,
+  environmentVariables = ,
+  accessRoutineSemantics = {
+    {
+      routineName = derived\_params,
+      routineArgs = {p},
+      transition = {
+        p.asprat, \dfrac{p.a}{p.b} ;
+        p.sd, \sqrt{p.\seqAt{sdvect}{0}^2 + p.\seqAt{sdvect}{1}^2 + p.\seqAt{sdvect}{2}^2} ;
+        p.ldf, \dfrac{p.td}{60.0}^{\dfrac{p.m}{16.0}} ;
+        p.wtnt, p.w \times p.tnt ;
+        p.h, \conditional{
+          p.t = 2.50, 2.16 ;
+          p.t = 2.70, 2.59 ;
+          p.t = 3.0, 2.92 ;
+          p.t = 4.0, 3.78 ;
+          p.t = 5.0, 4.57 ;
+          p.t = 6.0, 5.56 ;
+          p.t = 8.0, 7.42 ;
+          p.t = 10.0, 9.02 ;
+          p.t = 12.0, 11.91 ;
+          p.t = 16.0, 15.09 ;
+          p.t = 19.0, 18.26 ;
+          p.t = 22.0, 21.44 ;
+          \true, \realzero
+        } ;
+        p.gtf, \conditional{
+          p.gt = \str{AN}, 1.0 ;
+          p.gt = \str{HS}, 2.0 ;
+          p.gt = \str{FT}, 3.0 ;
+          \true, 0.0 
+        }
+      },
+      output = p,
+      exception = ,
+    }
+  }
+}
+ 
+
+
+%% ------------------------------------------------------------------------------
+%% -------------- INPUT VERIFICATION MODULE SPECIFICATION -----------------------
+%% ------------------------------------------------------------------------------
+\module{Input Constraints}{
+  moduleType = ,
+  moduleName = checkConstraints,
+  uses = param,
+  exportedConstants = ,
+  exportedTypes = ,
+  exportedAccessPrograms = {
+    check\_constraints , Param , , INPUTERROR 
+  },
+  stateVariables = ,
+  environmentVariables = ,
+  accessRoutineSemantics = {
+    {
+      routineName = derived\_params,
+      routineArgs = {p},
+      transition = ,
+      output = ,
+      exception = \conditional{
+        p.a \leq \realzero \AND p.b \leq \realzero, \exc{INPUTERROR} ;
+        \neg (1.0 \leq p.asprat \leq 5.0), \exc{INPUTERROR} ;
+        p.t \notin \finset[4]{2.50, 2.70, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}, \exc{INPUTERROR} ;
+        p.qt \notin \finset[3]{\str{AN}, \str{HS}, \str{FT}, \str{an}, \str{hs}, \str{ft}}, \exc{INPUTERROR} ;
+        p.tnt \leq \realzero, \exc{INPUTERROR} ;
+        \neg (4.5 \leq p.wtnt \leq 910.0), \exc{INPUTERROR} ;
+        \neg (6.0 \leq p.sd \leq 130.0), \exc{INPUTERROR}
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+%%% OLD %%%
 
 \newpage
 

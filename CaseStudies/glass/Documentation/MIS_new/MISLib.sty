@@ -1,0 +1,333 @@
+\usepackage{graphicx}
+\usepackage{paralist}
+\usepackage{amsmath}
+\usepackage{fullpage}
+\usepackage{amsfonts}
+\usepackage{tabto}
+\usepackage{xkeyval}
+\usepackage{xparse}
+\usepackage{ifthen}
+\usepackage{xstring}
+\noexpandarg
+\allowdisplaybreaks
+
+\renewcommand\baselinestretch{1.0}
+
+\pagestyle {plain}
+\pagenumbering{arabic}
+
+\setlength\parindent{0pt}
+
+
+\define@cmdkey [MIS] {module} {moduleType} {}
+\define@cmdkey [MIS] {module} {moduleName} {}
+\define@cmdkey [MIS] {module} {uses} {}
+\define@cmdkey [MIS] {module} {exportedConstants} {}
+\define@cmdkey [MIS] {module} {exportedTypes} {}
+\define@cmdkey [MIS] {module} {exportedAccessPrograms} {}
+\define@cmdkey [MIS] {module} {stateVariables} {}
+\define@cmdkey [MIS] {module} {environmentVariables} {}
+\define@cmdkey [MIS] {module} {accessRoutineSemantics} {}
+
+
+\define@cmdkey [MIS] {routine} {routineName} {}
+\define@cmdkey [MIS] {routine} {routineArgs} {}
+\define@cmdkey [MIS] {routine} {transition} {}
+\define@cmdkey [MIS] {routine} {output} {}
+\define@cmdkey [MIS] {routine} {exception} {}
+
+\newcommand{\module}[2]{
+  \setkeys[MIS]{module}{#2}
+  \@moduletitle{#1}
+  \@moduletype{\cmdMIS@module@moduleType}{\cmdMIS@module@moduleName}
+  \@uses{\cmdMIS@module@uses}
+  \@syntax
+  \expandafter\@constants\expandafter{\cmdMIS@module@exportedConstants}
+  \expandafter\@types\expandafter{\cmdMIS@module@exportedTypes}
+  \expandafter\@accessprogs\expandafter{\cmdMIS@module@exportedAccessPrograms}
+  \@semantics
+  \expandafter\@statevars\expandafter{\cmdMIS@module@stateVariables}
+  \expandafter\@envvars\expandafter{\cmdMIS@module@environmentVariables}
+  \expandafter\@arsemantics\expandafter{\cmdMIS@module@accessRoutineSemantics}
+  \newpage
+}
+
+\newcommand{\@routine}[1]{
+  \setkeys[MIS]{routine}{#1}
+  \cmdMIS@routine@routineName(\cmdMIS@routine@routineArgs):
+  \begin{itemize}
+  \item transition: 
+  \item[] \expandafter\@artransition\expandafter{\cmdMIS@routine@transition}
+  \item output:
+  \item[] \expandafter\@aroutput\expandafter{\cmdMIS@routine@output}
+  \item exception: 
+  \item[] \expandafter\@arexception\expandafter{\cmdMIS@routine@exception}
+  \end{itemize}
+}
+
+% -------------- SECTION CREATION ----------------------------------------------
+\newcommand{\@moduletitle}[1]{
+  \section*{#1 Module}
+}
+
+\newcommand{\@moduletype}[2]{
+  \subsection*{\ifthenelse{\equal{#1}{}}{}{#1 }Module}
+  #2
+}
+
+\newcommand{\@uses}[1]{
+  \subsection*{Uses}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \@@uses{#1} }
+}
+
+\newcommand{\@syntax}{ 
+  \subsection* {Syntax}
+}
+
+\newcommand{\@constants}[1]{
+  \subsubsection*{Exported Constants}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \@@constants{#1} }
+}
+
+\newcommand{\@types}[1]{
+  \subsubsection*{Exported Types}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \@@types{#1} }
+}
+
+\newcommand{\@accessprogs}[1]{
+  \subsubsection*{Exported Access Programs}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \@@accessprogs{#1} }
+}
+
+\newcommand{\@semantics}{
+  \subsection* {Semantics}
+}
+
+\newcommand{\@statevars}[1]{
+  \subsubsection*{State Variables}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \@@statevars{#1} }
+}
+
+\newcommand{\@envvars}[1]{
+  \subsubsection*{Environment Variables}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \@@statevars{#1} }
+}
+
+\NewDocumentCommand{\@arsemantics}{m}{
+  \subsubsection*{Access Routine Semantics}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \ProcessList {#1} {\@routine} }
+}
+
+
+% -------------- INTERNALS -----------------------------------------------------
+
+\NewDocumentCommand{\@@uses}{ >{ \SplitList {,} } m }{ 
+  \ProcessList { #1 } { \@use } 
+  \vspace{-2\baselineskip}
+}
+
+\newcommand\@use[1]{
+  #1\\
+}
+
+\NewDocumentCommand{\@@constants}{ >{ \SplitList {;} } m}{
+  \begin{tabular}{| l | l | l |}
+    \hline
+    \textbf{Constant name} & \textbf{Type} & \textbf{Value}\\
+    \hline
+    \ProcessList { #1 } { \@newrow }
+  \end{tabular}
+}
+
+\NewDocumentCommand{\@@types}{ >{ \SplitList {;} } m}{
+  \begin{tabular}{| l | l |}
+    \hline
+    \textbf{Type name} & \textbf{Type}\\
+    \hline
+    \ProcessList { #1 } { \@newrow }
+  \end{tabular}
+}
+
+\NewDocumentCommand{\@@accessprogs}{ >{ \SplitList {;} } m}{
+  \begin{tabular}{| l | l | l | l |}
+    \hline
+    \textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+    \hline
+    \ProcessList { #1 } { \@newrow }
+  \end{tabular}
+}
+
+\NewDocumentCommand{\@newrow}{m}{
+  \StrSubstitute{#1}{,}{&}[\temp]
+  \temp\\
+  \hline
+}
+
+\NewDocumentCommand{\@@statevars}{ >{ \SplitList {;} } m}{
+  \begin{tabular}{| l | l |}
+    \hline
+    \textbf{Variable name} & \textbf{Type}\\
+    \hline
+    \ProcessList { #1 } { \@newrow }
+  \end{tabular}
+}
+
+\NewDocumentCommand{\@artransition}{ >{ \SplitList {;} } m}{
+  \ifthenelse{\equal{#1}{{}}}
+  { N/A }
+  { \vspace{-2\baselineskip}
+    \begin{alignat*}{2}
+    \ProcessList { #1 } {\@neweqn}
+    \end{alignat*}
+    \vspace{-2\baselineskip}
+  }
+}
+
+\NewDocumentCommand{\@neweqn}{m}{
+  \StrSubstitute{#1}{#1}{;#1}[\temp]
+  \expandarg
+  \StrSubstitute{\temp}{,}{;;:=}[\temp]
+  \StrSubstitute{\temp}{;}{&}[\temp]
+  \noexpandarg
+  \temp\\
+}
+
+\NewDocumentCommand{\@aroutput}{m}{
+  \ifthenelse{\equal{#1}{}}
+  { N/A }
+  { \vspace{-2\baselineskip}
+    \begin{alignat*}{2}
+    \@neweqn{out, #1}
+    \end{alignat*}
+    \vspace{-2\baselineskip}
+  }
+}
+
+\NewDocumentCommand{\@arexception}{m}{
+  \ifthenelse{\equal{#1}{}}
+  { N/A }
+  { \vspace{-2\baselineskip}
+    \begin{alignat*}{2}
+    \@neweqn{exc, #1}
+    \end{alignat*}
+    \vspace{-2\baselineskip}
+  }
+}
+
+
+
+\NewDocumentCommand{\conditional}{m}{
+  \noexpandarg
+  \StrSubstitute{#1}{#1}{\&#1}[\temp]
+  \expandarg
+  \StrSubstitute{\temp}{;}{\\;}[\temp]
+  \StrSubstitute{\temp}{,}{;;\implies}[\temp]
+  \StrSubstitute{\temp}{\&}{;}[\temp]
+  \StrSubstitute{\temp}{;}{&}[\temp]
+  \noexpandarg
+  \begin{cases}
+  \begin{alignedat}{2}
+  \temp\\
+  \end{alignedat}
+  \end{cases}
+}
+
+\newcounter{@setcount}
+\newcounter{@setmax}
+
+\NewDocumentCommand{\finset}{o >{ \SplitList {,} } m}{
+  \expandarg
+  \setcounter{@setcount}{1}
+  \IfNoValueTF{#1}{\setcounter{@setmax}{3}}{\setcounter{@setmax}{#1}}
+  \left\{\begin{alignedat}{\the@setmax}
+  \ProcessList{#2}{\@setelt}
+  \end{alignedat}\right\}
+  \noexpandarg
+}
+
+\NewDocumentCommand{\@setelt}{m}{
+  \ifthenelse{\equal{\the@setcount}{\the@setmax}}
+  {
+    &#1,
+    \setcounter{@setcount}{0}
+  }
+  { \ifthenelse{\equal{\the@setcount}{0}}
+    { 
+      \\
+      \stepcounter{@setcount}
+      \@setelt{#1}
+    }
+    { 
+      &#1,~& 
+      \stepcounter{@setcount}
+    }
+  }
+}
+
+
+% -------------- TYPES ---------------------------------------------------------
+\newcommand{\real}{ $\mathbb{R}$ }
+
+\NewDocumentCommand{\seq}{om}{
+  sequence \IfNoValueF{#1}{[#1]} of #2
+}
+
+
+% -------------- VALUES --------------------------------------------------------
+\NewDocumentCommand{\seqval}{m}{
+  \langle #1 \rangle
+}
+
+\newcommand{\str}[1]{
+  \textrm{``#1"}
+}
+
+\newcommand{\emptystr}{
+  \textrm{``"}
+}
+
+\newcommand{\realzero}{
+  0.0
+}
+
+\newcommand{\true}{
+  \textrm{True}
+}
+
+\newcommand{\self}{
+  \textrm{self}
+}
+
+\newcommand{\fsread}{
+  \textrm{FileSystem Read}
+}
+
+\newcommand{\seqAt}[2]{
+  #1[#2]
+}
+
+\newcommand{\AND}{
+  \wedge
+}
+
+\newcommand{\OR}{
+  \vee
+}
+
+\newcommand{\exc}[1]{
+  \textrm{#1}
+}

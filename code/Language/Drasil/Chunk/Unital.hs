@@ -100,7 +100,7 @@ instance Quantity UnitalChunk where
   typ = q . typ
   
 instance Unit UnitalChunk where
-  unit = u . unit
+  usymb = u . usymb
   
 instance Eq UnitalChunk where
   a == b = (a ^. id) == (b ^. id)

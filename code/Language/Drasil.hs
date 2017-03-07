@@ -16,7 +16,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, nc', ncs
   , ncWDS', makeVC, makeVCObj, vcFromCC, makeDCC, SymbolForm(..)
-  , dcc, dccWDS, cv, ccStSS, dcc'
+  , dcc, dccWDS, cv, ccStSS, dcc', vc'
   , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
   , Concept(..), compoundterm
   , CommonIdea(..), commonidea, CI
@@ -42,7 +42,9 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper, UWrapper, uw
+  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
+  --Chunk.UWrapper 
+  , UWrapper, uw
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap, sLower, sParen
   , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
@@ -100,6 +102,8 @@ import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Wrapper
+import Language.Drasil.Chunk.Wrapper.QSWrapper
+import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sMap, sLower, sParen, sC, (+:+), (+:+.),

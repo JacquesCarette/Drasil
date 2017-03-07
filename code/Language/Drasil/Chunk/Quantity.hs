@@ -20,7 +20,7 @@ class NamedIdea c => Quantity c where
 instance Quantity VarChunk where
   getSymb    = Just . SF 
   getUnit _  = Nothing
-  typ f (VC n d s t) = fmap (\x -> VC n d s x) (f t)
+  typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)

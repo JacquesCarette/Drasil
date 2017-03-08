@@ -1,8 +1,6 @@
-\usepackage{paralist}
 \usepackage{amsmath}
 \usepackage{fullpage}
 \usepackage{amsfonts}
-\usepackage{tabto}
 \usepackage{xkeyval}
 \usepackage{xparse}
 \usepackage{ifthen}
@@ -16,6 +14,9 @@
 \pagenumbering{arabic}
 
 \setlength\parindent{0pt}
+\setlength{\mathindent}{0pt}
+\newlength{\mytextsize}
+\setlength{\mytextsize}{\f@size pt}
 
 
 \define@cmdkey [MIS] {module} {moduleType} {}
@@ -28,13 +29,18 @@
 \define@cmdkey [MIS] {module} {environmentVariables} {}
 \define@cmdkey [MIS] {module} {assumptions} {}
 \define@cmdkey [MIS] {module} {accessRoutineSemantics} {}
-
+\define@cmdkey [MIS] {module} {localFunctions} {}
 
 \define@cmdkey [MIS] {routine} {routineName} {}
 \define@cmdkey [MIS] {routine} {routineArgs} {}
 \define@cmdkey [MIS] {routine} {transition} {}
 \define@cmdkey [MIS] {routine} {output} {}
 \define@cmdkey [MIS] {routine} {exception} {}
+
+\define@cmdkey [MIS] {local} {functionName} {}
+\define@cmdkey [MIS] {local} {functionIn} {}
+\define@cmdkey [MIS] {local} {functionOut} {}
+\define@cmdkey [MIS] {local} {functionBody} {}
 
 \newcommand{\module}[2]{
   \setkeys[MIS]{module}{#2}
@@ -50,6 +56,7 @@
   \expandafter\@envvars\expandafter{\cmdMIS@module@environmentVariables}
   \expandafter\@assumptions\expandafter{\cmdMIS@module@assumptions}
   \expandafter\@arsemantics\expandafter{\cmdMIS@module@accessRoutineSemantics}
+  \expandafter\@localfunctions\expandafter{\cmdMIS@module@localFunctions}
   \newpage
 }
 
@@ -64,6 +71,12 @@
   \item exception: 
   \item[] \expandafter\@arexception\expandafter{\cmdMIS@routine@exception}
   \end{itemize}
+}
+
+\newcommand{\@localFunction}[1]{
+  \setkeys[MIS]{local}{#1}
+  \cmdMIS@local@functionName~: $\expandafter\@functionInTypes\expandafter{\cmdMIS@local@functionIn} \rightarrow \cmdMIS@local@functionOut$\\
+  \cmdMIS@local@functionName($\expandafter\@functionInNames\expandafter{\cmdMIS@local@functionIn}$)~$\equiv \cmdMIS@local@functionBody$\\[\mytextsize]
 }
 
 % -------------- SECTION CREATION ----------------------------------------------
@@ -142,6 +155,13 @@
   \ifthenelse{\equal{#1}{}}
     { N/A }
     { \ProcessList {#1} {\@routine} }
+}
+
+\NewDocumentCommand{\@localfunctions}{m}{
+  \subsubsection*{Local Functions}
+  \ifthenelse{\equal{#1}{}}
+    { N/A }
+    { \ProcessList {#1} {\@localFunction} }
 }
 
 
@@ -240,15 +260,50 @@
   }
 }
 
+\NewDocumentCommand{\@functionInTypes}{m}{
+  \StrCount{#1}{;}[\temp]
+  \ifthenelse{\equal{\temp}{0}}
+  {
+    \StrBehind{#1}{,}[\temp]
+    \temp
+  }
+  {
+    \StrBefore{#1}{;}[\temp]
+    \expandarg
+    \StrBehind{\temp}{,}[\temp]
+    \temp \times
+    \noexpandarg
+    \StrBehind{#1}{;}[\temp]
+    \expandafter\@functionInTypes\expandafter{\temp}
+  }
+}
+
+\NewDocumentCommand{\@functionInNames}{m}{
+  \StrCount{#1}{;}[\temp]
+  \ifthenelse{\equal{\temp}{0}}
+  {
+    \StrBefore{#1}{,}[\temp]
+    \temp
+  }
+  {
+    \StrBefore{#1}{;}[\temp]
+    \expandarg
+    \StrBefore{\temp}{,}[\temp]
+    \temp,~
+    \noexpandarg
+    \StrBehind{#1}{;}[\temp]
+    \expandafter\@functionInNames\expandafter{\temp}
+  }
+}
 
 
 \NewDocumentCommand{\conditional}{m}{
   \noexpandarg
-  \StrSubstitute{#1}{#1}{\&#1}[\temp]
+  \StrSubstitute{#1}{#1}{@#1}[\temp]
   \expandarg
   \StrSubstitute{\temp}{;}{\\;}[\temp]
   \StrSubstitute{\temp}{,}{;;\implies}[\temp]
-  \StrSubstitute{\temp}{\&}{;}[\temp]
+  \StrSubstitute{\temp}{@}{;}[\temp]
   \StrSubstitute{\temp}{;}{&}[\temp]
   \noexpandarg
   \begin{cases}
@@ -292,54 +347,54 @@
 
 
 % -------------- TYPES ---------------------------------------------------------
-\newcommand{\real}{ $\mathbb{R}$ }
+\newcommand{\real}{\ensuremath{\mathbb{R}}}
 
 \NewDocumentCommand{\seq}{om}{
-  sequence \IfNoValueF{#1}{[#1]} of #2
+  \ensuremath{\textrm{sequence \IfNoValueF{#1}{[#1]} of }#2}
 }
 
 
 % -------------- VALUES --------------------------------------------------------
 \NewDocumentCommand{\seqval}{m}{
-  \langle #1 \rangle
+  \ensuremath{\langle #1 \rangle}
 }
 
 \newcommand{\str}[1]{
-  \textrm{``#1"}
+  \ensuremath{\textrm{``#1"}}
 }
 
 \newcommand{\emptystr}{
-  \textrm{``"}
+  \ensuremath{\textrm{``"}}
 }
 
 \newcommand{\realzero}{
-  0.0
+  \ensuremath{0.0}
 }
 
 \newcommand{\true}{
-  \textrm{True}
+  \ensuremath{\textrm{True}}
 }
 
 \newcommand{\self}{
-  \textrm{self}
+  \ensuremath{\textrm{self}}
 }
 
 \newcommand{\fsread}{
-  \textrm{FileSystem Read}
+  \ensuremath{\textrm{FileSystem Read}}
 }
 
 \newcommand{\seqAt}[2]{
-  #1[#2]
+  \ensuremath{#1[#2]}
 }
 
 \newcommand{\AND}{
-  \wedge
+  \ensuremath{\wedge}
 }
 
 \newcommand{\OR}{
-  \vee
+  \ensuremath{\vee}
 }
 
 \newcommand{\exc}[1]{
-  \textrm{#1}
+  \ensuremath{\textrm{#1}}
 }

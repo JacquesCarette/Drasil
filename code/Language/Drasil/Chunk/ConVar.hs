@@ -34,7 +34,6 @@ instance Concept ConVar where
 instance SymbolForm ConVar where
   symbol f (CV c s t) = fmap (\x -> CV c x t) (f s)
 
---FIXME: This should not be exported.
 cvl :: Simple Lens ConVar ConceptChunk
 cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
 

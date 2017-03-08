@@ -1,7 +1,6 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Unital 
   ( UnitalChunk(..)
-  , makeUC
   , makeUCWDS
   , ucFromVC
   , uc
@@ -56,9 +55,6 @@ uc' :: (Unit u) => String -> String -> String -> Symbol -> u -> UnitalChunk
 uc' i t d s u = UC (dcc i t d) s u Rational
 
 --BEGIN HELPER FUNCTIONS--
---FIXME: Space hack
-makeUC :: Unit u => String -> String -> String -> Symbol -> u -> UnitalChunk
-makeUC = uc'
 
 --Better names will come later.
 makeUCWDS :: Unit u => String -> String -> Sentence -> Symbol -> u -> UnitalChunk

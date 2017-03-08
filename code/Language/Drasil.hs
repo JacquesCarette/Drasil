@@ -91,6 +91,7 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, makeUCWDS, ucFromVC

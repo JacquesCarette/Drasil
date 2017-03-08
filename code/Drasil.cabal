@@ -68,6 +68,7 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
+    , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.LC

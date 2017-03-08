@@ -9,6 +9,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.VarChunk (VarChunk, vc)
 import Language.Drasil.Chunk.Unital (ucFromVC)

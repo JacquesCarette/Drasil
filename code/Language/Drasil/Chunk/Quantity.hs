@@ -6,11 +6,13 @@ import Control.Lens
 
 import Language.Drasil.Space
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Unit
+import Language.Drasil.Chunk.ConVar
+
 import Prelude hiding (id)
+
+import Language.Drasil.Chunk.SymbolForm (SF(..))
+import Language.Drasil.Unit(UnitDefn)
 
 class NamedIdea c => Quantity c where
   typ      :: Simple Lens c Space

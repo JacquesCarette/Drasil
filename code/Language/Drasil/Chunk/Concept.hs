@@ -30,10 +30,8 @@ instance Concept ConceptChunk where
 nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens ConceptChunk a
 nl l f (CC n d) = fmap (\x -> CC (set l x n) d) (f (n ^. l))
   
-makeDCC, dcc :: String -> String -> String -> ConceptChunk
-makeDCC i ter des = CC (nc i ter) (S des)
-
-dcc = makeDCC
+dcc :: String -> String -> String -> ConceptChunk 
+dcc i ter des = CC (nc i ter) (S des)
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
 dccWDS i t d = CC (nc i t) d
@@ -43,3 +41,9 @@ ccStSS i t d = CC (ncs i t) d
 
 dcc' :: String -> String -> String -> String -> ConceptChunk
 dcc' i t d a = CC (nc' i t a) (S d)
+
+ccs :: NamedChunk -> Sentence -> ConceptChunk
+ccs = CC
+
+cc :: NamedChunk -> String -> ConceptChunk
+cc n d = CC n (S d)

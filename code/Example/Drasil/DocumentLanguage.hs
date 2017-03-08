@@ -89,8 +89,9 @@ mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
       (Section (tOfSymb^.term) (map Con [con, (table v (^.term))])) : l'
-    mkSubRef (SI _ _ _ _ _ ccs _) (TSymb' f con) l' = (mkTSymb ccs f con) : l'
-    mkSubRef (SI _ _ _ _ v ccs n) TAandA l' = (table_of_abb_and_acronyms $ filter (isJust . getA) (map nw v ++ map nw ccs ++ map nw n)) : l'
+    mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
+    mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
+      filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 mkTSymb :: (Quantity e, Concept e) => 

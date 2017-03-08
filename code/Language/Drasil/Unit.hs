@@ -14,7 +14,7 @@ import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk(..), makeDCC)
+import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk(..), dcc)
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
@@ -43,7 +43,7 @@ makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
 --FIXME: Make this use a meaningful identifier.
 unitCon :: String -> ConceptChunk
-unitCon s = makeDCC s s s
+unitCon s = dcc s s s
 ---------------------------------------------------------
 
 -- for defining fundamental units

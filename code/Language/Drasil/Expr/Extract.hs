@@ -6,7 +6,7 @@ import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
 import Language.Drasil.Chunk (id)
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea)
 import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc')
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation

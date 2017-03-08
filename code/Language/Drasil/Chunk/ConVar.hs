@@ -13,7 +13,6 @@ import Language.Drasil.Chunk.Concept
 
 import Control.Lens (Simple, Lens, (^.))
 
-import Language.Drasil.Spec
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 

@@ -1,4 +1,3 @@
-\usepackage{graphicx}
 \usepackage{paralist}
 \usepackage{amsmath}
 \usepackage{fullpage}
@@ -27,6 +26,7 @@
 \define@cmdkey [MIS] {module} {exportedAccessPrograms} {}
 \define@cmdkey [MIS] {module} {stateVariables} {}
 \define@cmdkey [MIS] {module} {environmentVariables} {}
+\define@cmdkey [MIS] {module} {assumptions} {}
 \define@cmdkey [MIS] {module} {accessRoutineSemantics} {}
 
 
@@ -48,6 +48,7 @@
   \@semantics
   \expandafter\@statevars\expandafter{\cmdMIS@module@stateVariables}
   \expandafter\@envvars\expandafter{\cmdMIS@module@environmentVariables}
+  \expandafter\@assumptions\expandafter{\cmdMIS@module@assumptions}
   \expandafter\@arsemantics\expandafter{\cmdMIS@module@accessRoutineSemantics}
   \newpage
 }
@@ -125,6 +126,17 @@
     { \@@statevars{#1} }
 }
 
+\NewDocumentCommand{\@assumptions}{ >{ \SplitList {,} } m }{
+  \subsubsection*{Assumptions}
+  \ifthenelse{\equal{#1}{{}}}
+    { N/A }
+    { 
+      \begin{itemize}
+      \ProcessList {#1} {\item } 
+      \end{itemize}
+    }
+}
+
 \NewDocumentCommand{\@arsemantics}{m}{
   \subsubsection*{Access Routine Semantics}
   \ifthenelse{\equal{#1}{}}
@@ -137,7 +149,7 @@
 
 \NewDocumentCommand{\@@uses}{ >{ \SplitList {,} } m }{ 
   \ProcessList { #1 } { \@use } 
-  \vspace{-2\baselineskip}
+  \vspace{-\baselineskip}
 }
 
 \newcommand\@use[1]{

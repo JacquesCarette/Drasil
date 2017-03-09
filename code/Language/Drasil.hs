@@ -48,6 +48,10 @@ module Language.Drasil (
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap, sLower, sParen
   , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
+  -- NounPhrase
+  , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
+  , cnIrr, nounPhrase, nounPhrase', at_start, at_start', CapitalizationRule(..)
+  , PluralRule(..)
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
     SecCons(..), ListType(..), ItemType(..),

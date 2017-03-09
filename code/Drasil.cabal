@@ -31,6 +31,7 @@ library
     , Language.Drasil.Format
     , Language.Drasil.Generate
     , Language.Drasil.Misc
+    , Language.Drasil.NounPhrase
     , Language.Drasil.People
     , Language.Drasil.Recipe
     , Language.Drasil.RefHelpers

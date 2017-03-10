@@ -1,0 +1,115 @@
+{-# LANGUAGE GADTs #-}
+module Language.Drasil.NounPhrase 
+  ( NounPhrase(..)
+  , NP
+  , pn, pn', pn'', pn''', pnIrr
+  , cn, cn', cn'', cn''', cnIP, cnIrr
+  , nounPhrase, nounPhrase'
+  , at_start, at_start'
+  , CapitalizationRule(..)
+  , PluralRule(..)
+  )where
+
+import Data.Char (toUpper)
+import Language.Drasil.Spec (Sentence(..), (+:+))
+--Linguistically, nounphrase might not be the best name (yet!), but once
+-- it is fleshed out and/or we do more with it, it will likely be a good fit
+
+--Using String for now, as it will allow us to add these to sentence 
+-- very easily. If we need other options we can always change it.
+class NounPhrase n where
+  phrase :: n -> Sentence -- ex. "the quick brown fox"
+  plural :: n -> PluralForm -- ex. "the quick brown foxes" 
+    --Could replace plural string with a function.
+  sentenceCase :: n -> (n -> Sentence) -> Capitalization 
+    --Should this be replaced with a data type instead?
+    --example: "The quick brown fox" 
+    --Data types should use functions to determine capitalization based
+    -- on rules.
+
+type Capitalization = Sentence  --Using type synonyms for clarity.
+type PluralForm     = Sentence  -- These might change.
+type PluralString   = String
+
+data NP where
+  ProperNoun :: String -> PluralRule -> NP
+  CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
+  Phrase     :: String -> PluralString -> CapitalizationRule -> NP
+  --Phrase plurals can get very odd, so it seems best (for now) to encode
+  --them directly.
+
+instance NounPhrase NP where
+  phrase (ProperNoun n _)       = S n
+  phrase (CommonNoun n _ _)     = S n
+  phrase (Phrase n _ _)         = S n
+  plural n@(ProperNoun _ p)     = sPlur (phrase n) p
+  plural n@(CommonNoun _ p _)   = sPlur (phrase n) p
+  plural (Phrase _ p _)         = S p
+  sentenceCase n@(ProperNoun _ _)   _ = phrase n
+  sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
+  sentenceCase n@(Phrase _ _ r)     f = cap (f n) r
+  
+-- ===Constructors=== --
+pn, pn', pn'', pn''' :: String -> NP
+pn    n = ProperNoun n SelfPlur
+pn'   n = ProperNoun n AddS
+pn''  n = ProperNoun n AddE
+pn''' n = ProperNoun n AddES
+
+pnIrr :: String -> PluralRule -> NP
+pnIrr = ProperNoun
+
+cn, cn', cn'', cn''' :: String -> NP
+cn    n = CommonNoun n SelfPlur CapFirst
+cn'   n = CommonNoun n AddS CapFirst
+cn''  n = CommonNoun n AddE CapFirst
+cn''' n = CommonNoun n AddES CapFirst
+
+cnIP :: String -> PluralRule -> NP
+cnIP n p = CommonNoun n p CapFirst
+
+cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
+cnIrr = CommonNoun 
+
+nounPhrase :: String -> PluralString -> NP
+nounPhrase s p = Phrase s p CapFirst
+
+nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
+nounPhrase' = Phrase
+
+-- === Helpers === 
+
+at_start, at_start' :: NounPhrase n => n -> Capitalization
+at_start  n = sentenceCase n phrase
+at_start' n = sentenceCase n plural
+
+
+data CapitalizationRule = CapFirst
+                        | Replace String
+data PluralRule = AddS
+                | AddE
+                | AddES
+                | SelfPlur
+                | IrregPlur (String -> String)
+
+-- DO NOT EXPORT --                
+sPlur :: Sentence -> PluralRule -> Sentence
+sPlur s@(S _) AddS = s :+: S "s"
+sPlur s@(S _) AddE = s :+: S "e"
+sPlur s@(S _) AddES = sPlur (sPlur s AddE) AddS
+sPlur s@(S _) SelfPlur = s
+sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
+sPlur (a :+: b) pt = a :+: sPlur b pt
+sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
+
+cap :: Sentence -> CapitalizationRule -> Sentence
+cap (S []) _ = S []
+cap (S (s:ss)) CapFirst = S $ (toUpper s : ss)
+cap _ (Replace s) = S s
+cap _ _ = error "Erroneous use of cap. See NounPhrase.hs"
+
+-- ity, ness, ion :: String -> String
+-- Maybe export these for use in irregular cases?
+-- ity  s = init s ++ "ity"
+-- ness s = init s ++ "ness"
+-- ion  s = init s ++ "ion"

@@ -43,7 +43,7 @@ s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S "the SI name.")
 
 s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
-  [(\x -> Sy (x ^. unit)),
+  [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (x ^. term))
   ] this_si)
@@ -59,7 +59,7 @@ s1_2_intro = Paragraph $
   
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ ch ^. unit),
+   (\ch -> Sy $ unit_symb ch),
    (\ch -> ch ^. term)
    ]
   pcmSymbols)

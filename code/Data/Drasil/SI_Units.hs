@@ -1,5 +1,5 @@
 module Data.Drasil.SI_Units where
-import Language.Drasil.Chunk.Concept (makeDCC, dcc)
+import Language.Drasil.Chunk.Concept (dcc)
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU)
 import Language.Drasil.Unicode (Special(Circle))
@@ -22,7 +22,7 @@ si_units = map UU fundamentals ++ map UU derived
 fund :: String -> String -> String -> FundUnit
 --This is one case where I don't consider having "id" and "term" equal 
 -- a bad thing.
-fund nam desc sym = UD (makeDCC nam nam desc) (UName $ Atomic sym)
+fund nam desc sym = UD (dcc nam nam desc) (UName $ Atomic sym)
 
 metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
 metre    = fund "Metre"    "length"               "m"
@@ -50,55 +50,55 @@ centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre,
   kilopascal, radians :: DerUChunk
 
 centigrade = DUC 
-  (UD (makeDCC "centigrade" "Centigrade" "temperature") 
+  (UD (dcc "centigrade" "Centigrade" "temperature") 
       (UName (Concat [Special Circle, Atomic "C"])))
-  (UShift 273.15 (kelvin ^. unit))
+  (UShift 273.15 (kelvin ^. usymb))
 
 joule = DUC
-    (UD (makeDCC "joule" "Joule" "energy") (UName $ Atomic "J"))
-    (USynonym (UProd [kilogram ^. unit, m_2 ^. unit,
-                      UPow (second ^. unit) (-2)]))
+    (UD (dcc "joule" "Joule" "energy") (UName $ Atomic "J"))
+    (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
+                      UPow (second ^. usymb) (-2)]))
 
 calorie = DUC
-  (UD (makeDCC "calorie" "Calorie" "energy") (UName $ Atomic "cal"))
-  (UScale 4.184 (joule ^. unit))
+  (UD (dcc "calorie" "Calorie" "energy") (UName $ Atomic "cal"))
+  (UScale 4.184 (joule ^. usymb))
 
 watt = DUC
-  (UD (makeDCC "watt" "Watt" "power") (UName $ Atomic "W"))
-  (USynonym (UProd [kilogram ^. unit, m_2 ^. unit,
-                    UPow (second ^. unit) (-3)]))
+  (UD (dcc "watt" "Watt" "power") (UName $ Atomic "W"))
+  (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
+                    UPow (second ^. usymb) (-3)]))
 
 kilowatt = DUC
-  (UD (makeDCC "kilowatt" "Kilowatt" "power")
+  (UD (dcc "kilowatt" "Kilowatt" "power")
       (UName $ Concat [Atomic "k", Atomic "W"]))
-  (UScale 1000 (watt ^. unit))
+  (UScale 1000 (watt ^. usymb))
 
 pascal = DUC
-  (UD (makeDCC "pascal" "Pascal" "pressure") (UName $ (Atomic "Pa")))
-  (USynonym (UProd [(kilogram ^. unit), (UPow (metre ^. unit) (-1)),
-                      (UPow (second ^. unit) (-2))]))
+  (UD (dcc "pascal" "Pascal" "pressure") (UName $ (Atomic "Pa")))
+  (USynonym (UProd [(kilogram ^. usymb), (UPow (metre ^. usymb) (-1)),
+                      (UPow (second ^. usymb) (-2))]))
 
 newton = DUC
-  (UD (makeDCC "newton" "Newton" "force") (UName $ Atomic "N"))
-  (USynonym (UProd [(kilogram ^. unit), (UPow (second ^. unit) (-2))]))
+  (UD (dcc "newton" "Newton" "force") (UName $ Atomic "N"))
+  (USynonym (UProd [(kilogram ^. usymb), (UPow (second ^. usymb) (-2))]))
 
 millimetre = DUC
-  (UD (makeDCC "millimetre" "Millimetre" "length")
+  (UD (dcc "millimetre" "Millimetre" "length")
       (UName $ (Atomic "mm")))
-  (UScale 0.0001 (metre ^. unit))
+  (UScale 0.0001 (metre ^. usymb))
 
 kilopascal = DUC
-  (UD (makeDCC "kilopascal" "Kilopascal" "pressure")
+  (UD (dcc "kilopascal" "Kilopascal" "pressure")
       (UName $ Concat [Atomic "k", Atomic "Pa"]))
-  (UScale 1000 (pascal ^. unit))
+  (UScale 1000 (pascal ^. usymb))
 
 radians = DUC
-    (UD (makeDCC "radians" "Radians" "angle") (UName $ Atomic "rad"))
+    (UD (dcc "radians" "Radians" "angle") (UName $ Atomic "rad"))
     (USynonym (metre /: metre))
 
 -- FIXME: Need to add pi 
 --degrees = DUC
-  --  (UD (makeDCC "Degrees" "angle") (UName (Special Circle)))
+  --  (UD (dcc "Degrees" "angle") (UName (Special Circle)))
   --  Equiv to pi/180 rad.
 
 -- FIXME: These should probably be moved elsewhere --
@@ -123,9 +123,9 @@ momentOfForceU = new_unit "moment of force"    $ newton *: metre
 stiffnessU     = new_unit "stiffness"          $ newton /: metre 
 
 gravConstU :: DerUChunk
-gravConstU = makeDerU (makeDCC "gravConstU" "gravitational constant" 
+gravConstU = makeDerU (dcc "gravConstU" "gravitational constant" 
   "universal gravitational constant") $
-   USynonym (UDiv (m_3 ^. unit) (UProd [kilogram ^. unit, s_2 ^. unit]))
+   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))
 
 ------
 specificE :: DerUChunk

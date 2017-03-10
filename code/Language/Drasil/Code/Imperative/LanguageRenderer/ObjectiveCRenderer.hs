@@ -158,7 +158,7 @@ funcDoc' :: Config -> Function -> Doc
 funcDoc' c (Func n vs) = innerFuncAppDoc c n vs
 funcDoc' c (Get n) = innerFuncAppDoc c (getterName n) []
 funcDoc' c (Set n v) = innerFuncAppDoc c (setterName n) [v]
-funcDoc' c (IndexOf var) = innerFuncAppDoc c "indexOfObject" [var]
+funcDoc' c (IndexOf v) = innerFuncAppDoc c "indexOfObject" [v]
 funcDoc' c ListSize = innerFuncAppDoc c "count" []
 funcDoc' c (ListAccess i) = innerFuncAppDoc c "objectAtIndex" [i]
 funcDoc' c (ListAdd _ v) = innerFuncAppDoc c "addObject" [v]

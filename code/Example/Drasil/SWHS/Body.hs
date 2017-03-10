@@ -543,7 +543,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   S "the" +:+ (sLower ((tank ^. term))) +:+
   S "is atmospheric, so the" +:+ (temp_melt ^. term) +:+
   S "and" +:+ (temp_boil ^. term) +:+ S "are 0" :+:
-  Sy (temp ^. unit) +:+ S "and 100" :+: Sy (temp ^. unit) `sC`
+  Sy (unit_symb temp) +:+ S "and 100" :+: Sy (unit_symb temp) `sC`
   S "respectively [IM1, IM3]."))])
 
 -- Again, list structure is same between all examples.
@@ -859,10 +859,10 @@ s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
-inputVar :: [UnitalChunk]
-inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density, htCap_W, 
-  coil_HTC, pcm_HTC, temp_init, time_final]
+inputVar :: [UWrapper]
+inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+  htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map uw [coil_SA, temp_C, w_density,
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
   
 -- Typical values and constraints must be added to UC definitions for mkTable 
 -- to work here.
@@ -946,7 +946,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   S " parameters, material properties and initial conditions:"))]), 
   (Table [S "symbol", S "unit", S "description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
-  (\ch -> Sy (ch ^. unit)),
+  (\ch -> Sy (unit_symb ch)),
   (\ch -> ch ^. term)] inputVar) 
   (S "Input Variable" +:+ (requirement ^. term)) False),
 --

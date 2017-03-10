@@ -15,8 +15,8 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, nc', ncs
-  , ncWDS', makeVC, makeVCObj, vcFromCC, makeDCC, SymbolForm(..)
-  , dcc, dccWDS, cv, ccStSS, dcc'
+  , ncWDS', makeVC, makeVCObj, vcFromCC, SymbolForm(..)
+  , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
   , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
   , Concept(..), compoundterm
   , CommonIdea(..), commonidea, CI
@@ -26,7 +26,8 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC
   -- Chunk.Unital
-  , UnitalChunk(..), makeUC, makeUCWDS, ucFromVC
+  , UnitalChunk(..), makeUCWDS, ucFromVC
+  , Unital(..), uc, uc'
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC
   -- Chunk.Method
@@ -42,9 +43,15 @@ module Language.Drasil (
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
   , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
+  --Chunk.UWrapper 
+  , UWrapper, uw
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap, sLower, sParen
   , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
+  -- NounPhrase
+  , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
+  , cnIrr, nounPhrase, nounPhrase', at_start, at_start', CapitalizationRule(..)
+  , PluralRule(..)
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
     SecCons(..), ListType(..), ItemType(..),
@@ -59,7 +66,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, getAcc
+  , mkTable, unit'2Contents, getAcc, unit_symb
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Template.DD
@@ -88,9 +95,11 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUC, makeUCWDS, ucFromVC)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromVC
+                                  , uc, uc', Unital(..))
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, makeRC)
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
@@ -98,6 +107,9 @@ import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Wrapper
+import Language.Drasil.Chunk.Wrapper.QSWrapper
+import Language.Drasil.Chunk.Wrapper.UWrapper
+import Language.Drasil.NounPhrase
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sMap, sLower, sParen, sC, (+:+), (+:+.),

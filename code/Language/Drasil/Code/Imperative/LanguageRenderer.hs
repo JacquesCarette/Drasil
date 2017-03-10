@@ -322,8 +322,8 @@ iterationDocD c (For initv guard update b) = vcat [
     forLabel <+> parens (statementDoc c Loop initv <> semi <+> valueDoc c guard <> semi <+> statementDoc c Loop update) <+> blockStart c,
     oneTab $ bodyDoc c b,
     blockEnd c]
-iterationDocD c (ForEach var listVar@(ListVar _ t) b) = vcat [
-    iterForEachLabel c <+> parens (stateType c t Dec <+> text var <+> iterInLabel c <+> valueDoc c listVar) <+> blockStart c,
+iterationDocD c (ForEach v listVar@(ListVar _ t) b) = vcat [
+    iterForEachLabel c <+> parens (stateType c t Dec <+> text v <+> iterInLabel c <+> valueDoc c listVar) <+> blockStart c,
     oneTab $ bodyDoc c b,
     blockEnd c]
 iterationDocD c (ForEach _ val _) = error $ "Value in ForEach statement (" ++ render (valueDoc c val) ++ ") must be a ListVar"
@@ -398,9 +398,9 @@ patternDocD c (Strategy (RunStrategy n (Strats strats r) v)) =
                                                Just b  -> vcat [
                                                             bodyDoc c b,
                                                             resultState]
-    where resultState = case v of Nothing  -> empty
-                                  Just var -> case r of Nothing  -> error $ "Strategy '" ++ n ++ "': Attempt to assign null return to a Value."
-                                                        Just res -> assignDoc c $ Assign var res
+    where resultState = case v of Nothing    -> empty
+                                  Just vari  -> case r of Nothing  -> error $ "Strategy '" ++ n ++ "': Attempt to assign null return to a Value."
+                                                          Just res -> assignDoc c $ Assign vari res
 patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecValues Dynamic observerListName t os
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
@@ -527,7 +527,7 @@ valueDocD c (ListVar v _) = valueDoc c $ Var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
 valueDocD c Input = inputFunc c
-valueDocD c (InputFile v) = error "This should be defined in each renderer"
+valueDocD _ (InputFile _) = error "This should be defined in each renderer"
 valueDocD c (Global s) = getEnv c s
 
 valueDocD' :: Config -> Value -> Doc

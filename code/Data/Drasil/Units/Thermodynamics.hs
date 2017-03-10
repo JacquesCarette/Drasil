@@ -12,7 +12,7 @@ heat_capacity = makeDerU (dccWDS "heat_capacity" "heat capacity"
 heat_cap_spec :: DerUChunk --Specific heat capacity
 heat_cap_spec = makeDerU (dccWDS "heat_cap_spec" "specific heat" 
   (S "heat capacity per unit mass")) $
-  USynonym (UDiv (joule ^. unit) (UProd [kilogram ^. unit, centigrade ^. unit]))
+  USynonym (UDiv (joule ^. usymb) (UProd [kilogram ^. usymb, centigrade ^. usymb]))
 
 thermal_flux :: DerUChunk
 thermal_flux = makeDerU (dccWDS "thermal_flux" "heat flux"
@@ -20,7 +20,7 @@ thermal_flux = makeDerU (dccWDS "thermal_flux" "heat flux"
 
 heat_transfer_coef :: DerUChunk
 heat_transfer_coef = new_unit "heat transfer coefficient" $ (UDiv
-  (watt ^. unit) (UProd [m_2 ^. unit, centigrade ^. unit]))
+  (watt ^. usymb) (UProd [m_2 ^. usymb, centigrade ^. usymb]))
 
 volHtGenU :: DerUChunk
 volHtGenU = makeDerU (dcc "volHtGenU" "volumetric heat generation" 

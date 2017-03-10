@@ -470,12 +470,12 @@ s6_2_5_intro = Paragraph $
 
 s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable 
   [(\x -> P $ fst x), (\x -> snd x)] 
-  [(dim_min ^. symbol, S "0.1" +:+ Sy (sd ^. unit)), 
-  (dim_max ^.symbol, S "0.1" +:+ Sy (sd ^. unit)),(ar_max ^. symbol, S "5"), 
-  (cWeightMin ^. symbol, S "4.5" +:+ Sy (cWeightMin ^. unit)),
-  (cWeightMax ^. symbol, S "910" +:+ Sy (cWeightMax ^. unit)), 
-  (sd_min ^. symbol, S "6" +:+ Sy (sd_min ^. unit)), 
-  (sd_max ^. symbol, S "130" +:+ Sy (sd_max ^. unit))])
+  [(dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb sd)), 
+  (dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)),(ar_max ^. symbol, S "5"), 
+  (cWeightMin ^. symbol, S "4.5" +:+ Sy (unit_symb cWeightMin)),
+  (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
+  (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
+  (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
   (S "Table 3: Specification Parameter Values") True
 
 s6_2_5_intro2 = Paragraph $

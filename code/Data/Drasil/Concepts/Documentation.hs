@@ -22,7 +22,7 @@ mg          = commonidea "mg"          "Module Guide"                        "MG
 
 -- concepts relating to the templates and their contents
 section, system, description, specific, symbol_, units_, table_,
-  introduction :: NamedChunk
+  introduction, symbols :: NamedChunk
 section      = nc "section"      "Section"
 system       = nc "system"       "System"
 description  = nc "description"  "Description"

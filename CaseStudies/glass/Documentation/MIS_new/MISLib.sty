@@ -5,6 +5,8 @@
 \usepackage{xparse}
 \usepackage{ifthen}
 \usepackage{xstring}
+\usepackage{etoolbox}
+\usepackage{graphicx}
 \noexpandarg
 \allowdisplaybreaks
 
@@ -73,7 +75,7 @@
   \end{itemize}
 }
 
-\newcommand{\@localFunction}[1]{
+\NewDocumentCommand{\@localFunction}{m}{
   \setkeys[MIS]{local}{#1}
   \cmdMIS@local@functionName~: $\expandafter\@functionInTypes\expandafter{\cmdMIS@local@functionIn} \rightarrow \cmdMIS@local@functionOut$\\
   \cmdMIS@local@functionName($\expandafter\@functionInNames\expandafter{\cmdMIS@local@functionIn}$)~$\equiv \cmdMIS@local@functionBody$\\[\mytextsize]
@@ -161,7 +163,22 @@
   \subsubsection*{Local Functions}
   \ifthenelse{\equal{#1}{}}
     { N/A }
-    { \ProcessList {#1} {\@localFunction} }
+    { \ProcessList {#1} {\@localFunctionPrep} }
+}
+
+\NewDocumentCommand{\@localFunctionPrep}{m}{
+  \StrSubstitute{#1}{ }{}[\temp]
+  \expandarg
+  \StrLeft{\temp}{1}[\temp]
+  \expandafter\ifdefmacro\expandafter{\temp}
+  { 
+    \edef\temp{#1}
+    \expandarg
+    \IfBeginWith{\temp}{ }{\StrGobbleLeft{\temp}{1}[\temp]}{}
+    \noexpandarg
+    \expandafter\@localFunction\expandafter{\temp}
+  }
+  { \@localFunction{#1} }
 }
 
 
@@ -346,17 +363,35 @@
 }
 
 
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.7}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+
+
 % -------------- TYPES ---------------------------------------------------------
 \newcommand{\real}{\ensuremath{\mathbb{R}}}
 
-\NewDocumentCommand{\seq}{om}{
-  \ensuremath{\textrm{sequence \IfNoValueF{#1}{[#1]} of }#2}
-}
+\newcommand{\bool}{\ensuremath{\mathbb{B}}}
+
+\newcommand{\functype}[2]{\ensuremath{(#1 \rightarrow #2)}}
+
+\NewDocumentCommand{\seq}{om}{\ensuremath{\textrm{sequence \IfNoValueF{#1}{[#1] }of }#2}}
 
 
 % -------------- VALUES --------------------------------------------------------
 \NewDocumentCommand{\seqval}{m}{
   \ensuremath{\langle #1 \rangle}
+}
+
+\define@cmdkey [MIS] {seqbuild} {newElement} {}
+\define@cmdkey [MIS] {seqbuild} {variable} {}
+\define@cmdkey [MIS] {seqbuild} {inputList} {}
+\define@cmdkey [MIS] {seqbuild} {predicate} {}
+
+\NewDocumentCommand{\seqbuild}{m}{
+  \setkeys[MIS]{seqbuild}{#1}
+  \ifthenelse{\equal{\cmdMIS@seqbuild@predicate}{}}
+  {\ensuremath{\langle~\cmdMIS@seqbuild@newElement~|~\cmdMIS@seqbuild@variable\leftarrow\cmdMIS@seqbuild@inputList~\rangle}}
+  {\ensuremath{\langle~\cmdMIS@seqbuild@newElement~|~\cmdMIS@seqbuild@variable\leftarrow\cmdMIS@seqbuild@inputList~\bigcdot~\cmdMIS@seqbuild@predicate~\rangle}}
 }
 
 \newcommand{\str}[1]{
@@ -398,3 +433,43 @@
 \newcommand{\exc}[1]{
   \ensuremath{\textrm{#1}}
 }
+
+\newcommand{\fapp}[2]{
+  \ensuremath{\textrm{#1}(#2)}
+}
+
+
+% COMMON LOCAL FUNCTIONS
+
+\newcommand{\@localmap}[2]{
+  functionName = map ,
+  functionIn = {
+    f , \noexpand\functype{#1}{#2} ;
+    \noexpand\ell , \noexpand\seq{#1}
+  },
+  functionOut = \noexpand\seq{#2},
+  functionBody = \noexpand\seqbuild{
+    variable = x ,
+    newElement = \noexpand\fapp{f}{x} ,
+    inputList = \noexpand\ell ,
+    predicate =
+  }
+}
+
+\newcommand{\@localfilter}[1]{
+  functionName = filter ,
+  functionIn = {
+    p , \noexpand\functype{#1}{\noexpand\bool} ;
+    \noexpand\ell , \noexpand\seq{#1}
+  },
+  functionOut = \noexpand\seq{#1},
+  functionBody = \noexpand\seqbuild{
+    variable = x ,
+    newElement = x ,
+    inputList = \noexpand\ell ,
+    predicate = \noexpand\fapp{p}{x}
+  }
+}
+
+\newcommand{\localmap}[2]{\@localmap{\noexpand#1}{\noexpand#2}}
+\newcommand{\localfilter}[1]{\@localfilter{\noexpand#1}}

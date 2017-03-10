@@ -16,7 +16,7 @@
 \pagenumbering{arabic}
 
 \setlength\parindent{0pt}
-\setlength{\mathindent}{0pt}
+%\setlength{\mathindent}{0pt}
 \newlength{\mytextsize}
 \setlength{\mytextsize}{\f@size pt}
 
@@ -64,7 +64,7 @@
 
 \newcommand{\@routine}[1]{
   \setkeys[MIS]{routine}{#1}
-  \cmdMIS@routine@routineName(\cmdMIS@routine@routineArgs):
+  \cmdMIS@routine@routineName($\cmdMIS@routine@routineArgs$):
   \begin{itemize}
   \item transition: 
   \item[] \expandafter\@artransition\expandafter{\cmdMIS@routine@transition}
@@ -186,7 +186,7 @@
 
 \NewDocumentCommand{\@@uses}{ >{ \SplitList {,} } m }{ 
   \ProcessList { #1 } { \@use } 
-  \vspace{-\baselineskip}
+  \vspace{-\mytextsize}
 }
 
 \newcommand\@use[1]{
@@ -237,12 +237,12 @@
 
 \NewDocumentCommand{\@artransition}{ >{ \SplitList {;} } m}{
   \ifthenelse{\equal{#1}{{}}}
-  { N/A }
-  { \vspace{-2\baselineskip}
+  { \hspace*{\mathindent}N/A }
+  { \vspace{-2\mytextsize}
     \begin{alignat*}{2}
     \ProcessList { #1 } {\@neweqn}
     \end{alignat*}
-    \vspace{-2\baselineskip}
+    \vspace{-3\mytextsize}
   }
 }
 
@@ -257,23 +257,23 @@
 
 \NewDocumentCommand{\@aroutput}{m}{
   \ifthenelse{\equal{#1}{}}
-  { N/A }
-  { \vspace{-2\baselineskip}
+  { \hspace*{\mathindent}N/A }
+  { \vspace{-2\mytextsize}
     \begin{alignat*}{2}
     \@neweqn{out, #1}
     \end{alignat*}
-    \vspace{-2\baselineskip}
+    \vspace{-3\mytextsize}
   }
 }
 
 \NewDocumentCommand{\@arexception}{m}{
   \ifthenelse{\equal{#1}{}}
-  { N/A }
-  { \vspace{-2\baselineskip}
+  { \hspace*{\mathindent}N/A }
+  { \vspace{-2\mytextsize}
     \begin{alignat*}{2}
     \@neweqn{exc, #1}
     \end{alignat*}
-    \vspace{-2\baselineskip}
+    \vspace{-3\mytextsize}
   }
 }
 
@@ -362,6 +362,46 @@
   }
 }
 
+\newcounter{@matrixrow}
+\newcounter{@matrixcol}
+\newcounter{@matrixrowmax}
+
+\NewDocumentCommand{\mat}{mm >{ \SplitList {,} } m}{
+  \setcounter{@matrixrow}{#1}
+  \setcounter{@matrixcol}{#2}
+  \setcounter{@matrixrowmax}{#1}
+  \left[~\begin{alignedat}{#2}
+  \ProcessList{#3}{\@matrixelt}
+  \end{alignedat}~\right]
+  \ifthenelse{\equal{\the@matrixrow}{0}}
+  {}
+  {\PackageError{MISLib}{Missing matrix elements}}
+  \ifthenelse{\equal{\the@matrixcol}{0}}
+  {}
+  {\PackageError{MISLib}{Missing matrix elements}}
+}
+
+\NewDocumentCommand{\@matrixelt}{m}{
+  \ifthenelse{\equal{\the@matrixrow}{1}}
+  {
+    #1
+    \addtocounter{@matrixrow}{-1}
+    \addtocounter{@matrixcol}{-1}
+  }
+  { 
+    \ifthenelse{\equal{\the@matrixrow}{0}}
+    { 
+      \\
+      \setcounter{@matrixrow}{\the@matrixrowmax}
+      \@matrixelt{#1}
+    }
+    { 
+      &#1~& 
+      \addtocounter{@matrixrow}{-1}
+    }
+  }
+}
+
 
 \newcommand*\bigcdot{\mathpalette\bigcdot@{.7}}
 \newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
@@ -407,11 +447,11 @@
 }
 
 \newcommand{\true}{
-  \ensuremath{\textrm{True}}
+  \ensuremath{\top}
 }
 
 \newcommand{\self}{
-  \ensuremath{\textrm{self}}
+  \ensuremath{self}
 }
 
 \newcommand{\fsread}{

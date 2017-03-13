@@ -8,14 +8,15 @@ module Drasil.TableOfSymbols
 import Control.Lens ((^.))
 
 import Data.Maybe (isJust)
+import Data.List (sort)
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
-table_of_symbols :: (Quantity s) => 
+table_of_symbols :: (Ord s,Quantity s) => 
   [s] -> (s -> Sentence) -> Section
 table_of_symbols ls f = Section (tOfSymb ^. term)
-  [Con intro, Con (table ls f)]
+  [Con intro, Con (table (sort ls) f)]
 
 intro :: Contents
 intro = Paragraph $ 

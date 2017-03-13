@@ -24,6 +24,9 @@ instance Chunk CQSWrapper where
 instance Eq CQSWrapper where
   a == b = (a ^. id) == (b ^. id)
   
+instance Ord CQSWrapper where
+  compare a b = compare (a ^. symbol) (b ^. symbol)
+  
 instance NamedIdea CQSWrapper where
   term = cqslens term
   getA (CQS a) = getA a
@@ -55,6 +58,9 @@ instance Chunk QSWrapper where
   
 instance Eq QSWrapper where
   a == b = (a ^. id) == (b ^. id)
+  
+instance Ord QSWrapper where
+  compare a b = compare (a ^. symbol) (b ^. symbol)
   
 instance NamedIdea QSWrapper where
   term = qslens term

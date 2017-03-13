@@ -31,8 +31,10 @@ data Greek = Alpha_L
            | Theta
            | Upsilon_L
            | Upsilon
+  deriving (Eq, Ord)
 
 data Special = LEQ | Partial | Circle | UScore --underscore
+  deriving (Eq, Ord)
 
 class RenderGreek r where
   greek :: Greek -> r

@@ -8,7 +8,7 @@ module Language.Drasil.Symbol where
 
 import Language.Drasil.Unicode 
 
-data Decoration = Hat | Vector deriving Eq
+data Decoration = Hat | Vector deriving (Eq, Ord)
 
 data Symbol where
   Atomic   :: String -> Symbol
@@ -23,6 +23,31 @@ data Symbol where
             --             [2]   [4]
   Concat :: [ Symbol ]  -> Symbol
             -- [s1, s2] -> s1s2
+  deriving Eq
+            
+instance Ord Symbol where
+  compare (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
+    if (b == b') then (if (lr == l') then compare ur u' else compare lr l') 
+    else compare b b'
+  compare (Corners _ _ _ _ a)    b                     = compare a b
+  compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
+  compare (Concat (x:xs))       (Concat (x':ys))       = 
+    if (x == x') then compare (Concat xs) (Concat ys) else compare x x'
+  compare (Concat (a:_))         b                     = compare a b
+  compare (Concat [])            _                     = 
+    error "Attempting to compare empty symbol"
+  compare (Atop d1 a)           (Atop d2 a')           = 
+    if (a == a') then compare d1 d2 else compare a a'
+  compare (Atop _ a)             b                     = compare a b
+  compare (Atomic a)            (Atomic b)             = compare a b
+  compare (Atomic _)             _                     = LT
+  compare  _                    (Atomic _)             = GT
+  compare (Greek a)             (Greek b)              = compare a b
+  compare (Greek _)              _                     = LT
+  compare  _                    (Greek _)              = GT
+  compare (Special a)           (Special b)            = compare a b
+  compare (Special _)            _                     = LT
+  
   
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b

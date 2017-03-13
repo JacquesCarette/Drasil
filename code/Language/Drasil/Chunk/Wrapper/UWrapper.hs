@@ -22,6 +22,11 @@ ulens :: (forall c. (Unital c, SymbolForm c) =>
   Simple Lens c a) -> Simple Lens UWrapper a
 ulens l f (UW a) = fmap (\x -> UW (set l x a)) (f (a ^. l))
 
+instance Eq UWrapper where
+  a == b = (a ^. id) == (b ^. id)
+instance Ord UWrapper where
+  compare a b = compare (a ^. symbol) (b ^. symbol)
+
 instance Chunk UWrapper where
   id = ulens id
 instance NamedIdea UWrapper where

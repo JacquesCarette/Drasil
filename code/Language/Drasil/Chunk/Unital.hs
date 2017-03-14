@@ -33,6 +33,7 @@ instance NamedIdea UnitalChunk where
   getA (UC qc _ _ _) = getA qc
 instance Concept UnitalChunk where
   defn = nl defn
+  cdom = nl cdom
 instance Quantity UnitalChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
   getSymb = Just . SF

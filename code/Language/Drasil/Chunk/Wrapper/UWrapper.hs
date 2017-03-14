@@ -42,6 +42,7 @@ instance SymbolForm UWrapper where
   symbol = ulens symbol
 instance Concept UWrapper where
   defn = ulens defn
+  cdom = ulens cdom
   
 uw :: (Unital c, SymbolForm c) => c -> UWrapper
 uw = UW

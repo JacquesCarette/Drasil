@@ -45,6 +45,7 @@ instance NamedIdea RelationConcept where
   
 instance Concept RelationConcept where
   defn = rcl defn
+  cdom = rcl cdom
 
 -- don't export this
 rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a

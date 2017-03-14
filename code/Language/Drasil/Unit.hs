@@ -62,6 +62,7 @@ instance NamedIdea FundUnit where
 
 instance Concept FundUnit where
   defn = vc . defn
+  cdom = vc . cdom
   
 instance Unit FundUnit where
   usymb f (UD a b) = fmap (\x -> UD a x) (f b)
@@ -77,7 +78,9 @@ instance Chunk     DerUChunk where id  = duc . id
 instance NamedIdea DerUChunk where
   term = duc . term
   getA c = getA (c ^. duc)
-instance Concept   DerUChunk where defn = duc . defn
+instance Concept   DerUChunk where 
+  defn = duc . defn
+  cdom = duc . cdom
 instance Unit      DerUChunk where usymb  = duc . usymb
 
 instance UnitEq DerUChunk where
@@ -99,7 +102,9 @@ instance Chunk     UnitDefn where id   = ulens id
 instance NamedIdea UnitDefn where
   term = ulens term
   getA (UU a) = getA a
-instance Concept   UnitDefn where defn = ulens defn
+instance Concept   UnitDefn where 
+  defn = ulens defn
+  cdom = ulens cdom
 instance Unit      UnitDefn where usymb = ulens usymb
 
 --- These conveniences go here, because we need the class

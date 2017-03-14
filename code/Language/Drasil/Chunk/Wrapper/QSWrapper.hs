@@ -33,6 +33,7 @@ instance NamedIdea CQSWrapper where
   
 instance Concept CQSWrapper where
   defn = cqslens defn
+  cdom = cqslens cdom
   
 instance SymbolForm CQSWrapper where
   symbol = cqslens symbol

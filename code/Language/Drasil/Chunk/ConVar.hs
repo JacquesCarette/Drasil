@@ -31,6 +31,7 @@ instance NamedIdea ConVar where
   getA (CV c _ _) = getA c
 instance Concept ConVar where
   defn = cvl . defn
+  cdom = cvl . cdom
 instance SymbolForm ConVar where
   symbol f (CV c s t) = fmap (\x -> CV c x t) (f s)
 

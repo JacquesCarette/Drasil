@@ -19,12 +19,12 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
 swhsUnits :: [UWrapper]
 swhsUnits = map uw [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   htCap_S_P,htCap_V,htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,
-  htTransCoeff,coil_HTC] ++ [uw htFusion] ++ map uw [pcm_HTC,tank_length] ++
-  [uw mass] ++ map uw [pcm_mass,w_mass,ht_flux,latentE,thFluxVect,ht_flux_C,
-  ht_flux_in,ht_flux_out, ht_flux_P,latentE_P] ++ [uw time] ++ map uw [temp,
+  htTransCoeff,coil_HTC,pcm_HTC,tank_length,pcm_mass,w_mass,ht_flux,latentE,
+  thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,temp,
   temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
-  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W]
+  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W] ++ 
+  map uw [htFusion, mass, time]
 
 coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,htTransCoeff,coil_HTC,

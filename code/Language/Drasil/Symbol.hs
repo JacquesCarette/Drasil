@@ -7,6 +7,7 @@
 module Language.Drasil.Symbol where
 
 import Language.Drasil.Unicode 
+import Data.Char (toLower)
 
 data Decoration = Hat | Vector deriving (Eq, Ord)
 
@@ -24,22 +25,34 @@ data Symbol where
   Concat :: [ Symbol ]  -> Symbol
             -- [s1, s2] -> s1s2
   deriving Eq
-            
+
+--FIXME? The exact ordering we want may need to be updated, or should we
+--  allow custom?  
 instance Ord Symbol where
   compare (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
-    if (b == b') then (if (lr == l') then compare ur u' else compare lr l') 
-    else compare b b'
+    case compare b b' of
+      EQ -> case compare lr l' of
+            EQ -> compare ur u'
+            other -> other
+      other -> other
   compare (Corners _ _ _ _ a)    b                     = compare a b
   compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
   compare (Concat (x:xs))       (Concat (x':ys))       = 
-    if (x == x') then compare (Concat xs) (Concat ys) else compare x x'
+    case compare x x' of
+      EQ -> compare xs ys
+      other -> other
   compare (Concat (a:_))         b                     = compare a b
   compare (Concat [])            _                     = 
     error "Attempting to compare empty symbol"
   compare (Atop d1 a)           (Atop d2 a')           = 
-    if (a == a') then compare d1 d2 else compare a a'
+    case compare a a' of
+      EQ -> compare d1 d2
+      other -> other
   compare (Atop _ a)             b                     = compare a b
-  compare (Atomic a)            (Atomic b)             = compare a b
+  compare (Atomic (x:xs))       (Atomic (y:ys))        = 
+    case compare (toLower x) (toLower y) of
+      EQ -> compare xs ys
+      other -> other
   compare (Atomic _)             _                     = LT
   compare  _                    (Atomic _)             = GT
   compare (Greek a)             (Greek b)              = compare a b

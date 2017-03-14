@@ -29,6 +29,16 @@ data Symbol where
 --FIXME? The exact ordering we want may need to be updated, or should we
 --  allow custom?  
 instance Ord Symbol where
+  compare (Atop d1 a)           (Atop d2 a')           = 
+    case compare a a' of
+      EQ -> compare d1 d2
+      other -> other
+  compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
+  compare (Concat (x:xs))       (Concat (x':ys))       = 
+    case compare x x' of
+      EQ -> compare xs ys
+      other -> other
+  compare (Concat a)             b                     = compare a [b]
   compare (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
     case compare b b' of
       EQ -> case compare lr l' of
@@ -36,19 +46,7 @@ instance Ord Symbol where
             other -> other
       other -> other
   compare (Corners _ _ _ _ a)    b                     = compare a b
-  compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
-  compare (Concat (x:xs))       (Concat (x':ys))       = 
-    case compare x x' of
-      EQ -> compare xs ys
-      other -> other
-  compare (Concat (a:_))         b                     = compare a b
-  compare (Concat [])            _                     = 
-    error "Attempting to compare empty symbol"
-  compare (Atop d1 a)           (Atop d2 a')           = 
-    case compare a a' of
-      EQ -> compare d1 d2
-      other -> other
-  compare (Atop _ a)             b                     = compare a b
+  compare (Atop _ a)             b                     = compare a b  
   compare (Atomic (x:xs))       (Atomic (y:ys))        = 
     case compare (toLower x) (toLower y) of
       EQ -> compare xs ys
@@ -60,7 +58,7 @@ instance Ord Symbol where
   compare  _                    (Greek _)              = GT
   compare (Special a)           (Special b)            = compare a b
   compare (Special _)            _                     = LT
-  
+
   
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b

@@ -12,6 +12,7 @@ import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
 import Data.Maybe (isJust)
+import Data.List (sort)
 import Prelude hiding (id)
 
 ---------------------------------------------------------------------------
@@ -30,7 +31,7 @@ data SystemInformation where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
-  Quantity e, Quantity f, Concept f, NamedIdea g) => {
+  Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g) => {
   _sys :: a,
   _kind :: b,
   _authors :: [c],
@@ -88,15 +89,15 @@ mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
-      (Section (tOfSymb^.term) (map Con [con, (table v (^.term))])) : l'
+      (Section (tOfSymb^.term) (map Con [con, (table (sort v) (^.term))])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
-mkTSymb :: (Quantity e, Concept e) => 
+mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> Contents -> Section
-mkTSymb v f c = Section (tOfSymb ^. term) (map Con [c, table v (lf f)])
+mkTSymb v f c = Section (tOfSymb ^. term) (map Con [c, table (sort v) (lf f)])
   where lf Term = (^.term)
         lf Defn = (^.defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then

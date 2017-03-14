@@ -47,19 +47,39 @@ $a$ & Plate length (long dimension) & mm
 \\
 $b$ & Plate width (short dimension) & mm
 \\
+$B$ & Risk function & 
+\\
 $d_{max}$ & Maximum value for one of the dimensions of the glass plate & mm
 \\
 $d_{min}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & kPa
 \\
+$g$ & Glass type, g in {AN, HS, FT} & 
+\\
 $h$ & Actual thickness & mm
+\\
+$is\_safe1$ & True when calculated probability is less than tolerable probability & 
+\\
+$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
+\\
+$J$ & Stress distribution factor (Function) & 
+\\
+$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & 
 \\
 $k$ & Surface flaw parameter & $\text{N}^{-7}$$\text{m}^{12}$
 \\
 $m$ & Surface flaw parameter & $\text{N}^{-7}$$\text{m}^{12}$
 \\
+$P_{b}$ & Probability of breakage & 
+\\
+$P_{btol}$ & Tolerable probability of breakage & 
+\\
 $q$ & Applied load (demand) & kPa
+\\
+$\hat{q}$ & Dimensionless load & 
+\\
+$\hat{q}_{tol}$ & Tolerable load & 
 \\
 $SD$ & Stand off distance which is represented in coordinates (SDx, SDy, SDz) & m
 \\
@@ -78,26 +98,6 @@ $w_{max}$ & Maximum permissible input charge weight & kg
 $w_{min}$ & Minimum permissible input charge weight & kg
 \\
 $w_{TNT}$ & Explosive Mass in equivalent weight of TNT & kg
-\\
-$B$ & Risk function & 
-\\
-$g$ & Glass type, g in {AN, HS, FT} & 
-\\
-$is\_safe1$ & True when calculated probability is less than tolerable probability & 
-\\
-$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
-\\
-$J$ & Stress distribution factor (Function) & 
-\\
-$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & 
-\\
-$P_{b}$ & Probability of breakage & 
-\\
-$P_{btol}$ & Tolerable probability of breakage & 
-\\
-$\hat{q}$ & Dimensionless load & 
-\\
-$\hat{q}_{tol}$ & Tolerable load & 
 \\
 \bottomrule
 \label{Table:ToS}

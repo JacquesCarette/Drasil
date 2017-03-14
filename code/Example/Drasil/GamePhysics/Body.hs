@@ -52,7 +52,7 @@ mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TAandA ]) :
     --FIXME: Need to be able to print defn for gravitational constant.
   
 chipmunkSysInfo :: SystemInformation
-chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [ConVar])
+chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [CQSWrapper])
   cpAcronyms --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]

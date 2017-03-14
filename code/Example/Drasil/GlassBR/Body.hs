@@ -61,7 +61,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb (Paragraph $ S ""), TAandA]) :
   map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
   
 glassSystInfo :: SystemInformation
-glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [ConVar])
+glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [CQSWrapper])
   acronyms --FIXME: All named ideas, not just acronyms.
 
 mgBod :: [Section]

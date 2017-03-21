@@ -5,7 +5,7 @@ module Language.Drasil.NounPhrase
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr
   , nounPhrase, nounPhrase', compoundPhrase, compoundPhrase'
-  , at_start, at_start'
+  , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
   , PluralRule(..)
   )where
@@ -27,6 +27,7 @@ class NounPhrase n where
     --example: "The quick brown fox" 
     --Data types should use functions to determine capitalization based
     -- on rules.
+  titleCase :: n -> (NP -> Sentence) -> Capitalization
 
 type Capitalization = Sentence  --Using type synonyms for clarity.
 type PluralForm     = Sentence  -- These might change.
@@ -49,6 +50,9 @@ instance NounPhrase NP where
   sentenceCase n@(ProperNoun _ _)   _ = phrase n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r)     f = cap (f n) r
+  titleCase n@(ProperNoun _ _)      _ = phrase n
+  titleCase n@(CommonNoun _ _ _)    f = cap (f n) CapWords
+  titleCase n@(Phrase _ _ _)        f = cap (f n) CapWords
   
 -- ===Constructors=== --
 pn, pn', pn'', pn''' :: String -> NP
@@ -92,6 +96,9 @@ at_start, at_start' :: NounPhrase n => n -> Capitalization
 at_start  n = sentenceCase n phrase
 at_start' n = sentenceCase n plural
 
+titleize, titleize' :: NounPhrase n => n -> Capitalization
+titleize  n = titleCase n phrase
+titleize' n = titleCase n plural
 
 data CapitalizationRule = CapFirst
                         | CapWords

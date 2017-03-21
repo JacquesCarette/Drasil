@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
-import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of_
+import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of'
                                        , ncs, npnc, NPNC, compoundNPNCTitle)
 import Language.Drasil.NounPhrase
 
@@ -23,21 +23,21 @@ mg          = commonidea "mg"          "Module Guide"                        "MG
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
-table_, introduction, symbols :: NamedChunk
-section, system, description, specific, symbol_, units_ :: NPNC
+introduction :: NamedChunk
+section, system, description, specific, symbol_, units_, table_:: NPNC
 section      = npnc "section"     (cn' "section")
 system       = npnc "system"      (cn' "system")
 description  = npnc "description" (cn' "description")
 specific     = npnc "specific"    (cn' "specific") -- ??
 symbol_      = npnc "symbol"      (cn' "symbol")
-symbols      = nc "symbols"      "Symbols" -- Hack!
 units_       = npnc "units"       (cn' "units")
-table_       = nc "table"        "Table"
+table_       = npnc "table"       (cn' "table")
 introduction = nc "introduction" "Introduction"
 
-refmat, tOfSymb :: NamedChunk
+tOfSymb, refmat :: NamedChunk
+
 refmat       = nc  "refmat"      "Reference Material"
-tOfSymb      = ncs "tOfSymb"   $ table_ `of_` symbols
+tOfSymb      = ncs "tOfSymb"   ((titleize table_) `of'` (titleize' symbol_))
 
 -- compounds
 systemdescription, specificsystemdescription  :: NPNC

@@ -1,7 +1,9 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
-import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, compoundterm, of_, ncs)
+import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of_
+                                       , ncs, npnc, NPNC, compoundNPNCTitle)
+import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg :: CI
@@ -21,15 +23,15 @@ mg          = commonidea "mg"          "Module Guide"                        "MG
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
-section, system, description, specific, symbol_, units_, table_,
-  introduction, symbols :: NamedChunk
-section      = nc "section"      "Section"
-system       = nc "system"       "System"
-description  = nc "description"  "Description"
-specific     = nc "specific"     "Specific" -- ??
-symbol_      = nc "symbol"       "Symbol"
+table_, introduction, symbols :: NamedChunk
+section, system, description, specific, symbol_, units_ :: NPNC
+section      = npnc "section"     (cn' "section")
+system       = npnc "system"      (cn' "system")
+description  = npnc "description" (cn' "description")
+specific     = npnc "specific"    (cn' "specific") -- ??
+symbol_      = npnc "symbol"      (cn' "symbol")
 symbols      = nc "symbols"      "Symbols" -- Hack!
-units_       = nc "units"        "Units"
+units_       = npnc "units"       (cn' "units")
 table_       = nc "table"        "Table"
 introduction = nc "introduction" "Introduction"
 
@@ -38,7 +40,7 @@ refmat       = nc  "refmat"      "Reference Material"
 tOfSymb      = ncs "tOfSymb"   $ table_ `of_` symbols
 
 -- compounds
-systemdescription, specificsystemdescription :: NamedChunk
-systemdescription         = compoundterm system   description
-specificsystemdescription = compoundterm specific systemdescription
+systemdescription, specificsystemdescription  :: NPNC
+systemdescription         = compoundNPNCTitle system   description
+specificsystemdescription = compoundNPNCTitle specific systemdescription
 

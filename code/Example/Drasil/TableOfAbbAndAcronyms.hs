@@ -14,7 +14,7 @@ table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
 --FIXME? Should it be called Symbol or something like Abbreviation/Acronym?
 --FIXME? Should it be "Description" or "Term" or something else?
 table :: (NamedIdea s) => [s] -> Contents
-table ls = Table (map (^.term) [symbol_,description]) (mkTable
+table ls = Table (map (at_start) [symbol_, description]) (mkTable
   [(\ch -> getAcc ch) , 
    (\ch -> ch ^. term)]
   ls)

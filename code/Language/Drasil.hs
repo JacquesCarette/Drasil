@@ -14,13 +14,15 @@ module Language.Drasil (
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), NamedChunk, ConceptChunk(..), nc, ncWDS, nc', ncs
-  , ncWDS', makeVC, makeVCObj, vcFromCC, SymbolForm(..)
+  , Chunk(..), VarChunk(..), ConceptChunk(..)
+  , makeVC, makeVCObj, vcFromCC, SymbolForm(..)
   , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
-  , Quantity(..), ConVar(..), cvR, NamedIdea(..), short
-  , Concept(..), compoundterm
+  , Quantity(..), ConVar(..), cvR
+  , Concept(..)
   , CommonIdea(..), commonidea, CI
-  , for, of_
+  -- Chunk.NamedIdea
+  , NamedIdea(..), NamedChunk, NPNC, short, nc, ncWDS, nc', ncs, ncWDS', npnc
+  , compoundterm, for, of_, compoundNPNC
   -- Chunk.Constrained
   , Constrained(..)
   -- Chunk.Eq
@@ -51,7 +53,7 @@ module Language.Drasil (
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, nounPhrase, nounPhrase', at_start, at_start', CapitalizationRule(..)
-  , PluralRule(..)
+  , PluralRule(..), compoundPhrase, compoundPhrase'
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
     SecCons(..), ListType(..), ItemType(..),

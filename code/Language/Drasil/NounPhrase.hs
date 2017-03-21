@@ -4,13 +4,14 @@ module Language.Drasil.NounPhrase
   , NP
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr
-  , nounPhrase, nounPhrase'
+  , nounPhrase, nounPhrase', compoundPhrase, compoundPhrase'
   , at_start, at_start'
   , CapitalizationRule(..)
   , PluralRule(..)
   )where
 
 import Data.Char (toUpper)
+import Data.List (intersperse)
 import Language.Drasil.Spec (Sentence(..), (+:+))
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
@@ -21,7 +22,7 @@ class NounPhrase n where
   phrase :: n -> Sentence -- ex. "the quick brown fox"
   plural :: n -> PluralForm -- ex. "the quick brown foxes" 
     --Could replace plural string with a function.
-  sentenceCase :: n -> (n -> Sentence) -> Capitalization 
+  sentenceCase :: n -> (NP -> Sentence) -> Capitalization 
     --Should this be replaced with a data type instead?
     --example: "The quick brown fox" 
     --Data types should use functions to determine capitalization based
@@ -34,17 +35,17 @@ type PluralString   = String
 data NP where
   ProperNoun :: String -> PluralRule -> NP
   CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
-  Phrase     :: String -> PluralString -> CapitalizationRule -> NP
+  Phrase     :: Sentence -> PluralForm -> CapitalizationRule -> NP
   --Phrase plurals can get very odd, so it seems best (for now) to encode
   --them directly.
 
 instance NounPhrase NP where
   phrase (ProperNoun n _)       = S n
   phrase (CommonNoun n _ _)     = S n
-  phrase (Phrase n _ _)         = S n
+  phrase (Phrase n _ _)         = n
   plural n@(ProperNoun _ p)     = sPlur (phrase n) p
   plural n@(CommonNoun _ p _)   = sPlur (phrase n) p
-  plural (Phrase _ p _)         = S p
+  plural (Phrase _ p _)         = p
   sentenceCase n@(ProperNoun _ _)   _ = phrase n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r)     f = cap (f n) r
@@ -72,10 +73,18 @@ cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 cnIrr = CommonNoun 
 
 nounPhrase :: String -> PluralString -> NP
-nounPhrase s p = Phrase s p CapFirst
+nounPhrase s p = Phrase (S s) (S p) CapFirst
 
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
-nounPhrase' = Phrase
+nounPhrase' s p = Phrase (S s) (S p)
+
+compoundPhrase :: NP -> NP -> NP
+compoundPhrase t1 t2 = Phrase 
+  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst
+  
+compoundPhrase' :: NP -> NP -> NP
+compoundPhrase' t1 t2 = Phrase
+  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords
 
 -- === Helpers === 
 
@@ -85,6 +94,7 @@ at_start' n = sentenceCase n plural
 
 
 data CapitalizationRule = CapFirst
+                        | CapWords
                         | Replace String
 data PluralRule = AddS
                 | AddE
@@ -103,8 +113,11 @@ sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 
 cap :: Sentence -> CapitalizationRule -> Sentence
-cap (S []) _ = S []
 cap (S (s:ss)) CapFirst = S $ (toUpper s : ss)
+cap (S s) CapWords = S $ concat (intersperse " " 
+  (map (\x -> (toUpper (head x) : tail x)) (words s)))
+cap (s1 :+: s2) CapWords = cap s1 CapFirst :+: cap s2 CapWords --FIXME: HACK
+cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
 cap _ (Replace s) = S s
 cap _ _ = error "Erroneous use of cap. See NounPhrase.hs"
 

@@ -58,6 +58,7 @@ instance NounPhrase NPNC where
   phrase (NPNC _ _ _ d) = phrase d
   plural (NPNC _ _ _ d) = plural d
   sentenceCase (NPNC _ _ _ d) = sentenceCase d
+  titleCase (NPNC _ _ _ d) = titleCase d
   
 npnc :: String -> NP -> NPNC
 npnc i n = NPNC i (phrase n) Nothing n
@@ -89,3 +90,6 @@ for t1 t2 = (t1^.term) +:+ S "for" +:+ (t2^.term)
 
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 of_ t1 t2 = (t1^.term) +:+ S "of" +:+ (t2^.term)
+
+of' :: Sentence -> Sentence -> Sentence
+of' t1 t2 = t1 +:+ S "of" +:+ t2

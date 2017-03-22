@@ -5,7 +5,7 @@ import qualified Data.Drasil.Concepts.Documentation as D
 import Control.Lens ((^.))
 
 specSysDescr :: NamedIdea c => c -> [Section] -> Section
-specSysDescr sys subs = section (at_start D.specificsystemdescription) (intro sys) subs
+specSysDescr sys subs = section (titleize D.specificsystemdescription) (intro sys) subs
 
 -- FIXME: this all should be broken down and mostly generated.
 intro :: NamedIdea c => c -> Contents

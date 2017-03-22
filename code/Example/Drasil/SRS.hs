@@ -8,12 +8,10 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation
 
-import Control.Lens ((^.))
-
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
 doc sys authors secs = Document (srs `for` sys) authors secs
 
 doc' sys authors secs = Document (addS (srs `for` sys)) authors secs
 
 intro :: [SecCons] -> Section
-intro l = Section (introduction^.term) l
+intro l = Section (titleize introduction) l

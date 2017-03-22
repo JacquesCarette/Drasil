@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
 import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of'
-                                       , ncs, npnc, NPNC, compoundNPNCTitle)
+                                       , ncs, npnc, NPNC, compoundNPNC)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
@@ -41,6 +41,6 @@ tOfSymb      = ncs "tOfSymb"   ((titleize table_) `of'` (titleize' symbol_))
 
 -- compounds
 systemdescription, specificsystemdescription  :: NPNC
-systemdescription         = compoundNPNCTitle system   description
-specificsystemdescription = compoundNPNCTitle specific systemdescription
+systemdescription         = compoundNPNC system   description
+specificsystemdescription = compoundNPNC specific systemdescription
 

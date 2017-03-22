@@ -122,12 +122,14 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
 cap (S s)        CapWords = S $ concat (intersperse " " 
-  (map (\x -> (toUpper (head x) : tail x)) (words s)))
+  (map (\x -> (toUpper (head x) : (tail x))) (words s)))
 cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
-cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords --FIXME: HACK
+cap (s1 :+: s2 :+: s3)  r = cap (s1 :+: s2) r +:+ cap s3 r 
+  --could change associativity of :+: instead?
+cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
 cap (s1 :+: s2)  CapFirst = cap s1 CapFirst :+: s2
 cap _ (Replace s) = S s
-cap _ _ = error "Erroneous use of cap. See NounPhrase.hs"
+cap a _ = a
 
 -- ity, ness, ion :: String -> String
 -- Maybe export these for use in irregular cases?

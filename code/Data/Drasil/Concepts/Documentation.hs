@@ -23,16 +23,17 @@ mg          = commonidea "mg"          "Module Guide"                        "MG
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
-introduction :: NamedChunk
-section, system, description, specific, symbol_, units_, table_:: NPNC
-section      = npnc "section"     (cn' "section")
-system       = npnc "system"      (cn' "system")
-description  = npnc "description" (cn' "description")
-specific     = npnc "specific"    (cn' "specific") -- ??
-symbol_      = npnc "symbol"      (cn' "symbol")
-units_       = npnc "units"       (cn' "units")
-table_       = npnc "table"       (cn' "table")
-introduction = nc "introduction" "Introduction"
+
+section, system, description, specific, symbol_, units_, 
+  table_, introduction:: NPNC
+section      = npnc "section"      (cn' "section")
+system       = npnc "system"       (cn' "system")
+description  = npnc "description"  (cn' "description")
+specific     = npnc "specific"     (cn' "specific") -- ??
+symbol_      = npnc "symbol"       (cn' "symbol")
+units_       = npnc "units"        (cn' "units")
+table_       = npnc "table"        (cn' "table")
+introduction = npnc "introduction" (cn' "introduction")
 
 tOfSymb, refmat :: NamedChunk
 

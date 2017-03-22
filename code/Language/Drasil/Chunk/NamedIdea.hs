@@ -75,11 +75,6 @@ compoundNPNC :: NPNC -> NPNC -> NPNC
 compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) = 
   NPNC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing 
   (compoundPhrase n1 n2) 
-
-compoundNPNCTitle :: NPNC -> NPNC -> NPNC
-compoundNPNCTitle t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) = 
-  NPNC (t1^.id ++ t2^.id) ((t1^.term) +:+ (t2^.term)) Nothing 
-  (compoundPhrase' n1 n2)
   
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:

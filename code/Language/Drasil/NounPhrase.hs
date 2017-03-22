@@ -120,11 +120,12 @@ sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 
 cap :: Sentence -> CapitalizationRule -> Sentence
-cap (S (s:ss)) CapFirst = S $ (toUpper s : ss)
-cap (S s) CapWords = S $ concat (intersperse " " 
+cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
+cap (S s)        CapWords = S $ concat (intersperse " " 
   (map (\x -> (toUpper (head x) : tail x)) (words s)))
-cap (s1 :+: s2) CapWords = cap s1 CapFirst :+: cap s2 CapWords --FIXME: HACK
-cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
+cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
+cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords --FIXME: HACK
+cap (s1 :+: s2)  CapFirst = cap s1 CapFirst :+: s2
 cap _ (Replace s) = S s
 cap _ _ = error "Erroneous use of cap. See NounPhrase.hs"
 

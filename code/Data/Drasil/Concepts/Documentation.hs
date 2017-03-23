@@ -1,24 +1,25 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
+import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
 import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of'
                                        , ncs, npnc, NPNC, compoundNPNC)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg :: CI
-
-assumption  = commonidea "assumption"  "Assumption"                          "A"
-dataDefn    = commonidea "dataDefn"    "Data Definition"                     "DD"
-genDefn     = commonidea "genDefn"     "General Definition"                  "GD"
-goalStmt    = commonidea "goalStmt"    "Goal Statement"                      "GS" 
-inModel     = commonidea "inModel"     "Instance Model"                      "IM" 
-likelyChg   = commonidea "likelyChg"   "Likely Change"                       "LC"
-physSyst    = commonidea "physSyst"    "Physical System Description"         "PS" 
-requirement = commonidea "requirement" "Requirement"                         "R"
-srs         = commonidea "srs"         "Software Requirements Specification" "SRS"
-thModel     = commonidea "thModel"     "Theoretical Model"                   "T"
-mg          = commonidea "mg"          "Module Guide"                        "MG" 
+  requirement, srs, thModel, mg :: CINP
+--FIXME: Add compound NounPhrases
+assumption  = commonINP "assumption"  (cn' "Assumption")                    "A"
+dataDefn    = commonINP "dataDefn"    (cn' "Data Definition")               "DD"
+genDefn     = commonINP "genDefn"     (cn' "General Definition")            "GD"
+goalStmt    = commonINP "goalStmt"    (cn' "Goal Statement")                "GS" 
+inModel     = commonINP "inModel"     (cn' "Instance Model")                "IM" 
+likelyChg   = commonINP "likelyChg"   (cn' "Likely Change")                 "LC"
+physSyst    = commonINP "physSyst"    (cn' "Physical System Description")   "PS" 
+requirement = commonINP "requirement" (cn' "Requirement")                   "R"
+thModel     = commonINP "thModel"     (cn' "Theoretical Model")             "T"
+mg          = commonINP "mg"          (cn' "Module Guide")                  "MG" 
+srs         = commonINP "srs"         (cn' "Software Requirements Specification") 
+  "SRS"
 
 ---------------------------------------------------------------------
 

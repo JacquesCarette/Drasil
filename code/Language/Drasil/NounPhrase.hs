@@ -38,7 +38,8 @@ data NP where
   CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
   Phrase     :: Sentence -> PluralForm -> CapitalizationRule -> NP
   --Phrase plurals can get very odd, so it seems best (for now) to encode
-  --them directly.
+  --them directly. FIXME: If the singular/plural phrase has special (replace)
+  --capitalization, one of the two cannot be capitalized right now.
 
 instance NounPhrase NP where
   phrase (ProperNoun n _)       = S n

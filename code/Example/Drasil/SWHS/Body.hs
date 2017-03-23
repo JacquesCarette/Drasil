@@ -33,7 +33,7 @@ import qualified Drasil.SRS as SRS
 import Drasil.ReferenceMaterial (refSec, intro)
 import Drasil.DocumentLanguage
 
-acronyms :: [CI]
+acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 

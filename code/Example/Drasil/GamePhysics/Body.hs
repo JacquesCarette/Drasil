@@ -353,7 +353,7 @@ s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section (addS $ assumption ^. term) [Con s4_2_1_intro,
+s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -364,7 +364,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   (map (\ch -> (sLower (ch ^. term)) +:+ (bterm ch)) 
   [thModel, genDefn, dataDefn, inModel]) `sC` S "or" +:+ 
   (sLower $ likelyChg ^. term) +:+ (bterm likelyChg) `sC` 
-  S "in which the respective" +:+ (sLower $ assumption ^. term) +:+. S "is used"
+  S "in which the respective" +:+ (phrase assumption) +:+. S "is used"
   where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
 
 s4_2_1_list = Enumeration (Simple [

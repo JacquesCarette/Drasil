@@ -108,7 +108,7 @@ s2_1_intro =
   S "The goals and" +:+ (sLower (thModel ^. term)) :+:
   S "s used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
-  (sLower (assumption ^. term)) :+: S "s and unambiguous" +:+
+  (plural assumption) +:+ S "and unambiguous" +:+
   S "definitions. This document is intended to be used as a reference" +:+
   S "to provide all information necessary to understand and verify the" +:+
   S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
@@ -250,7 +250,7 @@ s6_intro = Paragraph $
   S "This section first presents the problem description, which gives a" +:+
   S "high-level view of the problem to be solved. This is followed by" +:+
   S "the solution characteristics specification, which presents the" +:+
-  (sLower (assumption ^. term)) :+: S "s, theories, definitions."
+  (plural assumption) `sC` S "theories, definitions."
 
 s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
   Sub s6_1_2, Sub s6_1_3]
@@ -338,11 +338,11 @@ s6_2 = Section (S "Solution Characteristics Specification")
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This section explains all the" +:+
-  (sLower (assumption ^. term)) :+: S "s considered and the" +:+
+  (plural assumption) +:+ S "considered and the" +:+
   (sLower (thModel ^. term)) :+: S "s which are" +:+
   S "supported by the" +:+ (sLower (dataDefn ^. term)) :+: S "s."
   
-s6_2_1 = Section (assumption ^. term :+: S "s") ([Con s6_2_1_intro] ++
+s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
@@ -355,7 +355,7 @@ s6_2_1_intro = Paragraph $
   S "[" :+: (short dataDefn) :+: S "], or" +:+
   (sLower (inModel ^. term)) +:+ 
   S "[" :+: (short inModel) :+: S "], in which the respective" +:+
-  (sLower $ assumption ^. term) +:+. S "is used"
+  (phrase assumption) +:+. S "is used"
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
@@ -621,8 +621,8 @@ s9_intro1 = Paragraph $
   (sLower (dataDefn ^. term)) :+: S "s" `sC`
   (sLower (inModel ^. term)) :+: S "s" `sC`
   (sLower (likelyChg ^. term)) :+: S "s and" +:+
-  (sLower (requirement ^. term)) :+: S "s on the" +:+
-  (sLower (assumption ^. term)) :+: S "s."
+  (sLower (requirement ^. term)) :+: S "s on the" +:+.
+  (plural assumption)
 
 --FIXME: There has to be a better way to do this.
 s9_table1 = Table [S "", 
@@ -796,8 +796,8 @@ s9_intro2 =
   (sLower (inModel ^. term)) :+: S "s" `sC`
   (sLower (dataDefn ^. term)) :+: S "s" `sC` 
   (sLower (requirement ^. term)) :+: S "s and" +:+
-  (sLower (likelyChg ^. term)) :+: S "s on" +:+
-  (sLower (assumption ^. term)) :+: S "s.",
+  (sLower (likelyChg ^. term)) :+: S "s on" +:+.
+  (plural assumption),
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical" +:+
   S "representation of the matrix by scanning the labels and reference" +:+.
@@ -811,7 +811,7 @@ fig_3 = Figure (S "Figure 3: Traceability Matrix Showing the Connections" +:+
   "RTrace.png"
 
 fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections" +:+
-  S "Between" +:+ (assumption ^. term) :+: S "s and Other Items")
+  S "Between" +:+ (titleize' assumption) +:+ S "and Other Items")
   "ATrace.png"
 
 s10 = Section(S "References") [Con s10_list]

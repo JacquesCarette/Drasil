@@ -265,13 +265,13 @@ dy_i        = uc' "dy_i" "displacement of a slice in the y-ordinate direction (f
 
 ----Acronyms-----
 -- FIXME: Use acronyms
-acronyms :: [CI]
+acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
   physSyst,requirement,srs,sSA,thModel]
   
---FIXME: Use an acronym and move "Slope Stability Analysis" to term.
-sSA :: CI
-sSA = commonidea "sSA" "Slope Stability Analysis" "SSA"
+--FIXME: Use nounphrase instead of pn
+sSA :: CINP
+sSA = commonINP "sSA" (pn "Slope Stability Analysis") "SSA"
 
 
 ----Theoretical Models----

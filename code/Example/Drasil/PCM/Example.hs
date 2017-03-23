@@ -89,12 +89,12 @@ dummyVar    = uc' "dummyVar" "dummy variable for integration over time"
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 ----Acronyms-----
-acronyms :: [CI]
+acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   physSyst,requirement,srs,sWHS,thModel]
   
-sWHS :: CI
-sWHS = commonidea "sWHS" "Solar Water Heating System" "SWHS"
+sWHS :: CINP
+sWHS = commonINP "sWHS" (pn' "Solar Water Heating System") "SWHS"
 
 ----EqChunks----
 --Theoretical models--

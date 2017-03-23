@@ -19,7 +19,7 @@ module Language.Drasil (
   , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
   , Quantity(..), ConVar(..), cvR
   , Concept(..)
-  , CommonIdea(..), commonidea, CI
+  , CommonIdea(..), commonidea, CI, commonINP, CINP
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, NPNC, short, nc, ncWDS, nc', ncs, ncWDS', npnc
   , compoundterm, for, of_, compoundNPNC

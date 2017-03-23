@@ -9,4 +9,5 @@ ode :: CINP
 gradient  = dcc "gradient" "gradient" "gradient operator"
 norm_vect = dcc "norm_vect" "normal" "unit outward normal vector for a surface"
 
+--FIXME: use nounphrase instead of cn'
 ode       = commonINP "ode" (cn' "Ordinary Differential Equation") "ODE"

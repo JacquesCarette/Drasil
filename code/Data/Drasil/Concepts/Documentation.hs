@@ -7,7 +7,7 @@ import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg :: CINP
---FIXME: Add compound NounPhrases
+--FIXME: Add compound NounPhrases instead of cn'
 assumption  = commonINP "assumption"  (cn' "Assumption")                    "A"
 dataDefn    = commonINP "dataDefn"    (cn' "Data Definition")               "DD"
 genDefn     = commonINP "genDefn"     (cn' "General Definition")            "GD"

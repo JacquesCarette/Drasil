@@ -6,7 +6,7 @@ fixme :: String
 fixme = "FIXME: Define this"
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: CINP
-
+--FIXME: Use compound nounphrases instead of pn/cn
 phsChgMtrl  = commonINP "phsChgMtrl" (pn' "Phase Change Material")      "PCM"
 rightSide   = commonINP "rightSide"  (cn' "Right Hand Side")            "RHS" 
 progName    = commonINP "progName"   (pn' "Solar Water Heating System") "SWHS" 

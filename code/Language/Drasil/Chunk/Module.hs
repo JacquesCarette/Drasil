@@ -9,11 +9,11 @@ import Data.Char (toUpper)
 import Prelude hiding (id)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
-import Language.Drasil.Chunk.Concept (Concept, defn)
+import Language.Drasil.Chunk.Concept (Concept, defn, cw, CWrapper, cdom)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Chunk.Wrapper (cw, CWrapper, NWrapper, nw)
+import Language.Drasil.Chunk.Wrapper (NWrapper, nw)
 
 -- BEGIN METHODCHUNK --
 -- (Currently) used for module guide, MIS and code generation
@@ -40,6 +40,7 @@ instance Eq ModuleChunk where
   
 instance Concept ModuleChunk where
   defn = cl defn
+  cdom = cl cdom
 
 -- END METHODCHUNK --
 

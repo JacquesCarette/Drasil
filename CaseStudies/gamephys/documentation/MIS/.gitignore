@@ -1,0 +1,11 @@
+## Compiled LaTeX files ##
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+## Old versions ##
+GamePhysicsMIS - old.pdf

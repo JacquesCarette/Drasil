@@ -4,6 +4,7 @@ import Language.Drasil.Spec
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA)
+import Language.Drasil.Chunk.Unital
 
 import Control.Lens ((^.))
 
@@ -16,7 +17,10 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
 -- where should this go?
 unit'2Contents :: Quantity u => u -> Sentence
-unit'2Contents x = maybe (S "") (\y -> Sy (y ^. unit)) (getUnit x)
+unit'2Contents x = maybe (S "") (\y -> Sy (y ^. usymb)) (getUnit x)
 
 getAcc :: (NamedIdea c) => c -> Sentence
 getAcc = (\(Just x) -> x) . getA
+
+unit_symb :: (Unital c) => c -> USymb
+unit_symb c = (unit c) ^. usymb

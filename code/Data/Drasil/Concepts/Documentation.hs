@@ -1,44 +1,48 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil.Chunk.CommonIdea (CI, commonidea)
-import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, compoundterm, of_, ncs)
+import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
+import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of'
+                                       , ncs, npnc, NPNC, compoundNPNC)
+import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg :: CI
-
-assumption  = commonidea "assumption"  "Assumption"                          "A"
-dataDefn    = commonidea "dataDefn"    "Data Definition"                     "DD"
-genDefn     = commonidea "genDefn"     "General Definition"                  "GD"
-goalStmt    = commonidea "goalStmt"    "Goal Statement"                      "GS" 
-inModel     = commonidea "inModel"     "Instance Model"                      "IM" 
-likelyChg   = commonidea "likelyChg"   "Likely Change"                       "LC"
-physSyst    = commonidea "physSyst"    "Physical System Description"         "PS" 
-requirement = commonidea "requirement" "Requirement"                         "R"
-srs         = commonidea "srs"         "Software Requirements Specification" "SRS"
-thModel     = commonidea "thModel"     "Theoretical Model"                   "T"
-mg          = commonidea "mg"          "Module Guide"                        "MG" 
+  requirement, srs, thModel, mg :: CINP
+--FIXME: Add compound NounPhrases instead of cn'
+assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
+dataDefn    = commonINP "dataDefn"    (cn' "Data Definition")               "DD"
+genDefn     = commonINP "genDefn"     (cn' "General Definition")            "GD"
+goalStmt    = commonINP "goalStmt"    (cn' "Goal Statement")                "GS" 
+inModel     = commonINP "inModel"     (cn' "Instance Model")                "IM" 
+likelyChg   = commonINP "likelyChg"   (cn' "Likely Change")                 "LC"
+physSyst    = commonINP "physSyst"    (cn' "Physical System Description")   "PS" 
+requirement = commonINP "requirement" (cn' "Requirement")                   "R"
+thModel     = commonINP "thModel"     (cn' "Theoretical Model")             "T"
+mg          = commonINP "mg"          (cn' "Module Guide")                  "MG" 
+srs         = commonINP "srs"         (cn' "Software Requirements Specification") 
+  "SRS"
 
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
-section, system, description, specific, symbol_, units_, table_,
-  introduction :: NamedChunk
-section      = nc "section"      "Section"
-system       = nc "system"       "System"
-description  = nc "description"  "Description"
-specific     = nc "specific"     "Specific" -- ??
-symbol_      = nc "symbol"       "Symbol"
-symbols      = nc "symbols"      "Symbols" -- Hack!
-units_       = nc "units"        "Units"
-table_       = nc "table"        "Table"
-introduction = nc "introduction" "Introduction"
 
-refmat, tOfSymb :: NamedChunk
+section, system, description, specific, symbol_, units_, 
+  table_, introduction:: NPNC
+section      = npnc "section"      (cn' "section")
+system       = npnc "system"       (cn' "system")
+description  = npnc "description"  (cn' "description")
+specific     = npnc "specific"     (cn' "specific") -- ??
+symbol_      = npnc "symbol"       (cn' "symbol")
+units_       = npnc "units"        (cn' "units")
+table_       = npnc "table"        (cn' "table")
+introduction = npnc "introduction" (cn' "introduction")
+
+tOfSymb, refmat :: NamedChunk
+
 refmat       = nc  "refmat"      "Reference Material"
-tOfSymb      = ncs "tOfSymb"   $ table_ `of_` symbols
+tOfSymb      = ncs "tOfSymb"   ((titleize table_) `of'` (titleize' symbol_))
 
 -- compounds
-systemdescription, specificsystemdescription :: NamedChunk
-systemdescription         = compoundterm system   description
-specificsystemdescription = compoundterm specific systemdescription
+systemdescription, specificsystemdescription  :: NPNC
+systemdescription         = compoundNPNC system   description
+specificsystemdescription = compoundNPNC specific systemdescription
 

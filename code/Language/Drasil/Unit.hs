@@ -14,7 +14,7 @@ import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk(..), makeDCC)
+import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk(..), dcc)
 import Language.Drasil.Spec (USymb(..))
 
 -- Language of units (how to build them up)
@@ -26,7 +26,7 @@ data UDefn = USynonym USymb      -- to define straight synonyms
            | UShift Double USymb -- shift, i.e. +
 
 class Concept u => Unit u where
-   unit :: Simple Lens u USymb
+   usymb :: Simple Lens u USymb
 
 class UnitEq u where
    uniteq :: Simple Lens u UDefn
@@ -43,7 +43,7 @@ makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
 --FIXME: Make this use a meaningful identifier.
 unitCon :: String -> ConceptChunk
-unitCon s = makeDCC s s s
+unitCon s = dcc s s s
 ---------------------------------------------------------
 
 -- for defining fundamental units
@@ -62,9 +62,10 @@ instance NamedIdea FundUnit where
 
 instance Concept FundUnit where
   defn = vc . defn
+  cdom = vc . cdom
   
 instance Unit FundUnit where
-  unit f (UD a b) = fmap (\x -> UD a x) (f b)
+  usymb f (UD a b) = fmap (\x -> UD a x) (f b)
 
 -- and for defining Derived units
 data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
@@ -77,8 +78,10 @@ instance Chunk     DerUChunk where id  = duc . id
 instance NamedIdea DerUChunk where
   term = duc . term
   getA c = getA (c ^. duc)
-instance Concept   DerUChunk where defn = duc . defn
-instance Unit      DerUChunk where unit  = duc . unit
+instance Concept   DerUChunk where 
+  defn = duc . defn
+  cdom = duc . cdom
+instance Unit      DerUChunk where usymb  = duc . usymb
 
 instance UnitEq DerUChunk where
   uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)
@@ -99,17 +102,19 @@ instance Chunk     UnitDefn where id   = ulens id
 instance NamedIdea UnitDefn where
   term = ulens term
   getA (UU a) = getA a
-instance Concept   UnitDefn where defn = ulens defn
-instance Unit      UnitDefn where unit = ulens unit
+instance Concept   UnitDefn where 
+  defn = ulens defn
+  cdom = ulens cdom
+instance Unit      UnitDefn where usymb = ulens usymb
 
 --- These conveniences go here, because we need the class
 (^:) :: Unit u => u -> Integer -> USymb
-u ^: i = UPow (u ^. unit) i
+u ^: i = UPow (u ^. usymb) i
 
 (/:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
-u1 /: u2 = UDiv (u1 ^. unit) (u2 ^. unit)
+u1 /: u2 = UDiv (u1 ^. usymb) (u2 ^. usymb)
 
 (*:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
-u1 *: u2 = UProd [(u1 ^. unit), (u2 ^. unit)]
+u1 *: u2 = UProd [(u1 ^. usymb), (u2 ^. usymb)]
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)

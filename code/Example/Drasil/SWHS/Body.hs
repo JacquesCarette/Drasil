@@ -33,7 +33,7 @@ import qualified Drasil.SRS as SRS
 import Drasil.ReferenceMaterial (refSec, intro)
 import Drasil.DocumentLanguage
 
-acronyms :: [CI]
+acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 
@@ -154,8 +154,8 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "s and" +:+ (sLower (thModel ^. term)) :+: 
   S "s used in the" +:+ (short progName) +:+ S "code" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
-  (sLower (assumption ^. term)) :+: 
-  S "s and unambiguous definitions. This document is intended" +:+
+  (plural assumption) +:+ 
+  S "and unambiguous definitions. This document is intended" +:+
   S "to be used as a reference to provide ad hoc access to" +:+
   S "all information necessary to understand and verify the" +:+
   S "model. The" +:+ (short srs) +:+ S "is abstract" +:+ 
@@ -221,9 +221,9 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   S "[citation]. The presentation follows the standard" +:+
   S "pattern for presenting" +:+ (sLower (goalStmt ^. term)) :+: 
   S "s," +:+ (sLower (thModel ^. term)) :+: S "s," +:+ 
-  (sLower (dataDefn ^. term)) :+: S "s, and" +:+ 
-  (sLower (assumption ^. term)) :+: 
-  S "s. For readers that would like a more bottom" :+: 
+  (sLower (dataDefn ^. term)) :+: S "s, and" +:+. 
+  (plural assumption) +:+
+  S "For readers that would like a more bottom" :+: 
   S " up approach, they can start reading the" +:+ 
   (sLower (inModel ^. term)) :+: S "s in" +:+ 
   makeRef s4_2_5 +:+ S "and trace back to find any" +:+
@@ -294,7 +294,7 @@ s4_intro = Paragraph (S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem" +:+
   S "to be solved. This is followed by the solution" +:+
   S "characteristics specification, which presents the" +:+
-  (sLower (assumption ^. term)) :+: S "s," +:+ 
+  (plural assumption) `sC` 
   (sLower (thModel ^. term)) :+: S "s," +:+ 
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
   (sLower (dataDefn ^. term)) :+: S "s, and finally" +:+
@@ -421,7 +421,7 @@ s4_2_intro = Paragraph (S "The" +:+ (sLower (inModel ^. term)) :+:
 -- General besides progName, repeated in only one other example but it could be 
 -- used for all of them. So it can be abstracted out.
 
-s4_2_1 = Section (assumption ^. term :+: S "s") [Con s4_2_1_intro, 
+s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro, 
   Con s4_2_1_list]
 
 s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
@@ -433,7 +433,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
   S "]," +:+ (sLower (genDefn ^. term)) :+: 
   S " [" :+: (short genDefn) :+: S "]," +:+ (sLower (dataDefn ^. term)) +:+ S "[" :+: (short dataDefn) :+: S "]," +:+ (sLower (inModel ^. term)) +:+
   S "[" :+: (short inModel) :+: S "], or" +:+ (sLower (likelyChg ^. term)) +:+ S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
-  (sLower (assumption ^. term)) +:+. S "is used") 
+  (phrase assumption) +:+. S "is used") 
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
@@ -543,7 +543,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   S "the" +:+ (sLower ((tank ^. term))) +:+
   S "is atmospheric, so the" +:+ (temp_melt ^. term) +:+
   S "and" +:+ (temp_boil ^. term) +:+ S "are 0" :+:
-  Sy (temp ^. unit) +:+ S "and 100" :+: Sy (temp ^. unit) `sC`
+  Sy (unit_symb temp) +:+ S "and 100" :+: Sy (unit_symb temp) `sC`
   S "respectively [IM1, IM3]."))])
 
 -- Again, list structure is same between all examples.
@@ -625,8 +625,8 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   S "GD2. Assuming" +:+ P (density ^. symbol) :+: S "," +:+
   P (htCap ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
   S "are constant over the" +:+ (volume ^. term) :+: S "," +:+ 
-  S "which is true in our case by" +:+ (assumption ^. term) :+:
-  S "s (A3), (A4), (A5), and (A6), we have:"),
+  S "which is true in our case by" +:+ (titleize' assumption) +:+ 
+  S "(A3), (A4), (A5), and (A6), we have:"),
   EqnBlock 
   ((C density) * (C htCap) * (C volume) * Deriv Total (C temp) 
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
@@ -859,10 +859,10 @@ s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
-inputVar :: [UnitalChunk]
-inputVar = [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density, htCap_W, 
-  coil_HTC, pcm_HTC, temp_init, time_final]
+inputVar :: [UWrapper]
+inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+  htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map uw [coil_SA, temp_C, w_density,
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
   
 -- Typical values and constraints must be added to UC definitions for mkTable 
 -- to work here.
@@ -946,7 +946,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   S " parameters, material properties and initial conditions:"))]), 
   (Table [S "symbol", S "unit", S "description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
-  (\ch -> Sy (ch ^. unit)),
+  (\ch -> Sy (unit_symb ch)),
   (\ch -> ch ^. term)] inputVar) 
   (S "Input Variable" +:+ (requirement ^. term)) False),
 --
@@ -1044,7 +1044,7 @@ s6 = Section (addS (likelyChg ^. term)) [Con s6_list]
 s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat 
   (S "A4 -" +:+ (short phsChgMtrl) +:+ S "is actually a poor" +:+
   (sLower (thermal_conductor ^. term)) :+: S ", so" +:+
-  S "the" +:+ (sLower (assumption ^. term)) +:+
+  S "the" +:+ (phrase assumption) +:+
   S "of uniform" +:+ (temp_PCM ^. term) +:+. S "is not likely")),
 --
   ((short likelyChg) :+: S "2", Flat (S "A8 - The" +:+ (temp_C ^. 
@@ -1096,8 +1096,8 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
   (sLower (dataDefn ^. term)) :+: S "s," +:+
   (sLower (inModel ^. term)) :+: S "s, and" +:+ 
-  (sLower (likelyChg ^. term)) :+: S "s on the" +:+
-  (assumption ^. term) :+: S "s.")
+  (sLower (likelyChg ^. term)) :+: S "s on the" +:+.
+  (titleize' assumption))
 
 -- Completely general paragraph, and similar ones in other example, but slight 
 -- differences in what is included in each matrix. Perhaps we can abstract out 
@@ -1205,7 +1205,7 @@ s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
   [S "LC6", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
   S "", S "", S "", S "", S "", S "X", S "", S "", S "", S ""]]
   (S "Traceability Matrix Showing the Connections Between" +:+
-  (assumption ^. term) :+: S "s and Other Items") True
+  (titleize' assumption) +:+ S "and Other Items") True
 
 -- These matrices can probably be generated automatically when enough info is 
 -- abstracted out.
@@ -1225,7 +1225,7 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   (sLower (dataDefn ^. term)) :+: S "s," +:+
   (sLower (inModel ^. term)) :+: S "s," +:+
   (sLower (likelyChg ^. term)) :+: S "s, and" +:+
-  (sLower (assumption ^. term)) :+: S "s on each" +:+
+  (plural assumption) +:+ S "on each" +:+
   S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies" +:+
   S "of" +:+ (sLower (inModel ^. term)) :+: S "s," +:+
   (sLower (requirement ^. term)) :+: S "s, and data" +:+

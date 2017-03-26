@@ -91,11 +91,13 @@ $h_{P}$ & convective heat transfer coefficient between PCM and water & $\frac{\t
 \\
 $L$ & length of tank & m
 \\
-$m$ & mass & kg
-\\
 $m_{P}$ & mass of phase change material & kg
 \\
 $m_{W}$ & mass of water & kg
+\\
+$m$ & mass & kg
+\\
+$\mathbf{\hat{n}}$ & unit outward normal vector for a surface & 
 \\
 $q$ & heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
@@ -113,9 +115,15 @@ $q_{P}$ & heat flux into the PCM from water & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $Q_{P}$ & latent heat energy added to PCM & J
 \\
-$t$ & time & s
+$S$ & surface & 
 \\
 $T$ & temperature & ${}^{\circ}C$
+\\
+$t_{melt}^{final}$ & time at which melting of PCM ends & s
+\\
+$t_{melt}^{init}$ & time at which melting of PCM begins & s
+\\
+$T_{melt}^{P}$ & melting point temperature for PCM & ${}^{\circ}C$
 \\
 $T_{boil}$ & boiling point temperature & ${}^{\circ}C$
 \\
@@ -129,15 +137,11 @@ $T_{init}$ & initial temperature & ${}^{\circ}C$
 \\
 $T_{melt}$ & melting point temperature & ${}^{\circ}C$
 \\
-$t_{melt}^{init}$ & time at which melting of PCM begins & s
-\\
-$t_{melt}^{final}$ & time at which melting of PCM ends & s
-\\
-$T_{melt}^{P}$ & melting point temperature for PCM & ${}^{\circ}C$
-\\
 $T_{P}$ & temperature of the phase change material & ${}^{\circ}C$
 \\
 $T_{W}$ & temperature of the water & ${}^{\circ}C$
+\\
+$t$ & time & s
 \\
 $V$ & volume & $\text{m}^{3}$
 \\
@@ -148,6 +152,10 @@ $V_{tank}$ & volume of the cylindrical tank & $\text{m}^{3}$
 $V_{W}$ & volume of water & $\text{m}^{3}$
 \\
 $\Delta{}T$ & change in temperature & ${}^{\circ}C$
+\\
+$\eta{}$ & ODE parameter & 
+\\
+$\phi{}$ & melt fraction & 
 \\
 $\rho{}$ & density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
@@ -162,14 +170,6 @@ $\tau{}_{P}^{L}$ & ODE parameter for liquid PCM & s
 $\tau{}_{P}^{S}$ & ODE parameter for solid PCM & s
 \\
 $\tau{}_{W}$ & ODE parameter for water & s
-\\
-$\mathbf{\hat{n}}$ & unit outward normal vector for a surface & 
-\\
-$S$ & surface & 
-\\
-$\eta{}$ & ODE parameter & 
-\\
-$\phi{}$ & melt fraction & 
 \\
 \bottomrule
 \label{Table:ToS}

@@ -1,0 +1,87 @@
+==15141== Memcheck, a memory error detector
+==15141== Copyright (C) 2002-2013, and GNU GPL'd, by Julian Seward et al.
+==15141== Using Valgrind-3.10.1 and LibVEX; rerun with -h for copyright info
+==15141== Command: ./Main
+==15141== 
+--15141-- Valgrind options:
+--15141--    --leak-check=full
+--15141--    -v
+--15141-- Contents of /proc/version:
+--15141--   Linux version 3.13.0-85-generic (buildd@lgw01-32) (gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) ) #129-Ubuntu SMP Thu Mar 17 20:50:15 UTC 2016
+--15141-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3
+--15141-- Page sizes: currently 4096, max supported 4096
+--15141-- Valgrind library directory: /usr/lib/valgrind
+--15141-- Reading syms from /u1/lmawarid/Desktop/ChipmunkSIMP/tests/Main
+--15141-- Reading syms from /lib/x86_64-linux-gnu/ld-2.19.so
+--15141--   Considering /lib/x86_64-linux-gnu/ld-2.19.so ..
+--15141--   .. CRC mismatch (computed 46abf574 wanted 3ca2d3ca)
+--15141--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/ld-2.19.so ..
+--15141--   .. CRC is valid
+--15141-- Reading syms from /usr/lib/valgrind/memcheck-amd64-linux
+--15141--   Considering /usr/lib/valgrind/memcheck-amd64-linux ..
+--15141--   .. CRC mismatch (computed 4f1eed43 wanted a323a3ab)
+--15141--    object doesn't have a symbol table
+--15141--    object doesn't have a dynamic symbol table
+--15141-- Scheduler: using generic scheduler lock implementation.
+--15141-- Reading suppressions file: /usr/lib/valgrind/default.supp
+==15141== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-15141-by-lmawarid-on-???
+==15141== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-15141-by-lmawarid-on-???
+==15141== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-15141-by-lmawarid-on-???
+==15141== 
+==15141== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==15141== don't want to do, unless you know exactly what you're doing,
+==15141== or are doing some strange experiment):
+==15141==   /usr/lib/valgrind/../../bin/vgdb --pid=15141 ...command...
+==15141== 
+==15141== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==15141==   /path/to/gdb ./Main
+==15141== and then give GDB the following command
+==15141==   target remote | /usr/lib/valgrind/../../bin/vgdb --pid=15141
+==15141== --pid is optional if only one valgrind process is running
+==15141== 
+--15141-- REDIR: 0x4019c50 (ld-linux-x86-64.so.2:strlen) redirected to 0x380764b1 (???)
+--15141-- Reading syms from /usr/lib/valgrind/vgpreload_core-amd64-linux.so
+--15141--   Considering /usr/lib/valgrind/vgpreload_core-amd64-linux.so ..
+--15141--   .. CRC mismatch (computed fc68135e wanted 45f5e986)
+--15141--    object doesn't have a symbol table
+--15141-- Reading syms from /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so
+--15141--   Considering /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so ..
+--15141--   .. CRC mismatch (computed ae683f7e wanted 08c06df2)
+--15141--    object doesn't have a symbol table
+==15141== WARNING: new redirection conflicts with existing -- ignoring it
+--15141--     old: 0x04019c50 (strlen              ) R-> (0000.0) 0x380764b1 ???
+--15141--     new: 0x04019c50 (strlen              ) R-> (2007.0) 0x04c2e1a0 strlen
+--15141-- REDIR: 0x4019a00 (ld-linux-x86-64.so.2:index) redirected to 0x4c2dd50 (index)
+--15141-- REDIR: 0x4019c20 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4c2f2f0 (strcmp)
+--15141-- REDIR: 0x401a970 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4c31da0 (mempcpy)
+--15141-- Reading syms from /lib/x86_64-linux-gnu/libm-2.19.so
+--15141--   Considering /lib/x86_64-linux-gnu/libm-2.19.so ..
+--15141--   .. CRC mismatch (computed 08659659 wanted 7ce1b39a)
+--15141--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libm-2.19.so ..
+--15141--   .. CRC is valid
+--15141-- Reading syms from /lib/x86_64-linux-gnu/libc-2.19.so
+--15141--   Considering /lib/x86_64-linux-gnu/libc-2.19.so ..
+--15141--   .. CRC mismatch (computed ac9b5ddb wanted a10d05bf)
+--15141--   Considering /usr/lib/debug/lib/x86_64-linux-gnu/libc-2.19.so ..
+--15141--   .. CRC is valid
+--15141-- REDIR: 0x51c9c50 (libc.so.6:strcasecmp) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--15141-- REDIR: 0x51cbf40 (libc.so.6:strncasecmp) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--15141-- REDIR: 0x51c9420 (libc.so.6:memcpy@GLIBC_2.2.5) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--15141-- REDIR: 0x51c76b0 (libc.so.6:rindex) redirected to 0x4c2da30 (rindex)
+--15141-- REDIR: 0x51d09b0 (libc.so.6:strchrnul) redirected to 0x4c319b0 (strchrnul)
+--15141-- REDIR: 0x51c59b0 (libc.so.6:strlen) redirected to 0x4c2e0e0 (strlen)
+--15141-- REDIR: 0x51ce670 (libc.so.6:__GI_memcpy) redirected to 0x4c2fc90 (__GI_memcpy)
+--15141-- REDIR: 0x51c0130 (libc.so.6:calloc) redirected to 0x4c2cbf0 (calloc)
+--15141-- REDIR: 0x51ce620 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x4a25720 (_vgnU_ifunc_wrapper)
+--15141-- REDIR: 0x51d4ec0 (libc.so.6:__memcpy_sse2_unaligned) redirected to 0x4c2f6b0 (memcpy@@GLIBC_2.14)
+--15141-- REDIR: 0x51bfe00 (libc.so.6:realloc) redirected to 0x4c2ce10 (realloc)
+--15141-- REDIR: 0x51bfd00 (libc.so.6:free) redirected to 0x4c2bd80 (free)
+==15141== 
+==15141== HEAP SUMMARY:
+==15141==     in use at exit: 0 bytes in 0 blocks
+==15141==   total heap usage: 59 allocs, 59 frees, 367,328 bytes allocated
+==15141== 
+==15141== All heap blocks were freed -- no leaks are possible
+==15141== 
+==15141== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==15141== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

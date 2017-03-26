@@ -2,7 +2,7 @@ module Main where
 
 import Language.Drasil (DocType(SRS, MG, Website),Recipe(..),gen)
 
-import Drasil.GamePhysics.Body (chipmunkSRS, chipmunkSRS', chipmunkMG)
+import Drasil.GamePhysics.Body (chipmunkSRS', chipmunkMG)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "Chipmunk_SRS") chipmunkSRS',

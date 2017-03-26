@@ -124,6 +124,17 @@ mm
 </tr>
 <tr>
 <td>
+B
+</td>
+<td>
+Risk function
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 d<sub>max</sub>
 </td>
 <td>
@@ -157,6 +168,17 @@ kPa
 </tr>
 <tr>
 <td>
+g
+</td>
+<td>
+Glass type, g in {AN, HS, FT}
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 h
 </td>
 <td>
@@ -164,6 +186,50 @@ Actual thickness
 </td>
 <td>
 mm
+</td>
+</tr>
+<tr>
+<td>
+is_safe1
+</td>
+<td>
+True when calculated probability is less than tolerable probability
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+is_safe2
+</td>
+<td>
+True when load resistance (capacity) is greater than load (demand)
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+J
+</td>
+<td>
+Stress distribution factor (Function)
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+J<sub>tol</sub>
+</td>
+<td>
+Stress distribution factor (Function) based on Pbtol
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -190,6 +256,28 @@ N<sup>-7</sup>m<sup>12</sup>
 </tr>
 <tr>
 <td>
+P<sub>b</sub>
+</td>
+<td>
+Probability of breakage
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+P<sub>btol</sub>
+</td>
+<td>
+Tolerable probability of breakage
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 q
 </td>
 <td>
@@ -197,6 +285,28 @@ Applied load (demand)
 </td>
 <td>
 kPa
+</td>
+</tr>
+<tr>
+<td>
+q&#770;
+</td>
+<td>
+Dimensionless load
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+q&#770;<sub>tol</sub>
+</td>
+<td>
+Tolerable load
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -296,116 +406,6 @@ Explosive Mass in equivalent weight of TNT
 </td>
 <td>
 kg
-</td>
-</tr>
-<tr>
-<td>
-B
-</td>
-<td>
-Risk function
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-g
-</td>
-<td>
-Glass type, g in {AN, HS, FT}
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-is_safe1
-</td>
-<td>
-True when calculated probability is less than tolerable probability
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-is_safe2
-</td>
-<td>
-True when load resistance (capacity) is greater than load (demand)
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-J
-</td>
-<td>
-Stress distribution factor (Function)
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-J<sub>tol</sub>
-</td>
-<td>
-Stress distribution factor (Function) based on Pbtol
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-P<sub>b</sub>
-</td>
-<td>
-Probability of breakage
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-P<sub>btol</sub>
-</td>
-<td>
-Tolerable probability of breakage
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-q&#770;
-</td>
-<td>
-Dimensionless load
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-q&#770;<sub>tol</sub>
-</td>
-<td>
-Tolerable load
-</td>
-<td>
-
 </td>
 </tr>
 </table>

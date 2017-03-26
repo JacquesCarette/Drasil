@@ -1,0 +1,963 @@
+\documentclass[12pt]{article}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{pdfpage}
+\usepackage[all]{hypcap} 
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage[toc, page]{appendix}
+\usepackage{url}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{array}
+%\usepackage{refcheck}
+
+\hypersetup{
+      colorlinks=true,       % false: boxed links; true: coloured links
+      linkcolor=red,          % colour of internal links (change box colour with
+                              % %linkbordercolor)
+    citecolor=blue,        % colour of links to bibliography
+    filecolor=magenta,      % colour of file links
+    urlcolor=cyan           % colour of external links
+}
+
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{magenta}{SS}{#1}}
+\newcommand{\nk}[1]{\authornote{blue}{NK}{#1}}
+
+\newcommand{\InputFormat}{\hyperref[SecInF]{Input Format Module}}
+\newcommand{\InputParam}{\hyperref[SecInP]{Input Parameters Module}}
+\newcommand{\InputCons}{\hyperref[SecInC]{Input Constraints Module}}
+\newcommand{\DerivedVal}{\hyperref[SecDeV]{Derived Values Module}}
+\newcommand{\OutputFormat}{\hyperref[SecOutF]{Output Format Module}}
+\newcommand{\Calculations}{\hyperref[SecCalc]{Calculations Module}}
+\newcommand{\Control}{\hyperref[SecCtrl]{Control Module}}
+\newcommand{\InterpData}{\hyperref[SecInterpD]{Interpolation Data Module}}
+\newcommand{\Interp}{\hyperref[SecInterp]{Interpolation Module}}
+
+%\newommand{\colZwidth}{1.0\textwidth} 
+%\newcommand{\blt}{- } 
+%\newcommand{\colAwidth}{0.13\textwidth}
+%\newcommand{\colBwidth}{0.82\textwidth}
+%\newcommand{\colCwidth}{0.1\textwidth}
+%\newcommand{\colDwidth}{0.05\textwidth}
+%\newcommand{\colEwidth}{0.8\textwidth}
+%\newcommand{\colFwidth}{0.17\textwidth}
+%\newcommand{\colGwidth}{0.5\textwidth}
+%\newcommand{\colHwidth}{0.28\textwidth}
+%\newcommand{\colDescrip}{0.7\textwidth}
+
+\newcommand{\progname}[1]{Glass-BR}
+
+\externaldocument[SRS-]{../SRS/glassbr_srs}
+\externaldocument[MG-]{../MG/glassbr_mg}
+
+
+\begin{document}
+
+\title{Module Interface Specification for \progname} 
+\author{Jingwei Huang}
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+The following document details the Module Interface
+Specifications for the implemented modules in a program \progname{}. It is
+intended to ease navigation through the program for design and
+maintenance purposes.  Complementary documents include the 
+\href{../SRS/glassbr_srs.pdf}{System Requirement Specifications} (SRS) and 
+\href{../MG/glassbr_mg.pdf}{Module Guide} (MG).
+
+\section{Notation}
+
+\progname{} uses three primitive data types: Boolean, Integer and Float. 
+\progname{} also uses derived data types: Array, String, Tuple and File.
+These data types are summarized in the following table. The table lists the name of the data type, 
+its notation in this document, and a description of the data type.
+\newline
+
+\noindent \begin{tabular}{l l p{0.6\textwidth}} \hline
+\textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ \hline
+Boolean & $boolean$ & an element of \{true, false\}\\ \hline
+Integer & $integer$ & a number without a fractional component in (-$\infty$, $\infty$)\\ \hline
+Float & $float$ & any number in (-$\infty$, $\infty$) \\ \hline
+Array & $array$ & a collection of data items of the same kind \\ \hline
+String & $string$ & a varying length array of characters \\ \hline
+Tuple & $tuple$ & a collection of elements of possibly different types \\ \hline
+File & $FILE{}\ast$ & a pointer to an input or output file \\ \hline
+\end{tabular} 
+
+\section{Module Hierarchy} 
+
+To view the Module Hierarchy, see section 3 of the \href{../MG/glassbr_mg.pdf}{MG}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{MIS of the Input Format Module} \label{SecInF}
+
+\subsection{Module Name: Input Format}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+None
+
+\subsubsection{Imported Variables}
+
+$params$
+
+\subsubsection{Imported Data Types}
+
+Param: tuple 
+
+\subsubsection{Imported Access Programs}
+
+None
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+None
+
+\subsubsection{Exported Data Types}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{l l l l}\hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$s\_get\_input$ & FILE $\ast$, tuple & - & badFile $\vee$ badFormat \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+$filename$: FILE $\ast$ (input file)
+
+\subsubsection{State Variables}
+
+$params.a$, $params.b$, $params.t$, $params.w$, $params.tnt$,
+$sd_{x}$, $sd_{y}$, $sd_{z}$, \newline $params.pb_{tol}$: float \\
+$params.gt$: string \\
+$params.sdvect$: tuple of ($sd_{x}$: float, $sd_{y}$: float, $sd_{z}$: float)\\
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+The user input values are properly constrained and the data structure Param has been initialized.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$s\_get\_input$($filename$, $params$):} \\ \newline
+\begin{tabular}{l p{0.70\textwidth}}
+\textbf{Transition:} & $params.a$, $params.b$, $params.t$, $params.gt$, 
+$params.w$, $params.tnt$, $sd_{x}$, $sd_{y}$, $sd_{z}$, $params.sdvect$,
+$params.pb_{tol}$ := $a$, $b$, $t$, $gt$, $w$, $tnt$, $sd_{x}$, $sd_{y}$, 
+$sd_{z}$, ($sd_{x}$, $sd_{y}$, $sd_{z}$), $pb_{tol}$ stored in the input file  \\
+\textbf{Exceptions:} & $exc$ := \newline
+(error reading file $\Rightarrow$ badFile \newline $|$ inconsistent input format $\Rightarrow$ badFormat)\\
+\end{tabular}
+\end{itemize}
+
+\subsubsection{Considerations}
+
+The data type of $params.t$ has been mutated from String to Float.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of the Input Parameters Module} \label{SecInP}
+
+\subsection{Module Name: Input Parameters}
+
+\subsection{Uses}
+N/A
+%\subsubsection{Imported Constants}
+
+%\subsubsection{Imported Variables}
+
+%\subsubsection{Imported Data Types}
+
+%\subsubsection{Imported Access Programs}
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+\#define $params.E$ $7.17 \times 10^{7}$ \\
+\#define $params.t_{d}$ $3$ \\
+\#define $params.m$ $7$ \\
+\#define $params.k$ $2.86 \times 10^{-53}$ \\
+\#define $params.lsf$ $1$
+
+\subsubsection{Exported Variables}
+
+$params$
+
+\subsubsection{Exported Data Types}
+
+Param: tuple
+\newline
+
+\noindent The parameters for this structure correspond to 
+the state variables of this module, listed in section 
+\ref{SecSVparams}.
+  
+\subsubsection{Exported Access Programs} \label{SecEAPparams}
+
+\begin{center} \noindent
+\begin{tabular}{l l l l}
+\hline \textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline 
+$s\_params.a$&float&-&- \\ \hline
+$g\_params.a$&-&float&- \\ \hline
+$s\_params.b$&float&-&- \\ \hline
+$g\_params.b$&-&float&- \\ \hline
+$s\_params.t$&string&-&- \\ \hline
+$g\_params.t$&-&string&- \\ \hline
+$s\_params.gt$&string&-&- \\ \hline
+$g\_params.gt$&-&string&- \\ \hline
+$s\_params.w$&float&-&- \\ \hline
+$g\_params.w$&-&float&- \\ \hline
+$s\_params.tnt$&float&-&- \\ \hline
+$g\_params.tnt$&-&float&-\\ \hline
+$s\_params.sdvect$&tuple&-&- \\ \hline
+$g\_params.sdvect$&-&tuple&- \\ \hline
+$s\_params.pb_{tol}$&float&-&- \\ \hline
+$g\_params.pb_{tol}$&-&float&- \\ \hline
+$s\_params.asprat$&float&-&- \\ \hline
+$g\_params.asprat$&-&float&- \\ \hline
+$s\_params.sd$&float&-&- \\ \hline
+$g\_params.sd$&-&float&- \\ \hline
+$s\_params.h$&float&-&- \\ \hline
+$g\_params.h$&-&float&- \\ \hline
+$s\_params.gtf$&float&-&- \\ \hline
+$g\_params.gtf$&-&float&- \\ \hline
+$s\_params.ldf$&float&-&- \\ \hline
+$g\_params.ldf$&-&float&- \\ \hline
+$s\_params.wtnt$&float&-&- \\ \hline
+$g\_params.wtnt$&-&float&- \\ \hline
+
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables} 
+
+None
+
+\subsubsection{State Variables} \label{SecSVparams}
+
+$a$, $b$, $w$, $tnt$, $pb_{tol}$, $asprat$, $sd$, $h$, $gtf$, $ldf$, $wtnt$: float \\
+$t$, $gt$: string \\
+$sdvect$: tuple of ($sd_{x}$: float, $sd_{y}$: float, $sd_{z}$: float)
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+Before a get function is used, the necessary set functions have been called.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$s\_params.\ast$ :} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Transition:} & $params.a$, $params.b$, $params.t$, $params.gt$, $params.w$,
+$params.tnt$, $params.sdvect$, $params.pb_{tol}$, $params.asprat$, $params.sd$,
+$params.h$, $params.gtf$, $params.ldf$, $params.wtnt$ := 0.0, 0.0, ``2.5", ``AN", 0.0, 0.0, (0.0, 0.0, 0.0),
+0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 \\
+\textbf{Exceptions:} & none \\
+\end{tabular}
+
+\item\textbf{$g\_params.\ast$:} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $a$, $b$, $t$, $gt$, $w$, $tnt$, $sdvect$, $pb_{tol}$, $asprat$, 
+$sd$, $h$, $gtf$, $ldf$, $wtnt$ stored in the data structure Param.\\
+\textbf{Exceptions:} & none\\
+\end{tabular}
+\end{itemize}
+
+\subsubsection{Considerations}
+Param is a data structure designed to store the input information entered by 
+the \InputFormat{} and \DerivedVal. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of the Input Constraints Module} \label{SecInC}
+
+\subsection{Module Name: Input Constraints}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+None
+
+\subsubsection{Imported Variables}
+
+$params$
+
+\subsubsection{Imported Data Types}
+
+Param: tuple
+
+\subsubsection{Imported Access Programs}
+
+None
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+None
+
+\subsubsection{Exported Data Types}
+
+None
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{l l l p{0.5\textwidth}}\hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$s\_check\_constraints$ & tuple & - & badLength $\vee$ badWidth $\vee$ badAspectRatio 
+$\vee$ badThickness $\vee$ badTNT $\vee$ badWTNT $\vee$ badSD \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+$scn$ : the terminal screen
+
+\subsubsection{State Variables}
+
+$params.a$, $params.b$, $params.asprat$, $params.t$, $params.tnt$, $params.wtnt$, $params.sd$: float
+
+\subsubsection{State Invariant}
+
+$params.a > 0$ \\
+$params.b > 0$ \\
+$params.asprat \geq 1$ $\wedge$ $params.asprat \leq 5$ \\
+$params.t \in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}$ \\
+$params.tnt > 0$ \\
+$params.wtnt \geq 4.5$ $\wedge$ $params.wtnt \leq 910$ \\
+$params.sd \geq 6$ $\wedge$ $params.sd \leq 130$
+
+\subsubsection{Assumption}
+
+The function get\_input in the \InputFormat{} has been called and the data in
+the input file have been stored in the data structure Param.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$s\_check\_constraints$($params$):}  \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Transition:} & display the exceptions on $scn$\\
+\textbf{Exceptions:} & $exc$ := \newline ($params.a \leq 0$ $\vee$ $params.b \leq 0$ $\Rightarrow$ badLength or badWidth 
+\newline $|$ $params.asprat < 1$ $\vee$ $params.asprat > 5$ $\Rightarrow$ badAspectRatio \newline 
+$|$ $params.t \notin \{2.5, 2.7, 3.0, 4.0, 5.0, 8.0, 10.0, 12.0, 16.0,\newline 19.0, 22.0\}$ $\Rightarrow$ badThickness
+\newline $|$ $params.tnt \leq 0$ $\Rightarrow$ badTNT \newline
+$|$ $params.wtnt < 4.5$ $\vee$ $params.wtnt > 910$ $\Rightarrow$ badWTNT \newline
+$|$ $params.sd < 6$ $\vee$ $params.sd > 130$ $\Rightarrow$ badSD)\\
+\end{tabular}
+\end{itemize}
+
+\subsubsection{Considerations}
+
+The data type of $params.t$ has been mutated from String to Float.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Output Format Module} \label{SecOutF}
+
+\subsection{Module Name: Output Format}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+None
+
+\subsubsection{Imported Variables}
+
+$params$, $q$, $j$, $\hat{q}_{tol}$, $pb$, $lr$, $nfl$, $is\_safe1$, $is\_safe2$, $safe$ 
+
+\subsubsection{Imported Data Types}
+
+Param: tuple \\
+$q$, $j$, $\hat{q}_{tol}$, $pb$, $lr$, $nfl$: float \\
+$is\_safe1$, $is\_safe2$: boolean \\
+$safe$: string
+
+\subsubsection{Imported Access Programs}
+
+None
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+None
+
+\subsubsection{Exported Data Types}
+
+None
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\begin{tabular}{l p{5cm} l l} \hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$s\_display\_output$ &string, float, float, float, \newline float, float, float, boolean, \newline boolean, string& - & badPath \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+$filename$: FILE $\ast$ (output file)
+
+\subsubsection{State Variables}
+
+None
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+The functions in the \Calculations{} have been called and 
+the values for the imported variables have been calculated.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$s\_display\_output$($filename$, $q$, $j$, $\hat{q}_{tol}$, $pb$, $lr$, $nrl$, $is\_safe1$, $is\_safe2$, $safe$, $params$):}  \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Transition:} & display the outputs in the output file $filename$\\
+\textbf{Exceptions:} & $exc$ := error writing file $\Rightarrow$ badPath \\
+\end{tabular}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Derived Values Module} \label{SecDeV}
+
+\subsection{Module Name: Derived Values}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+\#define $params.t_{d}$ $3$ \\
+\#define $params.m$ $7$
+
+\subsubsection{Imported Variables}
+
+$params$
+
+\subsubsection{Imported Data Types}
+
+Param: tuple
+
+\subsubsection{Imported Access Programs}
+
+None
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+\#define $params.ldf$ $0.2696493494752911$
+
+\subsubsection{Exported Variables}
+
+$params$
+
+\subsubsection{Exported Data Types}
+
+Param: tuple
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\begin{tabular}{l l l p{0.5\textwidth}} \hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$sg\_derived\_params$ & tuple & tuple & badFormat $\vee$ notIndustrialStandard $\vee$ wrongGlassType\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+$scn$: the terminal screen
+
+\subsubsection{State Variables}
+
+$params.asprat$, $params.sd$, $params.ldf$, $params.wtnt$, $params.h$, \newline $params.gtf$: float
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+The function get\_input in the \InputFormat{} has been called and the data in 
+the input file have been stored in the data structure Param.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$sg\_derived\_params$($params$):}  \\ \newline
+\begin{tabular}{p{2.5cm} p{0.7\textwidth}}
+\textbf{Transition \newline \& Output:} & (display exceptions on $scn$ \newline $|$ 
+$out$ := $params.asprat$, $params.sd$, $params.ldf$, $params.wtnt$, $params.h$, $params.gtf$ calculated using 
+the functions defined in the \href{../SRS/glassbr_srs.pdf}{SRS}) \\
+\textbf{Exceptions:} & $exc$ := \newline
+(inconsistent format $\Rightarrow$ badFormat \newline 
+$|$ $params.t \notin \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, \newline16.0, 19.0, 22.0\}$ $\Rightarrow$ notIndustrialStandard
+\newline $|$ $params.gt \notin \{``AN", ``an", ``HS", ``hs", ``FT", ``ft"\}$ $\Rightarrow$ wrongGlassType)\\
+\end{tabular}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Calculations Module} \label{SecCalc}
+
+\subsection{Module Name: Calculations}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+\#define $E$ $7.17 \times 10^{7}$ \\
+\#define $m$ $ 7$ \\
+\#define $k$ $2.86 \times 10^{-53}$ \\
+\#define $ldf$ $0.2696493494752911$ \\
+\#define $lsf$ $1$
+
+\subsubsection{Imported Variables}
+
+$params$
+
+\subsubsection{Imported Data Types}
+
+Param: tuple 
+
+\subsubsection{Imported Access Programs}
+
+\textbf{Uses} \Interp{} \textbf{Imports} interp
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+$q$, $j$, $\hat{q}_{tol}$, $pb$, $lr$, $nfl$, $is\_safe1$, $is\_safe2$, $safe$
+
+\subsubsection{Exported Data Types}
+
+$q$, $j$, $\hat{q}_{tol}$, $pb$, $lr$, $nfl$: float \\
+$is\_safe1$, $is\_safe2$: boolean \\
+$safe$: string
+ 
+\subsubsection{Exported Access Programs}
+\begin{center}
+\begin{tabular}{l p{3cm} l l} \hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$g\_calc\_q$ &array of floats, array of floats, array of floats, tuple& float & badFormat \\ \hline
+$g\_calc\_j$ &array of floats, array of floats, array of floats, float, tuple& float, float & badFormat \\ \hline
+$g\_calc\_pb$ &float, tuple& float & - \\ \hline
+$g\_calc\_lr$ &float, tuple& float, float & - \\ \hline
+$g\_is\_safe$ &float, float, float, tuple& boolean, boolean, string & - \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+None
+
+\subsubsection{State Variables}
+
+$q$, $j$, $\hat{q}_{tol}$, $pb$, $lr$, $nfl$: float \\
+$w\_array$, $data\_sd$, $data\_q$, $j\_array$, $data\_asprat$, $data\_qstar$: array of floats\\
+$is\_safe1$, $is\_safe2$: boolean \\
+$safe$: string
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+The get\_input function in the \InputFormat{} and the derived\_params function
+in the \DerivedVal{} have been called and the data in the input file as well as
+the derived values have been stored in the data structure Param.
+\noindent The \Interp{} has been successfully implemented.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$g\_calc\_q$($w\_array$, $data\_sd$, $data\_q$, $params$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $q$ calculated using interpolation\\ 
+\textbf{Exceptions:} & $exc$ := badFormat \\
+\end{tabular}
+
+\item\textbf{$g\_calc\_j$($j\_array$, $data\_asprat$, $data\_qstar$, $q$, $params$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $j$, $\hat{q}_{tol}$ calculated using 
+interpolation and the functions defined in the \href{../SRS/glassbr_srs.pdf}{SRS} \\
+\textbf{Exceptions:} & $exc$ := badFormat \\
+\end{tabular}
+
+\item\textbf{$g\_calc\_pb$($j$, $params$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $pb$ calculated using the functions defined in the \href{../SRS/glassbr_srs.pdf}{SRS} \\ 
+\textbf{Exceptions:} & none \\ 
+\end{tabular}
+
+\item\textbf{$g\_calc\_lr$($\hat{q}_{tol}$, $params$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $lr$, $nfl$ calculated using the functions defined in the \href{../SRS/glassbr_srs.pdf}{SRS} \\ 
+\textbf{Exceptions:} & none \\ 
+\end{tabular}
+
+\item\textbf{$g\_is\_safe$($pb$, $lr$, $q$, $params$):}  \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := \newline
+($pb < params.pb_{tol}$ $\Rightarrow$ $is\_safe1 := True$ 
+$|$ $pb \geq params.pb_{tol}$ $\Rightarrow$ $is\_safe1 := False$) \newline $|$
+($lr > q$ $\Rightarrow$ $is\_safe2 := True$ $|$ $lr \leq q$ $\Rightarrow$ $is\_safe2 := False$)
+\newline $|$ ($is\_safe1 == True$ $\wedge$ $is\_safe2 == True$ $\Rightarrow$ $safe$ := `For
+the given input parameters, the glass is considered safe' $|$ $is\_safe1 == False$ $\vee$ 
+$is\_safe2 == False$ $\Rightarrow$ $safe$ := `For the given input parameters, the glass is
+NOT considered safe')\\ 
+\textbf{Exceptions:} & none \\
+\end{tabular}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of the Control Module} \label{SecCtrl}
+
+\subsection{Module Name: Control}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+None
+
+\subsubsection{Imported Variables}
+
+None
+
+\subsubsection{Imported Data Types}
+
+None
+
+\subsubsection{Imported Access Programs}
+
+\textbf{Uses} \InputParam{} \textbf{Imports} param \\
+\textbf{Uses} \InputFormat{} \textbf{Imports} inputFormat \\
+\textbf{Uses} \DerivedVal{} \textbf{Imports} derivedValues \\
+\textbf{Uses} \InputCons{} \textbf{Imports} checkConstraints \\
+\textbf{Uses} \InterpData{} \textbf{Imports} readTable \\
+\textbf{Uses} \Calculations{} \textbf{Imports} calculations \\
+\textbf{Uses} \OutputFormat{} \textbf{Imports} outputFormat
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+None
+
+\subsubsection{Exported Data Types}
+
+None
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\begin{tabular}{l l l l} \hline 
+\textbf{Routine Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\ \hline 
+$s\_main$ & FILE $\ast$ & - & badFile $\vee$ badPath $\vee$ badFormat \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+$filename$: FILE $\ast$ (input file and output file) \\
+$scn$: the terminal screen
+
+\subsubsection{State Variables}
+
+None 
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+The imported modules have been successfully implemented.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$s\_main$($filename$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}} 
+\textbf{Transition:} & 
+(calculate the outputs  \newline $|$ display the results in the output file $filename$ \newline 
+$|$ display the message ``Main has been executed and the results have been written to 
+`outputfile'" on $scn$) \\
+\textbf{Exceptions:} & $exc$ := \newline
+(error reading file $\Rightarrow$ badFile \newline $|$ error writing file $\Rightarrow$ badPath 
+\newline $|$ inconsistent input format $\Rightarrow$ badFormat)\\ \\
+\end{tabular}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of the Interpolation Data Module} \label{SecInterpD}
+
+\subsection{Module Name: Interpolation Data}
+
+\subsection{Uses}
+
+\subsubsection{Imported Constants}
+
+None
+
+\subsubsection{Imported Variables}
+
+None
+
+\subsubsection{Imported Data Types}
+
+None
+
+\subsubsection{Imported Access Programs}
+
+None
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+$num\_col$, $array1$, $array2$
+
+\subsubsection{Exported Data Types}
+
+$num\_col$, $array1$, $array2$: array of floats
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{l l p{2.6cm} l}\hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$g\_read\_table$ & FILE $\ast$ & array of floats, array of floats, array of floats & badFile $\vee$ badFormat\\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+$filename$: FILE $\ast$ (input file)
+
+\subsubsection{State Variables}
+
+$num\_col$, $array1$, $array2$: array of floats\\
+
+\subsubsection{State Invariant}
+
+None
+
+\subsubsection{Assumption}
+
+The user input values are properly constrained.
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$g\_read\_table$($filename$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $num\_col$, $array1$, $array2$ \\
+\textbf{Exceptions:} & $exc$ := \newline
+(error reading file $\Rightarrow$ badFile \newline $|$ inconsistent input format $\Rightarrow$ badFormat)\\
+\end{tabular}
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of the Interpolation Module} \label{SecInterp}
+
+\subsection{Module Name: Interpolation}
+
+\subsection{Uses}
+
+N/A
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Constants}
+
+None
+
+\subsubsection{Exported Variables}
+
+$y_{0}$, $idx$, $jdx$, $kdx$, $num\_interp1$, $num\_interp2$, $interp\_value$
+
+\subsubsection{Exported Data Types}
+
+$y_{0}$, $interp\_value$: float \\
+$idx$, $jdx$, $kdx$, $num\_interp1$, $num\_interp2$: integer 
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{l p{2.8cm} p{3cm} l}\hline 
+\textbf{Routine Name} & \textbf{In} &\textbf{Out} & \textbf{Exceptions} \\ \hline 
+$g\_lin\_interp$ & float, float, float, float, float & float & - \\ \hline
+$g\_find\_bounds$ & array of floats, array of floats, float, float & integer, integer, integer, integer, integer & - \\ \hline
+$g\_interp$ & integer, integer, integer, integer, integer, array of floats, array of floats, array of floats, float, float & float & - \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+None
+
+\subsubsection{State Variables}
+
+$y_{0}$, $y_{1}$, $y_{2}$, $x_{1}$, $x_{2}$, $input\_param$, $value1$, $value2$, $interp\_value$: float \\
+$idx$, $jdx$, $kdx$, $num\_interp1$, $num\_interp2$: integer \\
+$data1$, $data2$, $data3$: array of floats
+
+\subsubsection{State Invariant}
+
+$idx \geq 0$ \\
+$jdx \geq 0$ \\
+$kdx \geq 0$ \\
+$num\_interp1 \in \{0, 1\}$ \\
+$num\_interp2 \in \{0, 1, 2, 3\}$
+
+\subsubsection{Assumption}
+
+None
+
+\subsubsection{Access Program Semantics}
+
+\begin{itemize}
+\item\textbf{$g\_lin\_interp$($y_{1}$, $y_{2}$, $x_{1}$, $x_{2}$, $input\_param$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $y_{0}$ calculated using the linear interpolation algorithm \\ 
+\textbf{Exceptions:} & none\\
+\end{tabular}
+
+\item\textbf{$g\_find\_bounds$($data1$, $data2$, $value1$, $value2$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $idx$, $jdx$, $kdx$, $num\_interp1$, $num\_interp2$\\ 
+\textbf{Exceptions:} & none\\ 
+\end{tabular}
+
+\item\textbf{$g\_interp$($idx$, $jdx$, $kdx$, $num\_interp1$, $num\_interp2$, $data1$, $data2$, $data3$, $value1$, $value2$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Output:} & $out$ := $interp\_value$\\ 
+\textbf{Exceptions:} & none\\ 
+\end{tabular}
+\end{itemize}
+
+\subsubsection{Local Functions}
+
+\begin{itemize}
+\item\textbf{$g\_proper\_index$($index1$, $index2$, $data$, $value$):} \\ \newline
+\begin{tabular}{l p{0.7\textwidth}} 
+\textbf{Output:} & $out$ := $index1$\\
+\textbf{Exceptions:} & none\\
+\end{tabular}
+\end{itemize}
+
+\subsubsection{Local Data Types}
+
+\begin{tabular}{l p{0.7\textwidth}}
+\textbf{Imported:} & $index1$, $index2$: integer \newline $data$: array of floats \newline $value$: float \\ \\
+\textbf{Exported:} & $index1$: integer
+\end{tabular}
+
+\subsubsection{Considerations}
+
+The local function finds the proper values for indices (jdx, kdx) in the function find\_bounds. 
+
+\end{document}

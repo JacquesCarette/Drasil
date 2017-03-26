@@ -1,0 +1,268 @@
+\documentclass[10pt,fleqn]{article}
+
+\usepackage{MISLib}
+
+\begin{document}
+
+%% ------------------------------------------------------------------------------
+%% -------------- PARAMETERS MODULE SPECIFICATION -------------------------------
+%% ------------------------------------------------------------------------------
+\module{Parameters}{
+  moduleType = Template,
+  moduleName = param,
+  uses = ,
+  exportedConstants = {
+    E , \real , $7.17 \times 10^{7}$ ;
+    TD , \real ,  $3.0$ ;
+    M , \real , $7.0$ ;
+    MK , \real , $2.86 \times 10^{-53}$ ;
+    LSF , \real , $1.0$ 
+  },
+  exportedTypes = {
+    Param , ?
+  },
+  exportedAccessPrograms = {
+    Param , , Param , 
+  },
+  stateVariables = {
+    a , \real ;
+    b , \real ;
+    t , \real ;
+    w , \real ;
+    tnt , \real ;
+    pbtol , \real ;
+    asprat , \real ;
+    sd , \real ;
+    h , \real ;
+    gtf , \real ;
+    ldf , \real ;
+    wtnt , \real ;
+    sdvect , \seq[3]{\real} ;
+    gt , String  
+  },
+  environmentVariables = ,
+  assumptions = ,
+  accessRoutineSemantics = {
+    {
+      routineName = Param,
+      routineArgs = ,
+      transition = {
+        a, \realzero ;
+        b, \realzero ;
+        t, \realzero ;
+        w, \realzero ;
+        tnt, \realzero ;
+        pbtol, \realzero ;
+        asprat, \realzero ;
+        sd, \realzero ;
+        h, \realzero ;
+        gtf, \realzero ;
+        ldf, \realzero ;
+        wtnt, \realzero ;
+        sdvect, \seqval{\realzero, \realzero, \realzero} ;
+        gt, \emptystr
+      },
+      output = \self,
+      exception = ,
+    }
+  },
+  localFunctions = {
+    {
+      \localmap{\real}{\real}
+    }
+    {
+      \localfilter{\real}
+    }
+  }
+}
+
+   
+%% ------------------------------------------------------------------------------
+%% -------------- INPUT FORMAT MODULE SPECIFICATION -----------------------------
+%% ------------------------------------------------------------------------------
+\module{Input Format}{
+  moduleType = ,
+  moduleName = inputFormat,
+  uses = param,
+  exportedConstants = ,
+  exportedTypes = ,
+  exportedAccessPrograms = {
+    get\_input , string , Param , 
+  },
+  stateVariables = ,
+  environmentVariables = {
+    filesys, \fsread
+  },
+  assumptions = ,
+  accessRoutineSemantics = {
+    {
+      routineName = get\_input,
+      routineArgs = {filename, p},
+      transition = {
+        filesys, filename;
+        p.a, filesys.readline ;
+        p.b, filesys.readline ;
+        p.t, filesys.readline ;
+        p.gt, filesys.readline ;
+        p.w, filesys.readline ;
+        p.tnt, filesys.readline ;
+        p.\seqAt{sdvect}{0}, filesys.readline ;
+        p.\seqAt{sdvect}{1}, filesys.readline ;
+        p.\seqAt{sdvect}{2}, filesys.readline ;
+        pbtol, filesys.readline
+      },
+      output = ,
+      exception = ,
+    }
+  },
+  localFunctions = 
+}
+
+
+%% ------------------------------------------------------------------------------
+%% -------------- INPUT CONSTRAINTS MODULE SPECIFICATION ------------------------
+%% ------------------------------------------------------------------------------
+\module{Input Constraints}{
+  moduleType = ,
+  moduleName = derivedValues,
+  uses = param,
+  exportedConstants = ,
+  exportedTypes = ,
+  exportedAccessPrograms = {
+    derived\_params , Param , Param , 
+  },
+  stateVariables = ,
+  environmentVariables = ,
+  assumptions = ,
+  accessRoutineSemantics = {
+    {
+      routineName = derived\_params,
+      routineArgs = {p},
+      transition = {
+        p.asprat, \dfrac{p.a}{p.b} ;
+        p.sd, \sqrt{p.\seqAt{sdvect}{0}^2 + p.\seqAt{sdvect}{1}^2 + p.\seqAt{sdvect}{2}^2} ;
+        p.ldf, \dfrac{p.td}{60.0}^{\dfrac{p.m}{16.0}} ;
+        p.wtnt, p.w \times p.tnt ;
+        p.h, \conditional{
+          p.t = 2.50, 2.16 ;
+          p.t = 2.70, 2.59 ;
+          p.t = 3.0, 2.92 ;
+          p.t = 4.0, 3.78 ;
+          p.t = 5.0, 4.57 ;
+          p.t = 6.0, 5.56 ;
+          p.t = 8.0, 7.42 ;
+          p.t = 10.0, 9.02 ;
+          p.t = 12.0, 11.91 ;
+          p.t = 16.0, 15.09 ;
+          p.t = 19.0, 18.26 ;
+          p.t = 22.0, 21.44 ;
+          \true, \realzero
+        } ;
+        p.gtf, \conditional{
+          p.gt = \str{AN}, 1.0 ;
+          p.gt = \str{HS}, 2.0 ;
+          p.gt = \str{FT}, 3.0 ;
+          \true, 0.0 
+        }
+      },
+      output = p,
+      exception = ,
+    }
+  },
+  localFunctions = 
+}
+ 
+
+
+%% ------------------------------------------------------------------------------
+%% -------------- INPUT VERIFICATION MODULE SPECIFICATION -----------------------
+%% ------------------------------------------------------------------------------
+\module{Input Constraints}{
+  moduleType = ,
+  moduleName = checkConstraints,
+  uses = param,
+  exportedConstants = ,
+  exportedTypes = ,
+  exportedAccessPrograms = {
+    check\_constraints , Param , , INPUTERROR 
+  },
+  stateVariables = ,
+  environmentVariables = ,
+  assumptions = ,
+  accessRoutineSemantics = {
+    {
+      routineName = derived\_params,
+      routineArgs = {p},
+      transition = ,
+      output = ,
+      exception = \conditional{
+        p.a \leq \realzero \AND p.b \leq \realzero, \exc{INPUTERROR} ;
+        \neg (1.0 \leq p.asprat \leq 5.0), \exc{INPUTERROR} ;
+        p.t \notin \finset[4]{2.50, 2.70, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}, \exc{INPUTERROR} ;
+        p.qt \notin \finset[3]{\str{AN}, \str{HS}, \str{FT}, \str{an}, \str{hs}, \str{ft}}, \exc{INPUTERROR} ;
+        p.tnt \leq \realzero, \exc{INPUTERROR} ;
+        \neg (4.5 \leq p.wtnt \leq 910.0), \exc{INPUTERROR} ;
+        \neg (6.0 \leq p.sd \leq 130.0), \exc{INPUTERROR}
+      }
+    }
+  },
+  localFunctions = 
+}
+
+
+
+
+%%% OLD %%%
+
+%\newpage
+%
+%\section* {Table Input Module}
+%
+%\subsection*{Module}
+%
+%readTable
+%
+%\subsection* {Uses}
+%
+%None
+%
+%\subsection* {Syntax}
+%
+%\subsubsection* {Exported Access Programs}
+%
+%\begin{tabular}{| l | l | l | l |}
+%\hline
+%\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+%\hline
+%read\_table & string & sequence [2, ?, ?] of real & FILEERROR\\
+%\hline
+%
+%\end{tabular}
+%
+%\subsection* {Semantics}
+%
+%\subsubsection* {State Variables}
+%$contents$ : sequence [?, ?] of string
+%
+%\subsubsection* {Environment Variables}
+%$filesys$ : FileSystem Read
+%
+%\subsubsection* {Assumptions}
+%None
+%
+%\subsubsection* {Access Routine Semantics}
+%
+%read\_table($filename$):
+%\begin{itemize}
+%\item transition: \begin{itemize}
+%                        \item[] $contents := map~splitOn(`,')~filesys.readall(filename)$
+%                        \end{itemize}
+%\item output: \begin{itemize}
+%                    \item[] $out$ \tabto{1.5cm} $ := map~(\lambda x \rightarrow x[1:~:2])~contents~||~map~(\lambda x \rightarrow x[2:~:2])~contents$
+%                    \end{itemize}
+%\item exception: \begin{itemize}
+%                        \item[] $exc := \neg filesys.exists(filename) \implies \textrm{FILEERROR}$
+%                        \end{itemize}
+%\end{itemize}
+%
+\end {document}

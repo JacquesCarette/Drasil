@@ -8,14 +8,15 @@ module Drasil.TableOfSymbols
 import Control.Lens ((^.))
 
 import Data.Maybe (isJust)
+import Data.List (sort)
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
-table_of_symbols :: (Quantity s) => 
+table_of_symbols :: (Ord s,Quantity s) => 
   [s] -> (s -> Sentence) -> Section
 table_of_symbols ls f = Section (tOfSymb ^. term)
-  [Con intro, Con (table ls f)]
+  [Con intro, Con (table (sort ls) f)]
 
 intro :: Contents
 intro = Paragraph $ 
@@ -28,7 +29,7 @@ intro = Paragraph $
   
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 
 table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
-table ls f = Table (map (^.term) [symbol_, description, units_]) (mkTable
+table ls f = Table (map (at_start) [symbol_, description, units_]) (mkTable
   [(\ch -> (\(Just t) -> P (t ^. symbol)) (getSymb ch)),
   (\ch -> f ch), 
   unit'2Contents]

@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Relation
   ( NamedRelation, RelationConcept
-  , makeNR, relat, cc
+  , makeNR, relat
   , namewrap, nrelat, makeRC
   ) where
 
@@ -33,9 +33,6 @@ instance NamedIdea NamedRelation where
 data RelationConcept where 
   RC :: Concept c => c -> Relation -> RelationConcept
 
-cc :: RelationConcept -> CWrapper
-cc (RC c _) = cw c
-
 relat :: RelationConcept -> Relation
 relat (RC _ r) = r
 
@@ -48,6 +45,7 @@ instance NamedIdea RelationConcept where
   
 instance Concept RelationConcept where
   defn = rcl defn
+  cdom = rcl cdom
 
 -- don't export this
 rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a

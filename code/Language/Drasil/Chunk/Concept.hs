@@ -1,76 +1,79 @@
+{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Concept where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.SymbolForm
 
-import Control.Lens (Simple, Lens, (^.))
+import Control.Lens (Simple, Lens, (^.), set)
 
 import Language.Drasil.Spec
-import Language.Drasil.Symbol
-import Language.Drasil.Space
 
 import Prelude hiding (id)
 
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
+  cdom :: Simple Lens c [CWrapper] --This should be exported for use by the
+              --Drasil framework, but should not be exported beyond that.
 
 -- === DATA TYPES === --
-
 --- ConceptChunk ---  
-data ConceptChunk = DCC String Sentence Sentence (Maybe Sentence)
+data ConceptChunk where
+  CC :: NamedChunk -> Sentence -> [CWrapper] -> ConceptChunk 
+  --[c] is the ConceptDomain(s)
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk ConceptChunk where
-  id f (DCC n t d a) = fmap (\x -> DCC x t d a) (f n)
+  id = nl id
 instance NamedIdea ConceptChunk where
-  term f (DCC n t d a) = fmap (\x -> DCC n x d a) (f t)
-  getA (DCC _ _ _ a) = a
+  term = nl term
+  getA (CC n _ _) = getA n
 instance Concept ConceptChunk where
-  defn f (DCC n t d a) = fmap (\x -> DCC n t x a) (f d)
+  defn f (CC n d cd) = fmap (\x -> CC n x cd) (f d)
+  cdom f (CC n d cd) = fmap (\x -> CC n d x) (f cd)
   
-makeDCC, dcc :: String -> String -> String -> ConceptChunk
-makeDCC i ter des = DCC i (S ter) (S des) Nothing
+nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens ConceptChunk a
+nl l f (CC n d cd) = fmap (\x -> CC (set l x n) d cd) (f (n ^. l))
 
-dcc = makeDCC
+--FIXME: Temporary ConceptDomain tag hacking to not break everything.  
+dcc :: String -> String -> String -> ConceptChunk 
+dcc i ter des = CC (nc i ter) (S des) ([] :: [CWrapper])
 
 dccWDS :: String -> String -> Sentence -> ConceptChunk
-dccWDS i t d = DCC i (S t) d Nothing
+dccWDS i t d = CC (nc i t) d ([] :: [CWrapper])
 
 ccStSS :: String -> Sentence -> Sentence -> ConceptChunk
-ccStSS i t d = DCC i t d Nothing
+ccStSS i t d = CC (ncs i t) d ([] :: [CWrapper])
 
 dcc' :: String -> String -> String -> String -> ConceptChunk
-dcc' i t d a = DCC i (S t) (S d) (Just (S a))
+dcc' i t d a = CC (nc' i t a) (S d) ([] :: [CWrapper])
 
---- CONVAR ---
+ccs :: NamedChunk -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
+ccs = CC
+
+cc :: NamedChunk -> String -> ConceptChunk
+cc n d = CC n (S d) ([] :: [CWrapper])
+
+{- Concept Wrapper -}
+data CWrapper where
+  CW :: (Concept c) => c -> CWrapper
   
---FIXME: This is a temporary data structure created to advance the chunk
---  hierarchy redesign. A full overhaul of datastructures is coming soon.
+instance Chunk CWrapper where
+  id = clens id
+  
+instance NamedIdea CWrapper where
+  term = clens term
+  getA (CW a) = getA a
+  
+instance Concept CWrapper where
+  defn = clens defn
+  cdom = clens cdom
 
-data ConVar = CV { _con :: ConceptChunk
-                 , _symb :: Symbol
-                 , _typ :: Space }
-                     
-instance Eq ConVar where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk ConVar where
-  id = cvl . id
-instance NamedIdea ConVar where
-  term = cvl . term
-  getA (CV c _ _) = getA c
-instance Concept ConVar where
-  defn = cvl . defn
-instance SymbolForm ConVar where
-  symbol f (CV c s t) = fmap (\x -> CV c x t) (f s)
+cw :: Concept c => c -> CWrapper
+cw = CW
 
---FIXME: This should not be exported.
-cvl :: Simple Lens ConVar ConceptChunk
-cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
+clens :: (forall c. (Concept c) => 
+  Simple Lens c a) -> Simple Lens CWrapper a
+clens l f (CW a) = fmap (\x -> CW (set l x a)) (f (a ^. l))
 
-cv :: ConceptChunk -> Symbol -> Space -> ConVar
-cv = CV
-
---FIXME: Remove this hack
-cvR :: ConceptChunk -> Symbol -> ConVar
-cvR c s = CV c s Rational
+instance Eq CWrapper where
+ a == b = (a ^. id) == (b ^. id)

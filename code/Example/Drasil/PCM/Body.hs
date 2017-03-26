@@ -43,7 +43,7 @@ s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+:
            S "the SI name.")
 
 s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
-  [(\x -> Sy (x ^. unit)),
+  [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (x ^. term))
   ] this_si)
@@ -59,7 +59,7 @@ s1_2_intro = Paragraph $
   
 s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ ch ^. unit),
+   (\ch -> Sy $ unit_symb ch),
    (\ch -> ch ^. term)
    ]
   pcmSymbols)
@@ -72,7 +72,8 @@ s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 s4_intro = Paragraph $ S "This section first presents the problem " :+:
   S "description, which gives a high-level view of the problem to be solved" :+:
   S ". This is followed by the solution characteristics specification, " :+:
-  S "which presents the assumptions, theories, definitions and finally the " :+:
+  S "which presents the" +:+ (plural assumption) `sC` 
+  S "theories, definitions and finally the" +:+
   S "instance model (ODE) that models the solar water heating tank."
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
@@ -130,7 +131,7 @@ s4_2_intro = Paragraph $ S "The " :+:
   S " and its derivation is also" :+: S " presented, so that the " :+: 
   (sMap (map toLower) (inModel ^. term)) :+: S " can be verified."
   
-s4_2_1 = Section (assumption ^. term :+: S "s") [Con s4_2_1_intro]
+s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro]
 
 s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   S "and helps in developing the theoretical model by filling in the " :+:
@@ -140,7 +141,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) :+: 
   S ", or " :+: (sMap (map toLower) $ likelyChg ^. term) :+: S " [" :+: 
   (getAcc likelyChg) :+: S "], in which the respective " :+: 
-  (sMap (map toLower) $ assumption ^. term) :+: S " is used."
+  (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 
 s4_2_2 = Section ((thModel ^. term) :+: S "s") 

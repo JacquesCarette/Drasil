@@ -6,11 +6,13 @@ import Control.Lens
 
 import Language.Drasil.Space
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Unit
+import Language.Drasil.Chunk.ConVar
+
 import Prelude hiding (id)
+
+import Language.Drasil.Chunk.SymbolForm (SF(..))
+import Language.Drasil.Unit(UnitDefn)
 
 class NamedIdea c => Quantity c where
   typ      :: Simple Lens c Space
@@ -20,7 +22,7 @@ class NamedIdea c => Quantity c where
 instance Quantity VarChunk where
   getSymb    = Just . SF 
   getUnit _  = Nothing
-  typ f (VC n d s t) = fmap (\x -> VC n d s x) (f t)
+  typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)

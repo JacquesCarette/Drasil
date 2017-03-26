@@ -52,7 +52,7 @@ mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TAandA ]) :
     --FIXME: Need to be able to print defn for gravitational constant.
   
 chipmunkSysInfo :: SystemInformation
-chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [ConVar])
+chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [CQSWrapper])
   cpAcronyms --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
@@ -353,7 +353,7 @@ s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section (addS $ assumption ^. term) [Con s4_2_1_intro,
+s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -364,7 +364,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   (map (\ch -> (sLower (ch ^. term)) +:+ (bterm ch)) 
   [thModel, genDefn, dataDefn, inModel]) `sC` S "or" +:+ 
   (sLower $ likelyChg ^. term) +:+ (bterm likelyChg) `sC` 
-  S "in which the respective" +:+ (sLower $ assumption ^. term) +:+. S "is used"
+  S "in which the respective" +:+ (phrase assumption) +:+. S "is used"
   where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
 
 s4_2_1_list = Enumeration (Simple [
@@ -484,23 +484,23 @@ s4_2_6_intro = Paragraph $ S "Table 1 and 2 show the data constraints on" +:+
 s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] [
   [P (len ^. symbol), P (len ^. symbol) +:+ S "is G/E to 0", S "44.2" +:+
-  Sy (len ^. unit)],
+  Sy (unit_symb len)],
   [P (mass ^. symbol), P (mass ^. symbol) +:+ S "is greater than 0",
-  S "56.2" +:+ Sy (mass ^. unit)],
+  S "56.2" +:+ Sy (unit_symb mass)],
   [P (momtInert ^. symbol), P (momtInert ^. symbol) +:+ S "is G/E to 0",
-  S "74.5" +:+ Sy (momtInert ^. unit)],
-  [P (gravAccel ^. symbol), S "None", S "9.8" +:+ Sy (gravAccel ^. unit)],
+  S "74.5" +:+ Sy (unit_symb momtInert)],
+  [P (gravAccel ^. symbol), S "None", S "9.8" +:+ Sy (unit_symb gravAccel)],
   [P (position ^. symbol), S "None", S "(0.412, 0.502)" +:+
-  Sy (position ^. unit)],
-  [P (vel ^. symbol), S "None", S "2.51" +:+ Sy (vel ^. unit)],
+  Sy (unit_symb position)],
+  [P (vel ^. symbol), S "None", S "2.51" +:+ Sy (unit_symb vel)],
   [P (restitutionCoef ^. symbol), P (restitutionCoef ^. symbol) +:+ S "G/E to 0 and" +:+
   P (restitutionCoef ^. symbol) +:+ S "less than 1", S "0.8"],
   [P (orientation ^. symbol), P (orientation ^. symbol) +:+ S "G/E to 0" +:+
   S "and" +:+ P (orientation ^. symbol) +:+ S "less than 2pi", S "pi/2" +:+
-  Sy (orientation ^. unit)],
-  [P (angVel ^. symbol), S "None", S "2.1" +:+ Sy (angVel ^. unit)],
-  [P (force ^. symbol), S "None", S "98.1" +:+ Sy (force ^. unit)],
-  [P (torque ^. symbol), S "None", S "200" +:+ Sy (torque ^. unit)]
+  Sy (unit_symb orientation)],
+  [P (angVel ^. symbol), S "None", S "2.1" +:+ Sy (unit_symb angVel)],
+  [P (force ^. symbol), S "None", S "98.1" +:+ Sy (unit_symb force)],
+  [P (torque ^. symbol), S "None", S "200" +:+ Sy (unit_symb torque)]
   ]) (S "Table 1: Input Variables") True
 
 s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]

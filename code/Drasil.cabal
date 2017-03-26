@@ -31,6 +31,7 @@ library
     , Language.Drasil.Format
     , Language.Drasil.Generate
     , Language.Drasil.Misc
+    , Language.Drasil.NounPhrase
     , Language.Drasil.People
     , Language.Drasil.Recipe
     , Language.Drasil.RefHelpers
@@ -68,6 +69,7 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
+    , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.LC
@@ -82,6 +84,8 @@ library
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.VarChunk
     , Language.Drasil.Chunk.Wrapper
+    , Language.Drasil.Chunk.Wrapper.QSWrapper
+    , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST
     , Language.Drasil.Make.Helpers

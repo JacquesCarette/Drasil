@@ -183,8 +183,8 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For initv cond upd b) = vcat [
     text "for" <+> parens (statementDoc c NoLoop initv) <+> valueDoc c cond <+> parens (statementDoc c NoLoop upd),
     bodyDoc c b]
-iterationDoc' c (ForEach var listVar@(ListVar _ _) b) = vcat [
-    text "forEach" <+> lbl var <+> valueDoc c listVar,
+iterationDoc' c (ForEach v listVar@(ListVar _ _) b) = vcat [
+    text "forEach" <+> lbl v <+> valueDoc c listVar,
     bodyDoc c b]
 iterationDoc' c (While v b) = vcat [
     text "while" <+> valueDoc c v,
@@ -278,11 +278,11 @@ scopeDoc' Private = text "Private"
 scopeDoc' Public = text "Public"
 
 stateDoc' :: Config -> StateVar -> Doc
-stateDoc' c (StateVar n s p t del) = text var <+> delp <+> stateType c t Dec <+> lbl n
-    where var = case (s,p) of (Public, Dynamic) -> "pubMVar"
-                              (Public, Static)  -> "pubGVar"
-                              (Private, Dynamic) -> "privMVar"
-                              (Private, Static) -> "privGVar"
+stateDoc' c (StateVar n s p t del) = text v <+> delp <+> stateType c t Dec <+> lbl n
+    where v = case (s,p) of (Public, Dynamic) -> "pubMVar"
+                            (Public, Static)  -> "pubGVar"
+                            (Private, Dynamic) -> "privMVar"
+                            (Private, Static) -> "privGVar"
           delp | del == alwaysDel = text "alwaysDel"
                | del == neverDel = text "neverDel"
                | otherwise = int del

@@ -7,8 +7,9 @@
 module Language.Drasil.Symbol where
 
 import Language.Drasil.Unicode 
+import Data.Char (toLower)
 
-data Decoration = Hat | Vector deriving Eq
+data Decoration = Hat | Vector deriving (Eq, Ord)
 
 data Symbol where
   Atomic   :: String -> Symbol
@@ -23,6 +24,43 @@ data Symbol where
             --             [2]   [4]
   Concat :: [ Symbol ]  -> Symbol
             -- [s1, s2] -> s1s2
+  deriving Eq
+
+--FIXME? The exact ordering we want may need to be updated, or should we
+--  allow custom?  
+instance Ord Symbol where
+  compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
+  compare (Concat (x:xs))       (Concat (x':ys))       = 
+    case compare x x' of
+      EQ -> compare xs ys
+      other -> other
+  compare (Concat a)             b                     = compare a [b]
+  compare b                      (Concat a)            = compare [b] a
+  compare (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
+    case compare b b' of
+      EQ -> case compare lr l' of
+            EQ -> compare ur u'
+            other -> other
+      other -> other
+  compare (Corners _ _ _ _ a)    b                     = compare a b
+  compare b                      (Corners _ _ _ _ a)   = compare b a
+  compare (Atop d1 a)           (Atop d2 a')           = 
+    case compare a a' of
+      EQ -> compare d1 d2
+      other -> other
+  compare (Atop _ a)             b                     = compare a b  
+  compare b                      (Atop _ a)            = compare b a
+  compare (Atomic (x:xs))       (Atomic (y:ys))        = 
+    case compare (toLower x) (toLower y) of
+      EQ -> compare xs ys
+      other -> other
+  compare (Special a)           (Special b)            = compare a b
+  compare (Special _)            _                     = LT
+  compare _                     (Special _)            = GT
+  compare (Atomic _)             _                     = LT
+  compare  _                    (Atomic _)             = GT
+  compare (Greek a)             (Greek b)              = compare a b
+
   
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b

@@ -1,0 +1,12 @@
+## Compiled LaTeX files ##
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+## Previous versions of diagrams ##
+inherit-old.png
+uses-old.png

@@ -144,7 +144,7 @@ s2_3_intro =
   S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
   S "some aspects taken from Volere template 16 [3]."
   
-s2_3_intro_end = S "The" +:+ addS (sLower (dataDefn ^. term)) +:+
+s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
   S "are used to support the definitions of the different models" 
   
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
@@ -340,7 +340,7 @@ s6_2 = Section (S "Solution Characteristics Specification")
 s6_2_intro = Paragraph $ S "This section explains all the" +:+
   (plural assumption) +:+ S "considered and the" +:+
   (sLower (thModel ^. term)) :+: S "s which are" +:+
-  S "supported by the" +:+ (sLower (dataDefn ^. term)) :+: S "s."
+  S "supported by the" +:+. (plural dataDefn)
   
 s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
@@ -351,7 +351,7 @@ s6_2_1_intro = Paragraph $
   S "[" :+: (short thModel) :+: S "] by filling in the missing" 
   +:+ S "information for the physical system. The numbers given in the" +:+
   S "square brackets refer to the" +:+ 
-  (sLower (dataDefn ^. term)) +:+
+  (phrase dataDefn) +:+
   S "[" :+: (short dataDefn) :+: S "], or" +:+
   (sLower (inModel ^. term)) +:+ 
   S "[" :+: (short inModel) :+: S "], in which the respective" +:+
@@ -415,7 +415,7 @@ s6_2_3 = Section ((inModel ^. term) :+: S "s") (map Con s6_2_3_IMods)
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = Section ((dataDefn ^. term) :+: S "s") 
+s6_2_4 = Section (titleize' dataDefn) 
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
 
 s6_2_4_intro = Paragraph $ 
@@ -609,16 +609,16 @@ s9_intro1 = Paragraph $
   S "should be modified as well. Table 5" +:+ sParen (makeRef s9_table1) +:+ 
   S "shows the dependencies of" +:+ 
   (sLower (thModel ^. term)) :+: S "s" `sC` 
-  (sLower (dataDefn ^. term)) :+: S "s and" +:+
+  (plural dataDefn) +:+ S "and" +:+
   (sLower (inModel ^. term)) :+: S "s with each other." +:+
   S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the dependencies of" +:+
   (sLower (requirement ^. term)) :+: S "s on" +:+
   (sLower (thModel ^. term)) :+: S "s" `sC`
   (sLower (inModel ^. term)) :+: S "s" `sC`
-  (sLower (dataDefn ^. term)) :+: S "s and data constraints." +:+
+  (plural dataDefn) +:+ S "and data constraints." +:+
   S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the dependencies of"
   +:+ (sLower (thModel ^. term)) :+: S "s" `sC`
-  (sLower (dataDefn ^. term)) :+: S "s" `sC`
+  (plural dataDefn) `sC`
   (sLower (inModel ^. term)) :+: S "s" `sC`
   (sLower (likelyChg ^. term)) :+: S "s and" +:+
   (sLower (requirement ^. term)) :+: S "s on the" +:+.
@@ -784,17 +784,17 @@ s9_intro2 =
   S "component is changed, the components that it points to should also" +:+
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   S "dependencies of" +:+ (sLower (thModel ^. term)) :+: 
-  S "s" `sC` (sLower (dataDefn ^. term)) :+: S "s and" +:+
+  S "s" `sC` (plural dataDefn) +:+ S "and" +:+
   (sLower (inModel ^. term)) :+: S "s on each other." +:+
   S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the dependencies of" +:+
   (sLower (requirement ^. term)) :+: S "s on" +:+
   (sLower (thModel ^. term)) :+: S "s" `sC` 
   (sLower (inModel ^. term)) :+: S "s" `sC`
-  (sLower (dataDefn ^. term)) :+: S "s and data constraints." +:+
+  (plural dataDefn) +:+ S "and data constraints." +:+
   S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the dependencies of" +:+
   (sLower (thModel ^. term)) :+: S "s" `sC` 
   (sLower (inModel ^. term)) :+: S "s" `sC`
-  (sLower (dataDefn ^. term)) :+: S "s" `sC` 
+  (plural dataDefn) `sC` 
   (sLower (requirement ^. term)) :+: S "s and" +:+
   (sLower (likelyChg ^. term)) :+: S "s on" +:+.
   (plural assumption),

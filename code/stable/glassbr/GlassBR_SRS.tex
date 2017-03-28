@@ -170,7 +170,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, Glass-BR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Organization of Document}
 \label{Sec:OoD}
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:R}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DDs} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:R}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DD} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:S}
@@ -278,7 +278,7 @@ The physical system of Glass-BR as shown in Figure~\ref{Figure:Tps}, includes th
 \label{Sec:SCS}
 This section explains all the assumptions considered and the theoretical models which are supported by the data definitions.
 \subsubsection{Assumptions}
-\label{Sec:As}
+\label{Sec:A}
 This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition [DD], or instance model [IM], in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
@@ -335,7 +335,7 @@ Description & If $is\_safe2$ = True, the glass is considered safe. $is\_safe1$ (
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:IMs}
+\label{Sec:IM}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -379,7 +379,7 @@ Description & $q$ or demand, is the 3 second duration equivalent pressure obtain
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
-\label{Sec:DDs}
+\label{Sec:DD}
 This section collects and defines all the data needed to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -689,7 +689,7 @@ R6 (in Section~\ref{Sec:FRs}) &  &  & X & X & X &  & X & X & X & X & X & X & X &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l}
 \toprule
- & A1 (in Section~\ref{Sec:As}) & A2 (in Section~\ref{Sec:As}) & A3 (in Section~\ref{Sec:As}) & A4 (in Section~\ref{Sec:As}) & A5 (in Section~\ref{Sec:As}) & A6 (in Section~\ref{Sec:As}) & A7 (in Section~\ref{Sec:As}) & A8 (in Section~\ref{Sec:As})
+ & A1 (in Section~\ref{Sec:A}) & A2 (in Section~\ref{Sec:A}) & A3 (in Section~\ref{Sec:A}) & A4 (in Section~\ref{Sec:A}) & A5 (in Section~\ref{Sec:A}) & A6 (in Section~\ref{Sec:A}) & A7 (in Section~\ref{Sec:A}) & A8 (in Section~\ref{Sec:A})
 \\
 \midrule
 T1 (\hyperref[T:SR]{Definition~T:SR}) &  &  &  &  &  &  &  & 
@@ -746,7 +746,7 @@ R6 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TMStCBAaOI}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure 2 (Figure~\ref{Figure:F2TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models on each other. Figure 3 (Figure~\ref{Figure:F3TMStCBRsaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Figure 4 (Figure~\ref{Figure:F4TMStCBAsaOI}) shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure 2 (Figure~\ref{Figure:F2TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models on each other. Figure 3 (Figure~\ref{Figure:F3TMStCBRsaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Figure 4 (Figure~\ref{Figure:F4TMStCBAaOI}) shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
@@ -766,7 +766,7 @@ NOTE: Building a tool to automatically generate the graphical representation of 
 \begin{center}
 \includegraphics{ATrace.png}
 \caption{Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Figure:F4TMStCBAsaOI}
+\label{Figure:F4TMStCBAaOI}
 \end{center}
 \end{figure}
 \section{References}

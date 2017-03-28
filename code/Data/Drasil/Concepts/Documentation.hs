@@ -9,7 +9,7 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
 assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
-dataDefn    = commonINP "dataDefn"    (cn' "Data Definition")               "DD"
+dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
 genDefn     = commonINP "genDefn"     (cn' "General Definition")            "GD"
 goalStmt    = commonINP "goalStmt"    (cn' "Goal Statement")                "GS" 
 inModel     = commonINP "inModel"     (cn' "Instance Model")                "IM" 

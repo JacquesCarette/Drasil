@@ -353,7 +353,7 @@ s6_2_1_intro = Paragraph $
   S "square brackets refer to the" +:+ 
   (phrase dataDefn) +:+
   S "[" :+: (short dataDefn) :+: S "], or" +:+
-  (sLower (inModel ^. term)) +:+ 
+  phrase inModel +:+ 
   S "[" :+: (short inModel) :+: S "], in which the respective" +:+
   (phrase assumption) +:+. S "is used"
 
@@ -410,7 +410,7 @@ s6_2_2 = Section ((thModel ^. term) :+: S "s") (map Con s6_2_2_TMods)
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
 
-s6_2_3 = Section ((inModel ^. term) :+: S "s") (map Con s6_2_3_IMods)
+s6_2_3 = Section (titleize' inModel) (map Con s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
@@ -419,8 +419,8 @@ s6_2_4 = Section (titleize' dataDefn)
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
 
 s6_2_4_intro = Paragraph $ 
-  S "This section collects and defines all the data needed to build the" +:+
-  (sLower (inModel ^. term)) :+: S "s."
+  S "This section collects and defines all the data needed to build the" +:+.
+  plural inModel
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
@@ -610,16 +610,16 @@ s9_intro1 = Paragraph $
   S "shows the dependencies of" +:+ 
   (sLower (thModel ^. term)) :+: S "s" `sC` 
   (plural dataDefn) +:+ S "and" +:+
-  (sLower (inModel ^. term)) :+: S "s with each other." +:+
+  plural inModel +:+ S "with each other." +:+
   S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the dependencies of" +:+
   (sLower (requirement ^. term)) :+: S "s on" +:+
   (sLower (thModel ^. term)) :+: S "s" `sC`
-  (sLower (inModel ^. term)) :+: S "s" `sC`
+  (plural inModel) `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
   S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the dependencies of"
   +:+ (sLower (thModel ^. term)) :+: S "s" `sC`
   (plural dataDefn) `sC`
-  (sLower (inModel ^. term)) :+: S "s" `sC`
+  plural inModel `sC`
   (sLower (likelyChg ^. term)) :+: S "s and" +:+
   (sLower (requirement ^. term)) :+: S "s on the" +:+.
   (plural assumption)
@@ -785,15 +785,15 @@ s9_intro2 =
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   S "dependencies of" +:+ (sLower (thModel ^. term)) :+: 
   S "s" `sC` (plural dataDefn) +:+ S "and" +:+
-  (sLower (inModel ^. term)) :+: S "s on each other." +:+
+  plural inModel +:+ S "on each other." +:+
   S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the dependencies of" +:+
   (sLower (requirement ^. term)) :+: S "s on" +:+
   (sLower (thModel ^. term)) :+: S "s" `sC` 
-  (sLower (inModel ^. term)) :+: S "s" `sC`
+  plural inModel `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
   S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the dependencies of" +:+
   (sLower (thModel ^. term)) :+: S "s" `sC` 
-  (sLower (inModel ^. term)) :+: S "s" `sC`
+  plural inModel `sC`
   (plural dataDefn) `sC` 
   (sLower (requirement ^. term)) :+: S "s and" +:+
   (sLower (likelyChg ^. term)) :+: S "s on" +:+.

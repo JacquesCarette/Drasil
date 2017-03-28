@@ -142,7 +142,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given 2D rigid bodies, Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
 \subsection{Organization of Document}
 \label{Sec:OoD}
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IM} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
 \label{Sec:GSD}
@@ -180,7 +180,7 @@ This subsection provides a list of terms that are used in subsequent sections an
 \subsection{Solution Characteristics Specification}
 \label{Sec:SCS}
 \subsubsection{Assumptions}
-\label{Sec:As}
+\label{Sec:A}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]All objects are rigid bodies.
@@ -268,7 +268,7 @@ Description & The net torque $\tau{}$ (Nm) on a rigid body is proportional to it
 \label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn will be used to build the instance models.
 \subsubsection{Data Definitions}
-\label{Sec:DDs}
+\label{Sec:DD}
 This section collects and defines all the data needed to build the Instance Models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -399,8 +399,8 @@ Description & $j$ is the impulse (scalar) used to determine collision response b
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:IMs}
-This section transforms the problem defined in Section~\ref{Sec:PD} into one expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
+\label{Sec:IM}
+This section transforms the problem defined in Section~\ref{Sec:PD} into one expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 \subsubsection{Data Constraints}
 \label{Sec:DC}
 Table 1 and 2 show the data constraints on the input and output variables, respectively. The ``Physical Constraints" column gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.

@@ -20,23 +20,23 @@ rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
 --
-orgSec :: NamedIdea c => Sentence -> c -> Section -> Section
+orgSec :: (NounPhrase c) => Sentence -> c -> Section -> Section
 orgSec = \i b s ->
   Section (S "Organization of Document") (map Con (orgIntro i b s Nothing))
 
 --Do we have extra information at the end (post-refine chain)?
-orgSecWTS :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
+orgSecWTS :: (NounPhrase c) => Sentence -> c -> Section -> Sentence -> Section
 orgSecWTS = \i b s t ->
   Section (S "Organization of Document") (map Con (orgIntro i b s (Just t)))
   
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: NamedIdea c => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
+orgIntro :: (NounPhrase c) => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence= [ Paragraph $
   intro +:+ S "The presentation follows the standard pattern of presenting" +:+
   (foldl1 sC (map S ["goals", "theories", "definitions"])) `sC` 
   S "and assumptions. For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the" +:+ addS (sLower (bottom ^. term)) +:+ 
+  S "they can start reading the" +:+ (plural bottom) +:+ 
   S "in" +:+ (makeRef bottomSec) +:+. 
   S "and trace back to find any additional information they require",
   Paragraph $ lastS trailingSentence ]

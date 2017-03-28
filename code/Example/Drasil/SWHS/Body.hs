@@ -221,7 +221,7 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   S "[citation]. The presentation follows the standard" +:+
   S "pattern for presenting" +:+ (sLower (goalStmt ^. term)) :+: 
   S "s," +:+ (sLower (thModel ^. term)) :+: S "s," +:+ 
-  (sLower (dataDefn ^. term)) :+: S "s, and" +:+. 
+  (plural dataDefn) `sC` S "and" +:+. 
   (plural assumption) +:+
   S "For readers that would like a more bottom" :+: 
   S " up approach, they can start reading the" +:+ 
@@ -297,7 +297,7 @@ s4_intro = Paragraph (S "This section first presents the problem" +:+
   (plural assumption) `sC` 
   (sLower (thModel ^. term)) :+: S "s," +:+ 
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
-  (sLower (dataDefn ^. term)) :+: S "s, and finally" +:+
+  (plural dataDefn) `sC` S "and finally" +:+
   S "the" +:+ (sLower (inModel ^. term)) :+: S "s (" :+:
   (short ode) :+: S "s) that model the" +:+. 
   (swhs_pcm ^. term))
@@ -431,8 +431,10 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
   S "the square brackets refer to the" +:+ (sLower 
   (thModel ^. term)) +:+ S "[" :+: (short thModel) :+: 
   S "]," +:+ (sLower (genDefn ^. term)) :+: 
-  S " [" :+: (short genDefn) :+: S "]," +:+ (sLower (dataDefn ^. term)) +:+ S "[" :+: (short dataDefn) :+: S "]," +:+ (sLower (inModel ^. term)) +:+
-  S "[" :+: (short inModel) :+: S "], or" +:+ (sLower (likelyChg ^. term)) +:+ S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
+  S " [" :+: (short genDefn) :+: S "]," +:+ (phrase dataDefn) +:+ S "[" :+: 
+  (short dataDefn) :+: S "]," +:+ (sLower (inModel ^. term)) +:+
+  S "[" :+: (short inModel) :+: S "], or" +:+ (sLower (likelyChg ^. term)) +:+ 
+  S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
   (phrase assumption) +:+. S "is used") 
 
 -- General paragraph, repeated in every example. Can be abstracted out.
@@ -571,8 +573,8 @@ s4_2_3 = Section (genDefn ^. term :+: S "s")
   ((Con s4_2_3_intro):(map Con s4_2_3_deriv))
 
 s4_2_3_intro = Paragraph (S "This section collects the laws and equations" +:+
-  S "that will be used in deriving the" +:+ (sLower 
-  (dataDefn ^. term)) :+: S "s, which in turn are used to" +:+
+  S "that will be used in deriving the" +:+ 
+  (plural dataDefn) `sC` S "which in turn are used to" +:+
   S "build the" +:+ (sLower (inModel ^. term)) :+: 
   S "s. (General definitions are left out because they are not" +:+
   S "currently implemented in Drasil.)")
@@ -643,7 +645,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
 -- Add references to above when available (assumptions, GDs)
 -- Replace relevant Derivs with the regular derivative when it is available
 
-s4_2_4 = Section (dataDefn ^. term :+: S "s") [Con s4_2_4_intro, 
+s4_2_4 = Section (titleize' dataDefn) [Con s4_2_4_intro, 
   Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3]
 
 s4_2_4_intro = Paragraph (S "This section collects and defines all the" +:+
@@ -1085,7 +1087,7 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   S "component that are marked with an" +:+ Quote (S "X") :+: 
   S " should be modified as well." +:+ makeRef s7_table1 +:+
   S "shows the dependencies of" +:+ addS (sLower (thModel ^. term)) `sC`
-  addS (sLower (genDefn ^. term)) `sC` addS (sLower (dataDefn ^. term)) `sC`
+  addS (sLower (genDefn ^. term)) `sC` (plural dataDefn) `sC`
   S "and" +:+ (sLower (inModel ^. term)) :+: S "s" +:+
   S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
   S "dependencies of" +:+ (sLower (inModel ^. term)) :+:
@@ -1094,7 +1096,7 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
   (sLower (thModel ^. term)) :+: S "s," +:+
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
-  (sLower (dataDefn ^. term)) :+: S "s," +:+
+  (plural dataDefn) `sC`
   (sLower (inModel ^. term)) :+: S "s, and" +:+ 
   (sLower (likelyChg ^. term)) :+: S "s on the" +:+.
   (titleize' assumption))
@@ -1222,7 +1224,7 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   makeRef s7_fig1 +:+ S "shows the dependencies of" +:+
   (sLower (thModel ^. term)) :+: S "s," +:+
   (sLower (genDefn ^. term)) :+: S "s," +:+
-  (sLower (dataDefn ^. term)) :+: S "s," +:+
+  (plural dataDefn) `sC`
   (sLower (inModel ^. term)) :+: S "s," +:+
   (sLower (likelyChg ^. term)) :+: S "s, and" +:+
   (plural assumption) +:+ S "on each" +:+

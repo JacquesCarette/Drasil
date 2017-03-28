@@ -225,22 +225,16 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   (plural assumption) +:+
   S "For readers that would like a more bottom" :+: 
   S " up approach, they can start reading the" +:+ 
-  (sLower (inModel ^. term)) :+: S "s in" +:+ 
+  (plural inModel) +:+ S "in" +:+ 
   makeRef s4_2_5 +:+ S "and trace back to find any" +:+
   S "additional information they require. The" +:+
-  (sLower (inModel ^. term)) :+: S "s provide" +:+
+  (plural inModel) +:+ S "provide" +:+
   S "the" +:+ (ode ^. term) +:+ S "(" :+: (short ode) :+: S "s) and algebraic equations that model the" +:+.
   (swhs_pcm ^. term) +:+ (short progName) +:+
   S "solves these" +:+ (short ode) :+: S "s."),
+  --FIXME: Update refineChain after fixing goalStmt and thModel
   Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
-  {-
-  (S "The" +:+ (sLower (goalStmt ^. term))
-  :+: S "s are refined to the" +:+ (sLower 
-  (thModel ^. term)) :+: S "s, and" +:+ (sLower 
-  (thModel ^. term)) :+: S "s to the" +:+ (sLower
-  (inModel ^. term)) :+: S "s."
-  -}
-  S "The" +:+ addS (sLower (inModel ^. term)) +:+ sParen (makeRef s4_2_5) +:+. 
+  S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
   S "to be solved are referred to as IM1 to IM4"]
 
 -- This paragraph is mostly general (besides program name and number of IMs), 
@@ -298,7 +292,7 @@ s4_intro = Paragraph (S "This section first presents the problem" +:+
   (sLower (thModel ^. term)) :+: S "s," +:+ 
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
   (plural dataDefn) `sC` S "and finally" +:+
-  S "the" +:+ (sLower (inModel ^. term)) :+: S "s (" :+:
+  S "the" +:+ plural inModel +:+ S "(" :+:
   (short ode) :+: S "s) that model the" +:+. 
   (swhs_pcm ^. term))
 
@@ -409,14 +403,13 @@ s4_2 = Section (S "Solution Characteristics Specification") [Con s4_2_intro,
   Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, 
   Sub s4_2_7]
 
-s4_2_intro = Paragraph (S "The" +:+ (sLower (inModel ^. term)) :+:
-  S "s (" :+: (short ode) :+: S "s) that govern" +:+
-  (short progName) +:+ S "are" +:+ S "presented in" +:+ 
-  (makeRef s4_2_5) :+: S ". The information to understand the" +:+
-  S "meaning of the" +:+ (sLower (inModel ^. term)) :+:
-  S "s and their derivation is also presented, so that the" +:+
-  (sLower (inModel ^. term)) :+: S "s" +:+.
-  S "can be verified")
+s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
+  S "(" :+: (short ode) :+: S "s) that govern" +:+
+  (short progName) +:+ S "are" +:+ S "presented in" +:+. 
+  (makeRef s4_2_5) +:+ S "The information to understand the" +:+
+  S "meaning of the" +:+ (plural inModel) +:+
+  S "and their derivation is also presented, so that the" +:+
+  (plural inModel) +:+. S "can be verified")
 
 -- General besides progName, repeated in only one other example but it could be 
 -- used for all of them. So it can be abstracted out.
@@ -432,7 +425,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
   (thModel ^. term)) +:+ S "[" :+: (short thModel) :+: 
   S "]," +:+ (sLower (genDefn ^. term)) :+: 
   S " [" :+: (short genDefn) :+: S "]," +:+ (phrase dataDefn) +:+ S "[" :+: 
-  (short dataDefn) :+: S "]," +:+ (sLower (inModel ^. term)) +:+
+  (short dataDefn) :+: S "]," +:+ (phrase inModel) +:+
   S "[" :+: (short inModel) :+: S "], or" +:+ (sLower (likelyChg ^. term)) +:+ 
   S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
   (phrase assumption) +:+. S "is used") 
@@ -575,8 +568,8 @@ s4_2_3 = Section (genDefn ^. term :+: S "s")
 s4_2_3_intro = Paragraph (S "This section collects the laws and equations" +:+
   S "that will be used in deriving the" +:+ 
   (plural dataDefn) `sC` S "which in turn are used to" +:+
-  S "build the" +:+ (sLower (inModel ^. term)) :+: 
-  S "s. (General definitions are left out because they are not" +:+
+  S "build the" +:+. (plural inModel) +:+
+  S "(General definitions are left out because they are not" +:+
   S "currently implemented in Drasil.)")
 
 -- General paragraph, repeated in one other example but could be included in 
@@ -649,13 +642,13 @@ s4_2_4 = Section (titleize' dataDefn) [Con s4_2_4_intro,
   Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3]
 
 s4_2_4_intro = Paragraph (S "This section collects and defines all the" +:+
-  S "data needed to build the" +:+ (sLower (inModel ^. term)) :+: 
-  S "s. The dimension of each quantity is also given.")
+  S "data needed to build the" +:+. plural inModel +:+
+  S "The dimension of each quantity is also given.")
 
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = Section (inModel ^. term :+: S "s") ((map Con s4_2_5_intro) ++ 
+s4_2_5 = Section (titleize' inModel) ((map Con s4_2_5_intro) ++ 
   (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
 
 s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" +:+
@@ -1088,16 +1081,16 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   S " should be modified as well." +:+ makeRef s7_table1 +:+
   S "shows the dependencies of" +:+ addS (sLower (thModel ^. term)) `sC`
   addS (sLower (genDefn ^. term)) `sC` (plural dataDefn) `sC`
-  S "and" +:+ (sLower (inModel ^. term)) :+: S "s" +:+
+  S "and" +:+ plural inModel +:+
   S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
-  S "dependencies of" +:+ (sLower (inModel ^. term)) :+:
-  S "s," +:+ (sLower (requirement ^. term)) :+:
+  S "dependencies of" +:+ plural inModel `sC`
+  (sLower (requirement ^. term)) :+:
   S "s, and data constraints on each other." +:+ 
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
   (sLower (thModel ^. term)) :+: S "s," +:+
   (sLower (genDefn ^. term)) :+: S "s," +:+ 
   (plural dataDefn) `sC`
-  (sLower (inModel ^. term)) :+: S "s, and" +:+ 
+  (plural inModel) `sC` S "and" +:+ 
   (sLower (likelyChg ^. term)) :+: S "s on the" +:+.
   (titleize' assumption))
 
@@ -1159,8 +1152,7 @@ s7_table2 = Table [S "", S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
   [S "R10", S "", S "X", S "", S "", S "", S "", S ""],
   [S "R11", S "", S "X", S "", S "", S "", S "", S ""]]
   (S "Traceability Matrix Showing the Connections Between" +:+
-  (requirement ^. term) :+: S "s and" +:+ (inModel ^. term) :+:
-  S "s") True
+  (requirement ^. term) :+: S "s and" +:+ (titleize' inModel)) True
 
 s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
   S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
@@ -1225,11 +1217,11 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   (sLower (thModel ^. term)) :+: S "s," +:+
   (sLower (genDefn ^. term)) :+: S "s," +:+
   (plural dataDefn) `sC`
-  (sLower (inModel ^. term)) :+: S "s," +:+
+  (plural inModel) `sC`
   (sLower (likelyChg ^. term)) :+: S "s, and" +:+
   (plural assumption) +:+ S "on each" +:+
   S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies" +:+
-  S "of" +:+ (sLower (inModel ^. term)) :+: S "s," +:+
+  S "of" +:+ plural inModel `sC`
   (sLower (requirement ^. term)) :+: S "s, and data" +:+
   S "constraints on each other."),
   Paragraph (S "NOTE: Building a tool to automatically generate" +:+
@@ -1242,8 +1234,8 @@ s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between" +:+
   S "Items of Different Sections") "ATrace.png"
 
 s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between" +:+
-  (requirement ^. term) :+: S "s," +:+ (inModel ^. term) :+:
-  S "s, and Data Constraints") "RTrace.png"
+  (requirement ^. term) :+: S "s," +:+ titleize' inModel `sC`
+  S "and Data Constraints") "RTrace.png"
 
 --References?
 

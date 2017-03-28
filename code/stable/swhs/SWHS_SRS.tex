@@ -225,8 +225,8 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements is limited to thermal analysis of a single Solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Organization of Document}
 \label{Sec:OoD}
-The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern for presenting goal statements, theoretical models, data definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:IMs}) to be solved are referred to as IM1 to IM4.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern for presenting goal statements, theoretical models, data definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IM} and trace back to find any additional information they require. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:IM}) to be solved are referred to as IM1 to IM4.
 \section{General System Description}
 \label{Sec:GSD}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
@@ -278,9 +278,9 @@ Given the temperature of the heating coil, initial conditions for the temperatur
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SCS}
-The instance models (ODEs) that govern SWHS are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models (ODEs) that govern SWHS are presented in Section~\ref{Sec:IM}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:As}
+\label{Sec:A}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:Cote]{Definition~T:Cote}].
@@ -377,7 +377,7 @@ Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
 mC\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV
 \end{equation}
 \subsubsection{Data Definitions}
-\label{Sec:DDs}
+\label{Sec:DD}
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -428,8 +428,8 @@ Description & $H_{f}$ is the amount of thermal energy required to completely mel
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:IMs}
-This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
+\label{Sec:IM}
+This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for $T_{W}$ and $T_{P}$ depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change. (Instance models are left out because they are not currently implemented in Drasil.)
 Derivation of the energy balance on water:
 To find the rate of change of $T_{W}$, we look at the energy balance on water. The volume being considered is the volume of water $V_{W}$, which has mass of water $m_{W}$ and specific heat capacity of water, $C_{W}$. $q_{C}$ represents the heat flux into the water from the coil and $q_{P}$ represents the heat flux into the PCM from water, over coil surface area and phase change material surface area of $A_{C}$ and $A_{P}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A15). Assuming no volumetric heat generation per unit volume (A16), $g$=0. Therefore, the equation for GD2 can be written as:
@@ -579,7 +579,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TMaG}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRsaIMs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAsaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRsaIM} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
  & \hyperref[T:Cote]{Definition~T:Cote} & \hyperref[T:She]{Definition~T:She} & \hyperref[T:Lhe]{Definition~T:Lhe} & GD1 & GD2 & \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} & \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & IM1 & IM2 & IM3 & IM4
@@ -652,7 +652,7 @@ R11 &  & X &  &  &  &  &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TMStCBRsaIMs}
+\label{Table:TMStCBRsaIM}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
@@ -699,9 +699,9 @@ LC6 &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:TMStCBAsaOI}
+\label{Table:TMStCBAaOI}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TGStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TGStCBRsIMsaDC} shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TGStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TGStCBRsIM,aDC} shows the dependencies of instance models, requirements, and data constraints on each other.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}

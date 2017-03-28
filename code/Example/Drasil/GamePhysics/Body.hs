@@ -361,6 +361,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   S "and helps in developing the theoretical model by filling in the" +:+
   S "missing information for the physical system. The numbers given in" +:+
   S "the square brackets refer to the" +:+ foldr1 sC 
+  --FIXME: Use phrase once genDefn, thModel, and inModel are updated
   (map (\ch -> (sLower (ch ^. term)) +:+ (bterm ch)) 
   [thModel, genDefn, dataDefn, inModel]) `sC` S "or" +:+ 
   (sLower $ likelyChg ^. term) +:+ (bterm likelyChg) `sC` 
@@ -412,7 +413,7 @@ s4_2_3 = Section ( addS (genDefn ^. term)) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+
-  S "that will be used in deriving the" +:+ addS (sLower (dataDefn ^. term)) `sC`
+  S "that will be used in deriving the" +:+ (plural dataDefn) `sC`
   S "which in turn will be used to build the" +:+.
   (addS (sLower (inModel ^. term)))
 
@@ -430,7 +431,7 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = Section (addS (dataDefn ^. term)) ([Con s4_2_4_intro] ++
+s4_2_4 = Section (titleize' dataDefn) ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ S "This section collects and defines all the" +:+

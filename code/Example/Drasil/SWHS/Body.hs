@@ -151,8 +151,8 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_contents)
 s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "describe the modelling of" +:+ (swhs_pcm ^. term) :+:
   S ". The" +:+ (sLower (goalStmt ^. term)) :+: 
-  S "s and" +:+ (sLower (thModel ^. term)) :+: 
-  S "s used in the" +:+ (short progName) +:+ S "code" +:+
+  S "s and" +:+ plural thModel +:+ 
+  S "used in the" +:+ (short progName) +:+ S "code" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ 
   S "and unambiguous definitions. This document is intended" +:+
@@ -220,7 +220,7 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   S "scientific computing software proposed by [citation] and" +:+
   S "[citation]. The presentation follows the standard" +:+
   S "pattern for presenting" +:+ (sLower (goalStmt ^. term)) :+: 
-  S "s," +:+ (sLower (thModel ^. term)) :+: S "s," +:+ 
+  S "s," +:+ plural thModel `sC`
   (plural dataDefn) `sC` S "and" +:+. 
   (plural assumption) +:+
   S "For readers that would like a more bottom" :+: 
@@ -289,8 +289,8 @@ s4_intro = Paragraph (S "This section first presents the problem" +:+
   S "to be solved. This is followed by the solution" +:+
   S "characteristics specification, which presents the" +:+
   (plural assumption) `sC` 
-  (sLower (thModel ^. term)) :+: S "s," +:+ 
-  (sLower (genDefn ^. term)) :+: S "s," +:+ 
+  plural thModel `sC`
+  (plural genDefn) `sC` 
   (plural dataDefn) `sC` S "and finally" +:+
   S "the" +:+ plural inModel +:+ S "(" :+:
   (short ode) :+: S "s) that model the" +:+. 
@@ -418,13 +418,13 @@ s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
-  S "and helps in developing the" +:+ (sLower 
-  (thModel ^. term)) +:+ S "by filling in the missing" +:+
+  S "and helps in developing the" +:+ 
+  phrase thModel +:+ S "by filling in the missing" +:+
   S "information for the physical system. The numbers given in" +:+
-  S "the square brackets refer to the" +:+ (sLower 
-  (thModel ^. term)) +:+ S "[" :+: (short thModel) :+: 
-  S "]," +:+ (sLower (genDefn ^. term)) :+: 
-  S " [" :+: (short genDefn) :+: S "]," +:+ (phrase dataDefn) +:+ S "[" :+: 
+  S "the square brackets refer to the" +:+ 
+  phrase thModel +:+ S "[" :+: (short thModel) :+: 
+  S "]," +:+ (phrase genDefn) +:+ 
+  S "[" :+: (short genDefn) :+: S "]" `sC` (phrase dataDefn) +:+ S "[" :+: 
   (short dataDefn) :+: S "]," +:+ (phrase inModel) +:+
   S "[" :+: (short inModel) :+: S "], or" +:+ (sLower (likelyChg ^. term)) +:+ 
   S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
@@ -546,7 +546,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 -- Can booktabs colored links be used? The box links completely cover nearby 
 -- punctuation.
 
-s4_2_2 = Section (thModel ^. term :+: S "s") [Con s4_2_2_intro, 
+s4_2_2 = Section (titleize' thModel) [Con s4_2_2_intro, 
   Con s4_2_2_T1, Con s4_2_2_T2, Con s4_2_2_T3]
 
 s4_2_2_intro = Paragraph (S "This section focuses on the general equations" +:+
@@ -562,7 +562,7 @@ s4_2_2_intro = Paragraph (S "This section focuses on the general equations" +:+
 -- No subsubsubsections... may make things difficult for derivation sections
 -- coming up
 
-s4_2_3 = Section (genDefn ^. term :+: S "s") 
+s4_2_3 = Section (titleize' genDefn) 
   ((Con s4_2_3_intro):(map Con s4_2_3_deriv))
 
 s4_2_3_intro = Paragraph (S "This section collects the laws and equations" +:+
@@ -1079,16 +1079,16 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   S "component is changed, the items in the column of that" +:+
   S "component that are marked with an" +:+ Quote (S "X") :+: 
   S " should be modified as well." +:+ makeRef s7_table1 +:+
-  S "shows the dependencies of" +:+ addS (sLower (thModel ^. term)) `sC`
-  addS (sLower (genDefn ^. term)) `sC` (plural dataDefn) `sC`
+  S "shows the dependencies of" +:+ plural thModel `sC`
+  (plural genDefn) `sC` (plural dataDefn) `sC`
   S "and" +:+ plural inModel +:+
   S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
   S "dependencies of" +:+ plural inModel `sC`
   (sLower (requirement ^. term)) :+:
   S "s, and data constraints on each other." +:+ 
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
-  (sLower (thModel ^. term)) :+: S "s," +:+
-  (sLower (genDefn ^. term)) :+: S "s," +:+ 
+  plural thModel `sC`
+  (plural genDefn) `sC` 
   (plural dataDefn) `sC`
   (plural inModel) `sC` S "and" +:+ 
   (sLower (likelyChg ^. term)) :+: S "s on the" +:+.
@@ -1214,8 +1214,8 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   S "that arrow. Therefore, if a component is changed, the" +:+
   S "components that it points to should also be changed." +:+
   makeRef s7_fig1 +:+ S "shows the dependencies of" +:+
-  (sLower (thModel ^. term)) :+: S "s," +:+
-  (sLower (genDefn ^. term)) :+: S "s," +:+
+  plural thModel `sC`
+  (plural genDefn) `sC`
   (plural dataDefn) `sC`
   (plural inModel) `sC`
   (sLower (likelyChg ^. term)) :+: S "s, and" +:+

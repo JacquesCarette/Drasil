@@ -105,8 +105,8 @@ s2_1_intro =
   S "The main purpose of this document is to predict whether a given" +:+
   (sLower (glaSlab ^. term)) +:+ S "is likely to resist a" +:+
   S "specified" +:+. (sLower (blast ^. term)) +:+
-  S "The goals and" +:+ (sLower (thModel ^. term)) :+:
-  S "s used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
+  S "The goals and" +:+ plural thModel +:+
+  S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ S "and unambiguous" +:+
   S "definitions. This document is intended to be used as a reference" +:+
@@ -339,7 +339,7 @@ s6_2 = Section (S "Solution Characteristics Specification")
 
 s6_2_intro = Paragraph $ S "This section explains all the" +:+
   (plural assumption) +:+ S "considered and the" +:+
-  (sLower (thModel ^. term)) :+: S "s which are" +:+
+  plural thModel +:+ S "which are" +:+
   S "supported by the" +:+. (plural dataDefn)
   
 s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
@@ -347,7 +347,7 @@ s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
 
 s6_2_1_intro = Paragraph $ 
   S "This section simplifies the original problem and helps in developing the" 
-  +:+ (sLower (thModel ^. term)) +:+ 
+  +:+ (phrase thModel) +:+ 
   S "[" :+: (short thModel) :+: S "] by filling in the missing" 
   +:+ S "information for the physical system. The numbers given in the" +:+
   S "square brackets refer to the" +:+ 
@@ -405,7 +405,7 @@ s6_2_1_list =
     S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")])]
   --equation in sentence
 
-s6_2_2 = Section ((thModel ^. term) :+: S "s") (map Con s6_2_2_TMods)
+s6_2_2 = Section (titleize' thModel) (map Con s6_2_2_TMods)
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
@@ -608,16 +608,16 @@ s9_intro1 = Paragraph $
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
   S "should be modified as well. Table 5" +:+ sParen (makeRef s9_table1) +:+ 
   S "shows the dependencies of" +:+ 
-  (sLower (thModel ^. term)) :+: S "s" `sC` 
+  plural thModel `sC` 
   (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "with each other." +:+
   S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the dependencies of" +:+
   (sLower (requirement ^. term)) :+: S "s on" +:+
-  (sLower (thModel ^. term)) :+: S "s" `sC`
+  plural thModel `sC`
   (plural inModel) `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
-  S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the dependencies of"
-  +:+ (sLower (thModel ^. term)) :+: S "s" `sC`
+  S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the dependencies of" +:+
+  plural thModel `sC`
   (plural dataDefn) `sC`
   plural inModel `sC`
   (sLower (likelyChg ^. term)) :+: S "s and" +:+
@@ -783,16 +783,15 @@ s9_intro2 =
   S "by the component at the head of that arrow. Therefore, if a" +:+
   S "component is changed, the components that it points to should also" +:+
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
-  S "dependencies of" +:+ (sLower (thModel ^. term)) :+: 
-  S "s" `sC` (plural dataDefn) +:+ S "and" +:+
+  S "dependencies of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "on each other." +:+
   S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the dependencies of" +:+
   (sLower (requirement ^. term)) :+: S "s on" +:+
-  (sLower (thModel ^. term)) :+: S "s" `sC` 
+  plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
   S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the dependencies of" +:+
-  (sLower (thModel ^. term)) :+: S "s" `sC` 
+  plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) `sC` 
   (sLower (requirement ^. term)) :+: S "s and" +:+

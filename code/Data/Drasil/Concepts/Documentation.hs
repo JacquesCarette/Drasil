@@ -10,13 +10,13 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
 --FIXME: Add compound NounPhrases instead of cn'
 assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
 dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
-genDefn     = commonINP "genDefn"     (cn' "General Definition")            "GD"
+genDefn     = commonINP "genDefn"     (cn' "general definition")            "GD"
 goalStmt    = commonINP "goalStmt"    (cn' "Goal Statement")                "GS" 
 inModel     = commonINP "inModel"     (cn' "instance model")                "IM" 
 likelyChg   = commonINP "likelyChg"   (cn' "Likely Change")                 "LC"
 physSyst    = commonINP "physSyst"    (cn' "Physical System Description")   "PS" 
 requirement = commonINP "requirement" (cn' "Requirement")                   "R"
-thModel     = commonINP "thModel"     (cn' "Theoretical Model")             "T"
+thModel     = commonINP "thModel"     (cn' "theoretical model")             "T"
 mg          = commonINP "mg"          (cn' "Module Guide")                  "MG" 
 srs         = commonINP "srs"         (cn' "Software Requirements Specification") 
   "SRS"

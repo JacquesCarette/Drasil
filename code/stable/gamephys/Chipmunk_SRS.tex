@@ -138,7 +138,7 @@ The following section provides an overview of the Software Requirements Specific
 This document descibes the modeling of an open source 2D rigid body physics library used for games. The goal statements and theoretical models used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
 \subsection{Scope of Requirements}
-\label{Sec:SoRs}
+\label{Sec:SoR}
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given 2D rigid bodies, Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
 \subsection{Organization of Document}
 \label{Sec:OoD}
@@ -453,10 +453,10 @@ $\omega{}$ & None
 \label{Table:T2OV}
 \end{longtable}
 \section{Requirements}
-\label{Sec:Rs}
+\label{Sec:R}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FRs}
+\label{Sec:FR}
 \begin{itemize}
 \item[R1:]Create a space for all of the rigid bodies in the physical simulation to interact in.
 \item[R2:]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
@@ -468,7 +468,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[R8:]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 \end{itemize}
 \subsection{Nonfunctional Requirements}
-\label{Sec:NRs}
+\label{Sec:NR}
 Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}

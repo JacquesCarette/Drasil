@@ -165,7 +165,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "point for subsequent development phases, including" +:+ 
   S "writing the design specification and the software" +:+
   S "verification and validation plan. The design document" +:+
-  S "will show how the" +:+ addS (sLower (requirement ^. term)) +:+
+  S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
   S "on the numerical algorithms and programming environment" +:+
   S "The verification and validation plan will show the" +:+
@@ -920,19 +920,18 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the" +:+
 
 -- Remember to insert references in above derivation when available
 
-s5 = Section ((requirement ^. term) :+: S "s") [Con s5_intro, Sub s5_1, 
+s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1, 
   Sub s5_2]
 
-s5_intro = Paragraph (S "This section provides the functional" +:+ (sLower
-  (requirement ^. term)) :+: S "s, the business tasks" +:+
+s5_intro = Paragraph (S "This section provides the functional" +:+ 
+  plural requirement `sC` S "the business tasks" +:+
   S "that the software is expected to complete, and the" +:+
-  S "nonfunctional" +:+ (sLower (requirement ^. 
-  term)) :+:S "s, the qualities that the software is expected to" +:+
-  S "exhibit.")
+  S "nonfunctional" +:+ plural requirement `sC` 
+  S "the qualities that the software is expected to exhibit.")
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s5_1 = Section (S "Functional" +:+ (requirement ^. term) :+: S "s") 
+s5_1 = Section (S "Functional" +:+ titleize' requirement) 
   (map Con s5_1_list)
 
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
@@ -943,7 +942,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
   (\ch -> ch ^. term)] inputVar) 
-  (S "Input Variable" +:+ (requirement ^. term)) False),
+  (S "Input Variable" +:+ (titleize requirement)) False),
 --
   Enumeration (Simple [((short requirement) :+: S "2", Flat 
   (S "Use the inputs in R1 to find the" +:+ (mass ^. term) +:+
@@ -1014,14 +1013,14 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 --How to include pi?
 --How to add exponents?
 
-s5_2 = Section (S "Nonfunctional" +:+ addS (requirement ^. term)) 
+s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement) 
   [Con s5_2_contents]
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
   S "of this problem, performance is not a priority. Any" +:+
   S "reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
-  S "nonfunctional" +:+ addS (sLower (requirement ^. term)) +:+ 
+  S "nonfunctional" +:+ plural requirement +:+ 
   S "are correctness, verifiability" `sC`
   S "understandability, reusability, and maintainability.")
 
@@ -1084,8 +1083,8 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   S "and" +:+ plural inModel +:+
   S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
   S "dependencies of" +:+ plural inModel `sC`
-  (sLower (requirement ^. term)) :+:
-  S "s, and data constraints on each other." +:+ 
+  plural requirement `sC`
+  S "and data constraints on each other." +:+ 
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
   plural thModel `sC`
   (plural genDefn) `sC` 
@@ -1152,7 +1151,7 @@ s7_table2 = Table [S "", S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
   [S "R10", S "", S "X", S "", S "", S "", S "", S ""],
   [S "R11", S "", S "X", S "", S "", S "", S "", S ""]]
   (S "Traceability Matrix Showing the Connections Between" +:+
-  (requirement ^. term) :+: S "s and" +:+ (titleize' inModel)) True
+  (titleize' requirement) +:+ S "and" +:+ (titleize' inModel)) True
 
 s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
   S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
@@ -1222,7 +1221,7 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   (plural assumption) +:+ S "on each" +:+
   S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies" +:+
   S "of" +:+ plural inModel `sC`
-  (sLower (requirement ^. term)) :+: S "s, and data" +:+
+  plural requirement `sC` S "and data" +:+
   S "constraints on each other."),
   Paragraph (S "NOTE: Building a tool to automatically generate" +:+
   S "the graphical representation of the matrix by scanning the" +:+
@@ -1234,7 +1233,7 @@ s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between" +:+
   S "Items of Different Sections") "ATrace.png"
 
 s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between" +:+
-  (requirement ^. term) :+: S "s," +:+ titleize' inModel `sC`
+  (titleize' requirement) `sC` titleize' inModel `sC`
   S "and Data Constraints") "RTrace.png"
 
 --References?

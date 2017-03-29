@@ -326,7 +326,7 @@ s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 --NOTE: The only difference here from the original is the removal of an 
 --    extraneous space
 
-s6_1_3 = Section ((goalStmt ^. term) :+: S "s") [Con s6_1_3_list]
+s6_1_3 = Section (titleize' goalStmt) [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+

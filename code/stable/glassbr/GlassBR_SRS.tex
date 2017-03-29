@@ -166,7 +166,7 @@ Software is helpful to efficiently and correctly predict the blast risk involved
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the Glass-BR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
 \subsection{Scope of Requirements}
-\label{Sec:SoRs}
+\label{Sec:SoR}
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, Glass-BR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Organization of Document}
 \label{Sec:OoD}
@@ -553,10 +553,10 @@ $SD_{max}$ & 130 m
 \end{longtable}
 Table 4 () shows the constraints that must be satisfied by the output.
 \section{Requirements}
-\label{Sec:Rs}
+\label{Sec:R}
 \subsection{Functional Requirements}
-\label{Sec:FRs}
-The following section provides the functional Requirements, the business tasks that the software is expected to complete.
+\label{Sec:FR}
+The following section provides the functional requirements, the business tasks that the software is expected to complete.
 \begin{itemize}
 \item[R1:]Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
 \end{itemize}
@@ -615,7 +615,7 @@ $TNT$ & TNT equivalent factor &
           \end{enumerate}
 \end{itemize}
 \subsection{Nonfunctional Requirements}
-\label{Sec:NRs}
+\label{Sec:NR}
 Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority nonfunctional Rs are correctness, verifiability, understandability, reusability, maintainability and portability.
 \section{Likely Changes}
 \label{Sec:LCs}
@@ -668,20 +668,20 @@ DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X & X &  
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) & DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) & DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) & DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FRs}) & R2 (in Section~\ref{Sec:FRs})
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) & DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) & DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) & DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FR}) & R2 (in Section~\ref{Sec:FR})
 \\
 \midrule
-R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R1 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R2 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R3 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+R3 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-R4 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
+R4 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
 \\
-R5 (in Section~\ref{Sec:FRs}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R5 (in Section~\ref{Sec:FR}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (in Section~\ref{Sec:FRs}) &  &  & X & X & X &  & X & X & X & X & X & X & X & X &  &  & 
+R6 (in Section~\ref{Sec:FR}) &  &  & X & X & X &  & X & X & X & X & X & X & X & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
@@ -730,23 +730,23 @@ LC4 (in Section~\ref{Sec:LCs}) &  &  &  &  &  & X &  &
 \\
 LC5 (in Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X & 
 \\
-R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+R1 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  & 
 \\
-R2 (in Section~\ref{Sec:FRs}) &  &  &  & X & X &  &  & X
+R2 (in Section~\ref{Sec:FR}) &  &  &  & X & X &  &  & X
 \\
-R3 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+R3 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  & 
 \\
-R4 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+R4 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  & 
 \\
-R5 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+R5 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  & 
 \\
-R6 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+R6 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TMStCBAaOI}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure 2 (Figure~\ref{Figure:F2TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models on each other. Figure 3 (Figure~\ref{Figure:F3TMStCBRsaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Figure 4 (Figure~\ref{Figure:F4TMStCBAaOI}) shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure 2 (Figure~\ref{Figure:F2TMStCBIoDS}) shows the dependencies of theoretical models, data definitions and instance models on each other. Figure 3 (Figure~\ref{Figure:F3TMStCBRaOI}) shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. Figure 4 (Figure~\ref{Figure:F4TMStCBAaOI}) shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
@@ -759,7 +759,7 @@ NOTE: Building a tool to automatically generate the graphical representation of 
 \begin{center}
 \includegraphics{RTrace.png}
 \caption{Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items}
-\label{Figure:F3TMStCBRsaOI}
+\label{Figure:F3TMStCBRaOI}
 \end{center}
 \end{figure}
 \begin{figure}

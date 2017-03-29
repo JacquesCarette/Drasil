@@ -159,7 +159,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "subsequent development phases, including writing the design" +:+.
   S "specification and the software verification and validation plan" +:+
   S "The design document will show how the" +:+
-  (addS (sLower (requirement ^. term))) +:+ S "are to be" +:+
+  plural requirement +:+ S "are to be" +:+
   S "realized. The verification and validation plan will show the steps" +:+
   S "that will be used to increase confidence in the software" +:+.
   S "documentation and the implementation")]
@@ -171,11 +171,11 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section (S "Scope of" +:+ addS (requirement ^. term))
+s2_2 = Section (S "Scope of" +:+ titleize' requirement)
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ S "The scope of the" +:+
-  (addS (sLower (requirement ^. term))) +:+ S "includes the" +:+
+  plural requirement +:+ S "includes the" +:+
   S "physical simulation of" +:+ (getAcc twoD) +:+ 
   irregPlur (rigidBody ^. term) +:+ S "acted on by forces. Given" +:+ 
   (getAcc twoD) +:+ irregPlur (rigidBody ^. term) `sC` (short chipmunk) +:+ 
@@ -287,7 +287,7 @@ s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms" +:+
   S "that are used in subsequent sections and their meaning, with the" +:+
   S "purpose of reducing ambiguity and making it easier to correctly" +:+
-  S "understand the requirements:"
+  S "understand the" +:+ plural requirement :+: S ":"
 
 --FIXME: Handle plurals properly. This is a really bad hack.
 s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
@@ -519,13 +519,13 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = Section (addS $ requirement ^. term) [Con s5_intro, Sub s5_1,
+s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
 s5_intro = Paragraph $ S "This section provides the functional" +:+
-  addS (sLower (requirement ^. term)) `sC` S "the business" +:+
+  plural requirement `sC` S "the business" +:+
   S "tasks that the software is expected to complete, and the" +:+
-  S "nonfunctional" +:+. (addS (sLower (requirement ^. term)) `sC`
+  S "nonfunctional" +:+. (plural requirement `sC` 
   S "the qualities that the software is expected to exhibit")
 
 -----------------------------------
@@ -535,7 +535,7 @@ s5_intro = Paragraph $ S "This section provides the functional" +:+
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = Section (S "Functional" +:+ addS (requirement ^. term))
+s5_1 = Section (S "Functional" +:+ titleize' requirement)
   [Con s5_1_list]
 
 -- Currently need separate chunks for plurals like rigid bodies,
@@ -584,11 +584,12 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = Section (S "Nonfunctional" +:+ addS (requirement ^. term))
+s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement)
   [Con s5_2_intro]
 
 s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+
-  S "is a high priority. Other non-functional requirements that are a" +:+
+  S "is a high priority. Other non-functional" +:+ plural requirement +:+
+  S "that are a" +:+
   S "priority are: correctness, understandability, portability," +:+.
   S "reliability, and maintainability"
 

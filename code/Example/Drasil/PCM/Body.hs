@@ -110,7 +110,7 @@ s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   P (ht_flux_C ^. symbol) :+: S " represents the " :+: (ht_flux_C ^. term) :+:
   S " into the water.)")]
 
-s4_1_3 = Section ((goalStmt ^. term) :+: S "s") [Con s4_1_3_intro,
+s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro,
                                                     Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial " :+:

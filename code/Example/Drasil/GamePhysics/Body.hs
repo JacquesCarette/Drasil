@@ -150,7 +150,7 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "open source" +:+ (getAcc twoD) +:+ (rigidBody ^. term) +:+ 
   (physLib ^. term) +:+ S "used for games. The" +:+ 
-  (addS (sLower (goalStmt ^. term))) +:+ S "and" +:+ 
+  plural goalStmt +:+ S "and" +:+ 
   (plural thModel) +:+ S "used in" +:+ (short chipmunk) +:+
   S "are provided. This" +:+
   S "document is intended to be used as a reference to provide all" +:+.
@@ -307,7 +307,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = Section (addS (goalStmt ^. term)) [Con s4_1_2_list]
+s4_1_2 = Section (titleize' goalStmt) [Con s4_1_2_list]
 
 s4_1_2_list = Enumeration (Simple [
   ((getAcc goalStmt) :+: S "1", Flat (S "Given the physical" +:+

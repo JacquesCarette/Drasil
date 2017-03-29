@@ -124,11 +124,11 @@ s2_1_intro =
   S "be used to increase confidence in the software documentation and" +:+.
   S "the implementation"]
 
-s2_2 = Section (S "Scope of" +:+ addS (requirement ^. term)) 
+s2_2 = Section (S "Scope of" +:+ titleize' requirement) 
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $
-  S "The scope of the" +:+ addS (sLower (requirement ^. term)) +:+
+  S "The scope of the" +:+ plural requirement +:+
   S "includes getting all input parameters related to the" +:+ 
   (sLower (glaSlab ^. term)) +:+ S "and also the parameters" +:+
   S "related to" +:+. (sLower (blastTy ^. term)) +:+ 
@@ -269,8 +269,8 @@ s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro,
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent" +:+
   S "sections and their meaning, with the purpose of reducing ambiguity" +:+
-  S "and making it easier to correctly understand the" +:+ 
-  (sLower (requirement ^. term)) :+: S "s. All of the terms" +:+
+  S "and making it easier to correctly understand the" +:+. 
+  (plural requirement) +:+ S "All of the terms" +:+
   S "are extracted from [4] in" +:+. (makeRef s10)
 
 s6_1_1_bullets = Enumeration $ (Number $ 
@@ -488,14 +488,14 @@ s6_2_5_intro2 = Paragraph $
 --  [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
 --  (S "Table4: Output Variables") True
 
-s7 = Section((requirement ^. term) :+: S "s") [Sub s7_1, Sub s7_2]
+s7 = Section (titleize' requirement) [Sub s7_1, Sub s7_2]
 
-s7_1 = Section (S "Functional" +:+ (requirement ^. term) :+: S "s") 
+s7_1 = Section (S "Functional" +:+ titleize' requirement) 
   ([Con s7_1_intro] ++ (map Con s7_1_list))
 
 s7_1_intro = Paragraph $
   S "The following section provides the functional" +:+
-  (requirement ^. term) :+: S "s, the business tasks that the software" +:+.
+  plural requirement `sC` S "the business tasks that the software" +:+.
   S "is expected to complete"
 
 s7_1_list = 
@@ -564,7 +564,7 @@ s7_1_list =
     --S " = a/b)"
     ]))])]
 
-s7_2 = Section (S "Nonfunctional" +:+ (requirement ^. term) :+: S "s") 
+s7_2 = Section (S "Nonfunctional" +:+ titleize' requirement) 
   [Con s7_2_intro]
 
 s7_2_intro = Paragraph $
@@ -612,7 +612,7 @@ s9_intro1 = Paragraph $
   (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "with each other." +:+
   S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the dependencies of" +:+
-  (sLower (requirement ^. term)) :+: S "s on" +:+
+  plural requirement +:+ S "on" +:+
   plural thModel `sC`
   (plural inModel) `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
@@ -621,7 +621,7 @@ s9_intro1 = Paragraph $
   (plural dataDefn) `sC`
   plural inModel `sC`
   (sLower (likelyChg ^. term)) :+: S "s and" +:+
-  (sLower (requirement ^. term)) :+: S "s on the" +:+.
+  (plural requirement) +:+ S "on the" +:+.
   (plural assumption)
 
 --FIXME: There has to be a better way to do this.
@@ -786,7 +786,7 @@ s9_intro2 =
   S "dependencies of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "on each other." +:+
   S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the dependencies of" +:+
-  (sLower (requirement ^. term)) :+: S "s on" +:+
+  plural requirement +:+ S "on" +:+
   plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
@@ -794,7 +794,7 @@ s9_intro2 =
   plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) `sC` 
-  (sLower (requirement ^. term)) :+: S "s and" +:+
+  plural requirement +:+ S "and" +:+
   (sLower (likelyChg ^. term)) :+: S "s on" +:+.
   (plural assumption),
   Paragraph $ 
@@ -806,7 +806,7 @@ fig_2 = Figure (S "Figure 2: Traceability Matrix Showing the Connections" +:+
   S "Between Items of Different Sections") "Trace.png"
 
 fig_3 = Figure (S "Figure 3: Traceability Matrix Showing the Connections" +:+
-  S "Between" +:+ (requirement ^. term) :+: S "s and Other Items") 
+  S "Between" +:+ (titleize' requirement) +:+ S "and Other Items") 
   "RTrace.png"
 
 fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections" +:+

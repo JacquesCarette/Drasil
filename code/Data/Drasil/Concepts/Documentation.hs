@@ -11,7 +11,7 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
 assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
 dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
 genDefn     = commonINP "genDefn"     (cn' "general definition")            "GD"
-goalStmt    = commonINP "goalStmt"    (cn' "Goal Statement")                "GS" 
+goalStmt    = commonINP "goalStmt"    (cn' "goal statement")                "GS" 
 inModel     = commonINP "inModel"     (cn' "instance model")                "IM" 
 likelyChg   = commonINP "likelyChg"   (cn' "Likely Change")                 "LC"
 physSyst    = commonINP "physSyst"    (cn' "Physical System Description")   "PS" 

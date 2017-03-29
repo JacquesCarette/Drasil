@@ -144,7 +144,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 
-s4_2_2 = Section ((thModel ^. term) :+: S "s") 
+s4_2_2 = Section (titleize' thModel) 
   ((Con s4_2_2_intro):(Con s4_2_2_TMods):[])
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations ":+:

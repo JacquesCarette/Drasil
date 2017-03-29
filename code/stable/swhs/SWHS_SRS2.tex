@@ -495,10 +495,10 @@ E_{P}=\int_{0}^{t}{h_{P}A_{P}(T_{W}(t)-T_{P}(t))dt}
 \end{equation}
 Equations (reference) and (reference) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% (R9).
 \section{Requirements}
-\label{Sec:Rs}
+\label{Sec:R}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FRs}
+\label{Sec:FR}
 \begin{itemize}
 \item[R1:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
 \end{itemize}
@@ -565,7 +565,7 @@ m_{P}=V_{P}\rho{}_{P}
 \item[R11:]Calculate and output the time at which the PCM stops melting $t_{melt}^{final}$ (from IM2).
 \end{itemize}
 \subsection{Nonfunctional Requirements}
-\label{Sec:NRs}
+\label{Sec:NR}
 Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority nonfunctional requirements are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
@@ -579,7 +579,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TMaG}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRsaIM} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRaIM} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
  & \hyperref[T:Cote]{Definition~T:Cote} & \hyperref[T:She]{Definition~T:She} & \hyperref[T:Lhe]{Definition~T:Lhe} & GD1 & GD2 & \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} & \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & IM1 & IM2 & IM3 & IM4
@@ -652,7 +652,7 @@ R11 &  & X &  &  &  &  &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TMStCBRsaIM}
+\label{Table:TMStCBRaIM}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule

@@ -150,8 +150,8 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_contents)
 
 s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "describe the modelling of" +:+ (swhs_pcm ^. term) :+:
-  S ". The" +:+ (sLower (goalStmt ^. term)) :+: 
-  S "s and" +:+ plural thModel +:+ 
+  S ". The" +:+ plural goalStmt +:+
+  S "and" +:+ plural thModel +:+ 
   S "used in the" +:+ (short progName) +:+ S "code" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ 
@@ -219,8 +219,8 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   S "the template for an" +:+ (short srs) +:+ S "for" +:+
   S "scientific computing software proposed by [citation] and" +:+
   S "[citation]. The presentation follows the standard" +:+
-  S "pattern for presenting" +:+ (sLower (goalStmt ^. term)) :+: 
-  S "s," +:+ plural thModel `sC`
+  S "pattern for presenting" +:+ plural goalStmt `sC`
+  plural thModel `sC`
   (plural dataDefn) `sC` S "and" +:+. 
   (plural assumption) +:+
   S "For readers that would like a more bottom" :+: 
@@ -368,14 +368,14 @@ fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+ (ht_flux_C ^. term) +:+
   (ht_flux_P ^. term) +:+ S "of" +:+ P (ht_flux_P ^. symbol)) 
   "Tank.png"
 
-s4_1_3 = Section ((goalStmt ^. term) :+: S "s") [Con s4_1_3_intro, 
+s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro, 
   Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph (S "Given the" +:+ (temp_C ^. term) :+: S "," +:+
   S "initial conditions for the" +:+ (temp_W ^. term) +:+
   S "and the" +:+ (temp_PCM ^. term) :+: S ", and" +:+
   S "material properties, the" +:+
-  (sLower (goalStmt ^. term)) :+: S "s are:")
+  plural goalStmt +:+ S "are:")
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.

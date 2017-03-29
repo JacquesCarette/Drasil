@@ -151,7 +151,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "open source" +:+ (getAcc twoD) +:+ (rigidBody ^. term) +:+ 
   (physLib ^. term) +:+ S "used for games. The" +:+ 
   (addS (sLower (goalStmt ^. term))) +:+ S "and" +:+ 
-  (addS (sLower (thModel ^. term))) +:+ S "used in" +:+ (short chipmunk) +:+
+  (plural thModel) +:+ S "used in" +:+ (short chipmunk) +:+
   S "are provided. This" +:+
   S "document is intended to be used as a reference to provide all" +:+.
   S "necessary information to understand and verify the model"),
@@ -392,7 +392,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section (addS (thModel ^. term)) ([Con s4_2_2_intro] ++
+s4_2_2 = Section (titleize' thModel) ([Con s4_2_2_intro] ++
   (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ S "This section focuses on the general equations" +:+
@@ -408,7 +408,7 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = Section ( addS (genDefn ^. term)) ([Con s4_2_3_intro] {- ++
+s4_2_3 = Section (titleize' genDefn) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+

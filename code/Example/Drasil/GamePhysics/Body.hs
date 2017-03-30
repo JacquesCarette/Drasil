@@ -132,7 +132,7 @@ s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
   S "that is reliable and free will cut down development costs and lead" +:+.
   S "to better quality products"),
   Paragraph (S "The following section provides an overview of the" +:+
-  (srs ^. term) +:+ sParen (getAcc srs) +:+ S "for" +:+
+  titleize srs +:+ sParen (getAcc srs) +:+ S "for" +:+
   (short chipmunk) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
   (rigidBody ^. term) +:+. (physLib ^. term) +:+
   S "This section explains the purpose of this document, the scope" +:+.

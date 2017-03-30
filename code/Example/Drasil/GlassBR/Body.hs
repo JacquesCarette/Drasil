@@ -575,7 +575,7 @@ s7_2_intro = Paragraph $
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 
-s8 = Section((likelyChg ^. term) :+: S "s") [Con s8_list]
+s8 = Section(titleize' likelyChg) [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
@@ -620,7 +620,7 @@ s9_intro1 = Paragraph $
   plural thModel `sC`
   (plural dataDefn) `sC`
   plural inModel `sC`
-  (sLower (likelyChg ^. term)) :+: S "s and" +:+
+  plural likelyChg +:+ S "and" +:+
   (plural requirement) +:+ S "on the" +:+.
   (plural assumption)
 
@@ -795,7 +795,7 @@ s9_intro2 =
   plural inModel `sC`
   (plural dataDefn) `sC` 
   plural requirement +:+ S "and" +:+
-  (sLower (likelyChg ^. term)) :+: S "s on" +:+.
+  (plural likelyChg) +:+ S "on" +:+.
   (plural assumption),
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical" +:+

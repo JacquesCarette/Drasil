@@ -95,7 +95,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $
   (sMap capitalize (c ^. term)) :+: S ": " :+: (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
-s4_1_2 = Section (physSyst ^. term) [Con s4_1_2_intro,Con s4_1_2_list,
+s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]
 
 s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in " :+:

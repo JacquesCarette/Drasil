@@ -335,7 +335,7 @@ s411_bullet_map_f c = Flat ((c ^. term) :+: S ":" +:+. (c ^. defn))
 -- Included heat flux and specific heat in NamedChunks even though they are 
 -- already in SWHSUnits
 
-s4_1_2 = Section (physSyst ^. term) [Con s4_1_2_intro, Con s4_1_2_list, 
+s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro, Con s4_1_2_list, 
   Con fig_tank]
 
 s4_1_2_intro = Paragraph (S "The physical system of" +:+ (short progName)

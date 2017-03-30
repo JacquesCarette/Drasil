@@ -80,8 +80,9 @@ compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) =
 -- some kind of type system, which asserts that:
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
-for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for t1 t2 = (t1^.term) +:+ S "for" +:+ (t2^.term)
+--FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
+for :: (NounPhrase c, NamedIdea d) => c -> d -> Sentence
+for t1 t2 = (titleize t1) +:+ S "for" +:+ (t2^.term)
 
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 of_ t1 t2 = (t1^.term) +:+ S "of" +:+ (t2^.term)

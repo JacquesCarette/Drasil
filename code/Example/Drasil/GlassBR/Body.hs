@@ -92,7 +92,7 @@ s2_intro = Paragraph $
   S "predict the blast risk involved with the" +:+ 
   (sLower (glaSlab ^. term)) +:+ S "using an intuitive" +:+
   S "interface. The following section provides an overview of the" +:+ 
-  (srs ^. term) +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
+  titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This section explains the purpose of the" +:+
   S "document is designed to fulfil, the scope of the requirements and" +:+
   S "the organization of the document: what the document is based on and" +:+.

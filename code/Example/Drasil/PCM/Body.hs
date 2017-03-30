@@ -138,9 +138,9 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem " :+:
   S "missing information for the physical system. The numbers given in the " :+:
   S "square brackets refer to the " :+: foldr1 (:+:) (intersperse (S ", ") 
   (map (\ch -> (sMap (map toLower) (ch ^. term)) :+: S " [" :+:
-  (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) :+: 
-  S ", or " :+: (sMap (map toLower) $ likelyChg ^. term) :+: S " [" :+: 
-  (getAcc likelyChg) :+: S "], in which the respective " :+: 
+  (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 
+  S "or" +:+ phrase likelyChg +:+ S "[" :+: 
+  (getAcc likelyChg) :+: S "], in which the respective" +:+ 
   (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 

@@ -426,7 +426,7 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
   S "]," +:+ (phrase genDefn) +:+ 
   S "[" :+: (short genDefn) :+: S "]" `sC` (phrase dataDefn) +:+ S "[" :+: 
   (short dataDefn) :+: S "]," +:+ (phrase inModel) +:+
-  S "[" :+: (short inModel) :+: S "], or" +:+ (sLower (likelyChg ^. term)) +:+ 
+  S "[" :+: (short inModel) :+: S "], or" +:+ phrase likelyChg +:+ 
   S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
   (phrase assumption) +:+. S "is used") 
 
@@ -1030,7 +1030,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC
 -- performance is not a priority. This is probably something that can be 
 -- abstracted out.
 
-s6 = Section (addS (likelyChg ^. term)) [Con s6_list]
+s6 = Section (titleize' likelyChg) [Con s6_list]
 
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
@@ -1090,7 +1090,7 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   (plural genDefn) `sC` 
   (plural dataDefn) `sC`
   (plural inModel) `sC` S "and" +:+ 
-  (sLower (likelyChg ^. term)) :+: S "s on the" +:+.
+  (plural likelyChg) +:+ S "on the" +:+.
   (titleize' assumption))
 
 -- Completely general paragraph, and similar ones in other example, but slight 
@@ -1217,7 +1217,7 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   (plural genDefn) `sC`
   (plural dataDefn) `sC`
   (plural inModel) `sC`
-  (sLower (likelyChg ^. term)) :+: S "s, and" +:+
+  (plural likelyChg) `sC` S "and" +:+
   (plural assumption) +:+ S "on each" +:+
   S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies" +:+
   S "of" +:+ plural inModel `sC`

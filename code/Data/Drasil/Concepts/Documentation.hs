@@ -17,7 +17,7 @@ likelyChg   = commonINP "likelyChg"   (cn' "likely change")                 "LC"
 physSyst    = commonINP "physSyst"    (cn' "physical system description")   "PS" 
 requirement = commonINP "requirement" (cn' "requirement")                   "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")             "T"
-mg          = commonINP "mg"          (cn' "Module Guide")                  "MG" 
+mg          = commonINP "mg"          (cn' "module guide")                  "MG" 
 srs         = commonINP "srs"         (cn' "Software Requirements Specification") 
   "SRS"
 

@@ -130,7 +130,8 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (sLower (latent_heat ^. term)) :+: S ", which" +:+
   S "allows higher" +:+ (sLower (thermal_energy ^. 
   term)) +:+. S "storage capacity per unit weight"),
-  Paragraph (S " The following section provides an overview of the" +:+ (srs ^. term) +:+ S "(" :+: (short srs) :+:
+  Paragraph (S " The following section provides an overview of the" +:+ 
+  titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (swhs_pcm ^. term) :+: S ". The developed" +:+
   S "program will be referred to as" +:+ (progName ^. term) +:+
   S "(" :+: (short progName) :+: S "). This section explains" +:+

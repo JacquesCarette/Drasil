@@ -308,7 +308,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
-s6_1_2 = Section (physSyst ^. term) [Con s6_1_2_intro, Con s6_1_2_list, 
+s6_1_2 = Section (titleize physSyst) [Con s6_1_2_intro, Con s6_1_2_list, 
   Con fig_glassbr]
 
 s6_1_2_intro = Paragraph $ S "The physical system of" +:+ (gLassBR ^. defn) 

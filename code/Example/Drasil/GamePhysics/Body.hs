@@ -363,7 +363,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   S "the square brackets refer to the" +:+ foldr1 sC 
   (map (\ch -> (phrase ch) +:+ (bterm ch)) 
   [thModel, genDefn, dataDefn, inModel]) `sC` S "or" +:+ 
-  (sLower $ likelyChg ^. term) +:+ (bterm likelyChg) `sC` 
+  phrase likelyChg +:+ (bterm likelyChg) `sC` 
   S "in which the respective" +:+ (phrase assumption) +:+. S "is used"
   where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
 
@@ -600,10 +600,10 @@ s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section (addS (likelyChg ^. term)) [Con s6_intro, Con s6_list]
+s6 = Section (titleize' likelyChg) [Con s6_intro, Con s6_list]
 
-s6_intro = Paragraph $ S "This section lists the" +:+. (addS (sLower
-  (likelyChg ^. term)) +:+ S "to be made to the physics game library")
+s6_intro = Paragraph $ S "This section lists the" +:+. 
+  ((plural likelyChg) +:+ S "to be made to the physics game library")
 
 s6_list = Enumeration (Simple [
   ((getAcc likelyChg) :+: S "1", Flat (S "The internal" +:+

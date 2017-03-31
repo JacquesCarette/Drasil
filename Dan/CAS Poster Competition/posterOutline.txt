@@ -1,0 +1,60 @@
+|---------|--------------------------|
+|         | Drasil: A Framework for  |
+|McMaster | Literate Scientific Sfwr |
+|  Logo   |         AUTHORS          |
+|---------|--------------------------|
+|         | INTRO  |APPROACH| RESULTS|
+|   1     |   4    |   7    | 13/13.1|
+|   2     |   5    |   8    |   14   |
+|   3     |   6    |   10   |   15   |
+|   3.1   |   6.1  |   11   |   16   |
+|   C     |        |   12   |   17   |
+|         |        |        |    R   |
+|=========|========|========|========|
+Figure 1: Poster Mockup (Not to scale)
+
+1. Sick of sfwr artifacts falling out of sync?
+2. Figure: Generate all the things
+3. Abstract (Research Prob)
+3.1 Figure: Knowledge Duplication
+3.2 Figure: Motivation (see Ernie pres 3, slide 6)
+C. Contact info
+
+4. Figure: Rational Design Process
+5. Improving software quality through rational design process / Faking it
+6. Goals/Contributions? - Framework, Knowledge base, 
+  (maybe bring some advantages in here?), ??
+6.1 Figure: Knowledge Capture?
+
+7. Practical example-driven approach -- Can be moved up if need more space
+8. Figure: Tree (recipe trunk, knowledge roots, artifact leaves) -- New version
+9. Figure: Chunk Hierarchy
+10. Figure: Abstraction -- Need a new, cleaned up version
+11. Figure? DSLs all the way down to Haskell (Simplified view)
+
+13. Data.Drasil (SI Units, etc.)
+13.1 Figure: SI Units?
+14. Figure: Incorporation of GOOL / Generating code in multiple languages
+15. Figure: Document generation in HTML/LaTeX 
+16. Disadvantages
+  - High initial time investment
+  - Adding knowledge is not simple; Requires domain experts
+17. Advantages 
+  - internal (inter- and intra-artifact) consistency; great for certification
+  - common knowledge base - promotes reuse; shared across many projects
+  - pervasive bugs
+R. References (move wherever there is space)
+
+
+------------------------------------------
+            Recipe Language
+------------------------------------------
+              Chunk/KC Lang
+------------------------------------------          
+      |   Layout Language(s)      |
+------------------------------------------
+      |   Representation Lang(s)  |
+==========================================
+                HASKELL
+==========================================
+Figure 2: Mockup of #12 (it's a cake, hah)

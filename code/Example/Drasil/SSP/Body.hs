@@ -75,7 +75,7 @@ s1_2_table = Con $ Table [S "Symbol", S "Units", S "Description"] (mkTable
 s1_3 = table_of_abb_and_acronyms acronyms
   
 -- SECTION 2 --
-s2 = Section (S "Introduction") [s2_p1, s2_p2, s2_1, s2_2, s2_3]
+s2 = SRS.intro [s2_p1, s2_p2, s2_1, s2_2, s2_3]
 
 s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety."
 

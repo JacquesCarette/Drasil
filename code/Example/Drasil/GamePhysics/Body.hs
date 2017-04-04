@@ -123,8 +123,7 @@ s1_3 = table_of_abb_and_acronyms cpAcronyms
 s2 :: Section
 s2_intro :: [Contents]
 
-s2 = Section (S "Introduction") ((map Con s2_intro)++[Sub s2_1, Sub s2_2,
-  Sub s2_3])
+s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
 s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
   S "games, developers are looking for ways to save time and money for" +:+

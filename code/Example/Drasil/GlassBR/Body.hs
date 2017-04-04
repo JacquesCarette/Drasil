@@ -81,7 +81,7 @@ s1_2 = table_of_symbols this_symbols (^.term)
 
 s1_3 = table_of_abb_and_acronyms acronyms
 
-s2 = Section(S "Introduction") [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
+s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
   S "Software is helpful to efficiently and correctly predict the blast" +:+

@@ -57,4 +57,4 @@ R. References (move wherever there is space)
 ==========================================
                 HASKELL
 ==========================================
-Figure 2: Mockup of #12 (it's a cake, hah)
+Figure 2: Mockup of #11 (it's a cake, hah)

@@ -26,7 +26,7 @@ srs         = commonINP "srs"         (cn' "software requirements specification"
 -- concepts relating to the templates and their contents
 
 section, system, description, specific, symbol_, units_, 
-  table_, introduction:: NPNC
+  table_, introduction :: NPNC
 section      = npnc "section"      (cn' "section")
 system       = npnc "system"       (cn' "system")
 description  = npnc "description"  (cn' "description")

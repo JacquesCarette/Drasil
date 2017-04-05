@@ -4,7 +4,7 @@ module Language.Drasil.NounPhrase
   , NP
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr
-  , nounPhrase, nounPhrase', compoundPhrase, compoundPhrase'
+  , nounPhrase, nounPhrase', nounPhrase'', compoundPhrase, compoundPhrase'
   , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
   , PluralRule(..)
@@ -36,24 +36,24 @@ type PluralString   = String
 data NP where
   ProperNoun :: String -> PluralRule -> NP
   CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
-  Phrase     :: Sentence -> PluralForm -> CapitalizationRule -> NP
+  Phrase     :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
   --Phrase plurals can get very odd, so it seems best (for now) to encode
   --them directly. FIXME: If the singular/plural phrase has special (replace)
   --capitalization, one of the two cannot be capitalized right now.
-
+  --The two capitalization rules are for sentenceCase / titleCase respectively
 instance NounPhrase NP where
   phrase (ProperNoun n _)       = S n
   phrase (CommonNoun n _ _)     = S n
-  phrase (Phrase n _ _)         = n
+  phrase (Phrase n _ _ _)         = n
   plural n@(ProperNoun _ p)     = sPlur (phrase n) p
   plural n@(CommonNoun _ p _)   = sPlur (phrase n) p
-  plural (Phrase _ p _)         = p
+  plural (Phrase _ p _ _)         = p
   sentenceCase n@(ProperNoun _ _)   _ = phrase n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
-  sentenceCase n@(Phrase _ _ r)     f = cap (f n) r
+  sentenceCase n@(Phrase _ _ r _)     f = cap (f n) r
   titleCase n@(ProperNoun _ _)      _ = phrase n
   titleCase n@(CommonNoun _ _ _)    f = cap (f n) CapWords
-  titleCase n@(Phrase _ _ _)        f = cap (f n) CapWords
+  titleCase n@(Phrase _ _ _ r)        f = cap (f n) r
   
 -- ===Constructors=== --
 pn, pn', pn'', pn''' :: String -> NP
@@ -78,18 +78,21 @@ cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 cnIrr = CommonNoun 
 
 nounPhrase :: String -> PluralString -> NP
-nounPhrase s p = Phrase (S s) (S p) CapFirst
+nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords
 
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
-nounPhrase' s p = Phrase (S s) (S p)
+nounPhrase' s p c = Phrase (S s) (S p) c CapWords
+
+nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
+nounPhrase'' = Phrase
 
 compoundPhrase :: NP -> NP -> NP
 compoundPhrase t1 t2 = Phrase 
-  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst
+  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst CapWords
   
 compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
-  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords
+  (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords CapWords
 
 -- === Helpers === 
 
@@ -103,7 +106,7 @@ titleize' n = titleCase n plural
 
 data CapitalizationRule = CapFirst
                         | CapWords
-                        | Replace String
+                        | Replace Sentence
 data PluralRule = AddS
                 | AddE
                 | AddES
@@ -129,7 +132,7 @@ cap (s1 :+: s2 :+: s3)  r = cap (s1 :+: s2) r +:+ cap s3 r
   --could change associativity of :+: instead?
 cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
 cap (s1 :+: s2)  CapFirst = cap s1 CapFirst :+: s2
-cap _ (Replace s) = S s
+cap _ (Replace s) = s
 cap a _ = a
 
 -- ity, ness, ion :: String -> String

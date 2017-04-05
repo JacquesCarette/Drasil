@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
 import Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, of'
-                                       , ncs, npnc, NPNC, compoundNPNC)
+                                       , npnc, NPNC, compoundNPNC)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
@@ -36,10 +36,11 @@ units_       = npnc "units"        (cn' "units")
 table_       = npnc "table"        (cn' "table")
 introduction = npnc "introduction" (cn' "introduction")
 
-tOfSymb, refmat :: NamedChunk
+tOfSymb :: NPNC
+refmat :: NamedChunk
 
 refmat       = nc  "refmat"      "Reference Material"
-tOfSymb      = ncs "tOfSymb"   ((titleize table_) `of'` (titleize' symbol_))
+tOfSymb      = npnc "tOfSymb"   (table_ `of'` symbol_)
 
 -- compounds
 systemdescription, specificsystemdescription  :: NPNC

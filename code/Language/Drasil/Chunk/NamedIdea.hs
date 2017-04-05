@@ -87,5 +87,9 @@ for t1 t2 = (titleize t1) +:+ S "for" +:+ (t2^.term)
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 of_ t1 t2 = (t1^.term) +:+ S "of" +:+ (t2^.term)
 
-of' :: Sentence -> Sentence -> Sentence
-of' t1 t2 = t1 +:+ S "of" +:+ t2
+of' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+of' t1 t2 = nounPhrase'' 
+  (phrase t1 +:+ S "of" +:+ plural t2)
+  (phrase t1 +:+ S "of" +:+ plural t2)
+  (Replace (titleize t1 +:+ S "of" +:+ plural t2))
+  (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))

@@ -12,8 +12,10 @@ cpAcronyms :: [CINP]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
     inModel, likelyChg, ode, requirement, srs, thModel, twoD]
 
+--FIXME: Should use of' combinator.
 cent_mass :: NP --FIXME: Need to be able to cap plural.
-cent_mass = nounPhrase' "Centre of Mass" "Centres of Mass" (Replace "Centre of Mass")
+cent_mass = nounPhrase' "Centre of Mass" "Centres of Mass" 
+  (Replace (S "Centre of Mass"))
 
 centreMass    = commonINP "centreMass" cent_mass "CM"
 twoD          = commonINP "twoD" (pn "Two-Dimensional") "2D"

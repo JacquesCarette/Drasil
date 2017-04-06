@@ -91,7 +91,7 @@ mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
-      (Section (tOfSymb^.term) (map Con [con, (table (sort v) (^.term))])) : l'
+      (Section (titleize tOfSymb) (map Con [con, (table (sort v) (^.term))])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
@@ -99,7 +99,7 @@ mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
 
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> Contents -> Section
-mkTSymb v f c = Section (tOfSymb ^. term) (map Con [c, table (sort v) (lf f)])
+mkTSymb v f c = Section (titleize tOfSymb) (map Con [c, table (sort v) (lf f)])
   where lf Term = (^.term)
         lf Defn = (^.defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then

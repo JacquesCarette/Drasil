@@ -9,6 +9,7 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Language.Drasil.Spec
 
 import Prelude hiding (id)
+import Language.Drasil.NounPhrase
 
 class NamedIdea c => Concept c where
   defn :: Simple Lens c Sentence
@@ -77,3 +78,9 @@ clens l f (CW a) = fmap (\x -> CW (set l x a)) (f (a ^. l))
 
 instance Eq CWrapper where
  a == b = (a ^. id) == (b ^. id)
+
+--FIXME: Delete this once NamedIdea's term involves NPs. 
+tempCompoundPhrase :: NounPhrase a => a -> ConceptChunk -> NP
+tempCompoundPhrase t c = nounPhrase''
+  (phrase t +:+ (c ^. term)) (phrase t +:+ (c ^. term)) CapFirst CapWords
+  

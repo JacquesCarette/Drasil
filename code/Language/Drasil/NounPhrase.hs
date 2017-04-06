@@ -86,14 +86,14 @@ nounPhrase' s p c = Phrase (S s) (S p) c CapWords
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 nounPhrase'' = Phrase
 
-compoundPhrase :: NP -> NP -> NP
+compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 
   (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst CapWords
   
 compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords CapWords
-
+  
 -- === Helpers === 
 
 at_start, at_start' :: NounPhrase n => n -> Capitalization

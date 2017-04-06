@@ -20,5 +20,5 @@ cent_mass = nounPhrase' "Centre of Mass" "Centres of Mass"
 centreMass    = commonINP "centreMass" cent_mass "CM"
 twoD          = commonINP "twoD" (pn "Two-Dimensional") "2D"
 
-chipmunk :: NamedChunk
-chipmunk    = nc' "chipmunk" "Chipmunk2D game physics library" "Chipmunk2D" 
+chipmunk :: NPNC
+chipmunk    = npnc' "chipmunk" (pn "Chipmunk2D game physics library") "Chipmunk2D" 

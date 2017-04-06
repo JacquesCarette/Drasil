@@ -63,8 +63,8 @@ instance NounPhrase NPNC where
 npnc :: String -> NP -> NPNC
 npnc i n = NPNC i (phrase n) Nothing n
 
-npnc' :: String -> NP -> Maybe Sentence -> NPNC
-npnc' i n a = NPNC i (phrase n) a n
+npnc' :: String -> NP -> String -> NPNC
+npnc' i n a = NPNC i (phrase n) (Just $ S a) n
 
 ----------------------
 -- various combinators

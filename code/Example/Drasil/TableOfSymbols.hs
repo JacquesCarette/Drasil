@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Documentation
 
 table_of_symbols :: (Ord s,Quantity s) => 
   [s] -> (s -> Sentence) -> Section
-table_of_symbols ls f = Section (tOfSymb ^. term)
+table_of_symbols ls f = Section (titleize tOfSymb)
   [Con intro, Con (table (sort ls) f)]
 
 intro :: Contents
@@ -34,7 +34,7 @@ table ls f = Table (map (at_start) [symbol_, description, units_]) (mkTable
   (\ch -> f ch), 
   unit'2Contents]
   sls)
-  (tOfSymb ^. term) False
+  (titleize tOfSymb) False
   where sls = filter (isJust . getSymb) ls --Don't use catMaybes
   
 defnExcept :: (Eq s, Concept s) => [s] -> (s -> Sentence)

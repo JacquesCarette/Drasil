@@ -8,11 +8,11 @@ import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-self :: NamedChunk
-self = ncWDS "HGHC" (S "HGHC")
+self :: NPNC
+self = npnc "HGHC" (pn "HGHC")
 
-executable :: NamedChunk
-executable = ncWDS' (self ^. id) (self ^. term :+: (S " ") :+: program ^. term) ("HGHC")
+executable :: NPNC
+executable = npnc' (self ^. id) (tempCompoundPhrase self program) ("HGHC")
 
 -- HW Hiding Module
 mod_hw :: ModuleChunk

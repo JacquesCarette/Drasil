@@ -97,7 +97,7 @@ s1_1 = table_of_units $ map UU [metre, kilogram, second] ++ map UU [newton, radi
 s1_2 :: Section
 s1_2_intro, s1_2_table :: Contents
 
-s1_2 = Section (S "Table of Symbols") [Con s1_2_intro, Con s1_2_table]
+s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph $
   S "The table that follows summarizes the symbols used in this" +:+

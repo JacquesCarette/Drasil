@@ -6,11 +6,11 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 
 program, c, physLib :: ConceptChunk
-os, matlab :: NamedChunk
+os, matlab :: NPNC
 
 c       = dcc "c" "C" "C programming language"
-matlab  = nc' "matlab" "MATLAB programming language" "MATLAB"
-os      = nc' "os" "operating system" "OS"
+matlab  = npnc' "matlab" (pn' "MATLAB programming language") "MATLAB"
+os      = npnc' "os" (cn' "operating system") "OS"
 physLib = dcc "physLib" "physics library" ("A programming library which " ++
   "provides functions for modelling physical phenomenon.")
 program = dcc "program" "program" 

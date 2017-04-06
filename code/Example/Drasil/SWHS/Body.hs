@@ -91,7 +91,7 @@ s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = table_of_units this_si
   
-s1_2 = Section (tOfSymb^.term) [Con s1_2_intro, Con s1_2_table]
+s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
   S "symbols used in this document along with their units" :+:

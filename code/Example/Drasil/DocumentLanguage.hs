@@ -86,7 +86,7 @@ mkSections si l = foldr doit [] l
 
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (refmat^.term) c (foldr (mkSubRef si) [] l)
+mkRefSec si (RefProg c l) = section (titleize refmat) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'

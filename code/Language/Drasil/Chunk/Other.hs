@@ -1,7 +1,7 @@
 module Language.Drasil.Chunk.Other where
 
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Wrapper
 
-type AssumpChunk = NamedChunk
+type AssumpChunk = NWrapper
 -- unlikely change
-type UCChunk = NamedChunk
+type UCChunk = NWrapper

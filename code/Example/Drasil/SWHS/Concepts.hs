@@ -11,11 +11,8 @@ phsChgMtrl  = commonINP "phsChgMtrl" (pn' "Phase Change Material")      "PCM"
 rightSide   = commonINP "rightSide"  (cn' "Right Hand Side")            "RHS" 
 progName    = commonINP "progName"   (pn' "Solar Water Heating System") "SWHS" 
 
-swhsFull :: NamedChunk
-swhsFull    = 
---FIXME: There should be a way to combine sWHS/progName and pcm to create
--- this chunk. Compoundterm would work if we could inject "with" between terms.
-  nc "swhsFull" "Solar Water Heating Systems with Phase Change Material"
+swhsFull :: NPNC
+swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the 
 -- description to have accents when using dcc.
 

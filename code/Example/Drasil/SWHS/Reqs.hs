@@ -21,3 +21,6 @@ r8 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputf, mod_ener, mod_ctrl, mod_seq, 
 r9 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputv]
 r10 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputf, mod_temp, mod_ctrl]
 r11 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputf, mod_temp, mod_ener, mod_ctrl]
+
+emptyN :: NPNC
+emptyN = npnc "" (cn "")

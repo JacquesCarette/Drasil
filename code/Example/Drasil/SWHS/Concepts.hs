@@ -1,6 +1,8 @@
 module Drasil.SWHS.Concepts where
 
 import Language.Drasil
+import Data.Drasil.Concepts.Software (program)
+import Control.Lens ((^.))
 --- convenience
 fixme :: String
 fixme = "FIXME: Define this"
@@ -21,7 +23,7 @@ swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
 charging, coil, discharging, gauss_div, heat_flux, mech_energy,
   perfect_insul, phase_change_material, specific_heat, swhs_pcm, tank,
   tank_pcm, transient, water :: ConceptChunk
-swhsProg :: NamedChunk
+swhsProg :: NPNC
 --FIXME: There are too many "swhs" chunks for very minor differences.
   
 charging = dcc "charging" "Charging" "Charging of the tank"
@@ -40,7 +42,12 @@ perfect_insul = dcc "perfect_insul" "perfectly insulated"
 phase_change_material = dcc "pcm" "Phase Change Material (PCM)" 
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
-swhsProg = nc' "swhsProg" "SWHS program" "SWHS"
+      
+--FIXME: Temporarily have to manually create the compound phrase, because it
+--uses acronym and a sentence.
+swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+ (program ^. term))
+   (short progName +:+ (program ^. term)) CapFirst CapWords) 
+  "SWHS"
 specific_heat = dcc "specific_heat" "Specific heat" "Heat capacity per unit mass" 
   --FIXME: Specific Heat needs to be a UnitalChunk
 swhs_pcm = dcc "swhs_pcm" "solar water heating systems incorporating PCM" 

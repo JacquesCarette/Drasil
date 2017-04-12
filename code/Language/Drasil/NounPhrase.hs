@@ -4,7 +4,8 @@ module Language.Drasil.NounPhrase
   , NP
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr
-  , nounPhrase, nounPhrase', nounPhrase'', compoundPhrase, compoundPhrase'
+  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
+  , compoundPhrase, compoundPhrase'
   , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
   , PluralRule(..)
@@ -85,6 +86,10 @@ nounPhrase' s p c = Phrase (S s) (S p) c CapWords
 
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 nounPhrase'' = Phrase
+
+--For things that should not be pluralized.
+nounPhraseSP :: String -> NP
+nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 

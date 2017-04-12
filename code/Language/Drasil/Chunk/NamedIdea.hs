@@ -93,3 +93,18 @@ of' t1 t2 = nounPhrase''
   (phrase t1 +:+ S "of" +:+ plural t2)
   (Replace (titleize t1 +:+ S "of" +:+ plural t2))
   (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))
+  
+with :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+with t1 t2 = nounPhrase''
+  (phrase t1 +:+ S "with" +:+ phrase t2)
+  (plural t1 +:+ S "with" +:+ plural t2)
+  (Replace (at_start t1 +:+ S "with" +:+ phrase t2))
+  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  
+  
+--Case of "T1s with T2", as opposed to the above "T1 with T2"
+with' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+with' t1 t2 = nounPhrase''
+  (plural t1 +:+ S "with" +:+ phrase t2)
+  (plural t1 +:+ S "with" +:+ plural t2)
+  (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
+  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  

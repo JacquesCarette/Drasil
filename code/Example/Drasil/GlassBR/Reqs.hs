@@ -10,9 +10,9 @@ r1,r2,r3,r4,r5,r6 :: ReqChunk
 
 -- FIXME: having id "" and term "" is completely bogus, and should not
 -- be allowed.  This implicitly says that something here does not make sense.
-r1 = ReqChunk (ncWDS "" $ S "") [mod_hw, mod_inputf, mod_inputp, mod_ctrl]
-r2 = ReqChunk (ncWDS "" $ S "") [mod_inputf, mod_inputp]
-r3 = ReqChunk (ncWDS "" $ S "") [mod_inputc]
-r4 = ReqChunk (ncWDS "" $ S "") [mod_outputf]
-r5 = ReqChunk (ncWDS "" $ S "") [mod_outputf, mod_calc]
-r6 = ReqChunk (ncWDS "" $ S "") [mod_outputf]
+r1 = ReqChunk (nw $ ncWDS "" $ S "") [mod_hw, mod_inputf, mod_inputp, mod_ctrl]
+r2 = ReqChunk (nw $ ncWDS "" $ S "") [mod_inputf, mod_inputp]
+r3 = ReqChunk (nw $ ncWDS "" $ S "") [mod_inputc]
+r4 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputf]
+r5 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputf, mod_calc]
+r6 = ReqChunk (nw $ ncWDS "" $ S "") [mod_outputf]

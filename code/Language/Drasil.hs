@@ -54,6 +54,7 @@ module Language.Drasil (
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, nounPhrase, nounPhrase', at_start, at_start', CapitalizationRule(..)
   , PluralRule(..), compoundPhrase, compoundPhrase', titleize, titleize'
+  , nounPhrase''
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
     SecCons(..), ListType(..), ItemType(..),

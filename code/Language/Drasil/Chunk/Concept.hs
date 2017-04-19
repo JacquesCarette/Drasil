@@ -36,16 +36,16 @@ nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens ConceptChunk a
 nl l f (CC n d cd) = fmap (\x -> CC (set l x n) d cd) (f (n ^. l))
 
 --FIXME: Temporary ConceptDomain tag hacking to not break everything.  
-dcc :: String -> String -> String -> ConceptChunk 
+dcc :: String -> NP -> String -> ConceptChunk 
 dcc i ter des = CC (nc i ter) (S des) ([] :: [CWrapper])
 
-dccWDS :: String -> String -> Sentence -> ConceptChunk
+dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = CC (nc i t) d ([] :: [CWrapper])
 
-ccStSS :: String -> Sentence -> Sentence -> ConceptChunk
-ccStSS i t d = CC (ncs i t) d ([] :: [CWrapper])
+ccStSS :: String -> NP -> Sentence -> ConceptChunk
+ccStSS i t d = CC (nc i t) d ([] :: [CWrapper])
 
-dcc' :: String -> String -> String -> String -> ConceptChunk
+dcc' :: String -> NP -> String -> String -> ConceptChunk
 dcc' i t d a = CC (nc' i t a) (S d) ([] :: [CWrapper])
 
 ccs :: NamedChunk -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
@@ -82,5 +82,6 @@ instance Eq CWrapper where
 --FIXME: Delete this once NamedIdea's term involves NPs. 
 tempCompoundPhrase :: NounPhrase a => a -> ConceptChunk -> NP
 tempCompoundPhrase t c = nounPhrase''
-  (phrase t +:+ (c ^. term)) (phrase t +:+ (c ^. term)) CapFirst CapWords
+  (phrase t +:+ (phrase (c ^. term))) 
+  (phrase t +:+ (phrase (c ^. term))) CapFirst CapWords
   

@@ -1,5 +1,5 @@
 module Language.Drasil.Chunk.CommonIdea
-  ( CommonIdea(..), commonidea, CI
+  ( CommonIdea(..) --, commonidea, CI
   , CINP, commonINP
   ) where
 
@@ -13,7 +13,7 @@ import Language.Drasil.NounPhrase
 
 class NamedIdea c => CommonIdea c where
   abrv :: Simple Lens c Sentence
-  
+{-  
 data CI = CI String Sentence Sentence
 
 instance Chunk CI where
@@ -26,13 +26,14 @@ instance CommonIdea CI where
 
 commonidea :: String -> String -> String -> CI
 commonidea i nm ab = CI i (S nm) (S ab)
+-}
 
 data CINP = CINP String Sentence Sentence NP
 
 instance Chunk CINP where
   id f (CINP a b c d) = fmap (\x -> CINP x b c d) (f a)
 instance NamedIdea CINP where
-  term f (CINP a b c d) = fmap (\x -> CINP a x c d) (f b)
+  term f (CINP a b c d) = fmap (\x -> CINP a b c x) (f d)
   getA (CINP _ _ c _) = Just c
 instance CommonIdea CINP where
   abrv f (CINP a b c d) = fmap (\x -> CINP a b x d) (f c)

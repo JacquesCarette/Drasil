@@ -14,6 +14,8 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.Wrapper
 
+import Language.Drasil.NounPhrase (NP)
+
 data NamedRelation where 
   NR :: NamedIdea c => c -> Relation -> NamedRelation
 
@@ -51,12 +53,12 @@ instance Concept RelationConcept where
 rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a
 rcl l f (RC a b) = fmap (\x -> RC (set l x a) b) (f (a ^. l))
 
-makeRC :: String -> String -> Sentence -> Relation -> RelationConcept
+makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
 makeRC rID rTerm rDefn rel = RC (dccWDS rID rTerm rDefn) rel
 
 -- don't export this
 cp :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens NamedRelation a
 cp l f (NR a b) = fmap (\x -> NR (set l x a) b) (f (a ^. l))
 
-makeNR :: String -> Sentence -> Relation -> NamedRelation
-makeNR nm desc rel = NR (ncWDS nm desc) rel
+makeNR :: String -> NP -> Relation -> NamedRelation
+makeNR nm desc rel = NR (nc nm desc) rel

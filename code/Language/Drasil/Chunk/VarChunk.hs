@@ -8,8 +8,9 @@ import Control.Lens ((^.), set, Simple, Lens)
 import Language.Drasil.Chunk.Wrapper (NWrapper, nw)
 
 import Language.Drasil.Symbol
-import Language.Drasil.Spec
 import Language.Drasil.Space
+
+import Language.Drasil.NounPhrase (NP)
 
 import Prelude hiding (id)
   
@@ -35,16 +36,16 @@ nl l f (VC n s t) = fmap (\x -> VC (set l x n) s t) (f (n ^. l))
   
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Rational type so it compiles
-makeVC :: String -> String -> Symbol -> VarChunk
+makeVC :: String -> NP -> Symbol -> VarChunk
 makeVC i des sym = VC (nw $ nc i des) sym Rational
 
-vc :: String -> Sentence -> Symbol -> Space -> VarChunk
-vc i d sy t = VC (nw $ ncWDS i d) sy t
+vc :: String -> NP -> Symbol -> Space -> VarChunk
+vc i d sy t = VC (nw $ nc i d) sy t
 
 vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
 vc' n s t = VC (nw n) s t
 
-makeVCObj :: String -> String -> Symbol -> String -> VarChunk
+makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)
 
 vcFromCC :: NamedIdea c => c -> Symbol -> VarChunk

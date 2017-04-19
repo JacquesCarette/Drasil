@@ -15,8 +15,9 @@ import Language.Drasil.Chunk.VarChunk (VarChunk, vc)
 import Language.Drasil.Chunk.Unital (ucFromVC)
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Space
+
+import Language.Drasil.NounPhrase (NP, phrase)
 
 -- BEGIN EQCHUNK --
 data QDefinition where
@@ -79,15 +80,15 @@ instance Quantity E where
 --FIXME: Space hack
 --TODO: Create a version which doesn't use ConVar, but instead only 
 --     NamedIdeas if we decide the "new" unital needs only a named idea
-fromEqn :: Unit u => String -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn :: Unit u => String -> NP -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
-  EC (ucFromVC (cv (ccStSS nm desc desc) symb Rational) chunk) eqn
+  EC (ucFromVC (cv (ccStSS nm desc (phrase desc)) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack
-fromEqn' :: String -> Sentence -> Symbol -> Expr -> QDefinition
+fromEqn' :: String -> NP -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
-  EC (cv (ccStSS nm desc desc) symb Rational) eqn
+  EC (cv (ccStSS nm desc (phrase desc)) symb Rational) eqn
 
 
 getVC :: QDefinition -> VarChunk

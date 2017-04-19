@@ -17,6 +17,8 @@ import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
 import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk(..), dcc)
 import Language.Drasil.Spec (USymb(..))
 
+import Language.Drasil.NounPhrase (cn')
+
 -- Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)
@@ -43,7 +45,7 @@ makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
 --FIXME: Make this use a meaningful identifier.
 unitCon :: String -> ConceptChunk
-unitCon s = dcc s s s
+unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
 -- for defining fundamental units

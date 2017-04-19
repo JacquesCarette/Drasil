@@ -11,6 +11,7 @@ import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec (Sentence(..), RefType(..), sMap)
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
+import Language.Drasil.NounPhrase (phrase)
 import Control.Lens ((^.))
 
 type Title    = Sentence
@@ -98,7 +99,7 @@ instance LayoutObj Contents where
   
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
-getDefName (Theory c) = S "T:" :+: (sMap ((map head) . words) (c ^. term))
+getDefName (Theory c) = S "T:" :+: (sMap ((map head) . words) (phrase (c ^. term)))
 getDefName _          = error "Unimplemented definition type reference"
 
 ---------------------------------------------------------------------------

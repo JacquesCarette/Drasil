@@ -27,7 +27,7 @@ instance CommonIdea CI where
 commonidea :: String -> String -> String -> CI
 commonidea i nm ab = CI i (S nm) (S ab)
 -}
-
+--FIXME: Change CINP to CI and remove Sentence (term).
 data CINP = CINP String Sentence Sentence NP
 
 instance Chunk CINP where

@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation (mg)
 
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
-  Document (titleize mg +:+ S "for" +:+ (sys ^. term)) authors secs
+  Document (titleize mg +:+ S "for" +:+ (titleize (sys ^. term))) authors secs
 
 --When we want the short form in a title.  
 mgDoc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
@@ -203,7 +203,7 @@ mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
   let impl ccs = foldl1 (+:+) $ map (\x -> (S "If the entry is" +:+
        (short x) `sC` S "this means that the module is provided by the" +:+.
-       (x ^. term))) ccs 
+       (phrase $ x ^. term))) ccs 
 --FIXME: The fields above should be (x ^. term) and (x ^.defn) respectively
   in Paragraph $
     S "Modules are decomposed according to the principle of " :+:

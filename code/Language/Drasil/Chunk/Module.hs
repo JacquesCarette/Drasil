@@ -15,6 +15,8 @@ import Language.Drasil.Chunk.Method
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.Wrapper (NWrapper, nw)
 
+import Language.Drasil.NounPhrase (phrase)
+
 -- BEGIN METHODCHUNK --
 -- (Currently) used for module guide, MIS and code generation
 data ModuleChunk where 
@@ -75,7 +77,7 @@ generated (MoC _ _ _ _ _ _ _ b) = b
 --FIXME: Get rid of this entire function. It is a hack.
 formatName :: ModuleChunk -> String
 formatName m = (concat $ intersperse " " $
-  map capFirst $ words (unS (m ^. term))) ++ " Module"
+  map capFirst $ words (unS (phrase (m ^. term)))) ++ " Module"
   where capFirst [] = []
         capFirst (c:cs) = toUpper c:cs
         unS (S s) = s

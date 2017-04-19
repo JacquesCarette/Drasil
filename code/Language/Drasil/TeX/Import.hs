@@ -20,6 +20,7 @@ import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet
+import Language.Drasil.NounPhrase (phrase)
 
 expr :: Expr -> T.Expr
 expr (V v)             = T.Var  v
@@ -151,14 +152,14 @@ lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
 lay x@(Requirement r)     = 
-  T.Requirement (spec (r ^. term)) (spec $ refName x)
+  T.Requirement (spec (phrase (r ^. term))) (spec $ refName x)
 lay x@(Assumption a)      = 
-  T.Assumption (spec (a ^. term)) (spec $ refName x)
+  T.Assumption (spec (phrase $ a ^. term)) (spec $ refName x)
 lay x@(LikelyChange lc)   = 
-  T.LikelyChange (spec (lc ^. term))
+  T.LikelyChange (spec (phrase $ lc ^. term))
   (spec $ refName x)
 lay x@(UnlikelyChange ucc)= 
-  T.UnlikelyChange (spec (ucc ^. term))
+  T.UnlikelyChange (spec (phrase $ ucc ^. term))
   (spec $ refName x)
 lay x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y, spec z)) ps)
                               w h (spec t) (spec $ refName x)
@@ -181,7 +182,7 @@ makePairs (Data c) = [
   ("Description", T.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       T.Paragraph $ spec (c ^. term)),
+  ("Label",       T.Paragraph $ spec (phrase $ c ^. term)),
   ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
   ("Description", T.Paragraph (spec (c ^. defn)))
   ]
@@ -213,7 +214,7 @@ buildDDDescription c = descLines (
 descLines :: [VarChunk] -> T.Spec  
 descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
-                      (spec (vc ^. term))))
+                      (spec (phrase $ vc ^. term))))
 descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
 
 

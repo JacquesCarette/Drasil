@@ -19,6 +19,7 @@ import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
+import Language.Drasil.NounPhrase (phrase)
 
 expr :: Expr -> H.Expr
 expr (V v)            = H.Var   v
@@ -171,7 +172,7 @@ makePairs (Data c) = [
   ("Description", H.Paragraph (buildDDDescription c))
   ]
 makePairs (Theory c) = [
-  ("Label",       H.Paragraph $ spec (c ^. term)),
+  ("Label",       H.Paragraph $ spec (phrase $ c ^. term)),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
                   (H.S "")),
   ("Description", H.Paragraph (spec (c ^. defn)))
@@ -189,7 +190,7 @@ buildDDDescription c = descLines (
 descLines :: [VarChunk] -> H.Spec  
 descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
-  (H.S " is the " H.:+: (spec (vc ^. term))))
+  (H.S " is the " H.:+: (spec (phrase $ vc ^. term))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
 
 --buildModuleDesc :: ModuleChunk -> [H.LayoutObj]

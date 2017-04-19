@@ -20,6 +20,8 @@ import Language.Drasil.Symbol
 import Language.Drasil.Space
 import Language.Drasil.Spec (Sentence)
 
+import Language.Drasil.NounPhrase (NP)
+
 
 class (Concept c, Quantity c) => Unital c where
   unit :: c -> UnitDefn
@@ -52,13 +54,13 @@ nl l f (UC qc s u t) = fmap (\x -> UC (set l x qc) s u t) (f (qc ^. l))
 uc :: (Concept c, Unit u) => c -> Symbol -> u -> UnitalChunk
 uc a b c = UC a b c Rational
 
-uc' :: (Unit u) => String -> String -> String -> Symbol -> u -> UnitalChunk
+uc' :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
 uc' i t d s u = UC (dcc i t d) s u Rational
 
 --BEGIN HELPER FUNCTIONS--
 
 --Better names will come later.
-makeUCWDS :: Unit u => String -> String -> Sentence -> Symbol -> u -> UnitalChunk
+makeUCWDS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
 makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Rational
 
 

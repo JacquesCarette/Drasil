@@ -37,10 +37,11 @@ mod_inputp = makeRecord modInputParams (S "The format and structure of " :+:
              S "the input parameters.") executable htVars [] (Just mod_behav)
 
 --input format
+--FIXME: All the NP stuff here needs to be tweaked.
 meth_input :: MethodChunk
-meth_input = makeFileInputMethod (ncWDS "read_input" (S "Reads and stores " :+:
-             S "input from file.")) (makeVCObj "params" "input parameters" cP
-             (mod_inputp ^. id)) "input"
+meth_input = makeFileInputMethod (nc "read_input" 
+  (nounPhraseSP "Reads and stores input from file.")) 
+  (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id)) "input"
 
 mod_inputf :: ModuleChunk
 mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:
@@ -54,7 +55,8 @@ meth_htTransCladFuel = fromEC htTransCladFuel
 meth_htTransCladCool = fromEC htTransCladCool
 
 mod_calc_desc :: ConceptChunk
-mod_calc_desc = dcc "mod_calc_desc" "calc" "Calculates heat transfer coefficients"
+mod_calc_desc = dcc "mod_calc_desc" (cn' "calc") 
+  "Calculates heat transfer coefficients"
 
 mod_calc :: ModuleChunk
 mod_calc = makeImpModule mod_calc_desc
@@ -68,11 +70,12 @@ mod_calc = makeImpModule mod_calc_desc
 
 -- Output Format Module
 meth_output :: MethodChunk
-meth_output = makeFileOutputMethod (ncWDS "write_output" (S "Writes output to " :+:
-        S "to file.")) [getVC htTransCladFuel, getVC htTransCladCool] "output"
+meth_output = makeFileOutputMethod (nc "write_output" (
+  cn "Writes output to file.")) [getVC htTransCladFuel, getVC htTransCladCool] 
+  "output"
 
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" "output format" 
+mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
   (S "Outputs the results of the " :+:
   S "calculations, including the input parameters, " :+:
   S "temperatures, energies, and times when melting starts" :+:
@@ -129,7 +132,7 @@ main_func =
   ]
 
 meth_main :: MethodChunk
-meth_main = makeMainMethod (ncWDS "main" (S "Main method")) main_func
+meth_main = makeMainMethod (nc "main" (cn' "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
 mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:

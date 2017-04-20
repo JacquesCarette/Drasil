@@ -32,59 +32,69 @@ coil_SA, hIn_SA, hOut_SA, htCap, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
 fixme :: String
 fixme = "FIXME: Define this or remove the need for definitions"
 
-coil_SA     = uc' "coil_SA" "coil surface area" fixme (sub cA cC) m_2
-hIn_SA      = uc' "hIn_SA" "surface area over which heat is transferred in" 
+--FIXME: Anything that is "X of Y" should use the of combinator.
+coil_SA     = uc' "coil_SA" (cn' "coil surface area") fixme (sub cA cC) m_2
+hIn_SA      = uc' "hIn_SA" 
+  (nounPhraseSP "surface area over which heat is transferred in")
   fixme (sub cA (Atomic "in")) m_2
-hOut_SA     = uc' "hOut_SA" "surface area over which heat is transferred out" 
+hOut_SA     = uc' "hOut_SA" 
+  (nounPhraseSP "surface area over which heat is transferred out")
   fixme (sub cA (Atomic "out")) m_2
 htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
-htCap_Liq   = uc' "htCap_Liq" "specific heat capacity of a liquid" 
+htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
   fixme (sup cC cL) U.heat_cap_spec
-htCap_W     = uc' "htCap_W" "specific heat capacity of water" 
+htCap_W     = uc' "htCap_W" (nounPhraseSP "specific heat capacity of water")
   fixme (sub cC cW) U.heat_cap_spec
-tank_D      = uc' "tank_D" "diameter of tank" fixme cD metre
-ht_gen_vol  = uc' "ht_gen_vol" "volumetric heat generation per unit volume" 
+tank_D      = uc' "tank_D" (nounPhraseSP "diameter of tank") fixme cD metre
+ht_gen_vol  = uc' "ht_gen_vol" 
+  (nounPhraseSP "volumetric heat generation per unit volume")
   fixme lG U.thermal_flux
-ht_xfer_co  = uc' "ht_xfer_co" "convective heat transfer coefficient" 
+ht_xfer_co  = uc' "ht_xfer_co" 
+  (nounPhraseSP "convective heat transfer coefficient")
   fixme lH U.heat_transfer_coef
-ht_xfer_CW  = uc' "ht_xfer_CW" "convective heat transfer between coil and water" 
+ht_xfer_CW  = uc' "ht_xfer_CW" 
+  (nounPhraseSP "convective heat transfer between coil and water")
   fixme (sub lH cC) U.heat_transfer_coef
-tank_L      = uc' "tank_L" "length of tank" fixme cL metre
+tank_L      = uc' "tank_L" (nounPhraseSP "length of tank") fixme cL metre
 mass        = ucFromVC QPP.mass kilogram
-water_m     = uc' "water_m" ((QPP.mass ^. id) ++ " of water")
+water_m     = uc' "water_m" (nounPhraseSP $ (QPP.mass ^. id) ++ " of water")
   fixme (sub (QPP.mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
-ht_flux     = uc' "ht_flux" "heat flux" fixme lQ U.heat_transfer_coef
-thFluxVect  = uc' "thFluxVect" "thermal flux vector" 
+ht_flux     = uc' "ht_flux" (cn'' "heat flux") fixme lQ U.heat_transfer_coef
+thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
   fixme (vec lQ) U.thermal_flux
-ht_flux_C   = uc' "ht_flux_C" "heat flux from coil" 
+ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")
   fixme (sub lQ cC) U.thermal_flux
-ht_flux_in  = uc' "ht_flux_in" "heat flux in" 
+ht_flux_in  = uc' "ht_flux_in" (nounPhraseSP "heat flux in")
   fixme (sub lQ (Atomic "in")) U.thermal_flux
-ht_flux_out = uc' "ht_flux_out" "heat flux out" 
+ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux out")
   fixme (sub lQ (Atomic "out")) U.thermal_flux
 time        = ucFromVC QP.time second
-temp        = uc' "temp" "temperature" fixme cT centigrade
+temp        = uc' "temp" (cn' "temperature") fixme cT centigrade
 -- temp_boil   = uc' "T_boil" "temperature at boiling point" -- (sub cT (Atomic "boil")) centigrade
-temp_coil   = uc' "temp_coil" "temperature of coil" fixme (sub cT cC) centigrade
-temp_env    = uc' "temp_env" "temperature of environment" 
+temp_coil   = uc' "temp_coil" (nounPhraseSP "temperature of coil")
+  fixme (sub cT cC) centigrade
+temp_env    = uc' "temp_env" (nounPhraseSP "temperature of environment")
   fixme (sub cT (Atomic "env")) centigrade
-time_final  = uc' "time_final" "time" 
+time_final  = uc' "time_final" (cn' "time")
   fixme (sub lT (Atomic "final")) second
-temp_init   = uc' "temp_init" "initial temperature" 
+temp_init   = uc' "temp_init" (cn' "initial temperature")
   fixme (sub cT (Atomic "init")) centigrade
-temp_water  = uc' "temp_water" "temperature of water" fixme (sub cT cW) centigrade
-temp_diff   = uc' "temp_diff" "temperature difference" 
+temp_water  = uc' "temp_water" (nounPhraseSP "temperature of water")
+  fixme (sub cT cW) centigrade
+temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
   fixme (Concat [Greek Delta, cT]) centigrade
-vol         = uc' "vol" "volume" fixme cV m_3
+vol         = uc' "vol" (cn' "volume") fixme cV m_3
 --tank_vol    = uc' "V_tank" "volume of the cylindrical tank"   -- (sub cV (Atomic "tank")) m_3
-water_vol   = uc' "water_vol" "volume of water" fixme (sub cV cW) m_3
-density     = uc' "density" "density, mass per unit volume" 
+water_vol   = uc' "water_vol" (nounPhraseSP "volume of water")
+  fixme (sub cV cW) m_3
+density     = uc' "density" (nounPhraseSP "density, mass per unit volume")
   fixme (Greek Rho_L) densityU
-water_dense = uc' "water_dense" "density of water" 
+water_dense = uc' "water_dense" (nounPhraseSP "density of water")
   fixme (sub (Greek Rho_L) cW) densityU
-dummyVar    = uc' "dummyVar" "dummy variable for integration over time"
+dummyVar    = uc' "dummyVar" 
+  (nounPhraseSP "dummy variable for integration over time")
   fixme (Greek Tau_L) second
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
@@ -99,7 +109,8 @@ sWHS = commonINP "sWHS" (pn' "Solar Water Heating System") "SWHS"
 ----EqChunks----
 --Theoretical models--
 t1consThermE :: RelationConcept
-t1consThermE = makeRC "t1consThermE" "Conservation of thermal energy" 
+t1consThermE = makeRC "t1consThermE" 
+  (nounPhraseSP "Conservation of thermal energy")
   t1descr cons_therm_rel
 
 cons_therm_rel :: Relation

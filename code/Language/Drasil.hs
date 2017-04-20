@@ -54,7 +54,8 @@ module Language.Drasil (
   , (+:+), (+:+.), sC, addS, addE, addES, irregPlur
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, nounPhrase, nounPhrase', at_start, at_start', CapitalizationRule(..)
+  , cnIrr, cnIES, nounPhrase, nounPhrase', at_start, at_start'
+  , CapitalizationRule(..)
   , PluralRule(..), compoundPhrase, compoundPhrase', titleize, titleize'
   , nounPhrase'', nounPhraseSP
   -- Document

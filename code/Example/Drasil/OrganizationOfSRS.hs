@@ -11,11 +11,11 @@ refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 word :: NamedIdea c => c -> Sentence
-word w = addS (sLower (w ^. term))
+word w = plural $ w ^. term
 
 rc :: NamedIdea c => [c] -> Sentence
-rc (x:y:[]) = S "and the" +:+ addS (sLower (x ^. term)) +:+ S "to the" +:+. 
-  addS (sLower (y ^. term))
+rc (x:y:[]) = S "and the" +:+ (plural $ x ^. term) +:+ S "to the" +:+. 
+  (plural $ y ^. term)
 rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 

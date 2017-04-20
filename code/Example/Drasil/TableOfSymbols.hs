@@ -38,7 +38,7 @@ table ls f = Table (map (at_start) [symbol_, description, units_]) (mkTable
   where sls = filter (isJust . getSymb) ls --Don't use catMaybes
   
 defnExcept :: (Eq s, Concept s) => [s] -> (s -> Sentence)
-defnExcept xs x = if (x `elem` xs) then (x ^. term) else (x ^. defn)
+defnExcept xs x = if (x `elem` xs) then (phrase $ x ^. term) else (x ^. defn)
   
 termExcept :: (Concept s, Eq s) => [s] -> (s -> Sentence)
-termExcept xs x = if (x `elem` xs) then (x ^. defn) else (x ^. term)
+termExcept xs x = if (x `elem` xs) then (x ^. defn) else (phrase $ x ^. term)

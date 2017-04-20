@@ -1,4 +1,10 @@
-module Data.Drasil.Concepts.Physics where
+module Data.Drasil.Concepts.Physics 
+  ( rigidBody, velocity, angularV, friction, elasticity, collision, space
+  , cartesian, rightHand, surface, restitutionCoef, acceleration
+  , angularAccel, momentOfInertia, force, impulseS, impulseV, displacement
+  , gravitationalAccel, gravitationalConst, position, distance
+  , angularDisplacement,time, torque
+  ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil

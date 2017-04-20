@@ -68,7 +68,7 @@ type DocDesc = [DocSection]
 -- 
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
-  ((titleize kind) +:+ S "for" +:+ (sys^.term))
+  ((titleize kind) +:+ S "for" +:+ (phrase $ sys^.term))
   (manyNames authors) (mkSections si l)
 
 --When we want to use the short form for titles.  
@@ -91,7 +91,8 @@ mkRefSec si (RefProg c l) = section (titleize refmat) c (foldr (mkSubRef si) [] 
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
-      (Section (titleize tOfSymb) (map Con [con, (table (sort v) (^.term))])) : l'
+      (Section (titleize tOfSymb) 
+      (map Con [con, (table (sort v) (\x -> phrase $ x ^.term))])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
@@ -100,13 +101,13 @@ mkRefSec si (RefProg c l) = section (titleize refmat) c (foldr (mkSubRef si) [] 
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> Contents -> Section
 mkTSymb v f c = Section (titleize tOfSymb) (map Con [c, table (sort v) (lf f)])
-  where lf Term = (^.term)
-        lf Defn = (^.defn)
-        lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
-          (x ^. defn) else (x ^. term)) --Compare chunk ids, since we don't
+  where lf Term = (\x -> phrase $ x ^. term)
+        lf Defn = (^. defn)
+        lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
+          (x ^. defn) else (phrase $ x ^. term)) --Compare chunk ids, since we don't
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
-          (x ^. term) else (x ^. defn))
+          (phrase $ x ^. term) else (x ^. defn))
 
 --tsymb constructor
 tsymb, tsymb' :: Contents -> RefTab

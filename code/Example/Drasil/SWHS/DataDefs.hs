@@ -30,8 +30,10 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
              FCall (C temp_PCM) [C time])
 
 dd3HtFusion :: QDefinition
-dd3HtFusion = fromEqn "dd3HtFusion" (htFusion ^. defn) (htFusion ^. symbol)
-  specificE htFusionEqn
+dd3HtFusion = fromEqn "dd3HtFusion" (nounPhraseSP 
+  "FIXME: MISSING TERM - FOR MORE INFORMATION SEE Drasil.SWHS.DataDefs")
+  --FIXME: Should be (htFusion ^. defn)?
+  (htFusion ^. symbol) specificE htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = (C latentE) / (C mass)

@@ -57,7 +57,7 @@ mod_inputc = makeImpModule modInputConstraints
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" "output format"
+mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
   (S "Outputs the results of the calculations, including the input " :+:
    S "parameters, the demand, the capacity, the probability of breakage, " :+:
    S "and both safety requirements.")
@@ -84,8 +84,9 @@ mod_derivedv = makeImpModule modDerivedVals
 -- calculations module
 
 -- TODO: Maybe this could be parameterized.
+-- FIXME: Should use plural of "calculation"
 mod_calc_desc :: ConceptChunk
-mod_calc_desc = dccWDS "mod_calc_desc" "calculations"
+mod_calc_desc = dccWDS "mod_calc_desc" (cn "calculations")
   (S "Defines the equations for solving for the probability of glass " :+:
    S "breakage, demand, and capacity using the parameters in the input " :+:
    S "parameters module.")

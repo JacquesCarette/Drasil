@@ -77,7 +77,7 @@ s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = table_of_units this_si
 
-s1_2 = table_of_symbols this_symbols (^.term)
+s1_2 = table_of_symbols this_symbols (\x -> phrase $ x ^.term)
 
 s1_3 = table_of_abb_and_acronyms acronyms
 
@@ -85,12 +85,12 @@ s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
   S "Software is helpful to efficiently and correctly predict the blast" +:+
-  S "risk involved with the" +:+. (sLower (glaSlab ^. term)) +:+ 
-  S "The" +:+ (sLower (blast ^. term)) +:+ S "under" +:+
+  S "risk involved with the" +:+. (sLower (phrase $ glaSlab ^. term)) +:+ 
+  S "The" +:+ (sLower (phrase $ blast ^. term)) +:+ S "under" +:+
   S "consideration is" +:+. (sLower (blast ^. defn)) +:+ 
   S "The software, herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
   S "predict the blast risk involved with the" +:+ 
-  (sLower (glaSlab ^. term)) +:+ S "using an intuitive" +:+
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "using an intuitive" +:+
   S "interface. The following section provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This section explains the purpose of the" +:+
@@ -103,8 +103,8 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1_intro = 
   [Paragraph $
   S "The main purpose of this document is to predict whether a given" +:+
-  (sLower (glaSlab ^. term)) +:+ S "is likely to resist a" +:+
-  S "specified" +:+. (sLower (blast ^. term)) +:+
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "is likely to resist a" +:+
+  S "specified" +:+. (sLower (phrase $ blast ^. term)) +:+
   S "The goals and" +:+ plural thModel +:+
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
@@ -130,11 +130,11 @@ s2_2 = Section (S "Scope of" +:+ titleize' requirement)
 s2_2_intro = Paragraph $
   S "The scope of the" +:+ plural requirement +:+
   S "includes getting all input parameters related to the" +:+ 
-  (sLower (glaSlab ^. term)) +:+ S "and also the parameters" +:+
-  S "related to" +:+. (sLower (blastTy ^. term)) +:+ 
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "and also the parameters" +:+
+  S "related to" +:+. (sLower (phrase $ blastTy ^. term)) +:+ 
   S "Given the input" `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
   S "use the data and predict whether the" +:+ 
-  (sLower (glaSlab ^. term)) +:+. S "is safe to use or not"
+  (sLower (phrase $ glaSlab ^. term)) +:+. S "is safe to use or not"
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
@@ -180,7 +180,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
   (S "The end user is expected to have an understanding of theory behind" +:+
-  (sLower ((gbr ^. term))) +:+. S "and blast risk"),
+  (sLower (phrase $ gbr ^. term)) +:+. S "and blast risk"),
   (S "The end user is expected to have basic computer literacy to handle" +:+.
   S "the software")]
 
@@ -204,12 +204,12 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", S "Inputs", S "User", S "Characteristics of the" +:+
-  (sLower (glaSlab ^. term)) +:+ S "and of the" +:+.
-  (sLower (blast ^. term)) +:+ S "Details in" +:+ 
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "and of the" +:+.
+  (sLower (phrase $ blast ^. term)) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
   [S "2", S "Output", (gLassBR ^. defn), S "Whether or not the" +:+
-  (sLower (glaSlab ^. term)) +:+ S "is safe for the calculated" +:+
-  (sLower (load ^. term)) +:+ S "and supporting" +:+
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "is safe for the calculated" +:+
+  (sLower (phrase $ load ^. term)) +:+ S "and supporting" +:+
   S "calculated values"]])
   (S "Table 1: Use Case Table") True
 
@@ -218,29 +218,29 @@ s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the user providing input to" +:+ 
   (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
-  S "classes of inputs:" +:+ (sLower (glassGeo ^. term)) +:+
-  S "and" +:+. (sLower (blastTy ^. term)) +:+
+  S "classes of inputs:" +:+ (sLower (phrase $ glassGeo ^. term)) +:+
+  S "and" +:+. (sLower (phrase $ blastTy ^. term)) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
-  S "parameters describe" +:+ (sLower (char_weight ^. term)) +:+
-  S "and stand off" +:+. (sLower (blast ^. term)) +:+
+  S "parameters describe" +:+ (sLower (phrase $ char_weight ^. term)) +:+
+  S "and stand off" +:+. (sLower (phrase $ blast ^. term)) +:+
   S "Another input the user gives is the tolerable value of" +:+.
-  (sLower (prob_br ^. term))),
+  (sLower (phrase $ prob_br ^. term))),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
-  (sLower (glaSlab ^. term)) +:+ S "will be safe by" +:+
-  S "comparing whether" +:+ (sLower (capacity ^. term)) +:+
-  S "is greater than" +:+. (sLower (demandq ^. term)) +:+
-  (capacity ^. term) +:+ S "is the" +:+
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "will be safe by" +:+
+  S "comparing whether" +:+ (sLower (phrase $ capacity ^. term)) +:+
+  S "is greater than" +:+. (sLower (phrase $ demandq ^. term)) +:+
+  (phrase $ capacity ^. term) +:+ S "is the" +:+
   (sLower (capacity ^. defn)) +:+ S "and" +:+
-  (sLower (demandq ^. term)) +:+ S "is the requirement" +:+
+  (sLower (phrase $ demandq ^. term)) +:+ S "is the requirement" +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
   S "is to check whether the calculated probability" +:+ 
   sParen (P $ prob_br ^. symbol) +:+ 
   S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
   S "as an input. If both conditions return true then it's shown that the" 
-  +:+ (sLower (glaSlab ^. term)) +:+ S "is safe to use" `sC` 
+  +:+ (sLower (phrase $ glaSlab ^. term)) +:+ S "is safe to use" `sC` 
   S "else if both return false then the" +:+ 
-  (sLower (glaSlab ^. term)) +:+. S "is considered unsafe" +:+.
+  (sLower (phrase $ glaSlab ^. term)) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated values are also displayed as output")]
 
 s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
@@ -260,8 +260,8 @@ s6_1_intro = Paragraph $
   S "risk involved with the glass" +:+ (gLassBR ^. defn) +:+ S "is a" +:+
   S "computer program developed to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ 
-  (sLower (glaSlab ^. term)) +:+ S "can withstand the" +:+
-  (sLower (blast ^. term)) +:+. S "under the conditions"
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "can withstand the" +:+
+  (sLower (phrase $ blast ^. term)) +:+. S "under the conditions"
 
 s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
@@ -274,37 +274,37 @@ s6_1_1_intro = Paragraph $
   S "are extracted from [4] in" +:+. (makeRef s10)
 
 s6_1_1_bullets = Enumeration $ (Number $ 
-  [Flat $ ((aR ^. term) :+: sParenDash (short aspectR)) :+: 
+  [Flat $ ((phrase $ aR ^. term) :+: sParenDash (short aspectR)) :+: 
   (aR ^. defn)] ++
-  map (\c -> Flat $ ((c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
-  [Nested (((glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
-  [(((an ^. term) :+: sParenDash (short annealedGlass)) :+: 
+  map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
+  [Nested (((phrase $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
+  [(((phrase $ an ^. term) :+: sParenDash (short annealedGlass)) :+: 
     (an ^. defn)),
-  (((ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
+  (((phrase $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
     (ft ^. defn)),
-  (((hs ^. term) :+: sParenDash (short heatSGlass)) :+:
+  (((phrase $ hs ^. term) :+: sParenDash (short heatSGlass)) :+:
     (hs ^. defn))])] ++
   map (\c -> Flat c)
-  [(((gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
+  [(((phrase $ gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
   (gtf ^. defn)),
-  (((lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
-  [Nested (((load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
-  [(((specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
-  (((lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
+  (((phrase $ lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
+  [Nested (((phrase $ load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
+  [(((phrase $ specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
+  (((phrase $ lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
     (lr ^. defn)),
-  (((ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
-  (((nfl ^. term) :+: sParenDash (short nonFactorL)) :+: --Same for nfl and nonFactorL
+  (((phrase $ ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
+  (((phrase $ nfl ^. term) :+: sParenDash (short nonFactorL)) :+: --Same for nfl and nonFactorL
     (nfl ^. defn))] ++ 
-  map (\c -> Flat $ ((c ^. term) +:+ S "- ") :+: (c ^. defn))
+  map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn))
     [glassWL, sdl])] ++ 
   map (\c -> Flat c)
-  [(((lsf ^. term) :+: sParenDash (short lShareFac)) :+: 
+  [(((phrase $ lsf ^. term) :+: sParenDash (short lShareFac)) :+: 
   (lsf ^. defn)),
-  (((pb ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
+  (((phrase $ pb ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
   (pb ^. defn))] ++
-  map (\c -> Flat $ ((c ^. term) +:+ S "- ") :+: (c ^. defn)) 
+  map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn)) 
   [specA, blaReGLa, eqTNTChar] ++
-  [Flat $ ((sD ^. term) :+: sParenDash (P $ sd ^. symbol)) :+:
+  [Flat $ ((phrase $ sD ^. term) :+: sParenDash (P $ sd ^. symbol)) :+:
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
@@ -318,10 +318,10 @@ s6_1_2_intro = Paragraph $ S "The physical system of" +:+ (gLassBR ^. defn)
 fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((short physSyst) :+: S "1"), (glaSlab ^. term)), 
+  (((short physSyst) :+: S "1"), (phrase $ glaSlab ^. term)), 
   (((short physSyst) :+: S "2"), S "The point of explosion." +:+
   S "Where the bomb, or" +:+ (sLower (blast ^. defn)) `sC` 
-  S "is located. The" +:+ (sLower ((sD ^. term))) 
+  S "is located. The" +:+ (sLower ((phrase $ sD ^. term))) 
   +:+ S "is the distance between the point of explosion and the glass.")]
 --NOTE: The only difference here from the original is the removal of an 
 --    extraneous space
@@ -330,7 +330,7 @@ s6_1_3 = Section (titleize' goalStmt) [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
-  (sLower (glaSlab ^. term)) +:+ S "under consideration" +:+
+  (sLower (phrase $ glaSlab ^. term)) +:+ S "under consideration" +:+
   S "will be able to withstand the explosion of a certain degree which" +:+.
   S "is calculated based on user input")]
 
@@ -362,7 +362,7 @@ s6_2_1_list =
   (((short assumption) :+: S "1"), S "The standard E1300-09a for" +:+
     S "calculation applies only to monolithic, laminated, or insulating" +:+
     S "glass constructions of rectangular shape with continuous" +:+ 
-    (sLower (lateral ^. term)) +:+
+    (sLower (phrase $ lateral ^. term)) +:+
     S "support along one, two, three, or four edges. This practice assumes" 
     +:+ S "that (1) the supported glass edges for two, three and four-sided" 
     +:+ S "support conditions are simply supported and free to slip in" +:+
@@ -389,16 +389,16 @@ s6_2_1_list =
   (Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short assumption) :+: S "5"), S "Glass under consideration" +:+
     S "is assumed to be a single" +:+.
-    (sLower (lite ^. term)) +:+ S "Hence the value of" +:+ 
+    (sLower (phrase $ lite ^. term)) +:+ S "Hence the value of" +:+ 
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all calculations in" 
     +:+. (gLassBR ^. defn)),
   (((short assumption) :+: S "6"), S "Boundary conditions for the" +:+ 
-    (sLower (glaSlab ^. term)) +:+ S "is assumed to be 4-sided"
+    (sLower (phrase $ glaSlab ^. term)) +:+ S "is assumed to be 4-sided"
     +:+ S "support for calculations."),
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
   (((short assumption) :+: S "8"), S "With reference to A4 the value" 
-    +:+ S "of" +:+ (sLower (loadDF ^. term)) +:+ 
+    +:+ S "of" +:+ (sLower (phrase $ loadDF ^. term)) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
     (gLassBR ^. defn) +:+ S "It is calculated by the equation:" +:+
     --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
@@ -444,7 +444,7 @@ s6_2_5_intro = Paragraph $
   S "parameters used in Table 2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
   (P $ ar_max ^. symbol) +:+ S "refers to the" +:+
-  (sLower (ar_max ^. term)) +:+. S "for the plate of glass"
+  (sLower (phrase $ ar_max ^. term)) +:+. S "for the plate of glass"
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
 --  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),
@@ -504,9 +504,9 @@ s7_1_list =
     S "quantities, which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
     +:+ S "of failure and the characteristics of the" +:+ 
-    (sLower (blast ^. term)) :+: S ":")]),
+    (sLower (phrase $ blast ^. term)) :+: S ":")]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
-  ++ (map qs [glass_type,pb_tol,tNT])) (^.term) ),
+  ++ (map qs [glass_type,pb_tol,tNT])) (\x -> phrase $ x ^.term) ),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 --  [(\ch -> P (ch ^. symbol)),  
 --   (\ch -> maybeUnits $ ch ^. unit'),
@@ -544,23 +544,23 @@ s7_1_list =
   [(((short requirement) :+: S "6"), Nested (S "Output the following"
   +:+ S "quantities:")
   (Bullet $ 
-    [Flat $ (prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
+    [Flat $ (phrase $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++
-    [Flat $ (lRe ^. term) +:+ sParen(P $ lRe ^. symbol) +:+ 
+    [Flat $ (phrase $ lRe ^. term) +:+ sParen(P $ lRe ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory calOfCap)))] ++
-    [Flat $ (demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
+    [Flat $ (phrase $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
     sParen (makeRef (Definition (Theory calOfDe)))] ++
-    [Flat $ (act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
+    [Flat $ (phrase $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
     sParen (makeRef (Definition (Data hFromt)))] ++
-    map (\c -> Flat $ (c ^. term) +:+ sParen(P $ c ^. symbol) +:+ 
+    map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen(P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [loadDF,strDisFac,nonFL]++
-    [Flat $ (gTF ^. term) +:+ sParen(P $ gTF ^. symbol) +:+ 
+    [Flat $ (phrase $ gTF ^. term) +:+ sParen(P $ gTF ^. symbol) +:+ 
     sParen (makeRef (Definition (Data glaTyFac)))] ++
-    map (\c -> Flat $ (c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
+    map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [dL,tolPre,tolStrDisFac] ++
-    [Flat $ (ar ^. term) +:+ sParen(P $ ar ^. symbol)  
+    [Flat $ (phrase $ ar ^. term) +:+ sParen(P $ ar ^. symbol)  
     --S " = a/b)"
     ]))])]
 
@@ -589,7 +589,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+. S "variable inputs")),
   (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
   S "5 - The software may be changed to accommodate more than a single" +:+.
-  (sLower (lite ^. term)))),
+  (sLower (phrase $ lite ^. term)))),
   (((short likelyChg) :+: S "4"), ((short assumption) :+: 
   S "6 - The software may be changed to accommodate more boundary" +:+.
   S "conditions than 4-sided support")),
@@ -848,13 +848,13 @@ s11_intro = Paragraph $
   (makeRef fig_6)) +:+. S "used for interpolating values needed in the models"
 
 fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
-  (P (demand ^. symbol)) +:+ S "versus" +:+ (sD ^. term) +:+
-  S "versus" +:+ (char_weight ^. term) +:+ sParen
+  (P (demand ^. symbol)) +:+ S "versus" +:+ (phrase $ sD ^. term) +:+
+  S "versus" +:+ (phrase $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"
 
 fig_6 = Figure (S "Figure 6: Non dimensional" +:+ 
-  (sLower (lateral ^. term)) +:+
-  (sLower (load ^. term)) +:+ sParen
-  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (ar ^. term) +:+ 
-  sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (sdf ^. term) +:+ 
+  (sLower (phrase $ lateral ^. term)) +:+
+  (sLower (phrase $ load ^. term)) +:+ sParen
+  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (phrase $ ar ^. term) +:+ 
+  sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (phrase $ sdf ^. term) +:+ 
   sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"

@@ -32,7 +32,7 @@ mod_behav = makeUnimpModule modBehavHiding
 -- M2: Rigid Body Module --
 
 mod_body_serv :: ConceptChunk
-mod_body_serv = dccWDS "mod_body_serv" "rigid body"
+mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
     (S "Stores the physical properties of an object, such as mass, " :+:
     S "position, rotation, velocity, etc, and provides operations on rigid " :+:
     S "bodies, such as setting the mass and velocity of the body.")
@@ -49,7 +49,7 @@ mod_body = makeImpModule mod_body_serv
 -- M3: Shape Module --
 
 mod_shape_serv :: ConceptChunk
-mod_shape_serv = dccWDS "mod_shape_serv" "shape"
+mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
     (S "Stores the surface properties of an object, such as friction or " :+:
     S "elasticity, and provides operations on shapes, such as setting its " :+:
     S "friction or elasticity.")
@@ -67,13 +67,13 @@ mod_shape = makeImpModule mod_shape_serv
 -- M4, M5, M6: Circle, Segment, Polygon Modules (M3 submodules) --
 
 mod_circle_serv, mod_segment_serv, mod_poly_serv :: ConceptChunk
-mod_circle_serv = dccWDS "mod_circle_serv" "circle"
+mod_circle_serv = dccWDS "mod_circle_serv" (cn' "circle")
     (S "Provides operations on circles such as initializing a new circle, " :+:
     S "calculating moment and area, etc.")
-mod_segment_serv = dccWDS "mod_segment_serv" "segment"
+mod_segment_serv = dccWDS "mod_segment_serv" (cn' "segment")
     (S "Provides operations on segments such as initializing a new " :+:
     S "segment, calculating moment and area, etc.")
-mod_poly_serv = dccWDS "mod_poly_serv" "poly"
+mod_poly_serv = dccWDS "mod_poly_serv" (cn' "poly")
     (S "Provides operations on polygons such as initializing a new " :+:
     S "polygon, calculating moment, area and centroid, etc.")
 
@@ -107,7 +107,7 @@ mod_poly = makeImpModule mod_poly_serv
 -- M7: Space Module --
 
 mod_space_serv :: ConceptChunk
-mod_space_serv = dccWDS "mod_space_serv" "space"
+mod_space_serv = dccWDS "mod_space_serv" (cn' "space")
     (S "Controls how all the rigid bodies and shapes interact together.")
 
 mod_space :: ModuleChunk
@@ -122,7 +122,7 @@ mod_space = makeImpModule mod_space_serv
 -- M8: Arbiter Module --
 
 mod_arbiter_serv :: ConceptChunk
-mod_arbiter_serv = dccWDS "mod_arbiter_serv" "arbiter"
+mod_arbiter_serv = dccWDS "mod_arbiter_serv" (cn' "arbiter")
     (S "Stores all collision data, such as which bodies collided and " :+:
     S "their masses.")
 
@@ -159,7 +159,7 @@ mod_sw = makeUnimpModule modSfwrDecision
 -- M10: Vector Module --
 
 mod_vector_serv :: ConceptChunk
-mod_vector_serv = dccWDS "mod_vector_serv" "vector"
+mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
     (S "Provides vector operations such as addition, scalar and vector " :+:
     S "multiplication, dot and cross products, rotations, etc.")
 
@@ -175,7 +175,7 @@ mod_vector = makeImpModule mod_vector_serv
 -- M11: Bounding Box Module --
 
 mod_bb_serv :: ConceptChunk
-mod_bb_serv = dccWDS "mod_bb_serv" "bounding box"
+mod_bb_serv = dccWDS "mod_bb_serv" (cn''' "bounding box")
     (S "Provides constructors for bounding boxes and operations such as " :+:
     S "merging boxes, calculating their centroids and areas, etc.")
 
@@ -191,7 +191,7 @@ mod_bb = makeImpModule mod_bb_serv
 -- M12: Transform Matrix Module --
 
 mod_trans_serv :: ConceptChunk
-mod_trans_serv = dccWDS "mod_trans_serv" "transform matrix"
+mod_trans_serv = dccWDS "mod_trans_serv" (nounPhraseSP "transform matrix")
     (S "Provides constructors for affine transformation matrices, matrix " :+:
     S "operations such as inverse, transpose, multiplications, and " :+:
     S "operations for applying transformations to vectors and bounding boxes.")
@@ -208,7 +208,7 @@ mod_trans = makeImpModule mod_trans_serv
 -- M13: Spatial Index Module --
 
 mod_spatial_serv :: ConceptChunk
-mod_spatial_serv = dccWDS "mod_spatial_serv" "spatial index"
+mod_spatial_serv = dccWDS "mod_spatial_serv" (nounPhraseSP "spatial index")
     (S "Provides spatial indexing operations and tracks the positions of " :+:
     S "bodies in the simulation space.")
 
@@ -224,7 +224,7 @@ mod_spatial = makeImpModule mod_spatial_serv
 -- M14: Collision Solver Module --
 
 mod_coll_serv :: ConceptChunk
-mod_coll_serv = dccWDS "mod_coll_serv" "collision solver"
+mod_coll_serv = dccWDS "mod_coll_serv" (cn' "collision solver")
     (S "Fast collision filtering, primitive shape-to-shape collision " :+:
     S "detection.")
 
@@ -240,7 +240,7 @@ mod_coll = makeImpModule mod_coll_serv
 -- M15: Sequence Data Structure Module --
 
 mod_seq_serv :: ConceptChunk
-mod_seq_serv = dccWDS "mod_seq_serv" "sequence data structure"
+mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
     (S "Provides array manipulation operations, such as building an array " :+:
     S ", accessing a specific entry, slicing an array, etc.")
 
@@ -256,7 +256,7 @@ mod_seq = makeImpModule mod_seq_serv
 -- M16: Linked Data Structure Module --
 
 mod_linked_serv :: ConceptChunk
-mod_linked_serv = dccWDS "mod_linked_serv" "linked data structure"
+mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
     (S "Provides tree manipulation operations, such as building a tree, " :+:
     S "accessing a specific entry, etc.")
 
@@ -272,7 +272,7 @@ mod_linked = makeImpModule mod_linked_serv
 -- M17: Associative Data Structure Module --
 
 mod_assoc_serv :: ConceptChunk
-mod_assoc_serv = dccWDS "mod_assoc_serv" "associative data structure"
+mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
     (S "Provides operations on hash tables, such as building a hash table, " :+:
     S "accessing a specific entry, etc.")
 

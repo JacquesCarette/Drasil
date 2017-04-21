@@ -26,34 +26,39 @@ charging, coil, discharging, gauss_div, heat_flux, mech_energy,
 swhsProg :: NPNC
 --FIXME: There are too many "swhs" chunks for very minor differences.
   
-charging = dcc "charging" "Charging" "Charging of the tank"
-coil = dcc "coil" "Heating coil" 
+charging = dcc "charging" (nounPhraseSP "Charging") "Charging of the tank"
+coil = dcc "coil" (cn' "Heating coil")
   "Coil in tank that heats by absorbing solar energy"
-discharging = dcc "discharging" "Discharging" "Discharging of the tank"
-gauss_div = dcc "gauss_div" "Gauss's Divergence theorem" fixme
-heat_flux = dcc "heat_flux" "Heat flux" "The rate of heat energy transfer per unit area"
+discharging = dcc "discharging" (nounPhraseSP "Discharging") 
+  "Discharging of the tank"
+gauss_div = dcc "gauss_div" (nounPhraseSP "Gauss's Divergence theorem") fixme
+heat_flux = dcc "heat_flux" (nounPhraseSP "Heat flux") 
+  "The rate of heat energy transfer per unit area"
   --FIXME: Heat flux needs to be a Unital Chunk
-mech_energy = dcc "mech_energy" "Mechanical energy" 
+mech_energy = dcc "mech_energy" (nounPhraseSP "Mechanical energy")
   "The energy that comes from motion and position"
 --TODO: Physical property.
-perfect_insul = dcc "perfect_insul" "perfectly insulated" 
+perfect_insul = dcc "perfect_insul" (nounPhraseSP "perfectly insulated")
   "Describes the property of a material not allowing heat transfer through its boundaries"
 --FIXME: Remove " (PCM)" from the term and add an acronym instead.                
-phase_change_material = dcc "pcm" "Phase Change Material (PCM)" 
+phase_change_material = dcc "pcm" (nounPhraseSP "Phase Change Material (PCM)")
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
       
 --FIXME: Temporarily have to manually create the compound phrase, because it
 --uses acronym and a sentence.
-swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+ (program ^. term))
-   (short progName +:+ (program ^. term)) CapFirst CapWords) 
-  "SWHS"
-specific_heat = dcc "specific_heat" "Specific heat" "Heat capacity per unit mass" 
+swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+ 
+  (phrase $ program ^. term)) (short progName +:+ (phrase $ program ^. term))
+  CapFirst CapWords) "SWHS"
+specific_heat = dcc "specific_heat" (nounPhraseSP "Specific heat")
+  "Heat capacity per unit mass" 
   --FIXME: Specific Heat needs to be a UnitalChunk
-swhs_pcm = dcc "swhs_pcm" "solar water heating systems incorporating PCM" 
+swhs_pcm = dcc "swhs_pcm" (nounPhraseSP 
+  "solar water heating systems incorporating PCM")
   "Solar water heating systems incorporating phase change material"
-tank = dcc "tank" "Tank" "Solar water heating tank"
-tank_pcm = dcc "tank_pcm" "Solar water heating tank incorporating PCM" 
+tank = dcc "tank" (cn' "Tank") "Solar water heating tank"
+tank_pcm = dcc "tank_pcm" 
+  (nounPhraseSP "Solar water heating tank incorporating PCM")
   "FIXME: Define this"
-transient = dcc "transient" "Transient" "Changing with time"
-water = dcc "water" "Water" "The liquid with which the tank is filled"
+transient = dcc "transient" (nounPhraseSP "Transient") "Changing with time"
+water = dcc "water" (cn' "Water") "The liquid with which the tank is filled"

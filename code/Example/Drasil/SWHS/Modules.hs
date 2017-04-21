@@ -40,7 +40,7 @@ mod_inputv = makeImpModule modInputVerif (S "The format and structure of " :+:
 
 -- Output Format Module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" "output format" (
+mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format") (
   S "Outputs the results of the calculations, including the input parameters," +:+
   S "temperatures, energies, and times when melting starts and stops.")
 
@@ -51,7 +51,7 @@ mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
 
 -- Output Verification Module
 mod_outputv_desc :: ConceptChunk
-mod_outputv_desc = dccWDS "mod_outputv_desc" "output verification" (
+mod_outputv_desc = dccWDS "mod_outputv_desc" (cn' "output verification") (
   S "Verifies that the output " :+:
   S "energy results follow the law of conservation of " :+:
   S "energy. Throws a warning if the relative error " :+:
@@ -64,7 +64,7 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
 
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
-mod_temp_desc = dccWDS "mod_temp_desc" "temperature ODEs" (
+mod_temp_desc = dccWDS "mod_temp_desc" (nounPhraseSP "temperature ODEs") (
   S "Defines the" +:+ addS (short ode) +:+ S "using the parameters in the" +:+
   S "input parameters module.")
 
@@ -75,7 +75,7 @@ mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+:
 
 -- Energy Equations Module
 mod_ener_desc :: ConceptChunk
-mod_ener_desc = dccWDS "mod_ener_desc" "energy equations" (
+mod_ener_desc = dccWDS "mod_ener_desc" (nounPhraseSP "energy equations") (
   S "Defines the energy equations using the parameters in the input" +:+
   S "parameters module.")
 
@@ -100,7 +100,7 @@ mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
 
 -- Sequence Data Structure Module
 mod_seq_desc :: ConceptChunk
-mod_seq_desc = dccWDS "mod_seq_desc" "sequence data structure" 
+mod_seq_desc = dccWDS "mod_seq_desc" (nounPhraseSP "sequence data structure")
   (S "Provides array manipulation" :+:
   S ", including building an array, accessing a specific entry" :+:
   S ", slicing an array, etc.")
@@ -111,7 +111,7 @@ mod_seq = makeImpModule mod_seq_desc (S "The data structure for a sequence " :+:
 
 -- ODE Solver Module
 mod_ode_desc :: ConceptChunk
-mod_ode_desc = dccWDS "mod_ode_desc" "ODE solver" (
+mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
   S "Provides solvers that take the governing equation, initial conditions," +:+ 
   S "and numerical parameters, and solve them.")
 
@@ -122,7 +122,8 @@ mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
 
 -- Plotting Module
 mod_plot_desc :: ConceptChunk
-mod_plot_desc = dcc "mod_plot_desc" "plotting" "Provides a plot function."
+mod_plot_desc = dcc "mod_plot_desc" (nounPhraseSP "plotting")
+  "Provides a plot function."
 
 mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:

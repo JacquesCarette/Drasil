@@ -184,7 +184,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
   (S "The end user is expected to have an understanding of theory behind" +:+
-  (sLower (phrase $ gbr ^. term)) +:+ S "and" +:+
+  (phrase $ gbr ^. term) +:+ S "and" +:+
   (phrase $ blast ^. term) +:+. S "risk"),
   (S "The end user is expected to have basic computer literacy to handle" +:+.
   S "the software")]
@@ -281,7 +281,7 @@ s6_1_1_intro = Paragraph $
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ ((phrase $ aR ^. term) :+: sParenDash (short aspectR)) :+: 
   (aR ^. defn)] ++
-  map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
+  map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
   [Nested (((phrase $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
   [(((phrase $ an ^. term) :+: sParenDash (short annealedGlass)) :+: 
     (an ^. defn)),

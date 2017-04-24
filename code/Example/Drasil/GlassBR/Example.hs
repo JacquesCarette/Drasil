@@ -194,7 +194,7 @@ aR            = dcc "aR" (nounPhraseSP "Aspect ratio")
     "sides, the ratio of the length of one of the supported edges " ++
     "perpendicular to the free edge, to the length of the free edge, is " ++
     "equal to or greater than 0.5.")
-gbr           = dcc "gbr" (nounPhraseSP "Glass breakage")
+gbr           = dcc "gbr" (nounPhraseSP "glass breakage")
   ("The fracture or breakage of any lite or ply in monolithic, laminated, " ++
     "or insulating glass.")
 lite          = dcc "lite" (nounPhraseSP "Lite")

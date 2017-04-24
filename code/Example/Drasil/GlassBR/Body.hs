@@ -85,12 +85,12 @@ s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
   S "Software is helpful to efficiently and correctly predict the blast" +:+
-  S "risk involved with the" +:+. (sLower (phrase $ glaSlab ^. term)) +:+ 
+  S "risk involved with the" +:+. (phrase $ glaSlab ^. term) +:+ 
   S "The" +:+ (sLower (phrase $ blast ^. term)) +:+ S "under" +:+
   S "consideration is" +:+. (sLower (blast ^. defn)) +:+ 
   S "The software, herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
   S "predict the blast risk involved with the" +:+ 
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "using an intuitive" +:+
+  (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following section provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This section explains the purpose of the" +:+
@@ -103,7 +103,7 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1_intro = 
   [Paragraph $
   S "The main purpose of this document is to predict whether a given" +:+
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "is likely to resist a" +:+
+  (phrase $ glaSlab ^. term) +:+ S "is likely to resist a" +:+
   S "specified" +:+. (sLower (phrase $ blast ^. term)) +:+
   S "The goals and" +:+ plural thModel +:+
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
@@ -130,11 +130,11 @@ s2_2 = Section (S "Scope of" +:+ titleize' requirement)
 s2_2_intro = Paragraph $
   S "The scope of the" +:+ plural requirement +:+
   S "includes getting all input parameters related to the" +:+ 
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "and also the parameters" +:+
+  (phrase $ glaSlab ^. term) +:+ S "and also the parameters" +:+
   S "related to" +:+. (sLower (phrase $ blastTy ^. term)) +:+ 
   S "Given the input" `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
   S "use the data and predict whether the" +:+ 
-  (sLower (phrase $ glaSlab ^. term)) +:+. S "is safe to use or not"
+  (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
@@ -204,11 +204,11 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", S "Inputs", S "User", S "Characteristics of the" +:+
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "and of the" +:+.
+  (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (sLower (phrase $ blast ^. term)) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
   [S "2", S "Output", (gLassBR ^. defn), S "Whether or not the" +:+
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "is safe for the calculated" +:+
+  (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (sLower (phrase $ load ^. term)) +:+ S "and supporting" +:+
   S "calculated values"]])
   (S "Table 1: Use Case Table") True
@@ -226,7 +226,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "Another input the user gives is the tolerable value of" +:+.
   (sLower (phrase $ prob_br ^. term))),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "will be safe by" +:+
+  (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
   S "comparing whether" +:+ (sLower (phrase $ capacity ^. term)) +:+
   S "is greater than" +:+. (sLower (phrase $ demandq ^. term)) +:+
   (phrase $ capacity ^. term) +:+ S "is the" +:+
@@ -238,9 +238,9 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
   S "as an input. If both conditions return true then it's shown that the" 
-  +:+ (sLower (phrase $ glaSlab ^. term)) +:+ S "is safe to use" `sC` 
+  +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
   S "else if both return false then the" +:+ 
-  (sLower (phrase $ glaSlab ^. term)) +:+. S "is considered unsafe" +:+.
+  (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated values are also displayed as output")]
 
 s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
@@ -260,7 +260,7 @@ s6_1_intro = Paragraph $
   S "risk involved with the glass" +:+ (gLassBR ^. defn) +:+ S "is a" +:+
   S "computer program developed to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ 
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "can withstand the" +:+
+  (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+
   (sLower (phrase $ blast ^. term)) +:+. S "under the conditions"
 
 s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
@@ -318,7 +318,7 @@ s6_1_2_intro = Paragraph $ S "The physical system of" +:+ (gLassBR ^. defn)
 fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((short physSyst) :+: S "1"), (phrase $ glaSlab ^. term)), 
+  (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
   (((short physSyst) :+: S "2"), S "The point of explosion." +:+
   S "Where the bomb, or" +:+ (sLower (blast ^. defn)) `sC` 
   S "is located. The" +:+ (sLower ((phrase $ sD ^. term))) 
@@ -330,7 +330,7 @@ s6_1_3 = Section (titleize' goalStmt) [Con s6_1_3_list]
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
-  (sLower (phrase $ glaSlab ^. term)) +:+ S "under consideration" +:+
+  (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
   S "will be able to withstand the explosion of a certain degree which" +:+.
   S "is calculated based on user input")]
 
@@ -393,7 +393,7 @@ s6_2_1_list =
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all calculations in" 
     +:+. (gLassBR ^. defn)),
   (((short assumption) :+: S "6"), S "Boundary conditions for the" +:+ 
-    (sLower (phrase $ glaSlab ^. term)) +:+ S "is assumed to be 4-sided"
+    (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
     +:+ S "support for calculations."),
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),

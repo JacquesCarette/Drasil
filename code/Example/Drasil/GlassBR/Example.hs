@@ -265,7 +265,7 @@ eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "Equivalent TNT charge mass")
 sD            = dcc "sD" (nounPhraseSP "Stand off distance")
   ("The distance from the glazing surface to the centroid of a " ++
     "hemispherical high explosive charge.")
-glaSlab       = dcc "glaSlab" (nounPhraseSP "Glass slab") "Glass slab"
+glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
 blast         = dcc "blast" (cn' "Blast") "Any kind of man-made explosion"
 blastTy       = dcc "blastTy" (nounPhraseSP "Blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++

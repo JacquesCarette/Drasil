@@ -56,6 +56,8 @@ glassBR_srs' = mkDoc mkSRS glassSystInfo
 
 --FIXME: Missing ToS intro because this example was using the default 
 -- (nuclear literature related) intro.
+
+--FIXME: Should "blast risk" be its own chunk?
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb (Paragraph $ S ""), TAandA]) :
   map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
@@ -84,12 +86,14 @@ s1_3 = table_of_abb_and_acronyms acronyms
 s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
-  S "Software is helpful to efficiently and correctly predict the blast" +:+
+  S "Software is helpful to efficiently and correctly predict the" +:+ (phrase $ blast ^. term) +:+
   S "risk involved with the" +:+. (phrase $ glaSlab ^. term) +:+ 
-  S "The" +:+ (sLower (phrase $ blast ^. term)) +:+ S "under" +:+
+  S "The" +:+ (phrase $ blast ^. term) +:+ S "under" +:+
+  --FIXME: find a way to remove "sLower" entirely.
   S "consideration is" +:+. (sLower (blast ^. defn)) +:+ 
   S "The software, herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
-  S "predict the blast risk involved with the" +:+ 
+  S "predict the" +:+ (phrase $ blast ^. term) +:+ 
+  S "risk involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following section provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
@@ -104,7 +108,7 @@ s2_1_intro =
   [Paragraph $
   S "The main purpose of this document is to predict whether a given" +:+
   (phrase $ glaSlab ^. term) +:+ S "is likely to resist a" +:+
-  S "specified" +:+. (sLower (phrase $ blast ^. term)) +:+
+  S "specified" +:+. (phrase $ blast ^. term) +:+
   S "The goals and" +:+ plural thModel +:+
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
@@ -180,7 +184,8 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
   (S "The end user is expected to have an understanding of theory behind" +:+
-  (sLower (phrase $ gbr ^. term)) +:+. S "and blast risk"),
+  (sLower (phrase $ gbr ^. term)) +:+ S "and" +:+
+  (phrase $ blast ^. term) +:+. S "risk"),
   (S "The end user is expected to have basic computer literacy to handle" +:+.
   S "the software")]
 
@@ -205,7 +210,7 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", S "Inputs", S "User", S "Characteristics of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
-  (sLower (phrase $ blast ^. term)) +:+ S "Details in" +:+ 
+  (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
   [S "2", S "Output", (gLassBR ^. defn), S "Whether or not the" +:+
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
@@ -219,10 +224,10 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the user providing input to" +:+ 
   (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
   S "classes of inputs:" +:+ (sLower (phrase $ glassGeo ^. term)) +:+
-  S "and" +:+. (sLower (phrase $ blastTy ^. term)) +:+
+  S "and" +:+. sLower (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
   S "parameters describe" +:+ (sLower (phrase $ char_weight ^. term)) +:+
-  S "and stand off" +:+. (sLower (phrase $ blast ^. term)) +:+
+  S "and stand off" +:+. (phrase $ blast ^. term) +:+
   S "Another input the user gives is the tolerable value of" +:+.
   (sLower (phrase $ prob_br ^. term))),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
@@ -256,12 +261,12 @@ s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1,
   Sub s6_1_2, Sub s6_1_3]
 
 s6_1_intro = Paragraph $ 
-  S "A system is needed to efficiently and correctly predict the blast" +:+.
+  S "A system is needed to efficiently and correctly predict the" +:+ (phrase $ blast ^. term) +:+.
   S "risk involved with the glass" +:+ (gLassBR ^. defn) +:+ S "is a" +:+
   S "computer program developed to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+
-  (sLower (phrase $ blast ^. term)) +:+. S "under the conditions"
+  (phrase $ blast ^. term) +:+. S "under the conditions"
 
 s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
@@ -320,7 +325,7 @@ fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
   (((short physSyst) :+: S "2"), S "The point of explosion." +:+
-  S "Where the bomb, or" +:+ (sLower (blast ^. defn)) `sC` 
+  S "Where the bomb, or" +:+ sLower (blast ^. defn) `sC` 
   S "is located. The" +:+ (sLower ((phrase $ sD ^. term))) 
   +:+ S "is the distance between the point of explosion and the glass.")]
 --NOTE: The only difference here from the original is the removal of an 
@@ -504,7 +509,7 @@ s7_1_list =
     S "quantities, which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
     +:+ S "of failure and the characteristics of the" +:+ 
-    (sLower (phrase $ blast ^. term)) :+: S ":")]),
+    (phrase $ blast ^. term) :+: S ":")]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
   ++ (map qs [glass_type,pb_tol,tNT])) (\x -> phrase $ x ^.term) ),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
@@ -579,8 +584,10 @@ s8 = Section(titleize' likelyChg) [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
-  S "3 - The system currently only calculates for external blast risk." +:+.
-  S "In the future calculations can be added for the internal blast risk")),
+  S "3 - The system currently only calculates for external" +:+
+  (phrase $ blast ^. term) +:+. S "risk" +:+.
+  (S "In the future calculations can be added for the internal" +:+
+  (phrase $ blast ^. term) +:+ S "risk"))),
   (((short likelyChg) :+: S "2"), ((short assumption) :+:
   S "4" `sC` (short assumption) :+: S "8 - Currently the values for"
   +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`

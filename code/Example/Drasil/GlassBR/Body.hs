@@ -214,7 +214,7 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   (makeRef s5_2)],
   [S "2", S "Output", (gLassBR ^. defn), S "Whether or not the" +:+
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
-  (sLower (phrase $ load ^. term)) +:+ S "and supporting" +:+
+  (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated values"]])
   (S "Table 1: Use Case Table") True
 
@@ -293,7 +293,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   [(((phrase $ gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
   (gtf ^. defn)),
   (((phrase $ lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
-  [Nested (((phrase $ load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
+  [Nested (((at_start $ load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
   [(((phrase $ specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
   (((phrase $ lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
     (lr ^. defn)),
@@ -839,7 +839,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
-  +:+ S "for determining load resistance of glass in buildings,") :+: 
+  +:+ S "for determining" +:+ (phrase $ load ^. term) +:+ S "resistance of glass in buildings,") :+: 
   S " Standard E1300-09a, American Society for Testing and Material (ASTM),"
   +:+ S "2009."),
   (S "[5]", S "ASTM, developed by subcommittee C1408,Book of standards 15.02,"
@@ -861,7 +861,7 @@ fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
 
 fig_6 = Figure (S "Figure 6: Non dimensional" +:+ 
   (sLower (phrase $ lateral ^. term)) +:+
-  (sLower (phrase $ load ^. term)) +:+ sParen
+  (phrase $ load ^. term) +:+ sParen
   (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (phrase $ ar ^. term) +:+ 
   sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (phrase $ sdf ^. term) +:+ 
   sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"

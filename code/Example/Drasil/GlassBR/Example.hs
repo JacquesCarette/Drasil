@@ -223,7 +223,7 @@ gtf           = dccWDS "gtf" (nounPhraseSP "Glass type factor")
   S " in monolithic glass, " :+: (getAcc lGlass) :+: S " (Laminated Glass), " :+:
   S "or " :+: (getAcc iGlass) :+: S " (Insulating Glass) constructions.")
 lateral       = dcc "lateral" (cn "Lateral") "Perpendicular to the glass surface."
-load          = dcc "load" (cn "Load") "A uniformly distributed lateral pressure."
+load          = dcc "load" (cn "load") "A uniformly distributed lateral pressure."
 specDeLoad    = dcc "specDeLoad" (nounPhraseSP "Specified design load")
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")

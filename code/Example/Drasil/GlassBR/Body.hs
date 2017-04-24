@@ -135,7 +135,7 @@ s2_2_intro = Paragraph $
   S "The scope of the" +:+ plural requirement +:+
   S "includes getting all input parameters related to the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "and also the parameters" +:+
-  S "related to" +:+. (sLower (phrase $ blastTy ^. term)) +:+ 
+  S "related to" +:+. (phrase $ blastTy ^. term) +:+ 
   S "Given the input" `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
   S "use the data and predict whether the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
@@ -224,7 +224,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the user providing input to" +:+ 
   (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
   S "classes of inputs:" +:+ (sLower (phrase $ glassGeo ^. term)) +:+
-  S "and" +:+. sLower (phrase $ blastTy ^. term) +:+
+  S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
   S "parameters describe" +:+ (sLower (phrase $ char_weight ^. term)) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+

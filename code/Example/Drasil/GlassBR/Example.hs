@@ -267,7 +267,7 @@ sD            = dcc "sD" (nounPhraseSP "Stand off distance")
     "hemispherical high explosive charge.")
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
 blast         = dcc "blast" (cn' "blast") "Any kind of man-made explosion"
-blastTy       = dcc "blastTy" (nounPhraseSP "Blast type")
+blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")
 glassGeo      = dcc "glassGeo" (nounPhraseSP "Glass geometry")

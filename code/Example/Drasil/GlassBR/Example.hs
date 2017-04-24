@@ -82,7 +82,7 @@ nom_thick   = uc' "nom_thick" (nounPhraseSP $
 load_dur    = uc' "load_dur" (nounPhraseSP "Duration of load")
   "FIXME: Define this or remove the need for definitions"
   (sub lT lD) second
-char_weight = uc' "char_weight" (cn' "Charge weight")
+char_weight = uc' "char_weight" (cn' "charge weight")
   "FIXME: Define this or remove the need for definitions"
   lW kilogram
 cWeightMax  = uc' "cWeightMax" 
@@ -375,7 +375,7 @@ dedescr =
   (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
   (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
   S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
-  (sMap (map toLower) (phrase $ char_weight ^. term)) :+: S ". " :+: 
+  (phrase $ char_weight ^. term) :+: S ". " :+: 
   (P $ tNT ^. symbol) :+: S " is the " :+: (phrase $ tNT ^. term) :+: S ". " :+: 
   (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (phrase $ sD ^. term))
   :+: S " where " :+: (P $ sd ^. symbol) :+: S " = ." 

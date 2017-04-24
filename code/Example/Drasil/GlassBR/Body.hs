@@ -79,7 +79,7 @@ s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = table_of_units this_si
 
-s1_2 = table_of_symbols this_symbols (\x -> phrase $ x ^.term)
+s1_2 = table_of_symbols this_symbols (\x -> at_start $ x ^.term)
 
 s1_3 = table_of_abb_and_acronyms acronyms
 
@@ -226,7 +226,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
-  S "parameters describe" +:+ (sLower (phrase $ char_weight ^. term)) +:+
+  S "parameters describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
   S "Another input the user gives is the tolerable value of" +:+.
   (sLower (phrase $ prob_br ^. term))),
@@ -856,7 +856,7 @@ s11_intro = Paragraph $
 
 fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (phrase $ sD ^. term) +:+
-  S "versus" +:+ (phrase $ char_weight ^. term) +:+ sParen
+  S "versus" +:+ (at_start $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"
 
 fig_6 = Figure (S "Figure 6: Non dimensional" +:+ 

@@ -223,7 +223,7 @@ s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the user providing input to" +:+ 
   (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
-  S "classes of inputs:" +:+ (sLower (phrase $ glassGeo ^. term)) +:+
+  S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
   S "parameters describe" +:+ (sLower (phrase $ char_weight ^. term)) +:+

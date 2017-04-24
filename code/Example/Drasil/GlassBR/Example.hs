@@ -270,7 +270,7 @@ blast         = dcc "blast" (cn' "blast") "Any kind of man-made explosion"
 blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")
-glassGeo      = dcc "glassGeo" (nounPhraseSP "Glass geometry")
+glassGeo      = dcc "glassGeo" (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
 capacity      = dcc "capacity" (cnIES "Capacity") "The load resistance calculated"

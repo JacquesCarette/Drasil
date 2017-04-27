@@ -4,7 +4,6 @@ literate-scientific-software - The Drasil Framework
 Repository for working on both literate software and families of scientific software
 
 ## Quick Start
----------------------
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
 2. Run `stack setup` while in **./code/**
@@ -12,64 +11,63 @@ Repository for working on both literate software and families of scientific soft
 4. You can find the generated output in the SRS, MIS, MG, C++, and Website folders that appear.
 
 ## Building specific examples
--------------------------------
 
 Simply run: `make argument` to build the corresponding example, where argument is detailed below:
 
 Argument | Example
 -------- | -------
 gamephys | Chipmunk2D
-- swhs | Solar Water Heating System with PCM
-- glassbr | Glass-BR
-- tiny | HGHC toy example
-- ssp | Slope Stability Analysis
-- pcm | minimal SWHS example, with PCM removed
+swhs | Solar Water Heating System with PCM
+glassbr | Glass-BR
+tiny | HGHC toy example
+ssp | Slope Stability Analysis
+pcm | minimal SWHS example, with PCM removed
 
 ## Running the example(s)
--------------------------
 
 After building, you can find the executables for the examples in the relevant subdirectories of .stack-work/dist/ca59d0ab/build/
 
+--------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-Case Studies
+**Case Studies**
   - Manually produced code/documentation for the Chipmunk2D, GlassBR, and SWHS examples
 
-Chipmunk2D-master
+**Chipmunk2D-master**
   - A copy of the Chipmunk2D engine
   
-Dan
+**Dan**
   - Subdirectory for Dan Szymczak's work. Mostly papers and presentations
   
-FamilyOfGamePhysicsEngines
+**FamilyOfGamePhysicsEngines**
   - Subdirectory containing papers on Families of Physics Engines / Material Models
   
-Presentations
+**Presentations**
   - Presentations on LSS/Drasil
   
-RecipeForSCSoftDev
+**RecipeForSCSoftDev**
   - Paper *A Recipe for Scientific Computing Software Development*
   
-RelatedCode
+**RelatedCode**
   - Contains the *Generic Object Oriented Language* (GOOL) code.
   
-SRS_LPM_Example
+**SRS_LPM_Example**
   - SRS for a fuel pin (more comprehensive than HGHC)
   
-SampleEngCalcReport
+**SampleEngCalcReport**
   - A sample Engineering Calculation Report
   
-SolarHeatingWaterOnly
+**SolarHeatingWaterOnly**
   - A simplified version of the SWHS project, with PCM removed. This is the basis of the *pcm* example
   
-Steve
+**Steve**
   - Steven Palmer's work
   
-code
+**code**
   - The main folder for Drasil source code and example implementations
   
-hghc_Example
+**hghc_Example**
   - The simplified fuel pin example. This is the basis of the *tiny* toy example 
 
 .gitattributes

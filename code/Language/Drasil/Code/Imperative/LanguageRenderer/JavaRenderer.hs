@@ -59,7 +59,7 @@ javaConfig options c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
         getEnv = \_ -> error "no environment has been set",
-        printFileDoc = undefined
+        printFileDoc = error "printFileDoc is undefined for Java"
     }
 
 -- short names, packaged up above (and used below)

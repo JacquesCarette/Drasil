@@ -201,7 +201,9 @@ defaultValue (Integer) = litInt 0
 defaultValue (Float) = litFloat 0.0
 defaultValue (Character) = litChar ' '
 defaultValue (String) = litString ""
-defaultValue (File _) = undefined
+defaultValue (File _) = error $
+  "defaultValue undefined for (File _) pattern. See " ++
+  "Language.Drasil.Code.Imperative.AST"
 
 true :: Value
 true = Lit $ LitBool True

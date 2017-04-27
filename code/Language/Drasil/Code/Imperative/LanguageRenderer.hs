@@ -313,8 +313,12 @@ funcDocD _ (ListPopulate _ _) = empty
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
 funcDocD c (FileOpen s) = dot <> funcAppDoc c "open" [litString s]
-funcDocD _ Floor = undefined
-funcDocD _ Ceiling = undefined
+funcDocD _ Floor = error $
+  "funcDocD undefined for _ Floor pattern. See " ++
+  "Language.Drasil.Code.Imperative.LanguageRenderer"
+funcDocD _ Ceiling = error $
+  "funcDocD undefined for _ Ceiling pattern. See " ++
+  "Language.Drasil.Code.Imperative.LanguageRenderer"
 
 includeD :: Label -> Label -> Doc
 includeD incl n = text incl <+> text n

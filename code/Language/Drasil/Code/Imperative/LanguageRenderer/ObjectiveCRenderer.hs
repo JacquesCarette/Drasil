@@ -64,7 +64,7 @@ objcConfig options c =
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
 
         getEnv = \_ -> error "getEnv not implemented (yet) in ObjC",
-        printFileDoc = undefined
+        printFileDoc = error "printFileDoc not implemented in ObjC"
     }
 
 -- for convenience

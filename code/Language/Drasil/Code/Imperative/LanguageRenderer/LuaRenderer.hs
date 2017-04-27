@@ -55,7 +55,7 @@ luaConfig _ c =
         methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
 
         getEnv = \_ -> error "getEnv not implemented in Lua (yet)",
-        printFileDoc = undefined
+        printFileDoc = error "printFileDoc not implemented in Lua"
     }
 
 -- convenience
@@ -273,6 +273,12 @@ listIndex i = i #+ litInt 1
 transDecLine :: Config -> FileType -> Label -> Method -> Doc
 transDecLine c _ m (Method n _ _ ps _) = text "function" <+> text m <> modColon <> text n <> parens (paramListDoc c ps)
     where modColon = if null m then empty else colon
-transDecLine _ _ _ (GetMethod _ _) = undefined
-transDecLine _ _ _ (SetMethod _ _) = undefined
-transDecLine _ _ _ (MainMethod _)  = undefined
+transDecLine _ _ _ (GetMethod _ _) = error $
+  "transDecLine undefined for _ _ _ (GetMethod _ _) pattern. See " ++
+  "Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer"
+transDecLine _ _ _ (SetMethod _ _) = error $
+  "transDecLine undefined for _ _ _ (SetMethod _ _) pattern. See " ++
+  "Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer"
+transDecLine _ _ _ (MainMethod _)  = error $
+  "transDecLine undefined for _ _ _ (MainMethod _) pattern. See " ++
+  "Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer"

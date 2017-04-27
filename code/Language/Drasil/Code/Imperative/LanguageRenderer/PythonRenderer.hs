@@ -56,7 +56,7 @@ pythonConfig _ c =
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD', valueDoc = valueDoc' c,
 
         getEnv = \_ -> error "getEnv for pythong not yet implemented",
-        printFileDoc = undefined
+        printFileDoc = error "printFileDoc not implemented for python"
     }
 
 -- convenience

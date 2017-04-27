@@ -60,7 +60,7 @@ goolConfig options c =
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         getEnv = \_ -> error "getEnv for GOOL is not defined",
-        printFileDoc = undefined
+        printFileDoc = error "printFileDoc for GOOL is not defined"
     }
     
 -- for convenience
@@ -83,7 +83,9 @@ goolstateType _ (Base Character) _ = text "char"
 goolstateType _ (Base String) _ = text "string"
 goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
-goolstateType _ (Base (File _)) _ = undefined
+goolstateType _ (Base (File _)) _ = error $
+  "goolstateType undefined for _ (Base (File _)) _ pattern. See " ++ 
+  "Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer"
 
 gooltop :: Config -> Label -> a -> b -> Doc
 gooltop c hsMod _ _ = vcat [
@@ -180,7 +182,9 @@ funcDoc' _ (IterBegin) = text "IterBegin"
 funcDoc' _ (IterEnd) = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
-funcDoc' _ (FileOpen _) = undefined
+funcDoc' _ (FileOpen _) = error $
+  "funcDoc' not implemented for _ (FileOpen _) pattern. See " ++
+  "Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer"
 
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For initv cond upd b) = vcat [

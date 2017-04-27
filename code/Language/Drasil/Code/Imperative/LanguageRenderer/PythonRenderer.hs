@@ -55,7 +55,8 @@ pythonConfig _ c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD', valueDoc = valueDoc' c,
 
-        getEnv = \_ -> error "getEnv for pythong not yet implemented"
+        getEnv = \_ -> error "getEnv for pythong not yet implemented",
+        printFileDoc = undefined
     }
 
 -- convenience

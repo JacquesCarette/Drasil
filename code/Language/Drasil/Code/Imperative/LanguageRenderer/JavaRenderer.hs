@@ -58,7 +58,8 @@ javaConfig options c =
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
-        getEnv = \_ -> error "no environment has been set"
+        getEnv = \_ -> error "no environment has been set",
+        printFileDoc = undefined
     }
 
 -- short names, packaged up above (and used below)

@@ -201,6 +201,7 @@ defaultValue (Integer) = litInt 0
 defaultValue (Float) = litFloat 0.0
 defaultValue (Character) = litChar ' '
 defaultValue (String) = litString ""
+defaultValue (File _) = undefined
 
 true :: Value
 true = Lit $ LitBool True

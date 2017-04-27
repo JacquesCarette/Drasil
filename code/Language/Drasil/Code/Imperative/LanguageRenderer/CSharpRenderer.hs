@@ -53,7 +53,8 @@ csharpConfig _ c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDocD c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
 
-        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)"
+        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)",
+        printFileDoc = undefined
     }
 
 -- short names, packaged up above (and used below)

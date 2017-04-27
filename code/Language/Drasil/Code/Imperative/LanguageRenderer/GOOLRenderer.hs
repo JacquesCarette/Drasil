@@ -59,7 +59,8 @@ goolConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDoc' c, patternDoc = patternDoc' c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDoc',
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-        getEnv = \_ -> error "getEnv for GOOL is not defined"
+        getEnv = \_ -> error "getEnv for GOOL is not defined",
+        printFileDoc = undefined
     }
     
 -- for convenience
@@ -82,6 +83,7 @@ goolstateType _ (Base Character) _ = text "char"
 goolstateType _ (Base String) _ = text "string"
 goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
+goolstateType _ (Base (File _)) _ = undefined
 
 gooltop :: Config -> Label -> a -> b -> Doc
 gooltop c hsMod _ _ = vcat [
@@ -178,6 +180,7 @@ funcDoc' _ (IterBegin) = text "IterBegin"
 funcDoc' _ (IterEnd) = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
+funcDoc' _ (FileOpen _) = undefined
 
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For initv cond upd b) = vcat [

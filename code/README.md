@@ -1,18 +1,19 @@
-If you are looking for build instructions, find them in the README file [here](https://github.com/JacquesCarette/literate-scientific-software).
+If you are looking for **build instructions**, find them in the README file [here](https://github.com/JacquesCarette/literate-scientific-software).
 
+--------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-Data
+**Data**
   - Contains the current common-knowledge base for Drasil
   
-Example 
+**Example**
   - Contains the currently implemented examples
   
-Language
+**Language**
   - Contains the base for the Drasil language
   
-stable
+**stable**
   - Contains the (currently) expected output for each of the examples
   
 Makefile

@@ -72,7 +72,7 @@ pcm:
 	- $(DIFF) ./stable/pcm/$(PCM_PREF)SRS.html ./Website/$(PCM_PREF)SRS.html >> $(PCM_PREF)log.log 2>&1
 	
 clean: clean_logs
-	rm -r ./SRS ./Website ./MIS ./MG ./C++ .stack-work/dist/
+	rm -r ./SRS ./Website ./MIS ./MG ./C++ .stack-work/dist
 	
 clean_logs:
 	rm *.log

@@ -113,6 +113,12 @@ library
 executable tiny
   hs-source-dirs: Example
   main-is: Drasil/HGHC/Main.hs
+  other-modules:
+      Drasil.HGHC.HGHC
+    , Drasil.HGHC.HeatTransfer
+    , Drasil.HGHC.Modules
+    , Drasil.TableOfSymbols
+    , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -128,6 +134,12 @@ executable tiny
 executable pcm
   hs-source-dirs: Example
   main-is: Drasil/PCM/Main.hs
+  other-modules:
+      Drasil.PCM.Body
+    , Drasil.PCM.Example
+    , Drasil.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.TableOfAbbAndAcronyms
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -143,6 +155,16 @@ executable pcm
 executable ssp
   hs-source-dirs: Example
   main-is: Drasil/SSP/Main.hs
+  other-modules:
+      Drasil.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.SSP.Body
+    , Drasil.SSP.Changes
+    , Drasil.SSP.Defs
+    , Drasil.SSP.Modules
+    , Drasil.SSP.Reqs
+    , Drasil.SSP.Units
+    , Drasil.TableOfAbbAndAcronyms
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -158,6 +180,21 @@ executable ssp
 executable glassbr
   hs-source-dirs: Example
   main-is: Drasil/GlassBR/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.GlassBR.Body
+    , Drasil.GlassBR.Changes
+    , Drasil.GlassBR.Concepts
+    , Drasil.GlassBR.Example
+    , Drasil.GlassBR.Modules
+    , Drasil.GlassBR.Reqs
+    , Drasil.GlassBR.Units
+    , Drasil.OrganizationOfSRS
+    , Drasil.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.TableOfAbbAndAcronyms
+    , Drasil.TableOfSymbols
+    , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -173,6 +210,23 @@ executable glassbr
 executable chipmunkdocs
   hs-source-dirs: Example
   main-is: Drasil/GamePhysics/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.GamePhysics.Body
+    , Drasil.GamePhysics.Changes
+    , Drasil.GamePhysics.Concepts
+    , Drasil.GamePhysics.DataDefs
+    , Drasil.GamePhysics.Modules
+    , Drasil.GamePhysics.Reqs
+    , Drasil.GamePhysics.TMods
+    , Drasil.GamePhysics.Unitals
+    , Drasil.OrganizationOfSRS
+    , Drasil.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.SpecificSystemDescription
+    , Drasil.TableOfAbbAndAcronyms
+    , Drasil.TableOfSymbols
+    , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -188,6 +242,25 @@ executable chipmunkdocs
 executable swhs
   hs-source-dirs: Example
   main-is: Drasil/SWHS/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.OrganizationOfSRS
+    , Drasil.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.SWHS.Body
+    , Drasil.SWHS.Changes
+    , Drasil.SWHS.Concepts
+    , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.Generate
+    , Drasil.SWHS.Modules
+    , Drasil.SWHS.Reqs
+    , Drasil.SWHS.TModel1
+    , Drasil.SWHS.TModel2
+    , Drasil.SWHS.TModel3
+    , Drasil.SWHS.Unitals
+    , Drasil.TableOfAbbAndAcronyms
+    , Drasil.TableOfSymbols
+    , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

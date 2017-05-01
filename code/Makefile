@@ -5,7 +5,18 @@ SSP_PREF = SSP_
 GLASS_PREF = GlassBR_
 GAME_PREF = Chipmunk_
 
-DIST_DIR = .stack-work/dist/ca59d0ab/build
+
+ifeq ($(OS), Windows_NT)
+  DIST_DIR = .stack-work/dist/ca59d0ab/build
+else
+  UNAME_S := $(shell uname -s)
+  ifeq ($(UNAME_S), Linux)
+    DIST_DIR = .stack-work/dist/x86_64-linux/build
+  else
+    DIST_DIR = .stack-work/dist/x86_64-osx/build
+  endif
+endif
+
 GAME_EXE = chipmunkdocs/chipmunkdocs
 TINY_EXE = tiny/tiny
 SWHS_EXE = swhs/swhs

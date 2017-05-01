@@ -13,7 +13,7 @@ else
   ifeq ($(UNAME_S), Linux)
     DIST_DIR = .stack-work/dist/x86_64-linux/build
   else
-    DIST_DIR = .stack-work/dist/x86_64-osx/build
+    DIST_DIR = .stack-work/dist/x86_64-osx/Cabal-1.24.2.0/build
   endif
 endif
 

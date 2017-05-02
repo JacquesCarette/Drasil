@@ -72,8 +72,14 @@ compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) =
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
 --FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
-for :: (NounPhrase c, NamedIdea d) => c -> d -> Sentence
-for t1 t2 = (titleize t1) +:+ S "for" +:+ (phrase $ t2^.term)
+for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (phrase $ t2 ^. term)
+
+for' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for' t1 t2 = (short t1) +:+ S "for" +:+ (phrase $ t2 ^. term)
+
+for'' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for'' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 of_ t1 t2 = (phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term)

@@ -6,12 +6,12 @@ import Drasil.HGHC.HGHC (srsBody,mgBody,misBody,modules)
 import Drasil.HGHC.Modules (executable)
 
 docs :: [Recipe]
-docs = [Recipe (Website "SRS") srsBody,
-        Recipe (Website "MG") mgBody,
-        Recipe (Website "MIS") misBody,
-        Recipe (SRS "SRS") srsBody,
-        Recipe (MG "MG") mgBody,
-        Recipe (MIS "MIS") misBody
+docs = [ Recipe (Website "SRS") srsBody
+       , Recipe (Website "MG") mgBody
+       , Recipe (Website "MIS") misBody
+       , Recipe (SRS "SRS") srsBody
+       , Recipe (MG "MG") mgBody
+       , Recipe (MIS "MIS") misBody
        ]
 
 main :: IO ()            

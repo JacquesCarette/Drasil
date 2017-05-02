@@ -34,8 +34,8 @@ s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
 doc :: SymbolForm s => String -> [s] -> Sentence -> [Section] -> Document
 doc nam ls author body =
   Document ((S nam +:+ S "for") +:+
-    (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ x ^. symbol) ls))))
-    author body
+  (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ x ^. symbol) ls))))
+  author body
   
 srsBody :: Document
 srsBody = doc "SRS" vars (name spencerSmith) [s1, s2, s3]--, s4]

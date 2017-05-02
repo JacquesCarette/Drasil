@@ -68,14 +68,12 @@ type DocDesc = [DocSection]
 -- 
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
-  ((titleize kind) +:+ S "for" +:+ (phrase $ sys^.term))
-  (manyNames authors) (mkSections si l)
+  (kind `for` sys) (manyNames authors) (mkSections si l)
 
 --When we want to use the short form for titles.  
 mkDoc' :: DocDesc -> SystemInformation -> Document
 mkDoc' l si@(SI sys kind authors _ _ _ _) = Document 
-  ((titleize kind) +:+ S "for" +:+ (short sys))
-  (manyNames authors) (mkSections si l)
+  (kind `for''` sys) (manyNames authors) (mkSections si l)
 
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l

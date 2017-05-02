@@ -8,7 +8,7 @@ htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
-cladThick    = makeVC "cladThick"    (cn'' "clad thickness")
+cladThick    = makeVC "cladThick"    (cn''' "clad thickness")
   ((Greek Tau_L) `sub` lC)
 coolFilmCond = makeVC "coolFilmCond" (cn' "initial coolant film conductance")
   (lH `sub` lB)
@@ -16,9 +16,11 @@ gapFilmCond  = makeVC "gapFilmCond"  (cn' "initial gap film conductance")
   (lH `sub` lP)
 cladCond     = makeVC "cladCond"     (cnIES "clad conductivity") (lK `sub` lC)
 
-htTransCladCool_eq, htTransCladFuel_eq :: Expr
+htTransCladCool_eq :: Expr
 htTransCladCool_eq =
   (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) * (C coolFilmCond)))
+
+htTransCladFuel_eq :: Expr
 htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond) + ((C cladThick) * (C gapFilmCond)))
 
 htTransCladCool :: QDefinition

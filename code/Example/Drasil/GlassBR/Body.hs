@@ -102,7 +102,8 @@ s2_intro = Paragraph $
   S "the organization of the document: what the document is based on and" +:+.
   S "intended to portray"
 
-s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
+--s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
+s2_1 = Section (S titleize prpsOfDoc) (map Con s2_1_intro)
 
 s2_1_intro = 
   [Paragraph $

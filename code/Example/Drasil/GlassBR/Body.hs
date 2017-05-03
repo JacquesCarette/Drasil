@@ -248,7 +248,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated values are also displayed as output")]
 
-s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
+s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 

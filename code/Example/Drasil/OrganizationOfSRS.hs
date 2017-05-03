@@ -27,7 +27,7 @@ orgSec = \i b s ->
 --Do we have extra information at the end (post-refine chain)?
 orgSecWTS :: (NounPhrase c) => Sentence -> c -> Section -> Sentence -> Section
 orgSecWTS = \i b s t ->
-  Section (S "Organization of Document") (map Con (orgIntro i b s (Just t)))
+  Section (titleize orgOfDoc) (map Con (orgIntro i b s (Just t)))
   
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]

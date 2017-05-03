@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
-import Language.Drasil.Chunk.NamedIdea (of' , npnc, NPNC, compoundNPNC)
+import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
@@ -44,8 +44,8 @@ tOfSymb, refmat, orgOfDoc, prpsOfDoc :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
-orgOfDoc     = npnc "orgOfDoc"     (organization `of'` document)
-prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of'` document)
+orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
+prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 
 -- compounds
 systemdescription, specificsystemdescription, characteristicsSpecification :: NPNC

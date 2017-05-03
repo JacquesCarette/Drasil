@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 
-import Language.Drasil
+import Language.Drasil 
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
@@ -95,9 +95,9 @@ s2_intro = Paragraph $
   S "predict the" +:+ (phrase $ blast ^. term) +:+ 
   S "risk involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
-  S "interface. The following" +:+ phrase section +:+ "provides an overview of the" +:+ 
+  S "interface. The following" +:+ phrase section_ +:+ "provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
-  S "This" +:+ phrase section +:+ "explains the purpose of the" +:+
+  S "This" +:+ phrase section_ +:+ "explains the purpose of the" +:+
   S "document is designed to fulfil, the scope of the requirements and" +:+
   S "the organization of the document: what the document is based on and" +:+.
   S "intended to portray"
@@ -154,7 +154,7 @@ s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
 s3_intro = Paragraph $
-  S "This" +:+ phrase section +:+ "describes the Stakeholders: the people who have an" +:+.
+  S "This" +:+ phrase section_ +:+ "describes the Stakeholders: the people who have an" +:+.
   S "interest in the product"
 
 s3_1 = Section (S "The Client") [Con s3_1_intro]
@@ -173,7 +173,7 @@ s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph $
-  S "This" +:+ phrase section +:+ "provides general information about the system" `sC`
+  S "This" +:+ phrase section_ +:+ "provides general information about the system" `sC`
   S "identifies the interface between the system and its environment" `sC`
   S "and describes the user characteristics and the system constraints."
 
@@ -197,7 +197,7 @@ s4_2_intro = Paragraph $
 s5 = Section(S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
 
 s5_intro = Paragraph $
-  S "This" +:+ phrase section +:+ "presents the scope of the project. It describes the" +:+
+  S "This" +:+ phrase section_ +:+ "presents the scope of the project. It describes the" +:+
   S "expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
   S "inputs and outputs of each action. The use cases are input and" +:+
   S "output, which defines the action of getting the input and displaying" +:+.
@@ -252,7 +252,7 @@ s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 
-  S "This" +:+ phrase section +:+ "first presents the problem description, which gives a" +:+
+  S "This" +:+ phrase section_ +:+ "first presents the problem description, which gives a" +:+
   S "high-level view of the problem to be solved. This is followed by" +:+
   S "the solution" +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` S "theories, definitions."
@@ -342,7 +342,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 s6_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
-s6_2_intro = Paragraph $ S "This" +:+ phrase section +:+ "explains all the" +:+
+s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ "explains all the" +:+
   (plural assumption) +:+ S "considered and the" +:+
   plural thModel +:+ S "which are" +:+
   S "supported by the" +:+. (plural dataDefn)
@@ -351,7 +351,7 @@ s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
-  S "This" +:+ phrase section +:+ "simplifies the original problem and helps in developing the" 
+  S "This" +:+ phrase section_ +:+ "simplifies the original problem and helps in developing the" 
   +:+ (phrase thModel) +:+ 
   S "[" :+: (short thModel) :+: S "] by filling in the missing" 
   +:+ S "information for the physical system. The numbers given in the" +:+
@@ -424,7 +424,7 @@ s6_2_4 = Section (titleize' dataDefn)
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
 
 s6_2_4_intro = Paragraph $ 
-  S "This" +:+ phrase section +:+ "collects and defines all the data needed to build the" +:+.
+  S "This" +:+ phrase section_ +:+ "collects and defines all the data needed to build the" +:+.
   plural inModel
 
 s6_2_4_DDefns ::[Contents] 
@@ -499,7 +499,7 @@ s7_1 = Section (S "Functional" +:+ titleize' requirement)
   ([Con s7_1_intro] ++ (map Con s7_1_list))
 
 s7_1_intro = Paragraph $
-  S "The following" +:+ phrase section +:+ "provides the functional" +:+
+  S "The following" +:+ phrase section_ +:+ "provides the functional" +:+
   plural requirement `sC` S "the business tasks that the software" +:+.
   S "is expected to complete"
 

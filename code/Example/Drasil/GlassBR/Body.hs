@@ -140,7 +140,7 @@ s2_2_intro = Paragraph $
   S "use the data and predict whether the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
 
-s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end --Change it to Documents' section header??? M.N.
+s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
   S "The organization of this document follows the template for an" +:+ 
@@ -239,7 +239,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (sLower (phrase $ demandq ^. term)) +:+ S "is the requirement" +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
   S "is to check whether the calculated probability" +:+ 
-  sParen (P $ . ^. symbol) +:+ 
+  sParen (P $ prob_br ^. symbol) +:+ 
   S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
   S "as an input. If both conditions return true then it's shown that the" 

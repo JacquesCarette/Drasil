@@ -98,8 +98,9 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
   S "relative stability known as the factor of safety."
 
 s2_p2 = Con $ Paragraph $ S "The following section provides an" +:+
-  S "overview of the Software Requirements Specification (SRS) for" +:+
-  S "a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers."
+  S "overview of the" +:+ (phrase srs) +:+ (short srs) +:+ "for" +:+
+  S "a slope stability analysis problem. The developed program" +:+
+  S "will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = Sub $ Section (S "Purpose") [s2_1_p1, s2_1_p2]

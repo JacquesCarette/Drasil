@@ -102,7 +102,6 @@ s2_intro = Paragraph $
   S "the organization of the document: what the document is based on and" +:+.
   S "intended to portray"
 
---s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 s2_1_intro = 
@@ -340,7 +339,8 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "will be able to withstand the explosion of a certain degree which" +:+.
   S "is calculated based on user input")]
 
-s6_2 = Section (S "Solution Characteristics Specification") 
+--s6_2 = Section (S "Solution Characteristics Specification") 
+s6_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This section explains all the" +:+

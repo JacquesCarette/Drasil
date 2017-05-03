@@ -204,7 +204,7 @@ s2_3_intro = S "The organization of this document follows the" +:+
 s3 :: Section
 s3_intro :: Contents
 
-s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1,
+s3 = Section (S "General" +:+ titleize systemdescription) [Con s3_intro, Sub s3_1,
   Sub s3_2]
 
 --FIXME: This can be generalized to use more chunks

@@ -40,7 +40,6 @@ purpose      = npnc "purpose"      (cn' "purpose")
 characteristics = npnc "characteristics" (cn' "characteristics")
 specification = npnc "specification" (cn' "specification")
 
-
 tOfSymb, refmat, orgOfDoc, prpsOfDoc :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")

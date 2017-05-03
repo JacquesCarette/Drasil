@@ -34,23 +34,23 @@ s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = Section (S "Table of Units") [Con s1_1_intro,Con s1_1_table]
 
-s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
-           (F Grave 'e') :+: S "me International d'Unit" :+:
-           (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ units_ ^. term) +:+
-           S "system." +:+ S "In addition to the basic" +:+ (phrase $ units_ ^. term) +:+
-           S ", several derived" +:+ (phrase $ units_ ^. term) +:+ S "are" +:+ 
-           S "employed as described below. For each" +:+ (phrase $ units_ ^. term) +:+
-           S ", the symbol is given followed by a description of the"+:+
-           (phrase $ units_ ^. term) +:+ S "followed by the SI name.")
+s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
+           S "SI (Syst" :+: (F Grave 'e') :+: S "me International d'Unit" :+:
+           (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ unit_ ^. term) +:+
+           S "system." +:+ S "In addition to the basic" +:+ (phrase $ unit_ ^. term) :+:
+           S ", several derived" +:+ (plural $ unit_ ^. term) +:+ S "are" +:+ 
+           S "employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
+           S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a description" +:+
+           S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
-s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
+s1_1_table = Table [S (phrase $ symbol ^. term), S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
   ] this_si)
   (S "Table of Units") True
 
-s1_2 = Section (S "Table of Symbols") [Con s1_2_intro,Con s1_2_table]
+s1_2 = Section ((phrase $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
 
 s1_2_intro = Paragraph $ 
   S "The table that follows summarizes the symbols used in this " :+:

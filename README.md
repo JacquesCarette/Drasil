@@ -3,6 +3,22 @@ literate-scientific-software - The Drasil Framework
 
 Repository for working on both literate software and families of scientific software
 
+## What is Drasil?
+
+Drasil is a framework for literate scientific software deelopment. The main goals
+are to reduce knowledge duplication and improve reusability, maintainability,
+verifiability, traceability, and other software qualities.
+
+Drasil is used to generate *all* requisite software artifacts from a common 
+*knowledge-base* using *recipes* written in a Domain-Specific Language (DSL).
+These recipes allow us to specify which pieces of knowledge should be used in
+which artifacts, how to transform them, and more.
+
+For more information on Drasil, please read 
+[this paper](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
+or take a look at 
+our [poster](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+
 ## Quick Start
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).

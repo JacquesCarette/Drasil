@@ -173,8 +173,9 @@ s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "provides general information about the system" `sC`
-  S "identifies the interface between the system and its environment" `sC`
+  S "This" +:+ phrase section_ +:+ S "provides general information about the" +:+
+  phrase system `sC`
+  S "identifies the interface between the" +:+ phrase system +:+ S "and its environment" `sC`
   S "and describes the user characteristics and the system constraints."
 
 s4_1 = Section (S "User Characteristics") [Con s4_1_bullets]
@@ -261,7 +262,7 @@ s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1,
   Sub s6_1_2, Sub s6_1_3]
 
 s6_1_intro = Paragraph $ 
-  S "A system is needed to efficiently and correctly predict the" +:+ (phrase $ blast ^. term) +:+.
+  S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the" +:+ (phrase $ blast ^. term) +:+.
   S "risk involved with the glass" +:+ (gLassBR ^. defn) +:+ S "is a" +:+
   S "computer program developed to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ 
@@ -316,11 +317,11 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_2 = Section (titleize physSyst) [Con s6_1_2_intro, Con s6_1_2_list, 
   Con fig_glassbr]
 
-s6_1_2_intro = Paragraph $ S "The physical system of" +:+ (gLassBR ^. defn) 
+s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem S "of" +:+ (gLassBR ^. defn) 
   +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
   S "following elements:"
 
-fig_glassbr = Figure (S "The physical system") "physicalsystimage.png"
+fig_glassbr = Figure (S "The" +:+ phrase physicalSystem) "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
@@ -354,7 +355,7 @@ s6_2_1_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "simplifies the original problem and helps in developing the" 
   +:+ (phrase thModel) +:+ 
   S "[" :+: (short thModel) :+: S "] by filling in the missing" 
-  +:+ S "information for the physical system. The numbers given in the" +:+
+  +:+ S "information for the" +:+ phrase physicalSystem :+: S ". The numbers given in the" +:+
   S "square brackets refer to the" +:+ 
   (phrase dataDefn) +:+
   S "[" :+: (short dataDefn) :+: S "], or" +:+
@@ -377,7 +378,7 @@ s6_2_1_list =
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
     S "notched, or grooved glass with surface and edge treatments" +:+.
     S "that alter the glass strength"),
-  (((short assumption) :+: S "3"), S "This system only considers" +:+.
+  (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+ S "only considers" +:+.
     S "the external explosion scenario for its calculations"),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
     S "calculation in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
@@ -521,7 +522,7 @@ s7_1_list =
 --  char_weight])
 --  (S "Input Parameters") False
   (Enumeration $ Simple $
-  [(((short requirement) :+: S "2"), Nested (S "The system shall set" +:+
+  [(((short requirement) :+: S "2"), Nested (S "The" +:+ phrase system +:+ S "shall set" +:+
   S "the known values as follows: ") (Bullet $ map (\c -> Flat c) 
     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
@@ -531,7 +532,7 @@ s7_1_list =
     (P $ loadSF ^. symbol) +:+ S "following" +:+ (short assumption) 
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
-  [(((short requirement) :+: S "3"), S "The system shall check the" +:+
+  [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check the" +:+
   S "entered input values to ensure that they do not exceed the data" +:+
   S "constraints mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
   S "the input parameters is out of bounds, an error message is" +:+.
@@ -584,7 +585,7 @@ s8 = Section(titleize' likelyChg) [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
-  S "3 - The system currently only calculates for external" +:+
+  S "3 - The" +:+ phrase system +:+ S "currently only calculates for external" +:+
   (phrase $ blast ^. term) +:+. S "risk" +:+.
   (S "In the future calculations can be added for the internal" +:+
   (phrase $ blast ^. term) +:+ S "risk"))),

@@ -783,7 +783,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 
 s9_intro2 = 
   [Paragraph $
-  S "The of the traceability graphs is also to provide easy" +:+ 
+  S "The purpose of the traceability graphs is also to provide easy" +:+ 
   S "references on what has to be additionally modified if a certain" +:+
   S "component is changed. The arrows in the graphs represent" +:+
   S "dependencies. The component at the tail of an arrow is depended on" +:+

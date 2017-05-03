@@ -140,7 +140,7 @@ s2_2_intro = Paragraph $
   S "use the data and predict whether the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
 
-s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
+s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end --Change it to Documents' section header??? M.N.
 
 s2_3_intro = 
   S "The organization of this document follows the template for an" +:+ 

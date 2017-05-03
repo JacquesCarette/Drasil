@@ -43,7 +43,7 @@ s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a description" +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
-s1_1_table = Table [S (phrase $ symbol ^. term), S "Description", S "Name"] (mkTable
+s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), S "Name"] (mkTable
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
@@ -53,12 +53,12 @@ s1_1_table = Table [S (phrase $ symbol ^. term), S "Description", S "Name"] (mkT
 s1_2 = Section ((phrase $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
 
 s1_2_intro = Paragraph $ 
-  S "The table that follows summarizes the symbols used in this " :+:
-  S "document along with their units.  The choice of symbols was " :+:
-  S "made to be consistent with the heat transfer literature and " :+:
+  S "The table that follows summarizes the" +:+ (plural $ symbol_ ^. term) +:+ S "used in this" +:+
+  S "document along with their units.  The choice of" +:+ (plural $ symbol_ ^. term) +:+ S "was" +:+
+  S "made to be consistent with the heat transfer literature and" +:+
   S "with existing documentation for solar water heating systems."
   
-s1_2_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
+s1_2_table = Table [(phrase $ symbol_ ^. term), (plural $ units_ ^. term), (phrase $ description ^. term)] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ unit_symb ch),
    (\ch -> phrase $ ch ^. term)

@@ -239,7 +239,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (sLower (phrase $ demandq ^. term)) +:+ S "is the requirement" +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
   S "is to check whether the calculated probability" +:+ 
-  sParen (P $ prob_br ^. symbol) +:+ 
+  sParen (P $ . ^. symbol) +:+ 
   S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
   S "as an input. If both conditions return true then it's shown that the" 
@@ -783,7 +783,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 
 s9_intro2 = 
   [Paragraph $
-  S "The purpose of the traceability graphs is also to provide easy" +:+ 
+  S "The of the traceability graphs is also to provide easy" +:+ 
   S "references on what has to be additionally modified if a certain" +:+
   S "component is changed. The arrows in the graphs represent" +:+
   S "dependencies. The component at the tail of an arrow is depended on" +:+

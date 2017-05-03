@@ -169,7 +169,7 @@ s3_2 = Section (S "The Customer") [Con s3_2_intro]
 s3_2_intro = Paragraph $
   S "The customers are the end user of" +:+. (gLassBR ^. defn)
 
-s4 = Section(S "General System Description") [Con s4_intro, Sub s4_1, 
+s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1, 
   Sub s4_2]
 
 s4_intro = Paragraph $

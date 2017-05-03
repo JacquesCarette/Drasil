@@ -97,17 +97,30 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
   S "surface most likely to experience slip and an index of it's" +:+
   S "relative stability known as the factor of safety."
 
-s2_p2 = Con $ Paragraph $ S "The following section provides an" +:+
-  S "overview of the" +:+ (phrase srs) +:+ S "(" +:+ (short srs) +:+ S ")" +:+
+s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
+  S "of the" +:+ (titleize srs) +:+ S "(" :+: (short srs) :+: S ")" +:+
   S "for a slope stability analysis problem. The developed program" +:+
-  S "will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers."
+  S "will be referred to as the Slope Stability Analysis (SSA)" +:+
+  S "program. This section explains the purpose of this document," +:+
+  S "the scope of the system, the organization of the document and" +:+
+  S "the characteristics of the intended readers."
 
 -- SECTION 2.1 --
-s2_1 = Sub $ Section (S "Purpose") [s2_1_p1, s2_1_p2]
+s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
 
-s2_1_p1 = Con $ Paragraph $ S "The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope."
+s2_1_p1 = Con $ Paragraph $ S "The SSA program determines the" +:+
+  S "critical slip surface, and it's respective factor of safety" +:+
+  S "as a method of assessing the stability of a slope design." +:+
+  S "The program is intended to be used as an educational tool for" +:+
+  S "introducing slope stability issues, and will facilitate the" +:+
+  S "analysis and design of a safe slope."
 
-s2_1_p2 = Con $ Paragraph $ S "This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan.  The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment.  The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.  Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way.  Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process."
+s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
+  S "starting point for subsequent development phases, including" +:+
+  S "writing the design specification and the software verification" +:+
+  S "and validation plan.  The design document will show how the" +:+
+  S "requirements are to be realized, including decisions on the" +:+
+  S "numerical algorithms and programming environment.  The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.  Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way.  Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process."
 
 -- SECTION 2.2 --
 s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]

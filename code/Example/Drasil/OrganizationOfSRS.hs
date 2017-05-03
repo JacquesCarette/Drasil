@@ -22,7 +22,7 @@ rc _ = error "refineChain helper encountered an unexpected empty list"
 --
 orgSec :: (NounPhrase c) => Sentence -> c -> Section -> Section
 orgSec = \i b s ->
-  Section (S "Organization of Document") (map Con (orgIntro i b s Nothing))
+  Section (titleize orgOfDoc) (map Con (orgIntro i b s Nothing))
 
 --Do we have extra information at the end (post-refine chain)?
 orgSecWTS :: (NounPhrase c) => Sentence -> c -> Section -> Sentence -> Section

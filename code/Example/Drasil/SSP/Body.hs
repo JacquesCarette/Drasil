@@ -85,9 +85,22 @@ s1_3 = table_of_abb_and_acronyms acronyms
 -- SECTION 2 --
 s2 = SRS.intro [s2_p1, s2_p2, s2_1, s2_2, s2_3]
 
-s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety."
+s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
+  S "of soil and rock, is subject to the influence of gravity on" +:+
+  S "the mass. For an unstable slope this can cause instability" +:+
+  S "in the form of soil/rock movement. The effects of soil/rock" +:+
+  S "movement can range from inconvenient to seriously hazardous," +:+
+  S "resulting in signifcant life and economic loses. Slope" +:+
+  S "stability is of interest both when analyzing natural slopes," +:+
+  S "and when designing an excavated slope. Slope stability analysis" +:+
+  S "is the assessment of the safety of a slope, identifying the" +:+
+  S "surface most likely to experience slip and an index of it's" +:+
+  S "relative stability known as the factor of safety."
 
-s2_p2 = Con $ Paragraph $ S "The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers."
+s2_p2 = Con $ Paragraph $ S "The following section provides an" +:+
+  S "overview of the" +:+ (phrase srs) +:+ (short srs) +:+
+  S "for a slope stability analysis problem. The developed program" +:+
+  S "will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = Sub $ Section (S "Purpose") [s2_1_p1, s2_1_p2]
@@ -255,7 +268,7 @@ s5_1_list = Con $ Enumeration $ Simple $ [
 s5_1_table = Con table_inputdata
 
 table_inputdata :: Contents
-table_inputdata =  Table [S "Symbol", S "Units", S "Description"] (mkTable
+table_inputdata =  Table (map titleize [symbol_, units_, description]) (mkTable
   [(\ch -> P (ch ^. symbol)),
    (\ch -> Sy $ unit_symb ch),
    (\ch -> phrase $ ch ^. term)

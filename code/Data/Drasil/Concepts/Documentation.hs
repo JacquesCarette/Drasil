@@ -25,7 +25,8 @@ srs         = commonINP "srs"         (cn' "software requirements specification"
 -- concepts relating to the templates and their contents
 
 section, system, description, specific, general, symbol_, units_, 
-  table_, introduction, organization, document, purpose, characteristics, specification :: NPNC
+  table_, introduction, organization, document, purpose, characteristics, specification,
+    unit_:: NPNC
 section      = npnc "section"      (cn' "section")
 system       = npnc "system"       (cn' "system")
 description  = npnc "description"  (cn' "description")
@@ -33,6 +34,7 @@ specific     = npnc "specific"     (cn' "specific") -- ??
 general      = npnc "general"      (cn' "general")
 symbol_      = npnc "symbol"       (cn' "symbol")
 units_       = npnc "units"        (cn' "units")
+unit_        = npnc "unit"         (cn' "unit")
 table_       = npnc "table"        (cn' "table")
 introduction = npnc "introduction" (cn' "introduction")
 organization = npnc "organization" (cn' "organization")
@@ -41,12 +43,13 @@ purpose      = npnc "purpose"      (cn' "purpose")
 characteristics = npnc "characteristics" (cn' "characteristics")
 specification = npnc "specification" (cn' "specification")
 
-tOfSymb, refmat, orgOfDoc, prpsOfDoc :: NPNC
+tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
+tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
 systemdescription, specificsystemdescription, characteristicsSpecification, generalSystemDescription :: NPNC

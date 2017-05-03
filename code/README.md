@@ -39,7 +39,8 @@ S "is the"
 |------------|-----------------|----------------|
 | `+:+` | Concatenates two sentences and adds a space in between them | Sentence -> Sentence -> Sentence |
 | `:+:` | Concatenates two sentences | Sentence -> Sentence -> Sentence |
-| `of_` | Concatenates two sentences with " of " between them | Sentence -> Sentence -> Sentence |
+| `of_` | Creates a compound nounphrase from two terms, with " of " between them | (NamedIdea a, NamedIdea b) => a -> b -> NP |
+| `of'` | Similar to `of_` except the second term is always plural and the arguments must be NounPhrases, not NamedIdeas | (NounPhrase a, NounPhrase b) => a -> b -> NP |
 | `phrase` | Returns the singular form of a NounPhrase | NounPhrase n => n -> Sentence |
 | `plural` | Returns the plural form of a NounPhrase | NounPhrase n => n -> Sentence |
 | `at_start` | Returns the singular form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |

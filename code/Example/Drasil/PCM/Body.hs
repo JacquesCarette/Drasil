@@ -36,11 +36,12 @@ s1_1 = Section (S "Table of Units") [Con s1_1_intro,Con s1_1_table]
 
 s1_1_intro = Paragraph (S "Throughout this document SI (Syst" :+: 
            (F Grave 'e') :+: S "me International d'Unit" :+:
-           (F Acute 'e') :+: S "s) is employed as the unit system." :+:
-           S " In addition to the basic units, several derived units are" :+: 
-           S " employed as described below. For each unit, the symbol is" :+: 
-           S " given followed by a description of the unit followed by " :+: 
-           S "the SI name.")
+           (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ units_ ^. term) +:+
+           S "system." +:+ S "In addition to the basic" +:+ (phrase $ units_ ^. term) +:+
+           S ", several derived" +:+ (phrase $ units_ ^. term) +:+ S "are" +:+ 
+           S "employed as described below. For each" +:+ (phrase $ units_ ^. term) +:+
+           S ", the symbol is given followed by a description of the"+:+
+           (phrase $ units_ ^. term) +:+ S "followed by the SI name.")
 
 s1_1_table = Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. usymb)),

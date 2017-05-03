@@ -24,3 +24,5 @@ Main
 *.iml
 *.vrb
 .DS_Store
+.stack-work
+

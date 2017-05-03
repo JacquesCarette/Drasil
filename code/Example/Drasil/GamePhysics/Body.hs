@@ -204,7 +204,7 @@ s2_3_intro = S "The organization of this document follows the" +:+
 s3 :: Section
 s3_intro :: Contents
 
-s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1,
+s3 = Section (S "General" +:+ titleize systemdescription) [Con s3_intro, Sub s3_1,
   Sub s3_2]
 
 --FIXME: This can be generalized to use more chunks
@@ -344,7 +344,7 @@ s4_1_2_list = Enumeration (Simple [
 
 s4_2 :: Section
 
-s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
+s4_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) [Sub s4_2_1,
   Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
 
 -------------------------

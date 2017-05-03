@@ -102,7 +102,7 @@ s2_intro = Paragraph $
   S "the organization of the document: what the document is based on and" +:+.
   S "intended to portray"
 
-s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
+s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 s2_1_intro = 
   [Paragraph $
@@ -248,13 +248,13 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated values are also displayed as output")]
 
-s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
+s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 
   S "This section first presents the problem description, which gives a" +:+
   S "high-level view of the problem to be solved. This is followed by" +:+
-  S "the solution characteristics specification, which presents the" +:+
+  S "the solution" +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` S "theories, definitions."
 
 s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
@@ -339,7 +339,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "will be able to withstand the explosion of a certain degree which" +:+.
   S "is calculated based on user input")]
 
-s6_2 = Section (S "Solution Characteristics Specification") 
+s6_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This section explains all the" +:+

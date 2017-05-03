@@ -25,7 +25,7 @@ srs         = commonINP "srs"         (cn' "software requirements specification"
 -- concepts relating to the templates and their contents
 
 section, system, description, specific, symbol_, units_, 
-  table_, introduction, organization, document, purpose :: NPNC
+  table_, introduction, organization, document, purpose, characteristic, specification :: NPNC
 section      = npnc "section"      (cn' "section")
 system       = npnc "system"       (cn' "system")
 description  = npnc "description"  (cn' "description")
@@ -37,13 +37,16 @@ introduction = npnc "introduction" (cn' "introduction")
 organization = npnc "organization" (cn' "organization")
 document     = npnc "document"     (cn' "document")
 purpose      = npnc "purpose"      (cn' "purpose")
+characteristic = npnc "characteristic" (cn' "characteristic")
+specification = npnc "specification" (cn' "specification")
 
-tOfSymb, refmat, orgOfDoc, prpsOfDoc :: NPNC
+tOfSymb, refmat, orgOfDoc, prpsOfDoc, charsSpec :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of'` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of'` document)
+charsSpec     = npnc "charSpec"     (plural characteristic +:+ specification)
 
 -- compounds
 systemdescription, specificsystemdescription  :: NPNC

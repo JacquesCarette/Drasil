@@ -37,7 +37,7 @@ introduction = npnc "introduction" (cn' "introduction")
 organization = npnc "organization" (cn' "organization")
 document     = npnc "document"     (cn' "document")
 purpose      = npnc "purpose"      (cn' "purpose")
-characteristic = npnc "characteristic" (cn' "characteristic")
+characteristics = npnc "characteristics" (cn' "characteristics")
 specification = npnc "specification" (cn' "specification")
 
 
@@ -47,10 +47,9 @@ refmat       = npnc "refmat"       (cn' "reference material")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of'` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of'` document)
-charsSpec     = npnc "charsSpec"     (plural characteristic +:+ specification)
 
 -- compounds
 systemdescription, specificsystemdescription  :: NPNC
 systemdescription         = compoundNPNC system   description
 specificsystemdescription = compoundNPNC specific systemdescription
-
+characteristicsSpecification = compoundNPNC characteristics specification

@@ -24,25 +24,25 @@ srs         = commonINP "srs"         (cn' "software requirements specification"
 
 -- concepts relating to the templates and their contents
 
-<<<<<<< HEAD
-section_, system, description, specific, general, symbol_, units_, 
+section_, physical, system, description, specific, general, symbol_, units_, 
   table_, introduction, organization, document, purpose, characteristics, specification,
-    unit_:: NPNC
-section_      = npnc "section"      (cn' "section")
-system       = npnc "system"       (cn' "system")
-description  = npnc "description"  (cn' "description")
-specific     = npnc "specific"     (cn' "specific") -- ??
-general      = npnc "general"      (cn' "general")
-symbol_      = npnc "symbol"       (cn' "symbol")
-units_       = npnc "units"        (cn' "units")
-unit_        = npnc "unit"         (cn' "unit")
-table_       = npnc "table"        (cn' "table")
-introduction = npnc "introduction" (cn' "introduction")
-organization = npnc "organization" (cn' "organization")
-document     = npnc "document"     (cn' "document")
-purpose      = npnc "purpose"      (cn' "purpose")
+    unit_ :: NPNC
+section_        = npnc "section"      (cn' "section")
+physical        = npnc "physical"      (cn' "physical")
+system          = npnc "system"       (cn' "system")
+description     = npnc "description"  (cn' "description")
+specific        = npnc "specific"     (cn' "specific") -- ??
+general         = npnc "general"      (cn' "general")
+symbol_         = npnc "symbol"       (cn' "symbol")
+units_          = npnc "units"        (cn' "units")
+unit_           = npnc "unit"         (cn' "unit")
+table_          = npnc "table"        (cn' "table")
+introduction    = npnc "introduction" (cn' "introduction")
+organization    = npnc "organization" (cn' "organization")
+document        = npnc "document"     (cn' "document")
+purpose         = npnc "purpose"      (cn' "purpose")
 characteristics = npnc "characteristics" (cn' "characteristics")
-specification = npnc "specification" (cn' "specification")
+specification   = npnc "specification" (cn' "specification")
 
 tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits :: NPNC
 
@@ -53,8 +53,10 @@ prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
-systemdescription, specificsystemdescription, characteristicsSpecification, generalSystemDescription :: NPNC
-systemdescription         = compoundNPNC system   description
-specificsystemdescription = compoundNPNC specific systemdescription
-generalSystemDescription = compoundNPNC general systemdescription
+systemdescription, specificsystemdescription, characteristicsSpecification, 
+  physicalSystem, generalSystemDescription :: NPNC
+systemdescription            = compoundNPNC system   description
+specificsystemdescription    = compoundNPNC specific systemdescription
+generalSystemDescription     = compoundNPNC general systemdescription
 characteristicsSpecification = compoundNPNC characteristics specification
+physicalSystem               = compoundNPNC physical system

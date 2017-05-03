@@ -48,7 +48,9 @@ s1 = refSec [s1_1, s1_2, s1_3]
 -- SECTION 1.1 --
 s1_1 = Section (S "Table of Units") [s1_1_intro, s1_1_table]
 
-s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.")
+s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the" +:+
+  S "soil that are of interest when examining slope stability problems" +:+
+  S "are given in the following table.")
 
 s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
   [(\x -> Sy (x ^. usymb)),
@@ -139,7 +141,7 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.1.2 --
-s4_1_2 = Sub $ Section (S "Physical System Description")
+s4_1_2 = Sub $ Section (S "Physical" :+: $ titleize sysDcr)
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
 
 s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in " :+: (makeRef fig_indexconv) :+: S "."

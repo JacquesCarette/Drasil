@@ -254,7 +254,7 @@ s6 = Section(S "Specific System Description") [Con s6_intro, Sub s6_1,
 s6_intro = Paragraph $ 
   S "This section first presents the problem description, which gives a" +:+
   S "high-level view of the problem to be solved. This is followed by" +:+
-  S "the solution" +:+ characteristicsSpecification :+: S ", which presents the" +:+
+  S "the solution" +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` S "theories, definitions."
 
 s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 

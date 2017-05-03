@@ -17,6 +17,8 @@ import           Drasil.TableOfAbbAndAcronyms
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
+import Data.Drasil.Concepts.Documentation
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
@@ -96,7 +98,7 @@ s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]
 s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope."
 
 -- SECTION 2.3 --
-s2_3 = Sub $ Section (titlesize orgOfDoc) [s2_3_p1]
+s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
 
 s2_3_p1 = Con $ Paragraph $ S "The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef sec_IMs :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
 

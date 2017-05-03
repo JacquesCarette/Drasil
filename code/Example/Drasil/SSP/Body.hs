@@ -65,8 +65,12 @@ s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
 s1_2 = Section (titleize tOfSymb) [s1_2_intro, s1_2_table]
 
 s1_2_intro = Con $ Paragraph $
-  S "A collection of the symbols that will be used in the models and equations of the program are summarized in the table below. Values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass."
-  
+  S "A collection of the symbols that will be used in the models" +:+
+  S "and equations of the program are summarized in the table" +:+
+  S "below. Values with a subscript i implies that the value will" +:+
+  S "be taken at and analyzed at a slice or slice interface" +:+
+  S "composing the total slip mass."
+
 s1_2_table = Con $ Table (map titleize [symbol_, units_, description]) (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ unit_symb ch),
@@ -103,7 +107,7 @@ s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
 s2_3_p1 = Con $ Paragraph $ S "The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef sec_IMs :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
 
 -- SECTION 3 --
-s3 = Section (S "General" :+: (titleize systemdescription)) [s3_p1, s3_1, s3_2]
+s3 = Section (S "General" +:+ (titleize systemdescription)) [s3_p1, s3_1, s3_2]
 
 s3_p1 = Con $ Paragraph $ S "This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints."
 
@@ -118,7 +122,7 @@ s3_2 = Sub $ Section (S "System Constraints") [s3_2_p1]
 s3_2_p1 = Con $ Paragraph $ S "There are no system constraints."
 
 -- SECTION 4 --
-s4 = Section (S "Specific" :+: (titleize systemdescription)) [s4_p1, s4_1, s4_2]
+s4 = Section (S "Specific" +:+ (titleize systemdescription)) [s4_p1, s4_1, s4_2]
 
 s4_p1 = Con $ Paragraph $ S "This section first presents the problem description, which gives a high-level view of the problem to be solved.  This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope."
 
@@ -143,7 +147,7 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.1.2 --
-s4_1_2 = Sub $ Section (S "Physical" :+: (titleize systemdescription))
+s4_1_2 = Sub $ Section (S "Physical" +:+ (titleize systemdescription))
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
 
 s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in " :+: (makeRef fig_indexconv) :+: S "."

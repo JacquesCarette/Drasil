@@ -81,14 +81,18 @@ for' t1 t2 = (short t1) +:+ S "for" +:+ (phrase $ t2 ^. term)
 for'' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 for'' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
-of_ :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-of_ t1 t2 = (phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term)
+of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+of_ t1 t2 = nounPhrase'' 
+  ((phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
+  ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
+  (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
+  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
 of' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 of' t1 t2 = nounPhrase'' 
   (phrase t1 +:+ S "of" +:+ plural t2)
   (phrase t1 +:+ S "of" +:+ plural t2)
-  (Replace (titleize t1 +:+ S "of" +:+ plural t2))
+  (Replace (at_start t1 +:+ S "of" +:+ plural t2))
   (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))
   
 with :: (NounPhrase c, NounPhrase d) => c -> d -> NP

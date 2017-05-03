@@ -344,7 +344,7 @@ s4_1_2_list = Enumeration (Simple [
 
 s4_2 :: Section
 
-s4_2 = Section (S "Solution Characteristics Specification") [Sub s4_2_1,
+s4_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) [Sub s4_2_1,
   Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
 
 -------------------------

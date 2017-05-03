@@ -120,7 +120,15 @@ s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
   S "writing the design specification and the software verification" +:+
   S "and validation plan.  The design document will show how the" +:+
   S "requirements are to be realized, including decisions on the" +:+
-  S "numerical algorithms and programming environment.  The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.  Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way.  Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process."
+  S "numerical algorithms and programming environment.  The" +:+
+  S "verification and validation plan will show the steps that will" +:+
+  S "be used to increase confidence in the software documentation and" +:+
+  S "the implementation.  Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
+  S "documents that follow the so-called waterfall model, the actual" +:+
+  S "development process is not  constrained in any way.  Even when" +:+
+  S "the waterfall model is not followed, as Parnas and Clements point" +:+
+  S "out, the most logical way to present the documentation is still to"+:+
+  S "fake a rational design process."
 
 -- SECTION 2.2 --
 s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]

@@ -38,7 +38,7 @@ organization = npnc "organization" (cn' "organization")
 document     = npnc "document"     (cn' "document")
 purpose      = npnc "purpose"      (cn' "purpose")
 
-tOfSymb, refmat :: NPNC
+tOfSymb, refmat, orgOfDoc, prpsOfDoc :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)

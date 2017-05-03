@@ -239,7 +239,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (sLower (phrase $ demandq ^. term)) +:+ S "is the requirement" +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
   S "is to check whether the calculated probability" +:+ 
-  sParen (P $ . ^. symbol) +:+ 
+  sParen (P $ prob_br ^. symbol) +:+ 
   S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
   S "as an input. If both conditions return true then it's shown that the" 

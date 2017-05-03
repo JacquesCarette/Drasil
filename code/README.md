@@ -31,7 +31,25 @@ S "is the"
 ```
 ...
 
+-------------------------------------------------
+### Quick Start Legend
+-------------------------------------------------
 
+| Combinator | Usage / Meaning | Type Signature |
+|------------|-----------------|----------------|
+| `+:+` | Concatenates two sentences and adds a space in between them | Sentence -> Sentence -> Sentence |
+| `:+:` | Concatenates two sentences | Sentence -> Sentence -> Sentence |
+| `of_` | Concatenates two sentences with " of " between them | Sentence -> Sentence -> Sentence |
+| `phrase` | Returns the singular form of a NounPhrase | NounPhrase n => n -> Sentence |
+| `plural` | Returns the plural form of a NounPhrase | NounPhrase n => n -> Sentence |
+| `at_start` | Returns the singular form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
+| `at_start'` | Returns the plural form of a NounPhrase, for use at the start of a sentence (ie. Capitalized) | NounPhrase n => n -> Sentence |
+| `titleize` | Returns the singular, title form of a NounPhrase | NounPhrase n => n -> Sentence |
+| `titleize'` | Returns the plural, title form of a NounPhrase | NounPhrase n => n -> Sentence |
+
+**Note: See Language.Drasil.Spec.hs for more information on the Sentence type**
+
+More to come as questions arise.
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents

@@ -38,12 +38,13 @@ organization = npnc "organization" (cn' "organization")
 document     = npnc "document"     (cn' "document")
 purpose      = npnc "purpose"      (cn' "purpose")
 
-tOfSymb, refmat, orgOfDoc, prpsOfDoc :: NPNC
+tOfSymb, refmat, orgOfDoc, prpsOfDoc, sysDcr :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of'` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of'` document)
+sysDcr       = npnc "sysDcr"       (cn' "system description")
 
 -- compounds
 systemdescription, specificsystemdescription  :: NPNC

@@ -317,7 +317,7 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_2 = Section (titleize physSyst) [Con s6_1_2_intro, Con s6_1_2_list, 
   Con fig_glassbr]
 
-s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+  S "of" +:+ (gLassBR ^. defn) 
+s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLassBR ^. defn) 
   +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
   S "following elements:"
 

@@ -274,7 +274,7 @@ s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro,
   
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent" +:+
-  S "sections and their meaning, with the" +:+ phrase purpose +:+ S "of reducing ambiguity" +:+
+  plural section_ +:+ S "and their meaning, with the" +:+ phrase purpose +:+ S "of reducing ambiguity" +:+
   S "and making it easier to correctly understand the" +:+. 
   (plural requirement) +:+ S "All of the terms" +:+
   S "are extracted from [4] in" +:+. (makeRef s10)
@@ -437,13 +437,13 @@ s6_2_5 = Section (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1,
 s6_2_5_intro = Paragraph $
   S "Table 2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ") shows the data" +:+
-  S "constraints on the input variables. The column of physical constraints"
-  +:+ S "gives the physical limitations on the range of values that can" +:+
+  S "constraints on the input variables. The column of" +:+ phrase physical +:+ S "constraints"
+  +:+ S "gives the" +:+ phrase physical +:+ S "limitations on the range of values that can" +:+
   S " be taken by the variable. The constraints are conservative, to give"
   +:+ S "the user of the model the flexibility to experiment with unusual"
   +:+ S "situations. The column of typical values is intended to provide" +:+
   S "a feel for a common scenario. The uncertainty column provides an" +:+
-  S "estimate of the confidence with which the physical quantities can be"
+  S "estimate of the confidence with which the" +:+ phrase physical +:+ S "quantities can be"
   +:+ S "measured. This information would be part of the input if one were"
   +:+ S "performing an uncertainty quantification exercise. Table 3 (" :+:
   (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+

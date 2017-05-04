@@ -686,7 +686,7 @@ s9_table1 = Table [S "",
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
   S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
   S ""]]
-  (S "Traceability Matrix Showing the Connections Between Items of Different"
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections Between Items of Different"
   +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
@@ -720,7 +720,7 @@ s9_table2 = Table [S "", S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "X", S "X", S "X",
   S "", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "", S "",
   S ""]]
-  (S "Traceability Matrix Showing the Connections Between" +:+
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections Between" +:+
   titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
@@ -780,7 +780,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   S "", S "", S ""],
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S ""]]
-  (S "Traceability Matrix Showing the Connections Between Assumptions and"
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections Between Assumptions and"
   +:+ S "Other Items") True
 
 s9_intro2 = 
@@ -808,17 +808,17 @@ s9_intro2 =
   (plural assumption),
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical" +:+
-  S "representation of the matrix by scanning the labels and reference" +:+.
+  S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S"by scanning the labels and reference" +:+.
   S "can be future work"]
 
-fig_2 = Figure (S "Figure 2: Traceability Matrix Showing the Connections" +:+
+fig_2 = Figure (S "Figure 2: Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections" +:+
   S "Between Items of Different Sections") "Trace.png"
 
-fig_3 = Figure (S "Figure 3: Traceability Matrix Showing the Connections" +:+
+fig_3 = Figure (S "Figure 3: Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections" +:+
   S "Between" +:+ (titleize' requirement) +:+ S "and Other Items") 
   "RTrace.png"
 
-fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections" +:+
+fig_4 = Figure (S "Figure 4: Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections" +:+
   S "Between" +:+ (titleize' assumption) +:+ S "and Other Items")
   "ATrace.png"
 

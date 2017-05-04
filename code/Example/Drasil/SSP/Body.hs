@@ -186,7 +186,9 @@ s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (S "Problem Description") [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_p1 = Con $ Paragraph $ S "SSA is a computer program developed to evaluate the factor of safety of a slopes slip surface and to calculate the displacement that the slope will experience."
+s4_1_p1 = Con $ Paragraph $ S "SSA is a computer program developed" +:+
+  S "to evaluate the factor of safety of a slopes slip surface and" +:+
+  S "to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
 s4_1_1 = Sub $ Section (S "Terminology") [s4_1_1_list]
@@ -242,7 +244,7 @@ s4_1_3_list = Con $ Enumeration $ Simple $ [
   ]
 
 -- SECTION 4.2 --
-s4_2 = Sub $ Section (S "Solution Characteristics Specification")
+s4_2 = Sub $ Section (S "Solution" +:+ (titleize characteristicsSpecification))
   [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+

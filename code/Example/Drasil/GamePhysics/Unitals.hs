@@ -177,15 +177,10 @@ perpLen_B = uc' "||r_BP x n||" (nounPhraseSP $
   (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*",
   (normalVect ^. symbol), Atomic "||"]) metre
 
+--FIXME: Better way to parametrize a ConVar?
 momtInert_A = ucFromVC momtA metre
-            where momtA = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body A")) "moment Of Inertia" ) (sub (momtInert ^. symbol) cA)
+            where momtA = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body A")) "Moment Of Inertia" ) (sub (momtInert ^. symbol) cA)
 
+--FIXME: Better way to parametrize a ConVar?
 momtInert_B = ucFromVC momtB metre
-            where momtB = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body B")) "moment Of Inertia" ) (sub (momtInert ^. symbol) cB)
-
---momtInert_A = uc' "I_A" (nounPhraseSP "moment of inertia of rigid body A")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (momtInert ^. symbol) cA) momtInertU
---momtInert_B = uc' "I_B" (nounPhraseSP "moment of inertia of rigid body B")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (momtInert ^. symbol) cB) momtInertU
+            where momtB = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body B")) "Moment Of Inertia" ) (sub (momtInert ^. symbol) cB)

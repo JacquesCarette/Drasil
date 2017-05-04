@@ -156,7 +156,7 @@ s2_3_p1 = Con $ Paragraph $ S "The organization of this document" +:+
 -- SECTION 3 --
 s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
 
-s3_p1 = Con $ Paragraph $ S "This section provides general information"
+s3_p1 = Con $ Paragraph $ S "This section provides general information" +:+
   S "about the system, identifies the interfaces between the" +:+
   S "system and its environment, and describes the user characteristics" +:+
   S "and the system constraints."
@@ -164,7 +164,7 @@ s3_p1 = Con $ Paragraph $ S "This section provides general information"
 -- SECTION 3.1 --
 s3_1 = Sub $ Section (S "User Characteristics") [s3_1_p1]
 
-s3_1_p1 = Con $ Paragraph $ S "The end user of short SSA should" +:+
+s3_1_p1 = Con $ Paragraph $ S "The end user of SSA should" +:+
   S "have an understanding of undergraduate Level 1 Calculus and" +:+
   S "Physics, and be familiar with soil and material properties."
 
@@ -247,7 +247,7 @@ s4_2 = Sub $ Section (S "Solution Characteristics Specification")
 
 s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
   S "SSA are presented in " :+: makeRef sec_IMs :+: S "." +:+
-  S "The information to understand the meaning of the instance" +:+
+  S " The information to understand the meaning of the instance" +:+ --FIXME extra space at start of sentence?
   S "models and their derivation is also presented, so that the" +:+
   S "instance models can be verified."
 
@@ -256,8 +256,8 @@ s4_2_1 = Sub $ Section (S "Assumptions") [s4_2_1_p1, s4_2_1_list]
 
 s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
   S "original problem and helps in developing the theoretical" +:+
-  S "model by filling in the missing information for the" +:+ (phrase physicalSystem) +:+.
-  S " The numbers given in the square brackets refer to" +:+
+  S "model by filling in the missing information for the" +:+ (phrase physicalSystem) :+:
+  S ". The numbers given in the square brackets refer to" +:+
   S "the data definition, or the instance model, in which the" +:+
   S "respective assumption is used."
 
@@ -280,7 +280,8 @@ s4_2_2 = Sub sec_TMs
 sec_TMs :: Section
 sec_TMs = Section (S "Theoretical Models") (s4_2_2_p1:s4_2_2_tmods)
 
-s4_2_2_p1 = Con $ Paragraph $ S "This section focuses on the general equations and laws that SSA is based on."
+s4_2_2_p1 = Con $ Paragraph $ S "This section focuses on the" +:+
+  S "general equations and laws that SSA is based on."
 
 s4_2_2_tmods = map (Con . Definition) (map Theory [fs_rc])
 
@@ -302,7 +303,10 @@ s4_2_6 = Sub $ Section (S "Data Constraints") []
 -- SECTION 5 --
 s5 = Section (S "Requirements") [s5_p1, s5_1, s5_2]
 
-s5_p1 = Con $ Paragraph $ S "This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit."
+s5_p1 = Con $ Paragraph $ S "This section provides the" +:+
+  S "functional requirements, the business tasks that the software" +:+
+  S "is expected to complete, and the nonfunctional requirements," +:+
+  S "the qualities that the software is expected to exhibit."
 
 -- SECTION 5.1 --
 s5_1 = Sub $ Section (S "Functional Requirements")

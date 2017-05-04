@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
 
 import           Drasil.TableOfUnits
-import           Drasil.OfSymbols
+import           Drasil.TableOfSymbols
 import           Drasil.TableOfAbbAndAcronyms
 import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS

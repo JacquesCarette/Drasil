@@ -107,9 +107,9 @@ s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 s2_1_intro = 
   [Paragraph $
-  S "The main" +:+ phrase purpose +:+ S "of this" +:+ phrase document +:+ S "is to predict whether a given" +:+
-  (phrase $ glaSlab ^. term) +:+ S "is likely to resist a" +:+
-  S "specified" +:+. (phrase $ blast ^. term) +:+
+  S "The main" +:+ phrase purpose +:+ S "of this" +:+ phrase document +:+
+  S "is to predict whether a given" +:+ (phrase $ glaSlab ^. term) +:+
+  S "is likely to resist a specified" +:+. (phrase $ blast ^. term) +:+
   S "The goals and" +:+ plural thModel +:+
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
@@ -144,8 +144,9 @@ s2_2_intro = Paragraph $
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
-  S "The" +:+ phrase organization +:+ S "of this" +:+ phrase document +:+ S "follows the template for an" +:+ 
-  (short srs) +:+ S "for scientific computing software" +:+
+  S "The" +:+ phrase organization +:+ S "of this" +:+ phrase document +:+ 
+  S "follows the template for an" +:+ (short srs) +:+ 
+  S "for scientific computing software" +:+
   S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
   S "some aspects taken from Volere template 16 [3]."
   
@@ -155,8 +156,8 @@ s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
 s3_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the people who have an" +:+.
-  S "interest in the product"
+  S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the" +:+
+  S "people who have an interest in the product."
 
 s3_1 = Section (S "The Client") [Con s3_1_intro]
 
@@ -174,9 +175,9 @@ s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ S "information about the" +:+
-  phrase system `sC`
-  S "identifies the interface between the" +:+ phrase system +:+ S "and its environment" `sC`
+  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
+  S "information about the" +:+ phrase system `sC` S "identifies the interface" +:+
+  S "between the" +:+ phrase system +:+ S "and its environment" `sC`
   S "and describes the user characteristics and the system constraints."
 
 s4_1 = Section (S "User Characteristics") [Con s4_1_bullets]
@@ -199,8 +200,8 @@ s4_2_intro = Paragraph $
 s5 = Section(S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
 
 s5_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "presents the scope of the project. It describes the" +:+
-  S "expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
+  S "This" +:+ phrase section_ +:+ S "presents the scope of the project. It" +:+
+  S "describes the expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
   S "inputs and outputs of each action. The use cases are input and" +:+
   S "output, which defines the action of getting the input and displaying" +:+.
   S "the output"
@@ -263,12 +264,11 @@ s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1,
   Sub s6_1_2, Sub s6_1_3]
 
 s6_1_intro = Paragraph $ 
-  S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the" +:+ (phrase $ blast ^. term) +:+.
-  S "risk involved with the glass" +:+ (gLassBR ^. defn) +:+ S "is a" +:+
-  S "computer program developed to interpret the inputs to give out the" +:+
-  S "outputs which predicts whether the" +:+ 
-  (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+
-  (phrase $ blast ^. term) +:+. S "under the conditions"
+  S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
+  +:+ (phrase $ blast ^. term) +:+. S "risk involved with the glass" +:+ (gLassBR ^. defn)
+  +:+ S "is a" +:+ S "computer program developed to interpret the inputs to give out the" +:+
+  S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
+  S "can withstand the" +:+ (phrase $ blast ^. term) +:+. S "under the conditions"
 
 s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
@@ -606,18 +606,18 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S"and Graphs") ([Con s9_intro1, 
-  Con s9_table1, Con s9_table2, Con s9_table3] ++ (map Con s9_intro2) ++ 
+s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S"and Graphs")
+  ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
+  (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
 
 s9_intro1 = Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the traceability matrices is to provide easy references"
-  +:+ S "on what has to be additionally modified if a certain component is"
+  S "The" +:+ phrase purpose +:+ S "of the traceability matrices is to provide" +:+
+  S "easy references on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
-  S "should be modified as well." +:+ titleize table_ +:+ S "5" +:+ sParen (makeRef s9_table1) +:+ 
-  S "shows the dependencies of" +:+ 
-  plural thModel `sC` 
+  S "should be modified as well." +:+ titleize table_ +:+ S "5" +:+ 
+  sParen (makeRef s9_table1) +:+ S "shows the dependencies of" +:+ plural thModel `sC` 
   (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "with each other." +:+
   S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the dependencies of" +:+
@@ -686,8 +686,8 @@ s9_table1 = Table [S "",
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
   S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
   S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections Between Items of Different"
-  +:+ titleize' section_) True
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S "Showing the" +:+
+  S "Connections Between Items of Different" +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table [S "", S "T1 (" :+: 
@@ -720,8 +720,8 @@ s9_table2 = Table [S "", S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "X", S "X", S "X",
   S "", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "", S "",
   S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections Between" +:+
-  titleize' requirement +:+ S "and Other Items") True
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the" +:+
+  S "Connections Between" +:+ titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
 s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
@@ -780,14 +780,14 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   S "", S "", S ""],
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections Between Assumptions and"
-  +:+ S "Other Items") True
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the" +:+
+  S "Connections Between Assumptions and Other Items") True
 
 s9_intro2 = 
   [Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the traceability graphs is also to provide easy" +:+ 
-  S "references on what has to be additionally modified if a certain" +:+
-  S "component is changed. The arrows in the graphs represent" +:+
+  S "The" +:+ phrase purpose +:+ S "of the traceability graphs is also to" +:+
+  S "provide easy references on what has to be additionally modified if a" +:+
+  S "certain component is changed. The arrows in the graphs represent" +:+
   S "dependencies. The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
   S "component is changed, the components that it points to should also" +:+
@@ -808,30 +808,30 @@ s9_intro2 =
   (plural assumption),
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical" +:+
-  S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S"by scanning the labels and reference" +:+.
-  S "can be future work"]
+  S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
+  S "labels and reference can be future work."]
 
-fig_2 = Figure (S "Figure 2: Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections" +:+
-  S "Between Items of Different Sections") "Trace.png"
+fig_2 = Figure (S "Figure 2: Traceability" +:+ (titleize $ matrix ^. term) 
+  +:+ S"Showing the Connections" +:+ S "Between Items of Different Sections") "Trace.png"
 
-fig_3 = Figure (S "Figure 3: Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections" +:+
-  S "Between" +:+ (titleize' requirement) +:+ S "and Other Items") 
-  "RTrace.png"
+fig_3 = Figure (S "Figure 3: Traceability" +:+ (titleize $ matrix ^. term) +:+ 
+  S "Showing the Connections" +:+ S "Between" +:+ (titleize' requirement) +:+
+  S "and Other Items") "RTrace.png"
 
-fig_4 = Figure (S "Figure 4: Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the Connections" +:+
-  S "Between" +:+ (titleize' assumption) +:+ S "and Other Items")
-  "ATrace.png"
+fig_4 = Figure (S "Figure 4: Traceability" +:+ (titleize $ matrix ^. term) +:+
+  S"Showing the Connections Between" +:+ (titleize' assumption) +:+
+  S "and Other Items") "ATrace.png"
 
 s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ S "drive approach to" +:+
-  S "certifying scientific computing software,") +:+ S "Master's thesis" `sC`
-  S "McMaster University, Hamilton, Ontario, Canada, 2013."),
+  [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
+  S "drive approach to certifying scientific computing software,") +:+
+  S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   S "template for scientific computing,") +:+ S "in Proceedings of the" +:+
-  S "First International Workshop on Situational" +:+ titleize' requirement +:+ S "Engineering" +:+
-  S "Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
+  S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
+  S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
   titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 
   (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
@@ -841,7 +841,8 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
-  +:+ S "for determining" +:+ (phrase $ load ^. term) +:+ S "resistance of glass in buildings,") :+: 
+  +:+ S "for determining" +:+ (phrase $ load ^. term) +:+ S "resistance of" +:+
+  S "glass in buildings,") :+: 
   S " Standard E1300-09a, American Society for Testing and Material (ASTM),"
   +:+ S "2009."),
   (S "[5]", S "ASTM, developed by subcommittee C1408,Book of standards 15.02,"

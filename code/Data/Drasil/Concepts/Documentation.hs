@@ -5,7 +5,7 @@ import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg :: CINP
+  requirement, srs, thModel, mg, vav :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
 assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
 dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
@@ -17,8 +17,8 @@ physSyst    = commonINP "physSyst"    (cn' "physical system description")   "PS"
 requirement = commonINP "requirement" (cn' "requirement")                   "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")             "T"
 mg          = commonINP "mg"          (cn' "module guide")                  "MG" 
-srs         = commonINP "srs"         (cn' "software requirements specification") 
-  "SRS"
+srs         = commonINP "srs"  (cn' "software requirements specification")  "SRS"
+vav         = commonINP "vav"         (cn' "verification and validation")   "VAV"
 
 ---------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 -- compounds
 systemdescription, specificsystemdescription, characteristicsSpecification, 
   physicalSystem, generalSystemDescription :: NPNC
-systemdescription            = compoundNPNC system   description
+systemdescription            = compoundNPNC system description
 specificsystemdescription    = compoundNPNC specific systemdescription
 generalSystemDescription     = compoundNPNC general systemdescription
 characteristicsSpecification = compoundNPNC characteristics specification

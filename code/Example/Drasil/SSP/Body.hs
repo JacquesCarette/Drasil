@@ -156,12 +156,17 @@ s2_3_p1 = Con $ Paragraph $ S "The organization of this document" +:+
 -- SECTION 3 --
 s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
 
-s3_p1 = Con $ Paragraph $ S "This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints."
+s3_p1 = Con $ Paragraph $ S "This section provides general information"
+  S "about the system, identifies the interfaces between the" +:+
+  S "system and its environment, and describes the user characteristics" +:+
+  S "and the system constraints."
 
 -- SECTION 3.1 --
 s3_1 = Sub $ Section (S "User Characteristics") [s3_1_p1]
 
-s3_1_p1 = Con $ Paragraph $ S "The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties."
+s3_1_p1 = Con $ Paragraph $ S "The end user of short SSA should" +:+
+  S "have an understanding of undergraduate Level 1 Calculus and" +:+
+  S "Physics, and be familiar with soil and material properties."
 
 -- SECTION 3.2 --
 s3_2 = Sub $ Section (S "System Constraints") [s3_2_p1]
@@ -171,7 +176,12 @@ s3_2_p1 = Con $ Paragraph $ S "There are no system constraints."
 -- SECTION 4 --
 s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]
 
-s4_p1 = Con $ Paragraph $ S "This section first presents the problem description, which gives a high-level view of the problem to be solved.  This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope."
+s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
+  S "problem description, which gives a high-level view of the" +:+
+  S "problem to be solved.  This is followed by the solution" +:+
+  S "characteristics specification, which presents the assumptions," +:+
+  S "theories, definitions and finally the instance models that" +:+
+  S "model the slope."
 
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (S "Problem Description") [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
@@ -204,12 +214,14 @@ s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
   (S "Slice properties convention is noted by i.")
   ]
   
-s4_1_2_p2 = Con $ Paragraph $ S "A free body diagram of the forces acting on the slice is displayed in " :+: (makeRef fig_forceacting) :+: S "."
+s4_1_2_p2 = Con $ Paragraph $ S "A free body diagram of the forces" +:+
+  S "acting on the slice is displayed in " :+: (makeRef fig_forceacting) :+: S "."
 
 s4_1_2_fig1 = Con fig_indexconv
 
 fig_indexconv :: Contents
-fig_indexconv = Figure (S "Index convention for numbering slice and interslice force variables")  "IndexConvention.png"
+fig_indexconv = Figure (S "Index convention for numbering slice and" +:+
+  S "interslice force variables")  "IndexConvention.png"
 
 s4_1_2_fig2 = Con fig_forceacting
 
@@ -219,7 +231,9 @@ fig_forceacting = Figure (S "Forces acting on a slice") "ForceDiagram.png"
 -- SECTION 4.1.3 --
 s4_1_3 = Sub $ Section (S "Goal Statements") [s4_1_3_p1, s4_1_3_list]
 
-s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers."
+s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water" +:+
+  S "table, the geometry of the layers composing the plane of a" +:+
+  S "slope, and the material properties of the layers."
 
 s4_1_3_list = Con $ Enumeration $ Simple $ [
   (S "GS1", Flat $ S "Evaluate local and global factors of safety along a given slip surface."),
@@ -231,12 +245,21 @@ s4_1_3_list = Con $ Enumeration $ Simple $ [
 s4_2 = Sub $ Section (S "Solution Characteristics Specification")
   [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
-s4_2_p1 = Con $ Paragraph $ S "The instance models that govern SSA are presented in " :+: makeRef sec_IMs :+: S ".  The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified."
+s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
+  S "SSA are presented in " :+: makeRef sec_IMs :+: S "." +:+
+  S "The information to understand the meaning of the instance" +:+
+  S "models and their derivation is also presented, so that the" +:+
+  S "instance models can be verified."
 
 -- SECTION 4.2.1 --
 s4_2_1 = Sub $ Section (S "Assumptions") [s4_2_1_p1, s4_2_1_list]
 
-s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition, or the instance model, in which the respective assumption is used."
+s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
+  S "original problem and helps in developing the theoretical" +:+
+  S "model by filling in the missing information for the" +:+ (phrase physicalSystem) +:+.
+  S " The numbers given in the square brackets refer to" +:+
+  S "the data definition, or the instance model, in which the" +:+
+  S "respective assumption is used."
 
 s4_2_1_list = Con $ Enumeration $ Simple $ [
   (S "A1", Flat $ S "The slip surface is concave with respect to the slope surface. The " :+: P (coords ^. symbol) :+: S " coordinates of the failure surface follow a monotonic function."),

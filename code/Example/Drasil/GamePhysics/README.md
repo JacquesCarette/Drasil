@@ -1,11 +1,34 @@
-Chipmunk2D Drasil Documentation 
-===============================
+--------------------------------------------------
+### Summary of Folder Structure and File Contents
+--------------------------------------------------
 
-**(12/8/2016)**: Added Drasil MG for Game Physics example.
-
-**(18/7/2016)**: Fully updated documentation to the most recent version of Drasil.
-
-Build Instructions
-------------------
-
-Running "cabal build" or "cabal install ." from the current directory will generate the chipmunkdocs executable. This file can be found in dist/build/chipmunkdocs after running cabal and will generate the desired documentation.
+Body.hs
+  - The main document body representation for the Chipmunk example
+  
+Changes.hs
+  - A list of likely and unlikely changes to the Chipmunk engine
+  
+Concepts.hs
+  - Example-specific concepts for Chipmunk
+  
+DataDefs.hs
+  - Chipmunk's data definitions (for the SRS)
+  
+Main.hs 
+  - A list of what should be generated
+  
+Modules.hs
+  - A list of modules for Chipmunk's design document
+  
+README.md
+  - This file
+  
+Reqs.hs
+  - A list of requirement chunks for the Chipmunk example
+  
+TMods.hs
+  - Chipmunk theoretical models
+  
+Unitals.hs
+  - Example-specific quantities for Chipmunk
+  

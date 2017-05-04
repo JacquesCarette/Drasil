@@ -323,14 +323,32 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R3" , S "Test the slip surfaces to determine" +:+
             S "if they are physically realizable based" +:+
             S "on a set of pass or fail criteria."),
-  (S "R4" , S "Prepare the slip surfaces for a method of slices or limit equilibrium analysis."),
-  (S "R5" , S "Calculate the factors of safety of the slip surfaces."),
-  (S "R6" , S "Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting."),
-  (S "R7" , S "Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety."),
-  (S "R8" , S "Repeat requirements R3 to R7 until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface."),
-  (S "R9" , S "Prepare the critical slip surface for method of slices or limit equilibrium analysis."),
-  (S "R10", S "Calculate the factor of safety of the critical slip surface using the Morgenstern price method."),
-  (S "R11", S "Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern price method.")
+  (S "R4" , S "Prepare the slip surfaces for a method" +:+
+            S "of slices or limit equilibrium analysis."),
+  (S "R5" , S "Calculate the factors of safety of the" +:+
+            S "slip surfaces."),
+  (S "R6" , S "Rank and weight the slopes based on their" +:+
+            S "factor of safety, such that a slip surface" +:+
+            S "with a smaller factor of safety has a larger" +:+
+            S "weighting."),
+  (S "R7" , S "Generate new potential critical slip" +:+
+            S "surfaces based on previously analysed" +:+
+            S "slip surfaces with low factors of safety."),
+  (S "R8" , S "Repeat requirements R3 to R7 until the" +:+
+            S "minimum factor of safety remains approximately" +:+
+            S "the same over a predetermined number of" +:+
+            S "repetitions. Identify the slip surface that" +:+
+            S "generates the minimum factor of safety as" +:+
+            S "the critical slip surface."),
+  (S "R9" , S "Prepare the critical slip surface for" +:+
+            S "method of slices or limit equilibrium analysis."),
+  (S "R10", S "Calculate the factor of safety of the" +:+
+            S "critical slip surface using the Morgenstern" +:+
+            S "price method."),
+  (S "R11", S "Display the critical slip surface and the" +:+
+            S "slice element displacements graphically. Give" +:+
+            S "the values of the factors of safety calculated" +:+
+            S "by the Morgenstern price method.")
   ])
   
 s5_1_table = Con table_inputdata

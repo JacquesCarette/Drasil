@@ -173,7 +173,7 @@ s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "provides general information about the" +:+
+  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ S "information about the" +:+
   phrase system `sC`
   S "identifies the interface between the" +:+ phrase system +:+ S "and its environment" `sC`
   S "and describes the user characteristics and the system constraints."

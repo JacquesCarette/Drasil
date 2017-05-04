@@ -314,19 +314,24 @@ s5_p1 = Con $ Paragraph $ S "This section provides the" +:+
 s5_1 = Sub $ Section (S "Functional Requirements")
   [s5_1_list, s5_1_table]
 
-s5_1_list = Con $ Enumeration $ Simple $ [
-  (S "R1", Flat $ S "Read the input file, and store the data. Necessary input data summarized in " :+: makeRef table_inputdata :+: S "."),
-  (S "R2", Flat $ S "Generate potential critical slip surface's for the input slope."),
-  (S "R3", Flat $ S "Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria."),
-  (S "R4", Flat $ S "Prepare the slip surfaces for a method of slices or limit equilibrium analysis."),
-  (S "R5", Flat $ S "Calculate the factors of safety of the slip surfaces."),
-  (S "R6", Flat $ S "Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting."),
-  (S "R7", Flat $ S "Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety."),
-  (S "R8", Flat $ S "Repeat requirements R3 to R7 until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface."),
-  (S "R9", Flat $ S "Prepare the critical slip surface for method of slices or limit equilibrium analysis."),
-  (S "R10", Flat $ S "Calculate the factor of safety of the critical slip surface using the Morgenstern price method."),
-  (S "R11", Flat $ S "Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern price method.")
-  ]
+s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
+  (S "R1" , S "Read the input file, and store the" +:+
+            S "data. Necessary input data summarized in" +:+
+            makeRef table_inputdata :+: S "."),
+  (S "R2" , S "Generate potential critical slip" +:+ 
+            S "surface's for the input slope."),
+  (S "R3" , S "Test the slip surfaces to determine" +:+
+            S "if they are physically realizable based" +:+
+            S "on a set of pass or fail criteria."),
+  (S "R4" , S "Prepare the slip surfaces for a method of slices or limit equilibrium analysis."),
+  (S "R5" , S "Calculate the factors of safety of the slip surfaces."),
+  (S "R6" , S "Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting."),
+  (S "R7" , S "Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety."),
+  (S "R8" , S "Repeat requirements R3 to R7 until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface."),
+  (S "R9" , S "Prepare the critical slip surface for method of slices or limit equilibrium analysis."),
+  (S "R10", S "Calculate the factor of safety of the critical slip surface using the Morgenstern price method."),
+  (S "R11", S "Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern price method.")
+  ])
   
 s5_1_table = Con table_inputdata
 

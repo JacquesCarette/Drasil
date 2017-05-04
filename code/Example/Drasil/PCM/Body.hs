@@ -53,8 +53,8 @@ s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), 
 s1_2 = Section ((phrase $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
 
 s1_2_intro = Paragraph $ 
-  S "The" +:+ (phrase $ table_ ^. term) +:+ "that follows summarizes the" +:+ (plural $ symbol_ ^. term) +:+
-  S "used in this" +:+ S (phrase $ document ^. term) +:+ S "along with their" +:+ (plural $ unit_ ^. term) :+:
+  S "The" +:+ (phrase $ table_ ^. term) +:+ S "that follows summarizes the" +:+ (plural $ symbol_ ^. term) +:+
+  S "used in this" +:+ (phrase $ document ^. term) +:+ S "along with their" +:+ (plural $ unit_ ^. term) :+:
   S ".  The choice of" +:+ (plural $ symbol_ ^. term) +:+ S "was" +:+
   S "made to be consistent with the heat transfer literature and" +:+
   S "with existing documentation for solar water heating systems."

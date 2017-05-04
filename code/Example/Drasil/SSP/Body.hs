@@ -283,8 +283,8 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "depending on x position."),
   (S "A6", S "Slice to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the factor" +:+
-           S "of safety" +:+ sParen (P (fi ^. symbol)) +:+
-           S "and the Coulomb sliding law."),
+           S "of safety" +:+ sParen (P (fs ^. symbol)) :+:
+           S ", and the Coulomb sliding law."),
   (S "A7", S "The stress-strain curve for interslice" +:+
            S "relationships is linear with a constant slope."),
   (S "A8", S "The slope and slip surface extends far into" +:+

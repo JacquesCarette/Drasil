@@ -169,7 +169,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
   S "on the numerical algorithms and programming environment" +:+
-  S "The" +:+ (short vav) +:+ S plan will show the" +:+
+  S "The" +:+ (short vav) +:+ S "plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
   S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 

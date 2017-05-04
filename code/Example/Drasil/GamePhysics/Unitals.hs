@@ -36,15 +36,19 @@ impulseVec  = ucFromVC QP.impulseV impulseU
 impulseScl  = ucFromVC QP.impulseS impulseU
 len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
---FIXME: Better way to parametrize a ConVar?
+-- FIXME: parametrized hack
 iVect       = ucFromVC ivec metre
   where ivec = cvR (dccWDS "unit_vect" (compoundPhrase' (cn "horizontal") (QM.unit_vect ^. term)) (phrase $ QM.unit_vect ^. term)) (QM.unit_vect ^. symbol)
---FIXME: Better way to parametrize a ConVar?
+-- FIXME: parametrized hack
 jVect       = ucFromVC ivec metre
   where ivec = cvR (dccWDS "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) (phrase $ QM.unit_vect ^. term) ) (vec $ hat lJ)
 
-normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
-  "FIXME: Define this or remove the need for definitions"(vec lN) metre
+--normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
+--  "FIXME: Define this or remove the need for definitions"(vec lN) metre
+
+-- FIXME: parametrized hack
+normalVect  = ucFromVC normVect metre
+  where normVect = cvR (dccWDS "norm_vect" (compoundPhrase' (cn "collision") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term) ) (QM.norm_vect ^. symbol)
 angVel      = ucFromVC QP.angularV angVelU
 position    = ucFromVC QP.position metre
 orientation = ucFromVC QM.orientation radians
@@ -91,10 +95,9 @@ mass_1  = uc' "m_1" (nounPhraseSP "mass of the first body")
 mass_2  = uc' "m_2" (nounPhraseSP "mass of the second body")
   "FIXME: Define this or remove the need for definitions" 
   (sub (mass ^. symbol) (Atomic "2")) kilogram
-
+-- FIXME: parametrized hack
 dispUnit = ucFromVC dispVect metre
   where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement")  (QM.unit_vect ^. term)) (phrase $ compoundPhrase' (cn "displacement") (QM.unit_vect ^. term))) (vec (hat lR))
-
 --dispUnit = uc' "rhat" (nounPhraseSP "unit displacement vector")
 --  "FIXME: Define this or remove the need for definitions" (vec (hat lR)) metre
 -- Improvised norm symbols --
@@ -106,7 +109,6 @@ dispUnit = ucFromVC dispVect metre
 -- FIXME: parametrized hack
 dispNorm = ucFromVC norm metre
   where norm = cvR (dccWDS "euclideanNorm" (compoundPhrase' (QM.euclid_norm ^. term) (cn "of the displacement")) (phrase $ QM.euclid_norm ^. term) ) (QM.euclid_norm ^. symbol)
-
 -- FIXME: parametrized hack
 sqrDist = ucFromVC norm m_2
   where norm = cvR (dccWDS "euclideanNorm" (cn' "squared distance") (phrase $ QM.euclid_norm ^. term) ) (sup (QM.euclid_norm ^. symbol) (Atomic "2"))
@@ -186,10 +188,9 @@ perpLen_B = uc' "||r_BP x n||" (nounPhraseSP $
   (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*",
   (normalVect ^. symbol), Atomic "||"]) metre
 
---FIXME: Better way to parametrize a ConVar?
+-- FIXME: parametrized hack
 momtInert_A = ucFromVC momtA momtInertU
   where momtA = cvR (dccWDS "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body A")) (phrase $ QP.momentOfInertia ^. term)) (sub (momtInert ^. symbol) cA)
-
---FIXME: Better way to parametrize a ConVar?
+-- FIXME: parametrized hack
 momtInert_B = ucFromVC momtB momtInertU
   where momtB = cvR (dccWDS "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body B")) (phrase $ QP.momentOfInertia ^. term)) (sub (momtInert ^. symbol) cB)

@@ -5,6 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math
 import Prelude hiding (id)
 
 import           Drasil.TableOfUnits
@@ -866,3 +867,4 @@ fig_6 = Figure (S "Figure 6: Non dimensional" +:+
   (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (phrase $ ar ^. term) +:+ 
   sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (phrase $ sdf ^. term) +:+ 
   sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"
+

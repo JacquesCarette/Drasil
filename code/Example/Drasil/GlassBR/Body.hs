@@ -686,7 +686,7 @@ s9_table1 = Table [S "",
   S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
   S ""]]
   (S "Traceability Matrix Showing the Connections Between Items of Different"
-  +:+ S "Sections") True
+  +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table [S "", S "T1 (" :+: 

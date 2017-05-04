@@ -59,7 +59,7 @@ s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
   ] this_si)
-  (S "Table of Units") True
+  (titleize tOfUnits) True
 
 -- SECTION 1.2 --
 s1_2 = Section (titleize tOfSymb) [s1_2_intro, s1_2_table]
@@ -133,15 +133,22 @@ s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
 -- SECTION 2.2 --
 s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]
 
-s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope."
+s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
+  S "limited to stability analysis of a 2 dimensional slope," +:+
+  S "composed of homogeneous soil layers. Given appropriate" +:+
+  S "inputs, the code for SSA will identify the most likely" +:+
+  S "failure surface within the possible input range, and find" +:+
+  S "the factor of safety for the slope as well as displacement" +:+
+  S "of soil that will occur on the slope."
 
 -- SECTION 2.3 --
 s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
 
-s2_3_p1 = Con $ Paragraph $ S "The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef sec_IMs :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
+s2_3_p1 = Con $ Paragraph $ S "The organization of this document" +:+
+  S "follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef sec_IMs :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
 
 -- SECTION 3 --
-s3 = Section (S "General" +:+ (titleize systemdescription)) [s3_p1, s3_1, s3_2]
+s3 = Section (titleize generalSystemDescription)) [s3_p1, s3_1, s3_2]
 
 s3_p1 = Con $ Paragraph $ S "This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints."
 
@@ -156,7 +163,7 @@ s3_2 = Sub $ Section (S "System Constraints") [s3_2_p1]
 s3_2_p1 = Con $ Paragraph $ S "There are no system constraints."
 
 -- SECTION 4 --
-s4 = Section (S "Specific" +:+ (titleize systemdescription)) [s4_p1, s4_1, s4_2]
+s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]
 
 s4_p1 = Con $ Paragraph $ S "This section first presents the problem description, which gives a high-level view of the problem to be solved.  This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope."
 

@@ -47,10 +47,10 @@ problem         = npnc "problem"        (cn' "problem")
 theory          = npnc "theory"         (cnIES "theory")
 definition      = npnc "definition"     (cn' "definition")
 
-tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits, sciComS :: NPNC
+tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits, sciCompS :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
-sciComS      = npnc "sciComS"      (cn' "scientific computing software")
+sciCompS     = npnc "sciCompS"      (cn' "scientific computing software")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)

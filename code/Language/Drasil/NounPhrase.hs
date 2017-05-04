@@ -2,8 +2,8 @@
 module Language.Drasil.NounPhrase 
   ( NounPhrase(..)
   , NP
-  , pn, pn', pn'', pn''', pnIrr
-  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES
+  , pn, pn', pn'', pn''', pnX, pnIrr
+  , cn, cn', cn'', cn''', cnX, cnIP, cnIrr, cnIES
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
   , compoundPhrase, compoundPhrase'
   , at_start, at_start', titleize, titleize'
@@ -57,7 +57,7 @@ instance NounPhrase NP where
   titleCase n@(Phrase _ _ _ r)        f = cap (f n) r
   
 -- ===Constructors=== --
-pn, pn', pn'', pn''' :: String -> NP
+pn, pn', pn'', pn''', pnX :: String -> NP
 pn    n = ProperNoun n SelfPlur
 pn'   n = ProperNoun n AddS
 pn''  n = ProperNoun n AddE
@@ -67,7 +67,7 @@ pnX   n = ProperNoun n PluralX
 pnIrr :: String -> PluralRule -> NP
 pnIrr = ProperNoun
 
-cn, cn', cn'', cn''' :: String -> NP
+cn, cn', cn'', cn''', cnX :: String -> NP
 cn    n = CommonNoun n SelfPlur CapFirst
 cn'   n = CommonNoun n AddS CapFirst
 cn''  n = CommonNoun n AddE CapFirst

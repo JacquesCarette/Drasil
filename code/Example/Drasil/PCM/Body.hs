@@ -32,7 +32,7 @@ pcm_srs = SRS.doc' sWHS (name thulasi) [s1,s4]
 
 s1 = refSec [s1_1, s1_2, s1_3]
 
-s1_1 = Section (S "Table of Units") [Con s1_1_intro,Con s1_1_table]
+s1_1 = Section ((titleize $ tOfUnits ^. term)) [Con s1_1_intro,Con s1_1_table]
 
 s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S "SI (Syst" :+: (F Grave 'e') :+: S "me International d'Unit" :+:
@@ -40,7 +40,7 @@ s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S "system." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
            S ", several derived" +:+ (plural $ unit_ ^. term) +:+ S "are" +:+ 
            S "employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
-           S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a description" +:+
+           S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+ +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
 s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
@@ -73,10 +73,10 @@ s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 
 s4_intro = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
-  S ". This is followed by the solution characteristics specification," +:+
-  S "which presents the" +:+ (plural assumption) `sC` 
-    (plural $ theory ^. term) :+: S ", definitions and finally the" +:+
-  S "instance model (ODE) that models the solar water heating tank."
+  S ". This is followed by the solution" +:+ (phrase $ characteristicsSpecification ^. term) :+:
+  S ", which presents the" +:+ (plural assumption) `sC` 
+    (plural $ theory ^. term) :+: S "," +:+ (plural $ definition ^. term) +:+ "and finally the" +:+
+  S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --Do verb versions of nouns count?
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
                                             Sub s4_1_2,Sub s4_1_3]
@@ -89,7 +89,7 @@ s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
   
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that" +:+
-  S "are used in subsequent sections and their meaning, with the purpose of" +:+
+  S "are used in subsequent" +:+ (plural $ section ^. term) +:+ "and their meaning, with the purpose of" +:+
   S "reducing ambiguity and making it easier to correctly understand the" +:+
   S "requirements:"
   
@@ -100,7 +100,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $
 s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]
 
-s4_1_2_intro = Paragraph $ S "The physical system of SWHS, as shown in" +:+
+s4_1_2_intro = Paragraph $ S "The physical" +:+ (phrase $ system ^. term) +:+ "of SWHS, as shown in" +:+
   (makeRef fig_tank) :+: S ", includes the following elements:"
 
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of" +:+
@@ -128,7 +128,7 @@ s4_2_intro = Paragraph $ S "The" +:+
   (sMap (map toLower) (phrase $ inModel ^. term)) +:+
   S "(" :+: getAcc ode :+: S ") that governs" +:+ 
   (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
-  S ". The information to understand the meaning of the" +:+
+  S ". The" +:+ (phrase $ information ^. term) +:+ S "to understand the meaning of the" +:+
   (sMap (map toLower) (phrase $ inModel ^. term)) +:+ 
   S "and its derivation is also" +:+ S "presented, so that the" +:+ 
   (sMap (map toLower) (phrase $ inModel ^. term)) +:+ S "can be verified."
@@ -136,8 +136,8 @@ s4_2_intro = Paragraph $ S "The" +:+
 s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro]
 
 s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
-  S "and helps in developing the theoretical model by filling in the" +:+
-  S "missing information for the physical system. The numbers given in the" +:+
+  S "and helps in developing the theoretical" +:+ (phrase $ model ^. term) +:+ S "by filling in the" +:+
+  S "missing" +:+ (phrase $ information ^. term) +:+ S "for the physical" +:+ (phrase $ system ^. term) +:+ S ". The numbers given in the" +:+
   S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
   (map (\ch -> (sMap (map toLower) (phrase $ ch ^. term)) +:+ S "[" :+:
   (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 

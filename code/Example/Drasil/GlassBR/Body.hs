@@ -145,10 +145,9 @@ s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
   S "The" +:+ phrase organization +:+ S "of this" +:+ phrase document +:+ 
-  S "follows the template for an" +:+ (short srs) +:+ 
-  S "for scientific computing software" +:+
-  S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
-  S "some aspects taken from Volere template 16 [3]."
+  S "follows the template for an" +:+ (short srs) +:+ S "for" +:+ 
+  phrase sciCompS +:+ S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+:
+  S "), with some aspects taken from Volere template 16 [3]."
   
 s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
   S "are used to support the definitions of the different models" 
@@ -826,8 +825,8 @@ s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
-  S "drive approach to certifying scientific computing software,") +:+
-  S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
+  S "drive approach to certifying" +:+ phrase sciCompS) `sC`  S "Master's thesis"
+  `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   S "template for scientific computing,") +:+ S "in Proceedings of the" +:+
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 

@@ -165,11 +165,11 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
   S "writing the design specification and the software" +:+
-  S "verification and validation plan. The design document" +:+
+  (short vav) +:+ S "plan. The design document" +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
   S "on the numerical algorithms and programming environment" +:+
-  S "The verification and validation plan will show the" +:+
+  S "The" +:+ (short vav) +:+ S plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
   S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 

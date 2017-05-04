@@ -36,19 +36,13 @@ impulseVec  = ucFromVC QP.impulseV impulseU
 impulseScl  = ucFromVC QP.impulseS impulseU
 len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
---jVect       = unFromVC jvec metre
---            where jvec = cvR 
 iVect       = ucFromVC ivec metre
             where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "horizontal") (QM.unit_vect ^. term)) "unit vector" ) (QM.unit_vect ^. symbol)
             --FIXME: Better way to parametrize a ConVar?
---iVect       = uc' "i" (nounPhraseSP "horizontal unit vector")
---  "FIXME: Define this or remove the need for definitions" (vec (hat lI)) metre
 
 jVect       = ucFromVC ivec metre
             where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) "unit vector" ) (vec $ hat lJ)
             --FIXME: Better way to parametrize a ConVar?
---jVect       = uc' "j" (nounPhraseSP "vertical unit vector")
---  "FIXME: Define this or remove the need for definitions" (vec (hat lJ)) metre
 
 normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
   "FIXME: Define this or remove the need for definitions"(vec lN) metre
@@ -182,9 +176,16 @@ perpLen_B = uc' "||r_BP x n||" (nounPhraseSP $
   "FIXME: Define this or remove the need for definitions" 
   (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*",
   (normalVect ^. symbol), Atomic "||"]) metre
-momtInert_A = uc' "I_A" (nounPhraseSP "moment of inertia of rigid body A")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (momtInert ^. symbol) cA) momtInertU
-momtInert_B = uc' "I_B" (nounPhraseSP "moment of inertia of rigid body B")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (momtInert ^. symbol) cB) momtInertU
+
+momtInert_A = ucFromVC momtA metre
+            where momtA = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body A")) "moment Of Inertia" ) (sub (momtInert ^. symbol) cA)
+
+momtInert_B = ucFromVC momtB metre
+            where momtB = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body B")) "moment Of Inertia" ) (sub (momtInert ^. symbol) cB)
+
+--momtInert_A = uc' "I_A" (nounPhraseSP "moment of inertia of rigid body A")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sub (momtInert ^. symbol) cA) momtInertU
+--momtInert_B = uc' "I_B" (nounPhraseSP "moment of inertia of rigid body B")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sub (momtInert ^. symbol) cB) momtInertU

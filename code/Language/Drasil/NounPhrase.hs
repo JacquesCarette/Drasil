@@ -62,6 +62,7 @@ pn    n = ProperNoun n SelfPlur
 pn'   n = ProperNoun n AddS
 pn''  n = ProperNoun n AddE
 pn''' n = ProperNoun n AddES
+pnX   n = ProperNoun n PluralX
 
 pnIrr :: String -> PluralRule -> NP
 pnIrr = ProperNoun
@@ -71,6 +72,7 @@ cn    n = CommonNoun n SelfPlur CapFirst
 cn'   n = CommonNoun n AddS CapFirst
 cn''  n = CommonNoun n AddE CapFirst
 cn''' n = CommonNoun n AddES CapFirst
+cnX   n = CommonNoun n PluralX CapFirst
 
 cnIES :: String -> NP
 cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
@@ -119,6 +121,7 @@ data PluralRule = AddS
                 | AddE
                 | AddES
                 | SelfPlur
+                | PluralX
                 | IrregPlur (String -> String)
 
 -- DO NOT EXPORT --                
@@ -127,6 +130,7 @@ sPlur s@(S _) AddS = s :+: S "s"
 sPlur s@(S _) AddE = s :+: S "e"
 sPlur s@(S _) AddES = sPlur (sPlur s AddE) AddS
 sPlur s@(S _) SelfPlur = s
+sPlur s@(S _) PluralX = S $ init . init s ++ "ices"
 sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a

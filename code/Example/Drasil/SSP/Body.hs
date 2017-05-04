@@ -145,10 +145,16 @@ s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
 s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
 
 s2_3_p1 = Con $ Paragraph $ S "The organization of this document" +:+
-  S "follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai.  The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions.  For readers that would like a more bottom up approach, they can start reading the instance models in " :+: makeRef sec_IMs :+: S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
+  S "follows the template for an SRS for scientific computing" +:+
+  S "software proposed by Koothoor as well as Smith and Lai." +:+ 
+  S " The presentation follows the standard pattern of presenting" +:+
+  S "goals, theories, definitions, and assumptions.  For readers" +:+
+  S "that would like a more bottom up approach, they can start" +:+
+  S "reading the instance models in " :+: makeRef sec_IMs :+:
+  S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
 
 -- SECTION 3 --
-s3 = Section (titleize generalSystemDescription)) [s3_p1, s3_1, s3_2]
+s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
 
 s3_p1 = Con $ Paragraph $ S "This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints."
 

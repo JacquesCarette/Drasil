@@ -36,13 +36,12 @@ impulseVec  = ucFromVC QP.impulseV impulseU
 impulseScl  = ucFromVC QP.impulseS impulseU
 len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
+--FIXME: Better way to parametrize a ConVar?
 iVect       = ucFromVC ivec metre
-            where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "horizontal") (QM.unit_vect ^. term)) "unit vector" ) (QM.unit_vect ^. symbol)
-            --FIXME: Better way to parametrize a ConVar?
-
+  where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "horizontal") (QM.unit_vect ^. term)) "unit vector" ) (QM.unit_vect ^. symbol)
+--FIXME: Better way to parametrize a ConVar?
 jVect       = ucFromVC ivec metre
-            where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) "unit vector" ) (vec $ hat lJ)
-            --FIXME: Better way to parametrize a ConVar?
+  where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) "unit vector" ) (vec $ hat lJ)
 
 normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
   "FIXME: Define this or remove the need for definitions"(vec lN) metre
@@ -92,18 +91,28 @@ mass_1  = uc' "m_1" (nounPhraseSP "mass of the first body")
 mass_2  = uc' "m_2" (nounPhraseSP "mass of the second body")
   "FIXME: Define this or remove the need for definitions" 
   (sub (mass ^. symbol) (Atomic "2")) kilogram
-dispUnit = uc' "rhat" (nounPhraseSP "unit displacement vector")
-  "FIXME: Define this or remove the need for definitions" (vec (hat lR)) metre
+
+dispUnit = ucFromVC dispVect metre
+  where dispVect = cvR (dcc "dispUnit" (compoundPhrase' (cn "displacement")  (QM.unit_vect ^. term)) "displacement unit vector") (vec (hat lR))
+
+--dispUnit = uc' "rhat" (nounPhraseSP "unit displacement vector")
+--  "FIXME: Define this or remove the need for definitions" (vec (hat lR)) metre
 -- Improvised norm symbols --
 --FIXME: Properly implement Norm
-dispNorm    = uc' "||r||" (nounPhraseSP "Euclidean norm of the displacement")
-  "FIXME: Define this or remove the need for definitions" 
-  (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
+--dispNorm    = uc' "||r||" (nounPhraseSP "Euclidean norm of the displacement")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
 
---sqrDist = ucFromVC MP.EuclideanNorm m_2
-sqrDist = uc' "||r||^2" (nounPhraseSP "squared distance")
-  "FIXME: Define this or remove the need for definitions" 
-  (sup (dispNorm ^. symbol) (Atomic "2")) m_2
+-- FIXME: parametrized hack
+dispNorm = ucFromVC norm metre
+  where norm = cvR (dcc "euclideanNorm" (compoundPhrase' (QM.euclid_norm ^. term) (cn "of the displacement")) "Euclidean Norm" ) (QM.euclid_norm ^. symbol)
+
+-- FIXME: parametrized hack
+sqrDist = ucFromVC norm m_2
+  where norm = cvR (dcc "euclideanNorm" (cn' "squared distance") "Euclidean Norm" ) (sup (QM.euclid_norm ^. symbol) (Atomic "2"))
+--sqrDist = uc' "||r||^2" (nounPhraseSP "squared distance")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sup (dispNorm ^. symbol) (Atomic "2")) m_2
 
 -- T4 --
 
@@ -178,9 +187,9 @@ perpLen_B = uc' "||r_BP x n||" (nounPhraseSP $
   (normalVect ^. symbol), Atomic "||"]) metre
 
 --FIXME: Better way to parametrize a ConVar?
-momtInert_A = ucFromVC momtA metre
-            where momtA = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body A")) "Moment Of Inertia" ) (sub (momtInert ^. symbol) cA)
+momtInert_A = ucFromVC momtA momtInertU
+  where momtA = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body A")) "Moment Of Inertia" ) (sub (momtInert ^. symbol) cA)
 
 --FIXME: Better way to parametrize a ConVar?
-momtInert_B = ucFromVC momtB metre
-            where momtB = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body B")) "Moment Of Inertia" ) (sub (momtInert ^. symbol) cB)
+momtInert_B = ucFromVC momtB momtInertU
+  where momtB = cvR (dcc "momentOfInertia" (compoundPhrase' (QP.momentOfInertia ^. term) (cn "of rigid body B")) "Moment Of Inertia" ) (sub (momtInert ^. symbol) cB)

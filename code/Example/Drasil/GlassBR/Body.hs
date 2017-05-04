@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Math (matrix)
 import Prelude hiding (id)
 
 import           Drasil.TableOfUnits
@@ -686,7 +686,7 @@ s9_table1 = Table [S "",
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
   S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
   S ""]]
-  (S "Traceability Matrix Showing the Connections Between Items of Different"
+  (S "Traceability" +:+ titleize matrix +:+ S "Showing the Connections Between Items of Different"
   +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)

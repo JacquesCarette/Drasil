@@ -120,8 +120,11 @@ sqrDist = ucFromVC norm m_2
 
 vel_B, vel_O, r_OB :: UnitalChunk
 
-vel_B   = uc' "v_B" (nounPhraseSP "velocity at point B")
-  "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cB) velU
+-- FIXME: parametrized hacked
+vel_B   = ucFromVC velo velU
+  where velo = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term) (cn "at point B")) (phrase $ QP.velocity ^. term)) (sup (QP.velocity ^. symbol) cB)
+--vel_B   = uc' "v_B" (nounPhraseSP "velocity at point B")
+--  "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cB) velU
 vel_O   = uc' "v_O" (nounPhraseSP "velocity at the origin")
   "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cO) velU
 r_OB    = uc' "r_OB" 

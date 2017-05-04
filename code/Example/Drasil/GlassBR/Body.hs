@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
 
 import           Drasil.TableOfUnits
-import           Drasil.TableOfSymbols
+import           Drasil.OfSymbols
 import           Drasil.TableOfAbbAndAcronyms
 import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
@@ -217,7 +217,7 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated values"]])
-  (S "Table 1: Use Case Table") True
+  (titleize table_ +:+ S "1: Use Case Table") True
 
 s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
 
@@ -435,7 +435,7 @@ s6_2_5 = Section (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1,
   Con s6_2_5_table2, Con s6_2_5_intro2] --, Con s6_2_5_table3]
 
 s6_2_5_intro = Paragraph $
-  S "Table 2 (" :+: --(makeRef s6_2_5_table1) :+: 
+  titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ") shows the data" +:+
   S "constraints on the input variables. The column of" +:+ phrase physical +:+ S "constraints"
   +:+ S "gives the" +:+ phrase physical +:+ S "limitations on the range of values that can" +:+
@@ -445,9 +445,9 @@ s6_2_5_intro = Paragraph $
   S "a feel for a common scenario. The uncertainty column provides an" +:+
   S "estimate of the confidence with which the" +:+ phrase physical +:+ S "quantities can be"
   +:+ S "measured. This information would be part of the input if one were"
-  +:+ S "performing an uncertainty quantification exercise. Table 3 (" :+:
+  +:+ S "performing an uncertainty quantification exercise." +:+ titleize table_ +:+ S "3 (" :+:
   (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+
-  S "parameters used in Table 2 (" :+: --(makeRef s6_2_5_table1) :+: 
+  S "parameters used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
   (P $ ar_max ^. symbol) +:+ S "refers to the" +:+
   (sLower (phrase $ ar_max ^. term)) +:+. S "for the plate of glass"
@@ -482,10 +482,10 @@ s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable
   (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
   (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
   (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
-  (S "Table 3: Specification Parameter Values") True
+  (titleize table_ +:+ S "3: Specification Parameter Values") True
 
 s6_2_5_intro2 = Paragraph $
-  S "Table 4 (" :+: --(makeRef s6_2_5_table3) :+:
+  titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
   S ") shows the constraints"
   +:+. S "that must be satisfied by the output"
 
@@ -614,7 +614,7 @@ s9_intro1 = Paragraph $
   +:+ S "on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
-  S "should be modified as well. Table 5" +:+ sParen (makeRef s9_table1) +:+ 
+  S "should be modified as well." +:+ titleize table_ +:+ S "5" +:+ sParen (makeRef s9_table1) +:+ 
   S "shows the dependencies of" +:+ 
   plural thModel `sC` 
   (plural dataDefn) +:+ S "and" +:+

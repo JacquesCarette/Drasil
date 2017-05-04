@@ -3,8 +3,9 @@ module Language.Drasil.Misc where
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unital
+import Language.Drasil.NounPhrase (titleize)
 
 import Control.Lens ((^.))
 
@@ -24,3 +25,6 @@ getAcc = (\(Just x) -> x) . getA
 
 unit_symb :: (Unital c) => c -> USymb
 unit_symb c = (unit c) ^. usymb
+
+introduceAbb :: NamedIdea n => n -> Sentence
+introduceAbb n = (titleize $ n ^. term) +:+ (sParen (short n))

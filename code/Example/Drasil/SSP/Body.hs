@@ -162,7 +162,7 @@ s3_p1 = Con $ Paragraph $ S "This section provides general information" +:+
   S "and the system constraints."
 
 -- SECTION 3.1 --
-s3_1 = Sub $ Section (S "User Characteristics") [s3_1_p1]
+s3_1 = Sub $ Section (S "User" +:+ titleize characteristics) [s3_1_p1]
 
 s3_1_p1 = Con $ Paragraph $ S "The end user of SSA should" +:+
   S "have an understanding of undergraduate Level 1 Calculus and" +:+
@@ -254,14 +254,14 @@ s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
   S "instance models can be verified."
 
 -- SECTION 4.2.1 --
-s4_2_1 = Sub $ Section (S "Assumptions") [s4_2_1_p1, s4_2_1_list]
+s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
 
 s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
   S "original problem and helps in developing the theoretical" +:+
   S "model by filling in the missing information for the" +:+ (phrase physicalSystem) :+:
   S ". The numbers given in the square brackets refer to" +:+
   S "the data definition, or the instance model, in which the" +:+
-  S "respective assumption is used."
+  S "respective" +:+ (phrase assumption) +:+ S "is used."
 
 s4_2_1_list = Con $ Enumeration $ Simple $ [
   (S "A1", Flat $ S "The slip surface is concave with respect to the slope surface. The " :+: P (coords ^. symbol) :+: S " coordinates of the failure surface follow a monotonic function."),
@@ -348,4 +348,4 @@ s5_2_p1 = Con $ Paragraph $ S "SSA is intended to be an" +:+
   S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
-s6 = Section (S "Likely Changes") []
+s6 = Section (titleize' likelyChg) []

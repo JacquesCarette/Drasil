@@ -97,31 +97,31 @@ s2_intro = Paragraph $
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
-  S "This" +:+ phrase section_ +:+ S "explains the purpose of the" +:+
-  S "document is designed to fulfil, the scope of the requirements and" +:+
-  S "the organization of the document: what the document is based on and" +:+.
+  S "This" +:+ phrase section_ +:+ S "explains the purpose of the" +:+ phrase document +:+
+  S "is designed to fulfil, the scope of the requirements and" +:+
+  S "the organization of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
   S "intended to portray"
 
 s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 s2_1_intro = 
   [Paragraph $
-  S "The main purpose of this document is to predict whether a given" +:+
+  S "The main purpose of this" +:+ phrase document +:+ S "is to predict whether a given" +:+
   (phrase $ glaSlab ^. term) +:+ S "is likely to resist a" +:+
   S "specified" +:+. (phrase $ blast ^. term) +:+
   S "The goals and" +:+ plural thModel +:+
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ S "and unambiguous" +:+
-  S "definitions. This document is intended to be used as a reference" +:+
+  S "definitions. This" +:+ phrase document +:+ S "is intended to be used as a reference" +:+
   S "to provide all information necessary to understand and verify the" +:+
   S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what problem is being solved, but not how" +:+.
   S "to solve it",
   Paragraph $
-  S "This document will be used as a starting point for subsequent" +:+
+  S "This" +:+ phrase document +:+ S "will be used as a starting point for subsequent" +:+
   S "development phases, including writing the design specification and" +:+
-  S "the software verification and validation plan. The design document" +:+
+  S "the software verification and validation plan. The design" +:+ phrase document +:+
   S "will show how the requirements are to be realized, including" +:+.
   S "decisions on the numerical algorithms and programming environment" +:+
   S "The verification and validation plan will show the steps that will" +:+
@@ -143,7 +143,7 @@ s2_2_intro = Paragraph $
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
-  S "The organization of this document follows the template for an" +:+ 
+  S "The organization of this" +:+ phrase document +:+ S "follows the template for an" +:+ 
   (short srs) +:+ S "for scientific computing software" +:+
   S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
   S "some aspects taken from Volere template 16 [3]."
@@ -824,7 +824,7 @@ fig_4 = Figure (S "Figure 4: Traceability Matrix Showing the Connections" +:+
 s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(S "[1]", S "N. Koothoor" `sC` Quote (S "A document drive approach to" +:+
+  [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ S "drive approach to" +:+
   S "certifying scientific computing software,") +:+ S "Master's thesis" `sC`
   S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new requirements" +:+

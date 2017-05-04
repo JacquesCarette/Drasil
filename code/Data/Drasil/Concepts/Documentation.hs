@@ -32,7 +32,7 @@ physical        = npnc "physical"       (cn' "physical")
 system          = npnc "system"         (cn' "system")
 description     = npnc "description"    (cn' "description")
 specific        = npnc "specific"       (cn' "specific") -- ??
-general         = npnc "general"        (cn' "general")
+general         = npnc "general"        (cn' "general")  --FIXME: adjective?
 symbol_         = npnc "symbol"         (cn' "symbol")
 units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
 unit_           = npnc "unit"           (cn' "unit")
@@ -47,9 +47,10 @@ problem         = npnc "problem"        (cn' "problem")
 theory          = npnc "theory"         (cnIES "theory")
 definition      = npnc "definition"     (cn' "definition")
 
-tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits :: NPNC
+tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits, sciComS :: NPNC
 
 refmat       = npnc "refmat"       (cn' "reference material")
+sciComS      = npnc "sciComS"      (cn' "scientific computing software")
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)

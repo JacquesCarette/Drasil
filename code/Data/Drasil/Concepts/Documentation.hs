@@ -26,23 +26,25 @@ srs         = commonINP "srs"         (cn' "software requirements specification"
 
 section_, physical, system, description, specific, general, symbol_, units_, 
   table_, introduction, organization, document, purpose, characteristics, specification,
-    unit_ :: NPNC
-section_        = npnc "section"      (cn' "section")
-physical        = npnc "physical"      (cn' "physical")
-system          = npnc "system"       (cn' "system")
-description     = npnc "description"  (cn' "description")
-specific        = npnc "specific"     (cn' "specific") -- ??
-general         = npnc "general"      (cn' "general")
-symbol_         = npnc "symbol"       (cn' "symbol")
-units_          = npnc "units"        (cn' "units")
-unit_           = npnc "unit"         (cn' "unit")
-table_          = npnc "table"        (cn' "table")
-introduction    = npnc "introduction" (cn' "introduction")
-organization    = npnc "organization" (cn' "organization")
-document        = npnc "document"     (cn' "document")
-purpose         = npnc "purpose"      (cn' "purpose")
-characteristics = npnc "characteristics" (cn' "characteristics")
-specification   = npnc "specification" (cn' "specification")
+    unit_, problem, theory :: NPNC
+section_        = npnc "section"        (cn' "section")
+physical        = npnc "physical"       (cn' "physical")
+system          = npnc "system"         (cn' "system")
+description     = npnc "description"    (cn' "description")
+specific        = npnc "specific"       (cn' "specific") -- ??
+general         = npnc "general"        (cn' "general")
+symbol_         = npnc "symbol"         (cn' "symbol")
+units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
+unit_           = npnc "unit"           (cn' "unit")
+table_          = npnc "table"          (cn' "table")
+introduction    = npnc "introduction"   (cn' "introduction")
+organization    = npnc "organization"   (cn' "organization")
+document        = npnc "document"       (cn' "document")
+purpose         = npnc "purpose"        (cn' "purpose")
+characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
+specification   = npnc "specification"  (cn' "specification")
+problem         = npnc "problem"        (cn' "problem")
+theory          = npnc "theory"         (cnIES "theory")
 
 tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits :: NPNC
 

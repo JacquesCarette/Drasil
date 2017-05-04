@@ -98,7 +98,7 @@ s2_intro = Paragraph $
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This" +:+ phrase section_ +:+ S "explains the" +:+ phrase purpose +:+ S "of the" +:+ phrase document +:+
-  S "is designed to fulfil, the scope of the requirements and" +:+
+  S "is designed to fulfil, the scope of the" +:+ plural requirement +:+ S "and" +:+
   S "the" +:+ phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
   S "intended to portray"
 
@@ -122,7 +122,7 @@ s2_1_intro =
   S "This" +:+ phrase document +:+ S "will be used as a starting point for subsequent" +:+
   S "development phases, including writing the design specification and" +:+
   S "the software verification and validation plan. The design" +:+ phrase document +:+
-  S "will show how the requirements are to be realized, including" +:+.
+  S "will show how the" +:+ plural requirement +:+ S "are to be realized, including" +:+.
   S "decisions on the numerical algorithms and programming environment" +:+
   S "The verification and validation plan will show the steps that will" +:+
   S "be used to increase confidence in the software documentation and" +:+.
@@ -237,7 +237,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "is greater than" +:+. (sLower (phrase $ demandq ^. term)) +:+
   (phrase $ capacity ^. term) +:+ S "is the" +:+
   (sLower (capacity ^. defn)) +:+ S "and" +:+
-  (sLower (phrase $ demandq ^. term)) +:+ S "is the requirement" +:+
+  (sLower (phrase $ demandq ^. term)) +:+ S "is the" +:+ phrase requirement +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
   S "is to check whether the calculated probability" +:+ 
   sParen (P $ prob_br ^. symbol) +:+ 
@@ -719,8 +719,8 @@ s9_table2 = Table [S "", S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "X", S "X", S "X",
   S "", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "", S "",
   S ""]]
-  (S "Traceability Matrix Showing the Connections Between Requirements and"
-  +:+ S "Other Items") True
+  (S "Traceability Matrix Showing the Connections Between" +:+
+  titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
 s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
@@ -827,16 +827,16 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ S "drive approach to" +:+
   S "certifying scientific computing software,") +:+ S "Master's thesis" `sC`
   S "McMaster University, Hamilton, Ontario, Canada, 2013."),
-  (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new requirements" +:+
+  (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   S "template for scientific computing,") +:+ S "in Proceedings of the" +:+
-  S "First International Workshop on Situational Requirements Engineering" +:+
-  S "Processes - Methods, Techniques and Tools to Support Situation-Specific"
-  +:+ S "Requirements Engineering Processes, SREP'05 (J.Ralyt" :+: 
+  S "First International Workshop on Situational" +:+ titleize' requirement +:+ S "Engineering" +:+
+  S "Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
+  titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 
   (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
-  S "Requirements Engineering Conference, 2005."),
+  titleize' requirement +:+ S "Engineering Conference, 2005."),
   (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere ":+:
-  S "requirements specification template edition 16.") :+: S "" +:+ 
+  plural requirement +:+ S "specification template edition 16.") :+: S "" +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"

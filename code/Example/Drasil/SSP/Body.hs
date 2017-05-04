@@ -48,7 +48,7 @@ s4_2_2_tmods :: [SecCons]
 s1 = refSec [s1_1, s1_2, s1_3]
 
 -- SECTION 1.1 --
-s1_1 = Section (S "Table of Units") [s1_1_intro, s1_1_table]
+s1_1 = Section (titleize tOfUnits) [s1_1_intro, s1_1_table]
 
 s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the" +:+
   S "soil that are of interest when examining slope stability problems" +:+
@@ -340,7 +340,10 @@ table_inputdata =  Table (map titleize [symbol_, units_, description]) (mkTable
 -- SECTION 5.2 --
 s5_2 = Sub $ Section (S "Nonfunctional Requirements") [s5_2_p1]
 
-s5_2_p1 = Con $ Paragraph $ S "SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability."
+s5_2_p1 = Con $ Paragraph $ S "SSA is intended to be an" +:+
+  S "educational tool, therefore accuracy and performance speed" +:+
+  S "are secondary program priorities to correctness," +:+
+  S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
 s6 = Section (S "Likely Changes") []

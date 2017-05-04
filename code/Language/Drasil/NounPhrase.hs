@@ -76,7 +76,7 @@ cnIES :: String -> NP
 cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 
 cnICES :: String -> NP
-cnICES n = CommonNoun n (IrregPlur (\x -> init . init x ++ "ices")) CapFirst
+cnICES n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "ices")) CapFirst
 
 cnIP :: String -> PluralRule -> NP
 cnIP n p = CommonNoun n p CapFirst

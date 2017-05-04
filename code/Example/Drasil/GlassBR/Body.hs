@@ -99,7 +99,7 @@ s2_intro = Paragraph $
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This" +:+ phrase section_ +:+ S "explains the purpose of the" +:+ phrase document +:+
   S "is designed to fulfil, the scope of the requirements and" +:+
-  S "the organization of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
+  S "the" +:+ phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
   S "intended to portray"
 
 s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
@@ -143,7 +143,7 @@ s2_2_intro = Paragraph $
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
-  S "The organization of this" +:+ phrase document +:+ S "follows the template for an" +:+ 
+  S "The" +:+ phrase organization +:+ S "of this" +:+ phrase document +:+ S "follows the template for an" +:+ 
   (short srs) +:+ S "for scientific computing software" +:+
   S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+: S "), with" +:+ 
   S "some aspects taken from Volere template 16 [3]."

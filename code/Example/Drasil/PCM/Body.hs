@@ -37,13 +37,13 @@ s1_1 = Section (S "Table of Units") [Con s1_1_intro,Con s1_1_table]
 s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S "SI (Syst" :+: (F Grave 'e') :+: S "me International d'Unit" :+:
            (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ unit_ ^. term) +:+
-           S "system." +:+ S "In addition to the basic" +:+ (phrase $ unit_ ^. term) :+:
+           S "system." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
            S ", several derived" +:+ (plural $ unit_ ^. term) +:+ S "are" +:+ 
            S "employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a description" +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
-s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), S "Name"] (mkTable
+s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))

@@ -75,7 +75,7 @@ s4_intro = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem to be solved" :+:
   S ". This is followed by the solution characteristics specification," +:+
   S "which presents the" +:+ (plural assumption) `sC` 
-  S "theories, definitions and finally the" +:+
+    (plural $ theory ^. term) :+: S ", definitions and finally the" +:+
   S "instance model (ODE) that models the solar water heating tank."
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,

@@ -97,7 +97,7 @@ s2_intro = Paragraph $
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
-  S "This" +:+ phrase section_ +:+ S "explains the purpose of the" +:+ phrase document +:+
+  S "This" +:+ phrase section_ +:+ S "explains the" +:+ phrase purpose +:+ S "of the" +:+ phrase document +:+
   S "is designed to fulfil, the scope of the requirements and" +:+
   S "the" +:+ phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
   S "intended to portray"
@@ -106,7 +106,7 @@ s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 s2_1_intro = 
   [Paragraph $
-  S "The main purpose of this" +:+ phrase document +:+ S "is to predict whether a given" +:+
+  S "The main" +:+ phrase purpose +:+ S "of this" +:+ phrase document +:+ S "is to predict whether a given" +:+
   (phrase $ glaSlab ^. term) +:+ S "is likely to resist a" +:+
   S "specified" +:+. (phrase $ blast ^. term) +:+
   S "The goals and" +:+ plural thModel +:+
@@ -274,7 +274,7 @@ s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro,
   
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent" +:+
-  S "sections and their meaning, with the purpose of reducing ambiguity" +:+
+  S "sections and their meaning, with the" +:+ phrase purpose +:+ S "of reducing ambiguity" +:+
   S "and making it easier to correctly understand the" +:+. 
   (plural requirement) +:+ S "All of the terms" +:+
   S "are extracted from [4] in" +:+. (makeRef s10)
@@ -610,7 +610,7 @@ s9 = Section(S "Traceability Matrices and Graphs") ([Con s9_intro1,
   [Con fig_2, Con fig_3, Con fig_4])
 
 s9_intro1 = Paragraph $
-  S "The purpose of the traceability matrices is to provide easy references"
+  S "The" +:+ phrase purpose +:+ S "of the traceability matrices is to provide easy references"
   +:+ S "on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
@@ -784,7 +784,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 
 s9_intro2 = 
   [Paragraph $
-  S "The purpose of the traceability graphs is also to provide easy" +:+ 
+  S "The" +:+ phrase purpose +:+ S "of the traceability graphs is also to provide easy" +:+ 
   S "references on what has to be additionally modified if a certain" +:+
   S "component is changed. The arrows in the graphs represent" +:+
   S "dependencies. The component at the tail of an arrow is depended on" +:+

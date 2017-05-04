@@ -13,7 +13,7 @@ norm_vect = dcc "norm_vect" (cn' "normal vector") "unit outward normal vector fo
 -- could use better name for this? namespace collision when using orientation
 orient = dcc "orientation" (cn' "orientation") "orientation"
 unit_vect = dcc "unit_vect" (cn' "unit vector") "unit vector"
-euclid_norm = dcc "euclid_norm" (cn' "euclidean norm") "euclidean norm"
+euclid_norm = dcc "euclid_norm" (cn' "Euclidean norm") "Euclidean norm"
 
 matrix = dcc "matrix" (cnICES "matrix") "matrix"
 

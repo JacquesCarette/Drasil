@@ -66,7 +66,7 @@ pn''' n = ProperNoun n AddES
 pnIrr :: String -> PluralRule -> NP
 pnIrr = ProperNoun
 
-cn, cn', cn'', cn''', cnX :: String -> NP
+cn, cn', cn'', cn''' :: String -> NP
 cn    n = CommonNoun n SelfPlur CapFirst
 cn'   n = CommonNoun n AddS CapFirst
 cn''  n = CommonNoun n AddE CapFirst

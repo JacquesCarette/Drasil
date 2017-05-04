@@ -45,6 +45,7 @@ characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventu
 specification   = npnc "specification"  (cn' "specification")
 problem         = npnc "problem"        (cn' "problem")
 theory          = npnc "theory"         (cnIES "theory")
+definition      = npnc "definition"     (cn' "definition")
 
 tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits :: NPNC
 

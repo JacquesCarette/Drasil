@@ -606,7 +606,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section(S "Traceability Matrices and Graphs") ([Con s9_intro1, 
+s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S"and Graphs") ([Con s9_intro1, 
   Con s9_table1, Con s9_table2, Con s9_table3] ++ (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
 
@@ -686,7 +686,7 @@ s9_table1 = Table [S "",
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
   S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
   S ""]]
-  (S "Traceability" +:+ titleize matrix +:+ S "Showing the Connections Between Items of Different"
+  (S "Traceability Matrix Showing the Connections Between Items of Different"
   +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)

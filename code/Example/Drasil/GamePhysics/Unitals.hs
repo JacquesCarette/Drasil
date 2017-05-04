@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Unitals where
 import Language.Drasil
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Quantities.Physics as QP
-import qualified Data.Drasil.Quantities.Math as MP
+import qualified Data.Drasil.Quantities.Math as QM
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 
 import Control.Lens((^.))
@@ -44,7 +44,7 @@ normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
   "FIXME: Define this or remove the need for definitions"(vec lN) metre
 angVel      = ucFromVC QP.angularV angVelU
 position    = ucFromVC QP.position metre
-orientation = ucFromVC MP.orientation radians
+orientation = ucFromVC QM.orientation radians
   --{uc' "phi" (cn' "orientation")
   --"FIXME: Define this or remove the need for definitions" (Greek Phi_L) radians
 dist        = ucFromVC QP.distance metre
@@ -95,6 +95,8 @@ dispUnit = uc' "rhat" (nounPhraseSP "unit displacement vector")
 dispNorm    = uc' "||r||" (nounPhraseSP "Euclidean norm of the displacement")
   "FIXME: Define this or remove the need for definitions" 
   (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
+
+--sqrDist = ucFromVC MP.EuclideanNorm m_2
 sqrDist = uc' "||r||^2" (nounPhraseSP "squared distance")
   "FIXME: Define this or remove the need for definitions" 
   (sup (dispNorm ^. symbol) (Atomic "2")) m_2

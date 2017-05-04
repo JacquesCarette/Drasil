@@ -263,18 +263,42 @@ s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
   S "the data definition, or the instance model, in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
-s4_2_1_list = Con $ Enumeration $ Simple $ [
-  (S "A1", Flat $ S "The slip surface is concave with respect to the slope surface. The " :+: P (coords ^. symbol) :+: S " coordinates of the failure surface follow a monotonic function."),
-  (S "A2", Flat $ S "The geometry of the slope, and the material properties of the soil layers are given as inputs."),
-  (S "A3", Flat $ S "The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight."),
-  (S "A4", Flat $ S "Soil layers are treated as if they have isotropic properties."),
-  (S "A5", Flat $ S "Interslice normal and shear forces have a linear relationship, proportional to a constant (" :+: P (lambda ^. symbol) :+: S ") and an interslice force function (" :+: P (fi ^. symbol) :+: S ") depending on x position."),
-  (S "A6", Flat $ S "Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety (" :+: P (fs ^. symbol) :+: S "), and the Coulomb sliding law."),
-  (S "A7", Flat $ S "The stress-strain curve for interslice relationships is linear with a constant slope."),
-  (S "A8", Flat $ S "The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate."),
-  (S "A9", Flat $ S "The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship."),
-  (S "A10", Flat $ S "The surface and base of a slice between interslice nodes are approximated as straight lines.")
-  ]
+s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
+  (S "A1", S "The slip surface is concave with respect to" +:+
+           S "the slope surface. The" +:+ P (coords ^. symbol) +:+ 
+           S "coordinates of the failure surface follow a" +:+
+           S "monotonic function."),
+  (S "A2", S "The geometry of the slope, and the material" +:+
+           S "properties of the soil layers are given as inputs."),
+  (S "A3", S "The different layers of the soil are homogeneous," +:+
+           S "with consistent soil properties throughout," +:+
+           S "and independent of dry or saturated conditions," +:+
+           S "with the exception of unit weight."),
+  (S "A4", S "Soil layers are treated as if they have" +:+
+           S "isotropic properties."),
+  (S "A5", S "Interslice normal and shear forces have a" +:+
+           S "linear relationship, proportional to a constant" +:+
+           sParen (P (lambda ^. symbol)) +:+ S "and an" +:+
+           S "interslice force function" +:+ sParen (P (fi ^. symbol)) +:+
+           S "depending on x position."),
+  (S "A6", S "Slice to base normal and shear forces have" +:+
+           S "a linear relationship, dependent on the factor" +:+
+           S "of safety" +:+ sParen (P (fs ^. symbol)) :+:
+           S ", and the Coulomb sliding law."),
+  (S "A7", S "The stress-strain curve for interslice" +:+
+           S "relationships is linear with a constant slope."),
+  (S "A8", S "The slope and slip surface extends far into" +:+
+           S "and out of the geometry (z coordinate). This" +:+
+           S "implies plane strain conditions, making 2D" +:+
+           S "analysis appropriate."),
+  (S "A9", S "The effective normal stress is large enough" +:+
+           S "that the resistive shear to effective normal" +:+
+           S "stress relationship can be approximated as a" +:+
+           S "linear relationship."),
+  (S "A10", S "The surface and base of a slice between" +:+
+            S "interslice nodes are approximated as" +:+
+            S "straight lines.")
+  ])
 
 -- SECTION 4.2.2 --
 s4_2_2 = Sub sec_TMs
@@ -316,8 +340,8 @@ s5_1 = Sub $ Section (S "Functional Requirements")
 
 s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R1" , S "Read the input file, and store the" +:+
-            S "data. Necessary input data summarized in" +:+
-            makeRef table_inputdata :+: S "."),
+            S "data. Necessary input data summarized in" +:+.
+            makeRef table_inputdata),
   (S "R2" , S "Generate potential critical slip" +:+ 
             S "surface's for the input slope."),
   (S "R3" , S "Test the slip surfaces to determine" +:+

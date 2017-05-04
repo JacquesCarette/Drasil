@@ -36,10 +36,20 @@ impulseVec  = ucFromVC QP.impulseV impulseU
 impulseScl  = ucFromVC QP.impulseS impulseU
 len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
-iVect       = uc' "i" (nounPhraseSP "horizontal unit vector")
-  "FIXME: Define this or remove the need for definitions" (vec (hat lI)) metre
-jVect       = uc' "j" (nounPhraseSP "vertical unit vector")
-  "FIXME: Define this or remove the need for definitions" (vec (hat lJ)) metre
+--jVect       = unFromVC jvec metre
+--            where jvec = cvR 
+iVect       = ucFromVC ivec metre
+            where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "horizontal") (QM.unit_vect ^. term)) "unit vector" ) (QM.unit_vect ^. symbol)
+            --FIXME: Better way to parametrize a ConVar?
+--iVect       = uc' "i" (nounPhraseSP "horizontal unit vector")
+--  "FIXME: Define this or remove the need for definitions" (vec (hat lI)) metre
+
+jVect       = ucFromVC ivec metre
+            where ivec = cvR (dcc "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) "unit vector" ) (vec $ hat lJ)
+            --FIXME: Better way to parametrize a ConVar?
+--jVect       = uc' "j" (nounPhraseSP "vertical unit vector")
+--  "FIXME: Define this or remove the need for definitions" (vec (hat lJ)) metre
+
 normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
   "FIXME: Define this or remove the need for definitions"(vec lN) metre
 angVel      = ucFromVC QP.angularV angVelU

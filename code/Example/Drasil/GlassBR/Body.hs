@@ -113,9 +113,9 @@ s2_1_intro =
   S "The goals and" +:+ plural thModel +:+
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
-  (plural assumption) +:+ S "and unambiguous" +:+
-  S "definitions. This" +:+ phrase document +:+ S "is intended to be used as a reference" +:+
-  S "to provide all information necessary to understand and verify the" +:+
+  (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
+  S "This" +:+ phrase document +:+ S "is intended to be used as a reference" +:+
+  S "to provide all" +:+ phrase information +:+ S "necessary to understand and verify the" +:+
   S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what problem is being solved, but not how" +:+.
   S "to solve it",
@@ -150,7 +150,7 @@ s2_3_intro =
   S "), with some aspects taken from Volere template 16 [3]."
   
 s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
-  S "are used to support the definitions of the different models" 
+  S "are used to support the" +:+ plural definition +:+ S "of the different" +:+ plural model
   
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
@@ -174,8 +174,8 @@ s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
-  S "information about the" +:+ phrase system `sC` S "identifies the interface" +:+
+  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ phrase information +:+
+  S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
   S "between the" +:+ phrase system +:+ S "and its environment" `sC`
   S "and describes the user characteristics and the system constraints."
 
@@ -185,7 +185,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   [(S "The end user of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
-  (S "The end user is expected to have an understanding of theory behind" +:+
+  (S "The end user is expected to have an understanding of" +:+ phrase theory +:+ S "behind" +:+
   (phrase $ gbr ^. term) +:+ S "and" +:+
   (phrase $ blast ^. term) +:+. S "risk"),
   (S "The end user is expected to have basic computer literacy to handle" +:+.
@@ -257,7 +257,7 @@ s6_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "first presents the problem description, which gives a" +:+
   S "high-level view of the problem to be solved. This is followed by" +:+
   S "the solution" +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
-  (plural assumption) `sC` S "theories, definitions."
+  (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
 s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
   Sub s6_1_2, Sub s6_1_3]
@@ -269,7 +269,7 @@ s6_1_intro = Paragraph $
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+. S "under the conditions"
 
-s6_1_1 = Section (S "Terminology and Definitions") [Con s6_1_1_intro, 
+s6_1_1 = Section (S "Terminology and" +:+ titleize' definition) [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
   
 s6_1_1_intro = Paragraph $ 
@@ -354,8 +354,8 @@ s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
 s6_2_1_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "simplifies the original problem and helps in developing the" 
   +:+ (phrase thModel) +:+ 
-  S "[" :+: (short thModel) :+: S "] by filling in the missing" 
-  +:+ S "information for the" +:+ phrase physicalSystem :+: S ". The numbers given in the" +:+
+  S "[" :+: (short thModel) :+: S "] by filling in the missing" +:+ phrase information
+  +:+ S "for the" +:+ phrase physicalSystem :+: S ". The numbers given in the" +:+
   S "square brackets refer to the" +:+ 
   (phrase dataDefn) +:+
   S "[" :+: (short dataDefn) :+: S "], or" +:+
@@ -440,11 +440,11 @@ s6_2_5_intro = Paragraph $
   S "constraints on the input variables. The column of" +:+ phrase physical +:+ S "constraints"
   +:+ S "gives the" +:+ phrase physical +:+ S "limitations on the range of values that can" +:+
   S " be taken by the variable. The constraints are conservative, to give"
-  +:+ S "the user of the model the flexibility to experiment with unusual"
+  +:+ S "the user of the" +:+ phrase model +:+ S "the flexibility to experiment with unusual"
   +:+ S "situations. The column of typical values is intended to provide" +:+
   S "a feel for a common scenario. The uncertainty column provides an" +:+
   S "estimate of the confidence with which the" +:+ phrase physical +:+ S "quantities can be"
-  +:+ S "measured. This information would be part of the input if one were"
+  +:+ S "measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
   +:+ S "performing an uncertainty quantification exercise." +:+ titleize table_ +:+ S "3 (" :+:
   (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+
   S "parameters used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
@@ -825,7 +825,7 @@ s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
-  S "drive approach to certifying" +:+ phrase sciCompS) `sC`  S "Master's thesis"
+  S "drive approach to certifying" +:+ phrase sciCompS) +:+ S "Master's thesis"
   `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   S "template for scientific computing,") +:+ S "in Proceedings of the" +:+
@@ -854,7 +854,7 @@ s11 = Section(S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
 
 s11_intro = Paragraph $
   S "This appendix holds the graphs" +:+ sParen ((makeRef fig_5) +:+ S "and" +:+
-  (makeRef fig_6)) +:+. S "used for interpolating values needed in the models"
+  (makeRef fig_6)) +:+. S "used for interpolating values needed in the" +:+ plural model
 
 fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (phrase $ sD ^. term) +:+

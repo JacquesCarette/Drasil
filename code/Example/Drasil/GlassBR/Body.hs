@@ -605,7 +605,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S"and Graphs")
+s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S "and Graphs")
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
@@ -710,7 +710,7 @@ s9_table2 = Table [S "", S "T1 (" :+:
   S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
   [S "R2 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "R3 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S"",
+  [S "R3 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S "", S "", S "", S "", S "", S "", S "", S "X", S "", S ""],
   [S "R4 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "X", S "X"],
@@ -719,7 +719,7 @@ s9_table2 = Table [S "", S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "X", S "X", S "X",
   S "", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "", S "",
   S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the" +:+
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S "Showing the" +:+
   S "Connections Between" +:+ titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
@@ -779,7 +779,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   S "", S "", S ""],
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S"Showing the" +:+
+  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S "Showing the" +:+
   S "Connections Between Assumptions and Other Items") True
 
 s9_intro2 = 
@@ -811,14 +811,14 @@ s9_intro2 =
   S "labels and reference can be future work."]
 
 fig_2 = Figure (S "Figure 2: Traceability" +:+ (titleize $ matrix ^. term) 
-  +:+ S"Showing the Connections" +:+ S "Between Items of Different Sections") "Trace.png"
+  +:+ S "Showing the Connections" +:+ S "Between Items of Different Sections") "Trace.png"
 
 fig_3 = Figure (S "Figure 3: Traceability" +:+ (titleize $ matrix ^. term) +:+ 
   S "Showing the Connections" +:+ S "Between" +:+ (titleize' requirement) +:+
   S "and Other Items") "RTrace.png"
 
 fig_4 = Figure (S "Figure 4: Traceability" +:+ (titleize $ matrix ^. term) +:+
-  S"Showing the Connections Between" +:+ (titleize' assumption) +:+
+  S "Showing the Connections Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 
 s10 = Section(S "References") [Con s10_list]

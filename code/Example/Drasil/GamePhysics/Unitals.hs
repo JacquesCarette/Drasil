@@ -131,9 +131,13 @@ pos_CM = uc' "p_CM" (nounPhraseSP $
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
   (sub (position ^. symbol) (Atomic "CM")) metre
-mass_i = uc' "m_i" (nounPhraseSP "mass of the i-th particle")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (mass ^. symbol) lI) kilogram
+
+mass_i = ucFromVC massi kilogram
+  where massi = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the i-th particle")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) lI)
+
+--mass_i = uc' "m_i" (nounPhraseSP "mass of the i-th particle")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sub (mass ^. symbol) lI) kilogram
 pos_i = uc' "p_i" (nounPhraseSP "position vector of the i-th particle")
   "FIXME: Define this or remove the need for definitions" 
   (sub (position ^. symbol) lI) metre
@@ -164,9 +168,13 @@ mass_B = ucFromVC rigidB kilogram
 --  "FIXME: Define this or remove the need for definitions" 
 --  (sub (mass ^. symbol) cB) kilogram
 
-normalLen = uc' "||n||" (nounPhraseSP "length of the normal vector")
-  "FIXME: Define this or remove the need for definitions" 
-  (Concat [Atomic "||",(normalVect ^. symbol), Atomic "||"]) metre
+--FIXME: parametrized hack
+normalLen = ucFromVC normLen metre
+  where normLen = cvR (dccWDS "length of the normal vector" (compoundPhrase' (cn "length of the") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term)) (Concat [Atomic "||",(QM.norm_vect ^. symbol), Atomic "||"]) 
+
+--normalLen = uc' "||n||" (nounPhraseSP "length of the normal vector")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (Concat [Atomic "||",(normalVect ^. symbol), Atomic "||"]) metre
 contDisp_A = uc' "r_AP" (nounPhraseSP $ 
   "displacement vector between the centre of " ++
   "mass of rigid body A and contact point P")

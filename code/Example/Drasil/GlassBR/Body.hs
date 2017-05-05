@@ -231,7 +231,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "parameters describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
   S "Another input the user gives is the tolerable value of" +:+.
-  (phrase $ prob_br ^. term))),
+  (phrase $ prob_br ^. term)),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
   (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
   S "comparing whether" +:+ (phrase $ capacity ^. term) +:+
@@ -611,7 +611,7 @@ s9 = Section((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ gra
   [Con fig_2, Con fig_3, Con fig_4])
 
 s9_intro1 = Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the" +:+ (phrase $ traceyMatrix ^. term) +:+ S "is to provide" +:+
+  S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural $ traceyMatrix ^. term) +:+ S "is to provide" +:+
   S "easy references on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+

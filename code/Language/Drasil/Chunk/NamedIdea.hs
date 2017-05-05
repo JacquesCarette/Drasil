@@ -81,6 +81,9 @@ for' t1 t2 = (short t1) +:+ S "for" +:+ (phrase $ t2 ^. term)
 for'' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 for'' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
+for''' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for''' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (plural $ t2 ^. term)
+
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_ t1 t2 = nounPhrase'' 
   ((phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))

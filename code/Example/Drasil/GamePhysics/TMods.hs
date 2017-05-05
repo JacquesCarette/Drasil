@@ -69,7 +69,7 @@ newtonLUGRel = (C force) :=
 -- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
 
 t3descr :: Sentence
-t3descr = S "Two" +:+ irregPlur (phrase $ rigidBody ^. term) +:+ S "in the universe" +:+
+t3descr = S "Two" +:+ (plural $ rigidBody ^. term) +:+ S "in the universe" +:+
   S "attract each other with a" +:+ (phrase $ force ^. term) +:+ 
   P (force ^. symbol) +:+ sParen (Sy (unit_symb force)) +:+
   S "that is directly proportional to the product of their" +:+
@@ -79,7 +79,7 @@ t3descr = S "Two" +:+ irregPlur (phrase $ rigidBody ^. term) +:+ S "in the unive
   P (sqrDist ^. symbol) +:+ sParen (Sy (unit_symb sqrDist)) +:+
   S "between them. The vector" +:+ P (disp ^. symbol) +:+ 
   sParen (Sy (unit_symb disp)) +:+ S "is the" +:+ (phrase $ disp ^. term) +:+
-  S "between the centres of the" +:+ irregPlur (phrase $ rigidBody ^. term) +:+
+  S "between the centres of the" +:+ (plural $ rigidBody ^. term) +:+
   S "and" +:+ P (dispNorm ^. symbol) +:+ sParen (Sy (unit_symb dispNorm)) +:+ 
   S "represents the" +:+. ((phrase $ dispNorm ^. term) `sC`
   S "or absolute distance between the two") +:+ P (dispUnit ^. symbol) +:+ 
@@ -129,4 +129,4 @@ t5descr = S "The net" +:+ (phrase $ torque ^. term) +:+ P (torque ^. symbol) +:+
   sParen (Sy (unit_symb angAccel)) +:+ S "Here" `sC` P (momtInert ^. symbol) +:+
   sParen (Sy (unit_symb momtInert)) +:+ S "denotes the" +:+ (phrase $ momtInert ^. term) +:+
   S "of the" +:+. (phrase $ rigidBody ^. term) +:+ S "We also assume that all" +:+ 
-  irregPlur (phrase $ rigidBody ^. term) +:+. S "involved are two-dimensional (A2)"
+  (plural $ rigidBody ^. term) +:+. S "involved are two-dimensional (A2)"

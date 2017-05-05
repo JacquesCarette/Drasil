@@ -65,7 +65,7 @@ mod_outputv = makeImpModule mod_outputv_desc (S "The algorithm used to " :+:
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
 mod_temp_desc = dccWDS "mod_temp_desc" (nounPhraseSP "temperature ODEs") (
-  S "Defines the" +:+ addS (short ode) +:+ S "using the parameters in the" +:+
+  S "Defines the" +:+ (short ode) :+: S "s using the parameters in the" +:+ --FIXME use a pural abbreviation?
   S "input parameters module.")
 
 mod_temp :: ModuleChunk

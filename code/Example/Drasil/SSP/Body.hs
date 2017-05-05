@@ -250,10 +250,12 @@ s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
   S "slope, and the material properties of the layers."
 
-s4_1_3_list = Con $ Enumeration $ Simple $ [
-  (S "GS1", Flat $ S "Evaluate local and global factors of safety along a given slip surface."),
-  (S "GS2", Flat $ S "Identify the critical slip surface for the slope, with the lowest Factor of Safety."),
-  (S "GS3", Flat $ S "Determine the displacement of the slope.")
+s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+  (S "GS1", S "Evaluate local and global factors of safety along" +:+
+            S "a given slip surface."),
+  (S "GS2", S "Identify the critical slip surface for the slope" `sC` 
+            S "with the lowest Factor of Safety."),
+  (S "GS3", S "Determine the displacement of the slope.")
   ]
 
 -- SECTION 4.2 --

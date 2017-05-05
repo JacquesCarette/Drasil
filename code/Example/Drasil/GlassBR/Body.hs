@@ -616,15 +616,15 @@ s9_intro1 = Paragraph $
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
   S "should be modified as well." +:+ at_start table_ +:+ S "5" +:+ 
-  sParen (makeRef s9_table1) +:+ S "shows the dependencies of" +:+ plural thModel `sC` 
+  sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+ plural thModel `sC` 
   (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "with each other." +:+
-  S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the dependencies of" +:+
+  S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural requirement +:+ S "on" +:+
   plural thModel `sC`
   (plural inModel) `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
-  S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the dependencies of" +:+
+  S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC`
   (plural dataDefn) `sC`
   plural inModel `sC`
@@ -787,18 +787,18 @@ s9_intro2 =
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
   +:+ S "is also to provide easy references on what has to be additionally modified if a" +:+
   S "certain component is changed. The arrows in the" +:+ (plural $ graph ^. term)
-  +:+ S "represent dependencies. The component at the tail of an arrow is depended on" +:+
+  +:+ S "represent" +:+. plural dependency +:+ S ". The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
   S "component is changed, the components that it points to should also" +:+
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
-  S "dependencies of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
+  +:+ plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "on each other." +:+
-  S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the dependencies of" +:+
+  S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural requirement +:+ S "on" +:+
   plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
-  S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the dependencies of" +:+
+  S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) `sC` 

@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix)
+import Data.Drasil.Concepts.Math (matrix, graph)
 import Prelude hiding (id)
 
 import           Drasil.TableOfUnits
@@ -605,7 +605,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S "and Graphs")
+s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
@@ -784,10 +784,10 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 
 s9_intro2 = 
   [Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the traceability graphs is also to" +:+
-  S "provide easy references on what has to be additionally modified if a" +:+
-  S "certain component is changed. The arrows in the graphs represent" +:+
-  S "dependencies. The component at the tail of an arrow is depended on" +:+
+  S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
+  +:+ S "is also to provide easy references on what has to be additionally modified if a" +:+
+  S "certain component is changed. The arrows in the" +:+ (plural $ graph ^. term)
+  +:+ S "represent dependencies. The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
   S "component is changed, the components that it points to should also" +:+
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
@@ -853,8 +853,9 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
 s11 = Section(S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
 
 s11_intro = Paragraph $
-  S "This appendix holds the graphs" +:+ sParen ((makeRef fig_5) +:+ S "and" +:+
-  (makeRef fig_6)) +:+. S "used for interpolating values needed in the" +:+ plural model
+  S "This appendix holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)
+  +:+ S "and" +:+ (makeRef fig_6)) +:+. S "used for interpolating values needed in the"
+  +:+ plural model
 
 fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (phrase $ sD ^. term) +:+

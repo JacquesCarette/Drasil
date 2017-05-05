@@ -310,7 +310,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (pb ^. defn))] ++
   map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn)) 
   [specA, blaReGLa, eqTNTChar] ++
-  [Flat $ ((phrase $ sD ^. term) :+: sParenDash (P $ sd ^. symbol)) :+:
+  [Flat $ ((titleize $ sD ^. term) :+: sParenDash (P $ sd ^. symbol)) :+:
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
@@ -327,7 +327,7 @@ s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
   (((short physSyst) :+: S "2"), S "The point of explosion." +:+
   S "Where the bomb, or" +:+ sLower (blast ^. defn) `sC` 
-  S "is located. The" +:+ (sLower ((phrase $ sD ^. term))) 
+  S "is located. The" +:+ (phrase $ sD ^. term)) 
   +:+ S "is the distance between the point of explosion and the glass.")]
 --NOTE: The only difference here from the original is the removal of an 
 --    extraneous space
@@ -858,7 +858,7 @@ s11_intro = Paragraph $
   +:+. plural model
 
 fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
-  (P (demand ^. symbol)) +:+ S "versus" +:+ (phrase $ sD ^. term) +:+
+  (P (demand ^. symbol)) +:+ S "versus" +:+ (titleize $ sD ^. term) +:+
   S "versus" +:+ (at_start $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"
 

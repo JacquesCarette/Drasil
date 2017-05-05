@@ -17,7 +17,8 @@ cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++
 -- Chunks with units --
 accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
     impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
-    orientation, dist, disp, time, torque, angDisp, vel, linDisp :: UnitalChunk
+    orientation, dist, disp, time, torque, angDisp, vel, linDisp, linVelo
+    , linAccel :: UnitalChunk
 
 cpUnits :: [UnitalChunk]
 cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
@@ -53,11 +54,18 @@ disp        = ucFromVC QP.displacement metre
 time        = ucFromVC QP.time second
 torque      = ucFromVC QP.torque torqueU
 angDisp     = ucFromVC QP.angularDisplacement radians
+vel         = ucFromVC QP.velocity velU
 
 --FIXME: parametrized hack
 linDisp     = ucFromVC ldisp velU
   where ldisp = cvR (dccWDS "linearDisp" (compoundPhrase' (QP.linearDisplacement ^. term) (cn ("FIXME: add definition"))) (phrase $ QP.linearDisplacement ^. term)) (QP.linearDisplacement ^. symbol)
-vel         = ucFromVC QP.velocity velU
+--FIXME: parametrized hack
+linVelo     = ucFromVC lVelo velU
+  where lVelo = cvR (dccWDS "linearVelo" (compoundPhrase' (QP.linearVelocity ^. term) (cn ("FIXME: add definition"))) (phrase $ QP.linearVelocity ^. term)) (QP.linearVelocity ^. symbol)
+--FIXME: parametrized hack
+linAccel     = ucFromVC lAccl accelU
+  where lAccl = cvR (dccWDS "linearDisp" (compoundPhrase' (QP.linearAccel ^. term) (cn ("FIXME: add definition"))) (phrase $ QP.linearAccel ^. term)) (QP.linearAccel ^. symbol)
+
 -- Chunks without units --
 cpUnitless :: [VarChunk]
 cpUnitless = [numParticles]

@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Physics
   , cartesian, rightHand, surface, restitutionCoef, acceleration
   , angularAccel, momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
-  , angularDisplacement,time, torque
+  , angularDisplacement,time, torque, linearDisplacement
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -13,7 +13,7 @@ import Control.Lens ((^.))
 rigidBody, velocity, angularV, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
   angularAccel, momentOfInertia, force, impulseS, impulseV, displacement,
-  gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,time, torque :: ConceptChunk
+  gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,time, torque, linearDisplacement :: ConceptChunk
 
 rigidBody  = dcc "rigidBody" 
   (cnIES "rigid body") "A solid body in which deformation is neglected."
@@ -76,3 +76,5 @@ gravitationalAccel = dcc "gravitationalAccel"
   (cn "gravitational acceleration") fixme
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
   "gravitational constant (6.673 * 10E-11)"
+
+linearDisplacement = dcc "linearDisp" (cn' "linear displacement") fixme

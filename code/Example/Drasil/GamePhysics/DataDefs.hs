@@ -34,8 +34,9 @@ fixme = nounPhraseSP $ "FIXME: THIS HACK NEEDS TO BE UPDATED TO A NOUNPHRASE, " 
   "SEE Drasil.GamePhysics.DataDefs for more info"
 
 dd2linDisp :: QDefinition
-dd2linDisp = fromEqn "dd2linDisp" fixme --dd2descr 
-  (Concat [(disp ^. symbol), Atomic "(",(time ^. symbol), Atomic ")"]) 
+dd2linDisp = fromEqn "dd2linDisp" (linDisp ^. term) (linDisp ^. symbol)
+--fixme --dd2descr 
+--(Concat [(disp ^. symbol), Atomic "(",(time ^. symbol), Atomic ")"]) 
   metre dispEqn
 
 dispEqn :: Expr

@@ -79,7 +79,7 @@ s1_3 = table_of_abb_and_acronyms acronyms
 s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 
 s4_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+ (phrase $ problem ^. term) +:+
-    (phrase $ description ^. term) +:+ S ", which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
+    (phrase $ description ^. term) :+: S ", which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
   S ". This is followed by the" +:+ (phrase $ solution ^. term) +:+ (phrase $ characteristicsSpecification ^. term) :+:
   S ", which presents the" +:+ (plural assumption) `sC` 
     (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ S "and finally the" +:+

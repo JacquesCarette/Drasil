@@ -100,7 +100,7 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
 s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
   S "of the" +:+ (introduceAbb srs) +:+
   S "for a slope stability analysis problem. The developed program" +:+
-  S "will be referred to as the Slope Stability Analysis (SSA)" +:+
+  S "will be referred to as the" +:+ (introduceAbb ssa) +:+
   S "program. This section explains the purpose of this document," +:+
   S "the scope of the system, the organization of the document and" +:+
   S "the characteristics of the intended readers."
@@ -108,7 +108,7 @@ s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
 -- SECTION 2.1 --
 s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
 
-s2_1_p1 = Con $ Paragraph $ S "The SSA program determines the" +:+
+s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines the" +:+
   S "critical slip surface, and it's respective factor of safety" +:+
   S "as a method of assessing the stability of a slope design." +:+
   S "The program is intended to be used as an educational tool for" +:+
@@ -136,7 +136,7 @@ s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]
 s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
   S "limited to stability analysis of a 2 dimensional slope," +:+
   S "composed of homogeneous soil layers. Given appropriate" +:+
-  S "inputs, the code for SSA will identify the most likely" +:+
+  S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
   S "failure surface within the possible input range, and find" +:+
   S "the factor of safety for the slope as well as displacement" +:+
   S "of soil that will occur on the slope."
@@ -169,7 +169,7 @@ s3_p1 = Con $ Paragraph $ S "This section provides general information" +:+
 -- SECTION 3.1 --
 s3_1 = Sub $ Section (S "User" +:+ titleize characteristics) [s3_1_p1]
 
-s3_1_p1 = Con $ Paragraph $ S "The end user of SSA should" +:+
+s3_1_p1 = Con $ Paragraph $ S "The end user of" +:+ (short ssa) +:+ S "should" +:+
   S "have an understanding of undergraduate Level 1 Calculus and" +:+
   S "Physics, and be familiar with soil and material properties."
 
@@ -191,7 +191,7 @@ s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (S "Problem Description") [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_p1 = Con $ Paragraph $ S "SSA is a computer program developed" +:+
+s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" +:+
   S "to evaluate the factor of safety of a slopes slip surface and" +:+
   S "to calculate the displacement that the slope will experience."
 
@@ -263,7 +263,7 @@ s4_2 = Sub $ Section (S "Solution" +:+ (titleize characteristicsSpecification))
   [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
-  S "SSA are presented in" +:+. makeRef sec_IMs +:+
+  (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
   S " The information to understand the meaning of the instance" +:+ --FIXME extra space at start of sentence?
   S "models and their derivation is also presented, so that the" +:+
   S "instance models can be verified."
@@ -322,7 +322,8 @@ sec_TMs :: Section
 sec_TMs = Section (S "Theoretical Models") (s4_2_2_p1:s4_2_2_tmods)
 
 s4_2_2_p1 = Con $ Paragraph $ S "This section focuses on the" +:+
-  S "general equations and laws that SSA is based on."
+  S "general equations and laws that" +:+ (short ssa) +:+
+  S "is based on."
 
 s4_2_2_tmods = map (Con . Definition) (map Theory [fs_rc])
 
@@ -405,7 +406,7 @@ table_inputdata =  Table (map titleize [symbol_, units_, description])
 -- SECTION 5.2 --
 s5_2 = Sub $ Section (S "Nonfunctional Requirements") [s5_2_p1]
 
-s5_2_p1 = Con $ Paragraph $ S "SSA is intended to be an" +:+
+s5_2_p1 = Con $ Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+
   S "are secondary program priorities to correctness," +:+
   S "understandability, reusability, and maintainability."

@@ -164,7 +164,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "but do not say how to solve it"),
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
-  S "writing the" +:+ short desSpec +:+ "and the software" +:+
+  S "writing the" +:+ short desSpec +:+ S "and the software" +:+
   (short vav) +:+ S "plan. The design document" +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
@@ -287,7 +287,7 @@ s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,
 
 s4_intro = Paragraph (S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem" +:+
-  S "to be solved. This is followed by the" +:+ short solution +:+
+  S "to be solved. This is followed by the" +:+ phrase solution +:+
   phrase characteristicsSpecification +:+ S "which presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`
@@ -661,9 +661,9 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" +:+
   S "in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
-  S "the" +:+ short solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+
+  S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+
   P (temp_PCM ^. symbol) +:+ S "depend on one another. IM3" +:+
-  S "can be solved once IM1 has been solved. The" +:+ short solution +:+
+  S "can be solved once IM1 has been solved. The" +:+ phrase solution +:+
   S "of IM2 and IM4 are also coupled, since the" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "and" +:+ (phrase $ pcm_E ^. term) +:+
   S "depend on the" +:+ (sLower (phrase $ phase_change ^. 
@@ -883,7 +883,7 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 s4_2_7 = Section (S "Properties of a Correct" +:+ titleize solution) (map Con s4_2_7_deriv)
 
-s4_2_7_deriv = [Paragraph (S "A correct" +:+ short solution +:+ 
+s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:
   S ". This means that the" +:+ (phrase $ w_E ^. term) +:+
   S "should equal the difference between" +:+
@@ -911,7 +911,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ short solution +:+
   (C temp_PCM) [C time]))) time)),
   Paragraph (S "Equations (reference) and (reference) can be" +:+
   S "used as" +:+ Quote (S "sanity") :+: S "checks to gain" +:+ 
-  S "confidence in any" +:+ short solution +:+ "computed by" +:+
+  S "confidence in any" +:+ phrase solution +:+ S "computed by" +:+
   (short progName) :+: S ". The relative error between the results" +:+
   S "computed by" +:+ (short progName) +:+ S "and the" +:+
   S "results calculated from the" +:+ (short rightSide) :+: 

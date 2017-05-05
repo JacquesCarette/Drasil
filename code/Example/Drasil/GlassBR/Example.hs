@@ -122,7 +122,7 @@ sdf         = makeVC "sdf"
 sdf_tol     = makeVC "sdf_tol" 
   (nounPhraseSP "Stress distribution factor (Function) based on Pbtol")
   (sub (sdf ^. symbol) (Atomic "tol"))
-prob_br     = makeVC "prob_br" (nounPhraseSP "Probability of breakage") 
+prob_br     = makeVC "prob_br" (nounPhraseSP "probability of breakage") --originally was "(nounPhraseSP "probability of breakage")"
   (sub cP lB)
 pb_tol      = makeVC "pb_tol" 
   (nounPhraseSP "Tolerable probability of breakage") (sub cP (Atomic "btol"))
@@ -133,7 +133,7 @@ tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
 lRe         = makeVC "lRe" (nounPhraseSP "Load Resistance") (Atomic "LR")
 loadSF      = makeVC "loadSF" (nounPhraseSP "Load Share Factor") (Atomic "LSF")
 ar          = makeVC "ar" (nounPhraseSP "Aspect Ratio") (Atomic "AR")
-ar_max      = makeVC "ar_max" (nounPhraseSP "Maximum Aspect Ratio")
+ar_max      = makeVC "ar_max" (nounPhraseSP "maximum aspect ratio") -- originally "Maximum Aspect Ratio"
   (sub (ar ^. symbol) (Atomic "max"))
 ar_min      = makeVC "ar_min" (nounPhraseSP "Minimum Aspect Ratio")
   (sub (ar ^. symbol) (Atomic "min"))
@@ -273,8 +273,8 @@ blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
 glassGeo      = dcc "glassGeo" (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
-capacity      = dcc "capacity" (cnIES "Capacity") "The load resistance calculated"
-demandq       = dcc "demandq" (cn' "Demand") "3 second duration equivalent pressure"
+capacity      = dcc "capacity" (cnIES "capacity") "The load resistance calculated"
+demandq       = dcc "demandq" (cn' "demand") "3 second duration equivalent pressure" -- originally was "(cn' "demand")"
 safeMessage   = dcc "safeMessage" (cn "Safe")
   ("For the given input parameters, the glass is considered safe.")
 notSafe       = dcc "notSafe" (nounPhraseSP "Not safe")
@@ -420,7 +420,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "Load Duration Factor") 
+loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "load duration factor") -- originally "Load Duration Factor"
   (Atomic "LDF") 
   loadDF_eq
 

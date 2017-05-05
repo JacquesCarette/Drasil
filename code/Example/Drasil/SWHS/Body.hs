@@ -1236,7 +1236,7 @@ s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between" +:+
 
 s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between" +:+
   (titleize' requirement) `sC` titleize' inModel `sC`
-  S "and Data" titleize' constraint) "RTrace.png"
+  S "and Data" +:+ titleize' constraint) "RTrace.png"
 
 --References?
 

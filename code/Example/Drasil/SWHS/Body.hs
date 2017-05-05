@@ -839,7 +839,7 @@ s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
   S "respectively. The column for physical" +:+ plural constraint +:+
   S "gives the physical limitations on the range of values that can" +:+
   S "be taken by the variable. The column for software" +:+
-  plural constraints +:+ S "restricts the range of inputs to reasonable" +:+
+  plural constraint +:+ S "restricts the range of inputs to reasonable" +:+
   S "values. The" +:+ plural constraint +:+ S "are conservative, to" +:+
   S "give the user of the model the flexibility to experiment with" +:+
   S "unusual situations. The column of typical values is" +:+
@@ -1086,7 +1086,7 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
   S "dependencies of" +:+ plural inModel `sC`
   plural requirement `sC`
-  S "and data" +:+ plural constraint +:+ "on each other." +:+ 
+  S "and data" +:+ plural constraint +:+ S "on each other." +:+ 
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
   plural thModel `sC`
   (plural genDefn) `sC` 

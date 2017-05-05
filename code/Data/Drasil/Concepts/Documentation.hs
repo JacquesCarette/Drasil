@@ -26,7 +26,7 @@ vav         = commonINP "vav"         (cn' "verification and validation")   "VAV
 
 section_, physical, system, description, specific, general, symbol_, units_, 
   table_, introduction, organization, document, purpose, characteristics, characteristic, specification,
-    unit_, problem, theory, definition, model, information :: NPNC
+    unit_, problem, theory, definition, model, information, solution :: NPNC
 section_        = npnc "section"        (cn' "section")
 physical        = npnc "physical"       (cn' "physical")
 system          = npnc "system"         (cn' "system")
@@ -49,6 +49,7 @@ theory          = npnc "theory"         (cnIES "theory")
 definition      = npnc "definition"     (cn' "definition")
 model           = npnc "model"          (cn' "model")
 information     = npnc "information"    (cn "information")
+solution        = npnc "solution"       (cn' "solution")
 
 tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits, sciCompS :: NPNC
 

@@ -5,7 +5,7 @@ Repository for working on both literate software and families of scientific soft
 
 ## What is Drasil?
 
-Drasil is a framework for literate scientific software deelopment. The main goals
+Drasil is a framework for literate scientific software development. The main goals
 are to reduce knowledge duplication and improve reusability, maintainability,
 verifiability, traceability, and other software qualities.
 

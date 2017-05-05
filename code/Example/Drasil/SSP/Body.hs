@@ -119,7 +119,7 @@ s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
   S "writing the design specification and the software verification" +:+
   S "and validation plan.  The design document will show how the" +:+
-  S "requirements are to be realized, including decisions on the" +:+
+  (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
   S "numerical algorithms and programming environment.  The" +:+
   S "verification and validation plan will show the steps that will" +:+
   S "be used to increase confidence in the software documentation and" +:+
@@ -343,15 +343,15 @@ sec_IMs = Section (S "Instance Models") []
 s4_2_6 = Sub $ Section (S "Data Constraints") []
 
 -- SECTION 5 --
-s5 = Section (S "Requirements") [s5_p1, s5_1, s5_2]
+s5 = Section (titleize' requirement) [s5_p1, s5_1, s5_2]
 
 s5_p1 = Con $ Paragraph $ S "This section provides the" +:+
-  S "functional requirements, the business tasks that the software" +:+
-  S "is expected to complete, and the nonfunctional requirements," +:+
+  S "functional" +:+ (plural requirement) `sC` S "the business tasks that the software" +:+
+  S "is expected to complete, and the nonfunctional" +:+ (plural requirement) `sC`
   S "the qualities that the software is expected to exhibit."
 
 -- SECTION 5.1 --
-s5_1 = Sub $ Section (S "Functional Requirements")
+s5_1 = Sub $ Section (S "Functional" +:+ (titleize' requirement))
   [s5_1_list, s5_1_table]
 
 s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
@@ -374,7 +374,7 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R7" , S "Generate new potential critical slip" +:+
             S "surfaces based on previously analysed" +:+
             S "slip surfaces with low factors of safety."),
-  (S "R8" , S "Repeat requirements R3 to R7 until the" +:+
+  (S "R8" , S "Repeat" +:+ plural requirement +:+ S "R3 to R7 until the" +:+
             S "minimum factor of safety remains approximately" +:+
             S "the same over a predetermined number of" +:+
             S "repetitions. Identify the slip surface that" +:+
@@ -404,7 +404,7 @@ table_inputdata =  Table (map titleize [symbol_, units_, description])
   (S "Input data") True
  
 -- SECTION 5.2 --
-s5_2 = Sub $ Section (S "Nonfunctional Requirements") [s5_2_p1]
+s5_2 = Sub $ Section (S "Nonfunctional" +:+ (titleize' requirement)) [s5_2_p1]
 
 s5_2_p1 = Con $ Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+

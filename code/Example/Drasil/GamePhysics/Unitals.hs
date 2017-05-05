@@ -139,10 +139,9 @@ mTot = uc' "M" (nounPhraseSP "total mass of the rigid body")
 initRelVel, mass_A, mass_B, normalLen, contDisp_A, contDisp_B, perpLen_A,
   momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
 
-initRelVel = uc' "v_i^AB" 
-  (nounPhraseSP "relative velocity between rigid bodies A and B")
-  "FIXME: Define this or remove the need for definitions"
-  (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
+--FIXME: parametrized hack
+initRelVel = ucFromVC relVel velU
+  where relVel = cvR (dccWDS "v_i^AB" (compoundPhrase' (compoundPhrase' (cn "relative") (QP.velocity ^. term)) (cn "between rigid bodies of A and B")) (phrase $ QP.velocity ^. term)) (sup (sub (QP.velocity ^. symbol) lI) (Concat [cA, cB]))
 
 --FIXME: parametrized hack
 mass_A = ucFromVC rigidA kilogram

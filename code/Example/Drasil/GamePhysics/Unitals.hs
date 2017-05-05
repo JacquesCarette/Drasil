@@ -72,29 +72,25 @@ numParticles = makeVC "n" (nounPhraseSP "number of particles in a rigid body") l
 -- T2 --
 
 force_1, force_2 :: UnitalChunk
-
-force_1 = uc' "F_1" 
-  (nounPhraseSP "force exerted by the first body (on another body)")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (force ^. symbol) (Atomic "1")) newton
-force_2 = uc' "F_2" 
-  (nounPhraseSP "force exerted by the second body (on another body)")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (force ^. symbol) (Atomic "2")) newton
-
+--FIXME: parametrized hack
+force_1 = ucFromVC force1 newton
+  where force1 = cvR (dccWDS "force" (QP.force ^. term) (phrase $ compoundPhrase' (QP.force ^. term) (cn "exerted by the first body (on another body)"))) (sub (QP.force ^. symbol) (Atomic "1"))
+--FIXME: parametrized hack
+force_2 = ucFromVC force1 newton
+  where force1 = cvR (dccWDS "force" (QP.force ^. term) (phrase $ compoundPhrase' (QP.force ^. term) (cn "exerted by the second body (on another body)"))) (sub (QP.force ^. symbol) (Atomic "2"))
 -- T3 --
 
 mass_1, mass_2, dispUnit, dispNorm, sqrDist :: UnitalChunk
 
 -- FIXME: parametrized hack
 mass_1 = ucFromVC mass1 kilogram
-  where mass1 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the first body")) (phrase $ compoundPhrase' (QPP.mass ^. term) (cn "of the first body"))) (sub (QPP.mass ^. symbol) (Atomic "1"))
+  where mass1 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the first body")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) (Atomic "1"))
 -- FIXME: parametrized hack
 mass_2 = ucFromVC mass2 kilogram
-  where mass2 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the second body")) (phrase $ compoundPhrase' (QPP.mass ^. term) (cn "of the first body"))) (sub (QPP.mass ^. symbol) (Atomic "2"))
+  where mass2 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the second body")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) (Atomic "2"))
 -- FIXME: parametrized hack
 dispUnit = ucFromVC dispVect metre
-  where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement")  (QM.unit_vect ^. term)) (phrase $ compoundPhrase' (cn "displacement") (QM.unit_vect ^. term))) (vec (hat lR))
+  where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement") (QM.unit_vect ^. term)) (phrase $ compoundPhrase' (cn "displacement") (QM.unit_vect ^. term))) (vec (hat lR))
 
 -- FIXME: parametrized hack
 dispNorm = ucFromVC norm metre

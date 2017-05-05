@@ -11,12 +11,16 @@ import Language.Drasil
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Math (ode, norm_vect)
 import Data.Drasil.Units.Thermodynamics
 
-import           Drasil.TableOfAbbAndAcronyms
+import Drasil.TableOfUnits
+import Drasil.TableOfSymbols
+import Drasil.TableOfAbbAndAcronyms
+import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
-import           Drasil.ReferenceMaterial
+import Drasil.ReferenceMaterial (refSec, intro)
+import Drasil.DocumentLanguage
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -34,7 +38,7 @@ s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = Section ((titleize $ tOfUnits ^. term)) [Con s1_1_intro,Con s1_1_table]
 
-s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
+s1_1_intro = Paragraph (S "Throughout this" +:+ (phrase $ document ^. term) +:+
            S "SI (Syst" :+: (F Grave 'e') :+: S "me International d'Unit" :+:
            (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ unit_ ^. term) +:+
            S "system." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
@@ -43,7 +47,9 @@ s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
-s1_1_table = Table [(titleize $ symbol_ ^. term), (titleize $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
+
+--s1_1_table = unit_table this_si
+s1_1_table = Table [(titleize $ unit_ ^. term), (titleize $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
@@ -59,6 +65,7 @@ s1_2_intro = Paragraph $
   S "made to be consistent with the heat transfer literature and" +:+
   S "with existing documentation for solar water heating systems."
   
+--s1_2_table = table pcmSymbols (termExcept [cqs norm_vect])
 s1_2_table = Table [(titleize $ symbol_ ^. term), (titleize' $ unit_ ^. term), (titleize $ description ^. term)] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ unit_symb ch),
@@ -71,9 +78,9 @@ s1_3 = table_of_abb_and_acronyms acronyms
 
 s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 
-s4_intro = Paragraph $ S "This section first presents the problem" +:+
+s4_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the problem" +:+
   S "description, which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
-  S ". This is followed by the solution" +:+ (phrase $ characteristicsSpecification ^. term) :+:
+  S ". This is followed by the" +:+ (phrase $ solution ^. term) +:+ (phrase $ characteristicsSpecification ^. term) :+:
   S ", which presents the" +:+ (plural assumption) `sC` 
     (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ S "and finally the" +:+
   S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --NOTE: We need something to handle the use of nouns as verbs
@@ -135,7 +142,7 @@ s4_2_intro = Paragraph $ S "The" +:+
   
 s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro]
 
-s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
+s4_2_1_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "simplifies the original problem" +:+
   S "and helps in developing the theoretical" +:+ (phrase $ model ^. term) +:+ S "by filling in the" +:+
   S "missing" +:+ (phrase $ information ^. term) +:+ S "for the physical" +:+ (phrase $ system ^. term) :+: S ". The numbers given in the" +:+
   S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
@@ -149,7 +156,7 @@ s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
 s4_2_2 = Section (titleize' thModel) 
   ((Con s4_2_2_intro):(Con s4_2_2_TMods):[])
 
-s4_2_2_intro = Paragraph $ S "This section focuses on the general equations" +:+
+s4_2_2_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "focuses on the general equations" +:+
   S "and laws that" +:+ (getAcc sWHS) +:+ S "is based on." 
 -- :+: foldr1 (:+:) (map makeRef s4_2_2_TMods) :+: S" " :+: makeRef s1
   

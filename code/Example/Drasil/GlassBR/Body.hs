@@ -825,7 +825,7 @@ s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
-  S "drive approach to certifying" +:+ phrase sciCompS) +:+ S "Master's thesis"
+  S "drive approach to certifying" +:+ phrase sciCompS :+: ",") +:+ S "Master's thesis"
   `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   S "template for scientific computing,") +:+ S "in Proceedings of the" +:+
@@ -854,8 +854,8 @@ s11 = Section(S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
 
 s11_intro = Paragraph $
   S "This appendix holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)
-  +:+ S "and" +:+ (makeRef fig_6)) +:+. S "used for interpolating values needed in the"
-  +:+ plural model
+  +:+ S "and" +:+ (makeRef fig_6)) +:+ S "used for interpolating values needed in the"
+  +:+. plural model
 
 fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (phrase $ sD ^. term) +:+

@@ -11,12 +11,16 @@ import Language.Drasil
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Math (ode, norm_vect)
 import Data.Drasil.Units.Thermodynamics
 
-import           Drasil.TableOfAbbAndAcronyms
+import Drasil.TableOfUnits
+import Drasil.TableOfSymbols
+import Drasil.TableOfAbbAndAcronyms
+import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
-import           Drasil.ReferenceMaterial
+import Drasil.ReferenceMaterial (refSec, intro)
+import Drasil.DocumentLanguage
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -34,7 +38,7 @@ s1 = refSec [s1_1, s1_2, s1_3]
 
 s1_1 = Section ((titleize $ tOfUnits ^. term)) [Con s1_1_intro,Con s1_1_table]
 
-s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
+s1_1_intro = Paragraph (S "Throughout this" +:+ (phrase $ document ^. term) +:+
            S "SI (Syst" :+: (F Grave 'e') :+: S "me International d'Unit" :+:
            (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ unit_ ^. term) +:+
            S "system." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
@@ -43,12 +47,14 @@ s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
-s1_1_table = Table [(titleize $ symbol_ ^. term), (titleize $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
+
+s1_1_table = unit_table this_si
+{-s1_1_table = Table [(titleize $ unit_ ^. term), (titleize $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
   ] this_si)
-  ((titleize $ tOfUnits ^. term)) True
+  ((titleize $ tOfUnits ^. term)) True-}
 
 s1_2 = Section ((titleize $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
 
@@ -59,13 +65,14 @@ s1_2_intro = Paragraph $
   S "made to be consistent with the heat transfer literature and" +:+
   S "with existing documentation for solar water heating systems."
   
-s1_2_table = Table [(titleize $ symbol_ ^. term), (titleize' $ unit_ ^. term), (titleize $ description ^. term)] (mkTable
+s1_2_table = table pcmSymbols (termExcept [cqs norm_vect])
+{-s1_2_table = Table [(titleize $ symbol_ ^. term), (titleize' $ unit_ ^. term), (titleize $ description ^. term)] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ unit_symb ch),
    (\ch -> phrase $ ch ^. term)
    ]
   pcmSymbols)
-  ((titleize $ tOfSymb ^. term)) False
+  ((titleize $ tOfSymb ^. term)) False-}
 
 s1_3 = table_of_abb_and_acronyms acronyms
 

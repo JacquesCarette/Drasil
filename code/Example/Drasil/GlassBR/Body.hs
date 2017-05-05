@@ -231,14 +231,14 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "parameters describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
   S "Another input the user gives is the tolerable value of" +:+.
-  (sLower (phrase $ prob_br ^. term))),
+  (phrase $ prob_br ^. term))),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
   (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
-  S "comparing whether" +:+ (sLower (phrase $ capacity ^. term)) +:+
-  S "is greater than" +:+. (sLower (phrase $ demandq ^. term)) +:+
+  S "comparing whether" +:+ (phrase $ capacity ^. term) +:+
+  S "is greater than" +:+. (phrase $ demandq ^. term) +:+
   (phrase $ capacity ^. term) +:+ S "is the" +:+
   (sLower (capacity ^. defn)) +:+ S "and" +:+
-  (sLower (phrase $ demandq ^. term)) +:+ S "is the" +:+ phrase requirement +:+
+  (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
   S "is to check whether the calculated probability" +:+ 
   sParen (P $ prob_br ^. symbol) +:+ 
@@ -404,7 +404,7 @@ s6_2_1_list =
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
   (((short assumption) :+: S "8"), S "With reference to A4 the value" 
-    +:+ S "of" +:+ (sLower (phrase $ loadDF ^. term)) +:+ 
+    +:+ S "of" +:+ (phrase $ loadDF ^. term) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
     (gLassBR ^. defn) +:+ S "It is calculated by the equation:" +:+
     --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
@@ -450,7 +450,7 @@ s6_2_5_intro = Paragraph $
   S "parameters used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
   (P $ ar_max ^. symbol) +:+ S "refers to the" +:+
-  (sLower (phrase $ ar_max ^. term)) +:+. S "for the plate of glass"
+  (phrase $ ar_max ^. term) +:+. S "for the plate of glass"
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
 --  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),

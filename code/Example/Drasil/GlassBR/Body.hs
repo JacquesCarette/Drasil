@@ -254,7 +254,7 @@ s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription +:+ S ", which gives a" +:+
+  S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription `sC` S "which gives a" +:+
   S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This is followed by the" +:+
   phrase solution +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition

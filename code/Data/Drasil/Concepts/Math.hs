@@ -14,7 +14,7 @@ norm_vect = dcc "norm_vect" (cn' "normal vector") "unit outward normal vector fo
 orient = dcc "orientation" (cn' "orientation") "orientation"
 unit_vect = dcc "unit_vect" (cn' "unit vector") "unit vector"
 euclid_norm = dcc "euclid_norm" (cn' "Euclidean norm") "Euclidean norm"
-
+linear = dcc "linear" (cn' "linear") "exhibiting directly proportional change in two related quantities"
 matrix = dcc "matrix" (cnICES "matrix") "matrix"
 
 --FIXME: use nounphrase instead of cn'

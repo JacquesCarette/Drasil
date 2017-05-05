@@ -26,32 +26,34 @@ desSpec     = commonINP "desSpec"     (cn' "design specification")          "DS"
 -- concepts relating to the templates and their contents
 
 section_, physical, system, description, specific, general, symbol_, units_, 
-  table_, introduction, organization, document, purpose, characteristics, characteristic, specification,
-    unit_, problem, theory, definition, model, information, solution, condition :: NPNC
-section_        = npnc "section"        (cn' "section")
-physical        = npnc "physical"       (cn' "physical")
-system          = npnc "system"         (cn' "system")
-description     = npnc "description"    (cn' "description")
-specific        = npnc "specific"       (cn' "specific") -- ??
-general         = npnc "general"        (cn' "general")  --FIXME: adjective?
-symbol_         = npnc "symbol"         (cn' "symbol")
-units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
-unit_           = npnc "unit"           (cn' "unit")
-table_          = npnc "table"          (cn' "table")
-introduction    = npnc "introduction"   (cn' "introduction")
-organization    = npnc "organization"   (cn' "organization")
-document        = npnc "document"       (cn' "document")
-purpose         = npnc "purpose"        (cn' "purpose")
-characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
+  table_, introduction, organization, document, purpose, characteristics,
+  characteristic, specification, unit_, problem, theory, definition, model,
+  information, solution, condition :: NPNC
 characteristic  = npnc "characteristic" (cn' "characteristic")
-specification   = npnc "specification"  (cn' "specification")
-problem         = npnc "problem"        (cn' "problem")
-theory          = npnc "theory"         (cnIES "theory")
+characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
+condition       = npnc "condition"      (cn' "condition")
 definition      = npnc "definition"     (cn' "definition")
-model           = npnc "model"          (cn' "model")
+description     = npnc "description"    (cn' "description")
+document        = npnc "document"       (cn' "document")
+general         = npnc "general"        (cn' "general")  --FIXME: adjective?
 information     = npnc "information"    (cn "information")
+introduction    = npnc "introduction"   (cn' "introduction")
+model           = npnc "model"          (cn' "model")
+organization    = npnc "organization"   (cn' "organization")
+physical        = npnc "physical"       (cn' "physical")
+problem         = npnc "problem"        (cn' "problem")
+purpose         = npnc "purpose"        (cn' "purpose")
+section_        = npnc "section"        (cn' "section")
 solution        = npnc "solution"       (cn' "solution")
-condition       = npnc "condition"       (cn' "condition")
+specific        = npnc "specific"       (cn' "specific") -- ??
+specification   = npnc "specification"  (cn' "specification")
+symbol_         = npnc "symbol"         (cn' "symbol")
+system          = npnc "system"         (cn' "system")
+table_          = npnc "table"          (cn' "table")
+theory          = npnc "theory"         (cnIES "theory")
+unit_           = npnc "unit"           (cn' "unit")
+units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
+
 
 tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits, sciCompS :: NPNC
 

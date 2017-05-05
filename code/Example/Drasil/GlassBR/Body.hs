@@ -236,7 +236,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
   S "comparing whether" +:+ (phrase $ capacity ^. term) +:+
   S "is greater than" +:+. (phrase $ demandq ^. term) +:+
-  (phrase $ capacity ^. term) +:+ S "is the" +:+
+  (at_start $ capacity ^. term) +:+ S "is the" +:+
   (sLower (capacity ^. defn)) +:+ S "and" +:+
   (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+

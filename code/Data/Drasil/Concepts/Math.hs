@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Language.Drasil.NounPhrase
 
-gradient, norm_vect, orient, unit_vect, euclid_norm, matrix :: ConceptChunk
+gradient, norm_vect, orient, unit_vect, euclid_norm, matrix, linear :: ConceptChunk
 
 ode :: CINP
 

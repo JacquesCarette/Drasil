@@ -25,7 +25,7 @@ vav         = commonINP "vav"         (cn' "verification and validation")   "VAV
 -- concepts relating to the templates and their contents
 
 section_, physical, system, description, specific, general, symbol_, units_, 
-  table_, introduction, organization, document, purpose, characteristics, specification,
+  table_, introduction, organization, document, purpose, characteristics, characteristic, specification,
     unit_, problem, theory, definition, model, information :: NPNC
 section_        = npnc "section"        (cn' "section")
 physical        = npnc "physical"       (cn' "physical")

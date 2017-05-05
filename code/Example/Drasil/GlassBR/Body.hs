@@ -117,7 +117,7 @@ s2_1_intro =
   S "This" +:+ phrase document +:+ S "is intended to be used as a reference" +:+
   S "to provide all" +:+ phrase information +:+ S "necessary to understand and verify the" +:+
   S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
-  S "because the contents say what problem is being solved, but not how" +:+.
+  S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
   S "to solve it",
   Paragraph $
   S "This" +:+ phrase document +:+ S "will be used as a starting point for subsequent" +:+
@@ -254,12 +254,12 @@ s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "first presents the problem description, which gives a" +:+
-  S "high-level view of the problem to be solved. This is followed by" +:+
+  S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription +:+ S ", which gives a" +:+
+  S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This is followed by" +:+
   S "the solution" +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
-s6_1 = Section (S "Problem Description") [Con s6_1_intro, Sub s6_1_1, 
+s6_1 = Section (titleize problemDescription) [Con s6_1_intro, Sub s6_1_1, 
   Sub s6_1_2, Sub s6_1_3]
 
 s6_1_intro = Paragraph $ 
@@ -352,7 +352,7 @@ s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "simplifies the original problem and helps in developing the" 
+  S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+ S "and helps in developing the" 
   +:+ (phrase thModel) +:+ 
   S "[" :+: (short thModel) :+: S "] by filling in the missing" +:+ phrase information
   +:+ S "for the" +:+ phrase physicalSystem :+: S ". The numbers given in the" +:+
@@ -574,7 +574,7 @@ s7_2 = Section (S "Nonfunctional" +:+ titleize' requirement)
   [Con s7_2_intro]
 
 s7_2_intro = Paragraph $
-  S "Given the small size, and relative simplicity, of this problem" `sC`
+  S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
   S "performance is not a priority. Any reasonable implementation will" +:+
   S "be very quick and use minimal storage. Rather than performance" `sC`
   S "the priority nonfunctional" +:+ (short requirement) :+: 

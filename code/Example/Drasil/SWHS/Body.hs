@@ -164,12 +164,12 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "but do not say how to solve it"),
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
-  S "writing the" +:+ short desSpec +:+ S "and the software" +:+
-  (short vav) +:+ S "plan. The design document" +:+
+  S "writing the" +:+ phrase desSpec +:+ S "and the software" +:+
+  (phrase vav) +:+ S "plan. The design document" +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
   S "on the numerical algorithms and programming environment" +:+
-  S "The" +:+ (short vav) +:+ S "plan will show the" +:+
+  S "The" +:+ phrase vav +:+ S "plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
   S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 

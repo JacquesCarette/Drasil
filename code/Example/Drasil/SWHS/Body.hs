@@ -275,7 +275,7 @@ s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+:
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
-s3_2 = Section (S "System" titleize' constraint) [Con s3_2_contents]
+s3_2 = Section (S "System" +:+ titleize' constraint) [Con s3_2_contents]
 
 s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: S ".")
 

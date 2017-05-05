@@ -255,8 +255,8 @@ s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
 
 s6_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription +:+ S ", which gives a" +:+
-  S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This is followed by" +:+
-  S "the solution" +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
+  S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This is followed by the" +:+
+  phrase solution +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
 s6_1 = Section (titleize problemDescription) [Con s6_1_intro, Sub s6_1_1, 
@@ -340,7 +340,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "will be able to withstand the explosion of a certain degree which" +:+.
   S "is calculated based on user input")]
 
-s6_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) 
+s6_2 = Section (titleize solution +:+ titleize characteristicsSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +:+
@@ -445,7 +445,7 @@ s6_2_5_intro = Paragraph $
   S "a feel for a common scenario. The uncertainty column provides an" +:+
   S "estimate of the confidence with which the" +:+ phrase physical +:+ S "quantities can be"
   +:+ S "measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
-  +:+ S "performing an uncertainty quantification exercise." +:+ titleize table_ +:+ S "3 (" :+:
+  +:+ S "performing an uncertainty quantification exercise." +:+ at_start table_ +:+ S "3 (" :+:
   (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+
   S "parameters used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
@@ -615,7 +615,7 @@ s9_intro1 = Paragraph $
   S "easy references on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
-  S "should be modified as well." +:+ titleize table_ +:+ S "5" +:+ 
+  S "should be modified as well." +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the dependencies of" +:+ plural thModel `sC` 
   (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "with each other." +:+
@@ -825,7 +825,7 @@ s10 = Section(S "References") [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
-  S "drive approach to certifying" +:+ phrase sciCompS :+: ",") +:+ S "Master's thesis"
+  S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis"
   `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   S "template for scientific computing,") +:+ S "in Proceedings of the" +:+

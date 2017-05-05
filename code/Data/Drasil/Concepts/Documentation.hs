@@ -5,7 +5,7 @@ import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg, vav :: CINP
+  requirement, srs, thModel, mg, vav, desSpec :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
 assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
 dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
@@ -19,6 +19,7 @@ thModel     = commonINP "thModel"     (cn' "theoretical model")             "T"
 mg          = commonINP "mg"          (cn' "module guide")                  "MG" 
 srs         = commonINP "srs"  (cn' "software requirements specification")  "SRS"
 vav         = commonINP "vav"         (cn' "verification and validation")   "VAV"
+desSpec     = commonINP "desSpec"     (cn' "design specification")          "DS"
 
 ---------------------------------------------------------------------
 

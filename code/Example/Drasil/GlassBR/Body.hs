@@ -368,7 +368,7 @@ s6_2_1_list =
   (((short assumption) :+: S "1"), S "The standard E1300-09a for" +:+
     S "calculation applies only to monolithic, laminated, or insulating" +:+
     S "glass constructions of rectangular shape with continuous" +:+ 
-    (sLower (phrase $ lateral ^. term)) +:+
+    (phrase $ lateral ^. term) +:+
     S "support along one, two, three, or four edges. This practice assumes" 
     +:+ S "that (1) the supported glass edges for two, three and four-sided" 
     +:+ S "support conditions are simply supported and free to slip in" +:+

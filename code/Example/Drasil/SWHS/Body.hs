@@ -230,7 +230,8 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
   makeRef s4_2_5 +:+ S "and trace back to find any" +:+
   S "additional information they require. The" +:+
   (plural inModel) +:+ S "provide" +:+
-  S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+: S "s) and algebraic equations that model the" +:+.
+  S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+:
+  S "s) and algebraic equations that model the" +:+.
   (phrase $ swhs_pcm ^. term) +:+ (short progName) +:+
   S "solves these" +:+ (short ode) :+: S "s."),
   --FIXME: Update refineChain after fixing goalStmt and thModel
@@ -401,9 +402,9 @@ s4_1_3_list = Enumeration (Simple [((short goalStmt) :+: S "1", Flat
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
-s4_2 = Section (titleize solution +:+ titleize' characteristic +:+ titleize specification)
-  [Con s4_2_intro, Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4,
-  Sub s4_2_5, Sub s4_2_6, Sub s4_2_7]
+s4_2 = Section (titleize solution +:+ titleize' characteristic +:+
+  titleize specification) [Con s4_2_intro, Sub s4_2_1, Sub s4_2_2,
+  Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, Sub s4_2_7]
 
 s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
   S "(" :+: (short ode) :+: S "s) that govern" +:+
@@ -595,7 +596,8 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
   * (C htCap) * Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "Applying" +:+ (phrase $ gauss_div ^. term) +:+ S "to" +:+
-  S "the first term over the" +:+ (phrase $ surface ^. term) +:+ P (surface ^. symbol) +:+ S "of the" +:+ 
+  S "the first term over the" +:+ (phrase $ surface ^. term) +:+
+  P (surface ^. symbol) +:+ S "of the" +:+ 
   (phrase $ volume ^. term) :+: S ", with" +:+ P (thFluxVect ^. 
   symbol) +:+ S "as the" +:+ (phrase $ thFluxVect ^. term) +:+
   S "for the" +:+ (phrase $ surface ^. term) +:+ S "and" +:+
@@ -774,9 +776,10 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
   P (pcm_mass ^. symbol) +:+ S "and the" +:+ (phrase $ htCap_S_P ^. 
   term) +:+ S "is" +:+. P (htCap_S_P ^. symbol) +:+
   S "The" +:+ (phrase $ ht_flux_P ^. term) +:+ S "is" +:+ 
-  P (ht_flux_P ^. symbol) +:+ S "over" +:+ (phrase $ pcm_SA ^. term) +:+ P (pcm_SA ^. symbol) :+: S ". There is no" +:+ 
-  (phrase $ ht_flux_out ^. term) :+: S ". Assuming no" +:+ (phrase $ vol_ht_gen ^.
-  term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+: 
+  P (ht_flux_P ^. symbol) +:+ S "over" +:+ (phrase $ pcm_SA ^. term) +:+
+  P (pcm_SA ^. symbol) :+: S ". There is no" +:+ 
+  (phrase $ ht_flux_out ^. term) :+: S ". Assuming no" +:+ (phrase $ vol_ht_gen
+  ^. term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+: 
   S "=0, the equation for GD2 can be written as:"),
   EqnBlock 
    ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 

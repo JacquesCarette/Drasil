@@ -29,7 +29,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 section_, physical, system, description, specific, general, symbol_, units_, 
   table_, introduction, organization, document, purpose, characteristics,
   characteristic, specification, unit_, problem, theory, definition, model,
-  information, solution, condition, scope, requirement_, dependency :: NPNC
+  information, solution, condition, scope, dependency :: NPNC
 characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")
@@ -45,7 +45,6 @@ organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical")
 problem         = npnc "problem"        (cn' "problem")
 purpose         = npnc "purpose"        (cn' "purpose")
-requirement_    = npnc "requirement"    (cn' "requirement") --FIXME: a hack to get (of') to work in scpOfReq
 scope           = npnc "scope"          (cn' "scope")
 section_        = npnc "section"        (cn' "section")
 solution        = npnc "solution"       (cn' "solution")
@@ -67,7 +66,7 @@ tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
-scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement_)
+scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
 
 -- compounds
 systemdescription, specificsystemdescription, characteristicsSpecification, 

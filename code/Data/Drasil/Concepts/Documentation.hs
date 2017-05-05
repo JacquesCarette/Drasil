@@ -61,9 +61,10 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
 systemdescription, specificsystemdescription, characteristicsSpecification, 
-  physicalSystem, generalSystemDescription :: NPNC
+  physicalSystem, generalSystemDescription, problemDescription :: NPNC
 systemdescription            = compoundNPNC system description
 specificsystemdescription    = compoundNPNC specific systemdescription
 generalSystemDescription     = compoundNPNC general systemdescription
 characteristicsSpecification = compoundNPNC characteristics specification
 physicalSystem               = compoundNPNC physical system
+problemDescription           = compoundNPNC problem description

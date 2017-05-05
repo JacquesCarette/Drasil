@@ -40,7 +40,7 @@ s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S "system." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
            S ", several derived" +:+ (plural $ unit_ ^. term) +:+ S "are" +:+ 
            S "employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
-           S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+ +:+
+           S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
 s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
@@ -75,7 +75,7 @@ s4_intro = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
   S ". This is followed by the solution" +:+ (phrase $ characteristicsSpecification ^. term) :+:
   S ", which presents the" +:+ (plural assumption) `sC` 
-    (plural $ theory ^. term) :+: S "," +:+ (plural $ definition ^. term) +:+ "and finally the" +:+
+    (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ (S "and finally the") +:+
   S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --Do verb versions of nouns count?
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
@@ -89,7 +89,7 @@ s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
   
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that" +:+
-  S "are used in subsequent" +:+ (plural $ section ^. term) +:+ "and their meaning, with the purpose of" +:+
+  S "are used in subsequent" +:+ (plural $ section_ ^. term) +:+ S "and their meaning, with the purpose of" +:+
   S "reducing ambiguity and making it easier to correctly understand the" +:+
   S "requirements:"
   
@@ -100,7 +100,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $
 s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro,Con s4_1_2_list,
                                             Con fig_tank]
 
-s4_1_2_intro = Paragraph $ S "The physical" +:+ (phrase $ system ^. term) +:+ "of SWHS, as shown in" +:+
+s4_1_2_intro = Paragraph $ S "The physical" +:+ (phrase $ system ^. term) +:+ S "of SWHS, as shown in" +:+
   (makeRef fig_tank) :+: S ", includes the following elements:"
 
 fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of" +:+

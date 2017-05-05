@@ -41,7 +41,7 @@ s1_1 = Section ((titleize $ tOfUnits ^. term)) [Con s1_1_intro,Con s1_1_table]
 s1_1_intro = Paragraph (S "Throughout this" +:+ (phrase $ document ^. term) +:+
            S "SI (Syst" :+: (F Grave 'e') :+: S "me International d'Unit" :+:
            (F Acute 'e') :+: S "s) is employed as the" +:+ (phrase $ unit_ ^. term) +:+
-           S "system." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
+             (phrase $ system ^. term) :+: S"." +:+ S "In addition to the basic" +:+ (plural $ unit_ ^. term) :+:
            S ", several derived" +:+ (plural $ unit_ ^. term) +:+ S "are" +:+ 
            S "employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+
@@ -78,8 +78,8 @@ s1_3 = table_of_abb_and_acronyms acronyms
 
 s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
 
-s4_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the problem" +:+
-  S "description, which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
+s4_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+ (phrase $ problem ^. term) +:+
+    (phrase $ description ^. term) +:+ S ", which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
   S ". This is followed by the" +:+ (phrase $ solution ^. term) +:+ (phrase $ characteristicsSpecification ^. term) :+:
   S ", which presents the" +:+ (plural assumption) `sC` 
     (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ S "and finally the" +:+
@@ -96,7 +96,7 @@ s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
   
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that" +:+
-  S "are used in subsequent" +:+ (plural $ section_ ^. term) +:+ S "and their meaning, with the purpose of" +:+
+  S "are used in subsequent" +:+ (plural $ section_ ^. term) +:+ S "and their meaning, with the" +:+ (phrase $ purpose ^. term) +:+ S "of" +:+
   S "reducing ambiguity and making it easier to correctly understand the" +:+
   S "requirements:"
   
@@ -142,7 +142,7 @@ s4_2_intro = Paragraph $ S "The" +:+
   
 s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro]
 
-s4_2_1_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "simplifies the original problem" +:+
+s4_2_1_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
   S "and helps in developing the theoretical" +:+ (phrase $ model ^. term) +:+ S "by filling in the" +:+
   S "missing" +:+ (phrase $ information ^. term) +:+ S "for the physical" +:+ (phrase $ system ^. term) :+: S ". The numbers given in the" +:+
   S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 

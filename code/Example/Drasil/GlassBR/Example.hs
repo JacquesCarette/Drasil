@@ -262,7 +262,7 @@ blaReGLa      = dcc "blaReGLa" (nounPhraseSP "Blast resistant glazing")
 eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "Equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
-sD            = dcc "sD" (nounPhraseSP "Stand off distance")
+sD            = dcc "sD" (nounPhraseSP "stand off distance")
   ("The distance from the glazing surface to the centroid of a " ++
     "hemispherical high explosive charge.")
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?

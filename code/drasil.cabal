@@ -140,6 +140,10 @@ executable pcm
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.TableOfAbbAndAcronyms
+    , Drasil.DocumentLanguage
+    , Drasil.OrganizationOfSRS
+    , Drasil.TableOfSymbols
+    , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

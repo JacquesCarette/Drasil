@@ -86,13 +86,6 @@ force_2 = uc' "F_2"
 
 mass_1, mass_2, dispUnit, dispNorm, sqrDist :: UnitalChunk
 
---mass_1  = uc' "m_1" (nounPhraseSP "mass of the first body")
---  "FIXME: Define this or remove the need for definitions"
---  (sub (mass ^. symbol) (Atomic "1")) kilogram
---mass_2  = uc' "m_2" (nounPhraseSP "mass of the second body")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (mass ^. symbol) (Atomic "2")) kilogram
-
 -- FIXME: parametrized hack
 mass_1 = ucFromVC mass1 kilogram
   where mass1 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the first body")) (phrase $ compoundPhrase' (QPP.mass ^. term) (cn "of the first body"))) (sub (QPP.mass ^. symbol) (Atomic "1"))

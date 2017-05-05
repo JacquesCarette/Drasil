@@ -23,13 +23,13 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_srs :: Document  
-ssp_srs = SRS.doc sSA (name henryFrankis) [s1, s2, s3, s4, s5, s6]
+ssp_srs = SRS.doc ssa (name henryFrankis) [s1, s2, s3, s4, s5, s6]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 ssp_mg :: Document
-ssp_mg = mgDoc sSA (name henryFrankis) mgBod
+ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 
 s1, s1_1, s1_2, s1_3, s2, s3, s4, s5, s6 :: Section
 

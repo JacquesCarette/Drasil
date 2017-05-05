@@ -10,9 +10,20 @@ import Control.Lens ((^.))
 
 --FIXME: Remove unitless
 sspSymbols :: [UnitalChunk]
-sspSymbols = [fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords, fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i, omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f, m, upsilon, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i, dv_i, dx_i, dy_i]
+sspSymbols = [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
+              elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords,
+              fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2,
+              ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
+              omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f, m, upsilon,
+              delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+              dv_i, dx_i, dy_i]
 
-fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords, fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i, omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f, m, upsilon, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i, dv_i, dx_i, dy_i, s, p :: UnitalChunk
+fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, 
+  poisson, coords, hWT, hUS, hSlip, xi, critCoords, fs, fsloc, si, pi_f,
+  ti, ri, wi, kc, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
+  qi, alpha_i, beta_i, omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f,
+  m, upsilon, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+  dv_i, dx_i, dy_i, s, p :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -270,11 +281,11 @@ dy_i        = uc' "dy_i" (cn "displacement of a slice in the y-ordinate directio
 -- FIXME: Use acronyms
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
-  physSyst,requirement,srs,sSA,thModel]
+  physSyst,requirement,srs,ssa,thModel]
   
 --FIXME: Use nounphrase instead of pn
-sSA :: CINP
-sSA = commonINP "sSA" (pn "Slope Stability Analysis") "SSA"
+ssa :: CINP
+ssa = commonINP "ssa" (pn "Slope Stability Analysis") "SSA"
 
 
 ----Theoretical Models----
@@ -286,5 +297,7 @@ fs_rel = (C fs) := (C p) / (C s)
 
 fs_desc :: Sentence
 fs_desc = 
-  (S "The stability metric of the slope, known as the factor of safety (" :+: 
-  P (fs ^. symbol) :+: S "), is determined by the ratio of the shear force at the base of the slope (" :+: P (s ^. symbol) :+: S "), and the resistive shear (" :+: P (p ^. symbol) :+: S ").")
+  S "The stability metric of the slope, known as the factor of safety" `sC`
+  (sParen (P (fs ^. symbol))) +:+ S "is determined by the ratio of the" +:+
+  S "shear force at the base of the slope" `sC` (sParen (P (s ^. symbol))) +:+ 
+  S "and the resistive shear" +:+. (sParen (P (p ^. symbol)))

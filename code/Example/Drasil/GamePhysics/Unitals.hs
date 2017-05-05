@@ -139,10 +139,9 @@ mTot = uc' "M" (nounPhraseSP "total mass of the rigid body")
 initRelVel, mass_A, mass_B, normalLen, contDisp_A, contDisp_B, perpLen_A,
   momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
 
-initRelVel = uc' "v_i^AB" 
-  (nounPhraseSP "relative velocity between rigid bodies A and B")
-  "FIXME: Define this or remove the need for definitions"
-  (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
+--FIXME: parametrized hack
+initRelVel = ucFromVC relVel velU
+  where relVel = cvR (dccWDS "v_i^AB" (compoundPhrase' (compoundPhrase' (cn "relative") (QP.velocity ^. term)) (cn "between rigid bodies of A and B")) (phrase $ QP.velocity ^. term)) (sup (sub (QP.velocity ^. symbol) lI) (Concat [cA, cB]))
 
 --FIXME: parametrized hack
 mass_A = ucFromVC rigidA kilogram
@@ -166,18 +165,13 @@ contDisp_B = uc' "r_BP" (nounPhraseSP $
   "mass of rigid body B and contact point P")
   "FIXME: Define this or remove the need for definitions" 
   (sub (disp ^. symbol) (Concat [cB, cP])) metre
-perpLen_A = uc' "||r_AP x n||" (nounPhraseSP $ 
-  "length of the vector perpendicular " ++
-  "to the contact displacement vector of rigid body A")
-  "FIXME: Define this or remove the need for definitions" 
-  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*",
-  (normalVect ^. symbol), Atomic "||"]) metre
-perpLen_B = uc' "||r_BP x n||" (nounPhraseSP $ 
-  "length of the vector perpendicular " ++
-  "to the contact displacement vector of rigid body B")
-  "FIXME: Define this or remove the need for definitions" 
-  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*",
-  (normalVect ^. symbol), Atomic "||"]) metre
+
+--FIXME: parametrized hack -> needs synonym for normal with perpendicular
+perpLen_A = ucFromVC normlenA metre
+  where normlenA = cvR (dccWDS "|| r_AP x n ||" (compoundPhrase' (normalLen ^. term) (cn "to the contact displacement vector of rigid body A")) (phrase $ normalLen ^. term))  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*", (normalVect ^. symbol), Atomic "||"])
+--FIXME: parametrized hack -> needs synonym for normal with perpendicular
+perpLen_B = ucFromVC normlenB metre
+  where normlenB = cvR (dccWDS "|| r_AB x n ||" (compoundPhrase' (normalLen ^. term) (cn "to the contact displacement vector of rigid body B")) (phrase $ normalLen ^. term))  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*", (normalVect ^. symbol), Atomic "||"])
 
 -- FIXME: parametrized hack
 momtInert_A = ucFromVC momtA momtInertU

@@ -150,8 +150,13 @@ s2_3_p1 = Con $ Paragraph $ S "The organization of this document" +:+
   S " The presentation follows the standard pattern of presenting" +:+
   S "goals, theories, definitions, and assumptions.  For readers" +:+
   S "that would like a more bottom up approach, they can start" +:+
-  S "reading the instance models in " :+: makeRef sec_IMs :+:
-  S " and trace back to find any additional information they require.  The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (" :+: makeRef sec_TMs :+: S ") and instance models (" :+: makeRef sec_IMs :+: S ")."
+  S "reading the instance models in" +:+ makeRef sec_IMs +:+
+  S "and trace back to find any additional information they" +:+
+  S "require.  The instance models provide the set of algebraic" +:+
+  S "equations that must be solved iteratively to perform a" +:+
+  S "Morgenstern Price Analysis. The goal statements are refined" +:+
+  S "to the theoretical models" +:+ (sParen . makeRef) sec_TMs +:+ 
+  S "and instance models" +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
 s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
@@ -206,7 +211,7 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.1.2 --
-s4_1_2 = Sub $ Section (S "Physical" +:+ (titleize systemdescription))
+s4_1_2 = Sub $ Section (S "Physical" +:+ (titleize systemdescription)) --FIXME: Use proper compound nounPhrase for the whole title?
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
 
 s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in " :+: (makeRef fig_indexconv) :+: S "."
@@ -248,7 +253,7 @@ s4_2 = Sub $ Section (S "Solution" +:+ (titleize characteristicsSpecification))
   [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
-  S "SSA are presented in " :+: makeRef sec_IMs :+: S "." +:+
+  S "SSA are presented in" +:+. makeRef sec_IMs +:+
   S " The information to understand the meaning of the instance" +:+ --FIXME extra space at start of sentence?
   S "models and their derivation is also presented, so that the" +:+
   S "instance models can be verified."
@@ -258,8 +263,8 @@ s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
 
 s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
   S "original problem and helps in developing the theoretical" +:+
-  S "model by filling in the missing information for the" +:+ (phrase physicalSystem) :+:
-  S ". The numbers given in the square brackets refer to" +:+
+  S "model by filling in the missing information for the" +:+. (phrase physicalSystem) +:+
+  S "The numbers given in the square brackets refer to" +:+
   S "the data definition, or the instance model, in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 

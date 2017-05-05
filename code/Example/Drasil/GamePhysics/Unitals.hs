@@ -112,8 +112,8 @@ sqrDist = ucFromVC norm m_2
 vel_B, vel_O, r_OB :: UnitalChunk
 
 -- FIXME: parametrized hack
-vel_B   = ucFromVC velo velU
-  where velo = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term) (cn "at point B")) (phrase $ QP.velocity ^. term)) (sub (QP.velocity ^. symbol) cB)
+vel_B   = ucFromVC velb velU
+  where velb = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term) (cn "at point B")) (phrase $ QP.velocity ^. term)) (sub (QP.velocity ^. symbol) cB)
 -- FIXME: parametrized hack
 vel_O   = ucFromVC velo velU
   where velo = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term) (cn "at the origin")) (phrase $ QP.velocity ^. term)) (sub (QP.velocity ^. symbol) cO)
@@ -132,9 +132,9 @@ pos_CM = uc' "p_CM" (nounPhraseSP $
   "FIXME: Define this or remove the need for definitions" 
   (sub (position ^. symbol) (Atomic "CM")) metre
 
+--FIXME: parametrized hack
 mass_i = ucFromVC massi kilogram
   where massi = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the i-th particle")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) lI)
-
 --mass_i = uc' "m_i" (nounPhraseSP "mass of the i-th particle")
 --  "FIXME: Define this or remove the need for definitions" 
 --  (sub (mass ^. symbol) lI) kilogram

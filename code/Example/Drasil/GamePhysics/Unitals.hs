@@ -42,18 +42,12 @@ iVect       = ucFromVC ivec metre
 -- FIXME: parametrized hack
 jVect       = ucFromVC ivec metre
   where ivec = cvR (dccWDS "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) (phrase $ QM.unit_vect ^. term) ) (vec $ hat lJ)
-
---normalVect  = uc' "n" (nounPhraseSP "collision normal vector")
---  "FIXME: Define this or remove the need for definitions"(vec lN) metre
-
 -- FIXME: parametrized hack
 normalVect  = ucFromVC normVect metre
   where normVect = cvR (dccWDS "norm_vect" (compoundPhrase' (cn "collision") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term) ) (QM.norm_vect ^. symbol)
 angVel      = ucFromVC QP.angularV angVelU
 position    = ucFromVC QP.position metre
 orientation = ucFromVC QM.orientation radians
-  --{uc' "phi" (cn' "orientation")
-  --"FIXME: Define this or remove the need for definitions" (Greek Phi_L) radians
 dist        = ucFromVC QP.distance metre
 disp        = ucFromVC QP.displacement metre
 time        = ucFromVC QP.time second
@@ -112,9 +106,6 @@ dispNorm = ucFromVC norm metre
 -- FIXME: parametrized hack
 sqrDist = ucFromVC norm m_2
   where norm = cvR (dccWDS "euclideanNorm" (cn' "squared distance") (phrase $ QM.euclid_norm ^. term) ) (sup (QM.euclid_norm ^. symbol) (Atomic "2"))
---sqrDist = uc' "||r||^2" (nounPhraseSP "squared distance")
---  "FIXME: Define this or remove the need for definitions" 
---  (sup (dispNorm ^. symbol) (Atomic "2")) m_2
 
 -- T4 --
 
@@ -123,13 +114,9 @@ vel_B, vel_O, r_OB :: UnitalChunk
 -- FIXME: parametrized hack
 vel_B   = ucFromVC velo velU
   where velo = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term) (cn "at point B")) (phrase $ QP.velocity ^. term)) (sub (QP.velocity ^. symbol) cB)
---vel_B   = uc' "v_B" (nounPhraseSP "velocity at point B")
---  "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cB) velU
 -- FIXME: parametrized hack
 vel_O   = ucFromVC velo velU
   where velo = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term) (cn "at the origin")) (phrase $ QP.velocity ^. term)) (sub (QP.velocity ^. symbol) cO)
---vel_O   = uc' "v_O" (nounPhraseSP "velocity at the origin")
---  "FIXME: Define this or remove the need for definitions" (sub (vel ^. symbol) cO) velU
 r_OB    = uc' "r_OB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
@@ -162,9 +149,12 @@ initRelVel = uc' "v_i^AB"
   (nounPhraseSP "relative velocity between rigid bodies A and B")
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
-mass_A = uc' "m_A" (nounPhraseSP "mass of rigid body A")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (mass ^. symbol) cA) kilogram
+
+mass_A = ucFromVC rigidA kilogram
+  where rigidA = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of rigid body B")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) cA)
+--mass_A = uc' "m_A" (nounPhraseSP "mass of rigid body A")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sub (mass ^. symbol) cA) kilogram
 mass_B = uc' "m_B" (nounPhraseSP "mass of rigid body B")
   "FIXME: Define this or remove the need for definitions" 
   (sub (mass ^. symbol) cB) kilogram

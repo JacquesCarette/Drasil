@@ -262,7 +262,7 @@ s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1,
 s3_intro = Paragraph (S "This section provides general information about" +:+
   S "the system, identifies the interfaces between the system and" +:+
   S "its environment, and describes the user characteristics and" +:+.
-  S "the system constraints")
+  S "the system" +:+ plural constraint)
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -275,9 +275,9 @@ s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+:
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
-s3_2 = Section (S "System Constraints") [Con s3_2_contents]
+s3_2 = Section (S "System" titleize' constraint) [Con s3_2_contents]
 
-s3_2_contents = Paragraph (S "There are no system constraints.")
+s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: ".")
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
@@ -832,16 +832,16 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = Section (S "Data Constraints") [Con s4_2_6_intro]
+s4_2_6 = Section (S "Data" +:+ titleize' constraint) [Con s4_2_6_intro]
 
 s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
-  S "constraints on the input and output variables," +:+
-  S "respectively. The column for physical constraints gives" +:+ 
-  S "the physical limitations on the range of values that can" +:+
+  phrase constraint +:+ S "on the input and output variables," +:+
+  S "respectively. The column for physical" +:+ plural constraint +:+
+  S "gives the physical limitations on the range of values that can" +:+
   S "be taken by the variable. The column for software" +:+
-  S "constraints restricts the range of inputs to reasonable" +:+
-  S "values. The constraints are conservative, to give the" +:+
-  S "user of the model the flexibility to experiment with" +:+
+  plural constraints +:+ S "restricts the range of inputs to reasonable" +:+
+  S "values. The" +:+ plural constraint +:+ S "are conservative, to" +:+
+  S "give the user of the model the flexibility to experiment with" +:+
   S "unusual situations. The column of typical values is" +:+
   S "intended to provide a feel for a common scenario. The" +:+
   S "uncertainty column provides an estimate of the confidence" +:+
@@ -959,7 +959,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 --
   Enumeration (Simple [((short requirement) :+: S "3", Flat 
   (S "Verify that the inputs satisfy the required physical" +:+
-  S "constraints shown in Table 1.")),
+  plural constraint +:+ S "shown in Table 1.")),
 --
   ((short requirement) :+: S "4", Flat (S "Output the input" :+: 
   S " quantities and derived quantities in the following list: "  :+:
@@ -1086,7 +1086,7 @@ s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+
   S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
   S "dependencies of" +:+ plural inModel `sC`
   plural requirement `sC`
-  S "and data constraints on each other." +:+ 
+  S "and data" +:+ plural constraint +:+ "on each other." +:+ 
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
   plural thModel `sC`
   (plural genDefn) `sC` 
@@ -1224,7 +1224,7 @@ s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
   S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies" +:+
   S "of" +:+ plural inModel `sC`
   plural requirement `sC` S "and data" +:+
-  S "constraints on each other."),
+  plural constraint +:+ S "on each other."),
   Paragraph (S "NOTE: Building a tool to automatically generate" +:+
   S "the graphical representation of the matrix by scanning the" +:+
   S "labels and reference can be future work.")]
@@ -1236,7 +1236,7 @@ s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between" +:+
 
 s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between" +:+
   (titleize' requirement) `sC` titleize' inModel `sC`
-  S "and Data Constraints") "RTrace.png"
+  S "and Data" titleize' constraint) "RTrace.png"
 
 --References?
 

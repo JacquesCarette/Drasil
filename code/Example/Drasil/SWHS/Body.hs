@@ -136,8 +136,8 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "program will be referred to as" +:+ (phrase $ progName ^. term) +:+
   S "(" :+: (short progName) :+: S "). This section explains" +:+
   S "the purpose of this document, the scope of the system, the" +:+
-  S "organization of the document and the characteristics of" +:+.
-  S "the intended readers")]
+  S "organization of the document and the" +:+ plural characteristic +:+
+  S "of the intended readers")]
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
@@ -164,7 +164,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "but do not say how to solve it"),
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
-  S "writing the design specification and the software" +:+
+  S "writing the" +:+ short desSpec +:+ "and the software" +:+
   (short vav) +:+ S "plan. The design document" +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
@@ -266,7 +266,7 @@ s3_intro = Paragraph (S "This section provides general information about" +:+
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
-s3_1 = Section (S "User Characteristics") [Con s3_1_contents]
+s3_1 = Section (S "User" +:+ titleize' characteristic) [Con s3_1_contents]
 
 s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+: 
   S " should have an understanding of undergraduate Level 1" +:+.
@@ -287,8 +287,8 @@ s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,
 
 s4_intro = Paragraph (S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem" +:+
-  S "to be solved. This is followed by the solution" +:+
-  S "characteristics specification, which presents the" +:+
+  S "to be solved. This is followed by the" +:+ short solution +:+
+  phrase characteristicsSpecification +:+ S "which presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`
   (plural genDefn) `sC` 
@@ -363,6 +363,7 @@ s4_1_2_list = Enumeration (Simple $ [((short physSyst) :+: S "1", Flat
 
 -- Structure of list would be same between examples but content is completely 
 -- different
+-- FIXME: Figures have different IDs than stable structure
 
 fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+ (phrase $ ht_flux_C ^. term) +:+
   S "of" +:+ P (ht_flux_C ^. symbol) +:+ S "and" +:+ 
@@ -400,9 +401,9 @@ s4_1_3_list = Enumeration (Simple [((short goalStmt) :+: S "1", Flat
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
-s4_2 = Section (S "Solution Characteristics Specification") [Con s4_2_intro, 
-  Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, 
-  Sub s4_2_7]
+s4_2 = Section (titleize solution +:+ titleize' characteristic +:+ titleize specification)
+  [Con s4_2_intro, Sub s4_2_1, Sub s4_2_2, Sub s4_2_3, Sub s4_2_4,
+  Sub s4_2_5, Sub s4_2_6, Sub s4_2_7]
 
 s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
   S "(" :+: (short ode) :+: S "s) that govern" +:+
@@ -659,11 +660,11 @@ s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" +:+
   S "to replace the abstract symbols in the models identified" +:+
   S "in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
-  S "The solutions for IM1 and IM2 are coupled since the" +:+
-  S "solution for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+
+  S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
+  S "the" +:+ short solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+
   P (temp_PCM ^. symbol) +:+ S "depend on one another. IM3" +:+
-  S "can be solved once IM1 has been solved. The solution of" +:+
-  S "IM2 and IM4 are also coupled, since the" +:+ 
+  S "can be solved once IM1 has been solved. The" +:+ short solution +:+
+  S "of IM2 and IM4 are also coupled, since the" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "and" +:+ (phrase $ pcm_E ^. term) +:+
   S "depend on the" +:+ (sLower (phrase $ phase_change ^. 
   term)) :+: S ". (Instance models are left out because they" +:+
@@ -880,10 +881,10 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
-s4_2_7 = Section (S "Properties of a Correct Solution") (map Con s4_2_7_deriv)
+s4_2_7 = Section (S "Properties of a Correct" +:+ titleize solution) (map Con s4_2_7_deriv)
 
-s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the" +:+ 
-  (sLower (phrase $ law_cons_energy ^. term)) :+:
+s4_2_7_deriv = [Paragraph (S "A correct" +:+ short solution +:+ 
+  S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:
   S ". This means that the" +:+ (phrase $ w_E ^. term) +:+
   S "should equal the difference between" +:+
   S " the total energy input from the" +:+ (sLower 
@@ -910,8 +911,8 @@ s4_2_7_deriv = [Paragraph (S "A correct solution must exhibit the" +:+
   (C temp_PCM) [C time]))) time)),
   Paragraph (S "Equations (reference) and (reference) can be" +:+
   S "used as" +:+ Quote (S "sanity") :+: S "checks to gain" +:+ 
-  S "confidence in any solution computed by" +:+ (short progName) :+: 
-  S ". The relative error between the results" +:+
+  S "confidence in any" +:+ short solution +:+ "computed by" +:+
+  (short progName) :+: S ". The relative error between the results" +:+
   S "computed by" +:+ (short progName) +:+ S "and the" +:+
   S "results calculated from the" +:+ (short rightSide) :+: 
   S " of these equations should be less than 0.001% (R9).")]

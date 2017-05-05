@@ -214,10 +214,18 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 s4_1_2 = Sub $ Section (S "Physical" +:+ (titleize systemdescription)) --FIXME: Use proper compound nounPhrase for the whole title?
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
 
-s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties.  The index convention for referencing which interslice or slice is being used is shown in " :+: (makeRef fig_indexconv) :+: S "."
+s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed" +:+
+  S "by looking at properties of the slope as a series" +:+
+  S "of slice elements. Some properties are interslice" +:+
+  S "properties, and some are slice or slice base properties." +:+
+  S " The index convention for referencing which interslice" +:+
+  S "or slice is being used is shown in" +:+. (makeRef fig_indexconv)
 
 s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
-  (S "Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from 1 " :+: P (Special LEQ) :+: S " i " :+: P (Special LEQ) :+: S " n-1."),
+  (S "Interslice properties convention is noted by j. The end" +:+
+    S "interslice properties are usually not of interest" `sC` 
+    S "therefore use the interslice properties from 1" +:+
+    P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "n-1"),
   (S "Slice properties convention is noted by i.")
   ]
   

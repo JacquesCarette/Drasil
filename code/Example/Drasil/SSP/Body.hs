@@ -189,7 +189,7 @@ s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
   S "model the slope."
 
 -- SECTION 4.1 --
-s4_1 = Sub $ Section (S "Problem Description") [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
+s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" +:+
   S "to evaluate the factor of safety of a slopes slip surface and" +:+
@@ -199,15 +199,31 @@ s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" 
 s4_1_1 = Sub $ Section (S "Terminology") [s4_1_1_list]
 
 s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "Factor of Safety", S "Stability metric. How likely a slip surface is to experience failure through slipping."), 
-  (S "Critical Slip Surface", S "Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure."),
-  (S "Stress", S "Forces that are exerted between planes internal to a larger body subject to external loading."),
-  (S "Strain", S "Stress forces that result in deformation of the body/plane."),
-  (S "Normal Force", S "A force applied perpendicular to the plane of the material."),
-  (S "Shear Force", S "A force applied parallel to the plane of the material."),
-  (S "Tension", S "A stress the causes displacement of the body away from it's center."),
-  (S "Compression", S "A stress the causes displacement of the body towards it's center."),
-  (S "Plane Strain", S "The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominate dimensions direction are the ones that can be approximated as 0.")
+  (S "Factor of Safety", 
+      S "Stability metric. How likely a slip surface is to experience" +:+
+      S "failure through slipping."), 
+  (S "Critical Slip Surface", 
+      S "Slip surface of the slope that has the lowest global factor of" +:+
+      S "safety, and therefore most likely to experience failure."),
+  (S "Stress", 
+      S "Forces that are exerted between planes internal to a larger" +:+
+      S "body subject to external loading."),
+  (S "Strain", 
+      S "Stress forces that result in deformation of the body/plane."),
+  (S "Normal Force", 
+      S "A force applied perpendicular to the plane of the material."),
+  (S "Shear Force", 
+      S "A force applied parallel to the plane of the material."),
+  (S "Tension", 
+      S "A stress the causes displacement of the body away from it's center."),
+  (S "Compression", 
+      S "A stress the causes displacement of the body towards it's center."),
+  (S "Plane Strain", 
+      S "The resultant stresses in one of the directions of a" +:+
+      S "3 dimensional material can be approximated as 0. Results" +:+
+      S "when the length of one dimension of the body dominates the" +:+
+      S "others. Stresses in the dominate dimensions direction are" +:+
+      S "the ones that can be approximated as 0.")
   ]
 
 -- SECTION 4.1.2 --

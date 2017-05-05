@@ -131,7 +131,7 @@ s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
   S "fake a rational design process."
 
 -- SECTION 2.2 --
-s2_2 = Sub $ Section (S "Scope of Requirements") [s2_2_p1]
+s2_2 = Sub $ Section (titleize scpOfReq) [s2_2_p1]
 
 s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
   S "limited to stability analysis of a 2 dimensional slope," +:+

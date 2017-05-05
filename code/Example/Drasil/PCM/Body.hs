@@ -11,16 +11,14 @@ import Language.Drasil
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, norm_vect)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Units.Thermodynamics
 
 import Drasil.TableOfUnits
 import Drasil.TableOfSymbols
 import Drasil.TableOfAbbAndAcronyms
-import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
-import Drasil.ReferenceMaterial (refSec, intro)
-import Drasil.DocumentLanguage
+import Drasil.ReferenceMaterial (refSec)
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -48,13 +46,7 @@ s1_1_intro = Paragraph (S "Throughout this" +:+ (phrase $ document ^. term) +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
 
---s1_1_table = unit_table this_si
-s1_1_table = Table [(titleize $ unit_ ^. term), (titleize $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
-  [(\x -> Sy (x ^. usymb)),
-   (\x -> (x ^. defn)),
-   (\x -> (phrase $ x ^. term))
-  ] this_si)
-  ((titleize $ tOfUnits ^. term)) True
+s1_1_table = unit_table this_si --FIXME: Change to RefSec see line 72 of SWHS Body.hs
 
 s1_2 = Section ((titleize $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
 
@@ -63,27 +55,20 @@ s1_2_intro = Paragraph $
   S "used in this" +:+ (phrase $ document ^. term) +:+ S "along with their" +:+ (plural $ unit_ ^. term) :+:
   S ".  The choice of" +:+ (plural $ symbol_ ^. term) +:+ S "was" +:+
   S "made to be consistent with the heat transfer literature and" +:+
-  S "with existing documentation for solar water heating systems."
+  S "with existing documentation for" +:+ (plural $ sWHS ^. term) :+: S"."
   
---s1_2_table = table pcmSymbols (termExcept [cqs norm_vect])
-s1_2_table = Table [(titleize $ symbol_ ^. term), (titleize' $ unit_ ^. term), (titleize $ description ^. term)] (mkTable
-  [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ unit_symb ch),
-   (\ch -> phrase $ ch ^. term)
-   ]
-  pcmSymbols)
-  ((titleize $ tOfSymb ^. term)) False
+s1_2_table = table pcmSymbols (\x -> phrase $ x ^. term)
 
 s1_3 = table_of_abb_and_acronyms acronyms
 
-s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1,Sub s4_2]
+s4 = Section ((titleize $ specificsystemdescription ^. term)) [Con s4_intro, Sub s4_1,Sub s4_2]
 
 s4_intro = Paragraph $ S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+ (phrase $ problem ^. term) +:+
     (phrase $ description ^. term) :+: S ", which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
   S ". This is followed by the" +:+ (phrase $ solution ^. term) +:+ (phrase $ characteristicsSpecification ^. term) :+:
   S ", which presents the" +:+ (plural assumption) `sC` 
     (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ S "and finally the" +:+
-  S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --NOTE: We need something to handle the use of nouns as verbs
+  S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --FIXME: We need something to handle the use of nouns as verbs
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
                                             Sub s4_1_2,Sub s4_1_3]
@@ -92,7 +77,7 @@ s4_1_intro = Paragraph $ (getAcc sWHS) +:+ S "is a computer program" +:+
   S "developed to investigate the heating of water in a solar water heating" +:+
   S "tank."
 
-s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
+s4_1_1 = Section (S "Terminology and" +:+ (titleize' $ definition ^. term)) [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
   
 s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms that" +:+
@@ -128,7 +113,7 @@ s4_1_3_intro = Paragraph $ S "Given the temperature of the coil, initial" +:+
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = Section (S "Solution Characteristics Specification") 
+s4_2 = Section ((titleize $ solution ^. term) +:+ (titleize $ characteristicsSpecification ^. term)) 
   [Con s4_2_intro,Sub s4_2_1,Sub s4_2_2]
 
 s4_2_intro = Paragraph $ S "The" +:+ 

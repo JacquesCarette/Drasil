@@ -17,7 +17,7 @@ cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++
 -- Chunks with units --
 accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
     impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
-    orientation, dist, disp, time, torque, angDisp, vel :: UnitalChunk
+    orientation, dist, disp, time, torque, angDisp, vel, linDisp :: UnitalChunk
 
 cpUnits :: [UnitalChunk]
 cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
@@ -53,8 +53,11 @@ disp        = ucFromVC QP.displacement metre
 time        = ucFromVC QP.time second
 torque      = ucFromVC QP.torque torqueU
 angDisp     = ucFromVC QP.angularDisplacement radians
-vel         = ucFromVC QP.velocity velU
 
+--FIXME: parametrized hack
+linDisp     = ucFromVC ldisp velU
+  where ldisp = cvR (dccWDS "linearDisp" (compoundPhrase' (QP.linearDisplacement ^. term) (cn ("FIXME: add definition"))) (phrase $ QP.linearDisplacement ^. term)) (QP.linearDisplacement ^. symbol)
+vel         = ucFromVC QP.velocity velU
 -- Chunks without units --
 cpUnitless :: [VarChunk]
 cpUnitless = [numParticles]
@@ -92,13 +95,6 @@ mass_2  = uc' "m_2" (nounPhraseSP "mass of the second body")
 -- FIXME: parametrized hack
 dispUnit = ucFromVC dispVect metre
   where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement")  (QM.unit_vect ^. term)) (phrase $ compoundPhrase' (cn "displacement") (QM.unit_vect ^. term))) (vec (hat lR))
---dispUnit = uc' "rhat" (nounPhraseSP "unit displacement vector")
---  "FIXME: Define this or remove the need for definitions" (vec (hat lR)) metre
--- Improvised norm symbols --
---FIXME: Properly implement Norm
---dispNorm    = uc' "||r||" (nounPhraseSP "Euclidean norm of the displacement")
---  "FIXME: Define this or remove the need for definitions" 
---  (Concat [Atomic "||", (disp ^. symbol), Atomic "||"]) metre
 
 -- FIXME: parametrized hack
 dispNorm = ucFromVC norm metre
@@ -135,9 +131,7 @@ pos_CM = uc' "p_CM" (nounPhraseSP $
 --FIXME: parametrized hack
 mass_i = ucFromVC massi kilogram
   where massi = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the i-th particle")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) lI)
---mass_i = uc' "m_i" (nounPhraseSP "mass of the i-th particle")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (mass ^. symbol) lI) kilogram
+
 pos_i = uc' "p_i" (nounPhraseSP "position vector of the i-th particle")
   "FIXME: Define this or remove the need for definitions" 
   (sub (position ^. symbol) lI) metre
@@ -157,24 +151,15 @@ initRelVel = uc' "v_i^AB"
 --FIXME: parametrized hack
 mass_A = ucFromVC rigidA kilogram
   where rigidA = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of rigid body A")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) cA)
---mass_A = uc' "m_A" (nounPhraseSP "mass of rigid body A")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (mass ^. symbol) cA) kilogram
 
 --FIXME: parametrized hack
 mass_B = ucFromVC rigidB kilogram
   where rigidB = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of rigid body B")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) cB)
---mass_B = uc' "m_B" (nounPhraseSP "mass of rigid body B")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (mass ^. symbol) cB) kilogram
 
 --FIXME: parametrized hack
 normalLen = ucFromVC normLen metre
   where normLen = cvR (dccWDS "length of the normal vector" (compoundPhrase' (cn "length of the") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term)) (Concat [Atomic "||",(QM.norm_vect ^. symbol), Atomic "||"]) 
 
---normalLen = uc' "||n||" (nounPhraseSP "length of the normal vector")
---  "FIXME: Define this or remove the need for definitions" 
---  (Concat [Atomic "||",(normalVect ^. symbol), Atomic "||"]) metre
 contDisp_A = uc' "r_AP" (nounPhraseSP $ 
   "displacement vector between the centre of " ++
   "mass of rigid body A and contact point P")

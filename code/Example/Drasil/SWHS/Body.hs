@@ -277,7 +277,7 @@ s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+:
 
 s3_2 = Section (S "System" titleize' constraint) [Con s3_2_contents]
 
-s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: ".")
+s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: S ".")
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...

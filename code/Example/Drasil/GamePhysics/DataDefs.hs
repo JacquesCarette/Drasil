@@ -50,9 +50,8 @@ dd2descr = S "linear" +:+ (disp ^. term) +:+ S "of a" +:+
 -- DD3 : Linear velocity --
 
 dd3linVel :: QDefinition
-dd3linVel = fromEqn "dd3linVel" fixme --dd3descr 
-  (Concat [(vel ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
-  velU velEqn
+dd3linVel = fromEqn "dd3linVel" (linVelo ^. term) (linVelo ^. symbol) velU
+  velEqn
 
 velEqn :: Expr
 velEqn = Deriv Total (FCall (C disp) [C time]) (C time)
@@ -67,9 +66,8 @@ dd3descr = S "linear" +:+ (vel ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 dd4linAcc :: QDefinition
-dd4linAcc = fromEqn "dd4linAcc" fixme --dd4descr 
-  (Concat [(accel ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"]) 
-  accelU accelEqn
+dd4linAcc = fromEqn "dd4linAcc" (linAccel ^. term) (linAccel ^. symbol) accelU
+  accelEqn
 
 accelEqn :: Expr
 accelEqn = Deriv Total (FCall (C vel) [C time]) (C time)

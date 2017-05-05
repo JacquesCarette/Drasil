@@ -787,7 +787,7 @@ s9_intro2 =
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
   +:+ S "is also to provide easy references on what has to be additionally modified if a" +:+
   S "certain component is changed. The arrows in the" +:+ (plural $ graph ^. term)
-  +:+ S "represent" +:+. plural dependency +:+ S ". The component at the tail of an arrow is depended on" +:+
+  +:+ S "represent" +:+. plural dependency +:+ S "The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
   S "component is changed, the components that it points to should also" +:+
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+

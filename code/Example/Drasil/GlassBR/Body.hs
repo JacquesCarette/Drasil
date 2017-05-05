@@ -121,8 +121,8 @@ s2_1_intro =
   S "to solve it",
   Paragraph $
   S "This" +:+ phrase document +:+ S "will be used as a starting point for subsequent" +:+
-  S "development phases, including writing the design specification and" +:+
-  S "the software verification and validation plan. The design" +:+ phrase document +:+
+  S "development phases, including writing the" +:+ phrase desSpec +:+
+  S "and the software verification and validation plan. The design" +:+ phrase document +:+
   S "will show how the" +:+ plural requirement +:+ S "are to be realized, including" +:+.
   S "decisions on the numerical algorithms and programming environment" +:+
   S "The verification and validation plan will show the steps that will" +:+

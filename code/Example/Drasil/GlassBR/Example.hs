@@ -322,7 +322,7 @@ t2descr =
   (P $ lRe ^. symbol) :+: S " is the " :+: (phrase $ lRe ^. term) :+: 
   S " (also called capacity, as defined in " :+: 
   (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
-  (P $ demand ^. symbol) :+: S " (also referred as the " :+: (phrase $ demandq ^. term)
+  (P $ demand ^. symbol) :+: S " (also referred as the " :+: (titleize $ demandq ^. term)
   :+: S ") is the " :+: (demandq ^. defn) :+: S ", as defined in " :+: 
   (makeRef (Definition (Theory calOfDe))) :+: S "."
 

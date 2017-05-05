@@ -605,13 +605,13 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section(titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
+s9 = Section((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
 
 s9_intro1 = Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the traceability matrices is to provide" +:+
+  S "The" +:+ phrase purpose +:+ S "of the" +:+ (phrase $ traceyMatrix ^. term) +:+ S "is to provide" +:+
   S "easy references on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
@@ -685,7 +685,7 @@ s9_table1 = Table [S "",
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "",
   S "", S "", S "", S "", S "", S "X", S "X", S "", S "", S "", S "", S "",
   S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S "Showing the" +:+
+  ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
   S "Connections Between Items of Different" +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
@@ -719,7 +719,7 @@ s9_table2 = Table [S "", S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "X", S "X", S "X",
   S "", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "", S "",
   S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S "Showing the" +:+
+  ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
   S "Connections Between" +:+ titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
@@ -779,7 +779,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   S "", S "", S ""],
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S ""]]
-  (S "Traceability" +:+ (titleize $ matrix ^. term) +:+ S "Showing the" +:+
+  ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
   S "Connections Between Assumptions and Other Items") True
 
 s9_intro2 = 
@@ -810,14 +810,14 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   S "labels and reference can be future work."]
 
-fig_2 = Figure (S "Figure 2: Traceability" +:+ (titleize $ matrix ^. term) 
+fig_2 = Figure (S "Figure 2:" +:+ (titleize $ traceyMatrix ^. term) 
   +:+ S "Showing the Connections" +:+ S "Between Items of Different Sections") "Trace.png"
 
-fig_3 = Figure (S "Figure 3: Traceability" +:+ (titleize $ matrix ^. term) +:+ 
+fig_3 = Figure (S "Figure 3:" +:+ (titleize $ traceyMatrix ^. term) +:+ 
   S "Showing the Connections" +:+ S "Between" +:+ (titleize' requirement) +:+
   S "and Other Items") "RTrace.png"
 
-fig_4 = Figure (S "Figure 4: Traceability" +:+ (titleize $ matrix ^. term) +:+
+fig_4 = Figure (S "Figure 4:" +:+ (titleize $ traceyMatrix ^. term) +:+
   S "Showing the Connections Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 

@@ -150,14 +150,20 @@ initRelVel = uc' "v_i^AB"
   "FIXME: Define this or remove the need for definitions"
   (sup (sub (vel ^. symbol) lI) (Concat [cA, cB])) velU
 
+--FIXME: parametrized hack
 mass_A = ucFromVC rigidA kilogram
-  where rigidA = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of rigid body B")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) cA)
+  where rigidA = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of rigid body A")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) cA)
 --mass_A = uc' "m_A" (nounPhraseSP "mass of rigid body A")
 --  "FIXME: Define this or remove the need for definitions" 
 --  (sub (mass ^. symbol) cA) kilogram
-mass_B = uc' "m_B" (nounPhraseSP "mass of rigid body B")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (mass ^. symbol) cB) kilogram
+
+--FIXME: parametrized hack
+mass_B = ucFromVC rigidB kilogram
+  where rigidB = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of rigid body B")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) cB)
+--mass_B = uc' "m_B" (nounPhraseSP "mass of rigid body B")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sub (mass ^. symbol) cB) kilogram
+
 normalLen = uc' "||n||" (nounPhraseSP "length of the normal vector")
   "FIXME: Define this or remove the need for definitions" 
   (Concat [Atomic "||",(normalVect ^. symbol), Atomic "||"]) metre

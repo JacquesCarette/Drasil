@@ -550,7 +550,7 @@ s7_1_list =
   [(((short requirement) :+: S "6"), Nested (S "Output the following"
   +:+ S "quantities:")
   (Bullet $ 
-    [Flat $ (phrase $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
+    [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++
     [Flat $ (phrase $ lRe ^. term) +:+ sParen(P $ lRe ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory calOfCap)))] ++

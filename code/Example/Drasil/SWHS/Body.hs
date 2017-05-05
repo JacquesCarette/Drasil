@@ -137,7 +137,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "(" :+: (short progName) :+: S "). This section explains" +:+
   S "the purpose of this document, the scope of the system, the" +:+
   S "organization of the document and the" +:+ plural characteristic +:+
-  S "of the intended readers")]
+  S "of the intended readers.")]
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 

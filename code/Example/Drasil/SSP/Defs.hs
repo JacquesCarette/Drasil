@@ -297,7 +297,7 @@ fs_rel = (C fs) := (C p) / (C s)
 
 fs_desc :: Sentence
 fs_desc = 
-  S "The stability metric of the slope, known as the factor of safety" `sC`
-  (sParen (P (fs ^. symbol))) +:+ S "is determined by the ratio of the" +:+
-  S "shear force at the base of the slope" `sC` (sParen (P (s ^. symbol))) +:+ 
+  S "The stability metric of the slope, known as the factor of safety" +:+
+  (sParen (P (fs ^. symbol))) `sC` S "is determined by the ratio of the" +:+
+  S "shear force at the base of the slope" +:+ (sParen (P (s ^. symbol))) `sC` 
   S "and the resistive shear" +:+. (sParen (P (p ^. symbol)))

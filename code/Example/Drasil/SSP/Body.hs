@@ -393,12 +393,13 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s5_1_table = Con table_inputdata
 
 table_inputdata :: Contents
-table_inputdata =  Table (map titleize [symbol_, units_, description]) (mkTable
-  [(\ch -> P (ch ^. symbol)),
-   (\ch -> Sy $ unit_symb ch),
-   (\ch -> phrase $ ch ^. term)
-   ]
-  [coords, elastMod, cohesion, poisson, fricAngle, dryWeight, satWeight, waterWeight])
+table_inputdata =  Table (map titleize [symbol_, units_, description]) 
+  (mkTable
+    [(\ch -> P (ch ^. symbol)),
+     (\ch -> Sy $ unit_symb ch),
+     (\ch -> phrase $ ch ^. term)]
+    [coords, elastMod, cohesion, poisson, fricAngle, dryWeight,
+      satWeight, waterWeight])
   (S "Input data") True
  
 -- SECTION 5.2 --

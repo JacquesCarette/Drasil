@@ -27,7 +27,7 @@ desSpec     = commonINP "desSpec"     (cn' "design specification")          "DS"
 
 section_, physical, system, description, specific, general, symbol_, units_, 
   table_, introduction, organization, document, purpose, characteristics, characteristic, specification,
-    unit_, problem, theory, definition, model, information, solution :: NPNC
+    unit_, problem, theory, definition, model, information, solution, condition :: NPNC
 section_        = npnc "section"        (cn' "section")
 physical        = npnc "physical"       (cn' "physical")
 system          = npnc "system"         (cn' "system")
@@ -51,6 +51,7 @@ definition      = npnc "definition"     (cn' "definition")
 model           = npnc "model"          (cn' "model")
 information     = npnc "information"    (cn "information")
 solution        = npnc "solution"       (cn' "solution")
+condition       = npnc "condition"       (cn' "condition")
 
 tOfSymb, refmat, orgOfDoc, prpsOfDoc, tOfUnits, sciCompS :: NPNC
 

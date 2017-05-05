@@ -29,11 +29,12 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 section_, physical, system, description, specific, general, symbol_, units_, 
   table_, introduction, organization, document, purpose, characteristics,
   characteristic, specification, unit_, problem, theory, definition, model,
-  information, solution, condition, scope, requirement_ :: NPNC
+  information, solution, condition, scope, requirement_, dependency :: NPNC
 characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")
 definition      = npnc "definition"     (cn' "definition")
+dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
 document        = npnc "document"       (cn' "document")
 general         = npnc "general"        (cn' "general")  --FIXME: adjective?

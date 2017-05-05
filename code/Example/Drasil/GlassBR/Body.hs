@@ -395,7 +395,7 @@ s6_2_1_list =
   (Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short assumption) :+: S "5"), S "Glass under consideration" +:+
     S "is assumed to be a single" +:+.
-    (sLower (phrase $ lite ^. term)) +:+ S "Hence the value of" +:+ 
+    (phrase $ lite ^. term) +:+ S "Hence the value of" +:+ 
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all calculations in" 
     +:+. (gLassBR ^. defn)),
   (((short assumption) :+: S "6"), S "Boundary conditions for the" +:+ 
@@ -597,7 +597,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+. S "variable inputs")),
   (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
   S "5 - The software may be changed to accommodate more than a single" +:+.
-  (sLower (phrase $ lite ^. term)))),
+  (phrase $ lite ^. term))),
   (((short likelyChg) :+: S "4"), ((short assumption) :+: 
   S "6 - The software may be changed to accommodate more boundary" +:+.
   S "conditions than 4-sided support")),

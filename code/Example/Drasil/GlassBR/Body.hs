@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph)
+import Data.Drasil.Concepts.Math (matrix, traceyMatrix, graph)
 import Prelude hiding (id)
 
 import           Drasil.TableOfUnits
@@ -605,7 +605,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section(S "Traceability" +:+ (titleize' $ matrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
+s9 = Section(titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])

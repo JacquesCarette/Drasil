@@ -18,6 +18,8 @@ linear = dcc "linear" (cn' "linear") "exhibiting directly proportional change in
 matrix = dcc "matrix" (cnICES "matrix") "matrix"
 graph  = dcc "graph" (cn' "graph") "graph"
 
+traceyMatrix = dcc "traceyMatrix" (cnICES "traceability matrix") "traceability matrix"
+
 --FIXME: use nounphrase instead of cn'
 ode       = commonINP "ode" (cn' "Ordinary Differential Equation") "ODE"
 

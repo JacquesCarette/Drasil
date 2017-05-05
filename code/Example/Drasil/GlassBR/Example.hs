@@ -197,7 +197,7 @@ aR            = dcc "aR" (nounPhraseSP "Aspect ratio")
 gbr           = dcc "gbr" (nounPhraseSP "glass breakage")
   ("The fracture or breakage of any lite or ply in monolithic, laminated, " ++
     "or insulating glass.")
-lite          = dcc "lite" (nounPhraseSP "Lite")
+lite          = dcc "lite" (nounPhraseSP "lite")
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
 glassTy       = dcc "glassTy" (nounPhraseSP "Glass Types") "Type of glass"

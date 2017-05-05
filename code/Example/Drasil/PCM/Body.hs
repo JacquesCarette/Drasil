@@ -43,14 +43,14 @@ s1_1_intro = Paragraph (S "Throughout this"+:+ (phrase $ document ^. term) +:+
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+ (phrase $ description ^. term) +:+
            S "of the" +:+ (phrase $ unit_ ^. term) +:+ S "followed by the SI name.")
 
-s1_1_table = Table [(phrase $ symbol_ ^. term), (phrase $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
+s1_1_table = Table [(titleize $ symbol_ ^. term), (titleize $ description ^. term), S "Name"] (mkTable --FIXME: Change to RefSec (see line 72 SWHS Body)
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
   ] this_si)
   ((titleize $ tOfUnits ^. term)) True
 
-s1_2 = Section ((phrase $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
+s1_2 = Section ((titleize $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
 
 s1_2_intro = Paragraph $ 
   S "The" +:+ (phrase $ table_ ^. term) +:+ S "that follows summarizes the" +:+ (plural $ symbol_ ^. term) +:+
@@ -59,7 +59,7 @@ s1_2_intro = Paragraph $
   S "made to be consistent with the heat transfer literature and" +:+
   S "with existing documentation for solar water heating systems."
   
-s1_2_table = Table [(phrase $ symbol_ ^. term), (plural $ units_ ^. term), (phrase $ description ^. term)] (mkTable
+s1_2_table = Table [(titleize $ symbol_ ^. term), (titleize' $ unit_ ^. term), (titleize $ description ^. term)] (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
    (\ch -> Sy $ unit_symb ch),
    (\ch -> phrase $ ch ^. term)
@@ -75,8 +75,8 @@ s4_intro = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the" +:+ (phrase $ problem ^. term) +:+ S "to be solved" :+:
   S ". This is followed by the solution" +:+ (phrase $ characteristicsSpecification ^. term) :+:
   S ", which presents the" +:+ (plural assumption) `sC` 
-    (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ (S "and finally the") +:+
-  S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --Do verb versions of nouns count?
+    (plural $ theory ^. term) :+: (S ",") +:+ (plural $ definition ^. term) +:+ S "and finally the" +:+
+  S "instance" +:+ (phrase $ model ^. term) +:+ S "(ODE) that models the solar water heating tank." --NOTE: We need something to handle the use of nouns as verbs
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
                                             Sub s4_1_2,Sub s4_1_3]
@@ -137,7 +137,7 @@ s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro]
 
 s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
   S "and helps in developing the theoretical" +:+ (phrase $ model ^. term) +:+ S "by filling in the" +:+
-  S "missing" +:+ (phrase $ information ^. term) +:+ S "for the physical" +:+ (phrase $ system ^. term) +:+ S ". The numbers given in the" +:+
+  S "missing" +:+ (phrase $ information ^. term) +:+ S "for the physical" +:+ (phrase $ system ^. term) :+: S ". The numbers given in the" +:+
   S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
   (map (\ch -> (sMap (map toLower) (phrase $ ch ^. term)) +:+ S "[" :+:
   (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 

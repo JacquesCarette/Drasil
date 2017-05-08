@@ -18,7 +18,8 @@ import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Physics 
+import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.PhysicalProperties
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
@@ -70,7 +71,7 @@ s1_2_intro = Con $ Paragraph $
   S "and equations of the program are summarized in the table" +:+
   S "below. Values with a subscript i implies that the value will" +:+
   S "be taken at and analyzed at a slice or slice interface" +:+
-  S "composing the total slip mass."
+  S "composing the total slip" +:+. (phrase $ mass ^. term)
 
 s1_2_table = Con $ Table (map titleize [symbol_, units_, description]) (mkTable
   [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
@@ -91,12 +92,12 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
   S "the mass. For an unstable slope this can cause instability" +:+
   S "in the form of soil/rock movement. The effects of soil/rock" +:+
   S "movement can range from inconvenient to seriously hazardous," +:+
-  S "resulting in signifcant life and economic loses. Slope" +:+
-  S "stability is of interest both when analyzing natural slopes," +:+
-  S "and when designing an excavated slope. Slope stability analysis" +:+
+  S "resulting in signifcant life and economic loses. Slope stability" +:+
+  S "is of interest both when analyzing natural slopes," +:+
+  S "and when designing an excavated slope." +:+ (at_start ssa) +:+
   S "is the assessment of the safety of a slope, identifying the" +:+
   S "surface most likely to experience slip and an index of it's" +:+
-  S "relative stability known as the factor of safety."
+  S "relative stability known as the factor of safety." --FIXME: use a definition for "factor of safety"
 
 s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
   S "of the" +:+ (introduceAbb srs) +:+
@@ -104,7 +105,7 @@ s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+
   S "program. This section explains the purpose of this document," +:+
   S "the scope of the system, the organization of the document and" +:+
-  S "the characteristics of the intended readers."
+  S "the" +:+ (phrase characteristics) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
@@ -187,15 +188,15 @@ s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]
 s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
   S "problem description, which gives a high-level view of the" +:+
   S "problem to be solved.  This is followed by the solution" +:+
-  S "characteristics specification, which presents the assumptions," +:+
-  S "theories, definitions and finally the instance models that" +:+
-  S "model the slope."
+  (phrase characteristicsSpecification) `sC` S "which presents the" +:+ 
+  (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
+  S "and finally the instance models that model the slope."
 
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" +:+
-  S "to evaluate the factor of safety of a slopes slip surface and" +:+
+  S "to evaluate the factor of safety of a slopes slip surface and" +:+ --FIXME apostrophe on "slope's"
   S "to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
@@ -338,19 +339,19 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s4_2_2 = Sub sec_TMs
 
 sec_TMs :: Section
-sec_TMs = Section (S "Theoretical Models") (s4_2_2_p1:s4_2_2_tmods)
+sec_TMs = Section (titleize' thModel) (s4_2_2_p1:s4_2_2_tmods)
 
 s4_2_2_p1 = Con $ Paragraph $ S "This section focuses on the" +:+
   S "general equations and laws that" +:+ (short ssa) +:+
   S "is based on."
 
-s4_2_2_tmods = map (Con . Definition) (map Theory [fs_rc])
+s4_2_2_tmods = map (Con . Definition) [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = Sub $ Section (S "General Definitions") []
+s4_2_3 = Sub $ Section (S "General" +:+ (titleize' definition)) []
 
 -- SECTION 4.2.4 --
-s4_2_4 = Sub $ Section (S "Data Definitions") []
+s4_2_4 = Sub $ Section (S "Data" +:+ (titleize' definition)) []
 
 -- SECTION 4.2.5 --
 s4_2_5 = Sub sec_IMs

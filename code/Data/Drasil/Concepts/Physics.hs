@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics
   , angularAccel, momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , angularDisplacement,time, torque, linearDisplacement, linearVelocity
-  , linearAccel, fbd
+  , linearAccel, fbd, angular, linear
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -15,14 +15,13 @@ rigidBody, velocity, angularV, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
   angularAccel, momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,
-  time, torque, linearDisplacement, linearVelocity, linearAccel, fbd :: ConceptChunk
+  time, torque, linearDisplacement, linearVelocity, linearAccel, fbd, linear,
+  angular :: ConceptChunk
 
 rigidBody  = dcc "rigidBody" 
   (cnIES "rigid body") "A solid body in which deformation is neglected."
 velocity   = dccWDS "velocity" (cnIES "velocity")
   (S "The rate of change of a body's " :+: (phrase (position ^. term)))
-angularV   = dcc "angularV" (cnIES "angular velocity")
-  "The rate of change of a body's orientation."
 friction   = dcc "friction" (cn' "friction")
   "The force resisting the relative motion of two surfaces."
 elasticity = dcc "elasticity" (cnIES "elasticity") 
@@ -45,8 +44,6 @@ position   = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's " :+: (phrase (velocity ^. term)))
-angularAccel = dccWDS "angularAccel" (cn' "angular acceleration")
-  (S "the rate of change of a body's " :+: (phrase (angularV ^. term)))
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in " :+: (position ^. defn))
 force      = dcc "force" (cn' "force")
@@ -70,16 +67,25 @@ momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia") fixme
 impulseV   = dcc "impulseV" (cn "impulse (vector)") fixme 
 impulseS   = dcc "impulseS" (cn "impulse (scalar)") fixme 
 
-angularDisplacement = dcc "angularDisplacement" (cn' "angular displacement") fixme
-time = dcc "time" (cn' "time") fixme
-torque = dcc "torque" (cn' "torque") fixme
-
 gravitationalAccel = dcc "gravitationalAccel" 
   (cn "gravitational acceleration") fixme
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
   "gravitational constant (6.673 * 10E-11)"
 
+angularDisplacement = dcc "angularDisplacement" (cn' "angular displacement") fixme
+time = dcc "time" (cn' "time") fixme
+torque = dcc "torque" (cn' "torque") fixme
+angularV   = dcc "angularV" (cnIES "angular velocity")
+  "The rate of change of a body's orientation."
+angularAccel = dccWDS "angularAccel" (cn' "angular acceleration")
+  (S "the rate of change of a body's " :+: (phrase (angularV ^. term)))
+
 linearDisplacement = dcc "linearDisp" (cn' "linear displacement") fixme
 linearVelocity = dcc "linearVelo" (cn' "linear velocity") fixme
 linearAccel = dcc "linearAccel" (cn' "linear acceleration") fixme
+
+
 fbd = dcc "FBD" (cn' "free body diagram") fixme
+
+linear = dcc "linear" (cn' "linear") fixme
+angular = dcc "angular" (cn' "angular") fixme

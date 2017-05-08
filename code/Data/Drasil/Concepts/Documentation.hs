@@ -20,19 +20,20 @@ thModel     = commonINP "thModel"     (cn' "theoretical model")             "T"
 mg          = commonINP "mg"          (cn' "module guide")                  "MG" 
 srs         = commonINP "srs"  (cn' "software requirements specification")  "SRS"
 vav         = commonINP "vav"         (cn' "verification and validation")   "VAV"
-constraint  = commonINP "constraint"  (cn' "constraint")                    "CSTR"
+constraint  = commonINP "constraint"  (cn' "constraint")                    "CSTR" -- FIXME: Eventually only have one constraint 
 
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
 
-characteristic, characteristics, condition, definition, dependency, description, document, general,
+characteristic, characteristics, condition, constraint_, definition, dependency, description, document, general,
   information, introduction, model, name_, organization, physical, problem, purpose, scope,
   section_, solution, specific, specification, symbol_, system, table_, terminology, theory, unit_, units_ :: NPNC
 
 characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")
+constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
@@ -74,7 +75,7 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 -- compounds
 
 characteristicsSpecification, generalSystemDescription, physicalSystem, problemDescription,
-  specificsystemdescription, systemdescription :: NPNC
+  specificsystemdescription, systemdescription, systemConstraint :: NPNC
   
 characteristicsSpecification = compoundNPNC characteristics specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -82,4 +83,4 @@ physicalSystem               = compoundNPNC physical system
 problemDescription           = compoundNPNC problem description
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
-
+systemConstraint             = compoundNPNC system constraint_

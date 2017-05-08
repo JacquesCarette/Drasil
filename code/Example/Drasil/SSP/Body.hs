@@ -129,7 +129,7 @@ s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
   S "documents that follow the so-called waterfall model, the actual" +:+
   S "development process is not  constrained in any way. Even when" +:+
   S "the waterfall model is not followed, as Parnas and Clements point" +:+
-  S "out, the most logical way to present the documentation is still to"+:+
+  S "out, the most logical way to present the documentation is still to" +:+
   S "fake a rational design process."
 
 -- SECTION 2.2 --
@@ -250,7 +250,7 @@ s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
   ]
   
 s4_1_2_p2 = Con $ Paragraph $ S "A" +:+ (phrase $ fbd ^. term) +:+ S "of the forces" +:+
-  S "acting on the slice is displayed in " :+: (makeRef fig_forceacting) :+: S "."
+  S "acting on the slice is displayed in" +:+. (makeRef fig_forceacting)
 
 s4_1_2_fig1 = Con fig_indexconv
 

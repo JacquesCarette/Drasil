@@ -256,7 +256,7 @@ s2_3_contents = [Paragraph (S "The organization of this document follows" +:+
 -- the sectioning? This would also improve the tediousness of declaring 
 -- LayoutObjs
 
-s3 = Section (S "General System Description") [Con s3_intro, Sub s3_1, 
+s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1, 
   Sub s3_2]
 
 s3_intro = Paragraph (S "This section provides general information about" +:+
@@ -282,13 +282,14 @@ s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: S "
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
 
-s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1, 
+s4 = Section (titleize specificsystemdescription) [Con s4_intro, Sub s4_1, 
   Sub s4_2]
 
 s4_intro = Paragraph (S "This section first presents the" +:+ phrase problem +:+
-  S "description, which gives a high-level view of the" +:+ phrase problem +:+
-  S "to be solved. This is followed by the" +:+ phrase solution +:+
-  phrase characteristicsSpecification :+: S ", which presents the" +:+
+  phrase description +:+ S "which gives a high-level view of the" +:+
+  phrase problem +:+ S "to be solved. This is followed by the" +:+
+  phrase solution +:+ phrase characteristicsSpecification :+: S ", which" +:+
+  S "presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`
   (plural genDefn) `sC` 
@@ -339,8 +340,8 @@ s411_bullet_map_f c = Flat ((phrase $ c ^. term) :+: S ":" +:+. (c ^. defn))
 s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro, Con s4_1_2_list, 
   Con fig_tank]
 
-s4_1_2_intro = Paragraph (S "The physical system of" +:+ (short progName)
-  :+: S ", as shown in" +:+ (makeRef fig_tank) :+:
+s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
+  (short progName) :+: S ", as shown in" +:+ (makeRef fig_tank) :+:
   S ", includes the following elements:")
 
 -- Above paragraph is general except for progName and figure. However, not 
@@ -422,8 +423,8 @@ s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
 s4_2_1_intro = Paragraph (S "This section simplifies the original" +:+
   phrase problem +:+ S "and helps in developing the" +:+ 
   phrase thModel +:+ S "by filling in the missing" +:+
-  S "information for the physical system. The numbers given in" +:+
-  S "the square brackets refer to the" +:+ 
+  S "information for the" +:+ phrase physicalSystem +:+ S ". The" +:+
+  S "numbers given in the square brackets refer to the" +:+ 
   phrase thModel +:+ S "[" :+: (short thModel) :+: 
   S "]," +:+ (phrase genDefn) +:+ 
   S "[" :+: (short genDefn) :+: S "]" `sC` (phrase dataDefn) +:+ S "[" :+: 
@@ -570,8 +571,8 @@ s4_2_3 = Section (titleize' genDefn)
 s4_2_3_intro = Paragraph (S "This section collects the laws and equations" +:+
   S "that will be used in deriving the" +:+ 
   (plural dataDefn) `sC` S "which in turn are used to" +:+
-  S "build the" +:+. (plural inModel) +:+
-  S "(General definitions are left out because they are not" +:+
+  S "build the" +:+. (plural inModel) +:+ S "(" +:+ at_start' genDefn +:+
+  S "are left out because they are not" +:+
   S "currently implemented in Drasil.)")
 
 -- General paragraph, repeated in one other example but could be included in 
@@ -668,7 +669,7 @@ s4_2_5_intro = [Paragraph (S "This section transforms the" +:+ phrase
   S "of IM2 and IM4 are also coupled, since the" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "and" +:+ (phrase $ pcm_E ^. term) +:+
   S "depend on the" +:+ (sLower (phrase $ phase_change ^. 
-  term)) :+: S ". (Instance models are left out because they" +:+
+  term)) :+: S ". (" +:+ at_start' inModel +:+ S "are left out because they" +:+
   S "are not currently implemented in Drasil.)")]
 
 -- The first paragraph is completely general and repeated in other examples. 
@@ -942,7 +943,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (S "Input the following quantities, which define the" +:+
   (sLower ((phrase $ tank ^. term))) :+: 
   S " parameters, material properties and initial" +:+ plural condition +:+ S ":"))]), 
-  (Table [S "symbol", S "unit", S "description"] (mkTable
+  (Table [phrase symbol_, phrase unit_, phrase description] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
   (\ch -> phrase $ ch ^. term)] inputVar) 

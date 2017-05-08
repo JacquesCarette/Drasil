@@ -374,7 +374,7 @@ s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro,
   Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+: S "," +:+
-  S "initial conditions for the" +:+ (phrase $ temp_W ^. term) +:+
+  S "initial" +:+ plural condition +:+ S "for the" +:+ (phrase $ temp_W ^. term) +:+
   S "and the" +:+ (phrase $ temp_PCM ^. term) :+: S ", and" +:+
   S "material properties, the" +:+
   plural goalStmt +:+ S "are:")
@@ -941,7 +941,7 @@ s5_1 = Section (S "Functional" +:+ titleize' requirement)
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
   (S "Input the following quantities, which define the" +:+
   (sLower ((phrase $ tank ^. term))) :+: 
-  S " parameters, material properties and initial conditions:"))]), 
+  S " parameters, material properties and initial" +:+ plural condition +:+ S ":"))]), 
   (Table [S "symbol", S "unit", S "description"] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),

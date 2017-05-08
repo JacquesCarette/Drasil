@@ -84,7 +84,7 @@ s2 = SRS.intro [s2_p1, s2_p2, s2_1, s2_2, s2_3]
 
 s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC` 
   S "composed of soil and rock, is subject to the influence of gravity on" +:+
-  S "the " +:+. (phrase $ mass ^. term) +:+ S "For an unstable slope this can cause" +:+
+  S "the" +:+. (phrase $ mass ^. term) +:+ S "For an unstable slope this can cause" +:+
   S "instability in the form of soil/rock movement. The effects of soil/rock" +:+
   S "movement can range from inconvenient to seriously hazardous," +:+
   S "resulting in signifcant life and economic loses. Slope stability" +:+

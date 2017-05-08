@@ -17,7 +17,9 @@ import Language.Drasil.Symbol
 import Language.Drasil.Space
 
 import Prelude hiding (id)
-  
+
+-- | ConVar is a 'Concept' as well as a 'Language.Drasil.Chunk.Quantity'. 
+-- It adds a 'Space' and 'Symbol' to an existing 'ConceptChunk'.
 data ConVar = CV { _con :: ConceptChunk
                  , _symb :: Symbol
                  , _typ :: Space }
@@ -38,9 +40,11 @@ instance SymbolForm ConVar where
 cvl :: Simple Lens ConVar ConceptChunk
 cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
 
+-- | Constructor for 'ConVar' with explicit 'Space'
 cv :: ConceptChunk -> Symbol -> Space -> ConVar
 cv = CV
 
 --FIXME: Remove this hack
+-- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Rational' 'Space'.
 cvR :: ConceptChunk -> Symbol -> ConVar
 cvR c s = CV c s Rational

@@ -94,8 +94,8 @@ s1_1 = table_of_units this_si
 s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
-  S "symbols used in this document along with their units" :+:
-  S ". The choice of symbols was made to be consistent" +:+
+  S "symbols used in this document along with their units." :+:
+  S "The choice of symbols was made to be consistent" +:+
   S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) :+: 
   S " literature" +:+
   S "and with existing documentation for" +:+ (sLower

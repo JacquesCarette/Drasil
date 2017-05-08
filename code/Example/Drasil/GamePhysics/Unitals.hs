@@ -175,11 +175,11 @@ contDisp_B = uc' "r_BP" (nounPhraseSP $
   (sub (disp ^. symbol) (Concat [cB, cP])) metre
 
 --FIXME: parametrized hack -> needs synonym for normal with perpendicular
-perpLen_A = ucFromVC normlenA metre
-  where normlenA = cvR (dccWDS "|| r_AP x n ||" (compoundPhrase' (normalLen ^. term) (cn "to the contact displacement vector of rigid body A")) (phrase $ normalLen ^. term))  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*", (normalVect ^. symbol), Atomic "||"])
+perpLen_A = ucFromVC perpA metre
+  where perpA = cvR (dccWDS "|| r_AP x n ||" (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perp_vect ^. term)) (cn "to the contact displacement vector of rigid body A")) (phrase $ QM.perp_vect ^. term))  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*", (QM.perp_vect ^. symbol), Atomic "||"])
 --FIXME: parametrized hack -> needs synonym for normal with perpendicular
-perpLen_B = ucFromVC normlenB metre
-  where normlenB = cvR (dccWDS "|| r_AB x n ||" (compoundPhrase' (normalLen ^. term) (cn "to the contact displacement vector of rigid body B")) (phrase $ normalLen ^. term))  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*", (normalVect ^. symbol), Atomic "||"])
+perpLen_B = ucFromVC perpB metre
+  where perpB = cvR (dccWDS "|| r_AB x n ||" (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perp_vect ^. term)) (cn "to the contact displacement vector of rigid body B")) (phrase $ QM.perp_vect ^. term))  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*", (QM.perp_vect ^. symbol), Atomic "||"])
 
 -- FIXME: parametrized hack
 momtInert_A = ucFromVC momtA momtInertU

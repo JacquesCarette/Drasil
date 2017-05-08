@@ -11,7 +11,10 @@ import Control.Lens (Simple, Lens)
 import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase
 
+-- | CommonIdea is a chunk that is a 'NamedIdea' with the additional
+-- constraint that it __must__ have an abbreviation.
 class NamedIdea c => CommonIdea c where
+  -- | Introduces abrv which necessarily provides an abbreviation.
   abrv :: Simple Lens c Sentence
 {-  
 data CI = CI String Sentence Sentence
@@ -28,7 +31,11 @@ commonidea :: String -> String -> String -> CI
 commonidea i nm ab = CI i (S nm) (S ab)
 -}
 --FIXME: Change CINP to CI and remove Sentence (term).
-data CINP = CINP String Sentence Sentence NP
+
+-- | The common idea (with nounPhrase) data type. It must have a 
+-- 'NounPhrase' for its 'term'.
+data CINP = CINP String Sentence Sentence NP 
+-- ^ The first Sentence here is now deprecated
 
 instance Chunk CINP where
   id f (CINP a b c d) = fmap (\x -> CINP x b c d) (f a)
@@ -43,5 +50,7 @@ instance NounPhrase CINP where
   sentenceCase (CINP _ _ _ d) = sentenceCase d
   titleCase    (CINP _ _ _ d) = titleCase d
   
+-- | The commonINP smart constructor requires a chunk id, 
+-- term (of type 'NP'), and abbreviation
 commonINP :: String -> NP -> String -> CINP
 commonINP i t a = CINP i (phrase t) (S a) t

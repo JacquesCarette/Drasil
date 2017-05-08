@@ -112,10 +112,10 @@ A collection of the symbols that will be used in the models and equations of the
 Symbol
 </th>
 <th>
-Units
+Description
 </th>
 <th>
-Description
+Units
 </th>
 </tr>
 <tr>
@@ -123,10 +123,10 @@ Description
 &phiv;'
 </td>
 <td>
-&deg;
+effective angle of friction
 </td>
 <td>
-effective angle of friction
+&deg;
 </td>
 </tr>
 <tr>
@@ -134,10 +134,10 @@ effective angle of friction
 c'
 </td>
 <td>
-Pa
+effective cohesion
 </td>
 <td>
-effective cohesion
+Pa
 </td>
 </tr>
 <tr>
@@ -145,10 +145,10 @@ effective cohesion
 &gamma;
 </td>
 <td>
-N/(m<sup>3</sup>)
+unit weight of dry soil/ground layer
 </td>
 <td>
-unit weight of dry soil/ground layer
+N/(m<sup>3</sup>)
 </td>
 </tr>
 <tr>
@@ -156,10 +156,10 @@ unit weight of dry soil/ground layer
 &gamma;<sub>Sat</sub>
 </td>
 <td>
-N/(m<sup>3</sup>)
+unit weight of saturated soil/ground layer
 </td>
 <td>
-unit weight of saturated soil/ground layer
+N/(m<sup>3</sup>)
 </td>
 </tr>
 <tr>
@@ -167,10 +167,10 @@ unit weight of saturated soil/ground layer
 &gamma;<sub>w</sub>
 </td>
 <td>
-N/(m<sup>3</sup>)
+unit weight of water
 </td>
 <td>
-unit weight of water
+N/(m<sup>3</sup>)
 </td>
 </tr>
 <tr>
@@ -178,10 +178,10 @@ unit weight of water
 E
 </td>
 <td>
-Pa
+elastic modulus
 </td>
 <td>
-elastic modulus
+Pa
 </td>
 </tr>
 <tr>
@@ -189,10 +189,10 @@ elastic modulus
 &nu;
 </td>
 <td>
-unitless
+Poisson's ratio
 </td>
 <td>
-Poisson's ratio
+unitless
 </td>
 </tr>
 <tr>
@@ -200,10 +200,10 @@ Poisson's ratio
 (x,y)
 </td>
 <td>
-m
+cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
 </td>
 <td>
-cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
+m
 </td>
 </tr>
 <tr>
@@ -211,10 +211,10 @@ cartesian position coordinates; y is considered parallel to the direction of the
 y<sub>wt,i</sub>
 </td>
 <td>
-m
+the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i
 </td>
 <td>
-the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i
+m
 </td>
 </tr>
 <tr>
@@ -222,10 +222,10 @@ the y ordinate, or height of the water table at i; refers to either slice i midp
 y<sub>us,i</sub>
 </td>
 <td>
-m
+the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i
 </td>
 <td>
-the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i
+m
 </td>
 </tr>
 <tr>
@@ -233,10 +233,10 @@ the y ordinate, or height of the top of the slope at i; refers to either slice i
 y<sub>slip,i</sub>
 </td>
 <td>
-m
+the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i
 </td>
 <td>
-the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i
+m
 </td>
 </tr>
 <tr>
@@ -244,10 +244,10 @@ the y ordinate, or height of the slip surface at i; refers to either slice i mid
 x<sub>i</sub>
 </td>
 <td>
-m
+the x ordinate; refers to either slice i midpoint, or slice interface i
 </td>
 <td>
-the x ordinate; refers to either slice i midpoint, or slice interface i
+m
 </td>
 </tr>
 <tr>
@@ -255,10 +255,10 @@ the x ordinate; refers to either slice i midpoint, or slice interface i
 ({x<sub>cs</sub>},{y<sub>cs</sub>})
 </td>
 <td>
-m
+the set of x and y coordinates that describe the vertices of the critical slip surface
 </td>
 <td>
-the set of x and y coordinates that describe the vertices of the critical slip surface
+m
 </td>
 </tr>
 <tr>
@@ -266,10 +266,10 @@ the set of x and y coordinates that describe the vertices of the critical slip s
 FS
 </td>
 <td>
-unitless
+global factor of safety describing the stability of a surface in a slope
 </td>
 <td>
-global factor of safety describing the stability of a surface in a slope
+unitless
 </td>
 </tr>
 <tr>
@@ -277,10 +277,10 @@ global factor of safety describing the stability of a surface in a slope
 FS<sub>Loc,i</sub>
 </td>
 <td>
-unitless
+local factor of safety specific to a slice i
 </td>
 <td>
-local factor of safety specific to a slice i
+unitless
 </td>
 </tr>
 <tr>
@@ -288,10 +288,10 @@ local factor of safety specific to a slice i
 S<sub>i</sub>
 </td>
 <td>
-N
+mobilized shear force for slice i
 </td>
 <td>
-mobilized shear force for slice i
+N
 </td>
 </tr>
 <tr>
@@ -299,10 +299,10 @@ mobilized shear force for slice i
 P<sub>i</sub>
 </td>
 <td>
-N
+shear resistance; Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure
 </td>
 <td>
-shear resistance; Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure
+N
 </td>
 </tr>
 <tr>
@@ -310,10 +310,10 @@ shear resistance; Mohr Coulomb frictional force that describes the limit of mobi
 T<sub>i</sub>
 </td>
 <td>
-N
+mobilized shear force without the influence of interslice forces for slice i
 </td>
 <td>
-mobilized shear force without the influence of interslice forces for slice i
+N
 </td>
 </tr>
 <tr>
@@ -321,10 +321,10 @@ mobilized shear force without the influence of interslice forces for slice i
 R<sub>i</sub>
 </td>
 <td>
-N
+shear resistance without the influence of interslice forces for slice i
 </td>
 <td>
-shear resistance without the influence of interslice forces for slice i
+N
 </td>
 </tr>
 <tr>
@@ -332,10 +332,10 @@ shear resistance without the influence of interslice forces for slice i
 W<sub>i</sub>
 </td>
 <td>
-N
+weight; downward force caused by gravity on slice i
 </td>
 <td>
-weight; downward force caused by gravity on slice i
+N
 </td>
 </tr>
 <tr>
@@ -343,10 +343,10 @@ weight; downward force caused by gravity on slice i
 K<sub>c</sub>
 </td>
 <td>
-unitless
+earthquake load factor; proportionality factor of force that weight pushes outwards; caused by seismic earth movements
 </td>
 <td>
-earthquake load factor; proportionality factor of force that weight pushes outwards; caused by seismic earth movements
+unitless
 </td>
 </tr>
 <tr>
@@ -354,10 +354,10 @@ earthquake load factor; proportionality factor of force that weight pushes outwa
 H<sub>i</sub>
 </td>
 <td>
-N
+interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i)
 </td>
 <td>
-interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i)
+N
 </td>
 </tr>
 <tr>
@@ -365,10 +365,10 @@ interslice water force exerted in the x-ordinate direction between adjacent slic
 &Delta;H<sub>i</sub>
 </td>
 <td>
-N
+difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)
 </td>
 <td>
-difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)
+N
 </td>
 </tr>
 <tr>
@@ -376,10 +376,10 @@ difference between interslice forces on acting in the x-ordinate direction of th
 E<sub>i</sub>
 </td>
 <td>
-N
+interslice normal force being exerted between adjacent slices (for interslice index i)
 </td>
 <td>
-interslice normal force being exerted between adjacent slices (for interslice index i)
+N
 </td>
 </tr>
 <tr>
@@ -387,10 +387,10 @@ interslice normal force being exerted between adjacent slices (for interslice in
 X<sub>i</sub>
 </td>
 <td>
-N
+interslice shear force being exerted between adjacent slices (for interslice index i)
 </td>
 <td>
-interslice shear force being exerted between adjacent slices (for interslice index i)
+N
 </td>
 </tr>
 <tr>
@@ -398,10 +398,10 @@ interslice shear force being exerted between adjacent slices (for interslice ind
 U<sub>b,i</sub>
 </td>
 <td>
-N
+base hydrostatic force arising from water pressure within the slice (for slice index i)
 </td>
 <td>
-base hydrostatic force arising from water pressure within the slice (for slice index i)
+N
 </td>
 </tr>
 <tr>
@@ -409,10 +409,10 @@ base hydrostatic force arising from water pressure within the slice (for slice i
 U<sub>t,i</sub>
 </td>
 <td>
-N
+surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface (for slice index i)
 </td>
 <td>
-surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface (for slice index i)
+N
 </td>
 </tr>
 <tr>
@@ -420,10 +420,10 @@ surface hydrostatic force arising from water pressure acting into the slice from
 N<sub>i</sub>
 </td>
 <td>
-N
+total reactive force for a soil surface subject to a body resting on it
 </td>
 <td>
-total reactive force for a soil surface subject to a body resting on it
+N
 </td>
 </tr>
 <tr>
@@ -431,10 +431,10 @@ total reactive force for a soil surface subject to a body resting on it
 N'<sub>i</sub>
 </td>
 <td>
-N
+effective normal force of a soil surface, subtracting pore water reactive force from total reactive force
 </td>
 <td>
-effective normal force of a soil surface, subtracting pore water reactive force from total reactive force
+N
 </td>
 </tr>
 <tr>
@@ -442,10 +442,10 @@ effective normal force of a soil surface, subtracting pore water reactive force 
 N*<sub>i</sub>
 </td>
 <td>
-N
+effective normal force of a soil surface, neglecting the influence of interslice forces
 </td>
 <td>
-effective normal force of a soil surface, neglecting the influence of interslice forces
+N
 </td>
 </tr>
 <tr>
@@ -453,10 +453,10 @@ effective normal force of a soil surface, neglecting the influence of interslice
 Q<sub>i</sub>
 </td>
 <td>
-N
+imposed surface load; a downward force acting into the surface from midpoint of slice i
 </td>
 <td>
-imposed surface load; a downward force acting into the surface from midpoint of slice i
+N
 </td>
 </tr>
 <tr>
@@ -464,10 +464,10 @@ imposed surface load; a downward force acting into the surface from midpoint of 
 &alpha;<sub>i</sub>
 </td>
 <td>
-&deg;
+angle of the base of the mass relative to the horizontal (for slice index i)
 </td>
 <td>
-angle of the base of the mass relative to the horizontal (for slice index i)
+&deg;
 </td>
 </tr>
 <tr>
@@ -475,10 +475,10 @@ angle of the base of the mass relative to the horizontal (for slice index i)
 &beta;<sub>i</sub>
 </td>
 <td>
-&deg;
+angle of the surface of the mass relative to the horizontal (for slice index i)
 </td>
 <td>
-angle of the surface of the mass relative to the horizontal (for slice index i)
+&deg;
 </td>
 </tr>
 <tr>
@@ -486,10 +486,10 @@ angle of the surface of the mass relative to the horizontal (for slice index i)
 &omega;<sub>i</sub>
 </td>
 <td>
-&deg;
+angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
 </td>
 <td>
-angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
+&deg;
 </td>
 </tr>
 <tr>
@@ -497,10 +497,10 @@ angle of imposed surface load acting into the surface relative to the vertical (
 &lambda;
 </td>
 <td>
-unitless
+ratio between interslice normal and shear forces (applied to all interslices)
 </td>
 <td>
-ratio between interslice normal and shear forces (applied to all interslices)
+unitless
 </td>
 </tr>
 <tr>
@@ -508,10 +508,10 @@ ratio between interslice normal and shear forces (applied to all interslices)
 f<sub>i</sub>
 </td>
 <td>
-unitless
+scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine
 </td>
 <td>
-scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine
+unitless
 </td>
 </tr>
 <tr>
@@ -519,10 +519,10 @@ scaling function for magnitude of interslice forces as a function of the x coord
 b<sub>i</sub>
 </td>
 <td>
-m
+base width of the slice in the x-ordinate direction only (for slice index i)
 </td>
 <td>
-base width of the slice in the x-ordinate direction only (for slice index i)
+m
 </td>
 </tr>
 <tr>
@@ -530,10 +530,10 @@ base width of the slice in the x-ordinate direction only (for slice index i)
 &#8467;<sub>b,i</sub>
 </td>
 <td>
-m
+total length of the base of a slice (for slice index i)
 </td>
 <td>
-total length of the base of a slice (for slice index i)
+m
 </td>
 </tr>
 <tr>
@@ -541,10 +541,10 @@ total length of the base of a slice (for slice index i)
 &#8467;<sub>s,i</sub>
 </td>
 <td>
-m
+length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
 </td>
 <td>
-length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
+m
 </td>
 </tr>
 <tr>
@@ -552,10 +552,10 @@ length of an interslice surface, from slip base to slope surface in a vertical l
 h<sub>i</sub>
 </td>
 <td>
-m
+midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)
 </td>
 <td>
-midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)
+m
 </td>
 </tr>
 <tr>
@@ -563,10 +563,10 @@ midpoint height; distance from the slip base to the slope surface in a vertical 
 n
 </td>
 <td>
-unitless
+number of slices the slip mass has been divided into
 </td>
 <td>
-number of slices the slip mass has been divided into
+unitless
 </td>
 </tr>
 <tr>
@@ -574,10 +574,10 @@ number of slices the slip mass has been divided into
 F
 </td>
 <td>
-m
+generic force; assumed 1D allowing a scalar
 </td>
 <td>
-generic force; assumed 1D allowing a scalar
+m
 </td>
 </tr>
 <tr>
@@ -585,10 +585,10 @@ generic force; assumed 1D allowing a scalar
 M
 </td>
 <td>
-Nm
+moment of a body; assumed 2D allowing a scalar
 </td>
 <td>
-moment of a body; assumed 2D allowing a scalar
+Nm
 </td>
 </tr>
 <tr>
@@ -596,10 +596,10 @@ moment of a body; assumed 2D allowing a scalar
 &Upsilon;
 </td>
 <td>
-unitless
+generic minimization function or algorithm
 </td>
 <td>
-generic minimization function or algorithm
+unitless
 </td>
 </tr>
 <tr>
@@ -607,10 +607,10 @@ generic minimization function or algorithm
 &delta;
 </td>
 <td>
-m
+generic displacement of a body
 </td>
 <td>
-generic displacement of a body
+m
 </td>
 </tr>
 <tr>
@@ -618,10 +618,10 @@ generic displacement of a body
 K
 </td>
 <td>
-N/m
+stiffness (how much a body resists displacement when subject to a force)
 </td>
 <td>
-stiffness (how much a body resists displacement when subject to a force)
+N/m
 </td>
 </tr>
 <tr>
@@ -629,10 +629,10 @@ stiffness (how much a body resists displacement when subject to a force)
 K<sub>st,i</sub>
 </td>
 <td>
-Pa
+shear stiffness of an interslice surface, without length adjustment (for interslice index i)
 </td>
 <td>
-shear stiffness of an interslice surface, without length adjustment (for interslice index i)
+Pa
 </td>
 </tr>
 <tr>
@@ -640,10 +640,10 @@ shear stiffness of an interslice surface, without length adjustment (for intersl
 K<sub>bt,i</sub>
 </td>
 <td>
-Pa
+shear stiffness of a slice base surface, without length adjustment (for slice index i)
 </td>
 <td>
-shear stiffness of a slice base surface, without length adjustment (for slice index i)
+Pa
 </td>
 </tr>
 <tr>
@@ -651,10 +651,10 @@ shear stiffness of a slice base surface, without length adjustment (for slice in
 K<sub>sn,i</sub>
 </td>
 <td>
-Pa
+normal stiffness of an interslice surface, without length adjustment (for interslice index i)
 </td>
 <td>
-normal stiffness of an interslice surface, without length adjustment (for interslice index i)
+Pa
 </td>
 </tr>
 <tr>
@@ -662,10 +662,10 @@ normal stiffness of an interslice surface, without length adjustment (for inters
 K<sub>bn,i</sub>
 </td>
 <td>
-Pa
+normal stiffness of a slice base surface, without length adjustment (for slice index i)
 </td>
 <td>
-normal stiffness of a slice base surface, without length adjustment (for slice index i)
+Pa
 </td>
 </tr>
 <tr>
@@ -673,10 +673,10 @@ normal stiffness of a slice base surface, without length adjustment (for slice i
 K<sub>tr</sub>
 </td>
 <td>
-Pa
+residual shear stiffness
 </td>
 <td>
-residual shear stiffness
+Pa
 </td>
 </tr>
 <tr>
@@ -684,10 +684,10 @@ residual shear stiffness
 K<sub>no</sub>
 </td>
 <td>
-Pa
+residual normal stiffness
 </td>
 <td>
-residual normal stiffness
+Pa
 </td>
 </tr>
 <tr>
@@ -695,10 +695,10 @@ residual normal stiffness
 &delta;u<sub>i</sub>
 </td>
 <td>
-m
+shear displacement of a slice (for slice index i)
 </td>
 <td>
-shear displacement of a slice (for slice index i)
+m
 </td>
 </tr>
 <tr>
@@ -706,10 +706,10 @@ shear displacement of a slice (for slice index i)
 &delta;v<sub>i</sub>
 </td>
 <td>
-m
+normal displacement of a slice (for slice index i)
 </td>
 <td>
-normal displacement of a slice (for slice index i)
+m
 </td>
 </tr>
 <tr>
@@ -717,10 +717,10 @@ normal displacement of a slice (for slice index i)
 &delta;x<sub>i</sub>
 </td>
 <td>
-m
+displacement of a slice in the x-ordinate direction (for slice index i)
 </td>
 <td>
-displacement of a slice in the x-ordinate direction (for slice index i)
+m
 </td>
 </tr>
 <tr>
@@ -728,10 +728,10 @@ displacement of a slice in the x-ordinate direction (for slice index i)
 &delta;y<sub>i</sub>
 </td>
 <td>
-m
+displacement of a slice in the y-ordinate direction (for slice index i)
 </td>
 <td>
-displacement of a slice in the y-ordinate direction (for slice index i)
+m
 </td>
 </tr>
 </table>

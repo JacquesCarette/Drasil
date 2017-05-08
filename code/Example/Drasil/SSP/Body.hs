@@ -14,6 +14,7 @@ import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 
 import           Drasil.TableOfAbbAndAcronyms
+import           Drasil.TableOfSymbols 
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
@@ -73,13 +74,7 @@ s1_2_intro = Con $ Paragraph $
   S "be taken at and analyzed at a slice or slice interface" +:+
   S "composing the total slip" +:+. (phrase $ mass ^. term)
 
-s1_2_table = Con $ Table (map titleize [symbol_, units_, description]) (mkTable
-  [(\ch -> P (ch ^. symbol)), -- (\ch -> N (ch ^. symbol)) , 
-   (\ch -> Sy $ unit_symb ch),
-   (\ch -> phrase $ ch ^. term)
-   ]
-  sspSymbols)
-  (titleize tOfSymb) False
+s1_2_table = Con $ table sspSymbols (\x -> phrase $ x ^. term)
 
 -- SECTION 1.3 --
 s1_3 = table_of_abb_and_acronyms acronyms

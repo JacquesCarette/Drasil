@@ -53,10 +53,10 @@ s1 = refSec [s1_1, s1_2, s1_3]
 s1_1 = Section (titleize tOfUnits) [s1_1_intro, s1_1_table]
 
 s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the" +:+
-  S "soil that are of interest when examining slope stability problems" +:+
+  S "soil that are of interest when examining" +:+ (plural ssp) +:+
   S "are given in the following table.")
 
-s1_1_table = Con $ Table [S "Symbol", S "Description", S "Name"] (mkTable
+s1_1_table = Con $ Table [titleize symbol_, titleize description, S "Name"] (mkTable
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn)),
    (\x -> (phrase $ x ^. term))
@@ -200,7 +200,7 @@ s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" 
   S "to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
-s4_1_1 = Sub $ Section (S "Terminology") [s4_1_1_list]
+s4_1_1 = Sub $ Section (titleize terminology) [s4_1_1_list]
 
 s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "Factor of Safety", 
@@ -318,8 +318,8 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "depending on x position."),
   (S "A6", S "Slice to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the factor" +:+
-           S "of safety" +:+ sParen (P (fs ^. symbol)) :+:
-           S ", and the Coulomb sliding law."),
+           S "of safety" +:+ sParen (P (fs ^. symbol)) `sC`
+           S "and the Coulomb sliding law."),
   (S "A7", S "The stress-strain curve for interslice" +:+
            S "relationships is linear with a constant slope."),
   (S "A8", S "The slope and slip surface extends far into" +:+

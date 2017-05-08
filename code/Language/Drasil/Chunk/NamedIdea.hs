@@ -82,7 +82,10 @@ for'' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 for'' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
 for''' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for''' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize' $ t2 ^. term)
+for''' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
+
+for'''' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for'''' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize' $ t2 ^. term)
 
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_ t1 t2 = nounPhrase'' 

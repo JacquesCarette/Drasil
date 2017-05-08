@@ -285,7 +285,7 @@ acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
   
 --FIXME: Use nounphrase instead of pn
 ssa :: CINP
-ssa = commonINP "ssa" (pn "Slope Stability Analysis") "SSA"
+ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
 
 
 ----Theoretical Models----

@@ -100,7 +100,7 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
 
 s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
   S "of the" +:+ (introduceAbb srs) +:+
-  S "for a slope stability analysis problem. The developed program" +:+
+  S "for a" +:+ (phrase ssa) +:+ S "problem. The developed program" +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+
   S "program. This section explains the purpose of this document," +:+
   S "the scope of the system, the organization of the document and" +:+

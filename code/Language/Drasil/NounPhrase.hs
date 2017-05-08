@@ -3,7 +3,7 @@ module Language.Drasil.NounPhrase
   ( NounPhrase(..)
   , NP
   , pn, pn', pn'', pn''', pnIrr
-  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES
+  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
   , compoundPhrase, compoundPhrase'
   , at_start, at_start', titleize, titleize'
@@ -77,6 +77,9 @@ cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 
 cnICES :: String -> NP
 cnICES n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "ices")) CapFirst
+
+cnIS :: String -> NP
+cnIS n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "es")) CapFirst
 
 cnIP :: String -> PluralRule -> NP
 cnIP n p = CommonNoun n p CapFirst

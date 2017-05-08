@@ -87,7 +87,7 @@ s4_1_1_intro = Paragraph $
            S "This subsection provides a list of terms that" +:+
            S "are used in subsequent" +:+ (plural $ section_ ^. term) +:+ S "and their meaning, with the" +:+
             (phrase $ purpose ^. term) +:+ S "of reducing ambiguity and making it easier to correctly" +:+
-           S "understand the requirements:"
+           S "understand the" +:+ (plural $ requirement ^. term) :+: S ":"
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
   (sMap capitalize (phrase $ c ^. term)) :+: S ": " :+: (c ^. defn)) 

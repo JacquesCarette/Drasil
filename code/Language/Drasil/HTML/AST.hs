@@ -69,12 +69,12 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Paragraph Contents
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents
-             --  | CodeBlock Code
+             --  CodeBlock Code
                | Definition DType [(String,LayoutObj)] Label
                | List ListType
                | Figure Label Caption Filepath
                | Module String Label
-               -- | Span Tags Contents
+               -- Span Tags Contents
                
 data ListType = Ordered [ItemType] | Unordered [ItemType]
               | Simple [(Title,ItemType)]

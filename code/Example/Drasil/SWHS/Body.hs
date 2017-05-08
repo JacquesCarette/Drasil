@@ -97,8 +97,7 @@ s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
   S "symbols used in this document along with their units." :+:
   S "The choice of symbols was made to be consistent" +:+
   S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) :+: 
-  S " literature" +:+
-  S "and with existing documentation for" +:+ (sLower
+  S " literature and with existing documentation for" +:+ (sLower
   (phrase $ progName ^. term)) :+: S "s. The symbols are listed in" +:+.
   S "alphabetical order")
 
@@ -160,8 +159,8 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "to be used as a reference to provide ad hoc access to" +:+
   S "all information necessary to understand and verify the" +:+
   S "model. The" +:+ (short srs) +:+ S "is abstract" +:+ 
-  S "because the contents say what problem is being solved," +:+.
-  S "but do not say how to solve it"),
+  S "because the contents say what" +:+ phrase problem +:+ S "is being" +:+
+  S "solved, but do not say how to solve it"),
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
   S "writing the" +:+ phrase desSpec +:+ S "and the software" +:+
@@ -286,8 +285,8 @@ s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: S "
 s4 = Section (S "Specific System Description") [Con s4_intro, Sub s4_1, 
   Sub s4_2]
 
-s4_intro = Paragraph (S "This section first presents the problem" +:+
-  S "description, which gives a high-level view of the problem" +:+
+s4_intro = Paragraph (S "This section first presents the" +:+ phrase problem +:+
+  S "description, which gives a high-level view of the" +:+ phrase problem +:+
   S "to be solved. This is followed by the" +:+ phrase solution +:+
   phrase characteristicsSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` 
@@ -304,7 +303,7 @@ s4_intro = Paragraph (S "This section first presents the problem" +:+
 -- The swhs_pcm reference at the end would be better if singular, but concept is
 -- plural.
 
-s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1, 
+s4_1 = Section (titleize problemDescription) [Con s4_1_intro, Sub s4_1_1, 
   Sub s4_1_2, Sub s4_1_3]
 
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
@@ -420,8 +419,8 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
 s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro, 
   Con s4_2_1_list]
 
-s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
-  S "and helps in developing the" +:+ 
+s4_2_1_intro = Paragraph (S "This section simplifies the original" +:+
+  phrase problem +:+ S "and helps in developing the" +:+ 
   phrase thModel +:+ S "by filling in the missing" +:+
   S "information for the physical system. The numbers given in" +:+
   S "the square brackets refer to the" +:+ 
@@ -436,8 +435,8 @@ s4_2_1_intro = Paragraph (S "This section simplifies the original problem" +:+
 -- General paragraph, repeated in every example. Can be abstracted out.
 
 s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat 
-  (S "The only form of energy that is relevant for this problem" +:+
-  S "is" +:+ (sLower (phrase $ thermal_energy ^. term)) :+:
+  (S "The only form of energy that is relevant for this" +:+ phrase
+  problem +:+ S "is" +:+ (sLower (phrase $ thermal_energy ^. term)) :+:
   S ". All other forms of energy, such as" +:+ (sLower 
   ((phrase $ mech_energy ^. term))) :+: S ", are assumed to be" +:+
   S "negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),
@@ -655,8 +654,8 @@ s4_2_4_intro = Paragraph (S "This section collects and defines all the" +:+
 s4_2_5 = Section (titleize' inModel) ((map Con s4_2_5_intro) ++ 
   (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
 
-s4_2_5_intro = [Paragraph (S "This section transforms the problem defined" +:+
-  S "in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
+s4_2_5_intro = [Paragraph (S "This section transforms the" +:+ phrase
+  problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
   S "is expressed in mathematical terms. It uses concrete" +:+
   S "symbols defined in" +:+ (makeRef s4_2_4) +:+
   S "to replace the abstract symbols in the models identified" +:+
@@ -1022,7 +1021,7 @@ s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement)
   [Con s5_2_contents]
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
-  S "of this problem, performance is not a priority. Any" +:+
+  S "of this" +:+ phrase problem +:+ S ", performance is not a priority. Any" +:+
   S "reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
   S "nonfunctional" +:+ plural requirement +:+ 

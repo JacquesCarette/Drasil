@@ -82,7 +82,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 dd5angDisp :: QDefinition
-dd5angDisp = fromEqn "dd5angDisp" fixme --dd5descr 
+dd5angDisp = fromEqn "dd5angDisp" (angDisp ^. term) 
   (Concat [(angDisp ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
   radians angDispEqn
 

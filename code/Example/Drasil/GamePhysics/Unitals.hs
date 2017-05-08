@@ -25,8 +25,6 @@ cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
     impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
     orientation, dist, disp, time, torque, angDisp, vel]
 
-accel       = ucFromVC QP.acceleration accelU
-angAccel    = ucFromVC QP.angularAccel angAccelU
 force       = ucFromVC QP.force newton
 gravAccel   = ucFromVC QP.gravitationalAccel accelU
 -- What would be the best way to represent universal constants
@@ -46,15 +44,18 @@ jVect       = ucFromVC ivec metre
 -- FIXME: parametrized hack
 normalVect  = ucFromVC normVect metre
   where normVect = cvR (dccWDS "norm_vect" (compoundPhrase' (cn "collision") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term) ) (QM.norm_vect ^. symbol)
-angVel      = ucFromVC QP.angularV angVelU
 position    = ucFromVC QP.position metre
 orientation = ucFromVC QM.orientation radians
 dist        = ucFromVC QP.distance metre
-disp        = ucFromVC QP.displacement metre
 time        = ucFromVC QP.time second
 torque      = ucFromVC QP.torque torqueU
-angDisp     = ucFromVC QP.angularDisplacement radians
+disp        = ucFromVC QP.displacement metre
 vel         = ucFromVC QP.velocity velU
+accel       = ucFromVC QP.acceleration accelU
+
+angDisp     = ucFromVC QP.angularDisplacement radians
+angVel      = ucFromVC QP.angularVelocity angVelU
+angAccel    = ucFromVC QP.angularAccel angAccelU
 
 --FIXME: parametrized hack
 linDisp     = ucFromVC ldisp velU

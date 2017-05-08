@@ -150,9 +150,9 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
   S "for an" +:+ (short srs) +:+ S "for scientific computing" +:+
   S "software proposed by Koothoor as well as Smith and Lai." +:+ 
-  S " The presentation follows the standard pattern of presenting" +:+
+  S "The presentation follows the standard pattern of presenting" +:+
   S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
-  S "and" +:+. (plural assumption) +:+ S " For readers" +:+
+  S "and" +:+. (plural assumption) +:+ S "For readers" +:+
   S "that would like a more bottom up approach, they can start" +:+
   S "reading the instance models in" +:+ makeRef sec_IMs +:+
   S "and trace back to find any additional information they" +:+
@@ -238,7 +238,7 @@ s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed" +:+
   S "by looking at properties of the slope as a series" +:+
   S "of slice elements. Some properties are interslice" +:+
   S "properties, and some are slice or slice base properties." +:+
-  S " The index convention for referencing which interslice" +:+
+  S "The index convention for referencing which interslice" +:+
   S "or slice is being used is shown in" +:+. (makeRef fig_indexconv)
 
 s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
@@ -284,7 +284,7 @@ s4_2 = Sub $ Section (S "Solution" +:+ (titleize characteristicsSpecification))
 
 s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
   (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
-  S " The information to understand the meaning of the instance" +:+ --FIXME extra space at start of sentence?
+  S "The information to understand the meaning of the instance" +:+
   S "models and their derivation is also presented, so that the" +:+
   S "instance models can be verified."
 

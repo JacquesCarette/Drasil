@@ -45,7 +45,7 @@ s1_1_intro = Paragraph $
            S "are employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
            S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+
             (phrase $ description ^. term) +:+ S "of the" +:+ (phrase $ unit_ ^. term) +:+
-           S "followed by the SI name."
+           S "followed by the SI" +:+ (phrase $ name_ ^. term) :+: S "."
 
 s1_1_table = unit_table this_si --FIXME: Change to RefSec see line 72 of SWHS Body.hs
 
@@ -71,14 +71,14 @@ s4_intro = Paragraph $
             (phrase $ solution ^. term) +:+ (phrase $ characteristicsSpecification ^. term) :+:
            S ", which presents the" +:+ (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
             (plural $ definition ^. term) +:+ S "and finally the instance" +:+
-            (phrase $ model ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the solar water heating tank." --FIXME: We need something to handle the use of nouns as verbs
+            (phrase $ model ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
 
 s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
                                             Sub s4_1_2,Sub s4_1_3]
 
 s4_1_intro = Paragraph $
             (getAcc sWHS) +:+ S "is a computer program developed to investigate" +:+
-           S "the heating of water in a solar water heating tank."
+           S "the heating of" +:+ (phrase $ water ^. term) +:+ S "in a" +:+ (phrase $ sWHT ^. term) :+: S "."
 
 s4_1_1 = Section (S "Terminology and" +:+ (titleize' $ definition ^. term)) [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
@@ -100,20 +100,20 @@ s4_1_2_intro = Paragraph $
            S "The physical" +:+ (phrase $ system ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
            S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following elements:"
 
-fig_tank = Figure (S "Solar water heating tank, with heat flux from coil of" +:+
+fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with heat flux from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "PS1", S "Tank containing water"), 
-  (S "PS2", S "Heating coil at bottom of tank. (" :+:
+  (S "PS1", (at_start $ tank ^. term) +:+ S "containing" +:+ (phrase $ water ^. term)), 
+  (S "PS2", S "Heating" +:+ (phrase $ coil ^. term) +:+ S "at bottom of" +:+ (phrase $ tank ^. term) :+: S ". (" :+:
   P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
-  S "into the water.)")]
+  S "into the" +:+ (phrase $ water ^. term) :+: S ".)")]
 
 s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro,
                                                     Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph $
-           S "Given the temperature of the coil, initial temperature of the water," +:+
+           S "Given the temperature of the" +:+ (phrase $ coil ^. term) :+: S ", initial temperature of the" +:+ (phrase $ water ^. term) :+: S "," +:+
            S "and material properties, the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [

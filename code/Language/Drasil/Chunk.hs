@@ -1,3 +1,4 @@
+-- | Base chunk module
 module Language.Drasil.Chunk where
 
 import Control.Lens (Simple,Lens)

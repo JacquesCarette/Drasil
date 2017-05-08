@@ -185,10 +185,10 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
 --How to italicize words in sentence?
 --How to cite?
 
-s2_2 = Section (S "Scope of Requirements") [Con s2_2_contents]
+s2_2 = Section (S "Scope of" +:+ titleize' requirement) [Con s2_2_contents]
 
-s2_2_contents = Paragraph (S "The scope of the requirements is limited" +:+
-  S "to" +:+ (sLower (phrase $ thermal_analysis ^.
+s2_2_contents = Paragraph (S "The scope of the" +:+ plural requirement +:+
+  S "is limited to" +:+ (sLower (phrase $ thermal_analysis ^.
   term)) +:+ S "of a single" +:+. (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
   S "Given the appropriate inputs, the code for" +:+
   (short progName) +:+ S "is intended to predict the" +:+
@@ -261,8 +261,8 @@ s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1,
 
 s3_intro = Paragraph (S "This section provides general information about" +:+
   S "the system, identifies the interfaces between the system and" +:+
-  S "its environment, and describes the user characteristics and" +:+.
-  S "the system" +:+ plural constraint)
+  S "its environment, and describes the user" +:+ plural characteristic +:+
+  S "and the system" +:+ plural constraint)
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -319,8 +319,8 @@ s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
   S "that are used in the subsequent sections and their" +:+
-  S "meaning, with the purpose of reducing ambiguity and" +:+
-  S "making it easier to correctly understand the requirements:")
+  S "meaning, with the purpose of reducing ambiguity and making" +:+
+  S "it easier to correctly understand the" +:+ plural requirement +:+ S ":")
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)

@@ -101,8 +101,7 @@ s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph $
   S "The table that follows summarizes the symbols used in this" +:+
-  S "document along with their units.  More specific instances of these" +:+
-  S "symbols will be described in their respective sections. Throughout" +:+
+  S "document along with their units. Throughout" +:+
   S "the document, symbols in bold will represent vectors, and scalars" +:+.
   S "otherwise. The symbols are listed in alphabetical order"
 

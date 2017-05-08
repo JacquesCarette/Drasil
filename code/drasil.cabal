@@ -169,7 +169,7 @@ executable ssp
     , Drasil.SSP.Reqs
     , Drasil.SSP.Units
     , Drasil.TableOfAbbAndAcronyms
-	, Drasil.TableOfSymbols
+    , Drasil.TableOfSymbols
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

@@ -14,7 +14,7 @@ import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk(..), dcc)
+import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc)
 import Language.Drasil.Spec (USymb(..))
 
 import Language.Drasil.NounPhrase (cn')

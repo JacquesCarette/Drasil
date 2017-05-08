@@ -69,9 +69,15 @@ pcm:
 	- $(DIFF) ./stable/pcm/$(PCM_PREF)SRS.tex ./SRS/$(PCM_PREF)SRS.tex &> $(PCM_PREF)log.log
 	- $(DIFF) ./stable/pcm/$(PCM_PREF)SRS.css ./Website/$(PCM_PREF)SRS.css >> $(PCM_PREF)log.log 2>&1
 	- $(DIFF) ./stable/pcm/$(PCM_PREF)SRS.html ./Website/$(PCM_PREF)SRS.html >> $(PCM_PREF)log.log 2>&1
+  
+docs:
+	haddock -o Docs -h ./Language/Drasil.hs
 	
 clean: clean_logs
 	rm -r ./SRS ./Website ./MIS ./MG ./C++ .stack-work/dist
 	
 clean_logs:
 	rm *.log
+
+clean_docs:
+	rm -r ./Docs

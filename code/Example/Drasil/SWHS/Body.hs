@@ -1058,7 +1058,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   ((short likelyChg) :+: S "4", Flat (S "A11 - The" +:+ phrase model +:+
   S "currently only accounts for" +:+. (sLower (charging ^. 
   defn)) +:+ S "A more complete" +:+ phrase model +:+ S "would also" +:+.
-  S "account for" (sLower (discharging ^. defn)))),
+  S "account for" +:+ (sLower (discharging ^. defn)))),
 --
   ((short likelyChg) :+: S "5", Flat (S "A12 - To add more" +:+
   S " flexibility to the simulation, the" +:+ (phrase $ temp_init ^. term) +:+

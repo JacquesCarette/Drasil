@@ -18,6 +18,7 @@ import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Physics 
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
@@ -247,7 +248,7 @@ s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
   (S "Slice properties convention is noted by i.")
   ]
   
-s4_1_2_p2 = Con $ Paragraph $ S "A free body diagram of the forces" +:+
+s4_1_2_p2 = Con $ Paragraph $ S "A" +:+ (phrase $ fbd ^. term) +:+ S "of the forces" +:+
   S "acting on the slice is displayed in " :+: (makeRef fig_forceacting) :+: S "."
 
 s4_1_2_fig1 = Con fig_indexconv

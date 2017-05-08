@@ -290,6 +290,10 @@ ssa, ssp :: CINP
 ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
 ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
 
+slpSrf, crtSlpSrf :: NPNC
+slpSrf = npnc "slpSrf" (cn' "slip surface")
+crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
+
 
 ----Theoretical Models----
 fs_rc :: RelationConcept

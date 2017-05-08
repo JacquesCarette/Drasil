@@ -206,7 +206,7 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "Factor of Safety", 
       S "Stability metric. How likely a slip surface is to experience" +:+
       S "failure through slipping."), 
-  (S "Critical Slip Surface", 
+  (titleize crtSlpSrf, 
       S "Slip surface of the slope that has the lowest global factor of" +:+
       S "safety, and therefore most likely to experience failure."),
   (S "Stress", 

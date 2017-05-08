@@ -82,10 +82,10 @@ s1_3 = table_of_abb_and_acronyms acronyms
 -- SECTION 2 --
 s2 = SRS.intro [s2_p1, s2_p2, s2_1, s2_2, s2_3]
 
-s2_p1 = Con $ Paragraph $ S "A slope of geological mass, composed" +:+
-  S "of soil and rock, is subject to the influence of gravity on" +:+
-  S "the mass. For an unstable slope this can cause instability" +:+
-  S "in the form of soil/rock movement. The effects of soil/rock" +:+
+s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC` 
+  S "composed of soil and rock, is subject to the influence of gravity on" +:+
+  S "the " +:+. (phrase $ mass ^. term) +:+ S "For an unstable slope this can cause" +:+
+  S "instability in the form of soil/rock movement. The effects of soil/rock" +:+
   S "movement can range from inconvenient to seriously hazardous," +:+
   S "resulting in signifcant life and economic loses. Slope stability" +:+
   S "is of interest both when analyzing natural slopes," +:+
@@ -114,11 +114,11 @@ s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines th
 
 s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
-  S "writing the design specification and the software verification" +:+
-  S "and validation plan. The design document will show how the" +:+
+  S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
+  (phrase vav) +:+ S "plan. The design document will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
   S "numerical algorithms and programming environment. The" +:+
-  S "verification and validation plan will show the steps that will" +:+
+  (phrase vav) +:+ S "plan will show the steps that will" +:+
   S "be used to increase confidence in the software documentation and" +:+
   S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
   S "documents that follow the so-called waterfall model, the actual" +:+
@@ -163,7 +163,7 @@ s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
 s3_p1 = Con $ Paragraph $ S "This section provides general information" +:+
   S "about the system, identifies the interfaces between the" +:+
   S "system and its environment, and describes the user characteristics" +:+
-  S "and the system constraints."
+  S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --
 s3_1 = Sub $ Section (S "User" +:+ titleize characteristics) [s3_1_p1]
@@ -173,9 +173,9 @@ s3_1_p1 = Con $ Paragraph $ S "The end user of" +:+ (short ssa) +:+ S "should" +
   S "Physics, and be familiar with soil and material properties."
 
 -- SECTION 3.2 --
-s3_2 = Sub $ Section (S "System Constraints") [s3_2_p1]
+s3_2 = Sub $ Section (titleize' systemConstraint) [s3_2_p1]
 
-s3_2_p1 = Con $ Paragraph $ S "There are no system constraints."
+s3_2_p1 = Con $ Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
 -- SECTION 4 --
 s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]

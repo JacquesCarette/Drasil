@@ -94,10 +94,10 @@ s1_1 = table_of_units this_si
 s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
 
 s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
-  S "symbols used in this document along with their units." :+:
+  S "symbols used in this document along with their units." +:+
   S "The choice of symbols was made to be consistent" +:+
-  S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) :+: 
-  S " literature and with existing documentation for" +:+ (sLower
+  S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) +:+
+  S "literature and with existing documentation for" +:+ (sLower
   (phrase $ progName ^. term)) :+: S "s. The symbols are listed in" +:+.
   S "alphabetical order")
 
@@ -160,7 +160,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this document is to" +:+
   S "all information necessary to understand and verify the" +:+
   S "model. The" +:+ (short srs) +:+ S "is abstract" +:+ 
   S "because the contents say what" +:+ phrase problem +:+ S "is being" +:+
-  S "solved, but do not say how to solve it"),
+  S "solved, but do not say how to solve it."),
   Paragraph (S "This document will be used as a starting" +:+
   S "point for subsequent development phases, including" +:+ 
   S "writing the" +:+ phrase desSpec +:+ S "and the software" +:+
@@ -262,7 +262,7 @@ s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1,
 s3_intro = Paragraph (S "This section provides general information about" +:+
   S "the system, identifies the interfaces between the system and" +:+
   S "its environment, and describes the user" +:+ plural characteristic +:+
-  S "and the system" +:+ plural constraint)
+  S "and the system" +:+ plural constraint :+: S ".")
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -286,7 +286,7 @@ s4 = Section (titleize specificsystemdescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph (S "This section first presents the" +:+ phrase problem +:+
-  phrase description +:+ S "which gives a high-level view of the" +:+
+  phrase description :+: S ", which gives a high-level view of the" +:+
   phrase problem +:+ S "to be solved. This is followed by the" +:+
   phrase solution +:+ phrase characteristicsSpecification :+: S ", which" +:+
   S "presents the" +:+
@@ -423,7 +423,7 @@ s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
 s4_2_1_intro = Paragraph (S "This section simplifies the original" +:+
   phrase problem +:+ S "and helps in developing the" +:+ 
   phrase thModel +:+ S "by filling in the missing" +:+
-  S "information for the" +:+ phrase physicalSystem +:+ S ". The" +:+
+  S "information for the" +:+ phrase physicalSystem :+: S ". The" +:+
   S "numbers given in the square brackets refer to the" +:+ 
   phrase thModel +:+ S "[" :+: (short thModel) :+: 
   S "]," +:+ (phrase genDefn) +:+ 
@@ -942,7 +942,7 @@ s5_1 = Section (S "Functional" +:+ titleize' requirement)
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
   (S "Input the following quantities, which define the" +:+
   (sLower ((phrase $ tank ^. term))) :+: 
-  S " parameters, material properties and initial" +:+ plural condition +:+ S ":"))]), 
+  S " parameters, material properties and initial" +:+ plural condition :+: S ":"))]), 
   (Table [phrase symbol_, phrase unit_, phrase description] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
@@ -1022,7 +1022,7 @@ s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement)
   [Con s5_2_contents]
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
-  S "of this" +:+ phrase problem +:+ S ", performance is not a priority. Any" +:+
+  S "of this" +:+ phrase problem :+: S ", performance is not a priority. Any" +:+
   S "reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
   S "nonfunctional" +:+ plural requirement +:+ 

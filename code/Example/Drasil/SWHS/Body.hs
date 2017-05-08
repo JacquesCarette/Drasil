@@ -134,9 +134,10 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
   S "program will be referred to as" +:+ (phrase $ progName ^. term) +:+
   S "(" :+: (short progName) :+: S "). This section explains" +:+
-  S "the purpose of this" +:+ phrase document :+: S ", the scope of the" +:+
-  S "system, the organization of the" +:+ phrase document +:+ S  "and the" +:+
-  plural characteristic +:+ S "of the intended readers.")]
+  S "the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
+  S ", the" +:+ phrase scope +:+ S "of the system, the" +:+ phrase
+  organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
+  plural characteristic +:+ S "of the" +:+ S "intended readers.")]
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
@@ -146,11 +147,11 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
 -- similar paragraph in each of the other examples. It can probably be 
 -- abstracted out.
 
-s2_1 = Section (S "Purpose of" +:+ titleize document) (map Con s2_1_contents)
+s2_1 = Section (titleize purpose +:+ S "of" +:+ titleize document) (map Con s2_1_contents)
 
-s2_1_contents = [Paragraph (S "The main purpose of this" +:+ phrase document +:+
-  S "is to describe the modelling of" +:+ (phrase $ swhs_pcm ^. term) :+:
-  S ". The" +:+ plural goalStmt +:+
+s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
+  phrase document +:+ S "is to describe the modelling of" +:+
+  (phrase $ swhs_pcm ^. term) :+: S ". The" +:+ plural goalStmt +:+
   S "and" +:+ plural thModel +:+ 
   S "used in the" +:+ (short progName) +:+ S "code" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
@@ -158,7 +159,7 @@ s2_1_contents = [Paragraph (S "The main purpose of this" +:+ phrase document +:+
   S "and unambiguous" +:+ plural definition :+: S ". This" +:+ phrase document +:+
   S "is intended to be used as a reference to provide ad hoc access to" +:+
   S "all" +:+ phrase information +:+ S "necessary to understand and verify" +:+
-  S "the model. The" +:+ (short srs) +:+ S "is abstract" +:+ 
+  S "the" +:+ phrase model +:+ S ". The" +:+ (short srs) +:+ S "is abstract" +:+ 
   S "because the contents say what" +:+ phrase problem +:+ S "is being" +:+
   S "solved, but do not say how to solve it."),
   Paragraph (S "This" +:+ phrase document +:+ S "will be used as a starting" +:+
@@ -172,8 +173,8 @@ s2_1_contents = [Paragraph (S "The main purpose of this" +:+ phrase document +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
   S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 
-  plural document +:+ S "that follow the so-called waterfall model, the" +:+
-  S "actual development process is not constrained in any" +:+
+  plural document +:+ S "that follow the so-called waterfall" +:+ phrase model :+:
+  S ", the actual development process is not constrained in any" +:+
   S "way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
   S "to present the documentation is still to" +:+
@@ -213,11 +214,12 @@ s2_2_contents = Paragraph (S "The scope of the" +:+ plural requirement +:+
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
-s2_3 = Section (S "Organization of" +:+ titleize document) (map Con s2_3_contents)
+s2_3 = Section (titleize organization +:+ S "of" +:+ titleize document)
+  (map Con s2_3_contents)
 
-s2_3_contents = [Paragraph (S "The organization of this" +:+ phrase document +:+ 
-  S "follows the template for an" +:+ (short srs) +:+ S "for" +:+
-  S "scientific computing software proposed by [citation] and" +:+
+s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
+  phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
+  S "for scientific computing software proposed by [citation] and" +:+
   S "[citation]. The presentation follows the standard" +:+
   S "pattern for presenting" +:+ plural goalStmt `sC`
   plural thModel `sC`
@@ -230,7 +232,7 @@ s2_3_contents = [Paragraph (S "The organization of this" +:+ phrase document +:+
   S "additional" +:+ phrase information +:+ S "they require. The" +:+
   (plural inModel) +:+ S "provide" +:+
   S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+:
-  S "s) and algebraic equations that model the" +:+.
+  S "s) and algebraic equations that" +:+ phrase model +:+ S "the" +:+
   (phrase $ swhs_pcm ^. term) +:+ (short progName) +:+
   S "solves these" +:+ (short ode) :+: S "s."),
   --FIXME: Update refineChain after fixing goalStmt and thModel
@@ -295,7 +297,7 @@ s4_intro = Paragraph (S "This section first presents the" +:+ phrase problem +:+
   (plural genDefn) `sC` 
   (plural dataDefn) `sC` S "and finally" +:+
   S "the" +:+ plural inModel +:+ S "(" :+:
-  (short ode) :+: S "s) that model the" +:+. 
+  (short ode) :+: S "s) that" +:+ phrase model +:+ S "the" +:+
   (phrase $ swhs_pcm ^. term))
 
 -- Completely general except for solar water heating tank (object of analysis) 
@@ -318,8 +320,8 @@ s4_1_1 = Section (S "Terminology and" +:+ titleize' definition)
  [Con s4_1_1_intro, Con s4_1_1_bullets]
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
-  S "that are used in the subsequent sections and their" +:+
-  S "meaning, with the purpose of reducing ambiguity and making" +:+
+  S "that are used in the subsequent sections and their meaning," +:+
+  S "with the" +:+ phrase purpose +:+ S "of reducing ambiguity and making" +:+
   S "it easier to correctly understand the" +:+ plural requirement :+: S ":")
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
@@ -487,8 +489,8 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   (phrase $ water ^. term))) +:+ S "and the" +:+ (short phsChgMtrl) +:+
   S "[" :+: makeRef s4_2_4_DD2 :+: S "].")),
 --
-  ((short assumption) :+: S "11", Flat (S "The model only" +:+
-  S "accounts for" +:+ (sLower (charging ^. defn)) :+:
+  ((short assumption) :+: S "11", Flat (S "The" +:+ phrase model +:+
+  S "only accounts for" +:+ (sLower (charging ^. defn)) :+:
   S ", not" +:+ (sLower ((phrase $ discharging ^. term))) :+:
   S ". The" +:+ (phrase $ temp_W ^. term) +:+ S "and" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "can only increase, or remain" +:+
@@ -658,8 +660,8 @@ s4_2_5_intro = [Paragraph (S "This section transforms the" +:+ phrase
   problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
   S "is expressed in mathematical terms. It uses concrete" +:+
   S "symbols defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract symbols in the models identified" +:+
-  S "in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
+  S "to replace the abstract symbols in the" +:+ plural models +:+
+  S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
   S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+
@@ -838,18 +840,18 @@ s4_2_6 = Section (S "Data" +:+ titleize' constraint) [Con s4_2_6_intro]
 
 s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
   plural constraint +:+ S "on the input and output variables," +:+
-  S "respectively. The column for physical" +:+ plural constraint +:+
-  S "gives the physical limitations on the range of values that can" +:+
-  S "be taken by the variable. The column for software" +:+
+  S "respectively. The column for" +:+ phrase physical +:+ plural constraint +:+
+  S "gives the" +:+ phrase physical +:+ S "limitations on the range of" +:+
+  S "values that can be taken by the variable. The column for software" +:+
   plural constraint +:+ S "restricts the range of inputs to reasonable" +:+
   S "values. The" +:+ plural constraint +:+ S "are conservative, to" +:+
-  S "give the user of the model the flexibility to experiment with" +:+
-  S "unusual situations. The column of typical values is" +:+
+  S "give the user of the" +:+ phrase model +:+ S "the flexibility to" +:+
+  S "experiment with unusual situations. The column of typical values is" +:+
   S "intended to provide a feel for a common scenario. The" +:+
   S "uncertainty column provides an estimate of the confidence" +:+
-  S "with which the physical quantities can be measured. This" +:+
-  phrase information +:+ S "would be part of the input if one were" +:+
-  S "performing an uncertainty quantification exercise. (The" +:+
+  S "with which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
+  S "This" +:+ phrase information +:+ S "would be part of the input if" +:+
+  S "one were performing an uncertainty quantification exercise. (The" +:+
   S "tables are left out because features they should use are" +:+
   S "not yet implemented in Drasil.)")
 
@@ -960,7 +962,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
   Enumeration (Simple [((short requirement) :+: S "3", Flat 
-  (S "Verify that the inputs satisfy the required physical" +:+
+  (S "Verify that the inputs satisfy the required" +:+ phrase physical +:+
   plural constraint +:+ S "shown in Table 1.")),
 --
   ((short requirement) :+: S "4", Flat (S "Output the input" :+: 
@@ -1053,10 +1055,10 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   term) +:+ S "will actually change along its length as the" +:+
   (sLower ((phrase $ water ^. term))) +:+. S "within it cools")),
 --
-  ((short likelyChg) :+: S "4", Flat (S "A11 - The model" +:+
+  ((short likelyChg) :+: S "4", Flat (S "A11 - The" +:+ phrase model +:+
   S "currently only accounts for" +:+. (sLower (charging ^. 
-  defn)) +:+ S "A more complete model would also account for" +:+.
-  (sLower (discharging ^. defn)))),
+  defn)) +:+ S "A more complete" +:+ phrase model +:+ S "would also" +:+.
+  S "account for" (sLower (discharging ^. defn)))),
 --
   ((short likelyChg) :+: S "5", Flat (S "A12 - To add more" +:+
   S " flexibility to the simulation, the" +:+ (phrase $ temp_init ^. term) +:+
@@ -1076,7 +1078,8 @@ s7 = Section (S "Traceability Matrices and Graphs") ([Con s7_intro1,
   Con s7_table1, Con s7_table2, Con s7_table3] ++ (map Con s7_intro2) ++ 
   [Con s7_fig1, Con s7_fig2])
 
-s7_intro1 = Paragraph (S "The purpose of the traceability matrices is to" +:+ 
+s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
+  S "traceability matrices is to" +:+ 
   S "provide easy references on what has to be additionally" +:+
   S "modified if a certain component is changed. Every time a" +:+
   S "component is changed, the items in the column of that" +:+
@@ -1209,10 +1212,10 @@ s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
 
 -- Wrong DD reference above, change when DD4 is available
 
-s7_intro2 = [Paragraph (S "The purpose of the traceability graphs is also" +:+
-  S "to provide easy references on what has to be additionally" +:+
-  S "modified if a certain component is changed. The arrows in" +:+
-  S "the graphs represent dependencies. The component at the tail" +:+
+s7_intro2 = [Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
+  S "traceability graphs is also to provide easy references on what has" +:+
+  S "to be additionally modified if a certain component is changed. The" +:+
+  S "arrows in the graphs represent dependencies. The component at the tail" +:+
   S "of an arrow is depended on by the component at the head of" +:+
   S "that arrow. Therefore, if a component is changed, the" +:+
   S "components that it points to should also be changed." +:+

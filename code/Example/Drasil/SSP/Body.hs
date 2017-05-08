@@ -144,11 +144,13 @@ s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
 -- SECTION 2.3 --
 s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
 
-s2_3_p1 = Con $ Paragraph $ S "The organization of this document" +:+
-  S "follows the template for an SRS for scientific computing" +:+
+s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
+  S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
+  S "for an" +:+ (short srs) +:+ S "for scientific computing" +:+
   S "software proposed by Koothoor as well as Smith and Lai." +:+ 
   S " The presentation follows the standard pattern of presenting" +:+
-  S "goals, theories, definitions, and assumptions.  For readers" +:+
+  S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
+  S "and" +:+. (plural assumption) +:+ S " For readers" +:+
   S "that would like a more bottom up approach, they can start" +:+
   S "reading the instance models in" +:+ makeRef sec_IMs +:+
   S "and trace back to find any additional information they" +:+
@@ -362,8 +364,10 @@ s4_2_6 = Sub $ Section (S "Data Constraints") []
 s5 = Section (titleize' requirement) [s5_p1, s5_1, s5_2]
 
 s5_p1 = Con $ Paragraph $ S "This section provides the" +:+
-  S "functional" +:+ (plural requirement) `sC` S "the business tasks that the software" +:+
-  S "is expected to complete, and the nonfunctional" +:+ (plural requirement) `sC`
+  S "functional" +:+ (plural requirement) `sC` 
+  S "the business tasks that the software" +:+
+  S "is expected to complete, and the nonfunctional" +:+ 
+  (plural requirement) `sC`
   S "the qualities that the software is expected to exhibit."
 
 -- SECTION 5.1 --

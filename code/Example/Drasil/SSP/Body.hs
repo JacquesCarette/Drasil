@@ -120,14 +120,14 @@ s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines th
 s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
   S "writing the design specification and the software verification" +:+
-  S "and validation plan.  The design document will show how the" +:+
+  S "and validation plan. The design document will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
-  S "numerical algorithms and programming environment.  The" +:+
+  S "numerical algorithms and programming environment. The" +:+
   S "verification and validation plan will show the steps that will" +:+
   S "be used to increase confidence in the software documentation and" +:+
-  S "the implementation.  Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
+  S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
   S "documents that follow the so-called waterfall model, the actual" +:+
-  S "development process is not  constrained in any way.  Even when" +:+
+  S "development process is not  constrained in any way. Even when" +:+
   S "the waterfall model is not followed, as Parnas and Clements point" +:+
   S "out, the most logical way to present the documentation is still to"+:+
   S "fake a rational design process."
@@ -156,7 +156,7 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "that would like a more bottom up approach, they can start" +:+
   S "reading the instance models in" +:+ makeRef sec_IMs +:+
   S "and trace back to find any additional information they" +:+
-  S "require.  The instance models provide the set of algebraic" +:+
+  S "require. The instance models provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
   S "Morgenstern Price Analysis. The goal statements are refined" +:+
   S "to the theoretical models" +:+ (sParen . makeRef) sec_TMs +:+ 
@@ -187,7 +187,7 @@ s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]
 
 s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
   S "problem description, which gives a high-level view of the" +:+
-  S "problem to be solved.  This is followed by the solution" +:+
+  S "problem to be solved. This is followed by the solution" +:+
   (phrase characteristicsSpecification) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
   S "and finally the instance models that model the slope."

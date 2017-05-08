@@ -660,7 +660,7 @@ s4_2_5_intro = [Paragraph (S "This section transforms the" +:+ phrase
   problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
   S "is expressed in mathematical terms. It uses concrete" +:+
   S "symbols defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract symbols in the" +:+ plural models +:+
+  S "to replace the abstract symbols in the" +:+ plural model +:+
   S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+

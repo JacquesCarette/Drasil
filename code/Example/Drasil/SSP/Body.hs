@@ -157,13 +157,13 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
   S "and" +:+. (plural assumption) +:+ S "For readers" +:+
   S "that would like a more bottom up approach, they can start" +:+
-  S "reading the instance models in" +:+ makeRef sec_IMs +:+
+  S "reading the" +:+ (plural instMdl) +:+ S "in" +:+ makeRef sec_IMs +:+
   S "and trace back to find any additional information they" +:+
-  S "require. The instance models provide the set of algebraic" +:+
+  S "require. The" +:+ (plural instMdl) +:+ S "provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
   S "Morgenstern Price Analysis. The goal statements are refined" +:+
   S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
-  S "and instance models" +:+. (sParen . makeRef) sec_IMs
+  S "and" +:+ (plural instMdl) +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
 s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
@@ -193,7 +193,7 @@ s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
   S "problem to be solved. This is followed by the solution" +:+
   (phrase characteristicsSpecification) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
-  S "and finally the instance models that model the slope."
+  S "and finally the" +:+ (plural instMdl) +:+ S "that model the slope."
 
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
@@ -234,7 +234,7 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.1.2 --
-s4_1_2 = Sub $ Section (S "Physical" +:+ (titleize systemdescription)) --FIXME: Use proper compound nounPhrase for the whole title?
+s4_1_2 = Sub $ Section (titleize physSyst)
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
 
 s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed" +:+
@@ -285,11 +285,11 @@ s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 s4_2 = Sub $ Section (S "Solution" +:+ (titleize characteristicsSpecification))
   [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
-s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
+s4_2_p1 = Con $ Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
   (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
   S "The information to understand the meaning of the instance" +:+
   S "models and their derivation is also presented, so that the" +:+
-  S "instance models can be verified."
+  (plural instMdl) +:+ S "can be verified."
 
 -- SECTION 4.2.1 --
 s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
@@ -298,7 +298,7 @@ s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
   S "original problem and helps in developing the" +:+ (phrase thModel) +:+
   S "by filling in the missing information for the" +:+. (phrase physicalSystem) +:+
   S "The numbers given in the square brackets refer to" +:+
-  S "the data definition, or the instance model, in which the" +:+
+  S "the data definition, or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
 s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
@@ -360,7 +360,7 @@ s4_2_4 = Sub $ Section (S "Data" +:+ (titleize' definition)) []
 s4_2_5 = Sub sec_IMs
 
 sec_IMs :: Section
-sec_IMs = Section (S "Instance Models") []
+sec_IMs = Section (titleize' instMdl) []
 
 -- SECTION 4.2.6 --
 s4_2_6 = Sub $ Section (S "Data Constraints") []

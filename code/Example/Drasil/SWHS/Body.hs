@@ -663,8 +663,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   symbol) :+: S ", we look at the energy balance on" +:+
   (sLower ((phrase $ water ^. term))) :+: S ". The" +:+ 
   (phrase $ volume ^. term) +:+ S "being considered is the" +:+
-  (phrase $ w_vol ^. term) :+: S "" +:+ P (w_vol ^. symbol) :+:
-  S ", which has" +:+ (phrase $ w_mass ^. term) :+: S "" +:+ 
+  (phrase $ w_vol ^. term) :+: EmptyS +:+ P (w_vol ^. symbol) :+:
+  S ", which has" +:+ (phrase $ w_mass ^. term) :+: EmptyS +:+ 
   P (w_mass ^. symbol) +:+ S "and" +:+ (phrase $ htCap_W ^. term) :+: 
   S "," +:+. P (htCap_W ^. symbol) +:+ P (ht_flux_C ^. 
   symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
@@ -750,7 +750,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
   S "being considered is the" +:+ (phrase $ pcm_vol ^. term) :+: 
   S "," +:+ P (pcm_vol ^. symbol) :+: S ". The derivation" +:+
   S "that follows is initially for the" +:+ (sLower 
-  ((phrase $ solid ^. term))) :+: S "" +:+ (short phsChgMtrl) :+:
+  ((phrase $ solid ^. term))) :+: EmptyS +:+ (short phsChgMtrl) :+:
   S ". The" +:+ (phrase $ pcm_mass ^. term) +:+ S "is" +:+ 
   P (pcm_mass ^. symbol) +:+ S "and the" +:+ (phrase $ htCap_S_P ^. 
   term) +:+ S "is" +:+. P (htCap_S_P ^. symbol) +:+
@@ -784,7 +784,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
    (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
    ((C temp_W) - (C temp_PCM))),
   Paragraph (S "Equation (6) applies for the" +:+ 
-  (sLower ((phrase $ solid ^. term))) :+: S "" +:+ (short phsChgMtrl) :+: 
+  (sLower ((phrase $ solid ^. term))) :+: EmptyS +:+ (short phsChgMtrl) :+: 
   S ". In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
   S "derivation applies, except that" +:+ P (htCap_S_P ^. 
@@ -989,7 +989,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   S "output the" +:+ (phrase $ time ^. term) +:+ S "at which the" +:+ 
   (short phsChgMtrl) +:+
   S "stops" +:+ (sLower ((phrase $ melting ^. term))) :+: 
-  S "" +:+ P (t_final_melt ^. symbol) +:+ S "(from IM2)."))])
+  EmptyS +:+ P (t_final_melt ^. symbol) +:+ S "(from IM2)."))])
   ]
 
 -- List structure same between all examples
@@ -1083,105 +1083,105 @@ s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
 -- which types of items are associated with each matrix i.e. instance models, 
 -- assumptions, requirements, etc.. If so, this paragraph can be abstracted out.
 
-s7_table1 = Table [S "", makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
+s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
   makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 
   makeRef s4_2_4_DD2, makeRef s4_2_4_DD3, makeRef s4_2_4_DD3, S "IM1",
   S "IM2", S "IM3", S "IM4"]
-  [[makeRef s4_2_2_T1, S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S ""],
-  [makeRef s4_2_2_T2, S "", S "", S "X", S "", S "", S "", S "", S "",
-  S"", S "", S "", S "", S ""],
-  [makeRef s4_2_2_T3, S "", S "", S "", S "", S "", S "", S "", S "", 
-  S "", S "", S "", S "", S ""],
-  [S "GD1", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S ""],
-  [S "GD2", S "X", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S ""],
-  [makeRef s4_2_4_DD1, S "", S "", S "", S "X", S "", S "", S "",
-  S "", S "", S "", S "", S "", S ""],
-  [makeRef s4_2_4_DD2, S "", S "", S "", S "X", S "", S "", S "",
-  S"", S "", S "", S "", S "", S ""],
-  [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-  S"", S "", S "", S "", S ""],
-  [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "",
-  S "X", S "", S "", S "", S "", S ""],
-  [S "IM1", S "", S "", S "", S "", S "X", S "X", S "X", S "", S "",
-  S "", S "X", S "", S ""],
-  [S "IM2", S "", S "", S "", S "", S "X", S "", S "X", S "", S "X",
-  S "X", S "", S "", S "X"],
-  [S "IM3", S "", S "X", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S ""],
-  [S "IM4", S "", S "X", S "X", S "", S "", S "", S "X", S "X", S "X",
-  S "", S "X", S "", S ""]]
+  [[makeRef s4_2_2_T1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T2, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  S"", EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "GD1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "GD2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD2, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  S"", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  S"", EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS, EmptyS,
+  EmptyS, S "X", EmptyS, EmptyS],
+  [S "IM2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS, S "X",
+  S "X", EmptyS, EmptyS, S "X"],
+  [S "IM3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "IM4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
+  EmptyS, S "X", EmptyS, EmptyS]]
   (S "Traceability Matrix Showing the Connections Between Items" +:+
   S "of Different" +:+ titleize' section_) True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
-s7_table2 = Table [S "", S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
+s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
   S "R1", S "R2"]
-  [[S "IM1", S "", S "X", S "", S "", S "", S "X", S "X"],
-  [S "IM2", S "X", S "", S "", S "X", S "", S "X", S "X"],
-  [S "IM3", S "", S "", S "", S "", S "", S "X", S "X"],
-  [S "IM4", S "", S "X", S "", S "", S "", S "X", S "X"],
-  [S "R1", S "", S "", S "", S "", S "", S "", S ""],
-  [S "R2", S "", S "", S "", S "", S "", S "X", S ""],
-  [S "R3", S "", S "", S "", S "", S "X", S "", S ""],
-  [S "R4", S "X", S "X", S "", S "", S "", S "X", S "X"],
-  [S "R5", S "X", S "", S "", S "", S "", S "", S ""],
-  [S "R6", S "", S "X", S "", S "", S "", S "", S ""],
-  [S "R7", S "", S "", S "X", S "", S "", S "", S ""],
-  [S "R8", S "", S "", S "", S "X", S "", S "", S ""],
-  [S "R9", S "", S "", S "X", S "X", S "", S "", S ""],
-  [S "R10", S "", S "X", S "", S "", S "", S "", S ""],
-  [S "R11", S "", S "X", S "", S "", S "", S "", S ""]]
+  [[S "IM1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
+  [S "IM2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"],
+  [S "IM3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X"],
+  [S "IM4", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
+  [S "R1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "R2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS],
+  [S "R3", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS],
+  [S "R4", S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
+  [S "R5", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "R6", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "R7", EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "R8", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS],
+  [S "R9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS],
+  [S "R10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "R11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
   (S "Traceability Matrix Showing the Connections Between" +:+
   (titleize' requirement) +:+ S "and" +:+ (titleize' inModel)) True
 
-s7_table3 = Table [S "", S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
+s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
   S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
   S "A15", S "A16", S "A17", S "A18", S "A19"]
-  [[makeRef s4_2_2_T1, S "X", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
-  S ""],
-  [makeRef s4_2_2_T2, S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [makeRef s4_2_2_T3, S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "GD1", S "", S "X", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "GD2", S "", S "", S "X", S "X", S "X", S "X", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [makeRef s4_2_4_DD1, S "", S "", S "", S "", S "", S "", S "X",
-  S "X", S "X", S "", S "", S "", S "", S "", S "", S "", S "" , 
-  S "", S ""],
-  [makeRef s4_2_4_DD2, S "", S "", S "X", S "X", S "", S "", S "",
-  S "", S "", S "X", S "", S "", S "", S "", S "", S "", S "", S "",
-  S ""],
-  [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [makeRef s4_2_4_DD3, S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "IM1", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "X", S "X", S "", S "X", S "X", S "X", S "", S "", S "X"],
-  [S "IM2", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "X", S "X", S "", S "", S "X", S "X", S "X", S ""],
-  [S "IM3", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "X", S "", S "", S "", S "", S "X"],
-  [S "IM4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "X", S "", S "", S "", S "", S "X", S ""],
-  [S "LC1", S "", S "", S "", S "X", S "", S "", S "", S "", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "LC2", S "", S "", S "", S "", S "", S "", S "", S "X", S "",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "LC3", S "", S "", S "", S "", S "", S "", S "", S "", S "X",
-  S "", S "", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "LC4", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "X", S "", S "", S "", S "", S "", S "", S "", S ""],
-  [S "LC5", S "", S "", S "", S "", S "", S "", S "", S "", S "",
-  S "", S "", S "X", S "", S "", S "", S "", S "", S "", S ""],
-  [S "LC6", S "", S "", S "", S "", S "", S "", S "", S "", S "", 
-  S "", S "", S "", S "", S "", S "X", S "", S "", S "", S ""]]
+  [[makeRef s4_2_2_T1, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS],
+  [makeRef s4_2_2_T2, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "GD1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "GD2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS , 
+  EmptyS, EmptyS],
+  [makeRef s4_2_4_DD2, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS, S "X"],
+  [S "IM2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, S "X", S "X", S "X", EmptyS],
+  [S "IM3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X"],
+  [S "IM4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS],
+  [S "LC1", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "LC2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "LC3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "LC4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "LC5", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "LC6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS]]
   (S "Traceability Matrix Showing the Connections Between" +:+
   (titleize' assumption) +:+ S "and Other Items") True
 

@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Thermodynamics
 import Data.Drasil.Concepts.Math (ode)
 
 import Data.Drasil.Quantities.Physics (surface)
-import Data.Drasil.Quantities.Math (gradient, norm_vect)
+import Data.Drasil.Quantities.Math (gradient, normalVect)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
@@ -69,7 +69,7 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 
-  [ TUnits, tsymb'' tsymb_intro (TermExcept [norm_vect]), TAandA ]
+  [ TUnits, tsymb'' tsymb_intro (TermExcept [normalVect]), TAandA ]
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans), Doc (nw progName)], SymbOrder]
@@ -580,11 +580,11 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   (phrase $ volume ^. term) :+: S ", with" +:+ P (thFluxVect ^. 
   symbol) +:+ S "as the" +:+ (phrase $ thFluxVect ^. term) +:+
   S "for the" +:+ (phrase $ surface ^. term) +:+ S "and" +:+
-  P (norm_vect ^. symbol) +:+ S "as a" +:+ (norm_vect ^.
+  P (normalVect ^. symbol) +:+ S "as a" +:+ (normalVect ^.
   defn) :+: S ":"),
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
-  ((C thFluxVect) :. (C norm_vect)) surface))) + 
+  ((C thFluxVect) :. (C normalVect)) surface))) + 
   (UnaryOp (Integral (Just 
   (Low (C volume)), Nothing) (C vol_ht_gen) volume)) := 
   UnaryOp (Integral (Just (Low (C volume)), Nothing) 

@@ -173,7 +173,7 @@ tau_W        = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
 -- Unitless symbols --
 
 swhsUnitless :: [ConVar]
-swhsUnitless = [norm_vect, QP.surface, eta, melt_frac]
+swhsUnitless = [normalVect, QP.surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
 eta          = cvR (dcc "eta" (nounPhraseSP "ODE parameter") fixme) (Greek Eta_L)

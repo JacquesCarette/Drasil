@@ -37,13 +37,13 @@ len         = ucFromVC QPP.length metre
 mass        = ucFromVC QPP.mass kilogram
 -- FIXME: parametrized hack
 iVect       = ucFromVC ivec metre
-  where ivec = cvR (dccWDS "unit_vect" (compoundPhrase' (cn "horizontal") (QM.unit_vect ^. term)) (phrase $ QM.unit_vect ^. term)) (QM.unit_vect ^. symbol)
+  where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "horizontal") (QM.unitVect ^. term)) (phrase $ QM.unitVect ^. term)) (QM.unitVect ^. symbol)
 -- FIXME: parametrized hack
 jVect       = ucFromVC ivec metre
-  where ivec = cvR (dccWDS "unit_vect" (compoundPhrase' (cn "vertical") (QM.unit_vect ^. term)) (phrase $ QM.unit_vect ^. term) ) (vec $ hat lJ)
+  where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "vertical") (QM.unitVect ^. term)) (phrase $ QM.unitVect ^. term) ) (vec $ hat lJ)
 -- FIXME: parametrized hack
 normalVect  = ucFromVC normVect metre
-  where normVect = cvR (dccWDS "norm_vect" (compoundPhrase' (cn "collision") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term) ) (QM.norm_vect ^. symbol)
+  where normVect = cvR (dccWDS "normalVect" (compoundPhrase' (cn "collision") (QM.normalVect ^. term)) (phrase $ QM.normalVect ^. term) ) (QM.normalVect ^. symbol)
 position    = ucFromVC QP.position metre
 orientation = ucFromVC QM.orientation radians
 dist        = ucFromVC QP.distance metre
@@ -99,14 +99,14 @@ mass_2 = ucFromVC mass2 kilogram
   where mass2 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) (cn "of the second body")) (phrase $ QPP.mass ^. term)) (sub (QPP.mass ^. symbol) (Atomic "2"))
 -- FIXME: parametrized hack
 dispUnit = ucFromVC dispVect metre
-  where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement") (QM.unit_vect ^. term)) (phrase $ compoundPhrase' (cn "displacement") (QM.unit_vect ^. term))) (vec (hat lR))
+  where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement") (QM.unitVect ^. term)) (phrase $ compoundPhrase' (cn "displacement") (QM.unitVect ^. term))) (vec (hat lR))
 
 -- FIXME: parametrized hack
 dispNorm = ucFromVC norm metre
-  where norm = cvR (dccWDS "euclideanNorm" (compoundPhrase' (QM.euclid_norm ^. term) (cn "of the displacement")) (phrase $ QM.euclid_norm ^. term) ) (QM.euclid_norm ^. symbol)
+  where norm = cvR (dccWDS "euclideanNorm" (compoundPhrase' (QM.euclidNorm ^. term) (cn "of the displacement")) (phrase $ QM.euclidNorm ^. term) ) (QM.euclidNorm ^. symbol)
 -- FIXME: parametrized hack
 sqrDist = ucFromVC norm m_2
-  where norm = cvR (dccWDS "euclideanNorm" (cn' "squared distance") (phrase $ QM.euclid_norm ^. term) ) (sup (QM.euclid_norm ^. symbol) (Atomic "2"))
+  where norm = cvR (dccWDS "euclideanNorm" (cn' "squared distance") (phrase $ QM.euclidNorm ^. term) ) (sup (QM.euclidNorm ^. symbol) (Atomic "2"))
 
 -- T4 --
 
@@ -162,7 +162,7 @@ mass_B = ucFromVC rigidB kilogram
 
 --FIXME: parametrized hack
 normalLen = ucFromVC normLen metre
-  where normLen = cvR (dccWDS "length of the normal vector" (compoundPhrase' (cn "length of the") (QM.norm_vect ^. term)) (phrase $ QM.norm_vect ^. term)) (Concat [Atomic "||",(QM.norm_vect ^. symbol), Atomic "||"]) 
+  where normLen = cvR (dccWDS "length of the normal vector" (compoundPhrase' (cn "length of the") (QM.normalVect ^. term)) (phrase $ QM.normalVect ^. term)) (Concat [Atomic "||",(QM.normalVect ^. symbol), Atomic "||"]) 
 
 contDisp_A = uc' "r_AP" (nounPhraseSP $ 
   "displacement vector between the centre of " ++
@@ -177,10 +177,10 @@ contDisp_B = uc' "r_BP" (nounPhraseSP $
 
 --FIXME: parametrized hack -> needs synonym for normal with perpendicular
 perpLen_A = ucFromVC perpA metre
-  where perpA = cvR (dccWDS "|| r_AP x n ||" (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perp_vect ^. term)) (cn "to the contact displacement vector of rigid body A")) (phrase $ QM.perp_vect ^. term))  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*", (QM.perp_vect ^. symbol), Atomic "||"])
+  where perpA = cvR (dccWDS "|| r_AP x n ||" (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term)) (cn "to the contact displacement vector of rigid body A")) (phrase $ QM.perpVect ^. term))  (Concat [Atomic "||", (contDisp_A ^. symbol), Atomic "*", (QM.perpVect ^. symbol), Atomic "||"])
 --FIXME: parametrized hack -> needs synonym for normal with perpendicular
 perpLen_B = ucFromVC perpB metre
-  where perpB = cvR (dccWDS "|| r_AB x n ||" (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perp_vect ^. term)) (cn "to the contact displacement vector of rigid body B")) (phrase $ QM.perp_vect ^. term))  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*", (QM.perp_vect ^. symbol), Atomic "||"])
+  where perpB = cvR (dccWDS "|| r_AB x n ||" (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term)) (cn "to the contact displacement vector of rigid body B")) (phrase $ QM.perpVect ^. term))  (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*", (QM.perpVect ^. symbol), Atomic "||"])
 
 -- FIXME: parametrized hack
 momtInert_A = ucFromVC momtA momtInertU

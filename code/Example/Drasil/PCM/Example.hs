@@ -14,8 +14,11 @@ import qualified Data.Drasil.Quantities.Physics as QP (time)
 
 import Control.Lens ((^.))
 
-pcmSymbols :: [UnitalChunk]
-pcmSymbols = [coil_SA,hIn_SA,hOut_SA,htCap,htCap_Liq,htCap_W,tank_D,ht_gen_vol,
+pcmSymbols :: [CQSWrapper]
+pcmSymbols = map cqs pcmUnits
+
+pcmUnits :: [UWrapper]
+pcmUnits = map uw [coil_SA,hIn_SA,hOut_SA,htCap,htCap_Liq,htCap_W,tank_D,ht_gen_vol,
   ht_xfer_co,ht_xfer_CW,tank_L,mass,water_m, -- norm_vect, 
   ht_flux, thFluxVect,
   ht_flux_C,ht_flux_in,ht_flux_out,time,temp, --temp_boil,
@@ -134,3 +137,9 @@ t1descr =
   S ", where " :+: (P $ thFluxVect ^. symbol)) 
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.
+  
+srs_swhs :: ConceptChunk
+  
+srs_swhs = dcc "srs_swhs" (nounPhraseSP 
+  "Solar Water Heating Systems")
+  "Software Requirements Specification for Solar Water Heating Systems"

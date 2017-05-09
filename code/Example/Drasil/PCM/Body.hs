@@ -14,53 +14,27 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Units.Thermodynamics
 
-import Drasil.TableOfUnits
-import Drasil.TableOfSymbols
-import Drasil.TableOfAbbAndAcronyms
-import qualified Drasil.SRS as SRS
-import Drasil.ReferenceMaterial (refSec)
+import Drasil.ReferenceMaterial (intro)
+import Drasil.DocumentLanguage
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s1, s1_1,s1_2, s1_3,s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
+s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
-s1_1_intro, s1_1_table, s1_2_intro, s1_2_table, s4_intro,
+s4_intro,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
-pcm_srs :: Document  
-pcm_srs = SRS.doc' sWHS (name thulasi) [s1,s4]
-
-s1 = refSec [s1_1, s1_2, s1_3]
-
-s1_1 = Section ((titleize $ tOfUnits ^. term)) [Con s1_1_intro,Con s1_1_table]
-
-s1_1_intro = Paragraph $
-           S "Throughout this" +:+ (phrase $ document ^. term) +:+ S "SI (Syst" :+:
-            (F Grave 'e') :+: S "me International d'Unit" :+: (F Acute 'e') :+:
-           S "s) is employed as the" +:+ (phrase $ unit_ ^. term) +:+
-            (phrase $ system ^. term) :+: S"." +:+ S "In addition to the basic" +:+
-            (plural $ unit_ ^. term) :+: S ", several derived" +:+ (plural $ unit_ ^. term) +:+
-           S "are employed as described below. For each" +:+ (phrase $ unit_ ^. term) :+:
-           S ", the" +:+ (phrase $ symbol_ ^. term) +:+ S "is given followed by a" +:+
-            (phrase $ description ^. term) +:+ S "of the" +:+ (phrase $ unit_ ^. term) +:+
-           S "followed by the SI" +:+ (phrase $ name_ ^. term) :+: S "."
-
-s1_1_table = unit_table this_si --FIXME: Change to RefSec see line 72 of SWHS Body.hs
-
-s1_2 = Section ((titleize $ tOfSymb ^. term)) [Con s1_2_intro,Con s1_2_table]
-
-s1_2_intro = Paragraph $ 
-           S "The" +:+ (phrase $ table_ ^. term) +:+ S "that follows summarizes the" +:+
-            (plural $ symbol_ ^. term) +:+ S "used in this" +:+ (phrase $ document ^. term) +:+
-           S "along with their" +:+ (plural $ unit_ ^. term) :+: S ".  The choice of" +:+
-            (plural $ symbol_ ^. term) +:+ S "was made to be consistent with the heat transfer" +:+
-           S "literature and with existing documentation for" +:+ (plural $ sWHS ^. term) :+: S"."
+mkSRS :: DocDesc
+mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc (nw sWHS)], SymbOrder], TAandA]) : 
+        map Verbatim [s4]  
+        
+pcm_si :: SystemInformation
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
   
-s1_2_table = table pcmSymbols (\x -> phrase $ x ^. term)
-
-s1_3 = table_of_abb_and_acronyms acronyms
+pcm_srs :: Document
+pcm_srs = mkDoc mkSRS pcm_si
 
 s4 = Section ((titleize $ specificsystemdescription ^. term)) [Con s4_intro, Sub s4_1,Sub s4_2]
 

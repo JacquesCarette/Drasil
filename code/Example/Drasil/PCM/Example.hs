@@ -99,12 +99,12 @@ dummyVar    = uc' "dummyVar"
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 --Common Terms
-coil, tank, water :: NPNC
+coil, tank, water, ht_trans :: NPNC
 
-coil        = npnc "coil"         (cn' "coil")
-tank        = npnc "tank"         (cn' "tank")
-water       = npnc "water"        (cn "water")
-
+coil        = npnc "coil"           (cn' "coil")
+tank        = npnc "tank"           (cn' "tank")
+water       = npnc "water"          (cn "water")
+ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase, just a hack to get RefSec to work
 ----Acronyms-----
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,

@@ -76,21 +76,21 @@ this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
 s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
-  S "Software is helpful to efficiently and correctly predict the" +:+ (phrase $ blast ^. term) +:+
-  S "risk involved with the" +:+. (phrase $ glaSlab ^. term) +:+ 
-  S "The" +:+ (phrase $ blast ^. term) +:+ S "under" +:+
-  --FIXME: find a way to remove "sLower" entirely.
-  S "consideration is" +:+. (sLower (blast ^. defn)) +:+ 
+  S "Software is helpful to efficiently and correctly predict the" +:+ 
+  (phrase $ blast ^. term) +:+ S "risk involved with the" +:+. 
+  (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
+  +:+ S "under consideration is" +:+. (sLower (blast ^. defn)) +:+ --FIXME: find a way to remove "sLower" entirely.
   S "The software, herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
   S "predict the" +:+ (phrase $ blast ^. term) +:+ 
   S "risk involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
-  S "interface. The following" +:+ phrase section_ +:+ S "provides an overview of the" +:+ 
-  titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
-  S "This" +:+ phrase section_ +:+ S "explains the" +:+ phrase purpose +:+ S "of the" +:+ phrase document +:+
-  S "is designed to fulfil, the" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+ S "and" +:+
-  S "the" +:+ phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
-  S "intended to portray"
+  S "interface. The following" +:+ phrase section_ +:+ S "provides an overview" +:+
+  S "of the" +:+ titleize srs +:+ sParen (short srs) +:+ S "for" +:+. 
+  (gLassBR ^. defn) +:+ S "This" +:+ phrase section_ +:+ S "explains the" +:+ 
+  phrase purpose +:+ S "of the" +:+ phrase document +:+ S "is designed to fulfil, the" +:+ 
+  phrase scope +:+ S "of the" +:+ plural requirement +:+ S "and" +:+ S "the" +:+ 
+  phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ 
+  phrase document +:+. S "is based on and intended to portray"
 
 s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
@@ -99,24 +99,21 @@ s2_1_intro =
   S "The main" +:+ phrase purpose +:+ S "of this" +:+ phrase document +:+
   S "is to predict whether a given" +:+ (phrase $ glaSlab ^. term) +:+
   S "is likely to resist a specified" +:+. (phrase $ blast ^. term) +:+
-  S "The goals and" +:+ plural thModel +:+
-  S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
-  S "with an emphasis on explicitly identifying" +:+ 
+  S "The goals and" +:+ plural thModel +:+ S "used in the" +:+ (gLassBR ^. defn) +:+
+  S "code are provided" `sC` S "with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
   S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+
-  S "to provide all" +:+ phrase information +:+ S "necessary to understand and verify the" +:+
-  S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
+  S "to provide all" +:+ phrase information +:+ S "necessary to understand and" +:+
+  S "verify the analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
-  S "to solve it",
-  Paragraph $
-  S "This" +:+ phrase document +:+ S "will be used as a starting point for subsequent" +:+
-  S "development phases, including writing the" +:+ phrase desSpec +:+
-  S "and the software verification and validation plan. The design" +:+ phrase document +:+
-  S "will show how the" +:+ plural requirement +:+ S "are to be realized, including" +:+.
-  S "decisions on the numerical algorithms and programming environment" +:+
-  S "The verification and validation plan will show the steps that will" +:+
-  S "be used to increase confidence in the software documentation and" +:+.
-  S "the implementation"]
+  S "to solve it", Paragraph $ S "This" +:+ phrase document +:+ S "will be used" +:+
+  S "as a starting point for subsequent development phases, including writing the" +:+
+  phrase desSpec +:+ S "and the software verification and validation plan. The design" +:+
+  phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
+  S "are to be realized, including" +:+ S "decisions on the numerical" +:+
+  S "algorithms and programming environment. The verification and validation" +:+
+  S "plan will show the steps that will be used to increase confidence in the" +:+.
+  S "software documentation and the implementation"]
 
 s2_2 = Section (S "Scope of" +:+ titleize' requirement) 
   [Con s2_2_intro]
@@ -139,7 +136,8 @@ s2_3_intro =
   S "), with some aspects taken from Volere template 16 [3]."
   
 s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
-  S "are used to support the" +:+ plural definition +:+ S "of the different" +:+ plural model
+  S "are used to support the" +:+ plural definition +:+ S "of the different"
+  +:+ plural model
   
 s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
 
@@ -163,8 +161,8 @@ s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1,
   Sub s4_2]
 
 s4_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ phrase information +:+
-  S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
+  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
+  phrase information +:+ S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
   S "between the" +:+ phrase system +:+ S "and its environment" `sC`
   S "and describes the user characteristics and the" +:+. plural systemConstraint
 
@@ -174,10 +172,9 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   [(S "The end user of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
-  (S "The end user is expected to have an understanding of" +:+ phrase theory +:+ S "behind" +:+
-  (phrase $ gbr ^. term) +:+ S "and" +:+
-  (phrase $ blast ^. term) +:+. S "risk"),
-  (S "The end user is expected to have basic computer literacy to handle" +:+.
+  (S "The end user is expected to have an understanding of" +:+ phrase theory +:+
+  S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+ (phrase $ blast ^. term) +:+.
+  S "risk"), (S "The end user is expected to have basic computer literacy to handle" +:+.
   S "the software")]
 
 s4_2 = Section (titleize' systemConstraint) [Con s4_2_intro]
@@ -228,10 +225,9 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (at_start $ capacity ^. term) +:+ S "is the" +:+
   (sLower (capacity ^. defn)) +:+ S "and" +:+
   (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
-  S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ phrase condition +:+
-  S "is to check whether the calculated probability" +:+ 
-  sParen (P $ prob_br ^. symbol) +:+ 
-  S "is less than the tolerable probability" +:+ 
+  S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ 
+  phrase condition +:+ S "is to check whether the calculated probability" +:+ 
+  sParen (P $ prob_br ^. symbol) +:+ S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
   S "as an input. If both" +:+ plural condition +:+ S "return true then it's shown that the" 
   +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
@@ -263,8 +259,8 @@ s6_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition) [Co
   
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent" +:+
-  plural section_ +:+ S "and their meaning, with the" +:+ phrase purpose +:+ S "of reducing ambiguity" +:+
-  S "and making it easier to correctly understand the" +:+. 
+  plural section_ +:+ S "and their meaning, with the" +:+ phrase purpose +:+
+  S "of reducing ambiguity and making it easier to correctly understand the" +:+. 
   (plural requirement) +:+ S "All of the terms" +:+
   S "are extracted from [4] in" +:+. (makeRef s10)
 
@@ -341,16 +337,14 @@ s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
   (map Con s6_2_1_list))
 
 s6_2_1_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+ S "and helps in developing the" 
-  +:+ (phrase thModel) +:+ 
-  S "[" :+: (short thModel) :+: S "] by filling in the missing" +:+ phrase information
-  +:+ S "for the" +:+. phrase physicalSystem :+: S "The numbers given in the" +:+
-  S "square brackets refer to the" +:+ 
-  (phrase dataDefn) +:+
-  S "[" :+: (short dataDefn) :+: S "], or" +:+
-  phrase inModel +:+ 
-  S "[" :+: (short inModel) :+: S "], in which the respective" +:+
-  (phrase assumption) +:+. S "is used"
+  S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
+  S "and helps in developing the" +:+ (phrase thModel) +:+ S "[" :+: (short thModel) :+:
+  S "] by filling in the missing" +:+ phrase information +:+ S "for the" +:+.
+  phrase physicalSystem :+: S "The numbers given in the" +:+ 
+  S "square brackets refer to the" +:+ (phrase dataDefn) +:+ S "[" :+:
+  (short dataDefn) :+: S "], or" +:+ phrase inModel +:+ S "[" :+: 
+  (short inModel) :+: S "], in which the respective" +:+ (phrase assumption) 
+  +:+. S "is used"
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
@@ -367,8 +361,8 @@ s6_2_1_list =
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
     S "notched, or grooved glass with surface and edge treatments" +:+.
     S "that alter the glass strength"),
-  (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+ S "only considers" +:+.
-    S "the external explosion scenario for its calculations"),
+  (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+.
+    S "only considers the external explosion scenario for its calculations"),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
     S "calculation in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
@@ -387,13 +381,13 @@ s6_2_1_list =
     (phrase $ lite ^. term) +:+ S "Hence the value of" +:+ 
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all calculations in" 
     +:+. (gLassBR ^. defn)),
-  (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+ S "for the" +:+ 
-    (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
+  (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+
+    S "for the" +:+ (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
     +:+ S "support for calculations."),
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
-  (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+ S "to A4 the value" 
-    +:+ S "of" +:+ (phrase $ loadDF ^. term) +:+ 
+  (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+
+    S "to A4 the value of" +:+ (phrase $ loadDF ^. term) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
     (gLassBR ^. defn) +:+ S "It is calculated by the equation:" +:+
     --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
@@ -414,8 +408,8 @@ s6_2_4 = Section (titleize' dataDefn)
   ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
 
 s6_2_4_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "collects and defines all the data needed to build the" +:+.
-  plural inModel
+  S "This" +:+ phrase section_ +:+ S "collects and defines all the data needed to" +:+
+  S "build the" +:+. plural inModel
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
@@ -426,12 +420,13 @@ s6_2_5 = Section (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1,
 s6_2_5_intro = Paragraph $
   titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ") shows the data" +:+
-  S "constraints on the input variables. The column of" +:+ phrase physical +:+ S "constraints"
-  +:+ S "gives the" +:+ phrase physical +:+ S "limitations on the range of values that can" +:+
-  S " be taken by the variable. The" +:+ plural constraint_ +:+ S "are conservative, to give"
-  +:+ S "the user of the" +:+ phrase model +:+ S "the flexibility to experiment with unusual"
-  +:+ S "situations. The column of typical values is intended to provide" +:+
-  S "a feel for a common scenario. The uncertainty column provides an" +:+
+  S "constraints on the input variables. The column of" +:+ phrase physical +:+
+  S "constraints gives the" +:+ phrase physical +:+ S "limitations on the range" +:+
+  S "of values that can be taken by the variable. The" +:+ plural constraint_ +:+ 
+  S "are conservative, to give" +:+ S "the user of the" +:+ phrase model +:+ 
+  S "the flexibility to experiment with unusual situations. The column of" +:+.
+  S "typical values is intended to provide a feel for a common scenario" +:+
+  S "The uncertainty column provides an" +:+
   S "estimate of the confidence with which the" +:+ phrase physical +:+ S "quantities can be"
   +:+ S "measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
   +:+ S "performing an uncertainty quantification exercise." +:+ at_start table_ +:+ S "3 (" :+:
@@ -511,8 +506,8 @@ s7_1_list =
 --  char_weight])
 --  (S "Input Parameters") False
   (Enumeration $ Simple $
-  [(((short requirement) :+: S "2"), Nested (S "The" +:+ phrase system +:+ S "shall set" +:+
-  S "the known values as follows: ") (Bullet $ map (\c -> Flat c) 
+  [(((short requirement) :+: S "2"), Nested (S "The" +:+ phrase system +:+
+  S "shall set the known values as follows: ") (Bullet $ map (\c -> Flat c) 
     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
     S "following" +:+ (short assumption) :+: S "4",
@@ -521,8 +516,8 @@ s7_1_list =
     (P $ loadSF ^. symbol) +:+ S "following" +:+ (short assumption) 
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
-  [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check the" +:+
-  S "entered input values to ensure that they do not exceed the data" +:+
+  [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
+  S "the entered input values to ensure that they do not exceed the data" +:+
   S "constraints mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
   S "the input parameters is out of bounds, an error message is" +:+.
   S "displayed and the calculations stop"),
@@ -603,16 +598,15 @@ s9 = Section((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ gra
   [Con fig_2, Con fig_3, Con fig_4])
 
 s9_intro1 = Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural $ traceyMatrix ^. term) +:+ S "is to provide" +:+
-  S "easy" +:+ plural reference +:+ S "on what has to be additionally modified if a certain component is"
-  +:+ S "changed. Every time a component is changed, the items in the column"
-  +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
+  S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural $ traceyMatrix ^. term) +:+
+  S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
+  S "modified if a certain component is changed. Every time a component is changed, the" +:+
+  S "items in the column of that component that are marked with an" +:+ Quote (S "X") +:+
   S "should be modified as well." +:+ at_start table_ +:+ S "5" +:+ 
-  sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+ plural thModel `sC` 
-  (plural dataDefn) +:+ S "and" +:+
-  plural inModel +:+ S "with each other." +:+
+  sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
+  plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
   S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
-  plural requirement +:+ S "on" +:+
+  plural requirement +:+ S "on" +:+ 
   plural thModel `sC`
   (plural inModel) `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
@@ -777,21 +771,22 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 s9_intro2 = 
   [Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
-  +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be additionally modified if a" +:+
-  S "certain component is changed. The arrows in the" +:+ (plural $ graph ^. term)
-  +:+ S "represent" +:+. plural dependency +:+ S "The component at the tail of an arrow is depended on" +:+
+  +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
+  S "additionally modified if a ertain component is changed. The arrows in the" +:+ 
+  (plural $ graph ^. term) +:+ S "represent" +:+. plural dependency +:+
+  S "The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
   S "component is changed, the components that it points to should also" +:+
   S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+ S "on each other." +:+
-  S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
-  plural requirement +:+ S "on" +:+
+  S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the" +:+ plural dependency +:+
+  S "of" +:+ plural requirement +:+ S "on" +:+
   plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) +:+ S "and data constraints." +:+
-  S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
-  plural thModel `sC` 
+  S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ 
+  S "of" +:+ plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) `sC` 
   plural requirement +:+ S "and" +:+

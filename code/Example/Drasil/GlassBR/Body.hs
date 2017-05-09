@@ -269,7 +269,7 @@ s6_1_intro = Paragraph $
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+. S "under the conditions"
 
-s6_1_1 = Section (S "Terminology and" +:+ titleize' definition) [Con s6_1_1_intro, 
+s6_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition) [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
   
 s6_1_1_intro = Paragraph $ 
@@ -482,7 +482,7 @@ s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable
   (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
   (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
   (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
-  (titleize table_ +:+ S "3: Specification Parameter Values") True
+  (titleize table_ +:+ S "3:" +:+ titleize specification +:+ S "Parameter Values") True
 
 s6_2_5_intro2 = Paragraph $
   titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
@@ -780,7 +780,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S ""]]
   ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
-  S "Connections Between Assumptions and Other Items") True
+  S "Connections Between" +:+ plural assumption +:+ S "and Other Items") True
 
 s9_intro2 = 
   [Paragraph $
@@ -836,7 +836,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
   titleize' requirement +:+ S "Engineering Conference, 2005."),
   (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere ":+:
-  plural requirement +:+ S "specification template edition 16.") :+: S "" +:+ 
+  plural requirement +:+ phrase specification +:+ S "template edition 16.") :+: S "" +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
@@ -845,9 +845,9 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S " Standard E1300-09a, American Society for Testing and Material (ASTM),"
   +:+ S "2009."),
   (S "[5]", S "ASTM, developed by subcommittee C1408,Book of standards 15.02,"
-  +:+ Quote (S "Standard specification for flat glass,C1036.")),
+  +:+ Quote (S "Standard" +:+ phrase specification +:+ S "for flat glass,C1036.")),
   (S "[6]", S "ASTM, developed by subcommittee C14.08,Book of standards" +:+
-  S "15.02" `sC` Quote (S "Specification for heat treated flat glass-Kind"
+  S "15.02" `sC` Quote (at_start specification +:+ S "for heat treated flat glass-Kind"
   +:+ S "HS, kind FT coated and uncoated glass,C1048."))]
 
 s11 = Section(S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]

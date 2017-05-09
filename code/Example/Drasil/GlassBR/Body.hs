@@ -166,7 +166,7 @@ s4_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ phrase information +:+
   S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
   S "between the" +:+ phrase system +:+ S "and its environment" `sC`
-  S "and describes the user characteristics and the system constraints."
+  S "and describes the user characteristics and the" +:+. plural systemConstraint
 
 s4_1 = Section (S "User Characteristics") [Con s4_1_bullets]
 
@@ -180,7 +180,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   (S "The end user is expected to have basic computer literacy to handle" +:+.
   S "the software")]
 
-s4_2 = Section (S "System Constraints") [Con s4_2_intro]
+s4_2 = Section (titleize' systemConstraint) [Con s4_2_intro]
 
 s4_2_intro = Paragraph $
   (short notApp)
@@ -199,7 +199,7 @@ s5_1 = Section (S "Product Use Case Table") [Con s5_1_table]
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", S "Inputs", S "User", S "Characteristics of the" +:+
+  [[S "1", S "Inputs", S "User", titleize characteristic +:+ S " of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
@@ -228,12 +228,12 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (at_start $ capacity ^. term) +:+ S "is the" +:+
   (sLower (capacity ^. defn)) +:+ S "and" +:+
   (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
-  S "which is the" +:+. (demandq ^. defn) +:+ S "The second condition" +:+
+  S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ phrase condition +:+
   S "is to check whether the calculated probability" +:+ 
   sParen (P $ prob_br ^. symbol) +:+ 
   S "is less than the tolerable probability" +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
-  S "as an input. If both conditions return true then it's shown that the" 
+  S "as an input. If both" +:+ plural condition +:+ S "return true then it's shown that the" 
   +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
   S "else if both return false then the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
@@ -256,7 +256,7 @@ s6_1_intro = Paragraph $
   +:+ (phrase $ blast ^. term) +:+. S "risk involved with the glass" +:+ (gLassBR ^. defn)
   +:+ S "is a" +:+ S "computer program developed to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
-  S "can withstand the" +:+ (phrase $ blast ^. term) +:+. S "under the conditions"
+  S "can withstand the" +:+ (phrase $ blast ^. term) +:+. S "under the" +:+ plural condition
 
 s6_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition) [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
@@ -360,7 +360,7 @@ s6_2_1_list =
     (phrase $ lateral ^. term) +:+
     S "support along one, two, three, or four edges. This practice assumes" 
     +:+ S "that (1) the supported glass edges for two, three and four-sided" 
-    +:+ S "support conditions are simply supported and free to slip in" +:+
+    +:+ S "support" +:+ plural condition +:+ S "are simply supported and free to slip in" +:+
     S "plane; (2) glass supported on two sides acts as a simply supported" 
     +:+. S "beam and (3) glass supported on one side acts as a cantilever"), 
   (((short assumption) :+: S "2"), S "This practice does not apply" 
@@ -387,7 +387,7 @@ s6_2_1_list =
     (phrase $ lite ^. term) +:+ S "Hence the value of" +:+ 
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all calculations in" 
     +:+. (gLassBR ^. defn)),
-  (((short assumption) :+: S "6"), S "Boundary conditions for the" +:+ 
+  (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+ S "for the" +:+ 
     (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
     +:+ S "support for calculations."),
   (((short assumption) :+: S "7"), S "The response type considered in" 
@@ -428,7 +428,7 @@ s6_2_5_intro = Paragraph $
   S ") shows the data" +:+
   S "constraints on the input variables. The column of" +:+ phrase physical +:+ S "constraints"
   +:+ S "gives the" +:+ phrase physical +:+ S "limitations on the range of values that can" +:+
-  S " be taken by the variable. The constraints are conservative, to give"
+  S " be taken by the variable. The" +:+ plural constraint_ +:+ S "are conservative, to give"
   +:+ S "the user of the" +:+ phrase model +:+ S "the flexibility to experiment with unusual"
   +:+ S "situations. The column of typical values is intended to provide" +:+
   S "a feel for a common scenario. The uncertainty column provides an" +:+
@@ -475,7 +475,7 @@ s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable
 
 s6_2_5_intro2 = Paragraph $
   titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
-  S ") shows the constraints"
+  S ") shows the" +:+ plural constraint_
   +:+. S "that must be satisfied by the output"
 
 -- s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
@@ -498,7 +498,7 @@ s7_1_list =
   [(((short requirement) :+: S "1"), S "Input the following" +:+
     S "quantities, which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
-    +:+ S "of failure and the characteristics of the" +:+ 
+    +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:+ 
     (phrase $ blast ^. term) :+: S ":")]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
   ++ (map qs [glass_type,pb_tol,tNT])) (\x -> phrase $ x ^.term) ),
@@ -534,7 +534,7 @@ s7_1_list =
   (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true" `sC`
   S "output the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
-  S "the condition is false, then output the message" +:+ 
+  S "the" +:+ phrase condition +:+ S "is false, then output the message" +:+ 
   Quote (notSafe ^. defn))] ++
   [(((short requirement) :+: S "6"), Nested (S "Output the following"
   +:+ S "quantities:")
@@ -591,8 +591,8 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "5 - The software may be changed to accommodate more than a single" +:+.
   (phrase $ lite ^. term))),
   (((short likelyChg) :+: S "4"), ((short assumption) :+: 
-  S "6 - The software may be changed to accommodate more boundary" +:+.
-  S "conditions than 4-sided support")),
+  S "6 - The software may be changed to accommodate more boundary" +:+
+  plural condition +:+. S "than 4-sided support")),
   (((short likelyChg) :+: S "5"), ((short assumption) :+: 
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]

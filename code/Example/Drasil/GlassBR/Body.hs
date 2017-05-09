@@ -772,7 +772,7 @@ s9_intro2 =
   [Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
   +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
-  S "additionally modified if a ertain component is changed. The arrows in the" +:+ 
+  S "additionally modified if a certain component is changed. The arrows in the" +:+ 
   (plural $ graph ^. term) +:+ S "represent" +:+. plural dependency +:+
   S "The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+

@@ -427,8 +427,8 @@ s6_2_5_intro = Paragraph $
   S "the flexibility to experiment with unusual situations. The column of" +:+.
   S "typical values is intended to provide a feel for a common scenario" +:+
   S "The uncertainty column provides an" +:+
-  S "estimate of the confidence with which the" +:+ phrase physical +:+ S "quantities can be"
-  +:+ S "measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
+  S "estimate of the confidence with which the" +:+ phrase physical +:+ plural quantity +:+
+  S"can be measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
   +:+. S "performing an uncertainty quantification exercise" +:+ at_start table_ +:+ S "3 (" :+:
   (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+
   S "parameters used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
@@ -491,7 +491,7 @@ s7_1_intro = Paragraph $
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "1"), S "Input the following" +:+
-    S "quantities, which define the glass dimensions" `sC` 
+    plural quantity +:+ S ", which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
     +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:+ 
     (phrase $ blast ^. term) :+: S ":")]),
@@ -521,8 +521,8 @@ s7_1_list =
   S "constraints mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
   S "the input parameters is out of bounds, an error message is" +:+.
   S "displayed and the" +:+ (plural $ calculation ^. term) +:+ S "stop"),
-  (((short requirement) :+: S "4"), S "Output the input quantities" +:+
-  S "from" +:+ (short requirement) :+: S "1 and the known quantities"
+  (((short requirement) :+: S "4"), S "Output the input" +:+ plural quantity +:+
+  S "from" +:+ (short requirement) :+: S "1 and the known" +:+ plural quantity
   +:+ S "from" +:+ (short requirement) :+: S "2."),
   (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
@@ -531,8 +531,8 @@ s7_1_list =
   S "output the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
   S "the" +:+ phrase condition +:+ S "is false, then output the message" +:+ 
   Quote (notSafe ^. defn))] ++
-  [(((short requirement) :+: S "6"), Nested (S "Output the following"
-  +:+ S "quantities:")
+  [(((short requirement) :+: S "6"), Nested (S "Output the following" +:+
+  plural quantity +:+ S ":")
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++

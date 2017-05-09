@@ -37,6 +37,11 @@ dd2linDisp :: QDefinition
 dd2linDisp = fromEqn "dd2linDisp" (linDisp ^. term) (linDisp ^. symbol) metre
   dispEqn
 
+--linDispDef :: Sentence
+--linDispDef = foldl (+:+) (EmptyS) def
+--  where def = [(phrase $ QP.linearDisplacement ^. term), (S "of a"), (phrase $ CP.rigidBody ^. term), (S "as a function of"), (phrase $ --CP.time ^. term), (P $ time ^. symbol), (S "also equal to the derivate of its linear"), (phrase $ CP.velocity ^. term), (S "with respect --to"), (phrase $ CP.time ^. term), (P $ time ^. symbol)]
+
+
 dispEqn :: Expr
 dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
 {-

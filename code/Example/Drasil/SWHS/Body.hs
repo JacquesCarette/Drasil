@@ -830,7 +830,7 @@ s4_2_6_intro = Paragraph (S titleize' table_ +:+ S "1 and 2 show the data" +:+
   S "with which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the input if" +:+
   S "one were performing an uncertainty quantification exercise. (The" +:+
-  plural tables +:+ S "are left out because features they should use are" +:+
+  plural table_ +:+ S "are left out because features they should use are" +:+
   S "not yet implemented in Drasil.)")
 
 -- General paragraph, repeated between examples. Can be abstracted out.

@@ -112,8 +112,8 @@ acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   
 sWHS, sWHT :: CINP
 
-sWHS = commonINP "sWHS" (cn' "solar water heating system") "SWHS"
-sWHT = commonINP "sWHT" (cn' "solar water heating tank") "SWHT"
+sWHS  = commonINP "sWHS"  (cn' "solar water heating system")  "SWHS"
+sWHT  = commonINP "sWHT"  (cn' "solar water heating tank")    "SWHT"  
 
 ----EqChunks----
 --Theoretical models--

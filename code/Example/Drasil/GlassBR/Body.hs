@@ -26,7 +26,7 @@ import Drasil.DocumentLanguage
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s1, s1_1,  s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
+s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section
 
@@ -48,9 +48,6 @@ mg_authors = manyNames [spencerSmith,thulasi]
 
 authors :: People
 authors = [nikitha, spencerSmith]
-
-glassBR_srs :: Document  
-glassBR_srs = SRS.doc glassBRProg srs_authors [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
 glassBR_srs' :: Document
 glassBR_srs' = mkDoc mkSRS glassSystInfo
@@ -75,14 +72,6 @@ glassBR_mg = mgDoc glassBRProg mg_authors mgBod
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
-
-s1 = refSec [s1_1, s1_2, s1_3]
-
-s1_1 = table_of_units this_si
-
-s1_2 = table_of_symbols this_symbols (\x -> at_start $ x ^.term)
-
-s1_3 = table_of_abb_and_acronyms acronyms
 
 s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 

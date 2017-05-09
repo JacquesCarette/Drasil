@@ -42,12 +42,11 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
-s1, s1_1, s1_2, s1_3, s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
+s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s1_2_intro, s1_2_table,
-  s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
+s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_intro, 
@@ -70,14 +69,13 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 
-  [ TUnits, tsymb'' s1_2_intro (TermExcept [norm_vect]), TAandA ]
+  [ TUnits, tsymb'' tsymb_intro (TermExcept [norm_vect]), TAandA ]
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
+
+tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans), Doc (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS swhs_si
-
-swhs_srs :: Document
-swhs_srs = SRS.doc swhsFull authors [s1, s2, s3, s4, s5, s6, s7]
 
 -- It is sometimes hard to remember to add new sections both here and above.
 
@@ -87,28 +85,22 @@ mgBod :: [Section]
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
 
-s1 = refSec [s1_1, s1_2, s1_3]
 
-s1_1 = table_of_units this_si
-  
-s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
 
-s1_2_intro = Paragraph (S "The table that follows summarizes the" +:+
-  S "symbols used in this" +:+ phrase document +:+ S "along with their" +:+
-  S "units. The choice of symbols was made to be consistent" +:+
-  S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) +:+
-  S "literature and with existing documentation for" +:+ (sLower
-  (phrase $ progName ^. term)) :+: S "s. The symbols are listed in" +:+.
-  S "alphabetical order")
+-- Still here as a reference, but not to be used
+--Paragraph (S "The table that follows summarizes the" +:+
+--  S "symbols used in this" +:+ phrase document +:+ S "along with their" +:+
+--  S "units. The choice of symbols was made to be consistent" +:+
+--  S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) +:+
+-- S "literature and with existing documentation for" +:+ (sLower
+-- (phrase $ progName ^. term)) :+: S "s. The symbols are listed in" +:+.
+--  S "alphabetical order")
 
 -- "heat transfer" and program name are specific, but otherwise this paragraph 
 -- is general. If it were to be automated, there is a sentence in the game 
 -- physics example about how symbols for vectors are bold, which would be 
 -- useful to include in the automated paragraph.
 
-s1_2_table = table swhsSymbols (termExcept [cqs norm_vect])
-  
-s1_3 = table_of_abb_and_acronyms acronyms
   
 -- This section name and table structure are same between all examples.
   
@@ -261,7 +253,7 @@ s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
 s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1, 
   Sub s3_2]
 
-s3_intro = Paragraph (S "This" +:+ phrase section +:+ S "provides" +:+
+s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the system, identifies" +:+
   S "the interfaces between the system and its environment, and describes the user" +:+
   plural characteristic +:+ S "and the system" +:+ plural constraint :+: S ".")
@@ -287,8 +279,8 @@ s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: S "
 s4 = Section (titleize specificsystemdescription) [Con s4_intro, Sub s4_1, 
   Sub s4_2]
 
-s4_intro = Paragraph (S "This" +:+ phrase section +:+ S "first presents the" +:+ phrase problem +:+
-  phrase description :+: S ", which gives a high-level view of the" +:+
+s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:+
+  phrase problem +:+ phrase description :+: S ", which gives a high-level view of the" +:+
   phrase problem +:+ S "to be solved. This is followed by the" +:+
   phrase solution +:+ phrase characteristicsSpecification :+: S ", which" +:+
   S "presents the" +:+
@@ -422,7 +414,7 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
 s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro, 
   Con s4_2_1_list]
 
-s4_2_1_intro = Paragraph (S "This" +:+ phrase section +:+ S "simplifies" +:+
+s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
   S "the original" +:+ phrase problem +:+ S "and helps in developing the" +:+ 
   phrase thModel +:+ S "by filling in the missing" +:+
   phrase information +:+ S "for the" +:+ phrase physicalSystem :+:
@@ -554,7 +546,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 s4_2_2 = Section (titleize' thModel) [Con s4_2_2_intro, 
   Con s4_2_2_T1, Con s4_2_2_T2, Con s4_2_2_T3]
 
-s4_2_2_intro = Paragraph (S "This" +:+ phrase section +:+ S "focuses on the" +:+
+s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on the" +:+
   phrase general +:+ S "equations and laws that" +:+ (short progName) +:+
   S "is based on")
 
@@ -570,7 +562,7 @@ s4_2_2_intro = Paragraph (S "This" +:+ phrase section +:+ S "focuses on the" +:+
 s4_2_3 = Section (titleize' genDefn) 
   ((Con s4_2_3_intro):(map Con s4_2_3_deriv))
 
-s4_2_3_intro = Paragraph (S "This" +:+ phrase section +:+ S "collects the" +:+
+s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
   S "laws and equations that will be used in deriving the" +:+ 
   (plural dataDefn) `sC` S "which in turn are used to" +:+
   S "build the" +:+. (plural inModel) +:+ S "(" :+: at_start' genDefn +:+
@@ -647,7 +639,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
 s4_2_4 = Section (titleize' dataDefn) [Con s4_2_4_intro, 
   Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3]
 
-s4_2_4_intro = Paragraph (S "This" +:+ phrase section +:+ S "collects and" +:+
+s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
   S "defines all the data needed to build the" +:+. plural inModel +:+
   S "The dimension of each quantity is also given.")
 
@@ -657,7 +649,7 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section +:+ S "collects and" +:+
 s4_2_5 = Section (titleize' inModel) ((map Con s4_2_5_intro) ++ 
   (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
 
-s4_2_5_intro = [Paragraph (S "This" +:+ phrase section +:+ S "transforms the" +:+
+s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +:+
   phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
   S "is expressed in mathematical terms. It uses concrete" +:+
   S "symbols defined in" +:+ (makeRef s4_2_4) +:+
@@ -930,7 +922,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
 s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1, 
   Sub s5_2]
 
-s5_intro = Paragraph (S "This" +:+ phrase section +:+ S "provides the" +:+
+s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
   S "functional" +:+ plural requirement `sC` S "the business tasks" +:+
   S "that the software is expected to complete, and the" +:+
   S "nonfunctional" +:+ plural requirement `sC` 
@@ -1137,7 +1129,7 @@ s7_table1 = Table [S "", makeRef s4_2_2_T1, makeRef s4_2_2_T2,
   [S "IM4", S "", S "X", S "X", S "", S "", S "", S "X", S "X", S "X",
   S "", S "X", S "", S ""]]
   (S "Traceability Matrix Showing the Connections Between Items" +:+
-  S "of Different" +:+ titleize' section) True
+  S "of Different" +:+ titleize' section_) True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
@@ -1238,7 +1230,7 @@ s7_intro2 = [Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
 -- Same comments on this paragraph as I had for s7_intro1. 
 
 s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between" +:+
-  S "Items of Different" +:+ titleize' section) "ATrace.png"
+  S "Items of Different" +:+ titleize' section_) "ATrace.png"
 
 s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between" +:+
   (titleize' requirement) `sC` titleize' inModel `sC`

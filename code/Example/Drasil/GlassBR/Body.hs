@@ -836,7 +836,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
   titleize' requirement +:+ S "Engineering Conference, 2005."),
   (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere ":+:
-  plural requirement +:+ phrase specification +:+ S "template edition 16.") :+: S "" +:+ 
+  plural requirement +:+ phrase specification +:+ S "template edition 16.") +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"

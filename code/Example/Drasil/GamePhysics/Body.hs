@@ -37,9 +37,6 @@ authors = [alex, luthfi]
 auths :: Sentence
 auths = manyNames authors
 
-chipmunkSRS :: Document
-chipmunkSRS = SRS.doc chipmunk auths [s2, s3, s4, s5, s6, s7]
-
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc' mkSRS chipmunkSysInfo
 

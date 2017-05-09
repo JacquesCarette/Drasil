@@ -31,7 +31,7 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
 
 dd3HtFusion :: QDefinition
 dd3HtFusion = fromEqn "dd3HtFusion" (nounPhraseSP 
-  "FIXME: MISSING TERM - FOR MORE INFORMATION SEE Drasil.SWHS.DataDefs")
+  "amount of thermal energy required to completely melt a unit mass of a substance.")
   --FIXME: Should be (htFusion ^. defn)?
   (htFusion ^. symbol) specificE htFusionEqn
 

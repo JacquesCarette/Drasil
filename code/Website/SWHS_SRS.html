@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="SWHS_SRS2.css">
+<link rel="stylesheet" type="text/css" href="SWHS_SRS.css">
 <title>
 Software Requirements Specification for solar water heating systems incorporating PCM
 </title>
@@ -101,7 +101,7 @@ power (watt)
 Table of Symbols
 </h3>
 <p class="paragraph">
-The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
+The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the Heat transfer literature and with existing documentation for Solar Water Heating System. The symbols are listed in alphabetical order. 
 </p>
 <a id="Table:ToS">
 <table class="table">
@@ -393,7 +393,7 @@ kg
 </tr>
 <tr>
 <td>
-<b>n&#770;</b>
+<b>n</b>
 </td>
 <td>
 unit outward normal vector for a surface
@@ -952,17 +952,17 @@ Due to increasing cost, diminishing availability, and negative environmental imp
 Purpose of Document
 </h3>
 <p class="paragraph">
-The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
+The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model . The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
 <p class="paragraph">
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the process is not waterfall, as Parnas and Clements [citation] point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
 </a>
-<a id="Sec:SoR">
+<a id="Sec:soR">
 <div class="subsection">
 <h3>
-Scope of Requirements
+scope of Requirements
 </h3>
 <p class="paragraph">
 The scope of the requirements is limited to thermal analysis of a single Solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
@@ -975,7 +975,7 @@ The scope of the requirements is limited to thermal analysis of a single Solar w
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern for presenting goal statements, theoretical models, data definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IM>this Section</a> and trace back to find any additional information they require. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern for presenting goal statements, theoretical models, data definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IM>this Section</a> and trace back to find any additional information they require. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM SWHS solves these ODEs.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (<a href=#Sec:IM>this Section</a>) to be solved are referred to as IM1 to IM4.
@@ -1020,7 +1020,7 @@ There are no system constraints.
 Specific System Description
 </h2>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the solar water heating systems incorporating PCM.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the solar water heating systems incorporating PCM
 </p>
 <a id="Sec:PD">
 <div class="subsection">
@@ -1193,7 +1193,7 @@ A19: The pressure in the tank is atmospheric, so the melting point temperature a
 Theoretical Models
 </h4>
 <p class="paragraph">
-This section focuses on the general equations and laws that SWHS is based on.
+This section focuses on the general equations and laws that SWHS is based on
 </p>
 <a id="T:Cote">
 <table class="tdefn">
@@ -1368,11 +1368,11 @@ Integrating <a href=#T:Cote>this Definition</a> over a volume (V), we have:
 </div>
 </a>
 <p class="paragraph">
-Applying Gauss's Divergence theorem to the first term over the surface S of the volume, with <b>q</b> as the thermal flux vector for the surface and <b>n&#770;</b> as a unit outward normal vector for a surface:
+Applying Gauss's Divergence theorem to the first term over the surface S of the volume, with <b>q</b> as the thermal flux vector for the surface and <b>n</b> as a unit outward normal vector for a surface:
 </p>
 <a id="">
 <div class="equation">
-(-&int;<sub>S</sub>(<b>q</b>&sdot;<b>n&#770;</b>dS))+&int;<sub>V</sub>(gdV)=&int;<sub>V</sub>(&rho;C<div class="fraction">
+(-&int;<sub>S</sub>(<b>q</b>&sdot;<b>n</b>dS))+&int;<sub>V</sub>(gdV)=&int;<sub>V</sub>(&rho;C<div class="fraction">
 <span class="fup">
 &part;T
 </span>
@@ -1576,7 +1576,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-H<sub>f</sub> is the amount of thermal energy required to completely melt a unit mass of a substance.<br />Q is the latent heat energy<br />m is the mass
+H<sub>f</sub> is the FIXME: MISSING TERM - FOR MORE INFORMATION SEE Drasil.SWHS.DataDefs<br />Q is the latent heat energy<br />m is the mass
 </p>
 </td>
 </tr>
@@ -2195,7 +2195,7 @@ LC2: A8 - The temperature of the heating coil will change over the course of the
 LC3: A9 - The temperature of the heating coil will actually change along its length as the water within it cools.
 </p>
 <p>
-LC4: A11 - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+LC4: A11 - The model currently only accounts for charging of the tank. A more complete model would also account for. discharging of the tank
 </p>
 <p>
 LC5: A12 - To add more  flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
@@ -4508,7 +4508,7 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </a>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TGStCBIoDS>this Figure</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TGStCBRsIM,aDC>this Figure</a> shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TGStCBIoDS>this Figure</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TGStCBR,IM,aDC>this Figure</a> shows the dependencies of instance models, requirements, and data constraints on each other.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
@@ -4519,7 +4519,7 @@ NOTE: Building a tool to automatically generate the graphical representation of 
 Traceability Graph Showing the Connections Between Items of Different Sections
 </p>
 </a>
-<a id="Figure:TGStCBRsIMsaDC">
+<a id="Figure:TGStCBR,IM,aDC">
 <img class="figure" src="RTrace.png" alt="Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints"></img>
 <p class="caption">
 Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints

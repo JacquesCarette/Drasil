@@ -15,9 +15,6 @@ import Data.Drasil.Concepts.Math
 
 import Data.Drasil.Quantities.Physics (restitutionCoef)
 
-import Drasil.TableOfSymbols
-import Drasil.TableOfUnits
-import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
@@ -41,16 +38,18 @@ auths :: Sentence
 auths = manyNames authors
 
 chipmunkSRS :: Document
-chipmunkSRS = SRS.doc chipmunk auths [s1, s2, s3, s4, s5, s6, s7]
+chipmunkSRS = SRS.doc chipmunk auths [s2, s3, s4, s5, s6, s7]
 
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc' mkSRS chipmunkSysInfo
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg RM.intro [ TUnits, tsymb s1_2_intro, TAandA ]) : 
-  map Verbatim [s2, s3, s4, s5, s6, s7] 
+mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 
+  map Verbatim [s2, s3, s4, s5, s6, s7]
+  where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+
     --FIXME: Need to be able to print defn for gravitational constant.
-  
+
 chipmunkSysInfo :: SystemInformation
 chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [CQSWrapper])
   cpAcronyms --FIXME: All named ideas, not just acronyms.
@@ -74,46 +73,6 @@ mgBod :: [Section]
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
-
-------------------------------------
--- Section : REFERENCE MATERIAL --
-------------------------------------
-
-s1 :: Section
-s1 = RM.refSec [s1_1, s1_2, s1_3]
-
---------------------------
--- 1.1 : Table of Units --
---------------------------
-
--- should be computed!
-s1_1 :: Section
-s1_1 = table_of_units $ map UU [metre, kilogram, second] ++ map UU [newton, radians]
-
-----------------------------
--- 1.2 : Table of Symbols --
-----------------------------
-
-s1_2 :: Section
-s1_2_intro, s1_2_table :: Contents
-
-s1_2 = Section (titleize tOfSymb) [Con s1_2_intro, Con s1_2_table]
-
-s1_2_intro = Paragraph $
-  S "The table that follows summarizes the symbols used in this" +:+
-  S "document along with their units. Throughout" +:+
-  S "the document, symbols in bold will represent vectors, and scalars" +:+.
-  S "otherwise. The symbols are listed in alphabetical order"
-
-s1_2_table = table cpSymbols (\x -> phrase $ x ^.term)
-
---------------------------------------
--- 1.3 : Abbreviations and Acronyms --
---------------------------------------
-
-s1_3 :: Section
-
-s1_3 = table_of_abb_and_acronyms cpAcronyms
 
 ------------------------------
 -- Section : INTRODUCTION --

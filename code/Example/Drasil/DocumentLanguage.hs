@@ -49,7 +49,6 @@ data RefTab where
   TUnits' :: [TUIntro] -> RefTab -- Customized intro
   TSymb :: [TSIntro] -> RefTab
   TSymb' :: LFunc -> [TSIntro] -> RefTab
-  --FIXME: Pull out Contents as it's currently a verbatim "intro" to TSymb.
   TAandA :: RefTab
   TVerb :: Section -> RefTab
   -- add more here
@@ -143,17 +142,16 @@ tsymb' intro = TSymb' Defn intro         --Default Defn
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
 tsymb'' intro lfunc = TSymb' lfunc intro --Custom
 
-
+-- table of symbols intro builder
 tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ tsI x
+tsIntro x = Paragraph $ foldr (+:+) (S "") (map tsI x)
 
-tsI :: [TSIntro] -> Sentence
-tsI [] = S ""
-tsI ((TypogConvention ts):xs) = typogConvention ts +:+ tsI xs
-tsI (SymbOrder:xs) = S "The symbols are listed in alphabetical order." +:+ tsI xs
-tsI ((SymbConvention ls):xs) = symbConvention ls +:+ tsI xs
-tsI (TSPurpose:xs) = S "The table that follows summarizes the symbols used in" +:+
-  S "this document along with their units." +:+ tsI xs
+tsI :: TSIntro -> Sentence
+tsI (TypogConvention ts) = typogConvention ts
+tsI SymbOrder = S "The symbols are listed in alphabetical order."
+tsI (SymbConvention ls) = symbConvention ls
+tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
+  S "this document along with their units."
 
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
@@ -180,3 +178,13 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         scon (Doc x) = S "existing documentation for" +:+ (phrase $ x ^. term)
         scon (Manual x) = S "that used in the" +:+ (phrase $ x ^. term) +:+ S "manual"
   
+tuIntro :: [TUIntro] -> Contents
+tuIntro x = Paragraph $ foldr (+:+) (S "") (map tuI x)
+
+tuI :: TUIntro -> Sentence
+tuI System  = (S "The unit system used throughout is SI (Syst" :+: 
+  (F Grave 'e') :+: S "me International d'Unit" :+: (F Acute 'e') :+: S "s).")
+tuI Purpose = S "For each unit, the table lists the symbol," +:+
+  S "a description and the SI name.")
+tuI Derived = S "In addition to the basic units, several derived units are" +:+ 
+  S "also used."

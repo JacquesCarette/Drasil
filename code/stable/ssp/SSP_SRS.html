@@ -3,13 +3,13 @@
 <head>
 <link rel="stylesheet" type="text/css" href="SSP_SRS.css">
 <title>
-Software Requirements Specification for Slope Stability Analysis
+Software Requirements Specification for slope stability problem
 </title>
 </head>
 <body>
 <div class="title">
 <h1>
-Software Requirements Specification for Slope Stability Analysis
+Software Requirements Specification for slope stability problem
 </h1>
 </div>
 <div class="author">
@@ -31,7 +31,7 @@ This section records information for easy reference.
 Table of Units
 </h3>
 <p class="paragraph">
-Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.
+The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
 <a id="Table:ToU">
 <table class="table">
@@ -42,19 +42,13 @@ Symbol
 <th>
 Description
 </th>
-<th>
-Name
-</th>
 </tr>
 <tr>
 <td>
 m
 </td>
 <td>
-length
-</td>
-<td>
-Metre
+length (metre)
 </td>
 </tr>
 <tr>
@@ -62,10 +56,7 @@ Metre
 &deg;
 </td>
 <td>
-angle
-</td>
-<td>
-Degree
+angle (degree)
 </td>
 </tr>
 <tr>
@@ -73,10 +64,7 @@ Degree
 N
 </td>
 <td>
-force
-</td>
-<td>
-Newton
+force (newton)
 </td>
 </tr>
 <tr>
@@ -84,16 +72,10 @@ Newton
 Pa
 </td>
 <td>
-pressure
-</td>
-<td>
-Pascal
+pressure (pascal)
 </td>
 </tr>
 </table>
-<p class="caption">
-Table of Units
-</p>
 </a>
 </div>
 </a>
@@ -103,7 +85,7 @@ Table of Units
 Table of Symbols
 </h3>
 <p class="paragraph">
-A collection of the symbols that will be used in the models and equations of the program are summarized in the table below. Values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
+The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass. 
 </p>
 <a id="Table:ToS">
 <table class="table">
@@ -120,13 +102,35 @@ Units
 </tr>
 <tr>
 <td>
-&phiv;'
+(x,y)
 </td>
 <td>
-effective angle of friction
+cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
 </td>
 <td>
-&deg;
+m
+</td>
+</tr>
+<tr>
+<td>
+({x<sub>cs</sub>},{y<sub>cs</sub>})
+</td>
+<td>
+the set of x and y coordinates that describe the vertices of the critical slip surface
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+b<sub>i</sub>
+</td>
+<td>
+base width of the slice in the x-ordinate direction only (for slice index i)
+</td>
+<td>
+m
 </td>
 </tr>
 <tr>
@@ -142,39 +146,6 @@ Pa
 </tr>
 <tr>
 <td>
-&gamma;
-</td>
-<td>
-unit weight of dry soil/ground layer
-</td>
-<td>
-N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
-&gamma;<sub>Sat</sub>
-</td>
-<td>
-unit weight of saturated soil/ground layer
-</td>
-<td>
-N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
-&gamma;<sub>w</sub>
-</td>
-<td>
-unit weight of water
-</td>
-<td>
-N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
 E
 </td>
 <td>
@@ -186,10 +157,21 @@ Pa
 </tr>
 <tr>
 <td>
-&nu;
+E<sub>i</sub>
 </td>
 <td>
-Poisson's ratio
+interslice normal force being exerted between adjacent slices (for interslice index i)
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+f<sub>i</sub>
+</td>
+<td>
+scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine
 </td>
 <td>
 unitless
@@ -197,65 +179,10 @@ unitless
 </tr>
 <tr>
 <td>
-(x,y)
+F
 </td>
 <td>
-cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-y<sub>wt,i</sub>
-</td>
-<td>
-the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-y<sub>us,i</sub>
-</td>
-<td>
-the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-y<sub>slip,i</sub>
-</td>
-<td>
-the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-x<sub>i</sub>
-</td>
-<td>
-the x ordinate; refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-({x<sub>cs</sub>},{y<sub>cs</sub>})
-</td>
-<td>
-the set of x and y coordinates that describe the vertices of the critical slip surface
+generic force; assumed 1D allowing a scalar
 </td>
 <td>
 m
@@ -285,10 +212,164 @@ unitless
 </tr>
 <tr>
 <td>
-S<sub>i</sub>
+H<sub>i</sub>
 </td>
 <td>
-mobilized shear force for slice i
+interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i)
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+h<sub>i</sub>
+</td>
+<td>
+midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+K<sub>c</sub>
+</td>
+<td>
+earthquake load factor; proportionality factor of force that weight pushes outwards; caused by seismic earth movements
+</td>
+<td>
+unitless
+</td>
+</tr>
+<tr>
+<td>
+K
+</td>
+<td>
+stiffness (how much a body resists displacement when subject to a force)
+</td>
+<td>
+N/m
+</td>
+</tr>
+<tr>
+<td>
+K<sub>bn,i</sub>
+</td>
+<td>
+normal stiffness of a slice base surface, without length adjustment (for slice index i)
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+K<sub>bt,i</sub>
+</td>
+<td>
+shear stiffness of a slice base surface, without length adjustment (for slice index i)
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+K<sub>no</sub>
+</td>
+<td>
+residual normal stiffness
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+K<sub>sn,i</sub>
+</td>
+<td>
+normal stiffness of an interslice surface, without length adjustment (for interslice index i)
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+K<sub>st,i</sub>
+</td>
+<td>
+shear stiffness of an interslice surface, without length adjustment (for interslice index i)
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+K<sub>tr</sub>
+</td>
+<td>
+residual shear stiffness
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+M
+</td>
+<td>
+moment of a body; assumed 2D allowing a scalar
+</td>
+<td>
+Nm
+</td>
+</tr>
+<tr>
+<td>
+N<sub>i</sub>
+</td>
+<td>
+total reactive force for a soil surface subject to a body resting on it
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+n
+</td>
+<td>
+number of slices the slip mass has been divided into
+</td>
+<td>
+unitless
+</td>
+</tr>
+<tr>
+<td>
+N'<sub>i</sub>
+</td>
+<td>
+effective normal force of a soil surface, subtracting pore water reactive force from total reactive force
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+N*<sub>i</sub>
+</td>
+<td>
+effective normal force of a soil surface, neglecting the influence of interslice forces
 </td>
 <td>
 N
@@ -307,10 +388,10 @@ N
 </tr>
 <tr>
 <td>
-T<sub>i</sub>
+Q<sub>i</sub>
 </td>
 <td>
-mobilized shear force without the influence of interslice forces for slice i
+imposed surface load; a downward force acting into the surface from midpoint of slice i
 </td>
 <td>
 N
@@ -329,32 +410,10 @@ N
 </tr>
 <tr>
 <td>
-W<sub>i</sub>
+S<sub>i</sub>
 </td>
 <td>
-weight; downward force caused by gravity on slice i
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
-K<sub>c</sub>
-</td>
-<td>
-earthquake load factor; proportionality factor of force that weight pushes outwards; caused by seismic earth movements
-</td>
-<td>
-unitless
-</td>
-</tr>
-<tr>
-<td>
-H<sub>i</sub>
-</td>
-<td>
-interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i)
+mobilized shear force for slice i
 </td>
 <td>
 N
@@ -362,32 +421,10 @@ N
 </tr>
 <tr>
 <td>
-&Delta;H<sub>i</sub>
+T<sub>i</sub>
 </td>
 <td>
-difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
-E<sub>i</sub>
-</td>
-<td>
-interslice normal force being exerted between adjacent slices (for interslice index i)
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
-X<sub>i</sub>
-</td>
-<td>
-interslice shear force being exerted between adjacent slices (for interslice index i)
+mobilized shear force without the influence of interslice forces for slice i
 </td>
 <td>
 N
@@ -417,21 +454,10 @@ N
 </tr>
 <tr>
 <td>
-N<sub>i</sub>
+W<sub>i</sub>
 </td>
 <td>
-total reactive force for a soil surface subject to a body resting on it
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
-N'<sub>i</sub>
-</td>
-<td>
-effective normal force of a soil surface, subtracting pore water reactive force from total reactive force
+weight; downward force caused by gravity on slice i
 </td>
 <td>
 N
@@ -439,10 +465,21 @@ N
 </tr>
 <tr>
 <td>
-N*<sub>i</sub>
+x<sub>i</sub>
 </td>
 <td>
-effective normal force of a soil surface, neglecting the influence of interslice forces
+the x ordinate; refers to either slice i midpoint, or slice interface i
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+X<sub>i</sub>
+</td>
+<td>
+interslice shear force being exerted between adjacent slices (for interslice index i)
 </td>
 <td>
 N
@@ -450,13 +487,35 @@ N
 </tr>
 <tr>
 <td>
-Q<sub>i</sub>
+y<sub>slip,i</sub>
 </td>
 <td>
-imposed surface load; a downward force acting into the surface from midpoint of slice i
+the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i
 </td>
 <td>
-N
+m
+</td>
+</tr>
+<tr>
+<td>
+y<sub>us,i</sub>
+</td>
+<td>
+the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+y<sub>wt,i</sub>
+</td>
+<td>
+the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i
+</td>
+<td>
+m
 </td>
 </tr>
 <tr>
@@ -483,127 +542,6 @@ angle of the surface of the mass relative to the horizontal (for slice index i)
 </tr>
 <tr>
 <td>
-&omega;<sub>i</sub>
-</td>
-<td>
-angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
-</td>
-<td>
-&deg;
-</td>
-</tr>
-<tr>
-<td>
-&lambda;
-</td>
-<td>
-ratio between interslice normal and shear forces (applied to all interslices)
-</td>
-<td>
-unitless
-</td>
-</tr>
-<tr>
-<td>
-f<sub>i</sub>
-</td>
-<td>
-scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine
-</td>
-<td>
-unitless
-</td>
-</tr>
-<tr>
-<td>
-b<sub>i</sub>
-</td>
-<td>
-base width of the slice in the x-ordinate direction only (for slice index i)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-&#8467;<sub>b,i</sub>
-</td>
-<td>
-total length of the base of a slice (for slice index i)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-&#8467;<sub>s,i</sub>
-</td>
-<td>
-length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-h<sub>i</sub>
-</td>
-<td>
-midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-n
-</td>
-<td>
-number of slices the slip mass has been divided into
-</td>
-<td>
-unitless
-</td>
-</tr>
-<tr>
-<td>
-F
-</td>
-<td>
-generic force; assumed 1D allowing a scalar
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-M
-</td>
-<td>
-moment of a body; assumed 2D allowing a scalar
-</td>
-<td>
-Nm
-</td>
-</tr>
-<tr>
-<td>
-&Upsilon;
-</td>
-<td>
-generic minimization function or algorithm
-</td>
-<td>
-unitless
-</td>
-</tr>
-<tr>
-<td>
 &delta;
 </td>
 <td>
@@ -611,83 +549,6 @@ generic displacement of a body
 </td>
 <td>
 m
-</td>
-</tr>
-<tr>
-<td>
-K
-</td>
-<td>
-stiffness (how much a body resists displacement when subject to a force)
-</td>
-<td>
-N/m
-</td>
-</tr>
-<tr>
-<td>
-K<sub>st,i</sub>
-</td>
-<td>
-shear stiffness of an interslice surface, without length adjustment (for interslice index i)
-</td>
-<td>
-Pa
-</td>
-</tr>
-<tr>
-<td>
-K<sub>bt,i</sub>
-</td>
-<td>
-shear stiffness of a slice base surface, without length adjustment (for slice index i)
-</td>
-<td>
-Pa
-</td>
-</tr>
-<tr>
-<td>
-K<sub>sn,i</sub>
-</td>
-<td>
-normal stiffness of an interslice surface, without length adjustment (for interslice index i)
-</td>
-<td>
-Pa
-</td>
-</tr>
-<tr>
-<td>
-K<sub>bn,i</sub>
-</td>
-<td>
-normal stiffness of a slice base surface, without length adjustment (for slice index i)
-</td>
-<td>
-Pa
-</td>
-</tr>
-<tr>
-<td>
-K<sub>tr</sub>
-</td>
-<td>
-residual shear stiffness
-</td>
-<td>
-Pa
-</td>
-</tr>
-<tr>
-<td>
-K<sub>no</sub>
-</td>
-<td>
-residual normal stiffness
-</td>
-<td>
-Pa
 </td>
 </tr>
 <tr>
@@ -732,6 +593,127 @@ displacement of a slice in the y-ordinate direction (for slice index i)
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+&Delta;H<sub>i</sub>
+</td>
+<td>
+difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i)
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+&#8467;<sub>b,i</sub>
+</td>
+<td>
+total length of the base of a slice (for slice index i)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+&#8467;<sub>s,i</sub>
+</td>
+<td>
+length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+&gamma;
+</td>
+<td>
+unit weight of dry soil/ground layer
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>Sat</sub>
+</td>
+<td>
+unit weight of saturated soil/ground layer
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>w</sub>
+</td>
+<td>
+unit weight of water
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&lambda;
+</td>
+<td>
+ratio between interslice normal and shear forces (applied to all interslices)
+</td>
+<td>
+unitless
+</td>
+</tr>
+<tr>
+<td>
+&nu;
+</td>
+<td>
+Poisson's ratio
+</td>
+<td>
+unitless
+</td>
+</tr>
+<tr>
+<td>
+&omega;<sub>i</sub>
+</td>
+<td>
+angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
+</td>
+<td>
+&deg;
+</td>
+</tr>
+<tr>
+<td>
+&phiv;'
+</td>
+<td>
+effective angle of friction
+</td>
+<td>
+&deg;
+</td>
+</tr>
+<tr>
+<td>
+&Upsilon;
+</td>
+<td>
+generic minimization function or algorithm
+</td>
+<td>
+unitless
 </td>
 </tr>
 </table>

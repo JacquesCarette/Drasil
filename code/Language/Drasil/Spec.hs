@@ -75,6 +75,8 @@ sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
 (+:+) :: Sentence -> Sentence -> Sentence
+(S "") +:+ b = b
+a +:+ (S "") = a
 a +:+ b = a :+: S " " :+: b
 
 sC :: Sentence -> Sentence -> Sentence

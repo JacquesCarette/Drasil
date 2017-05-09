@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="SWHS_SRS.css">
+<link rel="stylesheet" type="text/css" href="SWHS_SRS2.css">
 <title>
-Software Requirements Specification for Solar Water Heating Systems with Phase Change Material
+Software Requirements Specification for solar water heating systems incorporating PCM
 </title>
 </head>
 <body>
 <div class="title">
 <h1>
-Software Requirements Specification for Solar Water Heating Systems with Phase Change Material
+Software Requirements Specification for solar water heating systems incorporating PCM
 </h1>
 </div>
 <div class="author">
@@ -327,6 +327,17 @@ W/(m<sup>2</sup>&deg;C)
 </tr>
 <tr>
 <td>
+H<sub>f</sub>
+</td>
+<td>
+specific latent heat of fusion
+</td>
+<td>
+J/kg
+</td>
+</tr>
+<tr>
+<td>
 h<sub>P</sub>
 </td>
 <td>
@@ -367,6 +378,28 @@ mass of water
 </td>
 <td>
 kg
+</td>
+</tr>
+<tr>
+<td>
+m
+</td>
+<td>
+mass
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+<b>n&#770;</b>
+</td>
+<td>
+unit outward normal vector for a surface
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -459,10 +492,54 @@ J
 </tr>
 <tr>
 <td>
+S
+</td>
+<td>
+surface
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 T
 </td>
 <td>
 temperature
+</td>
+<td>
+&deg;C
+</td>
+</tr>
+<tr>
+<td>
+t<sub>melt</sub><sup>final</sup>
+</td>
+<td>
+time at which melting of PCM ends
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+t<sub>melt</sub><sup>init</sup>
+</td>
+<td>
+time at which melting of PCM begins
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+T<sub>melt</sub><sup>P</sup>
+</td>
+<td>
+melting point temperature for PCM
 </td>
 <td>
 &deg;C
@@ -536,39 +613,6 @@ melting point temperature
 </tr>
 <tr>
 <td>
-t<sub>melt</sub><sup>init</sup>
-</td>
-<td>
-time at which melting of PCM begins
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-t<sub>melt</sub><sup>final</sup>
-</td>
-<td>
-time at which melting of PCM ends
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-T<sub>melt</sub><sup>P</sup>
-</td>
-<td>
-melting point temperature for PCM
-</td>
-<td>
-&deg;C
-</td>
-</tr>
-<tr>
-<td>
 T<sub>P</sub>
 </td>
 <td>
@@ -587,6 +631,17 @@ temperature of the water
 </td>
 <td>
 &deg;C
+</td>
+</tr>
+<tr>
+<td>
+t
+</td>
+<td>
+time
+</td>
+<td>
+s
 </td>
 </tr>
 <tr>
@@ -642,6 +697,28 @@ change in temperature
 </td>
 <td>
 &deg;C
+</td>
+</tr>
+<tr>
+<td>
+&eta;
+</td>
+<td>
+ODE parameter
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+&phi;
+</td>
+<td>
+melt fraction
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -719,83 +796,6 @@ ODE parameter for water
 </td>
 <td>
 s
-</td>
-</tr>
-<tr>
-<td>
-H<sub>f</sub>
-</td>
-<td>
-specific latent heat of fusion
-</td>
-<td>
-J/kg
-</td>
-</tr>
-<tr>
-<td>
-m
-</td>
-<td>
-mass
-</td>
-<td>
-kg
-</td>
-</tr>
-<tr>
-<td>
-t
-</td>
-<td>
-time
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-<b>n&#770;</b>
-</td>
-<td>
-unit outward normal vector for a surface
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-S
-</td>
-<td>
-surface
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-&eta;
-</td>
-<td>
-ODE parameter
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-&phi;
-</td>
-<td>
-melt fraction
-</td>
-<td>
-
 </td>
 </tr>
 </table>

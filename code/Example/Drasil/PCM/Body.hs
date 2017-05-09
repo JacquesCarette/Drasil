@@ -12,6 +12,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Thermodynamics(temperature)
 import Data.Drasil.Units.Thermodynamics
 
 import Drasil.ReferenceMaterial (intro)
@@ -26,6 +27,8 @@ s4_intro,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
+  
+--This generates the introductory reference section
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc (nw sWHS)], SymbOrder], TAandA]) : 
         map Verbatim [s4]  
@@ -74,7 +77,7 @@ s4_1_2_intro = Paragraph $
            S "The physical" +:+ (phrase $ system ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
            S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following elements:"
 
-fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with heat flux from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
+fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
@@ -87,7 +90,7 @@ s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro,
                                                     Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph $
-           S "Given the temperature of the" +:+ (phrase $ coil ^. term) :+: S ", initial temperature of the" +:+ (phrase $ water ^. term) :+: S "," +:+
+           S "Given the" +:+ (phrase $ temperature ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) :+: S ", initial" +:+ (phrase $ temperature ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) :+: S "," +:+
            S "and material properties, the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [

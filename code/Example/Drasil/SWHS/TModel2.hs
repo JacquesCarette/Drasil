@@ -9,6 +9,9 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Thermodynamics
+import Data.Drasil.Concepts.PhysicalProperties
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
+
 
 import Control.Lens ((^.))
 
@@ -20,10 +23,10 @@ t2SensHtE = makeRC "t2SensHtE" (nounPhraseSP "Sensible heat energy")
   t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
-sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT), 
+sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C QPP.mass) * (C deltaT), 
   ((C temp) :< (C temp_melt))), ((C htCap_L) * 
-  (C mass) * (C deltaT), ((C temp_melt) :< (C temp) :<
-  (C temp_boil))), ((C htCap_V) * (C mass) * 
+  (C QPP.mass) * (C deltaT), ((C temp_melt) :< (C temp) :<
+  (C temp_boil))), ((C htCap_V) * (C QPP.mass) * 
   (C deltaT), ((C temp_boil) :< (C temp)))]
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
@@ -38,8 +41,8 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
   P (htCap_V ^. symbol) :+: S " are the " :+: (phrase $ htCap_S ^. term) :+: 
   S ", " :+: (phrase $ htCap_L ^. term) :+: S ", and " :+: 
   (phrase $ htCap_V ^. term) :+: S ", respectively (" :+: Sy (unit_symb htCap) :+:
-  S "). " :+: P (mass ^. symbol) :+: S " is the " :+:
-  (phrase $ mass ^. term) :+: S " (" :+: Sy (unit_symb mass) :+: S "). " :+:
+  S "). " :+: P (QPP.mass ^. symbol) :+: S " is the " :+:
+  (phrase $ mass ^. term) :+: S " (" :+: P (QPP.mass ^. symbol) :+: S "). " :+:
   P (temp ^. symbol) :+: S " is the " :+: (phrase $ temp ^. term) :+: S " (" :+:
   Sy (unit_symb temp) :+: S "), and " :+: P (deltaT ^. symbol) :+:
   S " is the " :+: (phrase $ deltaT ^. term) :+: S " (" :+:

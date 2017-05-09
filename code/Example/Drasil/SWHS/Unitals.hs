@@ -6,7 +6,7 @@ import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import qualified Data.Drasil.Quantities.Physics as QP (surface, time)
 import Data.Drasil.Quantities.Math
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import Data.Drasil.Quantities.PhysicalProperties
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -23,8 +23,8 @@ swhsUnits = map uw [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,temp,
   temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
-  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W] ++ 
-  map uw [htFusion, mass, time]
+  pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W] ++ 
+  map uw [htFusion, time]
 
 coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,htTransCoeff,coil_HTC,
@@ -32,9 +32,9 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,
   temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
-  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W :: UnitalChunk
+  pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W :: UnitalChunk
   
-mass, htFusion, time :: UnitalChunk  
+htFusion, time :: UnitalChunk  
 
 --symbol names can't begin with a capital
 fixme :: String
@@ -98,7 +98,6 @@ pcm_HTC      = uc' "pcm_HTC"
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
   fixme (sub lH cP) heat_transfer_coef
 tank_length  = uc' "tank_length" (nounPhraseSP "length of tank") fixme cL metre
-mass         = ucFromVC QPP.mass kilogram
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   fixme (sub (mass ^. symbol) cP) kilogram
 w_mass       = uc' "w_mass" (nounPhraseSP "mass of water")
@@ -156,7 +155,6 @@ w_vol        = uc' "w_vol" (nounPhraseSP "volume of water")
   fixme (sub (volume ^. symbol) cW) m_3
 deltaT       = uc' "deltaT" (nounPhraseSP "change in temperature")
   fixme (Concat [Greek Delta, (temp ^. symbol)]) centigrade
-density      = uc' "density" (cnIES "density") fixme (Greek Rho_L) densityU
 pcm_density  = uc' "pcm_density" (nounPhraseSP "density of PCM")
   fixme (sub (density ^. symbol) cP) densityU
 w_density    = uc' "w_density" (nounPhraseSP "density of water")

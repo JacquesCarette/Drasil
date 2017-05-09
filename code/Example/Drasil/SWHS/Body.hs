@@ -13,6 +13,7 @@ import Data.Drasil.Concepts.Thermodynamics
 import Data.Drasil.Concepts.Math (ode)
 
 import Data.Drasil.Quantities.Physics (surface)
+import Data.Drasil.Quantities.PhysicalProperties as QPP
 import Data.Drasil.Quantities.Math (gradient, normalVect)
 
 import Drasil.SWHS.Unitals
@@ -575,7 +576,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   ((C gradient) :. (C thFluxVect)) volume))) + 
   UnaryOp (Integral (Just (Low (C volume)), Nothing) 
   (C vol_ht_gen) volume) := 
-  UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
+  UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C QPP.density) 
   * (C htCap) * Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "Applying" +:+ (phrase $ gauss_div ^. term) +:+ S "to" +:+
   S "the first term over the" +:+ (phrase $ surface ^. term) +:+
@@ -591,28 +592,28 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   (UnaryOp (Integral (Just 
   (Low (C volume)), Nothing) (C vol_ht_gen) volume)) := 
   UnaryOp (Integral (Just (Low (C volume)), Nothing) 
-  ((C density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
+  ((C QPP.density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "We consider an arbitrary" +:+ (phrase $ volume ^. 
   term) :+: S ". The" +:+ (phrase $ vol_ht_gen ^. term) :+: S "is" +:+
   S "assumed constant. Then (1) can be written as:"),
   EqnBlock 
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
   (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
-  (Just (Low (C volume)), Nothing) ((C density) * (C htCap) *
+  (Just (Low (C volume)), Nothing) ((C QPP.density) * (C htCap) *
   Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "Where" +:+ P (ht_flux_in ^. symbol) :+: S "," +:+
   P (ht_flux_out ^. symbol) :+: S "," +:+ P (in_SA ^. symbol) :+:
   S ", and" +:+ P (out_SA ^. symbol) +:+ S "are explained in" +:+
-  S "GD2. Assuming" +:+ P (density ^. symbol) :+: S "," +:+
+  S "GD2. Assuming" +:+ P (QPP.density ^. symbol) :+: S "," +:+
   P (htCap ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
   S "are constant over the" +:+ (phrase $ volume ^. term) :+: S "," +:+ 
   S "which is true in our case by" +:+ (titleize' assumption) +:+ 
   S "(A3), (A4), (A5), and (A6), we have:"),
   EqnBlock 
-  ((C density) * (C htCap) * (C volume) * Deriv Total (C temp) 
+  ((C QPP.density) * (C htCap) * (C volume) * Deriv Total (C temp) 
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
   (C out_SA) + (C vol_ht_gen) * (C volume)),
-  Paragraph (S "Using the fact that" +:+ P (density ^. symbol) :+:
+  Paragraph (S "Using the fact that" +:+ P (QPP.density ^. symbol) :+:
   S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
   P (volume ^. symbol) :+: S ", (2) can be written as:"),
   EqnBlock 

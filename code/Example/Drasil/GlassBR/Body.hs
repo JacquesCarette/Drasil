@@ -519,8 +519,8 @@ s7_1_list =
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
   S "the entered input values to ensure that they do not exceed the data" +:+
   S "constraints mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
-  S "the input parameters is out of bounds, an error message is" +:+.
-  S "displayed and the" +:+ (plural $ calculation ^. term) +:+ S "stop"),
+  S "the input parameters is out of bounds, an error message is" +:+
+  S "displayed and the" +:+ (plural $ calculation ^. term) +:+. S "stop"),
   (((short requirement) :+: S "4"), S "Output the input" +:+ plural quantity +:+
   S "from" +:+ (short requirement) :+: S "1 and the known" +:+ plural quantity
   +:+ S "from" +:+ (short requirement) :+: S "2."),

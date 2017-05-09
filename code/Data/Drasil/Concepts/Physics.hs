@@ -1,21 +1,20 @@
 module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, angularV, friction, elasticity, collision, space
+  ( rigidBody, velocity, friction, elasticity, collision, space
   , cartesian, rightHand, surface, restitutionCoef, acceleration
-  , angularAccel, momentOfInertia, force, impulseS, impulseV, displacement
+  , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
-  , angularDisplacement,time, torque, linearDisplacement, linearVelocity
-  , linearAccel, fbd, angular, linear
+  , time, torque, fbd, angular, linear
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
 import Control.Lens ((^.))
 
-rigidBody, velocity, angularV, friction, elasticity, collision, space,
+rigidBody, velocity, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
-  angularAccel, momentOfInertia, force, impulseS, impulseV, displacement,
-  gravitationalAccel, gravitationalConst, position, distance, angularDisplacement,
-  time, torque, linearDisplacement, linearVelocity, linearAccel, fbd, linear,
+  momentOfInertia, force, impulseS, impulseV, displacement,
+  gravitationalAccel, gravitationalConst, position, distance,
+  time, torque, fbd, linear,
   angular :: ConceptChunk
 
 rigidBody  = dcc "rigidBody" 
@@ -72,18 +71,8 @@ gravitationalAccel = dcc "gravitationalAccel"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
   "gravitational constant (6.673 * 10E-11)"
 
-angularDisplacement = dcc "angularDisplacement" (cn' "angular displacement") fixme
 time = dcc "time" (cn' "time") fixme
 torque = dcc "torque" (cn' "torque") fixme
-angularV   = dcc "angularV" (cnIES "angular velocity")
-  "The rate of change of a body's orientation."
-angularAccel = dccWDS "angularAccel" (cn' "angular acceleration")
-  (S "the rate of change of a body's " :+: (phrase (angularV ^. term)))
-
-linearDisplacement = dcc "linearDisp" (cn' "linear displacement") fixme
-linearVelocity = dcc "linearVelo" (cn' "linear velocity") fixme
-linearAccel = dcc "linearAccel" (cn' "linear acceleration") fixme
-
 
 fbd = dcc "FBD" (cn' "free body diagram") fixme
 

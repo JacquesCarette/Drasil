@@ -196,7 +196,7 @@ s5_1 = Section (S "Product Use Case Table") [Con s5_1_table]
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", S "Inputs", S "User", titleize characteristic +:+ S " of the" +:+
+  [[S "1", S "Inputs", S "User", titleize characteristic +:+ S "of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
@@ -252,7 +252,7 @@ s6_1_intro = Paragraph $
   +:+ (phrase $ blast ^. term) +:+. S "risk involved with the glass" +:+ (gLassBR ^. defn)
   +:+ S "is a" +:+ S "computer program developed to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
-  S "can withstand the" +:+ (phrase $ blast ^. term) +:+. S "under the" +:+ plural condition
+  S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
 
 s6_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition) [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
@@ -340,7 +340,7 @@ s6_2_1_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
   S "and helps in developing the" +:+ (phrase thModel) +:+ S "[" :+: (short thModel) :+:
   S "] by filling in the missing" +:+ phrase information +:+ S "for the" +:+.
-  phrase physicalSystem :+: S "The numbers given in the" +:+ 
+  phrase physicalSystem :+: S ". The numbers given in the" +:+ 
   S "square brackets refer to the" +:+ (phrase dataDefn) +:+ S "[" :+:
   (short dataDefn) :+: S "], or" +:+ phrase inModel +:+ S "[" :+: 
   (short inModel) :+: S "], in which the respective" +:+ (phrase assumption) 
@@ -361,10 +361,10 @@ s6_2_1_list =
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
     S "notched, or grooved glass with surface and edge treatments" +:+.
     S "that alter the glass strength"),
-  (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+.
-    S "only considers the external explosion scenario for its " +:+ (plural $ calculation ^. term)),
+  (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
+    S "only considers the external explosion scenario for its " +:+. (plural $ calculation ^. term)),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
-    (phrase $ calculation ^. term) +:+ S " in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
+    (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
     (Neg (Int 53))),
@@ -491,7 +491,7 @@ s7_1_intro = Paragraph $
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "1"), S "Input the following" +:+
-    plural quantity +:+ S ", which define the glass dimensions" `sC` 
+    plural quantity :+: S ", which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
     +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:+ 
     (phrase $ blast ^. term) :+: S ":")]),
@@ -825,7 +825,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere ":+:
   plural requirement +:+ phrase specification +:+. S "template edition 16") +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
-  S "Volere template16.pdf") :+: S ", 2012"),
+  S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
   +:+ S "for determining" +:+ (phrase $ load ^. term) +:+ S "resistance of" +:+
   S "glass in buildings,") :+: 

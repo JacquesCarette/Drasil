@@ -32,15 +32,14 @@ ctrOfMassEqn = (UnaryOp (Summation Nothing
 fixme :: NP
 fixme = nounPhraseSP $ "FIXME: THIS HACK NEEDS TO BE UPDATED TO A NOUNPHRASE, " ++
   "SEE Drasil.GamePhysics.DataDefs for more info"
-
+{-
+linDispQDef :: Sentence
+linDispQDef = foldl (+:+) (EmptyS) def
+  where def = [(phrase $ QP.linearDisplacement ^. term), (S "of a"), (phrase $ CP.rigidBody ^. term), (S "as a function of"), (phrase $ CP.time ^. term), (P $ time ^. symbol), (S "also equal to the derivate of its linear"), (phrase $ CP.velocity ^. term), (S "with respect to"), (phrase $ CP.time ^. term), (P $ time ^. symbol)]
+-}
 dd2linDisp :: QDefinition
 dd2linDisp = fromEqn "dd2linDisp" (linDisp ^. term) (linDisp ^. symbol) metre
   dispEqn
-
---linDispDef :: Sentence
---linDispDef = foldl (+:+) (EmptyS) def
---  where def = [(phrase $ QP.linearDisplacement ^. term), (S "of a"), (phrase $ CP.rigidBody ^. term), (S "as a function of"), (phrase $ --CP.time ^. term), (P $ time ^. symbol), (S "also equal to the derivate of its linear"), (phrase $ CP.velocity ^. term), (S "with respect --to"), (phrase $ CP.time ^. term), (P $ time ^. symbol)]
-
 
 dispEqn :: Expr
 dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
@@ -53,6 +52,12 @@ dd2descr = S "linear" +:+ (disp ^. term) +:+ S "of a" +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 -}
 -- DD3 : Linear velocity --
+
+{-
+linVelQDef :: Sentence
+linVelQDef = foldl (+:+) (EmptyS) def
+  where def = [(phrase $ linVelo ^. term), S "of a", (phrase $ CP.rigidBody ^. term), S "as a function of" , (phrase $ CP.time ^. term), P (CP.time ^. symbol), S "also equal to the derivative of its linear", (phrase $ CP.velocity ^. term), S "with respect to", (phrase $ time ^. term), P (time ^. symbol)]
+-}
 
 dd3linVel :: QDefinition
 dd3linVel = fromEqn "dd3linVel" (linVelo ^. term) (linVelo ^. symbol) velU

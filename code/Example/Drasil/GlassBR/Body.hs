@@ -558,7 +558,7 @@ s7_1_list =
     sParen (makeRef (Definition (Theory calOfDe)))] ++
     [Flat $ (phrase $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
     sParen (makeRef (Definition (Data hFromt)))] ++
-    map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen(P $ c ^. symbol) +:+ 
+    map (\c -> Flat $ (titleize $ c ^. term) +:+ sParen(P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [loadDF,strDisFac,nonFL]++
     [Flat $ (phrase $ gTF ^. term) +:+ sParen(P $ gTF ^. symbol) +:+ 

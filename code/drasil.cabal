@@ -118,6 +118,9 @@ executable tiny
     , Drasil.HGHC.HeatTransfer
     , Drasil.HGHC.Modules
     , Drasil.TableOfSymbols
+    , Drasil.ReferenceMaterial
+    , Drasil.TableOfAbbAndAcronyms
+    , Drasil.DocumentLanguage
     , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
@@ -170,6 +173,8 @@ executable ssp
     , Drasil.SSP.Units
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
+    , Drasil.DocumentLanguage
+    , Drasil.TableOfUnits
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

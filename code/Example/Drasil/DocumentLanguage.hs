@@ -144,7 +144,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro --Custom
 
 -- table of symbols intro builder
 tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ foldr (+:+) (S "") (map tsI x)
+tsIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tsI x)
 
 tsI :: TSIntro -> Sentence
 tsI (TypogConvention ts) = typogConvention ts

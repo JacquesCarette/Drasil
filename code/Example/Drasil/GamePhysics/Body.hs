@@ -15,9 +15,6 @@ import Data.Drasil.Concepts.Math
 
 import Data.Drasil.Quantities.Physics (restitutionCoef)
 
-import Drasil.TableOfSymbols
-import Drasil.TableOfUnits
-import Drasil.TableOfAbbAndAcronyms
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS

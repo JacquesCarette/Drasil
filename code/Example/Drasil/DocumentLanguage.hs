@@ -46,14 +46,40 @@ data SystemInformation where
 -- anything with 'Verb' in it should eventually go
 data RefTab where 
   TUnits :: RefTab
-  TSymb :: Contents -> RefTab
-  TSymb' :: LFunc -> Contents -> RefTab
+  TUnits' :: [TUIntro] -> RefTab -- Customized intro
+  TSymb :: [TSIntro] -> RefTab
+  TSymb' :: LFunc -> [TSIntro] -> RefTab
   --FIXME: Pull out Contents as it's currently a verbatim "intro" to TSymb.
   TAandA :: RefTab
   TVerb :: Section -> RefTab
   -- add more here
+
 data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
 data DocSection = Verbatim Section | RefSec RefSec
+
+data TSIntro = TypogConvention [TConvention]
+             | SymbOrder
+             | SymbConvention [Literature]
+             
+data TConvention = Vector Emphasis
+                 | Verb Sentence
+                 
+data Emphasis = Bold
+              | Italics
+
+instance Show Emphasis where
+  show Bold = "bold"
+  show Italics = "italics"
+
+data Literature = Lit Topic
+                | Doc Topic
+                | Manual Topic
+
+type Topic = NWrapper
+
+data TUIntro = System
+             | Derived
+             | Purpose
 
 -- Lens (lookup) functions (currently for TSymb)
 
@@ -88,17 +114,18 @@ mkRefSec si (RefProg c l) = section (titleize refmat) c (foldr (mkSubRef si) [] 
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
+    mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = error "Not yet implemented" 
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
-      (map Con [con, (table (sort v) (\x -> phrase $ x ^.term))])) : l'
+      (map Con [tsIntro con, (table (sort v) (\x -> phrase $ x ^.term))])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
-  [e] -> LFunc -> Contents -> Section
-mkTSymb v f c = Section (titleize tOfSymb) (map Con [c, table (sort v) (lf f)])
+  [e] -> LFunc -> [TSIntro] -> Section
+mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
   where lf Term = (\x -> phrase $ x ^. term)
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
@@ -108,8 +135,45 @@ mkTSymb v f c = Section (titleize tOfSymb) (map Con [c, table (sort v) (lf f)])
           (phrase $ x ^. term) else (x ^. defn))
 
 --tsymb constructor
-tsymb, tsymb' :: Contents -> RefTab
+tsymb, tsymb' :: [TSIntro] -> RefTab
 tsymb intro = TSymb intro                --Default Term
 tsymb' intro = TSymb' Defn intro         --Default Defn
-tsymb'' :: Contents -> LFunc -> RefTab
+
+tsymb'' :: [TSIntro] -> LFunc -> RefTab
 tsymb'' intro lfunc = TSymb' lfunc intro --Custom
+
+
+tsIntro :: [TSIntro] -> Contents
+tsIntro x = Paragraph $ tsI x
+
+tsI :: [TSIntro] -> Sentence
+tsI [] = S ""
+tsI ((TypogConvention ts):xs) = typogConvention ts +:+ tsI xs
+tsI (SymbOrder:xs) = S "The symbols are listed in alphabetical order." +:+ tsI xs
+tsI ((SymbConvention ls):xs) = symbConvention ls +:+ tsI xs
+
+typogConvention :: [TConvention] -> Sentence
+typogConvention [] = error "No arguments given for typographic conventions"
+typogConvention ts = S "Throughout the document" `sC` (makeSentence ts)
+  where makeSentence (x:[]) = tcon x :+: S "."
+        makeSentence (x:y:[]) = tcon x +:+ S "and" +:+. tcon y
+        makeSentence (x:y:z:[]) = tcon x `sC` tcon y `sC` S "and" +:+. tcon z
+        makeSentence (x:xs) = tcon x `sC` makeSentence xs
+        makeSentence _ = error "How did you get here?"
+        tcon (Vector emph) = S ("symbols in " ++ show emph ++ 
+                                " will represent vectors, and scalars otherwise")
+        tcon (Verb s) = s
+
+symbConvention :: [Literature] -> Sentence
+symbConvention [] = error "Attempting to reference no literature for SymbConvention"
+symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+
+                      makeSentence scs
+  where makeSentence (x:[]) = scon x :+: S "."
+        makeSentence (x:y:[]) = scon x +:+ S "and with" +:+. scon y
+        makeSentence (x:y:z:[]) = scon x `sC` scon y `sC` S "and" +:+. scon z
+        makeSentence (x:xs) = scon x `sC` makeSentence xs
+        makeSentence _ = error "How did you get here?"
+        scon (Lit x) = phrase (x ^. term) +:+ S "literature"
+        scon (Doc x) = S "existing documentation for" +:+ (phrase $ x ^. term)
+        scon (Manual x) = S "that used in the" +:+ (phrase $ x ^. term) +:+ S "manual"
+  

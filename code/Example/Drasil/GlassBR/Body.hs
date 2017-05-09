@@ -196,7 +196,7 @@ s5_1 = Section (S "Product Use Case Table") [Con s5_1_table]
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", S "Inputs", S "User", titleize characteristic +:+ S "of the" +:+
+  [[S "1", S "Inputs", S "User", titleize' characteristic +:+ S "of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],

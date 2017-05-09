@@ -7,10 +7,10 @@ import qualified Data.Drasil.Units.Thermodynamics as U
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 import Prelude hiding (length,id)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Quantities.Thermodynamics
+import qualified Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.Math
 import Data.Drasil.Concepts.Math (ode)
-import Data.Drasil.Concepts.Thermodynamics (temperature)
+import Data.Drasil.Concepts.Thermodynamics (temperature, heat_cap_spec)
 import Data.Drasil.Concepts.PhysicalProperties
 import qualified Data.Drasil.Quantities.Physics as QP (time)
 
@@ -45,10 +45,10 @@ hIn_SA      = uc' "hIn_SA"
 hOut_SA     = uc' "hOut_SA" 
               (nounPhraseSP "surface area over which heat is transferred out")
               fixme (sub cA (Atomic "out")) m_2
-htCap       = ucFromVC heat_cap_spec U.heat_cap_spec
+htCap       = ucFromVC QT.heat_cap_spec U.heat_cap_spec
 htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
               fixme (sup cC cL) U.heat_cap_spec
-htCap_W     = uc' "htCap_W" (heat_cap_spec `of_` water)
+htCap_W     = uc' "htCap_W" (QT.heat_cap_spec `of_` water)
               fixme (sub cC cW) U.heat_cap_spec
 tank_D      = uc' "tank_D" (diameter `of_` tank) fixme cD metre
 ht_gen_vol  = uc' "ht_gen_vol" 

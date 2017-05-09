@@ -340,7 +340,7 @@ s6_2_1_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
   S "and helps in developing the" +:+ (phrase thModel) +:+ S "[" :+: (short thModel) :+:
   S "] by filling in the missing" +:+ phrase information +:+ S "for the" +:+.
-  phrase physicalSystem :+: S ". The numbers given in the" +:+ 
+  phrase physicalSystem :+: S "The numbers given in the" +:+ 
   S "square brackets refer to the" +:+ (phrase dataDefn) +:+ S "[" :+:
   (short dataDefn) :+: S "], or" +:+ phrase inModel +:+ S "[" :+: 
   (short inModel) :+: S "], in which the respective" +:+ (phrase assumption) 
@@ -362,7 +362,7 @@ s6_2_1_list =
     S "notched, or grooved glass with surface and edge treatments" +:+.
     S "that alter the glass strength"),
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
-    S "only considers the external explosion scenario for its " +:+. (plural $ calculation ^. term)),
+    S "only considers the external explosion scenario for its" +:+. (plural $ calculation ^. term)),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
     (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
@@ -383,7 +383,7 @@ s6_2_1_list =
     +:+. (gLassBR ^. defn)),
   (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+
     S "for the" +:+ (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
-    +:+ S "support for " +:+. (plural $ calculation ^. term)),
+    +:+ S "support for" +:+. (plural $ calculation ^. term)),
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
   (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+

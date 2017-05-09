@@ -296,12 +296,11 @@ ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
 slpSrf, crtSlpSrf, instMdl :: NPNC
 slpSrf = npnc "slpSrf" (cn' "slip surface")
 crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
-instMdl = npnc "instance model" (cn' "instance model")
-
+instMdl = npnc "instMdl" (cn' "instance model")
 
 ----Theoretical Models----
 fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" (pn "Factor of Safety") fs_desc fs_rel
+fs_rc = makeRC "fs_rc" (nounPhrase "factor of safety" "factors of safety") fs_desc fs_rel
 
 fs_rel :: Relation
 fs_rel = (C fs) := (C p) / (C s)

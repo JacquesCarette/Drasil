@@ -100,7 +100,7 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) 
   S "and when designing an excavated slope." +:+ (at_start ssa) +:+
   S "is the assessment of the safety of a slope, identifying the" +:+
   S "surface most likely to experience slip and an index of it's" +:+
-  S "relative stability known as the factor of safety." --FIXME: use a definition for "factor of safety"
+  S "relative stability known as the" +:+. (phrase $ fs_rc ^. term)
 
 s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
   S "of the" +:+ (introduceAbb srs) +:+
@@ -114,7 +114,7 @@ s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
 s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
 
 s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines the" +:+
-  (phrase crtSlpSrf) `sC` S "and it's respective factor of safety" +:+
+  (phrase crtSlpSrf) `sC` S "and it's respective" +:+ (phrase $ fs_rc ^. term) +:+
   S "as a method of assessing the stability of a slope design." +:+
   S "The program is intended to be used as an educational tool for" +:+
   S "introducing slope stability issues, and will facilitate the" +:+
@@ -143,7 +143,7 @@ s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
   S "composed of homogeneous soil layers. Given appropriate" +:+
   S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
   S "failure surface within the possible input range, and find" +:+
-  S "the factor of safety for the slope as well as displacement" +:+
+  S "the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the slope as well as displacement" +:+
   S "of soil that will occur on the slope."
 
 -- SECTION 2.3 --
@@ -199,19 +199,19 @@ s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
 s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" +:+
-  S "to evaluate the factor of safety of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
+  S "to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
   S "and to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
 s4_1_1 = Sub $ Section (titleize terminology) [s4_1_1_list]
 
 s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "Factor of Safety", 
+  (titleize $ fs_rc ^. term, 
       S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
       S "failure through slipping."), 
   (titleize crtSlpSrf, 
-      (at_start slpSrf) +:+ S "of the slope that has the lowest global factor of" +:+
-      S "safety, and therefore most likely to experience failure."),
+      (at_start slpSrf) +:+ S "of the slope that has the lowest global" +:+
+      (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure."),
   (S "Stress", 
       S "Forces that are exerted between planes internal to a larger" +:+
       S "body subject to external loading."),
@@ -277,7 +277,7 @@ s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "Evaluate local and global factors of safety along" +:+
             S "a given" +:+. phrase slpSrf),
   (S "GS2", S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
-            S "with the lowest Factor of Safety."),
+            S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
   (S "GS3", S "Determine the displacement of the slope.")
   ]
 
@@ -321,7 +321,7 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "depending on x position."),
   (S "A6", S "Slice to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
-           S "factor of safety" +:+ sParen (P (fs ^. symbol)) `sC`
+           (phrase $ fs_rc ^. term) +:+ sParen (P (fs ^. symbol)) `sC`
            S "and the Coulomb sliding law."),
   (S "A7", S "The stress-strain curve for interslice" +:+
            S "relationships is linear with a constant slope."),
@@ -390,11 +390,11 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "on a set of pass or fail criteria."),
   (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a method" +:+
             S "of slices or limit equilibrium analysis."),
-  (S "R5" , S "Calculate the factors of safety of the" +:+.
+  (S "R5" , S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+.
             (plural slpSrf)),
   (S "R6" , S "Rank and weight the slopes based on their" +:+
             S "factor of safety, such that a" +:+ (phrase slpSrf) +:+
-            S "with a smaller factor of safety has a larger" +:+
+            S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+ S "has a larger" +:+
             S "weighting."),
   (S "R7" , S "Generate new potential" +:+ (plural crtSlpSrf) +:+
             S "based on previously analysed" +:+ (plural slpSrf) +:+
@@ -403,16 +403,16 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "minimum factor of safety remains approximately" +:+
             S "the same over a predetermined number of" +:+
             S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-            S "that generates the minimum factor of safety as" +:+
-            S "the" +:+. (phrase crtSlpSrf)),
+            S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
+            S "as the" +:+. (phrase crtSlpSrf)),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
             S "method of slices or limit equilibrium analysis."),
-  (S "R10", S "Calculate the factor of safety of the" +:+
+  (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
             (phrase crtSlpSrf) +:+ S "using the Morgenstern" +:+
             S "price method."),
   (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
             S "slice element displacements graphically. Give" +:+
-            S "the values of the factors of safety calculated" +:+
+            S "the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
             S "by the Morgenstern price method.")
   ])
   

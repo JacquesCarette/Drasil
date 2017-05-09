@@ -532,7 +532,7 @@ s7_1_list =
   S "the" +:+ phrase condition +:+ S "is false, then output the message" +:+ 
   Quote (notSafe ^. defn))] ++
   [(((short requirement) :+: S "6"), Nested (S "Output the following" +:+
-  plural quantity +:+ S ":")
+  plural quantity :+: S ":")
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++

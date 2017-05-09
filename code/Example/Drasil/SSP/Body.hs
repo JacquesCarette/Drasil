@@ -25,7 +25,7 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
-ssp_si = SI ssp srs [henryFrankis]
+ssp_si = SI ssa srs [henryFrankis]
   this_si sspSymbolList (sspSymbolList) acronyms 
 
 mkSRS :: DocDesc

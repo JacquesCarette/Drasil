@@ -25,4 +25,9 @@ Main
 *.vrb
 .DS_Store
 .stack-work
-
+/code/SRS
+/code/C++/
+/code/MG/
+/code/MIS/
+/code/Website/
+/code/Docs

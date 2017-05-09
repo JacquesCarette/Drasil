@@ -179,7 +179,7 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         scon (Manual x) = S "that used in the" +:+ (phrase $ x ^. term) +:+ S "manual"
   
 tuIntro :: [TUIntro] -> Contents
-tuIntro x = Paragraph $ foldr (+:+) (S "") (map tuI x)
+tuIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tuI x)
 
 tuI :: TUIntro -> Sentence
 tuI System  = (S "The unit system used throughout is SI (Syst" :+: 

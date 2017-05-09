@@ -103,7 +103,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (sLower (phrase $ thermal_energy ^. term)) +:+ S "as" +:+
   (sLower (phrase $ latent_heat ^. term)) :+: S ", which" +:+
   S "allows higher" +:+ (sLower (phrase $ thermal_energy ^. 
-  term)) +:+. S "storage capacity per" +:+ phrase unit_ +:+ S "weight"),
+  term)) +:+ S "storage capacity per" +:+ phrase unit_ +:+. S "weight"),
   Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
@@ -134,7 +134,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "and unambiguous" +:+ plural definition :+: S ". This" +:+ phrase document +:+
   S "is intended to be used as a reference to provide ad hoc access to" +:+
   S "all" +:+ phrase information +:+ S "necessary to understand and verify" +:+
-  S "the" +:+ phrase model +:+ S ". The" +:+ (short srs) +:+ S "is abstract" +:+ 
+  S "the" +:+ phrase model :+: S ". The" +:+ (short srs) +:+ S "is abstract" +:+ 
   S "because the contents say what" +:+ phrase problem +:+ S "is being" +:+
   S "solved, but do not say how to solve it."),
   Paragraph (S "This" +:+ phrase document +:+ S "will be used as a starting" +:+
@@ -207,7 +207,7 @@ s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   S "additional" +:+ phrase information +:+ S "they require. The" +:+
   (plural inModel) +:+ S "provide" +:+
   S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+:
-  S "s) and algebraic equations that" +:+ phrase model +:+ S "the" +:+
+  S "s) and algebraic equations that" +:+ phrase model +:+ S "the" +:+.
   (phrase $ swhs_pcm ^. term) +:+ (short progName) +:+
   S "solves these" +:+ (short ode) :+: S "s."),
   --FIXME: Update refineChain after fixing goalStmt and thModel
@@ -274,7 +274,7 @@ s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:
   (plural genDefn) `sC` 
   (plural dataDefn) `sC` S "and finally" +:+
   S "the" +:+ plural inModel +:+ S "(" :+:
-  (short ode) :+: S "s) that" +:+ phrase model +:+ S "the" +:+
+  (short ode) :+: S "s) that" +:+ phrase model +:+ S "the" +:+.
   (phrase $ swhs_pcm ^. term))
 
 -- Completely general except for solar water heating tank (object of analysis) 
@@ -533,7 +533,7 @@ s4_2_2 = Section (titleize' thModel) [Con s4_2_2_intro,
 
 s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on the" +:+
   phrase general +:+ S "equations and laws that" +:+ (short progName) +:+
-  S "is based on")
+  S "is based on.")
 
 -- General paragraph (besides progName), repeated in all examples. Can be 
 -- abstracted out.
@@ -663,8 +663,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   symbol) :+: S ", we look at the energy balance on" +:+
   (sLower ((phrase $ water ^. term))) :+: S ". The" +:+ 
   (phrase $ volume ^. term) +:+ S "being considered is the" +:+
-  (phrase $ w_vol ^. term) :+: EmptyS +:+ P (w_vol ^. symbol) :+:
-  S ", which has" +:+ (phrase $ w_mass ^. term) :+: EmptyS +:+ 
+  (phrase $ w_vol ^. term) +:+ EmptyS +:+ P (w_vol ^. symbol) :+:
+  S ", which has" +:+ (phrase $ w_mass ^. term) +:+ EmptyS +:+ 
   P (w_mass ^. symbol) +:+ S "and" +:+ (phrase $ htCap_W ^. term) :+: 
   S "," +:+. P (htCap_W ^. symbol) +:+ P (ht_flux_C ^. 
   symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
@@ -750,7 +750,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
   S "being considered is the" +:+ (phrase $ pcm_vol ^. term) :+: 
   S "," +:+ P (pcm_vol ^. symbol) :+: S ". The derivation" +:+
   S "that follows is initially for the" +:+ (sLower 
-  ((phrase $ solid ^. term))) :+: EmptyS +:+ (short phsChgMtrl) :+:
+  ((phrase $ solid ^. term))) +:+ EmptyS +:+ (short phsChgMtrl) :+:
   S ". The" +:+ (phrase $ pcm_mass ^. term) +:+ S "is" +:+ 
   P (pcm_mass ^. symbol) +:+ S "and the" +:+ (phrase $ htCap_S_P ^. 
   term) +:+ S "is" +:+. P (htCap_S_P ^. symbol) +:+
@@ -784,7 +784,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
    (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
    ((C temp_W) - (C temp_PCM))),
   Paragraph (S "Equation (6) applies for the" +:+ 
-  (sLower ((phrase $ solid ^. term))) :+: EmptyS +:+ (short phsChgMtrl) :+: 
+  (sLower ((phrase $ solid ^. term))) +:+ EmptyS +:+ (short phsChgMtrl) :+: 
   S ". In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
   S "derivation applies, except that" +:+ P (htCap_S_P ^. 
@@ -988,7 +988,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   ((short requirement) :+: S "11", Flat (S "Calculate and" +:+ 
   S "output the" +:+ (phrase $ time ^. term) +:+ S "at which the" +:+ 
   (short phsChgMtrl) +:+
-  S "stops" +:+ (sLower ((phrase $ melting ^. term))) :+: 
+  S "stops" +:+ (sLower ((phrase $ melting ^. term))) +:+
   EmptyS +:+ P (t_final_melt ^. symbol) +:+ S "(from IM2)."))])
   ]
 
@@ -1035,8 +1035,8 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 --
   ((short likelyChg) :+: S "4", Flat (S "A11 - The" +:+ phrase model +:+
   S "currently only accounts for" +:+. (sLower (charging ^. 
-  defn)) +:+ S "A more complete" +:+ phrase model +:+ S "would also" +:+.
-  S "account for" +:+ (sLower (discharging ^. defn)))),
+  defn)) +:+ S "A more complete" +:+ phrase model +:+ S "would also" +:+
+  S "account for" +:+ (sLower (discharging ^. defn)) :+: S ".")),
 --
   ((short likelyChg) :+: S "5", Flat (S "A12 - To add more" +:+
   S " flexibility to the simulation, the" +:+ (phrase $ temp_init ^. term) +:+

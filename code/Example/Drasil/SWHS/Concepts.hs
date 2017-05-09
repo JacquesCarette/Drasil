@@ -11,7 +11,7 @@ phsChgMtrl,rightSide,progName :: CINP
 --FIXME: Use compound nounphrases instead of pn/cn
 phsChgMtrl  = commonINP "phsChgMtrl" (pn' "Phase Change Material")      "PCM"
 rightSide   = commonINP "rightSide"  (cn' "Right Hand Side")            "RHS" 
-progName    = commonINP "progName"   (pn' "Solar Water Heating System") "SWHS" 
+progName    = commonINP "progName"   (pn' "solar water heating system") "SWHS" 
 
 swhsFull :: NPNC
 swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)

@@ -23,27 +23,31 @@ velocity = cvR CP.velocity (vec lV)
 acceleration = cvR CP.acceleration (vec lA)
 --FIXME: COMBINATION HACK
 angularDisplacement = cvR angDisp (Greek Theta_L)
-  where angDisp = dcc "angularDisplacement" (compoundPhrase' (CP.angular ^. term) (CP.displacement ^. term)) "fixme"
+  where angDisp = dcc "angularDisplacement" (compoundPhrase' (CP.angular ^. term)
+                  (CP.displacement ^. term)) "fixme"
 --FIXME: COMBINATION HACK
 angularVelocity = cvR angVelo (Greek Omega_L)
-  where angVelo = dcc "angularVelocity" (compoundPhrase' (CP.angular ^. term) (CP.velocity ^. term)) "fixme"
+  where angVelo = dcc "angularVelocity" (compoundPhrase' (CP.angular ^. term)
+                  (CP.velocity ^. term)) "fixme"
 --FIXME: COMBINATION HACK
 angularAccel = cvR angAccel (Greek Alpha_L)
-  where angAccel = dcc "angularAcceleration" (compoundPhrase' (CP.angular ^. term) (CP.acceleration ^. term)) "fixme"
+  where angAccel = dcc "angularAcceleration"
+                   (compoundPhrase' (CP.angular ^. term)
+                   (CP.acceleration ^. term)) "fixme"
 --FIXME: COMBINATION HACK
 linearDisplacement = cvR linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"])
-  where linDisp = dcc "linearDisplacement" (compoundPhrase' (CP.linear ^. term) (CP.displacement ^. term)) "fixme"
+  where linDisp = dcc "linearDisplacement" (compoundPhrase' (CP.linear ^. term)
+                  (CP.displacement ^. term)) "fixme"
 --FIXME: COMBINATION HACK
 linearVelocity = cvR linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"])
-  where linVelo = dcc "linearVelocity" (compoundPhrase' (CP.linear ^. term) (CP.velocity ^. term)) "fixme"
+  where linVelo = dcc "linearVelocity" (compoundPhrase' (CP.linear ^. term)
+                  (CP.velocity ^. term)) "fixme"
 --FIXME: COMBINATION HACK
 linearAccel = cvR linAccel (Concat [(vec lA), Atomic "(", lT, Atomic ")"])
-  where linAccel = dcc "linearAcceleration" (compoundPhrase' (CP.linear ^. term) (CP.acceleration ^. term)) "fixme"
-
+  where linAccel = dcc "linearAcceleration" (compoundPhrase' (CP.linear ^. term)
+                   (CP.acceleration ^. term)) "fixme"
 time = cvR CP.time lT
 torque = cvR CP.torque (Greek Tau_L)
-
-
 
 gravitationalAccel = cvR CP.gravitationalAccel lG
 gravitationalConst = cvR CP.gravitationalConst cG

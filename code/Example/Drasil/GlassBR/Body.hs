@@ -780,7 +780,7 @@ s9_table3 = Table [S "", S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", S "", S "", S "", S "", S "",
   S "", S "", S ""]]
   ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
-  S "Connections Between" +:+ plural assumption +:+ S "and Other Items") True
+  S "Connections Between" +:+ titleize' assumption +:+ S "and Other Items") True
 
 s9_intro2 = 
   [Paragraph $

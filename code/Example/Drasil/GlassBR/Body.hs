@@ -103,7 +103,7 @@ s2_1_intro =
   S "used in the" +:+ (gLassBR ^. defn) +:+ S "code are provided" `sC`
   S "with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
-  S "This" +:+ phrase document +:+ S "is intended to be used as a reference" +:+
+  S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+
   S "to provide all" +:+ phrase information +:+ S "necessary to understand and verify the" +:+
   S "analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
@@ -392,7 +392,7 @@ s6_2_1_list =
     +:+ S "support for calculations."),
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
-  (((short assumption) :+: S "8"), S "With reference to A4 the value" 
+  (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+ S "to A4 the value" 
     +:+ S "of" +:+ (phrase $ loadDF ^. term) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
     (gLassBR ^. defn) +:+ S "It is calculated by the equation:" +:+
@@ -604,7 +604,7 @@ s9 = Section((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ gra
 
 s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural $ traceyMatrix ^. term) +:+ S "is to provide" +:+
-  S "easy references on what has to be additionally modified if a certain component is"
+  S "easy" +:+ plural reference +:+ S "on what has to be additionally modified if a certain component is"
   +:+ S "changed. Every time a component is changed, the items in the column"
   +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+
   S "should be modified as well." +:+ at_start table_ +:+ S "5" +:+ 
@@ -777,7 +777,7 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 s9_intro2 = 
   [Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
-  +:+ S "is also to provide easy references on what has to be additionally modified if a" +:+
+  +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be additionally modified if a" +:+
   S "certain component is changed. The arrows in the" +:+ (plural $ graph ^. term)
   +:+ S "represent" +:+. plural dependency +:+ S "The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
@@ -800,7 +800,7 @@ s9_intro2 =
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical" +:+
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
-  S "labels and reference can be future work."]
+  S "labels and" +:+ phrase reference +:+ S "can be future work."]
 
 fig_2 = Figure (S "Figure 2:" +:+ (titleize $ traceyMatrix ^. term) 
   +:+ S "Showing the Connections" +:+ S "Between Items of Different Sections") "Trace.png"
@@ -813,7 +813,7 @@ fig_4 = Figure (S "Figure 4:" +:+ (titleize $ traceyMatrix ^. term) +:+
   S "Showing the Connections Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 
-s10 = Section(S "References") [Con s10_list]
+s10 = Section(titleize' reference) [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 

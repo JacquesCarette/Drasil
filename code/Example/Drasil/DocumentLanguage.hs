@@ -49,7 +49,6 @@ data RefTab where
   TUnits' :: [TUIntro] -> RefTab -- Customized intro
   TSymb :: [TSIntro] -> RefTab
   TSymb' :: LFunc -> [TSIntro] -> RefTab
-  --FIXME: Pull out Contents as it's currently a verbatim "intro" to TSymb.
   TAandA :: RefTab
   TVerb :: Section -> RefTab
   -- add more here
@@ -145,15 +144,14 @@ tsymb'' intro lfunc = TSymb' lfunc intro --Custom
 
 
 tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ tsI x
+tsIntro x = Paragraph $ foldr (+:+) (S "") (map tsI x)
 
-tsI :: [TSIntro] -> Sentence
-tsI [] = S ""
-tsI ((TypogConvention ts):xs) = typogConvention ts +:+ tsI xs
-tsI (SymbOrder:xs) = S "The symbols are listed in alphabetical order." +:+ tsI xs
-tsI ((SymbConvention ls):xs) = symbConvention ls +:+ tsI xs
-tsI (TSPurpose:xs) = S "The table that follows summarizes the symbols used in" +:+
-  S "this document along with their units." +:+ tsI xs
+tsI :: TSIntro -> Sentence
+tsI (TypogConvention ts) = typogConvention ts
+tsI SymbOrder = S "The symbols are listed in alphabetical order."
+tsI (SymbConvention ls) = symbConvention ls
+tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
+  S "this document along with their units."
 
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"

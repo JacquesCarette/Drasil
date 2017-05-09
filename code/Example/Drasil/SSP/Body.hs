@@ -320,8 +320,8 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "interslice force function" +:+ sParen (P (fi ^. symbol)) +:+
            S "depending on x position."),
   (S "A6", S "Slice to base normal and shear forces have" +:+
-           S "a linear relationship, dependent on the factor" +:+
-           S "of safety" +:+ sParen (P (fs ^. symbol)) `sC`
+           S "a linear relationship, dependent on the" +:+
+           S "factor of safety" +:+ sParen (P (fs ^. symbol)) `sC`
            S "and the Coulomb sliding law."),
   (S "A7", S "The stress-strain curve for interslice" +:+
            S "relationships is linear with a constant slope."),

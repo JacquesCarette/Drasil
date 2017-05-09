@@ -9,6 +9,9 @@ import Data.Drasil.Concepts.Documentation
 import Control.Lens ((^.))
 
 --FIXME: Remove unitless
+sspSymbolList :: [UWrapper]
+sspSymbolList = map uw sspSymbols
+
 sspSymbols :: [UnitalChunk]
 sspSymbols = [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords,

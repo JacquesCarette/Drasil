@@ -27,7 +27,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 -- concepts relating to the templates and their contents
 
 characteristic, characteristics, condition, constraint_, definition, dependency, description, document, general,
-  information, introduction, model, name_, organization, physical, problem, purpose, reference, scope,
+  information, introduction, model, name_, organization, physical, problem, purpose, quantity, reference, scope,
   section_, solution, specific, specification, symbol_, system, table_, terminology, theory, unit_, units_ :: NPNC
 
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -47,6 +47,7 @@ organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
 purpose         = npnc "purpose"        (cn' "purpose")
+quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
 scope           = npnc "scope"          (cn' "scope")
 section_        = npnc "section"        (cn' "section")

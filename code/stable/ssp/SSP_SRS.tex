@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
-\title{Software Requirements Specification for Slope Stability Analysis}
+\title{Software Requirements Specification for slope stability problem}
 \author{Henry Frankis}
 \begin{document}
 \maketitle
@@ -18,135 +18,112 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-Units of the physical properties of the soil that are of interest when examining slope stability problems are given in the following table.
-\begin{longtable}{l l l}
+The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+\begin{longtable*}{l l}
 \toprule
-Symbol & Description & Name
+Symbol & Description
 \\
 \midrule
-m & length & Metre
+m & length (metre)
 \\
-${}^{\circ}$ & angle & Degree
+${}^{\circ}$ & angle (degree)
 \\
-N & force & Newton
+N & force (newton)
 \\
-Pa & pressure & Pascal
+Pa & pressure (pascal)
 \\
 \bottomrule
-\caption{Table of Units}
 \label{Table:ToU}
-\end{longtable}
+\end{longtable*}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-A collection of the symbols that will be used in the models and equations of the program are summarized in the table below. Values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
+The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass. 
 \begin{longtable*}{l l l}
 \toprule
 Symbol & Description & Units
 \\
 \midrule
-$\varphi{}'$ & effective angle of friction & ${}^{\circ}$
+$(x,y)$ & cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
+\\
+$({x_{cs}},{y_{cs}})$ & the set of x and y coordinates that describe the vertices of the critical slip surface & m
+\\
+$b_{i}$ & base width of the slice in the x-ordinate direction only (for slice index i) & m
 \\
 $c'$ & effective cohesion & Pa
 \\
-$\gamma{}$ & unit weight of dry soil/ground layer & $\frac{\text{N}}{\text{m}^{3}}$
-\\
-$\gamma{}_{Sat}$ & unit weight of saturated soil/ground layer & $\frac{\text{N}}{\text{m}^{3}}$
-\\
-$\gamma{}_{w}$ & unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
-\\
 $E$ & elastic modulus & Pa
 \\
-$\nu{}$ & Poisson's ratio & unitless
+$E_{i}$ & interslice normal force being exerted between adjacent slices (for interslice index i) & N
 \\
-$(x,y)$ & cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
+$f_{i}$ & scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine & unitless
 \\
-$y_{wt,i}$ & the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i & m
-\\
-$y_{us,i}$ & the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i & m
-\\
-$y_{slip,i}$ & the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i & m
-\\
-$x_{i}$ & the x ordinate; refers to either slice i midpoint, or slice interface i & m
-\\
-$({x_{cs}},{y_{cs}})$ & the set of x and y coordinates that describe the vertices of the critical slip surface & m
+$F$ & generic force; assumed 1D allowing a scalar & m
 \\
 $FS$ & global factor of safety describing the stability of a surface in a slope & unitless
 \\
 $FS_{Loc,i}$ & local factor of safety specific to a slice i & unitless
 \\
-$S_{i}$ & mobilized shear force for slice i & N
+$H_{i}$ & interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i) & N
 \\
-$P_{i}$ & shear resistance; Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
-\\
-$T_{i}$ & mobilized shear force without the influence of interslice forces for slice i & N
-\\
-$R_{i}$ & shear resistance without the influence of interslice forces for slice i & N
-\\
-$W_{i}$ & weight; downward force caused by gravity on slice i & N
+$h_{i}$ & midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i) & m
 \\
 $K_{c}$ & earthquake load factor; proportionality factor of force that weight pushes outwards; caused by seismic earth movements & unitless
 \\
-$H_{i}$ & interslice water force exerted in the x-ordinate direction between adjacent slices (for interslice index i) & N
+$K$ & stiffness (how much a body resists displacement when subject to a force) & $\frac{\text{N}}{\text{m}}$
 \\
-$\Delta{}H_{i}$ & difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i) & N
+$K_{bn,i}$ & normal stiffness of a slice base surface, without length adjustment (for slice index i) & Pa
 \\
-$E_{i}$ & interslice normal force being exerted between adjacent slices (for interslice index i) & N
+$K_{bt,i}$ & shear stiffness of a slice base surface, without length adjustment (for slice index i) & Pa
 \\
-$X_{i}$ & interslice shear force being exerted between adjacent slices (for interslice index i) & N
+$K_{no}$ & residual normal stiffness & Pa
 \\
-$U_{b,i}$ & base hydrostatic force arising from water pressure within the slice (for slice index i) & N
+$K_{sn,i}$ & normal stiffness of an interslice surface, without length adjustment (for interslice index i) & Pa
 \\
-$U_{t,i}$ & surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface (for slice index i) & N
+$K_{st,i}$ & shear stiffness of an interslice surface, without length adjustment (for interslice index i) & Pa
+\\
+$K_{tr}$ & residual shear stiffness & Pa
+\\
+$M$ & moment of a body; assumed 2D allowing a scalar & Nm
 \\
 $N_{i}$ & total reactive force for a soil surface subject to a body resting on it & N
+\\
+$n$ & number of slices the slip mass has been divided into & unitless
 \\
 $N'_{i}$ & effective normal force of a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
 $N*_{i}$ & effective normal force of a soil surface, neglecting the influence of interslice forces & N
 \\
+$P_{i}$ & shear resistance; Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
+\\
 $Q_{i}$ & imposed surface load; a downward force acting into the surface from midpoint of slice i & N
+\\
+$R_{i}$ & shear resistance without the influence of interslice forces for slice i & N
+\\
+$S_{i}$ & mobilized shear force for slice i & N
+\\
+$T_{i}$ & mobilized shear force without the influence of interslice forces for slice i & N
+\\
+$U_{b,i}$ & base hydrostatic force arising from water pressure within the slice (for slice index i) & N
+\\
+$U_{t,i}$ & surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface (for slice index i) & N
+\\
+$W_{i}$ & weight; downward force caused by gravity on slice i & N
+\\
+$x_{i}$ & the x ordinate; refers to either slice i midpoint, or slice interface i & m
+\\
+$X_{i}$ & interslice shear force being exerted between adjacent slices (for interslice index i) & N
+\\
+$y_{slip,i}$ & the y ordinate, or height of the slip surface at i; refers to either slice i midpoint, or slice interface i & m
+\\
+$y_{us,i}$ & the y ordinate, or height of the top of the slope at i; refers to either slice i midpoint, or slice interface i & m
+\\
+$y_{wt,i}$ & the y ordinate, or height of the water table at i; refers to either slice i midpoint, or slice interface i & m
 \\
 $\alpha{}_{i}$ & angle of the base of the mass relative to the horizontal (for slice index i) & ${}^{\circ}$
 \\
 $\beta{}_{i}$ & angle of the surface of the mass relative to the horizontal (for slice index i) & ${}^{\circ}$
 \\
-$\omega{}_{i}$ & angle of imposed surface load acting into the surface relative to the vertical (for slice index i) & ${}^{\circ}$
-\\
-$\lambda{}$ & ratio between interslice normal and shear forces (applied to all interslices) & unitless
-\\
-$f_{i}$ & scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine & unitless
-\\
-$b_{i}$ & base width of the slice in the x-ordinate direction only (for slice index i) & m
-\\
-$\ell{}_{b,i}$ & total length of the base of a slice (for slice index i) & m
-\\
-$\ell{}_{s,i}$ & length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i) & m
-\\
-$h_{i}$ & midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i) & m
-\\
-$n$ & number of slices the slip mass has been divided into & unitless
-\\
-$F$ & generic force; assumed 1D allowing a scalar & m
-\\
-$M$ & moment of a body; assumed 2D allowing a scalar & Nm
-\\
-$\Upsilon{}$ & generic minimization function or algorithm & unitless
-\\
 $\delta{}$ & generic displacement of a body & m
-\\
-$K$ & stiffness (how much a body resists displacement when subject to a force) & $\frac{\text{N}}{\text{m}}$
-\\
-$K_{st,i}$ & shear stiffness of an interslice surface, without length adjustment (for interslice index i) & Pa
-\\
-$K_{bt,i}$ & shear stiffness of a slice base surface, without length adjustment (for slice index i) & Pa
-\\
-$K_{sn,i}$ & normal stiffness of an interslice surface, without length adjustment (for interslice index i) & Pa
-\\
-$K_{bn,i}$ & normal stiffness of a slice base surface, without length adjustment (for slice index i) & Pa
-\\
-$K_{tr}$ & residual shear stiffness & Pa
-\\
-$K_{no}$ & residual normal stiffness & Pa
 \\
 $\delta{}u_{i}$ & shear displacement of a slice (for slice index i) & m
 \\
@@ -155,6 +132,28 @@ $\delta{}v_{i}$ & normal displacement of a slice (for slice index i) & m
 $\delta{}x_{i}$ & displacement of a slice in the x-ordinate direction (for slice index i) & m
 \\
 $\delta{}y_{i}$ & displacement of a slice in the y-ordinate direction (for slice index i) & m
+\\
+$\Delta{}H_{i}$ & difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i) & N
+\\
+$\ell{}_{b,i}$ & total length of the base of a slice (for slice index i) & m
+\\
+$\ell{}_{s,i}$ & length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i) & m
+\\
+$\gamma{}$ & unit weight of dry soil/ground layer & $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\gamma{}_{Sat}$ & unit weight of saturated soil/ground layer & $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\gamma{}_{w}$ & unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\lambda{}$ & ratio between interslice normal and shear forces (applied to all interslices) & unitless
+\\
+$\nu{}$ & Poisson's ratio & unitless
+\\
+$\omega{}_{i}$ & angle of imposed surface load acting into the surface relative to the vertical (for slice index i) & ${}^{\circ}$
+\\
+$\varphi{}'$ & effective angle of friction & ${}^{\circ}$
+\\
+$\Upsilon{}$ & generic minimization function or algorithm & unitless
 \\
 \bottomrule
 \label{Table:ToS}

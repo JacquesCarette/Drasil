@@ -113,8 +113,8 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) c (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u : l'
-    mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = error "Not yet implemented" 
+    mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
+    mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table (sort v) (\x -> phrase $ x ^.term))])) : l'
@@ -188,3 +188,6 @@ tuI TUPurpose = S "For each unit, the table lists the symbol," +:+
   S "a description and the SI name."
 tuI Derived = S "In addition to the basic units, several derived units are" +:+ 
   S "also used."
+
+defaultTUI :: [TUIntro]
+defaultTUI = [System, Derived, TUPurpose]

@@ -49,7 +49,7 @@ buildMH mcl = map (padBack (length mcl)) $ buildMH' Nothing mcl
 
 formatMH :: [[Maybe ModuleChunk]] -> [[Sentence]]
 formatMH = map (map (\x -> if   isNothing x
-                           then (S "")
+                           then (EmptyS)
                            else (S $ formatName $ fromJust x)))
 
 getMHOrder :: [[Maybe ModuleChunk]] -> [ModuleChunk]

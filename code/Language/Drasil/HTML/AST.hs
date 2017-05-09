@@ -53,6 +53,7 @@ data Spec where
   Sp :: Special -> Spec
   HARDNL :: Spec
   Ref :: RefType -> Spec -> Spec
+  EmptyS :: Spec
 
 data Document = Document Title Author [LayoutObj]
 type Title    = Spec

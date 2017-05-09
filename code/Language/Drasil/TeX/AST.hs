@@ -50,6 +50,7 @@ data Spec = E Expr
           | G Greek
           | Sp Special
           | Ref RefType Spec
+          | EmptyS
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.

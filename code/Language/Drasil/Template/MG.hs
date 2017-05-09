@@ -273,7 +273,7 @@ mgLCTraceEntry lcc = [ makeRef (LikelyChange lcc),
                      ]
 
 mgListModules :: [ModuleChunk] -> Sentence
-mgListModules mcs = foldl (:+:) (S "") $ intersperse (S ", ") $
+mgListModules mcs = foldl (:+:) (EmptyS) $ intersperse (S ", ") $
   map (\x -> makeRef $ Module x) mcs
 
 mgUses :: [ModuleChunk] -> Section

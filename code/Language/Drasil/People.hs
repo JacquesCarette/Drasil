@@ -1,6 +1,6 @@
 module Language.Drasil.People (People, Person, person, HasName, name, manyNames) where
 
-import Language.Drasil.Spec (Sentence(S),(+:+), sC)
+import Language.Drasil.Spec (Sentence(S, EmptyS),(+:+), sC)
 
 data Person = Person { _first :: String, _last :: String, _name :: Sentence}
 type People = [Person]
@@ -20,7 +20,7 @@ instance HasName Person where
 manyNames :: (HasName p) => [p] -> Sentence
 manyNames [x,y] = (name x) +:+ (S "and") +:+ (name y)
 manyNames names = nameList names
-  where nameList [] = S ""
+  where nameList [] = EmptyS
         nameList [x] = name x
         nameList [x,y] = (name x) `sC` (S "and") +:+ (name y)
         nameList (x : y : rest) = (name x) `sC` (nameList (y : rest))

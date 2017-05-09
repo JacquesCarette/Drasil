@@ -16,6 +16,8 @@ import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
 
+--FIXME? Use Doc in place of Strings for p_spec/title_spec
+
 genHTML :: DocType -> L.Document -> Doc
 genHTML (Website fn) doc = build fn $ makeDocument doc
 genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
@@ -57,7 +59,6 @@ title_spec (a :/: b)  = brace (p_spec a) ++ "/" ++ brace (p_spec b)
 title_spec HARDNL     = ""
 title_spec s          = p_spec s
 
-
 p_spec :: Spec -> String
 p_spec (E e)      = p_expr e
 p_spec (a :+: b)  = p_spec a ++ p_spec b
@@ -71,6 +72,7 @@ p_spec (G g)      = unPH $ greek g
 p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
 p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
+p_spec EmptyS     = ""
 
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x

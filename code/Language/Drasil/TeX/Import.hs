@@ -106,6 +106,8 @@ replace_divs a        = expr a
 spec :: Sentence -> T.Spec
 spec (S s)     = T.S s
 spec (Sy s)    = T.Sy s
+spec (EmptyS :+: b) = spec b
+spec (a :+: EmptyS) = spec a
 spec (a :+: b) = spec a T.:+: spec b
 spec (G g)     = T.G g
 spec (Sp s)    = T.Sp s
@@ -113,6 +115,7 @@ spec (F f s)   = spec $ accent f s
 spec (P s)     = T.N s
 spec (Ref t r) = T.Ref t (spec r)
 spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
+spec EmptyS    = T.EmptyS
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"

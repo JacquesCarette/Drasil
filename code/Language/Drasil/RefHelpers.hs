@@ -9,9 +9,9 @@ inferName :: Sentence -> Sentence
 inferName (s1 :+: s2) = inferName s1 :+: inferName s2
 inferName (S s1)      = S (firstLetter s1)
 inferName (F _ s)     = S [s]
-inferName (Ref _ _)   = S ""
+inferName (Ref _ _)   = EmptyS
   -- error "Attempting to infer the name an existing reference"
-inferName _           = S "" -- Was Empty.
+inferName _           = EmptyS -- Was Empty.
 
 firstLetter :: String -> String
 firstLetter = map head . words

@@ -18,7 +18,7 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
 -- where should this go?
 unit'2Contents :: Quantity u => u -> Sentence
-unit'2Contents x = maybe (S "") (\y -> Sy (y ^. usymb)) (getUnit x)
+unit'2Contents x = maybe (EmptyS) (\y -> Sy (y ^. usymb)) (getUnit x)
 
 getAcc :: (NamedIdea c) => c -> Sentence
 getAcc = (\(Just x) -> x) . getA

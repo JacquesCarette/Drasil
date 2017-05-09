@@ -55,11 +55,11 @@ misInterfaceSemantics mc = Section (S $ "Interface Semantics")
 misAPSemantics :: MethodChunk -> Section
 misAPSemantics mec = Section (convertName (mec ^. id))
   [ Con $ Enumeration $ Desc
-    [(S "Input", Flat $ foldl (:+:) (S "") $
+    [(S "Input", Flat $ foldl (:+:) (EmptyS) $
         intersperse (S ", ") $ map (\x -> P $ x ^. symbol) (input mec)),
-     (S "Exceptions", Flat $ foldl (:+:) (S "") $
+     (S "Exceptions", Flat $ foldl (:+:) (EmptyS) $
         intersperse (S ", ") $ map (S . show) (exc mec)),
-     (S "Output", Flat $ foldl (:+:) (S "") $
+     (S "Output", Flat $ foldl (:+:) (EmptyS) $
              intersperse (S ", ") $ map (\x -> P $ x ^. symbol) (output mec))
     ]
   ]

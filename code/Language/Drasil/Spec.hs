@@ -31,6 +31,7 @@ data Sentence where
                                     
   -- Direct concatenation of two Specs (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
+  EmptyS :: Sentence
 
 -- Language of unit equations, to define a unit relative
 -- to another
@@ -75,8 +76,8 @@ sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
 (+:+) :: Sentence -> Sentence -> Sentence
-(S "") +:+ b = b
-a +:+ (S "") = a
+EmptyS +:+ b = b
+a +:+ EmptyS = a
 a +:+ b = a :+: S " " :+: b
 
 sC :: Sentence -> Sentence -> Sentence

@@ -203,7 +203,8 @@ needs (N _)     = Math
 needs (G _)     = Math
 needs (Sp _)    = Math
 needs HARDNL    = Text
-needs (Ref _ _)  = Text
+needs (Ref _ _) = Text
+needs (EmptyS)  = Text  
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -230,6 +231,7 @@ spec (Ref t@Assump r) = aref (show t) (spec r)
 spec (Ref t@LC r) = lcref (show t) (spec r)
 spec (Ref t@UC r) = ucref (show t) (spec r)
 spec (Ref t r)   = ref (show t) (spec r)
+spec EmptyS      = empty
 
 symbol_needs :: Symbol -> MathContext
 symbol_needs (Atomic _)          = Text

@@ -9,13 +9,17 @@ import Language.Drasil.NounPhrase
 
 import Prelude hiding (id)
 
+-- | A NamedIdea is a 'Chunk' (has 'id'), which also has a 'term'
+-- and /may/ have an accronym/abbreviation.
 class Chunk c => NamedIdea c where
+  -- | Lens to the term (a noun phrase)
   term :: Simple Lens c NP
+  -- | Provides (Just abbreviation) or Nothing if it does not exist
   getA :: c -> Maybe Sentence
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
 
--- Get short form (if exists), else get term.
+-- | Get short form (if it exists), else get term.
 short :: NamedIdea c => c -> Sentence
 short c = maybe (phrase (c^.term)) (\x -> x) (getA c)
 
@@ -29,9 +33,12 @@ instance NamedIdea NamedChunk where
   term f (NC a b c) = fmap (\x -> NC a x c) (f b)
   getA (NC _ _ c) = c
   
+-- | 'NamedChunk' constructor, takes an id and a term. For NamedChunks
+-- without abbreviations
 nc :: String -> NP -> NamedChunk
 nc i des = NC i des Nothing
 
+-- | 'NamedChunk' constructor for NamedChunks with abbreviations
 nc' :: String -> NP -> String -> NamedChunk
 nc' i t acc = NC i t (Just (S acc))
 
@@ -49,19 +56,26 @@ instance NounPhrase NPNC where
   plural (NPNC _ _ _ d) = plural d
   sentenceCase (NPNC _ _ _ d) = sentenceCase d
   titleCase (NPNC _ _ _ d) = titleCase d
-  
+
+-- | 'NPNC' constructor for those without abbreviations
 npnc :: String -> NP -> NPNC
 npnc i n = NPNC i (phrase n) Nothing n
 
+-- | 'NPNC' constructor for those with abbreviations
 npnc' :: String -> NP -> String -> NPNC
 npnc' i n a = NPNC i (phrase n) (Just $ S a) n
 
 ----------------------
 -- various combinators
+
+-- | Combinator for combining two 'NamedIdea's into one NamedChunk.
+-- /Does not preserve abbreviations/
 compoundterm :: (NamedIdea c, NounPhrase c, NamedIdea d, NounPhrase d) => 
   c -> d -> NamedChunk
 compoundterm t1 t2 = NC (t1^.id ++ t2^.id) (compoundPhrase t1 t2) Nothing
 
+-- | Combinator for combining two 'NPNC's into one.
+-- /Does not preserve abbreviations/
 compoundNPNC :: NPNC -> NPNC -> NPNC
 compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) = 
   NPNC (t1^.id ++ t2^.id) (phrase $ compoundPhrase n1 n2) Nothing 
@@ -71,7 +85,8 @@ compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) =
 -- some kind of type system, which asserts that:
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
---FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
+
+
 for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (phrase $ t2 ^. term)
 
@@ -94,6 +109,7 @@ of_ t1 t2 = nounPhrase''
   (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
   (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
+--FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
 of' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 of' t1 t2 = nounPhrase'' 
   (phrase t1 +:+ S "of" +:+ plural t2)
@@ -101,13 +117,15 @@ of' t1 t2 = nounPhrase''
   (Replace (at_start t1 +:+ S "of" +:+ plural t2))
   (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))
   
+--FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
 with :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 with t1 t2 = nounPhrase''
   (phrase t1 +:+ S "with" +:+ phrase t2)
   (plural t1 +:+ S "with" +:+ plural t2)
   (Replace (at_start t1 +:+ S "with" +:+ phrase t2))
   (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  
-  
+
+--FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase  
 --Case of "T1s with T2", as opposed to the above "T1 with T2"
 with' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 with' t1 t2 = nounPhrase''

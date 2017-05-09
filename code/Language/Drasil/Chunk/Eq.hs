@@ -20,10 +20,12 @@ import Language.Drasil.Space
 import Language.Drasil.NounPhrase (NP, phrase)
 
 -- BEGIN EQCHUNK --
+-- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition where
   EC :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
 
 --Removed named record fields, so we want to not break things for now.
+-- | Returns the defining equation of a 'QDefinition'
 equat :: QDefinition -> Expr 
 equat (EC _ b) = b
   
@@ -80,16 +82,21 @@ instance Quantity E where
 --FIXME: Space hack
 --TODO: Create a version which doesn't use ConVar, but instead only 
 --     NamedIdeas if we decide the "new" unital needs only a named idea
+
+-- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
+-- unit, and defining equation.
 fromEqn :: Unit u => String -> NP -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
   EC (ucFromVC (cv (ccStSS nm desc (phrase desc)) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack
+-- | Same as fromEqn, but has no units.
 fromEqn' :: String -> NP -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
   EC (cv (ccStSS nm desc (phrase desc)) symb Rational) eqn
-
-
+  
+-- | Returns a 'VarChunk' from a 'QDefinition'.
+-- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
 getVC qd = vc (qd ^. id) (qd ^. term) (qd ^. symbol) (qd ^. typ)

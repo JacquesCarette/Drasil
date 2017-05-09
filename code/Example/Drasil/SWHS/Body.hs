@@ -107,12 +107,15 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
-  S "program will be referred to as" +:+ (phrase $ progName ^. term) +:+
+  S "program will be referred to as" +:+ (titleize $ progName ^. term) +:+
   S "(" :+: (short progName) :+: S "). This" +:+ phrase section_ +:+ S "explains" +:+
   S "the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
   S ", the" +:+ phrase scope +:+ S "of the" +:+ phrase system :+: S ", the" +:+
   phrase organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
   plural characteristic +:+ S "of the" +:+ S "intended readers.")]
+
+-- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating PCM"
+-- which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 

@@ -184,7 +184,7 @@ tuIntro x = Paragraph $ foldr (+:+) (S "") (map tuI x)
 tuI :: TUIntro -> Sentence
 tuI System  = (S "The unit system used throughout is SI (Syst" :+: 
   (F Grave 'e') :+: S "me International d'Unit" :+: (F Acute 'e') :+: S "s).")
-tuI Purpose = S "For each unit, the table lists the symbol," +:+
+tuI TUPurpose = S "For each unit, the table lists the symbol," +:+
   S "a description and the SI name."
 tuI Derived = S "In addition to the basic units, several derived units are" +:+ 
   S "also used."

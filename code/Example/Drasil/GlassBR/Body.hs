@@ -559,11 +559,11 @@ s7_1_list =
     [Flat $ (phrase $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
     sParen (makeRef (Definition (Data hFromt)))] ++
     [Flat $ (titleize $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
-    sParen (makeRef (Definition (Theory loadDF)))]++
+    sParen (makeRef (Definition (Data loadDF)))]++
     [Flat $ (at_start $ strDisFac ^. term) +:+ sParen (P $ strDisFac ^. symbol) +:+ 
-    sParen (makeRef (Definition (Theory strDisFac)))]++
+    sParen (makeRef (Definition (Data strDisFac)))]++
     [Flat $ (titleize $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol) +:+ 
-    sParen (makeRef (Definition (Theory nonFL)))]++
+    sParen (makeRef (Definition (Data nonFL)))]++
     [Flat $ (phrase $ gTF ^. term) +:+ sParen(P $ gTF ^. symbol) +:+ 
     sParen (makeRef (Definition (Data glaTyFac)))] ++
     map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 

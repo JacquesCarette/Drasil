@@ -106,7 +106,7 @@ s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
   S "of the" +:+ (introduceAbb srs) +:+
   S "for a" +:+ (phrase ssa) +:+ S "problem. The developed program" +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+
-  S "program. This section explains the purpose of this document," +:+
+  S "program. This section explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
   S "the scope of the system, the organization of the document and" +:+
   S "the" +:+ (phrase characteristics) +:+ S "of the intended readers."
 
@@ -114,7 +114,7 @@ s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
 s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
 
 s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines the" +:+
-  S "critical slip surface, and it's respective factor of safety" +:+
+  (phrase crtSlpSrf) `sC` S "and it's respective factor of safety" +:+
   S "as a method of assessing the stability of a slope design." +:+
   S "The program is intended to be used as an educational tool for" +:+
   S "introducing slope stability issues, and will facilitate the" +:+
@@ -162,7 +162,7 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "require. The instance models provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
   S "Morgenstern Price Analysis. The goal statements are refined" +:+
-  S "to the theoretical models" +:+ (sParen . makeRef) sec_TMs +:+ 
+  S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
   S "and instance models" +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
@@ -199,18 +199,18 @@ s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
 s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" +:+
-  S "to evaluate the factor of safety of a slopes slip surface and" +:+ --FIXME apostrophe on "slope's"
-  S "to calculate the displacement that the slope will experience."
+  S "to evaluate the factor of safety of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
+  S "and to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
 s4_1_1 = Sub $ Section (titleize terminology) [s4_1_1_list]
 
 s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "Factor of Safety", 
-      S "Stability metric. How likely a slip surface is to experience" +:+
+      S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
       S "failure through slipping."), 
   (titleize crtSlpSrf, 
-      S "Slip surface of the slope that has the lowest global factor of" +:+
+      (at_start slpSrf) +:+ S "of the slope that has the lowest global factor of" +:+
       S "safety, and therefore most likely to experience failure."),
   (S "Stress", 
       S "Forces that are exerted between planes internal to a larger" +:+
@@ -275,8 +275,8 @@ s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water" +:+
 
 s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "Evaluate local and global factors of safety along" +:+
-            S "a given slip surface."),
-  (S "GS2", S "Identify the critical slip surface for the slope" `sC` 
+            S "a given" +:+. phrase slpSrf),
+  (S "GS2", S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
             S "with the lowest Factor of Safety."),
   (S "GS3", S "Determine the displacement of the slope.")
   ]
@@ -295,14 +295,14 @@ s4_2_p1 = Con $ Paragraph $ S "The instance models that govern" +:+
 s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
 
 s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
-  S "original problem and helps in developing the theoretical" +:+
-  S "model by filling in the missing information for the" +:+. (phrase physicalSystem) +:+
+  S "original problem and helps in developing the" +:+ (phrase thModel) +:+
+  S "by filling in the missing information for the" +:+. (phrase physicalSystem) +:+
   S "The numbers given in the square brackets refer to" +:+
   S "the data definition, or the instance model, in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
 s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
-  (S "A1", S "The slip surface is concave with respect to" +:+
+  (S "A1", S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the slope surface. The" +:+ P (coords ^. symbol) +:+ 
            S "coordinates of the failure surface follow a" +:+
            S "monotonic function."),
@@ -325,9 +325,9 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "and the Coulomb sliding law."),
   (S "A7", S "The stress-strain curve for interslice" +:+
            S "relationships is linear with a constant slope."),
-  (S "A8", S "The slope and slip surface extends far into" +:+
-           S "and out of the geometry (z coordinate). This" +:+
-           S "implies plane strain conditions, making 2D" +:+
+  (S "A8", S "The slope and" +:+ (phrase slpSrf) +:+ S "extends far" +:+
+           S "into and out of the geometry (z coordinate)." +:+
+           S "This implies plane strain conditions, making 2D" +:+
            S "analysis appropriate."),
   (S "A9", S "The effective normal stress is large enough" +:+
            S "that the resistive shear to effective normal" +:+
@@ -383,34 +383,34 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R1" , S "Read the input file, and store the" +:+
             S "data. Necessary input data summarized in" +:+.
             makeRef table_inputdata),
-  (S "R2" , S "Generate potential critical slip" +:+ 
-            S "surface's for the input slope."),
-  (S "R3" , S "Test the slip surfaces to determine" +:+
+  (S "R2" , S "Generate potential" +:+ (phrase crtSlpSrf) :+:
+            S "'s for the input slope."),
+  (S "R3" , S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
             S "if they are physically realizable based" +:+
             S "on a set of pass or fail criteria."),
-  (S "R4" , S "Prepare the slip surfaces for a method" +:+
+  (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a method" +:+
             S "of slices or limit equilibrium analysis."),
-  (S "R5" , S "Calculate the factors of safety of the" +:+
-            S "slip surfaces."),
+  (S "R5" , S "Calculate the factors of safety of the" +:+.
+            (plural slpSrf)),
   (S "R6" , S "Rank and weight the slopes based on their" +:+
-            S "factor of safety, such that a slip surface" +:+
+            S "factor of safety, such that a" +:+ (phrase slpSrf) +:+
             S "with a smaller factor of safety has a larger" +:+
             S "weighting."),
-  (S "R7" , S "Generate new potential critical slip" +:+
-            S "surfaces based on previously analysed" +:+
-            S "slip surfaces with low factors of safety."),
+  (S "R7" , S "Generate new potential" +:+ (plural crtSlpSrf) +:+
+            S "based on previously analysed" +:+ (plural slpSrf) +:+
+            S "with low factors of safety."),
   (S "R8" , S "Repeat" +:+ plural requirement +:+ S "R3 to R7 until the" +:+
             S "minimum factor of safety remains approximately" +:+
             S "the same over a predetermined number of" +:+
-            S "repetitions. Identify the slip surface that" +:+
-            S "generates the minimum factor of safety as" +:+
-            S "the critical slip surface."),
-  (S "R9" , S "Prepare the critical slip surface for" +:+
+            S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
+            S "that generates the minimum factor of safety as" +:+
+            S "the" +:+. (phrase crtSlpSrf)),
+  (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
             S "method of slices or limit equilibrium analysis."),
   (S "R10", S "Calculate the factor of safety of the" +:+
-            S "critical slip surface using the Morgenstern" +:+
+            (phrase crtSlpSrf) +:+ S "using the Morgenstern" +:+
             S "price method."),
-  (S "R11", S "Display the critical slip surface and the" +:+
+  (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
             S "slice element displacements graphically. Give" +:+
             S "the values of the factors of safety calculated" +:+
             S "by the Morgenstern price method.")

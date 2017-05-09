@@ -60,7 +60,7 @@ glassBR_srs' = mkDoc mkSRS glassSystInfo
 
 --FIXME: Should "blast risk" be its own chunk?
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg intro [TUnits, tsymb (Paragraph $ S ""), TAandA]) :
+mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
   
 glassSystInfo :: SystemInformation

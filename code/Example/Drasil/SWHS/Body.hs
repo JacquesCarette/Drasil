@@ -638,7 +638,7 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +
   phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
   S "is expressed in mathematical terms. It uses concrete" +:+
   plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract" +:+ plural symbol +:+ S "in the" +:+ plural model +:+
+  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+ plural model +:+
   S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
@@ -816,7 +816,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
 
 s4_2_6 = Section (S "Data" +:+ titleize' constraint) [Con s4_2_6_intro]
 
-s4_2_6_intro = Paragraph (S titleize' table_ +:+ S "1 and 2 show the data" +:+
+s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the data" +:+
   plural constraint +:+ S "on the input and output variables," +:+
   S "respectively. The column for" +:+ phrase physical +:+ plural constraint +:+
   S "gives the" +:+ phrase physical +:+ S "limitations on the range of" +:+
@@ -941,7 +941,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 --
   Enumeration (Simple [((short requirement) :+: S "3", Flat 
   (S "Verify that the inputs satisfy the required" +:+ phrase physical +:+
-  plural constraint +:+ S "shown in" +:+ titleize table +:+ S "1.")),
+  plural constraint +:+ S "shown in" +:+ titleize table_ +:+ S "1.")),
 --
   ((short requirement) :+: S "4", Flat (S "Output the input" :+: 
   S " quantities and derived quantities in the following list: "  :+:

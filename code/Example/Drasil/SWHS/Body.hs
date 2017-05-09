@@ -84,23 +84,6 @@ mgBod :: [Section]
 
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
-
-
-
--- Still here as a reference, but not to be used
---Paragraph (S "The table that follows summarizes the" +:+
---  S "symbols used in this" +:+ phrase document +:+ S "along with their" +:+
---  S "units. The choice of symbols was made to be consistent" +:+
---  S "with the" +:+ (sLower (phrase $ heat_trans ^. term)) +:+
--- S "literature and with existing documentation for" +:+ (sLower
--- (phrase $ progName ^. term)) :+: S "s. The symbols are listed in" +:+.
---  S "alphabetical order")
-
--- "heat transfer" and program name are specific, but otherwise this paragraph 
--- is general. If it were to be automated, there is a sentence in the game 
--- physics example about how symbols for vectors are bold, which would be 
--- useful to include in the automated paragraph.
-
   
 -- This section name and table structure are same between all examples.
   
@@ -120,15 +103,15 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (sLower (phrase $ thermal_energy ^. term)) +:+ S "as" +:+
   (sLower (phrase $ latent_heat ^. term)) :+: S ", which" +:+
   S "allows higher" +:+ (sLower (phrase $ thermal_energy ^. 
-  term)) +:+. S "storage capacity per unit weight"),
-  Paragraph (S " The following section provides an overview of the" +:+ 
-  titleize srs +:+ S "(" :+: (short srs) :+:
+  term)) +:+. S "storage capacity per" +:+ phrase unit_ +:+ S "weight"),
+  Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
+  S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
   S "program will be referred to as" +:+ (phrase $ progName ^. term) +:+
-  S "(" :+: (short progName) :+: S "). This section explains" +:+
+  S "(" :+: (short progName) :+: S "). This" +:+ phrase section_ +:+ S "explains" +:+
   S "the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
-  S ", the" +:+ phrase scope +:+ S "of the system, the" +:+ phrase
-  organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
+  S ", the" +:+ phrase scope +:+ S "of the" +:+ phrase system :+: S ", the" +:+
+  phrase organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
   plural characteristic +:+ S "of the" +:+ S "intended readers.")]
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
@@ -178,7 +161,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
 --How to italicize words in sentence?
 --How to cite?
 
-s2_2 = Section (phrase scope +:+ S "of" +:+ titleize' requirement) [Con s2_2_contents]
+s2_2 = Section (titleize' scpOfReq) [Con s2_2_contents]
 
 s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   plural requirement +:+ S "is limited to" +:+ (sLower (phrase $ thermal_analysis ^.
@@ -211,7 +194,7 @@ s2_3 = Section (titleize organization +:+ S "of" +:+ titleize document)
 
 s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
-  S "for scientific computing software proposed by [citation] and" +:+
+  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+
   S "[citation]. The presentation follows the standard" +:+
   S "pattern for presenting" +:+ plural goalStmt `sC`
   plural thModel `sC`
@@ -254,9 +237,10 @@ s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1,
   Sub s3_2]
 
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
-  phrase general +:+ phrase information +:+ S "about the system, identifies" +:+
-  S "the interfaces between the system and its environment, and describes the user" +:+
-  plural characteristic +:+ S "and the system" +:+ plural constraint :+: S ".")
+  phrase general +:+ phrase information +:+ S "about the" +:+ phrase system :+:
+  S ", identifies" +:+ S "the interfaces between the" +:+ phrase system +:+
+  S "and its environment, and describes the user" +:+ plural characteristic +:+
+  S "and the" +:+ phrase system +:+ plural constraint :+: S ".")
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -269,9 +253,10 @@ s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+:
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
-s3_2 = Section (S "System" +:+ titleize' constraint) [Con s3_2_contents]
+s3_2 = Section (titleize system +:+ titleize' constraint) [Con s3_2_contents]
 
-s3_2_contents = Paragraph (S "There are no system" +:+ plural constraint :+: S ".")
+s3_2_contents = Paragraph (S "There are no" +:+ phrase system +:+
+  plural constraint :+: S ".")
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
@@ -308,11 +293,11 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
 
 --  section is very different between all examples
 
-s4_1_1 = Section (S "Terminology and" +:+ titleize' definition)
+s4_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition)
  [Con s4_1_1_intro, Con s4_1_1_bullets]
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
-  S "that are used in the subsequent sections and their meaning," +:+
+  S "that are used in the subsequent" +:+ plural section_ +:+ S "and their meaning," +:+
   S "with the" +:+ phrase purpose +:+ S "of reducing ambiguity and making" +:+
   S "it easier to correctly understand the" +:+ plural requirement :+: S ":")
 
@@ -501,8 +486,8 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   S "[IM2, IM4]")),
 --
   ((short assumption) :+: S "14", Flat (S "The operating" +:+
-  (phrase $ temp ^. term) +:+ S "range of the system is" +:+ S "such" +:+
-  S "that the" +:+ (sLower ((phrase $ water ^. term))) +:+
+  (phrase $ temp ^. term) +:+ S "range of the" +:+ phrase system +:+
+  S "is such that the" +:+ (sLower ((phrase $ water ^. term))) +:+
   S "is always in" +:+ (liquid ^. defn) :+: S ". That is," +:+
   S "the" +:+ (phrase $ temp ^. term) +:+ S "will not drop below the" +:+
   (phrase $ temp_melt ^. term) +:+ S "of" +:+ (sLower 
@@ -652,8 +637,8 @@ s4_2_5 = Section (titleize' inModel) ((map Con s4_2_5_intro) ++
 s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +:+
   phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
   S "is expressed in mathematical terms. It uses concrete" +:+
-  S "symbols defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract symbols in the" +:+ plural model +:+
+  plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
+  S "to replace the abstract" +:+ plural symbol +:+ S "in the" +:+ plural model +:+
   S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
@@ -831,7 +816,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
 
 s4_2_6 = Section (S "Data" +:+ titleize' constraint) [Con s4_2_6_intro]
 
-s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
+s4_2_6_intro = Paragraph (S titleize' table_ +:+ S "1 and 2 show the data" +:+
   plural constraint +:+ S "on the input and output variables," +:+
   S "respectively. The column for" +:+ phrase physical +:+ plural constraint +:+
   S "gives the" +:+ phrase physical +:+ S "limitations on the range of" +:+
@@ -845,7 +830,7 @@ s4_2_6_intro = Paragraph (S "Tables 1 and 2 show the data" +:+
   S "with which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the input if" +:+
   S "one were performing an uncertainty quantification exercise. (The" +:+
-  S "tables are left out because features they should use are" +:+
+  plural tables +:+ S "are left out because features they should use are" +:+
   S "not yet implemented in Drasil.)")
 
 -- General paragraph, repeated between examples. Can be abstracted out.
@@ -956,7 +941,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 --
   Enumeration (Simple [((short requirement) :+: S "3", Flat 
   (S "Verify that the inputs satisfy the required" +:+ phrase physical +:+
-  plural constraint +:+ S "shown in Table 1.")),
+  plural constraint +:+ S "shown in" +:+ titleize table +:+ S "1.")),
 --
   ((short requirement) :+: S "4", Flat (S "Output the input" :+: 
   S " quantities and derived quantities in the following list: "  :+:

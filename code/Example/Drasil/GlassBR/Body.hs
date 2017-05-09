@@ -88,7 +88,7 @@ s2_intro = Paragraph $
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview of the" +:+ 
   titleize srs +:+ sParen (short srs) +:+ S "for" +:+. (gLassBR ^. defn) +:+
   S "This" +:+ phrase section_ +:+ S "explains the" +:+ phrase purpose +:+ S "of the" +:+ phrase document +:+
-  S "is designed to fulfil, the scope of the" +:+ plural requirement +:+ S "and" +:+
+  S "is designed to fulfil, the" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+ S "and" +:+
   S "the" +:+ phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ phrase document +:+ S "is based on and" +:+.
   S "intended to portray"
 
@@ -344,7 +344,7 @@ s6_2_1_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+ S "and helps in developing the" 
   +:+ (phrase thModel) +:+ 
   S "[" :+: (short thModel) :+: S "] by filling in the missing" +:+ phrase information
-  +:+ S "for the" +:+ phrase physicalSystem :+: S ". The numbers given in the" +:+
+  +:+ S "for the" +:+. phrase physicalSystem :+: S "The numbers given in the" +:+
   S "square brackets refer to the" +:+ 
   (phrase dataDefn) +:+
   S "[" :+: (short dataDefn) :+: S "], or" +:+

@@ -108,6 +108,7 @@ coil        = npnc "coil"           (cn' "coil")
 tank        = npnc "tank"           (cn' "tank")
 water       = npnc "water"          (cn "water")
 ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase, just a hack to get RefSec to work
+
 ----Acronyms-----
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
@@ -138,8 +139,8 @@ t1descr =
   --TODO: Finish this description and do it better. I need to
   --  figure out the best way to encode this information.
   
-srs_swhs :: ConceptChunk
+srs_swhs :: ConceptChunk -- Used to make the title of the paper
   
 srs_swhs = dcc "srs_swhs" (nounPhraseSP 
   "Solar Water Heating Systems")
-  "Software Requirements Specification for Solar Water Heating Systems"
+  "SWHS"

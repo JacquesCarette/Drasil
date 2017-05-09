@@ -60,6 +60,7 @@ data DocSection = Verbatim Section | RefSec RefSec
 data TSIntro = TypogConvention [TConvention]
              | SymbOrder
              | SymbConvention [Literature]
+             | TSPurpose
              
 data TConvention = Vector Emphasis
                  | Verb Sentence
@@ -79,7 +80,7 @@ type Topic = NWrapper
 
 data TUIntro = System
              | Derived
-             | Purpose
+             | TUPurpose
 
 -- Lens (lookup) functions (currently for TSymb)
 
@@ -151,6 +152,8 @@ tsI [] = S ""
 tsI ((TypogConvention ts):xs) = typogConvention ts +:+ tsI xs
 tsI (SymbOrder:xs) = S "The symbols are listed in alphabetical order." +:+ tsI xs
 tsI ((SymbConvention ls):xs) = symbConvention ls +:+ tsI xs
+tsI (TSPurpose:xs) = S "The table that follows summarizes the symbols used in" +:+
+  S "this document along with their units." +:+ tsI xs
 
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"

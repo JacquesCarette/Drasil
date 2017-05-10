@@ -4,7 +4,6 @@ module Language.Drasil.Spec where
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Symbol
 import Data.Char (toLower)
-import Data.Drasil.Plurals (irregularPlurals, pLook)
 
 data Accent = Grave | Acute deriving Eq
 

@@ -18,8 +18,6 @@ import Data.List (nub, intersperse)
 import Data.Maybe (fromJust, isNothing)
 import Data.Drasil.Concepts.Documentation (mg)
 
-type Topic = NWrapper
-
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
   Document (titleize mg +:+ S "for" +:+ (titleize (sys ^. term))) authors secs

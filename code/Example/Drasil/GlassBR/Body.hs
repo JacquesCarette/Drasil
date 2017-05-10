@@ -8,9 +8,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (matrix, traceyMatrix, graph, calculation)
 import Prelude hiding (id)
 
-import           Drasil.TableOfUnits
 import           Drasil.TableOfSymbols
-import           Drasil.TableOfAbbAndAcronyms
 import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial

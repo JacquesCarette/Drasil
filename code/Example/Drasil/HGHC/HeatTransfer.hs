@@ -33,7 +33,7 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq
 
-hghc, nuclearPhys :: NPNC
+hghc, nuclearPhys, fp :: NPNC
 hghc = npnc "hghc" (cn "tiny")
 nuclearPhys = npnc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = npnc "fp" (cn "FP")

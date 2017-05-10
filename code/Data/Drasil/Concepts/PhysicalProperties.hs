@@ -13,12 +13,12 @@ ctrOfMass = dcc "ctrOfMass" (cn "centre of mass") --FIXME: Plural?
   "The mean location of the distribution of mass of the object."
 
 density = dcc "density" (cnIES "density") "mass per unit volume"
-diameter = dcc "diameter" (cn' "diameter") ""
+diameter = dcc "diameter" (cn' "diameter") "any straight line segment that passes through the center of the circle and whose endpoints lie on the circle."
 len = dcc "length" (cn' "length")
   ("the straight-line distance between two points along an object. " ++
   "Typically used to represent the size of an object from one end to the other.")
 mass = dcc "mass" (cn''' "mass") "the quantity of matter in a body"
-vol = dcc "volume" (cn' "volume") ""
+vol = dcc "volume" (cn' "volume") "the amount of space that a substance or object occupies."
 
   
 --TODO: Add density

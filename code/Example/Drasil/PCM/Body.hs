@@ -13,6 +13,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Units.Thermodynamics
+import Data.Drasil.Quantities.Thermodynamics (temp)
 
 import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage
@@ -54,7 +55,7 @@ s4_1_intro = Paragraph $
             (getAcc sWHS) +:+ S "is a computer program developed to investigate" +:+
            S "the heating of" +:+ (phrase $ water ^. term) +:+ S "in a" +:+ (phrase $ sWHT ^. term) :+: S "."
 
-s4_1_1 = Section (S "Terminology and" +:+ (titleize' $ definition ^. term)) [Con s4_1_1_intro,
+s4_1_1 = Section ((titleize $ terminology ^. term) +:+ S "and" +:+ (titleize' $ definition ^. term)) [Con s4_1_1_intro,
                                                       Con s4_1_1_bullets]
   
 s4_1_1_intro = Paragraph $
@@ -87,7 +88,7 @@ s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro,
                                                     Con s4_1_3_list]
 
 s4_1_3_intro = Paragraph $
-           S "Given the temperature of the" +:+ (phrase $ coil ^. term) :+: S ", initial temperature of the" +:+ (phrase $ water ^. term) :+: S "," +:+
+           S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) :+: S ", initial" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) :+: S "," +:+
            S "and material properties, the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [

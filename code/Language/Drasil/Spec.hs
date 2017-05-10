@@ -85,3 +85,6 @@ a `sC` b = a :+: S "," +:+ b
 
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
+
+(+:) :: Sentence -> Sentence -> Sentence
+a +: b = a +:+ b :+: S ":"

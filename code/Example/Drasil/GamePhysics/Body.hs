@@ -116,7 +116,7 @@ s2_intro = [para1_s2_intro, para2_s2_intro]
 s2_1 :: Section
 s2_1_intro :: [Contents]
 
-s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
+s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
@@ -148,8 +148,7 @@ s2_1_intro = [para1_s2_1_intro, para2_s2_1_intro]
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section (S "Scope of" +:+ titleize' requirement)
-  [Con s2_2_intro]
+s2_2 = Section (titleize scpOfReq) [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ foldlSent 
   [S "The scope of the", plural requirement, S "includes the",
@@ -183,7 +182,7 @@ s2_3_intro = foldlSent
 s3 :: Section
 s3_intro :: Contents
 
-s3 = Section (S "General" +:+ titleize systemdescription) [Con s3_intro, Sub s3_1,
+s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1,
   Sub s3_2]
 
 --FIXME: This can be generalized to use more chunks
@@ -200,7 +199,7 @@ s3_intro = Paragraph $ foldlSent
 s3_1 :: Section
 s3_1_intro :: Contents
 
-s3_1 = Section (S "User Characteristics") [Con s3_1_intro]
+s3_1 = Section (S "User" +:+ titleize' characteristic) [Con s3_1_intro]
 
 s3_1_intro = Paragraph $ foldlSent 
   [S "The end user of", (short chipmunk),
@@ -214,7 +213,7 @@ s3_1_intro = Paragraph $ foldlSent
 s3_2 :: Section
 s3_2_intro :: Contents
 
-s3_2 = Section (S "System Constraints") [Con s3_2_intro]
+s3_2 = Section (titleize' systemConstraint) [Con s3_2_intro]
 
 s3_2_intro = Paragraph $ S "There are no system constraints."
 
@@ -236,7 +235,7 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 s4_1 :: Section
 s4_1_intro :: Contents
 
-s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
+s4_1 = Section (titleize problemDescription) [Con s4_1_intro, Sub s4_1_1,
   Sub s4_1_2]
 
 s4_1_intro = Paragraph $ foldlSent 

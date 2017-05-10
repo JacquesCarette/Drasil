@@ -27,8 +27,8 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 -- concepts relating to the templates and their contents
 
 appendix, characteristic, characteristics, condition, constraint_, connection, definition,
-  dependency, description, document, figure, general, information, introduction, 
-  model, name_, organization, physical, problem, purpose, quantity, reference, scope,
+  dependency, description, design, document, figure, general, information, introduction, 
+  model, name_, organization, physical, problem, program, purpose, quantity, reference, scope,
   section_, solution, specific, specification, symbol_, system, table_, 
   terminology, theory, unit_, units_, user :: NPNC
 
@@ -41,6 +41,7 @@ connection      = npnc "connection"     (cn' "connection")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
+design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
 figure          = npnc "figure"         (cn' "figure")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
@@ -51,6 +52,7 @@ name_           = npnc "name"           (cn' "name")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
+program         = npnc "program"        (cn' "program")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")

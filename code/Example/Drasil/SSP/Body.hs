@@ -104,26 +104,26 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) 
 
 s2_p2 = Con $ Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "provides an overview of the" +:+ (introduceAbb srs) +:+
-  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed program" +:+
-  S "will be referred to as the" +:+ (introduceAbb ssa) +:+
-  S "program. This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
+  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+ (phrase program) +:+
+  S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
+  (phrase program) +:+ S "This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
   S "the scope of the system, the organization of the document and" +:+
   S "the" +:+ (phrase characteristics) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
 
-s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines the" +:+
+s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ (phrase program) +:+  S "determines the" +:+
   (phrase crtSlpSrf) `sC` S "and it's respective" +:+ (phrase $ fs_rc ^. term) +:+
-  S "as a method of assessing the stability of a slope design." +:+
-  S "The program is intended to be used as an educational tool for" +:+
+  S "as a method of assessing the stability of a slope" +:+. (phrase design) +:+
+  S "The" +:+ (phrase program) +:+ S "is intended to be used as an educational tool for" +:+
   S "introducing slope stability issues, and will facilitate the" +:+
-  S "analysis and design of a safe slope."
+  S "analysis and" +:+ (phrase design) +:+ S "of a safe slope."
 
 s2_1_p2 = Con $ Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
-  (phrase vav) +:+ S "plan. The design" +:+ (phrase document) +:+ S "will show how the" +:+
+  (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+ S "will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
   S "numerical algorithms and programming environment. The" +:+
   (phrase vav) +:+ S "plan will show the steps that will" +:+
@@ -133,7 +133,7 @@ s2_1_p2 = Con $ Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used a
   S "the actual development process is not  constrained in any way. Even when" +:+
   S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements point" +:+
   S "out, the most logical way to present the documentation is still to" +:+
-  S "fake a rational design process."
+  S "fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
 s2_2 = Sub $ Section (titleize scpOfReq) [s2_2_p1]
@@ -198,7 +198,7 @@ s4_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents t
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer program developed" +:+
+s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase program) +:+ S "developed" +:+
   S "to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
   S "and to calculate the displacement that the slope will experience."
 
@@ -433,7 +433,7 @@ s5_2 = Sub $ Section (S "Nonfunctional" +:+ (titleize' requirement)) [s5_2_p1]
 
 s5_2_p1 = Con $ Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+
-  S "are secondary program priorities to correctness," +:+
+  S "are secondary" +:+ (phrase program) +:+ S "priorities to correctness," +:+
   S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --

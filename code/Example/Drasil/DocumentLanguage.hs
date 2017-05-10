@@ -32,7 +32,7 @@ data SystemInformation where
 -- use a lookup of some sort from their internal (Drasil) ids.
 -- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
 -- NP is built into NamedIdea.
- SI :: (NamedIdea a, NamedIdea b, NounPhrase b, HasName c, Unit d,
+ SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
   Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g) => {
   _sys :: a,
   _kind :: b,
@@ -94,12 +94,12 @@ type DocDesc = [DocSection]
 -- 
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
-  (kind `for'''` sys) (manyNames authors) (mkSections si l)
+  (kind `for` sys) (manyNames authors) (mkSections si l)
 
 --When we want to use the short form for titles.  
-mkDoc' :: DocDesc -> SystemInformation -> Document
-mkDoc' l si@(SI sys kind authors _ _ _ _) = Document 
-  (kind `for''` sys) (manyNames authors) (mkSections si l)
+mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
+mkDoc' l comb si@(SI sys kind authors _ _ _ _) = Document 
+  ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l

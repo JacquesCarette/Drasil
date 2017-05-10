@@ -17,8 +17,8 @@ cent_mass :: NP --FIXME: Need to be able to cap plural.
 cent_mass = nounPhrase' "centre of mass" "centres of mass" 
   (Replace (S "centre of mass"))
 
-centreMass    = commonINP "centreMass" cent_mass "CM"
-twoD          = commonINP "twoD" (pn "Two-Dimensional") "2D"
+centreMass    = commonINP "centreMass" cent_mass              "CM"
+twoD          = commonINP "twoD"       (pn "Two-Dimensional") "2D"
 
 chipmunk :: NPNC
 chipmunk    = npnc' "chipmunk" (pn "Chipmunk2D game physics library") "Chipmunk2D" 

@@ -26,18 +26,24 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-characteristic, characteristics, condition, constraint_, definition, dependency, description, document, general,
-  information, introduction, model, name_, organization, physical, problem, purpose, reference, scope,
-  section_, solution, specific, specification, symbol_, system, table_, terminology, theory, unit_, units_ :: NPNC
+appendix, characteristic, characteristics, condition, constraint_, connection, definition,
+  dependency, description, design, document, figure, general, information, introduction, 
+  model, name_, organization, physical, problem, program, purpose, quantity, reference, scope,
+  section_, solution, specific, specification, symbol_, system, table_, 
+  terminology, theory, unit_, units_, user :: NPNC
 
+appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
+connection      = npnc "connection"     (cn' "connection")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
+design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
+figure          = npnc "figure"         (cn' "figure")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 information     = npnc "information"    (cn "information")
 introduction    = npnc "introduction"   (cn' "introduction")
@@ -46,7 +52,9 @@ name_           = npnc "name"           (cn' "name")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
+program         = npnc "program"        (cn' "program")
 purpose         = npnc "purpose"        (cn' "purpose")
+quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
 scope           = npnc "scope"          (cn' "scope")
 section_        = npnc "section"        (cn' "section")
@@ -60,7 +68,7 @@ terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 unit_           = npnc "unit"           (cn' "unit")
 units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
-
+user            = npnc "user"           (cn' "user")
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
 
@@ -75,8 +83,9 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
 
-characteristicsSpecification, generalSystemDescription, physicalSystem, problemDescription,
-  specificsystemdescription, systemdescription, systemConstraint :: NPNC
+characteristicsSpecification, generalSystemDescription, physicalSystem, 
+  problemDescription, specificsystemdescription, systemdescription, 
+  systemConstraint, userCharacteristic :: NPNC
   
 characteristicsSpecification = compoundNPNC characteristics specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -85,3 +94,4 @@ problemDescription           = compoundNPNC problem description
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint_
+userCharacteristic           = compoundNPNC user characteristic

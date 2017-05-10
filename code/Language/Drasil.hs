@@ -24,7 +24,7 @@ module Language.Drasil (
   , commonINP, CINP
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, NPNC, short, nc, nc', npnc
-  , compoundterm, for, for', for'', for''', for'''', of_, compoundNPNC, npnc', with, with'
+  , compoundterm, for, for', for'', of_, compoundNPNC, npnc', with, with'
   -- Chunk.Constrained
   , Constrained(..)
   -- Chunk.Eq
@@ -51,7 +51,7 @@ module Language.Drasil (
   , UWrapper, uw
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sMap, sLower, sParen
-  , (+:+), (+:+.), sC
+  , (+:+), (+:+.), sC, (+:)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnIS, nounPhrase, nounPhrase', at_start, at_start'
@@ -78,7 +78,7 @@ module Language.Drasil (
   -- Template.DD
   , makeDD
   --Template.MG
-  , mgDoc, mgDoc'
+  , mgDoc, mgDoc', mgDoc''
   -- Generate
   , gen, genCode
   -- People
@@ -118,13 +118,13 @@ import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
-                              sMap, sLower, sParen, sC, (+:+), (+:+.),)
+                              sMap, sLower, sParen, sC, (+:+), (+:+.), (+:))
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Template.DD
-import Language.Drasil.Template.MG (mgDoc, mgDoc')
+import Language.Drasil.Template.MG (mgDoc, mgDoc', mgDoc'')
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames)

@@ -496,7 +496,7 @@ s7_1_list =
     +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
     (phrase $ blast ^. term))]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
-  ++ (map qs [glass_type,pb_tol,tNT])) (\x -> phrase $ x ^.term)),
+  ++ (map qs [glass_type,pb_tol,tNT])) (\x -> at_start $ x ^.term)),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 --  [(\ch -> P (ch ^. symbol)),  
 --   (\ch -> maybeUnits $ ch ^. unit'),

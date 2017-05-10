@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space, surface)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-
+import Data.Drasil.Utils (foldle, foldlSent)
 import Data.Drasil.Quantities.Physics (restitutionCoef)
 
 import Drasil.SpecificSystemDescription
@@ -65,18 +65,6 @@ mgBod :: [Section]
 -- it makes it easier to test between the two different versions as changes
 -- are introduced. Once the SRS is entirely switched to docLang, the redundant
 -- sections should be removed.
-
---fold helper functions applies f to all but the last element, applies g to 
---last element and the accumulator
-foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
-foldle _ _ z []     = z
-foldle _ g z [x]    = g z x
-foldle f g z [x,y]  = g (f z x) y
-foldle f g z (x:xs) = foldle f g (f z x) xs
-
--- partial function application of foldle for sentences specifically
-foldlSent :: [Sentence] -> Sentence
-foldlSent = foldle (+:+) (+:+.) EmptyS
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --

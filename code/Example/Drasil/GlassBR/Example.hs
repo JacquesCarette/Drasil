@@ -133,7 +133,7 @@ tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
 lRe         = makeVC "lRe" (nounPhraseSP "load resistance") (Atomic "LR")
 loadSF      = makeVC "loadSF" (nounPhraseSP "load share factor") (Atomic "LSF")
 ar          = makeVC "ar" (nounPhraseSP "aspect ratio") (Atomic "AR")
-ar_max      = makeVC "ar_max" (nounPhraseSP "maximum aspect ratio") -- originally "Maximum Aspect Ratio"
+ar_max      = makeVC "ar_max" (nounPhraseSP "maximum aspect ratio")
   (sub (ar ^. symbol) (Atomic "max"))
 ar_min      = makeVC "ar_min" (nounPhraseSP "minimum aspect ratio")
   (sub (ar ^. symbol) (Atomic "min"))
@@ -273,7 +273,7 @@ glassGeo      = dcc "glassGeo" (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
 capacity      = dcc "capacity" (cnIES "capacity") "The load resistance calculated"
-demandq       = dcc "demandq" (cn' "demand") "3 second duration equivalent pressure" -- originally was "(cn' "demand")"
+demandq       = dcc "demandq" (cn' "demand") "3 second duration equivalent pressure"
 safeMessage   = dcc "safeMessage" (cn "Safe")
   ("For the given input parameters, the glass is considered safe.")
 notSafe       = dcc "notSafe" (nounPhraseSP "Not safe")
@@ -419,7 +419,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "load duration factor") -- originally "Load Duration Factor"
+loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "load duration factor")
   (Atomic "LDF") 
   loadDF_eq
 

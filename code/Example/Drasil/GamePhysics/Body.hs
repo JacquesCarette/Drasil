@@ -38,7 +38,7 @@ auths :: Sentence
 auths = manyNames authors
 
 chipmunkSRS' :: Document
-chipmunkSRS' = mkDoc' mkSRS for'' chipmunkSysInfo
+chipmunkSRS' = mkDoc' mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 

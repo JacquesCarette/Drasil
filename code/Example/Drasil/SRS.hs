@@ -8,10 +8,15 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation
 
-doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc sys authors secs = Document (srs `for'''` sys) authors secs
+-- Local function to keep things looking clean, not exported.
+forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+forTT' = for'' titleize titleize'
 
-doc' sys authors secs = Document (srs `for''''` sys) authors secs
+doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
+doc sys authors secs = Document (srs `for` sys) authors secs
+
+
+doc' sys authors secs = Document (srs `forTT'` sys) authors secs
 
 intro :: [SecCons] -> Section
 intro l = Section (titleize introduction) l

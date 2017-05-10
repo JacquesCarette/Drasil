@@ -88,19 +88,13 @@ compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) =
 
 
 for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (phrase $ t2 ^. term)
+for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
 
 for' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for' t1 t2 = (short t1) +:+ S "for" +:+ (phrase $ t2 ^. term)
+for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
-for'' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for'' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
-
-for''' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for''' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
-
-for'''' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for'''' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize' $ t2 ^. term)
+for'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
+for'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "for" +:+ (f2 $ t2 ^. term)
 
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_ t1 t2 = nounPhrase'' 

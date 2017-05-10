@@ -26,12 +26,13 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-characteristic, characteristics, condition, constraint_, connection, definition,
+appendix, characteristic, characteristics, condition, constraint_, connection, definition,
   dependency, description, document, figure, general, information, introduction, 
   model, name_, organization, physical, problem, purpose, quantity, reference, scope,
   section_, solution, specific, specification, symbol_, system, table_, 
   terminology, theory, unit_, units_ :: NPNC
 
+appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")

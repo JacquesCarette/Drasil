@@ -89,7 +89,7 @@ s2_intro = Paragraph $
   (gLassBR ^. defn) +:+ S "This" +:+ phrase section_ +:+ S "explains the" +:+ 
   phrase purpose +:+ S "of the" +:+ phrase document +:+ S "is designed to fulfil, the" +:+ 
   phrase scope +:+ S "of the" +:+ plural requirement +:+ S "and" +:+ S "the" +:+ 
-  phrase organization +:+ S "of the" +:+ phrase document :+: S ": what the" +:+ 
+  phrase organization +:+ S "of the" +: phrase document +:+ S "what the" +:+ 
   phrase document +:+. S "is based on and intended to portray"
 
 s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
@@ -493,10 +493,10 @@ s7_1_list =
   [(((short requirement) :+: S "1"), S "Input the following" +:+
     plural quantity :+: S ", which define the glass dimensions" `sC` 
     (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
-    +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:+ 
-    (phrase $ blast ^. term) :+: S ":")]),
+    +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
+    (phrase $ blast ^. term))]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
-  ++ (map qs [glass_type,pb_tol,tNT])) (\x -> phrase $ x ^.term) ),
+  ++ (map qs [glass_type,pb_tol,tNT])) (\x -> phrase $ x ^.term)),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 --  [(\ch -> P (ch ^. symbol)),  
 --   (\ch -> maybeUnits $ ch ^. unit'),
@@ -531,8 +531,8 @@ s7_1_list =
   S "output the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
   S "the" +:+ phrase condition +:+ S "is false, then output the message" +:+ 
   Quote (notSafe ^. defn))] ++
-  [(((short requirement) :+: S "6"), Nested (S "Output the following" +:+
-  plural quantity :+: S ":")
+  [(((short requirement) :+: S "6"), Nested (S "Output the following" +:
+  plural quantity)
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++
@@ -822,7 +822,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
   titleize' requirement +:+. S "Engineering Conference, 2005"),
-  (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere ":+:
+  (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere" +:+
   plural requirement +:+ phrase specification +:+. S "template edition 16") +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),

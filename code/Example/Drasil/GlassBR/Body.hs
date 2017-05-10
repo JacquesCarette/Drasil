@@ -837,10 +837,10 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "15.02" `sC` Quote (at_start specification +:+ S "for heat treated flat glass-Kind"
   +:+. S "HS, kind FT coated and uncoated glass,C1048"))]
 
-s11 = Section(S "Appendix") [Con s11_intro, Con fig_5, Con fig_6]
+s11 = Section(titleize appendix) [Con s11_intro, Con fig_5, Con fig_6]
 
 s11_intro = Paragraph $
-  S "This appendix holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)
+  S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)
   +:+ S "and" +:+ (makeRef fig_6)) +:+ S "used for interpolating values needed in the"
   +:+. plural model
 

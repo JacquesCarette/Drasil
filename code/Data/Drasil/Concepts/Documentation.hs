@@ -26,8 +26,8 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-characteristic, characteristics, condition, constraint_, definition, dependency,
-  description, document, general, information, introduction, model, name_, 
+characteristic, characteristics, condition, constraint_, connection, definition,
+  dependency, description, document, general, information, introduction, model, name_, 
   organization, physical, problem, purpose, quantity, reference, scope,
   section_, solution, specific, specification, symbol_, system, table_, 
   terminology, theory, unit_, units_ :: NPNC
@@ -36,6 +36,7 @@ characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
+connection      = npnc "connection"     (cn' "connection")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")

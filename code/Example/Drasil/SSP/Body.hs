@@ -21,6 +21,21 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 
+--type declerations for sections--
+s2, s3, s4, s5, s6 :: Section
+
+s1_2_intro :: [TSIntro]
+
+s2_p1, s2_p2, s2_1, s2_2, s2_3, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
+  s3_1, s3_2, s3_1_p1, s3_2_p1, s4_p1, s4_1, s4_2, s4_1_p1, s4_1_1, s4_1_2,
+  s4_1_3, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1,
+  s4_1_2_fig2, s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
+  s4_2_5, s4_2_6, s4_2_1_p1, s4_2_1_list, s4_2_2_p1, s5_p1, s5_1, s5_2,
+  s5_1_list, s5_1_table, s5_2_p1 :: SecCons
+
+s4_2_2_tmods :: [SecCons]
+
+--Document Settup--
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
@@ -34,7 +49,7 @@ mkSRS = RefSec (RefProg intro
   ) : map Verbatim [s2, s3, s4, s5, s6]
 
 ssp_srs :: Document  
---ssp_srs = SRS.doc ssa (name henryFrankis) [s1, s2, s3, s4, s5, s6]
+
 ssp_srs = mkDoc mkSRS ssp_si
 
 mgBod :: [Section]
@@ -43,49 +58,22 @@ mgBod :: [Section]
 ssp_mg :: Document
 ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 
---s1, s1_1, s1_2, s1_3, 
-s2, s3, s4, s5, s6 :: Section
-
-s1_2_intro :: [TSIntro]
---s1_1_intro, s1_1_table, s1_2_intro, s1_2_table,
-s2_p1, s2_p2, s2_1, s2_2, s2_3, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
-  s3_1, s3_2, s3_1_p1, s3_2_p1, s4_p1, s4_1, s4_2, s4_1_p1, s4_1_1, s4_1_2,
-  s4_1_3, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1,
-  s4_1_2_fig2, s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
-  s4_2_5, s4_2_6, s4_2_1_p1, s4_2_1_list, s4_2_2_p1, s5_p1, s5_1, s5_2,
-  s5_1_list, s5_1_table, s5_2_p1 :: SecCons
-
-s4_2_2_tmods :: [SecCons]
-
 -- SECTION 1 --
---s1 = refSec [s1_1, s1_2, s1_3]
+--automaticly generated in mkSRS 
 
 -- SECTION 1.1 --
---s1_1 = Section (titleize tOfUnits) [s1_1_intro, s1_1_table]
-
--- s1_1_intro = Con $ Paragraph (S "Units of the physical properties of the" +:+
-  -- S "soil that are of interest when examining" +:+ (plural ssp) +:+
-  -- S "are given in the following table.")
-
---s1_1_table = Con $ Table [titleize symbol_, titleize description, S "Name"] (mkTable
---  [(\x -> Sy (x ^. usymb)),
---   (\x -> (x ^. defn)),
---   (\x -> (phrase $ x ^. term))
---  ] this_si)
---  (titleize tOfUnits) True
+--automaticly generated in mkSRS 
 
 -- SECTION 1.2 --
---s1_2 = Section (titleize tOfSymb) [s1_2_intro, s1_2_table]
+--automaticly generated in mkSRS using the intro bellow
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
   S "values with a subscript i implies that the value will" +:+
   S "be taken at and analyzed at a slice or slice interface" +:+
   S "composing the total slip" +:+ (phrase $ mass ^. term)]]
 
---s1_2_table = Con $ table sspSymbols (\x -> phrase $ x ^. term)
-
 -- SECTION 1.3 --
---s1_3 = table_of_abb_and_acronyms acronyms
+--automaticly generated in mkSRS 
   
 -- SECTION 2 --
 s2 = SRS.intro [s2_p1, s2_p2, s2_1, s2_2, s2_3]

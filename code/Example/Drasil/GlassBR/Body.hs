@@ -672,7 +672,7 @@ s9_table1 = Table [EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS]]
   ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
-  S "Connections Between Items of Different" +:+ titleize' section_) True
+  titleize' connection :+: S "Between Items of Different" +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table [EmptyS, S "T1 (" :+: 
@@ -706,7 +706,7 @@ s9_table2 = Table [EmptyS, S "T1 (" :+:
   EmptyS, S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", EmptyS, EmptyS,
   EmptyS]]
   ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
-  S "Connections Between" +:+ titleize' requirement +:+ S "and Other Items") True
+  titleize' connection :+: S "Between" +:+ titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
 s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
@@ -766,7 +766,7 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
   ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
-  S "Connections Between" +:+ titleize' assumption +:+ S "and Other Items") True
+  titleize' connection :+: S " Between" +:+ titleize' assumption +:+ S "and Other Items") True
 
 s9_intro2 = 
   [Paragraph $
@@ -798,14 +798,14 @@ s9_intro2 =
   S "labels and" +:+ phrase reference +:+. S "can be future work"]
 
 fig_2 = Figure (S "Figure 2:" +:+ (titleize $ traceyMatrix ^. term) 
-  +:+ S "Showing the Connections" +:+ S "Between Items of Different Sections") "Trace.png"
+  +:+ S "Showing the" +:+ titleize' connection :+: S "Between Items of Different Sections") "Trace.png"
 
 fig_3 = Figure (S "Figure 3:" +:+ (titleize $ traceyMatrix ^. term) +:+ 
-  S "Showing the Connections" +:+ S "Between" +:+ (titleize' requirement) +:+
+  S "Showing the" +:+ titleize' connection :+: S "Between" +:+ (titleize' requirement) +:+
   S "and Other Items") "RTrace.png"
 
 fig_4 = Figure (S "Figure 4:" +:+ (titleize $ traceyMatrix ^. term) +:+
-  S "Showing the Connections Between" +:+ (titleize' assumption) +:+
+  S "Showing the" +:+ titleize' connection :+: S "Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 
 s10 = Section(titleize' reference) [Con s10_list]

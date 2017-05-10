@@ -18,18 +18,16 @@ pcmSymbols :: [CQSWrapper]
 pcmSymbols = map cqs pcmUnits
 
 pcmUnits :: [UWrapper]
-pcmUnits = map uw [coil_SA, hIn_SA, hOut_SA, heat_cap_spec, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
-  ht_xfer_co, ht_xfer_CW, tank_L, mass, water_m, -- norm_vect, 
-  ht_flux, thFluxVect,
-  ht_flux_C, ht_flux_in, ht_flux_out, time,temp, --temp_boil,
-  temp_coil, temp_env, time_final, temp_init, temp_water, temp_diff, vol, --tank_vol,
-  water_vol, density, water_dense, dummyVar]
+pcmUnits = map uw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA,
+  htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol, --tank_vol, norm_vect, temp_boil,
+  ht_xfer_co, ht_xfer_CW, mass, tank_D, tank_L, temp, temp_coil, temp_diff, temp_env,
+  temp_init, temp_water, thFluxVect, time, time_final, vol, water_dense, water_m,
+  water_vol]
 
-coil_SA, hIn_SA, hOut_SA, htCap_Liq, htCap_W, tank_D, ht_gen_vol,
-  ht_xfer_co, ht_xfer_CW, tank_L,water_m, ht_flux, thFluxVect,
-  ht_flux_C, ht_flux_in, ht_flux_out,--temp_boil,
-  temp_coil, temp_env, time_final, temp_init, temp_water, temp_diff,--tank_vol,
-  water_vol, water_dense, dummyVar :: UnitalChunk
+coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux, ht_flux_C,
+  ht_flux_in, ht_flux_out, ht_gen_vol, ht_xfer_co, ht_xfer_CW, tank_D, tank_L,--temp_boil,
+  temp_coil, temp_diff, temp_env, temp_init, temp_water, thFluxVect, time_final,--tank_vol,
+  water_dense, water_m, water_vol :: UnitalChunk
 
 -- convenience
 fixme :: String
@@ -37,6 +35,9 @@ fixme = "FIXME: Define this or remove the need for definitions"
 
 --FIXME: Anything that is "X of Y" should use the of combinator.
 coil_SA     = uc' "coil_SA" (cn' "coil surface area") fixme (sub cA cC) m_2
+dummyVar    = uc' "dummyVar" 
+              (nounPhraseSP "dummy variable for integration over time")
+              fixme (Greek Tau_L) second
 hIn_SA      = uc' "hIn_SA" 
               (nounPhraseSP "surface area over which heat is transferred in")
               fixme (sub cA (Atomic "in")) m_2
@@ -47,7 +48,13 @@ htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid"
               fixme (sup cC cL) U.heat_cap_spec
 htCap_W     = uc' "htCap_W" (heat_cap_spec `of_` water)
               fixme (sub cC cW) U.heat_cap_spec
-tank_D      = uc' "tank_D" (diameter `of_` water) fixme cD metre
+ht_flux     = uc' "ht_flux" (cn'' "heat flux") fixme lQ U.heat_transfer_coef
+ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")
+              fixme (sub lQ cC) U.thermal_flux
+ht_flux_in  = uc' "ht_flux_in" (nounPhraseSP "heat flux in")
+              fixme (sub lQ (Atomic "in")) U.thermal_flux
+ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux out")
+              fixme (sub lQ (Atomic "out")) U.thermal_flux
 ht_gen_vol  = uc' "ht_gen_vol" 
               (nounPhraseSP "volumetric heat generation per unit volume")
               fixme lG U.thermal_flux
@@ -57,41 +64,32 @@ ht_xfer_co  = uc' "ht_xfer_co"
 ht_xfer_CW  = uc' "ht_xfer_CW" 
               (nounPhraseSP "convective heat transfer between coil and water")
               fixme (sub lH cC) U.heat_transfer_coef
-tank_L      = uc' "tank_L" (len `of_` tank) fixme cL metre
-water_m     = uc' "water_m" (mass `of_` water)
-              fixme (sub (mass ^. symbol) cW) kilogram
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
-ht_flux     = uc' "ht_flux" (cn'' "heat flux") fixme lQ U.heat_transfer_coef
-thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
-              fixme (vec lQ) U.thermal_flux
-ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")
-              fixme (sub lQ cC) U.thermal_flux
-ht_flux_in  = uc' "ht_flux_in" (nounPhraseSP "heat flux in")
-              fixme (sub lQ (Atomic "in")) U.thermal_flux
-ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux out")
-              fixme (sub lQ (Atomic "out")) U.thermal_flux
 -- temp_boil   = uc' "T_boil" "temperature at boiling point" -- (sub cT (Atomic "boil")) centigrade
+tank_D      = uc' "tank_D" (diameter `of_` water) fixme cD metre
+tank_L      = uc' "tank_L" (len `of_` tank) fixme cL metre
 temp_coil   = uc' "temp_coil" (temp `of_` coil)
               fixme (sub cT cC) centigrade
+temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
+              fixme (Concat [Greek Delta, cT]) centigrade
 temp_env    = uc' "temp_env" (nounPhraseSP "temperature of environment")
               fixme (sub cT (Atomic "env")) centigrade
+thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
+              fixme (vec lQ) U.thermal_flux
 time_final  = uc' "time_final" (cn' "time")
               fixme (sub lT (Atomic "final")) second
 temp_init   = uc' "temp_init" (cn' "initial temperature")
               fixme (sub cT (Atomic "init")) centigrade
 temp_water  = uc' "temp_water" (temp `of_` water)
               fixme (sub cT cW) centigrade
-temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
-              fixme (Concat [Greek Delta, cT]) centigrade
 --tank_vol    = uc' "V_tank" "volume of the cylindrical tank"   -- (sub cV (Atomic "tank")) m_3
-water_vol   = uc' "water_vol" (vol `of_` water)
-              fixme (sub cV cW) m_3
 water_dense = uc' "water_dense" (density `of_` water)
               fixme (sub (Greek Rho_L) cW) densityU
-dummyVar    = uc' "dummyVar" 
-              (nounPhraseSP "dummy variable for integration over time")
-              fixme (Greek Tau_L) second
+water_m     = uc' "water_m" (mass `of_` water)
+              fixme (sub (mass ^. symbol) cW) kilogram
+water_vol   = uc' "water_vol" (vol `of_` water)
+              fixme (sub cV cW) m_3
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 --Common Terms
@@ -100,6 +98,7 @@ coil, tank, water, ht_trans :: NPNC
 coil        = npnc "coil"           (cn' "coil")
 tank        = npnc "tank"           (cn' "tank")
 water       = npnc "water"          (cn "water")
+
 ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase, just a hack to get RefSec to work
 
 ----Acronyms-----

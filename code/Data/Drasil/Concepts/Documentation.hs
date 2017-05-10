@@ -30,7 +30,7 @@ appendix, characteristic, characteristics, condition, constraint_, connection, d
   dependency, description, document, figure, general, information, introduction, 
   model, name_, organization, physical, problem, purpose, quantity, reference, scope,
   section_, solution, specific, specification, symbol_, system, table_, 
-  terminology, theory, unit_, units_ :: NPNC
+  terminology, theory, unit_, units_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -66,7 +66,7 @@ terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 unit_           = npnc "unit"           (cn' "unit")
 units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
-
+user            = npnc "user"           (cn' "user")
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
 
@@ -83,7 +83,7 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 characteristicsSpecification, generalSystemDescription, physicalSystem, 
   problemDescription, specificsystemdescription, systemdescription, 
-  systemConstraint :: NPNC
+  systemConstraint, userCharacteristic :: NPNC
   
 characteristicsSpecification = compoundNPNC characteristics specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -92,3 +92,4 @@ problemDescription           = compoundNPNC problem description
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint_
+userCharacteristic           = compoundNPNC user characteristic

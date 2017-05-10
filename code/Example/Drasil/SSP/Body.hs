@@ -170,11 +170,11 @@ s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
 
 s3_p1 = Con $ Paragraph $ S "This section provides general information" +:+
   S "about the system, identifies the interfaces between the" +:+
-  S "system and its environment, and describes the user characteristics" +:+
+  S "system and its environment, and describes the" +:+ (plural userCharacteristic) +:+
   S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --
-s3_1 = Sub $ Section (S "User" +:+ titleize characteristics) [s3_1_p1]
+s3_1 = Sub $ Section (titleize' userCharacteristic) [s3_1_p1]
 
 s3_1_p1 = Con $ Paragraph $ S "The end user of" +:+ (short ssa) +:+ S "should" +:+
   S "have an understanding of undergraduate Level 1 Calculus and" +:+

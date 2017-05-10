@@ -114,7 +114,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S ", the" +:+ phrase scope +:+ S "of the" +:+ phrase system :+: S ", the" +:+
   phrase organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
   plural characteristic +:+ S "of the" +:+ S "intended readers.")]
-
+ 
 -- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating PCM"
 -- which is not capitlaized whereas the stable version is
 

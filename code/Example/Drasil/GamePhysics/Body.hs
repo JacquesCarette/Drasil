@@ -291,7 +291,7 @@ s4_1_2_list :: Contents
 
 s4_1_2 = Section (titleize' goalStmt) [Con s4_1_2_list]
 
-s4_1_2_stmt1 :: Sentence
+s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt1 = foldlSent 
   [S "Given the physical", S "properties, initial", 
   (plural $ position ^. term), S "and",
@@ -300,7 +300,6 @@ s4_1_2_stmt1 = foldlSent
   S "determine their new", plural (position ^. term), S "and",
   plural (vel ^. term), S "over a period of", (phrase $ time ^. term)]
 
-s4_1_2_stmt2 :: Sentence
 s4_1_2_stmt2 = foldlSent 
   [S "Given the physical", S "properties, initial", 
   plural (orientation ^. term), S "and", plural (angVel ^. term) `sC`
@@ -309,7 +308,6 @@ s4_1_2_stmt2 = foldlSent
   plural (orientation ^. term), S "and", plural (angVel ^. term), 
   S "over a period of", (phrase $ time ^. term)]
 
-s4_1_2_stmt3 :: Sentence
 s4_1_2_stmt3 = foldlSent 
   [S "Given the initial", plural (position ^. term), S "and", 
   plural (vel ^. term), S "of a", S "set of", 
@@ -317,7 +315,6 @@ s4_1_2_stmt3 = foldlSent
   S "them will collide with one another over a period of", 
   (phrase $ time ^. term)]
 
-s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt4 = foldlSent 
   [S "Given the physical", S "properties, initial linear and angular", 
   plural (position ^. term), 
@@ -618,17 +615,27 @@ s6 = Section (titleize' likelyChg) [Con s6_intro, Con s6_list]
 s6_intro = Paragraph $ S "This section lists the" +:+. 
   ((plural likelyChg) +:+ S "to be made to the physics game library")
 
-s6_list = Enumeration (Simple [
-  ((getAcc likelyChg) :+: S "1", Flat (S "The internal" +:+
-  (getAcc ode) :+: S "-solving algorithm used by the library may" +:+.
-  S "change in the future")),
-  ((getAcc likelyChg) :+: S "2", Flat (S "The library may be" +:+
+s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
+  s6_likelyChg_stmt4 :: Sentence
+
+s6_likelyChg_stmt1 = S "The internal" +:+ (getAcc ode) :+: 
+  S "-solving algorithm used by the library may" +:+. S "change in the future"
+
+s6_likelyChg_stmt2 = S "The library may be" +:+
   S "expanded to deal with edge-to-edge and vertex-to-vertex" +:+.
-  (plural (collision ^. term)))),
-  ((getAcc likelyChg) :+: S "3", Flat (S "The library may be" +:+.
-  S "expanded to include motion with damping")),
-  ((getAcc likelyChg) :+: S "4", Flat (S "The library may be" +:+.
-  S "expanded to include joints and constraints"))])
+  (plural (collision ^. term))
+
+s6_likelyChg_stmt3 = S "The library may be" +:+. 
+  S "expanded to include motion with damping"
+
+s6_likelyChg_stmt4 = S "The library may be" +:+.
+  S "expanded to include joints and constraints"
+
+s6_list = Enumeration (Simple [
+  ((getAcc likelyChg) :+: S "1", Flat s6_likelyChg_stmt1),
+  ((getAcc likelyChg) :+: S "2", Flat s6_likelyChg_stmt2),
+  ((getAcc likelyChg) :+: S "3", Flat s6_likelyChg_stmt3),
+  ((getAcc likelyChg) :+: S "4", Flat s6_likelyChg_stmt4)])
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --

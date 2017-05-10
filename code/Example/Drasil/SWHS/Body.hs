@@ -71,6 +71,7 @@ mkSRS = RefSec (RefProg intro
   [ TUnits, tsymb'' tsymb_intro (TermExcept [normalVect]), TAandA ]
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
+tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans), Doc (nw progName)], SymbOrder]
 
 swhs_srs' :: Document

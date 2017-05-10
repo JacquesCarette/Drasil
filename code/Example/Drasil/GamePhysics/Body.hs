@@ -425,9 +425,9 @@ s4_2_4_DDefs :: [Contents]
 s4_2_4 = Section (titleize' dataDefn) ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
-s4_2_4_intro = Paragraph $ S "This section collects and defines all the" +:+
-  S "data needed to build the" +:+. titleize' inModel +:+.
-  S "The dimension of each quantity is also given"
+s4_2_4_intro = Paragraph $ foldlSent [S "This section collects and defines all the",
+  S "data needed to build the" +:+. titleize' inModel,
+  S "The dimension of each quantity is also given"]
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
 

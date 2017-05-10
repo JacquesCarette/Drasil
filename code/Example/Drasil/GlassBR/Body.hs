@@ -50,7 +50,7 @@ authors :: People
 authors = [nikitha, spencerSmith]
 
 glassBR_srs' :: Document
-glassBR_srs' = mkDoc' mkSRS for glassSystInfo
+glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 
 --FIXME: Missing ToS intro because this example was using the default 
 -- (nuclear literature related) intro.
@@ -68,7 +68,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = mgDoc'' glassBRProg for mg_authors mgBod
+glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))

@@ -553,7 +553,7 @@ s7_1_list =
     map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [dL,tolPre,tolStrDisFac] ++
-    [Flat $ (phrase $ ar ^. term) +:+ sParen(P $ ar ^. symbol)  
+    [Flat $ (titleize $ ar ^. term) +:+ sParen(P $ ar ^. symbol)  
     --S " = a/b)"
     ]))])]
 
@@ -852,7 +852,7 @@ fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   (phrase $ lateral ^. term) +:+
   (phrase $ load ^. term) +:+ sParen
-  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (phrase $ ar ^. term) +:+ 
-  sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (phrase $ sdf ^. term) +:+ 
+  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize $ ar ^. term) +:+ 
+  sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (at_start $ sdf ^. term) +:+ 
   sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"
 

@@ -164,7 +164,7 @@ s4_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
   phrase information +:+ S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
   S "between the" +:+ phrase system +:+ S "and its environment" `sC`
-  S "and describes the" +:+ phrase userCharacteristic +:+ S "and the" +:+. plural systemConstraint
+  S "and describes the" +:+ plural userCharacteristic +:+ S "and the" +:+. plural systemConstraint
 
 s4_1 = Section (titleize' userCharacteristic) [Con s4_1_bullets]
 
@@ -322,8 +322,8 @@ s6_1_3 = Section (titleize' goalStmt) [Con s6_1_3_list]
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
   (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
-  S "will be able to withstand the explosion of a certain degree which" +:+.
-  S "is calculated based on" +:+ phrase user +:+ S "input")]
+  S "will be able to withstand the explosion of a certain degree which" +:+
+  S "is calculated based on" +:+ phrase user +:+. S "input")]
 
 s6_2 = Section (titleize solution +:+ titleize characteristicsSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]

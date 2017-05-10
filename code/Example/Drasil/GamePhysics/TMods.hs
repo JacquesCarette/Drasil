@@ -42,13 +42,13 @@ newtonTLRel :: Relation
 newtonTLRel = (C force_1) := (Neg (C force_2))
 
 t2descr :: Sentence
-t2descr = S "Every action has an equal and opposite reaction. In other" +:+
-  S "words, the" +:+ (phrase $ force ^. term) +:+ P (force_1 ^. symbol) +:+
-  sParen (Sy (unit_symb force_1)) +:+ S "exerted on the second" +:+
-  (phrase $ rigidBody ^. term) +:+ S "by the first is equal in magnitude and" +:+
-  S "in the opposite direction to the" +:+ (phrase $ force ^. term) +:+
-  P (force_2 ^. symbol) +:+ sParen (Sy (unit_symb force_2)) +:+
-  S "exerted on the first" +:+ (phrase $ rigidBody ^. term) +:+. S "by the second"
+t2descr = foldlSent [S "Every action has an equal and opposite reaction. In other",
+  S "words, the", (phrase $ force ^. term), (P $ force_1 ^. symbol),
+  (sParen $ Sy $ unit_symb force_1), S "exerted on the second",
+  (phrase $ rigidBody ^. term), S "by the first is equal in magnitude and",
+  S "in the opposite direction to the", (phrase $ force ^. term),
+  (P $ force_2 ^. symbol), (sParen $ Sy $ unit_symb force_2),
+  S "exerted on the first", (phrase $ rigidBody ^. term), S "by the second"]
 
 -- T3 : Newton's law of universal gravitation --
 
@@ -71,24 +71,24 @@ newtonLUGRel = (C force) :=
 -- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
 
 t3descr :: Sentence
-t3descr = S "Two" +:+ (plural $ rigidBody ^. term) +:+ S "in the universe" +:+
-  S "attract each other with a" +:+ (phrase $ force ^. term) +:+ 
-  P (force ^. symbol) +:+ sParen (Sy (unit_symb force)) +:+
-  S "that is directly proportional to the product of their" +:+
-  (phrase $ mass ^. term) :+: S "es" `sC` P (mass_1 ^. symbol) +:+ S "and" +:+
-  P (mass_2 ^. symbol) +:+ sParen (Sy (unit_symb mass)) `sC` S "and" +:+
-  S "inversely proportional to the" +:+ (phrase $ sqrDist ^. term) +:+
-  P (sqrDist ^. symbol) +:+ sParen (Sy (unit_symb sqrDist)) +:+
-  S "between them. The vector" +:+ P (disp ^. symbol) +:+ 
-  sParen (Sy (unit_symb disp)) +:+ S "is the" +:+ (phrase $ disp ^. term) +:+
-  S "between the centres of the" +:+ (plural $ rigidBody ^. term) +:+
-  S "and" +:+ P (dispNorm ^. symbol) +:+ sParen (Sy (unit_symb dispNorm)) +:+ 
+t3descr = foldlSent [S "Two", (plural $ rigidBody ^. term), S "in the universe",
+  S "attract each other with a", (phrase $ force ^. term), 
+  (P $ force ^. symbol), (sParen $ Sy $ unit_symb force),
+  S "that is directly proportional to the product of their",
+  (plural $ mass ^. term) `sC` (P $ mass_1 ^. symbol), S "and",
+  (P $ mass_2 ^. symbol), (sParen $ Sy $ unit_symb mass) `sC` S "and",
+  S "inversely proportional to the", (phrase $ sqrDist ^. term),
+  (P $ sqrDist ^. symbol), (sParen $ Sy $ unit_symb sqrDist),
+  S "between them. The vector", (P $ disp ^. symbol), 
+  (sParen $ Sy $ unit_symb disp), S "is the", (phrase $ disp ^. term),
+  S "between the centres of the", (plural $ rigidBody ^. term),
+  S "and", (P $ dispNorm ^. symbol), (sParen $ Sy $ unit_symb dispNorm), 
   S "represents the" +:+. ((phrase $ dispNorm ^. term) `sC`
-  S "or absolute distance between the two") +:+ P (dispUnit ^. symbol) +:+ 
-  S "denotes the" +:+ (phrase $ dispUnit ^. term) `sC` S "equivalent to the" +:+
-  (phrase $ disp ^. term) +:+ S "divided by the" +:+. ((phrase $ dispNorm ^. term) `sC`
-  S "as shown above") +:+ S "Finally" `sC` P (gravConst ^. symbol) +:+ 
-  S "is the" +:+ (gravConst ^. defn) +:+. sParen (Sy (unit_symb gravConst))
+  S "or absolute distance between the two"), (P $ dispUnit ^. symbol), 
+  S "denotes the", (phrase $ dispUnit ^. term) `sC` S "equivalent to the",
+  (phrase $ disp ^. term), S "divided by the" +:+. ((phrase $ dispNorm ^. term) `sC`
+  S "as shown above"), S "Finally" `sC` (P $ gravConst ^. symbol), 
+  S "is the", (gravConst ^. defn), (sParen $ Sy $ unit_symb gravConst)]
 
 -- T4 : Chasles' theorem --
 
@@ -102,15 +102,17 @@ chaslesRel = (C vel_B) := (C vel_O) + ((C angVel) * (C r_OB))
 
 -- B should ideally be italicized in 'point B' (line 202).
 t4descr :: Sentence
-t4descr = S "The linear" +:+ (phrase $ vel ^. term) +:+ P (vel_B ^. symbol) +:+ 
-  sParen (Sy (unit_symb vel_B)) +:+ S "of any point B in a" +:+ 
-  (phrase $ rigidBody ^. term) +:+ S "is the sum of the linear" +:+ (phrase $ vel ^. term) +:+ 
-  P (vel_O ^. symbol) +:+ sParen (Sy (unit_symb vel_O)) +:+ S "of the" +:+
-  (phrase $ rigidBody ^. term) +:+ S "at the origin (axis of rotation) and the" +:+
-  S "resultant vector from the cross product of the" +:+
-  (phrase $ rigidBody ^. term) :+: S "'s" +:+ ((phrase $ angVel ^. term)) +:+ 
-  P (angVel ^. symbol) +:+ sParen (Sy (unit_symb angVel)) +:+ S "and the" +:+ 
-  (phrase $ r_OB ^. term) `sC` P (r_OB ^. symbol) +:+. sParen (Sy (unit_symb r_OB))
+t4descr = foldlSent [S "The linear", (phrase $ vel ^. term), P (vel_B ^. symbol), 
+  (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
+  (phrase $ rigidBody ^. term), S "is the sum of the linear", 
+  (phrase $ vel ^. term), (P $ vel_O ^. symbol), (sParen $ Sy $ unit_symb vel_O),
+  S "of the", (phrase $ rigidBody ^. term),
+  S "at the origin (axis of rotation) and the",
+  S "resultant vector from the cross product of the",
+  (phrase $ rigidBody ^. term) :+: S "'s", (phrase $ angVel ^. term), 
+  (P $ angVel ^. symbol), (sParen $ Sy $ unit_symb angVel), S "and the", 
+  (phrase $ r_OB ^. term) `sC` (P $ r_OB ^. symbol), 
+  (sParen $ Sy $ unit_symb r_OB)]
 
 -- T5 : Newton's second law for rotational motion --
 
@@ -125,10 +127,10 @@ newtonSLRRel = (C torque) := (C momtInert) * (C angAccel)
 -- without referencing the entire section or dividing each bullet into its own
 -- section.
 t5descr :: Sentence
-t5descr = S "The net" +:+ (phrase $ torque ^. term) +:+ P (torque ^. symbol) +:+ 
-  sParen (Sy (unit_symb torque)) +:+ S "on a" +:+ (phrase $ rigidBody ^. term) +:+ 
-  S "is proportional to its" +:+ (phrase $ angAccel ^. term) +:+ P (angAccel ^. symbol) +:+.
-  sParen (Sy (unit_symb angAccel)) +:+ S "Here" `sC` P (momtInert ^. symbol) +:+
-  sParen (Sy (unit_symb momtInert)) +:+ S "denotes the" +:+ (phrase $ momtInert ^. term) +:+
-  S "of the" +:+. (phrase $ rigidBody ^. term) +:+ S "We also assume that all" +:+ 
-  (plural $ rigidBody ^. term) +:+. S "involved are two-dimensional (A2)"
+t5descr = foldlSent [S "The net", (phrase $ torque ^. term), (P $ torque ^. symbol), 
+  (sParen $ Sy $ unit_symb torque), S "on a", (phrase $ rigidBody ^. term), 
+  S "is proportional to its", (phrase $ angAccel ^. term), (P $ angAccel ^. symbol) +:+.
+  (sParen $ Sy $ unit_symb angAccel), S "Here" `sC` (P $ momtInert ^. symbol),
+  (sParen $ Sy $ unit_symb momtInert), S "denotes the", (phrase $ momtInert ^. term),
+  S "of the" +:+. (phrase $ rigidBody ^. term), S "We also assume that all", 
+  (plural $ rigidBody ^. term), S "involved are two-dimensional (A2)"]

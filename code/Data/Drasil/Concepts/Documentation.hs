@@ -26,9 +26,11 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-characteristic, characteristics, condition, constraint_, definition, dependency, description, document, general,
-  information, introduction, model, name_, organization, physical, problem, purpose, quantity, reference, scope,
-  section_, solution, specific, specification, symbol_, system, table_, terminology, theory, unit_, units_ :: NPNC
+characteristic, characteristics, condition, constraint_, definition, dependency,
+  description, document, general, information, introduction, model, name_, 
+  organization, physical, problem, purpose, quantity, reference, scope,
+  section_, solution, specific, specification, symbol_, system, table_, 
+  terminology, theory, unit_, units_ :: NPNC
 
 characteristic  = npnc "characteristic" (cn' "characteristic")
 characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
@@ -76,8 +78,9 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
 
-characteristicsSpecification, generalSystemDescription, physicalSystem, problemDescription,
-  specificsystemdescription, systemdescription, systemConstraint :: NPNC
+characteristicsSpecification, generalSystemDescription, physicalSystem, 
+  problemDescription, specificsystemdescription, systemdescription, 
+  systemConstraint :: NPNC
   
 characteristicsSpecification = compoundNPNC characteristics specification
 generalSystemDescription     = compoundNPNC general systemdescription

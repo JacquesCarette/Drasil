@@ -776,16 +776,16 @@ s9_intro2 =
   (plural $ graph ^. term) +:+ S "represent" +:+. plural dependency +:+
   S "The component at the tail of an arrow is depended on" +:+
   S "by the component at the head of that arrow. Therefore, if a" +:+
-  S "component is changed, the components that it points to should also" +:+
-  S "be changed. Figure 2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
+  S "component is changed, the components that it points to should also" +:+.
+  S "be changed" +:+ titleize figure +:+ S "2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+. S "on each other" +:+
-  S "Figure 3" +:+ sParen (makeRef fig_3) +:+ S "shows the" +:+ plural dependency +:+
+  titleize figure +:+ S "3" +:+ sParen (makeRef fig_3) +:+ S "shows the" +:+ plural dependency +:+
   S "of" +:+ plural requirement +:+ S "on" +:+
   plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) +:+. S "and data constraints" +:+
-  S "Figure 4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ 
+  titleize figure +:+ S "4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ 
   S "of" +:+ plural thModel `sC` 
   plural inModel `sC`
   (plural dataDefn) `sC` 
@@ -797,14 +797,14 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   S "labels and" +:+ phrase reference +:+. S "can be future work"]
 
-fig_2 = Figure (S "Figure 2:" +:+ (titleize $ traceyMatrix ^. term) 
+fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize $ traceyMatrix ^. term) 
   +:+ S "Showing the" +:+ titleize' connection :+: S "Between Items of Different Sections") "Trace.png"
 
-fig_3 = Figure (S "Figure 3:" +:+ (titleize $ traceyMatrix ^. term) +:+ 
+fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize $ traceyMatrix ^. term) +:+ 
   S "Showing the" +:+ titleize' connection :+: S "Between" +:+ (titleize' requirement) +:+
   S "and Other Items") "RTrace.png"
 
-fig_4 = Figure (S "Figure 4:" +:+ (titleize $ traceyMatrix ^. term) +:+
+fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize $ traceyMatrix ^. term) +:+
   S "Showing the" +:+ titleize' connection :+: S "Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 
@@ -844,12 +844,12 @@ s11_intro = Paragraph $
   +:+ S "and" +:+ (makeRef fig_6)) +:+ S "used for interpolating values needed in the"
   +:+. plural model
 
-fig_5 = Figure (S "Figure 5:" +:+ (demandq ^. defn) +:+ sParen
+fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+
   S "versus" +:+ (at_start $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"
 
-fig_6 = Figure (S "Figure 6: Non dimensional" +:+ 
+fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   (phrase $ lateral ^. term) +:+
   (phrase $ load ^. term) +:+ sParen
   (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (phrase $ ar ^. term) +:+ 

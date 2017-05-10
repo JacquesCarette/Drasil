@@ -66,6 +66,13 @@ mgBod :: [Section]
 -- are introduced. Once the SRS is entirely switched to docLang, the redundant
 -- sections should be removed.
 
+--fold helper functions applies f to all but the last element applies g to 
+--last element and the accumulator
+foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
+foldle f g z []     = z
+foldle f g z [x]    = g z x
+foldle f g z [x,y]  = g (f z x) y
+foldle f g z (x:xs) = foldle f g (f z x) xs
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
@@ -80,17 +87,35 @@ s2_intro :: [Contents]
 
 s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
-s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
-  S "games, developers are looking for ways to save time and money for" +:+
-  S "their projects. Using an open source" +:+ (phrase $ physLib ^. term) +:+
-  S "that is reliable and free will cut down development costs and lead" +:+.
-  S "to better quality products"),
-  Paragraph (S "The following section provides an overview of the" +:+
-  titleize srs +:+ sParen (getAcc srs) +:+ S "for" +:+
-  (short chipmunk) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
-  (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term) +:+
-  S "This section explains the purpose of this document, the scope" +:+.
-  S "of the system, and the organization of the document")]
+para1_s2_intro :: Contents
+para1_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+        [S "Due to the rising cost of developing video",
+        S "games, developers are looking for ways to save time and money for",
+        S "their projects. Using an open source", (phrase $ physLib ^. term),
+        S "that is reliable and free will cut down development costs and lead",
+        S "to better quality products"]
+
+para2_s2_intro :: Contents
+para2_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+        [S "The following section provides an overview of the",
+        titleize srs, sParen (getAcc srs), S "for",
+        (short chipmunk) `sC` S "an open source", (getAcc twoD), 
+        (phrase $ rigidBody ^. term), (phrase $ physLib ^. term), S ".",
+        S "This section explains the purpose of this document, the scope",
+        S "of the system, and the organization of the document"]
+        
+s2_intro = [para1_s2_intro, para2_s2_intro]
+--s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
+--  S "games, developers are looking for ways to save time and money for" +:+
+--  S "their projects. Using an open source" +:+ (phrase $ physLib ^. term) +:+
+--  S "that is reliable and free will cut down development costs and lead" +:+.
+--  S "to better quality products"),
+--  Paragraph (S "The following section provides an overview of the" +:+
+--  titleize srs +:+ sParen (getAcc srs) +:+ S "for" +:+
+--  (short chipmunk) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
+--  (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term) +:+
+--  S "This section explains the purpose of this document, the scope" +:+.
+--  S "of the system, and the organization of the document")]
 
 -------------------------------
 -- 2.1 : Purpose of Document --
@@ -101,7 +126,30 @@ s2_1_intro :: [Contents]
 
 s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
-s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
+para1_s2_1_intro :: Contents
+para1_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+          [S "This document descibes the modeling of an",
+          S "open source", (getAcc twoD), (phrase $ rigidBody ^. term), 
+          (phrase $ physLib ^. term), S "used for games. The", 
+          plural goalStmt, S "and", (plural thModel), S "used in",
+          (short chipmunk), S "are provided. This",
+          S "document is intended to be used as a reference to provide all",
+          S "necessary information to understand and verify the model"]
+
+para2_s2_1_intro :: Contents
+para2_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+          [S "This document will be used as a starting point for",
+          S "subsequent development phases, including writing the design",
+          S "specification and the software verification and validation plan.",
+          S "The design document will show how the", plural requirement,
+          S "are to be realized.", 
+          S "The verification and validation plan will show the steps",
+          S "that will be used to increase confidence in the software",
+          S "documentation and the implementation"]
+
+s2_1_intro = [para1_s2_1_intro, para2_s2_1_intro]
+
+{--s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "open source" +:+ (getAcc twoD) +:+ (phrase $ rigidBody ^. term) +:+ 
   (phrase $ physLib ^. term) +:+ S "used for games. The" +:+ 
   plural goalStmt +:+ S "and" +:+ 
@@ -117,7 +165,7 @@ s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
   S "realized. The verification and validation plan will show the steps" +:+
   S "that will be used to increase confidence in the software" +:+.
   S "documentation and the implementation")]
-
+--}
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
@@ -128,13 +176,13 @@ s2_2_intro :: Contents
 s2_2 = Section (S "Scope of" +:+ titleize' requirement)
   [Con s2_2_intro]
 
-s2_2_intro = Paragraph $ S "The scope of the" +:+
-  plural requirement +:+ S "includes the" +:+
-  S "physical simulation of" +:+ (getAcc twoD) +:+ 
-  plural (rigidBody ^. term) +:+ S "acted on by forces. Given" +:+ 
-  (getAcc twoD) +:+ plural (rigidBody ^. term) `sC` (short chipmunk) +:+ 
-  S "is intended to simulate how these" +:+ plural (rigidBody ^. term) +:+. 
-  S "interact with one another"
+s2_2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+    [S "The scope of the", plural requirement, S "includes the",
+    S "physical simulation of", (getAcc twoD), plural (rigidBody ^. term),
+    S "acted on by forces. Given", (getAcc twoD), 
+    plural (rigidBody ^. term) `sC` (short chipmunk), 
+    S "is intended to simulate how these", plural (rigidBody ^. term), 
+    S "interact with one another"]
 
 -------------------------------------
 -- 2.3 : Organization of Documents --

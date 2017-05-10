@@ -48,15 +48,12 @@ mkSRS = RefSec (RefProg intro
   [TUnits, tsymb s1_2_intro, TAandA]
   ) : map Verbatim [s2, s3, s4, s5, s6]
 
-ssp_srs :: Document  
-
+ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
+ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
-
-ssp_mg :: Document
-ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 
 -- SECTION 1 --
 --automaticly generated in mkSRS 
@@ -119,8 +116,8 @@ s2_1_p2 = Con $ Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used a
   S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
   (plural document) +:+ S "that follow the so-called waterfall" +:+ (phrase model) `sC`
   S "the actual development process is not  constrained in any way. Even when" +:+
-  S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements point" +:+
-  S "out, the most logical way to present the documentation is still to" +:+
+  S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements" +:+
+  S "point out, the most logical way to present the documentation is still to" +:+
   S "fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
@@ -283,8 +280,8 @@ s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
 
 s4_2_1_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:+
   S "original" +:+ (phrase problem) +:+ S "and helps in developing the" +:+ (phrase thModel) +:+
-  S "by filling in the missing" +:+ (phrase information) +:+ S "for the" +:+. (phrase physicalSystem) +:+
-  S "The numbers given in the square brackets refer to" +:+
+  S "by filling in the missing" +:+ (phrase information) +:+ S "for the" +:+.
+  (phrase physicalSystem) +:+ S "The numbers given in the square brackets refer to" +:+
   S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
@@ -303,12 +300,12 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "isotropic properties."),
   (S "A5", S "Interslice normal and shear forces have a" +:+
            S "linear relationship, proportional to a constant" +:+
-           sParen (P (lambda ^. symbol)) +:+ S "and an" +:+
-           S "interslice force function" +:+ sParen (P (fi ^. symbol)) +:+
+           (sParen $ P $ lambda ^. symbol) +:+ S "and an" +:+
+           S "interslice force function" +:+ (sParen $ P $ fi ^. symbol) +:+
            S "depending on x position."),
   (S "A6", S "Slice to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
-           (phrase $ fs_rc ^. term) +:+ sParen (P (fs ^. symbol)) `sC`
+           (phrase $ fs_rc ^. term) +:+ (sParen $ P $ fs ^. symbol) `sC`
            S "and the Coulomb sliding law."),
   (S "A7", S "The stress-strain curve for interslice" +:+
            S "relationships is linear with a constant slope."),
@@ -369,7 +366,7 @@ s5_1 = Sub $ Section (S "Functional" +:+ (titleize' requirement))
 s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R1" , S "Read the input file, and store the" +:+
             S "data. Necessary input data summarized in" +:+.
-            makeRef table_inputdata),
+            (makeRef table_inputdata)),
   (S "R2" , S "Generate potential" +:+ (phrase crtSlpSrf) :+:
             S "'s for the input slope."),
   (S "R3" , S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
@@ -405,7 +402,7 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   
 s5_1_table = Con table_inputdata
 
-table_inputdata :: Contents
+table_inputdata :: Contents --FIXME: use table function?
 table_inputdata =  Table (map titleize [symbol_, units_, description]) 
   (mkTable
     [(\ch -> P (ch ^. symbol)),

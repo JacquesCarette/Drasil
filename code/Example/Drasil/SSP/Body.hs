@@ -398,13 +398,13 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "weighting."),
   (S "R7" , S "Generate new potential" +:+ (plural crtSlpSrf) +:+
             S "based on previously analysed" +:+ (plural slpSrf) +:+
-            S "with low" +:+. plural $ fs_rc ^. term),
-  (S "R8" , S "Repeat" +:+ plural requirement +:+ S "R3 to R7 until the" +:+
+            S "with low" +:+. (plural $ fs_rc ^. term)),
+  (S "R8" , S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
             S "minimum factor of safety remains approximately" +:+
             S "the same over a predetermined number of" +:+
             S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
-            S "as the" +:+. phrase crtSlpSrf),
+            S "as the" +:+. (phrase crtSlpSrf)),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
             S "method of slices or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+

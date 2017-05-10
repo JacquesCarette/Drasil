@@ -50,7 +50,7 @@ authors :: People
 authors = [nikitha, spencerSmith]
 
 glassBR_srs' :: Document
-glassBR_srs' = mkDoc mkSRS glassSystInfo
+glassBR_srs' = mkDoc' mkSRS for glassSystInfo
 
 --FIXME: Missing ToS intro because this example was using the default 
 -- (nuclear literature related) intro.
@@ -766,7 +766,7 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
   ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
-  titleize' connection +:+ S " Between" +:+ titleize' assumption +:+ S "and Other Items") True
+  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other Items") True
 
 s9_intro2 = 
   [Paragraph $

@@ -171,9 +171,6 @@ notApp        = commonINP "notApp"        (cn "not applicable")             "N/A
 nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase? 
 eqTNT         = commonINP "eqTNT"         (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 
-likelyChg     = commonINP "likelyChg"     (cn' "likely change")                 "LC"
-
-
 ----Terminology---- 
 
 -- TODO: See if we can make some of these terms less specific and/or

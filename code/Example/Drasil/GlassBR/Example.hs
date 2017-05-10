@@ -24,78 +24,78 @@ plate_len, plate_width, dim_max, dim_min, mod_elas, act_thick, sflawParamK,
   sflawParamM, demand, sd, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitalChunk
 
-plate_len   = uc' "plate_len" (nounPhraseSP "Plate length (long dimension)")
+plate_len   = uc' "plate_len" (nounPhraseSP "plate length (long dimension)")
   "FIXME: Define this or remove the need for definitions"
   lA millimetre
-plate_width = uc' "plate_width" (nounPhraseSP "Plate width (short dimension)")
+plate_width = uc' "plate_width" (nounPhraseSP "plate width (short dimension)")
   "FIXME: Define this or remove the need for definitions"
   lB millimetre
 dim_max     = uc' "dim_max" 
-  (nounPhraseSP "Maximum value for one of the dimensions of the glass plate") 
+  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   "FIXME: Define this or remove the need for definitions"
   (sub lD (Atomic "max")) millimetre
 dim_min     = uc' "dim_min" 
-  (nounPhraseSP "Minimum value for one of the dimensions of the glass plate") 
+  (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
   "FIXME: Define this or remove the need for definitions"
   (sub lD (Atomic "min")) millimetre
-mod_elas    = uc' "mod_elas" (nounPhraseSP "Modulus of elasticity of glass")
+mod_elas    = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
   "FIXME: Define this or remove the need for definitions"
   cE kilopascal
-act_thick   = uc' "act_thick" (nounPhraseSP "Actual thickness")
+act_thick   = uc' "act_thick" (nounPhraseSP "actual thickness")
   "FIXME: Define this or remove the need for definitions"
   lH millimetre
-sflawParamK = uc' "sflawParamK" (nounPhraseSP "Surface flaw parameter")
+sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter")
   "FIXME: Define this or remove the need for definitions"
   lK sFlawPU
-sflawParamM = uc' "sflawParamM" (nounPhraseSP "Surface flaw parameter")
+sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter")
   "FIXME: Define this or remove the need for definitions"
   lM sFlawPU
-demand      = uc' "demand" (nounPhraseSP "Applied load (demand)")
+demand      = uc' "demand" (nounPhraseSP "applied load (demand)")
   "FIXME: Define this or remove the need for definitions"
   lQ kilopascal
-sd          = uc' "sd" (nounPhraseSP $ "Stand off distance which is " ++
+sd          = uc' "sd" (nounPhraseSP $ "stand off distance which is " ++
   "represented in coordinates (SDx, SDy, SDz)")
   "FIXME: Define this or remove the need for definitions"
   (Atomic "SD") metre
-sdx         = uc' "sdx" (nounPhraseSP "Stand off distance (x-component)")
+sdx         = uc' "sdx" (nounPhraseSP "stand off distance (x-component)")
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lX) metre
-sdy         = uc' "sdy" (nounPhraseSP "Stand off distance (y-component)")
+sdy         = uc' "sdy" (nounPhraseSP "stand off distance (y-component)")
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lY) metre
-sdz         = uc' "sdz" (nounPhraseSP "Stand off distance (z-component)")
+sdz         = uc' "sdz" (nounPhraseSP "stand off distance (z-component)")
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) lZ) metre
 sd_max      = uc' "sd_max" 
-  (nounPhraseSP "Maximum stand off distance permissible for input") 
+  (nounPhraseSP "maximum stand off distance permissible for input") 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) (Atomic "max")) metre
 sd_min      = uc' "sd_min" 
-  (nounPhraseSP "Minimum stand off distance permissible for input") 
+  (nounPhraseSP "minimum stand off distance permissible for input") 
   "FIXME: Define this or remove the need for definitions"
   (sub (sd ^. symbol) (Atomic "min")) metre
 nom_thick   = uc' "nom_thick" (nounPhraseSP $ 
-  "Nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
+  "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
   "FIXME: Define this or remove the need for definitions"
   lT millimetre
-load_dur    = uc' "load_dur" (nounPhraseSP "Duration of load")
+load_dur    = uc' "load_dur" (nounPhraseSP "duration of load")
   "FIXME: Define this or remove the need for definitions"
   (sub lT lD) second
 char_weight = uc' "char_weight" (cn' "charge weight")
   "FIXME: Define this or remove the need for definitions"
   lW kilogram
 cWeightMax  = uc' "cWeightMax" 
-  (nounPhraseSP "Maximum permissible input charge weight")
+  (nounPhraseSP "maximum permissible input charge weight")
   "FIXME: Define this or remove the need for definitions"
   (sub (char_weight ^. symbol) 
   (Atomic "max")) kilogram
 cWeightMin  = uc' "cWeightMin" 
-  (nounPhraseSP "Minimum permissible input charge weight")
+  (nounPhraseSP "minimum permissible input charge weight")
   "FIXME: Define this or remove the need for definitions"
   (sub (char_weight ^. symbol) (Atomic "min")) kilogram
 eqTNTWeight = uc' "eqTNTWeight" 
-  (nounPhraseSP "Explosive Mass in equivalent weight of TNT")
+  (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
   "FIXME: Define this or remove the need for definitions"
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
@@ -107,37 +107,37 @@ risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
   dimlessLoad, tolLoad, tNT, lRe, loadSF, ar, ar_max, ar_min, gTF :: VarChunk
 
 ----Quantities--
-risk_fun    = makeVC "risk_fun" (nounPhraseSP "Risk function") cB
-glass_type  = makeVC "glass_type" (nounPhraseSP "Glass type, g in {AN, HS, FT}") lG
+risk_fun    = makeVC "risk_fun" (nounPhraseSP "risk function") cB
+glass_type  = makeVC "glass_type" (nounPhraseSP "glass type, g in {AN, HS, FT}") lG
 is_safe1    = makeVC "is_safe1" 
-  (nounPhraseSP $ "True when calculated probability is " ++
+  (nounPhraseSP $ "true when calculated probability is " ++
   "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
   Atomic "safe1"])
 is_safe2    = makeVC "is_safe2" 
-  (nounPhraseSP $ "True when load resistance (capacity) " ++
+  (nounPhraseSP $ "true when load resistance (capacity) " ++
   "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
   Atomic "safe2"])
 sdf         = makeVC "sdf" 
-  (nounPhraseSP "Stress distribution factor (Function)") cJ
+  (nounPhraseSP "stress distribution factor (Function)") cJ
 sdf_tol     = makeVC "sdf_tol" 
-  (nounPhraseSP "Stress distribution factor (Function) based on Pbtol")
+  (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
   (sub (sdf ^. symbol) (Atomic "tol"))
-prob_br     = makeVC "prob_br" (nounPhraseSP "probability of breakage") --originally was "(nounPhraseSP "probability of breakage")"
+prob_br     = makeVC "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB)
 pb_tol      = makeVC "pb_tol" 
-  (nounPhraseSP "Tolerable probability of breakage") (sub cP (Atomic "btol"))
-dimlessLoad = makeVC "dimlessLoad" (cn' "Dimensionless load") (hat lQ)
-tolLoad     = makeVC "tolLoad" (cn' "Tolerable load")
+  (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
+dimlessLoad = makeVC "dimlessLoad" (cn' "dimensionless load") (hat lQ)
+tolLoad     = makeVC "tolLoad" (cn' "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
 tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
-lRe         = makeVC "lRe" (nounPhraseSP "Load Resistance") (Atomic "LR")
-loadSF      = makeVC "loadSF" (nounPhraseSP "Load Share Factor") (Atomic "LSF")
-ar          = makeVC "ar" (nounPhraseSP "Aspect Ratio") (Atomic "AR")
+lRe         = makeVC "lRe" (nounPhraseSP "load resistance") (Atomic "LR")
+loadSF      = makeVC "loadSF" (nounPhraseSP "load share factor") (Atomic "LSF")
+ar          = makeVC "ar" (nounPhraseSP "aspect ratio") (Atomic "AR")
 ar_max      = makeVC "ar_max" (nounPhraseSP "maximum aspect ratio") -- originally "Maximum Aspect Ratio"
   (sub (ar ^. symbol) (Atomic "max"))
-ar_min      = makeVC "ar_min" (nounPhraseSP "Minimum Aspect Ratio")
+ar_min      = makeVC "ar_min" (nounPhraseSP "minimum aspect ratio")
   (sub (ar ^. symbol) (Atomic "min"))
-gTF         = makeVC "gTF" (nounPhraseSP "Glass Type Factor") (Atomic "GTF")
+gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
@@ -155,21 +155,23 @@ annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
 --FIXME: Switch to using "nounphrase" instead of "cn"
-gLassBR       = dcc "gLassBR" (pn "GlassBR") "Glass-BR"
-annealedGlass = commonINP "annealedGlass" (cn''' "Annealed Glass") "AN"
-aspectR       = commonINP "aspectR" (cn' "Aspect Ratio") "AR"
-aspectRMax    = commonINP "aspectRMax" (cn' "Maximum Aspect Ratio") "ARmax"
-fullyTGlass   = commonINP "fullyTGlass" (cn''' "Fully Tempered Glass") "FT"
-glassTypeFac  = commonINP "glassTypeFac" (cn' "Glass Type Factor") "GTF"
-heatSGlass    = commonINP "heatSGlass" (cn''' "Heat Strengthened Glass") "HS"
-iGlass        = commonINP "iGlass" (cn''' "Insulating Glass") "IG"
-lDurFac       = commonINP "lDurFac" (cn' "Load Duration Factor") "LDF"
-lGlass        = commonINP "lGlass" (cn''' "Laminated Glass") "LG"
-lResistance   = commonINP "lResistance" (cn' "Load Resistance") "LR"
-lShareFac     = commonINP "lShareFac" (cn' "Load Share Factor") "LSF"
-notApp        = commonINP "notApp" (cn "Not Applicable") "N/A"
-nonFactorL    = commonINP "nonFactorL" (cn' "Non-Factored Load") "NFL"
-eqTNT         = commonINP "eqTNT" (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "Glass-BR" --lowercase?
+annealedGlass = commonINP "annealedGlass" (cn''' "annealed glass")          "AN"
+aspectR       = commonINP "aspectR"       (cn' "aspect ratio")              "AR"
+aspectRMax    = commonINP "aspectRMax"    (cn' "maximum aspect ratio")      "ARmax"
+fullyTGlass   = commonINP "fullyTGlass"   (cn''' "fully tempered glass")    "FT"
+glassTypeFac  = commonINP "glassTypeFac"  (cn' "glass type factor")         "GTF"
+heatSGlass    = commonINP "heatSGlass"    (cn''' "heat strengthened glass") "HS"
+iGlass        = commonINP "iGlass"        (cn''' "insulating glass")        "IG"
+lDurFac       = commonINP "lDurFac"       (cn' "load duration factor")      "LDF"
+lGlass        = commonINP "lGlass"        (cn''' "laminated glass")         "LG"
+lResistance   = commonINP "lResistance"   (cn' "load resistance")           "LR"
+lShareFac     = commonINP "lShareFac"     (cn' "load share factor")         "LSF"
+notApp        = commonINP "notApp"        (cn "not applicable")             "N/A"
+nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase? 
+eqTNT         = commonINP "eqTNT"         (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+
+likelyChg     = commonINP "likelyChg"     (cn' "likely change")                 "LC"
 
 
 ----Terminology---- 

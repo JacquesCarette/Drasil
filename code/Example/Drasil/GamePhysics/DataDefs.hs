@@ -43,7 +43,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
               phrase $ CP.time ^. term, P $ time ^. symbol]
 -}
 dd2linDisp :: QDefinition
-dd2linDisp = fromEqn "dd2linDisp" (linDisp ^. term) (linDisp ^. symbol) metre
+dd2linDisp = fromEqn "dd2linDisp" fixme (linDisp ^. symbol) metre
   dispEqn
 
 dispEqn :: Expr
@@ -70,7 +70,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 dd3linVel :: QDefinition
-dd3linVel = fromEqn "dd3linVel" (linVelo ^. term) (linVelo ^. symbol) velU
+dd3linVel = fromEqn "dd3linVel" fixme (linVelo ^. symbol) velU
   velEqn
 
 velEqn :: Expr
@@ -86,7 +86,7 @@ dd3descr = S "linear" +:+ (vel ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 dd4linAcc :: QDefinition
-dd4linAcc = fromEqn "dd4linAcc" (linAccel ^. term) (linAccel ^. symbol) accelU
+dd4linAcc = fromEqn "dd4linAcc" fixme (linAccel ^. symbol) accelU
   accelEqn
 
 accelEqn :: Expr
@@ -102,7 +102,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 dd5angDisp :: QDefinition
-dd5angDisp = fromEqn "dd5angDisp" (angDisp ^. term) 
+dd5angDisp = fromEqn "dd5angDisp" fixme
   (Concat [(angDisp ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
   radians angDispEqn
 

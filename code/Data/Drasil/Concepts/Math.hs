@@ -20,14 +20,7 @@ perp         = dcc "perp"         (cn' "perpendicular")           "at right angl
 traceyMatrix = dcc "traceyMatrix" (cnICES "traceability matrix")  "traceability matrix" -- CINP type, correct?
 unit         = dcc "unit"         (cn' "unit")                    "identity element"
 vector       = dcc "vector"       (cn' "vector")                  "object with magnitude and direction"
-
---norm_vect = dcc "norm_vect" (cn' "normal vector") "unit outward normal vector for a surface"
---perp_vect = dcc "perp_vect" (cn' "perpendicular vector") "vector perpendicular or 90 degrees to another vector"
--- could use better name for this? namespace collision when using orientation
-orient      = dcc "orientation" (cn' "orientation")   "orientation"
---unit_vect = dcc "unit_vect" (cn' "unit vector") "unit vector"
---euclid_norm = dcc "euclid_norm" (cn' "Euclidean norm") "Euclidean norm"
-
+orient       = dcc "orientation"  (cn' "orientation")             "orientation"
 --FIXME: use nounphrase instead of cn'
-ode       = commonINP "ode" (cn' "Ordinary Differential Equation") "ODE"
+ode          = commonINP "ode"    (cn' "Ordinary Differential Equation") "ODE"
 

@@ -535,7 +535,9 @@ s5_1_list :: Contents
 s5_1 = Section (S "Functional" +:+ titleize' requirement)
   [Con s5_1_list]
 
-s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4 :: Sentence
+s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
+  s5_1_req7, s5_1_req8 :: Sentence
+
 s5_1_req1 = S "Create a" +:+ (phrase $ space ^. term) +:+ S "for all of the" +:+ 
   plural (rigidBody ^. term) +:+. S "in the physical simulation to interact in"
 
@@ -552,6 +554,25 @@ s5_1_req3 = S "Input the" +:+ (phrase $ surface ^. term) +:+
 s5_1_req4 = S "Verify that the inputs" +:+. 
   S "satisfy the required physical constraints"
 
+s5_1_req5 = foldle (+:+) (+:+.) EmptyS 
+  [S "Determine the", plural (position ^. term), S "and", plural (vel ^. term), 
+  S "over a", S "period of", (phrase $ time ^. term), S "of the", (getAcc twoD),
+  plural (rigidBody ^. term), S "acted upon by a", (phrase $ force ^. term)]
+
+s5_1_req6 = foldle (+:+) (+:+.) EmptyS
+  [S "Determine the", plural (orientation ^. term), S "and", 
+  plural (angVel ^. term), S "over a period of", (phrase $ time ^. term),
+   S "of the", (getAcc twoD), plural (rigidBody ^. term)]
+
+s5_1_req7 = S "Determine if any of the" +:+ plural (rigidBody ^. term) +:+ 
+  S "in the" +:+ (phrase $ space ^. term) +:+. S "have collided"
+
+s5_1_req8 = foldle (+:+) (+:+.) EmptyS
+  [S "Determine the", plural (position ^. term), S "and", plural (vel ^. term), 
+  S "over a", S "period of", (phrase $ time ^. term), S "of the", (getAcc twoD), 
+  plural (rigidBody ^. term), S "that have undergone a", 
+  (phrase $ collision ^. term)]
+
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
 s5_1_list = Enumeration (Simple [
@@ -559,26 +580,10 @@ s5_1_list = Enumeration (Simple [
   ((getAcc requirement) :+: S "2", Flat s5_1_req2),
   ((getAcc requirement) :+: S "3", Flat s5_1_req3),
   ((getAcc requirement) :+: S "4", Flat s5_1_req4),
---
-  ((getAcc requirement) :+: S "5", Flat (S "Determine the" +:+
-  plural (position ^. term) +:+ S "and" +:+ plural (vel ^. term) +:+ S "over a" +:+
-  S "period of" +:+ (phrase $ time ^. term) +:+ S "of the" +:+ (getAcc twoD) +:+ 
-  plural (rigidBody ^. term) +:+ S "acted upon by a" +:+. (phrase $ force ^. term))),
---
-  ((getAcc requirement) :+: S "6", Flat (S "Determine the" +:+
-  plural (orientation ^. term) +:+ S "and" +:+ plural (angVel ^. term) +:+
-  S "over a period of" +:+ (phrase $ time ^. term) +:+ S "of the" +:+
-  (getAcc twoD) +:+. plural (rigidBody ^. term))),
---
-  ((getAcc requirement) :+: S "7", Flat (S "Determine if any of the" +:+
-  plural (rigidBody ^. term) +:+ S "in the" +:+ (phrase $ space ^. term) +:+.
-  S "have collided")),
---
-  ((getAcc requirement) :+: S "8", Flat (S "Determine the" +:+
-  plural (position ^. term) +:+ S "and" +:+ plural (vel ^. term) +:+ S "over a" +:+
-  S "period of" +:+ (phrase $ time ^. term) +:+ S "of the" +:+ (getAcc twoD) +:+ 
-  plural (rigidBody ^. term) +:+ S "that have undergone a" +:+. 
-  (phrase $ collision ^. term)))
+  ((getAcc requirement) :+: S "5", Flat s5_1_req5),
+  ((getAcc requirement) :+: S "6", Flat s5_1_req6),
+  ((getAcc requirement) :+: S "7", Flat s5_1_req7),
+  ((getAcc requirement) :+: S "8", Flat s5_1_req8)
   ])
 
 --------------------------------------

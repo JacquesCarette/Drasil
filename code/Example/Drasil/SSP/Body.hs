@@ -138,7 +138,7 @@ s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
 -- SECTION 2.2 --
 s2_2 = Sub $ Section (titleize scpOfReq) [s2_2_p1]
 
-s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+
+s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
   S "limited to stability analysis of a 2 dimensional slope," +:+
   S "composed of homogeneous soil layers. Given appropriate" +:+
   S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
@@ -161,7 +161,7 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "and trace back to find any additional information they" +:+
   S "require. The" +:+ (plural instMdl) +:+ S "provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
-  S "Morgenstern Price Analysis. The goal statements are refined" +:+
+  S "Morgenstern Price Analysis. The" +:+ (plural goalStmt) +:+ S "are refined" +:+
   S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
   S "and" +:+ (plural instMdl) +:+. (sParen . makeRef) sec_IMs
 
@@ -267,7 +267,7 @@ fig_forceacting :: Contents
 fig_forceacting = Figure (S "Forces acting on a slice") "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
-s4_1_3 = Sub $ Section (S "Goal Statements") [s4_1_3_p1, s4_1_3_list]
+s4_1_3 = Sub $ Section (titleize' goalStmt) [s4_1_3_p1, s4_1_3_list]
 
 s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
@@ -298,7 +298,7 @@ s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
   S "original problem and helps in developing the" +:+ (phrase thModel) +:+
   S "by filling in the missing information for the" +:+. (phrase physicalSystem) +:+
   S "The numbers given in the square brackets refer to" +:+
-  S "the data definition, or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
+  S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
 s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
@@ -363,7 +363,7 @@ sec_IMs :: Section
 sec_IMs = Section (titleize' instMdl) []
 
 -- SECTION 4.2.6 --
-s4_2_6 = Sub $ Section (S "Data Constraints") []
+s4_2_6 = Sub $ Section (S "Data" +:+ (titleize' constraint)) []
 
 -- SECTION 5 --
 s5 = Section (titleize' requirement) [s5_p1, s5_1, s5_2]

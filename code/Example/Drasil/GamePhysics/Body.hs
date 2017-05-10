@@ -66,7 +66,7 @@ mgBod :: [Section]
 -- are introduced. Once the SRS is entirely switched to docLang, the redundant
 -- sections should be removed.
 
---fold helper functions applies f to all but the last element applies g to 
+--fold helper functions applies f to all but the last element, applies g to 
 --last element and the accumulator
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 foldle _ _ z []     = z
@@ -444,11 +444,12 @@ s4_2_5_intro :: Contents
 s4_2_5 = Section (titleize' inModel) ([Con s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-})
 
-s4_2_5_intro = Paragraph $ S "This section transforms the problem defined" +:+
-  S "in" +:+ (makeRef s4_1) +:+ S "into one expressed in mathematical" +:+
-  S "terms. It uses concrete symbols defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract symbols in the models identified in" +:+
-  (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)
+s4_2_5_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+  [S "This section transforms the problem defined",
+  S "in", (makeRef s4_1), S "into one expressed in mathematical",
+  S "terms. It uses concrete symbols defined in", (makeRef s4_2_4),
+  S "to replace the abstract symbols in the models identified in",
+  (makeRef s4_2_2), S "and", (makeRef s4_2_3)]
 
 -- Instance models not yet implemented --
 -- s4_2_5_IMods = ?
@@ -463,14 +464,15 @@ s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 s4_2_6 = Section (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
   Con s4_2_6_table2]
 
-s4_2_6_intro = Paragraph $ S "Table 1 and 2 show the data constraints on" +:+
-  S "the input and output variables, respectively. The" +:+
-  (Quote $ S "Physical Constraints") +:+ S "column gives the physical" +:+
-  S "limitations on the range of values that can be taken by the" +:+
-  S "variable. The constraints are conservative, to give the user of the" +:+
-  S "model the flexibility to experiment with unusual situations. The" +:+
-  S "column of typical values is intended to provide a feel for a" +:+.
-  S "common scenario"
+s4_2_6_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+  [S "Table 1 and 2 show the data constraints on",
+  S "the input and output variables, respectively. The",
+  (Quote $ S "Physical Constraints"), S "column gives the physical",
+  S "limitations on the range of values that can be taken by the",
+  S "variable. The constraints are conservative, to give the user of the",
+  S "model the flexibility to experiment with unusual situations. The",
+  S "column of typical values is intended to provide a feel for a",
+  S "common scenario"]
 
 -- Currently unable to write relations in sentences, so verbal explanations
 -- will do for now.
@@ -516,11 +518,12 @@ s5_intro :: Contents
 s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
-s5_intro = Paragraph $ S "This section provides the functional" +:+
-  plural requirement `sC` S "the business" +:+
-  S "tasks that the software is expected to complete, and the" +:+
-  S "nonfunctional" +:+. (plural requirement `sC` 
-  S "the qualities that the software is expected to exhibit")
+s5_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+  [S "This section provides the functional",
+  plural requirement `sC` S "the business",
+  S "tasks that the software is expected to complete, and the",
+  S "nonfunctional", (plural requirement `sC` 
+  S "the qualities that the software is expected to exhibit")]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
@@ -532,24 +535,30 @@ s5_1_list :: Contents
 s5_1 = Section (S "Functional" +:+ titleize' requirement)
   [Con s5_1_list]
 
+s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4 :: Sentence
+s5_1_req1 = S "Create a" +:+ (phrase $ space ^. term) +:+ S "for all of the" +:+ 
+  plural (rigidBody ^. term) +:+. S "in the physical simulation to interact in"
+
+s5_1_req2 = foldle (+:+) (+:+.) EmptyS 
+  [S "Input the initial", plural (mass ^. term) `sC` plural (vel ^. term) `sC` 
+  plural (orientation ^. term) `sC` plural (angVel ^. term), 
+  S "of" `sC` S "and", plural (force ^. term), S "applied on", 
+  plural (rigidBody ^. term)]
+
+s5_1_req3 = S "Input the" +:+ (phrase $ surface ^. term) +:+ 
+  S "properties of the bodies, such as" +:+ (phrase $ friction ^. term) +:+ 
+  S "or" +:+. (phrase $ elasticity ^. term)
+
+s5_1_req4 = S "Verify that the inputs" +:+. 
+  S "satisfy the required physical constraints"
+
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
 s5_1_list = Enumeration (Simple [
-  ((getAcc requirement) :+: S "1", Flat (S "Create a" +:+
-  (phrase $ space ^. term) +:+ S "for all of the" +:+ 
-  plural (rigidBody ^. term) +:+. S "in the physical simulation to interact in")),
---
-  ((getAcc requirement) :+: S "2", Flat (S "Input the initial" +:+
-  plural (mass ^. term) `sC` plural (vel ^. term) `sC` plural (orientation ^. term) `sC`
-  plural (angVel ^. term) +:+ S "of" `sC` S "and" +:+ plural (force ^. term) +:+ 
-  S "applied on" +:+. plural (rigidBody ^. term))),
---
-  ((getAcc requirement) :+: S "3", Flat (S "Input the" +:+ 
-  (phrase $ surface ^. term) +:+ S "properties of the bodies, such as" +:+ 
-  (phrase $ friction ^. term) +:+ S "or" +:+. (phrase $ elasticity ^. term))),
---
-  ((getAcc requirement) :+: S "4", Flat (S "Verify that the inputs" +:+.
-  S "satisfy the required physical constraints")),
+  ((getAcc requirement) :+: S "1", Flat s5_1_req1),
+  ((getAcc requirement) :+: S "2", Flat s5_1_req2),
+  ((getAcc requirement) :+: S "3", Flat s5_1_req3),
+  ((getAcc requirement) :+: S "4", Flat s5_1_req4),
 --
   ((getAcc requirement) :+: S "5", Flat (S "Determine the" +:+
   plural (position ^. term) +:+ S "and" +:+ plural (vel ^. term) +:+ S "over a" +:+

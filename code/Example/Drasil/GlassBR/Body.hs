@@ -340,7 +340,7 @@ s6_2_1_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
   S "and helps in developing the" +:+ (phrase thModel) +:+ S "[" :+: (short thModel) :+:
   S "] by filling in the missing" +:+ phrase information +:+ S "for the" +:+.
-  phrase physicalSystem :+: S "The numbers given in the" +:+ 
+  phrase physicalSystem +:+ S "The numbers given in the" +:+ 
   S "square brackets refer to the" +:+ (phrase dataDefn) +:+ S "[" :+:
   (short dataDefn) :+: S "], or" +:+ phrase inModel +:+ S "[" :+: 
   (short inModel) :+: S "], in which the respective" +:+ (phrase assumption) 

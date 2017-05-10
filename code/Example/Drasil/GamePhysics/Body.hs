@@ -38,7 +38,7 @@ auths :: Sentence
 auths = manyNames authors
 
 chipmunkSRS' :: Document
-chipmunkSRS' = mkDoc' mkSRS chipmunkSysInfo
+chipmunkSRS' = mkDoc' mkSRS for'' chipmunkSysInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 
@@ -89,33 +89,22 @@ s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
-        [S "Due to the rising cost of developing video",
-        S "games, developers are looking for ways to save time and money for",
-        S "their projects. Using an open source", (phrase $ physLib ^. term),
-        S "that is reliable and free will cut down development costs and lead",
-        S "to better quality products"]
+  [S "Due to the rising cost of developing video",
+  S "games, developers are looking for ways to save time and money for",
+  S "their projects. Using an open source", (phrase $ physLib ^. term),
+  S "that is reliable and free will cut down development costs and lead",
+  S "to better quality products"]
 
 para2_s2_intro :: Contents
 para2_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
-        [S "The following section provides an overview of the",
-        titleize srs, sParen (getAcc srs), S "for",
-        (short chipmunk) `sC` S "an open source", (getAcc twoD), 
-        (phrase $ rigidBody ^. term), (phrase $ physLib ^. term), S ".",
-        S "This section explains the purpose of this document, the scope",
-        S "of the system, and the organization of the document"]
+  [S "The following section provides an overview of the",
+  titleize srs, sParen (getAcc srs), S "for",
+  (short chipmunk) `sC` S "an open source", (getAcc twoD), 
+  (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term),
+  S "This section explains the purpose of this document, the scope",
+  S "of the system, and the organization of the document"]
         
 s2_intro = [para1_s2_intro, para2_s2_intro]
---s2_intro = [Paragraph (S "Due to the rising cost of developing video" +:+
---  S "games, developers are looking for ways to save time and money for" +:+
---  S "their projects. Using an open source" +:+ (phrase $ physLib ^. term) +:+
---  S "that is reliable and free will cut down development costs and lead" +:+.
---  S "to better quality products"),
---  Paragraph (S "The following section provides an overview of the" +:+
---  titleize srs +:+ sParen (getAcc srs) +:+ S "for" +:+
---  (short chipmunk) `sC` S "an open source" +:+ (getAcc twoD) +:+ 
---  (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term) +:+
---  S "This section explains the purpose of this document, the scope" +:+.
---  S "of the system, and the organization of the document")]
 
 -------------------------------
 -- 2.1 : Purpose of Document --
@@ -128,44 +117,27 @@ s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
-          [S "This document descibes the modeling of an",
-          S "open source", (getAcc twoD), (phrase $ rigidBody ^. term), 
-          (phrase $ physLib ^. term), S "used for games. The", 
-          plural goalStmt, S "and", (plural thModel), S "used in",
-          (short chipmunk), S "are provided. This",
-          S "document is intended to be used as a reference to provide all",
-          S "necessary information to understand and verify the model"]
+  [S "This document descibes the modeling of an",
+  S "open source", (getAcc twoD), (phrase $ rigidBody ^. term), 
+  (phrase $ physLib ^. term), S "used for games. The", 
+  plural goalStmt, S "and", (plural thModel), S "used in",
+  (short chipmunk), S "are provided. This",
+  S "document is intended to be used as a reference to provide all",
+  S "necessary information to understand and verify the model"]
 
 para2_s2_1_intro :: Contents
 para2_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
-          [S "This document will be used as a starting point for",
-          S "subsequent development phases, including writing the design",
-          S "specification and the software verification and validation plan.",
-          S "The design document will show how the", plural requirement,
-          S "are to be realized.", 
-          S "The verification and validation plan will show the steps",
-          S "that will be used to increase confidence in the software",
-          S "documentation and the implementation"]
+  [S "This document will be used as a starting point for",
+  S "subsequent development phases, including writing the design",
+  S "specification and the software verification and validation plan.",
+  S "The design document will show how the", plural requirement, 
+  S "are to be realized.", 
+  S "The verification and validation plan will show the steps",
+  S "that will be used to increase confidence in the software",
+  S "documentation and the implementation"]
 
 s2_1_intro = [para1_s2_1_intro, para2_s2_1_intro]
 
-{--s2_1_intro = [Paragraph (S "This document descibes the modeling of an" +:+
-  S "open source" +:+ (getAcc twoD) +:+ (phrase $ rigidBody ^. term) +:+ 
-  (phrase $ physLib ^. term) +:+ S "used for games. The" +:+ 
-  plural goalStmt +:+ S "and" +:+ 
-  (plural thModel) +:+ S "used in" +:+ (short chipmunk) +:+
-  S "are provided. This" +:+
-  S "document is intended to be used as a reference to provide all" +:+.
-  S "necessary information to understand and verify the model"),
-  Paragraph (S "This document will be used as a starting point for" +:+
-  S "subsequent development phases, including writing the design" +:+.
-  S "specification and the software verification and validation plan" +:+
-  S "The design document will show how the" +:+
-  plural requirement +:+ S "are to be" +:+
-  S "realized. The verification and validation plan will show the steps" +:+
-  S "that will be used to increase confidence in the software" +:+.
-  S "documentation and the implementation")]
---}
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
@@ -177,12 +149,12 @@ s2_2 = Section (S "Scope of" +:+ titleize' requirement)
   [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
-    [S "The scope of the", plural requirement, S "includes the",
-    S "physical simulation of", (getAcc twoD), plural (rigidBody ^. term),
-    S "acted on by forces. Given", (getAcc twoD), 
-    plural (rigidBody ^. term) `sC` (short chipmunk), 
-    S "is intended to simulate how these", plural (rigidBody ^. term), 
-    S "interact with one another"]
+  [S "The scope of the", plural requirement, S "includes the",
+  S "physical simulation of", (getAcc twoD), plural (rigidBody ^. term),
+  S "acted on by forces. Given", (getAcc twoD), 
+  plural (rigidBody ^. term) `sC` (short chipmunk), 
+  S "is intended to simulate how these", plural (rigidBody ^. term), 
+  S "interact with one another"]
 
 -------------------------------------
 -- 2.3 : Organization of Documents --
@@ -196,9 +168,10 @@ s2_3 = orgSec s2_3_intro inModel s4_2_5
 -- FIXME: Citations.
 -- FIXME: This can probably be completely pulled out is we decide on the 
 --  right convention for the intro across examples.
-s2_3_intro = S "The organization of this document follows the" +:+
-  S "template for an" +:+ (getAcc srs) +:+ S "for scientific" +:+.
-  S "computing software proposed by [1] and [2]"
+s2_3_intro = foldle (+:+) (+:+.) (EmptyS) 
+  [S "The organization of this document follows the",
+  S "template for an", (getAcc srs), S "for scientific",
+  S "computing software proposed by [1] and [2]"]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -211,10 +184,11 @@ s3 = Section (S "General" +:+ titleize systemdescription) [Con s3_intro, Sub s3_
   Sub s3_2]
 
 --FIXME: This can be generalized to use more chunks
-s3_intro = Paragraph $ S "This section provides general information" +:+
-  S "about the system, identifies the interfaces between the system and" +:+
-  S "its environment, and describes the user characteristics and the" +:+.
-  S "system constraints"
+s3_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+  [S "This section provides general information",
+  S "about the system, identifies the interfaces between the system and",
+  S "its environment, and describes the user characteristics and the",
+  S "system constraints"]
 
 --------------------------------
 -- 3.1 : User Characteristics --
@@ -225,9 +199,10 @@ s3_1_intro :: Contents
 
 s3_1 = Section (S "User Characteristics") [Con s3_1_intro]
 
-s3_1_intro = Paragraph $ S "The end user of" +:+ (short chipmunk) +:+
-  S "should have an understanding of first year programming concepts" +:+.
-  S "and an understanding of high school physics"
+s3_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+  [S "The end user of", (short chipmunk),
+  S "should have an understanding of first year programming concepts",
+  S "and an understanding of high school physics"]
 
 -------------------------------
 -- 3.2 : System Constraints  --
@@ -261,20 +236,21 @@ s4_1_intro :: Contents
 s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
   Sub s4_1_2]
 
-s4_1_intro = Paragraph $ S "Creating a gaming" +:+ (phrase $ physLib ^. term) +:+
-  S "is a difficult task. Games need physics libraries that simulate" +:+
-  S "objects acting under various physical conditions, while" +:+
-  S "simultaneously being fast and efficient enough to work in soft" +:+
-  S "real-time during the game. Developing a" +:+ (phrase $ physLib ^. term) +:+
+s4_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+  [S "Creating a gaming", (phrase $ physLib ^. term),
+  S "is a difficult task. Games need physics libraries that simulate",
+  S "objects acting under various physical conditions, while",
+  S "simultaneously being fast and efficient enough to work in soft",
+  S "real-time during the game. Developing a", (phrase $ physLib ^. term),
   S "from scratch takes a long period of time and is very costly" `sC`
-  S "presenting barriers of entry which make it difficult for game" +:+
-  S "developers to include physics in their products. There are a few" +:+
-  S "free, open source and high quality physics libraries available to" +:+
-  S "be used for consumer products" +:+ sParen (makeRef s7) :+:
-  S ". By creating a simple, lightweight, fast and portable" +:+
-  (getAcc twoD) +:+ (phrase $ rigidBody ^. term) +:+ (phrase $ physLib ^. term) `sC` 
-  S "game development will be more accessible" +:+.
-  S "to the masses and higher quality products will be produced"
+  S "presenting barriers of entry which make it difficult for game",
+  S "developers to include physics in their products. There are a few",
+  S "free, open source and high quality physics libraries available to",
+  S "be used for consumer products" +:+. sParen (makeRef s7),
+  S "By creating a simple, lightweight, fast and portable",
+  (getAcc twoD), (phrase $ rigidBody ^. term), (phrase $ physLib ^. term) `sC`
+  S "game development will be more accessible",
+  S "to the masses and higher quality products will be produced"]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -286,10 +262,11 @@ s4_1_1_intro, s4_1_1_bullets :: Contents
 s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
   Con s4_1_1_bullets]
 
-s4_1_1_intro = Paragraph $ S "This subsection provides a list of terms" +:+
-  S "that are used in subsequent sections and their meaning, with the" +:+
-  S "purpose of reducing ambiguity and making it easier to correctly" +:+
-  S "understand the" +:+ plural requirement :+: S ":"
+s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
+  [S "This subsection provides a list of terms",
+  S "that are used in subsequent sections and their meaning, with the",
+  S "purpose of reducing ambiguity and making it easier to correctly",
+  S "understand the", plural requirement, S ":"]
 
 --FIXME: Handle plurals properly. This is a really bad hack.
 s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
@@ -311,35 +288,47 @@ s4_1_2_list :: Contents
 
 s4_1_2 = Section (titleize' goalStmt) [Con s4_1_2_list]
 
-s4_1_2_list = Enumeration (Simple [
-  ((getAcc goalStmt) :+: S "1", Flat (S "Given the physical" +:+
-  S "properties, initial" +:+ (plural $ position ^. term) +:+ S "and" +:+
-  plural (vel ^. term) `sC` S "and" +:+ plural (force ^. term) +:+
-  S "applied on a set of" +:+ plural (rigidBody ^. term) `sC`
-  S "determine their new" +:+ plural (position ^. term) +:+ S "and" +:+
-  plural (vel ^. term) +:+ S "over a period of" +:+. (phrase $ time ^. term))),
---
-  ((getAcc goalStmt) :+: S "2", Flat (S "Given the physical" +:+
-  S "properties, initial" +:+ plural (orientation ^. term) +:+ S "and" +:+
-  plural (angVel ^. term) `sC` S "and" +:+ plural (force ^. term) +:+
-  S "applied on a set of" +:+ plural (rigidBody ^. term) `sC`
-  S "determine their new" +:+ plural (orientation ^. term) +:+ S "and" +:+
-  plural (angVel ^. term) +:+ S "over a period of" +:+. (phrase $ time ^. term))),
---
-  ((getAcc goalStmt) :+: S "3", Flat (S "Given the initial" +:+
-  plural (position ^. term) +:+ S "and" +:+ plural (vel ^. term) +:+ S "of a" +:+
-  S "set of" +:+ plural (rigidBody ^. term) `sC` S "determine if any of" +:+
-  S "them will collide with one another over a period of" +:+. 
-  (phrase $ time ^. term))),
---
-  ((getAcc goalStmt) :+: S "4", Flat (S "Given the physical" +:+
-  S "properties, initial linear and angular" +:+ plural (position ^. term) +:+
-  S "and" +:+ plural (vel ^. term) `sC` S "determine the new" +:+
-  plural (position ^. term) +:+ S "and" +:+ plural (vel ^. term) +:+
-  S "over a period of" +:+ (phrase $ time ^. term) +:+ S "of" +:+
-  plural (rigidBody ^. term) +:+ S "that have undergone a" +:+. 
-  (phrase $ collision ^. term)))
-  ])
+s4_1_2_stmt1 :: Sentence
+s4_1_2_stmt1 = foldle (+:+) (+:+.) EmptyS 
+  [S "Given the physical", S "properties, initial", 
+  (plural $ position ^. term), S "and",
+  plural (vel ^. term) `sC` S "and", plural (force ^. term),
+  S "applied on a set of", plural (rigidBody ^. term) `sC`
+  S "determine their new", plural (position ^. term), S "and",
+  plural (vel ^. term), S "over a period of", (phrase $ time ^. term)]
+
+s4_1_2_stmt2 :: Sentence
+s4_1_2_stmt2 = foldle (+:+) (+:+.) EmptyS 
+  [S "Given the physical", S "properties, initial", 
+  plural (orientation ^. term), S "and", plural (angVel ^. term) `sC`
+  S "and", plural (force ^. term), S "applied on a set of", 
+  plural (rigidBody ^. term) `sC` S "determine their new",
+  plural (orientation ^. term), S "and", plural (angVel ^. term), 
+  S "over a period of", (phrase $ time ^. term)]
+
+s4_1_2_stmt3 :: Sentence
+s4_1_2_stmt3 = foldle (+:+) (+:+.) EmptyS 
+  [S "Given the initial", plural (position ^. term), S "and", 
+  plural (vel ^. term), S "of a", S "set of", 
+  plural (rigidBody ^. term) `sC` S "determine if any of",
+  S "them will collide with one another over a period of", 
+  (phrase $ time ^. term)]
+
+s4_1_2_stmt4 :: Sentence
+s4_1_2_stmt4 = foldle (+:+) (+:+.) EmptyS 
+  [S "Given the physical", S "properties, initial linear and angular", 
+  plural (position ^. term), 
+  S "and", plural (vel ^. term) `sC` S "determine the new",
+  plural (position ^. term), S "and", plural (vel ^. term),
+  S "over a period of", (phrase $ time ^. term), S "of",
+  plural (rigidBody ^. term), S "that have undergone a", 
+  (phrase $ collision ^. term)]
+
+s4_1_2_list = Enumeration (Simple 
+  [((getAcc goalStmt) :+: S "1", Flat s4_1_2_stmt1),
+  ((getAcc goalStmt) :+: S "2", Flat s4_1_2_stmt2),
+  ((getAcc goalStmt) :+: S "3", Flat s4_1_2_stmt3),
+  ((getAcc goalStmt) :+: S "4", Flat s4_1_2_stmt4)])
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -361,14 +350,15 @@ s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
-s4_2_1_intro = Paragraph $ S "This section simplifies the original problem" +:+
-  S "and helps in developing the theoretical model by filling in the" +:+
-  S "missing information for the physical system. The numbers given in" +:+
-  S "the square brackets refer to the" +:+ foldr1 sC 
-  (map (\ch -> (phrase ch) +:+ (bterm ch)) 
-  [thModel, genDefn, dataDefn, inModel]) `sC` S "or" +:+ 
-  phrase likelyChg +:+ (bterm likelyChg) `sC` 
-  S "in which the respective" +:+ (phrase assumption) +:+. S "is used"
+s4_2_1_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+  [S "This section simplifies the original problem",
+  S "and helps in developing the theoretical model by filling in the",
+  S "missing information for the physical system. The numbers given in",
+  S "the square brackets refer to the", 
+  foldr1 sC (map (\ch -> (phrase ch) +:+ (bterm ch)) 
+  [thModel, genDefn, dataDefn, inModel]) `sC` S "or", 
+  phrase likelyChg, (bterm likelyChg) `sC` S "in which the respective",
+  (phrase assumption), S "is used"]
   where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
 
 s4_2_1_list = Enumeration (Simple [

@@ -74,6 +74,9 @@ foldle _ g z [x]    = g z x
 foldle f g z [x,y]  = g (f z x) y
 foldle f g z (x:xs) = foldle f g (f z x) xs
 
+foldlSent :: [Sentence] -> Sentence
+foldlSent = foldle (+:+) (+:+.) EmptyS
+
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
@@ -88,7 +91,7 @@ s2_intro :: [Contents]
 s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
 para1_s2_intro :: Contents
-para1_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+para1_s2_intro = Paragraph $ foldlSent
   [S "Due to the rising cost of developing video",
   S "games, developers are looking for ways to save time and money for",
   S "their projects. Using an open source", (phrase $ physLib ^. term),
@@ -96,7 +99,7 @@ para1_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS)
   S "to better quality products"]
 
 para2_s2_intro :: Contents
-para2_s2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+para2_s2_intro = Paragraph $ foldlSent 
   [S "The following section provides an overview of the",
   titleize srs, sParen (getAcc srs), S "for",
   (short chipmunk) `sC` S "an open source", (getAcc twoD), 
@@ -116,7 +119,7 @@ s2_1_intro :: [Contents]
 s2_1 = Section (S "Purpose of Document") (map Con s2_1_intro)
 
 para1_s2_1_intro :: Contents
-para1_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+para1_s2_1_intro = Paragraph $ foldlSent 
   [S "This document descibes the modeling of an",
   S "open source", (getAcc twoD), (phrase $ rigidBody ^. term), 
   (phrase $ physLib ^. term), S "used for games. The", 
@@ -126,7 +129,7 @@ para1_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS)
   S "necessary information to understand and verify the model"]
 
 para2_s2_1_intro :: Contents
-para2_s2_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+para2_s2_1_intro = Paragraph $ foldlSent 
   [S "This document will be used as a starting point for",
   S "subsequent development phases, including writing the design",
   S "specification and the software verification and validation plan.",
@@ -148,7 +151,7 @@ s2_2_intro :: Contents
 s2_2 = Section (S "Scope of" +:+ titleize' requirement)
   [Con s2_2_intro]
 
-s2_2_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+s2_2_intro = Paragraph $ foldlSent 
   [S "The scope of the", plural requirement, S "includes the",
   S "physical simulation of", (getAcc twoD), plural (rigidBody ^. term),
   S "acted on by forces. Given", (getAcc twoD), 
@@ -168,7 +171,7 @@ s2_3 = orgSec s2_3_intro inModel s4_2_5
 -- FIXME: Citations.
 -- FIXME: This can probably be completely pulled out is we decide on the 
 --  right convention for the intro across examples.
-s2_3_intro = foldle (+:+) (+:+.) (EmptyS) 
+s2_3_intro = foldlSent 
   [S "The organization of this document follows the",
   S "template for an", (getAcc srs), S "for scientific",
   S "computing software proposed by [1] and [2]"]
@@ -184,7 +187,7 @@ s3 = Section (S "General" +:+ titleize systemdescription) [Con s3_intro, Sub s3_
   Sub s3_2]
 
 --FIXME: This can be generalized to use more chunks
-s3_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+s3_intro = Paragraph $ foldlSent 
   [S "This section provides general information",
   S "about the system, identifies the interfaces between the system and",
   S "its environment, and describes the user characteristics and the",
@@ -199,7 +202,7 @@ s3_1_intro :: Contents
 
 s3_1 = Section (S "User Characteristics") [Con s3_1_intro]
 
-s3_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+s3_1_intro = Paragraph $ foldlSent 
   [S "The end user of", (short chipmunk),
   S "should have an understanding of first year programming concepts",
   S "and an understanding of high school physics"]
@@ -236,7 +239,7 @@ s4_1_intro :: Contents
 s4_1 = Section (S "Problem Description") [Con s4_1_intro, Sub s4_1_1,
   Sub s4_1_2]
 
-s4_1_intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS) 
+s4_1_intro = Paragraph $ foldlSent 
   [S "Creating a gaming", (phrase $ physLib ^. term),
   S "is a difficult task. Games need physics libraries that simulate",
   S "objects acting under various physical conditions, while",
@@ -289,7 +292,7 @@ s4_1_2_list :: Contents
 s4_1_2 = Section (titleize' goalStmt) [Con s4_1_2_list]
 
 s4_1_2_stmt1 :: Sentence
-s4_1_2_stmt1 = foldle (+:+) (+:+.) EmptyS 
+s4_1_2_stmt1 = foldlSent 
   [S "Given the physical", S "properties, initial", 
   (plural $ position ^. term), S "and",
   plural (vel ^. term) `sC` S "and", plural (force ^. term),
@@ -298,7 +301,7 @@ s4_1_2_stmt1 = foldle (+:+) (+:+.) EmptyS
   plural (vel ^. term), S "over a period of", (phrase $ time ^. term)]
 
 s4_1_2_stmt2 :: Sentence
-s4_1_2_stmt2 = foldle (+:+) (+:+.) EmptyS 
+s4_1_2_stmt2 = foldlSent 
   [S "Given the physical", S "properties, initial", 
   plural (orientation ^. term), S "and", plural (angVel ^. term) `sC`
   S "and", plural (force ^. term), S "applied on a set of", 
@@ -307,7 +310,7 @@ s4_1_2_stmt2 = foldle (+:+) (+:+.) EmptyS
   S "over a period of", (phrase $ time ^. term)]
 
 s4_1_2_stmt3 :: Sentence
-s4_1_2_stmt3 = foldle (+:+) (+:+.) EmptyS 
+s4_1_2_stmt3 = foldlSent 
   [S "Given the initial", plural (position ^. term), S "and", 
   plural (vel ^. term), S "of a", S "set of", 
   plural (rigidBody ^. term) `sC` S "determine if any of",
@@ -315,7 +318,7 @@ s4_1_2_stmt3 = foldle (+:+) (+:+.) EmptyS
   (phrase $ time ^. term)]
 
 s4_1_2_stmt4 :: Sentence
-s4_1_2_stmt4 = foldle (+:+) (+:+.) EmptyS 
+s4_1_2_stmt4 = foldlSent 
   [S "Given the physical", S "properties, initial linear and angular", 
   plural (position ^. term), 
   S "and", plural (vel ^. term) `sC` S "determine the new",
@@ -350,7 +353,7 @@ s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
-s4_2_1_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+s4_2_1_intro = Paragraph $ foldlSent 
   [S "This section simplifies the original problem",
   S "and helps in developing the theoretical model by filling in the",
   S "missing information for the physical system. The numbers given in",
@@ -444,7 +447,7 @@ s4_2_5_intro :: Contents
 s4_2_5 = Section (titleize' inModel) ([Con s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-})
 
-s4_2_5_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+s4_2_5_intro = Paragraph $ foldlSent 
   [S "This section transforms the problem defined",
   S "in", (makeRef s4_1), S "into one expressed in mathematical",
   S "terms. It uses concrete symbols defined in", (makeRef s4_2_4),
@@ -464,7 +467,7 @@ s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 s4_2_6 = Section (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
   Con s4_2_6_table2]
 
-s4_2_6_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+s4_2_6_intro = Paragraph $ foldlSent 
   [S "Table 1 and 2 show the data constraints on",
   S "the input and output variables, respectively. The",
   (Quote $ S "Physical Constraints"), S "column gives the physical",
@@ -518,7 +521,7 @@ s5_intro :: Contents
 s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
-s5_intro = Paragraph $ foldle (+:+) (+:+.) EmptyS 
+s5_intro = Paragraph $ foldlSent 
   [S "This section provides the functional",
   plural requirement `sC` S "the business",
   S "tasks that the software is expected to complete, and the",
@@ -541,7 +544,7 @@ s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
 s5_1_req1 = S "Create a" +:+ (phrase $ space ^. term) +:+ S "for all of the" +:+ 
   plural (rigidBody ^. term) +:+. S "in the physical simulation to interact in"
 
-s5_1_req2 = foldle (+:+) (+:+.) EmptyS 
+s5_1_req2 = foldlSent 
   [S "Input the initial", plural (mass ^. term) `sC` plural (vel ^. term) `sC` 
   plural (orientation ^. term) `sC` plural (angVel ^. term), 
   S "of" `sC` S "and", plural (force ^. term), S "applied on", 
@@ -554,12 +557,12 @@ s5_1_req3 = S "Input the" +:+ (phrase $ surface ^. term) +:+
 s5_1_req4 = S "Verify that the inputs" +:+. 
   S "satisfy the required physical constraints"
 
-s5_1_req5 = foldle (+:+) (+:+.) EmptyS 
+s5_1_req5 = foldlSent 
   [S "Determine the", plural (position ^. term), S "and", plural (vel ^. term), 
   S "over a", S "period of", (phrase $ time ^. term), S "of the", (getAcc twoD),
   plural (rigidBody ^. term), S "acted upon by a", (phrase $ force ^. term)]
 
-s5_1_req6 = foldle (+:+) (+:+.) EmptyS
+s5_1_req6 = foldlSent
   [S "Determine the", plural (orientation ^. term), S "and", 
   plural (angVel ^. term), S "over a period of", (phrase $ time ^. term),
    S "of the", (getAcc twoD), plural (rigidBody ^. term)]
@@ -567,7 +570,7 @@ s5_1_req6 = foldle (+:+) (+:+.) EmptyS
 s5_1_req7 = S "Determine if any of the" +:+ plural (rigidBody ^. term) +:+ 
   S "in the" +:+ (phrase $ space ^. term) +:+. S "have collided"
 
-s5_1_req8 = foldle (+:+) (+:+.) EmptyS
+s5_1_req8 = foldlSent
   [S "Determine the", plural (position ^. term), S "and", plural (vel ^. term), 
   S "over a", S "period of", (phrase $ time ^. term), S "of the", (getAcc twoD), 
   plural (rigidBody ^. term), S "that have undergone a", 
@@ -596,11 +599,12 @@ s5_2_intro :: Contents
 s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement)
   [Con s5_2_intro]
 
-s5_2_intro = Paragraph $ S "Games are resource intensive, so performance" +:+
-  S "is a high priority. Other non-functional" +:+ plural requirement +:+
-  S "that are a" +:+
-  S "priority are: correctness, understandability, portability," +:+.
-  S "reliability, and maintainability"
+s5_2_intro = Paragraph $ foldlSent 
+  [S "Games are resource intensive, so performance",
+  S "is a high priority. Other non-functional", plural requirement,
+  S "that are a",
+  S "priority are: correctness, understandability, portability,",
+  S "reliability, and maintainability"]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --

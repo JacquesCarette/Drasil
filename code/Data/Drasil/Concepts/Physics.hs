@@ -14,7 +14,8 @@ rigidBody, velocity, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
-  time, torque, fbd, linear, angular, tension, compression, stress, strain :: ConceptChunk
+  time, torque, fbd, linear, angular, tension, compression, stress, 
+  strain :: ConceptChunk
 
 rigidBody  = dcc "rigidBody" 
   (cnIES "rigid body") "A solid body in which deformation is neglected."

@@ -274,8 +274,8 @@ s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water" +:+
   S "slope, and the material properties of the layers."
 
 s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "GS1", S "Evaluate local and global factors of safety along" +:+
-            S "a given" +:+. phrase slpSrf),
+  (S "GS1", S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
+            S "along a given" +:+. phrase slpSrf),
   (S "GS2", S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
             S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
   (S "GS3", S "Determine the displacement of the slope.")
@@ -398,13 +398,13 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "weighting."),
   (S "R7" , S "Generate new potential" +:+ (plural crtSlpSrf) +:+
             S "based on previously analysed" +:+ (plural slpSrf) +:+
-            S "with low factors of safety."),
+            S "with low" +:+. plural $ fs_rc ^. term),
   (S "R8" , S "Repeat" +:+ plural requirement +:+ S "R3 to R7 until the" +:+
             S "minimum factor of safety remains approximately" +:+
             S "the same over a predetermined number of" +:+
             S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
-            S "as the" +:+. (phrase crtSlpSrf)),
+            S "as the" +:+. phrase crtSlpSrf),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
             S "method of slices or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+

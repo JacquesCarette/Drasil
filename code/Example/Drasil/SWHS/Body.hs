@@ -8,12 +8,14 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
-import Data.Drasil.Concepts.Thermodynamics
+import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
+import Data.Drasil.Concepts.Thermodynamics hiding (temp)
 import Data.Drasil.Concepts.Math (ode)
 
-import Data.Drasil.Quantities.Physics (surface)
+import Data.Drasil.Quantities.Physics (surface, time)
 import Data.Drasil.Quantities.Math (gradient, normalVect)
+import Data.Drasil.Quantities.Thermodynamics (temp)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
@@ -25,12 +27,9 @@ import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
 
-import Drasil.TableOfUnits
-import Drasil.TableOfSymbols
-import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
-import Drasil.ReferenceMaterial (refSec, intro)
+import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage
 
 acronyms :: [CINP]

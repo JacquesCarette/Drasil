@@ -5,6 +5,8 @@ import Drasil.SWHS.Unitals
 import Language.Drasil
 import Data.Drasil.SI_Units (specificE)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
+import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Control.Lens ((^.))
 

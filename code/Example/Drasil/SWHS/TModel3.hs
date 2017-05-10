@@ -9,6 +9,8 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Thermodynamics
+import Data.Drasil.Quantities.Thermodynamics as QT
+import Data.Drasil.Quantities.Physics (time)
 
 import Control.Lens ((^.))
 
@@ -44,7 +46,7 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
   makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
   S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
   (phrase $ temp_melt ^. term) :+: S " and " :+: (phrase $ temp_boil ^. term) :+:
-  S ", respectively (" :+: Sy (unit_symb temp) :+: S "). " :+:
+  S ", respectively (" :+: Sy (unit_symb QT.temp) :+: S "). " :+:
   (phrase $ latent_heat ^. term) :+: S "ing stops when all material has " :+:
   S "changed to the new phase.")
   

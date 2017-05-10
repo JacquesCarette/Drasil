@@ -393,14 +393,14 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R5" , S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+.
             (plural slpSrf)),
   (S "R6" , S "Rank and weight the slopes based on their" +:+
-            S "factor of safety, such that a" +:+ (phrase slpSrf) +:+
-            S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+ S "has a larger" +:+
-            S "weighting."),
+            (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
+            S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
+            S "has a larger weighting."),
   (S "R7" , S "Generate new potential" +:+ (plural crtSlpSrf) +:+
             S "based on previously analysed" +:+ (plural slpSrf) +:+
             S "with low" +:+. (plural $ fs_rc ^. term)),
   (S "R8" , S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
-            S "minimum factor of safety remains approximately" +:+
+            S "minimum" +:+ (phrase $ fs_rc ^. term) +:+ S "remains approximately" +:+
             S "the same over a predetermined number of" +:+
             S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+

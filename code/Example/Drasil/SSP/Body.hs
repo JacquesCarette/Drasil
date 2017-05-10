@@ -212,19 +212,18 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (titleize crtSlpSrf, 
       (at_start slpSrf) +:+ S "of the slope that has the lowest global" +:+
       (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure."),
-  (S "Stress", 
-      S "Forces that are exerted between planes internal to a larger" +:+
-      S "body subject to external loading."),
-  (S "Strain", 
-      S "Stress forces that result in deformation of the body/plane."),
+  (titleize $ stress ^. term, 
+      stress ^. defn),
+  (titleize $ strain ^. term, 
+      strain ^. defn),
   (S "Normal Force", 
       S "A force applied perpendicular to the plane of the material."),
   (S "Shear Force", 
       S "A force applied parallel to the plane of the material."),
-  (S "Tension", 
-      S "A stress the causes displacement of the body away from it's center."),
-  (S "Compression", 
-      S "A stress the causes displacement of the body towards it's center."),
+  (titleize $ tension ^. term, 
+      tension ^. defn),
+  (titleize $ compression ^. term, 
+      compression ^. defn),
   (S "Plane Strain", 
       S "The resultant stresses in one of the directions of a" +:+
       S "3 dimensional material can be approximated as 0. Results" +:+

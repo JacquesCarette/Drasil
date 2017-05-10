@@ -86,16 +86,23 @@ compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) =
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
 
-
+-- | Inserts the word "for" between the titleized versions of
+-- two terms
 for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
 
+-- | Similar to 'for', but uses titleized version of term 1 with the abbreviation
+-- (if it exists, phrase otherwise) for term 2
 for' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
+-- | Similar to 'for', but allows one to specify the function to use on each term
+-- before inserting for. For example one could use @for'' phrase plural t1 t2@
 for'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
 for'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "for" +:+ (f2 $ t2 ^. term)
 
+-- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
+-- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_ t1 t2 = nounPhrase'' 
   ((phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
@@ -104,6 +111,8 @@ of_ t1 t2 = nounPhrase''
   (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
 --FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
+-- | Creates a noun phrase by combining two 'NounPhrase's with the word "of" between
+-- them. 'phrase' is defaulted to @(phrase t1) "of" (plural t2)@. Plural is the same.
 of' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 of' t1 t2 = nounPhrase'' 
   (phrase t1 +:+ S "of" +:+ plural t2)
@@ -112,6 +121,8 @@ of' t1 t2 = nounPhrase''
   (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))
   
 --FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
+-- | Similar to 'of\'', but with the word "with" instead of "of".
+-- Phrase defaults to @(phrase t1) "with" (phrase t2)@, plural only pluralizes t2.
 with :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 with t1 t2 = nounPhrase''
   (phrase t1 +:+ S "with" +:+ phrase t2)
@@ -120,7 +131,10 @@ with t1 t2 = nounPhrase''
   (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  
 
 --FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase  
---Case of "T1s with T2", as opposed to the above "T1 with T2"
+-- | Similar to 'with', except this is the
+-- case with "T1s with T2", as opposed to "T1 with T2", i.e.
+-- phrase defaults to @(plural t1) "with" (phrase t2)@, plural pluralizes both.
+
 with' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
 with' t1 t2 = nounPhrase''
   (plural t1 +:+ S "with" +:+ phrase t2)

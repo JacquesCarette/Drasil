@@ -3,8 +3,8 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Language.Drasil.NounPhrase
 
-calculation, euclidSpace, gradient, graph, matrix, norm, normal, orient, perp, traceyMatrix,
-  unit, vector :: ConceptChunk
+calculation, euclidSpace, gradient, graph, matrix, norm, normal, orient, perp, 
+  traceyMatrix, unit, vector :: ConceptChunk
 
 ode :: CINP
 

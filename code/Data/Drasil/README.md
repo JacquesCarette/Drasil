@@ -19,3 +19,7 @@ Plurals.hs
   
 SI_Units.hs
   - Contains the fundamental SI Units, and several derived units
+  
+Utils.hs
+  - Contains utility functions for use with Drasil
+  

@@ -3,7 +3,9 @@ module Drasil.GamePhysics.TMods where
 import Drasil.GamePhysics.Unitals
 
 import Language.Drasil
+import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Physics (rigidBody)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
@@ -22,13 +24,13 @@ newtonSLRel :: Relation
 newtonSLRel = (C force) := (C mass) * (C accel)
 
 t1descr :: Sentence
-t1descr = S "The net" +:+ (phrase $ force ^. term) +:+ P (force ^. symbol) +:+ 
-  sParen (Sy (unit_symb force)) +:+ S "on a" +:+ (phrase $ rigidBody ^. term) +:+ 
-  S "is proportional to the" +:+ (phrase $ accel ^. term) +:+ P (accel ^. symbol) +:+ 
-  sParen (Sy (unit_symb accel)) +:+ S "of the" +:+ (phrase $ rigidBody ^. term) `sC`
-  S "where" +:+ P (mass ^. symbol) +:+ sParen (Sy (unit_symb mass)) +:+
-  S "denotes the" +:+ (phrase $ mass ^. term) +:+ S "of the" +:+ (phrase $ rigidBody ^. term) +:+.
-  S "as the constant of proprotionality"
+t1descr = foldlSent [S "The net", (phrase $ force ^. term), (P $ force ^. symbol), 
+  (sParen $ Sy $ unit_symb force), S "on a", (phrase $ rigidBody ^. term),
+  S "is proportional to the", (phrase $ accel ^. term), (P $ accel ^. symbol), 
+  (sParen $ Sy $ unit_symb accel), S "of the", (phrase $ rigidBody ^. term) `sC`
+  S "where", (P $ mass ^. symbol), (sParen $ Sy $ unit_symb mass),
+  S "denotes the", (phrase $ mass ^. term), S "of the", (phrase $ rigidBody ^. term),
+  S "as the constant of proprotionality"]
 
 -- T2 : Newton's third law of motion --
 

@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Thermodynamics where
 import Language.Drasil
 
 boiling,law_cons_energy, law_conv_cooling, latent_heat, melting, phase_change,
-  sens_heat, temperature, thermal_analysis, thermal_conduction, thermal_energy,
+  sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, heat_trans :: ConceptChunk
 
 --To save space.
@@ -29,7 +29,7 @@ melting             = dcc "melting"         (cn "melting")
 phase_change        = dcc "phase_change"    (cn' "phase change") "Change of state"
 --FIXME: sens_heat's definition is useless.
 sens_heat           = dcc "sens_heat"       (cn' "sensible heat") fixme
-temperature         = dcc "temperature"     (cn' "temperature") fixme
+temp                = dcc "temperature"     (cn' "temperature") fixme
 thermal_analysis    = dcc "thermal_analysis" 
                       (cnIP "thermal analysis" (IrregPlur (\x -> init (init x) ++ "es")))
                       "The study of material properties as they change with temperature"

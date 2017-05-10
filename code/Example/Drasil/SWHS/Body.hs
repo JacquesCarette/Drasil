@@ -8,13 +8,14 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.PhysicalProperties hiding (mass)
-import Data.Drasil.Concepts.Thermodynamics
+import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
+import Data.Drasil.Concepts.Thermodynamics hiding (temp)
 import Data.Drasil.Concepts.Math (ode)
 
-import Data.Drasil.Quantities.Physics (surface)
-import Data.Drasil.Quantities.PhysicalProperties as QPP
+import Data.Drasil.Quantities.Physics (surface, time)
 import Data.Drasil.Quantities.Math (gradient, normalVect)
+import Data.Drasil.Quantities.Thermodynamics (temp)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
@@ -26,12 +27,9 @@ import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
 
-import Drasil.TableOfUnits
-import Drasil.TableOfSymbols
-import Drasil.TableOfAbbAndAcronyms
 import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
-import Drasil.ReferenceMaterial (refSec, intro)
+import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage
 
 acronyms :: [CINP]
@@ -576,7 +574,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   ((C gradient) :. (C thFluxVect)) volume))) + 
   UnaryOp (Integral (Just (Low (C volume)), Nothing) 
   (C vol_ht_gen) volume) := 
-  UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C QPP.density) 
+  UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
   * (C htCap) * Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "Applying" +:+ (phrase $ gauss_div ^. term) +:+ S "to" +:+
   S "the first term over the" +:+ (phrase $ surface ^. term) +:+
@@ -592,28 +590,28 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   (UnaryOp (Integral (Just 
   (Low (C volume)), Nothing) (C vol_ht_gen) volume)) := 
   UnaryOp (Integral (Just (Low (C volume)), Nothing) 
-  ((C QPP.density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
+  ((C density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "We consider an arbitrary" +:+ (phrase $ volume ^. 
   term) :+: S ". The" +:+ (phrase $ vol_ht_gen ^. term) :+: S "is" +:+
   S "assumed constant. Then (1) can be written as:"),
   EqnBlock 
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
   (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
-  (Just (Low (C volume)), Nothing) ((C QPP.density) * (C htCap) *
+  (Just (Low (C volume)), Nothing) ((C density) * (C htCap) *
   Deriv Part (C temp) (C time)) volume)),
   Paragraph (S "Where" +:+ P (ht_flux_in ^. symbol) :+: S "," +:+
   P (ht_flux_out ^. symbol) :+: S "," +:+ P (in_SA ^. symbol) :+:
   S ", and" +:+ P (out_SA ^. symbol) +:+ S "are explained in" +:+
-  S "GD2. Assuming" +:+ P (QPP.density ^. symbol) :+: S "," +:+
+  S "GD2. Assuming" +:+ P (density ^. symbol) :+: S "," +:+
   P (htCap ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
   S "are constant over the" +:+ (phrase $ volume ^. term) :+: S "," +:+ 
   S "which is true in our case by" +:+ (titleize' assumption) +:+ 
   S "(A3), (A4), (A5), and (A6), we have:"),
   EqnBlock 
-  ((C QPP.density) * (C htCap) * (C volume) * Deriv Total (C temp) 
+  ((C density) * (C htCap) * (C volume) * Deriv Total (C temp) 
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
   (C out_SA) + (C vol_ht_gen) * (C volume)),
-  Paragraph (S "Using the fact that" +:+ P (QPP.density ^. symbol) :+:
+  Paragraph (S "Using the fact that" +:+ P (density ^. symbol) :+:
   S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
   P (volume ^. symbol) :+: S ", (2) can be written as:"),
   EqnBlock 

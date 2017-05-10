@@ -4,9 +4,10 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
-import qualified Data.Drasil.Quantities.Physics as QP (surface, time)
+import Data.Drasil.Quantities.Thermodynamics(temp)
+import Data.Drasil.Quantities.Physics (surface, time)
 import Data.Drasil.Quantities.Math
-import Data.Drasil.Quantities.PhysicalProperties
+import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -23,18 +24,18 @@ swhsUnits = map uw [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,
   thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,temp,
   temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
-  pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W] ++ 
-  map uw [htFusion, time]
+  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W] ++ 
+  map uw [htFusion, mass, time]
 
 coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,htTransCoeff,coil_HTC,
   pcm_HTC,tank_length,pcm_mass,w_mass,ht_flux,latentE,
   thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,
-  temp,temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
+  temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
   pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W :: UnitalChunk
   
-htFusion, time :: UnitalChunk  
+htFusion :: UnitalChunk  
 
 --symbol names can't begin with a capital
 fixme :: String
@@ -117,8 +118,6 @@ ht_flux_P    = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water"
   fixme (sub (ht_flux ^. symbol) cP) thermal_flux
 latentE_P    = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   fixme (sub (latentE ^. symbol) cP) joule
-time         = ucFromVC QP.time second
-temp         = uc' "temp" (cn' "temperature") fixme cT centigrade
 temp_boil    = uc' "temp_boil" (nounPhraseSP "boiling point temperature")
   fixme (sub (temp ^. symbol) (Atomic "boil")) centigrade
 temp_C       = uc' "temp_C" (nounPhraseSP "temperature of the heating coil") 
@@ -171,7 +170,7 @@ tau_W        = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
 -- Unitless symbols --
 
 swhsUnitless :: [ConVar]
-swhsUnitless = [normalVect, QP.surface, eta, melt_frac]
+swhsUnitless = [normalVect, surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
 eta          = cvR (dcc "eta" (nounPhraseSP "ODE parameter") fixme) (Greek Eta_L)

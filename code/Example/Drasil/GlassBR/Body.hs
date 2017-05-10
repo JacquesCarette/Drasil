@@ -50,7 +50,7 @@ authors :: People
 authors = [nikitha, spencerSmith]
 
 glassBR_srs' :: Document
-glassBR_srs' = mkDoc' mkSRS for glassSystInfo
+glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 
 --FIXME: Missing ToS intro because this example was using the default 
 -- (nuclear literature related) intro.
@@ -68,7 +68,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = mgDoc'' glassBRProg for mg_authors mgBod
+glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
@@ -155,7 +155,7 @@ s3_1_intro = Paragraph $
 s3_2 = Section (S "The Customer") [Con s3_2_intro]
 
 s3_2_intro = Paragraph $
-  S "The customers are the end user of" +:+. (gLassBR ^. defn)
+  S "The customers are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
 s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1, 
   Sub s4_2]
@@ -164,17 +164,17 @@ s4_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
   phrase information +:+ S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
   S "between the" +:+ phrase system +:+ S "and its environment" `sC`
-  S "and describes the user characteristics and the" +:+. plural systemConstraint
+  S "and describes the" +:+ phrase userCharacteristic +:+ S "and the" +:+. plural systemConstraint
 
-s4_1 = Section (S "User Characteristics") [Con s4_1_bullets]
+s4_1 = Section (titleize' userCharacteristic) [Con s4_1_bullets]
 
 s4_1_bullets = Enumeration $ Bullet $ map Flat
-  [(S "The end user of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
+  [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
-  (S "The end user is expected to have an understanding of" +:+ phrase theory +:+
+  (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+ phrase theory +:+
   S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+ (phrase $ blast ^. term) +:+.
-  S "risk"), (S "The end user is expected to have basic computer literacy to handle" +:+.
+  S "risk"), (S "The end" +:+ phrase user +:+ S "is expected to have basic computer literacy to handle" +:+.
   S "the software")]
 
 s4_2 = Section (titleize' systemConstraint) [Con s4_2_intro]
@@ -196,7 +196,7 @@ s5_1 = Section (S "Product Use Case Table") [Con s5_1_table]
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", S "Inputs", S "User", titleize' characteristic +:+ S "of the" +:+
+  [[S "1", S "Inputs", titleize user, titleize' characteristic +:+ S "of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
@@ -209,14 +209,14 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
 s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
-  [(S "Use Case 1 refers to the user providing input to" +:+ 
+  [(S "Use Case 1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
   (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
   S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
   S "parameters describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
-  S "Another input the user gives is the tolerable value of" +:+.
+  S "Another input the" +:+ phrase user +:+ S "gives is the tolerable value of" +:+.
   (phrase $ prob_br ^. term)),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
   (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
@@ -228,7 +228,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ 
   phrase condition +:+ S "is to check whether the calculated probability" +:+ 
   sParen (P $ prob_br ^. symbol) +:+ S "is less than the tolerable probability" +:+ 
-  sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the user" +:+
+  sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the" +:+ phrase user +:+
   S "as an input. If both" +:+ plural condition +:+ S "return true then it's shown that the" 
   +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
   S "else if both return false then the" +:+ 
@@ -323,7 +323,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
   (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
   S "will be able to withstand the explosion of a certain degree which" +:+.
-  S "is calculated based on user input")]
+  S "is calculated based on" +:+ phrase user +:+ S "input")]
 
 s6_2 = Section (titleize solution +:+ titleize characteristicsSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
@@ -423,7 +423,7 @@ s6_2_5_intro = Paragraph $
   S "constraints on the input variables. The column of" +:+ phrase physical +:+
   S "constraints gives the" +:+ phrase physical +:+ S "limitations on the range" +:+
   S "of values that can  be taken by the variable. The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
-  S "are conservative, to give" +:+ S "the user of the" +:+ phrase model +:+ 
+  S "are conservative, to give" +:+ S "the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+ 
   S "the flexibility to experiment with unusual situations. The column of" +:+.
   S "typical values is intended to provide a feel for a common scenario" +:+
   S "The uncertainty column provides an" +:+

@@ -102,11 +102,11 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) 
   S "surface most likely to experience slip and an index of it's" +:+
   S "relative stability known as the" +:+. (phrase $ fs_rc ^. term)
 
-s2_p2 = Con $ Paragraph $ S "The following section provides an overview" +:+
-  S "of the" +:+ (introduceAbb srs) +:+
-  S "for a" +:+ (phrase ssa) +:+ S "problem. The developed program" +:+
+s2_p2 = Con $ Paragraph $ S "The following" +:+ (phrase section_) +:+
+  S "provides an overview of the" +:+ (introduceAbb srs) +:+
+  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed program" +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+
-  S "program. This section explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
+  S "program. This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
   S "the scope of the system, the organization of the document and" +:+
   S "the" +:+ (phrase characteristics) +:+ S "of the intended readers."
 
@@ -120,18 +120,18 @@ s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ S "program determines th
   S "introducing slope stability issues, and will facilitate the" +:+
   S "analysis and design of a safe slope."
 
-s2_1_p2 = Con $ Paragraph $ S "This document will be used as a" +:+
+s2_1_p2 = Con $ Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
-  (phrase vav) +:+ S "plan. The design document will show how the" +:+
+  (phrase vav) +:+ S "plan. The design" +:+ (phrase document) +:+ S "will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
   S "numerical algorithms and programming environment. The" +:+
   (phrase vav) +:+ S "plan will show the steps that will" +:+
   S "be used to increase confidence in the software documentation and" +:+
   S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
-  S "documents that follow the so-called waterfall model, the actual" +:+
-  S "development process is not  constrained in any way. Even when" +:+
-  S "the waterfall model is not followed, as Parnas and Clements point" +:+
+  (plural document) +:+ S "that follow the so-called waterfall" +:+ (phrase model) `sC`
+  S "the actual development process is not  constrained in any way. Even when" +:+
+  S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements point" +:+
   S "out, the most logical way to present the documentation is still to" +:+
   S "fake a rational design process."
 
@@ -151,15 +151,15 @@ s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
 
 s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
-  S "for an" +:+ (short srs) +:+ S "for scientific computing" +:+
-  S "software proposed by Koothoor as well as Smith and Lai." +:+ 
+  S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
+  S "proposed by Koothoor as well as Smith and Lai." +:+ 
   S "The presentation follows the standard pattern of presenting" +:+
   S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
   S "and" +:+. (plural assumption) +:+ S "For readers" +:+
   S "that would like a more bottom up approach, they can start" +:+
   S "reading the" +:+ (plural instMdl) +:+ S "in" +:+ makeRef sec_IMs +:+
-  S "and trace back to find any additional information they" +:+
-  S "require. The" +:+ (plural instMdl) +:+ S "provide the set of algebraic" +:+
+  S "and trace back to find any additional" +:+ (phrase information) +:+
+  S "they require. The" +:+ (plural instMdl) +:+ S "provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
   S "Morgenstern Price Analysis. The" +:+ (plural goalStmt) +:+ S "are refined" +:+
   S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
@@ -168,16 +168,16 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
 -- SECTION 3 --
 s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
 
-s3_p1 = Con $ Paragraph $ S "This section provides general information" +:+
-  S "about the system, identifies the interfaces between the" +:+
-  S "system and its environment, and describes the" +:+ (plural userCharacteristic) +:+
+s3_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ (phrase information) +:+
+  S "about the" +:+ (phrase system) `sC` S "identifies the interfaces between the" +:+
+  (phrase system) +:+ S "and its environment, and describes the" +:+ (plural userCharacteristic) +:+
   S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --
 s3_1 = Sub $ Section (titleize' userCharacteristic) [s3_1_p1]
 
-s3_1_p1 = Con $ Paragraph $ S "The end user of" +:+ (short ssa) +:+ S "should" +:+
-  S "have an understanding of undergraduate Level 1 Calculus and" +:+
+s3_1_p1 = Con $ Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
+  S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   S "Physics, and be familiar with soil and material properties."
 
 -- SECTION 3.2 --
@@ -188,12 +188,12 @@ s3_2_p1 = Con $ Paragraph $ S "There are no" +:+. (plural systemConstraint)
 -- SECTION 4 --
 s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]
 
-s4_p1 = Con $ Paragraph $ S "This section first presents the" +:+
-  S "problem description, which gives a high-level view of the" +:+
-  S "problem to be solved. This is followed by the solution" +:+
+s4_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
+  (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
+  (phrase problem) +:+ S "to be solved. This is followed by the" +:+ (phrase solution) +:+
   (phrase characteristicsSpecification) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
-  S "and finally the" +:+ (plural instMdl) +:+ S "that model the slope."
+  S "and finally the" +:+ (plural instMdl) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
 
 -- SECTION 4.1 --
 s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
@@ -282,21 +282,21 @@ s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.2 --
-s4_2 = Sub $ Section (S "Solution" +:+ (titleize characteristicsSpecification))
+s4_2 = Sub $ Section ((titleize solution) +:+ (titleize characteristicsSpecification))
   [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Con $ Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
   (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
-  S "The information to understand the meaning of the instance" +:+
-  S "models and their derivation is also presented, so that the" +:+
+  S "The" +:+ (phrase information) +:+ S "to understand the meaning of the instance" +:+
+  (plural model) +:+ S "and their derivation is also presented, so that the" +:+
   (plural instMdl) +:+ S "can be verified."
 
 -- SECTION 4.2.1 --
 s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
 
-s4_2_1_p1 = Con $ Paragraph $ S "This section simplifies the" +:+
-  S "original problem and helps in developing the" +:+ (phrase thModel) +:+
-  S "by filling in the missing information for the" +:+. (phrase physicalSystem) +:+
+s4_2_1_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:+
+  S "original" +:+ (phrase problem) +:+ S "and helps in developing the" +:+ (phrase thModel) +:+
+  S "by filling in the missing" +:+ (phrase information) +:+ S "for the" +:+. (phrase physicalSystem) +:+
   S "The numbers given in the square brackets refer to" +:+
   S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
@@ -310,8 +310,8 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "properties of the soil layers are given as inputs."),
   (S "A3", S "The different layers of the soil are homogeneous," +:+
            S "with consistent soil properties throughout," +:+
-           S "and independent of dry or saturated conditions," +:+
-           S "with the exception of unit weight."),
+           S "and independent of dry or saturated" +:+ (plural condition) `sC`
+           S "with the exception of" +:+ (phrase unit_) +:+ S "weight."),
   (S "A4", S "Soil layers are treated as if they have" +:+
            S "isotropic properties."),
   (S "A5", S "Interslice normal and shear forces have a" +:+
@@ -327,8 +327,8 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "relationships is linear with a constant slope."),
   (S "A8", S "The slope and" +:+ (phrase slpSrf) +:+ S "extends far" +:+
            S "into and out of the geometry (z coordinate)." +:+
-           S "This implies plane strain conditions, making 2D" +:+
-           S "analysis appropriate."),
+           S "This implies plane strain" +:+ (plural condition) `sC`
+           S "making 2D analysis appropriate."),
   (S "A9", S "The effective normal stress is large enough" +:+
            S "that the resistive shear to effective normal" +:+
            S "stress relationship can be approximated as a" +:+
@@ -344,7 +344,7 @@ s4_2_2 = Sub sec_TMs
 sec_TMs :: Section
 sec_TMs = Section (titleize' thModel) (s4_2_2_p1:s4_2_2_tmods)
 
-s4_2_2_p1 = Con $ Paragraph $ S "This section focuses on the" +:+
+s4_2_2_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:+
   S "general equations and laws that" +:+ (short ssa) +:+
   S "is based on."
 
@@ -368,7 +368,7 @@ s4_2_6 = Sub $ Section (S "Data" +:+ (titleize' constraint)) []
 -- SECTION 5 --
 s5 = Section (titleize' requirement) [s5_p1, s5_1, s5_2]
 
-s5_p1 = Con $ Paragraph $ S "This section provides the" +:+
+s5_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
   S "functional" +:+ (plural requirement) `sC` 
   S "the business tasks that the software" +:+
   S "is expected to complete, and the nonfunctional" +:+ 

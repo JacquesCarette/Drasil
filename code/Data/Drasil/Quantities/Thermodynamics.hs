@@ -1,13 +1,11 @@
 module Data.Drasil.Quantities.Thermodynamics where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Thermodynamics as CT
+import Data.Drasil.Units.Thermodynamics as UT
+import Data.Drasil.SI_Units
 
-heat_cap_spec :: ConVar
+temp, heat_cap_spec :: UnitalChunk
 
-heat_cap_spec = cvR CT.heat_cap_spec cC
-
-temperature :: UnitalChunk
-
-temperature = uc CT.temperature cT centigrade
+temp = uc CT.temp cT centigrade
+heat_cap_spec = uc CT.heat_cap_spec cC (UT.heat_cap_spec)

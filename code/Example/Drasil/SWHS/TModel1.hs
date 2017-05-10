@@ -8,7 +8,6 @@ import Drasil.SWHS.Concepts
 import Language.Drasil
 import Prelude hiding (id)
 import Data.Drasil.Concepts.Thermodynamics
-import Data.Drasil.Quantities.PhysicalProperties as QPP
 import Data.Drasil.Quantities.Math (gradient)
 
 import Control.Lens ((^.))
@@ -22,7 +21,7 @@ t1ConsThermE = makeRC "t1ConsThermE" (nounPhraseSP "Conservation of thermal ener
 
 consThermERel :: Relation
 consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
-  (C QPP.density) * (C htCap) * (Deriv Part (C temp) (C time))
+  (C density) * (C htCap) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence
 t1descr = (S "The above equation gives the" +:+ (sLower
@@ -31,7 +30,7 @@ t1descr = (S "The above equation gives the" +:+ (sLower
   S "in a material of" +:+ (phrase $ htCap ^. term) +:+ 
   P (htCap ^. symbol) +:+ S "(" :+: Sy (unit_symb htCap) :+: S ")" +:+
   S "and" +:+ (phrase $ density ^. term) `sC`
-  P (QPP.density ^. symbol) +:+ S "(" :+: Sy (unit_symb QPP.density) :+: 
+  P (density ^. symbol) +:+ S "(" :+: Sy (unit_symb density) :+: 
   S "), where" +:+ P (thFluxVect ^. symbol) +:+ S "is the" +:+ 
   (phrase $ thFluxVect ^. term) +:+ S "(" :+: Sy (unit_symb thFluxVect) :+:
   S "), " :+: P (vol_ht_gen ^. symbol) +:+ S "is the" +:+ 

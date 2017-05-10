@@ -2,11 +2,12 @@ module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Physics as CP
+import Data.Drasil.SI_Units
 import Control.Lens((^.)) --need for parametrization hack
 
 surface, acceleration, angularAccel, restitutionCoef, force, momentOfInertia,
   impulseS, impulseV, gravitationalAccel, gravitationalConst, displacement,
-  angularVelocity, position, distance, angularDisplacement,time, torque, 
+  angularVelocity, position, distance, angularDisplacement, torque, 
   linearDisplacement, velocity, linearVelocity, linearAccel :: ConVar
 
 surface = cvR CP.surface cS --Maybe should be physical property?
@@ -46,8 +47,13 @@ linearVelocity = cvR linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"])
 linearAccel = cvR linAccel (Concat [(vec lA), Atomic "(", lT, Atomic ")"])
   where linAccel = dcc "linearAcceleration" (compoundPhrase' (CP.linear ^. term)
                    (CP.acceleration ^. term)) "fixme"
-time = cvR CP.time lT
 torque = cvR CP.torque (Greek Tau_L)
 
 gravitationalAccel = cvR CP.gravitationalAccel lG
 gravitationalConst = cvR CP.gravitationalConst cG
+
+
+
+--FIXME: COnvert the ConVar values with units into UnitalChunks
+time :: UnitalChunk
+time = uc CP.time lT second

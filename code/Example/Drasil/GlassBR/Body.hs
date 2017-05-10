@@ -422,7 +422,7 @@ s6_2_5_intro = Paragraph $
   S ") shows the data" +:+
   S "constraints on the input variables. The column of" +:+ phrase physical +:+
   S "constraints gives the" +:+ phrase physical +:+ S "limitations on the range" +:+
-  S "of values that can be taken by the variable. The" +:+ plural constraint_ +:+ 
+  S "of values that can  be taken by the variable. The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
   S "are conservative, to give" +:+ S "the user of the" +:+ phrase model +:+ 
   S "the flexibility to experiment with unusual situations. The column of" +:+.
   S "typical values is intended to provide a feel for a common scenario" +:+

@@ -4,6 +4,7 @@ import Drasil.GamePhysics.Unitals
 
 import Language.Drasil
 import Data.Drasil.Concepts.Physics (rigidBody)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 

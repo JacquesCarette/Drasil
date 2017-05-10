@@ -14,16 +14,17 @@ cpSymbols :: [QSWrapper]
 cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++ 
   (map qs cpUnitless)
 
--- Chunks with units --
-accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
-    impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
-    orientation, dist, disp, time, torque, angDisp, vel, linDisp, linVelo
-    , linAccel :: UnitalChunk
 
 cpUnits :: [UnitalChunk]
 cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
-    impulseScl, len, mass, iVect, jVect, normalVect, angVel, position,
-    orientation, dist, disp, time, torque, angDisp, vel]
+    impulseScl, QPP.len, QPP.mass, iVect, jVect, normalVect, angVel, position,
+    orientation, dist, disp, QP.time, torque, angDisp, vel]
+    
+-- Chunks with units --
+accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
+    impulseScl, iVect, jVect, normalVect, angVel, position,
+    orientation, dist, disp, torque, angDisp, vel, linDisp, linVelo
+    , linAccel :: UnitalChunk
 
 force       = ucFromVC QP.force newton
 gravAccel   = ucFromVC QP.gravitationalAccel accelU
@@ -33,8 +34,6 @@ gravConst   = ucFromVC QP.gravitationalConst gravConstU
 momtInert   = ucFromVC QP.momentOfInertia momtInertU
 impulseVec  = ucFromVC QP.impulseV impulseU
 impulseScl  = ucFromVC QP.impulseS impulseU
-len         = ucFromVC QPP.length metre
-mass        = ucFromVC QPP.mass kilogram
 -- FIXME: parametrized hack
 iVect       = ucFromVC ivec metre
   where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
@@ -53,7 +52,6 @@ normalVect  = ucFromVC normVect metre
 position    = ucFromVC QP.position metre
 orientation = ucFromVC QM.orientation radians
 dist        = ucFromVC QP.distance metre
-time        = ucFromVC QP.time second
 torque      = ucFromVC QP.torque torqueU
 disp        = ucFromVC QP.displacement metre
 vel         = ucFromVC QP.velocity velU

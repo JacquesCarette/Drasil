@@ -5,7 +5,7 @@ import Drasil.GamePhysics.Unitals
 import Language.Drasil
 import Data.Drasil.SI_Units
 --import Data.Drasil.Concepts.Physics (rigidBody, collision)
-import Data.Drasil.Quantities.Physics (restitutionCoef)
+import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 

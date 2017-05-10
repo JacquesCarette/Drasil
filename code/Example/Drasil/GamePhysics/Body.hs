@@ -13,7 +13,8 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
 
-import Data.Drasil.Quantities.Physics (restitutionCoef)
+import Data.Drasil.Quantities.Physics (restitutionCoef, time)
+import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 
 import Drasil.SpecificSystemDescription
 import Drasil.OrganizationOfSRS

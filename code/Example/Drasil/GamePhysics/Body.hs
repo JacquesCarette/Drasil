@@ -188,7 +188,7 @@ s3_intro = Paragraph $ foldlSent
 s3_1 :: Section
 s3_1_intro :: Contents
 
-s3_1 = Section (S "User" +:+ titleize' characteristic) [Con s3_1_intro]
+s3_1 = Section (titleize' userCharacteristic) [Con s3_1_intro]
 
 s3_1_intro = Paragraph $ foldlSent 
   [S "The end user of", (short chipmunk),
@@ -352,18 +352,19 @@ s4_2_1_intro = Paragraph $ foldlSent
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7 :: Sentence
 
-s4_2_1_assum1 = S "All objects are" +:+. plural (rigidBody ^. term)
-s4_2_1_assum2 = S "All objects are" +:+. (getAcc twoD)
-s4_2_1_assum3 = S "The library uses a" +:+ (phrase $ cartesian ^. term) +:+. 
-  S "system"
-s4_2_1_assum4 = S "The axes are defined using" +:+. (phrase $ rightHand ^. term)
+s4_2_1_assum1 = foldlSent [S "All objects are", plural (rigidBody ^. term)]
+s4_2_1_assum2 = foldlSent [S "All objects are", (getAcc twoD)]
+s4_2_1_assum3 = foldlSent [S "The library uses a", (phrase $ cartesian ^. term), 
+  S "system"]
+s4_2_1_assum4 = foldlSent [S "The axes are defined using", 
+  (phrase $ rightHand ^. term)]
 s4_2_1_assum5 = foldlSent [S "All", plural (rigidBody ^. term), 
   plural (collision ^. term), S "are vertex-to-edge", 
   (plural (collision ^. term))]
-s4_2_1_assum6 = S "There is no damping" +:+. 
-  S "involved throughout the simulation"
-s4_2_1_assum7 = S "There are no constraints" +:+.
-  S "and joints involved throughout the simulation"
+s4_2_1_assum6 = foldlSent [S "There is no damping", 
+  S "involved throughout the simulation"]
+s4_2_1_assum7 = foldlSent [S "There are no constraints",
+  S "and joints involved throughout the simulation"]
 
 s4_2_1_list = Enumeration (Simple [
   ((getAcc assumption) :+: S "1", Flat s4_2_1_assum1),
@@ -385,8 +386,9 @@ s4_2_2_TMods :: [Contents]
 s4_2_2 = Section (titleize' thModel) ([Con s4_2_2_intro] ++
   (map Con s4_2_2_TMods))
 
-s4_2_2_intro = Paragraph $ S "This section focuses on the general equations" +:+
-  S "the" +:+ (phrase $ physLib ^. term) +:+. S "is based on"
+s4_2_2_intro = Paragraph $ foldlSent 
+  [S "This section focuses on the general equations",
+  S "the", (phrase $ physLib ^. term), S "is based on"]
 
 s4_2_2_TMods = map Definition (map Theory cpTMods)
 
@@ -401,9 +403,10 @@ s4_2_3_intro :: Contents
 s4_2_3 = Section (titleize' genDefn) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
-s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+
-  S "that will be used in deriving the" +:+ (plural dataDefn) `sC`
-  S "which in turn will be used to build the" +:+. (plural inModel)
+s4_2_3_intro = Paragraph $ foldlSent 
+  [S "This section collects the laws and equations",
+  S "that will be used in deriving the", (plural dataDefn) `sC`
+  S "which in turn will be used to build the", (plural inModel)]
 
 -- GDefs not yet implemented --
 {-
@@ -546,8 +549,8 @@ s5_1_req3 = foldlSent [S "Input the", (phrase $ surface ^. term),
   S "properties of the bodies, such as", (phrase $ friction ^. term), 
   S "or", (phrase $ elasticity ^. term)]
 
-s5_1_req4 = S "Verify that the inputs" +:+. 
-  S "satisfy the required physical constraints"
+s5_1_req4 = foldlSent [S "Verify that the inputs", 
+  S "satisfy the required physical constraints"]
 
 s5_1_req5 = foldlSent 
   [S "Determine the", plural (position ^. term), S "and", plural (vel ^. term), 
@@ -559,8 +562,8 @@ s5_1_req6 = foldlSent
   plural (angVel ^. term), S "over a period of", (phrase $ time ^. term),
    S "of the", (getAcc twoD), plural (rigidBody ^. term)]
 
-s5_1_req7 = S "Determine if any of the" +:+ plural (rigidBody ^. term) +:+ 
-  S "in the" +:+ (phrase $ space ^. term) +:+. S "have collided"
+s5_1_req7 = foldlSent [S "Determine if any of the", plural (rigidBody ^. term), 
+  S "in the", (phrase $ space ^. term), S "have collided"]
 
 s5_1_req8 = foldlSent
   [S "Determine the", plural (position ^. term), S "and", plural (vel ^. term), 

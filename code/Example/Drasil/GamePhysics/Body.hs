@@ -74,6 +74,7 @@ foldle _ g z [x]    = g z x
 foldle f g z [x,y]  = g (f z x) y
 foldle f g z (x:xs) = foldle f g (f z x) xs
 
+-- partial function application of foldle for sentences specifically
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
 
@@ -360,22 +361,30 @@ s4_2_1_intro = Paragraph $ foldlSent
   (phrase assumption), S "is used"]
   where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
 
+s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
+  s4_2_1_assum6, s4_2_1_assum7 :: Sentence
+
+s4_2_1_assum1 = S "All objects are" +:+. plural (rigidBody ^. term)
+s4_2_1_assum2 = S "All objects are" +:+. (getAcc twoD)
+s4_2_1_assum3 = S "The library uses a" +:+ (phrase $ cartesian ^. term) +:+. 
+  S "system"
+s4_2_1_assum4 = S "The axes are defined using" +:+. (phrase $ rightHand ^. term)
+s4_2_1_assum5 = foldlSent [S "All", plural (rigidBody ^. term), 
+  plural (collision ^. term), S "are vertex-to-edge", 
+  (plural (collision ^. term))]
+s4_2_1_assum6 = S "There is no damping" +:+. 
+  S "involved throughout the simulation"
+s4_2_1_assum7 = S "There are no constraints" +:+.
+  S "and joints involved throughout the simulation"
+
 s4_2_1_list = Enumeration (Simple [
-  ((getAcc assumption) :+: S "1", Flat (S "All objects are" +:+.
-  plural (rigidBody ^. term))),
-  ((getAcc assumption) :+: S "2", Flat (S "All objects are" +:+.
-  (getAcc twoD))),
-  ((getAcc assumption) :+: S "3", Flat (S "The library uses a" +:+
-  (phrase $ cartesian ^. term) +:+. S "system")),
-  ((getAcc assumption) :+: S "4", Flat (S "The axes are defined using" +:+.
-  (phrase $ rightHand ^. term))),
-  ((getAcc assumption) :+: S "5", Flat (S "All" +:+
-  plural (rigidBody ^. term) +:+ plural (collision ^. term) +:+
-  S "are vertex-to-edge" +:+. (plural (collision ^. term)))),
-  ((getAcc assumption) :+: S "6", Flat (S "There is no damping" +:+.
-  S "involved throughout the simulation")),
-  ((getAcc assumption) :+: S "7", Flat (S "There are no constraints" +:+.
-  S "and joints involved throughout the simulation"))])
+  ((getAcc assumption) :+: S "1", Flat s4_2_1_assum1),
+  ((getAcc assumption) :+: S "2", Flat s4_2_1_assum2),
+  ((getAcc assumption) :+: S "3", Flat s4_2_1_assum3),
+  ((getAcc assumption) :+: S "4", Flat s4_2_1_assum4),
+  ((getAcc assumption) :+: S "5", Flat s4_2_1_assum5),
+  ((getAcc assumption) :+: S "6", Flat s4_2_1_assum6),
+  ((getAcc assumption) :+: S "7", Flat s4_2_1_assum7)])
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --
@@ -406,8 +415,7 @@ s4_2_3 = Section (titleize' genDefn) ([Con s4_2_3_intro] {- ++
 
 s4_2_3_intro = Paragraph $ S "This section collects the laws and equations" +:+
   S "that will be used in deriving the" +:+ (plural dataDefn) `sC`
-  S "which in turn will be used to build the" +:+.
-  (plural inModel)
+  S "which in turn will be used to build the" +:+. (plural inModel)
 
 -- GDefs not yet implemented --
 {-
@@ -537,18 +545,18 @@ s5_1 = Section (S "Functional" +:+ titleize' requirement)
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
-s5_1_req1 = S "Create a" +:+ (phrase $ space ^. term) +:+ S "for all of the" +:+ 
-  plural (rigidBody ^. term) +:+. S "in the physical simulation to interact in"
+s5_1_req1 = foldlSent [S "Create a", (phrase $ space ^. term), S "for all of the",
+  plural (rigidBody ^. term), S "in the physical simulation to interact in"]
 
-s5_1_req2 = foldlSent 
-  [S "Input the initial", plural (mass ^. term) `sC` plural (vel ^. term) `sC` 
+s5_1_req2 = foldlSent [S "Input the initial", 
+  plural (mass ^. term) `sC` plural (vel ^. term) `sC` 
   plural (orientation ^. term) `sC` plural (angVel ^. term), 
   S "of" `sC` S "and", plural (force ^. term), S "applied on", 
   plural (rigidBody ^. term)]
 
-s5_1_req3 = S "Input the" +:+ (phrase $ surface ^. term) +:+ 
-  S "properties of the bodies, such as" +:+ (phrase $ friction ^. term) +:+ 
-  S "or" +:+. (phrase $ elasticity ^. term)
+s5_1_req3 = foldlSent [S "Input the", (phrase $ surface ^. term), 
+  S "properties of the bodies, such as", (phrase $ friction ^. term), 
+  S "or", (phrase $ elasticity ^. term)]
 
 s5_1_req4 = S "Verify that the inputs" +:+. 
   S "satisfy the required physical constraints"

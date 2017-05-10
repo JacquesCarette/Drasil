@@ -127,10 +127,10 @@ newtonSLRRel = (C torque) := (C momtInert) * (C angAccel)
 -- without referencing the entire section or dividing each bullet into its own
 -- section.
 t5descr :: Sentence
-t5descr = S "The net" +:+ (phrase $ torque ^. term) +:+ P (torque ^. symbol) +:+ 
-  sParen (Sy (unit_symb torque)) +:+ S "on a" +:+ (phrase $ rigidBody ^. term) +:+ 
-  S "is proportional to its" +:+ (phrase $ angAccel ^. term) +:+ P (angAccel ^. symbol) +:+.
-  sParen (Sy (unit_symb angAccel)) +:+ S "Here" `sC` P (momtInert ^. symbol) +:+
-  sParen (Sy (unit_symb momtInert)) +:+ S "denotes the" +:+ (phrase $ momtInert ^. term) +:+
-  S "of the" +:+. (phrase $ rigidBody ^. term) +:+ S "We also assume that all" +:+ 
-  (plural $ rigidBody ^. term) +:+. S "involved are two-dimensional (A2)"
+t5descr = foldlSent [S "The net", (phrase $ torque ^. term), (P $ torque ^. symbol), 
+  (sParen $ Sy $ unit_symb torque), S "on a", (phrase $ rigidBody ^. term), 
+  S "is proportional to its", (phrase $ angAccel ^. term), (P $ angAccel ^. symbol) +:+.
+  (sParen $ Sy $ unit_symb angAccel), S "Here" `sC` (P $ momtInert ^. symbol),
+  (sParen $ Sy $ unit_symb momtInert), S "denotes the", (phrase $ momtInert ^. term),
+  S "of the" +:+. (phrase $ rigidBody ^. term), S "We also assume that all", 
+  (plural $ rigidBody ^. term), S "involved are two-dimensional (A2)"]

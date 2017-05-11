@@ -13,7 +13,6 @@ import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 
-import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 import           Drasil.DocumentLanguage
 
@@ -26,14 +25,17 @@ s2, s3, s4, s5, s6 :: Section
 
 s1_2_intro :: [TSIntro]
 
-s2_p1, s2_p2, s2_1, s2_2, s2_3, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
-  s3_1, s3_2, s3_1_p1, s3_2_p1, s4_p1, s4_1, s4_2, s4_1_p1, s4_1_1, s4_1_2,
-  s4_1_3, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1,
-  s4_1_2_fig2, s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
-  s4_2_5, s4_2_6, s4_2_1_p1, s4_2_1_list, s4_2_2_p1, s5_p1, s5_1, s5_2,
-  s5_1_list, s5_1_table, s5_2_p1 :: SecCons
+s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
+  s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
+  s4_2_5, s4_2_6, s5_1, s5_2 :: Section
 
-s4_2_2_tmods :: [SecCons]
+s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s2_3_p1, s3_p1,
+  s3_1_p1, s3_2_p1, s4_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
+  s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
+  s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
+  s4_2_2_p1, s5_p1, s5_1_list, s5_1_table, s5_2_p1 :: Contents
+
+s4_2_2_tmods :: [Contents]
 
 --Document Settup--
 this_si :: [UnitDefn]
@@ -73,9 +75,9 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
   
 -- SECTION 2 --
-s2 = SRS.intro [s2_p1, s2_p2, s2_1, s2_2, s2_3]
+s2 = section (titleize introduction) [s2_p1, s2_p2] [s2_1, s2_2, s2_3]
 
-s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC` 
+s2_p1 = Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC` 
   S "composed of soil and rock, is subject to the influence of gravity on" +:+
   S "the" +:+. (phrase $ mass ^. term) +:+ S "For an unstable slope this can cause" +:+
   S "instability in the form of soil/rock movement. The effects of soil/rock" +:+
@@ -87,7 +89,7 @@ s2_p1 = Con $ Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) 
   S "surface most likely to experience slip and an index of it's" +:+
   S "relative stability known as the" +:+. (phrase $ fs_rc ^. term)
 
-s2_p2 = Con $ Paragraph $ S "The following" +:+ (phrase section_) +:+
+s2_p2 = Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "provides an overview of the" +:+ (introduceAbb srs) +:+
   S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+ (phrase program) +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
@@ -96,16 +98,16 @@ s2_p2 = Con $ Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "the" +:+ (phrase characteristics) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
-s2_1 = Sub $ Section (titleize purpose) [s2_1_p1, s2_1_p2]
+s2_1 = section (titleize purpose) [s2_1_p1, s2_1_p2] []
 
-s2_1_p1 = Con $ Paragraph $ S "The" +:+ (short ssa) +:+ (phrase program) +:+  S "determines the" +:+
+s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase program) +:+  S "determines the" +:+
   (phrase crtSlpSrf) `sC` S "and it's respective" +:+ (phrase $ fs_rc ^. term) +:+
   S "as a method of assessing the stability of a slope" +:+. (phrase design) +:+
   S "The" +:+ (phrase program) +:+ S "is intended to be used as an educational tool for" +:+
   S "introducing slope stability issues, and will facilitate the" +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe slope."
 
-s2_1_p2 = Con $ Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
+s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
   (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+ S "will show how the" +:+
@@ -121,9 +123,9 @@ s2_1_p2 = Con $ Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used a
   S "fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
-s2_2 = Sub $ Section (titleize scpOfReq) [s2_2_p1]
+s2_2 = section (titleize scpOfReq) [s2_2_p1] []
 
-s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
+s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
   S "limited to stability analysis of a 2 dimensional slope," +:+
   S "composed of homogeneous soil layers. Given appropriate" +:+
   S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
@@ -132,9 +134,9 @@ s2_2_p1 = Con $ Paragraph $ S "The scope of the requirements is" +:+ --FIXME: so
   S "of soil that will occur on the slope."
 
 -- SECTION 2.3 --
-s2_3 = Sub $ Section (titleize orgOfDoc) [s2_3_p1]
+s2_3 = section (titleize orgOfDoc) [s2_3_p1] []
 
-s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
+s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
   S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
   S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
   S "proposed by Koothoor as well as Smith and Lai." +:+ 
@@ -151,29 +153,29 @@ s2_3_p1 = Con $ Paragraph $ S "The" +:+ (phrase organization) +:+
   S "and" +:+ (plural instMdl) +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
-s3 = Section (titleize generalSystemDescription) [s3_p1, s3_1, s3_2]
+s3 = section (titleize generalSystemDescription) [s3_p1] [s3_1, s3_2]
 
-s3_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ (phrase information) +:+
+s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ (phrase information) +:+
   S "about the" +:+ (phrase system) `sC` S "identifies the interfaces between the" +:+
   (phrase system) +:+ S "and its environment, and describes the" +:+ (plural userCharacteristic) +:+
   S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --
-s3_1 = Sub $ Section (titleize' userCharacteristic) [s3_1_p1]
+s3_1 = section (titleize' userCharacteristic) [s3_1_p1] []
 
-s3_1_p1 = Con $ Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
+s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   S "Physics, and be familiar with soil and material properties."
 
 -- SECTION 3.2 --
-s3_2 = Sub $ Section (titleize' systemConstraint) [s3_2_p1]
-
-s3_2_p1 = Con $ Paragraph $ S "There are no" +:+. (plural systemConstraint)
+s3_2 = section (titleize' systemConstraint) [s3_2_p1] []
+ 
+s3_2_p1 = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
 -- SECTION 4 --
-s4 = Section (titleize specificsystemdescription) [s4_p1, s4_1, s4_2]
+s4 = section (titleize specificsystemdescription) [s4_p1] [s4_1, s4_2]
 
-s4_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
+s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
   (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
   (phrase problem) +:+ S "to be solved. This is followed by the" +:+ (phrase solution) +:+
   (phrase characteristicsSpecification) `sC` S "which presents the" +:+ 
@@ -181,16 +183,16 @@ s4_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents t
   S "and finally the" +:+ (plural instMdl) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
 
 -- SECTION 4.1 --
-s4_1 = Sub $ Section (titleize problemDescription) [s4_1_p1, s4_1_1, s4_1_2, s4_1_3]
+s4_1 = section (titleize problemDescription) [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_p1 = Con $ Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase program) +:+ S "developed" +:+
+s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase program) +:+ S "developed" +:+
   S "to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
   S "and to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
-s4_1_1 = Sub $ Section (titleize terminology) [s4_1_1_list]
+s4_1_1 = section (titleize terminology) [s4_1_1_list] []
 
-s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (titleize $ fs_rc ^. term, 
       S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
       S "failure through slipping."), 
@@ -218,17 +220,17 @@ s4_1_1_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.1.2 --
-s4_1_2 = Sub $ Section (titleize physSyst)
-  [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2]
+s4_1_2 = section (titleize physSyst)
+  [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
-s4_1_2_p1 = Con $ Paragraph $ S "Analysis of the slope is performed" +:+
+s4_1_2_p1 = Paragraph $ S "Analysis of the slope is performed" +:+
   S "by looking at properties of the slope as a series" +:+
   S "of slice elements. Some properties are interslice" +:+
   S "properties, and some are slice or slice base properties." +:+
   S "The index convention for referencing which interslice" +:+
   S "or slice is being used is shown in" +:+. (makeRef fig_indexconv)
 
-s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
+s4_1_2_bullets = Enumeration $ Bullet $ map Flat [
   (S "Interslice properties convention is noted by j. The end" +:+
     S "interslice properties are usually not of interest" `sC` 
     S "therefore use the interslice properties from 1" +:+
@@ -236,28 +238,28 @@ s4_1_2_bullets = Con $ Enumeration $ Bullet $ map Flat [
   (S "Slice properties convention is noted by i.")
   ]
   
-s4_1_2_p2 = Con $ Paragraph $ S "A" +:+ (phrase $ fbd ^. term) +:+ S "of the forces" +:+
+s4_1_2_p2 = Paragraph $ S "A" +:+ (phrase $ fbd ^. term) +:+ S "of the forces" +:+
   S "acting on the slice is displayed in" +:+. (makeRef fig_forceacting)
 
-s4_1_2_fig1 = Con fig_indexconv
+s4_1_2_fig1 = fig_indexconv
 
 fig_indexconv :: Contents
 fig_indexconv = Figure (S "Index convention for numbering slice and" +:+
   S "interslice force variables")  "IndexConvention.png"
 
-s4_1_2_fig2 = Con fig_forceacting
+s4_1_2_fig2 = fig_forceacting
 
 fig_forceacting :: Contents
 fig_forceacting = Figure (S "Forces acting on a slice") "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
-s4_1_3 = Sub $ Section (titleize' goalStmt) [s4_1_3_p1, s4_1_3_list]
+s4_1_3 = section (titleize' goalStmt) [s4_1_3_p1, s4_1_3_list] []
 
-s4_1_3_p1 = Con $ Paragraph $ S "Given the geometry of the water" +:+
+s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
   S "slope, and the material properties of the layers."
 
-s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
             S "along a given" +:+. phrase slpSrf),
   (S "GS2", S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
@@ -266,26 +268,26 @@ s4_1_3_list = Con $ Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.2 --
-s4_2 = Sub $ Section ((titleize solution) +:+ (titleize characteristicsSpecification))
-  [s4_2_p1, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
+s4_2 = section ((titleize solution) +:+ (titleize characteristicsSpecification))
+  [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
-s4_2_p1 = Con $ Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
+s4_2_p1 = Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
   (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
   S "The" +:+ (phrase information) +:+ S "to understand the meaning of the instance" +:+
   (plural model) +:+ S "and their derivation is also presented, so that the" +:+
   (plural instMdl) +:+ S "can be verified."
 
 -- SECTION 4.2.1 --
-s4_2_1 = Sub $ Section (titleize' assumption) [s4_2_1_p1, s4_2_1_list]
+s4_2_1 = section (titleize' assumption) [s4_2_1_p1, s4_2_1_list] []
 
-s4_2_1_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:+
+s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:+
   S "original" +:+ (phrase problem) +:+ S "and helps in developing the" +:+ (phrase thModel) +:+
   S "by filling in the missing" +:+ (phrase information) +:+ S "for the" +:+.
   (phrase physicalSystem) +:+ S "The numbers given in the square brackets refer to" +:+
   S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
-s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
+s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "A1", S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the slope surface. The" +:+ P (coords ^. symbol) +:+ 
            S "coordinates of the failure surface follow a" +:+
@@ -323,36 +325,36 @@ s4_2_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   ])
 
 -- SECTION 4.2.2 --
-s4_2_2 = Sub sec_TMs
+s4_2_2 = sec_TMs
 
 sec_TMs :: Section
-sec_TMs = Section (titleize' thModel) (s4_2_2_p1:s4_2_2_tmods)
+sec_TMs = section (titleize' thModel) (s4_2_2_p1:s4_2_2_tmods) []
 
-s4_2_2_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:+
+s4_2_2_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:+
   S "general equations and laws that" +:+ (short ssa) +:+
   S "is based on."
 
-s4_2_2_tmods = map (Con . Definition) [Theory fs_rc] --FIX fs_rc to use lowercase
+s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = Sub $ Section (titleize' genDefn) []
+s4_2_3 = section (titleize' genDefn) [] []
 
 -- SECTION 4.2.4 --
-s4_2_4 = Sub $ Section (titleize' dataDefn) []
+s4_2_4 = section (titleize' dataDefn) [] []
 
 -- SECTION 4.2.5 --
-s4_2_5 = Sub sec_IMs
+s4_2_5 = sec_IMs
 
 sec_IMs :: Section
-sec_IMs = Section (titleize' instMdl) []
+sec_IMs = section (titleize' instMdl) [] []
 
 -- SECTION 4.2.6 --
-s4_2_6 = Sub $ Section (titleize' datumConstraint) []
+s4_2_6 = section (titleize' datumConstraint) [] []
 
 -- SECTION 5 --
-s5 = Section (titleize' requirement) [s5_p1, s5_1, s5_2]
+s5 = section (titleize' requirement) [s5_p1] [s5_1, s5_2]
 
-s5_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
+s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
   S "functional" +:+ (plural requirement) `sC` 
   S "the business tasks that the software" +:+
   S "is expected to complete, and the nonfunctional" +:+ 
@@ -360,10 +362,10 @@ s5_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:
   S "the qualities that the software is expected to exhibit."
 
 -- SECTION 5.1 --
-s5_1 = Sub $ Section (titleize' functionalRequirement)
-  [s5_1_list, s5_1_table]
+s5_1 = section (titleize' functionalRequirement)
+  [s5_1_list, s5_1_table] []
 
-s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
+s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R1" , S "Read the input file, and store the" +:+
             S "data. Necessary input data summarized in" +:+.
             (makeRef table_inputdata)),
@@ -400,7 +402,7 @@ s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "by the Morgenstern price method.")
   ])
   
-s5_1_table = Con table_inputdata
+s5_1_table = table_inputdata
 
 table_inputdata :: Contents --FIXME: use table function?
 table_inputdata =  Table (map titleize [symbol_, units_, description]) 
@@ -413,12 +415,12 @@ table_inputdata =  Table (map titleize [symbol_, units_, description])
   (S "Input data") True
  
 -- SECTION 5.2 --
-s5_2 = Sub $ Section (titleize' nonfunctionalRequirement) [s5_2_p1]
+s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_p1] []
 
-s5_2_p1 = Con $ Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
+s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+
   S "are secondary" +:+ (phrase program) +:+ S "priorities to correctness," +:+
   S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
-s6 = Section (titleize' likelyChg) []
+s6 = section (titleize' likelyChg) [] []

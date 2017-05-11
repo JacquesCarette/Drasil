@@ -159,8 +159,8 @@ the t = nounPhrase''
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords
 
-a :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
-a t = nounPhrase'' 
+aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
+aNP t = nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))
   CapFirst CapWords  
   

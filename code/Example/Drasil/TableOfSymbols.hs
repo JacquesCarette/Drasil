@@ -11,8 +11,8 @@ import Data.Maybe (isJust)
 import Data.List (sort)
 
 import Language.Drasil
+import qualified Data.Drasil.Concepts.Math as CM
 import Data.Drasil.Concepts.Documentation
-import qualified Data.Drasil.Concepts.Math as CM (unit_)
 
 table_of_symbols :: (Ord s,Quantity s) => 
   [s] -> (s -> Sentence) -> Section

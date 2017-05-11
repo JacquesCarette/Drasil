@@ -245,7 +245,7 @@ s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
-s3_1 = Section (S "User" +:+ titleize' characteristic) [Con s3_1_contents]
+s3_1 = section (titleize' userCharacteristic) [s3_1_contents] []
 
 s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+: 
   S " should have an understanding of undergraduate Level 1" +:+.
@@ -254,7 +254,7 @@ s3_1_contents = Paragraph (S "The end user of" +:+ (short progName) :+:
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
-s3_2 = Section (titleize system +:+ titleize' constraint) [Con s3_2_contents]
+s3_2 = section (titleize' systemConstraint) [s3_2_contents] []
 
 s3_2_contents = Paragraph (S "There are no" +:+ phrase system +:+
   plural constraint :+: S ".")
@@ -262,8 +262,7 @@ s3_2_contents = Paragraph (S "There are no" +:+ phrase system +:+
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
 
-s4 = Section (titleize specificsystemdescription) [Con s4_intro, Sub s4_1, 
-  Sub s4_2]
+s4 = section (titleize specificsystemdescription) [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:+
   phrase problem +:+ phrase description :+: S ", which gives a high-level view of the" +:+
@@ -284,8 +283,7 @@ s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:
 -- The swhs_pcm reference at the end would be better if singular, but concept is
 -- plural.
 
-s4_1 = Section (titleize problemDescription) [Con s4_1_intro, Sub s4_1_1, 
-  Sub s4_1_2, Sub s4_1_3]
+s4_1 = section (titleize problemDescription) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
   S "developed to investigate the effect of employing" +:+
@@ -294,8 +292,8 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
 
 --  section is very different between all examples
 
-s4_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition)
- [Con s4_1_1_intro, Con s4_1_1_bullets]
+s4_1_1 = section (titleize terminology +:+ S "and" +:+ titleize' definition)
+  [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
   S "that are used in the subsequent" +:+ plural section_ +:+ S "and their meaning," +:+
@@ -350,8 +348,7 @@ fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+ (phrase $ ht_flux_C ^. term
   (phrase $ ht_flux_P ^. term) +:+ S "of" +:+ P (ht_flux_P ^. symbol)) 
   "Tank.png"
 
-s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro, 
-  Con s4_1_3_list]
+s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+: S "," +:+
   S "initial" +:+ plural condition +:+ S "for the" +:+ (phrase $ temp_W ^. term) +:+
@@ -381,9 +378,9 @@ s4_1_3_list = Enumeration (Simple [((short goalStmt) :+: S "1", Flat
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
-s4_2 = Section (titleize solution +:+ titleize' characteristic +:+
-  titleize specification) [Con s4_2_intro, Sub s4_2_1, Sub s4_2_2,
-  Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6, Sub s4_2_7]
+s4_2 = section (titleize solution +:+ titleize' characteristic +:+
+  titleize specification) [s4_2_intro] [s4_2_1, s4_2_2,
+  s4_2_3, s4_2_4, s4_2_5, s4_2_6, s4_2_7]
 
 s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
   S "(" :+: (short ode) :+: S "s) that govern" +:+
@@ -396,8 +393,7 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
 -- General besides progName, repeated in only one other example but it could be 
 -- used for all of them. So it can be abstracted out.
 
-s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro, 
-  Con s4_2_1_list]
+s4_2_1 = section (titleize' assumption) [s4_2_1_intro, s4_2_1_list] []
 
 s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
   S "the original" +:+ phrase problem +:+ S "and helps in developing the" +:+ 
@@ -528,8 +524,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 -- Can booktabs colored links be used? The box links completely cover nearby 
 -- punctuation.
 
-s4_2_2 = Section (titleize' thModel) [Con s4_2_2_intro, 
-  Con s4_2_2_T1, Con s4_2_2_T2, Con s4_2_2_T3]
+s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 
 s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on the" +:+
   phrase general +:+ S "equations and laws that" +:+ (short progName) +:+
@@ -544,8 +539,7 @@ s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on the" +:
 -- No subsubsubsections... may make things difficult for derivation sections
 -- coming up
 
-s4_2_3 = Section (titleize' genDefn) 
-  ((Con s4_2_3_intro):(map Con s4_2_3_deriv))
+s4_2_3 = section (titleize' genDefn) ((s4_2_3_intro):(s4_2_3_deriv)) []
 
 s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
   S "laws and equations that will be used in deriving the" +:+ 
@@ -621,8 +615,8 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
 -- Add references to above when available (assumptions, GDs)
 -- Replace relevant Derivs with the regular derivative when it is available
 
-s4_2_4 = Section (titleize' dataDefn) [Con s4_2_4_intro, 
-  Con s4_2_4_DD1, Con s4_2_4_DD2, Con s4_2_4_DD3]
+s4_2_4 = section (titleize' dataDefn) [s4_2_4_intro, s4_2_4_DD1, s4_2_4_DD2,
+  s4_2_4_DD3] []
 
 s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
   S "defines all the data needed to build the" +:+. plural inModel +:+
@@ -631,8 +625,8 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = Section (titleize' inModel) ((map Con s4_2_5_intro) ++ 
-  (map Con s4_2_5_deriv1) ++ (map Con s4_2_5_deriv2))
+s4_2_5 = section (titleize' inModel) ((s4_2_5_intro) ++ 
+  (s4_2_5_deriv1) ++ (s4_2_5_deriv2)) []
 
 s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +:+
   phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
@@ -863,7 +857,7 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
-s4_2_7 = Section (S "Properties of a Correct" +:+ titleize solution) (map Con s4_2_7_deriv)
+s4_2_7 = section (S "Properties of a Correct" +:+ titleize solution) (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:
@@ -914,8 +908,7 @@ s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s5_1 = Section (titleize' functionalRequirement) 
-  (map Con s5_1_list)
+s5_1 = section (titleize' functionalRequirement) (s5_1_list) []
 
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
   (S "Input the following quantities, which define the" +:+
@@ -996,8 +989,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 --How to include pi?
 --How to add exponents?
 
-s5_2 = Section (titleize' nonfunctionalRequirement) 
-  [Con s5_2_contents]
+s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_contents] []
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
   S "of this" +:+ phrase problem :+: S ", performance is not a priority. Any" +:+
@@ -1051,9 +1043,9 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = Section ((titleize' traceyMatrix) +:+ S "and" +:+
-  (titleize $ graph ^. term)) ([Con s7_intro1, Con s7_table1, Con s7_table2,
-  Con s7_table3] ++ (map Con s7_intro2) ++ [Con s7_fig1, Con s7_fig2])
+s7 = section ((titleize' traceyMatrix) +:+ S "and" +:+ (titleize $ graph ^. term))
+  ([s7_intro1, s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++
+  [s7_fig1, s7_fig2]) []
 
 s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
   S "traceability matrices is to" +:+ 

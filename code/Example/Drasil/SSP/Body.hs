@@ -95,19 +95,19 @@ s2_p1 = Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC`
 
 s2_p2 = Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "provides an overview of the" +:+ (introduceAbb srs) +:+
-  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+ (phrase program) +:+
+  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+ (phrase $ program ^. term) +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
-  (phrase program) +:+ S "This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
+  (phrase $ program ^. term) +:+ S "This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
   S "the scope of the system, the organization of the document and" +:+
   S "the" +:+ (plural characteristic) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = section (titleize purpose) [s2_1_p1, s2_1_p2] []
 
-s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase program) +:+  S "determines the" +:+
+s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+  S "determines the" +:+
   (phrase crtSlpSrf) `sC` S "and it's respective" +:+ (phrase $ fs_rc ^. term) +:+
   S "as a method of assessing the stability of a slope" +:+. (phrase design) +:+
-  S "The" +:+ (phrase program) +:+ S "is intended to be used as an educational tool for" +:+
+  S "The" +:+ (phrase $ program ^. term) +:+ S "is intended to be used as an educational tool for" +:+
   S "introducing slope stability issues, and will facilitate the" +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe slope."
 
@@ -189,7 +189,7 @@ s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:
 -- SECTION 4.1 --
 s4_1 = section (titleize problemDescription) [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase program) +:+ S "developed" +:+
+s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed" +:+
   S "to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
   S "and to calculate the displacement that the slope will experience."
 
@@ -423,7 +423,7 @@ s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_p1] []
 
 s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+
-  S "are secondary" +:+ (phrase program) +:+ S "priorities to correctness," +:+
+  S "are secondary" +:+ (phrase $ program ^. term) +:+ S "priorities to correctness," +:+
   S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --

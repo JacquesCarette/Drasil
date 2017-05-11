@@ -140,26 +140,26 @@ s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
   +:+ plural model
   
-s3 = Section (titleize' stakeholder) [Con s3_intro, Sub s3_1, Sub s3_2]
+s3 = section (titleize' stakeholder) [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the" +:+.
   S "people who have an interest in the product"
 
-s3_1 = Section (titleize theClient) [Con s3_1_intro]
+s3_1 = section (titleize theClient) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
   S "The client for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+
   S "Entuitive. It is developed by Dr. Manuel Campidelli. The client has" +:+.
   S "the final say on acceptance of the product"
 
-s3_2 = Section (titleize theCustomer) [Con s3_2_intro]
+s3_2 = section (titleize theCustomer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
   S "The customers are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
-s4 = Section (titleize generalSystemDescription) [Con s4_intro, Sub s4_1, 
-  Sub s4_2]
+s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, 
+  s4_2]
 
 s4_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
@@ -167,7 +167,7 @@ s4_intro = Paragraph $
   S "between the" +:+ phrase system +:+ S "and its environment" `sC`
   S "and describes the" +:+ plural userCharacteristic +:+ S "and the" +:+. plural systemConstraint
 
-s4_1 = Section (titleize' userCharacteristic) [Con s4_1_bullets]
+s4_1 = section (titleize' userCharacteristic) [s4_1_bullets] []
 
 s4_1_bullets = Enumeration $ Bullet $ map Flat
   [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
@@ -178,7 +178,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "risk"), (S "The end" +:+ phrase user +:+ S "is expected to have basic computer literacy to handle" +:+.
   S "the software")]
 
-s4_2 = Section (titleize' systemConstraint) [Con s4_2_intro]
+s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 
 s4_2_intro = Paragraph $
   (short notApp)
@@ -192,7 +192,7 @@ s5_intro = Paragraph $
   S "output, which defines the action of getting the input and displaying" +:+.
   S "the output"
 
-s5_1 = Section (titleize prodUCTable) [Con s5_1_table]
+s5_1 = section (titleize prodUCTable) [s5_1_table] []
 
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
@@ -207,7 +207,7 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   S "calculated values"]])
   (titleize table_ +:+ S "1: Use Case Table") True
 
-s5_2 = Section (titleize' indPRCase) [Con s5_2_bullets]
+s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
@@ -236,8 +236,8 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated values are also displayed as output")]
 
-s6 = Section (titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
-  Sub s6_2]
+s6 = section (titleize specificsystemdescription) [s6_intro] [s6_1,
+  s6_2]
 
 s6_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription `sC` S "which gives a" +:+
@@ -245,8 +245,8 @@ s6_intro = Paragraph $
   phrase solution +:+ phrase characteristicSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
-s6_1 = Section (titleize problemDescription) [Con s6_1_intro, Sub s6_1_1, 
-  Sub s6_1_2, Sub s6_1_3]
+s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1, 
+  s6_1_2, s6_1_3]
 
 s6_1_intro = Paragraph $ 
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
@@ -255,8 +255,8 @@ s6_1_intro = Paragraph $
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
 
-s6_1_1 = Section (titleize' (terminology `and_`  definition)) [Con s6_1_1_intro, 
-  Con s6_1_1_bullets]
+s6_1_1 = section (titleize' (terminology `and_` definition)) [s6_1_1_intro, 
+  s6_1_1_bullets] []
   
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent" +:+
@@ -300,8 +300,8 @@ s6_1_1_bullets = Enumeration $ (Number $
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
-s6_1_2 = Section (titleize physSyst) [Con s6_1_2_intro, Con s6_1_2_list, 
-  Con fig_glassbr]
+s6_1_2 = section (titleize physSyst) [s6_1_2_intro, s6_1_2_list, 
+  fig_glassbr] []
 
 s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLassBR ^. defn) 
   +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
@@ -318,7 +318,7 @@ s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 --NOTE: The only difference here from the original is the removal of an 
 --    extraneous space
 
-s6_1_3 = Section (titleize' goalStmt) [Con s6_1_3_list]
+s6_1_3 = section (titleize' goalStmt) [s6_1_3_list] []
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
@@ -326,8 +326,8 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "will be able to withstand the explosion of a certain degree which" +:+
   S "is calculated based on" +:+ phrase user +:+. S "input")]
 
-s6_2 = Section (titleize solution +:+ titleize characteristicSpecification) 
-  [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
+s6_2 = section (titleize solution +:+ titleize characteristicSpecification) 
+  [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
 s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +:+
   (plural assumption) +:+ S "considered and the" +:+
@@ -415,8 +415,8 @@ s6_2_4_intro = Paragraph $
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
 
-s6_2_5 = Section (titleize' datumConstraint) [Con s6_2_5_intro, --Con s6_2_5_table1, 
-  Con s6_2_5_table2, Con s6_2_5_intro2] --, Con s6_2_5_table3]
+s6_2_5 = section (titleize' datumConstraint) [s6_2_5_intro, --s6_2_5_table1, 
+  s6_2_5_table2, s6_2_5_intro2] {-, Con s6_2_5_table3]-} []
 
 s6_2_5_intro = Paragraph $
   titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
@@ -479,7 +479,7 @@ s6_2_5_intro2 = Paragraph $
 --  [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
 --  (S "Table4: Output Variables") True
 
-s7 = Section (titleize' requirement) [Sub s7_1, Sub s7_2]
+s7 = section (titleize' requirement) [] [s7_1, s7_2]
 
 s7_1 = Section (titleize' functionalRequirement) 
   ([Con s7_1_intro] ++ (map Con s7_1_list))

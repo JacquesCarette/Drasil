@@ -75,9 +75,11 @@ unit_           = npnc "unit"           (cn' "unit")
 units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
 user            = npnc "user"           (cn' "user")
 
-orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
+indPRCases, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
 
+indPRCases   = npnc "indPRCases"   (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
+prodUCTable  = npnc "prodUCTable"  (cn' "product use case table")
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")

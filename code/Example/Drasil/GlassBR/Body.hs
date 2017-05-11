@@ -8,6 +8,8 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (matrix, graph, calculation)
 import Prelude hiding (id)
 
+import Language.Drasil.Chunk.NamedIdea (and_')
+
 import           Drasil.TableOfSymbols
 import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
@@ -591,7 +593,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "of the glass"))]
 
 --FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'; `and_'` is giving an error
-s9 = Section (titleize' (traceyMatrix `and_` graph)) --(titleize' (traceyMatrix `and_'` graph)) --((titleize' traceyMatrix) `and_` (titleize' $ graph ^. term))
+s9 = Section (titleize' traceyMandG) {-(titleize' (traceyMatrix `and_` graph))-} --(titleize' (traceyMatrix `and_'` graph)) {-((titleize' traceyMatrix) `and_` (titleize' $ graph ^. term))-}
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])

@@ -30,7 +30,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 appendix, characteristic, client, condition, constraint_, connection, correct, customer,
   datum, definition, dependency, description, design, document, environment, figure, 
   functional, game, general, information, introduction, model, name_, 
-  nonfunctional, offShelf, organization, physical, problem, property, purpose, 
+  nonfunctional, offShelf, organization, physical, problem, project, property, purpose, 
   quantity, realtime, reference, requirement_, scope, section_, simulation, 
   solution, specific, specification, stakeholder, symbol_, system, table_, 
   terminology, theory, traceyMatrix, unit_, user, video :: NPNC
@@ -63,6 +63,7 @@ offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
+project         = npnc "project"        (cn' "project")
 property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
@@ -87,8 +88,8 @@ video           = npnc "video"          (cn' "video")
 realtime        = npnc "real-time"      (cn' "real-time")
 
 
-indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-},
-  traceyMandG, theClient, theCustomer, thePhysSys :: NPNC
+indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
+  tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, thePhysSys, theProj :: NPNC
 
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
@@ -97,11 +98,13 @@ prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
+scpOfTheProj = npnc "scpOfTheProj" (scope `of'` theProj)
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 --tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 theClient    = npnc "theClient"    (the client)
 theCustomer  = npnc "theCustomer"  (the customer)
 thePhysSys   = npnc "thePhysSys"   (the physicalSystem)
+theProj      = npnc "theProj"      (the project)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 

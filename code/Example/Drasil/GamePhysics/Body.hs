@@ -249,7 +249,7 @@ s4_1_intro = Paragraph $ foldlSent
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = section (titleize terminology +:+ S "and" +:+ titleize' definition)
+s4_1_1 = section (titleize terminology `and` titleize' definition)
  [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
@@ -637,7 +637,7 @@ s6_list = Enumeration (Simple [
 s7 :: Section
 s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
-s7 = section (S "Off-the-Shelf Solutions") [s7_intro, s7_2dlist,
+s7 = section (titleize' offShelfSolution) [s7_intro, s7_2dlist,
   s7_mid, s7_3dlist] []
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`

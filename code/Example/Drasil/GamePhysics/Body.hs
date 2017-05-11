@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space, surface)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils (foldle, foldlSent)
+import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 

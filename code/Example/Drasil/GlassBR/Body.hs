@@ -181,7 +181,8 @@ s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 s4_2_intro = Paragraph $
   (short notApp)
 
-s5 = section (S "Scope of the Project") [s5_intro] [s5_1, s5_2]
+--s5 = section (S "Scope of the Project") [s5_intro] [s5_1, s5_2]
+s5 = section (titleize scpOfTheProj) [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "presents the scope of the project. It" +:+
@@ -589,7 +590,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
---FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'; `and_'` is giving an error
+--FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'
 s9 = section (titleize' traceyMandG)
   ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
 

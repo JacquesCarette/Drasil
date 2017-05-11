@@ -1,10 +1,6 @@
-module Language.Drasil.Template.Helpers where
+module Drasil.Template.Helpers where
 
-import Language.Drasil.Document
-import Language.Drasil.Chunk.Module
-import Language.Drasil.Spec
-import Language.Drasil.Unicode
-import Language.Drasil.Reference
+import Language.Drasil
 
 import Data.List ((\\), intersperse)
 import Data.Maybe (fromJust, isNothing)

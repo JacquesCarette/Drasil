@@ -24,7 +24,8 @@ module Language.Drasil (
   , commonINP, CINP
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, NPNC, short, nc, nc', npnc
-  , compoundterm, for, for', for'', of_, compoundNPNC, compoundNPNC', npnc', with, with', and_, and_'
+  , compoundterm, for, for', for'', of_, of', compoundNPNC, compoundNPNC'
+  , npnc', with, with', and_, and_'
   -- Chunk.Constrained
   , Constrained(..)
   -- Chunk.Eq
@@ -36,9 +37,10 @@ module Language.Drasil (
   , NamedRelation, makeNR, RelationConcept, makeRC
   -- Chunk.Method
   , MethodChunk, fromEC, makeStdInputMethod, makeFileInputMethod
-  , makeFileOutputMethod, makeMainMethod
+  , makeFileOutputMethod, makeMainMethod, input, output, exc, methcc, mType
   -- Chunk.Module
   , ModuleChunk, makeRecord, makeImpModule, makeImpModuleNoGen, makeUnimpModule
+  , imp, hier, field, formatName, method, secret, uses
   -- Chunk.Req
   , ReqChunk(..)
   -- Chunk.LC
@@ -54,7 +56,7 @@ module Language.Drasil (
   , (+:+), (+:+.), sC, (+:)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
   , CapitalizationRule(..)
   , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', titleize, titleize'
   , nounPhrase'', nounPhraseSP
@@ -75,10 +77,6 @@ module Language.Drasil (
   , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb
   -- Printing.Helpers
   , capitalize, paren, sqbrac
-  -- Template.DD
-  , makeDD
-  --Template.MG
-  , mgDoc, mgDoc', mgDoc''
   -- Generate
   , gen, genCode
   -- People
@@ -124,7 +122,5 @@ import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
-import Language.Drasil.Template.DD
-import Language.Drasil.Template.MG (mgDoc, mgDoc', mgDoc'')
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames)

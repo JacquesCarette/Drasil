@@ -1,12 +1,8 @@
-module Language.Drasil.Template.MIS (makeMIS) where
+module Drasil.Template.MIS (makeMIS) where
 import Prelude hiding (id)
-import Language.Drasil.Document
-import Language.Drasil.Spec
-import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.Method
-import Language.Drasil.Chunk.SymbolForm (symbol)
-import Language.Drasil.Template.Helpers
+import Language.Drasil
+
+import Drasil.Template.Helpers
 
 import Data.List (intersperse)
 import Control.Lens ((^.))

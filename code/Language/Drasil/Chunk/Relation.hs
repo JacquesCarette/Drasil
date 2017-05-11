@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Relation
   ( NamedRelation, RelationConcept
   , makeNR, relat
-  , namewrap, nrelat, makeRC
+  , nrelat, makeRC
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -16,11 +16,14 @@ import Language.Drasil.Chunk.Wrapper
 
 import Language.Drasil.NounPhrase (NP)
 
+-- | A NamedRelation is just the combination of a 'NamedIdea' with a 'Relation'
 data NamedRelation where 
   NR :: NamedIdea c => c -> Relation -> NamedRelation
 
-namewrap :: NamedRelation -> NWrapper
-namewrap (NR c _) = nw c
+-- | Helper for retrieving the NamedIdea from a NamedRelation and wrapping it as
+-- an NWrapper
+--namewrap :: NamedRelation -> NWrapper
+--namewrap (NR c _) = nw c
 
 nrelat :: NamedRelation -> Relation
 nrelat (NR _ r) = r

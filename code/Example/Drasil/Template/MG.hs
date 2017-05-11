@@ -1,22 +1,15 @@
-module Language.Drasil.Template.MG(makeMG, mgDoc, mgDoc', mgDoc'') where
+module Drasil.Template.MG(makeMG, mgDoc, mgDoc', mgDoc'') where
 import Prelude hiding (id)
-import Language.Drasil.Document
-import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.Other
-import Language.Drasil.Chunk.Req
-import Language.Drasil.Chunk.LC
-import Language.Drasil.Chunk.Wrapper
-import Language.Drasil.Spec
---import Language.Drasil.Printing.Helpers
-import Language.Drasil.Reference
-import Language.Drasil.Template.Helpers
-import Language.Drasil.NounPhrase
+
+import Language.Drasil
 import Control.Lens ((^.))
+
 import Data.List (nub, intersperse)
 import Data.Maybe (fromJust, isNothing)
+
 import Data.Drasil.Concepts.Documentation (mg)
+
+import Drasil.Template.Helpers
 
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 

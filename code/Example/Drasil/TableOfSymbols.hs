@@ -12,6 +12,7 @@ import Data.List (sort)
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math (unit_)
 
 table_of_symbols :: (Ord s,Quantity s) => 
   [s] -> (s -> Sentence) -> Section

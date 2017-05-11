@@ -94,10 +94,7 @@ library
     , Language.Drasil.Make.Print
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
-    , Language.Drasil.Template.DD
-    , Language.Drasil.Template.Helpers
-    , Language.Drasil.Template.MG
-    , Language.Drasil.Template.MIS
+
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

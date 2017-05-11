@@ -70,21 +70,22 @@ npnc' i n a = NPNC i (phrase n) (Just $ S a) n
 
 -- | Combinator for combining two 'NamedIdea's into one NamedChunk.
 -- /Does not preserve abbreviations/
-compoundterm :: (NamedIdea c, NounPhrase c, NamedIdea d, NounPhrase d) => 
+compoundterm :: (NamedIdea c, NamedIdea d) => 
   c -> d -> NamedChunk
-compoundterm t1 t2 = NC (t1^.id ++ t2^.id) (compoundPhrase t1 t2) Nothing
+compoundterm t1 t2 = 
+  NC (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
 
 -- | Combinator for combining two 'NPNC's into one.
 -- /Does not preserve abbreviations/
-compoundNPNC :: NPNC -> NPNC -> NPNC
-compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) = 
-  NPNC (t1^.id ++ t2^.id) (phrase $ compoundPhrase n1 n2) Nothing 
-  (compoundPhrase n1 n2) 
+compoundNPNC :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
+compoundNPNC t1 t2 = NPNC 
+  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
+  (compoundPhrase (t1 ^. term) (t2 ^. term))
   
-compoundNPNC' :: NPNC -> NPNC -> NPNC
-compoundNPNC' t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) = 
-  NPNC (t1^.id ++ t2^.id) (phrase $ compoundPhrase n1 n2) Nothing 
-  (compoundPhrase'' n1 n2) 
+compoundNPNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
+compoundNPNC' t1 t2 = NPNC 
+  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
+  (compoundPhrase'' (t1 ^. term) (t2 ^. term)) 
   
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:

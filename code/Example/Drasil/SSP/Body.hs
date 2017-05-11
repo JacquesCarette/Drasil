@@ -95,7 +95,7 @@ s2_p2 = Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
   (phrase program) +:+ S "This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
   S "the scope of the system, the organization of the document and" +:+
-  S "the" +:+ (phrase characteristic) +:+ S "of the intended readers."
+  S "the" +:+ (plural characteristic) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = section (titleize purpose) [s2_1_p1, s2_1_p2] []
@@ -178,7 +178,7 @@ s4 = section (titleize specificsystemdescription) [s4_p1] [s4_1, s4_2]
 s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
   (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
   (phrase problem) +:+ S "to be solved. This is followed by the" +:+ (phrase solution) +:+
-  (phrase characteristicSpecification) `sC` S "which presents the" +:+ 
+  (plural characteristicSpecification) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
   S "and finally the" +:+ (plural instMdl) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
 
@@ -268,7 +268,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.2 --
-s4_2 = section ((titleize solution) +:+ (titleize characteristicSpecification))
+s4_2 = section (titleize' solutionCharSpec)
   [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
@@ -405,7 +405,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s5_1_table = table_inputdata
 
 table_inputdata :: Contents --FIXME: use table function?
-table_inputdata =  Table (map titleize [symbol_, unit_, description]) 
+table_inputdata =  Table $ map titleize [symbol_, unit_, description]
   (mkTable
     [(\ch -> P (ch ^. symbol)),
      (\ch -> Sy $ unit_symb ch),

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space, surface)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Utils (foldle, foldlSent)
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 
@@ -106,7 +106,7 @@ s2_intro = [para1_s2_intro, para2_s2_intro]
 s2_1 :: Section
 s2_1_intro :: [Contents]
 
-s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
+s2_1 = section (titleize prpsOfDoc) (map Con s2_1_intro)
 
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
@@ -138,7 +138,7 @@ s2_1_intro = [para1_s2_1_intro, para2_s2_1_intro]
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = Section (titleize scpOfReq) [Con s2_2_intro]
+s2_2 = section (titleize scpOfReq) [Con s2_2_intro]
 
 s2_2_intro = Paragraph $ foldlSent 
   [S "The scope of the", plural requirement, S "includes the",
@@ -172,7 +172,7 @@ s2_3_intro = foldlSent
 s3 :: Section
 s3_intro :: Contents
 
-s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1,
+s3 = section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1,
   Sub s3_2]
 
 --FIXME: This can be generalized to use more chunks
@@ -189,7 +189,7 @@ s3_intro = Paragraph $ foldlSent
 s3_1 :: Section
 s3_1_intro :: Contents
 
-s3_1 = Section (titleize' userCharacteristic) [Con s3_1_intro]
+s3_1 = section (titleize' userCharacteristic) [Con s3_1_intro]
 
 s3_1_intro = Paragraph $ foldlSent 
   [S "The end user of", (short chipmunk),
@@ -203,7 +203,7 @@ s3_1_intro = Paragraph $ foldlSent
 s3_2 :: Section
 s3_2_intro :: Contents
 
-s3_2 = Section (titleize' systemConstraint) [Con s3_2_intro]
+s3_2 = section (titleize' systemConstraint) [Con s3_2_intro]
 
 s3_2_intro = Paragraph $ S "There are no system constraints."
 
@@ -225,7 +225,7 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 s4_1 :: Section
 s4_1_intro :: Contents
 
-s4_1 = Section (titleize problemDescription) [Con s4_1_intro, Sub s4_1_1,
+s4_1 = section (titleize problemDescription) [Con s4_1_intro, Sub s4_1_1,
   Sub s4_1_2]
 
 s4_1_intro = Paragraph $ foldlSent 
@@ -251,10 +251,10 @@ s4_1_intro = Paragraph $ foldlSent
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
+s4_1_1 = section (S "Terminology and Definitions") [Con s4_1_1_intro,
   Con s4_1_1_bullets]
 
-s4_1_1_intro = Paragraph $ foldlSent 
+s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
   [S "This subsection provides a list of terms",
   S "that are used in subsequent sections and their meaning, with the",
   S "purpose of reducing ambiguity and making it easier to correctly",
@@ -278,7 +278,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = Section (titleize' goalStmt) [Con s4_1_2_list]
+s4_1_2 = section (titleize' goalStmt) [Con s4_1_2_list]
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt1 = foldlSent 
@@ -325,7 +325,7 @@ s4_1_2_list = Enumeration (Simple
 
 s4_2 :: Section
 
-s4_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) [Sub s4_2_1,
+s4_2 = section (S "Solution" +:+ titleize characteristicsSpecification) [Sub s4_2_1,
   Sub s4_2_2, Sub s4_2_3, Sub s4_2_4, Sub s4_2_5, Sub s4_2_6]
 
 -------------------------
@@ -335,7 +335,7 @@ s4_2 = Section (S "Solution" +:+ titleize characteristicsSpecification) [Sub s4_
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro,
+s4_2_1 = section (titleize' assumption) [Con s4_2_1_intro,
   Con s4_2_1_list]
 
 -- TODO: Add assumption references in the original and this SRS. --
@@ -384,7 +384,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = Section (titleize' thModel) ([Con s4_2_2_intro] ++
+s4_2_2 = section (titleize' thModel) ([Con s4_2_2_intro] ++
   (map Con s4_2_2_TMods))
 
 s4_2_2_intro = Paragraph $ foldlSent 
@@ -401,7 +401,7 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = Section (titleize' genDefn) ([Con s4_2_3_intro] {- ++
+s4_2_3 = section (titleize' genDefn) ([Con s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-})
 
 s4_2_3_intro = Paragraph $ foldlSent 
@@ -423,7 +423,7 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = Section (titleize' dataDefn) ([Con s4_2_4_intro] ++
+s4_2_4 = section (titleize' dataDefn) ([Con s4_2_4_intro] ++
   (map Con s4_2_4_DDefs))
 
 s4_2_4_intro = Paragraph $ foldlSent [S "This section collects and defines all the",
@@ -440,7 +440,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 -- s4_2_5_IMods :: [Contents]
 
-s4_2_5 = Section (titleize' inModel) ([Con s4_2_5_intro] {- ++
+s4_2_5 = section (titleize' inModel) ([Con s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-})
 
 s4_2_5_intro = Paragraph $ foldlSent 
@@ -460,7 +460,7 @@ s4_2_5_intro = Paragraph $ foldlSent
 s4_2_6 :: Section
 s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = Section (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
+s4_2_6 = section (S "Data Constraints") [Con s4_2_6_intro, Con s4_2_6_table1,
   Con s4_2_6_table2]
 
 s4_2_6_intro = Paragraph $ foldlSent 
@@ -514,7 +514,7 @@ s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1,
+s5 = section (titleize' requirement) [Con s5_intro, Sub s5_1,
   Sub s5_2]
 
 s5_intro = Paragraph $ foldlSent 
@@ -531,7 +531,7 @@ s5_intro = Paragraph $ foldlSent
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = Section (S "Functional" +:+ titleize' requirement)
+s5_1 = section (S "Functional" +:+ titleize' requirement)
   [Con s5_1_list]
 
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
@@ -592,7 +592,7 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement)
+s5_2 = section (S "Nonfunctional" +:+ titleize' requirement)
   [Con s5_2_intro]
 
 s5_2_intro = Paragraph $ foldlSent 
@@ -609,7 +609,7 @@ s5_2_intro = Paragraph $ foldlSent
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = Section (titleize' likelyChg) [Con s6_intro, Con s6_list]
+s6 = section (titleize' likelyChg) [Con s6_intro, Con s6_list]
 
 s6_intro = Paragraph $ S "This section lists the" +:+. 
   ((plural likelyChg) +:+ S "to be made to the physics game library")
@@ -643,7 +643,7 @@ s6_list = Enumeration (Simple [
 s7 :: Section
 s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
-s7 = Section (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
+s7 = section (S "Off-the-Shelf Solutions") [Con s7_intro, Con s7_2dlist,
   Con s7_mid, Con s7_3dlist]
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`

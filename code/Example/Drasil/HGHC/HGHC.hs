@@ -8,6 +8,8 @@ import Drasil.HGHC.Modules
 import Drasil.DocumentLanguage
 import Drasil.ReferenceMaterial (intro)
 
+import Drasil.Template.DD
+
 import Language.Drasil
 
 import Data.Drasil.SI_Units (si_units)

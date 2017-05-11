@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Units.Thermodynamics
-import Data.Drasil.Quantities.Thermodynamics (temp)
+import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 
 import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage

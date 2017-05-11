@@ -20,6 +20,9 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 
+import Drasil.Template.MG
+import Drasil.Template.DD
+
 --type declerations for sections--
 s2, s3, s4, s5, s6 :: Section
 

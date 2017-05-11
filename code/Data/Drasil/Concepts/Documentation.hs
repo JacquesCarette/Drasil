@@ -32,7 +32,7 @@ appendix, characteristic, condition, constraint_, connection,
   functional, general, information, introduction, model, name_, nonfunctional, 
   offShelf, organization, physical, problem, program, purpose, quantity, 
   reference, requirement_, scope, section_, solution, specific, specification, 
-  stakeholder, symbol_, system, table_, terminology, theory,traceyMatrix{-, unit_-}, user :: NPNC
+  stakeholder, symbol_, system, table_, terminology, theory,traceyMatrix, unit_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -74,7 +74,7 @@ table_          = npnc "table"          (cn' "table")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
---unit_           = npnc "unit"           (cn' "unit")
+unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 
 indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-}, traceyMandG :: NPNC

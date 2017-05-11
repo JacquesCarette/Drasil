@@ -24,7 +24,7 @@ pcmUnits = map uw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA,
   temp_init, temp_water, thFluxVect, time, time_final, vol, water_dense, water_m,
   water_vol]
 
-coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux, ht_flux_C,
+coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
   ht_flux_in, ht_flux_out, ht_gen_vol, ht_xfer_co, ht_xfer_CW, tank_D, tank_L,--temp_boil,
   temp_coil, temp_diff, temp_env, temp_init, temp_water, thFluxVect, time_final,--tank_vol,
   water_dense, water_m, water_vol :: UnitalChunk
@@ -48,7 +48,6 @@ htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid"
               fixme (sup cC cL) U.heat_cap_spec
 htCap_W     = uc' "htCap_W" (heat_cap_spec `of_` water)
               fixme (sub cC cW) U.heat_cap_spec
-ht_flux     = uc' "ht_flux" (cn'' "heat flux") fixme lQ U.heat_transfer_coef
 ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")
               fixme (sub lQ cC) U.thermal_flux
 ht_flux_in  = uc' "ht_flux_in" (nounPhraseSP "heat flux in")

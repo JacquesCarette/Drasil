@@ -39,3 +39,4 @@ gravitationalConst = cvR CP.gravitationalConst cG
 time :: UnitalChunk
 --force         = uc CP.force (vec cF) newton
 time          = uc CP.time lT second
+energy        = uc CP.energy cE joule

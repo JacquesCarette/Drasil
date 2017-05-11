@@ -4,7 +4,7 @@ import Language.Drasil
 
 boiling,law_cons_energy, law_conv_cooling, latent_heat, melting, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, heat_trans :: ConceptChunk
+  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans :: ConceptChunk
 
 --To save space.
 fixme :: String
@@ -17,6 +17,7 @@ boiling             = dcc "boiling"         (cn "boiling")
 heat                = dcc "heat"            (cn "heat") fixme
 heat_trans          = dcc "heat_trans"      (cn' "heat transfer") fixme
 heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity") fixme
+ht_flux             = uc' "ht_flux" (cn'' "heat flux") fixme
 latent_heat         = dcc "latent_heat"     (cn' "latent heat") fixme
 law_cons_energy     = dcc "law_cons_energy" 
                       (nounPhraseSP "law of conservation of energy" )

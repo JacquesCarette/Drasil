@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, friction, elasticity, collision, space
-  , cartesian, rightHand, surface, restitutionCoef, acceleration
+  ( rigidBody, velocity, friction, elasticity, energy, collision, space
+  , cartesian, rightHand, restitutionCoef, acceleration
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
@@ -11,8 +11,8 @@ module Data.Drasil.Concepts.Physics
 import Language.Drasil
 import Control.Lens((^.)) --need for parametrization hack
 
-rigidBody, velocity, friction, elasticity, collision, space,
-  cartesian, rightHand, surface, restitutionCoef, acceleration,
+rigidBody, velocity, friction, elasticity, energy, collision, space,
+  cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
@@ -27,6 +27,8 @@ friction   = dcc "friction" (cn' "friction")
 elasticity = dcc "elasticity" (cnIES "elasticity") 
   ("Ratio of the relative velocities " ++
   "of two colliding objects after and before a collision.")
+energy = dee "energy" (cn "energy")
+  "power derived from the utilization of physical or chemical resources."
 collision  = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++
   "in an exchange or transformation of energy.")
@@ -48,11 +50,8 @@ displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
 force      = dcc "force" (cn' "force")
   "an interaction that tends to produce change in the motion of an object"
-surface    = dcc "surface" (cn' "surface")
-  "the outer or topmost boundary of an object"
 distance   = dcc "distance" (cn' "distance")
   "the interval measured along a path connecting two locations"
-
 stress    = dcc "stress" (cn'' "stress")
   ("Forces that are exerted between planes internal to" ++
   " a larger body subject to external loading.")

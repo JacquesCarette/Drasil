@@ -294,7 +294,7 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
 
 --  section is very different between all examples
 
-s4_1_1 = section (titleize terminology +:+ S "and" +:+ titleize' definition)
+s4_1_1 = section (titleize' $ terminology `and_'` definition)
   [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
@@ -627,8 +627,8 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = section (titleize' inModel) ((s4_2_5_intro) ++ 
-  (s4_2_5_deriv1) ++ (s4_2_5_deriv2)) []
+s4_2_5 = section (titleize' inModel) ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
+  (s4_2_5_deriv2)) []
 
 s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +:+
   phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
@@ -859,7 +859,9 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
-s4_2_7 = section (titleize' property +:+ S "of a" +:+ titleize correct +:+ titleize solution) (s4_2_7_deriv) []
+s4_2_7 = section (S "Properties of a Correct Solution") (s4_2_7_deriv) []
+
+-- s4_2_7 = section (property `of_` (aNP  correct +:+ titleize solution)) (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:

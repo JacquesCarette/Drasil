@@ -26,7 +26,7 @@ this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
-  s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section
+  s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
 s2_intro, s2_2_intro, s3_intro, 
   s3_1_intro, s3_2_intro, s4_intro, s4_1_bullets, s4_2_intro, s5_intro, 
@@ -155,7 +155,7 @@ s3_2 = Section (S "The Customer") [Con s3_2_intro]
 s3_2_intro = Paragraph $
   S "The customers are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
-s4 = Section(titleize generalSystemDescription) [Con s4_intro, Sub s4_1, 
+s4 = Section (titleize generalSystemDescription) [Con s4_intro, Sub s4_1, 
   Sub s4_2]
 
 s4_intro = Paragraph $
@@ -180,7 +180,7 @@ s4_2 = Section (titleize' systemConstraint) [Con s4_2_intro]
 s4_2_intro = Paragraph $
   (short notApp)
 
-s5 = Section(S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
+s5 = Section (S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
 
 s5_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "presents the scope of the project. It" +:+

@@ -412,7 +412,7 @@ s6_2_4_intro = Paragraph $
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
 
-s6_2_5 = Section (S "Data Constraints") [Con s6_2_5_intro, --Con s6_2_5_table1, 
+s6_2_5 = Section (titleize' datumConstraint) [Con s6_2_5_intro, --Con s6_2_5_table1, 
   Con s6_2_5_table2, Con s6_2_5_intro2] --, Con s6_2_5_table3]
 
 s6_2_5_intro = Paragraph $
@@ -478,7 +478,7 @@ s6_2_5_intro2 = Paragraph $
 
 s7 = Section (titleize' requirement) [Sub s7_1, Sub s7_2]
 
-s7_1 = Section (S "Functional" +:+ titleize' requirement) 
+s7_1 = Section (titleize' functionalRequirement) 
   ([Con s7_1_intro] ++ (map Con s7_1_list))
 
 s7_1_intro = Paragraph $
@@ -555,7 +555,7 @@ s7_1_list =
     --S " = a/b)"
     ]))])]
 
-s7_2 = Section (S "Nonfunctional" +:+ titleize' requirement) 
+s7_2 = Section (titleize' nonfunctionalRequirement) 
   [Con s7_2_intro]
 
 s7_2_intro = Paragraph $

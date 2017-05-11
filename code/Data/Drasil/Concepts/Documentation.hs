@@ -29,7 +29,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 appendix, characteristic, characteristics, condition, constraint_, connection, datum, definition,
   dependency, description, design, document, figure, functional, general, information, introduction, 
   model, name_, nonfunctional, organization, physical, problem, program, purpose, quantity, reference,
-  requirement_, scope, section_, solution, specific, specification, symbol_, system, table_, 
+  requirement_, scope, section_, solution, specific, specification, stakeholder, symbol_, system, table_, 
   terminology, theory, unit_, units_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -65,6 +65,7 @@ section_        = npnc "section"        (cn' "section")
 solution        = npnc "solution"       (cn' "solution")
 specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
+stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")

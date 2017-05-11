@@ -408,7 +408,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s5_1_table = table_inputdata
 
 table_inputdata :: Contents --FIXME: use table function?
-table_inputdata =  Table $ map titleize [symbol_, unit_, description]
+table_inputdata =  Table [titleize symbol_, titleize' unit_, titleize description]
   (mkTable
     [(\ch -> P (ch ^. symbol)),
      (\ch -> Sy $ unit_symb ch),

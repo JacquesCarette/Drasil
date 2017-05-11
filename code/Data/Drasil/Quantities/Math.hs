@@ -11,7 +11,7 @@ gradient  = cvR CM.gradient (Greek Nabla)
 normalVect = cvR CM.normalV (vec $ lN)
 unitVect = cvR CM.unitV (vec $ hat lI)
 perpVect = cvR perpV (vec $ lN)
-surface = cvR CM.surface cS --Maybe should be physical property?
+surface = cvR CM.surface cS
 orientation = cvR CM.orient (Greek Phi_L)
 euclidNorm = cvR CM.euclidN (Concat [Atomic "||", (vec lR), Atomic "||"])
 

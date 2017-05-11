@@ -125,7 +125,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
 -- similar paragraph in each of the other examples. It can probably be 
 -- abstracted out.
 
-s2_1 = Section (titleize purpose +:+ S "of" +:+ titleize document) (map Con s2_1_contents)
+s2_1 = section (titleize prpsOfDoc) (s2_1_contents) []
 
 s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase document +:+ S "is to describe the modelling of" +:+
@@ -164,7 +164,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
 --How to italicize words in sentence?
 --How to cite?
 
-s2_2 = Section (titleize' scpOfReq) [Con s2_2_contents]
+s2_2 = section (titleize' scpOfReq) [s2_2_contents] []
 
 s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   plural requirement +:+ S "is limited to" +:+ (sLower (phrase $ thermal_analysis ^.
@@ -192,8 +192,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
-s2_3 = Section (titleize organization +:+ S "of" +:+ titleize document)
-  (map Con s2_3_contents)
+s2_3 = section (titleize orgOfDoc) (s2_3_contents) []
 
 s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
@@ -236,8 +235,7 @@ s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
 -- the sectioning? This would also improve the tediousness of declaring 
 -- LayoutObjs
 
-s3 = Section (titleize generalSystemDescription) [Con s3_intro, Sub s3_1, 
-  Sub s3_2]
+s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the" +:+ phrase system :+:

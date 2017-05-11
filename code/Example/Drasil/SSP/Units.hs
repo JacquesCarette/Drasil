@@ -6,11 +6,11 @@ import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 
 --FIXME: Remove unitless
-sspSymbolList :: [UWrapper]
-sspSymbolList = map uw sspSymbols
+sspSymbols :: [CQSWrapper]
+sspSymbols = map cqs sspUnits
 
-sspSymbols :: [UnitalChunk]
-sspSymbols = [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
+sspUnits :: [UWrapper]
+sspUnits = map uw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords,
               fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,

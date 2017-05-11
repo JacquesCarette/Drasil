@@ -43,7 +43,7 @@ this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbolList (sspSymbolList) acronyms 
+  this_si sspSymbols (sspSymbols) acronyms 
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 

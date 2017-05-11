@@ -27,10 +27,10 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, client, condition, constraint_, connection, customer,
+appendix, characteristic, client, condition, constraint_, connection, correct, customer,
   datum, definition, dependency, description, design, document, figure, 
   functional, general, information, introduction, model, name_, nonfunctional, 
-  offShelf, organization, physical, problem, program, purpose, quantity, 
+  offShelf, organization, physical, problem, program, property, purpose, quantity, 
   reference, requirement_, scope, section_, solution, specific, specification, 
   stakeholder, symbol_, system, table_, terminology, theory,traceyMatrix, unit_, user :: NPNC
 
@@ -82,7 +82,8 @@ unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 
 
-indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-}, traceyMandG :: NPNC
+indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-},
+  traceyMandG, theCustomer, theCustomer :: NPNC
 
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)

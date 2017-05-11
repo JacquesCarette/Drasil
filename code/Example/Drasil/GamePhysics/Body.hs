@@ -249,7 +249,7 @@ s4_1_intro = Paragraph $ foldlSent
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = section (titleize terminology `and` titleize' definition)
+s4_1_1 = section (titleize terminology +:+ S "and" +:+ titleize' definition)
  [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 

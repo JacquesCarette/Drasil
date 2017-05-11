@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
-import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC)
+import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC')
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
@@ -26,10 +26,10 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, characteristics, condition, constraint_, connection, definition,
-  dependency, description, design, document, figure, general, information, introduction, 
-  model, name_, organization, physical, problem, program, purpose, quantity, reference, scope,
-  section_, solution, specific, specification, symbol_, system, table_, 
+appendix, characteristic, characteristics, condition, constraint_, connection, datum, definition,
+  dependency, description, design, document, figure, functional, general, information, introduction, 
+  model, name_, nonfunctional, organization, physical, problem, program, purpose, quantity, reference,
+  requirement_, scope, section_, solution, specific, specification, symbol_, system, table_, 
   terminology, theory, unit_, units_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -38,17 +38,20 @@ characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventu
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
+datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
 design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
 figure          = npnc "figure"         (cn' "figure")
+functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 information     = npnc "information"    (cn "information")
 introduction    = npnc "introduction"   (cn' "introduction")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
+nonfunctional   = npnc "nonfunctional"  (cn' "nonfunctional") -- FIXME: Adjective
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
@@ -56,6 +59,7 @@ program         = npnc "program"        (cn' "program")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
+requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement 
 scope           = npnc "scope"          (cn' "scope")
 section_        = npnc "section"        (cn' "section")
 solution        = npnc "solution"       (cn' "solution")
@@ -85,7 +89,8 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 characteristicsSpecification, generalSystemDescription, physicalSystem, 
   problemDescription, specificsystemdescription, systemdescription, 
-  systemConstraint, userCharacteristic :: NPNC
+  systemConstraint, userCharacteristic, datumConstraint,
+  functionalRequirement, nonfunctionalRequirement  :: NPNC
   
 characteristicsSpecification = compoundNPNC characteristics specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -95,3 +100,6 @@ specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint_
 userCharacteristic           = compoundNPNC user characteristic
+datumConstraint              = compoundNPNC' datum constraint_
+functionalRequirement        = compoundNPNC functional requirement_
+nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_

@@ -335,10 +335,10 @@ s4_2_2_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on t
 s4_2_2_tmods = map (Con . Definition) [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = Sub $ Section (S "General" +:+ (titleize' definition)) []
+s4_2_3 = Sub $ Section (titleize' genDefn) []
 
 -- SECTION 4.2.4 --
-s4_2_4 = Sub $ Section (S "Data" +:+ (titleize' definition)) []
+s4_2_4 = Sub $ Section (titleize' dataDefn) []
 
 -- SECTION 4.2.5 --
 s4_2_5 = Sub sec_IMs
@@ -347,7 +347,7 @@ sec_IMs :: Section
 sec_IMs = Section (titleize' instMdl) []
 
 -- SECTION 4.2.6 --
-s4_2_6 = Sub $ Section (S "Data" +:+ (titleize' constraint)) []
+s4_2_6 = Sub $ Section (titleize' datumConstraint) []
 
 -- SECTION 5 --
 s5 = Section (titleize' requirement) [s5_p1, s5_1, s5_2]
@@ -360,7 +360,7 @@ s5_p1 = Con $ Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:
   S "the qualities that the software is expected to exhibit."
 
 -- SECTION 5.1 --
-s5_1 = Sub $ Section (S "Functional" +:+ (titleize' requirement))
+s5_1 = Sub $ Section (titleize' functionalRequirement)
   [s5_1_list, s5_1_table]
 
 s5_1_list = Con $ Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
@@ -413,7 +413,7 @@ table_inputdata =  Table (map titleize [symbol_, units_, description])
   (S "Input data") True
  
 -- SECTION 5.2 --
-s5_2 = Sub $ Section (S "Nonfunctional" +:+ (titleize' requirement)) [s5_2_p1]
+s5_2 = Sub $ Section (titleize' nonfunctionalRequirement) [s5_2_p1]
 
 s5_2_p1 = Con $ Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+

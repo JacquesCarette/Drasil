@@ -81,6 +81,11 @@ compoundNPNC t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) =
   NPNC (t1^.id ++ t2^.id) (phrase $ compoundPhrase n1 n2) Nothing 
   (compoundPhrase n1 n2) 
   
+compoundNPNC' :: NPNC -> NPNC -> NPNC
+compoundNPNC' t1@(NPNC _ _ _ n1) t2@(NPNC _ _ _ n2) = 
+  NPNC (t1^.id ++ t2^.id) (phrase $ compoundPhrase n1 n2) Nothing 
+  (compoundPhrase'' n1 n2) 
+  
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2

@@ -3,9 +3,9 @@ module Language.Drasil.NounPhrase
   ( NounPhrase(..)
   , NP
   , pn, pn', pn'', pn''', pnIrr
-  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS
+  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
-  , compoundPhrase, compoundPhrase'
+  , compoundPhrase, compoundPhrase', compoundPhrase''
   , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
   , PluralRule(..)
@@ -81,6 +81,9 @@ cnICES n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "ices")) CapFirst
 cnIS :: String -> NP
 cnIS n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "es")) CapFirst
 
+cnUM :: String -> NP
+cnUM n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "a")) CapFirst
+
 cnIP :: String -> PluralRule -> NP
 cnIP n p = CommonNoun n p CapFirst
 
@@ -108,6 +111,10 @@ compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords CapWords
   
+compoundPhrase'' :: NP -> NP -> NP
+compoundPhrase'' t1 t2 = Phrase
+  (phrase t1 +:+ phrase t2) (plural t1 +:+ plural t2) CapWords CapWords
+
 -- === Helpers === 
 
 at_start, at_start' :: NounPhrase n => n -> Capitalization

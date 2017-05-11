@@ -31,6 +31,8 @@ import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage
+import Drasil.Template.MG
+import Drasil.Template.DD
 
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,

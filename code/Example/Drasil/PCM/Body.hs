@@ -38,11 +38,12 @@ pcm_srs = mkDoc mkSRS pcm_si
 
 s4 = section ((titleize $ specificsystemdescription ^. term)) [s4_intro] [s4_1, s4_2]
 
+
 s4_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
             (phrase $ problemDescription ^. term) :+: S ", which gives a high-level view of the" +:+
             (phrase $ problem ^. term) +:+ S "to be solved. This is followed by the" +:+
-            (phrase $ solution ^. term) +:+ (phrase $ characteristicSpecification ^. term) :+:
+            (phrase $ solutionCharSpec ^. term) :+:
            S ", which presents the" +:+ (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
             (plural $ definition ^. term) +:+ S "and finally the" +:+
             (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
@@ -90,7 +91,7 @@ s4_1_3_intro = Paragraph $
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = section ((titleize $ solution ^. term) +:+ (titleize $ characteristicSpecification ^. term)) 
+s4_2 = section ((titleize $ solutionCharSpec ^. term)) 
   [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $

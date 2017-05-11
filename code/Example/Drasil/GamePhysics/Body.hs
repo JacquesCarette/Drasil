@@ -12,7 +12,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction, 
-                   rightHand, collision, space, surface)
+                   rightHand, collision, space)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Utils (foldle, foldlSent)
@@ -86,7 +86,7 @@ s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldlSent
   [S "Due to the rising cost of developing", (phrase videogame), 
-  developers are looking for ways to save time and money for",
+  S "developers are looking for ways to save time and money for",
   S "their projects. Using an open source", (phrase $ physLib ^. term),
   S "that is reliable and free will cut down development costs and lead",
   S "to better quality products"]
@@ -145,7 +145,7 @@ s2_2 = section (titleize scpOfReq) [s2_2_intro] []
 
 s2_2_intro = Paragraph $ foldlSent 
   [S "The scope of the", plural requirement, S "includes the",
-  S "physical simulation of", (getAcc twoD), (plural $ rigidBody ^. term),
+  (phrase $ physicalSim),  S "of", (getAcc twoD), (plural $ rigidBody ^. term),
   S "acted on by forces. Given", (getAcc twoD), 
   (plural $ rigidBody ^. term) `sC` (short chipmunk), 
   S "is intended to simulate how these", (plural $ rigidBody ^. term), 

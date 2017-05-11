@@ -29,10 +29,11 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 appendix, characteristic, client, condition, constraint_, connection, correct, customer,
   datum, definition, dependency, description, design, document, figure, 
-  functional, general, information, introduction, model, name_, nonfunctional, 
-  offShelf, organization, physical, problem, property, purpose, quantity, 
-  reference, requirement_, scope, section_, solution, specific, specification, 
-  stakeholder, symbol_, system, table_, terminology, theory,traceyMatrix, unit_, user :: NPNC
+  functional, game, general, information, introduction, model, name_, 
+  nonfunctional, offShelf, organization, physical, problem, property, purpose, 
+  quantity, reference, requirement_, scope, section_, simulation, solution, 
+  specific, specification, stakeholder, symbol_, system, table_, terminology,
+  theory, traceyMatrix, unit_, user, video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -50,6 +51,7 @@ design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
+game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 information     = npnc "information"    (cn "information")
 introduction    = npnc "introduction"   (cn' "introduction")
@@ -67,6 +69,7 @@ reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement 
 scope           = npnc "scope"          (cn' "scope")
 section_        = npnc "section"        (cn' "section")
+simulation      = npnc "simulation"     (cn' "simulation")
 solution        = npnc "solution"       (cn' "solution")
 specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
@@ -79,6 +82,7 @@ theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
+video           = npnc "video"          (cn' "video")
 
 
 indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-},
@@ -105,7 +109,7 @@ characteristicSpecification, generalSystemDescription, physicalConstraint,
   physicalSystem, problemDescription, specificsystemdescription, 
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
   functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
-  offShelfSolution :: NPNC
+  offShelfSolution, videogame, physicalSim :: NPNC
   
 characteristicSpecification  = compoundNPNC' characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -121,3 +125,5 @@ functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
 offShelfSolution             = compoundNPNC offShelf solution
+physicalSim                  = compoundNPNC physical simulation
+videogame                    = compoundNPNC video game

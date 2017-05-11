@@ -29,9 +29,9 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 appendix, characteristic, condition, constraint_, connection,
   datum, definition, dependency, description, design, document, figure, 
   functional, general, information, introduction, model, name_, nonfunctional, 
-  organization, physical, problem, program, purpose, quantity, reference,
-  requirement_, scope, section_, solution, specific, specification, stakeholder,
-  symbol_, system, table_, terminology, theory, unit_, user :: NPNC
+  offShelf, organization, physical, problem, program, purpose, quantity, 
+  reference, requirement_, scope, section_, solution, specific, specification, 
+  stakeholder, symbol_, system, table_, terminology, theory, unit_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -52,6 +52,7 @@ introduction    = npnc "introduction"   (cn' "introduction")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
 nonfunctional   = npnc "nonfunctional"  (cn' "nonfunctional") -- FIXME: Adjective
+offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
@@ -92,7 +93,8 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 characteristicSpecification, generalSystemDescription, physicalConstraint,
   physicalSystem, problemDescription, specificsystemdescription, 
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
-  functionalRequirement, nonfunctionalRequirement, solutionCharSpec :: NPNC
+  functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
+  offShelfSolution :: NPNC
   
 characteristicSpecification  = compoundNPNC' characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -107,3 +109,4 @@ datumConstraint              = compoundNPNC' datum constraint_
 functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
+offShelfSolution             = compoundNPNC offShelf solution

@@ -93,7 +93,7 @@ s2_intro = Paragraph $
   phrase organization +:+ S "of the" +: phrase document +:+ S "what the" +:+ 
   phrase document +:+. S "is based on and intended to portray"
 
-s2_1 = Section (titleize prpsOfDoc) (map Con s2_1_intro)
+s2_1 = section (titleize prpsOfDoc) (s2_1_intro) []
 
 s2_1_intro = 
   [Paragraph $
@@ -116,8 +116,7 @@ s2_1_intro =
   S "plan will show the steps that will be used to increase confidence in the" +:+.
   S "software documentation and the implementation"]
 
-s2_2 = Section (S "Scope of" +:+ titleize' requirement) 
-  [Con s2_2_intro]
+s2_2 = section (titleize' scpOfReq) [s2_2_intro] []
 
 s2_2_intro = Paragraph $
   S "The scope of the" +:+ plural requirement +:+
@@ -158,8 +157,7 @@ s3_2 = section (titleize theCustomer) [s3_2_intro] []
 s3_2_intro = Paragraph $
   S "The customers are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
-s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, 
-  s4_2]
+s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
@@ -183,7 +181,7 @@ s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 s4_2_intro = Paragraph $
   (short notApp)
 
-s5 = Section (S "Scope of the Project") [Con s5_intro, Sub s5_1, Sub s5_2]
+s5 = section (S "Scope of the Project") [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "presents the scope of the project. It" +:+
@@ -334,8 +332,7 @@ s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +
   plural thModel +:+ S "which are" +:+
   S "supported by the" +:+. (plural dataDefn)
   
-s6_2_1 = Section (titleize' assumption) ([Con s6_2_1_intro] ++
-  (map Con s6_2_1_list))
+s6_2_1 = section (titleize' assumption) ([s6_2_1_intro] ++ (s6_2_1_list)) []
 
 s6_2_1_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
@@ -395,18 +392,18 @@ s6_2_1_list =
     S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")])]
   --equation in sentence
 
-s6_2_2 = Section (titleize' thModel) (map Con s6_2_2_TMods)
+s6_2_2 = section (titleize' thModel) (s6_2_2_TMods) []
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
 
-s6_2_3 = Section (titleize' inModel) (map Con s6_2_3_IMods)
+s6_2_3 = section (titleize' inModel) (s6_2_3_IMods) []
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = Section (titleize' dataDefn) 
-  ((Con s6_2_4_intro):(map Con s6_2_4_DDefns))
+s6_2_4 = section (titleize' dataDefn) 
+  ((s6_2_4_intro):(s6_2_4_DDefns)) []
 
 s6_2_4_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "collects and defines all the data needed to" +:+
@@ -481,8 +478,8 @@ s6_2_5_intro2 = Paragraph $
 
 s7 = section (titleize' requirement) [] [s7_1, s7_2]
 
-s7_1 = Section (titleize' functionalRequirement) 
-  ([Con s7_1_intro] ++ (map Con s7_1_list))
+s7_1 = section (titleize' functionalRequirement) 
+  ([s7_1_intro] ++ (s7_1_list)) []
 
 s7_1_intro = Paragraph $
   S "The following" +:+ phrase section_+:+ S "provides the functional" +:+
@@ -558,8 +555,7 @@ s7_1_list =
     --S " = a/b)"
     ]))])]
 
-s7_2 = Section (titleize' nonfunctionalRequirement) 
-  [Con s7_2_intro]
+s7_2 = section (titleize' nonfunctionalRequirement) [s7_2_intro] []
 
 s7_2_intro = Paragraph $
   S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
@@ -569,7 +565,7 @@ s7_2_intro = Paragraph $
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 
-s8 = Section (titleize' likelyChg) [Con s8_list]
+s8 = section (titleize' likelyChg) [s8_list] []
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
@@ -594,10 +590,8 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "of the glass"))]
 
 --FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'; `and_'` is giving an error
-s9 = Section (titleize' traceyMandG) {-(titleize' (traceyMatrix `and_` graph))-} --(titleize' (traceyMatrix `and_'` graph)) {-((titleize' traceyMatrix) `and_` (titleize' $ graph ^. term))-}
-  ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
-  (map Con s9_intro2) ++ 
-  [Con fig_2, Con fig_3, Con fig_4])
+s9 = section (titleize' traceyMandG)
+  ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
 
 s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
@@ -810,7 +804,7 @@ fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 
-s10 = Section (titleize' reference) [Con s10_list]
+s10 = section (titleize' reference) [s10_list] []
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
@@ -839,7 +833,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "15.02" `sC` Quote (at_start specification +:+ S "for heat treated flat glass-Kind"
   +:+. S "HS, kind FT coated and uncoated glass,C1048"))]
 
-s11 = Section (titleize appendix) [Con s11_intro, Con fig_5, Con fig_6]
+s11 = section (titleize appendix) [s11_intro, fig_5, fig_6] []
 
 s11_intro = Paragraph $
   S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)

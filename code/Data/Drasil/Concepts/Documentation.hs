@@ -31,9 +31,9 @@ appendix, characteristic, client, condition, constraint_, connection, correct, c
   datum, definition, dependency, description, design, document, figure, 
   functional, game, general, information, introduction, model, name_, 
   nonfunctional, offShelf, organization, physical, problem, property, purpose, 
-  quantity, reference, requirement_, scope, section_, simulation, solution, 
-  specific, specification, stakeholder, symbol_, system, table_, terminology,
-  theory, traceyMatrix, unit_, user, video :: NPNC
+  quantity, realtime, reference, requirement_, scope, section_, simulation, 
+  solution, specific, specification, stakeholder, symbol_, system, table_, 
+  terminology, theory, traceyMatrix, unit_, user, video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -83,6 +83,7 @@ traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 video           = npnc "video"          (cn' "video")
+realtime        = npnc "real-time"      (cn' "real-time")
 
 
 indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-},

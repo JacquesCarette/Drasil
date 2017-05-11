@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
 import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC')
-import Data.Drasil.Concepts.Math (graph)
+--import Data.Drasil.Concepts.Math (graph)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,

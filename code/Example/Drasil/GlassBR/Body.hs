@@ -189,7 +189,7 @@ s5_intro = Paragraph $
   S "output, which defines the action of getting the input and displaying" +:+.
   S "the output"
 
-s5_1 = Section (S "Product Use Case Table") [Con s5_1_table]
+s5_1 = Section (titleize prodUCTable) [Con s5_1_table]
 
 s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
   S "Input and Output"] (mkTable
@@ -204,7 +204,7 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   S "calculated values"]])
   (titleize table_ +:+ S "1: Use Case Table") True
 
-s5_2 = Section (S "Individual Product Use Cases") [Con s5_2_bullets]
+s5_2 = Section (titleize' indPRCases) [Con s5_2_bullets]
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(S "Use Case 1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 

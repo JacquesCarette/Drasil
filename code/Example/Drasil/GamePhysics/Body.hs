@@ -249,8 +249,8 @@ s4_1_intro = Paragraph $ foldlSent
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = section (S "Terminology and Definitions") [s4_1_1_intro,
-  s4_1_1_bullets] []
+s4_1_1 = section (titleize terminology +:+ S "and" +:+ titleize' definition)
+ [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
   [S "This subsection provides a list of terms",
@@ -323,7 +323,7 @@ s4_1_2_list = Enumeration (Simple
 
 s4_2 :: Section
 
-s4_2 = section (S "Solution" +:+ titleize characteristicsSpecification) []
+s4_2 = section (titleize solutionCharSpec) []
  [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 -------------------------
@@ -456,13 +456,13 @@ s4_2_5_intro = Paragraph $ foldlSent
 s4_2_6 :: Section
 s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = section (S "Data Constraints") [s4_2_6_intro, s4_2_6_table1,
+s4_2_6 = section (titleize' dataConstraint) [s4_2_6_intro, s4_2_6_table1,
   s4_2_6_table2] []
 
 s4_2_6_intro = Paragraph $ foldlSent 
   [S "Table 1 and 2 show the data constraints on",
   S "the input and output variables, respectively. The",
-  (Quote $ S "Physical Constraints"), S "column gives the physical",
+  (Quote $ titleize' physicalConstraint), S "column gives the physical",
   S "limitations on the range of values that can be taken by the",
   S "variable. The constraints are conservative, to give the user of the",
   S "model the flexibility to experiment with unusual situations. The",
@@ -472,7 +472,7 @@ s4_2_6_intro = Paragraph $ foldlSent
 -- Currently unable to write relations in sentences, so verbal explanations
 -- will do for now.
 -- How do I write 2pi in constraints?
-s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
+s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] [
   [(P $ len ^. symbol), (P $ len ^. symbol) +:+ S "is G/E to 0", S "44.2" +:+
   (Sy $ unit_symb len)],
@@ -494,7 +494,7 @@ s4_2_6_table1 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
   [(P $ torque ^. symbol), S "None", S "200" +:+ (Sy $ unit_symb torque)]
   ]) (S "Table 1: Input Variables") True
 
-s4_2_6_table2 = Table [S "Var", S "Physical Constraints"]
+s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] [
   [(P $ position ^. symbol), S "None"],
   [(P $ vel ^. symbol), S "None"],
@@ -546,7 +546,7 @@ s5_1_req3 = foldlSent [S "Input the", (phrase $ surface ^. term),
   S "or", (phrase $ elasticity ^. term)]
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
-  S "satisfy the required physical constraints"]
+  S "satisfy the required", plural physicalConstraint]
 
 s5_1_req5 = foldlSent 
   [S "Determine the", (plural $ position ^. term), S "and", (plural $ vel ^. term), 

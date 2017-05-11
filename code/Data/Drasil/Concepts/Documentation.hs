@@ -26,11 +26,12 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, characteristics, condition, constraint_, connection, datum, definition,
-  dependency, description, design, document, figure, functional, general, information, introduction, 
-  model, name_, nonfunctional, organization, physical, problem, program, purpose, quantity, reference,
-  requirement_, scope, section_, solution, specific, specification, stakeholder, symbol_, system, table_, 
-  terminology, theory, unit_, units_, user :: NPNC
+appendix, characteristic, characteristics, condition, constraint_, connection,
+  data_, datum, definition, dependency, description, design, document, figure, 
+  functional, general, information, introduction, model, name_, nonfunctional, 
+  organization, physical, problem, program, purpose, quantity, reference,
+  requirement_, scope, section_, solution, specific, specification, stakeholder,
+  symbol_, system, table_, terminology, theory, unit_, units_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -38,6 +39,7 @@ characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventu
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
+data_            = npnc "data"           (cn' "data")
 datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
@@ -90,13 +92,15 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
 
-characteristicsSpecification, generalSystemDescription, physicalSystem, 
-  problemDescription, specificsystemdescription, systemdescription, 
-  systemConstraint, userCharacteristic, datumConstraint,
-  functionalRequirement, nonfunctionalRequirement  :: NPNC
+characteristicsSpecification, generalSystemDescription, physicalConstraint,
+  physicalSystem, problemDescription, specificsystemdescription, 
+  systemdescription, systemConstraint, userCharacteristic, datumConstraint,
+  functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
+  dataConstraint :: NPNC
   
 characteristicsSpecification = compoundNPNC characteristics specification
 generalSystemDescription     = compoundNPNC general systemdescription
+physicalConstraint           = compoundNPNC physical constraint_
 physicalSystem               = compoundNPNC physical system
 problemDescription           = compoundNPNC problem description
 specificsystemdescription    = compoundNPNC specific systemdescription
@@ -106,3 +110,5 @@ userCharacteristic           = compoundNPNC user characteristic
 datumConstraint              = compoundNPNC' datum constraint_
 functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
+solutionCharSpec             = compoundNPNC solution characteristicsSpecification
+dataConstraint               = compoundNPNC data_ constraint_

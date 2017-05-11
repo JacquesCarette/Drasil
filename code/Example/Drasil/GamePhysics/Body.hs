@@ -526,7 +526,7 @@ s5_intro = Paragraph $ foldlSent
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = section (S "Functional" +:+ titleize' requirement)
+s5_1 = section (titleize' functionalRequirement)
   [s5_1_list] []
 
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
@@ -587,7 +587,7 @@ s5_1_list = Enumeration (Simple [
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = section (S "Nonfunctional" +:+ titleize' requirement) [s5_2_intro] []
+s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_intro] []
 
 s5_2_intro = Paragraph $ foldlSent 
   [S "Games are resource intensive, so performance",

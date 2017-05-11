@@ -233,7 +233,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated values are also displayed as output")]
 
-s6 = Section(titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
+s6 = Section (titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
   Sub s6_2]
 
 s6_intro = Paragraph $ 
@@ -566,7 +566,7 @@ s7_2_intro = Paragraph $
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 
-s8 = Section(titleize' likelyChg) [Con s8_list]
+s8 = Section (titleize' likelyChg) [Con s8_list]
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
@@ -590,7 +590,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
+s9 = Section ((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
@@ -806,7 +806,7 @@ fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize $ traceyMatrix ^. term)
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 
-s10 = Section(titleize' reference) [Con s10_list]
+s10 = Section (titleize' reference) [Con s10_list]
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
@@ -835,7 +835,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "15.02" `sC` Quote (at_start specification +:+ S "for heat treated flat glass-Kind"
   +:+. S "HS, kind FT coated and uncoated glass,C1048"))]
 
-s11 = Section(titleize appendix) [Con s11_intro, Con fig_5, Con fig_6]
+s11 = Section (titleize appendix) [Con s11_intro, Con fig_5, Con fig_6]
 
 s11_intro = Paragraph $
   S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)

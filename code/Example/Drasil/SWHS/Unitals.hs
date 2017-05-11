@@ -5,8 +5,8 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import Data.Drasil.Quantities.Thermodynamics(temp)
-import Data.Drasil.Quantities.Physics (surface, time)
-import Data.Drasil.Quantities.Math
+import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Math (surface, normalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 
 import Control.Lens ((^.))

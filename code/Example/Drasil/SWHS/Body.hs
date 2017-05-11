@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
 import Data.Drasil.Concepts.Math (ode, graph)
 
-import Data.Drasil.Quantities.Physics (surface, time)
-import Data.Drasil.Quantities.Math (gradient, normalVect)
+import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 

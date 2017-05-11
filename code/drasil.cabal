@@ -120,6 +120,10 @@ executable tiny
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
     , Drasil.TableOfUnits
+    , Drasil.Template.DD
+    , Drasil.Template.Helpers
+    , Drasil.Template.MG
+    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -285,6 +289,10 @@ executable swhs
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.TableOfUnits
+    , Drasil.Template.DD
+    , Drasil.Template.Helpers
+    , Drasil.Template.MG
+    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

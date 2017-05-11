@@ -239,7 +239,7 @@ s6 = Section (titleize specificsystemdescription) [Con s6_intro, Sub s6_1,
 s6_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription `sC` S "which gives a" +:+
   S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This is followed by the" +:+
-  phrase solution +:+ phrase characteristicsSpecification :+: S ", which presents the" +:+
+  phrase solution +:+ phrase characteristicSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
 s6_1 = Section (titleize problemDescription) [Con s6_1_intro, Sub s6_1_1, 
@@ -323,7 +323,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "will be able to withstand the explosion of a certain degree which" +:+
   S "is calculated based on" +:+ phrase user +:+. S "input")]
 
-s6_2 = Section (titleize solution +:+ titleize characteristicsSpecification) 
+s6_2 = Section (titleize solution +:+ titleize characteristicSpecification) 
   [Con s6_2_intro, Sub s6_2_1, Sub s6_2_2, Sub s6_2_3, Sub s6_2_4, Sub s6_2_5]
 
 s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +:+

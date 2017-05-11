@@ -456,7 +456,7 @@ s4_2_5_intro = Paragraph $ foldlSent
 s4_2_6 :: Section
 s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = section (titleize' dataConstraint) [s4_2_6_intro, s4_2_6_table1,
+s4_2_6 = section (titleize' datumConstraint) [s4_2_6_intro, s4_2_6_table1,
   s4_2_6_table2] []
 
 s4_2_6_intro = Paragraph $ foldlSent 

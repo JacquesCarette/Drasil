@@ -270,7 +270,7 @@ s4 = Section (titleize specificsystemdescription) [Con s4_intro, Sub s4_1,
 s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:+
   phrase problem +:+ phrase description :+: S ", which gives a high-level view of the" +:+
   phrase problem +:+ S "to be solved. This is followed by the" +:+
-  phrase solution +:+ phrase characteristicsSpecification :+: S ", which" +:+
+  phrase solution +:+ phrase characteristicSpecification :+: S ", which" +:+
   S "presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`

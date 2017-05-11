@@ -26,20 +26,18 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, characteristics, condition, constraint_, connection,
-  data_, datum, definition, dependency, description, design, document, figure, 
+appendix, characteristic, condition, constraint_, connection,
+  datum, definition, dependency, description, design, document, figure, 
   functional, general, information, introduction, model, name_, nonfunctional, 
   organization, physical, problem, program, purpose, quantity, reference,
   requirement_, scope, section_, solution, specific, specification, stakeholder,
-  symbol_, system, table_, terminology, theory, unit_, units_, user :: NPNC
+  symbol_, system, table_, terminology, theory, unit_, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
-characteristics = npnc "characteristics" (cn' "characteristics") --FIXME: Eventually this plural version needs to be removed
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
-data_            = npnc "data"           (cn' "data")
 datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
@@ -74,12 +72,11 @@ table_          = npnc "table"          (cn' "table")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 unit_           = npnc "unit"           (cn' "unit")
-units_          = npnc "units"          (cn' "units") -- FIXME: Eventually this plural version needs to be removed
 user            = npnc "user"           (cn' "user")
 
-indPRCases, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
+indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
 
-indPRCases   = npnc "indPRCases"   (cn' "individual product use case")
+indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prodUCTable  = npnc "prodUCTable"  (cn' "product use case table")
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
@@ -92,13 +89,12 @@ tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 
 -- compounds
 
-characteristicsSpecification, generalSystemDescription, physicalConstraint,
+characteristicSpecification, generalSystemDescription, physicalConstraint,
   physicalSystem, problemDescription, specificsystemdescription, 
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
-  functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
-  dataConstraint :: NPNC
+  functionalRequirement, nonfunctionalRequirement, solutionCharSpec :: NPNC
   
-characteristicsSpecification = compoundNPNC characteristics specification
+characteristicSpecification  = compoundNPNC' characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
 physicalConstraint           = compoundNPNC physical constraint_
 physicalSystem               = compoundNPNC physical system
@@ -110,5 +106,4 @@ userCharacteristic           = compoundNPNC user characteristic
 datumConstraint              = compoundNPNC' datum constraint_
 functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
-solutionCharSpec             = compoundNPNC solution characteristicsSpecification
-dataConstraint               = compoundNPNC data_ constraint_
+solutionCharSpec             = compoundNPNC solution characteristicSpecification

@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
 import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC')
+import Data.Drasil.Concepts.Math (graph)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
@@ -72,6 +73,7 @@ system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
+traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 
@@ -86,7 +88,6 @@ sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
-
 
 -- compounds
 

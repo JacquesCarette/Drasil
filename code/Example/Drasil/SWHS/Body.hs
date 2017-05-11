@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Math (ode, traceyMatrix, graph)
 
 import Data.Drasil.Quantities.Physics (surface, time)
 import Data.Drasil.Quantities.Math (gradient, normalVect)
@@ -319,8 +319,7 @@ s411_bullet_map_f c = Flat ((phrase $ c ^. term) :+: S ":" +:+. (c ^. defn))
 -- Included heat flux and specific heat in NamedChunks even though they are 
 -- already in SWHSUnits
 
-s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro, Con s4_1_2_list, 
-  Con fig_tank]
+s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
   (short progName) :+: S ", as shown in" +:+ (makeRef fig_tank) :+:
@@ -817,7 +816,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = Section (S "Data" +:+ titleize' constraint) [Con s4_2_6_intro]
+s4_2_6 = section (titleize' datum +:+ titleize' constraint) [s4_2_6_intro] []
 
 s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the data" +:+
   plural constraint +:+ S "on the input and output variables," +:+
@@ -907,8 +906,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
 
 -- Remember to insert references in above derivation when available
 
-s5 = Section (titleize' requirement) [Con s5_intro, Sub s5_1, 
-  Sub s5_2]
+s5 = section (titleize' requirement) [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
   S "functional" +:+ plural requirement `sC` S "the business tasks" +:+
@@ -918,7 +916,7 @@ s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s5_1 = Section (S "Functional" +:+ titleize' requirement) 
+s5_1 = Section (titleize' functionalRequirement) 
   (map Con s5_1_list)
 
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
@@ -1000,7 +998,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 --How to include pi?
 --How to add exponents?
 
-s5_2 = Section (S "Nonfunctional" +:+ titleize' requirement) 
+s5_2 = Section (titleize' nonfunctionalRequirement) 
   [Con s5_2_contents]
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
@@ -1017,7 +1015,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC
 -- performance is not a priority. This is probably something that can be 
 -- abstracted out.
 
-s6 = Section (titleize' likelyChg) [Con s6_list]
+s6 = section (titleize' likelyChg) [s6_list] []
 
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
@@ -1055,9 +1053,9 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = Section (S "Traceability Matrices and Graphs") ([Con s7_intro1, 
-  Con s7_table1, Con s7_table2, Con s7_table3] ++ (map Con s7_intro2) ++ 
-  [Con s7_fig1, Con s7_fig2])
+s7 = Section ((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+
+  (titleize $ graph ^. term)) ([Con s7_intro1, Con s7_table1, Con s7_table2,
+  Con s7_table3] ++ (map Con s7_intro2) ++ [Con s7_fig1, Con s7_fig2])
 
 s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
   S "traceability matrices is to" +:+ 

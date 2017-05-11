@@ -140,4 +140,11 @@ with' t1 t2 = nounPhrase''
   (plural t1 +:+ S "with" +:+ phrase t2)
   (plural t1 +:+ S "with" +:+ plural t2)
   (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
-  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  
+  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))
+  
+and :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+and t1 t2 = nounPhrase''
+  ((phrase $ t1^.term) +:+ S "and" +:+ (phrase $ t2^.term))
+  ((phrase $ t1^.term) +:+ S "and" +:+ (plural $ t2^.term))
+  (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term)))
+  (Replace ((titleize $ t1 ^. term) +:+ S "and" +:+ (titleize $ t2 ^. term)))

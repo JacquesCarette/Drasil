@@ -37,4 +37,5 @@ gravitationalConst = cvR CP.gravitationalConst cG
 
 --FIXME: COnvert the ConVar values with units into UnitalChunks
 time :: UnitalChunk
-time = uc CP.time lT second
+--force         = uc CP.force (vec cF) newton
+time          = uc CP.time lT second

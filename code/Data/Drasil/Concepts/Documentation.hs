@@ -77,7 +77,7 @@ traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 --unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 
-indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-} :: NPNC
+indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-}, traceyMandG :: NPNC
 
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)

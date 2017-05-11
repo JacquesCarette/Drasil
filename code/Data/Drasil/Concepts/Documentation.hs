@@ -30,7 +30,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 appendix, characteristic, client, condition, constraint_, connection, correct, customer,
   datum, definition, dependency, description, design, document, figure, 
   functional, general, information, introduction, model, name_, nonfunctional, 
-  offShelf, organization, physical, problem, program, property, purpose, quantity, 
+  offShelf, organization, physical, problem, property, purpose, quantity, 
   reference, requirement_, scope, section_, solution, specific, specification, 
   stakeholder, symbol_, system, table_, terminology, theory,traceyMatrix, unit_, user :: NPNC
 
@@ -60,7 +60,6 @@ offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
-program         = npnc "program"        (cn' "program")
 property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
@@ -83,7 +82,7 @@ user            = npnc "user"           (cn' "user")
 
 
 indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-},
-  traceyMandG, theCustomer, theCustomer :: NPNC
+  traceyMandG, theClient, theCustomer, thePhysSys :: NPNC
 
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
@@ -96,6 +95,7 @@ tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 --tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 theClient    = npnc "theClient"    (the client)
 theCustomer  = npnc "theCustomer"  (the customer)
+thePhysSys   = npnc "thePhysSys"   (the physicalSystem)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 

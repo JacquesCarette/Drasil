@@ -29,7 +29,7 @@ intro = Paragraph $
   
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 
 table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
-table ls f = Table (map (at_start) [symbol_, description, unit_]) (mkTable
+table ls f = Table [at_start symbol_, at_start description, at_start' unit_] (mkTable
   [(\ch -> (\(Just t) -> P (t ^. symbol)) (getSymb ch)),
   (\ch -> f ch), 
   unit'2Contents]

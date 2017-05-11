@@ -71,7 +71,7 @@ s4_1_2_intro = Paragraph $
            S "The physical" +:+ (phrase $ system ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
            S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following elements:"
 
-fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with heat flux from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
+fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [

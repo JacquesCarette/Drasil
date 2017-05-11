@@ -39,6 +39,7 @@ characteristic  = npnc "characteristic" (cn' "characteristic")
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
+correct         = npnc "correct"        (cn' "correct")
 datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
@@ -58,6 +59,7 @@ organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
 program         = npnc "program"        (cn' "program")
+property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
@@ -76,6 +78,7 @@ theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
+
 
 indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-}, traceyMandG :: NPNC
 

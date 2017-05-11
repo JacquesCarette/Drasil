@@ -857,7 +857,7 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
-s4_2_7 = section (S "Properties of a Correct" +:+ titleize solution) (s4_2_7_deriv) []
+s4_2_7 = section (titleize' property +:+ S "of a" +:+ titleize correct +:+ titleize solution) (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:
@@ -1043,9 +1043,8 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = section ((titleize' traceyMatrix) +:+ S "and" +:+ (titleize $ graph ^. term))
-  ([s7_intro1, s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++
-  [s7_fig1, s7_fig2]) []
+s7 = section (titleize' traceyMandG) ([s7_intro1, s7_table1, s7_table2,
+  s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
 s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
   S "traceability matrices is to" +:+ 

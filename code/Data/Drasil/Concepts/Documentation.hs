@@ -28,7 +28,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 -- concepts relating to the templates and their contents
 
 appendix, characteristic, client, condition, constraint_, connection, correct, customer,
-  datum, definition, dependency, description, design, document, figure, 
+  datum, definition, dependency, description, design, document, environment, figure, 
   functional, game, general, information, introduction, model, name_, 
   nonfunctional, offShelf, organization, physical, problem, property, purpose, 
   quantity, realtime, reference, requirement_, scope, section_, simulation, 
@@ -49,6 +49,7 @@ dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
 design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
+environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
 game            = npnc "game"           (cn' "game")

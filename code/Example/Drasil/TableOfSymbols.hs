@@ -11,8 +11,8 @@ import Data.Maybe (isJust)
 import Data.List (sort)
 
 import Language.Drasil
+import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (unit_)
 
 table_of_symbols :: (Ord s,Quantity s) => 
   [s] -> (s -> Sentence) -> Section
@@ -30,7 +30,7 @@ intro = Paragraph $
   
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 
 table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
-table ls f = Table [at_start symbol_, at_start description, at_start' unit_] (mkTable
+table ls f = Table [at_start symbol_, at_start description, at_start' (CM.unit_ ^. term)] (mkTable
   [(\ch -> (\(Just t) -> P (t ^. symbol)) (getSymb ch)),
   (\ch -> f ch), 
   unit'2Contents]

@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
-import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC', and_')
+import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC', and_', the)
 import Data.Drasil.Concepts.Math (graph)
 import Language.Drasil.NounPhrase
 
@@ -27,7 +27,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, condition, constraint_, connection,
+appendix, characteristic, client, condition, constraint_, connection, customer,
   datum, definition, dependency, description, design, document, figure, 
   functional, general, information, introduction, model, name_, nonfunctional, 
   offShelf, organization, physical, problem, program, purpose, quantity, 
@@ -36,10 +36,12 @@ appendix, characteristic, condition, constraint_, connection,
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
+client          = npnc "client"         (cn' "client")
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
 correct         = npnc "correct"        (cn' "correct")
+customer        = npnc "customer"       (cn' "customer")
 datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
@@ -91,7 +93,10 @@ sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 --tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
+theClient    = npnc "theClient"    (the client)
+theCustomer  = npnc "theCustomer"  (the customer)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
+
 
 -- compounds
 

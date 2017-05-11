@@ -1,6 +1,5 @@
 module Drasil.PCM.Body where
 
-import Data.Char (toLower)
 import Data.List (intersperse)
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -37,7 +36,7 @@ pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
-s4 = Section ((titleize $ specificsystemdescription ^. term)) [Con s4_intro, Sub s4_1,Sub s4_2]
+s4 = section ((titleize $ specificsystemdescription ^. term)) [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
@@ -48,15 +47,13 @@ s4_intro = Paragraph $
             (plural $ definition ^. term) +:+ S "and finally the instance" +:+
             (phrase $ model ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
 
-s4_1 = Section (S "Problem Description") [Con s4_1_intro,Sub s4_1_1,
-                                            Sub s4_1_2,Sub s4_1_3]
+s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = Paragraph $
-            (getAcc sWHS) +:+ S "is a computer program developed to investigate" +:+
+            (getAcc sWHS) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed to investigate" +:+
            S "the heating of" +:+ (phrase $ water ^. term) +:+ S "in a" +:+ (phrase $ sWHT ^. term) :+: S "."
 
-s4_1_1 = Section ((titleize $ terminology ^. term) +:+ S "and" +:+ (titleize' $ definition ^. term)) [Con s4_1_1_intro,
-                                                      Con s4_1_1_bullets]
+s4_1_1 = section ((titleize $ terminology ^. term) +:+ S "and" +:+ (titleize' $ definition ^. term)) [s4_1_1_intro, s4_1_1_bullets] []
   
 s4_1_1_intro = Paragraph $
            S "This subsection provides a list of terms that" +:+
@@ -68,8 +65,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $
   (sMap capitalize (phrase $ c ^. term)) :+: S ": " :+: (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
-s4_1_2 = Section (titleize physSyst) [Con s4_1_2_intro,Con s4_1_2_list,
-                                            Con fig_tank]
+s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph $
            S "The physical" +:+ (phrase $ system ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
@@ -79,33 +75,33 @@ fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with heat flux from" +:+ (
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "PS1", (at_start $ tank ^. term) +:+ S "containing" +:+ (phrase $ water ^. term)), 
-  (S "PS2", S "Heating" +:+ (phrase $ coil ^. term) +:+ S "at bottom of" +:+ (phrase $ tank ^. term) :+: S ". (" :+:
-  P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
-  S "into the" +:+ (phrase $ water ^. term) :+: S ".)")]
+            (S "PS1", (at_start $ tank ^. term) +:+ S "containing" +:+ (phrase $ water ^. term)), 
+            (S "PS2", S "Heating" +:+ (phrase $ coil ^. term) +:+ S "at bottom of" +:+ (phrase $ tank ^. term) :+: S ". (" :+:
+           P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
+           S "into the" +:+ (phrase $ water ^. term) :+: S ".)")]
 
-s4_1_3 = Section (titleize' goalStmt) [Con s4_1_3_intro,
-                                                    Con s4_1_3_list]
+s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro = Paragraph $
-           S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) :+: S ", initial" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) :+: S "," +:+
+           S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) :+: S ", initial" +:+
+            (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) :+: S "," +:+
            S "and material properties, the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
+            (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = Section ((titleize $ solution ^. term) +:+ (titleize $ characteristicsSpecification ^. term)) 
-  [Con s4_2_intro,Sub s4_2_1,Sub s4_2_2]
+s4_2 = section ((titleize $ solution ^. term) +:+ (titleize $ characteristicsSpecification ^. term)) 
+  [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $
-           S "The" +:+ (sMap (map toLower) (phrase $ inModel ^. term)) +:+
+           S "The" +:+ (phrase $ inModel ^. term) +:+
            S "(" :+: getAcc ode :+: S ") that governs" +:+ (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
            S ". The" +:+ (phrase $ information ^. term) +:+ S "to understand the meaning of the" +:+
-            (sMap (map toLower) (phrase $ inModel ^. term)) +:+ 
+            (phrase $ inModel ^. term) +:+ 
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 
-            (sMap (map toLower) (phrase $ inModel ^. term)) +:+ S "can be verified."
+            (phrase $ inModel ^. term) +:+ S "can be verified."
   
-s4_2_1 = Section (titleize' assumption) [Con s4_2_1_intro]
+s4_2_1 = section (titleize' assumption) [s4_2_1_intro] []
 
 s4_2_1_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+
@@ -114,14 +110,13 @@ s4_2_1_intro = Paragraph $
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
            S "for the physical" +:+ (phrase $ system ^. term) :+: S ". The numbers given in the" +:+
            S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
-            (map (\ch -> (sMap (map toLower) (phrase $ ch ^. term)) +:+ S "[" :+:
+            (map (\ch -> (phrase $ ch ^. term) +:+ S "[" :+:
             (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 
            S "or" +:+ phrase likelyChg +:+ S "[" :+: (getAcc likelyChg) :+:
            S "], in which the respective" +:+ (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 
-s4_2_2 = Section (titleize' thModel) 
-  ((Con s4_2_2_intro):(Con s4_2_2_TMods):[])
+s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_TMods] []
 
 s4_2_2_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "focuses on the general equations" +:+

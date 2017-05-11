@@ -146,14 +146,14 @@ s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the" +:+.
   S "people who have an interest in the product"
 
-s3_1 = Section (S "The Client") [Con s3_1_intro]
+s3_1 = Section (titleize theClient) [Con s3_1_intro]
 
 s3_1_intro = Paragraph $
   S "The client for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+
   S "Entuitive. It is developed by Dr. Manuel Campidelli. The client has" +:+.
   S "the final say on acceptance of the product"
 
-s3_2 = Section (S "The Customer") [Con s3_2_intro]
+s3_2 = Section (titleize theCustomer) [Con s3_2_intro]
 
 s3_2_intro = Paragraph $
   S "The customers are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
@@ -251,7 +251,7 @@ s6_1 = Section (titleize problemDescription) [Con s6_1_intro, Sub s6_1_1,
 s6_1_intro = Paragraph $ 
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
   +:+ (phrase $ blast ^. term) +:+. S "risk involved with the glass" +:+ (gLassBR ^. defn)
-  +:+ S "is a" +:+ S "computer program developed to interpret the inputs to give out the" +:+
+  +:+ S "is a" +:+ S "computer sectiondeveloped to interpret the inputs to give out the" +:+
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
 

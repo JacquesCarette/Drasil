@@ -4,18 +4,19 @@ module Data.Drasil.Concepts.Physics
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel 
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
-import Control.Lens ((^.))
+import Control.Lens((^.)) --need for parametrization hack
 
 rigidBody, velocity, friction, elasticity, collision, space,
   cartesian, rightHand, surface, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
-  strain :: ConceptChunk
+  strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel :: ConceptChunk
 
 rigidBody  = dcc "rigidBody" 
   (cnIES "rigid body") "A solid body in which deformation is neglected."
@@ -60,10 +61,25 @@ strain    = dccWDS "strain" (cn' "strain")
   S "forces that result in deformation of the body/plane.")
 tension    = dccWDS "tension" (cn' "tension")
   (S "A" +:+ (phrase $ stress ^. term) +:+
-  S "that causes displacement of the body away from it's center.")
+  S "that causes displacement of the body away from its center.")
 compression = dccWDS "compression" (cn' "compression")
   (S "A" +:+ (phrase $ stress ^. term) +:+
-  S "that causes displacement of the body towards from it's center.")
+  S "that causes displacement of the body towards its center.")
+  
+--FIXME: COMBINATION HACK (for all below)
+angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term)
+                  (displacement ^. term)) "fixme"
+angVelo = dcc "angularVelocity" (compoundPhrase' (angular ^. term)
+                  (velocity ^. term)) "fixme"
+angAccel = dcc "angularAcceleration"
+                  (compoundPhrase' (angular ^. term)
+                  (acceleration ^. term)) "fixme"
+linDisp = dcc "linearDisplacement" (compoundPhrase' (linear ^. term)
+                  (displacement ^. term)) "fixme"
+linVelo = dcc "linearVelocity" (compoundPhrase' (linear ^. term)
+                  (velocity ^. term)) "fixme"
+linAccel = dcc "linearAcceleration" (compoundPhrase' (linear ^. term)
+                   (acceleration ^. term)) "fixme"
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  

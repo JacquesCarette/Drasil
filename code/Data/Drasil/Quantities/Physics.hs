@@ -3,7 +3,7 @@ module Data.Drasil.Quantities.Physics where
 import Language.Drasil
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.SI_Units
-import Control.Lens((^.)) --need for parametrization hack
+
 
 surface, acceleration, angularAccel, restitutionCoef, force, momentOfInertia,
   impulseS, impulseV, gravitationalAccel, gravitationalConst, displacement,
@@ -22,31 +22,12 @@ distance = cvR CP.distance lR
 displacement = cvR CP.displacement (vec lR)
 velocity = cvR CP.velocity (vec lV)
 acceleration = cvR CP.acceleration (vec lA)
---FIXME: COMBINATION HACK
-angularDisplacement = cvR angDisp (Greek Theta_L)
-  where angDisp = dcc "angularDisplacement" (compoundPhrase' (CP.angular ^. term)
-                  (CP.displacement ^. term)) "fixme"
---FIXME: COMBINATION HACK
-angularVelocity = cvR angVelo (Greek Omega_L)
-  where angVelo = dcc "angularVelocity" (compoundPhrase' (CP.angular ^. term)
-                  (CP.velocity ^. term)) "fixme"
---FIXME: COMBINATION HACK
-angularAccel = cvR angAccel (Greek Alpha_L)
-  where angAccel = dcc "angularAcceleration"
-                   (compoundPhrase' (CP.angular ^. term)
-                   (CP.acceleration ^. term)) "fixme"
---FIXME: COMBINATION HACK
-linearDisplacement = cvR linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"])
-  where linDisp = dcc "linearDisplacement" (compoundPhrase' (CP.linear ^. term)
-                  (CP.displacement ^. term)) "fixme"
---FIXME: COMBINATION HACK
-linearVelocity = cvR linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"])
-  where linVelo = dcc "linearVelocity" (compoundPhrase' (CP.linear ^. term)
-                  (CP.velocity ^. term)) "fixme"
---FIXME: COMBINATION HACK
-linearAccel = cvR linAccel (Concat [(vec lA), Atomic "(", lT, Atomic ")"])
-  where linAccel = dcc "linearAcceleration" (compoundPhrase' (CP.linear ^. term)
-                   (CP.acceleration ^. term)) "fixme"
+angularDisplacement = cvR CP.angDisp (Greek Theta_L)
+angularVelocity = cvR CP.angVelo (Greek Omega_L)
+angularAccel = cvR CP.angAccel (Greek Alpha_L)
+linearDisplacement = cvR CP.linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"])
+linearVelocity = cvR CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"])
+linearAccel = cvR CP.linAccel (Concat [(vec lA), Atomic "(", lT, Atomic ")"])
 torque = cvR CP.torque (Greek Tau_L)
 
 gravitationalAccel = cvR CP.gravitationalAccel lG

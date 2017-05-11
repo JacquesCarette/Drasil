@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Concepts.Math (ode)
-import Data.Drasil.Quantities.Math (gradient)
+import Data.Drasil.Quantities.Math (gradient, diameter)
 
 import Control.Lens ((^.))
 

@@ -137,7 +137,7 @@ s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
   +:+ plural model
   
-s3 = Section(S "Stakeholders") [Con s3_intro, Sub s3_1, Sub s3_2]
+s3 = Section (titleize' stakeholder) [Con s3_intro, Sub s3_1, Sub s3_2]
 
 s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the" +:+.

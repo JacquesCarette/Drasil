@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, traceyMatrix, graph)
+import Data.Drasil.Concepts.Math (ode, graph)
 
 import Data.Drasil.Quantities.Physics (surface, time)
 import Data.Drasil.Quantities.Math (gradient, normalVect)
@@ -1051,7 +1051,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = Section ((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+
+s7 = Section ((titleize' traceyMatrix) +:+ S "and" +:+
   (titleize $ graph ^. term)) ([Con s7_intro1, Con s7_table1, Con s7_table2,
   Con s7_table3] ++ (map Con s7_intro2) ++ [Con s7_fig1, Con s7_fig2])
 

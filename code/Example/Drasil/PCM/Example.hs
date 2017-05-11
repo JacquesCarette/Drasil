@@ -33,7 +33,6 @@ coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
 fixme :: String
 fixme = "FIXME: Define this or remove the need for definitions"
 
---FIXME: Anything that is "X of Y" should use the of combinator.
 coil_SA     = uc' "coil_SA" (cn' "coil surface area") fixme (sub cA cC) m_2
 dummyVar    = uc' "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")
@@ -72,7 +71,7 @@ temp_coil   = uc' "temp_coil" (temp `of_` coil)
               fixme (sub cT cC) centigrade
 temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
               fixme (Concat [Greek Delta, cT]) centigrade
-temp_env    = uc' "temp_env" (nounPhraseSP "temperature of environment")
+temp_env    = uc' "temp_env" (nounPhraseSP temp `of_` environment)
               fixme (sub cT (Atomic "env")) centigrade
 thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
               fixme (vec lQ) U.thermal_flux

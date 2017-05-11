@@ -85,7 +85,7 @@ s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldlSent
-  [S "Due to the rising cost of developing", (phrase videogame), 
+  [S "Due to the rising cost of developing", (plural videogame) :+: S ",", 
   S "developers are looking for ways to save time and money for",
   S "their projects. Using an open source", (phrase $ physLib ^. term),
   S "that is reliable and free will cut down development costs and lead",

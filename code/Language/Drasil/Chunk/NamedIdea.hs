@@ -153,3 +153,8 @@ and t1 t2 = nounPhrase''
   ((phrase $ t1^.term) +:+ S "and" +:+ (plural $ t2^.term))
   (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term)))
   (Replace ((titleize $ t1 ^. term) +:+ S "and" +:+ (titleize $ t2 ^. term)))
+  
+the :: (NamedIdea c) => c -> NP
+the t = nounPhrase'' 
+  (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
+  CapFirst CapWords

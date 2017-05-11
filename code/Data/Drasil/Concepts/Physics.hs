@@ -27,7 +27,7 @@ friction   = dcc "friction" (cn' "friction")
 elasticity = dcc "elasticity" (cnIES "elasticity") 
   ("Ratio of the relative velocities " ++
   "of two colliding objects after and before a collision.")
-energy = dee "energy" (cn "energy")
+energy = dcc "energy" (cn "energy")
   "power derived from the utilization of physical or chemical resources."
 collision  = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++

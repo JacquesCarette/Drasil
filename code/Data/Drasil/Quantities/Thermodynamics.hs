@@ -9,4 +9,4 @@ temp, heat_cap_spec, ht_flux :: UnitalChunk
 
 temp          = uc CT.temp cT centigrade
 heat_cap_spec = uc CT.heat_cap_spec cC (UT.heat_cap_spec)
-ht_flux       = uc CT.ht_flux lQ U.heat_transfer_coef
+ht_flux       = uc CT.ht_flux lQ UT.heat_transfer_coef

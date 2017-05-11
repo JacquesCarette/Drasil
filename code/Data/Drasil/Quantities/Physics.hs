@@ -5,12 +5,12 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.SI_Units
 
 
-surface, acceleration, angularAccel, restitutionCoef, force, momentOfInertia,
+acceleration, angularAccel, restitutionCoef, force, momentOfInertia,
   impulseS, impulseV, gravitationalAccel, gravitationalConst, displacement,
   angularVelocity, position, distance, angularDisplacement, torque, 
   linearDisplacement, velocity, linearVelocity, linearAccel :: ConVar
 
-surface = cvR CP.surface cS --Maybe should be physical property?
+
 restitutionCoef = cvR CP.restitutionCoef (sub cC cR)
 
 force = cvR CP.force (vec cF)

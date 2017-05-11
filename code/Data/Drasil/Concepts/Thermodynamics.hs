@@ -17,7 +17,7 @@ boiling             = dcc "boiling"         (cn "boiling")
 heat                = dcc "heat"            (cn "heat") fixme
 heat_trans          = dcc "heat_trans"      (cn' "heat transfer") fixme
 heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity") fixme
-ht_flux             = uc' "ht_flux" (cn'' "heat flux") fixme
+ht_flux             = dcc "ht_flux" (cn'' "heat flux") fixme
 latent_heat         = dcc "latent_heat"     (cn' "latent heat") fixme
 law_cons_energy     = dcc "law_cons_energy" 
                       (nounPhraseSP "law of conservation of energy" )

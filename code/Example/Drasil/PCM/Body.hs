@@ -44,8 +44,8 @@ s4_intro = Paragraph $
             (phrase $ problem ^. term) +:+ S "to be solved. This is followed by the" +:+
             (phrase $ solution ^. term) +:+ (phrase $ characteristicSpecification ^. term) :+:
            S ", which presents the" +:+ (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
-            (plural $ definition ^. term) +:+ S "and finally the instance" +:+
-            (phrase $ model ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
+            (plural $ definition ^. term) +:+ S "and finally the" +:+
+            (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
@@ -106,7 +106,7 @@ s4_2_1 = section (titleize' assumption) [s4_2_1_intro] []
 s4_2_1_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
-           S "and helps in developing the theoretical" +:+ (phrase $ model ^. term) +:+
+           S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
            S "for the physical" +:+ (phrase $ system ^. term) :+: S ". The numbers given in the" +:+
            S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 

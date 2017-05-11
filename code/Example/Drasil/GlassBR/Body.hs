@@ -8,7 +8,8 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (matrix, graph, calculation)
 import Prelude hiding (id)
 
-import Language.Drasil.Chunk.NamedIdea (and_')
+import Drasil.Template.MG
+import Drasil.Template.DD
 
 import           Drasil.TableOfSymbols
 import           Drasil.OrganizationOfSRS

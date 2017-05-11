@@ -19,6 +19,7 @@ import           Drasil.DocumentLanguage
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.Software
 
 import Drasil.Template.MG
 import Drasil.Template.DD

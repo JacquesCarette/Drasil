@@ -255,7 +255,7 @@ s6_1_intro = Paragraph $
   S "outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
 
-s6_1_1 = Section (titleize terminology +:+ S "and" +:+ titleize' definition) [Con s6_1_1_intro, 
+s6_1_1 = Section (titleize' (terminology `and_`  definition)) [Con s6_1_1_intro, 
   Con s6_1_1_bullets]
   
 s6_1_1_intro = Paragraph $ 

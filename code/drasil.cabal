@@ -145,6 +145,10 @@ executable pcm
     , Drasil.OrganizationOfSRS
     , Drasil.TableOfSymbols
     , Drasil.TableOfUnits
+    , Drasil.Template.DD
+    , Drasil.Template.Helpers
+    , Drasil.Template.MG
+    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -203,6 +207,10 @@ executable glassbr
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.TableOfUnits
+    , Drasil.Template.DD
+    , Drasil.Template.Helpers
+    , Drasil.Template.MG
+    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -235,6 +243,10 @@ executable chipmunkdocs
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.TableOfUnits
+    , Drasil.Template.DD
+    , Drasil.Template.Helpers
+    , Drasil.Template.MG
+    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

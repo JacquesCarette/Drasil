@@ -13,6 +13,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp)
 

@@ -590,13 +590,14 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The software may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
-s9 = Section ((titleize' $ traceyMatrix ^. term) +:+ S "and" +:+ (titleize' $ graph ^. term))
+--FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'; `and_'` is giving an error
+s9 = Section (titleize' (traceyMatrix `and_` graph)) --(titleize' (traceyMatrix `and_'` graph)) --((titleize' traceyMatrix) `and_` (titleize' $ graph ^. term))
   ([Con s9_intro1, Con s9_table1, Con s9_table2, Con s9_table3] ++ 
   (map Con s9_intro2) ++ 
   [Con fig_2, Con fig_3, Con fig_4])
 
 s9_intro1 = Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural $ traceyMatrix ^. term) +:+
+  S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
   S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
   S "modified if a certain component is changed. Every time a component is changed, the" +:+
   S "items in the column of that component that are marked with an" +:+ Quote (S "X") +:+.
@@ -669,7 +670,7 @@ s9_table1 = Table [EmptyS,
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS]]
-  ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between Items of Different" +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
@@ -703,7 +704,7 @@ s9_table2 = Table [EmptyS, S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS, S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", EmptyS, EmptyS,
   EmptyS]]
-  ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' requirement +:+ S "and Other Items") True
 
 -- FIXME: Same goes for this one (see above)
@@ -763,7 +764,7 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   EmptyS, EmptyS, EmptyS],
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
-  ((titleize $ traceyMatrix ^. term) +:+ S "Showing the" +:+
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other Items") True
 
 s9_intro2 = 
@@ -795,14 +796,14 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   S "labels and" +:+ phrase reference +:+. S "can be future work"]
 
-fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize $ traceyMatrix ^. term) 
+fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) 
   +:+ S "Showing the" +:+ titleize' connection +:+ S "Between Items of Different Sections") "Trace.png"
 
-fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize $ traceyMatrix ^. term) +:+ 
+fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
   S "and Other Items") "RTrace.png"
 
-fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize $ traceyMatrix ^. term) +:+
+fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other Items") "ATrace.png"
 

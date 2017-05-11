@@ -254,7 +254,7 @@ s4_1_1_intro, s4_1_1_bullets :: Contents
 s4_1_1 = Section (S "Terminology and Definitions") [Con s4_1_1_intro,
   Con s4_1_1_bullets]
 
-s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
+s4_1_1_intro = Paragraph $ foldlSent 
   [S "This subsection provides a list of terms",
   S "that are used in subsequent sections and their meaning, with the",
   S "purpose of reducing ambiguity and making it easier to correctly",

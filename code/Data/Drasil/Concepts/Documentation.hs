@@ -1,8 +1,8 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
-import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC')
---import Data.Drasil.Concepts.Math (graph)
+import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC'{-, and_'-})
+import Data.Drasil.Concepts.Math (graph)
 import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
@@ -32,7 +32,7 @@ appendix, characteristic, condition, constraint_, connection,
   functional, general, information, introduction, model, name_, nonfunctional, 
   offShelf, organization, physical, problem, program, purpose, quantity, 
   reference, requirement_, scope, section_, solution, specific, specification, 
-  stakeholder, symbol_, system, table_, terminology, theory, unit_, user :: NPNC
+  stakeholder, symbol_, system, table_, terminology, theory,traceyMatrix{-, unit_-}, user :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -74,10 +74,10 @@ table_          = npnc "table"          (cn' "table")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
-unit_           = npnc "unit"           (cn' "unit")
+--unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 
-indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb, tOfUnits :: NPNC
+indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, tOfSymb{-, tOfUnits-} :: NPNC
 
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
@@ -87,7 +87,8 @@ refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
-tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
+--tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
+traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 -- compounds
 

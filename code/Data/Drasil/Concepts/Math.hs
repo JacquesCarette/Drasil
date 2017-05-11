@@ -2,12 +2,10 @@ module Data.Drasil.Concepts.Math where
 
 import Language.Drasil
 import Language.Drasil.NounPhrase
-import Data.Drasil.Concepts.Documentation(unit_)
-
 import Control.Lens ((^.))
 
 calculation, diameter, euclidN, euclidSpace, gradient, graph, matrix, norm, normal, normalV, orient, perp, perpV,
-  traceyMatrix,{- unit,-} unitV, vector :: ConceptChunk
+  unit, unitV, vector :: ConceptChunk
 
 ode :: CINP
 
@@ -21,8 +19,7 @@ matrix       = dcc "matrix"       (cnICES "matrix")               "matrix"
 norm         = dcc "norm"         (cn' "norm")                    "positive length or size of a vector"
 normal       = dcc "normal"       (cn' "normal" )                 "object that is perpendicular to a given object"
 perp         = dcc "perp"         (cn' "perpendicular")           "at right angles"
-traceyMatrix = dcc "traceyMatrix" (cnICES "traceability matrix")  "traceability matrix" -- CINP type, correct?
---unit         = dcc "unit"         (cn' "unit")                    "identity element"
+unit_         = dcc "unit"         (cn' "unit")                    "identity element"
 vector       = dcc "vector"       (cn' "vector")                  "object with magnitude and direction"
 orient       = dcc "orientation"  (cn' "orientation")             "orientation"
 --FIXME: use nounphrase instead of cn'

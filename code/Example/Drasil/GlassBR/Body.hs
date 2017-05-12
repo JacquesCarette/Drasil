@@ -80,7 +80,7 @@ s2_intro = Paragraph $
   (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+. 
   (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
   +:+ S "under consideration is" +:+. (sLower (blast ^. defn)) +:+ --FIXME: find a way to remove "sLower" entirely.
-  S "The" +:+ phrase software +:+ S ", herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
+  S "The" +:+ phrase software :+: S ", herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
   S "predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview" +:+
@@ -133,7 +133,7 @@ s2_3_intro =
   phrase sciCompS +:+ S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+:
   S "), with some aspects taken from Volere" +:+ phrase template +:+. S "16 [3]"
   
-s2_3_intro_end = (at_start $ the dataDefn) +:+
+s2_3_intro_end = (plural $ the dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
   +:+ plural model
   
@@ -171,8 +171,8 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+ phrase theory +:+
   S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. (phrase $ blastRisk ^. term)),
-  (S "The end" +:+ phrase user +:+ S "is expected to have basic computer" +:+.
-  S "literacy to handle the" +:+ phrase software)]
+  (S "The end" +:+ phrase user +:+ S "is expected to have basic computer" +:+
+  S "literacy to handle the" +:+. phrase software)]
 
 s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 

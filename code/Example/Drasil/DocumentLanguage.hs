@@ -129,10 +129,10 @@ mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (
   where lf Term = (\x -> at_start $ x ^. term)
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
-          (x ^. defn) else (phrase $ x ^. term)) --Compare chunk ids, since we don't
+          (x ^. defn) else (at_start $ x ^. term)) --Compare chunk ids, since we don't
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
-          (phrase $ x ^. term) else (x ^. defn))
+          (at_start $ x ^. term) else (x ^. defn))
 
 --tsymb constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab

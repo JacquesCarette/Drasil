@@ -115,13 +115,14 @@ characteristicSpecification, generalSystemDescription, indPRCase, physicalConstr
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
   functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
   offShelfSolution, videoGame, physicalSim, productUC, useCaseTable, 
-  openSource, physicsLibrary :: NPNC
+  openSource, physicsLibrary, physicalProperty :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
 indPRCase                    = compoundNPNC individual productUC
 physicalConstraint           = compoundNPNC physical constraint_
 physicalSystem               = compoundNPNC physical system
+physicalProperty             = compoundNPNC physical property
 problemDescription           = compoundNPNC problem description
 prodUCTable                  = compoundNPNC productUC table_
 specificsystemdescription    = compoundNPNC specific systemdescription

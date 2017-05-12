@@ -86,19 +86,20 @@ s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldlSent
   [S "Due to the rising cost of developing", (plural videoGame) :+: S ",", 
-  S "developers are looking for ways to save time and money for",
-  S "their projects. Using an", (phrase openSource), (phrase $ physLib ^. term),
+  S "developers are looking for ways to save time and money for their" +:+.
+  (plural project), S "Using an", (phrase openSource), 
+  (phrase $ physLib ^. term),
   S "that is reliable and free will cut down development costs and lead",
-  S "to better quality products"]
+  S "to better quality", (plural product_)]
 
 para2_s2_intro :: Contents
 para2_s2_intro = Paragraph $ foldlSent 
-  [S "The following section provides an overview of the",
+  [S "The following", (phrase section_), S "provides an overview of the",
   titleize srs, (sParen $ getAcc srs), S "for",
   (short chipmunk) `sC` S "an", (phrase openSource), (getAcc twoD), 
   (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term),
-  S "This section explains the purpose of this", (phrase document) :+: 
-  S ", the scope", S "of the", (phrase system) :+: S ",", 
+  S "This", (phrase section_), S "explains the", (phrase purpose), S "of this", 
+  (phrase document) :+: S ", the scope", S "of the", (phrase system) :+: S ",", 
   S "and the", (phrase organization), S "of the", (phrase document)]
         
 s2_intro = [para1_s2_intro, para2_s2_intro]
@@ -120,7 +121,8 @@ para1_s2_1_intro = Paragraph $ foldlSent
   plural goalStmt, S "and", plural thModel, S "used in",
   short chipmunk, S "are provided. This", (phrase document),
   S "is intended to be used as a reference to provide all",
-  S "necessary", (phrase information), S "to understand and verify the model"]
+  S "necessary", (phrase information), S "to understand and verify the", 
+  (phrase model)]
 
 para2_s2_1_intro :: Contents
 para2_s2_1_intro = Paragraph $ foldlSent 
@@ -180,7 +182,7 @@ s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
 
 --FIXME: This can be generalized to use more chunks
 s3_intro = Paragraph $ foldlSent 
-  [S "This section provides", (phrase general), (phrase information),
+  [S "This", (phrase section_), S "provides", (phrase general), (phrase information),
   S "about the", (phrase system) :+: S ",", S "identifies the interfaces between the", 
   (phrase system), S "and",
   S "its environment, and describes the user characteristics and the",
@@ -242,13 +244,13 @@ s4_1_intro = Paragraph $ foldlSent
   S "from scratch takes a long period of time and is very costly" `sC`
   S "presenting barriers of entry which make it difficult for", (phrase game),
   S "developers to include", (phrase physics), 
-  S "in their products. There are a few", S "free,", (phrase openSource), 
+  S "in their" +:+. (plural product_), S "There are a few", S "free,", (phrase openSource), 
   S "and high quality", (plural physicsLibrary), S "available to",
-  S "be used for consumer products" +:+. (sParen $ makeRef s7),
+  S "be used for consumer", (plural product_) +:+. (sParen $ makeRef s7),
   S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase $ rigidBody ^. term), (phrase $ physLib ^. term) `sC`
   (phrase game), S "development will be more accessible",
-  S "to the masses and higher quality products will be produced"]
+  S "to the masses and higher quality", (plural product_), S "will be produced"]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -262,8 +264,9 @@ s4_1_1 = section (titleize' (terminology `and_'`  definition))
 
 s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
   [S "This subsection provides a list of terms",
-  S "that are used in subsequent sections and their meaning, with the",
-  S "purpose of reducing ambiguity and making it easier to correctly",
+  S "that are used in subsequent", (plural section_), 
+  S "and their meaning, with the", (phrase purpose), 
+  S "of reducing ambiguity and making it easier to correctly",
   S "understand the", plural requirement, S ":"]
 
 --FIXME: Handle plurals properly. This is a really bad hack.
@@ -288,7 +291,7 @@ s4_1_2 = section (titleize' goalStmt) [s4_1_2_list] []
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt1 = foldlSent 
-  [S "Given the", (phrase physical), (plural property) :+: S ",", S "initial", 
+  [S "Given the", (plural physicalProperty) :+: S ",", S "initial", 
   (plural $ position ^. term), S "and",
   (plural $ vel ^. term) `sC` S "and", (plural $ force ^. term),
   S "applied on a set of", (plural $ rigidBody ^. term) `sC`
@@ -296,7 +299,7 @@ s4_1_2_stmt1 = foldlSent
   (plural $ vel ^. term), S "over a period of", (phrase $ time ^. term)]
 
 s4_1_2_stmt2 = foldlSent 
-  [S "Given the", (phrase physical), (plural property) :+: S ",", S "initial", 
+  [S "Given the", (plural physicalProperty) :+: S ",", S "initial", 
   (plural $ orientation ^. term), S "and", (plural $ angVel ^. term) `sC`
   S "and", (plural $ force ^. term), S "applied on a set of", 
   (plural $ rigidBody ^. term) `sC` S "determine their new",
@@ -311,7 +314,7 @@ s4_1_2_stmt3 = foldlSent
   (phrase $ time ^. term)]
 
 s4_1_2_stmt4 = foldlSent 
-  [S "Given the", (phrase physical), S "properties, initial linear and angular", 
+  [S "Given the", (plural physicalProperty) :+: S ",", S "initial linear and angular", 
   (plural $ position ^. term), 
   S "and", (plural $ vel ^. term) `sC` S "determine the new",
   (plural $ position ^. term), S "and", (plural $ vel ^. term),
@@ -344,8 +347,8 @@ s4_2_1 = section (titleize' assumption) [s4_2_1_intro, s4_2_1_list] []
 
 -- TODO: Add assumption references in the original and this SRS. --
 s4_2_1_intro = Paragraph $ foldlSent 
-  [S "This section simplifies the original", (phrase problem),
-  S "and helps in developing the theoretical model by filling in the",
+  [S "This", (phrase section_), S "simplifies the original", (phrase problem),
+  S "and helps in developing the", (phrase thModel), S "by filling in the",
   S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
   S "The numbers given in", S "the square brackets refer to the", 
   foldr1 sC (map (\ch -> (phrase ch) +:+ (bterm ch)) 
@@ -389,8 +392,9 @@ s4_2_2_TMods :: [Contents]
 s4_2_2 = section (titleize' thModel) ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
 
 s4_2_2_intro = Paragraph $ foldlSent 
-  [S "This section focuses on the", (phrase general), (plural $ equation ^. term),
-  S "the", (phrase $ physLib ^. term), S "is based on"]
+  [S "This", (phrase section_), S "focuses on the", (phrase general), 
+  (plural $ equation ^. term), S "the", (phrase $ physLib ^. term), 
+  S "is based on"]
 
 s4_2_2_TMods = map Definition (map Theory cpTMods)
 
@@ -406,9 +410,10 @@ s4_2_3 = section (titleize' genDefn) ([s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-}) []
 
 s4_2_3_intro = Paragraph $ foldlSent 
-  [S "This section collects the laws and", (plural $ equation ^. term),
-  S "that will be used in deriving the", (plural dataDefn) `sC`
-  S "which in turn will be used to build the", (plural inModel)]
+  [S "This", (phrase section_), S "collects the laws and", 
+  (plural $ equation ^. term), S "that will be used in deriving the", 
+  (plural dataDefn) `sC` S "which in turn will be used to build the", 
+  (plural inModel)]
 
 -- GDefs not yet implemented --
 {-
@@ -427,9 +432,10 @@ s4_2_4_DDefs :: [Contents]
 s4_2_4 = section (titleize' dataDefn) ([s4_2_4_intro] ++
   (s4_2_4_DDefs)) []
 
-s4_2_4_intro = Paragraph $ foldlSent [S "This section collects and defines all the",
-  (plural datum), S "needed to build the" +:+. titleize' inModel,
-  S "The dimension of each", (phrase quantity), S "is also given"]
+s4_2_4_intro = Paragraph $ foldlSent [S "This", (phrase section_), 
+  S "collects and defines all the", (plural datum), S "needed to build the" +:+. 
+  titleize' inModel, S "The dimension of each", (phrase quantity), 
+  S "is also given"]
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
 
@@ -445,10 +451,10 @@ s4_2_5 = section (titleize' inModel) ([s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-}) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
-  [S "This section transforms the", (phrase problem), S "defined",
+  [S "This", (phrase section_), S "transforms the", (phrase problem), S "defined",
   S "in", (makeRef s4_1), S "into one expressed in mathematical",
   S "terms. It uses concrete symbols defined in", (makeRef s4_2_4),
-  S "to replace the abstract symbols in the models identified in",
+  S "to replace the abstract symbols in the", (plural model), S "identified in",
   (makeRef s4_2_2), S "and", (makeRef s4_2_3)]
 
 -- Instance models not yet implemented --
@@ -470,7 +476,7 @@ s4_2_6_intro = Paragraph $ foldlSent
   (Quote $ titleize' physicalConstraint), S "column gives the", (phrase physical),
   S "limitations on the range of values that can be taken by the",
   S "variable. The", (plural constraint_), S "are conservative, to give the user of the",
-  S "model the flexibility to experiment with unusual situations. The",
+  (phrase model), S "the flexibility to experiment with unusual situations. The",
   S "column of typical values is intended to provide a feel for a",
   S "common scenario"]
 
@@ -518,7 +524,7 @@ s5_intro :: Contents
 s5 = section (titleize' requirement) [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $ foldlSent 
-  [S "This section provides the", (phrase functional),
+  [S "This", (phrase section_), S "provides the", (phrase functional),
   plural requirement `sC` S "the business",
   S "tasks that the software is expected to complete, and the",
   (phrase nonfunctional), (plural requirement `sC` 
@@ -607,8 +613,9 @@ s6_intro, s6_list :: Contents
 
 s6 = section (titleize' likelyChg) [s6_intro, s6_list] []
 
-s6_intro = Paragraph $ foldlSent [S "This section lists the", (plural likelyChg), 
-  S "to be made to the", (phrase physics), (phrase game), (phrase library)]
+s6_intro = Paragraph $ foldlSent [S "This", (phrase section_), S "lists the", 
+  (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
+  (phrase library)]
 
 s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
   s6_likelyChg_stmt4 :: Sentence

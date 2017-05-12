@@ -128,10 +128,10 @@ para2_s2_1_intro :: Contents
 para2_s2_1_intro = Paragraph $ foldlSent 
   [S "This", (phrase document), S "will be used as a starting point for",
   S "subsequent development phases, including writing the design",
-  S "specification and the", (phrase softwareVerif), S "and validation plan.",
+  S "specification and the", (phrase software), (phrase vav), S "plan.",
   S "The design", (phrase document), S "will show how the", plural requirement, 
   S "are to be realized.", 
-  S "The verification and validation plan will show the steps",
+  S "The", (phrase vav), S "plan will show the steps",
   S "that will be used to increase confidence in the", (phrase softwareDoc),
   S "and the implementation"]
 

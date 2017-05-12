@@ -6,8 +6,6 @@ import Prelude hiding (id)
 import Drasil.PCM.Example
 
 import Language.Drasil
-import Drasil.Template.MG
-import Drasil.Template.DD
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors

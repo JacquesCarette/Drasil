@@ -155,7 +155,7 @@ s3_1_intro = Paragraph $
 s3_2 = section (S "The" +:+ titleize customer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
-  S "The" +:+ phrase customer +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
+  S "The" +:+ plural customer +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
 s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
 
@@ -240,7 +240,7 @@ s6 = section (titleize specificsystemdescription) [s6_intro] [s6_1,
 s6_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription `sC`
   S "which gives a high-level view of the" +:+ phrase problem +:+. S "to be solved" +:+
-  S "This is followed by the" +:+ phrase solutionCharSpec :+: S ", which presents the" +:+
+  S "This is followed by the" +:+ plural solutionCharSpec :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
 s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1, 

@@ -117,7 +117,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
-      (map Con [tsIntro con, (table (sort v) (\x -> phrase $ x ^.term))])) : l'
+      (map Con [tsIntro con, (table (sort v) (\x -> at_start $ x ^.term))])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'

@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation, unit_)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation)
 import Prelude hiding (id)
 
 import Drasil.Template.MG
@@ -149,13 +149,13 @@ s3_1 = section (titleize $ the client) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
   (phrase $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
-  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ S "The" +:+ phrase client +:+
+  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ (phrase $ the client) +:+
   S "has the final say on acceptance of the" +:+. phrase product_
 
 s3_2 = section (titleize $ the customer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
-  S "The" +:+ plural customer +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
+  (plural $ the customer) +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
 s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
 
@@ -305,7 +305,7 @@ s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLa
   +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
   S "following elements:"
 
-fig_glassbr = Figure (S "The" +:+ titleize physicalSystem) "physicalsystimage.png"
+fig_glassbr = Figure (titleize $ the physicalSystem) "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 

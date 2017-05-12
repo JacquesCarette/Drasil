@@ -91,7 +91,6 @@ indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTh
   tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, thePhysSys, theProj, corSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
-refmat       = npnc "refmat"       (cn' "reference material")
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prodUCTable  = npnc "prodUCTable"  (cn' "product use case table")

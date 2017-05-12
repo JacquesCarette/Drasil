@@ -126,7 +126,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
-  where lf Term = (\x -> phrase $ x ^. term)
+  where lf Term = (\x -> at_start $ x ^. term)
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
           (x ^. defn) else (phrase $ x ^. term)) --Compare chunk ids, since we don't

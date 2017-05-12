@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface)
 import Prelude hiding (id)
 
 import Drasil.Template.MG
@@ -357,7 +357,7 @@ s6_2_1_list =
     +:+. S "beam and (3) glass supported on one side acts as a cantilever"), 
   (((short assumption) :+: S "2"), S "This practice does not apply" 
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
-    S "notched, or grooved glass with surface and edge treatments" +:+.
+    S "notched, or grooved glass with" +:+ (phrase $ surface ^. term) +:+ S "and edge treatments" +:+.
     S "that alter the glass strength"),
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
     S "only considers the external explosion scenario for its" +:+. (plural $ calculation ^. term)),
@@ -387,7 +387,7 @@ s6_2_1_list =
   (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+
     S "to A4 the value of" +:+ (phrase $ loadDF ^. term) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
-    (gLassBR ^. defn) +:+ S "It is calculated by the equation:" +:+
+    (gLassBR ^. defn) +:+ S "It is calculated by the" +: (phrase $ equation ^. term) +:+
     --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
     S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")])]
   --equation in sentence

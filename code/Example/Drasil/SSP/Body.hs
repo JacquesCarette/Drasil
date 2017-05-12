@@ -13,8 +13,8 @@ import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 
-import           Drasil.ReferenceMaterial
-import           Drasil.DocumentLanguage
+import Drasil.ReferenceMaterial
+import Drasil.DocumentLanguage
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics

@@ -5,7 +5,6 @@ import Data.Drasil.SI_Units
 
 import Control.Lens ((^.))
 
---FIXME: Remove unitless
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
@@ -262,10 +261,11 @@ kc          = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor; proportion
   "factor of force that weight pushes outwards; caused by seismic earth movements")
   fixme) (sub cK lC)
 
-lambda      = cvR (dcc "lambda" (nounPhraseSP "ratio between interslice normal and shear forces (applied to all interslices)")
-  fixme) (Greek Lambda_L)
+lambda      = cvR (dcc "lambda" (nounPhraseSP $ "ratio between interslice normal and " ++
+  "shear forces (applied to all interslices)") fixme) (Greek Lambda_L)
   
-fi          = cvR (dcc "f_i" (nounPhraseSP "scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
+fi          = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of interslice " ++ 
+  "forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
   fixme) (sub lF lI)
   
 n           = cvR (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
@@ -276,20 +276,6 @@ upsilon     = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or
   
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety specific to a slice i")
   fixme) (sub (Atomic "FS") (Atomic "Loc,i"))
-
-
---degree--
-
--- FIXME: Pull this out.
-
-degree :: FundUnit
-degree = UD (dcc "degree" (cn' "Degree") "angle") (UName (Special Circle))
-
---unitless--
-
--- FIXME: Remove this.
-unitless :: FundUnit
-unitless = UD (dcc "unitless" (cn' "Unitless") "unitless") (UName $ Atomic "unitless")
 
 --N/m^3--
 specific_weight :: DerUChunk

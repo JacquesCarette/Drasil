@@ -101,6 +101,8 @@ radians = DUC
 --degrees = DUC
   --  (UD (dcc "Degrees" "angle") (UName (Special Circle)))
   --  Equiv to pi/180 rad.
+degree :: FundUnit --FIXME: define degree in terms of radians and pi
+degree = UD (dcc "degree" (cn' "Degree") "angle") (UName (Special Circle))
 
 -- FIXME: These should probably be moved elsewhere --
     

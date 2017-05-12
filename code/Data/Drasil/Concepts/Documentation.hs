@@ -28,12 +28,13 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 analysis, appendix, characteristic, client, condition, constraint_, connection, 
   customer, datum, definition, dependency, description, design, document, 
-  environment, figure, functional, game, general, individual, information, 
-  introduction, item, label, library, model, name_, nonfunctional, offShelf, open, 
-  organization, physics, physical, problem, product_, project, property, 
-  purpose, quantity, realtime, reference, requirement_, risk_, scope, source, section_, 
-  simulation, solution, specific, specification, stakeholder, symbol_, system, 
-  table_, template, terminology, theory, traceyMatrix, user, useCase, video :: NPNC
+  documentation, environment, figure, functional, game, general, individual, 
+  information, introduction, item, label, library, model, name_, nonfunctional, 
+  offShelf, open, organization, physics, physical, problem, product_, project, 
+  property, purpose, quantity, realtime, reference, requirement_, risk_, scope, 
+  source, section_, simulation, software, solution, specific, specification, 
+  stakeholder, symbol_, system, table_, template, terminology, theory, 
+  traceyMatrix, user, useCase, video, verification :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -49,6 +50,7 @@ dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
 design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
+documentation   = npnc "documentation"  (cn' "documentation")
 environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
@@ -62,7 +64,7 @@ label           = npnc "label"          (cn' "label")
 library         = npnc "library"        (cnIES "library")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
-nonfunctional   = npnc "nonfunctional"  (cn' "nonfunctional") -- FIXME: Adjective
+nonfunctional   = npnc "non-functional"  (cn' "non-functional") -- FIXME: Adjective
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
@@ -82,6 +84,7 @@ source          = npnc "source"         (cn' "source")
 section_        = npnc "section"        (cn' "section")
 simulation      = npnc "simulation"     (cn' "simulation")
 solution        = npnc "solution"       (cn' "solution")
+software        = npnc "software"       (cn' "software")
 specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
 stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
@@ -95,6 +98,7 @@ traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
 video           = npnc "video"          (cn' "video")
+verification    = npnc "verification"   (cn' "verification")
 realtime        = npnc "real-time"      (cn' "real-time")
 
 
@@ -117,9 +121,9 @@ traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 characteristicSpecification, generalSystemDescription, indPRCase, physicalConstraint,
   physicalSystem, problemDescription, prodUCTable, specificsystemdescription, 
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
-  functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
-  offShelfSolution, videoGame, physicalSim, productUC, useCaseTable, 
-  openSource, physicsLibrary, physicalProperty :: NPNC
+  functionalRequirement, nonfunctionalRequirement, softwareDoc, softwareVerif,
+  solutionCharSpec, offShelfSolution, videoGame, physicalSim, productUC, 
+  useCaseTable, openSource, physicsLibrary, physicalProperty :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -139,8 +143,10 @@ nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
 offShelfSolution             = compoundNPNC offShelf solution
 physicalSim                  = compoundNPNC physical simulation
-physicsLibrary                = compoundNPNC physics library
+physicsLibrary               = compoundNPNC physics library
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
 videoGame                    = compoundNPNC video game
 openSource                   = compoundNPNC open source
+softwareDoc                  = compoundNPNC software documentation
+softwareVerif                = compoundNPNC software verification

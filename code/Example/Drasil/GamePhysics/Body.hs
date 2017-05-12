@@ -169,7 +169,7 @@ s2_3 = orgSec s2_3_intro inModel s4_2_5
 s2_3_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
   S "template for an", (getAcc srs), S "for scientific",
-  S "computing", (phrase software) S "proposed by [1] and [2]"]
+  S "computing", (phrase software), S "proposed by [1] and [2]"]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -527,8 +527,8 @@ s5_intro = Paragraph $ foldlSent
   [S "This", (phrase section_), S "provides the", (phrase functional),
   plural requirement `sC` S "the business",
   S "tasks that the", (phrase software), S "is expected to complete, and the",
-  (phrase nonfunctional), (plural requirement `sC` 
-  S "the qualities that the", (phrase software), S "is expected to exhibit")]
+  (phrase nonfunctional), (plural requirement `sC` S "the qualities that the"), 
+  (phrase software), S "is expected to exhibit"]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
@@ -599,7 +599,7 @@ s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_intro] []
 
 s5_2_intro = Paragraph $ foldlSent 
   [(titleize' game), S "are resource intensive, so performance",
-  S "is a high priority. Other non-functional", plural requirement,
+  S "is a high priority. Other", (phrase nonfunctional), plural requirement,
   S "that are a",
   S "priority are: correctness, understandability, portability,",
   S "reliability, and maintainability"]

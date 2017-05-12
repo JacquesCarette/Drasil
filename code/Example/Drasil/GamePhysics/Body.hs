@@ -115,7 +115,7 @@ para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
   [S "This document descibes the modeling of an",
   (phrase openSource), getAcc twoD, (phrase $ rigidBody ^. term), 
-  (phrase $ physLib ^. term), S "used for games. The", 
+  (phrase $ physLib ^. term), S "used for" +:+. (plural game), S "The", 
   plural goalStmt, S "and", plural thModel, S "used in",
   short chipmunk, S "are provided. This",
   S "document is intended to be used as a reference to provide all",
@@ -196,7 +196,7 @@ s3_1 = section (titleize' userCharacteristic) [s3_1_intro] []
 s3_1_intro = Paragraph $ foldlSent 
   [S "The end user of", (short chipmunk),
   S "should have an understanding of first year programming concepts",
-  S "and an understanding of high school physics"]
+  S "and an understanding of high school", (phrase physics)]
 
 -------------------------------
 -- 3.2 : System Constraints  --
@@ -231,19 +231,20 @@ s4_1 = section (titleize problemDescription) [s4_1_intro] [s4_1_1, s4_1_2]
 
 s4_1_intro = Paragraph $ foldlSent 
   [S "Creating a gaming", (phrase $ physLib ^. term),
-  S "is a difficult task. Games need physics libraries that simulate",
-  S "objects acting under various physical conditions, while",
+  S "is a difficult task.", (titleize' game), S "need", (plural physicsLibrary), 
+  S "that simulate", S "objects acting under various physical conditions, while",
   S "simultaneously being fast and efficient enough to work in soft",
-  S "real-time during the game. Developing a", (phrase $ physLib ^. term),
+  S "real-time during the" +:+. (phrase game), S "Developing a", 
+  (phrase $ physLib ^. term),
   S "from scratch takes a long period of time and is very costly" `sC`
-  S "presenting barriers of entry which make it difficult for game",
-  S "developers to include physics in their products. There are a few",
-  S "free,", (phrase openSource), 
-  S "and high quality physics libraries available to",
+  S "presenting barriers of entry which make it difficult for", (phrase game),
+  S "developers to include", (phrase physics), 
+  S "in their products. There are a few", S "free,", (phrase openSource), 
+  S "and high quality", (plural physicsLibrary), S "available to",
   S "be used for consumer products" +:+. (sParen $ makeRef s7),
   S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase $ rigidBody ^. term), (phrase $ physLib ^. term) `sC`
-  S "game development will be more accessible",
+  (phrase game), S "development will be more accessible",
   S "to the masses and higher quality products will be produced"]
 
 -----------------------------------------
@@ -533,6 +534,7 @@ s5_1 = section (titleize' functionalRequirement)
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
+-- some requirements look like they could be parametrized
 s5_1_req1 = foldlSent [S "Create a", (phrase $ space ^. term), S "for all of the",
   (plural $ rigidBody ^. term), S "in the physical simulation to interact in"]
 
@@ -586,7 +588,7 @@ s5_2_intro :: Contents
 s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_intro] []
 
 s5_2_intro = Paragraph $ foldlSent 
-  [S "Games are resource intensive, so performance",
+  [(titleize' game), S "are resource intensive, so performance",
   S "is a high priority. Other non-functional", plural requirement,
   S "that are a",
   S "priority are: correctness, understandability, portability,",
@@ -601,24 +603,26 @@ s6_intro, s6_list :: Contents
 
 s6 = section (titleize' likelyChg) [s6_intro, s6_list] []
 
-s6_intro = Paragraph $ S "This section lists the" +:+. 
-  ((plural likelyChg) +:+ S "to be made to the physics game library")
+s6_intro = Paragraph $ foldlSent [S "This section lists the", (plural likelyChg), 
+  S "to be made to the", (phrase physics), (phrase game), (phrase library)]
 
 s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
   s6_likelyChg_stmt4 :: Sentence
 
-s6_likelyChg_stmt1 = S "The internal" +:+ (getAcc ode) :+: 
-  S "-solving algorithm used by the library may" +:+. S "change in the future"
+--these statements look like they could be parametrized
+s6_likelyChg_stmt1 = foldlSent [S "The internal", (getAcc ode) :+: 
+  S "-solving algorithm used by the", (phrase library), 
+  S "may change in the future"]
 
-s6_likelyChg_stmt2 = S "The library may be" +:+
-  S "expanded to deal with edge-to-edge and vertex-to-vertex" +:+.
-  (plural (collision ^. term))
+s6_likelyChg_stmt2 = foldlSent [S "The", (phrase library), S "may be",
+  S "expanded to deal with edge-to-edge and vertex-to-vertex",
+  (plural (collision ^. term))]
 
-s6_likelyChg_stmt3 = S "The library may be" +:+. 
-  S "expanded to include motion with damping"
+s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be", 
+  S "expanded to include motion with damping"]
 
-s6_likelyChg_stmt4 = S "The library may be" +:+.
-  S "expanded to include joints and constraints"
+s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
+  S "expanded to include joints and constraints"]
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
@@ -638,21 +642,21 @@ s7 = section (titleize' offShelfSolution) [s7_intro, s7_2dlist,
   s7_mid, s7_3dlist] []
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
-  S "there already exist free" +:+ (phrase openSource) +:+ 
-  S "game physics libraries") +:+ S "Similar" +:+ (getAcc twoD) +:+ 
-  S "physics libraries are:"
+  S "there already exist free" +:+ (phrase openSource) +:+ (phrase game) +:+
+  (plural physicsLibrary)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
+  (plural physicsLibrary) +:+ S "are:"
 
 s7_2dlist = Enumeration (Bullet [
   Flat (S "Box2D: http://box2d.org/"),
-  Flat (S "Nape Physics Engine: http://napephys.com/")])
+  Flat (S "Nape" +:+ (titleize physics) +:+ S "Engine: http://napephys.com/")])
 
 s7_mid = Paragraph $ S "Free" +:+ (phrase openSource) +:+ 
-        S "3D game physics libraries include:"
+        S "3D" +:+ (phrase game) +:+ (plural physicsLibrary) +:+ S "include:"
 
-s7_3dlist = Enumeration (Bullet [
-  Flat (S "Bullet: http://bulletphysics.org/"),
-  Flat (S "Open Dynamics Engine: http://www.ode.org/"),
-  Flat (S "Newton Game Dynamics: http://newtondynamics.com/")])
+s7_3dlist = Enumeration (Bullet $ map (Flat) [
+  (S "Bullet: http://bulletphysics.org/"),
+  (S "Open Dynamics Engine: http://www.ode.org/"),
+  (S "Newton" +:+ (titleize game) +:+ S "Dynamics: http://newtondynamics.com/")])
 
 ----------------
 -- REFERENCES --

@@ -28,13 +28,13 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 -- concepts relating to the templates and their contents
 
 appendix, characteristic, client, condition, constraint_, connection, customer,
-  datum, definition, dependency, description, design, document, environment, figure, 
-  functional, game, general, individual, information, introduction, model, name_, 
-  nonfunctional, offShelf, open, organization, physical, problem, product_, project, 
-  property, purpose, quantity, realtime, reference, requirement_, scope, source,
-  section_, simulation, solution, specific, specification, stakeholder, symbol_, 
-  system, table_, terminology, theory, traceyMatrix, unit_, user, useCase, 
-  video :: NPNC
+  datum, definition, dependency, description, design, document, environment, 
+  figure, functional, game, general, individual, information, introduction, 
+  library, model, name_, nonfunctional, offShelf, open, organization, physics, 
+  physical, problem, product_, project, property, purpose, quantity, realtime, 
+  reference, requirement_, scope, source, section_, simulation, solution, 
+  specific, specification, stakeholder, symbol_, system, table_, terminology, 
+  theory, traceyMatrix, unit_, user, useCase, video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -57,12 +57,14 @@ general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
 introduction    = npnc "introduction"   (cn' "introduction")
+library         = npnc "library"        (cnIES "library")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
 nonfunctional   = npnc "nonfunctional"  (cn' "nonfunctional") -- FIXME: Adjective
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
+physics          = npnc "physics"         (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
 product_        = npnc "product"        (cn' "product")
@@ -94,7 +96,8 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
-  tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, thePhysSys, theProj, corSol :: NPNC
+  tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, theLibrary,
+  thePhysSys, theProj, corSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
@@ -109,6 +112,7 @@ theClient    = npnc "theClient"    (the client)
 theCustomer  = npnc "theCustomer"  (the customer)
 thePhysSys   = npnc "thePhysSys"   (the physicalSystem)
 theProj      = npnc "theProj"      (the project)
+theLibrary   = npnc "theLibrary"   (the library)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 
@@ -119,7 +123,7 @@ characteristicSpecification, generalSystemDescription, indPRCase, physicalConstr
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
   functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
   offShelfSolution, videoGame, physicalSim, productUC, useCaseTable, 
-  openSource :: NPNC
+  openSource, physicsLibrary :: NPNC
   
 characteristicSpecification  = compoundNPNC' characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -138,6 +142,7 @@ nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
 offShelfSolution             = compoundNPNC offShelf solution
 physicalSim                  = compoundNPNC physical simulation
+physicsLibrary                = compoundNPNC physics library
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
 videoGame                    = compoundNPNC video game

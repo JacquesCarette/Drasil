@@ -30,10 +30,11 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 appendix, characteristic, client, condition, constraint_, connection, customer,
   datum, definition, dependency, description, design, document, environment, figure, 
   functional, game, general, individual, information, introduction, model, name_, 
-  nonfunctional, offShelf, organization, physical, problem, product_, project, property, purpose, 
-  quantity, realtime, reference, requirement_, scope, section_, simulation, 
-  solution, specific, specification, stakeholder, symbol_, system, table_, 
-  terminology, theory, traceyMatrix, unit_, user, useCase, video :: NPNC
+  nonfunctional, offShelf, open, organization, physical, problem, product_, project, 
+  property, purpose, quantity, realtime, reference, requirement_, scope, source,
+  section_, simulation, solution, specific, specification, stakeholder, symbol_, 
+  system, table_, terminology, theory, traceyMatrix, unit_, user, useCase, 
+  video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -60,6 +61,7 @@ model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
 nonfunctional   = npnc "nonfunctional"  (cn' "nonfunctional") -- FIXME: Adjective
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
+open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
@@ -71,6 +73,7 @@ quantity        = npnc "quantity"       (cnIES "quantity") --general enough to b
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement 
 scope           = npnc "scope"          (cn' "scope")
+source          = npnc "source"         (cn' "source")
 section_        = npnc "section"        (cn' "section")
 simulation      = npnc "simulation"     (cn' "simulation")
 solution        = npnc "solution"       (cn' "solution")
@@ -115,7 +118,8 @@ characteristicSpecification, generalSystemDescription, indPRCase, physicalConstr
   physicalSystem, problemDescription, prodUCTable, specificsystemdescription, 
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
   functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
-  offShelfSolution, videogame, physicalSim, productUC, useCaseTable :: NPNC
+  offShelfSolution, videoGame, physicalSim, productUC, useCaseTable, 
+  openSource :: NPNC
   
 characteristicSpecification  = compoundNPNC' characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -136,4 +140,5 @@ offShelfSolution             = compoundNPNC offShelf solution
 physicalSim                  = compoundNPNC physical simulation
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
-videogame                    = compoundNPNC video game
+videoGame                    = compoundNPNC video game
+openSource                   = compoundNPNC open source

@@ -85,9 +85,9 @@ s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
 
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldlSent
-  [S "Due to the rising cost of developing", (plural videogame) :+: S ",", 
+  [S "Due to the rising cost of developing", (plural videoGame) :+: S ",", 
   S "developers are looking for ways to save time and money for",
-  S "their projects. Using an open source", (phrase $ physLib ^. term),
+  S "their projects. Using an", (phrase openSource), (phrase $ physLib ^. term),
   S "that is reliable and free will cut down development costs and lead",
   S "to better quality products"]
 
@@ -95,7 +95,7 @@ para2_s2_intro :: Contents
 para2_s2_intro = Paragraph $ foldlSent 
   [S "The following section provides an overview of the",
   titleize srs, (sParen $ getAcc srs), S "for",
-  (short chipmunk) `sC` S "an open source", (getAcc twoD), 
+  (short chipmunk) `sC` S "an", (phrase openSource), (getAcc twoD), 
   (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term),
   S "This section explains the purpose of this document, the scope",
   S "of the system, and the organization of the document"]
@@ -114,7 +114,7 @@ s2_1 = section (titleize prpsOfDoc) (s2_1_intro) []
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
   [S "This document descibes the modeling of an",
-  S "open source", getAcc twoD, (phrase $ rigidBody ^. term), 
+  (phrase openSource), getAcc twoD, (phrase $ rigidBody ^. term), 
   (phrase $ physLib ^. term), S "used for games. The", 
   plural goalStmt, S "and", plural thModel, S "used in",
   short chipmunk, S "are provided. This",
@@ -238,7 +238,8 @@ s4_1_intro = Paragraph $ foldlSent
   S "from scratch takes a long period of time and is very costly" `sC`
   S "presenting barriers of entry which make it difficult for game",
   S "developers to include physics in their products. There are a few",
-  S "free, open source and high quality physics libraries available to",
+  S "free,", (phrase openSource), 
+  S "and high quality physics libraries available to",
   S "be used for consumer products" +:+. (sParen $ makeRef s7),
   S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase $ rigidBody ^. term), (phrase $ physLib ^. term) `sC`
@@ -637,14 +638,16 @@ s7 = section (titleize' offShelfSolution) [s7_intro, s7_2dlist,
   s7_mid, s7_3dlist] []
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
-  S "there already exist free open source game physics libraries") +:+
-  S "Similar" +:+ (getAcc twoD) +:+ S "physics libraries are:"
+  S "there already exist free" +:+ (phrase openSource) +:+ 
+  S "game physics libraries") +:+ S "Similar" +:+ (getAcc twoD) +:+ 
+  S "physics libraries are:"
 
 s7_2dlist = Enumeration (Bullet [
   Flat (S "Box2D: http://box2d.org/"),
   Flat (S "Nape Physics Engine: http://napephys.com/")])
 
-s7_mid = Paragraph $ S "Free open source 3D game physics libraries include:"
+s7_mid = Paragraph $ S "Free" +:+ (phrase openSource) +:+ 
+        S "3D game physics libraries include:"
 
 s7_3dlist = Enumeration (Bullet [
   Flat (S "Bullet: http://bulletphysics.org/"),

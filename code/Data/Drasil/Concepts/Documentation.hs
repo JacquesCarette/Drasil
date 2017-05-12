@@ -26,15 +26,16 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, client, condition, constraint_, connection, 
+analysis, appendix, characteristic, client, condition, constraint_, connection, 
   customer, datum, definition, dependency, description, design, document, 
   environment, figure, functional, game, general, individual, information, 
-  introduction, library, model, name_, nonfunctional, offShelf, open, 
+  introduction, item, label, library, model, name_, nonfunctional, offShelf, open, 
   organization, physics, physical, problem, product_, project, property, 
-  purpose, quantity, realtime, reference, requirement_, scope, source, section_, 
+  purpose, quantity, realtime, reference, requirement_, risk, scope, source, section_, 
   simulation, solution, specific, specification, stakeholder, symbol_, system, 
-  table_, terminology, theory, traceyMatrix, user, useCase, video :: NPNC
+  table_, template, terminology, theory, traceyMatrix, user, useCase, video :: NPNC
 
+analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
@@ -56,6 +57,8 @@ general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
 introduction    = npnc "introduction"   (cn' "introduction")
+item            = npnc "item"           (cn' "item")
+label           = npnc "label"          (cn' "label")
 library         = npnc "library"        (cnIES "library")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
@@ -63,7 +66,7 @@ nonfunctional   = npnc "nonfunctional"  (cn' "nonfunctional") -- FIXME: Adjectiv
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
-physics          = npnc "physics"         (cn' "physics")
+physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
 product_        = npnc "product"        (cn' "product")
@@ -73,6 +76,7 @@ purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement 
+risk            = npnc "risk"           (cn' "risk")
 scope           = npnc "scope"          (cn' "scope")
 source          = npnc "source"         (cn' "source")
 section_        = npnc "section"        (cn' "section")
@@ -84,6 +88,7 @@ stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
+template        = npnc "template"       (cn' "template")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")

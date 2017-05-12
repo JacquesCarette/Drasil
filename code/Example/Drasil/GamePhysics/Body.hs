@@ -128,12 +128,12 @@ para2_s2_1_intro :: Contents
 para2_s2_1_intro = Paragraph $ foldlSent 
   [S "This", (phrase document), S "will be used as a starting point for",
   S "subsequent development phases, including writing the design",
-  S "specification and the software verification and validation plan.",
+  S "specification and the", (phrase softwareVerif), S "and validation plan.",
   S "The design", (phrase document), S "will show how the", plural requirement, 
   S "are to be realized.", 
   S "The verification and validation plan will show the steps",
-  S "that will be used to increase confidence in the software",
-  S "documentation and the implementation"]
+  S "that will be used to increase confidence in the", (phrase softwareDoc),
+  S "and the implementation"]
 
 s2_1_intro = [para1_s2_1_intro, para2_s2_1_intro]
 
@@ -169,7 +169,7 @@ s2_3 = orgSec s2_3_intro inModel s4_2_5
 s2_3_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
   S "template for an", (getAcc srs), S "for scientific",
-  S "computing software proposed by [1] and [2]"]
+  S "computing", (phrase software) S "proposed by [1] and [2]"]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -526,9 +526,9 @@ s5 = section (titleize' requirement) [s5_intro] [s5_1, s5_2]
 s5_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "provides the", (phrase functional),
   plural requirement `sC` S "the business",
-  S "tasks that the software is expected to complete, and the",
+  S "tasks that the", (phrase software), S "is expected to complete, and the",
   (phrase nonfunctional), (plural requirement `sC` 
-  S "the qualities that the software is expected to exhibit")]
+  S "the qualities that the", (phrase software), S "is expected to exhibit")]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --

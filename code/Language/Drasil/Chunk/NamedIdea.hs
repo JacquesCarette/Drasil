@@ -186,3 +186,8 @@ a_ :: (NamedIdea c) => c -> NPNC --Pluralization disallowed
 a_ t = npnc ("a" ++ t ^.id) (nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
   CapFirst CapWords)
+
+a_' :: (NamedIdea c) => c -> NPNC --Pluralization disallowed
+a_' t = npnc ("a" ++ t ^.id) (nounPhrase'' 
+  (S "a" +:+ (titleize $ t ^. term)) (S "a" +:+ (titleize $ t ^. term)) 
+  CapFirst CapWords)

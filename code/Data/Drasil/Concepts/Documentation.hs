@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
-import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC', and_', the)
+import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC', compoundNPNC'', and_', the)
 import Data.Drasil.Concepts.Math (graph)
 import Language.Drasil.NounPhrase
 
@@ -117,7 +117,7 @@ characteristicSpecification, generalSystemDescription, indPRCase, physicalConstr
   offShelfSolution, videoGame, physicalSim, productUC, useCaseTable, 
   openSource, physicsLibrary :: NPNC
   
-characteristicSpecification  = compoundNPNC' characteristic specification
+characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
 indPRCase                    = compoundNPNC individual productUC
 physicalConstraint           = compoundNPNC physical constraint_

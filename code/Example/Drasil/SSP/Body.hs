@@ -16,10 +16,11 @@ import Drasil.SSP.Reqs
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
 
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation hiding (unit_)
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Math (unit_)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -301,7 +302,7 @@ s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "A3", S "The different layers of the soil are homogeneous," +:+
            S "with consistent soil properties throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
-           S "with the exception of" +:+ (phrase unit_) +:+ S "weight."),
+           S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
   (S "A4", S "Soil layers are treated as if they have" +:+
            S "isotropic properties."),
   (S "A5", S "Interslice normal and shear forces have a" +:+
@@ -409,7 +410,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s5_1_table = table_inputdata
 
 table_inputdata :: Contents
-table_inputdata =  Table [titleize symbol_, titleize' unit_, titleize description]
+table_inputdata =  Table [titleize symbol_, titleize' $ unit_ ^. term, titleize description]
   (mkTable
     [(\ch -> P $ ch ^. symbol),
      (\ch -> unwrap $ getUnit ch),

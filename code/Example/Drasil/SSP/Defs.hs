@@ -23,8 +23,10 @@ crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 instMdl = npnc "instMdl" (cn' "instance model")
 
 ----Theoretical Models----
+-- possibly temporary "factor of safety" hack FIXME?
 fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" (nounPhrase "factor of safety" "factors of safety") fs_desc fs_rel
+fs_rc = makeRC "fs_rc" (nounPhrase'' (S "factor of safety") (S "factors of safety")
+  CapFirst (Replace $ S "Factor of Safety")) fs_desc fs_rel
 
 fs_rel :: Relation
 fs_rel = (C fs) := (C p) / (C s)

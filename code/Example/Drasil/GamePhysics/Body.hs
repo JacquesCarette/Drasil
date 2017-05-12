@@ -232,9 +232,10 @@ s4_1 = section (titleize problemDescription) [s4_1_intro] [s4_1_1, s4_1_2]
 s4_1_intro = Paragraph $ foldlSent 
   [S "Creating a gaming", (phrase $ physLib ^. term),
   S "is a difficult task.", (titleize' game), S "need", (plural physicsLibrary), 
-  S "that simulate", S "objects acting under various physical conditions, while",
+  S "that simulate", S "objects acting under various", (phrase physical), 
+  S "conditions, while", 
   S "simultaneously being fast and efficient enough to work in soft",
-  S "real-time during the" +:+. (phrase game), S "Developing a", 
+  (phrase realtime), S "during the" +:+. (phrase game), S "Developing a", 
   (phrase $ physLib ^. term),
   S "from scratch takes a long period of time and is very costly" `sC`
   S "presenting barriers of entry which make it difficult for", (phrase game),
@@ -285,7 +286,7 @@ s4_1_2 = section (titleize' goalStmt) [s4_1_2_list] []
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt1 = foldlSent 
-  [S "Given the physical", S "properties, initial", 
+  [S "Given the", (phrase physical), (plural property) :+: S ",", S "initial", 
   (plural $ position ^. term), S "and",
   (plural $ vel ^. term) `sC` S "and", (plural $ force ^. term),
   S "applied on a set of", (plural $ rigidBody ^. term) `sC`
@@ -293,7 +294,7 @@ s4_1_2_stmt1 = foldlSent
   (plural $ vel ^. term), S "over a period of", (phrase $ time ^. term)]
 
 s4_1_2_stmt2 = foldlSent 
-  [S "Given the physical", S "properties, initial", 
+  [S "Given the", (phrase physical), (plural property) :+: S ",", S "initial", 
   (plural $ orientation ^. term), S "and", (plural $ angVel ^. term) `sC`
   S "and", (plural $ force ^. term), S "applied on a set of", 
   (plural $ rigidBody ^. term) `sC` S "determine their new",

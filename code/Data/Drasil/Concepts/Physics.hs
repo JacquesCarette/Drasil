@@ -99,7 +99,7 @@ impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a
 gravitationalAccel = dcc "gravitationalAccel" 
   (cn "gravitational acceleration") "An expression used in physics to indicate the intensity of a gravitational field"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
-  "An empirical physical constant involved in the calculation of gravitational effects denoted by (6.673 * 10E-11)"
+  "gravitational constant (6.673 * 10E-11)"
 
 time = dcc "time" (cn' "time") "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
 torque = dcc "torque" (cn' "torque") "A twisting force that tends to cause rotation"

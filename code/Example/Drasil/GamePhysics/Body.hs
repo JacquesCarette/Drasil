@@ -185,8 +185,8 @@ s3_intro = Paragraph $ foldlSent
   [S "This", (phrase section_), S "provides", (phrase general), (phrase information),
   S "about the", (phrase system) :+: S ",", S "identifies the interfaces between the", 
   (phrase system), S "and",
-  S "its environment, and describes the user characteristics and the",
-  (plural systemConstraint)]
+  S "its environment, and describes the", (plural userCharacteristic), 
+  S "and the", (plural systemConstraint)]
 
 --------------------------------
 -- 3.1 : User Characteristics --

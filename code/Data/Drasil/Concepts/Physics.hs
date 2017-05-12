@@ -57,7 +57,7 @@ stress    = dcc "stress" (cn'' "stress")
   " a larger body subject to external loading.")
 strain    = dccWDS "strain" (cn' "strain")
   ((titleize $ stress ^. term) +:+
-  S "Forces that result in deformation of the body/plane.")
+  S "forces that result in deformation of the body/plane.")
 tension    = dccWDS "tension" (cn' "tension")
   (S "A" +:+ (phrase $ stress ^. term) +:+
   S "that causes displacement of the body away from its center.")

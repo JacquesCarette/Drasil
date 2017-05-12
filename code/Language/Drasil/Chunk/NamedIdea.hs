@@ -136,7 +136,7 @@ of_'' t1 t2 = nounPhrase''
   ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
   ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
   (Replace ((at_start' $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2^.term)))
-  (Replace ((titleize' $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
+  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
 of'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
 of'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "of" +:+ (f2 $ t2 ^. term)

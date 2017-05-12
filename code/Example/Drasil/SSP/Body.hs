@@ -411,12 +411,15 @@ s5_1_table = table_inputdata
 table_inputdata :: Contents --FIXME: use table function?
 table_inputdata =  Table [titleize symbol_, titleize' unit_, titleize description]
   (mkTable
-    [(\ch -> P (ch ^. symbol)),
-     (\ch -> Sy $ unit_symb ch),
+    [(\ch -> P $ ch ^. symbol),
+     (\ch -> unwrap $ getUnit ch),
      (\ch -> phrase $ ch ^. term)]
-    [coords, elastMod, cohesion, poisson, fricAngle, dryWeight,
-      satWeight, waterWeight])
+    ((map cqs [coords, elastMod, cohesion]) ++ (map cqs [poisson]) ++ --this has to be seperate since poisson is a different type
+    map cqs [fricAngle, dryWeight, satWeight, waterWeight]))
   (S "Input data") True
+    where unwrap :: (Maybe UnitDefn) -> Sentence
+          unwrap (Just a) = Sy (a ^. usymb)
+          unwrap Nothing = EmptyS
  
 -- SECTION 5.2 --
 s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_p1] []

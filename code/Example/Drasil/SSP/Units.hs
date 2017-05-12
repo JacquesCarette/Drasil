@@ -7,22 +7,22 @@ import Control.Lens ((^.))
 
 --FIXME: Remove unitless
 sspSymbols :: [CQSWrapper]
-sspSymbols = map cqs sspUnits
+sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
 sspUnits :: [UWrapper]
 sspUnits = map uw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
-              elastMod, poisson, coords, hWT, hUS, hSlip, xi, critCoords,
-              fs, fsloc, si, pi_f, ti, ri, wi, kc, hi, dHi, ei, xi_2,
+              elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
+              si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
-              omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f, m, upsilon,
+              omega_i, bi, lbi, lsi, hi_2, f, m,
               delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, 
-  poisson, coords, hWT, hUS, hSlip, xi, critCoords, fs, fsloc, si, pi_f,
-  ti, ri, wi, kc, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
-  qi, alpha_i, beta_i, omega_i, lambda, fi, bi, lbi, lsi, hi_2, n, f,
-  m, upsilon, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+  coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
+  ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
+  qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, f,
+  m, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i, s, p :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
@@ -54,10 +54,6 @@ waterWeight = uc' "gamma_w" (cn "unit weight of water")
 elastMod    = uc' "E" (cn "elastic modulus")
   fixme
   cE pascal
-
-poisson     = uc' "nu" (cn "Poisson's ratio")
-  fixme
-  (Greek Nu_L) unitless
 
 coords      = uc' "(x,y)" 
   (cn $ "cartesian position coordinates; y is considered parallel to the " ++ 
@@ -92,15 +88,6 @@ critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates that " ++
   (Concat [sub (Atomic "({x") (Atomic "cs"), sub (Atomic "},{y") (Atomic "cs"), 
   Atomic "})"]) metre
 
-fs          = uc' "FS" (cn $ "global factor of safety describing the " ++
-  "stability of a surface in a slope")
-  fixme
-  (Atomic "FS") unitless
-
-fsloc       = uc' "FS_loci" (cn "local factor of safety specific to a slice i")
-  fixme
-  (sub (Atomic "FS") (Atomic "Loc,i")) unitless
-
 si          = uc' "S_i" (cn "mobilized shear force for slice i")
   fixme
   (sub cS lI) newton
@@ -132,11 +119,6 @@ ri          = uc' "R_i"
 wi          = uc' "W_i" (cn "weight; downward force caused by gravity on slice i")
   fixme
   (sub cW lI) newton
-
-kc          = uc' "K_c" (cn $ "earthquake load factor; proportionality factor " ++
-  "of force that weight pushes outwards; caused by seismic earth movements")
-  fixme
-  (sub cK lC) unitless
 
 hi          = uc' "H_i" (cn $ "interslice water force exerted in the " ++
   "x-ordinate direction between adjacent slices (for interslice index i)")
@@ -191,14 +173,6 @@ omega_i     = uc' "omega_i" (cn "angle of imposed surface load acting into the s
   fixme
   (sub (Greek Omega_L) lI) degree
 
-lambda      = uc' "lambda" (cn "ratio between interslice normal and shear forces (applied to all interslices)")
-  fixme
-  (Greek Lambda_L) unitless
-
-fi          = uc' "f_i" (cn "scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
-  fixme
-  (sub lF lI) unitless
-
 bi          = uc' "b_i" (cn "base width of the slice in the x-ordinate direction only (for slice index i)")
   fixme
   (sub lB lI) metre
@@ -215,10 +189,6 @@ hi_2        = uc' "h_i" (cn "midpoint height; distance from the slip base to the
   fixme
   (sub lH lI) metre
 
-n           = uc' "n" (cn "number of slices the slip mass has been divided into")
-  fixme
-  lN unitless
-
 f           = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
   fixme
   cF metre
@@ -226,10 +196,6 @@ f           = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
 m           = uc' "M" (cn "moment of a body; assumed 2D allowing a scalar")
   fixme
   cM momentOfForceU
-
-upsilon     = uc' "Upsilon" (cn "generic minimization function or algorithm")
-  fixme
-  (Greek Upsilon) unitless
 
 delta       = uc' "delta" (cn "generic displacement of a body")
   fixme
@@ -279,6 +245,39 @@ dy_i        = uc' "dy_i" (cn "displacement of a slice in the y-ordinate directio
   fixme
   (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre
   
+
+-- Unitless Symbols --
+
+sspUnitless :: [ConVar]
+sspUnitless = [poisson, fs, kc, lambda, fi, n, upsilon, fsloc]
+
+poisson, fs, kc, lambda, fi, n, upsilon, fsloc :: ConVar
+
+poisson     = cvR (dcc "nu" (nounPhraseSP "Poisson's ratio") fixme) (Greek Nu_L)
+  
+fs          = cvR (dcc "FS" (nounPhraseSP $ "global factor of safety describing the " ++
+  "stability of a surface in a slope") fixme) (Atomic "FS")
+
+kc          = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor; proportionality " ++
+  "factor of force that weight pushes outwards; caused by seismic earth movements")
+  fixme) (sub cK lC)
+
+lambda      = cvR (dcc "lambda" (nounPhraseSP "ratio between interslice normal and shear forces (applied to all interslices)")
+  fixme) (Greek Lambda_L)
+  
+fi          = cvR (dcc "f_i" (nounPhraseSP "scaling function for magnitude of interslice forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
+  fixme) (sub lF lI)
+  
+n           = cvR (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
+  fixme) lN
+
+upsilon     = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or algorithm")
+  fixme) (Greek Upsilon)  
+  
+fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety specific to a slice i")
+  fixme) (sub (Atomic "FS") (Atomic "Loc,i"))
+
+
 --degree--
 
 -- FIXME: Pull this out.

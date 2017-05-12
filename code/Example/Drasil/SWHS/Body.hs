@@ -55,7 +55,8 @@ s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro,
   s7_table3, s7_fig1, s7_fig2 :: Contents
   
 s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, 
-  s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2 :: [Contents]
+  s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
+  :: [Contents]
 
 authors :: Sentence
 authors = manyNames [thulasi, brooks, spencerSmith]
@@ -74,7 +75,8 @@ mkSRS = RefSec (RefProg intro
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 tsymb_intro :: [TSIntro]
-tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans), Doc (nw progName)], SymbOrder]
+tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans),
+  Doc (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS swhs_si
@@ -110,14 +112,14 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
   S "program will be referred to as" +:+ (titleize $ progName ^. term) +:+
-  S "(" :+: (short progName) :+: S "). This" +:+ phrase section_ +:+ S "explains" +:+
-  S "the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
+  S "(" :+: (short progName) :+: S "). This" +:+ phrase section_ +:+
+  S "explains the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
   S ", the" +:+ phrase scope +:+ S "of the" +:+ phrase system :+: S ", the" +:+
   phrase organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
   plural characteristic +:+ S "of the" +:+ S "intended readers.")]
  
--- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating PCM"
--- which is not capitlaized whereas the stable version is
+-- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating
+-- PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
@@ -136,14 +138,14 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "used in the" +:+ (short progName) +:+ S "code" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ 
-  S "and unambiguous" +:+ plural definition :+: S ". This" +:+ phrase document +:+
-  S "is intended to be used as a reference to provide ad hoc access to" +:+
-  S "all" +:+ phrase information +:+ S "necessary to understand and verify" +:+
-  S "the" +:+ phrase model :+: S ". The" +:+ (short srs) +:+ S "is abstract" +:+ 
-  S "because the contents say what" +:+ phrase problem +:+ S "is being" +:+
-  S "solved, but do not say how to solve it."),
-  Paragraph (S "This" +:+ phrase document +:+ S "will be used as a starting" +:+
-  S "point for subsequent development phases, including" +:+ 
+  S "and unambiguous" +:+ plural definition :+: S ". This" +:+
+  phrase document +:+ S "is intended to be used as a reference to provide" +:+
+  S "ad hoc access to all" +:+ phrase information +:+ S "necessary to" +:+
+  S "understand and verify the" +:+ phrase model :+: S ". The" +:+
+  (short srs) +:+ S "is abstract because the contents say what" +:+
+  phrase problem +:+ S "is being solved, but do not say how to solve it."),
+  Paragraph (S "This" +:+ phrase document +:+ S "will be used as a" +:+
+  S "starting point for subsequent development phases, including" +:+ 
   S "writing the" +:+ phrase desSpec +:+ S "and the software" +:+
   (phrase vav) +:+ S "plan. The design" +:+ phrase document +:+
   S "will show how the" +:+ (plural requirement) +:+
@@ -153,9 +155,9 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "steps that will be used to increase confidence in the" +:+
   S "software documentation and the implementation. Although" +:+
   S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 
-  plural document +:+ S "that follow the so-called waterfall" +:+ phrase model :+:
-  S ", the actual development process is not constrained in any" +:+
-  S "way. Even when the process is not waterfall, as Parnas" +:+
+  plural document +:+ S "that follow the so-called waterfall" +:+
+  phrase model :+: S ", the actual development process is not constrained" +:+
+  S "in any way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
   S "to present the documentation is still to" +:+
   Quote (S "fake") +:+. S "a rational design process")]
@@ -169,8 +171,9 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
 s2_2 = section (titleize' scpOfReq) [s2_2_contents] []
 
 s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
-  plural requirement +:+ S "is limited to" +:+ (sLower (phrase $ thermal_analysis ^.
-  term)) +:+ S "of a single" +:+. (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
+  plural requirement +:+ S "is limited to" +:+
+  (sLower (phrase $ thermal_analysis ^. term)) +:+ S "of a single" +:+.
+  (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
   S "Given the appropriate inputs, the code for" +:+
   (short progName) +:+ S "is intended to predict the" +:+
   (phrase $ temp ^. term) +:+ S "and" +:+ (sLower  
@@ -182,7 +185,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   (sLower (phrase $ water ^. term)) +:+ S "and" +:+.
   (short phsChgMtrl))
 
--- There is a similar paragraph in each example, but there's a lot of specific 
+-- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar 
 -- water heating tank incorporating PCM, 2D slope composed of homogeneous soil 
 -- layers, glass slab and blast, or 2D bodies acted on by forces) and also 
@@ -219,8 +222,8 @@ s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
   S "to be solved are referred to as IM1 to IM4"]
 
--- This paragraph is mostly general (besides program name and number of IMs), 
--- but there are some differences between the examples that I'm not sure how to 
+-- This paragraph is mostly general (besides program name and number of IMs),
+-- but there are some differences between the examples that I'm not sure how to
 -- account for. Specifically, the glass example references a Volere paper that 
 -- is not used for the other examples. Besides that, this paragraph could 
 -- probably be abstracted out with some changes (i.e. the other examples don't 
@@ -266,11 +269,11 @@ s3_2_contents = Paragraph (S "There are no" +:+ phrase system +:+
 
 s4 = section (titleize specificsystemdescription) [s4_intro] [s4_1, s4_2]
 
-s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:+
-  phrase problem +:+ phrase description :+: S ", which gives a high-level view of the" +:+
-  phrase problem +:+ S "to be solved. This is followed by the" +:+
-  phrase solution +:+ phrase characteristicSpecification :+: S ", which" +:+
-  S "presents the" +:+
+s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
+  S "the" +:+ phrase problem +:+ phrase description :+: S ", which gives a" +:+
+  S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This" +:+
+  S "is followed by the" +:+ phrase solution +:+
+  phrase characteristicSpecification :+: S ", which presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`
   (plural genDefn) `sC` 
@@ -282,10 +285,11 @@ s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents the" +:
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
  
--- The swhs_pcm reference at the end would be better if singular, but concept is
--- plural.
+-- The swhs_pcm reference at the end would be better if singular, but concept
+-- is plural.
 
-s4_1 = section (titleize problemDescription) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
+s4_1 = section (titleize problemDescription) [s4_1_intro]
+  [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
   S "developed to investigate the effect of employing" +:+
@@ -298,9 +302,10 @@ s4_1_1 = section (titleize' $ terminology `and_'` definition)
   [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
-  S "that are used in the subsequent" +:+ plural section_ +:+ S "and their meaning," +:+
-  S "with the" +:+ phrase purpose +:+ S "of reducing ambiguity and making" +:+
-  S "it easier to correctly understand the" +:+ plural requirement :+: S ":")
+  S "that are used in the subsequent" +:+ plural section_ +:+ S "and their" +:+
+  S "meaning, with the" +:+ phrase purpose +:+ S "of reducing ambiguity" +:+
+  S "and making it easier to correctly understand the" +:+
+  plural requirement :+: S ":")
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
@@ -324,7 +329,7 @@ s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
   S ", includes the following elements:")
 
 -- Above paragraph is general except for progName and figure. However, not 
--- every example has a physical system. Also, the SSP example is different, so 
+-- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
 s4_1_2_list = Enumeration (Simple $ [((short physSyst) :+: S "1", Flat
@@ -345,18 +350,17 @@ s4_1_2_list = Enumeration (Simple $ [((short physSyst) :+: S "1", Flat
 -- different
 -- FIXME: Figures have different IDs than stable structure
 
-fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+ (phrase $ ht_flux_C ^. term) +:+
-  S "of" +:+ P (ht_flux_C ^. symbol) +:+ S "and" +:+ 
-  (phrase $ ht_flux_P ^. term) +:+ S "of" +:+ P (ht_flux_P ^. symbol)) 
-  "Tank.png"
+fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+
+  (phrase $ ht_flux_C ^. term) +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
+  S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
+  P (ht_flux_P ^. symbol)) "Tank.png"
 
 s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
 
-s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+: S "," +:+
-  S "initial" +:+ plural condition +:+ S "for the" +:+ (phrase $ temp_W ^. term) +:+
-  S "and the" +:+ (phrase $ temp_PCM ^. term) :+: S ", and" +:+
-  S "material properties, the" +:+
-  plural goalStmt +:+ S "are:")
+s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+:
+  S ", initial" +:+ plural condition +:+ S "for the" +:+
+  (phrase $ temp_W ^. term) +:+ S "and the" +:+ (phrase $ temp_PCM ^. term) :+:
+  S ", and material properties, the" +:+ plural goalStmt +:+ S "are:")
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.
@@ -376,7 +380,7 @@ s4_1_3_list = Enumeration (Simple [((short goalStmt) :+: S "1", Flat
 
 -- List structure is repeated between examples. (For all of these lists I am 
 -- imagining the potential for something like what was done with the lists in 
--- MG, where you define goals, assumptions, physical system components, etc. in 
+-- MG, where you define goals, assumptions, physical system components, etc. in
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
@@ -392,13 +396,13 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
   S "and their derivation is also presented, so that the" +:+
   (plural inModel) +:+. S "can be verified")
 
--- General besides progName, repeated in only one other example but it could be 
+-- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
 
 s4_2_1 = section (titleize' assumption) [s4_2_1_intro, s4_2_1_list] []
 
 s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
-  S "the original" +:+ phrase problem +:+ S "and helps in developing the" +:+ 
+  S "the original" +:+ phrase problem +:+ S "and helps in developing the" +:+
   phrase thModel +:+ S "by filling in the missing" +:+
   phrase information +:+ S "for the" +:+ phrase physicalSystem :+:
   S ". The numbers given in the square brackets refer to the" +:+ 
@@ -435,10 +439,10 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   term) +:+ S "[GD2" `sC` makeRef s4_2_4_DD2 `sC` S "LC1].")),
 --
   ((short assumption) :+: S "5", Flat (S "The" +:+ 
-  (phrase $ w_density ^. term) +:+ S "and" +:+ (phrase $ pcm_density ^. term) +:+
-  S "have no spatial variation; that is, they are each" +:+
-  S "constant over their entire" +:+ (phrase $ volume ^. term) +:+. 
-  S "[GD2]")),
+  (phrase $ w_density ^. term) +:+ S "and" +:+
+  (phrase $ pcm_density ^. term) +:+ S "have no spatial variation; that" +:+
+  S "is, they are each constant over their entire" +:+
+  (phrase $ volume ^. term) +:+. S "[GD2]")),
 --
   ((short assumption) :+: S "6", Flat (S "The" +:+ (phrase $ htCap_W ^.
   term) :+: S "," +:+ (phrase $ htCap_S_P ^. term) :+: S ", and" +:+ 
@@ -523,14 +527,15 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 
 -- Again, list structure is same between all examples.
 
--- Can booktabs colored links be used? The box links completely cover nearby 
+-- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
 
-s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
+s4_2_2 = section (titleize' thModel)
+  [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 
-s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on the" +:+
-  phrase general +:+ S "equations and laws that" +:+ (short progName) +:+
-  S "is based on.")
+s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
+  S "the" +:+ phrase general +:+ S "equations and laws that" +:+
+  (short progName) +:+ S "is based on.")
 
 -- General paragraph (besides progName), repeated in all examples. Can be 
 -- abstracted out.
@@ -630,22 +635,23 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 s4_2_5 = section (titleize' inModel) ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
   (s4_2_5_deriv2)) []
 
-s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +:+
-  phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+ S "into one which" +:+
-  S "is expressed in mathematical terms. It uses concrete" +:+
+s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
+  S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+
+  S "into one which is expressed in mathematical terms. It uses concrete" +:+
   plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+ plural model +:+
-  S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+. (makeRef s4_2_3)), 
+  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
+  plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
+  (makeRef s4_2_3)), 
   Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
-  S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+
-  P (temp_PCM ^. symbol) +:+ S "depend on one another. IM3" +:+
+  S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+
+  S "and" +:+ P (temp_PCM ^. symbol) +:+ S "depend on one another. IM3" +:+
   S "can be solved once IM1 has been solved. The" +:+ phrase solution +:+
   S "of IM2 and IM4 are also coupled, since the" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "and" +:+ (phrase $ pcm_E ^. term) +:+
   S "depend on the" +:+ (sLower (phrase $ phase_change ^. 
-  term)) :+: S ". (" :+: at_start' inModel +:+ S "are left out because they" +:+
-  S "are not currently implemented in Drasil.)")]
+  term)) :+: S ". (" :+: at_start' inModel +:+ S "are left out because" +:+
+  S "they are not currently implemented in Drasil.)")]
 
 -- The first paragraph is completely general and repeated in other examples. 
 -- The second paragraph is very specific, and the other examples don't even 
@@ -653,7 +659,7 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms the" +
 
 -- Instance Models aren't implemented yet
 
-s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+ 
+s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   (sLower ((phrase $ water ^. term))) :+: S ":"),
   Paragraph (S "To find the rate of change of" +:+ P (temp_W ^.
   symbol) :+: S ", we look at the energy balance on" +:+
@@ -737,8 +743,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
-s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
-  S "the" +:+ (short phsChgMtrl) +:+ S "during" +:+ 
+s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance" +:+
+  S "on the" +:+ (short phsChgMtrl) +:+ S "during" +:+ 
   (sLower (phrase $ sens_heat ^. term)) :+: S "ing phase:"),
   Paragraph (S "To find the rate of change of" +:+ P (temp_PCM ^.
   symbol) :+: S ", we look at the energy balance on the" +:+ 
@@ -753,8 +759,8 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
   S "The" +:+ (phrase $ ht_flux_P ^. term) +:+ S "is" +:+ 
   P (ht_flux_P ^. symbol) +:+ S "over" +:+ (phrase $ pcm_SA ^. term) +:+
   P (pcm_SA ^. symbol) :+: S ". There is no" +:+ 
-  (phrase $ ht_flux_out ^. term) :+: S ". Assuming no" +:+ (phrase $ vol_ht_gen
-  ^. term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+: 
+  (phrase $ ht_flux_out ^. term) :+: S ". Assuming no" +:+
+  (phrase $ vol_ht_gen ^. term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+:
   S "=0, the equation for GD2 can be written as:"),
   EqnBlock 
    ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
@@ -780,7 +786,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance on" +:+
    (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
    ((C temp_W) - (C temp_PCM))),
   Paragraph (S "Equation (6) applies for the" +:+ 
-  (sLower ((phrase $ solid ^. term))) +:+ EmptyS +:+ (short phsChgMtrl) :+: 
+  (sLower ((phrase $ solid ^. term))) +:+ EmptyS +:+ (short phsChgMtrl) :+:
   S ". In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
   S "derivation applies, except that" +:+ P (htCap_S_P ^. 
@@ -814,16 +820,16 @@ s4_2_6 = section (titleize' datum +:+ titleize' constraint) [s4_2_6_intro] []
 
 s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the data" +:+
   plural constraint +:+ S "on the input and output variables," +:+
-  S "respectively. The column for" +:+ phrase physical +:+ plural constraint +:+
-  S "gives the" +:+ phrase physical +:+ S "limitations on the range of" +:+
-  S "values that can be taken by the variable. The column for software" +:+
-  plural constraint +:+ S "restricts the range of inputs to reasonable" +:+
-  S "values. The" +:+ plural constraint +:+ S "are conservative, to" +:+
-  S "give the user of the" +:+ phrase model +:+ S "the flexibility to" +:+
-  S "experiment with unusual situations. The column of typical values is" +:+
-  S "intended to provide a feel for a common scenario. The" +:+
-  S "uncertainty column provides an estimate of the confidence" +:+
-  S "with which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
+  S "respectively. The column for" +:+ phrase physical +:+
+  plural constraint +:+ S "gives the" +:+ phrase physical +:+
+  S "limitations on the range of values that can be taken by the variable." +:+
+  S "The column for software" +:+ plural constraint +:+ S "restricts the" +:+
+  S "range of inputs to reasonable values. The" +:+ plural constraint +:+
+  S "are conservative, to give the user of the" +:+ phrase model +:+
+  S "the flexibility to experiment with unusual situations. The column of" +:+
+  S "typical values is intended to provide a feel for a common scenario." +:+
+  S "The uncertainty column provides an estimate of the confidence with" +:+
+  S "which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the input if" +:+
   S "one were performing an uncertainty quantification exercise. (The" +:+
   plural table_ +:+ S "are left out because features they should use are" +:+
@@ -835,11 +841,11 @@ s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the data" +:+
 ---- The info from table 2 will likely end up in table 1.
 
 inputVar :: [UWrapper]
-inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map uw [coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map uw [coil_SA,
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
   
--- Typical values and constraints must be added to UC definitions for mkTable 
+-- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.
 
 -- table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
@@ -860,8 +866,12 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
 s4_2_7 = section (S "Properties of a Correct Solution") (s4_2_7_deriv) []
---s4_2_7 = section (of'' titleize' titleize property (aNP corSol)) (s4_2_7_deriv) []
--- s4_2_7 = section (property `of_` (aNP  correct +:+ titleize solution)) (s4_2_7_deriv) []
+
+--s4_2_7 = section (of'' titleize' titleize property (aNP corSol))
+--  (s4_2_7_deriv) []
+
+-- s4_2_7 = section (property `of_` (aNP  correct +:+ titleize solution))
+--  (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:
@@ -878,7 +888,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
   EqnBlock 
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
-  [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
+  [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time]))) time)),
   Paragraph (S "In addition, the" +:+ (phrase $ pcm_E ^. term) :+: 
@@ -897,7 +907,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
   S "results calculated from the" +:+ (short rightSide) :+: 
   S " of these equations should be less than 0.001% (R9).")]
 
--- Above section only occurs in this example (although maybe it SHOULD be in 
+-- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).
 
 -- Remember to insert references in above derivation when available
@@ -917,7 +927,8 @@ s5_1 = section (titleize' functionalRequirement) (s5_1_list) []
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
   (S "Input the following quantities, which define the" +:+
   (sLower ((phrase $ tank ^. term))) :+: 
-  S " parameters, material properties and initial" +:+ plural condition :+: S ":"))]), 
+  S " parameters, material properties and initial" +:+ plural condition :+:
+  S ":"))]),
   (Table [phrase symbol_, phrase unit_, phrase description] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
@@ -995,9 +1006,10 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 
 s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_contents] []
 
-s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC`
-  S "of this" +:+ phrase problem :+: S ", performance is not a priority. Any" +:+
-  S "reasonable implementation will be very quick and use" +:+
+s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
+  `sC`
+  S "of this" +:+ phrase problem :+: S ", performance is not a priority." +:+
+  S "Any reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
   S "nonfunctional" +:+ plural requirement +:+ 
   S "are correctness, verifiability" `sC`
@@ -1005,7 +1017,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity" `sC
 
 -- The second sentence of the above paragraph is repeated in all examples (not 
 -- exactly, but the general idea is). The first sentence is not always 
--- repeated, but it is always either stating that performance is a priority or 
+-- repeated, but it is always either stating that performance is a priority or
 -- performance is not a priority. This is probably something that can be 
 -- abstracted out.
 
@@ -1020,7 +1032,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   S "the" +:+ (phrase assumption) +:+
   S "of uniform" +:+ (phrase $ temp_PCM ^. term) +:+. S "is not likely")),
 --
-  ((short likelyChg) :+: S "2", Flat (S "A8 - The" +:+ (phrase $ temp_C ^. 
+  ((short likelyChg) :+: S "2", Flat (S "A8 - The" +:+ (phrase $ temp_C ^.
   term) +:+ S "will change over the course of the day, depending" +:+.
   S "on the energy received from the sun")),
 --
@@ -1072,39 +1084,39 @@ s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
   (plural likelyChg) +:+ S "on the" +:+.
   (titleize' assumption))
 
--- Completely general paragraph, and similar ones in other example, but slight 
+-- Completely general paragraph, and similar ones in other example, but slight
 -- differences in what is included in each matrix. Perhaps we can abstract out 
 -- which types of items are associated with each matrix i.e. instance models, 
--- assumptions, requirements, etc.. If so, this paragraph can be abstracted out.
+-- assumptions, requirements, etc. If so, this paragraph can be abstracted out.
 
 s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
   makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 
   makeRef s4_2_4_DD2, makeRef s4_2_4_DD3, makeRef s4_2_4_DD3, S "IM1",
   S "IM2", S "IM3", S "IM4"]
-  [[makeRef s4_2_2_T1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[makeRef s4_2_2_T1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T2, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "GD1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T2, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [S "GD2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "GD1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "GD2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
   [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [makeRef s4_2_4_DD2, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, EmptyS],
-  [S "IM2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS, S "X",
-  S "X", EmptyS, EmptyS, S "X"],
-  [S "IM3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
+  [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS],
+  [S "IM2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS,
+  S "X", S "X", EmptyS, EmptyS, S "X"],
+  [S "IM3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS, S "X", EmptyS, EmptyS]]
   (S "Traceability Matrix Showing the Connections Between Items" +:+
@@ -1132,54 +1144,70 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
   (S "Traceability Matrix Showing the Connections Between" +:+
   (titleize' requirement) +:+ S "and" +:+ (titleize' inModel)) True
 
-s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7",
-  S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
+s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
+  S "A7", S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
   S "A15", S "A16", S "A17", S "A18", S "A19"]
   [[makeRef s4_2_2_T1, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
-  EmptyS],
-  [makeRef s4_2_2_T2, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "GD1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T2, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS],
+  [S "GD1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS],
   [S "GD2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS],
   [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS , 
+  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS],
   [makeRef s4_2_4_DD2, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS],
+  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS],
+  [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS,
+  S "X"],
+  [S "IM2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS, S "X"],
-  [S "IM2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, S "X", S "X", S "X", EmptyS],
-  [S "IM3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X"],
-  [S "IM4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS],
-  [S "LC1", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "LC2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "LC3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "LC4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "LC5", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "LC6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS]]
+  [S "IM3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  EmptyS, S "X"],
+  [S "IM4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  EmptyS],
+  [S "LC1", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS],
+  [S "LC2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS],
+  [S "LC3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS],
+  [S "LC4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS],
+  [S "LC5", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS],
+  [S "LC6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
+  EmptyS, EmptyS]]
   (S "Traceability Matrix Showing the Connections Between" +:+
   (titleize' assumption) +:+ S "and Other Items") True
 
--- These matrices can probably be generated automatically when enough info is 
+-- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
 
 -- Wrong DD reference above, change when DD4 is available
@@ -1187,8 +1215,8 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6", S "A7
 s7_intro2 = [Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
   S "traceability graphs is also to provide easy references on what has" +:+
   S "to be additionally modified if a certain component is changed. The" +:+
-  S "arrows in the graphs represent dependencies. The component at the tail" +:+
-  S "of an arrow is depended on by the component at the head of" +:+
+  S "arrows in the graphs represent dependencies. The component at the" +:+
+  S "tail of an arrow is depended on by the component at the head of" +:+
   S "that arrow. Therefore, if a component is changed, the" +:+
   S "components that it points to should also be changed." +:+
   makeRef s7_fig1 +:+ S "shows the dependencies of" +:+

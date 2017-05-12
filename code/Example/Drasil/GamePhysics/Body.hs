@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils (foldle, foldlSent)
+import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList)
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 
@@ -314,11 +314,10 @@ s4_1_2_stmt4 = foldlSent
   (plural $ rigidBody ^. term), S "that have undergone a", 
   (phrase $ collision ^. term)]
 
-s4_1_2_list = Enumeration (Simple 
-  [((getAcc goalStmt) :+: S "1", Flat s4_1_2_stmt1),
-  ((getAcc goalStmt) :+: S "2", Flat s4_1_2_stmt2),
-  ((getAcc goalStmt) :+: S "3", Flat s4_1_2_stmt3),
-  ((getAcc goalStmt) :+: S "4", Flat s4_1_2_stmt4)])
+s4_1_2_list' :: [Sentence]
+s4_1_2_list' = [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4]
+
+s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList goalStmt s4_1_2_list')
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -367,14 +366,12 @@ s4_2_1_assum6 = foldlSent [S "There is no damping",
 s4_2_1_assum7 = foldlSent [S "There are no constraints",
   S "and joints involved throughout the simulation"]
 
-s4_2_1_list = Enumeration (Simple [
-  ((getAcc assumption) :+: S "1", Flat s4_2_1_assum1),
-  ((getAcc assumption) :+: S "2", Flat s4_2_1_assum2),
-  ((getAcc assumption) :+: S "3", Flat s4_2_1_assum3),
-  ((getAcc assumption) :+: S "4", Flat s4_2_1_assum4),
-  ((getAcc assumption) :+: S "5", Flat s4_2_1_assum5),
-  ((getAcc assumption) :+: S "6", Flat s4_2_1_assum6),
-  ((getAcc assumption) :+: S "7", Flat s4_2_1_assum7)])
+s4_2_1_list' :: [Sentence]
+s4_2_1_list' = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
+               s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
+
+s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList assumption s4_2_1_list')
+
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --
@@ -572,16 +569,11 @@ s5_1_req8 = foldlSent
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
-s5_1_list = Enumeration (Simple [
-  ((getAcc requirement) :+: S "1", Flat s5_1_req1),
-  ((getAcc requirement) :+: S "2", Flat s5_1_req2),
-  ((getAcc requirement) :+: S "3", Flat s5_1_req3),
-  ((getAcc requirement) :+: S "4", Flat s5_1_req4),
-  ((getAcc requirement) :+: S "5", Flat s5_1_req5),
-  ((getAcc requirement) :+: S "6", Flat s5_1_req6),
-  ((getAcc requirement) :+: S "7", Flat s5_1_req7),
-  ((getAcc requirement) :+: S "8", Flat s5_1_req8)
-  ])
+s5_1_list' :: [Sentence]
+s5_1_list' = [s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
+            s5_1_req7, s5_1_req8]
+
+s5_1_list = Enumeration (Simple $ mkEnumAbbrevList requirement s5_1_list')
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -627,11 +619,12 @@ s6_likelyChg_stmt3 = S "The library may be" +:+.
 s6_likelyChg_stmt4 = S "The library may be" +:+.
   S "expanded to include joints and constraints"
 
-s6_list = Enumeration (Simple [
-  ((getAcc likelyChg) :+: S "1", Flat s6_likelyChg_stmt1),
-  ((getAcc likelyChg) :+: S "2", Flat s6_likelyChg_stmt2),
-  ((getAcc likelyChg) :+: S "3", Flat s6_likelyChg_stmt3),
-  ((getAcc likelyChg) :+: S "4", Flat s6_likelyChg_stmt4)])
+s6_list' :: [Sentence]
+s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
+                    s6_likelyChg_stmt4]
+
+s6_list = Enumeration (Simple $ mkEnumAbbrevList likelyChg s6_list')
+
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --

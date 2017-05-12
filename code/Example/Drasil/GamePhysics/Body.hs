@@ -182,7 +182,7 @@ s3_intro = Paragraph $ foldlSent
   [S "This section provides general information",
   S "about the system, identifies the interfaces between the system and",
   S "its environment, and describes the user characteristics and the",
-  S "system constraints"]
+  S "system", (plural constraint_)]
 
 --------------------------------
 -- 3.1 : User Characteristics --
@@ -207,7 +207,7 @@ s3_2_intro :: Contents
 
 s3_2 = section (titleize' systemConstraint) [s3_2_intro] []
 
-s3_2_intro = Paragraph $ S "There are no system constraints."
+s3_2_intro = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
 ---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --
@@ -366,7 +366,7 @@ s4_2_1_assum5 = foldlSent [S "All", (plural $ rigidBody ^. term),
   (plural $ collision ^. term)]
 s4_2_1_assum6 = foldlSent [S "There is no damping", 
   S "involved throughout the simulation"]
-s4_2_1_assum7 = foldlSent [S "There are no constraints",
+s4_2_1_assum7 = foldlSent [S "There are no", (plural constraint_),
   S "and joints involved throughout the simulation"]
 
 s4_2_1_list' :: [Sentence]
@@ -463,11 +463,11 @@ s4_2_6 = section (titleize' datumConstraint) [s4_2_6_intro, s4_2_6_table1,
   s4_2_6_table2] []
 
 s4_2_6_intro = Paragraph $ foldlSent 
-  [S "Table 1 and 2 show the data constraints on",
+  [S "Table 1 and 2 show the", (plural datumConstraint),S "on",
   S "the input and output variables, respectively. The",
   (Quote $ titleize' physicalConstraint), S "column gives the physical",
   S "limitations on the range of values that can be taken by the",
-  S "variable. The constraints are conservative, to give the user of the",
+  S "variable. The", (plural constraint_), S "are conservative, to give the user of the",
   S "model the flexibility to experiment with unusual situations. The",
   S "column of typical values is intended to provide a feel for a",
   S "common scenario"]
@@ -546,7 +546,7 @@ s5_1_req2 = foldlSent [S "Input the initial",
   (plural $ rigidBody ^. term)]
 
 s5_1_req3 = foldlSent [S "Input the", (phrase $ surface ^. term), 
-  S "properties of the bodies, such as", (phrase $ friction ^. term), 
+  (plural property), S "of the bodies, such as", (phrase $ friction ^. term), 
   S "or", (phrase $ elasticity ^. term)]
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
@@ -623,7 +623,7 @@ s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be",
   S "expanded to include motion with damping"]
 
 s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to include joints and constraints"]
+  S "expanded to include joints and", (plural constraint_)]
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
@@ -651,8 +651,8 @@ s7_2dlist = Enumeration (Bullet [
   Flat (S "Box2D: http://box2d.org/"),
   Flat (S "Nape" +:+ (titleize physics) +:+ S "Engine: http://napephys.com/")])
 
-s7_mid = Paragraph $ S "Free" +:+ (phrase openSource) +:+ 
-        S "3D" +:+ (phrase game) +:+ (plural physicsLibrary) +:+ S "include:"
+s7_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
+        S "3D", (phrase game), (plural physicsLibrary), S "include:"]
 
 s7_3dlist = Enumeration (Bullet $ map (Flat) [
   (S "Bullet: http://bulletphysics.org/"),

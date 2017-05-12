@@ -73,7 +73,7 @@ angVelo = dcc "angularVelocity" (compoundPhrase' (angular ^. term)
                   (velocity ^. term))
                   "The rate of change of angular position of a rotating body"
 angAccel = dcc "angularAcceleration"
-                  (compoundPhrase' (angular ^. term)(acceleration ^. term))
+                  (compoundPhrase' (angular ^. term) (acceleration ^. term))
                   "The rate of change of angular velocity"
 linDisp = dcc "linearDisplacement" (compoundPhrase' (linear ^. term)
                   (displacement ^. term)) "Movement in one direction along a single axis"

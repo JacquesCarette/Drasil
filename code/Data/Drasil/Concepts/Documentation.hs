@@ -27,14 +27,14 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, client, condition, constraint_, connection, customer,
-  datum, definition, dependency, description, design, document, environment, 
-  figure, functional, game, general, individual, information, introduction, 
-  library, model, name_, nonfunctional, offShelf, open, organization, physics, 
-  physical, problem, product_, project, property, purpose, quantity, realtime, 
-  reference, requirement_, scope, source, section_, simulation, solution, 
-  specific, specification, stakeholder, symbol_, system, table_, terminology, 
-  theory, traceyMatrix, unit_, user, useCase, video :: NPNC
+appendix, characteristic, client, condition, constraint_, connection, 
+  customer, datum, definition, dependency, description, design, document, 
+  environment, figure, functional, game, general, individual, information, 
+  introduction, library, model, name_, nonfunctional, offShelf, open, 
+  organization, physics, physical, problem, product_, project, property, 
+  purpose, quantity, realtime, reference, requirement_, scope, source, section_, 
+  simulation, solution, specific, specification, stakeholder, symbol_, system, 
+  table_, terminology, theory, traceyMatrix, unit_, user, useCase, video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")

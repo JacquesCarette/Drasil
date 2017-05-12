@@ -135,7 +135,7 @@ s2_3_intro =
   phrase sciCompS +:+ S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+:
   S "), with some aspects taken from Volere template 16 [3]."
   
-s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
+s2_3_intro_end = (at_start $ the dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
   +:+ plural model
   
@@ -145,14 +145,14 @@ s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the" +: titleize' stakeholder +:+ 
   S "the people who have an interest in the" +:+. phrase product_
 
-s3_1 = section (S "The" +:+ titleize client) [s3_1_intro] []
+s3_1 = section (titleize $ the client) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
-  S "The" +:+ phrase client +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
+  (phrase $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
   S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ S "The" +:+ phrase client +:+
   S "has the final say on acceptance of the" +:+. phrase product_
 
-s3_2 = section (S "The" +:+ titleize customer) [s3_2_intro] []
+s3_2 = section (titleize $ the customer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
   S "The" +:+ plural customer +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)

@@ -105,7 +105,7 @@ s2_1_intro =
   (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
   S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+
   S "to provide all" +:+ phrase information +:+ S "necessary to understand and" +:+
-  S "verify the" +:+. phrase analysis +:+ "The" +:+ (short srs) +:+ S "is abstract" +:+
+  S "verify the" +:+. phrase analysis +:+ S "The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
   S "to solve it", Paragraph $ S "This" +:+ phrase document +:+ S "will be used" +:+
   S "as a starting point for subsequent development phases, including writing the" +:+
@@ -209,7 +209,7 @@ s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
-  (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ "There are two" +:+
+  (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:+
   S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
@@ -811,7 +811,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis"
   `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
-  phrase template +:+ "for scientific computing,") +:+ S "in Proceedings of the" +:+
+  phrase template +:+ S "for scientific computing,") +:+ S "in Proceedings of the" +:+
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
   titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 

@@ -24,9 +24,12 @@ instMdl = npnc "instMdl" (cn' "instance model")
 
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?
+factor, safety :: NPNC
+factor = npnc "factor" (cn' "factor")
+safety = npnc "safety" (cnIES "safety")
+
 fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" (nounPhrase'' (S "factor of safety") (S "factors of safety")
-  CapFirst (Replace $ S "Factor of Safety")) fs_desc fs_rel
+fs_rc = makeRC "fs_rc" (factor `of_''` safety) fs_desc fs_rel
 
 fs_rel :: Relation
 fs_rel = (C fs) := (C p) / (C s)

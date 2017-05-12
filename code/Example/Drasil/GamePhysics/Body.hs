@@ -274,10 +274,10 @@ s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
   [rigidBody, elasticity, ctrOfMass] ++ [termDefns cartesian] ++ 
   map termDefn [rightHand])
   where termDefn t = Flat (
-          (sMap capitalize (phrase $ t ^. term)) :+:
+          (titleize $ t ^. term) :+:
           S ":" +:+ (t ^. defn))
         termDefns t = Flat (
-          (sMap capitalize (phrase $ t ^. term)) :+:
+          (titleize $ t ^. term) :+:
           S "s:" +:+ (t ^. defn))
 
 -----------------------------

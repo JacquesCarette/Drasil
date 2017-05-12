@@ -85,7 +85,13 @@ compoundNPNC t1 t2 = NPNC
 compoundNPNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
 compoundNPNC' t1 t2 = NPNC 
   (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase'' (t1 ^. term) (t2 ^. term)) 
+  (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
+  
+compoundNPNC'' :: (NamedIdea a, NamedIdea b) => 
+  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NPNC
+compoundNPNC'' f1 f2 t1 t2 = NPNC
+  (t1 ^. id ++ t2 ^. id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
+  (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
   
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:

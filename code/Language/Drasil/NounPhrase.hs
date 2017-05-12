@@ -111,9 +111,11 @@ compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords CapWords
   
-compoundPhrase'' :: NP -> NP -> NP
-compoundPhrase'' t1 t2 = Phrase
-  (phrase t1 +:+ phrase t2) (plural t1 +:+ plural t2) CapWords CapWords
+compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+compoundPhrase'' f1 f2 t1 t2 = Phrase
+  (phrase t1 +:+ phrase t2) (f1 t1 +:+ f2 t2) CapWords CapWords
+  
+
 
 -- === Helpers === 
 

@@ -71,7 +71,7 @@ temp_coil   = uc' "temp_coil" (temp `of_` coil)
               fixme (sub cT cC) centigrade
 temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
               fixme (Concat [Greek Delta, cT]) centigrade
-temp_env    = uc' "temp_env" (nounPhraseSP temp `of_` environment)
+temp_env    = uc' "temp_env" (temp `of_` environment)
               fixme (sub cT (Atomic "env")) centigrade
 thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
               fixme (vec lQ) U.thermal_flux

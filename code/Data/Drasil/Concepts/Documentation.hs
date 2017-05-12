@@ -34,7 +34,7 @@ appendix, characteristic, client, condition, constraint_, connection,
   organization, physics, physical, problem, product_, project, property, 
   purpose, quantity, realtime, reference, requirement_, scope, source, section_, 
   simulation, solution, specific, specification, stakeholder, symbol_, system, 
-  table_, terminology, theory, traceyMatrix, unit_, user, useCase, video :: NPNC
+  table_, terminology, theory, traceyMatrix, user, useCase, video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -88,7 +88,6 @@ table_          = npnc "table"          (cn' "table")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
-unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
 video           = npnc "video"          (cn' "video")
@@ -106,7 +105,6 @@ sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
 scpOfTheProj = npnc "scpOfTheProj" (scope `of'` the project) -- reasonable hack?
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
---tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 

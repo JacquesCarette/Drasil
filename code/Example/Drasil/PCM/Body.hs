@@ -46,8 +46,8 @@ s4_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
             (phrase $ problemDescription ^. term) :+: S ", which gives a high-level view of the" +:+
             (phrase $ problem ^. term) +:+ S "to be solved. This is followed by the" +:+
-            (phrase $ solutionCharSpec ^. term) :+:
-           S ", which presents the" +:+ (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
+            (phrase $ solutionCharSpec ^. term) :+: S ", which presents the" +:+
+            (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
             (plural $ definition ^. term) +:+ S "and finally the" +:+
             (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
 
@@ -72,7 +72,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $
 s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph $
-           S "The physical" +:+ (phrase $ system ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
+           S "The" +:+ (phrase $ physicalSystem ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
            S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following elements:"
 
 fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+

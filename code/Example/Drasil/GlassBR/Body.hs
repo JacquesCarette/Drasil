@@ -142,15 +142,15 @@ s2_3_intro_end = S "The" +:+ (plural dataDefn) +:+
 s3 = section (titleize' stakeholder) [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the" +:+.
-  S "people who have an interest in the product"
+  S "This" +:+ phrase section_ +:+ S "describes the Stakeholders: the" +:+
+  S "people who have an interest in the" +:+. phrase product_
 
 s3_1 = section (titleize theClient) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
   S "The client for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+
-  S "Entuitive. It is developed by Dr. Manuel Campidelli. The client has" +:+.
-  S "the final say on acceptance of the product"
+  S "Entuitive. It is developed by Dr. Manuel Campidelli. The client has" +:+
+  S "the final say on acceptance of the" +:+. phrase product_
 
 s3_2 = section (titleize theCustomer) [s3_2_intro] []
 
@@ -181,19 +181,18 @@ s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 s4_2_intro = Paragraph $
   (short notApp)
 
---s5 = section (S "Scope of the Project") [s5_intro] [s5_1, s5_2]
 s5 = section (titleize scpOfTheProj) [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "presents the scope of the project. It" +:+
-  S "describes the expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
+  S "This" +:+ phrase section_ +:+ S "presents the" +:+. phrase scpOfTheProj +:+ 
+  S "It describes the expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
   S "inputs and outputs of each action. The use cases are input and" +:+
   S "output, which defines the action of getting the input and displaying" +:+.
   S "the output"
 
 s5_1 = section (titleize prodUCTable) [s5_1_table] []
 
-s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor", 
+s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ S "Name", S "Actor", 
   S "Input and Output"] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", S "Inputs", titleize user, titleize' characteristic +:+ S "of the" +:+
@@ -204,12 +203,12 @@ s5_1_table = Table [S "Use Case NO.", S "Use Case Name", S "Actor",
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated values"]])
-  (titleize table_ +:+ S "1: Use Case Table") True
+  (titleize table_ +:+ S "1:" +:+ titleize useCaseTable) True
 
 s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
-  [(S "Use Case 1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
+  [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
   (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
   S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
@@ -241,7 +240,7 @@ s6 = section (titleize specificsystemdescription) [s6_intro] [s6_1,
 s6_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription `sC` S "which gives a" +:+
   S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This is followed by the" +:+
-  phrase solution +:+ phrase characteristicSpecification :+: S ", which presents the" +:+
+  phrase solutionCharSpec :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
 s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1, 
@@ -325,7 +324,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "will be able to withstand the explosion of a certain degree which" +:+
   S "is calculated based on" +:+ phrase user +:+. S "input")]
 
-s6_2 = section (titleize solution +:+ titleize characteristicSpecification) 
+s6_2 = section (titleize solutionCharSpec) 
   [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
 s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +:+
@@ -418,9 +417,9 @@ s6_2_5 = section (titleize' datumConstraint) [s6_2_5_intro, --s6_2_5_table1,
 
 s6_2_5_intro = Paragraph $
   titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
-  S ") shows the data" +:+
-  S "constraints on the input variables. The column of" +:+ phrase physical +:+
-  S "constraints gives the" +:+ phrase physical +:+ S "limitations on the range" +:+
+  S ") shows the" +:+ plural datumConstraint +:+
+  S "on the input variables. The column of" +:+ plural physicalConstraint +:+
+  S "gives the" +:+ phrase physical +:+ S "limitations on the range" +:+
   S "of values that can  be taken by the variable. The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
   S "are conservative, to give" +:+ S "the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+ 
   S "the flexibility to experiment with unusual situations. The column of" +:+.
@@ -483,8 +482,8 @@ s7_1 = section (titleize' functionalRequirement)
   ([s7_1_intro] ++ (s7_1_list)) []
 
 s7_1_intro = Paragraph $
-  S "The following" +:+ phrase section_+:+ S "provides the functional" +:+
-  plural requirement `sC` S "the business tasks that the software" +:+.
+  S "The following" +:+ phrase section_+:+ S "provides the" +:+ 
+  plural functionalRequirement `sC` S "the business tasks that the software" +:+.
   S "is expected to complete"
 
 s7_1_list = 
@@ -516,8 +515,8 @@ s7_1_list =
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
-  S "the entered input values to ensure that they do not exceed the data" +:+
-  S "constraints mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
+  S "the entered input values to ensure that they do not exceed the" +:+ plural datumConstraint +:+
+  S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
   S "the input parameters is out of bounds, an error message is" +:+
   S "displayed and the" +:+ (plural $ calculation ^. term) +:+. S "stop"),
   (((short requirement) :+: S "4"), S "Output the input" +:+ plural quantity +:+
@@ -562,7 +561,7 @@ s7_2_intro = Paragraph $
   S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
   S "performance is not a priority. Any reasonable implementation will" +:+
   S "be very quick and use minimal storage. Rather than performance" `sC`
-  S "the priority nonfunctional" +:+ (short requirement) :+: 
+  S "the priority" +:+ phrase nonfunctional +:+ (short requirement) :+: 
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 
@@ -602,12 +601,12 @@ s9_intro1 = Paragraph $
   S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
-  S "Table 6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
+  titleize table_ +:+ S "6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural requirement +:+ S "on" +:+ 
   plural thModel `sC`
   (plural inModel) `sC`
-  (plural dataDefn) +:+. S "and data constraints" +:+
-  S "Table 7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
+  (plural dataDefn) +:+. S "and" +:+ plural datumConstraint +:+
+  titleize table_ +:+ S "7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC`
   (plural dataDefn) `sC`
   plural inModel `sC`
@@ -686,8 +685,8 @@ s9_table2 = Table [EmptyS, S "T1 (" :+:
   (makeRef (Definition (Data glaTyFac))) :+: S ")", S "DD7 (" :+:
   (makeRef (Definition (Data dL))) :+: S ")", S "DD8 (" :+:
   (makeRef (Definition (Data tolPre))) :+: S ")", S "DD9 (" :+:
-  (makeRef (Definition (Data tolStrDisFac))) :+: S ")", S "Data Constraints (" 
-  :+: (makeRef s6_2_5) :+: S ")", S "R1 (in" +:+ (makeRef s7_1) :+: S ")",
+  (makeRef (Definition (Data tolStrDisFac))) :+: S ")", titleize' datumConstraint +:+
+  S "(" :+: (makeRef s6_2_5) :+: S ")", S "R1 (in" +:+ (makeRef s7_1) :+: S ")",
   S "R2 (in" +:+ (makeRef s7_1) :+: S ")"]
   [[S "R1 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
@@ -781,7 +780,7 @@ s9_intro2 =
   S "of" +:+ plural requirement +:+ S "on" +:+
   plural thModel `sC` 
   plural inModel `sC`
-  (plural dataDefn) +:+. S "and data constraints" +:+
+  (plural dataDefn) +:+. S "and" +:+ plural datumConstraint +:+
   titleize figure +:+ S "4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ 
   S "of" +:+ plural thModel `sC` 
   plural inModel `sC`

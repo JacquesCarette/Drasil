@@ -182,7 +182,7 @@ s3_intro = Paragraph $ foldlSent
   [S "This section provides general information",
   S "about the system, identifies the interfaces between the system and",
   S "its environment, and describes the user characteristics and the",
-  S "system", (plural constraint_)]
+  (plural systemConstraint)]
 
 --------------------------------
 -- 3.1 : User Characteristics --

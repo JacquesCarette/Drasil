@@ -27,9 +27,6 @@ swhs:
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)MG.tex ./MG/$(SWHS_PREF)MG.tex >> $(SWHS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.css ./Website/$(SWHS_PREF)SRS.css >> $(SWHS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.html ./Website/$(SWHS_PREF)SRS.html >> $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS2.tex ./SRS/$(SWHS_PREF)SRS2.tex >> $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS2.css ./Website/$(SWHS_PREF)SRS2.css >> $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS2.html ./Website/$(SWHS_PREF)SRS2.html >> $(SWHS_PREF)log.log 2>&1
 	
 tiny:
 	stack build :tiny

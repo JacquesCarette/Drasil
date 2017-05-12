@@ -56,7 +56,6 @@ glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 --FIXME: Missing ToS intro because this example was using the default 
 -- (nuclear literature related) intro.
 
---FIXME: Should "blast risk" be its own chunk?
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
@@ -78,12 +77,11 @@ s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
   S "Software is helpful to efficiently and correctly predict the" +:+ 
-  (phrase $ blast ^. term) +:+ S "risk involved with the" +:+. 
+  (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+. 
   (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
   +:+ S "under consideration is" +:+. (sLower (blast ^. defn)) +:+ --FIXME: find a way to remove "sLower" entirely.
   S "The software, herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
-  S "predict the" +:+ (phrase $ blast ^. term) +:+ 
-  S "risk involved with the" +:+ 
+  S "predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview" +:+
   S "of the" +:+ titleize srs +:+ sParen (short srs) +:+ S "for" +:+. 
@@ -172,8 +170,8 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+ phrase theory +:+
-  S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+ (phrase $ blast ^. term) +:+.
-  S "risk"), (S "The end" +:+ phrase user +:+ S "is expected to have basic computer" +:+.
+  S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. (phrase $ blastRisk ^. term)),
+  (S "The end" +:+ phrase user +:+ S "is expected to have basic computer" +:+.
   S "literacy to handle the software")]
 
 s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
@@ -248,7 +246,7 @@ s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1,
 
 s6_1_intro = Paragraph $ 
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
-  +:+ (phrase $ blast ^. term) +:+. S "risk involved with the glass" +:+ (gLassBR ^. defn)
+  +:+ (phrase $ blastRisk ^. term) +:+. S "involved with the glass" +:+ (gLassBR ^. defn)
   +:+ S "is a" +:+ S "computer" +:+ phrase section_ +:+ S "developed to interpret the inputs"
   +:+ S "to give out the outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
@@ -569,10 +567,10 @@ s8 = section (titleize' likelyChg) [s8_list] []
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
-  S "3 - The" +:+ phrase system +:+ S "currently only calculates for external" +:+
-  (phrase $ blast ^. term) +:+. S "risk" +:+.
+  S "3 - The" +:+ phrase system +:+ S "currently only calculates for external" +:+.
+  (phrase $ blastRisk ^. term) +:+.
   (S "In the future" +:+ (plural $ calculation ^. term) +:+ S "can be added for the internal" +:+
-  (phrase $ blast ^. term) +:+ S "risk"))),
+  (phrase $ blastRisk ^. term)))),
   (((short likelyChg) :+: S "2"), ((short assumption) :+:
   S "4" `sC` (short assumption) :+: S "8 - Currently the values for"
   +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`

@@ -58,8 +58,9 @@ ht_xfer_co  = uc' "ht_xfer_co"
               (nounPhraseSP "convective heat transfer coefficient")
               "The proportionality constant between the heat flux and the thermodynamic driving force for the flow of thermal energy" lH U.heat_transfer_coef
 ht_xfer_CW  = uc' "ht_xfer_CW" 
-              (nounPhraseSP "convective heat transfer between coil and water")
-              "The transfer of thermal energy from the coil to another medium by the movement of water" (sub lH cC) U.heat_transfer_coef
+              (nounPhraseSP "convective heat transfer coefficient between coil and water")
+              "The convective heat transfer coefficient that models
+               the thermal flux from the coil to the surrounding water" (sub lH cC) U.heat_transfer_coef
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
 tank_D      = uc' "tank_D" (diameter `of_` tank) "The diameter of the tank" cD metre
@@ -74,9 +75,10 @@ temp_env    = uc' "temp_env" (temp `of_` environment)
 thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
               "Vector denoting the direction of thermal flux through a surface" (vec lQ) U.thermal_flux
 time_final  = uc' "time_final" (cn' "time")
-              "The amount of time elapsed since the beginning of its measurement" (sub lT (Atomic "final")) second
+              "The amount of time elapsed from the beginning of the
+               simulation to its conclusion" (sub lT (Atomic "final")) second
 temp_init   = uc' "temp_init" (cn' "initial temperature")
-              "The temperature of a substance at the beginning of measurements" (sub cT (Atomic "init")) centigrade
+              "The temperature at the beginning of the simulation" (sub cT (Atomic "init")) centigrade
 temp_water  = uc' "temp_water" (temp `of_` water)
               "The average kinetic energy of the particles within the water" (sub cT cW) centigrade
 water_dense = uc' "water_dense" (density `of_` water)

@@ -112,7 +112,7 @@ s2_1_intro =
   S "are to be realized, including" +:+ S "decisions on the numerical" +:+
   S "algorithms and programming" +:+. phrase environment +:+ S "The" +:+ phrase vav +:+ --'environment' used correctly?
   S "plan will show the steps that will be used to increase confidence in the" +:+
-  +:+ phrase software +:+. S "documentation and the implementation"]
+  phrase software +:+. S "documentation and the implementation"]
 
 s2_2 = section (titleize' scpOfReq) [s2_2_intro] []
 

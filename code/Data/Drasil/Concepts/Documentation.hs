@@ -96,8 +96,7 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
-  tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, theLibrary,
-  thePhysSys, theProj, corSol :: NPNC
+  tOfSymb{-, tOfUnits-}, traceyMandG, corSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
@@ -105,14 +104,9 @@ prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
-scpOfTheProj = npnc "scpOfTheProj" (scope `of'` theProj) -- reasonable hack?
+scpOfTheProj = npnc "scpOfTheProj" (scope `of'` the project) -- reasonable hack?
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 --tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
-theClient    = npnc "theClient"    (the client)
-theCustomer  = npnc "theCustomer"  (the customer)
-thePhysSys   = npnc "thePhysSys"   (the physicalSystem)
-theProj      = npnc "theProj"      (the project)
-theLibrary   = npnc "theLibrary"   (the library)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 

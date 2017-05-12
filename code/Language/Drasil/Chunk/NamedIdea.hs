@@ -166,13 +166,17 @@ and_' t1 t2 = nounPhrase''
   (Replace ((titleize $ t1 ^. term) +:+ S "and" +:+ (titleize' $ t2 ^. term)))
 
 
-the :: (NamedIdea c) => c -> NP
-the t = nounPhrase'' 
+the :: (NamedIdea c) => c -> NPNC
+the t = npnc ("the" ++ t ^. id) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
-  CapFirst CapWords
+  CapFirst CapWords)
 
 aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
 aNP t = nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))
   CapFirst CapWords  
   
+a_ :: (NamedIdea c) => c -> NPNC --Pluralization disallowed
+a_ t = npnc ("a" ++ t ^.id) (nounPhrase'' 
+  (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
+  CapFirst CapWords)

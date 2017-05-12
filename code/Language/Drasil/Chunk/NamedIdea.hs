@@ -122,15 +122,14 @@ of_ t1 t2 = nounPhrase''
   (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
   (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
---FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
--- | Creates a noun phrase by combining two 'NounPhrase's with the word "of" between
+-- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
 -- them. 'phrase' is defaulted to @(phrase t1) "of" (plural t2)@. Plural is the same.
-of' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
-of' t1 t2 = nounPhrase'' 
-  (phrase t1 +:+ S "of" +:+ plural t2)
-  (phrase t1 +:+ S "of" +:+ plural t2)
-  (Replace (at_start t1 +:+ S "of" +:+ plural t2))
-  (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))
+of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+of_' t1 t2 = nounPhrase'' 
+  ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
+  ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
+  (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (plural $ t2^.term)))
+  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize' $ t2 ^. term)))
 
 of'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
 of'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "of" +:+ (f2 $ t2 ^. term)

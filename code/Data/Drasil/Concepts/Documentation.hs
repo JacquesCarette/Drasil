@@ -1,9 +1,8 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil.Chunk.CommonIdea (CINP, commonINP)
-import Language.Drasil.Chunk.NamedIdea (of', of_, npnc, NPNC, compoundNPNC, compoundNPNC', compoundNPNC'', and_', the)
+import Language.Drasil
+
 import Data.Drasil.Concepts.Math (graph)
-import Language.Drasil.NounPhrase
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg, vav, desSpec, constraint :: CINP
@@ -102,9 +101,9 @@ orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
-scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
-scpOfTheProj = npnc "scpOfTheProj" (scope `of'` the project) -- reasonable hack?
-tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
+scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
+scpOfTheProj = npnc "scpOfTheProj" (scope `of_'` the project) -- reasonable hack?
+tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 

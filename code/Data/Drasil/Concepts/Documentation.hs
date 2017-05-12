@@ -112,7 +112,7 @@ sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
 scpOfTheProj = npnc "scpOfTheProj" (scope `of_'` the project) -- reasonable hack?
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
-traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
+traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 
 
 -- compounds

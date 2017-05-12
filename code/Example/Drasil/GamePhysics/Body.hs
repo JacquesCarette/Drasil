@@ -370,9 +370,9 @@ s4_2_1_assum5 = foldlSent [S "All", (plural $ rigidBody ^. term),
   (plural $ collision ^. term), S "are vertex-to-edge", 
   (plural $ collision ^. term)]
 s4_2_1_assum6 = foldlSent [S "There is no damping", 
-  S "involved throughout the simulation"]
+  S "involved throughout the", (phrase simulation)]
 s4_2_1_assum7 = foldlSent [S "There are no", (plural constraint_),
-  S "and joints involved throughout the simulation"]
+  S "and joints involved throughout the", (phrase simulation)]
 
 s4_2_1_list' :: [Sentence]
 s4_2_1_list' = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,

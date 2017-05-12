@@ -19,75 +19,72 @@ pcmSymbols = map cqs pcmUnits
 
 pcmUnits :: [UWrapper]
 pcmUnits = map uw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA,
-  htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol, --tank_vol, norm_vect, temp_boil,
-  ht_xfer_co, ht_xfer_CW, mass, tank_D, tank_L, temp, temp_coil, temp_diff, temp_env,
+  htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol,
+  ht_xfer_co, ht_xfer_CW, mass, tank_D, tank_L, tank_V, temp, temp_coil, temp_diff, temp_env,
   temp_init, temp_water, thFluxVect, time, time_final, vol, water_dense, water_m,
   water_vol]
 
 coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
-  ht_flux_in, ht_flux_out, ht_gen_vol, ht_xfer_co, ht_xfer_CW, tank_D, tank_L,--temp_boil,
-  temp_coil, temp_diff, temp_env, temp_init, temp_water, thFluxVect, time_final,--tank_vol,
+  ht_flux_in, ht_flux_out, ht_gen_vol, ht_xfer_co, ht_xfer_CW, tank_D, tank_L, tank_V,
+  temp_coil, temp_diff, temp_env, temp_init, temp_water, thFluxVect, time_final,
   water_dense, water_m, water_vol :: UnitalChunk
 
 -- convenience
-fixme :: String
-fixme = "FIXME: Define this or remove the need for definitions"
 
-coil_SA     = uc' "coil_SA" (cn' "coil surface area") fixme (sub cA cC) m_2
+coil_SA     = uc' "coil_SA" (cn' "coil surface area") "Area covered by the outermost layer of the coil" (sub cA cC) m_2
 dummyVar    = uc' "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")
-              fixme (Greek Tau_L) second
+              "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second
 hIn_SA      = uc' "hIn_SA" 
               (nounPhraseSP "surface area over which heat is transferred in")
-              fixme (sub cA (Atomic "in")) m_2
+              "Surface area over which thermal energy is transferred into an object" (sub cA (Atomic "in")) m_2
 hOut_SA     = uc' "hOut_SA" 
               (nounPhraseSP "surface area over which heat is transferred out")
-              fixme (sub cA (Atomic "out")) m_2
+              "Surface area over which thermal energy is transferred out of an object" (sub cA (Atomic "out")) m_2
 htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
-              fixme (sup cC cL) U.heat_cap_spec
+              "The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount"  (sup cC cL) U.heat_cap_spec
 htCap_W     = uc' "htCap_W" (heat_cap_spec `of_` water)
-              fixme (sub cC cW) U.heat_cap_spec
+              "The amount of energy required to raise the temperature of a given unit mass of water by a given amount" (sub cC cW) U.heat_cap_spec
 ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")
-              fixme (sub lQ cC) U.thermal_flux
+              "The rate of thermal energy transfer through the coil per unit time" (sub lQ cC) U.thermal_flux
 ht_flux_in  = uc' "ht_flux_in" (nounPhraseSP "heat flux in")
-              fixme (sub lQ (Atomic "in")) U.thermal_flux
+              "The rate of thermal energy transfer into an object through a given surface per unit time" (sub lQ (Atomic "in")) U.thermal_flux
 ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux out")
-              fixme (sub lQ (Atomic "out")) U.thermal_flux
+              "The rate of thermal energy transfer out of an object through a given surface per unit time" (sub lQ (Atomic "out")) U.thermal_flux
 ht_gen_vol  = uc' "ht_gen_vol" 
               (nounPhraseSP "volumetric heat generation per unit volume")
-              fixme lG U.thermal_flux
+              "Amount of thermal energy generated per unit volume" lG U.thermal_flux
 ht_xfer_co  = uc' "ht_xfer_co" 
               (nounPhraseSP "convective heat transfer coefficient")
-              fixme lH U.heat_transfer_coef
+              "The proportionality constant between the heat flux and the thermodynamic driving force for the flow of thermal energy" lH U.heat_transfer_coef
 ht_xfer_CW  = uc' "ht_xfer_CW" 
               (nounPhraseSP "convective heat transfer between coil and water")
-              fixme (sub lH cC) U.heat_transfer_coef
+              "The transfer of thermal energy from the coil to another medium by the movement of water" (sub lH cC) U.heat_transfer_coef
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
--- temp_boil   = uc' "T_boil" "temperature at boiling point" -- (sub cT (Atomic "boil")) centigrade
-tank_D      = uc' "tank_D" (diameter `of_` water) fixme cD metre
-tank_L      = uc' "tank_L" (len `of_` tank) fixme cL metre
+tank_D      = uc' "tank_D" (diameter `of_` tank) "The diameter of the tank" cD metre
+tank_L      = uc' "tank_L" (len `of_` tank) "The length of the tank" cL metre
+tank_V      = uc' "V_tank" (nounPhraseSP "volume of the cylindrical tank") "The amount of space encompassed by the tank" (sub cV (Atomic "tank")) m_3
 temp_coil   = uc' "temp_coil" (temp `of_` coil)
-              fixme (sub cT cC) centigrade
+              "The average kinetic energy of the particles within the coil" (sub cT cC) centigrade
 temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
-              fixme (Concat [Greek Delta, cT]) centigrade
+              "Measure of the relative amounts of internal energy within two bodies" (Concat [Greek Delta, cT]) centigrade
 temp_env    = uc' "temp_env" (temp `of_` environment)
-              fixme (sub cT (Atomic "env")) centigrade
+              "The tempature of a given environment" (sub cT (Atomic "env")) centigrade
 thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
-              fixme (vec lQ) U.thermal_flux
+              "Vector denoting the direction of thermal flux through a surface" (vec lQ) U.thermal_flux
 time_final  = uc' "time_final" (cn' "time")
-              fixme (sub lT (Atomic "final")) second
+              "The amount of time elapsed since the beginning of its measurement" (sub lT (Atomic "final")) second
 temp_init   = uc' "temp_init" (cn' "initial temperature")
-              fixme (sub cT (Atomic "init")) centigrade
+              "The temperature of a substance at the beginning of measurements" (sub cT (Atomic "init")) centigrade
 temp_water  = uc' "temp_water" (temp `of_` water)
-              fixme (sub cT cW) centigrade
---tank_vol    = uc' "V_tank" "volume of the cylindrical tank"   -- (sub cV (Atomic "tank")) m_3
+              "The average kinetic energy of the particles within the water" (sub cT cW) centigrade
 water_dense = uc' "water_dense" (density `of_` water)
-              fixme (sub (Greek Rho_L) cW) densityU
+              "The amount of mass per unit volume of water" (sub (Greek Rho_L) cW) densityU
 water_m     = uc' "water_m" (mass `of_` water)
-              fixme (sub (mass ^. symbol) cW) kilogram
+              "The amount of matter within a given quantity of water" (sub (mass ^. symbol) cW) kilogram
 water_vol   = uc' "water_vol" (vol `of_` water)
-              fixme (sub cV cW) m_3
+              "The amount of space occupied by a given quantity of water" (sub cV cW) m_3
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 --Common Terms
@@ -125,9 +122,12 @@ t1descr =
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 
   (P $ heat_cap_spec ^. symbol) :+: S " and density " :+: (P $ density ^. symbol) :+:
-  S ", where " :+: (P $ thFluxVect ^. symbol)) 
-  --TODO: Finish this description and do it better. I need to
-  --  figure out the best way to encode this information.
+  S ", where " :+: (P $ thFluxVect ^. symbol) +:+ S "is the thermal flux vector," +:+
+  (P $ ht_gen_vol ^. symbol) +:+ S "is the volumetric heat generation," +:+
+  (P $ temp ^. symbol) +:+ S "is the temperature," +:+ (P $ time ^. symbol) +:+
+  S "is time, and" +:+ (P $ gradient ^. symbol) +:+ S "is the gradient operator."
+  +:+ S "For this equation to apply, other forms of energy, such as mechanical"
+  +:+ S "energy, are assumed to be negligible in the system (A1).")
   
 srs_swhs :: ConceptChunk -- Used to make the title of the paper
   

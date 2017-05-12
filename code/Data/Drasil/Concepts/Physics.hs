@@ -28,7 +28,7 @@ elasticity = dcc "elasticity" (cnIES "elasticity")
   ("Ratio of the relative velocities " ++
   "of two colliding objects after and before a collision.")
 energy = dcc "energy" (cn "energy")
-  "power derived from the utilization of physical or chemical resources."
+  "Power derived from the utilization of physical or chemical resources."
 collision  = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++
   "in an exchange or transformation of energy.")
@@ -43,21 +43,21 @@ rightHand  = dcc "rightHand" (cn' "right-handed coordinate system")
   
   
 position   = dcc "position" (cn' "position")
-  "an object's location relative to a reference point"
+  "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
-  (S "the rate of change of a body's" +:+ (phrase $ velocity ^. term))
+  (S "The rate of change of a body's" +:+ (phrase $ velocity ^. term))
 displacement = dccWDS "displacement" (cn' "displacement")
-  (S "the change in" +:+ (position ^. defn))
+  (S "The change in" +:+ (position ^. defn))
 force      = dcc "force" (cn' "force")
-  "an interaction that tends to produce change in the motion of an object"
+  "An interaction that tends to produce change in the motion of an object"
 distance   = dcc "distance" (cn' "distance")
-  "the interval measured along a path connecting two locations"
+  "The interval measured along a path connecting two locations"
 stress    = dcc "stress" (cn'' "stress")
   ("Forces that are exerted between planes internal to" ++
   " a larger body subject to external loading.")
 strain    = dccWDS "strain" (cn' "strain")
   ((titleize $ stress ^. term) +:+
-  S "forces that result in deformation of the body/plane.")
+  S "Forces that result in deformation of the body/plane.")
 tension    = dccWDS "tension" (cn' "tension")
   (S "A" +:+ (phrase $ stress ^. term) +:+
   S "that causes displacement of the body away from its center.")
@@ -67,42 +67,45 @@ compression = dccWDS "compression" (cn' "compression")
   
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term)
-                  (displacement ^. term)) "fixme"
+                  (displacement ^. term))
+                  "The angle through which an object moves on a circular path"
 angVelo = dcc "angularVelocity" (compoundPhrase' (angular ^. term)
-                  (velocity ^. term)) "fixme"
+                  (velocity ^. term))
+                  "The rate of change of angular position of a rotating body"
 angAccel = dcc "angularAcceleration"
-                  (compoundPhrase' (angular ^. term)
-                  (acceleration ^. term)) "fixme"
+                  (compoundPhrase' (angular ^. term)(acceleration ^. term))
+                  "The rate of change of angular velocity"
 linDisp = dcc "linearDisplacement" (compoundPhrase' (linear ^. term)
-                  (displacement ^. term)) "fixme"
+                  (displacement ^. term)) "Movement in one direction along a single axis"
 linVelo = dcc "linearVelocity" (compoundPhrase' (linear ^. term)
-                  (velocity ^. term)) "fixme"
+                  (velocity ^. term)) "The speed of a moving object, dependent on the perspective taken"
 linAccel = dcc "linearAcceleration" (compoundPhrase' (linear ^. term)
-                   (acceleration ^. term)) "fixme"
+                   (acceleration ^. term)) "The rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
 -- FIXME: plurals below?
---TODO: The 'FIXME's below.
-fixme :: String
-fixme = "FIXME: MISSING DEFINITION"
 
-restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution") fixme
-momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia") fixme
+restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
+                  "A measure of the restitution of a collision between two objects"
+momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")
+                  "A quantity expressing a body's tendency to resist angular acceleration"
 
 --FIXME: These two should be built off "impulse"
-impulseV   = dcc "impulseV" (cn "impulse (vector)") fixme 
-impulseS   = dcc "impulseS" (cn "impulse (scalar)") fixme 
+impulseV   = dcc "impulseV" (cn "impulse (vector)")
+                  "A force acting briefly on a body and producing a finite change of momentum in a given direction" 
+impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a body and producing a finite change of momentum" 
 
 gravitationalAccel = dcc "gravitationalAccel" 
-  (cn "gravitational acceleration") fixme
+  (cn "gravitational acceleration") "An expression used in physics to indicate the intensity of a gravitational field"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
-  "gravitational constant (6.673 * 10E-11)"
+  "An empirical physical constant involved in the calculation of gravitational effects denoted by (6.673 * 10E-11)"
 
-time = dcc "time" (cn' "time") fixme
-torque = dcc "torque" (cn' "torque") fixme
+time = dcc "time" (cn' "time") "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
+torque = dcc "torque" (cn' "torque") "A twisting force that tends to cause rotation"
 
-fbd = dcc "FBD" (cn' "free body diagram") fixme
+fbd = dcc "FBD" (cn' "free body diagram")
+  "A graphical illustration used to visualize the applied forces, movements, and resulting reactions on a body in a steady state condition"
 
-linear = dcc "linear" (cn' "linear") fixme
-angular = dcc "angular" (cn' "angular") fixme
+linear = dcc "linear" (cn' "linear") "Arranged in or extending along a straight or nearly straight line"
+angular = dcc "angular" (cn' "angular") "Denoting physical properties or quantities measured with reference to or by means of an angle"

@@ -10,33 +10,36 @@ calculation, diameter, euclidN, euclidSpace, gradient, graph, matrix, norm, norm
 ode :: CINP
 
 --FIXME: Make some of these definitions better.
-calculation  = dcc "calculation"  (cn' "calculation")             "calculation"
-diameter     = dcc "diameter"     (cn' "diameter")                "any straight line segment that passes through the center of the circle and whose endpoints lie on the circle."
-equation     = dcc "equation"     (cn' "equation")                "fixme"
-euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               "Euclidean space"
-gradient     = dcc "gradient"     (cn' "gradient")                "gradient operator"
-graph        = dcc "graph"        (cn' "graph")                   "graph"
-matrix       = dcc "matrix"       (cnICES "matrix")               "matrix"
-norm         = dcc "norm"         (cn' "norm")                    "positive length or size of a vector"
-normal       = dcc "normal"       (cn' "normal" )                 "object that is perpendicular to a given object"
-perp         = dcc "perp"         (cn' "perpendicular")           "at right angles"
-surface      = dcc "surface" (cn' "surface")
-              "the outer or topmost boundary of an object"
-unit_        = dcc "unit"         (cn' "unit")                    "identity element"
-vector       = dcc "vector"       (cn' "vector")                  "object with magnitude and direction"
-orient       = dcc "orientation"  (cn' "orientation")             "orientation"
+calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
+diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
+                                                                  "and whose endpoints lie on the circle.")
+equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
+euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
+                                                                  "experience")
+gradient     = dcc "gradient"     (cn' "gradient")                "The degree of steepness of a graph at any point"
+graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
+matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
+                                                                  "is treated as a single entity and manipulated according to particular rules")
+norm         = dcc "norm"         (cn' "norm")                    "Positive length or size of a vector"
+normal       = dcc "normal"       (cn' "normal" )                 "Object that is perpendicular to a given object"
+perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
+surface      = dcc "surface" (cn' "surface")                      "The outer or topmost boundary of an object"
+unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
+vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"
+orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"
+
 --FIXME: use nounphrase instead of cn'
 ode          = commonINP "ode"    (cn' "Ordinary Differential Equation") "ODE"
 
 
 --FIXME: COMBINATION HACK (all below)
 euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)
-                (norm ^. term))"Euclidean norm"
+                (norm ^. term)) "Euclidean norm"
 normalV      = dcc "normal vector"  (compoundPhrase' (normal ^. term)
                 (vector ^. term))
-                "unit outward normal vector for a surface"
+                "Unit outward normal vector for a surface"
 perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
                 (vector ^. term))
-                "vector perpendicular or 90 degrees to another vector"
+                "Vector perpendicular or 90 degrees to another vector"
 unitV        = dcc "unit_vect"      (compoundPhrase' (unit_ ^. term)
-                (vector ^. term)) "unit vector"
+                (vector ^. term)) "A vector that has a magnitude of one"

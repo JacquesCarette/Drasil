@@ -15,7 +15,7 @@ physLib = dcc "physLib" (cnIES "physics library")
   ("A programming library which " ++
   "provides functions for modelling physical phenomenon.")
 program = dcc "program" (cn' "program")
-  ("a series of coded software instructions to control the operation of a " ++
+  ("A series of coded software instructions to control the operation of a " ++
   "computer or other machine.")
 
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
@@ -26,11 +26,10 @@ hwHiding = dcc "hwHiding" (cn "hardware hiding") (
   "Hides the exact details of the hardware, and provides a uniform interface" ++
   " for the rest of the system to use.")
 
---FIXME: remove "sLower"
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (
   S "Includes programs that provide externally visible behaviour of the" +:+ 
-  S "system as specified in the" +:+ (sLower (phrase (srs ^. term))) +:+
+  S "system as specified in the" +:+ (phrase (srs ^. term)) +:+
   S "(" :+: (short srs) :+: S ") documents. This module" +:+
   S "serves as a communication layer between the hardware-hiding module" +:+
   S "and the software decision module. The programs in this module will need" +:+

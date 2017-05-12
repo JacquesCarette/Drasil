@@ -18,6 +18,3 @@ len = dcc "length" (cn' "length")
   "Typically used to represent the size of an object from one end to the other.")
 mass = dcc "mass" (cn''' "mass") "the quantity of matter in a body"
 vol = dcc "volume" (cn' "volume") "the amount of space that a substance or object occupies."
-
-  
---TODO: Add density

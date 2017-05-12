@@ -73,6 +73,7 @@ instance Show Emphasis where
 
 data Literature = Lit Topic
                 | Doc Topic
+                | Doc' Topic
                 | Manual Topic
 
 type Topic = NWrapper
@@ -176,6 +177,7 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         makeSentence _ = error "How did you get here?"
         scon (Lit x) = phrase (x ^. term) +:+ S "literature"
         scon (Doc x) = S "existing documentation for" +:+ (phrase $ x ^. term)
+        scon (Doc' x)   = S "existing documentation for" +:+ (plural $ x ^. term)
         scon (Manual x) = S "that used in the" +:+ (phrase $ x ^. term) +:+ S "manual"
   
 tuIntro :: [TUIntro] -> Contents

@@ -867,10 +867,10 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 
 -- s4_2_7 = section (S "Properties of a Correct Solution") (s4_2_7_deriv) []
 
---s4_2_7 = section (of'' titleize' a_' property corSol) (s4_2_7_deriv) []
+s4_2_7 = section (of'' titleize' titleize property (a_ corSol)) (s4_2_7_deriv) []
 
 -- should be something like
-s4_2_7 = section (of'' titleize' titleize property (corSol)) (s4_2_7_deriv) []
+--s4_2_7 = section (of'' titleize' titleize property (corSol)) (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:

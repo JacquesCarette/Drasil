@@ -2,23 +2,27 @@ module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
 
-boiling,law_cons_energy, law_conv_cooling, latent_heat, melting, phase_change,
+boiling, boil_pt, law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans :: ConceptChunk
 
---To save space.
-fixme :: String
-fixme = "FIXME: MISSING DEFINITION"
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
 --    Same for "Melting"
 boiling             = dcc "boiling"         (cn "boiling")
                       "Phase change from liquid to vapour"
-heat                = dcc "heat"            (cn "heat") fixme
-heat_trans          = dcc "heat_trans"      (cn' "heat transfer") fixme
-heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity") fixme
-ht_flux             = dcc "ht_flux" (cn'' "heat flux") fixme
-latent_heat         = dcc "latent_heat"     (cn' "latent heat") fixme
+boil_pt             = dcc "boil_pt"         (cn' "boiling point")
+                      "Temperature at which a substance changes from liquid to vapour"
+heat                = dcc "heat"            (cn "heat")
+                      ("Noun: The amount of heat energy inside a body. " ++
+                      "Verb: To transfer thermal energy to a body")
+heat_trans          = dcc "heat_trans"      (cn' "heat transfer")
+                      "The generation, use, conversion, and exchange of thermal energy and heat between physical systems"
+heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity")
+                      "The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount"
+ht_flux             = dcc "ht_flux" (cn'' "heat flux") "The rate of thermal energy transfer through a given surface per unit time"
+latent_heat         = dcc "latent_heat"     (cn' "latent heat")
+                      "The heat required to convert a solid into a liquid or vapor, or a liquid into a vapor, without change of temperature"
 law_cons_energy     = dcc "law_cons_energy" 
                       (nounPhraseSP "law of conservation of energy" )
                       "Energy is conserved"
@@ -27,10 +31,14 @@ law_conv_cooling    = dcc "law_conv_cooling"
                       "Newton's law of convective cooling"
 melting             = dcc "melting"         (cn "melting")
                       "Phase change from solid to liquid"
+melt_pt             = dcc "melt_pt"         (cn' "melting point")
+                      "Temperature at which a substance changes from liquid to vapour"
 phase_change        = dcc "phase_change"    (cn' "phase change") "Change of state"
 --FIXME: sens_heat's definition is useless.
-sens_heat           = dcc "sens_heat"       (cn' "sensible heat") fixme
-temp                = dcc "temperature"     (cn' "temperature") fixme
+sens_heat           = dcc "sens_heat"       (cn' "sensible heat")
+                      ("Heat exchanged by a body in which the exchange of heat changes the temperature "++
+                      "and some macroscopic variables of the body or system, but leaves others unchanged")
+temp                = dcc "temperature"     (cn' "temperature") "The degree or intensity of heat present in a substance or object"
 thermal_analysis    = dcc "thermal_analysis" 
                       (cnIP "thermal analysis" (IrregPlur (\x -> init (init x) ++ "es")))
                       "The study of material properties as they change with temperature"
@@ -39,6 +47,6 @@ thermal_conduction  = dcc "thermal_conduction"
                       "The transfer of heat energy through a substance"
 thermal_conductor   = dcc "thermal_conductor"
                       (cn' "thermal conductor")
-                      ("An object through which thermal energy can be transferred")
+                      ("An object through which thermal energy can be transferred easily")
 thermal_energy      = dcc "thermal_energy" 
                       (cnIES "thermal energy") "The energy that comes from heat"

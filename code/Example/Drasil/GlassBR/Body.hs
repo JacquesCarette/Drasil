@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation, unit_)
 import Prelude hiding (id)
 
 import Drasil.Template.MG

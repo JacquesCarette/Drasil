@@ -181,7 +181,7 @@ terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad,
 
 aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr, 
   ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, 
-  sD, glaSlab, blast, blastTy, glassGeo, capacity, demandq, 
+  sD, glaSlab, blast, blastRisk, blastTy, glassGeo, capacity, demandq, 
   safeMessage, notSafe:: ConceptChunk
   
 
@@ -266,7 +266,7 @@ sD            = dcc "sD" (nounPhraseSP "stand off distance")
     "hemispherical high explosive charge.")
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
 blast         = dcc "blast" (cn' "blast") "Any kind of man-made explosion"
-blastRisk     = dcc "blastRisk" (nounphraseSP "blast risk") "FIXME: Define this or remove the need for definitions"
+blastRisk     = dcc "blastRisk" (nounPhraseSP "blast risk") "FIXME: Define this or remove the need for definitions"
 blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")

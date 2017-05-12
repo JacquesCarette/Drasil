@@ -47,7 +47,7 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
   S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
   (phrase $ temp_melt ^. term) :+: S " and " :+: (phrase $ temp_boil ^. term) :+:
   S ", respectively (" :+: Sy (unit_symb QT.temp) :+: S "). " :+:
-  (phrase $ latent_heat ^. term) :+: S "ing stops when all material has " :+:
+  (at_start $ latent_heat ^. term) :+: S "ing stops when all material has " :+:
   S "changed to the new phase.")
   
 -- Wrong DD reference above, change when DD4 is available

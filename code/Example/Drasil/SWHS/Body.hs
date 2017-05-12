@@ -315,7 +315,7 @@ s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [heat_flux,
    thermal_conduction, transient])
 
 s411_bullet_map_f :: Concept c => c -> ItemType
-s411_bullet_map_f c = Flat ((phrase $ c ^. term) :+: S ":" +:+. (c ^. defn))
+s411_bullet_map_f c = Flat ((at_start $ c ^. term) :+: S ":" +:+. (c ^. defn))
   
 -- Structure of this list is same in all examples, probably can be automated.
 

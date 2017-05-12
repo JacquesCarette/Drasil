@@ -171,7 +171,14 @@ and_' t1 t2 = nounPhrase''
   (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (plural $ t2 ^. term)))
   (Replace ((titleize $ t1 ^. term) +:+ S "and" +:+ (titleize' $ t2 ^. term)))
 
-
+andRT :: (NamedIdea c, NamedIdea d) => 
+  (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> NP
+andRT f1 f2 t1 t2 = nounPhrase''
+  ((phrase $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term))
+  ((phrase $ t1 ^. term) +:+ S "and" +:+ (plural $ t2 ^. term))
+  (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term)))
+  (Replace ((f1 $ t1 ^. term) +:+ S "and" +:+ (f2 $ t2 ^. term)))
+  
 the :: (NamedIdea c) => c -> NPNC
 the t = npnc ("the" ++ t ^. id) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))

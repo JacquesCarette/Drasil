@@ -145,17 +145,17 @@ s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the" +: titleize' stakeholder +:+ 
   S "the people who have an interest in the" +:+. phrase product_
 
-s3_1 = section (titleize theClient) [s3_1_intro] []
+s3_1 = section (S "The" +:+ titleize client) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
-  at_start theClient +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
-  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ at_start theClient +:+
+  S "The" +:+ phrase client +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
+  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ S "The" +:+ phrase client +:+
   S "has the final say on acceptance of the" +:+. phrase product_
 
-s3_2 = section (titleize theCustomer) [s3_2_intro] []
+s3_2 = section (S "The" +:+ titleize customer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
-  at_start' theCustomer +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
+  S "The" +:+ phrase customer +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
 s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
 
@@ -305,7 +305,7 @@ s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLa
   +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
   S "following elements:"
 
-fig_glassbr = Figure (titleize thePhysSys) "physicalsystimage.png"
+fig_glassbr = Figure (S "The" +:+ titleize physicalSystem) "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 

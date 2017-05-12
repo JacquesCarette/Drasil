@@ -107,7 +107,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (sLower (phrase $ thermal_energy ^. term)) +:+ S "as" +:+
   (sLower (phrase $ latent_heat ^. term)) :+: S ", which" +:+
   S "allows higher" +:+ (sLower (phrase $ thermal_energy ^. 
-  term)) +:+ S "storage capacity per" +:+ phrase $ unit_ ^. term +:+. S "weight"),
+  term)) +:+ S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"),
   Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
@@ -867,11 +867,10 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 
 -- s4_2_7 = section (S "Properties of a Correct Solution") (s4_2_7_deriv) []
 
-s4_2_7 = section (of'' titleize' titleize property (a_ corSol))
---  (s4_2_7_deriv) []
+s4_2_7 = section (of'' titleize' titleize property corSol) (s4_2_7_deriv) []
 
--- s4_2_7 = section (property `of_` (aNP  correct +:+ titleize solution))
---  (s4_2_7_deriv) []
+-- should be something like
+-- s4_2_7 = section (of'' titleize' titleize property (phrase $ a_ corSol)) (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
   S "must exhibit the" +:+ (sLower (phrase $ law_cons_energy ^. term)) :+:
@@ -929,7 +928,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (sLower ((phrase $ tank ^. term))) :+: 
   S " parameters, material properties and initial" +:+ plural condition :+:
   S ":"))]),
-  (Table [phrase symbol_, phrase $ unit_ ^. term, phrase description] (mkTable
+  (Table [phrase symbol_, (phrase $ unit_ ^. term), phrase description] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
   (\ch -> phrase $ ch ^. term)] inputVar) 

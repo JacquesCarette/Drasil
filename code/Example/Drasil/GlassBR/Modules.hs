@@ -37,7 +37,7 @@ mod_inputf = makeImpModule modInputFormat
   (Just mod_behav)
 
 mod_inputp :: ModuleChunk
-mod_inputp = makeImpModule modInputParams
+mod_inputp = makeImpModule modInputParam --FIXME: Plural?
   (S "The format and structure of the input parameters.")
   glassBRProg
   []
@@ -47,7 +47,7 @@ mod_inputp = makeImpModule modInputParams
 
 -- input constraints module
 mod_inputc :: ModuleChunk
-mod_inputc = makeImpModule modInputConstraints
+mod_inputc = makeImpModule modInputConstraint --FIXME: Plural?
   (S "The constraints on the input data.")
   glassBRProg
   []
@@ -73,7 +73,7 @@ mod_outputf = makeImpModule mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk
-mod_derivedv = makeImpModule modDerivedVals
+mod_derivedv = makeImpModule modDerivedVal --FIXME: Plural?
   (S "The transformations from initial inputs to derived quantities.")
   glassBRProg
   []
@@ -116,7 +116,7 @@ mod_ctrl = makeImpModule modControl
 -- interpolation data module
 
 mod_interpd :: ModuleChunk
-mod_interpd = makeImpModule modInterpData
+mod_interpd = makeImpModule modInterpDatum --FIXME: Plural?
   (S "The format and structure of the data used for interpolation.")
    glassBRProg
    []

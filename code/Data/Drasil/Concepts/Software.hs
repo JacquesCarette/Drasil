@@ -48,18 +48,16 @@ modInputFormat = dcc "modInputFormat" (cn' "input format")
   ("Converts the input data into the data structure " ++
   "used by the input parameters module.")
   
---FIXME: switch to "input parameter" and use plural.
-modInputParams :: ConceptChunk
-modInputParams = dccWDS "modInputParams" (cn' "input parameters") (
+modInputParam :: ConceptChunk
+modInputParam = dccWDS "modInputParam" (cn' "input parameter") (
   S "Stores the parameters needed " :+:
   S "for the program, including material properties, " :+:
   S "processing conditions, and numerical parameters. The " :+:
   S "values can be read as needed. This module knows how " :+:
   S "many parameters it stores.")
 
---FIXME: switch to "input constraint" and use plural.
-modInputConstraints :: ConceptChunk
-modInputConstraints = dccWDS "modInputConstraints" (cn' "input constraints") (
+modInputConstraint :: ConceptChunk
+modInputConstraint = dccWDS "modInputConstraint" (cn' "input constraint") (
   S "Defines the constraints on the input data and gives an error if " :+:
   S "a constraint is violated.")
 
@@ -71,9 +69,8 @@ modInputVerif = dccWDS "modInputVerif" (cn' "input verification") (
   S " physical constraint. Throws a warning if a parameter " :+:
   S "violates a software constraint.")
 
---FIXME: switch to "derived value" and use plural.
-modDerivedVals :: ConceptChunk
-modDerivedVals = dccWDS "modDerivedVals" (cn' "derived values") (
+modDerivedVal :: ConceptChunk
+modDerivedVal = dccWDS "modDerivedVal" (cn' "derived value") (
   S "Defines the equations transforming the initial inputs into derived " :+:
   S "quantities.")
 
@@ -82,8 +79,7 @@ modInterpolation = dccWDS "modInterpolation" (cn "interpolation") (
   S "Provides the equations that take the input parameters and " :+:
   S "interpolation data and return an interpolated value.")
 
---FIXME: switch to a combination of interpolation and datum, then use plural.
-modInterpData :: ConceptChunk
-modInterpData = dccWDS "modInterpData" (cn "interpolation data") (
+modInterpDatum :: ConceptChunk
+modInterpDatum = dccWDS "modInterpDatum" (cn "interpolation datum") (
   S "Converts the input interpolation data into the data structure used " :+:
   S "by the interpolation module.")

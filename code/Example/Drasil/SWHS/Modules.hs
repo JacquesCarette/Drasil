@@ -29,7 +29,7 @@ mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:
 
 -- Input Parameters Module
 mod_inputp :: ModuleChunk
-mod_inputp = makeImpModule modInputParams (S "The format and structure of " :+:
+mod_inputp = makeImpModule modInputParam (S "The format and structure of " :+: --FIXME: Plural?
              S "the input parameters.") swhsProg [] [] [mod_seq] (Just mod_behav)
 
 -- Input Verification Module

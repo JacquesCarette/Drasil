@@ -29,11 +29,11 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 appendix, characteristic, client, condition, constraint_, connection, customer,
   datum, definition, dependency, description, design, document, environment, figure, 
-  functional, game, general, information, introduction, model, name_, 
-  nonfunctional, offShelf, organization, physical, problem, project, property, purpose, 
+  functional, game, general, individual, information, introduction, model, name_, 
+  nonfunctional, offShelf, organization, physical, problem, product_, project, property, purpose, 
   quantity, realtime, reference, requirement_, scope, section_, simulation, 
   solution, specific, specification, stakeholder, symbol_, system, table_, 
-  terminology, theory, traceyMatrix, unit_, user, video :: NPNC
+  terminology, theory, traceyMatrix, unit_, user, useCase, video :: NPNC
 
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
@@ -53,6 +53,7 @@ figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
 game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
+individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
 introduction    = npnc "introduction"   (cn' "introduction")
 model           = npnc "model"          (cn' "model")
@@ -62,6 +63,7 @@ offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 organization    = npnc "organization"   (cn' "organization")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 problem         = npnc "problem"        (cn' "problem")
+product_        = npnc "product"        (cn' "product")
 project         = npnc "project"        (cn' "project")
 property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
@@ -83,22 +85,21 @@ theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 unit_           = npnc "unit"           (cn' "unit")
 user            = npnc "user"           (cn' "user")
+useCase         = npnc "useCase"        (cn' "use case")
 video           = npnc "video"          (cn' "video")
 realtime        = npnc "real-time"      (cn' "real-time")
 
 
-indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
+orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
   tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, thePhysSys, theProj, corSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
-indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
-prodUCTable  = npnc "prodUCTable"  (cn' "product use case table")
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of'` requirement)
-scpOfTheProj = npnc "scpOfTheProj" (scope `of'` theProj)
+scpOfTheProj = npnc "scpOfTheProj" (scope `of'` theProj) -- reasonable hack?
 tOfSymb      = npnc "tOfSymb"      (table_ `of'` symbol_)
 --tOfUnits     = npnc "tOfUnits"     (table_ `of'` unit_)
 theClient    = npnc "theClient"    (the client)
@@ -110,17 +111,19 @@ traceyMandG  = npnc "traceyMandG"  (traceyMatrix `and_'` graph)
 
 -- compounds
 
-characteristicSpecification, generalSystemDescription, physicalConstraint,
-  physicalSystem, problemDescription, specificsystemdescription, 
+characteristicSpecification, generalSystemDescription, indPRCase, physicalConstraint,
+  physicalSystem, problemDescription, prodUCTable, specificsystemdescription, 
   systemdescription, systemConstraint, userCharacteristic, datumConstraint,
   functionalRequirement, nonfunctionalRequirement, solutionCharSpec,
-  offShelfSolution, videogame, physicalSim :: NPNC
+  offShelfSolution, videogame, physicalSim, productUC, useCaseTable :: NPNC
   
 characteristicSpecification  = compoundNPNC' characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
+indPRCase                    = compoundNPNC individual productUC
 physicalConstraint           = compoundNPNC physical constraint_
 physicalSystem               = compoundNPNC physical system
 problemDescription           = compoundNPNC problem description
+prodUCTable                  = compoundNPNC productUC table_
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint_
@@ -131,4 +134,6 @@ nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
 offShelfSolution             = compoundNPNC offShelf solution
 physicalSim                  = compoundNPNC physical simulation
+productUC                    = compoundNPNC product_ useCase
+useCaseTable                 = compoundNPNC useCase table_
 videogame                    = compoundNPNC video game

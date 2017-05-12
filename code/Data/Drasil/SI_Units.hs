@@ -20,6 +20,7 @@ si_units :: [UnitDefn]
 si_units = map UU fundamentals ++ map UU derived
 
 ------------- Fundamental SI Units ---------------------------------------------
+
 fund :: String -> String -> String -> FundUnit
 --This is one case where I don't consider having "id" and "term" equal 
 -- a bad thing.

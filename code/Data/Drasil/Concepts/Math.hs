@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.NounPhrase
 import Control.Lens ((^.))
 
-calculation, diameter, euclidN, euclidSpace, gradient, graph, matrix, norm, normal, normalV, orient, perp, perpV, surface,
+calculation, diameter, equation, euclidN, euclidSpace, gradient, graph, matrix, norm, normal, normalV, orient, perp, perpV, surface,
   unit_, unitV, vector :: ConceptChunk
 
 ode :: CINP

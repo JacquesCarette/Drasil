@@ -27,7 +27,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-appendix, characteristic, client, condition, constraint_, connection, correct, customer,
+appendix, characteristic, client, condition, constraint_, connection, customer,
   datum, definition, dependency, description, design, document, environment, figure, 
   functional, game, general, information, introduction, model, name_, 
   nonfunctional, offShelf, organization, physical, problem, project, property, purpose, 
@@ -41,7 +41,6 @@ client          = npnc "client"         (cn' "client")
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
-correct         = npnc "correct"        (cn' "correct")
 customer        = npnc "customer"       (cn' "customer")
 datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
@@ -89,8 +88,10 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 indPRCase, orgOfDoc, prodUCTable, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
-  tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, thePhysSys, theProj :: NPNC
+  tOfSymb{-, tOfUnits-}, traceyMandG, theClient, theCustomer, thePhysSys, theProj, corSol :: NPNC
 
+corSol       = npnc "corSol"       (cn' "correct solution")
+refmat       = npnc "refmat"       (cn' "reference material")
 indPRCase    = npnc "indPRCase"    (cn' "individual product use case")
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prodUCTable  = npnc "prodUCTable"  (cn' "product use case table")

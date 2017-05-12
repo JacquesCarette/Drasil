@@ -31,7 +31,7 @@ analysis, appendix, characteristic, client, condition, constraint_, connection,
   documentation, environment, figure, functional, game, general, individual, 
   information, introduction, item, label, library, model, name_, nonfunctional, 
   offShelf, open, organization, physics, physical, problem, product_, project, 
-  property, purpose, quantity, realtime, reference, requirement_, risk_, scope, 
+  property, purpose, quantity, realtime, reference, requirement_, scope, 
   source, section_, simulation, software, solution, specific, specification, 
   stakeholder, symbol_, system, table_, template, terminology, theory, 
   traceyMatrix, user, useCase, video, verification :: NPNC
@@ -78,7 +78,6 @@ purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement 
-risk_            = npnc "risk"           (cn' "risk")
 scope           = npnc "scope"          (cn' "scope")
 source          = npnc "source"         (cn' "source")
 section_        = npnc "section"        (cn' "section")

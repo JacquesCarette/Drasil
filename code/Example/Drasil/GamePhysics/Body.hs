@@ -97,8 +97,9 @@ para2_s2_intro = Paragraph $ foldlSent
   titleize srs, (sParen $ getAcc srs), S "for",
   (short chipmunk) `sC` S "an", (phrase openSource), (getAcc twoD), 
   (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term),
-  S "This section explains the purpose of this document, the scope",
-  S "of the system, and the organization of the document"]
+  S "This section explains the purpose of this", (phrase document) :+: 
+  S ", the scope", S "of the", (phrase system) :+: S ",", 
+  S "and the", (phrase organization), S "of the", (phrase document)]
         
 s2_intro = [para1_s2_intro, para2_s2_intro]
 
@@ -113,20 +114,20 @@ s2_1 = section (titleize prpsOfDoc) (s2_1_intro) []
 
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
-  [S "This document descibes the modeling of an",
+  [S "This", (phrase document), S "descibes the modeling of an",
   (phrase openSource), getAcc twoD, (phrase $ rigidBody ^. term), 
   (phrase $ physLib ^. term), S "used for" +:+. (plural game), S "The", 
   plural goalStmt, S "and", plural thModel, S "used in",
-  short chipmunk, S "are provided. This",
-  S "document is intended to be used as a reference to provide all",
-  S "necessary information to understand and verify the model"]
+  short chipmunk, S "are provided. This", (phrase document),
+  S "is intended to be used as a reference to provide all",
+  S "necessary", (phrase information), S "to understand and verify the model"]
 
 para2_s2_1_intro :: Contents
 para2_s2_1_intro = Paragraph $ foldlSent 
-  [S "This document will be used as a starting point for",
+  [S "This", (phrase document), S "will be used as a starting point for",
   S "subsequent development phases, including writing the design",
   S "specification and the software verification and validation plan.",
-  S "The design document will show how the", plural requirement, 
+  S "The design", (phrase document), S "will show how the", plural requirement, 
   S "are to be realized.", 
   S "The verification and validation plan will show the steps",
   S "that will be used to increase confidence in the software",
@@ -164,7 +165,7 @@ s2_3 = orgSec s2_3_intro inModel s4_2_5
 -- FIXME: This can probably be completely pulled out is we decide on the 
 --  right convention for the intro across examples.
 s2_3_intro = foldlSent 
-  [S "The organization of this document follows the",
+  [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
   S "template for an", (getAcc srs), S "for scientific",
   S "computing software proposed by [1] and [2]"]
 
@@ -179,8 +180,9 @@ s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
 
 --FIXME: This can be generalized to use more chunks
 s3_intro = Paragraph $ foldlSent 
-  [S "This section provides general information",
-  S "about the system, identifies the interfaces between the system and",
+  [S "This section provides", (phrase general), (phrase information),
+  S "about the", (phrase system) :+: S ",", S "identifies the interfaces between the", 
+  (phrase system), S "and",
   S "its environment, and describes the user characteristics and the",
   (plural systemConstraint)]
 
@@ -309,7 +311,7 @@ s4_1_2_stmt3 = foldlSent
   (phrase $ time ^. term)]
 
 s4_1_2_stmt4 = foldlSent 
-  [S "Given the physical", S "properties, initial linear and angular", 
+  [S "Given the", (phrase physical), S "properties, initial linear and angular", 
   (plural $ position ^. term), 
   S "and", (plural $ vel ^. term) `sC` S "determine the new",
   (plural $ position ^. term), S "and", (plural $ vel ^. term),
@@ -342,10 +344,10 @@ s4_2_1 = section (titleize' assumption) [s4_2_1_intro, s4_2_1_list] []
 
 -- TODO: Add assumption references in the original and this SRS. --
 s4_2_1_intro = Paragraph $ foldlSent 
-  [S "This section simplifies the original problem",
+  [S "This section simplifies the original", (phrase problem),
   S "and helps in developing the theoretical model by filling in the",
-  S "missing information for the physical system. The numbers given in",
-  S "the square brackets refer to the", 
+  S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
+  S "The numbers given in", S "the square brackets refer to the", 
   foldr1 sC (map (\ch -> (phrase ch) +:+ (bterm ch)) 
   [thModel, genDefn, dataDefn, inModel]) `sC` S "or", 
   phrase likelyChg, (bterm likelyChg) `sC` S "in which the respective",
@@ -387,7 +389,7 @@ s4_2_2_TMods :: [Contents]
 s4_2_2 = section (titleize' thModel) ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
 
 s4_2_2_intro = Paragraph $ foldlSent 
-  [S "This section focuses on the general equations",
+  [S "This section focuses on the", (phrase general), (plural $ equation ^. term),
   S "the", (phrase $ physLib ^. term), S "is based on"]
 
 s4_2_2_TMods = map Definition (map Theory cpTMods)
@@ -404,7 +406,7 @@ s4_2_3 = section (titleize' genDefn) ([s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-}) []
 
 s4_2_3_intro = Paragraph $ foldlSent 
-  [S "This section collects the laws and equations",
+  [S "This section collects the laws and", (plural $ equation ^. term),
   S "that will be used in deriving the", (plural dataDefn) `sC`
   S "which in turn will be used to build the", (plural inModel)]
 
@@ -426,8 +428,8 @@ s4_2_4 = section (titleize' dataDefn) ([s4_2_4_intro] ++
   (s4_2_4_DDefs)) []
 
 s4_2_4_intro = Paragraph $ foldlSent [S "This section collects and defines all the",
-  S "data needed to build the" +:+. titleize' inModel,
-  S "The dimension of each quantity is also given"]
+  (plural datum), S "needed to build the" +:+. titleize' inModel,
+  S "The dimension of each", (phrase quantity), S "is also given"]
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
 
@@ -443,7 +445,7 @@ s4_2_5 = section (titleize' inModel) ([s4_2_5_intro] {- ++
   (map Con s4_2_5_IMods)-}) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
-  [S "This section transforms the problem defined",
+  [S "This section transforms the", (phrase problem), S "defined",
   S "in", (makeRef s4_1), S "into one expressed in mathematical",
   S "terms. It uses concrete symbols defined in", (makeRef s4_2_4),
   S "to replace the abstract symbols in the models identified in",
@@ -465,7 +467,7 @@ s4_2_6 = section (titleize' datumConstraint) [s4_2_6_intro, s4_2_6_table1,
 s4_2_6_intro = Paragraph $ foldlSent 
   [S "Table 1 and 2 show the", (plural datumConstraint),S "on",
   S "the input and output variables, respectively. The",
-  (Quote $ titleize' physicalConstraint), S "column gives the physical",
+  (Quote $ titleize' physicalConstraint), S "column gives the", (phrase physical),
   S "limitations on the range of values that can be taken by the",
   S "variable. The", (plural constraint_), S "are conservative, to give the user of the",
   S "model the flexibility to experiment with unusual situations. The",
@@ -516,10 +518,10 @@ s5_intro :: Contents
 s5 = section (titleize' requirement) [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $ foldlSent 
-  [S "This section provides the functional",
+  [S "This section provides the", (phrase functional),
   plural requirement `sC` S "the business",
   S "tasks that the software is expected to complete, and the",
-  S "nonfunctional", (plural requirement `sC` 
+  (phrase nonfunctional), (plural requirement `sC` 
   S "the qualities that the software is expected to exhibit")]
 
 -----------------------------------
@@ -537,7 +539,8 @@ s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
 
 -- some requirements look like they could be parametrized
 s5_1_req1 = foldlSent [S "Create a", (phrase $ space ^. term), S "for all of the",
-  (plural $ rigidBody ^. term), S "in the physical simulation to interact in"]
+  (plural $ rigidBody ^. term), S "in the", (phrase physicalSim), 
+  S "to interact in"]
 
 s5_1_req2 = foldlSent [S "Input the initial", 
   (plural $ mass ^. term) `sC` (plural $ vel ^. term) `sC` 

@@ -860,7 +860,7 @@ inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
 s4_2_7 = section (S "Properties of a Correct Solution") (s4_2_7_deriv) []
-s4_2_7 = section (of'' plural aNP property corSol) (s4_2_7_deriv) []
+-- s4_2_7 = section (of'' titleize' titleize property (aNP corSol)) (s4_2_7_deriv) []
 -- s4_2_7 = section (property `of_` (aNP  correct +:+ titleize solution)) (s4_2_7_deriv) []
 
 s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 

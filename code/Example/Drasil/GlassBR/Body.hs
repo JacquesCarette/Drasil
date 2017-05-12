@@ -605,7 +605,7 @@ s9_intro1 = Paragraph $
   plural requirement +:+ S "on" +:+ 
   plural thModel `sC`
   (plural inModel) `sC`
-  (plural dataDefn) +:+. S "and" +:+ plural datumConstraint +:+
+  (plural dataDefn) +:+ S "and" +:+. plural datumConstraint +:+
   titleize table_ +:+ S "7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC`
   (plural dataDefn) `sC`
@@ -780,7 +780,7 @@ s9_intro2 =
   S "of" +:+ plural requirement +:+ S "on" +:+
   plural thModel `sC` 
   plural inModel `sC`
-  (plural dataDefn) +:+. S "and" +:+ plural datumConstraint +:+
+  (plural dataDefn) +:+ S "and" +:+. plural datumConstraint +:+
   titleize figure +:+ S "4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ 
   S "of" +:+ plural thModel `sC` 
   plural inModel `sC`

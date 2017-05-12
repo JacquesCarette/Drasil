@@ -105,7 +105,7 @@ s2_1_intro =
   (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
   S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+
   S "to provide all" +:+ phrase information +:+ S "necessary to understand and" +:+
-  S "verify the analysis. The" +:+ (short srs) +:+ S "is abstract" +:+
+  S "verify the" +:+. phrase analysis +:+ "The" +:+ (short srs) +:+ S "is abstract" +:+
   S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
   S "to solve it", Paragraph $ S "This" +:+ phrase document +:+ S "will be used" +:+
   S "as a starting point for subsequent development phases, including writing the" +:+
@@ -131,9 +131,9 @@ s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
 s2_3_intro = 
   S "The" +:+ phrase organization +:+ S "of this" +:+ phrase document +:+ 
-  S "follows the template for an" +:+ (short srs) +:+ S "for" +:+ 
+  S "follows the" +:+ phrase template +:+ S "for an" +:+ (short srs) +:+ S "for" +:+ 
   phrase sciCompS +:+ S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+:
-  S "), with some aspects taken from Volere template 16 [3]."
+  S "), with some aspects taken from Volere" +:+ phrase template +:+. S "16 [3]"
   
 s2_3_intro_end = (at_start $ the dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
@@ -209,7 +209,7 @@ s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
-  (gLassBR ^. defn) +:+ S "for use within the analysis. There are two" +:+
+  (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ "There are two" +:+
   S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
@@ -597,7 +597,7 @@ s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
   S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
   S "modified if a certain component is changed. Every time a component is changed, the" +:+
-  S "items in the column of that component that are marked with an" +:+ Quote (S "X") +:+.
+  plural item +:+ S "in the column of that component that are marked with an" +:+ Quote (S "X") +:+.
   S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
@@ -668,7 +668,7 @@ s9_table1 = Table [EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between Items of Different" +:+ titleize' section_) True
+  titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different" +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table [EmptyS, S "T1 (" :+: 
@@ -702,7 +702,7 @@ s9_table2 = Table [EmptyS, S "T1 (" :+:
   EmptyS, S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", EmptyS, EmptyS,
   EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+ S "and Other Items") True
+  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+ S "and Other" +:+ titleize' item) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
@@ -762,7 +762,7 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other Items") True
+  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other" +:+ titleize' item) True
 
 s9_intro2 = 
   [Paragraph $
@@ -791,18 +791,18 @@ s9_intro2 =
   Paragraph $ 
   S "NOTE: Building a tool to automatically generate the graphical" +:+
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
-  S "labels and" +:+ phrase reference +:+. S "can be future work"]
+  plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
 fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) 
-  +:+ S "Showing the" +:+ titleize' connection +:+ S "Between Items of Different" +:+ titleize' section_) "Trace.png"
+  +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different" +:+ titleize' section_) "Trace.png"
 
 fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
-  S "and Other Items") "RTrace.png"
+  S "and Other" +:+ titleize' item) "RTrace.png"
 
 fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
-  S "and Other Items") "ATrace.png"
+  S "and Other" +:+ titleize' item) "ATrace.png"
 
 s10 = section (titleize' reference) [s10_list] []
 
@@ -811,7 +811,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis"
   `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
-  S "template for scientific computing,") +:+ S "in Proceedings of the" +:+
+  phrase template +:+ "for scientific computing,") +:+ S "in Proceedings of the" +:+
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
   titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 
@@ -819,7 +819,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
   titleize' requirement +:+. S "Engineering Conference, 2005"),
   (S "[3]", S "J. Robertson and S. Robertson" `sC` Quote (S "Volere" +:+
-  plural requirement +:+ phrase specification +:+. S "template edition 16") +:+ 
+  plural requirement +:+ phrase specification +:+ phrase template +:+. S "edition 16") +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
   S "Volere template16.pdf") :+: S ", 2012."),
   (S "[4]", S "ASTM Standards Committee" `sC` Quote (S "Standard practice"

@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, graph)
+import Data.Drasil.Concepts.Math (ode, graph, unit_)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
@@ -107,7 +107,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (sLower (phrase $ thermal_energy ^. term)) +:+ S "as" +:+
   (sLower (phrase $ latent_heat ^. term)) :+: S ", which" +:+
   S "allows higher" +:+ (sLower (phrase $ thermal_energy ^. 
-  term)) +:+ S "storage capacity per" +:+ phrase unit_ +:+. S "weight"),
+  term)) +:+ S "storage capacity per" +:+ phrase $ unit_ ^. term +:+. S "weight"),
   Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
@@ -929,7 +929,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (sLower ((phrase $ tank ^. term))) :+: 
   S " parameters, material properties and initial" +:+ plural condition :+:
   S ":"))]),
-  (Table [phrase symbol_, phrase unit_, phrase description] (mkTable
+  (Table [phrase symbol_, phrase $ unit_ ^. term, phrase description] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
   (\ch -> phrase $ ch ^. term)] inputVar) 

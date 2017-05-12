@@ -76,11 +76,11 @@ this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
 s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
 
 s2_intro = Paragraph $ 
-  S "Software is helpful to efficiently and correctly predict the" +:+ 
+  at_start software +:+ S "is helpful to efficiently and correctly predict the" +:+ 
   (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+. 
   (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
   +:+ S "under consideration is" +:+. (sLower (blast ^. defn)) +:+ --FIXME: find a way to remove "sLower" entirely.
-  S "The software, herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
+  S "The" +:+ phrase software +:+ S ", herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
   S "predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview" +:+
@@ -107,12 +107,12 @@ s2_1_intro =
   S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
   S "to solve it", Paragraph $ S "This" +:+ phrase document +:+ S "will be used" +:+
   S "as a starting point for subsequent development phases, including writing the" +:+
-  phrase desSpec +:+ S "and the software verification and validation plan. The" +:+ phrase design +:+
+  phrase desSpec +:+ S "and the" +:+ phrase software +:+ phrase vav +:+ S "plan. The" +:+ phrase design +:+
   phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
   S "are to be realized, including" +:+ S "decisions on the numerical" +:+
   S "algorithms and programming" +:+. phrase environment +:+ S "The" +:+ phrase vav +:+ --'environment' used correctly?
-  S "plan will show the steps that will be used to increase confidence in the" +:+.
-  S "software documentation and the implementation"]
+  S "plan will show the steps that will be used to increase confidence in the" +:+
+  +:+ phrase software +:+. S "documentation and the implementation"]
 
 s2_2 = section (titleize' scpOfReq) [s2_2_intro] []
 
@@ -172,7 +172,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+ phrase theory +:+
   S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. (phrase $ blastRisk ^. term)),
   (S "The end" +:+ phrase user +:+ S "is expected to have basic computer" +:+.
-  S "literacy to handle the software")]
+  S "literacy to handle the" +:+ phrase software)]
 
 s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 
@@ -481,8 +481,8 @@ s7_1 = section (titleize' functionalRequirement)
 
 s7_1_intro = Paragraph $
   S "The following" +:+ phrase section_+:+ S "provides the" +:+ 
-  plural functionalRequirement `sC` S "the business tasks that the software" +:+.
-  S "is expected to complete"
+  plural functionalRequirement `sC` S "the business tasks that the" +:+ 
+  phrase software +:+. S "is expected to complete"
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
@@ -578,13 +578,13 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+ S "same for all glass. In the future these values can be changed to"
   +:+. S "variable inputs")),
   (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
-  S "5 - The software may be changed to accommodate more than a single" +:+.
+  S "5 - The" +:+ phrase software +:+ S "may be changed to accommodate more than a single" +:+.
   (phrase $ lite ^. term))),
   (((short likelyChg) :+: S "4"), ((short assumption) :+: 
-  S "6 - The software may be changed to accommodate more boundary" +:+
+  S "6 - The" +:+ phrase software +:+ S "may be changed to accommodate more boundary" +:+
   plural condition +:+. S "than 4-sided support")),
   (((short likelyChg) :+: S "5"), ((short assumption) :+: 
-  S "7 - The software may be changed to consider more than just flexure" +:+.
+  S "7 - The" +:+ phrase software +:+ S "may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
 --FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'

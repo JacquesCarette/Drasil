@@ -125,6 +125,9 @@ of' t1 t2 = nounPhrase''
   (phrase t1 +:+ S "of" +:+ plural t2)
   (Replace (at_start t1 +:+ S "of" +:+ plural t2))
   (Replace (titleize t1 +:+ S "of" +:+ titleize' t2))
+
+of'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
+of'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "of" +:+ (f2 $ t2 ^. term)
   
 --FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
 -- | Similar to 'of\'', but with the word "with" instead of "of".

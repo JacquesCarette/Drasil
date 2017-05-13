@@ -133,7 +133,7 @@ s2_3_intro =
   phrase sciCompS +:+ S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+:
   S "), with some aspects taken from Volere" +:+ phrase template +:+. S "16 [3]"
   
-s2_3_intro_end = (plural $ the dataDefn) +:+
+s2_3_intro_end = (at_start' $ the dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
   +:+ plural model
   

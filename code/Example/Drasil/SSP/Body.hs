@@ -16,7 +16,7 @@ import Drasil.SSP.Reqs
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
 
-import Data.Drasil.Concepts.Documentation hiding (unit_)
+import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software

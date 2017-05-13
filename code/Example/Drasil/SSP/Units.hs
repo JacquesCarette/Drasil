@@ -2,7 +2,6 @@ module Drasil.SSP.Units where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Concepts.Physics
 
 import Control.Lens ((^.))
 

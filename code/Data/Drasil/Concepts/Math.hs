@@ -1,7 +1,6 @@
 module Data.Drasil.Concepts.Math where
 
 import Language.Drasil
-import Language.Drasil.NounPhrase
 import Control.Lens ((^.))
 
 calculation, diameter, equation, euclidN, euclidSpace, gradient, graph, matrix, norm, normal, normalV, orient, perp, perpV, surface,

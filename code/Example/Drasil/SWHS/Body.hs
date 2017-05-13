@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, graph, unit_)
+import Data.Drasil.Concepts.Math (ode, unit_)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)

@@ -198,9 +198,9 @@ mgModuleDecomp mpairs = --let levels = splitLevels $ getChunks mpairs
 
 mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
-  let impl ccs = foldl1 (+:+) $ map (\x -> (S "If the entry is" +:+
+  let impl cCS = foldl1 (+:+) $ map (\x -> (S "If the entry is" +:+
        (short x) `sC` S "this means that the module is provided by the" +:+.
-       (phrase $ x ^. term))) ccs 
+       (phrase $ x ^. term))) cCS 
 --FIXME: The fields above should be (x ^. term) and (x ^.defn) respectively
   in Paragraph $
     S "Modules are decomposed according to the principle of " :+:

@@ -1,5 +1,5 @@
 module Data.Drasil.Quantities.Math where
-import Data.Drasil.SI_Units
+
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math as CM

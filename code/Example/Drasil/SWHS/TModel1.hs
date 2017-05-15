@@ -27,9 +27,9 @@ consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
   (C density) * (C htCap) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence
-t1descr = (S "The above equation gives the" +:+ (sLower
-  (phrase $ law_cons_energy ^. term)) +:+ S "for" +:+ (sLower
-  ((phrase $ transient ^. term))) +:+ (sLower (phrase $ heat_trans ^. term)) +:+
+t1descr = (S "The above equation gives the" +:+
+  (phrase $ law_cons_energy ^. term) +:+ S "for" +:+
+  (phrase $ transient ^. term) +:+ (phrase $ heat_trans ^. term) +:+
   S "in a material of" +:+ (phrase $ htCap ^. term) +:+ 
   P (htCap ^. symbol) +:+ S "(" :+: Sy (unit_symb htCap) :+: S ")" +:+
   S "and" +:+ (phrase $ density ^. term) `sC`
@@ -44,7 +44,7 @@ t1descr = (S "The above equation gives the" +:+ (sLower
   Sy (unit_symb time) :+: S "), and" +:+ P (gradient ^. symbol) +:+ 
   S "is the" +:+. (gradient ^. defn) +:+ S "For this equation" +:+ 
   S "to apply, " :+: S "other forms of energy, such as" +:+
-  (sLower(phrase $ mech_energy ^. term)) :+: 
+  (phrase $ mech_energy ^. term) :+: 
   S ", are assumed to be negligible in the system (A1).")
 
 --referencing within a simple list is not yet implemented.

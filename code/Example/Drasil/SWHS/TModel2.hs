@@ -1,7 +1,5 @@
 module Drasil.SWHS.TModel2 where
 
-import Data.Char (toLower)
-
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.TModel3
 
@@ -34,7 +32,7 @@ sensHtEEqn = (C sensHtE) := Case [((C htCap_S) * (C mass) * (C deltaT),
 -- were implemented incorrectly.
 t2descr :: Sentence
 t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
-  (sMap (map toLower) (phrase $ sens_heat ^. term)) :+: S " energy (" :+:
+  (phrase $ sens_heat ^. term) :+: S " energy (" :+:
   Sy (joule ^. usymb) :+: S "). " :+: P (htCap_S ^. symbol) :+: 
   S ", " :+: P (htCap_L ^. symbol) :+: S ", " :+: 
   P (htCap_V ^. symbol) :+: S " are the " :+: (phrase $ htCap_S ^. term) :+: 
@@ -51,8 +49,8 @@ t2descr = (P (sensHtE ^. symbol) :+: S " is the change in " :+:
   S ", respectively (" :+: Sy (unit_symb QT.temp) :+: S "). " :+: 
   (at_start $ sens_heat ^. term) :+: S "ing occurs as long as the material does " :+: 
   S "not reach a " :+: (phrase $ temp ^. term) :+: S " where a " :+: 
-  (sMap (map toLower) (phrase $ phase_change ^. term)) :+: S " occurs. A " :+:
-  (sMap (map toLower) (phrase $ phase_change ^. term)) :+: S " occurs if " :+:
+  (phrase $ phase_change ^. term) :+: S " occurs. A " :+:
+  (phrase $ phase_change ^. term) :+: S " occurs if " :+:
   P (QT.temp ^. symbol) :+: S "=" :+: P (temp_boil ^. symbol) :+:
   S " or " :+: P (QT.temp ^. symbol) :+: S "=" :+: 
   P (temp_melt ^. symbol) :+: S ". If this is the case, refer to " :+: 

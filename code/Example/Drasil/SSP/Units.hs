@@ -14,16 +14,16 @@ sspUnits = map uw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
-              omega_i, bi, lbi, lsi, hi_2, f, m,
+              omega_i, bi, lbi, lsi, hi_2, genForce, momntOfBdy,
               delta, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
-  qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, f,
-  m, delta, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-  dv_i, dx_i, dy_i, s :: UnitalChunk
+  qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, genForce,
+  momntOfBdy, delta, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+  dv_i, dx_i, dy_i, mobShear :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -90,7 +90,7 @@ si          = uc' "S_i" (cn "mobilized shear force for slice i")
   fixme
   (sub cS lI) newton
 
-s           = uc' "S" (cn "mobilized shear force")
+mobShear    = uc' "S" (cn "mobilized shear force")
   fixme
   cS newton
 
@@ -185,13 +185,13 @@ hi_2        = uc' "h_i" (cn "midpoint height; distance from the slip base to the
   fixme
   (sub lH lI) metre
 
-f           = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
+genForce    = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
   fixme
   cF newton --FIXME: use force from concepts.physics or quantity.physics ?
 
-m           = uc' "M" (cn "moment of a body; assumed 2D allowing a scalar")
+momntOfBdy  = uc' "M" (cn "moment of a body; assumed 2D allowing a scalar")
   fixme
-  cM momentOfForceU
+  cM momentOfForceU --FIXME: move in concepts.physics ?
 
 delta       = uc' "delta" (cn "generic displacement of a body")
   fixme
@@ -243,11 +243,11 @@ dy_i        = uc' "dy_i" (cn "displacement of a slice in the y-ordinate directio
 -- Unitless Symbols --
 
 sspUnitless :: [ConVar]
-sspUnitless = [poisson, fs, kc, lambda, fi, n, upsilon, fsloc]
+sspUnitless = [SM.poissnsR, fs, kc, lambda, fi, n, upsilon, fsloc]
 
-poisson, fs, kc, lambda, fi, n, upsilon, fsloc :: ConVar
+fs, kc, lambda, fi, n, upsilon, fsloc :: ConVar
 
-poisson     = cvR (dcc "nu" (nounPhraseSP "Poisson's ratio") fixme) (Greek Nu_L)
+--poisson     = SM.poissnsR
   
 fs          = cvR (dcc "FS" (nounPhraseSP $ "global factor of safety describing the " ++
   "stability of a surface in a slope") fixme) (Atomic "FS")

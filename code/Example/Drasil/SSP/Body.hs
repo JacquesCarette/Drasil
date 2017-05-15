@@ -417,7 +417,7 @@ table_inputdata =  Table [titleize symbol_, titleize' $ unit_ ^. term, titleize 
     [(\ch -> P $ ch ^. symbol),
      (\ch -> unwrap $ getUnit ch),
      (\ch -> phrase $ ch ^. term)]
-    ((map cqs [coords, elastMod, cohesion]) ++ (map cqs [poisson]) ++ --this has to be seperate since poisson is a different type
+    ((map cqs [coords, elastMod, cohesion]) ++ (map cqs [poissnsR]) ++ --this has to be seperate since poisson is a different type
     map cqs [fricAngle, dryWeight, satWeight, waterWeight]))
   (S "Input data") True
     where unwrap :: (Maybe UnitDefn) -> Sentence

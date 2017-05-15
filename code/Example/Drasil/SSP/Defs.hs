@@ -33,11 +33,11 @@ fs_rc :: RelationConcept
 fs_rc = makeRC "fs_rc" (factor `of_''` safety) fs_desc fs_rel
 
 fs_rel :: Relation
-fs_rel = (C fs) := (C shearRes) / (C s)
+fs_rel = (C fs) := (C shearRes) / (C mobShear)
 
 fs_desc :: Sentence
 fs_desc = 
   S "The stability metric of the slope, known as the factor of safety" +:+
   (sParen $ P $ fs ^. symbol) `sC` S "is determined by the ratio of the" +:+
-  S "shear force at the base of the slope" +:+ (sParen $ P $ s ^. symbol) `sC` 
+  S "shear force at the base of the slope" +:+ (sParen $ P $ mobShear ^. symbol) `sC` 
   S "and the resistive shear" +:+. (sParen $ P $ shearRes ^. symbol)

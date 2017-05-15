@@ -35,7 +35,7 @@ collision  = dcc "collision" (cn' "collision")
 space      = dcc "space" (cn' "space") 
   ("A two-dimensional extent where objects and " ++
   "events have relative positions and directions.")
-cartesian  = dcc "cartesian" (pn' "Cartesian coordinate") 
+cartesian  = dcc "cartesian" (pn' "Cartesian coordinate system") 
   ("A coordinate system that specifies each point uniquely in a plane by a " ++
   "pair of numerical coordinates.")
 rightHand  = dcc "rightHand" (cn' "right-handed coordinate system")

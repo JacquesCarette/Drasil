@@ -1,5 +1,5 @@
 module Drasil.SRS (doc, doc', intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc,
-  goalStmt, solCharSpecm, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
+  goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
   nonfuncReq, funcReq, likeChg) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
@@ -8,17 +8,17 @@ module Drasil.SRS (doc, doc', intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, u
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.Concepts.Documentation as Doc
 
 -- Local function to keep things looking clean, not exported.
 forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 forTT' = for'' titleize titleize'
 
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc sys authors secs = Document (srs `for` sys) authors secs
+doc sys authors secs = Document (Doc.srs `for` sys) authors secs
 
 
-doc' sys authors secs = Document (srs `forTT'` sys) authors secs
+doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
 intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc,
   goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
@@ -29,14 +29,14 @@ prpsOfDoc conts sects = section (titleize Doc.prpsOfDoc) conts sects
 scpOfReq conts sects = section (titleize Doc.scpOfReq) conts sects
 orgOfDoc conts sects = section (titleize Doc.orgOfDoc) conts sects
 
-genSysDec conts sects = section (titleize Doc.generalSystemDescription) conts sect
-userChar conts sects = section (titleize' Doc.userCharacteristic) conts sect
-sysCon conts sects = section (titleize' Doc.systemConstraint) conts sect
+genSysDec conts sects = section (titleize Doc.generalSystemDescription) conts sects
+userChar conts sects = section (titleize' Doc.userCharacteristic) conts sects
+sysCon conts sects = section (titleize' Doc.systemConstraint) conts sects
 
-specSysDec conts sects = section (titleize Doc.specificsystemdescription) conts sect
-probDesc conts sects = section (titleize Doc.problemDescription) conts sect
-goalStmt conts sects = section (titleize Doc.goalStmt) conts sect
-solCharSpec conts sects = section (titleize Doc.solutionCharSpec) conts sect
+specSysDec conts sects = section (titleize Doc.specificsystemdescription) conts sects
+probDesc conts sects = section (titleize Doc.problemDescription) conts sects
+goalStmt conts sects = section (titleize Doc.goalStmt) conts sects
+solCharSpec conts sects = section (titleize Doc.solutionCharSpec) conts sects
 assump conts sects = section (titleize' Doc.assumption) conts sects
 thModel conts sects = section (titleize' Doc.thModel) conts sects
 genDefn conts sects = section (titleize' Doc.genDefn) conts sects

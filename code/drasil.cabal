@@ -19,10 +19,12 @@ library
     Data.Drasil.Concepts.Physics
     Data.Drasil.Concepts.Software
     Data.Drasil.Concepts.Math
+    Data.Drasil.Concepts.SolidMechanics
     Data.Drasil.Quantities.Thermodynamics
     Data.Drasil.Quantities.PhysicalProperties
     Data.Drasil.Quantities.Physics
     Data.Drasil.Quantities.Math
+    Data.Drasil.Quantities.SolidMechanics
     Data.Drasil.Units.Thermodynamics
   other-modules:
       Language.Drasil.Expr

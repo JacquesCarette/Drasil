@@ -54,10 +54,10 @@ distance   = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
 stress    = dcc "stress" (cn'' "stress")
   ("Forces that are exerted between planes internal to" ++
-  " a larger body subject to external loading.")
+  " a larger body subject to external loading.") --definition used in SSP, can be made clearer
 strain    = dccWDS "strain" (cn' "strain")
   ((titleize $ stress ^. term) +:+
-  S "forces that result in deformation of the body/plane.")
+  S "forces that result in deformation of the body/plane.") --definition used in SSP, can be made clearer
 tension    = dccWDS "tension" (cn' "tension")
   (S "A" +:+ (phrase $ stress ^. term) +:+
   S "that causes displacement of the body away from its center.")

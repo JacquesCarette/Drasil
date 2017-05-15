@@ -2,6 +2,7 @@ module Drasil.SSP.Units where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Quantities.SolidMechanics as SM
 
 import Control.Lens ((^.))
 
@@ -10,14 +11,14 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
 sspUnits :: [UWrapper]
 sspUnits = map uw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
-              elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
+              SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
               omega_i, bi, lbi, lsi, hi_2, f, m,
               delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
-fricAngle, cohesion, dryWeight, satWeight, waterWeight, elastMod, 
+fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, f,
@@ -50,9 +51,7 @@ waterWeight = uc' "gamma_w" (cn "unit weight of water")
   fixme
   (sub (Greek Gamma_L) lW) specific_weight
 
-elastMod    = uc' "E" (cn "elastic modulus")
-  fixme
-  cE pascal
+--elastMod    = SM.elastMod
 
 coords      = uc' "(x,y)" 
   (cn $ "cartesian position coordinates; y is considered parallel to the " ++ 

@@ -22,6 +22,8 @@ import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math (unit_)
 
+import Data.Drasil.Quantities.SolidMechanics
+
 import Drasil.Template.MG
 import Drasil.Template.DD
 

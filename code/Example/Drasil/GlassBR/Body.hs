@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, probability)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, probability, algorithm)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
@@ -112,7 +112,7 @@ s2_1_intro =
   phrase desSpec +:+ S "and the" +:+ phrase software +:+ phrase vav +:+ S "plan. The" 
   +:+ phrase design +:+ phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
   S "are to be realized, including" +:+ S "decisions on the numerical" +:+
-  S "algorithms and programming" +:+. phrase environment +:+ S "The" +:+ phrase vav +:+ --'environment' used correctly?
+  (plural $ algorithm ^. term) +:+ S "and programming" +:+. phrase environment +:+ S "The" +:+ phrase vav +:+ --'environment' used correctly?
   S "plan will show the steps that will be used to increase confidence in the" +:+
   phrase software +:+. S "documentation and the implementation"]
 
@@ -311,10 +311,10 @@ fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
-  (((short physSyst) :+: S "2"), S "The point of explosion." +:+
-  S "Where the bomb, or" +:+ (blast ^. defn) `sC` 
+  (((short physSyst) :+: S "2"), S "The point of" +:+. (phrase $ explosion ^. term) +:+
+  S "Where the" +:+ (phrase $ bomb ^. term) :+: S ", or" +:+ (blast ^. defn) `sC` 
   S "is located. The" +:+ ((phrase $ sD ^. term)) 
-  +:+. S "is the distance between the point of explosion and the glass")]
+  +:+. S "is the distance between the point of" +:+ (phrase $ explosion ^. term) +:+ S "and the glass")]
 --NOTE: The only difference here from the original is the removal of an 
 --    extraneous space
 
@@ -323,8 +323,9 @@ s6_1_3 = section (titleize' goalStmt) [s6_1_3_list] []
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
   (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
-  S "will be able to withstand the explosion of a certain degree which" +:+
-  S "is calculated based on" +:+ phrase user +:+. S "input")]
+  S "will be able to withstand the" +:+ (phrase $ explosion ^. term) +:+
+  S "of a certain degree which is calculated based on" +:+ phrase user 
+  +:+. S "input")]
 
 s6_2 = section (titleize solutionCharSpec) 
   [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
@@ -362,7 +363,8 @@ s6_2_1_list =
     S "notched, or grooved glass with" +:+ (phrase $ surface ^. term) +:+ S "and edge"
     +:+. S "treatments that alter the glass strength"),
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
-    S "only considers the external explosion scenario for its" +:+. (plural $ calculation ^. term)),
+    S "only considers the external" +:+ (phrase $ explosion ^. term) +:+ S "scenario for its" +:+.
+    (plural $ calculation ^. term)),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
     (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),

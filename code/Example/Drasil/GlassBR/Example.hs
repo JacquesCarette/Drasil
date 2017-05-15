@@ -182,7 +182,7 @@ terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad,
 aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr, 
   ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, 
   sD, glaSlab, blast, blastRisk, blastTy, glassGeo, capacity, demandq, 
-  safeMessage, notSafe:: ConceptChunk
+  safeMessage, notSafe, bomb, explosion:: ConceptChunk
   
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
@@ -279,6 +279,8 @@ safeMessage   = dcc "safeMessage" (cn "safe")
   ("For the given input parameters, the glass is considered safe.")
 notSafe       = dcc "notSafe" (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
+bomb          = dcc "bomb" (cn' "bomb") "a container filled with a destructive substance designed to exlode on impact or via detonation"
+explosion     = dcc "explosion" (cn' "explosion") "a destructive shattering of something"
 
 --Theoretical models--
 tModels :: [RelationConcept]

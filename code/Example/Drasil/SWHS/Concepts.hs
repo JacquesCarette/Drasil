@@ -26,23 +26,23 @@ charging, coil, discharging, gauss_div, heat_flux, mech_energy,
 swhsProg :: NPNC
 --FIXME: There are too many "swhs" chunks for very minor differences.
   
-charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
+charging = dcc "charging" (nounPhraseSP "charging") "Charging of the tank"
 coil = dcc "coil" (cn' "heating coil")
-  "coil in tank that heats by absorbing solar energy"
+  "Coil in tank that heats by absorbing solar energy"
 discharging = dcc "discharging" (nounPhraseSP "discharging") 
-  "discharging of the tank"
+  "Discharging of the tank"
 gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem") fixme
 heat_flux = dcc "heat_flux" (nounPhraseSP "heat flux") 
-  "the rate of heat energy transfer per unit area"
+  "The rate of heat energy transfer per unit area"
   --FIXME: Heat flux needs to be a Unital Chunk
 mech_energy = dcc "mech_energy" (nounPhraseSP "mechanical energy")
-  "the energy that comes from motion and position"
+  "The energy that comes from motion and position"
 --TODO: Physical property.
 perfect_insul = dcc "perfect_insul" (nounPhraseSP "perfectly insulated")
-  "describes the property of a material not allowing heat transfer through its boundaries"
+  "Describes the property of a material not allowing heat transfer through its boundaries"
 --FIXME: Remove " (PCM)" from the term and add an acronym instead.                
 phase_change_material = dcc "pcm" (nounPhraseSP "Phase Change Material (PCM)")
-      ("a substance that uses phase changes (such as melting) to absorb or " ++
+      ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
       
 --FIXME: Temporarily have to manually create the compound phrase, because it
@@ -51,14 +51,14 @@ swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
   (phrase $ program ^. term)) (short progName +:+ (phrase $ program ^. term))
   CapFirst CapWords) "SWHS"
 specific_heat = dcc "specific_heat" (nounPhraseSP "specific heat")
-  "heat capacity per unit mass" 
+  "Heat capacity per unit mass" 
   --FIXME: Specific Heat needs to be a UnitalChunk
 swhs_pcm = dcc "swhs_pcm" (nounPhraseSP 
   "solar water heating systems incorporating PCM")
-  "solar water heating systems incorporating phase change material"
-tank = dcc "tank" (cn' "tank") "solar water heating tank"
+  "Solar water heating systems incorporating phase change material"
+tank = dcc "tank" (cn' "tank") "Solar water heating tank"
 tank_pcm = dcc "tank_pcm" 
   (nounPhraseSP "solar water heating tank incorporating PCM")
   "FIXME: Define this"
-transient = dcc "transient" (nounPhraseSP "transient") "changing with time"
-water = dcc "water" (cn' "water") "the liquid with which the tank is filled"
+transient = dcc "transient" (nounPhraseSP "transient") "Changing with time"
+water = dcc "water" (cn' "water") "The liquid with which the tank is filled"

@@ -577,7 +577,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
   (C vol_ht_gen) volume) := 
   UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
   * (C htCap) * Deriv Part (C temp) (C time)) volume)),
-  Paragraph (S "Applying" +:+ (phrase $ gauss_div ^. term) +:+ S "to" +:+
+  Paragraph (S "Applying" +:+ (titleize $ gauss_div ^. term) +:+ S "to" +:+
   S "the first term over the" +:+ (phrase $ surface ^. term) +:+
   P (surface ^. symbol) +:+ S "of the" +:+ 
   (phrase $ volume ^. term) :+: S ", with" +:+ P (thFluxVect ^. 

@@ -29,7 +29,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 analysis, appendix, characteristic, client, condition, constraint_, connection, 
   customer, datum, definition, dependency, description, design, document, 
   documentation, environment, figure, functional, game, general, individual, 
-  information, introduction, item, label, library, model, name_, nonfunctional, 
+  information, intReader, introduction, item, label, library, model, name_, nonfunctional, 
   offShelf, open, organization, physics, physical, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, scope, 
   source, section_, simulation, software, solution, specific, specification, 

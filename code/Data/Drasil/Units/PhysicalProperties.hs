@@ -5,7 +5,6 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 
 
-densityU, stiffnessU :: DerUChunk
+densityU :: DerUChunk
 
 densityU     = new_unit "density"              $ kilogram /: m_3
-stiffnessU   = new_unit "stiffness"            $ newton /: metre

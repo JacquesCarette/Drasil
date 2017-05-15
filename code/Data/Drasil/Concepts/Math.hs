@@ -3,8 +3,8 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Control.Lens ((^.))
 
-calculation, diameter, equation, euclidN, euclidSpace, gradient, graph, matrix, norm, normal, normalV, orient, perp, perpV, surface,
-  unit_, unitV, vector :: ConceptChunk
+calculation, diameter, equation, euclidN, euclidSpace, gradient, graph, matrix, norm, 
+  normal, normalV, orient, perp, perpV, probability, surface, unit_, unitV, vector :: ConceptChunk
 
 ode :: CINP
 
@@ -22,7 +22,8 @@ matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangula
 norm         = dcc "norm"         (cn' "norm")                    "Positive length or size of a vector"
 normal       = dcc "normal"       (cn' "normal" )                 "Object that is perpendicular to a given object"
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
-surface      = dcc "surface" (cn' "surface")                      "The outer or topmost boundary of an object"
+probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
+surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
 unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
 vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"
 orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"

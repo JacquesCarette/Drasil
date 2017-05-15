@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList)
+import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList)
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 
@@ -483,27 +483,26 @@ s4_2_6_intro = Paragraph $ foldlSent
 -- Currently unable to write relations in sentences, so verbal explanations
 -- will do for now.
 -- How do I write 2pi in constraints?
+
+
+
+s4_2_6_symbolList :: [(Sentence, Sentence, Sentence, Sentence, Sentence)]
+s4_2_6_symbolList = 
+  [((P $ len ^. symbol), S "is G/E to 0", EmptyS, S "44.2", (Sy $ unit_symb len)), 
+  ((P $ mass ^. symbol), S "is greater than 0", EmptyS, S "56.2", (Sy $ unit_symb mass)), 
+  ((P $ momtInert ^. symbol), S "is G/E to 0", EmptyS, S "74.5", (Sy $ unit_symb momtInert)),
+  ((P $ gravAccel ^. symbol), EmptyS, EmptyS, S "9.8", (Sy $ unit_symb gravAccel)), 
+  ((P $ position ^. symbol), EmptyS, EmptyS, S "(0.412, 0.502)", (Sy $ unit_symb position)), 
+  ((P $ vel ^. symbol), EmptyS, EmptyS, S "2.51", (Sy $ unit_symb vel)), 
+  ((P $ restitutionCoef ^. symbol), S "G/E to 0", S "less than 1", S "0.8", EmptyS),
+  ((P $ orientation ^. symbol), S "G/E to 0", S "less than 2pi", S "pi/2", (Sy $ unit_symb orientation)),  
+  ((P $ angVel ^. symbol), EmptyS, EmptyS, S "2.1", (Sy $ unit_symb angVel)),
+  ((P $ force ^. symbol), EmptyS, EmptyS, S "98.1", (Sy $ unit_symb force)), 
+  ((P $ torque ^. symbol), EmptyS, EmptyS, S "200", (Sy $ unit_symb torque))]
+
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] [
-  [(P $ len ^. symbol), (P $ len ^. symbol) +:+ S "is G/E to 0", S "44.2" +:+
-  (Sy $ unit_symb len)],
-  [(P $ mass ^. symbol), (P $ mass ^. symbol) +:+ S "is greater than 0",
-  S "56.2" +:+ (Sy $ unit_symb mass)],
-  [(P $ momtInert ^. symbol), (P $ momtInert ^. symbol) +:+ S "is G/E to 0",
-  S "74.5" +:+ (Sy $ unit_symb momtInert)],
-  [(P $ gravAccel ^. symbol), S "None", S "9.8" +:+ (Sy $ unit_symb gravAccel)],
-  [(P $ position ^. symbol), S "None", S "(0.412, 0.502)" +:+
-  (Sy $ unit_symb position)],
-  [(P $ vel ^. symbol), S "None", S "2.51" +:+ (Sy $ unit_symb vel)],
-  [(P $ restitutionCoef ^. symbol), (P $ restitutionCoef ^. symbol) +:+ S "G/E to 0 and" +:+
-  (P $ restitutionCoef ^. symbol) +:+ S "less than 1", S "0.8"],
-  [(P $ orientation ^. symbol), (P $ orientation ^. symbol) +:+ S "G/E to 0" +:+
-  S "and" +:+ (P $ orientation ^. symbol) +:+ S "less than 2pi", S "pi/2" +:+
-  Sy (unit_symb orientation)],
-  [(P $ angVel ^. symbol), S "None", S "2.1" +:+ (Sy $ unit_symb angVel)],
-  [(P $ force ^. symbol), S "None", S "98.1" +:+ (Sy $ unit_symb force)],
-  [(P $ torque ^. symbol), S "None", S "200" +:+ (Sy $ unit_symb torque)]
-  ]) (S "Table 1: Input Variables") True
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) s4_2_6_symbolList) 
+    (S "Table 1: Input Variables") True
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] [

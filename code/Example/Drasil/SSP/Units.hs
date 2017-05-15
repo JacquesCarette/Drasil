@@ -3,6 +3,9 @@ module Drasil.SSP.Units where
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Quantities.SolidMechanics as SM
+import Data.Drasil.Concepts.Physics as CP
+--import Data.Drasil.Units.Physics
+--import Data.Drasil.Units.PhysicalProperties
 
 import Control.Lens ((^.))
 
@@ -185,9 +188,11 @@ hi_2        = uc' "h_i" (cn "midpoint height; distance from the slip base to the
   fixme
   (sub lH lI) metre
 
-genForce    = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
-  fixme
-  cF newton --FIXME: use force from concepts.physics or quantity.physics ?
+genForce = uc CP.force cF newton
+
+-- genForce    = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
+  -- fixme
+  -- cF newton --FIXME: use force from concepts.physics or quantity.physics ?
 
 momntOfBdy  = uc' "M" (cn "moment of a body; assumed 2D allowing a scalar")
   fixme

@@ -180,7 +180,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   S "histories for the" +:+ (phrase $ water ^. term) +:+ S "and the" +:+
   (short phsChgMtrl) :+: S ". This entire" +:+ phrase document +:+
   S "is written assuming that the substances inside the" +:+
-  (tank ^. defn) +:+ S "are" +:+ (phrase $ water ^. term)) +:+ S "and" +:+.
+  (tank ^. defn) +:+ S "are" +:+ (phrase $ water ^. term) +:+ S "and" +:+.
   (short phsChgMtrl))
 
 -- There is a similar paragraph in each example, but there's a lot of specific
@@ -869,11 +869,11 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
   S " the total energy input from the" +:+
   (phrase $ coil ^. term) +:+ S "and the energy output to the" +:+
   (short phsChgMtrl) :+: S ". This can be shown as an" +:+
-  S "equation by taking" +:+ makeRef s4_2_4_DD1 +:+ S "and" +
+  S "equation by taking" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
   makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
   S "respective surface area of" +:+ (phrase $ heat_trans ^. term) :+:
-  S ", and integrating each over the simulation" +:+ (phrase $ time ^. 
-  term) :+: S ", as follows:"),
+  S ", and integrating each over the simulation" +:+
+  (phrase $ time ^. term) :+: S ", as follows:"),
   EqnBlock 
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 

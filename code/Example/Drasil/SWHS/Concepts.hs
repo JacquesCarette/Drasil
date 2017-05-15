@@ -26,11 +26,11 @@ charging, coil, discharging, gauss_div, heat_flux, mech_energy,
 swhsProg :: NPNC
 --FIXME: There are too many "swhs" chunks for very minor differences.
   
-charging = dcc "charging" (nounPhraseSP "charging") "Charging of the tank"
+charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
 coil = dcc "coil" (cn' "heating coil")
   "Coil in tank that heats by absorbing solar energy"
 discharging = dcc "discharging" (nounPhraseSP "discharging") 
-  "Discharging of the tank"
+  "discharging of the tank"
 gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem") fixme
 heat_flux = dcc "heat_flux" (nounPhraseSP "heat flux") 
   "The rate of heat energy transfer per unit area"

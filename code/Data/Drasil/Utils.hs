@@ -2,6 +2,7 @@ module Data.Drasil.Utils
   ( foldle
   , foldlSent
   , mkEnumAbbrevList
+  , mkConstraintList
   ) where
 
 import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), 
@@ -27,3 +28,19 @@ enumWithAbbrev abbrev = [abbrev :+: (S $ show x) | x <- [(1 :: Integer)..]]
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 mkEnumAbbrevList :: NamedIdea c => c -> [Sentence] -> [(Sentence, ItemType)]
 mkEnumAbbrevList title list = zip (enumWithAbbrev $ getAcc title) (map (Flat) list)
+
+-- | formats constraints on variables for tables
+fmtConstrain :: Sentence -> Sentence -> Sentence -> Sentence
+fmtConstrain _ EmptyS EmptyS      = S "None"  
+fmtConstrain symb constrA EmptyS  = symb +:+ constrA
+fmtConstrain symb constrA constrB = symb +:+ constrA +:+ S "and" +:+ symb +:+ constrB
+
+-- | formats numbers with units for tables
+fmtUnit :: Sentence -> Sentence -> Sentence
+fmtUnit num EmptyS = num
+fmtUnit num units  = num +:+ units
+
+-- | makes a list of sentences for constraint tables
+mkConstraintList :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
+mkConstraintList (symb, a, b, num, units) = [symb, fmtConstrain symb a b, fmtUnit num units]
+

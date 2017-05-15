@@ -26,11 +26,11 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, condition, constraint_, connection, 
+analysis, appendix, characteristic, client, computer, condition, constraint_, connection, 
   customer, datum, definition, dependency, description, design, document, 
   documentation, environment, figure, functional, game, general, individual, 
-  information, intReader, introduction, item, label, library, model, name_, nonfunctional, 
-  offShelf, open, organization, physics, physical, problem, product_, project, 
+  information, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
+  offShelf, open, organization, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, scope, 
   source, section_, simulation, software, solution, specific, specification, 
   stakeholder, symbol_, system, table_, template, terminology, theory, 
@@ -40,6 +40,7 @@ analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
+computer        = npnc "computer"       (cn' "computer") -- general enough to be in Documentation?
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
@@ -63,14 +64,17 @@ introduction    = npnc "introduction"   (cn' "introduction")
 item            = npnc "item"           (cn' "item")
 label           = npnc "label"          (cn' "label")
 library         = npnc "library"        (cnIES "library")
+limitation      = npnc "limitation"     (cn' "limitation")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
-nonfunctional   = npnc "non-functional"  (cn' "non-functional") -- FIXME: Adjective
+nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjective
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
+performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
+priority        = npnc "priority"       (cnIES "priority")
 problem         = npnc "problem"        (cn' "problem")
 product_        = npnc "product"        (cn' "product")
 project         = npnc "project"        (cn' "project")
@@ -100,7 +104,6 @@ useCase         = npnc "useCase"        (cn' "use case")
 video           = npnc "video"          (cn' "video")
 verification    = npnc "verification"   (cn' "verification")
 realtime        = npnc "real-time"      (cn' "real-time")
-
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
   tOfSymb{-, tOfUnits-}, traceyMandG, corSol :: NPNC

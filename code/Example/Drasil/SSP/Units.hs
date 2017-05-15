@@ -276,9 +276,3 @@ upsilon     = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or
   
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety specific to a slice i")
   fixme) (sub (Atomic "FS") (Atomic "Loc,i"))
-
---N/m^3--
-specific_weight :: DerUChunk
-specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
-  "weight per unit volume") $
-  USynonym (UDiv (newton ^. usymb) (UPow (metre ^. usymb) (3)))

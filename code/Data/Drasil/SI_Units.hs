@@ -135,3 +135,8 @@ gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
 specificE :: DerUChunk
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") $ USynonym (joule /: kilogram)
+
+specific_weight :: DerUChunk
+specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
+  "weight per unit volume") $
+  USynonym (UDiv (newton ^. usymb) (UPow (metre ^. usymb) (3)))

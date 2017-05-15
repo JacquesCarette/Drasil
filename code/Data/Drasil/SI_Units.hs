@@ -1,7 +1,7 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk.Concept (dcc)
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU)
+  UnitDefn(..), new_unit, (^:), (/:), makeDerU)
 import Language.Drasil.Unicode (Special(Circle))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..))

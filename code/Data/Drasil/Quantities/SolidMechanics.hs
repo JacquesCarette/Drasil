@@ -2,6 +2,7 @@ module Data.Drasil.Quantities.SolidMechanics where
 
 import Language.Drasil
 import Data.Drasil.Concepts.SolidMechanics as CSM
+import Data.Drasil.Units.SolidMechanics
 import Data.Drasil.SI_Units
 
 elastMod, shearRes, stffness :: UnitalChunk

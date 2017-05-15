@@ -8,7 +8,7 @@ import Data.Drasil.Quantities.Thermodynamics(temp)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, normalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density,)
-import Data.Drasil.Units.PhysicalProperties
+--import Data.Drasil.Units.PhysicalProperties
 
 import Control.Lens ((^.))
 import Prelude hiding (id)

@@ -342,9 +342,9 @@ s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
 -- this paragraph can not be abstracted out as is.
 
 s4_1_2_list = Enumeration (Simple $ [((short physSyst) :+: S "1", Flat
-  ((phrase $ tank ^. term) +:+ S "containing" +:+. (phrase $ water ^. term))),
+  ((at_start $ tank ^. term) +:+ S "containing" +:+. (phrase $ water ^. term))),
 --
-  ((short physSyst) :+: S "2", Flat ((phrase $ coil ^. term) :+: 
+  ((short physSyst) :+: S "2", Flat ((at_start $ coil ^. term) :+: 
   S " at bottom of" +:+. (phrase $ tank ^. term) +:+
   sParen (P (ht_flux_C ^. symbol) +:+ S "represents the" +:+.
   (phrase $ ht_flux_C ^. term)))),

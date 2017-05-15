@@ -46,7 +46,7 @@ s2_3 = section (S "Characteristics of Intended Reader") [s2_3_intro] []
 
 s2_3_intro = Paragraph $
            S "Reviewers of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in"
-           +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+ (phrase $ theory ^. term) +:+.
+           +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
            S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
            S "reviewers should also have an understanding of differential equations, as typically" +:+
            S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+

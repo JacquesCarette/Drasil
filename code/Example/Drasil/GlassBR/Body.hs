@@ -146,7 +146,7 @@ s3_intro = Paragraph $
 s3_1 = section (titleize $ the client) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
-  (phrase $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
+  (at_start $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
   S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ (at_start $ the client) +:+
   S "has the final say on acceptance of the" +:+. phrase product_
 
@@ -251,7 +251,7 @@ s6_1_intro = Paragraph $
   +:+ S "to give out the outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
 
-s6_1_1 = section (titleize' (terminology `and_` definition)) [s6_1_1_intro, 
+s6_1_1 = section (titleize' (terminology `and_'` definition)) [s6_1_1_intro, 
   s6_1_1_bullets] []
   
 s6_1_1_intro = Paragraph $ 
@@ -262,35 +262,35 @@ s6_1_1_intro = Paragraph $
   S "are extracted from [4] in" +:+. (makeRef s10)
 
 s6_1_1_bullets = Enumeration $ (Number $ 
-  [Flat $ ((phrase $ aR ^. term) :+: sParenDash (short aspectR)) :+: 
+  [Flat $ ((at_start $ aR ^. term) :+: sParenDash (short aspectR)) :+: 
   (aR ^. defn)] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
-  [Nested (((phrase $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
+  [Nested (((titleize $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
   [(((phrase $ an ^. term) :+: sParenDash (short annealedGlass)) :+: 
     (an ^. defn)),
-  (((phrase $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
+  (((at_start $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
     (ft ^. defn)),
-  (((phrase $ hs ^. term) :+: sParenDash (short heatSGlass)) :+:
+  (((at_start $ hs ^. term) :+: sParenDash (short heatSGlass)) :+:
     (hs ^. defn))])] ++
   map (\c -> Flat c)
-  [(((phrase $ gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
+  [(((at_start $ gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
   (gtf ^. defn)),
   (((at_start $ lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
   [Nested (((at_start $ load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
-  [(((phrase $ specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
-  (((phrase $ lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
+  [(((at_start $ specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
+  (((at_start $ lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
     (lr ^. defn)),
-  (((phrase $ ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
-  (((phrase $ nfl ^. term) :+: sParenDash (short nonFactorL)) :+: --Same for nfl and nonFactorL
+  (((at_start $ ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
+  (((at_start $ nfl ^. term) :+: sParenDash (short nonFactorL)) :+: --Same for nfl and nonFactorL
     (nfl ^. defn))] ++ 
-  map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn))
+  map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
     [glassWL, sdl])] ++ 
   map (\c -> Flat c)
-  [(((phrase $ lsf ^. term) :+: sParenDash (short lShareFac)) :+: 
+  [(((at_start $ lsf ^. term) :+: sParenDash (short lShareFac)) :+: 
   (lsf ^. defn)),
-  (((phrase $ pb ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
+  (((at_start $ pb ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
   (pb ^. defn))] ++
-  map (\c -> Flat $ ((phrase $ c ^. term) +:+ S "- ") :+: (c ^. defn)) 
+  map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) 
   [specA, blaReGLa, eqTNTChar] ++
   [Flat $ ((at_start $ sD ^. term) :+: sParenDash (P $ sd ^. symbol)) :+:
   (sD ^. defn)])

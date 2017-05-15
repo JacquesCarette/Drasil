@@ -163,11 +163,11 @@ Creating a gaming physics library is a difficult task. Games need physics librar
 \label{Sec:TaD}
 This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 \begin{enumerate}
-\item{Rigid Body: A solid body in which deformation is neglected.}
+\item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
-\item{Centre of Mass: The mean location of the distribution of mass of the object.}
-\item{Cartesian Coordinates: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
-\item{Right-handed Coordinate System: A coordinate system where the positive z-axis comes out of the screen.}
+\item{Centre of mass: The mean location of the distribution of mass of the object.}
+\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
+\item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
 \end{enumerate}
 \subsubsection{Goal Statements}
 \label{Sec:GS}
@@ -197,9 +197,9 @@ This section focuses on the general equations the physics library is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Nslom}
+\toprule \textbf{Refname} & \textbf{T:t1NewtonSL}
 \phantomsection 
-\label{T:Nslom}
+\label{T:t1NewtonSL}
 \\ \midrule \\
 Label & Newton's second law of motion
 \\ \midrule \\
@@ -211,9 +211,9 @@ Description & The net force $\mathbf{F}$ (N) on a rigid body is proportional to 
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Ntlom}
+\toprule \textbf{Refname} & \textbf{T:t2NewtonTL}
 \phantomsection 
-\label{T:Ntlom}
+\label{T:t2NewtonTL}
 \\ \midrule \\
 Label & Newton's third law of motion
 \\ \midrule \\
@@ -225,9 +225,9 @@ Description & Every action has an equal and opposite reaction. In other words, t
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Nloug}
+\toprule \textbf{Refname} & \textbf{T:t3NewtonLUG}
 \phantomsection 
-\label{T:Nloug}
+\label{T:t3NewtonLUG}
 \\ \midrule \\
 Label & Newton's law of universal gravitation
 \\ \midrule \\
@@ -239,9 +239,9 @@ Description & Two rigid bodies in the universe attract each other with a force $
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Ct}
+\toprule \textbf{Refname} & \textbf{T:t4ChaslesThm}
 \phantomsection 
-\label{T:Ct}
+\label{T:t4ChaslesThm}
 \\ \midrule \\
 Label & Chasles' theorem
 \\ \midrule \\
@@ -253,9 +253,9 @@ Description & The linear velocity $\mathbf{v}_{B}$ ($\frac{\text{m}}{\text{s}}$)
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Nslfrm}
+\toprule \textbf{Refname} & \textbf{T:t5NewtonSLR}
 \phantomsection 
-\label{T:Nslfrm}
+\label{T:t5NewtonSLR}
 \\ \midrule \\
 Label & Newton's second law for rotational motion
 \\ \midrule \\

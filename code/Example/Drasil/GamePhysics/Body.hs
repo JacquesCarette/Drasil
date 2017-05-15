@@ -81,11 +81,11 @@ mgBod :: [Section]
 s2 :: Section
 s2_intro :: [Contents]
 
-s2 = SRS.intro ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
+s2 = SRS.intro (s2_intro) [s2_1, s2_2, s2_3]
 
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldlSent
-  [S "Due to the rising cost of developing", (plural videoGame) :+: S ",", 
+  [S "Due to the rising cost of developing", (plural videoGame) `sC` 
   S "developers are looking for ways to save time and money for their" +:+.
   (plural project), S "Using an", (phrase openSource), 
   (phrase $ physLib ^. term),
@@ -99,7 +99,7 @@ para2_s2_intro = Paragraph $ foldlSent
   (short chipmunk) `sC` S "an", (phrase openSource), (getAcc twoD), 
   (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term),
   S "This", (phrase section_), S "explains the", (phrase purpose), S "of this", 
-  (phrase document) :+: S ", the scope", S "of the", (phrase system) :+: S ",", 
+  (phrase document) :+: S ", the scope", S "of the", (phrase system) `sC` 
   S "and the", (phrase organization), S "of the", (phrase document)]
         
 s2_intro = [para1_s2_intro, para2_s2_intro]
@@ -183,7 +183,7 @@ s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
 --FIXME: This can be generalized to use more chunks
 s3_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "provides", (phrase general), (phrase information),
-  S "about the", (phrase system) :+: S ",", S "identifies the interfaces between the", 
+  S "about the", (phrase system) `sC` S "identifies the interfaces between the", 
   (phrase system), S "and",
   S "its environment, and describes the", (plural userCharacteristic), 
   S "and the", (plural systemConstraint)]
@@ -259,26 +259,21 @@ s4_1_intro = Paragraph $ foldlSent
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = section (titleize' (terminology `and_'`  definition))
+s4_1_1 = section (titleize' $ and_' terminology definition)
  [s4_1_1_intro, s4_1_1_bullets] []
 
-s4_1_1_intro = Paragraph $ foldle (+:+) (:+:) (EmptyS) 
+s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS) 
   [S "This subsection provides a list of terms",
   S "that are used in subsequent", (plural section_), 
   S "and their meaning, with the", (phrase purpose), 
   S "of reducing ambiguity and making it easier to correctly",
-  S "understand the", plural requirement, S ":"]
+  S "understand the", plural requirement]
 
 --FIXME: Handle plurals properly. This is a really bad hack.
-s4_1_1_bullets = Enumeration (Bullet $ map (termDefn)
-  [rigidBody, elasticity, ctrOfMass] ++ [termDefns cartesian] ++ 
-  map termDefn [rightHand])
-  where termDefn t = Flat (
-          (titleize $ t ^. term) :+:
-          S ":" +:+ (t ^. defn))
-        termDefns t = Flat (
-          (titleize $ t ^. term) :+:
-          S "s:" +:+ (t ^. defn))
+s4_1_1_bullets = Enumeration (Bullet $ 
+  (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)))
+  [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
+
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
@@ -291,7 +286,7 @@ s4_1_2 = section (titleize' goalStmt) [s4_1_2_list] []
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt1 = foldlSent 
-  [S "Given the", (plural physicalProperty) :+: S ",", S "initial", 
+  [S "Given the", (plural physicalProperty) `sC` S "initial", 
   (plural $ position ^. term), S "and",
   (plural $ vel ^. term) `sC` S "and", (plural $ force ^. term),
   S "applied on a set of", (plural $ rigidBody ^. term) `sC`
@@ -299,7 +294,7 @@ s4_1_2_stmt1 = foldlSent
   (plural $ vel ^. term), S "over a period of", (phrase $ time ^. term)]
 
 s4_1_2_stmt2 = foldlSent 
-  [S "Given the", (plural physicalProperty) :+: S ",", S "initial", 
+  [S "Given the", (plural physicalProperty) `sC` S "initial", 
   (plural $ orientation ^. term), S "and", (plural $ angVel ^. term) `sC`
   S "and", (plural $ force ^. term), S "applied on a set of", 
   (plural $ rigidBody ^. term) `sC` S "determine their new",

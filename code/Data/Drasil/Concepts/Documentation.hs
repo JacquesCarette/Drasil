@@ -26,20 +26,21 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, computer, condition, constraint_, connection, 
+analysis, appendix, characteristic, client, column, computer, condition, constraint_, connection, 
   customer, datum, definition, dependency, description, design, document, 
   documentation, environment, figure, functional, game, general, individual, 
-  information, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
-  offShelf, open, organization, performance, physics, physical, priority, problem, product_, project, 
+  information, input, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
+  offShelf, open, organization, output, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, scope, 
   source, section_, simulation, software, solution, specific, specification, 
   stakeholder, symbol_, system, table_, template, terminology, theory, 
-  traceyMatrix, user, useCase, variable, video, verification :: NPNC
+  traceyMatrix, user, useCase, value, variable, video, verification :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
+column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
 computer        = npnc "computer"       (cn' "computer") -- general enough to be in Documentation?
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
@@ -59,6 +60,7 @@ game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
+input           = npnc "input"          (cn' "input")         
 intReader       = npnc "intReader"      (cn "intended reader")
 introduction    = npnc "introduction"   (cn' "introduction")
 item            = npnc "item"           (cn' "item")
@@ -71,6 +73,7 @@ nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjecti
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
+output          = npnc "output"         (cn' "output")
 performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
@@ -101,6 +104,7 @@ theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
+value           = npnc "value"          (cn' "value") --general enough to be in Documentation?
 variable        = npnc "variable"       (cn' "variable")
 video           = npnc "video"          (cn' "video")
 verification    = npnc "verification"   (cn' "verification")
@@ -118,7 +122,6 @@ scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
 scpOfTheProj = npnc "scpOfTheProj" (scope `of_` the project) -- reasonable hack?
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
-
 
 -- compounds
 

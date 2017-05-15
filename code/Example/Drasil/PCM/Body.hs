@@ -29,7 +29,7 @@ s2_3_intro,s4_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc (nw sWHS)], SymbOrder], TAandA]) : 
+mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
         map Verbatim [s2, s4]  
         
 pcm_si :: SystemInformation
@@ -39,7 +39,7 @@ pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
 
-s2 = section (titleize $ introduction ^.term) [] [s2_3]
+s2 = intro [] [s2_3]
 
 s2_3 = section (S "Characteristics of Intended Reader") [s2_3_intro] []
 
@@ -125,7 +125,7 @@ s4_2_1_intro = Paragraph $
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
            S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
-           S "for the physical" +:+ (phrase $ system ^. term) :+: S ". The numbers given in the" +:+
+           S "for the physical" +:+ (phrase $ system ^. term) +:+. S "The numbers given in the" +:+
            S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
             (map (\ch -> (phrase $ ch ^. term) +:+ S "[" :+:
             (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 

@@ -6,7 +6,6 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
 import Control.Lens((^.))
-import Data.Char(toLower)
 import Prelude hiding (log, id)
 
 --FIXME: There are three separate non-factored loads! 

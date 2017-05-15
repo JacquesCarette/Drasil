@@ -93,7 +93,7 @@ s2_intro = Paragraph $
   phrase organization +:+ S "of the" +: phrase document +:+ S "what the" +:+ 
   phrase document +:+. S "is based on and intended to portray"
 
-s2_1 = section (titleize prpsOfDoc) (s2_1_intro) []
+s2_1 = SRS.prpsOfDoc (s2_1_intro) []
 
 s2_1_intro = 
   [Paragraph $
@@ -116,7 +116,7 @@ s2_1_intro =
   S "plan will show the steps that will be used to increase confidence in the" +:+
   phrase software +:+. S "documentation and the implementation"]
 
-s2_2 = section (titleize' scpOfReq) [s2_2_intro] []
+s2_2 = SRS.scpOfReq [s2_2_intro] []
 
 s2_2_intro = Paragraph $
   S "The" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+
@@ -158,7 +158,7 @@ s3_2_intro = Paragraph $
   (at_start' $ the customer) +:+ S "are the end" +:+ phrase user +:+
   S "of" +:+. (gLassBR ^. defn)
 
-s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
+s4 = SRS.genSysDec [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
@@ -166,7 +166,7 @@ s4_intro = Paragraph $
   S "between the" +:+ phrase system +:+ S "and its" +:+ phrase environment `sC`
   S "and describes the" +:+ plural userCharacteristic +:+ S "and the" +:+. plural systemConstraint
 
-s4_1 = section (titleize' userCharacteristic) [s4_1_bullets] []
+s4_1 = SRS.userChar [s4_1_bullets] []
 
 s4_1_bullets = Enumeration $ Bullet $ map Flat
   [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
@@ -177,7 +177,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the" +:+. phrase software)]
 
-s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
+s4_2 = SRS.sysCon [s4_2_intro] []
 
 s4_2_intro = Paragraph $
   (short notApp)
@@ -235,7 +235,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
   S "All the supporting calculated" +:+ plural value +:+ S "are also displayed as" +:+ phrase output_)]
 
-s6 = section (titleize specificsystemdescription) [s6_intro] [s6_1,
+s6 = SRS.specSysDec [s6_intro] [s6_1,
   s6_2]
 
 s6_intro = Paragraph $ 
@@ -244,7 +244,7 @@ s6_intro = Paragraph $
   S "This is followed by the" +:+ plural solutionCharSpec :+: S ", which presents the" +:+
   (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
 
-s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1, 
+s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, 
   s6_1_2, s6_1_3]
 
 s6_1_intro = Paragraph $ 
@@ -318,7 +318,7 @@ s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 --NOTE: The only difference here from the original is the removal of an 
 --    extraneous space
 
-s6_1_3 = section (titleize' goalStmt) [s6_1_3_list] []
+s6_1_3 = SRS.goalStmt [s6_1_3_list] []
 
 s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
@@ -327,7 +327,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   S "of a certain degree which is calculated based on" +:+ phrase user 
   +:+. phrase input_)]
 
-s6_2 = section (titleize solutionCharSpec) 
+s6_2 = SRS.solCharSpec
   [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
 s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +:+
@@ -335,7 +335,7 @@ s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +
   plural thModel +:+ S "which are" +:+
   S "supported by the" +:+. (plural dataDefn)
   
-s6_2_1 = section (titleize' assumption) ([s6_2_1_intro] ++ (s6_2_1_list)) []
+s6_2_1 = SRS.assump ([s6_2_1_intro] ++ (s6_2_1_list)) []
 
 s6_2_1_intro = Paragraph $ 
   S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
@@ -396,17 +396,17 @@ s6_2_1_list =
     S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")])]
   --equation in sentence
 
-s6_2_2 = section (titleize' thModel) (s6_2_2_TMods) []
+s6_2_2 = SRS.thModel (s6_2_2_TMods) []
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
 
-s6_2_3 = section (titleize' inModel) (s6_2_3_IMods) []
+s6_2_3 = SRS.inModel (s6_2_3_IMods) []
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = section (titleize' dataDefn) 
+s6_2_4 = SRS.dataDefn
   ((s6_2_4_intro):(s6_2_4_DDefns)) []
 
 s6_2_4_intro = Paragraph $ 
@@ -416,7 +416,7 @@ s6_2_4_intro = Paragraph $
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
 
-s6_2_5 = section (titleize' datumConstraint) [s6_2_5_intro, --s6_2_5_table1, 
+s6_2_5 = SRS.datCon [s6_2_5_intro, --s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2] {-, Con s6_2_5_table3]-} []
 
 s6_2_5_intro = Paragraph $
@@ -480,10 +480,9 @@ s6_2_5_intro2 = Paragraph $
 --  [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
 --  (S "Table4: Output Variables") True
 
-s7 = section (titleize' requirement) [] [s7_1, s7_2]
+s7 = SRS.require [] [s7_1, s7_2]
 
-s7_1 = section (titleize' functionalRequirement) 
-  ([s7_1_intro] ++ (s7_1_list)) []
+s7_1 = SRS.funcReq ([s7_1_intro] ++ (s7_1_list)) []
 
 s7_1_intro = Paragraph $
   S "The following" +:+ phrase section_+:+ S "provides the" +:+ 
@@ -559,7 +558,7 @@ s7_1_list =
     --S " = a/b)"
     ]))])]
 
-s7_2 = section (titleize' nonfunctionalRequirement) [s7_2_intro] []
+s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = Paragraph $
   S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
@@ -569,7 +568,7 @@ s7_2_intro = Paragraph $
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 
-s8 = section (titleize' likelyChg) [s8_list] []
+s8 = SRS.likeChg [s8_list] []
 
 s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 

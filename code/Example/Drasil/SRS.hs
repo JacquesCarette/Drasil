@@ -18,5 +18,5 @@ doc sys authors secs = Document (srs `for` sys) authors secs
 
 doc' sys authors secs = Document (srs `forTT'` sys) authors secs
 
-intro :: [SecCons] -> Section
-intro l = Section (titleize introduction) l
+intro :: [Contents] -> [Section] -> Section
+intro conts sects = section (titleize introduction) conts sects

@@ -12,6 +12,7 @@ import Drasil.SSP.Units
 import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
+import qualified Drasil.SRS as SRS
 
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
@@ -82,7 +83,7 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
   
 -- SECTION 2 --
-s2 = section (titleize introduction) [s2_p1, s2_p2] [s2_1, s2_2, s2_3]
+s2 = SRS.intro [s2_p1, s2_p2] [s2_1, s2_2, s2_3]
 
 s2_p1 = Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC` 
   S "composed of soil and rock, is subject to the influence of gravity on" +:+

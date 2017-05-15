@@ -111,7 +111,7 @@ prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
-scpOfTheProj = npnc "scpOfTheProj" (scope `of_'` the project) -- reasonable hack?
+scpOfTheProj = npnc "scpOfTheProj" (scope `of_` the project) -- reasonable hack?
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 

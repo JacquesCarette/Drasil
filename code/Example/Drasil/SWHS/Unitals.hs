@@ -92,7 +92,7 @@ coil_HTC     = uc' "coil_HTC" (nounPhraseSP
   fixme (sub (htTransCoeff ^. symbol) cC) heat_transfer_coef
 htFusion     = makeUCWDS "htFusion" (nounPhraseSP 
   "specific latent heat of fusion")
-  (S "amount of " :+: (sLower (phrase $ thermal_energy ^. term)) +:+
+  (S "amount of " :+: (phrase $ thermal_energy ^. term) +:+
   S "required to completely melt a unit " :+: (phrase $ mass ^. term) +:+
   S "of a substance.") (sub cH lF) specificE
 pcm_HTC      = uc' "pcm_HTC" 

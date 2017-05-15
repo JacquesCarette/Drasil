@@ -76,7 +76,7 @@ mkSRS = RefSec (RefProg intro
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans),
-  Doc (nw progName)], SymbOrder]
+  Doc' (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS swhs_si
@@ -91,7 +91,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
   
 -- This section name and table structure are same between all examples.
   
-s2 = SRS.intro $ ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3, Sub s2_4])
+s2 = SRS.intro $ ((s2_intro)++[s2_1, s2_2, s2_3, s2_4])
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
@@ -99,7 +99,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "energy sources and energy storage technology" +:+
   (swhs_pcm ^. defn) +:+ S "(" :+: (short phsChgMtrl) :+: 
   S ") use a renewable energy source and provide a novel way of" +:+.
-  S "storing energy" +:+ (phrase $ swhs_pcm ^. term) +:+ S "improve" +:+
+  S "storing energy" +:+ (at_start $ swhs_pcm ^. term) +:+ S "improve" +:+
   S "over the traditional" +:+ (phrase $ progName ^. term) :+: 
   S "s because of their smaller size. The smaller size" +:+
   S "is possible because of the ability of" +:+ 

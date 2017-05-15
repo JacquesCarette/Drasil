@@ -91,7 +91,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
   
 -- This section name and table structure are same between all examples.
   
-s2 = SRS.intro $ ((s2_intro)++[s2_1, s2_2, s2_3, s2_4])
+s2 = SRS.intro s2_intro [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+

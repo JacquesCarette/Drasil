@@ -1,4 +1,6 @@
-module Drasil.SRS (doc, doc', intro) where
+module Drasil.SRS (doc, doc', intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc,
+  goalStmt, solCharSpecm, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
+  nonfuncReq, funcReq, likeChg) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -18,7 +20,9 @@ doc sys authors secs = Document (srs `for` sys) authors secs
 
 doc' sys authors secs = Document (srs `forTT'` sys) authors secs
 
-intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc, goalStmt, solCharSpecm require :: [Contents] -> [Section] -> Section
+intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc,
+  goalStmt, solCharSpecm, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
+  nonfuncReq, funcReq, likeChg :: [Contents] -> [Section] -> Section
 
 intro conts sects = section (titleize Doc.introduction) conts sects
 prpsOfDoc conts sects = section (titleize Doc.prpsOfDoc) conts sects

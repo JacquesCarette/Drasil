@@ -12,6 +12,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Thermodynamics (heat)
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 
@@ -21,15 +22,15 @@ import Drasil.DocumentLanguage
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
+s2,s2_3,s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
-s4_intro,
+s2_3_intro,s4_intro,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc (nw sWHS)], SymbOrder], TAandA]) : 
-        map Verbatim [s4]  
+        map Verbatim [s2, s4]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
@@ -37,8 +38,22 @@ pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
-s4 = section ((titleize $ specificsystemdescription ^. term)) [s4_intro] [s4_1, s4_2]
 
+s2 = section (titleize $ introduction ^.term) [] [s2_3]
+
+s2_3 = section (S "Characteristics of Intended Reader") [s2_3_intro] []
+
+s2_3_intro = Paragraph $
+           S "Reviewers of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in"
+           +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+ (phrase $ theory ^. term) +:+.
+           S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
+           S "reviewers should also have an understanding of differential equations, as typically" +:+
+           S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+
+           S "can have a lower level expertise, as explained in" +:+ (titleize $ section_ ^. term)
+           -- FIXME: Section 3.2 does not exist yet, when it does, add reference
+
+           
+s4 = section ((titleize $ specificsystemdescription ^. term)) [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
@@ -64,7 +79,7 @@ s4_1_1_intro = Paragraph $
            S "understand the" +:+ (plural $ requirement ^. term) :+: S ":"
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
-  ((titleize $ c ^. term)) :+: S ": " :+: (c ^. defn)) 
+  ((at_start $ c ^. term)) :+: S ": " :+: (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
 s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []

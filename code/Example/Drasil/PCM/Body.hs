@@ -17,6 +17,7 @@ import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 
 import Drasil.ReferenceMaterial (intro)
+import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
 
 this_si :: [UnitDefn]
@@ -39,7 +40,7 @@ pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
 
-s2 = intro [] [s2_3]
+s2 = SRS.intro [] [s2_3]
 
 s2_3 = section (S "Characteristics of Intended Reader") [s2_3_intro] []
 

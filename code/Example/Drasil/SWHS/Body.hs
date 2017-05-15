@@ -43,18 +43,18 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
-s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1,
+s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s2_2_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
+s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_intro, 
   s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1, s7_table2,
   s7_table3, s7_fig1, s7_fig2 :: Contents
   
-s2_intro, s2_1_contents, s2_3_contents, s4_2_3_deriv, s4_2_5_intro, 
+s2_intro, s2_1_contents, s2_4_contents, s4_2_3_deriv, s4_2_5_intro, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
   :: [Contents]
 
@@ -91,7 +91,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
   
 -- This section name and table structure are same between all examples.
   
-s2 = SRS.intro $ ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3])
+s2 = SRS.intro $ ((map Con s2_intro)++[Sub s2_1, Sub s2_2, Sub s2_3, Sub s2_4])
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
@@ -195,9 +195,21 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
-s2_3 = section (titleize orgOfDoc) (s2_3_contents) []
+s2_3 = section (of'' titleize' titleize characteristic intReader) (s2_4_contents) []
 
-s2_3_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
+s2_3_contents = Paragraph (S "Reviewers of this documentation should" +:+
+  S "have a strong knowledge in heat transfer theory. A third or fourth" +:+
+  S "year Mechanical Engineering course on this topic is recommended." +:+
+  S "The reviewers should also have an understanding of differential" +:+
+  S "equations, as typically covered in first and second year Calculus" +:+
+  S "courses. The users of SWHS can have a lower level of expertise, as" +:+
+  S "explained in" +:+. (makeRef s3_2))
+
+
+
+s2_4 = section (titleize orgOfDoc) (s2_4_contents) []
+
+s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
   S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+
   S "[citation]. The presentation follows the standard" +:+

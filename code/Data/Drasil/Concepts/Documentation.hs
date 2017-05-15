@@ -58,6 +58,7 @@ game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
+intReader       = npnc "intReader"      (cn "intended reader")
 introduction    = npnc "introduction"   (cn' "introduction")
 item            = npnc "item"           (cn' "item")
 label           = npnc "label"          (cn' "label")

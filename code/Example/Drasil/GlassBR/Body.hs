@@ -359,7 +359,7 @@ s6_2_1_list =
   (((short assumption) :+: S "2"), S "This practice does not apply" 
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
     S "notched, or grooved glass with" +:+ (phrase $ surface ^. term) +:+ S "and edge"
-    +:+. "treatments that alter the glass strength"),
+    +:+. S "treatments that alter the glass strength"),
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
     S "only considers the external explosion scenario for its" +:+. (plural $ calculation ^. term)),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+

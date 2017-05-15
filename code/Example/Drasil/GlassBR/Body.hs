@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, probability, algorithm)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, probability, algorithm, parameter)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
@@ -120,8 +120,8 @@ s2_2 = section (titleize' scpOfReq) [s2_2_intro] []
 
 s2_2_intro = Paragraph $
   S "The" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+
-  S "includes getting all input parameters related to the" +:+ 
-  (phrase $ glaSlab ^. term) +:+ S "and also the parameters" +:+
+  S "includes getting all input" +:+ (plural $ parameter ^. term) +:+ S "related to the" +:+ 
+  (phrase $ glaSlab ^. term) +:+ S "and also the" +:+ (plural $ parameter ^. term) +:+
   S "related to" +:+. (phrase $ blastTy ^. term) +:+ 
   S "Given the input" `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
   S "use the" +:+ plural datum +:+ S "and predict whether the" +:+ 
@@ -213,8 +213,8 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:
   S "classes of inputs" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
-  (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
-  S "parameters describe" +:+ (phrase $ char_weight ^. term) +:+
+  (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+ (plural $ parameter ^. term) +:+
+  S "describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
   S "Another input the" +:+ phrase user +:+ S "gives is the tolerable value of" +:+.
   (phrase $ prob_br ^. term)),
@@ -422,9 +422,9 @@ s6_2_5 = section (titleize' datumConstraint) [s6_2_5_intro, --s6_2_5_table1,
 s6_2_5_intro = Paragraph $
   titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ") shows the" +:+ plural datumConstraint +:+
-  S "on the input variables. The column of" +:+ plural physicalConstraint +:+
+  S "on the input" +:+. plural variable +:+ S "The column of" +:+ plural physicalConstraint +:+
   S "gives the" +:+ phrase physical +:+ plural limitation +:+ S "on the range" +:+
-  S "of values that can  be taken by the variable. The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
+  S "of values that can  be taken by the" +:+. phrase variable +:+ S "The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
   S "are conservative, to give" +:+ S "the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+ 
   S "the flexibility to experiment with unusual situations. The column of" +:+.
   S "typical values is intended to provide a feel for a common scenario" +:+
@@ -432,8 +432,8 @@ s6_2_5_intro = Paragraph $
   S "estimate of the confidence with which the" +:+ phrase physical +:+ plural quantity +:+
   S"can be measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
   +:+. S "performing an uncertainty quantification exercise" +:+ at_start table_ +:+ S "3 (" :+:
-  (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+
-  S "parameters used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
+  (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+ (plural $ parameter ^. term) +:+
+  S "used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
   (P $ ar_max ^. symbol) +:+ S "refers to the" +:+
   (phrase $ ar_max ^. term) +:+. S "for the plate of glass"
@@ -468,7 +468,7 @@ s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable
   (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
   (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
   (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
-  (titleize table_ +: S "3" +:+ titleize specification +:+ S "Parameter Values") True
+  (titleize table_ +: S "3" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ S "Values") True
 
 s6_2_5_intro2 = Paragraph $
   titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
@@ -521,7 +521,7 @@ s7_1_list =
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
   S "the entered input values to ensure that they do not exceed the" +:+ plural datumConstraint +:+
   S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
-  S "the input parameters is out of bounds, an error message is" +:+
+  S "the input" +:+ (plural $ parameter ^. term) +:+ S "is out of bounds, an error message is" +:+
   S "displayed and the" +:+ (plural $ calculation ^. term) +:+. S "stop"),
   (((short requirement) :+: S "4"), S "Output the input" +:+ plural quantity +:+
   S "from" +:+ (short requirement) :+: S "1 and the known" +:+ plural quantity
@@ -582,7 +582,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
   S "and" +:+ (P $ mod_elas ^. symbol) +:+ S "are assumed to be the"
   +:+ S "same for all glass. In the future these values can be changed to"
-  +:+. S "variable inputs")),
+  +:+ phrase variable +:+. S "inputs")),
   (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
   S "5 - The" +:+ phrase software +:+ S "may be changed to accommodate more than a single" +:+.
   (phrase $ lite ^. term))),

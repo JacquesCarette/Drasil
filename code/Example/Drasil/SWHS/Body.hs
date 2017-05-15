@@ -195,7 +195,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
-s2_3 = section (of'' titleize' titleize characteristic intReader) (s2_4_contents) []
+s2_3 = section (of'' titleize' titleize characteristic intReader) [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this documentation should" +:+
   S "have a strong knowledge in heat transfer theory. A third or fourth" +:+
@@ -1011,8 +1011,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   S "of this" +:+ phrase problem :+: S ", performance is not a priority." +:+
   S "Any reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
-  S "nonfunctional" +:+ plural requirement +:+ 
-  S "are correctness, verifiability" `sC`
+  plural nonfunctionalRequirement +:+ S "are correctness, verifiability" `sC`
   S "understandability, reusability, and maintainability.")
 
 -- The second sentence of the above paragraph is repeated in all examples (not 

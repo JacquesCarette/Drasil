@@ -4,7 +4,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 algorithm, calculation, diameter, equation, euclidN, euclidSpace, gradient, graph, matrix, norm, 
-  normal, normalV, orient, parameter, perp, perpV, probability, surface, unit_, unitV, vector :: ConceptChunk
+  normal, normalV, number orient, parameter, perp, perpV, probability, surface, unit_, unitV, vector :: ConceptChunk
 
 ode :: CINP
 
@@ -23,6 +23,7 @@ matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangula
                                                                   "is treated as a single entity and manipulated according to particular rules")
 norm         = dcc "norm"         (cn' "norm")                    "Positive length or size of a vector"
 normal       = dcc "normal"       (cn' "normal" )                 "Object that is perpendicular to a given object"
+number       = dcc "number"       (cn' "number")                  "A mathematical object used to count, measure, and label"
 parameter    = dcc "parameter"    (cn' "parameter")               "A quantity whose value is selected depending on particular circumstances"
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"

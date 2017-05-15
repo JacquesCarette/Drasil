@@ -10,7 +10,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Math (ode, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Data.Drasil.Units.Thermodynamics
@@ -48,13 +48,13 @@ s2_3_intro = Paragraph $
            S "Reviewers of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in"
            +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
            S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
-           S "reviewers should also have an understanding of differential equations, as typically" +:+
+           S "reviewers should also have an understanding of differential" +:+ (plural $ equation ^. term) :+: S ", as typically" +:+
            S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+
            S "can have a lower level expertise, as explained in" +:+ (titleize $ section_ ^. term)
            -- FIXME: Section 3.2 does not exist yet, when it does, add reference
 
            
-s4 = section ((titleize $ specificsystemdescription ^. term)) [s4_intro] [s4_1, s4_2]
+s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
@@ -126,8 +126,8 @@ s4_2_1_intro = Paragraph $
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
            S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
-           S "for the physical" +:+. (phrase $ system ^. term) +:+ S "The numbers given in the" +:+
-           S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
+           S "for the physical" +:+. (phrase $ system ^. term) +:+ S "The" +:+ (plural $ information ^. term)+:+
+           S "given in the square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
             (map (\ch -> (phrase $ ch ^. term) +:+ S "[" :+:
             (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 
            S "or" +:+ phrase likelyChg +:+ S "[" :+: (getAcc likelyChg) :+:
@@ -137,7 +137,7 @@ s4_2_1_intro = Paragraph $
 s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_TMods] []
 
 s4_2_2_intro = Paragraph $
-           S "This" +:+ (phrase $ section_ ^. term) +:+ S "focuses on the general equations" +:+
+           S "This" +:+ (phrase $ section_ ^. term) +:+ S "focuses on the general" +:+ (plural $ equation ^. term) +:+
            S "and laws that" +:+ (getAcc sWHS) +:+ S "is based on." 
 -- :+: foldr1 (:+:) (map makeRef s4_2_2_TMods) :+: S" " :+: makeRef s1
   

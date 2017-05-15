@@ -175,7 +175,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. 
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
-  S "is expected to have basic computer literacy to handle the" +:+. phrase software)]
+  S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the" +:+. phrase software)]
 
 s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 
@@ -250,7 +250,7 @@ s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1,
 s6_1_intro = Paragraph $ 
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
   +:+ (phrase $ blastRisk ^. term) +:+. S "involved with the glass" +:+ (gLassBR ^. defn)
-  +:+ S "is a" +:+ S "computer" +:+ (phrase $ program ^. term) +:+ S "developed to interpret" 
+  +:+ S "is a" +:+ phrase computer +:+ (phrase $ program ^. term) +:+ S "developed to interpret" 
   +:+ S "the inputs to give out the outputs which predicts whether the" +:+
   (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+ (phrase $ blast ^. term) +:+
   S "under the" +:+. plural condition
@@ -423,7 +423,7 @@ s6_2_5_intro = Paragraph $
   titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ") shows the" +:+ plural datumConstraint +:+
   S "on the input variables. The column of" +:+ plural physicalConstraint +:+
-  S "gives the" +:+ phrase physical +:+ S "limitations on the range" +:+
+  S "gives the" +:+ phrase physical +:+ plural limitation +:+ S "on the range" +:+
   S "of values that can  be taken by the variable. The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
   S "are conservative, to give" +:+ S "the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+ 
   S "the flexibility to experiment with unusual situations. The column of" +:+.
@@ -563,9 +563,9 @@ s7_2 = section (titleize' nonfunctionalRequirement) [s7_2_intro] []
 
 s7_2_intro = Paragraph $
   S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
-  S "performance is not a priority. Any reasonable implementation will" +:+
-  S "be very quick and use minimal storage. Rather than performance" `sC`
-  S "the priority" +:+ phrase nonfunctional +:+ (short requirement) :+: 
+  phrase performance +:+ S "is not a" +:+. phrase priority +:+ S "Any reasonable implementation will" +:+
+  S "be very quick and use minimal storage. Rather than" +:+ phrase performance `sC`
+  S "the" +:+ phrase priority +:+ phrase nonfunctional +:+ (short requirement) :+: 
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
 

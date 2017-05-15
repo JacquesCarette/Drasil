@@ -1,6 +1,8 @@
-module Drasil.SRS (doc, doc', intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc,
-  goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
-  nonfuncReq, funcReq, likeChg) where
+module Drasil.SRS
+ (doc, doc', intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec,
+  userChar, sysCon, specSysDec, probDesc, goalStmt, solCharSpec, assump,
+  thModel, genDefn, dataDefn, inModel, datCon, require, nonfuncReq, funcReq,
+  likeChg) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -16,35 +18,34 @@ forTT' = for'' titleize titleize'
 
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
 doc sys authors secs = Document (Doc.srs `for` sys) authors secs
-
-
 doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
-intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec, probDesc,
-  goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn, inModel, datCon, require,
-  nonfuncReq, funcReq, likeChg :: [Contents] -> [Section] -> Section
+intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec,
+ probDesc, goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn,
+ inModel, datCon, require, nonfuncReq, funcReq, likeChg
+ :: [Contents] -> [Section] -> Section
 
-intro conts sects = section (titleize Doc.introduction) conts sects
-prpsOfDoc conts sects = section (titleize Doc.prpsOfDoc) conts sects
-scpOfReq conts sects = section (titleize Doc.scpOfReq) conts sects
-orgOfDoc conts sects = section (titleize Doc.orgOfDoc) conts sects
+intro       = section (titleize Doc.introduction)
+prpsOfDoc   = section (titleize Doc.prpsOfDoc)
+scpOfReq    = section (titleize Doc.scpOfReq)
+orgOfDoc    = section (titleize Doc.orgOfDoc)
 
-genSysDec conts sects = section (titleize Doc.generalSystemDescription) conts sects
-userChar conts sects = section (titleize' Doc.userCharacteristic) conts sects
-sysCon conts sects = section (titleize' Doc.systemConstraint) conts sects
+genSysDec   = section (titleize Doc.generalSystemDescription)
+userChar    = section (titleize' Doc.userCharacteristic)
+sysCon      = section (titleize' Doc.systemConstraint)
 
-specSysDec conts sects = section (titleize Doc.specificsystemdescription) conts sects
-probDesc conts sects = section (titleize Doc.problemDescription) conts sects
-goalStmt conts sects = section (titleize Doc.goalStmt) conts sects
-solCharSpec conts sects = section (titleize Doc.solutionCharSpec) conts sects
-assump conts sects = section (titleize' Doc.assumption) conts sects
-thModel conts sects = section (titleize' Doc.thModel) conts sects
-genDefn conts sects = section (titleize' Doc.genDefn) conts sects
-dataDefn conts sects = section (titleize' Doc.dataDefn) conts sects
-inModel conts sects = section (titleize' Doc.inModel) conts sects
-datCon conts sects = section (titleize' Doc.datumConstraint) conts sects
+specSysDec  = section (titleize Doc.specificsystemdescription)
+probDesc    = section (titleize Doc.problemDescription)
+goalStmt    = section (titleize Doc.goalStmt)
+solCharSpec = section (titleize Doc.solutionCharSpec)
+assump      = section (titleize' Doc.assumption)
+thModel     = section (titleize' Doc.thModel)
+genDefn     = section (titleize' Doc.genDefn)
+dataDefn    = section (titleize' Doc.dataDefn)
+inModel     = section (titleize' Doc.inModel)
+datCon      = section (titleize' Doc.datumConstraint)
 
-require conts sects = section (titleize' Doc.requirement) conts sects
-nonfuncReq conts sects = section (titleize' Doc.nonfunctionalRequirement) conts sects
-funcReq conts sects = section (titleize' Doc.functionalRequirement) conts sects
-likeChg conts sects = section (titleize' Doc.likelyChg) conts sects
+require     = section (titleize' Doc.requirement)
+nonfuncReq  = section (titleize' Doc.nonfunctionalRequirement)
+funcReq     = section (titleize' Doc.functionalRequirement)
+likeChg     = section (titleize' Doc.likelyChg)

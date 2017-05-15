@@ -155,7 +155,7 @@ annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
 --FIXME: Switch to using "nounphrase" instead of "cn"
-gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "Glass-BR" --lowercase?
+gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "GlassBR" --lowercase?
 annealedGlass = commonINP "annealedGlass" (cn''' "annealed glass")          "AN"
 aspectR       = commonINP "aspectR"       (cn' "aspect ratio")              "AR"
 aspectRMax    = commonINP "aspectRMax"    (cn' "maximum aspect ratio")      "ARmax"

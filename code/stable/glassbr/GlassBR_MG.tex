@@ -16,7 +16,7 @@
 \newcommand{\uctheucnum}{UC\theucnum}
 \newcounter{modnum}
 \newcommand{\mthemodnum}{M\themodnum}
-\title{Module Guide for Glass-BR program}
+\title{Module Guide for GlassBR program}
 \author{Spencer Smith and Thulasi Jegatheesan}
 \begin{document}
 \maketitle
@@ -149,7 +149,7 @@ Software Decision Module & Interpolation Module
 \end{longtable}
 \section{Module Decomposition}
 \label{Sec:MD}
-Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is Glass-BR, this means that the module is provided by the Glass-BR program. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
+Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is GlassBR, this means that the module is provided by the GlassBR program. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
 \subsection{Hardware Hiding Module (M\ref{MhwHiding})}
 \label{Sec:HHM()}
 \begin{description}
@@ -169,56 +169,56 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \begin{description}
 \item[Secrets:]The format and structure of the input data.
 \item[Services:]Converts the input data into the data structure used by the input parameters module.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Input Parameters Module (M\ref{MmodInputParams})}
 \label{Sec:IPM()}
 \begin{description}
 \item[Secrets:]The format and structure of the input parameters.
 \item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Input Constraints Module (M\ref{MmodInputConstraints})}
 \label{Sec:ICM()}
 \begin{description}
 \item[Secrets:]The constraints on the input data.
 \item[Services:]Defines the constraints on the input data and gives an error if a constraint is violated.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Output Format Module (M\ref{Mmodoutputfdesc})}
 \label{Sec:OFM()}
 \begin{description}
 \item[Secrets:]The format and structure of the output data.
 \item[Services:]Outputs the results of the calculations, including the input parameters, the demand, the capacity, the probability of breakage, and both safety requirements.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Derived Values Module (M\ref{MmodDerivedVals})}
 \label{Sec:DVM()}
 \begin{description}
 \item[Secrets:]The transformations from initial inputs to derived quantities.
 \item[Services:]Defines the equations transforming the initial inputs into derived quantities.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Calculations Module (M\ref{Mmodcalcdesc})}
 \label{Sec:CM()}
 \begin{description}
 \item[Secrets:]The equations for predicting the probability of glass breakage, capacity, and demand, using the input parameters.
 \item[Services:]Defines the equations for solving for the probability of glass breakage, demand, and capacity using the parameters in the input parameters module.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Control Module (M\ref{MmodControl})}
 \label{Sec:CM()}
 \begin{description}
 \item[Secrets:]The algorithm for coordinating the running of the program.
 \item[Services:]Provides the main program.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Interpolation Data Module (M\ref{MmodInterpData})}
 \label{Sec:IDM()}
 \begin{description}
 \item[Secrets:]The format and structure of the data used for interpolation.
 \item[Services:]Converts the input interpolation data into the data structure used by the interpolation module.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \subsection{Software Decision Module}
 \label{Sec:SDM}
@@ -232,7 +232,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \begin{description}
 \item[Secrets:]The interpolation algorithm.
 \item[Services:]Provides the equations that take the input parameters and interpolation data and return an interpolated value.
-\item[Implemented By:]Glass-BR
+\item[Implemented By:]GlassBR
 \end{description}
 \section{Traceability Matrix}
 \label{Sec:TM}

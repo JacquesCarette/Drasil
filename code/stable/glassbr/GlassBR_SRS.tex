@@ -7,7 +7,7 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
-\title{Software Requirements Specification for Glass-BR program}
+\title{Software Requirements Specification for GlassBR program}
 \author{Nikitha Krithnan and Spencer Smith}
 \begin{document}
 \maketitle
@@ -160,14 +160,14 @@ TNT & TNT (Trinitrotoluene) Equivalent Factor
 \end{longtable*}
 \section{Introduction}
 \label{Sec:I}
-Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called Glass-BR aims to predict the blast risk involved with the glass slab using an intuitive interface. The following section provides an overview of the Software Requirements Specification (SRS) for Glass-BR. This section explains the purpose of the document is designed to fulfil, the scope of the requirements and the organization of the document: what the document is based on and intended to portray.
+Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR aims to predict the blast risk involved with the glass slab using an intuitive interface. The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of the document is designed to fulfil, the scope of the requirements and the organization of the document: what the document is based on and intended to portray.
 \subsection{Purpose of Document}
 \label{Sec:PoD}
-The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the Glass-BR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
+The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
 \subsection{Scope of Requirements}
 \label{Sec:SoR}
-The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, Glass-BR is intended to use the data and predict whether the glass slab is safe to use or not.
+The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Organization of Document}
 \label{Sec:OoD}
 The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:R}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DD} and trace back to find any additional information they require.
@@ -177,17 +177,17 @@ The goal statements are refined to the theoretical models, and the theoretical m
 This section describes the Stakeholders: the people who have an interest in the product.
 \subsection{The Client}
 \label{Sec:TC}
-The client for Glass-BR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
+The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
 \subsection{The Customer}
 \label{Sec:TC}
-The customers are the end user of Glass-BR.
+The customers are the end user of GlassBR.
 \section{General System Description}
 \label{Sec:GSD}
 This section provides general information about the system, identifies the interface between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
 \label{Sec:UC}
 \begin{enumerate}
-\item{The end user of Glass-BR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil or structural engineering.}
+\item{The end user of GlassBR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil or structural engineering.}
 \item{The end user is expected to have an understanding of theory behind glass breakage and blast risk.}
 \item{The end user is expected to have basic computer literacy to handle the software.}
 \end{enumerate}
@@ -196,7 +196,7 @@ This section provides general information about the system, identifies the inter
 N/A
 \section{Scope of the Project}
 \label{Sec:SotP}
-This section presents the scope of the project. It describes the expected use of Glass-BR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
+This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
 \subsection{Product Use Case Table}
 \label{Sec:PUCT}
 \begin{longtable}{l l l l}
@@ -206,7 +206,7 @@ Use Case NO. & Use Case Name & Actor & Input and Output
 \midrule
 1 & Inputs & User & Characteristics of the glass slab and of the blast. Details in Section~\ref{Sec:IPUC}
 \\
-2 & Output & Glass-BR & Whether or not the glass slab is safe for the calculated load and supporting calculated values
+2 & Output & GlassBR & Whether or not the glass slab is safe for the calculated load and supporting calculated values
 \\
 \bottomrule
 \caption{Table 1: Use Case Table}
@@ -215,15 +215,15 @@ Use Case NO. & Use Case Name & Actor & Input and Output
 \subsection{Individual Product Use Cases}
 \label{Sec:IPUC}
 \begin{enumerate}
-\item{Use Case 1 refers to the user providing input to Glass-BR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.}
-\item{ Use Case 2 Glass-BR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability ($P_{b}$) is less than the tolerable probability ($P_{btol}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.}
+\item{Use Case 1 refers to the user providing input to GlassBR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.}
+\item{ Use Case 2 GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability ($P_{b}$) is less than the tolerable probability ($P_{btol}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.}
 \end{enumerate}
 \section{Specific System Description}
 \label{Sec:SSD}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions.
 \subsection{Problem Description}
 \label{Sec:PD}
-A system is needed to efficiently and correctly predict the blast risk involved with the glass. Glass-BR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
+A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TaD}
 This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in Section~\ref{Sec:R}.
@@ -257,7 +257,7 @@ This subsection provides a list of terms that are used in subsequent sections an
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PSD}
-The physical system of Glass-BR as shown in Figure~\ref{Figure:Tps}, includes the following elements:
+The physical system of GlassBR as shown in Figure~\ref{Figure:Tps}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Glass slab
 \item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
@@ -284,7 +284,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 \item[A2:]This practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 \item[A3:]This system only considers the external explosion scenario for its calculations.
-\item[A4:]Standard values used for calculation in Glass-BR are:
+\item[A4:]Standard values used for calculation in GlassBR are:
 \end{itemize}
 \begin{equation}
 m=7
@@ -299,10 +299,10 @@ E=(7.17)10^{7}
 t_{d}=3
 \end{equation}
 \begin{itemize}
-\item[A5:]Glass under consideration is assumed to be a single lite. Hence the value of $LSF$ is equal to 1 for all calculations in Glass-BR.
+\item[A5:]Glass under consideration is assumed to be a single lite. Hence the value of $LSF$ is equal to 1 for all calculations in GlassBR.
 \item[A6:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
-\item[A7:]The response type considered in Glass-BR is flexural.
-\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in Glass-BR. It is calculated by the equation: . Using this, $LDF$ = 0.27.
+\item[A7:]The response type considered in GlassBR is flexural.
+\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: . Using this, $LDF$ = 0.27.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TM}

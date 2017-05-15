@@ -6,6 +6,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface)
+import Data.Drasil.Concepts.Software (program)
 import Prelude hiding (id)
 
 import Drasil.Template.MG
@@ -247,7 +248,7 @@ s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1,
 s6_1_intro = Paragraph $ 
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
   +:+ (phrase $ blastRisk ^. term) +:+. S "involved with the glass" +:+ (gLassBR ^. defn)
-  +:+ S "is a" +:+ S "computer" +:+ phrase section_ +:+ S "developed to interpret the inputs"
+  +:+ S "is a" +:+ S "computer" +:+ (phrase $ program ^. term) +:+ S "developed to interpret the inputs"
   +:+ S "to give out the outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
   S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
 

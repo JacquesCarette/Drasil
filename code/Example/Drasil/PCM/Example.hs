@@ -11,6 +11,7 @@ import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Quantities.Math (gradient, diameter)
+import Data.Drasil.Units.PhysicalProperties
 
 import Control.Lens ((^.))
 

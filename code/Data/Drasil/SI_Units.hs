@@ -106,8 +106,9 @@ degree :: FundUnit --FIXME: define degree in terms of radians and pi
 degree = UD (dcc "degree" (cn' "degree") "angle") (UName (Special Circle))
 
 -- FIXME: These should probably be moved elsewhere --
+--    UPDATE: Moved these units to Physics and Physical Properties (densityU and stiffnessU)
     
-velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
+{-velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
 velU         = new_unit "velocity"             $ metre /: second
 accelU       = new_unit "acceleration"         $ metre /: s_2
 
@@ -129,7 +130,7 @@ stiffnessU     = new_unit "stiffness"          $ newton /: metre
 gravConstU :: DerUChunk
 gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
   "universal gravitational constant") $
-   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))
+   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))-}
 
 ------
 specificE :: DerUChunk

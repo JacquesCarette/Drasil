@@ -2,9 +2,8 @@ module Data.Drasil.Quantities.PhysicalProperties where
 
 import Language.Drasil
 import Data.Drasil.Concepts.PhysicalProperties as CPP
+import Data.Drasil.Units.PhysicalProperties
 import Data.Drasil.SI_Units
-
---FIXME: Space hacks
 
 density, mass, len, vol :: UnitalChunk
 

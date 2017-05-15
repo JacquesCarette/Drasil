@@ -5,6 +5,7 @@ import Data.Drasil.SI_Units
 import qualified Data.Drasil.Quantities.Physics as QP
 import qualified Data.Drasil.Quantities.Math as QM
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
+import Data.Drasil.Units.Physics
 
 import Control.Lens((^.))
 
@@ -26,14 +27,16 @@ accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
     orientation, dist, disp, torque, angDisp, vel, linDisp, linVelo
     , linAccel :: UnitalChunk
 
-force       = ucFromVC QP.force newton
-gravAccel   = ucFromVC QP.gravitationalAccel accelU
+-- FIXME: A number of chunks are simply renaming values from QP and QPP, may want to consider removal.
+    
+force       = QP.force
+gravAccel   = QP.gravitationalAccel
 -- What would be the best way to represent universal constants
 -- like gravitational constant, and display their constant value?
-gravConst   = ucFromVC QP.gravitationalConst gravConstU
-momtInert   = ucFromVC QP.momentOfInertia momtInertU
-impulseVec  = ucFromVC QP.impulseV impulseU
-impulseScl  = ucFromVC QP.impulseS impulseU
+gravConst   = QP.gravitationalConst
+momtInert   = QP.momentOfInertia
+impulseVec  = QP.impulseV
+impulseScl  = QP.impulseS
 -- FIXME: parametrized hack
 iVect       = ucFromVC ivec metre
   where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
@@ -49,17 +52,17 @@ normalVect  = ucFromVC normVect metre
   where normVect = cvR (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase $ QM.normalVect ^. term) )
                    (QM.normalVect ^. symbol)
-position    = ucFromVC QP.position metre
-orientation = ucFromVC QM.orientation radians
-dist        = ucFromVC QP.distance metre
-torque      = ucFromVC QP.torque torqueU
-disp        = ucFromVC QP.displacement metre
-vel         = ucFromVC QP.velocity velU
-accel       = ucFromVC QP.acceleration accelU
+position    = QP.position
+orientation = QM.orientation
+dist        = QP.distance
+torque      = QP.torque
+disp        = QP.displacement
+vel         = QP.velocity
+accel       = QP.acceleration
 
-angDisp     = ucFromVC QP.angularDisplacement radians
-angVel      = ucFromVC QP.angularVelocity angVelU
-angAccel    = ucFromVC QP.angularAccel angAccelU
+angDisp     = QP.angularDisplacement
+angVel      = QP.angularVelocity
+angAccel    = QP.angularAccel
 
 --FIXME: parametrized hack
 linDisp     = ucFromVC ldisp velU

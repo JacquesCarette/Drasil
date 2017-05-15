@@ -26,6 +26,8 @@ library
     Data.Drasil.Quantities.Math
     Data.Drasil.Quantities.SolidMechanics
     Data.Drasil.Units.Thermodynamics
+    Data.Drasil.Units.PhysicalProperties
+    Data.Drasil.Units.Physics
   other-modules:
       Language.Drasil.Expr
     , Language.Drasil.Chunk

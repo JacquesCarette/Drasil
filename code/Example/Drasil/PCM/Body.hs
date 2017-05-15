@@ -64,7 +64,7 @@ s4_1_1_intro = Paragraph $
            S "understand the" +:+ (plural $ requirement ^. term) :+: S ":"
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
-  (sMap capitalize (phrase $ c ^. term)) :+: S ": " :+: (c ^. defn)) 
+  ((titleize $ c ^. term)) :+: S ": " :+: (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
 s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []

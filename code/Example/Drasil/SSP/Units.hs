@@ -15,14 +15,14 @@ sspUnits = map uw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
               omega_i, bi, lbi, lsi, hi_2, f, m,
-              delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+              delta, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, f,
-  m, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+  m, delta, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i, s :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
@@ -187,7 +187,7 @@ hi_2        = uc' "h_i" (cn "midpoint height; distance from the slip base to the
 
 f           = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
   fixme
-  cF newton
+  cF newton --FIXME: use force from concepts.physics or quantity.physics ?
 
 m           = uc' "M" (cn "moment of a body; assumed 2D allowing a scalar")
   fixme
@@ -197,9 +197,7 @@ delta       = uc' "delta" (cn "generic displacement of a body")
   fixme
   (Greek Delta_L) metre
 
-k           = uc' "K" (cn "stiffness (how much a body resists displacement when subject to a force)")
-  fixme
-  (cK) stiffnessU
+--k           = SM.stffness
 
 k_sti       = uc' "K_st,i" (cn "shear stiffness of an interslice surface, without length adjustment (for interslice index i)")
   fixme

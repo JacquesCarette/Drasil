@@ -29,8 +29,8 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 analysis, appendix, characteristic, client, column, computer, condition, constraint_, connection, 
   customer, datum, definition, dependency, description, design, document, 
   documentation, environment, figure, functional, game, general, individual, 
-  information, input, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
-  offShelf, open, organization, output, performance, physics, physical, priority, problem, product_, project, 
+  information, input_, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
+  offShelf, open, organization, output_, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, scope, 
   source, section_, simulation, software, solution, specific, specification, 
   stakeholder, symbol_, system, table_, template, terminology, theory, 
@@ -60,7 +60,7 @@ game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
-input           = npnc "input"          (cn' "input")         
+input_           = npnc "input"          (cn' "input")         
 intReader       = npnc "intReader"      (cn "intended reader")
 introduction    = npnc "introduction"   (cn' "introduction")
 item            = npnc "item"           (cn' "item")
@@ -73,7 +73,7 @@ nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjecti
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
-output          = npnc "output"         (cn' "output")
+output_          = npnc "output"         (cn' "output")
 performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective

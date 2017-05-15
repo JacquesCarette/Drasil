@@ -5,8 +5,9 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, probability)
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 
 import Drasil.Template.MG
@@ -203,14 +204,14 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ S "Name",
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated values"]])
-  (titleize table_ +:+ S "1:" +:+ titleize useCaseTable) True
+  (titleize table_ +: S "1" +:+ titleize useCaseTable) True
 
 s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
-  (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:+
-  S "classes of inputs:" +:+ (phrase $ glassGeo ^. term) +:+
+  (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:
+  S "classes of inputs" +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+
   S "parameters describe" +:+ (phrase $ char_weight ^. term) +:+
@@ -225,8 +226,8 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   (capacity ^. defn) +:+ S "and" +:+
   (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ 
-  phrase condition +:+ S "is to check whether the calculated probability" +:+ 
-  sParen (P $ prob_br ^. symbol) +:+ S "is less than the tolerable probability" +:+ 
+  phrase condition +:+ S "is to check whether the calculated" +:+ (phrase $ probability ^. term) +:+ 
+  sParen (P $ prob_br ^. symbol) +:+ S "is less than the tolerable" +:+ (phrase $ probability ^. term) +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the" +:+ phrase user +:+
   S "as an input. If both" +:+ plural condition +:+ S "return true then it's shown that the" 
   +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
@@ -303,8 +304,8 @@ s6_1_2 = section (titleize physSyst) [s6_1_2_intro, s6_1_2_list,
   fig_glassbr] []
 
 s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLassBR ^. defn) 
-  +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
-  S "following elements:"
+  +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:
+  S "following elements"
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
@@ -363,7 +364,7 @@ s6_2_1_list =
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
     S "only considers the external explosion scenario for its" +:+. (plural $ calculation ^. term)),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
-    (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +:+ S "are:")]),
+    (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
     (Neg (Int 53))),
@@ -465,7 +466,7 @@ s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable
   (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
   (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
   (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
-  (titleize table_ +:+ S "3:" +:+ titleize specification +:+ S "Parameter Values") True
+  (titleize table_ +: S "3" +:+ titleize specification +:+ S "Parameter Values") True
 
 s6_2_5_intro2 = Paragraph $
   titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
@@ -491,8 +492,8 @@ s7_1_list =
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "1"), S "Input the following" +:+
     plural quantity :+: S ", which define the glass dimensions" `sC` 
-    (glassTy ^. defn) `sC` S "tolerable probability"
-    +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
+    (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase $ probability ^. term) +:+
+    S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
     (phrase $ blast ^. term))]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
   ++ (map qs [glass_type,pb_tol,tNT])) (\x -> at_start $ x ^.term)),
@@ -797,15 +798,15 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
-fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) 
+fig_2 = Figure (titleize figure +: S "2" +:+ (titleize traceyMatrix) 
   +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different"
   +:+ titleize' section_) "Trace.png"
 
-fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
+fig_3 = Figure (titleize figure +: S "3" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
   S "and Other" +:+ titleize' item) "RTrace.png"
 
-fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
+fig_4 = Figure (titleize figure +: S "4" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other" +:+ titleize' item) "ATrace.png"
 
@@ -835,8 +836,8 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   (S "[5]", S "ASTM, developed by subcommittee C1408,Book of standards 15.02,"
   +:+ Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass,C1036")),
   (S "[6]", S "ASTM, developed by subcommittee C14.08,Book of standards" +:+
-  S "15.02" `sC` Quote (at_start specification +:+ S "for heat treated flat glass-Kind"
-  +:+. S "HS, kind FT coated and uncoated glass,C1048"))]
+  S "15.02" `sC` Quote (at_start specification +:+ S "for" +:+ (plural $ heat ^. term) +:+.
+  S "treated flat glass-Kind HS, kind FT coated and uncoated glass,C1048"))]
 
 s11 = section (titleize appendix) [s11_intro, fig_5, fig_6] []
 
@@ -845,7 +846,7 @@ s11_intro = Paragraph $
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)) +:+
   S "used for interpolating values needed in the" +:+. plural model
 
-fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
+fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+
   S "versus" +:+ (at_start $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"

@@ -126,7 +126,7 @@ s4_2_1_intro = Paragraph $
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
            S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
-           S "for the physical" +:+ (phrase $ system ^. term) +:+. S "The numbers given in the" +:+
+           S "for the physical" +:+. (phrase $ system ^. term) +:+ S "The numbers given in the" +:+
            S "square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
             (map (\ch -> (phrase $ ch ^. term) +:+ S "[" :+:
             (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 

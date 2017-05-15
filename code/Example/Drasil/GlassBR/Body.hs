@@ -120,10 +120,10 @@ s2_2 = section (titleize' scpOfReq) [s2_2_intro] []
 
 s2_2_intro = Paragraph $
   S "The" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+
-  S "includes getting all input" +:+ (plural $ parameter ^. term) +:+ S "related to the" +:+ 
+  S "includes getting all" +:+ phrase input +:+ (plural $ parameter ^. term) +:+ S "related to the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "and also the" +:+ (plural $ parameter ^. term) +:+
   S "related to" +:+. (phrase $ blastTy ^. term) +:+ 
-  S "Given the input" `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
+  S "Given the" +:+ phrase input `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
   S "use the" +:+ plural datum +:+ S "and predict whether the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
 
@@ -187,38 +187,38 @@ s5 = section (titleize scpOfTheProj) [s5_intro] [s5_1, s5_2]
 s5_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "presents the" +:+. phrase scpOfTheProj +:+ 
   S "It describes the expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
-  S "inputs and outputs of each action. The" +:+ plural useCase +:+ S "are input and" +:+
-  S "output, which defines the action of getting the input and displaying" +:+.
-  S "the output"
+  plural input +:+ S "and" +:+ plural output +:+ S "of each action. The" +:+ plural useCase +:+ S "are" +:+ phrase input +:+ S "and" +:+
+  phrase output +:+ S ", which defines the action of getting the" +:+ phrase input +:+ S "and displaying" +:+.
+  S "the" +:+ phrase output
 
 s5_1 = section (titleize prodUCTable) [s5_1_table] []
 
 s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ S "Name", S "Actor", 
-  S "Input and Output"] (mkTable
+  titleize input +:+ S "and" +:+ titleize output] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", S "Inputs", titleize user, titleize' characteristic +:+ S "of the" +:+
+  [[S "1", titleize' input, titleize user, titleize' characteristic +:+ S "of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
-  [S "2", S "Output", (gLassBR ^. defn), S "Whether or not the" +:+
+  [S "2", titleize output, (gLassBR ^. defn), S "Whether or not the" +:+
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
-  S "calculated values"]])
+  S "calculated" +:+ plural value]])
   (titleize table_ +: S "1" +:+ titleize useCaseTable) True
 
 s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
-  [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing input to" +:+ 
-  (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:
-  S "classes of inputs" +:+ (phrase $ glassGeo ^. term) +:+
+  [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing" +:+ phrase input 
+  +:+ S "to" +:+ (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:
+  S "classes of" +:+ plural input +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+ (plural $ parameter ^. term) +:+
   S "describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
-  S "Another input the" +:+ phrase user +:+ S "gives is the tolerable value of" +:+.
+  S "Another" +:+ phrase input +:+ S "the" +:+ phrase user +:+ S "gives is the tolerable" +:+ phrase value +:+ S "of" +:+.
   (phrase $ prob_br ^. term)),
-  (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ S "outputs if the" +:+
+  (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ plural output +:+ S "if the" +:+
   (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
   S "comparing whether" +:+ (phrase $ capacity ^. term) +:+
   S "is greater than" +:+. (phrase $ demandq ^. term) +:+
@@ -229,11 +229,11 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   phrase condition +:+ S "is to check whether the calculated" +:+ (phrase $ probability ^. term) +:+ 
   sParen (P $ prob_br ^. symbol) +:+ S "is less than the tolerable" +:+ (phrase $ probability ^. term) +:+ 
   sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the" +:+ phrase user +:+
-  S "as an input. If both" +:+ plural condition +:+ S "return true then it's shown that the" 
+  S "as an" +:+. phrase input +:+ S "If both" +:+ plural condition +:+ S "return true then it's shown that the" 
   +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
   S "else if both return false then the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
-  S "All the supporting calculated values are also displayed as output")]
+  S "All the supporting calculated" +:+ plural value +:+ S "are also displayed as" +:+ phrase output)]
 
 s6 = section (titleize specificsystemdescription) [s6_intro] [s6_1,
   s6_2]
@@ -251,7 +251,7 @@ s6_1_intro = Paragraph $
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
   +:+ (phrase $ blastRisk ^. term) +:+. S "involved with the glass" +:+ (gLassBR ^. defn)
   +:+ S "is a" +:+ phrase computer +:+ (phrase $ program ^. term) +:+ S "developed to interpret" 
-  +:+ S "the inputs to give out the outputs which predicts whether the" +:+
+  +:+ S "the" +:+ plural input +:+ S "to give out the" +:+ plural output +:+ S "which predicts whether the" +:+
   (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+ (phrase $ blast ^. term) +:+
   S "under the" +:+. plural condition
 
@@ -325,7 +325,7 @@ s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
   S "will be able to withstand the" +:+ (phrase $ explosion ^. term) +:+
   S "of a certain degree which is calculated based on" +:+ phrase user 
-  +:+. S "input")]
+  +:+. phrase input)]
 
 s6_2 = section (titleize solutionCharSpec) 
   [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
@@ -365,7 +365,7 @@ s6_2_1_list =
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
     S "only considers the external" +:+ (phrase $ explosion ^. term) +:+ S "scenario for its" +:+.
     (plural $ calculation ^. term)),
-  (((short assumption) :+: S "4"), S "Standard values used for" +:+
+  (((short assumption) :+: S "4"), S "Standard" +:+ plural value +:+ S "used for" +:+
     (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")]),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
@@ -380,7 +380,7 @@ s6_2_1_list =
   (Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short assumption) :+: S "5"), S "Glass under consideration" +:+
     S "is assumed to be a single" +:+.
-    (phrase $ lite ^. term) +:+ S "Hence the value of" +:+ 
+    (phrase $ lite ^. term) +:+ S "Hence the" +:+ phrase value +:+ S "of" +:+ 
     (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
     +:+ S "in" +:+. (gLassBR ^. defn)),
   (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+
@@ -389,7 +389,7 @@ s6_2_1_list =
   (((short assumption) :+: S "7"), S "The response type considered in" 
     +:+ (gLassBR ^. defn) +:+. S "is flexural"),
   (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+
-    S "to A4 the value of" +:+ (phrase $ loadDF ^. term) +:+ 
+    S "to A4 the" +:+ phrase value +:+ S "of" +:+ (phrase $ loadDF ^. term) +:+ 
     sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
     (gLassBR ^. defn) +:+ S "It is calculated by the" +: (phrase $ equation ^. term) +:+
     --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
@@ -422,17 +422,17 @@ s6_2_5 = section (titleize' datumConstraint) [s6_2_5_intro, --s6_2_5_table1,
 s6_2_5_intro = Paragraph $
   titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ") shows the" +:+ plural datumConstraint +:+
-  S "on the input" +:+. plural variable +:+ S "The column of" +:+ plural physicalConstraint +:+
+  S "on the" +:+ phrase input +:+. plural variable +:+ S "The" +:+ phrase column +:+ S "of" +:+ plural physicalConstraint +:+
   S "gives the" +:+ phrase physical +:+ plural limitation +:+ S "on the range" +:+
-  S "of values that can  be taken by the" +:+. phrase variable +:+ S "The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
+  S "of" +:+ plural value +:+ S "that can  be taken by the" +:+. phrase variable +:+ S "The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
   S "are conservative, to give" +:+ S "the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+ 
-  S "the flexibility to experiment with unusual situations. The column of" +:+.
-  S "typical values is intended to provide a feel for a common scenario" +:+
-  S "The uncertainty column provides an" +:+
+  S "the flexibility to experiment with unusual situations. The" +:+ phrase column +:+ S "of" +:+.
+  S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario" +:+
+  S "The uncertainty" +:+ phrase column +:+ S "provides an" +:+
   S "estimate of the confidence with which the" +:+ phrase physical +:+ plural quantity +:+
-  S"can be measured. This" +:+ phrase information +:+ S "would be part of the input if one were"
+  S"can be measured. This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input +:+ S "if one were"
   +:+. S "performing an uncertainty quantification exercise" +:+ at_start table_ +:+ S "3 (" :+:
-  (makeRef s6_2_5_table2) :+: S ") gives the values of the specification" +:+ (plural $ parameter ^. term) +:+
+  (makeRef s6_2_5_table2) :+: S ") gives the" +:+ plural value +:+ S "of the specification" +:+ (plural $ parameter ^. term) +:+
   S "used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
   (P $ ar_max ^. symbol) +:+ S "refers to the" +:+
@@ -460,7 +460,7 @@ s6_2_5_intro = Paragraph $
 --  (P $ sd_max ^. symbol), S "45" :+: Sy (sd ^. unit), S "10%"]])
 --  (S "Table 2: Input Variables") True
 
-s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable 
+s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> P $ fst x), (\x -> snd x)] 
   [(dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb sd)), 
   (dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)),(ar_max ^. symbol, S "5"), 
@@ -468,12 +468,12 @@ s6_2_5_table2 = Table [S "Var", S "Value"] (mkTable
   (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
   (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
   (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
-  (titleize table_ +: S "3" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ S "Values") True
+  (titleize table_ +: S "3" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ titleize' value) True
 
 s6_2_5_intro2 = Paragraph $
   titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
   S ") shows the" +:+ plural constraint_
-  +:+. S "that must be satisfied by the output"
+  +:+. S "that must be satisfied by the" +:+ phrase output
 
 -- s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
 --  [(\x -> P $ fst(x)), (\x -> snd(x))] 
@@ -492,7 +492,7 @@ s7_1_intro = Paragraph $
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
-  [(((short requirement) :+: S "1"), S "Input the following" +:+
+  [(((short requirement) :+: S "1"), at_start input +:+ S "the following" +:+
     plural quantity :+: S ", which define the glass dimensions" `sC` 
     (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase $ probability ^. term) +:+
     S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
@@ -509,7 +509,7 @@ s7_1_list =
 --  (S "Input Parameters") False
   (Enumeration $ Simple $
   [(((short requirement) :+: S "2"), Nested (S "The" +:+ phrase system +:+
-  S "shall set the known values as follows: ") (Bullet $ map (\c -> Flat c) 
+  S "shall set the known" +:+ plural value +:+ S "as follows: ") (Bullet $ map (\c -> Flat c) 
     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
     S "following" +:+ (short assumption) :+: S "4",
@@ -519,21 +519,21 @@ s7_1_list =
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
-  S "the entered input values to ensure that they do not exceed the" +:+ plural datumConstraint +:+
+  S "the entered" +:+ phrase input +:+ plural value +:+ S "to ensure that they do not exceed the" +:+ plural datumConstraint +:+
   S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
-  S "the input" +:+ (plural $ parameter ^. term) +:+ S "is out of bounds, an error message is" +:+
+  S "the" +:+ phrase input +:+ (plural $ parameter ^. term) +:+ S "is out of bounds, an error message is" +:+
   S "displayed and the" +:+ (plural $ calculation ^. term) +:+. S "stop"),
-  (((short requirement) :+: S "4"), S "Output the input" +:+ plural quantity +:+
+  (((short requirement) :+: S "4"), titleize output +:+ S "the" +:+ phrase input +:+ plural quantity +:+
   S "from" +:+ (short requirement) :+: S "1 and the known" +:+ plural quantity
   +:+ S "from" +:+ (short requirement) :+: S "2."),
   (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
   (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true" `sC`
-  S "output the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
-  S "the" +:+ phrase condition +:+ S "is false, then output the message" +:+ 
+  phrase output +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
+  S "the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output +:+ S "the message" +:+ 
   Quote (notSafe ^. defn))] ++
-  [(((short requirement) :+: S "6"), Nested (S "Output the following" +:
+  [(((short requirement) :+: S "6"), Nested (titleize output +:+ S "the following" +:
   plural quantity)
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
@@ -578,11 +578,11 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   (S "In the future" +:+ (plural $ calculation ^. term) +:+ S "can be added for the internal" +:+
   (phrase $ blastRisk ^. term)))),
   (((short likelyChg) :+: S "2"), ((short assumption) :+:
-  S "4" `sC` (short assumption) :+: S "8 - Currently the values for"
+  S "4" `sC` (short assumption) :+: S "8 - Currently the" +:+ plural value +:+ S "for"
   +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
   S "and" +:+ (P $ mod_elas ^. symbol) +:+ S "are assumed to be the"
-  +:+ S "same for all glass. In the future these values can be changed to"
-  +:+ phrase variable +:+. S "inputs")),
+  +:+ S "same for all glass. In the future these" +:+ plural value +:+ S "can be changed to"
+  +:+ phrase variable +:+. plural input)),
   (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
   S "5 - The" +:+ phrase software +:+ S "may be changed to accommodate more than a single" +:+.
   (phrase $ lite ^. term))),
@@ -601,7 +601,7 @@ s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
   S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
   S "modified if a certain component is changed. Every time a component is changed, the" +:+
-  plural item +:+ S "in the column of that component that are marked with an" +:+ Quote (S "X") +:+.
+  plural item +:+ S "in the" +:+ phrase column +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+.
   S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
@@ -846,7 +846,7 @@ s11 = section (titleize appendix) [s11_intro, fig_5, fig_6] []
 s11_intro = Paragraph $
   S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)) +:+
-  S "used for interpolating values needed in the" +:+. plural model
+  S "used for interpolating" +:+ plural value +:+ S "needed in the" +:+. plural model
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+

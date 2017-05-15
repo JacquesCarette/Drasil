@@ -52,7 +52,7 @@ module Language.Drasil (
   --Chunk.UWrapper 
   , UWrapper, uw
   -- Spec
-  , USymb(..), Sentence(..), Accent(..), sMap, sParen
+  , USymb(..), Sentence(..), Accent(..), sParen
   , (+:+), (+:+.), sC, (+:)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
@@ -116,7 +116,7 @@ import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
-                              sMap, sParen, sC, (+:+), (+:+.), (+:))
+                              sParen, sC, (+:+), (+:+.), (+:))
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet

@@ -61,12 +61,6 @@ instance Show RefType where
   show Assump = "Assumption"
   show LC = "Likely Change"
   show UC = "Unlikely Change"
-  
--- this is a horrible hack that assumes too much from sentences!
-sMap :: (String->String) -> Sentence -> Sentence
-sMap f (S a) = S (f a)
-sMap f (a :+: b) = sMap f a :+: sMap f b
-sMap _ a = a
 
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"

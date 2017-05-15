@@ -6,7 +6,7 @@ import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
-import Control.Lens ((^.))
+--import Control.Lens ((^.))
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)

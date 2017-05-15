@@ -27,13 +27,13 @@ fund :: String -> String -> String -> FundUnit
 fund nam desc sym = UD (dcc nam (cn' nam) desc) (UName $ Atomic sym)
 
 metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
-metre    = fund "Metre"    "length"               "m"
-kilogram = fund "Kilogram" "mass"                 "kg"
-second   = fund "Second"   "time"                 "s"
-kelvin   = fund "Kelvin"   "temperature"          "K"
-mole     = fund "Mole"     "amount of substance"  "mol"
-ampere   = fund "Ampere"   "electric current"     "A"
-candela  = fund "Candela"  "luminous intensity"   "cd"
+metre    = fund "metre"    "length"               "m"
+kilogram = fund "kilogram" "mass"                 "kg"
+second   = fund "second"   "time"                 "s"
+kelvin   = fund "kelvin"   "temperature"          "K"
+mole     = fund "mole"     "amount of substance"  "mol"
+ampere   = fund "ampere"   "electric current"     "A"
+candela  = fund "candela"  "luminous intensity"   "cd"
 
 ------------- Commonly defined units -------------------------------------------
 
@@ -52,50 +52,50 @@ centigrade, joule, watt, calorie, kilowatt, pascal, newton, millimetre,
   kilopascal, radians :: DerUChunk
 
 centigrade = DUC 
-  (UD (dcc "centigrade" (cn "Centigrade") "temperature") 
+  (UD (dcc "centigrade" (cn "centigrade") "temperature") 
       (UName (Concat [Special Circle, Atomic "C"])))
   (UShift 273.15 (kelvin ^. usymb))
 
 joule = DUC
-    (UD (dcc "joule" (cn' "Joule") "energy") (UName $ Atomic "J"))
+    (UD (dcc "joule" (cn' "joule") "energy") (UName $ Atomic "J"))
     (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
                       UPow (second ^. usymb) (-2)]))
 
 calorie = DUC
-  (UD (dcc "calorie" (cn' "Calorie") "energy") (UName $ Atomic "cal"))
+  (UD (dcc "calorie" (cn' "calorie") "energy") (UName $ Atomic "cal"))
   (UScale 4.184 (joule ^. usymb))
 
 watt = DUC
-  (UD (dcc "watt" (cn' "Watt") "power") (UName $ Atomic "W"))
+  (UD (dcc "watt" (cn' "watt") "power") (UName $ Atomic "W"))
   (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
                     UPow (second ^. usymb) (-3)]))
 
 kilowatt = DUC
-  (UD (dcc "kilowatt" (cn' "Kilowatt") "power")
+  (UD (dcc "kilowatt" (cn' "kilowatt") "power")
       (UName $ Concat [Atomic "k", Atomic "W"]))
   (UScale 1000 (watt ^. usymb))
 
 pascal = DUC
-  (UD (dcc "pascal" (cn' "Pascal") "pressure") (UName $ (Atomic "Pa")))
+  (UD (dcc "pascal" (pn' "Pascal") "pressure") (UName $ (Atomic "Pa")))
   (USynonym (UProd [(kilogram ^. usymb), (UPow (metre ^. usymb) (-1)),
                       (UPow (second ^. usymb) (-2))]))
 
 newton = DUC
-  (UD (dcc "newton" (cn' "Newton") "force") (UName $ Atomic "N"))
+  (UD (dcc "newton" (pn' "Newton") "force") (UName $ Atomic "N"))
   (USynonym (UProd [(kilogram ^. usymb), (UPow (second ^. usymb) (-2))]))
 
 millimetre = DUC
-  (UD (dcc "millimetre" (cn' "Millimetre") "length")
+  (UD (dcc "millimetre" (cn' "millimetre") "length")
       (UName $ (Atomic "mm")))
   (UScale 0.0001 (metre ^. usymb))
 
 kilopascal = DUC
-  (UD (dcc "kilopascal" (cn' "Kilopascal") "pressure")
+  (UD (dcc "kilopascal" (cn' "kilopascal") "pressure")
       (UName $ Concat [Atomic "k", Atomic "Pa"]))
   (UScale 1000 (pascal ^. usymb))
 
 radians = DUC
-    (UD (dcc "radians" (cn' "Radians") "angle") (UName $ Atomic "rad"))
+    (UD (dcc "radians" (cn' "radians") "angle") (UName $ Atomic "rad"))
     (USynonym (metre /: metre))
 
 -- FIXME: Need to add pi 
@@ -103,7 +103,7 @@ radians = DUC
   --  (UD (dcc "Degrees" "angle") (UName (Special Circle)))
   --  Equiv to pi/180 rad.
 degree :: FundUnit --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "Degree") "angle") (UName (Special Circle))
+degree = UD (dcc "degree" (cn' "degree") "angle") (UName (Special Circle))
 
 -- FIXME: These should probably be moved elsewhere --
     

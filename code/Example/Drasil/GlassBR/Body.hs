@@ -81,8 +81,8 @@ s2_intro = Paragraph $
   (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+. 
   (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
   +:+ S "under consideration is" +:+. (blast ^. defn) +:+
-  S "The" +:+ phrase software :+: S ", herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
-  S "predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
+  S "The" +:+ phrase software :+: S ", herein called" +:+ (gLassBR ^. defn) +:+
+  S "aims to predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
   S "interface. The following" +:+ phrase section_ +:+ S "provides an overview" +:+
   S "of the" +:+ titleize srs +:+ sParen (short srs) +:+ S "for" +:+. 
@@ -108,8 +108,8 @@ s2_1_intro =
   S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
   S "to solve it", Paragraph $ S "This" +:+ phrase document +:+ S "will be used" +:+
   S "as a starting point for subsequent development phases, including writing the" +:+
-  phrase desSpec +:+ S "and the" +:+ phrase software +:+ phrase vav +:+ S "plan. The" +:+ phrase design +:+
-  phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
+  phrase desSpec +:+ S "and the" +:+ phrase software +:+ phrase vav +:+ S "plan. The" 
+  +:+ phrase design +:+ phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
   S "are to be realized, including" +:+ S "decisions on the numerical" +:+
   S "algorithms and programming" +:+. phrase environment +:+ S "The" +:+ phrase vav +:+ --'environment' used correctly?
   S "plan will show the steps that will be used to increase confidence in the" +:+
@@ -154,7 +154,8 @@ s3_1_intro = Paragraph $
 s3_2 = section (titleize $ the customer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
-  (at_start' $ the customer) +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
+  (at_start' $ the customer) +:+ S "are the end" +:+ phrase user +:+
+  S "of" +:+. (gLassBR ^. defn)
 
 s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
 
@@ -170,10 +171,10 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
-  (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+ phrase theory +:+
-  S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. (phrase $ blastRisk ^. term)),
-  (S "The end" +:+ phrase user +:+ S "is expected to have basic computer" +:+
-  S "literacy to handle the" +:+. phrase software)]
+  (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
+  phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. 
+  (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
+  S "is expected to have basic computer literacy to handle the" +:+. phrase software)]
 
 s4_2 = section (titleize' systemConstraint) [s4_2_intro] []
 
@@ -248,9 +249,10 @@ s6_1 = section (titleize problemDescription) [s6_1_intro] [s6_1_1,
 s6_1_intro = Paragraph $ 
   S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
   +:+ (phrase $ blastRisk ^. term) +:+. S "involved with the glass" +:+ (gLassBR ^. defn)
-  +:+ S "is a" +:+ S "computer" +:+ (phrase $ program ^. term) +:+ S "developed to interpret the inputs"
-  +:+ S "to give out the outputs which predicts whether the" +:+ (phrase $ glaSlab ^. term) +:+
-  S "can withstand the" +:+ (phrase $ blast ^. term) +:+ S "under the" +:+. plural condition
+  +:+ S "is a" +:+ S "computer" +:+ (phrase $ program ^. term) +:+ S "developed to interpret" 
+  +:+ S "the inputs to give out the outputs which predicts whether the" +:+
+  (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+ (phrase $ blast ^. term) +:+
+  S "under the" +:+. plural condition
 
 s6_1_1 = section (titleize' (terminology `and_'` definition)) [s6_1_1_intro, 
   s6_1_1_bullets] []
@@ -356,8 +358,8 @@ s6_2_1_list =
     +:+. S "beam and (3) glass supported on one side acts as a cantilever"), 
   (((short assumption) :+: S "2"), S "This practice does not apply" 
     +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
-    S "notched, or grooved glass with" +:+ (phrase $ surface ^. term) +:+ S "and edge treatments" +:+.
-    S "that alter the glass strength"),
+    S "notched, or grooved glass with" +:+ (phrase $ surface ^. term) +:+ S "and edge"
+    +:+. "treatments that alter the glass strength"),
   (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
     S "only considers the external explosion scenario for its" +:+. (plural $ calculation ^. term)),
   (((short assumption) :+: S "4"), S "Standard values used for" +:+
@@ -600,12 +602,14 @@ s9_intro1 = Paragraph $
   S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
-  titleize table_ +:+ S "6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
+  titleize table_ +:+ S "6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency 
+  +:+ S "of" +:+
   plural requirement +:+ S "on" +:+ 
   plural thModel `sC`
   (plural inModel) `sC`
   (plural dataDefn) +:+ S "and" +:+. plural datumConstraint +:+
-  titleize table_ +:+ S "7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
+  titleize table_ +:+ S "7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency 
+  +:+ S "of" +:+
   plural thModel `sC`
   (plural dataDefn) `sC`
   plural inModel `sC`
@@ -761,7 +765,8 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other" +:+ titleize' item) True
+  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other" 
+  +:+ titleize' item) True
 
 s9_intro2 = 
   [Paragraph $
@@ -793,7 +798,8 @@ s9_intro2 =
   plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
 fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) 
-  +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different" +:+ titleize' section_) "Trace.png"
+  +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different"
+  +:+ titleize' section_) "Trace.png"
 
 fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
@@ -835,9 +841,9 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
 s11 = section (titleize appendix) [s11_intro, fig_5, fig_6] []
 
 s11_intro = Paragraph $
-  S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+ sParen ((makeRef fig_5)
-  +:+ S "and" +:+ (makeRef fig_6)) +:+ S "used for interpolating values needed in the"
-  +:+. plural model
+  S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+
+  sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)) +:+
+  S "used for interpolating values needed in the" +:+. plural model
 
 fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+

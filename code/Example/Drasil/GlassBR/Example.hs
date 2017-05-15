@@ -186,7 +186,7 @@ aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr,
   
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
-aR            = dcc "aR" (nounPhraseSP "Aspect ratio") 
+aR            = dcc "aR" (nounPhraseSP "aspect ratio") 
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
@@ -199,23 +199,23 @@ gbr           = dcc "gbr" (nounPhraseSP "glass breakage")
 lite          = dcc "lite" (nounPhraseSP "lite")
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
-glassTy       = dcc "glassTy" (nounPhraseSP "Glass Types") "Type of glass"
+glassTy       = dcc "glassTy" (nounPhraseSP "glass types") "type of glass"
 an            = dcc "an" (nounPhraseSP "Annealed glass")
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5] in " ++
     "Reference.")
-ft            = dcc "ft" (nounPhraseSP "Fully tempered glass")
+ft            = dcc "ft" (nounPhraseSP "fully tempered glass")
   ("A flat and monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6] in " ++
     "Reference.")
-hs            = dcc "hs" (nounPhraseSP "Heat strengthened glass")
+hs            = dcc "hs" (nounPhraseSP "heat strengthened glass")
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6] in Reference.")
-gtf           = dccWDS "gtf" (nounPhraseSP "Glass type factor") 
+gtf           = dccWDS "gtf" (nounPhraseSP "glass type factor") 
   (S "A multiplying factor for adjusting the " :+: (getAcc lResistance) :+:
   S " of different glass type, that is, " :+: (getAcc annealedGlass) :+: 
   S ", " :+: (getAcc heatSGlass) :+: S ", or " :+: (getAcc fullyTGlass) :+: 
@@ -223,49 +223,49 @@ gtf           = dccWDS "gtf" (nounPhraseSP "Glass type factor")
   S "or " :+: (getAcc iGlass) :+: S " (Insulating Glass) constructions.")
 lateral       = dcc "lateral" (cn "lateral") "Perpendicular to the glass surface."
 load          = dcc "load" (cn "load") "A uniformly distributed lateral pressure."
-specDeLoad    = dcc "specDeLoad" (nounPhraseSP "Specified design load")
+specDeLoad    = dcc "specDeLoad" (nounPhraseSP "specified design load")
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
-lr            = dcc "lr" (nounPhraseSP "Load resistance")
+lr            = dcc "lr" (nounPhraseSP "load resistance")
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
     "[4] in Reference.")
-ldl           = dcc "ldl" (nounPhraseSP "Long duration load")
+ldl           = dcc "ldl" (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
-nfl           = dccWDS "nfl" (nounPhraseSP "Non-factored load")
+nfl           = dccWDS "nfl" (nounPhraseSP "non-factored load")
   (S ("Three second duration uniform load associated with a probability of " ++
     "breakage less than or equal to 8 lites per 1000 for monolithic ") :+:
     (getAcc annealedGlass) :+: S " glass.")
-glassWL       = dcc "glassWL" (nounPhraseSP "Glass weight load")
+glassWL       = dcc "glassWL" (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
-sdl           = dcc "sdl" (nounPhraseSP "Short duration load")
+sdl           = dcc "sdl" (nounPhraseSP "short duration load")
   "Any load lasting 3s or less."
-lsf           = dccWDS "lsf" (nounPhraseSP "Load share factor")
+lsf           = dccWDS "lsf" (nounPhraseSP "load share factor")
   (S "A multiplying factor derived from the load sharing between the double " :+:
   S "glazing, of equal or different thickness's and types (including the " :+:
   S "layered behaviour of " :+: (getAcc lGlass) :+: S " under long duration " :+:
   S "loads), in a sealed " :+: (getAcc iGlass) :+: S " unit.")
-pb            = dcc "pb" (nounPhraseSP "Probability of breakage")
+pb            = dcc "pb" (nounPhraseSP "probability of breakage")
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
     "in lites per 1000.")
-specA         = dcc "specA" (nounPhraseSP "Specifying authority")
+specA         = dcc "specA" (nounPhraseSP "specifying authority")
   ("The design professional responsible for interpreting applicable " ++
     "regulations of authorities having jurisdiction and considering " ++
     "appropriate site specific factors to determine the appropriate " ++
     "values used to calculate the specified design load, and furnishing " ++
     "other information required to perform this practice.")
-blaReGLa      = dcc "blaReGLa" (nounPhraseSP "Blast resistant glazing")
+blaReGLa      = dcc "blaReGLa" (nounPhraseSP "blast resistant glazing")
   ("Glazing that provides protection against air blast pressure generated " ++
     "by explosions.")
-eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "Equivalent TNT charge mass")
+eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
 sD            = dcc "sD" (nounPhraseSP "stand off distance")
   ("The distance from the glazing surface to the centroid of a " ++
     "hemispherical high explosive charge.")
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
-blast         = dcc "blast" (cn' "blast") "Any kind of man-made explosion"
+blast         = dcc "blast" (cn' "blast") "any kind of man-made explosion"
 blastRisk     = dcc "blastRisk" (nounPhraseSP "blast risk") "FIXME: Define this or remove the need for definitions"
 blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
@@ -273,11 +273,11 @@ blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
 glassGeo      = dcc "glassGeo" (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
-capacity      = dcc "capacity" (cnIES "capacity") "The load resistance calculated"
+capacity      = dcc "capacity" (cnIES "capacity") "the load resistance calculated"
 demandq       = dcc "demandq" (cn' "demand") "3 second duration equivalent pressure"
-safeMessage   = dcc "safeMessage" (cn "Safe")
+safeMessage   = dcc "safeMessage" (cn "safe")
   ("For the given input parameters, the glass is considered safe.")
-notSafe       = dcc "notSafe" (nounPhraseSP "Not safe")
+notSafe       = dcc "notSafe" (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
 
 --Theoretical models--
@@ -285,7 +285,7 @@ tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]
 
 t1SafetyReq :: RelationConcept
-t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
+t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "safety requirement-1")
   t1descr safety_require1_rel
 
 safety_require1_rel :: Relation
@@ -299,13 +299,13 @@ t1descr =
   (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either " :+:
   S "both True or both False. " :+: (P $ prob_br ^. symbol) :+: 
-  S " is the " :+: (sMap (map toLower) (phrase $ prob_br ^. term)) :+: 
+  S " is the " :+: (phrase $ prob_br ^. term) :+: 
   S ", as calculated in " :+: (makeRef (Definition (Theory probOfBr))) :+: 
   S ". " :+: (P $ pb_tol ^. symbol) :+: S " is the " :+: 
-  (sMap (map toLower) (phrase $ pb_tol ^. term)) :+: S " entered by the user."
+  (phrase $ pb_tol ^. term) :+: S " entered by the user."
 
 t2SafetyReq :: RelationConcept
-t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
+t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "safety requirement-2")
   t2descr safety_require2_rel
 
 safety_require2_rel :: Relation
@@ -331,7 +331,7 @@ iModels :: [RelationConcept]
 iModels =[probOfBr, calOfCap, calOfDe]
 
 probOfBr :: RelationConcept
-probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
+probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage") --make into an NPNC type? (along with calOfCap, calOfDe)
   pbdescr pb_rel 
 
 pb_rel :: Relation
@@ -340,7 +340,7 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 pbdescr :: Sentence
 pbdescr =
   (P $ prob_br ^. symbol) :+: S " is the calculated " :+: 
-  (sMap (map toLower) (phrase $ prob_br ^. term)) :+: S ". "  :+: 
+  (phrase $ prob_br ^. term) :+: S ". "  :+: 
   (P $ risk_fun ^. symbol) :+: S " is the " :+: (phrase $ risk ^. term) :+: S "."
 
 calOfCap :: RelationConcept
@@ -359,7 +359,7 @@ capdescr =
   (phrase $ loadSF ^. term) :+: S "."
 
 calOfDe :: RelationConcept
-calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)")
+calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
   dedescr de_rel
 
 de_rel :: Relation
@@ -368,16 +368,16 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 dedescr :: Sentence
 dedescr = 
   (P $ demand ^. symbol) :+: S " or " :+: 
-  (sMap (map toLower) (phrase $ demandq ^. term)) :+: S ", is the " :+:
+  (phrase $ demandq ^. term) :+: S ", is the " :+:
   (demandq ^. defn) :+: S " obtained from Figure 2 by interpolation using " 
-  :+: (sMap (map toLower) (phrase $ sD ^. term)) :+: S " (" :+: (P $ sd ^. symbol) 
+  :+: (phrase $ sD ^. term) :+: S " (" :+: (P $ sd ^. symbol) 
   :+: S ") and " :+: (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
   (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
   (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
   S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
   (phrase $ char_weight ^. term) :+: S ". " :+: 
   (P $ tNT ^. symbol) :+: S " is the " :+: (phrase $ tNT ^. term) :+: S ". " :+: 
-  (P $ sd ^.symbol) :+: S " is the " :+: (sMap (map toLower) (phrase $ sD ^. term))
+  (P $ sd ^.symbol) :+: S " is the " :+: (phrase $ sD ^. term)
   :+: S " where " :+: (P $ sd ^. symbol) :+: S " = ." 
   --equation in sentence
 

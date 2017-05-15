@@ -79,7 +79,7 @@ s2_intro = Paragraph $
   at_start software +:+ S "is helpful to efficiently and correctly predict the" +:+ 
   (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+. 
   (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
-  +:+ S "under consideration is" +:+. (sLower (blast ^. defn)) +:+ --FIXME: find a way to remove "sLower" entirely.
+  +:+ S "under consideration is" +:+. (blast ^. defn) +:+
   S "The" +:+ phrase software :+: S ", herein called" +:+ (gLassBR ^. defn) +:+ S "aims to" +:+
   S "predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
   (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
@@ -141,19 +141,19 @@ s3 = section (titleize' stakeholder) [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the" +: titleize' stakeholder +:+ 
-  S "the people who have an interest in the" +:+. phrase product_
+  S "the people who have an interest in" +:+. (phrase $ the product_)
 
 s3_1 = section (titleize $ the client) [s3_1_intro] []
 
 s3_1_intro = Paragraph $
   (phrase $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
-  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ (phrase $ the client) +:+
+  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ (at_start $ the client) +:+
   S "has the final say on acceptance of the" +:+. phrase product_
 
 s3_2 = section (titleize $ the customer) [s3_2_intro] []
 
 s3_2_intro = Paragraph $
-  (plural $ the customer) +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
+  (at_start' $ the customer) +:+ S "are the end" +:+ phrase user +:+ S "of" +:+. (gLassBR ^. defn)
 
 s4 = section (titleize generalSystemDescription) [s4_intro] [s4_1, s4_2]
 
@@ -220,7 +220,7 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
   S "comparing whether" +:+ (phrase $ capacity ^. term) +:+
   S "is greater than" +:+. (phrase $ demandq ^. term) +:+
   (at_start $ capacity ^. term) +:+ S "is the" +:+
-  (sLower (capacity ^. defn)) +:+ S "and" +:+
+  (capacity ^. defn) +:+ S "and" +:+
   (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
   S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ 
   phrase condition +:+ S "is to check whether the calculated probability" +:+ 
@@ -303,12 +303,12 @@ s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLa
   +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
   S "following elements:"
 
-fig_glassbr = Figure (titleize $ the physicalSystem) "physicalsystimage.png"
+fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
 s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
   (((short physSyst) :+: S "2"), S "The point of explosion." +:+
-  S "Where the bomb, or" +:+ sLower (blast ^. defn) `sC` 
+  S "Where the bomb, or" +:+ (blast ^. defn) `sC` 
   S "is located. The" +:+ ((phrase $ sD ^. term)) 
   +:+. S "is the distance between the point of explosion and the glass")]
 --NOTE: The only difference here from the original is the removal of an 
@@ -488,7 +488,7 @@ s7_1_list =
   [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "1"), S "Input the following" +:+
     plural quantity :+: S ", which define the glass dimensions" `sC` 
-    (sLower (glassTy ^. defn)) `sC` S "tolerable probability"
+    (glassTy ^. defn) `sC` S "tolerable probability"
     +:+ S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
     (phrase $ blast ^. term))]),
   (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 

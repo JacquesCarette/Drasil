@@ -75,7 +75,7 @@ glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
 
-s2 = SRS.intro [Con s2_intro, Sub s2_1, Sub s2_2, Sub s2_3]
+s2 = SRS.intro [s2_intro] [s2_1, s2_2, s2_3]
 
 s2_intro = Paragraph $ 
   at_start software +:+ S "is helpful to efficiently and correctly predict the" +:+ 

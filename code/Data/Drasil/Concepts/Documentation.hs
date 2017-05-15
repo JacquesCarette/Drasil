@@ -34,7 +34,7 @@ analysis, appendix, characteristic, client, computer, condition, constraint_, co
   property, purpose, quantity, realtime, reference, requirement_, scope, 
   source, section_, simulation, software, solution, specific, specification, 
   stakeholder, symbol_, system, table_, template, terminology, theory, 
-  traceyMatrix, user, useCase, video, verification :: NPNC
+  traceyMatrix, user, useCase, variable, video, verification :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -101,6 +101,7 @@ theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
+variable        = npnc "variable"       (cn' "variable")
 video           = npnc "video"          (cn' "video")
 verification    = npnc "verification"   (cn' "verification")
 realtime        = npnc "real-time"      (cn' "real-time")

@@ -4,6 +4,7 @@ import Drasil.SSP.Units
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Quantities.SolidMechanics
 
 import Control.Lens ((^.))
 
@@ -32,11 +33,11 @@ fs_rc :: RelationConcept
 fs_rc = makeRC "fs_rc" (factor `of_''` safety) fs_desc fs_rel
 
 fs_rel :: Relation
-fs_rel = (C fs) := (C p) / (C s)
+fs_rel = (C fs) := (C shearRes) / (C s)
 
 fs_desc :: Sentence
 fs_desc = 
   S "The stability metric of the slope, known as the factor of safety" +:+
   (sParen $ P $ fs ^. symbol) `sC` S "is determined by the ratio of the" +:+
   S "shear force at the base of the slope" +:+ (sParen $ P $ s ^. symbol) `sC` 
-  S "and the resistive shear" +:+. (sParen $ P $ p ^. symbol)
+  S "and the resistive shear" +:+. (sParen $ P $ shearRes ^. symbol)

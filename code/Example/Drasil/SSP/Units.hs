@@ -23,7 +23,7 @@ fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, f,
   m, delta, k, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-  dv_i, dx_i, dy_i, s, p :: UnitalChunk
+  dv_i, dx_i, dy_i, s :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -100,9 +100,7 @@ pi_f        = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
   fixme
   (sub cP lI) newton
 
-p           = uc' "P" (cn "shear resistance")
-  fixme
-  (cP) newton
+--p           = SM.shearRes
 
 ti          = uc' "T_i" 
   (cn "mobilized shear force without the influence of interslice forces for slice i")
@@ -189,7 +187,7 @@ hi_2        = uc' "h_i" (cn "midpoint height; distance from the slip base to the
 
 f           = uc' "F" (cn "generic force; assumed 1D allowing a scalar")
   fixme
-  cF metre
+  cF newton
 
 m           = uc' "M" (cn "moment of a body; assumed 2D allowing a scalar")
   fixme

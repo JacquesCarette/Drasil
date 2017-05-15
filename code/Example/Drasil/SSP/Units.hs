@@ -25,7 +25,7 @@ fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, genForce,
   momntOfBdy, delta, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-  dv_i, dx_i, dy_i, mobShear :: UnitalChunk
+  dv_i, dx_i, dy_i :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -34,7 +34,8 @@ fixme :: String
 fixme = "FIXME: Define this or remove the need for definitions"
 
 fricAngle   = uc' "varphi'" (cn "effective angle of friction")
-  fixme
+  ("The angle of inclination with respect to the horizontal axis of " ++ 
+  "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (Concat [Greek Phi_V, Atomic "'"]) degree
 
 cohesion    = uc' "c'" (cn "effective cohesion")
@@ -42,15 +43,15 @@ cohesion    = uc' "c'" (cn "effective cohesion")
   (Atomic "c'") pascal
 
 dryWeight   = uc' "gamma" (cn "unit weight of dry soil/ground layer")
-  fixme
+  "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight
 
 satWeight   = uc' "gamma_sat" (cn "unit weight of saturated soil/ground layer")
-  fixme
+  "The weight of saturated soil/ground layer divided by the volume of the layer."
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight
 
 waterWeight = uc' "gamma_w" (cn "unit weight of water")
-  fixme
+  "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight
 
 --elastMod    = SM.elastMod
@@ -92,9 +93,7 @@ si          = uc' "S_i" (cn "mobilized shear force for slice i")
   fixme
   (sub cS lI) newton
 
-mobShear    = uc' "S" (cn "mobilized shear force")
-  fixme
-  cS newton
+--mobShear    = SM.mobShear
 
 pi_f        = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
   "force that describes the limit of mobilized shear force the slice i " ++

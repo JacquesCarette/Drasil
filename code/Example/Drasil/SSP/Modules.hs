@@ -1,8 +1,14 @@
 module Drasil.SSP.Modules where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Software
+
 import Data.Drasil.Modules
+import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.SolidMechanics
+import Data.Drasil.Concepts.Software
+
+import Drasil.SSP.Units
+import Drasil.SSP.Defs
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
@@ -43,8 +49,8 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "prompted command line inputs. Input data includes the x,y" +:+
    S "coordinates of the slope, with a set of coordinates for each" +:+
    S "layer. For each layer it's soil properties of effective angle of" +:+
-   S "friction, effective cohesion, dry unit weight, saturated unit" +:+
-   S "weight, elastic modulus, and Poisson's ratio are stored in vectors" +:+
+   S "friction, effective cohesion, dry unit weight, saturated unit weight, elastic modulus," +:+ 
+   S "and Poisson's ratio are stored in vectors" +:+
    S "of soil properties. If a piezometric surface exists in the slope" +:+
    S "it's coordinates and the unit weight of water are also included in" +:+
    S "the input. Lastly an expected range for the entrance and exit points" +:+

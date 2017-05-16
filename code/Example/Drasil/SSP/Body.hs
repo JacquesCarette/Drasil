@@ -120,7 +120,7 @@ s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
   (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+ S "will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
-  S "numerical algorithms and programming" +:+ (phrase environment) +:+. S "The" +:+
+  S "numerical algorithms and programming" +:+. (phrase environment) +:+ S "The" +:+
   (phrase vav) +:+ S "plan will show the steps that will" +:+
   S "be used to increase confidence in the" +:+ (phrase softwareDoc) +:+ S "and" +:+
   S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+

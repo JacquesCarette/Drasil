@@ -63,8 +63,8 @@ mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
 
 mod_shape :: ModuleChunk
 mod_shape = makeImpModule mod_shape_serv
-    (S "The data structure of a collision shape. Children: Circle Module, " :+:
-    S "Segment Module, Polygon Module.")
+    (S "The data structure of a collision shape. Children: Circle" `sC` 
+    (phrase module_) +:+ S "Segment Module, Polygon Module.")
     chipmunk
     []
     []

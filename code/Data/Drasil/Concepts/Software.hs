@@ -1,12 +1,12 @@
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (srs)
+import Data.Drasil.Concepts.Documentation (srs, input_, output_)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
 program, c, physLib :: ConceptChunk
-os, matlab :: NPNC
+os, matlab, inDatum, outDatum :: NPNC
 
 c       = dcc "c" (pn "C") "C programming language"
 matlab  = npnc' "matlab" (pn' "MATLAB programming language") "MATLAB"
@@ -17,6 +17,8 @@ physLib = dcc "physLib" (cnIES "physics library")
 program = dcc "program" (cn' "program")
   ("A series of coded software instructions to control the operation of a " ++
   "computer or other machine.")
+inDatum  = compoundNPNC input_ datum
+outDatum = compoundNPNC output_ datum
 
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 

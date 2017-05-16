@@ -46,7 +46,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
-mod_inputf = mod_input_fun program [mod_hw] mod_inputf_desc (S "input" +:+ (plural datum))
+mod_inputf = mod_io_fun program [mod_hw] (plural inDatum) mod_inputf_desc
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
@@ -59,7 +59,7 @@ mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
    S "RFEM Module.")
 
 mod_output :: ModuleChunk
-mod_output = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] (S "output" +:+ (plural datum)) mod_outputf_desc
+mod_output = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] (plural outDatum) mod_outputf_desc
 
 -- gen alg module
 mod_genalg_desc :: ConceptChunk

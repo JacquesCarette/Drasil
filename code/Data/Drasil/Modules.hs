@@ -9,6 +9,8 @@ module Data.Drasil.Modules
   , mod_ctrl_fun
   , mod_inputf_fun
   , mod_inputp_fun
+  , mod_plot_fun
+  , mod_rng_fun
   ) where
 
 import Language.Drasil

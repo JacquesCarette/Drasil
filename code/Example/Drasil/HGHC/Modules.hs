@@ -8,6 +8,8 @@ import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
+import Data.Drasil.Modules (mod_outputf_desc_fun)
+
 self :: NPNC
 self = npnc "HGHC" (pn "HGHC")
 
@@ -75,9 +77,7 @@ meth_output = makeFileOutputMethod (nc "write_output" (
   "output"
 
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
-  (S "Outputs the results of the " :+:
-  S "calculations, including the input parameters, " :+:
+mod_outputf_desc = mod_outputf_desc_fun (S "input parameters, " :+:
   S "temperatures, energies, and times when melting starts" :+:
   S " and stops.")
 

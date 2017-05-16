@@ -2,7 +2,6 @@ module Drasil.SWHS.Modules where
 import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Concepts
-import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Modules
@@ -41,8 +40,7 @@ mod_inputv = makeImpModule modInputVerif (S "The format and structure of " :+:
 
 -- Output Format Module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format") (
-  S "Outputs the results of the calculations, including the input parameters," +:+
+mod_outputf_desc = mod_outputf_desc_fun (S "input parameters," +:+
   S "temperatures, energies, and times when melting starts and stops.")
 
 mod_outputf :: ModuleChunk

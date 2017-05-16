@@ -5,7 +5,6 @@ import Language.Drasil
 
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Physics
-import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.Concepts.Software
 
@@ -50,9 +49,7 @@ mod_inputf = mod_io_fun program [mod_hw] (plural inDatum) mod_inputf_desc
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
-  (S "Outputs the results of the calculations, including" +:+
-   S "the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the critical slip calculated by the" +:+
+mod_outputf_desc = mod_outputf_desc_fun ((phrase $ fs_rc ^. term) +:+ S "for the critical slip calculated by the" +:+
    S "Morgenstern Price Module and Rigid Finite Element Method Module" `sC`
    S "and a plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the slope geometry" `sC`
    S "with the showing the element displacements as calculated by the" +:+

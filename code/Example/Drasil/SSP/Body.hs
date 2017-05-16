@@ -106,7 +106,7 @@ s2_p2 = Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "the" +:+ (plural characteristic) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
-s2_1 = section (titleize purpose) [s2_1_p1, s2_1_p2] []
+s2_1 = SRS.prpsOfDoc [s2_1_p1, s2_1_p2] []
 
 s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+  S "determines the" +:+
   (phrase crtSlpSrf) `sC` S "and it's respective" +:+ (phrase $ fs_rc ^. term) +:+
@@ -131,7 +131,7 @@ s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +
   S "fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
-s2_2 = section (titleize scpOfReq) [s2_2_p1] []
+s2_2 = SRS.scpOfReq [s2_2_p1] []
 
 s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
   S "limited to stability analysis of a 2 dimensional slope," +:+
@@ -142,7 +142,7 @@ s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow 
   S "of soil that will occur on the slope."
 
 -- SECTION 2.3 --
-s2_3 = section (titleize orgOfDoc) [s2_3_p1] []
+s2_3 = SRS.orgOfDoc [s2_3_p1] []
 
 s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
   S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
@@ -161,7 +161,7 @@ s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
   S "and" +:+ (plural instMdl) +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
-s3 = section (titleize generalSystemDescription) [s3_p1] [s3_1, s3_2]
+s3 = SRS.genSysDec [s3_p1] [s3_1, s3_2]
 
 s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ (phrase information) +:+
   S "about the" +:+ (phrase system) `sC` S "identifies the interfaces between the" +:+
@@ -169,19 +169,19 @@ s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ 
   S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --
-s3_1 = section (titleize' userCharacteristic) [s3_1_p1] []
+s3_1 = SRS.userChar [s3_1_p1] []
 
 s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   S "Physics, and be familiar with soil and material properties."
 
 -- SECTION 3.2 --
-s3_2 = section (titleize' systemConstraint) [s3_2_p1] []
+s3_2 = SRS.sysCon [s3_2_p1] []
  
 s3_2_p1 = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
 -- SECTION 4 --
-s4 = section (titleize specificsystemdescription) [s4_p1] [s4_1, s4_2]
+s4 = SRS.specSysDec [s4_p1] [s4_1, s4_2]
 
 s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
   (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
@@ -191,14 +191,14 @@ s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:
   S "and finally the" +:+ (plural instMdl) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
 
 -- SECTION 4.1 --
-s4_1 = section (titleize problemDescription) [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
+s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed" +:+
   S "to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
   S "and to calculate the displacement that the slope will experience."
 
 -- SECTION 4.1.1 --
-s4_1_1 = section (titleize terminology) [s4_1_1_list] []
+s4_1_1 = SRS.termogy [s4_1_1_list] []
 
 s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (titleize $ fs_rc ^. term, 
@@ -228,8 +228,7 @@ s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.1.2 --
-s4_1_2 = section (titleize physSyst)
-  [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
+s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
 s4_1_2_p1 = Paragraph $ S "Analysis of the slope is performed" +:+
   S "by looking at properties of the slope as a series" +:+
@@ -261,7 +260,7 @@ fig_forceacting :: Contents
 fig_forceacting = Figure (S "Forces acting on a slice") "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
-s4_1_3 = section (titleize' goalStmt) [s4_1_3_p1, s4_1_3_list] []
+s4_1_3 = SRS.goalStmt [s4_1_3_p1, s4_1_3_list] []
 
 s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
@@ -276,8 +275,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   ]
 
 -- SECTION 4.2 --
-s4_2 = section (titleize' solutionCharSpec)
-  [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
+s4_2 = SRS.solCharSpec [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
   (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
@@ -286,7 +284,7 @@ s4_2_p1 = Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
   (plural instMdl) +:+ S "can be verified."
 
 -- SECTION 4.2.1 --
-s4_2_1 = section (titleize' assumption) [s4_2_1_p1, s4_2_1_list] []
+s4_2_1 = SRS.assump [s4_2_1_p1, s4_2_1_list] []
 
 s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:+
   S "original" +:+ (phrase problem) +:+ S "and helps in developing the" +:+ (phrase thModel) +:+
@@ -336,7 +334,7 @@ s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s4_2_2 = sec_TMs
 
 sec_TMs :: Section
-sec_TMs = section (titleize' thModel) (s4_2_2_p1:s4_2_2_tmods) []
+sec_TMs = SRS.thModel (s4_2_2_p1:s4_2_2_tmods) []
 
 s4_2_2_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:+
   S "general equations and laws that" +:+ (short ssa) +:+
@@ -345,22 +343,22 @@ s4_2_2_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:
 s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = section (titleize' genDefn) [] []
+s4_2_3 = SRS.genDefn [] []
 
 -- SECTION 4.2.4 --
-s4_2_4 = section (titleize' dataDefn) [] []
+s4_2_4 = SRS.dataDefn [] []
 
 -- SECTION 4.2.5 --
 s4_2_5 = sec_IMs
 
 sec_IMs :: Section
-sec_IMs = section (titleize' instMdl) [] []
+sec_IMs = SRS.inModel [] []
 
 -- SECTION 4.2.6 --
-s4_2_6 = section (titleize' datumConstraint) [] []
+s4_2_6 = SRS.datCon [] []
 
 -- SECTION 5 --
-s5 = section (titleize' requirement) [s5_p1] [s5_1, s5_2]
+s5 = SRS.require [s5_p1] [s5_1, s5_2]
 
 s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
   S "functional" +:+ (plural requirement) `sC` 
@@ -370,7 +368,7 @@ s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
   S "the qualities that the software is expected to exhibit."
 
 -- SECTION 5.1 --
-s5_1 = section (titleize' functionalRequirement)
+s5_1 = SRS.funcReq
   [s5_1_list, s5_1_table] []
 
 s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
@@ -426,7 +424,7 @@ table_inputdata =  Table [titleize symbol_, titleize' $ unit_ ^. term, titleize 
           unwrap Nothing = EmptyS
  
 -- SECTION 5.2 --
-s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_p1] []
+s5_2 = SRS.nonfuncReq [s5_2_p1] []
 
 s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "educational tool, therefore accuracy and performance speed" +:+
@@ -434,4 +432,4 @@ s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
-s6 = section (titleize' likelyChg) [] []
+s6 = SRS.likeChg [] []

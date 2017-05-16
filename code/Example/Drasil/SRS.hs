@@ -1,6 +1,6 @@
 module Drasil.SRS
  (doc, doc', intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec,
-  userChar, sysCon, specSysDec, probDesc, goalStmt, solCharSpec, assump,
+  userChar, sysCon, specSysDec, probDesc, termogy, physSyst, goalStmt, solCharSpec, assump,
   thModel, genDefn, dataDefn, inModel, datCon, require, nonfuncReq, funcReq,
   likeChg) where
 --Temporary file for keeping the "srs" document constructor until I figure out
@@ -21,7 +21,7 @@ doc sys authors secs = Document (Doc.srs `for` sys) authors secs
 doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
 intro, prpsOfDoc, scpOfReq, orgOfDoc, genSysDec, userChar, sysCon, specSysDec,
- probDesc, goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn,
+ probDesc, termogy, physSyst, goalStmt, solCharSpec, assump, thModel, genDefn, dataDefn,
  inModel, datCon, require, nonfuncReq, funcReq, likeChg
  :: [Contents] -> [Section] -> Section
 
@@ -36,6 +36,8 @@ sysCon      = section (titleize' Doc.systemConstraint)
 
 specSysDec  = section (titleize Doc.specificsystemdescription)
 probDesc    = section (titleize Doc.problemDescription)
+termogy     = section (titleize Doc.terminology)
+physSyst    = section (titleize Doc.physSyst)
 goalStmt    = section (titleize Doc.goalStmt)
 solCharSpec = section (titleize Doc.solutionCharSpec)
 assump      = section (titleize' Doc.assumption)

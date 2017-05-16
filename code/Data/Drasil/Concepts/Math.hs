@@ -4,7 +4,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 algorithm, calculation, diameter, equation, euclidN, euclidSpace, gradient, graph, matrix, norm, 
-  normal, normalV, number orient, parameter, perp, perpV, probability, surface, unit_, unitV, vector :: ConceptChunk
+  normal, normalV, number, orient, parameter, perp, perpV, probability, surface, unit_, unitV, vector :: ConceptChunk
 
 ode :: CINP
 

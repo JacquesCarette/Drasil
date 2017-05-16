@@ -120,14 +120,14 @@ s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
   (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+ S "will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
-  S "numerical algorithms and programming environment. The" +:+
+  S "numerical algorithms and programming" +:+ (phrase environment) +:+. S "The" +:+
   (phrase vav) +:+ S "plan will show the steps that will" +:+
-  S "be used to increase confidence in the software documentation and" +:+
+  S "be used to increase confidence in the" +:+ (phrase softwareDoc) +:+ S "and" +:+
   S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
   (plural document) +:+ S "that follow the so-called waterfall" +:+ (phrase model) `sC`
   S "the actual development process is not  constrained in any way. Even when" +:+
   S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements" +:+
-  S "point out, the most logical way to present the documentation is still to" +:+
+  S "point out, the most logical way to present the" +:+ (phrase documentation) +:+ S "is still to" +:+
   S "fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
@@ -165,7 +165,7 @@ s3 = SRS.genSysDec [s3_p1] [s3_1, s3_2]
 
 s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ (phrase information) +:+
   S "about the" +:+ (phrase system) `sC` S "identifies the interfaces between the" +:+
-  (phrase system) +:+ S "and its environment, and describes the" +:+ (plural userCharacteristic) +:+
+  (phrase system) +:+ S "and its" +:+ (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+
   S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --

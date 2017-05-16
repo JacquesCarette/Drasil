@@ -3,7 +3,8 @@ module Drasil.GamePhysics.Modules where
 import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.Utils (foldlSent)
-import Data.Drasil.Concepts.Physics (rigidBody, velocity, position)
+import Data.Drasil.Concepts.Physics (rigidBody, velocity, position, friction, 
+    elasticity)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Documentation
 --import Data.Drasil.Concepts.Software
@@ -55,9 +56,10 @@ mod_body = makeImpModule mod_body_serv
 mod_shape_serv :: ConceptChunk
 mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
     (S "Stores the surface" +:+ (phrase $ property ^. term) +:+ 
-    S "of an object, such as friction or" +:+
-    S "elasticity, and provides operations on shapes, such as setting its" +:+.
-    S "friction or elasticity")
+    S "of an object, such as" +:+ (phrase $ friction ^. term) +:+ S "or" `sC`
+    (phrase $ elasticity ^. term) +:+
+    S "and provides operations on shapes, such as setting its" +:+
+    (phrase $ friction ^. term) +:+ S "or" +:+. (phrase $ elasticity ^. term))
 
 mod_shape :: ModuleChunk
 mod_shape = makeImpModule mod_shape_serv

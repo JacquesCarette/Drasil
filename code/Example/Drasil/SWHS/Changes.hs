@@ -3,6 +3,7 @@ module Drasil.SWHS.Changes where
 import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Modules
+import Data.Drasil.Modules
 import Data.Drasil.Concepts.Math (ode)
 
 lcs :: [LCChunk]
@@ -45,7 +46,7 @@ lc9 = LCChunk (nw $ npnc "control" (nounPhraseSP
   "How the overall control of the calculations is orchestrated.")) [mod_ctrl]
 
 lc10 = LCChunk (nw $ npnc "sequence" (nounPhraseSP
-  "The implementation for the sequence (array) data structure.")) [mod_seq]
+  "The implementation for the sequence (array) data structure.")) [Drasil.SWHS.Modules.mod_seq]
 
 lc11 = LCChunk (nw $ npnc "ode" lc11np) [mod_ode]
 

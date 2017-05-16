@@ -1,15 +1,27 @@
 module Drasil.GamePhysics.Modules where
 
+import Control.Lens ((^.))
 import Language.Drasil
-import Data.Drasil.Concepts.Software
+import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Concepts.Physics (rigidBody, velocity, position)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Documentation
+--import Data.Drasil.Concepts.Software
 import Data.Drasil.Modules
 
 import Drasil.GamePhysics.Concepts
 
+
+mod_vector = mod_vector_fun chipmunk []
+mod_seq    = mod_seq_fun chipmunk []
+mod_assoc  = mod_assoc_fun chipmunk []
+mod_linked = mod_linked_fun chipmunk []
+mod_ctrl   = mod_ctrl_fun chipmunk [mod_arbiter, mod_hw]
+
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
-    mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, (mod_vector chipmunk []), mod_bb,
-    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk []), (mod_linked chipmunk []), (mod_assoc chipmunk [])]
+    mod_poly, mod_space, mod_arbiter, mod_ctrl, mod_sw, mod_vector, mod_bb, 
+    mod_trans, mod_spatial, mod_coll, mod_seq, mod_linked, mod_assoc]
 
 -- M1: Hardware Hiding Module --
 
@@ -19,26 +31,31 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 
 mod_body_serv :: ConceptChunk
 mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
-    (S "Stores the physical properties of an object, such as mass, " :+:
-    S "position, rotation, velocity, etc, and provides operations on rigid " :+:
-    S "bodies, such as setting the mass and velocity of the body.")
+    (foldlSent [S "Stores the", (plural physicalProperty), 
+    S "of an object, such as" `sC` (phrase $ mass ^. term), 
+    (phrase $ position ^. term) `sC` S "rotation" `sC` 
+    (phrase $ velocity ^. term), S "etc, and provides operations on", 
+    (plural $ rigidBody ^. term) `sC` S "such as setting the", 
+    (phrase $ mass ^. term), S "and", 
+    (phrase $ velocity ^. term), S "of the body"])
 
 mod_body :: ModuleChunk
 mod_body = makeImpModule mod_body_serv
-    (S "The data structure of a rigid body.")
+    (S "The data structure of a" +:+. (phrase $ rigidBody ^. term))
     chipmunk
     []
     []
-    [mod_spatial, mod_trans, (mod_vector chipmunk []), mod_space]
+    [mod_spatial, mod_trans, mod_vector, mod_space]
     (Just mod_behav)
 
 -- M3: Shape Module --
 
 mod_shape_serv :: ConceptChunk
 mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
-    (S "Stores the surface properties of an object, such as friction or " :+:
-    S "elasticity, and provides operations on shapes, such as setting its " :+:
-    S "friction or elasticity.")
+    (S "Stores the surface" +:+ (phrase $ property ^. term) +:+ 
+    S "of an object, such as friction or" +:+
+    S "elasticity, and provides operations on shapes, such as setting its" +:+.
+    S "friction or elasticity")
 
 mod_shape :: ModuleChunk
 mod_shape = makeImpModule mod_shape_serv
@@ -47,7 +64,7 @@ mod_shape = makeImpModule mod_shape_serv
     chipmunk
     []
     []
-    [mod_trans, mod_bb, (mod_vector chipmunk []), mod_body, mod_space]
+    [mod_trans, mod_bb, mod_vector, mod_body, mod_space]
     (Just mod_behav)
 
 -- M4, M5, M6: Circle, Segment, Polygon Modules (M3 submodules) --
@@ -102,15 +119,15 @@ mod_space = makeImpModule mod_space_serv
     chipmunk
     []
     []
-    [mod_bb, mod_spatial, (mod_assoc chipmunk []), (mod_seq chipmunk []), mod_spatial]
+    [mod_bb, mod_spatial, mod_assoc, mod_seq, mod_spatial]
     (Just mod_behav)
 
 -- M8: Arbiter Module --
 
 mod_arbiter_serv :: ConceptChunk
 mod_arbiter_serv = dccWDS "mod_arbiter_serv" (cn' "arbiter")
-    (S "Stores all collision data, such as which bodies collided and " :+:
-    S "their masses.")
+    (S "Stores all collision data, such as which bodies collided and" +:+. 
+    S "their masses")
 
 mod_arbiter :: ModuleChunk
 mod_arbiter = makeImpModule mod_arbiter_serv
@@ -118,20 +135,10 @@ mod_arbiter = makeImpModule mod_arbiter_serv
     chipmunk
     []
     []
-    [mod_shape, mod_body, (mod_vector chipmunk [])]
+    [mod_shape, mod_body, mod_vector]
     (Just mod_behav)
 
 -- M9: Control Module --
-
-mod_control :: ModuleChunk
-mod_control = makeImpModule modControl
-    (S "The internal data types and algorithms for coordinating the " :+:
-    S "running of the program.")
-    chipmunk
-    []
-    []
-    [mod_arbiter, mod_hw]
-    (Just mod_behav)
 
 -- Software Decision Module --
 
@@ -150,7 +157,7 @@ mod_bb = makeImpModule mod_bb_serv
     chipmunk
     []
     []
-    [(mod_vector chipmunk [])]
+    [mod_vector]
     (Just mod_sw)
 
 -- M12: Transform Matrix Module --
@@ -183,7 +190,7 @@ mod_spatial = makeImpModule mod_spatial_serv
     chipmunk
     []
     []
-    [mod_bb, (mod_vector chipmunk []), mod_coll, (mod_linked chipmunk [])]
+    [mod_bb, mod_vector, mod_coll, mod_linked]
     (Just mod_sw)
 
 -- M14: Collision Solver Module --
@@ -199,7 +206,7 @@ mod_coll = makeImpModule mod_coll_serv
     chipmunk
     []
     []
-    [mod_bb, (mod_vector chipmunk []), (mod_linked chipmunk [])]
+    [mod_bb, mod_vector, mod_linked]
     (Just mod_sw)
 
 -- M15: Sequence Data Structure Module --

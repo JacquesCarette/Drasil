@@ -139,9 +139,9 @@ $\ell{}_{b,i}$ & Total length of the base of a slice (for slice index i) & m
 \\
 $\ell{}_{s,i}$ & Length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i) & m
 \\
-$\gamma{}$ & Unit weight of dry soil/ground layer & $\frac{\text{N}}{\text{m}^{3}}$
+$\gamma{}$ & Dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-$\gamma{}_{Sat}$ & Unit weight of saturated soil/ground layer & $\frac{\text{N}}{\text{m}^{3}}$
+$\gamma{}_{Sat}$ & Saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 $\gamma{}_{w}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -195,7 +195,7 @@ T & Theoretical Model
 A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety.
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers.
 \subsection{Purpose of Document}
-\label{Sec:P}
+\label{Sec:PoD}
 The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process.
 \subsection{Scope of Requirements}
@@ -286,9 +286,9 @@ This section focuses on the general equations and laws that SSA is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:FoS}
+\toprule \textbf{Refname} & \textbf{T:fs.rc}
 \phantomsection 
-\label{T:FoS}
+\label{T:fs.rc}
 \\ \midrule \\
 Label & Factor of Safety
 \\ \midrule \\
@@ -338,9 +338,9 @@ $\nu{}$ &  & Poisson's ratio
 \\
 $\varphi{}'$ & ${}^{\circ}$ & effective angle of friction
 \\
-$\gamma{}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of dry soil/ground layer
+$\gamma{}$ & $\frac{\text{N}}{\text{m}^{3}}$ & dry unit weight
 \\
-$\gamma{}_{Sat}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of saturated soil/ground layer
+$\gamma{}_{Sat}$ & $\frac{\text{N}}{\text{m}^{3}}$ & saturated unit weight
 \\
 $\gamma{}_{w}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 \\

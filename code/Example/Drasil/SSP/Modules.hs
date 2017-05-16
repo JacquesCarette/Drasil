@@ -1,39 +1,33 @@
 module Drasil.SSP.Modules where
 
+import Control.Lens ((^.))
 import Language.Drasil
+
+import Data.Drasil.Modules
+import Data.Drasil.Concepts.Physics
+import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.Concepts.Software
+
+import Drasil.SSP.Units
+import Drasil.SSP.Defs
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
            mod_kinadm, mod_slipslicer, mod_slipweight, mod_mp, mod_rfem,
            mod_sps, mod_sw, mod_sds, mod_rng, mod_plot]
 
--- HW Hiding Module
-mod_hw :: ModuleChunk
-mod_hw = makeImpModule hwHiding
-  (S "The data structure and algorithm used to implement the virtual hardware.")
-  os
-  []
-  []
-  []
-  Nothing
+-- HW Hiding Module imported from Drasil.Module
+-- mod_hw :: ModuleChunk
+-- mod_hw = M.mod_hw
 
 -- Behaviour Hiding Module
-mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule modBehavHiding
-  (S "The contents of the required behaviors.")
-  Nothing
+-- mod_behav :: ModuleChunk
+-- mod_behav = M.mod_behav
 
 
 -- Control module
 mod_ctrl :: ModuleChunk
-mod_ctrl = makeImpModule modControl
-  (S "The algorithm for coordinating the running of the program.")
-  program
-  []
-  []
-  [mod_inputf, mod_outputf, mod_genalg]
-  (Just mod_behav)
+mod_ctrl = mod_ctrl_fun program [mod_inputf, mod_outputf, mod_genalg]
 
 -- input format module
 mod_inputf_desc :: ConceptChunk
@@ -41,30 +35,25 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   (S "Reads the input data from an input file, and/or" +:+
    S "prompted command line inputs. Input data includes the x,y" +:+
    S "coordinates of the slope, with a set of coordinates for each" +:+
-   S "layer. For each layer it's soil properties of effective angle of" +:+
-   S "friction, effective cohesion, dry unit weight, saturated unit" +:+
-   S "weight, elastic modulus, and Poisson's ratio are stored in vectors" +:+
+   S "layer. For each layer it's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
+--   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
+   (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC` (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
+   (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+ S "are stored in vectors" +:+
    S "of soil properties. If a piezometric surface exists in the slope" +:+
-   S "it's coordinates and the unit weight of water are also included in" +:+
+   S "it's coordinates and the" +:+ (phrase $ waterWeight ^. term) +:+ S "are also included in" +:+
    S "the input. Lastly an expected range for the entrance and exit points" +:+
-   S "of the critical slip surface are inputted.")
+   S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
-mod_inputf = makeImpModule mod_inputf_desc
-  (S "The format and structure of the input data.")
-  program
-  []
-  []
-  [mod_hw]
-  (Just mod_behav)
+mod_inputf = mod_inputf_fun program [mod_hw]
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
   (S "Outputs the results of the calculations, including" +:+
-   S "the factor of safety for the critical slip calculated by the" +:+
+   S "the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the critical slip calculated by the" +:+
    S "Morgenstern Price Module and Rigid Finite Element Method Module" `sC`
-   S "and a plot of the critical slip surface on the slope geometry" `sC`
+   S "and a plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the slope geometry" `sC`
    S "with the showing the element displacements as calculated by the" +:+
    S "RFEM Module.")
 
@@ -80,13 +69,13 @@ mod_outputf = makeImpModule mod_outputf_desc
 -- gen alg module
 mod_genalg_desc :: ConceptChunk
 mod_genalg_desc = dccWDS "mod_genalg_desc" (cn' "genetic algorithm")
-  (S "Searches the slope for the critical slip surface with" +:+
-   S "the minimum factor of safety")
+  (S "Searches the slope for the" +:+ (phrase crtSlpSrf) +:+ S "with" +:+
+   S "the minimum" +:+ (phrase $ fs_rc ^. term))
 
 mod_genalg :: ModuleChunk
 mod_genalg = makeImpModule mod_genalg_desc
-  (S "Algorithm to identify the slip surface that has the" +:+
-   S "minimum factor of safety, based on the inputs.")
+  (S "Algorithm to identify the" +:+ (phrase slpSrf) +:+ S "that has the" +:+
+   S "minimum" +:+ (phrase $ fs_rc ^. term) `sC` S "based on the inputs.")
    program
    []
    []
@@ -96,8 +85,8 @@ mod_genalg = makeImpModule mod_genalg_desc
 -- kin adm module
 mod_kinadm_desc :: ConceptChunk
 mod_kinadm_desc = dccWDS "mod_kinadm_desc" (cnIES "kinetic admissibility")
-  (S "Some slip surfaces are physically unlikely or" +:+
-   S "impossible to occur in a slip surface, such as slip surfaces" +:+
+  (S "Some" +:+ (plural slpSrf) +:+ S "are physically unlikely or" +:+
+   S "impossible to occur in a" +:+ (phrase slpSrf) `sC` S "such as" +:+ (plural slpSrf) +:+
    S "containing sharp angles, or going above the slope surface. Ensures" +:+
    S "randomly generated or mutated slopes from the Genetic Algorithm" +:+
    S "Module are physically possible according to the" +:+
@@ -105,7 +94,7 @@ mod_kinadm_desc = dccWDS "mod_kinadm_desc" (cnIES "kinetic admissibility")
 
 mod_kinadm :: ModuleChunk
 mod_kinadm = makeImpModule mod_kinadm_desc
-  (S "Algorithm to determine if a given slip surface passes" +:+
+  (S "Algorithm to determine if a given" +:+ (phrase slpSrf) +:+ S "passes" +:+
    S "or fails a set of admissibility criteria.")
    program
    []
@@ -116,7 +105,7 @@ mod_kinadm = makeImpModule mod_kinadm_desc
 -- slip slicer module
 mod_slipslicer_desc :: ConceptChunk
 mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
-  (S "When preparing a slip surface for analysis by the" +:+
+  (S "When preparing a" +:+ (phrase slpSrf) +:+ S "for analysis by the" +:+
    S "Morgenstern Price Module or the RFEM Module" `sC`
    S "the x-coordinates defining the boundaries of the" +:+
    S "slices are identified and stored in a vector.")
@@ -124,7 +113,7 @@ mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
   (S "Algorithm to determine the coordinates of where the" +:+
-   S "slip surface interslice nodes occur.")
+   (phrase slpSrf) +:+ S "interslice nodes occur.")
    program
    []
    []
@@ -134,16 +123,16 @@ mod_slipslicer = makeImpModule mod_slipslicer_desc
 -- slip weighting module
 mod_slipweight_desc :: ConceptChunk
 mod_slipweight_desc = dccWDS "mod_slipweight_desc" (cn' "slip weighting")
-  (S "Weights a set of slip surfaces generated by the" +:+
-   S "Genetic Algorithm Module based on their factors of" +:+
-   S "safety. A slip surface with a low factor of safety will have a high" +:+
-   S "weight as it is more likely to be or to lead to generation of the" +:+
-   S "critical slip surface.")
+  (S "Weights a set of" +:+ (plural slpSrf) +:+ S "generated by the" +:+
+   S "Genetic Algorithm Module based on their" +:+. (plural $ fs_rc ^. term) +:+
+   S "A" +:+ (phrase slpSrf) +:+ S "with a low" +:+ (phrase $ fs_rc ^. term) +:+ S "will have a high" +:+
+   S "weight as it is more likely to be or to lead to generation of the" +:+.
+   (phrase crtSlpSrf))
 
 mod_slipweight :: ModuleChunk
 mod_slipweight = makeImpModule mod_slipweight_desc
-  (S "The weighting for each slip surface in a set of slip" +:+
-   S "surfaces, based on each slip surfaces factor of safety.")
+  (S "The weighting for each" +:+ (phrase slpSrf) +:+ S "in a set of" +:+ (plural slpSrf) `sC`
+   S "based on each" +:+ (phrase slpSrf) :+: S "'s" +:+. (phrase $ fs_rc ^. term)) --FIXME: use possesive noun function
   program
   []
   []
@@ -153,13 +142,13 @@ mod_slipweight = makeImpModule mod_slipweight_desc
 -- morg price solver module
 mod_mp_desc :: ConceptChunk
 mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
-  (S "Calculates the factor of safety of a given slip" +:+
-   S "surface, through implementation of a Morgenstern Price slope" +:+
-   S "stability analysis method.")
+  (S "Calculates the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a given" +:+ (phrase slpSrf) `sC`
+   S "through implementation of a Morgenstern Price" +:+ (phrase ssa) +:+
+   S "method.")
 
 mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
-  (S "The factor of safety of a given slip surface.")
+  (S "The" +:+ (phrase $ fs_rc ^. term) +:+ S "of a given" +:+. (phrase slpSrf))
   program
   []
   []
@@ -169,10 +158,10 @@ mod_mp = makeImpModule mod_mp_desc
 -- rfem solver module
 mod_rfem_desc :: ConceptChunk
 mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
-  (S "Calculate the global factor of safety, local slice" +:+
-   S "factors of safety, and local slice displacements of a given slip" +:+
-   S "surface under given conditions, through implementation of a rigid" +:+
-   S "finite element slope stability analysis method.")
+  (S "Calculate the global" +:+ (phrase $ fs_rc ^. term) `sC` S "local slice" +:+
+   S "factors of safety, and local slice displacements of a given" +:+ (phrase slpSrf) +:+
+   S "under given conditions, through implementation of a rigid" +:+
+   S "finite element" +:+ (phrase ssa) +:+ S "method.")
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
@@ -197,7 +186,7 @@ mod_sps_desc = dccWDS "mod_sps_desc" (cn' "slice property sorter")
 
 mod_sps :: ModuleChunk
 mod_sps = makeImpModule mod_sps_desc
-  (S "Algorithm to assigns soil properties to slices based" +:+
+  (S "Algorithm to assigns" +:+ (plural soilPrpty) +:+ S "to slices based" +:+
    S "on the location of the slice with respect to the different soil layers.")
    program
    []
@@ -206,34 +195,24 @@ mod_sps = makeImpModule mod_sps_desc
    (Just mod_behav)
 
 -- sfwr dec module
-mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule modSfwrDecision
-  (S "The design decision based on mathematical theorems" `sC`
-   S "physical facts, or programming considerations. The secrets of this" +:+
-   S "module are not described in the SRS.")
-   Nothing
+-- mod_sw :: ModuleChunk
+-- mod_sw = M.mod_sw
 
 -- sequence data structure module
-mod_sds_desc :: ConceptChunk
-mod_sds_desc = dccWDS "mod_sds_desc" (cn' "sequence data structure")
-  (S "Provides array manipulation, including building an" +:+
-   S "array, accessing a specific entry, slicing an array etc.")
+-- mod_sds_desc :: ConceptChunk
+-- mod_sds_desc = dccWDS "mod_sds_desc" (cn' "sequence data structure")
+  -- (S "Provides array manipulation, including building an" +:+
+   -- S "array, accessing a specific entry, slicing an array etc.")
 
 mod_sds :: ModuleChunk
-mod_sds = makeImpModule mod_sds_desc
-  (S "The data structure for a sequence data type.")
-   matlab
-   []
-   []
-   []
-   (Just mod_sw)
+mod_sds = mod_seq_fun matlab []
 
 -- rng module
 mod_rng_desc :: ConceptChunk
 mod_rng_desc = dccWDS "mod_rng_desc" (cn' "random number generator")
   (S "Randomly produces numbers between 0 and 1, using a" +:+
-   S "chaotic function with an external seed. Used when generating slip" +:+
-   S "surfaces in the Genetic Algorithm Module.")
+   S "chaotic function with an external seed. Used when generating" +:+ (plural slpSrf) +:+
+   S "in the Genetic Algorithm Module.")
 
 mod_rng :: ModuleChunk
 mod_rng = makeImpModule mod_rng_desc
@@ -245,14 +224,8 @@ mod_rng = makeImpModule mod_rng_desc
    (Just mod_sw)
 
 -- plotting module
-mod_plot_desc :: ConceptChunk
-mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
+-- mod_plot_desc :: ConceptChunk
+-- mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
 
 mod_plot :: ModuleChunk
-mod_plot = makeImpModule mod_plot_desc
-  (S "The data structures and algorithms for plotting data graphically")
-   matlab
-   []
-   []
-   [mod_hw]
-   (Just mod_sw)
+mod_plot = mod_plot_fun matlab [mod_hw]

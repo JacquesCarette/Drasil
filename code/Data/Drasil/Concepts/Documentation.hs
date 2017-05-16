@@ -26,9 +26,9 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, column, computer, condition, constraint_, connection, context,
+analysis, appendix, characteristic, client, column, component, computer, condition, constraint_, connection, context,
   customer, datum, definition, dependency, description, design, document, 
-  documentation, environment, figure, functional, game, general, individual, 
+  documentation, element, environment, figure, functional, game, general, individual, 
   information, input_, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
   offShelf, open, organization, output_, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, scope, 
@@ -41,6 +41,7 @@ appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
+component       = npnc "component"      (cn' "component")
 computer        = npnc "computer"       (cn' "computer") -- general enough to be in Documentation?
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
@@ -54,6 +55,7 @@ description     = npnc "description"    (cn' "description")
 design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
 documentation   = npnc "documentation"  (cn' "documentation")
+element         = npnc "element"        (cn' "element")
 environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
@@ -113,7 +115,7 @@ verification    = npnc "verification"   (cn' "verification")
 realtime        = npnc "real-time"      (cn' "real-time")
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
-  tOfSymb, traceyMandG, corSol, charOfIR :: NPNC
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
 charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
@@ -123,6 +125,7 @@ refmat       = npnc "refmat"       (cn' "reference material")
 sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
 scpOfTheProj = npnc "scpOfTheProj" (scope `of_` the project) -- reasonable hack?
+termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 

@@ -45,8 +45,8 @@ s2 = SRS.intro [] [s2_3]
 s2_3 = section (titleize' charOfIR) [s2_3_intro] []
 
 s2_3_intro = Paragraph $
-            (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in" +:+
-            (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+            (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+
+            S "should have a strong knowledge in" +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
            S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
             (phrase $ reviewer ^. term) +:+ S "should also have an understanding of differential" +:+ (plural $ equation ^. term) :+: S ", as typically" +:+
            S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+
@@ -102,7 +102,7 @@ s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph $
            S "The" +:+ (phrase $ physicalSystem ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
-           S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following elements:"
+           S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following" +: (plural $ element ^. term)
 
 fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
@@ -118,7 +118,7 @@ s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
 s4_1_3_intro = Paragraph $
            S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) :+: S ", initial" +:+
             (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) :+: S "," +:+
-           S "and material properties, the goal statement is"
+           S "and material" +:+ (plural $ property ^. term) :+: S ", the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
@@ -127,10 +127,10 @@ s4_2 = section ((titleize $ solutionCharSpec ^. term))
   [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $
-           S "The" +:+ (phrase $ inModel ^. term) +:+
-           S "(" :+: getAcc ode :+: S ") that governs" +:+ (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
-           S ". The" +:+ (phrase $ information ^. term) +:+ S "to understand the meaning of the" +:+
-            (phrase $ inModel ^. term) +:+ 
+           S "The" +:+ (phrase $ inModel ^. term) +:+ S "(" :+: getAcc ode :+: S ") that governs" +:+
+            (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
+           S ". The" +:+ (phrase $ information ^. term) +:+
+           S "to understand the meaning of the" +:+ (phrase $ inModel ^. term) +:+ 
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 
             (phrase $ inModel ^. term) +:+ S "can be verified."
   
@@ -141,7 +141,7 @@ s4_2_1_intro = Paragraph $
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
            S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
-           S "for the physical" +:+. (phrase $ system ^. term) +:+ S "The" +:+ (plural $ information ^. term)+:+
+           S "for the" +:+. (phrase $ physicalSystem ^. term) +:+ S "The" +:+ (plural $ information ^. term)+:+
            S "given in the square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
             (map (\ch -> (phrase $ ch ^. term) +:+ S "[" :+:
             (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 

@@ -120,7 +120,7 @@ s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
   (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+ S "will show how the" +:+
   (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
-  S "numerical algorithms and programming" +:+ (phrase environment) +:+. S "The" +:+
+  S "numerical algorithms and programming" +:+. (phrase environment) +:+ S "The" +:+
   (phrase vav) +:+ S "plan will show the steps that will" +:+
   S "be used to increase confidence in the" +:+ (phrase softwareDoc) +:+ S "and" +:+
   S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
@@ -152,13 +152,13 @@ s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
   S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
   S "and" +:+. (plural assumption) +:+ S "For readers" +:+
   S "that would like a more bottom up approach, they can start" +:+
-  S "reading the" +:+ (plural instMdl) +:+ S "in" +:+ makeRef sec_IMs +:+
+  S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef sec_IMs +:+
   S "and trace back to find any additional" +:+ (phrase information) +:+
-  S "they require. The" +:+ (plural instMdl) +:+ S "provide the set of algebraic" +:+
+  S "they require. The" +:+ (plural inModel) +:+ S "provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
   S "Morgenstern Price Analysis. The" +:+ (plural goalStmt) +:+ S "are refined" +:+
   S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
-  S "and" +:+ (plural instMdl) +:+. (sParen . makeRef) sec_IMs
+  S "and" +:+ (plural inModel) +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
 s3 = SRS.genSysDec [s3_p1] [s3_1, s3_2]
@@ -173,7 +173,7 @@ s3_1 = SRS.userChar [s3_1_p1] []
 
 s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
-  S "Physics, and be familiar with soil and material properties."
+  S "Physics, and be familiar with soil and" +:+. (plural mtrlPrpty)
 
 -- SECTION 3.2 --
 s3_2 = SRS.sysCon [s3_2_p1] []
@@ -188,7 +188,7 @@ s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:
   (phrase problem) +:+ S "to be solved. This is followed by the" +:+ (phrase solution) +:+
   (plural characteristicSpecification) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
-  S "and finally the" +:+ (plural instMdl) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
+  S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
 
 -- SECTION 4.1 --
 s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
@@ -231,16 +231,16 @@ s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
 s4_1_2_p1 = Paragraph $ S "Analysis of the slope is performed" +:+
-  S "by looking at properties of the slope as a series" +:+
-  S "of slice elements. Some properties are interslice" +:+
-  S "properties, and some are slice or slice base properties." +:+
+  S "by looking at" +:+ (plural property) +:+ S "of the slope as a series" +:+
+  S "of slice elements. Some" +:+ (plural property) +:+ S "are" +:+ (plural itslPrpty) `sC`
+  S "and some are slice or slice base properties." +:+
   S "The index convention for referencing which interslice" +:+
   S "or slice is being used is shown in" +:+. (makeRef fig_indexconv)
 
 s4_1_2_bullets = Enumeration $ Bullet $ map Flat [
-  (S "Interslice properties convention is noted by j. The end" +:+
-    S "interslice properties are usually not of interest" `sC` 
-    S "therefore use the interslice properties from 1" +:+
+  ((at_start' itslPrpty) +:+ S "convention is noted by j. The end" +:+
+    (plural itslPrpty) +:+ S "are usually not of interest" `sC` 
+    S "therefore use the" +:+ (plural itslPrpty) +:+ S "from 1" +:+
     P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "n-1"),
   (S "Slice properties convention is noted by i.")
   ]
@@ -264,7 +264,7 @@ s4_1_3 = SRS.goalStmt [s4_1_3_p1, s4_1_3_list] []
 
 s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
-  S "slope, and the material properties of the layers."
+  S "slope, and the" +:+ (plural mtrlPrpty) +:+ S "of the layers."
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (S "GS1", S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
@@ -277,11 +277,11 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 -- SECTION 4.2 --
 s4_2 = SRS.solCharSpec [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
-s4_2_p1 = Paragraph $ S "The" +:+ (plural instMdl) +:+ S "that govern" +:+
+s4_2_p1 = Paragraph $ S "The" +:+ (plural inModel) +:+ S "that govern" +:+
   (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
   S "The" +:+ (phrase information) +:+ S "to understand the meaning of the instance" +:+
   (plural model) +:+ S "and their derivation is also presented, so that the" +:+
-  (plural instMdl) +:+ S "can be verified."
+  (plural inModel) +:+ S "can be verified."
 
 -- SECTION 4.2.1 --
 s4_2_1 = SRS.assump [s4_2_1_p1, s4_2_1_list] []
@@ -290,7 +290,7 @@ s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:
   S "original" +:+ (phrase problem) +:+ S "and helps in developing the" +:+ (phrase thModel) +:+
   S "by filling in the missing" +:+ (phrase information) +:+ S "for the" +:+.
   (phrase physicalSystem) +:+ S "The numbers given in the square brackets refer to" +:+
-  S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase instMdl) `sC` S "in which the" +:+
+  S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase inModel) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
 s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
@@ -298,10 +298,10 @@ s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
            S "the slope surface. The" +:+ P (coords ^. symbol) +:+ 
            S "coordinates of the failure surface follow a" +:+
            S "monotonic function."),
-  (S "A2", S "The geometry of the slope, and the material" +:+
-           S "properties of the soil layers are given as inputs."),
+  (S "A2", S "The geometry of the slope, and the" +:+ (plural mtrlPrpty) +:+
+           S "of the soil layers are given as inputs."),
   (S "A3", S "The different layers of the soil are homogeneous," +:+
-           S "with consistent soil properties throughout," +:+
+           S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
            S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
   (S "A4", S "Soil layers are treated as if they have" +:+

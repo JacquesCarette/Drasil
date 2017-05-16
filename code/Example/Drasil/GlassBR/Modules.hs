@@ -10,8 +10,10 @@ import Data.Drasil.Modules
 -- And the constructors for making 'modules' should be rethought to be more
 -- convenient for the most common cases.
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, 
-  mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_sw, mod_interp]
+modules = [mod_hw, mod_behav, (mod_inputf_fun glassBRProg [mod_hw, mod_inputp]) , (mod_inputp_fun glassBRProg [mod_inputc]),
+  mod_inputc, mod_outputf, mod_derivedv, mod_calc,
+  (mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]),
+  mod_interpd, mod_sw, mod_interp]
 
 -- input format module
 mod_inputf :: ModuleChunk
@@ -87,18 +89,6 @@ mod_calc = makeImpModule mod_calc_desc
    []
    [mod_inputp]
    (Just mod_behav)
-
--- Control module
-
-mod_ctrl :: ModuleChunk
-mod_ctrl = makeImpModule modControl
-  (S "The algorithm for coordinating the running of the program.")
-  glassBRProg
-  []
-  []
-  [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc,
-  mod_interp, mod_outputf]
-  (Just mod_behav)
 
 -- interpolation data module
 

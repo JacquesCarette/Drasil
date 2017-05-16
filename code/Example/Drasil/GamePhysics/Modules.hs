@@ -1,15 +1,22 @@
 module Drasil.GamePhysics.Modules where
 
+import Control.Lens ((^.))
 import Language.Drasil
-import Data.Drasil.Concepts.Software
+import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Concepts.Physics (rigidBody, velocity, position)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Documentation
+--import Data.Drasil.Concepts.Software
 import Data.Drasil.Modules
 
 import Drasil.GamePhysics.Concepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
-    mod_poly, mod_space, mod_arbiter, (mod_ctrl chipmunk [mod_arbiter, mod_hw]), mod_sw, (mod_vector chipmunk []), mod_bb,
-    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk []), (mod_linked chipmunk []), (mod_assoc chipmunk [])]
+    mod_poly, mod_space, mod_arbiter, (mod_ctrl chipmunk [mod_arbiter, mod_hw]),
+    mod_sw, (mod_vector chipmunk []), mod_bb,
+    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk []),
+    (mod_linked chipmunk []), (mod_assoc chipmunk [])]
 
 -- M1: Hardware Hiding Module --
 
@@ -19,9 +26,13 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 
 mod_body_serv :: ConceptChunk
 mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
-    (S "Stores the physical properties of an object, such as mass, " :+:
-    S "position, rotation, velocity, etc, and provides operations on rigid " :+:
-    S "bodies, such as setting the mass and velocity of the body.")
+    (foldlSent [S "Stores the", (plural physicalProperty), 
+    S "of an object, such as" `sC` (phrase $ mass ^. term), 
+    (phrase $ position ^. term) `sC` S "rotation" `sC` 
+    (phrase $ velocity ^. term), S "etc, and provides operations on", 
+    (plural $ rigidBody ^. term) `sC` S "such as setting the", 
+    (phrase $ mass ^. term), S "and", 
+    (phrase $ velocity ^. term), S "of the body"])
 
 mod_body :: ModuleChunk
 mod_body = makeImpModule mod_body_serv
@@ -102,7 +113,8 @@ mod_space = makeImpModule mod_space_serv
     chipmunk
     []
     []
-    [mod_bb, mod_spatial, (mod_assoc chipmunk []), (mod_seq chipmunk []), mod_spatial]
+    [mod_bb, mod_spatial, (mod_assoc chipmunk []), (mod_seq chipmunk []),
+     mod_spatial]
     (Just mod_behav)
 
 -- M8: Arbiter Module --
@@ -122,16 +134,6 @@ mod_arbiter = makeImpModule mod_arbiter_serv
     (Just mod_behav)
 
 -- M9: Control Module --
-
-{--mod_control :: ModuleChunk
-mod_control = makeImpModule modControl
-    (S "The internal data types and algorithms for coordinating the " :+:
-    S "running of the program.")
-    chipmunk
-    []
-    []
-    [mod_arbiter, mod_hw]
-    (Just mod_behav)--}
 
 -- Software Decision Module --
 

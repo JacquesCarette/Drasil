@@ -14,7 +14,7 @@ modules = [mod_hw, mod_behav, mod_inputf_args, mod_inputp_args, mod_inputc, mod_
   mod_derivedv, mod_calc, (mod_ctrl glassBRProg [mod_inputf_args, mod_inputp_args, mod_inputc, mod_derivedv, mod_calc,
   mod_interp, mod_outputf]), mod_interpd, mod_sw, mod_interp]
 
--- reasonable hack to reduce code?
+-- reasonable way to reduce code?
 mod_inputf_args = mod_inputf glassBRProg [mod_hw, mod_inputp_args]
 mod_inputp_args = mod_inputp glassBRProg [mod_inputc]
 

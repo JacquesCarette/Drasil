@@ -34,10 +34,8 @@ mod_inputc = makeImpModule modInputConstraint --FIXME: Plural?
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
-  (S "Outputs the results of the calculations, including the input " :+:
-   S "parameters, the demand, the capacity, the probability of breakage, " :+:
-   S "and both safety requirements.")
+mod_outputf_desc = mod_outputf_desc_fun (S "input parameters, the demand, the capacity, " +:+
+  S "the probability of breakage, and both safety requirements.")
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (S "output" +:+ (plural datum)) mod_outputf_desc

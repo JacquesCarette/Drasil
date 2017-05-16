@@ -10,6 +10,7 @@ module Data.Drasil.Modules
   , mod_io_fun
   , mod_plot_fun
   , mod_rng_fun
+  , mod_outputf_desc_fun
   ) where
 
 import Language.Drasil
@@ -39,6 +40,10 @@ mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
     
 mod_plot_desc :: ConceptChunk
 mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
+
+mod_outputf_desc_fun :: Sentence -> ConceptChunk
+mod_outputf_desc_fun desc = dccWDS "mod_outputf_desc" (cn' "output format")
+    (S "Outputs the results of the calculations, including the" +:+ desc)
 
 {-- Module Chunks --}
 

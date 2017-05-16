@@ -59,13 +59,7 @@ mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
    S "RFEM Module.")
 
 mod_output :: ModuleChunk
-mod_output = makeImpModule mod_outputf_desc
-  (S "The format and structure of the output data.")
-  program
-  []
-  []
-  [mod_plot, mod_slipslicer, mod_mp, mod_rfem]
-  (Just mod_behav)
+mod_output = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] (S "output" +:+ (plural datum)) mod_outputf_desc
 
 -- gen alg module
 mod_genalg_desc :: ConceptChunk

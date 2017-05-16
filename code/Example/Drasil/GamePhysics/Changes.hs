@@ -45,7 +45,7 @@ lc5 = LCChunk (nw $ npnc "arbiter" (nounPhraseSP $
 lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP $ 
   "How the overall control of the simulation is orchestrated, " ++
   "including the input and output of data."))
-  [mod_control]
+  [(mod_ctrl chipmunk [mod_arbiter, mod_hw])]
 
 lc7 = LCChunk (nw $ npnc "vector" (nounPhraseSP $ 
   "The implementation of mathematical vectors."))

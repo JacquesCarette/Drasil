@@ -8,7 +8,7 @@ import Drasil.GamePhysics.Concepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
-    mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, (mod_vector chipmunk []), mod_bb,
+    mod_poly, mod_space, mod_arbiter, (mod_ctrl chipmunk [mod_arbiter, mod_hw]), mod_sw, (mod_vector chipmunk []), mod_bb,
     mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk []), (mod_linked chipmunk []), (mod_assoc chipmunk [])]
 
 -- M1: Hardware Hiding Module --
@@ -123,7 +123,7 @@ mod_arbiter = makeImpModule mod_arbiter_serv
 
 -- M9: Control Module --
 
-mod_control :: ModuleChunk
+{--mod_control :: ModuleChunk
 mod_control = makeImpModule modControl
     (S "The internal data types and algorithms for coordinating the " :+:
     S "running of the program.")
@@ -131,7 +131,7 @@ mod_control = makeImpModule modControl
     []
     []
     [mod_arbiter, mod_hw]
-    (Just mod_behav)
+    (Just mod_behav)--}
 
 -- Software Decision Module --
 

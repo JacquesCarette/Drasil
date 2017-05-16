@@ -4,6 +4,8 @@ import Language.Drasil
 import Data.Drasil.Concepts.Software
 import Drasil.GlassBR.Concepts
 
+import Data.Drasil.Modules
+
 -- Some of the content below is 'generic' and should be pulled out from here.
 -- And the constructors for making 'modules' should be rethought to be more
 -- convenient for the most common cases.

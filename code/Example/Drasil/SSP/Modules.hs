@@ -5,6 +5,7 @@ import Language.Drasil
 
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.Concepts.Software
 
@@ -45,7 +46,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
-mod_inputf = mod_inputf_fun program [mod_hw]
+mod_inputf = mod_inputf_fun program [mod_hw] mod_inputf_desc (plural datum)
 
 -- output format module
 mod_outputf_desc :: ConceptChunk

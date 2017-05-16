@@ -20,11 +20,11 @@ lc1 = LCChunk (nw $ npnc "hardware" (nounPhraseSP
 
 lc2 = LCChunk ( nw $ npnc "input" (nounPhraseSP
   "The format of the initial input data.")
-  ) [mod_inputf]
+  ) [mod_inputf_args]
 
 lc3 = LCChunk ( nw $ npnc "parameters" (nounPhraseSP 
   "The format of the input parameters.")
-  ) [mod_inputp]
+  ) [mod_inputp_args]
 
 lc4 = LCChunk ( nw $ npnc "output" (nounPhraseSP
   "The format of the final output data.")
@@ -36,14 +36,13 @@ lc5 = LCChunk (
   ) [mod_calc]
 
 lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP
-  "How the overall control of the calculations is orchestrated.")
-  ) [(mod_ctrl glassBRProg [mod_inputf,
-                                                                                  mod_inputp,
-                                                                                  mod_inputc,
-                                                                                  mod_derivedv, 
-                                                                                  mod_calc,
-                                                                                  mod_interp,
-                                                                                  mod_outputf])]
+  "How the overall control of the calculations is orchestrated.")) [(mod_ctrl glassBRProg [mod_inputf_args,
+                                                                                           mod_inputp_args,
+                                                                                           mod_inputc,
+                                                                                           mod_derivedv, 
+                                                                                           mod_calc,
+                                                                                           mod_interp,
+                                                                                           mod_outputf])]
 
 lc7 = LCChunk ( nw $ npnc "interpd" (nounPhraseSP
   "The format of the data used for interpolation.")

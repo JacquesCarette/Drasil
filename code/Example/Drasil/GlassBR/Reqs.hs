@@ -13,14 +13,14 @@ r1,r2,r3,r4,r5,r6 :: ReqChunk
 
 -- FIXME: having id "" and term "" is completely bogus, and should not
 -- be allowed.  This implicitly says that something here does not make sense.
-r1 = ReqChunk (nw emptyN) [mod_hw, mod_inputf, mod_inputp, (mod_ctrl glassBRProg [mod_inputf,
-                                                                                  mod_inputp,
+r1 = ReqChunk (nw emptyN) [mod_hw, mod_inputf_args, mod_inputp_args, (mod_ctrl glassBRProg [mod_inputf_args,
+                                                                                  mod_inputp_args,
                                                                                   mod_inputc,
                                                                                   mod_derivedv, 
                                                                                   mod_calc,
                                                                                   mod_interp,
                                                                                   mod_outputf])]
-r2 = ReqChunk (nw emptyN) [mod_inputf, mod_inputp]
+r2 = ReqChunk (nw emptyN) [mod_inputf_args, mod_inputp_args]
 r3 = ReqChunk (nw emptyN) [mod_inputc]
 r4 = ReqChunk (nw emptyN) [mod_outputf]
 r5 = ReqChunk (nw emptyN) [mod_outputf, mod_calc]

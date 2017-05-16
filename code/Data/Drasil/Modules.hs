@@ -7,6 +7,8 @@ module Data.Drasil.Modules
   , mod_assoc
   , mod_vector
   , mod_ctrl
+  , mod_inputf
+  , mod_inputp
   ) where
 
 import Language.Drasil
@@ -64,6 +66,25 @@ mod_sw = makeUnimpModule modSfwrDecision
 mod_ctrl :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_ctrl impl depnd = makeImpModule modControl
   (S "The algorithm for coordinating the running of the program.")
+  impl
+  []
+  []
+  depnd
+  (Just mod_behav)
+
+-- parameterize inputf and inputp into one mod_input?
+mod_inputf :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_inputf impl depnd = makeImpModule modInputFormat
+  (S "The format and structure of the input data.")
+  impl
+  []
+  []
+  depnd
+  (Just mod_behav)
+
+mod_inputp :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_inputp impl depnd= makeImpModule modInputParam --FIXME: Plural?
+  (S "The format and structure of the input parameters.")
   impl
   []
   []

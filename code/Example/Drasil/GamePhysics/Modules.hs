@@ -12,6 +12,8 @@ import Data.Drasil.Modules
 import Drasil.GamePhysics.Concepts
 
 
+mod_vector, mod_seq, mod_assoc, mod_linked, mod_ctrl :: ModuleChunk
+
 mod_vector = mod_vector_fun chipmunk []
 mod_seq    = mod_seq_fun chipmunk []
 mod_assoc  = mod_assoc_fun chipmunk []

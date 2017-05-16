@@ -2,6 +2,7 @@ module Drasil.GamePhysics.Modules where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Modules
 
 import Drasil.GamePhysics.Concepts
 
@@ -12,7 +13,7 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 
 -- M1: Hardware Hiding Module --
 
-mod_hw :: ModuleChunk
+{--mod_hw :: ModuleChunk
 mod_hw = makeImpModule hwHiding
     (S "The data structure and algorithm used to implement the virtual " :+:
     S "hardware.")
@@ -28,7 +29,7 @@ mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule modBehavHiding
     (S "The contents of the required behaviors.")
     Nothing
-
+--}
 -- M2: Rigid Body Module --
 
 mod_body_serv :: ConceptChunk
@@ -148,14 +149,14 @@ mod_control = makeImpModule modControl
     (Just mod_behav)
 
 -- Software Decision Module --
-
+{--
 mod_sw :: ModuleChunk
 mod_sw = makeUnimpModule modSfwrDecision
     (S "The design decision based on mathematical theorems, physical facts" :+:
     S ", or programming considerations. The secrets of this module are " :+:
     S "not described in the SRS.")
     Nothing
-
+--}
 -- M10: Vector Module --
 
 mod_vector_serv :: ConceptChunk

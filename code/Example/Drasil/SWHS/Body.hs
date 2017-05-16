@@ -285,17 +285,18 @@ s3_1_2_intro = Paragraph (short progName +:+ S "is mostly self-contained. The on
 
 s3_1_2_bullets = Enumeration (Bullet $
   [Nested (titleize user +:+ S "Responsibilities:") (Bullet $ map (\c -> Flat c)
-  [S "Provide the input" +:+ plural datum +:+ S "to the" +:+ phrase system :+:
+  [S "Provide the" +:+ phrase input_ +:+ plural datum +:+ S "to the" +:+ phrase system :+:
   S ", ensuring no errors in the" +:+ plural datum +:+ S "entry",
-  S "Take care that consistent" +:+ plural unit_ +:+ "are used for input" +:+
+  S "Take care that consistent" +:+ plural unit_ +:+ "are used for" +:+ phrase input_ +:+
   plural variable
   ]),
 
-  Nested (S "SWHS Responsibilities:") (Bullet $ map (\c -> Flat c)
-  [S "Detect data type mismatch, such as a string of characters instead" +:+
+  Nested (short progName +:+ S "Responsibilities:") (Bullet $ map (\c -> Flat c)
+  [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of characters instead" +:+
   S "of a floating point number",
-  S "Determine if the inputs satisfy the required physical and software constraints",
-  S "Calculate the required outputs"
+  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+
+  physical `and_'` software +:+ plural constraint_,
+  S "Calculate the required" +:+ plural output_
   ])])
   
 
@@ -305,17 +306,17 @@ s3_1_2_bullets = Enumeration (Bullet $
 
 s3_2 = section (titleize' userCharacteristic) [s3_2_contents] []
 
-s3_2_contents = Paragraph (S "The end user of" +:+ (short progName) :+: 
+s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+ (short progName) :+: 
   S " should have an understanding of undergraduate Level 1" +:+.
-  S "Calculus and Physics")
+  S "Calculus and" +:+ titleize physics)
 
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
 s3_3 = section (titleize' systemConstraint) [s3_3_contents] []
 
-s3_3_contents = Paragraph (S "There are no" +:+ phrase system +:+
-  plural constraint :+: S ".")
+s3_3_contents = Paragraph (S "There are no" +:+ phrase system +:+.
+  plural constraint)
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
@@ -864,19 +865,19 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance" +:+
 s4_2_6 = section (titleize' datum +:+ titleize' constraint) [s4_2_6_intro] []
 
 s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the data" +:+
-  plural constraint +:+ S "on the input and output variables," +:+
-  S "respectively. The column for" +:+ phrase physical +:+
+  plural constraint +:+ S "on the" +:+ phrase input_ +:+ S "and output" +:+
+  plural variable :+: S ", respectively. The column for" +:+ phrase physical +:+
   plural constraint +:+ S "gives the" +:+ phrase physical +:+
   S "limitations on the range of values that can be taken by the variable." +:+
   S "The column for software" +:+ plural constraint +:+ S "restricts the" +:+
-  S "range of inputs to reasonable values. The" +:+ plural constraint +:+
-  S "are conservative, to give the user of the" +:+ phrase model +:+
+  S "range of" +:+ plural input_ +:+ S "to reasonable values. The" +:+
+  plural constraint +:+ S "are conservative, to give the user of the" +:+ phrase model +:+
   S "the flexibility to experiment with unusual situations. The column of" +:+
   S "typical values is intended to provide a feel for a common scenario." +:+
   S "The uncertainty column provides an estimate of the confidence with" +:+
   S "which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
-  S "This" +:+ phrase information +:+ S "would be part of the input if" +:+
-  S "one were performing an uncertainty quantification exercise. (The" +:+
+  S "This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
+  S "if one were performing an uncertainty quantification exercise. (The" +:+
   plural table_ +:+ S "are left out because features they should use are" +:+
   S "not yet implemented in Drasil.)")
 
@@ -921,7 +922,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
   S "must exhibit the" +:+ (phrase $ law_cons_energy ^. term) :+:
   S ". This means that the" +:+ (phrase $ w_E ^. term) +:+
   S "should equal the difference between" +:+
-  S " the total energy input from the" +:+
+  S " the total energy" +:+ phrase input_ +:+ S "from the" +:+
   (phrase $ coil ^. term) +:+ S "and the energy output to the" +:+
   (short phsChgMtrl) :+: S ". This can be shown as an" +:+
   S "equation by taking" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
@@ -936,7 +937,7 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time]))) time)),
   Paragraph (S "In addition, the" +:+ (phrase $ pcm_E ^. term) :+: 
-  S " should equal the energy input to the" +:+ (short phsChgMtrl) +:+ 
+  S " should equal the energy" +:+ phrase input_ +:+ S "to the" +:+ short phsChgMtrl +:+ 
   S "from the" +:+ (phrase $ water ^. term) :+:
   S ". This can be expressed as"),
   EqnBlock
@@ -959,27 +960,27 @@ s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+
 s5 = section (titleize' requirement) [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
-  S "functional" +:+ plural requirement `sC` S "the business tasks" +:+
-  S "that the software is expected to complete, and the" +:+
-  S "non-functional" +:+ plural requirement `sC` 
-  S "the qualities that the software is expected to exhibit.")
+  phrase functional +:+ plural requirement `sC` S "the business tasks" +:+
+  S "that the" +:+ phrase software +:+ S "is expected to complete, and the" +:+
+  phrase nonfunctional +:+ plural requirement `sC` 
+  S "the qualities that the" +:+ phrase software +:+ S "is expected to exhibit.")
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
 s5_1 = section (titleize' functionalRequirement) (s5_1_list) []
 
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
-  (S "Input the following quantities, which define the" +:+
-  (phrase $ tank ^. term) :+: S " parameters, material properties" +:+
+  (titleize input_ +:+ S "the following quantities, which define the" +:+
+  (phrase $ tank ^. term) :+: S " parameters, material" +:+ plural property +:+
   S "and initial" +:+ plural condition :+: S ":"))]),
   (Table [phrase symbol_, (phrase $ unit_ ^. term), phrase description] (mkTable
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
   (\ch -> phrase $ ch ^. term)] inputVar) 
-  (S "Input Variable" +:+ (titleize requirement)) False),
+  (titleize input_ +:+ titleize variable +:+ (titleize requirement)) False),
 --
   Enumeration (Simple [((short requirement) :+: S "2", Flat 
-  (S "Use the inputs in R1 to find the" +:+ (phrase $ mass ^. term) +:+
+  (S "Use the" +:+ plural input_ +:+ S "in R1 to find the" +:+ (phrase $ mass ^. term) +:+
   S "needed for IM1 to IM4, as follows, where" +:+
   P (w_vol ^. symbol) +:+ S "is the" +:+(phrase $ w_vol ^. term) +:+
   S "and" +:+ P (tank_vol ^. symbol) +:+ S "is the" +:+.
@@ -990,13 +991,14 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
   Enumeration (Simple [((short requirement) :+: S "3", Flat 
-  (S "Verify that the inputs satisfy the required" +:+ phrase physical +:+
-  plural constraint +:+ S "shown in" +:+ titleize table_ +:+ S "1.")),
+  (S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
+    phrase physical +:+ plural constraint +:+ S "shown in" +:+ titleize table_
+    +:+ S "1.")),
 --
-  ((short requirement) :+: S "4", Flat (S "Output the input" :+: 
-  S " quantities and derived quantities in the following list: "  :+:
-  S "the quantities from R1, the" +:+ (phrase $ mass ^. term) :+: S "es" +:+
-  S "from R2," +:+ P (tau_W ^. symbol) +:+ S "(from IM1)," +:+ 
+  ((short requirement) :+: S "4", Flat (titleize output_ +:+ S "the" +:+
+  phrase input_ :+: S " quantities and derived quantities in the" +:+
+  S "following list: the quantities from R1, the" +:+ (phrase $ mass ^. term) :+:
+  S "es from R2," +:+ P (tau_W ^. symbol) +:+ S "(from IM1)," +:+ 
   P (eta ^. symbol) +:+ S "(from IM1)," +:+ P (tau_S_P ^. 
   symbol) +:+ S "(from IM2) and" +:+ P (tau_L_P ^. symbol) +:+
   S "(from IM2).")),

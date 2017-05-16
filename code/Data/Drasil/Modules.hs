@@ -4,6 +4,7 @@ module Data.Drasil.Modules
   , mod_sw
   , mod_seq
   , mod_linked
+  , mod_assoc
   ) where
 
 import Language.Drasil
@@ -19,6 +20,11 @@ mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
 mod_linked_serv :: ConceptChunk
 mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
     (S "Provides tree manipulation operations, such as building a tree, " :+:
+    S "accessing a specific entry, etc.")
+
+mod_assoc_serv :: ConceptChunk
+mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
+    (S "Provides operations on hash tables, such as building a hash table, " :+:
     S "accessing a specific entry, etc.")
 
 {-- Module Chunks --}
@@ -59,6 +65,15 @@ mod_seq exampleName = makeImpModule mod_seq_serv
 mod_linked ::NamedIdea a => a -> ModuleChunk
 mod_linked exampleName = makeImpModule mod_linked_serv
     (S "The data structure for a linked data type.")
+    exampleName
+    []
+    []
+    []
+    (Just mod_sw)
+
+mod_assoc :: NamedIdea a => a -> ModuleChunk
+mod_assoc exampleName = makeImpModule mod_assoc_serv
+    (S "The data structure for an associative data type.")
     exampleName
     []
     []

@@ -69,7 +69,7 @@ lc11 = LCChunk (nw $ npnc "collision" (nounPhraseSP $
 
 lc12 = LCChunk (nw $ npnc "array" (nounPhraseSP $ 
   "The implementation of the sequence (array) data structure."))
-  [mod_seq chipmunk]
+  [(mod_seq chipmunk)]
 
 lc13 = LCChunk (nw $ npnc "tree" (nounPhraseSP $ 
   "The implementation of the linked (tree) data structure."))
@@ -77,7 +77,7 @@ lc13 = LCChunk (nw $ npnc "tree" (nounPhraseSP $
 
 lc14 = LCChunk (nw $ npnc "hash table" (nounPhraseSP $ 
   "The implementation of the associative (hash table) data structure."))
-  [mod_assoc]
+  [(mod_assoc chipmunk)]
 
 -- Unlikely Changes --
 

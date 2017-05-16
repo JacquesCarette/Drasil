@@ -9,7 +9,7 @@ import Drasil.GamePhysics.Concepts
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
     mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, mod_vector, mod_bb,
-    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk), (mod_linked chipmunk), mod_assoc]
+    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk), (mod_linked chipmunk), (mod_assoc chipmunk)]
 
 -- M1: Hardware Hiding Module --
 
@@ -102,7 +102,7 @@ mod_space = makeImpModule mod_space_serv
     chipmunk
     []
     []
-    [mod_bb, mod_spatial, mod_assoc, (mod_seq chipmunk), mod_spatial]
+    [mod_bb, mod_spatial, (mod_assoc chipmunk), (mod_seq chipmunk), mod_spatial]
     (Just mod_behav)
 
 -- M8: Arbiter Module --
@@ -218,21 +218,6 @@ mod_coll = makeImpModule mod_coll_serv
 
 -- M15: Sequence Data Structure Module --
 
-
 -- M16: Linked Data Structure Module --
 
 -- M17: Associative Data Structure Module --
-
-mod_assoc_serv :: ConceptChunk
-mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
-    (S "Provides operations on hash tables, such as building a hash table, " :+:
-    S "accessing a specific entry, etc.")
-
-mod_assoc :: ModuleChunk
-mod_assoc = makeImpModule mod_assoc_serv
-    (S "The data structure for an associative data type.")
-    chipmunk
-    []
-    []
-    []
-    (Just mod_sw)

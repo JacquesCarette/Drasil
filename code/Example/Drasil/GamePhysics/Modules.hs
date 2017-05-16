@@ -36,7 +36,7 @@ mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
 
 mod_body :: ModuleChunk
 mod_body = makeImpModule mod_body_serv
-    (S "The data structure of a rigid body.")
+    (S "The data structure of a" +:+. (phrase $ rigidBody ^. term))
     chipmunk
     []
     []
@@ -47,9 +47,10 @@ mod_body = makeImpModule mod_body_serv
 
 mod_shape_serv :: ConceptChunk
 mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
-    (S "Stores the surface properties of an object, such as friction or " :+:
-    S "elasticity, and provides operations on shapes, such as setting its " :+:
-    S "friction or elasticity.")
+    (S "Stores the surface" +:+ (phrase $ property ^. term) +:+ 
+    S "of an object, such as friction or" +:+
+    S "elasticity, and provides operations on shapes, such as setting its" +:+.
+    S "friction or elasticity")
 
 mod_shape :: ModuleChunk
 mod_shape = makeImpModule mod_shape_serv
@@ -121,8 +122,8 @@ mod_space = makeImpModule mod_space_serv
 
 mod_arbiter_serv :: ConceptChunk
 mod_arbiter_serv = dccWDS "mod_arbiter_serv" (cn' "arbiter")
-    (S "Stores all collision data, such as which bodies collided and " :+:
-    S "their masses.")
+    (S "Stores all collision data, such as which bodies collided and" +:+. 
+    S "their masses")
 
 mod_arbiter :: ModuleChunk
 mod_arbiter = makeImpModule mod_arbiter_serv

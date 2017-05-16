@@ -49,7 +49,7 @@ lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP $
 
 lc7 = LCChunk (nw $ npnc "vector" (nounPhraseSP $ 
   "The implementation of mathematical vectors."))
-  [(mod_vector chipmunk)]
+  [(mod_vector chipmunk [])]
 
 lc8 = LCChunk (nw $ npnc "bb" (nounPhraseSP $ 
   "The implementation of bounding box structures"))
@@ -57,7 +57,7 @@ lc8 = LCChunk (nw $ npnc "bb" (nounPhraseSP $
 
 lc9 = LCChunk (nw $ npnc "transform" (nounPhraseSP $ 
   "The implementation of affine transformation matrices."))
-  [(mod_vector chipmunk)]
+  [(mod_vector chipmunk [])]
 
 lc10 = LCChunk (nw $ npnc "spatial index" (nounPhraseSP $ 
   "How the simulation space is spatially indexed."))
@@ -69,15 +69,15 @@ lc11 = LCChunk (nw $ npnc "collision" (nounPhraseSP $
 
 lc12 = LCChunk (nw $ npnc "array" (nounPhraseSP $ 
   "The implementation of the sequence (array) data structure."))
-  [(mod_seq chipmunk)]
+  [(mod_seq chipmunk [])]
 
 lc13 = LCChunk (nw $ npnc "tree" (nounPhraseSP $ 
   "The implementation of the linked (tree) data structure."))
-  [(mod_linked chipmunk)]
+  [(mod_linked chipmunk [])]
 
 lc14 = LCChunk (nw $ npnc "hash table" (nounPhraseSP $ 
   "The implementation of the associative (hash table) data structure."))
-  [(mod_assoc chipmunk)]
+  [(mod_assoc chipmunk [])]
 
 -- Unlikely Changes --
 

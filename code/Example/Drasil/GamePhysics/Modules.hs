@@ -8,8 +8,8 @@ import Drasil.GamePhysics.Concepts
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
-    mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, (mod_vector chipmunk), mod_bb,
-    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk), (mod_linked chipmunk), (mod_assoc chipmunk)]
+    mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, (mod_vector chipmunk []), mod_bb,
+    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk []), (mod_linked chipmunk []), (mod_assoc chipmunk [])]
 
 -- M1: Hardware Hiding Module --
 
@@ -29,7 +29,7 @@ mod_body = makeImpModule mod_body_serv
     chipmunk
     []
     []
-    [mod_spatial, mod_trans, (mod_vector chipmunk), mod_space]
+    [mod_spatial, mod_trans, (mod_vector chipmunk []), mod_space]
     (Just mod_behav)
 
 -- M3: Shape Module --
@@ -47,7 +47,7 @@ mod_shape = makeImpModule mod_shape_serv
     chipmunk
     []
     []
-    [mod_trans, mod_bb, (mod_vector chipmunk), mod_body, mod_space]
+    [mod_trans, mod_bb, (mod_vector chipmunk []), mod_body, mod_space]
     (Just mod_behav)
 
 -- M4, M5, M6: Circle, Segment, Polygon Modules (M3 submodules) --
@@ -102,7 +102,7 @@ mod_space = makeImpModule mod_space_serv
     chipmunk
     []
     []
-    [mod_bb, mod_spatial, (mod_assoc chipmunk), (mod_seq chipmunk), mod_spatial]
+    [mod_bb, mod_spatial, (mod_assoc chipmunk []), (mod_seq chipmunk []), mod_spatial]
     (Just mod_behav)
 
 -- M8: Arbiter Module --
@@ -118,7 +118,7 @@ mod_arbiter = makeImpModule mod_arbiter_serv
     chipmunk
     []
     []
-    [mod_shape, mod_body, (mod_vector chipmunk)]
+    [mod_shape, mod_body, (mod_vector chipmunk [])]
     (Just mod_behav)
 
 -- M9: Control Module --
@@ -150,7 +150,7 @@ mod_bb = makeImpModule mod_bb_serv
     chipmunk
     []
     []
-    [(mod_vector chipmunk)]
+    [(mod_vector chipmunk [])]
     (Just mod_sw)
 
 -- M12: Transform Matrix Module --
@@ -183,7 +183,7 @@ mod_spatial = makeImpModule mod_spatial_serv
     chipmunk
     []
     []
-    [mod_bb, (mod_vector chipmunk), mod_coll, (mod_linked chipmunk)]
+    [mod_bb, (mod_vector chipmunk []), mod_coll, (mod_linked chipmunk [])]
     (Just mod_sw)
 
 -- M14: Collision Solver Module --
@@ -199,7 +199,7 @@ mod_coll = makeImpModule mod_coll_serv
     chipmunk
     []
     []
-    [mod_bb, (mod_vector chipmunk), (mod_linked chipmunk)]
+    [mod_bb, (mod_vector chipmunk []), (mod_linked chipmunk [])]
     (Just mod_sw)
 
 -- M15: Sequence Data Structure Module --

@@ -2,27 +2,28 @@ module Drasil.SSP.Modules where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Modules
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
            mod_kinadm, mod_slipslicer, mod_slipweight, mod_mp, mod_rfem,
            mod_sps, mod_sw, mod_sds, mod_rng, mod_plot]
 
--- HW Hiding Module
-mod_hw :: ModuleChunk
-mod_hw = makeImpModule hwHiding
-  (S "The data structure and algorithm used to implement the virtual hardware.")
-  os
-  []
-  []
-  []
-  Nothing
+-- HW Hiding Module imported from Drasil.Module
+-- mod_hw :: ModuleChunk
+-- mod_hw = makeImpModule hwHiding
+  -- (S "The data structure and algorithm used to implement the virtual hardware.")
+  -- os
+  -- []
+  -- []
+  -- []
+  -- Nothing
 
 -- Behaviour Hiding Module
-mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule modBehavHiding
-  (S "The contents of the required behaviors.")
-  Nothing
+-- mod_behav :: ModuleChunk
+-- mod_behav = makeUnimpModule modBehavHiding
+  -- (S "The contents of the required behaviors.")
+  -- Nothing
 
 
 -- Control module
@@ -206,12 +207,12 @@ mod_sps = makeImpModule mod_sps_desc
    (Just mod_behav)
 
 -- sfwr dec module
-mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule modSfwrDecision
-  (S "The design decision based on mathematical theorems" `sC`
-   S "physical facts, or programming considerations. The secrets of this" +:+
-   S "module are not described in the SRS.")
-   Nothing
+-- mod_sw :: ModuleChunk
+-- mod_sw = makeUnimpModule modSfwrDecision
+  -- (S "The design decision based on mathematical theorems" `sC`
+   -- S "physical facts, or programming considerations. The secrets of this" +:+
+   -- S "module are not described in the SRS.")
+   -- Nothing
 
 -- sequence data structure module
 mod_sds_desc :: ConceptChunk

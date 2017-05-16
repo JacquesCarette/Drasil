@@ -112,17 +112,17 @@ s2_1_intro =
   phrase desSpec +:+ S "and the" +:+ phrase software +:+ phrase vav +:+ S "plan. The" 
   +:+ phrase design +:+ phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
   S "are to be realized, including" +:+ S "decisions on the numerical" +:+
-  (plural $ algorithm ^. term) +:+ S "and programming" +:+. phrase environment +:+ S "The" +:+ phrase vav +:+ --'environment' used correctly?
-  S "plan will show the steps that will be used to increase confidence in the" +:+
+  (plural $ algorithm ^. term) +:+ S "and programming" +:+. phrase environment +:+ S "The" +:+ --'environment' used correctly?
+  phrase vav +:+ S "plan will show the steps that will be used to increase confidence in the" +:+
   phrase software +:+. S "documentation and the implementation"]
 
 s2_2 = SRS.scpOfReq [s2_2_intro] []
 
 s2_2_intro = Paragraph $
   S "The" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+
-  S "includes getting all" +:+ phrase input_ +:+ (plural $ parameter ^. term) +:+ S "related to the" +:+ 
-  (phrase $ glaSlab ^. term) +:+ S "and also the" +:+ (plural $ parameter ^. term) +:+
-  S "related to" +:+. (phrase $ blastTy ^. term) +:+ 
+  S "includes getting all" +:+ phrase input_ +:+ (plural $ parameter ^. term) +:+
+  S "related to the" +:+ (phrase $ glaSlab ^. term) +:+ S "and also the" +:+ 
+  (plural $ parameter ^. term) +:+ S "related to" +:+. (phrase $ blastTy ^. term) +:+ 
   S "Given the" +:+ phrase input_ `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
   S "use the" +:+ plural datum +:+ S "and predict whether the" +:+ 
   (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
@@ -187,8 +187,9 @@ s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 s5_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "presents the" +:+. phrase scpOfTheProj +:+ 
   S "It describes the expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
-  plural input_ +:+ S "and" +:+ plural output_ +:+ S "of each action. The" +:+ plural useCase +:+ S "are" +:+ phrase input_ +:+ S "and" +:+
-  phrase output_ +:+ S ", which defines the action of getting the" +:+ phrase input_ +:+ S "and displaying" +:+.
+  plural input_ +:+ S "and" +:+ plural output_ +:+ S "of each action. The" +:+ 
+  plural useCase +:+ S "are" +:+ phrase input_ +:+ S "and" +:+ phrase output_ +:+
+  S ", which defines the action of getting the" +:+ phrase input_ +:+ S "and displaying" +:+.
   S "the" +:+ phrase output_
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
@@ -210,14 +211,14 @@ s5_2 = SRS.indPRCase [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing" +:+ phrase input_ 
-  +:+ S "to" +:+ (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:
-  S "classes of" +:+ plural input_ +:+ (phrase $ glassGeo ^. term) +:+
+  +:+ S "to" +:+ (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:+
+  S "classes of" +: plural input_ +:+ (phrase $ glassGeo ^. term) +:+
   S "and" +:+. (phrase $ blastTy ^. term) +:+
   (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+ (plural $ parameter ^. term) +:+
   S "describe" +:+ (phrase $ char_weight ^. term) +:+
   S "and stand off" +:+. (phrase $ blast ^. term) +:+
-  S "Another" +:+ phrase input_ +:+ S "the" +:+ phrase user +:+ S "gives is the tolerable" +:+ phrase value +:+ S "of" +:+.
-  (phrase $ prob_br ^. term)),
+  S "Another" +:+ phrase input_ +:+ S "the" +:+ phrase user +:+ S "gives is the tolerable" +:+ 
+  phrase value +:+ S "of" +:+. (phrase $ prob_br ^. term)),
   (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ plural output_ +:+ S "if the" +:+
   (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
   S "comparing whether" +:+ (phrase $ capacity ^. term) +:+

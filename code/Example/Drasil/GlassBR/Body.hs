@@ -114,7 +114,7 @@ s2_1_intro =
   S "are to be realized, including" +:+ S "decisions on the numerical" +:+
   (plural $ algorithm ^. term) +:+ S "and programming" +:+. phrase environment +:+ S "The" +:+ --'environment' used correctly?
   phrase vav +:+ S "plan will show the steps that will be used to increase confidence in the" +:+
-  phrase software +:+. S "documentation and the implementation"]
+  phrase softwareDoc +:+. S "and the implementation"]
 
 s2_2 = SRS.scpOfReq [s2_2_intro] []
 
@@ -304,8 +304,8 @@ s6_1_2 = SRS.physSyst [s6_1_2_intro, s6_1_2_list,
   fig_glassbr] []
 
 s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLassBR ^. defn) 
-  +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:
-  S "following elements"
+  +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
+  S "following" +: plural element
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
@@ -597,8 +597,8 @@ s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2
 s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
   S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
-  S "modified if a certain component is changed. Every time a component is changed, the" +:+
-  plural item +:+ S "in the" +:+ phrase column +:+ S "of that component that are marked with an" +:+ Quote (S "X") +:+.
+  S "modified if a certain" +:+ phrase component +:+ S "is changed. Every time a" +:+ phrase component +:+ S "is changed, the" +:+
+  plural item +:+ S "in the" +:+ phrase column +:+ S "of that" +:+ phrase component +:+ S "that are marked with an" +:+ Quote (S "X") +:+.
   S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
   plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
@@ -772,11 +772,11 @@ s9_intro2 =
   [Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
   +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
-  S "additionally modified if a certain component is changed. The arrows in the" +:+ 
+  S "additionally modified if a certain" +:+ phrase component +:+ S "is changed. The arrows in the" +:+ 
   (plural $ graph ^. term) +:+ S "represent" +:+. plural dependency +:+
-  S "The component at the tail of an arrow is depended on" +:+
-  S "by the component at the head of that arrow. Therefore, if a" +:+
-  S "component is changed, the components that it points to should also" +:+.
+  S "The" +:+ phrase component +:+ S "at the tail of an arrow is depended on" +:+
+  S "by the" +:+ phrase component +:+ S "at the head of that arrow. Therefore, if a" +:+
+   phrase component +:+ S " is changed, the" +:+ plural component +:+ S "that it points to should also" +:+.
   S "be changed" +:+ titleize figure +:+ S "2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+. S "on each other" +:+

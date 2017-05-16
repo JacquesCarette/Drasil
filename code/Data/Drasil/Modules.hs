@@ -45,12 +45,13 @@ mod_hw = makeImpModule hwHiding
     []
     Nothing
 
+-- Behaviour Hiding Module
 mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule modBehavHiding
     (S "The contents of the required behaviors.")
     Nothing
 
-
+-- sfwr desc module
 mod_sw :: ModuleChunk
 mod_sw = makeUnimpModule modSfwrDecision
     (S "The design decision based on mathematical theorems, physical facts" :+:

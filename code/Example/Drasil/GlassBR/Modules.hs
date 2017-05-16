@@ -8,8 +8,8 @@ import Drasil.GlassBR.Concepts
 -- And the constructors for making 'modules' should be rethought to be more
 -- convenient for the most common cases.
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, 
-  mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_sw, mod_interp]
+modules = [mod_inputf, mod_inputp, mod_inputc, mod_outputf, 
+  mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_interp]
 
 -- input format module
 mod_inputf :: ModuleChunk

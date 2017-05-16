@@ -1,10 +1,11 @@
 module Drasil.SSP.Modules where
 
+import Control.Lens ((^.))
 import Language.Drasil
 
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Physics
-import Data.Drasil.Concepts.SolidMechanics
+import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.Concepts.Software
 
 import Drasil.SSP.Units
@@ -48,13 +49,14 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   (S "Reads the input data from an input file, and/or" +:+
    S "prompted command line inputs. Input data includes the x,y" +:+
    S "coordinates of the slope, with a set of coordinates for each" +:+
-   S "layer. For each layer it's soil properties of effective angle of" +:+
-   S "friction, effective cohesion, dry unit weight, saturated unit weight, elastic modulus," +:+ 
-   S "and Poisson's ratio are stored in vectors" +:+
+   S "layer. For each layer it's soil properties of" +:+  -- FIXME: have a list function do this for me (see next line)
+--   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
+   (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC` (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
+   (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+ S "are stored in vectors" +:+
    S "of soil properties. If a piezometric surface exists in the slope" +:+
-   S "it's coordinates and the unit weight of water are also included in" +:+
+   S "it's coordinates and the" +:+ (phrase $ waterWeight ^. term) +:+ S "are also included in" +:+
    S "the input. Lastly an expected range for the entrance and exit points" +:+
-   S "of the critical slip surface are inputted.")
+   S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
 mod_inputf = makeImpModule mod_inputf_desc
@@ -227,13 +229,7 @@ mod_sds_desc = dccWDS "mod_sds_desc" (cn' "sequence data structure")
    S "array, accessing a specific entry, slicing an array etc.")
 
 mod_sds :: ModuleChunk
-mod_sds = makeImpModule mod_sds_desc
-  (S "The data structure for a sequence data type.")
-   matlab
-   []
-   []
-   []
-   (Just mod_sw)
+mod_sds = mod_seq matlab
 
 -- rng module
 mod_rng_desc :: ConceptChunk

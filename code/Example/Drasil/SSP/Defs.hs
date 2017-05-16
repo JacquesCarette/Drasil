@@ -18,10 +18,18 @@ ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
 ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
-slpSrf, crtSlpSrf, instMdl :: NPNC
-slpSrf = npnc "slpSrf" (cn' "slip surface")
+soil, material :: NPNC
+soil     = npnc "soil"       (cn "soil")
+material = npnc "material"   (cn' "material")
+intrslce = npnc "interslice" (cn' "interslice")
+
+slpSrf, crtSlpSrf:: NPNC
+slpSrf    = npnc "slpSrf" (cn' "slip surface")
 crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
-instMdl = npnc "instMdl" (cn' "instance model")
+soilPrpty = compoundNPNC soil     property
+mtrlPrpty = compoundNPNC material property
+itslPrpty = compoundNPNC intrslce property
+
 
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?

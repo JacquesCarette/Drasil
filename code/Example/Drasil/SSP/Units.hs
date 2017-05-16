@@ -42,11 +42,11 @@ cohesion    = uc' "c'" (cn "effective cohesion")
   fixme
   (Atomic "c'") pascal
 
-dryWeight   = uc' "gamma" (cn "unit weight of dry soil/ground layer")
+dryWeight   = uc' "gamma" (cn "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight
 
-satWeight   = uc' "gamma_sat" (cn "unit weight of saturated soil/ground layer")
+satWeight   = uc' "gamma_sat" (cn "saturated unit weight")
   "The weight of saturated soil/ground layer divided by the volume of the layer."
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight
 

@@ -33,8 +33,8 @@ mod_ctrl = mod_ctrl_fun program [mod_inputf, mod_outputf, mod_genalg]
 -- input format module
 mod_inputf_desc :: ConceptChunk
 mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
-  (S "Reads the input data from an input file, and/or" +:+
-   S "prompted command line inputs. Input data includes the x,y" +:+
+  (S "Reads the" +:+ (plural inDatum) +:+ S "from an input file, and/or" +:+
+   S "prompted command line inputs." +:+ (at_start' inDatum) +:+ S "includes the x,y" +:+
    S "coordinates of the slope, with a set of coordinates for each" +:+
    S "layer. For each layer it's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
 --   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
@@ -58,8 +58,8 @@ mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
    S "with the showing the element displacements as calculated by the" +:+
    S "RFEM Module.")
 
-mod_output :: ModuleChunk
-mod_output = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] (plural outDatum) mod_outputf_desc
+mod_outputf :: ModuleChunk
+mod_outputf = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] (plural outDatum) mod_outputf_desc
 
 -- gen alg module
 mod_genalg_desc :: ConceptChunk

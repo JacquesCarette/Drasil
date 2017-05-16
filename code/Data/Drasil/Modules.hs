@@ -60,36 +60,36 @@ mod_sw = makeUnimpModule modSfwrDecision
 
 
 mod_seq ::NamedIdea a => a -> ModuleChunk
-mod_seq exampleName = makeImpModule mod_seq_serv 
+mod_seq usedBy = makeImpModule mod_seq_serv 
     (S "The data structure for a sequence data type.") 
-    exampleName
+    usedBy
     []
     []
     []
     (Just mod_sw)
 
 mod_linked ::NamedIdea a => a -> ModuleChunk
-mod_linked exampleName = makeImpModule mod_linked_serv
+mod_linked usedBy = makeImpModule mod_linked_serv
     (S "The data structure for a linked data type.")
-    exampleName
+    usedBy
     []
     []
     []
     (Just mod_sw)
 
 mod_assoc :: NamedIdea a => a -> ModuleChunk
-mod_assoc exampleName = makeImpModule mod_assoc_serv
+mod_assoc usedBy = makeImpModule mod_assoc_serv
     (S "The data structure for an associative data type.")
-    exampleName
+    usedBy
     []
     []
     []
     (Just mod_sw)
 
 mod_vector :: NamedIdea a => a -> ModuleChunk
-mod_vector exampleName = makeImpModule mod_vector_serv
+mod_vector usedBy = makeImpModule mod_vector_serv
     (S "The data structure representing vectors.")
-    exampleName
+    usedBy
     []
     []
     []

@@ -4,6 +4,7 @@ import Language.Drasil
 
 import Drasil.GlassBR.Modules
 import Data.Drasil.Modules
+import Drasil.GlassBR.Concepts
 
 lcs :: [LCChunk]
 lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]
@@ -36,7 +37,13 @@ lc5 = LCChunk (
 
 lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP
   "How the overall control of the calculations is orchestrated.")
-  ) [mod_ctrl]
+  ) [(mod_ctrl glassBRProg [mod_inputf,
+                                                                                  mod_inputp,
+                                                                                  mod_inputc,
+                                                                                  mod_derivedv, 
+                                                                                  mod_calc,
+                                                                                  mod_interp,
+                                                                                  mod_outputf])]
 
 lc7 = LCChunk ( nw $ npnc "interpd" (nounPhraseSP
   "The format of the data used for interpolation.")

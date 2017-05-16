@@ -6,6 +6,7 @@ module Data.Drasil.Modules
   , mod_linked
   , mod_assoc
   , mod_vector
+  , mod_ctrl
   ) where
 
 import Language.Drasil
@@ -59,6 +60,15 @@ mod_sw = makeUnimpModule modSfwrDecision
     S "not described in the SRS.")
     Nothing
 
+-- Control module
+mod_ctrl :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_ctrl impl depnd = makeImpModule modControl
+  (S "The algorithm for coordinating the running of the program.")
+  impl
+  []
+  []
+  depnd
+  (Just mod_behav)
 
 mod_seq :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_seq impl depnd = makeImpModule mod_seq_serv 

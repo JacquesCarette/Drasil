@@ -27,13 +27,7 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
 
 -- Control module
 mod_ctrl :: ModuleChunk
-mod_ctrl = makeImpModule modControl
-  (S "The algorithm for coordinating the running of the program.")
-  program
-  []
-  []
-  [mod_inputf, mod_outputf, mod_genalg]
-  (Just mod_behav)
+mod_ctrl = mod_ctrl_fun program [mod_inputf, mod_outputf, mod_genalg]
 
 -- input format module
 mod_inputf_desc :: ConceptChunk
@@ -51,13 +45,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
-mod_inputf = makeImpModule mod_inputf_desc
-  (S "The format and structure of the input data.")
-  program
-  []
-  []
-  [mod_hw]
-  (Just mod_behav)
+mod_inputf = mod_inputf_fun program [mod_hw]
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
@@ -217,7 +205,7 @@ mod_sps = makeImpModule mod_sps_desc
    -- S "array, accessing a specific entry, slicing an array etc.")
 
 mod_sds :: ModuleChunk
-mod_sds = mod_seq matlab []
+mod_sds = mod_seq_fun matlab []
 
 -- rng module
 mod_rng_desc :: ConceptChunk
@@ -236,14 +224,8 @@ mod_rng = makeImpModule mod_rng_desc
    (Just mod_sw)
 
 -- plotting module
-mod_plot_desc :: ConceptChunk
-mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
+-- mod_plot_desc :: ConceptChunk
+-- mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
 
 mod_plot :: ModuleChunk
-mod_plot = makeImpModule mod_plot_desc
-  (S "The data structures and algorithms for plotting data graphically")
-   matlab
-   []
-   []
-   [mod_hw]
-   (Just mod_sw)
+mod_plot = mod_plot_fun matlab [mod_hw]

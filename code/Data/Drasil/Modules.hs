@@ -35,6 +35,9 @@ mod_vector_serv :: ConceptChunk
 mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
     (S "Provides vector operations such as addition, scalar and vector" +:+
     S "multiplication, dot and cross products, rotations, etc.")
+    
+mod_plot_desc :: ConceptChunk
+mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
 
 {-- Module Chunks --}
 
@@ -126,6 +129,24 @@ mod_vector_fun impl depnd = makeImpModule mod_vector_serv
     []
     depnd
     (Just mod_sw)
+    
+mod_plot_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_plot_fun impl depnd = makeImpModule mod_plot_desc
+  (S "The data structures and algorithms for plotting data graphically")
+   impl
+   []
+   []
+   depnd
+   (Just mod_sw)
+   
+mod_rng_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ModuleChunk
+mod_rng_fun impl depnd disc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random number generator") disc)
+  (S "Pseudo-random number generation algorithm.")
+   impl
+   []
+   []
+   depnd
+   (Just mod_sw)
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

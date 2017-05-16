@@ -357,8 +357,7 @@ s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5,
 
 s4_2_1_assum1 = foldlSent [S "All objects are", (plural $ rigidBody ^. term)]
 s4_2_1_assum2 = foldlSent [S "All objects are", (getAcc twoD)]
-s4_2_1_assum3 = foldlSent [S "The library uses a", (phrase $ cartesian ^. term), 
-  S "system"]
+s4_2_1_assum3 = foldlSent [S "The library uses a", (phrase $ cartesian ^. term)]
 s4_2_1_assum4 = foldlSent [S "The axes are defined using", 
   (phrase $ rightHand ^. term)]
 s4_2_1_assum5 = foldlSent [S "All", (plural $ rigidBody ^. term), 

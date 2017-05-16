@@ -14,9 +14,11 @@ module Language.Drasil.Code.Imperative.AST (
     AbstractCode(..),
 
     -- * Convenience functions
-    bool,int,float,char,string,infile,outfile,obj,block,defaultValue,
+    bool,int,float,char,string,infile,outfile,listT,obj,
+    block,defaultValue,
     true,false,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,
+    var, svToVar,
+    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
     alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
@@ -25,7 +27,8 @@ module Language.Drasil.Code.Imperative.AST (
     printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew, objDecNewVoid, var, objMethodCall, objMethodCallVoid, valStmt
+    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,
+    toAbsCode, getClassName
 ) where
 
 import Data.List (zipWith4)
@@ -189,6 +192,9 @@ string = Base String
 infile = Base $ File In
 outfile = Base $ File Out
 
+listT :: StateType -> StateType
+listT t = List Dynamic t
+
 obj :: Label -> StateType
 obj = Type
 
@@ -214,6 +220,9 @@ false = Lit $ LitBool False
 var :: Label -> Value
 var = Var
 
+svToVar :: StateVar -> Value
+svToVar (StateVar n _ _ _ _) = Var n
+
 pubClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
 pubClass n p vs fs = Class n p Public vs fs
 
@@ -234,6 +243,9 @@ privMethod t n ps b = Method n Private t ps b
 
 pubMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
 pubMethod t n ps b = Method n Public t ps b
+
+constructor :: Label -> [Parameter] -> Body -> Method
+constructor n ps b = Method n Public (Construct n) ps b
 
 --comparison operators (?)
 (?!) :: Value -> Value  --logical Not
@@ -630,3 +642,10 @@ valueReplace' old new (ObjAccess val func) = ObjAccess (valueReplace old new val
 valueReplace' old new (StateObj st vals) = StateObj st $ valListReplace old new vals
 valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl
 valueReplace' _ _ v = v
+
+
+toAbsCode :: Label -> [Class] -> AbstractCode
+toAbsCode l c = AbsCode $ Pack l c 
+
+getClassName :: Class -> Label
+getClassName = className

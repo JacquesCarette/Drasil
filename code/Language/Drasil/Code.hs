@@ -1,8 +1,8 @@
 {- re-export smart constructors for external code writing -}
 module Language.Drasil.Code (
-    Body,
-    bool,int,float,char,string,infile,outfile,obj,block,defaultValue,true,false,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,
+    Body, Class, StateVar, Value,
+    bool,int,float,char,string,infile,outfile,listT,obj,block,defaultValue,true,false,
+    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),
     (#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
     alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
@@ -13,14 +13,14 @@ module Language.Drasil.Code (
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
     convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
-    objDecNewVoid,var,objMethodCall,objMethodCallVoid,valStmt,
+    objDecNewVoid,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,
     cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel,
-    makeCode, createCodeFiles,
-    Options
+    makeCode, createCodeFiles, toAbsCode, getClassName,
+    Options(..)
 ) where
 
 import Prelude hiding (break, print, return)
 import Language.Drasil.Code.Imperative.AST
-import Language.Drasil.Code.Imperative.LanguageRenderer (Options)
+import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 import Language.Drasil.Code.CodeGeneration

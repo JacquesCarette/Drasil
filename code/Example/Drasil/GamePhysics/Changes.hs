@@ -49,7 +49,7 @@ lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP $
 
 lc7 = LCChunk (nw $ npnc "vector" (nounPhraseSP $ 
   "The implementation of mathematical vectors."))
-  [mod_vector]
+  [(mod_vector chipmunk)]
 
 lc8 = LCChunk (nw $ npnc "bb" (nounPhraseSP $ 
   "The implementation of bounding box structures"))
@@ -57,7 +57,7 @@ lc8 = LCChunk (nw $ npnc "bb" (nounPhraseSP $
 
 lc9 = LCChunk (nw $ npnc "transform" (nounPhraseSP $ 
   "The implementation of affine transformation matrices."))
-  [mod_vector]
+  [(mod_vector chipmunk)]
 
 lc10 = LCChunk (nw $ npnc "spatial index" (nounPhraseSP $ 
   "How the simulation space is spatially indexed."))

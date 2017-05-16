@@ -5,6 +5,7 @@ module Data.Drasil.Modules
   , mod_seq
   , mod_linked
   , mod_assoc
+  , mod_vector
   ) where
 
 import Language.Drasil
@@ -26,6 +27,11 @@ mod_assoc_serv :: ConceptChunk
 mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
     (S "Provides operations on hash tables, such as building a hash table, " :+:
     S "accessing a specific entry, etc.")
+
+mod_vector_serv :: ConceptChunk
+mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
+    (S "Provides vector operations such as addition, scalar and vector " :+:
+    S "multiplication, dot and cross products, rotations, etc.")
 
 {-- Module Chunks --}
 
@@ -74,6 +80,15 @@ mod_linked exampleName = makeImpModule mod_linked_serv
 mod_assoc :: NamedIdea a => a -> ModuleChunk
 mod_assoc exampleName = makeImpModule mod_assoc_serv
     (S "The data structure for an associative data type.")
+    exampleName
+    []
+    []
+    []
+    (Just mod_sw)
+
+mod_vector :: NamedIdea a => a -> ModuleChunk
+mod_vector exampleName = makeImpModule mod_vector_serv
+    (S "The data structure representing vectors.")
     exampleName
     []
     []

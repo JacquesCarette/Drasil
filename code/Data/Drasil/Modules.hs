@@ -60,7 +60,7 @@ mod_sw = makeUnimpModule modSfwrDecision
     Nothing
 
 
---mod_seq ::NamedIdea a => a -> ModuleChunk
+mod_seq :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_seq impl depnd = makeImpModule mod_seq_serv 
     (S "The data structure for a sequence data type.") 
     impl
@@ -69,7 +69,7 @@ mod_seq impl depnd = makeImpModule mod_seq_serv
     depnd
     (Just mod_sw)
 
---mod_linked ::NamedIdea a => a -> ModuleChunk
+mod_linked :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_linked impl depnd = makeImpModule mod_linked_serv
     (S "The data structure for a linked data type.")
     impl
@@ -78,7 +78,7 @@ mod_linked impl depnd = makeImpModule mod_linked_serv
     depnd
     (Just mod_sw)
 
---mod_assoc :: NamedIdea a => a -> ModuleChunk
+mod_assoc :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_assoc impl depnd = makeImpModule mod_assoc_serv
     (S "The data structure for an associative data type.")
     impl
@@ -87,7 +87,7 @@ mod_assoc impl depnd = makeImpModule mod_assoc_serv
     depnd
     (Just mod_sw)
 
---mod_vector :: NamedIdea a => a -> ModuleChunk
+mod_vector :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_vector impl depnd = makeImpModule mod_vector_serv
     (S "The data structure representing vectors.")
     impl

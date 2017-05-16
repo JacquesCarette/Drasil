@@ -9,7 +9,7 @@ import Drasil.GamePhysics.Concepts
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
     mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, mod_vector, mod_bb,
-    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk), mod_linked, mod_assoc]
+    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk), (mod_linked chipmunk), mod_assoc]
 
 -- M1: Hardware Hiding Module --
 
@@ -197,7 +197,7 @@ mod_spatial = makeImpModule mod_spatial_serv
     chipmunk
     []
     []
-    [mod_bb, mod_vector, mod_coll, mod_linked]
+    [mod_bb, mod_vector, mod_coll, (mod_linked chipmunk)]
     (Just mod_sw)
 
 -- M14: Collision Solver Module --
@@ -213,27 +213,13 @@ mod_coll = makeImpModule mod_coll_serv
     chipmunk
     []
     []
-    [mod_bb, mod_vector, mod_linked]
+    [mod_bb, mod_vector, (mod_linked chipmunk)]
     (Just mod_sw)
 
 -- M15: Sequence Data Structure Module --
 
 
 -- M16: Linked Data Structure Module --
-
-mod_linked_serv :: ConceptChunk
-mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
-    (S "Provides tree manipulation operations, such as building a tree, " :+:
-    S "accessing a specific entry, etc.")
-
-mod_linked :: ModuleChunk
-mod_linked = makeImpModule mod_linked_serv
-    (S "The data structure for a linked data type.")
-    chipmunk
-    []
-    []
-    []
-    (Just mod_sw)
 
 -- M17: Associative Data Structure Module --
 

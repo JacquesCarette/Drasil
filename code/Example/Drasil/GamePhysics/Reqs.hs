@@ -19,7 +19,7 @@ r4 = ReqChunk (nw emptyN) [mod_body, mod_shape, mod_circle, mod_segment,
 r5 = ReqChunk (nw emptyN) [mod_body, mod_space, mod_vector, mod_trans]
 r6 = ReqChunk (nw emptyN) [mod_body, mod_space, mod_vector, mod_trans]
 r7 = ReqChunk (nw emptyN) [mod_body, mod_space, mod_bb, mod_spatial,
-  mod_coll, mod_linked, mod_assoc]
+  mod_coll, (mod_linked chipmunk), mod_assoc]
 r8 = ReqChunk (nw emptyN) [mod_body, mod_space, mod_arbiter, mod_vector,
   mod_trans]
 

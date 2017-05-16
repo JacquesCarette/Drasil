@@ -139,20 +139,20 @@ s2_3_intro_end = (at_start' $ the dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
   +:+ plural model
   
-s3 = section (titleize' stakeholder) [s3_intro] [s3_1, s3_2]
+s3 = SRS.stakeholder [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "describes the" +: titleize' stakeholder +:+ 
   S "the people who have an interest in" +:+. (phrase $ the product_)
 
-s3_1 = section (titleize $ the client) [s3_1_intro] []
+s3_1 = SRS.theClient [s3_1_intro] []
 
 s3_1_intro = Paragraph $
   (at_start $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
   S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ (at_start $ the client) +:+
   S "has the final say on acceptance of the" +:+. phrase product_
 
-s3_2 = section (titleize $ the customer) [s3_2_intro] []
+s3_2 = SRS.theCustomer [s3_2_intro] []
 
 s3_2_intro = Paragraph $
   (at_start' $ the customer) +:+ S "are the end" +:+ phrase user +:+
@@ -182,7 +182,7 @@ s4_2 = SRS.sysCon [s4_2_intro] []
 s4_2_intro = Paragraph $
   (short notApp)
 
-s5 = section (titleize scpOfTheProj) [s5_intro] [s5_1, s5_2]
+s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $
   S "This" +:+ phrase section_ +:+ S "presents the" +:+. phrase scpOfTheProj +:+ 
@@ -191,7 +191,7 @@ s5_intro = Paragraph $
   phrase output_ +:+ S ", which defines the action of getting the" +:+ phrase input_ +:+ S "and displaying" +:+.
   S "the" +:+ phrase output_
 
-s5_1 = section (titleize prodUCTable) [s5_1_table] []
+s5_1 = SRS.prodUCTable [s5_1_table] []
 
 s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ S "Name", S "Actor", 
   titleize input_ +:+ S "and" +:+ titleize output_] (mkTable
@@ -206,7 +206,7 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ S "Name",
   S "calculated" +:+ plural value]])
   (titleize table_ +: S "1" +:+ titleize useCaseTable) True
 
-s5_2 = section (titleize' indPRCase) [s5_2_bullets] []
+s5_2 = SRS.indPRCase [s5_2_bullets] []
 
 s5_2_bullets = Enumeration $ Bullet $ map Flat
   [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing" +:+ phrase input_ 
@@ -255,8 +255,7 @@ s6_1_intro = Paragraph $
   (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+ (phrase $ blast ^. term) +:+
   S "under the" +:+. plural condition
 
-s6_1_1 = section (titleize' (terminology `and_'` definition)) [s6_1_1_intro, 
-  s6_1_1_bullets] []
+s6_1_1 = SRS.termAndDefn [s6_1_1_intro, s6_1_1_bullets] []
   
 s6_1_1_intro = Paragraph $ 
   S "This subsection provides a list of terms that are used in subsequent" +:+
@@ -300,7 +299,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
-s6_1_2 = section (titleize physSyst) [s6_1_2_intro, s6_1_2_list, 
+s6_1_2 = SRS.physSyst [s6_1_2_intro, s6_1_2_list, 
   fig_glassbr] []
 
 s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLassBR ^. defn) 
@@ -592,9 +591,7 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "7 - The" +:+ phrase software +:+ S "may be changed to consider more than just flexure" +:+.
   S "of the glass"))]
 
---FIX! output should be 'Traceability Matrices and Graphs' but is 'Traceability Matrix and Graph'
-s9 = section (titleize' traceyMandG)
-  ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
+s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
 
 s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
@@ -811,7 +808,7 @@ fig_4 = Figure (titleize figure +: S "4" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other" +:+ titleize' item) "ATrace.png"
 
-s10 = section (titleize' reference) [s10_list] []
+s10 = SRS.reference [s10_list] []
 
 s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
@@ -840,7 +837,7 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
   S "15.02" `sC` Quote (at_start specification +:+ S "for" +:+ (plural $ heat ^. term) +:+.
   S "treated flat glass-Kind HS, kind FT coated and uncoated glass,C1048"))]
 
-s11 = section (titleize appendix) [s11_intro, fig_5, fig_6] []
+s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 
 s11_intro = Paragraph $
   S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+

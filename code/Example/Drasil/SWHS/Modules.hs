@@ -5,6 +5,7 @@ import Drasil.SWHS.Concepts
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
+import Data.Drasil.Modules
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
@@ -12,14 +13,14 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
           mod_plot]
 
 -- HW Hiding Module
-mod_hw :: ModuleChunk
-mod_hw = makeImpModule hwHiding (S "The data structure and algorithm " :+:
-         S "used to implement the virtual hardware.") os [] [] [] Nothing
+--mod_hw :: ModuleChunk
+--mod_hw = makeImpModule hwHiding (S "The data structure and algorithm " :+:
+--         S "used to implement the virtual hardware.") os [] [] [] Nothing
 
 -- Behaviour Hiding Module
-mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule modBehavHiding (S "The contents of the required" :+:
-            S " behaviours.") Nothing
+--mod_behav :: ModuleChunk
+--mod_behav = makeUnimpModule modBehavHiding (S "The contents of the required" :+:
+--            S " behaviours.") Nothing
 
 -- Input Format Module
 mod_inputf :: ModuleChunk
@@ -92,11 +93,11 @@ mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:
            mod_outputv, mod_outputf, mod_seq] (Just mod_behav)
 
 -- Software Decision Module
-mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
-         S "mathematical theorems, physical facts, or programming " :+:
-         S "considerations. The secrets of this module are not described " :+:
-         S "in the " :+: (short srs) :+: S ".") Nothing
+--mod_sw :: ModuleChunk
+--mod_sw = makeUnimpModule modSfwrDecision (S "The design decision based on " :+:
+--         S "mathematical theorems, physical facts, or programming " :+:
+--         S "considerations. The secrets of this module are not described " :+:
+--         S "in the " :+: (short srs) :+: S ".") Nothing
 
 -- Sequence Data Structure Module
 mod_seq_desc :: ConceptChunk

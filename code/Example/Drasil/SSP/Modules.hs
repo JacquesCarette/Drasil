@@ -57,8 +57,8 @@ mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
    S "with the showing the element displacements as calculated by the" +:+
    S "RFEM Module.")
 
-mod_outputf :: ModuleChunk
-mod_outputf = makeImpModule mod_outputf_desc
+mod_output :: ModuleChunk
+mod_output = makeImpModule mod_outputf_desc
   (S "The format and structure of the output data.")
   program
   []
@@ -208,20 +208,16 @@ mod_sds :: ModuleChunk
 mod_sds = mod_seq_fun matlab []
 
 -- rng module
-mod_rng_desc :: ConceptChunk
-mod_rng_desc = dccWDS "mod_rng_desc" (cn' "random number generator")
-  (S "Randomly produces numbers between 0 and 1, using a" +:+
-   S "chaotic function with an external seed. Used when generating" +:+ (plural slpSrf) +:+
-   S "in the Genetic Algorithm Module.")
+-- mod_rng_desc :: ConceptChunk
+-- mod_rng_desc = dccWDS "mod_rng_desc" (cn' "random number generator")
+  -- (S "Randomly produces numbers between 0 and 1, using a" +:+
+   -- S "chaotic function with an external seed. Used when generating" +:+ (plural slpSrf) +:+
+   -- S "in the Genetic Algorithm Module.")
 
 mod_rng :: ModuleChunk
-mod_rng = makeImpModule mod_rng_desc
-  (S "Pseudo-random number generation algorithm.")
-   matlab
-   []
-   []
-   []
-   (Just mod_sw)
+mod_rng = mod_rng_fun matlab [] (S "Randomly produces numbers between 0 and 1, using a" +:+
+   S "chaotic function with an external seed. Used when generating" +:+ (plural slpSrf) +:+
+   S "in the Genetic Algorithm Module.")
 
 -- plotting module
 -- mod_plot_desc :: ConceptChunk

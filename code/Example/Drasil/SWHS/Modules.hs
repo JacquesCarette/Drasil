@@ -91,6 +91,10 @@ mod_ener = makeImpModule mod_ener_desc (S "The equations for solving for " :+:
 --           S "the running of the prograM.") swhsProg [] [] [M.mod_hw, mod_inputp, 
 --           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
 --           mod_outputv, mod_outputf, mod_seq] (Just M.mod_behav)
+mod_ctrl :: ModuleChunk
+mod_ctrl = mod_ctrl_fun swhsProg [mod_hw, mod_inputp, 
+  mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
+  mod_outputv, mod_outputf, mod_seq]
 
 -- Software Decision Module
 --mod_sw :: ModuleChunk

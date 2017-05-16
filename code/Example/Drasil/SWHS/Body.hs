@@ -161,7 +161,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "in any way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
   S "to present the documentation is still to" +:+
-  Quote (S "fake") +:+. S "a rational" +:+ phrase design +:+ "process")]
+  Quote (S "fake") +:+. S "a rational" +:+ phrase design +:+ S "process")]
 
 -- Besides program name, these two paragraphs are general, mostly repeated 
 -- between examples, and can be abstracted out.
@@ -269,7 +269,7 @@ s3_1 = section (titleize sysCont) [s3_1_contents, sys_context_fig, s3_1_2_intro,
 
 s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
-  phrase software :+: ", the" +:+ phrase user +:+ S "in this case. A" +:+
+  phrase software :+: S ", the" +:+ phrase user +:+ S "in this case. A" +:+
   S "rectangle represents the" +:+ phrase softwareSys +:+
   S "itself (" :+: short progName :+: S "). Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
@@ -281,13 +281,13 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ titleize sysCo
 s3_1_2_intro = Paragraph (short progName +:+ S "is mostly self-contained. The only" +:+
   S "external interaction is through the" +:+ phrase user +:+ S "interface. The" +:+
   S "responsibilities of the" +:+ phrase user +:+ S "and the" +:+
-  phrase system +:+ "are as follows:")
+  phrase system +:+ S "are as follows:")
 
 s3_1_2_bullets = Enumeration (Bullet $
   [Nested (titleize user +:+ S "Responsibilities:") (Bullet $ map (\c -> Flat c)
   [S "Provide the" +:+ phrase input_ +:+ plural datum +:+ S "to the" +:+ phrase system :+:
   S ", ensuring no errors in the" +:+ plural datum +:+ S "entry",
-  S "Take care that consistent" +:+ plural unit_ +:+ "are used for" +:+ phrase input_ +:+
+  S "Take care that consistent" +:+ (plural $ unit_ ^.term) +:+ S "are used for" +:+ phrase input_ +:+
   plural variable
   ]),
 
@@ -295,7 +295,7 @@ s3_1_2_bullets = Enumeration (Bullet $
   [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of characters instead" +:+
   S "of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  physical `and_'` software +:+ plural constraint_,
+  phrase physical +:+ S "and" +:+ plural software +:+ plural constraint_,
   S "Calculate the required" +:+ plural output_
   ])])
   

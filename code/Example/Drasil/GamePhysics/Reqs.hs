@@ -3,7 +3,6 @@ module Drasil.GamePhysics.Reqs where
 import Language.Drasil
 import Drasil.GamePhysics.Modules
 import Data.Drasil.Modules
-import Drasil.GamePhysics.Concepts (chipmunk)
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6,r7,r8]

@@ -77,7 +77,7 @@ mod_ctrl_fun impl depnd = makeImpModule modControl
   (Just mod_behav)
 
 -- parameterize inputf and inputp into one mod_input?
-mod_input_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_input_fun :: NamedIdea a => a -> [ModuleChunk] -> ConceptChunk -> ModuleChunk
 mod_input_fun impl depnd disc cChunk= makeImpModule cChunk
   (S "The format and structure of the input" +:+. disc)
   impl

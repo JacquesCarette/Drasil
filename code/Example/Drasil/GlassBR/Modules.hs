@@ -11,21 +11,6 @@ modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, 
   mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_sw, mod_interp]
 
-mod_hw :: ModuleChunk
-mod_hw = makeImpModule hwHiding
-  (S "The data structure and algorithm used to implement the virtual hardware.")
-  os
-  []
-  []
-  []
-  Nothing
-
--- Behaviour Hiding Module
-mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule modBehavHiding
-  (S "The contents of the required behaviors.")
-  Nothing
-
 -- input format module
 mod_inputf :: ModuleChunk
 mod_inputf = makeImpModule modInputFormat
@@ -123,15 +108,6 @@ mod_interpd = makeImpModule modInterpDatum --FIXME: Plural?
    []
    []
    (Just mod_behav)
-
--- sfwr dec module
-
-mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule modSfwrDecision
-  (S "The design decision based on mathematical theorems, " :+:
-   S "physical facts, or programming considerations. The secrets of this " :+:
-   S "module are not described in the SRS.")
-   Nothing
 
 -- interpolation module
 

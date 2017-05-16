@@ -154,7 +154,7 @@ mod_mp = makeImpModule mod_mp_desc
 mod_rfem_desc :: ConceptChunk
 mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
   (S "Calculate the global" +:+ (phrase $ fs_rc ^. term) `sC` S "local slice" +:+
-   S "factors of safety, and local slice displacements of a given" +:+ (phrase slpSrf) +:+
+   (plural $ fs_rc ^. term) `sC` S "and local slice displacements of a given" +:+ (phrase slpSrf) +:+
    S "under given conditions, through implementation of a rigid" +:+
    S "finite element" +:+ (phrase ssa) +:+ S "method.")
 

@@ -18,19 +18,11 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
 
 -- HW Hiding Module imported from Drasil.Module
 -- mod_hw :: ModuleChunk
--- mod_hw = makeImpModule hwHiding
-  -- (S "The data structure and algorithm used to implement the virtual hardware.")
-  -- os
-  -- []
-  -- []
-  -- []
-  -- Nothing
+-- mod_hw = M.mod_hw
 
 -- Behaviour Hiding Module
 -- mod_behav :: ModuleChunk
--- mod_behav = makeUnimpModule modBehavHiding
-  -- (S "The contents of the required behaviors.")
-  -- Nothing
+-- mod_behav = M.mod_behav
 
 
 -- Control module
@@ -216,11 +208,7 @@ mod_sps = makeImpModule mod_sps_desc
 
 -- sfwr dec module
 -- mod_sw :: ModuleChunk
--- mod_sw = makeUnimpModule modSfwrDecision
-  -- (S "The design decision based on mathematical theorems" `sC`
-   -- S "physical facts, or programming considerations. The secrets of this" +:+
-   -- S "module are not described in the SRS.")
-   -- Nothing
+-- mod_sw = M.mod_sw
 
 -- sequence data structure module
 -- mod_sds_desc :: ConceptChunk

@@ -13,16 +13,6 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 
 -- M1: Hardware Hiding Module --
 
-{--mod_hw :: ModuleChunk
-mod_hw = makeImpModule hwHiding
-    (S "The data structure and algorithm used to implement the virtual " :+:
-    S "hardware.")
-    os
-    []
-    []
-    []
-    Nothing
-
 -- Behaviour Hiding Module --
 
 mod_behav :: ModuleChunk
@@ -149,14 +139,7 @@ mod_control = makeImpModule modControl
     (Just mod_behav)
 
 -- Software Decision Module --
-{--
-mod_sw :: ModuleChunk
-mod_sw = makeUnimpModule modSfwrDecision
-    (S "The design decision based on mathematical theorems, physical facts" :+:
-    S ", or programming considerations. The secrets of this module are " :+:
-    S "not described in the SRS.")
-    Nothing
---}
+
 -- M10: Vector Module --
 
 mod_vector_serv :: ConceptChunk

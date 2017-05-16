@@ -45,8 +45,8 @@ s2 = SRS.intro [] [s2_3]
 s2_3 = section (titleize' charOfIR) [s2_3_intro] []
 
 s2_3_intro = Paragraph $
-            (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in" +:+
-            (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+            (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+
+            S "should have a strong knowledge in" +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
            S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
             (phrase $ reviewer ^. term) +:+ S "should also have an understanding of differential" +:+ (plural $ equation ^. term) :+: S ", as typically" +:+
            S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+
@@ -127,10 +127,10 @@ s4_2 = section ((titleize $ solutionCharSpec ^. term))
   [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $
-           S "The" +:+ (phrase $ inModel ^. term) +:+
-           S "(" :+: getAcc ode :+: S ") that governs" +:+ (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
-           S ". The" +:+ (phrase $ information ^. term) +:+ S "to understand the meaning of the" +:+
-            (phrase $ inModel ^. term) +:+ 
+           S "The" +:+ (phrase $ inModel ^. term) +:+ S "(" :+: getAcc ode :+: S ") that governs" +:+
+            (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
+           S ". The" +:+ (phrase $ information ^. term) +:+
+           S "to understand the meaning of the" +:+ (phrase $ inModel ^. term) +:+ 
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 
             (phrase $ inModel ^. term) +:+ S "can be verified."
   

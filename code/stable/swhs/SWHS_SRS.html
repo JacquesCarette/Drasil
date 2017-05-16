@@ -1005,6 +1005,52 @@ This section provides general information about the system, identifies the inter
 <a id="Sec:UC">
 <div class="subsection">
 <h3>
+System Context
+</h3>
+<p class="paragraph">
+<a href=#Figure::SC>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system andits environment.
+</p>
+<a id="Figure::SC">
+<img class="figure" src="SystemContextFigure.png" alt="<a href=#Figure::SC>this Figure</a>: System Context"></img>
+<p class="caption">
+<a href=#Figure::SC>this Figure</a>: System Context
+</p>
+</a>
+<p class="paragraph">
+SWHS is mostly self-contained. The only external interaction is through the user inter- face. The responsibilities of the user and the system are as follows:
+</p>
+<ul class="list">
+<li>
+User Responsibilities:
+<ul class="list">
+<li>
+Provide the input data to the system, ensuring no errors in the data entry
+</li>
+<li>
+Take care that consistent units are used for input variables
+</li>
+</ul>
+</li>
+<li>
+SWHS Responsibilities:
+<ul class="list">
+<li>
+Detect data type mismatch, such as a string of characters instead of a floating point number
+</li>
+<li>
+Determine if the inputs satisfy the required physical and software constraints
+</li>
+<li>
+Calculate the required outputs
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</a>
+<a id="Sec:UC">
+<div class="subsection">
+<h3>
 User Characteristics
 </h3>
 <p class="paragraph">

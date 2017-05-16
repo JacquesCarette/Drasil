@@ -233,6 +233,30 @@ The goal statements are refined to the theoretical models, and the theoretical m
 \section{General System Description}
 \label{Sec:GSD}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+\subsection{System Context}
+\label{Sec:SC}
+Figure~\ref{Figure::SC} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system andits environment.
+\begin{figure}
+\begin{center}
+\includegraphics{SystemContextFigure.png}
+\caption{Figure~\ref{Figure::SC}: System Context}
+\label{Figure::SC}
+\end{center}
+\end{figure}
+SWHS is mostly self-contained. The only external interaction is through the user inter- face. The responsibilities of the user and the system are as follows:
+\begin{enumerate}
+\item{User Responsibilities:}
+\begin{enumerate}
+\item{Provide the input data to the system, ensuring no errors in the data entry}
+\item{Take care that consistent units are used for input variables}
+\end{enumerate}
+\item{SWHS Responsibilities:}
+\begin{enumerate}
+\item{Detect data type mismatch, such as a string of characters instead of a floating point number}
+\item{Determine if the inputs satisfy the required physical and software constraints}
+\item{Calculate the required outputs}
+\end{enumerate}
+\end{enumerate}
 \subsection{User Characteristics}
 \label{Sec:UC}
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.

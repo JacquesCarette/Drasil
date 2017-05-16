@@ -9,7 +9,7 @@ import Data.Drasil.Modules as M
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
-          mod_outputv, mod_temp, mod_ener, mod_ctrl, mod_sw, Drasil.SWHS.Modules.mod_seq,
+          mod_outputv, mod_temp, mod_ener, mod_sw, Drasil.SWHS.Modules.mod_seq,
           mod_ode, mod_plot]
 
 -- HW Hiding Module
@@ -86,11 +86,11 @@ mod_ener = makeImpModule mod_ener_desc (S "The equations for solving for " :+:
            [mod_inputp, Drasil.SWHS.Modules.mod_seq] (Just M.mod_behav)
 
 -- Control Module
-mod_ctrl :: ModuleChunk
-mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:
-           S "the running of the prograM.") swhsProg [] [] [M.mod_hw, mod_inputp, 
-           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
-           mod_outputv, mod_outputf, Drasil.SWHS.Modules.mod_seq] (Just M.mod_behav)
+--mod_ctrl :: ModuleChunk
+--mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:
+--           S "the running of the prograM.") swhsProg [] [] [M.mod_hw, mod_inputp, 
+--           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
+--           mod_outputv, mod_outputf, Drasil.SWHS.Modules.mod_seq] (Just M.mod_behav)
 
 -- Software Decision Module
 --mod_sw :: ModuleChunk

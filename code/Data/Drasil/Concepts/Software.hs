@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (srs, input_, output_)
+import Data.Drasil.Concepts.Documentation (srs, input_, output_, datum)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 

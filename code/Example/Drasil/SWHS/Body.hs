@@ -148,7 +148,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   Paragraph (S "This" +:+ phrase document +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+ 
   S "writing the" +:+ phrase desSpec +:+ S "and the software" +:+
-  (phrase vav) +:+ S "plan. The design" +:+ phrase document +:+
+  (phrase vav) +:+ S "plan. The" +:+ phrase design +:+ phrase document +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
   S "on the numerical algorithms and programming environment" +:+
@@ -161,7 +161,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "in any way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
   S "to present the documentation is still to" +:+
-  Quote (S "fake") +:+. S "a rational design process")]
+  Quote (S "fake") +:+. S "a rational" +:+ phrase design +:+ "process")]
 
 -- Besides program name, these two paragraphs are general, mostly repeated 
 -- between examples, and can be abstracted out.
@@ -175,7 +175,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   plural requirement +:+ S "is limited to" +:+
   (phrase $ thermal_analysis ^. term) +:+ S "of a single" +:+.
   (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
-  S "Given the appropriate inputs, the code for" +:+
+  S "Given the appropriate" +:+ plural input_ :+: S ", the code for" +:+
   (short progName) +:+ S "is intended to predict the" +:+
   (phrase $ temp ^. term) +:+ S "and" +:+ (phrase $ thermal_energy ^. term) +:+
   S "histories for the" +:+ (phrase $ water ^. term) +:+ S "and the" +:+
@@ -198,14 +198,14 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 
 s2_3 = section (of'' titleize' titleize characteristic intReader) [s2_3_contents] []
 
-s2_3_contents = Paragraph (S "Reviewers of this documentation should" +:+
-  S "have a strong knowledge in heat transfer theory. A third or fourth" +:+
-  S "year Mechanical Engineering course on this topic is recommended." +:+
-  S "The reviewers should also have an understanding of differential" +:+
-  S "equations, as typically covered in first and second year Calculus" +:+
-  S "courses. The users of SWHS can have a lower level of expertise, as" +:+
-  S "explained in" +:+. (makeRef s3_2))
-
+s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
+  S "should have a strong knowledge in heat transfer" +:+. phrase theory +:+
+  S "A third or fourth year Mechanical Engineering course on this topic is" +:+
+  S "recommended. The" +:+ plural reviewer +:+ S "should also have an" +:+
+  S "understanding of differential equations, as typically covered in" +:+
+  S "first and second year Calculus courses. The" +:+ plural user +:+
+  S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
+  S "as explained in" +:+. (makeRef s3_2))
 
 
 s2_4 = section (titleize orgOfDoc) (s2_4_contents) []
@@ -256,33 +256,39 @@ s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the" +:+ phrase system :+:
   S ", identifies" +:+ S "the interfaces between the" +:+ phrase system +:+
-  S "and its environment, and describes the user" +:+ plural characteristic +:+
-  S "and the" +:+ phrase system +:+ plural constraint :+: S ".")
+  S "and its environment, and describes the" +:+ phrase user +:+
+  plural characteristic +:+ S "and the" +:+ phrase system +:+
+  plural constraint :+: S ".")
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
 
 
-s3_1 = section (S "System Context") [s3_1_contents, sys_context_fig, s3_1_2_intro,
+s3_1 = section (titleize sysCont) [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
 
-s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the system" +:+
-  S "context. A circle represents an external entity outside the software," +:+
-  S "the user in this case. A rectangle represents the software system" +:+
-  S "itself (SWHS). Arrows are used to show the data flow between the" +:+
-  S "system and its environment.")
+s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
+  phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
+  phrase software :+: ", the" +:+ phrase user +:+ S "in this case. A" +:+
+  S "rectangle represents the" +:+ phrase softwareSys +:+
+  S "itself (" :+: short progName :+: S "). Arrows are used to show the" +:+
+  plural datum +:+ S "flow between the" +:+ phrase system +:+
+  S "and its environment.")
 
-sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ": System Context")
+sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ titleize sysCont)
   "SystemContextFigure.png"
 
-s3_1_2_intro = Paragraph (S "SWHS is mostly self-contained. The only" +:+
-  S "external interaction is through the user inter- face. The" +:+
-  S "responsibilities of the user and the system are as follows:")
+s3_1_2_intro = Paragraph (short progName +:+ S "is mostly self-contained. The only" +:+
+  S "external interaction is through the" +:+ phrase user +:+ S "interface. The" +:+
+  S "responsibilities of the" +:+ phrase user +:+ S "and the" +:+
+  phrase system +:+ "are as follows:")
 
 s3_1_2_bullets = Enumeration (Bullet $
-  [Nested (S "User Responsibilities:") (Bullet $ map (\c -> Flat c)
-  [S "Provide the input data to the system, ensuring no errors in the data entry",
-  S "Take care that consistent units are used for input variables"
+  [Nested (titleize user +:+ S "Responsibilities:") (Bullet $ map (\c -> Flat c)
+  [S "Provide the input" +:+ plural datum +:+ S "to the" +:+ phrase system :+:
+  S ", ensuring no errors in the" +:+ plural datum +:+ S "entry",
+  S "Take care that consistent" +:+ plural unit_ +:+ "are used for input" +:+
+  plural variable
   ]),
 
   Nested (S "SWHS Responsibilities:") (Bullet $ map (\c -> Flat c)

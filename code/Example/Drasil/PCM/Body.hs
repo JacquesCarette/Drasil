@@ -23,15 +23,15 @@ import Drasil.DocumentLanguage
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s2,s2_3,s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
+s2,s2_3, s3, s3_1, s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
-s2_3_intro,s4_intro,
+s2_3_intro, s3_1_intro, sys_context_fig, s4_intro,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
-        map Verbatim [s2, s4]  
+        map Verbatim [s2, s3, s4]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
@@ -42,16 +42,31 @@ pcm_srs = mkDoc mkSRS pcm_si
 
 s2 = SRS.intro [] [s2_3]
 
-s2_3 = section (S "Characteristics of Intended Reader") [s2_3_intro] []
+s2_3 = section (titleize' charOfIR) [s2_3_intro] []
 
 s2_3_intro = Paragraph $
-           S "Reviewers of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in"
-           +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+            (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+ S "should have a strong knowledge in" +:+
+            (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
            S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
-           S "reviewers should also have an understanding of differential" +:+ (plural $ equation ^. term) :+: S ", as typically" +:+
+            (phrase $ reviewer ^. term) +:+ S "should also have an understanding of differential" +:+ (plural $ equation ^. term) :+: S ", as typically" +:+
            S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+
            S "can have a lower level expertise, as explained in" +:+ (titleize $ section_ ^. term)
            -- FIXME: Section 3.2 does not exist yet, when it does, add reference
+
+           
+s3 = SRS.genSysDec [] [s3_1]
+
+s3_1 = section (titleize sysCont) [s3_1_intro, sys_context_fig] []
+
+s3_1_intro = Paragraph $
+              (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase $ sysCont ^. term) +:+
+             S "A circle represents an external entity outside the" +:+ (phrase $ software ^. term) +:+ S "," +:+
+             S "the" +:+ (phrase $ user ^. term) +:+ S "in this case. A rectangle represents the" +:+ (phrase $ softwareSys ^. term) +:+
+             S "itself (" :+: (getAcc sWHS) :+: S "). Arrows are used to show the" +:+ (plural $ datum ^. term) +:+ S "flow between the" +:+
+              (phrase $ section_ ^. term) +:+ S "and its" +:+. (phrase $ environment ^. term)
+            
+sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sysCont ^. term))
+            "SystemContextFigure.png"
 
            
 s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]

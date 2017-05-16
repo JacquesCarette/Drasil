@@ -26,12 +26,12 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, column, computer, condition, constraint_, connection, 
+analysis, appendix, characteristic, client, column, computer, condition, constraint_, connection, context,
   customer, datum, definition, dependency, description, design, document, 
   documentation, environment, figure, functional, game, general, individual, 
   information, input_, intReader, introduction, item, label, library, limitation, model, name_, nonfunctional, 
   offShelf, open, organization, output_, performance, physics, physical, priority, problem, product_, project, 
-  property, purpose, quantity, realtime, reference, requirement_, scope, 
+  property, purpose, quantity, realtime, reference, requirement_, reviewer, scope, 
   source, section_, simulation, software, solution, specific, specification, 
   stakeholder, symbol_, system, table_, template, terminology, theory, 
   traceyMatrix, user, useCase, value, variable, video, verification :: NPNC
@@ -45,6 +45,7 @@ computer        = npnc "computer"       (cn' "computer") -- general enough to be
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
+context         = npnc "context"        (cn' "context")
 customer        = npnc "customer"       (cn' "customer")
 datum           = npnc "datum"          (cnUM  "datum")
 definition      = npnc "definition"     (cn' "definition")
@@ -60,7 +61,7 @@ game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
-input_           = npnc "input"          (cn' "input")         
+input_          = npnc "input"          (cn' "input")         
 intReader       = npnc "intReader"      (cn "intended reader")
 introduction    = npnc "introduction"   (cn' "introduction")
 item            = npnc "item"           (cn' "item")
@@ -73,7 +74,7 @@ nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjecti
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
-output_          = npnc "output"         (cn' "output")
+output_         = npnc "output"         (cn' "output")
 performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
@@ -85,7 +86,8 @@ property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
 reference       = npnc "reference"      (cn' "reference")
-requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement 
+requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
+reviewer        = npnc "reviewer"       (cn' "reviewer") 
 scope           = npnc "scope"          (cn' "scope")
 source          = npnc "source"         (cn' "source")
 section_        = npnc "section"        (cn' "section")
@@ -111,9 +113,10 @@ verification    = npnc "verification"   (cn' "verification")
 realtime        = npnc "real-time"      (cn' "real-time")
 
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
-  tOfSymb{-, tOfUnits-}, traceyMandG, corSol :: NPNC
+  tOfSymb, traceyMandG, corSol, charOfIR :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
+charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
@@ -127,8 +130,8 @@ traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph
 
 characteristicSpecification, generalSystemDescription, indPRCase, physicalConstraint,
   physicalSystem, problemDescription, prodUCTable, specificsystemdescription, 
-  systemdescription, systemConstraint, userCharacteristic, datumConstraint,
-  functionalRequirement, nonfunctionalRequirement, softwareDoc, softwareVerif,
+  systemdescription, systemConstraint, sysCont, userCharacteristic, datumConstraint,
+  functionalRequirement, nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
   solutionCharSpec, offShelfSolution, videoGame, physicalSim, productUC, 
   useCaseTable, openSource, physicsLibrary, physicalProperty :: NPNC
   
@@ -143,6 +146,7 @@ prodUCTable                  = compoundNPNC productUC table_
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint_
+sysCont                      = compoundNPNC system context
 userCharacteristic           = compoundNPNC user characteristic
 datumConstraint              = compoundNPNC' datum constraint_
 functionalRequirement        = compoundNPNC functional requirement_
@@ -156,4 +160,5 @@ useCaseTable                 = compoundNPNC useCase table_
 videoGame                    = compoundNPNC video game
 openSource                   = compoundNPNC open source
 softwareDoc                  = compoundNPNC software documentation
+softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification

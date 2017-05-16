@@ -78,8 +78,8 @@ mod_ctrl_fun impl depnd = makeImpModule modControl
 
 -- parameterize inputf and inputp into one mod_input?
 mod_io_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
-mod_io_fun impl depnd disc cChunk= makeImpModule cChunk
-  (S "The format and structure of the" +:+. disc)
+mod_io_fun impl depnd desc cChunk= makeImpModule cChunk
+  (S "The format and structure of the" +:+. desc)
   impl
   []
   []
@@ -132,7 +132,7 @@ mod_plot_fun impl depnd = makeImpModule mod_plot_desc
    (Just mod_sw)
    
 mod_rng_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ModuleChunk
-mod_rng_fun impl depnd disc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random number generator") disc)
+mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random number generator") desc)
   (S "Pseudo-random number generation algorithm.")
    impl
    []

@@ -15,11 +15,6 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 
 -- Behaviour Hiding Module --
 
-mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule modBehavHiding
-    (S "The contents of the required behaviors.")
-    Nothing
---}
 -- M2: Rigid Body Module --
 
 mod_body_serv :: ConceptChunk

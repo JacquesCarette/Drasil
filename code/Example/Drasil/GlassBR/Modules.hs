@@ -5,34 +5,22 @@ import Data.Drasil.Concepts.Software
 import Drasil.GlassBR.Concepts
 
 import Data.Drasil.Modules
+import Data.Drasil.Concepts.Documentation
 
 -- Some of the content below is 'generic' and should be pulled out from here.
 -- And the constructors for making 'modules' should be rethought to be more
 -- convenient for the most common cases.
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, (mod_inputf_fun glassBRProg [mod_hw, mod_inputp]) , (mod_inputp_fun glassBRProg [mod_inputc]),
-  mod_inputc, mod_outputf, mod_derivedv, mod_calc,
+modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, mod_derivedv, mod_calc,
   (mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]),
   mod_interpd, mod_sw, mod_interp]
 
 -- input format module
 mod_inputf :: ModuleChunk
-mod_inputf = makeImpModule modInputFormat
-  (S "The format and structure of the input data.")
-  glassBRProg
-  []
-  []
-  [mod_hw, mod_inputp]
-  (Just mod_behav)
+mod_inputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (S "input" +:+ (plural datum)) modInputFormat
 
 mod_inputp :: ModuleChunk
-mod_inputp = makeImpModule modInputParam --FIXME: Plural?
-  (S "The format and structure of the input parameters.")
-  glassBRProg
-  []
-  []
-  [mod_inputc]
-  (Just mod_behav)
+mod_inputp = mod_io_fun glassBRProg [mod_inputc] (S "input parameters") modInputParam --FIXME: Plural?
 
 -- input constraints module
 mod_inputc :: ModuleChunk
@@ -52,13 +40,7 @@ mod_outputf_desc = dccWDS "mod_outputf_desc" (cn' "output format")
    S "and both safety requirements.")
 
 mod_outputf :: ModuleChunk
-mod_outputf = makeImpModule mod_outputf_desc
-  (S "The format and structure of the output data.")
-  glassBRProg
-  []
-  []
-  [mod_hw, mod_inputp]
-  (Just mod_behav)
+mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (S "output" +:+ (plural datum)) mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk
@@ -93,13 +75,7 @@ mod_calc = makeImpModule mod_calc_desc
 -- interpolation data module
 
 mod_interpd :: ModuleChunk
-mod_interpd = makeImpModule modInterpDatum --FIXME: Plural?
-  (S "The format and structure of the data used for interpolation.")
-   glassBRProg
-   []
-   []
-   []
-   (Just mod_behav)
+mod_interpd = mod_io_fun glassBRProg [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
 
 -- interpolation module
 

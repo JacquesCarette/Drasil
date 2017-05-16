@@ -20,11 +20,11 @@ lc1 = LCChunk (nw $ npnc "hardware" (nounPhraseSP
 
 lc2 = LCChunk ( nw $ npnc "input" (nounPhraseSP
   "The format of the initial input data.")
-  ) [mod_inputf_args]
+  ) [mod_inputf]
 
 lc3 = LCChunk ( nw $ npnc "parameters" (nounPhraseSP 
   "The format of the input parameters.")
-  ) [mod_inputp_args]
+  ) [mod_inputp]
 
 lc4 = LCChunk ( nw $ npnc "output" (nounPhraseSP
   "The format of the final output data.")
@@ -36,8 +36,8 @@ lc5 = LCChunk (
   ) [mod_calc]
 
 lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP
-  "How the overall control of the calculations is orchestrated.")) [(mod_ctrl glassBRProg [mod_inputf_args,
-                                                                                           mod_inputp_args,
+  "How the overall control of the calculations is orchestrated.")) [(mod_ctrl_fun glassBRProg [mod_inputf,
+                                                                                           mod_inputp,
                                                                                            mod_inputc,
                                                                                            mod_derivedv, 
                                                                                            mod_calc,

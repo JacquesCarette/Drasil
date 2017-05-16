@@ -10,16 +10,13 @@ import Data.Drasil.Modules
 -- And the constructors for making 'modules' should be rethought to be more
 -- convenient for the most common cases.
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, mod_inputf_args, mod_inputp_args, mod_inputc, mod_outputf, 
-  mod_derivedv, mod_calc, (mod_ctrl glassBRProg [mod_inputf_args, mod_inputp_args, mod_inputc, mod_derivedv, mod_calc,
-  mod_interp, mod_outputf]), mod_interpd, mod_sw, mod_interp]
-
--- reasonable way to reduce code?
-mod_inputf_args = mod_inputf glassBRProg [mod_hw, mod_inputp_args]
-mod_inputp_args = mod_inputp glassBRProg [mod_inputc]
+modules = [mod_hw, mod_behav, (mod_inputf_fun glassBRProg [mod_hw, mod_inputp]) , (mod_inputp_fun glassBRProg [mod_inputc]),
+  mod_inputc, mod_outputf, mod_derivedv, mod_calc,
+  (mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]),
+  mod_interpd, mod_sw, mod_interp]
 
 -- input format module
-{-mod_inputf :: ModuleChunk
+mod_inputf :: ModuleChunk
 mod_inputf = makeImpModule modInputFormat
   (S "The format and structure of the input data.")
   glassBRProg
@@ -35,7 +32,7 @@ mod_inputp = makeImpModule modInputParam --FIXME: Plural?
   []
   []
   [mod_inputc]
-  (Just mod_behav)-}
+  (Just mod_behav)
 
 -- input constraints module
 mod_inputc :: ModuleChunk
@@ -60,7 +57,7 @@ mod_outputf = makeImpModule mod_outputf_desc
   glassBRProg
   []
   []
-  [mod_hw, mod_inputp_args]
+  [mod_hw, mod_inputp]
   (Just mod_behav)
 
 -- derived values module
@@ -70,7 +67,7 @@ mod_derivedv = makeImpModule modDerivedVal --FIXME: Plural?
   glassBRProg
   []
   []
-  [mod_inputp_args]
+  [mod_inputp]
   (Just mod_behav)
 
 -- calculations module
@@ -90,7 +87,7 @@ mod_calc = makeImpModule mod_calc_desc
    glassBRProg
    []
    []
-   [mod_inputp_args]
+   [mod_inputp]
    (Just mod_behav)
 
 -- interpolation data module

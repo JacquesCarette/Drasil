@@ -13,8 +13,14 @@ module Language.Drasil.Code (
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
     convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
-    objDecNewVoid,var,objMethodCall,objMethodCallVoid,valStmt
+    objDecNewVoid,var,objMethodCall,objMethodCallVoid,valStmt,
+    cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel,
+    makeCode, createCodeFiles,
+    Options
 ) where
 
 import Prelude hiding (break, print, return)
 import Language.Drasil.Code.Imperative.AST
+import Language.Drasil.Code.Imperative.LanguageRenderer (Options)
+import Language.Drasil.Code.Imperative.Parsers.ConfigParser
+import Language.Drasil.Code.CodeGeneration

@@ -46,7 +46,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
-mod_inputf = mod_inputf_fun program [mod_hw] mod_inputf_desc (plural datum)
+mod_inputf = mod_input_fun program [mod_hw] mod_inputf_desc (S "input" +:+ (plural datum))
 
 -- output format module
 mod_outputf_desc :: ConceptChunk

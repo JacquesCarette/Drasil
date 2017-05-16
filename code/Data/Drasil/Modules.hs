@@ -7,7 +7,7 @@ module Data.Drasil.Modules
   , mod_assoc_fun
   , mod_vector_fun
   , mod_ctrl_fun
-  , mod_input_fun
+  , mod_io_fun
   , mod_plot_fun
   , mod_rng_fun
   ) where
@@ -77,9 +77,9 @@ mod_ctrl_fun impl depnd = makeImpModule modControl
   (Just mod_behav)
 
 -- parameterize inputf and inputp into one mod_input?
-mod_input_fun :: NamedIdea a => a -> [ModuleChunk] -> ConceptChunk -> ModuleChunk
-mod_input_fun impl depnd disc cChunk= makeImpModule cChunk
-  (S "The format and structure of the input" +:+. disc)
+mod_io_fun :: NamedIdea a => a -> [ModuleChunk] -> ConceptChunk -> ModuleChunk
+mod_io_fun impl depnd disc cChunk= makeImpModule cChunk
+  (S "The format and structure of the" +:+. disc)
   impl
   []
   []

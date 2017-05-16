@@ -107,7 +107,7 @@ mod_seq_desc = dccWDS "mod_seq_desc" (nounPhraseSP "sequence data structure")
   S ", slicing an array, etc.")
 
 mod_seq :: ModuleChunk
-mod_seq = M.mod_seq matlab
+mod_seq = M.mod_seq matlab []
 
 -- ODE Solver Module
 mod_ode_desc :: ConceptChunk

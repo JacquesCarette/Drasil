@@ -2,13 +2,15 @@ module Drasil.GamePhysics.Reqs where
 
 import Language.Drasil
 import Drasil.GamePhysics.Modules
+import Data.Drasil.Modules
+import Drasil.GamePhysics.Concepts (chipmunk)
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6,r7,r8]
 
 r1,r2,r3,r4,r5,r6,r7,r8 :: ReqChunk
 --FIXME: Why are all of these empty? Makes no sense.
-r1 = ReqChunk (nw emptyN) [mod_space, mod_control, mod_seq]
+r1 = ReqChunk (nw emptyN) [mod_space, mod_control, (mod_seq chipmunk)]
 r2 = ReqChunk (nw emptyN) [mod_body, mod_control, mod_vector, mod_trans]
 r3 = ReqChunk (nw emptyN) [mod_shape, mod_circle, mod_segment, mod_poly,
   mod_control, mod_vector]

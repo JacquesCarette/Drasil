@@ -3,6 +3,7 @@ module Drasil.GamePhysics.Changes where
 import Language.Drasil
 import Drasil.GamePhysics.Modules
 import Data.Drasil.Modules
+import Drasil.GamePhysics.Concepts (chipmunk)
 
 lcs :: [LCChunk]
 lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12, lc13,
@@ -68,7 +69,7 @@ lc11 = LCChunk (nw $ npnc "collision" (nounPhraseSP $
 
 lc12 = LCChunk (nw $ npnc "array" (nounPhraseSP $ 
   "The implementation of the sequence (array) data structure."))
-  [mod_seq]
+  [mod_seq chipmunk]
 
 lc13 = LCChunk (nw $ npnc "tree" (nounPhraseSP $ 
   "The implementation of the linked (tree) data structure."))

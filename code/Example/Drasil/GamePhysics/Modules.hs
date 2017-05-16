@@ -9,7 +9,7 @@ import Drasil.GamePhysics.Concepts
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
     mod_poly, mod_space, mod_arbiter, mod_control, mod_sw, mod_vector, mod_bb,
-    mod_trans, mod_spatial, mod_coll, mod_seq, mod_linked, mod_assoc]
+    mod_trans, mod_spatial, mod_coll, (mod_seq chipmunk), mod_linked, mod_assoc]
 
 -- M1: Hardware Hiding Module --
 
@@ -102,7 +102,7 @@ mod_space = makeImpModule mod_space_serv
     chipmunk
     []
     []
-    [mod_bb, mod_spatial, mod_assoc, mod_seq, mod_spatial]
+    [mod_bb, mod_spatial, mod_assoc, (mod_seq chipmunk), mod_spatial]
     (Just mod_behav)
 
 -- M8: Arbiter Module --
@@ -218,19 +218,6 @@ mod_coll = makeImpModule mod_coll_serv
 
 -- M15: Sequence Data Structure Module --
 
-mod_seq_serv :: ConceptChunk
-mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
-    (S "Provides array manipulation operations, such as building an array " :+:
-    S ", accessing a specific entry, slicing an array, etc.")
-
-mod_seq :: ModuleChunk
-mod_seq = makeImpModule mod_seq_serv
-    (S "The data structure for a sequence data type.")
-    chipmunk
-    []
-    []
-    []
-    (Just mod_sw)
 
 -- M16: Linked Data Structure Module --
 

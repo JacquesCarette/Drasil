@@ -229,7 +229,7 @@ mod_sds_desc = dccWDS "mod_sds_desc" (cn' "sequence data structure")
    S "array, accessing a specific entry, slicing an array etc.")
 
 mod_sds :: ModuleChunk
-mod_sds = mod_seq matlab
+mod_sds = mod_seq matlab []
 
 -- rng module
 mod_rng_desc :: ConceptChunk

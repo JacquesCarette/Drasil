@@ -26,7 +26,7 @@ surface  = npnc "surface"    (cn' "surface")
 slip     = npnc "slip"       (cn "slip") --FIXME: adjective?
 
 slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty :: NPNC
-slpSrf    = npnc "slpSrf" (cn' "slip surface")
+slpSrf    = compoundNPNC slip surface
 crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 soilPrpty = compoundNPNC soil     property
 mtrlPrpty = compoundNPNC material property

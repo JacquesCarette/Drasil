@@ -52,8 +52,8 @@ mod_sw = makeUnimpModule modSfwrDecision
 -- Control module
 mod_ctrl_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_ctrl_fun impl depnd = makeImpModule modControl
-  (foldlSent [S "The", (phrase $ algorithm ^. term), 
-  S "for coordinating the running of the program"])
+  (foldlSent [S "The internal", (plural $ dataType' ^. term), S "and",
+  (plural $ algorithm ^. term), S "for coordinating the running of the program"])
   impl
   []
   []
@@ -129,11 +129,6 @@ mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random 
   depnd
   (Just mod_sw)
 
--- ODE Solver Module
-mod_ode_desc :: ConceptChunk
-mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
-  S "Provides solvers that take the governing equation, initial conditions," +:+ 
-  S "and numerical parameters, and solve them.")
 
 mod_ode_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_ode_fun impl depnd = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:

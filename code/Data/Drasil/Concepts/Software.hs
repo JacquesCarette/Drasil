@@ -33,7 +33,7 @@ modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent
   [S "Includes programs that provide externally visible behaviour of the", 
   S "system as specified in the", (phrase (srs ^. term)),
-  S "(" :+: (short srs) :+: S ") documents. This module",
+  (sParen $ short srs), S "documents. This module",
   S "serves as a communication layer between the hardware-hiding module",
   S "and the software decision module. The programs in this module will need",
   S "to change if there are changes in the", (short srs)])
@@ -115,3 +115,9 @@ mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
 mod_outputf_desc_fun :: Sentence -> ConceptChunk
 mod_outputf_desc_fun desc = dccWDS "mod_outputf_desc" (cn' "output format")
     (S "Outputs the results of the calculations, including the" +:+ desc)
+
+-- ODE Solver Module
+mod_ode_desc :: ConceptChunk
+mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
+  S "Provides solvers that take the governing equation, initial conditions," +:+ 
+  S "and numerical parameters, and solve them.")

@@ -11,12 +11,13 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
 import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng, equation)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
 import Data.Drasil.Quantities.Thermodynamics (temp)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
@@ -97,12 +98,13 @@ s2 = SRS.intro s2_intro [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
-  S "fossil fuels, there is a higher demand for renewable" +:+.
-  S "energy sources and energy storage technology" +:+
-  (swhs_pcm ^. defn) +:+ S "(" :+: (short phsChgMtrl) :+: 
-  S ") use a renewable energy source and provide a novel way of" +:+.
-  S "storing energy" +:+ (at_start $ swhs_pcm ^. term) +:+ S "improve" +:+
-  S "over the traditional" +:+ (phrase $ progName ^. term) :+: 
+  S "fossil fuels, there is a higher demand for renewable" +:+
+  (phrase $ energy ^. term) +:+ S "sources and" +:+ (phrase $ energy ^. term) +:+
+  S "storage technology" +:+ (swhs_pcm ^. defn) +:+ S "(" :+: (short phsChgMtrl) :+: 
+  S ") use a renewable" +:+ (phrase $ energy ^. term) +:+
+  S "source and provide a novel way of" +:+.
+  S "storing" +:+ (phrase $ energy ^. term) +:+ (at_start $ swhs_pcm ^. term) +:+
+  S "improve over the traditional" +:+ (phrase $ progName ^. term) :+: 
   S "s because of their smaller size. The smaller size" +:+
   S "is possible because of the ability of" +:+ 
   (short phsChgMtrl) +:+ S "to store" +:+
@@ -113,12 +115,12 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
-  S "program will be referred to as" +:+ (titleize $ progName ^. term) +:+
+  phrase program +:+ S "will be referred to as" +:+ (titleize $ progName ^. term) +:+
   S "(" :+: (short progName) :+: S "). This" +:+ phrase section_ +:+
   S "explains the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
   S ", the" +:+ phrase scope +:+ S "of the" +:+ phrase system :+: S ", the" +:+
   phrase organization +:+ S "of the" +:+ phrase document +:+ S  "and the" +:+
-  plural characteristic +:+ S "of the" +:+ S "intended readers.")]
+  plural characteristic +:+ S "of the" +:+. plural intReader)]
  
 -- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating
 -- PCM" which is not capitlaized whereas the stable version is
@@ -141,27 +143,27 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ 
   S "and unambiguous" +:+ plural definition :+: S ". This" +:+
-  phrase document +:+ S "is intended to be used as a reference to provide" +:+
+  phrase document +:+ S "is intended to be used as a" +:+ reference +:+ S "to provide" +:+
   S "ad hoc access to all" +:+ phrase information +:+ S "necessary to" +:+
   S "understand and verify the" +:+ phrase model :+: S ". The" +:+
   (short srs) +:+ S "is abstract because the contents say what" +:+
   phrase problem +:+ S "is being solved, but do not say how to solve it."),
   Paragraph (S "This" +:+ phrase document +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+ 
-  S "writing the" +:+ phrase desSpec +:+ S "and the software" +:+
+  S "writing the" +:+ phrase desSpec +:+ S "and the" +:+ phrase software +:+
   (phrase vav) +:+ S "plan. The" +:+ phrase design +:+ phrase document +:+
   S "will show how the" +:+ (plural requirement) +:+
   S "are to be realized, including decisions" +:+.
-  S "on the numerical algorithms and programming environment" +:+
+  S "on the numerical algorithms and programming" +:+ phrase environment +:+
   S "The" +:+ phrase vav +:+ S "plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
-  S "software documentation and the implementation. Although" +:+
+  phrase softwareDoc +:+ S "and the implementation. Although" +:+
   S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 
   plural document +:+ S "that follow the so-called waterfall" +:+
   phrase model :+: S ", the actual development process is not constrained" +:+
   S "in any way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
-  S "to present the documentation is still to" +:+
+  S "to present the" +:+ phrase documentation +:+ S "is still to" +:+
   Quote (S "fake") +:+. S "a rational" +:+ phrase design +:+ S "process")]
 
 -- Besides program name, these two paragraphs are general, mostly repeated 
@@ -200,10 +202,11 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 s2_3 = section (of'' titleize' titleize characteristic intReader) [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
-  S "should have a strong knowledge in heat transfer" +:+. phrase theory +:+
+  S "should have a strong knowledge in" +:+ (plural $ heat ^. term) +:+ S "transfer" +:+. phrase theory +:+
   S "A third or fourth year Mechanical Engineering course on this topic is" +:+
   S "recommended. The" +:+ plural reviewer +:+ S "should also have an" +:+
-  S "understanding of differential" +:+ (plural $ equation ^. term) +:+ S ", as typically covered in" +:+
+  S "understanding of differential" +:+ (plural $ equation ^. term) +:+
+  S ", as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
   S "as explained in" +:+. (makeRef s3_2))
@@ -226,9 +229,9 @@ s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   S "additional" +:+ phrase information +:+ S "they require. The" +:+
   (plural inModel) +:+ S "provide" +:+
   S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+:
-  S "s) and algebraic" +:+ (plural $ equation ^. term) +:+ S "that" +:+ phrase model +:+ S "the" +:+.
-  (phrase $ swhs_pcm ^. term) +:+ (short progName) +:+
-  S "solves these" +:+ (short ode) :+: S "s."),
+  S "s) and algebraic" +:+ (plural $ equation ^. term) +:+ S "that" +:+
+  phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
+  (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s."),
   --FIXME: Update refineChain after fixing goalStmt and thModel
   Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
   S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
@@ -257,9 +260,9 @@ s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the" +:+ phrase system :+:
   S ", identifies" +:+ S "the interfaces between the" +:+ phrase system +:+
-  S "and its environment, and describes the" +:+ phrase user +:+
-  plural characteristic +:+ S "and the" +:+ phrase system +:+
-  plural constraint :+: S ".")
+  S "and its" +:+ phrase environment :+: S ", and describes the" +:+ phrase user +:+
+  plural characteristic +:+ S "and the" +:+ phrase system +:+.
+  plural constraint)
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -274,7 +277,7 @@ s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
   S "rectangle represents the" +:+ phrase softwareSys +:+
   S "itself (" :+: short progName :+: S "). Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
-  S "and its environment.")
+  S "and its" +:+. phrase environment)
 
 sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ titleize sysCont)
   "SystemContextFigure.png"
@@ -346,7 +349,8 @@ s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
 s4_1 = section (titleize problemDescription) [s4_1_intro]
   [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_intro = Paragraph ((short progName) +:+ S "is a computer program" +:+
+s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
+  (phrase $ program ^. term) +:+
   S "developed to investigate the effect of employing" +:+
   (short phsChgMtrl) +:+ S "within a" +:+. (tank ^. defn))
 
@@ -380,7 +384,7 @@ s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
   (short progName) :+: S ", as shown in" +:+ (makeRef fig_tank) :+:
-  S ", includes the following elements:")
+  S ", includes the following" +:+ plural element :+: S ":")
 
 -- Above paragraph is general except for progName and figure. However, not 
 -- every example has a physical system. Also, the SSP example is different, so
@@ -413,14 +417,15 @@ s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
 s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+:
   S ", initial" +:+ plural condition +:+ S "for the" +:+
   (phrase $ temp_W ^. term) +:+ S "and the" +:+ (phrase $ temp_PCM ^. term) :+:
-  S ", and material properties, the" +:+ plural goalStmt +:+ S "are:")
+  S ", and material" +:+ plural property :+: S ", the" +:+ plural goalStmt +:+ S "are:")
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.
 
-s4_1_3_list = Enumeration (Simple [((short goalStmt) :+: S "1", Flat 
-  (S "Predict the" +:+ (phrase $ temp_W ^. term) +:+ S "over" +:+.
-  (phrase $ time ^. term))),
+s4_1_3_list = Enumeration (Simple [
+
+  ((short goalStmt) :+: S "1", Flat (S "Predict the" +:+
+  (phrase $ temp_W ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
 --
   ((short goalStmt) :+: S "2", Flat (S "Predict the" +:+
   (phrase $ temp_PCM ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
@@ -429,7 +434,9 @@ s4_1_3_list = Enumeration (Simple [((short goalStmt) :+: S "1", Flat
   (phrase $ w_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
 --
   ((short goalStmt) :+: S "4", Flat (S "Predict the" +:+
-  (phrase $ pcm_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term)))])
+  (phrase $ pcm_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term)))
+
+  ])
 
 -- List structure is repeated between examples. (For all of these lists I am 
 -- imagining the potential for something like what was done with the lists in 
@@ -470,9 +477,9 @@ s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
 -- General paragraph, repeated in every example. Can be abstracted out.
 
 s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat 
-  (S "The only form of energy that is relevant for this" +:+ phrase
+  (S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is relevant for this" +:+ phrase
   problem +:+ S "is" +:+ (phrase $ thermal_energy ^. term) :+:
-  S ". All other forms of energy, such as" +:+
+  S ". All other forms of" +:+ (phrase $ energy ^. term) :+: S ", such as" +:+
   (phrase $ mech_energy ^. term) :+: S ", are assumed to be" +:+
   S "negligible [" :+: (makeRef s4_2_2_T1) :+: S "].")),
 --
@@ -548,17 +555,17 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   (phrase $ temp_boil ^. term) +:+. S "[IM1, IM3]")),
 --
   ((short assumption) :+: S "15", Flat (S "The" +:+
-  (phrase $ tank ^. term) +:+ S "is" +:+ 
-  (phrase $ perfect_insul ^. term) +:+ S "so that there is no heat" +:+
+  (phrase $ tank ^. term) +:+ S "is" +:+ (phrase $ perfect_insul ^. term) +:+
+  S "so that there is no" +:+ (phrase $ heat ^. term) +:+
   S "loss from the" +:+ (phrase $ tank ^. term) +:+. S "[IM1, LC6]")),
 --
-  ((short assumption) :+: S "16", Flat (S "No internal heat" +:+
+  ((short assumption) :+: S "16", Flat (S "No internal" +:+ (phrase $ heat ^. term) +:+
   S "is generated by either the" +:+ (phrase $ water ^. term) +:+
   S "or the" +:+ (short phsChgMtrl) :+: S "; therefore, the" +:+
   (phrase $ vol_ht_gen ^. term) +:+. S "is zero [IM1, IM2]")),
 --
-  ((short assumption) :+: S "17", Flat (S "The volume" +:+ 
-  S "change of the" +:+ (short phsChgMtrl) +:+ S "due to" +:+ 
+  ((short assumption) :+: S "17", Flat (S "The" +:+ (phrase $ vol ^. term) +:+ (phrase $ change ^. term) +:+
+  S "of the" +:+ (short phsChgMtrl) +:+ S "due to" +:+ 
   (phrase $ melting ^. term) +:+. S "is negligible [IM2]")),
 --
   ((short assumption) :+: S "18", Flat (S "The" +:+ 
@@ -596,7 +603,7 @@ s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
 s4_2_3 = section (titleize' genDefn) ((s4_2_3_intro):(s4_2_3_deriv)) []
 
 s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
-  S "laws and equations that will be used in deriving the" +:+ 
+  S "laws and" +:+ (plural $ equation ^. term) +:+ S "that will be used in deriving the" +:+ 
   (plural dataDefn) `sC` S "which in turn are used to" +:+
   S "build the" +:+. (plural inModel) +:+ S "(" :+: at_start' genDefn +:+
   S "are left out because they are not" +:+
@@ -706,10 +713,10 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 
 -- Instance Models aren't implemented yet
 
-s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
-  (phrase $ water ^. term) :+: S ":"),
+s4_2_5_deriv1 = [Paragraph (S "Derivation of the" +:+ (phrase $ energy ^. term) +:+
+  S "balance on" +:+ (phrase $ water ^. term) :+: S ":"),
   Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+ P (temp_W ^.
-  symbol) :+: S ", we look at the energy balance on" +:+
+  symbol) :+: S ", we look at the" +:+ (phrase $ energy ^. term) +:+ S "balance on" +:+
   (phrase $ water ^. term) :+: S ". The" +:+ 
   (phrase $ volume ^. term) +:+ S "being considered is the" +:+
   (phrase $ w_vol ^. term) +:+ EmptyS +:+ P (w_vol ^. symbol) :+:
@@ -727,7 +734,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   S "has been assumed to be" +:+ (phrase $ perfect_insul ^. term) :+: 
   S " (A15)." +:+ S "Assuming no" +:+ (phrase $ vol_ht_gen ^. term) :+: 
   S " (A16)," +:+ P (vol_ht_gen ^. symbol) :+: S "=0." +:+
-  S "Therefore, the equation for GD2 can be written as:"),
+  S "Therefore, the" +:+ (phrase $ equation ^. term) +:+ S "for GD2 can be written as:"),
   EqnBlock 
    ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
    := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
@@ -748,7 +755,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
    (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
   Paragraph (S "Factoring the negative sign out of the second" +:+
   S "term of the" +:+ (short rightSide) +:+ S "of" +:+
-  S "Equation (4) and multiplying it by" +:+ 
+  (titleize $ equation ^. term) +:+ S "(4) and multiplying it by" +:+ 
   P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: S "/" :+: 
   P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: 
   S " yields:"),
@@ -770,7 +777,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: 
   S " and" +:+ P (eta ^. symbol) :+: S "=" :+: P (pcm_HTC ^. 
   symbol) :+: P (pcm_SA ^. symbol) :+: S "/" :+: P (coil_HTC ^.
-  symbol) :+: P (coil_SA ^. symbol) :+: S ", Equation (5) can" +:+
+  symbol) :+: P (coil_SA ^. symbol) :+: S "," +:+
+  (titleize $ equation ^. term) +:+ S "(5) can" +:+
   S "be written as:"),
   EqnBlock
    (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
@@ -808,13 +816,13 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   P (pcm_SA ^. symbol) :+: S ". There is no" +:+ 
   (phrase $ ht_flux_out ^. term) :+: S ". Assuming no" +:+
   (phrase $ vol_ht_gen ^. term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+:
-  S "=0, the equation for GD2 can be written as:"),
+  S "=0, the" +:+ (phrase $ equation ^. term) +:+ S "for GD2 can be written as:"),
   EqnBlock 
    ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
    (C time) := (C ht_flux_P) * (C pcm_SA)),
    Paragraph (S "Using" +:+ makeRef s4_2_4_DD2 +:+ S "for" +:+
-   P (ht_flux_P ^. symbol) :+: S ", this equation can be" +:+
-   S "written as:"),
+   P (ht_flux_P ^. symbol) :+: S ", this" +:+ (phrase $ equation ^. term) +:+
+   S "can be written as:"),
   EqnBlock 
    ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
    (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
@@ -832,7 +840,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   EqnBlock 
    (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
    ((C temp_W) - (C temp_PCM))),
-  Paragraph (S "Equation (6) applies for the" +:+ 
+  Paragraph ((titleize $ equation ^. term) +:+ S "(6) applies for the" +:+ 
   (phrase $ solid ^. term) +:+ EmptyS +:+ (short phsChgMtrl) :+:
   S ". In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
@@ -930,7 +938,7 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   S " the total" +:+ (phrase $ energy ^. term) +:+ phrase input_ +:+ S "from the" +:+
   (phrase $ coil ^. term) +:+ S "and the" +:+ (phrase $ energy ^. term) +:+
   phrase output_ +:+ S "to the" +:+ (short phsChgMtrl) :+:
-  S ". This can be shown as an equation by taking" +:+ makeRef s4_2_4_DD1 +:+
+  S ". This can be shown as an" +:+ (phrase $ equation ^. term) +:+ S "by taking" +:+ makeRef s4_2_4_DD1 +:+
   S "and" +:+ makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
   S "respective surface area of" +:+ (phrase $ heat_trans ^. term) :+:
   S ", and integrating each over the" +:+ phrase simulation +:+

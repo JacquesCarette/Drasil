@@ -2,7 +2,7 @@ module Drasil.GamePhysics.Modules where
 
 import Control.Lens ((^.))
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Utils (foldlSent, foldlList)
 import Data.Drasil.Concepts.Physics (rigidBody, velocity, position, friction, 
     elasticity)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -177,8 +177,8 @@ mod_bb = makeImpModule mod_bb_serv
 mod_trans_serv :: ConceptChunk
 mod_trans_serv = dccWDS "mod_trans_serv" (nounPhraseSP "transform matrix")
     (S "Provides constructors for affine transformation matrices, matrix " :+:
-    S "operations such as inverse, transpose, multiplications, and " :+:
-    S "operations for applying transformations to vectors and bounding boxes.")
+    S "operations such as" +:+ (foldlList [S "inverse", S "transpose", S "multiplications",
+    S "operations"]) +:+ S "for applying transformations to vectors and bounding boxes.")
 
 mod_trans :: ModuleChunk
 mod_trans = makeImpModule mod_trans_serv

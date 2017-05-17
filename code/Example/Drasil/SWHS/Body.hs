@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
 import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix)
 
-import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass)
@@ -532,7 +532,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
   S "is the same" +:+. S "[IM1, IM2, LC5]")),
 --
-  ((short assumption) :+: S "13", Flat (S "The simulation" +:+
+  ((short assumption) :+: S "13", Flat (S "The" +:+ phrase simulation +:+
   S "will start with the" +:+ (short phsChgMtrl) +:+
   S "in a" +:+ (solid ^. defn) +:+.
   S "[IM2, IM4]")),
@@ -866,16 +866,19 @@ s4_2_6 = section (titleize' datum +:+ titleize' constraint) [s4_2_6_intro] []
 
 s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural datum +:+
   plural constraint +:+ S "on the" +:+ phrase input_ +:+ S "and" +:+ phrase output_ +:+
-  plural variable :+: S ", respectively. The column for" +:+ phrase physical +:+
-  plural constraint +:+ S "gives the" +:+ phrase physical +:+
+  plural variable :+: S ", respectively. The" +:+ phrase column +:+ S "for" +:+
+  phrase physical +:+ plural constraint +:+ S "gives the" +:+ phrase physical +:+
   plural limitation +:+ S "on the range of" +:+ plural value +:+ S "that can be taken by the" +:+.
   phrase variable +:+
-  S "The column for software" +:+ plural constraint +:+ S "restricts the" +:+
+  S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ plural constraint +:+
+  S "restricts the" +:+
   S "range of" +:+ plural input_ +:+ S "to reasonable" +:+. plural value +:+ S "The" +:+
-  plural constraint +:+ S "are conservative, to give the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+
-  S "the flexibility to experiment with unusual situations. The column of" +:+
+  plural constraint +:+ S "are conservative, to give the" +:+ phrase user +:+ S "of the" +:+
+  phrase model +:+
+  S "the flexibility to experiment with unusual situations. The" +:+ phrase column +:+
+  S "of" +:+
   S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario." +:+
-  S "The uncertainty column provides an estimate of the confidence with" +:+
+  S "The uncertainty" +:+ phrasecolumn +:+ S "provides an estimate of the confidence with" +:+
   S "which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
   S "if one were performing an uncertainty quantification exercise. (The" +:+
@@ -929,7 +932,7 @@ s4_2_7_deriv = [Paragraph (S "A"+:+ phrase corSol +:+
   S "equation by taking" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
   makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
   S "respective surface area of" +:+ (phrase $ heat_trans ^. term) :+:
-  S ", and integrating each over the simulation" +:+
+  S ", and integrating each over the" +:+ phrase simulation +:+
   (phrase $ time ^. term) :+: S ", as follows:"),
   EqnBlock 
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
@@ -1007,23 +1010,23 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   ((short requirement) :+: S "5", Flat (S "Calculate and" +:+
   phrase output_ +:+ S "the" +:+ (phrase $ temp_W ^. term) +:+ S "(" :+: P (temp_W ^.
   symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
-  S "over the simulation" +:+ (phrase $ time ^. term) +:+ S "(from IM1).")),
+  S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+ S "(from IM1).")),
 --
   ((short requirement) :+: S "6", Flat (S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ temp_PCM ^. term) +:+ S "(" :+:
   P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
-  S ")) over the simulation" +:+ (phrase $ time ^. term) :+: 
+  S ")) over the" +:+ phrase simulation +:+ (phrase $ time ^. term) :+: 
   S " (from IM2).")),
 --
   ((short requirement) :+: S "7", Flat (S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ w_E ^. term) +:+ S "(" :+: P (w_E ^. 
   symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
-  S "over the simulation" +:+ (phrase $ time ^. term) +:+ S "(from IM3).")),
+  S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+ S "(from IM3).")),
 --
   ((short requirement) :+: S "8", Flat (S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ pcm_E ^. term) +:+ S "(" :+: P (pcm_E ^.
-  symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the" +:+
-  S "simulation" +:+ (phrase $ time ^. term) +:+ S "(from IM4).")),
+  symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the" +:+ phrase simulation +:+
+  (phrase $ time ^. term) +:+ S "(from IM4).")),
 --
   ((short requirement) :+: S "9", Flat (S "Verify that the" +:+
   S "energy" +:+ plural output_ :+: S "(" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
@@ -1092,14 +1095,16 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   S "account for" +:+ (discharging ^. defn) :+: S ".")),
 --
   ((short likelyChg) :+: S "5", Flat (S "A12 - To add more" +:+
-  S " flexibility to the simulation, the" +:+ (phrase $ temp_init ^. term) +:+
+  S "flexibility to the" +:+ phrase simulation :+:
+  S ", the" +:+ (phrase $ temp_init ^. term) +:+
   S "of the" +:+ (phrase $ water ^. term) :+: 
   S " and the" +:+ (short phsChgMtrl) +:+ S "could be" +:+.
   S "allowed to have different" +:+ plural value)),
 --
   ((short likelyChg) :+: S "6", Flat (S "A15 - Any real" +:+
   (phrase $ tank ^. term) +:+ S "cannot be" +:+
-  (phrase $ perfect_insul ^. term) +:+. S "and will lose heat"))])
+  (phrase $ perfect_insul ^. term) +:+. S "and will lose" +:+
+  (phrase $ heat ^. term)))])
 
 -- List structure same in all examples.
 
@@ -1113,7 +1118,7 @@ s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
   plural reference +:+ S "on what has to be additionally modified if a" +:+
   S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
   phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
-  S "column of that" +:+ phrase component +:+ S "that are marked with an" +:+
+  phrase column +:+ S "of that" +:+ phrase component +:+ S "that are marked with an" +:+
   Quote (S "X") :+: S " should be modified as well." +:+ makeRef s7_table1 +:+
   S "shows the dependencies of" +:+ plural thModel `sC`
   (plural genDefn) `sC` (plural dataDefn) `sC`
@@ -1164,7 +1169,7 @@ s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS, S "X", EmptyS, EmptyS]]
-  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+ S "Between Items" +:+
+  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item +:+
   S "of Different" +:+ titleize' section_) True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
@@ -1250,7 +1255,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
   EmptyS, EmptyS]]
   (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+
-  (titleize' assumption) +:+ S "and Other Items") True
+  (titleize' assumption) +:+ S "and Other" +:+ titleize' item) True
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.

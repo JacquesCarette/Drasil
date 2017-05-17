@@ -11,6 +11,8 @@ module Data.Drasil.Modules
   , mod_plot_fun
   , mod_rng_fun
   , mod_outputf_desc_fun
+  , mod_ode_desc
+  , mod_ode_fun
   ) where
 
 import Language.Drasil
@@ -18,6 +20,7 @@ import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Computation
 import Control.Lens ((^.))
+import Data.Drasil.Concepts.Math(ode)
 
 {-- Module Chunks --}
 
@@ -125,6 +128,21 @@ mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random 
   []
   depnd
   (Just mod_sw)
+
+-- ODE Solver Module
+mod_ode_desc :: ConceptChunk
+mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
+  S "Provides solvers that take the governing equation, initial conditions," +:+ 
+  S "and numerical parameters, and solve them.")
+
+mod_ode_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_ode_fun impl depnd = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
+          S " first order " :+: (short ode) :+: S "s.")
+          impl
+          [] 
+          [] 
+          depnd
+          (Just mod_sw)
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

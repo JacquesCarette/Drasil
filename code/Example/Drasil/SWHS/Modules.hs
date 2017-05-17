@@ -114,15 +114,18 @@ mod_seq :: ModuleChunk
 mod_seq = mod_seq_fun matlab []
 
 -- ODE Solver Module
-mod_ode_desc :: ConceptChunk
-mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
-  S "Provides solvers that take the governing equation, initial conditions," +:+ 
-  S "and numerical parameters, and solve them.")
+--mod_ode_desc :: ConceptChunk
+--mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
+--  S "Provides solvers that take the governing equation, initial conditions," +:+ 
+--  S "and numerical parameters, and solve them.")
+
+--mod_ode :: ModuleChunk
+--mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
+--          S " first order " :+: (short ode) :+: S "s.") matlab [] [] 
+--          [mod_seq] (Just mod_sw)
 
 mod_ode :: ModuleChunk
-mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: (short ode) :+: S "s.") matlab [] [] 
-          [mod_seq] (Just mod_sw)
+mod_ode = mod_ode_fun matlab [mod_seq]
 
 -- Plotting Module
 --mod_plot_desc :: ConceptChunk

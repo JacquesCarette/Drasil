@@ -135,7 +135,7 @@ s2_2 = SRS.scpOfReq [s2_2_p1] []
 
 s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
   S "limited to stability analysis of a 2 dimensional slope," +:+
-  S "composed of homogeneous soil layers. Given appropriate" +:+
+  S "composed of homogeneous" +:+. (plural soilLyr) +:+ S "Given appropriate" +:+
   S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
   S "failure surface within the possible input range, and find" +:+
   S "the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the slope as well as displacement" +:+
@@ -156,7 +156,7 @@ s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
   S "and trace back to find any additional" +:+ (phrase information) +:+
   S "they require. The" +:+ (plural inModel) +:+ S "provide the set of algebraic" +:+
   S "equations that must be solved iteratively to perform a" +:+
-  S "Morgenstern Price Analysis. The" +:+ (plural goalStmt) +:+ S "are refined" +:+
+  (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+ S "are refined" +:+
   S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
   S "and" +:+ (plural inModel) +:+. (sParen . makeRef) sec_IMs
 
@@ -295,16 +295,16 @@ s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:
 
 s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "A1", S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
-           S "the slope surface. The" +:+ P (coords ^. symbol) +:+ 
+           S "the" +:+. (phrase slopeSrf) +:+ S "The" +:+ P (coords ^. symbol) +:+ 
            S "coordinates of the failure surface follow a" +:+
            S "monotonic function."),
   (S "A2", S "The geometry of the slope, and the" +:+ (plural mtrlPrpty) +:+
-           S "of the soil layers are given as inputs."),
+           S "of the" +:+ (plural soilLyr) +:+ S "are given as inputs."),
   (S "A3", S "The different layers of the soil are homogeneous," +:+
            S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
            S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
-  (S "A4", S "Soil layers are treated as if they have" +:+
+  (S "A4", (at_start' soilLyr) +:+ S "are treated as if they have" +:+
            S "isotropic properties."),
   (S "A5", S "Interslice normal and shear forces have a" +:+
            S "linear relationship, proportional to a constant" +:+
@@ -400,12 +400,12 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
             S "method of slices or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
-            (phrase crtSlpSrf) +:+ S "using the Morgenstern" +:+
-            S "price method."),
+            (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+
+            S "method."),
   (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
             S "slice element displacements graphically. Give" +:+
             S "the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
-            S "by the Morgenstern price method.")
+            S "by the" +:+ (titleize morPrice) +:+ S "method.")
   ])
   
 s5_1_table = table_inputdata

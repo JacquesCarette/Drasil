@@ -28,12 +28,15 @@ slope    = npnc "slope"      (cn "slope")
 
 morPrice  = npnc "morPrice" (cn "morgenstern price")
 
-slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty :: NPNC
+slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf,
+  soilLyr :: NPNC
 slpSrf    = compoundNPNC slip surface
 crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 soilPrpty = compoundNPNC soil     property
 mtrlPrpty = compoundNPNC material property
 itslPrpty = compoundNPNC intrslce property
+slopeSrf  = compoundNPNC slope surface
+soilLyr   = compoundNPNC soil (npnc "layer" (cn' "layer"))
 
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?

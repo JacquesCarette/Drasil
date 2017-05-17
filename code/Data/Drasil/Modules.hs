@@ -109,7 +109,7 @@ mod_vector_fun impl depnd = makeImpModule mod_vector_serv
 mod_plot_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_plot_fun impl depnd = makeImpModule mod_plot_desc
   (foldlSent [S "The", (plural $ dataStruct'), 
-  S "and algorithms for plotting data graphically"])
+  S "and algorithms for plotting data graphically."])
   impl
   []
   []

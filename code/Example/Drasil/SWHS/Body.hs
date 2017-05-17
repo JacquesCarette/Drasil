@@ -115,7 +115,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   Paragraph (S " The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+ (phrase $ swhs_pcm ^. term) :+: S ". The developed" +:+
-  phrase program +:+ S "will be referred to as" +:+ (titleize $ progName ^. term) +:+
+  (phrase $ program ^. term) +:+ S "will be referred to as" +:+ (titleize $ progName ^. term) +:+
   S "(" :+: (short progName) :+: S "). This" +:+ phrase section_ +:+
   S "explains the" +:+ phrase purpose +:+ S "of this" +:+ phrase document :+:
   S ", the" +:+ phrase scope +:+ S "of the" +:+ phrase system :+: S ", the" +:+

@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Unital
 import Prelude hiding (id)
 
-{- Unital Wrapper -}
+-- | Unital Wrapper
 data UWrapper where
   UW :: (Unital c, SymbolForm c) => c -> UWrapper
   
@@ -44,5 +44,7 @@ instance Concept UWrapper where
   defn = ulens defn
   cdom = ulens cdom
   
+-- | Constructor for Unital Wrappers. Similar to 
+-- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
 uw :: (Unital c, SymbolForm c) => c -> UWrapper
 uw = UW

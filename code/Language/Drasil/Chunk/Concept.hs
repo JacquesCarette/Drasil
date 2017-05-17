@@ -91,6 +91,8 @@ instance Concept CWrapper where
   cdom = clens cdom
 
 -- | CWrapper constructor. Takes the Concept to be wrapped.
+-- Similar to 
+-- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
 cw :: Concept c => c -> CWrapper
 cw = CW
 

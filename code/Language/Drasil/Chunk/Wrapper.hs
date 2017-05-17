@@ -9,7 +9,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Prelude hiding (id)
 
-{- NamedIdea Wrapper -}
+-- | NamedIdea Wrapper
 data NWrapper where
   NW :: (NamedIdea c) => c -> NWrapper
   
@@ -20,6 +20,10 @@ instance NamedIdea NWrapper where
   term = nlens term
   getA (NW a) = getA a
 
+-- | NamedIdea Wrapper constructor.
+-- Used to wrap different NamedIdeas, so they will have the same type.
+-- Essentially causes the system to ignore any information other than id, term,
+-- and acronym (if exists)
 nw :: NamedIdea c => c -> NWrapper
 nw = NW
 

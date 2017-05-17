@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Quantity
 
 import Prelude hiding (id)
 
-{- Concept, Quantity, and Symbol Wrapper -}
+-- | Concept, Quantity, and Symbol Wrapper 
 data CQSWrapper where
   CQS :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
   
@@ -43,6 +43,8 @@ instance Quantity CQSWrapper where
   getUnit (CQS a) = getUnit a
   typ = cqslens typ
 
+-- | Constructor for CQSWrapper. Similar to 
+-- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
 cqs :: (SymbolForm c, Quantity c, Concept c) => c -> CQSWrapper
 cqs = CQS
   
@@ -50,7 +52,7 @@ cqslens :: (forall c. (Quantity c, Concept c, SymbolForm c) =>
   Simple Lens c a) -> Simple Lens CQSWrapper a
 cqslens l f (CQS a) = fmap (\x -> CQS (set l x a)) (f (a ^. l))
 
-{- Quantity and Symbol Wrapper -}
+-- | Quantity and Symbol Wrapper
 data QSWrapper where
   QS :: (SymbolForm c, Quantity c) => c -> QSWrapper
   
@@ -75,6 +77,8 @@ instance Quantity QSWrapper where
   getUnit (QS a) = getUnit a
   typ = qslens typ
 
+-- | Constructor for CQSWrapper. Similar to 
+-- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
 qs :: (SymbolForm c, Quantity c) => c -> QSWrapper
 qs = QS
   

@@ -28,7 +28,7 @@ symbols :: [QSWrapper]
 symbols = map qs vars ++ map qs htVars
   
 thisSI :: SystemInformation
-thisSI = SI hghc srs [spencerSmith] si_units symbols ([] :: [UWrapper]) ([] :: [CINP])
+thisSI = SI hghc srs [spencerSmith] si_units symbols ([] :: [UCWrapper]) ([] :: [CINP])
   
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]

@@ -52,12 +52,15 @@ instance NounPhrase CINP where
   titleCase    (CINP _ _ c) = titleCase c
   
 -- | The commonINP smart constructor requires a chunk id, 
--- term (of type 'NP'), and abbreviation
+-- term (of type 'NP'), and abbreviation (as a string)
 commonINP :: String -> NP -> String -> CINP
 commonINP i t a = CINP i (S a) t
 
+-- | Similar to commonINP, except the abbreviation is a Symbol
 commonINP' :: String -> NP -> Symbol -> CINP
 commonINP' i t sy = CINP i (P sy) t 
 
+-- | Similar to commonINP, except the abbreviation can be anything of type 'Sentence'
+-- ('Symbol', 'String', 'Greek', etc.)
 commonINP'' :: String -> NP -> Sentence -> CINP
 commonINP'' i t ab = CINP i ab t

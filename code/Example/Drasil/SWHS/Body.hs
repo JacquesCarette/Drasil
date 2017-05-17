@@ -143,7 +143,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "are provided, with an emphasis on explicitly identifying" +:+ 
   (plural assumption) +:+ 
   S "and unambiguous" +:+ plural definition :+: S ". This" +:+
-  phrase document +:+ S "is intended to be used as a" +:+ reference +:+ S "to provide" +:+
+  phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+ S "to provide" +:+
   S "ad hoc access to all" +:+ phrase information +:+ S "necessary to" +:+
   S "understand and verify the" +:+ phrase model :+: S ". The" +:+
   (short srs) +:+ S "is abstract because the contents say what" +:+

@@ -35,16 +35,17 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 mod_body_serv :: ConceptChunk
 mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
     (foldlSent [S "Stores the", (plural physicalProperty), 
-    S "of an object, such as" `sC` (phrase $ mass ^. term), 
+    S "of an object, such as", (phrase $ mass ^. term) `sC` 
     (phrase $ position ^. term) `sC` S "rotation" `sC` 
-    (phrase $ velocity ^. term), S "etc, and provides operations on", 
+    (phrase $ velocity ^. term) `sC` S "etc, and provides operations on", 
     (plural $ rigidBody ^. term) `sC` S "such as setting the", 
     (phrase $ mass ^. term), S "and", 
     (phrase $ velocity ^. term), S "of the body"])
 
 mod_body :: ModuleChunk
 mod_body = makeImpModule mod_body_serv
-    (S "The data structure of a" +:+. (phrase $ rigidBody ^. term))
+    (S "The" +:+ (plural $ dataStruct) +:+ S "of a" 
+    +:+. (phrase $ rigidBody ^. term))
     chipmunk
     []
     []
@@ -55,16 +56,18 @@ mod_body = makeImpModule mod_body_serv
 
 mod_shape_serv :: ConceptChunk
 mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
-    (S "Stores the surface" +:+ (phrase $ property ^. term) +:+ 
-    S "of an object, such as" +:+ (phrase $ friction ^. term) +:+ S "or" `sC`
-    (phrase $ elasticity ^. term) +:+
-    S "and provides operations on shapes, such as setting its" +:+
-    (phrase $ friction ^. term) +:+ S "or" +:+. (phrase $ elasticity ^. term))
+    (foldlSent [S "Stores the surface", (plural $ property ^. term), 
+    S "of an object, such as", (phrase $ friction ^. term), S "or",
+    (phrase $ elasticity ^. term) `sC`
+    S "and provides operations on shapes, such as setting its",
+    (phrase $ friction ^. term), S "or", (phrase $ elasticity ^. term)])
 
 mod_shape :: ModuleChunk
 mod_shape = makeImpModule mod_shape_serv
-    (S "The data structure of a collision shape. Children: Circle" `sC` 
-    (phrase module_) +:+ S "Segment Module, Polygon Module.")
+    (foldlSent [S "The" +:+ (plural $ dataStruct) +:+ 
+    S "of a collision shape. Children: Circle", 
+    (titleize module_) `sC` S "Segment", (titleize module_) `sC` 
+    S "Polygon", (titleize module_)])
     chipmunk
     []
     []
@@ -75,18 +78,20 @@ mod_shape = makeImpModule mod_shape_serv
 
 mod_circle_serv, mod_segment_serv, mod_poly_serv :: ConceptChunk
 mod_circle_serv = dccWDS "mod_circle_serv" (cn' "circle")
-    (S "Provides operations on circles such as initializing a new circle, " :+:
-    S "calculating moment and area, etc.")
+    (S "Provides operations on circles such as initializing a new circle," +:+.
+    S "calculating moment and area, etc")
+
 mod_segment_serv = dccWDS "mod_segment_serv" (cn' "segment")
-    (S "Provides operations on segments such as initializing a new " :+:
-    S "segment, calculating moment and area, etc.")
+    (S "Provides operations on segments such as initializing a new" +:+.
+    S "segment, calculating moment and area, etc")
+
 mod_poly_serv = dccWDS "mod_poly_serv" (cn' "poly")
-    (S "Provides operations on polygons such as initializing a new " :+:
-    S "polygon, calculating moment, area and centroid, etc.")
+    (S "Provides operations on polygons such as initializing a new" +:+.
+    S "polygon, calculating moment, area and centroid, etc")
 
 mod_circle :: ModuleChunk
 mod_circle = makeImpModule mod_circle_serv
-    (S "The data structure for a circle shape.")
+    (S "The" +:+ (plural $ dataStruct) +:+ S "for a circle shape.")
     chipmunk
     []
     []
@@ -95,7 +100,7 @@ mod_circle = makeImpModule mod_circle_serv
 
 mod_segment :: ModuleChunk
 mod_segment = makeImpModule mod_segment_serv
-    (S "The data structure for a segment shape.")
+    (S "The" +:+ (plural $ dataStruct) +:+ S "for a segment shape.")
     chipmunk
     []
     []
@@ -104,7 +109,7 @@ mod_segment = makeImpModule mod_segment_serv
 
 mod_poly :: ModuleChunk
 mod_poly = makeImpModule mod_poly_serv
-    (S "The data structure for a polygon shape.")
+    (S "The" +:+ (plural $ dataStruct) +:+ S "for a polygon shape.")
     chipmunk
     []
     []
@@ -135,7 +140,7 @@ mod_arbiter_serv = dccWDS "mod_arbiter_serv" (cn' "arbiter")
 
 mod_arbiter :: ModuleChunk
 mod_arbiter = makeImpModule mod_arbiter_serv
-    (S "The data structure containing collision information.")
+    (S "The" +:+ (plural $ dataStruct) +:+ S "containing collision information.")
     chipmunk
     []
     []
@@ -157,7 +162,8 @@ mod_bb_serv = dccWDS "mod_bb_serv" (cn''' "bounding box")
 
 mod_bb :: ModuleChunk
 mod_bb = makeImpModule mod_bb_serv
-    (S "The data structure for representing axis-aligned bounding boxes.")
+    (S "The" +:+ (plural $ dataStruct) +:+ 
+    S "for representing axis-aligned bounding boxes.")
     chipmunk
     []
     []
@@ -174,7 +180,7 @@ mod_trans_serv = dccWDS "mod_trans_serv" (nounPhraseSP "transform matrix")
 
 mod_trans :: ModuleChunk
 mod_trans = makeImpModule mod_trans_serv
-    (S "The data structure representing transformation matrices.")
+    (S "The" +:+ (plural $ dataStruct) +:+ S "representing transformation matrices.")
     chipmunk
     []
     []
@@ -190,7 +196,7 @@ mod_spatial_serv = dccWDS "mod_spatial_serv" (nounPhraseSP "spatial index")
 
 mod_spatial :: ModuleChunk
 mod_spatial = makeImpModule mod_spatial_serv
-    (S "The data structures and algorithms for detecting collisions.")
+    (S "The" +:+ (plural $ dataStruct') +:+ S "and algorithms for detecting collisions.")
     chipmunk
     []
     []
@@ -206,7 +212,8 @@ mod_coll_serv = dccWDS "mod_coll_serv" (cn' "collision solver")
 
 mod_coll :: ModuleChunk
 mod_coll = makeImpModule mod_coll_serv
-    (S "The data structures and algorithms for detecting collisions.")
+    (S "The" +:+ (plural $ dataStruct') +:+ 
+    S "and algorithms for detecting collisions.")
     chipmunk
     []
     []

@@ -17,7 +17,7 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
 import Data.Drasil.Quantities.Thermodynamics (temp)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts

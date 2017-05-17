@@ -8,8 +8,7 @@ import Control.Lens ((^.))
 
 
 c :: ConceptChunk
-c       = dcc "c"               (pn "C")                  
-  "C programming language"
+c = dcc "c" (pn "C") "C programming language"
 
 physLib :: ConceptChunk
 physLib = dcc "physLib"         (cnIES "physics library") 

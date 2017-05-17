@@ -129,7 +129,12 @@ mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
 --mod_plot_desc = dcc "mod_plot_desc" (nounPhraseSP "plotting")
 --  "Provides a plot function."
 
+--mod_plot :: ModuleChunk
+--mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:
+--           S "algorithms for plotting data graphically.") matlab [] [] [mod_seq] 
+--           (Just mod_sw)
+
 mod_plot :: ModuleChunk
-mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:
-           S "algorithms for plotting data graphically.") matlab [] [] [mod_seq] 
-           (Just mod_sw)
+mod_plot = mod_plot_fun matlab [mod_seq] 
+
+

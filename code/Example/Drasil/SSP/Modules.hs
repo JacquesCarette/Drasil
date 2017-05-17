@@ -5,6 +5,8 @@ import Language.Drasil
 
 import Data.Drasil.Modules
 import Data.Drasil.Quantities.SolidMechanics
+import Data.Drasil.Utils
+
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Documentation
@@ -39,13 +41,14 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "prompted command line" +:+. (plural input_) +:+ (at_start' inDatum) +:+ S "includes" +:+
    S "the x,y coordinates of the" +:+ (phrase slope) `sC` S "with a set of coordinates for each" +:+
    S "layer. Each layer's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
---   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
-   (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC`
-   (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
-   (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+
+   (foldlList (map (\x -> (phrase $ x ^. term)) $ (
+    map cqs [fricAngle, cohesion, dryWeight, satWeight, elastMod]) ++ [cqs poissnsR])) +:+
+   -- (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC`
+   -- (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
+   -- (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+
    S "are stored in" +:+ (plural $ vector ^. term) +:+ S "of" +:+. (plural soilPrpty) +:+
-   S "If a piezometric" +:+ (phrase surface_) +:+ S "exists in the slope it's coordinates and the" +:+ 
-   (phrase $ waterWeight ^. term) +:+ S "are also included in the" +:+.
+   S "If a piezometric" +:+ (phrase surface_) +:+ S "exists in the" +:+ (phrase slope) +:+
+   S "it's coordinates and the" +:+ (phrase $ waterWeight ^. term) +:+ S "are also included in the" +:+.
    (phrase input_) +:+ S "Lastly an expected range for the entrance and exit points" +:+
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 

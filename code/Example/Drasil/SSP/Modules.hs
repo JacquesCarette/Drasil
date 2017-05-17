@@ -8,6 +8,7 @@ import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Computation
 
 import Drasil.SSP.Units
 import Drasil.SSP.Defs

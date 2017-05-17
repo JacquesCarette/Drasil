@@ -22,6 +22,7 @@ import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Computation
 
 import Data.Drasil.Quantities.SolidMechanics
 

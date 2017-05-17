@@ -37,7 +37,7 @@ mod_inputf_desc :: ConceptChunk
 mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   (S "Reads the" +:+ (plural inDatum) +:+ S "from an input file, and/or" +:+
    S "prompted command line inputs." +:+ (at_start' inDatum) +:+ S "includes" +:+
-   S "the x,y coordinates of the slope, with a set of coordinates for each" +:+
+   S "the x,y coordinates of the" +:+ (phrase slope) `sC` S "with a set of coordinates for each" +:+
    S "layer. For each layer it's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
 --   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
    (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC`
@@ -55,7 +55,7 @@ mod_inputf = mod_io_fun program [mod_hw] (plural inDatum) mod_inputf_desc
 -- output format module
 mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = mod_outputf_desc_fun ((phrase $ fs_rc ^. term) +:+
-   S "for the critical slip calculated by the" +:+ (titleize morPrice) +:+ 
+   S "for the critical" +:+ (phrase slip) +:+ S "calculated by the" +:+ (titleize morPrice) +:+ 
    S "Module and" +:+ (titleize rgFnElm) +:+ S "Method Module, and a" +:+
    S "plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the slope geometry" `sC`
    S "with the showing the" +:+ (phrase element) +:+ S "displacements" +:+
@@ -68,14 +68,14 @@ mod_outputf = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem]
 -- gen alg module
 mod_genalg_desc :: ConceptChunk
 mod_genalg_desc = dccWDS "mod_genalg_desc" (cn' "genetic algorithm")
-  (S "Searches the slope for the" +:+ (phrase crtSlpSrf) +:+ S "with" +:+
-   S "the minimum" +:+ (phrase $ fs_rc ^. term))
+  (S "Searches the" +:+ (phrase slope) +:+ S "for the" +:+ (phrase crtSlpSrf) +:+
+   S "with the minimum" +:+ (phrase $ fs_rc ^. term))
 
 mod_genalg :: ModuleChunk
 mod_genalg = makeImpModule mod_genalg_desc
   ((at_start $ algorithm ^. term) +:+ S "to identify the" +:+ (phrase slpSrf) +:+
    S "that has the" +:+ S "minimum" +:+ (phrase $ fs_rc ^. term) `sC`
-   S "based on the inputs.")
+   S "based on the" +:+. (plural input))
    program
    []
    []
@@ -169,7 +169,7 @@ mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
   (S "The" +:+ (phrase $ algorithm ^. term) +:+ S "to perform a" +:+
-   (titleize rgFnElm) +:+ S "Method analysis of the slope.")
+   (titleize rgFnElm) +:+ S "Method analysis of the" +:+. (phrase slope))
    program
    []
    []
@@ -179,7 +179,7 @@ mod_rfem = makeImpModule mod_rfem_desc
 -- slice property sorter module
 mod_sps_desc :: ConceptChunk
 mod_sps_desc = dccWDS "mod_sps_desc" (cn' "slice property sorter")
-  (S "When performing slip analysis with the RFEM Solver Module" +:+
+  (S "When performing" +:+ (phrase slip) +:+ S "analysis with the RFEM Solver Module" +:+
    S "or" +:+ (titleize morPrice) +:+ S "Module" `sC` S "the base and" +:+ 
    (phrase intrslce) +:+ (plural $ surface ^. term) +:+ S "of each" +:+
    (phrase slice) +:+ S "in the" +:+ S "analysis requires a" +:+ (phrase soil) +:+

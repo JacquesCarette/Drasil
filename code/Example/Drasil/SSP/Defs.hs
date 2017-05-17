@@ -24,7 +24,7 @@ intrslce = npnc "interslice" (cn' "interslice")
 material = npnc "material"   (cn' "material")
 slice    = npnc "slice"      (cn' "slice")
 slip     = npnc "slip"       (cn  "slip") --FIXME: adjective?
-slope    = npnc "slope"      (cn'  "slope")
+slope    = npnc "slope"      (cn' "slope")
 soil     = npnc "soil"       (cn  "soil")
 surface_ = npnc "surface"    (cn' "surface") -- FIXME: use the one from concepts.math
 

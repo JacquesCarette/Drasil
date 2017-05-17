@@ -103,7 +103,7 @@ glassBRUnitless = [risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol,
   prob_br, pb_tol, dimlessLoad, tolLoad]
 
 risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
-  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar, ar_max, ar_min, gTF :: VarChunk
+  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar, ar_min, gTF :: VarChunk
 
 ----Quantities--
 risk_fun    = makeVC "risk_fun" (nounPhraseSP "risk function") cB
@@ -132,8 +132,6 @@ tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
 lRe         = makeVC "lRe" (nounPhraseSP "load resistance") (Atomic "LR")
 loadSF      = makeVC "loadSF" (nounPhraseSP "load share factor") (Atomic "LSF")
 ar          = makeVC "ar" (nounPhraseSP "aspect ratio") (Atomic "AR")
-ar_max      = makeVC "ar_max" (nounPhraseSP "maximum aspect ratio")
-  (sub (ar ^. symbol) (Atomic "max"))
 ar_min      = makeVC "ar_min" (nounPhraseSP "minimum aspect ratio")
   (sub (ar ^. symbol) (Atomic "min"))
 gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
@@ -141,23 +139,24 @@ gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
 acronyms :: [CINP]
-acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
+acronyms = [assumption,annealedGlass,aspectR, ar_max{-aspectRMax-},dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
   lGlass,lResistance,lShareFac,notApp,{-nonFactorL,-}physSyst,requirement,
   srs,thModel,eqTNT]
   
 gLassBR :: ConceptChunk
 
-annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
+annealedGlass, aspectR, ar_max,{-aspectRMax-}fullyTGlass,glassTypeFac,heatSGlass,
   iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,--nonFactorL,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
 --FIXME: Switch to using "nounphrase" instead of "cn"
+ar_max        = commonINP' "ar_max"       (cn' "maximum aspect ratio")      (sub (ar ^. symbol) (Atomic "max"))
 gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "GlassBR" --lowercase?
 annealedGlass = commonINP "annealedGlass" (cn''' "annealed glass")          "AN"
 aspectR       = commonINP "aspectR"       (cn' "aspect ratio")              "AR"
-aspectRMax    = commonINP "aspectRMax"    (cn' "maximum aspect ratio")      "ARmax"
+--aspectRMax    = commonINP "aspectRMax"    (cn' "maximum aspect ratio")      "ARmax"
 fullyTGlass   = commonINP "fullyTGlass"   (cn''' "fully tempered glass")    "FT"
 glassTypeFac  = commonINP "glassTypeFac"  (cn' "glass type factor")         "GTF"
 heatSGlass    = commonINP "heatSGlass"    (cn''' "heat strengthened glass") "HS"

@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Data.Drasil.Modules (mod_outputf_desc_fun)
+import Data.Drasil.Modules
 
 self :: NPNC
 self = npnc "HGHC" (pn "HGHC")
@@ -17,7 +17,7 @@ executable :: NPNC
 executable = npnc' (self ^. id) (tempCompoundPhrase self program) ("HGHC")
 
 -- HW Hiding Module
-mod_hw :: ModuleChunk
+{--mod_hw :: ModuleChunk
 mod_hw = makeImpModuleNoGen hwHiding
   (S "The data structure and algorithm used to implement the virtual hardware.")
   os
@@ -25,14 +25,14 @@ mod_hw = makeImpModuleNoGen hwHiding
   []
   []
   Nothing
+--}
 
-
--- Behaviour Hiding Module
+{-- Behaviour Hiding Module
 mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule modBehavHiding
   (S "The contents of the required behaviors.")
   Nothing
-
+--}
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam (S "The format and structure of " :+: --FIXME: Plural?

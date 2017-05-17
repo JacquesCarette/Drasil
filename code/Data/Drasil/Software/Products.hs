@@ -1,7 +1,8 @@
-module Data.Drasil.Concepts.Documentation where
+module Data.Drasil.Software.Products where
 import Language.Drasil
 
 
-matlab :: NPNC
+chipmunk, matlab :: NPNC
 
-matlab          = npnc' "matlab"        (pn' "MATLAB programming language") "MATLAB"
+matlab          = npnc' "matlab"        (pn' "MATLAB programming language")       "MATLAB"
+chipmunk        = npnc' "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D" 

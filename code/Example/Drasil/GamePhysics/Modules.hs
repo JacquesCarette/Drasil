@@ -7,6 +7,7 @@ import Data.Drasil.Concepts.Physics (rigidBody, velocity, position, friction,
     elasticity)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Software.Products
 --import Data.Drasil.Concepts.Software
 import Data.Drasil.Modules
 

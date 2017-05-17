@@ -14,6 +14,7 @@ library
     Data.Drasil.Plurals
     Data.Drasil.Utils
     Data.Drasil.Modules
+    Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics
     Data.Drasil.Concepts.PhysicalProperties
@@ -21,6 +22,7 @@ library
     Data.Drasil.Concepts.Software
     Data.Drasil.Concepts.Math
     Data.Drasil.Concepts.SolidMechanics
+    Data.Drasil.Software.Products
     Data.Drasil.Quantities.Thermodynamics
     Data.Drasil.Quantities.PhysicalProperties
     Data.Drasil.Quantities.Physics

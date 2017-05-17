@@ -103,10 +103,10 @@ glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_to
   prob_br, pb_tol, dimlessLoad, tolLoad]
 
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
-  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar, ar_min, gTF :: VarChunk
+  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ----Quantities--
-ar_max      = makeVC "ar_max"   (nounPhraseSP "maximum aspect ratio") (sub (ar ^. symbol) (Atomic "max"))
+ar_max      = makeVC "ar_max"   (nounPhraseSP "maximum aspect ratio") (sub (Atomic "AR") (Atomic "max"))
 risk_fun    = makeVC "risk_fun" (nounPhraseSP "risk function") cB
 glass_type  = makeVC "glass_type" (nounPhraseSP "glass type, g in {AN, HS, FT}") lG
 is_safe1    = makeVC "is_safe1" 
@@ -132,9 +132,8 @@ tolLoad     = makeVC "tolLoad" (cn' "tolerable load")
 tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
 lRe         = makeVC "lRe" (nounPhraseSP "load resistance") (Atomic "LR")
 loadSF      = makeVC "loadSF" (nounPhraseSP "load share factor") (Atomic "LSF")
-ar          = makeVC "ar" (nounPhraseSP "aspect ratio") (Atomic "AR")
 ar_min      = makeVC "ar_min" (nounPhraseSP "minimum aspect ratio")
-  (sub (ar ^. symbol) (Atomic "min"))
+  (sub (Atomic "AR") (Atomic "min")) --find a way to call aspectR instead of using (Atomic "AR") again
 gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 
 ----Acronyms-----
@@ -155,7 +154,7 @@ annealedGlass, aspectR, fullyTGlass,glassTypeFac,heatSGlass,
 --FIXME: Switch to using "nounphrase" instead of "cn"
 gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "GlassBR" --lowercase?
 annealedGlass = commonINP "annealedGlass" (cn''' "annealed glass")          "AN"
-aspectR       = commonINP "aspectR"       (cn' "aspect ratio")              "AR"
+aspectR       = commonINP' "aspectR"      (cn' "aspect ratio")              (Atomic "AR")
 fullyTGlass   = commonINP "fullyTGlass"   (cn''' "fully tempered glass")    "FT"
 glassTypeFac  = commonINP "glassTypeFac"  (cn' "glass type factor")         "GTF"
 heatSGlass    = commonINP "heatSGlass"    (cn''' "heat strengthened glass") "HS"

@@ -273,7 +273,7 @@ s6_1_1_intro = Paragraph $
   S "are extracted from [4] in" +:+. (makeRef s10)
 
 s6_1_1_bullets = Enumeration $ (Number $ 
-  [Flat $ ((at_start $ aR ^. term) :+: sParenDash (P $ ar ^. symbol)) :+: -- conceptually correct to call abbreviation as a symbol?
+  [Flat $ ((at_start $ aspectR ^. term) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} :+: -- conceptually correct to call abbreviation as a symbol?
   (aR ^. defn)] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
   [Nested (((titleize $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
@@ -560,7 +560,7 @@ s7_1_list =
     map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [dL,tolPre,tolStrDisFac] ++
-    [Flat $ (titleize $ ar ^. term) +:+ sParen(P $ ar ^. symbol)  
+    [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"
     ]))])]
 
@@ -859,7 +859,7 @@ fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   (phrase $ lateral ^. term) +:+
   (phrase $ load ^. term) +:+ sParen
-  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize $ ar ^. term) +:+ 
-  sParen (P (ar ^. symbol)) +:+ S "versus" +:+ (at_start $ sdf ^. term) +:+ 
+  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize $ aspectR ^. term) +:+ 
+  sParen (short aspectR) {-(P (aspectR ^. symbol))-} +:+ S "versus" +:+ (at_start $ sdf ^. term) +:+ 
   sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"
 

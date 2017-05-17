@@ -8,8 +8,10 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Wrapper (NWrapper)
 
 -- BEGIN REQCHUNK --
+-- | Requirement Chunks contain a NamedIdea (as an NWrapper) and a list of
+-- related modules
 data ReqChunk = ReqChunk
-  { rCC :: NWrapper
+  { rNI :: NWrapper
   , rRelatedModules :: [ModuleChunk]
   }
 
@@ -18,7 +20,7 @@ instance Chunk ReqChunk where
 
 instance NamedIdea ReqChunk where
   term = cl . term
-  getA = getA . rCC
+  getA = getA . rNI
 -- END REQCHUNK --
 
 -- don't export this

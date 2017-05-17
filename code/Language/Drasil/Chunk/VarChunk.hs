@@ -14,6 +14,7 @@ import Language.Drasil.NounPhrase (NP)
 
 import Prelude hiding (id)
   
+-- | VarChunks are Quantities that have symbols, but not units.
 data VarChunk = VC { _ni :: NWrapper
                    , _vsymb :: Symbol
                    , _vtyp  :: Space }
@@ -36,17 +37,24 @@ nl l f (VC n s t) = fmap (\x -> VC (set l x n) s t) (f (n ^. l))
   
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Rational type so it compiles
+-- | Creates a VarChunk from an id, term, and symbol. Assumes Rational 'Space'
 makeVC :: String -> NP -> Symbol -> VarChunk
 makeVC i des sym = VC (nw $ nc i des) sym Rational
 
+-- | Creates a VarChunk from an id, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> VarChunk
 vc i d sy t = VC (nw $ nc i d) sy t
 
+-- | Creates a VarChunk from a 'NamedIdea', symbol, and space
 vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
 vc' n s t = VC (nw n) s t
 
+-- | Creates a VarChunk from an id, term, symbol, and 
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)
 
+-- | Creates a VarChunk from a NamedIdea
+-- This function will be renamed soon
+--FIXME: Rename this to vcFromNI
 vcFromCC :: NamedIdea c => c -> Symbol -> VarChunk
 vcFromCC cc sym = VC (nw cc) sym Rational

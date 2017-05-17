@@ -55,6 +55,7 @@ instance Concept RelationConcept where
 rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a
 rcl l f (RC a b) = fmap (\x -> RC (set l x a) b) (f (a ^. l))
 
+-- | Create a RelationConcept from a given id, term, defn, and relation.
 makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
 makeRC rID rTerm rDefn rel = RC (dccWDS rID rTerm rDefn) rel
 
@@ -62,5 +63,6 @@ makeRC rID rTerm rDefn rel = RC (dccWDS rID rTerm rDefn) rel
 cp :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens NamedRelation a
 cp l f (NR a b) = fmap (\x -> NR (set l x a) b) (f (a ^. l))
 
+-- | Create a NamedRelation from a given id, term, and relation.
 makeNR :: String -> NP -> Relation -> NamedRelation
-makeNR nm desc rel = NR (nc nm desc) rel
+makeNR rID rTerm rel = NR (nc rID rTerm) rel

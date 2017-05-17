@@ -1,5 +1,5 @@
 {-# Language GADTs, Rank2Types #-}
-module Language.Drasil.Chunk.SymbolForm where
+module Language.Drasil.Chunk.SymbolForm (SymbolForm(..), SF(..)) where
 
 import Language.Drasil.Chunk
 import Control.Lens (Simple, Lens, (^.), set)
@@ -7,9 +7,11 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Language.Drasil.Symbol
 import Prelude hiding (id)
 
+-- | A SymbolForm is a 'Chunk' with a symbol that represents it
 class Chunk c => SymbolForm c where
   symbol :: Simple Lens c Symbol
   
+-- | SF is a wrapper for SymbolForms
 data SF where 
   SF :: SymbolForm c => c -> SF
 instance Chunk SF where

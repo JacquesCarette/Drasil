@@ -198,7 +198,8 @@ mod_spatial_serv = dccWDS "mod_spatial_serv" (nounPhraseSP "spatial index")
 
 mod_spatial :: ModuleChunk
 mod_spatial = makeImpModule mod_spatial_serv
-    (S "The" +:+ (plural $ dataStruct') +:+ S "and algorithms for detecting collisions.")
+    (foldlSent [S "The", (plural $ dataStruct'), S "and", 
+    (plural $ algorithm ^. term), S "for detecting collisions"])
     chipmunk
     []
     []
@@ -214,8 +215,8 @@ mod_coll_serv = dccWDS "mod_coll_serv" (cn' "collision solver")
 
 mod_coll :: ModuleChunk
 mod_coll = makeImpModule mod_coll_serv
-    (S "The" +:+ (plural $ dataStruct') +:+ 
-    S "and algorithms for detecting collisions.")
+    (foldlSent [S "The", (plural $ dataStruct'), S "and", 
+    (plural $ algorithm ^. term), S "for detecting collisions"])
     chipmunk
     []
     []

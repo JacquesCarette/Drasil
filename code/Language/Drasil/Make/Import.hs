@@ -3,10 +3,11 @@ module Language.Drasil.Make.Import where
 import Language.Drasil.Output.Formats (DocType(..))
 import Language.Drasil.Make.AST
 
-
+-- | Creates a Makefile (calls 'makeRules')
 toMake :: [DocType] -> Makefile
 toMake rl = M $ makeRules rl
 
+-- | Helper for creating make rules for different document types
 makeRules :: [DocType] -> [Rule]
 makeRules [] = []
 makeRules ((SRS fn):rs) =  [(Phony, "srs", [fn ++ ".pdf"]), (TeX, fn, [])]

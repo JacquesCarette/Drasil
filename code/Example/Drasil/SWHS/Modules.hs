@@ -6,6 +6,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Modules
+import Data.Drasil.Software.Products
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,

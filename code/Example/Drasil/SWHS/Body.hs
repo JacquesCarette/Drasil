@@ -11,6 +11,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
 import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix)
+import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
@@ -892,7 +893,7 @@ s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural d
 
 inputVar :: [UCWrapper]
 inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map ucw [coil_SA,
+  temp_melt_P, htCap_S_P, htCap_L_P] ++ [ucw htFusion] ++ map ucw [coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
   
 -- Typical values and constraints must be added to UC definitions for mkTable
@@ -1061,7 +1062,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   S "of this" +:+ phrase problem :+: S "," +:+ phrase performance +:+
   S "is not a" +:+. phrase priority +:+
   S "Any reasonable implementation will be very quick and use" +:+
-  S "minimal storage. Rather than" +:+ phrase performance :+: ", the" +:+ phrase priority +:+
+  S "minimal storage. Rather than" +:+ phrase performance :+: S ", the" +:+ phrase priority +:+
   plural nonfunctionalRequirement +:+ S "are correctness, verifiability" `sC`
   S "understandability, reusability, and maintainability.")
 

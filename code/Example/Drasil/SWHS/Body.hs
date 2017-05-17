@@ -1029,7 +1029,8 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (phrase $ time ^. term) +:+ S "(from IM4).")),
 --
   ((short requirement) :+: S "9", Flat (S "Verify that the" +:+
-  S "energy" +:+ plural output_ :+: S "(" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
+  (phrase $ energy ^. term) +:+ plural output_ :+: S "(" :+:
+  P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
   symbol) :+: S ") and" +:+ P (pcm_E ^. symbol) :+: S "(" :+:
   P (time ^. symbol) :+: S ")) follow the" +:+
   (phrase $ law_cons_energy ^. term) :+: S ", as outlined in" +:+ 
@@ -1060,7 +1061,7 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   S "of this" +:+ phrase problem :+: S "," +:+ phrase performance +:+
   S "is not a" +:+. phrase priority +:+
   S "Any reasonable implementation will be very quick and use" +:+
-  S "minimal storage. Rather than performance, the priority" +:+
+  S "minimal storage. Rather than" +:+ phrase performance :+: ", the" +:+ phrase priority +:+
   plural nonfunctionalRequirement +:+ S "are correctness, verifiability" `sC`
   S "understandability, reusability, and maintainability.")
 

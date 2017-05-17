@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc')
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation
 
---Get dependency from equation  
+-- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep (a :/ b)      = nub (dep a ++ dep b)
 dep (a :* b)      = nub (dep a ++ dep b)
@@ -34,7 +34,7 @@ dep (UnaryOp u)   = dep (unpack u)
 dep (Grouping e)  = dep e
 dep (BinaryOp b)  = nub (concat $ map dep (binop b))
 
---Get a list of VarChunks from an equation in order to print
+-- | Get a list of VarChunks from an equation in order to print
 vars :: Expr -> [VarChunk]
 vars (a :/ b)      = nub (vars a ++ vars b)
 vars (a :* b)      = nub (vars a ++ vars b)
@@ -57,6 +57,7 @@ vars (UnaryOp u)   = vars (unpack u)
 vars (Grouping e)  = vars e
 vars (BinaryOp b)  = nub (concat $ map vars (binop b))
 
+-- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr
 unpack (Log e) = e
 unpack (Summation _ e) = e
@@ -69,13 +70,13 @@ unpack (Sec e) = e
 unpack (Csc e) = e
 unpack (Cot e) = e
 
+-- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]
 binop (Cross e f) = [e,f]
 
-
--- Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
--- Again, used for printing equations/descriptions mostly.
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational
+-- | Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
+-- Again, used for printing equations/descriptions mostly.
 toVC :: (NamedIdea c, SymbolForm c) => c -> VarChunk
 toVC c = vc' c (c ^. symbol) (Rational)

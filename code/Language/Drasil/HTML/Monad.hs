@@ -4,7 +4,7 @@ module Language.Drasil.HTML.Monad where
 import Language.Drasil.Unicode
 
 -----------------------------------------------------------------------------
--- Printing monad
+-- | Printing monad
 --
 
 -- first, start with a specific data type

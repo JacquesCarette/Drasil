@@ -26,7 +26,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, column, component, computer, 
+analysis, appendix, characteristic, client, column, component, 
   condition, constraint_, connection, context, customer, datum, definition, 
   dependency, description, design, document, documentation, element, 
   environment, figure, functional, game, general, individual, information, 
@@ -45,7 +45,6 @@ characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
 component       = npnc "component"      (cn' "component")
-computer        = npnc "computer"       (cn' "computer") -- general enough to be in Documentation?
 condition       = npnc "condition"      (cn' "condition")
 constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
 connection      = npnc "connection"     (cn' "connection")
@@ -120,7 +119,7 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 
-orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
+orgOfDoc, prpsOfDoc, refmat, scpOfReq, scpOfTheProj,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
@@ -128,7 +127,6 @@ charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
-sciCompS     = npnc "sciCompS"     (cn' "scientific computing software")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
 scpOfTheProj = npnc "scpOfTheProj" (scope `of_` the project) -- reasonable hack?
 termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)

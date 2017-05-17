@@ -10,14 +10,12 @@ algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of s
 
 
 
-os, structure, type_ :: NPNC
+computer, os, structure, type_ :: NPNC
+
+computer        = npnc "computer"       (cn' "computer")
 os              = npnc' "os"            (cn' "operating system") "OS"
 structure       = npnc "structure"      (cn' "structure")
 type_           = npnc "type"           (cn' "type")
-
-
-
-
 
 
 dataStruct, dataStruct', dataType, dataType', inDatum, outDatum ::NPNC

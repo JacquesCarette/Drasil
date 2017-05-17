@@ -2,10 +2,10 @@ module Data.Drasil.Software.Products where
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
-matlab :: NPNC
+matlab, sciCompS :: NPNC
 
-matlab          = npnc' "matlab"        (pn' "MATLAB programming language")       "MATLAB" 
-
+matlab     = npnc' "matlab"        (pn' "MATLAB programming language")       "MATLAB" 
+sciCompS   = npnc "sciCompS"       (cn' "scientific computing software")
 
 videoGame, openSource :: NPNC
 

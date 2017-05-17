@@ -3,14 +3,14 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Control.Lens ((^.))
 
-algorithm, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
+calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
   probability, surface, unit_, unitV, vector :: ConceptChunk
 
 ode :: CINP
 
 --FIXME: Make some of these definitions better.
-algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations"
+{--algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations" --}
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")

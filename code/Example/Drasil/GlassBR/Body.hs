@@ -12,6 +12,7 @@ import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface,
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
+import Data.Drasil.Utils (foldlSent)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -80,63 +81,65 @@ this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
 
 s2 = SRS.intro [s2_intro] [s2_1, s2_2, s2_3]
 
-s2_intro = Paragraph $ 
-  at_start software +:+ S "is helpful to efficiently and correctly predict the" +:+ 
-  (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+. 
-  (phrase $ glaSlab ^. term) +:+ S "The" +:+ (phrase $ blast ^. term) 
-  +:+ S "under consideration is" +:+. (blast ^. defn) +:+
-  S "The" +:+ phrase software :+: S ", herein called" +:+ (gLassBR ^. defn) +:+
-  S "aims to predict the" +:+ (phrase $ blastRisk ^. term) +:+ S "involved with the" +:+ 
-  (phrase $ glaSlab ^. term) +:+ S "using an intuitive" +:+
-  S "interface. The following" +:+ phrase section_ +:+ S "provides an overview" +:+
-  S "of the" +:+ titleize srs +:+ sParen (short srs) +:+ S "for" +:+. 
-  (gLassBR ^. defn) +:+ S "This" +:+ phrase section_ +:+ S "explains the" +:+ 
-  phrase purpose +:+ S "of the" +:+ phrase document +:+ S "is designed to fulfil, the" +:+ 
-  phrase scope +:+ S "of the" +:+ plural requirement +:+ S "and" +:+ S "the" +:+ 
-  phrase organization +:+ S "of the" +: phrase document +:+ S "what the" +:+ 
-  phrase document +:+. S "is based on and intended to portray"
+s2_intro = Paragraph $ foldlSent [(at_start software), 
+  S "is helpful to efficiently and correctly predict the", 
+  (phrase $ blastRisk ^. term), S "involved with the" +:+. 
+  (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
+  S "under consideration is" +:+. (blast ^. defn), S "The", phrase software `sC` 
+  S "herein called", (gLassBR ^. defn), S "aims to predict the", 
+  (phrase $ blastRisk ^. term), S "involved with the", (phrase $ glaSlab ^. term), 
+  S "using an intuitive", S "interface. The following", phrase section_, 
+  S "provides an overview", S "of the", titleize srs, sParen (short srs), 
+  S "for" +:+. (gLassBR ^. defn), S "This", phrase section_, S "explains the", 
+  phrase purpose, S "of the", phrase document, S "is designed to fulfil, the", 
+  phrase scope, S "of the", plural requirement, S "and", S "the", 
+  phrase organization, S "of the" +: phrase document, S "what the", 
+  phrase document, S "is based on and intended to portray"]
 
 s2_1 = SRS.prpsOfDoc (s2_1_intro) []
 
-s2_1_intro = 
-  [Paragraph $
-  S "The main" +:+ phrase purpose +:+ S "of this" +:+ phrase document +:+
-  S "is to predict whether a given" +:+ (phrase $ glaSlab ^. term) +:+
-  S "is likely to resist a specified" +:+. (phrase $ blast ^. term) +:+
-  S "The goals and" +:+ plural thModel +:+ S "used in the" +:+ (gLassBR ^. defn) +:+
-  S "code are provided" `sC` S "with an emphasis on explicitly identifying" +:+ 
-  (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
-  S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+
-  S "to provide all" +:+ phrase information +:+ S "necessary to understand and" +:+
-  S "verify the" +:+. phrase analysis +:+ S "The" +:+ (short srs) +:+ S "is abstract" +:+
-  S "because the contents say what" +:+ phrase problem +:+ S "is being solved, but not how" +:+.
-  S "to solve it", Paragraph $ S "This" +:+ phrase document +:+ S "will be used" +:+
-  S "as a starting point for subsequent development phases, including writing the" +:+
-  phrase desSpec +:+ S "and the" +:+ phrase software +:+ phrase vav +:+ S "plan. The" 
-  +:+ phrase design +:+ phrase document +:+ S "will show how the" +:+ plural requirement +:+ 
-  S "are to be realized, including" +:+ S "decisions on the numerical" +:+
-  (plural $ algorithm ^. term) +:+ S "and programming" +:+. phrase environment +:+ S "The" +:+ --'environment' used correctly?
-  phrase vav +:+ S "plan will show the steps that will be used to increase confidence in the" +:+
-  phrase softwareDoc +:+. S "and the implementation"]
+s2_1_intro = [s2_1_intro_p1, s2_1_intro_p2] 
+
+s2_1_intro_p1, s2_1_intro_p2 :: Contents
+
+s2_1_intro_p1 = Paragraph $ foldlSent [S "The main", phrase purpose, S "of this", 
+  phrase document, S "is to predict whether a given", (phrase $ glaSlab ^. term),
+  S "is likely to resist a specified" +:+. (phrase $ blast ^. term),
+  S "The goals and", plural thModel, S "used in the", (gLassBR ^. defn),
+  S "code are provided" `sC` S "with an emphasis on explicitly identifying", 
+  (plural assumption), S "and unambiguous" +:+. plural definition,
+  S "This", phrase document, S "is intended to be used as a", phrase reference,
+  S "to provide all", phrase information, S "necessary to understand and",
+  S "verify the" +:+. phrase analysis, S "The", (short srs), S "is abstract",
+  S "because the contents say what", phrase problem, 
+  S "is being solved, but not how", S "to solve it"]
+
+s2_1_intro_p2 = Paragraph $ foldlSent [S "This", phrase document, S "will be used", 
+  S "as a starting point for subsequent development phases, including writing the",
+  phrase desSpec, S "and the", phrase software, phrase vav, S "plan. The", 
+  phrase design, phrase document, S "will show how the", plural requirement,
+  S "are to be realized, including", S "decisions on the numerical",
+  (plural $ algorithm ^. term), S "and programming" +:+. phrase environment, 
+  S "The", phrase vav, 
+  S "plan will show the steps that will be used to increase confidence in the",
+  phrase softwareDoc, S "and the implementation"]
 
 s2_2 = SRS.scpOfReq [s2_2_intro] []
 
-s2_2_intro = Paragraph $
-  S "The" +:+ phrase scope +:+ S "of the" +:+ plural requirement +:+
-  S "includes getting all" +:+ phrase input_ +:+ (plural $ parameter ^. term) +:+
-  S "related to the" +:+ (phrase $ glaSlab ^. term) +:+ S "and also the" +:+ 
-  (plural $ parameter ^. term) +:+ S "related to" +:+. (phrase $ blastTy ^. term) +:+ 
-  S "Given the" +:+ phrase input_ `sC` (gLassBR ^. defn) +:+ S "is intended to" +:+
-  S "use the" +:+ plural datum +:+ S "and predict whether the" +:+ 
-  (phrase $ glaSlab ^. term) +:+. S "is safe to use or not"
+s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
+  plural requirement, S "includes getting all", phrase input_, 
+  (plural $ parameter ^. term), S "related to the", (phrase $ glaSlab ^. term),
+  S "and also the", (plural $ parameter ^. term), S "related to" +:+. 
+  (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (gLassBR ^. defn),
+  S "is intended to", S "use the", plural datum, S "and predict whether the", 
+  (phrase $ glaSlab ^. term), S "is safe to use or not"]
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
-s2_3_intro = 
-  S "The" +:+ phrase organization +:+ S "of this" +:+ phrase document +:+ 
-  S "follows the" +:+ phrase template +:+ S "for an" +:+ (short srs) +:+ S "for" +:+ 
-  phrase sciCompS +:+ S "proposed by [1] and [2] (in" +:+ (makeRef s10) :+:
-  S "), with some aspects taken from Volere" +:+ phrase template +:+. S "16 [3]"
+s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
+  phrase document, S "follows the", phrase template, S "for an", (short srs),
+  S "for", phrase sciCompS, S "proposed by [1] and [2] (in", (makeRef s10) :+:
+  S "), with some aspects taken from Volere", phrase template, S "16 [3]"]
   
 s2_3_intro_end = (at_start' $ the dataDefn) +:+
   S "are used to support the" +:+ plural definition +:+ S "of the different"
@@ -144,41 +147,43 @@ s2_3_intro_end = (at_start' $ the dataDefn) +:+
   
 s3 = SRS.stakeholder [s3_intro] [s3_1, s3_2]
 
-s3_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "describes the" +: titleize' stakeholder +:+ 
-  S "the people who have an interest in" +:+. (phrase $ the product_)
+s3_intro = Paragraph $ foldlSent [S "This", phrase section_, S "describes the" +:
+  titleize' stakeholder, S "the people who have an interest in",
+  (phrase $ the product_)]
 
 s3_1 = SRS.theClient [s3_1_intro] []
 
-s3_1_intro = Paragraph $
-  (at_start $ the client) +:+ S "for" +:+ (gLassBR ^. defn) +:+ S "is a company named" +:+.
-  S "Entuitive. It is developed by Dr. Manuel Campidelli" +:+ (at_start $ the client) +:+
-  S "has the final say on acceptance of the" +:+. phrase product_
+s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
+  (gLassBR ^. defn), S "is a company named" +:+.
+  S "Entuitive. It is developed by Dr. Manuel Campidelli", 
+  (at_start $ the client), S "has the final say on acceptance of the", 
+  phrase product_]
 
 s3_2 = SRS.theCustomer [s3_2_intro] []
 
-s3_2_intro = Paragraph $
-  (at_start' $ the customer) +:+ S "are the end" +:+ phrase user +:+
-  S "of" +:+. (gLassBR ^. defn)
+s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), S "are the end",
+  phrase user, S "of", (gLassBR ^. defn)]
 
 s4 = SRS.genSysDec [s4_intro] [s4_1, s4_2]
 
-s4_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "provides" +:+ phrase general +:+ 
-  phrase information +:+ S "about the" +:+ phrase system `sC` S "identifies the interface" +:+
-  S "between the" +:+ phrase system +:+ S "and its" +:+ phrase environment `sC`
-  S "and describes the" +:+ plural userCharacteristic +:+ S "and the" +:+. plural systemConstraint
+s4_intro = Paragraph $ foldlSent [S "This", phrase section_, S "provides", 
+  phrase general, phrase information, S "about the", phrase system `sC` 
+  S "identifies the interface", S "between the", phrase system, S "and its",
+  phrase environment `sC` S "and describes the", plural userCharacteristic,
+  S "and the", plural systemConstraint]
 
 s4_1 = SRS.userChar [s4_1_bullets] []
 
 s4_1_bullets = Enumeration $ Bullet $ map Flat
-  [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ S "is expected to" +:+
+  [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ 
+  S "is expected to" +:+ 
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. 
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
-  S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the" +:+. phrase software)]
+  S "is expected to have basic" +:+ phrase computer +:+ 
+  S "literacy to handle the" +:+. phrase software)]
 
 s4_2 = SRS.sysCon [s4_2_intro] []
 
@@ -187,13 +192,12 @@ s4_2_intro = Paragraph $
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
-s5_intro = Paragraph $
-  S "This" +:+ phrase section_ +:+ S "presents the" +:+. phrase scpOfTheProj +:+ 
-  S "It describes the expected use of" +:+ (gLassBR ^. defn) +:+ S "as well as the" +:+
-  plural input_ +:+ S "and" +:+ plural output_ +:+ S "of each action. The" +:+ 
-  plural useCase +:+ S "are" +:+ phrase input_ +:+ S "and" +:+ phrase output_ +:+
-  S ", which defines the action of getting the" +:+ phrase input_ +:+ S "and displaying" +:+.
-  S "the" +:+ phrase output_
+s5_intro = Paragraph $ foldlSent [S "This", phrase section_, S "presents the" +:+.
+  phrase scpOfTheProj, S "It describes the expected use of", (gLassBR ^. defn),
+  S "as well as the", plural input_, S "and", plural output_, 
+  S "of each action. The", plural useCase, S "are", phrase input_, S "and",
+  phrase output_ `sC` S "which defines the action of getting the", phrase input_,
+  S "and displaying", S "the", phrase output_]
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
 
@@ -242,11 +246,11 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat
 s6 = SRS.specSysDec [s6_intro] [s6_1,
   s6_2]
 
-s6_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "first presents the" +:+ phrase problemDescription `sC`
-  S "which gives a high-level view of the" +:+ phrase problem +:+. S "to be solved" +:+
-  S "This is followed by the" +:+ plural solutionCharSpec :+: S ", which presents the" +:+
-  (plural assumption) `sC` plural theory :+: S "," +:+. plural definition
+s6_intro = Paragraph $ foldlSent [S "This", phrase section_, 
+  S "first presents the", phrase problemDescription `sC`
+  S "which gives a high-level view of the", phrase problem +:+. S "to be solved",
+  S "This is followed by the", plural solutionCharSpec `sC` S "which presents the",
+  (plural assumption) `sC` plural theory `sC` plural definition]
 
 s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, 
   s6_1_2, s6_1_3]

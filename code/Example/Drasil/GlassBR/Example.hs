@@ -352,8 +352,8 @@ capdescr =
   (P $ lRe ^. symbol) :+: S " is the " :+: (phrase $ lRe ^. term) :+: S ", which " :+:
   S "is also called capacity. " :+: (P $ nonFL ^. symbol) :+: S " is the " :+:
   (phrase $ nonFL ^. term) :+: S ". " :+: (short glassTypeFac) :+: S " is the " :+:
-  (phrase $ glassTypeFac ^. term) :+: S ". " :+: (P $ loadSF ^. symbol) :+: S " is the " :+:
-  (phrase $ loadSF ^. term) :+: S "."
+  (phrase $ glassTypeFac ^. term) :+: S ". " :+: (short lShareFac) :+: S " is the " :+:
+  (phrase $ lShareFac ^. term) :+: S "."
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

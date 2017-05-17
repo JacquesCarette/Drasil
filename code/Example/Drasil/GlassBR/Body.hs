@@ -387,7 +387,7 @@ s6_2_1_list =
   (((short assumption) :+: S "5"), S "Glass under consideration" +:+
     S "is assumed to be a single" +:+.
     (phrase $ lite ^. term) +:+ S "Hence the" +:+ phrase value +:+ S "of" +:+ 
-    (P $ loadSF ^. symbol) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
+    (short lShareFac) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
     +:+ S "in" +:+. (gLassBR ^. defn)),
   (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+
     S "for the" +:+ (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
@@ -520,7 +520,7 @@ s7_1_list =
     S "following" +:+ (short assumption) :+: S "4",
     (P $ loadDF ^. symbol) +:+ S "following" +:+ (short assumption) 
     :+: S "8",
-    (P $ loadSF ^. symbol) +:+ S "following" +:+ (short assumption) 
+    (short lShareFac) +:+ S "following" +:+ (short assumption) 
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+

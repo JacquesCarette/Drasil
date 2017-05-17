@@ -555,7 +555,7 @@ s7_1_list =
     sParen (makeRef (Definition (Data strDisFac)))]++
     [Flat $ (titleize $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol) +:+ 
     sParen (makeRef (Definition (Data nonFL)))]++
-    [Flat $ (phrase $ gTF ^. term) +:+ sParen(P $ gTF ^. symbol) +:+ 
+    [Flat $ (phrase $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
     sParen (makeRef (Definition (Data glaTyFac)))] ++
     map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))

@@ -285,8 +285,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (((at_start $ lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
     (lr ^. defn)),
   (((at_start $ ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
-  (((at_start $ nfl ^. term) :+: sParenDash (short nonFactorL)) :+: --Same for nfl and nonFactorL
-    (nfl ^. defn))] ++ 
+  (((at_start $ nfl ^. term) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" +:+ (nfl ^. defn))] ++ 
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
     [glassWL, sdl])] ++ 
   map (\c -> Flat c)

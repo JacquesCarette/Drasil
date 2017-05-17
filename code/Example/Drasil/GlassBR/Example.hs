@@ -143,13 +143,13 @@ gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 acronyms :: [CINP]
 acronyms = [assumption,annealedGlass,aspectR,aspectRMax,dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
-  lGlass,lResistance,lShareFac,notApp,nonFactorL,physSyst,requirement,
+  lGlass,lResistance,lShareFac,notApp,{-nonFactorL,-}physSyst,requirement,
   srs,thModel,eqTNT]
   
 gLassBR :: ConceptChunk
 
 annealedGlass, aspectR,aspectRMax,fullyTGlass,glassTypeFac,heatSGlass,
-  iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,nonFactorL,
+  iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,--nonFactorL,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
@@ -167,7 +167,7 @@ lGlass        = commonINP "lGlass"        (cn''' "laminated glass")         "LG"
 lResistance   = commonINP "lResistance"   (cn' "load resistance")           "LR"
 lShareFac     = commonINP "lShareFac"     (cn' "load share factor")         "LSF"
 notApp        = commonINP "notApp"        (cn "not applicable")             "N/A"
-nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase? 
+--nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase? 
 eqTNT         = commonINP "eqTNT"         (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 
 ----Terminology---- 
@@ -437,8 +437,11 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
+nonFL = fromEqn' "nonFactorL" (cn' "Non-Factored Load") (Atomic "NFL") nonFL_eq
+{-
 nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") 
   nonFL_eq
+-}
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]

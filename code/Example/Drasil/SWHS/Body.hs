@@ -878,7 +878,7 @@ s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural d
   S "the flexibility to experiment with unusual situations. The" +:+ phrase column +:+
   S "of" +:+
   S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario." +:+
-  S "The uncertainty" +:+ phrasecolumn +:+ S "provides an estimate of the confidence with" +:+
+  S "The uncertainty" +:+ phrase column +:+ S "provides an estimate of the confidence with" +:+
   S "which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
   S "if one were performing an uncertainty quantification exercise. (The" +:+
@@ -922,15 +922,15 @@ s4_2_7 = section (of'' titleize' titleize property (a_ corSol)) (s4_2_7_deriv) [
 -- should be something like
 --s4_2_7 = section (of'' titleize' titleize property (corSol)) (s4_2_7_deriv) []
 
-s4_2_7_deriv = [Paragraph (S "A"+:+ phrase corSol +:+ 
+s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+ 
   S "must exhibit the" +:+ (phrase $ law_cons_energy ^. term) :+:
   S ". This means that the" +:+ (phrase $ w_E ^. term) +:+
   S "should equal the difference between" +:+
-  S " the total energy" +:+ phrase input_ +:+ S "from the" +:+
-  (phrase $ coil ^. term) +:+ S "and the energy output to the" +:+
-  (short phsChgMtrl) :+: S ". This can be shown as an" +:+
-  S "equation by taking" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
-  makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
+  S " the total" +:+ (phrase $ energy ^. term) +:+ phrase input_ +:+ S "from the" +:+
+  (phrase $ coil ^. term) +:+ S "and the" +:+ (phrase $ energy ^. term) +:+
+  phrase output_ +:+ S "to the" +:+ (short phsChgMtrl) :+:
+  S ". This can be shown as an equation by taking" +:+ makeRef s4_2_4_DD1 +:+
+  S "and" +:+ makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
   S "respective surface area of" +:+ (phrase $ heat_trans ^. term) :+:
   S ", and integrating each over the" +:+ phrase simulation +:+
   (phrase $ time ^. term) :+: S ", as follows:"),
@@ -941,8 +941,8 @@ s4_2_7_deriv = [Paragraph (S "A"+:+ phrase corSol +:+
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time]))) time)),
   Paragraph (S "In addition, the" +:+ (phrase $ pcm_E ^. term) :+: 
-  S " should equal the energy" +:+ phrase input_ +:+ S "to the" +:+ short phsChgMtrl +:+ 
-  S "from the" +:+ (phrase $ water ^. term) :+:
+  S " should equal the" +:+ (phrase $ energy ^. term) +:+ phrase input_ +:+
+  S "to the" +:+ short phsChgMtrl +:+ S "from the" +:+ (phrase $ water ^. term) :+:
   S ". This can be expressed as"),
   EqnBlock
   ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))

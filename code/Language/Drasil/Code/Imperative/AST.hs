@@ -15,12 +15,13 @@ module Language.Drasil.Code.Imperative.AST (
 
     -- * Convenience functions
     bool,int,float,char,string,infile,outfile,listT,obj,
+    methodType,methodTypeVoid,
     block,defaultValue,
     true,false,
     var, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
-    alwaysDel,neverDel,
+    ifelse,excThrow,excTryCatch,alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,params,
     print,printLn,printStr,printStrLn,
@@ -198,6 +199,12 @@ listT t = List Dynamic t
 obj :: Label -> StateType
 obj = Type
 
+methodType :: StateType -> MethodType
+methodType t = MState t
+
+methodTypeVoid :: MethodType
+methodTypeVoid = Void
+
 block :: [Statement] -> Block
 block = Block
 
@@ -354,7 +361,15 @@ v $. f = ObjAccess v f
 ($:) :: Label -> Label -> Value
 infixl 8 $:
 n $: e = EnumElement n e
-----------------------
+
+ifelse :: [(Value, Body)] -> Body -> Statement
+ifelse g e = CondState $ If g e
+
+excThrow :: String -> Statement
+excThrow m = ExceptState $ Throw m
+
+excTryCatch :: Body -> Body -> Statement
+excTryCatch t c = ExceptState $ TryCatch t c
 
 alwaysDel :: Int
 alwaysDel = 4

@@ -1,11 +1,12 @@
 {- re-export smart constructors for external code writing -}
 module Language.Drasil.Code (
     Body, Class, StateVar, Value,
-    bool,int,float,char,string,infile,outfile,listT,obj,block,defaultValue,true,false,
+    bool,int,float,char,string,infile,outfile,listT,obj,
+    methodType,methodTypeVoid,block,defaultValue,true,false,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),
     (#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
-    alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
+    ifelse,excThrow,excTryCatch,alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
     forEach,ifCond,ifExists,listDec,listDecValues,listOf,litBool,litChar,
     litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,
     params,print,printLn,printStr,printStrLn,printFile,printFileLn,printFileStr,

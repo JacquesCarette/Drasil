@@ -102,7 +102,7 @@ glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, 
   prob_br, pb_tol, dimlessLoad, tolLoad]
 
-risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
+ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
   dimlessLoad, tolLoad, tNT, lRe, loadSF, ar, ar_min, gTF :: VarChunk
 
 ----Quantities--
@@ -434,7 +434,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' "nonFactorL" (cn' "Non-Factored Load") (Atomic "NFL") nonFL_eq
+nonFL = fromEqn' "nonFactorL" (cn' "non-factored load") (Atomic "NFL") nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]

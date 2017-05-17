@@ -11,8 +11,8 @@ import Data.Drasil.Units.Physics
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
-sspUnits :: [UWrapper]
-sspUnits = map uw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
+sspUnits :: [UCWrapper]
+sspUnits = map ucw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,

@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix)
+import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng)
 import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -611,7 +611,7 @@ s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
 --General definitions not yet implemented
 
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
-  +:+ phrase rOfChng +:+ S "of" +:+ (phrase $ temp ^. term) :+: S ":"),
+  +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+ (phrase $ temp ^. term) :+: S ":"),
   Paragraph (S "Integrating" +:+ makeRef s4_2_2_T1 :+: 
   S " over a" +:+ (phrase $ volume ^. term) +:+ S "(" :+:
   P (volume ^. symbol) :+: S "), we have:"),
@@ -708,7 +708,7 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 
 s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   (phrase $ water ^. term) :+: S ":"),
-  Paragraph (S "To find the" +:+ phrase rOfChng +:+ S "of" +:+ P (temp_W ^.
+  Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+ P (temp_W ^.
   symbol) :+: S ", we look at the energy balance on" +:+
   (phrase $ water ^. term) :+: S ". The" +:+ 
   (phrase $ volume ^. term) +:+ S "being considered is the" +:+
@@ -793,7 +793,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
 s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   (phrase $ energy ^. term) +:+ S "balance on the" +:+ (short phsChgMtrl) +:+
   S "during" +:+ (phrase $ sens_heat ^. term) :+: S "ing phase:"),
-  Paragraph (S "To find the" +:+ phrase rOfChng +:+ S "of" +:+ P (temp_PCM ^.
+  Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+ P (temp_PCM ^.
   symbol) :+: S ", we look at the" +:+ (phrase $ energy ^. term) +:+ S "balance on the" +:+ 
   (short phsChgMtrl) :+: S ". The" +:+ (phrase $ volume ^. term) +:+
   S "being considered is the" +:+ (phrase $ pcm_vol ^. term) :+: 

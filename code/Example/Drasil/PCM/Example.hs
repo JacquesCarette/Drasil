@@ -18,8 +18,8 @@ import Control.Lens ((^.))
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = map cqs pcmUnits
 
-pcmUnits :: [UWrapper]
-pcmUnits = map uw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA,
+pcmUnits :: [UCWrapper]
+pcmUnits = map ucw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA,
   htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol,
   ht_xfer_co, ht_xfer_CW, mass, tank_D, tank_L, tank_V, temp, temp_coil, temp_diff, temp_env,
   temp_init, temp_water, thFluxVect, time, time_final, vol, water_dense, water_m,

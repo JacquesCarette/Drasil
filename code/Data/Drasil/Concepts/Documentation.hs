@@ -37,10 +37,11 @@ analysis, appendix, characteristic, client, column, component,
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, symbol_, system, table_, template, 
   terminology, theory, traceyMatrix, user, useCase, value, variable, 
-  video, verification :: NPNC
+  video, verification, rate, change :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
+change          = npnc "changed"        (cn' "change")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
@@ -90,6 +91,7 @@ project         = npnc "project"        (cn' "project")
 property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
+rate            = npnc "rate"           (cn' "rate")
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
 reviewer        = npnc "reviewer"       (cn' "reviewer") 
@@ -127,6 +129,7 @@ charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
+rOfChng      = npnc "rOfChng"      (rate `of_'` change)
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
 scpOfTheProj = npnc "scpOfTheProj" (scope `of_` the project) -- reasonable hack?
 termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)

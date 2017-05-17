@@ -140,14 +140,14 @@ gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 ----Acronyms-----
 -- FIXME: Use actual acronyms instead of CCs.
 acronyms :: [CINP]
-acronyms = [assumption,annealedGlass,ar,dataDefn,fullyTGlass,
+acronyms = [assumption,annealedGlass,aspectR, dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
   lGlass,lResistance,lShareFac,notApp,physSyst,requirement,
   srs,thModel,eqTNT]
   
 gLassBR :: ConceptChunk
 
-annealedGlass, fullyTGlass,glassTypeFac,heatSGlass,
+annealedGlass, aspectR, fullyTGlass,glassTypeFac,heatSGlass,
   iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
@@ -155,6 +155,7 @@ annealedGlass, fullyTGlass,glassTypeFac,heatSGlass,
 --FIXME: Switch to using "nounphrase" instead of "cn"
 gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "GlassBR" --lowercase?
 annealedGlass = commonINP "annealedGlass" (cn''' "annealed glass")          "AN"
+aspectR       = commonINP "aspectR"       (cn' "aspect ratio")              "AR"
 fullyTGlass   = commonINP "fullyTGlass"   (cn''' "fully tempered glass")    "FT"
 glassTypeFac  = commonINP "glassTypeFac"  (cn' "glass type factor")         "GTF"
 heatSGlass    = commonINP "heatSGlass"    (cn''' "heat strengthened glass") "HS"

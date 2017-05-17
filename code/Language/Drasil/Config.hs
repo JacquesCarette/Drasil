@@ -5,6 +5,7 @@ import Language.Drasil.Output.Formats
 
 data LPMParams = LPMParams DocClass UsePackages ExDoc
 
+-- TeX only - Parameters for rendering literate programmer's manual
 lpmTeXParams :: LPMParams
 lpmTeXParams = defaultLPMparams
 
@@ -40,6 +41,7 @@ numberedSections = True
 --  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
 --  "amsmath"])
 
+-- | default parameters for a generated literate programmer's manual 
 defaultLPMparams :: LPMParams
 defaultLPMparams = LPMParams
   (DocClass (Just "article") "cweb-hy")

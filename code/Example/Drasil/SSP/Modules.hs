@@ -7,6 +7,7 @@ import Data.Drasil.Modules
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Math
 
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
@@ -66,7 +67,7 @@ mod_genalg_desc = dccWDS "mod_genalg_desc" (cn' "genetic algorithm")
 
 mod_genalg :: ModuleChunk
 mod_genalg = makeImpModule mod_genalg_desc
-  (S "Algorithm to identify the" +:+ (phrase slpSrf) +:+ S "that has the" +:+
+  ((at_start $ algorithm ^. term) +:+ S "to identify the" +:+ (phrase slpSrf) +:+ S "that has the" +:+
    S "minimum" +:+ (phrase $ fs_rc ^. term) `sC` S "based on the inputs.")
    program
    []
@@ -86,7 +87,7 @@ mod_kinadm_desc = dccWDS "mod_kinadm_desc" (cnIES "kinetic admissibility")
 
 mod_kinadm :: ModuleChunk
 mod_kinadm = makeImpModule mod_kinadm_desc
-  (S "Algorithm to determine if a given" +:+ (phrase slpSrf) +:+ S "passes" +:+
+  ((at_start $ algorithm ^. term) +:+ S "to determine if a given" +:+ (phrase slpSrf) +:+ S "passes" +:+
    S "or fails a set of admissibility criteria.")
    program
    []
@@ -104,7 +105,7 @@ mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
 
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
-  (S "Algorithm to determine the coordinates of where the" +:+
+  ((at_start $ algorithm ^. term) +:+ S "to determine the coordinates of where the" +:+
    (phrase slpSrf) +:+ S "interslice nodes occur.")
    program
    []
@@ -157,7 +158,7 @@ mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
-  (S "The algorithm to perform a Rigid Finite Element Method" +:+
+  (S "The" +:+ (phrase $ algorithm ^. term) +:+ S "to perform a Rigid Finite Element Method" +:+
    S "analysis of the slope.")
    program
    []
@@ -178,7 +179,7 @@ mod_sps_desc = dccWDS "mod_sps_desc" (cn' "slice property sorter")
 
 mod_sps :: ModuleChunk
 mod_sps = makeImpModule mod_sps_desc
-  (S "Algorithm to assigns" +:+ (plural soilPrpty) +:+ S "to slices based" +:+
+  ((at_start $ algorithm ^. term) +:+ S "to assigns" +:+ (plural soilPrpty) +:+ S "to slices based" +:+
    S "on the location of the slice with respect to the different soil layers.")
    program
    []

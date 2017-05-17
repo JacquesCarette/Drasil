@@ -18,12 +18,15 @@ ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
 ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
-soil, material, intrslce :: NPNC
+soil, material, intrslce, surface, slip, slope, morPrice :: NPNC
 soil     = npnc "soil"       (cn "soil")
 material = npnc "material"   (cn' "material")
 intrslce = npnc "interslice" (cn' "interslice")
 surface  = npnc "surface"    (cn' "surface")
 slip     = npnc "slip"       (cn "slip") --FIXME: adjective?
+slope    = npnc "slope"      (cn "slope")
+
+morPrice  = npnc "morPrice" (cn "morgenstern price")
 
 slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty :: NPNC
 slpSrf    = compoundNPNC slip surface
@@ -31,7 +34,6 @@ crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 soilPrpty = compoundNPNC soil     property
 mtrlPrpty = compoundNPNC material property
 itslPrpty = compoundNPNC intrslce property
-
 
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?

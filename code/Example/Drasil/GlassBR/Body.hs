@@ -194,7 +194,7 @@ s5_intro = Paragraph $
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
 
-s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ S "Name", S "Actor", 
+s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ titleize name_, S "Actor", 
   titleize input_ +:+ S "and" +:+ titleize output_] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", titleize' input_, titleize user, titleize' characteristic +:+ S "of the" +:+

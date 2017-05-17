@@ -42,26 +42,26 @@ rightHand  = dcc "rightHand" (cn' "right-handed coordinate system")
   "A coordinate system where the positive z-axis comes out of the screen."
   
   
-position   = dcc "position" (cn' "position")
+position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "The rate of change of a body's" +:+ (phrase $ velocity ^. term))
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "The change in" +:+ (position ^. defn))
-force      = dcc "force" (cn' "force")
+force        = dcc "force" (cn' "force")
   "An interaction that tends to produce change in the motion of an object"
-distance   = dcc "distance" (cn' "distance")
+distance     = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
-stress    = dcc "stress" (cn'' "stress")
+stress       = dcc "stress" (cn'' "stress")
   ("Forces that are exerted between planes internal to" ++
   " a larger body subject to external loading.") --definition used in SSP, can be made clearer
-strain    = dccWDS "strain" (cn' "strain")
+strain       = dccWDS "strain" (cn' "strain")
   ((titleize $ stress ^. term) +:+
   S "forces that result in deformation of the body/plane.") --definition used in SSP, can be made clearer
-tension    = dccWDS "tension" (cn' "tension")
+tension      = dccWDS "tension" (cn' "tension")
   (S "A" +:+ (phrase $ stress ^. term) +:+
   S "that causes displacement of the body away from its center.")
-compression = dccWDS "compression" (cn' "compression")
+compression  = dccWDS "compression" (cn' "compression")
   (S "A" +:+ (phrase $ stress ^. term) +:+
   S "that causes displacement of the body towards its center.")
   

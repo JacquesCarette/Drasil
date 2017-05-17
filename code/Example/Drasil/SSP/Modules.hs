@@ -35,18 +35,18 @@ mod_ctrl = mod_ctrl_fun program [mod_inputf, mod_outputf, mod_genalg]
 -- input format module
 mod_inputf_desc :: ConceptChunk
 mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
-  (S "Reads the" +:+ (plural inDatum) +:+ S "from an input file, and/or" +:+
-   S "prompted command line inputs." +:+ (at_start' inDatum) +:+ S "includes" +:+
+  (S "Reads the" +:+ (plural inDatum) +:+ S "from an" +:+ (phrase input_) +:+ S "file, and/or" +:+
+   S "prompted command line" +:+. (plural input_) +:+ (at_start' inDatum) +:+ S "includes" +:+
    S "the x,y coordinates of the" +:+ (phrase slope) `sC` S "with a set of coordinates for each" +:+
-   S "layer. For each layer it's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
+   S "layer. Each layer's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
 --   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
    (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC`
    (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
    (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+
-   S "are stored in vectors" +:+ S "of" +:+. (plural soilPrpty) +:+
-   S "If a piezometric surface exists in the slope it's coordinates and the" +:+ 
-   (phrase $ waterWeight ^. term) +:+ S "are also included in the" +:+
-   S "input. Lastly an expected range for the entrance and exit points" +:+
+   S "are stored in" +:+ (plural $ vector ^. term) +:+ S "of" +:+. (plural soilPrpty) +:+
+   S "If a piezometric" +:+ (phrase surface_) +:+ S "exists in the slope it's coordinates and the" +:+ 
+   (phrase $ waterWeight ^. term) +:+ S "are also included in the" +:+.
+   (phrase input_) +:+ S "Lastly an expected range for the entrance and exit points" +:+
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
@@ -57,9 +57,9 @@ mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = mod_outputf_desc_fun ((phrase $ fs_rc ^. term) +:+
    S "for the critical" +:+ (phrase slip) +:+ S "calculated by the" +:+ (titleize morPrice) +:+ 
    S "Module and" +:+ (titleize rgFnElm) +:+ S "Method Module, and a" +:+
-   S "plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the slope geometry" `sC`
-   S "with the showing the" +:+ (phrase element) +:+ S "displacements" +:+
-   S "as calculated by the RFEM Module.")
+   S "plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the" +:+ (phrase slope) +:+
+   S "geometry, with the showing the" +:+ (phrase element) +:+
+   S "displacements as calculated by the RFEM Module.")
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] 
@@ -75,7 +75,7 @@ mod_genalg :: ModuleChunk
 mod_genalg = makeImpModule mod_genalg_desc
   ((at_start $ algorithm ^. term) +:+ S "to identify the" +:+ (phrase slpSrf) +:+
    S "that has the" +:+ S "minimum" +:+ (phrase $ fs_rc ^. term) `sC`
-   S "based on the" +:+. (plural input))
+   S "based on the" +:+. (plural input_))
    program
    []
    []
@@ -89,7 +89,7 @@ mod_kinadm_desc = dccWDS "mod_kinadm_desc" (cnIES "kinetic admissibility")
    S "impossible to occur in a" +:+ (phrase slpSrf) `sC` S "such as" +:+
    (plural slpSrf) +:+ S "containing sharp angles, or going above the" +:+.
    (phrase slopeSrf) +:+ S "Ensures randomly generated or mutated" +:+
-   (plural slope) +:+ S"from the" +:+ (titleize $ mod_genalg_desc ^. term) +:+
+   (plural slope) +:+ S "from the" +:+ (titleize $ mod_genalg_desc ^. term) +:+
    S "Module are physically possible according to the" +:+
    S "criteria of the Kinematic Admissibility Module.")
 
@@ -109,7 +109,7 @@ mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
   (S "When preparing a" +:+ (phrase slpSrf) +:+ S "for analysis by the" +:+
    (titleize morPrice) +:+ S "Module or the RFEM Module" `sC`
    S "the x-coordinates defining the boundaries of the" +:+
-   (plural slice) +:+ S "are identified and stored in a vector.")
+   (plural slice) +:+ S "are identified and stored in a" +:+. (phrase $ vector ^. term))
 
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc

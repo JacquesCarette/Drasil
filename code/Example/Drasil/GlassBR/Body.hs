@@ -5,7 +5,10 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, probability, algorithm, parameter)
+import Data.Drasil.Software.Products
+import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, 
+  probability,  parameter)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)

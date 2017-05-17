@@ -609,8 +609,8 @@ s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
 
 --General definitions not yet implemented
 
-s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified rate of" +:+
-  S "change of" +:+ (phrase $ temp ^. term) :+: S ":"),
+s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
+  +:+ phrase rOfChng +:+ S "of" +:+ (phrase $ temp ^. term) :+: S ":"),
   Paragraph (S "Integrating" +:+ makeRef s4_2_2_T1 :+: 
   S " over a" +:+ (phrase $ volume ^. term) +:+ S "(" :+:
   P (volume ^. symbol) :+: S "), we have:"),
@@ -707,7 +707,7 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 
 s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
   (phrase $ water ^. term) :+: S ":"),
-  Paragraph (S "To find the rate of change of" +:+ P (temp_W ^.
+  Paragraph (S "To find the" +:+ phrase rOfChng +:+ S "of" +:+ P (temp_W ^.
   symbol) :+: S ", we look at the energy balance on" +:+
   (phrase $ water ^. term) :+: S ". The" +:+ 
   (phrase $ volume ^. term) +:+ S "being considered is the" +:+
@@ -789,11 +789,11 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the energy balance on" +:+
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
-s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance" +:+
-  S "on the" +:+ (short phsChgMtrl) +:+ S "during" +:+ 
-  (phrase $ sens_heat ^. term) :+: S "ing phase:"),
-  Paragraph (S "To find the rate of change of" +:+ P (temp_PCM ^.
-  symbol) :+: S ", we look at the energy balance on the" +:+ 
+s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
+  (phrase $ energy ^. term) +:+ S "balance on the" +:+ (short phsChgMtrl) +:+
+  S "during" +:+ (phrase $ sens_heat ^. term) :+: S "ing phase:"),
+  Paragraph (S "To find the" +:+ phrase rOfChng +:+ S "of" +:+ P (temp_PCM ^.
+  symbol) :+: S ", we look at the" +:+ (phrase $ energy ^. term) +:+ S "balance on the" +:+ 
   (short phsChgMtrl) :+: S ". The" +:+ (phrase $ volume ^. term) +:+
   S "being considered is the" +:+ (phrase $ pcm_vol ^. term) :+: 
   S "," +:+ P (pcm_vol ^. symbol) :+: S ". The derivation" +:+
@@ -879,7 +879,7 @@ s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural d
   S "of" +:+
   S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario." +:+
   S "The uncertainty" +:+ phrase column +:+ S "provides an estimate of the confidence with" +:+
-  S "which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
+  S "which the" +:+ phrase physical +:+ plural quantity +:+ S "can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
   S "if one were performing an uncertainty quantification exercise. (The" +:+
   plural table_ +:+ S "are left out because features they should use are" +:+
@@ -974,7 +974,7 @@ s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
 s5_1 = section (titleize' functionalRequirement) (s5_1_list) []
 
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
-  (titleize input_ +:+ S "the following quantities, which define the" +:+
+  (titleize input_ +:+ S "the following" +:+ plural quantity :+: S ", which define the" +:+
   (phrase $ tank ^. term) :+: S " parameters, material" +:+ plural property +:+
   S "and initial" +:+ plural condition :+: S ":"))]),
   (Table [phrase symbol_, (phrase $ unit_ ^. term), phrase description] (mkTable
@@ -1000,8 +1000,8 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
     +:+ S "1.")),
 --
   ((short requirement) :+: S "4", Flat (titleize output_ +:+ S "the" +:+
-  phrase input_ :+: S " quantities and derived quantities in the" +:+
-  S "following list: the quantities from R1, the" +:+ (phrase $ mass ^. term) :+:
+  phrase input_ +:+ plural quantity +:+ S "and derived" +:+ plural quantity +:+ S "in the" +:+
+  S "following list: the" +:+ plural quantity +:+ S "from R1, the" +:+ (phrase $ mass ^. term) :+:
   S "es from R2," +:+ P (tau_W ^. symbol) +:+ S "(from IM1)," +:+ 
   P (eta ^. symbol) +:+ S "(from IM1)," +:+ P (tau_S_P ^. 
   symbol) +:+ S "(from IM2) and" +:+ P (tau_L_P ^. symbol) +:+

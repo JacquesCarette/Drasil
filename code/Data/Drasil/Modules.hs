@@ -17,14 +17,14 @@ import Language.Drasil
 import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Computation
-
+import Control.Lens ((^.))
 
 {-- Module Chunks --}
 
 mod_hw :: ModuleChunk
 mod_hw = makeImpModule hwHiding
   (foldlSent [S "The", (plural $ dataStruct), 
-  S "and algorithm used to implement the virtual",
+  S "and", (phrase $ algorithm ^. term), S "used to implement the virtual",
   S "hardware"])
   os
   []
@@ -49,7 +49,8 @@ mod_sw = makeUnimpModule modSfwrDecision
 -- Control module
 mod_ctrl_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_ctrl_fun impl depnd = makeImpModule modControl
-  (S "The algorithm for coordinating the running of the program.")
+  (foldlSent [S "The", (phrase $ algorithm ^. term), 
+  S "for coordinating the running of the program"])
   impl
   []
   []
@@ -109,7 +110,7 @@ mod_vector_fun impl depnd = makeImpModule mod_vector_serv
 mod_plot_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_plot_fun impl depnd = makeImpModule mod_plot_desc
   (foldlSent [S "The", (plural $ dataStruct'), 
-  S "and algorithms for plotting data graphically"])
+  S "and", (plural $ algorithm ^. term), S  "for plotting data graphically"])
   impl
   []
   []
@@ -118,7 +119,7 @@ mod_plot_fun impl depnd = makeImpModule mod_plot_desc
    
 mod_rng_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ModuleChunk
 mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random number generator") desc)
-  (S "Pseudo-random number generation algorithm.")
+  (foldlSent [S "Pseudo-random number generation", (phrase $ algorithm ^. term)])
   impl
   []
   []

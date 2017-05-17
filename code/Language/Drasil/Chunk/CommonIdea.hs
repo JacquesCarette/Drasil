@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.CommonIdea
   ( CommonIdea(..) --, commonidea, CI
-  , CINP, commonINP
+  , CINP, commonINP, commonINP' , commonINP''
   ) where
 
 import Prelude hiding (id)
@@ -8,8 +8,9 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(id))
 import Language.Drasil.Chunk.NamedIdea
 import Control.Lens (Simple, Lens)
-import Language.Drasil.Spec (Sentence(S))
+import Language.Drasil.Spec (Sentence(S,P))
 import Language.Drasil.NounPhrase
+import Language.Drasil.Symbol (Symbol)
 
 -- | CommonIdea is a chunk that is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.
@@ -34,23 +35,29 @@ commonidea i nm ab = CI i (S nm) (S ab)
 
 -- | The common idea (with nounPhrase) data type. It must have a 
 -- 'NounPhrase' for its 'term'.
-data CINP = CINP String Sentence Sentence NP 
+data CINP = CINP String Sentence NP 
 -- ^ The first Sentence here is now deprecated
 
 instance Chunk CINP where
-  id f (CINP a b c d) = fmap (\x -> CINP x b c d) (f a)
+  id f (CINP a b c) = fmap (\x -> CINP x b c) (f a)
 instance NamedIdea CINP where
-  term f (CINP a b c d) = fmap (\x -> CINP a b c x) (f d)
-  getA (CINP _ _ c _) = Just c
+  term f (CINP a b c) = fmap (\x -> CINP a b x) (f c)
+  getA (CINP _ b _) = Just b
 instance CommonIdea CINP where
-  abrv f (CINP a b c d) = fmap (\x -> CINP a b x d) (f c)
+  abrv f (CINP a b c) = fmap (\x -> CINP a x c) (f b)
 instance NounPhrase CINP where
-  phrase       (CINP _ _ _ d) = phrase d
-  plural       (CINP _ _ _ d) = plural d
-  sentenceCase (CINP _ _ _ d) = sentenceCase d
-  titleCase    (CINP _ _ _ d) = titleCase d
+  phrase       (CINP _ _ c) = phrase c
+  plural       (CINP _ _ c) = plural c
+  sentenceCase (CINP _ _ c) = sentenceCase c
+  titleCase    (CINP _ _ c) = titleCase c
   
 -- | The commonINP smart constructor requires a chunk id, 
 -- term (of type 'NP'), and abbreviation
 commonINP :: String -> NP -> String -> CINP
-commonINP i t a = CINP i (phrase t) (S a) t
+commonINP i t a = CINP i (S a) t
+
+commonINP' :: String -> NP -> Symbol -> CINP
+commonINP' i t sy = CINP i (P sy) t 
+
+commonINP'' :: String -> NP -> Sentence -> CINP
+commonINP'' i t ab = CINP i ab t

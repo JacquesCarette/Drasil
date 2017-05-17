@@ -21,7 +21,7 @@ module Language.Drasil (
   , Concept(..)
   , CommonIdea(..)
   --, commonidea, CI
-  , commonINP, CINP
+  , commonINP, CINP, commonINP', commonINP''
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, NPNC, short, nc, nc', npnc
   , compoundterm, for, for', for'', of_, of_', of_'', of'', compoundNPNC, compoundNPNC'
@@ -127,4 +127,5 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
-import Language.Drasil.People (People, Person, person, HasName(..), manyNames)
+import Language.Drasil.People (People, Person, person, HasName(..), manyNames
+                               ,person', personWM, personWM', mononym)

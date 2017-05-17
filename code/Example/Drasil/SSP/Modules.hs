@@ -34,15 +34,17 @@ mod_ctrl = mod_ctrl_fun program [mod_inputf, mod_outputf, mod_genalg]
 mod_inputf_desc :: ConceptChunk
 mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   (S "Reads the" +:+ (plural inDatum) +:+ S "from an input file, and/or" +:+
-   S "prompted command line inputs." +:+ (at_start' inDatum) +:+ S "includes the x,y" +:+
-   S "coordinates of the slope, with a set of coordinates for each" +:+
+   S "prompted command line inputs." +:+ (at_start' inDatum) +:+ S "includes" +:+
+   S "the x,y coordinates of the slope, with a set of coordinates for each" +:+
    S "layer. For each layer it's" +:+ (plural soilPrpty) +:+ S "of" +:+  -- FIXME: have a list function do this for me (see next line)
 --   (foldl sC (map (\x -> (phrase $ x ^. term)) [fricAngle, cohesion, dryWeight, satWeight, elastMod])) `sC`
-   (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC` (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
-   (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+ S "are stored in vectors" +:+
-   S "of" +:+. (plural soilPrpty) +:+ S "If a piezometric surface exists in the slope" +:+
-   S "it's coordinates and the" +:+ (phrase $ waterWeight ^. term) +:+ S "are also included in" +:+
-   S "the input. Lastly an expected range for the entrance and exit points" +:+
+   (phrase $ fricAngle ^. term) `sC` (phrase $ cohesion ^. term) `sC`
+   (phrase $ dryWeight ^. term) `sC` (phrase $ satWeight ^. term) `sC`
+   (phrase $ elastMod ^. term) `sC` S "and" +:+ (phrase $ poissnsR ^. term) +:+
+   S "are stored in vectors" +:+ S "of" +:+. (plural soilPrpty) +:+
+   S "If a piezometric surface exists in the slope it's coordinates and the" +:+ 
+   (phrase $ waterWeight ^. term) +:+ S "are also included in the" +:+
+   S "input. Lastly an expected range for the entrance and exit points" +:+
    S "of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
@@ -50,14 +52,16 @@ mod_inputf = mod_io_fun program [mod_hw] (plural inDatum) mod_inputf_desc
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun ((phrase $ fs_rc ^. term) +:+ S "for the critical slip calculated by the" +:+
-   (titleize morPrice) +:+ S "Module and Rigid Finite Element Method Module" `sC`
-   S "and a plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the slope geometry" `sC`
-   S "with the showing the element displacements as calculated by the" +:+
-   S "RFEM Module.")
+mod_outputf_desc = mod_outputf_desc_fun ((phrase $ fs_rc ^. term) +:+
+   S "for the critical slip calculated by the" +:+ (titleize morPrice) +:+ 
+   S "Module and" +:+ (titleize rgFnElm) +:+ S "Method Module, and a" +:+
+   S "plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the slope geometry" `sC`
+   S "with the showing the" +:+ (phrase element) +:+ S "displacements" +:+
+   S "as calculated by the RFEM Module.")
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] (plural outDatum) mod_outputf_desc
+mod_outputf = mod_io_fun program [mod_plot, mod_slipslicer, mod_mp, mod_rfem] 
+  (plural outDatum) mod_outputf_desc
 
 -- gen alg module
 mod_genalg_desc :: ConceptChunk
@@ -67,8 +71,9 @@ mod_genalg_desc = dccWDS "mod_genalg_desc" (cn' "genetic algorithm")
 
 mod_genalg :: ModuleChunk
 mod_genalg = makeImpModule mod_genalg_desc
-  ((at_start $ algorithm ^. term) +:+ S "to identify the" +:+ (phrase slpSrf) +:+ S "that has the" +:+
-   S "minimum" +:+ (phrase $ fs_rc ^. term) `sC` S "based on the inputs.")
+  ((at_start $ algorithm ^. term) +:+ S "to identify the" +:+ (phrase slpSrf) +:+
+   S "that has the" +:+ S "minimum" +:+ (phrase $ fs_rc ^. term) `sC`
+   S "based on the inputs.")
    program
    []
    []
@@ -79,16 +84,17 @@ mod_genalg = makeImpModule mod_genalg_desc
 mod_kinadm_desc :: ConceptChunk
 mod_kinadm_desc = dccWDS "mod_kinadm_desc" (cnIES "kinetic admissibility")
   (S "Some" +:+ (plural slpSrf) +:+ S "are physically unlikely or" +:+
-   S "impossible to occur in a" +:+ (phrase slpSrf) `sC` S "such as" +:+ (plural slpSrf) +:+
-   S "containing sharp angles, or going above the" +:+. (phrase slopeSrf) +:+ S "Ensures" +:+
-   S "randomly generated or mutated slopes from the" +:+ (titleize $ mod_genalg_desc ^. term) +:+
+   S "impossible to occur in a" +:+ (phrase slpSrf) `sC` S "such as" +:+
+   (plural slpSrf) +:+ S "containing sharp angles, or going above the" +:+.
+   (phrase slopeSrf) +:+ S "Ensures randomly generated or mutated" +:+
+   (plural slope) +:+ S"from the" +:+ (titleize $ mod_genalg_desc ^. term) +:+
    S "Module are physically possible according to the" +:+
    S "criteria of the Kinematic Admissibility Module.")
 
 mod_kinadm :: ModuleChunk
 mod_kinadm = makeImpModule mod_kinadm_desc
-  ((at_start $ algorithm ^. term) +:+ S "to determine if a given" +:+ (phrase slpSrf) +:+ S "passes" +:+
-   S "or fails a set of admissibility criteria.")
+  ((at_start $ algorithm ^. term) +:+ S "to determine if a given" +:+
+   (phrase slpSrf) +:+ S "passes or fails a set of admissibility criteria.")
    program
    []
    []
@@ -101,12 +107,12 @@ mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
   (S "When preparing a" +:+ (phrase slpSrf) +:+ S "for analysis by the" +:+
    (titleize morPrice) +:+ S "Module or the RFEM Module" `sC`
    S "the x-coordinates defining the boundaries of the" +:+
-   S "slices are identified and stored in a vector.")
+   (plural slice) +:+ S "are identified and stored in a vector.")
 
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
   ((at_start $ algorithm ^. term) +:+ S "to determine the coordinates of where the" +:+
-   (phrase slpSrf) +:+ S "interslice nodes occur.")
+   (phrase slpSrf) +:+ (phrase intrslce) +:+ S "nodes occur.")
    program
    []
    []
@@ -117,15 +123,16 @@ mod_slipslicer = makeImpModule mod_slipslicer_desc
 mod_slipweight_desc :: ConceptChunk
 mod_slipweight_desc = dccWDS "mod_slipweight_desc" (cn' "slip weighting")
   (S "Weights a set of" +:+ (plural slpSrf) +:+ S "generated by the" +:+
-   (titleize $ mod_genalg_desc ^. term) +:+ S "Module based on their" +:+. (plural $ fs_rc ^. term) +:+
-   S "A" +:+ (phrase slpSrf) +:+ S "with a low" +:+ (phrase $ fs_rc ^. term) +:+ S "will have a high" +:+
-   S "weight as it is more likely to be or to lead to generation of the" +:+.
-   (phrase crtSlpSrf))
+   (titleize $ mod_genalg_desc ^. term) +:+ S "Module based on their" +:+.
+   (plural $ fs_rc ^. term) +:+ S "A" +:+ (phrase slpSrf) +:+ S "with a low" +:+
+   (phrase $ fs_rc ^. term) +:+ S "will have a high weight as it is more" +:+
+   S "likely to be or to lead to generation of the" +:+. (phrase crtSlpSrf))
 
 mod_slipweight :: ModuleChunk
 mod_slipweight = makeImpModule mod_slipweight_desc
-  (S "The weighting for each" +:+ (phrase slpSrf) +:+ S "in a set of" +:+ (plural slpSrf) `sC`
-   S "based on each" +:+ (phrase slpSrf) :+: S "'s" +:+. (phrase $ fs_rc ^. term)) --FIXME: use possesive noun function
+  (S "The weighting for each" +:+ (phrase slpSrf) +:+ S "in a set of" +:+
+   (plural slpSrf) `sC` S "based on each" +:+ (phrase slpSrf) :+: S "'s" +:+. 
+   (phrase $ fs_rc ^. term)) --FIXME: use possesive noun function in line above
   program
   []
   []
@@ -135,9 +142,9 @@ mod_slipweight = makeImpModule mod_slipweight_desc
 -- morg price solver module
 mod_mp_desc :: ConceptChunk
 mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
-  (S "Calculates the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a given" +:+ (phrase slpSrf) `sC`
-   S "through implementation of a" +:+ (titleize morPrice) +:+ (phrase ssa) +:+
-   S "method.")
+  (S "Calculates the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a given" +:+
+   (phrase slpSrf) `sC`S "through implementation of a" +:+ (titleize morPrice) +:+
+   (phrase ssa) +:+ S "method.")
 
 mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
@@ -151,15 +158,16 @@ mod_mp = makeImpModule mod_mp_desc
 -- rfem solver module
 mod_rfem_desc :: ConceptChunk
 mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
-  (S "Calculate the global" +:+ (phrase $ fs_rc ^. term) `sC` S "local slice" +:+
-   (plural $ fs_rc ^. term) `sC` S "and local slice displacements of a given" +:+ (phrase slpSrf) +:+
-   S "under given conditions, through implementation of a rigid" +:+
-   S "finite element" +:+ (phrase ssa) +:+ S "method.")
+  (S "Calculate the global" +:+ (phrase $ fs_rc ^. term) `sC` S "local" +:+
+   (phrase slice) +:+ (plural $ fs_rc ^. term) `sC` S "and local" +:+
+   (phrase slice) +:+ S "displacements of a given" +:+ (phrase slpSrf) +:+
+   S "under given conditions, through implementation of a" +:+
+   (phrase rgFnElm) +:+ (phrase ssa) +:+ S "method.")
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
-  (S "The" +:+ (phrase $ algorithm ^. term) +:+ S "to perform a Rigid Finite Element Method" +:+
-   S "analysis of the slope.")
+  (S "The" +:+ (phrase $ algorithm ^. term) +:+ S "to perform a" +:+
+   (titleize rgFnElm) +:+ S "Method analysis of the slope.")
    program
    []
    []
@@ -169,18 +177,21 @@ mod_rfem = makeImpModule mod_rfem_desc
 -- slice property sorter module
 mod_sps_desc :: ConceptChunk
 mod_sps_desc = dccWDS "mod_sps_desc" (cn' "slice property sorter")
-  (S "When performing slip analysis with the RFEM Solver" +:+
-   S "Module or" +:+ (titleize morPrice) +:+ S "Module" `sC`
-   S "the base and interslice surfaces of each slice" +:+
-   S "in the analysis requires a soil constant. Slice Property Sorter" +:+
-   S "Module identifies which" +:+ (phrase soilLyr) +:+ S "the surface is in to assign" +:+
-   (plural property) +:+ S "from that" +:+ (phrase soilLyr) `sC` S "and uses a weighting scheme when" +:+
-   S "the surface crosses multiple" +:+. (plural soilLyr))
+  (S "When performing slip analysis with the RFEM Solver Module" +:+
+   S "or" +:+ (titleize morPrice) +:+ S "Module" `sC` S "the base and" +:+ 
+   (phrase intrslce) +:+ (plural $ surface ^. term) +:+ S "of each" +:+
+   (phrase slice) +:+ S "in the" +:+ S "analysis requires a soil constant." +:+
+   (titleize $ mod_sps_desc ^. term) +:+ S "Module identifies which" +:+
+   (phrase soilLyr) +:+ S "the surface is in" +:+ S "to assign" +:+
+   (plural property) +:+ S "from that" +:+ (phrase soilLyr) `sC`
+   S "and uses a weighting scheme when the" +:+ (phrase $ surface ^. term) +:+
+   S "crosses multiple" +:+. (plural soilLyr))
 
 mod_sps :: ModuleChunk
 mod_sps = makeImpModule mod_sps_desc
-  ((at_start $ algorithm ^. term) +:+ S "to assigns" +:+ (plural soilPrpty) +:+ S "to slices based" +:+
-   S "on the location of the slice with respect to the different" +:+. (plural soilLyr))
+  ((at_start $ algorithm ^. term) +:+ S "to assigns" +:+ (plural soilPrpty) +:+
+   S "to" +:+ (plural slice) +:+ S "based on the location of the" +:+
+   (phrase slice) +:+ S "with respect" +:+S "to the different" +:+. (plural soilLyr))
    program
    []
    []
@@ -204,13 +215,13 @@ mod_sds = mod_seq_fun matlab []
 -- mod_rng_desc :: ConceptChunk
 -- mod_rng_desc = dccWDS "mod_rng_desc" (cn' "random number generator")
   -- (S "Randomly produces numbers between 0 and 1, using a" +:+
-   -- S "chaotic function with an external seed. Used when generating" +:+ (plural slpSrf) +:+
-   -- S "in the Genetic Algorithm Module.")
+   -- S "chaotic function with an external seed. Used when generating" +:+
+   -- (plural slpSrf) +:+ S "in the Genetic Algorithm Module.")
 
 mod_rng :: ModuleChunk
-mod_rng = mod_rng_fun matlab [] (S "Randomly produces numbers between 0 and 1, using a" +:+
-   S "chaotic function with an external seed. Used when generating" +:+ (plural slpSrf) +:+
-   S "in the" +:+ (titleize $ mod_genalg_desc ^. term) +:+ S "Module.")
+mod_rng = mod_rng_fun matlab [] (S "Randomly produces numbers between 0 and 1" `sC`
+  S "using a chaotic function with an external seed. Used when generating" +:+
+  (plural slpSrf) +:+ S "in the" +:+ (titleize $ mod_genalg_desc ^. term) +:+ S "Module.")
 
 -- plotting module
 -- mod_plot_desc :: ConceptChunk

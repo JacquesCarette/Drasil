@@ -18,24 +18,27 @@ ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
 ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
-soil, material, intrslce, surface, slip, slope, morPrice :: NPNC
-soil     = npnc "soil"       (cn "soil")
-material = npnc "material"   (cn' "material")
+soil, material, intrslce, surface_, slip, slope, slice,
+  morPrice, rgFnElm :: NPNC
 intrslce = npnc "interslice" (cn' "interslice")
-surface  = npnc "surface"    (cn' "surface")
-slip     = npnc "slip"       (cn "slip") --FIXME: adjective?
-slope    = npnc "slope"      (cn "slope")
+material = npnc "material"   (cn' "material")
+slice    = npnc "slice"      (cn' "slice")
+slip     = npnc "slip"       (cn  "slip") --FIXME: adjective?
+slope    = npnc "slope"      (cn'  "slope")
+soil     = npnc "soil"       (cn  "soil")
+surface_ = npnc "surface"    (cn' "surface") -- FIXME: use the one from concepts.math
 
-morPrice  = npnc "morPrice" (cn "morgenstern price")
+morPrice = npnc "morPrice"   (cn  "morgenstern price")
+rgFnElm  = npnc "rgFnElm"    (cn' "rigid finite element")
 
 slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf,
   soilLyr :: NPNC
-slpSrf    = compoundNPNC slip surface
+slpSrf    = compoundNPNC slip surface_
 crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 soilPrpty = compoundNPNC soil     property
 mtrlPrpty = compoundNPNC material property
 itslPrpty = compoundNPNC intrslce property
-slopeSrf  = compoundNPNC slope surface
+slopeSrf  = compoundNPNC slope surface_
 soilLyr   = compoundNPNC soil (npnc "layer" (cn' "layer"))
 
 ----Theoretical Models----

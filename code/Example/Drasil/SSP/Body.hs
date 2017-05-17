@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.Concepts.Math
 
 import Data.Drasil.Quantities.SolidMechanics
 
@@ -76,8 +76,8 @@ mgBod :: [Section]
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
   S "values with a subscript i implies that the value will" +:+
-  S "be taken at and analyzed at a slice or slice interface" +:+
-  S "composing the total slip" +:+ (phrase $ mass ^. term)]]
+  S "be taken at and analyzed at a" +:+ (phrase slice) +:+ S "or" +:+ (phrase slice) +:+
+  S "interface composing the total slip" +:+ (phrase $ mass ^. term)]]
 
 -- SECTION 1.3 --
 --automaticly generated in mkSRS 
@@ -85,61 +85,64 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 -- SECTION 2 --
 s2 = SRS.intro [s2_p1, s2_p2] [s2_1, s2_2, s2_3]
 
-s2_p1 = Paragraph $ S "A slope of geological" +:+ (phrase $ mass ^. term) `sC` 
-  S "composed of soil and rock, is subject to the influence of gravity on" +:+
-  S "the" +:+. (phrase $ mass ^. term) +:+ S "For an unstable slope this can cause" +:+
-  S "instability in the form of soil/rock movement. The effects of soil/rock" +:+
-  S "movement can range from inconvenient to seriously hazardous," +:+
-  S "resulting in signifcant life and economic loses. Slope stability" +:+
-  S "is of interest both when analyzing natural slopes," +:+
-  S "and when designing an excavated slope." +:+ (at_start ssa) +:+
-  S "is the assessment of the safety of a slope, identifying the" +:+
-  S "surface most likely to experience slip and an index of it's" +:+
-  S "relative stability known as the" +:+. (phrase $ fs_rc ^. term)
+s2_p1 = Paragraph $ S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
+  (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
+  S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
+  S "For an unstable" +:+ (phrase slope) +:+ S "this can cause instability" +:+
+  S "in the form of soil/rock movement. The effects of soil/rock movement" +:+
+  S "can range from inconvenient to seriously hazardous, resulting in signifcant" +:+
+  S "life and economic loses. Slope stability is of interest both when analyzing" +:+
+  S "natural" +:+ (plural slope) `sC` S "and when designing an excavated" +:+. (phrase slope) +:+
+  (at_start ssa) +:+ S "is the assessment of the safety of a" +:+ (phrase slope) `sC`
+  S "identifying the" +:+ (phrase $ surface ^. term) +:+ S "most likely to" +:+
+  S "experience slip and an index of it's relative stability known as the" +:+.
+  (phrase $ fs_rc ^. term)
 
 s2_p2 = Paragraph $ S "The following" +:+ (phrase section_) +:+
   S "provides an overview of the" +:+ (introduceAbb srs) +:+
-  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+ (phrase $ program ^. term) +:+
-  S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
-  (phrase $ program ^. term) +:+ S "This" +:+ (phrase section_) +:+ S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
+  S "for a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+
+  (phrase $ program ^. term) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
+  (phrase $ program ^. term) +:+ S "This" +:+ (phrase section_) +:+
+  S "explains the purpose of this document," +:+ --FIXME: purpose, scope and organization have a similar pattern here
   S "the scope of the system, the organization of the document and" +:+
   S "the" +:+ (plural characteristic) +:+ S "of the intended readers."
 
 -- SECTION 2.1 --
 s2_1 = SRS.prpsOfDoc [s2_1_p1, s2_1_p2] []
 
-s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+  S "determines the" +:+
-  (phrase crtSlpSrf) `sC` S "and it's respective" +:+ (phrase $ fs_rc ^. term) +:+
-  S "as a method of assessing the stability of a slope" +:+. (phrase design) +:+
-  S "The" +:+ (phrase $ program ^. term) +:+ S "is intended to be used as an educational tool for" +:+
-  S "introducing slope stability issues, and will facilitate the" +:+
-  S "analysis and" +:+ (phrase design) +:+ S "of a safe slope."
+s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
+  S "determines the" +:+ (phrase crtSlpSrf) `sC` S "and it's respective" +:+ 
+  (phrase $ fs_rc ^. term) +:+ S "as a method of assessing the stability of a slope" +:+. 
+  (phrase design) +:+ S "The" +:+ (phrase $ program ^. term) +:+ 
+  S "is intended to be used as an educational tool for" +:+
+  S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
+  S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
 
 s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
   S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
-  (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+ S "will show how the" +:+
-  (plural requirement) +:+ S "are to be realized, including decisions on the" +:+
-  S "numerical algorithms and programming" +:+. (phrase environment) +:+ S "The" +:+
-  (phrase vav) +:+ S "plan will show the steps that will" +:+
-  S "be used to increase confidence in the" +:+ (phrase softwareDoc) +:+ S "and" +:+
-  S "the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
+  (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+
+  S "will show how the" +:+ (plural requirement) +:+ S "are to be realized," +:+
+  S "including decisions on the numerical algorithms and programming" +:+.
+  (phrase environment) +:+ S "The" +:+ (phrase vav) +:+ S "plan will show the steps" +:+
+  S "that will be used to increase confidence in the" +:+ (phrase softwareDoc) +:+
+  S "and the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
   (plural document) +:+ S "that follow the so-called waterfall" +:+ (phrase model) `sC`
   S "the actual development process is not  constrained in any way. Even when" +:+
   S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements" +:+
-  S "point out, the most logical way to present the" +:+ (phrase documentation) +:+ S "is still to" +:+
-  S "fake a rational" +:+ (phrase design) +:+ S "process."
+  S "point out, the most logical way to present the" +:+ (phrase documentation) +:+
+  S "is still to fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
 s2_2 = SRS.scpOfReq [s2_2_p1] []
 
 s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
-  S "limited to stability analysis of a 2 dimensional slope," +:+
+  S "limited to stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
   S "composed of homogeneous" +:+. (plural soilLyr) +:+ S "Given appropriate" +:+
   S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
-  S "failure surface within the possible input range, and find" +:+
-  S "the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the slope as well as displacement" +:+
-  S "of soil that will occur on the slope."
+  S "failure" +:+ (phrase $ surface ^. term) +:+ S "within the possible input range," +:+
+  S "and find the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the" +:+ (phrase slope) +:+
+  S "as well as displacement of" +:+ (phrase soil) +:+ S "that will occur on the" +:+. (phrase slope)
 
 -- SECTION 2.3 --
 s2_3 = SRS.orgOfDoc [s2_3_p1] []
@@ -154,18 +157,19 @@ s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
   S "that would like a more bottom up approach, they can start" +:+
   S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef sec_IMs +:+
   S "and trace back to find any additional" +:+ (phrase information) +:+
-  S "they require. The" +:+ (plural inModel) +:+ S "provide the set of algebraic" +:+
-  S "equations that must be solved iteratively to perform a" +:+
-  (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+ S "are refined" +:+
-  S "to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
+  S "they require. The" +:+ (plural inModel) +:+ S "provide the set of" +:+
+  S "algebraic equations that must be solved iteratively to perform a" +:+
+  (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+
+  S "are refined to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
   S "and" +:+ (plural inModel) +:+. (sParen . makeRef) sec_IMs
 
 -- SECTION 3 --
 s3 = SRS.genSysDec [s3_p1] [s3_1, s3_2]
 
-s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+ (phrase information) +:+
-  S "about the" +:+ (phrase system) `sC` S "identifies the interfaces between the" +:+
-  (phrase system) +:+ S "and its" +:+ (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+
+s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+
+  (phrase information) +:+ S "about the" +:+ (phrase system) `sC` S "identifies" +:+
+  S "the interfaces between the" +:+ (phrase system) +:+ S "and its" +:+
+  (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+ 
   S "and the" +:+. (plural systemConstraint)
 
 -- SECTION 3.1 --
@@ -173,7 +177,8 @@ s3_1 = SRS.userChar [s3_1_p1] []
 
 s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
-  S "Physics, and be familiar with soil and" +:+. (plural mtrlPrpty)
+  (titleize physics) `sC` S "and be familiar with" +:+ (phrase soil) +:+
+  S "and" +:+. (plural mtrlPrpty)
 
 -- SECTION 3.2 --
 s3_2 = SRS.sysCon [s3_2_p1] []
@@ -188,14 +193,16 @@ s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:
   (phrase problem) +:+ S "to be solved. This is followed by the" +:+ (phrase solution) +:+
   (plural characteristicSpecification) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
-  S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+ S "the slope."
+  S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+
+  S "the" +:+. (phrase slope)
 
 -- SECTION 4.1 --
 s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed" +:+
-  S "to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a slopes" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
-  S "and to calculate the displacement that the slope will experience."
+s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+
+  S "developed to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a" +:+ 
+  (phrase slope) :+: S "'s" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
+  S "and to calculate the displacement that the" +:+ (phrase slope) +:+ S "will experience."
 
 -- SECTION 4.1.1 --
 s4_1_1 = SRS.termogy [s4_1_1_list] []
@@ -205,7 +212,7 @@ s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
       S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
       S "failure through slipping."), 
   (titleize crtSlpSrf, 
-      (at_start slpSrf) +:+ S "of the slope that has the lowest global" +:+
+      (at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
       (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure."),
   (titleize $ stress ^. term, 
       stress ^. defn),
@@ -230,34 +237,35 @@ s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
-s4_1_2_p1 = Paragraph $ S "Analysis of the slope is performed" +:+
-  S "by looking at" +:+ (plural property) +:+ S "of the slope as a series" +:+
-  S "of slice elements. Some" +:+ (plural property) +:+ S "are" +:+ (plural itslPrpty) `sC`
-  S "and some are slice or slice base properties." +:+
-  S "The index convention for referencing which interslice" +:+
-  S "or slice is being used is shown in" +:+. (makeRef fig_indexconv)
+s4_1_2_p1 = Paragraph $ S "Analysis of the" +:+ (phrase slope) +:+ S "is performed" +:+
+  S "by looking at" +:+ (plural property) +:+ S "of the" +:+ (phrase slope) +:+
+  S "as a series of" +:+ (phrase slice) +:+. (plural element) +:+ S "Some" +:+ (plural property) +:+
+  S "are" +:+ (plural itslPrpty) `sC` S "and some are" +:+ (phrase slice) +:+ S "or" +:+
+  (phrase slice) +:+ S "base properties." +:+ S "The index convention for referencing which" +:+
+  (phrase intrslce) +:+ S "or" +:+ (phrase slice) +:+ S "is being used is shown in" +:+. 
+  (makeRef fig_indexconv)
 
 s4_1_2_bullets = Enumeration $ Bullet $ map Flat [
   ((at_start' itslPrpty) +:+ S "convention is noted by j. The end" +:+
     (plural itslPrpty) +:+ S "are usually not of interest" `sC` 
     S "therefore use the" +:+ (plural itslPrpty) +:+ S "from 1" +:+
     P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "n-1"),
-  (S "Slice properties convention is noted by i.")
+  ((at_start slice) +:+ S "properties convention is noted by i.")
   ]
   
 s4_1_2_p2 = Paragraph $ S "A" +:+ (phrase $ fbd ^. term) +:+ S "of the forces" +:+
-  S "acting on the slice is displayed in" +:+. (makeRef fig_forceacting)
+  S "acting on the" +:+ (phrase slice) +:+ S "is displayed in" +:+. (makeRef fig_forceacting)
 
 s4_1_2_fig1 = fig_indexconv
 
 fig_indexconv :: Contents
-fig_indexconv = Figure (S "Index convention for numbering slice and" +:+
-  S "interslice force variables")  "IndexConvention.png"
+fig_indexconv = Figure (S "Index convention for numbering" +:+ (phrase slice) +:+ S "and" +:+
+  (phrase intrslce) +:+ S "force variables")  "IndexConvention.png"
 
 s4_1_2_fig2 = fig_forceacting
 
 fig_forceacting :: Contents
-fig_forceacting = Figure (S "Forces acting on a slice") "ForceDiagram.png"
+fig_forceacting = Figure (S "Forces acting on a" +:+ (phrase slice)) "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
 s4_1_3 = SRS.goalStmt [s4_1_3_p1, s4_1_3_list] []
@@ -271,7 +279,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             S "along a given" +:+. phrase slpSrf),
   (S "GS2", S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
             S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
-  (S "GS3", S "Determine the displacement of the slope.")
+  (S "GS3", S "Determine the displacement of the" +:+. (phrase slope))
   ]
 
 -- SECTION 4.2 --
@@ -296,38 +304,39 @@ s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:
 s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "A1", S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the" +:+. (phrase slopeSrf) +:+ S "The" +:+ P (coords ^. symbol) +:+ 
-           S "coordinates of the failure surface follow a" +:+
-           S "monotonic function."),
-  (S "A2", S "The geometry of the slope, and the" +:+ (plural mtrlPrpty) +:+
-           S "of the" +:+ (plural soilLyr) +:+ S "are given as inputs."),
-  (S "A3", S "The different layers of the soil are homogeneous," +:+
+           S "coordinates of the failure" +:+ (phrase $ surface ^. term) +:+
+           S "follow a monotonic function."),
+  (S "A2", S "The geometry of the" +:+ (phrase slope) `sC` S "and the" +:+
+           (plural mtrlPrpty) +:+ S "of the" +:+ (plural soilLyr) +:+
+           S "are given as inputs."),
+  (S "A3", S "The different layers of the" +:+ (phrase soil) +:+ S "are homogeneous," +:+
            S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
            S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
   (S "A4", (at_start' soilLyr) +:+ S "are treated as if they have" +:+
            S "isotropic properties."),
-  (S "A5", S "Interslice normal and shear forces have a" +:+
+  (S "A5", (at_start intrslce) +:+ S "normal and shear forces have a" +:+
            S "linear relationship, proportional to a constant" +:+
            (sParen $ P $ lambda ^. symbol) +:+ S "and an" +:+
-           S "interslice force function" +:+ (sParen $ P $ fi ^. symbol) +:+
+           (phrase intrslce) +:+ S "force function" +:+ (sParen $ P $ fi ^. symbol) +:+
            S "depending on x position."),
-  (S "A6", S "Slice to base normal and shear forces have" +:+
+  (S "A6", (at_start slice) +:+ S "to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
            (phrase $ fs_rc ^. term) +:+ (sParen $ P $ fs ^. symbol) `sC`
            S "and the Coulomb sliding law."),
-  (S "A7", S "The stress-strain curve for interslice" +:+
-           S "relationships is linear with a constant slope."),
-  (S "A8", S "The slope and" +:+ (phrase slpSrf) +:+ S "extends far" +:+
-           S "into and out of the geometry (z coordinate)." +:+
+  (S "A7", S "The stress-strain curve for" +:+ (phrase intrslce) +:+
+           S "relationships is linear with a constant" +:+. (phrase slope)),
+  (S "A8", S "The" +:+ (phrase slope) +:+ S "and" +:+ (phrase slpSrf) +:+
+           S "extends far into and out of the geometry (z coordinate)." +:+
            S "This implies plane strain" +:+ (plural condition) `sC`
            S "making 2D analysis appropriate."),
   (S "A9", S "The effective normal stress is large enough" +:+
            S "that the resistive shear to effective normal" +:+
            S "stress relationship can be approximated as a" +:+
            S "linear relationship."),
-  (S "A10", S "The surface and base of a slice between" +:+
-            S "interslice nodes are approximated as" +:+
-            S "straight lines.")
+  (S "A10", S "The" +:+ (phrase $ surface ^. term) +:+ S "and base of a" +:+
+            (phrase slice) +:+ S "between" +:+ (phrase intrslce) +:+
+            S "nodes are approximated as straight lines.")
   ])
 
 -- SECTION 4.2.2 --
@@ -376,15 +385,15 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "data. Necessary input data summarized in" +:+.
             (makeRef table_inputdata)),
   (S "R2" , S "Generate potential" +:+ (phrase crtSlpSrf) :+:
-            S "'s for the input slope."),
+            S "'s for the input" +:+. (phrase slope)),
   (S "R3" , S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
             S "if they are physically realizable based" +:+
             S "on a set of pass or fail criteria."),
   (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a method" +:+
-            S "of slices or limit equilibrium analysis."),
+            S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R5" , S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+.
             (plural slpSrf)),
-  (S "R6" , S "Rank and weight the slopes based on their" +:+
+  (S "R6" , S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
             (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
             S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
             S "has a larger weighting."),
@@ -398,12 +407,12 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
             S "as the" +:+. (phrase crtSlpSrf)),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
-            S "method of slices or limit equilibrium analysis."),
+            S "method of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
             (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+
             S "method."),
   (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
-            S "slice element displacements graphically. Give" +:+
+            (phrase slice) +:+ (phrase element) +:+ S "displacements graphically. Give" +:+
             S "the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
             S "by the" +:+ (titleize morPrice) +:+ S "method.")
   ])

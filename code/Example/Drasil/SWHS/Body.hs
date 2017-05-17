@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, unit_)
+import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
@@ -672,8 +672,8 @@ s4_2_4 = section (titleize' dataDefn) [s4_2_4_intro, s4_2_4_DD1, s4_2_4_DD2,
   s4_2_4_DD3] []
 
 s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
-  S "defines all the data needed to build the" +:+. plural inModel +:+
-  S "The dimension of each quantity is also given.")
+  S "defines all the" +:+ plural datum +:+ S "needed to build the" +:+. plural inModel +:+
+  S "The dimension of each" +:+ phrase quantity +:+ S "is also given.")
 
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
@@ -864,16 +864,17 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the energy balance" +:+
 
 s4_2_6 = section (titleize' datum +:+ titleize' constraint) [s4_2_6_intro] []
 
-s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the data" +:+
-  plural constraint +:+ S "on the" +:+ phrase input_ +:+ S "and output" +:+
+s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural datum +:+
+  plural constraint +:+ S "on the" +:+ phrase input_ +:+ S "and" +:+ phrase output_ +:+
   plural variable :+: S ", respectively. The column for" +:+ phrase physical +:+
   plural constraint +:+ S "gives the" +:+ phrase physical +:+
-  S "limitations on the range of values that can be taken by the variable." +:+
+  plural limitation +:+ S "on the range of" +:+ plural value +:+ S "that can be taken by the" +:+.
+  phrase variable +:+
   S "The column for software" +:+ plural constraint +:+ S "restricts the" +:+
-  S "range of" +:+ plural input_ +:+ S "to reasonable values. The" +:+
-  plural constraint +:+ S "are conservative, to give the user of the" +:+ phrase model +:+
+  S "range of" +:+ plural input_ +:+ S "to reasonable" +:+. plural value +:+ S "The" +:+
+  plural constraint +:+ S "are conservative, to give the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+
   S "the flexibility to experiment with unusual situations. The column of" +:+
-  S "typical values is intended to provide a feel for a common scenario." +:+
+  S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario." +:+
   S "The uncertainty column provides an estimate of the confidence with" +:+
   S "which the" +:+ phrase physical +:+ S "quantities can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
@@ -918,7 +919,7 @@ s4_2_7 = section (of'' titleize' titleize property (a_ corSol)) (s4_2_7_deriv) [
 -- should be something like
 --s4_2_7 = section (of'' titleize' titleize property (corSol)) (s4_2_7_deriv) []
 
-s4_2_7_deriv = [Paragraph (S "A correct" +:+ phrase solution +:+ 
+s4_2_7_deriv = [Paragraph (S "A"+:+ phrase corSol +:+ 
   S "must exhibit the" +:+ (phrase $ law_cons_energy ^. term) :+:
   S ". This means that the" +:+ (phrase $ w_E ^. term) +:+
   S "should equal the difference between" +:+
@@ -1004,28 +1005,28 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   S "(from IM2).")),
 --
   ((short requirement) :+: S "5", Flat (S "Calculate and" +:+
-  S "output the" +:+ (phrase $ temp_W ^. term) +:+ S "(" :+: P (temp_W ^.
+  phrase output_ +:+ S "the" +:+ (phrase $ temp_W ^. term) +:+ S "(" :+: P (temp_W ^.
   symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
   S "over the simulation" +:+ (phrase $ time ^. term) +:+ S "(from IM1).")),
 --
   ((short requirement) :+: S "6", Flat (S "Calculate and" +:+ 
-  S "output the" +:+ (phrase $ temp_PCM ^. term) +:+ S "(" :+:
+  phrase output_ +:+ S "the" +:+ (phrase $ temp_PCM ^. term) +:+ S "(" :+:
   P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
   S ")) over the simulation" +:+ (phrase $ time ^. term) :+: 
   S " (from IM2).")),
 --
   ((short requirement) :+: S "7", Flat (S "Calculate and" +:+ 
-  S " output the" +:+ (phrase $ w_E ^. term) +:+ S "(" :+: P (w_E ^. 
+  phrase output_ +:+ S "the" +:+ (phrase $ w_E ^. term) +:+ S "(" :+: P (w_E ^. 
   symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
   S "over the simulation" +:+ (phrase $ time ^. term) +:+ S "(from IM3).")),
 --
   ((short requirement) :+: S "8", Flat (S "Calculate and" +:+ 
-  S "output the" +:+ (phrase $ pcm_E ^. term) +:+ S "(" :+: P (pcm_E ^.
+  phrase output_ +:+ S "the" +:+ (phrase $ pcm_E ^. term) +:+ S "(" :+: P (pcm_E ^.
   symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the" +:+
   S "simulation" +:+ (phrase $ time ^. term) +:+ S "(from IM4).")),
 --
   ((short requirement) :+: S "9", Flat (S "Verify that the" +:+
-  S "energy outputs (" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
+  S "energy" +:+ plural output_ :+: S "(" :+: P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
   symbol) :+: S ") and" +:+ P (pcm_E ^. symbol) :+: S "(" :+:
   P (time ^. symbol) :+: S ")) follow the" +:+
   (phrase $ law_cons_energy ^. term) :+: S ", as outlined in" +:+ 
@@ -1033,12 +1034,12 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   S "0.001%.")),
 --
   ((short requirement) :+: S "10", Flat (S "Calculate and" +:+ 
-  S "output the" +:+ (phrase $ time ^. term) +:+ S "at which the" +:+ 
+  phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+ S "at which the" +:+ 
   (short phsChgMtrl) +:+ S "begins to melt" +:+
   P (t_init_melt ^. symbol) +:+ S "(from IM2).")),
 --
   ((short requirement) :+: S "11", Flat (S "Calculate and" +:+ 
-  S "output the" +:+ (phrase $ time ^. term) +:+ S "at which the" +:+ 
+  phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+ S "at which the" +:+ 
   (short phsChgMtrl) +:+
   S "stops" +:+ (phrase $ melting ^. term) +:+
   EmptyS +:+ P (t_final_melt ^. symbol) +:+ S "(from IM2)."))])
@@ -1053,7 +1054,8 @@ s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_contents] []
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   `sC`
-  S "of this" +:+ phrase problem :+: S ", performance is not a priority." +:+
+  S "of this" +:+ phrase problem :+: S "," +:+ phrase performance +:+
+  S "is not a" +:+. phrase priority +:+
   S "Any reasonable implementation will be very quick and use" +:+
   S "minimal storage. Rather than performance, the priority" +:+
   plural nonfunctionalRequirement +:+ S "are correctness, verifiability" `sC`
@@ -1093,7 +1095,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   S " flexibility to the simulation, the" +:+ (phrase $ temp_init ^. term) +:+
   S "of the" +:+ (phrase $ water ^. term) :+: 
   S " and the" +:+ (short phsChgMtrl) +:+ S "could be" +:+.
-  S "allowed to have different values")),
+  S "allowed to have different" +:+ plural value)),
 --
   ((short likelyChg) :+: S "6", Flat (S "A15 - Any real" +:+
   (phrase $ tank ^. term) +:+ S "cannot be" +:+
@@ -1107,19 +1109,18 @@ s7 = section (titleize' traceyMandG) ([s7_intro1, s7_table1, s7_table2,
   s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
 s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
-  S "traceability matrices is to" +:+ 
-  S "provide easy references on what has to be additionally" +:+
-  S "modified if a certain component is changed. Every time a" +:+
-  S "component is changed, the items in the column of that" +:+
-  S "component that are marked with an" +:+ Quote (S "X") :+: 
-  S " should be modified as well." +:+ makeRef s7_table1 +:+
+  plural traceyMatrix +:+ S "is to provide easy" +:+
+  plural reference +:+ S "on what has to be additionally modified if a" +:+
+  S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
+  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
+  S "column of that" +:+ phrase component +:+ S "that are marked with an" +:+
+  Quote (S "X") :+: S " should be modified as well." +:+ makeRef s7_table1 +:+
   S "shows the dependencies of" +:+ plural thModel `sC`
   (plural genDefn) `sC` (plural dataDefn) `sC`
-  S "and" +:+ plural inModel +:+
-  S "with each other." +:+ makeRef s7_table2 +:+ S "shows the" +:+
-  S "dependencies of" +:+ plural inModel `sC`
+  S "and" +:+ plural inModel +:+ S "with each other." +:+ makeRef s7_table2 +:+
+  S "shows the dependencies of" +:+ plural inModel `sC`
   plural requirement `sC`
-  S "and data" +:+ plural constraint +:+ S "on each other." +:+ 
+  S "and" +:+ plural datum +:+ plural constraint +:+ S "on each other." +:+ 
   makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
   plural thModel `sC`
   (plural genDefn) `sC` 
@@ -1163,7 +1164,7 @@ s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS, S "X", EmptyS, EmptyS]]
-  (S "Traceability Matrix Showing the Connections Between Items" +:+
+  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+ S "Between Items" +:+
   S "of Different" +:+ titleize' section_) True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
@@ -1185,7 +1186,7 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
   [S "R9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS],
   [S "R10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "R11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
-  (S "Traceability Matrix Showing the Connections Between" +:+
+  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+
   (titleize' requirement) +:+ S "and" +:+ (titleize' inModel)) True
 
 s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
@@ -1248,7 +1249,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   [S "LC6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
   EmptyS, EmptyS]]
-  (S "Traceability Matrix Showing the Connections Between" +:+
+  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+
   (titleize' assumption) +:+ S "and Other Items") True
 
 -- These matrices can probably be generated automatically when enough info is
@@ -1257,35 +1258,39 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 -- Wrong DD reference above, change when DD4 is available
 
 s7_intro2 = [Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
-  S "traceability graphs is also to provide easy references on what has" +:+
-  S "to be additionally modified if a certain component is changed. The" +:+
-  S "arrows in the graphs represent dependencies. The component at the" +:+
-  S "tail of an arrow is depended on by the component at the head of" +:+
-  S "that arrow. Therefore, if a component is changed, the" +:+
-  S "components that it points to should also be changed." +:+
-  makeRef s7_fig1 +:+ S "shows the dependencies of" +:+
+  S "traceability" +:+ (plural $ graph ^. term) +:+ S "is also to provide easy" +:+
+  plural reference +:+ S "on what has to be additionally modified if a" +:+
+  S "certain" +:+ phrase component +:+ S "is changed. The arrows in the" +:+
+  (plural $ graph ^. term) +:+ S "represent dependencies. The" +:+ phrase component +:+
+  S "at the tail of an arrow is depended on by the" +:+ phrase component +:+
+  S "at the head of that arrow. Therefore, if a" +:+ phrase component +:+
+  S "is changed, the" +:+ plural component +:+ S "that it points to should" +:+
+  S "also be changed." +:+ makeRef s7_fig1 +:+ S "shows the dependencies" +:+
+  S "of" +:+
   plural thModel `sC`
   (plural genDefn) `sC`
   (plural dataDefn) `sC`
   (plural inModel) `sC`
   (plural likelyChg) `sC` S "and" +:+
   (plural assumption) +:+ S "on each" +:+
-  S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies" +:+
-  S "of" +:+ plural inModel `sC`
-  plural requirement `sC` S "and data" +:+
-  plural constraint +:+ S "on each other."),
+  S "other." +:+ makeRef s7_fig2 +:+ S "shows the dependencies of" +:+
+  plural inModel `sC`
+  plural requirement `sC` S "and data" +:+ plural constraint +:+
+  S "on each other."),
   Paragraph (S "NOTE: Building a tool to automatically generate" +:+
-  S "the graphical representation of the matrix by scanning the" +:+
-  S "labels and reference can be future work.")]
+  S "the graphical representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by" +:+
+  S "scanning the" +:+ plural label +:+ S "and" +:+ phrase reference +:+
+  S "can be future work.")]
 
 -- Same comments on this paragraph as I had for s7_intro1. 
 
-s7_fig1 = Figure (S "Traceability Graph Showing the Connections Between" +:+
-  S "Items of Different" +:+ titleize' section_) "ATrace.png"
+s7_fig1 = Figure (S "Traceability" +:+ (titleize $ graph ^. term) +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different" +:+
+  titleize' section_) "ATrace.png"
 
-s7_fig2 = Figure (S "Traceability Graph Showing the Connections Between" +:+
-  (titleize' requirement) `sC` titleize' inModel `sC`
-  S "and Data" +:+ titleize' constraint) "RTrace.png"
+s7_fig2 = Figure (S "Traceability" +:+ (titleize $ graph ^. term) +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ (titleize' requirement) `sC` titleize' inModel
+  `sC` S "and" +:+ titleize' datum +:+ titleize' constraint) "RTrace.png"
 
 --References?
 

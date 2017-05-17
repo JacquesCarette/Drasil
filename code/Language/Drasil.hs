@@ -82,7 +82,8 @@ module Language.Drasil (
   -- Generate
   , gen, genCode
   -- People
-  , People, Person, person, HasName, name, manyNames
+  , People, Person, person, HasName, name, manyNames, person', personWM
+  , personWM', mononym
 ) where
 
 import Prelude hiding (log, abs, sin, cos, tan, id, return, print, break)

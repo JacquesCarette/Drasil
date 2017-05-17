@@ -1,14 +1,18 @@
 {-# OPTIONS -Wall #-} 
+-- | Helper functions for printing
 module Language.Drasil.Printing.Helpers where
 
 import Text.PrettyPrint
 import Data.Char
 
---basic docs
+-- | Basic text-rendering helper function
 bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc
 bslash = text "\\"
+-- | Double backslash
 dbs    = text "\\\\"
+-- | "="
 assign = text "="
+-- | "=="
 eq     = text "=="
 lt     = text "<"
 gt     = text ">"
@@ -23,14 +27,16 @@ hyph   = text "-"
 tab    = text "\t"
 unders = text "_"
 
+-- | Text-rendering helper for wrapping strings with brackets/braces
 sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
 
+-- | indent helper
 indent :: Doc -> Doc
 indent = nest 4
 
---basic plaintext manipulation
+-- | basic plaintext (String) wrapping
 paren,brace,dollar,quotes,sqbrac,angbrac :: String -> String
 paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
@@ -39,12 +45,12 @@ quotes = \x -> "\"" ++ x ++ "\""
 sqbrac = \x -> "[" ++ x ++ "]"
 angbrac = \x -> "<" ++ x ++ ">"
 
---capitalize
+-- | String capitalization
 capitalize :: String -> String
 capitalize [] = []
 capitalize (c:cs) = toUpper c:map toLower cs
 
---format strings and convert -> Doc
+-- | Format strings and convert to Doc
 upcase, lowcase :: [Char] -> Doc
 upcase []      = text []
 upcase (c:cs)  = text $ toUpper c:cs --capitalize first letter of string

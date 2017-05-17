@@ -1,4 +1,4 @@
-{- re-export smart constructors for external code writing -}
+-- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
     Body, Class, StateVar, Value,
     bool,int,float,char,string,infile,outfile,listT,obj,

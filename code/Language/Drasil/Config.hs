@@ -1,35 +1,35 @@
+-- | Global configuration for output
+-- (This should be deprecated in the future as Recipes evolve)
 module Language.Drasil.Config where
 import Language.Drasil.Output.Formats
 
-
-expandSymbols :: Bool
-expandSymbols = True
-
---data SRSParams = SRSParams DocClass UsePackages
 data LPMParams = LPMParams DocClass UsePackages ExDoc
-
---srsTeXParams :: SRSParams
---srsTeXParams = defaultSRSparams
 
 lpmTeXParams :: LPMParams
 lpmTeXParams = defaultLPMparams
 
-tableWidth :: Double -- in cm
+-- | TeX table width in cm
+tableWidth :: Double
 tableWidth = 10.5
 
+-- | TeX font size
 fontSize :: Int
 fontSize = 12
 
+-- | Print verbose data definition descriptions?
 verboseDDDescription :: Bool
 verboseDDDescription = True
 
+-- | TeX Only - Number Data Definition equations?
 numberedDDEquations :: Bool
 numberedDDEquations = False -- Does not affect HTML
 
+-- | TeX Only - Number Theoretical Model equations?
 numberedTMEquations :: Bool
-numberedTMEquations = False -- TeX only
+numberedTMEquations = False
 
-numberedSections :: Bool -- TeX only
+-- | TeX Only - Numbered sections?
+numberedSections :: Bool
 numberedSections = True
 
 --TeX Document Parameter Defaults (can be modified to affect all documents OR
@@ -46,12 +46,13 @@ defaultLPMparams = LPMParams
   (UsePackages ["xr"])
   (ExDoc (Just "L-") "hghc_SRS")
   
---column width for data definitions (fraction of LaTeX textwidth)
+-- | TeX Only - column width for data definitions 
+-- (fraction of LaTeX textwidth)
 colAwidth, colBwidth :: Double
 colAwidth = 0.2
 colBwidth = 0.73
 
---settings for hyperref
+-- | TeX Only - Settings for hyperref
 hyperSettings :: String
 hyperSettings =
      "bookmarks=true,"     -- show bookmarks bar?
@@ -61,6 +62,6 @@ hyperSettings =
   ++ "filecolor=magenta,"  -- color of file links
   ++ "urlcolor=cyan"       -- color of external links
 
---split up generated code into source files based on modules
+-- | Split up generated code into source files based on modules
 splitSource :: Bool
 splitSource = True

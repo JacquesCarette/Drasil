@@ -10,7 +10,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, equation)
+import Data.Drasil.Concepts.Math (ode, equation, number)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Data.Drasil.Units.Thermodynamics
@@ -75,7 +75,7 @@ s4_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
             (phrase $ problemDescription ^. term) :+: S ", which gives a high-level view of the" +:+
             (phrase $ problem ^. term) +:+ S "to be solved. This is followed by the" +:+
-            (phrase $ solutionCharSpec ^. term) :+: S ", which presents the" +:+
+            (plural $ solutionCharSpec ^. term) :+: S ", which presents the" +:+
             (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
             (plural $ definition ^. term) +:+ S "and finally the" +:+
             (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
@@ -123,7 +123,7 @@ s4_1_3_intro = Paragraph $
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = section ((titleize $ solutionCharSpec ^. term)) 
+s4_2 = section ((titleize' $ solutionCharSpec ^. term)) 
   [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $
@@ -141,7 +141,7 @@ s4_2_1_intro = Paragraph $
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
            S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
            S "by filling in the missing" +:+ (phrase $ information ^. term) +:+
-           S "for the" +:+. (phrase $ physicalSystem ^. term) +:+ S "The" +:+ (plural $ information ^. term)+:+
+           S "for the" +:+. (phrase $ physicalSystem ^. term) +:+ S "The" +:+ (plural $ number ^. term)+:+
            S "given in the square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
             (map (\ch -> (phrase $ ch ^. term) +:+ S "[" :+:
             (getAcc ch) :+: S "]") [thModel, genDefn, dataDefn, inModel])) `sC` 

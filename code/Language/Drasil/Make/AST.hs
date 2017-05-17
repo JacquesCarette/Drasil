@@ -1,3 +1,4 @@
+-- | Makefile abstract syntax tree
 module Language.Drasil.Make.AST where
 
 data Makefile = M [Rule]

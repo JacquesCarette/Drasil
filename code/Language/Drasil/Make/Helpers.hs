@@ -2,7 +2,7 @@ module Language.Drasil.Make.Helpers where
 
 import Text.PrettyPrint
 
-
+-- | Helper for rendering OS-specific extensions
 osDefinitions :: Doc
 osDefinitions = text "ifeq \"$(OS)\" \"Windows_NT\"" $+$
                 text "\tTARGET_EXTENSION=.exe" $+$
@@ -20,5 +20,6 @@ osDefinitions = text "ifeq \"$(OS)\" \"Windows_NT\"" $+$
                 text "endif" $+$
                 text ""
 
+-- | Helper for prepending common features to a Makefile
 addCommonFeatures :: Doc -> Doc
 addCommonFeatures m = osDefinitions $+$ m

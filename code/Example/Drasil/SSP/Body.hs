@@ -22,6 +22,7 @@ import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.SolidMechanics
@@ -215,18 +216,12 @@ s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
   (titleize crtSlpSrf, 
       (at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
       (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure."),
-  (titleize $ stress ^. term, 
-      stress ^. defn),
-  (titleize $ strain ^. term, 
-      strain ^. defn),
-  (S "Normal Force", 
-      S "A force applied perpendicular to the plane of the material."),
-  (S "Shear Force", 
-      S "A force applied parallel to the plane of the material."),
-  (titleize $ tension ^. term, 
-      tension ^. defn),
-  (titleize $ compression ^. term, 
-      compression ^. defn),
+  (titleize $ stress ^. term,      stress ^. defn),
+  (titleize $ strain ^. term,      strain ^. defn),
+  (titleize $ normForce ^. term,   normForce ^. defn),
+  (titleize $ shearForce ^. term,  shearForce ^. defn),
+  (titleize $ tension ^. term,     tension ^. defn),
+  (titleize $ compression ^. term, compression ^. defn),
   (S "Plane Strain", 
       S "The resultant stresses in one of the directions of a" +:+
       S "3 dimensional material can be approximated as 0. Results" +:+

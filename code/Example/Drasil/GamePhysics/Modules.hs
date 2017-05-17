@@ -2,14 +2,12 @@ module Drasil.GamePhysics.Modules where
 
 import Control.Lens ((^.))
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Utils (foldlSent, foldlList)
 import Data.Drasil.Concepts.Physics (rigidBody, velocity, position, friction, 
     elasticity)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Software.Products
---import Data.Drasil.Concepts.Software
 import Data.Drasil.Modules
 
 import Drasil.GamePhysics.Concepts
@@ -37,9 +35,9 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 mod_body_serv :: ConceptChunk
 mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
     (foldlSent [S "Stores the", (plural physicalProperty), 
-    S "of an object, such as", (phrase $ mass ^. term) `sC` 
-    (phrase $ position ^. term) `sC` S "rotation" `sC` 
-    (phrase $ velocity ^. term) `sC` S "etc, and provides operations on", 
+    S "of an object, such as", (foldlList [(phrase $ mass ^. term), 
+    (phrase $ position ^. term), S "rotation", 
+    (phrase $ velocity ^. term), S "etc", S "provides operations on"]), 
     (plural $ rigidBody ^. term) `sC` S "such as setting the", 
     (phrase $ mass ^. term), S "and", 
     (phrase $ velocity ^. term), S "of the body"])
@@ -177,8 +175,9 @@ mod_bb = makeImpModule mod_bb_serv
 mod_trans_serv :: ConceptChunk
 mod_trans_serv = dccWDS "mod_trans_serv" (nounPhraseSP "transform matrix")
     (S "Provides constructors for affine transformation matrices, matrix " :+:
-    S "operations such as inverse, transpose, multiplications, and " :+:
-    S "operations for applying transformations to vectors and bounding boxes.")
+    S "operations such as" +:+ (foldlList [S "inverse", S "transpose", 
+    S "multiplications", S "operations"]) +:+ 
+    S "for applying transformations to vectors and bounding boxes.")
 
 mod_trans :: ModuleChunk
 mod_trans = makeImpModule mod_trans_serv

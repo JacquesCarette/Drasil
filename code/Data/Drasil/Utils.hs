@@ -1,12 +1,13 @@
 module Data.Drasil.Utils
   ( foldle
   , foldlSent
+  , foldlList
   , mkEnumAbbrevList
   , mkConstraintList
   ) where
 
 import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), 
-                        NamedIdea, getAcc)
+                        NamedIdea, getAcc, sC)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -16,9 +17,21 @@ foldle _ g z [x]    = g z x
 foldle f g z [x,y]  = g (f z x) y
 foldle f g z (x:xs) = foldle f g (f z x) xs
 
+-- | fold helper functions applied f to all but last element, applies g to last
+-- element and accumulator without starting value, does not work for empty list
+foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
+foldle1 _ _ [] = error "foldle1 cannot be used with empty list"
+foldle1 _ _ [x]    = x
+foldle1 _ g [x,y]  = g x y
+foldle1 f g (x:y:xs) = foldle f g (f x y) xs
+
 -- | partial function application of foldle for sentences specifically
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
+
+-- | creates a list of elements seperated by commas, ending in a "_, and _"
+foldlList :: [Sentence] -> Sentence
+foldlList = foldle1 sC (\a b -> a `sC` S "and" +:+ b)
 
 -- | concantenates number to abbreviation
 -- should not be exported

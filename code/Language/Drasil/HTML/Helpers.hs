@@ -7,22 +7,35 @@ import Data.List (intersperse)
 import Language.Drasil.Document (Document)
 import Language.Drasil.HTML.AST (Expr)
 
+
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
+-- | HTML tag wrapper
 html      = wrap "html" []
+-- | Head tag wrapper
 head_tag  = wrap "head" []
+-- | Body tag wrapper
 body      = wrap "body" []
+-- | Title tag wrapper
 title     = wrap "title" []
+-- | Paragraph tag wrapper
 paragraph = wrap "p" ["paragraph"]
+-- | Code tag wrapper
 code      = wrap "code" ["code"]
+-- | Table row tag wrapper
 tr        = wrap "tr" []
+-- | Table header tag wrapper
 th        = wrap "th" []
+-- | Table cell tag wrapper
 td        = wrap "td" []
 
+-- | Helper for HTML headers
 h :: Int -> Doc -> Doc
 h n       | n < 0 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = wrap ("h"++show n) []
 
+-- | Helper for wrapping HTML tags.
+-- The second argument provides class names for the CSS.
 wrap :: String -> [String] -> Doc -> Doc
 wrap s [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
@@ -31,34 +44,45 @@ wrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
   in vcat [tb s, x, te s]
-  
+
+-- | Helper for setting up captions  
 caption :: String -> Doc
 caption t = wrap "p" ["caption"] (text t)
 
+-- | Helper for setting up references
 refwrap :: String -> Doc -> Doc
 refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
+-- | Helper for setting up links to references
 reflink :: String -> String -> String
 reflink ref txt = "<a href=#" ++ ref ++ ">" ++ txt ++ "</a>"
 
+-- | Helper for setting up figures
 image :: String -> String -> Doc
 image f c = 
   text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"></img>"
 
 sub,sup :: String -> String  
+-- | Subscript tag
 sub = \x -> "<sub>" ++ x ++ "</sub>"
+-- | Superscript tag
 sup = \x -> "<sup>" ++ x ++ "</sup>"
 
 article_title, author :: Doc -> Doc
+-- | Title header
 article_title t = div_tag ["title"]  (h 1 t)
+-- | Author header
 author a        = div_tag ["author"] (h 2 a)
 
+-- | Div tag wrapper
 div_tag :: [String] -> Doc -> Doc
 div_tag = wrap "div"
   
+-- | Span tag wrapper
 span_tag :: [String] -> String -> Doc
 span_tag = \t -> wrap "span" t . text
 
+-- | Generates the CSS selectors necessary for a document
 makeCSS :: Document -> Doc  
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
@@ -133,19 +157,23 @@ makeCSS _ = vcat [
   text ".figure {max-width: 800px;}"
   ]
 
+-- | Create the link to the necessary CSS file
 linkCSS :: String -> Doc  
 linkCSS fn = 
   text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"
 
+-- | Create and markup fractions
 fraction :: String -> String -> String  
 fraction a b =
   render $ div_tag ["fraction"] (span_tag ["fup"] a $$ span_tag ["fdn"] b)
 
+-- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> String) -> String
 cases ps p_expr = render $ (span_tag ["casebr"] "{" $$ div_tag ["cases"] 
                   (makeCases ps p_expr) $$
                   span_tag ["casebr"] "}")
 
+-- | Build case expressions
 makeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 
 makeCases [] _ = empty
 makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) ++ " , " ++

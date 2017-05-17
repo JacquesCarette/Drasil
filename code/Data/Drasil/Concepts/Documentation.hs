@@ -37,7 +37,7 @@ analysis, appendix, characteristic, client, column, component,
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, symbol_, system, table_, template, 
   terminology, theory, traceyMatrix, user, useCase, value, variable, 
-  video, verification:: NPNC
+  video, verification, uncertainty :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -109,6 +109,7 @@ template        = npnc "template"       (cn' "template")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
+uncertainty     = npnc "uncertainty"    (cn' "uncertainty")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
 value           = npnc "value"          (cn' "value") --general enough to be in Documentation?

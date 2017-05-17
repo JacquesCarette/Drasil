@@ -8,7 +8,7 @@ import Language.Drasil.HTML.Import (makeDocument)
 import Language.Drasil.HTML.AST
 import Language.Drasil.Output.Formats (DocType(..))
 import Language.Drasil.Spec (USymb(..))
--- import Config (srsTeXParams, lpmTeXParams, tableWidth, colAwidth, colBwidth)
+
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.Unicode
@@ -18,10 +18,12 @@ import Language.Drasil.HTML.Monad
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
+-- | Generate an HTML document from a Drasil 'Document'
 genHTML :: DocType -> L.Document -> Doc
 genHTML (Website fn) doc = build fn $ makeDocument doc
 genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
 
+-- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc
 build fn (Document t a c) = 
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
@@ -31,6 +33,7 @@ build fn (Document t a c) =
   $$ print c
   ))
   
+-- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
 printLO (HDiv ts layoutObs l)   = refwrap (p_spec l) $ 
                                   div_tag ts (vcat (map printLO layoutObs))
@@ -44,12 +47,16 @@ printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 printLO (Module m l)            = makeModule m (p_spec l)
 
+-- | Called by build, uses 'printLO' to render the layout 
+-- objects in Doc format.
 print :: [LayoutObj] -> Doc
 print l = foldr ($$) empty $ map printLO l
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
 -----------------------------------------------------------------
+-- | Renders the title of the document. Different than body rendering
+-- because certain things can't be rendered in an HTML title.
 title_spec :: Spec -> String
 title_spec (N s)      = t_symbol s
 title_spec (a :+: b)  = title_spec a ++ title_spec b
@@ -59,6 +66,7 @@ title_spec (a :/: b)  = brace (p_spec a) ++ "/" ++ brace (p_spec b)
 title_spec HARDNL     = ""
 title_spec s          = p_spec s
 
+-- | Renders the Sentences in the HTML body (called by 'printLO')
 p_spec :: Spec -> String
 p_spec (E e)      = p_expr e
 p_spec (a :+: b)  = p_spec a ++ p_spec b
@@ -74,11 +82,13 @@ p_spec HARDNL     = "<br />"
 p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
 p_spec EmptyS     = ""
 
+-- | Renders symbols for HTML title
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
+-- | Renders symbols for HTML body
 symbol :: Symbol -> String
 symbol (Atomic s)  = s
 symbol (Special s) = unPH $ special s
@@ -104,6 +114,7 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
+-- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
@@ -125,6 +136,7 @@ p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
 
+-- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
 mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b
 mul a@(Sub _ _) b = paren (p_expr a) ++ p_expr b
@@ -140,6 +152,7 @@ mul x y@(Sym (Atomic s)) = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
                             p_expr x ++ p_expr y
 mul a b         = p_expr a ++ p_expr b
 
+-- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
 divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
@@ -147,6 +160,7 @@ divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
 divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d = p_expr n ++ "/" ++ p_expr d
 
+-- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
 neg a@(Var _) = "-" ++ p_expr a
 neg a@(Dbl _) = "-" ++ p_expr a
@@ -158,26 +172,30 @@ neg a         = paren ("-" ++ p_expr a)
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------
-  
+
+-- | Renders HTML table, called by 'printLO'
 makeTable :: Tags -> [[Spec]] -> String -> Bool -> String -> Doc
 makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
 makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
     tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
+-- | Helper for creating table rows
 makeRows :: [[Spec]] -> Doc
 makeRows []     = empty
 makeRows (c:cs) = tr (makeColumns c) $$ makeRows cs
 
-
 makeColumns, makeHeaderCols :: [Spec] -> Doc
+-- | Helper for creating table header row (each of the column header cells)
 makeHeaderCols ls = vcat $ map (th . text . p_spec) ls
 
+-- | Helper for creating table columns
 makeColumns ls = vcat $ map (td . text . p_spec) ls
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
+-- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,LayoutObj)] -> String -> Doc
 makeDefn _ [] _   = error "Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
@@ -185,6 +203,7 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
 
+-- | Helper for making the definition table rows
 makeDRows :: [(String,LayoutObj)] -> Doc
 makeDRows []         = error "No fields to create defn table"
 makeDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
@@ -194,6 +213,7 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
+-- | Renders lists
 makeList :: ListType -> Doc
 makeList (Simple items) = div_tag ["list"] 
   (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ ": ") <> (p_item e)))) items)
@@ -205,6 +225,7 @@ makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
 makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
 
+-- | Helper for rendering list items
 p_item :: ItemType -> Doc  
 p_item (Flat s) = text $ p_spec s
 p_item (Nested s l) = vcat [text (p_spec s),makeList l]
@@ -212,13 +233,14 @@ p_item (Nested s l) = vcat [text (p_spec s),makeList l]
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
-
+-- | Renders figures in HTML
 makeFigure :: String -> String -> String -> Doc
 makeFigure r c f = refwrap r (image f c $$ caption c)
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
+-- | Renders expression operations/functions. 
 p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
@@ -231,20 +253,24 @@ p_op Abs _ = error "Abs should only take one expr."
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
+-- | Helper for summation bound creation, used by 'p_op'
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String
 makeBound (Just ((s,v),hi)) = sub (symbol s ++"="++ p_expr v) ++ sup (p_expr hi)
 makeBound Nothing = ""
 
+-- | Helper for integration bound creation, used by 'p_op'
 makeIBound :: (Maybe Expr, Maybe Expr) -> String
 makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
 makeIBound (Just low, Nothing)   = sub (p_expr low)
 makeIBound (Nothing, Just high)  = sup (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
 
+-- | Helper for rendering binary infix operators, used by 'p_op'
 binfix_op :: Function -> [Expr] -> String
 binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
 binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
                    "number of operands (should be 2)"
 
+-- | Renders modules
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

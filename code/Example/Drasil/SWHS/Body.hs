@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng)
+import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng, equation)
 import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -203,7 +203,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "should have a strong knowledge in heat transfer" +:+. phrase theory +:+
   S "A third or fourth year Mechanical Engineering course on this topic is" +:+
   S "recommended. The" +:+ plural reviewer +:+ S "should also have an" +:+
-  S "understanding of differential equations, as typically covered in" +:+
+  S "understanding of differential" +:+ (plural $ equation ^. term) +:+ S ", as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
   S "as explained in" +:+. (makeRef s3_2))
@@ -226,7 +226,7 @@ s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   S "additional" +:+ phrase information +:+ S "they require. The" +:+
   (plural inModel) +:+ S "provide" +:+
   S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+:
-  S "s) and algebraic equations that" +:+ phrase model +:+ S "the" +:+.
+  S "s) and algebraic" +:+ (plural $ equation ^. term) +:+ S "that" +:+ phrase model +:+ S "the" +:+.
   (phrase $ swhs_pcm ^. term) +:+ (short progName) +:+
   S "solves these" +:+ (short ode) :+: S "s."),
   --FIXME: Update refineChain after fixing goalStmt and thModel
@@ -581,7 +581,7 @@ s4_2_2 = section (titleize' thModel)
   [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 
 s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
-  S "the" +:+ phrase general +:+ S "equations and laws that" +:+
+  S "the" +:+ phrase general +:+ (plural $ equation ^. term) +:+ S "and laws that" +:+
   (short progName) +:+ S "is based on.")
 
 -- General paragraph (besides progName), repeated in all examples. Can be 
@@ -879,10 +879,10 @@ s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural d
   S "the flexibility to experiment with unusual situations. The" +:+ phrase column +:+
   S "of" +:+
   S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario." +:+
-  S "The uncertainty" +:+ phrase column +:+ S "provides an estimate of the confidence with" +:+
+  S "The" +:+ phrase uncertainty +:+ phrase column +:+ S "provides an estimate of the confidence with" +:+
   S "which the" +:+ phrase physical +:+ plural quantity +:+ S "can be measured." +:+
   S "This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
-  S "if one were performing an uncertainty quantification exercise. (The" +:+
+  S "if one were performing an" +:+ phrase uncertainty +:+ S "quantification exercise. (The" +:+
   plural table_ +:+ S "are left out because features they should use are" +:+
   S "not yet implemented in Drasil.)")
 
@@ -949,13 +949,13 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
   (C temp_PCM) [C time]))) time)),
-  Paragraph (S "Equations (reference) and (reference) can be" +:+
+  Paragraph ((titleize' $ equation ^. term) +:+ S "(reference) and (reference) can be" +:+
   S "used as" +:+ Quote (S "sanity") :+: S "checks to gain" +:+ 
   S "confidence in any" +:+ phrase solution +:+ S "computed by" +:+
   (short progName) :+: S ". The relative error between the results" +:+
   S "computed by" +:+ (short progName) +:+ S "and the" +:+
   S "results calculated from the" +:+ (short rightSide) :+: 
-  S " of these equations should be less than 0.001% (R9).")]
+  S " of these" +:+ (plural $ equation ^. term) +:+ S "should be less than 0.001% (R9).")]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).
@@ -1085,7 +1085,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 --
   ((short likelyChg) :+: S "2", Flat (S "A8 - The" +:+ (phrase $ temp_C ^.
   term) +:+ S "will change over the course of the day, depending" +:+.
-  S "on the energy received from the sun")),
+  S "on the" +:+ (phrase $ energy ^. term) +:+ S "received from the sun")),
 --
   ((short likelyChg) :+: S "3", Flat (S "A9 - The" +:+ (phrase $ temp_C ^. 
   term) +:+ S "will actually change along its length as the" +:+

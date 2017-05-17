@@ -7,6 +7,8 @@ import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..))
 
+-- | Internal HTML version of Expr 
+-- (for converting 'Language.Drasil.Expr.Expr')
 data Expr = Var   Variable
           | Dbl   Double
           | Int   Integer
@@ -27,6 +29,8 @@ data Expr = Var   Variable
           | Op Function [Expr]
           | Grouping Expr
           
+-- | Internal HTML version of Function 
+-- (for converting Functions from 'Language.Drasil.Expr')
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
            | Abs
@@ -39,6 +43,8 @@ data Function = Log
            | Cot
            | Cross
 
+-- | Internal HTML version of Sentence 
+-- (for converting 'Language.Drasil.Spec.Sentence')
 infixr 5 :+:
 data Spec where
   E :: Expr -> Spec
@@ -55,6 +61,8 @@ data Spec where
   Ref :: RefType -> Spec -> Spec
   EmptyS :: Spec
 
+-- | Internal HTML version of Document
+-- (for converting 'Language.Drasil.Document.Document')
 data Document = Document Title Author [LayoutObj]
 type Title    = Spec
 type Author   = Spec
@@ -65,6 +73,8 @@ type Label    = Spec
 type Filepath = String
 type Caption  = Spec
 
+-- | Internal HTML version of LayoutObj 
+-- (for converting 'Language.Drasil.LayoutObj.LayoutObj')
 data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Header Int Contents
                | Paragraph Contents

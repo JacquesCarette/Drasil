@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 
-import Language.Drasil 
+import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
@@ -437,7 +437,7 @@ s6_2_5_intro = Paragraph $
   (makeRef s6_2_5_table2) :+: S ") gives the" +:+ plural value +:+ S "of the specification" +:+ (plural $ parameter ^. term) +:+
   S "used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
   S ")." +:+ 
-  (P $ ar_max ^. symbol) +:+ S "refers to the" +:+
+  (P $ ar_max ^. symbol) +:+ S "refers to the" +:+ --FIXME: Issue #167
   (phrase $ ar_max ^. term) +:+. S "for the plate of glass"
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
@@ -463,13 +463,13 @@ s6_2_5_intro = Paragraph $
 --  (S "Table 2: Input Variables") True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
-  [(\x -> P $ fst x), (\x -> snd x)] 
-  [(dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb sd)), 
-  (dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)),(ar_max ^. symbol, S "5"), 
-  (cWeightMin ^. symbol, S "4.5" +:+ Sy (unit_symb cWeightMin)),
-  (cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
-  (sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
-  (sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
+  [(\x -> fst x), (\x -> snd x)] 
+  [(P $ dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb sd)), 
+  (P $ dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)), ((P $ ar_max ^. symbol), S "5"), 
+  (P $ cWeightMin ^. symbol, S "4.5" +:+ Sy (unit_symb cWeightMin)),
+  (P $ cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
+  (P $ sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
+  (P $ sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
   (titleize table_ +:+ S "3:" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ titleize' value) True
 
 s6_2_5_intro2 = Paragraph $

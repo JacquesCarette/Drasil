@@ -10,7 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
-import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng, equation)
+import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng, equation, change)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
 

@@ -891,8 +891,8 @@ s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural d
 ---- The info from table 2 will likely end up in table 1.
 
 inputVar :: [UWrapper]
-inputVar = map uw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map uw [coil_SA,
+inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P] ++ [uw htFusion] ++ map ucw [coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
   
 -- Typical values and constraints must be added to UC definitions for mkTable

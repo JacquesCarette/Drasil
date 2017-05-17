@@ -543,7 +543,7 @@ s7_1_list =
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++
-    [Flat $ (phrase $ lRe ^. term) +:+ sParen(P $ lRe ^. symbol) +:+ 
+    [Flat $ (phrase $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
     sParen (makeRef (Definition (Theory calOfCap)))] ++
     [Flat $ (phrase $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
     sParen (makeRef (Definition (Theory calOfDe)))] ++

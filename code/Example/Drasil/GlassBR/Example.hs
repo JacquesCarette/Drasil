@@ -316,7 +316,7 @@ t2descr =
   S "considered safe. " :+: (P $ is_safe1 ^. symbol) :+: S " (from " :+:
   (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
   (P $ is_safe2 ^. symbol) :+: S " are either both True or both False. " :+:   
-  (P $ lRe ^. symbol) :+: S " is the " :+: (phrase $ lRe ^. term) :+: 
+  (short lResistance) :+: S " is the " :+: (phrase $ lResistance ^. term) :+: 
   S " (also called capacity, as defined in " :+: 
   (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
   (P $ demand ^. symbol) :+: S " (also referred as the " :+: (titleize $ demandq ^. term)
@@ -349,7 +349,7 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (P $ lRe ^. symbol) :+: S " is the " :+: (phrase $ lRe ^. term) :+: S ", which " :+:
+  (short lResistance) :+: S " is the " :+: (phrase $ lResistance ^. term) :+: S ", which " :+:
   S "is also called capacity. " :+: (P $ nonFL ^. symbol) :+: S " is the " :+:
   (phrase $ nonFL ^. term) :+: S ". " :+: (short glassTypeFac) :+: S " is the " :+:
   (phrase $ glassTypeFac ^. term) :+: S ". " :+: (short lShareFac) :+: S " is the " :+:

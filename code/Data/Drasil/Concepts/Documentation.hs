@@ -144,7 +144,7 @@ characteristicSpecification, generalSystemDescription, indPRCase,
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
   solutionCharSpec, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicsLibrary, physicalProperty :: NPNC
+  useCaseTable, physicalProperty :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -165,7 +165,6 @@ nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
 offShelfSolution             = compoundNPNC offShelf solution
 physicalSim                  = compoundNPNC physical simulation
-physicsLibrary               = compoundNPNC physics library
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
 softwareDoc                  = compoundNPNC software documentation

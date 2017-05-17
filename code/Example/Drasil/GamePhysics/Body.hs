@@ -236,9 +236,9 @@ s4_1 = section (titleize problemDescription) [s4_1_intro] [s4_1_1, s4_1_2]
 
 s4_1_intro = Paragraph $ foldlSent 
   [S "Creating a gaming", (phrase $ physLib ^. term),
-  S "is a difficult task.", (titleize' game), S "need", (plural physicsLibrary), 
-  S "that simulate", S "objects acting under various", (phrase physical), 
-  S "conditions, while", 
+  S "is a difficult task.", (titleize' game), S "need", 
+  (plural $ physLib ^. term), S "that simulate", 
+  S "objects acting under various", (phrase physical), S "conditions, while", 
   S "simultaneously being fast and efficient enough to work in soft",
   (phrase realtime), S "during the" +:+. (phrase game), S "Developing a", 
   (phrase $ physLib ^. term),
@@ -246,7 +246,7 @@ s4_1_intro = Paragraph $ foldlSent
   S "presenting barriers of entry which make it difficult for", (phrase game),
   S "developers to include", (phrase physics), 
   S "in their" +:+. (plural product_), S "There are a few", S "free,", (phrase openSource), 
-  S "and high quality", (plural physicsLibrary), S "available to",
+  S "and high quality", (plural $ physLib ^. term), S "available to",
   S "be used for consumer", (plural product_) +:+. (sParen $ makeRef s7),
   S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase $ rigidBody ^. term), (phrase $ physLib ^. term) `sC`
@@ -648,15 +648,15 @@ s7 = section (titleize' offShelfSolution) [s7_intro, s7_2dlist,
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
   S "there already exist free" +:+ (phrase openSource) +:+ (phrase game) +:+
-  (plural physicsLibrary)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
-  (plural physicsLibrary) +:+ S "are:"
+  (plural $ physLib ^. term)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
+  (plural $ physLib ^. term) +:+ S "are:"
 
 s7_2dlist = Enumeration (Bullet [
   Flat (S "Box2D: http://box2d.org/"),
   Flat (S "Nape" +:+ (titleize physics) +:+ S "Engine: http://napephys.com/")])
 
 s7_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
-        S "3D", (phrase game), (plural physicsLibrary), S "include:"]
+        S "3D", (phrase game), (plural $ physLib ^. term), S "include:"]
 
 s7_3dlist = Enumeration (Bullet $ map (Flat) [
   (S "Bullet: http://bulletphysics.org/"),

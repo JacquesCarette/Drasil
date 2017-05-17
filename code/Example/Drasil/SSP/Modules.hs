@@ -9,6 +9,7 @@ import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation
+import Data.Drasil.Software.Products
 
 import Drasil.SSP.Units
 import Drasil.SSP.Defs

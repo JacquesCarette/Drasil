@@ -273,7 +273,7 @@ s6_1_1_intro = Paragraph $
   S "are extracted from [4] in" +:+. (makeRef s10)
 
 s6_1_1_bullets = Enumeration $ (Number $ 
-  [Flat $ ((at_start $ aR ^. term) :+: sParenDash (short aspectR)) :+: 
+  [Flat $ ((at_start $ aR ^. term) :+: sParenDash (P $ ar ^. symbol)) :+: 
   (aR ^. defn)] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
   [Nested (((titleize $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)

@@ -18,34 +18,6 @@ import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 
-{-- Concept Chunks for Modules  --}
-
-mod_seq_serv :: ConceptChunk
-mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
-    (S "Provides array manipulation operations, such as building an array" `sC`
-    S "accessing a specific entry, slicing an array, etc.")
-
-mod_linked_serv :: ConceptChunk
-mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
-    (S "Provides tree manipulation operations, such as building a tree" `sC`
-    S "accessing a specific entry, etc.")
-
-mod_assoc_serv :: ConceptChunk
-mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
-    (S "Provides operations on hash tables, such as building a hash table" `sC`
-    S "accessing a specific entry, etc.")
-
-mod_vector_serv :: ConceptChunk
-mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
-    (S "Provides vector operations such as addition, scalar and vector" +:+
-    S "multiplication, dot and cross products, rotations, etc.")
-    
-mod_plot_desc :: ConceptChunk
-mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
-
-mod_outputf_desc_fun :: Sentence -> ConceptChunk
-mod_outputf_desc_fun desc = dccWDS "mod_outputf_desc" (cn' "output format")
-    (S "Outputs the results of the calculations, including the" +:+ desc)
 
 {-- Module Chunks --}
 

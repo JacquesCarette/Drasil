@@ -2,6 +2,7 @@ module Drasil.SWHS.Modules where
 import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Concepts
+import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Modules
@@ -102,11 +103,11 @@ mod_ctrl = mod_ctrl_fun swhsProg [mod_hw, mod_inputp,
 --         S "in the " :+: (short srs) :+: S ".") Nothing
 
 -- Sequence Data Structure Module
-mod_seq_desc :: ConceptChunk
-mod_seq_desc = dccWDS "mod_seq_desc" (nounPhraseSP "sequence data structure")
-  (S "Provides array manipulation" :+:
-  S ", including building an array, accessing a specific entry" :+:
-  S ", slicing an array, etc.")
+--mod_seq_desc :: ConceptChunk
+--mod_seq_desc = dccWDS "mod_seq_desc" (nounPhraseSP "sequence data structure")
+--  (S "Provides array manipulation" :+:
+--  S ", including building an array, accessing a specific entry" :+:
+--  S ", slicing an array, etc.")
 
 mod_seq :: ModuleChunk
 mod_seq = mod_seq_fun matlab []
@@ -123,9 +124,9 @@ mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
           [mod_seq] (Just mod_sw)
 
 -- Plotting Module
-mod_plot_desc :: ConceptChunk
-mod_plot_desc = dcc "mod_plot_desc" (nounPhraseSP "plotting")
-  "Provides a plot function."
+--mod_plot_desc :: ConceptChunk
+--mod_plot_desc = dcc "mod_plot_desc" (nounPhraseSP "plotting")
+--  "Provides a plot function."
 
 mod_plot :: ModuleChunk
 mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:

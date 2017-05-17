@@ -30,9 +30,9 @@ analysis, appendix, characteristic, client, column, component, computer,
   condition, constraint_, connection, context, customer, datum, definition, 
   dependency, description, design, document, documentation, element, 
   environment, figure, functional, game, general, individual, information, 
-  input_, intReader, introduction, item, label, library, limitation, module_, 
-  model, name_, nonfunctional, offShelf, open, organization, output_, 
-  performance, physics, physical, priority, problem, product_, project, 
+  input_, intReader, introduction, item, label, library, limitation, matlab,
+  module_, model, name_, nonfunctional, offShelf, open, organization, os, 
+  output_, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, structure, symbol_, system, table_, template, 
@@ -73,6 +73,7 @@ item            = npnc "item"           (cn' "item")
 label           = npnc "label"          (cn' "label")
 library         = npnc "library"        (cnIES "library")
 limitation      = npnc "limitation"     (cn' "limitation")
+matlab          = npnc' "matlab"        (pn' "MATLAB programming language") "MATLAB"
 module_         = npnc "module"         (cn' "module")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
@@ -80,6 +81,7 @@ nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjecti
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
+os              = npnc' "os"            (cn' "operating system") "OS"
 output_         = npnc "output"         (cn' "output")
 performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
@@ -120,6 +122,8 @@ video           = npnc "video"          (cn' "video")
 verification    = npnc "verification"   (cn' "verification")
 realtime        = npnc "real-time"      (cn' "real-time")
 
+
+
 orgOfDoc, prpsOfDoc, refmat, sciCompS, scpOfReq, scpOfTheProj,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR :: NPNC
 
@@ -144,7 +148,7 @@ characteristicSpecification, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
   solutionCharSpec, offShelfSolution, videoGame, physicalSim, productUC, 
   useCaseTable, openSource, physicsLibrary, physicalProperty, dataStruct,
-  dataStruct', dataType, dataType' :: NPNC
+  dataStruct', dataType, dataType', inDatum, outDatum :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -177,3 +181,5 @@ dataStruct                   = compoundNPNC'' plural phrase datum structure
 dataStruct'                  = compoundNPNC'' plural plural datum structure
 dataType                     = compoundNPNC'' plural phrase datum type_
 dataType'                    = compoundNPNC'' plural plural datum type_
+inDatum                      = compoundNPNC input_ datum
+outDatum                     = compoundNPNC output_ datum

@@ -10,7 +10,6 @@ algorithm, calculation, diameter, equation, euclidN, euclidSpace, gradient,
 ode :: CINP
 
 --FIXME: Make some of these definitions better.
-
 algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++

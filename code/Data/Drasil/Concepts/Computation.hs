@@ -4,10 +4,16 @@ import Language.Drasil
 import Control.Lens((^.))
 import Data.Drasil.Concepts.Documentation
 
-os, structure :: NPNC
 
+algorithm :: ConceptChunk
+algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations"
+
+
+
+os, structure, type_ :: NPNC
 os              = npnc' "os"            (cn' "operating system") "OS"
 structure       = npnc "structure"      (cn' "structure")
+type_           = npnc "type"           (cn' "type")
 
 
 

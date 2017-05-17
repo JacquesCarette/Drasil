@@ -19,16 +19,15 @@ module Language.Drasil.Code.Imperative.AST (
     block,defaultValue,
     true,false,
     var, svToVar,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
-    (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
-    ifelse,excThrow,excTryCatch,alwaysDel,neverDel,
+    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,   (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
+    alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,params,
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,
+    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,
     toAbsCode, getClassName
 ) where
 
@@ -362,15 +361,6 @@ v $. f = ObjAccess v f
 infixl 8 $:
 n $: e = EnumElement n e
 
-ifelse :: [(Value, Body)] -> Body -> Statement
-ifelse g e = CondState $ If g e
-
-excThrow :: String -> Statement
-excThrow m = ExceptState $ Throw m
-
-excTryCatch :: Body -> Body -> Statement
-excTryCatch t c = ExceptState $ TryCatch t c
-
 alwaysDel :: Int
 alwaysDel = 4
 
@@ -532,6 +522,8 @@ objMethodCallVoid o f = objMethodCall o f []
 valStmt :: Value -> Statement
 valStmt = ValState
 
+funcApp :: Label -> [Value] -> Value
+funcApp l p = FuncApp l p
 -----------------------
 -- Comment Functions --
 -----------------------

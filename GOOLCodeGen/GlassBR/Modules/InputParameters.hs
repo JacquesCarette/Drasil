@@ -2,6 +2,7 @@ module Modules.InputParameters (inputParameters) where
 
 import Language.Drasil.Code
 
+-- TODO:  improve gool support for lists
 variables :: [StateVar]
 variables = [ 
     pubMVar 4 float "a",

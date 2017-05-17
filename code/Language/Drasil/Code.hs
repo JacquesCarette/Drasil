@@ -6,7 +6,7 @@ module Language.Drasil.Code (
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),
     (#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
-    ifelse,excThrow,excTryCatch,alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
+    alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
     forEach,ifCond,ifExists,listDec,listDecValues,listOf,litBool,litChar,
     litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,
     params,print,printLn,printStr,printStrLn,printFile,printFileLn,printFileStr,
@@ -14,7 +14,7 @@ module Language.Drasil.Code (
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
     convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
-    objDecNewVoid,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,
+    objDecNewVoid,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,
     cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel,
     makeCode, createCodeFiles, toAbsCode, getClassName,
     Options(..)

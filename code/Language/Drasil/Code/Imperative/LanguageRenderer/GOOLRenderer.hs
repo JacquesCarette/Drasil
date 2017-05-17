@@ -83,9 +83,8 @@ goolstateType _ (Base Character) _ = text "char"
 goolstateType _ (Base String) _ = text "string"
 goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
-goolstateType _ (Base (File _)) _ = error $
-  "goolstateType undefined for _ (Base (File _)) _ pattern. See " ++ 
-  "Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer"
+goolstateType _ (Base (File In)) _ = text "infile"
+goolstateType _ (Base (File Out)) _ = text "outfile"
 
 gooltop :: Config -> Label -> a -> b -> Doc
 gooltop c hsMod _ _ = vcat [

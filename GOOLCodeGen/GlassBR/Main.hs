@@ -3,6 +3,7 @@ module Main where
 import Language.Drasil.Code
 import Modules.InputParameters
 import Modules.InputConstraints
+import Modules.InputFormat
 
 main :: IO()
 main = do
@@ -17,5 +18,5 @@ genCode lang = createCodeFiles $ makeCode
   (toAbsCode "GlassBR" classes)
 
 classes :: [Class]
-classes = [inputParameters, inputConstraints]
+classes = [inputParameters, inputConstraints, inputFormat]
 

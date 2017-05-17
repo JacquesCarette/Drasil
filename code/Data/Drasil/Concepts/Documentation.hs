@@ -36,8 +36,8 @@ analysis, appendix, characteristic, client, column, component, computer,
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, structure, symbol_, system, table_, template, 
-  terminology, theory, traceyMatrix, user, useCase, value, variable, video, 
-  verification :: NPNC
+  terminology, theory, traceyMatrix, type_, user, useCase, value, variable, 
+  video, verification :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -111,6 +111,7 @@ template        = npnc "template"       (cn' "template")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
+type_           = npnc "type"           (cn' "type")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
 value           = npnc "value"          (cn' "value") --general enough to be in Documentation?
@@ -143,7 +144,7 @@ characteristicSpecification, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
   solutionCharSpec, offShelfSolution, videoGame, physicalSim, productUC, 
   useCaseTable, openSource, physicsLibrary, physicalProperty, dataStruct,
-  dataStruct' :: NPNC
+  dataStruct', dataType, dataType' :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -174,3 +175,5 @@ softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification
 dataStruct                   = compoundNPNC'' plural phrase datum structure
 dataStruct'                  = compoundNPNC'' plural plural datum structure
+dataType                     = compoundNPNC'' plural phrase datum type_
+dataType'                    = compoundNPNC'' plural plural datum type_

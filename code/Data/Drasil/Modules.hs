@@ -14,6 +14,8 @@ module Data.Drasil.Modules
   ) where
 
 import Language.Drasil
+import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 
 {-- Concept Chunks for Modules  --}
@@ -49,27 +51,28 @@ mod_outputf_desc_fun desc = dccWDS "mod_outputf_desc" (cn' "output format")
 
 mod_hw :: ModuleChunk
 mod_hw = makeImpModule hwHiding
-    (S "The data structure and algorithm used to implement the virtual" +:+
-    S "hardware.")
-    os
-    []
-    []
-    []
-    Nothing
+  (foldlSent [S "The", (plural $ dataStruct), 
+  S "and algorithm used to implement the virtual",
+  S "hardware"])
+  os
+  []
+  []
+  []
+  Nothing
 
 -- Behaviour Hiding Module
 mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule modBehavHiding
-    (S "The contents of the required behaviors.")
-    Nothing
+  (S "The contents of the required behaviors.")
+  Nothing
 
 -- sfwr desc module
 mod_sw :: ModuleChunk
 mod_sw = makeUnimpModule modSfwrDecision
-    (S "The design decision based on mathematical theorems, physical facts" `sC`
-    S "or programming considerations. The secrets of this module are" +:+
-    S "not described in the SRS.")
-    Nothing
+  (S "The design decision based on mathematical theorems, physical facts" `sC`
+  S "or programming considerations. The secrets of this module are" +:+
+  S "not described in the SRS.")
+  Nothing
 
 -- Control module
 mod_ctrl_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
@@ -84,7 +87,7 @@ mod_ctrl_fun impl depnd = makeImpModule modControl
 -- parameterize inputf and inputp into one mod_input?
 mod_io_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
 mod_io_fun impl depnd desc cChunk= makeImpModule cChunk
-  (S "The format and structure of the" +:+. desc)
+  (foldlSent [S "The format and", (phrase structure), S "of the", desc])
   impl
   []
   []
@@ -93,57 +96,62 @@ mod_io_fun impl depnd desc cChunk= makeImpModule cChunk
 
 mod_seq_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_seq_fun impl depnd = makeImpModule mod_seq_serv 
-    (S "The data structure for a sequence data type.") 
-    impl
-    []
-    []
-    depnd
-    (Just mod_sw)
+  (foldlSent [S "The", (plural $ dataStruct), S "for a sequence", 
+  (plural dataType)]) 
+  impl
+  []
+  []
+  depnd
+  (Just mod_sw)
 
 mod_linked_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_linked_fun impl depnd = makeImpModule mod_linked_serv
-    (S "The data structure for a linked data type.")
-    impl
-    []
-    []
-    depnd
-    (Just mod_sw)
+  (foldlSent [S "The", (plural $ dataStruct), S "for a linked", 
+  (plural dataType)])
+  impl
+  []
+  []
+  depnd
+  (Just mod_sw)
 
 mod_assoc_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_assoc_fun impl depnd = makeImpModule mod_assoc_serv
-    (S "The data structure for an associative data type.")
-    impl
-    []
-    []
-    depnd
-    (Just mod_sw)
+  (foldlSent [S "The", (plural $ dataStruct), S "for an associative", 
+  (plural dataType)])
+  impl
+  []
+  []
+  depnd
+  (Just mod_sw)
 
 mod_vector_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_vector_fun impl depnd = makeImpModule mod_vector_serv
-    (S "The data structure representing vectors.")
-    impl
-    []
-    []
-    depnd
-    (Just mod_sw)
-    
+  (foldlSent [S "The", (plural $ dataStruct), S "representing vectors"])
+  impl
+  []
+  []
+  depnd
+  (Just mod_sw)
+
+
 mod_plot_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_plot_fun impl depnd = makeImpModule mod_plot_desc
-  (S "The data structures and algorithms for plotting data graphically")
-   impl
-   []
-   []
-   depnd
-   (Just mod_sw)
+  (foldlSent [S "The", (plural $ dataStruct'), 
+  S "and algorithms for plotting data graphically"])
+  impl
+  []
+  []
+  depnd
+  (Just mod_sw)
    
 mod_rng_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ModuleChunk
 mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random number generator") desc)
   (S "Pseudo-random number generation algorithm.")
-   impl
-   []
-   []
-   depnd
-   (Just mod_sw)
+  impl
+  []
+  []
+  depnd
+  (Just mod_sw)
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

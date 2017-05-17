@@ -21,8 +21,8 @@ foldle f g z (x:xs) = foldle f g (f z x) xs
 -- element and accumulator without starting value, does not work for empty list
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ [] = error "foldle1 cannot be used with empty list"
-foldle1 _ g [x]    = x
-foldle1 f g [x,y]  = g x y
+foldle1 _ _ [x]    = x
+foldle1 _ g [x,y]  = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
 -- | partial function application of foldle for sentences specifically

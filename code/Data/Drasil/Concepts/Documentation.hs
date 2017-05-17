@@ -146,8 +146,7 @@ characteristicSpecification, generalSystemDescription, indPRCase,
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
   solutionCharSpec, offShelfSolution, videoGame, physicalSim, productUC, 
-  useCaseTable, openSource, physicsLibrary, physicalProperty, dataStruct,
-  dataStruct', dataType, dataType', inDatum, outDatum :: NPNC
+  useCaseTable, openSource, physicsLibrary, physicalProperty :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -176,9 +175,3 @@ openSource                   = compoundNPNC open source
 softwareDoc                  = compoundNPNC software documentation
 softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification
-dataStruct                   = compoundNPNC'' plural phrase datum structure
-dataStruct'                  = compoundNPNC'' plural plural datum structure
-dataType                     = compoundNPNC'' plural phrase datum type_
-dataType'                    = compoundNPNC'' plural plural datum type_
-inDatum                      = compoundNPNC input_ datum
-outDatum                     = compoundNPNC output_ datum

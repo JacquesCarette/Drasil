@@ -182,10 +182,10 @@ mod_sps_desc = dccWDS "mod_sps_desc" (cn' "slice property sorter")
   (S "When performing slip analysis with the RFEM Solver Module" +:+
    S "or" +:+ (titleize morPrice) +:+ S "Module" `sC` S "the base and" +:+ 
    (phrase intrslce) +:+ (plural $ surface ^. term) +:+ S "of each" +:+
-   (phrase slice) +:+ S "in the" +:+ S "analysis requires a soil constant." +:+
-   (titleize $ mod_sps_desc ^. term) +:+ S "Module identifies which" +:+
-   (phrase soilLyr) +:+ S "the surface is in" +:+ S "to assign" +:+
-   (plural property) +:+ S "from that" +:+ (phrase soilLyr) `sC`
+   (phrase slice) +:+ S "in the" +:+ S "analysis requires a" +:+ (phrase soil) +:+
+   S "constant." +:+ (titleize $ mod_sps_desc ^. term) +:+ S "Module identifies which" +:+
+   (phrase soilLyr) +:+ S "the" +:+ (phrase $ surface ^. term) +:+ S "is in" +:+
+   S "to assign" +:+ (plural property) +:+ S "from that" +:+ (phrase soilLyr) `sC`
    S "and uses a weighting scheme when the" +:+ (phrase $ surface ^. term) +:+
    S "crosses multiple" +:+. (plural soilLyr))
 

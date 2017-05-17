@@ -89,6 +89,7 @@ library
     , Language.Drasil.Chunk.Req
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Unital
+    , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.VarChunk
     , Language.Drasil.Chunk.Wrapper
     , Language.Drasil.Chunk.Wrapper.QSWrapper

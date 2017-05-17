@@ -32,7 +32,9 @@ module Language.Drasil (
   , QDefinition(..), fromEqn, fromEqn', getVC
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromVC
-  , Unital(..), uc, uc'
+  , uc, uc'
+  -- Chunk.Unitary
+  , Unitary(..), UnitaryChunk, unitary, unitary'
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC
   -- Chunk.Method
@@ -50,7 +52,7 @@ module Language.Drasil (
   --Chunk.Wrapper
   , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
   --Chunk.UWrapper 
-  , UWrapper, uw
+  , UWrapper, uw, ucw, UCWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen
   , (+:+), (+:+.), sC, (+:)
@@ -103,7 +105,8 @@ import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromVC
-                                  , uc, uc', Unital(..))
+                                  , uc, uc')
+import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, makeRC)
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC

@@ -4,10 +4,10 @@ import Language.Drasil
 import Control.Lens((^.))
 import Data.Drasil.Concepts.Documentation
 
-os :: NPNC
+os, structure :: NPNC
 
 os              = npnc' "os"            (cn' "operating system") "OS"
-
+structure       = npnc "structure"      (cn' "structure")
 
 
 

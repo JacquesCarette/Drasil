@@ -31,11 +31,11 @@ analysis, appendix, characteristic, client, column, component, computer,
   dependency, description, design, document, documentation, element, 
   environment, figure, functional, game, general, individual, information, 
   input_, intReader, introduction, item, label, library, limitation,
-  module_, model, name_, nonfunctional, offShelf, open, organization, os, 
+  module_, model, name_, nonfunctional, offShelf, open, organization, 
   output_, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
-  specification, stakeholder, structure, symbol_, system, table_, template, 
+  specification, stakeholder, symbol_, system, table_, template, 
   terminology, theory, traceyMatrix, type_, user, useCase, value, variable, 
   video, verification :: NPNC
 
@@ -80,7 +80,6 @@ nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjecti
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
-os              = npnc' "os"            (cn' "operating system") "OS"
 output_         = npnc "output"         (cn' "output")
 performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
@@ -104,7 +103,6 @@ software        = npnc "software"       (cn' "software")
 specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
 stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
-structure       = npnc "structure"      (cn' "structure")
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
@@ -145,8 +143,8 @@ characteristicSpecification, generalSystemDescription, indPRCase,
   specificsystemdescription, systemdescription, systemConstraint, sysCont, 
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
-  solutionCharSpec, offShelfSolution, videoGame, physicalSim, productUC, 
-  useCaseTable, openSource, physicsLibrary, physicalProperty :: NPNC
+  solutionCharSpec, offShelfSolution, physicalSim, productUC, 
+  useCaseTable, physicsLibrary, physicalProperty :: NPNC
   
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
@@ -170,8 +168,6 @@ physicalSim                  = compoundNPNC physical simulation
 physicsLibrary               = compoundNPNC physics library
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
-videoGame                    = compoundNPNC video game
-openSource                   = compoundNPNC open source
 softwareDoc                  = compoundNPNC software documentation
 softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification

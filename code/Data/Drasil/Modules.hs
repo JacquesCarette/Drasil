@@ -17,6 +17,8 @@ import Language.Drasil
 import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Software.Products
+import Data.Drasil.Concepts.Computation
 
 
 {-- Module Chunks --}

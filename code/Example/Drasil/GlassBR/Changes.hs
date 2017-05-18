@@ -11,33 +11,29 @@ lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]
 ucs :: [UCChunk]
 ucs = [uc1, uc2, uc3, uc4, uc5]
 
+
+{-Likely Changes-}
+
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8 :: LCChunk
 
 lc1 = lcHW
 
 lc2 = lcInputF mod_inputf
 
-lc3 = LCChunk ( nw $ npnc "parameters" (nounPhraseSP 
-  "The format of the input parameters.")
-  ) [mod_inputp]
+lc3 = lcInputP mod_inputp
 
 lc4 = lcOutputF mod_outputf
 
-lc5 = LCChunk ( 
-  nw $ npnc "equations" (nounPhraseSP 
-  "How the equations are defined using the input parameters.")
-  ) [mod_calc]
+lc5 = lcEqns mod_calc
 
 lc6 = lcCtrl mod_ctrl (nounPhraseSP "How the overall control of the calculations is orchestrated.")
 
-lc7 = LCChunk ( nw $ npnc "interpd" (nounPhraseSP
-  "The format of the data used for interpolation.")
-  ) [mod_interpd]
+lc7 = lcInterpd mod_interpd
 
-lc8 = LCChunk ( nw $ npnc "interp" (nounPhraseSP
-  "The algorithm used for interpolation.")
-  ) [mod_interp]
+lc8 = lcInterp mod_interp
 
+
+{-Unlikely Changes-}
 
 uc1, uc2, uc3, uc4, uc5 :: UCChunk
 

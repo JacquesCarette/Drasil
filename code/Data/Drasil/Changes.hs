@@ -12,8 +12,8 @@ lcHW      = LCChunk (nw $ npnc "hardware" (nounPhraseSP
 lcCtrl :: ModuleChunk -> NP -> LCChunk
 lcCtrl mod_ctrl ctrlDefn = LCChunk (nw $ npnc "control" (ctrlDefn)) [mod_ctrl]
 
-lcInputF, lcOutputF, lcArray, lcRng, lcPlot, lcVect, lcTree, 
-  lcHash :: ModuleChunk -> LCChunk
+lcInputF, lcOutputF, lcInputP, lcArray, lcRng, lcPlot, lcVect, lcTree, 
+  lcHash, lcInterp, lcInterpd, lcEqns :: ModuleChunk -> LCChunk
   
 lcInputF  mod_inputf  = LCChunk (nw $ npnc "input" (nounPhraseSP
   "The format of the initial input data.")
@@ -23,6 +23,10 @@ lcOutputF mod_outputf = LCChunk (nw $ npnc "output" (nounPhraseSP
   "The format of the final output data.")
   ) [mod_outputf]
   
+lcInputP  mod_inputp  = LCChunk ( nw $ npnc "parameters" (nounPhraseSP 
+  "The format of the input parameters.")
+  ) [mod_inputp]
+
 lcArray   mod_sds     = LCChunk (nw $ npnc "array" (nounPhraseSP
   "The implementation for the sequence (array) data structure.")
   ) [mod_sds]
@@ -46,6 +50,18 @@ lcHash    mod_asso    = LCChunk (nw $ npnc "hash table" (nounPhraseSP $
 lcVect   mod_vect     = LCChunk (nw $ npnc "vector" (nounPhraseSP $ 
   "The implementation of mathematical vectors."))
   [mod_vect]
+
+lcInterp  mod_interp  = LCChunk ( nw $ npnc "interp" (nounPhraseSP
+  "The algorithm used for interpolation.")
+  ) [mod_interp]
+
+lcInterpd mod_interpd = LCChunk ( nw $ npnc "interpd" (nounPhraseSP
+  "The format of the data used for interpolation.")
+  ) [mod_interpd]
+
+lcEqns    mod_calc    = LCChunk (nw $ npnc "equations" (nounPhraseSP 
+  "How the equations are defined using the input parameters.")
+  ) [mod_calc]
 
 {-Unlikely Changes-}
 

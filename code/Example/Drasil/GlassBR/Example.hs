@@ -18,6 +18,9 @@ import Prelude hiding (log, id)
 ---- FIXME: having id "" and term "" is completely bogus, and should not
 -- be allowed.  This implicitly says that something here does not make sense.
 
+fixme :: String
+fixme = "FIXME: Define this or remove the need for definitions"
+
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
   act_thick, sflawParamK, sflawParamM, demand, sd, sd_max, sd_min, nom_thick,
@@ -28,33 +31,33 @@ plate_len, plate_width, dim_max, dim_min, mod_elas, act_thick, sflawParamK,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitalChunk
 
 plate_len   = uc' "plate_len" (nounPhraseSP "plate length (long dimension)")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lA millimetre
 plate_width = uc' "plate_width" (nounPhraseSP "plate width (short dimension)")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lB millimetre
 dim_max     = uc' "dim_max" 
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub lD (Atomic "max")) millimetre
 dim_min     = uc' "dim_min" 
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub lD (Atomic "min")) millimetre
 mod_elas    = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   cE kilopascal
 act_thick   = uc' "act_thick" (nounPhraseSP "actual thickness")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lH millimetre
 sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lK sFlawPU
 sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lM sFlawPU
 demand      = uc' "demand" (nounPhraseSP "applied load (demand)")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lQ kilopascal
 sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
   (S "The distance from the glazing surface to the" +:+
@@ -62,45 +65,45 @@ sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
   S "the coordinates (SDx, SDy, SDz).")
   (Atomic "SD") metre
 sdx         = uc' "sdx" (nounPhraseSP "stand off distance (x-component)")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (sd ^. symbol) lX) metre
 sdy         = uc' "sdy" (nounPhraseSP "stand off distance (y-component)")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (sd ^. symbol) lY) metre
 sdz         = uc' "sdz" (nounPhraseSP "stand off distance (z-component)")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (sd ^. symbol) lZ) metre
 sd_max      = uc' "sd_max" 
   (nounPhraseSP "maximum stand off distance permissible for input") 
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (sd ^. symbol) (Atomic "max")) metre
 sd_min      = uc' "sd_min" 
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (sd ^. symbol) (Atomic "min")) metre
 nom_thick   = uc' "nom_thick" (nounPhraseSP $ 
   "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lT millimetre
 load_dur    = uc' "load_dur" (nounPhraseSP "duration of load")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub lT lD) second
 char_weight = uc' "char_weight" (cn' "charge weight")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   lW kilogram
 cWeightMax  = uc' "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (char_weight ^. symbol) 
   (Atomic "max")) kilogram
 cWeightMin  = uc' "cWeightMin" 
   (nounPhraseSP "minimum permissible input charge weight")
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (char_weight ^. symbol) (Atomic "min")) kilogram
 eqTNTWeight = uc' "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
-  "FIXME: Define this or remove the need for definitions"
+  fixme
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
 glassBRUnitless :: [VarChunk]
@@ -266,7 +269,7 @@ eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "equivalent TNT charge mass")
 sD            = dccWDS "sD" (nounPhraseSP "stand off distance") (sd ^. defn)
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
 blast         = dcc "blast" (cn' "blast") "any kind of man-made explosion"
-blastRisk     = dcc "blastRisk" (nounPhraseSP "blast risk") "FIXME: Define this or remove the need for definitions"
+blastRisk     = dcc "blastRisk" (nounPhraseSP "blast risk") fixme
 blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")

@@ -368,7 +368,7 @@ s6_2_1_list =
   (Enumeration $ Simple $ mkEnumAbbrevList 5 (short assumption) s6_2_1_list_assum2)]
   --equation in sentence
 
-s6_2_1_list_asumm1 :: [Sentence]
+s6_2_1_list_assum1 :: [Sentence]
 s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for", 
   (phrase $ calculation ^. term),
   S "applies only to monolithic, laminated, or insulating",
@@ -389,22 +389,21 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   (S "Standard" +:+ plural value +:+ S "used for" +:+
   (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")]
 
-
 s6_2_1_list_assum2 :: [Sentence]
-s6_2_1_list_assum2 = [(S "Glass under consideration" +:+ S "is assumed to be a single" +:+.
-  (phrase $ lite ^. term) +:+ S "Hence the" +:+ phrase value +:+ S "of" +:+ 
-  (short lShareFac) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
-  +:+ S "in" +:+. (gLassBR ^. defn)),
-  (S "Boundary" +:+ plural condition +:+
-  S "for the" +:+ (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
-  +:+ S "support for" +:+. (plural $ calculation ^. term)),
-  (S "The response type considered in" +:+ (gLassBR ^. defn) +:+. 
-  S "is flexural"),
-  (S "With" +:+ phrase reference +:+ S "to A4 the" +:+ phrase value +:+ 
-  S "of" +:+ (phrase $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
-  S "is a constant in" +:+. (gLassBR ^. defn) +:+ S "It is calculated by the" +: 
-  (phrase $ equation ^. term) +:+ --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
-  S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")]
+s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration", 
+  S "is assumed to be a single" +:+. (phrase $ lite ^. term), S "Hence the",
+  phrase value, S "of", (short lShareFac), S "is equal to 1 for all", 
+  (plural $ calculation ^. term), S "in", (gLassBR ^. defn)]),
+  (foldlSent [S "Boundary", plural condition, S "for the", 
+  (phrase $ glaSlab ^. term), S "is assumed to be 4-sided",
+  S "support for", (plural $ calculation ^. term)]),
+  (foldlSent [S "The response type considered in", (gLassBR ^. defn), 
+  S "is flexural"]),
+  (foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
+  S "of", (phrase $ loadDF ^. term), sParen (P $ loadDF ^. symbol), 
+  S "is a constant in" +:+. (gLassBR ^. defn), S "It is calculated by the" +: 
+  (phrase $ equation ^. term), --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
+  S ". Using this" `sC` (P $ loadDF ^. symbol), S "= 0.27"])]
 
 
 s6_2_2 = SRS.thModel (s6_2_2_TMods) []

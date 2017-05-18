@@ -114,7 +114,7 @@ s2_1 = SRS.prpsOfDoc [s2_1_p1, s2_1_p2] []
 
 s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
   S "determines the" +:+ (phrase crtSlpSrf) `sC` S "and it's respective" +:+ 
-  (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method) +:+ S "of assessing the stability of a slope" +:+. 
+  (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ S "of assessing the stability of a slope" +:+. 
   (phrase design) +:+ S "The" +:+ (phrase $ program ^. term) +:+ 
   S "is intended to be used as an educational tool for" +:+
   S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
@@ -385,7 +385,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R3" , S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
             S "if they are physically realizable based" +:+
             S "on a set of pass or fail criteria."),
-  (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method) +:+
+  (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
             S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R5" , S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+.
             (plural slpSrf)),
@@ -403,14 +403,14 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
             S "as the" +:+. (phrase crtSlpSrf)),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
-            (phrase method)  +:+ S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+            (phrase method_)  +:+ S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
             (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
-            (phrase method)),
+            (phrase method_)),
   (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
             (phrase slice) +:+ (phrase element) +:+ S "displacements graphically. Give" +:+
             S "the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
-            S "by the" +:+ (titleize morPrice) +:+. (phrase method))
+            S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ])
   
 s5_1_table = table_inputdata

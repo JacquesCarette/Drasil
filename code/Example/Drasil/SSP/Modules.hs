@@ -146,7 +146,7 @@ mod_mp_desc :: ConceptChunk
 mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
   (S "Calculates the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a given" +:+
    (phrase slpSrf) `sC`S "through implementation of a" +:+ (titleize morPrice) +:+
-   (phrase ssa) +:+. (phrase method))
+   (phrase ssa) +:+. (phrase method_))
 
 mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
@@ -164,7 +164,7 @@ mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
    (phrase slice) +:+ (plural $ fs_rc ^. term) `sC` S "and local" +:+
    (phrase slice) +:+ S "displacements of a given" +:+ (phrase slpSrf) +:+
    S "under given conditions, through implementation of a" +:+
-   (phrase rgFnElm) +:+ (phrase ssa) +:+. (phrase method))
+   (phrase rgFnElm) +:+ (phrase ssa) +:+. (phrase method_))
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc

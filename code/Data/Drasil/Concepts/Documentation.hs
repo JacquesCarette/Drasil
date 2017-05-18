@@ -30,7 +30,7 @@ analysis, appendix, characteristic, client, column, component,
   condition, constraint_, connection, context, customer, datum, definition, 
   dependency, description, design, document, documentation, element, 
   environment, figure, functional, game, general, individual, information, 
-  input_, intReader, introduction, item, label, library, limitation, method,
+  input_, intReader, introduction, item, label, library, limitation, method_,
   module_, model, name_, nonfunctional, offShelf, open, organization, 
   output_, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
@@ -72,7 +72,7 @@ item            = npnc "item"           (cn' "item")
 label           = npnc "label"          (cn' "label")
 library         = npnc "library"        (cnIES "library")
 limitation      = npnc "limitation"     (cn' "limitation")
-method          = npnc "method"         (cn' "method")
+method_         = npnc "method"         (cn' "method")
 module_         = npnc "module"         (cn' "module")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")

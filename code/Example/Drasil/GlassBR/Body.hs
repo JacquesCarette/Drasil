@@ -51,8 +51,8 @@ s2_intro, s2_2_intro, s3_intro,
 s2_1_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
 srs_authors, mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
-srs_authors = manyNames [nikitha,spencerSmith]
-mg_authors = manyNames [spencerSmith,thulasi]
+srs_authors = manyNames [nikitha, spencerSmith]
+mg_authors = manyNames [spencerSmith, thulasi]
 
 authors :: People
 authors = [nikitha, spencerSmith]
@@ -65,7 +65,7 @@ glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
-  map Verbatim [s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
+  map Verbatim [s2, s3, s4, s5, s6, s7, s8, s9, s10, s11]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [CQSWrapper])
@@ -268,12 +268,12 @@ s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
 
 s6_1_1 = SRS.termAndDefn [s6_1_1_intro, s6_1_1_bullets] []
   
-s6_1_1_intro = Paragraph $ 
-  S "This subsection provides a list of terms that are used in subsequent" +:+
-  plural section_ +:+ S "and their meaning, with the" +:+ phrase purpose +:+
+s6_1_1_intro = Paragraph $ foldlSent [
+  S "This subsection provides a list of terms that are used in subsequent",
+  plural section_, S "and their meaning, with the", phrase purpose,
   S "of reducing ambiguity and making it easier to correctly understand the" +:+. 
-  (plural requirement) +:+ S "All of the terms" +:+
-  S "are extracted from [4] in" +:+. (makeRef s10)
+  (plural requirement), S "All of the terms are extracted from [4] in" +:+.
+  (makeRef s10)]
 
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ ((at_start $ aspectR ^. term) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} :+: -- conceptually correct to call abbreviation as a symbol?
@@ -312,9 +312,9 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_2 = SRS.physSyst [s6_1_2_intro, s6_1_2_list, 
   fig_glassbr] []
 
-s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLassBR ^. defn) 
-  +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` S "includes the" +:+
-  S "following" +: plural element
+s6_1_2_intro = Paragraph $ foldlSent [S "The", phrase physicalSystem, S "of", 
+  (gLassBR ^. defn), S "as shown in", (makeRef fig_glassbr) `sC` S "includes the", 
+  S "following" +: plural element]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
@@ -347,15 +347,15 @@ s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_,
   
 s6_2_1 = SRS.assump ([s6_2_1_intro] ++ (s6_2_1_list)) []
 
-s6_2_1_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "simplifies the original" +:+ phrase problem +:+
-  S "and helps in developing the" +:+ (phrase thModel) +:+ S "[" :+: (short thModel) :+:
-  S "] by filling in the missing" +:+ phrase information +:+ S "for the" +:+.
-  phrase physicalSystem +:+ S "The numbers given in the" +:+ 
-  S "square brackets refer to the" +:+ (phrase dataDefn) +:+ S "[" :+:
-  (short dataDefn) :+: S "], or" +:+ phrase inModel +:+ S "[" :+: 
-  (short inModel) :+: S "], in which the respective" +:+ (phrase assumption) 
-  +:+. S "is used"
+s6_2_1_intro = Paragraph $ foldlSent [
+  S "This", phrase section_, S "simplifies the original", phrase problem, 
+  S "and helps in developing the", (phrase thModel), S "[" :+: (short thModel) :+:
+  S "] by filling in the missing", phrase information, S "for the" +:+.
+  phrase physicalSystem, S "The numbers given in the",
+  S "square brackets refer to the", (phrase dataDefn), S "[" :+:
+  (short dataDefn) :+: S "], or", phrase inModel, S "[" :+: 
+  (short inModel) :+: S "], in which the respective", (phrase assumption) 
+  +:+. S "is used"]
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) s6_2_1_list_assum1),
@@ -423,9 +423,9 @@ s6_2_3_IMods = map Definition (map Theory iModels)
 s6_2_4 = SRS.dataDefn
   ((s6_2_4_intro):(s6_2_4_DDefns)) []
 
-s6_2_4_intro = Paragraph $ 
-  S "This" +:+ phrase section_ +:+ S "collects and defines all the" +:+ 
-  plural datum +:+ S "needed to build the" +:+. plural inModel
+s6_2_4_intro = Paragraph $ foldlSent [
+  S "This", phrase section_, S "collects and defines all the", 
+  plural datum, S "needed to build the" +:+. plural inModel]
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
@@ -500,20 +500,20 @@ s7 = SRS.require [] [s7_1, s7_2]
 
 s7_1 = SRS.funcReq ([s7_1_intro] ++ (s7_1_list)) []
 
-s7_1_intro = Paragraph $
-  S "The following" +:+ phrase section_+:+ S "provides the" +:+ 
-  plural functionalRequirement `sC` S "the business tasks that the" +:+ 
-  phrase software +:+. S "is expected to complete"
+s7_1_intro = Paragraph $ foldlSent [
+  S "The following", phrase section_, S "provides the", 
+  plural functionalRequirement `sC` S "the business tasks that the", 
+  phrase software +:+. S "is expected to complete"]
 
 s7_1_list = 
-  [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
+  [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   [(((short requirement) :+: S "1"), at_start input_ +:+ S "the following" +:+
     plural quantity :+: S ", which define the glass dimensions" `sC` 
     (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase $ probability ^. term) +:+
     S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
     (phrase $ blast ^. term))]),
-  (table ((map qs [plate_len,plate_width,sdx,sdy,sdz,nom_thick,char_weight]) 
-  ++ (map qs [glass_type,pb_tol,tNT])) (\x -> at_start $ x ^.term)),
+  (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
+  ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start $ x ^.term)),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
 --  [(\ch -> P (ch ^. symbol)),  
 --   (\ch -> maybeUnits $ ch ^. unit'),
@@ -532,7 +532,7 @@ s7_1_list =
     :+: S "8",
     (short lShareFac) +:+ S "following" +:+ (short assumption) 
     :+: S "5"]))] ++
-  map (\(a,b) -> (a, Flat b))
+  map (\(a, b) -> (a, Flat b))
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
   S "the entered" +:+ phrase input_ +:+ plural value +:+ S "to ensure that they do not exceed the" 
   +:+ plural datumConstraint +:+ S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
@@ -569,24 +569,24 @@ s7_1_list =
     sParen (makeRef (Definition (Data glaTyFac)))] ++
     map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
-    [dL,tolPre,tolStrDisFac] ++
+    [dL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"
     ]))])]
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
-s7_2_intro = Paragraph $
-  S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
-  phrase performance +:+ S "is not a" +:+. phrase priority +:+ S "Any reasonable implementation" 
-  +:+ S "will be very quick and use minimal storage. Rather than" +:+ phrase performance `sC`
-  S "the" +:+ phrase priority +:+ phrase nonfunctional +:+ (short requirement) :+: 
+s7_2_intro = Paragraph $ foldlSent [
+  S "Given the small size, and relative simplicity, of this", phrase problem `sC`
+  phrase performance, S "is not a" +:+. phrase priority, S "Any reasonable implementation", 
+  S "will be very quick and use minimal storage. Rather than", phrase performance `sC`
+  S "the", phrase priority, phrase nonfunctional, (short requirement) :+: 
   S "s are correctness, verifiability, understandability, reusability," +:+.
-  S "maintainability and portability"
+  S "maintainability and portability"]
 
 s8 = SRS.likeChg [s8_list] []
 
-s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
+s8_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
   S "3 - The" +:+ phrase system +:+ S "currently only calculates for external" +:+.
   (phrase $ blastRisk ^. term) +:+.
@@ -610,22 +610,22 @@ s8_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
 
 s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
 
-s9_intro1 = Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
-  S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
-  S "modified if a certain" +:+ phrase component +:+ S "is changed. Every time a" +:+ 
-  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+ phrase column +:+
-  S "of that" +:+ phrase component +:+ S "that are marked with an" +:+ Quote (S "X") +:+. 
-  S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
-  sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
-  plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+.
-  S "with each other" +:+ titleize table_ +:+ S "6" +:+ sParen (makeRef s9_table2) +:+
-  S "shows the" +:+ plural dependency +:+ S "of" +:+ plural requirement +:+ S "on" +:+ 
-  plural thModel `sC` (plural inModel) `sC` (plural dataDefn) +:+
-  S "and" +:+. plural datumConstraint +:+ titleize table_ +:+ S "7" +:+
-  sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
-  plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC` plural likelyChg +:+
-  S "and" +:+ (plural requirement) +:+ S "on the" +:+. (plural assumption)
+s9_intro1 = Paragraph $ foldlSent [
+  S "The", phrase purpose, S "of the", (plural traceyMatrix),
+  S "is to provide easy", plural reference, S "on what has to be additionally",
+  S "modified if a certain", phrase component, S "is changed. Every time a", 
+  phrase component, S "is changed, the", plural item, S "in the", phrase column,
+  S "of that", phrase component, S "that are marked with an", Quote (S "X") +:+. 
+  S "should be modified as well", at_start table_, S "5", 
+  sParen (makeRef s9_table1), S "shows the", plural dependency, S "of",
+  plural thModel `sC` (plural dataDefn), S "and", plural inModel +:+.
+  S "with each other", titleize table_, S "6", sParen (makeRef s9_table2),
+  S "shows the", plural dependency, S "of", plural requirement, S "on", 
+  plural thModel `sC` (plural inModel) `sC` (plural dataDefn),
+  S "and" +:+. plural datumConstraint, titleize table_, S "7",
+  sParen (makeRef s9_table3), S "shows the", plural dependency, S "of",
+  plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC` plural likelyChg,
+  S "and", (plural requirement), S "on the" +:+. (plural assumption)]
 
 --FIXME: There has to be a better way to do this.
 s9_table1 = Table [EmptyS, 
@@ -814,7 +814,7 @@ fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
 
 s10 = SRS.reference [s10_list] []
 
-s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
+s10_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
   S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis"
   `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
@@ -843,10 +843,10 @@ s10_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b))
 
 s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 
-s11_intro = Paragraph $
-  S "This" +:+ phrase appendix +:+ S "holds the" +:+ (plural $ graph ^. term) +:+
-  sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)) +:+
-  S "used for interpolating" +:+ plural value +:+ S "needed in the" +:+. plural model
+s11_intro = Paragraph $ foldlSent [
+  S "This", phrase appendix, S "holds the", (plural $ graph ^. term),
+  sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)),
+  S "used for interpolating", plural value, S "needed in the" +:+. plural model]
 
 fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+

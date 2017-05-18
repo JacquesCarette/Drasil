@@ -354,25 +354,7 @@ s6_2_1_intro = Paragraph $
   +:+. S "is used"
 
 s6_2_1_list = 
-  [(Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((short assumption) :+: S "1"), S "The standard E1300-09a for" +:+
-    (phrase $ calculation ^. term) +:+ S "applies only to monolithic, laminated, or insulating" +:+
-    S "glass constructions of rectangular shape with continuous" +:+ 
-    (phrase $ lateral ^. term) +:+
-    S "support along one, two, three, or four edges. This practice assumes" 
-    +:+ S "that (1) the supported glass edges for two, three and four-sided" 
-    +:+ S "support" +:+ plural condition +:+ S "are simply supported and free to slip in" +:+
-    S "plane; (2) glass supported on two sides acts as a simply supported" 
-    +:+. S "beam and (3) glass supported on one side acts as a cantilever"), 
-  (((short assumption) :+: S "2"), S "This practice does not apply" 
-    +:+ S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
-    S "notched, or grooved glass with" +:+ (phrase $ surface ^. term) +:+ S "and edge"
-    +:+. S "treatments that alter the glass strength"),
-  (((short assumption) :+: S "3"), S "This" +:+ phrase system +:+
-    S "only considers the external" +:+ (phrase $ explosion ^. term) +:+ S "scenario for its" +:+.
-    (plural $ calculation ^. term)),
-  (((short assumption) :+: S "4"), S "Standard" +:+ plural value +:+ S "used for" +:+
-    (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")]),
+  [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) s6_2_1_list_assum1),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
     (Neg (Int 53))),
@@ -383,24 +365,48 @@ s6_2_1_list =
   --  (P $ sflawParamK ^. symbol) +:+ S "= 2.86 * 10^(-53)" +:+ Sy (sflawParamK ^. unit), 
   --  (P $ mod_elas ^. symbol) +:+ S "= 7.17 * 10^7" +:+ Sy (mod_elas ^. unit),
   --  (P $ load_dur ^. symbol) +:+ S "= 3" +:+ Sy (load_dur ^. unit)]))] ++
-  (Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((short assumption) :+: S "5"), S "Glass under consideration" +:+
-    S "is assumed to be a single" +:+.
-    (phrase $ lite ^. term) +:+ S "Hence the" +:+ phrase value +:+ S "of" +:+ 
-    (short lShareFac) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
-    +:+ S "in" +:+. (gLassBR ^. defn)),
-  (((short assumption) :+: S "6"), S "Boundary" +:+ plural condition +:+
-    S "for the" +:+ (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
-    +:+ S "support for" +:+. (plural $ calculation ^. term)),
-  (((short assumption) :+: S "7"), S "The response type considered in" 
-    +:+ (gLassBR ^. defn) +:+. S "is flexural"),
-  (((short assumption) :+: S "8"), S "With" +:+ phrase reference +:+
-    S "to A4 the" +:+ phrase value +:+ S "of" +:+ (phrase $ loadDF ^. term) +:+ 
-    sParen (P $ loadDF ^. symbol) +:+ S "is a constant in" +:+. 
-    (gLassBR ^. defn) +:+ S "It is calculated by the" +: (phrase $ equation ^. term) +:+
-    --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
-    S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")])]
+  (Enumeration $ Simple $ mkEnumAbbrevList 5 (short assumption) s6_2_1_list_assum2)]
   --equation in sentence
+
+s6_2_1_list_asumm1 :: [Sentence] 
+s6_2_1_list_assum1 = 
+  [foldlSent [S "The standard E1300-09a for", (phrase $ calculation ^. term),
+  S "applies only to monolithic, laminated, or insulating",
+  S "glass constructions of rectangular shape with continuous", 
+  (phrase $ lateral ^. term),
+  S "support along one, two, three, or four edges. This practice assumes" 
+  S "that (1) the supported glass edges for two, three and four-sided" 
+  S "support", plural condition, S "are simply supported and free to slip in",
+  S "plane; (2) glass supported on two sides acts as a simply supported" 
+  S "beam and (3) glass supported on one side acts as a cantilever"], 
+  foldlSent [S "This practice does not apply" 
+  S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
+  S "notched, or grooved glass with", (phrase $ surface ^. term), S "and edge"
+  S "treatments that alter the glass strength"],
+  foldlSent [S "This", phrase system, S "only considers the external", 
+  (phrase $ explosion ^. term), S "scenario for its", 
+  (plural $ calculation ^. term)],
+  (S "Standard" +:+ plural value +:+ S "used for" +:+
+  (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")
+
+
+s6_2_1_list_assum2 :: [Sentence]
+s6_2_1_list_assum2 = 
+  [(S "Glass under consideration" +:+ S "is assumed to be a single" +:+.
+  (phrase $ lite ^. term) +:+ S "Hence the" +:+ phrase value +:+ S "of" +:+ 
+  (short lShareFac) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
+  +:+ S "in" +:+. (gLassBR ^. defn)),
+  (S "Boundary" +:+ plural condition +:+
+  S "for the" +:+ (phrase $ glaSlab ^. term) +:+ S "is assumed to be 4-sided"
+  +:+ S "support for" +:+. (plural $ calculation ^. term)),
+  (S "The response type considered in" +:+ (gLassBR ^. defn) +:+. 
+  S "is flexural"),
+  (S "With" +:+ phrase reference +:+ S "to A4 the" +:+ phrase value +:+ 
+  S "of" +:+ (phrase $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
+  S "is a constant in" +:+. (gLassBR ^. defn) +:+ S "It is calculated by the" +: 
+  (phrase $ equation ^. term) +:+ --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
+  S ". Using this" `sC` (P $ loadDF ^. symbol) +:+. S "= 0.27")]
+
 
 s6_2_2 = SRS.thModel (s6_2_2_TMods) []
   

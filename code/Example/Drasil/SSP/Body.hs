@@ -114,7 +114,7 @@ s2_1 = SRS.prpsOfDoc [s2_1_p1, s2_1_p2] []
 
 s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
   S "determines the" +:+ (phrase crtSlpSrf) `sC` S "and it's respective" +:+ 
-  (phrase $ fs_rc ^. term) +:+ S "as a method of assessing the stability of a slope" +:+. 
+  (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method) +:+ S "of assessing the stability of a slope" +:+. 
   (phrase design) +:+ S "The" +:+ (phrase $ program ^. term) +:+ 
   S "is intended to be used as an educational tool for" +:+
   S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
@@ -122,7 +122,7 @@ s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+
 
 s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+
-  S "writing the" +:+ (phrase desSpec) +:+ S "and the software" +:+
+  S "writing the" +:+ (phrase desSpec) +:+ S "and the" +:+ (phrase software) +:+
   (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+
   S "will show how the" +:+ (plural requirement) +:+ S "are to be realized," +:+
   S "including decisions on the numerical algorithms and programming" +:+.
@@ -366,11 +366,11 @@ s4_2_6 = SRS.datCon [] []
 s5 = SRS.require [s5_p1] [s5_1, s5_2]
 
 s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
-  S "functional" +:+ (plural requirement) `sC` 
-  S "the business tasks that the software" +:+
+  (plural functionalRequirement) `sC` 
+  S "the business tasks that the" +:+ (phrase software) +:+
   S "is expected to complete, and the nonfunctional" +:+ 
-  (plural requirement) `sC`
-  S "the qualities that the software is expected to exhibit."
+  (plural requirement) `sC` S "the qualities that the" +:+ 
+  (phrase software) +:+ S "is expected to exhibit."
 
 -- SECTION 5.1 --
 s5_1 = SRS.funcReq
@@ -385,7 +385,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
   (S "R3" , S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
             S "if they are physically realizable based" +:+
             S "on a set of pass or fail criteria."),
-  (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a method" +:+
+  (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method) +:+
             S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R5" , S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+.
             (plural slpSrf)),
@@ -403,14 +403,14 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
             S "as the" +:+. (phrase crtSlpSrf)),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
-            S "method of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+            (phrase method)  +:+ S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
-            (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+
-            S "method."),
+            (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
+            (phrase method)),
   (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
             (phrase slice) +:+ (phrase element) +:+ S "displacements graphically. Give" +:+
             S "the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
-            S "by the" +:+ (titleize morPrice) +:+ S "method.")
+            S "by the" +:+ (titleize morPrice) +:+. (phrase method))
   ])
   
 s5_1_table = table_inputdata

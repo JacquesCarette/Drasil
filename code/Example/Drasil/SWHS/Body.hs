@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng,
 
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils(mkEnumAbbrevList)
+import Data.Drasil.Utils (mkEnumAbbrevList)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)

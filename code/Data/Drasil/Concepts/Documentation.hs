@@ -122,11 +122,12 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, scpOfTheProj,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR :: NPNC
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
 charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
+propOfCorSol = npnc "propOfCorSol" (of'' titleize' titleize property (a_ corSol))
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)

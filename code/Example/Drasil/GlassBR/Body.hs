@@ -141,9 +141,9 @@ s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   S "for", phrase sciCompS, S "proposed by [1] and [2] (in", (makeRef s10) :+:
   S "), with some aspects taken from Volere", phrase template, S "16 [3]"]
   
-s2_3_intro_end = (at_start' $ the dataDefn) +:+
-  S "are used to support the" +:+ plural definition +:+ S "of the different"
-  +:+ plural model
+s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+  S "are used to support the", plural definition, S "of the different",
+  plural model]
   
 s3 = SRS.stakeholder [s3_intro] [s3_1, s3_2]
 
@@ -216,32 +216,35 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ titleize 
 
 s5_2 = SRS.indPRCase [s5_2_bullets] []
 
-s5_2_bullets = Enumeration $ Bullet $ map Flat
-  [(titleize useCase +:+ S "1 refers to the" +:+ phrase user +:+ S "providing" +:+ phrase input_ 
-  +:+ S "to" +:+ (gLassBR ^. defn) +:+ S "for use within the" +:+. phrase analysis +:+ S "There are two" +:+
-  S "classes of" +: plural input_ +:+ (phrase $ glassGeo ^. term) +:+
-  S "and" +:+. (phrase $ blastTy ^. term) +:+
-  (glassGeo ^. defn) +:+ (blastTy ^. defn) +:+ S "These" +:+ (plural $ parameter ^. term) +:+
-  S "describe" +:+ (phrase $ char_weight ^. term) +:+
-  S "and stand off" +:+. (phrase $ blast ^. term) +:+
-  S "Another" +:+ phrase input_ +:+ S "the" +:+ phrase user +:+ S "gives is the tolerable" +:+ 
-  phrase value +:+ S "of" +:+. (phrase $ prob_br ^. term)),
-  (S " Use Case 2" +:+ (gLassBR ^. defn) +:+ plural output_ +:+ S "if the" +:+
-  (phrase $ glaSlab ^. term) +:+ S "will be safe by" +:+
-  S "comparing whether" +:+ (phrase $ capacity ^. term) +:+
-  S "is greater than" +:+. (phrase $ demandq ^. term) +:+
-  (at_start $ capacity ^. term) +:+ S "is the" +:+
-  (capacity ^. defn) +:+ S "and" +:+
-  (phrase $ demandq ^. term) +:+ S "is the" +:+ phrase requirement +:+
-  S "which is the" +:+. (demandq ^. defn) +:+ S "The second" +:+ 
-  phrase condition +:+ S "is to check whether the calculated" +:+ (phrase $ probability ^. term) +:+ 
-  sParen (P $ prob_br ^. symbol) +:+ S "is less than the tolerable" +:+ (phrase $ probability ^. term) +:+ 
-  sParen (P $ pb_tol ^. symbol) +:+ S "which is obtained from the" +:+ phrase user +:+
-  S "as an" +:+. phrase input_ +:+ S "If both" +:+ plural condition +:+ S "return true then it's shown that the" 
-  +:+ (phrase $ glaSlab ^. term) +:+ S "is safe to use" `sC` 
-  S "else if both return false then the" +:+ 
-  (phrase $ glaSlab ^. term) +:+. S "is considered unsafe" +:+.
-  S "All the supporting calculated" +:+ plural value +:+ S "are also displayed as" +:+ phrase output_)]
+s5_2_bullets = Enumeration $ Bullet $ map Flat [s5_2_bt_sent1, s5_2_bt_sent2]
+
+s5_2_bt_sent1 :: Sentence
+s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, S "providing",
+  phrase input_, S "to", (gLassBR ^. defn), S "for use within the" +:+.
+  phrase analysis, S "There are two", S "classes of" +: plural input_, 
+  (phrase $ glassGeo ^. term), S "and" +:+. (phrase $ blastTy ^. term),
+  (glassGeo ^. defn), (blastTy ^. defn), S "These", (plural $ parameter ^. term),
+  S "describe", (phrase $ char_weight ^. term), S "and stand off" +:+. 
+  (phrase $ blast ^. term), S "Another", phrase input_, S "the", phrase user,
+  S "gives is the tolerable", phrase value, S "of", (phrase $ prob_br ^. term)]
+
+s5_2_bt_sent2 :: Sentence
+s5_2_bt_sent2 = foldlSent [S " Use Case 2", (gLassBR ^. defn), 
+  plural output_, S "if the", (phrase $ glaSlab ^. term), S "will be safe by", 
+  S "comparing whether", (phrase $ capacity ^. term), S "is greater than" +:+. 
+  (phrase $ demandq ^. term), (at_start $ capacity ^. term), S "is the",
+  (capacity ^. defn), S "and", (phrase $ demandq ^. term), S "is the", 
+  phrase requirement, S "which is the" +:+. (demandq ^. defn), S "The second", 
+  phrase condition, S "is to check whether the calculated", 
+  (phrase $ probability ^. term), sParen (P $ prob_br ^. symbol), 
+  S "is less than the tolerable", (phrase $ probability ^. term), 
+  sParen (P $ pb_tol ^. symbol), S "which is obtained from the", phrase user,
+  S "as an" +:+. phrase input_, S "If both", plural condition, 
+  S "return true then it's shown that the", (phrase $ glaSlab ^. term), 
+  S "is safe to use" `sC` S "else if both return false then the", 
+  (phrase $ glaSlab ^. term) +:+. S "is considered unsafe",
+  S "All the supporting calculated", plural value, S "are also displayed as",
+  phrase output_]
 
 s6 = SRS.specSysDec [s6_intro] [s6_1,
   s6_2]
@@ -252,16 +255,15 @@ s6_intro = Paragraph $ foldlSent [S "This", phrase section_,
   S "This is followed by the", plural solutionCharSpec `sC` S "which presents the",
   (plural assumption) `sC` plural theory `sC` plural definition]
 
-s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, 
-  s6_1_2, s6_1_3]
+s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, s6_1_2, s6_1_3]
 
-s6_1_intro = Paragraph $ 
-  S "A" +:+ phrase system +:+ S "is needed to efficiently and correctly predict the"
-  +:+ (phrase $ blastRisk ^. term) +:+. S "involved with the glass" +:+ (gLassBR ^. defn)
-  +:+ S "is a" +:+ phrase computer +:+ (phrase $ program ^. term) +:+ S "developed to interpret" 
-  +:+ S "the" +:+ plural input_ +:+ S "to give out the" +:+ plural output_ +:+ S "which predicts whether the" +:+
-  (phrase $ glaSlab ^. term) +:+ S "can withstand the" +:+ (phrase $ blast ^. term) +:+
-  S "under the" +:+. plural condition
+s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
+  S "is needed to efficiently and correctly predict the", 
+  (phrase $ blastRisk ^. term) +:+. S "involved with the glass", (gLassBR ^. defn),
+  S "is a", phrase computer, (phrase $ program ^. term), 
+  S "developed to interpret", S "the", plural input_, S "to give out the",
+  plural output_, S "which predicts whether the", (phrase $ glaSlab ^. term), 
+  S "can withstand the", (phrase $ blast ^. term), S "under the", plural condition]
 
 s6_1_1 = SRS.termAndDefn [s6_1_1_intro, s6_1_1_bullets] []
   
@@ -327,13 +329,7 @@ s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of
 s6_1_3 = SRS.goalStmt [s6_1_3_list] []
 
 s6_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short goalStmt) s6_1_3_list_goalStmt1
-{--[
-  (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
-  (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
-  S "will be able to withstand the" +:+ (phrase $ explosion ^. term) +:+
-  S "of a certain degree which is calculated based on" +:+ phrase user 
-  +:+. phrase input_)]
---}
+
 s6_1_3_list_goalStmt1 :: [Sentence]
 s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
   (phrase $ glaSlab ^. term), S "under consideration",
@@ -344,10 +340,9 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 s6_2 = SRS.solCharSpec
   [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
-s6_2_intro = Paragraph $ S "This" +:+ phrase section_ +:+ S "explains all the" +:+
-  (plural assumption) +:+ S "considered and the" +:+
-  plural thModel +:+ S "which are" +:+
-  S "supported by the" +:+. (plural dataDefn)
+s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_, 
+  S "explains all the", (plural assumption), S "considered and the",
+  plural thModel, S "which are", S "supported by the", (plural dataDefn)]
   
 s6_2_1 = SRS.assump ([s6_2_1_intro] ++ (s6_2_1_list)) []
 
@@ -438,7 +433,7 @@ s6_2_5 = SRS.datCon [s6_2_5_intro, --s6_2_5_table1,
   s6_2_5_table2, s6_2_5_intro2] {-, Con s6_2_5_table3]-} []
 
 s6_2_5_intro = Paragraph $ foldlSent
-  [titleize table_, S "2", --sParen (makeRef s6_2_5_table1) :+: 
+  [titleize table_, S "2", S "()", --sParen (makeRef s6_2_5_table1) :+: 
   S "shows the", plural datumConstraint,
   S "on the", phrase input_ +:+. plural variable, S "The", phrase column, S "of", 
   plural physicalConstraint, S "gives the", phrase physical, plural limitation, 
@@ -455,8 +450,8 @@ s6_2_5_intro = Paragraph $ foldlSent
   S "performing an uncertainty quantification exercise", at_start table_,
   S "3", (sParen $ makeRef s6_2_5_table2), S "gives the", plural value, 
   S "of the specification", (plural $ parameter ^. term),
-  S "used in", titleize table_, S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
-  S ").", (P $ ar_max ^. symbol), S "refers to the" +:+ --FIXME: Issue #167
+  S "used in", titleize table_, S "2" +:+. S "()", --(makeRef s6_2_5_table1) :+: 
+  (P $ ar_max ^. symbol), S "refers to the" +:+ --FIXME: Issue #167
   (phrase $ ar_max ^. term), S "for the plate of glass"]
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
@@ -491,7 +486,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (P $ sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
   (titleize table_ +:+ S "3:" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ titleize' value) True
 
-s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", --sParen (makeRef s6_2_5_table3),
+s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", S "()",--sParen (makeRef s6_2_5_table3),
   S "shows the", plural constraint_, S "that must be satisfied by the",
   phrase output_]
 
@@ -796,7 +791,7 @@ s9_intro2 =
   (plural $ graph ^. term) +:+ S "represent" +:+. plural dependency +:+
   S "The" +:+ phrase component +:+ S "at the tail of an arrow is depended on" +:+
   S "by the" +:+ phrase component +:+ S "at the head of that arrow. Therefore, if a" +:+
-   phrase component +:+ S " is changed, the" +:+ plural component +:+ S "that it points to should also" +:+.
+  phrase component +:+ S "is changed, the" +:+ plural component +:+ S "that it points to should also" +:+.
   S "be changed" +:+ titleize figure +:+ S "2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
   plural inModel +:+. S "on each other" +:+

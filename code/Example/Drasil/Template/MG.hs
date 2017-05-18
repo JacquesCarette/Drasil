@@ -177,8 +177,8 @@ mgModuleHierarchy mpairs hierTable =
 mgModuleHierarchyIntro :: Contents -> Contents
 mgModuleHierarchyIntro t@(Table _ _ _ _) = Paragraph $
   S "This section provides an overview of the module design. Modules are" +:+
-  S "summarized in a hierarchy decomposed by secrets in" +:+
-  makeRef t +:+.
+  S "summarized in a hierarchy decomposed by secrets in" +:+.
+  makeRef t +:+
   S "The modules listed below, which are leaves in the hierarchy tree," +:+
   S "are the modules that will actually be implemented."
 mgModuleHierarchyIntro _ = error "Contents type Table required"

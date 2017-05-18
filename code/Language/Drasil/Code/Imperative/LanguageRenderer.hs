@@ -178,6 +178,8 @@ binOpDocD Divide = text "/"
 binOpDocD Multiply = text "*"
 binOpDocD Modulo = text "%"
 binOpDocD Power = text "pow"
+binOpDocD And = text "&&"
+binOpDocD Or = text "||"
 
 bodyDocD :: Config -> Body -> Doc
 bodyDocD c bs = vibmap (blockDoc c) blocks

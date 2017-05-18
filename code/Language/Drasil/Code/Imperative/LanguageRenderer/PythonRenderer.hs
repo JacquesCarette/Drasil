@@ -91,6 +91,8 @@ pybody c f p ms = vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames i
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
 binOpDoc' Power = text "**"
+binOpDoc' And = text "and"
+binOpDoc' Or = text "or"
 binOpDoc' op = binOpDocD op
 
 declarationDoc' :: Config -> Declaration -> Doc

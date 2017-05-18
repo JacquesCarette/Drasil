@@ -19,7 +19,10 @@ module Language.Drasil.Code.Imperative.AST (
     block,defaultValue,
     true,false,
     var, svToVar,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,   (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),(&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),($->),($.),($:),
+    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,   (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
+    (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
+    (&=),(&.=),(&=.),(&+=),(&-=),(&++),
+    (&~-),($->),($.),($:),
     alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,params,
@@ -140,6 +143,7 @@ data UnaryOp = Negate | SquareRoot | Abs
     deriving (Eq, Show)
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
+              | And | Or
     deriving (Eq, Show)
 data BaseType = Boolean | Integer | Float | Character | String | File Mode
     deriving (Eq, Show)
@@ -281,6 +285,14 @@ v1 ?== v2 = binExpr v1 Equal v2
 (?!=) :: Value -> Value -> Value
 infixl 5 ?!=
 v1 ?!= v2 = binExpr v1 NotEqual v2
+
+(?&&) :: Value -> Value -> Value
+infixl 7 ?&&
+v1 ?&& v2 = binExpr v1 And v2
+
+(?||) :: Value -> Value -> Value
+infixl 6 ?||
+v1 ?|| v2 = binExpr v1 Or v2
 
 --arithmetic operators (#)
 (#~) :: Value -> Value  --unary negation

@@ -287,11 +287,11 @@ infixl 5 ?!=
 v1 ?!= v2 = binExpr v1 NotEqual v2
 
 (?&&) :: Value -> Value -> Value
-infixl 7 ?&&
+infixl 3 ?&&
 v1 ?&& v2 = binExpr v1 And v2
 
 (?||) :: Value -> Value -> Value
-infixl 6 ?||
+infixl 4 ?||
 v1 ?|| v2 = binExpr v1 Or v2
 
 --arithmetic operators (#)

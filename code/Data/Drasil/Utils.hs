@@ -7,8 +7,7 @@ module Data.Drasil.Utils
   , mkConstraintList
   ) where
 
-import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), 
-                        NamedIdea, getAcc, sC)
+import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator

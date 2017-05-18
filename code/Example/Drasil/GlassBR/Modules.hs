@@ -12,8 +12,7 @@ import Data.Drasil.Concepts.Documentation
 -- convenient for the most common cases.
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, mod_derivedv, mod_calc,
-  (mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]),
-  mod_interpd, mod_sw, mod_interp]
+  mod_ctrl, mod_interpd, mod_sw, mod_interp]
 
 -- input format module
 mod_inputf :: ModuleChunk
@@ -31,6 +30,9 @@ mod_inputc = makeImpModule modInputConstraint --FIXME: Plural?
   []
   []
   (Just mod_behav)
+
+mod_ctrl :: ModuleChunk
+mod_ctrl = mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]
 
 -- output format module
 mod_outputf_desc :: ConceptChunk

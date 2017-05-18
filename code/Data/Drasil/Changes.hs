@@ -7,15 +7,13 @@ import Data.Drasil.Modules
 
 lcHW :: LCChunk
 lcHW      = LCChunk (nw $ npnc "hardware" (nounPhraseSP
-  "The specific hardware on which the software is running.")
-  ) [mod_hw]
+  "The specific hardware on which the software is running.")) [mod_hw]
 
-lcCtrl, lcInputF, lcOutputF, lcArray, lcRng, lcPlot, lcVect, lcTree, 
+lcCtrl :: ModuleChunk -> NP -> LCChunk
+lcCtrl mod_ctrl ctrlDefn = LCChunk (nw $ npnc "control" (ctrlDefn)) [mod_ctrl]
+
+lcInputF, lcOutputF, lcArray, lcRng, lcPlot, lcVect, lcTree, 
   lcHash :: ModuleChunk -> LCChunk
-
-lcCtrl    mod_ctrl    = LCChunk (nw $ npnc "control" (nounPhraseSP
-  "The algorithm for the overall operation procedure of the program.")
-  ) [mod_ctrl]
   
 lcInputF  mod_inputf  = LCChunk (nw $ npnc "input" (nounPhraseSP
   "The format of the initial input data.")

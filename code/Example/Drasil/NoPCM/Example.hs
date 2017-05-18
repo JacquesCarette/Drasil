@@ -1,4 +1,4 @@
-module Drasil.PCM.Example where
+module Drasil.NoPCM.Example where
 
 import Language.Drasil
 

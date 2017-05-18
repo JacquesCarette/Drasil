@@ -4,7 +4,7 @@ TINY_PREF=""
 SSP_PREF="SSP_"
 GLASS_PREF="GlassBR_"
 GAME_PREF="Chipmunk_"
-PCM_PREF="PCM_"
+NoPCM_PREF="NoPCM_"
 log="log.log"
 #
 errors="no"
@@ -49,9 +49,9 @@ if [ -s $GAME_PREF$log ]; then
   errors="yes"
 fi
 
-if [ -s $PCM_PREF$log ]; then
+if [ -s $NoPCM_PREF$log ]; then
   echo "-------------------------------------------"
-  echo "- $PCM_PREF$log IS NOT EMPTY -- DIFFERENCE"
+  echo "- $NoPCM_PREF$log IS NOT EMPTY -- DIFFERENCE"
   echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
   echo "-------------------------------------------"
   errors="yes"

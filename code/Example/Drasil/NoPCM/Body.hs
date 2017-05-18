@@ -1,9 +1,9 @@
-module Drasil.PCM.Body where
+module Drasil.NoPCM.Body where
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Drasil.PCM.Example
+import Drasil.NoPCM.Example
 
 import Language.Drasil
 

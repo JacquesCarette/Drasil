@@ -3,6 +3,7 @@ module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS) where
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Utils (foldlsC)
 
 -- Note: Order matters!
 refineChain :: NamedIdea c => [c] -> Sentence
@@ -32,10 +33,10 @@ orgSecWTS = \i b s t ->
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
 orgIntro :: (NounPhrase c) => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
-orgIntro intro bottom bottomSec trailingSentence= [ Paragraph $
+orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
   intro +:+ S "The presentation follows the standard pattern of presenting" +:+
-  (foldl1 sC (map S ["goals", "theories", "definitions"])) `sC` 
-  S "and assumptions. For readers that would like a more bottom up approach" `sC`
+  (foldlsC $ map plural [goal, theory, definition]) `sC` S "and assumptions." +:+
+  S "For readers that would like a more bottom up approach" `sC`
   S "they can start reading the" +:+ (plural bottom) +:+ 
   S "in" +:+ (makeRef bottomSec) +:+. 
   S "and trace back to find any additional information they require",

@@ -29,7 +29,7 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 analysis, appendix, characteristic, client, column, component, 
   condition, constraint_, connection, context, customer, datum, definition, 
   dependency, description, design, document, documentation, element, 
-  environment, figure, functional, game, general, individual, information, 
+  environment, figure, functional, game, general, goal, individual, information, 
   input_, intReader, introduction, item, label, library, limitation, method_,
   module_, model, name_, nonfunctional, offShelf, open, organization, 
   output_, performance, physics, physical, priority, problem, product_, project, 
@@ -63,6 +63,7 @@ figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
 game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
+goal            = npnc "goal"           (cn' "goal")
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
 input_          = npnc "input"          (cn' "input")         

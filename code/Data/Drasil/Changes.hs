@@ -10,7 +10,8 @@ lcHW      = LCChunk (nw $ npnc "hardware" (nounPhraseSP
   "The specific hardware on which the software is running.")
   ) [mod_hw]
 
-lcCtrl, lcInputF, lcOutputF, lcArray, lcRng, lcPlot :: ModuleChunk -> LCChunk
+lcCtrl, lcInputF, lcOutputF, lcArray, lcRng, lcPlot, lcVect, lcTree, 
+  lcHash :: ModuleChunk -> LCChunk
 
 lcCtrl    mod_ctrl    = LCChunk (nw $ npnc "control" (nounPhraseSP
   "The algorithm for the overall operation procedure of the program.")
@@ -36,6 +37,17 @@ lcPlot    mod_plot    = LCChunk (nw $ npnc "plot" (nounPhraseSP
   "The method of displaying the final output.")
   ) [mod_plot]
 
+lcTree    mod_link    = LCChunk (nw $ npnc "tree" (nounPhraseSP $ 
+  "The implementation of the linked (tree) data structure."))
+  [mod_link]
+
+lcHash    mod_asso    = LCChunk (nw $ npnc "hash table" (nounPhraseSP $ 
+  "The implementation of the associative (hash table) data structure."))
+  [mod_asso]
+
+lcVect   mod_vect     = LCChunk (nw $ npnc "vector" (nounPhraseSP $ 
+  "The implementation of mathematical vectors."))
+  [mod_vect]
 
 {-Unlikely Changes-}
 

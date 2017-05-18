@@ -2,7 +2,8 @@ module Drasil.GamePhysics.Changes where
 
 import Language.Drasil
 import Drasil.GamePhysics.Modules
-import Data.Drasil.Modules
+--import Data.Drasil.Modules
+import Data.Drasil.Changes
 
 lcs :: [LCChunk]
 lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12, lc13,
@@ -16,9 +17,7 @@ ucs = [uc1, uc2, uc3, uc4, uc5, uc6, uc7]
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12, lc13,
   lc14 :: LCChunk
 
-lc1 = LCChunk (nw $ npnc "hardware"
-  (nounPhraseSP "The specific hardware on which the software is running."))
-  [mod_hw]
+lc1 = lcHW
 
 lc2 = LCChunk (nw $ npnc "rigid body"
   (nounPhraseSP $ 
@@ -46,9 +45,7 @@ lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP $
   "including the input and output of data."))
   [mod_ctrl]
 
-lc7 = LCChunk (nw $ npnc "vector" (nounPhraseSP $ 
-  "The implementation of mathematical vectors."))
-  [mod_vector]
+lc7 = lcVect mod_vector
 
 lc8 = LCChunk (nw $ npnc "bb" (nounPhraseSP $ 
   "The implementation of bounding box structures"))
@@ -66,17 +63,11 @@ lc11 = LCChunk (nw $ npnc "collision" (nounPhraseSP $
   "The algorithms used for solving collisions."))
   [mod_coll]
 
-lc12 = LCChunk (nw $ npnc "array" (nounPhraseSP $ 
-  "The implementation of the sequence (array) data structure."))
-  [mod_seq]
+lc12 = lcArray mod_seq
 
-lc13 = LCChunk (nw $ npnc "tree" (nounPhraseSP $ 
-  "The implementation of the linked (tree) data structure."))
-  [mod_linked]
+lc13 = lcTree mod_linked
 
-lc14 = LCChunk (nw $ npnc "hash table" (nounPhraseSP $ 
-  "The implementation of the associative (hash table) data structure."))
-  [mod_assoc]
+lc14 = lcHash mod_assoc
 
 -- Unlikely Changes --
 

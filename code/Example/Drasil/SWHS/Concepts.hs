@@ -3,7 +3,6 @@ module Drasil.SWHS.Concepts where
 import Language.Drasil
 import Data.Drasil.Concepts.Software (program)
 import Control.Lens ((^.))
-import Data.Drasil.Concepts.Documentation
 --- convenience
 fixme :: String
 fixme = "FIXME: Define this"

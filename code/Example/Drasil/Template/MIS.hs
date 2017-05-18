@@ -13,10 +13,10 @@ makeMIS mcs = misIntro:map misModule mcs
 misIntro :: Section
 misIntro = Section (S $ "Introduction")
   [ Con $ Paragraph $
-    S "The following document details the Module Interface Specifications " :+:
-    S "for the implemented modules in a program that calculates . " :+:
-    S "It is intended to ease navigation through the program for design " :+:
-    S "and maintenance purposes.  Complementary documents include the " :+:
+    S "The following document details the Module Interface Specifications" +:+
+    S "for the implemented modules in a program that calculates ." +:+
+    S "It is intended to ease navigation through the program for design" +:+
+    S "and maintenance purposes.  Complementary documents include the" +:+
     S "System Requirement Specifications and Module Guide."
   ]
 

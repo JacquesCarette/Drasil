@@ -97,4 +97,4 @@ convertName n = foldl1 (:+:) $ intersperse (Sp UScore) $
 
 docOutline :: [(Section, Sentence)] -> Contents
 docOutline secDesc = Paragraph $ foldl1 (:+:) $ intersperse (S " ") $
-  map (\(sect, desc) -> (makeRef sect) :+: S " " :+: desc) secDesc
+  map (\(sect, desc) -> (makeRef sect) +:+ desc) secDesc

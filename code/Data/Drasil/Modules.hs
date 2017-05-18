@@ -14,6 +14,7 @@ module Data.Drasil.Modules
   , mod_ode_desc
   , mod_ode_fun
   , mod_calc_fun
+  , mod_interp_fun
   ) where
 
 import Language.Drasil
@@ -146,6 +147,16 @@ mod_calc_fun defn desc impl depnd1 depnd2 = makeImpModule (mod_calc_desc defn)
   depnd1
   depnd2
   (Just mod_behav)
+
+-- interpolation module
+mod_interp_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_interp_fun impl depnd = makeImpModule modInterpolation
+  (S "The interpolation algorithm.")
+   impl
+   []
+   []
+   depnd
+   (Just mod_sw)
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

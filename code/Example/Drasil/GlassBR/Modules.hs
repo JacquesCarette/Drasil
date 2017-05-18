@@ -72,13 +72,5 @@ mod_calc = mod_calc_fun (glassBR_calcDesc)
 mod_interpd :: ModuleChunk
 mod_interpd = mod_io_fun glassBRProg [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
 
--- interpolation module
-
 mod_interp :: ModuleChunk
-mod_interp = makeImpModule modInterpolation
-  (S "The interpolation algorithm.")
-   glassBRProg
-   []
-   []
-   [mod_interpd]
-   (Just mod_sw)
+mod_interp = mod_interp_fun glassBRProg [mod_interpd]

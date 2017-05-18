@@ -52,9 +52,10 @@ sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter")
 demand      = uc' "demand" (nounPhraseSP "applied load (demand)")
   "FIXME: Define this or remove the need for definitions"
   lQ kilopascal
-sd          = uc' "sd" (nounPhraseSP $ "stand off distance which is " ++
-  "represented in coordinates (SDx, SDy, SDz)")
-  "FIXME: Define this or remove the need for definitions"
+sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
+  (S "The distance from the glazing surface to the" +:+
+  S "centroid of a hemispherical high explosive charge. It is represented by" +:+
+  S "the coordinates (SDx, SDy, SDz).")
   (Atomic "SD") metre
 sdx         = uc' "sdx" (nounPhraseSP "stand off distance (x-component)")
   "FIXME: Define this or remove the need for definitions"
@@ -256,9 +257,7 @@ blaReGLa      = dcc "blaReGLa" (nounPhraseSP "blast resistant glazing")
 eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
-sD            = dcc "sD" (nounPhraseSP "stand off distance")
-  ("The distance from the glazing surface to the centroid of a " ++
-    "hemispherical high explosive charge.")
+sD            = dccWDS "sD" (nounPhraseSP "stand off distance") (sd ^. defn)
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
 blast         = dcc "blast" (cn' "blast") "any kind of man-made explosion"
 blastRisk     = dcc "blastRisk" (nounPhraseSP "blast risk") "FIXME: Define this or remove the need for definitions"
@@ -367,14 +366,14 @@ dedescr =
   (P $ demand ^. symbol) +:+ S "or" +:+ 
   (phrase $ demandq ^. term) :+: S ", is the" +:+
   (demandq ^. defn) +:+ S "obtained from Figure 2 by interpolation using" 
-  +:+ (phrase $ sD ^. term) +:+ S "(" :+: (P $ sd ^. symbol) 
+  +:+ (phrase $ sd ^. term) +:+ S "(" :+: (P $ sd ^. symbol) 
   :+: S ") and" +:+ (P $ eqTNTWeight ^. symbol) +:+. S "as parameters" +:+ 
   (P $ eqTNTWeight ^. symbol) +:+ S "is defined as" +:+
   (P $ eqTNTWeight ^. symbol) +:+ S "=" +:+ (P $ char_weight ^. symbol) +:+.
   S "* TNT" +:+ (P $ char_weight ^. symbol) +:+ S "is the" +:+.
   (phrase $ char_weight ^. term) +:+ 
   (P $ tNT ^. symbol) +:+ S "is the" +:+. (phrase $ tNT ^. term) +:+ 
-  (P $ sd ^.symbol) +:+ S "is the" +:+ (phrase $ sD ^. term)
+  (P $ sd ^.symbol) +:+ S "is the" +:+ (phrase $ sd ^. term)
   +:+ S "where" +:+ (P $ sd ^. symbol) +:+ S "= ." 
   --equation in sentence
 

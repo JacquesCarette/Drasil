@@ -15,6 +15,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng,
 
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
+import Data.Drasil.Utils(mkEnumAbbrevList)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
@@ -324,8 +325,7 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 
 s3_3 = SRS.sysCon [s3_3_contents] []
 
-s3_3_contents = Paragraph (S "There are no" +:+ phrase system +:+.
-  plural constraint)
+s3_3_contents = Paragraph (S "There are no" +:+. plural systemConstraint)
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
@@ -428,21 +428,26 @@ s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+:
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.
 
-s4_1_3_list = Enumeration (Simple [
+s4_1_3_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short goalStmt) $
+  map (goalState) [temp_W, temp_PCM, w_E, pcm_E])
 
-  ((short goalStmt) :+: S "1", Flat (S "Predict the" +:+
-  (phrase $ temp_W ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
+--  ((short goalStmt) :+: S "1", Flat (S "Predict the" +:+
+--  (phrase $ temp_W ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
 --
-  ((short goalStmt) :+: S "2", Flat (S "Predict the" +:+
-  (phrase $ temp_PCM ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
+--  ((short goalStmt) :+: S "2", Flat (S "Predict the" +:+
+--  (phrase $ temp_PCM ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
 --
-  ((short goalStmt) :+: S "3", Flat (S "Predict the" +:+
-  (phrase $ w_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
+--  ((short goalStmt) :+: S "3", Flat (S "Predict the" +:+
+--  (phrase $ w_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
 --
-  ((short goalStmt) :+: S "4", Flat (S "Predict the" +:+
-  (phrase $ pcm_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term)))
+--  ((short goalStmt) :+: S "4", Flat (S "Predict the" +:+
+--  (phrase $ pcm_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term)))
 
-  ])
+
+goalState :: NamedIdea b => b -> Sentence
+goalState b =  (S "Predict the" +:+
+  (phrase $ b ^. term) +:+ S "over" +:+. (phrase $ time ^. term))
+
 
 -- List structure is repeated between examples. (For all of these lists I am 
 -- imagining the potential for something like what was done with the lists in 
@@ -961,7 +966,7 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time]))) time)),
-  Paragraph (S "In addition, the" +:+ (phrase $ pcm_E ^. term) :+: 
+  Paragraph (S "In addition, the" +:+ (phrase $ pcm_E ^. term) +:+ 
   S "should equal the" +:+ (phrase $ energy ^. term) +:+ phrase input_ +:+
   S "to the" +:+ short phsChgMtrl +:+ S "from the" +:+.
   (phrase $ water ^. term) +:+ S "This can be expressed as"),
@@ -1111,8 +1116,8 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   S "of uniform" +:+ (phrase $ temp_PCM ^. term) +:+. S "is not likely")),
 --
   ((short likelyChg) :+: S "2", Flat (S "A8 - The" +:+ (phrase $ temp_C ^.
-  term) +:+ S "will change over the course of the day, depending" +:+.
-  S "on the" +:+ (phrase $ energy ^. term) +:+ S "received from the sun")),
+  term) +:+ S "will change over the course of the day, depending" +:+
+  S "on the" +:+ (phrase $ energy ^. term) +:+. S "received from the sun")),
 --
   ((short likelyChg) :+: S "3", Flat (S "A9 - The" +:+ (phrase $ temp_C ^. 
   term) +:+ S "will actually change along its length as the" +:+
@@ -1127,12 +1132,12 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   S "flexibility to the" +:+ phrase simulation :+:
   S ", the" +:+ (phrase $ temp_init ^. term) +:+
   S "of the" +:+ (phrase $ water ^. term) +:+ 
-  S "and the" +:+ (short phsChgMtrl) +:+ S "could be" +:+.
-  S "allowed to have different" +:+ plural value)),
+  S "and the" +:+ (short phsChgMtrl) +:+ S "could be" +:+
+  S "allowed to have different" +:+. plural value)),
 --
   ((short likelyChg) :+: S "6", Flat (S "A15 - Any real" +:+
   (phrase $ tank ^. term) +:+ S "cannot be" +:+
-  (phrase $ perfect_insul ^. term) +:+. S "and will lose" +:+
+  (phrase $ perfect_insul ^. term) +:+ S "and will lose" +:+.
   (phrase $ heat ^. term)))])
 
 -- List structure same in all examples.

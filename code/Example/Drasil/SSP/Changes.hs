@@ -9,7 +9,7 @@ lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8,
       lc9, lc10, lc11, lc12, lc13, lc14]
 
 ucs :: [UCChunk]
-ucs = [uc1, uc2, uc3]
+ucs = [ucIO, ucInputS, ucOutput]
 
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8,
   lc9, lc10, lc11, lc12, lc13, lc14 :: LCChunk
@@ -18,13 +18,9 @@ lc1 = lcHW
 
 lc2 = lcCtrl mod_ctrl
 
-lc3 = LCChunk (nw $ npnc "input" (nounPhraseSP
-  "The format of the initial input data.")
-  ) [mod_inputf]
+lc3 = lcInputF mod_inputf
 
-lc4 = LCChunk (nw $ npnc "output" (nounPhraseSP
-  "The format of the final output data.")
-  ) [mod_outputf]
+lc4 = lcOutputF mod_outputf
 
 lc5 = LCChunk (nw $ npnc "genalg" (nounPhraseSP
   "Algorithm for determining the critical slip surface.")
@@ -55,27 +51,8 @@ lc11 = LCChunk (nw $ npnc "prop" (nounPhraseSP
   "The algorithm for assigning soil properties to slices.")
   ) [mod_sps]
 
-lc12 = LCChunk (nw $ npnc "array" (nounPhraseSP
-  "The implementation for the sequence (array) data structure.")
-  ) [mod_sds]
+lc12 = lcArray mod_sds
 
-lc13 = LCChunk (nw $ npnc "rand" (nounPhraseSP
-  "The method of generating pseudo-random numbers.")
-  ) [mod_rng]
+lc13 = lcRng mod_rng 
 
-lc14 = LCChunk (nw $ npnc "plot" (nounPhraseSP
-  "The method of displaying the final output.")
-  ) [mod_plot]
-
-
-uc1, uc2, uc3 :: UCChunk
-
-uc1 = nw $ npnc "IO" (nounPhraseSP $
-  "Input/Output devices (Input: File and/or Keyboard, Output: File, " ++
-  "Memory, and/or Screen).")
-
-uc2 = nw $ npnc "inputsource" (nounPhraseSP
-  "There will always be a source of input data external to the software.")
-
-uc3 = nw $ npnc "output" (nounPhraseSP
-  "Output data are displayed to the output device.")
+lc14 = lcPlot mod_plot

@@ -10,7 +10,7 @@ lcHW      = LCChunk (nw $ npnc "hardware" (nounPhraseSP
   "The specific hardware on which the software is running.")
   ) [mod_hw]
 
-lcCtrl, lcInputF, lcOutputF, lcRng, lcPlot :: ModuleChunk -> LCChunk
+lcCtrl, lcInputF, lcOutputF, lcArray, lcRng, lcPlot :: ModuleChunk -> LCChunk
 
 lcCtrl    mod_ctrl    = LCChunk (nw $ npnc "control" (nounPhraseSP
   "The algorithm for the overall operation procedure of the program.")
@@ -23,6 +23,10 @@ lcInputF  mod_inputf  = LCChunk (nw $ npnc "input" (nounPhraseSP
 lcOutputF mod_outputf = LCChunk (nw $ npnc "output" (nounPhraseSP
   "The format of the final output data.")
   ) [mod_outputf]
+  
+lcArray   mod_sds     = LCChunk (nw $ npnc "array" (nounPhraseSP
+  "The implementation for the sequence (array) data structure.")
+  ) [mod_sds]
 
 lcRng     mod_rng     = LCChunk (nw $ npnc "rand" (nounPhraseSP
   "The method of generating pseudo-random numbers.")

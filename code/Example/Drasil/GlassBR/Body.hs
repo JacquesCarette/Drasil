@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface,
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -368,31 +368,30 @@ s6_2_1_list =
   (Enumeration $ Simple $ mkEnumAbbrevList 5 (short assumption) s6_2_1_list_assum2)]
   --equation in sentence
 
-s6_2_1_list_asumm1 :: [Sentence] 
-s6_2_1_list_assum1 = 
-  [foldlSent [S "The standard E1300-09a for", (phrase $ calculation ^. term),
+s6_2_1_list_asumm1 :: [Sentence]
+s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for", 
+  (phrase $ calculation ^. term),
   S "applies only to monolithic, laminated, or insulating",
   S "glass constructions of rectangular shape with continuous", 
   (phrase $ lateral ^. term),
-  S "support along one, two, three, or four edges. This practice assumes" 
-  S "that (1) the supported glass edges for two, three and four-sided" 
+  S "support along one, two, three, or four edges. This practice assumes", 
+  S "that (1) the supported glass edges for two, three and four-sided", 
   S "support", plural condition, S "are simply supported and free to slip in",
-  S "plane; (2) glass supported on two sides acts as a simply supported" 
+  S "plane; (2) glass supported on two sides acts as a simply supported", 
   S "beam and (3) glass supported on one side acts as a cantilever"], 
-  foldlSent [S "This practice does not apply" 
+  foldlSent [S "This practice does not apply", 
   S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
-  S "notched, or grooved glass with", (phrase $ surface ^. term), S "and edge"
+  S "notched, or grooved glass with", (phrase $ surface ^. term), S "and edge",
   S "treatments that alter the glass strength"],
   foldlSent [S "This", phrase system, S "only considers the external", 
   (phrase $ explosion ^. term), S "scenario for its", 
   (plural $ calculation ^. term)],
   (S "Standard" +:+ plural value +:+ S "used for" +:+
-  (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")
+  (phrase $ calculation ^. term) +:+ S "in" +:+ (gLassBR ^. defn) +: S "are")]
 
 
 s6_2_1_list_assum2 :: [Sentence]
-s6_2_1_list_assum2 = 
-  [(S "Glass under consideration" +:+ S "is assumed to be a single" +:+.
+s6_2_1_list_assum2 = [(S "Glass under consideration" +:+ S "is assumed to be a single" +:+.
   (phrase $ lite ^. term) +:+ S "Hence the" +:+ phrase value +:+ S "of" +:+ 
   (short lShareFac) +:+ S "is equal to 1 for all" +:+ (plural $ calculation ^. term)
   +:+ S "in" +:+. (gLassBR ^. defn)),

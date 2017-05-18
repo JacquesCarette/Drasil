@@ -321,7 +321,7 @@ s4_1_2_stmt4 = foldlSent
 s4_1_2_list' :: [Sentence]
 s4_1_2_list' = [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4]
 
-s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList goalStmt s4_1_2_list')
+s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc goalStmt) s4_1_2_list')
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -373,7 +373,7 @@ s4_2_1_list' :: [Sentence]
 s4_2_1_list' = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
                s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
 
-s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList assumption s4_2_1_list')
+s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc assumption) s4_2_1_list')
 
 
 --------------------------------
@@ -580,7 +580,7 @@ s5_1_list' :: [Sentence]
 s5_1_list' = [s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
             s5_1_req7, s5_1_req8]
 
-s5_1_list = Enumeration (Simple $ mkEnumAbbrevList requirement s5_1_list')
+s5_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc requirement) s5_1_list')
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -633,7 +633,7 @@ s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
                     s6_likelyChg_stmt4]
 
-s6_list = Enumeration (Simple $ mkEnumAbbrevList likelyChg s6_list')
+s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc likelyChg) s6_list')
 
 
 -----------------------------------------

@@ -43,12 +43,12 @@ foldlsC (x:y:xs) = foldle sC sC (x `sC` y) xs
 
 -- | concantenates number to abbreviation
 -- should not be exported
-enumWithAbbrev :: Sentence -> [Sentence]
-enumWithAbbrev abbrev = [abbrev :+: (S $ show x) | x <- [(1 :: Integer)..]]
+enumWithAbbrev :: Integer -> Sentence -> [Sentence]
+enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
-mkEnumAbbrevList :: NamedIdea c => c -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList title list = zip (enumWithAbbrev $ getAcc title) (map (Flat) list)
+mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
+mkEnumAbbrevList start title list = zip (enumWithAbbrev start title) (map (Flat) list)
 
 -- | formats constraints on variables for tables
 fmtConstrain :: Sentence -> Sentence -> Sentence -> Sentence

@@ -7,8 +7,9 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation, equation, surface, 
-  probability,  parameter)
+import Data.Drasil.Concepts.Math (matrix, graph, calculation,
+                                  equation, surface, probability,
+                                  parameter)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
@@ -201,8 +202,8 @@ s5_intro = Paragraph $ foldlSent [S "This", phrase section_, S "presents the" +:
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
 
-s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ titleize name_, S "Actor", 
-  titleize input_ +:+ S "and" +:+ titleize output_] (mkTable
+s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ titleize name_,
+  S "Actor", titleize input_ +:+ S "and" +:+ titleize output_] (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", titleize' input_, titleize user, titleize' characteristic +:+ S "of the" +:+
   (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
@@ -219,8 +220,8 @@ s5_2 = SRS.indPRCase [s5_2_bullets] []
 s5_2_bullets = Enumeration $ Bullet $ map Flat [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
-s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, S "providing",
-  phrase input_, S "to", (gLassBR ^. defn), S "for use within the" +:+.
+s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, 
+  S "providing", phrase input_, S "to", (gLassBR ^. defn), S "for use within the" +:+.
   phrase analysis, S "There are two", S "classes of" +: plural input_, 
   (phrase $ glassGeo ^. term), S "and" +:+. (phrase $ blastTy ^. term),
   (glassGeo ^. defn), (blastTy ^. defn), S "These", (plural $ parameter ^. term),
@@ -533,13 +534,13 @@ s7_1_list =
     :+: S "5"]))] ++
   map (\(a,b) -> (a, Flat b))
   [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
-  S "the entered" +:+ phrase input_ +:+ plural value +:+ S "to ensure that they do not exceed the" +:+ plural datumConstraint +:+
-  S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
+  S "the entered" +:+ phrase input_ +:+ plural value +:+ S "to ensure that they do not exceed the" 
+  +:+ plural datumConstraint +:+ S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
   S "the" +:+ phrase input_ +:+ (plural $ parameter ^. term) +:+ S "is out of bounds, an error message is" +:+
   S "displayed and the" +:+ (plural $ calculation ^. term) +:+. S "stop"),
-  (((short requirement) :+: S "4"), titleize output_ +:+ S "the" +:+ phrase input_ +:+ plural quantity +:+
-  S "from" +:+ (short requirement) :+: S "1 and the known" +:+ plural quantity
-  +:+ S "from" +:+ (short requirement) :+: S "2."),
+  (((short requirement) :+: S "4"), titleize output_ +:+ S "the" +:+ phrase input_ +:+
+  plural quantity +:+ S "from" +:+ (short requirement) :+: S "1 and the known" +:+
+  plural quantity +:+ S "from" +:+ (short requirement) :+: S "2."),
   (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
   (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
@@ -577,8 +578,8 @@ s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = Paragraph $
   S "Given the small size, and relative simplicity, of this" +:+ phrase problem `sC`
-  phrase performance +:+ S "is not a" +:+. phrase priority +:+ S "Any reasonable implementation will" +:+
-  S "be very quick and use minimal storage. Rather than" +:+ phrase performance `sC`
+  phrase performance +:+ S "is not a" +:+. phrase priority +:+ S "Any reasonable implementation" 
+  +:+ S "will be very quick and use minimal storage. Rather than" +:+ phrase performance `sC`
   S "the" +:+ phrase priority +:+ phrase nonfunctional +:+ (short requirement) :+: 
   S "s are correctness, verifiability, understandability, reusability," +:+.
   S "maintainability and portability"
@@ -612,25 +613,19 @@ s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2
 s9_intro1 = Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the" +:+ (plural traceyMatrix) +:+
   S "is to provide easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
-  S "modified if a certain" +:+ phrase component +:+ S "is changed. Every time a" +:+ phrase component +:+ S "is changed, the" +:+
-  plural item +:+ S "in the" +:+ phrase column +:+ S "of that" +:+ phrase component +:+ S "that are marked with an" +:+ Quote (S "X") +:+.
+  S "modified if a certain" +:+ phrase component +:+ S "is changed. Every time a" +:+ 
+  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+ phrase column +:+
+  S "of that" +:+ phrase component +:+ S "that are marked with an" +:+ Quote (S "X") +:+. 
   S "should be modified as well" +:+ at_start table_ +:+ S "5" +:+ 
   sParen (makeRef s9_table1) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
-  plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other" +:+
-  titleize table_ +:+ S "6" +:+ sParen (makeRef s9_table2) +:+ S "shows the" +:+ plural dependency 
-  +:+ S "of" +:+
-  plural requirement +:+ S "on" +:+ 
-  plural thModel `sC`
-  (plural inModel) `sC`
-  (plural dataDefn) +:+ S "and" +:+. plural datumConstraint +:+
-  titleize table_ +:+ S "7" +:+ sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency 
-  +:+ S "of" +:+
-  plural thModel `sC`
-  (plural dataDefn) `sC`
-  plural inModel `sC`
-  plural likelyChg +:+ S "and" +:+
-  (plural requirement) +:+ S "on the" +:+.
-  (plural assumption)
+  plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+.
+  S "with each other" +:+ titleize table_ +:+ S "6" +:+ sParen (makeRef s9_table2) +:+
+  S "shows the" +:+ plural dependency +:+ S "of" +:+ plural requirement +:+ S "on" +:+ 
+  plural thModel `sC` (plural inModel) `sC` (plural dataDefn) +:+
+  S "and" +:+. plural datumConstraint +:+ titleize table_ +:+ S "7" +:+
+  sParen (makeRef s9_table3) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+
+  plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC` plural likelyChg +:+
+  S "and" +:+ (plural requirement) +:+ S "on the" +:+. (plural assumption)
 
 --FIXME: There has to be a better way to do this.
 s9_table1 = Table [EmptyS, 
@@ -787,34 +782,27 @@ s9_intro2 =
   [Paragraph $
   S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
   +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
-  S "additionally modified if a certain" +:+ phrase component +:+ S "is changed. The arrows in the" +:+ 
-  (plural $ graph ^. term) +:+ S "represent" +:+. plural dependency +:+
-  S "The" +:+ phrase component +:+ S "at the tail of an arrow is depended on" +:+
-  S "by the" +:+ phrase component +:+ S "at the head of that arrow. Therefore, if a" +:+
+  S "additionally modified if a certain" +:+ phrase component +:+. S "is changed" +:+ 
+  S "The arrows in the" +:+ (plural $ graph ^. term) +:+ S "represent" +:+.
+  plural dependency +:+ S "The" +:+ phrase component +:+ S "at the tail of an arrow" +:+
+  S "is depended on by the" +:+ phrase component +:+ S "at the head of that arrow. Therefore, if a" +:+
   phrase component +:+ S "is changed, the" +:+ plural component +:+ S "that it points to should also" +:+.
   S "be changed" +:+ titleize figure +:+ S "2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
   plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
-  plural inModel +:+. S "on each other" +:+
-  titleize figure +:+ S "3" +:+ sParen (makeRef fig_3) +:+ S "shows the" +:+ plural dependency +:+
-  S "of" +:+ plural requirement +:+ S "on" +:+
-  plural thModel `sC` 
-  plural inModel `sC`
-  (plural dataDefn) +:+ S "and" +:+. plural datumConstraint +:+
-  titleize figure +:+ S "4" +:+ sParen (makeRef fig_4) +:+ S "shows the" +:+ plural dependency +:+ 
-  S "of" +:+ plural thModel `sC` 
-  plural inModel `sC`
-  (plural dataDefn) `sC` 
-  plural requirement +:+ S "and" +:+
-  (plural likelyChg) +:+ S "on" +:+.
+  plural inModel +:+. S "on each other" +:+ titleize figure +:+ S "3" +:+ sParen (makeRef fig_3) +:+
+  S "shows the" +:+ plural dependency +:+ S "of" +:+ plural requirement +:+ S "on" +:+ 
+  plural thModel `sC` plural inModel `sC` (plural dataDefn) +:+ S "and" +:+.
+  plural datumConstraint +:+ titleize figure +:+ S "4" +:+ sParen (makeRef fig_4) +:+
+  S "shows the" +:+ plural dependency +:+ S "of" +:+ plural thModel `sC` plural inModel `sC`
+  (plural dataDefn) `sC` plural requirement +:+ S "and" +:+ (plural likelyChg) +:+ S "on" +:+.
   (plural assumption),
-  Paragraph $ 
-  S "NOTE: Building a tool to automatically generate the graphical" +:+
+  Paragraph $ S "NOTE: Building a tool to automatically generate the graphical" +:+
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
 fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
-  +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different"
-  +:+ titleize' section_) "Trace.png"
+  +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item
+  +:+ S "of Different" +:+ titleize' section_) "Trace.png"
 
 fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
@@ -871,4 +859,3 @@ fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+
   (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize $ aspectR ^. term) +:+ 
   sParen (short aspectR) {-(P (aspectR ^. symbol))-} +:+ S "versus" +:+ (at_start $ sdf ^. term) +:+ 
   sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"
-

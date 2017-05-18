@@ -107,7 +107,8 @@ ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
   dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ----Quantities--
-ar_max      = makeVC "ar_max"   (nounPhraseSP "maximum aspect ratio") (sub (Atomic "AR") (Atomic "max"))
+ar_max      = makeVC "ar_max"   (nounPhraseSP "maximum aspect ratio")
+  (sub (Atomic "AR") (Atomic "max"))
 risk_fun    = makeVC "risk_fun" (nounPhraseSP "risk function") cB
 glass_type  = makeVC "glass_type" (nounPhraseSP "glass type, g in {AN, HS, FT}") lG
 is_safe1    = makeVC "is_safe1" 
@@ -142,13 +143,13 @@ gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 acronyms :: [CINP]
 acronyms = [assumption,annealedGlass,aspectR, dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
-  lGlass,lResistance,lShareFac,notApp,physSyst,requirement,
+  lGlass,lResistance,lShareFac,notApp,nonFactorL, physSyst,requirement,
   srs,thModel,eqTNT]
   
 gLassBR :: ConceptChunk
 
 annealedGlass, aspectR, fullyTGlass,glassTypeFac,heatSGlass,
-  iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp,
+  iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp, nonFactorL,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
@@ -165,6 +166,7 @@ lGlass        = commonINP "lGlass"        (cn''' "laminated glass")         "LG"
 lResistance   = commonINP "lResistance"   (cn' "load resistance")           "LR"
 lShareFac     = commonINP "lShareFac"     (cn' "load share factor")         "LSF"
 notApp        = commonINP "notApp"        (cn "not applicable")             "N/A"
+nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase?
 eqTNT         = commonINP "eqTNT"         (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 
 ----Terminology---- 
@@ -273,7 +275,8 @@ safeMessage   = dcc "safeMessage" (cn "safe")
   ("For the given input parameters, the glass is considered safe.")
 notSafe       = dcc "notSafe" (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
-bomb          = dcc "bomb" (cn' "bomb") "a container filled with a destructive substance designed to exlode on impact or via detonation"
+bomb          = dcc "bomb" (cn' "bomb") ("a container filled with a destructive" ++
+  "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion" (cn' "explosion") "a destructive shattering of something"
 
 --Theoretical models--
@@ -348,11 +351,11 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) :+: S ", which" +:+.
-  S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+ S "is the" +:+.
-  (phrase $ nonFL ^. term) +:+ (short glassTypeFac) +:+ S "is the" +:+.
-  (phrase $ glassTypeFac ^. term) +:+ (short lShareFac) +:+ S "is the" +:+.
-  (phrase $ lShareFac ^. term)
+  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) :+:
+  S ", which" +:+. S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+
+  S "is the" +:+. (phrase $ nonFL ^. term) +:+ (short glassTypeFac) +:+
+  S "is the" +:+. (phrase $ glassTypeFac ^. term) +:+ (short lShareFac) +:+
+  S "is the" +:+. (phrase $ lShareFac ^. term)
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

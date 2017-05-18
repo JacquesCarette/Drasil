@@ -21,11 +21,11 @@ table_of_symbols ls f = Section (titleize tOfSymb)
 
 intro :: Contents
 intro = Paragraph $ 
-  S "The table that follows summarizes the symbols used in this " :+:
-  S "document along with their units.  The choice of symbols was " :+:
-  S "made with the goal of being consistent with the nuclear " :+:
-  S "physics literature and that used in the FP manual.  The SI " :+:
-  S "units are listed in brackets following the definition of " :+:
+  S "The table that follows summarizes the symbols used in this" +:+
+  S "document along with their units.  The choice of symbols was" +:+
+  S "made with the goal of being consistent with the nuclear" +:+
+  S "physics literature and that used in the FP manual.  The SI" +:+
+  S "units are listed in brackets following the definition of" +:+
   S "the symbol."
   
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 

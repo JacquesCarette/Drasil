@@ -2,7 +2,6 @@ module Drasil.SWHS.Modules where
 import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Concepts
-import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Modules

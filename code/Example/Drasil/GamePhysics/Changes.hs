@@ -73,22 +73,17 @@ lc14 = lcHash mod_assoc
 
 uc1, uc2, uc3, uc4, uc5, uc6, uc7 :: UCChunk
 
-uc1 = nw $ npnc "IO" (nounPhraseSP $ 
-  "Input/Output devices (Input: File and/or Keyboard, Output: File, " ++
-  "Memory, and/or Screen).")
+uc1 = ucIO
 
-uc2 = nw $ npnc "inputsource" (nounPhraseSP $ 
-  "There will always be a source of input data external to the software.")
+uc2 = ucInputS
 
-uc3 = nw $ npnc "output" (nounPhraseSP $ 
-  "Output data are displayed to the output device.")
+uc3 = ucOutput
 
 uc4 = nw $ npnc "goal" (nounPhraseSP $ 
   "The goal of the system is to simulate the interactions of 2D rigid bodies.")
 
-uc5 = nw $ npnc "Cartesian" 
-  (nounPhraseSP "A Cartesian coordinate system is used.")
+uc5 = ucCart
 
 uc6 = nw $ npnc "rigid" (nounPhraseSP "All objects are rigid bodies.")
 
-uc7 = nw $ npnc "2D" (nounPhraseSP "All objects are 2D.")
+uc7 = uc2D

@@ -51,7 +51,7 @@ lcVect   mod_vect     = LCChunk (nw $ npnc "vector" (nounPhraseSP $
 
 {-Unlikely Changes-}
 
-ucIO, ucInputS, ucOutput :: UCChunk
+ucIO, ucInputS, ucOutput, ucCart, uc2D :: UCChunk
 
 ucIO     = nw $ npnc "IO" (nounPhraseSP $
   "Input/Output devices (Input: File and/or Keyboard, Output: File, " ++
@@ -62,3 +62,8 @@ ucInputS = nw $ npnc "inputsource" (nounPhraseSP
 
 ucOutput = nw $ npnc "output" (nounPhraseSP
   "Output data are displayed to the output device.")
+
+ucCart = nw $ npnc "Cartesian" 
+  (nounPhraseSP "A Cartesian coordinate system is used.")
+
+uc2D = nw $ npnc "2D" (nounPhraseSP "All objects are 2D.")

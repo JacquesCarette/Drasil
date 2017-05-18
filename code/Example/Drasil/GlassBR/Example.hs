@@ -14,6 +14,10 @@ import Prelude hiding (log, id)
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 
 --FIXME: Many of the current terms can be separated into terms and defns!
+
+---- FIXME: having id "" and term "" is completely bogus, and should not
+-- be allowed.  This implicitly says that something here does not make sense.
+
 glassBRSymbols :: [UnitalChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
   act_thick, sflawParamK, sflawParamM, demand, sd, sd_max, sd_min, nom_thick,

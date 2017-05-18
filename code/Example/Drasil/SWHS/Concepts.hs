@@ -3,6 +3,7 @@ module Drasil.SWHS.Concepts where
 import Language.Drasil
 import Data.Drasil.Concepts.Software (program)
 import Control.Lens ((^.))
+import Data.Drasil.Concepts.Documentation
 --- convenience
 fixme :: String
 fixme = "FIXME: Define this"
@@ -31,10 +32,12 @@ coil = dcc "coil" (cn' "heating coil")
   "Coil in tank that heats by absorbing solar energy"
 discharging = dcc "discharging" (nounPhraseSP "discharging") 
   "discharging of the tank"
+
+
 gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem") fixme
 heat_flux = dcc "heat_flux" (nounPhraseSP "heat flux") 
   "The rate of heat energy transfer per unit area"
-  --FIXME: Heat flux needs to be a Unital Chunk
+  -- Heat flux is now a Unital Chunk being built off of this heat_flux
 mech_energy = dcc "mech_energy" (nounPhraseSP "mechanical energy")
   "The energy that comes from motion and position"
 --TODO: Physical property.
@@ -47,18 +50,30 @@ phase_change_material = dcc "pcm" (nounPhraseSP "Phase Change Material (PCM)")
       
 --FIXME: Temporarily have to manually create the compound phrase, because it
 --uses acronym and a sentence.
+
+--Didn't work
+--swhsProg = npnc' "swhsProg" (nounPhrase''
+--  (compoundNPNC'' short phrase progName (program ^. term))
+--  (short progName +:+ (phrase $ program ^. term))
+--  CapFirst CapWords) "SWHS"
+
 swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+ 
   (phrase $ program ^. term)) (short progName +:+ (phrase $ program ^. term))
   CapFirst CapWords) "SWHS"
-specific_heat = dcc "specific_heat" (nounPhraseSP "specific heat")
+
+specific_heat = dcc "specific_heat" (nounPhraseSP "specific heat capacity")
   "Heat capacity per unit mass" 
-  --FIXME: Specific Heat needs to be a UnitalChunk
+  --Done: Specific Heat needs to be a UnitalChunk
+  --Creates htCap
+
 swhs_pcm = dcc "swhs_pcm" (nounPhraseSP 
   "solar water heating systems incorporating PCM")
   "Solar water heating systems incorporating phase change material"
 tank = dcc "tank" (cn' "tank") "solar water heating tank"
 tank_pcm = dcc "tank_pcm" 
   (nounPhraseSP "solar water heating tank incorporating PCM")
-  "FIXME: Define this"
+  "Solar water heating tank incorporating phase change material"
+
+
 transient = dcc "transient" (nounPhraseSP "transient") "Changing with time"
 water = dcc "water" (cn' "water") "The liquid with which the tank is filled"

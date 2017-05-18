@@ -9,6 +9,7 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, normalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density,)
 import Data.Drasil.Units.PhysicalProperties
+import Drasil.SWHS.Concepts hiding (fixme)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -52,8 +53,7 @@ out_SA       = uc' "out_SA" (nounPhraseSP
   fixme (sub cA (Atomic "out")) m_2
 pcm_SA       = uc' "pcm_SA" (nounPhraseSP "phase change material surface area")
   fixme (sub cA cP) m_2
-htCap        = uc' "htCap" (nounPhraseSP "specific heat capacity")
-  fixme cC heat_cap_spec
+htCap        = uc specific_heat cC heat_cap_spec
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
   fixme (sup (htCap ^. symbol) cL) heat_cap_spec
 htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP 
@@ -104,7 +104,7 @@ pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   fixme (sub (mass ^. symbol) cP) kilogram
 w_mass       = uc' "w_mass" (nounPhraseSP "mass of water")
   fixme (sub (mass ^. symbol) cW) kilogram
-ht_flux      = uc' "ht_flux" (nounPhraseSP "heat flux") fixme lQ thermal_flux
+ht_flux      = uc heat_flux lQ thermal_flux
 latentE      = uc' "latentE" (nounPhraseSP "latent heat energy") fixme cQ joule
 thFluxVect   = uc' "thFluxVect" (nounPhraseSP "thermal flux vector") 
   fixme (vec lQ) thermal_flux

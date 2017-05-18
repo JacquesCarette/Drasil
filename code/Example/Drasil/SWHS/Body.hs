@@ -258,7 +258,7 @@ s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
 -- the sectioning? This would also improve the tediousness of declaring
 -- LayoutObjs
 
-s3 = SRS.genSysDec [s3_intro] [s3_1, s3_2]
+s3 = SRS.genSysDec [s3_intro] [s3_1, s3_2, s3_3]
 
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the" +:+ phrase system :+:
@@ -305,7 +305,7 @@ s3_1_2_bullets = Enumeration (Bullet $
   [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of" +:+
   S "characters instead of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical +:+ S "and" +:+ plural software +:+ plural constraint_,
+  phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint_,
   S "Calculate the required" +:+ plural output_
   ])])
   
@@ -323,6 +323,8 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
+
+--FIXME: System Constraints not being generated into HTML file
 s3_3 = SRS.sysCon [s3_3_contents] []
 
 s3_3_contents = Paragraph (S "There are no" +:+. plural systemConstraint)

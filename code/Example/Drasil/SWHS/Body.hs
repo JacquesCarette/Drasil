@@ -94,7 +94,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
   
 -- This section name and table structure are same between all examples.
   
-s2 = SRS.intro s2_intro [s2_1, s2_2, s2_3, s2_4]
+s2 = SRS.intro (s2_intro) [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
@@ -133,7 +133,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
 -- similar paragraph in each of the other examples. It can probably be 
 -- abstracted out.
 
-s2_1 = section (titleize prpsOfDoc) (s2_1_contents) []
+s2_1 = SRS.prpsOfDoc (s2_1_contents) []
 
 s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase document +:+ S "is to describe the modelling of" +:+
@@ -172,7 +172,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
 --How to italicize words in sentence?
 --How to cite?
 
-s2_2 = section (titleize' scpOfReq) [s2_2_contents] []
+s2_2 = SRS.scpOfReq [s2_2_contents] []
 
 s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   plural requirement +:+ S "is limited to" +:+
@@ -199,7 +199,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
-s2_3 = section (of'' titleize' titleize characteristic intReader) [s2_3_contents] []
+s2_3 = SRS.charOfIR [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "should have a strong knowledge in" +:+ (plural $ heat ^. term) +:+ S "transfer" +:+. phrase theory +:+
@@ -212,7 +212,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "as explained in" +:+. (makeRef s3_2))
 
 
-s2_4 = section (titleize orgOfDoc) (s2_4_contents) []
+s2_4 = SRS.orgOfDoc (s2_4_contents) []
 
 s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
@@ -255,7 +255,7 @@ s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
 -- the sectioning? This would also improve the tediousness of declaring 
 -- LayoutObjs
 
-s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
+s3 = SRS.genSysDec [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the" +:+ phrase system :+:
@@ -268,7 +268,7 @@ s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
 
 
 
-s3_1 = section (titleize sysCont) [s3_1_contents, sys_context_fig, s3_1_2_intro,
+s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
 
 s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
@@ -308,7 +308,7 @@ s3_1_2_bullets = Enumeration (Bullet $
 
 
 
-s3_2 = section (titleize' userCharacteristic) [s3_2_contents] []
+s3_2 = SRS.userChar [s3_2_contents] []
 
 s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+ (short progName) :+: 
   S " should have an understanding of undergraduate Level 1" +:+.
@@ -317,7 +317,7 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+ (short pro
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
-s3_3 = section (titleize' systemConstraint) [s3_3_contents] []
+s3_3 = SRS.sysCon [s3_3_contents] []
 
 s3_3_contents = Paragraph (S "There are no" +:+ phrase system +:+.
   plural constraint)
@@ -325,7 +325,7 @@ s3_3_contents = Paragraph (S "There are no" +:+ phrase system +:+.
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
 
-s4 = section (titleize specificsystemdescription) [s4_intro] [s4_1, s4_2]
+s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
   S "the" +:+ phrase problem +:+ phrase description :+: S ", which gives a" +:+
@@ -346,7 +346,7 @@ s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
 -- The swhs_pcm reference at the end would be better if singular, but concept
 -- is plural.
 
-s4_1 = section (titleize problemDescription) [s4_1_intro]
+s4_1 = SRS.probDesc [s4_1_intro]
   [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
@@ -356,8 +356,7 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
 
 --  section is very different between all examples
 
-s4_1_1 = section (titleize' $ terminology `and_'` definition)
-  [s4_1_1_intro, s4_1_1_bullets] []
+s4_1_1 = SRS.termAndDefn [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
   S "that are used in the subsequent" +:+ plural section_ +:+ S "and their" +:+
@@ -380,7 +379,7 @@ s411_bullet_map_f c = Flat ((at_start $ c ^. term) :+: S ":" +:+. (c ^. defn))
 -- Included heat flux and specific heat in NamedChunks even though they are 
 -- already in SWHSUnits
 
-s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
+s4_1_2 = SRS.physSyst [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
   (short progName) :+: S ", as shown in" +:+ (makeRef fig_tank) :+:
@@ -412,7 +411,7 @@ fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+
   S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
   P (ht_flux_P ^. symbol)) "Tank.png"
 
-s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
+s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+:
   S ", initial" +:+ plural condition +:+ S "for the" +:+
@@ -444,9 +443,8 @@ s4_1_3_list = Enumeration (Simple [
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
-s4_2 = section (titleize solution +:+ titleize' characteristic +:+
-  titleize specification) [s4_2_intro] [s4_2_1, s4_2_2,
-  s4_2_3, s4_2_4, s4_2_5, s4_2_6, s4_2_7]
+s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4,
+  s4_2_5, s4_2_6, s4_2_7]
 
 s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
   S "(" :+: (short ode) :+: S "s) that govern" +:+
@@ -459,7 +457,7 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
 
-s4_2_1 = section (titleize' assumption) [s4_2_1_intro, s4_2_1_list] []
+s4_2_1 = SRS.assump [s4_2_1_intro, s4_2_1_list] []
 
 s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
   S "the original" +:+ phrase problem +:+ S "and helps in developing the" +:+
@@ -564,7 +562,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   S "or the" +:+ (short phsChgMtrl) :+: S "; therefore, the" +:+
   (phrase $ vol_ht_gen ^. term) +:+. S "is zero [IM1, IM2]")),
 --
-  ((short assumption) :+: S "17", Flat (S "The" +:+ (phrase $ vol ^. term) +:+ (phrase $ change ^. term) +:+
+  ((short assumption) :+: S "17", Flat (S "The" +:+ (phrase $ volume ^. term) +:+ (phrase $ change ^. term) +:+
   S "of the" +:+ (short phsChgMtrl) +:+ S "due to" +:+ 
   (phrase $ melting ^. term) +:+. S "is negligible [IM2]")),
 --
@@ -584,8 +582,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
 
-s4_2_2 = section (titleize' thModel)
-  [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
+s4_2_2 = SRS.thModel [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 
 s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
   S "the" +:+ phrase general +:+ (plural $ equation ^. term) +:+ S "and laws that" +:+
@@ -600,7 +597,7 @@ s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
 -- No subsubsubsections... may make things difficult for derivation sections
 -- coming up
 
-s4_2_3 = section (titleize' genDefn) ((s4_2_3_intro):(s4_2_3_deriv)) []
+s4_2_3 = SRS.genDefn ((s4_2_3_intro):(s4_2_3_deriv)) []
 
 s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
   S "laws and" +:+ (plural $ equation ^. term) +:+ S "that will be used in deriving the" +:+ 
@@ -676,7 +673,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 -- Add references to above when available (assumptions, GDs)
 -- Replace relevant Derivs with the regular derivative when it is available
 
-s4_2_4 = section (titleize' dataDefn) [s4_2_4_intro, s4_2_4_DD1, s4_2_4_DD2,
+s4_2_4 = SRS.dataDefn [s4_2_4_intro, s4_2_4_DD1, s4_2_4_DD2,
   s4_2_4_DD3] []
 
 s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
@@ -686,7 +683,7 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = section (titleize' inModel) ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
+s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
   (s4_2_5_deriv2)) []
 
 s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
@@ -848,7 +845,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   symbol) +:+ S "is replaced by" +:+ P (htCap_L_P ^. symbol) :+:
   S ", and thus" +:+ P (tau_S_P ^. symbol) +:+ S "is" +:+ 
   S "replaced by" +:+. P (tau_L_P ^. symbol) +:+
-  S "Although a small change in surface area would be" +:+
+  S "Although a small change in" +:+ (phrase $ surface ^. term) +:+ S "area would be" +:+
   S "expected with" +:+ (phrase $ melting ^. term) :+:
   S ", this is not included, since the" +:+
   (phrase $ volume ^. term) +:+ S "change of the" +:+ (short phsChgMtrl) 
@@ -871,7 +868,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = section (titleize' datum +:+ titleize' constraint) [s4_2_6_intro] []
+s4_2_6 = SRS.datCon [s4_2_6_intro] []
 
 s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+ plural datum +:+
   plural constraint +:+ S "on the" +:+ phrase input_ +:+ S "and" +:+ phrase output_ +:+
@@ -940,7 +937,8 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   phrase output_ +:+ S "to the" +:+ (short phsChgMtrl) :+:
   S ". This can be shown as an" +:+ (phrase $ equation ^. term) +:+ S "by taking" +:+ makeRef s4_2_4_DD1 +:+
   S "and" +:+ makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
-  S "respective surface area of" +:+ (phrase $ heat_trans ^. term) :+:
+  S "respective" +:+ (phrase $ surface ^. term) +:+ S "area of" +:+
+  (phrase $ heat_trans ^. term) :+:
   S ", and integrating each over the" +:+ phrase simulation +:+
   (phrase $ time ^. term) :+: S ", as follows:"),
   EqnBlock 

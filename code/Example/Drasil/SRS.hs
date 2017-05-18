@@ -24,7 +24,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDec, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDec,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,
-  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, traceyMandG,
+  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG,
   appendix, reference :: [Contents] -> [Section] -> Section
 
 intro       = section (titleize Doc.introduction)

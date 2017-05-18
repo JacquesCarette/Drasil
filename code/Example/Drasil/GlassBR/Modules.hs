@@ -52,23 +52,18 @@ mod_derivedv = makeImpModule modDerivedVal --FIXME: Plural?
 
 -- calculations module
 
--- TODO: Maybe this could be parameterized.
--- FIXME: Should use plural of "calculation"
-mod_calc_desc :: ConceptChunk
-mod_calc_desc = dccWDS "mod_calc_desc" (cn "calculations")
-  (S "Defines the equations for solving for the probability of glass " :+:
+glassBR_calcDesc :: Sentence
+glassBR_calcDesc =(S "Defines the equations for solving for the probability of glass " :+:
    S "breakage, demand, and capacity using the parameters in the input " :+:
    S "parameters module.")
 
 mod_calc :: ModuleChunk
-mod_calc = makeImpModule mod_calc_desc
+mod_calc = mod_calc_fun (glassBR_calcDesc)
   (S "The equations for predicting the probability of glass breakage, " :+:
    S "capacity, and demand, using the input parameters.")
    glassBRProg
    []
-   []
    [mod_inputp]
-   (Just mod_behav)
 
 -- interpolation data module
 

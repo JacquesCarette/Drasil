@@ -13,6 +13,7 @@ module Data.Drasil.Modules
   , mod_outputf_desc_fun
   , mod_ode_desc
   , mod_ode_fun
+  , mod_calc_fun
   ) where
 
 import Language.Drasil
@@ -109,7 +110,6 @@ mod_vector_fun impl depnd = makeImpModule mod_vector_serv
   depnd
   (Just mod_sw)
 
-
 mod_plot_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_plot_fun impl depnd = makeImpModule mod_plot_desc
   (foldlSent [S "The", (plural $ dataStruct'), 
@@ -129,7 +129,6 @@ mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random 
   depnd
   (Just mod_sw)
 
-
 mod_ode_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_ode_fun impl depnd = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
           S " first order " :+: (short ode) :+: S "s.")
@@ -138,6 +137,15 @@ mod_ode_fun impl depnd = makeImpModule mod_ode_desc (S "The algorithm to solve a
           [] 
           depnd
           (Just mod_sw)
+
+mod_calc_fun :: NamedIdea a => Sentence -> Sentence -> a -> [MethodChunk] -> [ModuleChunk] -> ModuleChunk
+mod_calc_fun defn desc impl depnd1 depnd2 = makeImpModule (mod_calc_desc defn)
+  (desc)
+  impl
+  []
+  depnd1
+  depnd2
+  (Just mod_behav)
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

@@ -55,18 +55,16 @@ meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
 meth_htTransCladFuel = fromEC htTransCladFuel
 meth_htTransCladCool = fromEC htTransCladCool
 
-mod_calc_desc :: ConceptChunk
-mod_calc_desc = dcc "mod_calc_desc" (cn' "calc") 
-  "Calculates heat transfer coefficients"
+hghc_calcDesc :: Sentence
+hghc_calcDesc = S "Calculates heat transfer coefficients"
 
 mod_calc :: ModuleChunk
-mod_calc = makeImpModule mod_calc_desc
+mod_calc = mod_calc_fun 
+  hghc_calcDesc
   (S "The equations used to calculate heat transfer coefficients")
   executable
-  []
   [meth_htTransCladFuel, meth_htTransCladCool]
   []
-  (Just mod_behav)
 
 
 -- Output Format Module

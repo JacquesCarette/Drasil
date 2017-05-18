@@ -315,23 +315,31 @@ s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ (gLa
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
-s6_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (((short physSyst) :+: S "1"), (at_start $ glaSlab ^. term)), 
-  (((short physSyst) :+: S "2"), S "The point of" +:+. (phrase $ explosion ^. term) +:+
-  S "Where the" +:+ (phrase $ bomb ^. term) :+: S ", or" +:+ (blast ^. defn) `sC` 
-  S "is located. The" +:+ ((phrase $ sD ^. term)) 
-  +:+. S "is the distance between the point of" +:+ (phrase $ explosion ^. term) +:+ S "and the glass")]
---NOTE: The only difference here from the original is the removal of an 
---    extraneous space
+s6_1_2_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short physSyst) s6_1_2_list_physys1
+
+s6_1_2_list_physys1 :: [Sentence]
+s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of" +:+. 
+  (phrase $ explosion ^. term), S "Where the", (phrase $ bomb ^. term) `sC` 
+  S "or", (blast ^. defn) `sC` S "is located. The", (phrase $ sD ^. term), 
+  S "is the distance between the point of", (phrase $ explosion ^. term), 
+  S "and the glass"])]
 
 s6_1_3 = SRS.goalStmt [s6_1_3_list] []
 
-s6_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s6_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short goalStmt) s6_1_3_list_goalStmt1
+{--[
   (((short goalStmt) :+: S "1"), S "Analyze and predict whether the" +:+
   (phrase $ glaSlab ^. term) +:+ S "under consideration" +:+
   S "will be able to withstand the" +:+ (phrase $ explosion ^. term) +:+
   S "of a certain degree which is calculated based on" +:+ phrase user 
   +:+. phrase input_)]
+--}
+s6_1_3_list_goalStmt1 :: [Sentence]
+s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
+  (phrase $ glaSlab ^. term), S "under consideration",
+  S "will be able to withstand the", (phrase $ explosion ^. term),
+  S "of a certain degree which is calculated based on", phrase user, 
+  phrase input_]]
 
 s6_2 = SRS.solCharSpec
   [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
@@ -429,24 +437,27 @@ s6_2_4_DDefns = map Definition (map Data dataDefns)
 s6_2_5 = SRS.datCon [s6_2_5_intro, --s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2] {-, Con s6_2_5_table3]-} []
 
-s6_2_5_intro = Paragraph $
-  titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
-  S ") shows the" +:+ plural datumConstraint +:+
-  S "on the" +:+ phrase input_ +:+. plural variable +:+ S "The" +:+ phrase column +:+ S "of" +:+ plural physicalConstraint +:+
-  S "gives the" +:+ phrase physical +:+ plural limitation +:+ S "on the range" +:+
-  S "of" +:+ plural value +:+ S "that can  be taken by the" +:+. phrase variable +:+ S "The" +:+ plural constraint_ +:+  --supposed to have double space midsentence?
-  S "are conservative, to give" +:+ S "the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+ 
-  S "the flexibility to experiment with unusual situations. The" +:+ phrase column +:+ S "of" +:+.
-  S "typical" +:+ plural value +:+ S "is intended to provide a feel for a common scenario" +:+
-  S "The uncertainty" +:+ phrase column +:+ S "provides an" +:+
-  S "estimate of the confidence with which the" +:+ phrase physical +:+ plural quantity +:+
-  S"can be measured. This" +:+ phrase information +:+ S "would be part of the" +:+ phrase input_ +:+ S "if one were"
-  +:+. S "performing an uncertainty quantification exercise" +:+ at_start table_ +:+ S "3 (" :+:
-  (makeRef s6_2_5_table2) :+: S ") gives the" +:+ plural value +:+ S "of the specification" +:+ (plural $ parameter ^. term) +:+
-  S "used in" +:+ titleize table_ +:+ S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
-  S ")." +:+ 
-  (P $ ar_max ^. symbol) +:+ S "refers to the" +:+ --FIXME: Issue #167
-  (phrase $ ar_max ^. term) +:+. S "for the plate of glass"
+s6_2_5_intro = Paragraph $ foldlSent
+  [titleize table_, S "2", --sParen (makeRef s6_2_5_table1) :+: 
+  S "shows the", plural datumConstraint,
+  S "on the", phrase input_ +:+. plural variable, S "The", phrase column, S "of", 
+  plural physicalConstraint, S "gives the", phrase physical, plural limitation, 
+  S "on the range", S "of", plural value, S "that can be taken by the" +:+. 
+  phrase variable, S "The", plural constraint_, S "are conservative, to give", 
+  S "the", phrase user, S "of the", phrase model, 
+  S "the flexibility to experiment with unusual situations. The", 
+  phrase column, S "of" +:+. S "typical", plural value,
+  S "is intended to provide a feel for a common scenario",
+  S "The uncertainty", phrase column, S "provides an",
+  S "estimate of the confidence with which the", phrase physical, plural quantity,
+  S"can be measured. This", phrase information, S "would be part of the", 
+  phrase input_, S "if one were" +:+. 
+  S "performing an uncertainty quantification exercise", at_start table_,
+  S "3", (sParen $ makeRef s6_2_5_table2), S "gives the", plural value, 
+  S "of the specification", (plural $ parameter ^. term),
+  S "used in", titleize table_, S "2 (" :+: --(makeRef s6_2_5_table1) :+: 
+  S ").", (P $ ar_max ^. symbol), S "refers to the" +:+ --FIXME: Issue #167
+  (phrase $ ar_max ^. term), S "for the plate of glass"]
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
 --  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),
@@ -480,10 +491,9 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (P $ sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
   (titleize table_ +:+ S "3:" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ titleize' value) True
 
-s6_2_5_intro2 = Paragraph $
-  titleize table_ +:+ S "4 (" :+: --(makeRef s6_2_5_table3) :+:
-  S ") shows the" +:+ plural constraint_
-  +:+. S "that must be satisfied by the" +:+ phrase output_
+s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", --sParen (makeRef s6_2_5_table3),
+  S "shows the", plural constraint_, S "that must be satisfied by the",
+  phrase output_]
 
 -- s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
 --  [(\x -> P $ fst(x)), (\x -> snd(x))] 

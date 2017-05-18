@@ -2,7 +2,10 @@ module Drasil.GlassBR.Modules where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Math
 import Drasil.GlassBR.Concepts
+
+import Control.Lens ((^.))
 
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
@@ -16,15 +19,15 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, m
 
 -- input format module
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (S "input" +:+ (plural datum)) modInputFormat
+mod_inputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase input_ +:+ (plural datum)) modInputFormat
 
 mod_inputp :: ModuleChunk
-mod_inputp = mod_io_fun glassBRProg [mod_inputc] (S "input parameters") modInputParam --FIXME: Plural?
+mod_inputp = mod_io_fun glassBRProg [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
 
 -- input constraints module
 mod_inputc :: ModuleChunk
 mod_inputc = makeImpModule modInputConstraint --FIXME: Plural?
-  (S "The constraints on the input data.")
+  (S "The constraints on the" +:+ phrase input_ +:+. (plural datum))
   glassBRProg
   []
   []
@@ -36,16 +39,16 @@ mod_ctrl = mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_der
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (S "input parameters, the demand, the capacity, " +:+
-  S "the probability of breakage, and both safety requirements.")
+mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ (plural $ parameter ^. term) :+: S ", the demand, the capacity," +:+.
+  S "the probability of breakage, and both safety requirements")
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (S "output" +:+ (plural datum)) mod_outputf_desc
+mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase output_ +:+ (plural datum)) mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk
 mod_derivedv = makeImpModule modDerivedVal --FIXME: Plural?
-  (S "The transformations from initial inputs to derived quantities.")
+  (S "The transformations from initial" +:+ phrase input_ +:+. S "to derived quantities")
   glassBRProg
   []
   []
@@ -56,13 +59,13 @@ mod_derivedv = makeImpModule modDerivedVal --FIXME: Plural?
 
 glassBR_calcDesc :: Sentence
 glassBR_calcDesc =(S "Defines the equations for solving for the probability of glass " :+:
-   S "breakage, demand, and capacity using the parameters in the input " :+:
-   S "parameters module.")
+   S "breakage, demand, and capacity using the" +:+ (plural $ parameter ^. term) +:+ S "in the input" +:+
+   (plural $ parameter ^. term) +:+. S "module")
 
 mod_calc :: ModuleChunk
 mod_calc = mod_calc_fun (glassBR_calcDesc)
   (S "The equations for predicting the probability of glass breakage, " :+:
-   S "capacity, and demand, using the input parameters.")
+   S "capacity, and demand, using the" +:+ phrase input_ +:+. (plural $ parameter ^. term))
    glassBRProg
    []
    [mod_inputp]

@@ -272,7 +272,7 @@ s6_1_1_intro = Paragraph $ foldlSent [
   S "This subsection provides a list of terms that are used in subsequent",
   plural section_, S "and their meaning, with the", phrase purpose,
   S "of reducing ambiguity and making it easier to correctly understand the" +:+. 
-  (plural requirement), S "All of the terms are extracted from [4] in" +:+.
+  (plural requirement), S "All of the terms are extracted from [4] in",
   (makeRef s10)]
 
 s6_1_1_bullets = Enumeration $ (Number $ 
@@ -354,8 +354,7 @@ s6_2_1_intro = Paragraph $ foldlSent [
   phrase physicalSystem, S "The numbers given in the",
   S "square brackets refer to the", (phrase dataDefn), S "[" :+:
   (short dataDefn) :+: S "], or", phrase inModel, S "[" :+: 
-  (short inModel) :+: S "], in which the respective", (phrase assumption) 
-  +:+. S "is used"]
+  (short inModel) :+: S "], in which the respective", (phrase assumption), S "is used"]
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) s6_2_1_list_assum1),
@@ -425,7 +424,7 @@ s6_2_4 = SRS.dataDefn
 
 s6_2_4_intro = Paragraph $ foldlSent [
   S "This", phrase section_, S "collects and defines all the", 
-  plural datum, S "needed to build the" +:+. plural inModel]
+  plural datum, S "needed to build the", plural inModel]
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
@@ -503,7 +502,7 @@ s7_1 = SRS.funcReq ([s7_1_intro] ++ (s7_1_list)) []
 s7_1_intro = Paragraph $ foldlSent [
   S "The following", phrase section_, S "provides the", 
   plural functionalRequirement `sC` S "the business tasks that the", 
-  phrase software +:+. S "is expected to complete"]
+  phrase software, S "is expected to complete"]
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
@@ -581,7 +580,7 @@ s7_2_intro = Paragraph $ foldlSent [
   phrase performance, S "is not a" +:+. phrase priority, S "Any reasonable implementation", 
   S "will be very quick and use minimal storage. Rather than", phrase performance `sC`
   S "the", phrase priority, phrase nonfunctional, (short requirement) :+: 
-  S "s are correctness, verifiability, understandability, reusability," +:+.
+  S "s are correctness, verifiability, understandability, reusability,", 
   S "maintainability and portability"]
 
 s8 = SRS.likeChg [s8_list] []
@@ -625,7 +624,7 @@ s9_intro1 = Paragraph $ foldlSent [
   S "and" +:+. plural datumConstraint, titleize table_, S "7",
   sParen (makeRef s9_table3), S "shows the", plural dependency, S "of",
   plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC` plural likelyChg,
-  S "and", (plural requirement), S "on the" +:+. (plural assumption)]
+  S "and", (plural requirement), S "on the", (plural assumption)]
 
 --FIXME: There has to be a better way to do this.
 s9_table1 = Table [EmptyS, 
@@ -846,7 +845,7 @@ s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 s11_intro = Paragraph $ foldlSent [
   S "This", phrase appendix, S "holds the", (plural $ graph ^. term),
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)),
-  S "used for interpolating", plural value, S "needed in the" +:+. plural model]
+  S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+

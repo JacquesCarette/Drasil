@@ -25,10 +25,11 @@ import Control.Lens
 import Language.Drasil.Code.CodeGeneration
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 
--- Generate a number of artifacts based on a list of recipes.
+-- | Generate a number of artifacts based on a list of recipes.
 gen :: [Recipe] -> IO ()
 gen rl = mapM_ prnt rl
 
+-- | Generate the output artifacts (TeX+Makefile or HTML)
 prnt :: Recipe -> IO ()
 prnt (Recipe dt@(SRS _) body) =
   do prntDoc dt body
@@ -48,6 +49,7 @@ prnt (Recipe dt@(Website fn) body) =
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
 
+-- | Helper for writing the documents (TeX / HTML) to file
 prntDoc :: DocType -> Document -> IO ()
 prntDoc dt body = case dt of
   (SRS fn)     -> prntDoc' dt fn TeX body
@@ -64,21 +66,24 @@ prntDoc dt body = case dt of
                 getExt HTML = ".html"
                 getExt _    = error "we can only write TeX/HTML (for now)"
 
+-- | Helper for writing the Makefile(s)
 prntMake :: DocType -> IO ()
 prntMake dt =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [dt]
      hClose outh
 
+-- | Renders the documents
 writeDoc :: Format -> DocType -> Document -> Doc
 writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
+-- | Calls the code generator using the 'ModuleChunk's
 genCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
 genCode cc mcs = prntCode cc (filter generated mcs)
 
--- generate code for all supported languages (will add language selection later)
+-- | Generate code for all supported languages (will add language selection later)
 prntCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
 prntCode cc mcs = 
   let absCode = toCode cc mcs

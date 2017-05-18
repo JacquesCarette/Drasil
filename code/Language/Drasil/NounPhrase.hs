@@ -57,38 +57,66 @@ instance NounPhrase NP where
   titleCase n@(Phrase _ _ _ r)        f = cap (f n) r
   
 -- ===Constructors=== --
+-- | Construct a Proper Noun, it is always capitalized as written.
 pn, pn', pn'', pn''' :: String -> NP
+-- | Self plural
 pn    n = ProperNoun n SelfPlur
+-- | Plural form simply adds "s" (ex. Henderson -> Hendersons)
 pn'   n = ProperNoun n AddS
+-- | Plural form adds "e"
 pn''  n = ProperNoun n AddE
+-- | Plural form adds "es" (ex. Bush -> Bushes)
 pn''' n = ProperNoun n AddES
 
+-- | Construct a Proper Noun. Meant for use with IrregPlur from 'PluralRule'.
+-- First argument is the String representing the noun, second is the rule.
 pnIrr :: String -> PluralRule -> NP
 pnIrr = ProperNoun
 
+-- | Construct a common noun which capitalizes the first letter of the first word
+-- at the beginning of a sentence.
 cn, cn', cn'', cn''' :: String -> NP
+-- | Self plural
 cn    n = CommonNoun n SelfPlur CapFirst
+-- | Plural form simply adds "s" (ex. dog -> dogs)
 cn'   n = CommonNoun n AddS CapFirst
+-- | Plural form adds "e" (ex. formula -> formulae)
 cn''  n = CommonNoun n AddE CapFirst
+-- | Plural form adds "es" (ex. bush -> bushes)
 cn''' n = CommonNoun n AddES CapFirst
 
+-- | Common noun that pluralizes by dropping the last letter and adding an "ies"
+-- | ending (ex. body -> bodies)
 cnIES :: String -> NP
 cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 
+--FIXME: Shouldn't this just be drop one and add "ces"?
+-- | Common noun that pluralizes by dropping the last two letters and adding an 
+-- | "ices" ending (ex. matrix -> matrices)
 cnICES :: String -> NP
 cnICES n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "ices")) CapFirst
 
+-- | Common noun that pluralizes by dropping the last two letters and adding
+-- "es" (ex. analysis -> analyses)
 cnIS :: String -> NP
 cnIS n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "es")) CapFirst
 
+-- | Common noun that pluralizes by dropping the last two letters and adding "a"
+-- (ex. datum -> data)
 cnUM :: String -> NP
 cnUM n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "a")) CapFirst
 
+-- | Common noun that allows you to specify the pluralization rule 
+-- (as in 'pnIrr')
 cnIP :: String -> PluralRule -> NP
 cnIP n p = CommonNoun n p CapFirst
 
+-- | Common noun that allows you to specify both the pluralization rule and the
+-- capitalization rule for sentence case (if the noun is used at the beginning
+-- of a sentence)
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 cnIrr = CommonNoun 
+
 
 nounPhrase :: String -> PluralString -> NP
 nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords

@@ -1,3 +1,4 @@
+-- | Document Description Language
 module Language.Drasil.Document where
 import Prelude hiding (id)
 import Language.Drasil.Chunk (id)
@@ -18,48 +19,58 @@ type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type Pair     = (Title,ItemType) -- Title: Item
+type Pair     = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
 type Label    = Sentence
 type Sections = [Section]
 
+-- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
+-- which hold the contents of the document
 data Document = Document Title Author Sections
 
+-- | Section Contents are split into subsections or contents, where contents
+-- are standard layout objects (see 'Contents')
 data SecCons = Sub Section
              | Con Contents
 
+-- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 data Section = Section Title [SecCons]
 
---Types of layout objects we deal with explicitly
+-- | Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool
-  --table header data label showlabel?
-               | Paragraph Sentence
+  -- ^ table has: header-row data(rows) label/caption showlabel?
+               | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
-     --          | CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition DType
-               | Enumeration ListType
-               | Figure Label Filepath--Should use relative file path.
-               | Module ModuleChunk
+     --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
+               | Definition DType -- ^ Data/General definition or theoretical model
+               | Enumeration ListType -- ^ Lists
+               | Figure Label Filepath -- ^ Should use relative file path.
+               | Module ModuleChunk 
                | Requirement ReqChunk
                | Assumption AssumpChunk
                | LikelyChange LCChunk
                | UnlikelyChange UCChunk
-     --          | UsesHierarchy [(ModuleChunk,[ModuleChunk])]
+     --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
+               -- ^ TODO: Fill this one in.
 
-data ListType = Bullet [ItemType]
-              | Number [ItemType] 
-              | Simple [Pair]
-              | Desc [Pair]
+data ListType = Bullet [ItemType] -- ^ Bulleted list
+              | Number [ItemType] -- ^ Enumerated List
+              | Simple [Pair] -- ^ Simple list with items denoted by @-@
+              | Desc [Pair] -- ^ Descriptive list, renders as "Title: Item" (see 'Pair')
          
-data ItemType = Flat Sentence 
-              | Nested Header ListType
+data ItemType = Flat Sentence -- ^ Standard singular item
+              | Nested Header ListType -- ^ Nest a list as an item
                
--- Types of definitions
-data DType = Data QDefinition 
-           | General 
-           | Theory RelationConcept
+-- | Types of definitions
+data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
+                              -- equation used to generate the Data Definition
+           | General -- ^ Not implemented as of yet
+           | Theory RelationConcept -- ^ Theoretical models use a relation as
+                                    -- their definition
 
+-- | Every layout object has a reference name (for intra-document referencing)
+-- and a reference type (denoting what type of reference to create)
 class LayoutObj l where
   refName :: l -> Sentence
   rType   :: l -> RefType
@@ -95,6 +106,7 @@ instance LayoutObj Contents where
   rType (Graph _ _ _ _)    = Fig
   rType _ = error "Attempting to reference unimplemented reference type"
   
+-- | Automatically create the label for a definition
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
 getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. id))
@@ -105,5 +117,7 @@ getDefName _          = error "Unimplemented definition type reference"
 -- data types.  Over time, the types should no longer be exported, and 
 -- only these used
 
+-- | Smart constructor for creating Sections with introductory contents
+-- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)

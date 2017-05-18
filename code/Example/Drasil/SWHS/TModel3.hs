@@ -1,7 +1,5 @@
 module Drasil.SWHS.TModel3 where
 
-import Data.Char (toLower)
-
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.DataDefs
 

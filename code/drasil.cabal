@@ -195,6 +195,7 @@ executable ssp
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
+    , Drasil.OrganizationOfSRS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

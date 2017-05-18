@@ -1,7 +1,6 @@
 module Language.Drasil.Document where
 import Prelude hiding (id)
 import Language.Drasil.Chunk (id)
-import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
@@ -11,7 +10,6 @@ import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec (Sentence(..), RefType(..))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
-import Language.Drasil.NounPhrase (phrase)
 import Control.Lens ((^.))
 
 type Title    = Sentence

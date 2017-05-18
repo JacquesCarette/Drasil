@@ -140,7 +140,7 @@ mod_ode_fun impl depnd = makeImpModule mod_ode_desc (S "The algorithm to solve a
           (Just mod_sw)
 
 mod_calc_fun :: NamedIdea a => Sentence -> Sentence -> a -> [MethodChunk] -> [ModuleChunk] -> ModuleChunk
-mod_calc_fun defn desc impl depnd1 depnd2 = makeImpModule (mod_calc_desc defn)
+mod_calc_fun defn' desc impl depnd1 depnd2 = makeImpModule (mod_calc_desc defn')
   (desc)
   impl
   []

@@ -211,11 +211,11 @@ hs            = dcc "hs" (nounPhraseSP "heat strengthened glass")
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6] in Reference.")
 gtf           = dccWDS "gtf" (nounPhraseSP "glass type factor") 
-  (S "A multiplying factor for adjusting the " :+: (getAcc lResistance) :+:
-  S " of different glass type, that is, " :+: (getAcc annealedGlass) :+: 
-  S ", " :+: (getAcc heatSGlass) :+: S ", or " :+: (getAcc fullyTGlass) :+: 
-  S " in monolithic glass, " :+: (getAcc lGlass) :+: S " (Laminated Glass), " :+:
-  S "or " :+: (getAcc iGlass) :+: S " (Insulating Glass) constructions.")
+  (S "A multiplying factor for adjusting the" +:+ (getAcc lResistance) +:+
+  S "of different glass type, that is," +:+ (getAcc annealedGlass) :+: 
+  S "," +:+ (getAcc heatSGlass) :+: S ", or" +:+ (getAcc fullyTGlass) +:+ 
+  S "in monolithic glass," +:+ (getAcc lGlass) +:+ S "(Laminated Glass)," +:+
+  S "or" +:+ (getAcc iGlass) +:+. S "(Insulating Glass) constructions")
 lateral       = dcc "lateral" (cn "lateral") "Perpendicular to the glass surface."
 load          = dcc "load" (cn "load") "A uniformly distributed lateral pressure."
 specDeLoad    = dcc "specDeLoad" (nounPhraseSP "specified design load")
@@ -229,17 +229,17 @@ ldl           = dcc "ldl" (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nfl           = dccWDS "nfl" (nounPhraseSP "non-factored load")
   (S ("Three second duration uniform load associated with a probability of " ++
-    "breakage less than or equal to 8 lites per 1000 for monolithic ") :+:
-    (getAcc annealedGlass) :+: S " glass.")
+    "breakage less than or equal to 8 lites per 1000 for monolithic") +:+
+    (getAcc annealedGlass) +:+. S "glass")
 glassWL       = dcc "glassWL" (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
 sdl           = dcc "sdl" (nounPhraseSP "short duration load")
   "Any load lasting 3s or less."
 lsf           = dccWDS "lsf" (nounPhraseSP "load share factor")
-  (S "A multiplying factor derived from the load sharing between the double " :+:
-  S "glazing, of equal or different thickness's and types (including the " :+:
-  S "layered behaviour of " :+: (getAcc lGlass) :+: S " under long duration " :+:
-  S "loads), in a sealed " :+: (getAcc iGlass) :+: S " unit.")
+  (S "A multiplying factor derived from the load sharing between the double" +:+
+  S "glazing, of equal or different thickness's and types (including the" +:+
+  S "layered behaviour of" +:+ (getAcc lGlass) +:+ S "under long duration" +:+
+  S "loads), in a sealed" +:+ (getAcc iGlass) +:+. S "unit")
 pb            = dcc "pb" (nounPhraseSP "probability of breakage")
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
@@ -291,15 +291,15 @@ safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
 --relation within relation
 t1descr :: Sentence
 t1descr = 
-  S "If " :+: (P $ is_safe1 ^. symbol) :+: S " = True, the glass is " :+: 
-  S "considered safe. " :+: (P $ is_safe1 ^.symbol) :+: S " and " :+: 
-  (P $ is_safe2 ^. symbol) :+: S " (from " :+: 
-  (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either " :+:
-  S "both True or both False. " :+: (P $ prob_br ^. symbol) :+: 
-  S " is the " :+: (phrase $ prob_br ^. term) :+: 
-  S ", as calculated in " :+: (makeRef (Definition (Theory probOfBr))) :+: 
-  S ". " :+: (P $ pb_tol ^. symbol) :+: S " is the " :+: 
-  (phrase $ pb_tol ^. term) :+: S " entered by the user."
+  S "If" +:+ (P $ is_safe1 ^. symbol) +:+ S "= True, the glass is" +:+. 
+  S "considered safe" +:+ (P $ is_safe1 ^.symbol) +:+ S "and" +:+ 
+  (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
+  (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either" +:+.
+  S "both True or both False" +:+ (P $ prob_br ^. symbol) +:+ 
+  S "is the" +:+ (phrase $ prob_br ^. term) :+: 
+  S ", as calculated in" +:+. (makeRef (Definition (Theory probOfBr))) +:+ 
+  (P $ pb_tol ^. symbol) +:+ S "is the" +:+ 
+  (phrase $ pb_tol ^. term) +:+. S " entered by the user"
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "safety requirement-2")
@@ -312,16 +312,16 @@ safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 
 t2descr :: Sentence
 t2descr = 
-  S "If " :+: (P $ is_safe2 ^. symbol) :+: S " = True, the glass is " :+:
-  S "considered safe. " :+: (P $ is_safe1 ^. symbol) :+: S " (from " :+:
-  (makeRef (Definition (Theory t1SafetyReq))) :+: S " and " :+: 
-  (P $ is_safe2 ^. symbol) :+: S " are either both True or both False. " :+:   
-  (short lResistance) :+: S " is the " :+: (phrase $ lResistance ^. term) :+: 
-  S " (also called capacity, as defined in " :+: 
-  (makeRef (Definition (Theory calOfCap))) :+: S ". " :+: 
-  (P $ demand ^. symbol) :+: S " (also referred as the " :+: (titleize $ demandq ^. term)
-  :+: S ") is the " :+: (demandq ^. defn) :+: S ", as defined in " :+: 
-  (makeRef (Definition (Theory calOfDe))) :+: S "."
+  S "If" +:+ (P $ is_safe2 ^. symbol) +:+ S "= True, the glass is" +:+.
+  S "considered safe" +:+ (P $ is_safe1 ^. symbol) +:+ S "(from" +:+
+  (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
+  (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False" +:+   
+  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) +:+ 
+  S "(also called capacity, as defined in" +:+. 
+  (makeRef (Definition (Theory calOfCap))) +:+ 
+  (P $ demand ^. symbol) +:+ S "(also referred as the" +:+ (titleize $ demandq ^. term)
+  :+: S ") is the" +:+ (demandq ^. defn) :+: S ", as defined in" +:+. 
+  (makeRef (Definition (Theory calOfDe)))
 
 --Instance Models--
 iModels :: [RelationConcept]
@@ -336,9 +336,9 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 
 pbdescr :: Sentence
 pbdescr =
-  (P $ prob_br ^. symbol) :+: S " is the calculated " :+: 
-  (phrase $ prob_br ^. term) :+: S ". "  :+: 
-  (P $ risk_fun ^. symbol) :+: S " is the " :+: (phrase $ risk ^. term) :+: S "."
+  (P $ prob_br ^. symbol) +:+ S "is the calculated" +:+.
+  (phrase $ prob_br ^. term) +:+ 
+  (P $ risk_fun ^. symbol) +:+ S "is the" +:+. (phrase $ risk ^. term)
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
@@ -349,11 +349,11 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (short lResistance) :+: S " is the " :+: (phrase $ lResistance ^. term) :+: S ", which " :+:
-  S "is also called capacity. " :+: (P $ nonFL ^. symbol) :+: S " is the " :+:
-  (phrase $ nonFL ^. term) :+: S ". " :+: (short glassTypeFac) :+: S " is the " :+:
-  (phrase $ glassTypeFac ^. term) :+: S ". " :+: (short lShareFac) :+: S " is the " :+:
-  (phrase $ lShareFac ^. term) :+: S "."
+  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) :+: S ", which" +:+.
+  S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+ S "is the" +:+.
+  (phrase $ nonFL ^. term) +:+ (short glassTypeFac) +:+ S "is the" +:+.
+  (phrase $ glassTypeFac ^. term) +:+ (short lShareFac) +:+ S "is the" +:+.
+  (phrase $ lShareFac ^. term)
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
@@ -364,18 +364,18 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 
 dedescr :: Sentence
 dedescr = 
-  (P $ demand ^. symbol) :+: S " or " :+: 
-  (phrase $ demandq ^. term) :+: S ", is the " :+:
-  (demandq ^. defn) :+: S " obtained from Figure 2 by interpolation using " 
-  :+: (phrase $ sD ^. term) :+: S " (" :+: (P $ sd ^. symbol) 
-  :+: S ") and " :+: (P $ eqTNTWeight ^. symbol) :+: S " as parameters. " :+: 
-  (P $ eqTNTWeight ^. symbol) :+: S " is defined as " :+:
-  (P $ eqTNTWeight ^. symbol) :+: S " = " :+: (P $ char_weight ^. symbol) :+:
-  S " * TNT. " :+: (P $ char_weight ^. symbol) :+: S " is the " :+:
-  (phrase $ char_weight ^. term) :+: S ". " :+: 
-  (P $ tNT ^. symbol) :+: S " is the " :+: (phrase $ tNT ^. term) :+: S ". " :+: 
-  (P $ sd ^.symbol) :+: S " is the " :+: (phrase $ sD ^. term)
-  :+: S " where " :+: (P $ sd ^. symbol) :+: S " = ." 
+  (P $ demand ^. symbol) +:+ S "or" +:+ 
+  (phrase $ demandq ^. term) :+: S ", is the" +:+
+  (demandq ^. defn) +:+ S "obtained from Figure 2 by interpolation using" 
+  +:+ (phrase $ sD ^. term) +:+ S "(" :+: (P $ sd ^. symbol) 
+  :+: S ") and" +:+ (P $ eqTNTWeight ^. symbol) +:+. S "as parameters" +:+ 
+  (P $ eqTNTWeight ^. symbol) +:+ S "is defined as" +:+
+  (P $ eqTNTWeight ^. symbol) +:+ S "=" +:+ (P $ char_weight ^. symbol) +:+.
+  S "* TNT" +:+ (P $ char_weight ^. symbol) +:+ S "is the" +:+.
+  (phrase $ char_weight ^. term) +:+ 
+  (P $ tNT ^. symbol) +:+ S "is the" +:+. (phrase $ tNT ^. term) +:+ 
+  (P $ sd ^.symbol) +:+ S "is the" +:+ (phrase $ sD ^. term)
+  +:+ S "where" +:+ (P $ sd ^. symbol) +:+ S "= ." 
   --equation in sentence
 
 --Data Definitions--

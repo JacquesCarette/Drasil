@@ -2,6 +2,7 @@ module Data.Drasil.Utils
   ( foldle
   , foldlSent
   , foldlList
+  , foldlsC
   , mkEnumAbbrevList
   , mkConstraintList
   ) where
@@ -32,6 +33,13 @@ foldlSent = foldle (+:+) (+:+.) EmptyS
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
 foldlList = foldle1 sC (\a b -> a `sC` S "and" +:+ b)
+
+-- | creates a list of elements seperated by commas, including the last element
+foldlsC :: [Sentence] -> Sentence
+foldlsC []       = EmptyS
+foldlsC [x]      = x
+foldlsC [x,y]    = x `sC` y
+foldlsC (x:y:xs) = foldle sC sC (x `sC` y) xs
 
 -- | concantenates number to abbreviation
 -- should not be exported

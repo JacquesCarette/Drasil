@@ -4,10 +4,11 @@ import Prelude hiding (id)
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.List (nub, intersperse)
+import Data.List (nub)
 import Data.Maybe (fromJust, isNothing)
 
 import Data.Drasil.Concepts.Documentation (mg)
+import Data.Drasil.Utils (foldlsC)
 
 import Drasil.Template.Helpers
 
@@ -269,8 +270,7 @@ mgLCTraceEntry lcc = [ makeRef (LikelyChange lcc),
                      ]
 
 mgListModules :: [ModuleChunk] -> Sentence
-mgListModules mcs = foldl (:+:) (EmptyS) $ intersperse (S ", ") $
-  map (\x -> makeRef $ Module x) mcs
+mgListModules mcs = foldlsC $ map (\x -> makeRef $ Module x) mcs
 
 mgUses :: [ModuleChunk] -> Section
 mgUses mcs = let uh = mgUH mcs

@@ -3,6 +3,7 @@ import Prelude hiding (id)
 import Language.Drasil
 
 import Drasil.Template.Helpers
+import Data.Drasil.Utils (foldlsC)
 
 import Data.List (intersperse)
 import Control.Lens ((^.))
@@ -51,11 +52,8 @@ misInterfaceSemantics mc = Section (S $ "Interface Semantics")
 misAPSemantics :: MethodChunk -> Section
 misAPSemantics mec = Section (convertName (mec ^. id))
   [ Con $ Enumeration $ Desc
-    [(S "Input", Flat $ foldl (:+:) (EmptyS) $
-        intersperse (S ", ") $ map (\x -> P $ x ^. symbol) (input mec)),
-     (S "Exceptions", Flat $ foldl (:+:) (EmptyS) $
-        intersperse (S ", ") $ map (S . show) (exc mec)),
-     (S "Output", Flat $ foldl (:+:) (EmptyS) $
-             intersperse (S ", ") $ map (\x -> P $ x ^. symbol) (output mec))
+    [(S "Input", Flat $ foldlsC $ map (\x -> P $ x ^. symbol) (input mec)),
+     (S "Exceptions", Flat $ foldlsC$ map (S . show) (exc mec)),
+     (S "Output", Flat $ foldlsC $ map (\x -> P $ x ^. symbol) (output mec))
     ]
   ]

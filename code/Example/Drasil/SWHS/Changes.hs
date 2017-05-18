@@ -3,7 +3,6 @@ module Drasil.SWHS.Changes where
 import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Modules
-import Data.Drasil.Modules
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Changes
 

@@ -127,7 +127,7 @@ orgOfDoc, prpsOfDoc, refmat, scpOfReq, scpOfTheProj,
 corSol       = npnc "corSol"       (cn' "correct solution")
 charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
-propOfCorSol = npnc "propOfCorSol" (of'' titleize' titleize property (a_ corSol))
+propOfCorSol = npnc "propOfCorSol" (property `of__` (a_ corSol))
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)

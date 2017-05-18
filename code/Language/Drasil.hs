@@ -24,7 +24,7 @@ module Language.Drasil (
   , commonINP, CINP, commonINP', commonINP''
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, NPNC, short, nc, nc', npnc
-  , compoundterm, for, for', for'', of_, of_', of_'', of'', compoundNPNC, compoundNPNC'
+  , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNPNC, compoundNPNC'
   , compoundNPNC'', npnc', with, with', and_, and_', andRT, aNP, the, a_
   -- Chunk.Constrained
   , Constrained(..)

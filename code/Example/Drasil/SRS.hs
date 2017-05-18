@@ -60,7 +60,7 @@ inModel     = section (titleize' Doc.inModel)
 dataDefn    = section (titleize' Doc.dataDefn)
 datCon      = section (titleize' Doc.datumConstraint)
 
-propCorSol  = section (Doc.propOfCorSol)
+propCorSol  = section (titleize' Doc.propOfCorSol)
 
 require     = section (titleize' Doc.requirement)
 nonfuncReq  = section (titleize' Doc.nonfunctionalRequirement)

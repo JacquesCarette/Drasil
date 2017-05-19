@@ -8,18 +8,20 @@ import Data.Drasil.Concepts.Documentation
 import Control.Lens((^.))
 import Prelude hiding (log, id)
 
---FIXME: There are three separate non-factored loads! 
+--FIXME: There are three separate non-factored loads!
 -- Two are (at least) linked, but the third is completely separate!
 
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 
 --FIXME: Many of the current terms can be separated into terms and defns!
 
----- FIXME: having id "" and term "" is completely bogus, and should not
--- be allowed.  This implicitly says that something here does not make sense.
+--FIXME: having id "" and term "" is completely bogus, and should not
+--  be allowed.  This implicitly says that something here does not make sense.
 
 fixme :: String
 fixme = "FIXME: Define this or remove the need for definitions"
+
+{--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
 glassBRSymbolsWithDefns = [mod_elas, sd]
@@ -34,6 +36,8 @@ sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
   S "centroid of a hemispherical high explosive charge. It is represented by"
   +:+ S "the coordinates (SDx, SDy, SDz).")
   (Atomic "SD") metre
+
+{--}
 
 glassBRSymbols :: [UnitaryChunk]
 glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick,
@@ -93,6 +97,8 @@ eqTNTWeight = unitary' "eqTNTWeight"
   (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
+{-Quantities-}
+
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf,
   sdf_tol, prob_br, pb_tol, dimlessLoad, tolLoad]
@@ -100,7 +106,6 @@ glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf,
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br,
   pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
-----Quantities--
 ar_max      = makeVC "ar_max"   (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max"))
 risk_fun    = makeVC "risk_fun" (nounPhraseSP "risk function") cB
@@ -133,8 +138,9 @@ ar_min      = makeVC "ar_min" (nounPhraseSP "minimum aspect ratio")
   (sub (Atomic "AR") (Atomic "min")) --find a way to call aspectR instead of using (Atomic "AR") again
 gTF         = makeVC "gTF" (nounPhraseSP "glass type factor") (Atomic "GTF")
 
-----Acronyms-----
+{-Acronyms-}
 -- FIXME: Use actual acronyms instead of CCs.
+
 acronyms :: [CINP]
 acronyms = [assumption,annealedGlass,aspectR, dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
@@ -164,10 +170,8 @@ notApp        = commonINP "notApp"        (cn "not applicable")             "N/A
 nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase?
 eqTNT         = commonINP "eqTNT"         (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 
-----Terminology---- 
-
--- TODO: See if we can make some of these terms less specific and/or
---    parameterized.
+{-Terminology-}
+-- TODO: See if we can make some of these terms less specific and/or parameterized.
 terms :: [ConceptChunk]
 terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, 
   lr, ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, sD]
@@ -177,7 +181,6 @@ aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr,
   sD, glaSlab, blast, blastRisk, blastTy, glassGeo, capacity, demandq, 
   safeMessage, notSafe, bomb, explosion:: ConceptChunk
   
-
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 aR            = dcc "aR" (nounPhraseSP "aspect ratio") 
   ("The ratio of the long dimension of the glass to the short dimension of " ++
@@ -274,7 +277,8 @@ bomb          = dcc "bomb" (cn' "bomb") ("a container filled with a destructive"
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion" (cn' "explosion") "a destructive shattering of something"
 
---Theoretical models--
+{-Theoretical models-}
+
 tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]
 
@@ -306,7 +310,6 @@ safety_require2_rel :: Relation
 safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 
 --relation within relation
-
 t2descr :: Sentence
 t2descr = 
   S "If" +:+ (P $ is_safe2 ^. symbol) +:+ S "= True, the glass is" +:+.
@@ -320,7 +323,8 @@ t2descr =
   (titleize $ demandq ^. term) :+: S ") is the" +:+ (demandq ^. defn) :+:
   S ", as defined in" +:+. (makeRef (Definition (Theory calOfDe)))
 
---Instance Models--
+{-Instance Models-}
+
 iModels :: [RelationConcept]
 iModels =[probOfBr, calOfCap, calOfDe]
 
@@ -375,24 +379,23 @@ dedescr =
   +:+ S "where" +:+ (P $ sd ^. symbol) +:+ S "= ." 
   --equation in sentence
 
---Data Definitions--
+{-Data Definitions-}
+--FIXME? Maybe remove use of id, or not, since it's just setting an id.
+--        Should definitely look into how this chunk is used to make sure
+--        the current id makes sense. Same for the QDefns below.
 dataDefns :: [QDefinition]
 dataDefns = [risk,hFromt,loadDF,strDisFac,nonFL,glaTyFac,dL,tolPre,
   tolStrDisFac]
+
+risk :: QDefinition
+risk = fromEqn' (risk_fun ^. id) (nounPhraseSP "risk of failure") 
+  (risk_fun ^. symbol) risk_eq
 
 risk_eq :: Expr
 risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   ((C plate_width):/(Int 1000)))):^((C sflawParamM) - (Int 1))):*
   (Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick)
   :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
-
---FIXME? Maybe remove use of id, or not, since it's just setting an id.
---        Should definitely look into how this chunk is used to make sure
---        the current id makes sense. Same for the QDefns below.
-  
-risk :: QDefinition
-risk = fromEqn' (risk_fun ^. id) (nounPhraseSP "risk of failure") 
-  (risk_fun ^. symbol) risk_eq
 
 hFromt_eq :: Expr
 hFromt_eq = FCall (C act_thick) [C nom_thick]

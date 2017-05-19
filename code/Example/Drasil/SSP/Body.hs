@@ -356,29 +356,84 @@ s4_2_2_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:
 s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = SRS.genDefn [] []
+s4_2_3 = SRS.genDefn [s4_2_3_p1] []
+
+s4_2_3_p1 :: Contents
+s4_2_3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects the laws and" +:+
+  S "equations that will be used in deriving the" +:+ (plural dataDefn) `sC` S "which will" +:+
+  S "in turn are used to build the" +:+. (plural inModel)
 
 -- SECTION 4.2.4 --
-s4_2_4 = SRS.dataDefn [] []
+s4_2_4 = SRS.dataDefn [s4_2_3_p1] []
+
+s4_2_4_p1 :: Contents
+s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defines all" +:+
+  S "the" +:+ (plural datum) +:+ S "needed to build the" +:+. (plural inModel) +:+
+  (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
+  S "can be solved by direct analysis of given inputs. The interslice" +:+ 
+  S "forces DD9 are force variables that must be written" +:+ 
+  S "in terms of DD1 to DD8 to solve."
 
 -- SECTION 4.2.5 --
 s4_2_5 = sec_IMs
 
 sec_IMs :: Section
-sec_IMs = SRS.inModel [] []
+sec_IMs = SRS.inModel [s4_2_5_p1,s4_2_5_p2,s4_2_5_p3] []
+
+s4_2_5_p1, s4_2_5_p2, s4_2_5_p3 :: Contents
+
+s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+ (phrase problem) +:+
+  S "defined in the" +:+ makeRef s4_1 +:+ S "into one which is expressed in mathematical terms." +:+
+  S "It used concrete symbols defined in" +:+ makeRef s4_2_4 +:+ S "to replace the abstract" +:+
+  S "symbols in the" +:+ (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3 --FIXME: make references to these sections
+  
+s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
+  S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 
+  S "method. Analysis is performed by breaking the assumed failure" +:+ 
+  S "surface into a series of vertical slices of mass. Static" +:+ 
+  S "equilibrium analysis using two force equilibrium, and one" +:+ 
+  S "moment equation as in T2. The problem is statically" +:+ --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
+  S "indeterminate with only these 3 equations and one constitutive" +:+ 
+  S "equation (the Mohr Coulomb shear strength of T3)" +:+ 
+  S "so the assumption of GD5 is used. Solving for force" +:+ 
+  S "equilibrium allows definitions of all forces in terms of" +:+ 
+  S "the physical properties of DD1 to DD9," +:+ 
+  S "as done in DD10, DD11."
+
+s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
+  S "E the interslice normal/shear force magnitude ratio lambda," +:+ --FIXME: 'E' should be the symbol captital E, same with lambda
+  S "and the" +:+ (titleize $ fs_rc ^. term) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
+  S "Equations for the unknowns are written in terms of only the values" +:+ 
+  S "in DD1 to DD9, the values of" +:+ (P $ ri ^. symbol) `sC` 
+  S "and" +:+ (P $ ti ^. symbol) +:+ S "in DD10 and DD11, and each" +:+ --FIXME: DD10,DD11 should be references to other things in the body
+  S "other. The relationships between the unknowns are non linear," +:+ 
+  S "and therefore explicit equations cannot be derived and an" +:+ 
+  S "iterative solution method is required."
 
 -- SECTION 4.2.6 --
-s4_2_6 = SRS.datCon [] []
+s4_2_6 = SRS.datCon [s4_2_6_p1] []
+
+s4_2_6_p1 :: Contents
+s4_2_6_p1 = Paragraph $ S "Table 2 and 3 show the" +:+ (plural datumConstraint) +:+ --FIXME: make references to table 2 and 3
+  S "on the input and output variables, respectively. The column" +:+ 
+  S "physical constraints gives the physical limitations on the" +:+ 
+  S "range of values that can be taken by the variable. The constraints" +:+ 
+  S "are conservative, to give the user of the model the flexibility" +:+ 
+  S "to experiment with unusual situations. The column of typical" +:+ 
+  S "values is intended to provide a feel for a common scenario." +:+ 
+  S "The uncertainty column provides an estimate of the confidence" +:+ 
+  S "with which the physical quantities can be measured. This" +:+ 
+  S "information would be part of the input if one were performing" +:+ 
+  S "an uncertainty quantification exercise."
 
 -- SECTION 5 --
 s5 = SRS.require [s5_p1] [s5_1, s5_2]
 
 s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
-  (plural functionalRequirement) `sC` 
-  S "the business tasks that the" +:+ (phrase software) +:+
-  S "is expected to complete, and the nonfunctional" +:+ 
-  (plural requirement) `sC` S "the qualities that the" +:+ 
-  (phrase software) +:+ S "is expected to exhibit."
+  (plural functionalRequirement) `sC` S "the business tasks that the" +:+
+  (phrase software) +:+ S "is expected to complete, and the nonfunctional" +:+ 
+  (plural requirement) `sC` S "the qualities that the" +:+ (phrase software) +:+ 
+  S "is expected to exhibit."
 
 -- SECTION 5.1 --
 s5_1 = SRS.funcReq
@@ -416,8 +471,8 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
             (phrase method_)),
   (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
-            (phrase slice) +:+ (phrase element) +:+ S "displacements graphically. Give" +:+
-            S "the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
+            (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
+            S "Give the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
             S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ])
   

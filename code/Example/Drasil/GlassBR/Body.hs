@@ -88,8 +88,9 @@ s2_intro = Paragraph $ foldlSent [(at_start software),
   (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
   S "under consideration is" +:+. (blast ^. defn), S "The", phrase software `sC` 
   S "herein called", (gLassBR ^. defn), S "aims to predict the", 
-  (phrase $ blastRisk ^. term), S "involved with the", (phrase $ glaSlab ^. term), 
-  S "using an intuitive", S "interface. The following", phrase section_, 
+  (phrase $ blastRisk ^. term), S "involved with the", 
+  (phrase $ glaSlab ^. term), S "using an intuitive", 
+  S "interface. The following", phrase section_, 
   S "provides an overview", S "of the", titleize srs, sParen (short srs), 
   S "for" +:+. (gLassBR ^. defn), S "This", phrase section_, S "explains the", 
   phrase purpose, S "of the", phrase document, S "is designed to fulfil, the", 
@@ -115,13 +116,13 @@ s2_1_intro_p1 = Paragraph $ foldlSent [S "The main", phrase purpose, S "of this"
   S "because the contents say what", phrase problem, 
   S "is being solved, but not how", S "to solve it"]
 
-s2_1_intro_p2 = Paragraph $ foldlSent [S "This", phrase document, S "will be used", 
-  S "as a starting point for subsequent development phases, including writing the",
-  phrase desSpec, S "and the", phrase software, phrase vav, S "plan. The", 
-  phrase design, phrase document, S "will show how the", plural requirement,
-  S "are to be realized, including", S "decisions on the numerical",
-  (plural $ algorithm ^. term), S "and programming" +:+. phrase environment, 
-  S "The", phrase vav, 
+s2_1_intro_p2 = Paragraph $ foldlSent [S "This", phrase document, 
+  S "will be used", S "as a starting point for subsequent development", 
+  S "phases, including writing the", phrase desSpec, S "and the", 
+  phrase software, phrase vav, S "plan. The", phrase design, phrase document,
+  S "will show how the", plural requirement, S "are to be realized, including",
+  S "decisions on the numerical", (plural $ algorithm ^. term), 
+  S "and programming" +:+. phrase environment, S "The", phrase vav, 
   S "plan will show the steps that will be used to increase confidence in the",
   phrase softwareDoc, S "and the implementation"]
 
@@ -131,9 +132,10 @@ s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
   plural requirement, S "includes getting all", phrase input_, 
   (plural $ parameter ^. term), S "related to the", (phrase $ glaSlab ^. term),
   S "and also the", (plural $ parameter ^. term), S "related to" +:+. 
-  (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (gLassBR ^. defn),
-  S "is intended to", S "use the", plural datum, S "and predict whether the", 
-  (phrase $ glaSlab ^. term), S "is safe to use or not"]
+  (phrase $ blastTy ^. term), S "Given the", 
+  phrase input_ `sC` (gLassBR ^. defn), S "is intended to", S "use the",
+  plural datum, S "and predict whether the", (phrase $ glaSlab ^. term),
+  S "is safe to use or not"]
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
@@ -148,9 +150,9 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   
 s3 = SRS.stakeholder [s3_intro] [s3_1, s3_2]
 
-s3_intro = Paragraph $ foldlSent [S "This", phrase section_, S "describes the" +:
-  titleize' stakeholder, S "the people who have an interest in",
-  (phrase $ the product_)]
+s3_intro = Paragraph $ foldlSent [S "This", phrase section_,
+  S "describes the" +: titleize' stakeholder, 
+  S "the people who have an interest in", (phrase $ the product_)]
 
 s3_1 = SRS.theClient [s3_1_intro] []
 
@@ -162,8 +164,8 @@ s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
 
 s3_2 = SRS.theCustomer [s3_2_intro] []
 
-s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), S "are the end",
-  phrase user, S "of", (gLassBR ^. defn)]
+s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
+  S "are the end", phrase user, S "of", (gLassBR ^. defn)]
 
 s4 = SRS.genSysDec [s4_intro] [s4_1, s4_2]
 
@@ -180,11 +182,11 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "is expected to" +:+ 
   S "have completed at least the equivalent of the second year of an" +:+.
   S "undergraduate degree in civil or structural engineering"),
-  (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. 
-  (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
-  S "is expected to have basic" +:+ phrase computer +:+ 
-  S "literacy to handle the" +:+. phrase software)]
+  (S "The end" +:+ phrase user +:+
+  S "is expected to have an understanding of" +:+ phrase theory +:+ S "behind"
+  +:+ (phrase $ gbr ^. term) +:+ S "and" +:+. (phrase $ blastRisk ^. term)),
+  (S "The end" +:+ phrase user +:+ S "is expected to have basic" +:+ 
+  phrase computer +:+ S "literacy to handle the" +:+. phrase software)]
 
 s4_2 = SRS.sysCon [s4_2_intro] []
 
@@ -193,8 +195,9 @@ s4_2_intro = Paragraph $
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
-s5_intro = Paragraph $ foldlSent [S "This", phrase section_, S "presents the" +:+.
-  phrase (scpOfTheProj phrase), S "It describes the expected use of", (gLassBR ^. defn),
+s5_intro = Paragraph $ foldlSent [S "This", phrase section_,
+  S "presents the" +:+. phrase (scpOfTheProj phrase),
+  S "It describes the expected use of", (gLassBR ^. defn), 
   S "as well as the", plural input_, S "and", plural output_, 
   S "of each action. The", plural useCase, S "are", phrase input_, S "and",
   phrase output_ `sC` S "which defines the action of getting the", phrase input_,
@@ -202,11 +205,12 @@ s5_intro = Paragraph $ foldlSent [S "This", phrase section_, S "presents the" +:
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
 
-s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+ titleize name_,
-  S "Actor", titleize input_ +:+ S "and" +:+ titleize output_] (mkTable
+s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
+  titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+  (mkTable
   [(\x -> (x!!0)),(\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", titleize' input_, titleize user, titleize' characteristic +:+ S "of the" +:+
-  (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
+  [[S "1", titleize' input_, titleize user, titleize' characteristic +:+
+  S "of the" +:+ (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ 
   (makeRef s5_2)],
   [S "2", titleize output_, (gLassBR ^. defn), S "Whether or not the" +:+
@@ -221,13 +225,14 @@ s5_2_bullets = Enumeration $ Bullet $ map Flat [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
 s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, 
-  S "providing", phrase input_, S "to", (gLassBR ^. defn), S "for use within the" +:+.
-  phrase analysis, S "There are two", S "classes of" +: plural input_, 
-  (phrase $ glassGeo ^. term), S "and" +:+. (phrase $ blastTy ^. term),
-  (glassGeo ^. defn), (blastTy ^. defn), S "These", (plural $ parameter ^. term),
-  S "describe", (phrase $ char_weight ^. term), S "and stand off" +:+. 
-  (phrase $ blast ^. term), S "Another", phrase input_, S "the", phrase user,
-  S "gives is the tolerable", phrase value, S "of", (phrase $ prob_br ^. term)]
+  S "providing", phrase input_, S "to", (gLassBR ^. defn),
+  S "for use within the" +:+. phrase analysis, S "There are two", S "classes of"
+  +: plural input_, (phrase $ glassGeo ^. term), S "and" +:+.
+  (phrase $ blastTy ^. term), (glassGeo ^. defn), (blastTy ^. defn), S "These",
+  (plural $ parameter ^. term), S "describe", (phrase $ char_weight ^. term),
+  S "and stand off" +:+. (phrase $ blast ^. term), S "Another", phrase input_,
+  S "the", phrase user, S "gives is the tolerable", phrase value, S "of",
+  (phrase $ prob_br ^. term)]
 
 s5_2_bt_sent2 :: Sentence
 s5_2_bt_sent2 = foldlSent [S " Use Case 2", (gLassBR ^. defn), 
@@ -264,7 +269,8 @@ s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
   S "is a", phrase computer, (phrase $ program ^. term), 
   S "developed to interpret", S "the", plural input_, S "to give out the",
   plural output_, S "which predicts whether the", (phrase $ glaSlab ^. term), 
-  S "can withstand the", (phrase $ blast ^. term), S "under the", plural condition]
+  S "can withstand the", (phrase $ blast ^. term), S "under the",
+  plural condition]
 
 s6_1_1 = SRS.termAndDefn [s6_1_1_intro, s6_1_1_bullets] []
   
@@ -278,10 +284,10 @@ s6_1_1_intro = Paragraph $ foldlSent [
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ ((at_start $ aspectR ^. term) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} :+: -- conceptually correct to call abbreviation as a symbol?
   (aR ^. defn)] ++
-  map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) [gbr, lite] ++ 
-  [Nested (((titleize $ glassTy ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)
-  [(((phrase $ an ^. term) :+: sParenDash (short annealedGlass)) :+: 
-    (an ^. defn)),
+  map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
+  [gbr, lite] ++ [Nested (((titleize $ glassTy ^. term) :+: S ":")) 
+  (Bullet $ map (\c -> Flat c) [(((phrase $ an ^. term) :+: 
+    sParenDash (short annealedGlass)) :+: (an ^. defn)),
   (((at_start $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
     (ft ^. defn)),
   (((at_start $ hs ^. term) :+: sParenDash (short heatSGlass)) :+:
@@ -292,10 +298,11 @@ s6_1_1_bullets = Enumeration $ (Number $
   (((at_start $ lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
   [Nested (((at_start $ load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
   [(((at_start $ specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
-  (((at_start $ lr ^. term) :+: sParenDash (short lResistance)) :+: --lr and lResistance should be the same concepts
+  (((at_start $ lr ^. term) :+: sParenDash (short lResistance)) :+:
     (lr ^. defn)),
   (((at_start $ ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
-  (((at_start $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" +:+ (nfl ^. defn))] ++ 
+  (((at_start $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" 
+    +:+ (nfl ^. defn))] ++ 
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
     [glassWL, sdl])] ++ 
   map (\c -> Flat c)
@@ -313,23 +320,25 @@ s6_1_2 = SRS.physSyst [s6_1_2_intro, s6_1_2_list,
   fig_glassbr] []
 
 s6_1_2_intro = Paragraph $ foldlSent [S "The", phrase physicalSystem, S "of", 
-  (gLassBR ^. defn), S "as shown in", (makeRef fig_glassbr) `sC` S "includes the", 
-  S "following" +: plural element]
+  (gLassBR ^. defn), S "as shown in", (makeRef fig_glassbr) `sC` 
+  S "includes the following" +: plural element]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
-s6_1_2_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short physSyst) s6_1_2_list_physys1
+s6_1_2_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short physSyst) 
+  s6_1_2_list_physys1
 
 s6_1_2_list_physys1 :: [Sentence]
-s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of" +:+. 
-  (phrase $ explosion ^. term), S "Where the", (phrase $ bomb ^. term) `sC` 
+s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of"
+  +:+. (phrase $ explosion ^. term), S "Where the", (phrase $ bomb ^. term) `sC` 
   S "or", (blast ^. defn) `sC` S "is located. The", (phrase $ sD ^. term), 
   S "is the distance between the point of", (phrase $ explosion ^. term), 
   S "and the glass"])]
 
 s6_1_3 = SRS.goalStmt [s6_1_3_list] []
 
-s6_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short goalStmt) s6_1_3_list_goalStmt1
+s6_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short goalStmt) 
+  s6_1_3_list_goalStmt1
 
 s6_1_3_list_goalStmt1 :: [Sentence]
 s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
@@ -349,15 +358,17 @@ s6_2_1 = SRS.assump ([s6_2_1_intro] ++ (s6_2_1_list)) []
 
 s6_2_1_intro = Paragraph $ foldlSent [
   S "This", phrase section_, S "simplifies the original", phrase problem, 
-  S "and helps in developing the", (phrase thModel), S "[" :+: (short thModel) :+:
-  S "] by filling in the missing", phrase information, S "for the" +:+.
-  phrase physicalSystem, S "The numbers given in the",
+  S "and helps in developing the", (phrase thModel), S "[" :+: 
+  (short thModel) :+: S "] by filling in the missing", phrase information,
+  S "for the" +:+. phrase physicalSystem, S "The numbers given in the",
   S "square brackets refer to the", (phrase dataDefn), S "[" :+:
   (short dataDefn) :+: S "], or", phrase inModel, S "[" :+: 
-  (short inModel) :+: S "], in which the respective", (phrase assumption), S "is used"]
+  (short inModel) :+: S "], in which the respective", (phrase assumption),
+  S "is used"]
 
 s6_2_1_list = 
-  [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) s6_2_1_list_assum1),
+  [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) 
+    s6_2_1_list_assum1),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
     (Neg (Int 53))),
@@ -479,12 +490,14 @@ s6_2_5_intro = Paragraph $ foldlSent
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)] 
   [(P $ dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb sd)), 
-  (P $ dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)), ((P $ ar_max ^. symbol), S "5"), 
-  (P $ cWeightMin ^. symbol, S "4.5" +:+ Sy (unit_symb cWeightMin)),
-  (P $ cWeightMax ^. symbol, S "910" +:+ Sy (unit_symb cWeightMax)), 
-  (P $ sd_min ^. symbol, S "6" +:+ Sy (unit_symb sd_min)), 
-  (P $ sd_max ^. symbol, S "130" +:+ Sy (unit_symb sd_max))])
-  (titleize table_ +:+ S "3:" +:+ titleize specification +:+ (titleize $ parameter ^. term) +:+ titleize' value) True
+  (P $ dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)),
+  ((P $ ar_max ^. symbol), S "5"), (P $ cWeightMin ^. symbol, S "4.5" +:+
+  Sy (unit_symb cWeightMin)), (P $ cWeightMax ^. symbol, S "910" +:+ 
+  Sy (unit_symb cWeightMax)), (P $ sd_min ^. symbol, S "6" +:+
+  Sy (unit_symb sd_min)), (P $ sd_max ^. symbol, S "130" +:+
+  Sy (unit_symb sd_max))])
+  (titleize table_ +:+ S "3:" +:+ titleize specification +:+
+  (titleize $ parameter ^. term) +:+ titleize' value) True
 
 s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", S "()",--sParen (makeRef s6_2_5_table3),
   S "shows the", plural constraint_, S "that must be satisfied by the",
@@ -523,7 +536,8 @@ s7_1_list =
 --  (S "Input Parameters") False
   (Enumeration $ Simple $
   [(((short requirement) :+: S "2"), Nested (S "The" +:+ phrase system +:+
-  S "shall set the known" +:+ plural value +:+ S "as follows: ") (Bullet $ map (\c -> Flat c) 
+  S "shall set the known" +:+ plural value +:+ S "as follows: ")
+   (Bullet $ map (\c -> Flat c) 
     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
     S "following" +:+ (short assumption) :+: S "4",
@@ -532,21 +546,23 @@ s7_1_list =
     (short lShareFac) +:+ S "following" +:+ (short assumption) 
     :+: S "5"]))] ++
   map (\(a, b) -> (a, Flat b))
-  [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+ S "shall check" +:+
-  S "the entered" +:+ phrase input_ +:+ plural value +:+ S "to ensure that they do not exceed the" 
-  +:+ plural datumConstraint +:+ S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
-  S "the" +:+ phrase input_ +:+ (plural $ parameter ^. term) +:+ S "is out of bounds, an error message is" +:+
-  S "displayed and the" +:+ (plural $ calculation ^. term) +:+. S "stop"),
-  (((short requirement) :+: S "4"), titleize output_ +:+ S "the" +:+ phrase input_ +:+
-  plural quantity +:+ S "from" +:+ (short requirement) :+: S "1 and the known" +:+
-  plural quantity +:+ S "from" +:+ (short requirement) :+: S "2."),
+  [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+
+  S "shall check the entered" +:+ phrase input_ +:+ plural value +:+ 
+  S "to ensure that they do not exceed the"  +:+ plural datumConstraint +:+
+  S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
+  S "the" +:+ phrase input_ +:+ (plural $ parameter ^. term) +:+
+  S "is out of bounds, an error message is displayed and the" +:+
+  (plural $ calculation ^. term) +:+. S "stop"), (((short requirement)
+  :+: S "4"), titleize output_ +:+ S "the" +:+ phrase input_ +:+
+  plural quantity +:+ S "from" +:+ (short requirement) :+: S "1 and the known"
+  +:+ plural quantity +:+ S "from" +:+ (short requirement) :+: S "2."),
   (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
   (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true" `sC`
-  phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+ S "If" +:+
-  S "the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+ S "the message" +:+ 
-  Quote (notSafe ^. defn))] ++
+  phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
+  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
+  S "the message" +:+ Quote (notSafe ^. defn))] ++ 
   [(((short requirement) :+: S "6"), Nested (titleize output_ +:+ S "the following" +:
   plural quantity)
   (Bullet $ 
@@ -576,10 +592,11 @@ s7_1_list =
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = Paragraph $ foldlSent [
-  S "Given the small size, and relative simplicity, of this", phrase problem `sC`
-  phrase performance, S "is not a" +:+. phrase priority, S "Any reasonable implementation", 
-  S "will be very quick and use minimal storage. Rather than", phrase performance `sC`
-  S "the", phrase priority, phrase nonfunctional, (short requirement) :+: 
+  S "Given the small size, and relative simplicity, of this", 
+  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority, +:+.
+  S "Any reasonable implementation will be very quick and use minimal storage", 
+  S "Rather than", phrase performance `sC` S "the", phrase priority,
+  phrase nonfunctional, (short requirement) :+:
   S "s are correctness, verifiability, understandability, reusability,", 
   S "maintainability and portability"]
 
@@ -587,27 +604,28 @@ s8 = SRS.likeChg [s8_list] []
 
 s8_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
-  S "3 - The" +:+ phrase system +:+ S "currently only calculates for external" +:+.
-  (phrase $ blastRisk ^. term) +:+.
-  (S "In the future" +:+ (plural $ calculation ^. term) +:+ S "can be added for the internal" +:+
-  (phrase $ blastRisk ^. term)))),
+  S "3 - The" +:+ phrase system +:+
+  S "currently only calculates for external" +:+. (phrase $ blastRisk ^. term)
+  +:+. (S "In the future" +:+ (plural $ calculation ^. term) +:+
+  S "can be added for the internal" +:+ (phrase $ blastRisk ^. term)))),
   (((short likelyChg) :+: S "2"), ((short assumption) :+:
-  S "4" `sC` (short assumption) :+: S "8 - Currently the" +:+ plural value +:+ S "for"
-  +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
+  S "4" `sC` (short assumption) :+: S "8 - Currently the" +:+ plural value +:+
+  S "for" +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
   S "and" +:+ (P $ mod_elas ^. symbol) +:+ S "are assumed to be the"
-  +:+ S "same for all glass. In the future these" +:+ plural value +:+ S "can be changed to"
-  +:+ phrase variable +:+. plural input_)),
+  +:+ S "same for all glass. In the future these" +:+ plural value +:+ 
+  S "can be changed to" +:+ phrase variable +:+. plural input_)),
   (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
-  S "5 - The" +:+ phrase software +:+ S "may be changed to accommodate more than a single" +:+.
-  (phrase $ lite ^. term))),
-  (((short likelyChg) :+: S "4"), ((short assumption) :+: 
-  S "6 - The" +:+ phrase software +:+ S "may be changed to accommodate more boundary" +:+
-  plural condition +:+. S "than 4-sided support")),
-  (((short likelyChg) :+: S "5"), ((short assumption) :+: 
-  S "7 - The" +:+ phrase software +:+ S "may be changed to consider more than just flexure" +:+.
-  S "of the glass"))]
+  S "5 - The" +:+ phrase software +:+
+  S "may be changed to accommodate more than a single" +:+. 
+  (phrase $ lite ^. term))), (((short likelyChg) :+: S "4"),
+  ((short assumption) :+: S "6 - The" +:+ phrase software +:+
+  S "may be changed to accommodate more boundary" +:+ plural condition +:+.
+  S "than 4-sided support")), (((short likelyChg) :+: S "5"), 
+  ((short assumption) :+: S "7 - The" +:+ phrase software +:+.
+  S "may be changed to consider more than just flexure of the glass"))]
 
-s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
+s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] 
+  ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
 
 s9_intro1 = Paragraph $ foldlSent [
   S "The", phrase purpose, S "of the", (plural traceyMatrix),
@@ -623,8 +641,9 @@ s9_intro1 = Paragraph $ foldlSent [
   plural thModel `sC` (plural inModel) `sC` (plural dataDefn),
   S "and" +:+. plural datumConstraint, titleize table_, S "7",
   sParen (makeRef s9_table3), S "shows the", plural dependency, S "of",
-  plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC` plural likelyChg,
-  S "and", (plural requirement), S "on the", (plural assumption)]
+  plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC`
+  plural likelyChg, S "and", (plural requirement), S "on the",
+  (plural assumption)]
 
 --FIXME: There has to be a better way to do this.
 s9_table1 = Table [EmptyS, 
@@ -680,7 +699,8 @@ s9_table1 = Table [EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' item +:+ S "of Different" +:+ titleize' section_) True
+  titleize' connection +:+ S "Between" +:+ titleize' item +:+
+  S "of Different" +:+ titleize' section_) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table [EmptyS, S "T1 (" :+: 
@@ -714,7 +734,8 @@ s9_table2 = Table [EmptyS, S "T1 (" :+:
   EmptyS, S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", EmptyS, EmptyS,
   EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+ S "and Other" +:+ titleize' item) True
+  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
+  S "and Other" +:+ titleize' item) True
 
 -- FIXME: Same goes for this one (see above)
 s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
@@ -774,8 +795,8 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ S "and Other" 
-  +:+ titleize' item) True
+  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+
+  S "and Other" +:+ titleize' item) True
 
 s9_intro2 = 
   [Paragraph $
@@ -815,8 +836,8 @@ s10 = SRS.reference [s10_list] []
 
 s10_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   [(S "[1]", S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
-  S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis"
-  `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
+  S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
+  S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."),
   (S "[2]", S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   phrase template +:+ S "for scientific computing,") +:+ S "in Proceedings of the" +:+
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
@@ -856,5 +877,5 @@ fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+
   (phrase $ lateral ^. term) +:+
   (phrase $ load ^. term) +:+ sParen
   (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize $ aspectR ^. term) +:+ 
-  sParen (short aspectR) {-(P (aspectR ^. symbol))-} +:+ S "versus" +:+ (at_start $ sdf ^. term) +:+ 
-  sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"
+  sParen (short aspectR) {-(P (aspectR ^. symbol))-} +:+ S "versus" +:+
+  (at_start $ sdf ^. term) +:+ sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"

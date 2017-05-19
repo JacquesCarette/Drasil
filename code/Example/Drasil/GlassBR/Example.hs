@@ -61,8 +61,8 @@ demand      = uc' "demand" (nounPhraseSP "applied load (demand)")
   lQ kilopascal
 sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
   (S "The distance from the glazing surface to the" +:+
-  S "centroid of a hemispherical high explosive charge. It is represented by" +:+
-  S "the coordinates (SDx, SDy, SDz).")
+  S "centroid of a hemispherical high explosive charge. It is represented by"
+  +:+ S "the coordinates (SDx, SDy, SDz).")
   (Atomic "SD") metre
 sdx         = uc' "sdx" (nounPhraseSP "stand off distance (x-component)")
   fixme
@@ -107,17 +107,18 @@ eqTNTWeight = uc' "eqTNTWeight"
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, 
-  prob_br, pb_tol, dimlessLoad, tolLoad]
+glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf,
+  sdf_tol, prob_br, pb_tol, dimlessLoad, tolLoad]
 
-ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br, pb_tol,
-  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
+ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br,
+  pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ----Quantities--
 ar_max      = makeVC "ar_max"   (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max"))
 risk_fun    = makeVC "risk_fun" (nounPhraseSP "risk function") cB
-glass_type  = makeVC "glass_type" (nounPhraseSP "glass type, g in {AN, HS, FT}") lG
+glass_type  = makeVC "glass_type" (nounPhraseSP "glass type, g in {AN, HS, FT}")
+  lG
 is_safe1    = makeVC "is_safe1" 
   (nounPhraseSP $ "true when calculated probability is " ++
   "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
@@ -328,9 +329,9 @@ t2descr =
   (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) +:+ 
   S "(also called capacity, as defined in" +:+. 
   (makeRef (Definition (Theory calOfCap))) +:+ 
-  (P $ demand ^. symbol) +:+ S "(also referred as the" +:+ (titleize $ demandq ^. term)
-  :+: S ") is the" +:+ (demandq ^. defn) :+: S ", as defined in" +:+. 
-  (makeRef (Definition (Theory calOfDe)))
+  (P $ demand ^. symbol) +:+ S "(also referred as the" +:+
+  (titleize $ demandq ^. term) :+: S ") is the" +:+ (demandq ^. defn) :+:
+  S ", as defined in" +:+. (makeRef (Definition (Theory calOfDe)))
 
 --Instance Models--
 iModels :: [RelationConcept]

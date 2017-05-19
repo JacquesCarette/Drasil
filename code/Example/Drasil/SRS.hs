@@ -42,7 +42,7 @@ sysCont     = section (titleize Doc.sysCont)
 userChar    = section (titleize' Doc.userCharacteristic)
 sysCon      = section (titleize' Doc.systemConstraint)
 
-scpOfTheProj= section (titleize Doc.scpOfTheProj)
+scpOfTheProj = section (titleize (Doc.scpOfTheProj titleize))
 prodUCTable = section (titleize Doc.prodUCTable)
 indPRCase   = section (titleize' Doc.indPRCase)
 
@@ -73,3 +73,6 @@ traceyMandG = section (titleize' Doc.traceyMandG)
 appendix    = section (titleize Doc.appendix)
 
 reference   = section (titleize' Doc.reference)
+
+--scpOfTheProj :: [Contents] -> NP -> Section
+--scpOfTheProj = section (titleize $ Doc.(scpOfTheProj titleize))

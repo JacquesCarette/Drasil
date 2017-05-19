@@ -122,7 +122,7 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 
-orgOfDoc, prpsOfDoc, refmat, scpOfReq, scpOfTheProj,
+orgOfDoc, prpsOfDoc, refmat, scpOfReq,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
@@ -132,10 +132,12 @@ propOfCorSol = npnc "propOfCorSol" (property `of__` (a_ corSol))
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
-scpOfTheProj = npnc "scpOfTheProj" (scope `of_` the project) -- reasonable hack?
 termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
+
+scpOfTheProj :: (NP -> Sentence) -> NPNC
+scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
 
 -- compounds
 

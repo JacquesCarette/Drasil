@@ -197,6 +197,10 @@ the t = npnc ("the" ++ t ^. id) (nounPhrase''
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
+theCustom :: (NamedIdea c) => (NP -> Sentence) -> c -> NPNC
+theCustom f t = npnc ("the" ++ t ^. id)
+                (nounPhrase''(S "the" +:+ (f $ t ^. term)) (S "the" +:+ (f $ t ^. term)) CapFirst CapWords)
+
 aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
 aNP t = nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))

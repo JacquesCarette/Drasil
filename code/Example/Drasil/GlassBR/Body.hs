@@ -194,7 +194,7 @@ s4_2_intro = Paragraph $
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $ foldlSent [S "This", phrase section_, S "presents the" +:+.
-  phrase scpOfTheProj, S "It describes the expected use of", (gLassBR ^. defn),
+  phrase (scpOfTheProj phrase), S "It describes the expected use of", (gLassBR ^. defn),
   S "as well as the", plural input_, S "and", plural output_, 
   S "of each action. The", plural useCase, S "are", phrase input_, S "and",
   phrase output_ `sC` S "which defines the action of getting the", phrase input_,

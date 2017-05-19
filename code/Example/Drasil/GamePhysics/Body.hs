@@ -440,9 +440,9 @@ s4_2_4_DDefs = map Definition (map Data cpDDefs)
 
 s4_2_5 :: Section
 s4_2_5_intro :: Contents
--- s4_2_5_IMods :: [Contents]
+--s4_2_5_IMods :: [Contents]
 
-s4_2_5 = section (titleize' inModel) ([s4_2_5_intro] {- ++
+s4_2_5 = section (titleize' inModel) ([s4_2_5_intro] {--++
   (map Con s4_2_5_IMods)-}) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
@@ -453,7 +453,9 @@ s4_2_5_intro = Paragraph $ foldlSent
   (makeRef s4_2_2), S "and", (makeRef s4_2_3)]
 
 -- Instance models not yet implemented --
--- s4_2_5_IMods = ?
+
+--s4_2_5_IMods :: [Contents]
+--s4_2_5_IMods = map Definition (map Theory iModels)
 
 ------------------------------
 -- 4.2.6 : Data Constraints --

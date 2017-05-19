@@ -2,6 +2,7 @@ module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import qualified Data.Drasil.Concepts.Physics as CP
 import qualified Data.Drasil.Quantities.Physics as QP
 import qualified Data.Drasil.Quantities.Math as QM
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
@@ -156,7 +157,7 @@ r_OB    = uc' "r_OB"
 
 -- DD1 --
 
-pos_CM, mass_i, pos_i, mTot :: UnitalChunk
+pos_CM, mass_i, pos_i, acc_i, mTot :: UnitalChunk
 
 pos_CM = uc' "p_CM" (nounPhraseSP $ 
   "the mass-weighted average position of a rigid " ++
@@ -166,19 +167,34 @@ pos_CM = uc' "p_CM" (nounPhraseSP $
 
 --FIXME: parametrized hack
 mass_i = ucFromVC massi kilogram
-  where massi = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
+  where massi = cvR (dccWDS "m_i" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the i-th particle")) (phrase $ QPP.mass ^. term))
                 (sub (QPP.mass ^. symbol) lI)
-pos_i = uc' "p_i" (nounPhraseSP "position vector of the i-th particle")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (position ^. symbol) lI) metre
-mTot = uc' "M" (nounPhraseSP "total mass of the rigid body")
-  "FIXME: Define this or remove the need for definitions" cM kilogram
+pos_i = ucFromVC posi metre
+  where posi = cvR (dccWDS "p_i" (compoundPhrase' (position ^. term) 
+                (cn "vector of the i-th particle")) (phrase $ position ^. term))
+                (sub (position ^. symbol) lI)
+--pos_i = uc' "p_i" (nounPhraseSP "position vector of the i-th particle")
+--  "FIXME: Define this or remove the need for definitions" 
+--  (sub (position ^. symbol) lI) metre
+
+acc_i = ucFromVC accI accelU
+  where accI = cvR (dccWDS "acc_i" (compoundPhrase' (accel ^. term) 
+                (cn "of the i-th particle")) (phrase $ accel ^. term))
+                (sub (accel ^. symbol) lI)
+
+mTot = ucFromVC mtotal kilogram
+  where mtotal = cvR (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
+                (CP.rigidBody ^. term)) (phrase $ QPP.mass ^. term)) 
+                cM
+
+--mTot = uc' "M" (nounPhraseSP "total mass of the rigid body")
+--  "FIXME: Define this or remove the need for definitions" cM kilogram
 
 -- DD8 --
 
-initRelVel, mass_A, mass_B, normalLen, contDisp_A, contDisp_B, perpLen_A,
-  momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
+initRelVel, mass_A, mass_B, mass_I, normalLen, contDisp_A, contDisp_B, 
+  perpLen_A, momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
 
 --FIXME: parametrized hack
 initRelVel = ucFromVC relVel velU
@@ -197,6 +213,10 @@ mass_B = ucFromVC rigidB kilogram
   where rigidB = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
                  (cn "of rigid body B")) (phrase $ QPP.mass ^. term))
                  (sub (QPP.mass ^. symbol) cB)
+mass_I = ucFromVC massI kilogram
+  where massI = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) 
+                 (cn "of the i-th rigid body")) (phrase $ QPP.mass ^. term)) 
+                 (sub (QPP.mass ^. symbol) cI)
 --FIXME: parametrized hack
 normalLen = ucFromVC normLen metre
   where normLen = cvR (dccWDS "length of the normal vector" (compoundPhrase'

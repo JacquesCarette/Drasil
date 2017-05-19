@@ -112,7 +112,7 @@ s2_intro = [para1_s2_intro, para2_s2_intro]
 s2_1 :: Section
 s2_1_intro :: [Contents]
 
-s2_1 = section (titleize prpsOfDoc) (s2_1_intro) []
+s2_1 = SRS.prpsOfDoc (s2_1_intro) []
 
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
@@ -145,7 +145,7 @@ s2_1_intro = [para1_s2_1_intro, para2_s2_1_intro]
 s2_2 :: Section
 s2_2_intro :: Contents
 
-s2_2 = section (titleize scpOfReq) [s2_2_intro] []
+s2_2 = SRS.scpOfReq [s2_2_intro] []
 
 s2_2_intro = Paragraph $ foldlSent 
   [S "The scope of the", plural requirement, S "includes the",
@@ -179,7 +179,7 @@ s2_3_intro = foldlSent
 s3 :: Section
 s3_intro :: Contents
 
-s3 = section (titleize generalSystemDescription) [s3_intro] [s3_1, s3_2]
+s3 = SRS.genSysDec [s3_intro] [s3_1, s3_2]
 
 --FIXME: This can be generalized to use more chunks
 s3_intro = Paragraph $ foldlSent 
@@ -196,7 +196,7 @@ s3_intro = Paragraph $ foldlSent
 s3_1 :: Section
 s3_1_intro :: Contents
 
-s3_1 = section (titleize' userCharacteristic) [s3_1_intro] []
+s3_1 = SRS.userChar [s3_1_intro] []
 
 s3_1_intro = Paragraph $ foldlSent 
   [S "The end user of", (short chipmunk),
@@ -210,7 +210,7 @@ s3_1_intro = Paragraph $ foldlSent
 s3_2 :: Section
 s3_2_intro :: Contents
 
-s3_2 = section (titleize' systemConstraint) [s3_2_intro] []
+s3_2 = SRS.sysCon [s3_2_intro] []
 
 s3_2_intro = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
@@ -232,7 +232,7 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 s4_1 :: Section
 s4_1_intro :: Contents
 
-s4_1 = section (titleize problemDescription) [s4_1_intro] [s4_1_1, s4_1_2]
+s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2]
 
 s4_1_intro = Paragraph $ foldlSent 
   [S "Creating a gaming", (phrase $ physLib ^. term),
@@ -260,8 +260,7 @@ s4_1_intro = Paragraph $ foldlSent
 s4_1_1 :: Section
 s4_1_1_intro, s4_1_1_bullets :: Contents
 
-s4_1_1 = section (titleize' $ and_' terminology definition)
- [s4_1_1_intro, s4_1_1_bullets] []
+s4_1_1 = SRS.termAndDefn [s4_1_1_intro, s4_1_1_bullets] []
 
 s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS) 
   [S "This subsection provides a list of terms",
@@ -270,7 +269,7 @@ s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
   S "of reducing ambiguity and making it easier to correctly",
   S "understand the", plural requirement]
 
---FIXME: Handle plurals properly. This is a really bad hack.
+
 s4_1_1_bullets = Enumeration (Bullet $ 
   (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)))
   [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
@@ -283,7 +282,7 @@ s4_1_1_bullets = Enumeration (Bullet $
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = section (titleize' goalStmt) [s4_1_2_list] []
+s4_1_2 = SRS.goalStmt [s4_1_2_list] []
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: Sentence
 s4_1_2_stmt1 = foldlSent 
@@ -329,7 +328,7 @@ s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc goalStmt) s4_1_2_
 
 s4_2 :: Section
 
-s4_2 = section (titleize solutionCharSpec) []
+s4_2 = SRS.solCharSpec []
  [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 -------------------------
@@ -339,7 +338,7 @@ s4_2 = section (titleize solutionCharSpec) []
 s4_2_1 :: Section
 s4_2_1_intro, s4_2_1_list :: Contents
 
-s4_2_1 = section (titleize' assumption) [s4_2_1_intro, s4_2_1_list] []
+s4_2_1 = SRS.assump [s4_2_1_intro, s4_2_1_list] []
 
 -- TODO: Add assumption references in the original and this SRS. --
 s4_2_1_intro = Paragraph $ foldlSent 
@@ -384,7 +383,7 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = section (titleize' thModel) ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
+s4_2_2 = SRS.thModel ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
 
 s4_2_2_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "focuses on the", (phrase general), 
@@ -401,7 +400,7 @@ s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = section (titleize' genDefn) ([s4_2_3_intro] {- ++
+s4_2_3 = SRS.genDefn ([s4_2_3_intro] {- ++
   (map Con s4_2_3_GDefs)-}) []
 
 s4_2_3_intro = Paragraph $ foldlSent 
@@ -424,7 +423,7 @@ s4_2_4 :: Section
 s4_2_4_intro :: Contents
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = section (titleize' dataDefn) ([s4_2_4_intro] ++
+s4_2_4 = SRS.dataDefn ([s4_2_4_intro] ++
   (s4_2_4_DDefs)) []
 
 s4_2_4_intro = Paragraph $ foldlSent [S "This", (phrase section_), 
@@ -442,7 +441,7 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 --s4_2_5_IMods :: [Contents]
 
-s4_2_5 = section (titleize' inModel) ([s4_2_5_intro] {--++
+s4_2_5 = SRS.inModel ([s4_2_5_intro] {--++
   (map Con s4_2_5_IMods)-}) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
@@ -464,7 +463,7 @@ s4_2_5_intro = Paragraph $ foldlSent
 s4_2_6 :: Section
 s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = section (titleize' datumConstraint) [s4_2_6_intro, s4_2_6_table1,
+s4_2_6 = SRS.datCon [s4_2_6_intro, s4_2_6_table1,
   s4_2_6_table2] []
 
 s4_2_6_intro = Paragraph $ foldlSent 
@@ -517,7 +516,7 @@ s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
 s5 :: Section
 s5_intro :: Contents
 
-s5 = section (titleize' requirement) [s5_intro] [s5_1, s5_2]
+s5 = SRS.require [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "provides the", (phrase functional),
@@ -533,8 +532,7 @@ s5_intro = Paragraph $ foldlSent
 s5_1 :: Section
 s5_1_list :: Contents
 
-s5_1 = section (titleize' functionalRequirement)
-  [s5_1_list] []
+s5_1 = SRS.funcReq [s5_1_list] []
 
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
@@ -591,7 +589,7 @@ s5_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc requirement) s5_1_l
 s5_2 :: Section
 s5_2_intro :: Contents
 
-s5_2 = section (titleize' nonfunctionalRequirement) [s5_2_intro] []
+s5_2 = SRS.nonfuncReq [s5_2_intro] []
 
 s5_2_intro = Paragraph $ foldlSent 
   [(titleize' game), S "are resource intensive, so performance",
@@ -607,7 +605,7 @@ s5_2_intro = Paragraph $ foldlSent
 s6 :: Section
 s6_intro, s6_list :: Contents
 
-s6 = section (titleize' likelyChg) [s6_intro, s6_list] []
+s6 = SRS.likeChg [s6_intro, s6_list] []
 
 s6_intro = Paragraph $ foldlSent [S "This", (phrase section_), S "lists the", 
   (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
@@ -645,7 +643,7 @@ s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc likelyChg) s6_list')
 s7 :: Section
 s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
-s7 = section (titleize' offShelfSolution) [s7_intro, s7_2dlist,
+s7 = SRS.offShelfSol [s7_intro, s7_2dlist,
   s7_mid, s7_3dlist] []
 
 s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`

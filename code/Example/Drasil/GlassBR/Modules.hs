@@ -10,9 +10,6 @@ import Control.Lens ((^.))
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
 
--- Some of the content below is 'generic' and should be pulled out from here.
--- And the constructors for making 'modules' should be rethought to be more
--- convenient for the most common cases.
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, mod_derivedv, mod_calc,
   mod_ctrl, mod_interpd, mod_sw, mod_interp]
@@ -24,15 +21,8 @@ mod_inputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase input_ +:+ (plu
 mod_inputp :: ModuleChunk
 mod_inputp = mod_io_fun glassBRProg [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
 
--- input constraints module
 mod_inputc :: ModuleChunk
-mod_inputc = makeImpModule modInputConstraint --FIXME: Plural?
-  (S "The constraints on the" +:+ phrase input_ +:+. (plural datum))
-  glassBRProg
-  []
-  []
-  []
-  (Just mod_behav)
+mod_inputc = mod_inputc_fun glassBRProg
 
 mod_ctrl :: ModuleChunk
 mod_ctrl = mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]
@@ -47,16 +37,9 @@ mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase output_ +:+ (p
 
 -- derived values module
 mod_derivedv :: ModuleChunk
-mod_derivedv = makeImpModule modDerivedVal --FIXME: Plural?
-  (S "The transformations from initial" +:+ phrase input_ +:+. S "to derived quantities")
-  glassBRProg
-  []
-  []
-  [mod_inputp]
-  (Just mod_behav)
+mod_derivedv = mod_derivedv_fun glassBRProg [mod_inputp]
 
 -- calculations module
-
 glassBR_calcDesc :: Sentence
 glassBR_calcDesc =(S "Defines the equations for solving for the probability of glass " :+:
    S "breakage, demand, and capacity using the" +:+ (plural $ parameter ^. term) +:+ S "in the input" +:+
@@ -71,7 +54,6 @@ mod_calc = mod_calc_fun (glassBR_calcDesc)
    [mod_inputp]
 
 -- interpolation data module
-
 mod_interpd :: ModuleChunk
 mod_interpd = mod_io_fun glassBRProg [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
 

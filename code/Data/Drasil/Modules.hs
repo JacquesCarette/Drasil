@@ -15,6 +15,8 @@ module Data.Drasil.Modules
   , mod_ode_fun
   , mod_calc_fun
   , mod_interp_fun
+  , mod_inputc_fun
+  , mod_derivedv_fun
   ) where
 
 import Language.Drasil
@@ -23,6 +25,7 @@ import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Computation
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math(ode)
+import Data.Drasil.Concepts.Documentation
 
 {-- Module Chunks --}
 
@@ -157,6 +160,26 @@ mod_interp_fun impl depnd = makeImpModule modInterpolation
    []
    depnd
    (Just mod_sw)
+
+-- input constraints module --should be its own module?
+mod_inputc_fun :: NamedIdea a => a -> ModuleChunk
+mod_inputc_fun impl= makeImpModule modInputConstraint --FIXME: Plural?
+  (S "The" +:+ plural constraint_ +:+ S "on the" +:+ phrase input_ +:+. (plural datum))
+  impl
+  []
+  []
+  []
+  (Just mod_behav)
+
+-- derived values module
+mod_derivedv_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
+mod_derivedv_fun impl depnd= makeImpModule modDerivedVal --FIXME: Plural?
+  (S "The transformations from initial" +:+ phrase input_ +:+. S "to derived quantities")
+  impl
+  []
+  []
+  depnd
+  (Just mod_behav)
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

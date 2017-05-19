@@ -7,7 +7,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Thermodynamics
-import Data.Drasil.Quantities.Thermodynamics as QT
+import qualified Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.Physics (time)
 
 import Control.Lens ((^.))
@@ -19,21 +19,21 @@ t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE" (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latentE) [C time] := UnaryOp (Integral (Just (Low 0),
-  Just (High (C time))) (Deriv Total (FCall (C latentE) [C tau]) (C tau)) tau)
+latHtEEqn = FCall (C QT.latent_heat) [C time] := UnaryOp (Integral (Just (Low 0),
+  Just (High (C time))) (Deriv Total (FCall (C QT.latent_heat) [C tau]) (C tau)) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?
 -- How to have conditions on a single equation
 
 t3descr :: Sentence
-t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
+t3descr = (P (QT.latent_heat ^. symbol) :+: S " is the change in " :+:
   (phrase $ thermal_energy ^. term) :+: S " (" :+:
   Sy (joule ^. usymb) :+: S "), " :+:
   (phrase $ latent_heat ^. term) :+: S " energy. " :+:
   S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE" :+: 
   S " is the rate" :+:
-  S " of change of " :+: P (latentE ^. symbol) :+: S " with respect" :+:
+  S " of change of " :+: P (QT.latent_heat ^. symbol) :+: S " with respect" :+:
   S " to " :+: (phrase $ time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
   S " (" :+: Sy (unit_symb tau) :+: S "). " :+: P (time ^. symbol) :+:
   S " is the " :+: (phrase $ time ^. term) :+: S " (" :+: Sy (unit_symb time) :+:
@@ -41,9 +41,9 @@ t3descr = (P (latentE ^. symbol) :+: S " is the change in " :+:
   (phrase $ phase_change ^. term) :+: S " is not complete. The status of " :+:
   S "the " :+: (phrase $ phase_change ^. term) :+:
   S " depends on the " :+: (phrase $ melt_frac ^. term) :+: S ", " :+: 
-  makeRef s4_2_4_DD3 :+: S ". " :+: P (temp_melt ^. symbol) :+:
-  S " and " :+: P (temp_boil ^. symbol) :+: S " are the " :+:
-  (phrase $ temp_melt ^. term) :+: S " and " :+: (phrase $ temp_boil ^. term) :+:
+  makeRef s4_2_4_DD3 :+: S ". " :+: P (QT.melt_pt ^. symbol) :+:
+  S " and " :+: P (QT.boil_pt ^. symbol) :+: S " are the " :+:
+  (phrase $ QT.melt_pt ^. term) :+: S " and " :+: (phrase $ QT.boil_pt ^. term) :+:
   S ", respectively (" :+: Sy (unit_symb QT.temp) :+: S "). " :+:
   (at_start $ latent_heat ^. term) :+: S "ing stops when all material has " :+:
   S "changed to the new phase.")

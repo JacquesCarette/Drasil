@@ -7,6 +7,7 @@ import Data.Drasil.SI_Units (specificE)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.Thermodynamics(latent_heat)
 
 import Control.Lens ((^.))
 
@@ -38,7 +39,7 @@ dd3HtFusion = fromEqn "dd3HtFusion" (nounPhraseSP
   (htFusion ^. symbol) specificE htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = (C latentE) / (C mass)
+htFusionEqn = (C latent_heat) / (C mass)
 
 -- dd4MeltFrac :: QDefinition
 --dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless

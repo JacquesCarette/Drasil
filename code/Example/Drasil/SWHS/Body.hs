@@ -8,8 +8,8 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
-import Data.Drasil.Concepts.Thermodynamics hiding (temp)
+import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng,
   equation, change)
@@ -20,8 +20,8 @@ import Data.Drasil.Utils (mkEnumAbbrevList)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
-import Data.Drasil.Quantities.Thermodynamics (temp)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass)
+import Data.Drasil.Quantities.Thermodynamics
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
@@ -82,7 +82,7 @@ mkSRS = RefSec (RefProg intro
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 tsymb_intro :: [TSIntro]
-tsymb_intro = [TSPurpose,SymbConvention [Lit (nw heat_trans),
+tsymb_intro = [TSPurpose,SymbConvention [Lit (nw CT.heat_trans),
   Doc' (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
@@ -111,9 +111,9 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (at_start $ swhs_pcm ^. term) +:+ S "improve over the traditional" +:+
   (phrase $ progName ^. term) :+: S "s because of their smaller size. The" +:+
   S "smaller size is possible because of the ability of" +:+ 
-  (short phsChgMtrl) +:+ S "to store" +:+ (phrase $ thermal_energy ^. term) +:+
+  (short phsChgMtrl) +:+ S "to store" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "as" +:+ (phrase $ latent_heat ^. term) :+: S ", which" +:+
-  S "allows higher" +:+ (phrase $ thermal_energy ^. term) +:+
+  S "allows higher" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"),
   Paragraph (S "The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
@@ -180,11 +180,11 @@ s2_2 = SRS.scpOfReq [s2_2_contents] []
 
 s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   plural requirement +:+ S "is limited to" +:+
-  (phrase $ thermal_analysis ^. term) +:+ S "of a single" +:+.
+  (phrase $ CT.thermal_analysis ^. term) +:+ S "of a single" +:+.
   (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
   S "Given the appropriate" +:+ plural input_ :+: S ", the code for" +:+
   (short progName) +:+ S "is intended to predict the" +:+
-  (phrase $ temp ^. term) +:+ S "and" +:+ (phrase $ thermal_energy ^. term) +:+
+  (phrase $ temp ^. term) +:+ S "and" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "histories for the" +:+ (phrase $ water ^. term) +:+ S "and the" +:+.
   (short phsChgMtrl) +:+ S "This entire" +:+ phrase document +:+
   S "is written assuming that the substances inside the" +:+
@@ -206,7 +206,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 s2_3 = SRS.charOfIR [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
-  S "should have a strong knowledge in" +:+ (plural $ heat ^. term) +:+
+  S "should have a strong knowledge in" +:+ (plural $ CT.heat ^. term) +:+
   S "transfer" +:+. phrase theory +:+ S "A third or fourth year" +:+
   S "Mechanical Engineering course on this topic is recommended. The" +:+
   plural reviewer +:+ S "should also have an understanding of differential" +:+
@@ -375,9 +375,9 @@ s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
 
-s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [ht_flux,
-   phase_change_material, heat_cap_spec, 
-   thermal_conduction, transient])
+s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [CT.ht_flux,
+   phase_change_material, CT.heat_cap_spec, 
+   CT.thermal_conduction, transient])
 
 s411_bullet_map_f :: Concept c => c -> ItemType
 s411_bullet_map_f c = Flat ((at_start $ c ^. term) :+: S ":" +:+. (c ^. defn))
@@ -492,13 +492,13 @@ s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
 s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat 
   (S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   S "relevant for this" +:+ phrase problem +:+ S "is" +:+.
-  (phrase $ thermal_energy ^. term) +:+ S "All other forms of" +:+
+  (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) :+: S ", such as" +:+
   (phrase $ mech_energy ^. term) :+: S ", are assumed to be negligible [" :+:
   (makeRef s4_2_2_T1) :+: S "].")),
 --
   ((short assumption) :+: S "2", Flat (S "All" +:+
-  (phrase $ heat_trans ^. term) +:+ S "coefficients are constant over" +:+
+  (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
   (phrase $ time ^. term) +:+. S "[GD1]")),
 --
   ((short assumption) :+: S "3", Flat (S "The" +:+ 
@@ -515,15 +515,15 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   (phrase $ w_density ^. term) +:+ S "and" +:+
   (phrase $ pcm_density ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ volume ^. term) +:+. S "[GD2]")),
+  (phrase $ vol ^. term) +:+. S "[GD2]")),
 --
   ((short assumption) :+: S "6", Flat (S "The" +:+ (phrase $ htCap_W ^.
   term) :+: S "," +:+ (phrase $ htCap_S_P ^. term) :+: S ", and" +:+ 
   (phrase $ htCap_L_P ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ volume ^. term) +:+. S "[GD2]")),
+  (phrase $ vol ^. term) +:+. S "[GD2]")),
 --
-  ((short assumption) :+: S "7", Flat ((law_conv_cooling ^. defn) +:+
+  ((short assumption) :+: S "7", Flat ((CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
   (phrase $ water ^. term) +:+ S "[" :+: makeRef s4_2_4_DD1 :+: S "].")),
 --
@@ -535,7 +535,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   term) +:+ S "does not vary along its length [" :+:
   makeRef s4_2_4_DD1 `sC` S "LC3].")),
 --
-  ((short assumption) :+: S "10", Flat ((law_conv_cooling ^. 
+  ((short assumption) :+: S "10", Flat ((CT.law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
   S "[" :+: makeRef s4_2_4_DD2 :+: S "].")),
@@ -564,25 +564,25 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
   S "is such that the" +:+ (phrase $ water ^. term) +:+
   S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
   S "the" +:+ (phrase $ temp ^. term) +:+ S "will not drop below the" +:+
-  (phrase $ temp_melt ^. term) +:+ S "of" +:+
+  (phrase $ melt_pt ^. term) +:+ S "of" +:+
   (phrase $ water ^. term) :+: S ", or rise above its" +:+
-  (phrase $ temp_boil ^. term) +:+. S "[IM1, IM3]")),
+  (phrase $ boil_pt ^. term) +:+. S "[IM1, IM3]")),
 --
   ((short assumption) :+: S "15", Flat (S "The" +:+
   (phrase $ tank ^. term) +:+ S "is" +:+ (phrase $ perfect_insul ^. term) +:+
-  S "so that there is no" +:+ (phrase $ heat ^. term) +:+
+  S "so that there is no" +:+ (phrase $ CT.heat ^. term) +:+
   S "loss from the" +:+ (phrase $ tank ^. term) +:+. S "[IM1, LC6]")),
 --
   ((short assumption) :+: S "16", Flat (S "No internal" +:+
-  (phrase $ heat ^. term) +:+ S "is generated by either the" +:+
+  (phrase $ CT.heat ^. term) +:+ S "is generated by either the" +:+
   (phrase $ water ^. term) +:+ S "or the" +:+ (short phsChgMtrl) :+:
   S "; therefore, the" +:+ (phrase $ vol_ht_gen ^. term) +:+.
   S "is zero [IM1, IM2]")),
 --
   ((short assumption) :+: S "17", Flat (S "The" +:+
-  (phrase $ volume ^. term) +:+ (phrase $ change ^. term) +:+
+  (phrase $ vol ^. term) +:+ (phrase $ change ^. term) +:+
   S "of the" +:+ (short phsChgMtrl) +:+ S "due to" +:+ 
-  (phrase $ melting ^. term) +:+. S "is negligible [IM2]")),
+  (phrase $ CT.melting ^. term) +:+. S "is negligible [IM2]")),
 --
   ((short assumption) :+: S "18", Flat (S "The" +:+ 
   (short phsChgMtrl) +:+ S "is either in a" +:+
@@ -591,7 +591,7 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 --
   ((short assumption) :+: S "19", Flat (S "The pressure in" +:+ S "the" +:+
   (phrase $ tank ^. term) +:+ S "is atmospheric, so the" +:+
-  (phrase $ temp_melt ^. term) +:+ S "and" +:+ (phrase $ temp_boil ^. term) +:+
+  (phrase $ melt_pt ^. term) +:+ S "and" +:+ (phrase $ boil_pt ^. term) +:+
   S "are 0" :+: Sy (unit_symb temp) +:+ S "and 100" :+:
   Sy (unit_symb temp) `sC` S "respectively [IM1, IM3]."))])
 
@@ -635,19 +635,19 @@ s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   +:+ (phrase $ rOfChng ^. term) +:+ S "of" +: (phrase $ temp ^. term)),
   Paragraph (S "Integrating" +:+ makeRef s4_2_2_T1 +:+ 
-  S "over a" +:+ (phrase $ volume ^. term) +:+ S "(" :+:
-  P (volume ^. symbol) :+: S "), we have:"),
+  S "over a" +:+ (phrase $ vol ^. term) +:+ S "(" :+:
+  P (vol ^. symbol) :+: S "), we have:"),
   EqnBlock 
-  ((Neg (UnaryOp (Integral (Just (Low (C volume)), Nothing)
-  ((C gradient) :. (C thFluxVect)) volume))) + 
-  UnaryOp (Integral (Just (Low (C volume)), Nothing) 
-  (C vol_ht_gen) volume) := 
-  UnaryOp (Integral (Just (Low (C volume)), Nothing) ((C density) 
-  * (C htCap) * Deriv Part (C temp) (C time)) volume)),
+  ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  ((C gradient) :. (C thFluxVect)) vol))) + 
+  UnaryOp (Integral (Just (Low (C vol)), Nothing) 
+  (C vol_ht_gen) vol) := 
+  UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density) 
+  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
   Paragraph (S "Applying" +:+ (titleize $ gauss_div ^. term) +:+ S "to" +:+
   S "the first term over the" +:+ (phrase $ surface ^. term) +:+
   P (surface ^. symbol) +:+ S "of the" +:+ 
-  (phrase $ volume ^. term) :+: S ", with" +:+ P (thFluxVect ^. 
+  (phrase $ vol ^. term) :+: S ", with" +:+ P (thFluxVect ^. 
   symbol) +:+ S "as the" +:+ (phrase $ thFluxVect ^. term) +:+
   S "for the" +:+ (phrase $ surface ^. term) +:+ S "and" +:+
   P (normalVect ^. symbol) +:+ S "as a" +: (normalVect ^.
@@ -656,36 +656,36 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
   ((C thFluxVect) :. (C normalVect)) surface))) + 
   (UnaryOp (Integral (Just 
-  (Low (C volume)), Nothing) (C vol_ht_gen) volume)) := 
-  UnaryOp (Integral (Just (Low (C volume)), Nothing) 
-  ((C density) * (C htCap) * Deriv Part (C temp) (C time)) volume)),
-  Paragraph (S "We consider an arbitrary" +:+. (phrase $ volume ^. 
+  (Low (C vol)), Nothing) (C vol_ht_gen) vol)) := 
+  UnaryOp (Integral (Just (Low (C vol)), Nothing) 
+  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+  Paragraph (S "We consider an arbitrary" +:+. (phrase $ vol ^. 
   term) +:+ S "The" +:+ (phrase $ vol_ht_gen ^. term) :+: S "is" +:
   S "assumed constant. Then (1) can be written as"),
   EqnBlock 
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
-  (C out_SA) + (C vol_ht_gen) * (C volume) := UnaryOp (Integral 
-  (Just (Low (C volume)), Nothing) ((C density) * (C htCap) *
-  Deriv Part (C temp) (C time)) volume)),
+  (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral 
+  (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
+  Deriv Part (C temp) (C time)) vol)),
   Paragraph (S "Where" +:+ P (ht_flux_in ^. symbol) :+: S "," +:+
   P (ht_flux_out ^. symbol) :+: S "," +:+ P (in_SA ^. symbol) :+:
   S ", and" +:+ P (out_SA ^. symbol) +:+ S "are explained in" +:+
   S "GD2. Assuming" +:+ P (density ^. symbol) :+: S "," +:+
-  P (htCap ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
-  S "are constant over the" +:+ (phrase $ volume ^. term) :+: S "," +:+ 
+  P (heat_cap_spec ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
+  S "are constant over the" +:+ (phrase $ vol ^. term) :+: S "," +:+ 
   S "which is true in our case by" +:+ (titleize' assumption) +:
   S "(A3), (A4), (A5), and (A6), we have"),
   EqnBlock 
-  ((C density) * (C htCap) * (C volume) * Deriv Total (C temp) 
+  ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp) 
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
-  (C out_SA) + (C vol_ht_gen) * (C volume)),
+  (C out_SA) + (C vol_ht_gen) * (C vol)),
   Paragraph (S "Using the fact that" +:+ P (density ^. symbol) :+:
   S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
-  P (volume ^. symbol) :+: S ", (2) can be written as:"),
+  P (vol ^. symbol) :+: S ", (2) can be written as:"),
   EqnBlock 
-  ((C mass) * (C htCap) * Deriv Total (C temp) (C time) :=
+  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp) (C time) :=
   (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
-  (C vol_ht_gen) * (C volume))]
+  (C vol_ht_gen) * (C vol))]
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)
@@ -719,7 +719,7 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
   S "can be solved once IM1 has been solved. The" +:+ phrase solution +:+
   S "of IM2 and IM4 are also coupled, since the" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "and" +:+ (phrase $ pcm_E ^. term) +:+
-  S "depend on the" +:+. (phrase $ phase_change ^. term) +:+
+  S "depend on the" +:+. (phrase $ CT.phase_change ^. term) +:+
   S "(" :+: at_start' inModel +:+ S "are left out because" +:+
   S "they are not currently implemented in Drasil.)")]
 
@@ -735,7 +735,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the" +:+
   P (temp_W ^. symbol) :+: S ", we look at the" +:+
   (phrase $ energy ^. term) +:+ S "balance on" +:+.
   (phrase $ water ^. term) +:+ S "The" +:+ 
-  (phrase $ volume ^. term) +:+ S "being considered is the" +:+
+  (phrase $ vol ^. term) +:+ S "being considered is the" +:+
   (phrase $ w_vol ^. term) +:+ EmptyS +:+ P (w_vol ^. symbol) :+:
   S ", which has" +:+ (phrase $ w_mass ^. term) +:+ EmptyS +:+ 
   P (w_mass ^. symbol) +:+ S "and" +:+ (phrase $ htCap_W ^. term) :+: 
@@ -746,7 +746,7 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the" +:+
   (phrase $ coil_SA ^. term) +:+ S "and" +:+ (phrase $ pcm_SA ^. term) +:+
   S "of" +:+ P (coil_SA ^. symbol) +:+ S "and" +:+ 
   P (pcm_SA ^. symbol) :+: S ", respectively. No" +:+
-  (phrase $ heat_trans ^. term) +:+ S "occurs to the outside of the" +:+
+  (phrase $ CT.heat_trans ^. term) +:+ S "occurs to the outside of the" +:+
   (phrase $ tank ^. term) :+: S ", since it" +:+
   S "has been assumed to be" +:+ (phrase $ perfect_insul ^. term) +:+. 
   S "(A15)" +:+ S "Assuming no" +:+ (phrase $ vol_ht_gen ^. term) +:+
@@ -822,7 +822,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
   P (temp_PCM ^. symbol) :+: S ", we look at the" +:+
   (phrase $ energy ^. term) +:+ S "balance on the" +:+.
-  (short phsChgMtrl) +:+ S "The" +:+ (phrase $ volume ^. term) +:+
+  (short phsChgMtrl) +:+ S "The" +:+ (phrase $ vol ^. term) +:+
   S "being considered is the" +:+ (phrase $ pcm_vol ^. term) :+: 
   S "," +:+. P (pcm_vol ^. symbol) +:+ S "The derivation" +:+
   S "that follows is initially for the" +:+
@@ -869,10 +869,10 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   S ", and thus" +:+ P (tau_S_P ^. symbol) +:+ S "is" +:+ 
   S "replaced by" +:+. P (tau_L_P ^. symbol) +:+
   S "Although a small change in" +:+ (phrase $ surface ^. term) +:+
-  S "area would be expected with" +:+ (phrase $ melting ^. term) :+:
+  S "area would be expected with" +:+ (phrase $ CT.melting ^. term) :+:
   S ", this is not included, since the" +:+
-  (phrase $ volume ^. term) +:+ S "change of the" +:+ (short phsChgMtrl) 
-  +:+ S "with" +:+ (phrase $ melting ^. term) +:+.
+  (phrase $ vol ^. term) +:+ S "change of the" +:+ (short phsChgMtrl) 
+  +:+ S "with" +:+ (phrase $ CT.melting ^. term) +:+.
   S "is assumed to be negligible (A17)"),
   Paragraph (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
   S "=" :+: P (temp_melt_P ^. symbol) +:+ S "and not all of" +:+
@@ -881,7 +881,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
   P (time ^. symbol) :+: S "=0."),
   Paragraph (S "This derivation does not consider the" +:+ 
-  (phrase $ boiling ^. term) +:+ S "of the" +:+ 
+  (phrase $ CT.boiling ^. term) +:+ S "of the" +:+ 
   (short phsChgMtrl) :+: S ", as the" +:+ (short phsChgMtrl) 
   +:+ S "is assumed to either be in" +:+ S "a" +:+
   (solid ^. defn) +:+ S "or a" +:+ (liquid ^. defn) +:+.
@@ -950,7 +950,7 @@ s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
 
 
 s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+ 
-  S "must exhibit the" +:+. (phrase $ law_cons_energy ^. term) +:+
+  S "must exhibit the" +:+. (phrase $ CT.law_cons_energy ^. term) +:+
   S "This means that the" +:+ (phrase $ w_E ^. term) +:+
   S "should equal the difference between" +:+
   S "the total" +:+ (phrase $ energy ^. term) +:+ phrase input_ +:+
@@ -960,7 +960,7 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   (phrase $ equation ^. term) +:+ S "by taking" +:+ makeRef s4_2_4_DD1 +:+
   S "and" +:+ makeRef s4_2_4_DD2 :+: S ", multiplying each by their" +:+
   S "respective" +:+ (phrase $ surface ^. term) +:+ S "area of" +:+
-  (phrase $ heat_trans ^. term) :+:
+  (phrase $ CT.heat_trans ^. term) :+:
   S ", and integrating each over the" +:+ phrase simulation +:+
   (phrase $ time ^. term) :+: S ", as follows:"),
   EqnBlock 
@@ -1068,7 +1068,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
   symbol) :+: S ") and" +:+ P (pcm_E ^. symbol) :+: S "(" :+:
   P (time ^. symbol) :+: S ")) follow the" +:+
-  (phrase $ law_cons_energy ^. term) :+: S ", as outlined in" +:+ 
+  (phrase $ CT.law_cons_energy ^. term) :+: S ", as outlined in" +:+ 
   makeRef s4_2_7 :+: S ", with relative error no greater than" +:+.
   S "0.001%")),
 --
@@ -1080,7 +1080,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   ((short requirement) :+: S "11", Flat (S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+
   S "at which the" +:+ (short phsChgMtrl) +:+
-  S "stops" +:+ (phrase $ melting ^. term) +:+
+  S "stops" +:+ (phrase $ CT.melting ^. term) +:+
   EmptyS +:+ P (t_final_melt ^. symbol) +:+. S "(from IM2)"))])
   ]
 
@@ -1114,7 +1114,7 @@ s6 = SRS.likeChg [s6_list] []
 
 s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat 
   (S "A4 -" +:+ (short phsChgMtrl) +:+ S "is actually a poor" +:+
-  (phrase $ thermal_conductor ^. term) :+: S ", so" +:+
+  (phrase $ CT.thermal_conductor ^. term) :+: S ", so" +:+
   S "the" +:+ (phrase assumption) +:+
   S "of uniform" +:+ (phrase $ temp_PCM ^. term) +:+. S "is not likely")),
 --
@@ -1141,7 +1141,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
   ((short likelyChg) :+: S "6", Flat (S "A15 - Any real" +:+
   (phrase $ tank ^. term) +:+ S "cannot be" +:+
   (phrase $ perfect_insul ^. term) +:+ S "and will lose" +:+.
-  (phrase $ heat ^. term)))])
+  (phrase $ CT.heat ^. term)))])
 
 -- List structure same in all examples.
 

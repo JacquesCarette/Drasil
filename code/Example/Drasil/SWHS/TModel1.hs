@@ -7,10 +7,10 @@ import Drasil.SWHS.Concepts
 
 import Language.Drasil
 import Prelude hiding (id)
-import Data.Drasil.Concepts.Thermodynamics hiding (temp)
+import Data.Drasil.Concepts.Thermodynamics hiding (temp, heat_cap_spec)
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Quantities.Math (gradient)
-import Data.Drasil.Quantities.Thermodynamics (temp)
+import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec)
 import Data.Drasil.Quantities.PhysicalProperties
 import Data.Drasil.Quantities.Physics (time)
 
@@ -25,14 +25,14 @@ t1ConsThermE = makeRC "t1ConsThermE" (nounPhraseSP "Conservation of thermal ener
 
 consThermERel :: Relation
 consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
-  (C density) * (C htCap) * (Deriv Part (C temp) (C time))
+  (C density) * (C heat_cap_spec) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence
 t1descr = (S "The above equation gives the" +:+
   (phrase $ law_cons_energy ^. term) +:+ S "for" +:+
   (phrase $ transient ^. term) +:+ (phrase $ heat_trans ^. term) +:+
-  S "in a material of" +:+ (phrase $ htCap ^. term) +:+ 
-  P (htCap ^. symbol) +:+ S "(" :+: Sy (unit_symb htCap) :+: S ")" +:+
+  S "in a material of" +:+ (phrase $ heat_cap_spec ^. term) +:+ 
+  P (heat_cap_spec ^. symbol) +:+ S "(" :+: Sy (unit_symb heat_cap_spec) :+: S ")" +:+
   S "and" +:+ (phrase $ density ^. term) `sC`
   P (density ^. symbol) +:+ S "(" :+: Sy (unit_symb density) :+: 
   S "), where" +:+ P (thFluxVect ^. symbol) +:+ S "is the" +:+ 

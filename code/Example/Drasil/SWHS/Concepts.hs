@@ -7,8 +7,8 @@ import Control.Lens ((^.))
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: CINP
 --FIXME: Use compound nounphrases instead of pn/cn
-phsChgMtrl  = commonINP "phsChgMtrl" (pn' "Phase Change Material")      "PCM"
-rightSide   = commonINP "rightSide"  (cn' "Right Hand Side")            "RHS" 
+phsChgMtrl  = commonINP "phsChgMtrl" (pn' "Phase Change Material")                                           "PCM"
+rightSide   = commonINP "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS" 
 progName    = commonINP "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS" 
 
 swhsFull :: NPNC

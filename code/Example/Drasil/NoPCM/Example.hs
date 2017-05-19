@@ -43,7 +43,7 @@ hOut_SA     = uc' "hOut_SA"
               (nounPhraseSP "surface area over which heat is transferred out")
               "Surface area over which thermal energy is transferred out of an object" (sub cA (Atomic "out")) m_2
 htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
-              "The amount of energy required to raise the temperature of the unit mass of a given liquid by a given amount"  (sup cC cL) U.heat_cap_spec
+              "The amount of energy required to raise the temperature of a given unit mass of a given liquid by a given amount"  (sup cC cL) U.heat_cap_spec
 htCap_W     = uc' "htCap_W" (heat_cap_spec `of_` water)
               "The amount of energy required to raise the temperature of a given unit mass of water by a given amount" (sub cC cW) U.heat_cap_spec
 ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")

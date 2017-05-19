@@ -34,7 +34,6 @@ melting             = dcc "melting"         (cn "melting")
 melt_pt             = dcc "melt_pt"         (cn' "melting point")
                       "Temperature at which a substance changes from liquid to vapour"
 phase_change        = dcc "phase_change"    (cn' "phase change") "Change of state"
---FIXME: sens_heat's definition is useless.
 sens_heat           = dcc "sens_heat"       (cn' "sensible heat")
                       ("Heat exchanged by a body in which the exchange of heat changes the temperature "++
                       "and some macroscopic variables of the body or system, but leaves others unchanged")

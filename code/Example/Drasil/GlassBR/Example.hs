@@ -21,89 +21,76 @@ import Prelude hiding (log, id)
 fixme :: String
 fixme = "FIXME: Define this or remove the need for definitions"
 
-glassBRSymbols :: [UnitalChunk]
-glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, mod_elas, 
-  act_thick, sflawParamK, sflawParamM, demand, sd, sd_max, sd_min, nom_thick,
-  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight]
+glassBRSymbolsWithDefns :: [UnitalChunk]
+glassBRSymbolsWithDefns = [mod_elas, sd]
 
-plate_len, plate_width, dim_max, dim_min, mod_elas, act_thick, sflawParamK,
-  sflawParamM, demand, sd, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
-  char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitalChunk
+mod_elas, sd :: UnitalChunk
 
-plate_len   = uc' "plate_len" (nounPhraseSP "plate length (long dimension)")
-  fixme
-  lA millimetre
-plate_width = uc' "plate_width" (nounPhraseSP "plate width (short dimension)")
-  fixme
-  lB millimetre
-dim_max     = uc' "dim_max" 
-  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  fixme
-  (sub lD (Atomic "max")) millimetre
-dim_min     = uc' "dim_min" 
-  (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  fixme
-  (sub lD (Atomic "min")) millimetre
 mod_elas    = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
-  fixme
+  "The ratio of tensile stress to tensile strain of glass." -- definition added from wikipedia
   cE kilopascal
-act_thick   = uc' "act_thick" (nounPhraseSP "actual thickness")
-  fixme
-  lH millimetre
-sflawParamK = uc' "sflawParamK" (nounPhraseSP "surface flaw parameter")
-  fixme
-  lK sFlawPU
-sflawParamM = uc' "sflawParamM" (nounPhraseSP "surface flaw parameter")
-  fixme
-  lM sFlawPU
-demand      = uc' "demand" (nounPhraseSP "applied load (demand)")
-  fixme
-  lQ kilopascal
 sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
   (S "The distance from the glazing surface to the" +:+
   S "centroid of a hemispherical high explosive charge. It is represented by"
   +:+ S "the coordinates (SDx, SDy, SDz).")
   (Atomic "SD") metre
-sdx         = uc' "sdx" (nounPhraseSP "stand off distance (x-component)")
-  fixme
+
+glassBRSymbols :: [UnitaryChunk]
+glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick,
+  sflawParamK, sflawParamM, demand, sd_max, sd_min, nom_thick,
+  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight]
+
+plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
+  sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
+  char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
+
+plate_len   = unitary' "plate_len" (nounPhraseSP "plate length (long dimension)")
+  lA millimetre
+plate_width = unitary' "plate_width" (nounPhraseSP "plate width (short dimension)")
+  lB millimetre
+dim_max     = unitary' "dim_max" 
+  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "max")) millimetre
+dim_min     = unitary' "dim_min" 
+  (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "min")) millimetre
+act_thick   = unitary' "act_thick" (nounPhraseSP "actual thickness")
+  lH millimetre
+sflawParamK = unitary' "sflawParamK" (nounPhraseSP "surface flaw parameter")
+  lK sFlawPU
+sflawParamM = unitary' "sflawParamM" (nounPhraseSP "surface flaw parameter")
+  lM sFlawPU
+demand      = unitary' "demand" (nounPhraseSP "applied load (demand)")
+  lQ kilopascal
+sdx         = unitary' "sdx" (nounPhraseSP "stand off distance (x-component)")
   (sub (sd ^. symbol) lX) metre
-sdy         = uc' "sdy" (nounPhraseSP "stand off distance (y-component)")
-  fixme
+sdy         = unitary' "sdy" (nounPhraseSP "stand off distance (y-component)")
   (sub (sd ^. symbol) lY) metre
-sdz         = uc' "sdz" (nounPhraseSP "stand off distance (z-component)")
-  fixme
+sdz         = unitary' "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (sd ^. symbol) lZ) metre
-sd_max      = uc' "sd_max" 
+sd_max      = unitary' "sd_max" 
   (nounPhraseSP "maximum stand off distance permissible for input") 
-  fixme
   (sub (sd ^. symbol) (Atomic "max")) metre
-sd_min      = uc' "sd_min" 
+sd_min      = unitary' "sd_min" 
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  fixme
   (sub (sd ^. symbol) (Atomic "min")) metre
-nom_thick   = uc' "nom_thick" (nounPhraseSP $ 
+nom_thick   = unitary' "nom_thick" (nounPhraseSP $ 
   "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
-  fixme
   lT millimetre
-load_dur    = uc' "load_dur" (nounPhraseSP "duration of load")
-  fixme
+load_dur    = unitary' "load_dur" (nounPhraseSP "duration of load")
   (sub lT lD) second
-char_weight = uc' "char_weight" (cn' "charge weight")
-  fixme
+char_weight = unitary' "char_weight" (cn' "charge weight")
   lW kilogram
-cWeightMax  = uc' "cWeightMax" 
+cWeightMax  = unitary' "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  fixme
   (sub (char_weight ^. symbol) 
   (Atomic "max")) kilogram
-cWeightMin  = uc' "cWeightMin" 
+cWeightMin  = unitary' "cWeightMin" 
   (nounPhraseSP "minimum permissible input charge weight")
-  fixme
   (sub (char_weight ^. symbol) (Atomic "min")) kilogram
-eqTNTWeight = uc' "eqTNTWeight" 
+eqTNTWeight = unitary' "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
-  fixme
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
 
 glassBRUnitless :: [VarChunk]

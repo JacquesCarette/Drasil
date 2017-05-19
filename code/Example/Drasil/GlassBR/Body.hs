@@ -78,7 +78,7 @@ glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 this_symbols :: [QSWrapper]
-this_symbols = ((map qs glassBRSymbols) ++ (map qs glassBRUnitless))
+this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless))
 
 s2 = SRS.intro [s2_intro] [s2_1, s2_2, s2_3]
 
@@ -593,7 +593,7 @@ s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = Paragraph $ foldlSent [
   S "Given the small size, and relative simplicity, of this", 
-  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority, +:+.
+  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority +:+.
   S "Any reasonable implementation will be very quick and use minimal storage", 
   S "Rather than", phrase performance `sC` S "the", phrase priority,
   phrase nonfunctional, (short requirement) :+:

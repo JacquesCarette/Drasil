@@ -364,7 +364,7 @@ s4_2_3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects the laws 
   S "in turn are used to build the" +:+. (plural inModel)
 
 -- SECTION 4.2.4 --
-s4_2_4 = SRS.dataDefn [s4_2_3_p1] []
+s4_2_4 = SRS.dataDefn [s4_2_4_p1] []
 
 s4_2_4_p1 :: Contents
 s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defines all" +:+
@@ -383,7 +383,7 @@ sec_IMs = SRS.inModel [s4_2_5_p1,s4_2_5_p2,s4_2_5_p3] []
 s4_2_5_p1, s4_2_5_p2, s4_2_5_p3 :: Contents
 
 s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+ (phrase problem) +:+
-  S "defined in the" +:+ makeRef s4_1 +:+ S "into one which is expressed in mathematical terms." +:+
+  S "defined in" +:+ makeRef s4_1 +:+ S "into one which is expressed in mathematical terms." +:+
   S "It used concrete symbols defined in" +:+ makeRef s4_2_4 +:+ S "to replace the abstract" +:+
   S "symbols in the" +:+ (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3
   
@@ -506,30 +506,30 @@ s6 = SRS.likeChg [] []
 
 s7 = SRS.reference [s7_list] []
 
-s7_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
+s7_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [ --FIXME: names should be in italics
   (S "[1]", S "Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing" +:+
             S "the factor of safety using the morgensternprice method. Can. Geotech. J.," +:+
-            S "(42):272–278, 19 February 2005."),
+            S "(42):272-278, 19 February 2005."),
   (S "[2]", S "D.G. Fredlund and J.Krahn. Comparison of slope stability methods of" +:+
-            S "analysis. Can. Geotech. J., (14):429–439, 4 April 1977."),
+            S "analysis. Can. Geotech. J., (14):429-439, 4 April 1977."),
   (S "[3]", S "Nirmitha Koothoor. A document drive approach to certifying" +:+.
-            (phrase sciCompS) +:+ S "Master’s thesis, McMaster University," +:+
+            (phrase sciCompS) +:+ S "Master's thesis, McMaster University," +:+
             S "Hamilton, Ontario, Canada, 2013."),
   (S "[4]", S "David L. Parnas and P.C. Clements. A rational design process: How" +:+
             S "and why to fake it. IEEE Transactions on Software Engineering," +:+
-            S "12(2):251–257, February 1986."),
+            S "12(2):251-257, February 1986."),
   (S "[5]", S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
-            S "scientific computing. In J. Ralyt´e, P. Agerfalk, and N. Kraiem," +:+
+            S "scientific computing. In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk, and N. Kraiem," +:+
             S "editors, Proceedings of the First International Workshopon" +:+
-            S "Situational Requirements Engineering Processes – Methods," +:+
+            S "Situational Requirements Engineering Processes - Methods," +:+
             S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-            S "Engineering Processes, SREP’05, pages 107–121, Paris, France," +:+
+            S "Engineering Processes, SREP'05, pages 107-121, Paris, France," +:+
             S "2005. In conjunction with 13th IEEE International Requirements" +:+
             S "Engineering Conference."),
   (S "[6]", S "Dieter Stolle and Peijun Guo. Limit equilibrum" +:+ (phrase ssa) +:+
-            S "using rigid finite elements. Can. Geotech. J., (45):653–662, 20 May 2008."),
+            S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008."),
   (S "[7]", S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
             S "Peter John Cleall. An efficient approach for locating the" +:+
-            S "critical slip surface in slope stability analyses using a" +:+
-            S "real-coded genetic algorithm. Can. Geotech. J., (47):806–820," +:+
+            (phrase crtSlpSrf) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
+            S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+
             S "25 June 2010.")]

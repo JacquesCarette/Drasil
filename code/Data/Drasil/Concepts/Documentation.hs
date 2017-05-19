@@ -9,7 +9,7 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
 assumption  = commonINP "assumption"  (cn' "assumption")                            "A"
-dataDefn    = commonINP "dataDefn"    (compoundPhrase datum definition)               "DD"
+dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
 desSpec     = commonINP "desSpec"     (compoundPhrase design specification)           "DS"
 genDefn     = commonINP "genDefn"     (cn' "general definition")                    "GD"
 goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)                "GS" 
@@ -107,7 +107,7 @@ software        = npnc "software"       (cn' "software")
 specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
 stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
-statement       = npnc "statement"      (cn' "statements")
+statement       = npnc "statement"      (cn' "statement")
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")

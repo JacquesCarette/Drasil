@@ -53,6 +53,7 @@ normalVect  = ucFromVC normVect metre
   where normVect = cvR (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase $ QM.normalVect ^. term) )
                    (QM.normalVect ^. symbol)
+
 position    = QP.position
 orientation = QM.orientation
 dist        = QP.distance
@@ -60,7 +61,6 @@ torque      = QP.torque
 disp        = QP.displacement
 vel         = QP.velocity
 accel       = QP.acceleration
-
 angDisp     = QP.angularDisplacement
 angVel      = QP.angularVelocity
 angAccel    = QP.angularAccel
@@ -96,32 +96,25 @@ numParticles = makeVC "n" (nounPhraseSP "number of particles in a rigid body") l
 
 -- T2 --
 
-force_1, force_2 :: UnitalChunk
---FIXME: parametrized hack
-force_1 = ucFromVC force1 newton
-  where force1 = cvR (dccWDS "force" (QP.force ^. term)
+force_1, force_2, force_i :: UnitalChunk
+force_1 = ucFromVC (forceParam "1" "first") newton
+force_2 = ucFromVC (forceParam "2" "second") newton
+force_i = ucFromVC (forceParam "i" "i-th") newton
+
+forceParam, massParam :: String -> String -> ConVar
+forceParam n w = cvR (dccWDS "force" (QP.force ^. term)
                  (phrase $ compoundPhrase' (QP.force ^. term)
-                 (cn "exerted by the first body (on another body)")))
-                 (sub (QP.force ^. symbol) (Atomic "1"))
---FIXME: parametrized hack
-force_2 = ucFromVC force1 newton
-  where force1 = cvR (dccWDS "force" (QP.force ^. term)
-                 (phrase $ compoundPhrase' (QP.force ^. term)
-                 (cn "exerted by the second body (on another body)")))
-                 (sub (QP.force ^. symbol) (Atomic "2"))
+                 (cn $ "exerted by the" ++ w ++ "body (on another body)")))
+                 (sub (QP.force ^. symbol) (Atomic n))
+massParam n w = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
+                (cn $ "of the" ++ w ++ "body")) (phrase $ QPP.mass ^. term))
+                (sub (QPP.mass ^. symbol) (Atomic n))
 -- T3 --
 mass_1, mass_2, dispUnit, dispNorm, sqrDist :: UnitalChunk
 
--- FIXME: parametrized hack
-mass_1 = ucFromVC mass1 kilogram
-  where mass1 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
-                (cn "of the first body")) (phrase $ QPP.mass ^. term))
-                (sub (QPP.mass ^. symbol) (Atomic "1"))
--- FIXME: parametrized hack
-mass_2 = ucFromVC mass2 kilogram
-  where mass2 = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
-                (cn "of the second body")) (phrase $ QPP.mass ^. term))
-                (sub (QPP.mass ^. symbol) (Atomic "2"))
+mass_1 = ucFromVC (massParam "1" "first") kilogram
+mass_2 = ucFromVC (massParam "2" "second") kilogram
+
 -- FIXME: parametrized hack
 dispUnit = ucFromVC dispVect metre
   where dispVect = cvR (dccWDS "dispUnit" (compoundPhrase' (cn "displacement")
@@ -140,16 +133,15 @@ sqrDist = ucFromVC norm m_2
 -- T4 --
 vel_B, vel_O, r_OB :: UnitalChunk
 
+velParam :: String -> Symbol -> ConVar
+velParam n w = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term)
+               (cn $ "at point" ++ n)) (phrase $ QP.velocity ^. term))
+               (sub (QP.velocity ^. symbol) w)
+
 -- FIXME: parametrized hack
-vel_B   = ucFromVC velb velU
-  where velb = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term)
-               (cn "at point B")) (phrase $ QP.velocity ^. term))
-               (sub (QP.velocity ^. symbol) cB)
--- FIXME: parametrized hack
-vel_O   = ucFromVC velo velU
-  where velo = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term)
-               (cn "at the origin")) (phrase $ QP.velocity ^. term))
-               (sub (QP.velocity ^. symbol) cO)
+vel_B   = ucFromVC (velParam "B" cB) velU
+vel_O   = ucFromVC (velParam "origin" cO) velU
+
 r_OB    = uc' "r_OB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
@@ -174,26 +166,19 @@ pos_i = ucFromVC posi metre
   where posi = cvR (dccWDS "p_i" (compoundPhrase' (position ^. term) 
                 (cn "vector of the i-th particle")) (phrase $ position ^. term))
                 (sub (position ^. symbol) lI)
---pos_i = uc' "p_i" (nounPhraseSP "position vector of the i-th particle")
---  "FIXME: Define this or remove the need for definitions" 
---  (sub (position ^. symbol) lI) metre
 
 acc_i = ucFromVC accI accelU
   where accI = cvR (dccWDS "acc_i" (compoundPhrase' (accel ^. term) 
-                (cn "of the i-th particle")) (phrase $ accel ^. term))
+                (cn "of the i-th body's acceleration")) (phrase $ accel ^. term))
                 (sub (accel ^. symbol) lI)
 
 mTot = ucFromVC mtotal kilogram
   where mtotal = cvR (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
                 (CP.rigidBody ^. term)) (phrase $ QPP.mass ^. term)) 
                 cM
-
---mTot = uc' "M" (nounPhraseSP "total mass of the rigid body")
---  "FIXME: Define this or remove the need for definitions" cM kilogram
-
 -- DD8 --
 
-initRelVel, mass_A, mass_B, mass_I, normalLen, contDisp_A, contDisp_B, 
+initRelVel, mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
   perpLen_A, momtInert_A, perpLen_B, momtInert_B :: UnitalChunk
 
 --FIXME: parametrized hack
@@ -204,16 +189,15 @@ initRelVel = ucFromVC relVel velU
                  (phrase $ QP.velocity ^. term))
                  (sup (sub (QP.velocity ^. symbol) lI) (Concat [cA, cB]))
 --FIXME: parametrized hack
-mass_A = ucFromVC rigidA kilogram
-  where rigidA = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
-                 (cn "of rigid body A")) (phrase $ QPP.mass ^. term))
-                 (sub (QPP.mass ^. symbol) cA)
---FIXME: parametrized hack
-mass_B = ucFromVC rigidB kilogram
-  where rigidB = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
-                 (cn "of rigid body B")) (phrase $ QPP.mass ^. term))
-                 (sub (QPP.mass ^. symbol) cB)
-mass_I = ucFromVC massI kilogram
+
+rigidParam :: String -> Symbol -> ConVar
+rigidParam n w = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
+                 (cn $ "of rigid body" ++ n)) (phrase $ QPP.mass ^. term))
+                 (sub (QPP.mass ^. symbol) w)
+
+mass_A = ucFromVC (rigidParam "A" cA) kilogram
+mass_B = ucFromVC (rigidParam "B" cB) kilogram
+massIRigidBody = ucFromVC massI kilogram
   where massI = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term) 
                  (cn "of the i-th rigid body")) (phrase $ QPP.mass ^. term)) 
                  (sub (QPP.mass ^. symbol) cI)
@@ -223,43 +207,58 @@ normalLen = ucFromVC normLen metre
                   (cn "length of the") (QM.normalVect ^. term))
                   (phrase $ QM.normalVect ^. term))
                   (Concat [Atomic "||",(QM.normalVect ^. symbol), Atomic "||"])
-contDisp_A = uc' "r_AP" (nounPhraseSP $ 
-  "displacement vector between the centre of " ++
-  "mass of rigid body A and contact point P")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (disp ^. symbol) (Concat [cA, cP])) metre
-contDisp_B = uc' "r_BP" (nounPhraseSP $ 
-  "displacement vector between the centre of " ++
-  "mass of rigid body B and contact point P")
-  "FIXME: Define this or remove the need for definitions" 
-  (sub (disp ^. symbol) (Concat [cB, cP])) metre
 
---FIXME: parametrized hack -> needs synonym for normal with perpendicular
-perpLen_A = ucFromVC perpA metre
-  where perpA = cvR (dccWDS "|| r_AP x n ||" (compoundPhrase' (compoundPhrase
+contDisp_A = ucFromVC (contParam "A" cA) metre
+contDisp_B = ucFromVC (contParam "B" cB) metre
+
+contParam :: String -> Symbol -> ConVar
+contParam n w = cvR (dccWDS ("r_" ++ n ++ "P") (contdispN n) (phrase $ disp ^. term))
+                  (sub (disp ^. symbol) (Concat $ [w, cP]))
+contdispN :: String -> NP
+contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
+  ++ n ++ " and contact point P"
+
+
+--FIXME: parametrized hack
+perpParam :: String -> Symbol -> ConVar
+perpParam n w = cvR (dccWDS ("|| r_A" ++ n ++ " x n ||") 
+                (compoundPhrase' (compoundPhrase 
                 (cn' "length of the") (QM.perpVect ^. term))
-                (cn "to the contact displacement vector of rigid body A"))
-                (phrase $ QM.perpVect ^. term))  (Concat [Atomic "||", 
-                (contDisp_A ^. symbol), Atomic "*", 
-                (QM.perpVect ^. symbol), Atomic "||"])
---FIXME: parametrized hack -> needs synonym for normal with perpendicular
-perpLen_B = ucFromVC perpB metre
-  where perpB = cvR (dccWDS "|| r_AB x n ||" (compoundPhrase' (compoundPhrase 
-                (cn' "length of the") (QM.perpVect ^. term))
-                (cn "to the contact displacement vector of rigid body B"))
+                (cn $ "to the contact displacement vector of rigid body" ++ n))
                 (phrase $ QM.perpVect ^. term)) 
-                (Concat [Atomic "||", (contDisp_B ^. symbol), Atomic "*", 
+                (Concat [Atomic "||", w, Atomic "*", 
                 (QM.perpVect ^. symbol), Atomic "||"])
 
+perpLen_A = ucFromVC (perpParam "A" (contDisp_A ^. symbol)) metre
+perpLen_B = ucFromVC (perpParam "B" (contDisp_B ^. symbol)) metre
+
 -- FIXME: parametrized hack
-momtInert_A = ucFromVC momtA momtInertU
-  where momtA = cvR (dccWDS "momentOfInertia" (compoundPhrase'
-                (QP.momentOfInertia ^. term) (cn "of rigid body A"))
+momtParam :: String -> Symbol -> ConVar
+momtParam n w = cvR (dccWDS "momentOfInertia" (compoundPhrase'
+                (QP.momentOfInertia ^. term) (cn $ "of rigid body" ++ n))
                 (phrase $ QP.momentOfInertia ^. term))
-                (sub (momtInert ^. symbol) cA)
--- FIXME: parametrized hack
-momtInert_B = ucFromVC momtB momtInertU
-  where momtB = cvR (dccWDS "momentOfInertia" (compoundPhrase'
-                (QP.momentOfInertia ^. term) (cn "of rigid body B"))
-                (phrase $ QP.momentOfInertia ^. term))
-                (sub (momtInert ^. symbol) cB)
+                (sub (momtInert ^. symbol) w)
+
+momtInert_A = ucFromVC (momtParam "A" cA) momtInertU
+momtInert_B = ucFromVC (momtParam "B" cB) momtInertU
+
+timeT, initTime, collTime, velTime :: UnitalChunk
+timeT = ucFromVC timet second
+  where timet = cvR (dccWDS "t" (cn "point in time")
+                (phrase $ QP.time ^. term))
+                (QP.time ^. symbol)
+
+initTime = ucFromVC timeN second
+  where timeN = cvR (dccWDS "t_0" (cn "denotes the initial time")
+                   (phrase $ QP.time ^. term))
+                   (sub (QP.time ^. symbol) (Atomic "0"))
+
+collTime = ucFromVC collisionT second
+  where collisionT = cvR (dccWDS "t_c" (cn "denotes the time at collision")
+                     (phrase $ QP.time ^. term))
+                     (sub (QP.time ^. symbol) (Atomic "c"))
+
+velTime = ucFromVC velatTime second
+  where velatTime = cvR (dccWDS "t_c" (cn "i-th body's velocity")
+                     (phrase $ QP.time ^. term))
+                     (sub (QP.time ^. symbol) (Atomic "c"))

@@ -32,7 +32,7 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 
 --type declerations for sections--
-s2, s3, s4, s5, s6 :: Section
+s2, s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -44,7 +44,7 @@ s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, {-s2_3_p1, -}s3_p1,
   s3_1_p1, s3_2_p1, s4_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
   s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
   s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
-  s4_2_2_p1, s5_p1, s5_1_list, s5_1_table, s5_2_p1 :: Contents
+  s4_2_2_p1, s5_p1, s5_1_list, s5_1_table, s5_2_p1, s7_list :: Contents
 
 s4_2_2_tmods :: [Contents]
 
@@ -59,7 +59,7 @@ ssp_si = SI ssa srs [henryFrankis]
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 
   [TUnits, tsymb s1_2_intro, TAandA]
-  ) : map Verbatim [s2, s3, s4, s5, s6]
+  ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
@@ -385,18 +385,18 @@ s4_2_5_p1, s4_2_5_p2, s4_2_5_p3 :: Contents
 s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+ (phrase problem) +:+
   S "defined in the" +:+ makeRef s4_1 +:+ S "into one which is expressed in mathematical terms." +:+
   S "It used concrete symbols defined in" +:+ makeRef s4_2_4 +:+ S "to replace the abstract" +:+
-  S "symbols in the" +:+ (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3 --FIXME: make references to these sections
+  S "symbols in the" +:+ (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3
   
 s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
   S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 
   S "method. Analysis is performed by breaking the assumed failure" +:+ 
-  S "surface into a series of vertical slices of mass. Static" +:+ 
+  (phrase $ surface ^. term) +:+ S "into a series of vertical slices of mass. Static" +:+ 
   S "equilibrium analysis using two force equilibrium, and one" +:+ 
-  S "moment equation as in T2. The problem is statically" +:+ --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
+  S "moment equation as in T2. The" +:+ (phrase problem) +:+ S "is statically" +:+ --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
   S "indeterminate with only these 3 equations and one constitutive" +:+ 
   S "equation (the Mohr Coulomb shear strength of T3)" +:+ 
   S "so the assumption of GD5 is used. Solving for force" +:+ 
-  S "equilibrium allows definitions of all forces in terms of" +:+ 
+  S "equilibrium allows" +:+ (plural definition) +:+ S "of all forces in terms of" +:+ 
   S "the physical properties of DD1 to DD9," +:+ 
   S "as done in DD10, DD11."
 
@@ -408,7 +408,7 @@ s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
   S "and" +:+ (P $ ti ^. symbol) +:+ S "in DD10 and DD11, and each" +:+ --FIXME: DD10,DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear," +:+ 
   S "and therefore explicit equations cannot be derived and an" +:+ 
-  S "iterative solution method is required."
+  S "iterative" +:+ (plural solution) +:+ S "method is required."
 
 -- SECTION 4.2.6 --
 s4_2_6 = SRS.datCon [s4_2_6_p1] []
@@ -416,9 +416,9 @@ s4_2_6 = SRS.datCon [s4_2_6_p1] []
 s4_2_6_p1 :: Contents
 s4_2_6_p1 = Paragraph $ S "Table 2 and 3 show the" +:+ (plural datumConstraint) +:+ --FIXME: make references to table 2 and 3
   S "on the input and output variables, respectively. The column" +:+ 
-  S "physical constraints gives the physical limitations on the" +:+ 
-  S "range of values that can be taken by the variable. The constraints" +:+ 
-  S "are conservative, to give the user of the model the flexibility" +:+ 
+  (plural physicalConstraint) +:+ S "gives the physical limitations on the" +:+ 
+  S "range of values that can be taken by the variable. The" +:+ (plural constraint) +:+ 
+  S "are conservative, to give the" +:+ (phrase user) +:+ S "of the model the flexibility" +:+ 
   S "to experiment with unusual situations. The column of typical" +:+ 
   S "values is intended to provide a feel for a common scenario." +:+ 
   S "The uncertainty column provides an estimate of the confidence" +:+ 
@@ -501,3 +501,35 @@ s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
 
 -- SECTION 6 --
 s6 = SRS.likeChg [] []
+
+-- References --
+
+s7 = SRS.reference [s7_list] []
+
+s7_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
+  (S "[1]", S "Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing" +:+
+            S "the factor of safety using the morgensternprice method. Can. Geotech. J.," +:+
+            S "(42):272–278, 19 February 2005."),
+  (S "[2]", S "D.G. Fredlund and J.Krahn. Comparison of slope stability methods of" +:+
+            S "analysis. Can. Geotech. J., (14):429–439, 4 April 1977."),
+  (S "[3]", S "Nirmitha Koothoor. A document drive approach to certifying" +:+.
+            (phrase sciCompS) +:+ S "Master’s thesis, McMaster University," +:+
+            S "Hamilton, Ontario, Canada, 2013."),
+  (S "[4]", S "David L. Parnas and P.C. Clements. A rational design process: How" +:+
+            S "and why to fake it. IEEE Transactions on Software Engineering," +:+
+            S "12(2):251–257, February 1986."),
+  (S "[5]", S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
+            S "scientific computing. In J. Ralyt´e, P. Agerfalk, and N. Kraiem," +:+
+            S "editors, Proceedings of the First International Workshopon" +:+
+            S "Situational Requirements Engineering Processes – Methods," +:+
+            S "Techniques and Tools to Support Situation-Specific Requirements" +:+
+            S "Engineering Processes, SREP’05, pages 107–121, Paris, France," +:+
+            S "2005. In conjunction with 13th IEEE International Requirements" +:+
+            S "Engineering Conference."),
+  (S "[6]", S "Dieter Stolle and Peijun Guo. Limit equilibrum" +:+ (phrase ssa) +:+
+            S "using rigid finite elements. Can. Geotech. J., (45):653–662, 20 May 2008."),
+  (S "[7]", S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
+            S "Peter John Cleall. An efficient approach for locating the" +:+
+            S "critical slip surface in slope stability analyses using a" +:+
+            S "real-coded genetic algorithm. Can. Geotech. J., (47):806–820," +:+
+            S "25 June 2010.")]

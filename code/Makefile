@@ -65,7 +65,7 @@ nopcm:
 	stack exec $(NoPCM_EXE)
 	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.tex ./SRS/$(NoPCM_PREF)SRS.tex &> $(NoPCM_PREF)log.log
 	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.css ./Website/$(NoPCM_PREF)SRS.css >> $(NoPCM_PREF)log.log 2>&1
-	- $(DIFF) ./stable/pcm/$(NoPCM_PREF)SRS.html ./Website/$(NoPCM_PREF)SRS.html >> $(NoPCM_PREF)log.log 2>&1
+	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.html ./Website/$(NoPCM_PREF)SRS.html >> $(NoPCM_PREF)log.log 2>&1
   
 docs:
 	haddock -o Docs -h ./Language/Drasil.hs

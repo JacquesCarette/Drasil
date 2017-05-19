@@ -10,6 +10,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
+import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng,
   equation, change)
 
@@ -374,8 +375,8 @@ s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
 
-s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [heat_flux,
-   phase_change_material, specific_heat, 
+s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [ht_flux,
+   phase_change_material, heat_cap_spec, 
    thermal_conduction, transient])
 
 s411_bullet_map_f :: Concept c => c -> ItemType

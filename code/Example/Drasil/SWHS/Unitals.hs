@@ -2,14 +2,13 @@ module Drasil.SWHS.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Units.Thermodynamics
+import qualified Data.Drasil.Units.Thermodynamics as UT
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
-import Data.Drasil.Quantities.Thermodynamics(temp)
+import Data.Drasil.Quantities.Thermodynamics(temp, heat_cap_spec, ht_flux)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, normalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density,)
 import Data.Drasil.Units.PhysicalProperties
-import Drasil.SWHS.Concepts hiding (fixme)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -31,7 +30,7 @@ swhsUnits = map ucw [coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S
 
 coil_SA,in_SA,out_SA,pcm_SA,htCap,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   htCap_W,diam,sensHtE,pcm_initMltE,pcm_E,w_E,vol_ht_gen,htTransCoeff,coil_HTC,
-  pcm_HTC,tank_length,pcm_mass,w_mass,ht_flux,latentE,
+  pcm_HTC,tank_length,pcm_mass,w_mass,latentE,
   thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,
   temp_boil,temp_C,temp_env,time_final,temp_init,temp_melt,t_init_melt,
   t_final_melt,temp_melt_P,temp_PCM,temp_W,volume,pcm_vol,tank_vol,w_vol,deltaT,
@@ -53,24 +52,24 @@ out_SA       = uc' "out_SA" (nounPhraseSP
   fixme (sub cA (Atomic "out")) m_2
 pcm_SA       = uc' "pcm_SA" (nounPhraseSP "phase change material surface area")
   fixme (sub cA cP) m_2
-htCap        = uc specific_heat cC heat_cap_spec
+htCap        = heat_cap_spec  --May want to consider removing this
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
-  fixme (sup (htCap ^. symbol) cL) heat_cap_spec
+  fixme (sup (htCap ^. symbol) cL) UT.heat_cap_spec
 htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP 
   "specific heat capacity of PCM as a liquid")
-  fixme (sup (sub (htCap ^. symbol) cP) cL) heat_cap_spec
+  fixme (sup (sub (htCap ^. symbol) cP) cL) UT.heat_cap_spec
 htCap_S      = uc' "htCap_S" 
   (nounPhraseSP "specific heat capacity of a solid")
-  fixme (sup (htCap ^. symbol) cS) heat_cap_spec
+  fixme (sup (htCap ^. symbol) cS) UT.heat_cap_spec
 htCap_S_P    = uc' "htCap_S_P" 
   (nounPhraseSP "specific heat capacity of PCM as a solid")
-  fixme (sup (sub (htCap ^. symbol) cP) cS) heat_cap_spec
+  fixme (sup (sub (htCap ^. symbol) cP) cS) UT.heat_cap_spec
 htCap_V      = uc' "htCap_V" 
   (nounPhraseSP "specific heat capacity of a vapour")
-  fixme (sup (htCap ^. symbol) cV) heat_cap_spec
+  fixme (sup (htCap ^. symbol) cV) UT.heat_cap_spec
 htCap_W      = uc' "htCap_W" 
   (nounPhraseSP "specific heat capacity of water")
-  fixme (sub (htCap ^. symbol) cW) heat_cap_spec
+  fixme (sub (htCap ^. symbol) cW) UT.heat_cap_spec
 diam         = uc' "diam" 
   (nounPhraseSP "diameter of tank") fixme cD metre
 sensHtE      = uc' "sensHtE" 
@@ -84,13 +83,13 @@ w_E          = uc' "w_E" (nounPhraseSP "change in heat energy in the water")
   fixme (sub (sensHtE ^. symbol) cW) joule
 vol_ht_gen   = uc' "vol_ht_gen" 
   (nounPhraseSP "volumetric heat generation per unit volume")
-  fixme lG volHtGenU 
+  fixme lG UT.volHtGenU 
 htTransCoeff = uc' "htTransCoeff" 
   (nounPhraseSP "convective heat transfer coefficient")
-  fixme lH heat_transfer_coef
+  fixme lH UT.heat_transfer_coef
 coil_HTC     = uc' "coil_HTC" (nounPhraseSP 
   "convective heat transfer coefficient between coil and water")
-  fixme (sub (htTransCoeff ^. symbol) cC) heat_transfer_coef
+  fixme (sub (htTransCoeff ^. symbol) cC) UT.heat_transfer_coef
 htFusion     = makeUCWDS "htFusion" (nounPhraseSP 
   "specific latent heat of fusion")
   (S "amount of " :+: (phrase $ thermal_energy ^. term) +:+
@@ -98,25 +97,24 @@ htFusion     = makeUCWDS "htFusion" (nounPhraseSP
   S "of a substance.") (sub cH lF) specificE
 pcm_HTC      = uc' "pcm_HTC" 
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
-  fixme (sub lH cP) heat_transfer_coef
+  fixme (sub lH cP) UT.heat_transfer_coef
 tank_length  = uc' "tank_length" (nounPhraseSP "length of tank") fixme cL metre
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   fixme (sub (mass ^. symbol) cP) kilogram
 w_mass       = uc' "w_mass" (nounPhraseSP "mass of water")
   fixme (sub (mass ^. symbol) cW) kilogram
-ht_flux      = uc heat_flux lQ thermal_flux
 latentE      = uc' "latentE" (nounPhraseSP "latent heat energy") fixme cQ joule
 thFluxVect   = uc' "thFluxVect" (nounPhraseSP "thermal flux vector") 
-  fixme (vec lQ) thermal_flux
+  fixme (vec lQ) UT.thermal_flux
 ht_flux_C    = uc' "ht_flux_C" 
   (nounPhraseSP "heat flux into the water from the coil") 
-  fixme (sub (ht_flux ^. symbol) cC) thermal_flux
+  fixme (sub (ht_flux ^. symbol) cC) UT.thermal_flux
 ht_flux_in   = uc' "ht_flux_in" (nounPhraseSP "heat flux input")
-  fixme (sub (ht_flux ^. symbol) (Atomic "in")) thermal_flux
+  fixme (sub (ht_flux ^. symbol) (Atomic "in")) UT.thermal_flux
 ht_flux_out  = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
-  fixme (sub (ht_flux ^. symbol) (Atomic "out")) thermal_flux
+  fixme (sub (ht_flux ^. symbol) (Atomic "out")) UT.thermal_flux
 ht_flux_P    = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water") 
-  fixme (sub (ht_flux ^. symbol) cP) thermal_flux
+  fixme (sub (ht_flux ^. symbol) cP) UT.thermal_flux
 latentE_P    = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   fixme (sub (latentE ^. symbol) cP) joule
 temp_boil    = uc' "temp_boil" (nounPhraseSP "boiling point temperature")

@@ -8,6 +8,7 @@ import Drasil.SWHS.Concepts
 import Language.Drasil
 import Prelude hiding (id)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp)
+import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 import Data.Drasil.Quantities.PhysicalProperties

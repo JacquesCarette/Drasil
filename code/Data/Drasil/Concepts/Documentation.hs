@@ -7,20 +7,21 @@ import Data.Drasil.Concepts.Math (graph)
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg, vav, desSpec, constraint :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
-assumption  = commonINP "assumption"  (cn' "assumption")                    "A"
-dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
-desSpec     = commonINP "desSpec"     (cn' "design specification")          "DS"
-genDefn     = commonINP "genDefn"     (cn' "general definition")            "GD"
-goalStmt    = commonINP "goalStmt"    (cn' "goal statement")                "GS" 
-inModel     = commonINP "inModel"     (cn' "instance model")                "IM" 
-likelyChg   = commonINP "likelyChg"   (cn' "likely change")                 "LC"
-physSyst    = commonINP "physSyst"    (cn' "physical system description")   "PS" 
-requirement = commonINP "requirement" (cn' "requirement")                   "R"
-thModel     = commonINP "thModel"     (cn' "theoretical model")             "T"
-mg          = commonINP "mg"          (cn' "module guide")                  "MG" 
-srs         = commonINP "srs"  (cn' "software requirements specification")  "SRS"
-vav         = commonINP "vav"         (cn' "verification and validation")   "VAV"
-constraint  = commonINP "constraint"  (cn' "constraint")                    "CSTR" -- FIXME: Eventually only have one constraint 
+    --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
+assumption  = commonINP "assumption"  (cn' "assumption")                            "A"
+dataDefn    = commonINP "dataDefn"    (compoundPhrase datum definition)               "DD"
+desSpec     = commonINP "desSpec"     (compoundPhrase design specification)           "DS"
+genDefn     = commonINP "genDefn"     (cn' "general definition")                    "GD"
+goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)                "GS" 
+inModel     = commonINP "inModel"     (compoundPhrase instance_ model)                "IM" 
+likelyChg   = commonINP "likelyChg"   (cn' "likely change")                         "LC"
+physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description)     "PS" 
+requirement = commonINP "requirement" (cn' "requirement")                           "R"
+thModel     = commonINP "thModel"     (cn' "theoretical model")                     "T"
+mg          = commonINP "mg"          (compoundPhrase module_ guide)                  "MG" 
+srs         = commonINP "srs"         (compoundPhrase software reqSpec)               "SRS"
+vav         = commonINP "vav"         (cn' "verification and validation")           "VAV"
+constraint  = commonINP "constraint"  (cn' "constraint")                            "CSTR" -- FIXME: Eventually only have one constraint 
 
 ---------------------------------------------------------------------
 
@@ -29,13 +30,13 @@ constraint  = commonINP "constraint"  (cn' "constraint")                    "CST
 analysis, appendix, characteristic, client, column, component, 
   condition, constraint_, connection, context, customer, datum, definition, 
   dependency, description, design, document, documentation, element, 
-  environment, figure, functional, game, general, goal, individual, information, 
-  input_, intReader, introduction, item, label, library, limitation, method_,
+  environment, figure, functional, game, general, goal, guide, individual, information, 
+  input_, instance_, intReader, introduction, item, label, library, limitation, method_,
   module_, model, name_, nonfunctional, offShelf, open, organization, 
   output_, performance, physics, physical, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
-  specification, stakeholder, symbol_, system, table_, template, 
+  specification, stakeholder, statement, symbol_, system, table_, template, 
   terminology, theory, traceyMatrix, user, useCase, value, variable, 
   video, verification, uncertainty :: NPNC
 
@@ -64,9 +65,11 @@ functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
 game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 goal            = npnc "goal"           (cn' "goal")
+guide           = npnc "guide"          (cn' "guide")
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
-input_          = npnc "input"          (cn' "input")         
+input_          = npnc "input"          (cn' "input")
+instance_       = npnc "instance"       (cn' "instance")
 intReader       = npnc "intReader"      (cn "intended reader")
 introduction    = npnc "introduction"   (cn' "introduction")
 item            = npnc "item"           (cn' "item")
@@ -104,6 +107,7 @@ software        = npnc "software"       (cn' "software")
 specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
 stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
+statement       = npnc "statement"      (cn' "statements")
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
@@ -142,7 +146,7 @@ scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- 
 -- compounds
 
 characteristicSpecification, generalSystemDescription, indPRCase, 
-  physicalConstraint, physicalSystem, problemDescription, prodUCTable, 
+  physicalConstraint, physicalSystem, problemDescription, prodUCTable, reqSpec, 
   specificsystemdescription, systemdescription, systemConstraint, sysCont, 
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
@@ -157,6 +161,7 @@ physicalSystem               = compoundNPNC physical system
 physicalProperty             = compoundNPNC physical property
 problemDescription           = compoundNPNC problem description
 prodUCTable                  = compoundNPNC productUC table_
+reqSpec                      = compoundNPNC requirement_ specification
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint_

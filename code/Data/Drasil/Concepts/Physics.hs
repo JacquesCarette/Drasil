@@ -1,5 +1,5 @@
 module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, friction, elasticity, energy, collision, space
+  ( rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   , cartesian, rightHand, restitutionCoef, acceleration
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
@@ -11,7 +11,7 @@ module Data.Drasil.Concepts.Physics
 import Language.Drasil
 import Control.Lens((^.)) --need for parametrization hack
 
-rigidBody, velocity, friction, elasticity, energy, collision, space,
+rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
@@ -29,6 +29,8 @@ elasticity = dcc "elasticity" (cnIES "elasticity")
   "of two colliding objects after and before a collision.")
 energy = dcc "energy" (cn "energy")
   "Power derived from the utilization of physical or chemical resources."
+mech_energy = dcc "mech_energy" (cn "mechanical energy")
+  "The energy that comes from motion and position"
 collision  = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++
   "in an exchange or transformation of energy.")

@@ -40,11 +40,13 @@ s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
   s4_2_5, s4_2_6, s5_1, s5_2 :: Section
 
-s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, {-s2_3_p1, -}s3_p1,
-  s3_1_p1, s3_2_p1, s4_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
+s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_p1, s3_1_p1,
+  s3_2_p1, s4_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
   s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
   s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
-  s4_2_2_p1, s5_p1, s5_1_list, s5_1_table, s5_2_p1, s7_list :: Contents
+  s4_2_2_p1, s4_2_3_p1, s4_2_4_p1, s4_2_5_p1, s4_2_5_p2,
+  s4_2_5_p3, s4_2_6_p1, s5_p1, s5_1_list, s5_1_table,
+  s5_2_p1, s7_list :: Contents
 
 s4_2_2_tmods :: [Contents]
 
@@ -84,7 +86,7 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 
 -- SECTION 1.3 --
 --automaticly generated in mkSRS 
-  
+
 -- SECTION 2 --
 s2 = SRS.intro [s2_p1, s2_p2] [s2_1, s2_2, s2_3]
 
@@ -115,8 +117,9 @@ s2_1 = SRS.prpsOfDoc [s2_1_p1, s2_1_p2] []
 
 s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
   S "determines the" +:+ (phrase crtSlpSrf) `sC` S "and it's respective" +:+ 
-  (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ S "of assessing the stability of a slope" +:+. 
-  (phrase design) +:+ S "The" +:+ (phrase $ program ^. term) +:+ 
+  (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ 
+  S "of assessing the stability of a slope" +:+. (phrase design) +:+ 
+  S "The" +:+ (phrase $ program ^. term) +:+ 
   S "is intended to be used as an educational tool for" +:+
   S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
@@ -131,7 +134,7 @@ s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +
   S "that will be used to increase confidence in the" +:+ (phrase softwareDoc) +:+
   S "and the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
   (plural document) +:+ S "that follow the so-called waterfall" +:+ (phrase model) `sC`
-  S "the actual development process is not  constrained in any way. Even when" +:+
+  S "the actual development process is not constrained in any way. Even when" +:+
   S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements" +:+
   S "point out, the most logical way to present the" +:+ (phrase documentation) +:+
   S "is still to fake a rational" +:+ (phrase design) +:+ S "process."
@@ -148,7 +151,7 @@ s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow 
   S "as well as displacement of" +:+ (phrase soil) +:+ S "that will occur on the" +:+. (phrase slope)
 
 -- SECTION 2.3 --
-s2_3 = orgSecWTS start inModel sec_IMs end 
+s2_3 = orgSecWTS start inModel s4_2_5 end 
   where start = S "The" +:+ (phrase organization) +:+
                 S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
                 S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
@@ -165,13 +168,13 @@ s2_3 = orgSecWTS start inModel sec_IMs end
   -- S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
   -- S "and" +:+. (plural assumption) +:+ S "For readers" +:+
   -- S "that would like a more bottom up approach, they can start" +:+
-  -- S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef sec_IMs +:+
+  -- S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef s4_2_5 +:+
   -- S "and trace back to find any additional" +:+ (phrase information) +:+
   -- S "they require. The" +:+ (plural inModel) +:+ S "provide the set of" +:+
   -- S "algebraic equations that must be solved iteratively to perform a" +:+
   -- (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+
   -- S "are refined to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
-  -- S "and" +:+ (plural inModel) +:+. (sParen . makeRef) sec_IMs
+  -- S "and" +:+ (plural inModel) +:+. (sParen . makeRef) s4_2_5
 
 -- SECTION 3 --
 s3 = SRS.genSysDec [s3_p1] [s3_1, s3_2]
@@ -264,7 +267,7 @@ s4_1_2_fig1 = fig_indexconv
 
 fig_indexconv :: Contents
 fig_indexconv = Figure (S "Index convention for numbering" +:+ (phrase slice) +:+ S "and" +:+
-  (phrase intrslce) +:+ S "force variables")  "IndexConvention.png"
+  (phrase intrslce) +:+ S "force variables") "IndexConvention.png"
 
 s4_1_2_fig2 = fig_forceacting
 
@@ -290,7 +293,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
 s4_2 = SRS.solCharSpec [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_p1 = Paragraph $ S "The" +:+ (plural inModel) +:+ S "that govern" +:+
-  (short ssa) +:+ S "are presented in" +:+. makeRef sec_IMs +:+
+  (short ssa) +:+ S "are presented in" +:+. makeRef s4_2_5 +:+
   S "The" +:+ (phrase information) +:+ S "to understand the meaning of the instance" +:+
   (plural model) +:+ S "and their derivation is also presented, so that the" +:+
   (plural inModel) +:+ S "can be verified."
@@ -358,7 +361,6 @@ s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 -- SECTION 4.2.3 --
 s4_2_3 = SRS.genDefn [s4_2_3_p1] []
 
-s4_2_3_p1 :: Contents
 s4_2_3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects the laws and" +:+
   S "equations that will be used in deriving the" +:+ (plural dataDefn) `sC` S "which will" +:+
   S "in turn are used to build the" +:+. (plural inModel)
@@ -366,7 +368,6 @@ s4_2_3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects the laws 
 -- SECTION 4.2.4 --
 s4_2_4 = SRS.dataDefn [s4_2_4_p1] []
 
-s4_2_4_p1 :: Contents
 s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defines all" +:+
   S "the" +:+ (plural datum) +:+ S "needed to build the" +:+. (plural inModel) +:+
   (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
@@ -375,18 +376,14 @@ s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defin
   S "in terms of DD1 to DD8 to solve."
 
 -- SECTION 4.2.5 --
-s4_2_5 = sec_IMs
+s4_2_5 = SRS.inModel [s4_2_5_p1,s4_2_5_p2,s4_2_5_p3] []
 
-sec_IMs :: Section
-sec_IMs = SRS.inModel [s4_2_5_p1,s4_2_5_p2,s4_2_5_p3] []
+s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+
+  (phrase problem) +:+ S "defined in" +:+ makeRef s4_1 +:+ S "into one which" +:+
+  S "is expressed in mathematical terms. It used concrete symbols defined in" +:+
+  makeRef s4_2_4 +:+ S "to replace the abstract" +:+ S "symbols in the" +:+
+  (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3
 
-s4_2_5_p1, s4_2_5_p2, s4_2_5_p3 :: Contents
-
-s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+ (phrase problem) +:+
-  S "defined in" +:+ makeRef s4_1 +:+ S "into one which is expressed in mathematical terms." +:+
-  S "It used concrete symbols defined in" +:+ makeRef s4_2_4 +:+ S "to replace the abstract" +:+
-  S "symbols in the" +:+ (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3
-  
 s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
   S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 
   S "method. Analysis is performed by breaking the assumed failure" +:+ 
@@ -413,7 +410,6 @@ s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
 -- SECTION 4.2.6 --
 s4_2_6 = SRS.datCon [s4_2_6_p1] []
 
-s4_2_6_p1 :: Contents
 s4_2_6_p1 = Paragraph $ S "Table 2 and 3 show the" +:+ (plural datumConstraint) +:+ --FIXME: make references to table 2 and 3
   S "on the input and output variables, respectively. The column" +:+ 
   (plural physicalConstraint) +:+ S "gives the physical limitations on the" +:+ 
@@ -466,7 +462,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
             S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
             S "as the" +:+. (phrase crtSlpSrf)),
   (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
-            (phrase method_)  +:+ S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+            (phrase method_) +:+ S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
             (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
             (phrase method_)),
@@ -479,7 +475,7 @@ s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
 s5_1_table = table_inputdata
 
 table_inputdata :: Contents
-table_inputdata =  Table [titleize symbol_, titleize' $ unit_ ^. term, titleize description]
+table_inputdata = Table [titleize symbol_, titleize' $ unit_ ^. term, titleize description]
   (mkTable
     [(\ch -> P $ ch ^. symbol),
      (\ch -> unwrap $ getUnit ch),
@@ -503,7 +499,6 @@ s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
 s6 = SRS.likeChg [] []
 
 -- References --
-
 s7 = SRS.reference [s7_list] []
 
 s7_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [ --FIXME: names should be in italics

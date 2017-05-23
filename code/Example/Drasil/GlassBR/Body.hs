@@ -449,7 +449,7 @@ s6_2_5_intro = Paragraph $ foldlSent
   S "on the", phrase input_ +:+. plural variable, S "The", phrase column, S "of", 
   plural physicalConstraint, S "gives the", phrase physical, plural limitation, 
   S "on the range", S "of", plural value, S "that can be taken by the" +:+. 
-  phrase variable, S "The", plural constraint_, S "are conservative, to give", 
+  phrase variable, S "The", plural constraint, S "are conservative, to give", 
   S "the", phrase user, S "of the", phrase model, 
   S "the flexibility to experiment with unusual situations. The", 
   phrase column, S "of" +:+. S "typical", plural value,
@@ -500,7 +500,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (titleize $ parameter ^. term) +:+ titleize' value) True
 
 s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", S "()",--sParen (makeRef s6_2_5_table3),
-  S "shows the", plural constraint_, S "that must be satisfied by the",
+  S "shows the", plural constraint, S "that must be satisfied by the",
   phrase output_]
 
 -- s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 

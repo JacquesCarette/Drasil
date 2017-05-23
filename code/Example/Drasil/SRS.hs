@@ -14,13 +14,16 @@ import Language.Drasil
 import qualified Data.Drasil.Concepts.Documentation as Doc
 
 -- Local function to keep things looking clean, not exported.
+forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+forTT = for'' titleize' titleize
+
 forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT' = for'' titleize titleize'
+forTT' = for'' titleize' titleize'
 
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc sys authors secs = Document (Doc.srs `for` sys) authors secs
+doc sys authors secs = Document (Doc.srs `forTT` sys) authors secs
 -- | Uses plural of system for title.
 doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 

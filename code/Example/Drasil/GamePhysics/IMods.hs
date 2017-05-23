@@ -23,7 +23,7 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C force) := (C gravAccel) + (C mass)
+im1Rel = (C accel) := (C vel) := (C gravAccel) + ((C force) / (C mass))
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
@@ -51,7 +51,7 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation -- FIXME: add proper equation
-im2Rel = (C force) := (C mass)
+im2Rel = (C angAccel) := (C angVel) := ((C torque) / (C momtInert))
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 
@@ -102,6 +102,9 @@ im3leg = foldle1 (+:+.) (+:+.) [S "mk is the mass of the k-th rigid body (kg)",
 
 {-- __n(t) is the n-th body's __ -option- at time t (units) --}
 helper1 :: (Unitary c, SymbolForm c) => c -> String -> Sentence -> Sentence
+helper1 t i EmptyS = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
+  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase $ t ^. term) +:+
+  S "at time t" +:+ (sParen $ Sy $ unit_symb t)
 helper1 t i opt = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
-  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase $ t ^. term) :+: opt :+:
+  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase $ t ^. term) +:+ opt +:+
   S "at time t" +:+ (sParen $ Sy $ unit_symb t)

@@ -452,7 +452,7 @@ s4_2_5_intro = Paragraph $ foldlSent
   S "to replace the abstract symbols in the", (plural model), S "identified in",
   (makeRef s4_2_2), S "and", (makeRef s4_2_3)]
 
--- Instance models not yet implemented --
+-- Instance models not fully yet implemented --
 
 s4_2_5_IMods = map Definition (map Theory iModels)
 
@@ -467,6 +467,9 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
   S "of collision P, rAP and rBP. Note that this figure only presents", 
   S "vertex-to-edge collisions, as per our assumptions (A5)."]
 --}
+
+{--fig_1 = Figure (titleize figure +:+ S "1:" +:+ S "Collision between two rigid bodies")
+"CollisionDiagram.png" --}
 ------------------------------
 -- 4.2.6 : Data Constraints --
 ------------------------------

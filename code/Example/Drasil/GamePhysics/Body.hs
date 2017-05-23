@@ -48,7 +48,7 @@ chipmunkSRS' = mkDoc' mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 
-  map Verbatim [s2, s3, s4, s5, s6, s7]
+  map Verbatim [s2, s3, s4, s5, s6, s7, s8]
   where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.
@@ -676,6 +676,29 @@ s7_3dlist = Enumeration (Bullet $ map (Flat) [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
   (S "Newton" +:+ (titleize game) +:+ S "Dynamics: http://newtondynamics.com/")])
+
+-----------------------------------------------------
+-- SECTION 8 : Traceability Matrices and Graph    --
+-----------------------------------------------------
+
+s8 :: Section
+s8 = SRS.traceyMandG [s8_intro1] []
+
+s8_intro1 :: Contents
+s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of", 
+  (plural traceyMatrix), S "is", S "to provide easy", (plural reference), 
+  S "on what has to be additionally modified if",
+  S "a certain", (phrase component), S "is changed. Every time a", 
+  (phrase component), S "is changed,", S "the items in the column of that", 
+  (phrase component), S "that are marked with an “X”", 
+  S "should be modified as well. Table 3 shows the dependencies of", 
+  (plural goalStmt) `sC` (plural requirement) `sC` (plural inModel) `sC` S "and",
+  (plural datumConstraint), S "with each other.", 
+  S "Table 4 shows the dependencies of", (plural thModel) `sC` (plural genDefn) `sC`
+  (plural dataDefn) `sC` S "and", (plural inModel), S "on the assumptions. Finally, Table 5",
+  S "shows the dependencies of the", (plural thModel) `sC` (plural genDefn) `sC` 
+  (plural dataDefn) `sC` S "and", (plural inModel), S "on each other"]
+
 
 ----------------
 -- REFERENCES --

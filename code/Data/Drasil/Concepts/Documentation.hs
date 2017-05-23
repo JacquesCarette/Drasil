@@ -19,7 +19,7 @@ physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description
 requirement = commonINP "requirement" (cn' "requirement")                           "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")                     "T"
 mg          = commonINP "mg"          (compoundPhrase module_ guide)                  "MG" 
-srs         = commonINP "srs"         (compoundPhrase software reqSpec)               "SRS"
+srs         = commonINP "srs"         (compoundPhrase softwareReq specification)               "SRS"
 vav         = commonINP "vav"         (cn' "verification and validation")           "VAV"
 
 ---------------------------------------------------------------------
@@ -145,10 +145,10 @@ scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- 
 -- compounds
 
 characteristicSpecification, generalSystemDescription, indPRCase, 
-  physicalConstraint, physicalSystem, problemDescription, prodUCTable, reqSpec, 
+  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont, 
   userCharacteristic, datumConstraint, functionalRequirement, 
-  nonfunctionalRequirement, softwareDoc, softwareSys, softwareVerif,
+  nonfunctionalRequirement, softwareDoc, softwareReq, softwareSys, softwareVerif,
   solutionCharSpec, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty :: NPNC
   
@@ -160,7 +160,6 @@ physicalSystem               = compoundNPNC physical system
 physicalProperty             = compoundNPNC physical property
 problemDescription           = compoundNPNC problem description
 prodUCTable                  = compoundNPNC productUC table_
-reqSpec                      = compoundNPNC'' plural phrase requirement_ specification
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint
@@ -175,6 +174,6 @@ physicalSim                  = compoundNPNC physical simulation
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
 softwareDoc                  = compoundNPNC software documentation
-softwareReq                  = compoundNPNC software requirement_
+softwareReq                  = compoundNPNC''' software requirement_
 softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification

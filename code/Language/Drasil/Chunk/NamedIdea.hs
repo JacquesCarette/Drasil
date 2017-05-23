@@ -92,7 +92,12 @@ compoundNPNC'' :: (NamedIdea a, NamedIdea b) =>
 compoundNPNC'' f1 f2 t1 t2 = NPNC
   (t1 ^. id ++ t2 ^. id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
   (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
-  
+
+compoundNPNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
+compoundNPNC''' t1 t2 = NPNC 
+  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
+  (compoundPhrase'' phrase plural (t1 ^. term) (t2 ^. term))
+
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2

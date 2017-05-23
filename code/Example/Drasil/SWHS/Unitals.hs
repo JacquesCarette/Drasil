@@ -224,13 +224,16 @@ tau          = uc' "tau" (nounPhraseSP "dummy variable for integration over time
 --Not sure how to define anything after this point
 
 tau_L_P      = uc' "tau_L_P" (nounPhraseSP "ODE parameter for liquid PCM")
-  fixme (sup (sub (Greek Tau_L) cP) cL) second
+  ("Derived through melting of phase change material, which changes ODE parameter"
+  ++ "for solid PCM into parameter for liquid") (sup (sub (Greek Tau_L) cP) cL) second
 
 tau_S_P      = uc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
-  fixme (sup (sub (Greek Tau_L) cP) cS) second
+  "Derived parameter based on rate of change of temperature of phase change material"
+  (sup (sub (Greek Tau_L) cP) cS) second
 
 tau_W        = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
-  fixme (sub (Greek Tau_L) cW) second
+  "Derived parameter based on rate of change of temperature of water"
+  (sub (Greek Tau_L) cW) second
 
 -- Unitless symbols --
 
@@ -238,6 +241,10 @@ swhsUnitless :: [ConVar]
 swhsUnitless = [normalVect, surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
-eta          = cvR (dcc "eta" (nounPhraseSP "ODE parameter") fixme) (Greek Eta_L)
-melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction") fixme) 
+
+eta          = cvR (dcc "eta" (nounPhraseSP "ODE parameter")
+  "Derived parameter based on rate of change of temperature of water") (Greek Eta_L)
+
+melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
+  "Ratio of thermal energy to amount of mass melted") --FIXME: Not sure if definition is exactly correct
   (Greek Phi_L)

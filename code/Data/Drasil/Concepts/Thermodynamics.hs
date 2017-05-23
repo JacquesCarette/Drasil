@@ -11,7 +11,7 @@ boiling, boil_pt, law_cons_energy, law_conv_cooling, latent_heat, melting, melt_
 --    Same for "Melting"
 boiling             = dcc "boiling"         (cn "boiling")
                       "Phase change from liquid to vapour"
-boil_pt             = dcc "boil_pt"         (cn' "boiling point")
+boil_pt             = dcc "boil_pt"         (cn' "boiling point temperature")
                       "Temperature at which a substance changes from liquid to vapour"
 heat                = dcc "heat"            (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++
@@ -31,7 +31,7 @@ law_conv_cooling    = dcc "law_conv_cooling"
                       "Newton's law of convective cooling"
 melting             = dcc "melting"         (cn "melting")
                       "Phase change from solid to liquid"
-melt_pt             = dcc "melt_pt"         (cn' "melting point")
+melt_pt             = dcc "melt_pt"         (cn' "melting point temperature")
                       "Temperature at which a substance changes from liquid to vapour"
 phase_change        = dcc "phase_change"    (cn' "phase change") "Change of state"
 sens_heat           = dcc "sens_heat"       (cn' "sensible heat")

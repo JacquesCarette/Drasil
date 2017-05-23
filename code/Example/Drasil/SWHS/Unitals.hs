@@ -37,8 +37,6 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
   pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W :: UnitalChunk
 
 --symbol names can't begin with a capital
-fixme :: String
-fixme = "FIXME: Define this or remove the need for definitions"
 
 coil_SA      = uc' "coil_SA" (nounPhraseSP "coil surface area") 
   "Area covered by the outermost layer of the coil"(sub cA cC) m_2

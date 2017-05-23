@@ -6,8 +6,8 @@ import Control.Lens ((^.))
 
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: CINP
---FIXME: Use compound nounphrases instead of pn/cn
-phsChgMtrl  = commonINP "phsChgMtrl" (pn' "Phase Change Material")                                           "PCM"
+
+phsChgMtrl  = commonINP "phsChgMtrl" (nounPhrase "phase change material" "phase change materials")           "PCM"
 rightSide   = commonINP "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS" 
 progName    = commonINP "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS" 
 
@@ -30,7 +30,7 @@ coil = dcc "coil" (cn' "heating coil")
   "Coil in tank that heats by absorbing solar energy"
 
 discharging = dcc "discharging" (nounPhraseSP "discharging") 
-  "Discharging of the tank"
+  "discharging of the tank"
 
 gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
   "A result that relates the flow of a vector field through a surface to the behavior of the vector field inside the surface"
@@ -39,7 +39,7 @@ gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
 perfect_insul = dcc "perfect_insul" (nounPhraseSP "perfectly insulated")
   "Describes the property of a material not allowing heat transfer through its boundaries" 
 
-phase_change_material = dcc "pcm" (nounPhraseSP "Phase Change Material")
+phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
       

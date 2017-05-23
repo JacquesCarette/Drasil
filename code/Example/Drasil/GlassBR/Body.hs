@@ -319,9 +319,9 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_2 = SRS.physSyst [s6_1_2_intro, s6_1_2_list, 
   fig_glassbr] []
 
-s6_1_2_intro = Paragraph $ foldlSent [S "The", phrase physicalSystem, S "of", 
-  (gLassBR ^. defn), S "as shown in", (makeRef fig_glassbr) `sC` 
-  S "includes the following" +: plural element]
+s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ 
+  (gLassBR ^. defn) +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` 
+  S "includes the following" +: plural element
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   

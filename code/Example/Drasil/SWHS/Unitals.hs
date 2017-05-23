@@ -76,7 +76,6 @@ htCap_S_P    = uc' "htCap_S_P"
   "phase change material by a given amount") (sup (sub (heat_cap_spec ^. symbol) cP) cS) UT.heat_cap_spec
 
 htCap_V      = uc' "htCap_V"
-
   (nounPhraseSP "specific heat capacity of a vapour")
   "The amount of energy required to raise the temperature of a given unit mass of vapour by a given amount"
   (sup (heat_cap_spec ^. symbol) cV) UT.heat_cap_spec
@@ -195,7 +194,7 @@ temp_PCM     = uc' "temp_PCM"
   (nounPhraseSP "temperature of the phase change material" )
   "The average kinetic energy of the particles within the phase change material"
   (sub (temp ^. symbol) cP) centigrade
-  
+
 temp_W       = uc' "temp_W" 
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" (sub (temp ^. symbol) cW) centigrade

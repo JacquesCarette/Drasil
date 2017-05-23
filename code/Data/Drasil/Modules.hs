@@ -1,22 +1,23 @@
 module Data.Drasil.Modules
-  ( mod_hw
-  , mod_behav
-  , mod_sw
-  , mod_seq_fun
-  , mod_linked_fun
-  , mod_assoc_fun
-  , mod_vector_fun
-  , mod_ctrl_fun
-  , mod_io_fun
-  , mod_plot_fun
-  , mod_rng_fun
-  , mod_outputf_desc_fun
-  , mod_ode_desc
-  , mod_ode_fun
-  , mod_calc_fun
-  , mod_interp_fun
-  , mod_inputc_fun
-  , mod_derivedv_fun
+  ( mod_hw,
+    mod_behav,
+    mod_sw,
+    mod_seq_fun,
+    mod_linked_fun,
+    mod_assoc_fun,
+    mod_vector_fun,
+    mod_ctrl_fun,
+    mod_io_fun,
+    mod_param_fun,
+    mod_plot_fun,
+    mod_rng_fun,
+    mod_outputf_desc_fun,
+    mod_ode_desc,
+    mod_ode_fun,
+    mod_calc_fun,
+    mod_interp_fun,
+    mod_inputc_fun,
+    mod_derivedv_fun
   ) where
 
 import Language.Drasil
@@ -67,8 +68,17 @@ mod_ctrl_fun impl depnd = makeImpModule modControl
 
 -- parameterize inputf and inputp into one mod_input?
 mod_io_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
-mod_io_fun impl depnd desc cChunk= makeImpModule cChunk
+mod_io_fun impl depnd desc cChunk = makeImpModule cChunk
   (foldlSent [S "The format and", (phrase structure), S "of the", desc])
+  impl
+  []
+  []
+  depnd
+  (Just mod_behav)
+
+mod_param_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
+mod_param_fun impl depnd desc cChunk = makeImpModule cChunk
+  (foldlSent [desc])
   impl
   []
   []
@@ -135,12 +145,12 @@ mod_rng_fun impl depnd desc = makeImpModule (dccWDS "mod_rng_desc" (cn' "random 
 
 mod_ode_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_ode_fun impl depnd = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
-          S " first order " :+: (short ode) :+: S "s.")
-          impl
-          [] 
-          [] 
-          depnd
-          (Just mod_sw)
+  S " first order " :+: (short ode) :+: S "s.")
+  impl
+  [] 
+  [] 
+  depnd
+  (Just mod_sw)
 
 mod_calc_fun :: NamedIdea a => Sentence -> Sentence -> a -> [MethodChunk] -> [ModuleChunk] -> ModuleChunk
 mod_calc_fun defn' desc impl depnd1 depnd2 = makeImpModule (mod_calc_desc defn')
@@ -180,6 +190,7 @@ mod_derivedv_fun impl depnd= makeImpModule modDerivedVal --FIXME: Plural?
   []
   depnd
   (Just mod_behav)
+
 
 {--
       -> [VarChunk]        -- module fields, aka state variables

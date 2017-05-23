@@ -53,7 +53,9 @@ pythonConfig _ c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = \_ -> empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD', valueDoc = valueDoc' c,
+        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
+        functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
+        unOpDoc = unOpDocD', valueDoc = valueDoc' c,
 
         getEnv = \_ -> error "getEnv for pythong not yet implemented",
         printFileDoc = error "printFileDoc not implemented for python"
@@ -67,7 +69,7 @@ initName = "__init__"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [fileCode c p ms Source (ext c)]
+renderCode' c ms (AbsCode p) = Code $ fileCodeSplit c p ms Source (ext c)
 
 include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp
@@ -85,8 +87,14 @@ pytop _ _ _ = vcat [
     text "import sys",
     text "import math"]
 
-pybody :: Config -> FileType -> Label -> [Class] -> Doc
-pybody c f p ms = vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName ms))
+pybody :: Config -> FileType -> Label -> [Module] -> Doc
+pybody _ _ _ [] = blank
+pybody c f p ((Mod _ vs fs cs):ms) = 
+  functionListDoc c f p fs
+  $+$ blank $+$
+  (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
+  $+$ blank $+$
+  pybody c f p ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -206,3 +214,13 @@ valueDoc' c (StateObj t@(List _ _) _) = stateType c t Def
 valueDoc' c (StateObj t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c v = valueDocD c v
+
+functionDoc' :: Config -> FileType -> Label -> Method -> Doc
+functionDoc' _ _ _ (Method _ _ (Construct _) _ _) = error "Constructor cannot exist outside of class"
+functionDoc' c _ _ (Method n _ _ ps b) = vcat [
+    text "def" <+> text n <> parens (paramListDoc c ps) <> colon,
+    oneTab bodyD]
+        where bodyD | null b    = text "None"
+                    | otherwise = bodyDoc c b
+functionDoc' c _ _ (MainMethod b) = bodyDoc c b
+functionDoc' _ _ _ _ = empty

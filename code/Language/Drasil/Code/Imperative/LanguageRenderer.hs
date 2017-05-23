@@ -17,7 +17,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
-    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',
+    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionListDocD,
     
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
@@ -77,7 +77,7 @@ data Config = Config {
     ifBodyStart :: Doc, elseIf :: Doc,
     
     top :: FileType -> Label -> Doc,
-    body :: FileType -> Label -> [Class] -> Doc,
+    body :: FileType -> Label -> [Module] -> Doc,
     bottom :: FileType -> Doc,
     
     assignDoc :: Assignment -> Doc,
@@ -112,6 +112,8 @@ data Config = Config {
     methodDoc :: FileType -> Label -> Method -> Doc,
     methodListDoc :: FileType -> Label -> [Method] -> Doc,
     methodTypeDoc :: MethodType -> Doc,
+    functionDoc :: FileType -> Label -> Method -> Doc,
+    functionListDoc :: FileType -> Label -> [Method] -> Doc,
     unOpDoc :: UnaryOp -> Doc,
     valueDoc :: Value -> Doc,
     getEnv :: String -> Doc -- careful, this can fail!
@@ -122,13 +124,13 @@ data Config = Config {
 ----------------------------------
 
 fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
-fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p $ map (clsWithName ms) ns)
+fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- $ map (clsWithName ms) ns)
 
 fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
-fileCodeSplit c (Pack p ms) ns f e = let classes = map (clsWithName ms) ns
-  in [(fileName c (className cls) ns ++ e, fileDoc c f p [cls]) | cls <- classes]
+fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
+  [(fileName c (moduleName cls) ns ++ e, fileDoc c f p [cls]) | cls <- ms]
 
-fileDoc :: Config -> FileType -> Label -> [Class] -> Doc
+fileDoc :: Config -> FileType -> Label -> [Module] -> Doc
 fileDoc c f p ms = vibcat [
     top c f p,
     body c f p ms,
@@ -501,6 +503,10 @@ methodDocD' c ft m f = methodDocD c ft m f
 methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDocD c t m ms = vibmap (methodDoc c t m) funcs
     where funcs = filter (\f -> not $ isEmpty $ methodDoc c t m f) ms
+    
+functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
+functionListDocD c t m ms = vibmap (functionDoc c t m) funcs
+    where funcs = filter (\f -> not $ isEmpty $ functionDoc c t m f) ms
 
 methodTypeDocD :: Config -> MethodType -> Doc
 methodTypeDocD c (MState t) = stateType c t Dec
@@ -593,6 +599,7 @@ jump Continue = text "continue"
 litsToValues :: [Literal] -> [Value]
 litsToValues = map Lit
 
+-- what is the point of this?
 clsWithName :: [Class] -> Label -> Class
 clsWithName (c:cs) n = if className c == n then c else clsWithName cs n
 clsWithName [] n = error $ "Class '" ++ n ++ "' not found"

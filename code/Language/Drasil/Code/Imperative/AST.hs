@@ -10,7 +10,8 @@ module Language.Drasil.Code.Imperative.AST (
     Expression(..), UnaryOp(..), BinaryOp(..),
     -- ** Overall AbstractCode Structure
     BaseType(..), Mode(..), StateType(..), Permanence(..), MethodType(..),
-    Scope(..), Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), Package(..),
+    Scope(..), Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), 
+    VarDecl, FunctionDecl, Module(..), Package(..),
     AbstractCode(..),
 
     -- * Convenience functions
@@ -25,13 +26,14 @@ module Language.Drasil.Code.Imperative.AST (
     (&~-),($->),($.),($:),
     alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
-    listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,params,
+    listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,
+    param,params,paramToVar,
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,
-    toAbsCode, getClassName
+    toAbsCode, getClassName, buildModule, moduleName
 ) where
 
 import Data.List (zipWith4)
@@ -110,7 +112,6 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | Arg Int                    --Arg argIndex : get command-line arguments. Should only be used in the Body of the MainMethod.
            | Input          --Input : Get user keyboard input. Can only be assigned to string variables in some languages.
            | InputFile Value
-
     deriving (Eq, Show)
 data Literal = LitBool Bool
              | LitInt Integer
@@ -181,7 +182,10 @@ data Class = Enum {
                className :: Label,
                classVars :: [StateVar],
                classMethods :: [Method]}
-data Package = Pack Label [Class]
+type FunctionDecl = Method
+type VarDecl = Declaration 
+data Module = Mod Label [VarDecl] [FunctionDecl] [Class]
+data Package = Pack Label [Module]
 data AbstractCode = AbsCode Package
 
 ---------------------------
@@ -464,6 +468,10 @@ param = StateParam
 params :: [(Label, StateType)] -> [Parameter]
 params = map (\(l,st) -> StateParam l st)
 
+paramToVar :: Parameter -> Value
+paramToVar (StateParam l _) = Var l
+paramToVar (FuncParam l _ _) = Var l
+
 print :: StateType -> Value -> Statement
 print = PrintState False
 
@@ -663,8 +671,14 @@ valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl
 valueReplace' _ _ v = v
 
 
-toAbsCode :: Label -> [Class] -> AbstractCode
-toAbsCode l c = AbsCode $ Pack l c 
+toAbsCode :: Label -> [Module] -> AbstractCode
+toAbsCode l m = AbsCode $ Pack l m 
 
 getClassName :: Class -> Label
 getClassName = className
+
+buildModule :: Label -> [VarDecl] -> [FunctionDecl] -> [Class] -> Module
+buildModule = Mod
+
+moduleName :: Module -> Label
+moduleName (Mod l _ _ _) = l

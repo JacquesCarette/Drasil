@@ -3,8 +3,11 @@ module Modules.InputConstraints (inputConstraints) where
 import Language.Drasil.Code
 
 -- TODO:  add gool support for non-object functions;  don't need a class for this
-inputConstraints :: Class
-inputConstraints = pubClass
+inputConstraints :: Module
+inputConstraints = buildModule "InputConstraints" [] [] [inputConstraintsClass]
+
+inputConstraintsClass :: Class
+inputConstraintsClass = pubClass
   "InputConstraints"
   Nothing
   []

@@ -56,8 +56,11 @@ vals = [
     litFloat 1.0
   ]
   
-inputParameters :: Class
-inputParameters = pubClass
+inputParameters :: Module
+inputParameters = buildModule "InputParameters" [] [] [inputParametersClass]
+
+inputParametersClass :: Class
+inputParametersClass = pubClass
   "InputParameters"
   Nothing
   variables

@@ -4,8 +4,11 @@ import Language.Drasil.Code
 
 -- TODO:  add ability to specify libraries in gool
 -- TODO:  add gool support for non-object functions;  don't need a class for this
-inputFormat :: Class
-inputFormat = pubClass
+inputFormat :: Module
+inputFormat = buildModule "InputFormat" [] [] [inputFormatClass]
+
+inputFormatClass :: Class
+inputFormatClass = pubClass
   "InputFormat"
   Nothing
   []

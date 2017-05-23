@@ -10,13 +10,13 @@ module Language.Drasil.Code.CodeGeneration (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST (AbstractCode)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Config(renderCode))
-import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (csharpConfig)
-import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (cppConfig)
-import Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (goolConfig)
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (javaConfig)
-import Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (objcConfig)
+--import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (csharpConfig)
+--import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (cppConfig)
+--import Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (goolConfig)
+--import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (javaConfig)
+--import Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (objcConfig)
 import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (pythonConfig)
-import Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (luaConfig)
+--import Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (luaConfig)
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options)
 
@@ -29,13 +29,14 @@ import Data.Function (fix)
 -- | Map of (label,config) pairs for all supported languages.
 langs :: Map.Map String (Options -> Config -> Config)
 langs = Map.fromList[
-    (cSharpLabel, csharpConfig),
-    (cppLabel, cppConfig),
-    (goolLabel, goolConfig),
-    (javaLabel, javaConfig),
-    (objectiveCLabel, objcConfig),
-    (pythonLabel, pythonConfig),
-    (luaLabel, luaConfig)]
+  --  (cSharpLabel, csharpConfig),
+  --  (cppLabel, cppConfig),
+  --  (goolLabel, goolConfig),
+  --  (javaLabel, javaConfig),
+  --  (objectiveCLabel, objcConfig),
+    (pythonLabel, pythonConfig)--,
+  --  (luaLabel, luaConfig)
+  ]
 
 -- | Takes a language parameter, a set of optional parameters, and a list of module names, and passes an 'AbstractCode' to the required rendering function, which produces a 'Code'
 makeCode :: String -> Options -> [String] -> AbstractCode -> Code

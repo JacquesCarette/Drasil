@@ -415,7 +415,7 @@ s4_1_2_list = Enumeration (Simple $ [((short physSyst) :+: S "1", Flat
 -- different
 -- FIXME: Figures have different IDs than stable structure
 
-fig_tank = Figure ((at_start $ tank ^. defn) :+: S ", with" +:+
+fig_tank = Figure ((tank ^. defn) :+: S ", with" +:+
   (phrase $ ht_flux_C ^. term) +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
   S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
   P (ht_flux_P ^. symbol)) "Tank.png"

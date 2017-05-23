@@ -4,7 +4,7 @@ import Language.Drasil.Spec
 
 import Data.Char (isAlphaNum)
 
--- for now, magic: infer the name of sentences!
+-- | for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence
 inferName (s1 :+: s2) = inferName s1 :+: inferName s2
 inferName (S s1)      = S (firstLetter s1)
@@ -13,12 +13,15 @@ inferName (Ref _ _)   = EmptyS
   -- error "Attempting to infer the name an existing reference"
 inferName _           = EmptyS -- Was Empty.
 
+-- | helper to get first letter of each word. Used by inferName
 firstLetter :: String -> String
 firstLetter = map head . words
 
+-- | replace underscore in strings with "."
 repUnd :: String -> String
 repUnd s = map (\c -> if c == '_' then '.' else c) s
 
+-- | helper for filtering out any non-alpha-numeric characters from a string
 alphanumOnly :: String -> String
 alphanumOnly = filter (isAlphaNum)
 

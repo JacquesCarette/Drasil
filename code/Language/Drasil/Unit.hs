@@ -19,14 +19,15 @@ import Language.Drasil.Spec (USymb(..))
 
 import Language.Drasil.NounPhrase (cn')
 
--- Language of units (how to build them up)
+-- | Language of units (how to build them up)
 -- UName for the base cases, otherwise build up.
 -- Probably a 7-vector would be better (less error-prone!)
 
-data UDefn = USynonym USymb      -- to define straight synonyms
-           | UScale Double USymb -- scale, i.e. *
-           | UShift Double USymb -- shift, i.e. +
+data UDefn = USynonym USymb      -- ^ to define straight synonyms
+           | UScale Double USymb -- ^ scale, i.e. *
+           | UShift Double USymb -- ^ shift, i.e. +
 
+-- | Units are concepts
 class Concept u => Unit u where
    usymb :: Simple Lens u USymb
 
@@ -34,21 +35,24 @@ class UnitEq u where
    uniteq :: Simple Lens u UDefn
 
 
--- Can generate a default symbol
+-- | Can generate a default symbol
 from_udefn :: UDefn -> USymb
 from_udefn (USynonym x) = x
 from_udefn (UScale _ s) = s
 from_udefn (UShift _ s) = s
 
+-- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 
 --FIXME: Make this use a meaningful identifier.
+-- | Helper for fundamental unit concept chunk creation. Uses the same string
+-- for the identifier, term, and definition.
 unitCon :: String -> ConceptChunk
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
--- for defining fundamental units
+-- | for defining fundamental units
 data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
 
 -- don't export this
@@ -69,7 +73,7 @@ instance Concept FundUnit where
 instance Unit FundUnit where
   usymb f (UD a b) = fmap (\x -> UD a x) (f b)
 
--- and for defining Derived units
+-- | for defining Derived units
 data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 
 -- don't export this either
@@ -90,9 +94,8 @@ instance UnitEq DerUChunk where
 
 ----------------------------------------------------------
 
--- For allowing lists to mix the two, thus forgetting
+-- | For allowing lists to mix the two, thus forgetting
 -- the definition part
-
 data UnitDefn where
   UU :: Unit u => u -> UnitDefn
 
@@ -110,13 +113,18 @@ instance Concept   UnitDefn where
 instance Unit      UnitDefn where usymb = ulens usymb
 
 --- These conveniences go here, because we need the class
+-- | Combinator for raising a unit to a power
 (^:) :: Unit u => u -> Integer -> USymb
 u ^: i = UPow (u ^. usymb) i
 
+-- | Combinator for dividing one unit by another
 (/:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
 u1 /: u2 = UDiv (u1 ^. usymb) (u2 ^. usymb)
 
+-- | Combinator for multiplying two units together
 (*:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
 u1 *: u2 = UProd [(u1 ^. usymb), (u2 ^. usymb)]
+
+-- | Smart constructor for new derived units from existing units.
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)

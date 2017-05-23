@@ -17,10 +17,14 @@ import qualified Data.Drasil.Concepts.Documentation as Doc
 forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 forTT' = for'' titleize titleize'
 
+-- | SRS document constructor. 
+-- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
 doc sys authors secs = Document (Doc.srs `for` sys) authors secs
+-- | Uses plural of system for title.
 doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
+-- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDec, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDec,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,

@@ -1,13 +1,14 @@
 {-# LANGUAGE GADTs #-}
+-- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Symbol
 
+-- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
 
--- For writing "sentences" via combining smaller elements
-
+-- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
 -- - units (their visual representation)
 -- - words (via String)
@@ -31,24 +32,25 @@ data Sentence where
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
 
--- Language of unit equations, to define a unit relative
--- to another
 --Moving this here to avoid cyclic imports
+-- | Language of unit equations, to define a unit relative
+-- to another
 data USymb = UName Symbol
-           | UProd [USymb]
-           | UPow USymb Integer --can be negative, should not be 0
-           | UDiv USymb USymb   --Get proper division (not neg pow)
-                                --  necessary for things like J/(kg*C)
+           | UProd [USymb] -- ^ Product
+           | UPow USymb Integer -- ^ can be negative, should not be 0
+           | UDiv USymb USymb   -- ^ Get proper division (not neg pow)
+                                -- necessary for things like J/(kg*C)
 
-data RefType = Tab
-             | Fig
-             | Sect
-             | Def
-             | Mod
-             | Req
-             | Assump
-             | LC
-             | UC
+-- | For building references. Defines the possible type of reference.
+data RefType = Tab -- ^ Table
+             | Fig -- ^ Figure
+             | Sect -- ^ Section
+             | Def -- ^ Definition (includes theoretical models)
+             | Mod -- ^ Module
+             | Req -- ^ Requirement
+             | Assump -- ^ Assumption
+             | LC -- ^ Likely Change
+             | UC -- ^ Unlikely Change
 
 instance Show RefType where
   show Tab = "Table"
@@ -61,19 +63,26 @@ instance Show RefType where
   show LC = "Likely Change"
   show UC = "Unlikely Change"
 
+-- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
+-- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence
 EmptyS +:+ b = b
 a +:+ EmptyS = a
 a +:+ b = a :+: S " " :+: b
 
+-- | Helper for concatenating two sentences with a comma and space between them.
 sC :: Sentence -> Sentence -> Sentence
 a `sC` b = a :+: S "," +:+ b
 
+-- | Helper which concatenates two sentences using '+:+' then adds a period to
+-- the end.
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
 
+-- | Helper which concatenates two sentences using '+:+' then adds a colon to
+-- the end.
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"

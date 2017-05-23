@@ -117,28 +117,45 @@ cnIP n p = CommonNoun n p CapFirst
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 cnIrr = CommonNoun 
 
-
+-- | Noun phrase with a given singular and plural form that capitalizes the first
+-- letter of the first word for sentence case
 nounPhrase :: String -> PluralString -> NP
 nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords
 
+-- | Similar to 'nounPhrase', but following a given capitalization rule for 
+-- sentence case
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 nounPhrase' s p c = Phrase (S s) (S p) c CapWords
 
+-- | Custom noun phrase constructor that takes a singular form, plural form, 
+-- sentence case capitalization rule, and title case capitalization rule
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 nounPhrase'' = Phrase
 
---For things that should not be pluralized.
+-- | For things that should not be pluralized. Works like 'nounPhrase', but with
+-- only the first argument
 nounPhraseSP :: String -> NP
 nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
+-- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
+-- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
+-- Uses standard CapFirst sentence case and CapWords title case.
+-- For example: @compoundPhrase system description@ will have singular form
+-- "system constraint" and plural "system constraints"
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 
   (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapFirst CapWords
   
+-- | Similar to 'compoundPhrase', but where the sentence case is the same
+-- as the title case (CapWords).
 compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (phrase t1 +:+ plural t2) CapWords CapWords
-  
+
+-- | Similar to 'compoundPhrase\'', but which accepts functions to be used for
+-- constructing the plural form. For example 
+-- @compoundPhrase'' plural phrase system constraint@ would have the plural
+-- form "systems constraint". 
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase'' f1 f2 t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (f1 t1 +:+ f2 t2) CapWords CapWords
@@ -146,25 +163,37 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 
 
 -- === Helpers === 
-
+-- | Helper function for getting the sentence case of a noun phrase.
 at_start, at_start' :: NounPhrase n => n -> Capitalization
+-- | Singular sentence case.
 at_start  n = sentenceCase n phrase
+-- | Plural sentence case.
 at_start' n = sentenceCase n plural
 
+-- | Helper function for getting the title case of a noun phrase.
 titleize, titleize' :: NounPhrase n => n -> Capitalization
+-- | Singular title case.
 titleize  n = titleCase n phrase
+-- | Plural title case.
 titleize' n = titleCase n plural
 
-data CapitalizationRule = CapFirst
-                        | CapWords
-                        | Replace Sentence
-data PluralRule = AddS
-                | AddE
-                | AddES
-                | SelfPlur
-                | IrregPlur (String -> String)
+-- | Capitalization rules.
+data CapitalizationRule = CapFirst -- ^ Capitalize the first letter of the first word only.
+                        | CapWords -- ^ Capitalize the first letter of each word.
+                        | Replace Sentence -- ^ Replace the noun phrase with the
+                                           -- given Sentence. Used for custom
+                                           -- capitalization.
+
+-- | Pluralization rules.
+data PluralRule = AddS -- ^ Add "s" to the end of the noun phrase.
+                | AddE -- ^ Add "e" to the end of the noun phrase.
+                | AddES -- ^ Add "es" to the end of the noun phrase.
+                | SelfPlur -- ^ The noun phrase is already plural.
+                | IrregPlur (String -> String) -- ^ Apply the given function to
+                                               -- the noun phrase to get the plural.
 
 -- DO NOT EXPORT --                
+-- | Pluralization helper function.
 sPlur :: Sentence -> PluralRule -> Sentence
 sPlur s@(S _) AddS = s :+: S "s"
 sPlur s@(S _) AddE = s :+: S "e"
@@ -174,6 +203,7 @@ sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 
+-- | Capitalization helper function.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)

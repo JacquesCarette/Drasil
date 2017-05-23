@@ -4,6 +4,6 @@ import Language.Drasil.Document
 import Language.Drasil.Spec
 
 
--- Creating References --
+-- | Create References to a given 'LayoutObj'
 makeRef :: (LayoutObj l) => l -> Sentence
 makeRef r = Ref (rType r) (refName r)

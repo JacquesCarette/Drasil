@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
--- A 'Symbol' is actually going to be a graphical description of what
+-- | A 'Symbol' is actually going to be a graphical description of what
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
@@ -9,8 +9,16 @@ module Language.Drasil.Symbol where
 import Language.Drasil.Unicode 
 import Data.Char (toLower)
 
+-- | Decorations on symbols/characters such as hats or Vector representations
+-- (bolding/etc)
 data Decoration = Hat | Vector deriving (Eq, Ord)
 
+-- | Symbols can be:
+-- - atomic (strings such as "A" or "max" that represent a single idea)
+-- - special characters (ex. unicode)
+-- - Greek characters
+-- - Decorated symbols
+-- - Concatenations of symbols, including subscripts and superscripts
 data Symbol where
   Atomic   :: String -> Symbol
   Special  :: Special -> Symbol
@@ -61,18 +69,25 @@ instance Ord Symbol where
   compare  _                    (Atomic _)             = GT
   compare (Greek a)             (Greek b)              = compare a b
 
-  
+-- | Helper for creating a symbol with a superscript on the left side of the symbol.
+-- Arguments: Base symbol, then superscripted symbol.
 upper_left :: Symbol -> Symbol -> Symbol
 upper_left b ul = Corners [ul] [] [] [] b
 
+-- | Helper for creating a symbol with a subscript to the right.
+-- Arguments: Base symbol, then subscripted symbol.
 sub :: Symbol -> Symbol -> Symbol
 sub b lr = Corners [] [] [] [lr] b
 
+-- | Helper for creating a symbol with a superscript to the right.
+-- Arguments: Base symbol, then superscripted symbol.
 sup :: Symbol -> Symbol -> Symbol
 sup b ur = Corners [] [] [ur] [] b
 
+-- | Helper for creating a symbol with a hat ("^") atop it.
 hat :: Symbol -> Symbol
 hat = Atop Hat
 
+-- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
 vec = Atop Vector

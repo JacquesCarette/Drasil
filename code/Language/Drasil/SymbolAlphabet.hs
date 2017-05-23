@@ -1,7 +1,9 @@
+-- | Alphabet of capital/lowercase English letters as symbols
 module Language.Drasil.SymbolAlphabet where
 
 import Language.Drasil.Symbol
 
+-- | c_ means capital _; l_ means lowercase _
 cA,cB,cC,cD,cE,cF,cG,cH,cI,cJ,cK,cL,cM,cN,cO,cP,cQ,cR,cS,cT,cU,cV,cW,cX,cY,cZ,
   lA,lB,lC,lD,lE,lF,lG,lH,lI,lJ,lK,lL,lM,lN,lO,lP,lQ,lR,lS,lT,lU,lV,
   lW,lX,lY,lZ :: Symbol

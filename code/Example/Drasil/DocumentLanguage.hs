@@ -1,4 +1,10 @@
 {-# LANGUAGE GADTs #-}
+---------------------------------------------------------------------------
+-- | Start the process of moving away from Document as the main internal
+-- representation of information, to something more informative.
+-- Over time, we'll want to have a cleaner separation, but doing that
+-- all at once would break too much for too long.  So we start here
+-- instead.
 module Drasil.DocumentLanguage where
 
 import Language.Drasil
@@ -15,16 +21,11 @@ import Data.Maybe (isJust)
 import Data.List (sort)
 import Prelude hiding (id)
 
----------------------------------------------------------------------------
--- Start the process of moving away from Document as the main internal
--- representation of information, to something more informative.
--- Over time, we'll want to have a cleaner separation, but doing that
--- all at once would break too much for too long.  So we start here
--- instead.
-
 type System = Sentence
 type DocKind = Sentence
 
+-- | Data structure for holding all of the requisite information about a system
+-- to be used in artefact generation
 data SystemInformation where
 --FIXME:
 --There should be a way to remove redundant "Quantity" constraint.
@@ -44,6 +45,7 @@ data SystemInformation where
   } -> SystemInformation
 
 -- anything with 'Verb' in it should eventually go
+-- | Reference subsections
 data RefTab where 
   TUnits :: RefTab
   TUnits' :: [TUIntro] -> RefTab -- Customized intro
@@ -53,16 +55,21 @@ data RefTab where
   TVerb :: Section -> RefTab
   -- add more here
 
+-- | Reference section. Contents are top level followed by a list of subsections.
+-- RefVerb is used for including verbatim subsections
 data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
+-- | Document sections are either Verbatim or Reference sections (for now!)
 data DocSection = Verbatim Section | RefSec RefSec
 
-data TSIntro = TypogConvention [TConvention]
-             | SymbOrder
-             | SymbConvention [Literature]
-             | TSPurpose
-             
-data TConvention = Vector Emphasis
-                 | Verb Sentence
+-- | For creating the table of symbols intro
+data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
+             | SymbOrder -- ^ Symbol ordering (defaults to alphabetical)
+             | SymbConvention [Literature] -- ^ Symbol conventions match specified literature
+             | TSPurpose -- ^ Purpose of the Table of Symbols
+
+-- | Possible typographic conventions
+data TConvention = Vector Emphasis -- ^ How vectors are emphasized
+                 | Verb Sentence -- ^ Verbatim for specialized conventions
                  
 data Emphasis = Bold
               | Italics
@@ -71,19 +78,20 @@ instance Show Emphasis where
   show Bold = "bold"
   show Italics = "italics"
 
-data Literature = Lit Topic
-                | Doc Topic
-                | Doc' Topic
-                | Manual Topic
+-- | Types of literature
+data Literature = Lit Topic -- ^ literature
+                | Doc Topic -- ^ existing documentation for (singular topic)
+                | Doc' Topic -- ^ existing documentation for (plural of topic)
+                | Manual Topic -- ^ manual
 
 type Topic = NWrapper
 
-data TUIntro = System
-             | Derived
-             | TUPurpose
+-- | For creating the table of units intro
+data TUIntro = System -- ^ System of units (defaults to SI)
+             | Derived -- ^ Sentence about derived units being used alongside SI
+             | TUPurpose -- ^ Purpose of the table of units
 
--- Lens (lookup) functions (currently for TSymb)
-
+-- | Lens (lookup) functions (currently for TSymb)
 data LFunc where
   Term :: LFunc
   Defn :: LFunc
@@ -92,16 +100,17 @@ data LFunc where
 
 type DocDesc = [DocSection]
 
--- 
+-- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> SystemInformation -> Document
 mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
   (kind `for` sys) (manyNames authors) (mkSections si l)
 
---When we want to use the short form for titles.  
+-- | Similar to 'makeDoc', but for when we want to use the short form for titles.  
 mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
 mkDoc' l comb si@(SI sys kind authors _ _ _ _) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
+-- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l
   where
@@ -109,6 +118,7 @@ mkSections si l = foldr doit [] l
     doit (Verbatim s) ls = s : ls
     doit (RefSec rs)  ls = mkRefSec si rs : ls
 
+-- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
@@ -124,6 +134,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
+-- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
@@ -135,18 +146,20 @@ mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (
         lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
           (at_start $ x ^. term) else (x ^. defn))
 
---tsymb constructor
+-- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb intro = TSymb intro                --Default Term
-tsymb' intro = TSymb' Defn intro         --Default Defn
+tsymb intro = TSymb intro                -- ^ Default Term and given intro
+tsymb' intro = TSymb' Defn intro         -- ^ Default Defn and given intro
 
+-- | Custom table of symbols constructor
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro --Custom
+tsymb'' intro lfunc = TSymb' lfunc intro -- ^ Custom function and intro.
 
--- table of symbols intro builder
+-- | table of symbols intro builder. Used by mkRefSec
 tsIntro :: [TSIntro] -> Contents
 tsIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tsI x)
 
+-- | table of symbols intro writer. Translates a TSIntro to a list of Sentences
 tsI :: TSIntro -> Sentence
 tsI (TypogConvention ts) = typogConvention ts
 tsI SymbOrder = S "The symbols are listed in alphabetical order."
@@ -154,6 +167,8 @@ tsI (SymbConvention ls) = symbConvention ls
 tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
   S "this document along with their units."
 
+-- | typographic convention writer. Translates a list of typographic conventions
+-- to a sentence
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
 typogConvention ts = S "Throughout the document" `sC` (makeSentence ts)
@@ -166,6 +181,7 @@ typogConvention ts = S "Throughout the document" `sC` (makeSentence ts)
                                 " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
 
+-- | symbolic convention writer.
 symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
 symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+
@@ -179,10 +195,12 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         scon (Doc x) = S "existing documentation for" +:+ (phrase $ x ^. term)
         scon (Doc' x)   = S "existing documentation for" +:+ (plural $ x ^. term)
         scon (Manual x) = S "that used in the" +:+ (phrase $ x ^. term) +:+ S "manual"
-  
+
+-- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents
 tuIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tuI x)
 
+-- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
 tuI System  = (S "The unit system used throughout is SI (Syst" :+: 
   (F Grave 'e') :+: S "me International d'Unit" :+: (F Acute 'e') :+: S "s).")
@@ -191,5 +209,6 @@ tuI TUPurpose = S "For each unit, the table lists the symbol," +:+
 tuI Derived = S "In addition to the basic units, several derived units are" +:+ 
   S "also used."
 
+-- | Default table of units intro contains the 
 defaultTUI :: [TUIntro]
 defaultTUI = [System, Derived, TUPurpose]

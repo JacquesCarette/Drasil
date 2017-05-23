@@ -5,7 +5,8 @@ import Drasil.GamePhysics.Unitals
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, foldlSent)
 import Data.Drasil.Concepts.Physics (rigidBody)
---import Data.Drasil.Quantities.PhysicalProperties
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+--import Data.Drasil.Quantities.Physics
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
@@ -16,13 +17,13 @@ iModels = [im1, im2, im3]
 
 {-- Force on the translational motion  --}
 im1 :: RelationConcept
-im1 = makeRC "im1" (im1NP) im1descr im1Rel 
+im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel 
 
 im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
-im1Rel :: Relation
-im1Rel = 1
+im1Rel :: Relation -- FIXME: add proper equation
+im1Rel = (C force) := (C gravAccel) + (C mass)
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
@@ -41,25 +42,16 @@ im1leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
   (helper1 vel "i" EmptyS),
   S "F(t) is the force applied to the i-th body at time t (N)"]
 
-{--fotmVarList :: Sentence
-fotmVarList = map (ucToSent []) [massIRigidBody, gravAccel, timeT, initTime])
-  ++ (map (ucToSent ([S "at time"])  [pos_i, acc_i, vel_i, force_i]
-
-ucToSent :: UnitalChunk -> Sentence -> Sentence
-ucToSent option ch = foldlSent $ [(phrase $ ch ^. term), S "is the", 
-  (phrase $ ch ^. defn )] ++ option ++ [(sParen $ Sy $ unit_symb ch)]
---}
-
 {-- --}
 
 im2 :: RelationConcept
-im2 = makeRC "im2" (im2NP) im2descr im2Rel 
+im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel 
 
 im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
-im2Rel :: Relation
-im2Rel = 1
+im2Rel :: Relation -- FIXME: add proper equation
+im2Rel = (C force) := (C mass)
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 
@@ -80,18 +72,18 @@ im2leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
 {-- --}
 
 im3 :: RelationConcept
-im3 = makeRC "im3" (im3NP) im3descr im3Rel 
+im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel 
 
 im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
-im3Rel :: Relation
-im3Rel = 1
+im3Rel :: Relation -- FIXME: add proper equation
+im3Rel = (C force) := (C mass)
 
 im3descr, im3leg :: Sentence
 im3descr = foldlSent [S "This instance model is based on our assumptions",
   S "regarding rigid body (A1, A2) collisions (A5). Again, this does not take",
-  S "damping (A6) or constraints (A7) into account."]
+  S "damping (A6) or constraints (A7) into account"]
 
 im3leg = foldle1 (+:+.) (+:+.) [S "mk is the mass of the k-th rigid body (kg)",
   S "Ik is the moment of inertia of the k-th rigid body (kg m2)",

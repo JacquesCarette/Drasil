@@ -306,7 +306,7 @@ s3_1_2_bullets = Enumeration (Bullet $
   [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of" +:+
   S "characters instead of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint_,
+  phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint,
   S "Calculate the required" +:+ plural output_
   ])])
   

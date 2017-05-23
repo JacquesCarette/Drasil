@@ -174,7 +174,7 @@ mod_interp_fun impl depnd = makeImpModule modInterpolation
 -- input constraints module --should be its own module?
 mod_inputc_fun :: NamedIdea a => a -> ModuleChunk
 mod_inputc_fun impl= makeImpModule modInputConstraint --FIXME: Plural?
-  (S "The" +:+ plural constraint_ +:+ S "on the" +:+ phrase input_ +:+. (plural datum))
+  (S "The" +:+ plural constraint +:+ S "on the" +:+ phrase input_ +:+. (plural datum))
   impl
   []
   []

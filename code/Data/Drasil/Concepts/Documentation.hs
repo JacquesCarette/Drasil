@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math (graph)
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg, vav, desSpec, constraint :: CINP
+  requirement, srs, thModel, mg, vav, desSpec :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
 assumption  = commonINP "assumption"  (cn' "assumption")                            "A"
@@ -21,14 +21,13 @@ thModel     = commonINP "thModel"     (cn' "theoretical model")                 
 mg          = commonINP "mg"          (compoundPhrase module_ guide)                  "MG" 
 srs         = commonINP "srs"         (compoundPhrase software reqSpec)               "SRS"
 vav         = commonINP "vav"         (cn' "verification and validation")           "VAV"
-constraint  = commonINP "constraint"  (cn' "constraint")                            "CSTR" -- FIXME: Eventually only have one constraint 
 
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
 
 analysis, appendix, characteristic, client, column, component, 
-  condition, constraint_, connection, context, customer, datum, definition, 
+  condition, constraint, connection, context, customer, datum, definition, 
   dependency, description, design, document, documentation, element, 
   environment, figure, functional, game, general, goal, guide, individual, information, 
   input_, instance_, intReader, introduction, item, label, library, limitation, method_,
@@ -47,7 +46,7 @@ client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
 component       = npnc "component"      (cn' "component")
 condition       = npnc "condition"      (cn' "condition")
-constraint_     = npnc "constraint"     (cn' "constraint") -- FIXME: Eventually only have one constraint 
+constraint     = npnc "constraint"     (cn' "constraint")
 connection      = npnc "connection"     (cn' "connection")
 context         = npnc "context"        (cn' "context")
 customer        = npnc "customer"       (cn' "customer")
@@ -156,7 +155,7 @@ characteristicSpecification, generalSystemDescription, indPRCase,
 characteristicSpecification  = compoundNPNC'' plural phrase characteristic specification
 generalSystemDescription     = compoundNPNC general systemdescription
 indPRCase                    = compoundNPNC individual productUC
-physicalConstraint           = compoundNPNC physical constraint_
+physicalConstraint           = compoundNPNC physical constraint
 physicalSystem               = compoundNPNC physical system
 physicalProperty             = compoundNPNC physical property
 problemDescription           = compoundNPNC problem description
@@ -164,10 +163,10 @@ prodUCTable                  = compoundNPNC productUC table_
 reqSpec                      = compoundNPNC'' plural phrase requirement_ specification
 specificsystemdescription    = compoundNPNC specific systemdescription
 systemdescription            = compoundNPNC system description
-systemConstraint             = compoundNPNC system constraint_
+systemConstraint             = compoundNPNC system constraint
 sysCont                      = compoundNPNC system context
 userCharacteristic           = compoundNPNC user characteristic
-datumConstraint              = compoundNPNC' datum constraint_
+datumConstraint              = compoundNPNC' datum constraint
 functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC solution characteristicSpecification
@@ -176,5 +175,6 @@ physicalSim                  = compoundNPNC physical simulation
 productUC                    = compoundNPNC product_ useCase
 useCaseTable                 = compoundNPNC useCase table_
 softwareDoc                  = compoundNPNC software documentation
-softwareSys                  = compoundNPNC software system
+softwareReq                  = compoundNPNC software documentation
+softwareSys                  = compoundNPNC software requirement_
 softwareVerif                = compoundNPNC software verification

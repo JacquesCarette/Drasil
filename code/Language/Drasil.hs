@@ -60,7 +60,7 @@ module Language.Drasil (
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
   , CapitalizationRule(..)
-  , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', titleize, titleize'
+  , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
   , nounPhrase'', nounPhraseSP
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 

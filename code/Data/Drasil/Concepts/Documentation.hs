@@ -19,7 +19,7 @@ physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description
 requirement = commonINP "requirement" (cn' "requirement")                         "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"
 mg          = commonINP "mg"          (compoundPhrase module_ guide)              "MG" 
-srs         = commonINP "srs"         (compoundPhrase softwareReq specification)  "SRS"
+srs         = commonINP "srs"         (compoundPhrase''' softwareReq specification)  "SRS"
 vav         = commonINP "vav"         (cn' "verification and validation")         "VAV"
 
 ---------------------------------------------------------------------

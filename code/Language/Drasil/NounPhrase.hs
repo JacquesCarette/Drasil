@@ -5,7 +5,7 @@ module Language.Drasil.NounPhrase
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
-  , compoundPhrase, compoundPhrase', compoundPhrase''
+  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase'''
   , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
   , PluralRule(..)
@@ -159,7 +159,11 @@ compoundPhrase' t1 t2 = Phrase
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase'' f1 f2 t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (f1 t1 +:+ f2 t2) CapWords CapWords
-  
+
+--Definately a hack but it fixes the pluralization problem with software requirements specification.
+compoundPhrase''' :: (NounPhrase a, NounPhrase b) => a -> b -> NP
+compoundPhrase''' t1 t2 = Phrase 
+  (plural t1 +:+ phrase t2) (plural t1 +:+ plural t2) CapFirst CapWords
 
 
 -- === Helpers === 

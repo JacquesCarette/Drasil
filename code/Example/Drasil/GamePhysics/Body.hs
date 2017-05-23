@@ -28,6 +28,7 @@ import qualified Drasil.ReferenceMaterial as RM
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
 import Drasil.GamePhysics.TMods
+import Drasil.GamePhysics.IMods
 import Drasil.GamePhysics.DataDefs
 
 import Drasil.GamePhysics.Modules
@@ -453,9 +454,20 @@ s4_2_5_intro = Paragraph $ foldlSent
 
 -- Instance models not yet implemented --
 
---s4_2_5_IMods :: [Contents]
---s4_2_5_IMods = map Definition (map Theory iModels)
+s4_2_5_IMods :: [Contents]
+s4_2_5_IMods = map Definition (map Theory iModels)
 
+------------------------------
+-- Collision Diagram        --
+------------------------------
+{-- should be paired with the last instance model for this example
+secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image", 
+  S "of a typical collision between two 2D rigid bodies labeled A and B,"  
+  S "showing the position of the two objects, the collision normal vector n and",
+  S "the vectors from the approximate center of mass of each object to the point",
+  S "of collision P, rAP and rBP. Note that this figure only presents", 
+  S "vertex-to-edge collisions, as per our assumptions (A5)."]
+--}
 ------------------------------
 -- 4.2.6 : Data Constraints --
 ------------------------------

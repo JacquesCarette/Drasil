@@ -255,6 +255,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Reqs
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
+    , Drasil.GamePhysics.IMods
     , Drasil.OrganizationOfSRS
     , Drasil.ReferenceMaterial
     , Drasil.SRS

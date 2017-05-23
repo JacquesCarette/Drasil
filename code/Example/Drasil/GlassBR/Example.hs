@@ -84,7 +84,7 @@ nom_thick   = unitary' "nom_thick" (nounPhraseSP $
   lT millimetre
 load_dur    = unitary' "load_dur" (nounPhraseSP "duration of load")
   (sub lT lD) second
-char_weight = unitary' "char_weight" (cn' "charge weight")
+char_weight = unitary' "char_weight" (nounPhraseSP "charge weight")
   lW kilogram
 cWeightMax  = unitary' "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
@@ -128,8 +128,8 @@ prob_br     = makeVC "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB)
 pb_tol      = makeVC "pb_tol" 
   (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
-dimlessLoad = makeVC "dimlessLoad" (cn' "dimensionless load") (hat lQ)
-tolLoad     = makeVC "tolLoad" (cn' "tolerable load")
+dimlessLoad = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ)
+tolLoad     = makeVC "tolLoad" (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
 tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
 lRe         = makeVC "lRe" (nounPhraseSP "load resistance") (Atomic "LR")
@@ -154,21 +154,20 @@ annealedGlass, aspectR, fullyTGlass,glassTypeFac,heatSGlass,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
---FIXME: Switch to using "nounphrase" instead of "cn"
 gLassBR       = dcc "gLassBR"             (pn "GlassBR")                    "GlassBR" --lowercase?
-annealedGlass = commonINP "annealedGlass" (cn''' "annealed glass")          "AN"
-aspectR       = commonINP' "aspectR"      (cn' "aspect ratio")              (Atomic "AR")
-fullyTGlass   = commonINP "fullyTGlass"   (cn''' "fully tempered glass")    "FT"
-glassTypeFac  = commonINP "glassTypeFac"  (cn' "glass type factor")         "GTF"
-heatSGlass    = commonINP "heatSGlass"    (cn''' "heat strengthened glass") "HS"
-iGlass        = commonINP "iGlass"        (cn''' "insulating glass")        "IG"
-lDurFac       = commonINP "lDurFac"       (cn' "load duration factor")      "LDF"
-lGlass        = commonINP "lGlass"        (cn''' "laminated glass")         "LG"
-lResistance   = commonINP "lResistance"   (cn' "load resistance")           "LR"
-lShareFac     = commonINP "lShareFac"     (cn' "load share factor")         "LSF"
-notApp        = commonINP "notApp"        (cn "not applicable")             "N/A"
-nonFactorL    = commonINP "nonFactorL"    (cn' "Non-Factored Load")         "NFL"     --lowercase?
-eqTNT         = commonINP "eqTNT"         (cn' "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+annealedGlass = commonINP "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
+aspectR       = commonINP' "aspectR"      (nounPhraseSP "aspect ratio")              (Atomic "AR")
+fullyTGlass   = commonINP "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
+glassTypeFac  = commonINP "glassTypeFac"  (nounPhraseSP "glass type factor")         "GTF"
+heatSGlass    = commonINP "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
+iGlass        = commonINP "iGlass"        (nounPhraseSP "insulating glass")        "IG"
+lDurFac       = commonINP "lDurFac"       (nounPhraseSP "load duration factor")      "LDF"
+lGlass        = commonINP "lGlass"        (nounPhraseSP "laminated glass")         "LG"
+lResistance   = commonINP "lResistance"   (nounPhraseSP "load resistance")           "LR"
+lShareFac     = commonINP "lShareFac"     (nounPhraseSP "load share factor")         "LSF"
+notApp        = commonINP "notApp"        (nounPhraseSP "not applicable")             "N/A"
+nonFactorL    = commonINP "nonFactorL"    (nounPhraseSP "Non-Factored Load")         "NFL"     --lowercase?
+eqTNT         = commonINP "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
@@ -215,8 +214,8 @@ gtf           = dccWDS "gtf" (nounPhraseSP "glass type factor")
   S "," +:+ (getAcc heatSGlass) :+: S ", or" +:+ (getAcc fullyTGlass) +:+ 
   S "in monolithic glass," +:+ (getAcc lGlass) +:+ S "(Laminated Glass)," +:+
   S "or" +:+ (getAcc iGlass) +:+. S "(Insulating Glass) constructions")
-lateral       = dcc "lateral" (cn "lateral") "Perpendicular to the glass surface."
-load          = dcc "load" (cn "load") "A uniformly distributed lateral pressure."
+lateral       = dcc "lateral" (nounPhraseSP "lateral") "Perpendicular to the glass surface."
+load          = dcc "load" (nounPhraseSP "load") "A uniformly distributed lateral pressure."
 specDeLoad    = dcc "specDeLoad" (nounPhraseSP "specified design load")
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
@@ -257,7 +256,7 @@ eqTNTChar     = dcc "eqTNTChar" (nounPhraseSP "equivalent TNT charge mass")
     "design explosive threat.")
 sD            = dccWDS "sD" (nounPhraseSP "stand off distance") (sd ^. defn)
 glaSlab       = dcc "glaSlab" (nounPhraseSP "glass slab") "Glass slab" --FIXME: Why is it duplicated?
-blast         = dcc "blast" (cn' "blast") "any kind of man-made explosion"
+blast         = dcc "blast" (nounPhraseSP "blast") "any kind of man-made explosion"
 blastRisk     = dcc "blastRisk" (nounPhraseSP "blast risk") fixme
 blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
@@ -265,15 +264,15 @@ blastTy       = dcc "blastTy" (nounPhraseSP "blast type")
 glassGeo      = dcc "glassGeo" (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
-capacity      = dcc "capacity" (cnIES "capacity") "the load resistance calculated"
-demandq       = dcc "demandq" (cn' "demand") "3 second duration equivalent pressure"
-safeMessage   = dcc "safeMessage" (cn "safe")
+capacity      = dcc "capacity" (nounPhraseSP "capacity") "the load resistance calculated"
+demandq       = dcc "demandq" (nounPhraseSP "demand") "3 second duration equivalent pressure"
+safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 notSafe       = dcc "notSafe" (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
-bomb          = dcc "bomb" (cn' "bomb") ("a container filled with a destructive" ++
+bomb          = dcc "bomb" (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
-explosion     = dcc "explosion" (cn' "explosion") "a destructive shattering of something"
+explosion     = dcc "explosion" (nounPhraseSP "explosion") "a destructive shattering of something"
 
 {-Theoretical models-}
 
@@ -419,9 +418,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "load duration factor")
-  (Atomic "LDF") 
-  loadDF_eq
+loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "load duration factor") (Atomic "LDF") loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
@@ -435,7 +432,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' "nonFactorL" (cn' "non-factored load") (Atomic "NFL") nonFL_eq
+nonFL = fromEqn' (nonFactorL ^. id) (nounPhraseSP "non-factored load") (Atomic "NFL") nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]

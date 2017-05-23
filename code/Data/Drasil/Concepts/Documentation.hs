@@ -8,19 +8,19 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
   requirement, srs, thModel, mg, vav, desSpec :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
-assumption  = commonINP "assumption"  (cn' "assumption")                            "A"
-dataDefn    = commonINP "dataDefn"    (cn' "data definition")               "DD"
-desSpec     = commonINP "desSpec"     (compoundPhrase design specification)           "DS"
-genDefn     = commonINP "genDefn"     (cn' "general definition")                    "GD"
-goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)                "GS" 
-inModel     = commonINP "inModel"     (compoundPhrase instance_ model)                "IM" 
-likelyChg   = commonINP "likelyChg"   (cn' "likely change")                         "LC"
-physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description)     "PS" 
-requirement = commonINP "requirement" (cn' "requirement")                           "R"
-thModel     = commonINP "thModel"     (cn' "theoretical model")                     "T"
-mg          = commonINP "mg"          (compoundPhrase module_ guide)                  "MG" 
-srs         = commonINP "srs"         (compoundPhrase softwareReq specification)               "SRS"
-vav         = commonINP "vav"         (cn' "verification and validation")           "VAV"
+assumption  = commonINP "assumption"  (cn' "assumption")                          "A"
+dataDefn    = commonINP "dataDefn"    (cn' "data definition")                     "DD"
+desSpec     = commonINP "desSpec"     (compoundPhrase design specification)       "DS"
+genDefn     = commonINP "genDefn"     (cn' "general definition")                  "GD"
+goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)             "GS" 
+inModel     = commonINP "inModel"     (compoundPhrase instance_ model)            "IM" 
+likelyChg   = commonINP "likelyChg"   (cn' "likely change")                       "LC"
+physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description) "PS" 
+requirement = commonINP "requirement" (cn' "requirement")                         "R"
+thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"
+mg          = commonINP "mg"          (compoundPhrase module_ guide)              "MG" 
+srs         = commonINP "srs"         (compoundPhrase softwareReq specification)  "SRS"
+vav         = commonINP "vav"         (cn' "verification and validation")         "VAV"
 
 ---------------------------------------------------------------------
 

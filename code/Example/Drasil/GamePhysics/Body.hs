@@ -366,7 +366,7 @@ s4_2_1_assum5 = foldlSent [S "All", (plural $ rigidBody ^. term),
   (plural $ collision ^. term)]
 s4_2_1_assum6 = foldlSent [S "There is no damping", 
   S "involved throughout the", (phrase simulation)]
-s4_2_1_assum7 = foldlSent [S "There are no", (plural constraint_),
+s4_2_1_assum7 = foldlSent [S "There are no", (plural constraint),
   S "and joints involved throughout the", (phrase simulation)]
 
 s4_2_1_list' :: [Sentence]
@@ -485,7 +485,7 @@ s4_2_6_intro = Paragraph $ foldlSent
   S "the input and output variables, respectively. The",
   (Quote $ titleize' physicalConstraint), S "column gives the", (phrase physical),
   S "limitations on the range of values that can be taken by the",
-  S "variable. The", (plural constraint_), S "are conservative, to give the user of the",
+  S "variable. The", (plural constraint), S "are conservative, to give the user of the",
   (phrase model), S "the flexibility to experiment with unusual situations. The",
   S "column of typical values is intended to provide a feel for a",
   S "common scenario"]
@@ -641,7 +641,7 @@ s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be",
   S "expanded to include motion with damping"]
 
 s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to include joints and", (plural constraint_)]
+  S "expanded to include joints and", (plural constraint)]
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,

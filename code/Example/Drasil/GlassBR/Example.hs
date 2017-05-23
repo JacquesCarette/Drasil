@@ -223,7 +223,7 @@ specDeLoad    = dcc "specDeLoad" (nounPhraseSP "specified design load")
 lr            = dcc "lr" (nounPhraseSP "load resistance")
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
-    "[4].")
+    "[4 (pg. 53)], following A1.")
 ldl           = dcc "ldl" (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nfl           = dccWDS "nfl" (nounPhraseSP "non-factored load")
@@ -352,7 +352,11 @@ capdescr =
   S ", which" +:+. S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+
   S "is the" +:+. (phrase $ nonFL ^. term) +:+ (short glassTypeFac) +:+
   S "is the" +:+. (phrase $ glassTypeFac ^. term) +:+ (short lShareFac) +:+
-  S "is the" +:+. (phrase $ lShareFac ^. term)
+  S "is the" +:+. (phrase $ lShareFac ^. term) +:+ S "Follows" +:+ (short assumption) :+:
+  S "1 (" +:+ Quote (S "In development of this procedure, it was assumed that" +:+
+  S "all four edges of the glass are simply supported and free to slip in the" +:+
+  S "plane of the glass. This boundary condition has been shown to be typical" +:+.
+  S "of many glass installations) from [4 (pg. 53)]")
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

@@ -198,19 +198,17 @@ lite          = dcc "lite" (nounPhraseSP "lite")
 glassTy       = dcc "glassTy" (nounPhraseSP "glass types") "type of glass"
 an            = dcc "an" (nounPhraseSP "Annealed glass")
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
-    "residual surface stresses are almost zero, as defined in [5] in " ++
-    "Reference.")
+    "residual surface stresses are almost zero, as defined in [5].")
 ft            = dcc "ft" (nounPhraseSP "fully tempered glass")
   ("A flat and monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
-    "compression not less than 67 MPa (9700 psi), as defined in [6] in " ++
-    "Reference.")
+    "compression not less than 67 MPa (9700 psi), as defined in [6].")
 hs            = dcc "hs" (nounPhraseSP "heat strengthened glass")
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
-    "than 52 MPa (7500 psi), as defined in [6] in Reference.")
+    "than 52 MPa (7500 psi), as defined in [6].")
 gtf           = dccWDS "gtf" (nounPhraseSP "glass type factor") 
   (S "A multiplying factor for adjusting the" +:+ (getAcc lResistance) +:+
   S "of different glass type, that is," +:+ (getAcc annealedGlass) :+: 
@@ -225,7 +223,7 @@ specDeLoad    = dcc "specDeLoad" (nounPhraseSP "specified design load")
 lr            = dcc "lr" (nounPhraseSP "load resistance")
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
-    "[4] in Reference.")
+    "[4].")
 ldl           = dcc "ldl" (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nfl           = dccWDS "nfl" (nounPhraseSP "non-factored load")

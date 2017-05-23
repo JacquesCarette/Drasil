@@ -442,8 +442,8 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 s4_2_5_IMods :: [Contents]
 
-s4_2_5 = SRS.inModel ([s4_2_5_intro] ++
-  (s4_2_5_IMods)) []
+s4_2_5 = SRS.inModel ([s4_2_5_intro] {--++
+  (s4_2_5_IMods)--}) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "transforms the", (phrase problem), S "defined",

@@ -35,7 +35,7 @@ im1descr = foldlSent [S "The above equation expresses the total",
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
 im1leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
-  S "g is the acceleration due to gravity (ms−2)",
+  S "g is the acceleration due to gravity (ms-2)",
   S "t is a point in time and t0 denotes the initial time (s)",
   (helper1 position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
   (helper1 accel "i" EmptyS),
@@ -60,12 +60,12 @@ im2descr = foldlSent [S "The above equation for the total angular acceleration",
   S "currently assumed that there is no damping (A6) or constraints (A7) involved"]
 
 im2leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
-  S "g is the acceleration due to gravity (ms−2)",
+  S "g is the acceleration due to gravity (ms-2)",
   S "t is a point in time and t0 denotes the initial time (s)",
   (helper1 orientation "i" EmptyS),
   (helper1 angVel "i" EmptyS),
   (helper1 angAccel "k" EmptyS),
-  S "τ i(t) is the torque applied to the i-th body at time t (N m)",
+  S "t i(t) is the torque applied to the i-th body at time t (N m)",
   S "Signed direction of torque is defined by (A4)",
   S "Ii is the moment of inertia of the i-th body (kg m2)"]
 

@@ -96,7 +96,7 @@ compoundNPNC'' f1 f2 t1 t2 = NPNC
 compoundNPNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
 compoundNPNC''' t1 t2 = NPNC 
   (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase'' phrase plural (t1 ^. term) (t2 ^. term))
+  (compoundPhrase'' plural phrase (t1 ^. term) (t2 ^. term))
 
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:
@@ -138,10 +138,10 @@ of_' t1 t2 = nounPhrase''
   
 of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_'' t1 t2 = nounPhrase'' 
-  ((phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
+  ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
   ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
   (Replace ((at_start' $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2^.term)))
-  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
+  (Replace ((titleize' $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
 of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of__ t1 t2 = nounPhrase'' 

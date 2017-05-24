@@ -1,0 +1,52 @@
+The Temperature ODEs Module temperature1, temperature2, and temperature3 access 
+programs do not receive any inputs in this implementation because the ODE 
+Solver Module requires the functions in the form of strings, therefore the 
+actual values associated with the variable names are not needed within the 
+Temperature ODEs Module. They are only necessary where the ODE Solver Module 
+gets called, which is in the Control Module. For similar reasons, the only 
+input received by the event1 and event2 access program is params.
+
+The Temperature ODEs Module event1 and event2 access programs return an event 
+rather than a function in this implementation. However, the function is one of 
+the properties of the event, so the effect of returning the event is the same 
+as returning the function.
+
+The abstract functions described in the MIS are realized by the temperature1, 
+temperature2, temperature3, event1, and event2 functions. The actual 
+variable names in this implementation for each function appear in parentheses 
+in the following description. Each function takes the real values of time (t), 
+water temperature (Tw), PCM temperature (Tp), and latent Heat (Qp) 
+(temperature2 and event2 only) and return real values tied to the variable 
+string keys (Tw, Tp, Qp) in a dictionary.
+
+The ODE Solver Module access program "solve" described in the MIS is a 
+combination of the following calls in this implementation:
+- DSargs1 = args(name='PreMelt')
+- DSargs1.events = [event.event1(params)]
+- DSargs1.pars = pardict
+- DSargs1.tdata = [0, params.tfinal]
+- DSargs1.algparams = {'init_step': params.tstep, 'rtol': params.RelTol, 'atol': params.AbsTol}
+- DSargs1.varspecs = temperature.temperature1()
+- DSargs1.ics = icdict1
+- preMelt = PyDSTool.Generator.Vode_ODEsystem(DSargs1)
+- traj1 = preMelt.compute('preMelt')
+- pts1 = traj1.sample()
+
+Note: These are for the ODE solver for the first phase of the simulation. If 
+the second or third phase occurs, they are called by the same commands with the 
+appropriate changes to the arguments.
+
+The ODE Solver Module accepts some extra arguments not specified in the MIS. 
+- pardict is a dictionary structure that matches the string keys to the 
+  variable values they represent. 
+- init_step is the first time step to be used for the solution (the remaining 
+  time steps are determined by the ODE solver).
+  
+The ODE Solver Module does not directly return as many arrays of reals as the 
+number of equations in the ODE system in this implementation. Instead, it 
+returns a dictionary containing these arrays.
+
+The ODE Solver Module in this implementation has many possible exceptions for 
+different potential errors with input arguments to the solver, and other 
+exceptions related to the computation process for solving the ODEs.
+

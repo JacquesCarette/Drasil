@@ -6,7 +6,7 @@ import qualified Data.Drasil.Units.Thermodynamics as UT
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Math (surface, normalVect)
+import Data.Drasil.Quantities.Math (surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Units.PhysicalProperties
 
@@ -236,7 +236,7 @@ tau_W        = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
 -- Unitless symbols --
 
 swhsUnitless :: [ConVar]
-swhsUnitless = [normalVect, surface, eta, melt_frac]
+swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
 

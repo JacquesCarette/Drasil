@@ -104,7 +104,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
   (phrase $ energy ^. term) +:+ S "sources and" +:+
-  (phrase $ energy ^. term) +:+ S "storage technology" +:+ (swhs_pcm ^. defn)
+  (phrase $ energy ^. term) +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
   +:+ S "(" :+: (short phsChgMtrl) :+: S ") use a renewable" +:+
   (phrase $ energy ^. term) +:+ S "source and provide a novel way of" +:+.
   S "storing" +:+ (phrase $ energy ^. term) +:+
@@ -168,7 +168,7 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "in any way. Even when the process is not waterfall, as Parnas" +:+
   S "and Clements [citation] point out, the most logical way" +:+
   S "to present the" +:+ phrase documentation +:+ S "is still to" +:+
-  Quote (S "fake") +:+. S "a rational" +:+ phrase design +:+ S "process")]
+  Quote (S "fake") +:+ S "a rational" +:+ phrase design +:+. S "process")]
 
 -- Besides program name, these two paragraphs are general, mostly repeated 
 -- between examples, and can be abstracted out.

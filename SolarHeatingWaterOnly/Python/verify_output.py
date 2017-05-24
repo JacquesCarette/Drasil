@@ -2,7 +2,7 @@
 import warnings
 
 
-def verify_output(time, tempW, eW, params)#tempP, eW, eP, params):
+def verify_output(time, tempW, eW, params):#tempP, eW, eP, params):
     previous = time[0]
     deltaTime = []
     for element in time[1:]:

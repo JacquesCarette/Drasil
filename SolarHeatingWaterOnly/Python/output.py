@@ -1,5 +1,5 @@
 #Commented lines pending removal
-def output(params, time, tempW, eW, eTot, filename)#tempP, eW, eP, eTot, filename):
+def output(params, time, tempW, eW, eTot, filename):#tempP, eW, eP, eTot, filename):
     outputFilename = filename + 'out'
     f = open(outputFilename, 'w')
     f.write('\tL\t\t\t\t' + str(params.L) + '\n')

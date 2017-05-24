@@ -28,7 +28,7 @@ pardict = {#'Ap': params.Ap,
            'Tc': params.Tc,
 #           'hp': params.hp,
            'Tinit': params.Tinit,
-           'tau_w': params.tau_w,
+           'tau_w': params.tau_w}#,
 #           'eta': params.eta,
 #           'Mp': params.Mp,
 #           'tau_ps': params.tau_ps,
@@ -37,7 +37,7 @@ pardict = {#'Ap': params.Ap,
 icdict1 = {'Tw': pardict['Tinit']}#,
 #          'Tp': pardict['Tinit']}
 
-#DSargs1 = args(name='PreMelt')
+DSargs1 = args(name='PreMelt')
 #DSargs1.events = [event.event1(params)]
 DSargs1.pars = pardict
 DSargs1.tdata = [0, params.tfinal]
@@ -45,7 +45,7 @@ DSargs1.algparams = {'init_step': params.tstep, 'rtol': params.RelTol, 'atol': p
 DSargs1.varspecs = temperature.temperature1()
 DSargs1.ics = icdict1
 #preMelt = PyDSTool.Generator.Vode_ODEsystem(DSargs1)
-#traj1 = preMelt.compute('preMelt')
+traj1 = preMelt.compute('preMelt')
 pts1 = traj1.sample()
 #evs1 = traj1.getEvents('event_melt_begin')
 eWat = energy.energy1Wat(pts1['Tw'], params)

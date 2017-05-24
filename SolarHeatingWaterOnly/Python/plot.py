@@ -1,7 +1,7 @@
 #Commented lines pending removal
 from matplotlib import pyplot
 
-def plot(time, tempW, eW, filename)#tempP, eW, eP, filename):
+def plot(time, tempW, eW, filename):#tempP, eW, eP, filename):
     plotFilename = filename + 'png'
     pyplot.subplot(121)
     pyplot.plot(time, tempW, label='Water')

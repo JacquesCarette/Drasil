@@ -25,23 +25,23 @@ def load_params(filename):
 #    params.C_ps = param[6]
 #    params.C_pl = param[7]
 #    params.Hf = param[2]
-    params.Ac = param[3]
-    params.Tc = param[4]
-    params.rho_w = param[5]
-    params.C_w = param[6]
-    params.hc = param[7]
+    params.Ac = param[2]
+    params.Tc = param[3]
+    params.rho_w = param[4]
+    params.C_w = param[5]
+    params.hc = param[6]
 #    params.hp = param[14]
-    params.Tinit = param[8]
-    params.tstep = param[9]
-    params.tfinal = param[10]
-    params.AbsTol = param[11]
-    params.RelTol = param[12]
-    params.ConsTol = param[13]
+    params.Tinit = param[7]
+    params.tstep = param[8]
+    params.tfinal = param[9]
+    params.AbsTol = param[10]
+    params.RelTol = param[11]
+    params.ConsTol = param[12]
 
     # calculated parameters
 
     params.Vt = math.pi * (params.diam / 2) ** 2 * params.L
-    params.Mw = params.rho_w * (params.Vt - params.Vp)
+    params.Mw = params.rho_w * (params.Vt)# - params.Vp)
     params.tau_w = (params.Mw * params.C_w) / (params.hc * params.Ac)
 #    params.eta = (params.hp * params.Ap) / (params.hc * params.Ac)
 #    params.Mp = params.rho_p * params.Vp

@@ -482,7 +482,8 @@ s4_2_6 = SRS.datCon [s4_2_6_intro, s4_2_6_table1,
   s4_2_6_table2] []
 
 s4_2_6_intro = Paragraph $ foldlSent 
-  [S "Table 1 and 2 show the", (plural datumConstraint),S "on",
+  [S "Table 1", (makeRef s4_2_6_table1), S "and 2", (makeRef s4_2_6_table2), 
+  S "show the", (plural datumConstraint), S "on",
   S "the input and output variables, respectively. The",
   (Quote $ titleize' physicalConstraint), S "column gives the", (phrase physical),
   S "limitations on the range of values that can be taken by the",

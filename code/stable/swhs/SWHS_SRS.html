@@ -418,7 +418,7 @@ W/(m<sup>2</sup>)
 Q
 </td>
 <td>
-Latent heat energy
+Latent heat
 </td>
 <td>
 J
@@ -1008,7 +1008,7 @@ This section provides general information about the system, identifies the inter
 System Context
 </h3>
 <p class="paragraph">
-<a href=#Figure::SC>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system andits environment.
+<a href=#Figure::SC>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 </p>
 <a id="Figure::SC">
 <img class="figure" src="SystemContextFigure.png" alt="<a href=#Figure::SC>this Figure</a>: System Context"></img>
@@ -1096,13 +1096,13 @@ This subsection provides a list of terms that are used in the subsequent section
 </p>
 <ul class="list">
 <li>
-Heat flux: The rate of heat energy transfer per unit area.
+Heat flux: The rate of thermal energy transfer through a given surface per unit time.
 </li>
 <li>
 Phase Change Material (PCM): A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature.
 </li>
 <li>
-Specific heat: Heat capacity per unit mass.
+Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
 </li>
 <li>
 Thermal conduction: The transfer of heat energy through a substance.
@@ -1184,7 +1184,7 @@ This section simplifies the original problem and helps in developing the theoret
 </p>
 <div class="list">
 <p>
-A1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:Cote>this Definition</a>].
+A1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>this Definition</a>].
 </p>
 <p>
 A2: All heat transfer coefficients are constant over time [GD1].
@@ -1251,7 +1251,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
-<a id="T:Cote">
+<a id="T:t1ConsThermE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1288,13 +1288,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity C (J/(kg&deg;C)) and density, &rho; (kg/(m<sup>3</sup>)), where <b>q</b> is the thermal flux vector (W/(m<sup>2</sup>)), g is the volumetric heat generation per unit volume (W/(m<sup>3</sup>)), T is the temperature (&deg;C), t is time (s), and &nabla; is the gradient operator. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A1).
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity C (J/(kg&deg;C)) and density, &rho; (kg/(m<sup>3</sup>)), where <b>q</b> is the thermal flux vector (W/(m<sup>2</sup>)), g is the volumetric heat generation per unit volume (W/(m<sup>3</sup>)), T is the temperature (&deg;C), t is time (s), and &nabla; is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A1).
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:She">
+<a id="T:t2SensHtE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1346,13 +1346,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-E is the change in sensible heat energy (J). C<sup>S</sup>, C<sup>L</sup>, C<sup>V</sup> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&deg;C)). m is the mass (kg). T is the temperature (&deg;C), and &Delta;T is the change in temperature (&deg;C). T<sub>melt</sub> and T<sub>boil</sub> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if T=T<sub>boil</sub> or T=T<sub>melt</sub>. If this is the case, refer to <a href=#T:Lhe>this Definition</a>, Latent heat energy.
+E is the change in sensible heat energy (J). C<sup>S</sup>, C<sup>L</sup>, C<sup>V</sup> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&deg;C)). m is the mass (kg). T is the temperature (&deg;C), and &Delta;T is the change in temperature (&deg;C). T<sub>melt</sub> and T<sub>boil</sub> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if T=T<sub>boil</sub> or T=T<sub>melt</sub>. If this is the case, refer to <a href=#T:t3LatHtE>this Definition</a>, Latent heat energy.
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:Lhe">
+<a id="T:t3LatHtE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1409,7 +1409,7 @@ This section collects the laws and equations that will be used in deriving the d
 Detailed derivation of simplified rate of change of temperature:
 </p>
 <p class="paragraph">
-Integrating <a href=#T:Cote>this Definition</a> over a volume (V), we have:
+Integrating <a href=#T:t1ConsThermE>this Definition</a> over a volume (V), we have:
 </p>
 <a id="">
 <div class="equation">
@@ -1632,7 +1632,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-H<sub>f</sub> is the amount of thermal energy required to completely melt a unit mass of a substance.<br />Q is the latent heat energy<br />m is the mass
+H<sub>f</sub> is the amount of thermal energy required to completely melt a unit mass of a substance.<br />Q is the latent heat<br />m is the mass
 </p>
 </td>
 </tr>
@@ -1920,7 +1920,7 @@ Tables 1 and 2 show the data constraints on the input and output variables, resp
 </p>
 </div>
 </a>
-<a id="Sec:PoaCS">
+<a id="Sec:PoACS">
 <div class="subsubsection">
 <h4>
 Properties of a Correct Solution
@@ -2212,7 +2212,7 @@ R7: Calculate and output the change in heat energy in the water (E<sub>W</sub>(t
 R8: Calculate and output the change in heat energy in the PCM (E<sub>P</sub>(t)) over the simulation time (from IM4).
 </p>
 <p>
-R9: Verify that the energy outputs (E<sub>W</sub>(t) and E<sub>P</sub>(t)) follow the law of conservation of energy, as outlined in <a href=#Sec:PoaCS>this Section</a>, with relative error no greater than 0.001%.
+R9: Verify that the energy outputs (E<sub>W</sub>(t) and E<sub>P</sub>(t)) follow the law of conservation of energy, as outlined in <a href=#Sec:PoACS>this Section</a>, with relative error no greater than 0.001%.
 </p>
 <p>
 R10: Calculate and output the time at which the PCM begins to melt t<sub>melt</sub><sup>init</sup> (from IM2).
@@ -2277,13 +2277,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-<a href=#T:Cote>this Definition</a>
+<a href=#T:t1ConsThermE>this Definition</a>
 </th>
 <th>
-<a href=#T:She>this Definition</a>
+<a href=#T:t2SensHtE>this Definition</a>
 </th>
 <th>
-<a href=#T:Lhe>this Definition</a>
+<a href=#T:t3LatHtE>this Definition</a>
 </th>
 <th>
 GD1
@@ -2318,7 +2318,7 @@ IM4
 </tr>
 <tr>
 <td>
-<a href=#T:Cote>this Definition</a>
+<a href=#T:t1ConsThermE>this Definition</a>
 </td>
 <td>
 
@@ -2362,7 +2362,7 @@ IM4
 </tr>
 <tr>
 <td>
-<a href=#T:She>this Definition</a>
+<a href=#T:t2SensHtE>this Definition</a>
 </td>
 <td>
 
@@ -2406,7 +2406,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:Lhe>this Definition</a>
+<a href=#T:t3LatHtE>this Definition</a>
 </td>
 <td>
 
@@ -3382,7 +3382,7 @@ A19
 </tr>
 <tr>
 <td>
-<a href=#T:Cote>this Definition</a>
+<a href=#T:t1ConsThermE>this Definition</a>
 </td>
 <td>
 X
@@ -3444,7 +3444,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:She>this Definition</a>
+<a href=#T:t2SensHtE>this Definition</a>
 </td>
 <td>
 
@@ -3506,7 +3506,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:Lhe>this Definition</a>
+<a href=#T:t3LatHtE>this Definition</a>
 </td>
 <td>
 

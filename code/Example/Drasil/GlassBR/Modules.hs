@@ -9,6 +9,8 @@ import Control.Lens ((^.))
 
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Computation
+
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, mod_derivedv, mod_calc,
@@ -16,16 +18,17 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, m
 
 -- input format module
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase input_ +:+ (plural datum)) modInputFormat
+mod_inputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural inDatum) modInputFormat
 
 mod_inputp :: ModuleChunk
-mod_inputp = mod_io_fun glassBRProg [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
+mod_inputp = mod_io_fun glassBRProg [] [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
 
 mod_inputc :: ModuleChunk
 mod_inputc = mod_inputc_fun glassBRProg
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun glassBRProg [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]
+mod_ctrl = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType' ^. term) +:+ S "and") 
+  glassBRProg [] [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
@@ -33,7 +36,7 @@ mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ (plural $ parameter ^
   S "the probability of breakage, and both safety" +:+. plural requirement)
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase output_ +:+ (plural datum)) mod_outputf_desc
+mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural outDatum) mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk
@@ -55,7 +58,7 @@ mod_calc = mod_calc_fun (glassBR_calcDesc)
 
 -- interpolation data module
 mod_interpd :: ModuleChunk
-mod_interpd = mod_io_fun glassBRProg [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
+mod_interpd = mod_io_fun glassBRProg [] [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
 
 mod_interp :: ModuleChunk
 mod_interp = mod_interp_fun glassBRProg [mod_interpd]

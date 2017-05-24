@@ -19,7 +19,8 @@ mod_vector = mod_vector_fun chipmunk []
 mod_seq    = mod_seq_fun chipmunk []
 mod_assoc  = mod_assoc_fun chipmunk []
 mod_linked = mod_linked_fun chipmunk []
-mod_ctrl   = mod_ctrl_fun chipmunk [mod_arbiter, mod_hw]
+mod_ctrl   = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType' ^. term) +:+ S "and")
+  chipmunk [] [mod_arbiter, mod_hw]
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,

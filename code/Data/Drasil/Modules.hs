@@ -56,23 +56,22 @@ mod_sw = makeUnimpModule modSfwrDecision
   Nothing
 
 -- Control module
-mod_ctrl_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
-mod_ctrl_fun impl depnd = makeImpModule modControl
-  (foldlSent [S "The internal", (plural $ dataType' ^. term), S "and",
+mod_ctrl_fun :: NamedIdea a => Sentence -> a -> [MethodChunk] -> [ModuleChunk] -> ModuleChunk
+mod_ctrl_fun desc impl mthd depnd = makeImpModule modControl
+  (foldlSent [desc {-S "The internal", (plural $ dataType' ^. term), S "and"-},
   (plural $ algorithm ^. term), S "for coordinating the running of the program"])
   impl
   []
-  []
+  mthd
   depnd
   (Just mod_behav)
 
--- parameterize inputf and inputp into one mod_input?
-mod_io_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
-mod_io_fun impl depnd desc cChunk = makeImpModule cChunk
+mod_io_fun :: NamedIdea a => a -> [MethodChunk] -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
+mod_io_fun impl mthd depnd desc cChunk = makeImpModule cChunk
   (foldlSent [S "The format and", (phrase structure), S "of the", desc])
   impl
   []
-  []
+  mthd
   depnd
   (Just mod_behav)
 

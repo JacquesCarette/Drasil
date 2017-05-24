@@ -120,7 +120,5 @@ meth_main :: MethodChunk
 meth_main = makeMainMethod (nc "main" (cn' "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:
-           S "the running of the program.") executable [] [meth_main]
-           [mod_hw, mod_inputp, mod_inputf, mod_calc, mod_outputf]
-           (Just mod_behav)
+mod_ctrl = mod_ctrl_fun (S "The") executable [meth_main] 
+  [mod_hw, mod_inputp, mod_inputf, mod_calc, mod_outputf]

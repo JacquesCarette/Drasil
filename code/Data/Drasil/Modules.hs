@@ -182,7 +182,7 @@ mod_inputc_fun impl= makeImpModule modInputConstraint --FIXME: Plural?
 -- derived values module
 mod_derivedv_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_derivedv_fun impl depnd= makeImpModule modDerivedVal --FIXME: Plural?
-  (S "The transformations from initial" +:+ phrase input_ +:+. S "to derived quantities")
+  (S "The transformations from initial" +:+ plural input_ +:+. S "to derived quantities")
   impl
   []
   []

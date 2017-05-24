@@ -203,8 +203,8 @@ s4 = SRS.specSysDec [s4_p1] [s4_1, s4_2]
 
 s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
   (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
-  (phrase problem) +:+ S "to be solved. This is followed by the" +:+ (phrase solution) +:+
-  (plural characteristicSpecification) `sC` S "which presents the" +:+ 
+  (phrase problem) +:+ S "to be solved. This is followed by the" +:+
+  (plural solutionCharSpec) `sC` S "which presents the" +:+ 
   (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
   S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+
   S "the" +:+. (phrase slope)

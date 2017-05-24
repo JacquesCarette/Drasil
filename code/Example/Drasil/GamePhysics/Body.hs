@@ -15,7 +15,8 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList)
+import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
+  makeTMatrix)
 import Data.Drasil.Software.Products
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
@@ -682,7 +683,7 @@ s7_3dlist = Enumeration (Bullet $ map (Flat) [
 -----------------------------------------------------
 
 s8 :: Section
-s8 = SRS.traceyMandG [s8_intro1] []
+s8 = SRS.traceyMandG [s8_intro1,s8_table1] []
 
 s8_intro1 :: Contents
 s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of", 
@@ -699,6 +700,37 @@ s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of",
   S "shows the dependencies of the", (plural thModel) `sC` (plural genDefn) `sC` 
   (plural dataDefn) `sC` S "and", (plural inModel), S "on each other"]
 
+
+s8_row_t1, s8_colString_t1 :: [String]
+s8_row_t1 = ["IM1", "IM2", "IM3", "R1", "R4", "R7", "Data Constraints"]
+s8_colString_t1 = ["GS1", "GS2", "GS3", "GS4", "R1", "R2", "R3", "R4", "R5", "R6", "R7",
+  "R8"]
+s8_colName_t1 :: [Sentence]
+s8_colName_t1 = map (S) s8_colString_t1
+
+gS1t, gS2t, gS3t, gS4t, r1t, r2t, r3t, r4t, r5t, r6t, r7t, r8t :: [String]
+gS1t = ["IM1"]
+gS2t = ["IM2"]
+gS3t = ["IM3"]
+gS4t = ["IM3", "R7"]
+r1t = []
+r2t = ["IM1", "IM2", "R4"]
+r3t = ["IM3", "R4"]
+r4t = ["Data Constraints"]
+r5t = ["IM1"]
+r6t = ["IM2"]
+r7t = ["R1"]
+r8t = ["IM3", "R7"]
+
+s8_columns_t1 :: [[String]]
+s8_columns_t1 = [gS1t, gS2t, gS3t, gS4t, r1t, r2t, r3t, r4t, r5t, r6t, r7t, r8t]
+
+s8_table1 :: Contents
+s8_table1 = Table (EmptyS:(map (S) s8_row_t1))
+  (makeTMatrix s8_colName_t1 s8_columns_t1 s8_row_t1)
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
+  S "and Other" +:+ titleize' item) True
 
 ----------------
 -- REFERENCES --

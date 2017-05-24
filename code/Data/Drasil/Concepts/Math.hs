@@ -18,7 +18,7 @@ diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight
 equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
                                                                   "experience")
-gradient     = dcc "gradient"     (cn' "gradient")                "The degree of steepness of a graph at any point"
+gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                   "is treated as a single entity and manipulated according to particular rules")
@@ -43,7 +43,7 @@ euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)
                 (norm ^. term)) "Euclidean norm"
 normalV      = dcc "normal vector"  (compoundPhrase' (normal ^. term)
                 (vector ^. term))
-                "Unit outward normal vector for a surface"
+                "unit outward normal vector for a surface"
 perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
                 (vector ^. term))
                 "Vector perpendicular or 90 degrees to another vector"

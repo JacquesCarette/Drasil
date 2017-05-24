@@ -78,7 +78,7 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 
-  [ TUnits, tsymb'' tsymb_intro (TermExcept [normalVect]), TAandA ]
+  [ TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA ]
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 tsymb_intro :: [TSIntro]
@@ -210,7 +210,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "transfer" +:+. phrase theory +:+ S "A third or fourth year" +:+
   S "Mechanical Engineering course on this topic is recommended. The" +:+
   plural reviewer +:+ S "should also have an understanding of differential" +:+
-  (plural $ equation ^. term) +:+ S ", as typically covered in" +:+
+  (plural $ equation ^. term) :+: S ", as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
   S "as explained in" +:+. (makeRef s3_2))
@@ -650,11 +650,11 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   (phrase $ vol ^. term) :+: S ", with" +:+ P (thFluxVect ^. 
   symbol) +:+ S "as the" +:+ (phrase $ thFluxVect ^. term) +:+
   S "for the" +:+ (phrase $ surface ^. term) +:+ S "and" +:+
-  P (normalVect ^. symbol) +:+ S "as a" +: (normalVect ^.
+  P (uNormalVect ^. symbol) +:+ S "as a" +: (uNormalVect ^.
   defn)),
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
-  ((C thFluxVect) :. (C normalVect)) surface))) + 
+  ((C thFluxVect) :. (C uNormalVect)) surface))) + 
   (UnaryOp (Integral (Just 
   (Low (C vol)), Nothing) (C vol_ht_gen) vol)) := 
   UnaryOp (Integral (Just (Low (C vol)), Nothing) 

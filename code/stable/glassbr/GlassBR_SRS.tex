@@ -99,7 +99,7 @@ $w_{max}$ & Maximum permissible input charge weight & kg
 \\
 $w_{min}$ & Minimum permissible input charge weight & kg
 \\
-$w_{TNT}$ & Explosive Mass in equivalent weight of TNT & kg
+$w_{TNT}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
 \label{Table:ToS}
@@ -116,8 +116,6 @@ A & Assumption
 AN & Annealed Glass
 \\
 AR & Aspect Ratio
-\\
-ARmax & Maximum Aspect Ratio
 \\
 DD & Data Definition
 \\
@@ -244,7 +242,7 @@ This subsection provides a list of terms that are used in subsequent sections an
 \item{Load:}
 \begin{enumerate}
 \item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
-\item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4 (pg. 53)], following A1.}
+\item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4 (pg. 1, 53)], following A2 and A1 respectively.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
 \item{Glass weight load - The dead load component of the glass weight.}
@@ -284,7 +282,7 @@ This section explains all the assumptions considered and the theoretical models 
 This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition [DD], or instance model [IM], in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
-\item[A2:]This practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+\item[A2:]Following [4 (pg. 1)], this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 \item[A3:]This system only considers the external explosion scenario for its calculations.
 \item[A4:]Standard values used for calculation in GlassBR are:
 \end{itemize}
@@ -363,7 +361,7 @@ Label & Calculation of Capacity(LR)
 \\ \midrule \\
 Equation & $LR=NFL*GTF*LSF$
 \\ \midrule \\
-Description & $LR$ is the Load Resistance, which is also called capacity. $NFL$ is the Non-Factored Load. $GTF$ is the Glass Type Factor. $LSF$ is the Load Share Factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored Load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -412,7 +410,7 @@ Units & mm
 \\ \midrule \\
 Equation & $h$ = $h(t)$
 \\ \midrule \\
-Description & $h$ is the  function that maps from the nominal thickness ($t$) to the minimum thickness, as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = 4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | t = 10.0 => 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 => 18.26 | t = 22.0 => 21.44)\newline$h$ is the Actual thickness\newline$t$ is the Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+Description & $h$ is the  function that maps from the nominal thickness ($t$) to the minimum thickness, as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = 4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | t = 10.0 => 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 => 18.26 | t = 22.0 => 21.44)\newline$h$ is the actual thickness\newline$t$ is the nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -476,7 +474,7 @@ Units &
 \\ \midrule \\
 Equation & $GTF$ = $GTF(g)$
 \\ \midrule \\
-Description & $GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$g$ is the Glass type, g in {AN, HS, FT}
+Description & $GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$g$ is the glass type, g in {AN, HS, FT}
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -492,7 +490,7 @@ Units &
 \\ \midrule \\
 Equation & $\hat{q}$ = $\frac{q(ab)^{2}}{Eh^{4}*GTF}$
 \\ \midrule \\
-Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand)\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$GTF$ is the glass type Factor
+Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand)\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$GTF$ is the glass type factor
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -529,7 +527,7 @@ Description & $J_{tol}$ is the stress distribution factor (Function) based on Pb
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DC}
-Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can  be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table 2 (). $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table 2 (). $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
 \begin{longtable}{l l}
 \toprule
 Var & Value

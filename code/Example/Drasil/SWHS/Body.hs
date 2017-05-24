@@ -19,7 +19,7 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Utils (mkEnumAbbrevList)
 
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Quantities.Math (gradient, normalVect, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
@@ -106,8 +106,8 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (phrase $ energy ^. term) +:+ S "sources and" +:+
   (phrase $ energy ^. term) +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
   +:+ S "(" :+: (short phsChgMtrl) :+: S ") use a renewable" +:+
-  (phrase $ energy ^. term) +:+ S "source and provide a novel way of" +:+.
-  S "storing" +:+ (phrase $ energy ^. term) +:+
+  (phrase $ energy ^. term) +:+ S "source and provide a novel way of" +:+
+  S "storing" +:+. (phrase $ energy ^. term) +:+
   (at_start $ swhs_pcm ^. term) +:+ S "improve over the traditional" +:+
   (phrase $ progName ^. term) :+: S "s because of their smaller size. The" +:+
   S "smaller size is possible because of the ability of" +:+ 
@@ -157,8 +157,8 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   S "writing the" +:+ phrase desSpec +:+ S "and the" +:+ phrase software +:+
   (phrase vav) +:+ S "plan. The" +:+ phrase design +:+ phrase document +:+
   S "will show how the" +:+ (plural requirement) +:+
-  S "are to be realized, including decisions" +:+.
-  S "on the numerical algorithms and programming" +:+ phrase environment +:+
+  S "are to be realized, including decisions" +:+
+  S "on the numerical algorithms and programming" +:+. phrase environment +:+
   S "The" +:+ phrase vav +:+ S "plan will show the" +:+
   S "steps that will be used to increase confidence in the" +:+
   phrase softwareDoc +:+ S "and the implementation. Although" +:+
@@ -338,8 +338,7 @@ s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
 s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
   S "the" +:+ phrase problem +:+ phrase description :+: S ", which gives a" +:+
   S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This" +:+
-  S "is followed by the" +:+ phrase solution +:+
-  phrase characteristicSpecification :+: S ", which presents the" +:+
+  S "is followed by the" +:+ solutionCharSpec :+: S ", which presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`
   (plural genDefn) `sC` 

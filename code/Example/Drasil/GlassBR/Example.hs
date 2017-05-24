@@ -192,7 +192,7 @@ aR            = dcc "aR" (aspectR ^. term)
 gbr           = dcc "gbr" (nounPhraseSP "glass breakage")
   ("The fracture or breakage of any lite or ply in monolithic, laminated, " ++
     "or insulating glass.")
-lite          = dcc "lite" (nounPhraseSP "lite")
+lite          = dcc "lite" (cn' "lite") --is used in the plural form
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
 glassTy       = dcc "glassTy" (cn' "glass types") "type of glass"

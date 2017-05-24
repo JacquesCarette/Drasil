@@ -15,7 +15,8 @@ import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction,
                    rightHand, collision, space)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList)
+import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
+  makeTMatrix)
 import Data.Drasil.Software.Products
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
@@ -682,7 +683,7 @@ s7_3dlist = Enumeration (Bullet $ map (Flat) [
 -----------------------------------------------------
 
 s8 :: Section
-s8 = SRS.traceyMandG [s8_intro1] []
+s8 = SRS.traceyMandG [s8_intro1,s8_table1,s8_table2,s8_table3] []
 
 s8_intro1 :: Contents
 s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of", 
@@ -700,6 +701,141 @@ s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of",
   (plural dataDefn) `sC` S "and", (plural inModel), S "on each other"]
 
 
+s8_row_t1, s8_colString_t1 :: [String]
+s8_row_t1 = ["IM1", "IM2", "IM3", "R1", "R4", "R7", "Data Constraints"]
+s8_colString_t1 = ["GS1", "GS2", "GS3", "GS4", "R1", "R2", "R3", "R4", "R5", "R6", "R7",
+  "R8"]
+s8_colName_t1 :: [Sentence]
+s8_colName_t1 = map (S) s8_colString_t1
+
+gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1, r5_t1, r6_t1, r7_t1, 
+  r8_t1 :: [String]
+gS1_t1 = ["IM1"]
+gS2_t1 = ["IM2"]
+gS3_t1 = ["IM3"]
+gS4_t1 = ["IM3", "R7"]
+r1_t1 = []
+r2_t1 = ["IM1", "IM2", "R4"]
+r3_t1 = ["IM3", "R4"]
+r4_t1 = ["Data Constraints"]
+r5_t1 = ["IM1"]
+r6_t1 = ["IM2"]
+r7_t1 = ["R1"]
+r8_t1 = ["IM3", "R7"]
+
+s8_columns_t1 :: [[String]]
+s8_columns_t1 = [gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1, 
+  r5_t1, r6_t1, r7_t1, r8_t1]
+
+s8_table1 :: Contents
+s8_table1 = Table (EmptyS:(map (S) s8_row_t1))
+  (makeTMatrix s8_colName_t1 s8_columns_t1 s8_row_t1)
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
+  S "and Other" +:+ titleize' item) True
+
+s8_row_t2 :: [String]
+s8_row_t2 = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
+s8_colString_t2 :: [String]
+s8_colString_t2 = ["T1", "T2", "T3", "T4", "T5", "GD1", "GD2", 
+  "GD3", "GD4", "GD5", "GD6", "GD7", "DD1", "DD2", "DD3",
+  "DD4", "DD5", "DD6", "DD7", "DD8", "IM1", "IM2", "IM3", 
+  "LC1", "LC2", "LC3", "LC4"]
+
+s8_colName_t2 :: [Sentence]
+s8_colName_t2 = map (S) s8_colString_t2
+
+s8_columns_t2 :: [[String]]
+s8_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
+  gD4_t2, gD5_t2, gD6_t2, gD7_t2, dD1_t2, dD2_t2, dD3_t2, dD4_t2, dD5_t2, dD6_t2,
+  dD7_t2, dD8_t2, iM1_t2, iM2_t2, iM3_t2, lC1, lC2, lC3, lC4]
+
+t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2, gD4_t2, gD5_t2, 
+  gD6_t2, gD7_t2, dD1_t2, dD2_t2, dD3_t2, dD4_t2, dD5_t2, dD6_t2, dD7_t2, dD8_t2, 
+  iM1_t2, iM2_t2, iM3_t2, lC1, lC2, lC3, lC4 :: [String]
+t1_t2 = []
+t2_t2 = []
+t3_t2 = []
+t4_t2 = ["A1"]
+t5_t2 = []
+gD1_t2 = []
+gD2_t2 = []
+gD3_t2 = ["A2","A3"]
+gD4_t2 = []
+gD5_t2 = []
+gD6_t2 = []
+gD7_t2 = []
+dD1_t2 = ["A1","A2"]
+dD2_t2 = ["A1","A2","A6"]
+dD3_t2 = ["A1","A2","A6"]
+dD4_t2 = ["A1","A2","A6"]
+dD5_t2 = ["A1","A2","A6"]
+dD6_t2 = ["A1","A2","A6"]
+dD7_t2 = ["A1","A2","A6"]
+dD8_t2 = ["A1","A2","A4","A5"]
+iM1_t2 = ["A1","A2","A6","A7"]
+iM2_t2 = ["A1","A2","A4","A6","A7"]
+iM3_t2 = ["A1","A2","A5","A6","A7"]
+lC1 = []
+lC2 = ["A5"]
+lC3 = ["A6"]
+lC4 = ["A7"]
+
+s8_table2 :: Contents
+s8_table2 = Table (EmptyS:(map (S) s8_row_t2))
+  (makeTMatrix s8_colName_t2 s8_columns_t2 s8_row_t2)
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+
+  S "and Other" +:+ titleize' item) True
+
+s8_row_t3, s8_colString_t3 :: [String]
+s8_row_t3 = ["T1","T2","T3","T4","T5","GD1","GD2","GD3","GD4","GD5","GD6","GD7",
+  "DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "IM1", "IM2", 
+  "IM3"]
+
+s8_colString_t3 = s8_row_t3
+s8_colName_t3 :: [Sentence]
+s8_colName_t3 = map (S) s8_colString_t3
+
+s8_columns_t3 :: [[String]]
+s8_columns_t3 = [t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, gD4_t3, gD5_t3, gD6_t3,
+  gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3, dD7_t3, dD8_t3, iM1_t3,
+  iM2_t3, iM3_t3]
+
+t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, gD4_t3, gD5_t3, gD6_t3,
+  gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3, dD7_t3, dD8_t3, iM1_t3,
+  iM2_t3, iM3_t3 :: [String]
+
+t1_t3 = [] 
+t2_t3 = []
+t3_t3 = []
+t4_t3 = []
+t5_t3 = ["GD6", "GD7"]
+gD1_t3 = ["T1"]
+gD2_t3 = ["T2", "GD1"]
+gD3_t3 = ["T1", "T3"]
+gD4_t3 = []
+gD5_t3 = ["GD4"]
+gD6_t3 = []
+gD7_t3 = []
+dD1_t3 = []
+dD2_t3 = []
+dD3_t3 = []
+dD4_t3 = []
+dD5_t3 = []
+dD6_t3 = []
+dD7_t3 = []
+dD8_t3 = ["T4", "GD1","GD4","GD5","GD7","IM3"]
+iM1_t3 = ["T1", "GD3", "DD1","DD2","DD3","DD4"]
+iM2_t3 = ["T5", "DD1", "DD2", "DD3", "DD4"]
+iM3_t3 = ["GD1", "GD2", "GD6", "GD7", "DD1", "DD8"]
+
+s8_table3 :: Contents
+s8_table3 = Table (EmptyS:(map (S) s8_row_t3))
+  (makeTMatrix s8_colName_t3 s8_columns_t3 s8_row_t3)
+  ((titleize traceyMatrix) +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ titleize' item +:+
+  S "and Other" +:+ titleize' section_) True
 ----------------
 -- REFERENCES --
 ----------------

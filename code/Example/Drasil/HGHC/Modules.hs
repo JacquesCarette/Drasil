@@ -121,7 +121,7 @@ meth_main :: MethodChunk
 meth_main = makeMainMethod (nc "main" (cn' "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The")
+mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm ^. term))
   executable
   [meth_main] 
   [mod_hw, mod_inputp, mod_inputf, mod_calc, mod_outputf]

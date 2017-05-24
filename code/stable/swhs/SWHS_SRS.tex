@@ -215,7 +215,7 @@ T & Theoretical Model
 \section{Introduction}
 \label{Sec:I}
 Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
- The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers.
+The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers.
 \subsection{Purpose of Document}
 \label{Sec:PoD}
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
@@ -225,7 +225,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements is limited to thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:CoIR}
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in Section~\ref{Sec:SC}.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in Section~\ref{Sec:UC}.
 \subsection{Organization of Document}
 \label{Sec:OoD}
 The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern for presenting goal statements, theoretical models, data definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IM} and trace back to find any additional information they require. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
@@ -310,7 +310,7 @@ The instance models (ODEs) that govern SWHS are presented in Section~\ref{Sec:IM
 \label{Sec:A}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
 \begin{itemize}
-\item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:Cote]{Definition~T:Cote}].
+\item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}].
 \item[A2:]All heat transfer coefficients are constant over time [GD1].
 \item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP}].
 \item[A4:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP}, LC1].
@@ -336,9 +336,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Cote}
+\toprule \textbf{Refname} & \textbf{T:t1ConsThermE}
 \phantomsection 
-\label{T:Cote}
+\label{T:t1ConsThermE}
 \\ \midrule \\
 Label & Conservation of thermal energy
 \\ \midrule \\
@@ -350,9 +350,9 @@ Description & The above equation gives the law of conservation of energy for tra
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:She}
+\toprule \textbf{Refname} & \textbf{T:t2SensHtE}
 \phantomsection 
-\label{T:She}
+\label{T:t2SensHtE}
 \\ \midrule \\
 Label & Sensible heat energy
 \\ \midrule \\
@@ -362,15 +362,15 @@ C^{L}m*\Delta{}T, & T_{melt}<T<T_{boil}\\
 C^{V}m*\Delta{}T, & T_{boil}<T
 \end{cases}$
 \\ \midrule \\
-Description & $E$ is the change in sensible heat energy (J). $C^{S}$, $C^{L}$, $C^{V}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}C$), and $\Delta{}T$ is the change in temperature (${}^{\circ}C$). $T_{melt}$ and $T_{boil}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}C$). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=$T_{boil}$ or $T$=$T_{melt}$. If this is the case, refer to \hyperref[T:Lhe]{Definition~T:Lhe}, Latent heat energy.
+Description & $E$ is the change in sensible heat energy (J). $C^{S}$, $C^{L}$, $C^{V}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}C$), and $\Delta{}T$ is the change in temperature (${}^{\circ}C$). $T_{melt}$ and $T_{boil}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}C$). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=$T_{boil}$ or $T$=$T_{melt}$. If this is the case, refer to \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}, Latent heat energy.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Lhe}
+\toprule \textbf{Refname} & \textbf{T:t3LatHtE}
 \phantomsection 
-\label{T:Lhe}
+\label{T:t3LatHtE}
 \\ \midrule \\
 Label & Latent heat energy
 \\ \midrule \\
@@ -383,7 +383,7 @@ Description & $Q$ is the change in thermal energy (J), latent heat energy. FIXME
 \label{Sec:GD}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models. (General definitions are left out because they are not currently implemented in Drasil.)
 Detailed derivation of simplified rate of change of temperature:
-Integrating \hyperref[T:Cote]{Definition~T:Cote} over a volume ($V$), we have:
+Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{equation}
 (-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV})+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
 \end{equation}
@@ -609,14 +609,14 @@ Given the small size, and relative simplicity, of this problem, performance is n
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRaIM} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[T:Cote]{Definition~T:Cote} & \hyperref[T:She]{Definition~T:She} & \hyperref[T:Lhe]{Definition~T:Lhe} & GD1 & GD2 & \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} & \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & IM1 & IM2 & IM3 & IM4
+ & \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} & \hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} & \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} & GD1 & GD2 & \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} & \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & IM1 & IM2 & IM3 & IM4
 \\
 \midrule
-\hyperref[T:Cote]{Definition~T:Cote} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[T:She]{Definition~T:She} &  &  & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[T:Lhe]{Definition~T:Lhe} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 GD1 &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -686,11 +686,11 @@ R11 &  & X &  &  &  &  &
  & A1 & A2 & A3 & A4 & A5 & A6 & A7 & A8 & A9 & A10 & A11 & A12 & A13 & A14 & A15 & A16 & A17 & A18 & A19
 \\
 \midrule
-\hyperref[T:Cote]{Definition~T:Cote} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[T:She]{Definition~T:She} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[T:Lhe]{Definition~T:Lhe} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 GD1 &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

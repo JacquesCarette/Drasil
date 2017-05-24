@@ -58,8 +58,7 @@ mod_sw = makeUnimpModule modSfwrDecision
 -- Control module
 mod_ctrl_fun :: NamedIdea a => Sentence -> a -> [MethodChunk] -> [ModuleChunk] -> ModuleChunk
 mod_ctrl_fun desc impl mthd depnd = makeImpModule modControl
-  (foldlSent [desc {-S "The internal", (plural $ dataType' ^. term), S "and"-},
-  (plural $ algorithm ^. term), S "for coordinating the running of the program"])
+  (foldlSent [desc, S "for coordinating the running of the program"])
   impl
   []
   mthd
@@ -183,7 +182,7 @@ mod_inputc_fun impl= makeImpModule modInputConstraint --FIXME: Plural?
 -- derived values module
 mod_derivedv_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_derivedv_fun impl depnd= makeImpModule modDerivedVal --FIXME: Plural?
-  (S "The transformations from initial" +:+ phrase input_ +:+. S "to derived quantities")
+  (S "The transformations from initial" +:+ plural input_ +:+. S "to derived quantities")
   impl
   []
   []

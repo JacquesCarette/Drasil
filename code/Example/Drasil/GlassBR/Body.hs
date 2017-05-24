@@ -217,7 +217,7 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated" +:+ plural value]])
-  (titleize table_ +:+ S "1:" +:+ titleize useCaseTable) True
+  (titleize table_ +: S "1" +:+ titleize useCaseTable) True
 
 s5_2 = SRS.indPRCase [s5_2_bullets] []
 
@@ -286,7 +286,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (aR ^. defn)] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
   [gbr, lite] ++ [Nested (((titleize $ glassTy ^. term) :+: S ":")) 
-  (Bullet $ map (\c -> Flat c) [(((phrase $ an ^. term) :+: 
+  (Bullet $ map (\c -> Flat c) [(((at_start $ an ^. term) :+: 
     sParenDash (short annealedGlass)) :+: (an ^. defn)),
   (((at_start $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
     (ft ^. defn)),
@@ -452,7 +452,7 @@ s6_2_5_intro = Paragraph $ foldlSent
   phrase variable, S "The", plural constraint, S "are conservative, to give", 
   S "the", phrase user, S "of the", phrase model, 
   S "the flexibility to experiment with unusual situations. The", 
-  phrase column, S "of" +:+. S "typical", plural value,
+  phrase column, S "of", S "typical", plural value +:+.
   S "is intended to provide a feel for a common scenario",
   S "The uncertainty", phrase column, S "provides an",
   S "estimate of the confidence with which the", phrase physical, plural quantity,
@@ -496,7 +496,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   Sy (unit_symb cWeightMax)), (P $ sd_min ^. symbol, S "6" +:+
   Sy (unit_symb sd_min)), (P $ sd_max ^. symbol, S "130" +:+
   Sy (unit_symb sd_max))])
-  (titleize table_ +:+ S "3:" +:+ titleize specification +:+
+  (titleize table_ +: S "3" +:+ titleize specification +:+
   (titleize $ parameter ^. term) +:+ titleize' value) True
 
 s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", S "()",--sParen (makeRef s6_2_5_table3),
@@ -568,11 +568,11 @@ s7_1_list =
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++
-    [Flat $ (phrase $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
+    [Flat $ (titleize $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
     sParen (makeRef (Definition (Theory calOfCap)))] ++
-    [Flat $ (phrase $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
+    [Flat $ (at_start $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
     sParen (makeRef (Definition (Theory calOfDe)))] ++
-    [Flat $ (phrase $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
+    [Flat $ (at_start $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
     sParen (makeRef (Definition (Data hFromt)))] ++
     [Flat $ (titleize $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
     sParen (makeRef (Definition (Data loadDF)))]++
@@ -580,9 +580,9 @@ s7_1_list =
     sParen (makeRef (Definition (Data strDisFac)))]++
     [Flat $ (titleize $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol) +:+ 
     sParen (makeRef (Definition (Data nonFL)))]++
-    [Flat $ (phrase $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
+    [Flat $ (titleize $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
     sParen (makeRef (Definition (Data glaTyFac)))] ++
-    map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
+    map (\c -> Flat $ (at_start $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [dL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  
@@ -820,15 +820,15 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
-fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
+fig_2 = Figure (titleize figure +: S "2" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
   +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item
   +:+ S "of Different" +:+ titleize' section_) "Trace.png"
 
-fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
+fig_3 = Figure (titleize figure +: S "3" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
   S "and Other" +:+ titleize' item) "RTrace.png"
 
-fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
+fig_4 = Figure (titleize figure +: S "4" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other" +:+ titleize' item) "ATrace.png"
 
@@ -868,7 +868,7 @@ s11_intro = Paragraph $ foldlSent [
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
+fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+
   S "versus" +:+ (at_start $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"

@@ -442,8 +442,8 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 s4_2_5_IMods :: [Contents]
 
-s4_2_5 = SRS.inModel ([s4_2_5_intro] {--++
-  (s4_2_5_IMods)--}) []
+s4_2_5 = SRS.inModel ([s4_2_5_intro] ++
+  (s4_2_5_IMods)) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "transforms the", (phrase problem), S "defined",
@@ -690,7 +690,7 @@ s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of",
   S "on what has to be additionally modified if",
   S "a certain", (phrase component), S "is changed. Every time a", 
   (phrase component), S "is changed,", S "the items in the column of that", 
-  (phrase component), S "that are marked with an “X”", 
+  (phrase component), S "that are marked with an \"X\"", 
   S "should be modified as well. Table 3 shows the dependencies of", 
   (plural goalStmt) `sC` (plural requirement) `sC` (plural inModel) `sC` S "and",
   (plural datumConstraint), S "with each other.", 

@@ -65,7 +65,7 @@ im2leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
   (helper1 orientation "i" EmptyS),
   (helper1 angVel "i" EmptyS),
   (helper1 angAccel "k" EmptyS),
-  S "τ i(t) is the torque applied to the i-th body at time t (N m)",
+  S "t i(t) is the torque applied to the i-th body at time t (N m)",
   S "Signed direction of torque is defined by (A4)",
   S "Ii is the moment of inertia of the i-th body (kg m2)"]
 

@@ -27,7 +27,7 @@ mod_inputc :: ModuleChunk
 mod_inputc = mod_inputc_fun glassBRProg
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType' ^. term) +:+ S "and") 
+mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm ^. term)) 
   glassBRProg [] [mod_inputf, mod_inputp, mod_inputc, mod_derivedv, mod_calc, mod_interp, mod_outputf]
 
 -- output format module

@@ -58,8 +58,7 @@ mod_sw = makeUnimpModule modSfwrDecision
 -- Control module
 mod_ctrl_fun :: NamedIdea a => Sentence -> a -> [MethodChunk] -> [ModuleChunk] -> ModuleChunk
 mod_ctrl_fun desc impl mthd depnd = makeImpModule modControl
-  (foldlSent [desc {-S "The internal", (plural $ dataType' ^. term), S "and"-},
-  (plural $ algorithm ^. term), S "for coordinating the running of the program"])
+  (foldlSent [desc, S "for coordinating the running of the program"])
   impl
   []
   mthd

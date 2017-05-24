@@ -32,7 +32,7 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
 
 -- Control module
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType' ^. term) +:+ S "and")
+mod_ctrl = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType' ^. term) +:+ S "and" +:+ (plural $ algorithm ^. term))
   program [] [mod_inputf, mod_outputf, mod_genalg]
 
 -- input format module

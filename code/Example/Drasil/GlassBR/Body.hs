@@ -286,7 +286,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (aR ^. defn)] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
   [gbr, lite] ++ [Nested (((titleize $ glassTy ^. term) :+: S ":")) 
-  (Bullet $ map (\c -> Flat c) [(((phrase $ an ^. term) :+: 
+  (Bullet $ map (\c -> Flat c) [(((at_start $ an ^. term) :+: 
     sParenDash (short annealedGlass)) :+: (an ^. defn)),
   (((at_start $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
     (ft ^. defn)),
@@ -452,7 +452,7 @@ s6_2_5_intro = Paragraph $ foldlSent
   phrase variable, S "The", plural constraint, S "are conservative, to give", 
   S "the", phrase user, S "of the", phrase model, 
   S "the flexibility to experiment with unusual situations. The", 
-  phrase column, S "of" +:+. S "typical", plural value,
+  phrase column, S "of", S "typical", plural value +:+.
   S "is intended to provide a feel for a common scenario",
   S "The uncertainty", phrase column, S "provides an",
   S "estimate of the confidence with which the", phrase physical, plural quantity,
@@ -568,11 +568,11 @@ s7_1_list =
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
     sParen (makeRef (Definition (Theory probOfBr)))] ++
-    [Flat $ (phrase $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
+    [Flat $ (titleize $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
     sParen (makeRef (Definition (Theory calOfCap)))] ++
-    [Flat $ (phrase $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
+    [Flat $ (at_start $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
     sParen (makeRef (Definition (Theory calOfDe)))] ++
-    [Flat $ (phrase $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
+    [Flat $ (at_start $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
     sParen (makeRef (Definition (Data hFromt)))] ++
     [Flat $ (titleize $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
     sParen (makeRef (Definition (Data loadDF)))]++
@@ -580,9 +580,9 @@ s7_1_list =
     sParen (makeRef (Definition (Data strDisFac)))]++
     [Flat $ (titleize $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol) +:+ 
     sParen (makeRef (Definition (Data nonFL)))]++
-    [Flat $ (phrase $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
+    [Flat $ (titleize $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
     sParen (makeRef (Definition (Data glaTyFac)))] ++
-    map (\c -> Flat $ (phrase $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
+    map (\c -> Flat $ (at_start $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
     [dL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  

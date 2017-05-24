@@ -48,7 +48,7 @@ s2_3_intro = Paragraph $
             (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+
             S "should have a strong knowledge in" +:+ (phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
            S "A third or fourth year Mechanical Engineering course on the topic is recommended. The" +:+
-            (phrase $ reviewer ^. term) +:+ S "should also have an understanding of differential" +:+ (plural $ equation ^. term) :+: S ", as typically" +:+
+            (phrase $ reviewer ^. term) +:+ S "should also have an understanding of differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
            S "covered in first and second year Calculus courses. The" +:+ (plural $ user ^. term) +:+ S "of" +:+ (getAcc sWHS) +:+
            S "can have a lower level expertise, as explained in" +:+ (titleize $ section_ ^. term)
            -- FIXME: Section 3.2 does not exist yet, when it does, add reference
@@ -60,7 +60,7 @@ s3_1 = section (titleize sysCont) [s3_1_intro, sys_context_fig] []
 
 s3_1_intro = Paragraph $
               (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase $ sysCont ^. term) +:+
-             S "A circle represents an external entity outside the" +:+ (phrase $ software ^. term) +:+ S "," +:+
+             S "A circle represents an external entity outside the" +:+ (phrase $ software ^. term) `sC`
              S "the" +:+ (phrase $ user ^. term) +:+ S "in this case. A rectangle represents the" +:+ (phrase $ softwareSys ^. term) +:+
              S "itself (" :+: (getAcc sWHS) :+: S "). Arrows are used to show the" +:+ (plural $ datum ^. term) +:+ S "flow between the" +:+
               (phrase $ section_ ^. term) +:+ S "and its" +:+. (phrase $ environment ^. term)
@@ -104,19 +104,19 @@ s4_1_2_intro = Paragraph $
            S "The" +:+ (phrase $ physicalSystem ^. term) +:+ S "of" +:+ (getAcc sWHS) :+:
            S ", as shown in" +:+ (makeRef fig_tank) :+: S ", includes the following" +: (plural $ element ^. term)
 
-fig_tank = Figure ((at_start $ sWHT ^. term) :+: S ", with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
+fig_tank = Figure ((at_start $ sWHT ^. term) `sC` S "with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "PS1", (at_start $ tank ^. term) +:+ S "containing" +:+ (phrase $ water ^. term)), 
-            (S "PS2", S "Heating" +:+ (phrase $ coil ^. term) +:+ S "at bottom of" +:+ (phrase $ tank ^. term) :+: S ". (" :+:
+            (S "PS2", S "Heating" +:+ (phrase $ coil ^. term) +:+ S "at bottom of" +:+. (phrase $ tank ^. term) +:+ S "(" :+:
            P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
            S "into the" +:+ (phrase $ water ^. term) :+: S ".)")]
 
 s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro = Paragraph $
-           S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) :+: S ", initial" +:+
+           S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) `sC` S "initial" +:+
             (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) :+: S "," +:+
            S "and material" +:+ (plural $ property ^. term) :+: S ", the goal statement is"
 
@@ -128,8 +128,8 @@ s4_2 = section ((titleize' $ solutionCharSpec ^. term))
 
 s4_2_intro = Paragraph $
            S "The" +:+ (phrase $ inModel ^. term) +:+ S "(" :+: getAcc ode :+: S ") that governs" +:+
-            (getAcc sWHS) +:+ S "is presented in" +:+ --TODO: Subsec reference
-           S ". The" +:+ (phrase $ information ^. term) +:+
+            (getAcc sWHS) +:+. S "is presented in" +:+ --TODO: Subsec reference
+           S "The" +:+ (phrase $ information ^. term) +:+
            S "to understand the meaning of the" +:+ (phrase $ inModel ^. term) +:+ 
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 
             (phrase $ inModel ^. term) +:+ S "can be verified."

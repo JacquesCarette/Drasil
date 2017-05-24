@@ -6,68 +6,70 @@ import Drasil.GamePhysics.Modules
 import Data.Drasil.Changes
 
 lcs :: [LCChunk]
-lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12, lc13,
-  lc14]
+lcs = [hardware, rigidBodyStruct, shapeLC, spaceLC, arbiterLC, control, 
+  vectorStruct, boundingBox, transform, spatialIndex, collisionAlgo, sequenceStruct, 
+  linkedListStruct, hashtableStruct]
 
 ucs :: [UCChunk]
 ucs = [uc1, uc2, uc3, uc4, uc5, uc6, uc7]
 
 -- Likely Changes --
 
-lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12, lc13,
-  lc14 :: LCChunk
+hardware, rigidBodyStruct, shapeLC, spaceLC, arbiterLC, control, vectorStruct, 
+  boundingBox, transform, spatialIndex, collisionAlgo, sequenceStruct, 
+  linkedListStruct, hashtableStruct:: LCChunk
 
-lc1 = lcHW
+hardware = lcHW
 
-lc2 = LCChunk (nw $ npnc "rigid body"
+rigidBodyStruct = LCChunk (nw $ npnc "rigid body"
   (nounPhraseSP $ 
   "The data structure of the physical properties of an object such as " ++ 
   "the object's mass, position and velocity."))
   [mod_body]
 
-lc3 = LCChunk (nw $ npnc "shape"
+shapeLC = LCChunk (nw $ npnc "shape"
   (nounPhraseSP $ 
   "The data structure of the surface properties of an object such as " ++
   "the object's friction and elasticity."))
   [mod_shape, mod_circle, mod_segment, mod_poly]
 
-lc4 = LCChunk (nw $ npnc "space"
+spaceLC = LCChunk (nw $ npnc "space"
   (nounPhraseSP $ "How all the rigid bodies and shapes interact together."))
   [mod_space]
 
-lc5 = LCChunk (nw $ npnc "arbiter" (nounPhraseSP $ 
+arbiterLC = LCChunk (nw $ npnc "arbiter" (nounPhraseSP $ 
   "The data structure containing collision information such as the " ++
   "objects that collide and their masses."))
   [mod_arbiter]
 
-lc6 = LCChunk (nw $ npnc "control" (nounPhraseSP $ 
+control = LCChunk (nw $ npnc "control" (nounPhraseSP $ 
   "How the overall control of the simulation is orchestrated, " ++
   "including the input and output of data."))
   [mod_ctrl]
 
-lc7 = lcVect mod_vector
+vectorStruct = lcVect mod_vector
 
-lc8 = LCChunk (nw $ npnc "bb" (nounPhraseSP $ 
+boundingBox = LCChunk (nw $ npnc "bb" (nounPhraseSP $ 
   "The implementation of bounding box structures"))
   [mod_bb]
 
-lc9 = LCChunk (nw $ npnc "transform" (nounPhraseSP $ 
+transform = LCChunk (nw $ npnc "transform" (nounPhraseSP $ 
   "The implementation of affine transformation matrices."))
   [mod_vector]
 
-lc10 = LCChunk (nw $ npnc "spatial index" (nounPhraseSP $ 
+spatialIndex = LCChunk (nw $ npnc "spatial index" (nounPhraseSP $ 
   "How the simulation space is spatially indexed."))
   [mod_spatial]
 
-lc11 = LCChunk (nw $ npnc "collision" (nounPhraseSP $ 
+collisionAlgo = LCChunk (nw $ npnc "collision" (nounPhraseSP $ 
   "The algorithms used for solving collisions."))
   [mod_coll]
 
-lc12 = lcArray mod_seq
+sequenceStruct = lcArray mod_seq
 
-lc13 = lcTree mod_linked
+linkedListStruct = lcTree mod_linked
 
-lc14 = lcHash mod_assoc
+hashtableStruct = lcHash mod_assoc
 
 -- Unlikely Changes --
 

@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction, 
                    rightHand, collision, space)
-import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
+import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass, dimension)
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
   makeTMatrix)
@@ -430,8 +430,8 @@ s4_2_4 = SRS.dataDefn ([s4_2_4_intro] ++
 
 s4_2_4_intro = Paragraph $ foldlSent [S "This", (phrase section_), 
   S "collects and defines all the", (plural datum), S "needed to build the" +:+. 
-  titleize' inModel, S "The dimension of each", (phrase quantity), 
-  S "is also given"]
+  titleize' inModel, S "The", (phrase $ dimension ^. term), S "of each", 
+  (phrase quantity), S "is also given"]
 
 s4_2_4_DDefs = map Definition (map Data cpDDefs)
 

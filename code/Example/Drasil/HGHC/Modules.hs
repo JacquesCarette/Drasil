@@ -11,6 +11,7 @@ import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
+import Data.Drasil.Utils (foldlSent)
 
 self :: NPNC
 self = npnc "HGHC" (pn "HGHC")
@@ -21,8 +22,8 @@ executable = npnc' (self ^. id) (tempCompoundPhrase self program) ("HGHC")
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam 
-             (S "The format and" +:+ (phrase structure) +:+ S "of the"
-              +:+ (phrase input_) +:+. (plural $ parameter ^. term)) --FIXME: Plural?
+             (foldlSent [S "The format and", (phrase structure), S "of the", 
+             (phrase input_), (plural $ parameter ^. term)]) --FIXME: Plural?
              executable
              htVars
              []
@@ -37,7 +38,11 @@ meth_input = makeFileInputMethod
              "input"
 
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun executable [meth_input][mod_inputp] (plural inDatum) modInputFormat
+mod_inputf = mod_io_fun executable
+  [meth_input]
+  [mod_inputp]
+  (plural inDatum)
+  modInputFormat
 
 -- Calc Module
 meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
@@ -62,13 +67,15 @@ meth_output = makeFileOutputMethod (nc "write_output" (
   "output"
 
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (S "input parameters, " :+:
-  S "temperatures, energies, and times when melting starts" :+:
-  S " and stops.")
+mod_outputf_desc = mod_outputf_desc_fun (foldlSent [S "input parameters,",
+  S "temperatures, energies, and times when melting starts", S "and stops"])
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun executable [meth_output] [mod_hw, mod_inputp] 
-  (plural outDatum) mod_outputf_desc
+mod_outputf = mod_io_fun executable
+  [meth_output]
+  [mod_hw, mod_inputp]
+  (plural outDatum)
+  mod_outputf_desc
 
 -- Control Module
 main_func :: Body
@@ -114,5 +121,7 @@ meth_main :: MethodChunk
 meth_main = makeMainMethod (nc "main" (cn' "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The") executable [meth_main] 
+mod_ctrl = mod_ctrl_fun (S "The")
+  executable
+  [meth_main] 
   [mod_hw, mod_inputp, mod_inputf, mod_calc, mod_outputf]

@@ -696,15 +696,16 @@ s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of",
   (plural goalStmt) `sC` (plural requirement) `sC` (plural inModel) `sC` S "and",
   (plural datumConstraint), S "with each other.", 
   S "Table 4 shows the dependencies of", (plural thModel) `sC` (plural genDefn) `sC`
-  (plural dataDefn) `sC` S "and", (plural inModel), S "on the assumptions. Finally, Table 5",
+  (plural dataDefn) `sC` S "and", (plural inModel), 
+  S "on the assumptions. Finally, Table 5",
   S "shows the dependencies of the", (plural thModel) `sC` (plural genDefn) `sC` 
   (plural dataDefn) `sC` S "and", (plural inModel), S "on each other"]
 
 
 s8_row_t1, s8_colString_t1 :: [String]
 s8_row_t1 = ["IM1", "IM2", "IM3", "R1", "R4", "R7", "Data Constraints"]
-s8_colString_t1 = ["GS1", "GS2", "GS3", "GS4", "R1", "R2", "R3", "R4", "R5", "R6", "R7",
-  "R8"]
+s8_colString_t1 = ["GS1", "GS2", "GS3", "GS4", "R1", "R2", "R3", "R4", "R5",
+  "R6", "R7", "R8"]
 s8_colName_t1 :: [Sentence]
 s8_colName_t1 = map (S) s8_colString_t1
 
@@ -798,9 +799,9 @@ s8_colName_t3 :: [Sentence]
 s8_colName_t3 = map (S) s8_colString_t3
 
 s8_columns_t3 :: [[String]]
-s8_columns_t3 = [t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, gD4_t3, gD5_t3, gD6_t3,
-  gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3, dD7_t3, dD8_t3, iM1_t3,
-  iM2_t3, iM3_t3]
+s8_columns_t3 = [t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, 
+  gD4_t3, gD5_t3, gD6_t3, gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3,
+  dD7_t3, dD8_t3, iM1_t3, iM2_t3, iM3_t3]
 
 t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, gD4_t3, gD5_t3, gD6_t3,
   gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3, dD7_t3, dD8_t3, iM1_t3,

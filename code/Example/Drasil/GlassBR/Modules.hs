@@ -18,7 +18,7 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, m
 
 -- input format module
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (phrase input_ +:+ (plural datum)) modInputFormat
+mod_inputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural inDatum) modInputFormat
 
 mod_inputp :: ModuleChunk
 mod_inputp = mod_io_fun glassBRProg [] [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
@@ -36,7 +36,7 @@ mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ (plural $ parameter ^
   S "the probability of breakage, and both safety" +:+. plural requirement)
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (phrase output_ +:+ (plural datum)) mod_outputf_desc
+mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural outDatum) mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk

@@ -67,14 +67,8 @@ mod_outputf_desc = mod_outputf_desc_fun (S "input parameters, " :+:
   S " and stops.")
 
 mod_outputf :: ModuleChunk
-mod_outputf = makeImpModule mod_outputf_desc (S "The format and structure " :+:
-              S "of the output data.")
-              executable
-              []
-              [meth_output]
-              [mod_hw, mod_inputp]
-              (Just mod_behav)
-
+mod_outputf = mod_io_fun executable [meth_output] [mod_hw, mod_inputp] 
+  (plural outDatum) mod_outputf_desc
 
 -- Control Module
 main_func :: Body

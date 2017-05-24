@@ -144,7 +144,7 @@ scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- 
 
 -- compounds
 
-solutionCharacteristic, generalSystemDescription, indPRCase, 
+generalSystemDescription, indPRCase, 
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont, 
   userCharacteristic, datumConstraint, functionalRequirement, 

@@ -217,7 +217,7 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated" +:+ plural value]])
-  (titleize table_ +:+ S "1:" +:+ titleize useCaseTable) True
+  (titleize table_ +: S "1" +:+ titleize useCaseTable) True
 
 s5_2 = SRS.indPRCase [s5_2_bullets] []
 
@@ -496,7 +496,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   Sy (unit_symb cWeightMax)), (P $ sd_min ^. symbol, S "6" +:+
   Sy (unit_symb sd_min)), (P $ sd_max ^. symbol, S "130" +:+
   Sy (unit_symb sd_max))])
-  (titleize table_ +:+ S "3:" +:+ titleize specification +:+
+  (titleize table_ +: S "3" +:+ titleize specification +:+
   (titleize $ parameter ^. term) +:+ titleize' value) True
 
 s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4", S "()",--sParen (makeRef s6_2_5_table3),
@@ -820,15 +820,15 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
-fig_2 = Figure (titleize figure +:+ S "2:" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
+fig_2 = Figure (titleize figure +: S "2" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
   +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item
   +:+ S "of Different" +:+ titleize' section_) "Trace.png"
 
-fig_3 = Figure (titleize figure +:+ S "3:" +:+ (titleize traceyMatrix) +:+ 
+fig_3 = Figure (titleize figure +: S "3" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
   S "and Other" +:+ titleize' item) "RTrace.png"
 
-fig_4 = Figure (titleize figure +:+ S "4:" +:+ (titleize traceyMatrix) +:+
+fig_4 = Figure (titleize figure +: S "4" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
   S "and Other" +:+ titleize' item) "ATrace.png"
 
@@ -868,7 +868,7 @@ s11_intro = Paragraph $ foldlSent [
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = Figure (titleize figure +:+ S "5:" +:+ (demandq ^. defn) +:+ sParen
+fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen
   (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start $ sD ^. term) +:+
   S "versus" +:+ (at_start $ char_weight ^. term) +:+ sParen
   (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"

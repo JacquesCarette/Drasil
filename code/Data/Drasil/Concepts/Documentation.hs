@@ -149,7 +149,7 @@ solutionCharacteristic, generalSystemDescription, indPRCase,
   specificsystemdescription, systemdescription, systemConstraint, sysCont, 
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareReq, softwareSys, softwareVerif,
-  solutionCharSpec, offShelfSolution, physicalSim, productUC, 
+  solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty :: NPNC
   
 generalSystemDescription     = compoundNPNC general systemdescription

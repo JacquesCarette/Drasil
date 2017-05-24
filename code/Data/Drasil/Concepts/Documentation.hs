@@ -26,13 +26,13 @@ vav         = commonINP "vav"         (cn' "verification and validation")       
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, column, component, 
-  condition, constraint, connection, context, customer, datum, definition, 
-  dependency, description, design, document, documentation, element, 
-  environment, figure, functional, game, general, goal, guide, individual, information, 
-  input_, instance_, intReader, introduction, item, label, library, limitation, method_,
-  module_, model, name_, nonfunctional, offShelf, open, organization, 
-  output_, performance, physics, physical, priority, problem, product_, project, 
+analysis, appendix, characteristic, client, column, company, component, 
+  condition, constraint, connection, content, context, customer, datum, decision, 
+  definition, dependency, description, design, document, documentation, element, 
+  environment, figure, functional, game, general, goal, guide, implementation, individual,
+  information, interest, input_, instance_, intReader, introduction, item, label, library,
+  limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization, 
+  output_, performance, physics, physical, plan, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, statement, symbol_, system, table_, template, 
@@ -44,13 +44,16 @@ appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
+company         = npnc "company"        (cnIES "company")
 component       = npnc "component"      (cn' "component")
 condition       = npnc "condition"      (cn' "condition")
-constraint     = npnc "constraint"     (cn' "constraint")
+constraint      = npnc "constraint"     (cn' "constraint")
 connection      = npnc "connection"     (cn' "connection")
+content         = npnc "content"        (cn' "content")
 context         = npnc "context"        (cn' "context")
 customer        = npnc "customer"       (cn' "customer")
 datum           = npnc "datum"          (cnUM  "datum")
+decision        = npnc "decision"       (cn'  "decision")
 definition      = npnc "definition"     (cn' "definition")
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
@@ -65,8 +68,10 @@ game            = npnc "game"           (cn' "game")
 general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 goal            = npnc "goal"           (cn' "goal")
 guide           = npnc "guide"          (cn' "guide")
+implementation  = npnc "implementation" (cn' "implementation")
 individual      = npnc "individual"     (cn "individual")
 information     = npnc "information"    (cn "information")
+interest        = npnc "interest"       (cn' "interest")
 input_          = npnc "input"          (cn' "input")
 instance_       = npnc "instance"       (cn' "instance")
 intReader       = npnc "intReader"      (cn' "intended reader")
@@ -87,6 +92,7 @@ output_         = npnc "output"         (cn' "output")
 performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
+plan            = npnc "plan"           (cn' "plan")
 priority        = npnc "priority"       (cnIES "priority")
 problem         = npnc "problem"        (cn' "problem")
 product_        = npnc "product"        (cn' "product")
@@ -144,14 +150,15 @@ scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- 
 
 -- compounds
 
-generalSystemDescription, indPRCase, 
+designDoc, generalSystemDescription, indPRCase, 
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont, 
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareReq, softwareSys, softwareVerif,
-  solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty :: NPNC
+  softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim,
+  productUC, useCaseTable, physicalProperty, vavPlan :: NPNC
   
+designDoc                    = compoundNPNC design document
 generalSystemDescription     = compoundNPNC general systemdescription
 indPRCase                    = compoundNPNC individual productUC
 physicalConstraint           = compoundNPNC physical constraint
@@ -176,4 +183,6 @@ softwareDoc                  = compoundNPNC software documentation
 softwareReq                  = compoundNPNC' software requirement_
 softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification
+softwareVAV                  = compoundNPNC software vav
 solutionCharacteristic       = compoundNPNC' solution characteristic
+vavPlan                      = compoundNPNC vav plan

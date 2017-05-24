@@ -78,7 +78,8 @@ glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 this_symbols :: [QSWrapper]
-this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless))
+this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
+  ++ (map qs glassBRUnitless))
 
 s2 = SRS.intro [s2_intro] [s2_1, s2_2, s2_3]
 
@@ -90,11 +91,11 @@ s2_intro = Paragraph $ foldlSent [(at_start software),
   S "herein called", (gLassBR ^. defn), S "aims to predict the", 
   (phrase $ blastRisk ^. term), S "involved with the", 
   (phrase $ glaSlab ^. term), S "using an intuitive", 
-  S "interface. The following", phrase section_, 
-  S "provides an overview", S "of the", titleize srs, sParen (short srs), 
-  S "for" +:+. (gLassBR ^. defn), S "This", phrase section_, S "explains the", 
+  S "interface. The following", phrase section_, S "provides an overview", 
+  S "of the", titleize srs, sParen (short srs), S "for" +:+.
+  (gLassBR ^. defn), S "This", phrase section_, S "explains the", 
   phrase purpose, S "of the", phrase document, S "is designed to fulfil, the", 
-  phrase scope, S "of the", plural requirement, S "and", S "the", 
+  phrase scope, S "of the", plural requirement, S "and the", 
   phrase organization, S "of the" +: phrase document, S "what the", 
   phrase document, S "is based on and intended to portray"]
 
@@ -107,24 +108,24 @@ s2_1_intro_p1, s2_1_intro_p2 :: Contents
 s2_1_intro_p1 = Paragraph $ foldlSent [S "The main", phrase purpose, S "of this", 
   phrase document, S "is to predict whether a given", (phrase $ glaSlab ^. term),
   S "is likely to resist a specified" +:+. (phrase $ blast ^. term),
-  S "The goals and", plural thModel, S "used in the", (gLassBR ^. defn),
+  S "The", plural goal, S "and", plural thModel, S "used in the", (gLassBR ^. defn),
   S "code are provided" `sC` S "with an emphasis on explicitly identifying", 
   (plural assumption), S "and unambiguous" +:+. plural definition,
   S "This", phrase document, S "is intended to be used as a", phrase reference,
   S "to provide all", phrase information, S "necessary to understand and",
   S "verify the" +:+. phrase analysis, S "The", (short srs), S "is abstract",
-  S "because the contents say what", phrase problem, 
-  S "is being solved, but not how", S "to solve it"]
+  S "because the", plural content, S "say what", phrase problem, 
+  S "is being solved, but not how to solve it"]
 
 s2_1_intro_p2 = Paragraph $ foldlSent [S "This", phrase document, 
   S "will be used", S "as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
-  phrase software, phrase vav, S "plan. The", phrase design, phrase document,
+  phrase softwareVAV, S "plan. The", phrase designDoc,
   S "will show how the", plural requirement, S "are to be realized, including",
-  S "decisions on the numerical", (plural $ algorithm ^. term), 
-  S "and programming" +:+. phrase environment, S "The", phrase vav, 
-  S "plan will show the steps that will be used to increase confidence in the",
-  phrase softwareDoc, S "and the implementation"]
+  plural decision, S "on the numerical", (plural $ algorithm ^. term), 
+  S "and programming" +:+. phrase environment, S "The", phrase vavPlan, 
+  S "will show the steps that will be used to increase confidence in the",
+  phrase softwareDoc, S "and the", phrase implementation]
 
 s2_2 = SRS.scpOfReq [s2_2_intro] []
 
@@ -132,10 +133,9 @@ s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
   plural requirement, S "includes getting all", phrase input_, 
   (plural $ parameter ^. term), S "related to the", (phrase $ glaSlab ^. term),
   S "and also the", (plural $ parameter ^. term), S "related to" +:+. 
-  (phrase $ blastTy ^. term), S "Given the", 
-  phrase input_ `sC` (gLassBR ^. defn), S "is intended to", S "use the",
-  plural datum, S "and predict whether the", (phrase $ glaSlab ^. term),
-  S "is safe to use or not"]
+  (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (gLassBR ^. defn),
+  S "is intended to use the", plural datum, S "and predict whether the",
+  (phrase $ glaSlab ^. term), S "is safe to use or not"]
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 
@@ -152,12 +152,12 @@ s3 = SRS.stakeholder [s3_intro] [s3_1, s3_2]
 
 s3_intro = Paragraph $ foldlSent [S "This", phrase section_,
   S "describes the" +: titleize' stakeholder, 
-  S "the people who have an interest in", (phrase $ the product_)]
+  S "the people who have an", phrase interest, S "in", (phrase $ the product_)]
 
 s3_1 = SRS.theClient [s3_1_intro] []
 
 s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
-  (gLassBR ^. defn), S "is a company named" +:+.
+  (gLassBR ^. defn), S "is a", phrase company, S "named" +:+.
   S "Entuitive. It is developed by Dr. Manuel Campidelli", 
   (at_start $ the client), S "has the final say on acceptance of the", 
   phrase product_]
@@ -594,7 +594,7 @@ s7_2 = SRS.nonfuncReq [s7_2_intro] []
 s7_2_intro = Paragraph $ foldlSent [
   S "Given the small size, and relative simplicity, of this", 
   phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority +:+.
-  S "Any reasonable implementation will be very quick and use minimal storage", 
+  S "Any reasonable", phrase implementation, S "will be very quick and use minimal storage", 
   S "Rather than", phrase performance `sC` S "the", phrase priority,
   phrase nonfunctional, (short requirement) :+:
   S "s are correctness, verifiability, understandability, reusability,", 

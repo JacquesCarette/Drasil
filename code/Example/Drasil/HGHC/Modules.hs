@@ -8,6 +8,9 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 
 import Data.Drasil.Modules
+import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Computation
 
 self :: NPNC
 self = npnc "HGHC" (pn "HGHC")
@@ -15,40 +18,26 @@ self = npnc "HGHC" (pn "HGHC")
 executable :: NPNC
 executable = npnc' (self ^. id) (tempCompoundPhrase self program) ("HGHC")
 
--- HW Hiding Module
-{--mod_hw :: ModuleChunk
-mod_hw = makeImpModuleNoGen hwHiding
-  (S "The data structure and algorithm used to implement the virtual hardware.")
-  os
-  []
-  []
-  []
-  Nothing
---}
-
-{-- Behaviour Hiding Module
-mod_behav :: ModuleChunk
-mod_behav = makeUnimpModule modBehavHiding
-  (S "The contents of the required behaviors.")
-  Nothing
---}
 -- input param module
 mod_inputp :: ModuleChunk
-mod_inputp = makeRecord modInputParam (S "The format and structure of " :+: --FIXME: Plural?
-             S "the input parameters.") executable htVars [] (Just mod_behav)
+mod_inputp = makeRecord modInputParam 
+             (S "The format and" +:+ (phrase structure) +:+ S "of the"
+              +:+ (phrase input_) +:+. (plural $ parameter ^. term)) --FIXME: Plural?
+             executable
+             htVars
+             []
+             (Just mod_behav)
 
 --input format
 --FIXME: All the NP stuff here needs to be tweaked.
 meth_input :: MethodChunk
-meth_input = makeFileInputMethod (nc "read_input" 
-  (nounPhraseSP "Reads and stores input from file.")) 
-  (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id)) "input"
+meth_input = makeFileInputMethod
+             (nc "read_input" (nounPhraseSP "Reads and stores input from file."))
+             (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id))
+             "input"
 
 mod_inputf :: ModuleChunk
-mod_inputf = makeImpModule modInputFormat (S "The format and structure of " :+:
-             S "the input data.") executable [] [meth_input] [mod_inputp]
-             (Just mod_behav)
-
+mod_inputf = mod_io_fun executable [meth_input][mod_inputp] (plural inDatum) modInputFormat
 
 -- Calc Module
 meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
@@ -65,7 +54,6 @@ mod_calc = mod_calc_fun
   executable
   [meth_htTransCladFuel, meth_htTransCladCool]
   []
-
 
 -- Output Format Module
 meth_output :: MethodChunk

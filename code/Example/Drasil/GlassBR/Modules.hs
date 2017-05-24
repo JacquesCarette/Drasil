@@ -16,10 +16,10 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, m
 
 -- input format module
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase input_ +:+ (plural datum)) modInputFormat
+mod_inputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (phrase input_ +:+ (plural datum)) modInputFormat
 
 mod_inputp :: ModuleChunk
-mod_inputp = mod_io_fun glassBRProg [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
+mod_inputp = mod_io_fun glassBRProg [] [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
 
 mod_inputc :: ModuleChunk
 mod_inputc = mod_inputc_fun glassBRProg
@@ -33,7 +33,7 @@ mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ (plural $ parameter ^
   S "the probability of breakage, and both safety" +:+. plural requirement)
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun glassBRProg [mod_hw, mod_inputp] (phrase output_ +:+ (plural datum)) mod_outputf_desc
+mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (phrase output_ +:+ (plural datum)) mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk
@@ -55,7 +55,7 @@ mod_calc = mod_calc_fun (glassBR_calcDesc)
 
 -- interpolation data module
 mod_interpd :: ModuleChunk
-mod_interpd = mod_io_fun glassBRProg [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
+mod_interpd = mod_io_fun glassBRProg [] [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
 
 mod_interp :: ModuleChunk
 mod_interp = mod_interp_fun glassBRProg [mod_interpd]

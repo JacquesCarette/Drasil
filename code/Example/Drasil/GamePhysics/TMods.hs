@@ -30,7 +30,7 @@ t1descr = foldlSent [S "The net", (phrase $ force ^. term), (P $ force ^. symbol
   (sParen $ Sy $ unit_symb accel), S "of the", (phrase $ rigidBody ^. term) `sC`
   S "where", (P $ mass ^. symbol), (sParen $ Sy $ unit_symb mass),
   S "denotes the", (phrase $ mass ^. term), S "of the", (phrase $ rigidBody ^. term),
-  S "as the constant of proprotionality"]
+  S "as the constant of proportionality"]
 
 -- T2 : Newton's third law of motion --
 

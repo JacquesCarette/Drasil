@@ -535,10 +535,10 @@ s5_intro :: Contents
 s5 = SRS.require [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $ foldlSent 
-  [S "This", (phrase section_), S "provides the", (phrase functional),
-  plural requirement `sC` S "the business",
+  [S "This", (phrase section_), S "provides the", 
+  (plural functionalRequirement) `sC` S "the business",
   S "tasks that the", (phrase software), S "is expected to complete, and the",
-  (phrase nonfunctional), (plural requirement `sC` S "the qualities that the"), 
+  (plural nonfunctionalRequirement) `sC` S "the qualities that the"), 
   (phrase software), S "is expected to exhibit"]
 
 -----------------------------------
@@ -669,7 +669,7 @@ s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
 
 s7_2dlist = Enumeration (Bullet [
   Flat (S "Box2D: http://box2d.org/"),
-  Flat (S "Nape" +:+ (titleize physics) +:+ S "Engine: http://napephys.com/")])
+  Flat (S "Nape Physics Engine: http://napephys.com/")])
 
 s7_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural $ physLib ^. term), S "include:"]
@@ -677,7 +677,7 @@ s7_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource),
 s7_3dlist = Enumeration (Bullet $ map (Flat) [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
-  (S "Newton" +:+ (titleize game) +:+ S "Dynamics: http://newtondynamics.com/")])
+  (S "Newton Game Dynamics: http://newtondynamics.com/")])
 
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --

@@ -19,7 +19,7 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Utils (mkEnumAbbrevList)
 
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Quantities.Math (gradient, normalVect, surface)
+import Data.Drasil.Quantities.Math (gradient, normalVect, surface, uNormalVect)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 

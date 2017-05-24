@@ -60,7 +60,7 @@ swhs_pcm = dcc "swhs_pcm" (nounPhraseSP
   "solar water heating systems incorporating PCM")
   "Solar water heating systems incorporating phase change material"
 
-tank = dcc "tank" (cn' "tank") "solar water heating tank"
+tank = dcc "tank" (cn' "tank") "Solar water heating tank"
 
 tank_pcm = dcc "tank_pcm" 
   (nounPhraseSP "solar water heating tank incorporating PCM")

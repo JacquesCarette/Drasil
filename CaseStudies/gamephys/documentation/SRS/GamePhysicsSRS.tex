@@ -1298,7 +1298,7 @@ Ref.\ By & GS\ref{G_linear}, R\ref{R_Rigid}, R\ref{R_Force} \\
   \hline
   Input & $m_k, \mathbf{p}_k(t_0), \mathbf{v}_k(t_0), \boldsymbol{\phi}_k(t_0), \boldsymbol{\omega}_k(t_0), C_\text{R}$\\
   \hline
-  Output & $\textbf{v}_k(t), \textbf{p}_k(t), \textbf{p}_2(t), \boldsymbol{\phi}_k(t), \boldsymbol{\omega}_k(t)$ such that momentum is conserved: \\
+  Output & $\textbf{v}_k(t), \textbf{p}_k(t), \boldsymbol{\phi}_k(t), \boldsymbol{\omega}_k(t)$ such that momentum is conserved: \\
   & $\sum_{k=0}^{n} m_k\mathbf{v}_{\text{i}_k} = \sum_{k=0}^{n} m_k\mathbf{v}_{\text{f}_k}$ (GD\ref{GD_COM}) \\
   & and that for any colliding pair of rigid bodies $A$ and $B$, the following equations are satisfied: \\
   & $\mathbf{v}_\mathrm{A}(t_c) = \mathbf{v}_\mathrm{A}(t) + \frac{j}{m_\mathrm{A}} \mathbf{n}$ \\
@@ -1310,7 +1310,7 @@ Ref.\ By & GS\ref{G_linear}, R\ref{R_Rigid}, R\ref{R_Force} \\
   & $m_k$ is the mass of the $k$-th rigid body (\si{\kilogram}). \\
   & $\mathbf{I}_k$ is the moment of inertia of the $k$-th rigid body (\si{\kilogram\metre\tothe{2}}). \\
   & $t$ is a point in time, $t_0$ denotes the initial time, and $t_c$ denotes the time at collision (\si{\second}). \\
-  & $\mathbf{p}_i(t)$ is the $i$-th body's position (specifically, the position of its center of mass, $\mathbf{p}_\mathrm{CM}(t)$ (DD\ref{DD_CM})) at time $t$ (\si{\metre}). \\
+  & $\mathbf{p}_k(t)$ is the $k$-th body's position (specifically, the position of its center of mass, $\mathbf{p}_\mathrm{CM}(t)$ (DD\ref{DD_CM})) at time $t$ (\si{\metre}). \\
   & $\mathbf{v}_k(t)$ is the $k$-th body's velocity at time $t$ (\si{\metre\per\second}). \\
   & $\boldsymbol{\phi}_k(t)$ is the $k$-th body's orientation at time $t$ (\si{\radian}). \\
   & $\boldsymbol{\omega}_k(t)$ is the $k$-th body's angular velocity at time $t$ (\si{\radian\per\second}). \\

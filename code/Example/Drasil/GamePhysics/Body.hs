@@ -538,7 +538,7 @@ s5_intro = Paragraph $ foldlSent
   [S "This", (phrase section_), S "provides the", 
   (plural functionalRequirement) `sC` S "the business",
   S "tasks that the", (phrase software), S "is expected to complete, and the",
-  (plural nonfunctionalRequirement) `sC` S "the qualities that the"), 
+  (plural nonfunctionalRequirement) `sC` S "the qualities that the", 
   (phrase software), S "is expected to exhibit"]
 
 -----------------------------------

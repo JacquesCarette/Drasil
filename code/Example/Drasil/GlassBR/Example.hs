@@ -328,9 +328,8 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 
 pbdescr :: Sentence
 pbdescr =
-  (P $ prob_br ^. symbol) +:+ S "is the calculated" +:+.
-  (phrase $ prob_br ^. term) +:+ 
-  (P $ risk_fun ^. symbol) +:+ S "is the" +:+. (phrase $ risk ^. term)
+  foldlSent [(P $ prob_br ^. symbol), S "is the calculated" +:+. (phrase $ prob_br ^. term),
+  (P $ risk_fun ^. symbol), S "is the", (phrase $ risk ^. term)]
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
@@ -369,7 +368,7 @@ dedescr =
   S "=", (P $ char_weight ^. symbol) +:+. S "* TNT", (P $ char_weight ^. symbol),
   S "is the" +:+. (phrase $ char_weight ^. term), (P $ tNT ^. symbol), S "is the" +:+.
   (phrase $ tNT ^. term), (P $ sd ^.symbol), S "is the", (phrase $ sd ^. term),
-  S "where", (P $ sd ^. symbol), S "= ."]
+  S "where", (P $ sd ^. symbol), S "= "]
   --equation in sentence
 
 {-Data Definitions-}
@@ -431,8 +430,7 @@ glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: QDefinition
 glaTyFac = fromEqn' (glassTypeFac ^. id) (nounPhraseSP $ 
-  "function that maps from " ++
-  "the glass type (g) to a real " ++
+  "function that maps from " ++ "the glass type (g) to a real " ++
   "number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|" ++ 
   "g = HS => 2.0). AN is annealed glass. " ++ 
   "FT is fully tempered glass. HS is heat strengthened glass.") (Atomic "GTF") 

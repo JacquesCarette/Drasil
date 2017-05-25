@@ -425,6 +425,7 @@ s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map Definition (map Theory tModels)
 
 s6_2_3 = SRS.inModel (s6_2_3_IMods) []
+--s6_2_3 = inModelF s6_1 s6_2_4 s6_2_2 (no General Definitions section?)
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)

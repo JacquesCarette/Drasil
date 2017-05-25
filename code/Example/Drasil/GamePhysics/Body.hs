@@ -569,7 +569,7 @@ s5_1_req3 = foldlSent [S "Input the", (phrase $ surface ^. term),
   S "or", (phrase $ elasticity ^. term)]
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
-  S "satisfy the required", plural physicalConstraint]
+  S "satisfy the required", plural physicalConstraint, S "from", (makeRef s4_2_6_table1)]
 
 s5_1_req5 = foldlSent 
   [S "Determine the", (plural $ position ^. term), S "and", (plural $ vel ^. term), 

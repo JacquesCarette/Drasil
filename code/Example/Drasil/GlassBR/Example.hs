@@ -7,6 +7,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Documentation
 import Control.Lens((^.))
 import Prelude hiding (log, id)
+import Data.Drasil.Utils (foldlSent)
 
 --FIXME: There are three separate non-factored loads!
 -- Two are (at least) linked, but the third is completely separate!
@@ -28,9 +29,9 @@ mod_elas, sd :: UnitalChunk
 mod_elas    = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE kilopascal
 sd          = makeUCWDS "sd" (nounPhraseSP "stand off distance")
-  (S "The distance from the glazing surface to the" +:+
-  S "centroid of a hemispherical high explosive charge. It is represented by"
-  +:+ S "the coordinates (SDx, SDy, SDz).")
+  (foldlSent [S "The distance from the glazing surface to the",
+  S "centroid of a hemispherical high explosive charge. It is represented by", 
+  S "the coordinates (SDx, SDy, SDz)"])
   (Atomic "SD") metre
 
 {--}
@@ -142,15 +143,12 @@ acronyms = [assumption,annealedGlass,aspectR, dataDefn,fullyTGlass,
   goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
   lGlass,lResistance,lShareFac,notApp,nonFactorL, physSyst,requirement,
   srs,thModel,eqTNT]
-  
-gLassBR :: ConceptChunk
 
 annealedGlass, aspectR, fullyTGlass,glassTypeFac,heatSGlass,
   iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp, nonFactorL,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
-gLassBR       = dcc "gLassBR"             (pn "GlassBR")                           "GlassBR" --lowercase?
 annealedGlass = commonINP "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
 aspectR       = commonINP' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
 fullyTGlass   = commonINP "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
@@ -179,7 +177,7 @@ terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad,
 aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr, 
   ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, 
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,
-  notSafe, bomb, explosion :: ConceptChunk
+  notSafe, bomb, explosion, gLassBR :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 aR            = dcc "aR" (aspectR ^. term)
@@ -210,11 +208,11 @@ hs            = dcc "hs" (heatSGlass ^. term)
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6].")
 gtf           = dccWDS "gtf" (glassTypeFac ^. term) 
-  (S "A multiplying factor for adjusting the" +:+ (getAcc lResistance) +:+
-  S "of different glass type, that is," +:+ (getAcc annealedGlass) :+: 
-  S "," +:+ (getAcc heatSGlass) `sC` S "or" +:+ (getAcc fullyTGlass) +:+ 
-  S "in monolithic glass," +:+ (getAcc lGlass) +:+ S "(Laminated Glass)," +:+
-  S "or" +:+ (getAcc iGlass) +:+. S "(Insulating Glass) constructions")
+  (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
+  S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
+  (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass" `sC`
+  (getAcc lGlass), S "(Laminated Glass)" `sC` S "or", (getAcc iGlass), 
+  S "(Insulating Glass) constructions"])
 lateral       = dcc "lateral" (nounPhraseSP "lateral") "Perpendicular to the glass surface."
 load          = dcc "load" (nounPhraseSP "load") "A uniformly distributed lateral pressure."
 specDeLoad    = dcc "specDeLoad" (nounPhraseSP "specified design load")
@@ -227,18 +225,18 @@ lr            = dcc "lr" (lResistance ^. term)
 ldl           = dcc "ldl" (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nfl           = dccWDS "nfl" (nfl ^. term)
-  (S "Three second duration uniform load associated with a probability of" +:+
-    S "breakage less than or equal to 8" +:+ (plural $ lite ^. term) +:+ S "per 1000 for monolithic" +:+
-    (getAcc annealedGlass) +:+. S "glass")
+  (foldlSent [S "Three second duration uniform load associated with a probability of",
+    S "breakage less than or equal to 8", (plural $ lite ^. term), S "per 1000 for monolithic",
+    (getAcc annealedGlass), S "glass"])
 glassWL       = dcc "glassWL" (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
 sdl           = dcc "sdl" (nounPhraseSP "short duration load")
   "Any load lasting 3s or less."
 lsf           = dccWDS "lsf" (lShareFac ^. term)
-  (S "A multiplying factor derived from the load sharing between the double" +:+
-  S "glazing, of equal or different thickness's and types (including the" +:+
-  S "layered behaviour of" +:+ (getAcc lGlass) +:+ S "under long duration" +:+
-  S "loads), in a sealed" +:+ (getAcc iGlass) +:+. S "unit")
+  (foldlSent [S "A multiplying factor derived from the load sharing between the double",
+  S "glazing, of equal or different thickness's and types (including the",
+  S "layered behaviour of", (getAcc lGlass), S "under long duration",
+  S "loads), in a sealed", (getAcc iGlass), S "unit"])
 pb            = dcc "pb" (prob_br ^. term)
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
@@ -272,6 +270,7 @@ notSafe       = dcc "notSafe" (nounPhraseSP "not safe")
 bomb          = dcc "bomb" (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion" (nounPhraseSP "explosion") "a destructive shattering of something"
+gLassBR       = dcc "gLassBR" (pn "GlassBR") "GlassBR" --lowercase?
 
 {-Theoretical models-}
 
@@ -288,15 +287,13 @@ safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
 --relation within relation
 t1descr :: Sentence
 t1descr = 
-  S "If" +:+ (P $ is_safe1 ^. symbol) +:+ S "= True, the glass is" +:+. 
-  S "considered safe" +:+ (P $ is_safe1 ^.symbol) +:+ S "and" +:+ 
-  (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
-  (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either" +:+.
-  S "both True or both False" +:+ (P $ prob_br ^. symbol) +:+ 
-  S "is the" +:+ (phrase $ prob_br ^. term) `sC`
-  S "as calculated in" +:+. (makeRef (Definition (Theory probOfBr))) +:+ 
-  (P $ pb_tol ^. symbol) +:+ S "is the" +:+ 
-  (phrase $ pb_tol ^. term) +:+. S " entered by the user"
+  foldlSent [S "If", (P $ is_safe1 ^. symbol), S "= True, the glass is" +:+. 
+  S "considered safe", (P $ is_safe1 ^.symbol), S "and", (P $ is_safe2 ^. symbol),
+  S "(from", (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either" +:+.
+  S "both True or both False", (P $ prob_br ^. symbol), S "is the",
+  (phrase $ prob_br ^. term) `sC` S "as calculated in" +:+.
+  (makeRef (Definition (Theory probOfBr))), (P $ pb_tol ^. symbol), S "is the",
+  (phrase $ pb_tol ^. term), S "entered by the user"]
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
@@ -308,16 +305,14 @@ safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 --relation within relation
 t2descr :: Sentence
 t2descr = 
-  S "If" +:+ (P $ is_safe2 ^. symbol) +:+ S "= True, the glass is" +:+.
-  S "considered safe" +:+ (P $ is_safe1 ^. symbol) +:+ S "(from" +:+
-  (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
-  (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False" +:+   
-  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) +:+ 
-  S "(also called capacity, as defined in" +:+. 
-  (makeRef (Definition (Theory calOfCap))) +:+ 
-  (P $ demand ^. symbol) +:+ S "(also referred as the" +:+
-  (titleize $ demandq ^. term) :+: S ") is the" +:+ (demandq ^. defn) `sC`
-  S "as defined in" +:+. (makeRef (Definition (Theory calOfDe)))
+  foldlSent [S "If", (P $ is_safe2 ^. symbol), S "= True, the glass is" +:+.
+  S "considered safe", (P $ is_safe1 ^. symbol), S "(from", 
+  (makeRef (Definition (Theory t1SafetyReq))), S "and", (P $ is_safe2 ^. symbol)
+  +:+. S "are either both True or both False", (short lResistance), 
+  S "is the", (phrase $ lResistance ^. term), 
+  S "(also called capacity, as defined in" +:+. (makeRef (Definition (Theory calOfCap))), 
+  (P $ demand ^. symbol), S "(also referred as the", (titleize $ demandq ^. term) :+:
+  S ") is the", (demandq ^. defn) `sC` S "as defined in", (makeRef (Definition (Theory calOfDe)))]
 
 {-Instance Models-}
 
@@ -346,15 +341,16 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) `sC`
-  S "which" +:+. S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+
-  S "is the" +:+. (phrase $ nonFL ^. term) +:+ (short glassTypeFac) +:+
-  S "is the" +:+. (phrase $ glassTypeFac ^. term) +:+ (short lShareFac) +:+
-  S "is the" +:+. (phrase $ lShareFac ^. term) +:+ S "Follows" +:+ (short assumption) :+: S "2 and" +:+
-  (short assumption) :+: S "1 (" :+: Quote (S "In development of this procedure, it was assumed that" +:+
+  foldlSent [(short lResistance), S "is the", (phrase $ lResistance ^. term) `sC`
+  S "which" +:+. S "is also called capacity", (P $ nonFL ^. symbol),
+  S "is the" +:+. (phrase $ nonFL ^. term), (short glassTypeFac),
+  S "is the" +:+. (phrase $ glassTypeFac ^. term), (short lShareFac),
+  S "is the" +:+. (phrase $ lShareFac ^. term), S "Follows" +:+ (short assumption) :+: S "2 and",
+  (short assumption) :+: S "1 (" :+:
+  Quote (S "In development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip in the" +:+
   S "plane of the glass. This boundary condition has been shown to be typical" +:+
-  S "of many glass installations)") +:+. S "from [4 (pg. 53)]"
+  S "of many glass installations)") +:+. S "from [4 (pg. 53)]"]
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
@@ -365,17 +361,15 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 
 dedescr :: Sentence
 dedescr = 
-  (P $ demand ^. symbol) +:+ S "or" +:+ (phrase $ demandq ^. term) `sC` S "is the" +:+
-  (demandq ^. defn) +:+ S "obtained from Figure 2 by interpolation using" --use MakeRef? Issue #216
-  +:+ (phrase $ sd ^. term) +:+ S "(" :+: (P $ sd ^. symbol) 
-  :+: S ") and" +:+ (P $ eqTNTWeight ^. symbol) +:+. S "as parameters" +:+ 
-  (P $ eqTNTWeight ^. symbol) +:+ S "is defined as" +:+
-  (P $ eqTNTWeight ^. symbol) +:+ S "=" +:+ (P $ char_weight ^. symbol) +:+.
-  S "* TNT" +:+ (P $ char_weight ^. symbol) +:+ S "is the" +:+.
-  (phrase $ char_weight ^. term) +:+ 
-  (P $ tNT ^. symbol) +:+ S "is the" +:+. (phrase $ tNT ^. term) +:+ 
-  (P $ sd ^.symbol) +:+ S "is the" +:+ (phrase $ sd ^. term)
-  +:+ S "where" +:+ (P $ sd ^. symbol) +:+ S "= ." 
+  foldlSent [(P $ demand ^. symbol), S "or", (phrase $ demandq ^. term) `sC`
+  S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
+  (phrase $ sd ^. term), S "(" :+: (P $ sd ^. symbol) :+: S ") and", 
+  (P $ eqTNTWeight ^. symbol) +:+. S "as parameters", 
+  (P $ eqTNTWeight ^. symbol), S "is defined as", (P $ eqTNTWeight ^. symbol),
+  S "=", (P $ char_weight ^. symbol) +:+. S "* TNT", (P $ char_weight ^. symbol),
+  S "is the" +:+. (phrase $ char_weight ^. term), (P $ tNT ^. symbol), S "is the" +:+.
+  (phrase $ tNT ^. term), (P $ sd ^.symbol), S "is the", (phrase $ sd ^. term),
+  S "where", (P $ sd ^. symbol), S "= ."]
   --equation in sentence
 
 {-Data Definitions-}

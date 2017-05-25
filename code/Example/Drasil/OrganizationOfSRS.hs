@@ -1,5 +1,6 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysIntro, 
-                                 specSysDecIntro, datConF, datConPar) where
+                                 specSysDecIntro, datConF, datConPar,
+                                 figureLabel, showingCxnBw) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -25,6 +26,14 @@ rc (x:y:[]) = S "and the" +:+ (plural $ x ^. term) +:+ S "to the" +:+.
   (plural $ y ^. term)
 rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
+
+figureLabel :: [Char] -> NPNC -> Sentence -> [Char]-> Contents
+figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
+  +:+ (showingCxnBw (traceyMG) (contents))) filePath
+
+showingCxnBw :: NPNC -> Sentence -> Sentence
+showingCxnBw traceyMG contents = titleize traceyMG +:+ S "Showing the" +:+ titleize' connection +:+
+  S "Between" +:+ contents
 
 -- | Organization of the document section builder. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance
@@ -63,14 +72,14 @@ genSysIntro = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general
   S "and the" +:+. (plural systemConstraint)
   
 specSysDecIntro ::  Bool -> Sentence -> Contents
-specSysDecIntro l_end word = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
+specSysDecIntro l_end word_ = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
             (phrase problemDescription) :+: S ", which gives a high-level view of the" +:+
             (phrase problem) +:+ S "to be solved. This is followed by the" +:+
             (plural solutionCharSpec) `sC` S "which presents the" +:+
             (plural assumption) `sC` (plural theory) `sC` eND l_end
             where eND (True) = (plural definition) +:+ S "and finally the" +:+
                                (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+:
-                               S ") that models the" +:+. word  --FIXME: We need something to handle the use of nouns as verbs
+                               S ") that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+ (plural definition)
                   
 -- wrapper for datConPar

@@ -12,7 +12,7 @@ module Data.Drasil.Utils
   , itemRefToSent
   ) where
 
-import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC, DType, sParen, makeRef, Contents(Definition))
+import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC, sParen)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator

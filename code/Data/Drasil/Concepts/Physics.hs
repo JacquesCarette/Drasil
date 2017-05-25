@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel 
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint 
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -16,7 +16,8 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
-  strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel :: ConceptChunk
+  strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
+  joint :: ConceptChunk
 
 rigidBody  = dcc "rigidBody" 
   (cnIES "rigid body") "A solid body in which deformation is neglected."
@@ -43,7 +44,8 @@ cartesian  = dcc "cartesian" (pn' "Cartesian coordinate system")
 rightHand  = dcc "rightHand" (cn' "right-handed coordinate system")
   "A coordinate system where the positive z-axis comes out of the screen."
   
-  
+joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
+  "bodies which allows movement with one or more degrees of freedom")
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")

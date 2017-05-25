@@ -334,11 +334,13 @@ s3_3_contents = Paragraph (S "There are no" +:+. plural systemConstraint)
 -- system constraints in other projects so it can't be abstracted out as is...
 
 s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
-
+ 
+-- using plural solutionCharSpec is a hack in order to pluralize the middle word,
+-- based on compoundNPNC''' in NamedIdea.hs
 s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
   S "the" +:+ phrase problem +:+ phrase description :+: S ", which gives a" +:+
   S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This" +:+
-  S "is followed by the" +:+ phrase solutionCharSpec :+: S ", which presents the" +:+
+  S "is followed by the" +:+ plural solutionCharSpec :+: S ", which presents the" +:+
   (plural assumption) `sC` 
   plural thModel `sC`
   (plural genDefn) `sC` 

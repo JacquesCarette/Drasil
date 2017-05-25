@@ -93,6 +93,8 @@ compoundNPNC'' f1 f2 t1 t2 = NPNC
   (t1 ^. id ++ t2 ^. id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
   (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
+-- hack for Solution Characteristics Specification, calling upon plural will pluralize
+-- Characteristics as it is the end of the first term (solutionCharacteristic)
 compoundNPNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
 compoundNPNC''' t1 t2 = NPNC 
   (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 

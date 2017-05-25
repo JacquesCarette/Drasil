@@ -19,7 +19,7 @@ physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description
 requirement = commonINP "requirement" (cn' "requirement")                         "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"
 mg          = commonINP "mg"          (compoundPhrase module_ guide)              "MG" 
-srs         = commonINP "srs"         (compoundPhrase''' softwareReq specification)  "SRS"
+srs         = commonINP "srs"       (compoundPhrase''' softwareReq specification) "SRS"
 vav         = commonINP "vav"         (cn' "verification and validation")         "VAV"
 
 ---------------------------------------------------------------------
@@ -174,7 +174,7 @@ userCharacteristic           = compoundNPNC user characteristic
 datumConstraint              = compoundNPNC' datum constraint
 functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
-solutionCharSpec             = compoundNPNC solutionCharacteristic specification
+solutionCharSpec             = compoundNPNC''' solutionCharacteristic specification
 offShelfSolution             = compoundNPNC offShelf solution
 physicalSim                  = compoundNPNC physical simulation
 productUC                    = compoundNPNC product_ useCase
@@ -184,5 +184,5 @@ softwareReq                  = compoundNPNC' software requirement_
 softwareSys                  = compoundNPNC software system
 softwareVerif                = compoundNPNC software verification
 softwareVAV                  = compoundNPNC software vav
-solutionCharacteristic       = compoundNPNC' solution characteristic
+solutionCharacteristic       = compoundNPNC solution characteristic
 vavPlan                      = compoundNPNC vav plan

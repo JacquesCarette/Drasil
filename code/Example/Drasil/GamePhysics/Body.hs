@@ -699,7 +699,7 @@ s7_3dlist = Enumeration (Bullet $ map (Flat) [
 -----------------------------------------------------
 
 s8 :: Section
-s8 = SRS.traceyMandG [s8_intro1,s8_table1,s8_table2,s8_table3] []
+s8 = SRS.traceyMandG [s8_intro1, s8_table1,s8_table2,s8_table3] []
 
 s8_intro1 :: Contents
 s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of", 
@@ -717,13 +717,15 @@ s8_intro1 = Paragraph $ foldlSent [S "The", (phrase purpose), S "of",
   S "shows the dependencies of the", (plural thModel) `sC` (plural genDefn) `sC` 
   (plural dataDefn) `sC` S "and", (plural inModel), S "on each other"]
 
-
-s8_row_t1, s8_colString_t1 :: [String]
-s8_row_t1 = ["IM1", "IM2", "IM3", "R1", "R4", "R7", "Data Constraints"]
-s8_colString_t1 = ["GS1", "GS2", "GS3", "GS4", "R1", "R2", "R3", "R4", "R5",
-  "R6", "R7", "R8"]
+-- FIXME replace emptyS with DType reference to item
+s8_row_t1, s8_colString_t1 :: [(String, Sentence)]
+s8_row_t1 = [("IM1", EmptyS), ("IM2", EmptyS), ("IM3", EmptyS), ("R1", EmptyS),
+  ("R4", EmptyS), ("R7", EmptyS), ("Data Constraints", EmptyS)]
+s8_colString_t1 = [("GS1", EmptyS), ("GS2", EmptyS), ("GS3", EmptyS), 
+  ("GS4", EmptyS), ("R1", EmptyS), ("R2", EmptyS), ("R3", EmptyS), ("R4", EmptyS),
+  ("R5", EmptyS), ("R6", EmptyS), ("R7", EmptyS), ("R8", EmptyS)]
 s8_colName_t1 :: [Sentence]
-s8_colName_t1 = map (S) s8_colString_t1
+s8_colName_t1 = map (hackfixme) s8_colString_t1
 
 gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1, r5_t1, r6_t1, r7_t1, 
   r8_t1 :: [String]
@@ -745,23 +747,28 @@ s8_columns_t1 = [gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1,
   r5_t1, r6_t1, r7_t1, r8_t1]
 
 s8_table1 :: Contents
-s8_table1 = Table (EmptyS:(map (S) s8_row_t1))
+s8_table1 = Table (EmptyS:(map (hackfixme) s8_row_t1))
   (makeTMatrix s8_colName_t1 s8_columns_t1 s8_row_t1)
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
   sParen (makeRef s5) `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1_2) +:+
   S "and Other" +:+ titleize' item) True
 
-s8_row_t2 :: [String]
-s8_row_t2 = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-s8_colString_t2 :: [String]
-s8_colString_t2 = ["T1", "T2", "T3", "T4", "T5", "GD1", "GD2", 
-  "GD3", "GD4", "GD5", "GD6", "GD7", "DD1", "DD2", "DD3",
-  "DD4", "DD5", "DD6", "DD7", "DD8", "IM1", "IM2", "IM3", 
-  "LC1", "LC2", "LC3", "LC4"]
+-- FIXME EmptyS should be replaced with DType reference to that item
+s8_row_t2 :: [(String, Sentence)]
+s8_row_t2 = [("A1", EmptyS), ("A2", EmptyS), ("A3", EmptyS), ("A4", EmptyS),
+  ("A5", EmptyS), ("A6", EmptyS), ("A7", EmptyS)]
+s8_colString_t2 :: [(String, Sentence)]
+s8_colString_t2 = [("T1", EmptyS), ("T2", EmptyS), ("T3", EmptyS), ("T4", EmptyS), 
+  ("T5", EmptyS), ("GD1", EmptyS), ("GD2", EmptyS),  ("GD3", EmptyS), 
+  ("GD4", EmptyS), ("GD5", EmptyS), ("GD6", EmptyS), ("GD7", EmptyS), 
+  ("DD1", EmptyS), ("DD2", EmptyS), ("DD3", EmptyS), ("DD4", EmptyS), 
+  ("DD5", EmptyS), ("DD6", EmptyS), ("DD7", EmptyS), ("DD8", EmptyS), 
+  ("IM1", EmptyS), ("IM2", EmptyS), ("IM3", EmptyS), ("LC1", EmptyS), 
+  ("LC2", EmptyS), ("LC3", EmptyS), ("LC4", EmptyS)]
 
 s8_colName_t2 :: [Sentence]
-s8_colName_t2 = map (S) s8_colString_t2
+s8_colName_t2 = map (hackfixme) s8_colString_t2
 
 s8_columns_t2 :: [[String]]
 s8_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
@@ -800,20 +807,27 @@ lC3 = ["A6"]
 lC4 = ["A7"]
 
 s8_table2 :: Contents
-s8_table2 = Table (EmptyS:(map (S) s8_row_t2))
+s8_table2 = Table (EmptyS:(map (hackfixme) s8_row_t2))
   (makeTMatrix s8_colName_t2 s8_columns_t2 s8_row_t2)
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ sParen 
   (makeRef s4_2_1) +:+ S "and Other" +:+ titleize' item) True
 
-s8_row_t3, s8_colString_t3 :: [String]
-s8_row_t3 = ["T1","T2","T3","T4","T5","GD1","GD2","GD3","GD4","GD5","GD6","GD7",
-  "DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "IM1", "IM2", 
-  "IM3"]
+s8_row_t3, s8_colString_t3 :: [(String, Sentence)]
+s8_row_t3 = [("T1", EmptyS), ("T2", EmptyS), ("T3", EmptyS), ("T4", EmptyS), 
+  ("T5", EmptyS), ("GD1", EmptyS), ("GD2", EmptyS), ("GD3", EmptyS), 
+  ("GD4", EmptyS), ("GD5", EmptyS), ("GD6", EmptyS), ("GD7", EmptyS),
+  ("DD1", EmptyS), ("DD2", EmptyS), ("DD3", EmptyS), ("DD4", EmptyS), 
+  ("DD5", EmptyS), ("DD6", EmptyS), ("DD7", EmptyS), ("DD8", EmptyS), 
+  ("IM1", EmptyS), ("IM2", EmptyS), ("IM3", EmptyS)] 
+  -- ^^^^ hack until refs are added in the place of EmptyS
+
+hackfixme :: (String, t) -> Sentence
+hackfixme (x,_) = S x
 
 s8_colString_t3 = s8_row_t3
 s8_colName_t3 :: [Sentence]
-s8_colName_t3 = map (S) s8_colString_t3
+s8_colName_t3 = map (hackfixme) s8_colString_t3
 
 s8_columns_t3 :: [[String]]
 s8_columns_t3 = [t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, 
@@ -848,8 +862,9 @@ iM1_t3 = ["T1", "GD3", "DD1","DD2","DD3","DD4"]
 iM2_t3 = ["T5", "DD1", "DD2", "DD3", "DD4"]
 iM3_t3 = ["GD1", "GD2", "GD6", "GD7", "DD1", "DD8"]
 
+
 s8_table3 :: Contents
-s8_table3 = Table (EmptyS:(map (S) s8_row_t3))
+s8_table3 = Table (EmptyS:(map (hackfixme) s8_row_t3))
   (makeTMatrix s8_colName_t3 s8_columns_t3 s8_row_t3)
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' item +:+

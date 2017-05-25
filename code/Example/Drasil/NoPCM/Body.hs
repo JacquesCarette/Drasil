@@ -71,7 +71,7 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
             "SystemContextFigure.png"
 
            
-s4 = specSysDesF True (phrase $ sWHT ^. term) [s4_1, s4_2]
+s4 = specSysDesF (S "words") [s4_1, s4_2]
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 

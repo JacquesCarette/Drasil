@@ -1,11 +1,11 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, datConF, datConPar,
-                                 figureLabel, showingCxnBw, inModelF) where
+                                 specSysDesF, datConF, datConPar, reqF,
+                                 figureLabel, showingCxnBw, inModelF,
+                                 traceMGF) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Utils (foldlsC)
 import qualified Drasil.SRS as SRS
 
@@ -70,28 +70,31 @@ genSysF = SRS.genSysDec [genSysIntro]
 
 --generalized general system description introduction
 genSysIntro :: Contents
-genSysIntro = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+
-  (phrase information) +:+ S "about the" +:+ (phrase system) `sC` S "identifies" +:+
-  S "the interfaces between the" +:+ (phrase system) +:+ S "and its" +:+
-  (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+ 
-  S "and the" +:+. (plural systemConstraint)
+genSysIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides general" +:+
+  phrase information +:+ S "about the" +:+ phrase system `sC` S "identifies" +:+
+  S "the interfaces between the" +:+ phrase system +:+ S "and its" +:+
+  phrase environment `sC` S "and describes the" +:+ plural userCharacteristic +:+ 
+  S "and the" +:+. plural systemConstraint
 
 -- wrapper for specSysDesIntro
-specSysDesF :: Bool -> Sentence -> [Section] -> Section
-specSysDesF = \l_eND k_word subSec -> SRS.specSysDec [specSysDesIntro l_eND k_word] subSec
+specSysDesF :: Sentence -> [Section] -> Section
+specSysDesF = \l_eND subSec -> SRS.specSysDec [specSysDesIntro l_eND] subSec
 
 -- generalized specific system description introduction: boolean identifies whether the user wants the extended
--- or shortened ending (True) -> identifies key word pertaining to topic
-specSysDesIntro ::  Bool -> Sentence -> Contents
-specSysDesIntro l_end word_ = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
-            (phrase problemDescription) :+: S ", which gives a high-level view of the" +:+
-            (phrase problem) +:+ S "to be solved. This is followed by the" +:+
-            (plural solutionCharSpec) `sC` S "which presents the" +:+
-            (plural assumption) `sC` (plural theory) `sC` eND l_end
-            where eND (True) = (plural definition) +:+ S "and finally the" +:+
-                               (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+:
-                               S ") that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
-                  eND (False) =  S "and" +:+ (plural definition)
+-- or shortened ending (True) -> identifies key word pertaining to topic or Nothing
+specSysDesIntro ::  Sentence -> Contents
+specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first presents the" +:+
+            phrase problemDescription `sC` S "which gives a high-level view of the" +:+
+            phrase problem +:+ S "to be solved. This is followed by the" +:+
+            plural solutionCharSpec `sC` S "which presents the" +:+
+            plural assumption `sC` plural theory `sC` l_end
+
+--Up to change, decide on what ending sentence structure we would like to employ
+--Using Verbatim for now.
+{-            where eND (True) = plural definition +:+ S "and finally the" +:+
+                               (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
+                               S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
+                  eND (False) =  S "and" +:+. plural definition-}
  
 -- wrapper for inModelIntro
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
@@ -136,3 +139,38 @@ datConPar tableRef middleSent endingSent trailingSent = ( Paragraph $
                      S "if one were performing an" +:+ phrase uncertainty +:+
                      S "quantification exercise."
                      
+-- wrapper for reqIntro
+reqF :: [Section] -> Section
+reqF = SRS.require [reqIntro]
+
+--generalized requirements introduction
+reqIntro :: Contents
+reqIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides the" +:+
+  phrase functional +:+ plural requirement `sC` S "the business tasks" +:+
+  S "that the" +:+ phrase software +:+ S "is expected to complete, and the" +:+
+  phrase nonfunctional +:+ plural requirement `sC` 
+  S "the qualities that the" +:+ phrase software +:+.
+  S "is expected to exhibit"
+
+-- wrapper for traceMGIntro
+traceMGF :: Section -> Section -> Section -> [Section] -> Section
+traceMGF = \ rf1 rf2 rf3 -> SRS.traceyMandG [traceMGIntro rf1 rf2 rf3]
+
+-- generalized traceability matrix and graph introduction:
+traceMGIntro :: Section -> Section -> Section -> Contents
+traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
+  plural traceyMatrix +:+ S "is to provide easy" +:+
+  plural reference +:+ S "on what has to be additionally modified if a" +:+
+  S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
+  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
+  phrase column +:+ S "of that" +:+ phrase component +:+ S "that are" +:+
+  S "marked with an" +:+ Quote (S "X") +:+. S "should be modified as well" +:+
+  (makeRef r1) +:+ S "shows the dependencies of" +:+ plural thModel `sC`
+  plural genDefn `sC` plural dataDefn `sC`
+  S "and" +:+ plural inModel +:+. S "with each other" +:+ (makeRef r2) +:+
+  S "shows the dependencies of" +:+ plural inModel `sC`
+  plural requirement `sC` S "and" +:+ plural datum +:+ plural constraint +:+.
+  S "on each other" +:+ (makeRef r3) +:+ S "shows the dependencies of" +:+ 
+  plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
+  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
+  titleize' assumption

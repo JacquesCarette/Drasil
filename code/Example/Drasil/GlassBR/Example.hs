@@ -56,9 +56,9 @@ dim_min     = unitary' "dim_min"
   (sub lD (Atomic "min")) millimetre
 act_thick   = unitary' "act_thick" (nounPhraseSP "actual thickness")
   lH millimetre
-sflawParamK = unitary' "sflawParamK" (nounPhraseSP "surface flaw parameter")
+sflawParamK = unitary' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU
-sflawParamM = unitary' "sflawParamM" (nounPhraseSP "surface flaw parameter")
+sflawParamM = unitary' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
   lM sFlawPU
 demand      = unitary' "demand" (nounPhraseSP "applied load (demand)")
   lQ kilopascal
@@ -128,8 +128,8 @@ dimlessLoad = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad" (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
 tNT         = makeVC "tNT" (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
-lRe         = makeVC "lRe" (nounPhraseSP "load resistance") (Atomic "LR")
-loadSF      = makeVC "loadSF" (nounPhraseSP "load share factor") (Atomic "LSF")
+lRe         = makeVC "lRe" (lResistance ^. term) (Atomic "LR")
+loadSF      = makeVC "loadSF" (lShareFac ^. term) (Atomic "LSF")
 ar_min      = makeVC "ar_min" (nounPhraseSP "minimum aspect ratio")
   (sub (Atomic "AR") (Atomic "min")) --find a way to call aspectR instead of using (Atomic "AR") again
 gTF         = makeVC "gTF" (glassTypeFac ^. term) (Atomic "GTF")
@@ -417,7 +417,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. id) (nounPhraseSP "load duration factor") (Atomic "LDF") loadDF_eq
+loadDF = fromEqn' (lDurFac ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]

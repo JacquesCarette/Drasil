@@ -1,11 +1,12 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, datConF, datConPar, reqF,
-                                 figureLabel, showingCxnBw, inModelF,
+                                 figureLabel, showingCxnBw, thModF, inModelF,
                                  traceMGF) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math(equation)
 import Data.Drasil.Utils (foldlsC)
 import qualified Drasil.SRS as SRS
 
@@ -95,20 +96,30 @@ specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first pr
                                (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
- 
+
+--wrapper for thModelIntro
+thModF :: Sentence -> [Section] -> Section
+thModF = \kword subSec-> SRS.thModel [thModIntro kword] subSec
+
+-- generalized theoretical model introduction: identifies key word pertaining to topic
+thModIntro :: Sentence -> Contents
+thModIntro k_word = Paragraph $ S "This" +:+ phrase section_ +:+ S "focuses on" +:+
+  S "the" +:+ phrase general +:+ (plural $ equation ^. term) +:+ S "and" +:+
+  S "laws that" +:+ (k_word) +:+. S "is based on"
+
 -- wrapper for inModelIntro
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF r1 r2 r3 r4 otherContents = SRS.inModel ((inModelIntro r1 r2 r3 r4):otherContents) []
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):otherContents) []
 
--- just need to provide the four references in order to this function
+-- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = Paragraph $ S "This" +:+ phrase section_ +:+ S "transforms" +:+
   S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef r1) +:+
   S "into one which is expressed in mathematical terms. It uses concrete" +:+
   plural symbol_ +:+ S "defined in" +:+ (makeRef r2) +:+
   S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
-  plural model +:+ S "identified in" +:+ (makeRef r3) +:+ S "and" +:+.
-  (makeRef r4)
+  plural model +:+ S "identified in" +:+ (makeRef r3) +:+ S "and" +:+. (makeRef r4)
+        
  
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Bool -> Sentence -> [Contents] -> Section
@@ -141,7 +152,7 @@ datConPar tableRef middleSent endingSent trailingSent = ( Paragraph $
                      
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
-reqF = SRS.require [reqIntro]
+reqF = \subSec -> SRS.require [reqIntro] subSec
 
 --generalized requirements introduction
 reqIntro :: Contents
@@ -154,9 +165,10 @@ reqIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides the" +:+
 
 -- wrapper for traceMGIntro
 traceMGF :: Section -> Section -> Section -> [Section] -> Section
-traceMGF = \ rf1 rf2 rf3 -> SRS.traceyMandG [traceMGIntro rf1 rf2 rf3]
+traceMGF = \rf1 rf2 rf3 subSec-> SRS.traceyMandG [traceMGIntro rf1 rf2 rf3] subSec
 
--- generalized traceability matrix and graph introduction:
+-- generalized traceability matrix and graph introduction: variables are references to the three tables
+-- generally found in this section (in order of being mentioned)
 traceMGIntro :: Section -> Section -> Section -> Contents
 traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
   plural traceyMatrix +:+ S "is to provide easy" +:+

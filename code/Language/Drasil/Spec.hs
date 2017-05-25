@@ -67,6 +67,10 @@ instance Show RefType where
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
+-- | Helper function for wrapping sentences in square brackets.
+sSqBr :: Sentence -> Sentence
+sSqBr x = S "[" :+: x :+: S "]"
+
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence
 EmptyS +:+ b = b

@@ -43,7 +43,7 @@ s2_intro, s2_2_intro, s3_intro,
   s3_1_intro, s3_2_intro, s4_intro, s4_1_bullets, s4_2_intro, s5_intro, 
   s5_1_table, s5_2_bullets, s6_intro, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
-  s6_2_4_intro, s6_2_5_intro, --s6_2_5_table1, 
+  s6_2_4_intro, --s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2, --s6_2_5_table3, 
   s7_1_intro, s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
@@ -438,30 +438,13 @@ s6_2_4_intro = Paragraph $ foldlSent [
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
 
-s6_2_5 = SRS.datCon [s6_2_5_intro, --s6_2_5_table1, 
-  s6_2_5_table2, s6_2_5_intro2] {-, Con s6_2_5_table3]-} []
-
-s6_2_5_intro = Paragraph $ foldlSent
-  [titleize table_, S "2 ()", --sParen (makeRef s6_2_5_table1) :+: 
-  S "shows the", plural datumConstraint,
-  S "on the", phrase input_ +:+. plural variable, S "The", phrase column, S "of", 
-  plural physicalConstraint, S "gives the", phrase physical, plural limitation, 
-  S "on the range of", plural value, S "that can be taken by the" +:+. 
-  phrase variable, S "The", plural constraint, S "are conservative, to give", 
-  S "the", phrase user, S "of the", phrase model, 
-  S "the flexibility to experiment with unusual situations. The", 
-  phrase column, S "of typical", plural value +:+.
-  S "is intended to provide a feel for a common scenario",
-  S "The uncertainty", phrase column, S "provides an",
-  S "estimate of the confidence with which the", phrase physical, plural quantity,
-  S "can be measured. This", phrase information, S "would be part of the", 
-  phrase input_, S "if one were" +:+. 
-  S "performing an uncertainty quantification exercise", at_start table_,
-  S "3", (sParen $ makeRef s6_2_5_table2), S "gives the", plural value, 
-  S "of the specification", (plural $ parameter ^. term),
-  S "used in", titleize table_, S "2" +:+. S "()", --(makeRef s6_2_5_table1) :+: 
-  (P $ ar_max ^. symbol), S "refers to the" +:+ --FIXME: Issue #167
-  (phrase $ ar_max ^. term), S "for the plate of glass"]
+s6_2_5 = datConF (S "Table 2 () shows") EmptyS True end [s6_2_5_table2, s6_2_5_intro2]
+  where end = foldlSent [at_start table_,
+              S "3", (sParen $ makeRef s6_2_5_table2), S "gives the", plural value, 
+              S "of the specification", (plural $ parameter ^. term),
+              S "used in", titleize table_, S "2" +:+. S "()", --(makeRef s6_2_5_table1) :+: 
+              (P $ ar_max ^. symbol), S "refers to the" +:+ --FIXME: Issue #167
+              (phrase $ ar_max ^. term), S "for the plate of glass"]
 
 -- s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
 --  S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),

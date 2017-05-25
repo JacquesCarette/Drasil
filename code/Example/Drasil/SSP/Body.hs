@@ -198,15 +198,10 @@ s3_2 = SRS.sysCon [s3_2_p1] []
 s3_2_p1 = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
 -- SECTION 4 --
-s4 = specSysDesF True (phrase slope) [s4_1, s4_2]
-
--- s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
-  -- (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
-  -- (phrase problem) +:+ S "to be solved. This is followed by the" +:+
-  -- (plural solutionCharSpec) `sC` S "which presents the" +:+ 
-  -- (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
-  -- S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+
-  -- S "the" +:+. (phrase slope)
+s4 = specSysDesF end [s4_1, s4_2]
+  where end = (plural definition) +:+ S "and finally the" +:+ 
+              (plural inModel) +:+ S "that" +:+ (phrase model) +:+
+              S "the" +:+. (phrase slope)
 
 -- SECTION 4.1 --
 s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]

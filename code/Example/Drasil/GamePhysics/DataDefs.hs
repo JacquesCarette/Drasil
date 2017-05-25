@@ -4,7 +4,9 @@ import Drasil.GamePhysics.Unitals
 
 import Language.Drasil
 import Data.Drasil.SI_Units
---import Data.Drasil.Concepts.Physics (rigidBody, collision)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, collision, 
+  position, linDisp, linVelo, linAccel, displacement, velocity, angDisp, angVel,
+  angAccel, orientation)
 import Data.Drasil.Quantities.Physics (restitutionCoef, time)
 import Data.Drasil.Units.Physics
 
@@ -45,17 +47,17 @@ linDispQDef = foldl (+:+) (EmptyS) def
               phrase $ CP.time ^. term, P $ time ^. symbol]
 -}
 dd2linDisp :: QDefinition
-dd2linDisp = fromEqn "dd2linDisp" fixme (linDisp ^. symbol) metre
+dd2linDisp = fromEqn "dd2linDisp" fixme (CP.linDisp ^. symbol) metre
   dispEqn
 
 dispEqn :: Expr
-dispEqn = Deriv Total (FCall (C position) [C time]) (C time)
+dispEqn = Deriv Total (FCall (C CP.position) [C time]) (C time)
 {-
 dd2descr :: Sentence
-dd2descr = S "linear" +:+ (disp ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
+dd2descr = S "linear" +:+ (CP.displacement ^. term) +:+ S "of a" +:+
+  ( CP.rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
   P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
-  S "also equal to the derivative of its linear" +:+ (position ^. term) +:+ 
+  S "also equal to the derivative of its linear" +:+ (CP.position ^. term) +:+ 
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 -}
 -- DD3 : Linear velocity --
@@ -63,7 +65,7 @@ dd2descr = S "linear" +:+ (disp ^. term) +:+ S "of a" +:+
 {-
 linVelQDef :: Sentence
 linVelQDef = foldl (+:+) (EmptyS) def
-  where def = [phrase $ linVelo ^. term, S "of a",
+  where def = [phrase $ CP.linVelo ^. term, S "of a",
               phrase $ CP.rigidBody ^. term, S "as a function of" ,
               phrase $ CP.time ^. term, P $ CP.time ^. symbol,
               S "also equal to the derivative of its linear",
@@ -72,31 +74,31 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 dd3linVel :: QDefinition
-dd3linVel = fromEqn "dd3linVel" fixme (linVelo ^. symbol) velU
+dd3linVel = fromEqn "dd3linVel" fixme (CP.linVelo ^. symbol) velU
   velEqn
 
 velEqn :: Expr
-velEqn = Deriv Total (FCall (C disp) [C time]) (C time)
+velEqn = Deriv Total (FCall (C CP.displacement) [C time]) (C time)
 {-
 dd3descr :: Sentence
-dd3descr = S "linear" +:+ (vel ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
+dd3descr = S "linear" +:+ (CP.velocity ^. term) +:+ S "of a" +:+
+  (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
   P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
-  S "also equal to the derivative of its linear" +:+ (vel ^. term) +:+
+  S "also equal to the derivative of its linear" +:+ (CP.velocity ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 -}
 -- DD4 : Linear acceleration --
 
 dd4linAcc :: QDefinition
-dd4linAcc = fromEqn "dd4linAcc" fixme (linAccel ^. symbol) accelU
+dd4linAcc = fromEqn "dd4linAcc" fixme (CP.linAccel ^. symbol) accelU
   accelEqn
 
 accelEqn :: Expr
-accelEqn = Deriv Total (FCall (C vel) [C time]) (C time)
+accelEqn = Deriv Total (FCall (C CP.velocity) [C time]) (C time)
 {-
 dd4descr :: Sentence
 dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
+  (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
   P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
   S "also equal to the derivative of its linear" +:+ (accel ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
@@ -105,51 +107,51 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 
 dd5angDisp :: QDefinition
 dd5angDisp = fromEqn "dd5angDisp" fixme
-  (Concat [(angDisp ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
+  (Concat [(CP.angDisp ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
   radians angDispEqn
 
 angDispEqn :: Expr
-angDispEqn = Deriv Total (FCall (C orientation) [C time]) (C time)
+angDispEqn = Deriv Total (FCall (C CP.orientation) [C time]) (C time)
 {-
 dd5descr :: Sentence
-dd5descr = (angDisp ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
+dd5descr = (CP.angDisp ^. term) +:+ S "of a" +:+
+  (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
   P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
-  S "also equal to the derivative of its" +:+ (orientation ^. term) +:+
+  S "also equal to the derivative of its" +:+ (CP.orientation ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 -}
 -- DD6 : Angular velocity --
 
 dd6angVel :: QDefinition
 dd6angVel = fromEqn "dd6angVel" fixme --dd6descr 
-  (Concat [(angVel ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"]) 
+  (Concat [(CP.angVel ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"]) 
   angVelU angVelEqn
 
 angVelEqn :: Expr
-angVelEqn = Deriv Total (FCall (C angDisp) [C time]) (C time)
+angVelEqn = Deriv Total (FCall (C CP.angDisp) [C time]) (C time)
 {-
 dd6descr :: Sentence
-dd6descr = ((angVel ^. term)) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
+dd6descr = ((CP.angVel ^. term)) +:+ S "of a" +:+
+  (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+ 
   P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
-  S "also equal to the derivative of its" +:+ (angDisp ^. term) +:+
+  S "also equal to the derivative of its" +:+ (CP.angDisp ^. term) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 -}
 -- DD7 : Angular acceleration --
 
 dd7angAccel :: QDefinition
 dd7angAccel = fromEqn "dd7angAccel" fixme --dd7descr 
-  (Concat [(angAccel ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
+  (Concat [(CP.angAccel ^. symbol), Atomic "(", (time ^. symbol), Atomic ")"])
   angAccelU angAccelEqn
 
 angAccelEqn :: Expr
-angAccelEqn = Deriv Total (FCall (C angVel) [C time]) (C time)
+angAccelEqn = Deriv Total (FCall (C CP.angVel) [C time]) (C time)
 {-
 dd7descr :: Sentence
-dd7descr = (angAccel ^. term) +:+ S "of a" +:+
-  (rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+
+dd7descr = (CP.angAccel ^. term) +:+ S "of a" +:+
+  (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (time ^. term) +:+
   P (time ^. symbol) +:+ sParen (Sy (unit_symb time)) `sC`
-  S "also equal to the derivative of its" +:+ ((angVel ^. term)) +:+
+  S "also equal to the derivative of its" +:+ ((CP.angVel ^. term)) +:+
   S "with respect to" +:+ (time ^. term) +:+ P (time ^. symbol)
 -}
 -- DD8 : Impulse for collision response --
@@ -172,6 +174,6 @@ impulseEqn = ((Neg ((Int 1) + (C restitutionCoef))) * (C initRelVel) :.
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence
 dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
-  (collision ^. term) +:+ S "response between two" +:+ 
-  irregPlur (rigidBody ^. term)
+  (CP.collision ^. term) +:+ S "response between two" +:+ 
+  irregPlur (CP.rigidBody ^. term)
 -}

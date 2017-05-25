@@ -67,7 +67,7 @@ orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
        
 -- wrapper for general system description
 genSysF :: [Section] -> Section
-genSysF = SRS.genSysDec [genSysIntro] 
+genSysF = SRS.genSysDes [genSysIntro] 
 
 --generalized general system description introduction
 genSysIntro :: Contents
@@ -79,7 +79,7 @@ genSysIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides general" 
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section
-specSysDesF = \l_eND subSec -> SRS.specSysDec [specSysDesIntro l_eND] subSec
+specSysDesF = \l_eND subSec -> SRS.specSysDes [specSysDesIntro l_eND] subSec
 
 -- generalized specific system description introduction: boolean identifies whether the user wants the extended
 -- or shortened ending (True) -> identifies key word pertaining to topic or Nothing

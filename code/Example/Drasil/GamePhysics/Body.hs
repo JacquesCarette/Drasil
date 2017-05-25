@@ -187,7 +187,7 @@ s2_3_intro = foldlSent
 s3 :: Section
 s3_intro :: Contents
 
-s3 = SRS.genSysDec [s3_intro] [s3_1, s3_2]
+s3 = SRS.genSysDes [s3_intro] [s3_1, s3_2]
 
 --FIXME: This can be generalized to use more chunks
 s3_intro = Paragraph $ foldlSent 

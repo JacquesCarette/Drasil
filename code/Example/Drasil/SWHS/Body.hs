@@ -263,7 +263,7 @@ s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
 -- the sectioning? This would also improve the tediousness of declaring
 -- LayoutObjs
 
-s3 = SRS.genSysDec [s3_intro] [s3_1, s3_2, s3_3]
+s3 = SRS.genSysDes [s3_intro] [s3_1, s3_2, s3_3]
 
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
   phrase general +:+ phrase information +:+ S "about the" +:+ phrase system `sC`
@@ -337,7 +337,7 @@ s3_3_contents = Paragraph (S "There are no" +:+. plural systemConstraint)
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
 
-s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
+s4 = SRS.specSysDes [s4_intro] [s4_1, s4_2]
  
 -- using plural solutionCharSpec is a hack in order to pluralize the middle word,
 -- based on compoundNPNC''' in NamedIdea.hs

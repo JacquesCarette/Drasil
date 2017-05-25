@@ -169,7 +169,7 @@ s3_2 = SRS.theCustomer [s3_2_intro] []
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
   S "are the end", phrase user, S "of", (gLassBR ^. defn)]
 
-s4 = SRS.genSysDec [s4_intro] [s4_1, s4_2]
+s4 = SRS.genSysDes [s4_intro] [s4_1, s4_2]
 
 s4_intro = Paragraph $ foldlSent [S "This", phrase section_, S "provides", 
   phrase general, phrase information, S "about the", phrase system `sC` 
@@ -251,7 +251,7 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", (gLassBR ^. defn),
   S "All the supporting calculated", plural value, S "are also displayed as",
   phrase output_]
 
-s6 = SRS.specSysDec [s6_intro] [s6_1,
+s6 = SRS.specSysDes [s6_intro] [s6_1,
   s6_2]
 
 s6_intro = Paragraph $ foldlSent [S "This", phrase section_, 

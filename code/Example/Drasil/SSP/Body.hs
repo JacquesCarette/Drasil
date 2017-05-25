@@ -422,7 +422,7 @@ s5 = SRS.require [s5_p1] [s5_1, s5_2]
 
 s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
   (plural functionalRequirement) `sC` S "the business tasks that the" +:+
-  (phrase software) +:+ S "is expected to complete, and the nonfunctional" +:+ 
+  (phrase software) +:+ S "is expected to complete, and the non-functional" +:+ 
   (plural requirement) `sC` S "the qualities that the" +:+ (phrase software) +:+ 
   S "is expected to exhibit."
 

@@ -197,13 +197,14 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:PoD}
 The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not  constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:SoR}
 The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
 \subsection{Organization of Document}
 \label{Sec:OoD}
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IM} and trace back to find any additional information they require. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis. The goal statements are refined to the theoretical models (Section~\ref{Sec:TM}) and instance models (Section~\ref{Sec:IM}).
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IM} and trace back to find any additional information they require.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
 \section{General System Description}
 \label{Sec:GSD}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
@@ -299,15 +300,37 @@ Description & The stability metric of the slope, known as the factor of safety (
 \end{minipage}\\
 \subsubsection{General Definitions}
 \label{Sec:GD}
+This section collects the laws and equations that will be used in deriving the data definitions, which will in turn are used to build the instance models.
 \subsubsection{Data Definitions}
 \label{Sec:DD}
+This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
 \subsubsection{Instance Models}
 \label{Sec:IM}
+This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It used concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM} and Section~\ref{Sec:GD}.
+The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
+The values of the interslice normal force E the interslice normal/shear force magnitude ratio lambda, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R_{i}$, and $T_{i}$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 \subsubsection{Data Constraints}
 \label{Sec:DC}
+Table~\ref{Table:} and Table~\ref{Table:} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+\begin{longtable}{l}
+\toprule
+\\
+\midrule
+\bottomrule
+\caption{}
+\label{Table:}
+\end{longtable}
+\begin{longtable}{l}
+\toprule
+\\
+\midrule
+\bottomrule
+\caption{}
+\label{Table:}
+\end{longtable}
 \section{Requirements}
 \label{Sec:R}
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the nonfunctional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FR}
 \begin{itemize}
@@ -353,4 +376,15 @@ $\gamma{}_{w}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LC}
+\section{References}
+\label{Sec:R}
+\begin{itemize}
+\item[[1]:]Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing the factor of safety using the morgensternprice method. Can. Geotech. J., (42):272-278, 19 February 2005.
+\item[[2]:]D.G. Fredlund and J.Krahn. Comparison of slope stability methods of analysis. Can. Geotech. J., (14):429-439, 4 April 1977.
+\item[[3]:]Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+\item[[4]:]David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12(2):251-257, February 1986.
+\item[[5]:]W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt\'{e}, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshopon Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
+\item[[6]:]Dieter Stolle and Peijun Guo. Limit equilibrum slope stability analysis using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008.
+\item[[7]:]Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and Peter John Cleall. An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm. Can. Geotech. J., (47):806-820, 25 June 2010.
+\end{itemize}
 \end{document}

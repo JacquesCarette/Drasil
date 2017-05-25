@@ -1,11 +1,16 @@
 module Drasil.GamePhysics.IMods where
 
-import Drasil.GamePhysics.Unitals
+--import qualified Drasil.GamePhysics.Unitals as GPUN
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, foldlSent)
-import Data.Drasil.Concepts.Physics (rigidBody)
-import Data.Drasil.Quantities.PhysicalProperties (mass)
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
+  angularAccel, force, gravitationalConst, gravitationalAccel, velocity, 
+  momentOfInertia, displacement, angularVelocity, position)
+--import qualified Data.Drasil.Concepts.Math as QM ()
 --import Data.Drasil.Quantities.Physics
 import Prelude hiding (id)
 import Control.Lens ((^.))
@@ -23,23 +28,24 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C accel) := (C vel) := (C gravAccel) + ((C force) / (C mass))
+im1Rel = (C QP.acceleration) := (C QP.velocity) := (C QP.gravitationalAccel) + ((C QP.force) / (C QPP.mass))
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
-  (phrase $ accel ^. term), S "of the", (phrase $ rigidBody ^. term), 
-  S "(A1, A2) i as the sum of", (phrase $ gravAccel ^. term), 
-  S "(GD3) and", (phrase $ accel ^. term), S "due to applied", 
-  (phrase $ force ^. term), S "Fi(t) (T1). The resultant outputs are", 
+  (phrase $ QP.acceleration ^. term), S "of the", (phrase $ CP.rigidBody ^. term), 
+  S "(A1, A2) i as the sum of", (phrase $ QP.gravitationalAccel ^. term), 
+  S "(GD3) and", (phrase $ QP.acceleration ^. term), S "due to applied", 
+  (phrase $ QP.force ^. term), S "Fi(t) (T1). The resultant outputs are", 
   S "then obtained from this equation using DD2, DD3 and DD4. It is currently", 
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
-im1leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
+im1leg = foldle1 (+:+.) (+:+.) 
+  [S "mi is the mass of the i-th rigid body (kg)",
   S "g is the acceleration due to gravity (ms-2)",
   S "t is a point in time and t0 denotes the initial time (s)",
-  (helper1 position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
-  (helper1 accel "i" EmptyS),
-  (helper1 vel "i" EmptyS),
+  (helper1 QP.position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
+  (helper1 QP.acceleration "i" EmptyS),
+  (helper1 QP.velocity "i" EmptyS),
   S "F(t) is the force applied to the i-th body at time t (N)"]
 
 {-- --}
@@ -51,7 +57,7 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation -- FIXME: add proper equation
-im2Rel = (C angAccel) := (C angVel) := ((C torque) / (C momtInert))
+im2Rel = (C QP.angularAccel) := (C QP.angularVelocity) := ((C QP.torque) / (C QP.momentOfInertia))
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 
@@ -59,12 +65,13 @@ im2descr = foldlSent [S "The above equation for the total angular acceleration",
   S "are then obtained from this equation using DD5, DD6 and DD7. It is",
   S "currently assumed that there is no damping (A6) or constraints (A7) involved"]
 
-im2leg = foldle1 (+:+.) (+:+.) [S "mi is the mass of the i-th rigid body (kg)",
+im2leg = foldle1 (+:+.) (+:+.) 
+  [S "mi is the mass of the i-th rigid body (kg)",
   S "g is the acceleration due to gravity (ms-2)",
   S "t is a point in time and t0 denotes the initial time (s)",
-  (helper1 orientation "i" EmptyS),
-  (helper1 angVel "i" EmptyS),
-  (helper1 angAccel "k" EmptyS),
+  (helper1 QM.orientation "i" EmptyS),
+  (helper1 QP.angularVelocity "i" EmptyS),
+  (helper1 QP.angularAccel "k" EmptyS),
   S "t i(t) is the torque applied to the i-th body at time t (N m)",
   S "Signed direction of torque is defined by (A4)",
   S "Ii is the moment of inertia of the i-th body (kg m2)"]
@@ -78,21 +85,22 @@ im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 im3Rel :: Relation -- FIXME: add proper equation
-im3Rel = (C force) := (C mass)
+im3Rel = (C QP.force) := (C QPP.mass)
 
 im3descr, im3leg :: Sentence
 im3descr = foldlSent [S "This instance model is based on our assumptions",
   S "regarding rigid body (A1, A2) collisions (A5). Again, this does not take",
   S "damping (A6) or constraints (A7) into account"]
 
-im3leg = foldle1 (+:+.) (+:+.) [S "mk is the mass of the k-th rigid body (kg)",
+im3leg = foldle1 (+:+.) (+:+.) 
+  [S "mk is the mass of the k-th rigid body (kg)",
   S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 
   S "and tc denotes the time at collision (s)",
-  (helper1 position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
-  (helper1 vel "k" EmptyS),
-  (helper1 orientation "k" EmptyS),
-  (helper1 angVel "k" EmptyS), 
+  (helper1 QP.position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
+  (helper1 QP.velocity "k" EmptyS),
+  (helper1 QM.orientation "k" EmptyS),
+  (helper1 QP.angularVelocity "k" EmptyS), 
   S "n is the collision normal vector (m)", 
   S "Its signed direction is determined by (A4)",
   S "j is the collision impulse (DD8) (N s)", 

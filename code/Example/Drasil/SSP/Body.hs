@@ -42,11 +42,11 @@ s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
   s4_2_5, s4_2_6, s5_1, s5_2 :: Section
 
-s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_p1, s3_1_p1,
-  s3_2_p1, s4_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
+s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_1_p1,
+  s3_2_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
   s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
   s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
-  s4_2_2_p1, s4_2_3_p1, s4_2_4_p1, s4_2_5_p1, s4_2_5_p2,
+  s4_2_2_p1, s4_2_3_p1, s4_2_4_p1, s4_2_5_p2,
   s4_2_5_p3, s5_p1, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
 
@@ -161,31 +161,28 @@ s2_3 = orgSecWTS start inModel s4_2_5 end
         end   = S "The" +:+ (plural inModel) +:+ S "provide the set of" +:+
                 S "algebraic equations that must be solved iteratively to perform a" +:+
                 (titleize morPrice) +:+ S "Analysis"
-  
--- s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+
-  -- S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
-  -- S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
-  -- S "proposed by Koothoor as well as Smith and Lai." +:+ 
-  -- S "The presentation follows the standard pattern of presenting" +:+
-  -- S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
-  -- S "and" +:+. (plural assumption) +:+ S "For readers" +:+
-  -- S "that would like a more bottom up approach, they can start" +:+
-  -- S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef s4_2_5 +:+
-  -- S "and trace back to find any additional" +:+ (phrase information) +:+
-  -- S "they require. The" +:+ (plural inModel) +:+ S "provide the set of" +:+
-  -- S "algebraic equations that must be solved iteratively to perform a" +:+
-  -- (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+
-  -- S "are refined to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
-  -- S "and" +:+ (plural inModel) +:+. (sParen . makeRef) s4_2_5
 
+--this commented code is now generated with the above function
+--this is here as reference to what the code was before
+{-
+s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+  
+  S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
+  S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
+  S "proposed by Koothoor as well as Smith and Lai." +:+ 
+  S "The presentation follows the standard pattern of presenting" +:+
+  S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
+  S "and" +:+. (plural assumption) +:+ S "For readers" +:+
+  S "that would like a more bottom up approach, they can start" +:+
+  S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef s4_2_5 +:+
+  S "and trace back to find any additional" +:+ (phrase information) +:+
+  S "they require. The" +:+ (plural inModel) +:+ S "provide the set of" +:+
+  S "algebraic equations that must be solved iteratively to perform a" +:+
+  (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+
+  S "are refined to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
+  S "and" +:+ (plural inModel) +:+. (sParen . makeRef) s4_2_5
+-}
 -- SECTION 3 --
-s3 = SRS.genSysDec [s3_p1] [s3_1, s3_2]
-
-s3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+
-  (phrase information) +:+ S "about the" +:+ (phrase system) `sC` S "identifies" +:+
-  S "the interfaces between the" +:+ (phrase system) +:+ S "and its" +:+
-  (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+ 
-  S "and the" +:+. (plural systemConstraint)
+s3 = genSysF [s3_1, s3_2]
 
 -- SECTION 3.1 --
 s3_1 = SRS.userChar [s3_1_p1] []
@@ -201,15 +198,15 @@ s3_2 = SRS.sysCon [s3_2_p1] []
 s3_2_p1 = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 
 -- SECTION 4 --
-s4 = SRS.specSysDec [s4_p1] [s4_1, s4_2]
+s4 = specSysDesF True (phrase slope) [s4_1, s4_2]
 
-s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
-  (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
-  (phrase problem) +:+ S "to be solved. This is followed by the" +:+
-  (plural solutionCharSpec) `sC` S "which presents the" +:+ 
-  (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
-  S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+
-  S "the" +:+. (phrase slope)
+-- s4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
+  -- (phrase problemDescription) `sC` S "which gives a high-level view of the" +:+
+  -- (phrase problem) +:+ S "to be solved. This is followed by the" +:+
+  -- (plural solutionCharSpec) `sC` S "which presents the" +:+ 
+  -- (plural assumption) `sC` (plural theory) `sC` (plural definition) +:+
+  -- S "and finally the" +:+ (plural inModel) +:+ S "that" +:+ (phrase model) +:+
+  -- S "the" +:+. (phrase slope)
 
 -- SECTION 4.1 --
 s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
@@ -379,12 +376,6 @@ s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defin
 
 -- SECTION 4.2.5 --
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 [s4_2_5_p2,s4_2_5_p3]
-
-s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+
-  (phrase problem) +:+ S "defined in" +:+ makeRef s4_1 +:+ S "into one which" +:+
-  S "is expressed in mathematical terms. It used concrete symbols defined in" +:+
-  makeRef s4_2_4 +:+ S "to replace the abstract" +:+ S "symbols in the" +:+
-  (plural model) +:+ S "identified in" +:+ makeRef s4_2_2 +:+ S "and" +:+. makeRef s4_2_3
 
 s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
   S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 

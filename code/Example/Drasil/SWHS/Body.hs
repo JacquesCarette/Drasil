@@ -61,7 +61,7 @@ s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, sys_context_fig,
   s4_2_6_table2, s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
-s2_intro, s2_1_contents, s2_4_contents, s4_2_3_deriv, s4_2_5_intro, 
+s2_intro, s2_1_contents, s2_4_contents, s4_2_3_deriv, s4_2_5_subpar, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
   :: [Contents]
 
@@ -705,17 +705,9 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
-  (s4_2_5_deriv2)) []
+s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2)
 
-s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
-  S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+
-  S "into one which is expressed in mathematical terms. It uses concrete" +:+
-  plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
-  plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
-  (makeRef s4_2_3)), 
-  Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
+s4_2_5_subpar = [Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
   S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+
   S "and" +:+ P (temp_PCM ^. symbol) +:+ S "depend on one another. IM3" +:+
@@ -725,6 +717,17 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
   S "depend on the" +:+. (phrase $ CT.phase_change ^. term) +:+
   S "(" :+: at_start' inModel +:+ S "are left out because" +:+
   S "they are not currently implemented in Drasil.)")]
+
+{-s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
+  (s4_2_5_deriv2)) []
+
+s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
+  S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+
+  S "into one which is expressed in mathematical terms. It uses concrete" +:+
+  plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
+  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
+  plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
+  (makeRef s4_2_3)),-}
 
 -- The first paragraph is completely general and repeated in other examples. 
 -- The second paragraph is very specific, and the other examples don't even 

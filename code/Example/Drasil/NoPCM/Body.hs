@@ -64,17 +64,17 @@ s3_1_intro = Paragraph $
               (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase $ sysCont ^. term) +:+
              S "A circle represents an external entity outside the" +:+ (phrase $ software ^. term) `sC`
              S "the" +:+ (phrase $ user ^. term) +:+ S "in this case. A rectangle represents the" +:+ (phrase $ softwareSys ^. term) +:+
-             S "itself (" :+: (getAcc sWHS) :+: S "). Arrows are used to show the" +:+ (plural $ datum ^. term) +:+ S "flow between the" +:+
+             S "itself" +:+. sParen (getAcc sWHS) +:+ S "Arrows are used to show the" +:+ (plural $ datum ^. term) +:+ S "flow between the" +:+
               (phrase $ section_ ^. term) +:+ S "and its" +:+. (phrase $ environment ^. term)
             
 sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sysCont ^. term))
             "SystemContextFigure.png"
 
            
-s4 = specSysDesF (S words) [s4_1, s4_2]
-  where words = plural definition +:+ S "and finally the" +:+
-                (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
-                S "that models the" +:+. (phrase $ sWHT ^. term)
+s4 = specSysDesF (words_) [s4_1, s4_2]
+  where words_ = (plural definition +:+ S "and finally the" +:+
+                (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
+                S "that models the" +:+. (phrase $ sWHT ^. term))
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 

@@ -71,7 +71,7 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
             "SystemContextFigure.png"
 
            
-s4 = specSysDesF (True (phrase $ sWHT ^. term)) [s4_1, s4_2]
+s4 = specSysDesF True (phrase $ sWHT ^. term) [s4_1, s4_2]
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
@@ -159,3 +159,15 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) []) 
     (S "Table 2: Output Variables") True
+
+-- wrapper for requirements
+reqF :: Section
+reqF = SRS.genSysDec [genSysIntro][]
+
+--generalized general system description introduction
+genSysIntro :: Contents
+genSysIntro = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+
+  (phrase information) +:+ S "about the" +:+ (phrase system) `sC` S "identifies" +:+
+  S "the interfaces between the" +:+ (phrase system) +:+ S "and its" +:+
+  (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+ 
+  S "and the" +:+. (plural systemConstraint)

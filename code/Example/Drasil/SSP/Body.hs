@@ -22,7 +22,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Math hiding (contraint)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
 
@@ -45,7 +45,7 @@ s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_p1, s3_1_p1,
   s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
   s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
   s4_2_2_p1, s4_2_3_p1, s4_2_4_p1, s4_2_5_p1, s4_2_5_p2,
-  s4_2_5_p3, s4_2_6_p1, s5_p1, s5_1_list, s5_1_table,
+  s4_2_5_p3, s5_p1, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
 
 s4_2_2_tmods :: [Contents]
@@ -408,19 +408,7 @@ s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
   S "iterative" +:+ (plural solution) +:+ S "method is required."
 
 -- SECTION 4.2.6 --
-s4_2_6 = SRS.datCon [s4_2_6_p1] []
-
-s4_2_6_p1 = Paragraph $ S "Table 2 and 3 show the" +:+ (plural datumConstraint) +:+ --FIXME: make references to table 2 and 3
-  S "on the input and output variables, respectively. The column" +:+ 
-  (plural physicalConstraint) +:+ S "gives the physical limitations on the" +:+ 
-  S "range of values that can be taken by the variable. The" +:+ (plural constraint) +:+ 
-  S "are conservative, to give the" +:+ (phrase user) +:+ S "of the model the flexibility" +:+ 
-  S "to experiment with unusual situations. The column of typical" +:+ 
-  S "values is intended to provide a feel for a common scenario." +:+ 
-  S "The uncertainty column provides an estimate of the confidence" +:+ 
-  S "with which the physical quantities can be measured. This" +:+ 
-  S "information would be part of the input if one were performing" +:+ 
-  S "an uncertainty quantification exercise."
+s4_2_6 = datConF (S "Table 2 and 3 show") EmptyS True EmptyS [] --FIXME: make references to table 2 and 3
 
 -- SECTION 5 --
 s5 = SRS.require [s5_p1] [s5_1, s5_2]

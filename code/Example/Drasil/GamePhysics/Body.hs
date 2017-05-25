@@ -12,7 +12,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction, 
-                   rightHand, collision, space)
+                   rightHand, collision, space, joint)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass, dimension)
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
@@ -348,11 +348,14 @@ s4_2_1_intro = Paragraph $ foldlSent
   S "and helps in developing the", (phrase thModel), S "by filling in the",
   S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
   S "The numbers given in", S "the square brackets refer to the", 
-  foldr1 sC (map (\ch -> (phrase ch) +:+ (bterm ch)) 
-  [thModel, genDefn, dataDefn, inModel]) `sC` S "or", 
-  phrase likelyChg, (bterm likelyChg) `sC` S "in which the respective",
+  foldr1 sC (map (refs) itemsAndRefs) `sC` S "or", 
+  refs (likelyChg, s6) `sC` S "in which the respective",
   (phrase assumption), S "is used"]
-  where bterm chunk = S "[" :+: (getAcc chunk) :+: S "]"
+  where refs (chunk, ref) = (titleize' chunk) +:+ S "[" :+: (makeRef ref) :+: S "]"
+
+itemsAndRefs :: [(CINP, Section)]
+itemsAndRefs = [(thModel, s4_2_2), (genDefn, s4_2_3), (dataDefn, s4_2_4), 
+  (inModel, s4_2_5)]
 
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7 :: Sentence
@@ -643,7 +646,7 @@ s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be",
   S "expanded to include motion with damping"]
 
 s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to include joints and", (plural constraint)]
+  S "expanded to include", (plural $ joint ^. term), S "and", (plural constraint)]
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
@@ -734,6 +737,7 @@ s8_table1 = Table (EmptyS:(map (S) s8_row_t1))
   (makeTMatrix s8_colName_t1 s8_columns_t1 s8_row_t1)
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
+  sParen (makeRef s5) `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1_2) +:+
   S "and Other" +:+ titleize' item) True
 
 s8_row_t2 :: [String]
@@ -787,8 +791,8 @@ s8_table2 :: Contents
 s8_table2 = Table (EmptyS:(map (S) s8_row_t2))
   (makeTMatrix s8_colName_t2 s8_columns_t2 s8_row_t2)
   ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+
-  S "and Other" +:+ titleize' item) True
+  titleize' connection +:+ S "Between" +:+ titleize' assumption +:+ sParen 
+  (makeRef s4_2_1) +:+ S "and Other" +:+ titleize' item) True
 
 s8_row_t3, s8_colString_t3 :: [String]
 s8_row_t3 = ["T1","T2","T3","T4","T5","GD1","GD2","GD3","GD4","GD5","GD6","GD7",

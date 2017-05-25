@@ -1,5 +1,5 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysIntro, 
-                                 specSysDecIntro, datConF, datConPar,
+                                 specSysDesIntro, datConF, datConPar,
                                  figureLabel, showingCxnBw) where
 
 import Language.Drasil
@@ -63,16 +63,27 @@ orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
   Paragraph $ lastS trailingSentence ]
   where lastS Nothing = refineChain [goalStmt, thModel, inModel]
         lastS (Just t) = lastS Nothing +:+. t
-        
+       
+-- wrapper for general system description
+genSysF :: Section
+genSysF = SRS.genSysDec [genSysIntro][]
+
+--generalized general system description introduction
 genSysIntro :: Contents
 genSysIntro = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general" +:+
   (phrase information) +:+ S "about the" +:+ (phrase system) `sC` S "identifies" +:+
   S "the interfaces between the" +:+ (phrase system) +:+ S "and its" +:+
   (phrase environment) `sC` S "and describes the" +:+ (plural userCharacteristic) +:+ 
   S "and the" +:+. (plural systemConstraint)
-  
-specSysDecIntro ::  Bool -> Sentence -> Contents
-specSysDecIntro l_end word_ = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
+
+-- wrapper for specSysDesIntro
+specSysDesF :: Bool -> Sentence -> Section
+specSysDesF = \l_eND k_word -> SRS.specSysDec [specSysDesIntro l_eND k_word][]
+
+-- generalized specific system description introduction: boolean identifies whether the user wants the extended
+-- or shortened ending (True) -> identifies key word pertaining to topic
+specSysDesIntro ::  Bool -> Sentence -> Contents
+specSysDesIntro l_end word_ = Paragraph $ S "This" +:+ (phrase section_) +:+ S "first presents the" +:+
             (phrase problemDescription) :+: S ", which gives a high-level view of the" +:+
             (phrase problem) +:+ S "to be solved. This is followed by the" +:+
             (plural solutionCharSpec) `sC` S "which presents the" +:+
@@ -110,3 +121,4 @@ datConPar tableRef middleSent endingSent trailingSent = ( Paragraph $
                      phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
                      S "if one were performing an" +:+ phrase uncertainty +:+
                      S "quantification exercise."
+                     

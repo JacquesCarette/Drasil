@@ -378,7 +378,7 @@ s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defin
   S "in terms of DD1 to DD8 to solve."
 
 -- SECTION 4.2.5 --
-s4_2_5 = SRS.inModel [s4_2_5_p1,s4_2_5_p2,s4_2_5_p3] []
+s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 [s4_2_5_p2,s4_2_5_p3]
 
 s4_2_5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "transforms the" +:+
   (phrase problem) +:+ S "defined in" +:+ makeRef s4_1 +:+ S "into one which" +:+

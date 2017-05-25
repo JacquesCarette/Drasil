@@ -1,6 +1,6 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysIntro, 
                                  specSysDesIntro, datConF, datConPar,
-                                 figureLabel, showingCxnBw) where
+                                 figureLabel, showingCxnBw, inModelF) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -65,8 +65,8 @@ orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
         lastS (Just t) = lastS Nothing +:+. t
        
 -- wrapper for general system description
-genSysF :: Section
-genSysF = SRS.genSysDec [genSysIntro][]
+genSysF :: [Section] -> Section
+genSysF = SRS.genSysDec [genSysIntro] 
 
 --generalized general system description introduction
 genSysIntro :: Contents
@@ -77,8 +77,8 @@ genSysIntro = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides general
   S "and the" +:+. (plural systemConstraint)
 
 -- wrapper for specSysDesIntro
-specSysDesF :: Bool -> Sentence -> Section
-specSysDesF = \l_eND k_word -> SRS.specSysDec [specSysDesIntro l_eND k_word][]
+specSysDesF :: Bool -> Sentence -> [Section] -> Section
+specSysDesF = \l_eND k_word subSec -> SRS.specSysDec [specSysDesIntro l_eND k_word] subSec
 
 -- generalized specific system description introduction: boolean identifies whether the user wants the extended
 -- or shortened ending (True) -> identifies key word pertaining to topic
@@ -92,7 +92,21 @@ specSysDesIntro l_end word_ = Paragraph $ S "This" +:+ (phrase section_) +:+ S "
                                (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+:
                                S ") that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+ (plural definition)
-                  
+ 
+-- wrapper for inModelIntro
+inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
+inModelF r1 r2 r3 r4 otherContents = SRS.inModel ((inModelIntro r1 r2 r3 r4):otherContents) []
+
+-- just need to provide the four references in order to this function
+inModelIntro :: Section -> Section -> Section -> Section -> Contents
+inModelIntro r1 r2 r3 r4 = Paragraph $ S "This" +:+ phrase section_ +:+ S "transforms" +:+
+  S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef r1) +:+
+  S "into one which is expressed in mathematical terms. It uses concrete" +:+
+  plural symbol_ +:+ S "defined in" +:+ (makeRef r2) +:+
+  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
+  plural model +:+ S "identified in" +:+ (makeRef r3) +:+ S "and" +:+.
+  (makeRef r4)
+ 
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Bool -> Sentence -> [Contents] -> Section
 datConF = \tr mid end t otherContents ->

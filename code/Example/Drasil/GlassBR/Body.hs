@@ -626,23 +626,36 @@ s9_intro1 = Paragraph $ foldlSent [
 
 --FIXME: There has to be a better way to do this.
 
-s9_theorys, s9_instaModel, s9_dataDef, s9_data, s9_funcReq :: [String]
-s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, 
-  s9_funcReqRef :: [Sentence]
+s9_theorys, s9_instaModel, s9_dataDef, s9_data, s9_funcReq, s9_assump, 
+  s9_likelyChg :: [String]
+
+s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, s9_funcReqRef, 
+  s9_assumpRef, s9_likelyChgRef :: [Sentence]
+
 s9_theorys = ["T1", "T2"]
-s9_theorysRef = map (\x -> sParen $ makeRef $ Definition x) [Theory t1SafetyReq, Theory t2SafetyReq]
+s9_theorysRef = map (\x -> makeRef $ Definition x) [Theory t1SafetyReq, 
+  Theory t2SafetyReq]
 
 s9_instaModel = ["IM1", "IM2", "IM3"]
-s9_instaModelRef = map (\x -> sParen $ makeRef $ Definition x) [Theory probOfBr, Theory calOfCap, Theory calOfDe]
+s9_instaModelRef = map (\x -> makeRef $ Definition x) [Theory probOfBr, 
+  Theory calOfCap, Theory calOfDe]
 
 s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
-s9_dataDefRef = map (\x -> sParen $ makeRef $ Definition x) [Data risk, Data hFromt, Data loadDF, Data strDisFac, Data nonFL, Data glaTyFac, Data dL, Data tolPre, Data tolStrDisFac]
+s9_dataDefRef = map (\x -> makeRef $ Definition x) [Data risk, 
+  Data hFromt, Data loadDF, Data strDisFac, Data nonFL, Data glaTyFac, 
+  Data dL, Data tolPre, Data tolStrDisFac]
 
 s9_data  = ["Data Constraint"]
 s9_dataRef = [makeRef s6_2_5]
 
 s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 s9_funcReqRef = take 6 (repeat $ makeRef s7_1)
+
+s9_assump = ["AS1", "AS2", "AS3", "AS4", "AS5", "AS6", "AS7", "AS8"]
+s9_assumpRef = take 8 (repeat $ makeRef s6_2_1)
+
+s9_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
+s9_likelyChgRef = take 5 (repeat $ makeRef s8)
 
 s9_row_t1 :: [String]
 s9_row_t1 = s9_theorys ++ s9_instaModel ++ s9_dataDef
@@ -687,6 +700,9 @@ s9_row_t2 = s9_row_t1 ++ s9_data ++ s9_funcReq
 s9_row_header_t2, s9_col_header_t2 :: [Sentence]
 s9_row_header_t2 = s9_row_header_t1 ++ (map (itemRefToSent) $ zip (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
 
+s9_col_header_t2 = map (\(x,y) -> S x +:+ sParen (S "in" +:+ y)) (zip s9_funcReq s9_funcReqRef)
+
+
 s9_t2_r1, s9_t2_r2, s9_t2_r3, s9_t2_r4, s9_t2_r5, 
   s9_t2_r6 :: [String]
 
@@ -700,70 +716,60 @@ s9_t2_r5 = ["T1", "T2"]
 s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8",
   "DD9"]
 
-s9_col_header_t2 = map (\(x,y) -> S x +:+ sParen (S "in" +:+ y)) (zip s9_funcReq s9_funcReqRef)
-
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ S "and Other" +:+ titleize' item)) True
 
+s9_row_t3 :: [String]
+s9_row_t3 = s9_assump
+
+s9_row_header_t3, s9_col_header_t3 :: [Sentence]
+s9_row_header_t3 = map (itemRefToSent) $ zip s9_assump s9_assumpRef
+
+s9_col_header_t3 = s9_row_header_t1 ++ (map (itemRefToSent) $
+  zip (s9_likelyChg ++ s9_funcReq) (s9_likelyChgRef ++ s9_funcReqRef))
+
+s9_columns_t3 :: [[String]]
+s9_columns_t3 = [s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1, 
+  s9_t3_DD2, s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8, 
+  s9_t3_DD9, s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1, 
+  s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6]
+
+s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1, s9_t3_DD2, 
+  s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8, 
+  s9_t3_DD9, s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1, 
+  s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6 :: [String]
+-- list of each item that "this" item requires for traceability matrix
+s9_t3_T1  = []
+s9_t3_T2  = []
+s9_t3_IM1 = ["A4","A6","A7"]
+s9_t3_IM2 = ["A5"]
+s9_t3_IM3 = []
+s9_t3_DD1 = []
+s9_t3_DD2 = []
+s9_t3_DD3 = ["A4","A8"]
+s9_t3_DD4 = []
+s9_t3_DD5 = ["A4"]
+s9_t3_DD6 = []
+s9_t3_DD7 = ["A5"]
+s9_t3_DD8 = []
+s9_t3_DD9 = ["A9"]
+s9_t3_lc1 = ["A3"]
+s9_t3_lc2 = ["A4", "A8"]
+s9_t3_lc3 = ["A5"]
+s9_t3_lc4 = ["A6"]
+s9_t3_lc5 = ["A7"]
+s9_t3_r1  = []
+s9_t3_r2  = ["A4", "A5","A8"]
+s9_t3_r3  = []
+s9_t3_r4  = []
+s9_t3_r5  = []
+s9_t3_r6  = []
+
 -- FIXME: Same goes for this one (see above)
-s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
-  S "A2 (in" +:+ (makeRef s6_2_1) :+: S ")", S "A3 (in" +:+ 
-  (makeRef s6_2_1) :+: S ")", S "A4 (in" +:+ (makeRef s6_2_1) :+: S ")",
-  S "A5 (in" +:+ (makeRef s6_2_1) :+: S ")", S "A6 (in" +:+
-  (makeRef s6_2_1) :+: S ")", S "A7 (in" +:+ (makeRef s6_2_1) :+: S ")",
-  S "A8 (in" +:+ (makeRef s6_2_1) :+: S ")"]
-  [[S "T1 (" :+: (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "T2 (" :+: (makeRef (Definition (Theory t2SafetyReq))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "IM1 (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, S "X", S "X", EmptyS],
-  [S "IM2 (" :+: (makeRef (Definition (Theory calOfCap))) :+: S ")", S "X",
-  S "X", EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS],
-  [S "IM3 (" :+: (makeRef (Definition (Theory calOfDe))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD1 (" :+: (makeRef (Definition (Data risk))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD2 (" :+: (makeRef (Definition (Data hFromt))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD3 (" :+: (makeRef (Definition (Data loadDF))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X"],
-  [S "DD4 (" :+: (makeRef (Definition (Data strDisFac))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD5 (" :+: (makeRef (Definition (Data nonFL))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD6 (" :+: (makeRef (Definition (Data glaTyFac))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD7 (" :+: (makeRef (Definition (Data dL))) :+: S ")", EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, EmptyS, EmptyS],
-  [S "DD8 (" :+: (makeRef (Definition (Data tolPre))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "LC1 (in" +:+ (makeRef s8) :+: S ")", EmptyS, EmptyS, S "X", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [S "LC2 (in" +:+ (makeRef s8) :+: S ")", EmptyS, EmptyS, EmptyS, S "X", EmptyS,
-  EmptyS, EmptyS, S "X"],
-  [S "LC3 (in" +:+ (makeRef s8) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  EmptyS, EmptyS, EmptyS],
-  [S "LC4 (in" +:+ (makeRef s8) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  S "X", EmptyS, EmptyS],
-  [S "LC5 (in" +:+ (makeRef s8) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS],
-  [S "R1 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [S "R2 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, S "X", S "X",
-  EmptyS, EmptyS, S "X"],
-  [S "R3 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [S "R4 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [S "R5 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS]]
+s9_table3 = Table (EmptyS:s9_row_header_t3)
+  (makeTMatrix s9_col_header_t3 s9_columns_t3 s9_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other" +:+ titleize' item)) True
 
 s9_intro2 = 

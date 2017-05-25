@@ -28,7 +28,7 @@ vav         = commonINP "vav"         (cn' "verification and validation")       
 
 analysis, appendix, characteristic, client, column, company, component, 
   condition, constraint, connection, content, context, customer, datum, decision, 
-  definition, dependency, description, design, document, documentation, element, 
+  definition, dependency, description, design, document, documentation, element, endUser,
   environment, figure, functional, game, general, goal, guide, implementation, individual,
   information, interest, input_, instance_, intReader, introduction, item, label, library,
   limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization, 
@@ -61,6 +61,7 @@ design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
 documentation   = npnc "documentation"  (cn' "documentation")
 element         = npnc "element"        (cn' "element")
+endUser         = npnc "end user"       (cn' "end user")
 environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
@@ -136,7 +137,7 @@ orgOfDoc, prpsOfDoc, refmat, scpOfReq,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol :: NPNC
 
 corSol       = npnc "corSol"       (cn' "correct solution")
-charOfIR     = npnc "charOfIR"     (characteristic `of_''` intReader)
+charOfIR     = npnc "charOfIR"     (characteristic `of__` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
 propOfCorSol = npnc "propOfCorSol" (property `of__` (a_ corSol))
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)

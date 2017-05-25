@@ -57,9 +57,9 @@ s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s3_3_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
-  s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_intro, 
-  s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1, s7_table2,
-  s7_table3, s7_fig1, s7_fig2 :: Contents
+  s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_table1,
+  s4_2_6_table2, s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1,
+  s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
 s2_intro, s2_1_contents, s2_4_contents, s4_2_3_deriv, s4_2_5_intro, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
@@ -898,8 +898,8 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- 4.2.6 Data Constraints --
 ----------------------------
 
-s4_2_6 = datConF (makeRef s4_2_6_table1 +:+ S "and" makeRef s4_2_6_table2 +:+ S "show")
-  mid True end []
+s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show")
+  mid True end [s4_2_6_table1, s4_2_6_table2]
   where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
               plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
               S "to reasonable" +:+. plural value)
@@ -909,11 +909,11 @@ s4_2_6 = datConF (makeRef s4_2_6_table1 +:+ S "and" makeRef s4_2_6_table2 +:+ S 
 ---- The info from table 2 will likely end up in table 1.
 
 -- Temporary dummy tables
-s4_2_6_table1 = Table [[[],[]],[[],[]]]
+s4_2_6_table1 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
   (S "Table 1")
   True
 
-s4_2_6_table2 = Table [[[],[]],[[],[]]]
+s4_2_6_table2 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
   (S "Table 2")
   True
 

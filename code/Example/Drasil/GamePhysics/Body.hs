@@ -54,7 +54,7 @@ chipmunkSRS' = mkDoc' mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 
-  map Verbatim [s2, s3, s4, s5, s6, s7]--, s8]
+  map Verbatim [s2, s3, s4, s5, s6, s7, s8]
   where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.

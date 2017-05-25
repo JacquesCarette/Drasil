@@ -11,10 +11,11 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, cartesian, friction, 
-                   rightHand, collision, space, joint)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
+  cartesian, friction, rightHand, collision, space, joint)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, constraint)
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
+  constraint)
 import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
   makeTMatrix)
 import Data.Drasil.Software.Products

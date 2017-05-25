@@ -695,10 +695,10 @@ s9_table1 = Table [EmptyS,
   [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS]]
-  ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' item +:+
-  S "of Different" +:+ titleize' section_) True
-
+  (showingCxnBw (traceyMatrix) (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
+  {-((titleize traceyMatrix) +:+ S "Showing the" +:+ titleize' connection +:+
+  S "Between" +:+ titleize' item +:+ S "of Different" +:+ titleize' section_) True-}
+  
 -- FIXME: Same goes for this one (see above)
 s9_table2 = Table [EmptyS, S "T1 (" :+: 
   (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", S "T2 (" :+: 
@@ -730,9 +730,10 @@ s9_table2 = Table [EmptyS, S "T1 (" :+:
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS, S "X", S "X", S "X", S "X", S "X", S "X", S "X", S "X", EmptyS, EmptyS,
   EmptyS]]
-  ((titleize traceyMatrix) +:+ S "Showing the" +:+
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ S "and Other" +:+ titleize' item)) True
+  {-((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
-  S "and Other" +:+ titleize' item) True
+  S "and Other" +:+ titleize' item) True-}
 
 -- FIXME: Same goes for this one (see above)
 s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
@@ -791,9 +792,10 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
   EmptyS, EmptyS, EmptyS],
   [S "R6 (in" +:+ (makeRef s7_1) :+: S ")", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS]]
-  ((titleize traceyMatrix) +:+ S "Showing the" +:+
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other" +:+ titleize' item)) True
+  {-((titleize traceyMatrix) +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ titleize' assumption +:+
-  S "and Other" +:+ titleize' item) True
+  S "and Other" +:+ titleize' item) True-}
 
 s9_intro2 = 
   [Paragraph $
@@ -817,17 +819,39 @@ s9_intro2 =
   S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
   plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
 
-fig_2 = Figure (titleize figure +: S "2" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
+fig_2 = figureLabel "2" (traceyMatrix)
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)
+  ("Trace.png")
+  {-(titleize figure +: S "2" +:+ (titleize traceyMatrix) --why does this not cause a discrepancy like `+: S "2"` did?
   +:+ S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ titleize' item
-  +:+ S "of Different" +:+ titleize' section_) "Trace.png"
+  +:+ S "of Different" +:+ titleize' section_) "Trace.png"-}
 
-fig_3 = Figure (titleize figure +: S "3" +:+ (titleize traceyMatrix) +:+ 
+fig_3 = figureLabel "3" (traceyMatrix)
+  (titleize' requirement +:+ S "and Other" +:+ titleize' item)
+  ("RTrace.png")
+  {-Figure (titleize figure +: S "3" +:+ (titleize traceyMatrix) +:+ 
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' requirement) +:+
-  S "and Other" +:+ titleize' item) "RTrace.png"
+  S "and Other" +:+ titleize' item) "RTrace.png"-}
 
-fig_4 = Figure (titleize figure +: S "4" +:+ (titleize traceyMatrix) +:+
+fig_4 = figureLabel "4" (traceyMatrix)
+  (titleize' assumption +:+ S "and Other" +:+ titleize' item)
+  ("ATrace.png")
+  {-Figure (titleize figure +: S "4" +:+ (titleize traceyMatrix) +:+
   S "Showing the" +:+ titleize' connection +:+ S "Between" +:+ (titleize' assumption) +:+
-  S "and Other" +:+ titleize' item) "ATrace.png"
+  S "and Other" +:+ titleize' item) "ATrace.png"-}
+
+{-figs = Enumeration (Simple $ mkEnumAbbrevList 2 (titleize figure) $ map (figureLabel) 
+  [(titleize traceyMatrix) (titleize' item +:+ S "of Different" +:+ titleize' section_) ("Trace.png"), 
+   (titleize traceyMatrix) (titleize' requirement +:+ S "and Other" +:+ titleize' item) ("RTrace.png"),
+   (titleize traceyMatrix) (titleize' assumption +:+ S "and Other" +:+ titleize' item) ("ATrace.png")]) -}
+
+figureLabel :: [Char] -> NPNC -> Sentence -> [Char]-> Contents
+figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
+  +:+ (showingCxnBw (traceyMG) (contents))) filePath
+
+showingCxnBw :: NPNC -> Sentence -> Sentence
+showingCxnBw traceyMG contents = titleize traceyMG +:+ S "Showing the" +:+ titleize' connection +:+
+  S "Between" +:+ contents
 
 s10 = SRS.reference [s10_list] []
 

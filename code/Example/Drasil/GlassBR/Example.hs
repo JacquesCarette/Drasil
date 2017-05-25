@@ -212,7 +212,7 @@ hs            = dcc "hs" (heatSGlass ^. term)
 gtf           = dccWDS "gtf" (glassTypeFac ^. term) 
   (S "A multiplying factor for adjusting the" +:+ (getAcc lResistance) +:+
   S "of different glass type, that is," +:+ (getAcc annealedGlass) :+: 
-  S "," +:+ (getAcc heatSGlass) :+: S ", or" +:+ (getAcc fullyTGlass) +:+ 
+  S "," +:+ (getAcc heatSGlass) `sC` S "or" +:+ (getAcc fullyTGlass) +:+ 
   S "in monolithic glass," +:+ (getAcc lGlass) +:+ S "(Laminated Glass)," +:+
   S "or" +:+ (getAcc iGlass) +:+. S "(Insulating Glass) constructions")
 lateral       = dcc "lateral" (nounPhraseSP "lateral") "Perpendicular to the glass surface."
@@ -293,8 +293,8 @@ t1descr =
   (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
   (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either" +:+.
   S "both True or both False" +:+ (P $ prob_br ^. symbol) +:+ 
-  S "is the" +:+ (phrase $ prob_br ^. term) :+: 
-  S ", as calculated in" +:+. (makeRef (Definition (Theory probOfBr))) +:+ 
+  S "is the" +:+ (phrase $ prob_br ^. term) `sC`
+  S "as calculated in" +:+. (makeRef (Definition (Theory probOfBr))) +:+ 
   (P $ pb_tol ^. symbol) +:+ S "is the" +:+ 
   (phrase $ pb_tol ^. term) +:+. S " entered by the user"
 
@@ -316,8 +316,8 @@ t2descr =
   S "(also called capacity, as defined in" +:+. 
   (makeRef (Definition (Theory calOfCap))) +:+ 
   (P $ demand ^. symbol) +:+ S "(also referred as the" +:+
-  (titleize $ demandq ^. term) :+: S ") is the" +:+ (demandq ^. defn) :+:
-  S ", as defined in" +:+. (makeRef (Definition (Theory calOfDe)))
+  (titleize $ demandq ^. term) :+: S ") is the" +:+ (demandq ^. defn) `sC`
+  S "as defined in" +:+. (makeRef (Definition (Theory calOfDe)))
 
 {-Instance Models-}
 
@@ -346,8 +346,8 @@ cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) :+:
-  S ", which" +:+. S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+
+  (short lResistance) +:+ S "is the" +:+ (phrase $ lResistance ^. term) `sC`
+  S "which" +:+. S "is also called capacity" +:+ (P $ nonFL ^. symbol) +:+
   S "is the" +:+. (phrase $ nonFL ^. term) +:+ (short glassTypeFac) +:+
   S "is the" +:+. (phrase $ glassTypeFac ^. term) +:+ (short lShareFac) +:+
   S "is the" +:+. (phrase $ lShareFac ^. term) +:+ S "Follows" +:+ (short assumption) :+: S "2 and" +:+
@@ -365,8 +365,7 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 
 dedescr :: Sentence
 dedescr = 
-  (P $ demand ^. symbol) +:+ S "or" +:+ 
-  (phrase $ demandq ^. term) :+: S ", is the" +:+
+  (P $ demand ^. symbol) +:+ S "or" +:+ (phrase $ demandq ^. term) `sC` S "is the" +:+
   (demandq ^. defn) +:+ S "obtained from Figure 2 by interpolation using" 
   +:+ (phrase $ sd ^. term) +:+ S "(" :+: (P $ sd ^. symbol) 
   :+: S ") and" +:+ (P $ eqTNTWeight ^. symbol) +:+. S "as parameters" +:+ 

@@ -11,7 +11,7 @@ lcs = [hardware, rigidBodyStruct, shapeLC, spaceLC, arbiterLC, control,
   linkedListStruct, hashtableStruct]
 
 ucs :: [UCChunk]
-ucs = [uc1, uc2, uc3, uc4, uc5, uc6, uc7]
+ucs = [ucIO, ucInputS, ucOutput, ucGoal, ucCart, ucRigid, uc2D]
 
 -- Likely Changes --
 
@@ -73,19 +73,10 @@ hashtableStruct = lcHash mod_assoc
 
 -- Unlikely Changes --
 
-uc1, uc2, uc3, uc4, uc5, uc6, uc7 :: UCChunk
+ucGoal, ucRigid :: UCChunk
 
-uc1 = ucIO
-
-uc2 = ucInputS
-
-uc3 = ucOutput
-
-uc4 = nw $ npnc "goal" (nounPhraseSP $ 
+ucGoal = nw $ npnc "goal" (nounPhraseSP $ 
   "The goal of the system is to simulate the interactions of 2D rigid bodies.")
 
-uc5 = ucCart
+ucRigid = nw $ npnc "rigid" (nounPhraseSP "All objects are rigid bodies.")
 
-uc6 = nw $ npnc "rigid" (nounPhraseSP "All objects are rigid bodies.")
-
-uc7 = uc2D

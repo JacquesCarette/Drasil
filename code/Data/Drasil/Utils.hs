@@ -9,9 +9,10 @@ module Data.Drasil.Utils
   , zipFTable
   , zipSentList
   , makeTMatrix
+  , itemRefToSent
   ) where
 
-import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC)
+import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC, DType, sParen, makeRef, Contents(Definition))
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -84,3 +85,7 @@ zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
+
+-- | makes sentences from an containing an item and its reference
+itemRefToSent :: (String, DType) -> Sentence
+itemRefToSent (a,b) = S a +:+ sParen (makeRef (Definition (b)))

@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Math (matrix, graph, calculation,
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList)
+import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList, itemRefToSent)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -644,21 +644,17 @@ s9_intro1 = Paragraph $ foldlSent [
   (plural assumption)]
 
 --FIXME: There has to be a better way to do this.
-s9_table1 = Table [EmptyS, 
-  S "T1"  +:+ sParen (makeRef (Definition (Theory t1SafetyReq))), 
-  S "T2"  +:+ sParen (makeRef (Definition (Theory t2SafetyReq))),
-  S "IM1" +:+ sParen (makeRef (Definition (Theory probOfBr))), 
-  S "IM2" +:+ sParen (makeRef (Definition (Theory calOfCap))),
-  S "IM3" +:+ sParen (makeRef (Definition (Theory calOfDe))),
-  S "DD1" +:+ sParen (makeRef (Definition (Data risk))),
-  S "DD2" +:+ sParen (makeRef (Definition (Data hFromt))),
-  S "DD3" +:+ sParen (makeRef (Definition (Data loadDF))), 
-  S "DD4" +:+ sParen (makeRef (Definition (Data strDisFac))), 
-  S "DD5" +:+ sParen (makeRef (Definition (Data nonFL))),
-  S "DD6" +:+ sParen (makeRef (Definition (Data glaTyFac))),
-  S "DD7" +:+ sParen (makeRef (Definition (Data dL))), 
-  S "DD8" +:+ sParen (makeRef (Definition (Data tolPre))),
-  S "DD9" +:+ sParen (makeRef (Definition (Data tolStrDisFac)))]
+
+
+s9_itemsAndRefs = [("T1", Theory t1SafetyReq), ("T2", Theory t2SafetyReq),
+  ("IM1", Theory probOfBr), ("IM2", Theory calOfCap), 
+  ("IM3", Theory calOfDe), ("DD1", Data risk), ("DD2", Data hFromt), 
+  ("DD3", Data loadDF), ("DD4", Data strDisFac), 
+  ("DD5", Data nonFL), ("DD6", Data glaTyFac), ("DD7", Data dL), 
+  ("DD8", Data tolPre), ("DD9", Data tolStrDisFac)]
+
+
+s9_table1 = Table (EmptyS:(map (itemRefToSent) s9_itemsAndRefs))
   --For now, I'm not propagating the sParen changes 
   --through the rest of this.
   [[S "T1 (" :+: (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", EmptyS,

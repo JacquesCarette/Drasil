@@ -58,6 +58,30 @@ S "is the"
 
 More to come as questions arise.
 
+-------------------------------------------------
+### Building Up-to-Date Documentation
+-------------------------------------------------
+
+To build the documentation for Drasil, simply type `make docs`.
+
+Upon completion you should receive several messages stating the haddock for certain
+packages has been updated. You will also get the path to the index file(s).
+
+The drasil documentation will be on the path for **local packages** (normally in
+the *.stack-work* folder), for example:
+
+```
+Updating Haddock index for local packages in
+C:\Users\Dan\...\literate-scientific-software\code\.stack-work\...\doc\index.html
+```
+
+or
+
+```
+Updating Haddock index for local packages in
+/.../literate-scientific-software/code/.stack-work/.../doc/index.html
+```
+
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------

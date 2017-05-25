@@ -27,7 +27,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 s2,s2_3, s3, s3_1, s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
-s2_3_intro, s3_1_intro, sys_context_fig, s4_intro,
+s2_3_intro, s3_1_intro, sys_context_fig,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
   s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank, s4_2_6_table1, s4_2_6_table2:: Contents
 

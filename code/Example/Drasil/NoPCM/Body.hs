@@ -19,6 +19,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 import Drasil.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
+import Drasil.OrganizationOfSRS
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -71,14 +72,16 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
            
 s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
 
-s4_intro = Paragraph $
+s4_intro = specSysDecIntro True (phrase $ sWHT ^. term)
+
+{-Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
             (phrase $ problemDescription ^. term) :+: S ", which gives a high-level view of the" +:+
             (phrase $ problem ^. term) +:+ S "to be solved. This is followed by the" +:+
             (plural $ solutionCharSpec ^. term) :+: S ", which presents the" +:+
             (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
             (plural $ definition ^. term) +:+ S "and finally the" +:+
-            (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "." --FIXME: We need something to handle the use of nouns as verbs
+            (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "."-}
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 

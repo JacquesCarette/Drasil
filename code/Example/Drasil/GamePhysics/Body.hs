@@ -252,10 +252,10 @@ s4_1_intro = Paragraph $ foldlSent
   S "from scratch takes a long period of time and is very costly" `sC`
   S "presenting barriers of entry which make it difficult for", (phrase game),
   S "developers to include", (phrase physics), 
-  S "in their" +:+. (plural product_), S "There are a few", S "free,", (phrase openSource), 
-  S "and high quality", (plural $ physLib ^. term), S "available to",
-  S "be used for consumer", (plural product_) +:+. (sParen $ makeRef s7),
-  S "By creating a simple, lightweight, fast and portable",
+  S "in their" +:+. (plural product_), S "There are a few", S "free,", 
+  (phrase openSource), S "and high quality", (plural $ physLib ^. term), 
+  S "available to", S "be used for consumer", (plural product_) +:+. 
+  (sParen $ makeRef s7), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase $ CP.rigidBody ^. term), (phrase $ physLib ^. term) `sC`
   (phrase game), S "development will be more accessible",
   S "to the masses and higher quality", (plural product_), S "will be produced"]
@@ -581,21 +581,26 @@ s5_1_req4 = foldlSent [S "Verify that the inputs",
   S "satisfy the required", plural physicalConstraint, S "from", (makeRef s4_2_6_table1)]
 
 s5_1_req5 = foldlSent 
-  [S "Determine the", (plural $ QP.position ^. term), S "and", (plural $ QP.velocity ^. term), 
-  S "over a", S "period of", (phrase $ QP.time ^. term), S "of the", (getAcc twoD),
-  (plural $ CP.rigidBody ^. term), S "acted upon by a", (phrase $ QP.force ^. term)]
+  [S "Determine the", (plural $ QP.position ^. term), S "and", 
+  (plural $ QP.velocity ^. term), S "over a", S "period of", 
+  (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
+  (plural $ CP.rigidBody ^. term), S "acted upon by a", 
+  (phrase $ QP.force ^. term)]
 
 s5_1_req6 = foldlSent
   [S "Determine the", (plural $ QM.orientation ^. term), S "and", 
-  (plural $ QP.angularVelocity  ^. term), S "over a period of", (phrase $ QP.time ^. term),
-   S "of the", (getAcc twoD), (plural $ CP.rigidBody ^. term)]
+  (plural $ QP.angularVelocity  ^. term), S "over a period of", 
+  (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
+  (plural $ CP.rigidBody ^. term)]
 
-s5_1_req7 = foldlSent [S "Determine if any of the", (plural $ CP.rigidBody ^. term), 
-  S "in the", (phrase $ CP.space ^. term), S "have collided"]
+s5_1_req7 = foldlSent [S "Determine if any of the", 
+  (plural $ CP.rigidBody ^. term), S "in the", (phrase $ CP.space ^. term), 
+  S "have collided"]
 
 s5_1_req8 = foldlSent
-  [S "Determine the", (plural $ QP.position ^. term), S "and", (plural $ QP.velocity ^. term), 
-  S "over a", S "period of", (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
+  [S "Determine the", (plural $ QP.position ^. term), S "and", 
+  (plural $ QP.velocity ^. term), S "over a", S "period of", 
+  (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
   (plural $ CP.rigidBody ^. term), S "that have undergone a", 
   (phrase $ CP.collision ^. term)]
 

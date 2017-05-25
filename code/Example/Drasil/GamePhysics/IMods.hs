@@ -43,7 +43,8 @@ im1leg = foldle1 (+:+.) (+:+.)
   [S "mi is the mass of the i-th rigid body (kg)",
   S "g is the acceleration due to gravity (ms-2)",
   S "t is a point in time and t0 denotes the initial time (s)",
-  (helper1 QP.position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
+  (helper1 QP.position "i" 
+  (S "specifically the position of its center of mass, pCM(t) (DD1))")),
   (helper1 QP.acceleration "i" EmptyS),
   (helper1 QP.velocity "i" EmptyS),
   S "F(t) is the force applied to the i-th body at time t (N)"]

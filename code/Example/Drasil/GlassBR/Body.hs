@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Math (matrix, graph, calculation,
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList, itemRefToSent)
+import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList, itemRefToSent, makeTMatrix)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -628,53 +628,50 @@ s9_intro1 = Paragraph $ foldlSent [
 
 --FIXME: There has to be a better way to do this.
 
+s9_theorysAndRefs, s9_instaModelandRefs, s9_dataDefsandRefs :: [(String, DType)]
 
-s9_itemsAndRefs = [("T1", Theory t1SafetyReq), ("T2", Theory t2SafetyReq),
-  ("IM1", Theory probOfBr), ("IM2", Theory calOfCap), 
-  ("IM3", Theory calOfDe), ("DD1", Data risk), ("DD2", Data hFromt), 
+s9_theorysAndRefs = [("T1", Theory t1SafetyReq), ("T2", Theory t2SafetyReq)]
+
+s9_instaModelandRefs = [("IM1", Theory probOfBr), ("IM2", Theory calOfCap), 
+  ("IM3", Theory calOfDe)]
+
+s9_dataDefsandRefs=  [("DD1", Data risk), ("DD2", Data hFromt), 
   ("DD3", Data loadDF), ("DD4", Data strDisFac), 
   ("DD5", Data nonFL), ("DD6", Data glaTyFac), ("DD7", Data dL), 
   ("DD8", Data tolPre), ("DD9", Data tolStrDisFac)]
 
+s9_row_t1 :: [(String, DType)]
+s9_row_t1 = s9_theorysAndRefs ++ s9_instaModelandRefs ++ s9_dataDefsandRefs
 
-s9_table1 = Table (EmptyS:(map (itemRefToSent) s9_itemsAndRefs))
-  --For now, I'm not propagating the sParen changes 
-  --through the rest of this.
-  [[S "T1 (" :+: (makeRef (Definition (Theory t1SafetyReq))) :+: S ")", EmptyS,
-  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS], 
-  [S "T2 (" :+: (makeRef (Definition (Theory t2SafetyReq))) :+: S ")", S "X",
-  EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
-  EmptyS],
-  [S "IM1 (" :+: (makeRef (Definition (Theory probOfBr))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS],
-  [S "IM2 (" :+: (makeRef (Definition (Theory calOfCap))) :+: S ")", EmptyS, 
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS,
-  EmptyS],
-  [S "IM3 (" :+: (makeRef (Definition (Theory calOfDe))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS],
-  [S "DD1 (" :+: (makeRef (Definition (Data risk))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD2 (" :+: (makeRef (Definition (Data hFromt))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD3 (" :+: (makeRef (Definition (Data loadDF))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD4 (" :+: (makeRef (Definition (Data strDisFac))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS,
-  EmptyS],
-  [S "DD5 (" :+: (makeRef (Definition (Data nonFL))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS],
-  [S "DD6 (" :+: (makeRef (Definition (Data glaTyFac))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [S "DD7 (" :+: (makeRef (Definition (Data dL))) :+: S ")", EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS],
-  [S "DD8 (" :+: (makeRef (Definition (Data tolPre))) :+: S ")", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X"],
-  [S "DD9 (" :+: (makeRef (Definition (Data tolStrDisFac))) :+: S ")", EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS]]
+-- list of columns and there rows for traceability matrix
+s9_columns_t1 :: [[String]]
+s9_columns_t1 = [s9_T1, s9_T2, s9_IM1, s9_IM2, s9_IM3, s9_DD1, s9_DD2, s9_DD3, 
+  s9_DD4, s9_DD5, s9_DD6, s9_DD7, s9_DD8, s9_DD9]
+
+-- The headers for the first row, and column
+s9_row_name_t1 :: [Sentence]
+s9_row_name_t1 = map (itemRefToSent) s9_row_t1
+
+s9_T1, s9_T2, s9_IM1, s9_IM2, s9_IM3, s9_DD1, s9_DD2, s9_DD3, 
+  s9_DD4, s9_DD5, s9_DD6, s9_DD7, s9_DD8, s9_DD9 :: [String]
+-- list of each item that "this" item requires for traceability matrix
+s9_T1  = ["T2","IM1"]
+s9_T2  = ["T1","IM2","IM3"]
+s9_IM1 = ["DD1","DD2","DD3","DD4"]
+s9_IM2 = ["DD5", "DD6"]
+s9_IM3 = []
+s9_DD1 = []
+s9_DD2 = []
+s9_DD3 = []
+s9_DD4 = ["DD7"]
+s9_DD5 = ["DD2", "DD8"]
+s9_DD6 = []
+s9_DD7 = ["IM3", "DD2", "DD6"]
+s9_DD8 = ["DD9"]
+s9_DD9 = ["DD2","DD3"]
+
+s9_table1 = Table (EmptyS:s9_row_name_t1) 
+  (makeTMatrix s9_row_name_t1 s9_columns_t1 s9_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
   
 -- FIXME: Same goes for this one (see above)

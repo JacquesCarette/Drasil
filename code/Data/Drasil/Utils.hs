@@ -76,14 +76,14 @@ zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
 -- | traceability matrices row from a list of rows and a list of columns
-zipFTable :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
+zipFTable :: Eq a => [Sentence] -> [a] -> [(a, b)] -> [Sentence]
 zipFTable acc _ []              = acc
 zipFTable acc [] k              = acc ++ (take (length k) (repeat EmptyS))
-zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
+zipFTable acc k@(x:xs) (y:ys)   | x == (fst y)    = zipFTable (acc++[S "X"]) xs ys
                                 | otherwise = zipFTable (acc++[EmptyS]) k ys
 
 -- | makes a traceability matrix from list of column rows and list of rows
-makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [(a, b)] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
 -- | makes sentences from an containing an item and its reference

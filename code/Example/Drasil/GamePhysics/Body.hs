@@ -488,12 +488,13 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 
 s4_2_6 :: Section
-s4_2_6_intro, s4_2_6_table1, s4_2_6_table2 :: Contents
+s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = SRS.datCon [s4_2_6_intro, s4_2_6_table1,
-  s4_2_6_table2] []
+s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2)+:+ S "show") EmptyS True EmptyS [s4_2_6_table1, s4_2_6_table2]
+--s4_2_6 = SRS.datCon [s4_2_6_intro, s4_2_6_table1,
+--  s4_2_6_table2] []
 
-s4_2_6_intro = Paragraph $ foldlSent 
+{--s4_2_6_intro = Paragraph $ foldlSent 
   [(makeRef s4_2_6_table1), S "and", (makeRef s4_2_6_table2), 
   S "show the", (plural datumConstraint), S "on",
   S "the input and output variables, respectively. The",
@@ -502,7 +503,7 @@ s4_2_6_intro = Paragraph $ foldlSent
   S "variable. The", (plural constraint), S "are conservative, to give the user of the",
   (phrase model), S "the flexibility to experiment with unusual situations. The",
   S "column of typical values is intended to provide a feel for a",
-  S "common scenario"]
+  S "common scenario"] --}
 
 -- Currently unable to write relations in sentences, so verbal explanations
 -- will do for now.

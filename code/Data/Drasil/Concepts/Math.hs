@@ -5,7 +5,8 @@ import Control.Lens ((^.))
 
 calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
-  probability, surface, unit_, unitV, vector, rate, change, rOfChng :: ConceptChunk
+  probability, surface, unit_, unitV, vector, rate, change, rOfChng, 
+  constraint :: ConceptChunk
 
 ode :: CINP
 
@@ -13,6 +14,7 @@ ode :: CINP
 {--algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations" --}
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
+constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
 equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "

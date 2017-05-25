@@ -56,7 +56,7 @@ s2_3_intro = Paragraph $
            -- FIXME: Section 3.2 does not exist yet, when it does, add reference
 
            
-s3 = SRS.genSysDec [] [s3_1]
+s3 = genSysF [s3_1]
 
 s3_1 = section (titleize sysCont) [s3_1_intro, sys_context_fig] []
 
@@ -71,9 +71,7 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
             "SystemContextFigure.png"
 
            
-s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
-
-s4_intro = specSysDecIntro True (phrase $ sWHT ^. term)
+s4 = specSysDesF (True (phrase $ sWHT ^. term)) [s4_1, s4_2]
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 

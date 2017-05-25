@@ -43,6 +43,13 @@ pcm | minimal SWHS example, with PCM removed
 
 After building, you can find the executables for the examples in the relevant subdirectories of .stack-work/dist/ca59d0ab/build/
 
+## Finding / Building the Haddock documentation
+
+You can run `make docs` from the ./code folder to build the documentation.
+
+See the [README](https://github.com/JacquesCarette/literate-scientific-software/tree/master/code#building-up-to-date-documentation) 
+in ./code/ for more information.
+
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------

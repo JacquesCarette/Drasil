@@ -27,17 +27,17 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
 -- Input Format Module
 mod_inputf :: ModuleChunk
 mod_inputf = mod_io_fun
-  swhsProg [] [mod_hw, mod_inputp, mod_seq] (S "input data.") modInputFormat
+  swhsProg [] [mod_hw, mod_inputp, mod_seq] (S "input data") modInputFormat
 
 -- Input Parameters Module
 mod_inputp :: ModuleChunk
 mod_inputp = mod_io_fun
-  swhsProg [] [mod_seq] (S "input parameters.") modInputParam
+  swhsProg [] [mod_seq] (S "input parameters") modInputParam
 
 -- Input Verification Module
 mod_inputv :: ModuleChunk
 mod_inputv = mod_io_fun
-  swhsProg [] [mod_inputp, mod_seq] (S "physical and software constraints.") modInputVerif
+  swhsProg [] [mod_inputp, mod_seq] (S "physical and software constraints") modInputVerif
 
 -- Output Format Module
 mod_outputf_desc :: ConceptChunk
@@ -46,7 +46,7 @@ mod_outputf_desc = mod_outputf_desc_fun (S "input parameters," +:+
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun
-  swhsProg [] [mod_hw, mod_inputp, mod_seq] (S "output data.") mod_outputf_desc
+  swhsProg [] [mod_hw, mod_inputp, mod_seq] (S "output data") mod_outputf_desc
 
 -- Output Verification Module
 mod_outputv_desc :: ConceptChunk
@@ -58,7 +58,7 @@ mod_outputv_desc = dccWDS "mod_outputv_desc" (cn' "output verification") (
 
 mod_outputv :: ModuleChunk
 mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
-  (S "The algorithm used to approximate expected results.") mod_outputv_desc
+  (S "The algorithm used to approximate expected results") mod_outputv_desc
 
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
@@ -79,7 +79,7 @@ mod_ener_desc = dccWDS "mod_ener_desc" (nounPhraseSP "energy equations") (
 
 mod_ener :: ModuleChunk
 mod_ener = mod_param_fun swhsProg [mod_inputp, mod_seq]
-  (S "The equations for solving for the energies using the input parameters.") mod_ener_desc
+  (S "The equations for solving for the energies using the input parameters") mod_ener_desc
 
 -- Control Module
 --mod_ctrl :: ModuleChunk

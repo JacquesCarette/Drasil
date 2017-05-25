@@ -115,6 +115,8 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "as" +:+ (phrase $ latent_heat ^. term) :+: S ", which" +:+
   S "allows higher" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"),
+
+-- This last paragraph looks like it can be parameterized
   Paragraph (S "The following" +:+ phrase section_ +:+ S "provides an" +:+
   S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
   S ") for" +:+. (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
@@ -125,6 +127,8 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "of the" +:+ phrase system :+: S ", the" +:+ phrase organization +:+
   S "of the" +:+ phrase document +:+ S  "and the" +:+
   plural characteristic +:+ S "of the" +:+. plural intReader)]
+
+
  
 -- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating
 -- PCM" which is not capitlaized whereas the stable version is
@@ -435,6 +439,10 @@ s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) :+:
 s4_1_3_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short goalStmt) $
   map (goalState) [temp_W, temp_PCM, w_E, pcm_E])
 
+goalState :: NamedIdea b => b -> Sentence
+goalState b =  (S "Predict the" +:+
+  (phrase $ b ^. term) +:+ S "over" +:+. (phrase $ time ^. term))
+
 --  ((short goalStmt) :+: S "1", Flat (S "Predict the" +:+
 --  (phrase $ temp_W ^. term) +:+ S "over" +:+. (phrase $ time ^. term))),
 --
@@ -446,12 +454,6 @@ s4_1_3_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short goalStmt) $
 --
 --  ((short goalStmt) :+: S "4", Flat (S "Predict the" +:+
 --  (phrase $ pcm_E ^. term) +:+ S "over" +:+. (phrase $ time ^. term)))
-
-
-goalState :: NamedIdea b => b -> Sentence
-goalState b =  (S "Predict the" +:+
-  (phrase $ b ^. term) +:+ S "over" +:+. (phrase $ time ^. term))
-
 
 -- List structure is repeated between examples. (For all of these lists I am 
 -- imagining the potential for something like what was done with the lists in 
@@ -892,32 +894,12 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = SRS.datCon [s4_2_6_intro] []
-
-s4_2_6_intro = Paragraph (titleize' table_ +:+ S "1 and 2 show the" +:+
-  plural datum +:+ plural constraint +:+ S "on the" +:+ phrase input_ +:+
-  S "and" +:+ phrase output_ +:+ plural variable :+: S ", respectively." +:+
-  S "The" +:+ phrase column +:+ S "for" +:+ phrase physical +:+
-  plural constraint +:+ S "gives the" +:+ phrase physical +:+
-  plural limitation +:+ S "on the range of" +:+ plural value +:+
-  S "that can be taken by the" +:+. phrase variable +:+ S "The" +:+
-  phrase column +:+ S "for" +:+ phrase software +:+ plural constraint +:+
-  S "restricts the range of" +:+ plural input_ +:+ S "to reasonable" +:+.
-  plural value +:+ S "The" +:+ plural constraint +:+ S "are conservative," +:+
-  S "to give the" +:+ phrase user +:+ S "of the" +:+ phrase model +:+
-  S "the flexibility to experiment with unusual situations. The" +:+
-  phrase column +:+ S "of" +:+ S "typical" +:+ plural value +:+.
-  S "is intended to provide a feel for a common scenario" +:+
-  S "The" +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
-  S "estimate of the confidence with which the" +:+ phrase physical +:+
-  plural quantity +:+. S "can be measured" +:+ S "This" +:+
-  phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
-  S "if one were performing an" +:+ phrase uncertainty +:+
-  S "quantification exercise. (The" +:+ plural table_ +:+ S "are left out" +:+
-  S "because features they should use are not yet implemented in Drasil.)")
-
--- General paragraph, repeated between examples. Can be abstracted out.
-
+s4_2_6 = datConF (S "Table 1 and 2 show") mid True end []
+  where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
+              plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
+              S "to reasonable" +:+. plural value)
+        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+
+              S "because features they should use are not yet implemented in Drasil.")
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 

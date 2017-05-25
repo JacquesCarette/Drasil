@@ -44,7 +44,7 @@ mod_hw = makeImpModule hwHiding
 -- Behaviour Hiding Module
 mod_behav :: ModuleChunk
 mod_behav = makeUnimpModule modBehavHiding
-  (S "The contents of the required behaviors.")
+  (S "The contents of the required behaviours.")
   Nothing
 
 -- sfwr desc module

@@ -126,7 +126,7 @@ s4_1_3_intro = Paragraph $
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = section ((titleize' $ solutionCharSpec ^. term)) 
+s4_2 = section ((titleize' solutionCharSpec)) 
   [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $

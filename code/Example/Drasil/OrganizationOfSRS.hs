@@ -1,5 +1,5 @@
-module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysIntro, 
-                                 specSysDesIntro, datConF, datConPar,
+module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
+                                 specSysDesF, datConF, datConPar,
                                  figureLabel, showingCxnBw, inModelF) where
 
 import Language.Drasil

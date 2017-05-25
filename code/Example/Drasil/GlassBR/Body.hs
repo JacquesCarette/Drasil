@@ -44,7 +44,7 @@ s2_intro, s2_2_intro, s3_intro,
   s5_1_table, s5_2_bullets, s6_intro, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
   s6_2_4_intro, s6_2_5_table1, 
-  s6_2_5_table2, s6_2_5_intro2, --s6_2_5_table3, 
+  s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_1_intro, s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
@@ -438,12 +438,11 @@ s6_2_4_intro = Paragraph $ foldlSent [
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
 
-s6_2_5 = datConF (S "Table 2 () shows") EmptyS True end [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
-  where end = foldlSent [at_start table_, S "3", (sParen $ makeRef s6_2_5_table2), S "gives the", plural value, 
+s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
+  where end = foldlSent [(makeRef s6_2_5_table1), S "gives the", plural value, 
               S "of the specification", (plural $ parameter ^. term),
-              S "used in", titleize table_, S "2" +:+. S "()", --(makeRef s6_2_5_table1) :+: 
-              (P $ ar_max ^. symbol), S "refers to the" +:+ --FIXME: Issue #167
-              (phrase $ ar_max ^. term), S "for the plate of glass"]
+              S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
+              S "refers to the", (phrase $ ar_max ^. term), S "for the plate of glass"]
 
 s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "Typical Value",
   S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3),
@@ -479,14 +478,13 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (titleize table_ +: S "3" +:+ titleize specification +:+
   (titleize $ parameter ^. term) +:+ titleize' value) True
 
-s6_2_5_intro2 = Paragraph $ foldlSent [titleize table_, S "4 ()",--sParen (makeRef s6_2_5_table3),
-  S "shows the", plural constraint, S "that must be satisfied by the",
-  phrase output_]
+s6_2_5_intro2 = Paragraph $ foldlSent [(makeRef s6_2_5_table3), S "shows the",
+  plural constraint, S "that must be satisfied by the", phrase output_]
 
--- s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
---  [(\x -> P $ fst(x)), (\x -> snd(x))] 
---  [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
---  (S "Table4: Output Variables") True
+s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
+  [(\x -> P $ fst(x)), (\x -> snd(x))] 
+  [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
+  (S "Table 4: Output Variables") True
 
 s7 = SRS.require [] [s7_1, s7_2]
 

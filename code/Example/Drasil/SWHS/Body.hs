@@ -1204,8 +1204,7 @@ s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
   EmptyS, S "X", EmptyS, EmptyS]]
-  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+
-  S "Between" +:+ titleize' item +:+ S "of Different" +:+ titleize' section_)
+  (showingCxnBw traceyMatrix (titleize' item +:+ S "of Different" +:+ titleize' section_))
   True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
@@ -1227,8 +1226,7 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
   [S "R9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS],
   [S "R10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "R11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
-  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+
-  S "Between" +:+ (titleize' requirement) +:+ S "and" +:+ (titleize' inModel))
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+ titleize' inModel))
   True
 
 s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
@@ -1291,8 +1289,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   [S "LC6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
   EmptyS, EmptyS]]
-  (titleize traceyMatrix +:+ S "Showing the" +:+ titleize' connection +:+
-  S "Between" +:+ (titleize' assumption) +:+ S "and Other" +:+ titleize' item)
+  (showingCxnBw traceyMatrix (titleize' assumption +:+ S "and Other" +:+ titleize' item))
   True
 
 -- These matrices can probably be generated automatically when enough info is
@@ -1327,14 +1324,14 @@ s7_intro2 = [Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
 
 -- Same comments on this paragraph as I had for s7_intro1. 
 
-s7_fig1 = Figure (S "Traceability" +:+ (titleize $ graph ^. term) +:+
-  S "Showing the" +:+ titleize' connection +:+ S "Between" +:+
-  titleize' item +:+ S "of Different" +:+ titleize' section_) "ATrace.png"
+s7_fig1 = Figure (
+  showingCxnBw traceyGraph (titleize' item +:+ S "of Different" +:+ titleize' section_)
+  ) "ATrace.png"
 
-s7_fig2 = Figure (S "Traceability" +:+ (titleize $ graph ^. term) +:+
-  S "Showing the" +:+ titleize' connection +:+ S "Between" +:+
-  (titleize' requirement) `sC` titleize' inModel `sC` S "and" +:+
-  titleize' datum +:+ titleize' constraint) "RTrace.png"
+s7_fig2 = Figure (
+  showingCxnBw traceyGraph ((titleize' requirement) `sC`
+  titleize' inModel `sC` S "and" +:+ titleize' datum +:+ titleize' constraint)
+  ) "RTrace.png"
 
 --References?
 

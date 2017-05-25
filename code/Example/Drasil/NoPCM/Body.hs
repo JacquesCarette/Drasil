@@ -9,6 +9,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
+import Data.Drasil.Utils(mkConstraintList)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, equation, number)
 import Data.Drasil.Concepts.Software (program)
@@ -28,7 +29,7 @@ s2,s2_3, s3, s3_1, s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
 s2_3_intro, s3_1_intro, sys_context_fig, s4_intro,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
-  s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank:: Contents
+  s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank, s4_2_6_table1, s4_2_6_table2:: Contents
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
@@ -73,15 +74,6 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
 s4 = SRS.specSysDec [s4_intro] [s4_1, s4_2]
 
 s4_intro = specSysDecIntro True (phrase $ sWHT ^. term)
-
-{-Paragraph $
-           S "This" +:+ (phrase $ section_ ^. term) +:+ S "first presents the" +:+
-            (phrase $ problemDescription ^. term) :+: S ", which gives a high-level view of the" +:+
-            (phrase $ problem ^. term) +:+ S "to be solved. This is followed by the" +:+
-            (plural $ solutionCharSpec ^. term) :+: S ", which presents the" +:+
-            (plural assumption) `sC` (plural $ theory ^. term) :+: S "," +:+
-            (plural $ definition ^. term) +:+ S "and finally the" +:+
-            (phrase $ inModel ^. term) +:+ S "(":+: (getAcc ode) :+: S ") that models the" +:+ (phrase $ sWHT ^. term) :+: S "."-}
 
 s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
@@ -152,7 +144,7 @@ s4_2_1_intro = Paragraph $
            S "], in which the respective" +:+ (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 
-s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_TMods] []
+s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_TMods, s4_2_6_table1, s4_2_6_table2] []
 
 s4_2_2_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+ S "focuses on the general" +:+ (plural $ equation ^. term) +:+
@@ -161,3 +153,11 @@ s4_2_2_intro = Paragraph $
   
 s4_2_2_TMods :: Contents
 s4_2_2_TMods = Definition $ Theory t1consThermE
+
+s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) []) 
+    (S "Table 1: Input Variables") True
+
+s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) []) 
+    (S "Table 2: Output Variables") True

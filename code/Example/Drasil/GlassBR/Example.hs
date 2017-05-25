@@ -366,7 +366,7 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd]
 dedescr :: Sentence
 dedescr = 
   (P $ demand ^. symbol) +:+ S "or" +:+ (phrase $ demandq ^. term) `sC` S "is the" +:+
-  (demandq ^. defn) +:+ S "obtained from Figure 2 by interpolation using" 
+  (demandq ^. defn) +:+ S "obtained from Figure 2 by interpolation using" --use MakeRef? Issue #216
   +:+ (phrase $ sd ^. term) +:+ S "(" :+: (P $ sd ^. symbol) 
   :+: S ") and" +:+ (P $ eqTNTWeight ^. symbol) +:+. S "as parameters" +:+ 
   (P $ eqTNTWeight ^. symbol) +:+ S "is defined as" +:+

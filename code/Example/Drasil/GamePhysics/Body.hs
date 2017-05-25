@@ -11,6 +11,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
+import Drasil.OrganizationOfSRS
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
   position, torque, acceleration, angularAccel, force, gravitationalConst, 
@@ -452,8 +453,10 @@ s4_2_5 :: Section
 s4_2_5_intro :: Contents
 s4_2_5_IMods :: [Contents]
 
-s4_2_5 = SRS.inModel ([s4_2_5_intro] ++
-  (s4_2_5_IMods)) []
+
+s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
+--s4_2_5 = SRS.inModel ([s4_2_5_intro] ++
+--  (s4_2_5_IMods)) []
 
 s4_2_5_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "transforms the", (phrase problem), S "defined",

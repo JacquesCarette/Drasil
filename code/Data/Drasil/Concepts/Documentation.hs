@@ -36,7 +36,7 @@ analysis, appendix, characteristic, client, column, company, component,
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, statement, symbol_, system, table_, template, 
-  terminology, theory, traceyMatrix, user, useCase, value, variable, 
+  terminology, theory, traceyGraph, traceyMatrix, user, useCase, value, variable, 
   video, verification, uncertainty :: NPNC
 
 analysis        = npnc "analysis"       (cnIS "analysis")
@@ -119,6 +119,7 @@ table_          = npnc "table"          (cn' "table")
 template        = npnc "template"       (cn' "template")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
+traceyGraph     = npnc "traceyGraph"    (cn' "traceability graph")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 uncertainty     = npnc "uncertainty"    (cn' "uncertainty")
 user            = npnc "user"           (cn' "user")

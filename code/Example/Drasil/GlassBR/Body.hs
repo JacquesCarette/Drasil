@@ -792,7 +792,7 @@ s9_table3 = Table [EmptyS, S "A1 (in" +:+ (makeRef s6_2_1) :+: S ")",
 
 s9_intro2 = 
   [Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the traceability" +:+ (plural $ graph ^. term) 
+  S "The" +:+ phrase purpose +:+ S "of the" +:+ plural traceyGraph +:+ 
   +:+ S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
   S "additionally modified if a certain" +:+ phrase component +:+. S "is changed" +:+ 
   S "The arrows in the" +:+ (plural $ graph ^. term) +:+ S "represent" +:+.

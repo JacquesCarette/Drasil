@@ -11,10 +11,10 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Physics (rigidBody, elasticity, cartesian, friction, 
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, cartesian, friction, 
                    rightHand, collision, space, joint)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass, dimension)
-import Data.Drasil.Concepts.Math
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, constraint)
 import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
   makeTMatrix)
 import Data.Drasil.Software.Products
@@ -100,7 +100,7 @@ para2_s2_intro = Paragraph $ foldlSent
   [S "The following", (phrase section_), S "provides an overview of the",
   titleize srs, (sParen $ getAcc srs), S "for",
   (short chipmunk) `sC` S "an", (phrase openSource), (getAcc twoD), 
-  (phrase $ rigidBody ^. term) +:+. (phrase $ physLib ^. term),
+  (phrase $ CP.rigidBody ^. term) +:+. (phrase $ physLib ^. term),
   S "This", (phrase section_), S "explains the", (phrase purpose), S "of this", 
   (phrase document) :+: S ", the scope", S "of the", (phrase system) `sC` 
   S "and the", (phrase organization), S "of the", (phrase document)]
@@ -119,7 +119,7 @@ s2_1 = SRS.prpsOfDoc (s2_1_intro) []
 para1_s2_1_intro :: Contents
 para1_s2_1_intro = Paragraph $ foldlSent 
   [S "This", (phrase document), S "descibes the modeling of an",
-  (phrase openSource), getAcc twoD, (phrase $ rigidBody ^. term), 
+  (phrase openSource), getAcc twoD, (phrase $ CP.rigidBody ^. term), 
   (phrase $ physLib ^. term), S "used for" +:+. (plural game), S "The", 
   plural goalStmt, S "and", plural thModel, S "used in",
   short chipmunk, S "are provided. This", (phrase document),
@@ -151,10 +151,10 @@ s2_2 = SRS.scpOfReq [s2_2_intro] []
 
 s2_2_intro = Paragraph $ foldlSent 
   [S "The scope of the", plural requirement, S "includes the",
-  (phrase $ physicalSim),  S "of", (getAcc twoD), (plural $ rigidBody ^. term),
+  (phrase $ physicalSim),  S "of", (getAcc twoD), (plural $ CP.rigidBody ^. term),
   S "acted on by forces. Given", (getAcc twoD), 
-  (plural $ rigidBody ^. term) `sC` (short chipmunk), 
-  S "is intended to simulate how these", (plural $ rigidBody ^. term), 
+  (plural $ CP.rigidBody ^. term) `sC` (short chipmunk), 
+  S "is intended to simulate how these", (plural $ CP.rigidBody ^. term), 
   S "interact with one another"]
 
 -------------------------------------
@@ -251,7 +251,7 @@ s4_1_intro = Paragraph $ foldlSent
   S "and high quality", (plural $ physLib ^. term), S "available to",
   S "be used for consumer", (plural product_) +:+. (sParen $ makeRef s7),
   S "By creating a simple, lightweight, fast and portable",
-  (getAcc twoD), (phrase $ rigidBody ^. term), (phrase $ physLib ^. term) `sC`
+  (getAcc twoD), (phrase $ CP.rigidBody ^. term), (phrase $ physLib ^. term) `sC`
   (phrase game), S "development will be more accessible",
   S "to the masses and higher quality", (plural product_), S "will be produced"]
 
@@ -274,7 +274,7 @@ s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
 
 s4_1_1_bullets = Enumeration (Bullet $ 
   (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)))
-  [rigidBody, elasticity, ctrOfMass, cartesian, rightHand])
+  [CP.rigidBody, CP.elasticity, ctrOfMass, CP.cartesian, CP.rightHand])
 
 
 -----------------------------
@@ -291,7 +291,7 @@ s4_1_2_stmt1 = foldlSent
   [S "Given the", (plural physicalProperty) `sC` S "initial", 
   (plural $ position ^. term), S "and",
   (plural $ vel ^. term) `sC` S "and", (plural $ force ^. term),
-  S "applied on a set of", (plural $ rigidBody ^. term) `sC`
+  S "applied on a set of", (plural $ CP.rigidBody ^. term) `sC`
   S "determine their new", (plural $ position ^. term), S "and",
   (plural $ vel ^. term), S "over a period of", (phrase $ time ^. term)]
 
@@ -299,14 +299,14 @@ s4_1_2_stmt2 = foldlSent
   [S "Given the", (plural physicalProperty) `sC` S "initial", 
   (plural $ orientation ^. term), S "and", (plural $ angVel ^. term) `sC`
   S "and", (plural $ force ^. term), S "applied on a set of", 
-  (plural $ rigidBody ^. term) `sC` S "determine their new",
+  (plural $ CP.rigidBody ^. term) `sC` S "determine their new",
   (plural $ orientation ^. term), S "and", (plural $ angVel ^. term), 
   S "over a period of", (phrase $ time ^. term)]
 
 s4_1_2_stmt3 = foldlSent 
   [S "Given the initial", (plural $ position ^. term), S "and", 
   (plural $ vel ^. term), S "of a", S "set of", 
-  (plural $ rigidBody ^. term) `sC` S "determine if any of",
+  (plural $ CP.rigidBody ^. term) `sC` S "determine if any of",
   S "them will collide with one another over a period of", 
   (phrase $ time ^. term)]
 
@@ -316,8 +316,8 @@ s4_1_2_stmt4 = foldlSent
   S "and", (plural $ vel ^. term) `sC` S "determine the new",
   (plural $ position ^. term), S "and", (plural $ vel ^. term),
   S "over a period of", (phrase $ time ^. term), S "of",
-  (plural $ rigidBody ^. term), S "that have undergone a", 
-  (phrase $ collision ^. term)]
+  (plural $ CP.rigidBody ^. term), S "that have undergone a", 
+  (phrase $ CP.collision ^. term)]
 
 s4_1_2_list' :: [Sentence]
 s4_1_2_list' = [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4]
@@ -360,18 +360,19 @@ itemsAndRefs = [(thModel, s4_2_2), (genDefn, s4_2_3), (dataDefn, s4_2_4),
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7 :: Sentence
 
-s4_2_1_assum1 = foldlSent [S "All objects are", (plural $ rigidBody ^. term)]
+s4_2_1_assum1 = foldlSent [S "All objects are", (plural $ CP.rigidBody ^. term)]
 s4_2_1_assum2 = foldlSent [S "All objects are", (getAcc twoD)]
-s4_2_1_assum3 = foldlSent [S "The library uses a", (phrase $ cartesian ^. term)]
+s4_2_1_assum3 = foldlSent [S "The library uses a", (phrase $ CP.cartesian ^. term)]
 s4_2_1_assum4 = foldlSent [S "The axes are defined using", 
-  (phrase $ rightHand ^. term)]
-s4_2_1_assum5 = foldlSent [S "All", (plural $ rigidBody ^. term), 
-  (plural $ collision ^. term), S "are vertex-to-edge", 
-  (plural $ collision ^. term)]
+  (phrase $ CP.rightHand ^. term)]
+s4_2_1_assum5 = foldlSent [S "All", (plural $ CP.rigidBody ^. term), 
+  (plural $ CP.collision ^. term), S "are vertex-to-edge", 
+  (plural $ CP.collision ^. term)]
 s4_2_1_assum6 = foldlSent [S "There is no damping", 
   S "involved throughout the", (phrase simulation)]
-s4_2_1_assum7 = foldlSent [S "There are no", (plural constraint),
-  S "and joints involved throughout the", (phrase simulation)]
+s4_2_1_assum7 = foldlSent [S "There are no", (plural $ CM.constraint ^. term),
+  S "and", (plural $ CP.joint ^. term), S "involved throughout the", 
+  (phrase simulation)]
 
 s4_2_1_list' :: [Sentence]
 s4_2_1_list' = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
@@ -392,7 +393,7 @@ s4_2_2 = SRS.thModel ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
 
 s4_2_2_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "focuses on the", (phrase general), 
-  (plural $ equation ^. term), S "the", (phrase $ physLib ^. term), 
+  (plural $ CM.equation ^. term), S "the", (phrase $ physLib ^. term), 
   S "is based on"]
 
 s4_2_2_TMods = map Definition (map Theory cpTMods)
@@ -410,7 +411,7 @@ s4_2_3 = SRS.genDefn ([s4_2_3_intro] {- ++
 
 s4_2_3_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "collects the laws and", 
-  (plural $ equation ^. term), S "that will be used in deriving the", 
+  (plural $ CM.equation ^. term), S "that will be used in deriving the", 
   (plural dataDefn) `sC` S "which in turn will be used to build the", 
   (plural inModel)]
 
@@ -557,19 +558,19 @@ s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
 -- some requirements look like they could be parametrized
-s5_1_req1 = foldlSent [S "Create a", (phrase $ space ^. term), S "for all of the",
-  (plural $ rigidBody ^. term), S "in the", (phrase physicalSim), 
+s5_1_req1 = foldlSent [S "Create a", (phrase $ CP.space ^. term), S "for all of the",
+  (plural $ CP.rigidBody ^. term), S "in the", (phrase physicalSim), 
   S "to interact in"]
 
 s5_1_req2 = foldlSent [S "Input the initial", 
   (plural $ mass ^. term) `sC` (plural $ vel ^. term) `sC` 
   (plural $ orientation ^. term) `sC` (plural $ angVel ^. term), 
   S "of" `sC` S "and", (plural $ force ^. term), S "applied on", 
-  (plural $ rigidBody ^. term)]
+  (plural $ CP.rigidBody ^. term)]
 
-s5_1_req3 = foldlSent [S "Input the", (phrase $ surface ^. term), 
-  (plural property), S "of the bodies, such as", (phrase $ friction ^. term), 
-  S "or", (phrase $ elasticity ^. term)]
+s5_1_req3 = foldlSent [S "Input the", (phrase $ CM.surface ^. term), 
+  (plural property), S "of the bodies, such as", (phrase $ CP.friction ^. term), 
+  S "or", (phrase $ CP.elasticity ^. term)]
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
   S "satisfy the required", plural physicalConstraint, S "from", (makeRef s4_2_6_table1)]
@@ -577,21 +578,21 @@ s5_1_req4 = foldlSent [S "Verify that the inputs",
 s5_1_req5 = foldlSent 
   [S "Determine the", (plural $ position ^. term), S "and", (plural $ vel ^. term), 
   S "over a", S "period of", (phrase $ time ^. term), S "of the", (getAcc twoD),
-  (plural $ rigidBody ^. term), S "acted upon by a", (phrase $ force ^. term)]
+  (plural $ CP.rigidBody ^. term), S "acted upon by a", (phrase $ force ^. term)]
 
 s5_1_req6 = foldlSent
   [S "Determine the", (plural $ orientation ^. term), S "and", 
   (plural $ angVel ^. term), S "over a period of", (phrase $ time ^. term),
-   S "of the", (getAcc twoD), (plural $ rigidBody ^. term)]
+   S "of the", (getAcc twoD), (plural $ CP.rigidBody ^. term)]
 
-s5_1_req7 = foldlSent [S "Determine if any of the", (plural $ rigidBody ^. term), 
-  S "in the", (phrase $ space ^. term), S "have collided"]
+s5_1_req7 = foldlSent [S "Determine if any of the", (plural $ CP.rigidBody ^. term), 
+  S "in the", (phrase $ CP.space ^. term), S "have collided"]
 
 s5_1_req8 = foldlSent
   [S "Determine the", (plural $ position ^. term), S "and", (plural $ vel ^. term), 
   S "over a", S "period of", (phrase $ time ^. term), S "of the", (getAcc twoD), 
-  (plural $ rigidBody ^. term), S "that have undergone a", 
-  (phrase $ collision ^. term)]
+  (plural $ CP.rigidBody ^. term), S "that have undergone a", 
+  (phrase $ CP.collision ^. term)]
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
@@ -634,19 +635,20 @@ s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
   s6_likelyChg_stmt4 :: Sentence
 
 --these statements look like they could be parametrized
-s6_likelyChg_stmt1 = foldlSent [S "The internal", (getAcc ode) :+: 
+s6_likelyChg_stmt1 = foldlSent [S "The internal", (getAcc CM.ode) :+: 
   S "-solving algorithm used by the", (phrase library), 
   S "may change in the future"]
 
 s6_likelyChg_stmt2 = foldlSent [S "The", (phrase library), S "may be",
   S "expanded to deal with edge-to-edge and vertex-to-vertex",
-  (plural (collision ^. term))]
+  (plural (CP.collision ^. term))]
 
 s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be", 
   S "expanded to include motion with damping"]
 
 s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to include", (plural $ joint ^. term), S "and", (plural constraint)]
+  S "expanded to include", (plural $ CP.joint ^. term), S "and", 
+  (plural $ CM.constraint ^. term)]
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,

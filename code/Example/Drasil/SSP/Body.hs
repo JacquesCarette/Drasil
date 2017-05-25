@@ -22,11 +22,13 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math hiding (contraint)
+import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.SolidMechanics
+
+import Data.Drasil.Utils
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -281,12 +283,12 @@ s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
   S "slope, and the" +:+ (plural mtrlPrpty) +:+ S "of the layers."
 
-s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-  (S "GS1", S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
-            S "along a given" +:+. phrase slpSrf),
-  (S "GS2", S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
-            S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
-  (S "GS3", S "Determine the displacement of the" +:+. (phrase slope))
+s4_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "GS") [
+  (S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
+      S "along a given" +:+. phrase slpSrf),
+  (S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
+      S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
+  (S "Determine the displacement of the" +:+. (phrase slope))
   ]
 
 -- SECTION 4.2 --
@@ -308,43 +310,43 @@ s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:
   S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase inModel) `sC` S "in which the" +:+
   S "respective" +:+ (phrase assumption) +:+ S "is used."
 
-s4_2_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
-  (S "A1", S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
+s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
+  (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the" +:+. (phrase slopeSrf) +:+ S "The" +:+ P (coords ^. symbol) +:+ 
            S "coordinates of the failure" +:+ (phrase $ surface ^. term) +:+
            S "follow a monotonic function."),
-  (S "A2", S "The geometry of the" +:+ (phrase slope) `sC` S "and the" +:+
+  (S "The geometry of the" +:+ (phrase slope) `sC` S "and the" +:+
            (plural mtrlPrpty) +:+ S "of the" +:+ (plural soilLyr) +:+
            S "are given as inputs."),
-  (S "A3", S "The different layers of the" +:+ (phrase soil) +:+ S "are homogeneous," +:+
+  (S "The different layers of the" +:+ (phrase soil) +:+ S "are homogeneous," +:+
            S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
            S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
-  (S "A4", (at_start' soilLyr) +:+ S "are treated as if they have" +:+
+  ((at_start' soilLyr) +:+ S "are treated as if they have" +:+
            S "isotropic properties."),
-  (S "A5", (at_start intrslce) +:+ S "normal and shear forces have a" +:+
+  ((at_start intrslce) +:+ S "normal and shear forces have a" +:+
            S "linear relationship, proportional to a constant" +:+
            (sParen $ P $ lambda ^. symbol) +:+ S "and an" +:+
            (phrase intrslce) +:+ S "force function" +:+ (sParen $ P $ fi ^. symbol) +:+
            S "depending on x position."),
-  (S "A6", (at_start slice) +:+ S "to base normal and shear forces have" +:+
+  ((at_start slice) +:+ S "to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
            (phrase $ fs_rc ^. term) +:+ (sParen $ P $ fs ^. symbol) `sC`
            S "and the Coulomb sliding law."),
-  (S "A7", S "The stress-strain curve for" +:+ (phrase intrslce) +:+
+  (S "The stress-strain curve for" +:+ (phrase intrslce) +:+
            S "relationships is linear with a constant" +:+. (phrase slope)),
-  (S "A8", S "The" +:+ (phrase slope) +:+ S "and" +:+ (phrase slpSrf) +:+
+  (S "The" +:+ (phrase slope) +:+ S "and" +:+ (phrase slpSrf) +:+
            S "extends far into and out of the geometry (z coordinate)." +:+
            S "This implies plane strain" +:+ (plural condition) `sC`
            S "making 2D analysis appropriate."),
-  (S "A9", S "The effective normal stress is large enough" +:+
+  (S "The effective normal stress is large enough" +:+
            S "that the resistive shear to effective normal" +:+
            S "stress relationship can be approximated as a" +:+
            S "linear relationship."),
-  (S "A10", S "The" +:+ (phrase $ surface ^. term) +:+ S "and base of a" +:+
+  (S "The" +:+ (phrase $ surface ^. term) +:+ S "and base of a" +:+
             (phrase slice) +:+ S "between" +:+ (phrase intrslce) +:+
             S "nodes are approximated as straight lines.")
-  ])
+  ]
 
 -- SECTION 4.2.2 --
 s4_2_2 = sec_TMs
@@ -408,7 +410,12 @@ s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
   S "iterative" +:+ (plural solution) +:+ S "method is required."
 
 -- SECTION 4.2.6 --
-s4_2_6 = datConF (S "Table 2 and 3 show") EmptyS True EmptyS [] --FIXME: make references to table 2 and 3
+s4_2_6 = datConF (makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show")
+  EmptyS True EmptyS [s4_2_6Table2, s4_2_6Table3]
+
+s4_2_6Table2, s4_2_6Table3 :: Contents --FIXME: actually create these table
+s4_2_6Table2 = Table [] [] EmptyS True 
+s4_2_6Table3 = Table [] [] EmptyS True
 
 -- SECTION 5 --
 s5 = SRS.require [s5_p1] [s5_1, s5_2]
@@ -423,42 +430,41 @@ s5_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "provides the" +:+
 s5_1 = SRS.funcReq
   [s5_1_list, s5_1_table] []
 
-s5_1_list = Enumeration $ Simple $ (map (\(a,b) -> (a, Flat b)) [
-  (S "R1" , S "Read the input file, and store the" +:+
-            S "data. Necessary input data summarized in" +:+.
-            (makeRef table_inputdata)),
-  (S "R2" , S "Generate potential" +:+ (phrase crtSlpSrf) :+:
-            S "'s for the input" +:+. (phrase slope)),
-  (S "R3" , S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
-            S "if they are physically realizable based" +:+
-            S "on a set of pass or fail criteria."),
-  (S "R4" , S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
-            S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "R5" , S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+.
-            (plural slpSrf)),
-  (S "R6" , S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
-            (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
-            S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
-            S "has a larger weighting."),
-  (S "R7" , S "Generate new potential" +:+ (plural crtSlpSrf) +:+
-            S "based on previously analysed" +:+ (plural slpSrf) +:+
-            S "with low" +:+. (plural $ fs_rc ^. term)),
-  (S "R8" , S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
-            S "minimum" +:+ (phrase $ fs_rc ^. term) +:+ S "remains approximately" +:+
-            S "the same over a predetermined number of" +:+
-            S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-            S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
-            S "as the" +:+. (phrase crtSlpSrf)),
-  (S "R9" , S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+
-            (phrase method_) +:+ S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "R10", S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
-            (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
-            (phrase method_)),
-  (S "R11", S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
-            (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
-            S "Give the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
-            S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
-  ])
+s5_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "R") [
+  (S "Read the input file, and store the" +:+
+        S "data. Necessary input data summarized in" +:+.
+        (makeRef table_inputdata)),
+  (S "Generate potential" +:+ (phrase crtSlpSrf) :+:
+        S "'s for the input" +:+. (phrase slope)),
+  (S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
+        S "if they are physically realizable based" +:+
+        S "on a set of pass or fail criteria."),
+  (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
+        S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+  (S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+. (plural slpSrf)),
+  (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
+        (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
+        S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
+        S "has a larger weighting."),
+  (S "Generate new potential" +:+ (plural crtSlpSrf) +:+
+        S "based on previously analysed" +:+ (plural slpSrf) +:+
+        S "with low" +:+. (plural $ fs_rc ^. term)),
+  (S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
+        S "minimum" +:+ (phrase $ fs_rc ^. term) +:+ S "remains approximately" +:+
+        S "the same over a predetermined number of" +:+
+        S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
+        S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
+        S "as the" +:+. (phrase crtSlpSrf)),
+  (S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+ (phrase method_) +:+ 
+        S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+  (S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
+        (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
+        (phrase method_)),
+  (S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
+        (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
+        S "Give the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
+        S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
+  ]
   
 s5_1_table = table_inputdata
 

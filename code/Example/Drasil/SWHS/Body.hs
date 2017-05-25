@@ -894,7 +894,12 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
-s4_2_6 = datConF (S "Table 1 and 2 show") mid True end []
+----------------------------
+-- 4.2.6 Data Constraints --
+----------------------------
+
+s4_2_6 = datConF (makeRef s4_2_6_table1 +:+ S "and" makeRef s4_2_6_table2 +:+ S "show")
+  mid True end []
   where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
               plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
               S "to reasonable" +:+. plural value)
@@ -902,6 +907,16 @@ s4_2_6 = datConF (S "Table 1 and 2 show") mid True end []
               S "because features they should use are not yet implemented in Drasil.")
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
+
+-- Temporary dummy tables
+s4_2_6_table1 = Table [[[],[]],[[],[]]]
+  (S "Table 1")
+  True
+
+s4_2_6_table2 = Table [[[],[]],[[],[]]]
+  (S "Table 2")
+  True
+
 
 inputVar :: [UCWrapper]
 inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,

@@ -18,26 +18,16 @@ cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++
 
 
 cpUnits :: [UnitalChunk]
-cpUnits = [accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
-    impulseScl, QPP.len, QPP.mass, iVect, jVect, normalVect, angVel, position,
-    orientation, dist, disp, QP.time, torque, angDisp, vel]
+cpUnits = [QP.acceleration, QP.angularAccel, QP.force, QP.gravitationalAccel, 
+  QP.gravitationalConst, QP.momentOfInertia, QP.impulseV, QP.impulseS, QPP.len, 
+  QPP.mass, iVect, jVect, normalVect, QP.angularVelocity, QP.position, 
+  QM.orientation, QP.distance, QP.displacement, QP.time, QP.torque, 
+  QP.angularDisplacement, QP.velocity]
     
 -- Chunks with units --
-accel, angAccel, force, gravAccel, gravConst, momtInert, impulseVec,
-    impulseScl, iVect, jVect, normalVect, angVel, position,
-    orientation, dist, disp, torque, angDisp, vel, linDisp, linVelo
-    , linAccel :: UnitalChunk
+iVect, jVect, normalVect :: UnitalChunk
 
--- FIXME: A number of chunks are simply renaming values from QP and QPP, may want to consider removal.
-    
-force       = QP.force
-gravAccel   = QP.gravitationalAccel
--- What would be the best way to represent universal constants
--- like gravitational constant, and display their constant value?
-gravConst   = QP.gravitationalConst
-momtInert   = QP.momentOfInertia
-impulseVec  = QP.impulseV
-impulseScl  = QP.impulseS
+
 -- FIXME: parametrized hack
 iVect       = ucFromVC ivec metre
   where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
@@ -54,35 +44,6 @@ normalVect  = ucFromVC normVect metre
                    (QM.normalVect ^. term)) (phrase $ QM.normalVect ^. term) )
                    (QM.normalVect ^. symbol)
 
-position    = QP.position
-orientation = QM.orientation
-dist        = QP.distance
-torque      = QP.torque
-disp        = QP.displacement
-vel         = QP.velocity
-accel       = QP.acceleration
-angDisp     = QP.angularDisplacement
-angVel      = QP.angularVelocity
-angAccel    = QP.angularAccel
-
---FIXME: parametrized hack
-linDisp     = ucFromVC ldisp velU
-  where ldisp = cvR (dccWDS "linearDisp" (compoundPhrase'
-                (QP.linearDisplacement ^. term) (cn ("FIXME: add definition")))
-                (phrase $ QP.linearDisplacement ^. term))
-                (QP.linearDisplacement ^. symbol)
---FIXME: parametrized hack
-linVelo     = ucFromVC lVelo velU
-  where lVelo = cvR (dccWDS "linearVelo" (compoundPhrase'
-                (QP.linearVelocity ^. term) (cn ("FIXME: add definition")))
-                (phrase $ QP.linearVelocity ^. term)) 
-                (QP.linearVelocity ^. symbol)
---FIXME: parametrized hack
-linAccel     = ucFromVC lAccl accelU
-  where lAccl = cvR (dccWDS "linearDisp" (compoundPhrase'
-                (QP.linearAccel ^. term) (cn ("FIXME: add definition")))
-                (phrase $ QP.linearAccel ^. term))
-                (QP.linearAccel ^. symbol)
 -- Chunks without units --
 cpUnitless :: [VarChunk]
 cpUnitless = [numParticles]
@@ -145,7 +106,7 @@ vel_O   = ucFromVC (velParam "origin" cO) velU
 r_OB    = uc' "r_OB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (disp ^. symbol) (Concat [cO, cB])) metre
+  (sub (QP.displacement ^. symbol) (Concat [cO, cB])) metre
 
 -- DD1 --
 
@@ -155,7 +116,7 @@ pos_CM = uc' "p_CM" (nounPhraseSP $
   "the mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
-  (sub (position ^. symbol) (Atomic "CM")) metre
+  (sub (QP.position ^. symbol) (Atomic "CM")) metre
 
 --FIXME: parametrized hack
 mass_i = ucFromVC massi kilogram
@@ -163,14 +124,14 @@ mass_i = ucFromVC massi kilogram
                 (cn "of the i-th particle")) (phrase $ QPP.mass ^. term))
                 (sub (QPP.mass ^. symbol) lI)
 pos_i = ucFromVC posi metre
-  where posi = cvR (dccWDS "p_i" (compoundPhrase' (position ^. term) 
-                (cn "vector of the i-th particle")) (phrase $ position ^. term))
-                (sub (position ^. symbol) lI)
+  where posi = cvR (dccWDS "p_i" (compoundPhrase' (QP.position ^. term) 
+                (cn "vector of the i-th particle")) (phrase $ QP.position ^. term))
+                (sub (QP.position ^. symbol) lI)
 
 acc_i = ucFromVC accI accelU
-  where accI = cvR (dccWDS "acc_i" (compoundPhrase' (accel ^. term) 
-                (cn "of the i-th body's acceleration")) (phrase $ accel ^. term))
-                (sub (accel ^. symbol) lI)
+  where accI = cvR (dccWDS "acc_i" (compoundPhrase' (QP.acceleration ^. term) 
+                (cn "of the i-th body's acceleration")) (phrase $ QP.acceleration ^. term))
+                (sub (QP.acceleration ^. symbol) lI)
 
 mTot = ucFromVC mtotal kilogram
   where mtotal = cvR (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
@@ -212,8 +173,8 @@ contDisp_A = ucFromVC (contParam "A" cA) metre
 contDisp_B = ucFromVC (contParam "B" cB) metre
 
 contParam :: String -> Symbol -> ConVar
-contParam n w = cvR (dccWDS ("r_" ++ n ++ "P") (contdispN n) (phrase $ disp ^. term))
-                  (sub (disp ^. symbol) (Concat $ [w, cP]))
+contParam n w = cvR (dccWDS ("r_" ++ n ++ "P") (contdispN n) (phrase $ QP.displacement ^. term))
+                  (sub (QP.displacement ^. symbol) (Concat $ [w, cP]))
 contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
   ++ n ++ " and contact point P"
@@ -237,7 +198,7 @@ momtParam :: String -> Symbol -> ConVar
 momtParam n w = cvR (dccWDS "momentOfInertia" (compoundPhrase'
                 (QP.momentOfInertia ^. term) (cn $ "of rigid body" ++ n))
                 (phrase $ QP.momentOfInertia ^. term))
-                (sub (momtInert ^. symbol) w)
+                (sub (QP.momentOfInertia ^. symbol) w)
 
 momtInert_A = ucFromVC (momtParam "A" cA) momtInertU
 momtInert_B = ucFromVC (momtParam "B" cB) momtInertU

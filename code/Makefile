@@ -68,13 +68,10 @@ nopcm:
 	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.html ./Website/$(NoPCM_PREF)SRS.html >> $(NoPCM_PREF)log.log 2>&1
   
 docs:
-	haddock -o Docs -h ./Language/Drasil.hs
+	stack haddock drasil
 	
 clean: clean_logs
-	rm -r ./SRS ./Website ./MIS ./MG ./C++ .stack-work/dist
+	rm -r ./SRS ./Website ./MIS ./MG ./C++ .stack-work
 	
 clean_logs:
 	rm *.log
-
-clean_docs:
-	rm -r ./Docs

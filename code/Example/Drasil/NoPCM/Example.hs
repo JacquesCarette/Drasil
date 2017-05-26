@@ -32,7 +32,8 @@ coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
 
 -- convenience
 
-coil_SA     = uc' "coil_SA" (compoundPhrase' coil surArea) "Area covered by the outermost layer of the coil" (sub cA cC) m_2
+coil_SA     = uc' "coil_SA" (compoundPhrase' (coil ^. term) (surArea ^. term))
+              "Area covered by the outermost layer of the coil" (sub cA cC) m_2
 dummyVar    = uc' "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")
               "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second

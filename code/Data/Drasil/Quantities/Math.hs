@@ -17,6 +17,7 @@ surface = cvR CM.surface cS
 euclidNorm = cvR CM.euclidN (Concat [Atomic "||", (vec lR), Atomic "||"])
 
 
-orientation :: UnitalChunk
+surArea, orientation :: UnitalChunk
 
+surArea = uc CM.surArea cA m_2
 orientation = uc CM.orient (Greek Phi_L) radians

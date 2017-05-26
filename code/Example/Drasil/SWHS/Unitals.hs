@@ -1,13 +1,15 @@
 module Drasil.SWHS.Unitals where
 
+import Drasil.SWHS.Concepts
+
 import Language.Drasil
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Units.Thermodynamics as UT
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Math (surface, uNormalVect)
-import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
+import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea, diameter)
+import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol, len)
 import Data.Drasil.Units.PhysicalProperties
 
 import Control.Lens ((^.))
@@ -38,7 +40,7 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
 
 --symbol names can't begin with a capital
 
-coil_SA      = uc' "coil_SA" (nounPhraseSP "coil surface area") 
+coil_SA      = uc' "coil_SA" (compoundPhrase' (coil ^. term) (surArea ^. term)) 
   "Area covered by the outermost layer of the coil"(sub cA cC) m_2
 
 in_SA        = uc' "in_SA" (nounPhraseSP 
@@ -51,7 +53,7 @@ out_SA       = uc' "out_SA" (nounPhraseSP
   "Surface area over which thermal energy is transferred out of an object"
   (sub cA (Atomic "out")) m_2
 
-pcm_SA       = uc' "pcm_SA" (nounPhraseSP "phase change material surface area")
+pcm_SA       = uc' "pcm_SA" (compoundPhrase' (phsChgMtrl ^. term) (surArea ^. term))
   "Area covered by the outermost layer of the phase change material" (sub cA cP) m_2
 
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
@@ -79,12 +81,12 @@ htCap_V      = uc' "htCap_V"
   (sup (heat_cap_spec ^. symbol) cV) UT.heat_cap_spec
 
 htCap_W      = uc' "htCap_W" 
-  (nounPhraseSP "specific heat capacity of water")
+  (heat_cap_spec `of_` water)
   "The amount of energy required to raise the temperature of a given unit mass of water by a given amount"
   (sub (heat_cap_spec ^. symbol) cW) UT.heat_cap_spec
 
 diam         = uc' "diam" 
-  (nounPhraseSP "diameter of tank") "The diameter of the tank" cD metre
+  (diameter `of_` tank) "The diameter of the tank" cD metre
 
 pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP 
   "change in heat energy in the PCM at the instant when melting begins")
@@ -124,7 +126,7 @@ pcm_HTC      = uc' "pcm_HTC"
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heat_transfer_coef
 
-tank_length  = uc' "tank_length" (nounPhraseSP "length of tank")
+tank_length  = uc' "tank_length" (len `of_` tank)
   "The length of the tank" cL metre
 
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
@@ -203,7 +205,7 @@ pcm_vol      = uc' "pcm_vol" (nounPhraseSP "volume of PCM")
 tank_vol     = uc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank" (sub (vol ^. symbol) (Atomic "tank")) m_3
 
-w_vol        = uc' "w_vol" (nounPhraseSP "volume of water")
+w_vol        = uc' "w_vol" (vol `of_` water)
   "The amount of space occupied by a given quantity of water" (sub (vol ^. symbol) cW) m_3
 
 deltaT       = uc' "deltaT" (nounPhraseSP "change in temperature")
@@ -214,7 +216,7 @@ pcm_density  = uc' "pcm_density" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (sub (density ^. symbol) cP) densityU
 
-w_density    = uc' "w_density" (nounPhraseSP "density of water")
+w_density    = uc' "w_density" (density `of_` water)
   "Mass per unit volume of water" (sub (density ^. symbol) cW) densityU
 
 tau          = uc' "tau" (nounPhraseSP "dummy variable for integration over time") 

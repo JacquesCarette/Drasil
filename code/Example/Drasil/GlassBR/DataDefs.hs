@@ -6,7 +6,8 @@ import Data.Drasil.Units.Physics
 --import Data.Drasil.Concepts.Documentation
 import Prelude hiding (log, id)
 import Control.Lens ((^.))
-import Drasil.GlassBR.Example
+import Drasil.GlassBR.Unitals
+import Drasil.GlassBR.Concepts
 --import Drasil.GlassBR.Units
 
 

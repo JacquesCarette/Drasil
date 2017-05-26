@@ -4,8 +4,9 @@ import Language.Drasil
 import Data.Drasil.Utils (foldlSent)
 import Prelude hiding (id)
 import Control.Lens ((^.))
-import Drasil.GlassBR.Example
+import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.DataDefs
+import Drasil.GlassBR.Concepts
 import Data.Drasil.Concepts.Documentation
 --import Drasil.GlassBR.Units
 

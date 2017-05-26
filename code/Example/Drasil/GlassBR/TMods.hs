@@ -1,7 +1,8 @@
 module Drasil.GlassBR.TMods where
 
-import Drasil.GlassBR.Example
+import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.IMods
+import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.Utils (foldlSent)

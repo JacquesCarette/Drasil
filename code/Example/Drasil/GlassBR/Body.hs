@@ -24,7 +24,7 @@ import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
-import Drasil.GlassBR.Example
+import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
 import Drasil.GlassBR.Changes
 import Drasil.GlassBR.Modules

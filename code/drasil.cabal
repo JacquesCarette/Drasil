@@ -218,7 +218,7 @@ executable glassbr
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
-    , Drasil.GlassBR.Example
+    , Drasil.GlassBR.Unitals
     , Drasil.GlassBR.Modules
     , Drasil.GlassBR.Reqs
     , Drasil.GlassBR.TMods

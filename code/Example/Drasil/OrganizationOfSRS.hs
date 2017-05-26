@@ -1,7 +1,7 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, datConF, datConPar, reqF,
-                                 figureLabel, showingCxnBw, thModF, inModelF,
-                                 inModelF', traceMGF, systCon, stakehldr,
+                                 figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
+                                 dataDefnF, inModelF', traceMGF, systCon, stakehldr,
                                  stakeholderIntro) where
 
 import Language.Drasil
@@ -48,8 +48,7 @@ orgSec i b s = Section (titleize orgOfDoc) (map Con (orgIntro i b s Nothing))
 -- (post-refine chain)?
 orgSecWTS :: (NounPhrase c) => Sentence -> c -> Section -> Sentence -> Section
 orgSecWTS i b s t = Section (titleize orgOfDoc) (map Con (orgIntro i b s (Just t)))
-  
-  
+
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
 orgIntro :: (NounPhrase c) => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
@@ -63,7 +62,7 @@ orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
   Paragraph $ lastS trailingSentence ]
   where lastS Nothing = refineChain [goalStmt, thModel, inModel]
         lastS (Just t) = lastS Nothing +:+. t
-       
+
 -- wrapper for general system description
 genSysF :: [Section] -> Section
 genSysF = SRS.genSysDes [genSysIntro]
@@ -75,6 +74,13 @@ genSysIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides general" 
   S "the interfaces between the" +:+ phrase system +:+ S "and its" +:+
   phrase environment `sC` S "and describes the" +:+ plural userCharacteristic +:+ 
   S "and the" +:+. plural systemConstraint
+
+-- System Constraints
+-- generalized if no constraints, but if there are, they can be passed through
+systCon :: Maybe Contents -> [Section] -> Section
+systCon (Just a) subSec = SRS.sysCon [a] subSec
+systCon Nothing subSec  = SRS.sysCon [systCon_none] subSec
+  where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)  
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section
@@ -105,6 +111,21 @@ thModIntro :: Sentence -> Contents
 thModIntro k_word = Paragraph $ S "This" +:+ phrase section_ +:+ S "focuses on" +:+
   S "the" +:+ phrase general +:+ (plural $ equation ^. term) +:+ S "and" +:+
   S "laws that" +:+ (k_word) +:+. S "is based on"
+
+-- just supply the other contents for General Definition. Use empty list if none needed
+genDefnF :: [Contents] -> Section
+genDefnF otherContents = SRS.genDefn (genDefnIntro:otherContents) []
+  where genDefnIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "collects the" +:+
+                       S "laws and" +:+ (plural $ equation ^. term) +:+ S "that will be used in" +:+
+                       S "deriving the" +:+ plural dataDefn `sC` S "which in turn are used to" +:+
+                       S "build the" +:+. plural inModel
+                       
+-- used EmptyS if ending sentence is not needed
+dataDefnF :: Sentence -> [Contents] -> Section                      
+dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
+  where dataDefnIntro ending = Paragraph $ S "This" +:+ phrase section_ +:+ 
+                               S "collects and defines all" +:+ S "the" +:+ plural datum +:+ 
+                               S "needed to build the" +:+. plural inModel +:+ ending
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
@@ -198,12 +219,8 @@ traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:
   plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
   titleize' assumption
 
--- System Constraints
--- generalized if no constraints, but if there are, they can be passed through
-systCon :: Maybe Contents -> [Section] -> Section
-systCon (Just a) subSec = SRS.sysCon [a] subSec
-systCon Nothing subSec  = SRS.sysCon [systCon_none] subSec
-  where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
+
+
 
 
 

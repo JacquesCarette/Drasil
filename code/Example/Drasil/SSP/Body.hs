@@ -43,11 +43,10 @@ s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
   s4_2_5, s4_2_6, s5_1, s5_2 :: Section
 
 s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_1_p1,
-  s4_1_p1, s4_1_1_list, s4_1_2_p1, 
-  s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
-  s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
-  s4_2_3_p1, s4_2_4_p1, s4_2_5_p2,
-  s4_2_5_p3, s5_1_list, s5_1_table,
+  s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
+  s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
+  s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
+  s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
 
 s4_2_2_tmods :: [Contents]
@@ -344,21 +343,14 @@ s4_2_2 = thModF (short ssa) (s4_2_2_tmods)
 s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = SRS.genDefn [s4_2_3_p1] []
-
-s4_2_3_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects the laws and" +:+
-  S "equations that will be used in deriving the" +:+ (plural dataDefn) `sC` S "which will" +:+
-  S "in turn are used to build the" +:+. (plural inModel)
+s4_2_3 = genDefnF []
 
 -- SECTION 4.2.4 --
-s4_2_4 = SRS.dataDefn [s4_2_4_p1] []
-
-s4_2_4_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "collects and defines all" +:+
-  S "the" +:+ (plural datum) +:+ S "needed to build the" +:+. (plural inModel) +:+
-  (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
-  S "can be solved by direct analysis of given inputs. The interslice" +:+ 
-  S "forces DD9 are force variables that must be written" +:+ 
-  S "in terms of DD1 to DD8 to solve."
+s4_2_4 = dataDefnF ending []
+  where ending = (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
+                  S "can be solved by direct analysis of given inputs. The interslice" +:+ 
+                  S "forces DD9 are force variables that must be written" +:+ 
+                  S "in terms of DD1 to DD8 to solve."
 
 -- SECTION 4.2.5 --
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 [s4_2_5_p2,s4_2_5_p3]

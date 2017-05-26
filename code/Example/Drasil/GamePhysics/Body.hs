@@ -768,10 +768,9 @@ s8_columns_t1 = [gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1,
 s8_table1 :: Contents
 s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
-  ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' requirement +:+
-  sParen (makeRef s5) `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1_2) +:+
-  S "and Other" +:+ titleize' item) True
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1_2) +:+ S "and Other" +:+
+  titleize' item)) True
 
 s8_columns_t2 :: [[String]]
 s8_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
@@ -875,9 +874,9 @@ s8_row_header_t3 = s8_col_header_t3
 s8_table3 :: Contents
 s8_table3 = Table (EmptyS:s8_row_header_t3)
   (makeTMatrix s8_col_header_t3 s8_columns_t3 s8_row_t3)
-  ((titleize traceyMatrix) +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ titleize' item +:+
-  S "and Other" +:+ titleize' section_) True
+  (showingCxnBw (traceyMatrix) (titleize' item +:+ 
+  S "and Other" +:+ titleize' section_)) True
+
 ----------------
 -- REFERENCES --
 ----------------

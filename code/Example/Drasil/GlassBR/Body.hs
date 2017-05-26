@@ -7,9 +7,8 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Concepts.Math (matrix, graph, calculation,
-                                  equation, surface, probability,
-                                  parameter)
+import Data.Drasil.Concepts.Math (graph, calculation, equation,
+                                  surface, probability, parameter)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
@@ -730,27 +729,14 @@ s9_table3 = Table (EmptyS:s9_row_header_t3)
   (makeTMatrix s9_col_header_t3 s9_columns_t3 s9_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other" +:+ titleize' item)) True
 
-s9_intro2 = 
-  [Paragraph $
-  S "The" +:+ phrase purpose +:+ S "of the" +:+ plural traceyGraph +:+ 
-  S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
-  S "additionally modified if a certain" +:+ phrase component +:+. S "is changed" +:+ 
-  S "The arrows in the" +:+ (plural $ graph ^. term) +:+ S "represent" +:+.
-  plural dependency +:+ S "The" +:+ phrase component +:+ S "at the tail of an arrow" +:+
-  S "is depended on by the" +:+ phrase component +:+ S "at the head of that arrow. Therefore, if a" +:+
-  phrase component +:+ S "is changed, the" +:+ plural component +:+ S "that it points to should also" +:+.
-  S "be changed" +:+ titleize figure +:+ S "2" +:+ sParen (makeRef fig_2) +:+ S "shows the" +:+
-  plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) +:+ S "and" +:+
-  plural inModel +:+. S "on each other" +:+ titleize figure +:+ S "3" +:+ sParen (makeRef fig_3) +:+
-  S "shows the" +:+ plural dependency +:+ S "of" +:+ plural requirement +:+ S "on" +:+ 
-  plural thModel `sC` plural inModel `sC` (plural dataDefn) +:+ S "and" +:+.
-  plural datumConstraint +:+ titleize figure +:+ S "4" +:+ sParen (makeRef fig_4) +:+
-  S "shows the" +:+ plural dependency +:+ S "of" +:+ plural thModel `sC` plural inModel `sC`
-  (plural dataDefn) `sC` plural requirement +:+ S "and" +:+ (plural likelyChg) +:+ S "on" +:+.
-  (plural assumption),
-  Paragraph $ S "NOTE: Building a tool to automatically generate the graphical" +:+
-  S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
-  plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]
+s9_intro2 = traceGIntro [fig_2, fig_3, fig_4]
+  [(plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
+  `sC` plural dataDefn +:+ S "and" +:+. plural datumConstraint),
+  (plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
+  `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint),
+  (plural thModel `sC` plural inModel `sC` plural dataDefn `sC`
+  plural requirement +:+ S "and" +:+ plural likelyChg +:+ S "on" +:+.
+  plural assumption)]
 
 fig_2 = figureLabel "2" (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)

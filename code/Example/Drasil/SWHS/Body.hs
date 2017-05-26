@@ -146,15 +146,14 @@ s2_1 = SRS.prpsOfDoc (s2_1_contents) []
 s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase document +:+ S "is to describe the modelling of" +:+.
   (phrase $ swhs_pcm ^. term) +:+ S "The" +:+ plural goalStmt +:+
-  S "and" +:+ plural thModel +:+ 
-  S "used in the" +:+ (short progName) +:+ S "code" +:+
-  S "are provided, with an emphasis on explicitly identifying" +:+ 
-  (plural assumption) +:+ 
-  S "and unambiguous" +:+. plural definition +:+ S "This" +:+
-  phrase document +:+ S "is intended to be used as a" +:+ phrase reference +:+
-  S "to provide ad hoc access to all" +:+ phrase information +:+
-  S "necessary to understand and verify the" +:+. phrase model +:+ S "The" +:+
-  (short srs) +:+ S "is abstract because the contents say what" +:+
+  S "and" +:+ plural thModel +:+ S "used in the" +:+ (short progName) +:+
+  S "code are provided, with an emphasis on explicitly identifying" +:+ 
+  (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
+  S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+
+  phrase reference +:+ S "to provide ad hoc access to all" +:+
+  phrase information +:+ S "necessary to understand and verify the" +:+.
+  phrase model +:+ S "The" +:+ (short srs) +:+ 
+  S "is abstract because the contents say what" +:+
   phrase problem +:+. S "is being solved, but do not say how to solve it"),
   Paragraph (S "This" +:+ phrase document +:+ S "will be used as a" +:+
   S "starting point for subsequent development phases, including" +:+ 
@@ -705,7 +704,8 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
 
-s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2)
+s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3
+  (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2)
 
 s4_2_5_subpar = [Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
@@ -901,8 +901,8 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- 4.2.6 Data Constraints --
 ----------------------------
 
-s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show")
-  mid True end [s4_2_6_table1, s4_2_6_table2]
+s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
+  (makeRef s4_2_6_table2) +:+ S "show") mid True end [s4_2_6_table1, s4_2_6_table2]
   where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
               plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
               S "to reasonable" +:+. plural value)

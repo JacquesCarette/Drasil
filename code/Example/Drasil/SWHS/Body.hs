@@ -1114,36 +1114,41 @@ s6 = SRS.likeChg [s6_list] []
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
 
-s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat 
-  (S "A4 -" +:+ (short phsChgMtrl) +:+ S "is actually a poor" +:+
+s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short likelyChg) s6_likeChg_list)
+
+s6_likeChg_list :: [Sentence]
+s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+
+
+likeChg1 = S "A4 -" +:+ (short phsChgMtrl) +:+ S "is actually a poor" +:+
   (phrase $ CT.thermal_conductor ^. term) `sC` S "so" +:+
   S "the" +:+ (phrase assumption) +:+
-  S "of uniform" +:+ (phrase $ temp_PCM ^. term) +:+. S "is not likely")),
+  S "of uniform" +:+ (phrase $ temp_PCM ^. term) +:+. S "is not likely"
 --
-  ((short likelyChg) :+: S "2", Flat (S "A8 - The" +:+ (phrase $ temp_C ^.
-  term) +:+ S "will change over the course of the day, depending" +:+
-  S "on the" +:+ (phrase $ energy ^. term) +:+. S "received from the sun")),
+likeChg2 = S "A8 - The" +:+ (phrase $ temp_C ^. term) +:+
+  S "will change over the course of the day, depending" +:+
+  S "on the" +:+ (phrase $ energy ^. term) +:+. S "received from the sun"
 --
-  ((short likelyChg) :+: S "3", Flat (S "A9 - The" +:+ (phrase $ temp_C ^. 
+likeChg3 = S "A9 - The" +:+ (phrase $ temp_C ^. 
   term) +:+ S "will actually change along its length as the" +:+
-  (phrase $ water ^. term) +:+. S "within it cools")),
+  (phrase $ water ^. term) +:+. S "within it cools"
 --
-  ((short likelyChg) :+: S "4", Flat (S "A11 - The" +:+ phrase model +:+
+likeChg4 = S "A11 - The" +:+ phrase model +:+
   S "currently only accounts for" +:+. (charging ^. defn) +:+
   S "A more complete" +:+ phrase model +:+ S "would also" +:+
-  S "account for" +:+. (discharging ^. defn))),
+  S "account for" +:+. (discharging ^. defn)
 --
-  ((short likelyChg) :+: S "5", Flat (S "A12 - To add more" +:+
+likeChg5 = S "A12 - To add more" +:+
   S "flexibility to the" +:+ phrase simulation `sC`
   S "the" +:+ (phrase $ temp_init ^. term) +:+
   S "of the" +:+ (phrase $ water ^. term) +:+ 
   S "and the" +:+ (short phsChgMtrl) +:+ S "could be" +:+
-  S "allowed to have different" +:+. plural value)),
+  S "allowed to have different" +:+. plural value
 --
-  ((short likelyChg) :+: S "6", Flat (S "A15 - Any real" +:+
+likeChg6 = S "A15 - Any real" +:+
   (phrase $ tank ^. term) +:+ S "cannot be" +:+
   (phrase $ perfect_insul ^. term) +:+ S "and will lose" +:+.
-  (phrase $ CT.heat ^. term)))])
+  (phrase $ CT.heat ^. term)
 
 -- List structure same in all examples.
 

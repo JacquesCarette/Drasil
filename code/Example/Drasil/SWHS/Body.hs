@@ -61,7 +61,7 @@ s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, sys_context_fig,
   s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
-s2_intro, s2_1_contents, s2_4_contents, s4_2_3_deriv, s4_2_5_subpar, 
+s2_intro, s2_1_contents, s4_2_3_deriv, s4_2_5_subpar, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
   :: [Contents]
 
@@ -219,12 +219,26 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "as explained in" +:+. (makeRef s3_2))
 
 
-s2_4 = SRS.orgOfDoc (s2_4_contents) []
+s2_4 = orgSecWTS s2_4_intro inModel s4_2_5 s2_4_trail
 
-s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
+s2_4_intro :: Sentence
+s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
   S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+
-  S "[citation]. The presentation follows the standard" +:+
+  S "[citation]."
+
+s2_4_trail :: Sentence
+s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
+  S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
+  (plural inModel) +:+ S "provide the" +:+ (phrase $ ode ^. term) +:+
+  S "(" :+: (short ode) :+: S "s) and algebraic" +:+
+  (plural $ equation ^. term) +:+ S "that" +:+
+  phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
+  (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s."
+-- This part is close to the function but not exactly,
+-- so keeping it here for reference
+
+  {-S "The presentation follows the standard" +:+
   S "pattern for presenting" +:+ plural goalStmt `sC`
   plural thModel `sC`
   (plural dataDefn) `sC` S "and" +:+. 
@@ -233,16 +247,7 @@ s2_4_contents = [Paragraph (S "The" +:+ phrase organization +:+ S "of this" +:+
   S "up approach, they can start reading the" +:+ 
   (plural inModel) +:+ S "in" +:+ 
   makeRef s4_2_5 +:+ S "and trace back to find any" +:+
-  S "additional" +:+ phrase information +:+ S "they require. The" +:+
-  (plural inModel) +:+ S "provide" +:+
-  S "the" +:+ (phrase $ ode ^. term) +:+ S "(" :+: (short ode) :+:
-  S "s) and algebraic" +:+ (plural $ equation ^. term) +:+ S "that" +:+
-  phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
-  (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s."),
-  --FIXME: Update refineChain after fixing goalStmt and thModel
-  Paragraph $ refineChain [goalStmt, thModel, inModel] +:+
-  S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
-  S "to be solved are referred to as IM1 to IM4"]
+  S "additional" +:+ phrase information +:+ S "they require."-}
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to

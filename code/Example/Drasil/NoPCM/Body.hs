@@ -119,11 +119,11 @@ s4_1_3_intro = Paragraph $
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2]
+s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5]
 
 s4_2_intro = Paragraph $
-           S "The" +:+ (phrase $ inModel ^. term) +:+ S "(" :+: getAcc ode :+: S ") that governs" +:+
-            (getAcc sWHS) +:+. S "is presented in" +:+ --TODO: Subsec reference
+           S "The" +:+ (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
+           S "that governs" +:+ (getAcc sWHS) +:+. S "is presented in" +:+ --TODO: Subsec reference
            S "The" +:+ (phrase $ information ^. term) +:+
            S "to understand the meaning of the" +:+ (phrase $ inModel ^. term) +:+ 
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 

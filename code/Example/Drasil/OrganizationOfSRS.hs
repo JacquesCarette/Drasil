@@ -1,5 +1,5 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, datConF, datConPar, reqF,
+                                 specSysDesF, assumpF, assumpF', datConF, datConPar, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
                                  stakeholderIntro) where
@@ -100,6 +100,30 @@ specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first pr
                                (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
+
+-- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
+assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
+assumpF theMod genDef dataDef inMod likeChg otherContents = 
+  SRS.assump ((assumpIntro theMod (Just genDef) dataDef inMod likeChg):otherContents) []
+
+assumpF' :: Section -> Section -> Section -> Section -> [Contents] -> Section
+assumpF' theMod dataDef inMod likeChg otherContents = 
+  SRS.assump ((assumpIntro theMod Nothing dataDef inMod likeChg):otherContents) []
+
+-- takes a bunch of references to things discribed in the wrapper
+assumpIntro :: Section -> Maybe Section -> Section -> Section -> Section -> Contents
+assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent 
+  [S "This", (phrase section_), S "simplifies the original", (phrase problem),
+  S "and helps in developing the", (phrase thModel), S "by filling in the",
+  S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
+  S "The numbers given in", S "the square brackets refer to the", 
+  foldr1 sC (map (refs) (itemsAndRefs r2)) `sC` S "or", 
+  refs (likelyChg, r5) `sC` S "in which the respective",
+  (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
+  where refs (chunk, ref) = (titleize' chunk) +:+ S "[" :+: (makeRef ref) :+: S "]" 
+        itemsAndRefs Nothing = [(thModel, r1), (dataDefn, r3), (inModel, r4)]
+        itemsAndRefs (Just genDef) = [(thModel, r1), (genDefn, genDef), (dataDefn, r3), 
+                                      (inModel, r4)]
 
 --wrapper for thModelIntro
 thModF :: Sentence -> [Contents] -> Section

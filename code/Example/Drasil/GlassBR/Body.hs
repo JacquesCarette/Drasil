@@ -48,7 +48,7 @@ s2_intro, s2_2_intro,
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
-  s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
+  s7_2_intro, s8_list, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
 
@@ -584,24 +584,6 @@ s9 = traceMGF [s9_table1, s9_table2, s9_table3]
   plural assumption)]
   ([s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4])
   []
-
-s9_intro1 = Paragraph $ foldlSent [
-  S "The", phrase purpose, S "of the", (plural traceyMatrix),
-  S "is to provide easy", plural reference, S "on what has to be additionally",
-  S "modified if a certain", phrase component, S "is changed. Every time a", 
-  phrase component, S "is changed, the", plural item, S "in the", phrase column,
-  S "of that", phrase component, S "that are marked with an", Quote (S "X") +:+. 
-  S "should be modified as well", at_start table_, S "5", 
-  sParen (makeRef s9_table1), S "shows the", plural dependency, S "of",
-  plural thModel `sC` (plural dataDefn), S "and", plural inModel +:+.
-  S "with each other", titleize table_, S "6", sParen (makeRef s9_table2),
-  S "shows the", plural dependency, S "of", plural requirement, S "on", 
-  plural thModel `sC` (plural inModel) `sC` (plural dataDefn),
-  S "and" +:+. plural datumConstraint, titleize table_, S "7",
-  sParen (makeRef s9_table3), S "shows the", plural dependency, S "of",
-  plural thModel `sC` (plural dataDefn) `sC` plural inModel `sC`
-  plural likelyChg, S "and", (plural requirement), S "on the",
-  (plural assumption)]
 
 --FIXME: There has to be a better way to do this.
 

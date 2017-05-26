@@ -408,12 +408,12 @@ s6_2_2_TMods = map (Definition . Theory) tModels
 s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
-s6_2_3_IMods = map Definition (map Theory iModels)
+s6_2_3_IMods = map (Definition . Theory) iModels
 
 s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
-s6_2_4_DDefns = map Definition (map Data dataDefns)
+s6_2_4_DDefns = map (Definition . Data) dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table1), S "gives the", plural value, 

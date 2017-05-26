@@ -403,7 +403,7 @@ s4_2_2_intro = Paragraph $ foldlSent
   (plural $ CM.equation ^. term), S "the", (phrase $ physLib ^. term), 
   S "is based on"]
 
-s4_2_2_TMods = map Definition (map Theory cpTMods)
+s4_2_2_TMods = map (Definition . Theory) cpTMods
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
@@ -425,7 +425,7 @@ s4_2_3_intro = Paragraph $ foldlSent
 -- GDefs not yet implemented --
 {-
 s4_2_3_GDefs :: [Contents]
-s4_2_3_GDefs = map Definition (map General gDefs)
+s4_2_3_GDefs = map (Definition . General) gDefs)
 -}
 
 ------------------------------
@@ -444,7 +444,7 @@ s4_2_4_intro = Paragraph $ foldlSent [S "This", (phrase section_),
   titleize' inModel, S "The", (phrase $ CPP.dimension ^. term), S "of each", 
   (phrase quantity), S "is also given"]
 
-s4_2_4_DDefs = map Definition (map Data cpDDefs)
+s4_2_4_DDefs = map (Definition . Data) cpDDefs
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -457,7 +457,7 @@ s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
 
 -- Instance models not fully yet implemented --
 
-s4_2_5_IMods = map Definition (map Theory iModels)
+s4_2_5_IMods = map (Definition . Theory) iModels
 
 ------------------------------
 -- Collision Diagram        --

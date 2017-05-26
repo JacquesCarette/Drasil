@@ -42,12 +42,12 @@ showingCxnBw traceyMG contents = foldlSent [titleize traceyMG, S "Showing the",
 -- models or data definitions), a bottom section (for creating a reference link)
 -- which should match the bottom chunk, but does not have to.
 orgSec :: (NounPhrase c) => Sentence -> c -> Section -> Section
-orgSec i b s = Section (titleize orgOfDoc) (map Con (orgIntro i b s Nothing))
+orgSec i b s = SRS.orgOfDoc (orgIntro i b s Nothing) []
 
 -- | Same as 'orgSec' with the addition of extra information at the end 
 -- (post-refine chain)?
 orgSecWTS :: (NounPhrase c) => Sentence -> c -> Section -> Sentence -> Section
-orgSecWTS i b s t = Section (titleize orgOfDoc) (map Con (orgIntro i b s (Just t)))
+orgSecWTS i b s t = SRS.orgOfDoc (orgIntro i b s (Just t)) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
@@ -194,6 +194,7 @@ reqIntro = Paragraph $ foldlSent [S "This", phrase section_, S "provides the",
   plural nonfunctionalRequirement `sC` S "the qualities that the",
   phrase software, S "is expected to exhibit"]
 
+{-
 -- wrapper for traceMGIntro
 traceMGF :: Contents -> Contents -> Contents -> [Contents] -> [Section] -> Section
 traceMGF rf1 rf2 rf3 otherContents subSec = SRS.traceyMandG ((traceMGIntro rf1 rf2 rf3):otherContents) subSec
@@ -216,4 +217,23 @@ traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:
   S "on each other" +:+ (makeRef r3) +:+ S "shows the dependencies of" +:+ 
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
-  plural assumption
+  plural assumption-}
+
+-- wrapper for traceMGIntro
+traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section
+traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMGIntro refs trailing):otherContents) subSec
+
+-- generalized traceability matrix and graph introduction: variables are references to the three tables
+-- generally found in this section (in order of being mentioned)
+traceMGIntro :: [Contents] -> [Sentence] -> Contents
+traceMGIntro refs trailings = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
+  plural traceyMatrix +:+ S "is to provide easy" +:+
+  plural reference +:+ S "on what has to be additionally modified if a" +:+
+  S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
+  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
+  phrase column +:+ S "of that" +:+ phrase component +:+ S "that are" +:+
+  S "marked with an" +:+ Quote (S "X") +:+. S "should be modified as well" +:+
+  foldlSent (zipWith tableShows refs trailings)
+
+tableShows :: Contents -> Sentence -> Sentence
+tableShows ref trailing = (makeRef ref) +:+ S "shows the dependencies of" +:+ trailing

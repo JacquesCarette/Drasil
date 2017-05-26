@@ -58,7 +58,7 @@ s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, sys_context_fig,
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_table1,
-  s4_2_6_table2, s5_intro, s5_2_contents, s6_list, s7_intro1, s7_table1,
+  s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
 s2_intro, s2_1_contents, s2_4_contents, s4_2_3_deriv, s4_2_5_subpar, 
@@ -1138,15 +1138,8 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = SRS.traceyMandG ([s7_intro1, s7_table1, s7_table2,
-  s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
-
-s7_intro1 = traceMGIntro s7_table1 s7_table2 s7_table3
-
--- Completely general paragraph, and similar ones in other example, but slight
--- differences in what is included in each matrix. Perhaps we can abstract out 
--- which types of items are associated with each matrix i.e. instance models, 
--- assumptions, requirements, etc. If so, this paragraph can be abstracted out.
+s7 = traceMGF s7_table1 s7_table2 s7_table3
+  ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
 s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
   makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 

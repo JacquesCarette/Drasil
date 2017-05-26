@@ -164,12 +164,12 @@ reqIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides the" +:+
   phrase software +:+. S "is expected to exhibit"
 
 -- wrapper for traceMGIntro
-traceMGF :: Section -> Section -> Section -> [Section] -> Section
-traceMGF rf1 rf2 rf3 subSec = SRS.traceyMandG [traceMGIntro rf1 rf2 rf3] subSec
+traceMGF :: Contents -> Contents -> Contents -> [Contents] -> [Section] -> Section
+traceMGF rf1 rf2 rf3 otherContents subSec = SRS.traceyMandG ((traceMGIntro rf1 rf2 rf3):otherContents) subSec
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
-traceMGIntro :: Section -> Section -> Section -> Contents
+traceMGIntro :: Contents -> Contents -> Contents -> Contents
 traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
   plural traceyMatrix +:+ S "is to provide easy" +:+
   plural reference +:+ S "on what has to be additionally modified if a" +:+

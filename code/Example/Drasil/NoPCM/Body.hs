@@ -29,7 +29,7 @@ s2,s2_3, s3, s3_1, s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
 
 s2_3_intro, s3_1_intro, sys_context_fig,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
-  s4_1_3_list,s4_2_intro,s4_2_1_intro,s4_2_2_intro, fig_tank, s4_2_6_table1, s4_2_6_table2:: Contents
+  s4_1_3_list,s4_2_intro,s4_2_1_intro, fig_tank, s4_2_6_table1, s4_2_6_table2:: Contents
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
@@ -145,12 +145,7 @@ s4_2_1_intro = Paragraph $
            S "], in which the respective" +:+ (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 
-s4_2_2 = section (titleize' thModel) [s4_2_2_intro, s4_2_2_TMods, s4_2_6_table1, s4_2_6_table2] []
-
-s4_2_2_intro = Paragraph $
-           S "This" +:+ (phrase $ section_ ^. term) +:+ S "focuses on the general" +:+ (plural $ equation ^. term) +:+
-           S "and laws that" +:+ (getAcc sWHS) +:+ S "is based on." 
--- :+: foldr1 (:+:) (map makeRef s4_2_2_TMods) :+: S" " :+: makeRef s1
+s4_2_2 = thModF (getAcc sWHS) [s4_2_2_TMods, s4_2_6_table1, s4_2_6_table2]
   
 s4_2_2_TMods :: Contents
 s4_2_2_TMods = Definition $ Theory t1consThermE

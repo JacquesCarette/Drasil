@@ -32,7 +32,7 @@ coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
 
 -- convenience
 
-coil_SA     = uc' "coil_SA" (compoundPhrase' (coil ^. term) (surArea ^. term))
+coil_SA     = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase $ coil ^. term) (phrase $ coil ^. term) CapFirst CapWords) (nounPhrase'' (phrase $ surArea ^. term) (phrase $ surArea ^. term) CapFirst CapWords))
               "Area covered by the outermost layer of the coil" (sub cA cC) m_2
 dummyVar    = uc' "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")

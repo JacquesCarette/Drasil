@@ -158,11 +158,10 @@ reqF = SRS.require [reqIntro]
 --generalized requirements introduction
 reqIntro :: Contents
 reqIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides the" +:+
-  phrase functional +:+ plural requirement `sC` S "the business tasks" +:+
-  S "that the" +:+ phrase software +:+ S "is expected to complete, and the" +:+
-  phrase nonfunctional +:+ plural requirement `sC` 
-  S "the qualities that the" +:+ phrase software +:+.
-  S "is expected to exhibit"
+  plural functionalRequirement `sC` S "the business tasks that the" +:+
+  phrase software +:+ S "is expected to complete, and the" +:+
+  plural nonfunctionalRequirement `sC` S "the qualities that the" +:+
+  phrase software +:+. S "is expected to exhibit"
 
 -- wrapper for traceMGIntro
 traceMGF :: Section -> Section -> Section -> [Section] -> Section

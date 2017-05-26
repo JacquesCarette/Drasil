@@ -43,11 +43,11 @@ s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
   s4_2_5, s4_2_6, s5_1, s5_2 :: Section
 
 s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_1_p1,
-  s3_2_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, 
+  s4_1_p1, s4_1_1_list, s4_1_2_p1, 
   s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
   s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
   s4_2_2_p1, s4_2_3_p1, s4_2_4_p1, s4_2_5_p2,
-  s4_2_5_p3, s5_p1, s5_1_list, s5_1_table,
+  s4_2_5_p3, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
 
 s4_2_2_tmods :: [Contents]
@@ -193,10 +193,8 @@ s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +
   S "and" +:+. (plural mtrlPrpty)
 
 -- SECTION 3.2 --
-s3_2 = SRS.sysCon [s3_2_p1] []
+s3_2 = systCon Nothing []
  
-s3_2_p1 = Paragraph $ S "There are no" +:+. (plural systemConstraint)
-
 -- SECTION 4 --
 s4 = specSysDesF end [s4_1, s4_2]
   where end = (plural definition) +:+ S "and finally the" +:+ 

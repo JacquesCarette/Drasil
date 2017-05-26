@@ -1,7 +1,7 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, datConF, datConPar, reqF,
                                  figureLabel, showingCxnBw, thModF, inModelF,
-                                 traceMGF, systCon) where
+                                 inModelF', traceMGF, systCon) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -41,14 +41,12 @@ showingCxnBw traceyMG contents = titleize traceyMG +:+ S "Showing the" +:+ title
 -- models or data definitions), a bottom section (for creating a reference link)
 -- which should match the bottom chunk, but does not have to.
 orgSec :: (NounPhrase c) => Sentence -> c -> Section -> Section
-orgSec = \i b s ->
-  Section (titleize orgOfDoc) (map Con (orgIntro i b s Nothing))
+orgSec i b s = Section (titleize orgOfDoc) (map Con (orgIntro i b s Nothing))
 
 -- | Same as 'orgSec' with the addition of extra information at the end 
 -- (post-refine chain)?
 orgSecWTS :: (NounPhrase c) => Sentence -> c -> Section -> Sentence -> Section
-orgSecWTS = \i b s t ->
-  Section (titleize orgOfDoc) (map Con (orgIntro i b s (Just t)))
+orgSecWTS i b s t = Section (titleize orgOfDoc) (map Con (orgIntro i b s (Just t)))
   
   
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
@@ -67,7 +65,7 @@ orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
        
 -- wrapper for general system description
 genSysF :: [Section] -> Section
-genSysF = \subSec -> SRS.genSysDes [genSysIntro] subSec
+genSysF = SRS.genSysDes [genSysIntro]
 
 --generalized general system description introduction
 genSysIntro :: Contents
@@ -79,7 +77,7 @@ genSysIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides general" 
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section
-specSysDesF = \l_eND subSec -> SRS.specSysDes [specSysDesIntro l_eND] subSec
+specSysDesF l_eND subSec = SRS.specSysDes [specSysDesIntro l_eND] subSec
 
 -- generalized specific system description introduction: boolean identifies whether the user wants the extended
 -- or shortened ending (True) -> identifies key word pertaining to topic or Nothing
@@ -99,7 +97,7 @@ specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first pr
 
 --wrapper for thModelIntro
 thModF :: Sentence -> [Contents] -> Section
-thModF = \kword otherContents -> SRS.thModel ((thModIntro kword):otherContents) []
+thModF kword otherContents = SRS.thModel ((thModIntro kword):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
 thModIntro :: Sentence -> Contents
@@ -107,25 +105,27 @@ thModIntro k_word = Paragraph $ S "This" +:+ phrase section_ +:+ S "focuses on" 
   S "the" +:+ phrase general +:+ (plural $ equation ^. term) +:+ S "and" +:+
   S "laws that" +:+ (k_word) +:+. S "is based on"
 
--- wrapper for inModelIntro
+-- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel
-  ((inModelIntro probDes datDef theMod genDef):otherContents) []
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod (Just genDef)):otherContents) []
+
+inModelF' :: Section -> Section -> Section -> [Contents] -> Section
+inModelF' probDes datDef theMod otherContents = SRS.inModel ((inModelIntro probDes datDef theMod Nothing):otherContents) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Section -> Contents
+inModelIntro :: Section -> Section -> Section -> Maybe Section -> Contents
 inModelIntro r1 r2 r3 r4 = Paragraph $ S "This" +:+ phrase section_ +:+ S "transforms" +:+
   S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef r1) +:+
   S "into one which is expressed in mathematical terms. It uses concrete" +:+
   plural symbol_ +:+ S "defined in" +:+ (makeRef r2) +:+
   S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
-  plural model +:+ S "identified in" +:+ (makeRef r3) +:+ S "and" +:+. (makeRef r4)
+  plural model +:+ S "identified in" +:+ (makeRef r3) :+: end r4
+  where end (Just genDef) = S " and" +:+. (makeRef genDef)
+        end Nothing       = S "."
         
- 
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Bool -> Sentence -> [Contents] -> Section
-datConF = \tr mid end t otherContents ->
-  SRS.datCon ((datConPar tr mid end t):otherContents) []
+datConF tr mid end t otherContents = SRS.datCon ((datConPar tr mid end t):otherContents) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
@@ -153,7 +153,7 @@ datConPar tableRef middleSent endingSent trailingSent = ( Paragraph $
                      
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
-reqF = \subSec -> SRS.require [reqIntro] subSec
+reqF = SRS.require [reqIntro]
 
 --generalized requirements introduction
 reqIntro :: Contents
@@ -166,7 +166,7 @@ reqIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides the" +:+
 
 -- wrapper for traceMGIntro
 traceMGF :: Section -> Section -> Section -> [Section] -> Section
-traceMGF = \rf1 rf2 rf3 subSec-> SRS.traceyMandG [traceMGIntro rf1 rf2 rf3] subSec
+traceMGF rf1 rf2 rf3 subSec = SRS.traceyMandG [traceMGIntro rf1 rf2 rf3] subSec
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)

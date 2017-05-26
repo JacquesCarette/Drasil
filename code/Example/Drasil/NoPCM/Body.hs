@@ -91,7 +91,7 @@ s4_1_1_intro = Paragraph $
            S "understand the" +: (plural $ requirement ^. term)
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
-  ((at_start $ c ^. term)) +: (c ^. defn)) 
+  ((at_start $ c ^. term)) +:+ S ":" +:+ (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
 s4_1_2 = SRS.physSyst [s4_1_2_intro, s4_1_2_list, fig_tank] []
@@ -117,7 +117,7 @@ s4_1_3_intro = Paragraph $
            S "and material" +:+ (plural $ property ^. term) `sC` S "the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-            (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
+            (S "GS1", S "predict the" +:+ (phrase $ temp_water ^. term) +:+ S "over time")]
 
 s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5]
 

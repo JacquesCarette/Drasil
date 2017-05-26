@@ -400,12 +400,10 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
   (phrase $ equation ^. term), --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
   S ". Using this" `sC` (P $ loadDF ^. symbol), S "= 0.27"])]
 
-s6_2_2 = thModF (S "GlassBR") (s6_2_2_TMods) 
--- update thModF to receive NP argument (gLassBR ^. term) i/of Sentence?
--- is intro generic enough to be used by GlassBR?
+s6_2_2 = thModF (titleize $ gLassBR ^. term) (s6_2_2_TMods) 
   
 s6_2_2_TMods :: [Contents]
-s6_2_2_TMods = map Definition (map Theory tModels)
+s6_2_2_TMods = map (Definition . Theory) tModels
 
 s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 

@@ -234,7 +234,7 @@ notSafe       = dcc "notSafe" (nounPhraseSP "not safe")
 bomb          = dcc "bomb" (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion" (nounPhraseSP "explosion") "a destructive shattering of something"
-gLassBR       = dcc "gLassBR" (pn "GlassBR") "GlassBR" --lowercase?
+gLassBR       = dcc "gLassBR" (pn "glassBR") "glassBR" --lowercase?
 
 
 

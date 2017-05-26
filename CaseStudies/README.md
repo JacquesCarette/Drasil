@@ -21,8 +21,15 @@ Each of the case study examples is given in its own folder.
 **swpcm**
 - Solar water heating system incorporating PCM.  Since swpcm (also called swhs) is an on-going project, the full version of the case study is hosted external to the Drasil repo, at: https://github.com/smiths/swhs .  This example is based on the work of Marilyn Lightstone, Mechanical Engineering Department, McMaster University.
   
+**hghc_Example**
+  - The simplified fuel pin example. This is the basis of the *tiny* toy example 
+  
+**SolarHeatingWaterOnly**
+  - A simplified version of the SWHS project, with PCM removed. This is the basis of the *NoPCM* example
+  
 **ssp**
   - Slope stability analysis program.  This example is based on the work of Brandon Karchewski and Dieter Stolle, Civil Engineering Department, McMaster University.
+  
   
 README.md
   - This file

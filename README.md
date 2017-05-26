@@ -81,17 +81,11 @@ in ./code/ for more information.
 **SampleEngCalcReport**
   - A sample Engineering Calculation Report
   
-**SolarHeatingWaterOnly**
-  - A simplified version of the SWHS project, with PCM removed. This is the basis of the *pcm* example
-  
 **Steve**
   - Steven Palmer's work
   
 **code**
   - The main folder for Drasil source code and example implementations
-  
-**hghc_Example**
-  - The simplified fuel pin example. This is the basis of the *tiny* toy example 
 
 .gitattributes
   - Used by git

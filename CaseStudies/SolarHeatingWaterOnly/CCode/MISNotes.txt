@@ -1,0 +1,110 @@
+The Input Verification Module verify_valid program outputs an integer variable 
+called err in this implementation. The module itself does not raise any 
+exceptions. Instead, the Control Module checks the err variable and calls 
+EXIT_FAILURE if the integer is greater than 0. This is done because C does not 
+support error handling.
+
+The Input Verification Module verify_recommended program outputs an integer 
+variable called warnings in this implementation. This is for testing purposes 
+since the warnings are not otherwise detectable by the testing framework.
+
+The Temperature ODEs Module access programs do not actually output anything in 
+this implementation. However, they define the functions required by the ODE 
+Solver Module, which has the same effect as outputting the functions in this 
+case. 
+
+The Temperature ODEs Module access programs take different input in this 
+implementation than what is shown in the MIS, as required by the ODE Solver 
+Module. 
+- The Tw, Tp, and Qp variables are both contained in the yPhase argument. 
+- The params argument does not exist in this implementation because the ODE 
+  Solver Module does not allow for it. Instead, params is defined outside of 
+  the main function so that it is available to the other functions in the 
+  main.c file. 
+- There are two additional arguments, yPhasedot and user_data, which are 
+  required by the ODE Solver.
+
+The abstract functions described in the MIS are realized by the temperature1, 
+temperature2, temperature3, event1, and event2 functions. The actual 
+variable names in this implementation for each function appear in parentheses 
+in the following description. Each function takes the real values of time (t), 
+water temperature (y1), PCM temperature (y2), and latent Heat (y3) 
+(temperature2 and event2 only) and generates a real value
+output (yd1, yd2, yd3, or gout).
+
+The ODE Solver Module access program "solve" described in the MIS is a 
+combination of the following calls in this implementation:
+- cvode_mem = CVodeCreate(CV_BDF, CV_NEWTON);
+- CVodeInit(cvode_mem, temperature1, tinit, yPhase1);
+- CVodeSVtolerances(cvode_mem, reltol, abstol1);
+- CVodeRootInit(cvode_mem, 1, event1);
+- CVDense(cvode_mem, N1);
+- CVDlsSetDenseJacFn(cvode_mem, Jac1);
+- flag = CVode(cvode_mem, tout, yPhase1, &t, CV_NORMAL);
+
+Note: These are for the ODE solver for the first phase of the simulation. If 
+the second or third phase occurs, they are called by the same commands with the 
+appropriate changes to the arguments.
+
+Note: The last call in the list occurs in a loop through the simulation time 
+range.
+
+The ODE Solver Module in this implementation does not accept an array of reals 
+representing the time domain for the simulation as an argument. Instead it 
+takes a single real representing the initial time (tinit), and the end time is 
+determined by the loop from which the ODE solver is called.
+
+The ODE Solver Module accepts some extra arguments not specified in the MIS. 
+yPhase1 holds the water temperature and PCM temperature. For the melting phase 
+of the simulation, a similar argument would hold latent heat in addition to 
+these other results. CV_BDF, CV_NEWTON, and CV_NORMAL describe methods for the 
+ODE solver to use. Jac1 refers to a function defining the Jacobian matrix for 
+the system of ODEs, which is required by this ODE solver. N1 represents the 
+number of ODEs in the system. cvode_mem represents the memory allocated for the 
+ODE solver.
+
+The ODE Solver Module in this implementation has the following possible 
+exceptions not specified in the MIS. Their descriptions are taken directly from 
+the user guide for CVODE:
+- CV_ERR_FAILURE: Error test failures occurred too many times during one 
+  internal time step or minimum step size was reached.
+- CV_CONV_FAILURE: Convergence test failures occurred too many times during one 
+  internal time step or minimum step size was reached.
+- CV_LINIT_FAIL: The linear solver's initialization function failed.
+- CV_LSETUP_FAIL: The linear solver's setup function failed in an unrecoverable 
+  manner.
+- CV_LSOLVE_FAIL: The linear solver's solve function failed in an unrecoverable 
+  manner.
+- CV_RHSFUNC_FAIL: The right-hand side function failed in an unrecoverable 
+  manner.
+- CV_FIRST_RHSFUNC_ERR: The right-hand side function failed at the first call.
+- CV_REPTD_RHSFUNC_ERR: The right-hand side function had repeated recoverable 
+  errors.
+- CV_UNREC_RHSFUNC_ERR: The right-hand side function had a recoverable error, 
+  but no recovery is possible.
+- CV_RTFUNC_FAIL: The rootfinding function failed in an unrecoverable manner.
+- CV_MEM_FAIL: A memory allocation failed.
+- CV_MEM_NULL: The cvode_mem argument was NULL.
+- CV_NO_MALLOC: The CVODE memory block was not allocated by a call to 
+  CVodeMalloc.
+- CV_BAD_K: The derivative order k is larger than the order used.
+- CV_BAD_T: The time t is outside the last step taken.
+- CV_BAD_DKY: The output derivative vector is NULL.
+- CV_TOO_CLOSE: The output and initial times are too close to each other.
+
+
+The Energy Module access programs do not output an array of reals in this 
+implementation. Instead, they output a single real and are called in a loop 
+through each time point from the Control Module to generate the entire array.
+
+The Output Verification Module and Output Format Module take an extra argument 
+in this implementation. The argument is an integer variable representing the 
+size of the result lists, to be used for memory allocation purposes within 
+these modules.
+
+The Plotting Module does not receive any inputs except for filename in this 
+implementation. This is because gnuplot reads the results from the output file 
+rather than the variables.
+
+The Output Format Module does not use the max_width constant in this 
+implementation.

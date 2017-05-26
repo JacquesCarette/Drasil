@@ -1,0 +1,51 @@
+#include "unity.h"
+#include "unity_fixture.h"
+
+TEST_GROUP_RUNNER(InvalidInput){
+    RUN_TEST_CASE(InvalidInput, testFI01);
+    RUN_TEST_CASE(InvalidInput, testFI02);
+    RUN_TEST_CASE(InvalidInput, testFI03);
+    RUN_TEST_CASE(InvalidInput, testFI04);
+    RUN_TEST_CASE(InvalidInput, testFI05);
+    RUN_TEST_CASE(InvalidInput, testFI06);
+    RUN_TEST_CASE(InvalidInput, testFI07);
+    RUN_TEST_CASE(InvalidInput, testFI08);
+    RUN_TEST_CASE(InvalidInput, testFI09);
+    RUN_TEST_CASE(InvalidInput, testFI10);
+    RUN_TEST_CASE(InvalidInput, testFI11);
+    RUN_TEST_CASE(InvalidInput, testFI12);
+    RUN_TEST_CASE(InvalidInput, testFI13);
+    RUN_TEST_CASE(InvalidInput, testFI14);
+    RUN_TEST_CASE(InvalidInput, testFI15);
+    RUN_TEST_CASE(InvalidInput, testFI16);
+    RUN_TEST_CASE(InvalidInput, testFI17);
+    RUN_TEST_CASE(InvalidInput, testFI18);
+    RUN_TEST_CASE(InvalidInput, testFI19);
+    RUN_TEST_CASE(InvalidInput, testFI20);
+    RUN_TEST_CASE(InvalidInput, testFI21);
+    RUN_TEST_CASE(InvalidInput, testFI22);
+    RUN_TEST_CASE(InvalidInput, testFI23);
+    RUN_TEST_CASE(InvalidInput, testFI24);
+    RUN_TEST_CASE(InvalidInput, testFI25);
+    RUN_TEST_CASE(InvalidInput, testFI26);
+    RUN_TEST_CASE(InvalidInput, testFI27);
+    RUN_TEST_CASE(InvalidInput, testFI28);
+    RUN_TEST_CASE(InvalidInput, testFI29);
+    RUN_TEST_CASE(InvalidInput, testFI30);
+    RUN_TEST_CASE(InvalidInput, testFI31);
+    RUN_TEST_CASE(InvalidInput, testFI32);
+    RUN_TEST_CASE(InvalidInput, testFI33);
+    RUN_TEST_CASE(InvalidInput, testFI34);
+    RUN_TEST_CASE(InvalidInput, testFI35);
+    RUN_TEST_CASE(InvalidInput, testFI36);
+    RUN_TEST_CASE(InvalidInput, testFI37);
+    RUN_TEST_CASE(InvalidInput, testFI38);
+    RUN_TEST_CASE(InvalidInput, testFI39);
+    RUN_TEST_CASE(InvalidInput, testFI40);
+    RUN_TEST_CASE(InvalidInput, testFI41);
+    RUN_TEST_CASE(InvalidInput, testFI42);
+    RUN_TEST_CASE(InvalidInput, testFI43);
+    RUN_TEST_CASE(InvalidInput, testFI44);
+    RUN_TEST_CASE(InvalidInput, testFI45);
+    RUN_TEST_CASE(InvalidInput, testFI46);
+}

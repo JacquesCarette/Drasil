@@ -1,0 +1,32 @@
+Traceability between Modules and .m Files
+
+M1: Hardware-Hiding Module
+Matlab
+
+M2: Input Format Module
+load_params.m
+
+M3: Input Parameters Module
+load_params.m
+
+M4: Output Format Module
+output.m, plot.m
+
+M5: Temperature ODEs Module
+temperature1.m, temperature2.m, temperature3.m
+event1.m, event2.m
+
+M6: Energy Equations Module
+energy1.m, energy2.m, energy3.m
+
+M7: Control Module
+main.m
+
+M8: Sequence Data Structure Module
+Matlab
+
+M9: ODE Solver Module
+Matlab
+
+M10: Plotting Module
+Matlab

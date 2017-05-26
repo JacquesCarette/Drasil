@@ -1,7 +1,7 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, datConF, datConPar, reqF,
                                  figureLabel, showingCxnBw, thModF, inModelF,
-                                 traceMGF) where
+                                 traceMGF, systCon) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -98,8 +98,8 @@ specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first pr
                   eND (False) =  S "and" +:+. plural definition-}
 
 --wrapper for thModelIntro
-thModF :: Sentence -> [Section] -> Section
-thModF = \kword subSec-> SRS.thModel [thModIntro kword] subSec
+thModF :: Sentence -> [Contents] -> Section
+thModF = \kword otherContents -> SRS.thModel ((thModIntro kword):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
 thModIntro :: Sentence -> Contents
@@ -109,7 +109,8 @@ thModIntro k_word = Paragraph $ S "This" +:+ phrase section_ +:+ S "focuses on" 
 
 -- wrapper for inModelIntro
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):otherContents) []
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel
+  ((inModelIntro probDes datDef theMod genDef):otherContents) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Section -> Contents
@@ -190,9 +191,8 @@ traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:
 -- System Constraints
 -- generalized if no constraints, but if there are, they can be passed through
 systCon :: Maybe Contents -> [Section] -> Section
-systCon content subSec
-  | content == Nothing  = SRS.sysCon [systCon_none] subSec
-  | content == (Just a) = SRS.sysCon [a] subSec
+systCon (Just a) subSec = SRS.sysCon [a] subSec
+systCon Nothing subSec  = SRS.sysCon [systCon_none] subSec
   where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
 
 

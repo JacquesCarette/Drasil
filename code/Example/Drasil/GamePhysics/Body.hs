@@ -450,20 +450,9 @@ s4_2_4_DDefs = map Definition (map Data cpDDefs)
 -----------------------------
 
 s4_2_5 :: Section
-s4_2_5_intro :: Contents
 s4_2_5_IMods :: [Contents]
 
-
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
---s4_2_5 = SRS.inModel ([s4_2_5_intro] ++
---  (s4_2_5_IMods)) []
-
-s4_2_5_intro = Paragraph $ foldlSent 
-  [S "This", (phrase section_), S "transforms the", (phrase problem), S "defined",
-  S "in", (makeRef s4_1), S "into one expressed in mathematical",
-  S "terms. It uses concrete symbols defined in", (makeRef s4_2_4),
-  S "to replace the abstract symbols in the", (plural model), S "identified in",
-  (makeRef s4_2_2), S "and", (makeRef s4_2_3)]
 
 -- Instance models not fully yet implemented --
 
@@ -491,19 +480,7 @@ s4_2_6 :: Section
 s4_2_6_table1, s4_2_6_table2 :: Contents
 
 s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2)+:+ S "show") EmptyS True EmptyS [s4_2_6_table1, s4_2_6_table2]
---s4_2_6 = SRS.datCon [s4_2_6_intro, s4_2_6_table1,
---  s4_2_6_table2] []
 
-{--s4_2_6_intro = Paragraph $ foldlSent 
-  [(makeRef s4_2_6_table1), S "and", (makeRef s4_2_6_table2), 
-  S "show the", (plural datumConstraint), S "on",
-  S "the input and output variables, respectively. The",
-  (Quote $ titleize' physicalConstraint), S "column gives the", (phrase physical),
-  S "limitations on the range of values that can be taken by the",
-  S "variable. The", (plural constraint), S "are conservative, to give the user of the",
-  (phrase model), S "the flexibility to experiment with unusual situations. The",
-  S "column of typical values is intended to provide a feel for a",
-  S "common scenario"] --}
 
 -- Currently unable to write relations in sentences, so verbal explanations
 -- will do for now.

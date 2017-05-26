@@ -219,6 +219,9 @@ executable glassbr
     , Drasil.GlassBR.Example
     , Drasil.GlassBR.Modules
     , Drasil.GlassBR.Reqs
+    , Drasil.GlassBR.TMods
+    , Drasil.GlassBR.IMods
+    , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Units
     , Drasil.OrganizationOfSRS
     , Drasil.ReferenceMaterial

@@ -29,6 +29,9 @@ import Drasil.GlassBR.Concepts
 import Drasil.GlassBR.Changes
 import Drasil.GlassBR.Modules
 import Drasil.GlassBR.Reqs
+import Drasil.GlassBR.TMods
+import Drasil.GlassBR.IMods
+import Drasil.GlassBR.DataDefs
 
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)

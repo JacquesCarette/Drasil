@@ -37,7 +37,7 @@ swhs | Solar Water Heating System with PCM
 glassbr | Glass-BR
 tiny | HGHC toy example
 ssp | Slope Stability Analysis
-pcm | minimal SWHS example, with PCM removed
+nopcm | minimal SWHS example, with PCM removed
 
 ## Running the example(s)
 

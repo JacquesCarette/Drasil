@@ -24,11 +24,14 @@ import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
-import Drasil.GlassBR.Example
+import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
 import Drasil.GlassBR.Changes
 import Drasil.GlassBR.Modules
 import Drasil.GlassBR.Reqs
+import Drasil.GlassBR.TMods
+import Drasil.GlassBR.IMods
+import Drasil.GlassBR.DataDefs
 
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
@@ -41,11 +44,10 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
 s2_intro, s2_2_intro, 
-  s3_1_intro, s3_2_intro, s4_1_bullets, s4_2_intro, s5_intro, 
+  s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
-  s6_2_4_intro, s6_2_5_table1, 
-  s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
+  s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
@@ -178,10 +180,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   (S "The end" +:+ phrase user +:+ S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
 
-s4_2 = SRS.sysCon [s4_2_intro] []
-
-s4_2_intro = Paragraph $
-  (short notApp)
+s4_2 = systCon Nothing []
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
@@ -401,23 +400,17 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
   (phrase $ equation ^. term), --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
   S ". Using this" `sC` (P $ loadDF ^. symbol), S "= 0.27"])]
 
-
-s6_2_2 = SRS.thModel (s6_2_2_TMods) []
+s6_2_2 = thModF (titleize $ gLassBR ^. term) (s6_2_2_TMods) 
   
 s6_2_2_TMods :: [Contents]
-s6_2_2_TMods = map Definition (map Theory tModels)
+s6_2_2_TMods = map (Definition . Theory) tModels
 
 s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = SRS.dataDefn
-  ((s6_2_4_intro):(s6_2_4_DDefns)) []
-
-s6_2_4_intro = Paragraph $ foldlSent [
-  S "This", phrase section_, S "collects and defines all the", 
-  plural datum, S "needed to build the", plural inModel]
+s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)
@@ -583,6 +576,8 @@ s8_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
 
 s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] 
   ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
+--s9 = traceMGF s9_table1 s9_table2 s9_table3 ([s9_table1, s9_table2, s9_table3] 
+--  ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
 
 s9_intro1 = Paragraph $ foldlSent [
   S "The", phrase purpose, S "of the", (plural traceyMatrix),

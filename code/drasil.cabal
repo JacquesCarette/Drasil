@@ -134,6 +134,8 @@ executable tiny
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
+    , Drasil.OrganizationOfSRS
+    , Drasil.SRS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -216,9 +218,12 @@ executable glassbr
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
-    , Drasil.GlassBR.Example
+    , Drasil.GlassBR.Unitals
     , Drasil.GlassBR.Modules
     , Drasil.GlassBR.Reqs
+    , Drasil.GlassBR.TMods
+    , Drasil.GlassBR.IMods
+    , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Units
     , Drasil.OrganizationOfSRS
     , Drasil.ReferenceMaterial

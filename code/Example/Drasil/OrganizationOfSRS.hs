@@ -186,3 +186,15 @@ traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
   titleize' assumption
+
+-- System Constraints
+-- generalized if no constraints, but if there are, they can be passed through
+systCon :: Maybe Contents -> [Section] -> Section
+systCon content subSec
+  | content == Nothing  = SRS.sysCon [systCon_none] subSec
+  | content == (Just a) = SRS.sysCon [a] subSec
+  where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
+
+
+
+

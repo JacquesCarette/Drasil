@@ -54,7 +54,7 @@ s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s3_3, s4, s4_1,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
 s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, sys_context_fig,
-  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s3_3_contents, s4_intro, 
+  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_intro, 
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
   s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_table1,
@@ -328,10 +328,7 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 -- be abstracted out.
 
 
---FIXME: System Constraints not being generated into HTML file
-s3_3 = SRS.sysCon [s3_3_contents] []
-
-s3_3_contents = Paragraph (S "There are no" +:+. plural systemConstraint)
+s3_3 = systCon Nothing []
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...

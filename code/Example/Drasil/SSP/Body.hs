@@ -46,7 +46,7 @@ s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_1_p1,
   s4_1_p1, s4_1_1_list, s4_1_2_p1, 
   s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, 
   s4_1_3_p1, s4_1_3_list, s4_2_p1, s4_2_1_p1, s4_2_1_list, 
-  s4_2_2_p1, s4_2_3_p1, s4_2_4_p1, s4_2_5_p2,
+  s4_2_3_p1, s4_2_4_p1, s4_2_5_p2,
   s4_2_5_p3, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
 
@@ -339,14 +339,7 @@ s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
   ]
 
 -- SECTION 4.2.2 --
-s4_2_2 = sec_TMs
-
-sec_TMs :: Section
-sec_TMs = SRS.thModel (s4_2_2_p1:s4_2_2_tmods) []
-
-s4_2_2_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "focuses on the" +:+
-  S "general equations and laws that" +:+ (short ssa) +:+
-  S "is based on."
+s4_2_2 = thModF (short ssa) (s4_2_2_tmods)
 
 s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 

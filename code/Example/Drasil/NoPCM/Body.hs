@@ -25,7 +25,7 @@ import Drasil.OrganizationOfSRS
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s2,s2_3, s3, s3_1, s4,s4_1,s4_1_1,s4_1_2,s4_1_3,s4_2,s4_2_1,s4_2_2 :: Section
+s2,s2_3, s3, s3_1, s4,s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5 :: Section
 
 s2_3_intro, s3_1_intro, sys_context_fig,
   s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
@@ -44,7 +44,7 @@ pcm_srs = mkDoc mkSRS pcm_si
 
 s2 = SRS.intro [] [s2_3]
 
-s2_3 = section (titleize' charOfIR) [s2_3_intro] []
+s2_3 = SRS.charOfIR [s2_3_intro] []
 
 s2_3_intro = Paragraph $
             (at_start' $ reviewer ^. term) +:+ S "of this" +:+ (phrase $ documentation ^. term) +:+
@@ -58,7 +58,7 @@ s2_3_intro = Paragraph $
            
 s3 = genSysF [s3_1]
 
-s3_1 = section (titleize sysCont) [s3_1_intro, sys_context_fig] []
+s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 
 s3_1_intro = Paragraph $
               (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase $ sysCont ^. term) +:+
@@ -76,13 +76,13 @@ s4 = specSysDesF (words_) [s4_1, s4_2]
                 (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
                 S "that models the" +:+. (phrase $ sWHT ^. term))
 
-s4_1 = section ((titleize $ problemDescription ^. term)) [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
+s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = Paragraph $
             (getAcc sWHS) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed to investigate" +:+
            S "the heating of" +:+ (phrase $ water ^. term) +:+ S "in a" +:+. (phrase $ sWHT ^. term)
 
-s4_1_1 = section ((titleize $ termAndDef ^. term)) [s4_1_1_intro, s4_1_1_bullets] []
+s4_1_1 = SRS.termAndDefn [s4_1_1_intro, s4_1_1_bullets] []
   
 s4_1_1_intro = Paragraph $
            S "This subsection provides a list of terms that" +:+
@@ -94,7 +94,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $
   ((at_start $ c ^. term)) +: (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
-s4_1_2 = section (titleize physSyst) [s4_1_2_intro, s4_1_2_list, fig_tank] []
+s4_1_2 = SRS.physSyst [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
 s4_1_2_intro = Paragraph $
            S "The" +:+ (phrase $ physicalSystem ^. term) +:+ S "of" +:+ (getAcc sWHS) `sC`
@@ -109,7 +109,7 @@ s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
            sParen (P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
            S "into the" +:+. (phrase $ water ^. term)))]
 
-s4_1_3 = section (titleize' goalStmt) [s4_1_3_intro, s4_1_3_list] []
+s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro = Paragraph $
            S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) `sC` S "initial" +:+
@@ -119,8 +119,7 @@ s4_1_3_intro = Paragraph $
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the " :+: (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = section ((titleize' solutionCharSpec)) 
-  [s4_2_intro] [s4_2_1, s4_2_2]
+s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2]
 
 s4_2_intro = Paragraph $
            S "The" +:+ (phrase $ inModel ^. term) +:+ S "(" :+: getAcc ode :+: S ") that governs" +:+
@@ -130,7 +129,7 @@ s4_2_intro = Paragraph $
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 
             (phrase $ inModel ^. term) +:+. S "can be verified"
   
-s4_2_1 = section (titleize' assumption) [s4_2_1_intro] []
+s4_2_1 = SRS.assump [s4_2_1_intro] []
 
 s4_2_1_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+
@@ -148,6 +147,12 @@ s4_2_2 = thModF (getAcc sWHS) [s4_2_2_TMods, s4_2_6_table1, s4_2_6_table2]
   
 s4_2_2_TMods :: Contents
 s4_2_2_TMods = Definition $ Theory t1consThermE
+
+s4_2_3 = SRS.genDefn [] []
+
+s4_2_4 = SRS.dataDefn [] []
+
+s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 []
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) []) 

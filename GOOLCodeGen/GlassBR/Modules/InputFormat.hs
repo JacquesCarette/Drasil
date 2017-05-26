@@ -5,14 +5,10 @@ import Language.Drasil.Code
 -- TODO:  add ability to specify libraries in gool
 -- TODO:  add gool support for non-object functions;  don't need a class for this
 inputFormat :: Module
-inputFormat = buildModule "InputFormat" [] [] [inputFormatClass]
+inputFormat = buildModule "InputFormat" ["numpy"] [] [inputFormatFunc] []
 
-inputFormatClass :: Class
-inputFormatClass = pubClass
-  "InputFormat"
-  Nothing
-  []
-  [ pubMethod methodTypeVoid "get_input" (params [("filename", string), ("params", obj "InputParameters")]) 
+inputFormatFunc :: FunctionDecl
+inputFormatFunc = pubMethod methodTypeVoid "get_input" (params [("filename", string), ("params", obj "InputParameters")]) 
     [ 
       block [
         -- TODO:  improve gool file IO (some languages use object methods, some not...
@@ -30,14 +26,13 @@ inputFormatClass = pubClass
         (var "params")$->(var "pbtol") &= readfl64,
         valStmt (objMethodCall (var "infile") "close" [])
       ]
-    ]
-  ]      
+    ]      
   
   
 -- float64 from numpy library
 --   this should come from a library database
 readfl64 :: Value
-readfl64 = funcApp "float64" [readline]  
+readfl64 = funcApp "numpy.float64" [readline]  
   
 readline :: Value
 readline = objMethodCall (var "infile") "readline" []

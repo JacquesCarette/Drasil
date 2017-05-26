@@ -57,7 +57,7 @@ vals = [
   ]
   
 inputParameters :: Module
-inputParameters = buildModule "InputParameters" [] [] [inputParametersClass]
+inputParameters = buildModule "InputParameters" [] [] [] [inputParametersClass]
 
 inputParametersClass :: Class
 inputParametersClass = pubClass

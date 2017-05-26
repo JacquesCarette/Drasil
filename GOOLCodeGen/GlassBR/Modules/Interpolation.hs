@@ -5,7 +5,7 @@ import Prelude hiding (return)
 
 -- TODO:  add gool support for non-object functions;  don't need a class for this
 interpolation :: Module
-interpolation = buildModule "Interpolation" [] [interpolationFunc] []
+interpolation = buildModule "Interpolation" ["numpy"] [] [interpolationFunc] []
 
 interpolationFunc :: FunctionDecl
 interpolationFunc = pubMethod (methodType float) "lin_interp" [y1, y2, x1, x2, input_param] 

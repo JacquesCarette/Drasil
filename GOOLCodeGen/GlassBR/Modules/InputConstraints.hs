@@ -4,14 +4,10 @@ import Language.Drasil.Code
 
 -- TODO:  add gool support for non-object functions;  don't need a class for this
 inputConstraints :: Module
-inputConstraints = buildModule "InputConstraints" [] [] [inputConstraintsClass]
+inputConstraints = buildModule "InputConstraints" [] [] [inputConstraintsFunc] []
 
-inputConstraintsClass :: Class
-inputConstraintsClass = pubClass
-  "InputConstraints"
-  Nothing
-  []
-  [ pubMethod methodTypeVoid "check_constraints" (params [("params", obj "InputParameters")]) 
+inputConstraintsFunc :: FunctionDecl
+inputConstraintsFunc = pubMethod methodTypeVoid "check_constraints" (params [("params", obj "InputParameters")]) 
     [ 
       block [
         ifCond [(a ?<= (litFloat 0.0), oneLiner (throw "InputError: a must be greater than 0"))] noElse,
@@ -38,7 +34,7 @@ inputConstraintsClass = pubClass
         ifCond [(sd ?> (litFloat 130.0), oneLiner (throw "InputError: sd cannot be greater than 130.0"))] noElse
       ]
     ]
-  ]      
+      
 
   
 a, b, asprat, t, tnt, wtnt, sd :: Value

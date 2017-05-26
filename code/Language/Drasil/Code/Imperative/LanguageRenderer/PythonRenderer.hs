@@ -8,7 +8,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (comment,bool,int,float,char,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
-import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
+import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,reduceLibs)
 
 import Data.List (intersperse)
 import Prelude hiding (print)
@@ -82,14 +82,20 @@ pystateType _   (Base String)  _ = text "str"
 pystateType _   (Base _)       _ = empty
 pystateType c  s               d = stateTypeD c s d
 
-pytop :: Config -> a -> b -> Doc
-pytop _ _ _ = vcat [
+pytop :: Config -> FileType -> Label -> [Module] -> Doc
+pytop _ _ _ [] = vcat [
     text "import sys",
     text "import math"]
+pytop c f p ms = let modNames = map moduleName ms
+                     libNames = concat $ map libs ms
+                     libraries = reduceLibs libNames modNames
+  in  (vcat $ map (\x -> text "import" <+> text x) libraries)
+      $+$ pytop c f p []
+
 
 pybody :: Config -> FileType -> Label -> [Module] -> Doc
 pybody _ _ _ [] = blank
-pybody c f p ((Mod _ vs fs cs):ms) = 
+pybody c f p ((Mod _ _ vs fs cs):ms) = 
   functionListDoc c f p fs
   $+$ blank $+$
   (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 

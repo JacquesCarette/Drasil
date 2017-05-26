@@ -76,7 +76,7 @@ data Config = Config {
     blockStart :: Doc, blockEnd :: Doc,
     ifBodyStart :: Doc, elseIf :: Doc,
     
-    top :: FileType -> Label -> Doc,
+    top :: FileType -> Label -> [Module] -> Doc,
     body :: FileType -> Label -> [Module] -> Doc,
     bottom :: FileType -> Doc,
     
@@ -132,7 +132,7 @@ fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
 
 fileDoc :: Config -> FileType -> Label -> [Module] -> Doc
 fileDoc c f p ms = vibcat [
-    top c f p,
+    top c f p ms,
     body c f p ms,
     bottom c f]
 

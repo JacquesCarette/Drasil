@@ -4,14 +4,10 @@ import Language.Drasil.Code
 
 -- TODO:  add gool support for non-object functions;  don't need a class for this
 derivedValues :: Module
-derivedValues = buildModule "DerivedValues" [] [] [derivedValuesClass]
+derivedValues = buildModule "DerivedValues" [] [] [derivedValuesFunc] []
 
-derivedValuesClass :: Class
-derivedValuesClass = pubClass
-  "DerivedValues"
-  Nothing
-  []
-  [ pubMethod methodTypeVoid "derived_params" (params [("params", obj "InputParameters")]) 
+derivedValuesFunc :: FunctionDecl
+derivedValuesFunc = pubMethod methodTypeVoid "derived_params" (params [("params", obj "InputParameters")]) 
     [ 
       block [
         asprat &= a #/ b,
@@ -38,8 +34,7 @@ derivedValuesClass = pubClass
           (gt ?== litString "FT" ?|| gt ?== litString "ft", oneLiner (gtf &= litFloat 4.0))
         ] noElse
       ]
-    ]
-  ]      
+    ]     
   
         
 a, b, asprat, sd, sdx, sdy, sdz, ldf, td, m, wtnt, w, tnt, t, h, gt, gtf :: Value

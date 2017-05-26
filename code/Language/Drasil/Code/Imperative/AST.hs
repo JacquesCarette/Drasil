@@ -11,7 +11,7 @@ module Language.Drasil.Code.Imperative.AST (
     -- ** Overall AbstractCode Structure
     BaseType(..), Mode(..), StateType(..), Permanence(..), MethodType(..),
     Scope(..), Parameter(..), StateVar(..), Method(..), Enum(..), Class(..), 
-    VarDecl, FunctionDecl, Module(..), Package(..),
+    VarDecl, FunctionDecl, Library, Module(..), Package(..),
     AbstractCode(..),
 
     -- * Convenience functions
@@ -33,7 +33,7 @@ module Language.Drasil.Code.Imperative.AST (
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,
-    toAbsCode, getClassName, buildModule, moduleName
+    toAbsCode, getClassName, buildModule, moduleName, libs
 ) where
 
 import Data.List (zipWith4)
@@ -183,8 +183,9 @@ data Class = Enum {
                classVars :: [StateVar],
                classMethods :: [Method]}
 type FunctionDecl = Method
-type VarDecl = Declaration 
-data Module = Mod Label [VarDecl] [FunctionDecl] [Class]
+type VarDecl = Declaration
+type Library = Label
+data Module = Mod Label [Library] [VarDecl] [FunctionDecl] [Class]
 data Package = Pack Label [Module]
 data AbstractCode = AbsCode Package
 
@@ -670,15 +671,17 @@ valueReplace' old new (StateObj st vals) = StateObj st $ valListReplace old new 
 valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl
 valueReplace' _ _ v = v
 
-
 toAbsCode :: Label -> [Module] -> AbstractCode
 toAbsCode l m = AbsCode $ Pack l m 
 
 getClassName :: Class -> Label
 getClassName = className
 
-buildModule :: Label -> [VarDecl] -> [FunctionDecl] -> [Class] -> Module
+buildModule :: Label -> [Library] -> [VarDecl] -> [FunctionDecl] -> [Class] -> Module
 buildModule = Mod
 
 moduleName :: Module -> Label
-moduleName (Mod l _ _ _) = l
+moduleName (Mod l _ _ _ _) = l
+
+libs :: Module -> [Label]
+libs (Mod _ ls _ _ _) = ls

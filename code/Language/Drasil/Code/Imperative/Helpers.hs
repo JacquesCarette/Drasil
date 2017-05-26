@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
-    hmap,himap,vicat,vibcat,vmap,vimap,vibmap
+    hmap,himap,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
 ) where
 
 
@@ -88,6 +88,9 @@ vimap c f l = vicat c (map f l)
 
 vibmap :: (a -> Doc) -> [a] -> Doc
 vibmap = vimap blank
+
+reduceLibs :: [String] -> [String] -> [String]
+reduceLibs libs modules = nub $ filter (\x -> notElem x modules) libs 
 
 --private
 myLiteralNameReplace :: String -> String -> String

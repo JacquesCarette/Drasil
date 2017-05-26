@@ -17,6 +17,8 @@ import Data.Drasil.Authors (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.Modules
 
+import Drasil.OrganizationOfSRS
+
 vars :: [QDefinition]
 vars = [htTransCladFuel, htTransCladCool]
 
@@ -34,7 +36,7 @@ thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]
   
 s3 :: Section --, s4 
-s3 = Section (S "Data Definitions") $ map (Con . Definition . Data) vars
+s3 = dataDefnF EmptyS (map (Definition . Data) vars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS thisSI

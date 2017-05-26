@@ -134,6 +134,8 @@ executable tiny
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
+    , Drasil.OrganizationOfSRS
+    , Drasil.SRS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

@@ -47,8 +47,7 @@ s2_intro, s2_2_intro,
   s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
-  s6_2_4_intro, s6_2_5_table1, 
-  s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
+  s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
@@ -413,12 +412,7 @@ s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map Definition (map Theory iModels)
 
-s6_2_4 = SRS.dataDefn
-  ((s6_2_4_intro):(s6_2_4_DDefns)) []
-
-s6_2_4_intro = Paragraph $ foldlSent [
-  S "This", phrase section_, S "collects and defines all the", 
-  plural datum, S "needed to build the", plural inModel]
+s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map Definition (map Data dataDefns)

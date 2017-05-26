@@ -11,8 +11,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Math (ode, unit_, graph, matrix, rOfChng,
-  equation, change)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
@@ -1119,6 +1118,7 @@ s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short likelyChg) s6_likeChg_
 s6_likeChg_list :: [Sentence]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
+likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence
 
 likeChg1 = S "A4 -" +:+ (short phsChgMtrl) +:+ S "is actually a poor" +:+
   (phrase $ CT.thermal_conductor ^. term) `sC` S "so" +:+
@@ -1298,30 +1298,11 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 
 -- Wrong DD reference above, change when DD4 is available
 
-s7_intro2 = [Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
-  S "traceability" +:+ (plural $ graph ^. term) +:+ S "is also to provide" +:+
-  S "easy" +:+ plural reference +:+ S "on what has to be additionally" +:+
-  S "modified if a certain" +:+ phrase component +:+ S "is changed. The" +:+
-  S "arrows in the" +:+ (plural $ graph ^. term) +:+ S "represent" +:+
-  S "dependencies. The" +:+ phrase component +:+ S "at the tail of an" +:+
-  S "arrow is depended on by the" +:+ phrase component +:+ S "at the head" +:+
-  S "of that arrow. Therefore, if a" +:+ phrase component +:+ S "is" +:+
-  S "changed, the" +:+ plural component +:+ S "that it points to should" +:+.
-  S "also be changed" +:+ makeRef s7_fig1 +:+ S "shows the dependencies of" +:+
-  plural thModel `sC`
-  (plural genDefn) `sC`
-  (plural dataDefn) `sC`
-  (plural inModel) `sC`
-  (plural likelyChg) `sC` S "and" +:+
-  (plural assumption) +:+ S "on each" +:+.
-  S "other" +:+ makeRef s7_fig2 +:+ S "shows the dependencies of" +:+
-  plural inModel `sC`
-  plural requirement `sC` S "and data" +:+ plural constraint +:+.
-  S "on each other"),
-  Paragraph (S "NOTE: Building a tool to automatically generate" +:+
-  S "the graphical representation of the" +:+ (phrase $ matrix ^. term) +:+
-  S "by scanning the" +:+ plural label +:+ S "and" +:+ phrase reference +:+.
-  S "can be future work")]
+s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn `sC`
+  plural dataDefn `sC` plural inModel `sC` plural likelyChg `sC` 
+  S "and" +:+ plural assumption +:+. S "on each other"), (plural inModel
+  `sC` plural requirement `sC` S "and data" +:+ plural constraint +:+.
+  S "on each other")]
 
 -- Same comments on this paragraph as I had for s7_intro1. 
 

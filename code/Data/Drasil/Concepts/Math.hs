@@ -3,15 +3,15 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Control.Lens ((^.))
 
-calculation, diameter, equation, euclidN, euclidSpace, gradient, 
+area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
   probability, surface, unit_, unitV, vector, rate, change, rOfChng, 
   constraint :: ConceptChunk
 
 ode :: CINP
 
---FIXME: Make some of these definitions better.
 {--algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations" --}
+area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
@@ -51,5 +51,7 @@ perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
                 "Vector perpendicular or 90 degrees to another vector"
 rOfChng      = dcc "rOfChng" ((rate) `of_` (change))
                 "Ratio between a change in one variable relative to a corresponding change in another"
+surArea      = dcc "surArea"  (compoundPhrase' (surface ^. term) (area ^. term))
+                "A measure of the total area that the surface of the object occupies"
 unitV        = dcc "unit_vect"      (compoundPhrase' (unit_ ^. term)
                 (vector ^. term)) "A vector that has a magnitude of one"

@@ -148,9 +148,9 @@ s4_2_2 = thModF (getAcc sWHS) [s4_2_2_TMods, s4_2_6_table1, s4_2_6_table2]
 s4_2_2_TMods :: Contents
 s4_2_2_TMods = Definition $ Theory t1consThermE
 
-s4_2_3 = SRS.genDefn [] []
+s4_2_3 = genDefnF []
 
-s4_2_4 = SRS.dataDefn [] []
+s4_2_4 = dataDefnF EmptyS []
 
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 []
 

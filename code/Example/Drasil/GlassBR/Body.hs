@@ -575,10 +575,15 @@ s8_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   ((short assumption) :+: S "7 - The" +:+ phrase software +:+.
   S "may be changed to consider more than just flexure of the glass"))]
 
-s9 = SRS.traceyMandG ([s9_intro1, s9_table1, s9_table2, s9_table3] 
-  ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
---s9 = traceMGF s9_table1 s9_table2 s9_table3 ([s9_table1, s9_table2, s9_table3] 
---  ++ (s9_intro2) ++ [fig_2, fig_3, fig_4]) []
+s9 = traceMGF [s9_table1, s9_table2, s9_table3]
+  [(plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other"),
+  (plural requirement +:+ S "on" +:+ plural thModel `sC` (plural inModel) `sC` (plural dataDefn)
+  +:+ S "and" +:+. plural datumConstraint),
+  (S "shows the" +:+ plural dependency +:+ S "of" +:+ plural thModel `sC` (plural dataDefn) `sC`
+  plural inModel `sC` plural likelyChg +:+ S "and" +:+ (plural requirement) +:+ S "on the" +:+ 
+  plural assumption)]
+  ([s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4])
+  []
 
 s9_intro1 = Paragraph $ foldlSent [
   S "The", phrase purpose, S "of the", (plural traceyMatrix),

@@ -704,10 +704,17 @@ s8_instaModel, s8_assump, s8_funcReq, s8_data, s8_goalstmt, s8_theoryModel,
   s8_genDef, s8_dataDef, s8_likelyChg :: [String]
 
 s8_instaModelRef, s8_assumpRef, s8_funcReqRef, s8_goalstmtRef, 
-  s8_theoryModelRef, s8_genDefRef, s8_dataDefRef, s8_likelyChgRef :: [Sentence]
+  s8_theoryModelRef, s8_genDefRef, s8_dataDefRef, s8_likelyChgRef, 
+  s8_dataRef :: [Sentence]
 
 s8_instaModel = ["IM1", "IM2", "IM3"]
 s8_instaModelRef = map (refFromType Theory) iModels
+
+s8_theoryModel = ["T1", "T2", "T3", "T4", "T5"]
+s8_theoryModelRef = map (refFromType Theory) cpTMods
+
+s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
+s8_dataDefRef = map (refFromType Data) cpDDefs
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 s8_assumpRef = makeListRef s4_2_1_list' s4_2_1
@@ -716,20 +723,13 @@ s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 s8_funcReqRef = makeListRef s5_1_list' s5_1
 
 s8_data = ["Data Constraints"]
-s8_dataRef :: Sentence
-s8_dataRef = makeRef s4_2_6
+s8_dataRef = [makeRef s4_2_6]
 
 s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
 s8_goalstmtRef = makeListRef s4_1_2_list' s4_1_2
 
-s8_theoryModel = ["T1", "T2", "T3", "T4", "T5"]
-s8_theoryModelRef = map (refFromType Theory) cpTMods
-
 s8_genDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 s8_genDefRef = makeListRef s8_genDef s4_2_3
-
-s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-s8_dataDefRef = map (refFromType Data) cpDDefs
 
 s8_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
 s8_likelyChgRef = makeListRef s6_list' s6
@@ -754,7 +754,7 @@ r8_t1 = ["IM3", "R7"]
 
 s8_row_header_t1, s8_col_header_t1 :: [Sentence]
 s8_row_header_t1 = zipWith itemRefToSent s8_row_t1 (s8_instaModelRef ++ 
-  (take 3 s8_funcReqRef) ++ [s8_dataRef])
+  (take 3 s8_funcReqRef) ++ s8_dataRef)
 s8_col_header_t1 = zipWith itemRefToSent 
   (s8_goalstmt ++ s8_funcReq) (s8_goalstmtRef ++ s8_funcReqRef)
 

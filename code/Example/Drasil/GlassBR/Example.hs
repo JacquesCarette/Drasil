@@ -139,13 +139,13 @@ gTF         = makeVC "gTF" (glassTypeFac ^. term) (Atomic "GTF")
 -- FIXME: Use actual acronyms instead of CCs.
 
 acronyms :: [CINP]
-acronyms = [assumption,annealedGlass,aspectR, dataDefn,fullyTGlass,
-  goalStmt,glassTypeFac,heatSGlass,iGlass,inModel,likelyChg,lDurFac,
-  lGlass,lResistance,lShareFac,notApp,nonFactorL, physSyst,requirement,
-  srs,thModel,eqTNT]
+acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
+  goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, lDurFac,
+  lGlass, lResistance, lShareFac, notApp, nonFactorL, physSyst, requirement,
+  srs, thModel, eqTNT]
 
-annealedGlass, aspectR, fullyTGlass,glassTypeFac,heatSGlass,
-  iGlass,lDurFac, lGlass,lResistance,lShareFac,notApp, nonFactorL,
+annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
+  iGlass, lDurFac, lGlass, lResistance, lShareFac, notApp, nonFactorL,
   eqTNT :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
@@ -317,7 +317,7 @@ t2descr =
 {-Instance Models-}
 
 iModels :: [RelationConcept]
-iModels =[probOfBr, calOfCap, calOfDe]
+iModels = [probOfBr, calOfCap, calOfDe]
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage") --make into an NPNC type? (along with calOfCap, calOfDe)
@@ -376,7 +376,7 @@ dedescr =
 --        Should definitely look into how this chunk is used to make sure
 --        the current id makes sense. Same for the QDefns below.
 dataDefns :: [QDefinition]
-dataDefns = [risk,hFromt,loadDF,strDisFac,nonFL,glaTyFac,dL,tolPre,
+dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dL, tolPre,
   tolStrDisFac]
 
 risk :: QDefinition

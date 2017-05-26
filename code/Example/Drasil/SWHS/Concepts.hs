@@ -56,14 +56,19 @@ swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
   (phrase $ program ^. term)) (short progName +:+ (phrase $ program ^. term))
   CapFirst CapWords) "SWHS"
 
-swhs_pcm = dcc "swhs_pcm" (nounPhraseSP 
-  "solar water heating systems incorporating PCM")
+--Nounphrase'' hack to get nounPhraseSP words to accept nounPhrases instead of strings
+swhs_pcm = dcc "swhs_pcm" (nounPhrase'' 
+  ((phrase $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((phrase $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  CapFirst CapWords)
   "Solar water heating systems incorporating phase change material"
 
-tank = dcc "tank" (cn' "tank") "Solar water heating tank"
+tank = dcc "tank" (cn' "tank") "solar water heating tank"
 
-tank_pcm = dcc "tank_pcm" 
-  (nounPhraseSP "solar water heating tank incorporating PCM")
+tank_pcm = dcc "tank_pcm" (nounPhrase''
+  ((tank ^. defn) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((tank ^. defn) +:+ S "incorporating" +:+ short phsChgMtrl)
+  CapFirst CapWords)
   "Solar water heating tank incorporating phase change material"
 
 transient = dcc "transient" (nounPhraseSP "transient") "Changing with time"

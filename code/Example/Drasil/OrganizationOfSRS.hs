@@ -67,7 +67,7 @@ orgIntro intro bottom bottomSec trailingSentence = [ Paragraph $
        
 -- wrapper for general system description
 genSysF :: [Section] -> Section
-genSysF = SRS.genSysDes [genSysIntro] 
+genSysF = \subSec -> SRS.genSysDes [genSysIntro] subSec
 
 --generalized general system description introduction
 genSysIntro :: Contents

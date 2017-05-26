@@ -1149,8 +1149,26 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 
 --add referencing to assumptions?
   
-s7 = traceMGF s7_table1 s7_table2 s7_table3
+s7 = traceMGF s7_refList s7_trailing
   ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
+
+s7_refList :: [Contents]
+s7_refList = [s7_table1, s7_table2, s7_table3]
+
+s7_trailing :: [Sentence]
+s7_trailing = [
+
+  plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
+  S "and" +:+ plural inModel +:+. S "with each other",
+
+  plural inModel `sC` plural requirement `sC` S "and" +:+ plural datum +:+
+  plural constraint +:+. S "on each other",
+
+  plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
+  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
+  plural assumption
+
+  ]
 
 s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
   makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 

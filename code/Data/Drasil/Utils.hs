@@ -10,9 +10,11 @@ module Data.Drasil.Utils
   , zipSentList
   , makeTMatrix
   , itemRefToSent
+  , refFromType
+  , makeListRef
   ) where
 
-import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC, sParen)
+import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC, sParen, Contents(Definition), makeRef, DType, Section)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -86,6 +88,16 @@ zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
--- | makes sentences from an containing an item and its reference
-itemRefToSent :: (String, Sentence) -> Sentence
-itemRefToSent (a, b) = S a +:+ sParen b
+-- | makes sentences from an item and its reference 
+itemRefToSent :: String -> Sentence -> Sentence
+itemRefToSent a b = S a +:+ sParen b
+
+-- | refFromType takes a function and returns a reference sentence
+refFromType :: (a -> DType) -> a -> Sentence
+refFromType f = (makeRef . Definition . f)
+
+-- | makeListRef takes a list and a reference and generates references to 
+--   match the length of the list
+makeListRef :: [a] -> Section -> [Sentence]
+makeListRef l r = take (length l) $ repeat $ makeRef r
+

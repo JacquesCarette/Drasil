@@ -14,8 +14,8 @@ import Data.Drasil.Concepts.Software
 import Drasil.OrganizationOfSRS
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
-  position, torque, acceleration, angularAccel, force, gravitationalConst, 
-  gravitationalAccel, velocity, momentOfInertia, displacement, angularVelocity)
+  position, torque, force, gravitationalAccel, velocity, 
+  momentOfInertia, angularVelocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass, len)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
   cartesian, friction, rightHand, collision, space, joint)
@@ -24,11 +24,10 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
 import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
-  makeTMatrix, itemRefToSent)
+  makeTMatrix, itemRefToSent, refFromType, makeListRef)
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
-import Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import qualified Drasil.ReferenceMaterial as RM
 
@@ -396,6 +395,7 @@ s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
 s4_2_2 = SRS.thModel ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
+--s4_2_2 = thModF 
 
 s4_2_2_intro = Paragraph $ foldlSent 
   [S "This", (phrase section_), S "focuses on the", (phrase general), 
@@ -707,39 +707,35 @@ s8_instaModelRef, s8_assumpRef, s8_funcReqRef, s8_goalstmtRef,
   s8_theoryModelRef, s8_genDefRef, s8_dataDefRef, s8_likelyChgRef :: [Sentence]
 
 s8_instaModel = ["IM1", "IM2", "IM3"]
-s8_instaModelRef = map (\x -> makeRef $ Definition x) [Theory im1, Theory im2, 
-  Theory im3]
+s8_instaModelRef = map (refFromType Theory) iModels
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-s8_assumpRef = take (length s8_assump) $ repeat $ makeRef s4_2_1
+s8_assumpRef = makeListRef s4_2_1_list' s4_2_1
 
 s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-s8_funcReqRef = take (length s8_funcReq) $ repeat $ makeRef s5_1
+s8_funcReqRef = makeListRef s5_1_list' s5_1
 
 s8_data = ["Data Constraints"]
 s8_dataRef :: Sentence
 s8_dataRef = makeRef s4_2_6
 
 s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
-s8_goalstmtRef = take (length s8_goalstmt) $ repeat $  makeRef s4_1_2
+s8_goalstmtRef = makeListRef s4_1_2_list' s4_1_2
 
 s8_theoryModel = ["T1", "T2", "T3", "T4", "T5"]
-s8_theoryModelRef = map (\x -> makeRef $ Definition x) [Theory t1NewtonSL, 
-  Theory t2NewtonTL, Theory t3NewtonLUG, Theory t4ChaslesThm, 
-  Theory t5NewtonSLR]
+s8_theoryModelRef = map (refFromType Theory) cpTMods
 
 s8_genDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-s8_genDefRef = take (length s8_genDef) $ repeat $ makeRef s4_2_3
+s8_genDefRef = makeListRef s8_genDef s4_2_3
 
 s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-s8_dataDefRef = map (\x -> makeRef $ Definition x) [Data dd1CtrOfMass, 
-  Data dd2linDisp, Data dd3linVel, Data dd4linAcc, Data dd5angDisp, 
-  Data dd6angVel, Data dd7angAccel, Data dd8impulse]
+s8_dataDefRef = map (refFromType Data) cpDDefs
 
 s8_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
-s8_likelyChgRef = take (length s6_list') $ repeat $ makeRef s6
+s8_likelyChgRef = makeListRef s6_list' s6
 
 
+{-- Matrices generation below --}
 
 gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1, r5_t1, r6_t1, r7_t1, 
   r8_t1 :: [String]
@@ -757,10 +753,10 @@ r7_t1 = ["R1"]
 r8_t1 = ["IM3", "R7"]
 
 s8_row_header_t1, s8_col_header_t1 :: [Sentence]
-s8_row_header_t1 = map (itemRefToSent) $ zip s8_row_t1 (s8_instaModelRef ++ 
+s8_row_header_t1 = zipWith itemRefToSent s8_row_t1 (s8_instaModelRef ++ 
   (take 3 s8_funcReqRef) ++ [s8_dataRef])
-s8_col_header_t1 = map (itemRefToSent) $ 
-  zip (s8_goalstmt ++ s8_funcReq) (s8_goalstmtRef ++ s8_funcReqRef)
+s8_col_header_t1 = zipWith itemRefToSent 
+  (s8_goalstmt ++ s8_funcReq) (s8_goalstmtRef ++ s8_funcReqRef)
 
 s8_row_t1 :: [String]
 s8_row_t1 = s8_instaModel ++ ["R1","R4","R7"] ++ s8_data
@@ -823,8 +819,8 @@ s8_cols_ref_t2 = (s8_theoryModelRef ++ s8_genDefRef ++ s8_dataDefRef ++
   s8_instaModelRef ++ s8_likelyChgRef)
 
 s8_row_header_t2, s8_col_header_t2 :: [Sentence]
-s8_row_header_t2 = map (itemRefToSent) $ zip (s8_row_t2) (s8_assumpRef)
-s8_col_header_t2 = map (itemRefToSent) $ zip (s8_cols_t2) (s8_cols_ref_t2)
+s8_row_header_t2 = zipWith itemRefToSent (s8_row_t2) (s8_assumpRef)
+s8_col_header_t2 = zipWith itemRefToSent (s8_cols_t2) (s8_cols_ref_t2)
 
 s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
@@ -873,7 +869,7 @@ s8_row_ref_t3 = s8_theoryModelRef ++ s8_genDefRef ++ s8_dataDefRef ++
   s8_instaModelRef
 
 s8_col_header_t3, s8_row_header_t3 :: [Sentence]
-s8_col_header_t3 = map (itemRefToSent) $ zip (s8_row_t3) (s8_row_ref_t3)
+s8_col_header_t3 = zipWith itemRefToSent (s8_row_t3) (s8_row_ref_t3)
 s8_row_header_t3 = s8_col_header_t3
 
 s8_table3 :: Contents

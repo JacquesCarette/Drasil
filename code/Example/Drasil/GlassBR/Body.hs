@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList, itemRefToSent,
-  makeTMatrix)
+  makeTMatrix, makeListRef, refFromType)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -620,36 +620,33 @@ s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, s9_funcReqRef,
   s9_assumpRef, s9_likelyChgRef :: [Sentence]
 
 s9_theorys = ["T1", "T2"]
-s9_theorysRef = map (\x -> makeRef $ Definition x) [Theory t1SafetyReq, 
-  Theory t2SafetyReq]
+s9_theorysRef = map (refFromType Theory) tModels
 
 s9_instaModel = ["IM1", "IM2", "IM3"]
-s9_instaModelRef = map (\x -> makeRef $ Definition x) [Theory probOfBr, 
-  Theory calOfCap, Theory calOfDe]
+s9_instaModelRef = map (refFromType Theory) iModels
 
 s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
-s9_dataDefRef = map (\x -> makeRef $ Definition x) [Data risk, 
-  Data hFromt, Data loadDF, Data strDisFac, Data nonFL, Data glaTyFac, 
-  Data dL, Data tolPre, Data tolStrDisFac]
+s9_dataDefRef = map (refFromType Data) dataDefns
+
 
 s9_data  = ["Data Constraint"]
 s9_dataRef = [makeRef s6_2_5]
 
 s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-s9_funcReqRef = take 6 (repeat $ makeRef s7_1)
+s9_funcReqRef = makeListRef s9_funcReq s7_1
 
 s9_assump = ["AS1", "AS2", "AS3", "AS4", "AS5", "AS6", "AS7", "AS8"]
-s9_assumpRef = take 8 (repeat $ makeRef s6_2_1)
+s9_assumpRef = makeListRef s9_assump s6_2_1
 
 s9_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-s9_likelyChgRef = take 5 (repeat $ makeRef s8)
+s9_likelyChgRef = makeListRef s9_likelyChg s8
 
 s9_row_t1 :: [String]
 s9_row_t1 = s9_theorys ++ s9_instaModel ++ s9_dataDef
 
 -- The headers for the first row, and column
 s9_row_header_t1 :: [Sentence]
-s9_row_header_t1 = map (itemRefToSent) $ zip s9_row_t1 (s9_theorysRef ++ 
+s9_row_header_t1 = zipWith itemRefToSent s9_row_t1 (s9_theorysRef ++ 
   s9_instaModelRef ++ s9_dataDefRef)
 
 -- list of columns and there rows for traceability matrix
@@ -685,7 +682,7 @@ s9_row_t2 :: [String]
 s9_row_t2 = s9_row_t1 ++ s9_data ++ s9_funcReq
 
 s9_row_header_t2, s9_col_header_t2 :: [Sentence]
-s9_row_header_t2 = s9_row_header_t1 ++ (map (itemRefToSent) $ zip (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
+s9_row_header_t2 = s9_row_header_t1 ++ (zipWith itemRefToSent (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
 
 s9_col_header_t2 = map (\(x,y) -> S x +:+ sParen (S "in" +:+ y)) (zip s9_funcReq s9_funcReqRef)
 
@@ -712,10 +709,10 @@ s9_row_t3 :: [String]
 s9_row_t3 = s9_assump
 
 s9_row_header_t3, s9_col_header_t3 :: [Sentence]
-s9_row_header_t3 = map (itemRefToSent) $ zip s9_assump s9_assumpRef
+s9_row_header_t3 = zipWith itemRefToSent s9_assump s9_assumpRef
 
-s9_col_header_t3 = s9_row_header_t1 ++ (map (itemRefToSent) $
-  zip (s9_likelyChg ++ s9_funcReq) (s9_likelyChgRef ++ s9_funcReqRef))
+s9_col_header_t3 = s9_row_header_t1 ++ (zipWith itemRefToSent
+  (s9_likelyChg ++ s9_funcReq) (s9_likelyChgRef ++ s9_funcReqRef))
 
 s9_columns_t3 :: [[String]]
 s9_columns_t3 = [s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1, 

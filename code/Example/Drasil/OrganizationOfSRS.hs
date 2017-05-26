@@ -34,8 +34,8 @@ figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
   +:+ (showingCxnBw (traceyMG) (contents))) filePath
 
 showingCxnBw :: NPNC -> Sentence -> Sentence
-showingCxnBw traceyMG contents = titleize traceyMG +:+ S "Showing the" +:+ titleize' connection +:+
-  S "Between" +:+ contents
+showingCxnBw traceyMG contents = foldlSent [titleize traceyMG, S "Showing the",
+  titleize' connection, S "Between", contents]
 
 -- | Organization of the document section builder. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance
@@ -69,11 +69,10 @@ genSysF = SRS.genSysDes [genSysIntro]
 
 --generalized general system description introduction
 genSysIntro :: Contents
-genSysIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides general" +:+
-  phrase information +:+ S "about the" +:+ phrase system `sC` S "identifies" +:+
-  S "the interfaces between the" +:+ phrase system +:+ S "and its" +:+
-  phrase environment `sC` S "and describes the" +:+ plural userCharacteristic +:+ 
-  S "and the" +:+. plural systemConstraint
+genSysIntro = Paragraph $ foldlSent [S "This", phrase section_, S "provides general",
+  phrase information, S "about the", phrase system `sC` S "identifies",
+  S "the interfaces between the", phrase system, S "and its", phrase environment `sC`
+  S "and describes the", plural userCharacteristic, S "and the", plural systemConstraint]
 
 -- System Constraints
 -- generalized if no constraints, but if there are, they can be passed through
@@ -115,16 +114,16 @@ thModIntro k_word = Paragraph $ S "This" +:+ phrase section_ +:+ S "focuses on" 
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [Contents] -> Section
 genDefnF otherContents = SRS.genDefn (genDefnIntro:otherContents) []
-  where genDefnIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "collects the" +:+
-                       S "laws and" +:+ (plural $ equation ^. term) +:+ S "that will be used in" +:+
-                       S "deriving the" +:+ plural dataDefn `sC` S "which in turn are used to" +:+
-                       S "build the" +:+. plural inModel
+  where genDefnIntro = Paragraph $ foldlSent [S "This", phrase section_, S "collects the",
+                       S "laws and", (plural $ equation ^. term), S "that will be used in", 
+                       S "deriving the", plural dataDefn `sC` S "which in turn are used to",
+                       S "build the", plural inModel]
                        
--- used EmptyS if ending sentence is not needed
+-- uses EmptyS if ending sentence is not needed
 dataDefnF :: Sentence -> [Contents] -> Section                      
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
   where dataDefnIntro ending = Paragraph $ S "This" +:+ phrase section_ +:+ 
-                               S "collects and defines all" +:+ S "the" +:+ plural datum +:+ 
+                               S "collects and defines all the" +:+ plural datum +:+ 
                                S "needed to build the" +:+. plural inModel +:+ ending
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
@@ -189,11 +188,11 @@ reqF = SRS.require [reqIntro]
 
 --generalized requirements introduction
 reqIntro :: Contents
-reqIntro = Paragraph $ S "This" +:+ phrase section_ +:+ S "provides the" +:+
-  plural functionalRequirement `sC` S "the business tasks that the" +:+
-  phrase software +:+ S "is expected to complete, and the" +:+
-  plural nonfunctionalRequirement `sC` S "the qualities that the" +:+
-  phrase software +:+. S "is expected to exhibit"
+reqIntro = Paragraph $ foldlSent [S "This", phrase section_, S "provides the",
+  plural functionalRequirement `sC` S "the business tasks that the",
+  phrase software, S "is expected to complete, and the", 
+  plural nonfunctionalRequirement `sC` S "the qualities that the",
+  phrase software, S "is expected to exhibit"]
 
 -- wrapper for traceMGIntro
 traceMGF :: Contents -> Contents -> Contents -> [Contents] -> [Section] -> Section
@@ -218,10 +217,3 @@ traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
   titleize' assumption
-
-
-
-
-
-
-

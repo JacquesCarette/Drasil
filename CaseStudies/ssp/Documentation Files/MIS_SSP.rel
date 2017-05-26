@@ -1,0 +1,166 @@
+;; RefTeX parse info file
+;; File: /Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex
+;; User: smiths (Spencer Smith)
+
+(set reftex-docstruct-symbol '(
+
+
+(xr nil "\\\\\\\\\\\\")
+
+(index-tags)
+
+(is-multi nil)
+
+(bibview-cache)
+
+(master-dir . "/Users/smiths/Repos/ssp/Documentation Files/")
+
+(label-numbers)
+
+(bof "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex")
+
+(toc "toc" "    1 MIS of the Input Module" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 2 "1" "\\section{MIS of the Input Module}" 2395)
+
+(toc "toc" "      1.1 Module Name: Input" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "1.1" "\\subsection{Module Name: Input}" 2430)
+
+(toc "toc" "      1.2 Uses" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "1.2" "\\subsection{Uses}" 2463)
+
+(toc "toc" "        1.2.1 Imported Constant" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.2.1" "\\subsubsection{Imported Constant}" 2482)
+
+(toc "toc" "        1.2.2 Imported Variables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.2.2" "\\subsubsection{Imported Variables}" 2521)
+
+(toc "toc" "        1.2.3 Imported Data types" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.2.3" "\\subsubsection{Imported Data types}" 2561)
+
+(toc "toc" "        1.2.4 Imported Access Programs" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.2.4" "\\subsubsection{Imported Access Programs}" 2602)
+
+(toc "toc" "      1.3 Interface Syntax" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "1.3" "\\subsection{Interface Syntax}" 2648)
+
+(toc "toc" "        1.3.1 Exported Constants" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.3.1" "\\subsubsection{Exported Constants}" 2679)
+
+(toc "toc" "        1.3.2 Exported Variables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.3.2" "\\subsubsection{Exported Variables}" 2753)
+
+(toc "toc" "        1.3.3 Exported Data Types" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.3.3" "\\subsubsection{Exported Data Types}" 2793)
+
+(toc "toc" "        1.3.4 Exported Access Programs" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.3.4" "\\subsubsection{Exported Access Programs}" 3231)
+
+(toc "toc" "      1.4 Interface Semantics" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "1.4" "\\subsection{Interface Semantics}" 4340)
+
+(toc "toc" "        1.4.1 State Variables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.1" "\\subsubsection{State Variables}" 4374)
+
+(toc "toc" "        1.4.2 Assumption" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.2" "\\subsubsection{Assumption}" 5904)
+
+(toc "toc" "        1.4.3 Invariant" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.3" "\\subsubsection{Invariant}" 6207)
+
+(toc "toc" "        1.4.4 Access Program Semantics" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.4" "\\subsubsection{Access Program Semantics}" 6239)
+
+("sec:Initfunc" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("\\tiny$\\square$" "s" "] " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("sec:ReadFunc" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("sec:InputFunc" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("sec:StratFunc" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("\\tiny$\\square$" "s" "] " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("sec:PiezFunc" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("\\tiny$\\square$" "s" "] " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("sec:EntryA" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("\\tiny$\\square$" "s" "] " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("sec:EntryB" "s" "\\begin{itemize} " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("\\tiny$\\square$" "s" "] " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "        1.4.5 Local Functions" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.5" "\\subsubsection{Local Functions}" 9483)
+
+(toc "toc" "        1.4.6 Local Data Types" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.6" "\\subsubsection{Local Data Types}" 9520)
+
+(toc "toc" "        1.4.7 Local constants" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.7" "\\subsubsection{Local constants}" 9830)
+
+(toc "toc" "        1.4.8 Considerations" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "1.4.8" "\\subsubsection{Considerations}" 10199)
+
+(toc "toc" "    2 MIS of the Morgenstern Price Module" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 2 "2" "\\section{MIS of the Morgenstern Price Module}" 10444)
+
+("Sec:MorgPrice" "s" "\\subsection{Module Name: Morgenstern Price Module} \\subsection{Uses} \\subsubsection{Imported Constan" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "      2.1 Module Name: Morgenstern Price Module" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "2.1" "\\subsection{Module Name: Morgenstern Price Module}" 10513)
+
+(toc "toc" "      2.2 Uses" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "2.2" "\\subsection{Uses}" 10565)
+
+(toc "toc" "        2.2.1 Imported Constant" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.2.1" "\\subsubsection{Imported Constant}" 10584)
+
+(toc "toc" "        2.2.2 Imported Variables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.2.2" "\\subsubsection{Imported Variables}" 10749)
+
+(toc "toc" "        2.2.3 Imported Data types" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.2.3" "\\subsubsection{Imported Data types}" 10789)
+
+(toc "toc" "        2.2.4 Imported Access Programs" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.2.4" "\\subsubsection{Imported Access Programs}" 12293)
+
+(toc "toc" "      2.3 Interface Syntax" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "2.3" "\\subsection{Interface Syntax}" 12369)
+
+(toc "toc" "        2.3.1 Exported Constants" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.3.1" "\\subsubsection{Exported Constants}" 12400)
+
+(toc "toc" "        2.3.2 Exported Variables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.3.2" "\\subsubsection{Exported Variables}" 12452)
+
+(toc "toc" "        2.3.3 Exported Data Types" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.3.3" "\\subsubsection{Exported Data Types}" 12492)
+
+(toc "toc" "        2.3.4 Exported Access Programs" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.3.4" "\\subsubsection{Exported Access Programs}" 12533)
+
+(toc "toc" "      2.4 Interface Semantics" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "2.4" "\\subsection{Interface Semantics}" 13441)
+
+(toc "toc" "        2.4.1 State Variables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.1" "\\subsubsection{State Variables}" 13475)
+
+(toc "toc" "        2.4.2 Assumption" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.2" "\\subsubsection{Assumption}" 13826)
+
+(toc "toc" "        2.4.3 Invariant" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.3" "\\subsubsection{Invariant}" 13855)
+
+(toc "toc" "        2.4.4 Access Program Semantics" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.4" "\\subsubsection{Access Program Semantics}" 13886)
+
+("\\tiny$\\square$" "s" "] " "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "        2.4.5 Local Functions" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.5" "\\subsubsection{Local Functions}" 14872)
+
+(toc "toc" "        2.4.6 Local Data Types" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.6" "\\subsubsection{Local Data Types}" 14906)
+
+(toc "toc" "        2.4.7 Local constants" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.7" "\\subsubsection{Local constants}" 14941)
+
+(toc "toc" "        2.4.8 Considerations" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "2.4.8" "\\subsubsection{Considerations}" 14975)
+
+(toc "toc" "    3 Appendix" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 2 "3" "\\section{Appendix}" 15216)
+
+(toc "toc" "      3.1 Input File Format" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "3.1" "\\subsection{Input File Format}" 15236)
+
+("sec:InFormat" "s" "An input file for the SSA program is constructed in a text or data or spreadsheet file in the format" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+("Tbl:InputFile" "t" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "      3.2 Parameter Tables" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 3 "3.2" "\\subsection{Parameter Tables}" 19127)
+
+(toc "toc" "          * Layer Parameters" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "  *" "\\subsubsection*{Layer Parameters}" 19158)
+
+("Tbl:LayerParam" "t" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "          * Failure Parameters" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "  *" "\\subsubsection*{Failure Parameters}" 21044)
+
+("Tbl:FailParam" "t" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "          * Piezometric Parameter" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "  *" "\\subsubsection*{Piezometric Parameter}" 21836)
+
+("Tbl:PiezParam" "t" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "          * Force Parameters" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "  *" "\\subsubsection*{Force Parameters}" 22721)
+
+("Tbl:ForceParam" "t" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(toc "toc" "          * Angle Parameters" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil 4 "  *" "\\subsubsection*{Angle Parameters}" 24559)
+
+("Tbl:AngleParam" "t" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex" nil)
+
+(eof "/Users/smiths/Repos/ssp/Documentation Files/MIS_SSP.tex")
+))
+

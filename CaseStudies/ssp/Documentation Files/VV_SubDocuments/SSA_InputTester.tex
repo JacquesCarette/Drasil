@@ -1,0 +1,277 @@
+
+
+
+% This LaTeX was auto-generated from an M-file by MATLAB.
+% To make changes, update the M-file and republish this document.
+
+
+
+
+
+
+  
+    
+
+\section{Input Tester} \label{sec:InputTests}
+Testing results obtained for the Input.m program a module in the Slope
+Stability Analysis program. Tested using the SSA\_InputTester.m script.
+Tests used the script SSA\_InputSpecial.m in place of Input.m, where
+SSA\_InputSpecial is identical with the exception of predetermined command
+line inputs. The tester will test the algorithm to ensure it can
+correctly identify faulty input files, through various failure
+mechanisms.
+
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{| m{0.3\textwidth} | m{0.25\textwidth} |
+m{0.45\textwidth} |} \hline
+\textbf{Error Type} & \textbf{Case} & \textbf{Error Code}
+\\ \hline
+
+good file & / &
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Dimensions \\ - input file incorrectly
+identifies the number of stratigraphic layers describing the slope} &
+understate &
+
+        
+\color{lightgray} 
+Input Error : Expected 1 and  detected 2 stratigraphic layers
+ \color{black}
+    
+
+\\ \cline{2-3} & overstate &
+
+        
+\color{lightgray} 
+Input Error : Expected 3 and  detected 2 stratigraphic layers
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Dimensions \\ - input file incorrectly
+identifies the number of vertexes describing a soil layer} & understate &
+
+        
+\color{lightgray} 
+Input Error : Expected 4 and detected 5 vertex sets describing stratigraphic layer 1
+ \color{black}
+    
+
+\\ \cline{2-3} & overstate &
+
+        
+\color{lightgray} 
+Input Error : Expected 6 and detected 5 vertex sets describing stratigraphic layer 1
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Dimensions \\ - input file incorrectly gives
+the number of soil properties necessary to describe a layer} & missing
+properties &
+
+        
+\color{lightgray} 
+Input Error : Stratigraphic soil properties not fully defined
+ \color{black}
+    
+
+\\ \cline{2-3} & extra properties &
+
+        
+\color{lightgray} 
+Input Error : An extra soil data input has been given
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Analysis \\ - input files given soil motion
+direction does not match the geometry of the slope} & left to right &
+
+        
+\color{lightgray} 
+Input Error : Detected soil motion direction (left to right), does not match given soil motion
+ \color{black}
+    
+
+\\ \cline{2-3} & right to left &
+
+        
+\color{lightgray} 
+Input Error : Detected soil motion direction (right to left), does not match given soil motion
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Analysis \\ - input files given vertices of
+a soil layer or piezometric surface not ordered in terms of increasing
+x-ordinates.} & soil layer &
+
+        
+\color{lightgray} 
+Input Error : Given x-ordinates describing layer 2 are not in an increasing order
+ \color{black}
+    
+
+\\ \cline{2-3} & piezometric surface &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 0.0, and final x-ordinate of 75.0, of layer 2, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{4}{0.3\textwidth} {Analysis \\ - input file gives end vertexes
+of a soil layer that does not match the end x-ordinate range of the
+uppermost stratigraphic layer.} & end vertice \newline - high &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 0.0, and final x-ordinate of 75.0, of layer 2, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & end vertice \newline - low &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 0.0, and final x-ordinate of 60.0, of layer 2, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & start vertice \newline - high &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 5.0, and final x-ordinate of 70.0, of layer 2, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & start vertice \newline - low &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of -5.0, and final x-ordinate of 70.0, of layer 2, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{4}{0.3\textwidth} {Analysis \\ - input file gives end vertexes
+of a piezometric surface that does not match the end x-ordinate range of
+the uppermost stratigraphic layer.} & end vertice \newline - high &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 0.0, and final x-ordinate of 75.0, of the piezometric surface, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & end vertice \newline - low &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 0.0, and final x-ordinate of 65.0, of the piezometric surface, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & start vertice \newline - high &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 10.0, and final x-ordinate of 70.0, of the piezometric surface, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & start vertice \newline - low &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of -10.0, and final x-ordinate of 70.0, of the piezometric surface, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Constraints \\ - The effective angle of
+friction given for all soil layers must be between 0 and 90 degrees.} &
+$> 90$ &
+
+        
+\color{lightgray} 
+Input Error : Effective angle of friction of layer 1 does not meet physical constraints, must be between 0 and 90 degrees, given 100.0
+ \color{black}
+    
+
+\\ \cline{2-3} & $< 90$ &
+
+        
+\color{lightgray} 
+Input Error : Effective angle of friction of layer 1 does not meet physical constraints, must be between 0 and 90 degrees, given -10.0
+ \color{black}
+    
+
+\\ \hline
+
+Constraints \newline - The cohesion given for all soil layers must be
+greater than 0. & $< 0$ &
+
+        
+\color{lightgray} 
+Input Error : cohesion of layer 1 does not meet physical constraints, must be greater than 0, given -5.0
+ \color{black}
+    
+
+\\ \hline
+
+Constraints \newline - The soil weight given for all soil layers must be
+greater than 0. & $< 0$ &
+
+        
+\color{lightgray} 
+Input Error : Soil weight of layer 1 does not meet physical constraints, must be greater than 0, given -15.0
+ \color{black}
+    
+
+\\ \hline
+
+Constraints \newline - The saturated soil weight given for all soil
+layers must be greater than 0. & $< 0$ &
+
+        
+\color{lightgray} 
+Input Error : Saturated soil weight of layer 1 does not meet physical constraints, must be greater than 0, given -15.0
+ \color{black}
+    
+
+\\ \hline
+
+\multirow{2}{0.3\textwidth} {Constraints \\ - The poisson's ratio
+given for all soil layers must be between 0 and 90 degrees.} &
+$> 1$ &
+
+        
+\color{lightgray} 
+Input Error : Given initial x-ordinate of 0.0, and final x-ordinate of 75.0, of layer 2, do not match those given in the first layer with an initial x of 0.0 and final x of 70.0
+ \color{black}
+    
+
+\\ \cline{2-3} & $< 0$ &
+
+        
+\color{lightgray} 
+Input Error : Poissons ratio of layer 1 does not meet physical constraints, must be greater than 0 and less than 1, given -0.4
+ \color{black}
+    
+
+\\ \hline
+
+\end{longtable}

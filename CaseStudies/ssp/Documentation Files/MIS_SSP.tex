@@ -1,0 +1,1320 @@
+\documentclass[12pt]{article}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{multirow}
+%\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{booktabs}
+%\usepackage{xr}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{color}
+
+\definecolor{atomictangerine}{rgb}{1.0, 0.6, 0.4}
+\definecolor{gray}{gray}{0.4}
+\definecolor{AFB}{rgb}{0.36, 0.54, 0.66}
+
+\usepackage{xr}
+\usepackage{hyperref}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+      colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box
+                            % color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\newcommand{\NN}[1]{{\color{red}#1}}
+\newcommand{\WSS}[1]{{\color{blue}#1}}
+
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{magenta}{SS}{#1}}
+\newcommand{\hf}[1]{\authornote{AFB}{HF}{#1}}
+\newcommand{\cjl}[1]{\authornote{green}{CL}{#1}}
+
+\newcounter{tablenum} %Table number
+\newcommand{\tablethetablenum}{Table\thetablenum}
+\newcommand{\tableref}[1]{Table\ref{#1}}
+\newcounter{modulenum} %Module number
+\newcommand{\modulethemodulenum}{Module\themodulenum}
+\newcommand{\moduleref}[1]{Module\ref{#1}}
+\newcounter{algnum} %Algorithm number
+\newcommand{\algthealgnum}{NA\thealgnum}
+\newcommand{\algref}[1]{NA\ref{#1}}
+
+\newcommand{\forceindent}{\parindent=1em\indent\parindent=0pt\relax}
+
+%\oddsidemargin -1000mm
+%\evensidemargin -1000mm
+%\textwidth 160mm
+%\textheight 300mm
+\newgeometry{margin=2cm}
+
+\externaldocument[MG-]{MG_SSP}
+\externaldocument[SRS-]{SRS_SSP}
+
+\begin{document}
+
+\title{Module Interface Specification for Slope Stability Analysis} 
+\author{Henry Frankis\\McMaster University}
+\date{\today}
+	
+\maketitle
+\tableofcontents
+
+% ---------------------------------------------------------------- %
+% ------------------------ NOTATION ------------------------------ %
+% ---------------------------------------------------------------- %
+
+\section{Notation}
+
+The SSA program uses four data types of: Boolean, Real, String, and
+Sequence. These data types are summarized in the following table. The
+table lists the name of the data type, it's notation method, and a
+description of the data type.
+
+~\newline \renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{p{0.2\textwidth} p{0.1\textwidth} p{0.7\textwidth}}
+  \hline \textbf{Data Type} & \textbf{Notation} & \textbf{Description}
+  \\ \hline
+
+  Boolean & $\mathbb{B}$ & A value from the set of {true, false}\\
+  
+  Real & $\mathbb{R}$ & Any number in $\left( -\infty, \infty
+  \right)$.\\
+
+  String & `string' & A finite sequence of ordered ASCII
+  characters.\\
+
+  Sequence of T & $[T]$ & A sequence of any dimension, where $T$ is
+  the type of every element in the sequence. A sequence with specified
+  dimensions will have the superscripts $a$ and $b$.\\ \hline
+\end{tabular}
+
+~\newline~\newline\noindent
+In appropriate situations sequences of data elements are stored as
+tuples. The tuple, referred to as a structure, contains an unordered
+sequence of independent data elements, where the data elements are
+referenced by field name. When referencing a structure in the document
+a link to an appendix section, that identifies the structures different
+fields with: name, data type and physical description, will be
+provided.
+
+% ---------------------------------------------------------------- %
+% ------------------------ ALGORITHM ----------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{Numerical Algorithms}
+
+\subsection*{Morgenstern Price (Section \ref{sec:MPMod})}
+The non-linear nature of the systems of equations in the Morgenstern
+Price solver algorithm, requires that solutions to the equations for
+the unknown values: \textit{F\_MP} (IM\ref{SRS-IM_FS}), \textit{Lam}
+(IM\ref{SRS-IM_Lambda}) and \textit{E\_force} (IM\ref{SRS-IM_E}) are
+solved iterativley, with an initial guess for two of the values,
+typically \textit{F\_MP} and \textit{Lam}.
+
+\subsection*{RFEM (Section \ref{sec:RFEMMod})}
+The non-linear nature of the systems of equations in the RFEM solver
+algorithm, requires that the solution is done iteratively. The
+process implemented in the program is as follows. The stiffness
+constants are calculated as in DD\ref{SRS-DD_Stiff} of the SRS,
+assuming no displacements, and the applied load \textit{gLoad} is
+calculated as in GD\ref{SRS-GD_NetForce} of the SRS. This is used to
+calculate the displacements \textit{gDisp} as in
+IM\ref{SRS-IM_RFEM}. The calculated displacements can then be used to
+recalculate the stifness constants, and the reactive force
+\textit{dLoad} IM\ref{SRS-DD_Eqm}. Calculations repeat until the
+applied load, and the reactive force are in equilibrium.
+
+\subsection*{Genetic Algorithm (Section \ref{sec:GenAlgMod})}
+The uses a genetic algorithm to find the vertex coordinates of the
+slip surface that minimizes the factor of safety, as seen in
+IM\ref{SRS-IM_Min}. The genetic algorithm will generate new slip
+surfaces based on merging and mutating previously known slip surfaces
+with low factors of safety. When a minimum factor of safety cant be
+found after several iterations the factor of safety is considered
+minimized, and the critical slip has been found.
+
+% ---------------------------------------------------------------- %
+% --------------------- MODULE GUIDE --------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{Module Guide}
+
+The module decomposition can be found in table \ref{MG-Table:Decomp},
+and the module use hierarchy in figure \ref{MG-Fig_Use} of the MG.
+
+% ---------------------------------------------------------------- %
+% --------------------- CONTROL MODULE --------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Control Module}
+
+\subsection{Module Name: Control.m}
+
+\subsection{Uses}
+
+\subsubsection{Imported Access Programs}
+
+\noindent
+\textbf{Uses} Input Module - section \ref{sec:InputMod},
+\textbf{Passes} N/A, \textbf{Receives} \textit{params\_layers},
+\textit{params\_piez}, \textit{params\_search},
+\textit{params\_load}, \textit{params\_soln}
+
+~\newline\noindent
+\textbf{Uses} Genetic Algorithm Module - section \ref{sec:GenAlgMod},
+\textbf{Passes} \textit{params\_layers}, \textit{params\_piez},
+\textit{params\_piez}, \textit{params\_load},
+\textit{params\_soln}, \textbf{Receives} \textit{cslip}
+
+~\newline\noindent
+\textbf{Uses} Output Module - section \ref{sec:OutputMod},
+\textbf{Passes} \textit{params\_layers}, \textit{params\_piez},
+\textit{params\_load}, \textit{params\_soln},
+\textit{cslip}, \textbf{Receives} N/A
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular} {|p{0.15\textwidth}| p{0.15\textwidth}
+    |p{0.25\textwidth} |p{0.15\textwidth}|}
+
+  \hline \textbf{Name} & \textbf{In} & \textbf{Out} &
+  \textbf{Exceptions} \\ \hline
+
+  Control & - & - & - \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{State Variables}
+
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth}
+    p{0.7\textwidth}}
+  
+  \textit{params\_layers} : struc\_layers & (Appendix
+  \ref{Tbl:LayerParam})\\
+
+  \textit{params\_piez} : struc\_piez & (Appendix
+  \ref{Tbl:PiezParam})\\
+
+  \textit{params\_soln} : struc\_soln & (Appendix
+  \ref{Tbl:SolnParam})\\
+
+  \textit{params\_search} : struc\_search & (Appendix
+  \ref{Tbl:SearchParam})\\
+
+  \textit{params\_load} : struc\_load & (Appendix
+  \ref{Tbl:LoadForceParam})\\
+
+  \textit{cslip} : $[\mathbb{R}]^{2,\text{nslip}}$ & Sequence of
+  vertex coordinates describing the geometry of the critical slip
+  surface of the slope. Sequence length value \textit{nslip} is
+  defined by the Genetic Algorithm Module (section
+  \ref{sec:GenAlgMod}).
+\end{longtable}
+
+\subsubsection{Access Program Semantics}
+
+\textbf{Input:} ~\newline Control does not receive any external input.
+
+~\newline\noindent \textbf{Exceptions:} ~\newline There are no
+potential exceptions for control.
+
+~\newline\noindent \textbf{Output:} ~\newline Control does not return
+any values; however, it does control the overall operation of the
+program. This is done through a series of function calls to the
+functions provided by the imported modules.  The basic flow of the
+data is: Input, Genetic Algorithm, Output.
+
+% ---------------------------------------------------------------- %
+% ---------------------- INPUT MODULE ---------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Input Module} \label{sec:InputMod}
+
+\subsection{Module Name: Input.m }
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.18\textwidth} | p{0.25\textwidth} | 
+p{0.15\textwidth} | p{0.15\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+   Input & 'string' (file); ~\newline bools; ~\newline reals & struc;
+   ~\newline struc; ~\newline struc; ~\newline struc; ~\newline struc
+   & input file error \\ \hline
+
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Environment Variables}
+
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \textit{board} : keyboard & \\
+
+  \textit{in\_file} : file & \\
+\end{longtable}
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:} ~\newline\noindent Accepts a path to a file name. file
+type is readable by Matlab, and is constructed in the format seen in
+appendix \ref{sec:InFormat}. Command line prompts will control user
+input values as boolean or real values through the keyboard
+environment.
+
+~\newline\noindent \textbf{Exceptions:} ~\newline\noindent
+An input data file that does not follow intended input format will
+generate an input file error.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{params\_layers} : struc\_layers & (Appendix
+  \ref{Tbl:LayerParam})\\
+
+  \textit{params\_piez} : struc\_piez & (Appendix
+  \ref{Tbl:PiezParam})\\
+
+  \textit{params\_search} : struc\_search & (Appendix
+  \ref{Tbl:SearchParam})\\
+
+  \textit{params\_soln} : struc\_soln & (Appendix
+  \ref{Tbl:SolnParam})\\
+
+  \textit{params\_load} : struc\_load & (Appendix
+  \ref{Tbl:LoadForceParam})
+\end{longtable}
+
+
+% ---------------------------------------------------------------- %
+% -------------------- MORG PRICE MODULE ------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Morgenstern Price Solver Module} \label{sec:MPMod}
+
+\subsection{Module Name: MorgPriceSolver.m}
+
+\subsection{Uses}
+
+\subsubsection{Imported Access Programs}
+
+\noindent
+\textbf{Uses} PropertySorter - section \ref{sec:PropSortMod},
+\textbf{Passes} \textit{evalslip}, \textit{params\_layers},
+\textit{params\_piez} \textbf{Recieves} \textit{params\_soilInterior},
+\textit{params\_soilBase}, \textit{params\_internalForce},
+\textit{params\_angles}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+p{0.2\textwidth} | p{0.2\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  Morgenstern Price ~\newline Solver & Sequence; ~\newline struc;
+  ~\newline struc; ~\newline struc; ~\newline struc & Real & Non
+  Converging; ~\newline Spurious \textit{F\_MP} \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Local Constants}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{ p{0.2\textwidth}  p{0.8\textwidth}}
+  \textit{F\_MinLim} : $\mathbb{R}$ & The minimum factor of safety
+  value that the solution must be above to not be considered
+  spurious. [\textit{F\_MinLim}=0.5]\\
+  
+  \textit{max\_iter} : $\mathbb{R}$ & The max number of iterations the
+  algorithm will perform before the solution is considered non
+  converging. [\textit{max\_iter}=20]\\
+
+  \textit{eps\_F} : $\mathbb{R}$ & The value the absolute difference
+  between the factor of safety calculated by the algorithm between
+  consecutive iterations must be below for the answer to be considered
+  converged. [\textit{eps\_F}=1E-6]\\
+
+  \textit{eps\_Lam} : $\mathbb{R}$ & The value the absolute difference
+  between the interslice normal to shear force ratio calculated by the
+  algorithm between consecutive iterations must be below for the
+  answer to be considered converged. [\textit{eps\_Lam}=1E-6]\\
+\end{longtable}
+
+\subsubsection{State Variables}
+
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{ p{0.2\textwidth}  p{0.8\textwidth}}
+  \textit{Lam} : $\mathbb{R}$ & The interslice normal to shear force
+  ratio. From IM\ref{SRS-IM_Lambda} of the SRS. \\
+
+  \textit{E\_force} : $[\mathbb{R}]^{1,n+1}$ & Sequence of the value
+  of the interslice normal force exerted between slices. A value for
+  each interslice, including ends. Sequence length value \textit{n} is
+  defined by the input \textit{evalslip}. From IM\ref{SRS-IM_E} of the
+  SRS. \\
+
+  \textit{Del\_F} : $\mathbb{R}$ & The difference between the factor
+  of safety of the current iteration and the previous iteration. When
+  converged the value will not be changing and \textit{Del\_F} will be
+  small.\\
+
+  \textit{Del\_Lam} : $\mathbb{R}$ & The difference between the
+  interslice normal to shear force ratio of the current iteration and
+  the previous iteration. When converged the value will not be
+  changing and \textit{Del\_Lam} will be small.\\ 
+\end{longtable}
+ 
+\subsubsection{Access Program Semantics}
+
+\textbf{Input:} 
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{evalslip} : $[\mathbb{R}]^{2,n+1}$ & Vertex coordinates for
+  the slip surface being evaluated. Identifies shape of the slope, and
+  slice points. Sequence length value of \textit{n} is defined by the
+  Slicer module (section \ref{sec:SlicerMod}).\\
+
+  \textit{params\_layers} : struc\_layers & (Appendix
+  \ref{Tbl:LayerParam})\\
+
+  \textit{params\_piez} : struc\_piez & (Appendix
+  \ref{Tbl:PiezParam})\\
+
+  \textit{params\_soln} : struc\_soln & (Appendix
+  \ref{Tbl:SolnParam})\\
+
+  \textit{params\_load} : struc\_load & (Appendix
+  \ref{Tbl:LoadForceParam})
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent A solution which
+does not converge to a consistent solution, where the change in
+calculated factor of safety (\textit{Del\_F}) between iterations is
+less than \textit{eps\_F}, and the change in interslice normal to
+shear force ratio (\textit{Del\_Lam}) is less than \textit{eps\_Lam},
+in less than \textit{max\_iter} iterations will be considered non
+converging exception case. A solution with a final calculated a factor
+of safety less than \textit{F\_MinLim} will be considered a spurious
+factor of safety exception case. Solutions that trigger these
+exception cases will output a factor of safety (\textit{F\_MP}) of
+1000.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.15\textwidth} p{0.85\textwidth}}
+  \textit{F\_MP} : $\mathbb{R}$ & The factor of safety of the slope,
+  as calculated by the Morgenstern Price solution method, measuring
+  the stability of the slope. From IM\ref{SRS-IM_FS} of the SRS.\\
+\end{longtable}
+
+
+
+% ---------------------------------------------------------------- %
+% -------------------- RFEM MODULE ------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the RFEM Solver Module} \label{sec:RFEMMod}
+
+\subsection{Module Name: RFEMSolver.m}
+
+\subsection{Uses}
+
+\subsubsection{Imported Access Programs}
+
+\noindent
+\textbf{Uses} Property Sorter - section \ref{sec:PropSortMod},
+\textbf{Passes} \textit{evalslip}, \textit{params\_layers},
+\textit{params\_piez} \textbf{Receives} \textit{params\_soilInterior},
+\textit{params\_soilBase}, \textit{params\_internalForce},
+\textit{params\_angles}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+p{0.2\textwidth} | p{0.2\textwidth} |} \hline  
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  RFEM Solver & Sequence; ~\newline struc; ~\newline struc; ~\newline
+  struc; ~\newline struc & Real; ~\newline Sequence; ~\newline Sequence;
+  ~\newline Sequence & Non Converging \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Local Constants}
+
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \textit{F\_MinLim} : $\mathbb{R}$ &  The minimum factor of safety
+  value that the solution must be above to not be considered
+  spurious. [\textit{F\_MinLim}=0.5]\\
+\end{longtable}
+
+\subsubsection{State Variables}
+
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \textit{gLoad} : $[\mathbb{R}]^{1,2n}$ & Sequence of the applied
+  load placed on the slice elements. x-ordinate and y-ordinate value
+  for each slice. Sequence length value \textit{n} is defined by the
+  input \textit{evalslip}. From GD\ref{SRS-GD_NetForce} of SRS.\\
+
+  \textit{dLoad} : $[\mathbb{R}]^{1,2n}$ & Sequence of the internal
+  resistive force exerted by the slice elements that oppose the
+  applied load forces. x-ordinate and y-ordinate value for each
+  slice. Sequence length value \textit{n} is defined by the input
+  \textit{evalslip}. From DD\ref{SRS-DD_Eqm} of SRS.\\
+
+  \textit{gDisp} : $[\mathbb{R}]^{1,2n}$ & Sequence of the total
+  displacement the slice elements have experienced. x-ordinate and
+  y-ordinate value for each slice. Sequence length is defined by the
+  input \textit{evalslip}. From IM\ref{SRS-IM_RFEM} of SRS.\\
+\end{longtable}
+
+\subsubsection{Access Program Semantics}
+
+\textbf{Input:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable} {p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{evalslip} : $[\mathbb{R}]^{2,n+1}$ & Sequence of vertex
+  coordinates for the slip surface being evaluated. Identifies shape
+  of the slope, and slice points. Sequence length value \textit{n} is
+  defined by the Slicer module (section \ref{sec:SlicerMod}). \\
+
+  \textit{params\_layers} : struc\_layers & (Appendix
+  \ref{Tbl:LayerParam})\\
+
+  \textit{params\_piez} : struc\_piez & (Appendix
+  \ref{Tbl:PiezParam})\\
+
+  \textit{params\_soln} : struc\_soln & (Appendix
+  \ref{Tbl:SolnParam})\\
+
+  \textit{params\_load} : struc\_load & (Appendix
+  \ref{Tbl:LoadForceParam})
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent A
+calculated global factor of safety of less than \textit{F\_MinLim}, will be
+considered non converging and the factor of safety \textit{F\_RFEM},
+and slice local factors of safety \textit{FLoc\_RFEM} will be set
+equal to 1000, and the displacement vectors \textit{DispX} and
+\textit{DispY} will be set to empty vectors.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.25\textwidth} p{0.75\textwidth}}
+  \textit{F\_RFEM} : $\mathbb{R}$ & The factor of safety of the slip
+  surface as calculated by the RFEM solution method, measuring the
+  stability of the slope. From IM\ref{SRS-IM_RFEMFS}.\\
+
+  \textit{FLoc\_RFEM} : $[\mathbb{R}]^{1,n}$ & Sequence of the factors
+  of safety for the individual slices in the slip surface, identifying
+  the sections of the slope most vulnerable to failure. A value for
+  each slice. Sequence length value \textit{n} is defined by the input
+  \textit{evalslip}. From IM\ref{SRS-IM_RFEMFS} of the SRS.\\
+
+  \textit{DispX} : $[\mathbb{R}]^{1,n}$ & Sequence of the
+  displacements the slice elements of the slope will experience in the
+  $x$-ordinate direction to establish equilibrium. Sequence length
+  \textit{n} is defined by the input \textit{evalslip}. From
+  IM\ref{SRS-IM_RFEM} of the SRS.\\
+
+  \textit{DispY} : $[\mathbb{R}]^{1,n}$ & Sequence of the
+  displacements the slice elements of the slope will experience in the
+  $y$-ordinate direction to establish equilibrium. Sequence length
+  \textit{n} is defined by the input \textit{evalslip}. From
+  IM\ref{SRS-IM_RFEM} of the SRS.
+\end{longtable}
+
+% ---------------------------------------------------------------- %
+% -------------------- GEN ALG MODULE ------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Genetic Algorithm Module} \label{sec:GenAlgMod}
+
+\subsection{Module Name: GenAlgModule.m}
+
+\subsection{Uses}
+
+\subsubsection{Imported Access Programs}
+\noindent
+\textbf{Uses} MorgPrice Module - section \ref{sec:MPMod},
+\textbf{Passes} \textit{evalslip}, \textit{params\_layers},
+\textit{params\_piez}, \textit{params\_soln}, 
+\textit{params\_load}, \textbf{Receives} $\textit{F\_MP}_{i}$
+
+~\newline\noindent \textbf{Uses} Slicer Module - section
+\ref{sec:SlicerMod}, \textbf{Imports} $\textit{slip}_{i}$,
+\textbf{Receives} \textit{evalslip}
+
+~\newline\noindent \textbf{Uses} Kin Admissibility Module - section
+\ref{sec:KinAdmMod}, \textbf{Imports} $\textit{slip}_{i}$,
+\textit{strat1}, \textbf{Receives} \textit{KinPass},
+$\textit{slip}_{i}$
+
+~\newline\noindent \textbf{Uses} Slip Weights Module - section
+\ref{sec:WeightMod}, \textbf{Imports} \textit{pool}, \textbf{Receives}
+\textit{pool}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+p{0.2\textwidth} | p{0.2\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  GenAlg & struc; ~\newline struc; ~\newline struc; ~\newline struc;
+  ~\newline struc & Array & None \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Local Constants}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.15\textwidth} p{0.85\textwidth}}
+  \textit{nslip} : $\mathbb{R}$ & The number of vertices the generated
+  slip surfaces will be described by. [nslip=13] \\
+
+  \textit{Mpool} : $\mathbb{R}$ & The number of slip surfaces that
+  will be in the pool of potential critical slip surfaces. [Mpool=40]
+\end{longtable}
+
+\subsubsection{State Variables}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{pool} : $[[\mathbb{R}]^{2,\text{nslip}}, \mathbb{R},
+    \mathbb{R}]^{1,\text{Mpool}}$ & A sequence of data describing the
+  slip surfaces that are currently being considered as possible
+  critical slip surfaces. Contains three data elements describing the
+  slope: A sequence of coordinates describing the geometry of the slip
+  surface ($[\mathbb{R}]^{2,\text{nslip}}$), the factor of safety of
+  the slip surface ($\mathbb{R}$), and a weighting value describing
+  the surfaces factor of safety relative to the other slip surfaces in
+  the pools factors of safety ($\mathbb{R}$). \\
+\end{longtable}
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:} 
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+\textit{params\_layers} : struc\_layers & (Appendix \ref{Tbl:LayerParam})\\
+
+\textit{params\_piez} : struc\_piez & (Appendix \ref{Tbl:PiezParam})\\
+
+\textit{params\_search} : struc\_search & (Appendix
+\ref{Tbl:SearchParam})\\
+
+\textit{params\_soln} : struc\_soln & (Appendix
+\ref{Tbl:SolnParam})\\
+
+\textit{params\_load} : struc\_load & (Appendix
+\ref{Tbl:LoadForceParam})\\
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent There are
+no potential exceptions for GenAlg.
+
+~\newline\noindent \textbf{Output:}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  cslip : $[\mathbb{R}]^{2,\text{nslip}}$ & Sequence of vertex
+  coordinates describing the geometry of the critical slip surface of
+  the slope.
+\end{longtable}
+
+% ---------------------------------------------------------------- %
+% -------------------- PROPERTY SORTER MODULE -------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Property Sorter Module} \label{sec:PropSortMod}
+
+\subsection{Module Name: PropertySorter.m}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+p{0.2\textwidth} | p{0.2\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  Property Sorter & Sequence; ~\newline struc; ~\newline
+  struc & struc; ~\newline struc; ~\newline struc; ~\newline struc &
+  None \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{evalslip} : $[\mathbb{R}]^{1,n}$ & Sequence of vertex
+  coordinates for the slip surface being evaluated. Identifies shape
+  of the slope, and slice points. Sequence length value \textit{n} is
+  defined by the Slicer module (section \ref{sec:SlicerMod}).  \\
+
+  \textit{params\_layers} : struc\_layers & (Appendix
+  \ref{Tbl:LayerParam}) \\
+  
+  \textit{params\_piez} : struc\_piez & (Appendix \ref{Tbl:PiezParam})
+  \\
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent There are no
+potential exceptions for Property Sorter.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.4\textwidth} p{0.6\textwidth}}
+  \textit{params\_internalForce} : struc\_intForce & (Appendix
+  \ref{Tbl:ForceParam})\\
+  
+  \textit{params\_angles} : struc\_angles & (Appendix \ref{Tbl:AngleParam})\\
+
+  \textit{params\_soilInterior} : struc\_soilInt & (Appendix
+  \ref{Tbl:SoilIntParam})\\
+
+  \textit{params\_soilBase} : struc\_soilBase & (Appendix
+  \ref{Tbl:SoilBaseParam})\\
+\end{longtable}
+
+% ---------------------------------------------------------------- %
+% -------------------- SLICER MODULE ----------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Slip Slicer Module} \label{sec:SlicerMod}
+
+\subsection{Module Name: Slicer.m}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+  p{0.2\textwidth} | p{0.2\textwidth} |} \hline 
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  Slicer & Sequence; ~\newline bool & Sequence & None \\ \hline
+
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Local Constants}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.1\textwidth} p{0.9\textwidth}}
+  \textit{n} : $\mathbb{R}$ & The number of slices the slip surface
+  will be broken into for evaluation. [n=36]\\
+\end{longtable}
+
+\subsubsection{Assumption}
+A straight line describing the slip surface is assumed between
+adjacent vertex coordinates given in the input \textit{slip}.
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:} 
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.15\textwidth} p{0.85\textwidth}}
+  \textit{slip} : $[\mathbb{R}]^{2,\text{nslip}}$ & Sequence of vertex
+  coordinates of the slip surface being sliced. \\
+
+  \textit{evnslc} : $\mathbb{B}$ & Slicing method switch, an element
+  from the \textit{params\_soln} structure (Appendix
+  \ref{Tbl:SolnParam}).\\
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent There are no
+potential exceptions for Slip Slicer.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \textit{evalslip} : $[\mathbb{R}]^{1,n}$ & Sequence of vertex
+  coordinates for the slip surface being evaluated. Identifies shape
+  of the slope, and slice points. \\
+\end{longtable}
+
+% ---------------------------------------------------------------- %
+% -------------------- KIN ADM MODULE ------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Kinematic Admissibility
+  Module} \label{sec:KinAdmMod}
+
+\subsection{Module Name: KinAdm.m}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+p{0.15\textwidth} | p{0.15\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  Kin Adm & Sequence; ~\newline Sequence; ~\newline struc & bool;
+  ~\newline Sequence & None \\ \hline
+
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Assumption}
+A straight line describing the slip surface is assumed between
+adjacent vertex coordinates given in the input \textit{slip}.
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.25\textwidth} p{0.75\textwidth}}
+  \textit{slip} : $[\mathbb{R}]^{2,\text{nslip}}$ & Sequence of vertex
+  coordinates of the slip surface being tested. Sequence length value
+  \textit{nslip} is defined by the Genetic Algorithm module (section
+  \ref{sec:GenAlgMod}).\\
+  
+  $\textit{strat1}$ : $[\mathbb{R}]^{2,\text{nvtx}}$ & Sequence of
+  the coordinates of the vertexes from the uppermost stratigraphic
+  layer of the slope. Sequence length value \textit{nvtx} is defined
+  by the given input file. \\
+  
+  \textit{params\_soln} : struc & (Appendix
+  \ref{Tbl:SolnParam})
+\end{longtable}
+
+~\newline\noindent \textbf{Exceptions:} ~\newline\noindent There are
+no potential exceptions for KinAdm.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \textit{KinPass} : $\mathbb{B}$ & Identifies if the input slip
+  surface (\textit{slip}) has passed the admissibility criterion for a
+  slip surface. If true than the slip surface has passed. If false
+  than the slip surface has failed. \\
+
+  \textit{slipPass} : $[\mathbb{R}]^{1,\text{nslip}}$ & Sequence of
+  the slip surface given as input (\textit{slip}) with end vertexes
+  adjusted to ensure they are on the slope surface.
+\end{longtable}
+
+% ---------------------------------------------------------------- %
+% -------------------- SLIP WEIGHTING MODULE ------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Slip Weighting
+  Module} \label{sec:WeightMod}
+
+\subsection{Module Name: SlipWeighter.m}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\begin{center}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.2\textwidth} | 
+p{0.2\textwidth} | p{0.2\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  Slip Weighting & Sequence; ~\newline Real & Sequence & None
+  \\ \hline
+\end{tabular}
+\end{center}
+
+\subsection{Interface Semantics}
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:} 
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.32\textwidth} p{0.68\textwidth}}
+  \textit{pool\_In} : $[[\mathbb{R}]^{2,\text{nslip}}, \mathbb{R},
+    \mathbb{R}]^{1,\text{Mpool}}$ & A sequence of data sets describing
+  the slip surfaces that are currently being considered as possible
+  critical slip surfaces. Contains three data elements describing the
+  slope: coordinates describing the geometry of the slip surface
+  ($[\mathbb{R}]^{2,\text{nslip}}$),the factor of safety of the slip
+  surface ($\mathbb{R}$), and a weighting value describing the
+  surfaces factor of safety relative to the other slip surfaces in the
+  pools factors of safety ($\mathbb{R}$). Sequence length values
+  \textit{nslip}, and \textit{Mpool} are defined by the Genetic
+  Algorithm Module (section \ref{sec:GenAlgMod}). \\
+
+  \textit{Mpool} : $\mathbb{R}$ & The number of slip surfaces in the
+  pool of possible critical slip surfaces being compared and
+  weighting. constant defined in the Genetic Algorithm module (section
+  \ref{sec:GenAlgMod}).
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent There are no
+potential exceptions for Slip Weighter.
+
+~\newline\noindent \textbf{Output:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.33\textwidth} p{0.65\textwidth}}
+  \textit{pool\_Out} : $[[\mathbb{R}]^{2,\text{nslip}}, \mathbb{R},
+    \mathbb{R}]^{1,\text{Mpool}}$ & The sequence given in
+  \textit{pool\_In}, with the weight data element recalculated, and
+  the sequence reordered in terms of ascending factors of safety. \\
+\end{longtable}
+
+
+% ---------------------------------------------------------------- %
+% -------------------- OUTPUT MODULE ------------------------- %
+% ---------------------------------------------------------------- %
+
+\section{MIS of the Output
+  Module} \label{sec:OutputMod}
+
+\subsection{Module Name: Output.m}
+
+\subsection{Uses}
+
+\subsubsection{Imported Access Programs}
+\textbf{Uses} Slicer Module - section \ref{sec:SlicerMod},
+\textbf{Passes} \textit{cslip}, \textit{evnslc}, \textbf{Receives}
+\textit{eval\_cslip}
+
+~\newline\noindent
+\textbf{Uses} Morgenstern Price Module - section \ref{sec:MPMod},
+\textbf{Passes} \textit{eval\_cslip}, \textit{params\_layers},
+\textit{params\_piez}, \textit{params\_load},
+\textit{params\_soln} \textbf{Recieves} \textit{F\_MP\_Final}
+
+~\newline\noindent
+\textbf{Uses} RFEM Module - section \ref{sec:RFEMMod},
+\textbf{Passes} \textit{eval\_cslip}, \textit{params\_layers},
+\textit{params\_piez}, \textit{params\_load},
+\textbf{Receives} \textit{F\_RFEM\_Final}, \textit{FLoc\_RFEM\_Final},
+\textit{DispX\_Final}, \textit{DispY\_Final}
+
+\subsection{Interface Syntax}
+
+\subsubsection{Exported Access Programs}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{0.2\textwidth} | p{0.15\textwidth} | 
+p{0.25\textwidth} | p{0.2\textwidth} |} \hline 
+
+  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}
+  \\ \hline
+
+  Output & Sequence; ~\newline struc; ~\newline struc; ~\newline struc;
+  ~\newline struc & - & None \\ \hline
+
+\end{tabular}
+
+\subsection{Interface Semantics}
+
+\subsubsection{State Variables}
+\renewcommand{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{F\_MP\_Final} : $\mathbb{R}$ & The factor of safety as
+  calculated by the Morgenstern Price solution method for the
+  critical slip surface, measuring the stability of the slope. \\
+
+  \textit{F\_RFEM\_Final} : $\mathbb{R}$ & The factor of safety as
+  calculated by the RFEM solution method for the critical slip
+  surface, measuring the stability of the slope. \\
+
+  \textit{FLoc\_RFEM\_Final} : $[\mathbb{R}]^{1,n}$ & Sequence of the
+  factors of safety for the individual slices along the critical slip
+  surface, identifying the sections of the slope most vulnerable to
+  failure, as calculated by the RFEM solution method. Sequence length
+  value \textit{n} is defined by the Slicer Module (section
+  \ref{sec:SlicerMod}).\\
+
+  \textit{DispX\_Final} : $[\mathbb{R}]^{1,n}$ & Sequence of the
+  displacement the slice elements of the slope will experience in the
+  $x$-ordinate direction to achieve equilibrium for the critical slip
+  surface, as calculated by the RFEM solution method. Sequence length
+  value \textit{n} is defined by the Slicer Module (section
+  \ref{sec:SlicerMod}).\\
+
+  \textit{DispY\_Final} : $[\mathbb{R}]^{1,n}$ & Sequence of the
+  displacement the slice elements of the slope will experience in the
+  $y$-ordinate direction to achieve equilibrium for the critical slip
+  surface, as calculated by the RFEM solution method. Sequence length
+  value \textit{n}, is defined by the Slicer Module (section
+  \ref{sec:SlicerMod}). \\
+\end{longtable}
+
+\subsubsection{Access Program Semantics}
+\textbf{Input:}
+\renewcommand*{\arraystretch}{1.5}
+\begin{longtable}{p{0.3\textwidth} p{0.7\textwidth}}
+  \textit{cslip} : $[\mathbb{R}]^{2,\text{nslip}}$ & Sequence of
+  vertex coordinates for the critical slip surface of the slope. \\
+  
+  \textit{params\_layers} : struc\_layers & (Appendix \ref{Tbl:LayerParam})\\
+  
+  \textit{params\_piez} : struc\_piez & (Appendix \ref{Tbl:PiezParam})\\
+
+  \textit{params\_soln} : struc\_soln & (Appendix \ref{Tbl:SolnParam})\\
+  
+  \textit{params\_load} : struc\_load & (Appendix
+  \ref{Tbl:LoadForceParam})\\
+\end{longtable}
+
+\noindent \textbf{Exceptions:} ~\newline\noindent There are no
+potential exceptions for Output.
+
+~\newline\noindent \textbf{Output:} ~\newline\noindent Output does not
+return any values; however, it creates a plot of the critical slip
+surface \textit{cslip} as a part of the slope geometry \textit{strat}
+(from \textit{params\_layers}). The plot also displays the
+displacements the slice elements experience as calculated by the RFEM
+method in \textit{DispX\_Final} and \textit{DispY\_Final}. A second
+plot displaying the value of the local factors of safety at each
+element \textit{FLoc\_RFEM\_Final}, and the global factors of safety
+calculated by the Morgenstern Price module \textit{F\_MP\_Final}, and
+by the RFEM module \textit{F\_RFEM\_Final} on the same plot as
+straight lines across each element.
+
+% ---------------------------------------------------------------- %
+% ------------------------  APPENDIX --------------------------%
+% ---------------------------------------------------------------- %
+\section{Appendix}
+
+\subsection{Parameter Tables} \label{sec:ParamTables}
+
+\subsubsection{Layer Parameters} \label{Tbl:LayerParam}
+\noindent
+The elements in the structure of the containers for the parameters of
+different slope layers. Assumed that the parameters will be entered
+such that sequence progresses from the uppermost stratigraphic layer
+at the first index, to the lowest stratigraphic layer at the last
+index. $nlayer$ refers to the number of soil layers in the slope, and
+is defined by the input file.
+
+\begin{center}
+\begin{longtable}{ p{0.25\textwidth}
+    p{0.75\textwidth}}\hline
+
+  \textbf{Parameter} & \textbf{Description}\\ \hline
+
+  \textit{strat} : $[[\mathbb{R}]^{2,\text{nvtx}}]^{1,\text{nlayer}}$
+  & Sequence of coordinate sequences describing the vertexes of each
+  layer. The value \textit{nvtx} is defined by the input file, and can
+  be different for each sequence.\\
+
+  \textit{phi} : $[\mathbb{R}]^{1,\text{nlayer}}$ & Sequence of the
+  effective angle of friction for each stratigraphic layer.\\
+
+  \textit{coh} : $[\mathbb{R}]^{1,\text{nlayer}}$ & Sequence of the
+  effective cohesion for each stratigraphic layer.\\
+
+  \textit{gam} : $[\mathbb{R}]^{1,\text{nlayer}}$ & Sequence of the dry
+  unit weight of soil for each stratigraphic layer.\\
+
+  \textit{gams} : $[\mathbb{R}]^{1,\text{nlayer}}$ & Sequence of the
+  saturated unit weight of soil for each stratigraphic layer.\\
+
+  \textit{E} : $[\mathbb{R}]^{1,\text{nlayer}}$ & Sequence of the
+  Young's modulus for each stratigraphic layer.\\
+
+  \textit{nu} : $[\mathbb{R}]^{1,\text{nlayer}}$ & Sequence of the
+  poissons ratio for each stratigraphic layer. \\ \hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Piezometric Parameter} \label{Tbl:PiezParam}
+\noindent
+The elements in the structure for parameters relating to the
+piezometric surface existing on the slope. $npz$ refers to the number
+of vertexes describing the piezometric surface, and is defined by the
+input file.
+
+\begin{center}
+\begin{longtable}{ p{0.2\textwidth}
+    p{0.8\textwidth}}\hline 
+  \textbf{Parameter} & \textbf{Description}\\ \hline
+
+  \textit{piez} : $[\mathbb{R}]^{2,\text{npz}}$ & Sequence of vertex
+  coordinates describing the geometry of the water table. If there is
+  no water table than \textit{piez} is an empty array. \\
+
+  \textit{gamw} : $\mathbb{R}$ & The unit weight of water. \\ \hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Search Range Parameters} \label{Tbl:SearchParam}
+\noindent
+The elements in the structure for parameters relating to the range of
+coordinates the critical slip surface will be searched for in.
+
+\begin{center}
+\begin{tabular}{ p{0.2\textwidth}
+    p{0.8\textwidth}}\hline 
+
+  \textbf{Parameter} &
+  \textbf{Description}\\ \hline
+
+  Xext : $[\mathbb{R}]^{1,2}$ & Sequence of the range of $x$-ordinates
+  that the exit point of the slip will be searched for in. Exit refers
+  to the point of the slip at lower elevation that the slope mass will
+  move towards during failure. \\
+
+  Xent : $[\mathbb{R}]^{1,2}$ & sequence of the range of $x$-ordinates
+  that the entry point of the slip will be searched for in. Entry
+  refers to the point of the slip at higher elevation that the slope
+  mass will move away from during failure. \\
+
+  Ylim : $[\mathbb{R}]^{1,2}$ & Sequence of range of $y$-ordinates
+  that the slip will be searched for in. The larger value should be
+  greater than the max $y$-ordinate of the slope. The smaller Ylim
+  value is the deepest the slip surface is expected to descend
+  to.\\ \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Solution Parameters} \label{Tbl:SolnParam}
+\noindent
+the elements in the structure for parameters relating to method in
+which the solution method will be approached.
+
+\begin{center}
+\begin{longtable}{ p{0.15\textwidth} 
+    p{0.85\textwidth}}\hline 
+
+  \textbf{Parameter} & \textbf{Description}\\ \hline
+
+  ltor : $\mathbb{B}$ & Direction the slope is expected to
+  experience failure in. If true than the side of the slope with a
+  greater x-ordinate value is at a lower elevation. If false than the
+  side of the slope with a greater x-ordinate is at a higher
+  elevation.\\
+
+  ftype : $\mathbb{B}$ & Switch between functions to use for
+  interslice shear/normal inclination function. If true then the
+  inclination function is a constant (Spencer's method). If false then
+  the inclination function is a half-sine (standard Morgenstern Price
+  method). \\
+
+  evnslc : $\mathbb{B}$ & Switch between method of slicing a slip
+  surface to when preparing for analysis. If true then slice slip
+  surface into equal x-ordinate widths. If false then slice distance
+  between vertices into even number of slices. \\
+
+  cncvu : $\mathbb{B}$ & Switch for concave slip surface admissibility
+  criterion. If true then an admissible slip surface must be concave
+  upwards towards the surface. If false then an admissible slip
+  surface does not need to pass this criterion.\\
+
+  obtu : $\mathbb{B}$ & Switch for angle limit slip surface
+  admissibility criterion. If true then an admissible slip surface
+  must have all interior angles greater than a set limit. If false
+  then an admissible slip surface does not need to pass this
+  criterion.\\ \hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Load Force Parameters} \label{Tbl:LoadForceParam}
+\noindent
+The elements in the structure for parameters relating to the forces
+acting on a slice caused by external sources or loads. $n$ refers to
+the number of slices composing the slip surface.
+
+\begin{center}
+\begin{longtable}{ p{0.2\textwidth}
+    p{0.8\textwidth}}\hline 
+
+  \textbf{Parameter} & \textbf{Description}\\ \hline
+
+  Kc : $\mathbb{R}$ & The seismic load factor. The ratio of the weight
+  force of the slope that be exerted outwards as a result of
+  vibrations of the earth's surface. From DD\ref{SRS-DD_Kc} of the
+  SRS.\\
+
+  Q : ?? & An applied load being exerted into the slope surface. From
+  DD\ref{SRS-DD_Q} of the SRS. \\
+
+  omega : ?? & The angle the applied load is being exerted into the slope
+  surface. From DD\ref{SRS-DD_Q} of the SRS.\\ \hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Internal Force Parameters} \label{Tbl:ForceParam}
+\noindent
+The elements in the structure for parameters relating to the forces
+acting on a slice caused by the slope, and water in the slope acting
+on itself. $n$ refers to the number of slices composing the evaluation
+slip surface, and is defined by the Slicer module (section
+\ref{sec:SlicerMod}).
+
+\begin{center}
+\begin{longtable}{ p{0.2\textwidth} 
+    p{0.8\textwidth}}\hline 
+
+  \textbf{Parameter} & \textbf{Description}\\ \hline
+
+  Ub : $[\mathbb{R}]^{1,n}$ & Sequence of the force acting on the
+  basal surface of a slice as a result of pore water pressure within
+  the slice. Value for each slice. From DD\ref{SRS-DD_Ub} of the
+  SRS.\\
+  
+  Ut : $[\mathbb{R}]^{1,n}$ & Sequence of the force acting on the
+  upper surface of a slice as a result of pore water pressure standing
+  water on the surface. Value for each slice. From DD\ref{SRS-DD_Ut}
+  of the SRS.\\
+
+  W : $[\mathbb{R}]^{1,n}$ & Sequence of the downward force acting on
+  the slice caused by the mass of the slice and the force of
+  gravity. Value for each slice. From DD\ref{SRS-DD_W} of the SRS.\\
+
+  H : $[\mathbb{R}]^{1,n-1}$ & Sequence of the force acting into the
+  interslice surfaces as a result of pore water pressure within the
+  adjacent slices. Value for each interslice. From DD\ref{SRS-DD_H} of
+  the SRS.\\
+\end{longtable}
+\end{center}
+
+\subsubsection{Angle Parameters} \label{Tbl:AngleParam}
+\noindent
+The elements in the structure for parameters relating to the angles of
+the slice surfaces. $n$ refers to the number of slices composing the
+slip surface, and is defined by the input \textit{evalslip} given to
+the Property Sorter module (section \ref{sec:PropSortMod}).
+
+\begin{center}
+\begin{longtable}{ p{0.3\textwidth}
+    p{0.7\textwidth}}\hline 
+  \textbf{Parameter} & \textbf{Description}\\ \hline
+
+  Alpha : $[\mathbb{R}]^{1,n}$ & Sequence of the angle that the basal
+  surface of the slice makes with the horizontal. Value for each
+  slice. From DD\ref{SRS-DD_Angles} of the SRS.\\
+
+  Beta : $[\mathbb{R}]^{1,n}$ & Sequence of the angle that the upper
+  surface of the slice makes with the horizontal. Value for each
+  slice. From DD\ref{SRS-DD_Angles} of the SRS.\\ \hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Soil Interslice Properties} \label{Tbl:SoilIntParam}
+The elements in the structure for parameters relating to the soil
+properties of the slope, as calculated at the interslice interfaces of
+an evaluation slip. Calculation is based on the ratio of the interface
+that is in different stratigraphic layers, and the values of the
+effective angle of friction in the different layers. Interest is only
+with the interior interslice interfaces therefore for a slope of $n$
+slices, there will be $n-1$ interior interslice interfaces. The value
+\textit{n} is defined by the input \textit{evalslip} given to the
+Property Sorter module (section \ref{sec:PropSortMod}).
+
+
+\begin{center}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \hline \textbf{Parameter} & \textbf{Description} \\ \hline
+    
+  \textit{phi\_IS} : $[\mathbb{R}]^{1,n-1}$ & Sequence of the vector
+  of the effective angle of friction calculated at each interslice
+  interface. \\
+
+  \textit{coh\_IS} := $[\mathbb{R}]^{1,n-1}$ & Sequence of the vector
+  of the effective cohesion calculated at each interslice interface.\\
+
+  \textit{E\_IS} := $[\mathbb{R}]^{1,n-1}$ & Sequence of the vector of
+  the Youngs modulus calculated at each interslice interface.\\
+
+  \textit{nu\_IS} := $[\mathbb{R}]^{1,n-1}$ & Sequence of the vector
+  of the Poisson ratio calculated at each interslice
+  interface. \\ \hline
+\end{longtable}
+\end{center}
+
+\subsubsection{Soil Base Properties} \label{Tbl:SoilBaseParam}
+the elements in the structure for parameters relating to the soil
+properties of the slope, as calculated at the basal surfaces of an
+evaluation slip. Calculation is based on the ratio of the basal
+surface that is in different stratigraphic layers, and the values of
+the effective angle of friction in the different layers. An evaluation
+slip of $n$ slices will have $n$ basal surfaces, and the value of
+\textit{n} is defined by the input \textit{evalslip} given to
+the Property Sorter module (section \ref{sec:PropSortMod}).
+
+
+\begin{center}
+\begin{longtable}{p{0.2\textwidth} p{0.8\textwidth}}
+  \hline \textbf{Parameter} & \textbf{Description} \\ \hline
+
+  \textit{phi\_Base} : $[\mathbb{R}]^{1,n}$ & Sequence of the vector
+  of the effective angle of friction calculated at each slice basal
+  surface in an evaluation slip.\\
+
+  \textit{coh\_Base} : $[\mathbb{R}]^{1,n}$ & Sequence of the vector
+  of the effective cohesion calculated at each slice basal surface in
+  an evaluation slip.\\
+
+  \textit{E\_Base} : $[\mathbb{R}]^{1,n}$ & Sequence of the vector of
+  the Young's modulus calculated at each slice basal surface in an
+  evaluation slip.\\
+
+  \textit{nu\_Base} : $[\mathbb{R}]^{1,n}$ & Sequence of the vector of
+  the Poisson ratio calculated at each slice basal surface in an
+  evaluation slip.  \\ \hline
+\end{longtable}
+\end{center}
+
+\end{document}

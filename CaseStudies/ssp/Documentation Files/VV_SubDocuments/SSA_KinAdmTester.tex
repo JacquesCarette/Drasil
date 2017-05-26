@@ -1,0 +1,173 @@
+
+
+
+% This LaTeX was auto-generated from an M-file by MATLAB.
+% To make changes, update the M-file and republish this document.
+
+
+
+
+
+
+  
+    
+
+\section{Kinematic Admissibility Tester} \label{sec:KinTests}
+Testing results obtained from the KinAdm.m program, a
+module in the Slope Stability Analysis program. The tester will test the
+algorithm to ensure it can correctly identify when a slip surface fails
+the 6 failure criterion.
+
+\subsection{Testing}
+The module will now be tested for the different failure criterion. A
+kinematically inadmissible test will return a value pass=0, and a failure
+code detailing the cause of the failure. All other values should return a
+value pass=1. All failure criteria will pass boundary cases. The failure
+criterion are tested individually with a simple slope surface, and slip
+surfaces designed to test the failure. Each failure test will give a slip
+designed to pass, a boundary case, and one designed to fail.
+
+\subsubsection*{Failure (i)}
+The first criteria of a kinematically admissible surface is that the
+x-ordinates of the input slip surface vertexes do not decrease when
+reading the list of vertexes from beginning to end. (A) is a test with
+constantly increasing x-ordinates. (B) is a test case with equivalent
+x-ordinates. (C) is a case with decreasing x-ordinates. Results follow:
+
+        
+\color{lightgray} \begin{verbatim}
+Failure (i):
+(A): pass=1
+(B): pass=1
+(C): pass=0 Failure Code1 - Non monotonic x
+\end{verbatim} \color{black}
+    
+
+\subsubsection*{End Adjustments}
+The second criteria of a kinematically admissible surface is that the
+start and end vertexes of the slip surface match the y-ordinate of the
+uppermost stratigraphic layer at the specified x-ordinate.
+The module will not fail the slip surface, but will adjust the y value of
+the end vertexes. (A) is a test with vertexes above the uppermost
+stratigraphic layer. (B) is a test with vertexes on the uppermost
+stratigraphic layer. (C) is a test with vertexes below the uppermost
+stratigraphic layer. Vertice adjustment refers to the y values of the
+vertexes.
+
+        
+\color{lightgray} \begin{verbatim}
+End Adjustments:
+(A): pass=1, Start vertice adjustment,21->20 End vertice adjustment,13->12
+(B): pass=1, Start vertice adjustment,20->20 End vertice adjustment,12->12
+(C): pass=1, Start vertice adjustment,19->20 End vertice adjustment,11->12
+\end{verbatim} \color{black}
+    
+
+\subsubsection*{Failure (ii)}
+The vertexes of the slip surface must be within the specified x-ordinate
+range of the uppermost stratigraphic layer. (A) is a test case with
+vertexes that stay within the uppermost stratigraphic layers range. (B)
+is a test with a vertice x-ordinate that goes below the minimum range of
+the uppermost stratigraphic layer. (C) is a test with a vertice
+x-ordinate that goes above the maximum range of the uppermost
+stratigraphic layer.
+
+        
+\color{lightgray} \begin{verbatim}
+Failure (ii):
+(A): pass=1
+(B): pass=0 Failure Code2 - Vertex outside x range
+(C): pass=0 Failure Code2 - Vertex outside x range
+\end{verbatim} \color{black}
+    
+
+\subsubsection*{Failure (iii)}
+The non end vertexes of the slip surface must be below the uppermost
+stratigraphic layer. End vertexes will be moved onto the uppermost
+stratigraphic layer, and therefore don't interact with this case. This
+failure case checks only vertexes, line segments above the uppermost
+strat are checked in failure (iv). (A) is a test with vertexes below the
+uppermost stratigraphic layer. (B) is a test with vertexes on the
+uppermost stratigraphic layer. (C) is a test with the first interior
+vertice above the uppermost stratigraphic layer. (D) is a test with the
+last interior vertice above the uppermost stratigraphic layer of the slip
+surface.
+
+        
+\color{lightgray} \begin{verbatim}
+Failure (iii):
+(A): pass=1
+(B): pass=1
+(C): pass=0 Failure Code3 - Vertex above surface
+(D): pass=0 Failure Code3 - Vertex above surface
+\end{verbatim} \color{black}
+    
+
+\subsubsection*{Failure (iv)}
+Line segments between vertexes of the slip surface cannot go above the
+uppermost stratigraphic layer. (A) is a test with all line segments below
+the uppermost stratigraphic surface. (B) is a test case with a line
+segment on the uppermost stratigraphic layer. (C) is a test case with a
+line segment below the uppermost stratigraphic layer. the test is
+performed on the three interior line segments of the uppermost
+stratigraphic layer, going from slip entrance to exit as Strat Line
+Segments 1,2,3.
+
+        
+\color{lightgray} \begin{verbatim}
+Failure (iv) Strat Line Segment 1:
+(A): pass=1
+(B): pass=1
+(C): pass=0 Failure Code4 - Surface Intersection
+
+Failure (iv) Strat Line Segment 2:
+(A): pass=1
+(B): pass=1
+(C): pass=0 Failure Code4 - Surface Intersection
+
+Failure (iv) Strat Line Segment 3:
+(A): pass=1
+(B): pass=1
+(C): pass=0 Failure Code4 - Surface Intersection
+\end{verbatim} \color{black}
+    
+
+\subsubsection*{Failure (v)}
+The slip surface must be concave upwards. The slope of line segments
+between vertexes of the slip surface must go from a large magnitude
+negative number towards a large magnitude positive number when connecting
+vertexes from slip entrance to exit. (A) test a case where slip surface
+slopes are increasing. (B) tests a case where slip surface
+slopes are constant. (C) tests a case where slip slopes experience a
+decrease.
+
+        
+\color{lightgray} \begin{verbatim}
+Failure (v):
+(A): pass=1
+(B): pass=1
+(C): pass=0 Failure Code5 - Concave Down, mcur=-1.02 mprv=-0.98
+\end{verbatim} \color{black}
+    
+
+\subsubsection*{Failure (vi)}
+Slip surfaces cannot have angles less than 110 degrees (1.9199 rads)
+between adjacent line segments connecting vertexes. (A) tests a case with
+a greater than 110 degree slope. (B) tests a case with an exactly 110
+degree slope. (C) tests a case with a less than 110 degree slope.
+
+        
+\color{lightgray} \begin{verbatim}
+Failure (vi):
+(A): pass=0 Failure Code6 - Sharp angle, Theta=1.9078
+(B): pass=0 Failure Code6 - Sharp angle, Theta=1.9003
+(C): pass=0 Failure Code6 - Sharp angle, Theta=1.8929
+\end{verbatim} \color{black}
+    
+
+The results seen differ slightly from whats expected, with all cases
+failing reporting angles just below the 1.9199 rad cut off, despite case
+(A) being greater than this angle, and (B) being approximately
+equivalent, based on geometric analysis. The minor error in angle
+calculation likely comes from a \textit{pi} rounding error. Other than
+this small error, all other tests were successful.

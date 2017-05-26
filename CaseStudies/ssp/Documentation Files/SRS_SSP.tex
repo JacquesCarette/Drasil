@@ -1,0 +1,3123 @@
+\documentclass[12pt]{article}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{nccmath}
+\usepackage{multirow}
+%\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{xr}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{caption}
+
+\definecolor{AFB}{rgb}{0.36, 0.54, 0.66}
+\definecolor{Brass}{rgb}{0.71, 0.65, 0.26}
+\definecolor{Amethyst}{rgb}{0.6, 0.4, 0.8}
+
+\usepackage{xr}
+\usepackage{hyperref}
+
+\hypersetup{
+    bookmarks=true,         % show bookmarks bar?
+      colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=red,          % color of internal links (change box
+                            % color with linkbordercolor)
+    citecolor=green,        % color of links to bibliography
+    filecolor=magenta,      % color of file links
+    urlcolor=cyan           % color of external links
+}
+\newcommand{\NN}[1]{{\color{red}#1}}
+\newcommand{\WSS}[1]{{\color{blue}#1}}
+
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{magenta}{SS}{#1}}
+\newcommand{\hf}[1]{\authornote{cyan}{HF}{#1}}
+\newcommand{\cjl}[1]{\authornote{green}{CL}{#1}}
+
+\newcommand{\colAwidth}{0.13\textwidth}
+\newcommand{\colBwidth}{0.82\textwidth}
+\newcommand{\colCwidth}{0.1\textwidth}
+\newcommand{\colDwidth}{0.05\textwidth}
+\newcommand{\colEwidth}{0.8\textwidth}
+\newcommand{\colFwidth}{0.17\textwidth}
+\newcommand{\colGwidth}{0.5\textwidth}
+\newcommand{\colHwidth}{0.28\textwidth}
+\newcounter{assumpnum} %Assumption Number
+\newcommand{\atheassumpnum}{A\theassumpnum}
+\newcommand{\aref}[1]{A\ref{#1}}
+\newcounter{goalnum} %Goal Number
+\newcommand{\gthegoalnum}{GS\thegoalnum}
+\newcommand{\gsref}[1]{GS\ref{#1}}
+\newcounter{theorynum} %Theory Number
+\newcommand{\tthetheorynum}{T\thetheorynum}
+\newcommand{\tref}[1]{T\ref{#1}}
+\renewcommand{\arraystretch}{1}
+\newcounter{instnum} %Instance Number
+\newcommand{\itheinstnum}{IM\theinstnum}
+\newcommand{\iref}[1]{IM\ref{#1}}
+\newcounter{datadefnum} %Datadefinition Number
+\newcommand{\ddthedatadefnum}{DD\thedatadefnum}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+\newcounter{defnum} %Definition Number
+\newcommand{\dthedefnum}{GD\thedefnum}
+\newcommand{\dref}[1]{GD\ref{#1}}
+\newcounter{reqnum} %Requirement Number
+\newcommand{\rthereqnum}{R\thereqnum}
+\newcommand{\rref}[1]{R\ref{#1}}
+\newcounter{lcnum} %Likely change number
+\newcommand{\lthelcnum}{LC\thelcnum}
+\newcommand{\lcref}[1]{LC\ref{#1}}
+\newcounter{fnum} %Figure number
+\newcommand{\fthefnum}{Fig\thefnum}
+\newcommand{\fref}[1]{Fig\ref{#1}}
+\newcounter{tablenum} %Table number
+\newcommand{\tablethetablenum}{Table\thetablenum}
+\newcommand{\tableref}[1]{Table\ref{#1}}
+
+\newcommand{\forceindent}{\parindent=1em\indent\parindent=0pt\relax}
+
+%\oddsidemargin -1000mm
+%\evensidemargin -1000mm
+%\textwidth 160mm
+%\textheight 300mm
+\newgeometry{margin=2cm}
+
+\externaldocument[MIS-]{MIS_SSP}
+\externaldocument[MG-]{MG_SSP}
+
+\begin{document}
+
+\title{Software Requirements Specification for Slope Stability Analysis}
+\author{Henry Frankis\\McMaster University}
+\date{\today}
+	
+\maketitle
+\tableofcontents
+
+\section{Reference Material}
+
+\subsection{Table of Units}
+
+Units of the Physical properties of the soil that are 
+of interest when examining slope stability problems. 
+\newline
+
+\renewcommand{\arraystretch}{1.2}
+\setlength{\tabcolsep}{20pt}
+\begin{tabular}{  l  l  l  }
+\hline
+\textbf{Physical Property} & \textbf{Name} & \textbf{Symbol} \\
+\hline
+force & Newton & \si{\newton} \\
+length & meter & \si{\meter}  \\
+pressure & Pascal & $\si{\pascal}=\si{\newton\per\square\meter}$ \\
+angle & degree & \si{\degree}  \\
+\hline
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+
+
+\subsection{Table of Symbols}
+
+A  collection of  the symbols,  that will  be used  in the  models and
+equations of  the program  are summarized in  the table  below. Values
+with a  subscript $i$ implies that  the value will be  taken at
+and analyzed  at a slice or  slice interface composing the  total slip
+mass.
+
+\renewcommand{\arraystretch}{1.6}
+\setlength{\tabcolsep}{20pt}
+\begin{longtable}{  l  l  p{8.5cm}  }
+\hline
+\textbf{Symbol} & \textbf{Unit} & \textbf{Description} \\
+\hline
+${\varphi'}$ & \si{\degree} & Effective angle of friction. \\
+
+${\text{c}'}$ & \si{\pascal} & Effective cohesion. \\
+
+${\gamma}$ & \si{\kilo\newton\per\meter\cubed} & Unit weight of dry
+soil / ground layer.  \\
+
+${\gamma}_\text{Sat}$ & \si{\kilo\newton\per\meter\cubed} & Unit
+weight of saturated soil / ground layer. \\
+
+${\gamma}_\text{w}$ & \si{\kilo\newton\per\meter\cubed} & Unit weight
+of water. \\
+
+$\text{E}$ & \si{\pascal} & Elastic modulus.\\
+
+${\nu}$ & ${/}$ & Poisson's ratio. \\
+
+${(x,y)}$ & \si{\meter} & Cartesian position coordinates. $y$ is
+considered parallel to the direction of the force of gravity and $x$
+is considered perpendicular to $y$.\\
+
+$y_\text{wt,i}$ & \si{\meter} & The $y$-ordinate, or height of the
+water table at $x_\text{i}$. Can refer to either slice $i$ midpoint,
+or slice interface $i$. \\
+
+$y_\text{us,i}$ & \si{\meter} & The $y$-ordinate, or height of the top
+of the slope at $x_\text{i}$. Can refer to either slice $i$ midpoint,
+or slice interface $i$. \\
+
+$y_\text{slip,i}$ & \si{\meter} & The $y$-ordinate, or height of the
+slip surface at $x_\text{i}$. Can refer to either slice $i$ midpoint,
+or slice interface $i$. \\
+
+$x_\text{i}$ & \si{\meter} & The $x$-ordinate. Can refer to either
+slice $\text{i}$ midpoint, or slice interface $i$. \\
+
+$ \left( \left\{x_\text{cs}\right\}, \left\{y_\text{cs}\right\}
+\right)$ & \si{\meter} & The set of $x$ and $y$ coordinates that
+describe the vertexes of the critical slip surface.\\
+
+$\text{FS}$ & ${/}$ & Global Factor of Safety. Metric describing the
+stability of a surface in a slope. \\
+
+$\text{FS}_\text{Loc,i}$ & ${/}$ & Local Factor of Safety. Factor of
+Safety specific to a slice. For slice index $i$.\\
+
+${S_{\text{i}}}$ & \si{\newton} & Mobilized shear force. Shear forces
+that cause instability in a slice. For slice index $i$.\\
+
+${P_{\text{i}}}$ & \si{\newton} & Shear resistance. Mohr Coulomb
+frictional force that describes the limit of mobilized shear force the
+slice can withstand before failure. For slice index $i$.\\
+
+${T_{\text{i}}}$ & \si{\newton} & Mobilized shear force, without the
+influence of interslice forces. For slice index $i$.\\
+
+${R_{\text{i}}}$ & \si{\newton} & Shear resistance, without the
+influence of interslice forces. For slice index $i$.\\
+
+${W_{\text{i}}}$ & \si{\newton} & Weight. Downward force caused by
+gravity the mass of slice $i$ exerts. For slice index ${\text{i}}$. \\
+
+${K_{\text{c}}}$ & ${/}$ & Earthquake load factor. Proportionality
+factor of force that weight pushes outwards. Caused by seismic earth
+movements. \\
+
+${{H}_{\text{i}}}$ & \si{\newton} & Interslice water force exerted in
+the $x$-ordinate direction between adjacent slices. For interslice
+index $i$ \\
+
+${\Delta{H}_{\text{i}}}$ & \si{\newton} & Difference between
+interslice forces on acting in the $x$-ordinate direction of the slice
+on each side. For slice index $i$. Refers to net force
+${{H}_{\text{i}}-{H}_{\text{i-1}}}$ \\
+
+${E}_{\text{i}}$ & \si{\newton} & Interslice normal force being
+exerted between adjacent slices. For interslice index $i$. \\
+
+${X}_{\text{i}}$ & \si{\newton} & Interslice shear force being exerted
+between adjacent slices.  For interslice index $i$. \\
+
+${U_{\text{b,i}}}$ & \si{\newton} & Base hydrostatic force. Force from
+water pressure within the slice. For slice index $i$.\\
+
+${U_{\text{t,i}}}$ & \si{\newton} & Surface hydrostatic force. Force
+from water pressure acting into the slice from standing water on the
+slope surface. For slice index $i$.\\
+
+$N_{\text{i}}$ & \si{\newton} & Total reactive force for a soil
+surface subject to a body resting on it. \\
+
+$N'_{\text{i}}$ & \si{\newton} & Effective normal force of a soil
+surface, subtracting pore water reactive force from total reactive
+force. \\
+
+$N*_{\text{i}}$ & \si{\newton} & Effective normal force of a soil
+surface, neglecting the influence of interslice forces. \\
+
+$Q_\text{i}$ & \si{\newton} & An imposed surface load. A downward
+force acting into the surface from midpoint of slice $i$. \\
+
+${\alpha_{\text{i}}}$ & \si{\degree} & Angle of the base of the mass
+relative to the horizontal. For slice index $i$. \\
+
+${\beta_{\text{i}}}$ & \si{\degree} & Angle of the surface of the mass
+relative to the horizontal. For slice index $i$. \\
+
+${\omega_{\text{i}}}$ & \si{\degree} & Angle of imposed surface load
+acting into the surface relative to the vertical. For slice index
+$i$. \\
+
+${\lambda}$ & ${/}$ & Ratio between Interslice normal and shear
+forces. Applied to all interslices. \\
+
+${f_{\text{i}}}$ & ${/}$ & function for inclination of interslice
+forces. A scaling function for magnitude of interslice forces as a
+function of the x coordinate. Can be constant or a half-sine. Value of
+function at interslice index $i$.  \\
+
+${b_{\text{i}}}$ & \si{\meter} & Base width of the slice in the
+$x$-ordinate direction only. For slice $i$. \\
+
+$\ell_{\text{b,i}}$ & \si{\meter} & Total length of the base of a
+slice. For slice index $i$. \\
+
+$\ell_{\text{s,i}}$ & \si{\meter}& Length of an interslice surface,
+from slip base to slope surface in a vertical line from an interslice
+vertex. For interslice index $\text{i}$. \\
+
+${h_{\text{i}}}$ & \si{\meter} & Midpoint height. Distance from the
+slip base to the slope surface in a vertical line from the midpoint of
+the slice. For slice $i$. \\
+
+${\text{n}}$ & ${/}$ & Number of slices the slip mass has been divided
+into. \\
+
+${F}$ & \si{\newton} & A generic force. Assumed 1D allowing a
+scalar. \\
+
+${M}$ & \si{\newton\meter} & Moment of a body. Assumed 2D allowing a
+scalar. \\
+
+$\Upsilon$ & {/} & A generic minimization function or algorithm. \\
+
+$\delta$ & $\text{m}$ & Generic displacement of a body. \\
+
+$K$ & \si{newton\per\meter} & Stiffness. How much a body resists
+displacement when subject to a force. \\
+
+$K_{\text{st,i}}$ & \si{\pascal} & Shear stiffness of an interslice
+surface, without length adjustment. For interslice index $i$.  \\
+
+$K_{\text{bt,i}}$ & \si{\pascal} & Shear stiffness of a slice base
+surface, without length adjustment. For slice index $i$. \\
+
+$K_{\text{sn,i}}$ & \si{\pascal} & Normal stiffness of an interslice
+surface, without length adjustment. For interslice index $i$.  \\
+
+$K_{\text{bn,i}}$ & \si{\pascal} & Normal stiffness of a slice base
+surface, without length adjustment .For slice index $i$. \\
+
+$K_{\text{tr}}$ & \si{\pascal} & Residual shear stiffness. \\
+
+$K_{\text{no}}$ & \si{\pascal} & Residual normal stiffness. \\
+
+$\delta u_{\text{i}}$ & \si{\meter} & Shear displacement of a
+slice. For slice index $i$. \\
+
+$\delta v_{\text{i}}$ & \si{\meter}& Normal displacement of a
+slice. For slice index $i$. \\
+
+$\delta x_{\text{i}}$ & \si{\meter} & Displacement of a slice in the
+$x$-ordinate direction. For slice index $i$. \\
+
+$\delta y_{\text{i}}$ & \si{\meter} & Displacement of a slice in the
+$y$-ordinate direction. For slice index $i$. \\
+
+\hline
+\end{longtable}
+\renewcommand{\arraystretch}{1}
+
+
+\subsection{Abbreviations and Acronyms}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{l l} 
+  \toprule		
+  \textbf{symbol} & \textbf{description}\\
+  \midrule 
+  A & Assumption\\
+  DD & Data Definition\\
+  GD & General Definition\\
+  GS & Goal Statement\\
+  IM & Instance Model\\
+  LC & Likely Change\\
+  PS & Physical System Description\\
+  R & Requirement\\
+  SRS & Software Requirements Specification\\
+  SSA & Slope Stability Analysis\\
+  T & Theoretical Model\\
+  \bottomrule
+\end{tabular}\\
+
+\section{Introduction}
+
+A slope of Geological mass, composed of soil and rock, is subject to
+the influence of gravity on the mass. For an instable slope this can
+cause instability in the form of soil/rock movement.  The effects of
+soil/rock movement can range from inconvenient to seriously hazardous,
+resulting in significant life and economic loses. Slope stability is
+of interest both when analyzing natural slopes, and when designing an
+excavated slope. Slope stability analysis is the assessment of the
+safety of a slope, identifying the surface most likely to experience
+slip and an index of it's relative stability known as the factor of
+safety.
+
+~\newline~\newline The following section provides an overview of the
+Software Requirements Specification (SRS) for a slope stability
+analysis problem.  The developed program will be referred to as
+Slope Stability Analysis program (SSA).  This section explains the purpose of
+this document, the scope of the system, the organization of the
+document and the characteristics of the intended readers.
+
+\subsection{Purpose}
+
+The SSA program is slope stability analysis program.  The program
+determines the critical slip surface, and it's respective factor of
+safety as a method of assessing the stability of a slope design. The
+program is intended to be used as an educational tool, introducing
+slope stability issues, analysis software, and the design of a safe
+slope.
+
+This document will be used as a starting point for subsequent
+development phases, including writing the design specification and the
+software verification and validation plan.  The design document will
+show how the requirements are to be realized, including decisions on
+the numerical algorithms and programming environment.  The
+verification and validation plan will show the steps that will be used
+to increase confidence in the software documentation and the
+implementation.  Although the SRS fits in a series of documents that
+follow the so-called waterfall model, the actual development process
+is not constrained in any way.  Even when the process is not
+waterfall, as Parnas and Clements~\cite{ParnasAndClements1986} point
+out, the most logical way to present the documentation is still to
+``fake'' a rational design process.
+
+\subsection{Scope of Requirements} 
+
+The scope of the requirements is limited to stability analysis of a 2
+dimensional slope, composed of homogeneous soil layers. Given
+appropriate inputs the code for SSA will identify the most likely
+failure surface within the possible input range, and find the factor
+of safety for the slope and displacement of soil that will occur on
+the slope.
+
+\subsection{Organization of Document}
+
+The organization of this document follows the template for an SRS for
+scientific computing software proposed by~\cite{Koothoor2013} and
+\cite{SmithAndLai2005}.  The presentation follows the standard pattern
+of presenting goals, theories, definitions, and assumptions.  For
+readers that would like a more bottom up approach, they can start
+reading the instance models in Section \ref{sec_instance} and trace
+back to find any additional information they require.  The instance
+models provide the set of algebraic equations that must be solved
+iteratively to perform a Morgenstern Price Analysis, and the system of
+equations that must be solved for Rigid Finite Element Analysis.
+
+The goal statements are refined to the theoretical models, and
+theoretical models (Section \ref{sec_theoretical}) to the instance
+models (Section \ref{sec_instance}).
+
+%\subsection{Intended Audience}
+
+\section{General System Description}
+
+This section provides general information about the system, identifies
+the interfaces between the system and its environment, and describes
+the user characteristics and the system constraints.
+
+%\subsection{System Context}
+
+\subsection{User Characteristics}
+
+The end user of SSA should have an understanding of undergraduate
+Level 1 Calculus and Physics, and be familiar with soil and material
+properties.
+
+\subsection{System Constraints}
+
+There are no system constraints.
+
+\section{Specific System Description}
+
+This section first presents the problem description, which gives a
+high-level view of the problem to be solved.  This is followed by the
+solution characteristics specification, which presents the
+assumptions, theories, definitions and finally the instance models
+that model the slope. The program implements two solution methods to
+analyze the slope with. Models with
+\textbf{\textcolor{Amethyst}{purple}} table headings refer to a
+Morgenstern Price solution. Models with
+\textbf{\textcolor{AFB}{blue}} table headings refer to a RFEM
+solution. Models with \textbf{\textcolor{Brass}{brass}} table
+headings are models that refer to both solutions.
+
+
+\subsection{Problem Description} \label{Sec_pd}
+
+SSA is a computer program developed to evaluate the factor of safety
+of a slopes slip surface and, calculate the displacement the slope
+will experience.
+
+\subsubsection{Terminology}
+
+\begin{itemize}
+\item {\textit{Factor of safety:} Stability metric. How likely a slip
+  surface is to experience failure through slipping.}
+  
+\item {\textit{Critical slip surface:} Slip surface of the slope that
+  has the lowest global factor of safety, and therefore most likely to
+  experience failure.}
+
+\item {\textit{Stress:} Forces that are exerted between planes
+  internal to a larger body subject to external loading.}
+  
+\item {\textit{Strain:} Stress forces that result in deformation of
+  the body/plane.}
+  
+\item {\textit{Normal Force:} A force applied perpendicular to the
+  plane of the material.}
+  
+\item {\textit{Shear Force:} A force applied parallel to the plane of
+  the material.}
+  
+\item {\textit{Tension:} A stress the causes displacement of the body
+  away from it's center.}
+  
+\item {\textit{Compression:} A stress the causes displacement of the
+  body towards it's center.}
+  
+\item {\textit{Plane Strain:} The resultant stresses in one of the
+  directions of a 3 dimensional material can be approximated as
+  0. Results when the length of one dimension of the body dominates
+  the others. Stresses in the dominate dimensions direction are the
+  ones that can be approximated as 0.}
+  
+\end{itemize}
+
+\subsubsection{Physical System Description} \label{sec_system}
+
+Analysis of the slope is performed by looking at properties of the
+slope as a series of slice elements. Some properties are interslice
+properties, and some are slice or slice base properties.  The index
+convention for referencing which interslice or slice is being used is
+shown in \fref{Fig_Index}.
+
+\begin{itemize}
+\item Interslice properties convention is noted by $\text{j}$. The end
+  Interslice properties are usually not of interest, therefore use the
+  interslice properties from $1\leq\text{i}\leq n-1$.
+
+\item Slice properties convention is noted by $\text{i}$.
+\end{itemize}
+
+
+\begin{figure}[h!] \refstepcounter{fnum}  \label{Fig_Index}
+\begin{center}
+{
+\setlength{\unitlength}{6cm}
+\begin{picture}(2,1)
+% BORDER %
+\thinlines
+\put(0,0){\line(0,1){1}}
+\put(0,1){\line(1,0){2}}
+\put(2,1){\line(0,-1){1}}
+\put(2,0){\line(-1,0){2}}
+% SLIP SURFACE %
+\linethickness{1mm}
+\qbezier(0.2, 0.9)(0.5, 0.3)(1.8, 0.1)
+% SLOPE %
+\linethickness{0.1mm}
+\put(0.1,0.9){\line(1,0){0.5}}
+\put(0.6,0.9){\line(3,-2){1.2}}
+\put(1.8,0.1){\line(1,0){0.1}}
+% SLICES %
+\put(0.2,0.9){\line(0,1){0}}
+\put(0.6,0.484){\line(0,1){0.416}}
+\put(0.992,0.2938){\line(0,1){0.3401}}
+\put(1.4005,0.1764){\line(0,1){0.19}}
+\put(1.8,0.1){\line(0,1){0}}
+% j LABELS %
+\put(0.15,0.92){$j=0$}
+\put(0.55,0.92){$j=1$}
+\put(1.3985,0.3863){$j=n-1$}
+\put(1.78,0.13){$j=n$}
+% j LABELS %
+\put(0.38,0.75){$i=1$}
+\put(0.74,0.55){$i=2$}
+\put(1.1,0.34){$i=n-1$}
+\put(1.48,0.185){$i=n$}
+\end{picture}
+}
+\caption{Index convention for numbering slice and interslice force
+  variables}
+ \end{center}
+\end{figure}
+
+
+~\newline\noindent A free body diagram of the forces acting on the
+slice is displayed in \fref{Fig_Forces}.
+
+\begin{figure}[h!] \refstepcounter{fnum}  \label{Fig_Forces}
+\begin{center}
+{
+ \includegraphics[width=0.7\textwidth]{ForceDiagram.png}
+}
+\caption{Forces acting on a slice}
+\end{center}
+\end{figure}
+
+
+
+\subsubsection{Goal statements}
+
+Given the geometry of the water table, the geometry of the layers
+composing the plane of a slope, and the material properties of the
+layers.
+
+\begin{itemize}
+\item [G\refstepcounter{goalnum}\thegoalnum: \label{G_FS}]
+  {Evaluate local and global factors of safety along a given slip
+    surface.}
+  
+\item [G\refstepcounter{goalnum}\thegoalnum: \label{G_Critical}]
+  {Identify the critical slip surface for the slope, with the lowest
+    Factor of Safety.}
+  
+\item [G\refstepcounter{goalnum}\thegoalnum: \label{G_Displacement}]
+  {Determine the displacement of the slope.}
+\end{itemize}
+
+\subsection{Solution Characteristics Specification}
+
+The instance models that govern SSA are presented in
+Subsection~\ref{sec_instance}.  The information to understand the
+meaning of the instance models and their derivation is also presented,
+so that the instance models can be verified.
+
+\subsubsection{Assumptions}
+
+This section simplifies the original problem and helps in developing
+the theoretical model by filling in the missing information for the
+physical system. The numbers given in the square brackets refer to the
+data definition, or the instance model, in which the respective
+assumption is used.
+
+\begin{enumerate}[label=A\arabic*:,ref={\arabic*}]
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Concave}] The
+  slip surface is concave with respect to the slope surface. The (x,y)
+  coordinates of the failure surface follow a monotonic function.
+
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Input}] The
+  geometry of the slope, and the material properties of the soil
+  layers are given as inputs.
+
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Homo}] The
+  different layers of the soil are homogeneous, with consistent soil
+  properties throughout, and independent of dry or saturated
+  conditions, with the exception of unit weight.
+
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Isotropic}]
+  Soil layers are treated as if they have isotropic properties.
+  
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Base}]
+  Interslice normal and shear forces have a linear relationship,
+  proportional to a constant $\left({\lambda}\right)$ and an
+  interslice force function $\left({f}\right)$ depending on x
+  position.
+
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Interslice}]
+  Slice to base normal and shear forces have a linear relationship,
+  dependent on the factor of safety $\left({FS}\right)$, and the
+  Coulomb sliding law.
+
+\item
+  [A\refstepcounter{assumpnum}\theassumpnum: \label{A_StressStrain}]
+  The stress-strain curve for interslice relationships is linear with
+  a constant slope.
+  
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_2D}] The
+  slope and slip surface extends far into and out of the geometry ($z$
+  coordinate). This implies plane strain conditions, making 2D
+  analysis appropriate.
+
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Lin}] The
+  effective normal stress is large enough that the resistive shear to
+  effective normal stress relationship can be approximated as a linear
+  relationship.
+
+\item [A\refstepcounter{assumpnum}\theassumpnum: \label{A_Straight}]
+  The surface and base of a slice between interslice nodes are
+  approximated as straight lines.
+\end{enumerate}
+
+\subsubsection{Theoretical Models} \label{sec_theoretical}
+
+This section focuses on the general equations and laws that SSA is based
+on.
+
+~\newline
+
+% ----------------------------- %
+%        Begin TM FS           %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  T\refstepcounter{theorynum}\thetheorynum \label{TM_FS}\\
+  
+  \hline Label&\bf Factor of Safety\\
+  
+  \hline Equation& \( \text{FS} = \frac{P}{S} \) \\
+  
+  \hline Description & The stability metric of the slope, known as the
+  factor of safety $\text{FS}$, is determined by the ratio of the
+  shear force at the base of the slope $S$ (\dref{GD_MobShear}), and
+  the resistive shear $P$ (\tref{TM_Fmc}). \\
+ 
+  \hline Source & \cite{FredlundKrahn}\\
+
+  \hline Ref.\ By & \iref{IM_FS}, \dref{GD_MobShear} \\
+
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ----------------------------- %
+%        End TM FS              %
+% ----------------------------- %
+
+~\newline
+
+% ----------------------------- %
+%        Begin TM Equilibrium            %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  T\refstepcounter{theorynum}\thetheorynum \label{TM_Eqm}\\
+  
+  \hline
+  Label&\bf Equilibrium\\
+  
+  \hline Equation& \( \displaystyle\sum {F}_{\text{x}} = 0 ~\newline
+  \displaystyle\sum F_{\text{y}} = 0 ~\newline \displaystyle\sum M = 0
+  \)\\
+
+  \hline Description & For a body in static equilibrium the net
+  forces, and net moments acting on the body will cancel out. Assuming
+  a 2D problem (\aref{A_2D}) the net $x$-ordinate
+  $\left(F_{\text{x}}\right)$ and $y$-ordinate
+  $\left(F_{\text{y}}\right)$ scalar components will be equal to
+  0. All forces and their distance from the chosen point of rotation
+  will create a net moment equal to 0, also able to be analyzed as a
+  scalar in a 2D problem. \\
+  
+  \hline Source & \cite{FredlundKrahn}\\
+  
+  \hline Ref.\ By & \dref{GD_Fx}, \dref{GD_Fy}, \dref{GD_M},
+  \iref{IM_Lambda} \\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ----------------------------- %
+%        End TM Equilibrium   %
+% ----------------------------- %
+
+~\newline
+
+% ----------------------------- %
+%        Begin TM Mohr Coulomb            %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Brass} Number&
+  T\refstepcounter{theorynum}\thetheorynum \label{TM_Fmc}\\
+  
+  \hline Label&\bf Mohr-Coulomb Shear Strength\\
+  
+  \hline Equation& \( P = \sigma \cdot \tan\left( \varphi' \right) + c
+  \) \\
+  
+  \hline Description & For a soil under stress it will exert a shear
+  resistive strength based on the Coulomb sliding law.  The resistive
+  shear is the maximum amount of shear a surface can experience while
+  remaining rigid, analogous to a maximum normal force.  In this model
+  the shear force $P$ is proportional to the product of the normal
+  stress on the plane $\sigma$ with it's static friction, in the
+  angular form $\tan\left( \varphi' \right)=U_{\text{s}}$.  The $P$
+  versus $\sigma$ relationship is not truly linear, but assuming the
+  effective normal force is strong enough it can be approximated with
+  a linear fit (\aref{A_Lin}), where the cohesion $c$ represents the
+  $P$ intercept of the fitted line.\\
+
+  \hline Source & \cite{FredlundKrahn}\\
+  
+  \hline Ref.\ By & \dref{GD_P}, \dref{GD_MobShear}, \ddref{DD_R},
+  \ddref{DD_T}, \iref{IM_RFEMFS}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ----------------------------- %
+%        End TM Mohr Coulomb              %
+% ----------------------------- %
+
+~\newline
+
+% ----------------------------- %
+%        Begin TM Effective Stress            %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  T\refstepcounter{theorynum}\thetheorynum \label{TM_EffStress}\\
+  
+  \hline Label&\bf Effective Stress\\
+  
+  \hline Equation& \( \sigma' =\sigma - \mu \) \\
+  
+  \hline Description & $\sigma$ is the total stress a soil mass needs
+  to maintain itself as a rigid collection of particles. The source of
+  the stress can be provided by the soil skeleton $\sigma'$, or by the
+  pore pressure from water within the soil $\mu$. The stress from the
+  soil skeleton is known as the effective stress $\sigma'$ and is the
+  difference between the total stress $\sigma$ and the pore stress
+  $\mu$. \\
+
+  \hline Source & \cite{FredlundKrahn}\\
+  
+  \hline Ref.\ By & \dref{GD_P}, \dref{GD_MobShear}, \ddref{DD_R},
+  \ddref{DD_T}, \iref{IM_E}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}
+% ----------------------------- %
+%        End TM Effective Stress             %
+% ----------------------------- %
+
+~\newline
+
+% ----------------------------- %
+%      Begin TM Hookes         %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{AFB} Number&
+  T\refstepcounter{theorynum}\thetheorynum \label{TM_Hooke}\\
+  
+  \hline Label&\bf Hooke's Law\\
+  
+  \hline Equation& \( {F}= {K} \cdot {\delta} \) \\
+  
+  \hline Description & Stiffness $K$ is the resistance a body offers
+  to deformation by displacement $\delta$ when subject to a force $F$,
+  along the same direction. A body with high stiffness will experience
+  little deformation when subject to a force. \\
+
+  \hline Source & \cite{StolleGuo}\\
+
+  \hline Ref.\ By & \dref{GD_NetForce}, \dref{GD_Hookes},
+  \ddref{DD_Stiff}, \iref{IM_RFEM}, \iref{IM_RFEMFS}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+
+
+% ----------------------------- %
+%        End TM Hookes         %
+% ----------------------------- %
+
+\subsubsection{General Definitions} \label{sec_gendef}
+
+This section collects the laws and equations that will be used in
+deriving the data definitions, which in turn are used to build the
+instance models.
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD Force Equilibrium X     %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_Fx}\\
+  
+  \hline Label&\bf Normal Force Equilibrium\\
+  
+  \hline Equation& \( N_{\text{i}} \; = \begin{array}{l} \left[
+      W_{\text{i}} - X_{\text{i-1}} + X_{\text{i}} +
+      {U_{\text{t,i}}}\;{\cos\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+      \right]\cos\left(\alpha_{\text{i}}\right) \\ + \left[
+      {-K_{\text{c}}}\;{W_{\text{i}}} - E_{\text{i}} + E_{\text{i-1}}
+      - H_{\text{i}} + H_{\text{i-1}} +
+      {U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)}
+      \right]\sin\left(\alpha_{\text{i}}\right) \end{array} \) \\
+ 
+  \hline Description & For a slice of mass in the slope the force
+  equilibrium to satisfy \tref{TM_Eqm} in the direction perpendicular
+  to the base surface of the slice. Rearranged to solve for the normal
+  force of the surface $N_{\text{i}}$. Force equilibrium is derived
+  from the free body diagram of \fref{Fig_Forces} in
+  section~\ref{sec_system}. Index $\text{i}$ refers to the values of
+  the properties for slice/interslices following convention in
+  \fref{Fig_Index} in section~\ref{sec_system}. Force variable
+  definitions can be found in \ddref{DD_W} to \ddref{DD_EX}.  \\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_E}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ------------------------------------------ %
+%        End  GD Force Equilibrium X       %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD Force Equilibrium Y     %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_Fy}\\
+  
+  \hline Label&\bf Base Shear Force Equilibrium\\
+  
+  \hline Equation& \( S_{\text{i}} = \begin{array}{l} \left[
+      W_{\text{i}} -X_{\text{i-1}} + X_{\text{i}} +
+      {U_{\text{t,i}}}\;{\cos\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+      \right]\sin\left(\alpha_{\text{i}}\right) \\ - \left[
+      {-K_{\text{c}}}\;{W_{\text{i}}} - E_{\text{i}} + E_{\text{i-1}}
+      - H_{\text{i}} + H_{\text{i-1}} +
+      {U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+      \right]\cos\left(\alpha_{\text{i}}\right) \end{array} \) \\
+  
+  \hline Description & For a slice of mass in the slope the force
+  equilibrium to satisfy \tref{TM_Eqm} in the direction parallel to
+  the base surface of the slice. Rearranged to solve for the shear
+  force acting on the base $S_{\text{i}}$. Force equilibrium is
+  derived from the free body diagram of \fref{Fig_Forces} in
+  section~\ref{sec_system}. Index $\text{i}$ refers to the values of
+  the properties for slice/interslices following convention in
+  \fref{Fig_Index} in section~\ref{sec_system}. Force variable
+  definitions can be found in \ddref{DD_W} to \ddref{DD_EX}.  \\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T},\iref{IM_E}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ------------------------------------------ %
+%        End  GD Force Equilibrium Y       %
+% ------------------------------------------ %
+
+~\newline
+
+% ----------------------------- %
+%        Begin GD Resistive Shear   %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_P}\\
+  
+  \hline Label&\bf Resistive Shear \\
+  
+  \hline Equation& \( P_{\text{i}} = N'_{\text{i}} \cdot \tan\left(
+  \varphi'_{\text{i}} \right) + c' \cdot b_{\text{i}} \cdot
+  \sec\left(\alpha_{\text{i}}\right) \) \\
+  
+  \hline Description & The Mohr-Coulomb resistive shear strength of a
+  slice $P_{\text{i}}$ is adjusted to account for the effective normal
+  $\sigma'=N'=N-U_{\text{b}}$ of a soil from \tref{TM_EffStress}.
+  Also and the cohesion is adjusted to account for the length $\ell$
+  of the plane where the normal occurs, where $\ell_{\text{b,i}} =
+  b_{\text{i}} \cdot \sec\left(\alpha\right)$, and $b_\text{i}$ is the
+  x width of the base.  therefore $c = c' \cdot b_{\text{i}} \cdot
+  \sec\left(\alpha_{\text{i}}\right)$. \\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \dref{GD_MobShear}, \ddref{DD_R}, \ddref{DD_T}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ----------------------------- %
+%        End GD Resistive Shear             %
+% ----------------------------- %
+
+~\newline
+
+% ----------------------------- %
+%  Begin GD Mobile Shear   %
+% ----------------------------- %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_MobShear}\\
+  
+  \hline Label&\bf Mobile Shear \\
+  
+  \hline Equation & \( S_{\text{i}} = \frac{ P_{\text{i}} }{ \text{FS}
+  } = \frac { N'_{\text{i}} \cdot \tan\left( \varphi'_{\text{i}}
+    \right) + c' \cdot b_{\text{i}} \cdot
+    \sec\left(\alpha_{\text{i}}\right) }{\text{FS}} \) \\
+  
+  \hline Description & From the definition of the Factor of Safety in
+  \tref{TM_FS}, and the new definition of $P_{\text{i}}$, a new
+  relation for the net mobile shear force of the slice $T_{\text{i}}$
+  is found as the resistive shear $P_{\text{i}}$ (\dref{GD_P}) divided
+  by the factor of safety $\text{FS}$. \\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T} \\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ----------------------------- %
+%        End GD Mobile Shear             %
+% ----------------------------- %
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD  Interslice Normal/Shear Relationship    %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_X}\\
+  
+  \hline Label&\bf Interslice Normal/Shear Relationship\\
+  
+  \hline Equation& \( X_\text{i} = \lambda \cdot f_\text{i} \cdot
+  E_\text{i} \) \\
+
+  \hline Description & The assumption for the Morgenstern Price method
+  (\aref{A_Base}) that the interslice shear force $X_\text{i}$ is
+  proportional to the interslice normal force $E_\text{i}$ by a
+  proportionality constant $\lambda$, and a predetermined scaling
+  function $f$, that changes the proportionality as a function of the
+  $x$-ordinate position of the interslice. $f$ is typically either a
+  half-sine along the slip surface, or a constant.  \\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+  \iref{IM_Lambda}, \iref{IM_E}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ------------------------------------------ %
+%        End  GD Interslice Normal/Shear Relationship       %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD Moment Equilibrium    %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{Amethyst} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_M}\\
+  
+  \hline Label&\bf Moment Equilibrium\\
+  
+  \hline Equation& \( 0 = \begin{array}{l} - {E}_{\text{i}} \left[
+      {z_{\text{i}}} - \frac{b_{\text{i}}}{2} {
+        \tan\left(\alpha_{\text{i}}\right)} \right] + {E}_{\text{i-1}}
+    \left[ {z_{\text{i-1}}} + \frac{b_{\text{i}}}{2} {
+        \tan\left(\alpha_{\text{i}}\right)} \right] -
+    H_{\text{i}}\left[ z_{\text{w,i}} - \frac{b_{\text{i}}}{2} {
+        \tan\left(\alpha_{\text{i}}\right)} \right] \\[5pt] +
+    H_{\text{i-1}}\left[ z_{\text{w,i-1}} + \frac{b_{\text{i}}}{2} {
+        \tan\left(\alpha_{\text{i}}\right)} \right] -
+    \frac{b_{\text{i}}}{2} \left( X_{\text{i}} + X_{\text{i-1}}
+    \right) + K_{\text{c}} W_{\text{i}} \frac{h_{\text{i}}}{2} -
+    U_{\text{t,i}} \sin\left(\beta_{\text{i}}\right) h_{\text{i}} \\ -
+    Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)}
+    h_{\text{i}} \end{array} \) \\
+
+  \hline Description & For a slice of mass in the slope the moment
+  equilibrium to satisfy \tref{TM_Eqm} in the direction perpendicular
+  to the base surface of the slice. Moment equilibrium is derived from
+  the free body diagram of \fref{Fig_Forces} in
+  section~\ref{sec_system}. Index $\text{i}$ refers to the values of
+  the properties for slice/interslices following convention in
+  \fref{Fig_Index} in section~\ref{sec_system}.  Variable
+  definitions can be found in \ddref{DD_W} to \ddref{DD_EX}.  \\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \iref{IM_Lambda}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+% ------------------------------------------ %
+%        End  GD Moment Equilibrium       %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD Net Force      %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{1.5cm} | p{14cm}|}
+  
+  \hline \rowcolor{AFB} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_NetForce}\\
+  
+  \hline Label&\bf Net Force\\
+  
+  \hline Equation & \(F_{\text{x,i}} = -\Delta H_\text{i} -K_{\text{c}}
+  \cdot W_\text{i} - U_{\text{b,i}} \sin\left(\alpha_\text{i}\right) +
+  U_{\text{t,i}} \sin\left(\beta\right) + Q_\text{i}
+  \sin\left(\omega_\text{i}\right)\)
+  
+~\newline \(F_{\text{y,i}} = -W_\text{i} + U_{\text{b,i}}
+  \cos\left(\alpha_\text{i}\right) - U_{\text{t,i}}
+  \cos\left(\beta_\text{i}\right) - Q_\text{i}
+  \cos\left(\omega_\text{i}\right) \)\\
+
+  \hline Description & The net sum of forces acting on a slice for the
+  RFEM model. The forces that create an applied load on the slice.
+  $F_\text{x,i}$ refers to the load in the direction perpendicular to
+  the direction of the force of gravity for slice $i$, while
+  $F_\text{y,i}$ refers to the load in the direction parallel to the
+  force of gravity for slice $i$.  Forces are found in the free
+  body diagram of \fref{Fig_Forces} in section~\ref{sec_system}. In
+  this model the elements are not exerting forces on each other, so
+  the interslice forces $E$ and $X$ are not a part of the model. Index
+  $\text{i}$ refers to the values of the properties for
+  slice/interslices following convention in \fref{Fig_Index} in
+  section~\ref{sec_system}. Force variable definitions can be found in
+  \ddref{DD_W} to \ddref{DD_Q}.\\
+
+  \hline Source & \cite{ZhuEtAl2005}\\
+  
+  \hline Ref.\ By & \ddref{DD_Eqm},
+  \iref{IM_RFEM}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%        End  GD Net Force       %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD Hookes      %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{3cm} | p{12.5cm}|}
+  
+  \hline \rowcolor{AFB} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_Hookes}\\
+  
+  \hline Label&\bf Hooke's Law 2D\\
+  
+  \hline Equation&
+
+  \( \left[\begin{array}{l} p_\text{t,i} \\ p_\text{n,i} \end{array}
+    \right] = \left[ \begin{array}{l l} K_\text{t,i} & 0 \\ 0 &
+      K_\text{n,i}\end{array} \right] \left[\begin{array}{l} \delta
+      t_\text{i} \\ \delta n_\text{i}
+    \end{array} \right] \) \\
+
+  \hline Description & A 2D component implementation of Hooke's law as
+  seen in \tref{TM_Hooke}. $\delta n_\text{i}$ is the displacement of
+  the element normal to the surface and $\delta t_\text{i}$ is the
+  displacement of the element parallel to the surface. $p_\text{n,i}$,
+  is the net pressure acting normal to the surface, and $p_\text{t,i}$
+  is the net pressure acting parallel to the surface. Pressure is used
+  in place of force as the surface has not been normalized for it's
+  length. The stiffness values $K_\text{n,i}$ and $K_\text{t,i}$ are
+  then the resistance to displacement in the respective directions
+  defined as in \ddref{DD_Stiff}. The pressure forces would be the
+  result of applied loads on the mass, the product of the stiffness
+  elements with the displacement would be the mass's reactive force
+  that creates equilibrium with the applied forces after reaching the
+  equilibrium displacement. \\
+
+  \hline Source & \cite{StolleGuo}\\
+  
+  \hline Ref.\ By & \ddref{DD_KMats},
+  \iref{IM_RFEM}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%        End  GD Hookes       %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%        Begin GD Displacement Vectors      %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.5}
+\begin{tabular}{| p{3cm} | p{12.5cm}|}
+  
+  \hline \rowcolor{AFB} Number&
+  GD\refstepcounter{defnum}\thedefnum \label{GD_DispVecs}\\
+  
+  \hline Label&\bf Displacement Vectors\\
+  
+  \hline Equation&
+
+  \( \bar{\delta}_\text{i} = \left[ \begin{array}{l} \delta x_\text{i}
+      \\ \delta y_\text{i} \end{array} \right]\)
+  ~\newline ~\newline
+  \( \bar{\epsilon}_\text{i} = \left[ \begin{array}{l} \delta
+      u_\text{i} \\ \delta v_\text{i} \end{array} \right]
+  = \left[ \begin{array}{l l} \cos\left(\alpha_\text{i}\right) &
+      \sin\left(\alpha_\text{i}\right)\\ -\sin\left(\alpha_\text{i}\right)
+      & \cos\left(\alpha_\text{i}\right)
+    \end{array}\right] \bar{\delta_\text{i}} \)\\
+
+      \hline Description & Vectors describing the displacement of
+      slice $\text{i}$. $\bar{\delta}_\text{i}$ is the displacement in
+      the unrotated coordinate system, where $\delta x_\text{i}$ is
+      the displacement of the slice perpendicular to the direction of
+      gravity, and $\delta y_\text{i}$ is the displacement of the
+      slice parallel to the force of
+      gravity. $\bar{\epsilon}_\text{i}$ is the displacement in the
+      rotated coordinate system, where $\delta u_\text{i}$ is the
+      displacement of the slice parallel to the slice base, and
+      $\delta y_\text{i}$ is the displacement of the slice
+      perpendicular to the slice base. $\bar{\epsilon_\text{i}}$ can
+      also be found by rotating $\bar{\delta_\text{i}}$ clockwise by
+      the base angle $\alpha$ through a rotation matrix as shown.\\
+
+  \hline Source & \cite{StolleGuo}\\
+  
+  \hline Ref.\ By & \ddref{DD_KMats},
+  \iref{IM_RFEM}, \iref{IM_RFEMFS}\\
+  
+  \hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%        End  GD Displacement Vectors       %
+% ------------------------------------------ %
+
+\subsubsection{Data Definition} \label{sec_datadef}
+
+This section collects and defines all the data needed to build the
+instance models. Definitions \ddref{DD_W} to \ddref{DD_Q} are the
+force variables that can be solved by direct analysis of given
+inputs. The interslice forces \ddref{DD_EX} are force variables that
+must be written in terms of \ddref{DD_W} to \ddref{DD_Q} to solve.
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD W    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_W}\\
+
+\hline Label& \bf Slice Weight \\
+
+\hline
+Equation & 
+\( W_\text{i} =  b_\text{i} \cdot \left\{  \begin{array}{l l}
+  \left[ y_\text{us,i} - y_\text{slip,i} \right] \cdot
+  \gamma_\text{Sat} & \text{If } y_\text{wt,i} \geq y_\text{us,i}
+  \\ \left[ y_\text{us,i} - y_\text{wt,i} \right] \cdot \gamma +
+  \left[ y_\text{wt,i} - y_\text{slip,i} \right] \cdot
+  \gamma_\text{Sat} & \text{If } y_\text{us,i} > y_\text{wt,i} >
+  y_\text{slip,i} \\ \left[ y_\text{us,i} - y_\text{slip,i} \right]
+  \cdot \gamma & \text{If } y_\text{wt,i} \leq y_\text{slip,i} \\
+ \end{array} \right. \) \\
+
+\hline Description & The weight of the slice $W$ is how much force the
+soil mass exerts into the slip surface.  The piecewise function is the
+unit weight of the slice. Wet regions are determined by
+($y_\text{wt,i} > y_\text{slip,i}$), where $y_\text{wt,i}$ is the
+height of the water table and $y_\text{slip,i}$ is the height of the
+slip surface, at the midpoint of slice $\text{i}$. Dry regions are
+determined by ($y_\text{us,i} > y_\text{slip,i}$), where
+$y_\text{us,i}$ is the height of the slice surface at the midpoint of
+slice $\text{i}$. The height of weight regions is multiplied by weight
+of wet soil $\gamma_\text{Sat}$, and dry regions are multiplied by the
+weight of dry soil $\gamma$. the sum is the total unit weight of the
+slice. The unit weight is multiplied with the width of the slice
+$b_\text{i}$(\ddref{DD_b}) to get the total weight of the slice.\\
+
+\hline Sources& \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD W        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Ub    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Ub}\\
+
+\hline Label& \bf Base Water Force \\
+
+\hline
+Equation & 
+\( U_\text{b,i} =  \ell_\text{b,i} \cdot \left\{  \begin{array}{l l}
+\left[ y_\text{wt,i} - y_\text{slip,i} \right] \cdot \gamma_\text{w} &
+\text{If } y_\text{wt,i} > y_\text{slip,i} \\ 0 & \text{If }
+y_\text{wt,i} \leq y_\text{slip,i} \\
+ \end{array} \right. \)
+\\
+
+\hline Description & The base water force $U_\text{b,i}$ is how much
+force the water contributes to the total normal force, the variable
+$\mu$ from \tref{TM_EffStress}. If the slice contains water
+$y_\text{wt,i} > y_\text{slip,i}$, where $y_\text{wt,i}$ is the height
+of the water table and $y_\text{slip,i}$ is the height of the slip
+surface at the midpoint of slice $\text{i}$,then the water will
+contribute to the normal force of the slice. The unit base water force
+is the product of the height of the water above the slip surface with
+the unit weight of water $\gamma_\text{w}$. The unit base water force
+is normalized by multiplying by the length of the base of the slice
+$\ell_\text{b,i}$, to get the total base water force.  \\
+
+\hline Sources& \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Ub        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Ut    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Ut}\\
+
+\hline Label& \bf Surface Water Force \\
+
+\hline
+Equation & 
+\( U_\text{t,i} = \ell_\text{s,i} \cdot \left\{  \begin{array}{l l}
+  \left[ y_\text{wt,i} - y_\text{us,i} \right] \cdot \gamma_\text{w} &
+  \text{If } y_\text{wt,i} > y_\text{us,i} \\ 0 & \text{If }
+  y_\text{wt,i} \leq y_\text{us,i} \\
+ \end{array} \right. \) \\
+
+\hline Description & The surface water force $U_\text{t,i}$, exerting
+a force downwards into the slice. Occurs when standing water is
+resting on the surface of the slope, such that. $y_\text{wt,i} >
+y_\text{us,i}$, where $y_\text{wt,i}$ is the height of the water table
+and $y_\text{us,i}$ is the height of the slope surface at the midpoint
+of slice $\text{i}$. The unit surface water force is the product of
+the height the water is above the surface with the unit weight of
+water $\gamma_\text{w}$. The unit surface water force is normalized by
+multiplying by the length of the surface of the slice
+$\ell_\text{s,i}$, to get the total base water force.  \\
+
+\hline Sources & \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Ut        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD H    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_H}\\
+
+\hline Label& \bf Interslice Water Forces \\
+
+\hline Equation & \( H_\text{i} = \left\{ \begin{array}{l l}
+  \frac{\left[ y_\text{us,i} - y_\text{slip,i} \right] ^2 }{2} \cdot
+  \gamma_\text{Sat} + \left[ y_\text{wt,i} - y_\text{us,i} \right] ^2
+  \cdot \gamma_\text{Sat} & \text{If } y_\text{wt,i} \geq
+  y_\text{us,i} \\ \frac{\left[ y_\text{wt,i} - y_\text{slip,i}
+      \right] ^2 }{2} \cdot \gamma_\text{Sat} & \text{If }
+  y_\text{us,i} > y_\text{wt,i} > y_\text{slip,i} \\ 0 & \text{If }
+  y_\text{wt,i} \leq y_\text{slip,i} \\ \end{array} \right. \)\\
+
+\hline Description & The interslice water force $H_\text{i}$ is a
+force created by water acting horizontally from an interslice
+$\text{i}$ onto adjacent slice.  \\
+
+\hline Sources & \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD H        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Angles   %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Angles}\\
+
+\hline Label& \bf Angles \\
+
+\hline
+Equation & 
+\( \alpha_\text{i} = \frac{y_\text{slip,i} -
+  y_\text{slip,i-1}}{x_\text{slip,i} - x_\text{slip,i-1}} \),
+\( \beta_\text{i} = \frac{y_\text{us,i} -
+  y_\text{us,i-1}}{x_\text{us,i} - x_\text{us,i-1}} \)\\
+
+\hline
+Description & The angle the slip surface (slice base) and slope
+surface (slice surface) make with the horizontal.  Uses approximation
+\aref{A_Straight} that the base and surface of slices between nodes
+are straight lines.  \\
+
+\hline Sources& \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Angles        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD b   %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_b}\\
+
+\hline Label& \bf Lengths \\
+
+\hline
+Equation & 
+\( b_\text{i} = x_\text{slip,i} - x_\text{slip,i-1} \),
+\( \ell_\text{b,i} = b_\text{i} \cdot \sec\left(\alpha_\text{i}\right)
+\)
+\( \ell_\text{s,i} = b_\text{i} \cdot \sec\left(\beta_\text{i}\right)
+\)\\
+
+\hline Description & The width of the slice $b_\text{i}$ is the
+difference in x-ordinates between $x_\text{slip}$ nodes surrounding
+the slice.  Using the slice base angle $\alpha_\text{i}$ and surface
+angle $\beta_\text{i}$ from \ddref{DD_Angles}, and Pythagoreans
+theorem the total length of the slice base $\ell_\text{b,i}$ or slice
+surface $\ell_\text{s,i}$ can be calculated.  \\
+
+\hline Sources& \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD b        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Kc  %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Kc}\\
+
+\hline Label& \bf Seismic Load Factor\\
+
+\hline Equation & \(K_\text{E,i} = K_\text{c} W_\text{i} \) \\
+
+\hline Description & Input $K_\text{c}$ is the seismic load factor. It
+represents the proportion of weight that slice $\text{i}$ will exert
+outward as a result of horizontal motion of the earth dues to
+earthquakes.  The force $K_\text{E,i}$ will be the product of the load
+factor $K_\text{c}$ and the weight of the slice $W_\text{i}$ from
+\ddref{DD_W}.  \\
+
+\hline Sources& \cite{FredlundKrahn}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Kc        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Q  %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Q}\\
+
+\hline Label& \bf Surface Loads \\
+
+\hline Equation & \( Q_\text{i}, \omega_\text{i} \)\\
+
+\hline Description & Inputs $Q_\text{i}$ and $\omega_\text{i}$ are the
+results of a slope surface load from an external weight such as a
+building on the slope. $Q_\text{i}$ is the magnitude of the surface
+load being exerted on slice $\text{i}$ and $\omega$ is the angle the
+force is being exerted at relative to the vertical (line parallel to
+the direction of the force of gravity).  \\
+
+\hline Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Q        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD E,X  %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Amethyst} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_EX}\\
+
+\hline Label& \bf Interslice Forces \\
+
+\hline Equation & \( E_\text{i}, X_\text{i} = \lambda \cdot f_\text{i}
+\cdot E_\text{i} \) \\
+
+\hline Description & The interslice forces are the normal and shear
+forces occurring on a slice at it's interfaces as a result of the
+internal stress on the slices of mass from the weight of the adjacent
+slice.  $E_\text{i}$ is the normal force exerted by interslice
+$\text{i}$, and $X_\text{i}$ is the shear force exerted by interslice
+$\text{i}$. The value of $X_\text{i}$ is determined by it's
+relationship to $E_\text{i}$ in \dref{GD_X}. $E_\text{i}$ is one of
+the three solution variables, determined by \iref{IM_E}.  \\
+
+\hline Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \ddref{DD_R}, \ddref{DD_T}, \iref{IM_FS},
+\iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD E,X        %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD R    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Amethyst} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_R}\\
+
+\hline Label& \bf Resistive Shear, Without Interslice Forces \\
+
+\hline
+Equation & 
+\( R_{\text{i}}= \begin{array}{l}
+  \left( \begin{array}{l}
+    \left[ W_{\text{i}} + U_{\text{t,i}}
+      \cos\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+      \cos\left(\omega_{\text{i}}\right) \right]
+    \cos\left(\alpha_{\text{i}}\right) \\
++ \left[ - K_{\text{c}} W_{\text{i}} - \Delta H_{\text{i}} +
+  U_{\text{t,i}} \sin\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+  \sin\left(\omega_{\text{i}}\right) \right]
+\sin\left(\alpha_{\text{i}}\right) - U_{\text{b,i}} \end{array}
+  \right) \cdot \tan\left(\varphi'\right) \\
++ c'_{\text{i}} \cdot b_{\text{i}} \cdot
+\sec\left(\alpha_{\text{i}}\right) \end{array} \)\\
+
+\hline Description & The resistive shear of \dref{GD_P}, with the
+normal force $N_\text{i}$ defined in terms of the physical properties
+of \ddref{DD_W} to \ddref{DD_EX}, without considering the
+effects of the interslice forces $E$ and $X$.  \\
+
+\hline Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \iref{IM_FS}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD R         %
+% ------------------------------------------ %
+
+\subsubsection*{Resistive Shear Force, Without the
+  Influence of Interslice Forces Derivation}
+
+\noindent
+The resistive shear force of a slice is defined as $P_\text{i}$ in
+\dref{GD_P}.  The effective normal in the equation for $P_\text{i}$ of
+the soil is defined in the perpendicular force equilibrium of a slice
+from \dref{GD_Fy}, Using the effective normal $N'_\text{i}$ of
+\tref{TM_EffStress} shown in equation~(\ref{eq:N'}).
+
+\begin{equation} \label{eq:N'}
+ N'_{\text{i}} \; = \begin{array}{l}
+   \left[ W_{\text{i}} - X_{\text{i-1}} + X_{\text{i}} +
+     {U_{\text{t,i}}}\;{\cos\left(\beta_{\text{i}}\right)} +
+     Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+     \right]\cos\left(\alpha_{\text{i}}\right) \\ + \left[
+     {-K_{\text{c}}}\;{W_{\text{i}}} - E_{\text{i}} + E_{\text{i-1}} -
+     H_{\text{i}} + H_{\text{i-1}} +
+     {U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} +
+     Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)}
+     \right]\sin\left(\alpha_{\text{i}}\right) \\ -
+   U_{\text{b,i}} \end{array}
+ \end{equation}
+
+\noindent
+The values of the interslice forces $E$ and $X$ in the equation are
+unknown, while the other values are found from the physical force
+definitions of \ddref{DD_W} to \ddref{DD_EX}.  Consider a force
+equilibrium without the affect of interslice
+forces, to obtain a solvable value as done for $N^*_\text{i}$ in
+equation~(\ref{eq:N*}).
+
+\begin{equation} \label{eq:N*}
+ N^*_{\text{i}} \; = \begin{array}{l}
+   \left[ W_{\text{i}} +
+     {U_{\text{t,i}}}\;{\cos\left(\beta_{\text{i}}\right)} +
+     Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+     \right]\cos\left(\alpha_{\text{i}}\right) \\ + \left[
+     {-K_{\text{c}}}\;{W_{\text{i}}}- H_{\text{i}} + H_{\text{i-1}} +
+     {U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} +
+     Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)}
+     \right]\sin\left(\alpha_{\text{i}}\right) -
+   U_{\text{b,i}} \end{array}
+\end{equation}
+
+\noindent
+Using $N^*_\text{i}$, a resistive shear force neglecting the influence
+of interslice forces can be solved for in terms of all known values as
+done in equation~(\ref{eq:R}).
+
+\begin{equation*}
+R_\text{i} = N^*_\text{i} \tan\left(\varphi'\right) + c'_\text{i}
+\cdot b'_\text{i} \sec\left(\alpha_text{i}'\right)
+\end{equation*}
+
+\begin{equation}\label{eq:R}   R_{\text{i}} \; =
+  \left( \begin{array}{l} \left[ W_{\text{i}} + U_{\text{t,i}}
+      \cos\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+      \cos\left(\omega_{\text{i}}\right) \right]
+    \cos\left(\alpha_{\text{i}}\right) \\ + \left[ - K_{\text{c}}
+      W_{\text{i}} - \Delta H_{\text{i}} + U_{\text{t,i}}
+      \sin\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+      \sin\left(\omega_{\text{i}}\right) \right]
+    \sin\left(\alpha_{\text{i}}\right) - U_{\text{b,i}} \end{array}
+  \right) \cdot \tan\left(\varphi'\right) + c'_{\text{i}} \cdot
+  b_{\text{i}} \cdot \sec\left(\alpha_{\text{i}}\right)
+ \end{equation}
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD T    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline
+\rowcolor{Amethyst}
+Number& DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_T}\\
+
+\hline
+Label& \bf Mobile Shear, Without Interslice Forces \\
+
+\hline
+Equation &
+\( T_{\text{i}} = \begin{array}{l} \left[ W_{\text{i}} +
+    U_{\text{t,i}} \cos\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+    \cos\left(\omega_{\text{i}}\right) \right]
+  \sin\left(\alpha_{\text{i}}\right)\\ - \left[ - K_{\text{c}} W_{\text{i}} -
+    \Delta H_{\text{i}} + U_{\text{t,i}}
+    \sin\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+    \sin\left(\omega_{\text{i}}\right) \right]
+  \cos\left(\alpha_{\text{i}}\right) \end{array} \) \\
+
+\hline Description & The mobile shear of \dref{GD_Fy}, defined in
+terms of the physical properties of \ddref{DD_W}, to \ddref{DD_EX} without
+considering the effects of the interslice forces $E$ and $X$.\\
+
+\hline
+Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \iref{IM_FS}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD T         %
+% ------------------------------------------ %
+
+\subsubsection*{Mobile Shear Force, Without the
+  Influence of Interslice Forces Derivation}
+
+\noindent
+The mobile shear force acting on a slice is defined as $S_\text{i}$
+from the force equilibrium in \dref{GD_Fy},also shown in
+equation~(\ref{eq:Si}).
+
+\begin{equation}  \label{eq:Si}
+  S_{\text{i}} = \begin{array}{l} \left[ W_{\text{i}} -X_{\text{i-1}}
+      + X_{\text{i}} +
+      {U_{\text{t,i}}}\;{\cos\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+      \right]\sin\left(\alpha_{\text{i}}\right) \\ - \left[
+      {-K_{\text{c}}}\;{W_{\text{i}}} - E_{\text{i}} + E_{\text{i-1}}
+      - H_{\text{i}} + H_{\text{i-1}} +
+      {U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}}\;{\cos\left(\omega_{\text{i}}\right)}
+      \right]\cos\left(\alpha_{\text{i}}\right) \end{array}
+\end{equation}
+
+\noindent
+The equation is unsolvable, containing the unknown interslice normal
+force $E$ and shear force $X$.  Consider a force equilibrium without
+the affect of interslice forces, to obtain the mobile shear force
+without the influence of interslice forces $T$, as done in
+equation~(\ref{eq:T}).n
+
+\begin{equation}  \label{eq:T} T_{\text{i}} =
+  \begin{array}{l}  
+\left[ W_{\text{i}} + U_{\text{t,i}} \cos\left(\beta_{\text{i}}\right)
+  + Q_{\text{i}} \cos\left(\omega_{\text{i}}\right) \right]
+\sin\left(\alpha_{\text{i}}\right) \\ - \left[ - K_{\text{c}}
+  W_{\text{i}} - \Delta H_{\text{i}} + U_{\text{t,i}}
+  \sin\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+  \sin\left(\omega_{\text{i}}\right) \right]
+\cos\left(\alpha_{\text{i}}\right) \end{array}
+\end{equation}
+
+\noindent
+The values of $R_\text{i}$ and $T_\text{i}$ are now defined completely
+in terms of the known force property values of \ddref{DD_W} to
+\ddref{DD_EX}.
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD K Mats     %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{AFB} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_KMats}\\
+
+\hline Label& \bf Displacement Reaction Force \\
+
+\hline Equation & \textbf{Interslice} ~\newline
+\( \left[ \begin{array}{l} p_\text{x,i}
+        \\ p_\text{y,i} \end{array}\right]
+= \bar{K}_\text{s,i} \; \bar{\delta}_\text{i}
+= \left[ \begin{array}{l l}
+      K_\text{st,i} & 0 \\ 0 & K_\text{sn,i}\end{array} \right]
+  \left[\begin{array}{l} \delta x_\text{i} \\ \delta y_\text{i}
+    \end{array} \right] \)
+~\newline ~\newline \textbf{Basal} ~\newline
+\( \left[ \begin{array}{l} p_\text{x,i}
+        \\ p_\text{y,i} \end{array}\right]
+= \bar{K}_\text{b,i} \; \bar{\delta}_\text{i}
+= \left[ \begin{array}{l l}
+        K_\text{bA,i} & K_\text{bB,i} \\
+        K_\text{bB,i} & K_\text{bA,i}
+  \end{array} \right]
+\left[\begin{array}{l} \delta x_\text{i} \\ \delta y_\text{i}
+  \end{array} \right] \) \\
+
+
+\hline Description & The force displacement relationship of
+\dref{GD_Hookes} for a slice based on interslice or basal surface
+forces, generalized for displacement in the unrotated coordinate
+system $\bar{\delta}_\text{i}$ from \dref{GD_DispVecs}. Uses the
+definitions of shear and normal stiffness from
+\ddref{DD_Stiff}. $K_\text{bA,i}$, and $K_\text{bB,i}$ are effective
+values for the rotated coordinate system found in
+equations~(\ref{eq:KbA}) and~(\ref{eq:KbB}) respectively. \\
+
+\hline Sources& \cite{StolleGuo}\\
+
+\hline Ref.\ By & \iref{IM_RFEM}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD K Mats         %
+% ------------------------------------------ %
+
+\subsubsection*{Derivation of Stifness Matrixes}
+\noindent
+Using the force-displacement relationship of \dref{GD_Hookes} to
+define stiffness matrix $\bar{K_\text{i}}$, as seen in
+equation~(\ref{eq:Kmat}).
+
+\begin{equation} \label{eq:Kmat}
+  \bar{K_\text{i}} = \left[ \begin{array}{l l}
+      K_\text{t,i} & 0 \\ 0 & K_\text{n,i}\end{array} \right]
+\end{equation}
+
+\noindent
+For interslice surfaces the stiffness constants and displacements
+refer to an unrotated coordinate system, $\bar{\delta}_\text{i}$ of
+\dref{GD_DispVecs}. The interslice elements are left in their standard
+coordinate system, and therefore are described by the same equation
+from \dref{GD_Hookes}. Seen as $\bar{K}_\text{s,i}$ in
+\ddref{DD_KMats}. $K_\text{st,i}$ is the shear element in the matrix,
+and $K_\text{sn,i}$ is the normal element in the matrix, calculated as
+in \ddref{DD_Stiff}.
+
+~\newline\noindent For basal surfaces the stiffness constants and
+displacements refer to a system rotated for the base angle $\alpha$
+(\ddref{DD_Angles}). To analyze the effect of force-displacement
+relationships occurring on both basal and interslice surfaces of an
+element $i$ they must reference the same coordinate system. The
+basal stiffness matrix must be rotated counter clockwise to align with
+the angle of the basal surface. The base stiffness counter clockwise
+rotation is applied in equation~(\ref{eq:Krot}) to the new matrix
+$\bar{K^*_\text{i}}$.
+
+
+\begin{equation} \label{eq:Krot}
+  \begin{aligned} \bar{K^*_\text{i}} & = 
+   \left[ \begin{array}{l l} \cos\left(\alpha_\text{i}\right) & -
+       \sin\left(\alpha_\text{i}\right)\\ \sin\left(\alpha_\text{i}\right)
+       & \cos\left(\alpha_\text{i}\right)\end{array} \right]
+   \bar{K_\text{i}}\\ {} & = \left[ \begin{array}{l l} K_\text{bt,i}
+       \cos\left(\alpha_\text{i}\right) & - K_\text{bn,i}
+       \sin\left(\alpha_\text{i}\right)\\ K_\text{bt,i}
+       \sin\left(\alpha_\text{i}\right) & K_\text{bn,i}
+       \cos\left(\alpha_\text{i}\right)\end{array}\right]
+  \end{aligned} \end{equation}
+
+\noindent
+The Hooke's law force displacement relationship of \dref{GD_Hookes}
+applied to the base also references a displacement vector
+$\bar{\epsilon}_\text{i}$ of \dref{GD_DispVecs} rotated for the base
+angle angle of the slice $\alpha_\text{i}$. The basal displacement
+vector $\bar{\epsilon}_\text{i}$ is rotated clockwise to align with
+the interslice displacement vector $\bar{\delta}_\text{i}$, applying
+the definition of $\bar{\epsilon}_\text{i}$ in terms of
+$\bar{\delta}_\text{i}$ as seen in \dref{GD_DispVecs}. Using this with
+base stiffness matrix $\bar{K^*}_\text{i}$, a basal force displacement
+relationship in the same coordinate system as the interslice
+relationship can be derived as done in equation~(\ref{eq:pRot}).
+    
+\begin{equation}\label{eq:pRot} \begin{aligned}
+    \left[ \begin{array}{l} p_\text{bx,i}
+        \\ p_\text{by,i} \end{array}\right]
+    & = \bar{K^*_\text{i}} \; \bar{\epsilon} \\
+      {} & = \left[ \begin{array}{l l} K_\text{bt,i}
+      \cos\left(\alpha_\text{i}\right) & - K_\text{bn,i}
+      \sin\left(\alpha_\text{i}\right)\\  K_\text{bt,i}
+      \sin\left(\alpha_\text{i}\right) & K_\text{bn,i}
+      \cos\left(\alpha_\text{i}\right)\end{array}\right]
+      \left[ \begin{array}{l l} \cos\left(\alpha_\text{i}\right)
+          &\sin\left(\alpha_\text{i}\right)\\
+          -\sin\left(\alpha_\text{i}\right)
+          & \cos\left(\alpha_\text{i}\right)\end{array}\right]
+      \left[ \begin{array}{l} \delta x_\text{i}
+          \\ \delta y_\text{i} \end{array} \right] \\
+      {} & = \left[ \begin{array}{l l}
+          K_\text{bt,i} \cos^2\left(\alpha_\text{i}\right)+
+          K_\text{bn,i} \sin^2\left(\alpha_\text{i}\right)
+          & \left(K_\text{bt,i} - K_\text{bn,i}\right)
+          \sin\left(\alpha_\text{i}\right)
+          \cos\left(\alpha_\text{i}\right)\\
+          \left(K_\text{bt,i} - K_\text{bn,i}\right)
+          \sin\left(\alpha_\text{i}\right)
+          \cos\left(\alpha_\text{i}\right)
+          & K_\text{bt,i} \cos^2\left(\alpha_\text{i}\right)+
+          K_\text{bn,i} \sin^2\left(\alpha_\text{i}\right)
+        \end{array} \right]
+    \left[ \begin{array}{l} \delta x_\text{i}
+        \\ \delta y_\text{i}
+      \end{array} \right]\end{aligned} 
+      \end{equation}
+
+\noindent
+The new effective base stiffness matrix $K'_\text{i}$,as derived in
+equation~(\ref{eq:Krot}) is defined in equation~(\ref{eq:K'}). This is
+seen as matrix $\bar{K}_\text{b,i}$ in
+\dref{DD_KMats}. $K_\text{bt,i}$ is the shear element in the matrix,
+and $K_\text{bn,i}$ is the normal element in the matrix, calculated as
+in \ddref{DD_Stiff}. The notation is simplified by the introduction of
+the constants $K_\text{bA,i}$ and $K_\text{bB,i}$, defined in
+equations~(\ref{eq:KbA}) and (\ref{eq:KbB}) respectively.
+
+\begin{equation} \label{eq:K'}
+  \begin{aligned} & \bar{ K'_\text{i}}
+     = \left[ \begin{array}{l l}
+          K_\text{bt,i} \cos^2\left(\alpha_\text{i}\right)+
+          K_\text{bn,i} \sin^2\left(\alpha_\text{i}\right)
+          & \left(K_\text{bt,i} - K_\text{bn,i}\right)
+          \sin\left(\alpha_\text{i}\right)
+          \cos\left(\alpha_\text{i}\right)\\
+          \left(K_\text{bt,i} - K_\text{bn,i}\right)
+          \sin\left(\alpha_\text{i}\right)
+          \cos\left(\alpha_\text{i}\right)
+          & K_\text{bt,i} \cos^2\left(\alpha_\text{i}\right)+
+          K_\text{bn,i} \sin^2\left(\alpha_\text{i}\right)
+      \end{array} \right] \\
+    & \bar{ K'_\text{i}} = \left[ \begin{array}{l l}
+        K_\text{bA,i} & K_\text{bB,i} \\
+        K_\text{bB,i} & K_\text{bA,i}
+      \end{array} \right] \end{aligned} \end{equation}
+
+
+\begin{equation} \label{eq:KbA}
+  K_\text{bA,i} = K_\text{bt,i} \cos^2\left(\alpha_\text{i}\right)+
+                 K_\text{bn,i} \sin^2\left(\alpha_\text{i}\right)
+\end{equation}
+
+\begin{equation} \label{eq:KbB}
+  K_\text{bB,i} = \left(K_\text{bt,i} - K_\text{bn,i}\right)
+                 \sin\left(\alpha_\text{i}\right)
+                 \cos\left(\alpha_\text{i}\right)
+\end{equation}
+
+
+\noindent
+A force-displacement relationship for an element $\text{i}$ can be
+written in terms of displacements occurring in the unrotated
+coordinate system $\bar{\delta}_\text{i}$ of \dref{GD_DispVecs} using
+the matrix $K_\text{s,i}$, and $K_\text{b,i}$ as seen in
+\ddref{DD_KMats}.
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Eqm     %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14.25cm} |}
+  
+\hline \rowcolor{AFB} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Eqm}\\
+
+\hline Label& \bf Net Force-Displacement Equilibrium \\
+
+\hline Equation &
+\( - \ell_\text{s,i-1} \cdot \bar{K}_\text{s,i-1} \cdot
+\bar{\delta}_\text{i-1}
++ \left( \ell_\text{s,i-1} \cdot \bar{K}_\text{s,i-1}
++\ell_\text{b,i} \cdot \bar{K}_\text{b,i}
++\ell_\text{s,i} \cdot \bar{K}_\text{s,i} \right)
+\cdot \bar{\delta}_\text{i}
+- \ell_\text{s,i} \cdot \bar{K}_\text{s,i} \cdot
+\bar{\delta}_\text{i+1}
+= \left[ \begin{array}{l} F_\text{x,i} \\ F_\text{y,i} \end{array}
+\right] \) \\
+
+\hline Description & The total force displacement equilibrium
+relationship on a slice, considering the effects of displacements by
+adjacent slices. The net loads acting on a slice ($F_\text{x,i}$ and
+$F_\text{y,i}$) are found from \dref{GD_NetForce}. A net load on a
+slice will cause an opposing reaction force, therefore
+$\bar{\delta}_\text{i}$ is positively related to the net force. The
+reaction of the slice will be dampened by the movement of adjacent
+slices, therefore $\bar{\delta}_\text{i-1}$ and
+$\bar{\delta}_\text{i+1}$ are negatively related. $\bar{K}_\text{s,i}$
+and $\bar{K}_\text{b,i}$ are defined as in \ddref{DD_KMats}. The
+stiffnesses are normalized for the length of the surfaces $\ell$. \\
+
+\hline Sources& \cite{StolleGuo}\\
+
+\hline Ref.\ By & \iref{IM_RFEM}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Eqm         %
+% ------------------------------------------ %
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin DD Soil Stiffness     %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{AFB} Number&
+DD\refstepcounter{datadefnum}\thedatadefnum \label{DD_Stiff}\\
+
+\hline Label& \bf Soil Stiffness \\
+
+\hline Input & $E$ , $\nu$ , $b$ , $c$ , $\sigma$ , $\phi$ , $\kappa$
+$a$ , $A$ , $u$ , $v$\\
+
+\hline
+Output & 
+\( K_{\text{t}} = \frac{E}{2 \left[ 1 + \nu \right]} \frac{0.1}{b} +
+\frac { c - \sigma \cdot \tan\left(\phi\right) }{ \left| \delta u
+  \right| + a }\)
+~\newline~\newline
+ \( K_{\text{n}}= \) 
+\(  \left\{
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{ p{4cm} l} 
+$ \frac { E \left[1-\nu\right] }{ \left[ 1 + \nu \right] \left[ 1 -
+      2\nu + b \right] }$ & for $\text{v} \leq \text{0}$ \\
+\noindent\parbox[c]{\hsize} {$ \frac {0.01 \; E \left[1-\nu\right] }{
+    \left[ 1 + \nu \right] \left[ 1 - 2\nu + b \right] } +
+  \frac{\kappa}{\delta v + A} $} & for $\text{v} \geq \text{0}$
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+\right. \) \\
+
+\hline Description & Calculations are applied to interslice and basal
+interfaces, which will have different material properties and
+displacements. Material constants are constant for a homogeneous
+layer, and a weighting scheme is used to interpolate a new material
+constant for surfaces that cross multiple layers with different
+material constants, noted as an effective material constant. \\
+& $K_{\text{t}}$ is the shear stiffness of a slice.\\
+& $K_{\text{n}}$ is the normal stiffness of a slice.\\
+& $E$ is the effective Young's modulus.\\
+& $c$ is the effective cohesion.\\
+& $v$ is the effective Poisson's ratio. \\
+& $\tan\left(\phi\right)$ is the effective static friction. \\
+& $b$ is the length of the base for base stiffness, and the length
+between adjacent slice midpoints for interslice stiffness.\\
+& $\sigma$ is the normal stress on the surface.\\
+& $\delta u$ is the shear displacement of the surface.  Relative for
+interslice surfaces, and absolute for base surfaces.\\
+& $\delta v$ is the normal displacement of the surface.  Relative for
+interslice surfaces, and absolute for base surfaces\\
+& $\kappa$, $A$, and $a$ are constants.\\
+
+\hline Sources& \cite{StolleGuo}\\
+
+\hline Ref.\ By & \iref{IM_RFEM}, \iref{IM_RFEMFS}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End DD Soil Stiffness         %
+% ------------------------------------------ %
+
+
+\subsubsection{Instance Models} \label{sec_instance}
+
+This section transforms the problem defined in the
+Section~\ref{Sec_pd} into one which is expressed in mathematical
+terms. It uses concrete symbols defined in Section~\ref{sec_datadef}
+to replace the abstract symbols in the models identified in the
+Sections~\ref{sec_theoretical} and ~\ref{sec_gendef}.
+
+~\newline\noindent The Morgenstern Price Method is a vertical slice,
+limit equilibrium slope stability analysis method. Analysis is
+performed by breaking the assumed failure surface into a series of
+vertical slices of mass. Static equilibrium analysis using two force
+equilibrium, and one moment equation as in \tref{TM_Eqm}. The problem
+is statically indeterminate with only these 3 equations and one
+constitutive equation (the Mohr Coulomb shear strength of
+\tref{TM_Fmc}) so the assumption of \dref{GD_X} is used. Solving for
+force equilibrium allows definitions of all forces in terms of the
+physical properties of \ddref{DD_W} to \ddref{DD_EX}, as done in
+\ddref{DD_R}, \ddref{DD_T}.
+
+~\newline\noindent The values of the interslice normal force $E$ the
+interslice normal/shear force magnitude ratio $\lambda$, and the
+Factor of Safety $\text{FS}$, are unknown. Equations for the unknowns
+are written in terms of only the values in \ddref{DD_W} to
+\ddref{DD_EX}, the values of $R_\text{i}$, and $T_\text{i}$ in
+\ddref{DD_R} and \ddref{DD_T}, and each other. The relationships
+between the unknowns are non linear, and therefore explicit equations
+cannot be derived and an iterative solution method is required.
+
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin IM Factor of safety      %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Amethyst} Number&
+IM\refstepcounter{instnum}\theinstnum \label{IM_FS}\\
+
+\hline Label& \bf Factor of Safety \\
+
+\hline Input & ${\Psi_{\text{v}}}$ , ${\Phi_{\text{v}}}$ ,
+${T_{\text{v}}}$ , ${R_{\text{v}}}$ \\
+
+\hline
+Output &
+\( {FS}= \frac{\displaystyle\sum_{v=1}^{n-1} \left[ {R_{v}}
+    \;{\displaystyle\prod_{c=i}^{n-1} \frac{\Psi_{c}}{\Phi_{c}}
+    }\right] + {R_{n}} }{\displaystyle\sum_{v=1}^{n-1} \left[ {T_{v}}
+    \;{\displaystyle\prod_{c=i}^{n-1} \frac{\Psi_{c}}{\Phi_{c}}
+    }\right] + {T_{n}} } \)\\
+
+\hline Description & Equation for the Factor of Safety, the ratio
+between resistive and mobile shear the slip surface. The sum of values
+from each slice is taken to find the total resistive and mobile shear
+for the slip surface. The constants $\Phi$ and $\Psi$ convert the
+resistive and mobile shear without the influence of interslice forces,
+to a calculation considering the interslice forces. \\
+
+\hline Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \iref{IM_Lambda}, \iref{IM_E}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End IM Factor of Safety         %
+% ------------------------------------------ %
+
+\subsubsection*{Factor of Safety Derivation}
+
+\noindent
+Using equation~(\ref{eq:Interslice2}) from
+section~\ref{sec:Ederivation}, rearranging, and applying the boundary
+condition that $E_{\text{0}}$ and $E_{\text{n}}$ are equal to $0$ an
+equation for the factor of safety is found as equation~(\ref{eq:FS}),
+also seen in \iref{IM_FS}.
+
+\begin{equation}\label{eq:FS}
+  \text{FS}= \frac{\displaystyle\sum_{v=1}^{n-1} \left[ {R_{v}}
+      \;{\displaystyle\prod_{c=v}^{n-1} \frac{\Psi_{c}}{\Phi_{c}}
+      }\right] + {R_{n}} }{\displaystyle\sum_{v=1}^{n-1} \left[
+      {T_{v}} \;{\displaystyle\prod_{c=v}^{n-1}
+        \frac{\Psi_{c}}{\Phi_{c}} }\right] + {T_{n}} }
+\end{equation}
+
+\noindent
+The constants $\Psi$ and $\Phi$ described in equations \ref{eq:Psi}
+and \ref{eq:Phi} are functions of the unknowns: the interslice
+normal/shear force ratio $\lambda$ (\iref{IM_Lambda}) and the Factor
+of Safety itself $\text{FS}$ (\iref{IM_FS}).
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin IM Lambda      %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Amethyst} Number&
+IM\refstepcounter{instnum}\theinstnum \label{IM_Lambda}\\
+
+\hline Label& \bf Normal/Shear Force Ratio \\
+
+\hline Input & $b_{\text{v}}$ , $E_{\text{v}}$ , $H_{\text{v}}$ ,
+$\alpha_{\text{v}}$ , $h_{\text{v}}$ , $W_{\text{v}}$ ,
+$U_{\text{t,v}}$ , $\beta_{\text{v}}$ , $f_{\text{v}}$ ,
+${K_{\text{c}}}$ \\
+
+\hline
+Output & 
+\( {C1_{\text{i}}}= \) 
+\(  \left\{
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{ p{6.5cm} r} 
+  $ {{b}_{\text{1}}}\left[{{E}_{\text{1}} + {H}_{\text{1}}}
+    \right]{\tan\left(\alpha_{\text{1}}\right) } $ & for $
+  \text{i}={\text{1}} $ \\
+\noindent\parbox[c]{\hsize} {$ {{b}_{\text{i}}} \left[
+    \left({{E}_{\text{i}} + {E}_{\text{i-1}}}\right) +
+    \left({{H}_{\text{i}} + {H}_{\text{i-1}}}\right)
+    \right]{\tan\left(\alpha_{\text{i}}\right)} \\ +
+  {{h}_{\text{i}}}\left( {K_{\text{c}}}\;{W_{\text{i}}} -
+  {2}\;{U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} -
+  {2}\;{Q_{\text{i}}}\;{\cos\left(\omega_{\text{i}}\right)} \right) $}
+& for $ 2\leq\text{i}\leq{\text{n-1}} $ \\ $
+                {{b}_{\text{n}}}\left[{{E}_{\text{n-1}} +
+                    {H}_{\text{n-1}}}\right]{\tan\left(\alpha_{\text{n-1}}\right)
+                } $ & for $ \text{i}=\text{n} $ \\
+\end{tabular} 
+\renewcommand{\arraystretch}{1}
+\right. \)
+~\newline~\newline
+\( {C2_{\text{i}}}= \)
+\(  \left\{
+\renewcommand{\arraystretch}{2}
+\begin{tabular}{ p{7cm} r} 
+  $ {{b}_{\text{1}}}{{E}_{\text{1}}}{f_{\text{1}}} $ & for $
+  \text{i}=\text{1} $ \\ $ {{b}_{\text{i}}}\;{\left({
+      {f_{\text{i}}}{{E}_{\text{i}}} +
+      {f_{\text{i-1}}}{{E}_{\text{i-1}}} }\right)} $ & for $
+  2\leq\text{i}\leq{\text{n-1}} $ \\ $
+  {{b}_{\text{n}}}{{E}_{\text{n-1}}}{f_{\text{n-1}}} $ & for $
+  \text{v}=\text{n} $ \\
+\end{tabular} 
+\renewcommand{\arraystretch}{1}
+\right. \) 
+~\newline
+\( \lambda= \frac{ \displaystyle\sum_{i=1}^{n} {C1_{\text{i}}}}
+   {\displaystyle\sum_{i=1}^{n} {C2_{\text{i}}}} \) \\
+
+\hline Description & $\lambda$ is the magnitude ratio between shear
+and normal forces at the interslice interfaces as the assumption of
+the Morgenstern Price method in \dref{GD_X}. The inclination function
+$f$ determines the relative magnitude ratio between the different
+interslices, while $\lambda$ determines the magnitude. $\lambda$ uses
+the sum of interslice normal and shear forces taken from each
+interslice. \\
+
+\hline Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \iref{IM_FS}, \iref{IM_E} \\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End IM Lambda         %
+% ------------------------------------------ %
+
+\subsubsection*{Normal/Shear Force Ratio Derivation}
+
+ The last static equation of \tref{TM_Eqm} the moment equilibrium of
+ \dref{GD_M} about the midpoint of the base is taken, with the
+ assumption of \dref{GD_X}. Results in equation~(\ref{eq:Moment}).
+
+\begin{equation}\label{eq:Moment}
+  0 = \begin{array}{l} - {E}_{\text{i}} \left[ {z_{\text{i}}} -
+      \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+      \right] + {E}_{\text{i-1}} \left[ {z_{\text{i-1}}} +
+      \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+      \right] - H_{\text{i}}\left[ z_{\text{w,i}} -
+      \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+      \right] \\[5pt] + H_{\text{i-1}}\left[ z_{\text{w,i-1}} +
+      \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+      \right] -\lambda \frac{b_{\text{i}}}{2} \left( E_{\text{i}}
+    f_{\text{i}} + E_{\text{i-1}} f_{\text{i-1}} \right) +
+    K_{\text{c}} W_{\text{i}} \frac{h_{\text{i}}}{2} - U_{\text{t,i}}
+    \sin\left(\beta_{\text{i}}\right) h_{\text{i}} -
+    Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)}
+    h_{\text{i}} \end{array}
+\end{equation} 
+
+\noindent
+Rearranging the equation in terms of $\lambda$ leads to equation
+~(\ref{eq:lambda1}).
+
+\begin{equation}\label{eq:lambda1}
+  \lambda = \frac { \begin{array}{l} - {E}_{\text{i}} \left[
+        {z_{\text{i}}} - \frac{b_{\text{i}}}{2} {
+          \tan\left(\alpha_{\text{i}}\right)} \right] +
+      {E}_{\text{i-1}} \left[ {z_{\text{i-1}}} +
+        \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+        \right] - H_{\text{i}}\left[ z_{\text{w,i}} -
+        \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+        \right] \\[5pt] + H_{\text{i-1}}\left[ z_{\text{w,i-1}} +
+        \frac{b_{\text{i}}}{2} { \tan\left(\alpha_{\text{i}}\right)}
+        \right] + K_{\text{c}} W_{\text{i}} \frac{h_{\text{i}}}{2} -
+      U_{\text{t,i}} \sin\left(\beta_{\text{i}}\right) h_{\text{i}} -
+      Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)}
+      h_{\text{i}} \end{array} } { \frac{b_{\text{i}}}{2} \left[
+      E_{\text{i}} f_{\text{i}} + E_{\text{i-1}} f_{\text{i-1}}
+      \right] }
+\end{equation}
+
+\noindent
+Taking a summation of each slice, and considering the boundary
+conditions that $E_{\text{0}}$ and $E_{\text{n}}$ are equal to zero, a
+general equation for the constant $\lambda$ is developed in
+equation~(\ref{eq:Lambda}), also found in \iref{IM_Lambda}.
+
+\begin{equation}\label{eq:Lambda}
+\lambda= \frac{ \displaystyle\sum_{i=1}^{n} { {b_{\text{i}}} \left[
+      \left({{E}_{\text{i}} + {E}_{\text{i-1}}}\right) +
+      \left({{H}_{\text{i}} + {H}_{\text{i-1}}}\right)
+      \right]{\tan\left(\alpha_{\text{i}}\right)} \\ +
+    {{h}_{\text{i}}}\;\left[ {K_{\text{c}}}\;{W_{\text{i}}} -
+      {2}\;{U_{\text{t,i}}}\;{\sin\left(\beta_{\text{i}}\right)} - {2}
+      \; Q_{\text{i}}\;{\sin\left(\omega_{\text{i}}\right)} \right] }}
+         {\displaystyle\sum_{i=1}^{n} { {{b}_{\text{i}}}\;{\left[{
+                   {f_{i}}{{E}_{\text{i}}} +
+                   {f_{\text{i-1}}}{{E}_{\text{i-1}}} }\right]} }}
+\end{equation}
+
+\noindent
+Equation~(\ref{eq:Lambda}) for $\lambda$, is a function of the unknown
+interslice normal force $E$ (\iref{IM_E}).
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin IM E    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Amethyst} Number&
+IM\refstepcounter{instnum}\theinstnum \label{IM_E}\\
+
+\hline Label& \bf Interslice Forces \\
+
+\hline Input & $\text{FS}$, $T_\text{i}$, $R_\text{i}$, $\Psi$,
+$\Phi$\\
+
+\hline
+Output &
+
+\( E_{\text{i}}= \) 
+\(  \left\{
+\renewcommand{\arraystretch}{1.75}
+\begin{tabular}{ p{3cm} l} 
+$ \frac{ \left(\text{FS}\right) T_{\text{i}} - R_{\text{i}} }{
+    \Phi_{\text{i}} } $ & for $\text{i=1}$ \\
+\noindent\parbox[c]{\hsize} {$ \frac{ \Psi_{\text{i-1}} \cdot
+    E_{\text{i-1}} + \left(\text{FS}\right) \cdot T_{\text{i}} -
+    R_{\text{i}} }{ \Phi_{\text{i}} } $} & for
+$1\leq\text{i}\leq\text{n-1}$ \\
+\noindent\parbox[c]{\hsize} {$0 $} & for $\text{i=0}$ and $\text{i=n}$
+\end{tabular}
+\renewcommand{\arraystretch}{1}
+\right. \) \\
+
+\hline Description & The value of the interslice normal force
+$E_\text{i}$ at interface $\text{i}$. The net force the weight of the
+slices adjacent to interface $\text{i}$ exert horizontally on each
+other.\\
+
+\hline Sources& \cite{ZhuEtAl2005}\\
+
+\hline Ref.\ By & \iref{IM_FS}, \iref{IM_Lambda}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End IM E         %
+% ------------------------------------------ %
+
+\subsubsection*{Interslice Force Derivation} \label{sec:Ederivation}
+
+Taking the perpendicular force equilibrium of \dref{GD_Fx} with the
+effective stress definition from \tref{TM_EffStress} that
+$N_{\text{i}}=N'_{\text{i}} - U_{\text{b,i}}$, and the assumption of
+\dref{GD_X} the equilibrium equation can be rewritten as
+equation~(\ref{eq:F_perp}).
+
+\begin{equation}\label{eq:F_perp}   N'_{\text{i}}  = \begin{array}{l}    
+    \left[ W_{\text{i}} - \lambda \cdot f_{\text{i-1}} \cdot
+      E_{\text{i-1}} + \lambda \cdot f_{\text{i}} \cdot E_{\text{i}} +
+      U_{\text{t,i}} {\cos\left(\beta_{\text{i}}\right)} +
+      Q_{\text{i}} \cos\left(\omega_{\text{i}}\right)
+      \right]\cos\left(\alpha_{\text{i}}\right) \\ + \left[
+      -K_{\text{c}} W_{\text{i}} - E_{\text{i}} + E_{\text{i-1}} -
+      H_{\text{i}} + H_{\text{i-1}} + U_{\text{t,i}}
+      \sin\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+      \sin\left(\omega_{\text{i}}\right) \right]
+    \sin\left(\alpha_{\text{i}}\right) - U_{\text{b,i}} \end{array}
+\end{equation}
+
+\noindent
+Taking the parallel force equilibrium of \dref{GD_Fy} with the
+definition of mobile shear from \dref{GD_MobShear} and the assumption
+of \dref{GD_X}, the equilibrium equation can be rewritten as
+equation~(\ref{eq:F_par}).
+
+
+\begin{equation}  \label{eq:F_par}
+  \frac{ N_{\text{i}} \tan\left(\varphi'\right) + c'_{\text{i}} \cdot
+    b'_{\text{i}} \cdot \sec\left(\alpha_{\text{i}}\right) }{
+    \text{FS} } = \begin{array}{l} \left[ W_{\text{i}} - \lambda \cdot
+      f_{\text{i-1}} \cdot E_{\text{i-1}} + \lambda \cdot f_{\text{i}}
+      \cdot E_{\text{i}} + U_{\text{t,i}}
+      \cos\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+      \cos\left(\omega_{\text{i}}\right) \right]
+    \sin\left(\alpha_{\text{i}}\right) \\ - \left[ -K_{\text{c}}
+      W_{\text{i}} - E_{\text{i}} + E_{\text{i-1}} - H_{\text{i}} +
+      H_{\text{i-1}} + U_{\text{t,i}} \cdot
+      \sin\left(\beta_{\text{i}}\right) + Q_{\text{i}}
+      \sin\left(\omega_{\text{i}}\right) \right]
+    \cos\left(\alpha_{\text{i}}\right) \end{array}
+\end{equation}
+
+\noindent
+Substituting the equation for $N'_{\text{i}}$ from
+equation~(\ref{eq:F_perp}) into equation~(\ref{eq:F_par}) and
+rearranging results in equation~(\ref{eq:Interslice1})
+
+\begin{equation}\label{eq:Interslice1}
+E_\text{i} \left[ \begin{array}{l} \left[ \lambda \cdot f_\text{i}
+      \cos\left(\alpha_\text{i}\right) -
+      \sin\left(\alpha_\text{i}\right) \right]
+    \tan\left(\varphi'\right) \\ - \left[ \lambda \cdot f_\text{i}
+      \sin\left(\alpha_\text{i}\right) +
+      \cos\left(\alpha_\text{i}\right) \right]
+    \left(\text{FS}\right) \end{array} \right] = E_\text{i-1}
+\left[ \begin{array}{l} \left[ \lambda \cdot f_\text{i-1}
+      \cos\left(\alpha_\text{i}\right) -
+      \sin\left(\alpha_\text{i}\right) \right]
+    \tan\left(\varphi'\right) \\ - \left[ \lambda \cdot f_\text{i-1}
+      \sin\left(\alpha_\text{i}\right) +
+      \cos\left(\alpha_\text{i}\right) \right]
+    \left(\text{FS}\right) \end{array} \right] +
+\left(\text{FS}\right) \cdot T_\text{i} - R_\text{i}
+\end{equation}
+
+\noindent
+Where $R_\text{i}$ and $T_\text{i}$ are the resistive and mobile shear
+of the slice, without the influence of interslice forces $E$ and $X$,
+as defined in \ddref{DD_R} and \ddref{DD_T}.  Making use of the
+constants $\phi$ and $\Psi$ with full equations found below in
+equations~(\ref{eq:Phi}) and~(\ref{eq:Psi}) respectively, then
+equation ~(\ref{eq:Interslice1}) can be simplified to equation
+~(\ref{eq:Interslice2}), also seen in \iref{IM_E}.
+
+\begin{equation}\label{eq:Phi} \begin{aligned}
+\Phi_{\text{i}}={} & \left[ \lambda \cdot f_{\text{i}}
+  \cos\left(\alpha_{\text{i}}\right) -
+  \sin\left(\alpha_{\text{i}}\right) \right]\left[
+  \tan\left({\varphi'_{\text{i}}}\right) \right] - \left[ \lambda
+  \cdot f_{\text{i}} \sin\left(\alpha_{\text{i}}\right) +
+  \cos\left(\alpha_{\text{i}}\right) \right]\left(\text{FS}\right)
+\\[5pt] & \text{Where i is the local slice of mass for }
+1\leq\text{i}\leq\text{n-1}
+\end{aligned}\end{equation}
+
+~\newline 
+\begin{equation}\label{eq:Psi}\begin{aligned}
+\Psi_{\text{i}} ={}& \left[ \lambda \cdot f_{\text{i}}
+  \cos\left(\alpha_{\text{i+1}}\right) -
+  \sin\left(\alpha_{\text{i+1}}\right) \right]\left[
+  \tan\left(\varphi'\right) \right] - \left[ \lambda \cdot
+  f_{\text{i}} \sin\left(\alpha_{\text{i+1}}\right) +
+  \cos\left(\alpha_{\text{i+1}}\right) \right] \left( \text{FS}
+\right) \\[5pt] & \text{Where i is the local slice of mass for }
+1\leq\text{i}\leq\text{n-1}
+ \end{aligned}\end{equation}
+~\newline
+\begin{equation}\label{eq:Interslice2}
+{E}_{\text{i}} = \frac{{\Psi_{\text{i-1}}}\;{{E}_{\text{i-1}}} +
+  \left({{FS}}\right)\;{T_{\text{i}}} -
+       {R_{\text{i}}}}{\Phi_{\text{i}}}
+\end{equation}
+
+\noindent
+The constants $\Psi$ and $\Phi$ in equation~(\ref{eq:Interslice2}) for
+$E_\text{i}$ is a function of the unknown values, the interslice
+normal/shear force ratio $\lambda$ (\iref{IM_Lambda}), and the Factor
+of Safety $\text{FS}$ (\iref{IM_FS}).
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin IM Force Displacement      %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{AFB} Number&
+IM\refstepcounter{instnum}\theinstnum \label{IM_RFEM}\\
+
+\hline Label& \bf Force Displacement Equilibrium \\
+
+\hline Input & $E$ , $\nu$ , $b$ , $c$ , $\sigma$ , $\phi$ , $\kappa$
+$a$ , $A$ , $u$ , $v$\\
+
+\hline
+Output &
+
+\textbf{X Equilibrium} ~\newline
+ \( \begin{array}{l} -\Delta H_\text{i} -K_{\text{c}} \cdot W_\text{i} -
+U_{\text{b,i}} \sin\left(\alpha_\text{i}\right) \\ + U_{\text{t,i}}
+\sin\left(\beta_\text{i}\right) + Q_\text{i}
+\sin\left(\omega_\text{i}\right) \end{array} =  \begin{array}{l}  
+\left[ \delta x_{\text{i-1}} \right] \left( - \ell_{\text{s,i-1}}
+K_{\text{sn,i-1}} \right) \\ + \left[ \delta x_{\text{i}} \right]
+\left( - \ell_{\text{s,i-1}} K_{\text{sn,i-1}} + \ell_{\text{s,i}}
+K_{\text{sn,i}} + \ell_{\text{b,i}} K_{\text{bA,i}} \right) \\ +
+\left[ \delta x_{\text{i+1}} \right] \left( - \ell_{\text{s,i}}
+K_{\text{sn,i}} \right) + \left[ \delta y_{\text{i}} \right] \left( -
+\ell_{\text{b,i}} K_{\text{bB,i}} \right)
+\end{array} \) ~\newline ~\newline
+\textbf{Y Equilibrium} ~\newline
+\( \begin{array}{l} -W_\text{i} + U_{\text{b,i}}
+\cos\left(\alpha_\text{i}\right)\\ - U_{\text{t,i}}
+\cos\left(\beta_\text{i}\right) - Q_{\text{i}}
+\cos\left(\omega_\text{i}\right)\end{array} = \begin{array}{l}  
+\left[ \delta y_{\text{i-1}} \right] \left( - \ell_{\text{s,i-1}}
+K_{\text{st,i-1}} \right) \\ + \left[ \delta y_{\text{i}} \right]
+\left( - \ell_{\text{s,i-1}} K_{\text{st,i-1}} + \ell_{\text{s,i}}
+K_{\text{st,i}} + \ell_{\text{b,i}} K_{\text{bA,i}} \right) \\ +
+\left[ \delta y_{\text{i+1}} \right] \left( - \ell_{\text{s,i}}
+K_{\text{st,i}} \right) + \left[ \delta x_{\text{i}} \right] \left( -
+\ell_{\text{b,i}} K_{\text{bB,i}} \right) \end{array}\) \\
+
+\hline Description & One set of force displacement equilibrium
+equations in the x and y directions. There is of equations for each
+element. System of equations solved for displacements ($\delta x$, and
+$\delta y$) \\
+& $\Delta H_{\text{i}} = H_{\text{i}}-H_{\text{i-1}}$ is the net
+hydrostatic force across a slice.\\
+& $K_{\text{c}}$ is the earthquake load factor.\\
+& $W_{\text{i}}$ is the weight of the slice.\\
+& $U_{\text{b,i}}$ is the pore water pressure acting on the slice
+base.\\
+& $U_{\text{t,i}}$ is the pore water pressure acting on the slice
+surface. \\
+& $\alpha_{\text{i}}$ is the angle of the base with the horizontal. \\
+& $\beta_{\text{i}}$ is the angle of the surface with the horizontal\\
+& $\delta x_{\text{i}}$ is the x displacement of slice $\text{i}$\\
+& $\delta y_{\text{i}}$ is the y displacement of slice $\text{i}$\\
+& $ \ell_{\text{s,i}}$ is the length of the interslice surface
+$\text{i}$\\
+& $ \ell_{\text{s,i}}$ is the length of the base surface $\text{i}$\\
+& $ K_{\text{st,i}}$ is the interslice shear stiffness at surface
+$\text{i}$.\\
+& $ K_{\text{st,i-1}}$ is the interslice normal stiffness at surface
+$\text{i}$.\\
+& $ K_{\text{bA,i}}$, and $ K_{\text{bB,i}}$ are the base stiffness
+values for slice $\text{i}$.\\
+
+\hline Sources& \cite{StolleGuo}\\
+
+\hline Ref.\ By & \iref{IM_RFEMFS} \\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End IM Force Displacement         %
+% ------------------------------------------ %
+
+\subsubsection*{Rigid Finite Element
+  Displacement Derivation}
+
+Using the net force-displacement equilibrium equation of a slice from
+\ddref{DD_Eqm}, with the definitions of the stiffness matrices from
+\ddref{DD_KMats}, and the force definitions from \dref{GD_NetForce}, a
+broken down force-displacement equilibrium equation can be
+derived. Equation~(\ref{eq:NetFx}) gives the broken down equation in
+the $x$ direction, and equation~(\ref{eq:NetFy}) gives the broken down
+equation in the $y$ direction.
+
+\begin{equation}\label{eq:NetFx}
+-\Delta H_\text{i} -K_{\text{c}} \cdot W_\text{i} - U_{\text{b,i}}
+\sin\left(\alpha_\text{i}\right) + U_{\text{t,i}}
+\sin\left(\beta_\text{i}\right) + Q_\text{i}
+\sin\left(\omega_\text{i}\right) = \begin{array}{l} \left[ \delta
+    x_{\text{i-1}} \right] \left( - \ell_{\text{s,i-1}}
+  K_{\text{sn,i-1}} \right) \\ + \left[ \delta x_{\text{i}} \right]
+  \left( - \ell_{\text{s,i-1}} K_{\text{sn,i-1}} + \ell_{\text{s,i}}
+  K_{\text{sn,i}} + \ell_{\text{b,i}} K_{\text{bA,i}} \right) \\ +
+  \left[ \delta x_{\text{i+1}} \right] \left( - \ell_{\text{s,i}}
+  K_{\text{sn,i}} \right) + \left[ \delta y_{\text{i}} \right] \left(
+  - \ell_{\text{b,i}} K_{\text{bB,i}} \right)
+  \end{array}
+\end{equation}
+
+
+\begin{equation}\label{eq:NetFy}
+-W_\text{i} + U_{\text{b,i}} \cos\left(\alpha_\text{i}\right) -
+U_{\text{t,i}} \cos\left(\beta_\text{i}\right) - Q_{\text{i}}
+\cos\left(\omega_\text{i}\right) = \begin{array}{l} \left[ \delta
+    y_{\text{i-1}} \right] \left( - \ell_{\text{s,i-1}}
+  K_{\text{st,i-1}} \right) \\ + \left[ \delta y_{\text{i}} \right]
+  \left( - \ell_{\text{s,i-1}} K_{\text{st,i-1}} + \ell_{\text{s,i}}
+  K_{\text{st,i}} + \ell_{\text{b,i}} K_{\text{bA,i}} \right) \\ +
+  \left[ \delta y_{\text{i+1}} \right] \left( - \ell_{\text{s,i}}
+  K_{\text{st,i}} \right) + \left[ \delta x_{\text{i}} \right] \left(
+  - \ell_{\text{b,i}} K_{\text{bB,i}} \right)
+ \end{array}
+\end{equation}
+
+\noindent
+Using the known input assumption of \aref{A_Input}, the force variable
+definitions of \ddref{DD_W} to \ddref{DD_Q} on the left side of the
+equations can be solved for. The only unknown in the variables to
+solve for the stiffness values from \ddref{DD_Stiff} is the
+displacements. Therefore taking the equation from each slice a set of
+$2 \cdot n$ equations, with $2 \cdot n$ unknown displacements in the
+$x$ and $y$ directions of each slice can be derived. Solutions for
+the displacements of each slice can then be found. The use of
+displacement in the definition of the stiffness values makes the
+equation implicit, which means an iterative solution method, with an
+initial guess for the displacements in the stiffness values is
+required.
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin IM RFEM FS     %
+% ------------------------------------------ %
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{AFB} Number&
+IM\refstepcounter{instnum}\theinstnum \label{IM_RFEMFS}\\
+
+\hline Label& \bf RFEM Factor of Safety \\
+
+\hline Input & $c$, $\ell_{\text{b}}$, $\delta u$ , $\delta v$,
+$\varphi'$, $K_{\text{bt,i}}$, $K_{\text{bn,i}}$ \\
+
+\hline Output & \( \begin{aligned} & FS_{\text{Loc,i}} = \frac{c -
+    K_{\text{bn,i}} \cdot \delta v_{\text{i}} \cdot
+    \tan\left(\varphi'_{\text{i}}\right)}{K_{\text{bt,i}} \cdot \delta
+    u_{\text{i}}} \\[7.5pt] & FS = \frac{\displaystyle\sum_{i=1}^{n}
+    \ell_{\text{b,i}} \left[ c - K_{\text{bn,i}} \cdot \delta
+      v_{\text{i}} \cdot \tan\left(\varphi'_{\text{i}}\right) \right]}
+  {\displaystyle\sum_{i=1}^{n} \ell_{\text{b,i}} \left[
+      K_{\text{bt,i}} \cdot \delta u_{\text{i}} \right]
+} \end{aligned} \) \\
+
+\hline
+Description 
+& $FS_{\text{Loc,i}}$ Factor of Safety for slice $\text{i}$.\\
+& $FS$ Factor of Safety for the entire slip surface.\\
+& $c$ is the cohesion of slice ${\text{i}}$'s base.\\
+& $\varphi'_{\text{i}}$ is the effective angle of friction of slice
+${\text{i}}$'s base.\\
+& $\delta v_{\text{i}}$ is the normal displacement of slice
+$\text{i}$\\
+& $\delta u_{\text{i}}$ is the shear displacement of slice
+$\text{i}$\\
+& $ \ell_{\text{b,i}}$ is the length of the base of slice $\text{i}$\\
+& $ K_{\text{bt,i}}$ is the base shear stiffness at surface
+$\text{i}$.\\
+& $ K_{\text{bn,i}}$ is the base normal stiffness at surface
+$\text{i}$.\\
+& $ \text{n} $ is the number of slices in the slip surface.\\
+
+\hline Sources& \cite{StolleGuo} \\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End IM RFEM FS         %
+% ------------------------------------------ %
+
+\subsubsection*{Rigid Finite Element
+  Factor of Safety Derivation}
+
+\noindent
+RFEM analysis can also be used to calculate the Factor of safety for
+the slope.  For a slice element $\text{i}$ the displacements $\delta
+x_{\text{i}}$ and $\delta y_{\text{i}}$, are solved from the system of
+equations in \iref{IM_RFEM}. The definition of
+$\bar{\epsilon}_\text{i}$ as the rotation of the displacement vector
+$\bar{\delta}_\text{i}$ is seen in\dref{GD_DispVecs} .
+
+This is used to find the displacements of the slice parallel to the
+base of the slice $\delta u$ in equation~(\ref{eq:DispPar}) and normal
+to the base of the slice $\delta v$ in equation~(\ref{eq:DispPerp}).
+
+\begin{equation}\label{eq:DispPar}
+\delta u_{\text{i}} = \cos\left(\alpha_{\text{i}}\right) \delta
+x_{\text{i}} + \sin\left(\alpha_{\text{i}}\right) \delta y_{\text{i}}
+\end{equation}
+
+\begin{equation}\label{eq:DispPerp}
+\delta v_{\text{i}} = -\sin\left(\alpha_{\text{i}}\right) \delta
+x_{\text{i}} + \cos\left(\alpha_{\text{i}}\right) \delta y_{\text{i}}
+\end{equation}
+
+\noindent
+With the definition of normal stiffness from \ddref{DD_Stiff} to find
+the normal stiffness of the base $K_\text{bn,i}$, and the now known
+base displacement perpendicular to the surface $\delta v_{\text{i}}$
+from equation~(\ref{eq:DispPerp}), the normal base stress can be
+calculated from the force-displacement relationship of
+\tref{TM_Hooke}. Stress $\sigma$ is used in place of force $F$ as the
+stiffness hasn't been normalized for the length of the base. Results in
+equation~(\ref{eq:Sigma}).
+
+\begin{equation}\label{eq:Sigma}
+\sigma_{\text{i}} = K_{\text{bn,i}} \cdot \delta v_{\text{i}}
+\end{equation}
+
+\noindent
+The resistive shear to calculate the factor of safety $FS$ in is found
+from the Mohr Coulomb resistive strength of soil in
+\tref{TM_Fmc}. Using the normal stress $\sigma$ from
+equation~(\ref{eq:Sigma}) as the stress the resistive shear of the
+slice can be calculated from calculated in equation~(\ref{eq:S}).
+
+\begin{equation}\label{eq:S}
+S_{\text{i}} = c - \sigma_{\text{i}} \cdot \tan\left(\varphi'\right)
+\end{equation}
+
+\noindent
+previously the value of the base shear stiffness $K_\text{bt,i}$ as
+seen in equation~(\ref{eq:ShearStiff}) was unsolvable because the
+normal stress $\sigma_\text{i}$ was unknown. With the definition of
+$\sigma_\text{i}$ from equation~(\ref{eq:Sigma}) and the definition of
+displacement shear to the base $\delta u_\text{i}$ from
+equation~(\ref{eq:DispPerp}), the value of $K_\text{bt,i}$ becomes
+solvable.
+
+\begin{equation}\label{eq:ShearStiff}
+K_{\text{bt,i}} = \frac{E_\text{i}}{2 \left[ 1 + \nu_\text{i} \right]}
+\frac{0.1}{b_\text{i}} + \frac { c_\text{i} - \sigma_\text{i} \cdot
+  \tan\left(\phi_\text{i}\right) }{ \left| \delta u_\text{i} \right| +
+  a }
+\end{equation}
+
+\noindent
+With shear stiffness $K_{\text{bt,i}}$ calculated in
+equation~(\ref{eq:ShearStiff}) and shear displacement $\delta
+u_{\text{i}}$ calculated in equation~(\ref{eq:DispPar}) values now
+known the shear stress acting on the base of a slice $\tau$ can be
+calculated using \tref{TM_Hooke}, as done in equation~(\ref{eq:Tau}).
+Again stress $\tau$ is used in place of force $F$ as the stiffness
+hasn't been normalized for the length of the base.
+
+\begin{equation}\label{eq:Tau}
+\tau_{\text{i}} = K_{\text{bt,i}} \cdot \delta u_{\text{i}}
+\end{equation}
+
+\noindent
+The shear stress on the base $\tau$ acts as the mobile shear acting on
+the base. Using the definition Factor of Safety equation from
+\tref{TM_FS}, with the definitions of resistive shear strength of a
+slice $S_\text{i}$ from equation~(\ref{eq:S}) and mobile shear on a
+slice $\tau$ from equation~(\ref{eq:Tau}) the factor of safety for a
+slice $FS_{\text{Loc,i}}$ can be found from as seen in
+equation~(\ref{eq:FSLoc}), and \iref{IM_RFEMFS}.
+
+\begin{equation}\label{eq:FSLoc}
+FS_{\text{Loc,i}} = \frac{S_{\text{i}}}{\tau_{\text{i}}} = \frac{c -
+  K_{\text{bn,i}} \cdot \delta v_{\text{i}} \cdot
+  \tan\left(\varphi'_{\text{i}}\right)}{K_{\text{bt,i}} \cdot \delta
+  u_{\text{i}}}
+\end{equation}
+
+\noindent The global Factor of Safety is then the ratio of the
+summation of the resistive and mobile shears for each slice, with a
+weighting for the length of the slices base. Shown in
+equation~(\ref{eq:FSGlob}), and \iref{IM_RFEMFS}.
+
+\begin{equation}\label{eq:FSGlob}
+FS = \frac{\displaystyle\sum_{i=1}^{n} \ell_{\text{i}} \cdot
+  S_{\text{i}}}{\displaystyle\sum_{i=1}^{n} \ell_{\text{i}} \cdot
+  \tau_{\text{i}}} = \frac{\displaystyle\sum_{i=1}^{n}
+  \ell_{\text{b,i}} \left[ c - K_{\text{bn,i}} \cdot \delta
+    v_{\text{i}} \cdot \tan\left(\varphi'_{\text{i}}\right) \right]}
+{\displaystyle\sum_{i=1}^{n} \ell_{\text{b,i}} \left[ K_{\text{bt,i}}
+    \cdot \delta u_{\text{i}} \right]}
+\end{equation}
+
+~\newline
+
+% ------------------------------------------ %
+%               Begin IM Minimization    %
+% ------------------------------------------ %
+
+\noindent
+\begin{minipage}{\textwidth}
+\renewcommand*{\arraystretch}{1.6}
+\begin{tabular}{| p{1.5cm} | p{14cm} |}
+  
+\hline \rowcolor{Brass} Number&
+IM\refstepcounter{instnum}\theinstnum \label{IM_Min}\\
+
+\hline Label& \bf Critical Slip Identification \\
+
+\hline Input & The geometry of the water table, the geometry of the
+layers composing the plane of a slope, and the material properties of
+the layers. \\
+
+\hline Output & \(  \text{FS}_\text{Min}
+ = \Upsilon\left( \left\{x_\text{cs},y_\text{cs}\right\},\text{Input}
+ \right) \)
+ \\
+
+\hline Description & Given the necessary slope inputs, a minimization
+algorithm or function $\Upsilon$, will identify the critical slip
+surface of the slope, with the critical slip coordinates
+$\left\{x_\text{cs},y_\text{cs}\right\}$ and the minimum factor of
+safety $\text{FS}_\text{Min}$ that results.\\
+
+\hline Sources& \cite{LiEtAl}\\
+
+\hline
+\end{tabular}
+\end{minipage}\\
+
+% ------------------------------------------ %
+%               End IM Minimization         %
+% ------------------------------------------ %
+
+\subsubsection{Data Constraints} \label{sec_DataConstraints}    
+
+Table~\ref{TblInputVar} and \ref{TblOutputVar} show the data
+constraints on the input and output variables, respectively.  The
+column physical constraints gives the physical limitations on the
+range of values that can be taken by the variable.  The constraints
+are conservative, to give the user of the model the flexibility to
+experiment with unusual situations.  The column of typical values is
+intended to provide a feel for a common scenario.  The uncertainty
+column provides an estimate of the confidence with which the physical
+quantities can be measured.  This information would be part of the
+input if one were performing an uncertainty quantification exercise.
+
+\newpage
+
+%\begin{table}[!h]
+%\caption{Input Variables} 
+\renewcommand{\arraystretch}{1.5}
+\noindent \begin{longtable}{p{2.4cm} p{5.8cm} p{1.2cm} c}
+  \toprule  \label{TblInputVar}
+  \textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical
+    Value} & \textbf{Uncertainty}\\ \midrule
+  $(x,y)$ of water table vertices's & Consecutive vertexes have
+  increasing x values. All layers start and end vertices's go to the
+  same x values. & N/A & / \\
+  $(x,y)$ of slip vertices's & Consecutive vertexes have increasing x
+  values. All layers start and end vertices's go to the same x
+  values. & N/A & / \\
+  $(x,y)$ of slope vertices's (*) & Consecutive vertexes have
+  increasing x values. All layers start and end vertices's go to the
+  same x values. & N/A & / \\
+  $E$ (*) & $E > 0$ & 15000 & /\\
+  $c$ (*) & $c >0$ & 10 & /\\
+  $v$ (*) & $ 0 < v < 1 $ & 0.4 & \\
+  $\varphi'$ (*) & $ 0 < \varphi < 90 $ & 25 & / \\
+  $\gamma$ (*) & $\gamma > 0$ & 20 & / \\
+  $\gamma_{\text{Sat}}$ (*) & $\gamma_{\text{Sat}} > 0 $ & 20 & /
+  \\
+  $\gamma_{\text{Wat}}$ & $\gamma_{\text{Wat}} > 0 $ & 9.8 & / \\
+  \bottomrule
+\end{longtable}
+%\end{table}
+
+\noindent \begin{description}
+\item[(*)] Input coordinates needed for each layer.
+\end{description}
+
+%\begin{table}[!h]
+%\caption{Output Variables} 
+\renewcommand{\arraystretch}{1.2} 
+\noindent \begin{longtable}{l l} 
+  \toprule \label{TblOutputVar}
+  \textbf{Var} & \textbf{Physical Constraints} \\
+  \midrule 
+  $FS$ & $FS>0$ \\
+  $(x,y)$ Slip vertices's &  Vertices's monotonic \\
+  $\delta x$ &  \\
+  $\delta y$ &  \\
+  \bottomrule
+\end{longtable}
+%\end{table}
+
+\section{Requirements}
+
+This section provides the functional requirements, the business tasks
+that the software is expected to complete, and the nonfunctional
+requirements, the qualities that the software is expected to exhibit.
+
+\subsection{Functional Requirements}
+
+\noindent \begin{itemize}
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Inputs}:] Read the
+  input file, and store the data. Necessary input data summarized in
+  \tableref{Table:Inputs}. [\aref{A_Input}, \aref{A_Homo}]
+  
+  \renewcommand{\arraystretch}{1.5}
+  %\noindent \begin{tabularx}{1.0\textwidth}{l l X}
+  \noindent \begin{longtable}{l l p{12cm}} \toprule \textbf{symbol} &
+    \refstepcounter{tablenum}  \label{Table:Inputs}
+    \textbf{unit} & \textbf{description}\\ \midrule
+    $\left(x,y\right)$ & $\text{m}$ & x and y coordinates for vertices
+    of the slope layers, and for the water table if one exists.
+    Assumed straight line fits between vertexes.\\
+    $E$ & $\text{kPa}$ & Young's modulus for each layer of the
+    slope.\\
+    $c$ & $\text{kPa}$ & Cohesion for each slope layer. \\
+    $v$ & $ / $ & Poisson's ratio for each soil layer. \\
+    $\varphi$ & $\text{deg}$ & Effective angle of friction for each
+    slope layer. \\
+    $\gamma$ & $\frac{\text{kN}}{\text{m}^3}$ & Unit weight of dry
+    soil / ground layer for each slope layer. \\
+    $\gamma_{\text{Sat}}$ & $\frac{\text{kN}}{\text{m}^3}$ & Unit
+    weight of saturated soil / ground layer for each slope
+    layer. \\
+    $\gamma_{\text{Wat}}$ & $\frac{\text{kN}}{\text{m}^3}$ & Unit
+    weight of water. \\ \bottomrule
+\end{longtable}
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_InitGen}:] Generate
+  potential critical slip surface's for the input slope. 
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_KinAdm}:] Test the
+  slip surfaces to determine if they are physically realizable based
+  on a set of pass or fail criteria. [\aref{A_Concave}]
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Slice}:] Prepare the
+  slip surfaces for a method of slices or limit equilibrium analysis.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_FS}:] Calculate the
+  factors of safety of the slip surfaces.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Weight}:] Rank and
+  weight the slopes based on their factor of safety, such that a slip
+  surface with a smaller factor of safety has a larger weighting.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_NewGen}:] Generate
+  new potential critical slip surfaces based on previously analysed
+  slip surfaces with low factors of safety.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Minimize}:] Repeat
+  requirements \rref{R_KinAdm} to \rref{R_NewGen} until the
+  minimum factor of safety remains approximately the same over a
+  predetermined number of repetitions. Identify the slip surface that
+  generates the minimum factor of safety as the critical slip surface.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_PrepOutput}:]
+  Prepare the critical slip surface for method of slices or limit
+  equilibrium analysis.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Analyze}:] Calculate
+  the factor of safety of the critical slip surface using the
+  Morgenstern price method. Also calculate the local and global
+  factors of safety for the critical slip using the RFEM method, and
+  the displacement of the slice elements using the RFEM method.
+
+\item[R\refstepcounter{reqnum}\thereqnum \label{R_Output}:] Display
+  the critical slip surface and the slice element displacements
+  graphically. Give the values of the factors of safety calculated by
+  both methods, and the local factors of safety calculated by the RFEM
+  method of analysis.
+  
+\end{itemize}
+
+
+\subsection{Nonfunctional Requirements}
+
+SSA is intended to be an educational tool, therefore accuracy and
+performance speed are secondary program priorities to correctness,
+understandability, reusability, and maintainability.
+
+\section{Likely Changes}    
+
+%\noindent \begin{itemize}
+%\end{itemize}
+
+\bibliographystyle {plain}
+\bibliography {Bib_SSP}
+
+\end{document}

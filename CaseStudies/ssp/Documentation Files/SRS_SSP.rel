@@ -1,0 +1,266 @@
+;; RefTeX parse info file
+;; File: /Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex
+;; User: smiths (Spencer Smith)
+
+(set reftex-docstruct-symbol '(
+
+
+(xr nil "\\\\\\\\\\\\")
+
+(index-tags)
+
+(is-multi nil)
+
+(bibview-cache)
+
+(master-dir . "/Users/smiths/Repos/ssp/Documentation Files/")
+
+(label-numbers)
+
+(bof "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex")
+
+(toc "toc" "    1 Reference Material" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 2 "1" "\\section{Reference Material}" 2566)
+
+(toc "toc" "      1.1 Table of Units" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "1.1" "\\subsection{Table of Units}" 2596)
+
+(toc "toc" "      1.2 Table of Symbols" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "1.2" "\\subsection{Table of Symbols}" 3135)
+
+(toc "toc" "      1.3 Abbreviations and Acronyms" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "1.3" "\\subsection{Abbreviations and Acronyms}" 11057)
+
+(toc "toc" "    2 Introduction" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 2 "2" "\\section{Introduction}" 11560)
+
+(toc "toc" "      2.1 Purpose" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "2.1" "\\subsection{Purpose}" 13111)
+
+(toc "toc" "      2.2 Scope of Requirements" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "2.2" "\\subsection{Scope of Requirements}" 14312)
+
+(toc "toc" "      2.3 Organization of Document" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "2.3" "\\subsection{Organization of Document}" 14696)
+
+(toc "toc" "    3 General System Description" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 2 "3" "\\section{General System Description}" 15613)
+
+(toc "toc" "      3.1 User Characteristics" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "3.1" "\\subsection{User Characteristics}" 15875)
+
+(toc "toc" "      3.2 System Constraints" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "3.2" "\\subsection{System Constraints}" 16058)
+
+(toc "toc" "    4 Specific System Description" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 2 "4" "\\section{Specific System Description}" 16125)
+
+(toc "toc" "      4.1 Problem Description" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.1" "\\subsection{Problem Description}" 16450)
+
+("Sec_pd" "s" "SSA is a computer program developed to evaluate the factor of safety of a slopes slip surface and, c" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "        4.1.1 Terminology" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "4.1.1" "\\subsubsection{Terminology}" 16653)
+
+(toc "toc" "        4.1.2 Physical System Description" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "4.1.2" "\\subsubsection{Physical System Description}" 18351)
+
+("sec_system" "s" "Analysis of the slope is performed by looking at properties of the slope as a series of slice elemen" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("Fig_Index" "s" "~\\newline \\indent \\setlength{\\unitlength}{8cm} \\begin{picture}(2,1) % BORDER % \\thinlines \\put(0,0){" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "        4.1.3 Goal statements" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "4.1.3" "\\subsubsection{Goal statements}" 20144)
+
+("G_FS" "s" "] {Evaluate local and global factors of safety along a given slip surface} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("G_Critical" "s" "] {Identify the critical slip surface for the slope, with the lowest Factor of Safety. } " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("G_Displacement" "s" "] {Evaluate the displacement of the slope} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "      4.2 Solution Characteristics Specification" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.2" "\\subsection{Solution Characteristics Specification}" 20772)
+
+(toc "toc" "      4.3 Assumptions" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.3" "\\subsection{Assumptions}" 21061)
+
+("\\textit{A\\arabic*:" "i" "NO MATCH FOR CONTEXT REGEXP" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_Concave" "i" "The slip surface is concave with respect to the slope surface. The (x,y) coordinates of the failure " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_SurfLoad" "i" "No surface loads applying downward force on the slope, with the exception of those created by hydros" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_Homo" "i" "The different layers of the soil are homogeneous, with consistent soil properties throughout, and in" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_Isotropic" "i" "Soil layers are treated as if they have isotropic properties. " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_Base" "i" "Interslice normal and shear forces have a linear relationship, proportional to a constant $\\left({\\l" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_Interslice" "i" "Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_StressStrain" "i" "The stress-strain curve for interslice relationships is linear with a constant slope. " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("A_2D" "i" "The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies p" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "      4.4 Theoretical Models" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.4" "\\subsection{Theoretical Models}" 22725)
+
+("sec_theoretical" "s" "This section focuses on the general equations and laws that SSA is based on. ~\\newline % -----------" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("TM_FS" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("TM_Eqm" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("TM_Fmc" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("TM_EffStress" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("TM_Stiff" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "      4.5 General Definitions" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.5" "\\subsection{General Definitions}" 28368)
+
+("sec_gendef" "s" "This section collects the laws and equations that will be used in deriving the data definitions, whi" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_Fx" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_Fy" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_P" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_MobShear" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_X" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_M" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("GD_SoilStiff" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "      4.6 Data Definition" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.6" "\\subsection{Data Definition}" 39892)
+
+("sec_datadef" "s" "This section collects and defines all the data needed to build the instance models. The dimension of" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("DD_defns" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("DD_R" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "          * Resistive Shear Force, Without the Influence of Interslice Forces Derivation" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "  *" "\\subsubsection*{Resistive Shear Force, Without the Influence of Interslice Forces Derivation}" 45037)
+
+("eq:N'" "e" "N'_{\\text{i}} \\; = \\begin{array}{l} \\left[ W_{\\text{i}} - X_{\\text{i-1}} + X_{\\text{i}} + {U_{\\text{" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:N*" "e" "N^*_{\\text{i}} \\; = \\begin{array}{l} \\left[ W_{\\text{i}} + {U_{\\text{t,i}}}\\;{\\cos\\left(\\beta_{\\text" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:R" "e" "R_{\\text{i}} \\; = \\left( \\begin{array}{l} \\left[ W_{\\text{i}} + U_{\\text{t,i}} \\cos\\left(\\beta_{\\tex" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("DD_T" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "          * Mobile Shear Force, Without the Influence of Interslice Forces Derivation" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "  *" "\\subsubsection*{Mobile Shear Force, Without the Influence of Interslice Forces Derivation}" 49120)
+
+("eq:Si" "e" "S_{\\text{i}} = \\begin{array}{l} \\left[ W_{\\text{i}} -X_{\\text{i-1}} + X_{\\text{i}} + {U_{\\text{t,i}}" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:T" "e" "T_{\\text{i}} = \\begin{array}{l} \\left[ W_{\\text{i}} + U_{\\text{t,i}} \\cos\\left(\\beta_{\\text{i}}\\righ" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("DD_Stiff" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "      4.7 Instance Models" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "4.7" "\\subsection{Instance Models}" 53308)
+
+("sec_instance" "s" "This section transforms the problem defined in the Section~\\ref{Sec_pd} into one which is expressed " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("IM_FS" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "          * Factor of Safety Derivation" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "  *" "\\subsubsection*{Factor of Safety Derivation}" 56296)
+
+("eq:FS" "e" "\\text{FS}= \\frac{\\displaystyle\\sum_{v=1}^{n-1} \\left[ {R_{v}} \\;{\\displaystyle\\prod_{c=v}^{n-1} \\fra" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("IM_Lambda" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "          * Normal/Shear Force Ratio Derivation" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "  *" "\\subsubsection*{Normal/Shear Force Ratio Derivation}" 59953)
+
+("eq:Moment" "e" "0 = \\begin{array}{l} - {E}_{\\text{i}} \\left[ {z_{\\text{i}}} - \\frac{b_{\\text{i}}}{2} { \\tan\\left(\\al" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:lambda1" "e" "\\lambda = \\frac { \\begin{array}{l} - {E}_{\\text{i}} \\left[ {z_{\\text{i}}} - \\frac{b_{\\text{i}}}{2} {" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Lambda" "e" "\\lambda= \\frac{ \\displaystyle\\sum_{i=1}^{n} { {b_{\\text{i}}} \\left[ \\left({{E}_{\\text{i}} + {E}_{\\te" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("IM_E" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "          * Interslice Force Derivation" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "  *" "\\subsubsection*{Interslice Force Derivation}" 64411)
+
+("sec:Ederivation" "s" "Taking the perpendicular force equilibrium of \\dref{GD_Fx} with the effective stress definition from" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:F_perp" "e" "N'_{\\text{i}} = \\begin{array}{l} \\left[ W_{\\text{i}} - \\lambda \\cdot f_{\\text{i-1}} \\cdot E_{\\text{i" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:F_par" "e" "\\frac{ N_{\\text{i}} \\tan\\left(\\varphi'\\right) + c'_{\\text{i}} \\cdot b'_{\\text{i}} \\cdot \\sec\\left(\\a" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Interslice1" "e" "E_\\text{i} \\left[ \\begin{array}{l} \\left[ \\lambda \\cdot f_\\text{i} \\cos\\left(\\alpha_\\text{i}\\right) " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Phi" "e" "\\begin{aligned} \\Phi_{\\text{i}}={} & \\left[ \\lambda \\cdot f_{\\text{i}} \\cos\\left(\\alpha_{\\text{i}}\\r" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Psi" "e" "\\begin{aligned} \\Psi_{\\text{i}} ={}& \\left[ \\lambda \\cdot f_{\\text{i}} \\cos\\left(\\alpha_{\\text{i+1}}" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Interslice2" "e" "{E}_{\\text{i}} = \\frac{{\\Psi_{\\text{i-1}}}\\;{{E}_{\\text{i-1}}} + \\left({{FS}}\\right)\\;{T_{\\text{i}}}" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("IM_E" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "          * Rigid Finite Element" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "  *" "\\subsubsection*{Rigid Finite Element}" 70525)
+
+("eq:ForceStiff" "e" "F = K \\cdot \\delta " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:ForceWord" "e" "F_{\\text{NET}} = \\begin{bmatrix} \\text{Left} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:BaseForceT1" "e" "\\tau_{\\text{b}} = K_{\\text{bt}} \\cos\\left(\\alpha\\right) \\delta x + K_{\\text{bt}} \\sin\\left(\\alpha\\ri" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:BaseForceN1" "e" "\\sigma_{\\text{b}} =- K_{\\text{bn}} \\sin\\left(\\alpha\\right) \\delta x + K_{\\text{bn}} \\cos\\left(\\alpha" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:BaseForceX" "e" "F_{\\text{x}} = \\left[ \\cos^2\\left(\\alpha\\right) K_{\\text{bt}} + \\sin^2\\left(\\alpha\\right) K_{\\text{b" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:BaseForceY" "e" "F_{\\text{y}} = \\left[ \\cos\\left(\\alpha\\right)\\sin\\left(\\alpha\\right)\\left( K_{\\text{bt}} - K_{\\text{" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:KA" "e" "K_{\\text{bA}} = \\cos^2\\left(\\alpha\\right) K_{\\text{bt}} + \\sin^2\\left(\\alpha\\right) K_{\\text{bn}} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:KB" "e" "K_{\\text{bB}} = \\cos\\left(\\alpha\\right)\\sin\\left(\\alpha\\right)\\left( K_{\\text{bt}} - K_{\\text{bn}} \\" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:EQx" "e" "F_{\\text{x,i}} = \\begin{aligned} & \\left[ \\delta x_{\\text{i-1}} \\right] \\left( - \\ell_{\\text{s,i-1}}" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:EQy" "e" "F_{\\text{y,i}} = \\begin{aligned} & \\left[ \\delta y_{\\text{i-1}} \\right] \\left( - \\ell_{\\text{s,i-1}}" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Fx" "e" "F_{\\text{x}} = -\\Delta H -K_{\\text{c}} \\cdot W - U_{\\text{b}} \\sin\\left(\\alpha\\right) + U_{\\text{t}}" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Fy" "e" "F_{\\text{y}} = -W + U_{\\text{b}} \\cos\\left(\\alpha\\right) - U_{\\text{t}} \\cos\\left(\\beta\\right) " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("IM_RFEM" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:DispPar" "e" "\\delta u_{\\text{i}} = \\cos\\left(\\alpha_{\\text{i}}\\right) \\delta x_{\\text{i}} + \\sin\\left(\\alpha_{\\te" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:DispPerp" "e" "\\delta v_{\\text{i}} = -\\sin\\left(\\alpha_{\\text{i}}\\right) \\delta x_{\\text{i}} + \\cos\\left(\\alpha_{\\t" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Sigma" "e" "\\sigma_{\\text{i}} = K_{\\text{bn,i}} \\cdot \\delta v_{\\text{i}} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:S" "e" "S_{\\text{i}} = c - \\sigma_{\\text{i}} \\cdot \\tan\\left(\\varphi'\\right) " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:ShearStiff" "e" "K_{\\text{bt,i}} = \\frac{E}{2 \\left[ 1 + \\nu \\right]} \\frac{0.1}{b} + \\frac { c - \\sigma \\cdot \\tan\\l" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:Tau" "e" "\\tau_{\\text{i}} = K_{\\text{bt,i}} \\cdot \\delta u_{\\text{i}} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:FSLoc" "e" "FS_{\\text{Loc,i}} = \\frac{S_{\\text{i}}}{\\tau_{\\text{i}}} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("eq:FSGlob" "e" "FS = \\frac{\\displaystyle\\sum_{i=1}^{n} \\ell_{\\text{i}} \\cdot S_{\\text{i}}}{\\displaystyle\\sum_{i=1}^{" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("IM_RFEMFS" "s" " " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "        4.7.1 Data Constraints" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 4 "4.7.1" "\\subsubsection{Data Constraints}" 87120)
+
+("sec_DataConstraints" "s" "Table~\\ref{TblInputVar} and \\ref{TblOutputVar} show the data constraints on the input and output var" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("TblInputVar" "t" "Input Variables" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" 87811)
+
+("TblOutputVar" "t" "Output Variables" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" 89542)
+
+(toc "toc" "    5 Requirements" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 2 "5" "\\section{Requirements}" 89962)
+
+(toc "toc" "      5.1 Functional Requirements" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "5.1" "\\subsection{Functional Requirements}" 90192)
+
+("R_Inputs" "s" ":] Input the slope parameters. Summarized in the table below. \\renewcommand{\\arraystretch}{1.5} %\\no" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("R_Analyze" "s" ":] Create an initial slip surface for analysis. " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("R_Analyze" "s" ":] Slice the slip surface into a series of elements. Determine soil properties for the interslice su" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("R_Analyze" "s" ":] Find the Factor of Safety of the slip surface. \\iref{IM_FS} " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("R_Analyze" "s" ":] Determine the slopes critical slip surface, the surface that has the lowest Factor of Safety. " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("R_Analyze" "s" ":] For the determined critical slip surface calculate the displacements and local factors of safety " "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+("R_Analyze" "s" ":] Graphically display the critical surface, and displacements, and return the global and local fact" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(toc "toc" "      5.2 Nonfunctional Requirements" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 3 "5.2" "\\subsection{Nonfunctional Requirements}" 92775)
+
+(toc "toc" "    6 Likely Changes" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil 2 "6" "\\section{Likely Changes}" 93003)
+
+("LC_Load" "s" ":] Addition of a surface load force, exerting a downard force on the slope surface, occuring at an a" "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex" nil)
+
+(eof "/Users/smiths/Repos/ssp/Documentation Files/SRS_SSP.tex")
+))
+

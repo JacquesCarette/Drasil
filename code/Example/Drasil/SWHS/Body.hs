@@ -1148,26 +1148,7 @@ s6_list = Enumeration (Simple [((short likelyChg) :+: S "1", Flat
 s7 = SRS.traceyMandG ([s7_intro1, s7_table1, s7_table2,
   s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
-s7_intro1 = Paragraph (S "The" +:+ phrase purpose +:+ S "of the" +:+
-  plural traceyMatrix +:+ S "is to provide easy" +:+
-  plural reference +:+ S "on what has to be additionally modified if a" +:+
-  S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
-  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
-  phrase column +:+ S "of that" +:+ phrase component +:+ S "that are" +:+
-  S "marked with an" +:+ Quote (S "X") +:+. S "should be modified as well" +:+
-  makeRef s7_table1 +:+ S "shows the dependencies of" +:+ plural thModel `sC`
-  (plural genDefn) `sC` (plural dataDefn) `sC`
-  S "and" +:+ plural inModel +:+. S "with each other" +:+ makeRef s7_table2 +:+
-  S "shows the dependencies of" +:+ plural inModel `sC`
-  plural requirement `sC`
-  S "and" +:+ plural datum +:+ plural constraint +:+. S "on each other" +:+ 
-  makeRef s7_table3 +:+ S "shows the dependencies of" +:+ 
-  plural thModel `sC`
-  (plural genDefn) `sC` 
-  (plural dataDefn) `sC`
-  (plural inModel) `sC` S "and" +:+ 
-  (plural likelyChg) +:+ S "on the" +:+.
-  (titleize' assumption))
+s7_intro1 = traceMGIntro s7_table1 s7_table2 s7_table3
 
 -- Completely general paragraph, and similar ones in other example, but slight
 -- differences in what is included in each matrix. Perhaps we can abstract out 

@@ -276,10 +276,10 @@ s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
   S "of reducing ambiguity and making it easier to correctly",
   S "understand the", plural requirement]
 
+s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
 
 s4_1_1_bullets = Enumeration (Bullet $ 
-  (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)))
-  [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
+  (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn))) s4_1_1_terms
 
 
 -----------------------------

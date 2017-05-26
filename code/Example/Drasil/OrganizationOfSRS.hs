@@ -2,12 +2,12 @@ module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF,
                                  specSysDesF, assumpF, assumpF', datConF, datConPar, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
-                                 stakeholderIntro) where
+                                 stakeholderIntro, traceGIntro) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math(equation)
+import Data.Drasil.Concepts.Math(equation, matrix, graph)
 import Data.Drasil.Utils (foldlsC, foldlSent)
 import qualified Drasil.SRS as SRS
 
@@ -218,46 +218,38 @@ reqIntro = Paragraph $ foldlSent [S "This", phrase section_, S "provides the",
   plural nonfunctionalRequirement `sC` S "the qualities that the",
   phrase software, S "is expected to exhibit"]
 
-{-
--- wrapper for traceMGIntro
-traceMGF :: Contents -> Contents -> Contents -> [Contents] -> [Section] -> Section
-traceMGF rf1 rf2 rf3 otherContents subSec = SRS.traceyMandG ((traceMGIntro rf1 rf2 rf3):otherContents) subSec
-
--- generalized traceability matrix and graph introduction: variables are references to the three tables
--- generally found in this section (in order of being mentioned)
-traceMGIntro :: Contents -> Contents -> Contents -> Contents
-traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
-  plural traceyMatrix +:+ S "is to provide easy" +:+
-  plural reference +:+ S "on what has to be additionally modified if a" +:+
-  S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
-  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
-  phrase column +:+ S "of that" +:+ phrase component +:+ S "that are" +:+
-  S "marked with an" +:+ Quote (S "X") +:+. S "should be modified as well" +:+
-  (makeRef r1) +:+ S "shows the dependencies of" +:+ plural thModel `sC`
-  plural genDefn `sC` plural dataDefn `sC`
-  S "and" +:+ plural inModel +:+. S "with each other" +:+ (makeRef r2) +:+
-  S "shows the dependencies of" +:+ plural inModel `sC`
-  plural requirement `sC` S "and" +:+ plural datum +:+ plural constraint +:+.
-  S "on each other" +:+ (makeRef r3) +:+ S "shows the dependencies of" +:+ 
-  plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
-  plural assumption-}
-
 -- wrapper for traceMGIntro
 traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMGIntro refs trailing):otherContents) subSec
+traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
-traceMGIntro :: [Contents] -> [Sentence] -> Contents
-traceMGIntro refs trailings = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
-  plural traceyMatrix +:+ S "is to provide easy" +:+
-  plural reference +:+ S "on what has to be additionally modified if a" +:+
-  S "certain" +:+ phrase component +:+ S "is changed. Every time a" +:+
-  phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
+traceMIntro :: [Contents] -> [Sentence] -> Contents
+traceMIntro refs trailings = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:+
+  plural traceyMatrix +:+ S "is to provide easy" +:+ plural reference +:+
+  S "on what has to be additionally modified if a certain" +:+ phrase component
+  +:+ S "is changed. Every time a" +:+ phrase component +:+ S "is changed, the" +:+ plural item +:+ S "in the" +:+
   phrase column +:+ S "of that" +:+ phrase component +:+ S "that are" +:+
   S "marked with an" +:+ Quote (S "X") +:+. S "should be modified as well" +:+
   foldlSent (zipWith tableShows refs trailings)
 
 tableShows :: Contents -> Sentence -> Sentence
-tableShows ref trailing = (makeRef ref) +:+ S "shows the dependencies of" +:+ trailing
+tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
+  plural dependency +:+ S "of" +:+ trailing
+
+-- generalized traceability matrix and graph introduction: variables are references to the three tables
+-- generally found in this section (in order of being mentioned)
+traceGIntro :: [Contents] -> [Sentence] -> [Contents]
+traceGIntro refs trailings = 
+  [Paragraph $
+  S "The" +:+ phrase purpose +:+ S "of the" +:+ plural traceyGraph +:+ 
+  S "is also to provide easy" +:+ plural reference +:+ S "on what has to be" +:+
+  S "additionally modified if a certain" +:+ phrase component +:+. S "is changed" +:+ 
+  S "The arrows in the" +:+ (plural $ graph ^. term) +:+ S "represent" +:+.
+  plural dependency +:+ S "The" +:+ phrase component +:+ S "at the tail of an arrow" +:+
+  S "is depended on by the" +:+ phrase component +:+ S "at the head of that arrow. Therefore, if a" +:+
+  phrase component +:+ S "is changed, the" +:+ plural component +:+ S "that it points to should also" +:+.
+  S "be changed" +:+ foldlSent (zipWith tableShows refs trailings),
+  Paragraph $ S "NOTE: Building a tool to automatically generate the graphical" +:+
+  S "representation of the" +:+ (phrase $ matrix ^. term) +:+ S "by scanning the" +:+
+  plural label +:+ S "and" +:+ phrase reference +:+. S "can be future work"]

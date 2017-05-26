@@ -82,13 +82,13 @@ s4_1_intro = Paragraph $
             (getAcc sWHS) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed to investigate" +:+
            S "the heating of" +:+ (phrase $ water ^. term) +:+ S "in a" +:+ (phrase $ sWHT ^. term) :+: S "."
 
-s4_1_1 = section ((titleize $ terminology ^. term) +:+ S "and" +:+ (titleize' $ definition ^. term)) [s4_1_1_intro, s4_1_1_bullets] []
+s4_1_1 = section ((titleize $ termAndDef ^. term)) [s4_1_1_intro, s4_1_1_bullets] []
   
 s4_1_1_intro = Paragraph $
            S "This subsection provides a list of terms that" +:+
            S "are used in subsequent" +:+ (plural $ section_ ^. term) +:+ S "and their meaning, with the" +:+
             (phrase $ purpose ^. term) +:+ S "of reducing ambiguity and making it easier to correctly" +:+
-           S "understand the" +:+ (plural $ requirement ^. term) :+: S ":"
+           S "understand the" +: (plural $ requirement ^. term)
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
   ((at_start $ c ^. term)) :+: S ": " :+: (c ^. defn)) 

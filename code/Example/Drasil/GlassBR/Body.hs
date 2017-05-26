@@ -176,9 +176,10 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "is expected to have completed at least the equivalent of the second year of an" +:+
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+ (phrase $ blastRisk ^. term)),
-  (S "The end" +:+ phrase user +:+ S "is expected to have basic" +:+ phrase computer +:+
-  S "literacy to handle the" +:+. phrase software)]
+  phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+
+  (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
+  S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
+  +:+. phrase software)]
 
 s4_2 = systCon Nothing []
 
@@ -428,15 +429,15 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "
   (P $ dim_min ^. symbol) +:+ S "<=" +:+ (P $ plate_len ^. symbol) +:+ S "<=" +:+ 
   (P $ dim_max ^. symbol) +:+ S "and" +:+ (P $ plate_len ^. symbol) :+: S "/" :+: 
   (P $ plate_width ^. symbol) +:+ S "<" +:+ (P $ ar_max ^. symbol), S "1500" +:+
-  Sy (unit_symb plate_len), S "10%"], [(P $ plate_width ^. symbol), (P $ (plate_width ^. symbol)) 
-  +:+ S "> 0 and" +:+ (P $ plate_width ^. symbol) +:+ S "<" +:+ (P $ plate_len ^. symbol),
-  (P $ dim_min ^. symbol) +:+ S "<=" +:+ (P $ plate_width ^. symbol) +:+ S "<=" +:+ 
-  (P $ dim_max ^.symbol) +:+ S "and" +:+ (P $ plate_len ^. symbol) :+: S "/" :+: 
-  (P $ plate_width ^. symbol) +:+ S "<" +:+ (P $ ar_max ^. symbol), S "1200" +:+ 
-  Sy (unit_symb plate_width), S "10%"], [(P $ pb_tol ^. symbol), S "0 <" +:+ 
-  (P $ pb_tol ^. symbol) +:+ S "< 1", S "-", S "0.008", S "0.1%"], [(P $ char_weight ^. symbol), 
-  (P $ char_weight ^. symbol) +:+ S ">= 0", (P $ cWeightMin ^. symbol) +:+ S "<" +:+ 
-  (P $ char_weight ^. symbol) +:+ S "<" +:+ (P $ cWeightMax ^. symbol), S "42" +:+ 
+  Sy (unit_symb plate_len), S "10%"], [(P $ plate_width ^. symbol), 
+  (P $ (plate_width ^. symbol)) +:+ S "> 0 and" +:+ (P $ plate_width ^. symbol) 
+  +:+ S "<" +:+ (P $ plate_len ^. symbol), (P $ dim_min ^. symbol) +:+ S "<=" +:+ 
+  (P $ plate_width ^. symbol) +:+ S "<=" +:+ (P $ dim_max ^.symbol) +:+ S "and" +:+
+  (P $ plate_len ^. symbol) :+: S "/" :+: (P $ plate_width ^. symbol) +:+ S "<" +:+
+  (P $ ar_max ^. symbol), S "1200" +:+ Sy (unit_symb plate_width), S "10%"], 
+  [(P $ pb_tol ^. symbol), S "0 <" +:+ (P $ pb_tol ^. symbol) +:+ S "< 1", S "-", S "0.008", S "0.1%"], 
+  [(P $ char_weight ^. symbol), (P $ char_weight ^. symbol) +:+ S ">= 0", (P $ cWeightMin ^. symbol)
+  +:+ S "<" +:+ (P $ char_weight ^. symbol) +:+ S "<" +:+ (P $ cWeightMax ^. symbol), S "42" +:+ 
   Sy (unit_symb char_weight), S "10%"],[(P $ tNT ^. symbol), (P $ tNT ^. symbol) :+: 
   S " > 0", S "-", S "1", S "10%"], [(P $ sd ^. symbol), (P $ sd ^. symbol) +:+ S "> 0", 
   (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ sd ^. symbol) +:+ S "<" +:+ 

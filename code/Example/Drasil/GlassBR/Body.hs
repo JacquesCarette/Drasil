@@ -41,8 +41,8 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
 s2_intro, s2_2_intro, s3_intro, 
-  s3_1_intro, s3_2_intro, s4_intro, s4_1_bullets, s4_2_intro, s5_intro, 
-  s5_1_table, s5_2_bullets, s6_intro, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
+  s3_1_intro, s3_2_intro, s4_1_bullets, s4_2_intro, s5_intro, 
+  s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
   s6_2_4_intro, s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
@@ -169,13 +169,7 @@ s3_2 = SRS.theCustomer [s3_2_intro] []
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
   S "are the end", phrase user, S "of", (gLassBR ^. defn)]
 
-s4 = SRS.genSysDes [s4_intro] [s4_1, s4_2]
-
-s4_intro = Paragraph $ foldlSent [S "This", phrase section_, S "provides", 
-  phrase general, phrase information, S "about the", phrase system `sC` 
-  S "identifies the interface between the", phrase system, S "and its",
-  phrase environment `sC` S "and describes the", plural userCharacteristic,
-  S "and the", plural systemConstraint]
+s4 = genSysF [s4_1, s4_2]
 
 s4_1 = SRS.userChar [s4_1_bullets] []
 
@@ -251,14 +245,7 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", (gLassBR ^. defn),
   S "All the supporting calculated", plural value, S "are also displayed as",
   phrase output_]
 
-s6 = SRS.specSysDes [s6_intro] [s6_1,
-  s6_2]
-
-s6_intro = Paragraph $ foldlSent [S "This", phrase section_, 
-  S "first presents the", phrase problemDescription `sC`
-  S "which gives a high-level view of the", phrase problem +:+. S "to be solved",
-  S "This is followed by the", plural solutionCharSpec `sC` S "which presents the",
-  (plural assumption) `sC` plural theory `sC` S "and", plural definition]
+s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
 
 s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, s6_1_2, s6_1_3]
 

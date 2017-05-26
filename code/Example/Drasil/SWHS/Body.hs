@@ -1018,62 +1018,68 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (C pcm_vol)) * (C w_density)),
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
-  Enumeration (Simple [((short requirement) :+: S "3", Flat 
-  (S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-    phrase physical +:+ plural constraint +:+ S "shown in" +:+ titleize table_
-    +:+. S "1")),
+  Enumeration (Simple $ mkEnumAbbrevList 3 (short requirement) reqList)
+  ]
+
+-- Want to add req1 and req2 but they include a table and another enumeration
+-- so not sure how to implement yet
+reqList :: [Sentence]
+reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
+
+req3, req4, req5, req6, req7, req8, req9, req10, req11 :: Sentence
+req3 = S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
+  phrase physical +:+ plural constraint +:+ S "shown in" +:+ makeRef s7_table1
 --
-  ((short requirement) :+: S "4", Flat (titleize output_ +:+ S "the" +:+
+req4 = titleize output_ +:+ S "the" +:+
   phrase input_ +:+ plural quantity +:+ S "and derived" +:+ plural quantity +:+
   S "in the following list: the" +:+ plural quantity +:+ S "from R1, the" +:+
   (phrase $ mass ^. term) :+: S "es from R2," +:+ P (tau_W ^. symbol) +:+
   S "(from IM1)," +:+ P (eta ^. symbol) +:+ S "(from IM1)," +:+
   P (tau_S_P ^. symbol) +:+ S "(from IM2) and" +:+ P (tau_L_P ^. symbol) +:+.
-  S "(from IM2)")),
+  S "(from IM2)"
 --
-  ((short requirement) :+: S "5", Flat (S "Calculate and" +:+
+req5 = S "Calculate and" +:+
   phrase output_ +:+ S "the" +:+ (phrase $ temp_W ^. term) +:+ S "(" :+:
   P (temp_W ^. symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
   S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
-  S "(from IM1)")),
+  S "(from IM1)"
 --
-  ((short requirement) :+: S "6", Flat (S "Calculate and" +:+ 
+req6 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ temp_PCM ^. term) +:+ S "(" :+:
   P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
   S ")) over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
-  S "(from IM2)")),
+  S "(from IM2)"
 --
-  ((short requirement) :+: S "7", Flat (S "Calculate and" +:+ 
+req7 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ w_E ^. term) +:+ S "(" :+:
   P (w_E ^. symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
   S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
-  S "(from IM3)")),
+  S "(from IM3)"
 --
-  ((short requirement) :+: S "8", Flat (S "Calculate and" +:+ 
+req8 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ pcm_E ^. term) +:+ S "(" :+:
   P (pcm_E ^. symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the" +:+
-  phrase simulation +:+ (phrase $ time ^. term) +:+. S "(from IM4)")),
+  phrase simulation +:+ (phrase $ time ^. term) +:+. S "(from IM4)"
 --
-  ((short requirement) :+: S "9", Flat (S "Verify that the" +:+
+req9 = S "Verify that the" +:+
   (phrase $ energy ^. term) +:+ plural output_ +:+ S "(" :+:
   P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
   symbol) :+: S ") and" +:+ P (pcm_E ^. symbol) :+: S "(" :+:
   P (time ^. symbol) :+: S ")) follow the" +:+
   (phrase $ CT.law_cons_energy ^. term) `sC` S "as outlined in" +:+ 
   makeRef s4_2_7 `sC` S "with relative error no greater than" +:+.
-  S "0.001%")),
+  S "0.001%"
 --
-  ((short requirement) :+: S "10", Flat (S "Calculate and" +:+ 
+req10 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+
   S "at which the" +:+ (short phsChgMtrl) +:+ S "begins to melt" +:+
-  P (t_init_melt ^. symbol) +:+. S "(from IM2)")),
+  P (t_init_melt ^. symbol) +:+. S "(from IM2)"
 --
-  ((short requirement) :+: S "11", Flat (S "Calculate and" +:+ 
+req11 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+
   S "at which the" +:+ (short phsChgMtrl) +:+
   S "stops" +:+ (phrase $ CT.melting ^. term) +:+
-  EmptyS +:+ P (t_final_melt ^. symbol) +:+. S "(from IM2)"))])
-  ]
+  EmptyS +:+ P (t_final_melt ^. symbol) +:+. S "(from IM2)"
 
 -- List structure same between all examples
 

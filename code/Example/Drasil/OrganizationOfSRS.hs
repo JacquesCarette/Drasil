@@ -196,7 +196,7 @@ traceMGIntro r1 r2 r3 = Paragraph $ S "The" +:+ phrase purpose +:+ S "of the" +:
   S "on each other" +:+ (makeRef r3) +:+ S "shows the dependencies of" +:+ 
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
-  titleize' assumption
+  plural assumption
 
 -- System Constraints
 -- generalized if no constraints, but if there are, they can be passed through

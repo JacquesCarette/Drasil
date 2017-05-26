@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
-  probability, surface, unit_, unitV, vector, rate, change, rOfChng, 
+  probability, surArea, surface, unit_, unitV, vector, rate, change, rOfChng, 
   constraint :: ConceptChunk
 
 ode :: CINP

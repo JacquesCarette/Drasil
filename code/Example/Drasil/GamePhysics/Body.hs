@@ -487,21 +487,51 @@ s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2
 -- will do for now.
 -- How do I write 2pi in constraints?
 
+s4_2_6_lengthConstraint, s4_2_6_massConstraint, 
+  s4_2_6_mmntOfInConstraint, s4_2_6_gravAccelConstraint, s4_2_6_posConstraint, 
+  s4_2_6_veloConstraint, s4_2_6_restCoefConstraint, s4_2_6_orientationConstraint,
+  s4_2_6_angVeloConstraint, s4_2_6_forceConstraint, 
+  s4_2_6_torqueConstraint ::(Sentence, Sentence, Sentence, Sentence, Sentence)
+
+s4_2_6_lengthConstraint = ((P $ QPP.len ^. symbol), S "is G/E to 0", 
+  EmptyS, S "44.2", (Sy $ unit_symb QPP.len)) 
+
+s4_2_6_massConstraint = ((P $ QPP.mass ^. symbol), S "is greater than 0", 
+  EmptyS, S "56.2", (Sy $ unit_symb QPP.mass)) 
+
+s4_2_6_mmntOfInConstraint = ((P $ QP.momentOfInertia ^. symbol), 
+  S "is G/E to 0", EmptyS, S "74.5", (Sy $ unit_symb QP.momentOfInertia))
+
+s4_2_6_gravAccelConstraint = ((P $ QP.gravitationalAccel ^. symbol), EmptyS, 
+  EmptyS, S "9.8", (Sy $ unit_symb QP.gravitationalAccel))
+
+s4_2_6_posConstraint = ((P $ QP.position ^. symbol), EmptyS, EmptyS, 
+  S "(0.412, 0.502)", (Sy $ unit_symb QP.position))
+
+s4_2_6_veloConstraint = ((P $ QP.velocity ^. symbol), EmptyS, EmptyS, 
+  S "2.51", (Sy $ unit_symb QP.velocity))
+
+s4_2_6_restCoefConstraint = ((P $ QP.restitutionCoef ^. symbol), S "G/E to 0", 
+  S "less than 1", S "0.8", EmptyS)
+
+s4_2_6_orientationConstraint = ((P $ QM.orientation ^. symbol), S "G/E to 0", 
+  S "less than 2pi", S "pi/2", (Sy $ unit_symb QM.orientation))
+
+s4_2_6_angVeloConstraint = ((P $ QP.angularVelocity  ^. symbol), EmptyS, EmptyS, 
+  S "2.1", (Sy $ unit_symb QP.angularVelocity ))
+
+s4_2_6_forceConstraint = ((P $ QP.force ^. symbol), EmptyS, EmptyS, S "98.1", 
+  (Sy $ unit_symb QP.force))
+
+s4_2_6_torqueConstraint = ((P $ QP.torque ^. symbol), EmptyS, EmptyS, S "200", 
+  (Sy $ unit_symb QP.torque))
 
 
 s4_2_6_symbolList :: [(Sentence, Sentence, Sentence, Sentence, Sentence)]
-s4_2_6_symbolList = 
-  [((P $ QPP.len ^. symbol), S "is G/E to 0", EmptyS, S "44.2", (Sy $ unit_symb QPP.len)), 
-  ((P $ QPP.mass ^. symbol), S "is greater than 0", EmptyS, S "56.2", (Sy $ unit_symb QPP.mass)), 
-  ((P $ QP.momentOfInertia ^. symbol), S "is G/E to 0", EmptyS, S "74.5", (Sy $ unit_symb QP.momentOfInertia)),
-  ((P $ QP.gravitationalAccel ^. symbol), EmptyS, EmptyS, S "9.8", (Sy $ unit_symb QP.gravitationalAccel)), 
-  ((P $ QP.position ^. symbol), EmptyS, EmptyS, S "(0.412, 0.502)", (Sy $ unit_symb QP.position)), 
-  ((P $ QP.velocity ^. symbol), EmptyS, EmptyS, S "2.51", (Sy $ unit_symb QP.velocity)), 
-  ((P $ QP.restitutionCoef ^. symbol), S "G/E to 0", S "less than 1", S "0.8", EmptyS),
-  ((P $ QM.orientation ^. symbol), S "G/E to 0", S "less than 2pi", S "pi/2", (Sy $ unit_symb QM.orientation)),  
-  ((P $ QP.angularVelocity  ^. symbol), EmptyS, EmptyS, S "2.1", (Sy $ unit_symb QP.angularVelocity )),
-  ((P $ QP.force ^. symbol), EmptyS, EmptyS, S "98.1", (Sy $ unit_symb QP.force)), 
-  ((P $ QP.torque ^. symbol), EmptyS, EmptyS, S "200", (Sy $ unit_symb QP.torque))]
+s4_2_6_symbolList = [s4_2_6_lengthConstraint, s4_2_6_massConstraint, 
+  s4_2_6_mmntOfInConstraint, s4_2_6_gravAccelConstraint, s4_2_6_posConstraint, 
+  s4_2_6_veloConstraint, s4_2_6_restCoefConstraint, s4_2_6_orientationConstraint,
+  s4_2_6_angVeloConstraint, s4_2_6_forceConstraint, s4_2_6_torqueConstraint]
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) s4_2_6_symbolList) 

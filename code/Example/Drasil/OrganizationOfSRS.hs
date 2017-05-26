@@ -1,13 +1,14 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, datConF, datConPar, reqF,
                                  figureLabel, showingCxnBw, thModF, inModelF,
-                                 inModelF', traceMGF, systCon) where
+                                 inModelF', traceMGF, systCon, stakehldr,
+                                 stakeholderIntro) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math(equation)
-import Data.Drasil.Utils (foldlsC)
+import Data.Drasil.Utils (foldlsC, foldlSent)
 import qualified Drasil.SRS as SRS
 
 -- | Create a list in the pattern of "The __ are refined to the __".
@@ -150,7 +151,17 @@ datConPar tableRef middleSent endingSent trailingSent = ( Paragraph $
                      phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
                      S "if one were performing an" +:+ phrase uncertainty +:+
                      S "quantification exercise."
-                     
+       
+-- wrapper for stakeholderIntro
+stakehldr :: [Section] -> Section
+stakehldr subs = (SRS.stakeholder) [stakeholderIntro] subs
+
+-- general stakeholders introduction
+stakeholderIntro :: Contents
+stakeholderIntro = Paragraph $ foldlSent [S "This", phrase section_,
+  S "describes the" +: titleize' stakeholder, S "the people who have an",
+  phrase interest, S "in", (phrase $ the product_)]
+
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]

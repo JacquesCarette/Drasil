@@ -40,13 +40,13 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
-s2_intro, s2_2_intro, s3_intro, 
+s2_intro, s2_2_intro, 
   s3_1_intro, s3_2_intro, s4_1_bullets, s4_2_intro, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
   s6_2_4_intro, s6_2_5_table1, 
   s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
-  s7_1_intro, s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
+  s7_2_intro, s8_list, s9_intro1, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
 
@@ -150,11 +150,7 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support the", plural definition, S "of the different",
   plural model]
   
-s3 = SRS.stakeholder [s3_intro] [s3_1, s3_2]
-
-s3_intro = Paragraph $ foldlSent [S "This", phrase section_,
-  S "describes the" +: titleize' stakeholder, 
-  S "the people who have an", phrase interest, S "in", (phrase $ the product_)]
+s3 = stakehldr [s3_1, s3_2]
 
 s3_1 = SRS.theClient [s3_1_intro] []
 
@@ -474,14 +470,9 @@ s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable
   [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
   (S "Table 4: Output Variables") True
 
-s7 = SRS.require [] [s7_1, s7_2]
+s7 = reqF [s7_1, s7_2]
 
-s7_1 = SRS.funcReq ([s7_1_intro] ++ (s7_1_list)) []
-
-s7_1_intro = Paragraph $ foldlSent [
-  S "The following", phrase section_, S "provides the", 
-  plural functionalRequirement `sC` S "the business tasks that the", 
-  phrase software, S "is expected to complete"]
+s7_1 = SRS.funcReq (s7_1_list) []
 
 s7_1_list = 
   [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))

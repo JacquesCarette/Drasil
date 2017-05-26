@@ -989,14 +989,7 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
 
 -- Remember to insert references in above derivation when available
 
-s5 = SRS.require [s5_intro] [s5_1, s5_2]
-
-s5_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides the" +:+
-  phrase functional +:+ plural requirement `sC` S "the business tasks" +:+
-  S "that the" +:+ phrase software +:+ S "is expected to complete, and the" +:+
-  phrase nonfunctional +:+ plural requirement `sC` 
-  S "the qualities that the" +:+ phrase software +:+.
-  S "is expected to exhibit")
+s5 = reqF [s5_1, s5_2]
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 

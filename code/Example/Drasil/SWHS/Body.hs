@@ -499,8 +499,7 @@ s4_2 =solChSpecF progName s4_2_5
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6
-  [s4_2_1_list] []
+s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6 [s4_2_1_list]
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 

@@ -448,19 +448,22 @@ s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
-s4_1_2_list = Enumeration (Simple $ [((short physSyst) :+: S "1", Flat
-  ((at_start $ tank ^. term) +:+ S "containing" +:+.
-  (phrase $ water ^. term))),
+s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short physSyst)
+  s4_1_2_physSystList)
+
+s4_1_2_physSystList :: [Sentence]
+s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
+
+physSyst1 = (at_start $ tank ^. term) +:+ S "containing" +:+.
+  (phrase $ water ^. term)
 --
-  ((short physSyst) :+: S "2", Flat ((at_start $ coil ^. term) +:+ 
-  S "at bottom of" +:+. (phrase $ tank ^. term) +:+
-  sParen (P (ht_flux_C ^. symbol) +:+ S "represents the" +:+.
-  (phrase $ ht_flux_C ^. term)))),
+physSyst2 = (at_start $ coil ^. term) +:+ S "at bottom of" +:+.
+  (phrase $ tank ^. term) +:+ sParen (P (ht_flux_C ^. symbol) +:+
+  S "represents the" +:+. (phrase $ ht_flux_C ^. term))
 --
-  ((short physSyst) :+: S "3", Flat ((short phsChgMtrl) +:+ 
-  S "suspended in" +:+. (phrase $ tank ^. term) +:+
-  sParen (P (ht_flux_P ^. symbol) +:+ S "represents the" +:+.
-  (phrase $ ht_flux_P ^. term))))])
+physSyst3 = (short phsChgMtrl) +:+ S "suspended in" +:+.
+  (phrase $ tank ^. term) +:+ sParen (P (ht_flux_P ^. symbol) +:+
+  S "represents the" +:+. (phrase $ ht_flux_P ^. term))
 
 -- Structure of list would be same between examples but content is completely 
 -- different

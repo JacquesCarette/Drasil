@@ -43,7 +43,7 @@ capdescr =
   Quote (S "In development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip in the" +:+
   S "plane of the glass. This boundary condition has been shown to be typical" +:+
-  S "of many glass installations)") +:+. S "from [4 (pg. 53)]"]
+  S "of many glass installations)") +:+ S "from [4 (pg. 53)]"]
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

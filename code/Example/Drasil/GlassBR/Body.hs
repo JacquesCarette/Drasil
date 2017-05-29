@@ -711,7 +711,7 @@ s9_intro2 = traceGIntro [fig_2, fig_3, fig_4]
   (plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
   `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint),
   (plural thModel `sC` plural inModel `sC` plural dataDefn `sC`
-  plural requirement +:+ S "and" +:+ plural likelyChg +:+ S "on" +:+.
+  plural requirement +:+ S "and" +:+ plural likelyChg +:+ S "on" +:+
   plural assumption)]
 
 fig_2 = figureLabel "2" (traceyMatrix)

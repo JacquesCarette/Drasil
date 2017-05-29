@@ -175,7 +175,7 @@ s4_1_bullets = Enumeration $ Bullet $ map Flat
   S "is expected to have completed at least the equivalent of the second year of an" +:+
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+ (phrase $ gbr ^. term) +:+ S "and" +:+
+  phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
   +:+. phrase software)]
@@ -264,36 +264,36 @@ s6_1_1_intro = Paragraph $ foldlSent [
 
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ ((at_start $ aspectR ^. term) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} :+: -- conceptually correct to call abbreviation as a symbol?
-  (aR ^. defn)] ++
+  (aspectRatio ^. defn)] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
-  [gbr, lite] ++ [Nested (((titleize $ glassTy ^. term) :+: S ":")) 
-  (Bullet $ map (\c -> Flat c) [(((at_start $ an ^. term) :+: 
-    sParenDash (short annealedGlass)) :+: (an ^. defn)),
-  (((at_start $ ft ^. term) :+: sParenDash (short fullyTGlass)) :+:
-    (ft ^. defn)),
-  (((at_start $ hs ^. term) :+: sParenDash (short heatSGlass)) :+:
-    (hs ^. defn))])] ++
+  [glBreakage, lite] ++ [Nested (((titleize $ glassTy ^. term) :+: S ":")) 
+  (Bullet $ map (\c -> Flat c) [(((at_start $ annealedGl ^. term) :+: 
+    sParenDash (short annealedGlass)) :+: (annealedGl ^. defn)),
+  (((at_start $ fTemperedGl ^. term) :+: sParenDash (short fullyTGlass)) :+:
+    (fTemperedGl ^. defn)),
+  (((at_start $ hStrengthGl ^. term) :+: sParenDash (short heatSGlass)) :+:
+    (hStrengthGl ^. defn))])] ++
   map (\c -> Flat c)
-  [(((at_start $ gtf ^. term) :+: sParenDash (short glassTypeFac)) :+: 
-  (gtf ^. defn)),
+  [(((at_start $ glTyFac ^. term) :+: sParenDash (short glassTypeFac)) :+: 
+  (glTyFac ^. defn)),
   (((at_start $ lateral ^. term) +:+ S "- ") :+: (lateral ^. defn))] ++ 
   [Nested (((at_start $ load ^. term) :+: S ":")) (Bullet $ map (\c -> Flat c)  
   [(((at_start $ specDeLoad ^. term) +:+ S "- ") :+: (specDeLoad ^. defn)),
-  (((at_start $ lr ^. term) :+: sParenDash (short lResistance)) :+:
-    (lr ^. defn)),
-  (((at_start $ ldl ^. term) +:+ S "- ") :+: (ldl ^. defn)),
+  (((at_start $ loadResis ^. term) :+: sParenDash (short lResistance)) :+:
+    (loadResis ^. defn)),
+  (((at_start $ longDurLoad ^. term) +:+ S "- ") :+: (longDurLoad ^. defn)),
   (((at_start $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" 
-    +:+ (nfl ^. defn))] ++ 
+    +:+ (nonFactoredL ^. defn))] ++ 
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn))
-    [glassWL, sdl])] ++ 
+    [glassWL, shortDurLoad])] ++ 
   map (\c -> Flat c)
-  [(((at_start $ lsf ^. term) :+: sParenDash (short lShareFac)) :+: 
-  (lsf ^. defn)),
-  (((at_start $ pb ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
-  (pb ^. defn))] ++
+  [(((at_start $ loadShareFac ^. term) :+: sParenDash (short lShareFac)) :+: 
+  (loadShareFac ^. defn)),
+  (((at_start $ probBreak ^. term) :+: sParenDash (P $ prob_br ^. symbol)) :+:
+  (probBreak ^. defn))] ++
   map (\c -> Flat $ ((at_start $ c ^. term) +:+ S "- ") :+: (c ^. defn)) 
-  [specA, blaReGLa, eqTNTChar] ++
-  [Flat $ ((at_start $ sD ^. term) :+: sParenDash (P $ sd ^. symbol)) :+:
+  [specA, blastResisGla, eqTNTChar] ++
+  [Flat $ ((at_start $ sD ^. term) :+: sParenDash (P $ standOffDist ^. symbol)) :+:
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
@@ -438,15 +438,15 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", S "
   [(P $ char_weight ^. symbol), (P $ char_weight ^. symbol) +:+ S ">= 0", (P $ cWeightMin ^. symbol)
   +:+ S "<" +:+ (P $ char_weight ^. symbol) +:+ S "<" +:+ (P $ cWeightMax ^. symbol), S "42" +:+ 
   Sy (unit_symb char_weight), S "10%"],[(P $ tNT ^. symbol), (P $ tNT ^. symbol) :+: 
-  S " > 0", S "-", S "1", S "10%"], [(P $ sd ^. symbol), (P $ sd ^. symbol) +:+ S "> 0", 
-  (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ sd ^. symbol) +:+ S "<" +:+ 
-  (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb sd), S "10%"]])
+  S " > 0", S "-", S "1", S "10%"], [(P $ standOffDist ^. symbol), (P $ standOffDist ^. symbol)
+  +:+ S "> 0", (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ standOffDist ^. symbol) +:+ S "<" +:+ 
+  (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb standOffDist), S "10%"]])
   (S "Table 2: Input Variables") True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)] 
-  [(P $ dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb sd)), 
-  (P $ dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb sd)),
+  [(P $ dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb standOffDist)), 
+  (P $ dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb standOffDist)),
   ((P $ ar_max ^. symbol), S "5"), (P $ cWeightMin ^. symbol, S "4.5" +:+
   Sy (unit_symb cWeightMin)), (P $ cWeightMax ^. symbol, S "910" +:+ 
   Sy (unit_symb cWeightMax)), (P $ sd_min ^. symbol, S "6" +:+
@@ -796,4 +796,5 @@ fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+
   (phrase $ load ^. term) +:+ sParen
   (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize $ aspectR ^. term) +:+ 
   sParen (short aspectR) {-(P (aspectR ^. symbol))-} +:+ S "versus" +:+
-  (at_start $ sdf ^. term) +:+ sParen (P (sdf ^. symbol))) "ASTM_F2248-09_BeasonEtAl.png"
+  (at_start $ stressDistFac ^. term) +:+ sParen (P (stressDistFac ^. symbol)))
+  "ASTM_F2248-09_BeasonEtAl.png"

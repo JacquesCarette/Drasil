@@ -50,17 +50,17 @@ calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)")
   dedescr de_rel
 
 de_rel :: Relation
-de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C sd] 
+de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
 
 dedescr :: Sentence
 dedescr = 
   foldlSent [(P $ demand ^. symbol), S "or", (phrase $ demandq ^. term) `sC`
   S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase $ sd ^. term), S "(" :+: (P $ sd ^. symbol) :+: S ") and", 
+  (phrase $ standOffDist ^. term), S "(" :+: (P $ standOffDist ^. symbol) :+: S ") and", 
   (P $ eqTNTWeight ^. symbol) +:+. S "as parameters", 
   (P $ eqTNTWeight ^. symbol), S "is defined as", (P $ eqTNTWeight ^. symbol),
   S "=", (P $ char_weight ^. symbol) +:+. S "* TNT", (P $ char_weight ^. symbol),
   S "is the" +:+. (phrase $ char_weight ^. term), (P $ tNT ^. symbol), S "is the" +:+.
-  (phrase $ tNT ^. term), (P $ sd ^.symbol), S "is the", (phrase $ sd ^. term),
-  S "where", (P $ sd ^. symbol), S "= "]
+  (phrase $ tNT ^. term), (P $ standOffDist ^.symbol), S "is the",
+  (phrase $ standOffDist ^. term), S "where", (P $ standOffDist ^. symbol), S "= "]
   --equation in sentence

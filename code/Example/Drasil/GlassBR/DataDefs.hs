@@ -20,7 +20,7 @@ risk_eq :: Expr
 risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   ((C plate_width):/(Int 1000)))):^((C sflawParamM) - (Int 1))):*
   (Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick)
-  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
+  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C stressDistFac)
 
 hFromt_eq :: Expr
 hFromt_eq = FCall (C act_thick) [C nom_thick]
@@ -45,10 +45,10 @@ loadDF :: QDefinition
 loadDF = fromEqn' (lDurFac ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
+strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: QDefinition
-strDisFac = fromEqn' (sdf ^. id) (sdf ^. term) (sdf ^. symbol) 
+strDisFac = fromEqn' (stressDistFac ^. id) (stressDistFac ^. term) (stressDistFac ^. symbol) 
   strDisFac_eq
 
 nonFL_eq :: Expr

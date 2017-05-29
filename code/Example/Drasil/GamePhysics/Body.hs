@@ -23,8 +23,8 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
-import Data.Drasil.Utils (foldle, foldlSent, mkEnumAbbrevList, mkConstraintList, 
-  makeTMatrix, itemRefToSent, refFromType, makeListRef)
+import Data.Drasil.Utils (foldle, foldlSent, mkConstraintList, 
+  makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, enumBullet)
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -279,8 +279,7 @@ s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
 s4_1_1_terms :: [ConceptChunk]
 s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
 
-s4_1_1_bullets = Enumeration (Bullet $ 
-  (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms))
+s4_1_1_bullets = enumBullet (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
 
 
 -----------------------------
@@ -328,7 +327,9 @@ s4_1_2_stmt4 = foldlSent
 s4_1_2_list' :: [Sentence]
 s4_1_2_list' = [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4]
 
-s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc goalStmt) s4_1_2_list')
+--enumS = Enumeration . Simple
+
+s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -384,7 +385,7 @@ s4_2_1_list' :: [Sentence]
 s4_2_1_list' = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
                s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
 
-s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc assumption) s4_2_1_list')
+s4_2_1_list = enumSimple 1 (getAcc assumption) s4_2_1_list'
 
 
 --------------------------------
@@ -622,7 +623,7 @@ s5_1_list' :: [Sentence]
 s5_1_list' = [s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
             s5_1_req7, s5_1_req8]
 
-s5_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc requirement) s5_1_list')
+s5_1_list = enumSimple 1 (getAcc requirement) s5_1_list'
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -676,7 +677,7 @@ s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
   s6_likelyChg_stmt4]
 
-s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (getAcc likelyChg) s6_list')
+s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
 
 
 -----------------------------------------
@@ -694,17 +695,17 @@ s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
   (plural $ physLib ^. term)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
   (plural $ physLib ^. term) +:+ S "are:"
 
-s7_2dlist = Enumeration (Bullet [
+s7_2dlist = enumBullet [
   Flat (S "Box2D: http://box2d.org/"),
-  Flat (S "Nape Physics Engine: http://napephys.com/")])
+  Flat (S "Nape Physics Engine: http://napephys.com/")]
 
 s7_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural $ physLib ^. term), S "include:"]
 
-s7_3dlist = Enumeration (Bullet $ map (Flat) [
+s7_3dlist = enumBullet $ map (Flat) [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
-  (S "Newton Game Dynamics: http://newtondynamics.com/")])
+  (S "Newton Game Dynamics: http://newtondynamics.com/")]
 
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --

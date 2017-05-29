@@ -12,9 +12,13 @@ module Data.Drasil.Utils
   , itemRefToSent
   , refFromType
   , makeListRef
+  , enumSimple
+  , enumBullet
   ) where
 
-import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), sC, sParen, Contents(Definition), makeRef, DType, Section)
+import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), 
+  sC, sParen, Contents(Definition, Enumeration), makeRef, DType, Section, 
+  ListType(Simple, Bullet))
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -53,8 +57,11 @@ enumWithAbbrev :: Integer -> Sentence -> [Sentence]
 enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
+-- s - the number from which the enumeration should start from
+-- t - the title of the list
+-- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList start title list = zip (enumWithAbbrev start title) (map (Flat) list)
+mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map (Flat) l)
 
 -- | formats constraints on variables for tables
 fmtConstrain :: Sentence -> Sentence -> Sentence -> Sentence
@@ -78,9 +85,12 @@ zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
 -- | traceability matrices row from a list of rows and a list of columns
+-- acc - accumulator
+-- k   - list of type that is comparable
+-- l   - list of type that is comparable
 zipFTable :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
 zipFTable acc _ []              = acc
-zipFTable acc [] k              = acc ++ (take (length k) (repeat EmptyS))
+zipFTable acc [] l              = acc ++ (take (length l) (repeat EmptyS))
 zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
                                 | otherwise = zipFTable (acc++[EmptyS]) k ys
 
@@ -89,6 +99,8 @@ makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
 -- | makes sentences from an item and its reference 
+-- a - String title of reference
+-- b - Sentence containing the full reference
 itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
@@ -98,6 +110,19 @@ refFromType f = (makeRef . Definition . f)
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
+-- l - list whos length is to be matched
+-- r - reference to be repeated
 makeListRef :: [a] -> Section -> [Sentence]
 makeListRef l r = take (length l) $ repeat $ makeRef r
 
+
+-- | enumBullet apply enumeration and bullet to a list
+enumBullet ::[ItemType] -> Contents
+enumBullet f = Enumeration $ Bullet $ f
+
+-- | enumSimple enumerates a list and applies simple and enumeration to it
+-- s - start index for the enumeration
+-- t - title of the list
+-- l - list to be enumerated
+enumSimple :: Integer -> Sentence -> [Sentence] -> Contents
+enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l

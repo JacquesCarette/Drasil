@@ -295,8 +295,8 @@ traceMIntro refs trailings = Paragraph $ foldlSent [S "The", phrase purpose, S "
         S "on what has to be additionally modified if a certain", phrase component,
         S "is changed. Every time a", phrase component, S "is changed, the", plural item, S "in the",
         phrase column, S "of that", phrase component, S "that are",
-        S "marked with an", Quote (S "X") +:+. S "should be modified as well",
-        foldlSent (zipWith tableShows refs trailings)]
+        S "marked with an", Quote (S "X"), S "should be modified as well"] +:+
+        foldlSent (zipWith tableShows refs trailings)
 
 tableShows :: Contents -> Sentence -> Sentence
 tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
@@ -312,8 +312,8 @@ traceGIntro refs trailings = [Paragraph $ foldlSent
         S "The arrows in the", (plural $ graph ^. term), S "represent" +:+.
         plural dependency, S "The", phrase component, S "at the tail of an arrow",
         S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
-        phrase component, S "is changed, the", plural component, S "that it points to should also" +:+.
-        S "be changed", foldlSent (zipWith tableShows refs trailings)],
+        phrase component, S "is changed, the", plural component, S "that it points to should also",
+        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings),
         Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate the graphical",
         S "representation of the", (phrase $ matrix ^. term), S "by scanning the",
         plural label, S "and", phrase reference, S "can be future work"]]

@@ -53,14 +53,12 @@ s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s3_3, s4, s4_1,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
 s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
-  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_intro_end, 
-  s4_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
-  fig_tank, s4_1_3_intro, s4_1_3_list, 
-  s4_2_1_list, s4_2_6_table1,
-  s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
+  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
+  s4_1_2_intro, s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
+  s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
-s2_intro, s2_1_contents, s4_2_3_deriv, s4_2_5_subpar, 
+s2_1_contents, s4_2_3_deriv, s4_2_5_subpar, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
   :: [Contents]
 
@@ -105,7 +103,8 @@ swhs_mg = mgDoc swhsFull authors mgBod
   
 s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4]
 
-s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
+s2_intro :: Sentence
+s2_intro = S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
   (phrase $ energy ^. term) +:+ S "sources and" +:+
@@ -119,7 +118,7 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (short phsChgMtrl) +:+ S "to store" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "as" +:+ (phrase $ latent_heat ^. term) `sC`
   S "which allows higher" +:+ (phrase $ CT.thermal_energy ^. term) +:+
-  S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight")]
+  S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"
 
 kSent :: Sentence
 kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
@@ -360,6 +359,7 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
  
 -- using plural solutionCharSpec is a hack in order to pluralize the middle word,
 -- based on compoundNPNC''' in NamedIdea.hs
+s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
   S "and finally the" +:+ plural inModel +:+ S "(" :+: (short ode) :+:
   S "s) that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
@@ -388,7 +388,7 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-s4_1_1 = termDefnF Nothing [s4_1_1_bullets] []
+s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
@@ -423,6 +423,9 @@ s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short physSyst)
   s4_1_2_physSystList)
 
 s4_1_2_physSystList :: [Sentence]
+
+physSyst1, physSyst2, physSyst3 :: Sentence
+
 s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
 
 physSyst1 = (at_start $ tank ^. term) +:+ S "containing" +:+.
@@ -507,6 +510,11 @@ s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short assumption)
   s4_2_1_assump_list)
 
 s4_2_1_assump_list :: [Sentence]
+
+assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19 :: Sentence
+
 s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19]
@@ -1052,6 +1060,9 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 -- so not sure how to implement yet
 
 reqList :: [Sentence]
+
+req3, req4, req5, req6, req7, req8, req9, req10, req11 :: Sentence
+
 reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 req3, req4, req5, req6, req7, req8, req9, req10, req11 :: Sentence
@@ -1148,6 +1159,9 @@ s6 = SRS.likeChg [s6_list] []
 s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short likelyChg) s6_likeChg_list)
 
 s6_likeChg_list :: [Sentence]
+
+likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence
+
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence

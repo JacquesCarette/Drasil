@@ -15,11 +15,12 @@ module Data.Drasil.Utils
   , makeListRef
   , enumSimple
   , enumBullet
+  , mkRefsList
   ) where
 
 import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
-  ItemType(Flat), sC, sParen, Contents(Definition, Enumeration), 
+  ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), UnitalChunk, 
   unit_symb, symbol)
   
@@ -65,6 +66,12 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map (Flat) l)
+
+mkRefsList :: Integer -> [Sentence] -> Contents
+mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map (Flat) l)
+
+enumWithSquBrk :: Integer -> [Sentence]
+enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 
 -- | formats constraints on variables for tables
 fmtCS :: Sentence -> Sentence -> Sentence -> Sentence

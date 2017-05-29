@@ -9,19 +9,20 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation, matrix, graph)
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Utils (foldle, foldlsC, foldlSent)
+import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
-introF :: Sentence -> Sentence -> [Section] -> Section
-introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
+introF :: Sentence -> Sentence -> [Section] -> [(Sentence, Sentence)]-> Section
+introF start kSent subSec temp = SRS.intro [Paragraph start, Paragraph end] subSec
       where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
-                  S "for", kSent, S "This", phrase section_, S "explains the", phrase purpose,
-                  S "of this", phrase document `sC` S "the", phrase scope,
-                  S "of the", phrase system `sC` S "the", phrase organization,
-                  S "of the", phrase document, S  "and the",
-                  plural characteristic, S "of the", plural intReader]
+                  S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
+                  S "of this", phrase document, foldlList (map ofThe (temp))]
+
+--combinator function that is used by introF
+ofThe :: (Sentence, Sentence) -> Sentence
+ofThe (p1, p2) = S "the" +:+ p1 +:+ S "of the" +:+ p2
 
 -- provide only the first paragraph (as a sentence type) to 
 prpsOfDocF :: Sentence -> Section

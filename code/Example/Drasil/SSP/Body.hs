@@ -89,7 +89,8 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introF start kSent [s2_1, s2_2, s2_3]
+s2 = introF start kSent [s2_1, s2_2, s2_3] 
+  [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
   where start = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
                 (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
                 S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+

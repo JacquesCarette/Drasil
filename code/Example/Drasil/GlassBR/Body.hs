@@ -84,7 +84,8 @@ this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
-s2 = introF start (titleize $ gLassBR ^. term) [s2_1, s2_2, s2_3]
+s2 = introF start (titleize $ gLassBR ^. term) [s2_1, s2_2, s2_3] 
+  [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
   where start = foldlSent [(at_start software), 
                 S "is helpful to efficiently and correctly predict the", 
                 (phrase $ blastRisk ^. term), S "involved with the" +:+. 

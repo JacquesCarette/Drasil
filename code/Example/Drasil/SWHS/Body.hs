@@ -102,6 +102,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
   
 s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4]
+  [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+

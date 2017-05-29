@@ -45,7 +45,7 @@ s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
 s2_p1, s2_p2, s2_1_p1, s2_1_p2, s2_2_p1, s3_1_p1,
   s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
-  s4_1_3_list, s4_2_p1, s4_2_1_list, 
+  s4_1_3_list, s4_2_1_list, 
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
 
@@ -281,23 +281,10 @@ s4_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "GS") [
   ]
 
 -- SECTION 4.2 --
-s4_2 = SRS.solCharSpec [s4_2_p1] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
-
-s4_2_p1 = Paragraph $ S "The" +:+ (plural inModel) +:+ S "that govern" +:+
-  (short ssa) +:+ S "are presented in" +:+. makeRef s4_2_5 +:+
-  S "The" +:+ (phrase information) +:+ S "to understand the meaning of the instance" +:+
-  (plural model) +:+ S "and their derivation is also presented, so that the" +:+
-  (plural inModel) +:+ S "can be verified."
+s4_2 = solChSpecF ssa s4_2_5 [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 -- SECTION 4.2.1 --
 s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6 [s4_2_1_list]
-
--- s4_2_1_p1 = Paragraph $ S "This" +:+ (phrase section_) +:+ S "simplifies the" +:+
-  -- S "original" +:+ (phrase problem) +:+ S "and helps in developing the" +:+ (phrase thModel) +:+
-  -- S "by filling in the missing" +:+ (phrase information) +:+ S "for the" +:+.
-  -- (phrase physicalSystem) +:+ S "The numbers given in the square brackets refer to" +:+
-  -- S "the" +:+ (phrase dataDefn) `sC` S "or the" +:+ (phrase inModel) `sC` S "in which the" +:+
-  -- S "respective" +:+ (phrase assumption) +:+ S "is used."
 
 s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+

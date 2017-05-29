@@ -1,5 +1,5 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, assumpF, assumpF', datConF, reqF,
+                                 specSysDesF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
                                  stakeholderIntro, traceGIntro) where
@@ -101,6 +101,16 @@ specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first pr
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
 
+--provide the key word, a reference to the Instance Model, and the Subsections
+solChSpecF :: CINP -> Section -> [Section] -> Section
+solChSpecF kWord inModRef subSec = SRS.solCharSpec [intro] subSec
+  where intro = Paragraph $ S "The" +:+ plural inModel +:+ S "that govern" +:+
+                short kWord +:+ S "are presented in" +:+. makeRef inModRef +:+
+                S "The" +:+ phrase information +:+ S "to understand the meaning of the" +:+
+                plural inModel +:+ S "and their derivation is also presented, so that the" +:+
+                plural inModel +:+ S "can be verified."
+
+ 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg otherContents = 

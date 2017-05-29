@@ -13,7 +13,7 @@ inputFormatFunc = pubMethod methodTypeVoid "get_input" (params [("filename", str
       block [
         -- TODO:  improve gool file IO (some languages use object methods, some not...
         --        probably best to add as new IO Statement)
-        varDecDef "infile" infile (funcApp "open" [var "filename", litString "r"]),
+        varDecDef "infile" infile (funcApp' "open" [var "filename", litString "r"]),
         (var "params")$->(var "a") &= readfl64,
         (var "params")$->(var "b") &= readfl64,
         (var "params")$->(var "t") &= readfl64,
@@ -32,7 +32,7 @@ inputFormatFunc = pubMethod methodTypeVoid "get_input" (params [("filename", str
 -- float64 from numpy library
 --   this should come from a library database
 readfl64 :: Value
-readfl64 = funcApp "numpy.float64" [readline]  
+readfl64 = funcApp "numpy" "float64" [readline]  
   
 readline :: Value
 readline = objMethodCall (var "infile") "readline" []

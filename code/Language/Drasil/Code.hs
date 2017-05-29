@@ -16,7 +16,7 @@ module Language.Drasil.Code (
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
     convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
-    objDecNewVoid,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,
+    objDecNewVoid,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,funcApp',
     cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel,
     makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
     Options(..)

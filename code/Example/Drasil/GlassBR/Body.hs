@@ -42,7 +42,7 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
-s2_intro, s2_2_intro, 
+s2_2_intro, 
   s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
@@ -84,23 +84,15 @@ this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
-s2 = SRS.intro [s2_intro] [s2_1, s2_2, s2_3]
-
-s2_intro = Paragraph $ foldlSent [(at_start software), 
-  S "is helpful to efficiently and correctly predict the", 
-  (phrase $ blastRisk ^. term), S "involved with the" +:+. 
-  (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
-  S "under consideration is" +:+. (blast ^. defn), S "The", phrase software `sC` 
-  S "herein called", (gLassBR ^. defn), S "aims to predict the", 
-  (phrase $ blastRisk ^. term), S "involved with the", 
-  (phrase $ glaSlab ^. term), S "using an intuitive", 
-  S "interface. The following", phrase section_, S "provides an overview", 
-  S "of the", titleize srs, sParen (short srs), S "for" +:+.
-  (gLassBR ^. defn), S "This", phrase section_, S "explains the", 
-  phrase purpose, S "of the", phrase document, S "is designed to fulfil, the", 
-  phrase scope, S "of the", plural requirement, S "and the", 
-  phrase organization, S "of the" +: phrase document, S "what the", 
-  phrase document, S "is based on and intended to portray"]
+s2 = introF start (titleize $ gLassBR ^. term) [s2_1, s2_2, s2_3]
+  where start = foldlSent [(at_start software), 
+                S "is helpful to efficiently and correctly predict the", 
+                (phrase $ blastRisk ^. term), S "involved with the" +:+. 
+                (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
+                S "under consideration is" +:+. (blast ^. defn), S "The", phrase software `sC` 
+                S "herein called", (gLassBR ^. defn), S "aims to predict the", 
+                (phrase $ blastRisk ^. term), S "involved with the", 
+                (phrase $ glaSlab ^. term), S "using an intuitive interface"]
 
 s2_1 = SRS.prpsOfDoc (s2_1_intro) []
 

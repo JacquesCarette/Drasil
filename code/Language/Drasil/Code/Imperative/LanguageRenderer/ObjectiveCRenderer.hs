@@ -114,12 +114,12 @@ objctop c Source p _ = vcat [
     include c "<Foundation/NSAutoreleasePool.h>"]
 
 objcbody :: Config -> FileType -> Label -> [Module] -> Doc
-objcbody c f@(Header) p modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+objcbody c f@(Header) p modules = let ms = foldl1 (++) (map classes modules) in
     vcat [
     clsDecListDoc c ms,
     blank,
     vibmap (classDoc c f p) (fixCtorNames sagaInit ms)]
-objcbody c f@(Source) p modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+objcbody c f@(Source) p modules = let ms = foldl1 (++) (map classes modules) in
     vibmap (classDoc c f p) (fixCtorNames sagaInit ms)
 
 -- code doc functions

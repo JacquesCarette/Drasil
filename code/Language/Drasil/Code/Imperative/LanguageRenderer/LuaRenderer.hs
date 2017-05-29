@@ -125,7 +125,7 @@ luatop c ft _ _ = vcat [
                             \end"
 
 luabody :: Config -> FileType -> Label -> [Module] -> Doc
-luabody c f p modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+luabody c f p modules = let ms = foldl1 (++) (map classes modules) in
   vibmap (classDoc c f p) $ fixCtorNames initName ms
 
 -- code doc functions

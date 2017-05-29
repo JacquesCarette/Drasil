@@ -119,7 +119,7 @@ cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
     usingNameSpace c "std" (Just "ofstream")]
 
 cppbody :: Config -> FileType -> Label -> [Module] -> Doc
-cppbody c f@(Header) p modules = let cs = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+cppbody c f@(Header) p modules = let cs = foldl1 (++) (map classes modules) in
     vcat [
     package c p <+> lbrace,
     oneTabbed [
@@ -127,7 +127,7 @@ cppbody c f@(Header) p modules = let cs = foldl1 (++) (map (\(Mod _ _ _ _ classe
         blank,
         vibmap (classDoc c f p) cs],
     rbrace]
-cppbody c f@(Source) p modules = let cs = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+cppbody c f@(Source) p modules = let cs = foldl1 (++) (map classes modules) in
    vibmap (classDoc c f p) cs
 
 cppbottom :: FileType -> Doc

@@ -87,7 +87,7 @@ jtop c _ p _ = vcat [
     ]
 
 jbody :: Config -> a -> Label -> [Module] -> Doc
-jbody c _ p modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+jbody c _ p modules = let ms = foldl1 (++) (map classes modules) in
   vibmap (classDoc c Source p) ms
 
 -- code doc functions

@@ -156,7 +156,7 @@ Reviewers of this documentation should have a strong knowledge in heat transfer 
 \section{General System Description}
 \label{Sec:GSD}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
-\subsection{System Context}
+\subsection{System Constraints}
 \label{Sec:SC}
 Figure~\ref{Figure::SC} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the section and its environment.
 \begin{figure}
@@ -190,7 +190,7 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Swht,whffco}, includ
 \begin{center}
 \includegraphics{TankWaterOnly.png}
 \caption{Solar water heating tank, with heat flux from coil of $q_{C}$}
-\label{Figure:Swhtwhffco}
+\label{Figure:Swht,whffco}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
@@ -211,9 +211,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:Cote}
+\toprule \textbf{Refname} & \textbf{T:t1consThermE}
 \phantomsection 
-\label{T:Cote}
+\label{T:t1consThermE}
 \\ \midrule \\
 Label & Conservation of thermal energy
 \\ \midrule \\
@@ -222,4 +222,34 @@ Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{}C\frac{\partial{}T}{\partial{}t}$
 Description & This equation gives the conservation of energy for time varying heat transfer in a material of specific heat capacity $C$ and density $\rho{}$, where $\mathbf{q}$ is the thermal flux vector, $g$ is the volumetric heat generation, $T$ is the temperature, $t$ is time, and $\nabla{}$ is the gradient operator. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+\subsubsection{General Definitions}
+\label{Sec:GD}
+This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+\subsubsection{Data Definitions}
+\label{Sec:DD}
+This section collects and defines all the data needed to build the instance models.
+\subsubsection{Instance Models}
+\label{Sec:IM}
+This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM} and Section~\ref{Sec:GD}.
+\subsubsection{Data Constraints}
+\label{Sec:DC}
+Table~\ref{Table:T1IV} and Table~\ref{Table:T2OV} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+\begin{longtable}{l l l}
+\toprule
+Var & Physical Constraints & Typical Value
+\\
+\midrule
+\bottomrule
+\caption{Table 1: Input Variables}
+\label{Table:T1IV}
+\end{longtable}
+\begin{longtable}{l l l}
+\toprule
+Var & Physical Constraints & Typical Value
+\\
+\midrule
+\bottomrule
+\caption{Table 2: Output Variables}
+\label{Table:T2OV}
+\end{longtable}
 \end{document}

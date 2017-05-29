@@ -131,7 +131,7 @@ t1descr =
   (P $ temp ^. symbol) +:+ S "is the temperature," +:+ (P $ time ^. symbol) +:+
   S "is time, and" +:+ (P $ gradient ^. symbol) +:+ S "is the gradient operator."
   +:+ S "For this equation to apply, other forms of energy, such as mechanical"
-  +:+ S "energy, are assumed to be negligible in the system (A1).")
+  +:+ S "energy, are assumed to be negligible in the") --FIXME: Add 'system (A1).' or Assumption 1 reference
   
 srs_swhs :: ConceptChunk -- Used to make the title of the paper
   

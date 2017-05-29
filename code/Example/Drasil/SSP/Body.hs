@@ -108,7 +108,7 @@ s2 = introF start kSent [s2_1, s2_2, s2_3]
 
 -- SECTION 2.1 --
 s2_1 = prpsOfDocF $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
-  S "determines the" +:+ (phrase crtSlpSrf) `sC` S "and it's respective" +:+ 
+  S "determines the" +:+ (phrase $ crtSlpSrf ^. term) `sC` S "and it's respective" +:+ 
   (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ 
   S "of assessing the stability of a slope" +:+. (phrase design) +:+ 
   S "The" +:+ (phrase $ program ^. term) +:+ 
@@ -155,7 +155,7 @@ s3_2 = systCon Nothing []
 s4 = specSysDesF end [s4_1, s4_2]
   where end = (plural definition) +:+ S "and finally the" +:+ 
               (plural inModel) +:+ S "that" +:+ (phrase model) +:+
-              S "the" +:+. (phrase slope)
+              S "the" +:+ (phrase slope)
 
 -- SECTION 4.1 --
 s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
@@ -168,16 +168,12 @@ s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^.
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
-s4_1_1_list = Enumeration $ Simple $ ([
-  (titleize $ fs_rc ^. term, 
-      Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
-      S "failure through slipping."), 
-  (titleize crtSlpSrf, 
-      Flat $ (at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
-      (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure.")] ++
+s4_1_1_list = Enumeration $ Simple $
+  ([(titleize $ fs_rc ^. term, Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+
+                                      S "is to experience failure through slipping.")] ++
   map (\x -> (titleize $ x ^. term, Flat $ x ^. defn)) 
-      [stress, strain, normForce, shearForce, tension, compression, plnStrn])
-      -- most of these are in concepts (physics or solidMechanics) except for plnStrn which is in defs.hs
+      [crtSlpSrf, stress, strain, normForce, shearForce, tension, compression, plnStrn])
+      -- most of these are in concepts (physics or solidMechanics) except for crtSlpSrf & plnStrn which is in defs.hs
 
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
@@ -222,7 +218,7 @@ s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
 s4_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "GS") [
   (S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
       S "along a given" +:+. phrase slpSrf),
-  (S "Identify the" +:+ (phrase crtSlpSrf) +:+ S "for the slope" `sC` 
+  (S "Identify the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for the slope" `sC` 
       S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
   (S "Determine the displacement of the" +:+. (phrase slope))
   ]
@@ -284,7 +280,7 @@ s4_2_4 = dataDefnF ending []
   where ending = (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
                   S "can be solved by direct analysis of given inputs. The interslice" +:+ 
                   S "forces DD9 are force variables that must be written" +:+ 
-                  S "in terms of DD1 to DD8 to solve."
+                  S "in terms of DD1 to DD8 to solve"
 
 -- SECTION 4.2.5 --
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 [s4_2_5_p2,s4_2_5_p3]
@@ -331,7 +327,7 @@ s5_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "R") [
   (S "Read the input file, and store the" +:+
         S "data. Necessary input data summarized in" +:+.
         (makeRef table_inputdata)),
-  (S "Generate potential" +:+ (phrase crtSlpSrf) :+:
+  (S "Generate potential" +:+ (phrase $ crtSlpSrf ^. term) :+:
         S "'s for the input" +:+. (phrase slope)),
   (S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
         S "if they are physically realizable based" +:+
@@ -343,7 +339,7 @@ s5_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "R") [
         (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
         S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
         S "has a larger weighting."),
-  (S "Generate new potential" +:+ (plural crtSlpSrf) +:+
+  (S "Generate new potential" +:+ (plural $ crtSlpSrf ^. term) +:+
         S "based on previously analysed" +:+ (plural slpSrf) +:+
         S "with low" +:+. (plural $ fs_rc ^. term)),
   (S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
@@ -351,13 +347,13 @@ s5_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "R") [
         S "the same over a predetermined number of" +:+
         S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
         S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
-        S "as the" +:+. (phrase crtSlpSrf)),
-  (S "Prepare the" +:+ (phrase crtSlpSrf) +:+ S "for" +:+ (phrase method_) +:+ 
+        S "as the" +:+. (phrase $ crtSlpSrf ^. term)),
+  (S "Prepare the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for" +:+ (phrase method_) +:+ 
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
   (S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
-        (phrase crtSlpSrf) +:+ S "using the" +:+ (titleize morPrice) +:+.
+        (phrase $ crtSlpSrf ^. term) +:+ S "using the" +:+ (titleize morPrice) +:+.
         (phrase method_)),
-  (S "Display the" +:+ (phrase crtSlpSrf) +:+ S "and the" +:+
+  (S "Display the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
         S "Give the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
         S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
@@ -416,6 +412,6 @@ s7_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [ --FIXME: names s
             S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008."),
   (S "[7]", S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
             S "Peter John Cleall. An efficient approach for locating the" +:+
-            (phrase crtSlpSrf) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
+            (phrase $ crtSlpSrf ^. term) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
             S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+
             S "25 June 2010.")]

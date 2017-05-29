@@ -31,23 +31,27 @@ surface_ = npnc "surface"    (cn' "surface") -- FIXME: use the one from concepts
 morPrice = npnc "morPrice"   (cn  "morgenstern price")
 rgFnElm  = npnc "rgFnElm"    (cn' "rigid finite element")
 
-slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf,
+slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf,
   soilLyr :: NPNC
 slpSrf    = compoundNPNC slip surface_
-crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
+--crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 soilPrpty = compoundNPNC soil     property
 mtrlPrpty = compoundNPNC material property
 itslPrpty = compoundNPNC intrslce property
 slopeSrf  = compoundNPNC slope surface_
 soilLyr   = compoundNPNC soil (npnc "layer" (cn' "layer"))
 
-plnStrn :: ConceptChunk
+crtSlpSrf, plnStrn :: ConceptChunk
 plnStrn = dcc "plane strain" (cn' "plane strain") 
-          ("The resultant stresses in one of the directions of a" ++
-          "3 dimensional material can be approximated as 0. Results" ++
-          "when the length of one dimension of the body dominates the" ++
-          "others. Stresses in the dominate dimensions direction are" ++
+          ("The resultant stresses in one of the directions of a " ++
+          "3 dimensional material can be approximated as 0. Results " ++
+          "when the length of one dimension of the body dominates the " ++
+          "others. Stresses in the dominate dimensions direction are " ++
           "the ones that can be approximated as 0.")
+          
+crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
+    ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
+    (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure.")
 
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?

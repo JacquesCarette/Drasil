@@ -48,7 +48,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "If a piezometric" +:+ (phrase surface_) +:+ S "exists in the" +:+ (phrase slope) +:+
    S "it's coordinates and the" +:+ (phrase $ waterWeight ^. term) +:+ S "are also" +:+
    S "included in the" +:+. (phrase input_) +:+ S "Lastly an expected range for" +:+
-   S "the entrance and exit points of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
+   S "the entrance and exit points of the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
 mod_inputf = mod_io_fun program [] [mod_hw] (plural inDatum) mod_inputf_desc
@@ -58,7 +58,7 @@ mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = mod_outputf_desc_fun ((phrase $ fs_rc ^. term) +:+
    S "for the critical" +:+ (phrase slip) +:+ S "calculated by the" +:+ (titleize morPrice) +:+ 
    S "Module and" +:+ (titleize rgFnElm) +:+ S "Method Module, and a" +:+
-   S "plot of the" +:+ (phrase crtSlpSrf) +:+ S "on the" +:+ (phrase slope) +:+
+   S "plot of the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "on the" +:+ (phrase slope) +:+
    S "geometry, with the showing the" +:+ (phrase element) +:+
    S "displacements as calculated by the RFEM Module.")
 
@@ -69,7 +69,7 @@ mod_outputf = mod_io_fun program [] [mod_plot, mod_slipslicer, mod_mp, mod_rfem]
 -- gen alg module
 mod_genalg_desc :: ConceptChunk
 mod_genalg_desc = dccWDS "mod_genalg_desc" (cn' "genetic algorithm")
-  (S "Searches the" +:+ (phrase slope) +:+ S "for the" +:+ (phrase crtSlpSrf) +:+
+  (S "Searches the" +:+ (phrase slope) +:+ S "for the" +:+ (phrase $ crtSlpSrf ^. term) +:+
    S "with the minimum" +:+ (phrase $ fs_rc ^. term))
 
 mod_genalg :: ModuleChunk
@@ -129,7 +129,7 @@ mod_slipweight_desc = dccWDS "mod_slipweight_desc" (cn' "slip weighting")
    (titleize $ mod_genalg_desc ^. term) +:+ S "Module based on their" +:+.
    (plural $ fs_rc ^. term) +:+ S "A" +:+ (phrase slpSrf) +:+ S "with a low" +:+
    (phrase $ fs_rc ^. term) +:+ S "will have a high weight as it is more" +:+
-   S "likely to be or to lead to generation of the" +:+. (phrase crtSlpSrf))
+   S "likely to be or to lead to generation of the" +:+. (phrase $ crtSlpSrf ^. term))
 
 mod_slipweight :: ModuleChunk
 mod_slipweight = makeImpModule mod_slipweight_desc

@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent, mkEnumAbbrevList, itemRefToSent,
-  makeTMatrix, makeListRef, refFromType)
+import Data.Drasil.Utils (foldlSent, itemRefToSent,
+  makeTMatrix, makeListRef, refFromType, enumSimple, enumBullet)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -162,8 +162,7 @@ s4 = genSysF [s4_1, s4_2]
 
 s4_1 = SRS.userChar [s4_1_bullets] []
 
-s4_1_bullets = Enumeration $ Bullet $ map Flat
-  [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ 
+s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (gLassBR ^. defn) +:+ 
   S "is expected to have completed at least the equivalent of the second year of an" +:+
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
@@ -201,7 +200,7 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
 
 s5_2 = SRS.indPRCase [s5_2_bullets] []
 
-s5_2_bullets = Enumeration $ Bullet $ map Flat [s5_2_bt_sent1, s5_2_bt_sent2]
+s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
 s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, 
@@ -287,8 +286,7 @@ s6_1_2 = physSystDesc (gLassBR ^. defn) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
-s6_1_2_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short physSyst) 
-  s6_1_2_list_physys1
+s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys1
 
 s6_1_2_list_physys1 :: [Sentence]
 s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of"
@@ -299,8 +297,7 @@ s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of
 
 s6_1_3 = SRS.goalStmt [s6_1_3_list] []
 
-s6_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short goalStmt) 
-  s6_1_3_list_goalStmt1
+s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
 s6_1_3_list_goalStmt1 :: [Sentence]
 s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
@@ -319,8 +316,7 @@ s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_,
 s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
-  [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) 
-    s6_2_1_list_assum1),
+  [(enumSimple 1 (short assumption) s6_2_1_list_assum1),
   (EqnBlock $ (C sflawParamM):=(Int 7)),
   (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
     (Neg (Int 53))),
@@ -331,7 +327,7 @@ s6_2_1_list =
   --  (P $ sflawParamK ^. symbol) +:+ S "= 2.86 * 10^(-53)" +:+ Sy (sflawParamK ^. unit), 
   --  (P $ mod_elas ^. symbol) +:+ S "= 7.17 * 10^7" +:+ Sy (mod_elas ^. unit),
   --  (P $ load_dur ^. symbol) +:+ S "= 3" +:+ Sy (load_dur ^. unit)]))] ++
-  (Enumeration $ Simple $ mkEnumAbbrevList 5 (short assumption) s6_2_1_list_assum2)]
+  (enumSimple 5 (short assumption) s6_2_1_list_assum2)]
   --equation in sentence
 
 s6_2_1_list_assum1 :: [Sentence]
@@ -523,27 +519,38 @@ s7_2_intro = Paragraph $ foldlSent [
 
 s8 = SRS.likeChg [s8_list] []
 
-s8_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
-  [(((short likelyChg) :+: S "1"), ((short assumption) :+: 
-  S "3 - The" +:+ phrase system +:+
+s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
+  s8_likelychg5 :: Sentence
+
+s8_likelychg1 = foldlSent [(short assumption) :+: S "3 - The", phrase system,
   S "currently only calculates for external" +:+. (phrase $ blastRisk ^. term)
-  +:+. (S "In the future" +:+ (plural $ calculation ^. term) +:+
-  S "can be added for the internal" +:+ (phrase $ blastRisk ^. term)))),
-  (((short likelyChg) :+: S "2"), ((short assumption) :+:
-  S "4" `sC` (short assumption) :+: S "8 - Currently the" +:+ plural value +:+
-  S "for" +:+ (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
-  S "and" +:+ (P $ mod_elas ^. symbol) +:+ S "are assumed to be the"
-  +:+ S "same for all glass. In the future these" +:+ plural value +:+ 
-  S "can be changed to" +:+ phrase variable +:+. plural input_)),
-  (((short likelyChg) :+: S "3"), ((short assumption ) :+: 
-  S "5 - The" +:+ phrase software +:+
-  S "may be changed to accommodate more than a single" +:+. 
-  (phrase $ lite ^. term))), (((short likelyChg) :+: S "4"),
-  ((short assumption) :+: S "6 - The" +:+ phrase software +:+
-  S "may be changed to accommodate more boundary" +:+ plural condition +:+.
-  S "than 4-sided support")), (((short likelyChg) :+: S "5"), 
-  ((short assumption) :+: S "7 - The" +:+ phrase software +:+.
-  S "may be changed to consider more than just flexure of the glass"))]
+  +:+. S "In the future", (plural $ calculation ^. term),
+  S "can be added for the internal", (phrase $ blastRisk ^. term)]
+
+s8_likelychg2 = foldlSent [(short assumption) :+: S "4" `sC` 
+  (short assumption) :+: S "8 - Currently the", plural value,
+  S "for", (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
+  S "and", (P $ mod_elas ^. symbol), S "are assumed to be the",
+  S "same for all glass. In the future these", plural value, 
+  S "can be changed to", phrase variable, plural input_]
+
+s8_likelychg3 = foldlSent [(short assumption) :+: S "5 - The", phrase software,
+  S "may be changed to accommodate more than a single", (phrase $ lite ^. term)]
+
+s8_likelychg4 = foldlSent [(short assumption) :+: S "6 - The", phrase software,
+  S "may be changed to accommodate more boundary", plural condition,
+  S "than 4-sided support"]
+
+s8_likelychg5 = foldlSent [(short assumption) :+: S "7 - The", phrase software,
+  S "may be changed to consider more than just flexure of the glass"]
+
+s8_likelychg_list :: [Sentence]
+s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
+  s8_likelychg5]
+
+s8_list = enumSimple 1 (short assumption) s8_likelychg_list
+
+
 
 s9 = traceMGF [s9_table1, s9_table2, s9_table3]
   [(plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+. S "with each other"),

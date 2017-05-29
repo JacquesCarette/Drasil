@@ -41,6 +41,14 @@ itslPrpty = compoundNPNC intrslce property
 slopeSrf  = compoundNPNC slope surface_
 soilLyr   = compoundNPNC soil (npnc "layer" (cn' "layer"))
 
+plnStrn :: ConceptChunk
+plnStrn = dcc "plane strain" (cn' "plane strain") 
+          ("The resultant stresses in one of the directions of a" ++
+          "3 dimensional material can be approximated as 0. Results" ++
+          "when the length of one dimension of the body dominates the" ++
+          "others. Stresses in the dominate dimensions direction are" ++
+          "the ones that can be approximated as 0.")
+
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?
 factor, safety :: NPNC

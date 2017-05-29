@@ -168,26 +168,16 @@ s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^.
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
-s4_1_1_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s4_1_1_list = Enumeration $ Simple $ ([
   (titleize $ fs_rc ^. term, 
-      S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
+      Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+ S "is to experience" +:+
       S "failure through slipping."), 
   (titleize crtSlpSrf, 
-      (at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
-      (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure."),
-  (titleize $ stress ^. term,      stress ^. defn),
-  (titleize $ strain ^. term,      strain ^. defn),
-  (titleize $ normForce ^. term,   normForce ^. defn),
-  (titleize $ shearForce ^. term,  shearForce ^. defn),
-  (titleize $ tension ^. term,     tension ^. defn),
-  (titleize $ compression ^. term, compression ^. defn),
-  (S "Plane Strain", 
-      S "The resultant stresses in one of the directions of a" +:+
-      S "3 dimensional material can be approximated as 0. Results" +:+
-      S "when the length of one dimension of the body dominates the" +:+
-      S "others. Stresses in the dominate dimensions direction are" +:+
-      S "the ones that can be approximated as 0.")
-  ]
+      Flat $ (at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
+      (phrase $ fs_rc ^. term) `sC` S "and therefore most likely to experience failure.")] ++
+  map (\x -> (titleize $ x ^. term, Flat $ x ^. defn)) 
+      [stress, strain, normForce, shearForce, tension, compression, plnStrn])
+      -- most of these are in concepts (physics or solidMechanics) except for plnStrn which is in defs.hs
 
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []

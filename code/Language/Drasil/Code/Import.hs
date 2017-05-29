@@ -21,7 +21,7 @@ toCode :: NamedIdea c => c -> [ModuleChunk] -> AbstractCode
 toCode prog mcs = AbsCode $ Pack (prog ^. id)
   (makeModules (filter generated mcs) [])
 
-makeModules :: [ModuleChunk] -> [Class] -> [Class]
+makeModules :: [ModuleChunk] -> [Module] -> [Module]
 makeModules [] cs = cs
 makeModules (mc:mcs) cs =
   -- if dependencies haven't been built into Class types, postpone
@@ -29,14 +29,16 @@ makeModules (mc:mcs) cs =
          (\x -> makeClassNameValid $ (modcc x) ^. id)
          (filter generated (uses mc)))
        `Set.isSubsetOf`
-       Set.fromList (map className cs)
+       Set.fromList (map moduleName cs)
   then makeModules mcs (makeModule mc cs:cs)
   else makeModules (mcs ++ [mc]) cs
 
 
-makeModule :: ModuleChunk -> [Class] -> Class
-makeModule mc cs = pubClass (makeClassNameValid $ (modcc mc) ^. id) noParent
-  (makeFields (field mc)) (makeMethods (method mc) cs)
+makeModule :: ModuleChunk -> [Module] -> Module
+makeModule mc cs = buildModule (makeClassNameValid $ (modcc mc) ^. id)
+  [] [] []
+  [(pubClass (makeClassNameValid $ (modcc mc) ^. id) noParent
+  (makeFields (field mc)) (makeMethods (method mc) cs))]
 
 makeFields :: [VarChunk] -> [StateVar]
 makeFields = map makeField
@@ -44,10 +46,10 @@ makeFields = map makeField
 makeField :: VarChunk -> StateVar
 makeField vc = pubMVar 2 (makeType (vc ^. Q.typ)) (vc ^. id)
 
-makeMethods :: [MethodChunk] -> [Class] -> [Method]
+makeMethods :: [MethodChunk] -> [Module] -> [Method]
 makeMethods mcs cs = map (\x -> makeMethod x cs) mcs
 
-makeMethod :: MethodChunk -> [Class] -> Method
+makeMethod :: MethodChunk -> [Module] -> Method
 makeMethod meth@(MeC { mType = MCalc (EC a b)}) _ =
   pubMethod (A.typ $ makeType $ a ^. Q.typ) ("calc_" ++ ((methcc meth) ^. id))
   (map (\vc -> param (vc ^. id) (makeType (vc ^. Q.typ))) (vars b))
@@ -117,9 +119,12 @@ makeExpr (b E.:+ e) = (makeExpr b) #+ (makeExpr e)
 makeExpr (b E.:- e) = (makeExpr b) #- (makeExpr e)
 makeExpr _          = error "Unimplemented expression in code generation"
 
-findClass :: String -> [Class] -> Class
-findClass _ [] = error "Class not found"
-findClass n (c:cs) = if (makeClassNameValid n) == className c then c else findClass n cs
+findClass :: String -> [Module] -> Class
+findClass n ms = findClass' n (foldl1 (++) (map classes ms))
+
+findClass' :: String -> [Class] -> Class
+findClass' _ [] = error "Class not found"
+findClass' n (c:cs) = if (makeClassNameValid n) == className c then c else findClass' n cs
 
 getClassVars :: Class -> [Value]
 getClassVars (Enum _ _ _) = error "Enum does not have vars"

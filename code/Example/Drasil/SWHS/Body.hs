@@ -94,8 +94,14 @@ mgBod :: [Section]
 
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
-  
--- This section name and table structure are same between all examples.
+
+-- =================================== --
+-- SOFTWARE REQUIREMENTS SPECIFICATION --
+-- =================================== --
+
+------------------------------
+-- Section 2 : INTRODUCTION --
+------------------------------
   
 s2 = SRS.intro (s2_intro) [s2_1, s2_2, s2_3, s2_4]
 
@@ -140,6 +146,10 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
 -- similar paragraph in each of the other examples. It can probably be 
 -- abstracted out.
 
+-------------------------------
+-- 2.1 : Purpose of Document --
+-------------------------------
+
 s2_1 = SRS.prpsOfDoc (s2_1_contents) []
 
 s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
@@ -178,6 +188,10 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
 --How to italicize words in sentence?
 --How to cite?
 
+---------------------------------
+-- 2.2 : Scope of Requirements --
+---------------------------------
+
 s2_2 = SRS.scpOfReq [s2_2_contents] []
 
 s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
@@ -205,6 +219,10 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- The fact that "PCM" must always be capital is especially making things 
 -- difficult with concept chunks involving PCM (can't use map toLower).
 
+----------------------------------------------
+-- 2.3 : Characteristics of Intended Reader --
+----------------------------------------------
+
 s2_3 = SRS.charOfIR [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
@@ -217,6 +235,10 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
   S "as explained in" +:+. (makeRef s3_2))
 
+
+------------------------------------
+-- 2.4 : Organization of Document --
+------------------------------------
 
 s2_4 = orgSecWTS s2_4_intro inModel s4_2_5 s2_4_trail
 
@@ -266,6 +288,10 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+.
 -- the sectioning? This would also improve the tediousness of declaring
 -- LayoutObjs
 
+--------------------------------------------
+-- Section 3: GENERAL SYSTEM DESCRIPTION --
+--------------------------------------------
+
 s3 = SRS.genSysDes [s3_intro] [s3_1, s3_2, s3_3]
 
 s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
@@ -277,7 +303,9 @@ s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
-
+--------------------------
+-- 3.1 : System Context --
+--------------------------
 
 s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
@@ -316,11 +344,10 @@ s3_1_2_bullets = Enumeration (Bullet $
   phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint,
   S "Calculate the required" +:+ plural output_
   ])])
-  
 
-
-
-
+--------------------------------
+-- 3.2 : User Characteristics --
+--------------------------------
 
 s3_2 = SRS.userChar [s3_2_contents] []
 
@@ -331,11 +358,18 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
 
+------------------------------
+-- 3.3 : System Constraints --
+------------------------------
 
 s3_3 = systCon Nothing []
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
+
+---------------------------------------------
+-- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
+---------------------------------------------
 
 s4 = SRS.specSysDes [s4_intro] [s4_1, s4_2]
  
@@ -359,6 +393,10 @@ s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
 -- The swhs_pcm reference at the end would be better if singular, but concept
 -- is plural.
 
+-------------------------------
+-- 4.1 : Problem Description --
+-------------------------------
+
 s4_1 = SRS.probDesc [s4_1_intro]
   [s4_1_1, s4_1_2, s4_1_3]
 
@@ -368,6 +406,10 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
   (short phsChgMtrl) +:+ S "within a" +:+. (tank ^. defn))
 
 --  section is very different between all examples
+
+-----------------------------------------
+-- 4.1.1 : Terminology and Definitions --
+-----------------------------------------
 
 s4_1_1 = SRS.termAndDefn [s4_1_1_intro, s4_1_1_bullets] []
 
@@ -391,6 +433,10 @@ s411_bullet_map_f c = Flat ((at_start $ c ^. term) :+: S ":" +:+. (c ^. defn))
 
 -- Included heat flux and specific heat in NamedChunks even though they are 
 -- already in SWHSUnits
+
+-----------------------------------------
+-- 4.1.2 : Physical System Description --
+-----------------------------------------
 
 s4_1_2 = SRS.physSyst [s4_1_2_intro, s4_1_2_list, fig_tank] []
 
@@ -424,6 +470,10 @@ fig_tank = Figure ((tank ^. defn) `sC` S "with" +:+
   (phrase $ ht_flux_C ^. term) +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
   S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
   P (ht_flux_P ^. symbol)) "Tank.png"
+
+-----------------------------
+-- 4.1.3 : Goal Statements --
+-----------------------------
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
@@ -461,6 +511,10 @@ goalState b =  (S "Predict the" +:+
 -- separate files, import them and pass them as arguments to some "makeSRS" 
 -- function and the rest is automated.)
 
+--------------------------------------------------
+-- 4.2 : Solution Characteristics Specification --
+--------------------------------------------------
+
 s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4,
   s4_2_5, s4_2_6, s4_2_7]
 
@@ -474,6 +528,10 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
+
+-------------------------
+-- 4.2.1 : Assumptions --
+-------------------------
 
 s4_2_1 = SRS.assump [s4_2_1_intro, s4_2_1_list] []
 
@@ -603,6 +661,10 @@ s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
 
+--------------------------------
+-- 4.2.2 : Theoretical Models --
+--------------------------------
+
 s4_2_2 = SRS.thModel [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 
 s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
@@ -617,6 +679,10 @@ s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
 
 -- No subsubsubsections... may make things difficult for derivation sections
 -- coming up
+
+---------------------------------
+-- 4.2.3 : General Definitions --
+---------------------------------
 
 s4_2_3 = SRS.genDefn ((s4_2_3_intro):(s4_2_3_deriv)) []
 
@@ -694,6 +760,10 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 -- Add references to above when available (assumptions, GDs)
 -- Replace relevant Derivs with the regular derivative when it is available
 
+------------------------------
+-- 4.2.4 : Data Definitions --
+------------------------------
+
 s4_2_4 = SRS.dataDefn [s4_2_4_intro, s4_2_4_DD1, s4_2_4_DD2,
   s4_2_4_DD3] []
 
@@ -704,6 +774,10 @@ s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
 
 -- General paragraph, repeated in most examples but would work for all. Can be 
 -- absracted out.
+
+-----------------------------
+-- 4.2.5 : Instance Models --
+-----------------------------
 
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3
   (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2)
@@ -948,6 +1022,10 @@ inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 --Tables 2 and 3 will be delayed for now bc they are similar to table 1
 
 
+----------------------------------------------
+-- 4.2.7 : Properties of A Correct Solution --
+----------------------------------------------
+
 s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
 
 
@@ -993,9 +1071,15 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
 
 -- Remember to insert references in above derivation when available
 
+------------------------------
+-- Section 5 : REQUIREMENTS --
+------------------------------
+
 s5 = reqF [s5_1, s5_2]
 
--- General paragraph, repeated in every example. Can be abstracted out.
+-----------------------------------
+-- 5.1 : Functional Requirements --
+-----------------------------------
 
 s5_1 = SRS.funcReq (s5_1_list) []
 
@@ -1090,6 +1174,10 @@ req11 = S "Calculate and" +:+
 --How to include pi?
 --How to add exponents?
 
+---------------------------------------
+-- 5.2 : Non-functional Requirements --
+---------------------------------------
+
 s5_2 = SRS.nonfuncReq [s5_2_contents] []
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
@@ -1107,6 +1195,10 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
 -- repeated, but it is always either stating that performance is a priority or
 -- performance is not a priority. This is probably something that can be 
 -- abstracted out.
+
+--------------------------------
+-- Section 6 : LIKELY CHANGES --
+--------------------------------
 
 s6 = SRS.likeChg [s6_list] []
 
@@ -1153,6 +1245,10 @@ likeChg6 = S "A15 - Any real" +:+
 -- List structure same in all examples.
 
 --add referencing to assumptions?
+
+--------------------------------------------------
+-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
+--------------------------------------------------
   
 s7 = traceMGF s7_refList s7_trailing
   ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
@@ -1297,6 +1393,10 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 -- abstracted out.
 
 -- Wrong DD reference above, change when DD4 is available
+
+------------------------
+-- Traceabilty Graphs --
+------------------------
 
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` plural inModel `sC` plural likelyChg `sC` 

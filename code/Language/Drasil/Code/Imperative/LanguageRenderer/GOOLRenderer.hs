@@ -59,6 +59,7 @@ goolConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDoc' c, patternDoc = patternDoc' c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDoc',
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         getEnv = \_ -> error "getEnv for GOOL is not defined",
         printFileDoc = error "printFileDoc for GOOL is not defined"
     }
@@ -86,8 +87,8 @@ goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
 goolstateType _ (Base (File In)) _ = text "infile"
 goolstateType _ (Base (File Out)) _ = text "outfile"
 
-gooltop :: Config -> FileType -> Label -> [Module] -> Doc
-gooltop c hsMod _ _ = vcat [
+gooltop :: Config -> Label -> FileType -> Label -> [Module] -> Doc
+gooltop c hsMod _ _ _ = vcat [
     text $ "module " ++ hsMod ++ " (" ++ classNameList ++ ", " ++ makeAbsCode ++ ") where",
     blank,
     include c "Prelude hiding (break,log,print,return)",

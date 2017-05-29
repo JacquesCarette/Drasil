@@ -62,7 +62,7 @@ objcConfig options c =
         objVarDoc = objVarDocD c, paramDoc = paramDoc' c, paramListDoc = paramListDoc' c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         getEnv = \_ -> error "getEnv not implemented (yet) in ObjC",
         printFileDoc = error "printFileDoc not implemented in ObjC"
     }

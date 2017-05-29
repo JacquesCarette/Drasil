@@ -52,7 +52,7 @@ csharpConfig _ c =
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDocD c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
-
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         getEnv = \_ -> error "getEnv not implemented in CSharp (yet)",
         printFileDoc = error "printFileDoc not implemented in CSharp"
     }

@@ -53,7 +53,7 @@ luaConfig _ c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = \_ -> empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c, 
         getEnv = \_ -> error "getEnv not implemented in Lua (yet)",
         printFileDoc = error "printFileDoc not implemented in Lua"
     }

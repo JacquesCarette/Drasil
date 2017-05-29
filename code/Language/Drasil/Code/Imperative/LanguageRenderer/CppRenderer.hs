@@ -61,7 +61,7 @@ cppConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, printFileDoc = printFileDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
-
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 

@@ -550,111 +550,116 @@ s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s4_2_1_list = Enumeration (Simple [((short assumption) :+: S "1", Flat 
-  (S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
+s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short assumption)
+  s4_2_1_assump_list)
+
+s4_2_1_assump_list :: [Sentence]
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19]
+
+assump1 = S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   S "relevant for this" +:+ phrase problem +:+ S "is" +:+.
   (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) `sC` S "such as" +:+
   (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible [" :+:
-  (makeRef s4_2_2_T1) :+: S "].")),
+  (makeRef s4_2_2_T1) :+: S "]."
 --
-  ((short assumption) :+: S "2", Flat (S "All" +:+
+assump2 = S "All" +:+
   (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
-  (phrase $ time ^. term) +:+. S "[GD1]")),
+  (phrase $ time ^. term) +:+. S "[GD1]"
 --
-  ((short assumption) :+: S "3", Flat (S "The" +:+ 
+assump3 = S "The" +:+ 
   (phrase $ water ^. term) +:+ S "in the" +:+ (phrase $ tank ^. term) +:+
   S "is fully mixed, so the" +:+ (phrase $ temp_W ^. term) +:+
   S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+
-  S "[GD2" `sC` makeRef s4_2_4_DD2 :+: S "].")),
+  S "[GD2" `sC` makeRef s4_2_4_DD2 :+: S "]."
 --
-  ((short assumption) :+: S "4", Flat (S "The" +:+ (phrase $ temp_PCM ^.
+assump4 = S "The" +:+ (phrase $ temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+ S "[GD2" `sC` makeRef s4_2_4_DD2 `sC` S "LC1].")),
+  term) +:+ S "[GD2" `sC` makeRef s4_2_4_DD2 `sC` S "LC1]."
 --
-  ((short assumption) :+: S "5", Flat (S "The" +:+ 
+assump5 = S "The" +:+ 
   (phrase $ w_density ^. term) +:+ S "and" +:+
   (phrase $ pcm_density ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ vol ^. term) +:+. S "[GD2]")),
+  (phrase $ vol ^. term) +:+. S "[GD2]"
 --
-  ((short assumption) :+: S "6", Flat (S "The" +:+ (phrase $ htCap_W ^.
+assump6 = S "The" +:+ (phrase $ htCap_W ^.
   term) `sC` (phrase $ htCap_S_P ^. term) `sC` S "and" +:+ 
   (phrase $ htCap_L_P ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ vol ^. term) +:+. S "[GD2]")),
+  (phrase $ vol ^. term) +:+. S "[GD2]"
 --
-  ((short assumption) :+: S "7", Flat ((CT.law_conv_cooling ^. defn) +:+
+assump7 = (CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
-  (phrase $ water ^. term) +:+ S "[" :+: makeRef s4_2_4_DD1 :+: S "].")),
+  (phrase $ water ^. term) +:+ S "[" :+: makeRef s4_2_4_DD1 :+: S "]."
 --
-  ((short assumption) :+: S "8", Flat (S "The" +:+ (phrase $ temp_C ^. 
+assump8 = S "The" +:+ (phrase $ temp_C ^. 
   term) +:+ S "is constant over" +:+ (phrase $ time ^. term) +:+
-  S "[" :+: makeRef s4_2_4_DD1 `sC` S "LC2].")),
+  S "[" :+: makeRef s4_2_4_DD1 `sC` S "LC2]."
 --
-  ((short assumption) :+: S "9", Flat (S "The" +:+ (phrase $ temp_C ^.
+assump9 = S "The" +:+ (phrase $ temp_C ^.
   term) +:+ S "does not vary along its length [" :+:
-  makeRef s4_2_4_DD1 `sC` S "LC3].")),
+  makeRef s4_2_4_DD1 `sC` S "LC3]."
 --
-  ((short assumption) :+: S "10", Flat ((CT.law_conv_cooling ^. 
+assump10 = (CT.law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
-  S "[" :+: makeRef s4_2_4_DD2 :+: S "].")),
+  S "[" :+: makeRef s4_2_4_DD2 :+: S "]."
 --
-  ((short assumption) :+: S "11", Flat (S "The" +:+ phrase model +:+
+assump11 = S "The" +:+ phrase model +:+
   S "only accounts for" +:+ (charging ^. defn) `sC`
   S "not" +:+. (phrase $ discharging ^. term) +:+
   S "The" +:+ (phrase $ temp_W ^. term) +:+ S "and" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "can only increase, or remain" +:+
   S "constant; they do not decrease. This implies that the" +:+
   (phrase $ temp_init ^. term) +:+ S "(A12) is less than (or equal)" +:+
-  S "to the" +:+ (phrase $ temp_C ^. term) +:+. S "[IM1, LC4]")),
+  S "to the" +:+ (phrase $ temp_C ^. term) +:+. S "[IM1, LC4]"
 --
-  ((short assumption) :+: S "12", Flat (S "The" +:+
+assump12 = S "The" +:+
   (phrase $ temp_init ^. term) +:+ S "of the" +:+
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
-  S "is the same" +:+. S "[IM1, IM2, LC5]")),
+  S "is the same" +:+. S "[IM1, IM2, LC5]"
 --
-  ((short assumption) :+: S "13", Flat (S "The" +:+ phrase simulation +:+
-  S "will start with the" +:+ (short phsChgMtrl) +:+
-  S "in a" +:+ (solid ^. defn) +:+.
-  S "[IM2, IM4]")),
+assump13 = S "The" +:+ phrase simulation +:+ S "will start with the" +:+
+  (short phsChgMtrl) +:+ S "in a" +:+ (solid ^. defn) +:+. S "[IM2, IM4]"
 --
-  ((short assumption) :+: S "14", Flat (S "The operating" +:+
+assump14 = S "The operating" +:+
   (phrase $ temp ^. term) +:+ S "range of the" +:+ phrase system +:+
   S "is such that the" +:+ (phrase $ water ^. term) +:+
   S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
   S "the" +:+ (phrase $ temp ^. term) +:+ S "will not drop below the" +:+
   (phrase $ melt_pt ^. term) +:+ S "of" +:+
   (phrase $ water ^. term) `sC` S "or rise above its" +:+
-  (phrase $ boil_pt ^. term) +:+. S "[IM1, IM3]")),
+  (phrase $ boil_pt ^. term) +:+. S "[IM1, IM3]"
 --
-  ((short assumption) :+: S "15", Flat (S "The" +:+
+assump15 = S "The" +:+
   (phrase $ tank ^. term) +:+ S "is" +:+ (phrase $ perfect_insul ^. term) +:+
   S "so that there is no" +:+ (phrase $ CT.heat ^. term) +:+
-  S "loss from the" +:+ (phrase $ tank ^. term) +:+. S "[IM1, LC6]")),
+  S "loss from the" +:+ (phrase $ tank ^. term) +:+. S "[IM1, LC6]"
 --
-  ((short assumption) :+: S "16", Flat (S "No internal" +:+
+assump16 = S "No internal" +:+
   (phrase $ CT.heat ^. term) +:+ S "is generated by either the" +:+
   (phrase $ water ^. term) +:+ S "or the" +:+ (short phsChgMtrl) :+:
   S "; therefore, the" +:+ (phrase $ vol_ht_gen ^. term) +:+.
-  S "is zero [IM1, IM2]")),
+  S "is zero [IM1, IM2]"
 --
-  ((short assumption) :+: S "17", Flat (S "The" +:+
+assump17 = S "The" +:+
   (phrase $ vol ^. term) +:+ (phrase $ change ^. term) +:+
   S "of the" +:+ (short phsChgMtrl) +:+ S "due to" +:+ 
-  (phrase $ CT.melting ^. term) +:+. S "is negligible [IM2]")),
+  (phrase $ CT.melting ^. term) +:+. S "is negligible [IM2]"
 --
-  ((short assumption) :+: S "18", Flat (S "The" +:+ 
+assump18 = S "The" +:+ 
   (short phsChgMtrl) +:+ S "is either in a" +:+
   (liquid ^. defn) +:+ S "or a" +:+ (solid ^. defn) +:+
-  S "but not a" +:+ (gaseous ^. defn) +:+. S "[IM2, IM4]")),
+  S "but not a" +:+ (gaseous ^. defn) +:+. S "[IM2, IM4]"
 --
-  ((short assumption) :+: S "19", Flat (S "The pressure in" +:+ S "the" +:+
+assump19 = S "The pressure in" +:+ S "the" +:+
   (phrase $ tank ^. term) +:+ S "is atmospheric, so the" +:+
   (phrase $ melt_pt ^. term) +:+ S "and" +:+ (phrase $ boil_pt ^. term) +:+
   S "are 0" :+: Sy (unit_symb temp) +:+ S "and 100" :+:
-  Sy (unit_symb temp) `sC` S "respectively [IM1, IM3]."))])
+  Sy (unit_symb temp) `sC` S "respectively [IM1, IM3]."
 
 -- Again, list structure is same between all examples.
 
@@ -1111,6 +1116,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
 
 -- Want to add req1 and req2 but they include a table and another enumeration
 -- so not sure how to implement yet
+
 reqList :: [Sentence]
 reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 

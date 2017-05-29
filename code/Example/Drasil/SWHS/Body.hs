@@ -52,11 +52,11 @@ s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s3_3, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s2_2_contents, s2_3_contents, s3_intro, s3_1_contents, sys_context_fig,
-  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_intro, 
-  s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
-  fig_tank, s4_1_3_intro, s4_1_3_list, s4_2_intro, s4_2_1_intro, 
-  s4_2_1_list, s4_2_2_intro, s4_2_3_intro, s4_2_4_intro, s4_2_6_table1,
+s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
+  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_intro_end, 
+  s4_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
+  fig_tank, s4_1_3_intro, s4_1_3_list, 
+  s4_2_1_list, s4_2_2_intro, s4_2_4_intro_end, s4_2_6_table1,
   s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
@@ -103,7 +103,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
   
-s2 = SRS.intro (s2_intro) [s2_1, s2_2, s2_3, s2_4]
+s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
@@ -119,31 +119,23 @@ s2_intro = [Paragraph (S "Due to increasing cost, diminishing" +:+
   (short phsChgMtrl) +:+ S "to store" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "as" +:+ (phrase $ latent_heat ^. term) `sC`
   S "which allows higher" +:+ (phrase $ CT.thermal_energy ^. term) +:+
-  S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"),
+  S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight")]
 
--- This last paragraph looks like it can be parameterized
-  Paragraph (S "The following" +:+ phrase section_ +:+ S "provides an" +:+
-  S "overview of the" +:+ titleize srs +:+ S "(" :+: (short srs) :+:
-  S ") for" +:+. (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
+kSent :: Sentence
+kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
   (phrase $ program ^. term) +:+ S "will be referred to as" +:+
   (titleize $ progName ^. term) +:+ S "(" :+: (short progName) :+:
-  S "). This" +:+ phrase section_ +:+ S "explains the" +:+ phrase purpose +:+
-  S "of this" +:+ phrase document `sC` S "the" +:+ phrase scope +:+
-  S "of the" +:+ phrase system `sC` S "the" +:+ phrase organization +:+
-  S "of the" +:+ phrase document +:+ S  "and the" +:+
-  plural characteristic +:+ S "of the" +:+. plural intReader)]
+  S ")."
 
-
- 
--- In Concepts.hs "swhs_pcm" gives "solar water heating systems incorporating
+-- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
+-- similar paragraph in each of the other eolar water heating systems incorporating
 -- PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural, 
 -- sometimes not, sometimes need to be used in different tenses. How to 
 -- accomodate all this?
 
--- The second paragraph is general except for program name, and there is a 
--- similar paragraph in each of the other examples. It can probably be 
+-- The second paragraph is general exceptxamples. It can probably be 
 -- abstracted out.
 
 -------------------------------
@@ -255,7 +247,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+.
   S "(" :+: (short ode) :+: S "s) and algebraic" +:+
   (plural $ equation ^. term) +:+ S "that" +:+
   phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
-  (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s."
+  (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s"
 -- This part is close to the function but not exactly,
 -- so keeping it here for reference
 
@@ -292,14 +284,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+.
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 = SRS.genSysDes [s3_intro] [s3_1, s3_2, s3_3]
-
-s3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "provides" +:+
-  phrase general +:+ phrase information +:+ S "about the" +:+ phrase system `sC`
-  S "identifies" +:+ S "the interfaces between the" +:+ phrase system +:+
-  S "and its" +:+ phrase environment `sC` S "and describes the" +:+
-  phrase user +:+ plural characteristic +:+ S "and the" +:+ phrase system +:+.
-  plural constraint)
+s3 = genSysF [s3_1, s3_2, s3_3]
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -371,21 +356,13 @@ s3_3 = systCon Nothing []
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-s4 = SRS.specSysDes [s4_intro] [s4_1, s4_2]
+s4 = specSysDesF s4_intro_end [s4_1, s4_2]
  
 -- using plural solutionCharSpec is a hack in order to pluralize the middle word,
 -- based on compoundNPNC''' in NamedIdea.hs
-s4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "first presents" +:+
-  S "the" +:+ phrase problem +:+ phrase description `sC` S "which gives a" +:+
-  S "high-level view of the" +:+ phrase problem +:+ S "to be solved. This" +:+
-  S "is followed by the" +:+ plural solutionCharSpec `sC` S "which presents the" +:+
-  (plural assumption) `sC` 
-  plural thModel `sC`
-  (plural genDefn) `sC` 
-  (plural dataDefn) `sC` S "and finally" +:+
-  S "the" +:+ plural inModel +:+ S "(" :+:
-  (short ode) :+: S "s) that" +:+ phrase model +:+ S "the" +:+.
-  (phrase $ swhs_pcm ^. term))
+s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
+  S "and finally the" +:+ plural inModel +:+ S "(" :+: (short ode) :+:
+  S "s) that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
 
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
@@ -411,13 +388,7 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-s4_1_1 = SRS.termAndDefn [s4_1_1_intro, s4_1_1_bullets] []
-
-s4_1_1_intro = Paragraph (S "This subsection provides a list of terms" +:+
-  S "that are used in the subsequent" +:+ plural section_ +:+ S "and their" +:+
-  S "meaning, with the" +:+ phrase purpose +:+ S "of reducing ambiguity" +:+
-  S "and making it easier to correctly understand the" +:
-  plural requirement)
+s4_1_1 = termDefnF Nothing [s4_1_1_bullets] []
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
@@ -518,16 +489,8 @@ goalState b =  (S "Predict the" +:+
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4,
-  s4_2_5, s4_2_6, s4_2_7]
-
-s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
-  S "(" :+: (short ode) :+: S "s) that govern" +:+
-  (short progName) +:+ S "are" +:+ S "presented in" +:+. 
-  (makeRef s4_2_5) +:+ S "The" +:+ phrase information +:+ S "to" +:+
-  S "understand the meaning of the" +:+ (plural inModel) +:+
-  S "and their derivation is also presented, so that the" +:+
-  (plural inModel) +:+. S "can be verified")
+s4_2 =solChSpecF progName s4_2_5
+  [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6, s4_2_7]
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -536,20 +499,8 @@ s4_2_intro = Paragraph (S "The" +:+ plural inModel +:+
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1 = SRS.assump [s4_2_1_intro, s4_2_1_list] []
-
-s4_2_1_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "simplifies" +:+
-  S "the original" +:+ phrase problem +:+ S "and helps in developing the" +:+
-  phrase thModel +:+ S "by filling in the missing" +:+
-  phrase information +:+ S "for the" +:+. phrase physicalSystem +:+
-  S "The numbers given in the square brackets refer to the" +:+ 
-  phrase thModel +:+ S "[" :+: (short thModel) :+: 
-  S "]," +:+ (phrase genDefn) +:+ 
-  S "[" :+: (short genDefn) :+: S "]" `sC` (phrase dataDefn) +:+ S "[" :+: 
-  (short dataDefn) :+: S "]," +:+ (phrase inModel) +:+
-  S "[" :+: (short inModel) :+: S "], or" +:+ phrase likelyChg +:+ 
-  S "[" :+: (short likelyChg) :+: S "], in which the respective" +:+
-  (phrase assumption) +:+. S "is used") 
+s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6
+  [s4_2_1_list] []
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
@@ -673,33 +624,16 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
-s4_2_2 = SRS.thModel [s4_2_2_intro, s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
-
-s4_2_2_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "focuses on" +:+
-  S "the" +:+ phrase general +:+ (plural $ equation ^. term) +:+ S "and" +:+
-  S "laws that" +:+ (short progName) +:+. S "is based on")
-
--- General paragraph (besides progName), repeated in all examples. Can be 
--- abstracted out.
+s4_2_2 = thModF (short progName) [s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 
 -- Theory has to be RelationChunk....
 -- No way to include "Source" or "Ref. By" sections?
-
--- No subsubsubsections... may make things difficult for derivation sections
--- coming up
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-s4_2_3 = SRS.genDefn ((s4_2_3_intro):(s4_2_3_deriv)) []
-
-s4_2_3_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects the" +:+
-  S "laws and" +:+ (plural $ equation ^. term) +:+ S "that will be used in" +:+
-  S "deriving the" +:+ (plural dataDefn) `sC` S "which in turn are used to" +:+
-  S "build the" +:+. (plural inModel) +:+ S "(" :+: at_start' genDefn +:+
-  S "are left out because they are not" +:+
-  S "currently implemented in Drasil.)")
+s4_2_3 = genDefnF s4_2_3_deriv []
 
 -- General paragraph, repeated in one other example but could be included in 
 -- all. Can be abstracted out.
@@ -772,12 +706,9 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-s4_2_4 = SRS.dataDefn [s4_2_4_intro, s4_2_4_DD1, s4_2_4_DD2,
-  s4_2_4_DD3] []
+s4_2_4 = dataDefnF s4_2_4_intro_end [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3] []
 
-s4_2_4_intro = Paragraph (S "This" +:+ phrase section_ +:+ S "collects and" +:+
-  S "defines all the" +:+ plural datum +:+ S "needed to build the" +:+.
-  plural inModel +:+ S "The dimension of each" +:+ phrase quantity +:+.
+s4_2_4_intro_end = (S "The dimension of each" +:+ phrase quantity +:+.
   S "is also given")
 
 -- General paragraph, repeated in most examples but would work for all. Can be 
@@ -1410,7 +1341,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` plural inModel `sC` plural likelyChg `sC` 
   S "and" +:+ plural assumption +:+. S "on each other"), (plural inModel
-  `sC` plural requirement `sC` S "and data" +:+ plural constraint +:+.
+  `sC` plural requirement `sC` S "and data" +:+ plural constraint +:+
   S "on each other")]
 
 -- Same comments on this paragraph as I had for s7_intro1. 

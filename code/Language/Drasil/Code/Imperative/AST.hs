@@ -32,7 +32,7 @@ module Language.Drasil.Code.Imperative.AST (
     printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,
+    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,funcApp',
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
@@ -43,6 +43,7 @@ import Language.Drasil.Code.Imperative.Helpers (capitalize)
 
 -- Language datatype definitions
 type Label = String
+type Library = Label
 
 type Body = [Block]
 data Block = Block [Statement] deriving Show
@@ -98,7 +99,7 @@ data Jump = Break | Continue deriving Show
 data Return = Ret Value deriving Show
 data Value = EnumElement Label Label    --EnumElement enumName elementName
            | Expr Expression
-           | FuncApp Label [Value]
+           | FuncApp (Maybe Library) Label [Value]
            | Lit Literal
            | ObjAccess Value Function
            | StateObj StateType [Value]
@@ -184,7 +185,6 @@ data Class = Enum {
                classMethods :: [Method]}
 type FunctionDecl = Method
 type VarDecl = Declaration
-type Library = Label
 data Module = Mod Label [Library] [VarDecl] [FunctionDecl] [Class]
 data Package = Pack Label [Module]
 data AbstractCode = AbsCode Package
@@ -543,8 +543,11 @@ objMethodCallVoid o f = objMethodCall o f []
 valStmt :: Value -> Statement
 valStmt = ValState
 
-funcApp :: Label -> [Value] -> Value
-funcApp l p = FuncApp l p
+funcApp :: Library -> Label -> [Value] -> Value
+funcApp lib lbl vs = FuncApp (Just lib) lbl vs
+
+funcApp' :: Label -> [Value] -> Value
+funcApp' lbl vs = FuncApp Nothing lbl vs
 -----------------------
 -- Comment Functions --
 -----------------------
@@ -665,7 +668,7 @@ valueReplace old new v | v == old  = new
 
 valueReplace' :: Value -> Value -> Value -> Value
 valueReplace' old new (Expr e) = Expr $ exprReplace old new e
-valueReplace' old new (FuncApp lbl vals) = FuncApp lbl $ valListReplace old new vals
+valueReplace' old new (FuncApp lib lbl vals) = FuncApp lib lbl $ valListReplace old new vals
 valueReplace' old new (ObjAccess val func) = ObjAccess (valueReplace old new val) (funcReplace old new func)
 valueReplace' old new (StateObj st vals) = StateObj st $ valListReplace old new vals
 valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl

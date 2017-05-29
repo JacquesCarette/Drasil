@@ -219,6 +219,7 @@ valueDoc' _ (Self) = text "self"
 valueDoc' c (StateObj t@(List _ _) _) = stateType c t Def
 valueDoc' c (StateObj t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v@(Arg _) = valueDocD' c v
+valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
 valueDoc' c v = valueDocD c v
 
 functionDoc' :: Config -> FileType -> Label -> Method -> Doc

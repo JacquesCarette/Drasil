@@ -532,7 +532,7 @@ valueDocD :: Config -> Value -> Doc
 valueDocD c (Const n) = valueDoc c $ Var n
 valueDocD c (Lit v) = litDoc c v
 valueDocD _ (EnumElement en e) = text en <> dot <> text e
-valueDocD c (FuncApp n vs) = funcAppDoc c n vs
+valueDocD c (FuncApp _ n vs) = funcAppDoc c n vs
 valueDocD c (ObjAccess v f) = objAccessDoc c v f
 valueDocD c (Expr v) = exprDoc c v
 valueDocD _ Self = text "this"

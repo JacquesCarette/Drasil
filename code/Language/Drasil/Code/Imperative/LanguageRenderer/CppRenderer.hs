@@ -233,7 +233,7 @@ printDoc' :: Config -> Bool -> StateType -> Value -> Doc
 printDoc' _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
 printDoc' c newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printStr "[",
-    statementDoc c NoLoop $ ValState $ FuncApp "copy" [v $. IterBegin, v $. IterEnd, FuncApp iter [Var "std::cout", litString ","]],
+    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [Var "std::cout", litString ","]],
     statementDoc c Loop $ printLastStr "]"]
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printStrLn else printStr
@@ -244,7 +244,7 @@ printFileDoc' :: Config -> Value -> Bool -> StateType -> Value -> Doc
 printFileDoc' _ _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
 printFileDoc' c f newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printFileStr f "[",
-    statementDoc c NoLoop $ ValState $ FuncApp "copy" [v $. IterBegin, v $. IterEnd, FuncApp iter [f, litString ","]],
+    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [f, litString ","]],
     statementDoc c Loop $ printLastStr "]"]
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printFileStrLn f else printFileStr f

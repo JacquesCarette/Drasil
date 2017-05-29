@@ -54,7 +54,7 @@ s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s3_3, s4, s4_1,
 
 s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
-  s4_1_2_intro, s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
+  s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
   s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
@@ -409,11 +409,7 @@ s411_bullet_map_f c = Flat ((at_start $ c ^. term) :+: S ":" +:+. (c ^. defn))
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
 
-s4_1_2 = SRS.physSyst [s4_1_2_intro, s4_1_2_list, fig_tank] []
-
-s4_1_2_intro = Paragraph (S "The" +:+ phrase physicalSystem +:+ S "of" +:+
-  (short progName) `sC` S "as shown in" +:+ (makeRef fig_tank) `sC`
-  S "includes the following" +: plural element)
+s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 
 -- Above paragraph is general except for progName and figure. However, not 
 -- every example has a physical system. Also, the SSP example is different, so

@@ -45,7 +45,7 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
 s2_2_intro, 
   s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_bullets,
-  s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, 
+  s6_1_2_list, s6_1_3_list, s6_2_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_2_intro, s8_list, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
@@ -283,12 +283,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
-s6_1_2 = SRS.physSyst [s6_1_2_intro, s6_1_2_list, 
-  fig_glassbr] []
-
-s6_1_2_intro = Paragraph $ S "The" +:+ phrase physicalSystem +:+ S "of" +:+ 
-  (gLassBR ^. defn) +:+ S "as shown in" +:+ (makeRef fig_glassbr) `sC` 
-  S "includes the following" +: plural element
+s6_1_2 = physSystDesc (gLassBR ^. defn) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   

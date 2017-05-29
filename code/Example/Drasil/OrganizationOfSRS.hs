@@ -2,7 +2,7 @@ module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, orgSec, orgSec
                                  specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
-                                 stakeholderIntro, traceGIntro) where
+                                 stakeholderIntro, traceGIntro, physSystDesc) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -89,7 +89,7 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
           (foldlsC $ map plural [goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom, 
-          S "in", makeRef bottomSec +:+. 
+          S "in", makeRef bottomSec +:+
           S "and trace back to find any additional information they require"],
           Paragraph $ lastS trailingSentence]
           where lastS Nothing = refineChain [goalStmt, thModel, inModel]
@@ -146,6 +146,12 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
                     S "meaning, with the", phrase purpose, S "of reducing ambiguity",
                     S "and making it easier to correctly understand the",
                     plural requirement, lastF end]
+
+--general introduction for Physical System Description
+physSystDesc :: Sentence -> Contents -> [Contents] -> Section
+physSystDesc kWord fig otherContents = SRS.physSyst ((intro):otherContents) []
+  where intro = Paragraph $ foldlSent [S "The", (phrase physicalSystem), S "of", kWord `sC`
+                S "as shown in", (makeRef fig) `sC` S "includes the following" +: plural element]
 
 --provide the key word, a reference to the Instance Model, and the Subsections
 solChSpecF :: CINP -> Section -> [Section] -> Section
@@ -246,12 +252,12 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           S "typical", plural value +:+. S "is intended to provide a feel for a common scenario",
           endS endingSent, trailingSent]
           where endS False = EmptyS
-                endS True  = phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
+                endS True  = S "The " +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
                              S "estimate of the confidence with which the" +:+ phrase physical +:+
                              plural quantity +:+. S "can be measured" +:+ S "This" +:+
                              phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
                              S "if one were performing an" +:+ phrase uncertainty +:+
-                             S "quantification exercise."
+                             S "quantification exercise"
        
 -- wrapper for stakeholderIntro
 stakehldr :: [Section] -> Section

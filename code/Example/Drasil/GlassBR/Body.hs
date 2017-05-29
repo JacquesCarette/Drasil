@@ -44,7 +44,7 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
 
 s2_2_intro, 
   s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
-  s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_intro, s6_1_1_bullets,
+  s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_bullets,
   s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_2_intro, s8_list, s9_table1, s9_table2, s9_table3,
@@ -245,14 +245,8 @@ s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
   S "can withstand the", (phrase $ blast ^. term), S "under the",
   plural condition]
 
-s6_1_1 = SRS.termAndDefn [s6_1_1_intro, s6_1_1_bullets] []
-  
-s6_1_1_intro = Paragraph $ foldlSent [
-  S "This subsection provides a list of terms that are used in subsequent",
-  plural section_, S "and their meaning, with the", phrase purpose,
-  S "of reducing ambiguity and making it easier to correctly understand the" +:+. 
-  (plural requirement), S "All of the terms are extracted from [4] in",
-  (makeRef s10)]
+s6_1_1 = termDefnF (Just (S "All of the terms are extracted from [4] in" +:+ (makeRef s10)))
+  [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ ((at_start $ aspectR ^. term) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} :+: -- conceptually correct to call abbreviation as a symbol?

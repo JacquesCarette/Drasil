@@ -279,7 +279,7 @@ s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
 s4_1_1_terms :: [ConceptChunk]
 s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
 
-s4_1_1_bullets = enumBullet (map (\x -> Flat $ (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
+s4_1_1_bullets = enumBullet (map (\x -> (at_start $ x ^. term) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
 
 
 -----------------------------
@@ -695,14 +695,13 @@ s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
   (plural $ physLib ^. term)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
   (plural $ physLib ^. term) +:+ S "are:"
 
-s7_2dlist = enumBullet [
-  Flat (S "Box2D: http://box2d.org/"),
-  Flat (S "Nape Physics Engine: http://napephys.com/")]
+s7_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
+  (S "Nape Physics Engine: http://napephys.com/")]
 
 s7_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural $ physLib ^. term), S "include:"]
 
-s7_3dlist = enumBullet $ map (Flat) [
+s7_3dlist = enumBullet [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
   (S "Newton Game Dynamics: http://newtondynamics.com/")]

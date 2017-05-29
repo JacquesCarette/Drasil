@@ -116,9 +116,9 @@ makeListRef :: [a] -> Section -> [Sentence]
 makeListRef l r = take (length l) $ repeat $ makeRef r
 
 
--- | enumBullet apply enumeration and bullet to a list
-enumBullet ::[ItemType] -> Contents
-enumBullet f = Enumeration $ Bullet $ f
+-- | enumBullet apply Enumeration, Bullet and Flat to a list
+enumBullet ::[Sentence] -> Contents
+enumBullet f = Enumeration $ Bullet $ map (Flat) f
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration

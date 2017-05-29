@@ -1,5 +1,5 @@
 module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, assumpF, assumpF', datConF, datConPar, reqF,
+                                 specSysDesF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
                                  stakeholderIntro, traceGIntro) where

@@ -1065,7 +1065,6 @@ req3, req4, req5, req6, req7, req8, req9, req10, req11 :: Sentence
 
 reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
-req3, req4, req5, req6, req7, req8, req9, req10, req11 :: Sentence
 req3 = S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
   phrase physical +:+ plural constraint +:+ S "shown in" +:+ makeRef s7_table1
 --

@@ -58,7 +58,7 @@ s2_3_intro = Paragraph $
            
 s3 = genSysF [s3_1]
 
-s3_1 = systCon (Just [s3_1_intro, sys_context_fig]) []
+s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 
 s3_1_intro = Paragraph $
               (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase $ sysCont ^. term) +:+

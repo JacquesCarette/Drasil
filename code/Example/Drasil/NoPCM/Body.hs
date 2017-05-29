@@ -74,7 +74,7 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
 s4 = specSysDesF (words_) [s4_1, s4_2]
   where words_ = (plural definition +:+ S "and finally the" +:+
                 (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
-                S "that models the" +:+. (phrase $ sWHT ^. term))
+                S "that models the" +:+ (phrase $ sWHT ^. term))
 
 s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 

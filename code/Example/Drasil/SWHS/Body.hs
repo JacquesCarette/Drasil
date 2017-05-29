@@ -56,7 +56,7 @@ s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_intro_end, 
   s4_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list,
   fig_tank, s4_1_3_intro, s4_1_3_list, 
-  s4_2_1_list, s4_2_2_intro, s4_2_4_intro_end, s4_2_6_table1,
+  s4_2_1_list, s4_2_4_intro_end, s4_2_6_table1,
   s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   

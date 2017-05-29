@@ -86,7 +86,7 @@ goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
 goolstateType _ (Base (File In)) _ = text "infile"
 goolstateType _ (Base (File Out)) _ = text "outfile"
 
-gooltop :: Config -> Label -> a -> b -> Doc
+gooltop :: Config -> FileType -> Label -> [Module] -> Doc
 gooltop c hsMod _ _ = vcat [
     text $ "module " ++ hsMod ++ " (" ++ classNameList ++ ", " ++ makeAbsCode ++ ") where",
     blank,

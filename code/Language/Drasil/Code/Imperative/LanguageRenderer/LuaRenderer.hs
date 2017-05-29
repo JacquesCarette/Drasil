@@ -79,8 +79,8 @@ luastateType _ (Base _) _    = empty
 luastateType _ (Type name) _ = text name <> colon <> text initName
 luastateType c s d           = stateTypeD c s d
 
-luatop :: Config -> FileType -> a -> Doc
-luatop c ft _ = vcat [
+luatop :: Config -> FileType -> Label -> [Module] -> Doc
+luatop c ft _ _ = vcat [
     methodDoc c ft "" tableFindFunc,      --Needed for IndexOf function calls. TODO: only include this if IndexOf is used in the code
     blank,
     text inheritanceFunc]                --Function used to simulate definition of classes and inheritance in Lua. Also defines default constuctor, and some common OO class features.

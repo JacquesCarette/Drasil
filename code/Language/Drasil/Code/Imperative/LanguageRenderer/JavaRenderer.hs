@@ -75,8 +75,8 @@ jstateType c s@(List lt t) d = case t of Base Integer -> list c lt <> angles (te
 jstateType _ (Base String) _ = text "String"
 jstateType c s d = stateTypeD c s d
 
-jtop :: Config -> a -> Label -> Doc
-jtop c _ p = vcat [
+jtop :: Config -> FileType -> Label -> [Module] -> Doc
+jtop c _ p _ = vcat [
     package c p <> (endStatement c)
     -- blank,
     -- include c "java.util.Arrays" <> endStatement c,

@@ -90,8 +90,8 @@ cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
 cppstateType c s d              = stateTypeD c s d
 
-cpptop :: Config -> FileType -> Label -> Doc
-cpptop c Header p = vcat [
+cpptop :: Config -> FileType -> Label -> [Module] -> Doc
+cpptop c Header p _ = vcat [
     text "#ifndef" <+> text p <> text "_h",
     text "#define" <+> text p <> text "_h",
     blank,
@@ -102,7 +102,7 @@ cpptop c Header p = vcat [
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p = vcat [          --TODO remove includes if they aren't used
+cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
     include c ("\"" ++ p ++ cppHeaderExt ++ "\""),
     include c "<algorithm>",
     include c "<iostream>",

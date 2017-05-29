@@ -61,8 +61,8 @@ csharpConfig _ c =
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
 renderCode' c ms (AbsCode p) = Code [fileCode c p [m] Source (ext c) | m <- ms]
 
-cstop :: Config -> a -> b -> Doc
-cstop c _ _ = vcat [
+cstop :: Config -> FileType -> Label -> [Module] -> Doc
+cstop c _ _ _ = vcat [
     include c "System" <> endStatement c,
     include c "System.Collections" <> endStatement c,
     include c "System.Collections.Generic" <> endStatement c]

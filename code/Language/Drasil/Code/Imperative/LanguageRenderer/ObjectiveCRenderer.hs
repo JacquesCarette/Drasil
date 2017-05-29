@@ -99,12 +99,12 @@ objcstateType _ (Base String) _    = str
 objcstateType _ (Type name) Dec    = text name <> ptr
 objcstateType c s d                = stateTypeD c s d
 
-objctop :: Config -> FileType -> Label -> Doc
-objctop c Header _ = vcat [
+objctop :: Config -> FileType -> Label -> [Module] -> Doc
+objctop c Header _ _ = vcat [
     include c "<Foundation/NSObject.h>",
     include c "<Foundation/NSString.h>",
     include c "<Foundation/NSArray.h>"]
-objctop c Source p = vcat [
+objctop c Source p _ = vcat [
     include c ("\"" ++ p ++ objcHeaderExt ++ "\""),
     blank,
     include c "<Foundation/NSObject.h>",

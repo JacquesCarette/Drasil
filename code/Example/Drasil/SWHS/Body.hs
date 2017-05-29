@@ -706,7 +706,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-s4_2_4 = dataDefnF s4_2_4_intro_end [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3] []
+s4_2_4 = dataDefnF s4_2_4_intro_end [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3]
 
 s4_2_4_intro_end :: Sentence
 s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.

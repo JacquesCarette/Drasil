@@ -11,7 +11,7 @@ else
 endif
 
 # PY = python3.4 #for systems where version 3 is not the default
-PY = python3.4
+PY = py -3
 PYFLAGS = -m
 PYDOC = $(PY) -m pydoc
 PYDOCFLAGS = -w

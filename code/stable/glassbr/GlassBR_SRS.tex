@@ -528,6 +528,28 @@ Description & $J_{tol}$ is the stress distribution factor (Function) based on Pb
 \subsubsection{Data Constraints}
 \label{Sec:DC}
 Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table 2 (). $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+\begin{longtable}{l l l l l}
+\toprule
+Var & Physical Cons & Software Constraints & Typical Value & Uncertainty
+\\
+\midrule
+$a$ & $a$ > 0 and $a$/$b$ > 1 & $d_{min}$ <= $a$ <= $d_{max}$ and $a$/$b$ < $AR_{max}$ & 1500 mm & 10%
+\\
+$b$ & $b$ > 0 and $b$ < $a$ & 1 & $d_{min}$ <= $b$ <= $d_{max}$ and $a$/$b$ < $AR_{max}$ & 1200 mm & 10%
+\\
+$P_{btol}$ & 0 < $P_{btol}$ < 1 & - & 0.008 & 0.1%
+\\
+$w$ & $w$ >= 0 & $w_{min}$ < $w$ < $w_{max}$ & 42 kg & 10%
+\\
+$TNT$ & $TNT$ > 0 & - & 1 & 10%
+\\
+$SD$ & $SD$ > 0 & $SD_{min}$ < $SD$ < $SD_{max}$  & 45m & 10%
+\\
+\bottomrule
+\caption{Table 2: Input Variables}
+\label{Table:T3SPV}
+\end{longtable}
+hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 \begin{longtable}{l l}
 \toprule
 Var & Value

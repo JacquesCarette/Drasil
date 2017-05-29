@@ -18,18 +18,29 @@ def main(filename):
     params = param.Param()
     inputFormat.get_input(filename, params)
     derivedValues.derived_params(params)
-
     checkConstraints.check_constraints(params)
-    w_array, data_sd, data_q = readTable.read_table('TSD.txt')
-    j_array, data_asprat, data_qstar = readTable.read_table('SDF.txt')
+    
+    w_array = readTable.read_num_col('TSD.txt')
+    data_sd = readTable.read_array1('TSD.txt', len(w_array))
+    data_q = readTable.read_array2('TSD.txt', len(w_array))
+    
+    j_array = readTable.read_num_col('SDF.txt')
+    data_asprat = readTable.read_array1('SDF.txt', len(j_array))
+    data_qstar = readTable.read_array2('SDF.txt', len(j_array))
 
     q = calculations.calc_q(w_array, data_sd, data_q, params)
-    j, q_hat_tol = calculations.calc_j(j_array, data_asprat, data_qstar, q, params)
+    q_vec = calculations.calc_q_vec(j_array, data_asprat, data_qstar, params)
+    j_vec = calculations.calc_j_vec(j_array, data_asprat, data_qstar, params)
+    q_hat = calculations.calc_q_hat(q, q_vec, params)
+    j_tol = calculations.calc_j_tol(params)
+    j = calculations.calc_j(q_vec, j_vec, q_hat)
+    q_hat_tol = calculations.calc_q_hat_tol(q_vec, j_vec, j_tol)
     pb = calculations.calc_pb(j, params)
-    lr, nfl = calculations.calc_lr(q_hat_tol, params)
-    is_safe1, is_safe2, safe = calculations.is_safe(pb, lr, q, params)
-
-    outputFormat.display_output('outputfile.txt', q, j, q_hat_tol, pb, lr, nfl, is_safe1, is_safe2, safe, params)
+    nfl = calculations.calc_nfl(q_hat_tol, params)
+    lr = calculations.calc_lr(nfl, params)
+    is_safe1 = calculations.is_safe1(pb, params)
+    is_safe2 = calculations.is_safe2(lr, q)
+    outputFormat.display_output('outputfile.txt', q, j, q_hat_tol, pb, lr, nfl, is_safe1, is_safe2, params)
     print("Main has been executed and the results have been written to 'outputfile.txt'.")
 
 if __name__ == "__main__":

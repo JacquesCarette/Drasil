@@ -168,7 +168,7 @@ s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^.
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
-s4_1_1_list = Enumeration $ Simple $
+s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
   ([(titleize $ fs_rc ^. term, Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+
                                       S "is to experience failure through slipping.")] ++
   map (\x -> (titleize $ x ^. term, Flat $ x ^. defn)) 

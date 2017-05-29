@@ -31,17 +31,15 @@ surface_ = npnc "surface"    (cn' "surface") -- FIXME: use the one from concepts
 morPrice = npnc "morPrice"   (cn  "morgenstern price")
 rgFnElm  = npnc "rgFnElm"    (cn' "rigid finite element")
 
-slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf,
-  soilLyr :: NPNC
+slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NPNC
 slpSrf    = compoundNPNC slip surface_
---crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
 soilPrpty = compoundNPNC soil     property
 mtrlPrpty = compoundNPNC material property
 itslPrpty = compoundNPNC intrslce property
 slopeSrf  = compoundNPNC slope surface_
 soilLyr   = compoundNPNC soil (npnc "layer" (cn' "layer"))
 
-crtSlpSrf, plnStrn :: ConceptChunk
+crtSlpSrf, plnStrn :: ConceptChunk --FIXME: move to Concepts/soldMechanics.hs? They are too spicific though
 plnStrn = dcc "plane strain" (cn' "plane strain") 
           ("The resultant stresses in one of the directions of a " ++
           "3 dimensional material can be approximated as 0. Results " ++

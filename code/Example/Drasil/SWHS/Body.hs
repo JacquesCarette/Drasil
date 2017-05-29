@@ -624,7 +624,7 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
-s4_2_2 = thModF (short progName) [s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
+s4_2_2 = thModF (short progName) [s4_2_2_T1, s4_2_2_T2, s4_2_2_T3]
 
 -- Theory has to be RelationChunk....
 -- No way to include "Source" or "Ref. By" sections?
@@ -633,7 +633,7 @@ s4_2_2 = thModF (short progName) [s4_2_2_T1, s4_2_2_T2, s4_2_2_T3] []
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-s4_2_3 = genDefnF s4_2_3_deriv []
+s4_2_3 = genDefnF s4_2_3_deriv
 
 -- General paragraph, repeated in one other example but could be included in 
 -- all. Can be abstracted out.

@@ -204,9 +204,9 @@ genDefnF otherContents = SRS.genDefn (genDefnIntro:otherContents) []
 -- uses EmptyS if ending sentence is not needed
 dataDefnF :: Sentence -> [Contents] -> Section                      
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
-  where dataDefnIntro ending = Paragraph $ S "This" +:+ phrase section_ +:+ 
-                               S "collects and defines all the" +:+ plural datum +:+ 
-                               S "needed to build the" +:+. plural inModel +:+ ending
+  where dataDefnIntro ending = Paragraph $ foldlSent [S "This", phrase section_, 
+                               S "collects and defines all the", plural datum,
+                               S "needed to build the" +:+. plural inModel, ending]
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
@@ -223,8 +223,8 @@ inModelIntro r1 r2 r3 r4 = Paragraph $ foldlSent [S "This", phrase section_,
           plural symbol_, S "defined in", (makeRef r2),
           S "to replace the abstract", plural symbol_, S "in the",
           plural model, S "identified in", (makeRef r3) :+: end r4]
-          where end (Just genDef) = S " and" +:+. (makeRef genDef)
-                end Nothing       = S "."
+          where end (Just genDef) = S " and" +:+ (makeRef genDef)
+                end Nothing       = EmptyS
         
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Bool -> Sentence -> [Contents] -> Section
@@ -239,14 +239,14 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           S "The", phrase column, S "for", phrase physical,
           plural constraint, S "gives the", phrase physical,
           plural limitation, S "on the range of", plural value,
-          S "that can be taken by the" +:+. phrase variable +:+ middleSent, -- << if you are wondering where middleSent is
-          S "The", plural constraint, S "are conservative,", S "to give the",
+          S "that can be taken by the" +:+. phrase variable, middleSent, -- << if you are wondering where middleSent is
+          S "The", plural constraint, S "are conservative, to give the",
           phrase user, S "of the", phrase model, S "the flexibility to", 
           S "experiment with unusual situations. The", phrase column, S "of", 
-          S "typical", plural value, S "is intended to provide a feel for a common scenario.",
-          endS endingSent +:+ trailingSent]
+          S "typical", plural value +:+. S "is intended to provide a feel for a common scenario",
+          endS endingSent, trailingSent]
           where endS False = EmptyS
-                endS True  = S "The" +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
+                endS True  = phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
                              S "estimate of the confidence with which the" +:+ phrase physical +:+
                              plural quantity +:+. S "can be measured" +:+ S "This" +:+
                              phrase information +:+ S "would be part of the" +:+ phrase input_ +:+

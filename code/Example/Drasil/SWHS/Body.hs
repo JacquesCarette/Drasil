@@ -58,7 +58,7 @@ s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
   s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
   s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
   
-s2_1_contents, s4_2_3_deriv, s4_2_5_subpar, 
+s4_2_3_deriv, s4_2_5_subpar, 
   s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
   :: [Contents]
 
@@ -141,9 +141,10 @@ kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
 -- 2.1 : Purpose of Document --
 -------------------------------
 
-s2_1 = SRS.prpsOfDoc (s2_1_contents) []
+s2_1 = prpsOfDocF s2_1_par1
 
-s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
+s2_1_par1 :: Sentence
+s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase document +:+ S "is to describe the modelling of" +:+.
   (phrase $ swhs_pcm ^. term) +:+ S "The" +:+ plural goalStmt +:+
   S "and" +:+ plural thModel +:+ S "used in the" +:+ (short progName) +:+
@@ -154,24 +155,8 @@ s2_1_contents = [Paragraph (S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase information +:+ S "necessary to understand and verify the" +:+.
   phrase model +:+ S "The" +:+ (short srs) +:+ 
   S "is abstract because the contents say what" +:+
-  phrase problem +:+. S "is being solved, but do not say how to solve it"),
-  Paragraph (S "This" +:+ phrase document +:+ S "will be used as a" +:+
-  S "starting point for subsequent development phases, including" +:+ 
-  S "writing the" +:+ phrase desSpec +:+ S "and the" +:+ phrase software +:+
-  (phrase vav) +:+ S "plan. The" +:+ phrase design +:+ phrase document +:+
-  S "will show how the" +:+ (plural requirement) +:+
-  S "are to be realized, including decisions" +:+
-  S "on the numerical algorithms and programming" +:+. phrase environment +:+
-  S "The" +:+ phrase vav +:+ S "plan will show the" +:+
-  S "steps that will be used to increase confidence in the" +:+
-  phrase softwareDoc +:+ S "and the implementation. Although" +:+
-  S "the" +:+ (short srs) +:+ S "fits in a series of" +:+ 
-  plural document +:+ S "that follow the so-called waterfall" +:+
-  phrase model `sC` S "the actual development process is not constrained" +:+
-  S "in any way. Even when the process is not waterfall, as Parnas" +:+
-  S "and Clements [citation] point out, the most logical way" +:+
-  S "to present the" +:+ phrase documentation +:+ S "is still to" +:+
-  Quote (S "fake") +:+ S "a rational" +:+ phrase design +:+. S "process")]
+  phrase problem +:+. S "is being solved, but do not say how to solve it"
+ 
 
 -- Besides program name, these two paragraphs are general, mostly repeated 
 -- between examples, and can be abstracted out.

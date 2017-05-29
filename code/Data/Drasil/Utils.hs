@@ -5,7 +5,8 @@ module Data.Drasil.Utils
   , foldlList
   , foldlsC
   , mkEnumAbbrevList
-  , mkConstraintList
+  , listConstS
+  , listConstUC
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -16,9 +17,11 @@ module Data.Drasil.Utils
   , enumBullet
   ) where
 
-import Language.Drasil (Sentence(EmptyS, S, (:+:)), (+:+), (+:+.), ItemType(Flat), 
-  sC, sParen, Contents(Definition, Enumeration), makeRef, DType, Section, 
-  ListType(Simple, Bullet))
+import Control.Lens ((^.))
+import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
+  ItemType(Flat), sC, sParen, Contents(Definition, Enumeration), 
+  makeRef, DType, Section, ListType(Simple, Bullet), UnitalChunk, 
+  unit_symb, symbol)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -64,19 +67,41 @@ mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map (Flat) l)
 
 -- | formats constraints on variables for tables
-fmtConstrain :: Sentence -> Sentence -> Sentence -> Sentence
-fmtConstrain _ EmptyS EmptyS      = S "None"  
-fmtConstrain symb constrA EmptyS  = symb +:+ constrA
-fmtConstrain symb constrA constrB = symb +:+ constrA +:+ S "and" +:+ symb +:+ constrB
+fmtCS :: Sentence -> Sentence -> Sentence -> Sentence
+fmtCS _ EmptyS EmptyS = S "None"  
+fmtCS symb a EmptyS   = symb +:+ a
+fmtCS symb a b        = symb +:+ a +:+ S "and" +:+ symb +:+ b
 
 -- | formats numbers with units for tables
-fmtUnit :: Sentence -> Sentence -> Sentence
-fmtUnit num EmptyS = num
-fmtUnit num units  = num +:+ units
+fmtUS :: Sentence -> Sentence -> Sentence
+fmtUS num EmptyS = num
+fmtUS num units  = num +:+ units
 
--- | makes a list of sentences for constraint tables
-mkConstraintList :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
-mkConstraintList (symb, a, b, num, units) = [symb, fmtConstrain symb a b, fmtUnit num units]
+-- | takes a amount and adds a unit to it
+fmtU :: Sentence -> UnitalChunk -> Sentence
+fmtU n u  = n +:+ getU u
+
+-- | takes a chunk and constraints and makes a sentence of the constraints
+-- on that chunk
+fmtC :: UnitalChunk -> [Sentence] -> Sentence
+fmtC _ []      = S "None"  
+fmtC symb [x]  = (getS symb) +:+ x
+fmtC symb (x:xs) = (getS symb) +:+ x +:+ S "and" +:+ (fmtC symb xs)
+
+
+getS, getU :: UnitalChunk -> Sentence
+-- | gets symbol from chunk
+getS s  = P $ s ^. symbol
+-- | gets unit from chunk
+getU s = Sy $ unit_symb s
+
+-- | makes a list of sentence from sentences
+listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
+listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, fmtUS n u]
+
+-- | makes a list of sentence from unital chunk and a constraint list with units
+listConstUC :: (UnitalChunk, [Sentence], Sentence) -> [Sentence]
+listConstUC (s, a, b) = [getS s, fmtC s a, fmtU b s]
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 

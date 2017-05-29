@@ -9,7 +9,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(mkConstraintList)
+import Data.Drasil.Utils(listConstS)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, equation, number)
 import Data.Drasil.Concepts.Software (program)
@@ -157,9 +157,9 @@ s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 []
 s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show") EmptyS False EmptyS [s4_2_6_table1, s4_2_6_table2]
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) []) 
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (listConstS) []) 
     (S "Table 1: Input Variables") True
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) []) 
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (listConstS) []) 
     (S "Table 2: Output Variables") True

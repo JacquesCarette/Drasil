@@ -23,8 +23,9 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
-import Data.Drasil.Utils (foldle, foldlSent, mkConstraintList, 
-  makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, enumBullet)
+import Data.Drasil.Utils (foldle, foldlSent, listConstUC, 
+  listConstS, makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
+  enumBullet)
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -327,8 +328,6 @@ s4_1_2_stmt4 = foldlSent
 s4_1_2_list' :: [Sentence]
 s4_1_2_list' = [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4]
 
---enumS = Enumeration . Simple
-
 s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 
 --------------------------------------------------
@@ -481,71 +480,51 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 s4_2_6 :: Section
 s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2)+:+ S "show") EmptyS True EmptyS [s4_2_6_table1, s4_2_6_table2]
+s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ 
+  (makeRef s4_2_6_table2) +:+ S "show") EmptyS True EmptyS 
+  [s4_2_6_table1, s4_2_6_table2]
 
 
 -- Currently unable to write relations in sentences, so verbal explanations
 -- will do for now.
 -- How do I write 2pi in constraints?
 
-s4_2_6_lengthConstraint, s4_2_6_massConstraint, 
-  s4_2_6_mmntOfInConstraint, s4_2_6_gravAccelConstraint, s4_2_6_posConstraint, 
-  s4_2_6_veloConstraint, s4_2_6_restCoefConstraint, s4_2_6_orientationConstraint,
-  s4_2_6_angVeloConstraint, s4_2_6_forceConstraint, 
-  s4_2_6_torqueConstraint ::(Sentence, Sentence, Sentence, Sentence, Sentence)
+lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
+  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
+  forceConstraint, torqueConstraint :: (UnitalChunk, [Sentence], Sentence)
 
-s4_2_6_lengthConstraint = ((P $ QPP.len ^. symbol), S "is G/E to 0", 
-  EmptyS, S "44.2", (Sy $ unit_symb QPP.len)) 
+lengthConstraint = (QPP.len, [S "is G/E to 0"], S "44.2")
+massConstraint = (QPP.mass, [S "is greater than 0"], S "56.2")
+mmntOfInConstraint = (QP.momentOfInertia, [S "is G/E to 0"], S "74.5")
+gravAccelConstraint = (QP.gravitationalAccel, [], S "9.8")
+posConstraint = (QP.position, [], S "(0.412, 0.502)")
+veloConstraint = (QP.velocity, [], S "2.51")
+orientConstraint = (QM.orientation, [S "G/E to 0", S "less than 2pi"], 
+  S "pi/2")
+angVeloConstraint = (QP.angularVelocity, [], S "2.1")
+forceConstraint = (QP.force, [], S "98.1")
+torqueConstraint = (QP.torque, [], S "200")
 
-s4_2_6_massConstraint = ((P $ QPP.mass ^. symbol), S "is greater than 0", 
-  EmptyS, S "56.2", (Sy $ unit_symb QPP.mass)) 
-
-s4_2_6_mmntOfInConstraint = ((P $ QP.momentOfInertia ^. symbol), 
-  S "is G/E to 0", EmptyS, S "74.5", (Sy $ unit_symb QP.momentOfInertia))
-
-s4_2_6_gravAccelConstraint = ((P $ QP.gravitationalAccel ^. symbol), EmptyS, 
-  EmptyS, S "9.8", (Sy $ unit_symb QP.gravitationalAccel))
-
-s4_2_6_posConstraint = ((P $ QP.position ^. symbol), EmptyS, EmptyS, 
-  S "(0.412, 0.502)", (Sy $ unit_symb QP.position))
-
-s4_2_6_veloConstraint = ((P $ QP.velocity ^. symbol), EmptyS, EmptyS, 
-  S "2.51", (Sy $ unit_symb QP.velocity))
-
-s4_2_6_restCoefConstraint = ((P $ QP.restitutionCoef ^. symbol), S "G/E to 0", 
+restCoefConstraint :: [Sentence]
+restCoefConstraint = listConstS ((P $ QP.restitutionCoef ^. symbol), S "G/E to 0", 
   S "less than 1", S "0.8", EmptyS)
 
-s4_2_6_orientationConstraint = ((P $ QM.orientation ^. symbol), S "G/E to 0", 
-  S "less than 2pi", S "pi/2", (Sy $ unit_symb QM.orientation))
-
-s4_2_6_angVeloConstraint = ((P $ QP.angularVelocity  ^. symbol), EmptyS, EmptyS, 
-  S "2.1", (Sy $ unit_symb QP.angularVelocity ))
-
-s4_2_6_forceConstraint = ((P $ QP.force ^. symbol), EmptyS, EmptyS, S "98.1", 
-  (Sy $ unit_symb QP.force))
-
-s4_2_6_torqueConstraint = ((P $ QP.torque ^. symbol), EmptyS, EmptyS, S "200", 
-  (Sy $ unit_symb QP.torque))
-
-
-s4_2_6_symbolList :: [(Sentence, Sentence, Sentence, Sentence, Sentence)]
-s4_2_6_symbolList = [s4_2_6_lengthConstraint, s4_2_6_massConstraint, 
-  s4_2_6_mmntOfInConstraint, s4_2_6_gravAccelConstraint, s4_2_6_posConstraint, 
-  s4_2_6_veloConstraint, s4_2_6_restCoefConstraint, s4_2_6_orientationConstraint,
-  s4_2_6_angVeloConstraint, s4_2_6_forceConstraint, s4_2_6_torqueConstraint]
+s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
+s4_2_6_t1_list = map (listConstUC) [lengthConstraint, massConstraint, 
+  mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
+  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint] ++ [(restCoefConstraint)]
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (mkConstraintList) s4_2_6_symbolList) 
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ s4_2_6_t1_list) 
     (S "Table 1: Input Variables") True
 
+
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] [
-  [(P $ QP.position ^. symbol), S "None"],
-  [(P $ QP.velocity ^. symbol), S "None"],
-  [(P $ QM.orientation ^. symbol), (P $ QM.orientation ^. symbol) +:+ S "G/E to 0" +:+
-  S "and" +:+ (P $ QM.orientation ^. symbol) +:+ S "less than 2pi"],
-  [(P $ QP.angularVelocity  ^. symbol), S "None"]
-  ]) (S "Table 2: Output Variables") True
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_t2_list) 
+  (S "Table 2: Output Variables") True
+
+s4_2_6_t2_list = map (listConstUC) [posConstraint, veloConstraint, 
+  orientConstraint, angVeloConstraint]
 
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --

@@ -1,4 +1,4 @@
-module Drasil.OrganizationOfSRS (introF, refineChain, orgSec, orgSecWTS, genSysF, 
+module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
@@ -7,7 +7,8 @@ module Drasil.OrganizationOfSRS (introF, refineChain, orgSec, orgSecWTS, genSysF
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math(equation, matrix, graph)
+import Data.Drasil.Concepts.Math (equation, matrix, graph)
+import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Utils (foldle, foldlsC, foldlSent)
 import qualified Drasil.SRS as SRS
 
@@ -22,6 +23,25 @@ introF start kSent subSec = SRS.intro [Paragraph start, end] subSec
               S "of the" +:+ phrase document +:+ S  "and the" +:+
               plural characteristic +:+ S "of the" +:+. plural intReader
 
+-- provide only the first paragraph (as a sentence type) to 
+prpsOfDocF :: Sentence -> Section
+prpsOfDocF par1 = SRS.prpsOfDoc [Paragraph par1, Paragraph par2] []
+  where par2 = foldlSent [S "This", phrase document, 
+                S "will be used as a starting point for subsequent development", 
+                S "phases, including writing the", phrase desSpec, S "and the", 
+                phrase softwareVAV, S "plan. The", phrase designDoc,
+                S "will show how the", plural requirement, S "are to be realized, including",
+                plural decision, S "on the numerical", (plural $ algorithm ^. term), 
+                S "and programming" +:+. phrase environment, S "The", phrase vavPlan, 
+                S "will show the steps that will be used to increase confidence in the",
+                phrase softwareDoc, S "and the" +:+. phrase implementation, S "Although",
+                S "the", (short srs), S "fits in a series of", plural document, 
+                S "that follow the so-called waterfall", phrase model `sC` 
+                S "the actual development process is not constrained", 
+                S "in any way. Even when the waterfall model is not followed, as",
+                S "Parnas and Clements point out, the most logical way", --FIXME: add citation to these people?
+                S "to present the", phrase documentation, S "is still to",
+                Quote (S "fake"), S "a rational", phrase design, S "process"]
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!

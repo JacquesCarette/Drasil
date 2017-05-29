@@ -42,7 +42,7 @@ s2_1, s2_2, s2_3, s3_1, s3_2, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
   s4_2_5, s4_2_6, s5_1, s5_2 :: Section
 
-s2_1_p1, s2_1_p2, s2_2_p1, s3_1_p1,
+s2_2_p1, s3_1_p1,
   s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
   s4_1_3_list, s4_2_1_list, 
@@ -107,9 +107,7 @@ s2 = introF start kSent [s2_1, s2_2, s2_3]
                 (phrase $ program ^. term)
 
 -- SECTION 2.1 --
-s2_1 = SRS.prpsOfDoc [s2_1_p1, s2_1_p2] []
-
-s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
+s2_1 = prpsOfDocF $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
   S "determines the" +:+ (phrase crtSlpSrf) `sC` S "and it's respective" +:+ 
   (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ 
   S "of assessing the stability of a slope" +:+. (phrase design) +:+ 
@@ -117,21 +115,6 @@ s2_1_p1 = Paragraph $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+
   S "is intended to be used as an educational tool for" +:+
   S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
-
-s2_1_p2 = Paragraph $ S "This" +:+ (phrase document) +:+ S "will be used as a" +:+
-  S "starting point for subsequent development phases, including" +:+
-  S "writing the" +:+ (phrase desSpec) +:+ S "and the" +:+ (phrase software) +:+
-  (phrase vav) +:+ S "plan. The" +:+ (phrase design) +:+ (phrase document) +:+
-  S "will show how the" +:+ (plural requirement) +:+ S "are to be realized," +:+
-  S "including decisions on the numerical algorithms and programming" +:+.
-  (phrase environment) +:+ S "The" +:+ (phrase vav) +:+ S "plan will show the steps" +:+
-  S "that will be used to increase confidence in the" +:+ (phrase softwareDoc) +:+
-  S "and the implementation. Although the" +:+ (short srs) +:+ S "fits in a series of" +:+
-  (plural document) +:+ S "that follow the so-called waterfall" +:+ (phrase model) `sC`
-  S "the actual development process is not constrained in any way. Even when" +:+
-  S "the waterfall" +:+ (phrase model) +:+ S "is not followed, as Parnas and Clements" +:+
-  S "point out, the most logical way to present the" +:+ (phrase documentation) +:+
-  S "is still to fake a rational" +:+ (phrase design) +:+ S "process."
 
 -- SECTION 2.2 --
 s2_2 = SRS.scpOfReq [s2_2_p1] []

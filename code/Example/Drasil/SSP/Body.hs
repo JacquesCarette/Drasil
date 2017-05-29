@@ -137,25 +137,6 @@ s2_3 = orgSecWTS start inModel s4_2_5 end
                 S "algebraic equations that must be solved iteratively to perform a" +:+
                 (titleize morPrice) +:+ S "Analysis"
 
---this commented code is now generated with the above function
---this is here as reference to what the code was before
-{-
-s2_3_p1 = Paragraph $ S "The" +:+ (phrase organization) +:+  
-  S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
-  S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
-  S "proposed by Koothoor as well as Smith and Lai." +:+ 
-  S "The presentation follows the standard pattern of presenting" +:+
-  S "goals" `sC` (plural theory) `sC` (plural definition) `sC`
-  S "and" +:+. (plural assumption) +:+ S "For readers" +:+
-  S "that would like a more bottom up approach, they can start" +:+
-  S "reading the" +:+ (plural inModel) +:+ S "in" +:+ makeRef s4_2_5 +:+
-  S "and trace back to find any additional" +:+ (phrase information) +:+
-  S "they require. The" +:+ (plural inModel) +:+ S "provide the set of" +:+
-  S "algebraic equations that must be solved iteratively to perform a" +:+
-  (titleize morPrice) +:+ S "Analysis. The" +:+ (plural goalStmt) +:+
-  S "are refined to the" +:+ (plural thModel) +:+ (sParen . makeRef) sec_TMs +:+ 
-  S "and" +:+ (plural inModel) +:+. (sParen . makeRef) s4_2_5
--}
 -- SECTION 3 --
 s3 = genSysF [s3_1, s3_2]
 

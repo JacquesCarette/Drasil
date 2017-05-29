@@ -45,7 +45,7 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
 s2_2_intro, 
   s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_bullets,
-  s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, s6_2_1_intro, 
+  s6_1_2_intro, s6_1_2_list, s6_1_3_list, s6_2_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_2_intro, s8_list, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
@@ -321,17 +321,7 @@ s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_,
   S "explains all the", (plural assumption), S "considered and the",
   plural thModel, S "which are supported by the", (plural dataDefn)]
   
-s6_2_1 = SRS.assump ([s6_2_1_intro] ++ (s6_2_1_list)) []
-
-s6_2_1_intro = Paragraph $ foldlSent [
-  S "This", phrase section_, S "simplifies the original", phrase problem, 
-  S "and helps in developing the", (phrase thModel), S "[" :+: 
-  (short thModel) :+: S "] by filling in the missing", phrase information,
-  S "for the" +:+. phrase physicalSystem, S "The numbers given in the",
-  S "square brackets refer to the", (phrase dataDefn), S "[" :+:
-  (short dataDefn) :+: S "], or", phrase inModel, S "[" :+: 
-  (short inModel) :+: S "], in which the respective", (phrase assumption),
-  S "is used"]
+s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
   [(Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) 

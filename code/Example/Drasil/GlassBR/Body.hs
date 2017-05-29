@@ -534,7 +534,7 @@ s7_1_list =
     sParen (makeRef (Definition (Data glaTyFac)))] ++
     map (\c -> Flat $ (at_start $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
     sParen (makeRef (Definition (Data c))))
-    [dL, tolPre, tolStrDisFac] ++
+    [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"
     ]))])]

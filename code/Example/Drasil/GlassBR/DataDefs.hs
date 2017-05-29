@@ -2,17 +2,14 @@ module Drasil.GlassBR.DataDefs where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
---import Data.Drasil.Concepts.Documentation
 import Prelude hiding (log, id)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
---import Drasil.GlassBR.Units
-
 
 
 dataDefns :: [QDefinition]
-dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dL, tolPre,
+dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
 
 risk :: QDefinition
@@ -72,13 +69,13 @@ glaTyFac = fromEqn' (glassTypeFac ^. id) (nounPhraseSP $
   "FT is fully tempered glass. HS is heat strengthened glass.") (Atomic "GTF") 
   glaTyFac_eq
 
-dL_eq :: Expr
-dL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
+dimLL_eq :: Expr
+dimLL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
 
-dL :: QDefinition
-dL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
-  (dimlessLoad ^. symbol) dL_eq
+dimLL :: QDefinition
+dimLL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
+  (dimlessLoad ^. symbol) dimLL_eq
 
 tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]

@@ -94,8 +94,9 @@ gooltop c hsMod _ _ = vcat [
     include c "GOOL.CodeGeneration.AbstractCode",
     include c "GOOL.Auxil.DataTypes"]
 
-goolbody :: Config -> a -> Label -> [Class] -> Doc
-goolbody c _ p cs = vibcat [
+goolbody :: Config -> a -> Label -> [Module] -> Doc
+goolbody c _ p modules = let cs = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+    vibcat [
     package c p,
     clsDecListDoc c cs,
     vibmap (classDoc c Source p) cs]

@@ -67,8 +67,9 @@ cstop c _ _ _ = vcat [
     include c "System.Collections" <> endStatement c,
     include c "System.Collections.Generic" <> endStatement c]
 
-csbody :: Config -> a -> Label -> [Class] -> Doc
-csbody c _ p ms = vcat [
+csbody :: Config -> a -> Label -> [Module] -> Doc
+csbody c _ p  modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+    vcat [
     package c p <+> lbrace,
     oneTab $ vibmap (classDoc c Source p) ms,
     rbrace]

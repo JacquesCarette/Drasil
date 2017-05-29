@@ -124,8 +124,9 @@ luatop c ft _ _ = vcat [
                             \    return new_class\n\
                             \end"
 
-luabody :: Config -> FileType -> Label -> [Class] -> Doc
-luabody c f p ms = vibmap (classDoc c f p) $ fixCtorNames initName ms
+luabody :: Config -> FileType -> Label -> [Module] -> Doc
+luabody c f p modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+  vibmap (classDoc c f p) $ fixCtorNames initName ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc

@@ -85,8 +85,9 @@ jtop c _ p _ = vcat [
     -- include c ("java.util." ++ render (list c Dynamic)) <> endStatement c
     ]
 
-jbody :: Config -> a -> Label -> [Class] -> Doc
-jbody c _ p ms = vibmap (classDoc c Source p) ms
+jbody :: Config -> a -> Label -> [Module] -> Doc
+jbody c _ p modules = let ms = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+  vibmap (classDoc c Source p) ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc

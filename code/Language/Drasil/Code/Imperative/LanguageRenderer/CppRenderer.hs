@@ -118,15 +118,17 @@ cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
 
-cppbody :: Config -> FileType -> Label -> [Class] -> Doc
-cppbody c f@(Header) p cs = vcat [
+cppbody :: Config -> FileType -> Label -> [Module] -> Doc
+cppbody c f@(Header) p modules = let cs = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+    vcat [
     package c p <+> lbrace,
     oneTabbed [
         clsDecListDoc c cs,
         blank,
         vibmap (classDoc c f p) cs],
     rbrace]
-cppbody c f@(Source) p cs = vibmap (classDoc c f p) cs
+cppbody c f@(Source) p modules = let cs = foldl1 (++) (map (\(Mod _ _ _ _ classes) -> classes) modules) in
+   vibmap (classDoc c f p) cs
 
 cppbottom :: FileType -> Doc
 cppbottom Header = text "#endif"

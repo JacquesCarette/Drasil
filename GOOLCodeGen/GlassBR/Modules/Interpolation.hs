@@ -11,8 +11,8 @@ interpolationFunc :: FunctionDecl
 interpolationFunc = pubMethod (methodType float) "lin_interp" [y1, y2, x1, x2, input_param] 
     [ 
       block [
-        y0 &= paramToVar y1 #+ (paramToVar y2 #- paramToVar y1) #/ (paramToVar x2 #- paramToVar x1) #* (paramToVar input_param #- paramToVar x1),
-        return y0
+        varDecDef y0 float $ paramToVar y1 #+ (paramToVar y2 #- paramToVar y1) #/ (paramToVar x2 #- paramToVar x1) #* (paramToVar input_param #- paramToVar x1),
+        return $ var y0
       ]
     ]     
 
@@ -23,6 +23,6 @@ y2 = param "y2" float
 x1 = param "x1" float
 x2 = param "x2" float
 input_param = param "input_param" float
-  
-y0 :: Value
-y0 = var "y0"
+
+y0 :: Label
+y0 = "y0"

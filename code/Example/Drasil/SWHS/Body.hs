@@ -1164,8 +1164,6 @@ likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence
 
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
-likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence
-
 likeChg1 = S "A4 -" +:+ (short phsChgMtrl) +:+ S "is actually a poor" +:+
   (phrase $ CT.thermal_conductor ^. term) `sC` S "so" +:+
   S "the" +:+ (phrase assumption) +:+

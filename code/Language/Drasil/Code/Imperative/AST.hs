@@ -33,7 +33,7 @@ module Language.Drasil.Code.Imperative.AST (
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,
-    toAbsCode, getClassName, buildModule, moduleName, libs
+    toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
 import Data.List (zipWith4)
@@ -685,3 +685,6 @@ moduleName (Mod l _ _ _ _) = l
 
 libs :: Module -> [Label]
 libs (Mod _ ls _ _ _) = ls
+
+classes :: Module -> [Class]
+classes (Mod _ _ _ _ cs) = cs

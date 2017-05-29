@@ -17,7 +17,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
-    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionListDocD,
+    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,
     
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
@@ -503,7 +503,10 @@ methodDocD' c ft m f = methodDocD c ft m f
 methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDocD c t m ms = vibmap (methodDoc c t m) funcs
     where funcs = filter (\f -> not $ isEmpty $ methodDoc c t m f) ms
-    
+
+functionDocD :: Config -> FileType -> Label -> Method -> Doc
+functionDocD _ _ _ _ = error "Not implemented yet!"
+
 functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
 functionListDocD c t m ms = vibmap (functionDoc c t m) funcs
     where funcs = filter (\f -> not $ isEmpty $ functionDoc c t m f) ms

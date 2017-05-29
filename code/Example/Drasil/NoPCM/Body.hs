@@ -91,7 +91,7 @@ s4_1_1_intro = Paragraph $
            S "understand the" +: (plural $ requirement ^. term)
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
-  ((at_start $ c ^. term)) +:+ S ":" +:+ (c ^. defn)) 
+  ((at_start $ c ^. term)) :+: S ":" +:+ (c ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
 s4_1_2 = SRS.physSyst [s4_1_2_intro, s4_1_2_list, fig_tank] []
@@ -123,7 +123,7 @@ s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5]
 
 s4_2_intro = Paragraph $
            S "The" +:+ (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
-           S "that governs" +:+ (getAcc sWHS) +:+. S "is presented in" +:+ --TODO: Subsec reference
+           S "that governs" +:+ (getAcc sWHS) +:+. S "is presented in " +:+ --TODO: Subsec reference
            S "The" +:+ (phrase $ information ^. term) +:+
            S "to understand the meaning of the" +:+ (phrase $ inModel ^. term) +:+ 
            S "and its derivation is also" +:+ S "presented, so that the" +:+ 

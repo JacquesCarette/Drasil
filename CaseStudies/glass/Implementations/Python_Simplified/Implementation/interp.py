@@ -33,34 +33,47 @@ def proper_index(index1,index2,data,value):
     return index1 
 
 
-# find_bounds: numpy.ndarray numpy.ndarray Num Num -> Int Int Int Int Int
-def find_bounds(data1, data2, value1, value2):
-    """
-    Finds the closest values above and below the input parameter to be used in
-    the interpolation.  Also returns how many interpolations are to be performed.
-    """
+def find_idx(data1, value1):
     # idx represents the index of the closest value of value1 in the array data1(e.g. for w_array,idx=0 if input w = 4.5)
     idx = (np.abs(data1 - value1)).argmin()
     # if the closest value is greater than the input parameter value1, we let idx=idx-1 to ensure the input parameter is 
     #   within the range [closest value below value1(data1[idx]), closest value above value1(data1[idx+1])]
     if data1[idx] > value1:
         idx -= 1
+    return idx
+
+def find_jdx(data2,value2,idx):   
     # jdx represents the index of the closest value of value2 in the ith column of the array data2(data2[:,idx])
     jdx = (np.abs(data2[:, idx] - value2)).argmin()
+    jdx = proper_index(jdx,idx,data2,value2)
+    return jdx
+    
+def find_kdx(data2,value2,idx):
     # kdx represents the index of the closest value of value2 in the (i+1)th column of the array data2(data2[:,idx+1])
-    kdx = (np.abs(data2[:, idx+1] - value2)).argmin() 
-    # Case1: value1 in data1; num_interp1 = 0; look for value2 in data2[:,idx]
+    kdx = (np.abs(data2[:, idx+1] - value2)).argmin()
+    kdx = proper_index(kdx,idx+1,data2,value2)
+    return kdx
+    
+def find_num_interp1(data1, value1,idx):
+    # Case1: value1 in data1; num_interp1 = 0
     if value1 in data1:
         num_interp1 = 0
+    # Case2: value1 NOT in data1; num_interp1 = 1
+    else:
+        num_interp1 = 1
+    return num_interp1
+    
+def find_num_interp2(data1, data2, value1, value2,idx):
+    # Case1: value1 in data1; look for value2 in data2[:,idx]
+    if value1 in data1:
         # Case1_1: value2 in data2[:,idx]; num_interp2 = 0
         if value2 in data2[:,idx]:
             num_interp2 = 0
         # Case1_2: value2 NOT in data2[:,idx]; num_interp2 = 1
         else:
             num_interp2 = 1
-    # Case2: value1 NOT in data1; num_interp1 = 1; look for value2 in both data2[:,idx] and data2[:,idx+1]   
+    # Case2: value1 NOT in data1; look for value2 in both data2[:,idx] and data2[:,idx+1]   
     else:
-        num_interp1 = 1
         # Case2_1: value2 in both data2[:,idx] and data2[:,idx+1]; num_interp2 = 0
         if value2 in data2[:,idx] and value2 in data2[:,idx+1]:
             num_interp2 = 0
@@ -73,9 +86,7 @@ def find_bounds(data1, data2, value1, value2):
         # Case2_4: value2 NOT in data2[:,idx] or data2[:,idx+1]; num_interp2 = 3
         else:
             num_interp2 = 3
-    jdx = proper_index(jdx,idx,data2,value2)
-    kdx = proper_index(kdx,idx+1,data2,value2)
-    return idx, jdx, kdx, num_interp1, num_interp2
+    return num_interp2
 
 
 # interp: Int Int Int Int Int Int numpy.ndarray numpy.ndarray numpy.ndarray Num Num -> Num

@@ -150,8 +150,9 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> Contents -> [Contents] -> Section
 physSystDesc kWord fig otherContents = SRS.physSyst ((intro):otherContents) []
-  where intro = Paragraph $ foldlSent [S "The", (phrase physicalSystem), S "of", kWord `sC`
-                S "as shown in", (makeRef fig) `sC` S "includes the following" +: plural element]
+  where intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
+                [S "The", (phrase physicalSystem), S "of", kWord `sC`
+                S "as shown in", (makeRef fig) `sC` S "includes the following", plural element]
 
 --provide the key word, a reference to the Instance Model, and the Subsections
 solChSpecF :: CINP -> Section -> [Section] -> Section
@@ -212,7 +213,7 @@ dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
   where dataDefnIntro ending = Paragraph $ foldlSent [S "This", phrase section_, 
                                S "collects and defines all the", plural datum,
-                               S "needed to build the" +:+. plural inModel, ending]
+                               S "needed to build the" +:+ plural inModel, ending]
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
@@ -249,14 +250,14 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           S "The", plural constraint, S "are conservative, to give the",
           phrase user, S "of the", phrase model, S "the flexibility to", 
           S "experiment with unusual situations. The", phrase column, S "of", 
-          S "typical", plural value +:+. S "is intended to provide a feel for a common scenario",
-          endS endingSent, trailingSent]
+          S "typical", plural value, S "is intended to provide a feel for a common scenario"]
+          +:+ endS endingSent +:+ trailingSent
           where endS False = EmptyS
                 endS True  = S "The " +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
                              S "estimate of the confidence with which the" +:+ phrase physical +:+
                              plural quantity +:+. S "can be measured" +:+ S "This" +:+
                              phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
-                             S "if one were performing an" +:+ phrase uncertainty +:+
+                             S "if one were performing an" +:+ phrase uncertainty +:+.
                              S "quantification exercise"
        
 -- wrapper for stakeholderIntro

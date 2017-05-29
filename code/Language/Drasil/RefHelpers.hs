@@ -14,7 +14,7 @@ inferName (Ref _ _)   = EmptyS
   -- error "Attempting to infer the name an existing reference"
 inferName _           = EmptyS -- Was Empty.
 
--- | helper to get first letter of each word. Used by inferName
+-- | helper to get first 4 letters of each word. Used by inferName
 firstFourLetters :: String -> [[Char]]
 firstFourLetters =  (map (take 4) . words)
 

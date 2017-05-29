@@ -1,5 +1,5 @@
-module Drasil.OrganizationOfSRS (refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, solChSpecF, assumpF, assumpF', datConF, reqF,
+module Drasil.OrganizationOfSRS (introF, refineChain, orgSec, orgSecWTS, genSysF, 
+                                 specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
                                  stakeholderIntro, traceGIntro) where
@@ -8,8 +8,20 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math(equation, matrix, graph)
-import Data.Drasil.Utils (foldlsC, foldlSent)
+import Data.Drasil.Utils (foldle, foldlsC, foldlSent)
 import qualified Drasil.SRS as SRS
+
+--Provide the start to the intro, then the key sentence relating to the overview, and subsections
+introF :: Sentence -> Sentence -> [Section] -> Section
+introF start kSent subSec = SRS.intro [Paragraph start, end] subSec
+  where end = Paragraph $ S "The following" +:+ (phrase section_) +:+
+              S "provides an overview of the" +:+ (introduceAbb srs) +:+
+              S "for" +:+ kSent +:+ S "This" +:+ phrase section_ +:+ S "explains the" +:+ phrase purpose +:+
+              S "of this" +:+ phrase document `sC` S "the" +:+ phrase scope +:+
+              S "of the" +:+ phrase system `sC` S "the" +:+ phrase organization +:+
+              S "of the" +:+ phrase document +:+ S  "and the" +:+
+              plural characteristic +:+ S "of the" +:+. plural intReader
+
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
@@ -76,8 +88,8 @@ genSysIntro = Paragraph $ foldlSent [S "This", phrase section_, S "provides gene
 
 -- System Constraints
 -- generalized if no constraints, but if there are, they can be passed through
-systCon :: Maybe Contents -> [Section] -> Section
-systCon (Just a) subSec = SRS.sysCon [a] subSec
+systCon :: Maybe [Contents] -> [Section] -> Section
+systCon (Just a) subSec = SRS.sysCon a subSec
 systCon Nothing subSec  = SRS.sysCon [systCon_none] subSec
   where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)  
 
@@ -100,6 +112,17 @@ specSysDesIntro l_end = Paragraph $ S "This" +:+ phrase section_ +:+ S "first pr
                                (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
+
+--can take a (Just sentence) if needed or Nothing if not
+termDefnF :: Maybe Sentence -> [Contents] -> Section
+termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
+  where lastF Nothing  = EmptyS
+        lastF (Just s) = s
+        intro = Paragraph $ foldle (+:+) (+:) (EmptyS) [S "This subsection provides a list of terms",
+                S "that are used in the subsequent", plural section_, S "and their",
+                S "meaning, with the", phrase purpose, S "of reducing ambiguity",
+                S "and making it easier to correctly understand the",
+                plural requirement, lastF end]
 
 --provide the key word, a reference to the Instance Model, and the Subsections
 solChSpecF :: CINP -> Section -> [Section] -> Section

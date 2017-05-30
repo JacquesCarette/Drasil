@@ -90,7 +90,7 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introF start kSent [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)] [s2_1, s2_2, s2_3]  
+s2 = introF start kSent [s2_1, s2_2, s2_3]  
   where start = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
                 (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
                 S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
@@ -139,12 +139,12 @@ s2_3 = orgSecWTS start inModel s4_2 end --FIXME: This needs to reference the ins
                 (titleize morPrice) +:+ S "Analysis"
 
 -- SECTION 3 --
-s3 = genSysF s3_1_p1 Nothing []
+s3 = genSysF userCharIntro Nothing []
 
 -- SECTION 3.1 --
 -- User Characteristics automaticly generated in genSysF with the userContraints intro bellow
-s3_1_p1 :: Sentence
-s3_1_p1 = S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
+userCharIntro :: Contents
+userCharIntro = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   (titleize physics) `sC` S "and be familiar with" +:+ (phrase soil) +:+
   S "and" +:+. (plural mtrlPrpty)

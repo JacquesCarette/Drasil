@@ -13,12 +13,16 @@ import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
-introF :: Sentence -> Sentence -> [(Sentence, Sentence)] -> [Section] -> Section
-introF start kSent temp subSec = SRS.intro [Paragraph start, Paragraph end] subSec
+introF :: Sentence -> Sentence -> [Section] -> Section
+introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
       where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
                   S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
                   S "of this", phrase document, foldlList (map ofThe (temp))]
+
+--list is used by introF (current args passed in are the same for every example)
+temp :: [(Sentence, Sentence)]
+temp = [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
 
 --combinator function that is used by introF
 ofThe :: (Sentence, Sentence) -> Sentence

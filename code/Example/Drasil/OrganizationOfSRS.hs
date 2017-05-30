@@ -175,7 +175,7 @@ physSystDesc kWord fig otherContents = SRS.physSyst ((intro):otherContents) []
 -- kWord (ex ssp, progName), the two sections, gendef is True if you want general definitions sections,
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints,
 --  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: CINP -> (Section, Section) -> Bool -> Sentence -> (Sentence, Sentence, Bool, Sentence) -> ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> [Contents] -> Section
+solChSpecF :: CINP -> (Section, Section) -> Bool -> Sentence -> (Sentence, Sentence, Bool, Sentence) -> ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> [Section] -> Section
 solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a,t,g,dd,i,dc) adSubSec = SRS.solCharSpec [Paragraph intro] (subSec gendef)
   where intro = foldlSent
                 [S "The", plural inModel, S "that govern",

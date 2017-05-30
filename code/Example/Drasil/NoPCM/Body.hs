@@ -41,6 +41,8 @@ pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
+nopcmSymbMap = symbolMap pcmSymbols
+
 
 s2 = SRS.intro [] [s2_3]
 
@@ -56,7 +58,7 @@ s2_3_intro = Paragraph $
            -- FIXME: Section 3.2 does not exist yet, when it does, add reference
 
            
-s3 = genSysF [s3_1]
+s3 = genSysF EmptyS (Just [s3_1_intro, sys_context_fig]) []
 
 s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 
@@ -143,10 +145,10 @@ s4_2_1_intro = Paragraph $
            S "in which the respective" +:+ (phrase assumption) +:+. S "is used"
 --TODO: Simple List
 
-s4_2_2 = thModF (getAcc sWHS) [s4_2_2_TMods]
+s4_2_2 = thModF sWHS s4_2_2_TMods
   
-s4_2_2_TMods :: Contents
-s4_2_2_TMods = Definition $ Theory t1consThermE
+s4_2_2_TMods :: [Contents]
+s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]
 
 s4_2_3 = genDefnF []
 

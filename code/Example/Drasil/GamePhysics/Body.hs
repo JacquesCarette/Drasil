@@ -163,6 +163,18 @@ s2_2_intro = Paragraph $ foldlSent
   S "is intended to simulate how these", (plural $ CP.rigidBody ^. term), 
   S "interact with one another"]
 
+----------------------------------------------
+-- 2.3 : Characteristics of Intended Reader --
+----------------------------------------------
+{--
+s2_3 :: Section
+s2_3_intro :: Sentence
+
+s2_3_intro = foldlSent 
+  [S "Reviwers of this documentation should have knowledge of",
+  S "The reader should also have an understanding of", S "The users of"]
+
+--}
 -------------------------------------
 -- 2.3 : Organization of Documents --
 -------------------------------------

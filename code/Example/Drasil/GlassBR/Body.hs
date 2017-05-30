@@ -77,6 +77,8 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [CQSWrapp
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
+gbSymbMap = symbolMap glassBRSymbols
+
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
@@ -371,17 +373,17 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
 s6_2_2 = thModF (titleize $ gLassBR ^. term) (s6_2_2_TMods) 
   
 s6_2_2_TMods :: [Contents]
-s6_2_2_TMods = map (Definition . Theory) tModels
+s6_2_2_TMods = map (Definition gbSymbMap . Theory) tModels
 
 s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
-s6_2_3_IMods = map (Definition . Theory) iModels
+s6_2_3_IMods = map (Definition gbSymbMap . Theory) iModels
 
 s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
-s6_2_4_DDefns = map (Definition . Data) dataDefns
+s6_2_4_DDefns = map (Definition gbSymbMap . Data) dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table1), S "gives the", plural value, 
@@ -572,13 +574,13 @@ s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, s9_funcReqRef,
   s9_assumpRef, s9_likelyChgRef :: [Sentence]
 
 s9_theorys = ["T1", "T2"]
-s9_theorysRef = map (refFromType Theory) tModels
+s9_theorysRef = map (refFromType Theory gbSymbMap) tModels
 
 s9_instaModel = ["IM1", "IM2", "IM3"]
-s9_instaModelRef = map (refFromType Theory) iModels
+s9_instaModelRef = map (refFromType Theory gbSymbMap) iModels
 
 s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
-s9_dataDefRef = map (refFromType Data) dataDefns
+s9_dataDefRef = map (refFromType Data gbSymbMap) dataDefns
 
 
 s9_data  = ["Data Constraint"]

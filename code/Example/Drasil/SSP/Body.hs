@@ -41,8 +41,7 @@ s1_2_intro :: [TSIntro]
 s2_1, s2_2, s2_3, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
-s2_2_p1, s3_1_p1,
-  s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
+s2_2_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
   s4_1_3_list, s4_2_1_list, 
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
@@ -70,6 +69,7 @@ ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
+sspSymMap :: SymbolMap
 sspSymMap = symbolMap sspSymbols
 
 -- SECTION 1 --
@@ -90,8 +90,7 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introF start kSent [s2_1, s2_2, s2_3] 
-  [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
+s2 = introF start kSent [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)] [s2_1, s2_2, s2_3]  
   where start = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
                 (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
                 S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
@@ -130,7 +129,7 @@ s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow 
   S "as well as displacement of" +:+ (phrase soil) +:+ S "that will occur on the" +:+. (phrase slope)
 
 -- SECTION 2.3 --
-s2_3 = orgSecWTS start inModel s4_2_5 end 
+s2_3 = orgSecWTS start inModel s2_3 end --FIXME: This needs to reference the instance model
   where start = S "The" +:+ (phrase organization) +:+
                 S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
                 S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
@@ -144,7 +143,8 @@ s3 = genSysF s3_1_p1 Nothing []
 
 -- SECTION 3.1 --
 -- User Characteristics automaticly generated in genSysF with the userContraints intro bellow
-s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
+s3_1_p1 :: Sentence
+s3_1_p1 = S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   (titleize physics) `sC` S "and be familiar with" +:+ (phrase soil) +:+
   S "and" +:+. (plural mtrlPrpty)
@@ -277,7 +277,7 @@ s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
 -- SECTION 4.2.2 --
 -- TModels is automaticly generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
+s4_2_2_tmods = map (Definition sspSymMap . Theory) [fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
 -- General Definitions is automaticly generated in solChSpecF

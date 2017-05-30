@@ -59,7 +59,7 @@ s2_3_intro = Paragraph $
            -- FIXME: Section 3.2 does not exist yet, when it does, add reference
 
            
-s3 = genSysF EmptyS (Just [s3_1_intro, sys_context_fig]) []
+s3 = genSysF [s3_1] (Paragraph $ EmptyS) (Just []) []
 
 s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 

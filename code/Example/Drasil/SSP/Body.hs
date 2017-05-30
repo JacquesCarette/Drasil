@@ -129,7 +129,7 @@ s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow 
   S "as well as displacement of" +:+ (phrase soil) +:+ S "that will occur on the" +:+. (phrase slope)
 
 -- SECTION 2.3 --
-s2_3 = orgSecWTS start inModel s2_3 end --FIXME: This needs to reference the instance model
+s2_3 = orgSecWTS start inModel s4_2 end --FIXME: This needs to reference the instance model
   where start = S "The" +:+ (phrase organization) +:+
                 S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
                 S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+

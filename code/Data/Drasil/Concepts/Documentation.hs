@@ -160,7 +160,9 @@ designDoc, generalSystemDescription, indPRCase,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim,
   productUC, useCaseTable, physicalProperty, vavPlan :: NPNC
   
+datumConstraint              = compoundNPNC' datum constraint
 designDoc                    = compoundNPNC design document
+functionalRequirement        = compoundNPNC functional requirement_
 generalSystemDescription     = compoundNPNC general systemdescription
 indPRCase                    = compoundNPNC individual productUC
 physicalConstraint           = compoundNPNC physical constraint
@@ -173,8 +175,6 @@ systemdescription            = compoundNPNC system description
 systemConstraint             = compoundNPNC system constraint
 sysCont                      = compoundNPNC system context
 userCharacteristic           = compoundNPNC user characteristic
-datumConstraint              = compoundNPNC' datum constraint
-functionalRequirement        = compoundNPNC functional requirement_
 nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
 solutionCharSpec             = compoundNPNC''' solutionCharacteristic specification
 offShelfSolution             = compoundNPNC offShelf solution

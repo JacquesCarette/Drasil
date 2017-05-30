@@ -21,7 +21,7 @@ module Data.Drasil.Utils
 import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
-  makeRef, DType, Section, ListType(Simple, Bullet), UnitalChunk, 
+  makeRef, DType, Section, ListType(Simple, Bullet), 
   unit_symb, symbol, SymbolForm, Unitary, SymbolMap)
   
 -- | fold helper functions applies f to all but the last element, applies g to

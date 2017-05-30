@@ -1,7 +1,5 @@
 module Data.Drasil.Units.Physics where
 
-
-import Language.Drasil.Unit (new_unit, makeDerU)
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))

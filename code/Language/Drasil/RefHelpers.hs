@@ -3,7 +3,6 @@ module Language.Drasil.RefHelpers where
 import Language.Drasil.Spec
 
 import Data.Char (isAlphaNum)
-import Data.List (concat)
 
 -- | for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence

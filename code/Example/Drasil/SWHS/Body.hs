@@ -101,8 +101,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
   
-s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4]
-  [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
+s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4] s2_endList
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
@@ -126,6 +125,10 @@ kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
   (phrase $ program ^. term) +:+ S "will be referred to as" +:+
   (titleize $ progName ^. term) +:+ S "(" :+: (short progName) :+:
   S ")."
+
+s2_endList :: [(Sentence, Sentence)]
+s2_endList = [(phrase scope, phrase system), (phrase organization,
+  phrase document), (plural characteristic, phrase intReader)]
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating

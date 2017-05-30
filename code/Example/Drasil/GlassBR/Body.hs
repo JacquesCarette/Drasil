@@ -38,7 +38,7 @@ import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_2,
+s2, s2_1, s2_2, s2_4, s2_3, s3, s3_1, s3_2, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
@@ -135,6 +135,12 @@ s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
   (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (short gLassBR),
   S "is intended to use the", plural datum, S "and predict whether the",
   (phrase $ glaSlab ^. term), S "is safe to use or not"]
+
+s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
+  (phrase $ blastRisk ^. term))
+  (EmptyS)  
+  (short gLassBR)
+  (s4_1_bullets)
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 

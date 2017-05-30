@@ -42,6 +42,8 @@ javaConfig options c =
         package          = package',
         printFunc        = text "System.out.print",
         printLnFunc      = text "System.out.println",
+        printFileFunc    = \_ -> error "not implemented",
+        printFileLnFunc  = \_ -> error "not implemented",
         stateType        = jstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -58,9 +60,9 @@ javaConfig options c =
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
+        ioDoc = ioDocD c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        getEnv = \_ -> error "no environment has been set",
-        printFileDoc = error "printFileDoc is undefined for Java"
+        getEnv = \_ -> error "no environment has been set"
     }
 
 -- short names, packaged up above (and used below)

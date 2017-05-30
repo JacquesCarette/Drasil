@@ -1,6 +1,7 @@
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code (
     Body, Class, StateVar, Value, Parameter, Module, FunctionDecl,
+    Label, 
     bool,int,float,char,string,infile,outfile,listT,obj,
     methodType,methodTypeVoid,block,defaultValue,true,false,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,

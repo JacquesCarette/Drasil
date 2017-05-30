@@ -36,6 +36,8 @@ csharpConfig _ c =
         package          = namespaceD,
         printFunc        = text "Console.Write",
         printLnFunc      = text "Console.WriteLine",
+        printFileFunc    = \_ -> error "not implemented",
+        printFileLnFunc  = \_ -> error "not implemented",
         stateType        = stateTypeD c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -52,9 +54,9 @@ csharpConfig _ c =
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDocD c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
+        ioDoc = ioDocD c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)",
-        printFileDoc = error "printFileDoc not implemented in CSharp"
+        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)"
     }
 
 -- short names, packaged up above (and used below)

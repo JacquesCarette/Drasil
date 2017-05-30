@@ -84,8 +84,8 @@ makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) _ =
   [ Block [ varDec ("outFile") (outfile),
             ValState $ ObjAccess (Var "outFile") (FileOpen f)
           ],
-    Block (map (\x -> PrintFileState (Var "outFile") True
-      (makeType (x ^. Q.typ)) (Var (x ^. id))) vcs)
+    Block (map (\x -> printFileLn (Var "outFile") (makeType (x ^. Q.typ)) 
+      (Var (x ^. id))) vcs)
   ]
 
 makeMethod (MeC { mType = MCustom b}) _ =

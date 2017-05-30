@@ -43,6 +43,8 @@ goolConfig options c =
             text $ makeAbsCode ++ " = AbsCode $ Pack \"" ++ p ++ "\" " ++ classList],
         printFunc        = text "print",
         printLnFunc      = text "printLn",
+        printFileFunc    = \v -> text "printFile" <+> valueDoc c v,
+        printFileLnFunc  = \v -> text "printFileLn" <+> valueDoc c v,
         stateType        = goolstateType c,
         
         blockStart = text "[", blockEnd = text "]", 
@@ -60,8 +62,8 @@ goolConfig options c =
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        getEnv = \_ -> error "getEnv for GOOL is not defined",
-        printFileDoc = error "printFileDoc for GOOL is not defined"
+        ioDoc = ioDocD c,
+        getEnv = \_ -> error "getEnv for GOOL is not defined"
     }
     
 -- for convenience
@@ -84,8 +86,9 @@ goolstateType _ (Base Character) _ = text "char"
 goolstateType _ (Base String) _ = text "string"
 goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
-goolstateType _ (Base (File In)) _ = text "infile"
-goolstateType _ (Base (File Out)) _ = text "outfile"
+goolstateType _ (Base (FileType Read)) _ = text "infile"
+goolstateType _ (Base (FileType Write)) _ = text "outfile"
+goolstateType _ (Base (FileType ReadWrite)) _ = error "Not yet implemented"
 
 gooltop :: Config -> Label -> FileType -> Label -> [Module] -> Doc
 gooltop c hsMod _ _ _ = vcat [
@@ -277,11 +280,15 @@ patternDoc' c (Observer (AddObserver t o)) =
 patternDoc' c (Observer (NotifyObservers t fn ps)) = 
     text "PatternState $ Observer $ NotifyObservers" <+> stateType c t Dec <+> lbl fn <+> hsList (valueDoc c) ps
     
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' _ newLn (Base String) (Lit (LitStr s)) = text printFn <+> lbl s
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDoc' _ Console newLn (Base String) (Lit (LitStr s)) = text printFn <+> lbl s
     where printFn = if newLn then "printStrLn" else "printStr"
-printDoc' c newLn t v = printFn <+> stateType c t Dec <+> valueDoc c v
+printDoc' c Console newLn t v = printFn <+> stateType c t Dec <+> valueDoc c v
     where printFn = if newLn then printLnFunc c else printFunc c
+printDoc' c (File f) newLn (Base String) (Lit (LitStr s)) = text printFn <+> valueDoc c f <+> lbl s
+    where printFn = if newLn then "printFileStrLn" else "printFileStr"
+printDoc' c (File f) newLn t v = printFn f <+> stateType c t Dec <+> valueDoc c v
+    where printFn = if newLn then printFileLnFunc c else printFileFunc c
     
 scopeDoc' :: Scope -> Doc
 scopeDoc' Private = text "Private"

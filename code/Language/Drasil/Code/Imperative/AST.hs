@@ -4,7 +4,9 @@ module Language.Drasil.Code.Imperative.AST (
     Label,
     -- ** Statement Structure
     Body, Block(..),
-    Statement(..), Pattern(..), StatePattern(..), StratPattern(..), Strategies(..), ObserverPattern(..), Assignment(..), Declaration(..), Conditional(..),
+    Statement(..), IOSt(..), IOType(..),
+    Pattern(..), StatePattern(..), StratPattern(..), Strategies(..), ObserverPattern(..),
+    Assignment(..), Declaration(..), Conditional(..),
     Iteration(..), Exception(..), Jump(..), Return(..), Value(..), Comment(..),
     Literal(..), Function(..),
     Expression(..), UnaryOp(..), BinaryOp(..),
@@ -29,7 +31,10 @@ module Language.Drasil.Code.Imperative.AST (
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
     print,printLn,printStr,printStrLn,
-    printFile,printFileLn,printFileStr,printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
+    printFile,printFileLn,printFileStr,printFileStrLn,
+    print',printLn',printStr',printStrLn',
+    getInput,getFileInput,
+    return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,funcApp',
@@ -53,11 +58,22 @@ data Statement = AssignState Assignment | DeclState Declaration
                | ValState Value
                | CommentState Comment
                | FreeState Value
-               | PrintState Bool StateType Value      --PrintState newLine type valueToPrint : print statement. Only Objective-C uses the StateType argument here, the other languages can infer enough from the Value-type.
-               | PrintFileState Value Bool StateType Value  --PrintFileState fileVar newLine type valtoprint
                | ExceptState Exception
                | PatternState Pattern           --deals with special design patterns
+               | IOState IOSt
                   deriving Show
+data IOSt = OpenFile Value Label Mode
+          | CloseFile Value
+          | Out IOType Bool StateType Value
+          | In IOType StateType Value
+          deriving Show
+data Mode = Read
+          | Write
+          | ReadWrite
+          deriving (Eq, Show)
+data IOType = Console
+            | File Value
+            deriving Show
 data Pattern = State StatePattern
              | Strategy StratPattern
              | Observer ObserverPattern
@@ -147,9 +163,8 @@ data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
               | And | Or
     deriving (Eq, Show)
-data BaseType = Boolean | Integer | Float | Character | String | File Mode
+data BaseType = Boolean | Integer | Float | Character | String | FileType Mode
     deriving (Eq, Show)
-data Mode = In | Out deriving (Eq, Show)
 data StateType = List Permanence StateType | Base BaseType | Type Label | Iterator StateType | EnumType Label
     deriving (Eq, Show)
 data Permanence = Static | Dynamic
@@ -198,8 +213,8 @@ int = Base Integer
 float = Base Float
 char = Base Character
 string = Base String
-infile = Base $ File In
-outfile = Base $ File Out
+infile = Base $ FileType Read
+outfile = Base $ FileType Write
 
 listT :: StateType -> StateType
 listT t = List Dynamic t
@@ -222,7 +237,7 @@ defaultValue (Integer) = litInt 0
 defaultValue (Float) = litFloat 0.0
 defaultValue (Character) = litChar ' '
 defaultValue (String) = litString ""
-defaultValue (File _) = error $
+defaultValue (FileType _) = error $
   "defaultValue undefined for (File _) pattern. See " ++
   "Language.Drasil.Code.Imperative.AST"
 
@@ -474,29 +489,52 @@ paramToVar (StateParam l _) = Var l
 paramToVar (FuncParam l _ _) = Var l
 
 print :: StateType -> Value -> Statement
-print = PrintState False
+print s v = IOState $ Out Console False s v
 
 printLn :: StateType -> Value -> Statement
-printLn = PrintState True
+printLn s v = IOState $ Out Console True s v
 
 printStr :: String -> Statement
-printStr = PrintState False string . litString
+printStr s = IOState $ Out Console False string (litString s)
 
 printStrLn :: String -> Statement
-printStrLn = PrintState True string . litString
+printStrLn s = IOState $ Out Console True string (litString s)
 
--- file printing
 printFile :: Value -> StateType -> Value -> Statement
-printFile f = PrintFileState f False
+printFile f s v = IOState $ Out (File f) False s v
 
 printFileLn :: Value -> StateType -> Value -> Statement
-printFileLn f = PrintFileState f True
+printFileLn f s v = IOState $ Out (File f) True s v
 
 printFileStr :: Value -> String -> Statement
-printFileStr f = PrintFileState f False string . litString
+printFileStr f s = IOState $ Out (File f) False string (litString s)
 
 printFileStrLn :: Value -> String -> Statement
-printFileStrLn f = PrintFileState f True string . litString
+printFileStrLn f s = IOState $ Out (File f) True string (litString s)
+
+print' :: IOType -> StateType -> Value -> Statement
+print' Console = print
+print' (File f) = printFile f
+
+printLn' :: IOType -> StateType -> Value -> Statement
+printLn' Console = printLn
+printLn' (File f) = printFileLn f
+
+printStr' :: IOType -> String -> Statement
+printStr' Console = printStr
+printStr' (File f) = printFileStr f
+
+printStrLn' :: IOType -> String -> Statement
+printStrLn' Console = printStrLn
+printStrLn' (File f) = printFileStrLn f
+
+getInput :: StateType -> Value -> Statement
+getInput s v = IOState $ In Console s v
+
+
+-- file input
+getFileInput :: Value -> StateType -> Value -> Statement
+getFileInput f s v = IOState $ In (File f) s v
 
 return :: Value -> Statement
 return = RetState . Ret

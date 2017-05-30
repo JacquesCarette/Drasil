@@ -36,8 +36,10 @@ pythonConfig _ c =
         listObj          = empty,
         clsDec           = classDec,
         package          = \_ -> empty,
-        printFunc        = text "sys.stdout.write",
-        printLnFunc      = text "print",
+        printFunc        = text "print",
+        printLnFunc      = empty,
+        printFileFunc    = \_ -> empty,
+        printFileLnFunc  = \_ -> empty,
         stateType        = pystateType c,
         
         blockStart = colon, blockEnd = empty,
@@ -55,10 +57,9 @@ pythonConfig _ c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
-        unOpDoc = unOpDocD', valueDoc = valueDoc' c,
+        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDocD c,
 
-        getEnv = \_ -> error "getEnv for pythong not yet implemented",
-        printFileDoc = error "printFileDoc not implemented for python"
+        getEnv = \_ -> error "getEnv for pythong not yet implemented"
     }
 
 -- convenience
@@ -194,9 +195,11 @@ paramDoc' :: Config -> Parameter -> Doc
 paramDoc' _ (StateParam n _) = text n
 paramDoc' c p = paramDocD c p
 
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' c False _ v = printFunc c <> parens (valueDoc c $ v $. Cast string)
-printDoc' c True _ v = printLnFunc c <> parens (valueDoc c v)
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDoc' c Console False _ v = printFunc c <> parens (valueDoc c v)
+printDoc' c Console True _ v = printFunc c <> parens (valueDoc c v <> text ", end=''")
+printDoc' c (File f) False _ v = printFunc c <> parens (valueDoc c v <> text ", file=" <> valueDoc c f)
+printDoc' c (File f) True _ v = printFunc c <> parens (valueDoc c v <> text ", end='', file=" <> valueDoc c f)
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n _ (Construct _) ps b) = vcat [

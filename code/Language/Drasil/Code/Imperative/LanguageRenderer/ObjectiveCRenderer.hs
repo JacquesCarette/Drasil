@@ -46,6 +46,8 @@ objcConfig options c =
         package          = \_ -> empty,
         printFunc        = text "printf",
         printLnFunc      = text "printf",
+        printFileFunc    = \_ -> empty,
+        printFileLnFunc  = \_ -> empty,
         stateType        = objcstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -63,8 +65,8 @@ objcConfig options c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        getEnv = \_ -> error "getEnv not implemented (yet) in ObjC",
-        printFileDoc = error "printFileDoc not implemented in ObjC"
+        ioDoc = ioDocD c,
+        getEnv = \_ -> error "getEnv not implemented (yet) in ObjC"
     }
 
 -- for convenience
@@ -250,8 +252,8 @@ paramDoc' c p@(FuncParam _ _ _) = paramDocD c p
 paramListDoc' :: Config -> [Parameter] -> Doc
 paramListDoc' c ps = colonMapListDoc (text " : ") (paramDoc c) ps
 
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc    --this function assumes that the StateType and Value match up as appropriate (e.g. if the StateType is a List, then the Value should be a ListVar)
-printDoc' c newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",") <+> value)
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc    --this function assumes that the StateType and Value match up as appropriate (e.g. if the StateType is a List, then the Value should be a ListVar)
+printDoc' c Console newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",") <+> value)
     where nl = if newLn then "\\n" else ""
           value =  case t of 
                      Base String -> 
@@ -267,7 +269,8 @@ printDoc' c newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",
                            List _ _ -> "s"
                            EnumType _ -> "d"
                            _ -> error $ "Objective-C: print statement not supported for type " ++ render (stateType c t Def)
-
+printDoc' _ (File _) _ _ _ = error "Not implemented yet!"
+                           
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' _ Header _ (MainMethod _) = empty
 methodDoc' c Header _ f@(Method n _ _ _ _) | isDtor n  = empty

@@ -17,7 +17,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
-    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,
+    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
     
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
@@ -71,6 +71,8 @@ data Config = Config {
     package :: Label -> Doc,
     printFunc :: Doc,
     printLnFunc :: Doc,
+    printFileFunc :: Value -> Doc,
+    printFileLnFunc :: Value -> Doc,
     stateType :: StateType -> DecDef -> Doc,
     
     blockStart :: Doc, blockEnd :: Doc,
@@ -102,8 +104,7 @@ data Config = Config {
     paramDoc :: Parameter -> Doc,
     paramListDoc :: [Parameter] -> Doc,
     patternDoc :: Pattern -> Doc,
-    printDoc :: Bool -> StateType -> Value -> Doc,
-    printFileDoc :: Value -> Bool -> StateType -> Value -> Doc,
+    printDoc :: IOType -> Bool -> StateType -> Value -> Doc,
     retDoc :: Return -> Doc,
     scopeDoc :: Scope -> Doc,
     stateDoc :: StateVar -> Doc,
@@ -116,7 +117,8 @@ data Config = Config {
     functionListDoc :: FileType -> Label -> [Method] -> Doc,
     unOpDoc :: UnaryOp -> Doc,
     valueDoc :: Value -> Doc,
-    getEnv :: String -> Doc -- careful, this can fail!
+    getEnv :: String -> Doc, -- careful, this can fail!
+    ioDoc :: IOSt -> Doc
 }
 
 ----------------------------------
@@ -421,20 +423,22 @@ patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv 
           initv = varDecDef index (Base Integer) $ litInt 0
           notify = oneLiner $ ValState $ (obsList $. at index) $. Func fn ps
 
-printDocD :: Config -> Bool -> StateType -> Value -> Doc
-printDocD c newLn _ v@(ListVar _ t) = vcat [
-    statementDoc c NoLoop $ printStr "[",
+printDocD :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDocD c io newLn _ v@(ListVar _ t) = vcat [
+    statementDoc c NoLoop $ printStr' io "[",
     iterationDoc c $ ForEach e v [ Block [
-        print t element,
-        printStr "," ] ],
+        print' io t element,
+        printStr' io "," ] ],
     statementDoc c Loop $ printLastStr "]"]
     where e = genNameFromType t
-          printLastStr = if newLn then printStrLn else printStr
+          printLastStr = if newLn then printStrLn' io else printStr' io
           element = case t of List _ st -> e `listOf` st
                               _         -> Var e
-printDocD c newLn _ v = printFn <> parens (valueDoc c v)
+printDocD c Console newLn _ v = printFn <> parens (valueDoc c v)
     where printFn = if newLn then printLnFunc c else printFunc c
-
+printDocD c (File f) newLn _ v = printFn <> parens (valueDoc c v)
+    where printFn = if newLn then printFileLnFunc c f else printFileFunc c f   
+    
 retDocD :: Config -> Return -> Doc
 retDocD c (Ret v) = text "return" <+> valueDoc c v
 
@@ -462,16 +466,23 @@ statementDocD c loc (RetState s) = retDoc c s <> end c loc
 statementDocD c loc (ValState s) = valueDoc c s <> end c loc
 statementDocD c _ (CommentState s) = comment c s
 statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
-statementDocD c loc (PrintState newLn t v) = printDoc c newLn t v <> end c loc
-statementDocD c loc (PrintFileState f newLn t v) = printFileDoc c f newLn t v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
+statementDocD c loc (IOState io) = ioDoc c io <> end c loc
+
+ioDocD :: Config -> IOSt -> Doc
+ioDocD _ (OpenFile _ _ _) = error ""
+ioDocD _ (CloseFile _) = error ""
+ioDocD c (Out t newLn s v) = printDoc c t newLn s v
+ioDocD _ (In Console _ _) = error ""
+ioDocD _ (In (File _) _ _) = error ""
+
 
 stateTypeD :: Config -> StateType -> DecDef -> Doc
 stateTypeD c (List lt t@(List _ _)) _ = list c lt <> angles (space <> stateType c t Dec <> space)
 stateTypeD c (List lt t) _            = case t of Base Boolean -> bitArray c
                                                   _    -> list c lt <> angles (stateType c t Dec)
-stateTypeD _ (Base (File _)) _   = text "File"
+stateTypeD _ (Base (FileType _)) _ = text "File"
 stateTypeD _ (Base Boolean) _    = text "Boolean"
 stateTypeD _ (Base Integer) _    = text "int"
 stateTypeD _ (Base Float) _      = text "float"

@@ -45,6 +45,8 @@ cppConfig options c =
         package          = namespaceD,
         printFunc        = text "std::cout",
         printLnFunc      = text "std::cout",
+        printFileFunc    = \f -> valueDoc c f,
+        printFileLnFunc  = \f -> valueDoc c f,
         stateType        = cppstateType c,
 
         blockStart = lbrace, blockEnd = rbrace,
@@ -58,10 +60,11 @@ cppConfig options c =
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, printFileDoc = printFileDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        ioDoc = ioDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
@@ -83,8 +86,9 @@ renderCode' c ms (AbsCode p) =
 
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
-cppstateType _ (Base (File In)) _    = text "ifstream"
-cppstateType _ (Base (File Out)) _   = text "ofstream"
+cppstateType _ (Base (FileType Read)) _    = text "ifstream"
+cppstateType _ (Base (FileType Write)) _   = text "ofstream"
+cppstateType _ (Base (FileType ReadWrite)) _ = error "Not implemented"
 cppstateType _ (Base Boolean) _ = text "bool"
 cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
@@ -229,27 +233,17 @@ paramDoc' :: Config -> Parameter -> Doc
 paramDoc' c (StateParam n t@(List _ _)) = stateType c t Dec <+> text "&" <> text n
 paramDoc' c p = paramDocD c p
 
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
-printDoc' c newLn _ v@(ListVar _ t) = vcat [
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDoc' _ _ _ _ (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
+printDoc' c Console newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printStr "[",
     statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [Var "std::cout", litString ","]],
     statementDoc c Loop $ printLastStr "]"]
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printStrLn else printStr
-printDoc' c newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
+printDoc' c Console newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
     where endl = if newLn then text "<<" <+> text "std::endl" else empty
-
-printFileDoc' :: Config -> Value -> Bool -> StateType -> Value -> Doc
-printFileDoc' _ _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
-printFileDoc' c f newLn _ v@(ListVar _ t) = vcat [
-    statementDoc c NoLoop $ printFileStr f "[",
-    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [f, litString ","]],
-    statementDoc c Loop $ printLastStr "]"]
-    where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
-          printLastStr = if newLn then printFileStrLn f else printFileStr f
-printFileDoc' c f newLn _ v = valueDoc c f <+> text "<<" <+> valueDoc c v <+> endl
-    where endl = if newLn then text "<<" <+> text "std::endl" else empty
+printDoc' _ (File _) _ _ _ = error "TODO!"
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c ft@(Header) m f = transDecLine c ft m f

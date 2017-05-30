@@ -73,7 +73,7 @@ chipmunkMG = mgDoc' chipmunk auths mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
-cpSymbMap :: SymbolMap
+cpSympMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
@@ -174,7 +174,7 @@ s2_3 :: Section
 s2_3_intro :: Sentence
 
 s2_3_intro = foldlSent 
-  [S "Reviwers of this documentation should have knowledge of",
+  [S "Reviewers of this documentation should have knowledge of",
   S "The reader should also have an understanding of", S "The users of"]
 
 --}

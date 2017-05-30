@@ -48,7 +48,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
-s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s3_3, s4, s4_1,
+s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
   s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
@@ -92,6 +92,9 @@ mgBod :: [Section]
 
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
+
+swhsSymbMap :: SymbolMap
+swhsSymbMap = symbolMap swhsSymbols
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
@@ -272,7 +275,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+.
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 = genSysF [s3_1, s3_2, s3_3]
+s3 = genSysF s3_2_contents Nothing
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -322,7 +325,7 @@ s3_1_2_bullets = Enumeration (Bullet $
 -- 3.2 : User Characteristics --
 --------------------------------
 
-s3_2 = SRS.userChar [s3_2_contents] []
+---s3_2 = SRS.userChar [s3_2_contents] []
 
 s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
   (short progName) +:+ S "should have an understanding of undergraduate" +:+
@@ -335,7 +338,7 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 -- 3.3 : System Constraints --
 ------------------------------
 
-s3_3 = systCon Nothing []
+--s3_3 = systCon Nothing []
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...

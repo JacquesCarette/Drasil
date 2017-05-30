@@ -67,8 +67,8 @@ figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
   +:+ (showingCxnBw (traceyMG) (contents))) filePath
 
 showingCxnBw :: NPNC -> Sentence -> Sentence
-showingCxnBw traceyMG contents = foldlSent [titleize traceyMG, S "Showing the",
-  titleize' connection, S "Between", contents]
+showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ contents
 
 -- | Organization of the document section builder. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance

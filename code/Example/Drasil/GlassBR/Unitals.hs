@@ -9,6 +9,8 @@ import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.Utils (foldlSent)
 
+import Language.Drasil
+
 
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 
@@ -35,9 +37,9 @@ standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick,
-  sflawParamK, sflawParamM, demand, sd_max, sd_min, nom_thick,
-  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight]
+glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
+  sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
+  char_weight, cWeightMax, cWeightMin, eqTNTWeight]
 
 plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
@@ -87,8 +89,8 @@ eqTNTWeight = unitary' "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac,
-  sdf_tol, prob_br, pb_tol, dimlessLoad, tolLoad]
+glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
+  pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF]
 
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
   pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk

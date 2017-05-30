@@ -45,3 +45,9 @@ blastRisk, glaSlab :: NPNC
 blastRisk    = npnc "blastRisk" (nounPhraseSP "blast risk")
 glaSlab      = npnc "glaSlab"   (nounPhraseSP "glass slab")
 
+temporary :: [VarChunk]
+temporary = [nonFactorL_, lDurFac_, glassTypeFac_]
+
+nonFactorL_    = makeVC "nonFactorL"    (nounPhraseSP "non-factored load") cB
+lDurFac_       = makeVC "lDurFac"       (nounPhraseSP "load duration factor") cB
+glassTypeFac_  = makeVC "glassTypeFac"  (nounPhraseSP "glass type factor") cB

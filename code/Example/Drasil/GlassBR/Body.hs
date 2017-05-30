@@ -78,7 +78,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
 gbSymbMap :: SymbolMap
-gbSymbMap = symbolMap glassBRSymbols
+gbSymbMap = symbolMap $ map qs (glassBRSymbols) ++ map qs (glassBRUnitless) ++ map qs (glassBRSymbolsWithDefns) ++ map qs (temporary)
 
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod

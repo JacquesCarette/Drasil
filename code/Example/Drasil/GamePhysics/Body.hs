@@ -65,7 +65,7 @@ chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [CQSWrapper
   cpAcronyms --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
-chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radians]
+chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
 
 chipmunkMG :: Document
 chipmunkMG = mgDoc' chipmunk auths mgBod

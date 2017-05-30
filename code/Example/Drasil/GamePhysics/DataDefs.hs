@@ -111,7 +111,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 dd5angDisp :: QDefinition
 dd5angDisp = fromEqn "dd5angDisp" fixme
   (Concat [(QP.angularDisplacement ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"])
-  radians angDispEqn
+  radian angDispEqn
 
 angDispEqn :: Expr
 angDispEqn = Deriv Total (FCall (C QM.orientation) [C QP.time]) (C QP.time)

@@ -243,7 +243,7 @@ printDoc' c Console newLn _ v@(ListVar _ t) = vcat [
           printLastStr = if newLn then printStrLn else printStr
 printDoc' c Console newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
     where endl = if newLn then text "<<" <+> text "std::endl" else empty
-printDoc' _ (File _) _ _ _ = error "TODO!"
+printDoc' _ (File _) _ _ _ = empty --TODO!
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c ft@(Header) m f = transDecLine c ft m f

@@ -38,7 +38,7 @@ lShareFac     = commonINP "lShareFac"     (nounPhraseSP "load share factor")    
 notApp        = commonINP "notApp"        (nounPhraseSP "not applicable")          "N/A"
 nonFactorL    = commonINP "nonFactorL"    (nounPhraseSP "non-factored load")       "NFL"     --lowercase?
 eqTNT         = commonINP "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
-gLassBR       = commonINP "gLassBR"       (pn "glassBR") "glassBR" --lowercase?
+gLassBR       = commonINP "gLassBR"       (pn "GlassBR")                           "GlassBR"
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

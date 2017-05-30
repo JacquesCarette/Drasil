@@ -87,14 +87,14 @@ this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
-s2 = introF start (titleize $ gLassBR ^. term)
+s2 = introF start (short gLassBR)
   [s2_1, s2_2, s2_3]
   where start = foldlSent [(at_start software), 
                 S "is helpful to efficiently and correctly predict the", 
                 (phrase $ blastRisk ^. term), S "involved with the" +:+. 
                 (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
                 S "under consideration is" +:+. (blast ^. defn), S "The", phrase software `sC` 
-                S "herein called", (titleize $ gLassBR ^. term), S "aims to predict the", 
+                S "herein called", (short gLassBR), S "aims to predict the", 
                 (phrase $ blastRisk ^. term), S "involved with the", 
                 (phrase $ glaSlab ^. term), S "using an intuitive interface"]
 
@@ -108,7 +108,7 @@ s2_1_intro_p1 = Paragraph $ foldlSent [S "The main", phrase purpose, S "of this"
   phrase document, S "is to predict whether a given", (phrase $ glaSlab ^. term),
   S "is likely to resist a specified" +:+. (phrase $ blast ^. term),
   S "The", plural goal, S "and", plural thModel, S "used in the", 
-  (titleize $ gLassBR ^. term), S "code are provided" `sC`
+  (short gLassBR), S "code are provided" `sC`
   S "with an emphasis on explicitly identifying",   (plural assumption), S "and unambiguous" +:+. plural definition,
   S "This", phrase document, S "is intended to be used as a", phrase reference,
   S "to provide all", phrase information, S "necessary to understand and",
@@ -132,7 +132,7 @@ s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
   plural requirement, S "includes getting all", phrase input_, 
   (plural $ parameter ^. term), S "related to the", (phrase $ glaSlab ^. term),
   S "and also the", (plural $ parameter ^. term), S "related to" +:+. 
-  (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (titleize $ gLassBR ^. term),
+  (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (short gLassBR),
   S "is intended to use the", plural datum, S "and predict whether the",
   (phrase $ glaSlab ^. term), S "is safe to use or not"]
 
@@ -152,7 +152,7 @@ s3 = stakehldr [s3_1, s3_2]
 s3_1 = SRS.theClient [s3_1_intro] []
 
 s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
-  (titleize $ gLassBR ^. term), S "is a", phrase company, S "named" +:+.
+  (short gLassBR), S "is a", phrase company, S "named" +:+.
   S "Entuitive. It is developed by Dr. Manuel Campidelli", 
   (at_start $ the client), S "has the final say on acceptance of the", 
   phrase product_]
@@ -160,11 +160,11 @@ s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
 s3_2 = SRS.theCustomer [s3_2_intro] []
 
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
-  S "are the end", phrase user, S "of", (titleize $ gLassBR ^. term)]
+  S "are the end", phrase user, S "of", (short gLassBR)]
 
 s4 = genSysF [] s4_1_bullets Nothing []
 
-s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
+s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (short gLassBR) +:+ 
   S "is expected to have completed at least the equivalent of the second year of an" +:+
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
@@ -179,7 +179,7 @@ s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
 s5_intro = Paragraph $ foldlSent [S "This", phrase section_,
   S "presents the" +:+. phrase (scpOfTheProj phrase),
-  S "It describes the expected use of", (titleize $ gLassBR ^. term), 
+  S "It describes the expected use of", (short gLassBR), 
   S "as well as the", plural input_, S "and", plural output_, 
   S "of each action. The", plural useCase, S "are", phrase input_, S "and",
   phrase output_ `sC` S "which defines the action of getting the", phrase input_,
@@ -194,7 +194,7 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
   [[S "1", titleize' input_, titleize user, titleize' characteristic +:+
   S "of the" +:+ (phrase $ glaSlab ^. term) +:+ S "and of the" +:+.
   (phrase $ blast ^. term) +:+ S "Details in" +:+ (makeRef s5_2)],
-  [S "2", titleize output_, (titleize $ gLassBR ^. term), S "Whether or not the" +:+
+  [S "2", titleize output_, (short gLassBR), S "Whether or not the" +:+
   (phrase $ glaSlab ^. term) +:+ S "is safe for the calculated" +:+
   (phrase $ load ^. term) +:+ S "and supporting" +:+
   S "calculated" +:+ plural value]]) 
@@ -206,7 +206,7 @@ s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
 s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, 
-  S "providing", phrase input_, S "to", (titleize $ gLassBR ^. term),
+  S "providing", phrase input_, S "to", (short gLassBR),
   S "for use within the" +:+. phrase analysis, S "There are two classes of"
   +: plural input_, (phrase $ glassGeo ^. term), S "and" +:+.
   (phrase $ blastTy ^. term), (glassGeo ^. defn), (blastTy ^. defn), S "These",
@@ -216,7 +216,7 @@ s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user,
   (phrase $ prob_br ^. term)]
 
 s5_2_bt_sent2 :: Sentence
-s5_2_bt_sent2 = foldlSent [S " Use Case 2", (titleize $ gLassBR ^. term), 
+s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR), 
   plural output_, S "if the", (phrase $ glaSlab ^. term), S "will be safe by", 
   S "comparing whether", (phrase $ capacity ^. term), S "is greater than" +:+. 
   (phrase $ demandq ^. term), (at_start $ capacity ^. term), S "is the",
@@ -239,7 +239,7 @@ s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, s6_1_2, s6_1_3]
 
 s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
   S "is needed to efficiently and correctly predict the", 
-  (phrase $ blastRisk ^. term) +:+. S "involved with the glass", (titleize $ gLassBR ^. term),
+  (phrase $ blastRisk ^. term) +:+. S "involved with the glass", (short gLassBR),
   S "is a", phrase computer, (phrase $ program ^. term), 
   S "developed to interpret the", plural input_, S "to give out the",
   plural output_, S "which predicts whether the", (phrase $ glaSlab ^. term), 
@@ -284,7 +284,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   (sD ^. defn)])
   where sParenDash = \x -> S " (" :+: x :+: S ") - "
   
-s6_1_2 = physSystDesc (titleize $ gLassBR ^. term) (fig_glassbr) [s6_1_2_list, fig_glassbr]
+s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
@@ -351,21 +351,21 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   (phrase $ explosion ^. term), S "scenario for its", 
   (plural $ calculation ^. term)],
   (S "Standard" +:+ plural value +:+ S "used for" +:+
-  (phrase $ calculation ^. term) +:+ S "in" +:+ (titleize $ gLassBR ^. term) +: S "are")]
+  (phrase $ calculation ^. term) +:+ S "in" +:+ (short gLassBR) +: S "are")]
 
 s6_2_1_list_assum2 :: [Sentence]
 s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration", 
   S "is assumed to be a single" +:+. (phrase $ lite ^. term), S "Hence the",
   phrase value, S "of", (short lShareFac), S "is equal to 1 for all", 
-  (plural $ calculation ^. term), S "in", (titleize $ gLassBR ^. term)]),
+  (plural $ calculation ^. term), S "in", (short gLassBR)]),
   (foldlSent [S "Boundary", plural condition, S "for the", 
   (phrase $ glaSlab ^. term), S "is assumed to be 4-sided",
   S "support for", (plural $ calculation ^. term)]),
-  (foldlSent [S "The response type considered in", (titleize $ gLassBR ^. term), 
+  (foldlSent [S "The response type considered in", (short gLassBR), 
   S "is flexural"]),
   (foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
   S "of", (phrase $ loadDF ^. term), sParen (P $ loadDF ^. symbol), 
-  S "is a constant in" +:+. (titleize $ gLassBR ^. term), S "It is calculated by the" +: 
+  S "is a constant in" +:+. (short gLassBR), S "It is calculated by the" +: 
   (phrase $ equation ^. term), --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
   S ". Using this" `sC` (P $ loadDF ^. symbol), S "= 0.27"])]
 

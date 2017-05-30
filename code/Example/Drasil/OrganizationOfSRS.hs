@@ -184,12 +184,12 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
                 S "The", phrase information, S "to understand the meaning of the",
                 plural inModel, S "and their derivation is also presented, so that the",
                 plural inModel, S "can be verified"]
-        subSec True  = [assumption True, theModels, generDefn, 
+        subSec True  = [assumption_ True, theModels, generDefn, 
                         dataDefin, instModels True, dataConstr]
-        subSec False = [assumption False, theModels,
+        subSec False = [assumption_ False, theModels,
                         dataDefin, instModels False, dataConstr]
-        assumption True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
-        assumption False = assumpF' theModels           dataDefin (instModels False) likeChg a
+        assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
+        assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
         theModels  = thModF kWord t
         generDefn  = genDefnF g
         dataDefin  = dataDefnF ddEndSent dd

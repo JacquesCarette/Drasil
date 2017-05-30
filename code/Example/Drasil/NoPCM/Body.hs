@@ -33,7 +33,7 @@ s2_3_intro, s3_1_intro, sys_context_fig,
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
-        map Verbatim [s2, s3, s4]  
+        map Verbatim [s2, s3, s4, s6]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms

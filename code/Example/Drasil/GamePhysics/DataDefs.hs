@@ -9,7 +9,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, collision,
   angAccel)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
   angularVelocity, angularAccel, angularDisplacement, velocity, displacement,
-  position, linearAccel, linearDisplacement, linearVelocity)
+  position, linearAccel, linearDisplacement, linearVelocity, impulseS)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import Data.Drasil.Units.Physics
 
@@ -93,7 +93,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 dd4linAcc :: QDefinition
-dd4linAcc = fromEqn (QP.LinearAccel ^. id) fixme (QP.linearAccel ^. symbol) accelU
+dd4linAcc = fromEqn (QP.linearAccel ^. id) fixme (QP.linearAccel ^. symbol) accelU
   accelEqn
 
 accelEqn :: Expr
@@ -163,7 +163,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -- need norms and cross products
 
 dd8impulse :: QDefinition
-dd8impulse = fromEqn (impulseS ^. id) fixme --dd8descr 
+dd8impulse = fromEqn (QP.impulseS ^. id) fixme --dd8descr 
   lJ impulseU impulseEqn
 
 -- The last two terms in the denominator should be cross products.

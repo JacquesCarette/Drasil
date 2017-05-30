@@ -24,11 +24,12 @@ t1descr :: Sentence
 t1descr = 
   foldlSent [S "If", (P $ is_safe1 ^. symbol), S "= True, the glass is" +:+. 
   S "considered safe", (P $ is_safe1 ^.symbol), S "and", (P $ is_safe2 ^. symbol),
-  S "(from", (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are either" +:+.
-  S "both True or both False", (P $ prob_br ^. symbol), S "is the",
-  (phrase $ prob_br ^. term) `sC` S "as calculated in" +:+.
-  (makeRef (Definition (Theory probOfBr))), (P $ pb_tol ^. symbol), S "is the",
-  (phrase $ pb_tol ^. term), S "entered by the user"]
+  S "(from", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))
+  :+: S ") are either" +:+. S "both True or both False", (P $ prob_br ^. symbol),
+  S "is the", (phrase $ prob_br ^. term) `sC` S "as calculated in" +:+.
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
+  (P $ pb_tol ^. symbol), S "is the", (phrase $ pb_tol ^. term),
+  S "entered by the user"]
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
@@ -42,9 +43,10 @@ t2descr :: Sentence
 t2descr = 
   foldlSent [S "If", (P $ is_safe2 ^. symbol), S "= True, the glass is" +:+.
   S "considered safe", (P $ is_safe1 ^. symbol), S "(from", 
-  (makeRef (Definition (Theory t1SafetyReq))), S "and", (P $ is_safe2 ^. symbol)
-  +:+. S "are either both True or both False", (short lResistance), 
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq)),
+  S "and", (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False", (short lResistance), 
   S "is the", (phrase $ lResistance ^. term), 
-  S "(also called capacity, as defined in" +:+. (makeRef (Definition (Theory calOfCap))), 
+  S "(also called capacity, as defined in" +:+. 
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
   (P $ demand ^. symbol), S "(also referred as the", (titleize $ demandq ^. term) :+:
-  S ") is the", (demandq ^. defn) `sC` S "as defined in", (makeRef (Definition (Theory calOfDe)))]
+  S ") is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]

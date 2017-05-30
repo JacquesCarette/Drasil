@@ -315,8 +315,16 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
   S "of a certain degree which is calculated based on", phrase user, 
   phrase input_]]
 
-s6_2 = SRS.solCharSpec
-  [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
+s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
+ (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2]) []
+  where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
+        end = foldlSent [(makeRef s6_2_5_table1), S "gives the", plural value, 
+              S "of the specification", (plural $ parameter ^. term),
+              S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
+              S "refers to the", (phrase $ ar_max ^. term), S "for the plate of glass"]
+
+--s6_2 = SRS.solCharSpec
+--  [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
 s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_, 
   S "explains all the", (plural assumption), S "considered and the",

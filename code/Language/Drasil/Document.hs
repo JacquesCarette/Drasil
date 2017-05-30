@@ -11,6 +11,7 @@ import Language.Drasil.Chunk.LC
 import Language.Drasil.Spec (Sentence(..), RefType(..))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
+import Language.Drasil.Expr.Extract (SymbolMap)
 import Control.Lens ((^.))
 
 type Title    = Sentence
@@ -42,7 +43,9 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition DType -- ^ Data/General definition or theoretical model
+               | Definition DType SymbolMap 
+               -- ^ Data/General definition or theoretical model. SymbolMap for
+               -- looking up variables (currently a hack)
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath -- ^ Should use relative file path.
                | Module ModuleChunk 
@@ -85,7 +88,7 @@ instance LayoutObj Contents where
   refName (Paragraph _)       = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)        = error "EqnBlock ref unimplemented"
 --  refName (CodeBlock _)       = error "Codeblock ref unimplemented"
-  refName (Definition d)      = getDefName d
+  refName (Definition d _)      = getDefName d
   refName (Enumeration _)     = error "List refs unimplemented"
   refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. id)
   refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. id)
@@ -96,7 +99,7 @@ instance LayoutObj Contents where
   refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
-  rType (Definition _)     = Def
+  rType (Definition _ _)     = Def
   rType (Module _)         = Mod
   rType (Requirement _)    = Req
   rType (Assumption _)     = Assump

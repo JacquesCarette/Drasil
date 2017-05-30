@@ -21,8 +21,8 @@ module Data.Drasil.Utils
 import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
-  makeRef, DType, Section, ListType(Simple, Bullet), 
-  unit_symb, symbol, SymbolForm, Unitary)
+  makeRef, DType, Section, ListType(Simple, Bullet), UnitalChunk, 
+  unit_symb, symbol, SymbolForm, Unitary, SymbolMap)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -138,8 +138,8 @@ itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
-refFromType :: (a -> DType) -> a -> Sentence
-refFromType f = (makeRef . Definition . f)
+refFromType :: (a -> DType) -> SymbolMap -> a -> Sentence
+refFromType f m = (makeRef . (\x -> Definition x m) . f)
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list

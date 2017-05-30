@@ -216,7 +216,7 @@ s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
   S "table, the geometry of the layers composing the plane of a" +:+
   S "slope, and the" +:+ (plural mtrlPrpty) +:+ S "of the layers."
 
-s4_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "GS") [
+s4_1_3_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short goalStmt) [
   (S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
       S "along a given" +:+. phrase slpSrf),
   (S "Identify the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for the slope" `sC` 
@@ -236,7 +236,7 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
 -- SECTION 4.2.1 --
 -- Assumptions is automaticly generated in solChSpecF using the list below
 
-s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
+s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short assumption) [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the" +:+. (phrase slopeSrf) +:+ S "The" +:+ P (coords ^. symbol) +:+ 
            S "coordinates of the failure" +:+ (phrase $ surface ^. term) +:+
@@ -325,7 +325,7 @@ s5 = reqF [s5_1, s5_2]
 s5_1 = SRS.funcReq
   [s5_1_list, s5_1_table] []
 
-s5_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "R") [
+s5_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (short requirement) [
   (S "Read the input file, and store the" +:+
         S "data. Necessary input data summarized in" +:+.
         (makeRef table_inputdata)),

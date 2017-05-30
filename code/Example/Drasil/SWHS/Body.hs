@@ -101,7 +101,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
   
-s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4] s2_endList
+s2 = introF s2_intro kSent s2_endList [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
@@ -1337,7 +1337,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` plural inModel `sC` plural likelyChg `sC` 
   S "and" +:+ plural assumption +:+. S "on each other"), (plural inModel
-  `sC` plural requirement `sC` S "and data" +:+ plural constraint +:+
+  `sC` plural requirement `sC` S "and" +:+ plural datumConstraint +:+
   S "on each other")]
 
 -- Same comments on this paragraph as I had for s7_intro1. 
@@ -1348,7 +1348,7 @@ s7_fig1 = Figure (
 
 s7_fig2 = Figure (
   showingCxnBw traceyGraph ((titleize' requirement) `sC`
-  titleize' inModel `sC` S "and" +:+ titleize' datum +:+ titleize' constraint)
+  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)
   ) "RTrace.png"
 
 --References?

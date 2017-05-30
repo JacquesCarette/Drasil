@@ -16,7 +16,7 @@ inferName _           = EmptyS -- Was Empty.
 
 -- | helper to get first 4 letters of each word. Used by inferName
 firstFourLetters :: String -> String
-firstFourLetters s1 =  (filter (\x -> x /= ',' and x /= '.') stringId)
+firstFourLetters s1 = (filter (\x -> not (x `elem` ",.?!")) stringId)
   where stringId = concat (map (take 4) (words s1))
 
 

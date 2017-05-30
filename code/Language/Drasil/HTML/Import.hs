@@ -123,6 +123,7 @@ spec (F f s)   = spec $ accent f s
 spec (Ref t r) = H.Ref t (spec r)
 spec (Quote q) = H.S "&quot;" H.:+: spec q H.:+: H.S "&quot;"
 spec EmptyS    = H.EmptyS
+spec (E e)     = H.E $ expr e
 
 -- | Helper function for translating accented characters to 
 -- an HTML renderable form.

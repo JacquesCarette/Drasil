@@ -116,6 +116,7 @@ spec (P s)     = T.N s
 spec (Ref t r) = T.Ref t (spec r)
 spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
 spec EmptyS    = T.EmptyS
+spec (E e)     = T.E $ expr e
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"

@@ -93,8 +93,6 @@ mgBod :: [Section]
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
 
-swhsSymbMap :: SymbolMap
-swhsSymbMap = symbolMap swhsSymbols
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
@@ -216,7 +214,8 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   (plural $ equation ^. term) `sC` S "as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
-  S "as explained in" +:+. (makeRef s3_2))
+  S "as explained in" +:+. (makeRef s3))
+-- should reference User characteristics
 
 
 ------------------------------------
@@ -275,7 +274,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+.
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 = genSysF s3_2_contents Nothing
+s3 = genSysF [s3_1] s3_2_contents Nothing []
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 

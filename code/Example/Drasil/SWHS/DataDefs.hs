@@ -11,6 +11,9 @@ import Data.Drasil.Quantities.Thermodynamics(latent_heat)
 
 import Control.Lens ((^.))
 
+swhsSymbMap :: SymbolMap
+swhsSymbMap = symbolMap swhsSymbols
+
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.
@@ -55,10 +58,10 @@ htFusionEqn = (C latent_heat) / (C mass)
 
 --Need to add units to data definition descriptions
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3 :: Contents
-s4_2_4_DD1 = Definition (Data dd1HtFluxC)
-s4_2_4_DD2 = Definition (Data dd2HtFluxP)
-s4_2_4_DD3 = Definition (Data dd3HtFusion)
+s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3 :: [Contents]
+s4_2_4_DD1 = map (Definition swhsSymbMap . Data) [dd1HtFluxC]
+s4_2_4_DD2 = map (Definition swhsSymbMap . Data) [dd2HtFluxP]
+s4_2_4_DD3 = map (Definition swhsSymbMap . Data) [dd3HtFusion]
 --s4_2_4_DD4 = Definition (Data dd4MeltFrac)
 
 --Symbol appears as "Label"

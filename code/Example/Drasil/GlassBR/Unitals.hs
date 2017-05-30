@@ -9,9 +9,6 @@ import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.Utils (foldlSent)
 
-import Language.Drasil
-
-
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 
 --FIXME: Many of the current terms can be separated into terms and defns!

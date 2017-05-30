@@ -4,6 +4,14 @@ import Language.Drasil
 
 import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
+hghcSymMap = symbolMap symbols
+
+symbols :: [QSWrapper]
+symbols = map qs vars ++ map qs htVars
+
+vars :: [QDefinition]
+vars = [htTransCladFuel, htTransCladCool]
+
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 

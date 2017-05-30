@@ -19,15 +19,9 @@ import Data.Drasil.Modules
 
 import Drasil.OrganizationOfSRS
 
-vars :: [QDefinition]
-vars = [htTransCladFuel, htTransCladCool]
-
 modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,
   mod_ctrl]
-
-symbols :: [QSWrapper]
-symbols = map qs vars ++ map qs htVars
   
 thisSI :: SystemInformation
 thisSI = SI hghc srs [spencerSmith] si_units symbols ([] :: [UCWrapper]) ([] :: [CINP])
@@ -36,7 +30,7 @@ thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]
   
 s3 :: Section --, s4 
-s3 = dataDefnF EmptyS (map (Definition . Data) vars)
+s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) vars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS thisSI

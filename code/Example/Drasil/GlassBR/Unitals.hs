@@ -127,7 +127,7 @@ terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStren
 aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, loadResis, 
   longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar, 
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,
-  notSafe, bomb, explosion, gLassBR :: ConceptChunk
+  notSafe, bomb, explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 aspectRatio   = dcc "aspectRatio" (aspectR ^. term)
@@ -220,4 +220,3 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
-gLassBR       = dcc "gLassBR"     (pn "glassBR") "glassBR" --lowercase?

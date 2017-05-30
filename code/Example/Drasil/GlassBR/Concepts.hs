@@ -22,7 +22,7 @@ acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
   iGlass, lDurFac, lGlass, lResistance, lShareFac, notApp, nonFactorL,
-  eqTNT :: CINP
+  eqTNT, gLassBR :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
 annealedGlass = commonINP "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
@@ -38,6 +38,7 @@ lShareFac     = commonINP "lShareFac"     (nounPhraseSP "load share factor")    
 notApp        = commonINP "notApp"        (nounPhraseSP "not applicable")          "N/A"
 nonFactorL    = commonINP "nonFactorL"    (nounPhraseSP "non-factored load")       "NFL"     --lowercase?
 eqTNT         = commonINP "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+gLassBR       = commonINP "gLassBR"       (pn "glassBR") "glassBR" --lowercase?
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

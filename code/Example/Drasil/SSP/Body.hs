@@ -39,8 +39,7 @@ s2, s3, s4, s5, s6, s7 :: Section
 s1_2_intro :: [TSIntro]
 
 s2_1, s2_2, s2_3, s4_1, s4_1_1, s4_1_2,
-  s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4,
-  s4_2_5, s4_2_6, s5_1, s5_2 :: Section
+  s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s2_2_p1, s3_1_p1,
   s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
@@ -144,14 +143,14 @@ s2_3 = orgSecWTS start inModel s4_2_5 end
 s3 = genSysF s3_1_p1 Nothing []
 
 -- SECTION 3.1 --
--- automaticly generated in genSysF with the userContraints intro bellow
+-- User Characteristics automaticly generated in genSysF with the userContraints intro bellow
 s3_1_p1 = S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   (titleize physics) `sC` S "and be familiar with" +:+ (phrase soil) +:+
   S "and" +:+. (plural mtrlPrpty)
 
 -- SECTION 3.2 --
--- automaticly generated in genSysF
+-- System Constraints automaticly generated in genSysF
  
 -- SECTION 4 --
 s4 = specSysDesF end [s4_1, s4_2]
@@ -235,7 +234,7 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
         tbRef    = (makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show")
 
 -- SECTION 4.2.1 --
-s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6 [s4_2_1_list]
+-- Assumptions is automaticly generated in solChSpecF using the list below
 
 s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
@@ -276,22 +275,18 @@ s4_2_1_list = Enumeration $ Simple $ mkEnumAbbrevList 1 (S "A") [
   ]
 
 -- SECTION 4.2.2 --
-s4_2_2 = thModF ssa (s4_2_2_tmods)
+-- TModels is automaticly generated in solChSpecF using the tmods below
 
 s4_2_2_tmods = map Definition [Theory fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
-s4_2_3 = genDefnF []
+-- General Definitions is automaticly generated in solChSpecF
 
 -- SECTION 4.2.4 --
-s4_2_4 = dataDefnF ending []
-  where ending = (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
-                  S "can be solved by direct analysis of given inputs. The interslice" +:+ 
-                  S "forces DD9 are force variables that must be written" +:+ 
-                  S "in terms of DD1 to DD8 to solve"
+-- Data Definitions is automaticly generated in solChSpecF
 
 -- SECTION 4.2.5 --
-s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 [s4_2_5_p2,s4_2_5_p3]
+-- Instance Models is automaticly generated in solChSpecF using the paragraphs below
 
 s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
   S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 
@@ -317,8 +312,7 @@ s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
   S "iterative" +:+ (plural solution) +:+ S "method is required."
 
 -- SECTION 4.2.6 --
-s4_2_6 = datConF (makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show")
-  EmptyS True EmptyS [s4_2_6Table2, s4_2_6Table3]
+-- Data Constraints is automaticly generated in solChSpecF using the tables below
 
 s4_2_6Table2, s4_2_6Table3 :: Contents --FIXME: actually create these table
 s4_2_6Table2 = Table [] [] EmptyS True 

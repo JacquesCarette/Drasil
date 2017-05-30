@@ -144,7 +144,7 @@ s3 = genSysF s3_1_p1 Nothing []
 
 -- SECTION 3.1 --
 -- User Characteristics automaticly generated in genSysF with the userContraints intro bellow
-s3_1_p1 = S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
+s3_1_p1 = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
   S "should have an understanding of undergraduate Level 1 Calculus and" +:+
   (titleize physics) `sC` S "and be familiar with" +:+ (phrase soil) +:+
   S "and" +:+. (plural mtrlPrpty)

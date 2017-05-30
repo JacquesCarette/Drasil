@@ -41,6 +41,7 @@ pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
+nopcmSymbMap :: SymbolMap
 nopcmSymbMap = symbolMap pcmSymbols
 
 

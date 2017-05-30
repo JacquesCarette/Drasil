@@ -49,8 +49,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 --Will there be a table of contents?
 
 s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1,
-  s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
-  s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
+  s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
 s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
@@ -102,7 +101,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
   
-s2 = introF s2_intro kSent s2_endList [s2_1, s2_2, s2_3, s2_4]
+s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
@@ -121,15 +120,11 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "which allows higher" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"
 
-kSent :: Sentence
-kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
+s2_kSent :: Sentence
+s2_kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
   (phrase $ program ^. term) +:+ S "will be referred to as" +:+
   (titleize $ progName ^. term) +:+ S "(" :+: (short progName) :+:
   S ")."
-
-s2_endList :: [(Sentence, Sentence)]
-s2_endList = [(phrase scope, phrase system), (phrase organization,
-  phrase document), (plural characteristic, phrase intReader)]
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating
@@ -222,7 +217,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4 = orgSecWTS s2_4_intro inModel s4_2_5 s2_4_trail
+s2_4 = orgSecWTS s2_4_intro inModel s4_2 s2_4_trail
 
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
@@ -231,7 +226,7 @@ s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   S "[citation]."
 
 s2_4_trail :: Sentence
-s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
+s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2) +:+. 
   S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
   (plural inModel) +:+ S "provide the" +:+ (phrase $ ode ^. term) +:+
   S "(" :+: (short ode) :+: S "s) and algebraic" +:+
@@ -479,8 +474,18 @@ goalState b =  (S "Predict the" +:+
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-s4_2 =solChSpecF progName s4_2_5
-  [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6, s4_2_7]
+s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end 
+  (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+
+  S "show"), mid, True, end)
+  ([s4_2_1_list], s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_deriv,
+    s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3, (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
+    [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
+
+  where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
+              plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
+              S "to reasonable" +:+. plural value)
+        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+
+              S "because features they should use are not yet implemented in Drasil.")
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -488,8 +493,6 @@ s4_2 =solChSpecF progName s4_2_5
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-
-s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6 [s4_2_1_list]
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
@@ -511,7 +514,7 @@ assump1 = S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) `sC` S "such as" +:+
   (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible [" :+:
-  (makeRef s4_2_2_T1) :+: S "]."
+  ((makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE))) :+: S "]."
 --
 assump2 = S "All" +:+
   (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
@@ -521,11 +524,11 @@ assump3 = S "The" +:+
   (phrase $ water ^. term) +:+ S "in the" +:+ (phrase $ tank ^. term) +:+
   S "is fully mixed, so the" +:+ (phrase $ temp_W ^. term) +:+
   S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+
-  S "[GD2" `sC` makeRef s4_2_4_DD2 :+: S "]."
+  S "[GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) :+: S "]."
 --
 assump4 = S "The" +:+ (phrase $ temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+ S "[GD2" `sC` makeRef s4_2_4_DD2 `sC` S "LC1]."
+  term) +:+ S "[GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "LC1]."
 --
 assump5 = S "The" +:+ 
   (phrase $ w_density ^. term) +:+ S "and" +:+
@@ -541,20 +544,20 @@ assump6 = S "The" +:+ (phrase $ htCap_W ^.
 --
 assump7 = (CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
-  (phrase $ water ^. term) +:+ S "[" :+: makeRef s4_2_4_DD1 :+: S "]."
+  (phrase $ water ^. term) +:+ S "[" :+: (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) :+: S "]."
 --
 assump8 = S "The" +:+ (phrase $ temp_C ^. 
   term) +:+ S "is constant over" +:+ (phrase $ time ^. term) +:+
-  S "[" :+: makeRef s4_2_4_DD1 `sC` S "LC2]."
+  S "[" :+: (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) `sC` S "LC2]."
 --
 assump9 = S "The" +:+ (phrase $ temp_C ^.
   term) +:+ S "does not vary along its length [" :+:
-  makeRef s4_2_4_DD1 `sC` S "LC3]."
+  (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) `sC` S "LC3]."
 --
 assump10 = (CT.law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
-  S "[" :+: makeRef s4_2_4_DD2 :+: S "]."
+  S "[" :+: (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) :+: S "]."
 --
 assump11 = S "The" +:+ phrase model +:+
   S "only accounts for" +:+ (charging ^. defn) `sC`
@@ -618,16 +621,12 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
-s4_2_2 = thModF (short progName) [s4_2_2_T1, s4_2_2_T2, s4_2_2_T3]
-
 -- Theory has to be RelationChunk....
 -- No way to include "Source" or "Ref. By" sections?
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
-
-s4_2_3 = genDefnF s4_2_3_deriv
 
 -- General paragraph, repeated in one other example but could be included in 
 -- all. Can be abstracted out.
@@ -639,7 +638,7 @@ s4_2_3 = genDefnF s4_2_3_deriv
 
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   +:+ (phrase $ rOfChng ^. term) +:+ S "of" +: (phrase $ temp ^. term)),
-  Paragraph (S "Integrating" +:+ makeRef s4_2_2_T1 +:+ 
+  Paragraph (S "Integrating" +:+ (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)) +:+ 
   S "over a" +:+ (phrase $ vol ^. term) +:+ S "(" :+:
   P (vol ^. symbol) :+: S "), we have:"),
   EqnBlock 
@@ -700,7 +699,6 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-s4_2_4 = dataDefnF s4_2_4_intro_end [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3]
 
 s4_2_4_intro_end :: Sentence
 s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
@@ -712,9 +710,6 @@ s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
-
-s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3
-  (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2)
 
 s4_2_5_subpar = [Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
@@ -771,8 +766,8 @@ s4_2_5_deriv1 = [Paragraph (S "Derivation of the" +:+
   EqnBlock 
    ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
    := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
-  Paragraph(S "Using" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
-  makeRef s4_2_4_DD2 +:+ S "for" +:+ P (ht_flux_C ^. symbol) +:+
+  Paragraph(S "Using" +:+ (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) +:+ S "and" +:+
+  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) +:+ S "for" +:+ P (ht_flux_C ^. symbol) +:+
   S "and" +:+ P (ht_flux_P ^. symbol) +:+ S "respectively," +:
   S "this can be written as"),
   EqnBlock 
@@ -855,7 +850,7 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   EqnBlock 
    ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
    (C time) := (C ht_flux_P) * (C pcm_SA)),
-   Paragraph (S "Using" +:+ makeRef s4_2_4_DD2 +:+ S "for" +:+
+   Paragraph (S "Using" +:+ (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) +:+ S "for" +:+
    P (ht_flux_P ^. symbol) `sC` S "this" +:+ (phrase $ equation ^. term) +:
    S "can be written as"),
   EqnBlock 
@@ -910,13 +905,8 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- 4.2.6 Data Constraints --
 ----------------------------
 
-s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
-  (makeRef s4_2_6_table2) +:+ S "show") mid True end [s4_2_6_table1, s4_2_6_table2]
-  where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
-              plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
-              S "to reasonable" +:+. plural value)
-        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+
-              S "because features they should use are not yet implemented in Drasil.")
+--[s4_2_6_table1, s4_2_6_table2]
+
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
@@ -971,8 +961,8 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   S "from the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
   (phrase $ energy ^. term) +:+ phrase output_ +:+ S "to the" +:+.
   (short phsChgMtrl) +:+ S "This can be shown as an" +:+
-  (phrase $ equation ^. term) +:+ S "by taking" +:+ makeRef s4_2_4_DD1 +:+
-  S "and" +:+ makeRef s4_2_4_DD2 `sC` S "multiplying each by their" +:+
+  (phrase $ equation ^. term) +:+ S "by taking" +:+ (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) +:+
+  S "and" +:+ (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "multiplying each by their" +:+
   S "respective" +:+ (phrase $ surface ^. term) +:+ S "area of" +:+
   (phrase $ CT.heat_trans ^. term) `sC`
   S "and integrating each over the" +:+ phrase simulation +:+
@@ -1209,27 +1199,27 @@ s7_trailing = [
 
   ]
 
-s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
-  makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 
-  makeRef s4_2_4_DD2, makeRef s4_2_4_DD3, makeRef s4_2_4_DD3, S "IM1",
+s7_table1 = Table [EmptyS, (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)), (makeRef ((Definition swhsSymbMap . Theory) t2SensHtE)), 
+  (makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)), S "GD1", S "GD2", (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), 
+  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)),(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)),(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), S "IM1",
   S "IM2", S "IM3", S "IM4"]
-  [[makeRef s4_2_2_T1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[(makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T2, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Theory) t2SensHtE)), EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "GD1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "GD2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD2, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS],
@@ -1244,7 +1234,7 @@ s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2,
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
-s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
+s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2,
   S "R1", S "R2"]
   [[S "IM1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
   [S "IM2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"],
@@ -1267,13 +1257,13 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
 s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   S "A7", S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
   S "A15", S "A16", S "A17", S "A18", S "A19"]
-  [[makeRef s4_2_2_T1, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[(makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)), S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T2, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Theory) t2SensHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
   [S "GD1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
@@ -1282,16 +1272,16 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   [S "GD2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS],
-  [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  [(makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
   S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS],
-  [makeRef s4_2_4_DD2, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
   [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,

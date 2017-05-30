@@ -13,11 +13,9 @@ import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec)
 import Data.Drasil.Quantities.PhysicalProperties
 import Data.Drasil.Quantities.Physics (time)
+import Drasil.SWHS.DataDefs
 
 import Control.Lens ((^.))
-
-swhsSymbMap :: SymbolMap
-swhsSymbMap = symbolMap swhsSymbols
 
 s4_2_2_T1 :: [Contents]
 s4_2_2_T1 = map (Definition swhsSymbMap . Theory) [t1ConsThermE]

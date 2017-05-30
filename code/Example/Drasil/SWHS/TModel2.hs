@@ -9,11 +9,9 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Concepts.Thermodynamics
 import qualified Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.PhysicalProperties
+import Drasil.SWHS.DataDefs
 
 import Control.Lens ((^.))
-
-swhsSymbMap :: SymbolMap
-swhsSymbMap = symbolMap swhsSymbols
 
 s4_2_2_T2 :: [Contents]
 s4_2_2_T2 = map (Definition swhsSymbMap . Theory) [t2SensHtE]

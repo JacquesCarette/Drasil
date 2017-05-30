@@ -139,7 +139,7 @@ s2_3 = orgSecWTS start inModel s4_2 end --FIXME: This needs to reference the ins
                 (titleize morPrice) +:+ S "Analysis"
 
 -- SECTION 3 --
-s3 = genSysF userCharIntro Nothing []
+s3 = genSysF [] userCharIntro Nothing []
 
 -- SECTION 3.1 --
 -- User Characteristics automaticly generated in genSysF with the userContraints intro bellow

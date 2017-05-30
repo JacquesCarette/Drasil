@@ -58,6 +58,7 @@ ufunc (Summation (Just (s, Low v, High h)) e) =
 ufunc (Summation Nothing e) = (T.Summation Nothing, expr e)
 ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc (Abs e) = (T.Abs, expr e)
+ufunc (Norm e) = (T.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
 ufunc (Sin e) = (T.Sin, expr e)
 ufunc (Cos e) = (T.Cos, expr e)

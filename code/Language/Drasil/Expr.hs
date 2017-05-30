@@ -111,6 +111,7 @@ data UFunc where
     -- OR Nothing for the first term.
     -- Expr is the expression we are summing over
   Abs :: Expr -> UFunc -- Absolute value
+  Norm :: Expr -> UFunc -- Norm
   Integral :: (SymbolForm c) => 
     ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
     -- Integral (low,high) Bounds (if any), then (expression to integrate) 

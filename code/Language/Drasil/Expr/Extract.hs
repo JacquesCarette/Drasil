@@ -70,6 +70,7 @@ unpack :: UFunc -> Expr
 unpack (Log e) = e
 unpack (Summation _ e) = e
 unpack (Abs e) = e
+unpack (Norm e) = e
 unpack (Integral _ e _) = e
 unpack (Sin e) = e
 unpack (Cos e) = e

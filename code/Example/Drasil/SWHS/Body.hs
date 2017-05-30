@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils (mkEnumAbbrevList)
+import Data.Drasil.Utils (mkEnumAbbrevList, enumSimple, enumBullet)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -401,8 +401,7 @@ s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
-s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short physSyst)
-  s4_1_2_physSystList)
+s4_1_2_list = enumSimple 1 (short physSyst) s4_1_2_physSystList
 
 s4_1_2_physSystList :: [Sentence]
 
@@ -445,8 +444,7 @@ s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) `sC`
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.
 
-s4_1_3_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short goalStmt) $
-  map (goalState) [temp_W, temp_PCM, w_E, pcm_E])
+s4_1_3_list = enumSimple 1 (short goalStmt) $ map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
 
 goalState :: NamedIdea b => b -> Sentence
 goalState b =  (S "Predict the" +:+
@@ -496,8 +494,7 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short assumption)
-  s4_2_1_assump_list)
+s4_2_1_list = enumSimple 1 (short assumption) s4_2_1_assump_list
 
 s4_2_1_assump_list :: [Sentence]
 
@@ -1030,7 +1027,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (C pcm_vol)) * (C w_density)),
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
-  Enumeration (Simple $ mkEnumAbbrevList 3 (short requirement) reqList)
+  enumSimple 3 (short requirement) reqList
   ]
 
 -- Want to add req1 and req2 but they include a table and another enumeration
@@ -1132,7 +1129,7 @@ s6 = SRS.likeChg [s6_list] []
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
 
-s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short likelyChg) s6_likeChg_list)
+s6_list = enumSimple 1 (short likelyChg) s6_likeChg_list
 
 s6_likeChg_list :: [Sentence]
 

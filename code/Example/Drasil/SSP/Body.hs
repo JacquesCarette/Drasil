@@ -187,7 +187,7 @@ s4_1_2_p1 = Paragraph $ S "Analysis of the" +:+ (phrase slope) +:+ S "is perform
   (phrase intrslce) +:+ S "or" +:+ (phrase slice) +:+ S "is being used is shown in" +:+. 
   (makeRef fig_indexconv)
 
-s4_1_2_bullets = Enumeration $ Bullet $ map Flat [
+s4_1_2_bullets = enumBullet [
   ((at_start' itslPrpty) +:+ S "convention is noted by j. The end" +:+
     (plural itslPrpty) +:+ S "are usually not of interest" `sC` 
     S "therefore use the" +:+ (plural itslPrpty) +:+ S "from 1" +:+

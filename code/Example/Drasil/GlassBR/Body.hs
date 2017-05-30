@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent, itemRefToSent,
+import Data.Drasil.Utils (foldlSent, itemRefToSent, foldlList,
   makeTMatrix, makeListRef, refFromType, enumSimple, enumBullet)
 
 import Drasil.Template.MG
@@ -136,9 +136,10 @@ s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
   S "is intended to use the", plural datum, S "and predict whether the",
   (phrase $ glaSlab ^. term), S "is safe to use or not"]
 
-s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
-  (phrase $ blastRisk ^. term))
-  (EmptyS)  
+s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
+                   (phrase $ glBreakage ^. term) +:+ S "and" +:+ 
+                   (phrase $ blastRisk ^. term))
+  (foldlList [S "second year calculus", S "structural mechanics", S "computer applications in civil engineering"])
   (short gLassBR)
   (s4_1_bullets)
 

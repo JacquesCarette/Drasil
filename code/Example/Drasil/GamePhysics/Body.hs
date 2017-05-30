@@ -73,6 +73,8 @@ chipmunkMG = mgDoc' chipmunk auths mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
+cpSymbMap = symbolMap cpSymbols
+
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
 -- it makes it easier to test between the two different versions as changes
@@ -415,7 +417,7 @@ s4_2_2_intro = Paragraph $ foldlSent
   (plural $ CM.equation ^. term), S "the", (phrase $ physLib ^. term), 
   S "is based on"]
 
-s4_2_2_TMods = map (Definition . Theory) cpTMods
+s4_2_2_TMods = map (Definition cpSymbMap . Theory) cpTMods
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
@@ -456,7 +458,7 @@ s4_2_4_intro = Paragraph $ foldlSent [S "This", (phrase section_),
   titleize' inModel, S "The", (phrase $ CPP.dimension ^. term), S "of each", 
   (phrase quantity), S "is also given"]
 
-s4_2_4_DDefs = map (Definition . Data) cpDDefs
+s4_2_4_DDefs = map (Definition cpSymbMap . Data) cpDDefs
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -469,7 +471,7 @@ s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
 
 -- Instance models not fully yet implemented --
 
-s4_2_5_IMods = map (Definition . Theory) iModels
+s4_2_5_IMods = map (Definition cpSymbMap . Theory) iModels
 
 ------------------------------
 -- Collision Diagram        --
@@ -730,13 +732,13 @@ s8_instaModelRef, s8_assumpRef, s8_funcReqRef, s8_goalstmtRef,
   s8_dataRef :: [Sentence]
 
 s8_instaModel = ["IM1", "IM2", "IM3"]
-s8_instaModelRef = map (refFromType Theory) iModels
+s8_instaModelRef = map (refFromType Theory cpSymbMap) iModels
 
 s8_theoryModel = ["T1", "T2", "T3", "T4", "T5"]
-s8_theoryModelRef = map (refFromType Theory) cpTMods
+s8_theoryModelRef = map (refFromType Theory cpSymbMap) cpTMods
 
 s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-s8_dataDefRef = map (refFromType Data) cpDDefs
+s8_dataDefRef = map (refFromType Data cpSymbMap) cpDDefs
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 s8_assumpRef = makeListRef s4_2_1_list' s4_2_1

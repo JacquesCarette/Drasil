@@ -22,7 +22,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.force, QP.gravitationalAccel,
   QP.gravitationalConst, QP.momentOfInertia, QP.impulseV, QP.impulseS, QPP.len, 
   QPP.mass, iVect, jVect, normalVect, QP.angularVelocity, QP.position, 
   QM.orientation, QP.distance, QP.displacement, QP.time, QP.torque, 
-  QP.angularDisplacement, QP.velocity]
+  QP.angularDisplacement, QP.velocity, pos_CM]
     
 -- Chunks with units --
 iVect, jVect, normalVect :: UnitalChunk

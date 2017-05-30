@@ -25,7 +25,7 @@ cpDDefs = [dd1CtrOfMass, dd2linDisp, dd3linVel, dd4linAcc, dd5angDisp,
 -- DD1 : Centre of mass --
 
 dd1CtrOfMass :: QDefinition
-dd1CtrOfMass = fromEqn "dd1CtrOfMass" (pos_CM ^. term) (pos_CM ^. symbol)
+dd1CtrOfMass = fromEqn (pos_CM ^. id) (pos_CM ^. term) (pos_CM ^. symbol)
   metre ctrOfMassEqn
 
 ctrOfMassEqn :: Expr

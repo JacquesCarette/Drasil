@@ -1,12 +1,13 @@
 {-# LANGUAGE RankNTypes #-}
-module Language.Drasil.Expr.Extract(dep, vars, toVC, SymbolMap) where
+module Language.Drasil.Expr.Extract(dep, vars, toVC, SymbolMap, symbolMap) where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
 import Language.Drasil.Chunk (Chunk, id)
-import Language.Drasil.Chunk.Wrapper.QSWrapper (QSWrapper)
+import Language.Drasil.Chunk.Quantity (Quantity)
+import Language.Drasil.Chunk.Wrapper.QSWrapper (QSWrapper, qs)
 import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc')
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation
@@ -14,6 +15,9 @@ import Language.Drasil.Space  -- need this for code generation
 import qualified Data.Map as Map
 
 type SymbolMap = Map.Map String QSWrapper
+
+symbolMap :: (SymbolForm c, Quantity c) => [c] -> SymbolMap
+symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]

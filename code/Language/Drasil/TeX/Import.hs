@@ -150,7 +150,7 @@ lay x@(Table hdr lls t b)
 lay (Paragraph c)         = T.Paragraph (spec c)
 lay (EqnBlock c)          = T.EqnBlock (T.E (expr c))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay x@(Definition c m)      = T.Definition (makePairs c m) (spec $ refName x)
+lay x@(Definition m c)      = T.Definition (makePairs c m) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)

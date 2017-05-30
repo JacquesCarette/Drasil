@@ -70,6 +70,19 @@ showingCxnBw :: NPNC -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
 
+--Characteristics of Intended Reader section
+charIntRdrF :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence -> Contents -> Section
+charIntRdrF know c1 und c2 progName r = 
+  SRS.charOfIR (intReaderIntro know c1 und c2 progName r) []
+
+--paragraph called by charIntRdrF
+intReaderIntro :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence -> Contents -> [Contents]
+intReaderIntro know c1 und c2 progName r = [Paragraph $ foldlSent [S "Reviewers of this", (phrase documentation),
+  S "should have a strong knowledge in" +:+. know, S "A", c1,  
+  S "course on this topic is recommended. The reviewers should also have an understanding of",
+  und `sC` S "as typically covered in", c2 +:+. S "courses", S "The", (plural user), S "of",
+  progName, S "can have a lower level of expertise, as explained in", (makeRef r)]]
+
 -- | Organization of the document section builder. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance
 -- models or data definitions), a bottom section (for creating a reference link)

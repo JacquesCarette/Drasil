@@ -151,37 +151,37 @@ T & Theoretical Model
 \section{Introduction}
 \label{Sec:Intr}
 \subsection{Characteristics of Intended Reader}
-\label{Sec:CoIR}
+\label{Sec:CharofInteRead}
 Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on the topic is recommended. The reviewer should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level expertise, as explained in Section
 \section{General System Description}
-\label{Sec:GSD}
+\label{Sec:GeneSystDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{System Context}
-\label{Sec:SC}
-Figure~\ref{Figure::SC} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the section and its environment.
+\label{Sec:SystCont}
+Figure~\ref{Figure::SystCont} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the section and its environment.
 \begin{figure}
 \begin{center}
 \includegraphics{SystemContextFigure.png}
-\caption{Figure~\ref{Figure::SC}: System Context}
-\label{Figure::SC}
+\caption{Figure~\ref{Figure::SystCont}: System Context}
+\label{Figure::SystCont}
 \end{center}
 \end{figure}
 \section{Specific System Description}
-\label{Sec:SSD}
+\label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
 \subsection{Problem Description}
-\label{Sec:PD}
+\label{Sec:ProbDesc}
 SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
 \subsubsection{Terminology and Definitions}
-\label{Sec:TaD}
+\label{Sec:TermandDefi}
 This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 \begin{enumerate}
 \item{Heat flux: the rate of heat energy transfer per unit area}
 \item{Specific heat: heat capacity per unit mass}
 \end{enumerate}
 \subsubsection{Physical System Description}
-\label{Sec:PSD}
-The physical system of SWHS, as shown in Figure~\ref{Figure:Swht,whffco}, includes the following elements:
+\label{Sec:PhysSystDesc}
+The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattank,withheatfluxfromcoilof}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Tank containing water
 \item[PS2:]Heating coil at bottom of tank. ($q_{C}$ represents the heat flux from coil into the water.)
@@ -190,11 +190,11 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Swht,whffco}, includ
 \begin{center}
 \includegraphics{TankWaterOnly.png}
 \caption{Solar water heating tank, with heat flux from coil of $q_{C}$}
-\label{Figure:Swht,whffco}
+\label{Figure:Solawateheattank,withheatfluxfromcoilof}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
-\label{Sec:GS}
+\label{Sec:GoalStat}
 Given the temperature of the coil, initial temperature of the water, and material properties, the goal statement is
 \begin{itemize}
 \item[GS1:]predict the temperature of water over time
@@ -230,7 +230,7 @@ This section collects the laws and equations that will be used in deriving the d
 This section collects and defines all the data needed to build the instance models.
 \subsubsection{Instance Models}
 \label{Sec:IM}
-This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM} and Section~\ref{Sec:GD}.
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM} and Section~\ref{Sec:GD}.
 \subsubsection{Data Constraints}
 \label{Sec:DC}
 Table~\ref{Table:T1IV} and Table~\ref{Table:T2OV} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.

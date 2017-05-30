@@ -594,7 +594,7 @@ Theoretical Model
 <h2>
 Introduction
 </h2>
-<a id="Sec:CoIR">
+<a id="Sec:CharofInteRead">
 <div class="subsection">
 <h3>
 Characteristics of Intended Reader
@@ -606,7 +606,7 @@ Reviewers of this documentation should have a strong knowledge in heat transfer 
 </a>
 </div>
 </a>
-<a id="Sec:GSD">
+<a id="Sec:GeneSystDesc">
 <div class="section">
 <h2>
 General System Description
@@ -614,25 +614,25 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:SC">
+<a id="Sec:SystCont">
 <div class="subsection">
 <h3>
 System Context
 </h3>
 <p class="paragraph">
-<a href=#Figure::SC>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the section and its environment.
+<a href=#Figure::SystCont>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the section and its environment.
 </p>
-<a id="Figure::SC">
-<img class="figure" src="SystemContextFigure.png" alt="<a href=#Figure::SC>this Figure</a>: System Context"></img>
+<a id="Figure::SystCont">
+<img class="figure" src="SystemContextFigure.png" alt="<a href=#Figure::SystCont>this Figure</a>: System Context"></img>
 <p class="caption">
-<a href=#Figure::SC>this Figure</a>: System Context
+<a href=#Figure::SystCont>this Figure</a>: System Context
 </p>
 </a>
 </div>
 </a>
 </div>
 </a>
-<a id="Sec:SSD">
+<a id="Sec:SpecSystDesc">
 <div class="section">
 <h2>
 Specific System Description
@@ -640,7 +640,7 @@ Specific System Description
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
 </p>
-<a id="Sec:PD">
+<a id="Sec:ProbDesc">
 <div class="subsection">
 <h3>
 Problem Description
@@ -648,7 +648,7 @@ Problem Description
 <p class="paragraph">
 SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
 </p>
-<a id="Sec:TaD">
+<a id="Sec:TermandDefi">
 <div class="subsubsection">
 <h4>
 Terminology and Definitions
@@ -666,13 +666,13 @@ Specific heat: heat capacity per unit mass
 </ul>
 </div>
 </a>
-<a id="Sec:PSD">
+<a id="Sec:PhysSystDesc">
 <div class="subsubsection">
 <h4>
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of SWHS, as shown in <a href=#Figure:Swht,whffco>this Figure</a>, includes the following elements:
+The physical system of SWHS, as shown in <a href=#Figure:Solawateheattank,withheatfluxfromcoilof>this Figure</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -682,7 +682,7 @@ PS1: Tank containing water
 PS2: Heating coil at bottom of tank. (q<sub>C</sub> represents the heat flux from coil into the water.)
 </p>
 </div>
-<a id="Figure:Swht,whffco">
+<a id="Figure:Solawateheattank,withheatfluxfromcoilof">
 <img class="figure" src="TankWaterOnly.png" alt="Solar water heating tank, with heat flux from coil of q<sub>C</sub>"></img>
 <p class="caption">
 Solar water heating tank, with heat flux from coil of q<sub>C</sub>
@@ -690,7 +690,7 @@ Solar water heating tank, with heat flux from coil of q<sub>C</sub>
 </a>
 </div>
 </a>
-<a id="Sec:GS">
+<a id="Sec:GoalStat">
 <div class="subsubsection">
 <h4>
 Goal Statements
@@ -804,7 +804,7 @@ This section collects and defines all the data needed to build the instance mode
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a> and <a href=#Sec:GD>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a> and <a href=#Sec:GD>this Section</a>.
 </p>
 </div>
 </a>

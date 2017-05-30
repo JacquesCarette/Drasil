@@ -38,12 +38,12 @@ import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_1, s4_2,
+s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
 s2_2_intro, 
-  s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
+  s3_1_intro, s3_2_intro, {-s4_1_bullets,-} s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_bullets,
   s6_1_2_list, s6_1_3_list, s6_2_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
@@ -77,6 +77,7 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols ([] :: [CQSWrapp
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
+gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap glassBRSymbols
 
 glassBR_mg :: Document
@@ -86,8 +87,9 @@ this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
-s2 = introF start (titleize $ gLassBR ^. term) [s2_1, s2_2, s2_3] 
+s2 = introF start (titleize $ gLassBR ^. term)  
   [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
+  [s2_1, s2_2, s2_3]
   where start = foldlSent [(at_start software), 
                 S "is helpful to efficiently and correctly predict the", 
                 (phrase $ blastRisk ^. term), S "involved with the" +:+. 
@@ -161,18 +163,20 @@ s3_2 = SRS.theCustomer [s3_2_intro] []
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
   S "are the end", phrase user, S "of", (titleize $ gLassBR ^. term)]
 
-s4 = genSysF [s4_1, s4_2]
+s4 = genSysF s4_1_TEMP Nothing []
 
-s4_1 = SRS.userChar [s4_1_bullets] []
-
-s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
+s4_1_TEMP :: Sentence
+s4_1_TEMP = (S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
+  S "is expected to have completed at least the equivalent of the second year of an" +:+
+  S "undergraduate degree in civil or structural engineering")
+{-s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
   S "is expected to have completed at least the equivalent of the second year of an" +:+
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
-  +:+. phrase software)]
+  +:+. phrase software)]-}
 
 s4_2 = systCon Nothing []
 
@@ -370,7 +374,7 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
   (phrase $ equation ^. term), --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
   S ". Using this" `sC` (P $ loadDF ^. symbol), S "= 0.27"])]
 
-s6_2_2 = thModF (titleize $ gLassBR ^. term) (s6_2_2_TMods) 
+s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map (Definition gbSymbMap . Theory) tModels
@@ -478,8 +482,8 @@ s7_1_list =
   +:+ plural quantity +:+ S "from" +:+ (short requirement) :+: S "2."),
   (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
-  (makeRef (Definition (Theory t1SafetyReq))) +:+ S "and" +:+ 
-  (makeRef (Definition (Theory t2SafetyReq))) :+: S ") are true" `sC`
+  (makeRef ((Definition gbSymbMap . Theory) t1SafetyReq)) +:+ S "and" +:+ 
+  (makeRef ((Definition gbSymbMap . Theory) t2SafetyReq)) :+: S ") are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn))] ++ 
@@ -487,23 +491,23 @@ s7_1_list =
   plural quantity)
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
-    sParen (makeRef (Definition (Theory probOfBr)))] ++
+    sParen (makeRef ((Definition gbSymbMap . Theory) probOfBr))] ++
     [Flat $ (titleize $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
-    sParen (makeRef (Definition (Theory calOfCap)))] ++
+    sParen (makeRef ((Definition gbSymbMap . Theory) calOfCap))] ++
     [Flat $ (at_start $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
-    sParen (makeRef (Definition (Theory calOfDe)))] ++
+    sParen (makeRef ((Definition gbSymbMap . Theory) calOfDe))] ++
     [Flat $ (at_start $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
-    sParen (makeRef (Definition (Data hFromt)))] ++
+    sParen (makeRef ((Definition gbSymbMap . Data) hFromt))] ++
     [Flat $ (titleize $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
-    sParen (makeRef (Definition (Data loadDF)))]++
+    sParen (makeRef ((Definition gbSymbMap . Data) loadDF))]++
     [Flat $ (at_start $ strDisFac ^. term) +:+ sParen (P $ strDisFac ^. symbol) +:+ 
-    sParen (makeRef (Definition (Data strDisFac)))]++
+    sParen (makeRef ((Definition gbSymbMap . Data) strDisFac))]++
     [Flat $ (titleize $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol) +:+ 
-    sParen (makeRef (Definition (Data nonFL)))]++
+    sParen (makeRef ((Definition gbSymbMap . Data) nonFL))]++
     [Flat $ (titleize $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
-    sParen (makeRef (Definition (Data glaTyFac)))] ++
+    sParen (makeRef ((Definition gbSymbMap . Data) glaTyFac))] ++
     map (\c -> Flat $ (at_start $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
-    sParen (makeRef (Definition (Data c))))
+    sParen (makeRef ((Definition gbSymbMap . Data) c)))
     [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"

@@ -71,6 +71,8 @@ ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
+sspSymMap = symbolMap sspSymbols
+
 -- SECTION 1 --
 --automaticly generated in mkSRS 
 

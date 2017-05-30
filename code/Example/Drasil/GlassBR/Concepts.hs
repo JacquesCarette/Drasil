@@ -2,9 +2,7 @@ module Drasil.GlassBR.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Control.Lens((^.))
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent)
 
 --FIXME: Figure out why this wasn't used in body (until now with srsDoc)
 glassBRProg :: ConceptChunk

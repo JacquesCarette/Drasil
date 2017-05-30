@@ -2,7 +2,7 @@ module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, orgSec, orgSec
                                  specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
-                                 stakeholderIntro, traceGIntro, physSystDesc) where
+                                 stakeholderIntro, traceGIntro, physSystDesc, charIntRdrF) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -114,9 +114,9 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
                 lastS (Just t) = lastS Nothing +:+. t
 
 -- wrapper for general system description
-genSysF :: Sentence -> Maybe [Contents] -> [Section] -> Section
-genSysF userIntro contraints systSubSec = SRS.genSysDes [genSysIntro] 
-  [SRS.userChar [Paragraph userIntro] [], systCon contraints systSubSec]
+genSysF :: [Section] -> Contents -> Maybe [Contents] -> [Section] -> Section
+genSysF sCntxt userIntro contraints systSubSec = SRS.genSysDes [genSysIntro]
+  (sCntxt ++ [SRS.userChar [userIntro] [], systCon contraints systSubSec])
 
 --generalized general system description introduction
 genSysIntro :: Contents

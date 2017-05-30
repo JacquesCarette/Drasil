@@ -43,7 +43,7 @@ s2, s2_1, s2_2, s2_3, s3, s3_1, s3_2, s4, s4_2,
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
 s2_2_intro, 
-  s3_1_intro, s3_2_intro, {-s4_1_bullets,-} s5_intro, 
+  s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_bullets,
   s6_1_2_list, s6_1_3_list, s6_2_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
@@ -162,20 +162,16 @@ s3_2 = SRS.theCustomer [s3_2_intro] []
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
   S "are the end", phrase user, S "of", (titleize $ gLassBR ^. term)]
 
-s4 = genSysF s4_1_TEMP Nothing []
+s4 = genSysF [] s4_1_bullets Nothing []
 
-s4_1_TEMP :: Sentence
-s4_1_TEMP = (S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
-  S "is expected to have completed at least the equivalent of the second year of an" +:+
-  S "undergraduate degree in civil or structural engineering")
-{-s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
+s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (titleize $ gLassBR ^. term) +:+ 
   S "is expected to have completed at least the equivalent of the second year of an" +:+
   S "undergraduate degree in civil or structural engineering"),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
-  +:+. phrase software)]-}
+  +:+. phrase software)]
 
 s4_2 = systCon Nothing []
 

@@ -99,7 +99,7 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
 -- wrapper for general system description
 genSysF :: Sentence -> Maybe [Contents] -> [Section] -> Section
 genSysF userIntro contraints systSubSec = SRS.genSysDes [genSysIntro] 
-  [SRS.userChar [userIntro] [], systCon contraints systSubSec]
+  [SRS.userChar [Paragraph userIntro] [], systCon contraints systSubSec]
 
 --generalized general system description introduction
 genSysIntro :: Contents
@@ -168,17 +168,17 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
                 plural inModel, S "and their derivation is also presented, so that the",
                 plural inModel, S "can be verified"]
         subSec True  = [assumption True, theModels, generDefn, 
-                        dataDefin, theModels True, dataConstr]
+                        dataDefin, instModels True, dataConstr]
         subSec False = [assumption False, theModels,
-                        dataDefin, theModels False, dataConstr]
+                        dataDefin, instModels False, dataConstr]
         assumption True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
         assumption False = assumpF' theModels           dataDefin (instModels False) likeChg a
         theModels  = thModF kWord t
         generDefn  = genDefnF g
-        dataDefin  = dataDefnF datEndSent dd
+        dataDefin  = dataDefnF ddEndSent dd
         instModels True  = inModelF  probDes dataDefin theModels generDefn i
         instModels False = inModelF' probDes dataDefin theModels           i
-        dataConstr = datConF tbRef mid end trail tr dc
+        dataConstr = datConF tbRef mid end trail dc
 
  
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
@@ -206,11 +206,11 @@ assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent
                                               (inModel, r4)]
 
 --wrapper for thModelIntro
-thModF :: Sentence -> [Contents] -> Section
+thModF :: CINP -> [Contents] -> Section
 thModF kword otherContents = SRS.thModel ((thModIntro kword):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: Sentence -> Contents
+thModIntro :: CINP -> Contents
 thModIntro k_word = Paragraph $ foldlSent
           [S "This", phrase section_, S "focuses on",
           S "the", phrase general, (plural $ equation ^. term), S "and",

@@ -73,7 +73,7 @@ chipmunkMG = mgDoc' chipmunk auths mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
-cpSympMap :: SymbolMap
+cpSymbMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

@@ -50,8 +50,8 @@ linDispQDef = foldl (+:+) (EmptyS) def
               phrase $ QP.time ^. term, P $ QP.time ^. symbol]
 -}
 dd2linDisp :: QDefinition
-dd2linDisp = fromEqn "dd2linDisp" fixme (QP.linearDisplacement ^. symbol) metre
-  dispEqn
+dd2linDisp = fromEqn (QP.linearDisplacement ^. id) fixme 
+  (QP.linearDisplacement ^. symbol) metre dispEqn
 
 dispEqn :: Expr
 dispEqn = Deriv Total (FCall (C QP.position) [C QP.time]) (C QP.time)
@@ -77,8 +77,8 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 dd3linVel :: QDefinition
-dd3linVel = fromEqn "dd3linVel" fixme (QP.linearVelocity ^. symbol) velU
-  velEqn
+dd3linVel = fromEqn (QP.linearVelocity ^. id) fixme 
+  (QP.linearVelocity ^. symbol) velU velEqn
 
 velEqn :: Expr
 velEqn = Deriv Total (FCall (C QP.displacement) [C QP.time]) (C QP.time)
@@ -93,7 +93,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 dd4linAcc :: QDefinition
-dd4linAcc = fromEqn "dd4linAcc" fixme (QP.linearAccel ^. symbol) accelU
+dd4linAcc = fromEqn (QP.LinearAccel ^. id) fixme (QP.linearAccel ^. symbol) accelU
   accelEqn
 
 accelEqn :: Expr
@@ -109,7 +109,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 dd5angDisp :: QDefinition
-dd5angDisp = fromEqn "dd5angDisp" fixme
+dd5angDisp = fromEqn (QP.angularDisplacement ^. id) fixme
   (Concat [(QP.angularDisplacement ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"])
   radian angDispEqn
 
@@ -126,7 +126,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -- DD6 : Angular velocity --
 
 dd6angVel :: QDefinition
-dd6angVel = fromEqn "dd6angVel" fixme --dd6descr 
+dd6angVel = fromEqn (QP.angularVelocity ^. id) fixme --dd6descr 
   (Concat [(QP.angularVelocity ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"]) 
   angVelU angVelEqn
 
@@ -143,7 +143,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -- DD7 : Angular acceleration --
 
 dd7angAccel :: QDefinition
-dd7angAccel = fromEqn "dd7angAccel" fixme --dd7descr 
+dd7angAccel = fromEqn (QP.angularAccel ^. id) fixme --dd7descr 
   (Concat [(QP.angularAccel ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"])
   angAccelU angAccelEqn
 
@@ -163,7 +163,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -- need norms and cross products
 
 dd8impulse :: QDefinition
-dd8impulse = fromEqn "dd8impulse" fixme --dd8descr 
+dd8impulse = fromEqn (impulseS ^. id) fixme --dd8descr 
   lJ impulseU impulseEqn
 
 -- The last two terms in the denominator should be cross products.

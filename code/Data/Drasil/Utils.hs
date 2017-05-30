@@ -21,8 +21,8 @@ module Data.Drasil.Utils
 import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
-  makeRef, DType, Section, ListType(Simple, Bullet), UnitalChunk, 
-  unit_symb, symbol)
+  makeRef, DType, Section, ListType(Simple, Bullet), 
+  unit_symb, symbol, SymbolForm, Unitary)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -85,21 +85,22 @@ fmtUS num EmptyS = num
 fmtUS num units  = num +:+ units
 
 -- | takes a amount and adds a unit to it
-fmtU :: Sentence -> UnitalChunk -> Sentence
+fmtU :: (Unitary a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ getU u
 
 -- | takes a chunk and constraints and makes a sentence of the constraints
 -- on that chunk
-fmtC :: UnitalChunk -> [Sentence] -> Sentence
+fmtC ::(SymbolForm a) => a -> [Sentence] -> Sentence
 fmtC _ []      = S "None"  
 fmtC symb [x]  = (getS symb) +:+ x
 fmtC symb (x:xs) = (getS symb) +:+ x +:+ S "and" +:+ (fmtC symb xs)
 
 
-getS, getU :: UnitalChunk -> Sentence
+getS :: (SymbolForm a) => a -> Sentence
 -- | gets symbol from chunk
 getS s  = P $ s ^. symbol
 -- | gets unit from chunk
+getU :: (Unitary a) => a -> Sentence
 getU s = Sy $ unit_symb s
 
 -- | makes a list of sentence from sentences
@@ -107,7 +108,7 @@ listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
 listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, fmtUS n u]
 
 -- | makes a list of sentence from unital chunk and a constraint list with units
-listConstUC :: (UnitalChunk, [Sentence], Sentence) -> [Sentence]
+listConstUC :: (Unitary a, SymbolForm a) => (a, [Sentence], Sentence) -> [Sentence]
 listConstUC (s, a, b) = [getS s, fmtC s a, fmtU b s]
 
 -- | appends a sentence to the front of a list of list of sentences

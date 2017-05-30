@@ -13,8 +13,8 @@ import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
-introF :: Sentence -> Sentence -> [Section] -> [(Sentence, Sentence)]-> Section
-introF start kSent subSec temp = SRS.intro [Paragraph start, Paragraph end] subSec
+introF :: Sentence -> Sentence -> [(Sentence, Sentence)] -> [Section] -> Section
+introF start kSent temp subSec = SRS.intro [Paragraph start, Paragraph end] subSec
       where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
                   S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
@@ -97,8 +97,9 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
                 lastS (Just t) = lastS Nothing +:+. t
 
 -- wrapper for general system description
-genSysF :: [Section] -> Section
-genSysF = SRS.genSysDes [genSysIntro]
+genSysF :: Sentence -> Maybe [Contents] -> [Section] -> Section
+genSysF userIntro contraints systSubSec = SRS.genSysDes [genSysIntro] 
+  [SRS.userChar [userIntro] [], systCon contraints systSubSec]
 
 --generalized general system description introduction
 genSysIntro :: Contents
@@ -156,14 +157,26 @@ physSystDesc kWord fig otherContents = SRS.physSyst ((intro):otherContents) []
                 S "as shown in", (makeRef fig) `sC` S "includes the following", plural element]
 
 --provide the key word, a reference to the Instance Model, and the Subsections
-solChSpecF :: CINP -> Section -> [Section] -> Section
-solChSpecF kWord inModRef subSec = SRS.solCharSpec [Paragraph intro] subSec
-      where intro = foldlSent
-                    [S "The", plural inModel, S "that govern",
-                    short kWord, S "are presented in" +:+. makeRef inModRef,
-                    S "The", phrase information, S "to understand the meaning of the",
-                    plural inModel, S "and their derivation is also presented, so that the",
-                    plural inModel, S "can be verified"]
+solChSpecF :: CINP -> (Section, Section) -> Bool -> Sentence -> (Sentence, Sentence, Bool, Sentence) -> ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> Section
+solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef mid end trail) (a,t,g,dd,i,dc) = SRS.solCharSpec [Paragraph intro] (subSec gendef)
+  where intro = foldlSent
+                [S "The", plural inModel, S "that govern",
+                short kWord, S "are presented in" +:+. makeRef (instModels gendef),
+                S "The", phrase information, S "to understand the meaning of the",
+                plural inModel, S "and their derivation is also presented, so that the",
+                plural inModel, S "can be verified"]
+        subSec True  = [assumption True, theModels, generDefn, 
+                        dataDefin, theModels True, dataConstr]
+        subSec False = [assumption False, theModels,
+                        dataDefin, theModels False, dataConstr]
+        assumption True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
+        assumption False = assumpF' theModels           dataDefin (instModels False) likeChg a
+        theModels  = thModF kWord t
+        generDefn  = genDefnF g
+        dataDefin  = dataDefnF datEndSent dd
+        instModels True  = inModelF  probDes dataDefin theModels generDefn i
+        instModels False = inModelF' probDes dataDefin theModels           i
+        dataConstr = datConF tbRef mid end trail tr dc
 
  
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
@@ -199,7 +212,7 @@ thModIntro :: Sentence -> Contents
 thModIntro k_word = Paragraph $ foldlSent
           [S "This", phrase section_, S "focuses on",
           S "the", phrase general, (plural $ equation ^. term), S "and",
-          S "laws that", k_word, S "is based on"]
+          S "laws that", short k_word, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [Contents] -> Section
@@ -254,7 +267,7 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           S "typical", plural value, S "is intended to provide a feel for a common scenario"]
           +:+ endS endingSent +:+ trailingSent
           where endS False = EmptyS
-                endS True  = S "The " +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
+                endS True  = S "The" +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
                              S "estimate of the confidence with which the" +:+ phrase physical +:+
                              plural quantity +:+. S "can be measured" +:+ S "This" +:+
                              phrase information +:+ S "would be part of the" +:+ phrase input_ +:+

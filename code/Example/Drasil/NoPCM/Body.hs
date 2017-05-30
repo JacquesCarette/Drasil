@@ -25,11 +25,11 @@ import Drasil.OrganizationOfSRS
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s2,s2_3, s3, s3_1, s4,s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6 :: Section
+s2, s2_3, s3, s3_1, s4,s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6, s6 :: Section
 
 s2_3_intro, s3_1_intro, sys_context_fig,
-  s4_1_intro,s4_1_1_intro,s4_1_1_bullets,s4_1_2_intro,s4_1_2_list,s4_1_3_intro,
-  s4_1_3_list,s4_2_intro,s4_2_1_intro, fig_tank, s4_2_6_table1, s4_2_6_table2:: Contents
+  s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list, s4_1_3_intro,
+  s4_1_3_list, s4_2_intro, s4_2_1_intro, fig_tank, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
@@ -122,7 +122,9 @@ s4_1_3_intro = Paragraph $
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the" +:+ (phrase $ temp_water ^. term) +:+ S "over time")]
 
-s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
+s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show"), EmptyS, False, EmptyS)
+          ([s4_2_1_intro], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro], [s4_2_6_table1, s4_2_6_table2]) []
+--s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_intro = Paragraph $
            S "The" +:+ (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
@@ -153,9 +155,15 @@ s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]
 
 s4_2_3 = genDefnF []
 
+s4_2_3_intro = Paragraph $ EmptyS
+
 s4_2_4 = dataDefnF EmptyS []
 
+s4_2_4_intro = Paragraph $ EmptyS
+
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 []
+
+s4_2_5_intro = Paragraph $ EmptyS
 
 s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show") EmptyS False EmptyS [s4_2_6_table1, s4_2_6_table2]
 
@@ -166,3 +174,6 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (listConstS) []) 
     (S "Table 2: Output Variables") True
+    
+    
+s6 = SRS.likeChg [] []

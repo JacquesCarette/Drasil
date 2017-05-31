@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation, matrix, graph)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe)
+import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe, ofThe')
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
@@ -97,7 +97,7 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
 -- Compleate the sentences, no need to add a period at the end of your input sentences
 scpOfReqF :: Sentence -> CINP -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
-  where intro = foldlSent [ofThe (phrase scope, plural requirement),
+  where intro = foldlSent [ofThe' (phrase scope, plural requirement),
                 S "includes" +:+. includes, S "Given appropriate inputs, the code for",
                 short progName, S "is intended to" +:+ ending]
 

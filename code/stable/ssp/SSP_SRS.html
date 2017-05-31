@@ -17,7 +17,7 @@ Software Requirements Specification for Slope Stability Analysis
 Henry Frankis
 </h2>
 </div>
-<a id="Sec:RM">
+<a id="Sec:RefeMate">
 <div class="section">
 <h2>
 Reference Material
@@ -25,7 +25,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:ToU">
+<a id="Sec:TablofUnit">
 <div class="subsection">
 <h3>
 Table of Units
@@ -33,7 +33,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:ToU">
+<a id="Table:TablofUnit">
 <table class="table">
 <tr>
 <th>
@@ -79,7 +79,7 @@ pressure (pascal)
 </a>
 </div>
 </a>
-<a id="Sec:ToS">
+<a id="Sec:TablofSymb">
 <div class="subsection">
 <h3>
 Table of Symbols
@@ -87,7 +87,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
 </p>
-<a id="Table:ToS">
+<a id="Table:TablofSymb">
 <table class="table">
 <tr>
 <th>
@@ -720,12 +720,12 @@ Generic minimization function or algorithm
 </a>
 </div>
 </a>
-<a id="Sec:AaA">
+<a id="Sec:AbbrandAcro">
 <div class="subsection">
 <h3>
 Abbreviations and Acronyms
 </h3>
-<a id="Table:AaA">
+<a id="Table:AbbrandAcro">
 <table class="table">
 <tr>
 <th>
@@ -829,7 +829,7 @@ Theoretical Model
 </a>
 </div>
 </a>
-<a id="Sec:I">
+<a id="Sec:Intr">
 <div class="section">
 <h2>
 Introduction
@@ -838,9 +838,9 @@ Introduction
 A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety.
 </p>
 <p class="paragraph">
-The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers.
+The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:PoD">
+<a id="Sec:PurpofDocu">
 <div class="subsection">
 <h3>
 Purpose of Document
@@ -853,7 +853,7 @@ This document will be used as a starting point for subsequent development phases
 </p>
 </div>
 </a>
-<a id="Sec:SoR">
+<a id="Sec:ScopofRequ">
 <div class="subsection">
 <h3>
 Scope of Requirements
@@ -863,13 +863,13 @@ The scope of the requirements is limited to stability analysis of a 2 dimensiona
 </p>
 </div>
 </a>
-<a id="Sec:OoD">
+<a id="Sec:OrgaofDocu">
 <div class="subsection">
 <h3>
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IM>this Section</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:SoluCharSpec>this Section</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
@@ -878,7 +878,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 </div>
 </a>
-<a id="Sec:GSD">
+<a id="Sec:GeneSystDesc">
 <div class="section">
 <h2>
 General System Description
@@ -886,7 +886,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:UC">
+<a id="Sec:UserChar">
 <div class="subsection">
 <h3>
 User Characteristics
@@ -896,7 +896,7 @@ The end user of SSA should have an understanding of undergraduate Level 1 Calcul
 </p>
 </div>
 </a>
-<a id="Sec:SC">
+<a id="Sec:SystCons">
 <div class="subsection">
 <h3>
 System Constraints
@@ -908,7 +908,7 @@ There are no system constraints.
 </a>
 </div>
 </a>
-<a id="Sec:SSD">
+<a id="Sec:SpecSystDesc">
 <div class="section">
 <h2>
 Specific System Description
@@ -916,7 +916,7 @@ Specific System Description
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope.
 </p>
-<a id="Sec:PD">
+<a id="Sec:ProbDesc">
 <div class="subsection">
 <h3>
 Problem Description
@@ -924,7 +924,7 @@ Problem Description
 <p class="paragraph">
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 </p>
-<a id="Sec:TaD">
+<a id="Sec:TermandDefi">
 <div class="subsubsection">
 <h4>
 Terminology and Definitions
@@ -963,13 +963,13 @@ Plane Strain: The resultant stresses in one of the directions of a 3 dimensional
 </div>
 </div>
 </a>
-<a id="Sec:PSD">
+<a id="Sec:PhysSystDesc">
 <div class="subsubsection">
 <h4>
 Physical System Description
 </h4>
 <p class="paragraph">
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:Icfnsaifv>this Figure</a>.
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:Indeconvfornumbslicandinteforcvari>this Figure</a>.
 </p>
 <ul class="list">
 <li>
@@ -980,15 +980,15 @@ Slice properties convention is noted by i.
 </li>
 </ul>
 <p class="paragraph">
-A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:Faoas>this Figure</a>.
+A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:Forcactionaslic>this Figure</a>.
 </p>
-<a id="Figure:Icfnsaifv">
+<a id="Figure:Indeconvfornumbslicandinteforcvari">
 <img class="figure" src="IndexConvention.png" alt="Index convention for numbering slice and interslice force variables"></img>
 <p class="caption">
 Index convention for numbering slice and interslice force variables
 </p>
 </a>
-<a id="Figure:Faoas">
+<a id="Figure:Forcactionaslic">
 <img class="figure" src="ForceDiagram.png" alt="Forces acting on a slice"></img>
 <p class="caption">
 Forces acting on a slice
@@ -996,7 +996,7 @@ Forces acting on a slice
 </a>
 </div>
 </a>
-<a id="Sec:GS">
+<a id="Sec:GoalStat">
 <div class="subsubsection">
 <h4>
 Goal Statements
@@ -1019,21 +1019,21 @@ GS3: Determine the displacement of the slope.
 </a>
 </div>
 </a>
-<a id="Sec:SCS">
+<a id="Sec:SoluCharSpec">
 <div class="subsection">
 <h3>
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern SSA are presented in <a href=#Sec:IM>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SSA are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:A">
+<a id="Sec:Assu">
 <div class="subsubsection">
 <h4>
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TM>this Section</a>], General Definitions [<a href=#Sec:GD>this Section</a>], Data Definitions [<a href=#Sec:DD>this Section</a>], Instance Models [<a href=#Sec:IM>this Section</a>], or Likely Changes [<a href=#Sec:LC>this Section</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>this Section</a>], General Definitions [<a href=#Sec:GeneDefi>this Section</a>], Data Definitions [<a href=#Sec:DataDefi>this Section</a>], Instance Models [<a href=#Sec:InstMode>this Section</a>], or Likely Changes [<a href=#Sec:LikeChan>this Section</a>], in which the respective assumption is used.
 </p>
 <div class="list">
 <p>
@@ -1069,7 +1069,7 @@ A10: The surface and base of a slice between interslice nodes are approximated a
 </div>
 </div>
 </a>
-<a id="Sec:TM">
+<a id="Sec:TheoMode">
 <div class="subsubsection">
 <h4>
 Theoretical Models
@@ -1122,7 +1122,7 @@ The stability metric of the slope, known as the factor of safety (FS), is determ
 </a>
 </div>
 </a>
-<a id="Sec:GD">
+<a id="Sec:GeneDefi">
 <div class="subsubsection">
 <h4>
 General Definitions
@@ -1132,7 +1132,7 @@ This section collects the laws and equations that will be used in deriving the d
 </p>
 </div>
 </a>
-<a id="Sec:DD">
+<a id="Sec:DataDefi">
 <div class="subsubsection">
 <h4>
 Data Definitions
@@ -1142,13 +1142,13 @@ This section collects and defines all the data needed to build the instance mode
 </p>
 </div>
 </a>
-<a id="Sec:IM">
+<a id="Sec:InstMode">
 <div class="subsubsection">
 <h4>
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a> and <a href=#Sec:GD>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
 <p class="paragraph">
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
@@ -1158,7 +1158,7 @@ The values of the interslice normal force E the interslice normal/shear force ma
 </p>
 </div>
 </a>
-<a id="Sec:DC">
+<a id="Sec:DataCons">
 <div class="subsubsection">
 <h4>
 Data Constraints
@@ -1190,7 +1190,7 @@ Data Constraints
 </a>
 </div>
 </a>
-<a id="Sec:R">
+<a id="Sec:Requ">
 <div class="section">
 <h2>
 Requirements
@@ -1198,14 +1198,14 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FR">
+<a id="Sec:FuncRequ">
 <div class="subsection">
 <h3>
 Functional Requirements
 </h3>
 <div class="list">
 <p>
-R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:Id>this Table</a>.
+R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:Inpudata>this Table</a>.
 </p>
 <p>
 R2: Generate potential critical slip surface's for the input slope.
@@ -1238,7 +1238,7 @@ R10: Calculate the factor of safety of the critical slip surface using the Morge
 R11: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
 </p>
 </div>
-<a id="Table:Id">
+<a id="Table:Inpudata">
 <table class="table">
 <tr>
 <th>
@@ -1346,7 +1346,7 @@ Input data
 </a>
 </div>
 </a>
-<a id="Sec:NR">
+<a id="Sec:Non-Requ">
 <div class="subsection">
 <h3>
 Non-functional Requirements
@@ -1358,14 +1358,14 @@ SSA is intended to be an educational tool, therefore accuracy and performance sp
 </a>
 </div>
 </a>
-<a id="Sec:LC">
+<a id="Sec:LikeChan">
 <div class="section">
 <h2>
 Likely Changes
 </h2>
 </div>
 </a>
-<a id="Sec:R">
+<a id="Sec:Refe">
 <div class="section">
 <h2>
 References

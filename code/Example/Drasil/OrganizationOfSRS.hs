@@ -42,7 +42,7 @@ introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
       where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
                   S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
-                  S "of this", phrase document, foldlList (map ofThe (temp))]
+                  S "of this", phrase document `sC` foldlList (map ofThe (temp))]
 
 --list is used by introF (current args passed in are the same for every example)
 temp :: [(Sentence, Sentence)]

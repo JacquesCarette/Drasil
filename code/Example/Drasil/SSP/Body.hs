@@ -99,7 +99,7 @@ s2 = introF start kSent [s2_1, s2_2, s2_3, s2_4]
                 S "can range from inconvenient to seriously hazardous, resulting in signifcant" +:+
                 S "life and economic loses. Slope stability is of interest both when analyzing" +:+
                 S "natural" +:+ (plural slope) `sC` S "and when designing an excavated" +:+. (phrase slope) +:+
-                (at_start ssa) +:+ S "is the assessment of the safety of a" +:+ (phrase slope) `sC`
+                (at_start ssa) +:+ S "is" +:+ ofThe (S "assessment", S "safety of a" +:+ (phrase slope)) `sC`
                 S "identifying the" +:+ (phrase $ surface ^. term) +:+ S "most likely to" +:+
                 S "experience slip and an index of it's relative stability known as the" +:+.
                 (phrase $ fs_rc ^. term)
@@ -221,7 +221,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
       S "along a given" +:+. phrase slpSrf),
   (S "Identify the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for the slope" `sC` 
       S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
-  (S "Determine the displacement of the" +:+. (phrase slope))
+  (S "Determine" +:+. ofThe (S "displacement", phrase slope))
   ]
 
 -- SECTION 4.2 --
@@ -238,13 +238,13 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
 
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
-           S "the" +:+. (phrase slopeSrf) +:+ S "The" +:+ P (coords ^. symbol) +:+ 
-           S "coordinates of the failure" +:+ (phrase $ surface ^. term) +:+
+           S "the" +:+. (phrase slopeSrf) +:+ ofThe' (P (coords ^. symbol) +:+ 
+           S "coordinates", S "failure") +:+ (phrase $ surface ^. term) +:+
            S "follow a monotonic function."),
-  (S "The geometry of the" +:+ (phrase slope) `sC` S "and the" +:+
-           (plural mtrlPrpty) +:+ S "of the" +:+ (plural soilLyr) +:+
+  (ofThe' (S "geometry", phrase slope) `sC` S "and" +:+
+           ofThe (plural mtrlPrpty, plural soilLyr) +:+
            S "are given as inputs."),
-  (S "The different layers of the" +:+ (phrase soil) +:+ S "are homogeneous," +:+
+  (ofThe' (S "different layers", phrase soil) +:+ S "are homogeneous," +:+
            S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
            S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
@@ -301,7 +301,7 @@ s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+
   S "the physical properties of DD1 to DD9," +:+ 
   S "as done in DD10, DD11."
 
-s4_2_5_p3 = Paragraph $ S "The values of the interslice normal force" +:+
+s4_2_5_p3 = Paragraph $ ofThe' (S "values", S "interslice normal force") +:+
   S "E the interslice normal/shear force magnitude ratio lambda," +:+ --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the" +:+ (titleize $ fs_rc ^. term) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   S "Equations for the unknowns are written in terms of only the values" +:+ 
@@ -336,7 +336,7 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "on a set of pass or fail criteria."),
   (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate" +:+ ofThe (plural $ fs_rc ^. term, plural slpSrf)),
+  (S "Calculate" +:+. ofThe (plural $ fs_rc ^. term, plural slpSrf)),
   (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
         (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
         S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
@@ -356,7 +356,7 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
   (S "Display the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
-        S "Give the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+
+        S "Give" +:+ ofThe (S "values", plural $ fs_rc ^. term) +:+ S "calculated" +:+
         S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ]
   

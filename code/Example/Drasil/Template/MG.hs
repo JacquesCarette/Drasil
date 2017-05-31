@@ -141,7 +141,7 @@ mgLikelyChanges lccs =
 
 mgUnlikelyChanges :: [UCChunk] -> Section
 mgUnlikelyChanges uccs =
-  Section (S "Unikely Changes") (
+  Section (S "Unlikely Changes") (
     [ Con mgUnlikelyChangesIntro ]
     ++ map (Con . UnlikelyChange) uccs
   )

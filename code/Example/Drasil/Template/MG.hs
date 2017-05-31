@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Data.List (nub)
 import Data.Maybe (fromJust, isNothing)
 
-import Data.Drasil.Concepts.Documentation (mg)
+import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg)
 import Data.Drasil.Utils (foldlsC)
 
 import Drasil.Template.Helpers
@@ -64,7 +64,7 @@ makeMG lccs uccs rcs mcs =
 
 mgIntro :: Contents -> Section
 mgIntro docDesc =
-  Section (S "Introduction") (
+  Section (titleize introduction) (
     [ Con $ Paragraph $
         S "Decomposing a system into modules is a commonly accepted" +:+
         S "approach to developing software.  A module is a work assignment" +:+
@@ -134,14 +134,14 @@ mgChanges lccs uccs = let secLikely = mgLikelyChanges lccs
 
 mgLikelyChanges :: [LCChunk] -> Section
 mgLikelyChanges lccs =
-  Section (S "Likely Changes") (
+  Section (titleize' likelyChg) (
     [ Con mgLikelyChangesIntro ]
     ++ map (Con . LikelyChange) lccs
   )
 
 mgUnlikelyChanges :: [UCChunk] -> Section
 mgUnlikelyChanges uccs =
-  Section (S "Unlikely Changes") (
+  Section (titleize' unlikelyChg) (
     [ Con mgUnlikelyChangesIntro ]
     ++ map (Con . UnlikelyChange) uccs
   )

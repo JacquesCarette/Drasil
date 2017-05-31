@@ -4,8 +4,8 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
 
-assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg, vav, desSpec :: CINP
+assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg, 
+  physSyst, requirement, srs, thModel, mg, vav, desSpec :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
 assumption  = commonINP "assumption"  (cn' "assumption")                          "A"
@@ -15,6 +15,7 @@ genDefn     = commonINP "genDefn"     (cn' "general definition")                
 goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)             "GS" 
 inModel     = commonINP "inModel"     (compoundPhrase instance_ model)            "IM" 
 likelyChg   = commonINP "likelyChg"   (cn' "likely change")                       "LC"
+unlikelyChg = commonINP "unlikelyChg" (cn' "unlikely change")                     "UC"
 physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description) "PS" 
 requirement = commonINP "requirement" (cn' "requirement")                         "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"

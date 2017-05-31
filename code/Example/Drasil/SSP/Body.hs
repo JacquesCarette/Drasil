@@ -42,7 +42,7 @@ s2_1, s2_2, s2_3, s2_4, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
+  s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2,
   s4_1_3_list, s4_2_1_list, 
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
   s5_2_p1, s7_list :: Contents
@@ -212,11 +212,9 @@ fig_forceacting :: Contents
 fig_forceacting = Figure (S "Forces acting on a" +:+ (phrase slice)) "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
-s4_1_3 = SRS.goalStmt [s4_1_3_p1, s4_1_3_list] []
-
-s4_1_3_p1 = Paragraph $ S "Given the geometry of the water" +:+
-  S "table, the geometry of the layers composing the plane of a" +:+
-  S "slope, and the" +:+ (plural mtrlPrpty) +:+ S "of the layers."
+s4_1_3 = goalStmtF (map ofThe [(S "geometry", S "water table"), 
+                               (S "geometry", S "layers composing the plane of a slope"),
+                               (plural mtrlPrpty, S "layers")]) [s4_1_3_list]
 
 s4_1_3_list = enumSimple 1 (short goalStmt) [
   (S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+

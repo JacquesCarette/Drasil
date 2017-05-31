@@ -15,6 +15,7 @@ module Drasil.OrganizationOfSRS
   , probDescF
   , termDefnF
   , physSystDesc
+  , goalStmtF
   , solChSpecF
   , assumpF, assumpF'
   , thModF
@@ -32,7 +33,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation, matrix, graph)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
+import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe)
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
@@ -46,10 +47,6 @@ introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
 --list is used by introF (current args passed in are the same for every example)
 temp :: [(Sentence, Sentence)]
 temp = [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
-
---combinator function that is used by introF
-ofThe :: (Sentence, Sentence) -> Sentence
-ofThe (p1, p2) = S "the" +:+ p1 +:+ S "of the" +:+ p2
 
 -- provide only the first paragraph (as a sentence type) to 
 prpsOfDocF :: Sentence -> Section
@@ -207,6 +204,11 @@ physSystDesc kWord fig otherContents = SRS.physSyst ((intro):otherContents) []
   where intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", kWord `sC`
                 S "as shown in", (makeRef fig) `sC` S "includes the following", plural element]
+
+--List all the given inputs. Might be possible to use ofThe combinator from utils.hs
+goalStmtF :: [Sentence] -> [Contents] -> Section
+goalStmtF givenInputs otherContents = SRS.goalStmt ((Paragraph intro):otherContents) []
+  where intro = S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ plural goalStmt +: S "are"
 
 -- kWord (ex ssp, progName), the two sections, gendef is True if you want general definitions sections,
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints,

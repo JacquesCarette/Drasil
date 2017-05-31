@@ -16,6 +16,7 @@ module Data.Drasil.Utils
   , enumSimple
   , enumBullet
   , mkRefsList
+  , ofThe
   ) where
 
 import Control.Lens ((^.))
@@ -159,3 +160,7 @@ enumBullet f = Enumeration $ Bullet $ map (Flat) f
 -- l - list to be enumerated
 enumSimple :: Integer -> Sentence -> [Sentence] -> Contents
 enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
+
+--combinator function that is used by introF in OrganizationOfSRS (needs take a tuple)
+ofThe :: (Sentence, Sentence) -> Sentence
+ofThe (p1, p2) = S "the" +:+ p1 +:+ S "of the" +:+ p2

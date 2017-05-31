@@ -29,6 +29,10 @@ s2, s2_3, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s6 :: Section
 s3_1_intro, sys_context_fig, s4_1_intro, s4_1_1_bullets, s4_1_2_list, s4_1_3_intro,
   s4_1_3_list, fig_tank, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents
 
+-------------------------------
+--Section 1 : REFERENCE MATERIAL
+-------------------------------
+  
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
         map Verbatim [s2, s3, s4, s6]  
@@ -43,6 +47,10 @@ nopcmSymbMap :: SymbolMap
 nopcmSymbMap = symbolMap pcmSymbols
 
 
+--------------------------
+--Section 2 : INTRODUCTION
+--------------------------
+
 s2 = SRS.intro [] [s2_3]
 
 s2_3 = charIntRdrF knowledge understanding (getAcc sWHS) fig_tank --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
@@ -50,8 +58,14 @@ s2_3 = charIntRdrF knowledge understanding (getAcc sWHS) fig_tank --FIXME: refer
                     S "A third or fourth year Mechanical Engineering course on the topic is recommended")
         understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
                         S "covered in first and second year Calculus courses")
-           
+
+                        
+----------------------------------------
+--Section 3 : GENERAL SYSTEM DESCRIPTION
+----------------------------------------
+
 s3 = genSysF [s3_1] (Paragraph $ EmptyS) Nothing []
+--TODO: fill in the empty (last three) parameters
 
 s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 
@@ -65,7 +79,12 @@ s3_1_intro = Paragraph $
 sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sysCont ^. term))
             "SystemContextFigure.png"
 
-           
+
+-----------------------------------------
+--Section 4 : SPECIFIC SYSTEM DESCRIPTION
+-----------------------------------------
+
+--TODO: finish filling in the subsections
 s4 = specSysDesF (words_) [s4_1, s4_2]
   where words_ = (plural definition +:+ S "and finally the" +:+
                 (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
@@ -110,11 +129,11 @@ s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS (((makeRef s4_2_6_table1) +:+ S "a
 s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]
 
-s4_2_3_intro = Paragraph $ EmptyS
+s4_2_3_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 
-s4_2_4_intro = Paragraph $ EmptyS
+s4_2_4_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 
-s4_2_5_intro = Paragraph $ EmptyS
+s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (listConstS) []) 
@@ -124,5 +143,15 @@ s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map (listConstS) []) 
     (S "Table 2: Output Variables") True
     
-    
-s6 = SRS.likeChg [] []
+
+--------------------------
+--Section 5 : REQUIREMENTS
+--------------------------
+
+s5 = reqF [] --TODO: Add the rest of the section
+
+----------------------------
+--Section 6 : LIKELY CHANGES
+----------------------------
+
+s6 = SRS.likeChg [] [] --TODO: Add the rest of the section

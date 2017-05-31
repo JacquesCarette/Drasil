@@ -38,7 +38,7 @@ s2, s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
-s2_1, s2_2, s2_3, s4_1, s4_1_1, s4_1_2,
+s2_1, s2_2, s2_3, s2_4, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s2_2_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
@@ -90,7 +90,7 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introF start kSent [s2_1, s2_2, s2_3]  
+s2 = introF start kSent [s2_1, s2_2, s2_3, s2_4]  
   where start = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
                 (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
                 S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
@@ -129,7 +129,11 @@ s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow 
   S "as well as displacement of" +:+ (phrase soil) +:+ S "that will occur on the" +:+. (phrase slope)
 
 -- SECTION 2.3 --
-s2_3 = orgSecWTS start inModel s4_2 end --FIXME: This needs to reference the instance model
+s2_3 = charIntRdrF (S "solid mechanics") (S "undergraduate level 4 physics")
+  (short ssa) (SRS.userChar [Paragraph EmptyS] [])
+
+-- SECTION 2.4 --
+s2_4 = orgSecWTS start inModel s4_2 end --FIXME: This needs to reference the instance model
   where start = S "The" +:+ (phrase organization) +:+
                 S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
                 S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+

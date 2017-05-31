@@ -141,7 +141,7 @@ s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
                    (phrase $ blastRisk ^. term))
   (foldlList [S "second year calculus", S "structural mechanics", S "computer applications in civil engineering"])
   (short gLassBR)
-  (s4_1_bullets)
+  (SRS.userChar [Paragraph EmptyS] [])
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
 

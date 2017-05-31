@@ -75,12 +75,12 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
 
 --Characteristics of Intended Reader section
-charIntRdrF :: Sentence -> Sentence -> Sentence -> Contents -> Section
+charIntRdrF :: Sentence -> Sentence -> Sentence -> Section -> Section
 charIntRdrF know und progName r = 
   SRS.charOfIR (intReaderIntro know und progName r) []
 
 --paragraph called by charIntRdrF
-intReaderIntro :: Sentence -> Sentence -> Sentence -> Contents -> [Contents]
+intReaderIntro :: Sentence -> Sentence -> Sentence -> Section -> [Contents]
 intReaderIntro know und progName r = [Paragraph $ foldlSent [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. know,
   S "The reviewers should also have an understanding of" +:+. und,

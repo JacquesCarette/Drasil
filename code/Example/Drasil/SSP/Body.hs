@@ -41,7 +41,7 @@ s1_2_intro :: [TSIntro]
 s2_1, s2_2, s2_3, s2_4, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
-s2_2_p1, s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
+s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
   s4_1_3_list, s4_2_1_list, 
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,

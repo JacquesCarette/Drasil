@@ -53,7 +53,7 @@ nopcmSymbMap = symbolMap pcmSymbols
 
 s2 = SRS.intro [] [s2_3]
 
-s2_3 = charIntRdrF knowledge understanding (getAcc sWHS) fig_tank --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
+s2_3 = charIntRdrF knowledge understanding (getAcc sWHS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
   where knowledge = ((phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
                     S "A third or fourth year Mechanical Engineering course on the topic is recommended")
         understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+

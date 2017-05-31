@@ -130,10 +130,10 @@ s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow 
 
 -- SECTION 2.3 --
 s2_3 = charIntRdrF (S "solid mechanics") (S "undergraduate level 4 physics")
-  (short ssa) (SRS.userChar [] [])
+  (short ssa) (SRS.userChar missingP [])
 
 -- SECTION 2.4 --
-s2_4 = orgSecWTS start inModel (SRS.inModel [] []) end --FIXME: This is kind of a hack as it is not referencing the real instance model
+s2_4 = orgSecWTS start inModel (SRS.inModel missingP []) end --FIXME: This is kind of a hack as it is not referencing the real instance model
   where start = S "The" +:+ (phrase organization) +:+
                 S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
                 S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+

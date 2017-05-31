@@ -188,3 +188,10 @@ systemdescription            = compoundNPNC system description
 useCaseTable                 = compoundNPNC useCase table_
 userCharacteristic           = compoundNPNC user characteristic
 vavPlan                      = compoundNPNC vav plan
+
+-- extra utilities --
+missing :: Sentence
+missing = S "..."
+
+missingP :: [Contents]
+missingP = [Paragraph missing]

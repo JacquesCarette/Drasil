@@ -109,7 +109,7 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
   (phrase $ energy ^. term) +:+ S "sources and" +:+
   (phrase $ energy ^. term) +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
-  +:+ S "(" :+: (short phsChgMtrl) :+: S ") use a renewable" +:+
+  +:+ sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
   (phrase $ energy ^. term) +:+ S "source and provide a novel way of" +:+
   S "storing" +:+. (phrase $ energy ^. term) +:+
   (at_start $ swhs_pcm ^. term) +:+ S "improve over the traditional" +:+
@@ -226,14 +226,14 @@ s2_4 = orgSecWTS s2_4_intro inModel s4_2 s2_4_trail
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
-  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+
-  S "[citation]."
+  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+.
+  sSqBr (S "citation")
 
 s2_4_trail :: Sentence
 s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2) +:+. 
   S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
   (plural inModel) +:+ S "provide the" +:+ (phrase $ ode ^. term) +:+
-  S "(" :+: (short ode) :+: S "s) and algebraic" +:+
+  sParen ((short ode) :+: S "s") +:+ S "and algebraic" +:+
   (plural $ equation ^. term) +:+ S "that" +:+
   phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
   (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s"
@@ -288,7 +288,7 @@ s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
   S "rectangle represents the" +:+ phrase softwareSys +:+
-  S "itself (" :+: short progName :+: S "). Arrows are used to show the" +:+
+  S "itself" +:+. sParen (short progName) +:+ S "Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
   S "and its" +:+. phrase environment)
 
@@ -351,8 +351,8 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 -- based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
-  S "and finally the" +:+ plural inModel +:+ S "(" :+: (short ode) :+:
-  S "s) that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
+  S "and finally the" +:+ plural inModel +:+ sParen ((short ode) :+:
+  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
 
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
@@ -486,8 +486,8 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
               plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
               S "to reasonable" +:+. plural value)
-        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+
-              S "because features they should use are not yet implemented in Drasil.")
+        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+.
+              S "because features they should use are not yet implemented in Drasil")
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -514,28 +514,28 @@ assump1 = S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   S "relevant for this" +:+ phrase problem +:+ S "is" +:+.
   (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) `sC` S "such as" +:+
-  (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible [" :+:
-  ((makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE))) :+: S "]."
+  (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible" +:+. sSqBr
+  (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE))
 --
 assump2 = S "All" +:+
   (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
-  (phrase $ time ^. term) +:+. S "[GD1]"
+  (phrase $ time ^. term) +:+. sSqBr (S "GD1")
 --
 assump3 = S "The" +:+ 
   (phrase $ water ^. term) +:+ S "in the" +:+ (phrase $ tank ^. term) +:+
   S "is fully mixed, so the" +:+ (phrase $ temp_W ^. term) +:+
-  S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+
-  S "[GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) :+: S "]."
+  S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+. sSqBr
+  (S "GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)))
 --
 assump4 = S "The" +:+ (phrase $ temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+ S "[GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "LC1]."
+  term) +:+. sSqBr (S "GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "LC1")
 --
 assump5 = S "The" +:+ 
   (phrase $ w_density ^. term) +:+ S "and" +:+
   (phrase $ pcm_density ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ vol ^. term) +:+. S "[GD2]"
+  (phrase $ vol ^. term) +:+. sSqBr (S "GD2")
 --
 assump6 = S "The" +:+ (phrase $ htCap_W ^.
   term) `sC` (phrase $ htCap_S_P ^. term) `sC` S "and" +:+ 

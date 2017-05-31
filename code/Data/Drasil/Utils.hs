@@ -18,7 +18,6 @@ module Data.Drasil.Utils
   , mkRefsList
   , ofThe, ofThe'
   , weave
-  , ofThe
   ) where
 
 import Data.List

@@ -121,10 +121,9 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"
 
 s2_kSent :: Sentence
-s2_kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
+s2_kSent = ((phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
   (phrase $ program ^. term) +:+ S "will be referred to as" +:+
-  (titleize $ progName ^. term) +:+ S "(" :+: (short progName) :+:
-  S ")."
+  (titleize $ progName ^. term) +:+ sParen (short progName))
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating

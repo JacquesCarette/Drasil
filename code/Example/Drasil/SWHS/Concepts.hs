@@ -58,8 +58,8 @@ swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
 
 --Nounphrase'' hack to get nounPhraseSP words to accept nounPhrases instead of strings
 swhs_pcm = dcc "swhs_pcm" (nounPhrase'' 
-  ((phrase $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
-  ((phrase $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((plural $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((plural $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "Solar water heating systems incorporating phase change material"
 

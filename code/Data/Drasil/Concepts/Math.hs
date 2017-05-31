@@ -45,7 +45,7 @@ euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)
                 (norm ^. term)) "Euclidean norm"
 normalV      = dcc "normal vector"  (compoundPhrase' (normal ^. term)
                 (vector ^. term))
-                "unit outward normal vector for a surface"
+                "Unit outward normal vector for a surface"
 perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
                 (vector ^. term))
                 "Vector perpendicular or 90 degrees to another vector"

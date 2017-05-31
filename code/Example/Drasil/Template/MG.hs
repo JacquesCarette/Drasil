@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Data.List (nub)
 import Data.Maybe (fromJust, isNothing)
 
-import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg, introduction)
 import Data.Drasil.Utils (foldlsC)
 
 import Drasil.Template.Helpers
@@ -261,7 +261,7 @@ mgTraceR rcs = Table [S "Requirement", S "Modules"]
   (S "Trace Between Requirements and Modules") True
 
 mgTraceLC :: [LCChunk] -> Contents
-mgTraceLC lccs = Table [S "Likely Change", S "Modules"]
+mgTraceLC lccs = Table [titleize likelyChg, S "Modules"]
   (map mgLCTraceEntry lccs) (S "Trace Between Likely Changes and Modules") True
 
 mgLCTraceEntry :: LCChunk -> [Sentence]

@@ -238,7 +238,7 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
 
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
-           S "the" +:+. (phrase slopeSrf) +:+ ofThe' (P (coords ^. symbol) +:+ 
+           S "the" +:+. (phrase slopeSrf) +:+ ofThe' (getS coords +:+ 
            S "coordinates", S "failure") +:+ (phrase $ surface ^. term) +:+
            S "follow a monotonic function."),
   (ofThe' (S "geometry", phrase slope) `sC` S "and" +:+
@@ -252,12 +252,12 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "isotropic properties."),
   ((at_start intrslce) +:+ S "normal and shear forces have a" +:+
            S "linear relationship, proportional to a constant" +:+
-           (sParen $ P $ lambda ^. symbol) +:+ S "and an" +:+
-           (phrase intrslce) +:+ S "force function" +:+ (sParen $ P $ fi ^. symbol) +:+
+           (sParen $ getS lambda) +:+ S "and an" +:+
+           (phrase intrslce) +:+ S "force function" +:+ (sParen $ getS fi) +:+
            S "depending on x position."),
   ((at_start slice) +:+ S "to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
-           (phrase $ fs_rc ^. term) +:+ (sParen $ P $ fs ^. symbol) `sC`
+           (phrase $ fs_rc ^. term) +:+ (sParen $ getS fs) `sC`
            S "and the Coulomb sliding law."),
   (S "The stress-strain curve for" +:+ (phrase intrslce) +:+
            S "relationships is linear with a constant" +:+. (phrase slope)),
@@ -305,8 +305,8 @@ s4_2_5_p3 = Paragraph $ ofThe' (S "values", S "interslice normal force") +:+
   S "E the interslice normal/shear force magnitude ratio lambda," +:+ --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the" +:+ (titleize $ fs_rc ^. term) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   S "Equations for the unknowns are written in terms of only the values" +:+ 
-  S "in DD1 to DD9, the values of" +:+ (P $ ri ^. symbol) `sC` 
-  S "and" +:+ (P $ ti ^. symbol) +:+ S "in DD10 and DD11, and each" +:+ --FIXME: DD10,DD11 should be references to other things in the body
+  S "in DD1 to DD9, the values of" +:+ (getS ri) `sC` 
+  S "and" +:+ (getS ti) +:+ S "in DD10 and DD11, and each" +:+ --FIXME: DD10,DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear," +:+ 
   S "and therefore explicit equations cannot be derived and an" +:+ 
   S "iterative" +:+ (plural solution) +:+ S "method is required."
@@ -365,7 +365,7 @@ s5_1_table = table_inputdata
 table_inputdata :: Contents
 table_inputdata = Table [titleize symbol_, titleize' $ unit_ ^. term, titleize description]
   (mkTable
-    [(\ch -> P $ ch ^. symbol),
+    [getS,
      (\ch -> unwrap $ getUnit ch),
      (\ch -> phrase $ ch ^. term)]
     ((map cqs [coords, elastMod, cohesion]) ++ (map cqs [poissnsR]) ++ --this has to be seperate since poisson is a different type

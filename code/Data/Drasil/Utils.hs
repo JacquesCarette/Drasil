@@ -17,6 +17,7 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , ofThe, ofThe'
+  , getS
   ) where
 
 import Control.Lens ((^.))
@@ -47,7 +48,9 @@ foldlSent = foldle (+:+) (+:+.) EmptyS
 
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
-foldlList = foldle1 sC (\a b -> a `sC` S "and" +:+ b)
+foldlList []    = EmptyS
+foldlList [a,b] = a +:+ S "and" +:+ b
+foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence

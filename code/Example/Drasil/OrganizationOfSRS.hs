@@ -353,6 +353,21 @@ reqIntro = Paragraph $ foldlSent
         plural nonfunctionalRequirement `sC` S "the qualities that the",
         phrase software, S "is expected to exhibit"]
 
+{--- wrapper for nonfuncReq
+nonFuncReqF :: Maybe [Sentence] -> Maybe [Sentence] -> Sentence -> Sentence -> Section
+nonFuncReqF noPriority priority reason explanation = SRS.nonfuncReq [nonFuncReq noPriority priority reason explanation] []
+        
+-- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
+-- reason for initial priority choice, explanation for how priority choice can be achieved.
+nonFuncReq :: Maybe [Sentence] -> Maybe [Sentence] -> Sentence -> Sentence -> Section
+nonFuncReq noPriority priority reason explanation = Paragraph $ foldlSent [reason `sC` (listO noPriority), listT priority]
+		where 	listO Nothing = S "so" +:+ head priority +:+. S "is a high priority" +:+ explanation +:+ S "The other"
+            listO ([s]) = S "so" +:+ s +:+. S "is not a priority" +:+ explanation +:+  S "Rather than" +:+ s `sC` S "the"
+            listO (Just s) = S "so" +:+ foldlist s +:+. S "are not priorities" +:+ explanation +:+ S "Rather, the"
+            listT Nothing = S "program does not possess a priority non-functional requirement."
+            listT ([s]) = S  "priority non-functional requirement is" +:+. s
+            listT (Just s) = S "priority non-functional requirements are" +:+s foldlist s-}
+        
 -- wrapper for traceMGIntro
 traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section
 traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec

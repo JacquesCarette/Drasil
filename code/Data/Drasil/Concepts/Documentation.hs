@@ -192,6 +192,3 @@ vavPlan                      = compoundNPNC vav plan
 -- extra utilities --
 missing :: Sentence
 missing = S "..."
-
-missingP :: [Contents]
-missingP = [Paragraph missing]

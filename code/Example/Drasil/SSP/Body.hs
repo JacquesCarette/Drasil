@@ -104,7 +104,7 @@ s2 = introF start kSent [s2_1, s2_2, s2_3]
                 S "experience slip and an index of it's relative stability known as the" +:+.
                 (phrase $ fs_rc ^. term)
         kSent = S "a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+
-                (phrase $ program ^. term) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+.
+                (phrase $ program ^. term) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+
                 (phrase $ program ^. term)
 
 -- SECTION 2.1 --

@@ -245,7 +245,7 @@ dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
   where dataDefnIntro ending = Paragraph $ foldlSent [S "This", phrase section_, 
                                S "collects and defines all the", plural datum,
-                               S "needed to build the" +:+ plural inModel, ending]
+                               S "needed to build the" +:+. plural inModel, ending]
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section

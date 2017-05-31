@@ -18,7 +18,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
     statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
-    
+    inputDocD,
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
 ) where
@@ -118,7 +118,8 @@ data Config = Config {
     unOpDoc :: UnaryOp -> Doc,
     valueDoc :: Value -> Doc,
     getEnv :: String -> Doc, -- careful, this can fail!
-    ioDoc :: IOSt -> Doc
+    ioDoc :: IOSt -> Doc,
+    inputDoc :: IOType -> StateType -> Value -> Doc
 }
 
 ----------------------------------
@@ -471,12 +472,15 @@ statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
 
 ioDocD :: Config -> IOSt -> Doc
-ioDocD _ (OpenFile _ _ _) = error ""
-ioDocD _ (CloseFile _) = error ""
+ioDocD c (OpenFile f n Read) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString "r"])
+ioDocD c (OpenFile f n Write) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString "w"])
+ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close" [])
 ioDocD c (Out t newLn s v) = printDoc c t newLn s v
-ioDocD _ (In Console _ _) = error ""
-ioDocD _ (In (File _) _ _) = error ""
+ioDocD c (In t s v) = inputDoc c t s v
 
+inputDocD :: Config -> IOType -> StateType -> Value -> Doc
+inputDocD _ _ (Base _) _ = error "No default implementation"
+inputDocD _ _ _ _ = error "Type not supported for input"
 
 stateTypeD :: Config -> StateType -> DecDef -> Doc
 stateTypeD c (List lt t@(List _ _)) _ = list c lt <> angles (space <> stateType c t Dec <> space)

@@ -62,14 +62,13 @@ data Statement = AssignState Assignment | DeclState Declaration
                | PatternState Pattern           --deals with special design patterns
                | IOState IOSt
                   deriving Show
-data IOSt = OpenFile Value Label Mode
+data IOSt = OpenFile Value Value Mode
           | CloseFile Value
           | Out IOType Bool StateType Value
           | In IOType StateType Value
           deriving Show
 data Mode = Read
           | Write
-          | ReadWrite
           deriving (Eq, Show)
 data IOType = Console
             | File Value

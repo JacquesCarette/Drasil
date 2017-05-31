@@ -64,7 +64,7 @@ cppConfig options c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
@@ -88,7 +88,6 @@ renderCode' c ms (AbsCode p) =
 cppstateType :: Config -> StateType -> DecDef -> Doc
 cppstateType _ (Base (FileType Read)) _    = text "ifstream"
 cppstateType _ (Base (FileType Write)) _   = text "ofstream"
-cppstateType _ (Base (FileType ReadWrite)) _ = error "Not implemented"
 cppstateType _ (Base Boolean) _ = text "bool"
 cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"

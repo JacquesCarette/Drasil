@@ -62,7 +62,7 @@ goolConfig options c =
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "getEnv for GOOL is not defined"
     }
     
@@ -88,7 +88,6 @@ goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
 goolstateType _ (Base (FileType Read)) _ = text "infile"
 goolstateType _ (Base (FileType Write)) _ = text "outfile"
-goolstateType _ (Base (FileType ReadWrite)) _ = error "Not yet implemented"
 
 gooltop :: Config -> Label -> FileType -> Label -> [Module] -> Doc
 gooltop c hsMod _ _ _ = vcat [

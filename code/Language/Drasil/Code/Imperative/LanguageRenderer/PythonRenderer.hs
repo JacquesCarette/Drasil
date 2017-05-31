@@ -58,7 +58,7 @@ pythonConfig _ c =
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
         unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDocD c,
-
+        inputDoc = inputDocD c,
         getEnv = \_ -> error "getEnv for pythong not yet implemented"
     }
 

@@ -630,6 +630,26 @@ System Context
 </a>
 </div>
 </a>
+<a id="Sec:UserChar">
+<div class="subsection">
+<h3>
+User Characteristics
+</h3>
+<p class="paragraph">
+
+</p>
+</div>
+</a>
+<a id="Sec:SystCons">
+<div class="subsection">
+<h3>
+System Constraints
+</h3>
+<p class="paragraph">
+There are no system constraints.
+</p>
+</div>
+</a>
 </div>
 </a>
 <a id="Sec:SpecSystDesc">
@@ -672,7 +692,7 @@ Specific heat: heat capacity per unit mass
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of SWHS, as shown in <a href=#Figure:Solawateheattank,withheatfluxfromcoilof>this Figure</a>, includes the following elements:
+The physical system of SWHS, as shown in <a href=#Figure:Solawateheattankwithheatfluxfromcoilof>this Figure</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -682,7 +702,7 @@ PS1: Tank containing water
 PS2: Heating coil at bottom of tank. (q<sub>C</sub> represents the heat flux from coil into the water.)
 </p>
 </div>
-<a id="Figure:Solawateheattank,withheatfluxfromcoilof">
+<a id="Figure:Solawateheattankwithheatfluxfromcoilof">
 <img class="figure" src="TankWaterOnly.png" alt="Solar water heating tank, with heat flux from coil of q<sub>C</sub>"></img>
 <p class="caption">
 Solar water heating tank, with heat flux from coil of q<sub>C</sub>
@@ -713,7 +733,7 @@ GS1: predict the temperature of water over time
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance model (ODE) that governs SWHS is presented in . The information to understand the meaning of the instance model and its derivation is also presented, so that the instance model can be verified.
+The instance models that govern SWHS are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assu">
 <div class="subsubsection">
@@ -721,7 +741,7 @@ The instance model (ODE) that governs SWHS is presented in . The information to 
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>this Section</a>], General Definitions [<a href=#Sec:GeneDefi>this Section</a>], Data Definitions [<a href=#Sec:DataDefi>this Section</a>], Instance Models [<a href=#Sec:InstMode>this Section</a>], or Likely Changes [<a href=#Sec:LikeChan>this Section</a>], in which the respective assumption is used.
 </p>
 </div>
 </a>
@@ -786,6 +806,9 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
+<p class="paragraph">
+
+</p>
 </div>
 </a>
 <a id="Sec:DataDefi">
@@ -796,9 +819,12 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
+<p class="paragraph">
+
+</p>
 </div>
 </a>
-<a id="Sec:IM">
+<a id="Sec:InstMode">
 <div class="subsubsection">
 <h4>
 Instance Models
@@ -806,9 +832,12 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
+<p class="paragraph">
+
+</p>
 </div>
 </a>
-<a id="Sec:DC">
+<a id="Sec:DataCons">
 <div class="subsubsection">
 <h4>
 Data Constraints
@@ -856,6 +885,13 @@ Table 2: Output Variables
 </a>
 </div>
 </a>
+</div>
+</a>
+<a id="Sec:LikeChan">
+<div class="section">
+<h2>
+Likely Changes
+</h2>
 </div>
 </a>
 </body>

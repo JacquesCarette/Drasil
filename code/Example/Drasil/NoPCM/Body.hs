@@ -1,6 +1,5 @@
 module Drasil.NoPCM.Body where
 
-import Data.List (intersperse)
 import Control.Lens ((^.))
 import Prelude hiding (id)
 import Drasil.NoPCM.Example
@@ -11,7 +10,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Utils(listConstS)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, equation, number)
+import Data.Drasil.Concepts.Math (ode, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Data.Drasil.Units.Thermodynamics
@@ -29,7 +28,7 @@ s2, s2_3, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s4_2_1, s4_2_2, s4
 
 s2_3_intro, s3_1_intro, sys_context_fig,
   s4_1_intro, s4_1_1_intro, s4_1_1_bullets, s4_1_2_intro, s4_1_2_list, s4_1_3_intro,
-  s4_1_3_list, s4_2_intro, s4_2_1_intro, fig_tank, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents
+  s4_1_3_list, s4_2_intro, {-s4_2_1_intro, -}fig_tank, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
@@ -123,7 +122,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
             (S "GS1", S "predict the" +:+ (phrase $ temp_water ^. term) +:+ S "over time")]
 
 s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show"), EmptyS, False, EmptyS)
-          ([s4_2_1_intro], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro], [s4_2_6_table1, s4_2_6_table2]) []
+          ([], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro], [s4_2_6_table1, s4_2_6_table2]) []
 --s4_2 = SRS.solCharSpec [s4_2_intro] [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
 
 s4_2_intro = Paragraph $
@@ -136,7 +135,7 @@ s4_2_intro = Paragraph $
   
 --s4_2_1 = SRS.assump [s4_2_1_intro] []
 
-s4_2_1_intro = Paragraph $
+{-s4_2_1_intro = Paragraph $
            S "This" +:+ (phrase $ section_ ^. term) +:+
            S "simplifies the original" +:+ (phrase $ problem ^. term) +:+
            S "and helps in developing the" +:+ (phrase $ thModel ^. term) +:+
@@ -145,7 +144,7 @@ s4_2_1_intro = Paragraph $
            S "given in the square brackets refer to the" +:+ foldr1 (:+:) (intersperse (S ", ") 
             (map (\ch -> (phrase $ ch ^. term) +:+ sSqBr (getAcc ch)) [thModel, genDefn, dataDefn, inModel]))
             `sC` S "or" +:+ phrase likelyChg +:+ sSqBr (getAcc likelyChg) `sC`
-           S "in which the respective" +:+ (phrase assumption) +:+. S "is used"
+           S "in which the respective" +:+ (phrase assumption) +:+. S "is used"-}
 --TODO: Simple List
 
 --s4_2_2 = thModF sWHS s4_2_2_TMods

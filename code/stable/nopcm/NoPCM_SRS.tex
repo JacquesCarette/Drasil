@@ -166,6 +166,11 @@ Figure~\ref{Figure::SystCont} shows the system context. A circle represents an e
 \label{Figure::SystCont}
 \end{center}
 \end{figure}
+\subsection{User Characteristics}
+\label{Sec:UserChar}
+\subsection{System Constraints}
+\label{Sec:SystCons}
+There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
@@ -181,7 +186,7 @@ This subsection provides a list of terms that are used in subsequent sections an
 \end{enumerate}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSystDesc}
-The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattank,withheatfluxfromcoilof}, includes the following elements:
+The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwithheatfluxfromcoilof}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Tank containing water
 \item[PS2:]Heating coil at bottom of tank. ($q_{C}$ represents the heat flux from coil into the water.)
@@ -190,7 +195,7 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattank,wit
 \begin{center}
 \includegraphics{TankWaterOnly.png}
 \caption{Solar water heating tank, with heat flux from coil of $q_{C}$}
-\label{Figure:Solawateheattank,withheatfluxfromcoilof}
+\label{Figure:Solawateheattankwithheatfluxfromcoilof}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
@@ -201,10 +206,10 @@ Given the temperature of the coil, initial temperature of the water, and materia
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SoluCharSpec}
-The instance model (ODE) that governs SWHS is presented in . The information to understand the meaning of the instance model and its derivation is also presented, so that the instance model can be verified.
+The instance models that govern SWHS are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], General Definitions [Section~\ref{Sec:GeneDefi}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
 This section focuses on the general equations and laws that SWHS is based on.
@@ -229,10 +234,10 @@ This section collects the laws and equations that will be used in deriving the d
 \label{Sec:DataDefi}
 This section collects and defines all the data needed to build the instance models.
 \subsubsection{Instance Models}
-\label{Sec:IM}
+\label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
 \subsubsection{Data Constraints}
-\label{Sec:DC}
+\label{Sec:DataCons}
 Table~\ref{Table:Tabl1:InpuVari} and Table~\ref{Table:Tabl2:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 \begin{longtable}{l l l}
 \toprule
@@ -252,4 +257,6 @@ Var & Physical Constraints & Typical Value
 \caption{Table 2: Output Variables}
 \label{Table:Tabl2:OutpVari}
 \end{longtable}
+\section{Likely Changes}
+\label{Sec:LikeChan}
 \end{document}

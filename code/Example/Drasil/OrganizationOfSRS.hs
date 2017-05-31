@@ -1,8 +1,29 @@
-module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, scpOfReqF, charIntRdrF, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
-                                 figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
-                                 dataDefnF, inModelF', traceMGF, systCon, stakehldr,
-                                 stakeholderIntro, traceGIntro, physSystDesc) where
+module Drasil.OrganizationOfSRS 
+  ( refineChain
+  , showingCxnBw
+  , figureLabel
+-- start of functions for SRS document sections in order of document apperence
+  , introF
+  , prpsOfDocF
+  , scpOfReqF
+  , charIntRdrF
+  , orgSec, orgSecWTS
+  , stakehldr, stakeholderIntro
+  , genSysF
+  , systCon
+  , specSysDesF
+  , termDefnF
+  , physSystDesc
+  , solChSpecF
+  , assumpF, assumpF'
+  , thModF
+  , genDefnF
+  , dataDefnF
+  , inModelF, inModelF'
+  , datConF
+  , reqF
+  , traceMGF, traceGIntro
+  ) where
 
 import Language.Drasil
 import Control.Lens ((^.))

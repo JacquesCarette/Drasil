@@ -17,7 +17,7 @@ self :: NPNC
 self = npnc "HGHC" (pn "HGHC")
 
 executable :: NPNC
-executable = npnc' (self ^. id) (tempCompoundPhrase self program) ("HGHC")
+executable = npnc' (self ^. id) (compoundPhrase self (program ^. term)) ("HGHC")
 
 -- input param module
 mod_inputp :: ModuleChunk

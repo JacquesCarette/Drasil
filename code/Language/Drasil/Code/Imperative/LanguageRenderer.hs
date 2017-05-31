@@ -258,9 +258,6 @@ declarationDocD c (ObjDecDef n t v) = declarationDoc c $ VarDecDef n t v
 declarationDocD c (ConstDecDef n l) = text "const" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
 
 declarationDocD' :: Config -> Declaration -> Doc
-declarationDocD' c (VarDecDef n t Input) = vcat [
-    declarationDoc c (VarDec n t) <> endStatement c,
-    assignDoc c $ Assign (Var n) Input]
 declarationDocD' c d = declarationDocD c d
 
 enumElementsDocD :: Config -> [Label] -> Doc
@@ -558,8 +555,6 @@ valueDocD c (EnumVar v) = valueDoc c $ Var v
 valueDocD c (ListVar v _) = valueDoc c $ Var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
-valueDocD c Input = inputFunc c
-valueDocD _ (InputFile _) = error "This should be defined in each renderer"
 valueDocD c (Global s) = getEnv c s
 
 valueDocD' :: Config -> Value -> Doc

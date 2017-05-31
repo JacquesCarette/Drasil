@@ -139,8 +139,8 @@ cppbottom Source = empty
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
-assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
+--assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
+--assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
 assignDoc' c a = assignDocD c a
 
 declarationDoc' :: Config -> Declaration -> Doc
@@ -260,8 +260,8 @@ methodListDoc' c f m fs = methodListDocD c f m fs
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e
 valueDoc' c v@(Arg _) = valueDocD' c v
-valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
-valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
+--valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
+--valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
 
 ----------------------

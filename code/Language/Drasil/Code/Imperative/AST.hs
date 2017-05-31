@@ -34,6 +34,7 @@ module Language.Drasil.Code.Imperative.AST (
     printFile,printFileLn,printFileStr,printFileStrLn,
     print',printLn',printStr',printStrLn',
     getInput,getFileInput,
+    openFileR, openFileW, closeFile,
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
@@ -125,9 +126,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | ListVar Label StateType
            | Const Label
            | Global Label -- these are generation-time globals that will be filled-in
-           | Arg Int                    --Arg argIndex : get command-line arguments. Should only be used in the Body of the MainMethod.
-           | Input          --Input : Get user keyboard input. Can only be assigned to string variables in some languages.
-           | InputFile Value
+           | Arg Int                    --Arg argIndex : get command-line arguments. 
     deriving (Eq, Show)
 data Literal = LitBool Bool
              | LitInt Integer
@@ -278,7 +277,7 @@ constructor n ps b = Method n Public (Construct n) ps b
 
 --comparison operators (?)
 (?!) :: Value -> Value  --logical Not
-infixl 9 ?!
+infixr 6 ?!
 (?!) v = unExpr Not v
 
 (?<) :: Value -> Value -> Value
@@ -298,11 +297,11 @@ infixl 5 ?>=
 v1 ?>= v2 = binExpr v1 GreaterEqual v2
 
 (?==) :: Value -> Value -> Value
-infixl 5 ?==
+infixl 4 ?==
 v1 ?== v2 = binExpr v1 Equal v2
 
 (?!=) :: Value -> Value -> Value
-infixl 5 ?!=
+infixl 4 ?!=
 v1 ?!= v2 = binExpr v1 NotEqual v2
 
 (?&&) :: Value -> Value -> Value
@@ -310,86 +309,86 @@ infixl 3 ?&&
 v1 ?&& v2 = binExpr v1 And v2
 
 (?||) :: Value -> Value -> Value
-infixl 4 ?||
+infixl 2 ?||
 v1 ?|| v2 = binExpr v1 Or v2
 
 --arithmetic operators (#)
 (#~) :: Value -> Value  --unary negation
-infixl 9 #~
+infixl 8 #~
 (#~) v = unExpr Negate v
 
 (#/^) :: Value -> Value     --square root
-infixl 8 #/^
+infixl 7 #/^
 (#/^) v = unExpr SquareRoot v
 
 (#|) :: Value -> Value      --absolute value
-infixl 8 #|
+infixl 7 #|
 (#|) v = unExpr Abs v
 
 (#+) :: Value -> Value -> Value
-infixl 6 #+
+infixl 5 #+
 v1 #+ v2 = binExpr v1 Plus v2
 
 (#-) :: Value -> Value -> Value
-infixl 6 #-
+infixl 5 #-
 v1 #- v2 = binExpr v1 Minus v2
 
 (#*) :: Value -> Value -> Value
-infixl 7 #*
+infixl 6 #*
 v1 #* v2 = binExpr v1 Multiply v2
 
 (#/) :: Value -> Value -> Value
-infixl 7 #/
+infixl 6 #/
 v1 #/ v2 = binExpr v1 Divide v2
 
 (#%) :: Value -> Value -> Value
-infixl 8 #%
+infixl 6 #%
 v1 #% v2 = binExpr v1 Modulo v2
 
 (#^) :: Value -> Value -> Value  --exponentiation
-infixl 8 #^
+infixl 7 #^
 v1 #^ v2 = binExpr v1 Power v2
 
 --assignment operators (&)
 (&=) :: Value -> Value -> Statement
-infixr 5 &=
+infixr 1 &=
 a &= b = assign a b
 
 (&.=) :: Label -> Value -> Statement
-infixr 5 &.=
+infixr 1 &.=
 a &.= b = assign (Var a) b
 
 (&=.) :: Value -> Label -> Statement
-infixr 5 &=.
+infixr 1 &=.
 a &=. b = assign a (Var b)
 
 (&-=) :: Label -> Value -> Statement
-infixl 6 &-=
+infixl 1 &-=
 n &-= v = (n &.= (Var n #- v))
 
 (&+=) :: Label -> Value -> Statement
-infixl 6 &+=
+infixl 1 &+=
 n &+= v = AssignState $ PlusEquals (Var n) v
 
 (&++) :: Label -> Statement
-infixl 9 &++
+infixl 8 &++
 (&++) l = AssignState $ PlusPlus (Var l)
 
 (&~-) :: Label -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
-infixl 9 &~-
+infixl 8 &~-
 (&~-) l = (l &-= litInt 1)
 
 --other operators ($)
 ($->) :: Value -> Value -> Value
-infixl 8 $->
+infixl 9 $->
 v $-> vr = ObjVar v vr
 
 ($.) :: Value -> Function -> Value
-infixl 5 $.
+infixl 9 $.
 v $. f = ObjAccess v f
 
 ($:) :: Label -> Label -> Value
-infixl 8 $:
+infixl 9 $:
 n $: e = EnumElement n e
 
 alwaysDel :: Int
@@ -530,10 +529,18 @@ printStrLn' (File f) = printFileStrLn f
 getInput :: StateType -> Value -> Statement
 getInput s v = IOState $ In Console s v
 
-
 -- file input
 getFileInput :: Value -> StateType -> Value -> Statement
 getFileInput f s v = IOState $ In (File f) s v
+
+openFileR :: Value -> Value -> Statement
+openFileR f n = IOState (OpenFile f n Read)
+
+openFileW :: Value -> Value -> Statement
+openFileW f n = IOState (OpenFile f n Write)
+
+closeFile :: Value -> Statement
+closeFile f = IOState (CloseFile f)
 
 return :: Value -> Statement
 return = RetState . Ret

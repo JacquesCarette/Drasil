@@ -126,11 +126,11 @@ objcbody c f@(Source) p modules = let ms = foldl1 (++) (map classes modules) in
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign v Input) = vcat [      --assumes v is NSString
-    text "char*" <+> temp <> endStatement c,
-    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
-    valueDoc c v <+> equals <+> nsFromCString c temp]
-    where temp = text "temp"
+--assignDoc' c (Assign v Input) = vcat [      --assumes v is NSString
+--    text "char*" <+> temp <> endStatement c,
+--    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
+--    valueDoc c v <+> equals <+> nsFromCString c temp]
+--    where temp = text "temp"
 assignDoc' c a = assignDocD c a
 
 callFuncParamList' :: Config -> [Value] -> Doc
@@ -332,7 +332,7 @@ valueDoc' c (StateObj t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDo
 valueDoc' c (StateObj t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
 valueDoc' c (StateObj t vs) = brackets (funcDoc c (Cast t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs)
 valueDoc' c (Arg i) = nsFromCString c $ argsListAccess c i
-valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
+--valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
 valueDoc' c v = valueDocD c v
 
 ----------------------

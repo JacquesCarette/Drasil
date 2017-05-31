@@ -12,6 +12,7 @@ module Drasil.OrganizationOfSRS
   , genSysF
   , systCon
   , specSysDesF
+  , probDescF
   , termDefnF
   , physSystDesc
   , solChSpecF
@@ -30,6 +31,7 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation, matrix, graph)
 import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
 import qualified Drasil.SRS as SRS
 
@@ -181,6 +183,12 @@ specSysDesIntro l_end = Paragraph $ foldlSent
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
 
+-- give starting sentence(s), the program name, and finish the last sentence
+probDescF :: Sentence -> CINP -> Sentence -> [Section] -> Section
+probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
+  where intro = foldlSent [start, (short progName), S "is a computer", 
+                (phrase $ program ^. term), S "developed to", ending]
+                  
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []

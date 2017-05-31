@@ -41,7 +41,7 @@ s1_2_intro :: [TSIntro]
 s2_1, s2_2, s2_3, s2_4, s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
-s4_1_p1, s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
+s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2, s4_1_3_p1,
   s4_1_3_list, s4_2_1_list, 
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
@@ -162,12 +162,11 @@ s4 = specSysDesF end [s4_1, s4_2]
               S "the" +:+ (phrase slope)
 
 -- SECTION 4.1 --
-s4_1 = SRS.probDesc [s4_1_p1] [s4_1_1, s4_1_2, s4_1_3]
-
-s4_1_p1 = Paragraph $ (short ssa) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+
-  S "developed to evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a" +:+ 
-  (phrase slope) :+: S "'s" +:+ (phrase slpSrf) +:+ --FIXME apostrophe on "slope's"
-  S "and to calculate the displacement that the" +:+ (phrase slope) +:+ S "will experience."
+s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
+  where ending = S "evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a" +:+ 
+                 (phrase slope) :+: S "'s" +:+ --FIXME apostrophe on "slope's"
+                 (phrase slpSrf) +:+ S "and to calculate the displacement that the" +:+
+                 (phrase slope) +:+ S "will experience"
 
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF Nothing [s4_1_1_list]

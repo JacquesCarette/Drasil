@@ -9,7 +9,7 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
-import Data.Drasil.Concepts.Software (program)
+--import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils (foldlSent, itemRefToSent, foldlList,
@@ -42,16 +42,15 @@ s2, s2_1, s2_2, s2_4, s2_3, s3, s3_1, s3_2, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, s6_2_2, 
   s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
-s2_2_intro, 
-  s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
-  s5_1_table, s5_2_bullets, s6_1_intro, s6_1_1_bullets,
+s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
+  s5_1_table, s5_2_bullets, {-s6_1_intro, -} s6_1_1_bullets,
   s6_1_2_list, s6_1_3_list, s6_2_intro, 
   s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3, 
   s7_2_intro, s8_list, s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, fig_3, fig_4, 
   fig_5, fig_6 :: Contents
 
-s2_1_intro, s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
+s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
 srs_authors, mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
 srs_authors = manyNames [nikitha, spencerSmith]
@@ -98,13 +97,11 @@ s2 = introF start (short gLassBR)
                 (phrase $ blastRisk ^. term), S "involved with the", 
                 (phrase $ glaSlab ^. term), S "using an intuitive interface"]
 
-s2_1 = SRS.prpsOfDoc (s2_1_intro) []
+s2_1 = prpsOfDocF s2_1_intro_p1
 
-s2_1_intro = [s2_1_intro_p1, s2_1_intro_p2] 
+s2_1_intro_p1 :: Sentence
 
-s2_1_intro_p1, s2_1_intro_p2 :: Contents
-
-s2_1_intro_p1 = Paragraph $ foldlSent [S "The main", phrase purpose, S "of this", 
+s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this", 
   phrase document, S "is to predict whether a given", (phrase $ glaSlab ^. term),
   S "is likely to resist a specified" +:+. (phrase $ blast ^. term),
   S "The", plural goal, S "and", plural thModel, S "used in the", 
@@ -116,25 +113,23 @@ s2_1_intro_p1 = Paragraph $ foldlSent [S "The main", phrase purpose, S "of this"
   S "because the", plural content, S "say what", phrase problem, 
   S "is being solved, but not how to solve it"]
 
-s2_1_intro_p2 = Paragraph $ foldlSent [S "This", phrase document, 
-  S "will be used as a starting point for subsequent development", 
-  S "phases, including writing the", phrase desSpec, S "and the", 
-  phrase softwareVAV, S "plan. The", phrase designDoc,
-  S "will show how the", plural requirement, S "are to be realized, including",
-  plural decision, S "on the numerical", (plural $ algorithm ^. term), 
-  S "and programming" +:+. phrase environment, S "The", phrase vavPlan, 
-  S "will show the steps that will be used to increase confidence in the",
-  phrase softwareDoc, S "and the", phrase implementation]
+-- s2_1_intro_p2 = Paragraph $ foldlSent [S "This", phrase document, 
+  -- S "will be used as a starting point for subsequent development", 
+  -- S "phases, including writing the", phrase desSpec, S "and the", 
+  -- phrase softwareVAV, S "plan. The", phrase designDoc,
+  -- S "will show how the", plural requirement, S "are to be realized, including",
+  -- plural decision, S "on the numerical", (plural $ algorithm ^. term), 
+  -- S "and programming" +:+. phrase environment, S "The", phrase vavPlan, 
+  -- S "will show the steps that will be used to increase confidence in the",
+  -- phrase softwareDoc, S "and the", phrase implementation]
 
-s2_2 = SRS.scpOfReq [s2_2_intro] []
-
-s2_2_intro = Paragraph $ foldlSent [S "The", phrase scope, S "of the",
-  plural requirement, S "includes getting all", phrase input_, 
-  (plural $ parameter ^. term), S "related to the", (phrase $ glaSlab ^. term),
-  S "and also the", (plural $ parameter ^. term), S "related to" +:+. 
-  (phrase $ blastTy ^. term), S "Given the", phrase input_ `sC` (short gLassBR),
-  S "is intended to use the", plural datum, S "and predict whether the",
-  (phrase $ glaSlab ^. term), S "is safe to use or not"]
+s2_2 = scpOfReqF includes gLassBR ending
+  where includes = foldl (+:+) EmptyS [S "getting all", phrase input_, 
+                   (plural $ parameter ^. term), S "related to the", (phrase $ glaSlab ^. term),
+                   S "and also the", (plural $ parameter ^. term), S "related to", 
+                   (phrase $ blastTy ^. term)]
+        ending   = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the",
+                   (phrase $ glaSlab ^. term), S "is safe to use or not"]
 
 s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
                    (phrase $ glBreakage ^. term) +:+ S "and" +:+ 
@@ -242,16 +237,22 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR),
 
 s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
 
-s6_1 = SRS.probDesc [s6_1_intro] [s6_1_1, s6_1_2, s6_1_3]
+s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
+  where start = foldlSent [S "A", phrase system,
+                S "is needed to efficiently and correctly predict the", 
+                (phrase $ blastRisk ^. term) +:+ S "involved with the glass"]
+        ending = foldl (+:+) EmptyS [S "predict whether the", (phrase $ glaSlab ^. term), 
+                S "can withstand the", (phrase $ blast ^. term), S "under the",
+                plural condition]
 
-s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
-  S "is needed to efficiently and correctly predict the", 
-  (phrase $ blastRisk ^. term) +:+. S "involved with the glass", (short gLassBR),
-  S "is a", phrase computer, (phrase $ program ^. term), 
-  S "developed to interpret the", plural input_, S "to give out the",
-  plural output_, S "which predicts whether the", (phrase $ glaSlab ^. term), 
-  S "can withstand the", (phrase $ blast ^. term), S "under the",
-  plural condition]
+-- s6_1_intro = Paragraph $ foldlSent [S "A", phrase system,
+  -- S "is needed to efficiently and correctly predict the", 
+  -- (phrase $ blastRisk ^. term) +:+. S "involved with the glass", (short gLassBR),
+  -- S "is a", phrase computer, (phrase $ program ^. term), 
+  -- S "developed to " foldlSent ["interpret the", plural input_, S "to give out the",
+  -- plural output_, S "which predicts whether the", (phrase $ glaSlab ^. term), 
+  -- S "can withstand the", (phrase $ blast ^. term), S "under the",
+  -- plural condition]
 
 s6_1_1 = termDefnF (Just (S "All of the terms are extracted from [4] in" +:+ (makeRef s10)))
   [s6_1_1_bullets]
@@ -304,7 +305,7 @@ s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of
   S "is the distance between the point of", (phrase $ explosion ^. term), 
   S "and the glass"])]
 
-s6_1_3 = SRS.goalStmt [s6_1_3_list] []
+s6_1_3 = goalStmtF [S "FIXME: ADD INPUTS"] [s6_1_3_list] --FIXME: add inputs
 
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 

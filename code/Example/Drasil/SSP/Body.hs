@@ -336,7 +336,7 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "on a set of pass or fail criteria."),
   (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate the" +:+ (plural $ fs_rc ^. term) +:+ S "of the" +:+. (plural slpSrf)),
+  (S "Calculate" +:+ ofThe (plural $ fs_rc ^. term, plural slpSrf)),
   (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
         (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
         S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
@@ -352,9 +352,8 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "as the" +:+. (phrase $ crtSlpSrf ^. term)),
   (S "Prepare the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for" +:+ (phrase method_) +:+ 
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of the" +:+
-        (phrase $ crtSlpSrf ^. term) +:+ S "using the" +:+ (titleize morPrice) +:+.
-        (phrase method_)),
+  (S "Calculate" +:+ ofThe (phrase $ fs_rc ^. term, phrase $ crtSlpSrf ^. term) +:+ 
+        S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
   (S "Display the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
         S "Give the values of the" +:+ (plural $ fs_rc ^. term) +:+ S "calculated" +:+

@@ -97,7 +97,7 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
 -- Compleate the sentences, no need to add a period at the end of your input sentences
 scpOfReqF :: Sentence -> CINP -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
-  where intro = foldlSent [S "The scope of the", plural requirement,
+  where intro = foldlSent [ofThe (phrase scope, plural requirement),
                 S "includes" +:+. includes, S "Given appropriate inputs, the code for",
                 short progName, S "is intended to" +:+ ending]
 

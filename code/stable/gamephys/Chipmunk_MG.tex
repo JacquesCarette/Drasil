@@ -407,7 +407,7 @@ LC\ref{LChashtable} & M\ref{Mmodassocserv}
 \end{longtable}
 \section{Uses Hierarchy}
 \label{Sec:UsesHier}
-In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UH} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHier} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
 \begin{figure}
 \centering
 \begin{adjustbox}{max width=\textwidth}
@@ -450,6 +450,6 @@ node [style = "n"];
 \end{tikzpicture}
 \end{adjustbox}
 \caption{Uses Hierarchy}
-\label{Figure:UH}
+\label{Figure:UsesHier}
 \end{figure}
 \end{document}

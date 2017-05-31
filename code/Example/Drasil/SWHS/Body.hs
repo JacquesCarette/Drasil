@@ -51,7 +51,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
+s2_2_contents, {-s2_3_contents, -}s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
   s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
   s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
@@ -199,7 +199,12 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3 = SRS.charOfIR [s2_3_contents] []
+s2_3 = charIntRdrF knowledge understanding (short progName) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
+  where knowledge = ((phrase $ CT.heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+                    S "A third or fourth year Mechanical Engineering course on this topic is recommended")
+        understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
+                        S "covered in first and second year Calculus courses")
+{-s2_3 = SRS.charOfIR [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "should have a strong knowledge in" +:+ (plural $ CT.heat ^. term) +:+
@@ -209,7 +214,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   (plural $ equation ^. term) `sC` S "as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
-  S "as explained in" +:+. (makeRef s3))
+  S "as explained in" +:+. (makeRef s3))-}
 -- should reference User characteristics
 
 

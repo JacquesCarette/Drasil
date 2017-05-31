@@ -1469,17 +1469,139 @@ j is the impulse (scalar) used to determine collision response between two rigid
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
+<a id="T:im1">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Force on the translational motion of a set of 2d rigid bodies
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>a</b>=<b>v</b>=g+<div class="fraction">
+<span class="fup">
+<b>F</b>
+</span>
+<span class="fdn">
+m
+</span>
+</div>
 </div>
 </a>
-<a id="Sec:DC">
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. mi is the mass of the i-th rigid body (kg) g is the acceleration due to gravity (ms-2). t is a point in time and t0 denotes the initial time (s). <b>p</b>i(t) is the i-th body's position specifically the position of its center of mass, pCM(t) (DD1)) at time t (m). <b>a</b>i(t) is the i-th body's acceleration at time t (m/(s<sup>2</sup>)). <b>v</b>i(t) is the i-th body's velocity at time t (m/s). F(t) is the force applied to the i-th body at time t (N).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:im2">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Force on the rotational motion of a set of 2D rigid body
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&alpha;=&omega;=<div class="fraction">
+<span class="fup">
+&tau;
+</span>
+<span class="fdn">
+<b>I</b>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. mi is the mass of the i-th rigid body (kg) g is the acceleration due to gravity (ms-2). t is a point in time and t0 denotes the initial time (s). &phi;i(t) is the i-th body's orientation at time t (rad). &omega;i(t) is the i-th body's angular velocity at time t (rad/s). &alpha;k(t) is the k-th body's angular acceleration at time t (rad/(s<sup>2</sup>)). t i(t) is the torque applied to the i-th body at time t (N m). Signed direction of torque is defined by (A4). Ii is the moment of inertia of the i-th body (kg m2).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:im3">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Collisions on 2D rigid bodies
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>F</b>=m
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. mk is the mass of the k-th rigid body (kg) Ik is the moment of inertia of the k-th rigid body (kg m2). t is a point in time, t0 denotes the initial time, and tc denotes the time at collision (s). <b>p</b>i(t) is the i-th body's position specifically the position of its center of mass, pCM(t) (DD1)) at time t (m). <b>v</b>k(t) is the k-th body's velocity at time t (m/s). &phi;k(t) is the k-th body's orientation at time t (rad). &omega;k(t) is the k-th body's angular velocity at time t (rad/s). n is the collision normal vector (m). Its signed direction is determined by (A4). j is the collision impulse (DD8) (N s). P is the point of collision (m). rkP is the displacement vector between the center of mass of the k-th body and point P (m).
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:DataCons">
 <div class="subsubsection">
 <h4>
 Data Constraints
 </h4>
 <p class="paragraph">
-Table 1 and 2 show the data constraints on the input and output variables, respectively. The &quot;Physical Constraints&quot; column gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+<a href=#Table:Tabl1:InpuVari>this Table</a> and <a href=#Table:Tabl2:OutpVari>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
 </p>
 <a id="Table:Tabl1:InpuVari">
 <table class="table">
@@ -1562,17 +1684,6 @@ None
 </tr>
 <tr>
 <td>
-C<sub>R</sub>
-</td>
-<td>
-C<sub>R</sub> G/E to 0 and C<sub>R</sub> less than 1
-</td>
-<td>
-0.8
-</td>
-</tr>
-<tr>
-<td>
 &phi;
 </td>
 <td>
@@ -1613,6 +1724,17 @@ None
 </td>
 <td>
 200 Nm
+</td>
+</tr>
+<tr>
+<td>
+C<sub>R</sub>
+</td>
+<td>
+C<sub>R</sub> G/E to 0 and C<sub>R</sub> less than 1
+</td>
+<td>
+0.8
 </td>
 </tr>
 </table>
@@ -1782,8 +1904,6 @@ Newton Game Dynamics: http://newtondynamics.com/
 </ul>
 </div>
 </a>
-</body>
-</html>
 <a id="Sec:TracMatrandGrap">
 <div class="section">
 <h2>

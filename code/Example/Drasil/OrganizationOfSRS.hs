@@ -1,8 +1,8 @@
-module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, orgSec, orgSecWTS, genSysF, 
+module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, scpOfReqF, charIntRdrF, orgSec, orgSecWTS, genSysF, 
                                  specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
-                                 stakeholderIntro, traceGIntro, physSystDesc, charIntRdrF) where
+                                 stakeholderIntro, traceGIntro, physSystDesc) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -73,6 +73,13 @@ figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
 showingCxnBw :: NPNC -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
+
+-- Compleate the sentences, no need to add a period at the end of your input sentences
+scpOfReqF :: Sentence -> CINP -> Sentence -> Section
+scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
+  where intro = foldlSent [S "The scope of the", plural requirement,
+                S "includes" +:+. includes, S "Given appropriate inputs, the code for",
+                short progName, S "is intended to" +:+ ending]
 
 --Characteristics of Intended Reader section
 charIntRdrF :: Sentence -> Sentence -> Sentence -> Section -> Section

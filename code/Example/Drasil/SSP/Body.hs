@@ -118,15 +118,14 @@ s2_1 = prpsOfDocF $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
 
 -- SECTION 2.2 --
-s2_2 = SRS.scpOfReq [s2_2_p1] []
-
-s2_2_p1 = Paragraph $ S "The scope of the requirements is" +:+ --FIXME: somehow use scpOfReq with a "the"
-  S "limited to stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
-  S "composed of homogeneous" +:+. (plural soilLyr) +:+ S "Given appropriate" +:+
-  S "inputs, the code for" +:+ (short ssa) +:+ S "will identify the most likely" +:+
-  S "failure" +:+ (phrase $ surface ^. term) +:+ S "within the possible input range," +:+
-  S "and find the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the" +:+ (phrase slope) +:+
-  S "as well as displacement of" +:+ (phrase soil) +:+ S "that will occur on the" +:+. (phrase slope)
+s2_2 = scpOfReqF includes ssa ending
+  where includes = S "stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
+                   S "composed of homogeneous" +:+ (plural soilLyr)
+        ending   = S "identify the most likely" +:+ S "failure" +:+ 
+                   (phrase $ surface ^. term) +:+ S "within the possible input range," +:+
+                   S "and find the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the" +:+ 
+                   (phrase slope) +:+ S "as well as displacement of" +:+ (phrase soil) +:+ 
+                   S "that will occur on the" +:+ (phrase slope)
 
 -- SECTION 2.3 --
 s2_3 = charIntRdrF (S "solid mechanics") (S "undergraduate level 4 physics")

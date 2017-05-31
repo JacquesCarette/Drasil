@@ -23,7 +23,7 @@ import Language.Drasil.Spec (Sentence)
 
 import Language.Drasil.NounPhrase (NP)
 
--- | UnitalChunks are Unitals
+-- | UnitalChunks are Unitary
 data UnitalChunk where --Named Unital...?
   UC :: (Concept c, Unit u) => c -> Symbol -> u -> Space -> UnitalChunk
 instance Chunk UnitalChunk where

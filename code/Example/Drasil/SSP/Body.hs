@@ -326,11 +326,11 @@ verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
 
 fmtC' ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
 fmtC' _ []      = S "None"  
-fmtC' symb [(f,n)]  = E ((C symb) `f` n)
-fmtC' symb ((f,n):xs) = (E ((C symb) `f` n)) +:+ S "and" +:+ (fmtC' symb xs)
+fmtC' symb [(f,num)]  = E ((C symb) `f` num)
+fmtC' symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtC' symb xs)
 
-mkGtZeroConst' :: (Show n) => ConVar      -> [(Expr -> Expr -> Expr, Expr)] -> n -> [Sentence]
-mkGtZeroConst  :: (Show n) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> n -> [Sentence]
+mkGtZeroConst' :: (Show a) => ConVar      -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+mkGtZeroConst  :: (Show a) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
 mkGtZeroConst' s@(CV _ _ _)   other num = [getS s, fmtC' s (((:>), Int 0):other), S $ show num]
 mkGtZeroConst  s@(UC _ _ _ _) other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s]
 

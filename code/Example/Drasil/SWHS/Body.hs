@@ -198,7 +198,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3 = charIntRdrF knowledge understanding (short progName) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
+s2_3 = charIntRdrF knowledge understanding (short progName) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
   where knowledge = ((phrase $ CT.heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
                     S "A third or fourth year Mechanical Engineering course on this topic is recommended")
         understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+

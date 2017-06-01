@@ -26,15 +26,10 @@ module Data.Drasil.Utils
 
 import Data.List
 import Control.Lens ((^.))
-{-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
+import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), 
-<<<<<<< HEAD
   unit_symb, symbol, SymbolForm, Unitary, SymbolMap, UnitDefn, usymb)
-=======
-  unit_symb, symbol, SymbolForm, Unitary, SymbolMap, ConceptChunk)-}
-import Language.Drasil
->>>>>>> created and implemented use of 'isThe' combinator
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator

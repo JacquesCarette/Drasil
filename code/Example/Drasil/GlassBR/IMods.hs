@@ -8,7 +8,6 @@ import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.DataDefs
 import Drasil.GlassBR.Concepts
 import Data.Drasil.Concepts.Documentation
---import Drasil.GlassBR.Units
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]

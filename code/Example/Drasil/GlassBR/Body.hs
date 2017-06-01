@@ -556,9 +556,7 @@ s8_likelychg_list :: [Sentence]
 s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5]
 
-s8_list = enumSimple 1 (short assumption) s8_likelychg_list
-
-
+s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
 
 s9 = traceMGF [s9_table1, s9_table2, s9_table3]
   [(plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+.

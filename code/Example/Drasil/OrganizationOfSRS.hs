@@ -43,7 +43,7 @@ introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
       where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
                   S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
-                  S "of this", phrase document `sC` foldlList (map ofThe (temp))]
+                  S "of this", phrase document `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (temp))]
 
 --list is used by introF (current args passed in are the same for every example)
 temp :: [(Sentence, Sentence)]
@@ -98,7 +98,7 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
 -- Compleate the sentences, no need to add a period at the end of your input sentences
 scpOfReqF :: Sentence -> CINP -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
-  where intro = foldlSent [ofThe' (phrase scope, plural requirement),
+  where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. includes, S "Given appropriate inputs, the code for",
                 short progName, S "is intended to" +:+ ending]
 

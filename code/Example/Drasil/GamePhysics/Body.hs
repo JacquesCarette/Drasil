@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint)
 import Data.Drasil.Utils (foldle, foldlSent, listConstUC, 
   listConstS, makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet)
+  enumBullet, mkRefsList)
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -55,7 +55,7 @@ chipmunkSRS' = mkDoc' mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 
-  map Verbatim [s2, s3, s4, s5, s6, s7, s8]
+  map Verbatim [s2, s3, s4, s5, s6, s7, s8, s9]
   where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.
@@ -907,3 +907,53 @@ s8_table3 = Table (EmptyS:s8_row_header_t3)
 ----------------
 --}
 -- To be added --
+s9 = SRS.reference [s9_list] []
+
+s9_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s9_ref1, s9_ref2, s9_ref3, s9_ref4, s9_ref5,
+  s9_ref6, s9_ref7, s9_ref8])
+
+-- make sure all refs are proper format
+
+s9_ref1 = [S "David L. Parnas.", S "Designing Software for Ease of Extension",
+  S "and Contraction.", S "ICSE '78: Proceedings of the 3rd international", 
+  S "conference on Software engineering,", S "264-277, 1978"]
+
+s9_ref2 = [S "Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P.", 
+  S "Chue Hong and Matt Davis and Richard T. Guy and Steven H.D. Haddock", 
+  S "and Kathryn D. Huff and Ian M. Mitchell and Mark D. Plumblet and Ben Waugh", 
+  S "and Ethan P. White and Paul Wilson. Best Practices for Scientific", 
+  S "Computing, 2013"]
+
+s9_ref3 = [S "David L. Parnas. On the Criteria To Be Used in Decomposing Systems", 
+  S "into Modules. Comm. ACM, vol. 15, no. 2, pp. 1053-1058, 1972"]
+
+s9_ref4 = [S "D. L. Parnas and P. C. Clements and D. M. Weiss.",
+  S "The Modular Structure of Complex Systems.", S "ICSE '84: Proceedings of", 
+  S "the 7th international conference on Software engineering" `sC` 
+  S "408-417, 1984"]
+
+s9_ref5 = [S "David L. Parnas and P.C. Clements.", S "A Rational Design", 
+  S "Process: How and Why to Fake it.", S "IEEE Transactions on Software", 
+  S "Engineering,", S "251-257" `sC` S "1986"]
+
+s9_ref6 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+. 
+  (phrase sciCompS), S "Master's thesis, McMaster University,", 
+  S "Hamilton, Ontario, Canada, 2013."]
+
+s9_ref7 = [S "David L. Parnas and P.C. Clements. A rational design process: How", 
+  S "and why to fake it. IEEE Transactions on Software Engineering,", 
+  S "12(2):251-257, February 1986."]
+
+s9_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
+  S "scientific computing. In J. Ralyt" :+: (F Acute 'e') `sC` 
+  S "P. Agerfalk, and N. Kraiem,", S "editors, Proceedings of the First", 
+  S "International Workshopon", S "Situational Requirements Engineering", 
+  S "Processes - Methods,", S "Techniques and Tools to Support Situation-Specific", 
+  S "Requirements", S "Engineering Processes, SREP'05, pages 107-121, Paris, France,", 
+  S "2005. In conjunction with 13th IEEE International Requirements", 
+  S "Engineering Conference."]
+
+s9_ref9 = [S "J. Frederick Bueche. Introduction to Physics for Scientists", 
+  S "Fourth Edition. 1986"]
+
+s9_ref10 = [S "Marilyn Lightstone. Derivation of Tank/PCM Model. 2012"]

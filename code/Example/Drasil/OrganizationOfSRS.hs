@@ -24,7 +24,7 @@ module Drasil.OrganizationOfSRS
   , inModelF, inModelF'
   , datConF
   , reqF
---  , nonFuncReqF --WIP
+  , nonFuncReqF
   , traceMGF, traceGIntro
   ) where
 
@@ -354,23 +354,24 @@ reqIntro = Paragraph $ foldlSent
         plural nonfunctionalRequirement `sC` S "the qualities that the",
         phrase software, S "is expected to exhibit"]
 
---WIP
-{--- wrapper for nonfuncReq
-nonFuncReqF :: Maybe [Sentence] -> Maybe [Sentence] -> Sentence -> Sentence -> Section
-nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq [nonFuncReq noPriority priority_ reason_ explanation_] []
+
+-- wrapper for nonfuncReq
+nonFuncReqF :: [String] -> [String] -> Sentence -> Sentence -> Section
+nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq [nonFuncReq (map S noPriority) (map S priority_) reason_ explanation_] []
         
 -- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
 -- reason for initial priority choice, explanation for how priority choice can be achieved.
-nonFuncReq :: Maybe [Sentence] -> Maybe [Sentence] -> Sentence -> Sentence -> Contents
-nonFuncReq noPriority priority_ reason_ explanation_ = Paragraph $ foldlSent [reason_ `sC` (listO explanation_ noPriority), listT priority_]
-listO :: Sentence -> Maybe [Sentence] -> Sentence
-listO explanation_ Nothing = S "so" {-+:+ head priority-} +:+. S "is a high priority" +:+ explanation_ +:+ S "The other"
-listO explanation_ (Just [s]) = S "so" +:+ s +:+. S "is not a priority" +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the"
-listO explanation_ (Just s) = S "so" +:+ foldlList s +:+. S "are not priorities" +:+ explanation_ +:+ S "Rather, the"
-listT :: Maybe [Sentence] -> Sentence
-listT Nothing = S "program does not possess a priority non-functional requirement."
-listT (Just [s]) = S  "priority non-functional requirement is" +:+. s
-listT (Just s) = S "priority non-functional requirements are" +:+ foldlList s-}
+nonFuncReq :: [Sentence] -> [Sentence] -> Sentence -> Sentence -> Contents
+nonFuncReq noPriority priority_ reason_ explanation_ = Paragraph $ reason_ `sC` (listO explanation_ noPriority priority_)
+listO :: Sentence -> [Sentence] -> [Sentence] -> Sentence
+listO explanation_ [] [] = S "so there are no" +:+ plural priority +:+ explanation_
+listO explanation_ [] priority_ = S "so" +:+ head priority_ +:+ S "is a high" +:+. phrase priority +:+ explanation_ +:+ S "The other" +:+. listT (tail priority_)
+listO explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT priority_
+listO explanation_ s priority_ = S "so" +:+ foldlList s +:+ S "are not" +:+. plural priority +:+ explanation_ +:+ S "Rather, the" +:+. listT priority_
+listT :: [Sentence] -> Sentence
+listT [] = (phrase $ program ^. term) +:+ S "does not possess a" +:+ phrase priority +:+ phrase nonfunctionalRequirement
+listT [s] = phrase priority +:+ phrase nonfunctionalRequirement +:+ S "is" +:+ s
+listT s = phrase priority +:+ phrase nonfunctionalRequirement +:+ S "are" +:+ foldlList s
         
 -- wrapper for traceMGIntro
 traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section

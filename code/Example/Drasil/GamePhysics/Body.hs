@@ -589,7 +589,7 @@ s5_1_req4 = foldlSent [S "Verify that the inputs",
 
 s5_1_req5 = foldlSent 
   [S "Determine the", (plural $ QP.position ^. term), S "and", 
-  (plural $ QP.velocity ^. term), S "over a", S "period of", 
+  (plural $ QP.velocity ^. term), S "over a period of", 
   (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
   (plural $ CP.rigidBody ^. term), S "acted upon by a", 
   (phrase $ QP.force ^. term)]
@@ -606,7 +606,7 @@ s5_1_req7 = foldlSent [S "Determine if any of the",
 
 s5_1_req8 = foldlSent
   [S "Determine the", (plural $ QP.position ^. term), S "and", 
-  (plural $ QP.velocity ^. term), S "over a", S "period of", 
+  (plural $ QP.velocity ^. term), S "over a period of", 
   (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
   (plural $ CP.rigidBody ^. term), S "that have undergone a", 
   (phrase $ CP.collision ^. term)]

@@ -85,7 +85,7 @@ force (newton)
 Table of Symbols
 </h3>
 <p class="paragraph">
-
+The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
 </p>
 <a id="Table:ToS">
 <table class="table">
@@ -117,6 +117,17 @@ AR<sub>max</sub>
 </td>
 <td>
 Maximum aspect ratio
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+AR<sub>min</sub>
+</td>
+<td>
+Minimum aspect ratio
 </td>
 <td>
 
@@ -640,7 +651,7 @@ Purpose of Document
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to "fake" a rational design process.
 </p>
 </div>
 </a>
@@ -651,6 +662,16 @@ Scope of Requirements
 </h3>
 <p class="paragraph">
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
+</p>
+</div>
+</a>
+<a id="Sec:CoIR">
+<div class="subsection">
+<h3>
+Characteristics of Intended Reader
+</h3>
+<p class="paragraph">
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UC>.
 </p>
 </div>
 </a>
@@ -731,7 +752,7 @@ The end user is expected to have basic computer literacy to handle the software.
 System Constraints
 </h3>
 <p class="paragraph">
-N/A
+There are no system constraints.
 </p>
 </div>
 </a>
@@ -824,7 +845,7 @@ Use Case 1 refers to the user providing input to GlassBR for use within the anal
 Specific System Description
 </h2>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions.
 </p>
 <a id="Sec:PD">
 <div class="subsection">
@@ -968,7 +989,7 @@ This section explains all the assumptions considered and the theoretical models 
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition [DD], or instance model [IM], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TM>this Section</a>], Data Definitions [<a href=#Sec:DD>this Section</a>], Instance Models [<a href=#Sec:IM>this Section</a>], or Likely Changes [<a href=#Sec:LC>this Section</a>], in which the respective assumption is used.
 </p>
 <div class="list">
 <p>
@@ -1025,6 +1046,9 @@ A8: With reference to A4 the value of load duration factor (LDF) is a constant i
 <h4>
 Theoretical Models
 </h4>
+<p class="paragraph">
+This section focuses on the general equations and laws that GlassBR is based on.
+</p>
 <a id="T:SR">
 <table class="tdefn">
 <tr>
@@ -1104,6 +1128,9 @@ If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:SR>t
 <h4>
 Instance Models
 </h4>
+<p class="paragraph">
+This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a>.
+</p>
 <a id="T:PoGB">
 <table class="tdefn">
 <tr>
@@ -1749,8 +1776,134 @@ J<sub>tol</sub> is the stress distribution factor (Function) based on Pbtol<br /
 Data Constraints
 </h4>
 <p class="paragraph">
-Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (<a href=#Table:T3SPV>this Table</a>) gives the values of the specification parameters used in Table 2 (). AR<sub>max</sub> refers to the maximum aspect ratio for the plate of glass.
+<a href=#Table:T2IV>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. <a href=#Table:T2IV>this Table</a> gives the values of the specification parameters used in <a href=#Table:T2IV>this Table</a>. AR<sub>max</sub> refers to the maximum aspect ratio for the plate of glass.
 </p>
+<a id="Table:T2IV">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Physical Cons
+</th>
+<th>
+Software Constraints
+</th>
+<th>
+Typical Value
+</th>
+<th>
+Uncertainty
+</th>
+</tr>
+<tr>
+<td>
+a
+</td>
+<td>
+a > 0 and a/b > 1
+</td>
+<td>
+d<sub>min</sub> <= a <= d<sub>max</sub> and a/b < AR<sub>max</sub>
+</td>
+<td>
+1500 mm
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+b
+</td>
+<td>
+b > 0 and b < a
+</td>
+<td>
+d<sub>min</sub> <= b <= d<sub>max</sub> and a/b < AR<sub>max</sub>
+</td>
+<td>
+1200 mm
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+P<sub>btol</sub>
+</td>
+<td>
+0 < P<sub>btol</sub> < 1
+</td>
+<td>
+-
+</td>
+<td>
+0.008
+</td>
+<td>
+0.1%
+</td>
+</tr>
+<tr>
+<td>
+w
+</td>
+<td>
+w >= 0
+</td>
+<td>
+w<sub>min</sub> < w < w<sub>max</sub>
+</td>
+<td>
+42 kg
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+TNT
+</td>
+<td>
+TNT > 0
+</td>
+<td>
+-
+</td>
+<td>
+1
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+SD
+</td>
+<td>
+SD > 0
+</td>
+<td>
+SD<sub>min</sub> < SD < SD<sub>max</sub>
+</td>
+<td>
+45m
+</td>
+<td>
+10%
+</td>
+</tr>
+</table>
+<p class="caption">
+Table 2: Input Variables
+</p>
+</a>
 <a id="Table:T3SPV">
 <table class="table">
 <tr>
@@ -1823,7 +1976,7 @@ Table 3: Specification Parameter Values
 </p>
 </a>
 <p class="paragraph">
-Table 4 () shows the constraints that must be satisfied by the output.
+<a href=#Table:T4OV>this Table</a> shows the constraints that must be satisfied by the output.
 </p>
 </div>
 </a>
@@ -1836,14 +1989,14 @@ Table 4 () shows the constraints that must be satisfied by the output.
 <h2>
 Requirements
 </h2>
+<p class="paragraph">
+This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+</p>
 <a id="Sec:FR">
 <div class="subsection">
 <h3>
 Functional Requirements
 </h3>
-<p class="paragraph">
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
-</p>
 <div class="list">
 <p>
 R1: Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:

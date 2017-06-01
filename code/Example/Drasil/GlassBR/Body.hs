@@ -87,7 +87,7 @@ this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
 s2 = introF start (short gLassBR)
-  [s2_1, s2_2, s2_3]
+  [s2_1, s2_2, s2_4, s2_3]
   where start = foldlSent [(at_start software), 
                 S "is helpful to efficiently and correctly predict the", 
                 (phrase $ blastRisk ^. term), S "involved with the" +:+. 
@@ -132,8 +132,8 @@ s2_2 = scpOfReqF includes gLassBR ending
                    (phrase $ glaSlab ^. term), S "is safe to use or not"]
 
 s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
-                   (phrase $ glBreakage ^. term) +:+ S "and" +:+ 
-                   (phrase $ blastRisk ^. term))
+                     (phrase $ glBreakage ^. term) +:+ 
+                     S "and" +:+ (phrase $ blastRisk ^. term))
   (foldlList [S "second year calculus", S "structural mechanics", S "computer applications in civil engineering"])
   (short gLassBR)
   (SRS.userChar [Paragraph EmptyS] [])
@@ -528,8 +528,8 @@ s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = Paragraph $ foldlSent [
   S "Given the small size, and relative simplicity, of this", 
-  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority +:+.
-  S "Any reasonable", phrase implementation, S "will be very quick and use minimal storage", 
+  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority,
+  S "Any reasonable", phrase implementation +:+. S "will be very quick and use minimal storage", 
   S "Rather than", phrase performance `sC` S "the", phrase priority,
   phrase nonfunctional, (short requirement) :+:
   S "s are correctness, verifiability, understandability, reusability,", 

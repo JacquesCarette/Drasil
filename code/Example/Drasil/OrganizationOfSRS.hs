@@ -103,16 +103,17 @@ scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
                 short progName, S "is intended to" +:+ ending]
 
 --Characteristics of Intended Reader section
-charIntRdrF :: Sentence -> Sentence -> Sentence -> Section -> Section
-charIntRdrF know und progName r = 
-  SRS.charOfIR (intReaderIntro know und progName r) []
+charIntRdrF :: Sentence -> Sentence -> Sentence -> Sentence -> Section -> Section
+charIntRdrF know und progName appStandd r = 
+  SRS.charOfIR (intReaderIntro know und progName appStandd r) []
 
 --paragraph called by charIntRdrF
-intReaderIntro :: Sentence -> Sentence -> Sentence -> Section -> [Contents]
-intReaderIntro know und progName r = [Paragraph $ foldlSent [S "Reviewers of this",
+intReaderIntro :: Sentence -> Sentence -> Sentence -> Sentence -> Section -> [Contents]
+intReaderIntro know und progName appStandd r = [Paragraph $ foldlSent [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. know,
-  S "The reviewers should also have an understanding of" +:+. und,
-  S "The", (plural user), S "of", progName, S "can have a lower level of expertise, as explained in", (makeRef r)]]
+  S "The reviewers should also have an understanding of" +:+. und :+:
+  appStandd, S "The", (plural user), S "of", progName,
+  S "can have a lower level of expertise, as explained in", (makeRef r)]]
 
 -- | Organization of the document section builder. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance
@@ -142,8 +143,8 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
 
 -- wrapper for general system description
 genSysF :: [Section] -> Contents -> Maybe [Contents] -> [Section] -> Section
-genSysF sCntxt userIntro contraints systSubSec = SRS.genSysDes [genSysIntro]
-  (sCntxt ++ [SRS.userChar [userIntro] [], systCon contraints systSubSec])
+genSysF sCntxt userIntro constraints systSubSec = SRS.genSysDes [genSysIntro]
+  (sCntxt ++ [SRS.userChar [userIntro] [], systCon constraints systSubSec])
 
 --generalized general system description introduction
 genSysIntro :: Contents

@@ -131,6 +131,8 @@ s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
   (foldlList [S "second year calculus", S "structural mechanics",
   S "computer applications in civil engineering"])
   (short gLassBR)
+  (S " In addition, reviewers should be familiar with the applicable" +:+
+    S "standards for constructions using glass from [4-6] in" +:+. (makeRef s10))
   (SRS.userChar [Paragraph EmptyS] [])
 
 s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
@@ -157,7 +159,7 @@ s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
 s3_2 = SRS.theCustomer [s3_2_intro] []
 
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
-  S "are the" phrase endUser, S "of", (short gLassBR)]
+  S "are the", phrase endUser, S "of", (short gLassBR)]
 
 s4 = genSysF [] s4_1_bullets Nothing []
 

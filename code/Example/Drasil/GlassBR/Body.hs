@@ -212,16 +212,16 @@ s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user,
   (phrase $ blastTy ^. term), (glassGeo ^. defn), (blastTy ^. defn), S "These",
   (plural $ parameter ^. term), S "describe", (phrase $ char_weight ^. term),
   S "and stand off" +:+. (phrase $ blast ^. term), S "Another", phrase input_,
-  S "the", phrase user, S "gives is the tolerable", phrase value, S "of",
+  S "the", phrase user, S "gives" `isThe` S "tolerable", phrase value, S "of",
   (phrase $ prob_br ^. term)]
 
 s5_2_bt_sent2 :: Sentence
 s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR), 
   plural output_, S "if the", (phrase $ glaSlab ^. term), S "will be safe by", 
   S "comparing whether", (phrase $ capacity ^. term), S "is greater than" +:+. 
-  (phrase $ demandq ^. term), (at_start $ capacity ^. term), S "is the",
-  (capacity ^. defn), S "and", (phrase $ demandq ^. term), S "is the", 
-  phrase requirement, S "which is the" +:+. (demandq ^. defn), S "The second", 
+  (phrase $ demandq ^. term), (at_start $ capacity ^. term) `isThe`
+  (capacity ^. defn), S "and", (phrase $ demandq ^. term) `isThe` 
+  phrase requirement, S "which" `isThe'` (demandq ^. defn), S "The second", 
   phrase condition, S "is to check whether the calculated", 
   (phrase $ probability ^. term), sParen (P $ prob_br ^. symbol), 
   S "is less than the tolerable", (phrase $ probability ^. term), 
@@ -292,7 +292,7 @@ s6_1_2_list_physys1 :: [Sentence]
 s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of"
   +:+. (phrase $ explosion ^. term), S "Where the", (phrase $ bomb ^. term) `sC` 
   S "or", (blast ^. defn) `sC` S "is located. The", (phrase $ sD ^. term), 
-  S "is the distance between the point of", (phrase $ explosion ^. term), 
+  `isthe` S "distance between the point of", (phrase $ explosion ^. term), 
   S "and the glass"])]
 
 s6_1_3 = goalStmtF [S "FIXME: ADD INPUTS"] [s6_1_3_list] --FIXME: add inputs

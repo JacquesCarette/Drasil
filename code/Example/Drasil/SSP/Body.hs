@@ -238,11 +238,11 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
 
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
-           S "the" +:+. (phrase slopeSrf) +:+ (getS coords +:+ 
-           S "coordinates") `ofThe'` (S "failure") +:+ (phrase $ surface ^. term) +:+
+           S "the" +:+. (phrase slopeSrf) +:+ ((getS coords +:+ 
+           S "coordinates") `ofThe'` (S "failure")) +:+ (phrase $ surface ^. term) +:+
            S "follow a monotonic function."),
   ((S "geometry") `ofThe'` (phrase slope) `sC` S "and" +:+
-          (plural mtrlPrpty) `ofThe` (plural soilLyr) +:+
+          ((plural mtrlPrpty) `ofThe` (plural soilLyr)) +:+
            S "are given as inputs."),
   ((S "different layers") `ofThe'` (phrase soil) +:+ S "are homogeneous," +:+
            S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
@@ -368,7 +368,7 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "on a set of pass or fail criteria."),
   (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate" +:+. (plural $ fs_rc ^. term) `ofThe` (plural slpSrf)),
+  (S "Calculate" +:+. ((plural $ fs_rc ^. term) `ofThe` (plural slpSrf))),
   (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
         (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
         S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
@@ -384,11 +384,11 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "as the" +:+. (phrase $ crtSlpSrf ^. term)),
   (S "Prepare the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for" +:+ (phrase method_) +:+ 
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate" +:+ (phrase $ fs_rc ^. term) `ofThe` (phrase $ crtSlpSrf ^. term) +:+ 
+  (S "Calculate" +:+ ((phrase $ fs_rc ^. term) `ofThe` (phrase $ crtSlpSrf ^. term)) +:+ 
         S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
   (S "Display the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
-        S "Give" +:+ (S "values") `ofThe` (plural $ fs_rc ^. term) +:+ S "calculated" +:+
+        S "Give" +:+ ((S "values") `ofThe` (plural $ fs_rc ^. term)) +:+ S "calculated" +:+
         S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ]
   

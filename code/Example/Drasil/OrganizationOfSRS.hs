@@ -407,5 +407,5 @@ traceGIntro refs trailings = [Paragraph $ foldlSent
         phrase component, S "is changed, the", plural component, S "that it points to should also",
         S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings),
         Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate", 
-        S "graphical representation" `ofThe'` (phrase $ matrix ^. term), S "by scanning the",
+        S "graphical representation" `ofThe` (phrase $ matrix ^. term), S "by scanning the",
         plural label, S "and", phrase reference, S "can be future work"]]

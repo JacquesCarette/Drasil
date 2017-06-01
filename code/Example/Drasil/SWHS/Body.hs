@@ -13,7 +13,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
-import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, foldle, weave)
 
@@ -1127,10 +1127,10 @@ s5_2 = SRS.nonfuncReq [s5_2_contents] []
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   `sC`
-  S "of this" +:+ phrase problem `sC` phrase performance +:+
+  S "of this" +:+ phrase problem `sC` (phrase $ performance ^. term) +:+
   S "is not a" +:+. phrase priority +:+
   S "Any reasonable implementation will be very quick and use" +:+
-  S "minimal storage. Rather than" +:+ phrase performance `sC` S "the" +:+
+  S "minimal storage. Rather than" +:+ (phrase $ performance ^. term) `sC` S "the" +:+
   phrase priority +:+ plural nonfunctionalRequirement +:+
   S "are correctness, verifiability" `sC`
   S "understandability, reusability, and maintainability.")

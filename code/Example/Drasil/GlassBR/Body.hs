@@ -7,7 +7,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Software (performance)
 import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)

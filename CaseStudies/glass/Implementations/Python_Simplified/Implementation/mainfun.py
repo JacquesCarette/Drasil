@@ -21,13 +21,13 @@ def main(filename):
     derivedValues.derived_params(params)
     checkConstraints.check_constraints(params)
     
-    w_array = readTable.read_num_col('TSD.txt')
-    data_sd = readTable.read_array1('TSD.txt', len(w_array))
-    data_q = readTable.read_array2('TSD.txt', len(w_array))
+    w_array = readTable.read_z_array('TSD.txt')
+    data_sd = readTable.read_x_array('TSD.txt', len(w_array))
+    data_q = readTable.read_y_array('TSD.txt', len(w_array))
     
-    j_array = readTable.read_num_col('SDF.txt')
-    data_asprat = readTable.read_array1('SDF.txt', len(j_array))
-    data_qstar = readTable.read_array2('SDF.txt', len(j_array))
+    j_array = readTable.read_z_array('SDF.txt')
+    data_asprat = readTable.read_x_array('SDF.txt', len(j_array))
+    data_qstar = readTable.read_y_array('SDF.txt', len(j_array))
 
     q = interp.interpY(data_sd, data_q, w_array, params.sd, params.wtnt)
     q_hat = calculations.calc_q_hat(q, params)

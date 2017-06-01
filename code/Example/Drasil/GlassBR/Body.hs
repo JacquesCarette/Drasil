@@ -12,7 +12,8 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils (foldlSent, itemRefToSent, foldlList,
-  makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
+  makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet,
+  ofThe)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -140,7 +141,7 @@ s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   S "), with some aspects taken from Volere", phrase template, S "16 [3]"]
   
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
-  S "are used to support the", plural definition, S "of the different",
+  S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
   
 s3 = stakehldr [s3_1, s3_2]
@@ -161,8 +162,8 @@ s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer),
 s4 = genSysF [] s4_1_bullets Nothing []
 
 s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (short gLassBR) +:+ 
-  S "is expected to have completed at least the equivalent of the second year of an" +:+
-  S "undergraduate degree in civil or structural engineering"),
+  S "is expected to have completed at least" +:+ (S "equivalent" `ofThe`
+  S "second year of an undergraduate degree in civil or structural engineering")),
   (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
   (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
@@ -305,8 +306,8 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
   [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
-        end = foldlSent [(makeRef s6_2_5_table1), S "gives the", plural value, 
-              S "of the specification", (plural $ parameter ^. term),
+        end = foldlSent [(makeRef s6_2_5_table1), S "gives",
+             (plural value `ofThe` S "specification"), (plural $ parameter ^. term),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase $ ar_max ^. term), S "for the plate of glass"]
 
@@ -388,8 +389,8 @@ s6_2_4_DDefns = map (Definition gbSymbMap . Data) dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
-  where end = foldlSent [(makeRef s6_2_5_table1), S "gives the", plural value, 
-              S "of the specification", (plural $ parameter ^. term),
+  where end = foldlSent [(makeRef s6_2_5_table1), S "gives the",
+              (plural value `ofThe` S "specification"), (plural $ parameter ^. term),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase $ ar_max ^. term), S "for the plate of glass"]
 
@@ -446,8 +447,7 @@ s7_1_list =
   [(((short requirement) :+: S "1"), at_start input_ +:+ S "the following" +:+
     plural quantity `sC` S "which define the glass dimensions" `sC` 
     (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase $ probability ^. term) +:+
-    S "of failure and the" +:+ plural characteristic +:+ S "of the" +:
-    (phrase $ blast ^. term))]),
+    S "of failure and" +:+ (plural characteristic `ofThe` (phrase $ blast ^. term)))]),
   (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
   ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start $ x ^.term)),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable

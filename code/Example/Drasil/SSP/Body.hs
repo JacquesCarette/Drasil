@@ -314,8 +314,8 @@ s4_2_5_p3 = Paragraph $ ofThe' (S "values", S "interslice normal force") +:+
 -- SECTION 4.2.6 --
 -- Data Constraints is automaticly generated in solChSpecF using the tables below
 vertConvention :: Sentence
-vertConvention = S "Consecutive vertexes have increasing x values. All layer's" +:+
-                 S "start and end vertices's go to the same x values."
+vertConvention = S "Consecutive vertexes have increasing x values." +:+
+                 S "The start and end vertices of all layers go to the same x values."
 
 vertVar :: Sentence -> Sentence
 vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices's"
@@ -334,13 +334,13 @@ waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,
 waterVert = verticesConst $ S "water table"
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
-intNormFor = mkGtZeroConst ei [] 15000
-effectCohe = mkGtZeroConst cohesion [] 10
-normDispla = mkGtZeroConst dv_i [S "LT 1"] 0.4
-fricAng    = mkGtZeroConst fricAngle [S "LT 90"] 25
-dryUWght   = mkGtZeroConst dryWeight [] 20
-satUWght   = mkGtZeroConst satWeight [] 20
-waterUWght = mkGtZeroConst waterWeight [] 9.8
+intNormFor = mkGtZeroConst ei [] (15000 :: Integer)
+effectCohe = mkGtZeroConst cohesion [] (10 :: Integer)
+normDispla = mkGtZeroConst dv_i [S "LT 1"] (0.4 :: Double)
+fricAng    = mkGtZeroConst fricAngle [S "LT 90"] (25 :: Integer)
+dryUWght   = mkGtZeroConst dryWeight [] (20 :: Integer)
+satUWght   = mkGtZeroConst satWeight [] (20 :: Integer)
+waterUWght = mkGtZeroConst waterWeight [] (9.8 :: Double)
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,

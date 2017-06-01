@@ -907,12 +907,18 @@ s8_table3 = Table (EmptyS:s8_row_header_t3)
 ----------------
 --}
 -- To be added --
+
+s9 :: Section
 s9 = SRS.reference [s9_list] []
 
-s9_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s9_ref1, s9_ref2, s9_ref3, s9_ref4, s9_ref5,
-  s9_ref6, s9_ref7, s9_ref8])
+s9_list :: Contents
+s9_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s9_ref1, s9_ref2, s9_ref3, 
+  s9_ref4, s9_ref5, s9_ref6, s9_ref7, s9_ref8, s9_ref9, s9_ref10])
 
 -- make sure all refs are proper format
+
+s9_ref1, s9_ref2, s9_ref3, s9_ref4, s9_ref5, s9_ref6, s9_ref7, 
+  s9_ref8, s9_ref9, s9_ref10 :: [Sentence]
 
 s9_ref1 = [S "David L. Parnas.", S "Designing Software for Ease of Extension",
   S "and Contraction.", S "ICSE '78: Proceedings of the 3rd international", 

@@ -21,14 +21,20 @@ module Data.Drasil.Utils
   , weave
   , fmtU
   , unwrap
+  , isThe, isThe'
   ) where
 
 import Data.List
 import Control.Lens ((^.))
-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
+{-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), 
+<<<<<<< HEAD
   unit_symb, symbol, SymbolForm, Unitary, SymbolMap, UnitDefn, usymb)
+=======
+  unit_symb, symbol, SymbolForm, Unitary, SymbolMap, ConceptChunk)-}
+import Language.Drasil
+>>>>>>> created and implemented use of 'isThe' combinator
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -179,3 +185,7 @@ ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
 unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
+
+isThe, isThe' :: Sentence -> Sentence -> Sentence
+isThe  p1 p2 = p1 +:+ S "is the" +:+ p2
+isThe' p1 p2 = p1 +:+ S "is the" +:+. p2

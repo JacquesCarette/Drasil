@@ -5,7 +5,7 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.Concepts
 
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.Utils (foldlSent, isThe, isThe')
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
@@ -25,10 +25,11 @@ t1descr =
   foldlSent [S "If", (P $ is_safe1 ^. symbol), S "= True, the glass is" +:+. 
   S "considered safe", (P $ is_safe1 ^.symbol), S "and", (P $ is_safe2 ^. symbol),
   S "(from", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))
-  :+: S ") are either" +:+. S "both True or both False", (P $ prob_br ^. symbol),
-  S "is the", (phrase $ prob_br ^. term) `sC` S "as calculated in" +:+.
+  :+: S ") are either" +:+. S "both True or both False",
+  ((P $ prob_br ^. symbol) `isThe` (phrase $ prob_br ^. term)) 
+  `sC` S "as calculated in" +:+.
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
-  (P $ pb_tol ^. symbol), S "is the", (phrase $ pb_tol ^. term),
+  (P $ pb_tol ^. symbol) `isThe` (phrase $ pb_tol ^. term),
   S "entered by the user"]
 
 t2SafetyReq :: RelationConcept
@@ -44,8 +45,8 @@ t2descr =
   foldlSent [S "If", (P $ is_safe2 ^. symbol), S "= True, the glass is" +:+.
   S "considered safe", (P $ is_safe1 ^. symbol), S "(from", 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq)),
-  S "and", (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False", (short lResistance), 
-  S "is the", (phrase $ lResistance ^. term), 
+  S "and", (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False",
+  (short lResistance) `isThe` (phrase $ lResistance ^. term), 
   S "(also called capacity, as defined in" +:+. 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
   (P $ demand ^. symbol), S "(also referred as the", (titleize $ demandq ^. term) :+:

@@ -598,7 +598,7 @@ s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
 s9_dataDefRef = map (refFromType Data gbSymbMap) dataDefns
 
 
-s9_data  = ["Data Constraint"]
+s9_data  = ["Data Constraints"]
 s9_dataRef = [makeRef s6_2_5]
 
 s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]

@@ -329,43 +329,38 @@ fmtC' _ []      = S "None"
 fmtC' symb [(f,num)]  = E ((C symb) `f` num)
 fmtC' symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtC' symb xs)
 
---mkGtZeroConst' :: (Show a) => ConVar      -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
---mkGtZeroConst  :: (Show a) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
---mkGtZeroConst' s@(CV _ _ _)   other num = [getS s, fmtC' s (((:>), Int 0):other), S $ show num]
---mkGtZeroConst  s@(UC _ _ _ _) other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s]
-
 waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
 waterVert = verticesConst $ S "water table"
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
 intNormFor  = mkGtZeroConst (cqs ei)          [] (15000 :: Integer)
-effectCohe  = mkGtZeroConst (cqs cohesion )   [] (10 :: Integer)
-poissnRatio = mkGtZeroConst (cqs poissnsR )   [((:<),1)] (0.4 :: Double) --FIXME: use un-primed version (but it is a different type...)
-fricAng     = mkGtZeroConst (cqs fricAngle  ) [((:<),90)] (25 :: Integer)
-dryUWght    = mkGtZeroConst (cqs dryWeight )  [] (20 :: Integer)
-satUWght    = mkGtZeroConst (cqs satWeight )  [] (20 :: Integer)
+effectCohe  = mkGtZeroConst (cqs cohesion)    [] (10 :: Integer)
+poissnRatio = mkGtZeroConst (cqs poissnsR)    [((:<),1)] (0.4 :: Double)
+fricAng     = mkGtZeroConst (cqs fricAngle)   [((:<),90)] (25 :: Integer)
+dryUWght    = mkGtZeroConst (cqs dryWeight)   [] (20 :: Integer)
+satUWght    = mkGtZeroConst (cqs satWeight)   [] (20 :: Integer)
 waterUWght  = mkGtZeroConst (cqs waterWeight) [] (9.8 :: Double)
 
-----
---test1, test2 :: [Sentence]
---test1 = mkGtZeroConst'' (cqs poissnsR) [((:<),1)] (0.4 :: Double)
---test2 = mkGtZeroConst'' (cqs fricAngle) [((:<),90)] (25 :: Integer)
+fcOfSa, slipVert2, deltax, deltay :: [Sentence]
+fcOfSa = [S "FS", E $ (V "FS") :> (Int 0)]
+slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
+deltax = [P $ Concat [Greek Delta_L, Atomic "x"], S "None"]
+deltay = [P $ Concat [Greek Delta_L, Atomic "y"], S "None"]
 
 mkGtZeroConst  :: (Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
 mkGtZeroConst s other num = [P $ s ^. symbol, fmtC' s (((:>), Int 0):other), (S (show num)) +:+ (unwrap $ getUnit s)]
   where unwrap :: (Maybe UnitDefn) -> Sentence
         unwrap (Just a) = Sy (a ^. usymb)
         unwrap Nothing = EmptyS
-----
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght]
 
 s4_2_6Table2, s4_2_6Table3 :: Contents --FIXME: actually create these table
-s4_2_6Table2 = Table [S "Var", S "Physical Constraints", S "Typical Value"] dataConstList EmptyS True 
-s4_2_6Table3 = Table [] [] EmptyS True
+s4_2_6Table2 = Table [S "Var", S "Physical Constraints", S "Typical Value"] dataConstList (S "Input Variables") True 
+s4_2_6Table3 = Table [S "Var", S "Physical Constraints"] [fcOfSa, slipVert2, deltax, deltay] (S "Output Variables") True
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

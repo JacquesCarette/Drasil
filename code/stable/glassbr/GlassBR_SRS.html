@@ -1123,124 +1123,6 @@ If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:SR>t
 </a>
 </div>
 </a>
-<a id="Sec:IM">
-<div class="subsubsection">
-<h4>
-Instance Models
-</h4>
-<p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a>.
-</p>
-<a id="T:PoGB">
-<table class="tdefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Probability of Glass Breakage
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-P<sub>b</sub>=1-e<sup>-B</sup>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<p class="paragraph">
-P<sub>b</sub> is the calculated probability of breakage. B is the risk of failure.
-</p>
-</td>
-</tr>
-</table>
-</a>
-<a id="T:CoC">
-<table class="tdefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Calculation of Capacity(LR)
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-LR=NFL*GTF*LSF
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<p class="paragraph">
-LR is the load resistance, which is also called capacity. NFL is the non-factored load. GTF is the glass type factor. LSF is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)&quot; from [4 (pg. 53)].
-</p>
-</td>
-</tr>
-</table>
-</a>
-<a id="T:CoD">
-<table class="tdefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Calculation of Demand(q)
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-q=q(w<sub>TNT</sub>,SD)
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<p class="paragraph">
-q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and w<sub>TNT</sub> as parameters. w<sub>TNT</sub> is defined as w<sub>TNT</sub> = w * TNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD = .
-</p>
-</td>
-</tr>
-</table>
-</a>
-</div>
-</a>
 <a id="Sec:DD">
 <div class="subsubsection">
 <h4>
@@ -1763,6 +1645,124 @@ Description
 <td>
 <p class="paragraph">
 J<sub>tol</sub> is the stress distribution factor (Function) based on Pbtol<br />P<sub>btol</sub> is the tolerable probability of breakage<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)<br />m is the surface flaw parameter<br />k is the surface flaw parameter<br />E is the modulus of elasticity of glass<br />h is the actual thickness<br />LDF is the load duration factor
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:IM">
+<div class="subsubsection">
+<h4>
+Instance Models
+</h4>
+<p class="paragraph">
+This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a>.
+</p>
+<a id="T:PoGB">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Probability of Glass Breakage
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+P<sub>b</sub>=1-e<sup>-B</sup>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+P<sub>b</sub> is the calculated probability of breakage. B is the risk of failure.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:CoC">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Calculation of Capacity(LR)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+LR=NFL*GTF*LSF
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+LR is the load resistance, which is also called capacity. NFL is the non-factored load. GTF is the glass type factor. LSF is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)&quot; from [4 (pg. 53)].
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:CoD">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Calculation of Demand(q)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+q=q(w<sub>TNT</sub>,SD)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and w<sub>TNT</sub> as parameters. w<sub>TNT</sub> is defined as w<sub>TNT</sub> = w * TNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD = .
 </p>
 </td>
 </tr>

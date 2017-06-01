@@ -521,8 +521,8 @@ forceConstraint = (QP.force, [], S "98.1")
 torqueConstraint = (QP.torque, [], S "200")
 
 restCoefConstraint :: [Sentence]
-restCoefConstraint = listConstS ((P $ QP.restitutionCoef ^. symbol), S "G/E to 0", 
-  S "less than 1", S "0.8", EmptyS)
+restCoefConstraint = listConstUC (QP.restitutionCoef, [S "G/E to 0", 
+  S "less than 1"], S "0.8")
 
 s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
 s4_2_6_t1_list = map (listConstUC) [lengthConstraint, massConstraint, 

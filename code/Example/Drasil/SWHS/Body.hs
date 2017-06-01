@@ -179,7 +179,7 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   S "histories for the" +:+ (phrase $ water ^. term) +:+ S "and the" +:+.
   (short phsChgMtrl) +:+ S "This entire" +:+ phrase document +:+
   S "is written assuming that the substances inside the" +:+
-  (tank ^. defn) +:+ S "are" +:+ (phrase $ water ^. term) +:+ S "and" +:+.
+  (phrase $ sWHT ^. term) +:+ S "are" +:+ (phrase $ water ^. term) +:+ S "and" +:+.
   (short phsChgMtrl))
 
 -- There is a similar paragraph in each example, but there's a lot of specific
@@ -221,7 +221,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4 = orgSecWTS s2_4_intro inModel s4_2 s2_4_trail
+s2_4 = orgSecWTS s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4_trail
 
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
@@ -230,7 +230,7 @@ s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   sSqBr (S "citation")
 
 s2_4_trail :: Sentence
-s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2) +:+. 
+s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef (SRS.inModel SRS.missingP [])) +:+. 
   S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
   (plural inModel) +:+ S "provide the" +:+ (phrase $ ode ^. term) +:+
   sParen ((short ode) :+: S "s") +:+ S "and algebraic" +:+
@@ -352,7 +352,7 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
   S "and finally the" +:+ plural inModel +:+ sParen ((short ode) :+:
-  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
+  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+ (phrase $ swhs_pcm ^. term)
 
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
@@ -370,7 +370,7 @@ s4_1 = SRS.probDesc [s4_1_intro]
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
   (phrase $ program ^. term) +:+
   S "developed to investigate the effect of employing" +:+
-  (short phsChgMtrl) +:+ S "within a" +:+. (tank ^. defn))
+  (short phsChgMtrl) +:+ S "within a" +:+. (phrase $ sWHT ^. term))
 
 --  section is very different between all examples
 
@@ -428,7 +428,7 @@ physSyst3 = (short phsChgMtrl) +:+ S "suspended in" +:+.
 -- different
 -- FIXME: Figures have different IDs than stable structure
 
-fig_tank = Figure ((tank ^. defn) `sC` S "with" +:+
+fig_tank = Figure ((at_start $ sWHT ^. term) `sC` S "with" +:+
   (phrase $ ht_flux_C ^. term) +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
   S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
   P (ht_flux_P ^. symbol)) "Tank.png"

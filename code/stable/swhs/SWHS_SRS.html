@@ -955,7 +955,7 @@ Purpose of Document
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the process is not waterfall, as Parnas and Clements [citation] point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
 </a>
@@ -969,26 +969,26 @@ The scope of the requirements is limited to thermal analysis of a single solar w
 </p>
 </div>
 </a>
-<a id="Sec:CoIR">
+<a id="Sec:CharofInteRead">
 <div class="subsection">
 <h3>
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UC>this Section</a>.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChar>this Section</a>.
 </p>
 </div>
 </a>
-<a id="Sec:OoD">
+<a id="Sec:OrgaofDocu">
 <div class="subsection">
 <h3>
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern for presenting goal statements, theoretical models, data definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IM>this Section</a> and trace back to find any additional information they require. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:InstMode>this Section</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (<a href=#Sec:IM>this Section</a>) to be solved are referred to as IM1 to IM4.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (<a href=#Sec:InstMode>this Section</a>) to be solved are referred to as IM1 to IM4. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 </p>
 </div>
 </a>
@@ -1002,7 +1002,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:UC">
+<a id="Sec:UserChar">
 <div class="subsection">
 <h3>
 System Context
@@ -1048,7 +1048,7 @@ Calculate the required outputs
 </ul>
 </div>
 </a>
-<a id="Sec:UC">
+<a id="Sec:UserChar">
 <div class="subsection">
 <h3>
 User Characteristics
@@ -1058,7 +1058,7 @@ The end user of SWHS should have an understanding of undergraduate Level 1 Calcu
 </p>
 </div>
 </a>
-<a id="Sec:SystCont">
+<a id="Sec:SystCons">
 <div class="subsection">
 <h3>
 System Constraints
@@ -1070,15 +1070,15 @@ There are no system constraints.
 </a>
 </div>
 </a>
-<a id="Sec:SSD">
+<a id="Sec:SpecSystDesc">
 <div class="section">
 <h2>
 Specific System Description
 </h2>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the solar water heating systems incorporating PCM.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the solar water heating systems incorporating PCM.
 </p>
-<a id="Sec:PD">
+<a id="Sec:ProbDesc">
 <div class="subsection">
 <h3>
 Problem Description
@@ -1086,7 +1086,7 @@ Problem Description
 <p class="paragraph">
 SWHS is a computer program developed to investigate the effect of employing PCM within a solar water heating tank.
 </p>
-<a id="Sec:TaD">
+<a id="Sec:TermandDefi">
 <div class="subsubsection">
 <h4>
 Terminology and Definitions
@@ -1099,7 +1099,7 @@ This subsection provides a list of terms that are used in the subsequent section
 Heat flux: The rate of thermal energy transfer through a given surface per unit time.
 </li>
 <li>
-Phase Change Material (PCM): A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature.
+Phase change material: A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature.
 </li>
 <li>
 Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
@@ -1113,13 +1113,13 @@ Transient: Changing with time.
 </ul>
 </div>
 </a>
-<a id="Sec:PSD">
+<a id="Sec:PhysSystDesc">
 <div class="subsubsection">
 <h4>
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of SWHS, as shown in <a href=#Figure:Swht,whfitwftcoahfitPfwo>this Figure</a>, includes the following elements:
+The physical system of SWHS, as shown in <a href=#Figure:SolawateheattankwithheatfluxintothewatefromthecoilofandheatfluxintothePCMfromwateof>this Figure</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -1132,7 +1132,7 @@ PS2: Heating coil at bottom of tank. (q<sub>C</sub> represents the heat flux int
 PS3: PCM suspended in tank. (q<sub>P</sub> represents the heat flux into the PCM from water.)
 </p>
 </div>
-<a id="Figure:Swht,whfitwftcoahfitPfwo">
+<a id="Figure:SolawateheattankwithheatfluxintothewatefromthecoilofandheatfluxintothePCMfromwateof">
 <img class="figure" src="Tank.png" alt="Solar water heating tank, with heat flux into the water from the coil of q<sub>C</sub> and heat flux into the PCM from water of q<sub>P</sub>"></img>
 <p class="caption">
 Solar water heating tank, with heat flux into the water from the coil of q<sub>C</sub> and heat flux into the PCM from water of q<sub>P</sub>
@@ -1140,7 +1140,7 @@ Solar water heating tank, with heat flux into the water from the coil of q<sub>C
 </a>
 </div>
 </a>
-<a id="Sec:GS">
+<a id="Sec:GoalStat">
 <div class="subsubsection">
 <h4>
 Goal Statements
@@ -1166,13 +1166,13 @@ GS4: Predict the change in heat energy in the PCM over time.
 </a>
 </div>
 </a>
-<a id="Sec:SCS">
+<a id="Sec:SoluCharSpec">
 <div class="subsection">
 <h3>
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models (ODEs) that govern SWHS are presented in <a href=#Sec:IM>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models (ODEs) that govern SWHS are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:A">
 <div class="subsubsection">
@@ -1640,13 +1640,13 @@ H<sub>f</sub> is the amount of thermal energy required to completely melt a unit
 </a>
 </div>
 </a>
-<a id="Sec:IM">
+<a id="Sec:InstMode">
 <div class="subsubsection">
 <h4>
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a> and <a href=#Sec:GD>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a> and <a href=#Sec:GD>this Section</a>.
 </p>
 <p class="paragraph">
 The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for T<sub>W</sub> and T<sub>P</sub> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change. (Instance models are left out because they are not currently implemented in Drasil.)

@@ -3,22 +3,28 @@ This module implements a portion of the Input Format Module.  In this
 case the input is the tabular data necessary for the different interpolations.
 """
 
-import numpy as np
-
 
 def read_num_col(filename):
-    with open(filename, 'rb') as f:
-        num_col = [f.readline()]
-
-    num_col = np.genfromtxt(num_col, delimiter=',', dtype=str)
-    num_col = num_col[1::2].astype(float)
-    
-    return num_col
+    with open(filename, "r") as f:
+        line = f.readline()
+    z_array = line.split(",")[1::2]
+    z_array = [float(i) for i in z_array]  
+    return z_array
     
 def read_array1(filename, length):
-    array1 = np.loadtxt(filename, delimiter=',', usecols=range(0, 2*length, 2), skiprows=1)
-    return array1
+    with open(filename, "r") as f:
+        lines = f.readlines()
+    lines = lines[1:]
+    x_array = [line.split(",")[0::2] for line in lines]
+    for i in range(len(x_array)):
+        x_array[i] = [float(j) for j in x_array[i]]
+    return x_array
     
 def read_array2(filename, length):
-    array2 = np.loadtxt(filename, delimiter=',', usecols=range(1, 2*length, 2), skiprows=1)
-    return array2
+    with open(filename, "r") as f:
+        lines = f.readlines()
+    lines = lines[1:]
+    y_array = [line.split(",")[1::2] for line in lines]
+    for i in range(len(y_array)):
+        y_array[i] = [float(j) for j in y_array[i]]
+    return y_array

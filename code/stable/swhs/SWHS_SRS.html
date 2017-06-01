@@ -1389,7 +1389,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Q is the change in thermal energy (J), latent heat energy. FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE is the rate of change of Q with respect to time &tau; (s). t is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:dd3HtFusion>this Definition</a>. T<sub>melt</sub> and T<sub>boil</sub> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+Q is the change in thermal energy (J), latent heat energy. FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE is the rate of change of Q with respect to time &tau; (s). t is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>this Definition</a>. T<sub>melt</sub> and T<sub>boil</sub> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
 </p>
 </td>
 </tr>
@@ -1585,7 +1585,7 @@ q<sub>P</sub> is the heat flux into the PCM from water<br />h<sub>P</sub> is the
 </tr>
 </table>
 </a>
-<a id="DD:dd3HtFusion">
+<a id="DD:htFusion">
 <table class="ddefn">
 <tr>
 <th>
@@ -1632,7 +1632,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-H<sub>f</sub> is the amount of thermal energy required to completely melt a unit mass of a substance.<br />Q is the latent heat<br />m is the mass
+H<sub>f</sub> is the specific latent heat of fusion<br />Q is the latent heat<br />m is the mass
 </p>
 </td>
 </tr>
@@ -1655,7 +1655,7 @@ The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of T<sub>W</sub>, we look at the energy balance on water. The volume being considered is the volume of water V<sub>W</sub>, which has mass of water m<sub>W</sub> and specific heat capacity of water, C<sub>W</sub>. q<sub>C</sub> represents the heat flux into the water from the coil and q<sub>P</sub> represents the heat flux into the PCM from water, over coil surface area and phase change material surface area of A<sub>C</sub> and A<sub>P</sub>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A15). Assuming no volumetric heat generation per unit volume (A16), g=0. Therefore, the equation for GD2 can be written as:
+To find the rate of change of T<sub>W</sub>, we look at the energy balance on water. The volume being considered is the volume of water V<sub>W</sub>, which has mass of water m<sub>W</sub> and specific heat capacity of water, C<sub>W</sub>. q<sub>C</sub> represents the heat flux into the water from the coil and q<sub>P</sub> represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of A<sub>C</sub> and A<sub>P</sub>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A15). Assuming no volumetric heat generation per unit volume (A16), g=0. Therefore, the equation for GD2 can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1910,7 +1910,7 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 </p>
 </div>
 </a>
-<a id="Sec:DC">
+<a id="Sec:DataCons">
 <div class="subsubsection">
 <h4>
 Data Constraints
@@ -1920,7 +1920,7 @@ Data Constraints
 </p>
 </div>
 </a>
-<a id="Sec:PoACS">
+<a id="Sec:PropofACorrSolu">
 <div class="subsubsection">
 <h4>
 Properties of a Correct Solution
@@ -1950,7 +1950,7 @@ Equations (reference) and (reference) can be used as &quot;sanity&quot;checks to
 </a>
 </div>
 </a>
-<a id="Sec:R">
+<a id="Sec:Requ">
 <div class="section">
 <h2>
 Requirements
@@ -1958,7 +1958,7 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FR">
+<a id="Sec:FuncRequ">
 <div class="subsection">
 <h3>
 Functional Requirements
@@ -1968,7 +1968,7 @@ Functional Requirements
 R1: Input the following quantities, which define the tank parameters, material properties and initial conditions:
 </p>
 </div>
-<a id="Table:IVR">
+<a id="Table:InpuVariRequ">
 <table class="table">
 <tr>
 <th>
@@ -2088,7 +2088,7 @@ A<sub>C</sub>
 m<sup>2</sup>
 </td>
 <td>
-coil surface area
+heating coil surface area
 </td>
 </tr>
 <tr>
@@ -2194,7 +2194,7 @@ m<sub>P</sub>=V<sub>P</sub>&rho;<sub>P</sub>
 </a>
 <div class="list">
 <p>
-R3: Verify that the inputs satisfy the required physical constraints shown in Table 1.
+R3: Verify that the inputs satisfy the required physical constraints shown in Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect}
 </p>
 <p>
 R4: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, &tau;<sub>W</sub> (from IM1), &eta; (from IM1), &tau;<sub>P</sub><sup>S</sup> (from IM2) and &tau;<sub>P</sub><sup>L</sup> (from IM2).
@@ -2212,7 +2212,7 @@ R7: Calculate and output the change in heat energy in the water (E<sub>W</sub>(t
 R8: Calculate and output the change in heat energy in the PCM (E<sub>P</sub>(t)) over the simulation time (from IM4).
 </p>
 <p>
-R9: Verify that the energy outputs (E<sub>W</sub>(t) and E<sub>P</sub>(t)) follow the law of conservation of energy, as outlined in <a href=#Sec:PoACS>this Section</a>, with relative error no greater than 0.001%.
+R9: Verify that the energy outputs (E<sub>W</sub>(t) and E<sub>P</sub>(t)) follow the law of conservation of energy, as outlined in <a href=#Sec:PropofACorrSolu>this Section</a>, with relative error no greater than 0.001%.
 </p>
 <p>
 R10: Calculate and output the time at which the PCM begins to melt t<sub>melt</sub><sup>init</sup> (from IM2).
@@ -2223,7 +2223,7 @@ R11: Calculate and output the time at which the PCM stops melting t<sub>melt</su
 </div>
 </div>
 </a>
-<a id="Sec:NR">
+<a id="Sec:Non-Requ">
 <div class="subsection">
 <h3>
 Non-functional Requirements
@@ -2235,7 +2235,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 </a>
 </div>
 </a>
-<a id="Sec:LC">
+<a id="Sec:LikeChan">
 <div class="section">
 <h2>
 Likely Changes
@@ -2262,15 +2262,15 @@ LC6: A15 - Any real tank cannot be perfectly insulated and will lose heat.
 </div>
 </div>
 </a>
-<a id="Sec:TMaG">
+<a id="Sec:TracMatrandGrap">
 <div class="section">
 <h2>
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TMStCBIoDS>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:TMStCBRaIM>this Table</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:TMStCBAaOI>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:TracMatrShowtheConnBetwRequandInstMode>this Table</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 </p>
-<a id="Table:TMStCBIoDS">
+<a id="Table:TracMatrShowtheConnBetwItemofDiffSect">
 <table class="table">
 <tr>
 <th>
@@ -2298,10 +2298,10 @@ GD2
 <a href=#DD:ht.flux.P>this Definition</a>
 </th>
 <th>
-<a href=#DD:dd3HtFusion>this Definition</a>
+<a href=#DD:htFusion>this Definition</a>
 </th>
 <th>
-<a href=#DD:dd3HtFusion>this Definition</a>
+<a href=#DD:htFusion>this Definition</a>
 </th>
 <th>
 IM1
@@ -2626,7 +2626,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd3HtFusion>this Definition</a>
+<a href=#DD:htFusion>this Definition</a>
 </td>
 <td>
 
@@ -2670,7 +2670,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd3HtFusion>this Definition</a>
+<a href=#DD:htFusion>this Definition</a>
 </td>
 <td>
 
@@ -2893,7 +2893,7 @@ X
 Traceability Matrix Showing the Connections Between Items of Different Sections
 </p>
 </a>
-<a id="Table:TMStCBRaIM">
+<a id="Table:TracMatrShowtheConnBetwRequandInstMode">
 <table class="table">
 <tr>
 <th>
@@ -2912,7 +2912,7 @@ IM3
 IM4
 </th>
 <th>
-<a href=#Sec:DC>this Section</a>
+<a href=#Sec:DataCons>this Section</a>
 </th>
 <th>
 R1
@@ -3316,7 +3316,7 @@ X
 Traceability Matrix Showing the Connections Between Requirements and Instance Models
 </p>
 </a>
-<a id="Table:TMStCBAaOI">
+<a id="Table:TracMatrShowtheConnBetwAssuandOtheItem">
 <table class="table">
 <tr>
 <th>
@@ -3816,7 +3816,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd3HtFusion>this Definition</a>
+<a href=#DD:htFusion>this Definition</a>
 </td>
 <td>
 
@@ -3878,7 +3878,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd3HtFusion>this Definition</a>
+<a href=#DD:htFusion>this Definition</a>
 </td>
 <td>
 
@@ -4564,12 +4564,12 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </a>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TGStCBIoDS>this Figure</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TGStCBRsIM,aDC>this Figure</a> shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TracGrapShowtheConnBetwItemofDiffSect>this Figure</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TGStCBRsIM,aDC>this Figure</a> shows the dependencies of instance models, requirements, and data constraints on each other.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 </p>
-<a id="Figure:TGStCBIoDS">
+<a id="Figure:TracGrapShowtheConnBetwItemofDiffSect">
 <img class="figure" src="ATrace.png" alt="Traceability Graph Showing the Connections Between Items of Different Sections"></img>
 <p class="caption">
 Traceability Graph Showing the Connections Between Items of Different Sections

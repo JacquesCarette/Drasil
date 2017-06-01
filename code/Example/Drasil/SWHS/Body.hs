@@ -703,7 +703,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 
 
 s4_2_4_intro_end :: Sentence
-s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
+s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+
   S "is also given"
 
 -- General paragraph, repeated in most examples but would work for all. Can be 
@@ -1212,7 +1212,7 @@ s7_trailing = [
   plural constraint +:+. S "on each other",
 
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
+  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+
   plural assumption
 
   ]

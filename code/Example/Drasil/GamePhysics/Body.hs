@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint)
 import Data.Drasil.Utils (foldle, foldlSent, foldlList, listConstUC, 
   listConstS, makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, ofThe, ofThe')
+  enumBullet, mkRefsList, ofThe, ofThe', getS, fmtU)
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -504,28 +504,40 @@ s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
 -- will do for now.
 -- How do I write 2pi in constraints?
 
-lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
-  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
-  forceConstraint, torqueConstraint :: (UnitalChunk, [Sentence], Sentence)
+--lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
+--  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
+--  forceConstraint, torqueConstraint :: (Num a) => (UnitalChunk, [Expr], a)
 
-lengthConstraint = (QPP.len, [S "is G/E to 0"], S "44.2")
-massConstraint = (QPP.mass, [S "is greater than 0"], S "56.2")
-mmntOfInConstraint = (QP.momentOfInertia, [S "is G/E to 0"], S "74.5")
+--listConstExpr :: (SymbolForm a, Quantity a) => (a, [Expr], Sentence) -> [Sentence]
+listConstExpr (s, a, b) = [getS s, fmtC' s a, fmtU b s]
+
+
+lengthConstraint = (QPP.len, [((:>),(Int 0))], S "44.2")
+
+massConstraint = (QPP.mass, [((:>),(Int 0))], S "56.2")
+mmntOfInConstraint = (QP.momentOfInertia, [((:>),(Int 0))], S "74.5")
 gravAccelConstraint = (QP.gravitationalAccel, [], S "9.8")
 posConstraint = (QP.position, [], S "(0.412, 0.502)")
 veloConstraint = (QP.velocity, [], S "2.51")
-orientConstraint = (QM.orientation, [S "G/E to 0", S "less than 2pi"], 
-  S "pi/2")
+orientConstraint = (QM.orientation, [((:>),(Int 0)), ((:<),(Dbl 6.18))], 
+  S "pi/2") --FIXME: this constraint should be 2 * pi not 6.18
 angVeloConstraint = (QP.angularVelocity, [], S "2.1")
 forceConstraint = (QP.force, [], S "98.1")
 torqueConstraint = (QP.torque, [], S "200")
 
 restCoefConstraint :: [Sentence]
-restCoefConstraint = listConstUC (QP.restitutionCoef, [S "G/E to 0", 
-  S "less than 1"], S "0.8")
+restCoefConstraint = listConstExpr (QP.restitutionCoef, [((:>),(Int 0)), 
+  ((:<),(Int 1))], S "0.8")
+
+fmtC' _ []              = S "None"
+fmtC' symb [(f,num)]    = E $ (C symb) `f` num
+fmtC' symb ((f,num):xs) = (E $ (C symb) `f` num) +:+ S "and" +:+ (fmtC' symb xs)
+
+
 
 s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
-s4_2_6_t1_list = map (listConstUC) [lengthConstraint, massConstraint, 
+--s4_2_6_t1_list = map (listConstExpr) [lengthConstraint,massConstraint]
+s4_2_6_t1_list = map (listConstExpr) [lengthConstraint, massConstraint, 
   mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
   orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint] ++ [(restCoefConstraint)]
 
@@ -538,7 +550,7 @@ s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_t2_list) 
   (S "Table 2: Output Variables") True
 
-s4_2_6_t2_list = map (listConstUC) [posConstraint, veloConstraint, 
+s4_2_6_t2_list = map (listConstExpr) [posConstraint, veloConstraint, 
   orientConstraint, angVeloConstraint]
 
 ------------------------------

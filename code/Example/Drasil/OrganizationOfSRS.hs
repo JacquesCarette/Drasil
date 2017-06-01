@@ -358,8 +358,9 @@ reqIntro = Paragraph $ foldlSent
 
 
 -- wrapper for nonfuncReq
-nonFuncReqF :: [String] -> [String] -> Sentence -> Sentence -> Section
-nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq [nonFuncReq (map S noPriority) (map S priority_) reason_ explanation_] []
+nonFuncReqF :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> Section
+nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
+  [nonFuncReq (map (\x -> phrase $ x ^. term) noPriority) (map (\x -> phrase $ x ^. term) priority_) reason_ explanation_] []
         
 -- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
 -- reason for initial priority choice, explanation for how priority choice can be achieved.

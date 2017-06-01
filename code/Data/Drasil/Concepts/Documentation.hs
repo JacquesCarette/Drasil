@@ -33,7 +33,7 @@ analysis, appendix, characteristic, client, column, company, component,
   environment, figure, functional, game, general, goal, guide, implementation, individual,
   information, interest, input_, instance_, intReader, introduction, item, label, library,
   limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization, 
-  output_, performance, physics, physical, plan, priority, problem, product_, project, 
+  output_, physics, physical, plan, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, statement, symbol_, system, table_, template, 
@@ -91,7 +91,6 @@ offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
 output_         = npnc "output"         (cn' "output")
-performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 plan            = npnc "plan"           (cn' "plan")

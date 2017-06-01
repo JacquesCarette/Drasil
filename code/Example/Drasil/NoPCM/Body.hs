@@ -11,7 +11,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Utils(listConstS)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, equation)
-import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
@@ -150,8 +150,8 @@ s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
 
 s5 = reqF [s5_2] --TODO: Add the rest of the section
 
-s5_2 = nonFuncReqF ["performance"] ["correctness", "verifiability",
-        "understandability", "reusability", "maintainability"]
+s5_2 = nonFuncReqF [performance] [correctness, verifiability,
+        understandability, reusability, maintainability]
         (S "This problem is small in size and relatively simple")
         (S "Any reasonable implementation will be very quick and use minimal storage.")
 

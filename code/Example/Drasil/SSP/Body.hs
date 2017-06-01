@@ -301,7 +301,7 @@ s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+
   S "the physical properties of DD1 to DD9," +:+ 
   S "as done in DD10, DD11."
 
-s4_2_5_p3 = Paragraph $ (S "values") `ofThe` (S "interslice normal force") +:+
+s4_2_5_p3 = Paragraph $ (S "values") `ofThe'` (S "interslice normal force") +:+
   S "E the interslice normal/shear force magnitude ratio lambda," +:+ --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the" +:+ (titleize $ fs_rc ^. term) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   S "Equations for the unknowns are written in terms of only the values" +:+ 

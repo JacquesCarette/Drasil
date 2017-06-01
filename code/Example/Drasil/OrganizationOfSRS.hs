@@ -142,7 +142,7 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
                 lastS (Just t) = lastS Nothing +:+. t
 
 -- wrapper for general system description
-genSysF :: [Section] -> Contents -> Maybe [Contents] -> [Section] -> Section
+genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
 genSysF sCntxt userIntro constraints systSubSec = SRS.genSysDes [genSysIntro]
   (sCntxt ++ [SRS.userChar [userIntro] [], systCon constraints systSubSec])
 
@@ -156,10 +156,10 @@ genSysIntro = Paragraph $ foldlSent
 
 -- System Constraints
 -- generalized if no constraints, but if there are, they can be passed through
-systCon :: Maybe [Contents] -> [Section] -> Section
-systCon (Just a) subSec = SRS.sysCon a subSec
-systCon Nothing subSec  = SRS.sysCon [systCon_none] subSec
-            where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)  
+systCon :: [Contents] -> [Section] -> Section
+systCon [] subSec  = SRS.sysCon [systCon_none] subSec
+            where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
+systCon a subSec = SRS.sysCon a subSec  
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section

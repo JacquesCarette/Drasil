@@ -273,7 +273,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef (SRS.inModel SRS.mis
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 = genSysF [s3_1] s3_2_contents Nothing []
+s3 = genSysF [s3_1] s3_2_contents [] []
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 

@@ -162,7 +162,7 @@ s3_2 = SRS.theCustomer [s3_2_intro] []
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
   S "are the", phrase endUser, S "of", (short gLassBR)]
 
-s4 = genSysF [] s4_1_bullets Nothing []
+s4 = genSysF [] s4_1_bullets [] []
 
 s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ (short gLassBR) +:+ 
   S "is expected to have completed at least" +:+. (S "equivalent" `ofThe`
@@ -173,7 +173,7 @@ s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ (short gLa
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
   +:+. phrase software)]
 
-s4_2 = systCon Nothing []
+s4_2 = systCon [] []
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 

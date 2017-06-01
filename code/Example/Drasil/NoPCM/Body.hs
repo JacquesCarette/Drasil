@@ -64,7 +64,7 @@ s2_3 = charIntRdrF knowledge understanding (getAcc sWHS) (EmptyS) (SRS.userChar 
 --Section 3 : GENERAL SYSTEM DESCRIPTION
 ----------------------------------------
 
-s3 = genSysF [s3_1] (Paragraph $ EmptyS) Nothing []
+s3 = genSysF [s3_1] (Paragraph $ EmptyS) [] []
 --TODO: fill in the empty (last three) parameters
 
 s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []

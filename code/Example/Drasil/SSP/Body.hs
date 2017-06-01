@@ -142,7 +142,7 @@ s2_4 = orgSecWTS start inModel (SRS.inModel SRS.missingP []) end --FIXME: This i
                 (titleize morPrice) +:+ S "Analysis"
 
 -- SECTION 3 --
-s3 = genSysF [] userCharIntro Nothing []
+s3 = genSysF [] userCharIntro [] []
 
 -- SECTION 3.1 --
 -- User Characteristics automaticly generated in genSysF with the userContraints intro bellow

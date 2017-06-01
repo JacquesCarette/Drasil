@@ -27,7 +27,7 @@ module Language.Drasil.Code.Imperative.AST (
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
     ($->),($.),($:),
     log,exp,alwaysDel,neverDel,
-    assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
+    assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
     print,printLn,printStr,printStrLn,
@@ -39,7 +39,7 @@ module Language.Drasil.Code.Imperative.AST (
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, 
-    listSize, listAccess, listAppend,valStmt,funcApp,funcApp',
+    listSize, listAccess, listAppend,valStmt,funcApp,funcApp',continue,
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
@@ -457,6 +457,9 @@ ifExists v ifBody elseBody = ifCond [(Expr $ Exists v, ifBody)] elseBody
 listDec :: Permanence -> Label -> StateType -> Int -> Statement
 listDec lt n t s = DeclState $ ListDec lt n t s
 
+listDec' :: Label -> StateType -> Int -> Statement
+listDec' n t s = DeclState $ ListDec Dynamic n t s
+
 listDecValues :: Label -> StateType -> [Value] -> Statement
 listDecValues n t vs = DeclState $ ListDecValues Static n t vs
 
@@ -625,6 +628,9 @@ funcApp lib lbl vs = FuncApp (Just lib) lbl vs
 
 funcApp' :: Label -> [Value] -> Value
 funcApp' lbl vs = FuncApp Nothing lbl vs
+
+continue :: Statement
+continue = JumpState Continue
 -----------------------
 -- Comment Functions --
 -----------------------

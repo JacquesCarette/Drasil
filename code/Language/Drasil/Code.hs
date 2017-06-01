@@ -10,7 +10,7 @@ module Language.Drasil.Code (
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
     ($->),($.),($:),log,exp,
     alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
-    forEach,ifCond,ifExists,listDec,listDecValues,listOf,litBool,litChar,
+    forEach,ifCond,ifExists,listDec,listDec',listDecValues,listOf,litBool,litChar,
     litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,
     params,paramToVar,print,printLn,printStr,printStrLn,printFile,printFileLn,printFileStr,openFileR,openFileW,closeFile,getInput,getFileInput,
     printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,
@@ -18,7 +18,7 @@ module Language.Drasil.Code (
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
     convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
     objDecNewVoid,
-    listSize,listAccess,listAppend,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,funcApp',
+    listSize,listAccess,listAppend,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,funcApp',continue,
     cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel,
     makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
     Options(..)

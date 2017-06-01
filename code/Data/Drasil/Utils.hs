@@ -22,14 +22,15 @@ module Data.Drasil.Utils
   , fmtU
   , unwrap
   , isThe, isThe'
+  , fmtBF
   ) where
 
 import Data.List
 import Control.Lens ((^.))
-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
+import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, SymbolMap, UnitDefn, usymb)
+  symbol, SymbolForm, SymbolMap, UnitDefn, usymb, Expr(..))
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -103,6 +104,13 @@ fmtC ::(SymbolForm a) => a -> [Sentence] -> Sentence
 fmtC _ []      = S "None"  
 fmtC symb [x]  = (getS symb) +:+ x
 fmtC symb (x:xs) = (getS symb) +:+ x +:+ S "and" +:+ (fmtC symb xs)
+
+-- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)
+-- ex. fmtBF x [((:>),0), ((:<),1)] -> x>0 and x<1
+fmtBF ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
+fmtBF _ []      = S "None"  
+fmtBF symb [(f,num)]  = E ((C symb) `f` num)
+fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence

@@ -324,11 +324,6 @@ vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
 
-fmtC' ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
-fmtC' _ []      = S "None"  
-fmtC' symb [(f,num)]  = E ((C symb) `f` num)
-fmtC' symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtC' symb xs)
-
 waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
 waterVert = verticesConst $ S "water table"
@@ -349,10 +344,7 @@ deltax = [P $ dx_i ^. symbol, S "None"]
 deltay = [P $ dy_i ^. symbol, S "None"]
 
 mkGtZeroConst  :: (Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst s other num = [P $ s ^. symbol, fmtC' s (((:>), Int 0):other), (S (show num)) +:+ (unwrap $ getUnit s)]
-  where unwrap :: (Maybe UnitDefn) -> Sentence
-        unwrap (Just a) = Sy (a ^. usymb)
-        unwrap Nothing = EmptyS
+mkGtZeroConst s other num = [P $ s ^. symbol, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) s]
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,

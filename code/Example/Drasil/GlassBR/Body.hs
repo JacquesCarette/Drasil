@@ -165,10 +165,10 @@ s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer),
 s4 = genSysF [] s4_1_bullets Nothing []
 
 s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ (short gLassBR) +:+ 
-  S "is expected to have completed at least" +:+ (S "equivalent" `ofThe`
+  S "is expected to have completed at least" +:+. (S "equivalent" `ofThe`
   S "second year of an undergraduate degree in civil or structural engineering")),
   (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
+  phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+.
   (phrase $ blastRisk ^. term)), (S "The" +:+ phrase endUser +:+
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
   +:+. phrase software)]
@@ -239,7 +239,8 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
   where start = foldlSent [S "A", phrase system,
                 S "is needed to efficiently and correctly predict the", 
                 (phrase $ blastRisk ^. term) +:+ S "involved with the glass"]
-        ending = foldl (+:+) EmptyS [S "predict whether the", 
+        ending = foldl (+:+) EmptyS [S "interpret the", plural input_,
+                S "to give out the", plural output_, S "which predicts whether the", 
                 (phrase $ glaSlab ^. term), S "can withstand the",
                 (phrase $ blast ^. term), S "under the", plural condition]
 
@@ -450,7 +451,7 @@ s7_1_list =
   [(((short requirement) :+: S "1"), at_start input_ +:+ S "the following" +:+
     plural quantity `sC` S "which define the glass dimensions" `sC` 
     (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase $ probability ^. term) +:+
-    S "of failure and" +:+ (plural characteristic `ofThe` (phrase $ blast ^. term)))]),
+    S "of failure and" +: (plural characteristic `ofThe` (phrase $ blast ^. term)))]),
   (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
   ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start $ x ^.term)),
 --s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
@@ -534,8 +535,8 @@ s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5 :: Sentence
 
 s8_likelychg1 = foldlSent [(short assumption) :+: S "3 - The", phrase system,
-  S "currently only calculates for external" +:+. (phrase $ blastRisk ^. term)
-  +:+. S "In the future", (plural $ calculation ^. term),
+  S "currently only calculates for external" +:+. (phrase $ blastRisk ^. term),
+  S "In the future", (plural $ calculation ^. term),
   S "can be added for the internal", (phrase $ blastRisk ^. term)]
 
 s8_likelychg2 = foldlSent [(short assumption) :+: S "4" `sC` 

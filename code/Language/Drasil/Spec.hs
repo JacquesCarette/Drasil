@@ -92,3 +92,7 @@ a +:+. b = a +:+ b :+: S "."
 -- the end.
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
+
+-- | Helper for concatenating two sentences with a semi-colon and space between them.
+semiCol :: Sentence -> Sentence -> Sentence
+a `semiCol` b = a :+: S ";" +:+ b

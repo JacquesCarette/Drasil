@@ -19,7 +19,8 @@ module Data.Drasil.Utils
   , ofThe, ofThe'
   , getS
   , weave
-  , fmtU  
+  , fmtU
+  , unwrap
   ) where
 
 import Data.List
@@ -27,7 +28,7 @@ import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), 
-  unit_symb, symbol, SymbolForm, Unitary, SymbolMap)
+  unit_symb, symbol, SymbolForm, Unitary, SymbolMap, UnitDefn, usymb)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -174,3 +175,7 @@ weave = (concat . transpose)
 ofThe, ofThe' :: Sentence -> Sentence -> Sentence
 ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
 ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
+
+unwrap :: (Maybe UnitDefn) -> Sentence
+unwrap (Just a) = Sy (a ^. usymb)
+unwrap Nothing  = EmptyS

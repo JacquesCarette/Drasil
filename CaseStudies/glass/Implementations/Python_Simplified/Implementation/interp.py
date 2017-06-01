@@ -5,132 +5,74 @@ Service: Provides the equations that take the input parameters and interpolation
 data and return an interpolated value.
 """
 
-import numpy as np
 
+class BoundError(Exception):
+    pass
 
-def lin_interp(y1, y2, x1, x2, input_param):
-    """
-    Defines the equation for the linear interpolation.
-    """
-    y0 = y1 + (y2 - y1)/(x2 - x1)*(input_param - x1)
-    return y0
+def lin_interp(x1, y1, x2, y2, x):
+    y = (y2 - y1)/(x2 - x1)*(x - x1) + y1
+    return y
 
-
-def proper_index(index1,index2,data,value):
-    if index1 == 0:
-        if data[index1,index2] == data[index1+1,index2]:
-            index1 += 1
-    elif index1 == (data[:,index2]).argmax():
-        index1 -= 1
-    else:
-        if data[index1,index2] > value:
-            index1 -= 1
-        elif data[index1,index2] < value:
-            if (index1+1 < (data[:,index2]).argmax()) and (data[index1,index2] == data[index1+1,index2]):
-                index1 += 1
-            elif (index1+1 == (data[:,index2]).argmax()) and (data[index1,index2] == data[index1+1,index2]):
-                index1 -= 1 
-    return index1 
-
-
-def find_idx(data1, value1):
-    # idx represents the index of the closest value of value1 in the array data1(e.g. for w_array,idx=0 if input w = 4.5)
-    idx = (np.abs(data1 - value1)).argmin()
-    # if the closest value is greater than the input parameter value1, we let idx=idx-1 to ensure the input parameter is 
-    #   within the range [closest value below value1(data1[idx]), closest value above value1(data1[idx+1])]
-    if data1[idx] > value1:
-        idx -= 1
-    return idx
-
-def find_jdx(data2,value2,idx):   
-    # jdx represents the index of the closest value of value2 in the ith column of the array data2(data2[:,idx])
-    jdx = (np.abs(data2[:, idx] - value2)).argmin()
-    jdx = proper_index(jdx,idx,data2,value2)
-    return jdx
     
-def find_kdx(data2,value2,idx):
-    # kdx represents the index of the closest value of value2 in the (i+1)th column of the array data2(data2[:,idx+1])
-    kdx = (np.abs(data2[:, idx+1] - value2)).argmin()
-    kdx = proper_index(kdx,idx+1,data2,value2)
-    return kdx
-    
-def find_num_interp1(data1, value1,idx):
-    # Case1: value1 in data1; num_interp1 = 0
-    if value1 in data1:
-        num_interp1 = 0
-    # Case2: value1 NOT in data1; num_interp1 = 1
-    else:
-        num_interp1 = 1
-    return num_interp1
-    
-def find_num_interp2(data1, data2, value1, value2,idx):
-    # Case1: value1 in data1; look for value2 in data2[:,idx]
-    if value1 in data1:
-        # Case1_1: value2 in data2[:,idx]; num_interp2 = 0
-        if value2 in data2[:,idx]:
-            num_interp2 = 0
-        # Case1_2: value2 NOT in data2[:,idx]; num_interp2 = 1
-        else:
-            num_interp2 = 1
-    # Case2: value1 NOT in data1; look for value2 in both data2[:,idx] and data2[:,idx+1]   
-    else:
-        # Case2_1: value2 in both data2[:,idx] and data2[:,idx+1]; num_interp2 = 0
-        if value2 in data2[:,idx] and value2 in data2[:,idx+1]:
-            num_interp2 = 0
-        # Case2_2: value2 in data2[:,idx]; num_interp2 = 1
-        elif value2 in data2[:,idx]:
-            num_interp2 = 1
-        # Case2_3: value2 in data2[:,idx+1]; num_interp2 = 2
-        elif value2 in data2[:, idx+1]:
-            num_interp2 = 2
-        # Case2_4: value2 NOT in data2[:,idx] or data2[:,idx+1]; num_interp2 = 3
-        else:
-            num_interp2 = 3
-    return num_interp2
+def indInSeq(arr, v):
+    for i in range(len(arr) - 1):
+        if arr[i] <= v and v <= arr[i+1]:
+            return i
+    raise BoundError
 
+def matrixCol(mat, c):
+    col = []
+    for i in range(len(mat)):
+        col.append(mat[i][c])
+    return col
+    
+def interpY(x_array, y_array, z_array, x, z):
+    # find index that bounds z
+    i = indInSeq(z_array, z)
+    
+    # x and y values for the z curves at i and i+1 (z_1 and z_2)
+    x_z_1 = matrixCol(x_array, i)
+    y_z_1 = matrixCol(y_array, i)
+    x_z_2 = matrixCol(x_array, i + 1)
+    y_z_2 = matrixCol(y_array, i + 1)
+        
+    # find indices that bound x for each z curve
+    try:
+        j = indInSeq(x_z_1, x)
+        k = indInSeq(x_z_2, x)
+    except BoundError:
+        raise SystemExit("Interpolation of y failed")
+        
+    # interpolate y values on z curves z_1 and z_2 at x
+    y_1 = lin_interp(x_z_1[j], y_z_1[j], x_z_1[j+1], y_z_1[j+1], x)
+    y_2 = lin_interp(x_z_2[k], y_z_2[k], x_z_2[k+1], y_z_2[k+1], x)
 
-# interp: Int Int Int Int Int Int numpy.ndarray numpy.ndarray numpy.ndarray Num Num -> Num
-def interp(idx, jdx, kdx, num_interp1, num_interp2, data1, data2, data3, value1, value2):
-    """
-    Performs the appropriate number of interpolations based on the output of find_bounds.
-    """
-    # Case1_1: value1 in data1 and value2 in data2[:,idx]; no need for interpolation, interp_value = data3[jdx,idx]
-    if num_interp1 == 0 and num_interp2 == 0:
-        interp_value = data3[jdx, idx]
-    # Case1_2: value1 in data1 but value2 NOT in data2[:,idx]; use the closest values above and below value2 in data2[:,idx] to do linear interpolation, 
-    #   where (x1,y1)=(data2[jdx,idx],data3[jdx,idx]), (x2,y2)=(data2[jdx+1,idx],data3[jdx+1,idx])
-    elif num_interp1 == 0 and num_interp2 == 1:
-        interp_value = lin_interp(data3[jdx, idx], data3[jdx+1, idx], data2[jdx, idx], data2[jdx+1, idx], value2)
-    # Case2_1: value1 NOT in data1 but value2 in both data2[:,idx] and data2[:,idx+1]; use the closest values above and below value1 to do linear
-    #   interpolation, where (x1,y1)=(data1[idx],data3[jdx,idx]), (x2,y2)=(data1[idx+1],data3[kdx,idx+1]) 
-    elif num_interp1 == 1 and num_interp2 == 0:
-        y0_1 = data3[jdx, idx]
-        y0_2 = data3[kdx, idx+1]
-        interp_value = lin_interp(y0_1, y0_2, data1[idx], data1[idx+1], value1)
-    # Case2_2: value1 NOT in data1 but value2 in data2[:,idx]; use the closest values below and above value2 in data2[:,idx+1] to do linear interpolation for 
-    #   y2(x2=data1[idx+1] but value2 not in data2[:,idx+1]); then use the closest values below and above value1 to do linear interpolation for interp_value, 
-    #   where (x1,y1)=(data1[idx],data3[jdx,idx]), (x2,y2)=(data1[idx+1],lin_interp(data3[kdx,idx+1],data3[kdx+1,idx+1],data2[kdx,idx+1],data2[kdx+1,idx+1],value2))
-    elif num_interp1 == 1 and num_interp2 == 1:
-        y0_1 = data3[jdx, idx]
-        y0_2 = lin_interp(data3[kdx, idx+1], data3[kdx+1, idx+1], data2[kdx, idx+1], data2[kdx+1, idx+1], value2)
-        interp_value = lin_interp(y0_1, y0_2, data1[idx], data1[idx+1], value1)
-    # Case2_3: value1 NOT in data1 but value2 in data2[:,idx+1]; use the closest values below and above value2 in data2[:,idx] to do linear interpolation for
-    #   y1(x1=data1[idx] but value2 not in data2[:,idx]); then use the closest values below and above value1 to do linear interpolation for interp_value, where
-    #   (x1,y1)=(data1[idx],lin_interp(data3[jdx,idx],data3[jdx+1,idx],data2[jdx,idx],data2[jdx+1.idx],value2)), (x2,y2)=(data1[idx+1], data3[kdx,idx+1])
-    elif num_interp1 == 1 and num_interp2 ==2:
-        y0_2 = data3[kdx, idx+1]
-        y0_1 = lin_interp(data3[jdx, idx], data3[jdx+1, idx], data2[jdx, idx], data2[jdx+1, idx], value2)
-        x1_1 = data1[idx]
-        x1_2 = data1[idx+1]
-        interp_value = lin_interp(y0_1, y0_2, x1_1, x1_2, value1)
-    # Case2_4: value1 NOT in data1 and value2 NOT in data2[:,idx] or data2[:,idx+1]; use the closest values below and above value2 in data2[:,idx] to do 
-    #   linear interpolation for y1 and the closest values below and above value2 in data2[:,idx+1] to do linear interpolation for y2; then use the closest
-    #   values of value1 in data1 to do linear interpolation for interp_value, where (x1,y1)=(data1[idx],lin_interp(data3[jdx,idx],data3[jdx+1,idx],
-    #   data2[jdx,idx],data2[jdx+1,idx],value2)), (x2,y2)=(data1[idx+1],lin_interp(data3[kdx,idx+1],data3[kdx+1,idx+1],data2[kdx,idx+1],data2[kdx+1,idx+1],value2))
-    elif num_interp1 == 1 and num_interp2 == 3:
-        y0_1 = lin_interp(data3[jdx, idx], data3[jdx+1, idx], data2[jdx, idx], data2[jdx+1, idx], value2)
-        y0_2 = lin_interp(data3[kdx, idx+1], data3[kdx+1, idx+1], data2[kdx, idx+1], data2[kdx+1, idx+1], value2)
-        x0_1 = data1[idx]
-        x0_2 = data1[idx+1]
-        interp_value = lin_interp(y0_1, y0_2, x0_1, x0_2, value1)
-    return interp_value
+    # interpolate y
+    return lin_interp(z_array[i], y_1, z_array[i+1], y_2, z)
+            
+        
+def interpZ(x_array, y_array, z_array, x, y):
+    for i in range(len(z_array) - 1):
+        # x and y values for two consecutive z curves 
+        x_z_1 = matrixCol(x_array, i)
+        y_z_1 = matrixCol(y_array, i)
+        x_z_2 = matrixCol(x_array, i + 1)
+        y_z_2 = matrixCol(y_array, i + 1)
+        
+        # find indices that bound x for each z curve
+        try:
+            j = indInSeq(x_z_1, x)
+            k = indInSeq(x_z_2, x)
+        except BoundError:
+            continue
+        
+        # interpolate y values at x on z curves
+        y_lower = lin_interp(x_z_1[j], y_z_1[j], x_z_1[j+1], y_z_1[j+1], x)
+        y_upper = lin_interp(x_z_2[k], y_z_2[k], x_z_2[k+1], y_z_2[k+1], x)
+        
+        # check if y is bound
+        if y_lower <= y and y <= y_upper:
+            # interpolate z
+            return lin_interp(y_lower, z_array[i], y_upper, z_array[i+1], y)
+            
+    raise SystemExit("Interpolation of z failed")

@@ -129,7 +129,7 @@ s2_2 = scpOfReqF includes ssa ending
 
 -- SECTION 2.3 --
 s2_3 = charIntRdrF (S "solid mechanics") (S "undergraduate level 4 physics")
-  (short ssa) (SRS.userChar SRS.missingP [])
+  (short ssa) EmptyS (SRS.userChar SRS.missingP [])
 
 -- SECTION 2.4 --
 s2_4 = orgSecWTS start inModel (SRS.inModel SRS.missingP []) end --FIXME: This is kind of a hack as it is not referencing the real instance model
@@ -313,15 +313,13 @@ s4_2_5_p3 = Paragraph $ (S "values") `ofThe'` (S "interslice normal force") +:+
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automaticly generated in solChSpecF using the tables below
-vertConvention :: Sentence
+noTypicalVal, vertConvention :: Sentence
+noTypicalVal = S "N/A"
 vertConvention = S "Consecutive vertexes have increasing x values." +:+
                  S "The start and end vertices of all layers go to the same x values."
 
 vertVar :: Sentence -> Sentence
 vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
-
-noTypicalVal :: Sentence
-noTypicalVal = S "N/A"
 
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
@@ -331,24 +329,26 @@ fmtC' _ []      = S "None"
 fmtC' symb [(f,n)]  = E ((C symb) `f` n)
 fmtC' symb ((f,n):xs) = (E ((C symb) `f` n)) +:+ S "and" +:+ (fmtC' symb xs)
 
-mkGtZeroConst :: (Show a) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst s other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s] --listConstUC (s,(E $ :> (Int 0)):other,S $ show num)
+mkGtZeroConst' :: (Show n) => ConVar      -> [(Expr -> Expr -> Expr, Expr)] -> n -> [Sentence]
+mkGtZeroConst  :: (Show n) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> n -> [Sentence]
+mkGtZeroConst' s@(CV _ _ _)   other num = [getS s, fmtC' s (((:>), Int 0):other), S $ show num]
+mkGtZeroConst  s@(UC _ _ _ _) other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s]
 
-waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,
+waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
 waterVert = verticesConst $ S "water table"
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
-intNormFor = mkGtZeroConst ei [] (15000 :: Integer)
-effectCohe = mkGtZeroConst cohesion [] (10 :: Integer)
-normDispla = mkGtZeroConst dv_i [((:<),1)] (0.4 :: Double)
-fricAng    = mkGtZeroConst fricAngle [((:<),90)] (25 :: Integer)
-dryUWght   = mkGtZeroConst dryWeight [] (20 :: Integer)
-satUWght   = mkGtZeroConst satWeight [] (20 :: Integer)
-waterUWght = mkGtZeroConst waterWeight [] (9.8 :: Double)
+intNormFor  = mkGtZeroConst  ei          [] (15000 :: Integer)
+effectCohe  = mkGtZeroConst  cohesion    [] (10 :: Integer)
+poissnRatio = mkGtZeroConst' poissnsR    [((:<),1)] (0.4 :: Double) --FIXME: should be possion's ratio (but it is a different type...)
+fricAng     = mkGtZeroConst  fricAngle   [((:<),90)] (25 :: Integer)
+dryUWght    = mkGtZeroConst  dryWeight   [] (20 :: Integer)
+satUWght    = mkGtZeroConst  satWeight   [] (20 :: Integer)
+waterUWght  = mkGtZeroConst  waterWeight [] (9.8 :: Double)
 
 dataConstList :: [[Sentence]]
-dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,
+dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght]
 
 s4_2_6Table2, s4_2_6Table3 :: Contents --FIXME: actually create these table

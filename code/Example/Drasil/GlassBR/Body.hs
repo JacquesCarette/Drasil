@@ -320,7 +320,8 @@ s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_,
   S "explains all the", (plural assumption), S "considered and the",
   plural thModel, S "which are supported by the", (plural dataDefn)]
   
-s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
+--s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
+s6_2_1 = assumpF (s6_2_2) (Nothing) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
   [(enumSimple 1 (short assumption) s6_2_1_list_assum1),

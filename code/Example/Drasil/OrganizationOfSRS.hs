@@ -17,7 +17,7 @@ module Drasil.OrganizationOfSRS
   , physSystDesc
   , goalStmtF
   , solChSpecF
-  , assumpF, assumpF'
+  , assumpF
   , thModF
   , genDefnF
   , dataDefnF
@@ -228,8 +228,7 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
                         dataDefin, instModels True, dataConstr] ++ adSubSec
         subSec False = [assumption_ False, theModels,
                         dataDefin, instModels False, dataConstr] ++ adSubSec
-        assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
-        assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
+        assumption_ True  = assumpF  theModels (Just generDefn) dataDefin (instModels True ) likeChg a
         theModels  = thModF kWord t
         generDefn  = genDefnF g
         dataDefin  = dataDefnF ddEndSent dd
@@ -239,13 +238,17 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
 
  
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
-assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
+{-assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg otherContents = 
       SRS.assump ((assumpIntro theMod (Just genDef) dataDef inMod likeChg):otherContents) []
 
 assumpF' :: Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF' theMod dataDef inMod likeChg otherContents = 
-      SRS.assump ((assumpIntro theMod Nothing dataDef inMod likeChg):otherContents) []
+      SRS.assump ((assumpIntro theMod Nothing dataDef inMod likeChg):otherContents) []-}
+
+assumpF :: Section -> Maybe Section -> Section -> Section -> Section -> [Contents] -> Section
+assumpF theMod genDef dataDef inMod likeChg otherContents = 
+  SRS.assump ((assumpIntro theMod genDef dataDef inMod likeChg):otherContents) []
 
 -- takes a bunch of references to things discribed in the wrapper
 assumpIntro :: Section -> Maybe Section -> Section -> Section -> Section -> Contents

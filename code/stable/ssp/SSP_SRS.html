@@ -1174,24 +1174,181 @@ The values of the interslice normal force E the interslice normal/shear force ma
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:>this Table</a> and <a href=#Table:>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+<a href=#Table:InpuVari>this Table</a> and <a href=#Table:OutpVari>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
 </p>
-<a id="Table:">
+<a id="Table:InpuVari">
 <table class="table">
 <tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+<th>
+Typical Value
+</th>
+</tr>
+<tr>
+<td>
+(x,y) of water table vertices'
+</td>
+<td>
+Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values.
+</td>
+<td>
+N/A
+</td>
+</tr>
+<tr>
+<td>
+(x,y) of slip vertices'
+</td>
+<td>
+Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values.
+</td>
+<td>
+N/A
+</td>
+</tr>
+<tr>
+<td>
+(x,y) of slope vertices'
+</td>
+<td>
+Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values.
+</td>
+<td>
+N/A
+</td>
+</tr>
+<tr>
+<td>
+E<sub>i</sub>
+</td>
+<td>
+E<sub>i</sub>&gt;0
+</td>
+<td>
+15000 N
+</td>
+</tr>
+<tr>
+<td>
+c'
+</td>
+<td>
+c'&gt;0
+</td>
+<td>
+10 Pa
+</td>
+</tr>
+<tr>
+<td>
+&nu;
+</td>
+<td>
+&nu;&gt;0 and &nu;&lt;1
+</td>
+<td>
+0.4
+</td>
+</tr>
+<tr>
+<td>
+&phiv;'
+</td>
+<td>
+&phiv;'&gt;0 and &phiv;'&lt;90
+</td>
+<td>
+25 &deg;
+</td>
+</tr>
+<tr>
+<td>
+&gamma;
+</td>
+<td>
+&gamma;&gt;0
+</td>
+<td>
+20 N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>Sat</sub>
+</td>
+<td>
+&gamma;<sub>Sat</sub>&gt;0
+</td>
+<td>
+20 N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>w</sub>
+</td>
+<td>
+&gamma;<sub>w</sub>&gt;0
+</td>
+<td>
+9.8 N/(m<sup>3</sup>)
+</td>
 </tr>
 </table>
 <p class="caption">
-
+Input Variables
 </p>
 </a>
-<a id="Table:">
+<a id="Table:OutpVari">
 <table class="table">
 <tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+</tr>
+<tr>
+<td>
+FS
+</td>
+<td>
+FS&gt;0
+</td>
+</tr>
+<tr>
+<td>
+(x,y) of slip vertices'
+</td>
+<td>
+Vertices's monotonic
+</td>
+</tr>
+<tr>
+<td>
+&delta;x<sub>i</sub>
+</td>
+<td>
+None
+</td>
+</tr>
+<tr>
+<td>
+&delta;y<sub>i</sub>
+</td>
+<td>
+None
+</td>
 </tr>
 </table>
 <p class="caption">
-
+Output Variables
 </p>
 </a>
 </div>

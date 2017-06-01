@@ -150,8 +150,8 @@ s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
 
 s5 = reqF [s5_2] --TODO: Add the rest of the section
 
-s5_2 = nonFuncReqF [S "performance"] [S "correctness", S "verifiability",
-        S "understandability", S "reusability", S "maintainability"]
+s5_2 = nonFuncReqF ["performance"] ["correctness", "verifiability",
+        "understandability", "reusability", "maintainability"]
         (S "This problem is small in size and relatively simple")
         (S "Any reasonable implementation will be very quick and use minimal storage.")
 

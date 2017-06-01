@@ -5,6 +5,7 @@ module Language.Drasil.Code (
     bool,int,float,char,string,infile,outfile,listT,obj,
     methodType,methodTypeVoid,block,defaultValue,true,false,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
+    mainMethod,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),

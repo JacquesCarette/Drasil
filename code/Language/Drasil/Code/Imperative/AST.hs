@@ -22,7 +22,9 @@ module Language.Drasil.Code.Imperative.AST (
     block,defaultValue,
     true,false,
     var, svToVar,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,   (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
+    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
+    mainMethod,
+    (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
     ($->),($.),($:),
@@ -276,6 +278,9 @@ pubMethod t n ps b = Method n Public t ps b
 
 constructor :: Label -> [Parameter] -> Body -> Method
 constructor n ps b = Method n Public (Construct n) ps b
+
+mainMethod :: Body -> Method
+mainMethod = MainMethod
 
 --comparison operators (?)
 (?!) :: Value -> Value  --logical Not

@@ -157,16 +157,16 @@ s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
 s3_2 = SRS.theCustomer [s3_2_intro] []
 
 s3_2_intro = Paragraph $ foldlSent [(at_start' $ the customer), 
-  S "are the end", phrase user, S "of", (short gLassBR)]
+  S "are the" phrase endUser, S "of", (short gLassBR)]
 
 s4 = genSysF [] s4_1_bullets Nothing []
 
-s4_1_bullets = enumBullet [(S "The end" +:+ phrase user +:+ S "of" +:+ (short gLassBR) +:+ 
+s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ (short gLassBR) +:+ 
   S "is expected to have completed at least" +:+ (S "equivalent" `ofThe`
   S "second year of an undergraduate degree in civil or structural engineering")),
-  (S "The end" +:+ phrase user +:+ S "is expected to have an understanding of" +:+
+  (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase $ glBreakage ^. term) +:+ S "and" +:+
-  (phrase $ blastRisk ^. term)), (S "The end" +:+ phrase user +:+
+  (phrase $ blastRisk ^. term)), (S "The" +:+ phrase endUser +:+
   S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
   +:+. phrase software)]
 

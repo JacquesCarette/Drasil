@@ -615,7 +615,7 @@ s5_1_req8 = foldlSent
 -- velocities, etc.
 s5_1_list' :: [Sentence]
 s5_1_list' = [s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
-            s5_1_req7, s5_1_req8]
+  s5_1_req7, s5_1_req8]
 
 s5_1_list = enumSimple 1 (getAcc requirement) s5_1_list'
 
@@ -657,14 +657,14 @@ s6_likelyChg_stmt1 = foldlSent [S "The internal", (getAcc CM.ode) :+:
   S "may change in the future"]
 
 s6_likelyChg_stmt2 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to deal with edge-to-edge and vertex-to-vertex",
+  S "expanded to", S "deal with edge-to-edge and vertex-to-vertex",
   (plural (CP.collision ^. term))]
 
 s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be", 
-  S "expanded to include motion with damping"]
+  S "expanded to", S "include motion with damping"]
 
 s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to include", (plural $ CP.joint ^. term), S "and", 
+  S "expanded to", S "include", (plural $ CP.joint ^. term), S "and", 
   (plural $ CM.constraint ^. term)]
 
 s6_list' :: [Sentence]

@@ -329,23 +329,35 @@ fmtC' _ []      = S "None"
 fmtC' symb [(f,num)]  = E ((C symb) `f` num)
 fmtC' symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtC' symb xs)
 
-mkGtZeroConst' :: (Show a) => ConVar      -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst  :: (Show a) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst' s@(CV _ _ _)   other num = [getS s, fmtC' s (((:>), Int 0):other), S $ show num]
-mkGtZeroConst  s@(UC _ _ _ _) other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s]
+--mkGtZeroConst' :: (Show a) => ConVar      -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+--mkGtZeroConst  :: (Show a) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+--mkGtZeroConst' s@(CV _ _ _)   other num = [getS s, fmtC' s (((:>), Int 0):other), S $ show num]
+--mkGtZeroConst  s@(UC _ _ _ _) other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s]
 
 waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
 waterVert = verticesConst $ S "water table"
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
-intNormFor  = mkGtZeroConst  ei          [] (15000 :: Integer)
-effectCohe  = mkGtZeroConst  cohesion    [] (10 :: Integer)
-poissnRatio = mkGtZeroConst' poissnsR    [((:<),1)] (0.4 :: Double) --FIXME: should be possion's ratio (but it is a different type...)
-fricAng     = mkGtZeroConst  fricAngle   [((:<),90)] (25 :: Integer)
-dryUWght    = mkGtZeroConst  dryWeight   [] (20 :: Integer)
-satUWght    = mkGtZeroConst  satWeight   [] (20 :: Integer)
-waterUWght  = mkGtZeroConst  waterWeight [] (9.8 :: Double)
+intNormFor  = mkGtZeroConst (cqs ei)          [] (15000 :: Integer)
+effectCohe  = mkGtZeroConst (cqs cohesion )   [] (10 :: Integer)
+poissnRatio = mkGtZeroConst (cqs poissnsR )   [((:<),1)] (0.4 :: Double) --FIXME: use un-primed version (but it is a different type...)
+fricAng     = mkGtZeroConst (cqs fricAngle  ) [((:<),90)] (25 :: Integer)
+dryUWght    = mkGtZeroConst (cqs dryWeight )  [] (20 :: Integer)
+satUWght    = mkGtZeroConst (cqs satWeight )  [] (20 :: Integer)
+waterUWght  = mkGtZeroConst (cqs waterWeight) [] (9.8 :: Double)
+
+----
+--test1, test2 :: [Sentence]
+--test1 = mkGtZeroConst'' (cqs poissnsR) [((:<),1)] (0.4 :: Double)
+--test2 = mkGtZeroConst'' (cqs fricAngle) [((:<),90)] (25 :: Integer)
+
+mkGtZeroConst  :: (Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+mkGtZeroConst s other num = [P $ s ^. symbol, fmtC' s (((:>), Int 0):other), (S (show num)) +:+ (unwrap $ getUnit s)]
+  where unwrap :: (Maybe UnitDefn) -> Sentence
+        unwrap (Just a) = Sy (a ^. usymb)
+        unwrap Nothing = EmptyS
+----
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,

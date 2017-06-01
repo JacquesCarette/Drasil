@@ -229,7 +229,7 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
       ([s4_2_1_list], s4_2_2_tmods, [], [], [s4_2_5_p2,s4_2_5_p3], [s4_2_6Table2, s4_2_6Table3]) []
   where ddEnding = (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
                   S "can be solved by direct analysis of given inputs. The interslice" +:+ 
-                  S "forces DD9 are force variables that must be written" +:+ 
+                  S "forces DD9 are force variables that must be written" +:+. 
                   S "in terms of DD1 to DD8 to solve"
         tbRef    = (makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show")
 

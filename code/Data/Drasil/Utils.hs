@@ -17,9 +17,9 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , ofThe, ofThe'
-  , getS
-  ) where
+  , getS  , weave  ) where
 
+import Data.List
 import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
@@ -163,6 +163,10 @@ enumBullet f = Enumeration $ Bullet $ map (Flat) f
 -- l - list to be enumerated
 enumSimple :: Integer -> Sentence -> [Sentence] -> Contents
 enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
+
+-- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
+weave :: [[a]] -> [a]
+weave = (concat . transpose)
 
 --combinator function that is used by introF in OrganizationOfSRS (needs take a tuple)
 ofThe, ofThe' :: (Sentence, Sentence) -> Sentence

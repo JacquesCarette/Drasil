@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils (enumSimple)
+import Data.Drasil.Utils (enumSimple, foldle, weave)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -109,7 +109,7 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
   (phrase $ energy ^. term) +:+ S "sources and" +:+
   (phrase $ energy ^. term) +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
-  +:+ S "(" :+: (short phsChgMtrl) :+: S ") use a renewable" +:+
+  +:+ sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
   (phrase $ energy ^. term) +:+ S "source and provide a novel way of" +:+
   S "storing" +:+. (phrase $ energy ^. term) +:+
   (at_start $ swhs_pcm ^. term) +:+ S "improve over the traditional" +:+
@@ -226,14 +226,14 @@ s2_4 = orgSecWTS s2_4_intro inModel s4_2 s2_4_trail
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
-  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+
-  S "[citation]."
+  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+.
+  sSqBr (S "citation")
 
 s2_4_trail :: Sentence
 s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2) +:+. 
   S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
   (plural inModel) +:+ S "provide the" +:+ (phrase $ ode ^. term) +:+
-  S "(" :+: (short ode) :+: S "s) and algebraic" +:+
+  sParen ((short ode) :+: S "s") +:+ S "and algebraic" +:+
   (plural $ equation ^. term) +:+ S "that" +:+
   phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
   (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s"
@@ -288,7 +288,7 @@ s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
   S "rectangle represents the" +:+ phrase softwareSys +:+
-  S "itself (" :+: short progName :+: S "). Arrows are used to show the" +:+
+  S "itself" +:+. sParen (short progName) +:+ S "Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
   S "and its" +:+. phrase environment)
 
@@ -351,8 +351,8 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 -- based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
-  S "and finally the" +:+ plural inModel +:+ S "(" :+: (short ode) :+:
-  S "s) that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
+  S "and finally the" +:+ plural inModel +:+ sParen ((short ode) :+:
+  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
 
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
@@ -486,8 +486,8 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
               plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
               S "to reasonable" +:+. plural value)
-        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+
-              S "because features they should use are not yet implemented in Drasil.")
+        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+.
+              S "because features they should use are not yet implemented in Drasil")
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -514,28 +514,28 @@ assump1 = S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   S "relevant for this" +:+ phrase problem +:+ S "is" +:+.
   (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) `sC` S "such as" +:+
-  (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible [" :+:
-  ((makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE))) :+: S "]."
+  (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible" +:+. sSqBr
+  (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE))
 --
 assump2 = S "All" +:+
   (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
-  (phrase $ time ^. term) +:+. S "[GD1]"
+  (phrase $ time ^. term) +:+. sSqBr (S "GD1")
 --
 assump3 = S "The" +:+ 
   (phrase $ water ^. term) +:+ S "in the" +:+ (phrase $ tank ^. term) +:+
   S "is fully mixed, so the" +:+ (phrase $ temp_W ^. term) +:+
-  S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+
-  S "[GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) :+: S "]."
+  S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+. sSqBr
+  (S "GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)))
 --
 assump4 = S "The" +:+ (phrase $ temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+ S "[GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "LC1]."
+  term) +:+. sSqBr (S "GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "LC1")
 --
 assump5 = S "The" +:+ 
   (phrase $ w_density ^. term) +:+ S "and" +:+
   (phrase $ pcm_density ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ vol ^. term) +:+. S "[GD2]"
+  (phrase $ vol ^. term) +:+. sSqBr (S "GD2")
 --
 assump6 = S "The" +:+ (phrase $ htCap_W ^.
   term) `sC` (phrase $ htCap_S_P ^. term) `sC` S "and" +:+ 
@@ -740,97 +740,135 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 
 -- Instance Models aren't implemented yet
 
-s4_2_5_deriv1 = [Paragraph (S "Derivation of the" +:+
-  (phrase $ energy ^. term) +:+ S "balance on" +: (phrase $ water ^. term)),
-  Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
-  P (temp_W ^. symbol) `sC` S "we look at the" +:+
-  (phrase $ energy ^. term) +:+ S "balance on" +:+.
-  (phrase $ water ^. term) +:+ S "The" +:+ 
-  (phrase $ vol ^. term) +:+ S "being considered is the" +:+
-  (phrase $ w_vol ^. term) +:+ EmptyS +:+ P (w_vol ^. symbol) `sC`
-  S "which has" +:+ (phrase $ w_mass ^. term) +:+ EmptyS +:+ 
-  P (w_mass ^. symbol) +:+ S "and" +:+ (phrase $ htCap_W ^. term) :+: 
-  S "," +:+. P (htCap_W ^. symbol) +:+ P (ht_flux_C ^. 
-  symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
-  S "and" +:+ P (ht_flux_P ^. symbol) +:+ S "represents" +:+
-  S "the" +:+ (phrase $ ht_flux_P ^. term) `sC` S "over" +:+
-  (phrase $ coil_SA ^. term) +:+ S "and" +:+ (phrase $ pcm_SA ^. term) +:+
-  S "of" +:+ P (coil_SA ^. symbol) +:+ S "and" +:+ 
-  P (pcm_SA ^. symbol) `sC` S "respectively. No" +:+
-  (phrase $ CT.heat_trans ^. term) +:+ S "occurs to the outside of the" +:+
-  (phrase $ tank ^. term) `sC` S "since it" +:+
-  S "has been assumed to be" +:+ (phrase $ perfect_insul ^. term) +:+. 
-  S "(A15)" +:+ S "Assuming no" +:+ (phrase $ vol_ht_gen ^. term) +:+
-  S  "(A16)," +:+ P (vol_ht_gen ^. symbol) :+: S "=0." +:+
-  S "Therefore, the" +:+ (phrase $ equation ^. term) +:+ S "for GD2 can be" +:
-  S "written as"),
-  EqnBlock 
-   ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
-   := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
-  Paragraph(S "Using" +:+ (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) +:+ S "and" +:+
-  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) +:+ S "for" +:+ P (ht_flux_C ^. symbol) +:+
-  S "and" +:+ P (ht_flux_P ^. symbol) +:+ S "respectively," +:
-  S "this can be written as"),
-  EqnBlock 
-   ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
-   := (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
-   (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
-  Paragraph (S "Dividing (3) by" +:+ P (w_mass ^. symbol) :+:
-  P (htCap_W ^. symbol) `sC` S "we obtain:"),
-  EqnBlock 
-   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
-   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
-   (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
-   (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
-  Paragraph (S "Factoring the negative sign out of the second" +:+
-  S "term of the" +:+ (short rightSide) +:+ S "of" +:+
-  (titleize $ equation ^. term) +:+ S "(4) and multiplying it by" +:+ 
-  P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: S "/" :+: 
-  P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) +:
-  S "yields"),
-  EqnBlock 
-   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+s4_2_5_deriv1 = s4_2_5_d1startPara ++ (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
+
+s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list, 
+  s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
+s4_2_5_d1startPara = [Paragraph (S "Derivation of the" +:+
+  (phrase $ energy ^. term) +:+ S "balance on" +: (phrase $ water ^. term))]
+
+s4_2_5_d1eqn_list = map (EqnBlock) [s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, 
+  s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
+
+s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
+  [S "To find the", (phrase $ rOfChng ^. term), S "of", (P $ temp_W ^. symbol) `sC` 
+  S "we look at the", (phrase $ energy ^. term), S "balance on" +:+. 
+  (phrase $ water ^. term), S "The", (phrase $ vol ^. term), 
+  S "being considered is the", (phrase $ w_vol ^. term), EmptyS, 
+  (P $ w_vol ^. symbol) `sC` S "which has", (phrase $ w_mass ^. term), EmptyS, -- why is EmptyS here?
+  (P $ w_mass ^. symbol), S "and" +:+. ((phrase $ htCap_W ^. term) `sC` 
+  (P $ htCap_W ^. symbol)), (P $ ht_flux_C ^. symbol), S "represents the", 
+  (phrase $ ht_flux_C ^. term), S "and", (P $ ht_flux_P ^. symbol), S "represents",
+  S "the", (phrase $ ht_flux_P ^. term) `sC` S "over", (phrase $ coil_SA ^. term),
+  S "and", (phrase $ pcm_SA ^. term), S "of", (P $ coil_SA ^. symbol), S "and", 
+  (P $ pcm_SA ^. symbol) `sC` S "respectively. No", 
+  (phrase $ CT.heat_trans ^. term), S "occurs to the outside of the",
+  (phrase $ tank ^. term) `sC` S "since it",
+  S "has been assumed to be", (phrase $ perfect_insul ^. term) +:+. 
+  S "(A15)", S "Assuming no", (phrase $ vol_ht_gen ^. term) +:+.
+  (S  "(A16)" `sC` ((P $ vol_ht_gen ^. symbol) :+: S "=0")),
+  S "Therefore, the", (phrase $ equation ^. term), S "for GD2 can be",
+  S "written as"],
+  [S "Using", (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), S "and",
+  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), S "for", 
+  (P $ ht_flux_C ^. symbol), S "and", (P $ ht_flux_P ^. symbol), 
+  S "respectively,", S "this can be written as"],
+  [S "Dividing (3) by", P (w_mass ^. symbol) :+:
+  P (htCap_W ^. symbol) `sC` S "we obtain"],
+  [S "Factoring the negative sign out of the second", S "term of the", 
+  (short rightSide), S "of", (titleize $ equation ^. term), 
+  S "(4) and multiplying it by", 
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol) :+: S "/" :+: 
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), S "yields"],
+  [S "Which simplifies to"],
+  [S "Setting", P (tau_W ^. symbol) :+: S "=" :+:
+  (P $ w_mass ^. symbol) :+: (P $ htCap_W ^. symbol) :+: S "/" :+:
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), 
+  S "and", (P $ eta ^. symbol) :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+: 
+  (P $ pcm_SA ^. symbol) :+: S "/" :+: (P $ coil_HTC ^. symbol) :+: 
+  (P $ coil_SA ^. symbol) `sC` (titleize $ equation ^. term), S "(5) can",
+  S "be written as"],
+  [S "Finally, factoring out 1/" :+: (P $ tau_W ^. 
+  symbol) `sC` S "we are left with the governing",
+  (short ode), S "for IM1"]]
+
+
+s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
+  s4_2_5_d_eqn6, s4_2_5_d_eqn7 :: Expr
+
+s4_2_5_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) := 
+  (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)) 
+
+s4_2_5_d_eqn2 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) := 
+  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
+  (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d_eqn3 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
+  (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
+  (C htCap_W)) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d_eqn4 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
    (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
    (C temp_W)) + ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * 
    (C coil_SA)) * ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * 
-   (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
-  Paragraph (S "Which simplifies to:"),
-  EqnBlock 
-   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
-   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-   (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
-   (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
-   (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
-  Paragraph (S "Setting" +:+ P (tau_W ^. symbol) :+: S "=" :+:
-  P (w_mass ^. symbol) :+: P (htCap_W ^. symbol) :+: S "/" :+:
-  P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) +:+ 
-  S "and" +:+ P (eta ^. symbol) :+: S "=" :+: P (pcm_HTC ^. 
-  symbol) :+: P (pcm_SA ^. symbol) :+: S "/" :+: P (coil_HTC ^.
-  symbol) :+: P (coil_SA ^. symbol) `sC`
-  (titleize $ equation ^. term) +:+ S "(5) can" +:
-  S "be written as"),
-  EqnBlock
-   (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
-   ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
-   ((C temp_PCM) - (C temp_W))),
-  Paragraph (S "Finally, factoring out 1/" :+: P (tau_W ^. 
-  symbol) `sC` S "we are left with the governing" +:+
-  (short ode) +: S "for IM1"),
-  EqnBlock
-   (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+   (C htCap_W)) * ((C temp_PCM) - (C temp_W)))
+
+s4_2_5_d_eqn5 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
+  (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
+  (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
+  (C htCap_W)) * ((C temp_PCM) - (C temp_W)))
+
+s4_2_5_d_eqn6 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+  ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
+  ((C temp_PCM) - (C temp_W)))
+
+s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
    (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - 
    (C temp_W))))
-  ]
 
 -- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
-s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
+s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++
+  s4_2_5_d2endPara
+
+s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using", 
+  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), S "for",
+  (P $ ht_flux_P ^. symbol) `sC` S "this", (phrase $ equation ^. term),
+   S "can be written as"],
+  [S "Dividing by", (P $ pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol), 
+  S "we obtain"],
+  [S "Setting", P (tau_S_P ^. symbol) :+: S "=" :+:
+  P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
+  P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) `sC`
+  S "this can be written as"]]
+ 
+
+s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, 
+  s4_2_5_d2eqn4]
+
+s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
+
+s4_2_5_d2eqn1 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+   (C time) := (C ht_flux_P) * (C pcm_SA))
+
+s4_2_5_d2eqn2 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+  (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) * 
+   (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
+  ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   (phrase $ energy ^. term) +:+ S "balance on the" +:+ (short phsChgMtrl) +:+
   S "during" +:+ (phrase $ sens_heat ^. term) :+: S "ing phase:"),
-  Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
+  (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
   P (temp_PCM ^. symbol) `sC` S "we look at the" +:+
   (phrase $ energy ^. term) +:+ S "balance on the" +:+.
   (short phsChgMtrl) +:+ S "The" +:+ (phrase $ vol ^. term) +:+
@@ -847,31 +885,9 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   (phrase $ ht_flux_out ^. term) +:+ S "Assuming no" +:+
   (phrase $ vol_ht_gen ^. term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+:
   S "=0, the" +:+ (phrase $ equation ^. term) +:
-  S "for GD2 can be written as"),
-  EqnBlock 
-   ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
-   (C time) := (C ht_flux_P) * (C pcm_SA)),
-   Paragraph (S "Using" +:+ (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) +:+ S "for" +:+
-   P (ht_flux_P ^. symbol) `sC` S "this" +:+ (phrase $ equation ^. term) +:
-   S "can be written as"),
-  EqnBlock 
-   ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
-   (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
-   (C temp_PCM))),
-   Paragraph (S "Dividing by" +:+ P (pcm_mass ^. symbol) :+:
-   P (htCap_S_P ^. symbol) +: S "we obtain"),
-  EqnBlock
-   (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) * 
-   (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
-   (C temp_PCM))),
-  Paragraph (S "Setting" +:+ P (tau_S_P ^. symbol) :+: S "=" :+:
-  P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
-  P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) :+: S "," +:
-  S "this can be written as"),
-  EqnBlock 
-   (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
-   ((C temp_W) - (C temp_PCM))),
-  Paragraph ((titleize $ equation ^. term) +:+ S "(6) applies for the" +:+ 
+  S "for GD2 can be written as")]
+
+s4_2_5_d2endPara = map Paragraph [((titleize $ equation ^. term) +:+ S "(6) applies for the" +:+ 
   (phrase $ solid ^. term) +:+ EmptyS +:+. (short phsChgMtrl) +:+
   S "In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
@@ -885,13 +901,13 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   (phrase $ vol ^. term) +:+ S "change of the" +:+ (short phsChgMtrl) 
   +:+ S "with" +:+ (phrase $ CT.melting ^. term) +:+.
   S "is assumed to be negligible (A17)"),
-  Paragraph (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
+  (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
   S "=" :+: P (temp_melt_P ^. symbol) +:+ S "and not all of" +:+
   S "the" +:+ (short phsChgMtrl) +:+ S "is melted, the" +:+
   (phrase $ temp_PCM ^. term) +:+ S "does not change. Therefore, in" +:+
   S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
   P (time ^. symbol) :+: S "=0."),
-  Paragraph (S "This derivation does not consider the" +:+ 
+  (S "This derivation does not consider the" +:+ 
   (phrase $ CT.boiling ^. term) +:+ S "of the" +:+ 
   (short phsChgMtrl) `sC` S "as the" +:+ (short phsChgMtrl) 
   +:+ S "is assumed to either be in" +:+ S "a" +:+

@@ -57,26 +57,26 @@ makeMethod meth@(MeC { mType = MCalc (EC a b)}) _ m =
 
 makeMethod      (MeC { mType = MInput IOStd vc}) _ _ =
   pubMethod (A.typ $ makeType $ vc ^. Q.typ) ("in_" ++ (vc ^. id)) []
-  [ Block [ varDec (vc ^. id) (makeType $ vc ^. Q.typ),
-            assign (Var (vc ^. id)) (Input)
+  [ Block [ --varDec (vc ^. id) (makeType $ vc ^. Q.typ),
+            --assign (Var (vc ^. id)) (Input)
           ]
   ]
 
-makeMethod      mc@(MeC { mType = MInput (IOFile f) vc}) classList _ =
+makeMethod      mc@(MeC { mType = MInput (IOFile _) vc}) _ _ =
   pubMethod (Void) ((methcc mc) ^. id)
     [param (vc ^. id) (makeType $ vc ^. Q.typ)]
-  [ Block [ varDec ("inFile") (infile),
-            ValState $ ObjAccess (Var "inFile") (FileOpen f)
-          ],
-    Block (makeAssignments $ vc ^. Q.typ)
+  [ Block [ --varDec ("inFile") (infile),
+            --ValState $ ObjAccess (Var "inFile") (FileOpen f)
+          ]--,
+    --Block (makeAssignments $ vc ^. Q.typ)
   ]
-  where makeAssignments :: Space -> [Statement]
+{-  where makeAssignments :: Space -> [Statement]
         makeAssignments (S.Obj s) = map (\x -> assign x
           (InputFile (Var "inFile")))
           (map (ObjVar (Var $ vc ^. id))
             (getClassVars $ findClass s classList))
         makeAssignments _ = [assign (Var (vc ^. id))
-          (InputFile (Var "inFile"))]
+          (InputFile (Var "inFile"))] -}
 
 makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) _ _ =
   pubMethod (Void) ((methcc mc) ^. id)

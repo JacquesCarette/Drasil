@@ -32,3 +32,5 @@ Main
 /code/Website/
 /code/Docs
 *.synctex.gz
+*.pyc
+__pycache__

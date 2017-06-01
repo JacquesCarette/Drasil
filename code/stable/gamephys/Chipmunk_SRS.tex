@@ -425,6 +425,48 @@ Description & $j$ is the impulse (scalar) used to determine collision response b
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:im1}
+\phantomsection 
+\label{T:im1}
+\\ \midrule \\
+Label & Force on the translational motion of a set of 2d rigid bodies
+\\ \midrule \\
+Equation & $\mathbf{a}=\mathbf{v}=g+\frac{\mathbf{F}}{m}$
+\\ \midrule \\
+Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. mi is the mass of the i-th rigid body (kg) g is the acceleration due to gravity (ms-2). t is a point in time and t0 denotes the initial time (s). $\mathbf{p}$i(t) is the i-th body's position specifically the position of its center of mass, pCM(t) (DD1)) at time t (m). $\mathbf{a}$i(t) is the i-th body's acceleration at time t ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$i(t) is the i-th body's velocity at time t ($\frac{\text{m}}{\text{s}}$). F(t) is the force applied to the i-th body at time t (N).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:im2}
+\phantomsection 
+\label{T:im2}
+\\ \midrule \\
+Label & Force on the rotational motion of a set of 2D rigid body
+\\ \midrule \\
+Equation & $\alpha{}=\omega{}=\frac{\tau{}}{\mathbf{I}}$
+\\ \midrule \\
+Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. mi is the mass of the i-th rigid body (kg) g is the acceleration due to gravity (ms-2). t is a point in time and t0 denotes the initial time (s). $\phi{}$i(t) is the i-th body's orientation at time t (rad). $\omega{}$i(t) is the i-th body's angular velocity at time t ($\frac{\text{rad}}{\text{s}}$). $\alpha{}$k(t) is the k-th body's angular acceleration at time t ($\frac{\text{rad}}{\text{s}^{2}}$). t i(t) is the torque applied to the i-th body at time t (N m). Signed direction of torque is defined by (A4). Ii is the moment of inertia of the i-th body (kg m2).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:im3}
+\phantomsection 
+\label{T:im3}
+\\ \midrule \\
+Label & Collisions on 2D rigid bodies
+\\ \midrule \\
+Equation & $\mathbf{F}=m$
+\\ \midrule \\
+Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. mk is the mass of the k-th rigid body (kg) Ik is the moment of inertia of the k-th rigid body (kg m2). t is a point in time, t0 denotes the initial time, and tc denotes the time at collision (s). $\mathbf{p}$i(t) is the i-th body's position specifically the position of its center of mass, pCM(t) (DD1)) at time t (m). $\mathbf{v}$k(t) is the k-th body's velocity at time t ($\frac{\text{m}}{\text{s}}$). $\phi{}$k(t) is the k-th body's orientation at time t (rad). $\omega{}$k(t) is the k-th body's angular velocity at time t ($\frac{\text{rad}}{\text{s}}$). n is the collision normal vector (m). Its signed direction is determined by (A4). j is the collision impulse (DD8) (N s). P is the point of collision (m). rkP is the displacement vector between the center of mass of the k-th body and point P (m).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
 Table~\ref{Table:Tabl1:InpuVari} and Table~\ref{Table:Tabl2:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.

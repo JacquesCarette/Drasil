@@ -58,7 +58,7 @@ pythonConfig _ c =
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
         unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDocD c,
-
+        inputDoc = inputDoc' c,
         getEnv = \_ -> error "getEnv for pythong not yet implemented"
     }
 
@@ -234,3 +234,21 @@ functionDoc' c _ _ (Method n _ _ ps b) = vcat [
                     | otherwise = bodyDoc c b
 functionDoc' c _ _ (MainMethod b) = bodyDoc c b
 functionDoc' _ _ _ _ = empty
+
+inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
+inputDoc' c io (Base Boolean) v = statementDoc c NoLoop
+  (v &= inputFn io ?!= litString "0")
+inputDoc' c io (Base Integer) v = statementDoc c NoLoop
+  (v &= funcApp' "int" [inputFn io])
+inputDoc' c io (Base Float) v = statementDoc c NoLoop
+  (v &= funcApp' "float" [inputFn io])
+inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
+inputDoc' c io (Base _) v = statementDoc c NoLoop
+  (v &= inputFn io)
+inputDoc' c io s v = inputDocD c io s v 
+  
+-- helpers
+
+inputFn :: IOType -> Value
+inputFn Console = funcApp' "raw_input" []
+inputFn (File f) = objMethodCall f "readline" []

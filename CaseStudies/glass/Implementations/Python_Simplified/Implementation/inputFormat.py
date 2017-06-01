@@ -5,8 +5,6 @@ Service: Converts the input data into the data structures used in the
 input parameters module.
 """
 
-from numpy import float64
-
 
 def get_input(filename, params):
     """
@@ -17,23 +15,23 @@ def get_input(filename, params):
     infile = open(filename, "r")
     text = infile.readline()
     # dimensions of glass slab
-    params.a = float64(infile.readline())
-    params.b = float64(infile.readline())
-    params.t = float64(infile.readline())
+    params.a = float(infile.readline())
+    params.b = float(infile.readline())
+    params.t = float(infile.readline())
     text = infile.readline()
     # glass type
     params.gt = infile.readline().rstrip()
     # Weight of Charge
     text = infile.readline()
-    params.w = float64(infile.readline())
+    params.w = float(infile.readline())
     text = infile.readline()
-    params.tnt = float64(infile.readline())
+    params.tnt = float(infile.readline())
     text = infile.readline()
     # stand off distance coordinates
-    sdx = float64(infile.readline())
-    sdy = float64(infile.readline())
-    sdz = float64(infile.readline())
+    sdx = float(infile.readline())
+    sdy = float(infile.readline())
+    sdz = float(infile.readline())
     params.sdvect = (sdx, sdy, sdz)
     text = infile.readline()
-    params.pbtol = float64(infile.readline())
+    params.pbtol = float(infile.readline())
     infile.close()

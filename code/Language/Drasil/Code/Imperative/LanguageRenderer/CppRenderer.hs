@@ -64,7 +64,7 @@ cppConfig options c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
@@ -88,7 +88,6 @@ renderCode' c ms (AbsCode p) =
 cppstateType :: Config -> StateType -> DecDef -> Doc
 cppstateType _ (Base (FileType Read)) _    = text "ifstream"
 cppstateType _ (Base (FileType Write)) _   = text "ofstream"
-cppstateType _ (Base (FileType ReadWrite)) _ = error "Not implemented"
 cppstateType _ (Base Boolean) _ = text "bool"
 cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
@@ -140,8 +139,8 @@ cppbottom Source = empty
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
-assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
+--assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
+--assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
 assignDoc' c a = assignDocD c a
 
 declarationDoc' :: Config -> Declaration -> Doc
@@ -176,7 +175,7 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var it) (Var $ "(*" ++ it ++ ")") b
     where initState = DeclState $ VarDecDef it (Iterator t) (listVar $. IterBegin)
           guard     = binExpr (Var it) NotEqual (listVar $. IterEnd)
-          update    = (&++)it
+          update    = (&.++)it
 iterationDoc' c i = iterationDocD c i
 
 classDoc' :: Config -> FileType -> Label -> Class -> Doc
@@ -261,8 +260,8 @@ methodListDoc' c f m fs = methodListDocD c f m fs
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e
 valueDoc' c v@(Arg _) = valueDocD' c v
-valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
-valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
+--valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
+--valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
 
 ----------------------
@@ -283,7 +282,7 @@ destructor _ n vs =
         guard l = Var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
-        deleteLoop l = IterState (For initv (guard l) ((&++)i) (loopBody l))
+        deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
         deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (Var lbl)
         deleteVar (StateVar lbl _ _ _ _) = FreeState $ Var lbl
         deleteStatements = map deleteVar deleteVars

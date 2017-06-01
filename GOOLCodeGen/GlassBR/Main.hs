@@ -6,6 +6,8 @@ import Modules.InputFormat
 import Modules.DerivedValues
 import Modules.InputConstraints
 import Modules.Interpolation
+import Modules.Calculations
+import Modules.Control
 
 main :: IO()
 main = do
@@ -20,5 +22,5 @@ genCode lang = createCodeFiles $ makeCode
   (toAbsCode "GlassBR" classes)
 
 classes :: [Module]
-classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation]
+classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, control]
 

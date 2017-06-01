@@ -18,7 +18,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
     statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
-    
+    inputDocD,
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
 ) where
@@ -118,7 +118,8 @@ data Config = Config {
     unOpDoc :: UnaryOp -> Doc,
     valueDoc :: Value -> Doc,
     getEnv :: String -> Doc, -- careful, this can fail!
-    ioDoc :: IOSt -> Doc
+    ioDoc :: IOSt -> Doc,
+    inputDoc :: IOType -> StateType -> Value -> Doc
 }
 
 ----------------------------------
@@ -257,9 +258,6 @@ declarationDocD c (ObjDecDef n t v) = declarationDoc c $ VarDecDef n t v
 declarationDocD c (ConstDecDef n l) = text "const" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
 
 declarationDocD' :: Config -> Declaration -> Doc
-declarationDocD' c (VarDecDef n t Input) = vcat [
-    declarationDoc c (VarDec n t) <> endStatement c,
-    assignDoc c $ Assign (Var n) Input]
 declarationDocD' c d = declarationDocD c d
 
 enumElementsDocD :: Config -> [Label] -> Doc
@@ -312,6 +310,7 @@ funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast 
 funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast Integer)
 funcDocD c (ListAccess i) = brackets $ valueDoc c i
 funcDocD c (ListAdd i v) = dot <> funcAppDoc c "Insert" [i, v]
+funcDocD c (ListAppend v) = dot <> funcAppDoc c "append" [v]
 funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
@@ -417,7 +416,7 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&.++)index) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0
@@ -471,12 +470,15 @@ statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
 
 ioDocD :: Config -> IOSt -> Doc
-ioDocD _ (OpenFile _ _ _) = error ""
-ioDocD _ (CloseFile _) = error ""
+ioDocD c (OpenFile f n Read) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString "r"])
+ioDocD c (OpenFile f n Write) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString "w"])
+ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close" [])
 ioDocD c (Out t newLn s v) = printDoc c t newLn s v
-ioDocD _ (In Console _ _) = error ""
-ioDocD _ (In (File _) _ _) = error ""
+ioDocD c (In t s v) = inputDoc c t s v
 
+inputDocD :: Config -> IOType -> StateType -> Value -> Doc
+inputDocD _ _ (Base _) _ = error "No default implementation"
+inputDocD _ _ _ _ = error "Type not supported for input"
 
 stateTypeD :: Config -> StateType -> DecDef -> Doc
 stateTypeD c (List lt t@(List _ _)) _ = list c lt <> angles (space <> stateType c t Dec <> space)
@@ -532,11 +534,15 @@ unOpDocD Negate = text "-"
 unOpDocD SquareRoot = text "sqrt"
 unOpDocD Abs = text "fabs"
 unOpDocD Not = text "!"
+unOpDocD Log = text "log"
+unOpDocD Exp = text "exp"
 
 unOpDocD' :: UnaryOp -> Doc
 unOpDocD' SquareRoot = text "math.sqrt"
 unOpDocD' Abs = text "math.fabs"
 unOpDocD' Not = text "not"
+unOpDocD' Log = text "math.log"
+unOpDocD' Exp = text "math.exp"
 unOpDocD' op = unOpDocD op
 
 valueDocD :: Config -> Value -> Doc
@@ -554,8 +560,6 @@ valueDocD c (EnumVar v) = valueDoc c $ Var v
 valueDocD c (ListVar v _) = valueDoc c $ Var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
-valueDocD c Input = inputFunc c
-valueDocD _ (InputFile _) = error "This should be defined in each renderer"
 valueDocD c (Global s) = getEnv c s
 
 valueDocD' :: Config -> Value -> Doc

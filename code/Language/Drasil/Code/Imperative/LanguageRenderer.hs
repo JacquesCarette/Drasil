@@ -310,6 +310,7 @@ funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast 
 funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast Integer)
 funcDocD c (ListAccess i) = brackets $ valueDoc c i
 funcDocD c (ListAdd i v) = dot <> funcAppDoc c "Insert" [i, v]
+funcDocD c (ListAppend v) = dot <> funcAppDoc c "append" [v]
 funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v

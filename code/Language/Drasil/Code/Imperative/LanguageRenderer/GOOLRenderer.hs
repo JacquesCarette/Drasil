@@ -181,6 +181,7 @@ funcDoc' _ ListSize = text "ListSize"
 funcDoc' _ (ListAccess (Var n)) = text "at" <+> lbl n
 funcDoc' c (ListAccess v) = text "ListAccess" <+> valueDoc c v
 funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
+funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
 funcDoc' _ (IterBegin) = text "IterBegin"

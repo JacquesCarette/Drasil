@@ -39,7 +39,7 @@ module Language.Drasil.Code.Imperative.AST (
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, 
-    listSize, listAccess, valStmt,funcApp,funcApp',
+    listSize, listAccess, listAppend,valStmt,funcApp,funcApp',
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
@@ -145,6 +145,7 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListAdd Value Value     --ListAdd index value
               | ListSet Value Value     --ListSet index value
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.
+              | ListAppend Value
               | IterBegin | IterEnd
               | Floor | Ceiling
               | FileOpen String
@@ -501,6 +502,9 @@ listSize = ListSize
 
 listAccess :: Value -> Function
 listAccess = ListAccess
+
+listAppend :: Value -> Function
+listAppend = ListAppend
 
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]

@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint)
 import Data.Drasil.Utils (foldle, foldlSent, listConstUC, 
   listConstS, makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList)
+  enumBullet, mkRefsList, ofThe, ofThe')
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -111,8 +111,8 @@ para2_s2_intro = Paragraph $ foldlSent
   (short chipmunk) `sC` S "an", (phrase openSource), (getAcc twoD), 
   (phrase $ CP.rigidBody ^. term) +:+. (phrase $ physLib ^. term),
   S "This", (phrase section_), S "explains the", (phrase purpose), S "of this", 
-  (phrase document) :+: S ", the scope", S "of the", (phrase system) `sC` 
-  S "and the", (phrase organization), S "of the", (phrase document)]
+  (phrase document) `sC` ((phrase scope) `ofThe` (phrase system)) `sC` 
+  S "and", (phrase organization) `ofThe` (phrase document)]
         
 s2_intro = [para1_s2_intro, para2_s2_intro]
 
@@ -159,7 +159,7 @@ s2_2_intro :: Contents
 s2_2 = SRS.scpOfReq [s2_2_intro] []
 
 s2_2_intro = Paragraph $ foldlSent 
-  [S "The scope of the", plural requirement, S "includes the",
+  [phrase scope `ofThe'` plural requirement, S "includes the",
   (phrase $ physicalSim),  S "of", (getAcc twoD), (plural $ CP.rigidBody ^. term),
   S "acted on by forces. Given", (getAcc twoD), 
   (plural $ CP.rigidBody ^. term) `sC` (short chipmunk), 

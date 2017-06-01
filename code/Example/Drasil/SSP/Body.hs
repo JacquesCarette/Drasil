@@ -326,8 +326,13 @@ noTypicalVal = S "N/A"
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
 
-mkGtZeroConst :: (Show a) => UnitalChunk -> [Sentence] -> a -> [Sentence]
-mkGtZeroConst s other num = listConstUC (s,(S "GT 0"):other,S $ show num)
+fmtC' ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
+fmtC' _ []      = S "None"  
+fmtC' symb [(f,n)]  = E ((C symb) `f` n)
+fmtC' symb ((f,n):xs) = (E ((C symb) `f` n)) +:+ S "and" +:+ (fmtC' symb xs)
+
+mkGtZeroConst :: (Show a) => UnitalChunk -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+mkGtZeroConst s other num = [getS s, fmtC' s (((:>), Int 0):other), fmtU (S $ show num) s] --listConstUC (s,(E $ :> (Int 0)):other,S $ show num)
 
 waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
@@ -336,8 +341,8 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 intNormFor = mkGtZeroConst ei [] (15000 :: Integer)
 effectCohe = mkGtZeroConst cohesion [] (10 :: Integer)
-normDispla = mkGtZeroConst dv_i [S "LT 1"] (0.4 :: Double)
-fricAng    = mkGtZeroConst fricAngle [S "LT 90"] (25 :: Integer)
+normDispla = mkGtZeroConst dv_i [((:<),1)] (0.4 :: Double)
+fricAng    = mkGtZeroConst fricAngle [((:<),90)] (25 :: Integer)
 dryUWght   = mkGtZeroConst dryWeight [] (20 :: Integer)
 satUWght   = mkGtZeroConst satWeight [] (20 :: Integer)
 waterUWght = mkGtZeroConst waterWeight [] (9.8 :: Double)

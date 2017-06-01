@@ -98,8 +98,8 @@ s4_1_intro = Paragraph $
 
 s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
   
-s4_1_1_bullets = Enumeration $ (Bullet $ map (\c -> Flat $ 
-          ((at_start $ c ^. term)) :+: S ":" +:+ (c ^. defn)) 
+s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
+          ((at_start $ x ^. term)) :+: S ":" +:+ (x ^. defn)) 
           [thermal_flux, heat_cap_spec])
   
 s4_1_2 = physSystDesc (getAcc sWHS) fig_tank [s4_1_2_list, fig_tank]

@@ -358,7 +358,7 @@ reqIntro = Paragraph $ foldlSent
 
 
 -- wrapper for nonfuncReq
-nonFuncReqF :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> Section
+nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section
 nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
   [nonFuncReq (map (\x -> phrase $ x ^. term) noPriority) (map (\x -> phrase $ x ^. term) priority_) reason_ explanation_] []
         

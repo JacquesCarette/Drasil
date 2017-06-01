@@ -32,6 +32,7 @@ import Drasil.GlassBR.Reqs
 import Drasil.GlassBR.TMods
 import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
+import Data.Drasil.Utils (isThe, isThe')
 
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
@@ -291,8 +292,8 @@ s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys1
 s6_1_2_list_physys1 :: [Sentence]
 s6_1_2_list_physys1 = [(at_start $ glaSlab ^. term), (foldlSent [S "The point of"
   +:+. (phrase $ explosion ^. term), S "Where the", (phrase $ bomb ^. term) `sC` 
-  S "or", (blast ^. defn) `sC` S "is located. The", (phrase $ sD ^. term), 
-  `isthe` S "distance between the point of", (phrase $ explosion ^. term), 
+  S "or", (blast ^. defn) `sC` S "is located. The", (phrase $ sD ^. term) 
+  `isThe` S "distance between the point of", (phrase $ explosion ^. term), 
   S "and the glass"])]
 
 s6_1_3 = goalStmtF [S "FIXME: ADD INPUTS"] [s6_1_3_list] --FIXME: add inputs

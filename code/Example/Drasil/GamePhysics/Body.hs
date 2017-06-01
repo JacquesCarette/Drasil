@@ -23,9 +23,9 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
-import Data.Drasil.Utils (foldle, foldlSent, foldlList, listConstUC, 
-  listConstS, makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, ofThe, ofThe', getS, fmtU)
+import Data.Drasil.Utils (foldle, foldlSent, foldlList, listConstExpr, 
+  makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
+  enumBullet, mkRefsList, ofThe, ofThe')
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -504,16 +504,13 @@ s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
 -- will do for now.
 -- How do I write 2pi in constraints?
 
---lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
---  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
---  forceConstraint, torqueConstraint :: (Num a) => (UnitalChunk, [Expr], a)
-
---listConstExpr :: (SymbolForm a, Quantity a) => (a, [Expr], Sentence) -> [Sentence]
-listConstExpr (s, a, b) = [getS s, fmtC' s a, fmtU b s]
+lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
+  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
+  forceConstraint, 
+  torqueConstraint :: (UnitalChunk, [(Expr -> Expr -> Expr, Expr)], Sentence)
 
 
 lengthConstraint = (QPP.len, [((:>),(Int 0))], S "44.2")
-
 massConstraint = (QPP.mass, [((:>),(Int 0))], S "56.2")
 mmntOfInConstraint = (QP.momentOfInertia, [((:>),(Int 0))], S "74.5")
 gravAccelConstraint = (QP.gravitationalAccel, [], S "9.8")

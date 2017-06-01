@@ -6,7 +6,7 @@ module Data.Drasil.Utils
   , foldlsC
   , mkEnumAbbrevList
   , listConstS
-  , listConstUC
+  , listConstExpr
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -98,19 +98,16 @@ fmtUS num units  = num +:+ units
 fmtU :: (Quantity a, SymbolForm a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | takes a chunk and constraints and makes a sentence of the constraints
--- on that chunk
-fmtC ::(SymbolForm a) => a -> [Sentence] -> Sentence
-fmtC _ []      = S "None"  
-fmtC symb [x]  = (getS symb) +:+ x
-fmtC symb (x:xs) = (getS symb) +:+ x +:+ S "and" +:+ (fmtC symb xs)
-
 -- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)
 -- ex. fmtBF x [((:>),0), ((:<),1)] -> x>0 and x<1
 fmtBF ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
 fmtBF _ []      = S "None"  
 fmtBF symb [(f,num)]  = E ((C symb) `f` num)
 fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
+
+-- | makes a constraint table entry from symbol expr and sentence
+listConstExpr :: (SymbolForm a, Quantity a) => (a, [(Expr -> Expr -> Expr, Expr)], Sentence) -> [Sentence]
+listConstExpr (s, a, b) = [getS s, fmtBF s a, fmtU b s]
 
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence
@@ -119,10 +116,6 @@ getS s  = P $ s ^. symbol
 -- | makes a list of sentence from sentences
 listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
 listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, fmtUS n u]
-
--- | makes a list of sentence from unital chunk and a constraint list with units
-listConstUC :: (SymbolForm a, Quantity a) => (a, [Sentence], Sentence) -> [Sentence]
-listConstUC (s, a, b) = [getS s, fmtC s a, fmtU b s]
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 

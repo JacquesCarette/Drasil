@@ -318,7 +318,7 @@ vertConvention = S "Consecutive vertexes have increasing x values." +:+
                  S "The start and end vertices of all layers go to the same x values."
 
 vertVar :: Sentence -> Sentence
-vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices's"
+vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 
 noTypicalVal :: Sentence
 noTypicalVal = S "N/A"

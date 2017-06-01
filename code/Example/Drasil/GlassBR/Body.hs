@@ -7,6 +7,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
@@ -519,10 +520,10 @@ s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = Paragraph $ foldlSent [
   S "Given the small size, and relative simplicity, of this", 
-  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority,
+  phrase problem `sC` (phrase $ performance ^. term), S "is not a" +:+. phrase priority,
   S "Any reasonable", phrase implementation +:+. 
   S "will be very quick and use minimal storage", 
-  S "Rather than", phrase performance `sC` S "the", phrase priority,
+  S "Rather than", (phrase $ performance ^. term) `sC` S "the", phrase priority,
   phrase nonfunctional, (short requirement) :+:
   S "s are correctness, verifiability, understandability, reusability,", 
   S "maintainability and portability"]

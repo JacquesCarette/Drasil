@@ -17,7 +17,9 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , ofThe, ofThe'
-  , getS  , weave  ) where
+  , getS
+  , weave  
+  ) where
 
 import Data.List
 import Control.Lens ((^.))

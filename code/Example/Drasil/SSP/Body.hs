@@ -313,9 +313,41 @@ s4_2_5_p3 = Paragraph $ ofThe' (S "values", S "interslice normal force") +:+
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automaticly generated in solChSpecF using the tables below
+vertConvention :: Sentence
+vertConvention = S "Consecutive vertexes have increasing x values. All layer's" +:+
+                 S "start and end vertices's go to the same x values."
+
+vertVar :: Sentence -> Sentence
+vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices's"
+
+noTypicalVal :: Sentence
+noTypicalVal = S "N/A"
+
+verticesConst :: Sentence -> [Sentence]
+verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
+
+mkGtZeroConst :: (Show a) => UnitalChunk -> [Sentence] -> a -> [Sentence]
+mkGtZeroConst s other num = listConstUC (s,(S "GT 0"):other,S $ show num)
+
+waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,
+  fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
+waterVert = verticesConst $ S "water table"
+slipVert  = verticesConst $ phrase slip 
+slopeVert = verticesConst $ phrase slope
+intNormFor = mkGtZeroConst ei [] 15000
+effectCohe = mkGtZeroConst cohesion [] 10
+normDispla = mkGtZeroConst dv_i [S "LT 1"] 0.4
+fricAng    = mkGtZeroConst fricAngle [S "LT 90"] 25
+dryUWght   = mkGtZeroConst dryWeight [] 20
+satUWght   = mkGtZeroConst satWeight [] 20
+waterUWght = mkGtZeroConst waterWeight [] 9.8
+
+dataConstList :: [[Sentence]]
+dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, normDispla,
+  fricAng, dryUWght, satUWght, waterUWght]
 
 s4_2_6Table2, s4_2_6Table3 :: Contents --FIXME: actually create these table
-s4_2_6Table2 = Table [] [] EmptyS True 
+s4_2_6Table2 = Table [S "Var", S "Physical Constraints", S "Typical Value"] dataConstList EmptyS True 
 s4_2_6Table3 = Table [] [] EmptyS True
 
 -- SECTION 5 --

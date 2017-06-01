@@ -219,8 +219,9 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
   where intro = foldlSent
                 [S "The", plural inModel, S "that govern",
                 short kWord, S "are presented in" +:+. makeRef (instModels gendef),
-                S "The", phrase information, S "to understand the meaning of the",
-                plural inModel, S "and their derivation is also presented, so that the",
+                S "The", phrase information, S "to understand",
+                (S "meaning" `ofThe` plural inModel),
+                S "and their derivation is also presented, so that the",
                 plural inModel, S "can be verified"]
         subSec True  = [assumption_ True, theModels, generDefn, 
                         dataDefin, instModels True, dataConstr] ++ adSubSec
@@ -318,8 +319,8 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           plural constraint, S "gives the", phrase physical,
           plural limitation, S "on the range of", plural value,
           S "that can be taken by the" +:+. phrase variable, middleSent, -- << if you are wondering where middleSent is
-          S "The", plural constraint, S "are conservative, to give the",
-          phrase user, S "of the", phrase model, S "the flexibility to", 
+          S "The", plural constraint, S "are conservative, to give",
+          (phrase user `ofThe` phrase model), S "the flexibility to", 
           S "experiment with unusual situations. The", phrase column, S "of", 
           S "typical", plural value, S "is intended to provide a feel for a common scenario"]
           +:+ endS endingSent +:+ trailingSent
@@ -380,11 +381,10 @@ traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
 traceMIntro :: [Contents] -> [Sentence] -> Contents
-traceMIntro refs trailings = Paragraph $ foldlSent [S "The", phrase purpose, S "of the",
-        plural traceyMatrix, S "is to provide easy", plural reference,
-        S "on what has to be additionally modified if a certain", phrase component,
-        S "is changed. Every time a", phrase component, S "is changed, the", plural item, S "in the",
-        phrase column, S "of that", phrase component, S "that are",
+traceMIntro refs trailings = Paragraph $ foldlSent [phrase purpose `ofThe'` plural traceyMatrix,
+        S "is to provide easy", plural reference, S "on what has to be additionally modified if a certain",
+        phrase component, S "is changed. Every time a", phrase component, S "is changed, the", 
+        plural item, S "in the", phrase column, S "of that", phrase component, S "that are",
         S "marked with an", Quote (S "X"), S "should be modified as well"] +:+
         foldlSent (zipWith tableShows refs trailings)
 
@@ -396,7 +396,7 @@ tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
 -- generally found in this section (in order of being mentioned)
 traceGIntro :: [Contents] -> [Sentence] -> [Contents]
 traceGIntro refs trailings = [Paragraph $ foldlSent
-        [S "The", phrase purpose, S "of the", plural traceyGraph,
+        [phrase purpose `ofThe'` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
         S "The arrows in the", (plural $ graph ^. term), S "represent" +:+.
@@ -404,6 +404,6 @@ traceGIntro refs trailings = [Paragraph $ foldlSent
         S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
         phrase component, S "is changed, the", plural component, S "that it points to should also",
         S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings),
-        Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate the graphical",
-        S "representation of the", (phrase $ matrix ^. term), S "by scanning the",
+        Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate", 
+        S "graphical representation" `ofThe'` (phrase $ matrix ^. term), S "by scanning the",
         plural label, S "and", phrase reference, S "can be future work"]]

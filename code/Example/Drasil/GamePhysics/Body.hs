@@ -529,11 +529,6 @@ restCoefConstraint :: [Sentence]
 restCoefConstraint = listConstExpr (QP.restitutionCoef, [((:>),(Int 0)), 
   ((:<),(Int 1))], S "0.8")
 
-fmtC' _ []              = S "None"
-fmtC' symb [(f,num)]    = E $ (C symb) `f` num
-fmtC' symb ((f,num):xs) = (E $ (C symb) `f` num) +:+ S "and" +:+ (fmtC' symb xs)
-
-
 
 s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
 --s4_2_6_t1_list = map (listConstExpr) [lengthConstraint,massConstraint]

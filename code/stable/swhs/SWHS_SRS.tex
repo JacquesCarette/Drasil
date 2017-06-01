@@ -305,21 +305,21 @@ Given the temperature of the heating coil, initial conditions for the temperatur
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SoluCharSpec}
-The instance models (ODEs) that govern SWHS are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SWHS are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:A}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the theoretical model [T], general definition [GD], data definition [DD], instance model [IM], or likely change [LC], in which the respective assumption is used.
+\label{Sec:Assu}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], General Definitions [Section~\ref{Sec:GeneDefi}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}].
 \item[A2:]All heat transfer coefficients are constant over time [GD1].
-\item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP}].
-\item[A4:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP}, LC1].
+\item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
+\item[A4:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, LC1].
 \item[A5:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
 \item[A6:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
-\item[A7:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC}].
-\item[A8:]The temperature of the heating coil is constant over time [\hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC}, LC2].
-\item[A9:]The temperature of the heating coil does not vary along its length [\hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC}, LC3].
-\item[A10:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP}].
+\item[A7:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}].
+\item[A8:]The temperature of the heating coil is constant over time [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC2].
+\item[A9:]The temperature of the heating coil does not vary along its length [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC3].
+\item[A10:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
 \item[A11:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC4].
 \item[A12:]The initial temperature of the water and the PCM is the same [IM1, IM2, LC5].
 \item[A13:]The simulation will start with the PCM in a solid state [IM2, IM4].
@@ -331,7 +331,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[A19:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}C$ and 100${}^{\circ}C$, respectively [IM1, IM3].
 \end{itemize}
 \subsubsection{Theoretical Models}
-\label{Sec:TM}
+\label{Sec:TheoMode}
 This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -376,12 +376,12 @@ Label & Latent heat energy
 \\ \midrule \\
 Equation & $Q(t)=\int_{0}^{t}{\frac{dQ(\tau{})}{d\tau{}}d\tau{}}$
 \\ \midrule \\
-Description & $Q$ is the change in thermal energy (J), latent heat energy. FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion}. $T_{melt}$ and $T_{boil}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}C$). Latent heating stops when all material has changed to the new phase.
+Description & $Q$ is the change in thermal energy (J), latent heat energy. FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. $T_{melt}$ and $T_{boil}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}C$). Latent heating stops when all material has changed to the new phase.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GD}
-This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models. (General definitions are left out because they are not currently implemented in Drasil.)
+\label{Sec:GeneDefi}
+This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{equation}
@@ -404,14 +404,14 @@ Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
 mC\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV
 \end{equation}
 \subsubsection{Data Definitions}
-\label{Sec:DD}
+\label{Sec:DataDefi}
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:dd1HtFluxC}
+\toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
 \phantomsection 
-\label{DD:dd1HtFluxC}
+\label{DD:ht.flux.C}
 \\ \midrule \\
 Label & $q_{C}$
 \\ \midrule \\
@@ -425,9 +425,9 @@ Description & $q_{C}$ is the heat flux into the water from the coil\newline$h_{C
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:dd2HtFluxP}
+\toprule \textbf{Refname} & \textbf{DD:ht.flux.P}
 \phantomsection 
-\label{DD:dd2HtFluxP}
+\label{DD:ht.flux.P}
 \\ \midrule \\
 Label & $q_{P}$
 \\ \midrule \\
@@ -456,14 +456,14 @@ Description & $H_{f}$ is the amount of thermal energy required to completely mel
 \end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM} and Section~\ref{Sec:GD}.
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
 The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for $T_{W}$ and $T_{P}$ depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change. (Instance models are left out because they are not currently implemented in Drasil.)
 Derivation of the energy balance on water:
 To find the rate of change of $T_{W}$, we look at the energy balance on water. The volume being considered is the volume of water $V_{W}$, which has mass of water $m_{W}$ and specific heat capacity of water, $C_{W}$. $q_{C}$ represents the heat flux into the water from the coil and $q_{P}$ represents the heat flux into the PCM from water, over coil surface area and phase change material surface area of $A_{C}$ and $A_{P}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A15). Assuming no volumetric heat generation per unit volume (A16), $g$=0. Therefore, the equation for GD2 can be written as:
 \begin{equation}
 m_{W}C_{W}\frac{dT_{W}}{dt}=q_{C}A_{C}-q_{P}A_{P}
 \end{equation}
-Using \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} and \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} for $q_{C}$ and $q_{P}$ respectively, this can be written as:
+Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for $q_{C}$ and $q_{P}$ respectively, this can be written as:
 \begin{equation}
 m_{W}C_{W}\frac{dT_{W}}{dt}=h_{C}A_{C}(T_{C}-T_{W})-h_{P}A_{P}(T_{W}-T_{P})
 \end{equation}
@@ -492,7 +492,7 @@ To find the rate of change of $T_{P}$, we look at the energy balance on the PCM.
 \begin{equation}
 m_{P}C_{P}^{S}\frac{dT_{P}}{dt}=q_{P}A_{P}
 \end{equation}
-Using \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} for $q_{P}$, this equation can be written as:
+Using \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for $q_{P}$, this equation can be written as:
 \begin{equation}
 m_{P}C_{P}^{S}\frac{dT_{P}}{dt}=h_{P}A_{P}(T_{W}-T_{P})
 \end{equation}
@@ -509,10 +509,10 @@ In the case where $T_{P}$=$T_{melt}^{P}$ and not all of the PCM is melted, the t
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A18).
 \subsubsection{Data Constraints}
 \label{Sec:DC}
-Tables 1 and 2 show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
+Table~\ref{Table:Tabl1} and Table~\ref{Table:Tabl2} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:PoACS}
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} and \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 \begin{equation}
 E_{W}=\int_{0}^{t}{h_{C}A_{C}(T_{C}-T_{W}(t))dt}-\int_{0}^{t}{h_{P}A_{P}(T_{W}(t)-T_{P}(t))dt}
 \end{equation}
@@ -609,7 +609,7 @@ Given the small size, and relative simplicity, of this problem, performance is n
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TMStCBIoDS} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TMStCBRaIM} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TMStCBAaOI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the Assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} & \hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} & \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} & GD1 & GD2 & \hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} & \hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & \hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} & IM1 & IM2 & IM3 & IM4
+ & \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} & \hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} & \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} & GD1 & GD2 & \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} & \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} & \hyperref[DD:htFusion]{Definition~DD:htFusion} & \hyperref[DD:htFusion]{Definition~DD:htFusion} & IM1 & IM2 & IM3 & IM4
 \\
 \midrule
 \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -622,13 +622,13 @@ GD1 &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 GD2 & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:htFusion]{Definition~DD:htFusion} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} &  &  &  &  &  &  &  & X &  &  &  &  & 
+\hyperref[DD:htFusion]{Definition~DD:htFusion} &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
 IM1 &  &  &  &  & X & X & X &  &  &  & X &  & 
 \\
@@ -696,13 +696,13 @@ GD1 &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &
 \\
 GD2 &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd1HtFluxC]{Definition~DD:dd1HtFluxC} &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd2HtFluxP]{Definition~DD:dd2HtFluxP} &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:htFusion]{Definition~DD:htFusion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dd3HtFusion]{Definition~DD:dd3HtFusion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:htFusion]{Definition~DD:htFusion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 IM1 &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\

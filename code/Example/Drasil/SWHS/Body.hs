@@ -655,8 +655,9 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   (phrase $ vol ^. term) `sC` S "with" +:+ P (thFluxVect ^. 
   symbol) +:+ S "as the" +:+ (phrase $ thFluxVect ^. term) +:+
   S "for the" +:+ (phrase $ surface ^. term) +:+ S "and" +:+
-  P (uNormalVect ^. symbol) +:+ S "as a" +: (uNormalVect ^.
-  defn)),
+  P (uNormalVect ^. symbol) +:+ S "as a" +:+ (phrase $ unit_ ^. term) +:+
+  S "outward" +:+ (phrase $ uNormalVect ^. term) +:+ S "for a" +:
+  (phrase $ surface ^. term)),
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
   ((C thFluxVect) :. (C uNormalVect)) surface))) + 

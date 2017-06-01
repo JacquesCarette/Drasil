@@ -1172,9 +1172,9 @@ GS4: Predict the change in heat energy in the PCM over time.
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models (ODEs) that govern SWHS are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SWHS are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:A">
+<a id="Sec:Assu">
 <div class="subsubsection">
 <h4>
 Assumptions
@@ -1190,10 +1190,10 @@ A1: The only form of energy that is relevant for this problem is thermal energy.
 A2: All heat transfer coefficients are constant over time [GD1].
 </p>
 <p>
-A3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:dd2HtFluxP>this Definition</a>].
+A3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>this Definition</a>].
 </p>
 <p>
-A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:dd2HtFluxP>this Definition</a>, LC1].
+A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>this Definition</a>, LC1].
 </p>
 <p>
 A5: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
@@ -1202,16 +1202,16 @@ A5: The density of water and density of PCM have no spatial variation; that is, 
 A6: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
 </p>
 <p>
-A7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:dd1HtFluxC>this Definition</a>].
+A7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>this Definition</a>].
 </p>
 <p>
-A8: The temperature of the heating coil is constant over time [<a href=#DD:dd1HtFluxC>this Definition</a>, LC2].
+A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>this Definition</a>, LC2].
 </p>
 <p>
-A9: The temperature of the heating coil does not vary along its length [<a href=#DD:dd1HtFluxC>this Definition</a>, LC3].
+A9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>this Definition</a>, LC3].
 </p>
 <p>
-A10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:dd2HtFluxP>this Definition</a>].
+A10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:ht.flux.P>this Definition</a>].
 </p>
 <p>
 A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC4].
@@ -1243,7 +1243,7 @@ A19: The pressure in the tank is atmospheric, so the melting point temperature a
 </div>
 </div>
 </a>
-<a id="Sec:TM">
+<a id="Sec:TheoMode">
 <div class="subsubsection">
 <h4>
 Theoretical Models
@@ -1397,13 +1397,13 @@ Q is the change in thermal energy (J), latent heat energy. FIXME: THE INTEGRAL F
 </a>
 </div>
 </a>
-<a id="Sec:GD">
+<a id="Sec:GeneDefi">
 <div class="subsubsection">
 <h4>
 General Definitions
 </h4>
 <p class="paragraph">
-This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models. (General definitions are left out because they are not currently implemented in Drasil.)
+This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
 <p class="paragraph">
 Detailed derivation of simplified rate of change of temperature:
@@ -1485,7 +1485,7 @@ dt
 </a>
 </div>
 </a>
-<a id="Sec:DD">
+<a id="Sec:DataDefi">
 <div class="subsubsection">
 <h4>
 Data Definitions
@@ -1493,7 +1493,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
-<a id="DD:dd1HtFluxC">
+<a id="DD:ht.flux.C">
 <table class="ddefn">
 <tr>
 <th>
@@ -1539,7 +1539,7 @@ q<sub>C</sub> is the heat flux into the water from the coil<br />h<sub>C</sub> i
 </tr>
 </table>
 </a>
-<a id="DD:dd2HtFluxP">
+<a id="DD:ht.flux.P">
 <table class="ddefn">
 <tr>
 <th>
@@ -1646,7 +1646,7 @@ H<sub>f</sub> is the amount of thermal energy required to completely melt a unit
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a> and <a href=#Sec:GD>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
 <p class="paragraph">
 The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for T<sub>W</sub> and T<sub>P</sub> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change. (Instance models are left out because they are not currently implemented in Drasil.)
@@ -1670,7 +1670,7 @@ dt
 </div>
 </a>
 <p class="paragraph">
-Using <a href=#DD:dd1HtFluxC>this Definition</a> and <a href=#DD:dd2HtFluxP>this Definition</a> for q<sub>C</sub> and q<sub>P</sub> respectively, this can be written as:
+Using <a href=#DD:ht.flux.C>this Definition</a> and <a href=#DD:ht.flux.P>this Definition</a> for q<sub>C</sub> and q<sub>P</sub> respectively, this can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1841,7 +1841,7 @@ dt
 </div>
 </a>
 <p class="paragraph">
-Using <a href=#DD:dd2HtFluxP>this Definition</a> for q<sub>P</sub>, this equation can be written as:
+Using <a href=#DD:ht.flux.P>this Definition</a> for q<sub>P</sub>, this equation can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1916,7 +1916,7 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 Data Constraints
 </h4>
 <p class="paragraph">
-Tables 1 and 2 show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
+<a href=#Table:Tabl1>this Table</a> and <a href=#Table:Tabl2>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
 </p>
 </div>
 </a>
@@ -1926,7 +1926,7 @@ Tables 1 and 2 show the data constraints on the input and output variables, resp
 Properties of a Correct Solution
 </h4>
 <p class="paragraph">
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:dd1HtFluxC>this Definition</a> and <a href=#DD:dd2HtFluxP>this Definition</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>this Definition</a> and <a href=#DD:ht.flux.P>this Definition</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
 <a id="">
 <div class="equation">
@@ -2292,10 +2292,10 @@ GD1
 GD2
 </th>
 <th>
-<a href=#DD:dd1HtFluxC>this Definition</a>
+<a href=#DD:ht.flux.C>this Definition</a>
 </th>
 <th>
-<a href=#DD:dd2HtFluxP>this Definition</a>
+<a href=#DD:ht.flux.P>this Definition</a>
 </th>
 <th>
 <a href=#DD:dd3HtFusion>this Definition</a>
@@ -2538,7 +2538,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd1HtFluxC>this Definition</a>
+<a href=#DD:ht.flux.C>this Definition</a>
 </td>
 <td>
 
@@ -2582,7 +2582,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd2HtFluxP>this Definition</a>
+<a href=#DD:ht.flux.P>this Definition</a>
 </td>
 <td>
 
@@ -3692,7 +3692,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd1HtFluxC>this Definition</a>
+<a href=#DD:ht.flux.C>this Definition</a>
 </td>
 <td>
 
@@ -3754,7 +3754,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:dd2HtFluxP>this Definition</a>
+<a href=#DD:ht.flux.P>this Definition</a>
 </td>
 <td>
 

@@ -177,7 +177,7 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var i) (listVar $. at i) b
     where initState = varDecDef i (Base Integer) (litInt 0)
           guard     = Var i ?< (listVar $. ListSize)
-          update    = (&++)i
+          update    = (&.++)i
     -- the following ForEach implementation will only be valid in Objective-C 2.0 or later
     {-vcat [
         iterForEachLabel c <+> parens (stateType c t Dec <+> text var <+> iterInLabel c <+> valueDoc c listVar) <+> lbrace,
@@ -236,7 +236,7 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v f@(Cast _) = objAccessDocD c v f
-objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&++)i) forBody
+objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&.++)i) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)

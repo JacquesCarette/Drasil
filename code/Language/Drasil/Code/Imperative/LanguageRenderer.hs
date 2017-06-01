@@ -415,7 +415,7 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&.++)index) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0
@@ -533,11 +533,15 @@ unOpDocD Negate = text "-"
 unOpDocD SquareRoot = text "sqrt"
 unOpDocD Abs = text "fabs"
 unOpDocD Not = text "!"
+unOpDocD Log = text "log"
+unOpDocD Exp = text "exp"
 
 unOpDocD' :: UnaryOp -> Doc
 unOpDocD' SquareRoot = text "math.sqrt"
 unOpDocD' Abs = text "math.fabs"
 unOpDocD' Not = text "not"
+unOpDocD' Log = text "math.log"
+unOpDocD' Exp = text "math.exp"
 unOpDocD' op = unOpDocD op
 
 valueDocD :: Config -> Value -> Doc

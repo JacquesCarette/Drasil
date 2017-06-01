@@ -24,9 +24,9 @@ module Language.Drasil.Code.Imperative.AST (
     var, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,   (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
-    (&=),(&.=),(&=.),(&+=),(&-=),(&++),
-    (&~-),($->),($.),($:),
-    alwaysDel,neverDel,
+    (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
+    ($->),($.),($:),
+    log,exp,alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
     listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
@@ -38,12 +38,13 @@ module Language.Drasil.Code.Imperative.AST (
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,funcApp',
+    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, 
+    listSize, listAccess, valStmt,funcApp,funcApp',
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
 import Data.List (zipWith4)
-import Prelude hiding (break,print,return)
+import Prelude hiding (break,print,return,log,exp)
 
 import Language.Drasil.Code.Imperative.Helpers (capitalize)
 
@@ -155,7 +156,7 @@ data Expression = UnaryExpr UnaryOp Value
                 | Exists Value      --used to check whether the specified variable/list element/etc. is null
     deriving (Eq, Show)
 data UnaryOp = Negate | SquareRoot | Abs
-             | Not
+             | Not | Log | Exp
     deriving (Eq, Show)
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
@@ -281,35 +282,35 @@ infixr 6 ?!
 (?!) v = unExpr Not v
 
 (?<) :: Value -> Value -> Value
-infixl 5 ?<
+infixl 4 ?<
 v1 ?< v2 = binExpr v1 Less v2
 
 (?<=) :: Value -> Value -> Value
-infixl 5 ?<=
+infixl 4 ?<=
 v1 ?<= v2 = binExpr v1 LessEqual v2
 
 (?>) :: Value -> Value -> Value
-infixl 5 ?>
+infixl 4 ?>
 v1 ?> v2 = binExpr v1 Greater v2
 
 (?>=) :: Value -> Value -> Value
-infixl 5 ?>=
+infixl 4 ?>=
 v1 ?>= v2 = binExpr v1 GreaterEqual v2
 
 (?==) :: Value -> Value -> Value
-infixl 4 ?==
+infixl 3 ?==
 v1 ?== v2 = binExpr v1 Equal v2
 
 (?!=) :: Value -> Value -> Value
-infixl 4 ?!=
+infixl 3 ?!=
 v1 ?!= v2 = binExpr v1 NotEqual v2
 
 (?&&) :: Value -> Value -> Value
-infixl 3 ?&&
+infixl 2 ?&&
 v1 ?&& v2 = binExpr v1 And v2
 
 (?||) :: Value -> Value -> Value
-infixl 2 ?||
+infixl 1 ?||
 v1 ?|| v2 = binExpr v1 Or v2
 
 --arithmetic operators (#)
@@ -362,21 +363,37 @@ a &.= b = assign (Var a) b
 infixr 1 &=.
 a &=. b = assign a (Var b)
 
-(&-=) :: Label -> Value -> Statement
+(&-=) :: Value -> Value -> Statement
 infixl 1 &-=
-n &-= v = (n &.= (Var n #- v))
+n &-= v = (n &= (n #- v))
 
-(&+=) :: Label -> Value -> Statement
+(&.-=) :: Label -> Value -> Statement
+infixl 1 &.-=
+n &.-= v = (n &.= (Var n #- v))
+
+(&+=) :: Value -> Value -> Statement
 infixl 1 &+=
-n &+= v = AssignState $ PlusEquals (Var n) v
+n &+= v = AssignState $ PlusEquals n v
 
-(&++) :: Label -> Statement
+(&.+=) :: Label -> Value -> Statement
+infixl 1 &.+=
+n &.+= v = AssignState $ PlusEquals (Var n) v
+
+(&++) :: Value -> Statement
 infixl 8 &++
-(&++) l = AssignState $ PlusPlus (Var l)
+(&++) v = AssignState $ PlusPlus v
 
-(&~-) :: Label -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
+(&.++) :: Label -> Statement
+infixl 8 &.++
+(&.++) l = AssignState $ PlusPlus (Var l)
+
+(&~-) :: Value -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
 infixl 8 &~-
-(&~-) l = (l &-= litInt 1)
+(&~-) v = (v &-= litInt 1)
+
+(&.~-) :: Label -> Statement
+infixl 8 &.~-
+(&.~-) l = (l &.-= litInt 1)
 
 --other operators ($)
 ($->) :: Value -> Value -> Value
@@ -390,6 +407,12 @@ v $. f = ObjAccess v f
 ($:) :: Label -> Label -> Value
 infixl 9 $:
 n $: e = EnumElement n e
+
+log :: Value -> Value
+log = unExpr Log
+
+exp :: Value -> Value
+exp = unExpr Exp
 
 alwaysDel :: Int
 alwaysDel = 4
@@ -472,6 +495,12 @@ objDecNew n t vs = DeclState $ ObjDecDef n t (StateObj t vs)
 -- declare new object with parameter-less constructor
 objDecNewVoid :: Label -> StateType -> Statement
 objDecNewVoid n t = objDecNew n t []
+
+listSize :: Function
+listSize = ListSize
+
+listAccess :: Value -> Function
+listAccess = ListAccess
 
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]

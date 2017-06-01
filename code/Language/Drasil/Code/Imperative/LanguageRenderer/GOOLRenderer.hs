@@ -109,9 +109,9 @@ assignDoc' :: Config -> Assignment -> Doc
 assignDoc' c (Assign (Var n) v2) = lbl n <+> text "&.=" <+> valueDoc c v2
 assignDoc' c (Assign v1 (Var n)) = valueDoc c v1 <+> text "&=." <+> lbl n
 assignDoc' c (Assign v1 v2) = valueDoc c v1 <+> text "&=" <+> valueDoc c v2
-assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&+=" <+> valueDoc c v2
+assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&.+=" <+> valueDoc c v2
 assignDoc' c (PlusEquals v1 v2) = text "AssignState $ PlusEquals" <+> valueDoc c v1 <+> valueDoc c v2
-assignDoc' _ (PlusPlus (Var n)) = text "(&++)" <> lbl n
+assignDoc' _ (PlusPlus (Var n)) = text "(&.++)" <> lbl n
 assignDoc' c (PlusPlus v) = text "AssignState $ PlusPlus" <+> valueDoc c v
 
 binOpDoc' :: BinaryOp -> Doc
@@ -335,6 +335,8 @@ unOpDoc' Negate = text "#~"
 unOpDoc' SquareRoot = text "#/^"
 unOpDoc' Abs = text "#|"
 unOpDoc' Not = text "?!"
+unOpDoc' Log = text "log"
+unOpDoc' Exp = text "exp"
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' c = parens . valueDoc'' c

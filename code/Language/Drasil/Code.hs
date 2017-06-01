@@ -7,8 +7,8 @@ module Language.Drasil.Code (
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
-    (&=),(&.=),(&=.),(&+=),(&-=),(&++),
-    (&~-),($->),($.),($:),
+    (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
+    ($->),($.),($:),log,exp,
     alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
     forEach,ifCond,ifExists,listDec,listDecValues,listOf,litBool,litChar,
     litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,param,
@@ -17,13 +17,14 @@ module Language.Drasil.Code (
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,
     convertToMethod,bodyReplace,funcReplace,valListReplace,objDecNew,
-    objDecNewVoid,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,funcApp',
+    objDecNewVoid,
+    listSize,listAccess,var,svToVar,objMethodCall,objMethodCallVoid,valStmt,funcApp,funcApp',
     cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel,
     makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
     Options(..)
 ) where
 
-import Prelude hiding (break, print, return)
+import Prelude hiding (break, print, return, log, exp)
 import Language.Drasil.Code.Imperative.AST
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser

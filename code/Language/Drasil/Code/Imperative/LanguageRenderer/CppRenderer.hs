@@ -175,7 +175,7 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var it) (Var $ "(*" ++ it ++ ")") b
     where initState = DeclState $ VarDecDef it (Iterator t) (listVar $. IterBegin)
           guard     = binExpr (Var it) NotEqual (listVar $. IterEnd)
-          update    = (&++)it
+          update    = (&.++)it
 iterationDoc' c i = iterationDocD c i
 
 classDoc' :: Config -> FileType -> Label -> Class -> Doc
@@ -282,7 +282,7 @@ destructor _ n vs =
         guard l = Var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
-        deleteLoop l = IterState (For initv (guard l) ((&++)i) (loopBody l))
+        deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
         deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (Var lbl)
         deleteVar (StateVar lbl _ _ _ _) = FreeState $ Var lbl
         deleteStatements = map deleteVar deleteVars

@@ -101,9 +101,8 @@ fmtC _ []      = S "None"
 fmtC symb [x]  = (getS symb) +:+ x
 fmtC symb (x:xs) = (getS symb) +:+ x +:+ S "and" +:+ (fmtC symb xs)
 
-
-getS :: (SymbolForm a) => a -> Sentence
 -- | gets symbol from chunk
+getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
 -- | gets unit from chunk
 getU :: (Unitary a) => a -> Sentence

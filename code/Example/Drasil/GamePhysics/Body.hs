@@ -670,7 +670,7 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 
 --these statements look like they could be parametrized
 s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving algorithm used by the" +:+ (phrase library)) `maybeWOAdj` 
+  S "-solving algorithm used by the" +:+ (phrase library)) `maybeWOVerb` 
   (S "changed in the future")
 
 s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`

@@ -45,7 +45,7 @@ s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2,
   s4_1_3_list, s4_2_1_list, 
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
-  s5_2_p1, s7_list :: Contents
+  s7_list :: Contents
 
 s4_2_2_tmods :: [Contents]
 
@@ -411,12 +411,14 @@ table_inputdata = Table [titleize symbol_, titleize' $ unit_ ^. term, titleize d
   (S "Input data") True
  
 -- SECTION 5.2 --
-s5_2 = SRS.nonfuncReq [s5_2_p1] []
+s5_2 = nonFuncReqF [accuracy, performanceSpd] [correctness, understandability, reusability, maintainability] r EmptyS
+  where r = (short ssa) +:+ S "is intended to be an educational tool"
+        
 
-s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
-  S "educational tool, therefore accuracy and performance speed" +:+
-  S "are secondary" +:+ (phrase $ program ^. term) +:+ S "priorities to correctness," +:+
-  S "understandability, reusability, and maintainability."
+-- s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
+  -- S "educational tool, therefore accuracy and performance speed" +:+
+  -- S "are secondary" +:+ (phrase $ program ^. term) +:+ S "priorities to correctness," +:+
+  -- S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
 s6 = SRS.likeChg [] []

@@ -22,7 +22,7 @@ program = dcc "program"         (cn' "program")
 
 -- Non-functional requirements  
 
-accuracy, correctness, maintainability, performance, portability, reliability,
+accuracy, correctness, maintainability, performance, performanceSpd, portability, reliability,
   reusability, understandability, verifiability :: ConceptChunk
   
 accuracy = dcc "accuracy" (nounPhraseSP "accuracy")
@@ -36,6 +36,9 @@ maintainability = dcc "maintainability" (nounPhraseSP "maintainability")
 
 performance = dcc "performance" (nounPhraseSP "performance")
               "The action or process of carrying out or accomplishing an action, task, or function"
+              
+performanceSpd = dcc (performance ^. id) (nounPhrase'' (phrase $ performance ^. term) (S "speed") CapFirst CapWords)
+              "The action or process of carrying out or accomplishing an action, task, or function quickly"
              
 portability = dcc "portability" (nounPhraseSP "portability")
               "The ability of software to be transferred from one machine or system to another"

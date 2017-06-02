@@ -79,7 +79,7 @@ cpSymbMap = symbolMap cpSymbols
 cpSymMapT :: RelationConcept -> Contents 
 cpSymMapT = symbolMapFun cpSymbols Theory
 
-cpSymMapD :: QDefintion -> Contents 
+cpSymMapD :: QDefinition -> Contents 
 cpSymMapD = symbolMapFun cpSymbols Data
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

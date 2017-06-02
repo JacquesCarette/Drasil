@@ -314,7 +314,7 @@ s4_2_5_p3 = Paragraph $ (S "values") `ofThe'` (S "interslice normal force") +:+
 -- SECTION 4.2.6 --
 -- Data Constraints is automaticly generated in solChSpecF using the tables below
 noTypicalVal, vertConvention :: Sentence
-noTypicalVal = S "N/A"
+noTypicalVal   = S "N/A"
 vertConvention = S "Consecutive vertexes have increasing x values." +:+
                  S "The start and end vertices of all layers go to the same x values."
 
@@ -350,9 +350,11 @@ dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght]
 
-s4_2_6Table2, s4_2_6Table3 :: Contents --FIXME: actually create these table
-s4_2_6Table2 = Table [S "Var", S "Physical Constraints", S "Typical Value"] dataConstList (S "Input Variables") True 
-s4_2_6Table3 = Table [S "Var", S "Physical Constraints"] [fcOfSa, slipVert2, deltax, deltay] (S "Output Variables") True
+s4_2_6Table2, s4_2_6Table3 :: Contents
+s4_2_6Table2 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
+                      dataConstList (S "Input Variables") True 
+s4_2_6Table3 = Table [S "Var", S "Physical Constraints"]
+                      [fcOfSa, slipVert2, deltax, deltay] (S "Output Variables") True
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]
@@ -402,14 +404,11 @@ table_inputdata :: Contents
 table_inputdata = Table [titleize symbol_, titleize' $ unit_ ^. term, titleize description]
   (mkTable
     [getS,
-     (\ch -> unwrap $ getUnit ch),
+     (fmtU EmptyS),
      (\ch -> phrase $ ch ^. term)]
     ((map cqs [coords, elastMod, cohesion]) ++ (map cqs [poissnsR]) ++ --this has to be seperate since poisson is a different type
     map cqs [fricAngle, dryWeight, satWeight, waterWeight]))
   (S "Input data") True
-    where unwrap :: (Maybe UnitDefn) -> Sentence
-          unwrap (Just a) = Sy (a ^. usymb)
-          unwrap Nothing = EmptyS
  
 -- SECTION 5.2 --
 s5_2 = SRS.nonfuncReq [s5_2_p1] []

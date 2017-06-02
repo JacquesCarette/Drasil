@@ -171,17 +171,44 @@ enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
 weave :: [[a]] -> [a]
 weave = (concat . transpose)
 
---combinator function that is used by introF in OrganizationOfSRS (needs take a tuple)
+--combinator functions that are used by introF in OrganizationOfSRS
+sAnd :: Sentence -> Sentence -> Sentence
+sAnd p1 p2 = p1 +:+ S "and" +:+ p2
+
+andIts :: Sentence -> Sentence -> Sentence
+andIts p1 p2 = p1 +:+ S "and its" +:+ p2
+
+andThe :: Sentence -> Sentence -> Sentence
+andThe p1 p2 = p1 +:+ S "and the" +:+ p2
+
+sAre :: Sentence -> Sentence -> Sentence
+sAre p1 p2 = p1 +:+ S "are" +:+ p2
+
+sIn :: Sentence -> Sentence -> Sentence
+sIn p1 p2 = p1 +:+ S "in" +:+ p2
+
+sIs :: Sentence -> Sentence -> Sentence
+sIs p1 p2 = p1 +:+ S "is" +:+ p2
+
+isThe :: Sentence -> Sentence -> Sentence
+isThe p1 p2 = p1 +:+ S "is the" +:+ p2
+
+sOf :: Sentence -> Sentence -> Sentence
+sOf p1 p2 = p1 +:+ S "of" +:+ p2
+
+sOr :: Sentence -> Sentence -> Sentence
+sOr p1 p2 = p1 +:+ S "or" +:+ p2
+
 ofThe, ofThe' :: Sentence -> Sentence -> Sentence
 ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
 ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
 
+toThe :: Sentence -> Sentence -> Sentence
+toThe p1 p2 = p1 +:+ S "to the" +:+ p2
+
 unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
-
-isThe :: Sentence -> Sentence -> Sentence
-isThe  p1 p2 = p1 +:+ S "is the" +:+ p2
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be

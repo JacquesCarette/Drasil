@@ -48,10 +48,10 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
-s2, s3, s3_1, s4, s4_1,
+s3, s3_1, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s2_2_contents, {-s2_3_contents, -}s3_1_contents, sys_context_fig,
+s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
   s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
   s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
@@ -101,7 +101,8 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
 
-s2 = introductionF progName s2_intro s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
+s2 :: Section
+s2 = introductionF progName (s2_intro, s2_kSent) s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
 -- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
@@ -170,7 +171,7 @@ s2_2_tuple :: (Sentence, Sentence)
 s2_2_tuple = (s2_2_contents, s2_2_end)
 
 s2_2_contents :: Sentence
-s2_2_contents = S (phrase $ CT.thermal_analysis ^. term) +:+ S "of a single" +:+
+s2_2_contents = (phrase $ CT.thermal_analysis ^. term) +:+ S "of a single" +:+
   (phrase $ tank_pcm ^. term) --FIXME: Caps issue
   
 s2_2_end :: Sentence
@@ -198,8 +199,8 @@ s2_2_end = S "predict the" +:+
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3_tuple :: (Sentence, Sentence, Sentence, Section)
-s2_3_tuple = (s2_3_knowlegde, s2_3_understanding, (EmptyS), (SRS.userChar SRS.missingP []))
+s2_3_tuple :: (Sentence, Sentence, Sentence)
+s2_3_tuple = (s2_3_knowlegde, s2_3_understanding, EmptyS)
 
 s2_3_knowlegde :: Sentence
 s2_3_knowlegde = (phrase $ CT.heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
@@ -227,7 +228,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4_tuple :: (Sentence, Sentence, Section, Sentence)
+s2_4_tuple :: (Sentence, CINP, Section, Sentence)
 s2_4_tuple = (s2_4_intro, inModel, (SRS.inModel SRS.missingP []), s2_4_trail)
 
 s2_4_intro :: Sentence

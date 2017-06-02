@@ -21,7 +21,7 @@ pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
 
 pbdescr :: Sentence
 pbdescr =
-  foldlSent [(P $ prob_br ^. symbol), S "is the calculated" +:+. (phrase $ prob_br ^. term),
+  foldlSent [(P $ prob_br ^. symbol) `isThe` (S "calculated" +:+. (phrase $ prob_br ^. term)),
   (P $ risk_fun ^. symbol) `isThe` (phrase $ risk ^. term)]
 
 calOfCap :: RelationConcept

@@ -32,7 +32,7 @@ module Drasil.OrganizationOfSRS
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (equation, matrix, graph)
+import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe, ofThe')
@@ -41,9 +41,9 @@ import qualified Drasil.SRS as SRS
 introductionF :: CINP -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CINP, Section, Sentence) -> Section
 introductionF kWord (startIntro, kSent) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
   = introF startIntro kSent subsec
-     where  subsec   = [pOfDoc, scpOfReq, cIntRdr, organizationOfDoc orgTrailing]
+     where  subsec   = [pOfDoc, scpOfReq_, cIntRdr, organizationOfDoc orgTrailing]
             pOfDoc   = prpsOfDocF pOdPart1
-            scpOfReq = scpOfReqF inc kWord endSCOR
+            scpOfReq_ = scpOfReqF inc kWord endSCOR
             cIntRdr  = charIntRdrF know und kWord appStandd (SRS.userChar [] [])
             organizationOfDoc True  = orgSecWTS i b s t
             organizationOfDoc False = orgSec i b s 

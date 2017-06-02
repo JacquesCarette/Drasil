@@ -2,11 +2,12 @@ module Data.Drasil.SentenceStructures
   ( foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
-  , toThe
+  , toThe, tableShows
   ) where
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1)
+import Data.Drasil.Concepts.Documentation
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -60,3 +61,9 @@ ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
 
 toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2
+
+
+{--** Miscellaneous **--}
+tableShows :: Contents -> Sentence -> Sentence
+tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
+                          plural dependency +:+ S "of" +:+ trailing

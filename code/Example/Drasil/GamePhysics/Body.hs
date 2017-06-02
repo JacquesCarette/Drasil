@@ -11,6 +11,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
+import Drasil.TraceabilityMandGs
 import Drasil.OrganizationOfSRS
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 

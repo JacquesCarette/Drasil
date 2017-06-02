@@ -227,6 +227,7 @@ executable glassbr
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Units
     , Drasil.OrganizationOfSRS
+    , Drasil.TraceabilityMandGs
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.TableOfAbbAndAcronyms
@@ -263,6 +264,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
     , Drasil.OrganizationOfSRS
+    , Drasil.TraceabilityMandGs
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.SpecificSystemDescription
@@ -291,6 +293,7 @@ executable swhs
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.OrganizationOfSRS
+    , Drasil.TraceabilityMandGs
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.SWHS.Body

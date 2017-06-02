@@ -38,6 +38,7 @@ import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage
 import Drasil.Template.MG
 import Drasil.Template.DD
+import Drasil.TraceabilityMandGs
 
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils hiding (foldlSent, foldlsC) 

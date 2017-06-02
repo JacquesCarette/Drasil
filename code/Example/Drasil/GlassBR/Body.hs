@@ -36,6 +36,7 @@ import Data.Drasil.Utils (isThe)
 
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
+import Drasil.TraceabilityMandGs
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

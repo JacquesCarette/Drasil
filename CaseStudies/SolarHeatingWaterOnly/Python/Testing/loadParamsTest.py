@@ -78,10 +78,10 @@ class TestLoadParams(unittest.TestCase):
         self.assertAlmostEqual(self.params.Vt, 0.1999749387716046988011011019127, places=None, msg='Vt', delta=1e-10)
 
     def test_params_Mw(self):
-        self.assertAlmostEqual(self.params.Mw, 149.97493877160469880110110191927, places=None, msg='Mw', delta=1e-10)
+        self.assertAlmostEqual(self.params.Mw, 199.97493877160469880110110191927, places=None, msg='Mw', delta=1e-10)
 
     def test_params_tau_w(self):
-        self.assertAlmostEqual(self.params.tau_w, 5231.6257808161439098450767719507, places=None, msg='tau_w',
+        self.assertAlmostEqual(self.params.tau_w, 6975.7924474828105765117434386172, places=None, msg='tau_w',
                                delta=1e-10)
 
     # def test_params_eta(self):

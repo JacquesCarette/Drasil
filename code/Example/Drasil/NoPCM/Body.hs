@@ -24,7 +24,7 @@ import Drasil.OrganizationOfSRS
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s2, s2_3, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s5, s5_2, s6 :: Section
+s2, s2_1, s2_2, s2_3, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s5, s5_1, s5_2, s6, s7 :: Section
 
 s3_1_intro, sys_context_fig, s4_1_intro, s4_1_1_bullets, s4_1_2_list, s4_1_3_intro,
   s4_1_3_list, fig_tank, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents
@@ -35,7 +35,7 @@ s3_1_intro, sys_context_fig, s4_1_intro, s4_1_1_bullets, s4_1_2_list, s4_1_3_int
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
-        map Verbatim [s2, s3, s4, s5, s6]  
+        map Verbatim [s2, s3, s4, s5, s6, s7]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
@@ -51,13 +51,20 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2 = SRS.intro [] [s2_3]
+s2 = introF EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4] --TODO: Placeholder values until content can be added
+
+s2_1 = prpsOfDocF EmptyS --TODO: Placeholder values until content can be added
+
+s2_2 = scpOfReqF EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
 
 s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
   where knowledge = ((phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
                     S "A third or fourth year Mechanical Engineering course on this topic is recommended")
         understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
                         S "covered in first and second year Calculus courses")
+                        
+s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP [])
+
 
                         
 ----------------------------------------
@@ -148,7 +155,9 @@ s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
 --Section 5 : REQUIREMENTS
 --------------------------
 
-s5 = reqF [s5_2] --TODO: Add the rest of the section
+s5 = reqF [s5_1, s5_2]
+
+s5_1 = SRS.funcReq [] [] --TODO: Placeholder values until content can be added
 
 s5_2 = nonFuncReqF [performance] [correctness, verifiability,
         understandability, reusability, maintainability]
@@ -160,3 +169,10 @@ s5_2 = nonFuncReqF [performance] [correctness, verifiability,
 ----------------------------
 
 s6 = SRS.likeChg [] [] --TODO: Add the rest of the section
+
+
+------------
+--REFERENCES
+------------
+
+s7 = SRS.reference [] []

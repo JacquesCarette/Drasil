@@ -28,7 +28,8 @@ import Data.Drasil.Software.Products
 
 import Data.Drasil.Quantities.SolidMechanics
 
-import Data.Drasil.Utils
+import Data.Drasil.Utils hiding (ofThe, ofThe')
+import Data.Drasil.SentenceStructures
 
 import Drasil.Template.MG
 import Drasil.Template.DD

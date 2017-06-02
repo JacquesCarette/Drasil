@@ -38,6 +38,7 @@ import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
 import Drasil.TraceabilityMandGs
 import Drasil.Stakeholders
 import Drasil.Introduction
+import Drasil.Requirements
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

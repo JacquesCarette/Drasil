@@ -4,13 +4,16 @@ import Language.Drasil.Code
 
 -- gool labels/variables/params
 
-l_a, l_b, l_t, l_gt, l_w, l_tnt, l_sdx, l_sdy,
+l_filename, l_infile, l_a, l_b, l_t, l_gt, l_w, l_tnt, l_sdx, l_sdy,
   l_sdz, l_pbtol, l_asprat, l_sd, l_h, l_gtf, l_ldf, l_wtnt, l_E,
   l_td, l_m, l_k, l_lsf, l_w_array, l_data_sd, l_data_q, l_j_array, 
   l_data_asprat, l_data_qstar, l_params, l_q, l_j_tol, l_q_hat, l_q_hat_tol,
   l_pb, l_j, l_nfl, l_lr, l_is_safe1, l_is_safe2, l_y1, l_y2, l_x1, l_x2, 
   l_x, l_y, l_arr, l_v, l_i, l_mat, l_c, l_col, l_x_array, l_y_array, 
-  l_z_array, l_z, l_x_z1, l_y_z1, l_x_z2, l_y_z2, l_y_upper, l_y_lower :: Label
+  l_z_array, l_z, l_x_z1, l_y_z1, l_x_z2, l_y_z2, l_y_upper, l_y_lower,
+  l_outfile  :: Label
+l_filename = "filename"
+l_infile = "infile"
 l_a = "a"
 l_b = "b"
 l_t = "t"
@@ -71,16 +74,19 @@ l_x_z2 = "x_z2"
 l_y_z2 = "y_z2"
 l_y_upper = "y_upper"
 l_y_lower = "y_lower"
+l_outfile = "outfile"
 
 
-v_a, v_b, v_t, v_gt, v_w, v_tnt, v_sdx, v_sdy,
+v_filename, v_infile, v_a, v_b, v_t, v_gt, v_w, v_tnt, v_sdx, v_sdy,
   v_sdz, v_pbtol, v_asprat, v_sd, v_h, v_gtf, v_ldf, v_wtnt,
   v_E, v_td, v_m, v_k, v_lsf, v_w_array, v_data_sd, v_data_q, 
   v_j_array, v_data_asprat, v_data_qstar, v_params, v_q, v_j_tol, 
   v_q_hat, v_q_hat_tol, v_pb, v_j, v_nfl, v_lr, v_is_safe1, 
   v_is_safe2, v_x1, v_y1, v_x2, v_y2, v_x, v_y, v_arr, v_v, v_i, 
   v_mat, v_c, v_col, v_x_array, v_y_array, v_z_array, v_z, v_x_z1, 
-  v_y_z1, v_x_z2, v_y_z2, v_y_upper, v_y_lower  :: Value
+  v_y_z1, v_x_z2, v_y_z2, v_y_upper, v_y_lower, v_outfile  :: Value
+v_filename = var l_filename
+v_infile = var l_infile
 v_a = var l_a
 v_b = var l_b
 v_t = var l_t
@@ -141,10 +147,12 @@ v_x_z2 = var l_x_z2
 v_y_z2 = var l_y_z2
 v_y_upper = var l_y_upper
 v_y_lower = var l_y_lower
+v_outfile = var l_outfile
 
-p_w_array, p_data_sd, p_data_q, p_params, p_q, p_j, p_q_hat_tol, 
+p_filename, p_w_array, p_data_sd, p_data_q, p_params, p_q, p_j, p_q_hat_tol, 
   p_nfl, p_pb, p_lr, p_x1, p_y1, p_x2, p_y2, p_x, p_arr, p_v, p_mat, 
-  p_c, p_x_array, p_y_array, p_z_array, p_z, p_y :: Parameter
+  p_c, p_x_array, p_y_array, p_z_array, p_z, p_y, p_is_safe1, p_is_safe2 :: Parameter
+p_filename = param l_filename string
 p_w_array = param l_w_array (listT float)
 p_data_sd = param l_data_sd (listT $ listT float)
 p_data_q = param l_data_q (listT $ listT float)
@@ -169,3 +177,63 @@ p_y_array = param l_y_array (listT $ listT float)
 p_z_array = param l_z_array (listT float)
 p_z = param l_z float
 p_y = param l_y float
+p_is_safe1 = param l_is_safe1 bool
+p_is_safe2 = param l_is_safe2 bool
+
+
+s_InputParameters :: StateType
+s_InputParameters = obj "InputParameters"
+
+lib_InputParameters, lib_InputFormat, lib_DerivedValues, lib_InputConstraints,
+  lib_Interpolation, lib_Calculations, lib_OutputFormat :: Library
+lib_InputParameters = "InputParameters"
+lib_InputFormat = "InputFormat"
+lib_DerivedValues = "DerivedValues"
+lib_InputConstraints = "InputConstraints"
+lib_Interpolation = "Interpolation"
+lib_Calculations = "Calculations"
+lib_OutputFormat = "OutputFormat"
+
+
+param_float_fields :: [String]
+param_float_fields = [
+      l_a ,
+      l_b ,
+      l_t ,
+      l_w ,
+      l_tnt ,
+      l_sdx ,
+      l_sdy ,
+      l_sdz ,
+      l_pbtol ,
+      l_asprat ,
+      l_sd ,
+      l_h ,
+      l_gtf ,
+      l_ldf ,
+      l_wtnt ,
+      l_E ,
+      l_td ,
+      l_m ,
+      l_k ,
+      l_lsf
+    ]
+
+param_int_fields :: [String]
+param_int_fields = [l_gt]   
+    
+float_outputs :: [(String, Label)]
+float_outputs = [
+    ("Demand", l_q) ,
+    ("Stress Distr. Factor", l_j) ,
+    ("Tolerable Pressure", l_q_hat_tol) ,
+    ("Prob. of Breakage", l_pb) ,
+    ("Capacity", l_lr) ,
+    ("Non-Factored Load", l_nfl)
+  ]
+  
+bool_outputs :: [(String, Label)]
+bool_outputs = [
+    ("Safety Req. 1", l_is_safe1) ,
+    ("Safety Req. 2", l_is_safe2)
+  ]

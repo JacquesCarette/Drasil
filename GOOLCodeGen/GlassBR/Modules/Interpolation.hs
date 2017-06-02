@@ -9,7 +9,7 @@ interpolation :: Module
 interpolation = buildModule "Interpolation" [] [] [lin_interp_func, indInSeq_func, matrixCol_func, interpY_func, interpZ_func] []
 
 lin_interp_func :: FunctionDecl
-lin_interp_func = pubMethod (methodType float) "lin_interp" [p_y1, p_y2, p_x1, p_x2, p_x] 
+lin_interp_func = pubMethod (methodType float) "lin_interp" [p_x1, p_y1, p_x2, p_y2, p_x] 
     [ 
       block [
         varDecDef l_y float $ (v_y2 #- v_y1) #/ (v_x2 #- v_x1) #* (v_x #- v_x1) #+ v_y1,
@@ -78,7 +78,7 @@ interpY_func = pubMethod (methodType float) "interpY" [p_x_array, p_y_array, p_z
           [ v_z_array$.(listAccess v_i),
             v_y1,
             v_z_array$.(listAccess (v_i #+ (litInt 1))),
-            v_y1,
+            v_y2,
             v_z ]
       ]
     ]
@@ -91,7 +91,6 @@ interpZ_func = pubMethod (methodType float) "interpZ" [p_x_array, p_y_array, p_z
         for (varDecDef l_i int (litInt 0)) (v_i ?< v_z_array$.listSize #- (litInt 1)) ((&++) v_i) 
           [
             block [
-              varDecDef l_i int $ funcApp' "indInSeq" [v_z_array, v_z] ,
               -- TODO:  refine gool list mechanics (varDecDef is wrong here)
               varDecDef l_x_z1 (listT float) $ funcApp' "matrixCol" [v_x_array, v_i] ,
               varDecDef l_y_z1 (listT float) $ funcApp' "matrixCol" [v_y_array, v_i] ,

@@ -9,8 +9,8 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
-  angularAccel, force, gravitationalConst, gravitationalAccel, velocity, 
-  momentOfInertia, displacement, angularVelocity, position)
+  angularAccel, force, gravitationalAccel, velocity, 
+  momentOfInertia, angularVelocity, position)
 --import qualified Data.Drasil.Concepts.Math as QM ()
 --import Data.Drasil.Quantities.Physics
 import Prelude hiding (id)

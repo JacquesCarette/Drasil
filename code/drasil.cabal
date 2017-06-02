@@ -13,6 +13,7 @@ library
     Data.Drasil.SI_Units
     Data.Drasil.Plurals
     Data.Drasil.Utils
+    Data.Drasil.SentenceStructure
     Data.Drasil.Modules
     Data.Drasil.Changes
     Data.Drasil.Concepts.Computation

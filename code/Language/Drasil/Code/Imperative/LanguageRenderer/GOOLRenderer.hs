@@ -62,7 +62,7 @@ goolConfig options c =
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "getEnv for GOOL is not defined"
     }
     
@@ -88,7 +88,6 @@ goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
 goolstateType _ (Base (FileType Read)) _ = text "infile"
 goolstateType _ (Base (FileType Write)) _ = text "outfile"
-goolstateType _ (Base (FileType ReadWrite)) _ = error "Not yet implemented"
 
 gooltop :: Config -> Label -> FileType -> Label -> [Module] -> Doc
 gooltop c hsMod _ _ _ = vcat [
@@ -110,9 +109,9 @@ assignDoc' :: Config -> Assignment -> Doc
 assignDoc' c (Assign (Var n) v2) = lbl n <+> text "&.=" <+> valueDoc c v2
 assignDoc' c (Assign v1 (Var n)) = valueDoc c v1 <+> text "&=." <+> lbl n
 assignDoc' c (Assign v1 v2) = valueDoc c v1 <+> text "&=" <+> valueDoc c v2
-assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&+=" <+> valueDoc c v2
+assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&.+=" <+> valueDoc c v2
 assignDoc' c (PlusEquals v1 v2) = text "AssignState $ PlusEquals" <+> valueDoc c v1 <+> valueDoc c v2
-assignDoc' _ (PlusPlus (Var n)) = text "(&++)" <> lbl n
+assignDoc' _ (PlusPlus (Var n)) = text "(&.++)" <> lbl n
 assignDoc' c (PlusPlus v) = text "AssignState $ PlusPlus" <+> valueDoc c v
 
 binOpDoc' :: BinaryOp -> Doc
@@ -182,6 +181,7 @@ funcDoc' _ ListSize = text "ListSize"
 funcDoc' _ (ListAccess (Var n)) = text "at" <+> lbl n
 funcDoc' c (ListAccess v) = text "ListAccess" <+> valueDoc c v
 funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
+funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
 funcDoc' _ (IterBegin) = text "IterBegin"
@@ -336,6 +336,8 @@ unOpDoc' Negate = text "#~"
 unOpDoc' SquareRoot = text "#/^"
 unOpDoc' Abs = text "#|"
 unOpDoc' Not = text "?!"
+unOpDoc' Log = text "log"
+unOpDoc' Exp = text "exp"
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' c = parens . valueDoc'' c
@@ -351,7 +353,7 @@ valueDoc'' _ (EnumElement en e) = lbl en <+> text "$:" <+> lbl e
 valueDoc'' c (FuncApp (Just l) n vs) = text "funcApp" <+> text l <+> funcAppDoc c n vs
 valueDoc'' c (FuncApp Nothing n vs) = text "funcApp'" <+> funcAppDoc c n vs
 valueDoc'' _ Self = text "Self"
-valueDoc'' c (StateObj t vs) = text "StateObj" <+> stateType c t Dec <+> hsList (valueDoc c) vs
+valueDoc'' c (StateObj l t vs) = text "StateObj" <+> justDoc l <+> stateType c t Dec <+> hsList (valueDoc c) vs
 valueDoc'' _ (Var v) = text "Var" <+> lbl v
 valueDoc'' _ (EnumVar v) = text "EnumVar" <+> lbl v
 valueDoc'' c (ListVar v t) = lbl v <+> text "`listOf`" <+> stateType c t Dec
@@ -382,3 +384,7 @@ casesDoc c f = hsVList (\(a,b) -> parens $ f a <> comma <+> bodyDoc c b)
 
 elseBody :: Config -> Body -> Doc
 elseBody c b = if null b then text "noElse" else bodyDoc c b
+
+justDoc :: Maybe Label -> Doc
+justDoc (Just l) = parens $ text "Just" <+> text l
+justDoc Nothing = text "Nothing" 

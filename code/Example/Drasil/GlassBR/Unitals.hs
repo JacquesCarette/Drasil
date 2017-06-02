@@ -5,10 +5,10 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Utils(symbolMapFun)
 import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.Utils (foldlSent)
-
 
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 
@@ -35,9 +35,9 @@ standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick,
-  sflawParamK, sflawParamM, demand, sd_max, sd_min, nom_thick,
-  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight]
+glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
+  sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
+  char_weight, cWeightMax, cWeightMin, eqTNTWeight]
 
 plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
@@ -87,8 +87,8 @@ eqTNTWeight = unitary' "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac,
-  sdf_tol, prob_br, pb_tol, dimlessLoad, tolLoad]
+glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
+  pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF]
 
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
   pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
@@ -127,7 +127,7 @@ terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStren
 aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, loadResis, 
   longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar, 
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,
-  notSafe, bomb, explosion, gLassBR :: ConceptChunk
+  notSafe, bomb, explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 aspectRatio   = dcc "aspectRatio" (aspectR ^. term)
@@ -220,4 +220,30 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
-gLassBR       = dcc "gLassBR"     (pn "glassBR") "glassBR" --lowercase?
+
+
+-- hack; needs to be removed eventually; originals are within Concepts.hs
+temporary :: [VarChunk]
+temporary = [nonFactorL_, lDurFac_, glassTypeFac_]
+
+nonFactorL_, lDurFac_, glassTypeFac_ :: VarChunk
+
+nonFactorL_    = makeVC "nonFactorL"    (nounPhraseSP "non-factored load") cB
+lDurFac_       = makeVC "lDurFac"       (nounPhraseSP "load duration factor") cB
+glassTypeFac_  = makeVC "glassTypeFac"  (nounPhraseSP "glass type factor") cB
+
+this_symbols :: [QSWrapper]
+this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
+  ++ (map qs glassBRUnitless))
+
+temporaryLOSymbols :: [QSWrapper]
+temporaryLOSymbols = this_symbols++map qs (temporary)
+
+gbSymbMap :: SymbolMap
+gbSymbMap = symbolMap temporaryLOSymbols
+
+gbSymbMapD :: QDefinition -> Contents
+gbSymbMapD term_ = (symbolMapFun temporaryLOSymbols Data) term_
+
+gbSymbMapT :: RelationConcept -> Contents
+gbSymbMapT term_ = (symbolMapFun temporaryLOSymbols Theory) term_

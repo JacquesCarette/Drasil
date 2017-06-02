@@ -56,7 +56,7 @@ luaConfig _ c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c, 
-        ioDoc = ioDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "getEnv not implemented in Lua (yet)"
     }
 
@@ -259,8 +259,8 @@ unOpDoc' op = unOpDocD' op
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (Self) = text "self"
-valueDoc' c (StateObj t@(List _ _) _) = listObj c <> stateType c t Def
-valueDoc' c (StateObj t vs) = stateType c t Def <> parens (callFuncParamList c vs)
+valueDoc' c (StateObj _ t@(List _ _) _) = listObj c <> stateType c t Def
+valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c v = valueDocD c v
 

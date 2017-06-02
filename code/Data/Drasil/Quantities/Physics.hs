@@ -17,7 +17,7 @@ angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   position, time, torque, velocity :: UnitalChunk
 
 angularAccel        = uc CP.angAccel (Greek Alpha_L) angAccelU
-angularDisplacement = uc CP.angDisp (Greek Theta_L) radians
+angularDisplacement = uc CP.angDisp (Greek Theta_L) radian
 angularVelocity     = uc CP.angVelo (Greek Omega_L) angVelU
 acceleration        = uc CP.acceleration (vec lA) accelU
 displacement        = uc CP.displacement (vec lR) metre

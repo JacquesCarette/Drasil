@@ -250,6 +250,8 @@ p_op f@(Integral bs wrtc) (x:[]) =
 p_op (Integral _ _) _  = error "Something went wrong with an integral" 
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
+p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
+p_op Norm _ = error "Norm should only take on expression."
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 

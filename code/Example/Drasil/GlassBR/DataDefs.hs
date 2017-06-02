@@ -42,7 +42,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
+loadDF = fromEqn' (lDurFac_ ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
@@ -56,13 +56,13 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
+nonFL = fromEqn' (nonFactorL_ ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: QDefinition
-glaTyFac = fromEqn' (glassTypeFac ^. id) (nounPhraseSP $ 
+glaTyFac = fromEqn' (glassTypeFac_ ^. id) (nounPhraseSP $ 
   "function that maps from " ++ "the glass type (g) to a real " ++
   "number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|" ++ 
   "g = HS => 2.0). AN is annealed glass. " ++ 

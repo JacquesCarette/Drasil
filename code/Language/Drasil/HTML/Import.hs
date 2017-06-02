@@ -8,7 +8,7 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
@@ -59,6 +59,7 @@ ufunc (Summation (Just (s, Low v, High h)) e) =
 ufunc (Summation Nothing e) = (H.Summation Nothing,(expr e))
 ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc (Abs e) = (H.Abs, expr e)
+ufunc (Norm e) = (H.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
 ufunc (Sin e) = (H.Sin, expr e)
 ufunc (Cos e) = (H.Cos, expr e)
@@ -97,7 +98,7 @@ integral (Integral (Nothing, Nothing) e wrtc) =
 integral _ = error "TeX/Import.hs Incorrect use of Integral"
 
 -- | Helper function for translating the differential
-int_wrt :: (NamedIdea c, SymbolForm c) => c -> H.Expr
+int_wrt :: (SymbolForm c) => c -> H.Expr
 int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
 
 -- | Helper function for translating operations in expressions 
@@ -123,6 +124,7 @@ spec (F f s)   = spec $ accent f s
 spec (Ref t r) = H.Ref t (spec r)
 spec (Quote q) = H.S "&quot;" H.:+: spec q H.:+: H.S "&quot;"
 spec EmptyS    = H.EmptyS
+spec (E e)     = H.E $ expr e
 
 -- | Helper function for translating accented characters to 
 -- an HTML renderable form.
@@ -165,7 +167,7 @@ lay x@(Table hdr lls t b)     = H.Table ["table"]
 lay (Paragraph c)     = H.Paragraph (spec c)
 lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (H.E (expr c))] (H.EmptyS)
 --lay (CodeBlock c)     = H.CodeBlock c
-lay x@(Definition c)  = H.Definition c (makePairs c) (spec $ refName x)
+lay x@(Definition m c)  = H.Definition c (makePairs c m) (spec $ refName x)
 lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
@@ -189,20 +191,20 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: DType -> [(String,H.LayoutObj)]
-makePairs (Data c) = [
+makePairs :: DType -> SymbolMap -> [(String,H.LayoutObj)]
+makePairs (Data c) m = [
   ("Label",       H.Paragraph $ H.N $ c ^. symbol),
   ("Units",       H.Paragraph $ spec $ unit'2Contents c),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)),
-  ("Description", H.Paragraph (buildDDDescription c))
+  ("Description", H.Paragraph (buildDDDescription c m))
   ]
-makePairs (Theory c) = [
+makePairs (Theory c) _ = [
   ("Label",       H.Paragraph $ spec (phrase $ c ^. term)),
   ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
                   (H.EmptyS)),
   ("Description", H.Paragraph (spec (c ^. defn)))
   ]
-makePairs General = error "Not yet implemented"
+makePairs General _ = error "Not yet implemented"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
@@ -210,9 +212,9 @@ buildEqn :: QDefinition -> H.Spec
 buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: QDefinition -> H.Spec
-buildDDDescription c = descLines (
-  (toVC c):(if verboseDDDescription then (vars (equat c)) else []))
+buildDDDescription :: QDefinition -> SymbolMap -> H.Spec
+buildDDDescription c m = descLines (
+  (toVC c m):(if verboseDDDescription then (vars (equat c) m) else []))
 
 -- | Helper for building each line of the description of a data def
 descLines :: [VarChunk] -> H.Spec  

@@ -65,7 +65,7 @@ objcConfig options c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "getEnv not implemented (yet) in ObjC"
     }
 
@@ -126,18 +126,18 @@ objcbody c f@(Source) p modules = let ms = foldl1 (++) (map classes modules) in
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign v Input) = vcat [      --assumes v is NSString
-    text "char*" <+> temp <> endStatement c,
-    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
-    valueDoc c v <+> equals <+> nsFromCString c temp]
-    where temp = text "temp"
+--assignDoc' c (Assign v Input) = vcat [      --assumes v is NSString
+--    text "char*" <+> temp <> endStatement c,
+--    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
+--    valueDoc c v <+> equals <+> nsFromCString c temp]
+--    where temp = text "temp"
 assignDoc' c a = assignDocD c a
 
 callFuncParamList' :: Config -> [Value] -> Doc
 callFuncParamList' c vs = colonMapListDoc (text " : ") (valueDoc c) vs
 
 declarationDoc' :: Config -> Declaration -> Doc
-declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <+> equals <+> valueDoc c (StateObj (List lt t) [Lit $ LitInt $ toInteger s])
+declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <+> equals <+> valueDoc c (StateObj Nothing (List lt t) [Lit $ LitInt $ toInteger s])
 declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> brackets (alloc c (List lt t) <+> initList)
     where initList = if null vs then text defaultInit else text "initWithObjects" <> listInitObjectsDoc c vs
 declarationDoc' c d = declarationDocD' c d
@@ -177,7 +177,7 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var i) (listVar $. at i) b
     where initState = varDecDef i (Base Integer) (litInt 0)
           guard     = Var i ?< (listVar $. ListSize)
-          update    = (&++)i
+          update    = (&.++)i
     -- the following ForEach implementation will only be valid in Objective-C 2.0 or later
     {-vcat [
         iterForEachLabel c <+> parens (stateType c t Dec <+> text var <+> iterInLabel c <+> valueDoc c listVar) <+> lbrace,
@@ -236,7 +236,7 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v f@(Cast _) = objAccessDocD c v f
-objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&++)i) forBody
+objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&.++)i) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
@@ -324,15 +324,15 @@ valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _))) = vcat [
     objAccessDoc c v f <> endStatement c,
     objAccessDoc c e (Func release [])]
 valueDoc' _ (Self) = text "self"
-valueDoc' c (StateObj t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
+valueDoc' c (StateObj _ t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
     where init = case lt of Static  -> defaultInit
                             Dynamic -> "initWithCapacity"
           size = case lt of Static  -> []
                             Dynamic -> [s]
-valueDoc' c (StateObj t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
-valueDoc' c (StateObj t vs) = brackets (funcDoc c (Cast t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs)
+valueDoc' c (StateObj _ t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
+valueDoc' c (StateObj _ t vs) = brackets (funcDoc c (Cast t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs)
 valueDoc' c (Arg i) = nsFromCString c $ argsListAccess c i
-valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
+--valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
 valueDoc' c v = valueDocD c v
 
 ----------------------

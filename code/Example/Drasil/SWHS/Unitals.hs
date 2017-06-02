@@ -40,7 +40,7 @@ coil_SA,in_SA,out_SA,pcm_SA,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
 
 --symbol names can't begin with a capital
 
-coil_SA      = uc' "coil_SA" (compoundPhrase' (coil ^. term) (surArea ^. term)) 
+coil_SA      = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase $ coil ^. term) (phrase $ coil ^. term) CapFirst CapWords) (nounPhrase'' (phrase $ surArea ^. term) (phrase $ surArea ^. term) CapFirst CapWords)) 
   "Area covered by the outermost layer of the coil"(sub cA cC) m_2
 
 in_SA        = uc' "in_SA" (nounPhraseSP 
@@ -53,7 +53,7 @@ out_SA       = uc' "out_SA" (nounPhraseSP
   "Surface area over which thermal energy is transferred out of an object"
   (sub cA (Atomic "out")) m_2
 
-pcm_SA       = uc' "pcm_SA" (compoundPhrase' (phsChgMtrl ^. term) (surArea ^. term))
+pcm_SA       = uc' "pcm_SA" (compoundPhrase (nounPhrase'' (phrase $ phsChgMtrl ^. term) (phrase $ phsChgMtrl ^. term) CapFirst CapWords) (nounPhrase'' (phrase $ surArea ^. term) (phrase $ surArea ^. term) CapFirst CapWords))
   "Area covered by the outermost layer of the phase change material" (sub cA cP) m_2
 
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")

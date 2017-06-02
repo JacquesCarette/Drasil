@@ -6,7 +6,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..)
-  , log, abs, sin, cos, tan, sec, csc, cot
+  , log, abs, sin, cos, tan, sec, csc, cot, SymbolMap, symbolMap
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -55,7 +55,7 @@ module Language.Drasil (
   , UWrapper, uw, ucw, UCWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sSqBr
-  , (+:+), (+:+.), sC, (+:)
+  , (+:+), (+:+.), sC, (+:), semiCol
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
@@ -89,6 +89,7 @@ module Language.Drasil (
 import Prelude hiding (log, abs, sin, cos, tan, id, return, print, break)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
                Bound(..),DerivType(..), log, abs, sin, cos, tan, sec, csc, cot)
+import Language.Drasil.Expr.Extract (SymbolMap, symbolMap)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
   Section(..), Contents(..), SecCons(..), ListType(..),ItemType(..),section)
@@ -120,7 +121,7 @@ import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
-                              sParen, sSqBr, sC, (+:+), (+:+.), (+:))
+                              sParen, sSqBr, sC, (+:+), (+:+.), (+:), semiCol)
 import Language.Drasil.Reference (makeRef)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
 import Language.Drasil.SymbolAlphabet

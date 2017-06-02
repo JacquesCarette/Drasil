@@ -20,7 +20,7 @@ swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
 
 charging, coil, discharging, gauss_div,
   perfect_insul, phase_change_material, swhs_pcm, tank,
-  tank_pcm, transient, water :: ConceptChunk
+  tank_pcm, transient, water, sWHT :: ConceptChunk
 swhsProg :: NPNC
 
   
@@ -58,16 +58,17 @@ swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
 
 --Nounphrase'' hack to get nounPhraseSP words to accept nounPhrases instead of strings
 swhs_pcm = dcc "swhs_pcm" (nounPhrase'' 
-  ((phrase $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
-  ((phrase $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((plural $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((plural $ progName ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "Solar water heating systems incorporating phase change material"
 
-tank = dcc "tank" (cn' "tank") "solar water heating tank"
+tank = dcc "tank" (cn' "tank") "Enclosure containing some kind of substance"
+sWHT = dcc "sWHT" (cn' "solar water heating tank") "Solar water heating tank"
 
 tank_pcm = dcc "tank_pcm" (nounPhrase''
-  ((tank ^. defn) +:+ S "incorporating" +:+ short phsChgMtrl)
-  ((tank ^. defn) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((phrase $ sWHT ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
+  ((phrase $ sWHT ^. term) +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "Solar water heating tank incorporating phase change material"
 

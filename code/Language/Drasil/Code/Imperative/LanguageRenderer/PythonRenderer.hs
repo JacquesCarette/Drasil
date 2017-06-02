@@ -57,8 +57,8 @@ pythonConfig _ c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
-        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDocD c,
-
+        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
+        inputDoc = inputDoc' c,
         getEnv = \_ -> error "getEnv for pythong not yet implemented"
     }
 
@@ -85,13 +85,15 @@ pystateType c  s               d = stateTypeD c s d
 
 pytop :: Config -> FileType -> Label -> [Module] -> Doc
 pytop _ _ _ [] = vcat [
+    text "from __future__ import print_function",
     text "import sys",
-    text "import math"]
+    text "import math" ]
 pytop c f p ms = let modNames = map moduleName ms
                      libNames = concat $ map libs ms
                      libraries = reduceLibs libNames modNames
-  in  (vcat $ map (\x -> text "import" <+> text x) libraries)
-      $+$ pytop c f p []
+  in  pytop c f p [] $+$
+        (vcat $ map (\x -> text "import" <+> text x) libraries)
+      
 
 
 pybody :: Config -> FileType -> Label -> [Module] -> Doc
@@ -196,10 +198,10 @@ paramDoc' _ (StateParam n _) = text n
 paramDoc' c p = paramDocD c p
 
 printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
-printDoc' c Console False _ v = printFunc c <> parens (valueDoc c v)
-printDoc' c Console True _ v = printFunc c <> parens (valueDoc c v <> text ", end=''")
-printDoc' c (File f) False _ v = printFunc c <> parens (valueDoc c v <> text ", file=" <> valueDoc c f)
-printDoc' c (File f) True _ v = printFunc c <> parens (valueDoc c v <> text ", end='', file=" <> valueDoc c f)
+printDoc' c Console False _ v = printFunc c <> parens (valueDoc c v <> text ", end=''")
+printDoc' c Console True _ v = printFunc c <> parens (valueDoc c v)
+printDoc' c (File f) False _ v = printFunc c <> parens (valueDoc c v <> text ", end='', file=" <> valueDoc c f)
+printDoc' c (File f) True _ v = printFunc c <> parens (valueDoc c v <> text ", file=" <> valueDoc c f)
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n _ (Construct _) ps b) = vcat [
@@ -219,8 +221,10 @@ methodDoc' _ _ _ _ = empty
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (Self) = text "self"
-valueDoc' c (StateObj t@(List _ _) _) = stateType c t Def
-valueDoc' c (StateObj t vs) = stateType c t Def <> parens (callFuncParamList c vs)
+valueDoc' c (StateObj _ t@(List _ _) _) = stateType c t Def
+valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (callFuncParamList c vs)
+  where prefixLib Nothing = empty
+        prefixLib (Just lib) = text lib <> dot
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
 valueDoc' c v = valueDocD c v
@@ -234,3 +238,27 @@ functionDoc' c _ _ (Method n _ _ ps b) = vcat [
                     | otherwise = bodyDoc c b
 functionDoc' c _ _ (MainMethod b) = bodyDoc c b
 functionDoc' _ _ _ _ = empty
+
+inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
+inputDoc' c io (Base Boolean) v = statementDoc c NoLoop
+  (v &= inputFn io ?!= litString "0")
+inputDoc' c io (Base Integer) v = statementDoc c NoLoop
+  (v &= funcApp' "int" [inputFn io])
+inputDoc' c io (Base Float) v = statementDoc c NoLoop
+  (v &= funcApp' "float" [inputFn io])
+inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
+inputDoc' c io (Base _) v = statementDoc c NoLoop
+  (v &= inputFn io)
+inputDoc' c io s v = inputDocD c io s v 
+
+ioDoc' :: Config -> IOSt -> Doc
+ioDoc' c (OpenFile f n m) = statementDoc c NoLoop (f &= funcApp' "open" [n, litString (modeStr m)])
+  where modeStr Read = "r"
+        modeStr Write = "w"  
+ioDoc' c io = ioDocD c io
+  
+-- helpers
+
+inputFn :: IOType -> Value
+inputFn Console = funcApp' "raw_input" []
+inputFn (File f) = objMethodCall f "readline" []

@@ -2,9 +2,7 @@ module Drasil.GlassBR.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Control.Lens((^.))
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent)
 
 --FIXME: Figure out why this wasn't used in body (until now with srsDoc)
 glassBRProg :: ConceptChunk
@@ -22,7 +20,7 @@ acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
   iGlass, lDurFac, lGlass, lResistance, lShareFac, notApp, nonFactorL,
-  eqTNT :: CINP
+  eqTNT, gLassBR :: CINP
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
 annealedGlass = commonINP "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
@@ -38,6 +36,7 @@ lShareFac     = commonINP "lShareFac"     (nounPhraseSP "load share factor")    
 notApp        = commonINP "notApp"        (nounPhraseSP "not applicable")          "N/A"
 nonFactorL    = commonINP "nonFactorL"    (nounPhraseSP "non-factored load")       "NFL"     --lowercase?
 eqTNT         = commonINP "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+gLassBR       = commonINP "gLassBR"       (pn "GlassBR")                           "GlassBR"
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
@@ -45,4 +44,3 @@ eqTNT         = commonINP "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) E
 blastRisk, glaSlab :: NPNC
 blastRisk    = npnc "blastRisk" (nounPhraseSP "blast risk")
 glaSlab      = npnc "glaSlab"   (nounPhraseSP "glass slab")
-

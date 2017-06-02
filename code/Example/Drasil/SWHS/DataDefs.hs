@@ -7,16 +7,25 @@ import Data.Drasil.SI_Units (specificE)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Thermodynamics(latent_heat)
+import Data.Drasil.Quantities.Thermodynamics (latent_heat)
+import Data.Drasil.Utils (symbolMapFun)
+import Prelude hiding (id)
 
 import Control.Lens ((^.))
+
+
+swhsSymbMapD :: QDefinition -> Contents
+swhsSymbMapD termType = (symbolMapFun swhsSymbols Data) termType
+
+swhsSymbMapT :: RelationConcept -> Contents
+swhsSymbMapT termType = (symbolMapFun swhsSymbols Theory) termType
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.
 
 dd1HtFluxC :: QDefinition
-dd1HtFluxC = fromEqn "dd1HtFluxC" (ht_flux_C ^. term) (ht_flux_C ^. symbol) 
+dd1HtFluxC = fromEqn (ht_flux_C ^. id) (ht_flux_C ^. term) (ht_flux_C ^. symbol) 
   thermal_flux htFluxCEqn
 
 htFluxCEqn :: Expr
@@ -25,7 +34,7 @@ htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 --Can't include info in description beyond definition of variables?
 
 dd2HtFluxP :: QDefinition
-dd2HtFluxP = fromEqn "dd2HtFluxP" (ht_flux_P ^. term) (ht_flux_P ^. symbol) 
+dd2HtFluxP = fromEqn (ht_flux_P ^. id) (ht_flux_P ^. term) (ht_flux_P ^. symbol) 
   thermal_flux htFluxPEqn
 
 htFluxPEqn :: Expr
@@ -33,10 +42,8 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
              FCall (C temp_PCM) [C time])
 
 dd3HtFusion :: QDefinition
-dd3HtFusion = fromEqn "dd3HtFusion" (nounPhraseSP 
-  "amount of thermal energy required to completely melt a unit mass of a substance.")
-  --FIXME: Should be (htFusion ^. defn)?
-  (htFusion ^. symbol) specificE htFusionEqn
+dd3HtFusion = fromEqn (htFusion ^. id) (htFusion ^. term) (htFusion ^. symbol)
+  specificE htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = (C latent_heat) / (C mass)
@@ -55,10 +62,10 @@ htFusionEqn = (C latent_heat) / (C mass)
 
 --Need to add units to data definition descriptions
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3 :: Contents
-s4_2_4_DD1 = Definition (Data dd1HtFluxC)
-s4_2_4_DD2 = Definition (Data dd2HtFluxP)
-s4_2_4_DD3 = Definition (Data dd3HtFusion)
+s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3 :: [Contents]
+s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]
+s4_2_4_DD2 = map swhsSymbMapD [dd2HtFluxP]
+s4_2_4_DD3 = map swhsSymbMapD [dd3HtFusion]
 --s4_2_4_DD4 = Definition (Data dd4MeltFrac)
 
 --Symbol appears as "Label"

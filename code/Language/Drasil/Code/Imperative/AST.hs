@@ -21,28 +21,32 @@ module Language.Drasil.Code.Imperative.AST (
     methodType,methodTypeVoid,
     block,defaultValue,
     true,false,
-    var, svToVar,
-    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,   (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
+    var, arg, self, svToVar,
+    pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
+    mainMethod,
+    (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
-    (&=),(&.=),(&=.),(&+=),(&-=),(&++),
-    (&~-),($->),($.),($:),
-    alwaysDel,neverDel,
-    assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,
-    listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,
+    (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
+    ($->),($.),($:),
+    log,exp,alwaysDel,neverDel,
+    assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
+    listOf,litBool,litChar,litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,
     print',printLn',printStr',printStrLn',
     getInput,getFileInput,
+    openFileR, openFileW, closeFile,
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, valStmt,funcApp,funcApp',
+    objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
+    listSize, listAccess, listAppend,valStmt,funcApp,funcApp',continue,
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
 import Data.List (zipWith4)
-import Prelude hiding (break,print,return)
+import Prelude hiding (break,print,return,log,exp)
 
 import Language.Drasil.Code.Imperative.Helpers (capitalize)
 
@@ -62,14 +66,13 @@ data Statement = AssignState Assignment | DeclState Declaration
                | PatternState Pattern           --deals with special design patterns
                | IOState IOSt
                   deriving Show
-data IOSt = OpenFile Value Label Mode
+data IOSt = OpenFile Value Value Mode
           | CloseFile Value
           | Out IOType Bool StateType Value
           | In IOType StateType Value
           deriving Show
 data Mode = Read
           | Write
-          | ReadWrite
           deriving (Eq, Show)
 data IOType = Console
             | File Value
@@ -118,7 +121,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | FuncApp (Maybe Library) Label [Value]
            | Lit Literal
            | ObjAccess Value Function
-           | StateObj StateType [Value]
+           | StateObj (Maybe Library) StateType [Value]
            | Self
            | Var Label
            | EnumVar Label
@@ -126,9 +129,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | ListVar Label StateType
            | Const Label
            | Global Label -- these are generation-time globals that will be filled-in
-           | Arg Int                    --Arg argIndex : get command-line arguments. Should only be used in the Body of the MainMethod.
-           | Input          --Input : Get user keyboard input. Can only be assigned to string variables in some languages.
-           | InputFile Value
+           | Arg Int                    --Arg argIndex : get command-line arguments. 
     deriving (Eq, Show)
 data Literal = LitBool Bool
              | LitInt Integer
@@ -146,6 +147,7 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListAdd Value Value     --ListAdd index value
               | ListSet Value Value     --ListSet index value
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.
+              | ListAppend Value
               | IterBegin | IterEnd
               | Floor | Ceiling
               | FileOpen String
@@ -157,7 +159,7 @@ data Expression = UnaryExpr UnaryOp Value
                 | Exists Value      --used to check whether the specified variable/list element/etc. is null
     deriving (Eq, Show)
 data UnaryOp = Negate | SquareRoot | Abs
-             | Not
+             | Not | Log | Exp
     deriving (Eq, Show)
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
@@ -250,8 +252,14 @@ false = Lit $ LitBool False
 var :: Label -> Value
 var = Var
 
+arg :: Int -> Value
+arg = Arg 
+
+self :: Value
+self = Self
+
 svToVar :: StateVar -> Value
-svToVar (StateVar n _ _ _ _) = Var n
+svToVar (StateVar n _ _ _ _) = Self $-> Var n
 
 pubClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
 pubClass n p vs fs = Class n p Public vs fs
@@ -277,121 +285,146 @@ pubMethod t n ps b = Method n Public t ps b
 constructor :: Label -> [Parameter] -> Body -> Method
 constructor n ps b = Method n Public (Construct n) ps b
 
+mainMethod :: Body -> Method
+mainMethod = MainMethod
+
 --comparison operators (?)
 (?!) :: Value -> Value  --logical Not
-infixl 9 ?!
+infixr 6 ?!
 (?!) v = unExpr Not v
 
 (?<) :: Value -> Value -> Value
-infixl 5 ?<
+infixl 4 ?<
 v1 ?< v2 = binExpr v1 Less v2
 
 (?<=) :: Value -> Value -> Value
-infixl 5 ?<=
+infixl 4 ?<=
 v1 ?<= v2 = binExpr v1 LessEqual v2
 
 (?>) :: Value -> Value -> Value
-infixl 5 ?>
+infixl 4 ?>
 v1 ?> v2 = binExpr v1 Greater v2
 
 (?>=) :: Value -> Value -> Value
-infixl 5 ?>=
+infixl 4 ?>=
 v1 ?>= v2 = binExpr v1 GreaterEqual v2
 
 (?==) :: Value -> Value -> Value
-infixl 5 ?==
+infixl 3 ?==
 v1 ?== v2 = binExpr v1 Equal v2
 
 (?!=) :: Value -> Value -> Value
-infixl 5 ?!=
+infixl 3 ?!=
 v1 ?!= v2 = binExpr v1 NotEqual v2
 
 (?&&) :: Value -> Value -> Value
-infixl 3 ?&&
+infixl 2 ?&&
 v1 ?&& v2 = binExpr v1 And v2
 
 (?||) :: Value -> Value -> Value
-infixl 4 ?||
+infixl 1 ?||
 v1 ?|| v2 = binExpr v1 Or v2
 
 --arithmetic operators (#)
 (#~) :: Value -> Value  --unary negation
-infixl 9 #~
+infixl 8 #~
 (#~) v = unExpr Negate v
 
 (#/^) :: Value -> Value     --square root
-infixl 8 #/^
+infixl 7 #/^
 (#/^) v = unExpr SquareRoot v
 
 (#|) :: Value -> Value      --absolute value
-infixl 8 #|
+infixl 7 #|
 (#|) v = unExpr Abs v
 
 (#+) :: Value -> Value -> Value
-infixl 6 #+
+infixl 5 #+
 v1 #+ v2 = binExpr v1 Plus v2
 
 (#-) :: Value -> Value -> Value
-infixl 6 #-
+infixl 5 #-
 v1 #- v2 = binExpr v1 Minus v2
 
 (#*) :: Value -> Value -> Value
-infixl 7 #*
+infixl 6 #*
 v1 #* v2 = binExpr v1 Multiply v2
 
 (#/) :: Value -> Value -> Value
-infixl 7 #/
+infixl 6 #/
 v1 #/ v2 = binExpr v1 Divide v2
 
 (#%) :: Value -> Value -> Value
-infixl 8 #%
+infixl 6 #%
 v1 #% v2 = binExpr v1 Modulo v2
 
 (#^) :: Value -> Value -> Value  --exponentiation
-infixl 8 #^
+infixl 7 #^
 v1 #^ v2 = binExpr v1 Power v2
 
 --assignment operators (&)
 (&=) :: Value -> Value -> Statement
-infixr 5 &=
+infixr 1 &=
 a &= b = assign a b
 
 (&.=) :: Label -> Value -> Statement
-infixr 5 &.=
+infixr 1 &.=
 a &.= b = assign (Var a) b
 
 (&=.) :: Value -> Label -> Statement
-infixr 5 &=.
+infixr 1 &=.
 a &=. b = assign a (Var b)
 
-(&-=) :: Label -> Value -> Statement
-infixl 6 &-=
-n &-= v = (n &.= (Var n #- v))
+(&-=) :: Value -> Value -> Statement
+infixl 1 &-=
+n &-= v = (n &= (n #- v))
 
-(&+=) :: Label -> Value -> Statement
-infixl 6 &+=
-n &+= v = AssignState $ PlusEquals (Var n) v
+(&.-=) :: Label -> Value -> Statement
+infixl 1 &.-=
+n &.-= v = (n &.= (Var n #- v))
 
-(&++) :: Label -> Statement
-infixl 9 &++
-(&++) l = AssignState $ PlusPlus (Var l)
+(&+=) :: Value -> Value -> Statement
+infixl 1 &+=
+n &+= v = AssignState $ PlusEquals n v
 
-(&~-) :: Label -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
-infixl 9 &~-
-(&~-) l = (l &-= litInt 1)
+(&.+=) :: Label -> Value -> Statement
+infixl 1 &.+=
+n &.+= v = AssignState $ PlusEquals (Var n) v
+
+(&++) :: Value -> Statement
+infixl 8 &++
+(&++) v = AssignState $ PlusPlus v
+
+(&.++) :: Label -> Statement
+infixl 8 &.++
+(&.++) l = AssignState $ PlusPlus (Var l)
+
+(&~-) :: Value -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
+infixl 8 &~-
+(&~-) v = (v &-= litInt 1)
+
+(&.~-) :: Label -> Statement
+infixl 8 &.~-
+(&.~-) l = (l &.-= litInt 1)
 
 --other operators ($)
 ($->) :: Value -> Value -> Value
-infixl 8 $->
+infixl 9 $->
 v $-> vr = ObjVar v vr
 
 ($.) :: Value -> Function -> Value
-infixl 5 $.
+infixl 9 $.
 v $. f = ObjAccess v f
 
 ($:) :: Label -> Label -> Value
-infixl 8 $:
+infixl 9 $:
 n $: e = EnumElement n e
+
+log :: Value -> Value
+log = unExpr Log
+
+exp :: Value -> Value
+exp = unExpr Exp
 
 alwaysDel :: Int
 alwaysDel = 4
@@ -435,6 +468,9 @@ ifExists v ifBody elseBody = ifCond [(Expr $ Exists v, ifBody)] elseBody
 listDec :: Permanence -> Label -> StateType -> Int -> Statement
 listDec lt n t s = DeclState $ ListDec lt n t s
 
+listDec' :: Label -> StateType -> Int -> Statement
+listDec' n t s = DeclState $ ListDec Dynamic n t s
+
 listDecValues :: Label -> StateType -> [Value] -> Statement
 listDecValues n t vs = DeclState $ ListDecValues Static n t vs
 
@@ -453,8 +489,11 @@ litFloat = Lit . LitFloat
 litInt :: Integer -> Value
 litInt = Lit . LitInt
 
-litObj :: StateType -> [Value] -> Value
-litObj t vs = StateObj t vs
+litObj :: Library -> StateType -> [Value] -> Value
+litObj l t vs = StateObj (Just l) t vs
+
+litObj' :: StateType -> [Value] -> Value
+litObj' t vs = StateObj Nothing t vs
 
 litString :: Label -> Value
 litString = Lit . LitStr
@@ -468,12 +507,27 @@ noParent = Nothing
 objDecDef :: Label -> StateType -> Value -> Statement
 objDecDef n t v = DeclState $ ObjDecDef n t v
 
-objDecNew :: Label -> StateType -> [Value] -> Statement
-objDecNew n t vs = DeclState $ ObjDecDef n t (StateObj t vs)
+objDecNew :: Label -> Library -> StateType -> [Value] -> Statement
+objDecNew n l t vs = DeclState $ ObjDecDef n t (StateObj (Just l) t vs)
+
+objDecNew' :: Label -> StateType -> [Value] -> Statement
+objDecNew' n t vs = DeclState $ ObjDecDef n t (StateObj Nothing t vs)
 
 -- declare new object with parameter-less constructor
-objDecNewVoid :: Label -> StateType -> Statement
-objDecNewVoid n t = objDecNew n t []
+objDecNewVoid :: Label -> Library -> StateType -> Statement
+objDecNewVoid n l t = objDecNew n l t []
+
+objDecNewVoid' :: Label -> StateType -> Statement
+objDecNewVoid' n t = objDecNew' n t []
+
+listSize :: Function
+listSize = ListSize
+
+listAccess :: Value -> Function
+listAccess = ListAccess
+
+listAppend :: Value -> Function
+listAppend = ListAppend
 
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]
@@ -531,10 +585,18 @@ printStrLn' (File f) = printFileStrLn f
 getInput :: StateType -> Value -> Statement
 getInput s v = IOState $ In Console s v
 
-
 -- file input
 getFileInput :: Value -> StateType -> Value -> Statement
 getFileInput f s v = IOState $ In (File f) s v
+
+openFileR :: Value -> Value -> Statement
+openFileR f n = IOState (OpenFile f n Read)
+
+openFileW :: Value -> Value -> Statement
+openFileW f n = IOState (OpenFile f n Write)
+
+closeFile :: Value -> Statement
+closeFile f = IOState (CloseFile f)
 
 return :: Value -> Statement
 return = RetState . Ret
@@ -586,6 +648,9 @@ funcApp lib lbl vs = FuncApp (Just lib) lbl vs
 
 funcApp' :: Label -> [Value] -> Value
 funcApp' lbl vs = FuncApp Nothing lbl vs
+
+continue :: Statement
+continue = JumpState Continue
 -----------------------
 -- Comment Functions --
 -----------------------
@@ -708,7 +773,7 @@ valueReplace' :: Value -> Value -> Value -> Value
 valueReplace' old new (Expr e) = Expr $ exprReplace old new e
 valueReplace' old new (FuncApp lib lbl vals) = FuncApp lib lbl $ valListReplace old new vals
 valueReplace' old new (ObjAccess val func) = ObjAccess (valueReplace old new val) (funcReplace old new func)
-valueReplace' old new (StateObj st vals) = StateObj st $ valListReplace old new vals
+valueReplace' old new (StateObj l st vals) = StateObj l st $ valListReplace old new vals
 valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl
 valueReplace' _ _ v = v
 

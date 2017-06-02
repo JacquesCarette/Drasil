@@ -3,20 +3,21 @@ module Language.Drasil.RefHelpers where
 import Language.Drasil.Spec
 
 import Data.Char (isAlphaNum)
-import Data.List (intercalate)
 
 -- | for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence
 inferName (s1 :+: s2) = inferName s1 :+: inferName s2
-inferName (S s1)      = S $ intercalate ("") (firstFourLetters s1)
+inferName (S s1)      = S $ (firstFourLetters s1)
 inferName (F _ s)     = S [s]
 inferName (Ref _ _)   = EmptyS
   -- error "Attempting to infer the name an existing reference"
 inferName _           = EmptyS -- Was Empty.
 
 -- | helper to get first 4 letters of each word. Used by inferName
-firstFourLetters :: String -> [[Char]]
-firstFourLetters =  (map (take 4) . words)
+firstFourLetters :: String -> String
+firstFourLetters s1 = (filter (\x -> not (x `elem` ",.?!")) stringId)
+  where stringId = concat (map (take 4) (words s1))
+
 
 -- | replace underscore in strings with "."
 repUnd :: String -> String

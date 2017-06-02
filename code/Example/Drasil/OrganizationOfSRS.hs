@@ -1,28 +1,55 @@
-module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
-                                 figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
-                                 dataDefnF, inModelF', traceMGF, systCon, stakehldr,
-                                 stakeholderIntro, traceGIntro, physSystDesc) where
+module Drasil.OrganizationOfSRS 
+  ( refineChain
+  , showingCxnBw
+  , figureLabel
+-- start of functions for SRS document sections in order of document apperence
+  , introF
+  , prpsOfDocF
+  , scpOfReqF
+  , charIntRdrF
+  , orgSec, orgSecWTS
+  , stakehldrGeneral, stakeholderIntro
+  , tClientF
+  , tCustomerF
+  , genSysF
+  , systCon
+  , specSysDesF
+  , probDescF
+  , termDefnF
+  , physSystDesc
+  , goalStmtF
+  , solChSpecF
+  , assumpF, assumpF'
+  , thModF
+  , genDefnF
+  , dataDefnF
+  , inModelF, inModelF'
+  , datConF
+  , reqF
+  , nonFuncReqF
+  , traceMGF, traceGIntro
+  ) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation, matrix, graph)
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
+import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe, ofThe')
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
-introF :: Sentence -> Sentence -> [Section] -> [(Sentence, Sentence)]-> Section
-introF start kSent subSec temp = SRS.intro [Paragraph start, Paragraph end] subSec
+introF :: Sentence -> Sentence -> [Section] -> Section
+introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
       where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
                   S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
-                  S "of this", phrase document, foldlList (map ofThe (temp))]
+                  S "of this", phrase document `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (temp))]
 
---combinator function that is used by introF
-ofThe :: (Sentence, Sentence) -> Sentence
-ofThe (p1, p2) = S "the" +:+ p1 +:+ S "of the" +:+ p2
+--list is used by introF (current args passed in are the same for every example)
+temp :: [(Sentence, Sentence)]
+temp = [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
 
 -- provide only the first paragraph (as a sentence type) to 
 prpsOfDocF :: Sentence -> Section
@@ -67,8 +94,28 @@ figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
   +:+ (showingCxnBw (traceyMG) (contents))) filePath
 
 showingCxnBw :: NPNC -> Sentence -> Sentence
-showingCxnBw traceyMG contents = foldlSent [titleize traceyMG, S "Showing the",
-  titleize' connection, S "Between", contents]
+showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ contents
+
+-- Compleate the sentences, no need to add a period at the end of your input sentences
+scpOfReqF :: Sentence -> CINP -> Sentence -> Section
+scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
+  where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
+                S "includes" +:+. includes, S "Given appropriate inputs, the code for",
+                short progName, S "is intended to" +:+ ending]
+
+--Characteristics of Intended Reader section
+charIntRdrF :: Sentence -> Sentence -> Sentence -> Sentence -> Section -> Section
+charIntRdrF know und progName appStandd r = 
+  SRS.charOfIR (intReaderIntro know und progName appStandd r) []
+
+--paragraph called by charIntRdrF
+intReaderIntro :: Sentence -> Sentence -> Sentence -> Sentence -> Section -> [Contents]
+intReaderIntro know und progName appStandd r = [Paragraph $ foldlSent [S "Reviewers of this",
+  (phrase documentation), S "should have a strong knowledge in" +:+. know,
+  S "The reviewers should also have an understanding of" +:+. und :+:
+  appStandd, S "The", (plural user), S "of", progName,
+  S "can have a lower level of expertise, as explained in", (makeRef r)]]
 
 -- | Organization of the document section builder. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance
@@ -97,8 +144,9 @@ orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
                 lastS (Just t) = lastS Nothing +:+. t
 
 -- wrapper for general system description
-genSysF :: [Section] -> Section
-genSysF = SRS.genSysDes [genSysIntro]
+genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
+genSysF sCntxt userIntro constraints systSubSec = SRS.genSysDes [genSysIntro]
+  (sCntxt ++ [SRS.userChar [userIntro] [], systCon constraints systSubSec])
 
 --generalized general system description introduction
 genSysIntro :: Contents
@@ -110,10 +158,10 @@ genSysIntro = Paragraph $ foldlSent
 
 -- System Constraints
 -- generalized if no constraints, but if there are, they can be passed through
-systCon :: Maybe [Contents] -> [Section] -> Section
-systCon (Just a) subSec = SRS.sysCon a subSec
-systCon Nothing subSec  = SRS.sysCon [systCon_none] subSec
-            where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)  
+systCon :: [Contents] -> [Section] -> Section
+systCon [] subSec  = SRS.sysCon [systCon_none] subSec
+            where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
+systCon a subSec = SRS.sysCon a subSec  
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section
@@ -136,6 +184,12 @@ specSysDesIntro l_end = Paragraph $ foldlSent
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
 
+-- give starting sentence(s), the program name, and finish the last sentence
+probDescF :: Sentence -> CINP -> Sentence -> [Section] -> Section
+probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
+  where intro = foldlSent [start, (short progName), S "is a computer", 
+                (phrase $ program ^. term), S "developed to", ending]
+                  
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
@@ -155,15 +209,35 @@ physSystDesc kWord fig otherContents = SRS.physSyst ((intro):otherContents) []
                 [S "The", (phrase physicalSystem), S "of", kWord `sC`
                 S "as shown in", (makeRef fig) `sC` S "includes the following", plural element]
 
---provide the key word, a reference to the Instance Model, and the Subsections
-solChSpecF :: CINP -> Section -> [Section] -> Section
-solChSpecF kWord inModRef subSec = SRS.solCharSpec [Paragraph intro] subSec
-      where intro = foldlSent
-                    [S "The", plural inModel, S "that govern",
-                    short kWord, S "are presented in" +:+. makeRef inModRef,
-                    S "The", phrase information, S "to understand the meaning of the",
-                    plural inModel, S "and their derivation is also presented, so that the",
-                    plural inModel, S "can be verified"]
+--List all the given inputs. Might be possible to use ofThe combinator from utils.hs
+goalStmtF :: [Sentence] -> [Contents] -> Section
+goalStmtF givenInputs otherContents = SRS.goalStmt ((Paragraph intro):otherContents) []
+  where intro = S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ plural goalStmt +: S "are"
+
+-- kWord (ex ssp, progName), the two sections, gendef is True if you want general definitions sections,
+--  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints,
+--  the last input is a tupple of lists of Sections for each Subsection in order.
+solChSpecF :: CINP -> (Section, Section) -> Bool -> Sentence -> (Sentence, Sentence, Bool, Sentence) -> ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> [Section] -> Section
+solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a,t,g,dd,i,dc) adSubSec = SRS.solCharSpec [Paragraph intro] (subSec gendef)
+  where intro = foldlSent
+                [S "The", plural inModel, S "that govern",
+                short kWord, S "are presented in" +:+. makeRef (instModels gendef),
+                S "The", phrase information, S "to understand",
+                (S "meaning" `ofThe` plural inModel),
+                S "and their derivation is also presented, so that the",
+                plural inModel, S "can be verified"]
+        subSec True  = [assumption_ True, theModels, generDefn, 
+                        dataDefin, instModels True, dataConstr] ++ adSubSec
+        subSec False = [assumption_ False, theModels,
+                        dataDefin, instModels False, dataConstr] ++ adSubSec
+        assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
+        assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
+        theModels  = thModF kWord t
+        generDefn  = genDefnF g
+        dataDefin  = dataDefnF ddEndSent dd
+        instModels True  = inModelF  probDes dataDefin theModels generDefn i
+        instModels False = inModelF' probDes dataDefin theModels           i
+        dataConstr = datConF tbRef mid end trail dc
 
  
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
@@ -185,21 +259,21 @@ assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent
           foldr1 sC (map (refs) (itemsAndRefs r2)) `sC` S "or", 
           refs (likelyChg, r5) `sC` S "in which the respective",
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = (titleize' chunk) +:+ S "[" :+: (makeRef ref) :+: S "]" 
+          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
                 itemsAndRefs Nothing = [(thModel, r1), (dataDefn, r3), (inModel, r4)]
                 itemsAndRefs (Just genDef) = [(thModel, r1), (genDefn, genDef), (dataDefn, r3), 
                                               (inModel, r4)]
 
 --wrapper for thModelIntro
-thModF :: Sentence -> [Contents] -> Section
+thModF :: CINP -> [Contents] -> Section
 thModF kword otherContents = SRS.thModel ((thModIntro kword):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: Sentence -> Contents
+thModIntro :: CINP -> Contents
 thModIntro k_word = Paragraph $ foldlSent
           [S "This", phrase section_, S "focuses on",
           S "the", phrase general, (plural $ equation ^. term), S "and",
-          S "laws that", k_word, S "is based on"]
+          S "laws that", short k_word, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [Contents] -> Section
@@ -214,7 +288,7 @@ dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
   where dataDefnIntro ending = Paragraph $ foldlSent [S "This", phrase section_, 
                                S "collects and defines all the", plural datum,
-                               S "needed to build the" +:+ plural inModel, ending]
+                               S "needed to build the", plural inModel] +:+ ending
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
@@ -248,28 +322,44 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           plural constraint, S "gives the", phrase physical,
           plural limitation, S "on the range of", plural value,
           S "that can be taken by the" +:+. phrase variable, middleSent, -- << if you are wondering where middleSent is
-          S "The", plural constraint, S "are conservative, to give the",
-          phrase user, S "of the", phrase model, S "the flexibility to", 
+          S "The", plural constraint, S "are conservative, to give",
+          (phrase user `ofThe` phrase model), S "the flexibility to", 
           S "experiment with unusual situations. The", phrase column, S "of", 
           S "typical", plural value, S "is intended to provide a feel for a common scenario"]
           +:+ endS endingSent +:+ trailingSent
           where endS False = EmptyS
-                endS True  = S "The " +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
+                endS True  = S "The" +:+ phrase uncertainty +:+ phrase column +:+ S "provides an" +:+
                              S "estimate of the confidence with which the" +:+ phrase physical +:+
                              plural quantity +:+. S "can be measured" +:+ S "This" +:+
                              phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
                              S "if one were performing an" +:+ phrase uncertainty +:+.
                              S "quantification exercise"
-       
--- wrapper for stakeholderIntro
-stakehldr :: [Section] -> Section
-stakehldr subs = (SRS.stakeholder) [stakeholderIntro] subs
+
+stakehldrGeneral :: CINP -> Sentence -> Section
+stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs
+  where subs = [(tClientF kWord clientDetails), (tCustomerF kWord)]
 
 -- general stakeholders introduction
 stakeholderIntro :: Contents
 stakeholderIntro = Paragraph $ foldlSent [S "This", phrase section_,
             S "describes the" +: titleize' stakeholder, S "the people who have an",
             phrase interest, S "in", (phrase $ the product_)]
+
+tClientF :: CINP -> Sentence ->  Section
+tClientF kWord details = SRS.theClient [clientIntro kWord details] []
+
+clientIntro :: CINP -> Sentence -> Contents
+clientIntro kWord  details = Paragraph $ foldlSent [(at_start $ the client), S "for",
+  (short kWord), S "is a", phrase company, S "named" +:+. details,
+  (at_start $ the client), S "has the final say on acceptance of the", 
+  phrase product_]
+
+tCustomerF :: CINP -> Section
+tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
+
+customerIntro :: CINP -> Contents
+customerIntro kWord = Paragraph $ foldlSent [(at_start' $ the customer), 
+  S "are the", phrase endUser, S "of", (short kWord)]
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
@@ -284,6 +374,26 @@ reqIntro = Paragraph $ foldlSent
         plural nonfunctionalRequirement `sC` S "the qualities that the",
         phrase software, S "is expected to exhibit"]
 
+
+-- wrapper for nonfuncReq
+nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section
+nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
+  [nonFuncReq (map (\x -> phrase $ x ^. term) noPriority) (map (\x -> phrase $ x ^. term) priority_) reason_ explanation_] []
+        
+-- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
+-- reason for initial priority choice, explanation for how priority choice can be achieved.
+nonFuncReq :: [Sentence] -> [Sentence] -> Sentence -> Sentence -> Contents
+nonFuncReq noPriority priority_ reason_ explanation_ = Paragraph $ reason_ `sC` (listO explanation_ noPriority priority_)
+listO :: Sentence -> [Sentence] -> [Sentence] -> Sentence
+listO explanation_ [] [] = S "so there are no" +:+ plural priority +:+ explanation_
+listO explanation_ [] priority_ = S "so" +:+ head priority_ +:+ S "is a high" +:+. phrase priority +:+ explanation_ +:+ S "The other" +:+. listT (tail priority_)
+listO explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT priority_
+listO explanation_ s priority_ = S "so" +:+ foldlList s +:+ S "are not" +:+. plural priority +:+ explanation_ +:+ S "Rather, the" +:+. listT priority_
+listT :: [Sentence] -> Sentence
+listT [] = (phrase $ program ^. term) +:+ S "does not possess a" +:+ phrase priority +:+ phrase nonfunctionalRequirement
+listT [s] = phrase nonfunctionalRequirement +:+ phrase priority +:+ S "is" +:+ s
+listT s = phrase nonfunctionalRequirement +:+ plural priority +:+ S "are" +:+ foldlList s
+        
 -- wrapper for traceMGIntro
 traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section
 traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec
@@ -291,11 +401,10 @@ traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
 traceMIntro :: [Contents] -> [Sentence] -> Contents
-traceMIntro refs trailings = Paragraph $ foldlSent [S "The", phrase purpose, S "of the",
-        plural traceyMatrix, S "is to provide easy", plural reference,
-        S "on what has to be additionally modified if a certain", phrase component,
-        S "is changed. Every time a", phrase component, S "is changed, the", plural item, S "in the",
-        phrase column, S "of that", phrase component, S "that are",
+traceMIntro refs trailings = Paragraph $ foldlSent [phrase purpose `ofThe'` plural traceyMatrix,
+        S "is to provide easy", plural reference, S "on what has to be additionally modified if a certain",
+        phrase component, S "is changed. Every time a", phrase component, S "is changed, the", 
+        plural item, S "in the", phrase column, S "of that", phrase component, S "that are",
         S "marked with an", Quote (S "X"), S "should be modified as well"] +:+
         foldlSent (zipWith tableShows refs trailings)
 
@@ -307,7 +416,7 @@ tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
 -- generally found in this section (in order of being mentioned)
 traceGIntro :: [Contents] -> [Sentence] -> [Contents]
 traceGIntro refs trailings = [Paragraph $ foldlSent
-        [S "The", phrase purpose, S "of the", plural traceyGraph,
+        [phrase purpose `ofThe'` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
         S "The arrows in the", (plural $ graph ^. term), S "represent" +:+.
@@ -315,6 +424,6 @@ traceGIntro refs trailings = [Paragraph $ foldlSent
         S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
         phrase component, S "is changed, the", plural component, S "that it points to should also",
         S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings),
-        Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate the graphical",
-        S "representation of the", (phrase $ matrix ^. term), S "by scanning the",
+        Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate", 
+        S "graphical representation" `ofThe` (phrase $ matrix ^. term), S "by scanning the",
         plural label, S "and", phrase reference, S "can be future work"]]

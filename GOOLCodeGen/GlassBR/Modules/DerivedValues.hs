@@ -1,60 +1,37 @@
 module Modules.DerivedValues (derivedValues) where
 
 import Language.Drasil.Code
+import Defs
 
--- TODO:  add gool support for non-object functions;  don't need a class for this
 derivedValues :: Module
-derivedValues = buildModule "DerivedValues" [] [] [derivedValuesFunc] []
+derivedValues = buildModule "DerivedValues" [] [] [derived_params_func] []
 
-derivedValuesFunc :: FunctionDecl
-derivedValuesFunc = pubMethod methodTypeVoid "derived_params" (params [("params", obj "InputParameters")]) 
+derived_params_func :: FunctionDecl
+derived_params_func = pubMethod methodTypeVoid "derived_params" [p_params]
     [ 
       block [
-        asprat &= a #/ b,
-        sd &= (#/^) (sdx #^ (litFloat 2.0) #+ sdy #^ (litFloat 2.0) #+ sdz #^ (litFloat 2.0)),
-        ldf &= (td #/ litFloat 60.0) #^ (m #/ litFloat 16.0),
-        wtnt &= w #* tnt,
+        v_params$->v_asprat &= v_params$->v_a #/ v_params$->v_b,
+        v_params$->v_sd &= (#/^) (v_params$->v_sdx #^ (litFloat 2.0) #+ v_params$->v_sdy #^ (litFloat 2.0) #+ v_params$->v_sdz #^ (litFloat 2.0)),
+        v_params$->v_ldf &= (v_params$->v_td #/ litFloat 60.0) #^ (v_params$->v_m #/ litFloat 16.0),
+        v_params$->v_wtnt &= v_params$->v_w #* v_params$->v_tnt,
         ifCond [
-          (t ?== litFloat 2.50, oneLiner (h &= litFloat 2.16)),
-          (t ?== litFloat 2.70, oneLiner (h &= litFloat 2.59)),
-          (t ?== litFloat 3.00, oneLiner (h &= litFloat 2.92)),
-          (t ?== litFloat 4.00, oneLiner (h &= litFloat 3.78)),
-          (t ?== litFloat 5.00, oneLiner (h &= litFloat 4.57)),
-          (t ?== litFloat 6.00, oneLiner (h &= litFloat 5.56)),
-          (t ?== litFloat 8.00, oneLiner (h &= litFloat 7.42)),
-          (t ?== litFloat 10.00, oneLiner (h &= litFloat 9.02)),
-          (t ?== litFloat 12.00, oneLiner (h &= litFloat 11.91)),
-          (t ?== litFloat 16.00, oneLiner (h &= litFloat 15.09)),
-          (t ?== litFloat 19.00, oneLiner (h &= litFloat 18.26)),
-          (t ?== litFloat 22.00, oneLiner (h &= litFloat 21.44))
+          (v_params$->v_t ?== litFloat 2.50, oneLiner (v_params$->v_h &= litFloat 2.16)),
+          (v_params$->v_t ?== litFloat 2.70, oneLiner (v_params$->v_h &= litFloat 2.59)),
+          (v_params$->v_t ?== litFloat 3.00, oneLiner (v_params$->v_h &= litFloat 2.92)),
+          (v_params$->v_t ?== litFloat 4.00, oneLiner (v_params$->v_h &= litFloat 3.78)),
+          (v_params$->v_t ?== litFloat 5.00, oneLiner (v_params$->v_h &= litFloat 4.57)),
+          (v_params$->v_t ?== litFloat 6.00, oneLiner (v_params$->v_h &= litFloat 5.56)),
+          (v_params$->v_t ?== litFloat 8.00, oneLiner (v_params$->v_h &= litFloat 7.42)),
+          (v_params$->v_t ?== litFloat 10.00, oneLiner (v_params$->v_h &= litFloat 9.02)),
+          (v_params$->v_t ?== litFloat 12.00, oneLiner (v_params$->v_h &= litFloat 11.91)),
+          (v_params$->v_t ?== litFloat 16.00, oneLiner (v_params$->v_h &= litFloat 15.09)),
+          (v_params$->v_t ?== litFloat 19.00, oneLiner (v_params$->v_h &= litFloat 18.26)),
+          (v_params$->v_t ?== litFloat 22.00, oneLiner (v_params$->v_h &= litFloat 21.44))
         ] noElse,
         ifCond [
-          (gt ?== litString "AN" ?|| gt ?== litString "an", oneLiner (gtf &= litFloat 1.0)),
-          (gt ?== litString "HS" ?|| gt ?== litString "hs", oneLiner (gtf &= litFloat 2.0)),
-          (gt ?== litString "FT" ?|| gt ?== litString "ft", oneLiner (gtf &= litFloat 4.0))
+          (v_params$->v_gt ?== litInt 1, oneLiner (v_params$->v_gtf &= litFloat 1.0)),
+          (v_params$->v_gt ?== litInt 2, oneLiner (v_params$->v_gtf &= litFloat 2.0)),
+          (v_params$->v_gt ?== litInt 3, oneLiner (v_params$->v_gtf &= litFloat 4.0))
         ] noElse
       ]
     ]     
-  
-        
-a, b, asprat, sd, sdx, sdy, sdz, ldf, td, m, wtnt, w, tnt, t, h, gt, gtf :: Value
-a = param_pre "a"
-b = param_pre "b"
-asprat = param_pre "asprat"
-sd = param_pre "sd"
-sdx = param_pre "sdx"
-sdy = param_pre "sdy"
-sdz = param_pre "sdz"
-ldf = param_pre "ldf"
-td = param_pre "td"
-m = param_pre "m"
-wtnt = param_pre "wtnt"
-w = param_pre "w"
-tnt = param_pre "tnt"
-t = param_pre "t"
-h = param_pre "h"
-gt = param_pre "gt"
-gtf = param_pre "gtf"
-
-param_pre :: String -> Value
-param_pre = (($->) (var "params")) . var

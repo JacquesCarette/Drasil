@@ -4,6 +4,7 @@ module Language.Drasil.Spec where
 
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Symbol
+import Language.Drasil.Expr
 
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
@@ -31,6 +32,7 @@ data Sentence where
   -- Direct concatenation of two Specs (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
+  E :: Expr -> Sentence
 
 --Moving this here to avoid cyclic imports
 -- | Language of unit equations, to define a unit relative
@@ -90,3 +92,7 @@ a +:+. b = a +:+ b :+: S "."
 -- the end.
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
+
+-- | Helper for concatenating two sentences with a semi-colon and space between them.
+semiCol :: Sentence -> Sentence -> Sentence
+a `semiCol` b = a :+: S ";" +:+ b

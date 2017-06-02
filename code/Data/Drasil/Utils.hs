@@ -6,7 +6,7 @@ module Data.Drasil.Utils
   , foldlsC
   , mkEnumAbbrevList
   , listConstS
-  , listConstUC
+  , listConstExpr
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -16,13 +16,27 @@ module Data.Drasil.Utils
   , enumSimple
   , enumBullet
   , mkRefsList
+  , mkInputDatTb
+  , ofThe, ofThe'
+  , getS
+  , weave
+  , fmtU
+  , unwrap
+  , isThe
+  , fmtBF
+  , symbolMapFun
   ) where
 
+import Data.List
 import Control.Lens ((^.))
-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:)), (+:+), (+:+.), 
+import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
-  makeRef, DType, Section, ListType(Simple, Bullet), 
-  unit_symb, symbol, SymbolForm, Unitary)
+  makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
+  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, QDefinition, Chunk, Expr(..),
+  phrase, titleize, titleize', mkTable, term, Contents(Table))
+import Data.Drasil.Concepts.Documentation (description, input_, datum, symbol_)
+import Data.Drasil.Concepts.Math (unit_)
+
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -46,7 +60,9 @@ foldlSent = foldle (+:+) (+:+.) EmptyS
 
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
-foldlList = foldle1 sC (\a b -> a `sC` S "and" +:+ b)
+foldlList []    = EmptyS
+foldlList [a,b] = a +:+ S "and" +:+ b
+foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
@@ -85,31 +101,27 @@ fmtUS num EmptyS = num
 fmtUS num units  = num +:+ units
 
 -- | takes a amount and adds a unit to it
-fmtU :: (Unitary a) => Sentence -> a -> Sentence
-fmtU n u  = n +:+ getU u
+fmtU :: (Quantity a, SymbolForm a) => Sentence -> a -> Sentence
+fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | takes a chunk and constraints and makes a sentence of the constraints
--- on that chunk
-fmtC ::(SymbolForm a) => a -> [Sentence] -> Sentence
-fmtC _ []      = S "None"  
-fmtC symb [x]  = (getS symb) +:+ x
-fmtC symb (x:xs) = (getS symb) +:+ x +:+ S "and" +:+ (fmtC symb xs)
+-- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)
+-- ex. fmtBF x [((:>),0), ((:<),1)] -> x>0 and x<1
+fmtBF ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
+fmtBF _ []      = S "None"  
+fmtBF symb [(f,num)]  = E ((C symb) `f` num)
+fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 
+-- | makes a constraint table entry from symbol expr and sentence
+listConstExpr :: (SymbolForm a, Quantity a) => (a, [(Expr -> Expr -> Expr, Expr)], Sentence) -> [Sentence]
+listConstExpr (s, a, b) = [getS s, fmtBF s a, fmtU b s]
 
-getS :: (SymbolForm a) => a -> Sentence
 -- | gets symbol from chunk
+getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
--- | gets unit from chunk
-getU :: (Unitary a) => a -> Sentence
-getU s = Sy $ unit_symb s
 
 -- | makes a list of sentence from sentences
 listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
 listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, fmtUS n u]
-
--- | makes a list of sentence from unital chunk and a constraint list with units
-listConstUC :: (Unitary a, SymbolForm a) => (a, [Sentence], Sentence) -> [Sentence]
-listConstUC (s, a, b) = [getS s, fmtC s a, fmtU b s]
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
@@ -131,6 +143,12 @@ zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
+-- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
+mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
+mkInputDatTb inputVar = Table [titleize symbol_, titleize $ unit_ ^. term, titleize description]
+  (mkTable [getS, fmtU EmptyS, (\ch -> phrase $ ch ^. term)] inputVar) 
+  (titleize input_ +:+ titleize' datum) True
+
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
 -- b - Sentence containing the full reference
@@ -138,8 +156,8 @@ itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
-refFromType :: (a -> DType) -> a -> Sentence
-refFromType f = (makeRef . Definition . f)
+refFromType :: (a -> DType) -> SymbolMap -> a -> Sentence
+refFromType f m = (makeRef . Definition m . f)
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
@@ -159,3 +177,51 @@ enumBullet f = Enumeration $ Bullet $ map (Flat) f
 -- l - list to be enumerated
 enumSimple :: Integer -> Sentence -> [Sentence] -> Contents
 enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
+
+-- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
+weave :: [[a]] -> [a]
+weave = (concat . transpose)
+
+--combinator functions that are used by introF in OrganizationOfSRS
+sAnd :: Sentence -> Sentence -> Sentence
+sAnd p1 p2 = p1 +:+ S "and" +:+ p2
+
+andIts :: Sentence -> Sentence -> Sentence
+andIts p1 p2 = p1 +:+ S "and its" +:+ p2
+
+andThe :: Sentence -> Sentence -> Sentence
+andThe p1 p2 = p1 +:+ S "and the" +:+ p2
+
+sAre :: Sentence -> Sentence -> Sentence
+sAre p1 p2 = p1 +:+ S "are" +:+ p2
+
+sIn :: Sentence -> Sentence -> Sentence
+sIn p1 p2 = p1 +:+ S "in" +:+ p2
+
+sIs :: Sentence -> Sentence -> Sentence
+sIs p1 p2 = p1 +:+ S "is" +:+ p2
+
+isThe :: Sentence -> Sentence -> Sentence
+isThe p1 p2 = p1 +:+ S "is the" +:+ p2
+
+sOf :: Sentence -> Sentence -> Sentence
+sOf p1 p2 = p1 +:+ S "of" +:+ p2
+
+sOr :: Sentence -> Sentence -> Sentence
+sOr p1 p2 = p1 +:+ S "or" +:+ p2
+
+ofThe, ofThe' :: Sentence -> Sentence -> Sentence
+ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
+ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
+
+toThe :: Sentence -> Sentence -> Sentence
+toThe p1 p2 = p1 +:+ S "to the" +:+ p2
+
+unwrap :: (Maybe UnitDefn) -> Sentence
+unwrap (Just a) = Sy (a ^. usymb)
+unwrap Nothing  = EmptyS
+
+-- Using symbolMap from Extract
+--FIXME: Not sure what type d should be
+symbolMapFun :: (SymbolForm c, Quantity c, Chunk d) => [c] -> (d -> DType) -> (d -> Contents)
+symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)

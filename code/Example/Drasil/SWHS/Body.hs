@@ -13,9 +13,9 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
-import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils (mkEnumAbbrevList)
+import Data.Drasil.Utils (enumSimple, foldle, weave)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -48,11 +48,10 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
-s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s3_2, s3_3, s4, s4_1,
-  s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5,
-  s4_2_6, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
+s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1,
+  s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
-s2_2_contents, s2_3_contents, s3_1_contents, sys_context_fig,
+s2_2_contents, {-s2_3_contents, -}s3_1_contents, sys_context_fig,
   s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
   s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
   s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
@@ -93,6 +92,7 @@ mgBod :: [Section]
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
 
+
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
@@ -101,8 +101,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
   
-s2 = introF s2_intro kSent [s2_1, s2_2, s2_3, s2_4]
-  [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
+s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
@@ -110,7 +109,7 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
   (phrase $ energy ^. term) +:+ S "sources and" +:+
   (phrase $ energy ^. term) +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
-  +:+ S "(" :+: (short phsChgMtrl) :+: S ") use a renewable" +:+
+  +:+ sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
   (phrase $ energy ^. term) +:+ S "source and provide a novel way of" +:+
   S "storing" +:+. (phrase $ energy ^. term) +:+
   (at_start $ swhs_pcm ^. term) +:+ S "improve over the traditional" +:+
@@ -121,11 +120,10 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "which allows higher" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "storage capacity per" +:+ (phrase $ unit_ ^. term) +:+. S "weight"
 
-kSent :: Sentence
-kSent = (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
+s2_kSent :: Sentence
+s2_kSent = (EmptyS +:+. (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
   (phrase $ program ^. term) +:+ S "will be referred to as" +:+
-  (titleize $ progName ^. term) +:+ S "(" :+: (short progName) :+:
-  S ")."
+  (titleize $ progName ^. term) +:+ sParen (short progName))
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating
@@ -171,7 +169,7 @@ s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
 
 s2_2 = SRS.scpOfReq [s2_2_contents] []
 
-s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
+s2_2_contents = Paragraph $ S "The" +:+ phrase scope +:+ S "of the" +:+
   plural requirement +:+ S "is limited to" +:+
   (phrase $ CT.thermal_analysis ^. term) +:+ S "of a single" +:+.
   (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
@@ -181,8 +179,8 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
   S "histories for the" +:+ (phrase $ water ^. term) +:+ S "and the" +:+.
   (short phsChgMtrl) +:+ S "This entire" +:+ phrase document +:+
   S "is written assuming that the substances inside the" +:+
-  (tank ^. defn) +:+ S "are" +:+ (phrase $ water ^. term) +:+ S "and" +:+.
-  (short phsChgMtrl))
+  (phrase $ sWHT ^. term) +:+ S "are" +:+ (phrase $ water ^. term) +:+ S "and" +:+.
+  (short phsChgMtrl)
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar 
@@ -200,7 +198,12 @@ s2_2_contents = Paragraph (S "The" +:+ phrase scope +:+ S "of the" +:+
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3 = SRS.charOfIR [s2_3_contents] []
+s2_3 = charIntRdrF knowledge understanding (short progName) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
+  where knowledge = ((phrase $ CT.heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+                    S "A third or fourth year Mechanical Engineering course on this topic is recommended")
+        understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
+                        S "covered in first and second year Calculus courses")
+{-s2_3 = SRS.charOfIR [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   S "should have a strong knowledge in" +:+ (plural $ CT.heat ^. term) +:+
@@ -210,26 +213,27 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   (plural $ equation ^. term) `sC` S "as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
   S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
-  S "as explained in" +:+. (makeRef s3_2))
+  S "as explained in" +:+. (makeRef s3))-}
+-- should reference User characteristics
 
 
 ------------------------------------
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4 = orgSecWTS s2_4_intro inModel s4_2_5 s2_4_trail
+s2_4 = orgSecWTS s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4_trail
 
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
-  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+
-  S "[citation]."
+  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+.
+  sSqBr (S "citation")
 
 s2_4_trail :: Sentence
-s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+. 
+s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef (SRS.inModel SRS.missingP [])) +:+. 
   S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
   (plural inModel) +:+ S "provide the" +:+ (phrase $ ode ^. term) +:+
-  S "(" :+: (short ode) :+: S "s) and algebraic" +:+
+  sParen ((short ode) :+: S "s") +:+ S "and algebraic" +:+
   (plural $ equation ^. term) +:+ S "that" +:+
   phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term) +:+
   (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s"
@@ -269,7 +273,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef s4_2_5) +:+.
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 = genSysF [s3_1, s3_2, s3_3]
+s3 = genSysF [s3_1] s3_2_contents [] []
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
 
@@ -280,21 +284,21 @@ s3 = genSysF [s3_1, s3_2, s3_3]
 s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
 
-s3_1_contents = Paragraph ((makeRef sys_context_fig) +:+ S "shows the" +:+.
+s3_1_contents = Paragraph $ (makeRef sys_context_fig) +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
   S "rectangle represents the" +:+ phrase softwareSys +:+
-  S "itself (" :+: short progName :+: S "). Arrows are used to show the" +:+
+  S "itself" +:+. sParen (short progName) +:+ S "Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
-  S "and its" +:+. phrase environment)
+  S "and its" +:+. phrase environment
 
 sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+
   titleize sysCont) "SystemContextFigure.png"
 
-s3_1_2_intro = Paragraph (short progName +:+. S "is mostly self-contained" +:+
+s3_1_2_intro = Paragraph $ short progName +:+. S "is mostly self-contained" +:+
   S "The only external interaction is through the" +:+ phrase user +:+
   S "interface. The responsibilities of the" +:+ phrase user +:+
-  S "and the" +:+ phrase system +: S "are as follows")
+  S "and the" +:+ phrase system +: S "are as follows"
 
 s3_1_2_bullets = Enumeration (Bullet $
   [Nested (titleize user +: S "Responsibilities")
@@ -319,7 +323,7 @@ s3_1_2_bullets = Enumeration (Bullet $
 -- 3.2 : User Characteristics --
 --------------------------------
 
-s3_2 = SRS.userChar [s3_2_contents] []
+---s3_2 = SRS.userChar [s3_2_contents] []
 
 s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
   (short progName) +:+ S "should have an understanding of undergraduate" +:+
@@ -332,7 +336,7 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 -- 3.3 : System Constraints --
 ------------------------------
 
-s3_3 = systCon Nothing []
+--s3_3 = systCon Nothing []
 
 -- This is the same for all of our examples... but there could potentially be 
 -- system constraints in other projects so it can't be abstracted out as is...
@@ -347,8 +351,8 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 -- based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
-  S "and finally the" +:+ plural inModel +:+ S "(" :+: (short ode) :+:
-  S "s) that" +:+ phrase model +:+ S "the" +:+. (phrase $ swhs_pcm ^. term)
+  S "and finally the" +:+ plural inModel +:+ sParen ((short ode) :+:
+  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+ (phrase $ swhs_pcm ^. term)
 
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
@@ -366,7 +370,7 @@ s4_1 = SRS.probDesc [s4_1_intro]
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
   (phrase $ program ^. term) +:+
   S "developed to investigate the effect of employing" +:+
-  (short phsChgMtrl) +:+ S "within a" +:+. (tank ^. defn))
+  (short phsChgMtrl) +:+ S "within a" +:+. (phrase $ sWHT ^. term))
 
 --  section is very different between all examples
 
@@ -401,8 +405,7 @@ s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
-s4_1_2_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short physSyst)
-  s4_1_2_physSystList)
+s4_1_2_list = enumSimple 1 (short physSyst) s4_1_2_physSystList
 
 s4_1_2_physSystList :: [Sentence]
 
@@ -425,7 +428,7 @@ physSyst3 = (short phsChgMtrl) +:+ S "suspended in" +:+.
 -- different
 -- FIXME: Figures have different IDs than stable structure
 
-fig_tank = Figure ((tank ^. defn) `sC` S "with" +:+
+fig_tank = Figure ((at_start $ sWHT ^. term) `sC` S "with" +:+
   (phrase $ ht_flux_C ^. term) +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
   S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
   P (ht_flux_P ^. symbol)) "Tank.png"
@@ -436,17 +439,16 @@ fig_tank = Figure ((tank ^. defn) `sC` S "with" +:+
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
-s4_1_3_intro = Paragraph (S "Given the" +:+ (phrase $ temp_C ^. term) `sC`
+s4_1_3_intro = Paragraph $ S "Given the" +:+ (phrase $ temp_C ^. term) `sC`
   S "initial" +:+ plural condition +:+ S "for the" +:+
   (phrase $ temp_W ^. term) +:+ S "and the" +:+ (phrase $ temp_PCM ^. term) `sC`
   S "and material" +:+ plural property `sC` S "the" +:+ plural goalStmt +:
-  S "are")
+  S "are"
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.
 
-s4_1_3_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short goalStmt) $
-  map (goalState) [temp_W, temp_PCM, w_E, pcm_E])
+s4_1_3_list = enumSimple 1 (short goalStmt) $ map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
 
 goalState :: NamedIdea b => b -> Sentence
 goalState b =  (S "Predict the" +:+
@@ -474,8 +476,18 @@ goalState b =  (S "Predict the" +:+
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-s4_2 =solChSpecF progName s4_2_5
-  [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6, s4_2_7]
+s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end 
+  (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+
+  S "show"), mid, True, end)
+  ([s4_2_1_list], s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_deriv,
+    s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3, (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
+    [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
+
+  where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
+              plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
+              S "to reasonable" +:+. plural value)
+        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+.
+              S "because features they should use are not yet implemented in Drasil")
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -484,12 +496,9 @@ s4_2 =solChSpecF progName s4_2_5
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1 = assumpF s4_2_2 s4_2_3 s4_2_4 s4_2_5 s6 [s4_2_1_list]
-
 -- General paragraph, repeated in every example. Can be abstracted out.
 
-s4_2_1_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short assumption)
-  s4_2_1_assump_list)
+s4_2_1_list = enumSimple 1 (short assumption) s4_2_1_assump_list
 
 s4_2_1_assump_list :: [Sentence]
 
@@ -505,51 +514,51 @@ assump1 = S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   S "relevant for this" +:+ phrase problem +:+ S "is" +:+.
   (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) `sC` S "such as" +:+
-  (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible [" :+:
-  (makeRef s4_2_2_T1) :+: S "]."
+  (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible" +:+. sSqBr
+  (makeRef (swhsSymbMapT t1ConsThermE))
 --
 assump2 = S "All" +:+
   (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
-  (phrase $ time ^. term) +:+. S "[GD1]"
+  (phrase $ time ^. term) +:+. sSqBr (S "GD1")
 --
 assump3 = S "The" +:+ 
   (phrase $ water ^. term) +:+ S "in the" +:+ (phrase $ tank ^. term) +:+
   S "is fully mixed, so the" +:+ (phrase $ temp_W ^. term) +:+
-  S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+
-  S "[GD2" `sC` makeRef s4_2_4_DD2 :+: S "]."
+  S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+. sSqBr
+  (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)))
 --
 assump4 = S "The" +:+ (phrase $ temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+ S "[GD2" `sC` makeRef s4_2_4_DD2 `sC` S "LC1]."
+  term) +:+. sSqBr (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)) `sC` S "LC1")
 --
 assump5 = S "The" +:+ 
   (phrase $ w_density ^. term) +:+ S "and" +:+
   (phrase $ pcm_density ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ vol ^. term) +:+. S "[GD2]"
+  (phrase $ vol ^. term) +:+. sSqBr (S "GD2")
 --
 assump6 = S "The" +:+ (phrase $ htCap_W ^.
   term) `sC` (phrase $ htCap_S_P ^. term) `sC` S "and" +:+ 
   (phrase $ htCap_L_P ^. term) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
-  (phrase $ vol ^. term) +:+. S "[GD2]"
+  (phrase $ vol ^. term) +:+. sSqBr (S "GD2")
 --
 assump7 = (CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
-  (phrase $ water ^. term) +:+ S "[" :+: makeRef s4_2_4_DD1 :+: S "]."
+  (phrase $ water ^. term) +:+. sSqBr (makeRef (swhsSymbMapD dd1HtFluxC))
 --
 assump8 = S "The" +:+ (phrase $ temp_C ^. 
-  term) +:+ S "is constant over" +:+ (phrase $ time ^. term) +:+
-  S "[" :+: makeRef s4_2_4_DD1 `sC` S "LC2]."
+  term) +:+ S "is constant over" +:+ (phrase $ time ^. term) +:+.
+  sSqBr (makeRef (swhsSymbMapD dd1HtFluxC) `sC` S "LC2")
 --
 assump9 = S "The" +:+ (phrase $ temp_C ^.
-  term) +:+ S "does not vary along its length [" :+:
-  makeRef s4_2_4_DD1 `sC` S "LC3]."
+  term) +:+ S "does not vary along its length" +:+. sSqBr
+  (makeRef (swhsSymbMapD dd1HtFluxC) `sC` S "LC3")
 --
 assump10 = (CT.law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+
-  (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
-  S "[" :+: makeRef s4_2_4_DD2 :+: S "]."
+  (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+.
+  sSqBr (makeRef (swhsSymbMapD dd2HtFluxP))
 --
 assump11 = S "The" +:+ phrase model +:+
   S "only accounts for" +:+ (charging ^. defn) `sC`
@@ -558,15 +567,15 @@ assump11 = S "The" +:+ phrase model +:+
   (phrase $ temp_PCM ^. term) +:+ S "can only increase, or remain" +:+
   S "constant; they do not decrease. This implies that the" +:+
   (phrase $ temp_init ^. term) +:+ S "(A12) is less than (or equal)" +:+
-  S "to the" +:+ (phrase $ temp_C ^. term) +:+. S "[IM1, LC4]"
+  S "to the" +:+ (phrase $ temp_C ^. term) +:+. sSqBr (S "IM1, LC4")
 --
 assump12 = S "The" +:+
   (phrase $ temp_init ^. term) +:+ S "of the" +:+
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+
-  S "is the same" +:+. S "[IM1, IM2, LC5]"
+  S "is the same" +:+. sSqBr (S "IM1, IM2, LC5")
 --
 assump13 = S "The" +:+ phrase simulation +:+ S "will start with the" +:+
-  (short phsChgMtrl) +:+ S "in a" +:+ (solid ^. defn) +:+. S "[IM2, IM4]"
+  (short phsChgMtrl) +:+ S "in a" +:+ (solid ^. defn) +:+. sSqBr (S "IM2, IM4")
 --
 assump14 = S "The operating" +:+
   (phrase $ temp ^. term) +:+ S "range of the" +:+ phrase system +:+
@@ -575,17 +584,17 @@ assump14 = S "The operating" +:+
   S "the" +:+ (phrase $ temp ^. term) +:+ S "will not drop below the" +:+
   (phrase $ melt_pt ^. term) +:+ S "of" +:+
   (phrase $ water ^. term) `sC` S "or rise above its" +:+
-  (phrase $ boil_pt ^. term) +:+. S "[IM1, IM3]"
+  (phrase $ boil_pt ^. term) +:+. sSqBr (S "IM1, IM3")
 --
 assump15 = S "The" +:+
   (phrase $ tank ^. term) +:+ S "is" +:+ (phrase $ perfect_insul ^. term) +:+
   S "so that there is no" +:+ (phrase $ CT.heat ^. term) +:+
-  S "loss from the" +:+ (phrase $ tank ^. term) +:+. S "[IM1, LC6]"
+  S "loss from the" +:+ (phrase $ tank ^. term) +:+. sSqBr (S "IM1, LC6")
 --
 assump16 = S "No internal" +:+
   (phrase $ CT.heat ^. term) +:+ S "is generated by either the" +:+
-  (phrase $ water ^. term) +:+ S "or the" +:+ (short phsChgMtrl) :+:
-  S "; therefore, the" +:+ (phrase $ vol_ht_gen ^. term) +:+.
+  (phrase $ water ^. term) +:+ S "or the" +:+ (short phsChgMtrl) `semiCol`
+  S "therefore, the" +:+ (phrase $ vol_ht_gen ^. term) +:+.
   S "is zero [IM1, IM2]"
 --
 assump17 = S "The" +:+
@@ -596,7 +605,7 @@ assump17 = S "The" +:+
 assump18 = S "The" +:+ 
   (short phsChgMtrl) +:+ S "is either in a" +:+
   (liquid ^. defn) +:+ S "or a" +:+ (solid ^. defn) +:+
-  S "but not a" +:+ (gaseous ^. defn) +:+. S "[IM2, IM4]"
+  S "but not a" +:+ (gaseous ^. defn) +:+. sSqBr (S "IM2, IM4")
 --
 assump19 = S "The pressure in" +:+ S "the" +:+
   (phrase $ tank ^. term) +:+ S "is atmospheric, so the" +:+
@@ -613,16 +622,12 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
-s4_2_2 = thModF (short progName) [s4_2_2_T1, s4_2_2_T2, s4_2_2_T3]
-
 -- Theory has to be RelationChunk....
 -- No way to include "Source" or "Ref. By" sections?
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
-
-s4_2_3 = genDefnF s4_2_3_deriv
 
 -- General paragraph, repeated in one other example but could be included in 
 -- all. Can be abstracted out.
@@ -634,9 +639,9 @@ s4_2_3 = genDefnF s4_2_3_deriv
 
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   +:+ (phrase $ rOfChng ^. term) +:+ S "of" +: (phrase $ temp ^. term)),
-  Paragraph (S "Integrating" +:+ makeRef s4_2_2_T1 +:+ 
-  S "over a" +:+ (phrase $ vol ^. term) +:+ S "(" :+:
-  P (vol ^. symbol) :+: S "), we have:"),
+  Paragraph (S "Integrating" +:+ (makeRef (swhsSymbMapT t1ConsThermE)) +:+ 
+  S "over a" +:+ (phrase $ vol ^. term) +:+ sParen (
+  P (vol ^. symbol)) `sC` S "we have:"),
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C gradient) :. (C thFluxVect)) vol))) + 
@@ -650,8 +655,9 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   (phrase $ vol ^. term) `sC` S "with" +:+ P (thFluxVect ^. 
   symbol) +:+ S "as the" +:+ (phrase $ thFluxVect ^. term) +:+
   S "for the" +:+ (phrase $ surface ^. term) +:+ S "and" +:+
-  P (uNormalVect ^. symbol) +:+ S "as a" +: (uNormalVect ^.
-  defn)),
+  P (uNormalVect ^. symbol) +:+ S "as a" +:+ (phrase $ unit_ ^. term) +:+
+  S "outward" +:+ (phrase $ uNormalVect ^. term) +:+ S "for a" +:
+  (phrase $ surface ^. term)),
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
   ((C thFluxVect) :. (C uNormalVect)) surface))) + 
@@ -695,7 +701,6 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-s4_2_4 = dataDefnF s4_2_4_intro_end [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3]
 
 s4_2_4_intro_end :: Sentence
 s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
@@ -708,9 +713,6 @@ s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3
-  (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2)
-
 s4_2_5_subpar = [Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
   S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+
@@ -719,8 +721,8 @@ s4_2_5_subpar = [Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +
   S "of IM2 and IM4 are also coupled, since the" +:+ 
   (phrase $ temp_PCM ^. term) +:+ S "and" +:+ (phrase $ pcm_E ^. term) +:+
   S "depend on the" +:+. (phrase $ CT.phase_change ^. term) +:+
-  S "(" :+: at_start' inModel +:+ S "are left out because" +:+
-  S "they are not currently implemented in Drasil.)")]
+  sParen (at_start' inModel +:+ S "are left out because" +:+.
+  S "they are not currently implemented in Drasil"))]
 
 {-s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
   (s4_2_5_deriv2)) []
@@ -739,97 +741,135 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 
 -- Instance Models aren't implemented yet
 
-s4_2_5_deriv1 = [Paragraph (S "Derivation of the" +:+
-  (phrase $ energy ^. term) +:+ S "balance on" +: (phrase $ water ^. term)),
-  Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
-  P (temp_W ^. symbol) `sC` S "we look at the" +:+
-  (phrase $ energy ^. term) +:+ S "balance on" +:+.
-  (phrase $ water ^. term) +:+ S "The" +:+ 
-  (phrase $ vol ^. term) +:+ S "being considered is the" +:+
-  (phrase $ w_vol ^. term) +:+ EmptyS +:+ P (w_vol ^. symbol) `sC`
-  S "which has" +:+ (phrase $ w_mass ^. term) +:+ EmptyS +:+ 
-  P (w_mass ^. symbol) +:+ S "and" +:+ (phrase $ htCap_W ^. term) :+: 
-  S "," +:+. P (htCap_W ^. symbol) +:+ P (ht_flux_C ^. 
-  symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
-  S "and" +:+ P (ht_flux_P ^. symbol) +:+ S "represents" +:+
-  S "the" +:+ (phrase $ ht_flux_P ^. term) `sC` S "over" +:+
-  (phrase $ coil_SA ^. term) +:+ S "and" +:+ (phrase $ pcm_SA ^. term) +:+
-  S "of" +:+ P (coil_SA ^. symbol) +:+ S "and" +:+ 
-  P (pcm_SA ^. symbol) `sC` S "respectively. No" +:+
-  (phrase $ CT.heat_trans ^. term) +:+ S "occurs to the outside of the" +:+
-  (phrase $ tank ^. term) `sC` S "since it" +:+
-  S "has been assumed to be" +:+ (phrase $ perfect_insul ^. term) +:+. 
-  S "(A15)" +:+ S "Assuming no" +:+ (phrase $ vol_ht_gen ^. term) +:+
-  S  "(A16)," +:+ P (vol_ht_gen ^. symbol) :+: S "=0." +:+
-  S "Therefore, the" +:+ (phrase $ equation ^. term) +:+ S "for GD2 can be" +:
-  S "written as"),
-  EqnBlock 
-   ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
-   := (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)),
-  Paragraph(S "Using" +:+ makeRef s4_2_4_DD1 +:+ S "and" +:+
-  makeRef s4_2_4_DD2 +:+ S "for" +:+ P (ht_flux_C ^. symbol) +:+
-  S "and" +:+ P (ht_flux_P ^. symbol) +:+ S "respectively," +:
-  S "this can be written as"),
-  EqnBlock 
-   ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) 
-   := (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
-   (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM))),
-  Paragraph (S "Dividing (3) by" +:+ P (w_mass ^. symbol) :+:
-  P (htCap_W ^. symbol) `sC` S "we obtain:"),
-  EqnBlock 
-   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
-   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
-   (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
-   (C htCap_W)) * ((C temp_W) - (C temp_PCM))),
-  Paragraph (S "Factoring the negative sign out of the second" +:+
-  S "term of the" +:+ (short rightSide) +:+ S "of" +:+
-  (titleize $ equation ^. term) +:+ S "(4) and multiplying it by" +:+ 
-  P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) :+: S "/" :+: 
-  P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) +:
-  S "yields"),
-  EqnBlock 
-   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+s4_2_5_deriv1 = s4_2_5_d1startPara ++ (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
+
+s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list, 
+  s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
+s4_2_5_d1startPara = [Paragraph (S "Derivation of the" +:+
+  (phrase $ energy ^. term) +:+ S "balance on" +: (phrase $ water ^. term))]
+
+s4_2_5_d1eqn_list = map (EqnBlock) [s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, 
+  s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
+
+s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
+  [S "To find the", (phrase $ rOfChng ^. term), S "of", (P $ temp_W ^. symbol) `sC` 
+  S "we look at the", (phrase $ energy ^. term), S "balance on" +:+. 
+  (phrase $ water ^. term), S "The", (phrase $ vol ^. term), 
+  S "being considered is the", (phrase $ w_vol ^. term), EmptyS, 
+  (P $ w_vol ^. symbol) `sC` S "which has", (phrase $ w_mass ^. term), EmptyS, -- why is EmptyS here?
+  (P $ w_mass ^. symbol), S "and" +:+. ((phrase $ htCap_W ^. term) `sC` 
+  (P $ htCap_W ^. symbol)), (P $ ht_flux_C ^. symbol), S "represents the", 
+  (phrase $ ht_flux_C ^. term), S "and", (P $ ht_flux_P ^. symbol), S "represents",
+  S "the", (phrase $ ht_flux_P ^. term) `sC` S "over", (phrase $ coil_SA ^. term),
+  S "and", (phrase $ pcm_SA ^. term), S "of", (P $ coil_SA ^. symbol), S "and", 
+  (P $ pcm_SA ^. symbol) `sC` S "respectively. No", 
+  (phrase $ CT.heat_trans ^. term), S "occurs to the outside of the",
+  (phrase $ tank ^. term) `sC` S "since it",
+  S "has been assumed to be", (phrase $ perfect_insul ^. term) +:+. 
+  sParen (S "A15"), S "Assuming no", (phrase $ vol_ht_gen ^. term) +:+.
+  ((sParen $ S  "A16") `sC` ((P $ vol_ht_gen ^. symbol) :+: S "=0")),
+  S "Therefore, the", (phrase $ equation ^. term), S "for GD2 can be",
+  S "written as"],
+  [S "Using", (makeRef (swhsSymbMapD dd1HtFluxC)), S "and",
+  (makeRef (swhsSymbMapD dd2HtFluxP)), S "for", 
+  (P $ ht_flux_C ^. symbol), S "and", (P $ ht_flux_P ^. symbol), 
+  S "respectively,", S "this can be written as"],
+  [S "Dividing (3) by", P (w_mass ^. symbol) :+:
+  P (htCap_W ^. symbol) `sC` S "we obtain"],
+  [S "Factoring the negative sign out of the second", S "term of the", 
+  (short rightSide), S "of", (titleize $ equation ^. term), 
+  S "(4) and multiplying it by", 
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol) :+: S "/" :+: 
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), S "yields"],
+  [S "Which simplifies to"],
+  [S "Setting", P (tau_W ^. symbol) :+: S "=" :+:
+  (P $ w_mass ^. symbol) :+: (P $ htCap_W ^. symbol) :+: S "/" :+:
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), 
+  S "and", (P $ eta ^. symbol) :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+: 
+  (P $ pcm_SA ^. symbol) :+: S "/" :+: (P $ coil_HTC ^. symbol) :+: 
+  (P $ coil_SA ^. symbol) `sC` (titleize $ equation ^. term), S "(5) can",
+  S "be written as"],
+  [S "Finally, factoring out 1/" :+: (P $ tau_W ^. 
+  symbol) `sC` S "we are left with the governing",
+  (short ode), S "for IM1"]]
+
+
+s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
+  s4_2_5_d_eqn6, s4_2_5_d_eqn7 :: Expr
+
+s4_2_5_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) := 
+  (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA)) 
+
+s4_2_5_d_eqn2 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) := 
+  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
+  (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d_eqn3 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
+  (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
+  (C htCap_W)) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d_eqn4 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
    (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - 
    (C temp_W)) + ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * 
    (C coil_SA)) * ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * 
-   (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
-  Paragraph (S "Which simplifies to:"),
-  EqnBlock 
-   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
-   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-   (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
-   (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
-   (C htCap_W)) * ((C temp_PCM) - (C temp_W))),
-  Paragraph (S "Setting" +:+ P (tau_W ^. symbol) :+: S "=" :+:
-  P (w_mass ^. symbol) :+: P (htCap_W ^. symbol) :+: S "/" :+:
-  P (coil_HTC ^. symbol) :+: P (coil_SA ^. symbol) +:+ 
-  S "and" +:+ P (eta ^. symbol) :+: S "=" :+: P (pcm_HTC ^. 
-  symbol) :+: P (pcm_SA ^. symbol) :+: S "/" :+: P (coil_HTC ^.
-  symbol) :+: P (coil_SA ^. symbol) `sC`
-  (titleize $ equation ^. term) +:+ S "(5) can" +:
-  S "be written as"),
-  EqnBlock
-   (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
-   ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
-   ((C temp_PCM) - (C temp_W))),
-  Paragraph (S "Finally, factoring out 1/" :+: P (tau_W ^. 
-  symbol) `sC` S "we are left with the governing" +:+
-  (short ode) +: S "for IM1"),
-  EqnBlock
-   (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+   (C htCap_W)) * ((C temp_PCM) - (C temp_W)))
+
+s4_2_5_d_eqn5 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) * 
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
+  (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
+  (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) * 
+  (C htCap_W)) * ((C temp_PCM) - (C temp_W)))
+
+s4_2_5_d_eqn6 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+  ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
+  ((C temp_PCM) - (C temp_W)))
+
+s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
    (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) - 
    (C temp_W))))
-  ]
 
 -- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
-s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
+s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++
+  s4_2_5_d2endPara
+
+s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using", 
+  (makeRef (swhsSymbMapD dd2HtFluxP)), S "for",
+  (P $ ht_flux_P ^. symbol) `sC` S "this", (phrase $ equation ^. term),
+   S "can be written as"],
+  [S "Dividing by", (P $ pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol), 
+  S "we obtain"],
+  [S "Setting", P (tau_S_P ^. symbol) :+: S "=" :+:
+  P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
+  P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) `sC`
+  S "this can be written as"]]
+ 
+
+s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, 
+  s4_2_5_d2eqn4]
+
+s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
+
+s4_2_5_d2eqn1 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+   (C time) := (C ht_flux_P) * (C pcm_SA))
+
+s4_2_5_d2eqn2 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
+  (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) * 
+   (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
+  ((C temp_W) - (C temp_PCM)))
+
+s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   (phrase $ energy ^. term) +:+ S "balance on the" +:+ (short phsChgMtrl) +:+
   S "during" +:+ (phrase $ sens_heat ^. term) :+: S "ing phase:"),
-  Paragraph (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
+  (S "To find the" +:+ (phrase $ rOfChng ^. term) +:+ S "of" +:+
   P (temp_PCM ^. symbol) `sC` S "we look at the" +:+
   (phrase $ energy ^. term) +:+ S "balance on the" +:+.
   (short phsChgMtrl) +:+ S "The" +:+ (phrase $ vol ^. term) +:+
@@ -844,33 +884,11 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   P (ht_flux_P ^. symbol) +:+ S "over" +:+ (phrase $ pcm_SA ^. term) +:+.
   P (pcm_SA ^. symbol) +:+ S "There is no" +:+. 
   (phrase $ ht_flux_out ^. term) +:+ S "Assuming no" +:+
-  (phrase $ vol_ht_gen ^. term) +:+ S "(A16)," +:+ P (vol_ht_gen ^. symbol) :+:
+  (phrase $ vol_ht_gen ^. term) +:+ sParen (S "A16") `sC` P (vol_ht_gen ^. symbol) :+:
   S "=0, the" +:+ (phrase $ equation ^. term) +:
-  S "for GD2 can be written as"),
-  EqnBlock 
-   ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
-   (C time) := (C ht_flux_P) * (C pcm_SA)),
-   Paragraph (S "Using" +:+ makeRef s4_2_4_DD2 +:+ S "for" +:+
-   P (ht_flux_P ^. symbol) `sC` S "this" +:+ (phrase $ equation ^. term) +:
-   S "can be written as"),
-  EqnBlock 
-   ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM) 
-   (C time) := (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - 
-   (C temp_PCM))),
-   Paragraph (S "Dividing by" +:+ P (pcm_mass ^. symbol) :+:
-   P (htCap_S_P ^. symbol) +: S "we obtain"),
-  EqnBlock
-   (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) * 
-   (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - 
-   (C temp_PCM))),
-  Paragraph (S "Setting" +:+ P (tau_S_P ^. symbol) :+: S "=" :+:
-  P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
-  P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) :+: S "," +:
-  S "this can be written as"),
-  EqnBlock 
-   (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
-   ((C temp_W) - (C temp_PCM))),
-  Paragraph ((titleize $ equation ^. term) +:+ S "(6) applies for the" +:+ 
+  S "for GD2 can be written as")]
+
+s4_2_5_d2endPara = map Paragraph [((titleize $ equation ^. term) +:+ S "(6) applies for the" +:+ 
   (phrase $ solid ^. term) +:+ EmptyS +:+. (short phsChgMtrl) +:+
   S "In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
@@ -884,18 +902,18 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
   (phrase $ vol ^. term) +:+ S "change of the" +:+ (short phsChgMtrl) 
   +:+ S "with" +:+ (phrase $ CT.melting ^. term) +:+.
   S "is assumed to be negligible (A17)"),
-  Paragraph (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
+  (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
   S "=" :+: P (temp_melt_P ^. symbol) +:+ S "and not all of" +:+
   S "the" +:+ (short phsChgMtrl) +:+ S "is melted, the" +:+
   (phrase $ temp_PCM ^. term) +:+ S "does not change. Therefore, in" +:+
   S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
   P (time ^. symbol) :+: S "=0."),
-  Paragraph (S "This derivation does not consider the" +:+ 
+  (S "This derivation does not consider the" +:+ 
   (phrase $ CT.boiling ^. term) +:+ S "of the" +:+ 
   (short phsChgMtrl) `sC` S "as the" +:+ (short phsChgMtrl) 
   +:+ S "is assumed to either be in" +:+ S "a" +:+
   (solid ^. defn) +:+ S "or a" +:+ (liquid ^. defn) +:+.
-  S "(A18)")]
+  sParen (S "A18"))]
 
 -- Add GD, A, and EqnBlock references when available
 -- Replace Derivs with regular derivative when available
@@ -905,17 +923,12 @@ s4_2_5_deriv2 = [Paragraph (S "Detailed derivation of the" +:+
 -- 4.2.6 Data Constraints --
 ----------------------------
 
-s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
-  (makeRef s4_2_6_table2) +:+ S "show") mid True end [s4_2_6_table1, s4_2_6_table2]
-  where mid = (S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
-              plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+ 
-              S "to reasonable" +:+. plural value)
-        end = (sParen $ S "The" +:+ plural table_ +:+ S "are left out" +:+
-              S "because features they should use are not yet implemented in Drasil.")
+--[s4_2_6_table1, s4_2_6_table2]
+
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
--- Temporary dummy tables
+-- FIXME: Temporary dummy tables
 s4_2_6_table1 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
   (S "Table 1")
   True
@@ -966,8 +979,8 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   S "from the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
   (phrase $ energy ^. term) +:+ phrase output_ +:+ S "to the" +:+.
   (short phsChgMtrl) +:+ S "This can be shown as an" +:+
-  (phrase $ equation ^. term) +:+ S "by taking" +:+ makeRef s4_2_4_DD1 +:+
-  S "and" +:+ makeRef s4_2_4_DD2 `sC` S "multiplying each by their" +:+
+  (phrase $ equation ^. term) +:+ S "by taking" +:+ (makeRef (swhsSymbMapD dd1HtFluxC)) +:+
+  S "and" +:+ (makeRef (swhsSymbMapD dd2HtFluxP)) `sC` S "multiplying each by their" +:+
   S "respective" +:+ (phrase $ surface ^. term) +:+ S "area of" +:+
   (phrase $ CT.heat_trans ^. term) `sC`
   S "and integrating each over the" +:+ phrase simulation +:+
@@ -1035,7 +1048,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   (C pcm_vol)) * (C w_density)),
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
-  Enumeration (Simple $ mkEnumAbbrevList 3 (short requirement) reqList)
+  enumSimple 3 (short requirement) reqList
   ]
 
 -- Want to add req1 and req2 but they include a table and another enumeration
@@ -1053,39 +1066,39 @@ req3 = S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
 req4 = titleize output_ +:+ S "the" +:+
   phrase input_ +:+ plural quantity +:+ S "and derived" +:+ plural quantity +:+
   S "in the following list: the" +:+ plural quantity +:+ S "from R1, the" +:+
-  (phrase $ mass ^. term) :+: S "es from R2," +:+ P (tau_W ^. symbol) +:+
-  S "(from IM1)," +:+ P (eta ^. symbol) +:+ S "(from IM1)," +:+
+  (plural $ mass ^. term) +:+ S "from R2" `sC` P (tau_W ^. symbol) +:+
+  sParen (S "from IM1") `sC` P (eta ^. symbol) +:+ sParen (S "from IM1") `sC`
   P (tau_S_P ^. symbol) +:+ S "(from IM2) and" +:+ P (tau_L_P ^. symbol) +:+.
-  S "(from IM2)"
+  sParen (S "from IM2")
 --
 req5 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ (phrase $ temp_W ^. term) +:+ S "(" :+:
-  P (temp_W ^. symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
+  phrase output_ +:+ S "the" +:+ (phrase $ temp_W ^. term) +:+ sParen
+  (P (temp_W ^. symbol) :+: sParen (P $ time ^. symbol)) +:+
   S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
-  S "(from IM1)"
+  sParen (S "from IM1")
 --
 req6 = S "Calculate and" +:+ 
-  phrase output_ +:+ S "the" +:+ (phrase $ temp_PCM ^. term) +:+ S "(" :+:
-  P (temp_PCM ^. symbol) :+: S "(" :+: P (time ^. symbol) :+:
-  S ")) over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
-  S "(from IM2)"
+  phrase output_ +:+ S "the" +:+ (phrase $ temp_PCM ^. term) +:+ sParen
+  (P (temp_PCM ^. symbol) :+: sParen (P $ time ^. symbol)) +:+
+  S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
+  sParen (S "from IM2")
 --
 req7 = S "Calculate and" +:+ 
-  phrase output_ +:+ S "the" +:+ (phrase $ w_E ^. term) +:+ S "(" :+:
-  P (w_E ^. symbol) :+: S "(" :+: P (time ^. symbol) :+: S "))" +:+
+  phrase output_ +:+ S "the" +:+ (phrase $ w_E ^. term) +:+ sParen
+  (P (w_E ^. symbol) :+: sParen (P $ time ^. symbol)) +:+
   S "over the" +:+ phrase simulation +:+ (phrase $ time ^. term) +:+.
-  S "(from IM3)"
+  sParen (S "from IM3")
 --
 req8 = S "Calculate and" +:+ 
-  phrase output_ +:+ S "the" +:+ (phrase $ pcm_E ^. term) +:+ S "(" :+:
-  P (pcm_E ^. symbol) :+: S "(" :+: P (time ^. symbol) :+: S ")) over the" +:+
-  phrase simulation +:+ (phrase $ time ^. term) +:+. S "(from IM4)"
+  phrase output_ +:+ S "the" +:+ (phrase $ pcm_E ^. term) +:+ sParen
+  (P (pcm_E ^. symbol) :+: sParen (P $ time ^. symbol)) +:+ S "over the" +:+
+  phrase simulation +:+ (phrase $ time ^. term) +:+. sParen (S "from IM4")
 --
 req9 = S "Verify that the" +:+
-  (phrase $ energy ^. term) +:+ plural output_ +:+ S "(" :+:
-  P (w_E ^. symbol) :+: S "(" :+: P (time ^. 
-  symbol) :+: S ") and" +:+ P (pcm_E ^. symbol) :+: S "(" :+:
-  P (time ^. symbol) :+: S ")) follow the" +:+
+  (phrase $ energy ^. term) +:+ plural output_ +:+ sParen
+  (P (w_E ^. symbol) :+: sParen (P $ time ^. 
+  symbol) +:+ S "and" +:+ P (pcm_E ^. symbol) :+: sParen
+  (P $ time ^. symbol)) +:+ S "follow the" +:+
   (phrase $ CT.law_cons_energy ^. term) `sC` S "as outlined in" +:+ 
   makeRef s4_2_7 `sC` S "with relative error no greater than" +:+.
   S "0.001%"
@@ -1093,13 +1106,13 @@ req9 = S "Verify that the" +:+
 req10 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+
   S "at which the" +:+ (short phsChgMtrl) +:+ S "begins to melt" +:+
-  P (t_init_melt ^. symbol) +:+. S "(from IM2)"
+  P (t_init_melt ^. symbol) +:+. sParen (S "from IM2")
 --
 req11 = S "Calculate and" +:+ 
   phrase output_ +:+ S "the" +:+ (phrase $ time ^. term) +:+
   S "at which the" +:+ (short phsChgMtrl) +:+
   S "stops" +:+ (phrase $ CT.melting ^. term) +:+
-  EmptyS +:+ P (t_final_melt ^. symbol) +:+. S "(from IM2)"
+  EmptyS +:+ P (t_final_melt ^. symbol) +:+. sParen (S "from IM2")
 
 -- List structure same between all examples
 
@@ -1114,10 +1127,10 @@ s5_2 = SRS.nonfuncReq [s5_2_contents] []
 
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   `sC`
-  S "of this" +:+ phrase problem `sC` phrase performance +:+
+  S "of this" +:+ phrase problem `sC` (phrase $ performance ^. term) +:+
   S "is not a" +:+. phrase priority +:+
   S "Any reasonable implementation will be very quick and use" +:+
-  S "minimal storage. Rather than" +:+ phrase performance `sC` S "the" +:+
+  S "minimal storage. Rather than" +:+ (phrase $ performance ^. term) `sC` S "the" +:+
   phrase priority +:+ plural nonfunctionalRequirement +:+
   S "are correctness, verifiability" `sC`
   S "understandability, reusability, and maintainability.")
@@ -1137,7 +1150,7 @@ s6 = SRS.likeChg [s6_list] []
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
 
-s6_list = Enumeration (Simple $ mkEnumAbbrevList 1 (short likelyChg) s6_likeChg_list)
+s6_list = enumSimple 1 (short likelyChg) s6_likeChg_list
 
 s6_likeChg_list :: [Sentence]
 
@@ -1199,32 +1212,32 @@ s7_trailing = [
   plural constraint +:+. S "on each other",
 
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+.
+  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+
   plural assumption
 
   ]
 
-s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2, 
-  makeRef s4_2_2_T3, S "GD1", S "GD2", makeRef s4_2_4_DD1, 
-  makeRef s4_2_4_DD2, makeRef s4_2_4_DD3, makeRef s4_2_4_DD3, S "IM1",
+s7_table1 = Table [EmptyS, (makeRef (swhsSymbMapT t1ConsThermE)), (makeRef (swhsSymbMapT t2SensHtE)), 
+  (makeRef (swhsSymbMapT t3LatHtE)), S "GD1", S "GD2", (makeRef (swhsSymbMapD dd1HtFluxC)), 
+  (makeRef (swhsSymbMapD dd2HtFluxP)),(makeRef (swhsSymbMapD dd3HtFusion)),(makeRef (swhsSymbMapD dd3HtFusion)), S "IM1",
   S "IM2", S "IM3", S "IM4"]
-  [[makeRef s4_2_2_T1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[(makeRef (swhsSymbMapT t1ConsThermE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T2, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t2SensHtE)), EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "GD1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "GD2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd1HtFluxC)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD2, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd2HtFluxP)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS],
@@ -1239,7 +1252,7 @@ s7_table1 = Table [EmptyS, makeRef s4_2_2_T1, makeRef s4_2_2_T2,
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
-s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
+s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2,
   S "R1", S "R2"]
   [[S "IM1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
   [S "IM2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"],
@@ -1262,13 +1275,13 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2_6,
 s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   S "A7", S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
   S "A15", S "A16", S "A17", S "A18", S "A19"]
-  [[makeRef s4_2_2_T1, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[(makeRef (swhsSymbMapT t1ConsThermE)), S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T2, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t2SensHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_2_T3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
   [S "GD1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
@@ -1277,16 +1290,16 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   [S "GD2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS],
-  [makeRef s4_2_4_DD1, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  [(makeRef (swhsSymbMapD dd1HtFluxC)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
   S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS],
-  [makeRef s4_2_4_DD2, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd2HtFluxP)), EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [makeRef s4_2_4_DD3, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
   [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
@@ -1334,7 +1347,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` plural inModel `sC` plural likelyChg `sC` 
   S "and" +:+ plural assumption +:+. S "on each other"), (plural inModel
-  `sC` plural requirement `sC` S "and data" +:+ plural constraint +:+
+  `sC` plural requirement `sC` S "and" +:+ plural datumConstraint +:+
   S "on each other")]
 
 -- Same comments on this paragraph as I had for s7_intro1. 
@@ -1345,8 +1358,7 @@ s7_fig1 = Figure (
 
 s7_fig2 = Figure (
   showingCxnBw traceyGraph ((titleize' requirement) `sC`
-  titleize' inModel `sC` S "and" +:+ titleize' datum +:+ titleize' constraint)
+  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)
   ) "RTrace.png"
 
 --References?
-

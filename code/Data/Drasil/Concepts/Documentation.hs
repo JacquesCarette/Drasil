@@ -4,8 +4,8 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
 
-assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg, vav, desSpec :: CINP
+assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg, 
+  physSyst, requirement, srs, thModel, mg, vav, desSpec :: CINP
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
 assumption  = commonINP "assumption"  (cn' "assumption")                          "A"
@@ -15,6 +15,7 @@ genDefn     = commonINP "genDefn"     (cn' "general definition")                
 goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)             "GS" 
 inModel     = commonINP "inModel"     (compoundPhrase instance_ model)            "IM" 
 likelyChg   = commonINP "likelyChg"   (cn' "likely change")                       "LC"
+unlikelyChg = commonINP "unlikelyChg" (cn' "unlikely change")                     "UC"
 physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description) "PS" 
 requirement = commonINP "requirement" (cn' "requirement")                         "R"
 thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"
@@ -32,7 +33,7 @@ analysis, appendix, characteristic, client, column, company, component,
   environment, figure, functional, game, general, goal, guide, implementation, individual,
   information, interest, input_, instance_, intReader, introduction, item, label, library,
   limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization, 
-  output_, performance, physics, physical, plan, priority, problem, product_, project, 
+  output_, physics, physical, plan, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, statement, symbol_, system, table_, template, 
@@ -90,7 +91,6 @@ offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
 output_         = npnc "output"         (cn' "output")
-performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 plan            = npnc "plan"           (cn' "plan")
@@ -188,3 +188,7 @@ systemdescription            = compoundNPNC system description
 useCaseTable                 = compoundNPNC useCase table_
 userCharacteristic           = compoundNPNC user characteristic
 vavPlan                      = compoundNPNC vav plan
+
+-- extra utilities --
+missing :: Sentence
+missing = S "..."

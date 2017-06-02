@@ -1,38 +1,27 @@
 module Modules.InputFormat (inputFormat) where
 
 import Language.Drasil.Code
+import Defs
 
--- TODO:  add ability to specify libraries in gool
--- TODO:  add gool support for non-object functions;  don't need a class for this
 inputFormat :: Module
-inputFormat = buildModule "InputFormat" ["numpy"] [] [inputFormatFunc] []
+inputFormat = buildModule "InputFormat" [] [] [get_input_func] []
 
-inputFormatFunc :: FunctionDecl
-inputFormatFunc = pubMethod methodTypeVoid "get_input" (params [("filename", string), ("params", obj "InputParameters")]) 
+get_input_func :: FunctionDecl
+get_input_func = pubMethod methodTypeVoid "get_input" [p_filename, p_params] 
     [ 
       block [
-        -- TODO:  improve gool file IO (some languages use object methods, some not...
-        --        probably best to add as new IO Statement)
-        varDecDef "infile" infile (funcApp' "open" [var "filename", litString "r"]),
-        (var "params")$->(var "a") &= readfl64,
-        (var "params")$->(var "b") &= readfl64,
-        (var "params")$->(var "t") &= readfl64,
-        (var "params")$->(var "gt") &= readline,
-        (var "params")$->(var "w") &= readfl64,
-        (var "params")$->(var "tnt") &= readfl64,
-        (var "params")$->(var "sdx") &= readfl64,
-        (var "params")$->(var "sdy") &= readfl64,
-        (var "params")$->(var "sdz") &= readfl64,
-        (var "params")$->(var "pbtol") &= readfl64,
-        valStmt (objMethodCall (var "infile") "close" [])
+        varDec l_infile infile,
+        openFileR v_infile v_filename,
+        getFileInput v_infile float $ v_params$->v_a,
+        getFileInput v_infile float $ v_params$->v_b,
+        getFileInput v_infile float $ v_params$->v_t,
+        getFileInput v_infile int $ v_params$->v_gt,
+        getFileInput v_infile float $ v_params$->v_w,
+        getFileInput v_infile float $ v_params$->v_tnt,
+        getFileInput v_infile float $ v_params$->v_sdx,
+        getFileInput v_infile float $ v_params$->v_sdy,
+        getFileInput v_infile float $ v_params$->v_sdz,
+        getFileInput v_infile float $ v_params$->v_pbtol,
+        closeFile v_infile
       ]
     ]      
-  
-  
--- float64 from numpy library
---   this should come from a library database
-readfl64 :: Value
-readfl64 = funcApp "numpy" "float64" [readline]  
-  
-readline :: Value
-readline = objMethodCall (var "infile") "readline" []

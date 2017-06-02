@@ -11,7 +11,7 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term)
+import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
@@ -58,6 +58,7 @@ ufunc (Summation (Just (s, Low v, High h)) e) =
 ufunc (Summation Nothing e) = (T.Summation Nothing, expr e)
 ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
 ufunc (Abs e) = (T.Abs, expr e)
+ufunc (Norm e) = (T.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
 ufunc (Sin e) = (T.Sin, expr e)
 ufunc (Cos e) = (T.Cos, expr e)
@@ -92,7 +93,7 @@ integral (Integral (Nothing, Nothing) e wrtc) =
   (T.Integral (Nothing, Nothing) (int_wrt wrtc), expr e)
 integral _ = error "TeX/Import.hs Incorrect use of Integral"
 
-int_wrt :: (NamedIdea c, SymbolForm c) => c -> T.Expr
+int_wrt :: (SymbolForm c) => c -> T.Expr
 int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
 
 replace_divs :: Expr -> T.Expr
@@ -116,6 +117,7 @@ spec (P s)     = T.N s
 spec (Ref t r) = T.Ref t (spec r)
 spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
 spec EmptyS    = T.EmptyS
+spec (E e)     = T.E $ expr e
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -150,7 +152,7 @@ lay x@(Table hdr lls t b)
 lay (Paragraph c)         = T.Paragraph (spec c)
 lay (EqnBlock c)          = T.EqnBlock (T.E (expr c))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay x@(Definition c)      = T.Definition (makePairs c) (spec $ refName x)
+lay x@(Definition m c)      = T.Definition (makePairs c m) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
@@ -177,19 +179,19 @@ item :: ItemType -> T.ItemType
 item (Flat i) = T.Flat (spec i)
 item (Nested t s) = T.Nested (spec t) (makeL s) 
   
-makePairs :: DType -> [(String,T.LayoutObj)]
-makePairs (Data c) = [
+makePairs :: DType -> SymbolMap -> [(String,T.LayoutObj)]
+makePairs (Data c) m = [
   ("Label",       T.Paragraph $ T.N $ c ^. symbol),
   ("Units",       T.Paragraph $ spec $ unit'2Contents c),
   ("Equation",    eqnStyleDD $ buildEqn c),
-  ("Description", T.Paragraph (buildDDDescription c))
+  ("Description", T.Paragraph (buildDDDescription c m))
   ]
-makePairs (Theory c) = [
+makePairs (Theory c) _ = [
   ("Label",       T.Paragraph $ spec (phrase $ c ^. term)),
   ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
   ("Description", T.Paragraph (spec (c ^. defn)))
   ]
-makePairs General = error "Not yet implemented"
+makePairs General _ = error "Not yet implemented"
 
 makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
 makeUHPairs []          = []
@@ -210,9 +212,9 @@ buildEqn :: QDefinition -> T.Spec
 buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
-buildDDDescription :: QDefinition -> T.Spec
-buildDDDescription c = descLines (
-  (toVC c):(if verboseDDDescription then vars $ equat c else []))
+buildDDDescription :: QDefinition -> SymbolMap -> T.Spec
+buildDDDescription c m = descLines (
+  (toVC c m):(if verboseDDDescription then vars (equat c) m else []))
 
 descLines :: [VarChunk] -> T.Spec  
 descLines []       = error "No chunks to describe"

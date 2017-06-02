@@ -21,7 +21,7 @@ module Data.Drasil.Modules
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Computation
 import Control.Lens ((^.))

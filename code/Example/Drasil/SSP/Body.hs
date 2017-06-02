@@ -69,7 +69,7 @@ ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
-sspSymMapT :: d -> Contents 
+sspSymMapT :: RelationConcept -> Contents 
 sspSymMapT = symbolMapFun sspSymbols Theory
 
 -- SECTION 1 --

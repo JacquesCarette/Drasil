@@ -39,18 +39,13 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe, ofThe')
 import qualified Drasil.SRS as SRS
 
-introductionF :: CINP -> Sentence -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence, Section) -> Bool -> (Sentence, CINP, Section, Sentence) -> Section
-introductionF kWord (startIntro) (pOdPart1) (inc, endSCOR) (know, und, appStandd, refForCoIR) orgTrailing (i, b, s, t)
-                = SRS.intro [Paragraph startIntro, Paragraph endIntro] subsec
-      where endIntro = foldlSent [S "The following", phrase section_, 
-                                  S "provides an overview of the", introduceAbb srs,
-                                  S "for" +:+. (short kWord), S "This", phrase section_,
-                                  S "explains the", phrase purpose, S "of this", phrase document
-                                  `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (temp))]
-            subsec   = [pOfDoc, scpOfReq, cIntRdr, organizationOfDoc orgTrailing]
+introductionF :: CINP -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CINP, Section, Sentence) -> Section
+introductionF kWord (startIntro, kSent) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
+  = introF startIntro kSent subsec
+     where  subsec   = [pOfDoc, scpOfReq, cIntRdr, organizationOfDoc orgTrailing]
             pOfDoc   = prpsOfDocF pOdPart1
             scpOfReq = scpOfReqF inc kWord endSCOR
-            cIntRdr  = charIntRdrF know und kWord appStandd refForCoIR
+            cIntRdr  = charIntRdrF know und kWord appStandd (SRS.userChar [] [])
             organizationOfDoc True  = orgSecWTS i b s t
             organizationOfDoc False = orgSec i b s 
 

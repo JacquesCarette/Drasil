@@ -5,6 +5,7 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Utils(symbolMapFun)
 import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.Utils (foldlSent)
@@ -219,3 +220,30 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
+
+
+-- hack; needs to be removed eventually; originals are within Concepts.hs
+temporary :: [VarChunk]
+temporary = [nonFactorL_, lDurFac_, glassTypeFac_]
+
+nonFactorL_, lDurFac_, glassTypeFac_ :: VarChunk
+
+nonFactorL_    = makeVC "nonFactorL"    (nounPhraseSP "non-factored load") cB
+lDurFac_       = makeVC "lDurFac"       (nounPhraseSP "load duration factor") cB
+glassTypeFac_  = makeVC "glassTypeFac"  (nounPhraseSP "glass type factor") cB
+
+this_symbols :: [QSWrapper]
+this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
+  ++ (map qs glassBRUnitless))
+
+temporaryLOSymbols :: [QSWrapper]
+temporaryLOSymbols = this_symbols++map qs (temporary)
+
+gbSymbMap :: SymbolMap
+gbSymbMap = symbolMap temporaryLOSymbols
+
+gbSymbMapD :: QDefinition -> Contents
+gbSymbMapD term_ = (symbolMapFun temporaryLOSymbols Data) term_
+
+gbSymbMapT :: RelationConcept -> Contents
+gbSymbMapT term_ = (symbolMapFun temporaryLOSymbols Theory) term_

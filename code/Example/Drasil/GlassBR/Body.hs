@@ -77,16 +77,8 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
-gbSymbMap :: SymbolMap
-gbSymbMap = symbolMap $ map qs (glassBRSymbols) ++ map qs (glassBRUnitless)
-  ++ map qs (glassBRSymbolsWithDefns) ++ map qs (temporary)
-
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
-
-this_symbols :: [QSWrapper]
-this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
-  ++ (map qs glassBRUnitless))
 
 s2 = introF start (short gLassBR)
   [s2_1, s2_2, s2_4, s2_3]
@@ -383,17 +375,17 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
 s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
   
 s6_2_2_TMods :: [Contents]
-s6_2_2_TMods = map (Definition gbSymbMap . Theory) tModels
+s6_2_2_TMods = map gbSymbMapT tModels
 
 s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
-s6_2_3_IMods = map (Definition gbSymbMap . Theory) iModels
+s6_2_3_IMods = map gbSymbMapT iModels
 
 s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
-s6_2_4_DDefns = map (Definition gbSymbMap . Data) dataDefns
+s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
@@ -490,8 +482,8 @@ s7_1_list =
   +:+ plural quantity +:+ S "from" +:+ (short requirement) :+: S "2."),
   (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
   +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
-  (makeRef ((Definition gbSymbMap . Theory) t1SafetyReq)) +:+ S "and" +:+ 
-  (makeRef ((Definition gbSymbMap . Theory) t2SafetyReq)) :+: S ") are true" `sC`
+  (makeRef (gbSymbMapT t1SafetyReq)) +:+ S "and" +:+ 
+  (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn))] ++ 
@@ -499,23 +491,23 @@ s7_1_list =
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start $ prob_br ^. term) +:+ sParen (P $ prob_br ^. symbol) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Theory) probOfBr))] ++
+    sParen (makeRef (gbSymbMapT probOfBr))] ++
     [Flat $ (titleize $ lResistance ^. term) +:+ sParen(short lResistance) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Theory) calOfCap))] ++
+    sParen (makeRef (gbSymbMapT calOfCap))] ++
     [Flat $ (at_start $ demand ^. term) +:+ sParen (P $ demand ^. symbol) +:+
-    sParen (makeRef ((Definition gbSymbMap . Theory) calOfDe))] ++
+    sParen (makeRef (gbSymbMapT calOfDe))] ++
     [Flat $ (at_start $ act_thick ^. term) +:+ sParen(P $ act_thick ^. symbol) +:+
-    sParen (makeRef ((Definition gbSymbMap . Data) hFromt))] ++
+    sParen (makeRef (gbSymbMapD hFromt))] ++
     [Flat $ (titleize $ loadDF ^. term) +:+ sParen (P $ loadDF ^. symbol) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Data) loadDF))]++
+    sParen (makeRef (gbSymbMapD loadDF))]++
     [Flat $ (at_start $ strDisFac ^. term) +:+ sParen (P $ strDisFac ^. symbol) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Data) strDisFac))]++
+    sParen (makeRef (gbSymbMapD strDisFac))]++
     [Flat $ (titleize $ nonFL ^. term) +:+ sParen (P $ nonFL ^. symbol) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Data) nonFL))]++
+    sParen (makeRef (gbSymbMapD nonFL))]++
     [Flat $ (titleize $ glassTypeFac ^. term) +:+ sParen(short glassTypeFac) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Data) glaTyFac))] ++
+    sParen (makeRef (gbSymbMapD glaTyFac))] ++
     map (\c -> Flat $ (at_start $ c ^. term) +:+ sParen (P $ c ^. symbol) +:+ 
-    sParen (makeRef ((Definition gbSymbMap . Data) c)))
+    sParen (makeRef (gbSymbMapD c)))
     [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize $ aspectR ^. term) +:+ sParen(short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"

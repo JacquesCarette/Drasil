@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Software
 import Drasil.TraceabilityMandGs
 import Drasil.OrganizationOfSRS
 import Drasil.Introduction
-import Drasil.Requirements
+--import Drasil.Requirements
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
   position, torque, force, gravitationalAccel, velocity, 

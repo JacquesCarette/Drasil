@@ -340,11 +340,11 @@ waterUWght  = mkGtZeroConst waterWeight []          (9.8   :: Double )
 fcOfSa, slipVert2, deltax, deltay :: [Sentence]
 fcOfSa = [S "FS", E $ (V "FS") :> (Int 0)] -- FIXME: Use factor of safety's symbol (currently doesn't have one)
 slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
-deltax = [P $ dx_i ^. symbol, S "None"]
-deltay = [P $ dy_i ^. symbol, S "None"]
+deltax = [getS dx_i, S "None"]
+deltay = [getS dy_i, S "None"]
 
 mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst s other num = [P $ s ^. symbol, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
+mkGtZeroConst s other num = [getS s, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,

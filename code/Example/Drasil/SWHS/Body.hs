@@ -515,7 +515,7 @@ assump1 = S "The only form of" +:+ (phrase $ energy ^. term) +:+ S "that is" +:+
   (phrase $ CT.thermal_energy ^. term) +:+ S "All other forms of" +:+
   (phrase $ energy ^. term) `sC` S "such as" +:+
   (phrase $ mech_energy ^. term) `sC` S "are assumed to be negligible" +:+. sSqBr
-  (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE))
+  (makeRef (swhsSymbMapT t1ConsThermE))
 --
 assump2 = S "All" +:+
   (phrase $ CT.heat_trans ^. term) +:+ S "coefficients are constant over" +:+
@@ -525,11 +525,11 @@ assump3 = S "The" +:+
   (phrase $ water ^. term) +:+ S "in the" +:+ (phrase $ tank ^. term) +:+
   S "is fully mixed, so the" +:+ (phrase $ temp_W ^. term) +:+
   S "is the same throughout the entire" +:+ (phrase $ tank ^. term) +:+. sSqBr
-  (S "GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)))
+  (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)))
 --
 assump4 = S "The" +:+ (phrase $ temp_PCM ^.
   term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+. sSqBr (S "GD2" `sC` (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "LC1")
+  term) +:+. sSqBr (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)) `sC` S "LC1")
 --
 assump5 = S "The" +:+ 
   (phrase $ w_density ^. term) +:+ S "and" +:+
@@ -545,20 +545,20 @@ assump6 = S "The" +:+ (phrase $ htCap_W ^.
 --
 assump7 = (CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
-  (phrase $ water ^. term) +:+. sSqBr (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC))
+  (phrase $ water ^. term) +:+. sSqBr (makeRef (swhsSymbMapD dd1HtFluxC))
 --
 assump8 = S "The" +:+ (phrase $ temp_C ^. 
   term) +:+ S "is constant over" +:+ (phrase $ time ^. term) +:+.
-  sSqBr (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC) `sC` S "LC2")
+  sSqBr (makeRef (swhsSymbMapD dd1HtFluxC) `sC` S "LC2")
 --
 assump9 = S "The" +:+ (phrase $ temp_C ^.
   term) +:+ S "does not vary along its length" +:+. sSqBr
-  (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC) `sC` S "LC3")
+  (makeRef (swhsSymbMapD dd1HtFluxC) `sC` S "LC3")
 --
 assump10 = (CT.law_conv_cooling ^. 
   defn) +:+ S "applies between the" +:+
   (phrase $ water ^. term) +:+ S "and the" +:+ (short phsChgMtrl) +:+.
-  sSqBr (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP))
+  sSqBr (makeRef (swhsSymbMapD dd2HtFluxP))
 --
 assump11 = S "The" +:+ phrase model +:+
   S "only accounts for" +:+ (charging ^. defn) `sC`
@@ -639,7 +639,7 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   +:+ (phrase $ rOfChng ^. term) +:+ S "of" +: (phrase $ temp ^. term)),
-  Paragraph (S "Integrating" +:+ (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)) +:+ 
+  Paragraph (S "Integrating" +:+ (makeRef (swhsSymbMapT t1ConsThermE)) +:+ 
   S "over a" +:+ (phrase $ vol ^. term) +:+ sParen (
   P (vol ^. symbol)) `sC` S "we have:"),
   EqnBlock 
@@ -770,8 +770,8 @@ s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
   ((sParen $ S  "A16") `sC` ((P $ vol_ht_gen ^. symbol) :+: S "=0")),
   S "Therefore, the", (phrase $ equation ^. term), S "for GD2 can be",
   S "written as"],
-  [S "Using", (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), S "and",
-  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), S "for", 
+  [S "Using", (makeRef (swhsSymbMapD dd1HtFluxC)), S "and",
+  (makeRef (swhsSymbMapD dd2HtFluxP)), S "for", 
   (P $ ht_flux_C ^. symbol), S "and", (P $ ht_flux_P ^. symbol), 
   S "respectively,", S "this can be written as"],
   [S "Dividing (3) by", P (w_mass ^. symbol) :+:
@@ -838,7 +838,7 @@ s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_l
   s4_2_5_d2endPara
 
 s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using", 
-  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), S "for",
+  (makeRef (swhsSymbMapD dd2HtFluxP)), S "for",
   (P $ ht_flux_P ^. symbol) `sC` S "this", (phrase $ equation ^. term),
    S "can be written as"],
   [S "Dividing by", (P $ pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol), 
@@ -979,8 +979,8 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   S "from the" +:+ (phrase $ coil ^. term) +:+ S "and the" +:+
   (phrase $ energy ^. term) +:+ phrase output_ +:+ S "to the" +:+.
   (short phsChgMtrl) +:+ S "This can be shown as an" +:+
-  (phrase $ equation ^. term) +:+ S "by taking" +:+ (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)) +:+
-  S "and" +:+ (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)) `sC` S "multiplying each by their" +:+
+  (phrase $ equation ^. term) +:+ S "by taking" +:+ (makeRef (swhsSymbMapD dd1HtFluxC)) +:+
+  S "and" +:+ (makeRef (swhsSymbMapD dd2HtFluxP)) `sC` S "multiplying each by their" +:+
   S "respective" +:+ (phrase $ surface ^. term) +:+ S "area of" +:+
   (phrase $ CT.heat_trans ^. term) `sC`
   S "and integrating each over the" +:+ phrase simulation +:+
@@ -1217,27 +1217,27 @@ s7_trailing = [
 
   ]
 
-s7_table1 = Table [EmptyS, (makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)), (makeRef ((Definition swhsSymbMap . Theory) t2SensHtE)), 
-  (makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)), S "GD1", S "GD2", (makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), 
-  (makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)),(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)),(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), S "IM1",
+s7_table1 = Table [EmptyS, (makeRef (swhsSymbMapT t1ConsThermE)), (makeRef (swhsSymbMapT t2SensHtE)), 
+  (makeRef (swhsSymbMapT t3LatHtE)), S "GD1", S "GD2", (makeRef (swhsSymbMapD dd1HtFluxC)), 
+  (makeRef (swhsSymbMapD dd2HtFluxP)),(makeRef (swhsSymbMapD dd3HtFusion)),(makeRef (swhsSymbMapD dd3HtFusion)), S "IM1",
   S "IM2", S "IM3", S "IM4"]
-  [[(makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[(makeRef (swhsSymbMapT t1ConsThermE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Theory) t2SensHtE)), EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t2SensHtE)), EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "GD1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "GD2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd1HtFluxC)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd2HtFluxP)), EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS],
@@ -1275,13 +1275,13 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2,
 s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   S "A7", S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
   S "A15", S "A16", S "A17", S "A18", S "A19"]
-  [[(makeRef ((Definition swhsSymbMap . Theory) t1ConsThermE)), S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [[(makeRef (swhsSymbMapT t1ConsThermE)), S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Theory) t2SensHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t2SensHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapT t3LatHtE)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
   [S "GD1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
@@ -1290,16 +1290,16 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   [S "GD2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd1HtFluxC)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
+  [(makeRef (swhsSymbMapD dd1HtFluxC)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
   S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd2HtFluxP)), EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd2HtFluxP)), EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [(makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [(makeRef (swhsSymbMapD dd3HtFusion)), EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
   [S "IM1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,

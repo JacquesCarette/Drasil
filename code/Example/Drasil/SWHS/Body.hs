@@ -48,7 +48,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
-s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1,
+s2, s3, s3_1, s4, s4_1,
   s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
 
 s2_2_contents, {-s2_3_contents, -}s3_1_contents, sys_context_fig,
@@ -100,8 +100,9 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 -- Section 2 : INTRODUCTION --
 ------------------------------
-  
-s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
+
+s2 = introductionF progName s2_intro s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
+-- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
@@ -140,8 +141,6 @@ s2_kSent = (EmptyS +:+. (phrase $ swhs_pcm ^. term) +:+ S "The developed" +:+
 -- 2.1 : Purpose of Document --
 -------------------------------
 
-s2_1 = prpsOfDocF s2_1_par1
-
 s2_1_par1 :: Sentence
 s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase document +:+ S "is to describe the modelling of" +:+.
@@ -167,14 +166,15 @@ s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
-s2_2 = SRS.scpOfReq [s2_2_contents] []
+s2_2_tuple :: (Sentence, Sentence)
+s2_2_tuple = (s2_2_contents, s2_2_end)
 
-s2_2_contents = Paragraph $ S "The" +:+ phrase scope +:+ S "of the" +:+
-  plural requirement +:+ S "is limited to" +:+
-  (phrase $ CT.thermal_analysis ^. term) +:+ S "of a single" +:+.
-  (phrase $ tank_pcm ^. term) +:+ --FIXME: Caps issue
-  S "Given the appropriate" +:+ plural input_ `sC` S "the code for" +:+
-  (short progName) +:+ S "is intended to predict the" +:+
+s2_2_contents :: Sentence
+s2_2_contents = S (phrase $ CT.thermal_analysis ^. term) +:+ S "of a single" +:+
+  (phrase $ tank_pcm ^. term) --FIXME: Caps issue
+  
+s2_2_end :: Sentence
+s2_2_end = S "predict the" +:+
   (phrase $ temp ^. term) +:+ S "and" +:+ (phrase $ CT.thermal_energy ^. term) +:+
   S "histories for the" +:+ (phrase $ water ^. term) +:+ S "and the" +:+.
   (short phsChgMtrl) +:+ S "This entire" +:+ phrase document +:+
@@ -198,11 +198,17 @@ s2_2_contents = Paragraph $ S "The" +:+ phrase scope +:+ S "of the" +:+
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3 = charIntRdrF knowledge understanding (progName) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
-  where knowledge = ((phrase $ CT.heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
-                    S "A third or fourth year Mechanical Engineering course on this topic is recommended")
-        understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
-                        S "covered in first and second year Calculus courses")
+s2_3_tuple :: (Sentence, Sentence, Sentence, Section)
+s2_3_tuple = (s2_3_knowlegde, s2_3_understanding, (EmptyS), (SRS.userChar SRS.missingP []))
+
+s2_3_knowlegde :: Sentence
+s2_3_knowlegde = (phrase $ CT.heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+                    S "A third or fourth year Mechanical Engineering course on this topic is recommended"
+
+s2_3_understanding :: Sentence
+s2_3_understanding = S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
+                        S "covered in first and second year Calculus courses"
+
 {-s2_3 = SRS.charOfIR [s2_3_contents] []
 
 s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
@@ -221,7 +227,8 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4 = orgSecWTS s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4_trail
+s2_4_tuple :: (Sentence, Sentence, Section, Sentence)
+s2_4_tuple = (s2_4_intro, inModel, (SRS.inModel SRS.missingP []), s2_4_trail)
 
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+

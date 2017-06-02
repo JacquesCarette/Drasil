@@ -1,4 +1,4 @@
-module Data.Drasil.SentenceStructure 
+module Data.Drasil.SentenceStructures
   ( foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'

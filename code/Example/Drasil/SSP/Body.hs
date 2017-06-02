@@ -335,7 +335,25 @@ waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
 waterVert = verticesConst $ S "water table"
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
-intNormFor  = mkGtZeroConst ei          []          (15000 :: Integer)
+
+{--- START OF SECTION TO MESS WITH DATA TYPES
+data VariableChunk where
+  VarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
+  
+data VarContraint where
+  VarCon :: (Expr -> Expr -> Expr) -> Expr -> VarContraint
+
+intNormFor  = mkGtZeroConst' $ VarCh ei [] (15000 :: Integer)
+mkGtZeroConst'  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> [Sentence]
+mkGtZeroConst' (VarCh s other num) = [getS s, fmtBF' s ((VarCon (:>) (Int 0)):other), fmtU (S (show num)) (cqs s)]
+
+fmtBF' ::(SymbolForm a) => a -> [VarContraint] -> Sentence
+fmtBF' _ []      = S "None"  
+fmtBF' symb [VarCon f num]  = E ((C symb) `f` num)
+fmtBF' symb ((VarCon f num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
+--- END OF SECTION -}
+
+intNormFor  = mkGtZeroConst ei [] (15000 :: Integer)
 effectCohe  = mkGtZeroConst cohesion    []          (10    :: Integer)
 poissnRatio = mkGtZeroConst poissnsR    [((:<),1)]  (0.4   :: Double )
 fricAng     = mkGtZeroConst fricAngle   [((:<),90)] (25    :: Integer)

@@ -21,7 +21,7 @@ module Language.Drasil.Code.Imperative.AST (
     methodType,methodTypeVoid,
     block,defaultValue,
     true,false,
-    var, svToVar,
+    var, arg, self, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     mainMethod,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
@@ -30,7 +30,7 @@ module Language.Drasil.Code.Imperative.AST (
     ($->),($.),($:),
     log,exp,alwaysDel,neverDel,
     assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
-    listOf,litBool,litChar,litFloat,litInt,litObj,litString,noElse,noParent,objDecDef,oneLiner,
+    listOf,litBool,litChar,litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,
@@ -40,7 +40,7 @@ module Language.Drasil.Code.Imperative.AST (
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
-    objDecNew, objDecNewVoid, objMethodCall, objMethodCallVoid, 
+    objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
     listSize, listAccess, listAppend,valStmt,funcApp,funcApp',continue,
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
@@ -121,7 +121,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | FuncApp (Maybe Library) Label [Value]
            | Lit Literal
            | ObjAccess Value Function
-           | StateObj StateType [Value]
+           | StateObj (Maybe Library) StateType [Value]
            | Self
            | Var Label
            | EnumVar Label
@@ -252,8 +252,14 @@ false = Lit $ LitBool False
 var :: Label -> Value
 var = Var
 
+arg :: Int -> Value
+arg = Arg 
+
+self :: Value
+self = Self
+
 svToVar :: StateVar -> Value
-svToVar (StateVar n _ _ _ _) = Var n
+svToVar (StateVar n _ _ _ _) = Self $-> Var n
 
 pubClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
 pubClass n p vs fs = Class n p Public vs fs
@@ -483,8 +489,11 @@ litFloat = Lit . LitFloat
 litInt :: Integer -> Value
 litInt = Lit . LitInt
 
-litObj :: StateType -> [Value] -> Value
-litObj t vs = StateObj t vs
+litObj :: Library -> StateType -> [Value] -> Value
+litObj l t vs = StateObj (Just l) t vs
+
+litObj' :: StateType -> [Value] -> Value
+litObj' t vs = StateObj Nothing t vs
 
 litString :: Label -> Value
 litString = Lit . LitStr
@@ -498,12 +507,18 @@ noParent = Nothing
 objDecDef :: Label -> StateType -> Value -> Statement
 objDecDef n t v = DeclState $ ObjDecDef n t v
 
-objDecNew :: Label -> StateType -> [Value] -> Statement
-objDecNew n t vs = DeclState $ ObjDecDef n t (StateObj t vs)
+objDecNew :: Label -> Library -> StateType -> [Value] -> Statement
+objDecNew n l t vs = DeclState $ ObjDecDef n t (StateObj (Just l) t vs)
+
+objDecNew' :: Label -> StateType -> [Value] -> Statement
+objDecNew' n t vs = DeclState $ ObjDecDef n t (StateObj Nothing t vs)
 
 -- declare new object with parameter-less constructor
-objDecNewVoid :: Label -> StateType -> Statement
-objDecNewVoid n t = objDecNew n t []
+objDecNewVoid :: Label -> Library -> StateType -> Statement
+objDecNewVoid n l t = objDecNew n l t []
+
+objDecNewVoid' :: Label -> StateType -> Statement
+objDecNewVoid' n t = objDecNew' n t []
 
 listSize :: Function
 listSize = ListSize
@@ -758,7 +773,7 @@ valueReplace' :: Value -> Value -> Value -> Value
 valueReplace' old new (Expr e) = Expr $ exprReplace old new e
 valueReplace' old new (FuncApp lib lbl vals) = FuncApp lib lbl $ valListReplace old new vals
 valueReplace' old new (ObjAccess val func) = ObjAccess (valueReplace old new val) (funcReplace old new func)
-valueReplace' old new (StateObj st vals) = StateObj st $ valListReplace old new vals
+valueReplace' old new (StateObj l st vals) = StateObj l st $ valListReplace old new vals
 valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl
 valueReplace' _ _ v = v
 

@@ -353,7 +353,7 @@ valueDoc'' _ (EnumElement en e) = lbl en <+> text "$:" <+> lbl e
 valueDoc'' c (FuncApp (Just l) n vs) = text "funcApp" <+> text l <+> funcAppDoc c n vs
 valueDoc'' c (FuncApp Nothing n vs) = text "funcApp'" <+> funcAppDoc c n vs
 valueDoc'' _ Self = text "Self"
-valueDoc'' c (StateObj t vs) = text "StateObj" <+> stateType c t Dec <+> hsList (valueDoc c) vs
+valueDoc'' c (StateObj l t vs) = text "StateObj" <+> justDoc l <+> stateType c t Dec <+> hsList (valueDoc c) vs
 valueDoc'' _ (Var v) = text "Var" <+> lbl v
 valueDoc'' _ (EnumVar v) = text "EnumVar" <+> lbl v
 valueDoc'' c (ListVar v t) = lbl v <+> text "`listOf`" <+> stateType c t Dec
@@ -384,3 +384,7 @@ casesDoc c f = hsVList (\(a,b) -> parens $ f a <> comma <+> bodyDoc c b)
 
 elseBody :: Config -> Body -> Doc
 elseBody c b = if null b then text "noElse" else bodyDoc c b
+
+justDoc :: Maybe Label -> Doc
+justDoc (Just l) = parens $ text "Just" <+> text l
+justDoc Nothing = text "Nothing" 

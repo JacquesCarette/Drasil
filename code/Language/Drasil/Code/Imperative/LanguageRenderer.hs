@@ -470,8 +470,9 @@ statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
 
 ioDocD :: Config -> IOSt -> Doc
-ioDocD c (OpenFile f n Read) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString "r"])
-ioDocD c (OpenFile f n Write) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString "w"])
+ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString (modeStr m)])
+  where modeStr Read = "r"
+        modeStr Write = "w"
 ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close" [])
 ioDocD c (Out t newLn s v) = printDoc c t newLn s v
 ioDocD c (In t s v) = inputDoc c t s v
@@ -553,8 +554,8 @@ valueDocD c (FuncApp _ n vs) = funcAppDoc c n vs
 valueDocD c (ObjAccess v f) = objAccessDoc c v f
 valueDocD c (Expr v) = exprDoc c v
 valueDocD _ Self = text "this"
-valueDocD c (StateObj t@(List _ _) vs) = listObj c <+> stateType c t Def <> parens (callFuncParamList c vs)
-valueDocD c (StateObj t vs) = new <+> stateType c t Def <> parens (callFuncParamList c vs)
+valueDocD c (StateObj _ t@(List _ _) vs) = listObj c <+> stateType c t Def <> parens (callFuncParamList c vs)
+valueDocD c (StateObj _ t vs) = new <+> stateType c t Def <> parens (callFuncParamList c vs)
 valueDocD _ (Var v) = text v
 valueDocD c (EnumVar v) = valueDoc c $ Var v
 valueDocD c (ListVar v _) = valueDoc c $ Var v

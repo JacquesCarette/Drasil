@@ -1,7 +1,7 @@
 module Drasil.HGHC.Modules where
 
 import Language.Drasil
-import Language.Drasil.Code
+import Language.Drasil.Code hiding (self)
 import Drasil.HGHC.HeatTransfer
 import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
@@ -96,10 +96,10 @@ main_func =
       labelHc = htTransCladCool ^. id
   in
   [ block
-    [ objDecNewVoid labelParams typeParams,
-      objDecNewVoid labelIn typeIn,
+    [ objDecNewVoid' labelParams typeParams,
+      objDecNewVoid' labelIn typeIn,
       valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams],
-      objDecNewVoid labelCalc typeCalc,
+      objDecNewVoid' labelCalc typeCalc,
       varDecDef labelHg float
         ( objMethodCall (var labelCalc) ("calc_" ++ labelHg)
           [ var labelParams $-> var labelCladCond,
@@ -110,7 +110,7 @@ main_func =
           [ var labelParams $-> var labelCladCond,
             var labelParams $-> var labelCoolFilm,
             var labelParams $-> var labelCladThick ] ),
-      objDecNewVoid labelOut typeOut,
+      objDecNewVoid' labelOut typeOut,
       valStmt $ objMethodCall (var labelOut) (meth_output ^. id)
         [ var labelHg,
           var labelHc ]

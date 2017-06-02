@@ -401,14 +401,8 @@ s5_1_list = enumSimple 1 (short requirement) [
 s5_1_table = table_inputdata
 
 table_inputdata :: Contents
-table_inputdata = Table [titleize symbol_, titleize' $ unit_ ^. term, titleize description]
-  (mkTable
-    [getS,
-     (fmtU EmptyS),
-     (\ch -> phrase $ ch ^. term)]
-    ((map cqs [coords, elastMod, cohesion]) ++ (map cqs [poissnsR]) ++ --this has to be seperate since poisson is a different type
-    map cqs [fricAngle, dryWeight, satWeight, waterWeight]))
-  (S "Input data") True
+table_inputdata = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this has to be seperate since poisson is a different type
+  [cqs poissnsR] ++ map cqs [fricAngle, dryWeight, satWeight, waterWeight])
  
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd] [correctness, understandability, reusability, maintainability] r EmptyS

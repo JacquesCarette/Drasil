@@ -16,6 +16,7 @@ module Data.Drasil.Utils
   , enumSimple
   , enumBullet
   , mkRefsList
+  , mkInputDatTb
   , ofThe, ofThe'
   , getS
   , weave
@@ -31,7 +32,10 @@ import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Expr(..))
+  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Expr(..),
+  phrase, titleize, titleize', mkTable, term, Contents(Table))
+import Data.Drasil.Concepts.Documentation (description, input_, datum, symbol_)
+import Data.Drasil.Concepts.Math (unit_)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -137,6 +141,12 @@ zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
+
+-- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
+mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
+mkInputDatTb inputVar = Table [titleize symbol_, titleize $ unit_ ^. term, titleize description]
+  (mkTable [getS, fmtU EmptyS, (\ch -> phrase $ ch ^. term)] inputVar) 
+  (titleize input_ +:+ titleize' datum) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference

@@ -38,7 +38,7 @@ s2, s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
-s2_1, s2_2, s2_3, s2_4, s4_1, s4_1_1, s4_1_2,
+s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
@@ -90,25 +90,29 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introF start kSent [s2_1, s2_2, s2_3, s2_4]  
-  where start = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
-                (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
-                S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
-                S "For an unstable" +:+ (phrase slope) +:+ S "this can cause instability" +:+
-                S "in the form of soil/rock movement. The effects of soil/rock movement" +:+
-                S "can range from inconvenient to seriously hazardous, resulting in signifcant" +:+
-                S "life and economic loses. Slope stability is of interest both when analyzing" +:+
-                S "natural" +:+ (plural slope) `sC` S "and when designing an excavated" +:+. (phrase slope) +:+
-                (at_start ssa) +:+ S "is" +:+ (S "assessment" `ofThe` (S "safety of a" +:+ (phrase slope))) `sC`
-                S "identifying the" +:+ (phrase $ surface ^. term) +:+ S "most likely to" +:+
-                S "experience slip and an index of it's relative stability known as the" +:+.
-                (phrase $ fs_rc ^. term)
+s2 = introductionF ssa startIntro kSent prpsOfDoc_p1 (scpIncl,scpEnd) 
+  (S "solid mechanics", S "undergraduate level 4 physics", EmptyS) True
+  (orgSecStart, inModel, SRS.inModel SRS.missingP [], orgSecEnd)--FIXME: This is kind of a hack as it is not referencing the real instance model
+  where startIntro = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
+          (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
+          S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
+          S "For an unstable" +:+ (phrase slope) +:+ S "this can cause instability" +:+
+          S "in the form of soil/rock movement. The effects of soil/rock movement" +:+
+          S "can range from inconvenient to seriously hazardous, resulting in signifcant" +:+
+          S "life and economic loses. Slope stability is of interest both when analyzing" +:+
+          S "natural" +:+ (plural slope) `sC` S "and when designing an excavated" +:+. (phrase slope) +:+
+          (at_start ssa) +:+ S "is" +:+ (S "assessment" `ofThe` (S "safety of a" +:+ (phrase slope))) `sC`
+          S "identifying the" +:+ (phrase $ surface ^. term) +:+ S "most likely to" +:+
+          S "experience slip and an index of it's relative stability known as the" +:+.
+          (phrase $ fs_rc ^. term)
         kSent = S "a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+
-                (phrase $ program ^. term) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+
-                (phrase $ program ^. term)
+          (phrase $ program ^. term) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+
+          (phrase $ program ^. term)
 
 -- SECTION 2.1 --
-s2_1 = prpsOfDocF $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
+-- Purpose of Document automaticly generated in introductionF
+prpsOfDoc_p1 :: Sentence
+prpsOfDoc_p1 = S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
   S "determines the" +:+ (phrase $ crtSlpSrf ^. term) `sC` S "and it's respective" +:+ 
   (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ 
   S "of assessing the stability of a slope" +:+. (phrase design) +:+ 
@@ -118,28 +122,29 @@ s2_1 = prpsOfDocF $ S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
 
 -- SECTION 2.2 --
-s2_2 = scpOfReqF includes ssa ending
-  where includes = S "stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
-                   S "composed of homogeneous" +:+ (plural soilLyr)
-        ending   = S "identify the most likely" +:+ S "failure" +:+ 
-                   (phrase $ surface ^. term) +:+ S "within the possible input range," +:+
-                   S "and find the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the" +:+ 
-                   (phrase slope) +:+ S "as well as displacement of" +:+ (phrase soil) +:+ 
-                   S "that will occur on the" +:+ (phrase slope)
+-- Scope of Requirments automaticly generated in introductionF
+scpIncl, scpEnd :: Sentence
+scpIncl = S "stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
+  S "composed of homogeneous" +:+ (plural soilLyr)
+scpEnd  = S "identify the most likely" +:+ S "failure" +:+ 
+  (phrase $ surface ^. term) +:+ S "within the possible input range," +:+
+  S "and find the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the" +:+ 
+  (phrase slope) +:+ S "as well as displacement of" +:+ (phrase soil) +:+ 
+  S "that will occur on the" +:+ (phrase slope)
 
 -- SECTION 2.3 --
-s2_3 = charIntRdrF (S "solid mechanics") (S "undergraduate level 4 physics")
-  (ssa) EmptyS (SRS.userChar SRS.missingP [])
+-- Characteristics of the Intended Reader automaticly generated in introductionF
 
 -- SECTION 2.4 --
-s2_4 = orgSecWTS start inModel (SRS.inModel SRS.missingP []) end --FIXME: This is kind of a hack as it is not referencing the real instance model
-  where start = S "The" +:+ (phrase organization) +:+
-                S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
-                S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
-                S "proposed by Koothoor as well as Smith and Lai."
-        end   = S "The" +:+ (plural inModel) +:+ S "provide the set of" +:+
-                S "algebraic equations that must be solved iteratively to perform a" +:+
-                (titleize morPrice) +:+ S "Analysis"
+-- Organization automaticly generated in introductionF
+orgSecStart, orgSecEnd :: Sentence
+orgSecStart = S "The" +:+ (phrase organization) +:+
+  S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
+  S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
+  S "proposed by Koothoor as well as Smith and Lai."
+orgSecEnd   = S "The" +:+ (plural inModel) +:+ S "provide the set of" +:+
+  S "algebraic equations that must be solved iteratively to perform a" +:+
+  (titleize morPrice) +:+ S "Analysis"
 
 -- SECTION 3 --
 s3 = genSysF [] userCharIntro [] []

@@ -162,7 +162,7 @@ executable nopcm
     , Drasil.OrganizationOfSRS
     , Drasil.Introduction
     , Drasil.Requirements
-    , Drasil.Requirements
+    , Drasil.GeneralSystDesc
     , Drasil.TableOfSymbols
     , Drasil.TableOfUnits
     , Drasil.Template.DD
@@ -204,6 +204,7 @@ executable ssp
     , Drasil.OrganizationOfSRS
     , Drasil.Introduction
     , Drasil.Requirements
+    , Drasil.GeneralSystDesc
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -234,6 +235,7 @@ executable glassbr
     , Drasil.OrganizationOfSRS
     , Drasil.Introduction
     , Drasil.Requirements
+    , Drasil.GeneralSystDesc
     , Drasil.TraceabilityMandGs
     , Drasil.Stakeholders
     , Drasil.ReferenceMaterial
@@ -305,6 +307,7 @@ executable swhs
     , Drasil.OrganizationOfSRS
     , Drasil.Introduction
     , Drasil.Requirements
+    , Drasil.GeneralSystDesc
     , Drasil.TraceabilityMandGs
     , Drasil.ReferenceMaterial
     , Drasil.SRS

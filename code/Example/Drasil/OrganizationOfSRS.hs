@@ -2,8 +2,6 @@ module Drasil.OrganizationOfSRS
   ( showingCxnBw
   , figureLabel
 -- start of functions for SRS document sections in order of document apperence
-  , genSysF
-  , systCon
   , specSysDesF
   , probDescF
   , termDefnF
@@ -34,26 +32,6 @@ figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
 showingCxnBw :: NPNC -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
-
--- wrapper for general system description
-genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
-genSysF sCntxt userIntro constraints systSubSec = SRS.genSysDes [genSysIntro]
-  (sCntxt ++ [SRS.userChar [userIntro] [], systCon constraints systSubSec])
-
---generalized general system description introduction
-genSysIntro :: Contents
-genSysIntro = Paragraph $ foldlSent
-              [S "This", phrase section_, S "provides general",
-              phrase information, S "about the", phrase system `sC` S "identifies",
-              S "the interfaces between the", phrase system, S "and its", phrase environment `sC`
-              S "and describes the", plural userCharacteristic, S "and the", plural systemConstraint]
-
--- System Constraints
--- generalized if no constraints, but if there are, they can be passed through
-systCon :: [Contents] -> [Section] -> Section
-systCon [] subSec  = SRS.sysCon [systCon_none] subSec
-            where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
-systCon a subSec = SRS.sysCon a subSec  
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section

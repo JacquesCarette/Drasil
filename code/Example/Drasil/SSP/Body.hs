@@ -19,6 +19,7 @@ import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS
 import Drasil.Introduction
 import Drasil.Requirements
+import Drasil.GeneralSystDesc
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics

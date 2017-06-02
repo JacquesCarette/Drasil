@@ -17,6 +17,7 @@ import qualified Drasil.SRS as SRS
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS
+import Drasil.Introduction
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics

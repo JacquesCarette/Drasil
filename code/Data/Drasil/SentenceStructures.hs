@@ -2,12 +2,13 @@ module Data.Drasil.SentenceStructures
   ( foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
-  , toThe, tableShows
+  , toThe, tableShows, refineChain
   ) where
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1)
 import Data.Drasil.Concepts.Documentation
+import Control.Lens ((^.))
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -65,5 +66,22 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: Contents -> Sentence -> Sentence
-tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
-                          plural dependency +:+ S "of" +:+ trailing
+tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+ plural dependency +:+ S "of" +:+ trailing
+
+-- | Create a list in the pattern of "The __ are refined to the __".
+-- Note: Order matters!
+refineChain :: NamedIdea c => [c] -> Sentence
+refineChain (x:y:[]) = S "The" +:+ word x +:+ S "are refined to the" +:+ word y
+refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
+refineChain _ = error "refineChain encountered an unexpected empty list"
+
+-- | Helper used by refineChain
+word :: NamedIdea c => c -> Sentence
+word w = plural $ w ^. term
+
+-- | Helper used by refineChain
+rc :: NamedIdea c => [c] -> Sentence
+rc (x:y:[]) = S "and the" +:+ (plural $ x ^. term) +:+ S "to the" +:+. 
+  (plural $ y ^. term)
+rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
+rc _ = error "refineChain helper encountered an unexpected empty list"

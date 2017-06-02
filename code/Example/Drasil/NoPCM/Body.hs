@@ -20,6 +20,7 @@ import Drasil.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS
+import Drasil.Introduction
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]

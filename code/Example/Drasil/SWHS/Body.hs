@@ -39,6 +39,7 @@ import Drasil.DocumentLanguage
 import Drasil.Template.MG
 import Drasil.Template.DD
 import Drasil.TraceabilityMandGs
+import Drasil.Introduction
 
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,

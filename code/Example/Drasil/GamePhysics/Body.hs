@@ -580,6 +580,15 @@ s5_1 = SRS.funcReq [s5_1_list] []
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
+reqFrame :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
+reqFrame a b x z = foldlSent [S "Determine the", a, S "and", b, S "over a period of", 
+  (phrase $ QP.time ^. term), S "of the", x, z]
+
+reqS :: (NounPhrase a, NounPhrase b) => a -> b -> Sentence -> Sentence
+reqS a b d = reqFrame (plural a) (plural b) ((getAcc twoD) +:+ (plural $ CP.rigidBody ^. term)) d
+reqS' :: (NounPhrase a, NounPhrase b) => a -> b -> Sentence
+reqS' a b = reqS a b EmptyS 
+
 -- some requirements look like they could be parametrized
 s5_1_req1 = foldlSent [S "Create a", (phrase $ CP.space ^. term), S "for all of the",
   (plural $ CP.rigidBody ^. term), S "in the", (phrase physicalSim), 
@@ -598,29 +607,19 @@ s5_1_req3 = foldlSent [S "Input the", (phrase $ CM.surface ^. term),
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
   S "satisfy the required", plural physicalConstraint, S "from", (makeRef s4_2_6_table1)]
 
-s5_1_req5 = foldlSent 
-  [S "Determine the", (plural $ QP.position ^. term), S "and", 
-  (plural $ QP.velocity ^. term), S "over a period of", 
-  (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
-  (plural $ CP.rigidBody ^. term), S "acted upon by a", 
-  (phrase $ QP.force ^. term)]
+s5_1_req5 = reqS (QP.position ^. term) (QP.velocity ^. term) 
+  (S "acted upon by a" +:+ (phrase $ QP.force ^. term))
 
-s5_1_req6 = foldlSent
-  [S "Determine the", (plural $ QM.orientation ^. term), S "and", 
-  (plural $ QP.angularVelocity  ^. term), S "over a period of", 
-  (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
-  (plural $ CP.rigidBody ^. term)]
+s5_1_req6 = reqS' (QM.orientation ^. term) (QP.angularVelocity  ^. term)
 
 s5_1_req7 = foldlSent [S "Determine if any of the", 
   (plural $ CP.rigidBody ^. term), S "in the", (phrase $ CP.space ^. term), 
   S "have collided"]
 
-s5_1_req8 = foldlSent
-  [S "Determine the", (plural $ QP.position ^. term), S "and", 
-  (plural $ QP.velocity ^. term), S "over a period of", 
-  (phrase $ QP.time ^. term), S "of the", (getAcc twoD), 
-  (plural $ CP.rigidBody ^. term), S "that have undergone a", 
-  (phrase $ CP.collision ^. term)]
+s5_1_req8 = reqS (QP.position ^. term) (QP.velocity ^. term) 
+  (S "that have undergone a" +:+ (phrase $ CP.collision ^. term))
+
+
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
@@ -662,21 +661,25 @@ s6_intro = Paragraph $ foldlSent [S "This", (phrase section_), S "lists the",
 s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
   s6_likelyChg_stmt4 :: Sentence
 
+likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
+likelyFrame a adject x = foldlSent [S "The", a, S "may be", adject, x]
+maybeWOAdj, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOAdj a b = likelyFrame a EmptyS b
+maybeChanged a b = likelyFrame a (S "changed") b
+maybeExpanded a b = likelyFrame a (S "expanded") b 
+
 --these statements look like they could be parametrized
-s6_likelyChg_stmt1 = foldlSent [S "The internal", (getAcc CM.ode) :+: 
-  S "-solving algorithm used by the", (phrase library), 
-  S "may change in the future"]
+s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
+  S "-solving algorithm used by the" +:+ (phrase library)) `maybeWOAdj` 
+  (S "changed in the future")
 
-s6_likelyChg_stmt2 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to", S "deal with edge-to-edge and vertex-to-vertex",
-  (plural (CP.collision ^. term))]
+s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
+  (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural $ CP.collision ^. term))
 
-s6_likelyChg_stmt3 = foldlSent [S "The", (phrase library), S "may be", 
-  S "expanded to", S "include motion with damping"]
+s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` S "to include motion with damping"
 
-s6_likelyChg_stmt4 = foldlSent [S "The", (phrase library), S "may be",
-  S "expanded to", S "include", (plural $ CP.joint ^. term), S "and", 
-  (plural $ CM.constraint ^. term)]
+s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
+  (plural $ CP.joint ^. term) +:+ S "and" +:+ (plural $ CM.constraint ^. term))
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,

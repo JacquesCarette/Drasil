@@ -662,9 +662,9 @@ s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
   s6_likelyChg_stmt4 :: Sentence
 
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
-likelyFrame a adject x = foldlSent [S "The", a, S "may be", adject, x]
-maybeWOAdj, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
-maybeWOAdj a b = likelyFrame a EmptyS b
+likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
+maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb a b = likelyFrame a EmptyS b
 maybeChanged a b = likelyFrame a (S "changed") b
 maybeExpanded a b = likelyFrame a (S "expanded") b 
 

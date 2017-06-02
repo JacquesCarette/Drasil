@@ -329,13 +329,13 @@ waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
 waterVert = verticesConst $ S "water table"
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
-intNormFor  = mkGtZeroConst (cqs ei)          [] (15000 :: Integer)
-effectCohe  = mkGtZeroConst (cqs cohesion)    [] (10 :: Integer)
-poissnRatio = mkGtZeroConst (cqs poissnsR)    [((:<),1)] (0.4 :: Double)
-fricAng     = mkGtZeroConst (cqs fricAngle)   [((:<),90)] (25 :: Integer)
-dryUWght    = mkGtZeroConst (cqs dryWeight)   [] (20 :: Integer)
-satUWght    = mkGtZeroConst (cqs satWeight)   [] (20 :: Integer)
-waterUWght  = mkGtZeroConst (cqs waterWeight) [] (9.8 :: Double)
+intNormFor  = mkGtZeroConst ei          []          (15000 :: Integer)
+effectCohe  = mkGtZeroConst cohesion    []          (10    :: Integer)
+poissnRatio = mkGtZeroConst poissnsR    [((:<),1)]  (0.4   :: Double )
+fricAng     = mkGtZeroConst fricAngle   [((:<),90)] (25    :: Integer)
+dryUWght    = mkGtZeroConst dryWeight   []          (20    :: Integer)
+satUWght    = mkGtZeroConst satWeight   []          (20    :: Integer)
+waterUWght  = mkGtZeroConst waterWeight []          (9.8   :: Double )
 
 fcOfSa, slipVert2, deltax, deltay :: [Sentence]
 fcOfSa = [S "FS", E $ (V "FS") :> (Int 0)] -- FIXME: Use factor of safety's symbol (currently doesn't have one)
@@ -343,8 +343,8 @@ slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
 deltax = [P $ dx_i ^. symbol, S "None"]
 deltay = [P $ dy_i ^. symbol, S "None"]
 
-mkGtZeroConst  :: (Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst s other num = [P $ s ^. symbol, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) s]
+mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+mkGtZeroConst s other num = [P $ s ^. symbol, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,

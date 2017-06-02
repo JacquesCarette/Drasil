@@ -39,6 +39,9 @@ import Drasil.DocumentLanguage
 import Drasil.Template.MG
 import Drasil.Template.DD
 
+import Data.Drasil.SentenceStructure 
+import Data.Drasil.Utils hiding (foldlSent, foldlsC) 
+
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
@@ -47,19 +50,6 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
-
-s3, s3_1, s4, s4_1,
-  s4_1_1, s4_1_2, s4_1_3, s4_2, s4_2_7, s5, s5_1, s5_2, s6, s7 :: Section
-
-s3_1_contents, sys_context_fig,
-  s3_1_2_intro, s3_1_2_bullets, s3_2_contents, s4_1_intro, s4_1_1_bullets,
-  s4_1_2_list, fig_tank, s4_1_3_intro, s4_1_3_list, 
-  s4_2_1_list, s4_2_6_table1, s4_2_6_table2, s5_2_contents, s6_list, s7_table1,
-  s7_table2, s7_table3, s7_fig1, s7_fig2 :: Contents
-  
-s4_2_3_deriv, s4_2_5_subpar, 
-  s4_2_5_deriv1, s4_2_5_deriv2, s4_2_7_deriv, s5_1_list, s7_intro2
-  :: [Contents]
 
 authors :: Sentence
 authors = manyNames [thulasi, brooks, spencerSmith]
@@ -281,6 +271,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef (SRS.inModel SRS.mis
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
+s3 :: Section
 s3 = genSysF [s3_1] s3_2_contents [] []
 
 -- Completely general paragraph, same between examples. Easily abstracted out.
@@ -289,9 +280,11 @@ s3 = genSysF [s3_1] s3_2_contents [] []
 -- 3.1 : System Context --
 --------------------------
 
+s3_1 :: Section
 s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
 
+s3_1_contents ::Contents
 s3_1_contents = Paragraph $ (makeRef sys_context_fig) +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
@@ -300,14 +293,17 @@ s3_1_contents = Paragraph $ (makeRef sys_context_fig) +:+ S "shows the" +:+.
   plural datum +:+ S "flow between the" +:+ phrase system +:+
   S "and its" +:+. phrase environment
 
+sys_context_fig :: Contents
 sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+
   titleize sysCont) "SystemContextFigure.png"
 
+s3_1_2_intro :: Contents
 s3_1_2_intro = Paragraph $ short progName +:+. S "is mostly self-contained" +:+
   S "The only external interaction is through the" +:+ phrase user +:+
   S "interface. The responsibilities of the" +:+ phrase user +:+
   S "and the" +:+ phrase system +: S "are as follows"
 
+s3_1_2_bullets :: Contents
 s3_1_2_bullets = Enumeration (Bullet $
   [Nested (titleize user +: S "Responsibilities")
   (Bullet $ map (\c -> Flat c)
@@ -317,7 +313,6 @@ s3_1_2_bullets = Enumeration (Bullet $
   S "Take care that consistent" +:+ (plural $ unit_ ^.term) +:+
   S "are used for" +:+ phrase input_ +:+ plural variable
   ]),
-
   Nested (short progName +: S "Responsibilities")
   (Bullet $ map (\c -> Flat c)
   [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of" +:+
@@ -333,6 +328,7 @@ s3_1_2_bullets = Enumeration (Bullet $
 
 ---s3_2 = SRS.userChar [s3_2_contents] []
 
+s3_2_contents :: Contents
 s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
   (short progName) +:+ S "should have an understanding of undergraduate" +:+
   S "Level 1 Calculus and" +:+. titleize physics)
@@ -353,6 +349,7 @@ s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
+s4 :: Section
 s4 = specSysDesF s4_intro_end [s4_1, s4_2]
  
 -- using plural solutionCharSpec is a hack in order to pluralize the middle word,
@@ -372,9 +369,11 @@ s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
 -- 4.1 : Problem Description --
 -------------------------------
 
+s4_1 :: Section
 s4_1 = SRS.probDesc [s4_1_intro]
   [s4_1_1, s4_1_2, s4_1_3]
 
+s4_1_intro :: Contents
 s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
   (phrase $ program ^. term) +:+
   S "developed to investigate the effect of employing" +:+
@@ -386,11 +385,13 @@ s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
+s4_1_1 :: Section
 s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note: 
 -- GlassBR has an additional sentence with a reference at the end.)
 
+s4_1_1_bullets :: Contents
 s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [CT.ht_flux,
    phase_change_material, CT.heat_cap_spec, 
    CT.thermal_conduction, transient])
@@ -407,18 +408,18 @@ s411_bullet_map_f c = Flat ((at_start $ c ^. term) :+: S ":" +:+. (c ^. defn))
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
 
+s4_1_2 :: Section
 s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 
 -- Above paragraph is general except for progName and figure. However, not 
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
+s4_1_2_list :: Contents
 s4_1_2_list = enumSimple 1 (short physSyst) s4_1_2_physSystList
 
 s4_1_2_physSystList :: [Sentence]
-
 physSyst1, physSyst2, physSyst3 :: Sentence
-
 s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
 
 physSyst1 = (at_start $ tank ^. term) +:+ S "containing" +:+.
@@ -435,7 +436,7 @@ physSyst3 = (short phsChgMtrl) +:+ S "suspended in" +:+.
 -- Structure of list would be same between examples but content is completely 
 -- different
 -- FIXME: Figures have different IDs than stable structure
-
+fig_tank :: Contents
 fig_tank = Figure ((at_start $ sWHT ^. term) `sC` S "with" +:+
   (phrase $ ht_flux_C ^. term) +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
   S "and" +:+ (phrase $ ht_flux_P ^. term) +:+ S "of" +:+
@@ -445,8 +446,10 @@ fig_tank = Figure ((at_start $ sWHT ^. term) `sC` S "with" +:+
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
+s4_1_3 :: Section
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
+s4_1_3_intro :: Contents
 s4_1_3_intro = Paragraph $ S "Given the" +:+ (phrase $ temp_C ^. term) `sC`
   S "initial" +:+ plural condition +:+ S "for the" +:+
   (phrase $ temp_W ^. term) +:+ S "and the" +:+ (phrase $ temp_PCM ^. term) `sC`
@@ -456,6 +459,7 @@ s4_1_3_intro = Paragraph $ S "Given the" +:+ (phrase $ temp_C ^. term) `sC`
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be 
 -- abstracted out if this paragraph were to be abstracted out.
 
+s4_1_3_list :: Contents
 s4_1_3_list = enumSimple 1 (short goalStmt) $ map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
 
 goalState :: NamedIdea b => b -> Sentence
@@ -484,6 +488,7 @@ goalState b =  (S "Predict the" +:+
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
+s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end 
   (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+
   S "show"), mid, True, end)
@@ -506,6 +511,7 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
 
 -- General paragraph, repeated in every example. Can be abstracted out.
 
+s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) s4_2_1_assump_list
 
 s4_2_1_assump_list :: [Sentence]
@@ -645,6 +651,7 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 
 --General definitions not yet implemented
 
+s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   +:+ (phrase $ rOfChng ^. term) +:+ S "of" +: (phrase $ temp ^. term)),
   Paragraph (S "Integrating" +:+ (makeRef (swhsSymbMapT t1ConsThermE)) +:+ 
@@ -721,6 +728,7 @@ s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
 -- 4.2.5 : Instance Models --
 -----------------------------
 
+s4_2_5_subpar :: [Contents]
 s4_2_5_subpar = [Paragraph (S "The goals GS1 to GS4 are solved by IM1 to IM4." +:+
   S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
   S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+
@@ -749,10 +757,12 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 
 -- Instance Models aren't implemented yet
 
+s4_2_5_deriv1 :: [Contents]
 s4_2_5_deriv1 = s4_2_5_d1startPara ++ (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
 
 s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list, 
   s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
+
 s4_2_5_d1startPara = [Paragraph (S "Derivation of the" +:+
   (phrase $ energy ^. term) +:+ S "balance on" +: (phrase $ water ^. term))]
 
@@ -842,6 +852,7 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
+s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++
   s4_2_5_d2endPara
 
@@ -937,10 +948,12 @@ s4_2_5_d2endPara = map Paragraph [((titleize $ equation ^. term) +:+ S "(6) appl
 ---- The info from table 2 will likely end up in table 1.
 
 -- FIXME: Temporary dummy tables
+s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
   (S "Table 1")
   True
 
+s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
   (S "Table 2")
   True
@@ -976,9 +989,10 @@ inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
+s4_2_7 :: Section
 s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
 
-
+s4_2_7_deriv :: [Contents]
 s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+ 
   S "must exhibit the" +:+. (phrase $ CT.law_cons_energy ^. term) +:+
   S "This means that the" +:+ (phrase $ w_E ^. term) +:+
@@ -1025,14 +1039,17 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
 -- Section 5 : REQUIREMENTS --
 ------------------------------
 
+s5 :: Section
 s5 = reqF [s5_1, s5_2]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
+s5_1 :: Section
 s5_1 = SRS.funcReq (s5_1_list) []
 
+s5_1_list :: [Contents]
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
   (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ (phrase $ tank ^. term) +:+
@@ -1131,8 +1148,10 @@ req11 = S "Calculate and" +:+
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
 
+s5_2 :: Section
 s5_2 = SRS.nonfuncReq [s5_2_contents] []
 
+s5_2_contents :: Contents
 s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
   `sC`
   S "of this" +:+ phrase problem `sC` (phrase $ performance ^. term) +:+
@@ -1153,11 +1172,13 @@ s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
+s6 :: Section
 s6 = SRS.likeChg [s6_list] []
 
 -- The game physics example has a short intro paragraph that can likely be 
 -- abstracted out and used for all examples.
 
+s6_list :: Contents
 s6_list = enumSimple 1 (short likelyChg) s6_likeChg_list
 
 s6_likeChg_list :: [Sentence]
@@ -1203,7 +1224,8 @@ likeChg6 = S "A15 - Any real" +:+
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
-  
+
+s7 :: Section
 s7 = traceMGF s7_refList s7_trailing
   ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
@@ -1225,6 +1247,7 @@ s7_trailing = [
 
   ]
 
+s7_table1 :: Contents
 s7_table1 = Table [EmptyS, (makeRef (swhsSymbMapT t1ConsThermE)), (makeRef (swhsSymbMapT t2SensHtE)), 
   (makeRef (swhsSymbMapT t3LatHtE)), S "GD1", S "GD2", (makeRef (swhsSymbMapD dd1HtFluxC)), 
   (makeRef (swhsSymbMapD dd2HtFluxP)),(makeRef (swhsSymbMapD dd3HtFusion)),(makeRef (swhsSymbMapD dd3HtFusion)), S "IM1",
@@ -1260,6 +1283,7 @@ s7_table1 = Table [EmptyS, (makeRef (swhsSymbMapT t1ConsThermE)), (makeRef (swhs
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
+s7_table2 :: Contents
 s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2,
   S "R1", S "R2"]
   [[S "IM1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
@@ -1280,6 +1304,7 @@ s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2,
   (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+ titleize' inModel))
   True
 
+s7_table3 :: Contents
 s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
   S "A7", S "A8", S "A9", S "A10", S "A11", S "A12", S "A13", S "A14",
   S "A15", S "A16", S "A17", S "A18", S "A19"]
@@ -1352,6 +1377,7 @@ s7_table3 = Table [EmptyS, S "A1", S "A2", S "A3", S "A4", S "A5", S "A6",
 -- Traceabilty Graphs --
 ------------------------
 
+s7_intro2 :: [Contents]
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` plural inModel `sC` plural likelyChg `sC` 
   S "and" +:+ plural assumption +:+. S "on each other"), (plural inModel
@@ -1360,10 +1386,12 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC` plural genDefn 
 
 -- Same comments on this paragraph as I had for s7_intro1. 
 
+s7_fig1 :: Contents
 s7_fig1 = Figure (
   showingCxnBw traceyGraph (titleize' item +:+ S "of Different" +:+ titleize' section_)
   ) "ATrace.png"
 
+s7_fig2 :: Contents
 s7_fig2 = Figure (
   showingCxnBw traceyGraph ((titleize' requirement) `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)

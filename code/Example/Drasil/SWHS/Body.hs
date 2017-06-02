@@ -1362,4 +1362,3 @@ s7_fig2 = Figure (
   ) "RTrace.png"
 
 --References?
-

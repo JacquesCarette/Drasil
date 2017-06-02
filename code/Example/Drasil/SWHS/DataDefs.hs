@@ -13,6 +13,7 @@ import Prelude hiding (id)
 
 import Control.Lens ((^.))
 
+
 swhsSymbMapD :: QDefinition -> Contents
 swhsSymbMapD termType = (symbolMapFun swhsSymbols Data) termType
 

@@ -225,6 +225,3 @@ unwrap Nothing  = EmptyS
 --FIXME: Not sure what type d should be
 symbolMapFun :: (SymbolForm c, Quantity c, Chunk d) => [c] -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)
-
-
-

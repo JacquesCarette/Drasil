@@ -228,6 +228,7 @@ executable glassbr
     , Drasil.GlassBR.Units
     , Drasil.OrganizationOfSRS
     , Drasil.TraceabilityMandGs
+    , Drasil.Stakeholders
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.TableOfAbbAndAcronyms

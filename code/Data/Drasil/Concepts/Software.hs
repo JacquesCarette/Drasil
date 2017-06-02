@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (srs)
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 

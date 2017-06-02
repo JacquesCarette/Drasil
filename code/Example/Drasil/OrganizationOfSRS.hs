@@ -35,7 +35,8 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe, ofThe')
+import Data.Drasil.Utils (foldle)
+import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
 
 introductionF :: CINP -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CINP, Section, Sentence) -> Section

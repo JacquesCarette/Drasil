@@ -69,8 +69,8 @@ ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD lcs ucs reqs modules
 
-sspSymMap :: SymbolMap
-sspSymMap = symbolMap sspSymbols
+sspSymMapT :: d -> Contents 
+sspSymMapT = symbolMapFun sspSymbols Theory
 
 -- SECTION 1 --
 --automaticly generated in mkSRS 
@@ -277,7 +277,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
 -- SECTION 4.2.2 --
 -- TModels is automaticly generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = map (Definition sspSymMap . Theory) [fs_rc] --FIX fs_rc to use lowercase
+s4_2_2_tmods = [sspSymMapT fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
 -- General Definitions is automaticly generated in solChSpecF

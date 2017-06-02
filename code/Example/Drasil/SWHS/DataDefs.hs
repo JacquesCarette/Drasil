@@ -14,10 +14,10 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 
 swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD term = (symbolMapFun swhsSymbols Data) term
+swhsSymbMapD termType = (symbolMapFun swhsSymbols Data) termType
 
 swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT term = (symbolMapFun swhsSymbols Theory) term
+swhsSymbMapT termType = (symbolMapFun swhsSymbols Theory) termType
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.

@@ -32,10 +32,11 @@ import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Expr(..),
+  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, QDefinition, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, term, Contents(Table))
 import Data.Drasil.Concepts.Documentation (description, input_, datum, symbol_)
 import Data.Drasil.Concepts.Math (unit_)
+
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -222,7 +223,7 @@ unwrap Nothing  = EmptyS
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
-symbolMapFun :: (SymbolForm c, Quantity c) => [c] -> (d -> DType) -> (d -> Contents)
+symbolMapFun :: (SymbolForm c, Quantity c, Chunk d) => [c] -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)
 
 

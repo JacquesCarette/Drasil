@@ -23,7 +23,7 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-\label{Sec:I}
+\label{Sec:Intr}
 Decomposing a system into modules is a commonly accepted approach to developing software.  A module is a work assignment for a programmer or programming team. In the best practices for scientific computing, Wilson et al advise a modular design, but are silent on the criteria to use to decompose the software into modules.  We advocate a decomposition based on the principle of information hiding. This principle supports design for change, because the ``secrets" that each module hides represent likely future changes.  Design for change is valuable in SC, where modifications are frequent, especially during initial development as the solution space is explored.
 Our design follows the rules laid out by Parnas, as follows:
 \begin{enumerate}
@@ -36,9 +36,9 @@ After completing the first stage of the design, the Software Requirements Specif
 \item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
 \item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
 \end{enumerate}
-Section~\ref{Sec:LaUC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
+Section~\ref{Sec:LaULikeandUnliChanC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
 \section{Likely and Unlikely Changes}
-\label{Sec:LaUC}
+\label{Sec:LikeandUnliChan}
 This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LC} and unlikely changes are listed in Section~\ref{Sec:UC}
 \subsection{Likely Changes}
 \label{Sec:LC}

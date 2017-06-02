@@ -703,7 +703,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
 
 
 s4_2_4_intro_end :: Sentence
-s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+
+s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
   S "is also given"
 
 -- General paragraph, repeated in most examples but would work for all. Can be 
@@ -928,7 +928,7 @@ s4_2_5_d2endPara = map Paragraph [((titleize $ equation ^. term) +:+ S "(6) appl
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
--- Temporary dummy tables
+-- FIXME: Temporary dummy tables
 s4_2_6_table1 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
   (S "Table 1")
   True

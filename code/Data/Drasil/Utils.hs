@@ -21,7 +21,7 @@ module Data.Drasil.Utils
   , weave
   , fmtU
   , unwrap
-  , isThe, isThe'
+  , isThe
   , fmtBF
   ) where
 
@@ -179,6 +179,5 @@ unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
 
-isThe, isThe' :: Sentence -> Sentence -> Sentence
+isThe :: Sentence -> Sentence -> Sentence
 isThe  p1 p2 = p1 +:+ S "is the" +:+ p2
-isThe' p1 p2 = p1 +:+ S "is the" +:+. p2

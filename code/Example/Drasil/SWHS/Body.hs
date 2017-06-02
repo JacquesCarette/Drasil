@@ -39,7 +39,7 @@ import Drasil.DocumentLanguage
 import Drasil.Template.MG
 import Drasil.Template.DD
 
-import Data.Drasil.SentenceStructure 
+import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils hiding (foldlSent, foldlsC) 
 
 acronyms :: [CINP]

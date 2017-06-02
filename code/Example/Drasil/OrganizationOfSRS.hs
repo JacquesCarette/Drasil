@@ -10,6 +10,7 @@ module Drasil.OrganizationOfSRS
   , orgSec, orgSecWTS
   , stakehldr, stakeholderIntro
   , tClientF
+  , tCustomerF
   , genSysF
   , systCon
   , specSysDesF
@@ -352,6 +353,13 @@ clientIntro kWord  details = Paragraph $ foldlSent [(at_start $ the client), S "
   (short kWord), S "is a", phrase company, S "named" +:+. details,
   (at_start $ the client), S "has the final say on acceptance of the", 
   phrase product_]
+
+tCustomerF :: CINP -> Section
+tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
+
+customerIntro :: CINP -> Contents
+customerIntro kWord = Paragraph $ foldlSent [(at_start' $ the customer), 
+  S "are the", phrase endUser, S "of", (short kWord)]
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section

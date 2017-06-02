@@ -25,7 +25,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint)
 import Data.Drasil.Utils (foldle, foldlSent, foldlList, listConstExpr, 
   makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, ofThe, ofThe')
+  enumBullet, mkRefsList, ofThe, ofThe', symbolMapFun)
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription
@@ -75,6 +75,12 @@ mgBod :: [Section]
 
 cpSymbMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols
+
+cpSymMapT :: RelationConcept -> Contents 
+cpSymMapT = symbolMapFun cpSymbols Theory
+
+cpSymMapD :: QDefintion -> Contents 
+cpSymMapD = symbolMapFun cpSymbols Data
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -418,7 +424,7 @@ s4_2_2_intro = Paragraph $ foldlSent
   (plural $ CM.equation ^. term), S "the", (phrase $ physLib ^. term), 
   S "is based on"]
 
-s4_2_2_TMods = map (Definition cpSymbMap . Theory) cpTMods
+s4_2_2_TMods = map cpSymMapT cpTMods
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
@@ -459,7 +465,7 @@ s4_2_4_intro = Paragraph $ foldlSent [S "This", (phrase section_),
   titleize' inModel, S "The", (phrase $ CPP.dimension ^. term), S "of each", 
   (phrase quantity), S "is also given"]
 
-s4_2_4_DDefs = map (Definition cpSymbMap . Data) cpDDefs
+s4_2_4_DDefs = map cpSymMapD cpDDefs
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -472,7 +478,7 @@ s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
 
 -- Instance models not fully yet implemented --
 
-s4_2_5_IMods = map (Definition cpSymbMap . Theory) iModels
+s4_2_5_IMods = map cpSymMapT iModels
 
 ------------------------------
 -- Collision Diagram        --
@@ -670,8 +676,8 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 
 --these statements look like they could be parametrized
 s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving algorithm used by the" +:+ (phrase library)) `maybeWOVerb` 
-  (S "changed in the future")
+  S "-solving algorithm used by the" +:+ (phrase library)) `maybeChanged` 
+  (S "in the future")
 
 s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural $ CP.collision ^. term))

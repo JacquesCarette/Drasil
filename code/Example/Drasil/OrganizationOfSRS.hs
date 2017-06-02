@@ -8,7 +8,7 @@ module Drasil.OrganizationOfSRS
   , scpOfReqF
   , charIntRdrF
   , orgSec, orgSecWTS
-  , stakehldr, stakeholderIntro
+  , stakehldrGeneral, stakeholderIntro
   , tClientF
   , tCustomerF
   , genSysF
@@ -334,10 +334,10 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
                              phrase information +:+ S "would be part of the" +:+ phrase input_ +:+
                              S "if one were performing an" +:+ phrase uncertainty +:+.
                              S "quantification exercise"
-       
--- wrapper for stakeholderIntro
-stakehldr :: [Section] -> Section
-stakehldr subs = (SRS.stakeholder) [stakeholderIntro] subs
+
+stakehldrGeneral :: CINP -> Sentence -> Section
+stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs
+  where subs = [(tClientF kWord clientDetails), (tCustomerF kWord)]
 
 -- general stakeholders introduction
 stakeholderIntro :: Contents

@@ -40,7 +40,7 @@ import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s2, s2_1, s2_2, s2_4, s2_3, s3, s3_1, s3_2, s4, s4_2,
+s2, s2_1, s2_2, s2_4, s2_3, s3, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1,
   s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
@@ -143,11 +143,7 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
   
-s3 = stakehldr [s3_1, s3_2]
-
-s3_1 = tClientF (gLassBR) (S "Entuitive. It is developed by Dr. Manuel Campidelli")
-
-s3_2 = tCustomerF (gLassBR)
+s3 = stakehldrGeneral (gLassBR) (S "Entuitive. It is developed by Dr. Manuel Campidelli")
 
 s4 = genSysF [] s4_1_bullets [] []
 

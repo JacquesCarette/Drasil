@@ -40,7 +40,7 @@ import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s2, s2_1, s2_2, s2_4, s2_3, s3, s4, s4_2,
+s2, s3, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1,
   s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
@@ -80,22 +80,38 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-s2 = introF start (short gLassBR)
-  [s2_1, s2_2, s2_4, s2_3]
-  where start = foldlSent [(at_start software), 
-                S "is helpful to efficiently and correctly predict the", 
-                (phrase $ blastRisk ^. term), S "involved with the" +:+. 
-                (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
-                S "under consideration is" +:+. (blast ^. defn), S "The",
-                phrase software `sC` S "herein called", (short gLassBR),
-                S "aims to predict the", (phrase $ blastRisk ^. term), 
-                S "involved with the", (phrase $ glaSlab ^. term),
-                S "using an intuitive interface"]
+s2 = introductionF (gLassBR) (startIntro) (s2_1_intro_p1) (incScoR, endScoR)
+     (knowIR, undIR, appStanddIR, secForRef) True
+     (s2_3_intro, dataDefn, s6_2_4, s2_3_intro_end)
+  where startIntro = foldlSent [(at_start software), 
+                     S "is helpful to efficiently and correctly predict the", 
+                     (phrase $ blastRisk ^. term), S "involved with the" +:+. 
+                     (phrase $ glaSlab ^. term), S "The", (phrase $ blast ^. term), 
+                     S "under consideration is" +:+. (blast ^. defn), S "The",
+                     phrase software `sC` S "herein called", (short gLassBR),
+                     S "aims to predict the", (phrase $ blastRisk ^. term), 
+                     S "involved with the", (phrase $ glaSlab ^. term),
+                     S "using an intuitive interface"]
+        incScoR    = foldl (+:+) EmptyS [S "getting all", phrase input_, 
+                     (plural $ parameter ^. term), S "related to the",
+                     (phrase $ glaSlab ^. term), S "and also the",
+                     (plural $ parameter ^. term), S "related to", 
+                     (phrase $ blastTy ^. term)]
+        endScoR    = foldl (+:+) EmptyS [S "use the", plural datum, 
+                     S "and predict whether the", (phrase $ glaSlab ^. term),
+                     S "is safe to use or not"]
+        knowIR    = (phrase theory +:+ S "behind" +:+
+                    (phrase $ glBreakage ^. term) +:+ 
+                    S "and" +:+ (phrase $ blastRisk ^. term))
+        undIR     = (foldlList [S "second year calculus", S "structural mechanics",
+                    S "computer applications in civil engineering"])
+        appStanddIR = (S " In addition, reviewers should be familiar with the applicable" +:+
+                       S "standards for constructions using glass from" +:+ sSqBr (S "4-6") +:+
+                       S "in" +:+. (makeRef s10))
+        secForRef = (SRS.userChar [Paragraph EmptyS] [])
 
-s2_1 = prpsOfDocF s2_1_intro_p1
-
+--for Purpose of Document Section
 s2_1_intro_p1 :: Sentence
-
 s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this", 
   phrase document, S "is to predict whether a given", (phrase $ glaSlab ^. term),
   S "is likely to resist a specified" +:+. (phrase $ blast ^. term),
@@ -109,29 +125,7 @@ s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
   plural content, S "say what", phrase problem,
   S "is being solved, but not how to solve it"]
 
-s2_2 = scpOfReqF includes gLassBR ending
-  where includes = foldl (+:+) EmptyS [S "getting all", phrase input_, 
-                   (plural $ parameter ^. term), S "related to the",
-                   (phrase $ glaSlab ^. term), S "and also the",
-                   (plural $ parameter ^. term), S "related to", 
-                   (phrase $ blastTy ^. term)]
-        ending   = foldl (+:+) EmptyS [S "use the", plural datum, 
-                   S "and predict whether the", (phrase $ glaSlab ^. term),
-                   S "is safe to use or not"]
-
-s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
-                     (phrase $ glBreakage ^. term) +:+ 
-                     S "and" +:+ (phrase $ blastRisk ^. term))
-  (foldlList [S "second year calculus", S "structural mechanics",
-  S "computer applications in civil engineering"])
-  (gLassBR)
-  (S " In addition, reviewers should be familiar with the applicable" +:+
-    S "standards for constructions using glass from" +:+ sSqBr (S "4-6") +:+
-    S "in" +:+. (makeRef s10))
-  (SRS.userChar [Paragraph EmptyS] [])
-
-s2_3 = orgSecWTS s2_3_intro dataDefn s6_2_4 s2_3_intro_end
-
+--for Organization of Document Section
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", (short srs),
   S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1"), S "and",

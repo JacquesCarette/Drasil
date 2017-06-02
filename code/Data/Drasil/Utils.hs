@@ -31,7 +31,7 @@ import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, QDefinition, Expr(..))
+  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Expr(..))
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator

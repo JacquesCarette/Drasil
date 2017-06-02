@@ -165,13 +165,13 @@ class TestInvalidInput(unittest.TestCase):
         params = load_params.load_params('Testing/invalidInput/FI40.txt')
         self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
 
-    def test_FI41(self):
-        params = load_params.load_params('Testing/invalidInput/FI41.txt')
-        self.assertRaisesRegexp(ValueError, 'Tinit must be < Tmelt\n', verify_params.verify_valid, params)
+    # def test_FI41(self):
+        # params = load_params.load_params('Testing/invalidInput/FI41.txt')
+        # self.assertRaisesRegexp(ValueError, 'Tinit must be < Tmelt\n', verify_params.verify_valid, params)
 
-    def test_FI42(self):
-        params = load_params.load_params('Testing/invalidInput/FI42.txt')
-        self.assertRaisesRegexp(ValueError, 'Tinit must be < Tmelt\n', verify_params.verify_valid, params)
+    # def test_FI42(self):
+        # params = load_params.load_params('Testing/invalidInput/FI42.txt')
+        # self.assertRaisesRegexp(ValueError, 'Tinit must be < Tmelt\n', verify_params.verify_valid, params)
 
     def test_FI43(self):
         params = load_params.load_params('Testing/invalidInput/FI43.txt')

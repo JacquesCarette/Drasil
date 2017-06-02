@@ -44,7 +44,7 @@ s2, s2_1, s2_2, s2_4, s2_3, s3, s3_1, s3_2, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1,
   s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
-s3_1_intro, s3_2_intro, s4_1_bullets, s5_intro, 
+s3_2_intro, s4_1_bullets, s5_intro, 
   s5_1_table, s5_2_bullets, s6_1_1_bullets, s6_1_2_list,
   s6_1_3_list, s6_2_intro, s6_2_5_table1, s6_2_5_table2,
   s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s8_list, s9_table1,
@@ -145,13 +145,7 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   
 s3 = stakehldr [s3_1, s3_2]
 
-s3_1 = SRS.theClient [s3_1_intro] []
-
-s3_1_intro = Paragraph $ foldlSent [(at_start $ the client), S "for",
-  (short gLassBR), S "is a", phrase company, S "named" +:+.
-  S "Entuitive. It is developed by Dr. Manuel Campidelli", 
-  (at_start $ the client), S "has the final say on acceptance of the", 
-  phrase product_]
+s3_1 = tClientF (gLassBR) (S "Entuitive. It is developed by Dr. Manuel Campidelli")
 
 s3_2 = SRS.theCustomer [s3_2_intro] []
 

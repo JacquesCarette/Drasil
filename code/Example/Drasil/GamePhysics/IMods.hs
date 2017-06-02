@@ -3,7 +3,8 @@ module Drasil.GamePhysics.IMods where
 --import qualified Drasil.GamePhysics.Unitals as GPUN
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle1, foldlSent)
+import Data.Drasil.Utils (foldle1)
+import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)

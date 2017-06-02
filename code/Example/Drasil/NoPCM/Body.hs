@@ -24,7 +24,7 @@ import Drasil.OrganizationOfSRS
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s2, s2_1, s2_2, s2_3, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s5, s5_1, s5_2, s6, s7 :: Section
+s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s5, s5_1, s5_2, s6, s7 :: Section
 
 s3_1_intro, sys_context_fig, s4_1_intro, s4_1_1_bullets, s4_1_2_list, s4_1_3_intro,
   s4_1_3_list, fig_tank, s4_2_3_intro, s4_2_4_intro, s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents

@@ -24,9 +24,10 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
-import Data.Drasil.Utils (foldle, foldlSent, foldlList, listConstExpr, 
+import Data.Drasil.Utils (foldle, listConstExpr, 
   makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, ofThe, ofThe', symbolMapFun)
+  enumBullet, mkRefsList, symbolMapFun)
+import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
 import Drasil.SpecificSystemDescription

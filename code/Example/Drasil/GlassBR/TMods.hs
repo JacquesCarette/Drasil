@@ -5,7 +5,7 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.Concepts
 
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 

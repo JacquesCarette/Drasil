@@ -12,9 +12,9 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent, itemRefToSent, foldlList,
-  makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet,
-  ofThe)
+import Data.Drasil.Utils (itemRefToSent,
+  makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
+import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -32,7 +32,6 @@ import Drasil.GlassBR.Reqs
 import Drasil.GlassBR.TMods
 import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
-import Data.Drasil.Utils (isThe)
 
 import Drasil.DocumentLanguage
 import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)

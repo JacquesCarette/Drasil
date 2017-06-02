@@ -3,7 +3,7 @@ module Drasil.GamePhysics.TMods where
 import Drasil.GamePhysics.Unitals
 
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
   angularAccel, force, gravitationalConst, velocity, momentOfInertia, 

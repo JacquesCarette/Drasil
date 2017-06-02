@@ -40,9 +40,6 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 import Drasil.TraceabilityMandGs
 
-import Data.Drasil.SentenceStructures
-import Data.Drasil.Utils hiding (foldlSent, foldlsC) 
-
 acronyms :: [CINP]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]

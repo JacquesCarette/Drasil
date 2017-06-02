@@ -2,7 +2,7 @@ module Drasil.GamePhysics.Modules where
 
 import Control.Lens ((^.))
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent, foldlList)
+import Data.Drasil.SentenceStructures (foldlSent, foldlList)
 import Data.Drasil.Concepts.Physics (rigidBody, velocity, position, friction, 
     elasticity)
 import Data.Drasil.Quantities.PhysicalProperties (mass)

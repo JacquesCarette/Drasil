@@ -11,7 +11,7 @@ import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 self :: NPNC
 self = npnc "HGHC" (pn "HGHC")

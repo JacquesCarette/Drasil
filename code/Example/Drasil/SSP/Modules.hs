@@ -5,7 +5,7 @@ import Language.Drasil
 
 import Data.Drasil.Modules
 import Data.Drasil.Quantities.SolidMechanics
-import Data.Drasil.Utils
+import Data.Drasil.SentenceStructures
 
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math

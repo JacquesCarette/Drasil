@@ -8,7 +8,7 @@ import Data.List (nub)
 import Data.Maybe (fromJust, isNothing)
 
 import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg, introduction)
-import Data.Drasil.Utils (foldlsC)
+import Data.Drasil.SentenceStructures (foldlsC)
 
 import Drasil.Template.Helpers
 

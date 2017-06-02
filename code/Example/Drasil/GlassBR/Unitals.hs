@@ -8,7 +8,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Utils(symbolMapFun)
 import Control.Lens((^.))
 import Prelude hiding (log, id)
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 

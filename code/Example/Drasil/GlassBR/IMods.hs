@@ -1,7 +1,7 @@
 module Drasil.GlassBR.IMods where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals

@@ -124,7 +124,7 @@ s2_4 = charIntRdrF (phrase theory +:+ S "behind" +:+
                      S "and" +:+ (phrase $ blastRisk ^. term))
   (foldlList [S "second year calculus", S "structural mechanics",
   S "computer applications in civil engineering"])
-  (short gLassBR)
+  (gLassBR)
   (S " In addition, reviewers should be familiar with the applicable" +:+
     S "standards for constructions using glass from" +:+ sSqBr (S "4-6") +:+
     S "in" +:+. (makeRef s10))

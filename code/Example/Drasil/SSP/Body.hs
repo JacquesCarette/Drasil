@@ -129,7 +129,7 @@ s2_2 = scpOfReqF includes ssa ending
 
 -- SECTION 2.3 --
 s2_3 = charIntRdrF (S "solid mechanics") (S "undergraduate level 4 physics")
-  (short ssa) EmptyS (SRS.userChar SRS.missingP [])
+  (ssa) EmptyS (SRS.userChar SRS.missingP [])
 
 -- SECTION 2.4 --
 s2_4 = orgSecWTS start inModel (SRS.inModel SRS.missingP []) end --FIXME: This is kind of a hack as it is not referencing the real instance model

@@ -39,6 +39,20 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList, ofThe, ofThe')
 import qualified Drasil.SRS as SRS
 
+introductionF :: CINP -> Sentence -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence, Section) -> Bool -> (Sentence, CINP, Section, Sentence) -> Section
+introductionF kWord (startIntro) (pOdPart1) (inc, endSCOR) (know, und, appStandd, refForCoIR) orgTrailing (i, b, s, t)
+      = SRS.intro [Paragraph startIntro, Paragraph endIntro]
+       [pOfDoc, scpOfReq, cIntRdr, organizationOfDoc orgTrailing]
+      where endIntro = foldlSent [S "The following", phrase section_,
+                  S "provides an overview of the", introduceAbb srs,
+                  S "for" +:+. (short kWord), S "This", phrase section_, S "explains the", phrase purpose,
+                  S "of this", phrase document `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (temp))]
+            pOfDoc         = prpsOfDocF pOdPart1
+            scpOfReq       = scpOfReqF inc kWord endSCOR
+            cIntRdr        = charIntRdrF know und kWord appStandd refForCoIR
+            organizationOfDoc True  = orgSecWTS i b s t
+            organizationOfDoc False = orgSec i b s 
+
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
 introF :: Sentence -> Sentence -> [Section] -> Section
 introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
@@ -97,7 +111,7 @@ showingCxnBw :: NPNC -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
 
--- Compleate the sentences, no need to add a period at the end of your input sentences
+-- Complete the sentences, no need to add a period at the end of your input sentences
 scpOfReqF :: Sentence -> CINP -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
   where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
@@ -105,16 +119,16 @@ scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
                 short progName, S "is intended to" +:+ ending]
 
 --Characteristics of Intended Reader section
-charIntRdrF :: Sentence -> Sentence -> Sentence -> Sentence -> Section -> Section
+charIntRdrF :: Sentence -> Sentence -> CINP -> Sentence -> Section -> Section
 charIntRdrF know und progName appStandd r = 
   SRS.charOfIR (intReaderIntro know und progName appStandd r) []
 
 --paragraph called by charIntRdrF
-intReaderIntro :: Sentence -> Sentence -> Sentence -> Sentence -> Section -> [Contents]
+intReaderIntro :: Sentence -> Sentence -> CINP -> Sentence -> Section -> [Contents]
 intReaderIntro know und progName appStandd r = [Paragraph $ foldlSent [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. know,
   S "The reviewers should also have an understanding of" +:+. und :+:
-  appStandd, S "The", (plural user), S "of", progName,
+  appStandd, S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef r)]]
 
 -- | Organization of the document section builder. Takes an introduction,

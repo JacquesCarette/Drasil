@@ -90,7 +90,7 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automaticly generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introductionF ssa startIntro kSent prpsOfDoc_p1 (scpIncl,scpEnd) 
+s2 = introductionF ssa (startIntro, kSent) prpsOfDoc_p1 (scpIncl,scpEnd) 
   (S "solid mechanics", S "undergraduate level 4 physics", EmptyS) True
   (orgSecStart, inModel, SRS.inModel SRS.missingP [], orgSecEnd)--FIXME: This is kind of a hack as it is not referencing the real instance model
   where startIntro = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 

@@ -8,15 +8,16 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
+import Data.Drasil.Utils (symbolMapFun)
 import Prelude hiding (id)
 
 import Control.Lens ((^.))
 
 swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD = symbolMapFun swhsSymbols Data
+swhsSymbMapD term = (symbolMapFun swhsSymbols Data) term
 
-swhsSymbMapT :: QDefinition -> Contents
-swhsSymbMapT = symbolMapFun swhsSymbols Theory
+swhsSymbMapT :: RelationConcept -> Contents
+swhsSymbMapT term = (symbolMapFun swhsSymbols Theory) term
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.

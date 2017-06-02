@@ -18,7 +18,7 @@ import Drasil.SWHS.DataDefs
 import Control.Lens ((^.))
 
 s4_2_2_T1 :: [Contents]
-s4_2_2_T1 = map (Definition swhsSymbMap . Theory) [t1ConsThermE]
+s4_2_2_T1 = map swhsSymbMapT [t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE" (nounPhraseSP "Conservation of thermal energy") 

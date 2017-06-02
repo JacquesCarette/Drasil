@@ -23,6 +23,7 @@ module Data.Drasil.Utils
   , unwrap
   , isThe
   , fmtBF
+  , symbolMapFun
   ) where
 
 import Data.List
@@ -30,7 +31,7 @@ import Control.Lens ((^.))
 import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+), (+:+.), 
   ItemType(Flat), sC, sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, SymbolMap, UnitDefn, usymb, Expr(..))
+  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, QDefinition, Expr(..))
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -181,3 +182,11 @@ unwrap Nothing  = EmptyS
 
 isThe :: Sentence -> Sentence -> Sentence
 isThe  p1 p2 = p1 +:+ S "is the" +:+ p2
+
+-- Using symbolMap from Extract
+--FIXME: Not sure what type d should be
+symbolMapFun :: (SymbolForm c, Quantity c) => [c] -> (d -> DType) -> (d -> Contents)
+symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)
+
+
+

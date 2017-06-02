@@ -14,7 +14,7 @@ import Drasil.SWHS.DataDefs
 import Control.Lens ((^.))
 
 s4_2_2_T2 :: [Contents]
-s4_2_2_T2 = map (Definition swhsSymbMap . Theory) [t2SensHtE]
+s4_2_2_T2 = map swhsSymbMapT [t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE" (nounPhraseSP "Sensible heat energy") 
@@ -55,7 +55,7 @@ t2descr = (P (QT.sens_heat ^. symbol) :+: S " is the change in " :+:
   P (QT.temp ^. symbol) :+: S "=" :+: P (QT.boil_pt ^. symbol) :+:
   S " or " :+: P (QT.temp ^. symbol) :+: S "=" :+: 
   P (QT.melt_pt ^. symbol) :+: S ". If this is the case, refer to " :+: 
-  (makeRef ((Definition swhsSymbMap . Theory) t3LatHtE)) :+: S ", " :+: (at_start $ latent_heat ^. term) :+: 
+  (makeRef (swhsSymbMapT t3LatHtE)) :+: S ", " :+: (at_start $ latent_heat ^. term) :+: 
   S " energy.")
   
 

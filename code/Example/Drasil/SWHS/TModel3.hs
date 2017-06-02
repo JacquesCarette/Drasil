@@ -13,7 +13,7 @@ import Data.Drasil.Quantities.Physics (time)
 import Control.Lens ((^.))
 
 s4_2_2_T3 :: [Contents]
-s4_2_2_T3 = map (Definition swhsSymbMap . Theory) [t3LatHtE]
+s4_2_2_T3 = map swhsSymbMapT [t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE" (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
@@ -41,7 +41,7 @@ t3descr = (P (QT.latent_heat ^. symbol) :+: S " is the change in " :+:
   (phrase $ phase_change ^. term) :+: S " is not complete. The status of " :+:
   S "the " :+: (phrase $ phase_change ^. term) :+:
   S " depends on the " :+: (phrase $ melt_frac ^. term) `sC`
-  (makeRef ((Definition swhsSymbMap . Data) dd3HtFusion)) :+: S "." +:+
+  (makeRef (swhsSymbMapD dd3HtFusion)) :+: S "." +:+
   P (QT.melt_pt ^. symbol) :+:
   S " and " :+: P (QT.boil_pt ^. symbol) :+: S " are the " :+:
   (phrase $ QT.melt_pt ^. term) :+: S " and " :+: (phrase $ QT.boil_pt ^. term) :+:

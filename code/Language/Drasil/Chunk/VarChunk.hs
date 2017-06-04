@@ -53,8 +53,7 @@ vc' n s t = VC (nw n) s t
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)
 
---FIXME: Rename this to vcFromNI
 -- | Creates a VarChunk from a NamedIdea.
 -- This function will be renamed soon
-vcFromCC :: NamedIdea c => c -> Symbol -> VarChunk
-vcFromCC cc sym = VC (nw cc) sym Rational
+vcFromNI :: NamedIdea c => c -> Symbol -> VarChunk
+vcFromNI cc sym = VC (nw cc) sym Rational

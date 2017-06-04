@@ -28,8 +28,8 @@ class NamedIdea c => Concept c where
 
 -- | The ConceptChunk datatype is a Concept
 data ConceptChunk where
-  -- CC takes a 'NamedChunk', a definition, and domain tags.
-  CC :: NamedChunk -> Sentence -> [CWrapper] -> ConceptChunk 
+  -- CC takes a 'NamedIdea', a definition, and domain tags.
+  CC :: NamedIdea c => c -> Sentence -> [CWrapper] -> ConceptChunk 
   -- [CWrapper] is a list of the ConceptDomain(s) as Concepts themselves.
   -- It is not exported, see 'cc' and 'ccs' for the exported constructors.
 instance Eq ConceptChunk where

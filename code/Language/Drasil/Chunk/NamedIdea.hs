@@ -155,27 +155,24 @@ of__ t1 t2 = nounPhrase''
 of'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
 of'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "of" +:+ (f2 $ t2 ^. term)
   
---FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
 -- | Similar to 'of\'', but with the word "with" instead of "of".
 -- Phrase defaults to @(phrase t1) "with" (phrase t2)@, plural only pluralizes t2.
-with :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 with t1 t2 = nounPhrase''
-  (phrase t1 +:+ S "with" +:+ phrase t2)
-  (plural t1 +:+ S "with" +:+ plural t2)
-  (Replace (at_start t1 +:+ S "with" +:+ phrase t2))
-  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  
+  (phrase (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term))
+  (plural (t1 ^. term) +:+ S "with" +:+ plural (t2 ^. term))
+  (Replace (at_start (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term)))
+  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize' (t2 ^. term)))  
 
---FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase  
 -- | Similar to 'with', except this is the
 -- case with "T1s with T2", as opposed to "T1 with T2", i.e.
 -- phrase defaults to @(plural t1) "with" (phrase t2)@, plural pluralizes both.
-
-with' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+with' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 with' t1 t2 = nounPhrase''
-  (plural t1 +:+ S "with" +:+ phrase t2)
-  (plural t1 +:+ S "with" +:+ plural t2)
-  (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
-  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))
+  (plural (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term))
+  (plural (t1 ^. term) +:+ S "with" +:+ plural (t2 ^. term))
+  (Replace (at_start' (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term)))
+  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize' (t2 ^. term)))
   
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_ t1 t2 = nounPhrase''

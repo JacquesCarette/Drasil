@@ -67,11 +67,11 @@ ccStSS :: String -> NP -> Sentence -> ConceptChunk
 ccStSS i t d = CC (nc i t) d ([] :: [CWrapper])
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
-cc :: NamedChunk -> String -> ConceptChunk
+cc :: NamedIdea c => c -> String -> ConceptChunk
 cc n d = CC n (S d) ([] :: [CWrapper])
 
 -- | Constructor for 'ConceptChunk'. Allows explicit tagging.
-ccs :: NamedChunk -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
+ccs :: NamedIdea c => c -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
 ccs = CC
 
 {- Concept Wrapper -}

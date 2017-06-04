@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.VarChunk (VarChunk, vc)
-import Language.Drasil.Chunk.Unital (ucFromVC)
+import Language.Drasil.Chunk.Unital (ucFromCV)
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
@@ -87,7 +87,7 @@ instance Quantity E where
 -- unit, and defining equation.
 fromEqn :: Unit u => String -> NP -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
-  EC (ucFromVC (cv (ccStSS nm desc (phrase desc)) symb Rational) chunk) eqn
+  EC (ucFromCV (cv (ccStSS nm desc (phrase desc)) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack

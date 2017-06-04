@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Unital 
   ( UnitalChunk(..)
   , makeUCWDS
-  , ucFromVC
+  , ucFromCV
   , uc
   , uc'
   ) where
@@ -80,8 +80,6 @@ makeUCWDS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
 makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Rational
 
 
---FIXME: I don't like this (it's partly a relic), it should be a 
--- different data structure which is an instance of Unitary that has a convar
 -- | Create a UnitalChunk from a 'ConVar' by supplying the additional 'Unit'
-ucFromVC :: Unit u => ConVar -> u -> UnitalChunk
-ucFromVC conv un = uc conv (conv ^. symbol) un
+ucFromCV :: Unit u => ConVar -> u -> UnitalChunk
+ucFromCV conv un = UCV conv un

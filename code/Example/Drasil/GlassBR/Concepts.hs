@@ -12,7 +12,7 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 {-Acronyms-}
 -- FIXME: Use actual acronyms instead of CCs.
 
-acronyms :: [CINP]
+acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, lDurFac,
   lGlass, lResistance, lShareFac, notApp, nonFactorL, physSyst, requirement,
@@ -20,7 +20,7 @@ acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
   iGlass, lDurFac, lGlass, lResistance, lShareFac, notApp, nonFactorL,
-  eqTNT, gLassBR :: CINP
+  eqTNT, gLassBR :: CI
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
 annealedGlass = commonINP "annealedGlass" (nounPhraseSP "annealed glass")          "AN"

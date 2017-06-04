@@ -8,7 +8,7 @@ area, calculation, diameter, equation, euclidN, euclidSpace, gradient,
   probability, surArea, surface, unit_, unitV, vector, rate, change, rOfChng, 
   constraint :: ConceptChunk
 
-ode :: CINP
+ode :: CI
 
 {--algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations" --}
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
@@ -37,7 +37,7 @@ vector       = dcc "vector"       (cn' "vector")                  "Object with m
 orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"
 
 --FIXME: use nounphrase instead of cn'
-ode          = commonINP "ode"    (cn' "Ordinary Differential Equation") "ODE"
+ode          = commonIdea "ode"    (cn' "Ordinary Differential Equation") "ODE"
 
 
 --FIXME: COMBINATION HACK (all below)

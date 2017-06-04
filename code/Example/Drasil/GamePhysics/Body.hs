@@ -384,7 +384,7 @@ s4_2_1_intro = Paragraph $ foldlSent
   (phrase assumption), S "is used"]
   where refs (chunk, ref) = (titleize' chunk) +:+ S "[" :+: (makeRef ref) :+: S "]"
 
-itemsAndRefs :: [(CINP, Section)]
+itemsAndRefs :: [(CI, Section)]
 itemsAndRefs = [(thModel, s4_2_2), (genDefn, s4_2_3), (dataDefn, s4_2_4), 
   (inModel, s4_2_5)]
 

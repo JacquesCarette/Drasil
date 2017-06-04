@@ -5,23 +5,23 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math (graph)
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg, 
-  physSyst, requirement, srs, thModel, mg, vav, desSpec :: CINP
+  physSyst, requirement, srs, thModel, mg, vav, desSpec :: CI
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
-assumption  = commonINP "assumption"  (cn' "assumption")                          "A"
-dataDefn    = commonINP "dataDefn"    (cn' "data definition")                     "DD"
-desSpec     = commonINP "desSpec"     (compoundPhrase design specification)       "DS"
-genDefn     = commonINP "genDefn"     (cn' "general definition")                  "GD"
-goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)             "GS" 
-inModel     = commonINP "inModel"     (compoundPhrase instance_ model)            "IM" 
-likelyChg   = commonINP "likelyChg"   (cn' "likely change")                       "LC"
-unlikelyChg = commonINP "unlikelyChg" (cn' "unlikely change")                     "UC"
-physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description) "PS" 
-requirement = commonINP "requirement" (cn' "requirement")                         "R"
-thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"
-mg          = commonINP "mg"          (compoundPhrase module_ guide)              "MG" 
-srs         = commonINP "srs"       (compoundPhrase''' softwareReq specification) "SRS"
-vav         = commonINP "vav"         (cn' "verification and validation")         "VAV"
+assumption  = commonIdea "assumption"  (cn' "assumption")                          "A"
+dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                     "DD"
+desSpec     = commonIdea "desSpec"     (compoundPhrase design specification)       "DS"
+genDefn     = commonIdea "genDefn"     (cn' "general definition")                  "GD"
+goalStmt    = commonIdea "goalStmt"    (compoundPhrase goal statement)             "GS" 
+inModel     = commonIdea "inModel"     (compoundPhrase instance_ model)            "IM" 
+likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                       "LC"
+unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                     "UC"
+physSyst    = commonIdea "physSyst"    (compoundPhrase physicalSystem description) "PS" 
+requirement = commonIdea "requirement" (cn' "requirement")                         "R"
+thModel     = commonIdea "thModel"     (cn' "theoretical model")                   "T"
+mg          = commonIdea "mg"          (compoundPhrase module_ guide)              "MG" 
+srs         = commonIdea "srs"       (compoundPhrase''' softwareReq specification) "SRS"
+vav         = commonIdea "vav"         (cn' "verification and validation")         "VAV"
 
 ---------------------------------------------------------------------
 

@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation (algorithm)
 import Control.Lens ((^.))
 
-introductionF :: CINP -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CINP, Section, Sentence) -> Section
+introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CI, Section, Sentence) -> Section
 introductionF kWord (startIntro, kSent) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
   = introF startIntro kSent subsec
      where  subsec   = [pOfDoc, scpOfReq_, cIntRdr, organizationOfDoc orgTrailing]
@@ -58,19 +58,19 @@ prpsOfDocF par1 = SRS.prpsOfDoc [Paragraph par1, Paragraph par2] []
                     Quote (S "fake"), S "a rational", phrase design, S "process"]
 
 -- Complete the sentences, no need to add a period at the end of your input sentences
-scpOfReqF :: Sentence -> CINP -> Sentence -> Section
+scpOfReqF :: Sentence -> CI -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
   where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. includes, S "Given appropriate inputs, the code for",
                 short progName, S "is intended to" +:+ ending]
 
 --Characteristics of Intended Reader section
-charIntRdrF :: Sentence -> Sentence -> CINP -> Sentence -> Section -> Section
+charIntRdrF :: Sentence -> Sentence -> CI -> Sentence -> Section -> Section
 charIntRdrF know und progName appStandd r = 
   SRS.charOfIR (intReaderIntro know und progName appStandd r) []
 
 --paragraph called by charIntRdrF
-intReaderIntro :: Sentence -> Sentence -> CINP -> Sentence -> Section -> [Contents]
+intReaderIntro :: Sentence -> Sentence -> CI -> Sentence -> Section -> [Contents]
 intReaderIntro know und progName appStandd r = [Paragraph $ foldlSent [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. know,
   S "The reviewers should also have an understanding of" +:+. und :+:

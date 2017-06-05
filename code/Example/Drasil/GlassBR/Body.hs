@@ -205,8 +205,8 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR),
   S "comparing whether", (phrase capacity), S "is greater than" +:+. 
   (phrase demandq), (at_start capacity) `isThe`
   (capacity ^. defn), S "and", (phrase demandq) `isThe` 
-  phrase requirement +:+. S "which" `isThe` (demandq ^. defn), S "The second", 
-  phrase condition, S "is to check whether the calculated", 
+  phrase requirement +:+. (S "which" `isThe` (demandq ^. defn)),
+  S "The second", phrase condition, S "is to check whether the calculated", 
   (phrase probability), sParen (P $ prob_br ^. symbol), 
   S "is less than the tolerable", (phrase probability), 
   sParen (P $ pb_tol ^. symbol), S "which is obtained from the", phrase user,
@@ -335,7 +335,7 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   S "support", plural condition, S "are simply supported and free to slip in",
   S "plane; (2) glass supported on two sides acts as a simply supported", 
   S "beam and (3) glass supported on one side acts as a cantilever"], 
-  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")),
+  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this practice does not apply to any form of wired, patterned" `sC`
   S "etched, sandblasted, drilled, notched, or grooved glass with",
   (phrase surface), S "and edge treatments that alter the glass strength"],

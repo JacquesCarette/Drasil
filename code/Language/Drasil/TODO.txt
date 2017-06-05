@@ -1,3 +1,0 @@
-Section Data type that stores metadata on what it contains.
-
-Necessary for auto-gen of intro, etc.

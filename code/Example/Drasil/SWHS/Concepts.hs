@@ -11,7 +11,7 @@ phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material" "phase
 rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS" 
 progName    = commonIdea "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS" 
 
-swhsFull :: NPNC
+swhsFull :: NamedChunk
 swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the 
 -- description to have accents when using dcc.
@@ -21,7 +21,7 @@ swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
 charging, coil, discharging, gauss_div,
   perfect_insul, phase_change_material, swhs_pcm, tank,
   tank_pcm, transient, water, sWHT :: ConceptChunk
-swhsProg :: NPNC
+swhsProg :: NamedChunk
 
   
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"

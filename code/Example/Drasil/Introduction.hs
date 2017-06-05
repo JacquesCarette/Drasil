@@ -13,7 +13,6 @@ import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe',
   foldlList, foldlsC, refineChain)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation (algorithm)
-import Control.Lens ((^.))
 
 introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CI, Section, Sentence) -> Section
 introductionF kWord (startIntro, kSent) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
@@ -28,39 +27,39 @@ introductionF kWord (startIntro, kSent) (pOdPart1) (inc, endSCOR) (know, und, ap
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
 introF :: Sentence -> Sentence -> [Section] -> Section
 introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
-      where end = foldlSent [S "The following", fterm phrase section_,
+      where end = foldlSent [S "The following", phrase section_,
                   S "provides an overview of the", introduceAbb srs,
-                  S "for" +:+. kSent, S "This", fterm phrase section_, S "explains the", fterm phrase purpose,
-                  S "of this", (fterm phrase document) `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (listOfIntroSubsec))]
+                  S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
+                  S "of this", (phrase document) `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (listOfIntroSubsec))]
 
 --list is used by introF (current args passed in are the same for every example)
 listOfIntroSubsec :: [(Sentence, Sentence)]
-listOfIntroSubsec = [(fterm phrase scope, fterm phrase system), (fterm phrase organization, fterm phrase document), (fterm plural characteristic, fterm phrase intReader)]
+listOfIntroSubsec = [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
 
 -- provide only the first paragraph (as a sentence type) to 
 prpsOfDocF :: Sentence -> Section
 prpsOfDocF par1 = SRS.prpsOfDoc [Paragraph par1, Paragraph par2] []
-      where par2 = foldlSent [S "This", fterm phrase document, 
+      where par2 = foldlSent [S "This", phrase document, 
                     S "will be used as a starting point for subsequent development", 
-                    S "phases, including writing the", fterm phrase desSpec, S "and the", 
-                    fterm phrase softwareVAV, S "plan. The", fterm phrase designDoc,
-                    S "will show how the", fterm plural requirement, S "are to be realized, including",
-                    fterm plural decision, S "on the numerical", (plural $ algorithm ^. term), 
-                    S "and programming" +:+. fterm phrase environment, S "The", fterm phrase vavPlan, 
+                    S "phases, including writing the", phrase desSpec, S "and the", 
+                    phrase softwareVAV, S "plan. The", phrase designDoc,
+                    S "will show how the", plural requirement, S "are to be realized, including",
+                    plural decision, S "on the numerical", (plural algorithm), 
+                    S "and programming" +:+. phrase environment, S "The", phrase vavPlan, 
                     S "will show the steps that will be used to increase confidence in the",
-                    fterm phrase softwareDoc, S "and the" +:+. fterm phrase implementation, S "Although",
-                    S "the", short srs, S "fits in a series of", fterm plural document, 
-                    S "that follow the so-called waterfall", (fterm phrase model) `sC` 
+                    phrase softwareDoc, S "and the" +:+. phrase implementation, S "Although",
+                    S "the", short srs, S "fits in a series of", plural document, 
+                    S "that follow the so-called waterfall", (phrase model) `sC` 
                     S "the actual development process is not constrained", 
                     S "in any way. Even when the waterfall model is not followed, as",
                     S "Parnas and Clements point out, the most logical way", --FIXME: add citation to these people?
-                    S "to present the", fterm phrase documentation, S "is still to",
-                    Quote (S "fake"), S "a rational", fterm phrase design, S "process"]
+                    S "to present the", phrase documentation, S "is still to",
+                    Quote (S "fake"), S "a rational", phrase design, S "process"]
 
 -- Complete the sentences, no need to add a period at the end of your input sentences
 scpOfReqF :: Sentence -> CI -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
-  where intro = foldlSent [(fterm phrase scope) `ofThe'` (fterm plural requirement),
+  where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. includes, S "Given appropriate inputs, the code for",
                 short progName, S "is intended to" +:+ ending]
 
@@ -72,9 +71,9 @@ charIntRdrF know und progName appStandd r =
 --paragraph called by charIntRdrF
 intReaderIntro :: Sentence -> Sentence -> CI -> Sentence -> Section -> [Contents]
 intReaderIntro know und progName appStandd r = [Paragraph $ foldlSent [S "Reviewers of this",
-  (fterm phrase documentation), S "should have a strong knowledge in" +:+. know,
+  (phrase documentation), S "should have a strong knowledge in" +:+. know,
   S "The reviewers should also have an understanding of" +:+. und :+:
-  appStandd, S "The", (fterm plural user), S "of", (short progName),
+  appStandd, S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef r)]]
 
 -- | Organization of the document section builder. Takes an introduction,
@@ -94,9 +93,9 @@ orgSecWTS i b s t = SRS.orgOfDoc (orgIntro i b s (Just t)) []
 orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
           intro, S "The presentation follows the standard pattern of presenting",
-          (foldlsC $ map (fterm plural) [goal, theory, definition]) `sC` S "and assumptions.",
+          (foldlsC $ map (plural) [goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
-          S "they can start reading the", fterm plural bottom, 
+          S "they can start reading the", plural bottom, 
           S "in", makeRef bottomSec +:+
           S "and trace back to find any additional information they require"],
           Paragraph $ lastS trailingSentence]

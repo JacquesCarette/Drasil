@@ -19,8 +19,8 @@ mod_vector = mod_vector_fun chipmunk []
 mod_seq    = mod_seq_fun chipmunk []
 mod_assoc  = mod_assoc_fun chipmunk []
 mod_linked = mod_linked_fun chipmunk []
-mod_ctrl   = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType' ^. term) +:+ 
-  S "and" +:+ (plural $ algorithm ^. term))
+mod_ctrl   = mod_ctrl_fun (S "The internal" +:+ (plural $ dataType') +:+ 
+  S "and" +:+ (plural $ algorithm))
   chipmunk [] [mod_arbiter, mod_hw]
 
 modules :: [ModuleChunk]
@@ -37,17 +37,17 @@ modules = [mod_hw, mod_behav, mod_body, mod_shape, mod_circle, mod_segment,
 mod_body_serv :: ConceptChunk
 mod_body_serv = dccWDS "mod_body_serv" (cnIES "rigid body")
     (foldlSent [S "Stores the", (plural physicalProperty), 
-    S "of an object, such as", (foldlList [(phrase $ mass ^. term), 
-    (phrase $ position ^. term), S "rotation", 
-    (phrase $ velocity ^. term), S "etc", S "provides operations on"]), 
-    (plural $ rigidBody ^. term) `sC` S "such as setting the", 
-    (phrase $ mass ^. term), S "and", 
-    (phrase $ velocity ^. term), S "of the body"])
+    S "of an object, such as", (foldlList [(phrase $ mass), 
+    (phrase $ position), S "rotation", 
+    (phrase $ velocity), S "etc", S "provides operations on"]), 
+    (plural $ rigidBody) `sC` S "such as setting the", 
+    (phrase $ mass), S "and", 
+    (phrase $ velocity), S "of the body"])
 
 mod_body :: ModuleChunk
 mod_body = makeImpModule mod_body_serv
     (S "The" +:+ (plural $ dataStruct) +:+ S "of a" 
-    +:+. (phrase $ rigidBody ^. term))
+    +:+. (phrase $ rigidBody))
     chipmunk
     []
     []
@@ -58,11 +58,11 @@ mod_body = makeImpModule mod_body_serv
 
 mod_shape_serv :: ConceptChunk
 mod_shape_serv = dccWDS "mod_shape_serv" (cn' "shape")
-    (foldlSent [S "Stores the surface", (plural $ property ^. term), 
-    S "of an object, such as", (phrase $ friction ^. term), S "or",
-    (phrase $ elasticity ^. term) `sC`
+    (foldlSent [S "Stores the surface", (plural $ property), 
+    S "of an object, such as", (phrase $ friction), S "or",
+    (phrase $ elasticity) `sC`
     S "and provides operations on shapes, such as setting its",
-    (phrase $ friction ^. term), S "or", (phrase $ elasticity ^. term)])
+    (phrase $ friction), S "or", (phrase $ elasticity)])
 
 mod_shape :: ModuleChunk
 mod_shape = makeImpModule mod_shape_serv
@@ -200,7 +200,7 @@ mod_spatial_serv = dccWDS "mod_spatial_serv" (nounPhraseSP "spatial index")
 mod_spatial :: ModuleChunk
 mod_spatial = makeImpModule mod_spatial_serv
     (foldlSent [S "The", (plural $ dataStruct'), S "and", 
-    (plural $ algorithm ^. term), S "for detecting collisions"])
+    (plural $ algorithm), S "for detecting collisions"])
     chipmunk
     []
     []
@@ -217,7 +217,7 @@ mod_coll_serv = dccWDS "mod_coll_serv" (cn' "collision solver")
 mod_coll :: ModuleChunk
 mod_coll = makeImpModule mod_coll_serv
     (foldlSent [S "The", (plural $ dataStruct'), S "and", 
-    (plural $ algorithm ^. term), S "for detecting collisions"])
+    (plural $ algorithm), S "for detecting collisions"])
     chipmunk
     []
     []

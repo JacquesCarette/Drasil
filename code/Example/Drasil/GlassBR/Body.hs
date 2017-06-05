@@ -84,7 +84,8 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1) (incScoR, endScoR)
+s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
+     (incScoR, endScoR)
      (knowIR, undIR, appStanddIR) True
      (s2_3_intro, dataDefn, s6_2_4, s2_3_intro_end)
   where startIntro = foldlSent [(at_start software), 
@@ -109,9 +110,9 @@ s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1) (incS
                     S "and" +:+ (phrase blastRisk))
         undIR     = (foldlList [S "second year calculus", S "structural mechanics",
                     S "computer applications in civil engineering"])
-        appStanddIR = (S " In addition, reviewers should be familiar with the applicable" +:+
-                       S "standards for constructions using glass from" +:+ sSqBr (S "4-6") +:+
-                       S "in" +:+. (makeRef s10))
+        appStanddIR = (S " In addition, reviewers should be familiar with the" +:+
+                       S "applicable standards for constructions using glass" +:+
+                       S "from" +:+ sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
 
 
 --for Purpose of Document Section
@@ -141,18 +142,20 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
   
-s3 = stakehldrGeneral (gLassBR) (S "Entuitive. It is developed by Dr. Manuel Campidelli")
+s3 = stakehldrGeneral (gLassBR) 
+  (S "Entuitive. It is developed by Dr. Manuel Campidelli")
 
 s4 = genSysF [] s4_1_bullets [] []
 
-s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ (short gLassBR) +:+ 
-  S "is expected to have completed at least" +:+. (S "equivalent" `ofThe`
+s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ 
+  (short gLassBR) +:+ S "is expected to have completed at least" +:+.
+  (S "equivalent" `ofThe` 
   S "second year of an undergraduate degree in civil or structural engineering")),
   (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of" +:+
   phrase theory +:+ S "behind" +:+ (phrase glBreakage) +:+ S "and" +:+.
   (phrase blastRisk)), (S "The" +:+ phrase endUser +:+
-  S "is expected to have basic" +:+ phrase computer +:+ S "literacy to handle the"
-  +:+. phrase software)]
+  S "is expected to have basic" +:+ phrase computer +:+
+  S "literacy to handle the" +:+. phrase software)]
 
 s4_2 = systCon [] []
 
@@ -221,12 +224,13 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
                 S "is needed to efficiently and correctly predict the", 
                 (phrase blastRisk) +:+ S "involved with the glass"]
         ending = foldl (+:+) EmptyS [S "interpret the", plural input_,
-                S "to give out the", plural output_, S "which predicts whether the", 
-                (phrase glaSlab), S "can withstand the",
-                (phrase blast), S "under the", plural condition]
+                S "to give out the", plural output_,
+                S "which predicts whether the", (phrase glaSlab),
+                S "can withstand the", (phrase blast), S "under the",
+                plural condition]
 
-s6_1_1 = termDefnF (Just (S "All of the terms are extracted from" +:+ sSqBr (S "4")
-  +:+ S "in" +:+ (makeRef s10))) [s6_1_1_bullets]
+s6_1_1 = termDefnF (Just (S "All of the terms are extracted from" +:+ 
+  sSqBr (S "4") +:+ S "in" +:+ (makeRef s10))) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $ 
   [Flat $ ((at_start aspectR) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} -- conceptually correct to call abbreviation as a symbol?
@@ -331,10 +335,10 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   S "support", plural condition, S "are simply supported and free to slip in",
   S "plane; (2) glass supported on two sides acts as a simply supported", 
   S "beam and (3) glass supported on one side acts as a cantilever"], 
-  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")), S "this practice does not apply", 
-  S "to any form of wired, patterned, etched, sandblasted, drilled" `sC`
-  S "notched, or grooved glass with", (phrase surface), S "and edge",
-  S "treatments that alter the glass strength"],
+  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")),
+  S "this practice does not apply to any form of wired, patterned" `sC`
+  S "etched, sandblasted, drilled, notched, or grooved glass with",
+  (phrase surface), S "and edge treatments that alter the glass strength"],
   foldlSent [S "This", phrase system, S "only considers the external", 
   (phrase explosion), S "scenario for its", 
   (plural calculation)],
@@ -399,9 +403,9 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
   +:+ S "<" +:+ (P $ cWeightMax ^. symbol), S "42" +:+ Sy (unit_symb char_weight),
   S "10%"],[(P $ tNT ^. symbol), (P $ tNT ^. symbol) :+: S " > 0", S "-", S "1",
   S "10%"], [(P $ standOffDist ^. symbol), (P $ standOffDist ^. symbol)
-  +:+ S "> 0", (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ standOffDist ^. symbol) +:+ S "<" +:+ 
-  (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb standOffDist), S "10%"]])
-  (S "Table 2: Input Variables") True
+  +:+ S "> 0", (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ standOffDist ^. symbol)
+  +:+ S "<" +:+ (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb standOffDist),
+  S "10%"]]) (S "Table 2: Input Variables") True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)] 
@@ -616,7 +620,8 @@ s9_t1_DD9 = ["DD2","DD3"]
 
 s9_table1 = Table (EmptyS:s9_row_header_t1) 
   (makeTMatrix s9_row_header_t1 s9_columns_t1 s9_row_t1)
-  (showingCxnBw (traceyMatrix) (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
+  (showingCxnBw (traceyMatrix) 
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 --
 
@@ -624,9 +629,11 @@ s9_row_t2 :: [String]
 s9_row_t2 = s9_row_t1 ++ s9_data ++ s9_funcReq
 
 s9_row_header_t2, s9_col_header_t2 :: [Sentence]
-s9_row_header_t2 = s9_row_header_t1 ++ (zipWith itemRefToSent (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
+s9_row_header_t2 = s9_row_header_t1 ++ 
+  (zipWith itemRefToSent (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
 
-s9_col_header_t2 = map (\(x,y) -> S x +:+ sParen (S "in" +:+ y)) (zip s9_funcReq s9_funcReqRef)
+s9_col_header_t2 = map (\(x,y) -> S x +:+ sParen (S "in" +:+ y)) 
+  (zip s9_funcReq s9_funcReqRef)
 
 s9_t2_r1, s9_t2_r2, s9_t2_r3, s9_t2_r4, s9_t2_r5, 
   s9_t2_r6 :: [String]
@@ -643,7 +650,8 @@ s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"
 
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
-  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ S "and Other" +:+ titleize' item)) True
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ S "and Other" +:+
+  titleize' item)) True
 
 --
 
@@ -696,7 +704,8 @@ s9_t3_r6  = []
 
 s9_table3 = Table (EmptyS:s9_row_header_t3)
   (makeTMatrix s9_col_header_t3 s9_columns_t3 s9_row_t3)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other" +:+ titleize' item)) True
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other"
+  +:+ titleize' item)) True
 
 --
 

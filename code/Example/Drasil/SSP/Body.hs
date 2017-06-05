@@ -88,7 +88,7 @@ sspSymMapT = symbolMapFun sspSymbols Theory
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
   S "values with a subscript i implies that the value will" +:+
   S "be taken at and analyzed at a" +:+ (phrase slice) +:+ S "or" +:+ (phrase slice) +:+
-  S "interface composing the total slip" +:+ (phrase $ mass ^. term)]]
+  S "interface composing the total slip" +:+ (phrase $ mass)]]
 
 -- SECTION 1.3 --
 --automaticly generated in mkSRS 
@@ -98,29 +98,29 @@ s2 = introductionF ssa (startIntro, kSent) prpsOfDoc_p1 (scpIncl,scpEnd)
   (S "solid mechanics", S "undergraduate level 4 physics", EmptyS) True
   (orgSecStart, inModel, SRS.inModel SRS.missingP [], orgSecEnd)--FIXME: This is kind of a hack as it is not referencing the real instance model
   where startIntro = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
-          (phrase $ mass ^. term) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
-          S "is subject to the influence of gravity on the" +:+. (phrase $ mass ^. term) +:+
+          (phrase $ mass) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
+          S "is subject to the influence of gravity on the" +:+. (phrase $ mass) +:+
           S "For an unstable" +:+ (phrase slope) +:+ S "this can cause instability" +:+
           S "in the form of soil/rock movement. The effects of soil/rock movement" +:+
           S "can range from inconvenient to seriously hazardous, resulting in signifcant" +:+
           S "life and economic loses. Slope stability is of interest both when analyzing" +:+
           S "natural" +:+ (plural slope) `sC` S "and when designing an excavated" +:+. (phrase slope) +:+
           (at_start ssa) +:+ S "is" +:+ (S "assessment" `ofThe` (S "safety of a" +:+ (phrase slope))) `sC`
-          S "identifying the" +:+ (phrase $ surface ^. term) +:+ S "most likely to" +:+
+          S "identifying the" +:+ (phrase $ surface) +:+ S "most likely to" +:+
           S "experience slip and an index of it's relative stability known as the" +:+.
-          (phrase $ fs_rc ^. term)
+          (phrase $ fs_rc)
         kSent = S "a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+
-          (phrase $ program ^. term) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+
-          (phrase $ program ^. term)
+          (phrase $ program) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+
+          (phrase $ program)
 
 -- SECTION 2.1 --
 -- Purpose of Document automaticly generated in introductionF
 prpsOfDoc_p1 :: Sentence
-prpsOfDoc_p1 = S "The" +:+ (short ssa) +:+ (phrase $ program ^. term) +:+ 
-  S "determines the" +:+ (phrase $ crtSlpSrf ^. term) `sC` S "and it's respective" +:+ 
-  (phrase $ fs_rc ^. term) +:+ S "as a" +:+ (phrase method_) +:+ 
+prpsOfDoc_p1 = S "The" +:+ (short ssa) +:+ (phrase $ program) +:+ 
+  S "determines the" +:+ (phrase $ crtSlpSrf) `sC` S "and it's respective" +:+ 
+  (phrase $ fs_rc) +:+ S "as a" +:+ (phrase method_) +:+ 
   S "of assessing the stability of a slope" +:+. (phrase design) +:+ 
-  S "The" +:+ (phrase $ program ^. term) +:+ 
+  S "The" +:+ (phrase $ program) +:+ 
   S "is intended to be used as an educational tool for" +:+
   S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
   S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
@@ -131,8 +131,8 @@ scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
   S "composed of homogeneous" +:+ (plural soilLyr)
 scpEnd  = S "identify the most likely" +:+ S "failure" +:+ 
-  (phrase $ surface ^. term) +:+ S "within the possible input range," +:+
-  S "and find the" +:+ (phrase $ fs_rc ^. term) +:+ S "for the" +:+ 
+  (phrase $ surface) +:+ S "within the possible input range," +:+
+  S "and find the" +:+ (phrase $ fs_rc) +:+ S "for the" +:+ 
   (phrase slope) +:+ S "as well as displacement of" +:+ (phrase soil) +:+ 
   S "that will occur on the" +:+ (phrase slope)
 
@@ -172,7 +172,7 @@ s4 = specSysDesF end [s4_1, s4_2]
 
 -- SECTION 4.1 --
 s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
-  where ending = S "evaluate the" +:+ (phrase $ fs_rc ^. term) +:+ S "of a" +:+ 
+  where ending = S "evaluate the" +:+ (phrase $ fs_rc) +:+ S "of a" +:+ 
                  (phrase slope) :+: S "'s" +:+ --FIXME apostrophe on "slope's"
                  (phrase slpSrf) +:+ S "and to calculate the displacement that the" +:+
                  (phrase slope) +:+ S "will experience"
@@ -181,9 +181,9 @@ s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
 s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
-  ([(titleize $ fs_rc ^. term, Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+
+  ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+
                                       S "is to experience failure through slipping.")] ++
-  map (\x -> (titleize $ x ^. term, Flat $ x ^. defn)) 
+  map (\x -> (titleize $ x, Flat $ x ^. defn)) 
       [crtSlpSrf, stress, strain, normForce, shearForce, tension, compression, plnStrn])
       -- most of these are in concepts (physics or solidMechanics) except for crtSlpSrf & plnStrn which is in defs.hs
 
@@ -206,7 +206,7 @@ s4_1_2_bullets = enumBullet [
   ((at_start slice) +:+ S "properties convention is noted by i.")
   ]
   
-s4_1_2_p2 = Paragraph $ S "A" +:+ (phrase $ fbd ^. term) +:+ S "of the forces" +:+
+s4_1_2_p2 = Paragraph $ S "A" +:+ (phrase $ fbd) +:+ S "of the forces" +:+
   S "acting on the" +:+ (phrase slice) +:+ S "is displayed in" +:+. (makeRef fig_forceacting)
 
 s4_1_2_fig1 = fig_indexconv
@@ -226,10 +226,10 @@ s4_1_3 = goalStmtF (map (\(x,y) -> x `ofThe` y) [(S "geometry", S "water table")
                                (plural mtrlPrpty, S "layers")]) [s4_1_3_list]
 
 s4_1_3_list = enumSimple 1 (short goalStmt) [
-  (S "Evaluate local and global" +:+ (plural $ fs_rc ^. term) +:+
+  (S "Evaluate local and global" +:+ (plural $ fs_rc) +:+
       S "along a given" +:+. phrase slpSrf),
-  (S "Identify the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for the slope" `sC` 
-      S "with the lowest" +:+. (phrase $ fs_rc ^. term)),
+  (S "Identify the" +:+ (phrase $ crtSlpSrf) +:+ S "for the slope" `sC` 
+      S "with the lowest" +:+. (phrase $ fs_rc)),
   (S "Determine" +:+. (S "displacement" `ofThe` phrase slope))
   ]
 
@@ -248,7 +248,7 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the" +:+. (phrase slopeSrf) +:+ ((getS coords +:+ 
-           S "coordinates") `ofThe'` (S "failure")) +:+ (phrase $ surface ^. term) +:+
+           S "coordinates") `ofThe'` (S "failure")) +:+ (phrase $ surface) +:+
            S "follow a monotonic function."),
   ((S "geometry") `ofThe'` (phrase slope) `sC` S "and" +:+
           ((plural mtrlPrpty) `ofThe` (plural soilLyr)) +:+
@@ -256,7 +256,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
   ((S "different layers") `ofThe'` (phrase soil) +:+ S "are homogeneous," +:+
            S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
-           S "with the exception of" +:+ (phrase $ unit_ ^. term) +:+ S "weight."),
+           S "with the exception of" +:+ (phrase $ unit_) +:+ S "weight."),
   ((at_start' soilLyr) +:+ S "are treated as if they have" +:+
            S "isotropic properties."),
   ((at_start intrslce) +:+ S "normal and shear forces have a" +:+
@@ -266,7 +266,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "depending on x position."),
   ((at_start slice) +:+ S "to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
-           (phrase $ fs_rc ^. term) +:+ (sParen $ getS fs) `sC`
+           (phrase $ fs_rc) +:+ (sParen $ getS fs) `sC`
            S "and the Coulomb sliding law."),
   (S "The stress-strain curve for" +:+ (phrase intrslce) +:+
            S "relationships is linear with a constant" +:+. (phrase slope)),
@@ -278,7 +278,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "that the resistive shear to effective normal" +:+
            S "stress relationship can be approximated as a" +:+
            S "linear relationship."),
-  (S "The" +:+ (phrase $ surface ^. term) +:+ S "and base of a" +:+
+  (S "The" +:+ (phrase $ surface) +:+ S "and base of a" +:+
             (phrase slice) +:+ S "between" +:+ (phrase intrslce) +:+
             S "nodes are approximated as straight lines.")
   ]
@@ -300,7 +300,7 @@ s4_2_2_tmods = [sspSymMapT fs_rc] --FIX fs_rc to use lowercase
 s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
   S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 
   S "method. Analysis is performed by breaking the assumed failure" +:+ 
-  (phrase $ surface ^. term) +:+ S "into a series of vertical slices of mass. Static" +:+ 
+  (phrase $ surface) +:+ S "into a series of vertical slices of mass. Static" +:+ 
   S "equilibrium analysis using two force equilibrium, and one" +:+ 
   S "moment equation as in T2. The" +:+ (phrase problem) +:+ S "is statically" +:+ --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
   S "indeterminate with only these 3 equations and one constitutive" +:+ 
@@ -312,7 +312,7 @@ s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+
 
 s4_2_5_p3 = Paragraph $ (S "values") `ofThe'` (S "interslice normal force") +:+
   S "E the interslice normal/shear force magnitude ratio lambda," +:+ --FIXME: 'E' should be the symbol captital E, same with lambda
-  S "and the" +:+ (titleize $ fs_rc ^. term) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
+  S "and the" +:+ (titleize $ fs_rc) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   S "Equations for the unknowns are written in terms of only the values" +:+ 
   S "in DD1 to DD9, the values of" +:+ (getS ri) `sC` 
   S "and" +:+ (getS ti) +:+ S "in DD10 and DD11, and each" +:+ --FIXME: DD10,DD11 should be references to other things in the body
@@ -401,34 +401,34 @@ s5_1_list = enumSimple 1 (short requirement) [
   (S "Read the input file, and store the" +:+
         S "data. Necessary input data summarized in" +:+.
         (makeRef table_inputdata)),
-  (S "Generate potential" +:+ (phrase $ crtSlpSrf ^. term) :+:
+  (S "Generate potential" +:+ (phrase $ crtSlpSrf) :+:
         S "'s for the input" +:+. (phrase slope)),
   (S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
         S "if they are physically realizable based" +:+
         S "on a set of pass or fail criteria."),
   (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate" +:+. ((plural $ fs_rc ^. term) `ofThe` (plural slpSrf))),
+  (S "Calculate" +:+. ((plural $ fs_rc) `ofThe` (plural slpSrf))),
   (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
-        (phrase $ fs_rc ^. term) `sC` S "such that a" +:+ (phrase slpSrf) +:+
-        S "with a smaller" +:+ (phrase $ fs_rc ^. term) +:+
+        (phrase $ fs_rc) `sC` S "such that a" +:+ (phrase slpSrf) +:+
+        S "with a smaller" +:+ (phrase $ fs_rc) +:+
         S "has a larger weighting."),
-  (S "Generate new potential" +:+ (plural $ crtSlpSrf ^. term) +:+
+  (S "Generate new potential" +:+ (plural $ crtSlpSrf) +:+
         S "based on previously analysed" +:+ (plural slpSrf) +:+
-        S "with low" +:+. (plural $ fs_rc ^. term)),
+        S "with low" +:+. (plural $ fs_rc)),
   (S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
-        S "minimum" +:+ (phrase $ fs_rc ^. term) +:+ S "remains approximately" +:+
+        S "minimum" +:+ (phrase $ fs_rc) +:+ S "remains approximately" +:+
         S "the same over a predetermined number of" +:+
         S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-        S "that generates the minimum" +:+ (phrase $ fs_rc ^. term) +:+
-        S "as the" +:+. (phrase $ crtSlpSrf ^. term)),
-  (S "Prepare the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "for" +:+ (phrase method_) +:+ 
+        S "that generates the minimum" +:+ (phrase $ fs_rc) +:+
+        S "as the" +:+. (phrase $ crtSlpSrf)),
+  (S "Prepare the" +:+ (phrase $ crtSlpSrf) +:+ S "for" +:+ (phrase method_) +:+ 
         S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
-  (S "Calculate" +:+ ((phrase $ fs_rc ^. term) `ofThe` (phrase $ crtSlpSrf ^. term)) +:+ 
+  (S "Calculate" +:+ ((phrase $ fs_rc) `ofThe` (phrase $ crtSlpSrf)) +:+ 
         S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
-  (S "Display the" +:+ (phrase $ crtSlpSrf ^. term) +:+ S "and the" +:+
+  (S "Display the" +:+ (phrase $ crtSlpSrf) +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
-        S "Give" +:+ ((S "values") `ofThe` (plural $ fs_rc ^. term)) +:+ S "calculated" +:+
+        S "Give" +:+ ((S "values") `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
         S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ]
   
@@ -445,7 +445,7 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd] [correctness, understandability, r
 
 -- s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
   -- S "educational tool, therefore accuracy and performance speed" +:+
-  -- S "are secondary" +:+ (phrase $ program ^. term) +:+ S "priorities to correctness," +:+
+  -- S "are secondary" +:+ (phrase $ program) +:+ S "priorities to correctness," +:+
   -- S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
@@ -478,6 +478,6 @@ s7_list = mkRefsList 1 [ --FIXME: names should be in italics
             S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008.",
   S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
             S "Peter John Cleall. An efficient approach for locating the" +:+
-            (phrase $ crtSlpSrf ^. term) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
+            (phrase $ crtSlpSrf) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
             S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+
             S "25 June 2010."]

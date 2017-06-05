@@ -18,10 +18,10 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf, m
 
 -- input format module
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural inDatum) modInputFormat
+mod_inputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (fterm plural inDatum) modInputFormat
 
 mod_inputp :: ModuleChunk
-mod_inputp = mod_io_fun glassBRProg [] [mod_inputc] (phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
+mod_inputp = mod_io_fun glassBRProg [] [mod_inputc] (fterm phrase input_ +:+ (plural $ parameter ^. term)) modInputParam --FIXME: Plural?
 
 mod_inputc :: ModuleChunk
 mod_inputc = mod_inputc_fun glassBRProg
@@ -32,8 +32,8 @@ mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm ^. term))
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ (plural $ parameter ^. term) :+: S ", the demand, the capacity," +:+
-  S "the probability of breakage, and both safety" +:+. plural requirement)
+mod_outputf_desc = mod_outputf_desc_fun (fterm phrase input_ +:+ (plural $ parameter ^. term) :+: S ", the demand, the capacity," +:+
+  S "the probability of breakage, and both safety" +:+. fterm plural requirement)
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural outDatum) mod_outputf_desc
@@ -51,14 +51,14 @@ glassBR_calcDesc =(S "Defines the equations for solving for the probability of g
 mod_calc :: ModuleChunk
 mod_calc = mod_calc_fun (glassBR_calcDesc)
   (S "The" +:+ (plural $ equation ^. term) +:+ S "for predicting the probability of glass breakage," +:+
-   S "capacity, and demand, using the" +:+ phrase input_ +:+. (plural $ parameter ^. term))
+   S "capacity, and demand, using the" +:+ fterm phrase input_ +:+. (plural $ parameter ^. term))
    glassBRProg
    []
    [mod_inputp]
 
 -- interpolation data module
 mod_interpd :: ModuleChunk
-mod_interpd = mod_io_fun glassBRProg [] [] ((plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
+mod_interpd = mod_io_fun glassBRProg [] [] ((fterm plural datum) +:+ S "used for interpolation") modInterpDatum --FIXME: Plural?
 
 mod_interp :: ModuleChunk
 mod_interp = mod_interp_fun glassBRProg [mod_interpd]

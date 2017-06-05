@@ -61,9 +61,9 @@ s2_1 = prpsOfDocF EmptyS --TODO: Placeholder values until content can be added
 s2_2 = scpOfReqF EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
 
 s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
-  where knowledge = ((phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
+  where knowledge = ((phrase heat ) +:+ S "transfer" +:+. (phrase theory ) +:+
                     S "A third or fourth year Mechanical Engineering course on this topic is recommended")
-        understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
+        understanding = (S "differential" +:+ (plural equation ) `sC` S "as typically" +:+
                         S "covered in first and second year Calculus courses")
                         
 s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP [])
@@ -80,13 +80,13 @@ s3 = genSysF [s3_1] (Paragraph $ EmptyS) [] []
 s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 
 s3_1_intro = Paragraph $
-              (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase $ sysCont ^. term) +:+
-             S "A circle represents an external entity outside the" +:+ (phrase $ software ^. term) `sC`
-             S "the" +:+ (phrase $ user ^. term) +:+ S "in this case. A rectangle represents the" +:+ (phrase $ softwareSys ^. term) +:+
-             S "itself" +:+. sParen (getAcc sWHS) +:+ S "Arrows are used to show the" +:+ (plural $ datum ^. term) +:+ S "flow between the" +:+
-              (phrase $ section_ ^. term) +:+ S "and its" +:+. (phrase $ environment ^. term)
+              (makeRef sys_context_fig) +:+ S "shows the" +:+. (phrase sysCont ) +:+
+             S "A circle represents an external entity outside the" +:+ (phrase software ) `sC`
+             S "the" +:+ (phrase user ) +:+ S "in this case. A rectangle represents the" +:+ (phrase softwareSys ) +:+
+             S "itself" +:+. sParen (getAcc sWHS) +:+ S "Arrows are used to show the" +:+ (plural datum ) +:+ S "flow between the" +:+
+              (phrase section_ ) +:+ S "and its" +:+. (phrase environment )
             
-sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sysCont ^. term))
+sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sysCont ))
             "SystemContextFigure.png"
 
 
@@ -97,41 +97,41 @@ sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+ (titleize $ sy
 --TODO: finish filling in the subsections
 s4 = specSysDesF (words_) [s4_1, s4_2]
   where words_ = (plural definition +:+ S "and finally the" +:+
-                (phrase $ inModel ^. term) +:+ sParen (getAcc ode) +:+
-                S "that models the" +:+ (phrase $ sWHT ^. term))
+                (phrase inModel ) +:+ sParen (getAcc ode) +:+
+                S "that models the" +:+ (phrase sWHT ))
 
 s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = Paragraph $
-            (getAcc sWHS) +:+ S "is a computer" +:+ (phrase $ program ^. term) +:+ S "developed to investigate" +:+
-           S "the heating of" +:+ (phrase $ water ^. term) +:+ S "in a" +:+. (phrase $ sWHT ^. term)
+            (getAcc sWHS) +:+ S "is a computer" +:+ (phrase program ) +:+ S "developed to investigate" +:+
+           S "the heating of" +:+ (phrase water ) +:+ S "in a" +:+. (phrase sWHT )
 
 s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
-          ((at_start $ x ^. term)) :+: S ":" +:+ (x ^. defn)) 
+          ((at_start $ x )) :+: S ":" +:+ (x ^. defn)) 
           [thermal_flux, heat_cap_spec])
   
 s4_1_2 = physSystDesc (getAcc sWHS) fig_tank [s4_1_2_list, fig_tank]
 
-fig_tank = Figure ((at_start $ sWHT ^. term) `sC` S "with" +:+ (phrase $ ht_flux ^. term) +:+ S "from" +:+ (phrase $ coil ^. term) +:+ S "of" +:+
+fig_tank = Figure ((at_start $ sWHT ) `sC` S "with" +:+ (phrase ht_flux ) +:+ S "from" +:+ (phrase coil ) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-            (S "PS1", (at_start $ tank ^. term) +:+ S "containing" +:+ (phrase $ water ^. term)), 
-            (S "PS2", S "Heating" +:+ (phrase $ coil ^. term) +:+ S "at bottom of" +:+. (phrase $ tank ^. term) +:+
-           sParen (P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase $ ht_flux_C ^. term) +:+
-           S "into the" +:+. (phrase $ water ^. term)))]
+            (S "PS1", (at_start $ tank ) +:+ S "containing" +:+ (phrase water )), 
+            (S "PS2", S "Heating" +:+ (phrase coil ) +:+ S "at bottom of" +:+. (phrase tank ) +:+
+           sParen (P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase ht_flux_C ) +:+
+           S "into the" +:+. (phrase water )))]
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro = Paragraph $
-           S "Given the" +:+ (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ coil ^. term) `sC` S "initial" +:+
-            (phrase $ temp ^. term) +:+ S "of the" +:+ (phrase $ water ^. term) `sC`
-           S "and material" +:+ (plural $ property ^. term) `sC` S "the goal statement is"
+           S "Given the" +:+ (phrase temp ) +:+ S "of the" +:+ (phrase coil ) `sC` S "initial" +:+
+            (phrase temp ) +:+ S "of the" +:+ (phrase water ) `sC`
+           S "and material" +:+ (plural property ) `sC` S "the goal statement is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
-            (S "GS1", S "predict the" +:+ (phrase $ temp_water ^. term) +:+ S "over time")]
+            (S "GS1", S "predict the" +:+ (phrase temp_water ) +:+ S "over time")]
 
 s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show"), EmptyS, False, EmptyS)
           ([], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro], [s4_2_6_table1, s4_2_6_table2]) []

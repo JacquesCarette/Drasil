@@ -7,7 +7,8 @@ import Control.Lens ((^.))
 import Data.List (nub)
 import Data.Maybe (fromJust, isNothing)
 
-import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg, introduction)
+import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg, 
+                                          introduction, fterm)
 import Data.Drasil.SentenceStructures (foldlsC)
 
 import Drasil.Template.Helpers
@@ -64,7 +65,7 @@ makeMG lccs uccs rcs mcs =
 
 mgIntro :: Contents -> Section
 mgIntro docDesc =
-  Section (titleize introduction) (
+  Section (fterm titleize introduction) (
     [ Con $ Paragraph $
         S "Decomposing a system into modules is a commonly accepted" +:+
         S "approach to developing software.  A module is a work assignment" +:+

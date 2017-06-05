@@ -15,7 +15,7 @@ import Drasil.TableOfUnits (table_of_units)
 import Drasil.TableOfSymbols (table)
 import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 
-import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
+import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, fterm)
 
 import Data.Maybe (isJust)
 import Data.List (sort)
@@ -121,13 +121,13 @@ mkSections si l = foldr doit [] l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
+mkRefSec si (RefProg c l) = section (fterm titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
     mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
-      (Section (titleize tOfSymb) 
+      (Section (fterm titleize tOfSymb) 
       (map Con [tsIntro con, (table (sort v) (\x -> at_start $ x ^.term))])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
@@ -137,7 +137,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
+mkTSymb v f c = Section (fterm titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
   where lf Term = (\x -> at_start $ x ^. term)
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then

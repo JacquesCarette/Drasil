@@ -13,17 +13,17 @@ import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.SentenceStructures (foldlSent)
 
-self :: NPNC
+self :: NamedChunk
 self = npnc "HGHC" (pn "HGHC")
 
-executable :: NPNC
-executable = npnc' (self ^. id) (compoundPhrase self (program ^. term)) ("HGHC")
+executable :: NamedChunk
+executable = npnc' (self ^. id) (fterms compoundPhrase self program) ("HGHC")
 
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam 
-             (foldlSent [S "The format and", (phrase structure), S "of the", 
-             (phrase input_), (plural $ parameter ^. term)]) --FIXME: Plural?
+             (foldlSent [S "The format and", (fterm phrase structure), S "of the", 
+             (fterm phrase input_), (fterm plural parameter)]) --FIXME: Plural?
              executable
              htVars
              []
@@ -41,7 +41,7 @@ mod_inputf :: ModuleChunk
 mod_inputf = mod_io_fun executable
   [meth_input]
   [mod_inputp]
-  (plural inDatum)
+  (fterm plural inDatum)
   modInputFormat
 
 -- Calc Module
@@ -74,7 +74,7 @@ mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun executable
   [meth_output]
   [mod_hw, mod_inputp]
-  (plural outDatum)
+  (fterm plural outDatum)
   mod_outputf_desc
 
 -- Control Module

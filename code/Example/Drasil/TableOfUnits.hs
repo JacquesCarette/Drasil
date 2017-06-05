@@ -14,7 +14,7 @@ table_of_units u intro = Section (S "Table of Units") [Con intro, Con (unit_tabl
 -- | Creates the actual table of units from a list of units
 unit_table :: Unit s => [s] -> Contents
 unit_table u = Table
-  (map (at_start) [symbol_, description])  (mkTable
+  (map (fterm at_start) [symbol_, description])  (mkTable
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn) +:+ sParen (phrase $ x ^. term))
   ] u)

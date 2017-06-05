@@ -63,11 +63,11 @@ mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
 mod_temp_desc = dccWDS "mod_temp_desc" (nounPhraseSP "temperature ODEs") (
-  S "Defines the" +:+ (fterm short ode) :+: S "s using the parameters in the" +:+ --FIXME use a pural abbreviation?
+  S "Defines the" +:+ (short ode) :+: S "s using the parameters in the" +:+ --FIXME use a pural abbreviation?
   S "input parameters module.")
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: (fterm short ode) :+:
+mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+:
            S "s for solving the temperature, using the input parameters.")
            swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 

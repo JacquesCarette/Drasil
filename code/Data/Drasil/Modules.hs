@@ -24,7 +24,6 @@ import Language.Drasil
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Computation
-import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math(ode)
 import Data.Drasil.Concepts.Documentation
 

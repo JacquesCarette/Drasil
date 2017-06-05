@@ -14,8 +14,8 @@ acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
   physSyst,requirement,srs,ssa,thModel]
   
 ssa, ssp :: CI
-ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
-ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
+ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"
+ssp = commonIdea "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
 soil, material, intrslce, surface_, slip, slope, slice,

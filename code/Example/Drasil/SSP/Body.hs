@@ -25,6 +25,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
@@ -105,9 +106,10 @@ s2 = introductionF ssa (startIntro, kSent) prpsOfDoc_p1 (scpIncl,scpEnd)
           S "this can cause instability in the form of soil/rock movement",
           S "The effects of soil/rock movement can range from inconvenient",
           S "to seriously hazardous, resulting in signifcant life and", 
-          S "economic loses. Slope stability is of interest both when analyzing",
-          S "natural", (plural slope) `sC` S "and when designing an excavated"
-          +:+. (phrase slope), (at_start ssa), S "is", 
+          S "economic loses. Slope stability is of", (phrase interest),
+          S "both when analyzing natural", (plural slope) `sC` 
+          S "and when designing an excavated" +:+. (phrase slope),
+          (at_start ssa), S "is", 
           (S "assessment" `ofThe` (S "safety of a" +:+ (phrase slope))) `sC`
           S "identifying the", (phrase $ surface), S "most likely to",
           S "experience slip and an index of it's relative stability",
@@ -127,7 +129,7 @@ prpsOfDoc_p1 = foldlSent [S "The", (short ssa), (phrase $ program),
   S "The", (phrase $ program),
   S "is intended to be used as an educational tool for",
   S "introducing", (phrase slope), S "stability issues, and will facilitate the",
-  S "analysis and", (phrase design), S "of a safe", (phrase slope)]
+  phrase analysis, S "and", (phrase design), S "of a safe", (phrase slope)]
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in introductionF
@@ -147,12 +149,12 @@ scpEnd  = S "identify the most likely failure" +:+
 -- Organization automatically generated in introductionF
 orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", (phrase organization), S "of this",
-  (phrase document), S "follows the template for an", (short srs),
-  S "for", (phrase sciCompS),
+  (phrase document), S "follows the", (phrase template), S "for an",
+  (short srs), S "for", (phrase sciCompS),
   S "proposed by Koothoor as well as Smith and Lai"]
 orgSecEnd   = S "The" +:+ (plural inModel) +:+ S "provide the set of" +:+
   S "algebraic equations that must be solved iteratively to perform a" +:+
-  (titleize morPrice) +:+ S "Analysis"
+  (titleize morPrice) +:+ titleize analysis
 
 -- SECTION 3 --
 s3 = genSysF [] userCharIntro [] []
@@ -195,7 +197,7 @@ s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
-s4_1_2_p1 = Paragraph $ foldlSent [S "Analysis of the", (phrase slope),
+s4_1_2_p1 = Paragraph $ foldlSent [at_start analysis, S "of the", (phrase slope),
   S "is performed by looking at", (plural property), S "of the",
   (phrase slope), S "as a series of", (phrase slice) +:+. (plural element),
   S "Some", (plural property), S "are", (plural itslPrpty) `sC`
@@ -206,7 +208,7 @@ s4_1_2_p1 = Paragraph $ foldlSent [S "Analysis of the", (phrase slope),
 
 s4_1_2_bullets = enumBullet [
   ((at_start' itslPrpty) +:+ S "convention is noted by j. The end" +:+
-    (plural itslPrpty) +:+ S "are usually not of interest" `sC` 
+    (plural itslPrpty) +:+ S "are usually not of" +:+ (phrase interest) `sC` 
     S "therefore use the" +:+ (plural itslPrpty) +:+ S "from 1" +:+
     P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "n-1"),
   ((at_start slice) +:+. S "properties convention is noted by i")
@@ -307,7 +309,7 @@ s4_2_2_tmods = [sspSymMapT fs_rc] --FIX fs_rc to use lowercase
 
 s4_2_5_p2 = Paragraph $ foldlSent [S "The", (titleize morPrice),
   (phrase method_), S "is a vertical slice, limit equilibrium",
-  (phrase ssa), S "method. Analysis is performed by breaking the",
+  (phrase ssa) +:+. (phrase method_), at_start analysis, S "is performed by breaking the",
   S "assumed failure", (phrase $ surface), S "into a series of vertical",
   S "slices of mass. Static equilibrium analysis using two force", 
   S "equilibrium, and one moment equation as in T2. The", (phrase problem),
@@ -406,8 +408,8 @@ s5_1 = SRS.funcReq
   [s5_1_list, s5_1_table] []
 
 s5_1_list = enumSimple 1 (short requirement) [
-  (S "Read the input file, and store the" +:+
-        S "data. Necessary input data summarized in" +:+.
+  (S "Read the input file, and store the" +:+. plural datum +:+
+        S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
         (makeRef table_inputdata)),
   (S "Generate potential" +:+ (phrase $ crtSlpSrf) :+:
         S "'s for the input" +:+. (phrase slope)),
@@ -437,7 +439,7 @@ s5_1_list = enumSimple 1 (short requirement) [
   (S "Display the" +:+ (phrase $ crtSlpSrf) +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+.
         S "displacements graphically" +:+ S "Give" +:+ 
-        ((S "values") `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
+        ((plural value) `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
         S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ]
   
@@ -468,7 +470,7 @@ s7_list = mkRefsList 1 [ --FIXME: names should be in italics
             S "the factor of safety using the morgensternprice method. Can. Geotech. J.," +:+.
             S "(42):272-278, 19 February 2005",
   S "D.G. Fredlund and J.Krahn. Comparison of slope stability methods of" +:+.
-            S "analysis. Can. Geotech. J., (14):429-439, 4 April 1977",
+            phrase analysis +:+. S "Can. Geotech. J., (14):429-439, 4 April 1977",
   S "Nirmitha Koothoor. A document drive approach to certifying" +:+.
             (phrase sciCompS) +:+ S "Master's thesis, McMaster University," +:+.
             S "Hamilton, Ontario, Canada, 2013",

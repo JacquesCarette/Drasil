@@ -346,17 +346,24 @@ data VariableChunk where
 data VarContraint where
   VarCon :: (Expr -> Expr -> Expr) -> Expr -> VarContraint
 
-intNormFor  = mkGtZeroConst' $ VarCh ei [] (15000 :: Integer)
-mkGtZeroConst'  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> [Sentence]
-mkGtZeroConst' (VarCh s other num) = [getS s, fmtBF' s ((VarCon (:>) (Int 0)):other), fmtU (S (show num)) (cqs s)]
+positiveC :: VarContraint
+positiveC = VarCon (:>) (Int 0)
+-- "positive variable chunk"
+posVarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
+posVarCh s contraints typicalVal = VarCh s (contraints:positiveC) typicalVal
+
+intNormFor  = mkGtZeroConst' $ posVarCh ei [] (15000 :: Integer)
+
+varChShow :: VarCh -> [Sentence]
+varChShow (VarCh s contraints typicalVal) = [getS s, fmtBF' s contraints, fmtU (S (show typicalVal)) (cqs s)]
 
 fmtBF' ::(SymbolForm a) => a -> [VarContraint] -> Sentence
-fmtBF' _ []      = S "None"  
-fmtBF' symb [VarCon f num]  = E ((C symb) `f` num)
-fmtBF' symb ((VarCon f num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
+fmtBF' _    []             = S "None"  
+fmtBF' symb [VarCon f num] = E $ (C symb) `f` num
+fmtBF' symb (x:xs)         = fmtBF' [x] +:+ S "and" +:+ (fmtBF symb xs)
 --- END OF SECTION -}
 
-intNormFor  = mkGtZeroConst ei [] (15000 :: Integer)
+intNormFor  = mkGtZeroConst ei          []          (15000 :: Integer)
 effectCohe  = mkGtZeroConst cohesion    []          (10    :: Integer)
 poissnRatio = mkGtZeroConst poissnsR    [((:<),1)]  (0.4   :: Double )
 fricAng     = mkGtZeroConst fricAngle   [((:<),90)] (25    :: Integer)

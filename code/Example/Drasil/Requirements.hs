@@ -38,4 +38,4 @@ listO explanation_ s priority_ = S "so" +:+ foldlList s +:+ S "are not" +:+. (pl
 listT :: [Sentence] -> Sentence
 listT [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase $ nonfunctionalRequirement)
 listT [s] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is" +:+ s
-listT s = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "are" +:+ foldlList s
+listT s = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are" +:+ foldlList s

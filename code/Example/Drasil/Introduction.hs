@@ -60,7 +60,7 @@ prpsOfDocF par1 = SRS.prpsOfDoc [Paragraph par1, Paragraph par2] []
 scpOfReqF :: Sentence -> CI -> Sentence -> Section
 scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
   where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
-                S "includes" +:+. includes, S "Given appropriate inputs, the code for",
+                S "includes" +:+. includes, S "Given the appropriate inputs, the code for",
                 short progName, S "is intended to" +:+ ending]
 
 --Characteristics of Intended Reader section

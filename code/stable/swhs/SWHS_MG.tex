@@ -36,7 +36,7 @@ After completing the first stage of the design, the Software Requirements Specif
 \item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
 \item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
 \end{enumerate}
-Section~\ref{Sec:LaULikeandUnliChanC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UsesHier}  describes the use relation between modules.
+Section~\ref{Sec:LikeandUnliChan}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:ModuHier}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:ModuDeco}  gives a detailed description of the modules. Section~\ref{Sec:TracMatr}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UsesHier}  describes the use relation between modules.
 \section{Likely and Unlikely Changes}
 \label{Sec:LikeandUnliChan}
 This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LikeChan} and unlikely changes are listed in Section~\ref{Sec:UnliChan}
@@ -79,7 +79,7 @@ Likely changes are the source of the information that is to be hidden inside the
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LCplot}:]The implementation of plotting data.
 \end{description}
-\subsection{Unikely Changes}
+\subsection{Unlikely Changes}
 \label{Sec:UnliChan}
 The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
 \begin{description}
@@ -101,8 +101,8 @@ The module design should be as general as possible. However, a general system is
 \item[\refstepcounter{ucnum}\uctheucnum\label{UCenergy}:]The energy equations can be defined using the parameters defined in the input parameters module.
 \end{description}
 \section{Module Hierarchy}
-\label{Sec:MH}
-This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
+\label{Sec:ModuHier}
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:ModuHier}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
 \item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
 \end{description}
@@ -170,10 +170,10 @@ Software Decision Module & Sequence Data Structure Module
 \\
 \bottomrule
 \caption{Module Hierarchy}
-\label{Table:MH}
+\label{Table:ModuHier}
 \end{longtable}
 \section{Module Decomposition}
-\label{Sec:MD}
+\label{Sec:ModuDeco}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is SWHS, this means that the module is provided by the SWHS program. If the entry is MATLAB, this means that the module is provided by the MATLAB programming language. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
 \subsection{Hardware Hiding Module (M\ref{MhwHiding})}
 \label{Sec:HHM()}
@@ -204,35 +204,35 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Input Verification Module (M\ref{MmodInputVerif})}
-\label{Sec:IVM()}
+\label{Sec:InpuVeriModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the physical and software constraints.
 \item[Services:]Verifies that the input parameters comply with physical and software constraints. Throws an error if a parameter violates a physical constraint. Throws a warning if a parameter violates a software constraint.
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Output Format Module (M\ref{Mmodoutputfdesc})}
-\label{Sec:OFM()}
+\label{Sec:OutpFormModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the output data.
 \item[Services:]Outputs the results of the calculations, including the input parameters, temperatures, energies, and times when melting starts and stops.
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Output Verification Module (M\ref{Mmodoutputvdesc})}
-\label{Sec:OVM()}
+\label{Sec:OutpVeriModu()}
 \begin{description}
 \item[Secrets:]The algorithm used to approximate expected results.
 \item[Services:]Verifies that the output energy results follow the law of conservation of energy. Throws a warning if the relative error exceeds the error threshold.
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Temperature ODEs Module (M\ref{Mmodtempdesc})}
-\label{Sec:TOM()}
+\label{Sec:TempODEsModu()}
 \begin{description}
 \item[Secrets:]The ODEs for solving the temperature, using the input parameters.
 \item[Services:]Defines the ODEs using the parameters in the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Energy Equations Module (M\ref{Mmodenerdesc})}
-\label{Sec:EEM()}
+\label{Sec:EnerEquaModu()}
 \begin{description}
 \item[Secrets:]The equations for solving for the energies using the input parameters.
 \item[Services:]Defines the energy equations using the parameters in the input parameters module.
@@ -274,7 +274,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Implemented By:]MATLAB
 \end{description}
 \section{Traceability Matrix}
-\label{Sec:TM}
+\label{Sec:TracMatr}
 This section shows two traceability matrices: between the modules and the requirements in Table~\ref{Table:TracBetwRequandModu} and between the modules and the likely changes in Table~\ref{Table:TracBetwLikeChanandModu}.
 \begin{longtable}{l l}
 \toprule

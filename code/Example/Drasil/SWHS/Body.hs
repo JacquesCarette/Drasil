@@ -103,7 +103,7 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   phrase energy +:+ S "sources and" +:+
   phrase energy +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
   +:+ sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
-  phrase energy +:+. S "source and provide a novel way of" +:+
+  phrase energy +:+ S "source and provide a novel way of" +:+
   S "storing" +:+. phrase energy +:+
   at_start swhs_pcm +:+ S "improve over the traditional" +:+
   phrase progName :+: S "s because of their smaller size. The" +:+
@@ -171,7 +171,7 @@ s2_2_end = S "predict the" +:+
   S "histories for the" +:+ phrase water +:+ S "and the" +:+.
   short phsChgMtrl +:+ S "This entire" +:+ phrase document +:+
   S "is written assuming that the substances inside the" +:+
-  phrase sWHT +:+ S "are" +:+ phrase water +:+ S "and" +:+.
+  phrase sWHT +:+ S "are" +:+ phrase water +:+ S "and" +:+
   short phsChgMtrl
 
 -- There is a similar paragraph in each example, but there's a lot of specific
@@ -1276,7 +1276,7 @@ s7_table1 = Table [EmptyS, (makeRef (swhsSymbMapT t1ConsThermE)), (makeRef (swhs
 -- Wrong DD reference above, change when DD4 is available (twice)
 
 s7_table2 :: Contents
-s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef s4_2,
+s7_table2 = Table [EmptyS, S "IM1", S "IM2", S "IM3", S "IM4", makeRef (SRS.datCon SRS.missingP []),
   S "R1", S "R2"]
   [[S "IM1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
   [S "IM2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"],

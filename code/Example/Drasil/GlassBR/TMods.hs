@@ -26,10 +26,10 @@ t1descr =
   S "considered safe", (P $ is_safe1 ^.symbol), S "and", (P $ is_safe2 ^. symbol),
   S "(from", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))
   :+: S ") are either" +:+. S "both True or both False",
-  ((P $ prob_br ^. symbol) `isThe` (phrase $ prob_br ^. term)) 
+  ((P $ prob_br ^. symbol) `isThe` (phrase prob_br)) 
   `sC` S "as calculated in" +:+.
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
-  (P $ pb_tol ^. symbol) `isThe` (phrase $ pb_tol ^. term),
+  (P $ pb_tol ^. symbol) `isThe` (phrase pb_tol),
   S "entered by the user"]
 
 t2SafetyReq :: RelationConcept
@@ -46,8 +46,8 @@ t2descr =
   S "considered safe", (P $ is_safe1 ^. symbol), S "(from", 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq)),
   S "and", (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False",
-  (short lResistance) `isThe` (phrase $ lResistance ^. term), 
+  (short lResistance) `isThe` (phrase lResistance), 
   S "(also called capacity, as defined in" +:+. 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
-  (P $ demand ^. symbol), S "(also referred as the", (titleize $ demandq ^. term) :+:
+  (P $ demand ^. symbol), S "(also referred as the", (titleize demandq) :+:
   S ") is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]

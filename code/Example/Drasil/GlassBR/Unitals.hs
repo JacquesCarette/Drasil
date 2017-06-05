@@ -176,7 +176,7 @@ longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nonFactoredL  = dccWDS "nonFactoredL"    (nonFactoredL ^. term)
   (foldlSent [S "Three second duration uniform load associated with a probability of",
-    S "breakage less than or equal to 8", (plural $ lite ^. term), S "per 1000 for monolithic",
+    S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
     (getAcc annealedGlass), S "glass"])
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")

@@ -5,11 +5,11 @@ import Data.Drasil.Concepts.Software (program)
 import Control.Lens ((^.))
 
 ---Acronyms---
-phsChgMtrl,rightSide,progName :: CINP
+phsChgMtrl,rightSide,progName :: CI
 
-phsChgMtrl  = commonINP "phsChgMtrl" (nounPhrase "phase change material" "phase change materials")           "PCM"
-rightSide   = commonINP "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS" 
-progName    = commonINP "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS" 
+phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material" "phase change materials")           "PCM"
+rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS" 
+progName    = commonIdea "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS" 
 
 swhsFull :: NPNC
 swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)

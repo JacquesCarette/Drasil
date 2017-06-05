@@ -40,30 +40,15 @@ nc i des = NC i des Nothing
 
 -- | 'NamedChunk' constructor for NamedChunks with abbreviations
 nc' :: String -> NP -> String -> NamedChunk
-nc' i t acc = NC i t (Just (S acc))
+nc' i t acc = NC i t (Just $ S acc)
 
-data NPNC where
-  NPNC :: String -> Sentence -> (Maybe Sentence) -> NP -> NPNC
-instance Eq NPNC where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk NPNC where
-  id f (NPNC a b c d) = fmap (\x -> NPNC x b c d) (f a)
-instance NamedIdea NPNC where
-  term f (NPNC a b c d) = fmap (\x -> NPNC a b c x) (f d)
-  getA (NPNC _ _ c _) = c
-instance NounPhrase NPNC where
-  phrase (NPNC _ _ _ d) = phrase d
-  plural (NPNC _ _ _ d) = plural d
-  sentenceCase (NPNC _ _ _ d) = sentenceCase d
-  titleCase (NPNC _ _ _ d) = titleCase d
+-- | 'NamedChunk' constructor for those without abbreviations
+npnc :: String -> NP -> NamedChunk
+npnc i n = NC i n Nothing
 
--- | 'NPNC' constructor for those without abbreviations
-npnc :: String -> NP -> NPNC
-npnc i n = NPNC i (phrase n) Nothing n
-
--- | 'NPNC' constructor for those with abbreviations
-npnc' :: String -> NP -> String -> NPNC
-npnc' i n a = NPNC i (phrase n) (Just $ S a) n
+-- | 'NamedChunk' constructor for those with abbreviations
+npnc' :: String -> NP -> String -> NamedChunk
+npnc' i n a = NC i n (Just $ S a)
 
 ----------------------
 -- various combinators
@@ -73,32 +58,28 @@ npnc' i n a = NPNC i (phrase n) (Just $ S a) n
 compoundterm :: (NamedIdea c, NamedIdea d) => 
   c -> d -> NamedChunk
 compoundterm t1 t2 = 
-  NC (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
+  nc (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
--- | Combinator for combining two 'NPNC's into one.
+-- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/
-compoundNPNC :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
-compoundNPNC t1 t2 = NPNC 
-  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase (t1 ^. term) (t2 ^. term))
+compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
   
-compoundNPNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
-compoundNPNC' t1 t2 = NPNC 
-  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
+compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC' t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
   
-compoundNPNC'' :: (NamedIdea a, NamedIdea b) => 
-  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NPNC
-compoundNPNC'' f1 f2 t1 t2 = NPNC
-  (t1 ^. id ++ t2 ^. id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
-  (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
+compoundNC'' :: (NamedIdea a, NamedIdea b) => 
+  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNC'' f1 f2 t1 t2 = nc
+  (t1 ^. id ++ t2 ^. id) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
-compoundNPNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
-compoundNPNC''' t1 t2 = NPNC 
-  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase'' plural phrase (t1 ^. term) (t2 ^. term))
+compoundNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC''' t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase'' plural phrase (t1 ^. term) (t2 ^. term))
 
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:
@@ -196,12 +177,12 @@ andRT f1 f2 t1 t2 = nounPhrase''
   (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term)))
   (Replace ((f1 $ t1 ^. term) +:+ S "and" +:+ (f2 $ t2 ^. term)))
   
-the :: (NamedIdea c) => c -> NPNC
+the :: (NamedIdea c) => c -> NamedChunk
 the t = npnc ("the" ++ t ^. id) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
-theCustom :: (NamedIdea c) => (NP -> Sentence) -> c -> NPNC
+theCustom :: (NamedIdea c) => (NP -> Sentence) -> c -> NamedChunk
 theCustom f t = npnc ("the" ++ t ^. id)
                 (nounPhrase''(S "the" +:+ (f $ t ^. term)) (S "the" +:+ (f $ t ^. term)) CapFirst CapWords)
 
@@ -210,7 +191,7 @@ aNP t = nounPhrase''
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))
   CapFirst CapWords  
   
-a_ :: (NamedIdea c) => c -> NPNC --Pluralization disallowed
+a_ :: (NamedIdea c) => c -> NamedChunk --Pluralization disallowed
 a_ t = npnc ("a" ++ t ^.id) (nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
   CapFirst CapWords)

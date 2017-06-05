@@ -15,7 +15,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, makeVCObj, vcFromCC, SymbolForm(..)
+  , makeVC, makeVCObj, vcFromNI, SymbolForm(..)
   , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
   , Quantity(..), ConVar(..), cvR
   , Concept(..)
@@ -23,9 +23,9 @@ module Language.Drasil (
   --, commonidea, CI
   , commonIdea, CI, commonIdea', commonIdea''
   -- Chunk.NamedIdea
-  , NamedIdea(..), NamedChunk, NPNC, short, nc, nc', npnc
-  , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNPNC, compoundNPNC'
-  , compoundNPNC'', compoundNPNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
+  , NamedIdea(..), NamedChunk, short, nc, nc', npnc
+  , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
+  , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
   -- Chunk.Constrained
   , Constrained(..)
   -- Chunk.Eq

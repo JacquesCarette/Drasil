@@ -69,8 +69,8 @@ mkSRS = RefSec (RefProg intro
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 tsymb_intro :: [TSIntro]
-tsymb_intro = [TSPurpose,SymbConvention [Lit (nw CT.heat_trans),
-  Doc' (nw progName)], SymbOrder]
+tsymb_intro = [TSPurpose,SymbConvention
+  [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS swhs_si
@@ -93,30 +93,30 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 s2 :: Section
-s2 = introductionF progName (s2_intro, s2_kSent) s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
+s2 = introductionF progName s2_intro, s2_kSent s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
 -- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
-  (phrase $ energy) +:+ S "sources and" +:+
-  (phrase $ energy) +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
+  phrase energy +:+ S "sources and" +:+
+  phrase energy +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
   +:+ sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
-  (phrase $ energy) +:+ S "source and provide a novel way of" +:+
-  S "storing" +:+. (phrase $ energy) +:+
-  (at_start $ swhs_pcm) +:+ S "improve over the traditional" +:+
-  (phrase $ progName) :+: S "s because of their smaller size. The" +:+
+  phrase energy +:+. S "source and provide a novel way of" +:+
+  S "storing" +:+. phrase energy +:+
+  at_start swhs_pcm +:+ S "improve over the traditional" +:+
+  phrase progName :+: S "s because of their smaller size. The" +:+
   S "smaller size is possible because of the ability of" +:+ 
-  (short phsChgMtrl) +:+ S "to store" +:+ (phrase $ CT.thermal_energy) +:+
-  S "as" +:+ (phrase $ latent_heat) `sC`
-  S "which allows higher" +:+ (phrase $ CT.thermal_energy) +:+
-  S "storage capacity per" +:+ (phrase $ unit_) +:+. S "weight"
+  short phsChgMtrl +:+ S "to store" +:+ phrase CT.thermal_energy +:+
+  S "as" +:+ phrase latent_heat `sC`
+  S "which allows higher" +:+ phrase CT.thermal_energy +:+
+  S "storage capacity per" +:+ phrase unit_ +:+. S "weight"
 
 s2_kSent :: Sentence
-s2_kSent = (EmptyS +:+. (phrase $ swhs_pcm) +:+ S "The developed" +:+
-  (phrase $ program) +:+ S "will be referred to as" +:+
-  (titlize $ progName) +:+ sParen (short progName))
+s2_kSent = EmptyS +:+. phrase swhs_pcm +:+ S "The developed" +:+
+  phrase program +:+ S "will be referred to as" +:+
+  titlize progName +:+ sParen (short progName)
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating
@@ -136,14 +136,14 @@ s2_kSent = (EmptyS +:+. (phrase $ swhs_pcm) +:+ S "The developed" +:+
 s2_1_par1 :: Sentence
 s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
   phrase document +:+ S "is to describe the modelling of" +:+.
-  (phrase $ swhs_pcm) +:+ S "The" +:+ plural goalStmt +:+
-  S "and" +:+ plural thModel +:+ S "used in the" +:+ (short progName) +:+
+  phrase swhs_pcm +:+ S "The" +:+ plural goalStmt +:+
+  S "and" +:+ plural thModel +:+ S "used in the" +:+ short progName +:+
   S "code are provided, with an emphasis on explicitly identifying" +:+ 
-  (plural assumption) +:+ S "and unambiguous" +:+. plural definition +:+
+  plural assumption +:+ S "and unambiguous" +:+. plural definition +:+
   S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+
   phrase reference +:+ S "to provide ad hoc access to all" +:+
   phrase information +:+ S "necessary to understand and verify the" +:+.
-  phrase model +:+ S "The" +:+ (short srs) +:+ 
+  phrase model +:+ S "The" +:+ short srs +:+ 
   S "is abstract because the contents say what" +:+
   phrase problem +:+. S "is being solved, but do not say how to solve it"
  
@@ -162,17 +162,17 @@ s2_2_tuple :: (Sentence, Sentence)
 s2_2_tuple = (s2_2_contents, s2_2_end)
 
 s2_2_contents :: Sentence
-s2_2_contents = (phrase $ CT.thermal_analysis) +:+ S "of a single" +:+
-  (phrase $ tank_pcm) --FIXME: Caps issue
+s2_2_contents = phrase CT.thermal_analysis +:+ S "of a single" +:+
+  phrase tank_pcm --FIXME: Caps issue
   
 s2_2_end :: Sentence
 s2_2_end = S "predict the" +:+
-  (phrase $ temp) +:+ S "and" +:+ (phrase $ CT.thermal_energy) +:+
-  S "histories for the" +:+ (phrase $ water) +:+ S "and the" +:+.
-  (short phsChgMtrl) +:+ S "This entire" +:+ phrase document +:+
+  phrase temp +:+ S "and" +:+ phrase CT.thermal_energy +:+
+  S "histories for the" +:+ phrase water +:+ S "and the" +:+.
+  short phsChgMtrl +:+ S "This entire" +:+ phrase document +:+
   S "is written assuming that the substances inside the" +:+
-  (phrase $ sWHT) +:+ S "are" +:+ (phrase $ water) +:+ S "and" +:+.
-  (short phsChgMtrl)
+  phrase sWHT +:+ S "are" +:+ phrase water +:+ S "and" +:+.
+  short phsChgMtrl
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar 
@@ -194,12 +194,13 @@ s2_3_tuple :: (Sentence, Sentence, Sentence)
 s2_3_tuple = (s2_3_knowlegde, s2_3_understanding, EmptyS)
 
 s2_3_knowlegde :: Sentence
-s2_3_knowlegde = (phrase $ CT.heat) +:+ S "transfer" +:+. (phrase $ theory) +:+
-                    S "A third or fourth year Mechanical Engineering course on this topic is recommended"
+s2_3_knowlegde = phrase CT.heat +:+ S "transfer" +:+. phrase theory +:+
+  S "A third or fourth year Mechanical Engineering course on this topic" +:+
+  S "is recommended"
 
 s2_3_understanding :: Sentence
-s2_3_understanding = S "differential" +:+ (plural $ equation) `sC` S "as typically" +:+
-                        S "covered in first and second year Calculus courses"
+s2_3_understanding = S "differential" +:+ plural equation `sC` S "as typically" +:+
+  S "covered in first and second year Calculus courses"
 
 {-s2_3 = SRS.charOfIR [s2_3_contents] []
 
@@ -224,18 +225,19 @@ s2_4_tuple = (s2_4_intro, inModel, (SRS.inModel SRS.missingP []), s2_4_trail)
 
 s2_4_intro :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
-  phrase document +:+ S "follows the template for an" +:+ (short srs) +:+
+  phrase document +:+ S "follows the template for an" +:+ short srs +:+
   S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+.
   sSqBr (S "citation")
 
 s2_4_trail :: Sentence
-s2_4_trail = S "The" +:+ plural inModel +:+ sParen (makeRef (SRS.inModel SRS.missingP [])) +:+. 
+s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
+  makeRef (SRS.inModel SRS.missingP [])) +:+. 
   S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
-  (plural inModel) +:+ S "provide the" +:+ (phrase $ ode) +:+
-  sParen ((short ode) :+: S "s") +:+ S "and algebraic" +:+
-  (plural $ equation) +:+ S "that" +:+
-  phrase model +:+ S "the" +:+. (phrase $ swhs_pcm) +:+
-  (short progName) +:+ S "solves these" +:+ (short ode) :+: S "s"
+  plural inModel +:+ S "provide the" +:+ phrase ode +:+
+  sParen (short ode :+: S "s") +:+ S "and algebraic" +:+
+  plural equation +:+ S "that" +:+
+  phrase model +:+ S "the" +:+. phrase swhs_pcm +:+
+  short progName +:+ S "solves these" +:+ short ode :+: S "s"
 -- This part is close to the function but not exactly,
 -- so keeping it here for reference
 
@@ -286,16 +288,16 @@ s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
 
 s3_1_contents ::Contents
-s3_1_contents = Paragraph $ (makeRef sys_context_fig) +:+ S "shows the" +:+.
+s3_1_contents = Paragraph $ makeRef sys_context_fig +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
   S "rectangle represents the" +:+ phrase softwareSys +:+
-  S "itself" +:+. sParen (short progName) +:+ S "Arrows are used to show the" +:+
+  S "itself" +:+. sParen short progName +:+ S "Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
   S "and its" +:+. phrase environment
 
 sys_context_fig :: Contents
-sys_context_fig = Figure ((makeRef sys_context_fig) :+: S ":" +:+
+sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
   titlize sysCont) "SystemContextFigure.png"
 
 s3_1_2_intro :: Contents
@@ -311,7 +313,7 @@ s3_1_2_bullets = Enumeration (Bullet $
   [S "Provide the" +:+ phrase input_ +:+ plural datum +:+ S "to the" +:+
   phrase system `sC` S "ensuring no errors in the" +:+ plural datum +:+
   S "entry",
-  S "Take care that consistent" +:+ (plural $ unit_ ^.term) +:+
+  S "Take care that consistent" +:+ plural unit_ +:+
   S "are used for" +:+ phrase input_ +:+ plural variable
   ]),
   Nested (short progName +: S "Responsibilities")
@@ -330,9 +332,9 @@ s3_1_2_bullets = Enumeration (Bullet $
 ---s3_2 = SRS.userChar [s3_2_contents] []
 
 s3_2_contents :: Contents
-s3_2_contents = Paragraph (S "The end" +:+ phrase user +:+ S "of" +:+
-  (short progName) +:+ S "should have an understanding of undergraduate" +:+
-  S "Level 1 Calculus and" +:+. titlize physics)
+s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
+  short progName +:+ S "should have an understanding of undergraduate" +:+
+  S "Level 1 Calculus and" +:+. titlize physics
 
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
@@ -356,9 +358,9 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 -- using plural solutionCharSpec is a hack in order to pluralize the middle word,
 -- based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
-s4_intro_end = plural thModel `sC` (plural genDefn) `sC` (plural dataDefn) `sC`
-  S "and finally the" +:+ plural inModel +:+ sParen ((short ode) :+:
-  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+ (phrase $ swhs_pcm)
+s4_intro_end = plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
+  S "and finally the" +:+ plural inModel +:+ sParen (short ode :+:
+  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+ phrase swhs_pcm
 
 -- Completely general except for solar water heating tank (object of analysis) 
 -- and similar between all examples; can be abstracted out.
@@ -375,10 +377,9 @@ s4_1 = SRS.probDesc [s4_1_intro]
   [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro :: Contents
-s4_1_intro = Paragraph ((short progName) +:+ S "is a computer" +:+
-  (phrase $ program) +:+
-  S "developed to investigate the effect of employing" +:+
-  (short phsChgMtrl) +:+ S "within a" +:+. (phrase $ sWHT))
+s4_1_intro = Paragraph $ short progName +:+ S "is a computer" +:+
+  phrase program +:+ S "developed to investigate the effect of" +:+
+  S "employing" +:+ short phsChgMtrl +:+ S "within a" +:+. phrase sWHT
 
 --  section is very different between all examples
 
@@ -393,9 +394,9 @@ s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
 -- GlassBR has an additional sentence with a reference at the end.)
 
 s4_1_1_bullets :: Contents
-s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f [CT.ht_flux,
-   phase_change_material, CT.heat_cap_spec, 
-   CT.thermal_conduction, transient])
+s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f
+  [CT.ht_flux, phase_change_material, CT.heat_cap_spec, 
+  CT.thermal_conduction, transient])
 
 s411_bullet_map_f :: Concept c => c -> ItemType
 s411_bullet_map_f c = Flat ((at_start $ c) :+: S ":" +:+. (c ^. defn))

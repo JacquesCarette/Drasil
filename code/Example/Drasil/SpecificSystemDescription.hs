@@ -5,7 +5,7 @@ import qualified Data.Drasil.Concepts.Documentation as D
 import Control.Lens ((^.))
 
 -- | Specific System description section builder. Takes the system and subsections.
-specSysDescr :: NamedIdea c => c -> [Section] -> Section
+specSysDescr :: NP -> [Section] -> Section
 specSysDescr sys subs = section (D.fterm titleize D.specificsystemdescription) [intro sys] subs
 
 -- FIXME: this all should be broken down and mostly generated.

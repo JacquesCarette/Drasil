@@ -92,7 +92,7 @@ water_vol   = uc' "water_vol" (vol `of_` water)
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 --Common Terms
-coil, tank, water, ht_trans :: NPNC
+coil, tank, water, ht_trans :: NamedChunk
 
 coil        = npnc "coil"           (cn' "coil")
 tank        = npnc "tank"           (cn' "tank")

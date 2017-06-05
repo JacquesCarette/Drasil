@@ -17,7 +17,7 @@ traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
 traceMIntro :: [Contents] -> [Sentence] -> Contents
-traceMIntro refs trailings = Paragraph $ foldlSent [fterm phrase purpose `ofThe'` fterm plural traceyMatrix,
+traceMIntro refs trailings = Paragraph $ foldlSent [(fterm phrase purpose) `ofThe'` (fterm plural traceyMatrix),
         S "is to provide easy", fterm plural reference, S "on what has to be additionally modified if a certain",
         fterm phrase component, S "is changed. Every time a", fterm phrase component, S "is changed, the", 
         fterm plural item, S "in the", fterm phrase column, S "of that", fterm phrase component, S "that are",
@@ -37,5 +37,5 @@ traceGIntro refs trailings = [Paragraph $ foldlSent
         fterm phrase component, S "is changed, the", fterm plural component, S "that it points to should also",
         S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings),
         Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate", 
-        S "graphical representation" `ofThe` (fterm phrase $ matrix ^. term), S "by scanning the",
+        S "graphical representation" `ofThe` (phrase $ matrix ^. term), S "by scanning the",
         fterm plural label, S "and", fterm phrase reference, S "can be future work"]]

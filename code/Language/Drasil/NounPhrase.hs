@@ -140,7 +140,7 @@ nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 -- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
 -- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
 -- Uses standard CapFirst sentence case and CapWords title case.
--- For example: @compoundPhrase system description@ will have singular form
+-- For example: @compoundPhrase system constraint@ will have singular form
 -- "system constraint" and plural "system constraints"
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 

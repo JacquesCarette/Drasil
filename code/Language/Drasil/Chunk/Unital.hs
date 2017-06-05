@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Unital 
   ( UnitalChunk(..)
   , makeUCWDS
-  , ucFromVC
+  , ucFromCV
   , uc
   , uc'
   ) where
@@ -12,7 +12,7 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
 import Language.Drasil.Chunk.Concept (Concept(..), dcc, dccWDS)
-import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Chunk.ConVar (ConVar (..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm(..), SF(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
@@ -23,28 +23,40 @@ import Language.Drasil.Spec (Sentence)
 
 import Language.Drasil.NounPhrase (NP)
 
--- | UnitalChunks are Unitals
+-- | UnitalChunks are Unitary
 data UnitalChunk where --Named Unital...?
   UC :: (Concept c, Unit u) => c -> Symbol -> u -> Space -> UnitalChunk
+  UCV :: (Unit u) => ConVar -> u -> UnitalChunk
 instance Chunk UnitalChunk where
   id = nl id
 instance NamedIdea UnitalChunk where
   term = nl term
   getA (UC qc _ _ _) = getA qc
+  getA (UCV cv _ ) = getA cv
 instance Concept UnitalChunk where
   defn = nl defn
   cdom = nl cdom
 instance Quantity UnitalChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
+  typ f ucv@(UCV _ _) = cvl typ f ucv
   getSymb = Just . SF
   getUnit = Just . unit
 instance Unitary UnitalChunk where
   unit (UC _ _ u _) = UU u
+  unit (UCV _ u) = UU u
 instance SymbolForm UnitalChunk where
   symbol f (UC n s u t) = fmap (\x -> UC n x u t) (f s)
+  symbol f ucv@(UCV _ _) = cvl symbol f ucv
   
 nl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens UnitalChunk a
 nl l f (UC qc s u t) = fmap (\x -> UC (set l x qc) s u t) (f (qc ^. l))
+nl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
+
+cvl :: (forall c. (Concept c, Quantity c, SymbolForm c) => 
+  Simple Lens c a) -> Simple Lens UnitalChunk a
+cvl _ _ (UC _ _ _ _) = error $ "Incorrect use of cvl for UC unital chunks. " ++
+  "Should only be used with UCV"
+cvl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
 
 -- FIXME: Temporarily hacking in the space for UC chunks, these can be fixed
 -- with the use of other constructors.
@@ -68,8 +80,6 @@ makeUCWDS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
 makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Rational
 
 
---FIXME: I don't like this (it's partly a relic), it should be a 
--- different data structure which is an instance of Unitary that has a convar
 -- | Create a UnitalChunk from a 'ConVar' by supplying the additional 'Unit'
-ucFromVC :: Unit u => ConVar -> u -> UnitalChunk
-ucFromVC conv un = uc conv (conv ^. symbol) un
+ucFromCV :: Unit u => ConVar -> u -> UnitalChunk
+ucFromCV conv un = UCV conv un

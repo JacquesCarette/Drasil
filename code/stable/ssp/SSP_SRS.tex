@@ -14,10 +14,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RM}
+\label{Sec:RefeMate}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:ToU}
+\label{Sec:TablofUnit}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -33,10 +33,10 @@ N & force (newton)
 Pa & pressure (pascal)
 \\
 \bottomrule
-\label{Table:ToU}
+\label{Table:TablofUnit}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:ToS}
+\label{Sec:TablofSymb}
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript i implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
 \begin{longtable*}{l l l}
 \toprule
@@ -156,10 +156,10 @@ $\varphi{}'$ & Effective angle of friction & ${}^{\circ}$
 $\Upsilon{}$ & Generic minimization function or algorithm & 
 \\
 \bottomrule
-\label{Table:ToS}
+\label{Table:TablofSymb}
 \end{longtable*}
 \subsection{Abbreviations and Acronyms}
-\label{Sec:AaA}
+\label{Sec:AbbrandAcro}
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -188,40 +188,44 @@ SSA & Slope Stability Analysis
 T & Theoretical Model
 \\
 \bottomrule
-\label{Table:AaA}
+\label{Table:AbbrandAcro}
 \end{longtable*}
 \section{Introduction}
-\label{Sec:I}
+\label{Sec:Intr}
 A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety.
-The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document and the characteristics of the intended readers.
+The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
-\label{Sec:PoD}
+\label{Sec:PurpofDocu}
 The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to fake a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
-\label{Sec:SoR}
-The scope of the requirements is limited to stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA will identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
+\label{Sec:ScopofRequ}
+The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
+\subsection{Characteristics of Intended Reader}
+\label{Sec:CharofInteRead}
+Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
 \subsection{Organization of Document}
-\label{Sec:OoD}
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IM} and trace back to find any additional information they require.
+\label{Sec:OrgaofDocu}
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:InstMode} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
 \section{General System Description}
-\label{Sec:GSD}
+\label{Sec:GeneSystDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
-\label{Sec:UC}
+\label{Sec:UserChar}
 The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
 \subsection{System Constraints}
-\label{Sec:SC}
+\label{Sec:SystCons}
 There are no system constraints.
 \section{Specific System Description}
-\label{Sec:SSD}
+\label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope.
 \subsection{Problem Description}
-\label{Sec:PD}
+\label{Sec:ProbDesc}
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
-\subsubsection{Terminology}
-\label{Sec:T}
+\subsubsection{Terminology and Definitions}
+\label{Sec:TermandDefi}
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 \begin{itemize}
 \item[Factor of Safety:]Stability metric. How likely a slip surface is to experience failure through slipping.
 \item[Critical Slip Surface:]Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
@@ -234,41 +238,41 @@ SSA is a computer program developed to evaluate the factor of safety of a slope'
 \item[Plane Strain:]The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominate dimensions direction are the ones that can be approximated as 0.
 \end{itemize}
 \subsubsection{Physical System Description}
-\label{Sec:PSD}
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:Icfnsaifv}.
+\label{Sec:PhysSystDesc}
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:Indeconvfornumbslicandinteforcvari}.
 \begin{enumerate}
 \item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from 1 $\leq{}$ i $\leq{}$ n-1.}
 \item{Slice properties convention is noted by i.}
 \end{enumerate}
-A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:Faoas}.
+A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:Forcactionaslic}.
 \begin{figure}
 \begin{center}
 \includegraphics{IndexConvention.png}
 \caption{Index convention for numbering slice and interslice force variables}
-\label{Figure:Icfnsaifv}
+\label{Figure:Indeconvfornumbslicandinteforcvari}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics{ForceDiagram.png}
 \caption{Forces acting on a slice}
-\label{Figure:Faoas}
+\label{Figure:Forcactionaslic}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
-\label{Sec:GS}
-Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers.
+\label{Sec:GoalStat}
+Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers, the goal statements are:
 \begin{itemize}
 \item[GS1:]Evaluate local and global factors of safety along a given slip surface.
 \item[GS2:]Identify the critical slip surface for the slope, with the lowest factor of safety.
 \item[GS3:]Determine the displacement of the slope.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
-\label{Sec:SCS}
-The instance models that govern SSA are presented in Section~\ref{Sec:IM}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\label{Sec:SoluCharSpec}
+The instance models that govern SSA are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:A}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TM}], General Definitions [Section~\ref{Sec:GD}], Data Definitions [Section~\ref{Sec:DD}], Instance Models [Section~\ref{Sec:IM}], or Likely Changes [Section~\ref{Sec:LC}], in which the respective assumption is used.
+\label{Sec:Assu}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], General Definitions [Section~\ref{Sec:GeneDefi}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \item[A2:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
@@ -282,7 +286,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[A10:]The surface and base of a slice between interslice nodes are approximated as straight lines.
 \end{itemize}
 \subsubsection{Theoretical Models}
-\label{Sec:TM}
+\label{Sec:TheoMode}
 This section focuses on the general equations and laws that SSA is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -299,42 +303,72 @@ Description & The stability metric of the slope, known as the factor of safety (
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GD}
+\label{Sec:GeneDefi}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 \subsubsection{Data Definitions}
-\label{Sec:DD}
+\label{Sec:DataDefi}
 This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
 \subsubsection{Instance Models}
-\label{Sec:IM}
-This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM} and Section~\ref{Sec:GD}.
+\label{Sec:InstMode}
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
 The values of the interslice normal force E the interslice normal/shear force magnitude ratio lambda, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R_{i}$, and $T_{i}$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 \subsubsection{Data Constraints}
-\label{Sec:DC}
-Table~\ref{Table:} and Table~\ref{Table:} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
-\begin{longtable}{l}
+\label{Sec:DataCons}
+Table~\ref{Table:InpuVari} and Table~\ref{Table:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+\begin{longtable}{l l l}
 \toprule
+Var & Physical Constraints & Typical Value
 \\
 \midrule
+$(x,y)$ of water table vertices' & Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values. & N/A
+\\
+$(x,y)$ of slip vertices' & Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values. & N/A
+\\
+$(x,y)$ of slope vertices' & Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values. & N/A
+\\
+$E_{i}$ & $E_{i}>0$ & 15000 N
+\\
+$c'$ & $c'>0$ & 10 Pa
+\\
+$\nu{}$ & $\nu{}>0$ and $\nu{}<1$ & 0.4
+\\
+$\varphi{}'$ & $\varphi{}'>0$ and $\varphi{}'<90$ & 25 ${}^{\circ}$
+\\
+$\gamma{}$ & $\gamma{}>0$ & 20 $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\gamma{}_{Sat}$ & $\gamma{}_{Sat}>0$ & 20 $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\gamma{}_{w}$ & $\gamma{}_{w}>0$ & 9.8 $\frac{\text{N}}{\text{m}^{3}}$
+\\
 \bottomrule
-\caption{}
-\label{Table:}
+\caption{Input Variables}
+\label{Table:InpuVari}
 \end{longtable}
-\begin{longtable}{l}
+\begin{longtable}{l l}
 \toprule
+Var & Physical Constraints
 \\
 \midrule
+FS & $FS>0$
+\\
+$(x,y)$ of slip vertices' & Vertices's monotonic
+\\
+$\delta{}x_{i}$ & None
+\\
+$\delta{}y_{i}$ & None
+\\
 \bottomrule
-\caption{}
-\label{Table:}
+\caption{Output Variables}
+\label{Table:OutpVari}
 \end{longtable}
 \section{Requirements}
-\label{Sec:R}
+\label{Sec:Requ}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FR}
+\label{Sec:FuncRequ}
 \begin{itemize}
-\item[R1:]Read the input file, and store the data. Necessary input data summarized in Table~\ref{Table:Id}.
+\item[R1:]Read the input file, and store the data. Necessary input data summarized in Table~\ref{Table:InpuData}.
 \item[R2:]Generate potential critical slip surface's for the input slope.
 \item[R3:]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
 \item[R4:]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
@@ -348,7 +382,7 @@ This section provides the functional requirements, the business tasks that the s
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
-Symbol & Units & Description
+Symbol & Unit & Description
 \\
 \midrule
 $(x,y)$ & m & cartesian position coordinates; y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y
@@ -368,16 +402,16 @@ $\gamma{}_{Sat}$ & $\frac{\text{N}}{\text{m}^{3}}$ & saturated unit weight
 $\gamma{}_{w}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 \\
 \bottomrule
-\caption{Input data}
-\label{Table:Id}
+\caption{Input Data}
+\label{Table:InpuData}
 \end{longtable}
 \subsection{Non-functional Requirements}
-\label{Sec:NR}
-SSA is intended to be an educational tool, therefore accuracy and performance speed are secondary program priorities to correctness, understandability, reusability, and maintainability.
+\label{Sec:Non-Requ}
+SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
-\label{Sec:LC}
+\label{Sec:LikeChan}
 \section{References}
-\label{Sec:R}
+\label{Sec:Refe}
 \begin{itemize}
 \item[[1]:]Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing the factor of safety using the morgensternprice method. Can. Geotech. J., (42):272-278, 19 February 2005.
 \item[[2]:]D.G. Fredlund and J.Krahn. Comparison of slope stability methods of analysis. Can. Geotech. J., (14):429-439, 4 April 1977.

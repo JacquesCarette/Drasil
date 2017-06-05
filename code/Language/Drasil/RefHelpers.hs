@@ -7,15 +7,17 @@ import Data.Char (isAlphaNum)
 -- | for now, magic: infer the name of sentences!
 inferName :: Sentence -> Sentence
 inferName (s1 :+: s2) = inferName s1 :+: inferName s2
-inferName (S s1)      = S (firstLetter s1)
+inferName (S s1)      = S $ (firstFourLetters s1)
 inferName (F _ s)     = S [s]
 inferName (Ref _ _)   = EmptyS
   -- error "Attempting to infer the name an existing reference"
 inferName _           = EmptyS -- Was Empty.
 
--- | helper to get first letter of each word. Used by inferName
-firstLetter :: String -> String
-firstLetter = map head . words
+-- | helper to get first 4 letters of each word. Used by inferName
+firstFourLetters :: String -> String
+firstFourLetters s1 = (filter (\x -> not (x `elem` ",.?!")) stringId)
+  where stringId = concat (map (take 4) (words s1))
+
 
 -- | replace underscore in strings with "."
 repUnd :: String -> String

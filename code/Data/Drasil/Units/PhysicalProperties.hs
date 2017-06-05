@@ -1,6 +1,5 @@
 module Data.Drasil.Units.PhysicalProperties where
 
-import Language.Drasil.Unit (new_unit)
 import Language.Drasil
 import Data.Drasil.SI_Units
 

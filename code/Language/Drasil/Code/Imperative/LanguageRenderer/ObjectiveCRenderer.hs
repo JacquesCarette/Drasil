@@ -46,6 +46,8 @@ objcConfig options c =
         package          = \_ -> empty,
         printFunc        = text "printf",
         printLnFunc      = text "printf",
+        printFileFunc    = \_ -> empty,
+        printFileLnFunc  = \_ -> empty,
         stateType        = objcstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -62,9 +64,9 @@ objcConfig options c =
         objVarDoc = objVarDocD c, paramDoc = paramDoc' c, paramListDoc = paramListDoc' c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-
-        getEnv = \_ -> error "getEnv not implemented (yet) in ObjC",
-        printFileDoc = error "printFileDoc not implemented in ObjC"
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
+        getEnv = \_ -> error "getEnv not implemented (yet) in ObjC"
     }
 
 -- for convenience
@@ -99,12 +101,12 @@ objcstateType _ (Base String) _    = str
 objcstateType _ (Type name) Dec    = text name <> ptr
 objcstateType c s d                = stateTypeD c s d
 
-objctop :: Config -> FileType -> Label -> Doc
-objctop c Header _ = vcat [
+objctop :: Config -> FileType -> Label -> [Module] -> Doc
+objctop c Header _ _ = vcat [
     include c "<Foundation/NSObject.h>",
     include c "<Foundation/NSString.h>",
     include c "<Foundation/NSArray.h>"]
-objctop c Source p = vcat [
+objctop c Source p _ = vcat [
     include c ("\"" ++ p ++ objcHeaderExt ++ "\""),
     blank,
     include c "<Foundation/NSObject.h>",
@@ -113,27 +115,29 @@ objctop c Source p = vcat [
     include c "<Foundation/NSValue.h>",
     include c "<Foundation/NSAutoreleasePool.h>"]
 
-objcbody :: Config -> FileType -> Label -> [Class] -> Doc
-objcbody c f@(Header) p ms = vcat [
+objcbody :: Config -> FileType -> Label -> [Module] -> Doc
+objcbody c f@(Header) p modules = let ms = foldl1 (++) (map classes modules) in
+    vcat [
     clsDecListDoc c ms,
     blank,
     vibmap (classDoc c f p) (fixCtorNames sagaInit ms)]
-objcbody c f@(Source) p ms = vibmap (classDoc c f p) (fixCtorNames sagaInit ms)
+objcbody c f@(Source) p modules = let ms = foldl1 (++) (map classes modules) in
+    vibmap (classDoc c f p) (fixCtorNames sagaInit ms)
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign v Input) = vcat [      --assumes v is NSString
-    text "char*" <+> temp <> endStatement c,
-    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
-    valueDoc c v <+> equals <+> nsFromCString c temp]
-    where temp = text "temp"
+--assignDoc' c (Assign v Input) = vcat [      --assumes v is NSString
+--    text "char*" <+> temp <> endStatement c,
+--    inputFunc c <> parens (text "\"%s\"," <+> temp) <> endStatement c,
+--    valueDoc c v <+> equals <+> nsFromCString c temp]
+--    where temp = text "temp"
 assignDoc' c a = assignDocD c a
 
 callFuncParamList' :: Config -> [Value] -> Doc
 callFuncParamList' c vs = colonMapListDoc (text " : ") (valueDoc c) vs
 
 declarationDoc' :: Config -> Declaration -> Doc
-declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <+> equals <+> valueDoc c (StateObj (List lt t) [Lit $ LitInt $ toInteger s])
+declarationDoc' c (ListDec lt n t s) = stateType c (List lt t) Dec <+> text n <+> equals <+> valueDoc c (StateObj Nothing (List lt t) [Lit $ LitInt $ toInteger s])
 declarationDoc' c (ListDecValues lt n t vs) = stateType c (List lt t) Dec <+> text n <+> equals <+> brackets (alloc c (List lt t) <+> initList)
     where initList = if null vs then text defaultInit else text "initWithObjects" <> listInitObjectsDoc c vs
 declarationDoc' c d = declarationDocD' c d
@@ -173,7 +177,7 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var i) (listVar $. at i) b
     where initState = varDecDef i (Base Integer) (litInt 0)
           guard     = Var i ?< (listVar $. ListSize)
-          update    = (&++)i
+          update    = (&.++)i
     -- the following ForEach implementation will only be valid in Objective-C 2.0 or later
     {-vcat [
         iterForEachLabel c <+> parens (stateType c t Dec <+> text var <+> iterInLabel c <+> valueDoc c listVar) <+> lbrace,
@@ -232,7 +236,7 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v f@(Cast _) = objAccessDocD c v f
-objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&++)i) forBody
+objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&.++)i) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
@@ -248,8 +252,8 @@ paramDoc' c p@(FuncParam _ _ _) = paramDocD c p
 paramListDoc' :: Config -> [Parameter] -> Doc
 paramListDoc' c ps = colonMapListDoc (text " : ") (paramDoc c) ps
 
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc    --this function assumes that the StateType and Value match up as appropriate (e.g. if the StateType is a List, then the Value should be a ListVar)
-printDoc' c newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",") <+> value)
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc    --this function assumes that the StateType and Value match up as appropriate (e.g. if the StateType is a List, then the Value should be a ListVar)
+printDoc' c Console newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",") <+> value)
     where nl = if newLn then "\\n" else ""
           value =  case t of 
                      Base String -> 
@@ -265,7 +269,8 @@ printDoc' c newLn t v = printFunc c <> parens (text ("\"%" ++ frmt ++ nl ++ "\",
                            List _ _ -> "s"
                            EnumType _ -> "d"
                            _ -> error $ "Objective-C: print statement not supported for type " ++ render (stateType c t Def)
-
+printDoc' _ (File _) _ _ _ = error "Not implemented yet!"
+                           
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' _ Header _ (MainMethod _) = empty
 methodDoc' c Header _ f@(Method n _ _ _ _) | isDtor n  = empty
@@ -319,15 +324,15 @@ valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _))) = vcat [
     objAccessDoc c v f <> endStatement c,
     objAccessDoc c e (Func release [])]
 valueDoc' _ (Self) = text "self"
-valueDoc' c (StateObj t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
+valueDoc' c (StateObj _ t@(List lt _) [s]) = brackets (alloc c t <> innerFuncAppDoc c init size)
     where init = case lt of Static  -> defaultInit
                             Dynamic -> "initWithCapacity"
           size = case lt of Static  -> []
                             Dynamic -> [s]
-valueDoc' c (StateObj t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
-valueDoc' c (StateObj t vs) = brackets (funcDoc c (Cast t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs)
+valueDoc' c (StateObj _ t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
+valueDoc' c (StateObj _ t vs) = brackets (funcDoc c (Cast t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs)
 valueDoc' c (Arg i) = nsFromCString c $ argsListAccess c i
-valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
+--valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
 valueDoc' c v = valueDocD c v
 
 ----------------------

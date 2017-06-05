@@ -3,13 +3,14 @@ module Drasil.GamePhysics.IMods where
 --import qualified Drasil.GamePhysics.Unitals as GPUN
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle1, foldlSent)
+import Data.Drasil.Utils (foldle1)
+import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
-  angularAccel, force, gravitationalConst, gravitationalAccel, velocity, 
-  momentOfInertia, displacement, angularVelocity, position)
+  angularAccel, force, gravitationalAccel, velocity, 
+  momentOfInertia, angularVelocity, position)
 --import qualified Data.Drasil.Concepts.Math as QM ()
 --import Data.Drasil.Quantities.Physics
 import Prelude hiding (id)
@@ -32,10 +33,10 @@ im1Rel = (C QP.acceleration) := (C QP.velocity) := (C QP.gravitationalAccel) + (
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
-  (phrase $ QP.acceleration ^. term), S "of the", (phrase $ CP.rigidBody ^. term), 
-  S "(A1, A2) i as the sum of", (phrase $ QP.gravitationalAccel ^. term), 
-  S "(GD3) and", (phrase $ QP.acceleration ^. term), S "due to applied", 
-  (phrase $ QP.force ^. term), S "Fi(t) (T1). The resultant outputs are", 
+  (phrase $ QP.acceleration), S "of the", (phrase $ CP.rigidBody), 
+  S "(A1, A2) i as the sum of", (phrase $ QP.gravitationalAccel), 
+  S "(GD3) and", (phrase $ QP.acceleration), S "due to applied", 
+  (phrase $ QP.force), S "Fi(t) (T1). The resultant outputs are", 
   S "then obtained from this equation using DD2, DD3 and DD4. It is currently", 
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
@@ -112,8 +113,8 @@ im3leg = foldle1 (+:+.) (+:+.)
 {-- __n(t) is the n-th body's __ -option- at time t (units) --}
 helper1 :: (Unitary c, SymbolForm c) => c -> String -> Sentence -> Sentence
 helper1 t i EmptyS = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
-  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase $ t ^. term) +:+
+  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase t) +:+
   S "at time t" +:+ (sParen $ Sy $ unit_symb t)
 helper1 t i opt = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
-  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase $ t ^. term) +:+ opt +:+
+  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase t) +:+ opt +:+
   S "at time t" +:+ (sParen $ Sy $ unit_symb t)

@@ -3,7 +3,7 @@ import Prelude hiding (id)
 import Language.Drasil
 
 import Drasil.Template.Helpers
-import Data.Drasil.Utils (foldlsC)
+import Data.Drasil.SentenceStructures (foldlsC)
 
 import Data.List (intersperse)
 import Control.Lens ((^.))

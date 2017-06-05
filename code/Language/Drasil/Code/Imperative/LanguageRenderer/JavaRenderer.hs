@@ -42,6 +42,8 @@ javaConfig options c =
         package          = package',
         printFunc        = text "System.out.print",
         printLnFunc      = text "System.out.println",
+        printFileFunc    = \_ -> error "not implemented",
+        printFileLnFunc  = \_ -> error "not implemented",
         stateType        = jstateType c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -58,8 +60,9 @@ javaConfig options c =
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
-        getEnv = \_ -> error "no environment has been set",
-        printFileDoc = error "printFileDoc is undefined for Java"
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        getEnv = \_ -> error "no environment has been set"
     }
 
 -- short names, packaged up above (and used below)
@@ -75,8 +78,8 @@ jstateType c s@(List lt t) d = case t of Base Integer -> list c lt <> angles (te
 jstateType _ (Base String) _ = text "String"
 jstateType c s d = stateTypeD c s d
 
-jtop :: Config -> a -> Label -> Doc
-jtop c _ p = vcat [
+jtop :: Config -> FileType -> Label -> [Module] -> Doc
+jtop c _ p _ = vcat [
     package c p <> (endStatement c)
     -- blank,
     -- include c "java.util.Arrays" <> endStatement c,
@@ -85,8 +88,9 @@ jtop c _ p = vcat [
     -- include c ("java.util." ++ render (list c Dynamic)) <> endStatement c
     ]
 
-jbody :: Config -> a -> Label -> [Class] -> Doc
-jbody c _ p ms = vibmap (classDoc c Source p) ms
+jbody :: Config -> a -> Label -> [Module] -> Doc
+jbody c _ p modules = let ms = foldl1 (++) (map classes modules) in
+  vibmap (classDoc c Source p) ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc

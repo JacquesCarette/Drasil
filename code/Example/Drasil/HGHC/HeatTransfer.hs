@@ -4,6 +4,15 @@ import Language.Drasil
 
 import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
+hghcSymMap :: SymbolMap
+hghcSymMap = symbolMap symbols
+
+symbols :: [QSWrapper]
+symbols = map qs vars ++ map qs htVars
+
+vars :: [QDefinition]
+vars = [htTransCladFuel, htTransCladCool]
+
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
@@ -33,7 +42,7 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq
 
-hghc, nuclearPhys, fp :: NPNC
+hghc, nuclearPhys, fp :: NamedChunk
 hghc = npnc "hghc" (cn "tiny")
 nuclearPhys = npnc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = npnc "fp" (cn "FP")

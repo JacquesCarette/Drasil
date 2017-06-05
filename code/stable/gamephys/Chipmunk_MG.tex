@@ -23,7 +23,7 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-\label{Sec:I}
+\label{Sec:Intr}
 Decomposing a system into modules is a commonly accepted approach to developing software.  A module is a work assignment for a programmer or programming team. In the best practices for scientific computing, Wilson et al advise a modular design, but are silent on the criteria to use to decompose the software into modules.  We advocate a decomposition based on the principle of information hiding. This principle supports design for change, because the ``secrets" that each module hides represent likely future changes.  Design for change is valuable in SC, where modifications are frequent, especially during initial development as the solution space is explored.
 Our design follows the rules laid out by Parnas, as follows:
 \begin{enumerate}
@@ -36,12 +36,12 @@ After completing the first stage of the design, the Software Requirements Specif
 \item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
 \item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
 \end{enumerate}
-Section~\ref{Sec:LaUC}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:MD}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
+Section~\ref{Sec:LikeandUnliChan}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:ModuHier}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:ModuDeco}  gives a detailed description of the modules. Section~\ref{Sec:TracMatr}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UsesHier}  describes the use relation between modules.
 \section{Likely and Unlikely Changes}
-\label{Sec:LaUC}
-This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LC} and unlikely changes are listed in Section~\ref{Sec:UC}
+\label{Sec:LikeandUnliChan}
+This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LikeChan} and unlikely changes are listed in Section~\ref{Sec:UnliChan}
 \subsection{Likely Changes}
-\label{Sec:LC}
+\label{Sec:LikeChan}
 Likely changes are the source of the information that is to be hidden inside the modules. Ideally, changing one of the likely changes will only require changing the one module that hides the associated decision. The approach adapted here is called design for change.
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LChardware}:]The specific hardware on which the software is running.
@@ -85,8 +85,8 @@ Likely changes are the source of the information that is to be hidden inside the
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LChashtable}:]The implementation of the associative (hash table) data structure.
 \end{description}
-\subsection{Unikely Changes}
-\label{Sec:UC}
+\subsection{Unlikely Changes}
+\label{Sec:UnliChan}
 The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
 \begin{description}
 \item[\refstepcounter{ucnum}\uctheucnum\label{UCIO}:]Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
@@ -110,8 +110,8 @@ The module design should be as general as possible. However, a general system is
 \item[\refstepcounter{ucnum}\uctheucnum\label{UC2D}:]All objects are 2D.
 \end{description}
 \section{Module Hierarchy}
-\label{Sec:MH}
-This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:MH}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
+\label{Sec:ModuHier}
+This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:ModuHier}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
 \item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
 \end{description}
@@ -202,147 +202,147 @@ Software Decision Module & Vector Module &
 \\
 \bottomrule
 \caption{Module Hierarchy}
-\label{Table:MH}
+\label{Table:ModuHier}
 \end{longtable}
 \section{Module Decomposition}
-\label{Sec:MD}
+\label{Sec:ModuDeco}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is Chipmunk2D, this means that the module is provided by the Chipmunk2D game physics library. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
 \subsection{Hardware Hiding Module (M\ref{MhwHiding})}
-\label{Sec:HHM()}
+\label{Sec:HardHidiModu()}
 \begin{description}
 \item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
 \item[Services:]Hides the exact details of the hardware, and provides a uniform interface for the rest of the system to use.
 \item[Implemented By:]OS
 \end{description}
 \subsection{Behaviour Hiding Module}
-\label{Sec:BHM}
+\label{Sec:BehaHidiModu}
 \begin{description}
-\item[Secrets:]The contents of the required behaviors.
+\item[Secrets:]The contents of the required behaviours.
 \item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
 \item[Implemented By:]--
 \end{description}
 \subsection{Rigid Body Module (M\ref{Mmodbodyserv})}
-\label{Sec:RBM()}
+\label{Sec:RigiBodyModu()}
 \begin{description}
 \item[Secrets:]The data structure of a rigid body.
 \item[Services:]Stores the physical properties of an object, such as mass, position, rotation, velocity, etc, and provides operations on rigid bodies, such as setting the mass and velocity of the body.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Shape Module (M\ref{Mmodshapeserv})}
-\label{Sec:SM()}
+\label{Sec:ShapModu()}
 \begin{description}
 \item[Secrets:]The data structure of a collision shape. Children: Circle Module, Segment Module, Polygon Module.
 \item[Services:]Stores the surface properties of an object, such as friction or elasticity, and provides operations on shapes, such as setting its friction or elasticity.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Circle Module (M\ref{Mmodcircleserv})}
-\label{Sec:CM()}
+\label{Sec:CircModu()}
 \begin{description}
 \item[Secrets:]The data structure for a circle shape.
 \item[Services:]Provides operations on circles such as initializing a new circle, calculating moment and area, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Segment Module (M\ref{Mmodsegmentserv})}
-\label{Sec:SM()}
+\label{Sec:SegmModu()}
 \begin{description}
 \item[Secrets:]The data structure for a segment shape.
 \item[Services:]Provides operations on segments such as initializing a new segment, calculating moment and area, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Poly Module (M\ref{Mmodpolyserv})}
-\label{Sec:PM()}
+\label{Sec:PolyModu()}
 \begin{description}
 \item[Secrets:]The data structure for a polygon shape.
 \item[Services:]Provides operations on polygons such as initializing a new polygon, calculating moment, area and centroid, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Space Module (M\ref{Mmodspaceserv})}
-\label{Sec:SM()}
+\label{Sec:SpacModu()}
 \begin{description}
 \item[Secrets:]The container for simulating objects.
 \item[Services:]Controls how all the rigid bodies and shapes interact together.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Arbiter Module (M\ref{Mmodarbiterserv})}
-\label{Sec:AM()}
+\label{Sec:ArbiModu()}
 \begin{description}
 \item[Secrets:]The data structure containing collision information.
 \item[Services:]Stores all collision data, such as which bodies collided and their masses.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Control Module (M\ref{MmodControl})}
-\label{Sec:CM()}
+\label{Sec:ContModu()}
 \begin{description}
 \item[Secrets:]The internal data types and algorithms for coordinating the running of the program.
 \item[Services:]Provides the main program.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Software Decision Module}
-\label{Sec:SDM}
+\label{Sec:SoftDeciModu}
 \begin{description}
 \item[Secrets:]The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
 \item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
 \subsection{Vector Module (M\ref{Mmodvectorserv})}
-\label{Sec:VM()}
+\label{Sec:VectModu()}
 \begin{description}
 \item[Secrets:]The data structure representing vectors.
 \item[Services:]Provides vector operations such as addition, scalar and vector multiplication, dot and cross products, rotations, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Bounding Box Module (M\ref{Mmodbbserv})}
-\label{Sec:BBM()}
+\label{Sec:BounBoxModu()}
 \begin{description}
 \item[Secrets:]The data structure for representing axis-aligned bounding boxes.
 \item[Services:]Provides constructors for bounding boxes and operations such as merging boxes, calculating their centroids and areas, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Transform Matrix Module (M\ref{Mmodtransserv})}
-\label{Sec:TMM()}
+\label{Sec:TranMatrModu()}
 \begin{description}
 \item[Secrets:]The data structure representing transformation matrices.
 \item[Services:]Provides constructors for affine transformation matrices, matrix operations such as inverse, transpose, multiplications, and operations for applying transformations to vectors and bounding boxes.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Spatial Index Module (M\ref{Mmodspatialserv})}
-\label{Sec:SIM()}
+\label{Sec:SpatIndeModu()}
 \begin{description}
 \item[Secrets:]The data structures and algorithms for detecting collisions.
 \item[Services:]Provides spatial indexing operations and tracks the positions of bodies in the simulation space.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Collision Solver Module (M\ref{Mmodcollserv})}
-\label{Sec:CSM()}
+\label{Sec:CollSolvModu()}
 \begin{description}
 \item[Secrets:]The data structures and algorithms for detecting collisions.
 \item[Services:]Fast collision filtering, primitive shape-to-shape collision detection.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Sequence Data Structure Module (M\ref{Mmodseqserv})}
-\label{Sec:SDSM()}
+\label{Sec:SequDataStruModu()}
 \begin{description}
 \item[Secrets:]The data structure for a sequence data type.
 \item[Services:]Provides array manipulation operations, such as building an array, accessing a specific entry, slicing an array, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Linked Data Structure Module (M\ref{Mmodlinkedserv})}
-\label{Sec:LDSM()}
+\label{Sec:LinkDataStruModu()}
 \begin{description}
 \item[Secrets:]The data structure for a linked data type.
 \item[Services:]Provides tree manipulation operations, such as building a tree, accessing a specific entry, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \subsection{Associative Data Structure Module (M\ref{Mmodassocserv})}
-\label{Sec:ADSM()}
+\label{Sec:AssoDataStruModu()}
 \begin{description}
 \item[Secrets:]The data structure for an associative data type.
 \item[Services:]Provides operations on hash tables, such as building a hash table, accessing a specific entry, etc.
 \item[Implemented By:]Chipmunk2D
 \end{description}
 \section{Traceability Matrix}
-\label{Sec:TM}
-This section shows two traceability matrices: between the modules and the requirements in Table~\ref{Table:TBRaM} and between the modules and the likely changes in Table~\ref{Table:TBLCaM}.
+\label{Sec:TracMatr}
+This section shows two traceability matrices: between the modules and the requirements in Table~\ref{Table:TracBetwRequandModu} and between the modules and the likely changes in Table~\ref{Table:TracBetwLikeChanandModu}.
 \begin{longtable}{l l}
 \toprule
 Requirement & Modules
@@ -366,7 +366,7 @@ R8 & M\ref{Mmodbodyserv}, M\ref{Mmodspaceserv}, M\ref{Mmodarbiterserv}, M\ref{Mm
 \\
 \bottomrule
 \caption{Trace Between Requirements and Modules}
-\label{Table:TBRaM}
+\label{Table:TracBetwRequandModu}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -403,11 +403,11 @@ LC\ref{LChashtable} & M\ref{Mmodassocserv}
 \\
 \bottomrule
 \caption{Trace Between Likely Changes and Modules}
-\label{Table:TBLCaM}
+\label{Table:TracBetwLikeChanandModu}
 \end{longtable}
 \section{Uses Hierarchy}
-\label{Sec:UH}
-In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UH} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
+\label{Sec:UsesHier}
+In this section, the uses hierarchy between modules is provided. Parnas said of two programs A and B that A uses B if correct execution of B may be necessary for A to complete the task described in its specification. That is, A uses B if there exist situations in which the correct functioning of A depends upon the availability of a correct implementation of B. Figure~\ref{Figure:UsesHier} illustrates the uses hierarchy between the modules. The graph is a directed acyclic graph (DAG). Each level of the hierarchy offers a testable and usable subset of the system, and modules in the higher level of the hierarchy are essentially simpler because they use modules from the lower levels.
 \begin{figure}
 \centering
 \begin{adjustbox}{max width=\textwidth}
@@ -450,6 +450,6 @@ node [style = "n"];
 \end{tikzpicture}
 \end{adjustbox}
 \caption{Uses Hierarchy}
-\label{Figure:UH}
+\label{Figure:UsesHier}
 \end{figure}
 \end{document}

@@ -16,7 +16,7 @@ unit_table :: Unit s => [s] -> Contents
 unit_table u = Table
   (map (at_start) [symbol_, description])  (mkTable
   [(\x -> Sy (x ^. usymb)),
-   (\x -> (x ^. defn) +:+ sParen (phrase $ x ^. term))
+   (\x -> (x ^. defn) +:+ sParen (phrase x))
   ] u)
   (S "Table of Units") False
 

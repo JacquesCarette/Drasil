@@ -2,9 +2,7 @@ module Drasil.GlassBR.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Control.Lens((^.))
 import Prelude hiding (id)
-import Data.Drasil.Utils (foldlSent)
 
 --FIXME: Figure out why this wasn't used in body (until now with srsDoc)
 glassBRProg :: ConceptChunk
@@ -14,7 +12,7 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 {-Acronyms-}
 -- FIXME: Use actual acronyms instead of CCs.
 
-acronyms :: [CINP]
+acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, lDurFac,
   lGlass, lResistance, lShareFac, notApp, nonFactorL, physSyst, requirement,
@@ -22,27 +20,27 @@ acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
   iGlass, lDurFac, lGlass, lResistance, lShareFac, notApp, nonFactorL,
-  eqTNT :: CINP
+  eqTNT, gLassBR :: CI
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
-annealedGlass = commonINP "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
-aspectR       = commonINP' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
-fullyTGlass   = commonINP "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
-glassTypeFac  = commonINP "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
-heatSGlass    = commonINP "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
-iGlass        = commonINP "iGlass"        (nounPhraseSP "insulating glass")        "IG"
-lDurFac       = commonINP "lDurFac"       (nounPhraseSP "load duration factor")    "LDF"
-lGlass        = commonINP "lGlass"        (nounPhraseSP "laminated glass")         "LG"
-lResistance   = commonINP "lResistance"   (nounPhraseSP "load resistance")         "LR"
-lShareFac     = commonINP "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
-notApp        = commonINP "notApp"        (nounPhraseSP "not applicable")          "N/A"
-nonFactorL    = commonINP "nonFactorL"    (nounPhraseSP "non-factored load")       "NFL"     --lowercase?
-eqTNT         = commonINP "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
+aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
+fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
+glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
+heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
+iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"
+lDurFac       = commonIdea "lDurFac"       (nounPhraseSP "load duration factor")    "LDF"
+lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
+lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"
+lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
+notApp        = commonIdea "notApp"        (nounPhraseSP "not applicable")          "N/A"
+nonFactorL    = commonIdea "nonFactorL"    (nounPhraseSP "non-factored load")       "NFL"     --lowercase?
+eqTNT         = commonIdea "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
+gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
-blastRisk, glaSlab :: NPNC
+blastRisk, glaSlab :: NamedChunk
 blastRisk    = npnc "blastRisk" (nounPhraseSP "blast risk")
 glaSlab      = npnc "glaSlab"   (nounPhraseSP "glass slab")
-

@@ -1,7 +1,7 @@
 module Drasil.HGHC.Modules where
 
 import Language.Drasil
-import Language.Drasil.Code
+import Language.Drasil.Code hiding (self)
 import Drasil.HGHC.HeatTransfer
 import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
@@ -11,19 +11,20 @@ import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 
-self :: NPNC
+self :: NamedChunk
 self = npnc "HGHC" (pn "HGHC")
 
-executable :: NPNC
-executable = npnc' (self ^. id) (tempCompoundPhrase self program) ("HGHC")
+executable :: NamedChunk
+executable = npnc' (self ^. id) (compoundPhrase (self ^. term) (program ^. term))
+  ("HGHC")
 
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam 
              (foldlSent [S "The format and", (phrase structure), S "of the", 
-             (phrase input_), (plural $ parameter ^. term)]) --FIXME: Plural?
+             (phrase input_), (plural parameter)]) --FIXME: Plural?
              executable
              htVars
              []
@@ -46,8 +47,8 @@ mod_inputf = mod_io_fun executable
 
 -- Calc Module
 meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
-meth_htTransCladFuel = fromEC htTransCladFuel
-meth_htTransCladCool = fromEC htTransCladCool
+meth_htTransCladFuel = fromEC htTransCladFuel hghcSymMap
+meth_htTransCladCool = fromEC htTransCladCool hghcSymMap
 
 hghc_calcDesc :: Sentence
 hghc_calcDesc = S "Calculates heat transfer coefficients"
@@ -96,10 +97,10 @@ main_func =
       labelHc = htTransCladCool ^. id
   in
   [ block
-    [ objDecNewVoid labelParams typeParams,
-      objDecNewVoid labelIn typeIn,
+    [ objDecNewVoid' labelParams typeParams,
+      objDecNewVoid' labelIn typeIn,
       valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams],
-      objDecNewVoid labelCalc typeCalc,
+      objDecNewVoid' labelCalc typeCalc,
       varDecDef labelHg float
         ( objMethodCall (var labelCalc) ("calc_" ++ labelHg)
           [ var labelParams $-> var labelCladCond,
@@ -110,7 +111,7 @@ main_func =
           [ var labelParams $-> var labelCladCond,
             var labelParams $-> var labelCoolFilm,
             var labelParams $-> var labelCladThick ] ),
-      objDecNewVoid labelOut typeOut,
+      objDecNewVoid' labelOut typeOut,
       valStmt $ objMethodCall (var labelOut) (meth_output ^. id)
         [ var labelHg,
           var labelHc ]
@@ -121,7 +122,7 @@ meth_main :: MethodChunk
 meth_main = makeMainMethod (nc "main" (cn' "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm ^. term))
+mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase algorithm))
   executable
   [meth_main] 
   [mod_hw, mod_inputp, mod_inputf, mod_calc, mod_outputf]

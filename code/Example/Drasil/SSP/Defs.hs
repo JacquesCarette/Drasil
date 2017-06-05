@@ -9,17 +9,17 @@ import Data.Drasil.Quantities.SolidMechanics
 import Control.Lens ((^.))
 
 ----Acronyms-----
-acronyms :: [CINP]
+acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
   physSyst,requirement,srs,ssa,thModel]
   
-ssa, ssp :: CINP
-ssa = commonINP "ssa" (cnIS "slope stability analysis") "SSA"
-ssp = commonINP "ssp" (cn' "slope stability problem") "SSP"
+ssa, ssp :: CI
+ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"
+ssp = commonIdea "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
 soil, material, intrslce, surface_, slip, slope, slice,
-  morPrice, rgFnElm :: NPNC
+  morPrice, rgFnElm :: NamedChunk
 intrslce = npnc "interslice" (cn' "interslice")
 material = npnc "material"   (cn' "material")
 slice    = npnc "slice"      (cn' "slice")
@@ -31,19 +31,29 @@ surface_ = npnc "surface"    (cn' "surface") -- FIXME: use the one from concepts
 morPrice = npnc "morPrice"   (cn  "morgenstern price")
 rgFnElm  = npnc "rgFnElm"    (cn' "rigid finite element")
 
-slpSrf, crtSlpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf,
-  soilLyr :: NPNC
-slpSrf    = compoundNPNC slip surface_
-crtSlpSrf = compoundNPNC (npnc "critical" (cn "critical")) slpSrf
-soilPrpty = compoundNPNC soil     property
-mtrlPrpty = compoundNPNC material property
-itslPrpty = compoundNPNC intrslce property
-slopeSrf  = compoundNPNC slope surface_
-soilLyr   = compoundNPNC soil (npnc "layer" (cn' "layer"))
+slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
+slpSrf    = compoundNC slip surface_
+soilPrpty = compoundNC soil     property
+mtrlPrpty = compoundNC material property
+itslPrpty = compoundNC intrslce property
+slopeSrf  = compoundNC slope surface_
+soilLyr   = compoundNC soil (npnc "layer" (cn' "layer"))
+
+crtSlpSrf, plnStrn :: ConceptChunk --FIXME: move to Concepts/soldMechanics.hs? They are too spicific though
+plnStrn = dcc "plane strain" (cn' "plane strain") 
+          ("The resultant stresses in one of the directions of a " ++
+          "3 dimensional material can be approximated as 0. Results " ++
+          "when the length of one dimension of the body dominates the " ++
+          "others. Stresses in the dominate dimensions direction are " ++
+          "the ones that can be approximated as 0.")
+          
+crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
+    ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
+    (phrase $ fs_rc) `sC` S "and therefore most likely to experience failure.")
 
 ----Theoretical Models----
 -- possibly temporary "factor of safety" hack FIXME?
-factor, safety :: NPNC
+factor, safety :: NamedChunk
 factor = npnc "factor" (cn' "factor")
 safety = npnc "safety" (cnIES "safety")
 

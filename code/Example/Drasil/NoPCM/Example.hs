@@ -32,7 +32,7 @@ coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
 
 -- convenience
 
-coil_SA     = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase $ coil ^. term) (phrase $ coil ^. term) CapFirst CapWords) (nounPhrase'' (phrase $ surArea ^. term) (phrase $ surArea ^. term) CapFirst CapWords))
+coil_SA     = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
               "Area covered by the outermost layer of the coil" (sub cA cC) m_2
 dummyVar    = uc' "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")
@@ -92,7 +92,7 @@ water_vol   = uc' "water_vol" (vol `of_` water)
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 --Common Terms
-coil, tank, water, ht_trans :: NPNC
+coil, tank, water, ht_trans :: NamedChunk
 
 coil        = npnc "coil"           (cn' "coil")
 tank        = npnc "tank"           (cn' "tank")
@@ -101,14 +101,14 @@ water       = npnc "water"          (cn "water")
 ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase, just a hack to get RefSec to work
 
 ----Acronyms-----
-acronyms :: [CINP]
+acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
             physSyst,requirement,srs,sWHS,thModel]
   
-sWHS, sWHT :: CINP
+sWHS, sWHT :: CI
 
-sWHS  = commonINP "sWHS"  (cn' "solar water heating system")  "SWHS"
-sWHT  = commonINP "sWHT"  (cn' "solar water heating tank")    "SWHT"  
+sWHS  = commonIdea "sWHS"  (cn' "solar water heating system")  "SWHS"
+sWHT  = commonIdea "sWHT"  (cn' "solar water heating tank")    "SWHT"  
 
 ----EqChunks----
 --Theoretical models--
@@ -131,7 +131,7 @@ t1descr =
   (P $ temp ^. symbol) +:+ S "is the temperature," +:+ (P $ time ^. symbol) +:+
   S "is time, and" +:+ (P $ gradient ^. symbol) +:+ S "is the gradient operator."
   +:+ S "For this equation to apply, other forms of energy, such as mechanical"
-  +:+ S "energy, are assumed to be negligible in the system (A1).")
+  +:+ S "energy, are assumed to be negligible in the") --FIXME: Add 'system (A1).' or Assumption 1 reference
   
 srs_swhs :: ConceptChunk -- Used to make the title of the paper
   

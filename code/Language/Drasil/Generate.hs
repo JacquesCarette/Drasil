@@ -24,6 +24,7 @@ import Control.Lens
 -- temporary
 import Language.Drasil.Code.CodeGeneration
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
+import Language.Drasil.Expr.Extract (SymbolMap)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: [Recipe] -> IO ()
@@ -80,13 +81,13 @@ writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator using the 'ModuleChunk's
-genCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
-genCode cc mcs = prntCode cc (filter generated mcs)
+genCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
+genCode cc mcs m = prntCode cc (filter generated mcs) m
 
 -- | Generate code for all supported languages (will add language selection later)
-prntCode :: NamedIdea c => c -> [ModuleChunk] -> IO ()
-prntCode cc mcs = 
-  let absCode = toCode cc mcs
+prntCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
+prntCode cc mcs m = 
+  let absCode = toCode cc mcs m
       code l  = makeCode l
         (Options Nothing Nothing Nothing (Just "Code"))
         (map (\mc -> makeClassNameValid $ (modcc mc) ^. id) mcs)

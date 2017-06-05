@@ -5,11 +5,10 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Utils(symbolMapFun)
 import Control.Lens((^.))
 import Prelude hiding (log, id)
-import Data.Drasil.Utils (foldlSent)
-
+import Data.Drasil.SentenceStructures (foldlSent)
 
 --FIXME: Clean up symbols (use symbol alphabet where possible)
 
@@ -21,13 +20,13 @@ import Data.Drasil.Utils (foldlSent)
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
-glassBRSymbolsWithDefns = [mod_elas, sd]
+glassBRSymbolsWithDefns = [mod_elas, standOffDist]
 
-mod_elas, sd :: UnitalChunk
+mod_elas, standOffDist :: UnitalChunk
 
 mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE kilopascal
-sd          = makeUCWDS "sd"      (nounPhraseSP "stand off distance")
+standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
   (foldlSent [S "The distance from the glazing surface to the",
   S "centroid of a hemispherical high explosive charge. It is represented by", 
   S "the coordinates (SDx, SDy, SDz)"])
@@ -36,9 +35,9 @@ sd          = makeUCWDS "sd"      (nounPhraseSP "stand off distance")
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick,
-  sflawParamK, sflawParamM, demand, sd_max, sd_min, nom_thick,
-  load_dur, char_weight, cWeightMax, cWeightMin, eqTNTWeight]
+glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
+  sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
+  char_weight, cWeightMax, cWeightMin, eqTNTWeight]
 
 plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
@@ -61,15 +60,15 @@ sflawParamM = unitary' "sflawParamM" (nounPhraseSP "surface flaw parameter") --p
 demand      = unitary' "demand"      (nounPhraseSP "applied load (demand)")
   lQ kilopascal
 sdx         = unitary' "sdx"         (nounPhraseSP "stand off distance (x-component)")
-  (sub (sd ^. symbol) lX) metre
+  (sub (standOffDist ^. symbol) lX) metre
 sdy         = unitary' "sdy"         (nounPhraseSP "stand off distance (y-component)")
-  (sub (sd ^. symbol) lY) metre
+  (sub (standOffDist ^. symbol) lY) metre
 sdz         = unitary' "sdz"         (nounPhraseSP "stand off distance (z-component)")
-  (sub (sd ^. symbol) lZ) metre
+  (sub (standOffDist ^. symbol) lZ) metre
 sd_max      = unitary' "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
-  (sub (sd ^. symbol) (Atomic "max")) metre
+  (sub (standOffDist ^. symbol) (Atomic "max")) metre
 sd_min      = unitary' "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (sd ^. symbol) (Atomic "min")) metre
+  (sub (standOffDist ^. symbol) (Atomic "min")) metre
 nom_thick   = unitary' "nom_thick"   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
   lT millimetre
@@ -88,10 +87,10 @@ eqTNTWeight = unitary' "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf,
-  sdf_tol, prob_br, pb_tol, dimlessLoad, tolLoad]
+glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
+  pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF]
 
-ar_max, risk_fun, glass_type, is_safe1, is_safe2, sdf, sdf_tol, prob_br,
+ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
   pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ar_max      = makeVC "ar_max"        (nounPhraseSP "maximum aspect ratio")
@@ -105,9 +104,9 @@ is_safe1    = makeVC "is_safe1"      (nounPhraseSP $ "true when calculated proba
 is_safe2    = makeVC "is_safe2"      (nounPhraseSP $ "true when load resistance (capacity) " ++
   "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
   Atomic "safe2"])
-sdf         = makeVC "sdf"           (nounPhraseSP "stress distribution factor (Function)") cJ
+stressDistFac = makeVC "stressDistFac"  (nounPhraseSP "stress distribution factor (Function)") cJ
 sdf_tol     = makeVC "sdf_tol"       (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
-  (sub (sdf ^. symbol) (Atomic "tol"))
+  (sub (stressDistFac ^. symbol) (Atomic "tol"))
 prob_br     = makeVC "prob_br"       (nounPhraseSP "probability of breakage")
   (sub cP lB)
 pb_tol      = makeVC "pb_tol"        (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
@@ -122,43 +121,43 @@ ar_min      = makeVC "ar_min"        (nounPhraseSP "minimum aspect ratio")
 gTF         = makeVC "gTF"           (glassTypeFac ^. term) (Atomic "GTF")
 
 terms :: [ConceptChunk]
-terms = [aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, 
-  lr, ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, sD]
+terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, 
+  loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar, sD]
 
-aR, gbr, lite, glassTy, an, ft, hs, gtf, lateral, load, specDeLoad, lr, 
-  ldl, nfl, glassWL, sdl, lsf, pb, specA, blaReGLa, eqTNTChar, 
+aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, loadResis, 
+  longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar, 
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,
-  notSafe, bomb, explosion, gLassBR :: ConceptChunk
+  notSafe, bomb, explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
-aR            = dcc "aR"          (aspectR ^. term)
+aspectRatio   = dcc "aspectRatio" (aspectR ^. term)
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
     "sides, the ratio of the length of one of the supported edges " ++
     "perpendicular to the free edge, to the length of the free edge, is " ++
     "equal to or greater than 0.5.")
-gbr           = dcc "gbr"         (nounPhraseSP "glass breakage")
+glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
   ("The fracture or breakage of any lite or ply in monolithic, laminated, " ++
     "or insulating glass.")
 lite          = dcc "lite"        (cn' "lite") --is used in the plural form
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
 glassTy       = dcc "glassTy"     (cn' "glass types") "type of glass"
-an            = dcc "an"          (annealedGlass ^. term)
+annealedGl    = dcc "annealedGl"  (annealedGlass ^. term)
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5].")
-ft            = dcc "ft"          (fullyTGlass ^. term)
+fTemperedGl   = dcc "fTemperedGl"          (fullyTGlass ^. term)
   ("A flat and monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6].")
-hs            = dcc "hs"          (heatSGlass ^. term)
+hStrengthGl   = dcc "hStrengthGl"          (heatSGlass ^. term)
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6].")
-gtf           = dccWDS "gtf"      (glassTypeFac ^. term) 
+glTyFac       = dccWDS "glTyFac"      (glassTypeFac ^. term) 
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
   S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
   (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass" `sC`
@@ -169,26 +168,26 @@ load          = dcc "load"        (nounPhraseSP "load") "A uniformly distributed
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
-lr            = dcc "lr"          (lResistance ^. term)
+loadResis     = dcc "loadResis"          (lResistance ^. term)
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
-ldl           = dcc "ldl"         (nounPhraseSP "long duration load")
+longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
-nfl           = dccWDS "nfl"      (nfl ^. term)
+nonFactoredL  = dccWDS "nonFactoredL"    (nonFactoredL ^. term)
   (foldlSent [S "Three second duration uniform load associated with a probability of",
-    S "breakage less than or equal to 8", (plural $ lite ^. term), S "per 1000 for monolithic",
+    S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
     (getAcc annealedGlass), S "glass"])
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
-sdl           = dcc "sdl"         (nounPhraseSP "short duration load")
+shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
   "Any load lasting 3s or less."
-lsf           = dccWDS "lsf"      (lShareFac ^. term)
+loadShareFac  = dccWDS "loadShareFac"  (lShareFac ^. term)
   (foldlSent [S "A multiplying factor derived from the load sharing between the double",
   S "glazing, of equal or different thickness's and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
-pb            = dcc "pb"          (prob_br ^. term)
+probBreak     = dcc "probBreak"       (prob_br ^. term)
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
     "in lites per 1000.")
@@ -198,13 +197,13 @@ specA         = dcc "specA"       (nounPhraseSP "specifying authority")
     "appropriate site specific factors to determine the appropriate " ++
     "values used to calculate the specified design load, and furnishing " ++
     "other information required to perform this practice.")
-blaReGLa      = dcc "blaReGLa"    (nounPhraseSP "blast resistant glazing")
+blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
   ("Glazing that provides protection against air blast pressure generated " ++
     "by explosions.")
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
-sD            = dccWDS "sD"       (sd ^. term) (sd ^. defn)
+sD            = dccWDS "sD"       (standOffDist ^. term) (standOffDist ^. defn)
 blast         = dcc "blast"       (nounPhraseSP "blast") "any kind of man-made explosion"
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
@@ -221,4 +220,30 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with a destructive" ++
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
-gLassBR       = dcc "gLassBR"     (pn "glassBR") "glassBR" --lowercase?
+
+
+-- hack; needs to be removed eventually; originals are within Concepts.hs
+temporary :: [VarChunk]
+temporary = [nonFactorL_, lDurFac_, glassTypeFac_]
+
+nonFactorL_, lDurFac_, glassTypeFac_ :: VarChunk
+
+nonFactorL_    = makeVC "nonFactorL"    (nounPhraseSP "non-factored load") cB
+lDurFac_       = makeVC "lDurFac"       (nounPhraseSP "load duration factor") cB
+glassTypeFac_  = makeVC "glassTypeFac"  (nounPhraseSP "glass type factor") cB
+
+this_symbols :: [QSWrapper]
+this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
+  ++ (map qs glassBRUnitless))
+
+temporaryLOSymbols :: [QSWrapper]
+temporaryLOSymbols = this_symbols++map qs (temporary)
+
+gbSymbMap :: SymbolMap
+gbSymbMap = symbolMap temporaryLOSymbols
+
+gbSymbMapD :: QDefinition -> Contents
+gbSymbMapD term_ = (symbolMapFun temporaryLOSymbols Data) term_
+
+gbSymbMapT :: RelationConcept -> Contents
+gbSymbMapT term_ = (symbolMapFun temporaryLOSymbols Theory) term_

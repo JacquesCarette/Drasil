@@ -2,8 +2,6 @@
 module Drasil.TableOfAbbAndAcronyms
   ( table_of_abb_and_acronyms ) where
 
-import Control.Lens ((^.))
-
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
@@ -19,6 +17,6 @@ table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
 table :: (NamedIdea s) => [s] -> Contents
 table ls = Table (map (at_start) [symbol_, description]) (mkTable
   [(\ch -> getAcc ch) , 
-   (\ch -> titleize $ ch ^. term)]
+   (\ch -> titleize ch)]
   ls)
   (S "Abbreviations and Acronyms") False

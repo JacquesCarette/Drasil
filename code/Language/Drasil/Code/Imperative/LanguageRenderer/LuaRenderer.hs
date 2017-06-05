@@ -37,6 +37,8 @@ luaConfig _ c =
         package          = \_ -> empty,
         printFunc        = text "io.write",
         printLnFunc      = text "print",
+        printFileFunc    = \_ -> error "not implemented",
+        printFileLnFunc  = \_ -> error "not implemented",
         stateType        = luastateType c,
         
         blockStart = text "do", blockEnd = text "end",
@@ -53,9 +55,9 @@ luaConfig _ c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = \_ -> empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-
-        getEnv = \_ -> error "getEnv not implemented in Lua (yet)",
-        printFileDoc = error "printFileDoc not implemented in Lua"
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c, 
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
+        getEnv = \_ -> error "getEnv not implemented in Lua (yet)"
     }
 
 -- convenience
@@ -79,8 +81,8 @@ luastateType _ (Base _) _    = empty
 luastateType _ (Type name) _ = text name <> colon <> text initName
 luastateType c s d           = stateTypeD c s d
 
-luatop :: Config -> FileType -> a -> Doc
-luatop c ft _ = vcat [
+luatop :: Config -> FileType -> Label -> [Module] -> Doc
+luatop c ft _ _ = vcat [
     methodDoc c ft "" tableFindFunc,      --Needed for IndexOf function calls. TODO: only include this if IndexOf is used in the code
     blank,
     text inheritanceFunc]                --Function used to simulate definition of classes and inheritance in Lua. Also defines default constuctor, and some common OO class features.
@@ -124,8 +126,9 @@ luatop c ft _ = vcat [
                             \    return new_class\n\
                             \end"
 
-luabody :: Config -> FileType -> Label -> [Class] -> Doc
-luabody c f p ms = vibmap (classDoc c f p) $ fixCtorNames initName ms
+luabody :: Config -> FileType -> Label -> [Module] -> Doc
+luabody c f p modules = let ms = foldl1 (++) (map classes modules) in
+  vibmap (classDoc c f p) $ fixCtorNames initName ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -256,8 +259,8 @@ unOpDoc' op = unOpDocD' op
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (Self) = text "self"
-valueDoc' c (StateObj t@(List _ _) _) = listObj c <> stateType c t Def
-valueDoc' c (StateObj t vs) = stateType c t Def <> parens (callFuncParamList c vs)
+valueDoc' c (StateObj _ t@(List _ _) _) = listObj c <> stateType c t Def
+valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c v = valueDocD c v
 

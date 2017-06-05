@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
+import qualified Language.Drasil.NounPhrase as NP
 
 
 algorithm :: ConceptChunk
@@ -11,7 +12,7 @@ mod_calc_desc :: Sentence -> ConceptChunk
 mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation")   defnFromEx
 
 
-computer, os, structure, type_ :: NPNC
+computer, os, structure, type_ :: NamedChunk
 
 computer        = npnc "computer"       (cn' "computer")
 os              = npnc' "os"            (cn' "operating system") "OS"
@@ -19,11 +20,11 @@ structure       = npnc "structure"      (cn' "structure")
 type_           = npnc "type"           (cn' "type")
 
 
-dataStruct, dataStruct', dataType, dataType', inDatum, outDatum ::NPNC
+dataStruct, dataStruct', dataType, dataType', inDatum, outDatum :: NamedChunk
 
-dataStruct                   = compoundNPNC'' plural phrase datum structure
-dataStruct'                  = compoundNPNC'' plural plural datum structure
-dataType                     = compoundNPNC'' plural phrase datum type_
-dataType'                    = compoundNPNC'' plural plural datum type_
-inDatum                      = compoundNPNC input_ datum
-outDatum                     = compoundNPNC output_ datum
+dataStruct                   = compoundNC'' NP.plural NP.phrase datum structure
+dataStruct'                  = compoundNC'' NP.plural NP.plural datum structure
+dataType                     = compoundNC'' NP.plural NP.phrase datum type_
+dataType'                    = compoundNC'' NP.plural NP.plural datum type_
+inDatum                      = compoundNC input_ datum
+outDatum                     = compoundNC output_ datum

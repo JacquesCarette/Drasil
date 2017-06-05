@@ -40,30 +40,15 @@ nc i des = NC i des Nothing
 
 -- | 'NamedChunk' constructor for NamedChunks with abbreviations
 nc' :: String -> NP -> String -> NamedChunk
-nc' i t acc = NC i t (Just (S acc))
+nc' i t acc = NC i t (Just $ S acc)
 
-data NPNC where
-  NPNC :: String -> Sentence -> (Maybe Sentence) -> NP -> NPNC
-instance Eq NPNC where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk NPNC where
-  id f (NPNC a b c d) = fmap (\x -> NPNC x b c d) (f a)
-instance NamedIdea NPNC where
-  term f (NPNC a b c d) = fmap (\x -> NPNC a b c x) (f d)
-  getA (NPNC _ _ c _) = c
-instance NounPhrase NPNC where
-  phrase (NPNC _ _ _ d) = phrase d
-  plural (NPNC _ _ _ d) = plural d
-  sentenceCase (NPNC _ _ _ d) = sentenceCase d
-  titleCase (NPNC _ _ _ d) = titleCase d
+-- | 'NamedChunk' constructor for those without abbreviations
+npnc :: String -> NP -> NamedChunk
+npnc i n = NC i n Nothing
 
--- | 'NPNC' constructor for those without abbreviations
-npnc :: String -> NP -> NPNC
-npnc i n = NPNC i (phrase n) Nothing n
-
--- | 'NPNC' constructor for those with abbreviations
-npnc' :: String -> NP -> String -> NPNC
-npnc' i n a = NPNC i (phrase n) (Just $ S a) n
+-- | 'NamedChunk' constructor for those with abbreviations
+npnc' :: String -> NP -> String -> NamedChunk
+npnc' i n a = NC i n (Just $ S a)
 
 ----------------------
 -- various combinators
@@ -73,32 +58,28 @@ npnc' i n a = NPNC i (phrase n) (Just $ S a) n
 compoundterm :: (NamedIdea c, NamedIdea d) => 
   c -> d -> NamedChunk
 compoundterm t1 t2 = 
-  NC (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
+  nc (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
--- | Combinator for combining two 'NPNC's into one.
+-- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/
-compoundNPNC :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
-compoundNPNC t1 t2 = NPNC 
-  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase (t1 ^. term) (t2 ^. term))
+compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
   
-compoundNPNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
-compoundNPNC' t1 t2 = NPNC 
-  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
+compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC' t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
   
-compoundNPNC'' :: (NamedIdea a, NamedIdea b) => 
-  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NPNC
-compoundNPNC'' f1 f2 t1 t2 = NPNC
-  (t1 ^. id ++ t2 ^. id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing
-  (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
+compoundNC'' :: (NamedIdea a, NamedIdea b) => 
+  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNC'' f1 f2 t1 t2 = nc
+  (t1 ^. id ++ t2 ^. id) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
-compoundNPNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NPNC
-compoundNPNC''' t1 t2 = NPNC 
-  (t1^.id ++ t2^.id) (phrase $ compoundPhrase (t1 ^. term) (t2 ^. term)) Nothing 
-  (compoundPhrase'' plural phrase (t1 ^. term) (t2 ^. term))
+compoundNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC''' t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase'' plural phrase (t1 ^. term) (t2 ^. term))
 
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:
@@ -117,8 +98,8 @@ for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
 -- | Similar to 'for', but allows one to specify the function to use on each term
 -- before inserting for. For example one could use @for'' phrase plural t1 t2@
-for'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
-for'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "for" +:+ (f2 $ t2 ^. term)
+for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
 
 -- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
 -- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
@@ -155,27 +136,24 @@ of__ t1 t2 = nounPhrase''
 of'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
 of'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "of" +:+ (f2 $ t2 ^. term)
   
---FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase
 -- | Similar to 'of\'', but with the word "with" instead of "of".
 -- Phrase defaults to @(phrase t1) "with" (phrase t2)@, plural only pluralizes t2.
-with :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 with t1 t2 = nounPhrase''
-  (phrase t1 +:+ S "with" +:+ phrase t2)
-  (plural t1 +:+ S "with" +:+ plural t2)
-  (Replace (at_start t1 +:+ S "with" +:+ phrase t2))
-  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))  
+  (phrase (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term))
+  (plural (t1 ^. term) +:+ S "with" +:+ plural (t2 ^. term))
+  (Replace (at_start (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term)))
+  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize' (t2 ^. term)))  
 
---FIXME: This should be NamedIdea c & d, but temporarily swapped to NounPhrase  
 -- | Similar to 'with', except this is the
 -- case with "T1s with T2", as opposed to "T1 with T2", i.e.
 -- phrase defaults to @(plural t1) "with" (phrase t2)@, plural pluralizes both.
-
-with' :: (NounPhrase c, NounPhrase d) => c -> d -> NP
+with' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 with' t1 t2 = nounPhrase''
-  (plural t1 +:+ S "with" +:+ phrase t2)
-  (plural t1 +:+ S "with" +:+ plural t2)
-  (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
-  (Replace (titleize' t1 +:+ S "with" +:+ titleize' t2))
+  (plural (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term))
+  (plural (t1 ^. term) +:+ S "with" +:+ plural (t2 ^. term))
+  (Replace (at_start' (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term)))
+  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize' (t2 ^. term)))
   
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_ t1 t2 = nounPhrase''
@@ -192,28 +170,28 @@ and_' t1 t2 = nounPhrase''
   (Replace ((titleize $ t1 ^. term) +:+ S "and" +:+ (titleize' $ t2 ^. term)))
 
 andRT :: (NamedIdea c, NamedIdea d) => 
-  (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> NP
+  (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 andRT f1 f2 t1 t2 = nounPhrase''
   ((phrase $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term))
   ((phrase $ t1 ^. term) +:+ S "and" +:+ (plural $ t2 ^. term))
   (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term)))
-  (Replace ((f1 $ t1 ^. term) +:+ S "and" +:+ (f2 $ t2 ^. term)))
+  (Replace ((f1 t1) +:+ S "and" +:+ (f2 t2)))
   
-the :: (NamedIdea c) => c -> NPNC
+the :: (NamedIdea c) => c -> NamedChunk
 the t = npnc ("the" ++ t ^. id) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
-theCustom :: (NamedIdea c) => (NP -> Sentence) -> c -> NPNC
-theCustom f t = npnc ("the" ++ t ^. id)
-                (nounPhrase''(S "the" +:+ (f $ t ^. term)) (S "the" +:+ (f $ t ^. term)) CapFirst CapWords)
+theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
+theCustom f t = npnc ("the" ++ t ^. id) (nounPhrase''(S "the" +:+ (f t)) 
+  (S "the" +:+ (f t)) CapFirst CapWords)
 
 aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
 aNP t = nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))
   CapFirst CapWords  
   
-a_ :: (NamedIdea c) => c -> NPNC --Pluralization disallowed
+a_ :: (NamedIdea c) => c -> NamedChunk --Pluralization disallowed
 a_ t = npnc ("a" ++ t ^.id) (nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
   CapFirst CapWords)

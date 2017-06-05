@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (srs)
-import Data.Drasil.Utils (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
@@ -20,7 +20,42 @@ program = dcc "program"         (cn' "program")
   ("A series of coded software instructions to control the operation of a " ++
   "computer or other machine.")
 
+-- Non-functional requirements  
 
+accuracy, correctness, maintainability, performance, performanceSpd, portability, reliability,
+  reusability, understandability, verifiability :: ConceptChunk
+  
+accuracy = dcc "accuracy" (nounPhraseSP "accuracy")
+          "The quality or state of being correct or precise"
+
+correctness = dcc "correctness" (nounPhraseSP "correctness")
+              "The quality or state of being free from error"
+              
+maintainability = dcc "maintainability" (nounPhraseSP "maintainability")
+                  "The probability of performing a successful repair action within a given time"
+
+performance = dcc "performance" (nounPhraseSP "performance")
+              "The action or process of carrying out or accomplishing an action, task, or function"
+              
+performanceSpd = dcc (performance ^. id) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
+              "The action or process of carrying out or accomplishing an action, task, or function quickly"
+             
+portability = dcc "portability" (nounPhraseSP "portability")
+              "The ability of software to be transferred from one machine or system to another"
+
+reliability = dcc "reliability" (nounPhraseSP "reliability")
+              ("The degree to which the result of a measurement, calculation," ++
+              "or specification can be depended on to be accurate")
+
+reusability = dcc "reusability" (nounPhraseSP "reusability")
+              "The use of existing assets in some form within the software product development process"
+
+understandability = dcc "understandability" (nounPhraseSP "understandability")
+                    "The property of being understandable"
+
+verifiability = dcc "verifiability" (nounPhraseSP "verifiability")
+                "the quality or state of being capable of being verified , confirmed , or substantiated"
+                  
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 
 --FIXME: "hiding" is not a noun.
@@ -32,7 +67,7 @@ hwHiding = dcc "hwHiding" (cn "hardware hiding") (
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent
   [S "Includes programs that provide externally visible behaviour of the", 
-  S "system as specified in the", (phrase (srs ^. term)),
+  S "system as specified in the", (phrase srs),
   (sParen $ short srs), S "documents. This module",
   S "serves as a communication layer between the hardware-hiding module",
   S "and the software decision module. The programs in this module will need",

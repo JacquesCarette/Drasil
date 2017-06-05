@@ -45,6 +45,8 @@ cppConfig options c =
         package          = namespaceD,
         printFunc        = text "std::cout",
         printLnFunc      = text "std::cout",
+        printFileFunc    = \f -> valueDoc c f,
+        printFileLnFunc  = \f -> valueDoc c f,
         stateType        = cppstateType c,
 
         blockStart = lbrace, blockEnd = rbrace,
@@ -58,10 +60,11 @@ cppConfig options c =
         conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDocD' c, funcAppDoc = funcAppDocD c,
         funcDoc = funcDoc' c, iterationDoc = iterationDoc' c, litDoc = litDocD,
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, printFileDoc = printFileDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
+        objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
-
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
@@ -83,15 +86,15 @@ renderCode' c ms (AbsCode p) =
 
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
-cppstateType _ (Base (File In)) _    = text "ifstream"
-cppstateType _ (Base (File Out)) _   = text "ofstream"
+cppstateType _ (Base (FileType Read)) _    = text "ifstream"
+cppstateType _ (Base (FileType Write)) _   = text "ofstream"
 cppstateType _ (Base Boolean) _ = text "bool"
 cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
 cppstateType c s d              = stateTypeD c s d
 
-cpptop :: Config -> FileType -> Label -> Doc
-cpptop c Header p = vcat [
+cpptop :: Config -> FileType -> Label -> [Module] -> Doc
+cpptop c Header p _ = vcat [
     text "#ifndef" <+> text p <> text "_h",
     text "#define" <+> text p <> text "_h",
     blank,
@@ -102,7 +105,7 @@ cpptop c Header p = vcat [
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p = vcat [          --TODO remove includes if they aren't used
+cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
     include c ("\"" ++ p ++ cppHeaderExt ++ "\""),
     include c "<algorithm>",
     include c "<iostream>",
@@ -118,15 +121,17 @@ cpptop c Source p = vcat [          --TODO remove includes if they aren't used
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
 
-cppbody :: Config -> FileType -> Label -> [Class] -> Doc
-cppbody c f@(Header) p cs = vcat [
+cppbody :: Config -> FileType -> Label -> [Module] -> Doc
+cppbody c f@(Header) p modules = let cs = foldl1 (++) (map classes modules) in
+    vcat [
     package c p <+> lbrace,
     oneTabbed [
         clsDecListDoc c cs,
         blank,
         vibmap (classDoc c f p) cs],
     rbrace]
-cppbody c f@(Source) p cs = vibmap (classDoc c f p) cs
+cppbody c f@(Source) p modules = let cs = foldl1 (++) (map classes modules) in
+   vibmap (classDoc c f p) cs
 
 cppbottom :: FileType -> Doc
 cppbottom Header = text "#endif"
@@ -134,8 +139,8 @@ cppbottom Source = empty
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
-assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
+--assignDoc' c (Assign v Input) = inputFunc c <+> text ">>" <+> valueDoc c v
+--assignDoc' c (Assign v (InputFile f)) = valueDoc c f <+> text ">>" <+> valueDoc c v
 assignDoc' c a = assignDocD c a
 
 declarationDoc' :: Config -> Declaration -> Doc
@@ -170,7 +175,7 @@ iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var it) (Var $ "(*" ++ it ++ ")") b
     where initState = DeclState $ VarDecDef it (Iterator t) (listVar $. IterBegin)
           guard     = binExpr (Var it) NotEqual (listVar $. IterEnd)
-          update    = (&++)it
+          update    = (&.++)it
 iterationDoc' c i = iterationDocD c i
 
 classDoc' :: Config -> FileType -> Label -> Class -> Doc
@@ -227,27 +232,17 @@ paramDoc' :: Config -> Parameter -> Doc
 paramDoc' c (StateParam n t@(List _ _)) = stateType c t Dec <+> text "&" <> text n
 paramDoc' c p = paramDocD c p
 
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
-printDoc' c newLn _ v@(ListVar _ t) = vcat [
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDoc' _ _ _ _ (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
+printDoc' c Console newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printStr "[",
-    statementDoc c NoLoop $ ValState $ FuncApp "copy" [v $. IterBegin, v $. IterEnd, FuncApp iter [Var "std::cout", litString ","]],
+    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [Var "std::cout", litString ","]],
     statementDoc c Loop $ printLastStr "]"]
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printStrLn else printStr
-printDoc' c newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
+printDoc' c Console newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
     where endl = if newLn then text "<<" <+> text "std::endl" else empty
-
-printFileDoc' :: Config -> Value -> Bool -> StateType -> Value -> Doc
-printFileDoc' _ _ _ _   (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
-printFileDoc' c f newLn _ v@(ListVar _ t) = vcat [
-    statementDoc c NoLoop $ printFileStr f "[",
-    statementDoc c NoLoop $ ValState $ FuncApp "copy" [v $. IterBegin, v $. IterEnd, FuncApp iter [f, litString ","]],
-    statementDoc c Loop $ printLastStr "]"]
-    where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
-          printLastStr = if newLn then printFileStrLn f else printFileStr f
-printFileDoc' c f newLn _ v = valueDoc c f <+> text "<<" <+> valueDoc c v <+> endl
-    where endl = if newLn then text "<<" <+> text "std::endl" else empty
+printDoc' _ (File _) _ _ _ = empty --TODO!
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c ft@(Header) m f = transDecLine c ft m f
@@ -265,8 +260,8 @@ methodListDoc' c f m fs = methodListDocD c f m fs
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (EnumElement _ e) = text e
 valueDoc' c v@(Arg _) = valueDocD' c v
-valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
-valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
+--valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
+--valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
 
 ----------------------
@@ -287,7 +282,7 @@ destructor _ n vs =
         guard l = Var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
-        deleteLoop l = IterState (For initv (guard l) ((&++)i) (loopBody l))
+        deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
         deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (Var lbl)
         deleteVar (StateVar lbl _ _ _ _) = FreeState $ Var lbl
         deleteStatements = map deleteVar deleteVars

@@ -34,6 +34,7 @@ data Expr = Var   Variable
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
            | Abs
+           | Norm
            | Integral ((Maybe Expr),(Maybe Expr)) Expr
            | Sin
            | Cos
@@ -103,6 +104,7 @@ instance Show Function where
   show Log = "log"
   show (Summation _) = "&sum;"
   show Abs = ""
+  show Norm = ""
   show (Integral _ _) = "&int;"
   show Sin = "sin"
   show Cos = "cos"

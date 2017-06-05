@@ -20,5 +20,5 @@ r9  = ReqChunk (nw emptyN) [mod_ctrl, mod_outputf, mod_slipslicer, mod_sds]
 r10 = ReqChunk (nw emptyN) [mod_outputf, mod_mp, mod_rfem, mod_sds]
 r11 = ReqChunk (nw emptyN) [mod_outputf, mod_plot]
 
-emptyN :: NPNC
+emptyN :: NamedChunk
 emptyN = npnc "" (cn "")

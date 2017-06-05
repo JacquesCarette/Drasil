@@ -17,8 +17,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
-    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',
-    
+    statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
+    inputDocD,
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
 ) where
@@ -71,13 +71,15 @@ data Config = Config {
     package :: Label -> Doc,
     printFunc :: Doc,
     printLnFunc :: Doc,
+    printFileFunc :: Value -> Doc,
+    printFileLnFunc :: Value -> Doc,
     stateType :: StateType -> DecDef -> Doc,
     
     blockStart :: Doc, blockEnd :: Doc,
     ifBodyStart :: Doc, elseIf :: Doc,
     
-    top :: FileType -> Label -> Doc,
-    body :: FileType -> Label -> [Class] -> Doc,
+    top :: FileType -> Label -> [Module] -> Doc,
+    body :: FileType -> Label -> [Module] -> Doc,
     bottom :: FileType -> Doc,
     
     assignDoc :: Assignment -> Doc,
@@ -102,8 +104,7 @@ data Config = Config {
     paramDoc :: Parameter -> Doc,
     paramListDoc :: [Parameter] -> Doc,
     patternDoc :: Pattern -> Doc,
-    printDoc :: Bool -> StateType -> Value -> Doc,
-    printFileDoc :: Value -> Bool -> StateType -> Value -> Doc,
+    printDoc :: IOType -> Bool -> StateType -> Value -> Doc,
     retDoc :: Return -> Doc,
     scopeDoc :: Scope -> Doc,
     stateDoc :: StateVar -> Doc,
@@ -112,9 +113,13 @@ data Config = Config {
     methodDoc :: FileType -> Label -> Method -> Doc,
     methodListDoc :: FileType -> Label -> [Method] -> Doc,
     methodTypeDoc :: MethodType -> Doc,
+    functionDoc :: FileType -> Label -> Method -> Doc,
+    functionListDoc :: FileType -> Label -> [Method] -> Doc,
     unOpDoc :: UnaryOp -> Doc,
     valueDoc :: Value -> Doc,
-    getEnv :: String -> Doc -- careful, this can fail!
+    getEnv :: String -> Doc, -- careful, this can fail!
+    ioDoc :: IOSt -> Doc,
+    inputDoc :: IOType -> StateType -> Value -> Doc
 }
 
 ----------------------------------
@@ -122,15 +127,15 @@ data Config = Config {
 ----------------------------------
 
 fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
-fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p $ map (clsWithName ms) ns)
+fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- $ map (clsWithName ms) ns)
 
 fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
-fileCodeSplit c (Pack p ms) ns f e = let classes = map (clsWithName ms) ns
-  in [(fileName c (className cls) ns ++ e, fileDoc c f p [cls]) | cls <- classes]
+fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
+  [(fileName c (moduleName cls) ns ++ e, fileDoc c f p [cls]) | cls <- ms]
 
-fileDoc :: Config -> FileType -> Label -> [Class] -> Doc
+fileDoc :: Config -> FileType -> Label -> [Module] -> Doc
 fileDoc c f p ms = vibcat [
-    top c f p,
+    top c f p ms,
     body c f p ms,
     bottom c f]
 
@@ -253,9 +258,6 @@ declarationDocD c (ObjDecDef n t v) = declarationDoc c $ VarDecDef n t v
 declarationDocD c (ConstDecDef n l) = text "const" <+> stateType c (Base $ typeOfLit l) Dec <+> text n <+> equals <+> litDoc c l
 
 declarationDocD' :: Config -> Declaration -> Doc
-declarationDocD' c (VarDecDef n t Input) = vcat [
-    declarationDoc c (VarDec n t) <> endStatement c,
-    assignDoc c $ Assign (Var n) Input]
 declarationDocD' c d = declarationDocD c d
 
 enumElementsDocD :: Config -> [Label] -> Doc
@@ -308,6 +310,7 @@ funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast 
 funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast Integer)
 funcDocD c (ListAccess i) = brackets $ valueDoc c i
 funcDocD c (ListAdd i v) = dot <> funcAppDoc c "Insert" [i, v]
+funcDocD c (ListAppend v) = dot <> funcAppDoc c "append" [v]
 funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
@@ -413,26 +416,28 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&.++)index) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0
           notify = oneLiner $ ValState $ (obsList $. at index) $. Func fn ps
 
-printDocD :: Config -> Bool -> StateType -> Value -> Doc
-printDocD c newLn _ v@(ListVar _ t) = vcat [
-    statementDoc c NoLoop $ printStr "[",
+printDocD :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDocD c io newLn _ v@(ListVar _ t) = vcat [
+    statementDoc c NoLoop $ printStr' io "[",
     iterationDoc c $ ForEach e v [ Block [
-        print t element,
-        printStr "," ] ],
+        print' io t element,
+        printStr' io "," ] ],
     statementDoc c Loop $ printLastStr "]"]
     where e = genNameFromType t
-          printLastStr = if newLn then printStrLn else printStr
+          printLastStr = if newLn then printStrLn' io else printStr' io
           element = case t of List _ st -> e `listOf` st
                               _         -> Var e
-printDocD c newLn _ v = printFn <> parens (valueDoc c v)
+printDocD c Console newLn _ v = printFn <> parens (valueDoc c v)
     where printFn = if newLn then printLnFunc c else printFunc c
-
+printDocD c (File f) newLn _ v = printFn <> parens (valueDoc c v)
+    where printFn = if newLn then printFileLnFunc c f else printFileFunc c f   
+    
 retDocD :: Config -> Return -> Doc
 retDocD c (Ret v) = text "return" <+> valueDoc c v
 
@@ -460,16 +465,27 @@ statementDocD c loc (RetState s) = retDoc c s <> end c loc
 statementDocD c loc (ValState s) = valueDoc c s <> end c loc
 statementDocD c _ (CommentState s) = comment c s
 statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
-statementDocD c loc (PrintState newLn t v) = printDoc c newLn t v <> end c loc
-statementDocD c loc (PrintFileState f newLn t v) = printFileDoc c f newLn t v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
+statementDocD c loc (IOState io) = ioDoc c io <> end c loc
+
+ioDocD :: Config -> IOSt -> Doc
+ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString (modeStr m)])
+  where modeStr Read = "r"
+        modeStr Write = "w"
+ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close" [])
+ioDocD c (Out t newLn s v) = printDoc c t newLn s v
+ioDocD c (In t s v) = inputDoc c t s v
+
+inputDocD :: Config -> IOType -> StateType -> Value -> Doc
+inputDocD _ _ (Base _) _ = error "No default implementation"
+inputDocD _ _ _ _ = error "Type not supported for input"
 
 stateTypeD :: Config -> StateType -> DecDef -> Doc
 stateTypeD c (List lt t@(List _ _)) _ = list c lt <> angles (space <> stateType c t Dec <> space)
 stateTypeD c (List lt t) _            = case t of Base Boolean -> bitArray c
                                                   _    -> list c lt <> angles (stateType c t Dec)
-stateTypeD _ (Base (File _)) _   = text "File"
+stateTypeD _ (Base (FileType _)) _ = text "File"
 stateTypeD _ (Base Boolean) _    = text "Boolean"
 stateTypeD _ (Base Integer) _    = text "int"
 stateTypeD _ (Base Float) _      = text "float"
@@ -502,6 +518,13 @@ methodListDocD :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDocD c t m ms = vibmap (methodDoc c t m) funcs
     where funcs = filter (\f -> not $ isEmpty $ methodDoc c t m f) ms
 
+functionDocD :: Config -> FileType -> Label -> Method -> Doc
+functionDocD _ _ _ _ = error "Not implemented yet!"
+
+functionListDocD :: Config -> FileType -> Label -> [Method] -> Doc
+functionListDocD c t m ms = vibmap (functionDoc c t m) funcs
+    where funcs = filter (\f -> not $ isEmpty $ functionDoc c t m f) ms
+
 methodTypeDocD :: Config -> MethodType -> Doc
 methodTypeDocD c (MState t) = stateType c t Dec
 methodTypeDocD _ Void = text "void"
@@ -512,30 +535,32 @@ unOpDocD Negate = text "-"
 unOpDocD SquareRoot = text "sqrt"
 unOpDocD Abs = text "fabs"
 unOpDocD Not = text "!"
+unOpDocD Log = text "log"
+unOpDocD Exp = text "exp"
 
 unOpDocD' :: UnaryOp -> Doc
 unOpDocD' SquareRoot = text "math.sqrt"
 unOpDocD' Abs = text "math.fabs"
 unOpDocD' Not = text "not"
+unOpDocD' Log = text "math.log"
+unOpDocD' Exp = text "math.exp"
 unOpDocD' op = unOpDocD op
 
 valueDocD :: Config -> Value -> Doc
 valueDocD c (Const n) = valueDoc c $ Var n
 valueDocD c (Lit v) = litDoc c v
 valueDocD _ (EnumElement en e) = text en <> dot <> text e
-valueDocD c (FuncApp n vs) = funcAppDoc c n vs
+valueDocD c (FuncApp _ n vs) = funcAppDoc c n vs
 valueDocD c (ObjAccess v f) = objAccessDoc c v f
 valueDocD c (Expr v) = exprDoc c v
 valueDocD _ Self = text "this"
-valueDocD c (StateObj t@(List _ _) vs) = listObj c <+> stateType c t Def <> parens (callFuncParamList c vs)
-valueDocD c (StateObj t vs) = new <+> stateType c t Def <> parens (callFuncParamList c vs)
+valueDocD c (StateObj _ t@(List _ _) vs) = listObj c <+> stateType c t Def <> parens (callFuncParamList c vs)
+valueDocD c (StateObj _ t vs) = new <+> stateType c t Def <> parens (callFuncParamList c vs)
 valueDocD _ (Var v) = text v
 valueDocD c (EnumVar v) = valueDoc c $ Var v
 valueDocD c (ListVar v _) = valueDoc c $ Var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
-valueDocD c Input = inputFunc c
-valueDocD _ (InputFile _) = error "This should be defined in each renderer"
 valueDocD c (Global s) = getEnv c s
 
 valueDocD' :: Config -> Value -> Doc
@@ -593,6 +618,7 @@ jump Continue = text "continue"
 litsToValues :: [Literal] -> [Value]
 litsToValues = map Lit
 
+-- what is the point of this?
 clsWithName :: [Class] -> Label -> Class
 clsWithName (c:cs) n = if className c == n then c else clsWithName cs n
 clsWithName [] n = error $ "Class '" ++ n ++ "' not found"

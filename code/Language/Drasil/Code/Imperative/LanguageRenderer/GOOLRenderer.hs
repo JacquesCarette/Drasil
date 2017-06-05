@@ -43,6 +43,8 @@ goolConfig options c =
             text $ makeAbsCode ++ " = AbsCode $ Pack \"" ++ p ++ "\" " ++ classList],
         printFunc        = text "print",
         printLnFunc      = text "printLn",
+        printFileFunc    = \v -> text "printFile" <+> valueDoc c v,
+        printFileLnFunc  = \v -> text "printFileLn" <+> valueDoc c v,
         stateType        = goolstateType c,
         
         blockStart = text "[", blockEnd = text "]", 
@@ -59,8 +61,9 @@ goolConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDoc' c, patternDoc = patternDoc' c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDoc',
         stateDoc = stateDoc' c, stateListDoc = stateListDoc' c, statementDoc = statementDoc' c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-        getEnv = \_ -> error "getEnv for GOOL is not defined",
-        printFileDoc = error "printFileDoc for GOOL is not defined"
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
+        getEnv = \_ -> error "getEnv for GOOL is not defined"
     }
     
 -- for convenience
@@ -83,19 +86,20 @@ goolstateType _ (Base Character) _ = text "char"
 goolstateType _ (Base String) _ = text "string"
 goolstateType _ (Type name) _ = parens $ text "Type" <+> lbl name
 goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
-goolstateType _ (Base (File In)) _ = text "infile"
-goolstateType _ (Base (File Out)) _ = text "outfile"
+goolstateType _ (Base (FileType Read)) _ = text "infile"
+goolstateType _ (Base (FileType Write)) _ = text "outfile"
 
-gooltop :: Config -> Label -> a -> b -> Doc
-gooltop c hsMod _ _ = vcat [
+gooltop :: Config -> Label -> FileType -> Label -> [Module] -> Doc
+gooltop c hsMod _ _ _ = vcat [
     text $ "module " ++ hsMod ++ " (" ++ classNameList ++ ", " ++ makeAbsCode ++ ") where",
     blank,
     include c "Prelude hiding (break,log,print,return)",
     include c "GOOL.CodeGeneration.AbstractCode",
     include c "GOOL.Auxil.DataTypes"]
 
-goolbody :: Config -> a -> Label -> [Class] -> Doc
-goolbody c _ p cs = vibcat [
+goolbody :: Config -> a -> Label -> [Module] -> Doc
+goolbody c _ p modules = let cs = foldl1 (++) (map classes modules) in
+    vibcat [
     package c p,
     clsDecListDoc c cs,
     vibmap (classDoc c Source p) cs]
@@ -105,9 +109,9 @@ assignDoc' :: Config -> Assignment -> Doc
 assignDoc' c (Assign (Var n) v2) = lbl n <+> text "&.=" <+> valueDoc c v2
 assignDoc' c (Assign v1 (Var n)) = valueDoc c v1 <+> text "&=." <+> lbl n
 assignDoc' c (Assign v1 v2) = valueDoc c v1 <+> text "&=" <+> valueDoc c v2
-assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&+=" <+> valueDoc c v2
+assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&.+=" <+> valueDoc c v2
 assignDoc' c (PlusEquals v1 v2) = text "AssignState $ PlusEquals" <+> valueDoc c v1 <+> valueDoc c v2
-assignDoc' _ (PlusPlus (Var n)) = text "(&++)" <> lbl n
+assignDoc' _ (PlusPlus (Var n)) = text "(&.++)" <> lbl n
 assignDoc' c (PlusPlus v) = text "AssignState $ PlusPlus" <+> valueDoc c v
 
 binOpDoc' :: BinaryOp -> Doc
@@ -177,6 +181,7 @@ funcDoc' _ ListSize = text "ListSize"
 funcDoc' _ (ListAccess (Var n)) = text "at" <+> lbl n
 funcDoc' c (ListAccess v) = text "ListAccess" <+> valueDoc c v
 funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
+funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
 funcDoc' _ (IterBegin) = text "IterBegin"
@@ -275,11 +280,15 @@ patternDoc' c (Observer (AddObserver t o)) =
 patternDoc' c (Observer (NotifyObservers t fn ps)) = 
     text "PatternState $ Observer $ NotifyObservers" <+> stateType c t Dec <+> lbl fn <+> hsList (valueDoc c) ps
     
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' _ newLn (Base String) (Lit (LitStr s)) = text printFn <+> lbl s
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDoc' _ Console newLn (Base String) (Lit (LitStr s)) = text printFn <+> lbl s
     where printFn = if newLn then "printStrLn" else "printStr"
-printDoc' c newLn t v = printFn <+> stateType c t Dec <+> valueDoc c v
+printDoc' c Console newLn t v = printFn <+> stateType c t Dec <+> valueDoc c v
     where printFn = if newLn then printLnFunc c else printFunc c
+printDoc' c (File f) newLn (Base String) (Lit (LitStr s)) = text printFn <+> valueDoc c f <+> lbl s
+    where printFn = if newLn then "printFileStrLn" else "printFileStr"
+printDoc' c (File f) newLn t v = printFn f <+> stateType c t Dec <+> valueDoc c v
+    where printFn = if newLn then printFileLnFunc c else printFileFunc c
     
 scopeDoc' :: Scope -> Doc
 scopeDoc' Private = text "Private"
@@ -327,6 +336,8 @@ unOpDoc' Negate = text "#~"
 unOpDoc' SquareRoot = text "#/^"
 unOpDoc' Abs = text "#|"
 unOpDoc' Not = text "?!"
+unOpDoc' Log = text "log"
+unOpDoc' Exp = text "exp"
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' c = parens . valueDoc'' c
@@ -339,9 +350,10 @@ valueDoc'' _ (Lit (LitFloat v)) = text "litFloat" <+> double v
 valueDoc'' _ (Lit (LitChar v)) = text "litChar" <+> quotes (char v)
 valueDoc'' _ (Lit (LitStr v)) = text "litString" <+> lbl v
 valueDoc'' _ (EnumElement en e) = lbl en <+> text "$:" <+> lbl e
-valueDoc'' c (FuncApp n vs) = text "FuncApp" <+> funcAppDoc c n vs
+valueDoc'' c (FuncApp (Just l) n vs) = text "funcApp" <+> text l <+> funcAppDoc c n vs
+valueDoc'' c (FuncApp Nothing n vs) = text "funcApp'" <+> funcAppDoc c n vs
 valueDoc'' _ Self = text "Self"
-valueDoc'' c (StateObj t vs) = text "StateObj" <+> stateType c t Dec <+> hsList (valueDoc c) vs
+valueDoc'' c (StateObj l t vs) = text "StateObj" <+> justDoc l <+> stateType c t Dec <+> hsList (valueDoc c) vs
 valueDoc'' _ (Var v) = text "Var" <+> lbl v
 valueDoc'' _ (EnumVar v) = text "EnumVar" <+> lbl v
 valueDoc'' c (ListVar v t) = lbl v <+> text "`listOf`" <+> stateType c t Dec
@@ -372,3 +384,7 @@ casesDoc c f = hsVList (\(a,b) -> parens $ f a <> comma <+> bodyDoc c b)
 
 elseBody :: Config -> Body -> Doc
 elseBody c b = if null b then text "noElse" else bodyDoc c b
+
+justDoc :: Maybe Label -> Doc
+justDoc (Just l) = parens $ text "Just" <+> text l
+justDoc Nothing = text "Nothing" 

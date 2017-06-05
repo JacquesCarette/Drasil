@@ -36,6 +36,8 @@ csharpConfig _ c =
         package          = namespaceD,
         printFunc        = text "Console.Write",
         printLnFunc      = text "Console.WriteLine",
+        printFileFunc    = \_ -> error "not implemented",
+        printFileLnFunc  = \_ -> error "not implemented",
         stateType        = stateTypeD c,
         
         blockStart = lbrace, blockEnd = rbrace, 
@@ -52,23 +54,24 @@ csharpConfig _ c =
         objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDocD c,
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
-
-        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)",
-        printFileDoc = error "printFileDoc not implemented in CSharp"
+        ioDoc = ioDocD c,inputDoc = inputDocD c,
+        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        getEnv = \_ -> error "getEnv not implemented in CSharp (yet)"
     }
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
 renderCode' c ms (AbsCode p) = Code [fileCode c p [m] Source (ext c) | m <- ms]
 
-cstop :: Config -> a -> b -> Doc
-cstop c _ _ = vcat [
+cstop :: Config -> FileType -> Label -> [Module] -> Doc
+cstop c _ _ _ = vcat [
     include c "System" <> endStatement c,
     include c "System.Collections" <> endStatement c,
     include c "System.Collections.Generic" <> endStatement c]
 
-csbody :: Config -> a -> Label -> [Class] -> Doc
-csbody c _ p ms = vcat [
+csbody :: Config -> a -> Label -> [Module] -> Doc
+csbody c _ p  modules = let ms = foldl1 (++) (map classes modules) in
+    vcat [
     package c p <+> lbrace,
     oneTab $ vibmap (classDoc c Source p) ms,
     rbrace]

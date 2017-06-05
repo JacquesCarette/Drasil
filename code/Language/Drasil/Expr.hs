@@ -7,7 +7,6 @@ import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
-import Language.Drasil.Chunk.NamedIdea (NamedIdea)
 import Language.Drasil.Symbol
 
 import Control.Lens ((^.))
@@ -38,7 +37,7 @@ data Expr where
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)*dx1
-  C        :: (NamedIdea c, SymbolForm c) => c -> Expr -- Chunk (must be 
+  C        :: (SymbolForm c) => c -> Expr -- Chunk (must be 
   -- representable as a symbol)
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
@@ -112,7 +111,8 @@ data UFunc where
     -- OR Nothing for the first term.
     -- Expr is the expression we are summing over
   Abs :: Expr -> UFunc -- Absolute value
-  Integral :: (NamedIdea c, SymbolForm c) => 
+  Norm :: Expr -> UFunc -- Norm
+  Integral :: (SymbolForm c) => 
     ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
     -- Integral (low,high) Bounds (if any), then (expression to integrate) 
     -- and finally which chunk (variable) we are integrating with respect to.

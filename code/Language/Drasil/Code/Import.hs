@@ -17,26 +17,28 @@ import Language.Drasil.Space as S
 import Language.Drasil.Chunk as C
 import Language.Drasil.Chunk.Quantity as Q
 
-toCode :: NamedIdea c => c -> [ModuleChunk] -> AbstractCode
-toCode prog mcs = AbsCode $ Pack (prog ^. id)
-  (makeModules (filter generated mcs) [])
+toCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> AbstractCode
+toCode prog mcs m = AbsCode $ Pack (prog ^. id)
+  (makeModules (filter generated mcs) [] m)
 
-makeModules :: [ModuleChunk] -> [Class] -> [Class]
-makeModules [] cs = cs
-makeModules (mc:mcs) cs =
+makeModules :: [ModuleChunk] -> [Module] -> SymbolMap -> [Module]
+makeModules [] cs _ = cs
+makeModules (mc:mcs) cs m =
   -- if dependencies haven't been built into Class types, postpone
   if   Set.fromList (map
          (\x -> makeClassNameValid $ (modcc x) ^. id)
          (filter generated (uses mc)))
        `Set.isSubsetOf`
-       Set.fromList (map className cs)
-  then makeModules mcs (makeModule mc cs:cs)
-  else makeModules (mcs ++ [mc]) cs
+       Set.fromList (map moduleName cs)
+  then makeModules mcs (makeModule mc cs m:cs) m
+  else makeModules (mcs ++ [mc]) cs m
 
 
-makeModule :: ModuleChunk -> [Class] -> Class
-makeModule mc cs = pubClass (makeClassNameValid $ (modcc mc) ^. id) noParent
-  (makeFields (field mc)) (makeMethods (method mc) cs)
+makeModule :: ModuleChunk -> [Module] -> SymbolMap -> Module
+makeModule mc cs m = buildModule (makeClassNameValid $ (modcc mc) ^. id)
+  [] [] []
+  [(pubClass (makeClassNameValid $ (modcc mc) ^. id) noParent
+  (makeFields (field mc)) (makeMethods (method mc) cs m))]
 
 makeFields :: [VarChunk] -> [StateVar]
 makeFields = map makeField
@@ -44,52 +46,52 @@ makeFields = map makeField
 makeField :: VarChunk -> StateVar
 makeField vc = pubMVar 2 (makeType (vc ^. Q.typ)) (vc ^. id)
 
-makeMethods :: [MethodChunk] -> [Class] -> [Method]
-makeMethods mcs cs = map (\x -> makeMethod x cs) mcs
+makeMethods :: [MethodChunk] -> [Module] -> SymbolMap -> [Method]
+makeMethods mcs cs m = map (\x -> makeMethod x cs m) mcs
 
-makeMethod :: MethodChunk -> [Class] -> Method
-makeMethod meth@(MeC { mType = MCalc (EC a b)}) _ =
+makeMethod :: MethodChunk -> [Module] -> SymbolMap -> Method
+makeMethod meth@(MeC { mType = MCalc (EC a b)}) _ m =
   pubMethod (A.typ $ makeType $ a ^. Q.typ) ("calc_" ++ ((methcc meth) ^. id))
-  (map (\vc -> param (vc ^. id) (makeType (vc ^. Q.typ))) (vars b))
+  (map (\vc -> param (vc ^. id) (makeType (vc ^. Q.typ))) (vars b m))
   (oneLiner $ return $ makeExpr b)
 
-makeMethod      (MeC { mType = MInput IOStd vc}) _ =
+makeMethod      (MeC { mType = MInput IOStd vc}) _ _ =
   pubMethod (A.typ $ makeType $ vc ^. Q.typ) ("in_" ++ (vc ^. id)) []
-  [ Block [ varDec (vc ^. id) (makeType $ vc ^. Q.typ),
-            assign (Var (vc ^. id)) (Input)
+  [ Block [ --varDec (vc ^. id) (makeType $ vc ^. Q.typ),
+            --assign (Var (vc ^. id)) (Input)
           ]
   ]
 
-makeMethod      mc@(MeC { mType = MInput (IOFile f) vc}) classList =
+makeMethod      mc@(MeC { mType = MInput (IOFile _) vc}) _ _ =
   pubMethod (Void) ((methcc mc) ^. id)
     [param (vc ^. id) (makeType $ vc ^. Q.typ)]
-  [ Block [ varDec ("inFile") (infile),
-            ValState $ ObjAccess (Var "inFile") (FileOpen f)
-          ],
-    Block (makeAssignments $ vc ^. Q.typ)
+  [ Block [ --varDec ("inFile") (infile),
+            --ValState $ ObjAccess (Var "inFile") (FileOpen f)
+          ]--,
+    --Block (makeAssignments $ vc ^. Q.typ)
   ]
-  where makeAssignments :: Space -> [Statement]
+{-  where makeAssignments :: Space -> [Statement]
         makeAssignments (S.Obj s) = map (\x -> assign x
           (InputFile (Var "inFile")))
           (map (ObjVar (Var $ vc ^. id))
             (getClassVars $ findClass s classList))
         makeAssignments _ = [assign (Var (vc ^. id))
-          (InputFile (Var "inFile"))]
+          (InputFile (Var "inFile"))] -}
 
-makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) _ =
+makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) _ _ =
   pubMethod (Void) ((methcc mc) ^. id)
     (map (\x -> param (x ^. id) (makeType $ x ^. Q.typ)) vcs)
   [ Block [ varDec ("outFile") (outfile),
             ValState $ ObjAccess (Var "outFile") (FileOpen f)
           ],
-    Block (map (\x -> PrintFileState (Var "outFile") True
-      (makeType (x ^. Q.typ)) (Var (x ^. id))) vcs)
+    Block (map (\x -> printFileLn (Var "outFile") (makeType (x ^. Q.typ)) 
+      (Var (x ^. id))) vcs)
   ]
 
-makeMethod (MeC { mType = MCustom b}) _ =
+makeMethod (MeC { mType = MCustom b}) _ _ =
   MainMethod b
 
-makeMethod (MeC _ (MOutput IOStd _) _ _ _) _ =
+makeMethod (MeC _ (MOutput IOStd _) _ _ _) _ _ =
   error "oops, missing case (TODO)"
 
 makeType :: Space -> StateType
@@ -117,9 +119,12 @@ makeExpr (b E.:+ e) = (makeExpr b) #+ (makeExpr e)
 makeExpr (b E.:- e) = (makeExpr b) #- (makeExpr e)
 makeExpr _          = error "Unimplemented expression in code generation"
 
-findClass :: String -> [Class] -> Class
-findClass _ [] = error "Class not found"
-findClass n (c:cs) = if (makeClassNameValid n) == className c then c else findClass n cs
+findClass :: String -> [Module] -> Class
+findClass n ms = findClass' n (foldl1 (++) (map classes ms))
+
+findClass' :: String -> [Class] -> Class
+findClass' _ [] = error "Class not found"
+findClass' n (c:cs) = if (makeClassNameValid n) == className c then c else findClass' n cs
 
 getClassVars :: Class -> [Value]
 getClassVars (Enum _ _ _) = error "Enum does not have vars"

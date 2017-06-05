@@ -2,17 +2,14 @@ module Drasil.GlassBR.DataDefs where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
---import Data.Drasil.Concepts.Documentation
 import Prelude hiding (log, id)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
---import Drasil.GlassBR.Units
-
 
 
 dataDefns :: [QDefinition]
-dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dL, tolPre,
+dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
 
 risk :: QDefinition
@@ -23,7 +20,7 @@ risk_eq :: Expr
 risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   ((C plate_width):/(Int 1000)))):^((C sflawParamM) - (Int 1))):*
   (Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick)
-  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C sdf)
+  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C stressDistFac)
 
 hFromt_eq :: Expr
 hFromt_eq = FCall (C act_thick) [C nom_thick]
@@ -45,13 +42,13 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
+loadDF = fromEqn' (lDurFac_ ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (C sdf) [C dimlessLoad, (C plate_len):/(C plate_width)]
+strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: QDefinition
-strDisFac = fromEqn' (sdf ^. id) (sdf ^. term) (sdf ^. symbol) 
+strDisFac = fromEqn' (stressDistFac ^. id) (stressDistFac ^. term) (stressDistFac ^. symbol) 
   strDisFac_eq
 
 nonFL_eq :: Expr
@@ -59,26 +56,26 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
+nonFL = fromEqn' (nonFactorL_ ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: QDefinition
-glaTyFac = fromEqn' (glassTypeFac ^. id) (nounPhraseSP $ 
+glaTyFac = fromEqn' (glassTypeFac_ ^. id) (nounPhraseSP $ 
   "function that maps from " ++ "the glass type (g) to a real " ++
   "number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|" ++ 
   "g = HS => 2.0). AN is annealed glass. " ++ 
   "FT is fully tempered glass. HS is heat strengthened glass.") (Atomic "GTF") 
   glaTyFac_eq
 
-dL_eq :: Expr
-dL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
+dimLL_eq :: Expr
+dimLL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
 
-dL :: QDefinition
-dL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
-  (dimlessLoad ^. symbol) dL_eq
+dimLL :: QDefinition
+dimLL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
+  (dimlessLoad ^. symbol) dimLL_eq
 
 tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]

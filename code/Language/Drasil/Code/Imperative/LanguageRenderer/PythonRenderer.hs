@@ -8,7 +8,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (comment,bool,int,float,char,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
-import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
+import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,reduceLibs)
 
 import Data.List (intersperse)
 import Prelude hiding (print)
@@ -36,8 +36,10 @@ pythonConfig _ c =
         listObj          = empty,
         clsDec           = classDec,
         package          = \_ -> empty,
-        printFunc        = text "sys.stdout.write",
-        printLnFunc      = text "print",
+        printFunc        = text "print",
+        printLnFunc      = empty,
+        printFileFunc    = \_ -> empty,
+        printFileLnFunc  = \_ -> empty,
         stateType        = pystateType c,
         
         blockStart = colon, blockEnd = empty,
@@ -53,10 +55,11 @@ pythonConfig _ c =
         clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDoc' c, objAccessDoc = objAccessDoc' c,
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = \_ -> empty,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD', valueDoc = valueDoc' c,
-
-        getEnv = \_ -> error "getEnv for pythong not yet implemented",
-        printFileDoc = error "printFileDoc not implemented for python"
+        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, 
+        functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
+        unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
+        inputDoc = inputDoc' c,
+        getEnv = \_ -> error "getEnv for pythong not yet implemented"
     }
 
 -- convenience
@@ -67,7 +70,7 @@ initName = "__init__"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [fileCode c p ms Source (ext c)]
+renderCode' c ms (AbsCode p) = Code $ fileCodeSplit c p ms Source (ext c)
 
 include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp
@@ -80,13 +83,27 @@ pystateType _   (Base String)  _ = text "str"
 pystateType _   (Base _)       _ = empty
 pystateType c  s               d = stateTypeD c s d
 
-pytop :: Config -> a -> b -> Doc
-pytop _ _ _ = vcat [
+pytop :: Config -> FileType -> Label -> [Module] -> Doc
+pytop _ _ _ [] = vcat [
+    text "from __future__ import print_function",
     text "import sys",
-    text "import math"]
+    text "import math" ]
+pytop c f p ms = let modNames = map moduleName ms
+                     libNames = concat $ map libs ms
+                     libraries = reduceLibs libNames modNames
+  in  pytop c f p [] $+$
+        (vcat $ map (\x -> text "import" <+> text x) libraries)
+      
 
-pybody :: Config -> FileType -> Label -> [Class] -> Doc
-pybody c f p ms = vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName ms))
+
+pybody :: Config -> FileType -> Label -> [Module] -> Doc
+pybody _ _ _ [] = blank
+pybody c f p ((Mod _ _ _ fs cs):ms) = 
+  functionListDoc c f p fs
+  $+$ blank $+$
+  (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
+  $+$ blank $+$
+  pybody c f p ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -180,9 +197,11 @@ paramDoc' :: Config -> Parameter -> Doc
 paramDoc' _ (StateParam n _) = text n
 paramDoc' c p = paramDocD c p
 
-printDoc' :: Config -> Bool -> StateType -> Value -> Doc
-printDoc' c False _ v = printFunc c <> parens (valueDoc c $ v $. Cast string)
-printDoc' c True _ v = printLnFunc c <> parens (valueDoc c v)
+printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
+printDoc' c Console False _ v = printFunc c <> parens (valueDoc c v <> text ", end=''")
+printDoc' c Console True _ v = printFunc c <> parens (valueDoc c v)
+printDoc' c (File f) False _ v = printFunc c <> parens (valueDoc c v <> text ", end='', file=" <> valueDoc c f)
+printDoc' c (File f) True _ v = printFunc c <> parens (valueDoc c v <> text ", file=" <> valueDoc c f)
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n _ (Construct _) ps b) = vcat [
@@ -202,7 +221,44 @@ methodDoc' _ _ _ _ = empty
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' _ (Self) = text "self"
-valueDoc' c (StateObj t@(List _ _) _) = stateType c t Def
-valueDoc' c (StateObj t vs) = stateType c t Def <> parens (callFuncParamList c vs)
+valueDoc' c (StateObj _ t@(List _ _) _) = stateType c t Def
+valueDoc' c (StateObj l t vs) = prefixLib l <> stateType c t Def <> parens (callFuncParamList c vs)
+  where prefixLib Nothing = empty
+        prefixLib (Just lib) = text lib <> dot
 valueDoc' c v@(Arg _) = valueDocD' c v
+valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
 valueDoc' c v = valueDocD c v
+
+functionDoc' :: Config -> FileType -> Label -> Method -> Doc
+functionDoc' _ _ _ (Method _ _ (Construct _) _ _) = error "Constructor cannot exist outside of class"
+functionDoc' c _ _ (Method n _ _ ps b) = vcat [
+    text "def" <+> text n <> parens (paramListDoc c ps) <> colon,
+    oneTab bodyD]
+        where bodyD | null b    = text "None"
+                    | otherwise = bodyDoc c b
+functionDoc' c _ _ (MainMethod b) = bodyDoc c b
+functionDoc' _ _ _ _ = empty
+
+inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
+inputDoc' c io (Base Boolean) v = statementDoc c NoLoop
+  (v &= inputFn io ?!= litString "0")
+inputDoc' c io (Base Integer) v = statementDoc c NoLoop
+  (v &= funcApp' "int" [inputFn io])
+inputDoc' c io (Base Float) v = statementDoc c NoLoop
+  (v &= funcApp' "float" [inputFn io])
+inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
+inputDoc' c io (Base _) v = statementDoc c NoLoop
+  (v &= inputFn io)
+inputDoc' c io s v = inputDocD c io s v 
+
+ioDoc' :: Config -> IOSt -> Doc
+ioDoc' c (OpenFile f n m) = statementDoc c NoLoop (f &= funcApp' "open" [n, litString (modeStr m)])
+  where modeStr Read = "r"
+        modeStr Write = "w"  
+ioDoc' c io = ioDocD c io
+  
+-- helpers
+
+inputFn :: IOType -> Value
+inputFn Console = funcApp' "raw_input" []
+inputFn (File f) = objMethodCall f "readline" []

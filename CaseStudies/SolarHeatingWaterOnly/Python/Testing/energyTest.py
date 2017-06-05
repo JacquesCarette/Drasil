@@ -22,15 +22,15 @@ class TestEnergy(unittest.TestCase):
         self.assertAlmostEqual(eWat[3], expE[3], places=None, msg='energy1Wat: eWat[3]', delta=1e-9)
         self.assertAlmostEqual(eWat[4], expE[4], places=None, msg='energy1Wat: eWat[4]', delta=1e-9)
 
-    def test_E1P(self):
-        temp = [40, 41, 42, 43, 44]
-        expE = [0, 88616.0, 177232.0, 265848.0, 354464.0]
-        ePCM = energy.energy1PCM(temp, self.params)
-        self.assertAlmostEqual(ePCM[0], expE[0], places=None, msg='energy1PCM: ePCM[0]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[1], expE[1], places=None, msg='energy1PCM: ePCM[1]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[2], expE[2], places=None, msg='energy1PCM: ePCM[2]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[3], expE[3], places=None, msg='energy1PCM: ePCM[3]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[4], expE[4], places=None, msg='energy1PCM: ePCM[4]', delta=1e-9)
+    # def test_E1P(self):
+        # temp = [40, 41, 42, 43, 44]
+        # expE = [0, 88616.0, 177232.0, 265848.0, 354464.0]
+        # ePCM = energy.energy1PCM(temp, self.params)
+        # self.assertAlmostEqual(ePCM[0], expE[0], places=None, msg='energy1PCM: ePCM[0]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[1], expE[1], places=None, msg='energy1PCM: ePCM[1]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[2], expE[2], places=None, msg='energy1PCM: ePCM[2]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[3], expE[3], places=None, msg='energy1PCM: ePCM[3]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[4], expE[4], places=None, msg='energy1PCM: ePCM[4]', delta=1e-9)
 
     def test_E2W(self):
         temp = [44.2, 44.3, 44.4, 44.5, 44.6]
@@ -43,15 +43,15 @@ class TestEnergy(unittest.TestCase):
         self.assertAlmostEqual(eWat[3], expE[3], places=None, msg='energy2Wat: eWat[3]', delta=1e-9)
         self.assertAlmostEqual(eWat[4], expE[4], places=None, msg='energy2Wat: eWat[4]', delta=1e-9)
 
-    def test_E2P(self):
-        latentHeat= [372000, 423000, 474000, 525000, 576000]
-        expE = [744187.2, 795187.2, 846187.2, 897187.2, 948187.2]
-        ePCM = energy.energy2PCM(latentHeat, self.params)
-        self.assertAlmostEqual(ePCM[0], expE[0], places=None, msg='energy2PCM: ePCM[0]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[1], expE[1], places=None, msg='energy2PCM: ePCM[1]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[2], expE[2], places=None, msg='energy2PCM: ePCM[2]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[3], expE[3], places=None, msg='energy2PCM: ePCM[3]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[4], expE[4], places=None, msg='energy2PCM: ePCM[4]', delta=1e-9)
+    # def test_E2P(self):
+        # latentHeat= [372000, 423000, 474000, 525000, 576000]
+        # expE = [744187.2, 795187.2, 846187.2, 897187.2, 948187.2]
+        # ePCM = energy.energy2PCM(latentHeat, self.params)
+        # self.assertAlmostEqual(ePCM[0], expE[0], places=None, msg='energy2PCM: ePCM[0]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[1], expE[1], places=None, msg='energy2PCM: ePCM[1]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[2], expE[2], places=None, msg='energy2PCM: ePCM[2]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[3], expE[3], places=None, msg='energy2PCM: ePCM[3]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[4], expE[4], places=None, msg='energy2PCM: ePCM[4]', delta=1e-9)
 
     def test_E3W(self):
         temp = [45, 46, 47, 48, 49]
@@ -64,15 +64,15 @@ class TestEnergy(unittest.TestCase):
         self.assertAlmostEqual(eWat[3], expE[3], places=None, msg='energy3Wat: eWat[3]', delta=1e-9)
         self.assertAlmostEqual(eWat[4], expE[4], places=None, msg='energy3Wat: eWat[4]', delta=1e-9)
 
-    def test_E3P(self):
-        temp = [45, 46, 47, 48, 49]
-        expE = [11117682.8, 11231977.3, 11346271.8, 11460566.3, 11574860.8]
-        ePCM = energy.energy3PCM(temp, self.params)
-        self.assertAlmostEqual(ePCM[0], expE[0], places=None, msg='energy3PCM: ePCM[0]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[1], expE[1], places=None, msg='energy3PCM: ePCM[1]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[2], expE[2], places=None, msg='energy3PCM: ePCM[2]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[3], expE[3], places=None, msg='energy3PCM: ePCM[3]', delta=1e-9)
-        self.assertAlmostEqual(ePCM[4], expE[4], places=None, msg='energy3PCM: ePCM[4]', delta=1e-9)
+    # def test_E3P(self):
+        # temp = [45, 46, 47, 48, 49]
+        # expE = [11117682.8, 11231977.3, 11346271.8, 11460566.3, 11574860.8]
+        # ePCM = energy.energy3PCM(temp, self.params)
+        # self.assertAlmostEqual(ePCM[0], expE[0], places=None, msg='energy3PCM: ePCM[0]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[1], expE[1], places=None, msg='energy3PCM: ePCM[1]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[2], expE[2], places=None, msg='energy3PCM: ePCM[2]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[3], expE[3], places=None, msg='energy3PCM: ePCM[3]', delta=1e-9)
+        # self.assertAlmostEqual(ePCM[4], expE[4], places=None, msg='energy3PCM: ePCM[4]', delta=1e-9)
 
 
 class EnergySuite(unittest.TestCase):

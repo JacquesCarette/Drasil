@@ -1,5 +1,5 @@
 Name:		drasil
-Version:	0.0.7
+Version:	0.0.8
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -13,6 +13,7 @@ library
     Data.Drasil.SI_Units
     Data.Drasil.Plurals
     Data.Drasil.Utils
+    Data.Drasil.SentenceStructures
     Data.Drasil.Modules
     Data.Drasil.Changes
     Data.Drasil.Concepts.Computation
@@ -159,6 +160,9 @@ executable nopcm
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
     , Drasil.OrganizationOfSRS
+    , Drasil.Introduction
+    , Drasil.Requirements
+    , Drasil.GeneralSystDesc
     , Drasil.TableOfSymbols
     , Drasil.TableOfUnits
     , Drasil.Template.DD
@@ -198,6 +202,9 @@ executable ssp
     , Drasil.Template.MG
     , Drasil.Template.MIS
     , Drasil.OrganizationOfSRS
+    , Drasil.Introduction
+    , Drasil.Requirements
+    , Drasil.GeneralSystDesc
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -226,6 +233,11 @@ executable glassbr
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Units
     , Drasil.OrganizationOfSRS
+    , Drasil.Introduction
+    , Drasil.Requirements
+    , Drasil.GeneralSystDesc
+    , Drasil.TraceabilityMandGs
+    , Drasil.Stakeholders
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.TableOfAbbAndAcronyms
@@ -262,6 +274,9 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
     , Drasil.OrganizationOfSRS
+    , Drasil.Introduction
+    , Drasil.Requirements
+    , Drasil.TraceabilityMandGs
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.SpecificSystemDescription
@@ -290,6 +305,10 @@ executable swhs
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.OrganizationOfSRS
+    , Drasil.Introduction
+    , Drasil.Requirements
+    , Drasil.GeneralSystDesc
+    , Drasil.TraceabilityMandGs
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.SWHS.Body

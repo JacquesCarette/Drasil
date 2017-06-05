@@ -35,7 +35,8 @@ langs = Map.fromList[
     (javaLabel, javaConfig),
     (objectiveCLabel, objcConfig),
     (pythonLabel, pythonConfig),
-    (luaLabel, luaConfig)]
+    (luaLabel, luaConfig)
+  ]
 
 -- | Takes a language parameter, a set of optional parameters, and a list of module names, and passes an 'AbstractCode' to the required rendering function, which produces a 'Code'
 makeCode :: String -> Options -> [String] -> AbstractCode -> Code

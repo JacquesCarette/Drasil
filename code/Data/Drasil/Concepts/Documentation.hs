@@ -3,24 +3,26 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
+import Control.Lens ((^.))
 
-assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, mg, vav, desSpec :: CINP
+assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg, 
+  physSyst, requirement, srs, thModel, mg, vav, desSpec :: CI
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
-assumption  = commonINP "assumption"  (cn' "assumption")                          "A"
-dataDefn    = commonINP "dataDefn"    (cn' "data definition")                     "DD"
-desSpec     = commonINP "desSpec"     (compoundPhrase design specification)       "DS"
-genDefn     = commonINP "genDefn"     (cn' "general definition")                  "GD"
-goalStmt    = commonINP "goalStmt"    (compoundPhrase goal statement)             "GS" 
-inModel     = commonINP "inModel"     (compoundPhrase instance_ model)            "IM" 
-likelyChg   = commonINP "likelyChg"   (cn' "likely change")                       "LC"
-physSyst    = commonINP "physSyst"    (compoundPhrase physicalSystem description) "PS" 
-requirement = commonINP "requirement" (cn' "requirement")                         "R"
-thModel     = commonINP "thModel"     (cn' "theoretical model")                   "T"
-mg          = commonINP "mg"          (compoundPhrase module_ guide)              "MG" 
-srs         = commonINP "srs"       (compoundPhrase''' softwareReq specification) "SRS"
-vav         = commonINP "vav"         (cn' "verification and validation")         "VAV"
+assumption  = commonIdea "assumption"  (cn' "assumption")                                      "A"
+dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                                 "DD"
+desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)                   "DS"
+genDefn     = commonIdea "genDefn"     (cn' "general definition")                              "GD"
+goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)                         "GS" 
+inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)                        "IM" 
+likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                                   "LC"
+unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                                 "UC"
+physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)             "PS" 
+requirement = commonIdea "requirement" (cn' "requirement")                                     "R"
+thModel     = commonIdea "thModel"     (cn' "theoretical model")                               "T"
+mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)                 "MG" 
+srs         = commonIdea "srs"         (fterms compoundPhrase''' softwareReq specification) "SRS"
+vav         = commonIdea "vav"         (cn' "verification and validation")                     "VAV"
 
 ---------------------------------------------------------------------
 
@@ -32,12 +34,12 @@ analysis, appendix, characteristic, client, column, company, component,
   environment, figure, functional, game, general, goal, guide, implementation, individual,
   information, interest, input_, instance_, intReader, introduction, item, label, library,
   limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization, 
-  output_, performance, physics, physical, plan, priority, problem, product_, project, 
+  output_, physics, physical, plan, priority, problem, product_, project, 
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, statement, symbol_, system, table_, template, 
   terminology, theory, traceyGraph, traceyMatrix, user, useCase, value, variable, 
-  video, verification, uncertainty :: NPNC
+  video, verification, uncertainty :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -90,7 +92,6 @@ offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
 output_         = npnc "output"         (cn' "output")
-performance     = npnc "performance"    (cn' "performance")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 plan            = npnc "plan"           (cn' "plan")
@@ -134,7 +135,7 @@ realtime        = npnc "real-time"      (cn' "real-time")
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol :: NPNC
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol :: NamedChunk
 
 corSol       = npnc "corSol"       (cn' "correct solution")
 charOfIR     = npnc "charOfIR"     (characteristic `of__` intReader)
@@ -147,7 +148,7 @@ termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 
-scpOfTheProj :: (NP -> Sentence) -> NPNC
+scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
 
 -- compounds
@@ -158,33 +159,51 @@ designDoc, generalSystemDescription, indPRCase,
   userCharacteristic, datumConstraint, functionalRequirement, 
   nonfunctionalRequirement, softwareDoc, softwareReq, softwareSys, softwareVerif,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim,
-  productUC, useCaseTable, physicalProperty, vavPlan :: NPNC
+  productUC, useCaseTable, physicalProperty, vavPlan :: NamedChunk
   
-designDoc                    = compoundNPNC design document
-generalSystemDescription     = compoundNPNC general systemdescription
-indPRCase                    = compoundNPNC individual productUC
-physicalConstraint           = compoundNPNC physical constraint
-physicalSystem               = compoundNPNC physical system
-physicalProperty             = compoundNPNC physical property
-problemDescription           = compoundNPNC problem description
-prodUCTable                  = compoundNPNC productUC table_
-specificsystemdescription    = compoundNPNC specific systemdescription
-systemdescription            = compoundNPNC system description
-systemConstraint             = compoundNPNC system constraint
-sysCont                      = compoundNPNC system context
-userCharacteristic           = compoundNPNC user characteristic
-datumConstraint              = compoundNPNC' datum constraint
-functionalRequirement        = compoundNPNC functional requirement_
-nonfunctionalRequirement     = compoundNPNC nonfunctional requirement_
-solutionCharSpec             = compoundNPNC''' solutionCharacteristic specification
-offShelfSolution             = compoundNPNC offShelf solution
-physicalSim                  = compoundNPNC physical simulation
-productUC                    = compoundNPNC product_ useCase
-useCaseTable                 = compoundNPNC useCase table_
-softwareDoc                  = compoundNPNC software documentation
-softwareReq                  = compoundNPNC' software requirement_
-softwareSys                  = compoundNPNC software system
-softwareVerif                = compoundNPNC software verification
-softwareVAV                  = compoundNPNC software vav
-solutionCharacteristic       = compoundNPNC solution characteristic
-vavPlan                      = compoundNPNC vav plan
+datumConstraint              = compoundNC' datum constraint
+designDoc                    = compoundNC design document
+functionalRequirement        = compoundNC functional requirement_
+generalSystemDescription     = compoundNC general systemdescription
+indPRCase                    = compoundNC individual productUC
+nonfunctionalRequirement     = compoundNC nonfunctional requirement_
+offShelfSolution             = compoundNC offShelf solution
+physicalConstraint           = compoundNC physical constraint
+physicalProperty             = compoundNC physical property
+physicalSim                  = compoundNC physical simulation
+physicalSystem               = compoundNC physical system
+problemDescription           = compoundNC problem description
+prodUCTable                  = compoundNC productUC table_
+productUC                    = compoundNC product_ useCase
+softwareDoc                  = compoundNC software documentation
+softwareReq                  = compoundNC' software requirement_
+softwareSys                  = compoundNC software system
+softwareVAV                  = compoundNC software vav
+softwareVerif                = compoundNC software verification
+solutionCharSpec             = compoundNC''' solutionCharacteristic specification
+solutionCharacteristic       = compoundNC solution characteristic
+specificsystemdescription    = compoundNC specific systemdescription
+sysCont                      = compoundNC system context
+systemConstraint             = compoundNC system constraint
+systemdescription            = compoundNC system description
+useCaseTable                 = compoundNC useCase table_
+userCharacteristic           = compoundNC user characteristic
+vavPlan                      = compoundNC vav plan
+
+-- extra utilities --
+missing :: Sentence
+missing = S "..."
+
+-- FIXME: fterms is here instead of Utils because of cyclic import
+-- | Apply a binary function to the terms of two named ideas, instead of to the named
+-- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of 
+-- @compoundPhrase (t1 ^. term) (t2 ^. term)@
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+fterms f a b = f (a ^. term) (b ^. term)
+
+--Just to keep the use of (^.) down a bit
+-- | Apply a unary function to the term of a named idea, instead of the named
+-- idea itself. Ex. @fterm titleize t1@ instead of @titleize $ t1 ^. term@
+fterm :: (NamedIdea c) => (NP -> t) -> c -> t
+fterm f t1 = f $ t1 ^. term
+

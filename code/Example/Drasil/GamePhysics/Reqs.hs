@@ -21,5 +21,5 @@ r7 = ReqChunk (nw emptyN) [mod_body, mod_space, mod_bb, mod_spatial,
 r8 = ReqChunk (nw emptyN) [mod_body, mod_space, mod_arbiter, mod_vector,
   mod_trans]
 
-emptyN :: NPNC
+emptyN :: NamedChunk
 emptyN = npnc "" (cn "")

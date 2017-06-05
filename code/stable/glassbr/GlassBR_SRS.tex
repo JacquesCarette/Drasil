@@ -37,7 +37,7 @@ N & force (newton)
 \end{longtable*}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-
+The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
 \begin{longtable*}{l l l}
 \toprule
 Symbol & Description & Units
@@ -46,6 +46,8 @@ Symbol & Description & Units
 $a$ & Plate length (long dimension) & mm
 \\
 $AR_{max}$ & Maximum aspect ratio & 
+\\
+$AR_{min}$ & Minimum aspect ratio & 
 \\
 $b$ & Plate width (short dimension) & mm
 \\
@@ -115,7 +117,7 @@ A & Assumption
 \\
 AN & Annealed Glass
 \\
-AR & Aspect Ratio
+$AR$ & Aspect Ratio
 \\
 DD & Data Definition
 \\
@@ -160,14 +162,18 @@ TNT & TNT (Trinitrotoluene) Equivalent Factor
 \end{longtable*}
 \section{Introduction}
 \label{Sec:I}
-Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR aims to predict the blast risk involved with the glass slab using an intuitive interface. The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of the document is designed to fulfil, the scope of the requirements and the organization of the document: what the document is based on and intended to portray.
+Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR aims to predict the blast risk involved with the glass slab using an intuitive interface.
+The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
 \label{Sec:PoD}
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to "fake" a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:SoR}
-The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the input, GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
+The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
+\subsection{Characteristics of Intended Reader}
+\label{Sec:CoIR}
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UC}.
 \subsection{Organization of Document}
 \label{Sec:OoD}
 The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:R}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DD} and trace back to find any additional information they require.
@@ -183,7 +189,7 @@ The client for GlassBR is a company named Entuitive. It is developed by Dr. Manu
 The customers are the end user of GlassBR.
 \section{General System Description}
 \label{Sec:GSD}
-This section provides general information about the system, identifies the interface between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
 \label{Sec:UC}
 \begin{enumerate}
@@ -193,7 +199,7 @@ This section provides general information about the system, identifies the inter
 \end{enumerate}
 \subsection{System Constraints}
 \label{Sec:SC}
-N/A
+There are no system constraints.
 \section{Scope of the Project}
 \label{Sec:SotP}
 This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
@@ -220,7 +226,7 @@ Use Case NO. & Use Case Name & Actor & Input and Output
 \end{enumerate}
 \section{Specific System Description}
 \label{Sec:SSD}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions.
 \subsection{Problem Description}
 \label{Sec:PD}
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
@@ -279,7 +285,7 @@ The physical system of GlassBR as shown in Figure~\ref{Figure:Tps}, includes the
 This section explains all the assumptions considered and the theoretical models which are supported by the data definitions.
 \subsubsection{Assumptions}
 \label{Sec:A}
-This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the data definition [DD], or instance model [IM], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TM}], Data Definition [Section~\ref{Sec:DD}], Instance Models [Section~\ref{Sec:IM}], or Likely Changes [Section~\ref{Sec:LC}] in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 \item[A2:]Following [4 (pg. 1)], this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
@@ -306,6 +312,7 @@ t_{d}=3
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TM}
+This section focuses on the general equations and laws that GlassBR is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -332,50 +339,6 @@ Label & Safety Requirement-2
 Equation & $is\_safe2=LR>q$
 \\ \midrule \\
 Description & If $is\_safe2$ = True, the glass is considered safe. $is\_safe1$ (from \hyperref[T:SR]{Definition~T:SR} and $is\_safe2$ are either both True or both False. $LR$ is the load resistance (also called capacity, as defined in \hyperref[T:CoC]{Definition~T:CoC}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:CoD]{Definition~T:CoD}.
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-\subsubsection{Instance Models}
-\label{Sec:IM}
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:PoGB}
-\phantomsection 
-\label{T:PoGB}
-\\ \midrule \\
-Label & Probability of Glass Breakage
-\\ \midrule \\
-Equation & $P_{b}=1-e^{-B}$
-\\ \midrule \\
-Description & $P_{b}$ is the calculated probability of breakage. $B$ is the risk of failure.
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:CoC}
-\phantomsection 
-\label{T:CoC}
-\\ \midrule \\
-Label & Calculation of Capacity(LR)
-\\ \midrule \\
-Equation & $LR=NFL*GTF*LSF$
-\\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored Load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:CoD}
-\phantomsection 
-\label{T:CoD}
-\\ \midrule \\
-Label & Calculation of Demand(q)
-\\ \midrule \\
-Equation & $q=q(w_{TNT},SD)$
-\\ \midrule \\
-Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD$ = .
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
@@ -525,9 +488,75 @@ Equation & $J_{tol}$ = $\log(\log(\frac{1}{1-P_{btol}})\frac{(\frac{a}{1000}\fra
 Description & $J_{tol}$ is the stress distribution factor (Function) based on Pbtol\newline$P_{btol}$ is the tolerable probability of breakage\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$k$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+\subsubsection{Instance Models}
+\label{Sec:IM}
+This section transforms the problem defined in Section~\ref{Sec:PD} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DD} to replace the abstract symbols in the models identified in Section~\ref{Sec:TM}.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:PoGB}
+\phantomsection 
+\label{T:PoGB}
+\\ \midrule \\
+Label & Probability of Glass Breakage
+\\ \midrule \\
+Equation & $P_{b}=1-e^{-B}$
+\\ \midrule \\
+Description & $P_{b}$ is the calculated probability of breakage. $B$ is the risk of failure.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:CoC}
+\phantomsection 
+\label{T:CoC}
+\\ \midrule \\
+Label & Calculation of Capacity(LR)
+\\ \midrule \\
+Equation & $LR=NFL*GTF*LSF$
+\\ \midrule \\
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored Load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:CoD}
+\phantomsection 
+\label{T:CoD}
+\\ \midrule \\
+Label & Calculation of Demand(q)
+\\ \midrule \\
+Equation & $q=q(w_{TNT},SD)$
+\\ \midrule \\
+Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD$ = .
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DC}
-Table 2 () shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table 2 (). $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+Table~\ref{Table:T2IV} shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table~\ref{Table:T2IV}. $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+\begin{longtable}{l l l l l}
+\toprule
+Var & Physical Cons & Software Constraints & Typical Value & Uncertainty
+\\
+\midrule
+$a$ & $a$ > 0 and $a$/$b$ > 1 & $d_{min}$ <= $a$ <= $d_{max}$ and $a$/$b$ < $AR_{max}$ & 1500 mm & 10%
+\\
+$b$ & $b$ > 0 and $b$ < $a$ & 1 & $d_{min}$ <= $b$ <= $d_{max}$ and $a$/$b$ < $AR_{max}$ & 1200 mm & 10%
+\\
+$P_{btol}$ & 0 < $P_{btol}$ < 1 & - & 0.008 & 0.1%
+\\
+$w$ & $w$ >= 0 & $w_{min}$ < $w$ < $w_{max}$ & 42 kg & 10%
+\\
+$TNT$ & $TNT$ > 0 & - & 1 & 10%
+\\
+$SD$ & $SD$ > 0 & $SD_{min}$ < $SD$ < $SD_{max}$  & 45m & 10%
+\\
+\bottomrule
+\caption{Table 2: Input Variables}
+\label{Table:T3SPV}
+\end{longtable}
 \begin{longtable}{l l}
 \toprule
 Var & Value
@@ -554,9 +583,9 @@ $SD_{max}$ & 130 m
 Table 4 () shows the constraints that must be satisfied by the output.
 \section{Requirements}
 \label{Sec:R}
+This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FR}
-The following section provides the functional requirements, the business tasks that the software is expected to complete.
 \begin{itemize}
 \item[R1:]Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
 \end{itemize}
@@ -668,20 +697,20 @@ DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X & X &  
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) & DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) & DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) & DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FR}) & R2 (in Section~\ref{Sec:FR})
+ & T1 (\hyperref[T:SR]{Definition~T:SR}) & T2 (\hyperref[T:SR]{Definition~T:SR}) & IM1 (\hyperref[T:PoGB]{Definition~T:PoGB}) & IM2 (\hyperref[T:CoC]{Definition~T:CoC}) & IM3 (\hyperref[T:CoD]{Definition~T:CoD}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:lDurFac]{Definition~DD:lDurFac}) & DD4 (\hyperref[DD:sdf]{Definition~DD:sdf}) & DD5 (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL}) & DD6 (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DC}) & R1 (in Section~\ref{Sec:FR}) & R2 (in Section~\ref{Sec:FR}) & R3 (in Section~\ref{Sec:FR}) & R4 (in Section~\ref{Sec:FR}) & R5 (in Section~\ref{Sec:FR}) & R6 (in Section~\ref{Sec:FR})
 \\
 \midrule
-R1 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R1 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R2 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R3 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+R3 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-R4 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
+R4 (in Section~\ref{Sec:FR}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-R5 (in Section~\ref{Sec:FR}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R5 (in Section~\ref{Sec:FR}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (in Section~\ref{Sec:FR}) &  &  & X & X & X &  & X & X & X & X & X & X & X & X &  &  & 
+R6 (in Section~\ref{Sec:FR}) &  &  & X & X & X &  & X & X & X & X & X & X & X & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}

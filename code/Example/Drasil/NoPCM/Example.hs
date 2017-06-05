@@ -101,11 +101,11 @@ water       = npnc "water"          (cn "water")
 ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase, just a hack to get RefSec to work
 
 ----Acronyms-----
-acronyms :: [CINP]
+acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
             physSyst,requirement,srs,sWHS,thModel]
   
-sWHS, sWHT :: CINP
+sWHS, sWHT :: CI
 
 sWHS  = commonINP "sWHS"  (cn' "solar water heating system")  "SWHS"
 sWHT  = commonINP "sWHT"  (cn' "solar water heating tank")    "SWHT"  

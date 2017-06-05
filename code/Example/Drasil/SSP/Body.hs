@@ -37,7 +37,7 @@ import Data.Drasil.SentenceStructures
 import Drasil.Template.MG
 import Drasil.Template.DD
 
---type declerations for sections--
+--type declarations for sections--
 s2, s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
@@ -53,7 +53,7 @@ s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
 
 s4_2_2_tmods :: [Contents]
 
---Document Settup--
+--Document Setup--
 this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
@@ -77,75 +77,79 @@ sspSymMapT :: RelationConcept -> Contents
 sspSymMapT = symbolMapFun sspSymbols Theory
 
 -- SECTION 1 --
---automaticly generated in mkSRS 
+--automatically generated in mkSRS -
 
 -- SECTION 1.1 --
---automaticly generated in mkSRS 
+--automatically generated in mkSRS 
 
 -- SECTION 1.2 --
---automaticly generated in mkSRS using the intro bellow
+--automatically generated in mkSRS using the intro below
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
   S "values with a subscript i implies that the value will" +:+
-  S "be taken at and analyzed at a" +:+ (phrase slice) +:+ S "or" +:+ (phrase slice) +:+
-  S "interface composing the total slip" +:+ (phrase $ mass)]]
+  S "be taken at and analyzed at a" +:+ (phrase slice) +:+ S "or" 
+  +:+ (phrase slice) +:+ S "interface composing the total slip"
+  +:+ (phrase $ mass)]]
 
 -- SECTION 1.3 --
---automaticly generated in mkSRS 
+--automatically generated in mkSRS 
 
 -- SECTION 2 --
 s2 = introductionF ssa (startIntro, kSent) prpsOfDoc_p1 (scpIncl,scpEnd) 
   (S "solid mechanics", S "undergraduate level 4 physics", EmptyS) True
   (orgSecStart, inModel, SRS.inModel SRS.missingP [], orgSecEnd)--FIXME: This is kind of a hack as it is not referencing the real instance model
-  where startIntro = S "A" +:+ (phrase slope) +:+ S "of geological" +:+ 
-          (phrase $ mass) `sC` S "composed of" +:+ (phrase soil) +:+ S "and rock," +:+
-          S "is subject to the influence of gravity on the" +:+. (phrase $ mass) +:+
-          S "For an unstable" +:+ (phrase slope) +:+ S "this can cause instability" +:+
-          S "in the form of soil/rock movement. The effects of soil/rock movement" +:+
-          S "can range from inconvenient to seriously hazardous, resulting in signifcant" +:+
-          S "life and economic loses. Slope stability is of interest both when analyzing" +:+
-          S "natural" +:+ (plural slope) `sC` S "and when designing an excavated" +:+. (phrase slope) +:+
-          (at_start ssa) +:+ S "is" +:+ (S "assessment" `ofThe` (S "safety of a" +:+ (phrase slope))) `sC`
-          S "identifying the" +:+ (phrase $ surface) +:+ S "most likely to" +:+
-          S "experience slip and an index of it's relative stability known as the" +:+.
-          (phrase $ fs_rc)
-        kSent = S "a" +:+ (phrase ssa) +:+. (phrase problem) +:+ S "The developed" +:+
-          (phrase $ program) +:+ S "will be referred to as the" +:+ (introduceAbb ssa) +:+
+  where startIntro = foldlSent [S "A", (phrase slope), S "of geological", 
+          (phrase $ mass) `sC` S "composed of", (phrase soil),
+          S "and rock, is subject to the influence of gravity on the"
+          +:+. (phrase $ mass), S "For an unstable", (phrase slope) +:+.
+          S "this can cause instability in the form of soil/rock movement",
+          S "The effects of soil/rock movement can range from inconvenient",
+          S "to seriously hazardous, resulting in signifcant life and", 
+          S "economic loses. Slope stability is of interest both when analyzing",
+          S "natural", (plural slope) `sC` S "and when designing an excavated"
+          +:+. (phrase slope), (at_start ssa), S "is", 
+          (S "assessment" `ofThe` (S "safety of a" +:+ (phrase slope))) `sC`
+          S "identifying the", (phrase $ surface), S "most likely to",
+          S "experience slip and an index of it's relative stability",
+          S "known as the", (phrase $ fs_rc)]
+        kSent = S "a" +:+ (phrase ssa) +:+. (phrase problem) +:+
+          S "The developed" +:+ (phrase $ program) +:+ 
+          S "will be referred to as the" +:+ (introduceAbb ssa) +:+
           (phrase $ program)
 
 -- SECTION 2.1 --
--- Purpose of Document automaticly generated in introductionF
+-- Purpose of Document automatically generated in introductionF
 prpsOfDoc_p1 :: Sentence
-prpsOfDoc_p1 = S "The" +:+ (short ssa) +:+ (phrase $ program) +:+ 
-  S "determines the" +:+ (phrase $ crtSlpSrf) `sC` S "and it's respective" +:+ 
-  (phrase $ fs_rc) +:+ S "as a" +:+ (phrase method_) +:+ 
-  S "of assessing the stability of a slope" +:+. (phrase design) +:+ 
-  S "The" +:+ (phrase $ program) +:+ 
-  S "is intended to be used as an educational tool for" +:+
-  S "introducing" +:+ (phrase slope) +:+ S "stability issues, and will facilitate the" +:+
-  S "analysis and" +:+ (phrase design) +:+ S "of a safe" +:+. (phrase slope)
+prpsOfDoc_p1 = foldlSent [S "The", (short ssa), (phrase $ program), 
+  S "determines the", (phrase $ crtSlpSrf) `sC` S "and it's respective", 
+  (phrase $ fs_rc), S "as a", (phrase method_), 
+  S "of assessing the stability of a slope" +:+. (phrase design),
+  S "The", (phrase $ program),
+  S "is intended to be used as an educational tool for",
+  S "introducing", (phrase slope), S "stability issues, and will facilitate the",
+  S "analysis and", (phrase design), S "of a safe", (phrase slope)]
 
 -- SECTION 2.2 --
--- Scope of Requirments automaticly generated in introductionF
+-- Scope of Requirements automatically generated in introductionF
 scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ (phrase slope) `sC`
   S "composed of homogeneous" +:+ (plural soilLyr)
-scpEnd  = S "identify the most likely" +:+ S "failure" +:+ 
-  (phrase $ surface) +:+ S "within the possible input range," +:+
+scpEnd  = S "identify the most likely failure" +:+ 
+  (phrase $ surface) +:+ S "within the possible input range" `sC`
   S "and find the" +:+ (phrase $ fs_rc) +:+ S "for the" +:+ 
   (phrase slope) +:+ S "as well as displacement of" +:+ (phrase soil) +:+ 
   S "that will occur on the" +:+ (phrase slope)
 
 -- SECTION 2.3 --
--- Characteristics of the Intended Reader automaticly generated in introductionF
+-- Characteristics of the Intended Reader automatically generated in introductionF
 
 -- SECTION 2.4 --
--- Organization automaticly generated in introductionF
+-- Organization automatically generated in introductionF
 orgSecStart, orgSecEnd :: Sentence
-orgSecStart = S "The" +:+ (phrase organization) +:+
-  S "of this" +:+ (phrase document) +:+ S "follows the template" +:+ 
-  S "for an" +:+ (short srs) +:+ S "for" +:+ (phrase sciCompS) +:+
-  S "proposed by Koothoor as well as Smith and Lai."
+orgSecStart = foldlSent [S "The", (phrase organization), S "of this",
+  (phrase document), S "follows the template for an", (short srs),
+  S "for", (phrase sciCompS),
+  S "proposed by Koothoor as well as Smith and Lai"]
 orgSecEnd   = S "The" +:+ (plural inModel) +:+ S "provide the set of" +:+
   S "algebraic equations that must be solved iteratively to perform a" +:+
   (titleize morPrice) +:+ S "Analysis"
@@ -154,15 +158,16 @@ orgSecEnd   = S "The" +:+ (plural inModel) +:+ S "provide the set of" +:+
 s3 = genSysF [] userCharIntro [] []
 
 -- SECTION 3.1 --
--- User Characteristics automaticly generated in genSysF with the userContraints intro bellow
+-- User Characteristics automatically generated in genSysF with the userContraints intro below
 userCharIntro :: Contents
-userCharIntro = Paragraph $ S "The end" +:+ (phrase user) +:+ S "of" +:+ (short ssa) +:+
-  S "should have an understanding of undergraduate Level 1 Calculus and" +:+
-  (titleize physics) `sC` S "and be familiar with" +:+ (phrase soil) +:+
-  S "and" +:+. (plural mtrlPrpty)
+userCharIntro = Paragraph $ foldlSent [S "The", (phrase endUser), S "of",
+  (short ssa), 
+  S "should have an understanding of undergraduate Level 1 Calculus and",
+  (titleize physics) `sC` S "and be familiar with", (phrase soil),
+  S "and", (plural mtrlPrpty)]
 
 -- SECTION 3.2 --
--- System Constraints automaticly generated in genSysF
+-- System Constraints automatically generated in genSysF
  
 -- SECTION 4 --
 s4 = specSysDesF end [s4_1, s4_2]
@@ -174,15 +179,15 @@ s4 = specSysDesF end [s4_1, s4_2]
 s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
   where ending = S "evaluate the" +:+ (phrase $ fs_rc) +:+ S "of a" +:+ 
                  (phrase slope) :+: S "'s" +:+ --FIXME apostrophe on "slope's"
-                 (phrase slpSrf) +:+ S "and to calculate the displacement that the" +:+
-                 (phrase slope) +:+ S "will experience"
+                 (phrase slpSrf) +:+ S "and to calculate the displacement"
+                 +:+ S "that the" +:+ (phrase slope) +:+ S "will experience"
 
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
-  ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+ (phrase slpSrf) +:+
-                                      S "is to experience failure through slipping.")] ++
+  ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+
+    (phrase slpSrf) +:+. S "is to experience failure through slipping")] ++
   map (\x -> (titleize $ x, Flat $ x ^. defn)) 
       [crtSlpSrf, stress, strain, normForce, shearForce, tension, compression, plnStrn])
       -- most of these are in concepts (physics or solidMechanics) except for crtSlpSrf & plnStrn which is in defs.hs
@@ -190,30 +195,33 @@ s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
-s4_1_2_p1 = Paragraph $ S "Analysis of the" +:+ (phrase slope) +:+ S "is performed" +:+
-  S "by looking at" +:+ (plural property) +:+ S "of the" +:+ (phrase slope) +:+
-  S "as a series of" +:+ (phrase slice) +:+. (plural element) +:+ S "Some" +:+ (plural property) +:+
-  S "are" +:+ (plural itslPrpty) `sC` S "and some are" +:+ (phrase slice) +:+ S "or" +:+
-  (phrase slice) +:+ S "base properties." +:+ S "The index convention for referencing which" +:+
-  (phrase intrslce) +:+ S "or" +:+ (phrase slice) +:+ S "is being used is shown in" +:+. 
-  (makeRef fig_indexconv)
+s4_1_2_p1 = Paragraph $ foldlSent [S "Analysis of the", (phrase slope),
+  S "is performed by looking at", (plural property), S "of the",
+  (phrase slope), S "as a series of", (phrase slice) +:+. (plural element),
+  S "Some", (plural property), S "are", (plural itslPrpty) `sC`
+  S "and some are", (phrase slice), S "or", (phrase slice),
+  S "base properties. The index convention for referencing which",
+  (phrase intrslce), S "or", (phrase slice), S "is being used is shown in", 
+  (makeRef fig_indexconv)]
 
 s4_1_2_bullets = enumBullet [
   ((at_start' itslPrpty) +:+ S "convention is noted by j. The end" +:+
     (plural itslPrpty) +:+ S "are usually not of interest" `sC` 
     S "therefore use the" +:+ (plural itslPrpty) +:+ S "from 1" +:+
     P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "n-1"),
-  ((at_start slice) +:+ S "properties convention is noted by i.")
+  ((at_start slice) +:+. S "properties convention is noted by i")
   ]
   
-s4_1_2_p2 = Paragraph $ S "A" +:+ (phrase $ fbd) +:+ S "of the forces" +:+
-  S "acting on the" +:+ (phrase slice) +:+ S "is displayed in" +:+. (makeRef fig_forceacting)
+s4_1_2_p2 = Paragraph $ foldlSent [S "A", (phrase $ fbd), S "of the forces",
+  S "acting on the", (phrase slice), S "is displayed in",
+  (makeRef fig_forceacting)]
 
 s4_1_2_fig1 = fig_indexconv
 
 fig_indexconv :: Contents
-fig_indexconv = Figure (S "Index convention for numbering" +:+ (phrase slice) +:+ S "and" +:+
-  (phrase intrslce) +:+ S "force variables") "IndexConvention.png"
+fig_indexconv = Figure (S "Index convention for numbering" +:+ 
+  (phrase slice) +:+ S "and" +:+ (phrase intrslce) +:+ 
+  S "force variables") "IndexConvention.png"
 
 s4_1_2_fig2 = fig_forceacting
 
@@ -243,89 +251,89 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
         tbRef    = (makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show")
 
 -- SECTION 4.2.1 --
--- Assumptions is automaticly generated in solChSpecF using the list below
+-- Assumptions is automatically generated in solChSpecF using the list below
 
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ (phrase slpSrf) +:+ S "is concave with respect to" +:+
            S "the" +:+. (phrase slopeSrf) +:+ ((getS coords +:+ 
-           S "coordinates") `ofThe'` (S "failure")) +:+ (phrase $ surface) +:+
-           S "follow a monotonic function."),
+           S "coordinates") `ofThe'` (S "failure")) +:+ (phrase $ surface)
+          +:+. S "follow a monotonic function"),
   ((S "geometry") `ofThe'` (phrase slope) `sC` S "and" +:+
-          ((plural mtrlPrpty) `ofThe` (plural soilLyr)) +:+
-           S "are given as inputs."),
-  ((S "different layers") `ofThe'` (phrase soil) +:+ S "are homogeneous," +:+
-           S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout," +:+
+          ((plural mtrlPrpty) `ofThe` (plural soilLyr)) +:+.
+           S "are given as inputs"),
+  ((S "different layers") `ofThe'` (phrase soil) +:+ S "are homogeneous" `sC`
+           S "with consistent" +:+ (plural soilPrpty) +:+ S "throughout" `sC`
            S "and independent of dry or saturated" +:+ (plural condition) `sC`
-           S "with the exception of" +:+ (phrase $ unit_) +:+ S "weight."),
-  ((at_start' soilLyr) +:+ S "are treated as if they have" +:+
-           S "isotropic properties."),
+           S "with the exception of" +:+ (phrase $ unit_) +:+. S "weight"),
+  ((at_start' soilLyr) +:+ S "are treated as if they have" +:+.
+           S "isotropic properties"),
   ((at_start intrslce) +:+ S "normal and shear forces have a" +:+
            S "linear relationship, proportional to a constant" +:+
            (sParen $ getS lambda) +:+ S "and an" +:+
-           (phrase intrslce) +:+ S "force function" +:+ (sParen $ getS fi) +:+
-           S "depending on x position."),
+           (phrase intrslce) +:+ S "force function" +:+ (sParen $ getS fi) +:+.
+           S "depending on x position"),
   ((at_start slice) +:+ S "to base normal and shear forces have" +:+
            S "a linear relationship, dependent on the" +:+
            (phrase $ fs_rc) +:+ (sParen $ getS fs) `sC`
            S "and the Coulomb sliding law."),
   (S "The stress-strain curve for" +:+ (phrase intrslce) +:+
            S "relationships is linear with a constant" +:+. (phrase slope)),
-  (S "The" +:+ (phrase slope) +:+ S "and" +:+ (phrase slpSrf) +:+
-           S "extends far into and out of the geometry (z coordinate)." +:+
+  (S "The" +:+ (phrase slope) +:+ S "and" +:+ (phrase slpSrf) +:+.
+           S "extends far into and out of the geometry (z coordinate)" +:+
            S "This implies plane strain" +:+ (plural condition) `sC`
            S "making 2D analysis appropriate."),
   (S "The effective normal stress is large enough" +:+
            S "that the resistive shear to effective normal" +:+
-           S "stress relationship can be approximated as a" +:+
-           S "linear relationship."),
+           S "stress relationship can be approximated as a" +:+.
+           S "linear relationship"),
   (S "The" +:+ (phrase $ surface) +:+ S "and base of a" +:+
-            (phrase slice) +:+ S "between" +:+ (phrase intrslce) +:+
-            S "nodes are approximated as straight lines.")
+            (phrase slice) +:+ S "between" +:+ (phrase intrslce) +:+.
+            S "nodes are approximated as straight lines")
   ]
 
 -- SECTION 4.2.2 --
--- TModels is automaticly generated in solChSpecF using the tmods below
+-- TModels is automatically generated in solChSpecF using the tmods below
 
 s4_2_2_tmods = [sspSymMapT fs_rc] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
--- General Definitions is automaticly generated in solChSpecF
+-- General Definitions is automatically generated in solChSpecF
 
 -- SECTION 4.2.4 --
--- Data Definitions is automaticly generated in solChSpecF
+-- Data Definitions is automatically generated in solChSpecF
 
 -- SECTION 4.2.5 --
--- Instance Models is automaticly generated in solChSpecF using the paragraphs below
+-- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
-s4_2_5_p2 = Paragraph $ S "The" +:+ (titleize morPrice) +:+ (phrase method_) +:+ S "is a" +:+
-  S "vertical slice, limit equilibrium" +:+ (phrase ssa) +:+ 
-  S "method. Analysis is performed by breaking the assumed failure" +:+ 
-  (phrase $ surface) +:+ S "into a series of vertical slices of mass. Static" +:+ 
-  S "equilibrium analysis using two force equilibrium, and one" +:+ 
-  S "moment equation as in T2. The" +:+ (phrase problem) +:+ S "is statically" +:+ --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
-  S "indeterminate with only these 3 equations and one constitutive" +:+ 
-  S "equation (the Mohr Coulomb shear strength of T3)" +:+ 
-  S "so the assumption of GD5 is used. Solving for force" +:+ 
-  S "equilibrium allows" +:+ (plural definition) +:+ S "of all forces in terms of" +:+ 
-  S "the physical properties of DD1 to DD9," +:+ 
-  S "as done in DD10, DD11."
+s4_2_5_p2 = Paragraph $ foldlSent [S "The", (titleize morPrice),
+  (phrase method_), S "is a vertical slice, limit equilibrium",
+  (phrase ssa), S "method. Analysis is performed by breaking the",
+  S "assumed failure", (phrase $ surface), S "into a series of vertical",
+  S "slices of mass. Static equilibrium analysis using two force", 
+  S "equilibrium, and one moment equation as in T2. The", (phrase problem),
+  S "is statically indeterminate with only these 3 equations and one", --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
+  S "constitutive equation (the Mohr Coulomb shear strength of T3)", 
+  S "so the assumption of GD5 is used. Solving for force", 
+  S "equilibrium allows", (plural definition), 
+  S "of all forces in terms of the physical properties",
+  S "of DD1 to DD9, as done in DD10, DD11"]
 
-s4_2_5_p3 = Paragraph $ (S "values") `ofThe'` (S "interslice normal force") +:+
-  S "E the interslice normal/shear force magnitude ratio lambda," +:+ --FIXME: 'E' should be the symbol captital E, same with lambda
-  S "and the" +:+ (titleize $ fs_rc) +:+ S "(FS)" `sC` S "are unknown." +:+ --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
-  S "Equations for the unknowns are written in terms of only the values" +:+ 
-  S "in DD1 to DD9, the values of" +:+ (getS ri) `sC` 
-  S "and" +:+ (getS ti) +:+ S "in DD10 and DD11, and each" +:+ --FIXME: DD10,DD11 should be references to other things in the body
-  S "other. The relationships between the unknowns are non linear," +:+ 
-  S "and therefore explicit equations cannot be derived and an" +:+ 
-  S "iterative" +:+ (plural solution) +:+ S "method is required."
+s4_2_5_p3 = Paragraph $ foldlSent [(S "values") `ofThe'` (S "interslice normal force"),
+  S "E the interslice normal/shear force magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
+  S "and the", (titleize $ fs_rc), S "(FS)" `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
+  S "Equations for the unknowns are written in terms of only the values", 
+  S "in DD1 to DD9, the values of", (getS ri) `sC` 
+  S "and", (getS ti), S "in DD10 and DD11, and each", --FIXME: DD10,DD11 should be references to other things in the body
+  S "other. The relationships between the unknowns are non linear" `sC`
+  S "and therefore explicit equations cannot be derived and an", 
+  S "iterative", (plural solution), S "method is required"]
 
 -- SECTION 4.2.6 --
--- Data Constraints is automaticly generated in solChSpecF using the tables below
+-- Data Constraints is automatically generated in solChSpecF using the tables below
 noTypicalVal, vertConvention :: Sentence
 noTypicalVal   = S "N/A"
-vertConvention = S "Consecutive vertexes have increasing x values." +:+
-                 S "The start and end vertices of all layers go to the same x values."
+vertConvention = S "Consecutive vertexes have increasing x values." +:+.
+                 S "The start and end vertices of all layers go to the same x values"
 
 vertVar :: Sentence -> Sentence
 vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
@@ -404,15 +412,15 @@ s5_1_list = enumSimple 1 (short requirement) [
   (S "Generate potential" +:+ (phrase $ crtSlpSrf) :+:
         S "'s for the input" +:+. (phrase slope)),
   (S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
-        S "if they are physically realizable based" +:+
-        S "on a set of pass or fail criteria."),
+        S "if they are physically realizable based" +:+.
+        S "on a set of pass or fail criteria"),
   (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
-        S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+        S "of" +:+ (plural slice) +:+. S "or limit equilibrium analysis"),
   (S "Calculate" +:+. ((plural $ fs_rc) `ofThe` (plural slpSrf))),
   (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
         (phrase $ fs_rc) `sC` S "such that a" +:+ (phrase slpSrf) +:+
-        S "with a smaller" +:+ (phrase $ fs_rc) +:+
-        S "has a larger weighting."),
+        S "with a smaller" +:+ (phrase $ fs_rc) +:+.
+        S "has a larger weighting"),
   (S "Generate new potential" +:+ (plural $ crtSlpSrf) +:+
         S "based on previously analysed" +:+ (plural slpSrf) +:+
         S "with low" +:+. (plural $ fs_rc)),
@@ -423,12 +431,13 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "that generates the minimum" +:+ (phrase $ fs_rc) +:+
         S "as the" +:+. (phrase $ crtSlpSrf)),
   (S "Prepare the" +:+ (phrase $ crtSlpSrf) +:+ S "for" +:+ (phrase method_) +:+ 
-        S "of" +:+ (plural slice) +:+ S "or limit equilibrium analysis."),
+        S "of" +:+ (plural slice) +:+. S "or limit equilibrium analysis"),
   (S "Calculate" +:+ ((phrase $ fs_rc) `ofThe` (phrase $ crtSlpSrf)) +:+ 
         S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
   (S "Display the" +:+ (phrase $ crtSlpSrf) +:+ S "and the" +:+
-        (phrase slice) +:+ (phrase element) +:+ S "displacements graphically." +:+
-        S "Give" +:+ ((S "values") `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
+        (phrase slice) +:+ (phrase element) +:+.
+        S "displacements graphically" +:+ S "Give" +:+ 
+        ((S "values") `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
         S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
   ]
   
@@ -456,28 +465,28 @@ s7 = SRS.reference [s7_list] []
 
 s7_list = mkRefsList 1 [ --FIXME: names should be in italics
   S "Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing" +:+
-            S "the factor of safety using the morgensternprice method. Can. Geotech. J.," +:+
-            S "(42):272-278, 19 February 2005.",
-  S "D.G. Fredlund and J.Krahn. Comparison of slope stability methods of" +:+
-            S "analysis. Can. Geotech. J., (14):429-439, 4 April 1977.",
+            S "the factor of safety using the morgensternprice method. Can. Geotech. J.," +:+.
+            S "(42):272-278, 19 February 2005",
+  S "D.G. Fredlund and J.Krahn. Comparison of slope stability methods of" +:+.
+            S "analysis. Can. Geotech. J., (14):429-439, 4 April 1977",
   S "Nirmitha Koothoor. A document drive approach to certifying" +:+.
-            (phrase sciCompS) +:+ S "Master's thesis, McMaster University," +:+
-            S "Hamilton, Ontario, Canada, 2013.",
+            (phrase sciCompS) +:+ S "Master's thesis, McMaster University," +:+.
+            S "Hamilton, Ontario, Canada, 2013",
   S "David L. Parnas and P.C. Clements. A rational design process: How" +:+
-            S "and why to fake it. IEEE Transactions on Software Engineering," +:+
-            S "12(2):251-257, February 1986.",
+            S "and why to fake it. IEEE Transactions on Software Engineering," +:+.
+            S "12(2):251-257, February 1986",
   S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
-            S "scientific computing. In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk, and N. Kraiem," +:+
+            S "scientific computing. In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk, and N. Kraiem" `sC`
             S "editors, Proceedings of the First International Workshopon" +:+
             S "Situational Requirements Engineering Processes - Methods," +:+
             S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-            S "Engineering Processes, SREP'05, pages 107-121, Paris, France," +:+
-            S "2005. In conjunction with 13th IEEE International Requirements" +:+
-            S "Engineering Conference.",
-  S "Dieter Stolle and Peijun Guo. Limit equilibrum" +:+ (phrase ssa) +:+
-            S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008.",
+            S "Engineering Processes, SREP'05, pages 107-121, Paris, France" `sC`
+            S "2005. In conjunction with 13th IEEE International Requirements" +:+.
+            S "Engineering Conference",
+  S "Dieter Stolle and Peijun Guo. Limit equilibrum" +:+ (phrase ssa) +:+.
+            S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008",
   S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
             S "Peter John Cleall. An efficient approach for locating the" +:+
             (phrase $ crtSlpSrf) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
-            S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+
-            S "25 June 2010."]
+            S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+.
+            S "25 June 2010"]

@@ -36,7 +36,7 @@ mod_outputf_desc = mod_outputf_desc_fun (fterm phrase input_ +:+ (plural $ param
   S "the probability of breakage, and both safety" +:+. fterm plural requirement)
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural outDatum) mod_outputf_desc
+mod_outputf = mod_io_fun glassBRProg [] [mod_hw, mod_inputp] (plural $ outDatum ^. term) mod_outputf_desc
 
 -- derived values module
 mod_derivedv :: ModuleChunk

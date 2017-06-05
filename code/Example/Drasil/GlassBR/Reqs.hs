@@ -16,5 +16,5 @@ req4 = ReqChunk (nw emptyN) [mod_outputf]
 req5 = ReqChunk (nw emptyN) [mod_outputf, mod_calc]
 req6 = ReqChunk (nw emptyN) [mod_outputf]
 
-emptyN :: NPNC
+emptyN :: NamedChunk
 emptyN = npnc "" (cn "")

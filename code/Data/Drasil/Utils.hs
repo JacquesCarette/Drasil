@@ -29,7 +29,7 @@ import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
-  phrase, titleize, titleize', mkTable, term, Contents(Table))
+  phrase, titleize, titleize', mkTable, Contents(Table))
 import Data.Drasil.Concepts.Documentation (description, input_, datum, 
                                             symbol_, fterms, fterm)
 import Data.Drasil.Concepts.Math (unit_)

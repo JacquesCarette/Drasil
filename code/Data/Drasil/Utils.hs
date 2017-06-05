@@ -125,10 +125,10 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
-mkInputDatTb inputVar = Table [fterm titleize symbol_, fterm titleize unit_, 
-  fterm titleize description]
-  (mkTable [getS, fmtU EmptyS, (\ch -> phrase $ ch ^. term)] inputVar) 
-  (fterm titleize input_ +:+ fterm titleize' datum) True
+mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
+  titleize description]
+  (mkTable [getS, fmtU EmptyS, phrase] inputVar) 
+  (titleize input_ +:+ titleize' datum) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference

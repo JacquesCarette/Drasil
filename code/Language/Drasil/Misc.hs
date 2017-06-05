@@ -5,7 +5,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.NounPhrase (titleize)
+import qualified Language.Drasil.NounPhrase as NP
 
 import Control.Lens ((^.))
 
@@ -48,4 +48,28 @@ unit_symb c = (unit c) ^. usymb
 -- noun phrase (from a NamedIdea)
 -- followed by its abbreviation in parentheses.
 introduceAbb :: NamedIdea n => n -> Sentence
-introduceAbb n = (titleize $ n ^. term) +:+ (sParen (short n))
+introduceAbb n = (NP.titleize $ n ^. term) +:+ (sParen (short n))
+
+-- | Helper function for getting the sentence case of a noun phrase from a 
+-- NamedIdea.
+at_start, at_start' :: NamedIdea n => n -> Sentence
+-- | Singular sentence case.
+at_start  n = NP.at_start (n ^. term)
+-- | Plural sentence case.
+at_start' n = NP.at_start' (n ^. term)
+
+-- | Helper function for getting the title case of a noun phrase from a 
+-- NamedIdea.
+titleize, titleize' :: NamedIdea n => n -> Sentence
+-- | Singular title case.
+titleize  n = NP.titleize (n ^. term)
+-- | Plural title case.
+titleize' n = NP.titleize' (n ^. term)
+
+-- | Helper for getting the phrase from a NamedIdea.
+phrase :: NamedIdea n => n -> Sentence
+phrase n = NP.phrase (n ^. term)
+
+-- | Helper for getting the plural of a phrase from a NamedIdea
+plural :: NamedIdea n => n -> Sentence
+plural n = NP.phrase (n ^. term)

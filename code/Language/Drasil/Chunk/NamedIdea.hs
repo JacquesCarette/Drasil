@@ -98,8 +98,8 @@ for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
 -- | Similar to 'for', but allows one to specify the function to use on each term
 -- before inserting for. For example one could use @for'' phrase plural t1 t2@
-for'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
-for'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "for" +:+ (f2 $ t2 ^. term)
+for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
 
 -- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
 -- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
@@ -170,21 +170,21 @@ and_' t1 t2 = nounPhrase''
   (Replace ((titleize $ t1 ^. term) +:+ S "and" +:+ (titleize' $ t2 ^. term)))
 
 andRT :: (NamedIdea c, NamedIdea d) => 
-  (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> NP
+  (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 andRT f1 f2 t1 t2 = nounPhrase''
   ((phrase $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term))
   ((phrase $ t1 ^. term) +:+ S "and" +:+ (plural $ t2 ^. term))
   (Replace ((at_start $ t1 ^. term) +:+ S "and" +:+ (phrase $ t2 ^. term)))
-  (Replace ((f1 $ t1 ^. term) +:+ S "and" +:+ (f2 $ t2 ^. term)))
+  (Replace ((f1 t1) +:+ S "and" +:+ (f2 t2)))
   
 the :: (NamedIdea c) => c -> NamedChunk
 the t = npnc ("the" ++ t ^. id) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
-theCustom :: (NamedIdea c) => (NP -> Sentence) -> c -> NamedChunk
-theCustom f t = npnc ("the" ++ t ^. id)
-                (nounPhrase''(S "the" +:+ (f $ t ^. term)) (S "the" +:+ (f $ t ^. term)) CapFirst CapWords)
+theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
+theCustom f t = npnc ("the" ++ t ^. id) (nounPhrase''(S "the" +:+ (f t)) 
+  (S "the" +:+ (f t)) CapFirst CapWords)
 
 aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
 aNP t = nounPhrase'' 

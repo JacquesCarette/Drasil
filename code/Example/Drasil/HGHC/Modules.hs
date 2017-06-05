@@ -17,13 +17,14 @@ self :: NamedChunk
 self = npnc "HGHC" (pn "HGHC")
 
 executable :: NamedChunk
-executable = npnc' (self ^. id) (fterms compoundPhrase self program) ("HGHC")
+executable = npnc' (self ^. id) (compoundPhrase (self ^. term) (program ^. term))
+  ("HGHC")
 
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam 
-             (foldlSent [S "The format and", (fterm phrase structure), S "of the", 
-             (fterm phrase input_), (fterm plural parameter)]) --FIXME: Plural?
+             (foldlSent [S "The format and", (phrase structure), S "of the", 
+             (phrase input_), (plural parameter)]) --FIXME: Plural?
              executable
              htVars
              []
@@ -41,7 +42,7 @@ mod_inputf :: ModuleChunk
 mod_inputf = mod_io_fun executable
   [meth_input]
   [mod_inputp]
-  (fterm plural inDatum)
+  (plural inDatum)
   modInputFormat
 
 -- Calc Module
@@ -74,7 +75,7 @@ mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun executable
   [meth_output]
   [mod_hw, mod_inputp]
-  (fterm plural outDatum)
+  (plural outDatum)
   mod_outputf_desc
 
 -- Control Module
@@ -121,7 +122,7 @@ meth_main :: MethodChunk
 meth_main = makeMainMethod (nc "main" (cn' "Main method")) main_func
 
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm ^. term))
+mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase algorithm))
   executable
   [meth_main] 
   [mod_hw, mod_inputp, mod_inputf, mod_calc, mod_outputf]

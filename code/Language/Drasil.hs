@@ -76,7 +76,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb
+  , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb, phrase, plural
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate
@@ -118,7 +118,8 @@ import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
-import Language.Drasil.NounPhrase
+import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
+                                          , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sParen, sSqBr, sC, (+:+), (+:+.), (+:), semiCol)

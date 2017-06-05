@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
+import qualified Language.Drasil.NounPhrase as NP
 
 
 algorithm :: ConceptChunk
@@ -21,9 +22,9 @@ type_           = npnc "type"           (cn' "type")
 
 dataStruct, dataStruct', dataType, dataType', inDatum, outDatum :: NamedChunk
 
-dataStruct                   = compoundNC'' plural phrase datum structure
-dataStruct'                  = compoundNC'' plural plural datum structure
-dataType                     = compoundNC'' plural phrase datum type_
-dataType'                    = compoundNC'' plural plural datum type_
+dataStruct                   = compoundNC'' NP.plural NP.phrase datum structure
+dataStruct'                  = compoundNC'' NP.plural NP.plural datum structure
+dataType                     = compoundNC'' NP.plural NP.phrase datum type_
+dataType'                    = compoundNC'' NP.plural NP.plural datum type_
 inDatum                      = compoundNC input_ datum
 outDatum                     = compoundNC output_ datum

@@ -22,7 +22,7 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
 rigidBody  = dcc "rigidBody" 
   (cnIES "rigid body") "A solid body in which deformation is neglected."
 velocity   = dccWDS "velocity" (cnIES "velocity")
-  (S "The rate of change of a body's" +:+ (phrase $ position ^. term))
+  (S "The rate of change of a body's" +:+ (phrase position))
 friction   = dcc "friction" (cn' "friction")
   "The force resisting the relative motion of two surfaces."
 elasticity = dcc "elasticity" (cnIES "elasticity") 
@@ -49,7 +49,7 @@ joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " +
 position     = dcc "position" (cn' "position")
   "An object's location relative to a reference point"
 acceleration = dccWDS "acceleration" (cn' "acceleration")
-  (S "The rate of change of a body's" +:+ (phrase $ velocity ^. term))
+  (S "The rate of change of a body's" +:+ (phrase velocity))
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "The change in" +:+ (position ^. defn))
 force        = dcc "force" (cn' "force")
@@ -60,13 +60,13 @@ stress       = dcc "stress" (cn'' "stress")
   ("Forces that are exerted between planes internal to" ++
   " a larger body subject to external loading.") --definition used in SSP, can be made clearer
 strain       = dccWDS "strain" (cn' "strain")
-  ((titleize $ stress ^. term) +:+
+  ((titleize stress) +:+
   S "forces that result in deformation of the body/plane.") --definition used in SSP, can be made clearer
 tension      = dccWDS "tension" (cn' "tension")
-  (S "A" +:+ (phrase $ stress ^. term) +:+
+  (S "A" +:+ (phrase stress) +:+
   S "that causes displacement of the body away from its center.")
 compression  = dccWDS "compression" (cn' "compression")
-  (S "A" +:+ (phrase $ stress ^. term) +:+
+  (S "A" +:+ (phrase stress) +:+
   S "that causes displacement of the body towards its center.")
   
 --FIXME: COMBINATION HACK (for all below)

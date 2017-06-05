@@ -8,14 +8,14 @@ import Data.List (nub)
 import Data.Maybe (fromJust, isNothing)
 
 import Data.Drasil.Concepts.Documentation (mg, likelyChg, unlikelyChg, 
-                                          introduction, fterm)
+                                          introduction)
 import Data.Drasil.SentenceStructures (foldlsC)
 
 import Drasil.Template.Helpers
 
 mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
-  Document (titleize mg +:+ S "for" +:+ (titleize (sys ^. term))) authors secs
+  Document (titleize mg +:+ S "for" +:+ (titleize sys)) authors secs
 
 --When we want the short form in a title.  
 mgDoc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
@@ -65,7 +65,7 @@ makeMG lccs uccs rcs mcs =
 
 mgIntro :: Contents -> Section
 mgIntro docDesc =
-  Section (fterm titleize introduction) (
+  Section (titleize introduction) (
     [ Con $ Paragraph $
         S "Decomposing a system into modules is a commonly accepted" +:+
         S "approach to developing software.  A module is a work assignment" +:+
@@ -202,7 +202,7 @@ mgModuleDecompIntro :: [ModuleChunk] -> Contents
 mgModuleDecompIntro mcs =
   let impl cCS = foldl1 (+:+) $ map (\x -> (S "If the entry is" +:+
        (short x) `sC` S "this means that the module is provided by the" +:+.
-       (phrase $ x ^. term))) cCS 
+       (phrase x))) cCS 
 --FIXME: The fields above should be (x ^. term) and (x ^.defn) respectively
   in Paragraph $
     S "Modules are decomposed according to the principle of" +:+

@@ -37,7 +37,7 @@ maintainability = dcc "maintainability" (nounPhraseSP "maintainability")
 performance = dcc "performance" (nounPhraseSP "performance")
               "The action or process of carrying out or accomplishing an action, task, or function"
               
-performanceSpd = dcc (performance ^. id) (nounPhrase'' (phrase $ performance ^. term) (S "speed") CapFirst CapWords)
+performanceSpd = dcc (performance ^. id) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
               "The action or process of carrying out or accomplishing an action, task, or function quickly"
              
 portability = dcc "portability" (nounPhraseSP "portability")
@@ -67,7 +67,7 @@ hwHiding = dcc "hwHiding" (cn "hardware hiding") (
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent
   [S "Includes programs that provide externally visible behaviour of the", 
-  S "system as specified in the", (phrase (srs ^. term)),
+  S "system as specified in the", (phrase srs),
   (sParen $ short srs), S "documents. This module",
   S "serves as a communication layer between the hardware-hiding module",
   S "and the software decision module. The programs in this module will need",

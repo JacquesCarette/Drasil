@@ -32,8 +32,8 @@ import Data.Drasil.Concepts.Documentation
 
 mod_hw :: ModuleChunk
 mod_hw = makeImpModule hwHiding
-  (foldlSent [S "The", (fterm plural dataStruct), 
-  S "and", (phrase $ algorithm ^. term), S "used to implement the virtual",
+  (foldlSent [S "The", (plural dataStruct), 
+  S "and", (phrase algorithm), S "used to implement the virtual",
   S "hardware"])
   os
   []
@@ -67,7 +67,7 @@ mod_ctrl_fun desc impl mthd depnd = makeImpModule modControl
 
 mod_io_fun :: NamedIdea a => a -> [MethodChunk] -> [ModuleChunk] -> Sentence -> ConceptChunk -> ModuleChunk
 mod_io_fun impl mthd depnd desc cChunk = makeImpModule cChunk
-  (foldlSent [S "The format and", (fterm phrase structure), S "of the", desc])
+  (foldlSent [S "The format and", (phrase structure), S "of the", desc])
   impl
   []
   mthd
@@ -85,8 +85,8 @@ mod_param_fun impl depnd desc cChunk = makeImpModule cChunk
 
 mod_seq_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_seq_fun impl depnd = makeImpModule mod_seq_serv 
-  (foldlSent [S "The", (fterm plural dataStruct), S "for a sequence", 
-  (fterm plural dataType)]) 
+  (foldlSent [S "The", (plural dataStruct), S "for a sequence", 
+  (plural dataType)]) 
   impl
   []
   []
@@ -95,8 +95,8 @@ mod_seq_fun impl depnd = makeImpModule mod_seq_serv
 
 mod_linked_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_linked_fun impl depnd = makeImpModule mod_linked_serv
-  (foldlSent [S "The", (fterm plural dataStruct), S "for a linked", 
-  (fterm plural dataType)])
+  (foldlSent [S "The", (plural dataStruct), S "for a linked", 
+  (plural dataType)])
   impl
   []
   []
@@ -105,8 +105,8 @@ mod_linked_fun impl depnd = makeImpModule mod_linked_serv
 
 mod_assoc_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_assoc_fun impl depnd = makeImpModule mod_assoc_serv
-  (foldlSent [S "The", (fterm plural dataStruct), S "for an associative", 
-  (fterm plural dataType)])
+  (foldlSent [S "The", (plural dataStruct), S "for an associative", 
+  (plural dataType)])
   impl
   []
   []
@@ -115,7 +115,7 @@ mod_assoc_fun impl depnd = makeImpModule mod_assoc_serv
 
 mod_vector_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_vector_fun impl depnd = makeImpModule mod_vector_serv
-  (foldlSent [S "The", (fterm plural dataStruct), S "representing vectors"])
+  (foldlSent [S "The", (plural dataStruct), S "representing vectors"])
   impl
   []
   []
@@ -124,8 +124,8 @@ mod_vector_fun impl depnd = makeImpModule mod_vector_serv
 
 mod_plot_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_plot_fun impl depnd = makeImpModule mod_plot_desc
-  (foldlSent [S "The", (fterm plural dataStruct'), 
-  S "and", (fterm plural algorithm), S  "for plotting data graphically"])
+  (foldlSent [S "The", (plural dataStruct'), 
+  S "and", (plural algorithm), S  "for plotting data graphically"])
   impl
   []
   []
@@ -135,7 +135,7 @@ mod_plot_fun impl depnd = makeImpModule mod_plot_desc
 mod_rng_fun :: NamedIdea a => a -> [ModuleChunk] -> Sentence -> ModuleChunk
 mod_rng_fun impl depnd desc = makeImpModule 
   (dccWDS "mod_rng_desc" (cn' "random number generator") desc)
-  (foldlSent [S "Pseudo-random number generation", (fterm phrase algorithm)])
+  (foldlSent [S "Pseudo-random number generation", (phrase algorithm)])
   impl
   []
   []
@@ -174,8 +174,8 @@ mod_interp_fun impl depnd = makeImpModule modInterpolation
 -- input constraints module --should be its own module?
 mod_inputc_fun :: NamedIdea a => a -> ModuleChunk
 mod_inputc_fun impl= makeImpModule modInputConstraint --FIXME: Plural?
-  (S "The" +:+ fterm plural constraint +:+ S "on the" +:+ 
-  fterm phrase input_ +:+. (fterm plural datum))
+  (S "The" +:+ plural constraint +:+ S "on the" +:+ 
+  phrase input_ +:+. (plural datum))
   impl
   []
   []
@@ -185,7 +185,7 @@ mod_inputc_fun impl= makeImpModule modInputConstraint --FIXME: Plural?
 -- derived values module
 mod_derivedv_fun :: NamedIdea a => a -> [ModuleChunk] -> ModuleChunk
 mod_derivedv_fun impl depnd= makeImpModule modDerivedVal --FIXME: Plural?
-  (S "The transformations from initial" +:+ fterm plural input_ +:+. 
+  (S "The transformations from initial" +:+ plural input_ +:+. 
   S "to derived quantities")
   impl
   []

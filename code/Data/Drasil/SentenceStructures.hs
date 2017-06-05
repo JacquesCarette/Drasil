@@ -6,9 +6,8 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, fterms, fterm)
+import Data.Drasil.Utils (foldle, foldle1)
 import Data.Drasil.Concepts.Documentation
-import Control.Lens ((^.))
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -67,7 +66,7 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 {--** Miscellaneous **--}
 tableShows :: Contents -> Sentence -> Sentence
 tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+ 
-  fterm plural dependency +:+ S "of" +:+ trailing
+  plural dependency +:+ S "of" +:+ trailing
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
@@ -78,7 +77,7 @@ refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper used by refineChain
 word :: NamedIdea c => c -> Sentence
-word = fterm plural
+word = plural
 
 -- | Helper used by refineChain
 rc :: NamedIdea c => [c] -> Sentence

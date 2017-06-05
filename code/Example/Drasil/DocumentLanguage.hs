@@ -15,7 +15,7 @@ import Drasil.TableOfUnits (table_of_units)
 import Drasil.TableOfSymbols (table)
 import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 
-import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, fterm)
+import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
 import Data.Maybe (isJust)
 import Data.List (sort)
@@ -121,14 +121,14 @@ mkSections si l = foldr doit [] l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (fterm titleize refmat) [c] (foldr (mkSubRef si) [] l)
+mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
     mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
     mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
-      (Section (fterm titleize tOfSymb) 
-      (map Con [tsIntro con, (table (sort v) (\x -> at_start $ x ^.term))])) : l'
+      (Section (titleize tOfSymb) 
+      (map Con [tsIntro con, (table (sort v) at_start)])) : l'
     mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
@@ -137,14 +137,14 @@ mkRefSec si (RefProg c l) = section (fterm titleize refmat) [c] (foldr (mkSubRef
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = Section (fterm titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
-  where lf Term = (\x -> at_start $ x ^. term)
+mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (lf f)])
+  where lf Term = at_start
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
-          (x ^. defn) else (at_start $ x ^. term)) --Compare chunk ids, since we don't
+          (x ^. defn) else (at_start x)) --Compare chunk ids, since we don't
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
-          (at_start $ x ^. term) else (x ^. defn))
+          (at_start x) else (x ^. defn))
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
@@ -191,10 +191,10 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         makeSentence (x:y:z:[]) = scon x `sC` scon y `sC` S "and" +:+. scon z
         makeSentence (x:xs) = scon x `sC` makeSentence xs
         makeSentence _ = error "How did you get here?"
-        scon (Lit x) = phrase (x ^. term) +:+ S "literature"
-        scon (Doc x) = S "existing documentation for" +:+ (phrase $ x ^. term)
-        scon (Doc' x)   = S "existing documentation for" +:+ (plural $ x ^. term)
-        scon (Manual x) = S "that used in the" +:+ (phrase $ x ^. term) +:+ S "manual"
+        scon (Lit x) = phrase x +:+ S "literature"
+        scon (Doc x) = S "existing documentation for" +:+ (phrase x)
+        scon (Doc' x)   = S "existing documentation for" +:+ (plural x)
+        scon (Manual x) = S "that used in the" +:+ (phrase x) +:+ S "manual"
 
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents

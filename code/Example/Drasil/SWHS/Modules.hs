@@ -88,7 +88,7 @@ mod_ener = mod_param_fun swhsProg [mod_inputp, mod_seq]
 --           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
 --           mod_outputv, mod_outputf, mod_seq] (Just M.mod_behav)
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm ^. term))
+mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm))
   swhsProg [] [mod_hw, mod_inputp, mod_inputf, mod_inputv, mod_temp, mod_ener,
   mod_ode, mod_plot, mod_outputv, mod_outputf, mod_seq]
 

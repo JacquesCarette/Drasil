@@ -28,25 +28,25 @@ latHtEEqn = FCall (C QT.latent_heat) [C time] := UnaryOp (Integral (Just (Low 0)
 
 t3descr :: Sentence
 t3descr = (P (QT.latent_heat ^. symbol) :+: S " is the change in " :+:
-  (phrase $ thermal_energy ^. term) :+: S " (" :+:
+  (phrase $ thermal_energy) :+: S " (" :+:
   Sy (joule ^. usymb) :+: S "), " :+:
-  (phrase $ latent_heat ^. term) :+: S " energy. " :+:
+  (phrase $ latent_heat) :+: S " energy. " :+:
   S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE" :+: 
   S " is the rate" :+:
   S " of change of " :+: P (QT.latent_heat ^. symbol) :+: S " with respect" :+:
-  S " to " :+: (phrase $ time ^. term) :+: S " " :+: P (tau ^. symbol) :+: 
+  S " to " :+: (phrase $ time) :+: S " " :+: P (tau ^. symbol) :+: 
   S " (" :+: Sy (unit_symb tau) :+: S "). " :+: P (time ^. symbol) :+:
-  S " is the " :+: (phrase $ time ^. term) :+: S " (" :+: Sy (unit_symb time) :+:
+  S " is the " :+: (phrase $ time) :+: S " (" :+: Sy (unit_symb time) :+:
   S ") elapsed, as long as the " :+:
-  (phrase $ phase_change ^. term) :+: S " is not complete. The status of " :+:
-  S "the " :+: (phrase $ phase_change ^. term) :+:
-  S " depends on the " :+: (phrase $ melt_frac ^. term) `sC`
+  (phrase $ phase_change) :+: S " is not complete. The status of " :+:
+  S "the " :+: (phrase $ phase_change) :+:
+  S " depends on the " :+: (phrase $ melt_frac) `sC`
   (makeRef (swhsSymbMapD dd3HtFusion)) :+: S "." +:+
   P (QT.melt_pt ^. symbol) :+:
   S " and " :+: P (QT.boil_pt ^. symbol) :+: S " are the " :+:
-  (phrase $ QT.melt_pt ^. term) :+: S " and " :+: (phrase $ QT.boil_pt ^. term) :+:
+  (phrase $ QT.melt_pt) :+: S " and " :+: (phrase $ QT.boil_pt) :+:
   S ", respectively (" :+: Sy (unit_symb QT.temp) :+: S "). " :+:
-  (at_start $ latent_heat ^. term) :+: S "ing stops when all material has " :+:
+  (at_start $ latent_heat) :+: S "ing stops when all material has " :+:
   S "changed to the new phase.")
   
 -- Wrong DD reference above, change when DD4 is available

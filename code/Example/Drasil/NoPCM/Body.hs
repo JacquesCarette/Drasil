@@ -61,10 +61,8 @@ s2_1 = prpsOfDocF EmptyS --TODO: Placeholder values until content can be added
 s2_2 = scpOfReqF EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
 
 s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
-  where knowledge = ((phrase $ heat ^. term) +:+ S "transfer" +:+. (phrase $ theory ^. term) +:+
   where knowledge = ((phrase heat) +:+ S "transfer" +:+. (phrase theory) +:+
                     S "A third or fourth year Mechanical Engineering course on this topic is recommended")
-        understanding = (S "differential" +:+ (plural $ equation ^. term) `sC` S "as typically" +:+
         understanding = (S "differential" +:+ (plural equation) `sC` S "as typically" +:+
                         S "covered in first and second year Calculus courses")
                         

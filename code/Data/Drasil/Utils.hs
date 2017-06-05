@@ -20,6 +20,7 @@ module Data.Drasil.Utils
   , unwrap
   , fmtBF
   , symbolMapFun
+  , fterms , fterm
   ) where
 
 import Data.List
@@ -29,7 +30,8 @@ import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, term, Contents(Table))
-import Data.Drasil.Concepts.Documentation (description, input_, datum, symbol_)
+import Data.Drasil.Concepts.Documentation (description, input_, datum, 
+                                            symbol_, fterms, fterm)
 import Data.Drasil.Concepts.Math (unit_)
 
   
@@ -123,9 +125,10 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
-mkInputDatTb inputVar = Table [titleize symbol_, titleize $ unit_ ^. term, titleize description]
+mkInputDatTb inputVar = Table [fterm titleize symbol_, fterm titleize unit_, 
+  fterm titleize description]
   (mkTable [getS, fmtU EmptyS, (\ch -> phrase $ ch ^. term)] inputVar) 
-  (titleize input_ +:+ titleize' datum) True
+  (fterm titleize input_ +:+ fterm titleize' datum) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference

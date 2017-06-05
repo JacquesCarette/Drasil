@@ -33,17 +33,17 @@ iVect, jVect, normalVect :: UnitalChunk
 -- FIXME: parametrized hack
 iVect       = ucFromCV ivec metre
   where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
-               (QM.unitVect ^. term)) (phrase $ QM.unitVect ^. term))
+               (QM.unitVect ^. term)) (QM.unitVect ^. term))
                (QM.unitVect ^. symbol)
 -- FIXME: parametrized hack
 jVect       = ucFromCV ivec metre
   where ivec = cvR (dccWDS "unitVect" (compoundPhrase' (cn "vertical")
-               (QM.unitVect ^. term)) (phrase $ QM.unitVect ^. term) )
+               (QM.unitVect ^. term)) (QM.unitVect ^. term) )
                (vec $ hat lJ)
 -- FIXME: parametrized hack
 normalVect  = ucFromCV normVect metre
   where normVect = cvR (dccWDS "normalVect" (compoundPhrase' (cn "collision")
-                   (QM.normalVect ^. term)) (phrase $ QM.normalVect ^. term) )
+                   (QM.normalVect ^. term)) (QM.normalVect ^. term) )
                    (QM.normalVect ^. symbol)
 
 -- Chunks without units --

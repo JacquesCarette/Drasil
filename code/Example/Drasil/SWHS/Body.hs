@@ -43,7 +43,7 @@ import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
-acronyms :: [CINP]
+acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
 
@@ -93,7 +93,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 s2 :: Section
-s2 = introductionF progName s2_intro, s2_kSent s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
+s2 = introductionF progName (s2_intro, s2_kSent) s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
 -- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
@@ -114,9 +114,9 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "storage capacity per" +:+ phrase unit_ +:+. S "weight"
 
 s2_kSent :: Sentence
-s2_kSent = EmptyS +:+. phrase swhs_pcm +:+ S "The developed" +:+
-  phrase program +:+ S "will be referred to as" +:+
-  titlize progName +:+ sParen (short progName)
+s2_kSent = EmptyS +:+. (phrase swhs_pcm) +:+ S "The developed" +:+
+  (phrase program) +:+ S "will be referred to as" +:+
+  (titleize progName) +:+ sParen (short progName)
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating
@@ -220,7 +220,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4_tuple :: (Sentence, CINP, Section, Sentence)
+s2_4_tuple :: (Sentence, CI, Section, Sentence)
 s2_4_tuple = (s2_4_intro, inModel, (SRS.inModel SRS.missingP []), s2_4_trail)
 
 s2_4_intro :: Sentence
@@ -292,13 +292,13 @@ s3_1_contents = Paragraph $ makeRef sys_context_fig +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
   S "rectangle represents the" +:+ phrase softwareSys +:+
-  S "itself" +:+. sParen short progName +:+ S "Arrows are used to show the" +:+
+  S "itself" +:+. (sParen $ short progName) +:+ S "Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
   S "and its" +:+. phrase environment
 
 sys_context_fig :: Contents
 sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
-  titlize sysCont) "SystemContextFigure.png"
+  titleize sysCont) "SystemContextFigure.png"
 
 s3_1_2_intro :: Contents
 s3_1_2_intro = Paragraph $ short progName +:+. S "is mostly self-contained" +:+
@@ -308,7 +308,7 @@ s3_1_2_intro = Paragraph $ short progName +:+. S "is mostly self-contained" +:+
 
 s3_1_2_bullets :: Contents
 s3_1_2_bullets = Enumeration (Bullet $
-  [Nested (titlize user +: S "Responsibilities")
+  [Nested (titleize user +: S "Responsibilities")
   (Bullet $ map (\c -> Flat c)
   [S "Provide the" +:+ phrase input_ +:+ plural datum +:+ S "to the" +:+
   phrase system `sC` S "ensuring no errors in the" +:+ plural datum +:+
@@ -334,7 +334,7 @@ s3_1_2_bullets = Enumeration (Bullet $
 s3_2_contents :: Contents
 s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
   short progName +:+ S "should have an understanding of undergraduate" +:+
-  S "Level 1 Calculus and" +:+. titlize physics
+  S "Level 1 Calculus and" +:+. (titleize physics)
 
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
@@ -543,9 +543,7 @@ assump3 = S "The" +:+
   S "is the same throughout the entire" +:+ (phrase $ tank) +:+. sSqBr
   (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)))
 --
-assump4 = S "The" +:+ (phrase $ temp_PCM ^.
-  term) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol ^. 
-  term) +:+. sSqBr (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)) `sC` S "LC1")
+assump4 = S "The" +:+ (phrase $ temp_PCM) +:+ S "is the same throughout the" +:+ (phrase $ pcm_vol) +:+. sSqBr (S "GD2" `sC` (makeRef (swhsSymbMapD dd2HtFluxP)) `sC` S "LC1")
 --
 assump5 = S "The" +:+ 
   (phrase $ w_density) +:+ S "and" +:+
@@ -553,8 +551,7 @@ assump5 = S "The" +:+
   S "is, they are each constant over their entire" +:+
   (phrase $ vol) +:+. sSqBr (S "GD2")
 --
-assump6 = S "The" +:+ (phrase $ htCap_W ^.
-  term) `sC` (phrase $ htCap_S_P) `sC` S "and" +:+ 
+assump6 = S "The" +:+ (phrase $ htCap_W) `sC` (phrase $ htCap_S_P) `sC` S "and" +:+ 
   (phrase $ htCap_L_P) +:+ S "have no spatial variation; that" +:+
   S "is, they are each constant over their entire" +:+
   (phrase $ vol) +:+. sSqBr (S "GD2")
@@ -563,12 +560,10 @@ assump7 = (CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ (phrase $ coil) +:+ S "and the" +:+
   (phrase $ water) +:+. sSqBr (makeRef (swhsSymbMapD dd1HtFluxC))
 --
-assump8 = S "The" +:+ (phrase $ temp_C ^. 
-  term) +:+ S "is constant over" +:+ (phrase $ time) +:+.
+assump8 = S "The" +:+ (phrase $ temp_C) +:+ S "is constant over" +:+ (phrase $ time) +:+.
   sSqBr (makeRef (swhsSymbMapD dd1HtFluxC) `sC` S "LC2")
 --
-assump9 = S "The" +:+ (phrase $ temp_C ^.
-  term) +:+ S "does not vary along its length" +:+. sSqBr
+assump9 = S "The" +:+ (phrase $ temp_C) +:+ S "does not vary along its length" +:+. sSqBr
   (makeRef (swhsSymbMapD dd1HtFluxC) `sC` S "LC3")
 --
 assump10 = (CT.law_conv_cooling ^. 
@@ -666,7 +661,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   (C vol_ht_gen) vol) := 
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density) 
   * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
-  Paragraph (S "Applying" +:+ (titlize $ gauss_div) +:+ S "to" +:+
+  Paragraph (S "Applying" +:+ (titleize $ gauss_div) +:+ S "to" +:+
   S "the first term over the" +:+ (phrase $ surface) +:+
   P (surface ^. symbol) +:+ S "of the" +:+ 
   (phrase $ vol) `sC` S "with" +:+ P (thFluxVect ^. 
@@ -682,8 +677,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   (Low (C vol)), Nothing) (C vol_ht_gen) vol)) := 
   UnaryOp (Integral (Just (Low (C vol)), Nothing) 
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
-  Paragraph (S "We consider an arbitrary" +:+. (phrase $ vol ^. 
-  term) +:+ S "The" +:+ (phrase $ vol_ht_gen) :+: S "is" +:
+  Paragraph (S "We consider an arbitrary" +:+. (phrase $ vol) +:+ S "The" +:+ (phrase $ vol_ht_gen) :+: S "is" +:
   S "assumed constant. Then (1) can be written as"),
   EqnBlock 
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
@@ -797,7 +791,7 @@ s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
   [S "Dividing (3) by", P (w_mass ^. symbol) :+:
   P (htCap_W ^. symbol) `sC` S "we obtain"],
   [S "Factoring the negative sign out of the second", S "term of the", 
-  (short rightSide), S "of", (titlize $ equation), 
+  (short rightSide), S "of", (titleize $ equation), 
   S "(4) and multiplying it by", 
   (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol) :+: S "/" :+: 
   (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), S "yields"],
@@ -807,7 +801,7 @@ s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
   (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), 
   S "and", (P $ eta ^. symbol) :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+: 
   (P $ pcm_SA ^. symbol) :+: S "/" :+: (P $ coil_HTC ^. symbol) :+: 
-  (P $ coil_SA ^. symbol) `sC` (titlize $ equation), S "(5) can",
+  (P $ coil_SA ^. symbol) `sC` (titleize $ equation), S "(5) can",
   S "be written as"],
   [S "Finally, factoring out 1/" :+: (P $ tau_W ^. 
   symbol) `sC` S "we are left with the governing",
@@ -899,8 +893,7 @@ s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   S "that follows is initially for the" +:+
   (phrase $ solid) +:+ EmptyS +:+. (short phsChgMtrl) +:+
   S "The" +:+ (phrase $ pcm_mass) +:+ S "is" +:+ 
-  P (pcm_mass ^. symbol) +:+ S "and the" +:+ (phrase $ htCap_S_P ^. 
-  term) +:+ S "is" +:+. P (htCap_S_P ^. symbol) +:+
+  P (pcm_mass ^. symbol) +:+ S "and the" +:+ (phrase $ htCap_S_P) +:+ S "is" +:+. P (htCap_S_P ^. symbol) +:+
   S "The" +:+ (phrase $ ht_flux_P) +:+ S "is" +:+ 
   P (ht_flux_P ^. symbol) +:+ S "over" +:+ (phrase $ pcm_SA) +:+.
   P (pcm_SA ^. symbol) +:+ S "There is no" +:+. 
@@ -909,7 +902,7 @@ s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   S "=0, the" +:+ (phrase $ equation) +:
   S "for GD2 can be written as")]
 
-s4_2_5_d2endPara = map Paragraph [((titlize $ equation) +:+ S "(6) applies for the" +:+ 
+s4_2_5_d2endPara = map Paragraph [((titleize $ equation) +:+ S "(6) applies for the" +:+ 
   (phrase $ solid) +:+ EmptyS +:+. (short phsChgMtrl) +:+
   S "In the case where all of the" +:+
   (short phsChgMtrl) +:+ S "is melted, the same" +:+
@@ -1053,7 +1046,7 @@ s5_1 = SRS.funcReq (s5_1_list) []
 
 s5_1_list :: [Contents]
 s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat 
-  (titlize input_ +:+ S "the following" +:+ plural quantity `sC`
+  (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ (phrase $ tank) +:+
   S "parameters, material" +:+ plural property +:+ S "and initial" +:
   plural condition))]),
@@ -1062,7 +1055,7 @@ s5_1_list = [Enumeration (Simple [((short requirement) :+: S "1", Flat
   [(\ch -> P (ch ^. symbol)),
   (\ch -> Sy (unit_symb ch)),
   (\ch -> phrase $ ch)] inputVar) 
-  (titlize input_ +:+ titlize variable +:+ (titlize requirement)) False),
+  ((titleize input_) +:+ (titleize variable) +:+ (titleize requirement)) False),
 --
   Enumeration (Simple [((short requirement) :+: S "2", Flat 
   (S "Use the" +:+ plural input_ +:+ S "in R1 to find the" +:+
@@ -1090,7 +1083,7 @@ reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 req3 = S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
   phrase physical +:+ plural constraint +:+ S "shown in" +:+ makeRef s7_table1
 --
-req4 = titlize output_ +:+ S "the" +:+
+req4 = titleize output_ +:+ S "the" +:+
   phrase input_ +:+ plural quantity +:+ S "and derived" +:+ plural quantity +:+
   S "in the following list: the" +:+ plural quantity +:+ S "from R1, the" +:+
   (plural $ mass) +:+ S "from R2" `sC` P (tau_W ^. symbol) +:+
@@ -1198,8 +1191,7 @@ likeChg2 = S "A8 - The" +:+ (phrase $ temp_C) +:+
   S "will change over the course of the day, depending" +:+
   S "on the" +:+ (phrase $ energy) +:+. S "received from the sun"
 --
-likeChg3 = S "A9 - The" +:+ (phrase $ temp_C ^. 
-  term) +:+ S "will actually change along its length as the" +:+
+likeChg3 = S "A9 - The" +:+ (phrase $ temp_C) +:+ S "will actually change along its length as the" +:+
   (phrase $ water) +:+. S "within it cools"
 --
 likeChg4 = S "A11 - The" +:+ phrase model +:+

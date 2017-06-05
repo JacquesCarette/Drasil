@@ -25,7 +25,7 @@ swhsSymbMapT termType = (symbolMapFun swhsSymbols Theory) termType
 --    I think this will need an overhaul after we fix Data Definitions.
 
 dd1HtFluxC :: QDefinition
-dd1HtFluxC = fromEqn (ht_flux_C ^. id) (ht_flux_C) (ht_flux_C ^. symbol) 
+dd1HtFluxC = fromEqn (ht_flux_C ^. id) (ht_flux_C ^. term) (ht_flux_C ^. symbol) 
   thermal_flux htFluxCEqn
 
 htFluxCEqn :: Expr
@@ -34,7 +34,7 @@ htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
 --Can't include info in description beyond definition of variables?
 
 dd2HtFluxP :: QDefinition
-dd2HtFluxP = fromEqn (ht_flux_P ^. id) (ht_flux_P) (ht_flux_P ^. symbol) 
+dd2HtFluxP = fromEqn (ht_flux_P ^. id) (ht_flux_P ^. term) (ht_flux_P ^. symbol) 
   thermal_flux htFluxPEqn
 
 htFluxPEqn :: Expr
@@ -42,7 +42,7 @@ htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
              FCall (C temp_PCM) [C time])
 
 dd3HtFusion :: QDefinition
-dd3HtFusion = fromEqn (htFusion ^. id) (htFusion) (htFusion ^. symbol)
+dd3HtFusion = fromEqn (htFusion ^. id) (htFusion ^. term) (htFusion ^. symbol)
   specificE htFusionEqn
 
 htFusionEqn :: Expr

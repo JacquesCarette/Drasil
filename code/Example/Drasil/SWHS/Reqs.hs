@@ -23,5 +23,5 @@ r9 = ReqChunk (nw $ emptyN) [mod_outputv]
 r10 = ReqChunk (nw $ emptyN) [mod_outputf, mod_temp, mod_ctrl]
 r11 = ReqChunk (nw $ emptyN) [mod_outputf, mod_temp, mod_ener, mod_ctrl]
 
-emptyN :: Named Chunk
+emptyN :: NamedChunk
 emptyN = npnc "" (cn "")

@@ -111,7 +111,7 @@ s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
                     S "and" +:+ (phrase blastRisk))
         undIR     = (foldlList [S "second year calculus", S "structural mechanics",
                     S "computer applications in civil engineering"])
-        appStanddIR = (S " In addition, reviewers should be familiar with the" +:+
+        appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
                        S "applicable standards for constructions using glass" +:+
                        S "from" +:+ sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
 

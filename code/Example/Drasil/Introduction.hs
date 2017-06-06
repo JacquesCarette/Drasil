@@ -3,7 +3,7 @@ module Drasil.Introduction
    orgSec,
    introductionSection,
    purposeOfDoc,
-   scpOfReqF,
+   scopeOfRequirements,
    charIntRdrF
    ) where
 
@@ -50,12 +50,12 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 -------------------------
 
 introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CI, Section, Sentence) -> Section
-introductionF kWord (problemIntroduction, programDefinition) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
+introductionF progName (problemIntroduction, programDefinition) (pOdPart1) (mainRequirement, intendedPurpose) (know, und, appStandd) orgTrailing (i, b, s, t) 
   = introductionSection problemIntroduction programDefinition subsec
      where  subsec   = [pOfDoc, scpOfReq_, cIntRdr, organizationOfDoc orgTrailing]
             pOfDoc   = purposeOfDoc pOdPart1
-            scpOfReq_ = scpOfReqF inc kWord endSCOR
-            cIntRdr  = charIntRdrF know und kWord appStandd (SRS.userChar [] [])
+            scpOfReq_ = scopeOfRequirements mainRequirement progName intendedPurpose
+            cIntRdr  = charIntRdrF know und progName appStandd (SRS.userChar [] [])
             organizationOfDoc True  = orgSecWTS i b s t
             organizationOfDoc False = orgSec i b s 
 
@@ -76,7 +76,7 @@ overviewParagraph programDefinition = Paragraph $ foldlSent [S "The following", 
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", (phrase document) `sC` introductionSubsections]
 
--- | constructor for purpose of document section
+-- | constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
 -- example
 purposeOfDoc :: Sentence -> Section
@@ -84,27 +84,40 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
   [Paragraph purposeOfProgramParagraph, developmentProcessParagraph] []
 
 
--- Complete the sentences, no need to add a period at the end of your input sentences
-scpOfReqF :: Sentence -> CI -> Sentence -> Section
-scpOfReqF includes progName ending = SRS.scpOfReq [Paragraph intro] []
+-- | constructor for scope of requirements subsection
+-- mainRequirement  - the main requirement for the program
+-- programName      - the name of the program
+-- intendedPurpose  - the intended purpose of the program
+scopeOfRequirements :: Sentence -> CI -> Sentence -> Section
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [Paragraph intro] []
   where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
-                S "includes" +:+. includes, S "Given the appropriate inputs, the code for",
-                short progName, S "is intended to" +:+ ending]
+                S "includes" +:+. mainRequirement, S "Given the appropriate inputs, the code for",
+                short programName, S "is intended to" +:+ intendedPurpose]
 
---Characteristics of Intended Reader section
+-- | constructor for characteristics of the intended reader subsection
+-- know
+-- und
+-- progName
+-- appStandd
+-- r
 charIntRdrF :: Sentence -> Sentence -> CI -> Sentence -> Section -> Section
 charIntRdrF know und progName appStandd r = 
   SRS.charOfIR (intReaderIntro know und progName appStandd r) []
 
 --paragraph called by charIntRdrF
+-- topic1 - sentence the reader should have knowledge in
+-- topic2 - sentence the reader should understand
+-- 
+--
 intReaderIntro :: Sentence -> Sentence -> CI -> Sentence -> Section -> [Contents]
-intReaderIntro know und progName appStandd r = [Paragraph $ foldlSent [S "Reviewers of this",
-  (phrase documentation), S "should have a strong knowledge in" +:+. know,
-  S "The reviewers should also have an understanding of" +:+. und :+:
+intReaderIntro topic1 topic2 progName appStandd userCharacter = 
+  [Paragraph $ foldlSent [S "Reviewers of this",
+  (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
+  S "The reviewers should also have an understanding of" +:+. topic2 :+:
   appStandd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRef r)]]
+  S "can have a lower level of expertise, as explained in", (makeRef userCharacter)]]
 
--- | Organization of the document section builder. Takes an introduction,
+-- | Organization of the document section constructor. Takes an introduction,
 -- a "bottom" chunk (where to start reading bottom-up. Usually instance
 -- models or data definitions), a bottom section (for creating a reference link)
 -- which should match the bottom chunk, but does not have to.

@@ -58,7 +58,7 @@ s2 = introductionSection EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4] --TODO: Placehol
 
 s2_1 = purposeOfDoc EmptyS --TODO: Placeholder values until content can be added
 
-s2_2 = scpOfReqF EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
+s2_2 = scopeOfRequirements EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
 
 s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
   where knowledge = ((phrase heat) +:+ S "transfer" +:+. (phrase theory) +:+

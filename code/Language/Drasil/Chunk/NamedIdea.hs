@@ -153,7 +153,7 @@ with' t1 t2 = nounPhrase''
   (plural (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term))
   (plural (t1 ^. term) +:+ S "with" +:+ plural (t2 ^. term))
   (Replace (at_start' (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term)))
-  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize' (t2 ^. term)))
+  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize (t2 ^. term)))
   
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_ t1 t2 = nounPhrase''

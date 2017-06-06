@@ -3,7 +3,7 @@ module Drasil.Stakeholders
 
 import Language.Drasil
 import qualified Drasil.SRS as SRS
-import Data.Drasil.SentenceStructures (foldlSent, foldlSP)
+import Data.Drasil.SentenceStructures (foldlSP)
 import Data.Drasil.Concepts.Documentation
 
 stakehldrGeneral :: CI -> Sentence -> Section

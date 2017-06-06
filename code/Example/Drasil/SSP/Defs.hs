@@ -1,13 +1,8 @@
 module Drasil.SSP.Defs where
 
-import Drasil.SSP.Units
-
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Quantities.SolidMechanics
 import Drasil.SSP.TMods
-
-import Control.Lens ((^.))
 
 ----Acronyms-----
 acronyms :: [CI]

@@ -6,35 +6,55 @@ data Greek = Alpha_L
            | Alpha  
            | Beta_L
            | Beta
-           | Delta_L
-           | Delta
-           | Ell
-           | Eta_L
-           | Eta
            | Gamma_L
            | Gamma
+           | Delta_L
+           | Delta
+           | Epsilon_L
+           | Epsilon_V
+           | Epsilon
+           | Zeta_L
+           | Zeta
+           | Eta_L
+           | Eta
+           | Theta_L
+           | Theta
+           | Iota_L
+           | Iota
+           | Kappa_L
+           | Kappa
            | Lambda_L
            | Lambda
-           | Nabla
+           | Mu_L
+           | Mu
            | Nu_L
            | Nu
-           | Omega_L
-           | Omega
+           | Xi_L
+           | Xi
+           | Omicron_L
+           | Omicron
            | Pi_L
            | Pi
-           | Phi_L
-           | Phi_V
-           | Phi
            | Rho_L
            | Rho
            | Sigma_L
            | Sigma
            | Tau_L
            | Tau
-           | Theta_L
-           | Theta
            | Upsilon_L
            | Upsilon
+           | Phi_L
+           | Phi_V
+           | Phi
+           | Chi_L
+           | Chi
+           | Psi_L
+           | Psi
+           | Omega_L
+           | Omega
+           --end of standard greek alphabet
+           | Ell
+           | Nabla
   deriving (Eq, Ord)
 
 -- | Special characters including @<=@, partial derivatives, degree circle, and

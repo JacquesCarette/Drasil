@@ -69,3 +69,15 @@ fs_desc =
   (sParen $ P $ fs ^. symbol) `sC` S "is determined by the ratio of the" +:+
   S "shear force at the base of the slope" +:+ (sParen $ P $ mobShear ^. symbol) `sC` 
   S "and the resistive shear" +:+. (sParen $ P $ shearRes ^. symbol)
+
+fixmeS :: Sentence
+fixmeS = S "FIXME: add description"
+  
+equilibrium :: RelationConcept
+equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
+
+eq_rel :: Relation
+eq_rel = (UnaryOp $ Summation Nothing (C genForce)) := (Int 0) --FIXME: add net x force, net y force, and net moment
+
+eq_desc :: Sentence
+eq_desc = fixmeS

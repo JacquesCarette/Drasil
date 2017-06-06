@@ -296,7 +296,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = [sspSymMapT fs_rc] --FIX fs_rc to use lowercase
+s4_2_2_tmods = map sspSymMapT [fs_rc, equilibrium] --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
@@ -361,7 +361,7 @@ positiveC = VarCon (:>) (Int 0)
 
 -- "positive variable chunk" built from an existing concept+quanity+symbolform
 posVarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
-posVarCh s contraints typicalVal = VarCh s (contraints:positiveC) typicalVal
+posVarCh s contraints typicalVal = VarCh s (positiveC:contraints) typicalVal
 
 --"variable chunk with units"
 varChWU :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk [VarContraint] -> a -> VariableChunk
@@ -382,8 +382,8 @@ fmtBF' symb (x:xs)         = fmtBF' [x] +:+ S "and" +:+ (fmtBF symb xs)
 
 intNormFor  = mkGtZeroConst ei          []          (15000 :: Integer)
 effectCohe  = mkGtZeroConst cohesion    []          (10    :: Integer)
-poissnRatio = mkGtZeroConst poissnsR    [((:<),1)]  (0.4   :: Double )
-fricAng     = mkGtZeroConst fricAngle   [((:<),90)] (25    :: Integer)
+poissnRatio = mkGtZeroConst poissnsR    [(\x -> 0 :< x :< 1)]  (0.4   :: Double )
+fricAng     = mkGtZeroConst fricAngle   [(:< 90)] (25    :: Integer)
 dryUWght    = mkGtZeroConst dryWeight   []          (20    :: Integer)
 satUWght    = mkGtZeroConst satWeight   []          (20    :: Integer)
 waterUWght  = mkGtZeroConst waterWeight []          (9.8   :: Double )
@@ -394,7 +394,7 @@ slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
 deltax = [getS dx_i, S "None"]
 deltay = [getS dy_i, S "None"]
 
-mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
+mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr)] -> a -> [Sentence]
 mkGtZeroConst s other num = [getS s, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
 
 dataConstList :: [[Sentence]]

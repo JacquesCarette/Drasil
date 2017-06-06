@@ -21,7 +21,6 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 
 import           Drasil.TableOfSymbols
-import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
@@ -35,12 +34,12 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 
 import Drasil.DocumentLanguage
---import Drasil.OrganizationOfSRS
 import Drasil.TraceabilityMandGs
 import Drasil.Stakeholders
 import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
+import Drasil.SpecificSystemDescription
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

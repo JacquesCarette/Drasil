@@ -17,7 +17,7 @@ import qualified Drasil.SRS as SRS
 
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc

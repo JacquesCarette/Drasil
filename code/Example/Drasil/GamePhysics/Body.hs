@@ -12,7 +12,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Drasil.TraceabilityMandGs
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 import Drasil.Introduction
 --import Drasil.Requirements
 import qualified Data.Drasil.Quantities.Math as QM (orientation)

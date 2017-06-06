@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 import Drasil.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc

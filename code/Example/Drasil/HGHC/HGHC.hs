@@ -17,7 +17,7 @@ import Data.Drasil.Authors (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.Modules
 
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 
 modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,

@@ -32,7 +32,7 @@ import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
 
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 import qualified Drasil.SRS as SRS
 import Drasil.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage

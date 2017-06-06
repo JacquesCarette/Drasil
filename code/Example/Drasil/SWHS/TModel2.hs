@@ -55,7 +55,7 @@ t2descr = (P (QT.sens_heat ^. symbol) :+: S " is the change in " :+:
   P (QT.temp ^. symbol) :+: S "=" :+: P (QT.boil_pt ^. symbol) :+:
   S " or " :+: P (QT.temp ^. symbol) :+: S "=" :+: 
   P (QT.melt_pt ^. symbol) :+: S ". If this is the case, refer to " :+: 
-  (makeRef (swhsSymbMapT t3LatHtE)) :+: S ", " :+: (at_start $ latent_heat) :+: 
+  swhsSymbMapTRef t3LatHtE :+: S ", " :+: at_start latent_heat :+: 
   S " energy.")
   
 

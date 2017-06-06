@@ -41,7 +41,7 @@ t3descr = (P (QT.latent_heat ^. symbol) :+: S " is the change in " :+:
   (phrase $ phase_change) :+: S " is not complete. The status of " :+:
   S "the " :+: (phrase $ phase_change) :+:
   S " depends on the " :+: (phrase $ melt_frac) `sC`
-  (makeRef (swhsSymbMapD dd3HtFusion)) :+: S "." +:+
+  swhsSymbMapDRef dd3HtFusion :+: S "." +:+
   P (QT.melt_pt ^. symbol) :+:
   S " and " :+: P (QT.boil_pt ^. symbol) :+: S " are the " :+:
   (phrase $ QT.melt_pt) :+: S " and " :+: (phrase $ QT.boil_pt) :+:

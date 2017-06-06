@@ -20,6 +20,12 @@ swhsSymbMapD termType = (symbolMapFun swhsSymbols Data) termType
 swhsSymbMapT :: RelationConcept -> Contents
 swhsSymbMapT termType = (symbolMapFun swhsSymbols Theory) termType
 
+swhsSymbMapDRef :: QDefinition -> Sentence
+swhsSymbMapDRef termType = makeRef $ swhsSymbMapD termType
+
+swhsSymbMapTRef :: RelationConcept -> Sentence
+swhsSymbMapTRef termType = makeRef $ swhsSymbMapT termType
+
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.

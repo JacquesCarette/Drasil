@@ -95,7 +95,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 s2 :: Section
-s2 = introductionF progName (s2_intro, s2_kSent) s2_1_par1 s2_2_tuple s2_3_tuple True s2_4_tuple
+s2 = introductionF progName (s2_intro, s2_kSent) s2_1_par1 s2_2_tuple s2_3_tuple s2_4_tuple
 -- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence

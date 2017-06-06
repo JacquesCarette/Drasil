@@ -66,13 +66,13 @@ probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
 termDefnF :: Maybe Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
       where lastF Nothing  = EmptyS
-            lastF (Just s) = s
+            lastF (Just s) = S "." +:+ s
             intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
                     [S "This subsection provides a list of terms",
                     S "that are used in the subsequent", plural section_, S "and their",
                     S "meaning, with the", phrase purpose, S "of reducing ambiguity",
-                    S "and making it easier to correctly understand the" +:+.
-                    plural requirement, lastF end]
+                    S "and making it easier to correctly understand the" +:+
+                    plural requirement :+: (lastF end)]
 
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> Contents -> [Contents] -> Section

@@ -148,7 +148,7 @@ Hardware Hiding Module &
 \\
 Behaviour Hiding Module & Input Format Module
 \\
- & Input Parameters Module
+ & Input Parameter Module
 \\
  & Input Verification Module
 \\
@@ -176,7 +176,7 @@ Software Decision Module & Sequence Data Structure Module
 \label{Sec:ModuDeco}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is SWHS, this means that the module is provided by the SWHS program. If the entry is MATLAB, this means that the module is provided by the MATLAB programming language. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
 \subsection{Hardware Hiding Module (M\ref{MhwHiding})}
-\label{Sec:HHM()}
+\label{Sec:HardHidiModu()}
 \begin{description}
 \item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
 \item[Services:]Hides the exact details of the hardware, and provides a uniform interface for the rest of the system to use.
@@ -190,14 +190,14 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Implemented By:]--
 \end{description}
 \subsection{Input Format Module (M\ref{MmodInputFormat})}
-\label{Sec:IFM()}
+\label{Sec:InpuFormModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the input data.
 \item[Services:]Converts the input data into the data structure used by the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Input Parameters Module (M\ref{MmodInputParams})}
-\label{Sec:IPM()}
+\subsection{Input Parameter Module (M\ref{MmodInputParam})}
+\label{Sec:InpuParaModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the input parameters.
 \item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.

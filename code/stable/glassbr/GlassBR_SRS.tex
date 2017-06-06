@@ -549,7 +549,7 @@ Description & $q$ or demand, is the 3 second duration equivalent pressure obtain
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
-Table~\ref{Table:T2IV} shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:T3SPV}) gives the values of the specification parameters used in Table~\ref{Table:T2IV}. $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+Table~\ref{Table:Tabl2:InpuVari} shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:Tabl3:SpecParaValu}) gives the values of the specification parameters used in Table~\ref{Table:Tabl2:InpuVari}. $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Cons & Software Constraints & Typical Value & Uncertainty
@@ -569,7 +569,7 @@ $SD$ & $SD$ > 0 & $SD_{min}$ < $SD$ < $SD_{max}$  & 45m & 10%
 \\
 \bottomrule
 \caption{Table 2: Input Variables}
-\label{Table:T3SPV}
+\label{Table:Tabl3:SpecParaValu}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -592,7 +592,7 @@ $SD_{max}$ & 130 m
 \\
 \bottomrule
 \caption{Table 3: Specification Parameter Values}
-\label{Table:T3SPV}
+\label{Table:Tabl3:SpecParaValu}
 \end{longtable}
 Table~\ref{Table:Tabl4:OutpVari} shows the constraints that must be satisfied by the output.
 \section{Requirements}
@@ -763,27 +763,27 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  &
 \\
 DD9 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  & X &  &  &  & 
 \\
-LC1 (in Section~\ref{Sec:LikeChan}) &  &  & X &  &  &  &  & 
+LC1 (Section~\ref{Sec:LikeChan}) &  &  & X &  &  &  &  & 
 \\
-LC2 (in Section~\ref{Sec:LikeChan}) &  &  &  & X &  &  &  & X
+LC2 (Section~\ref{Sec:LikeChan}) &  &  &  & X &  &  &  & X
 \\
-LC3 (in Section~\ref{Sec:LikeChan}) &  &  &  &  & X &  &  & 
+LC3 (Section~\ref{Sec:LikeChan}) &  &  &  &  & X &  &  & 
 \\
-LC4 (in Section~\ref{Sec:LikeChan}) &  &  &  &  &  & X &  & 
+LC4 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  & X &  & 
 \\
-LC5 (in Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  & X & 
+LC5 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  & X & 
 \\
-R1 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R1 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
 \\
-R2 (in Section~\ref{Sec:FuncRequ}) &  &  &  & X & X &  &  & X
+R2 (Section~\ref{Sec:FuncRequ}) &  &  &  & X & X &  &  & X
 \\
-R3 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R3 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
 \\
-R4 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R4 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
 \\
-R5 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R5 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
 \\
-R6 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R6 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

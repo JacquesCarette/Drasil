@@ -193,6 +193,7 @@ executable ssp
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
     , Drasil.SSP.Units
+    , Drasil.SSP.TMods
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.DocumentLanguage

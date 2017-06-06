@@ -12,6 +12,7 @@ import Drasil.SSP.Units
 import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
+import Drasil.SSP.TMods
 import qualified Drasil.SRS as SRS
 
 import Drasil.ReferenceMaterial
@@ -296,7 +297,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = map sspSymMapT [fs_rc, equilibrium] --FIX fs_rc to use lowercase
+s4_2_2_tmods = map sspSymMapT sspTMods --FIX fs_rc to use lowercase
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF

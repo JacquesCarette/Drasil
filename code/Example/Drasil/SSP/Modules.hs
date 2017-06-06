@@ -13,6 +13,7 @@ import Data.Drasil.Software.Products
 
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
+import Drasil.SSP.TMods
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,

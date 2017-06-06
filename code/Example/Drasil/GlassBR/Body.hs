@@ -14,7 +14,8 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils (itemRefToSent,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
-import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
+  showingCxnBw, figureLabel)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -34,7 +35,7 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 
 import Drasil.DocumentLanguage
-import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
+--import Drasil.OrganizationOfSRS
 import Drasil.TraceabilityMandGs
 import Drasil.Stakeholders
 import Drasil.Introduction

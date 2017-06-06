@@ -43,6 +43,8 @@ import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
+import Data.Drasil.SentenceStructures (showingCxnBw)
+
 acronyms :: [CI]
 acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
   phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]

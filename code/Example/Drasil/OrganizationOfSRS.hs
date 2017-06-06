@@ -1,8 +1,6 @@
 module Drasil.OrganizationOfSRS 
-  ( showingCxnBw
-  , figureLabel
--- start of functions for SRS document sections in order of document apperence
-  , specSysDesF
+  ( -- functions for SRS document sections in order of document apperence
+  specSysDesF
   , probDescF
   , termDefnF
   , physSystDesc
@@ -23,14 +21,6 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
-
-figureLabel :: NamedIdea c => [Char] -> c -> Sentence -> [Char]-> Contents
-figureLabel num traceyMG contents filePath = Figure (titleize figure +: 
-  S num +:+ (showingCxnBw (traceyMG) (contents))) filePath
-
-showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
-showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
-  titleize' connection +:+ S "Between" +:+ contents
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section

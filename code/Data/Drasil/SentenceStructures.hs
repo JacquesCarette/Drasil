@@ -2,7 +2,8 @@ module Data.Drasil.SentenceStructures
   ( foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
-  , toThe, tableShows, refineChain
+  , toThe, tableShows, figureLabel
+  , showingCxnBw, refineChain
   ) where
 
 import Language.Drasil
@@ -67,6 +68,16 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 tableShows :: Contents -> Sentence -> Sentence
 tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
+
+-- | Function that creates (a label for) a figure
+--FIXME: Is `figureLabel` defined in the correct file?
+figureLabel :: NamedIdea c => [Char] -> c -> Sentence -> [Char]-> Contents
+figureLabel num traceyMG contents filePath = Figure (titleize figure +: 
+  S num +:+ (showingCxnBw (traceyMG) (contents))) filePath
+
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ contents
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!

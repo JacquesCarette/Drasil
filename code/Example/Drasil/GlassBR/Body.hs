@@ -86,7 +86,7 @@ glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
      (incScoR, endScoR)
-     (knowIR, undIR, appStanddIR) True
+     (knowIR, undIR, appStanddIR)
      (s2_3_intro, dataDefn, s6_2_4, s2_3_intro_end)
   where startIntro = foldlSent [(at_start software), 
                      S "is helpful to efficiently and correctly predict the", 

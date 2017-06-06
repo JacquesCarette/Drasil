@@ -459,12 +459,6 @@ table_inputdata = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this h
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd] [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
-        
-
--- s5_2_p1 = Paragraph $ (short ssa) +:+ S "is intended to be an" +:+
-  -- S "educational tool, therefore accuracy and performance speed" +:+
-  -- S "are secondary" +:+ (phrase $ program) +:+ S "priorities to correctness," +:+
-  -- S "understandability, reusability, and maintainability."
 
 -- SECTION 6 --
 s6 = SRS.likeChg [] []

@@ -748,7 +748,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:R>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UC>.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:Refe>this Section</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChar>this Section</a>.
 </p>
 </div>
 </a>
@@ -758,7 +758,7 @@ Reviewers of this documentation should have a strong knowledge in theory behind 
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:R>this Section</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DD>this Section</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:Refe>this Section</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DataDefi>this Section</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
@@ -875,7 +875,7 @@ Inputs
 User
 </td>
 <td>
-Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IPUC>this Section</a>
+Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndiProdUseCase>this Section</a>
 </td>
 </tr>
 <tr>
@@ -1020,7 +1020,7 @@ Stand off distance (SD) - The distance from the glazing surface to the centroid 
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of GlassBR as shown in <a href=#Figure:Tps>this Figure</a>, includes the following elements:
+The physical system of GlassBR, as shown in <a href=#Figure:Thephyssyst>this Figure</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -1066,7 +1066,7 @@ The instance models that govern GlassBR are presented in <a href=#Sec:InstMode>t
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TM>this Section</a>], Data Definitions [<a href=#Sec:DD>this Section</a>], Instance Models [<a href=#Sec:IM>this Section</a>], or Likely Changes [<a href=#Sec:LC>this Section</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>this Section</a>], Data Definitions [<a href=#Sec:DataDefi>this Section</a>], Instance Models [<a href=#Sec:InstMode>this Section</a>], or Likely Changes [<a href=#Sec:LikeChan>this Section</a>], in which the respective assumption is used.
 </p>
 <div class="list">
 <p>
@@ -1156,7 +1156,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-If is_safe1 = True, the glass is considered safe. is_safe1 and is_safe2 (from <a href=#T:SR>this Definition</a>) are either both True or both False. P<sub>b</sub> is the probability of breakage, as calculated in <a href=#T:PoGB>this Definition</a>. P<sub>btol</sub> is the tolerable probability of breakage entered by the user.
+If is_safe1 = True, the glass is considered safe. is_safe1 and is_safe2 (from <a href=#T:t2SafetyReq>this Definition</a>) are either both True or both False. P<sub>b</sub> is the probability of breakage, as calculated in <a href=#T:probOfBr>this Definition</a>. P<sub>btol</sub> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1192,7 +1192,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:SR>this Definition</a> and is_safe2 are either both True or both False. LR is the load resistance (also called capacity, as defined in <a href=#T:CoC>this Definition</a>. q (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:CoD>this Definition</a>.
+If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:t1SafetyReq>this Definition</a> and is_safe2 are either both True or both False. LR is the load resistance (also called capacity, as defined in <a href=#T:calOfCap>this Definition</a>. q (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>this Definition</a>.
 </p>
 </td>
 </tr>
@@ -1735,7 +1735,7 @@ J<sub>tol</sub> is the stress distribution factor (Function) based on Pbtol<br /
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:PD>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DD>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TM>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a>.
 </p>
 <a id="T:probOfBr">
 <table class="tdefn">
@@ -2314,7 +2314,7 @@ LC5: A7 - The software may be changed to consider more than just flexure of the 
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-> The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a> shows the dependencies of theoretical models, data definitions and instance models with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>this Table</a> shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a> shows the dependencies of theoretical models, data definitions and instance models with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>this Table</a> shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
 </p>
 <a id="Table:TracMatrShowtheConnBetwItemofDiffSect">
 <table class="table">

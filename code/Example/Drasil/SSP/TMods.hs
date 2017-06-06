@@ -46,7 +46,7 @@ eq_desc :: Sentence
 eq_desc = fixmeS
 
 --
-
+mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")  mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation

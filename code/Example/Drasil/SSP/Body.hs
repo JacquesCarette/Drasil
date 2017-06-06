@@ -382,8 +382,8 @@ fmtBF' symb (x:xs)         = fmtBF' [x] +:+ S "and" +:+ (fmtBF symb xs)
 
 intNormFor  = mkGtZeroConst ei          []          (15000 :: Integer)
 effectCohe  = mkGtZeroConst cohesion    []          (10    :: Integer)
-poissnRatio = mkGtZeroConst poissnsR    [(\x -> 0 :< x :< 1)]  (0.4   :: Double )
-fricAng     = mkGtZeroConst fricAngle   [(:< 90)] (25    :: Integer)
+poissnRatio = mkGtZeroConst poissnsR    [((:<), 1)] (0.4   :: Double )
+fricAng     = mkGtZeroConst fricAngle   [((:<), 90)] (25    :: Integer)
 dryUWght    = mkGtZeroConst dryWeight   []          (20    :: Integer)
 satUWght    = mkGtZeroConst satWeight   []          (20    :: Integer)
 waterUWght  = mkGtZeroConst waterWeight []          (9.8   :: Double )
@@ -394,7 +394,7 @@ slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
 deltax = [getS dx_i, S "None"]
 deltay = [getS dy_i, S "None"]
 
-mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr)] -> a -> [Sentence]
+mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
 mkGtZeroConst s other num = [getS s, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
 
 dataConstList :: [[Sentence]]

@@ -13,7 +13,7 @@ reqF = SRS.require [reqIntro]
 
 --generalized requirements introduction
 reqIntro :: Contents
-reqIntro = Paragraph $ foldlSent
+reqIntro = foldlSP
         [S "This", (phrase section_), S "provides the",
         (plural functionalRequirement) `sC` S "the business tasks that the",
         (phrase software), S "is expected to complete, and the", 

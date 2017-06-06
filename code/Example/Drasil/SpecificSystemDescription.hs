@@ -42,7 +42,7 @@ specSysDesF l_eND subSec = SRS.specSysDes [specSysDesIntro l_eND] subSec
 -- generalized specific system description introduction: boolean identifies whether the user wants the extended
 -- or shortened ending (True) -> identifies key word pertaining to topic or Nothing
 specSysDesIntro ::  Sentence -> Contents
-specSysDesIntro l_end = Paragraph $ foldlSent
+specSysDesIntro l_end = foldlSP
             [S "This", phrase section_, S "first presents the",
             phrase problemDescription `sC` S "which gives a high-level view of the",
             phrase problem, S "to be solved. This is followed by the",
@@ -147,7 +147,7 @@ thModF kword otherContents = SRS.thModel ((thModIntro kword):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
 thModIntro :: CI -> Contents
-thModIntro k_word = Paragraph $ foldlSent
+thModIntro k_word = foldlSP
           [S "This", phrase section_, S "focuses on",
           S "the", phrase general, (plural equation), S "and",
           S "laws that", short k_word, S "is based on"]
@@ -155,7 +155,7 @@ thModIntro k_word = Paragraph $ foldlSent
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [Contents] -> Section
 genDefnF otherContents = SRS.genDefn (genDefnIntro:otherContents) []
-  where genDefnIntro = Paragraph $ foldlSent [S "This", phrase section_, 
+  where genDefnIntro = foldlSP [S "This", phrase section_, 
                        S "collects the", S "laws and", (plural equation), 
                        S "that will be used in", S "deriving the", 
                        plural dataDefn `sC` S "which in turn are used to",
@@ -164,8 +164,8 @@ genDefnF otherContents = SRS.genDefn (genDefnIntro:otherContents) []
 -- uses EmptyS if ending sentence is not needed
 dataDefnF :: Sentence -> [Contents] -> Section                      
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
-  where dataDefnIntro ending = Paragraph $ 
-          foldlSent [S "This", phrase section_, 
+  where dataDefnIntro ending = Paragraph $ foldlSent
+            [S "This", phrase section_, 
             S "collects and defines all the", plural datum,
             S "needed to build the", plural inModel] +:+ ending
 
@@ -178,7 +178,7 @@ inModelF' probDes datDef theMod otherContents = SRS.inModel ((inModelIntro probD
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Maybe Section -> Contents
-inModelIntro r1 r2 r3 r4 = Paragraph $ foldlSent [S "This", phrase section_,
+inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
           S "transforms the", phrase problem, S "defined in", (makeRef r1),
           S "into one which is expressed in mathematical terms. It uses concrete",
           plural symbol_, S "defined in", (makeRef r2),

@@ -54,9 +54,9 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2 = introF EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4] --TODO: Placeholder values until content can be added
+s2 = introductionSection EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4] --TODO: Placeholder values until content can be added
 
-s2_1 = prpsOfDocF EmptyS --TODO: Placeholder values until content can be added
+s2_1 = purposeOfDoc EmptyS --TODO: Placeholder values until content can be added
 
 s2_2 = scpOfReqF EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
 

@@ -1,8 +1,8 @@
 module Drasil.Introduction 
   (introductionF,
    orgSec,
-   introF,
-   prpsOfDocF,
+   introductionSection,
+   purposeOfDoc,
    scpOfReqF,
    charIntRdrF
    ) where
@@ -14,47 +14,75 @@ import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe',
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation (algorithm)
 
+
+-----------------------
+--     Constants     --
+-----------------------
+
+-- | Contents explaining the development process of this program
+developmentProcessParagraph :: Contents
+developmentProcessParagraph = Paragraph $ foldlSent [S "This", phrase document, 
+  S "will be used as a starting point for subsequent development", 
+  S "phases, including writing the", phrase desSpec, S "and the", 
+  phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
+  plural requirement, S "are to be realized, including", plural decision, 
+  S "on the numerical", (plural algorithm), S "and programming" +:+. 
+  phrase environment, S "The", phrase vavPlan, 
+  S "will show the steps that will be used to increase confidence in the",
+  phrase softwareDoc, S "and the" +:+. phrase implementation, S "Although",
+  S "the", short srs, S "fits in a series of", plural document, 
+  S "that follow the so-called waterfall", (phrase model) `sC` 
+  S "the actual development process is not constrained", 
+  S "in any way. Even when the waterfall model is not followed, as",
+  S "Parnas and Clements point out, the most logical way", --FIXME: add citation to these people?
+  S "to present the", phrase documentation, S "is still to",
+  Quote (S "fake"), S "a rational", phrase design, S "process"]
+
+-- | Sentence containing the subsections of the introduction
+introductionSubsections :: Sentence
+introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y) 
+  [(phrase scope, phrase system), 
+  (phrase organization, phrase document), 
+  (plural characteristic, phrase intReader)])
+
+-------------------------
+--                    --
+-------------------------
+
 introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CI, Section, Sentence) -> Section
-introductionF kWord (startIntro, kSent) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
-  = introF startIntro kSent subsec
+introductionF kWord (problemIntroduction, programDefinition) (pOdPart1) (inc, endSCOR) (know, und, appStandd) orgTrailing (i, b, s, t) 
+  = introductionSection problemIntroduction programDefinition subsec
      where  subsec   = [pOfDoc, scpOfReq_, cIntRdr, organizationOfDoc orgTrailing]
-            pOfDoc   = prpsOfDocF pOdPart1
+            pOfDoc   = purposeOfDoc pOdPart1
             scpOfReq_ = scpOfReqF inc kWord endSCOR
             cIntRdr  = charIntRdrF know und kWord appStandd (SRS.userChar [] [])
             organizationOfDoc True  = orgSecWTS i b s t
             organizationOfDoc False = orgSec i b s 
 
---Provide the start to the intro, then the key sentence relating to the overview, and subsections
-introF :: Sentence -> Sentence -> [Section] -> Section
-introF start kSent subSec = SRS.intro [Paragraph start, Paragraph end] subSec
-      where end = foldlSent [S "The following", phrase section_,
-                  S "provides an overview of the", introduceAbb srs,
-                  S "for" +:+. kSent, S "This", phrase section_, S "explains the", phrase purpose,
-                  S "of this", (phrase document) `sC` foldlList (map ((\(x,y) -> x `ofThe` y)) (listOfIntroSubsec))]
+-- | Constructor for the introduction section
+-- problemIntroduction - Sentence introducing the specific example problem
+-- programDefinition  - Sentence definition of the specific example
+-- subSections        - List of subsections for this section
+introductionSection :: Sentence -> Sentence -> [Section] -> Section
+introductionSection problemIntroduction programDefinition subSections = SRS.intro 
+  [Paragraph problemIntroduction, (overviewParagraph programDefinition)] subSections
 
---list is used by introF (current args passed in are the same for every example)
-listOfIntroSubsec :: [(Sentence, Sentence)]
-listOfIntroSubsec = [(phrase scope, phrase system), (phrase organization, phrase document), (plural characteristic, phrase intReader)]
 
--- provide only the first paragraph (as a sentence type) to 
-prpsOfDocF :: Sentence -> Section
-prpsOfDocF par1 = SRS.prpsOfDoc [Paragraph par1, Paragraph par2] []
-      where par2 = foldlSent [S "This", phrase document, 
-                    S "will be used as a starting point for subsequent development", 
-                    S "phases, including writing the", phrase desSpec, S "and the", 
-                    phrase softwareVAV, S "plan. The", phrase designDoc,
-                    S "will show how the", plural requirement, S "are to be realized, including",
-                    plural decision, S "on the numerical", (plural algorithm), 
-                    S "and programming" +:+. phrase environment, S "The", phrase vavPlan, 
-                    S "will show the steps that will be used to increase confidence in the",
-                    phrase softwareDoc, S "and the" +:+. phrase implementation, S "Although",
-                    S "the", short srs, S "fits in a series of", plural document, 
-                    S "that follow the so-called waterfall", (phrase model) `sC` 
-                    S "the actual development process is not constrained", 
-                    S "in any way. Even when the waterfall model is not followed, as",
-                    S "Parnas and Clements point out, the most logical way", --FIXME: add citation to these people?
-                    S "to present the", phrase documentation, S "is still to",
-                    Quote (S "fake"), S "a rational", phrase design, S "process"]
+-- | Constructor for the overview paragraph for the introduction
+-- programDefinition - defintion of the specific example being generated
+overviewParagraph :: Sentence -> Contents
+overviewParagraph programDefinition = Paragraph $ foldlSent [S "The following", phrase section_,
+  S "provides an overview of the", introduceAbb srs, S "for" +:+. 
+  programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
+  S "of this", (phrase document) `sC` introductionSubsections]
+
+-- | constructor for purpose of document section
+-- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
+-- example
+purposeOfDoc :: Sentence -> Section
+purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc 
+  [Paragraph purposeOfProgramParagraph, developmentProcessParagraph] []
+
 
 -- Complete the sentences, no need to add a period at the end of your input sentences
 scpOfReqF :: Sentence -> CI -> Sentence -> Section

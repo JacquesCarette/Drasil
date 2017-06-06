@@ -380,7 +380,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
-  where end = foldlSent [(makeRef s6_2_5_table1), S "gives the",
+  where end = foldlSent [(makeRef s6_2_5_table2), S "gives the",
               (plural value `ofThe` S "specification"), (plural parameter),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]

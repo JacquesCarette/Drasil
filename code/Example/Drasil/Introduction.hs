@@ -49,15 +49,10 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 --                    --
 -------------------------
 
-introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> Bool -> (Sentence, CI, Section, Sentence) -> Section
-introductionF progName (problemIntroduction, programDefinition) (pOdPart1) (mainRequirement, intendedPurpose) (know, und, appStandd) orgTrailing (i, b, s, t) 
+introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> (Sentence, CI, Section, Sentence) -> Section
+introductionF progName (problemIntroduction, programDefinition) (pOdPart1) (mainRequirement, intendedPurpose) (know, und, appStandd) (i, b, s, t) 
   = introductionSection problemIntroduction programDefinition subsec
-     where  subsec   = [pOfDoc, scpOfReq_, cIntRdr, organizationOfDoc orgTrailing]
-            pOfDoc   = purposeOfDoc pOdPart1
-            scpOfReq_ = scopeOfRequirements mainRequirement progName intendedPurpose
-            cIntRdr  = charIntRdrF know und progName appStandd (SRS.userChar [] [])
-            organizationOfDoc True  = orgSecWTS i b s t
-            organizationOfDoc False = orgSec i b s 
+      where subsec = [(purposeOfDoc pOdPart1), (scopeOfRequirements mainRequirement progName intendedPurpose), (charIntRdrF know und progName appStandd (SRS.userChar [] [])), (orgSec i b s t)]
 
 -- | Constructor for the introduction section
 -- problemIntroduction - Sentence introducing the specific example problem
@@ -105,33 +100,25 @@ charIntRdrF know und progName appStandd r =
   SRS.charOfIR (intReaderIntro know und progName appStandd r) []
 
 --paragraph called by charIntRdrF
--- topic1 - sentence the reader should have knowledge in
--- topic2 - sentence the reader should understand
--- 
---
+-- topic1     - sentence the reader should have knowledge in
+-- topic2     - sentence the reader should understand
+-- standard   - sentence of the standards the reader should be familiar with
+-- sectionRef - reference to user characteristic section
 intReaderIntro :: Sentence -> Sentence -> CI -> Sentence -> Section -> [Contents]
-intReaderIntro topic1 topic2 progName appStandd userCharacter = 
+intReaderIntro topic1 topic2 progName standard sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
   S "The reviewers should also have an understanding of" +:+. topic2 :+:
-  appStandd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRef userCharacter)]]
+  standard, S "The", (plural user), S "of", (short progName),
+  S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 
--- | Organization of the document section constructor. Takes an introduction,
--- a "bottom" chunk (where to start reading bottom-up. Usually instance
--- models or data definitions), a bottom section (for creating a reference link)
--- which should match the bottom chunk, but does not have to.
-orgSec :: (NamedIdea c) => Sentence -> c -> Section -> Section
-orgSec i b s = SRS.orgOfDoc (orgIntro i b s Nothing) []
-
--- | Same as 'orgSec' with the addition of extra information at the end 
--- (post-refine chain)?
-orgSecWTS :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> Section
-orgSecWTS i b s t = SRS.orgOfDoc (orgIntro i b s (Just t)) []
+-- | Organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
+orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
+orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
+orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [goal, theory, definition]) `sC` S "and assumptions.",
@@ -140,5 +127,5 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           S "in", makeRef bottomSec +:+
           S "and trace back to find any additional information they require"],
           Paragraph $ lastS trailingSentence]
-          where lastS Nothing = refineChain [goalStmt, thModel, inModel]
-                lastS (Just t) = lastS Nothing +:+. t
+          where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
+                lastS t = refineChain [goalStmt, thModel, inModel] +:+. t

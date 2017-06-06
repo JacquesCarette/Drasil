@@ -66,7 +66,7 @@ s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.mis
         understanding = (S "differential" +:+ (plural equation) `sC` S "as typically" +:+
                         S "covered in first and second year Calculus courses")
                         
-s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP [])
+s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS
 
 
                         

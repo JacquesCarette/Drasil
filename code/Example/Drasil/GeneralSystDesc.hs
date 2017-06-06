@@ -13,7 +13,7 @@ genSysF sCntxt userIntro constraints systSubSec = SRS.genSysDes [genSysIntro]
 
 --generalized general system description introduction
 genSysIntro :: Contents
-genSysIntro = Paragraph $ foldlSent
+genSysIntro = foldlSP
               [S "This", phrase section_, S "provides general",
               phrase information, S "about the", phrase system `sC` S "identifies",
               S "the interfaces between the", phrase system, S "and its", phrase environment `sC`

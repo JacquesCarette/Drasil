@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils (itemRefToSent,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
-  showingCxnBw, figureLabel)
+  showingCxnBw, figureLabel, foldlSP)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -161,7 +161,7 @@ s4_2 = systCon [] []
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
-s5_intro = Paragraph $ foldlSent [S "This", phrase section_,
+s5_intro = foldlSP [S "This", phrase section_,
   S "presents the" +:+. phrase (scpOfTheProj phrase),
   S "It describes the expected use of", (short gLassBR), 
   S "as well as the", plural input_, S "and", plural output_, 
@@ -305,7 +305,7 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
 --s6_2 = SRS.solCharSpec
 --  [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
-s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_, 
+s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", (plural assumption), S "considered and the",
   plural thModel, S "which are supported by the", (plural dataDefn)]
   
@@ -422,7 +422,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (titleize table_ +: S "3" +:+ titleize specification +:+
   (titleize parameter) +:+ titleize' value) True
 
-s6_2_5_intro2 = Paragraph $ foldlSent [(makeRef s6_2_5_table3), S "shows the",
+s6_2_5_intro2 = foldlSP [(makeRef s6_2_5_table3), S "shows the",
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
@@ -507,7 +507,7 @@ s7_1_list =
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
-s7_2_intro = Paragraph $ foldlSent [
+s7_2_intro = foldlSP [
   S "Given the small size, and relative simplicity, of this", 
   phrase problem `sC` (phrase performance), S "is not a" +:+. phrase priority,
   S "Any reasonable", phrase implementation +:+. 
@@ -764,7 +764,7 @@ s10_list = mkRefsList 1
 
 s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 
-s11_intro = Paragraph $ foldlSent [
+s11_intro = foldlSP [
   S "This", phrase appendix, S "holds the", (plural graph),
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]

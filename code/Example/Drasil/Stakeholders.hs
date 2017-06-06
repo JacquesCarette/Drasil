@@ -3,7 +3,7 @@ module Drasil.Stakeholders
 
 import Language.Drasil
 import qualified Drasil.SRS as SRS
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSP)
 import Data.Drasil.Concepts.Documentation
 
 stakehldrGeneral :: CI -> Sentence -> Section
@@ -12,7 +12,7 @@ stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs
 
 -- general stakeholders introduction
 stakeholderIntro :: Contents
-stakeholderIntro = Paragraph $ foldlSent [S "This", (phrase section_),
+stakeholderIntro = foldlSP [S "This", (phrase section_),
             S "describes the" +: (titleize' stakeholder), S "the people who have an",
             (phrase interest), S "in", (phrase $ the product_)]
 
@@ -20,7 +20,7 @@ tClientF :: CI -> Sentence ->  Section
 tClientF kWord details = SRS.theClient [clientIntro kWord details] []
 
 clientIntro :: CI -> Sentence -> Contents
-clientIntro kWord  details = Paragraph $ foldlSent [(at_start $ the client),
+clientIntro kWord  details = foldlSP [(at_start $ the client),
   S "for", (short kWord), S "is a", (phrase company), S "named" +:+. details,
   (at_start $ the client), S "has the final say on acceptance of the", 
   (phrase product_)]
@@ -29,5 +29,5 @@ tCustomerF :: CI -> Section
 tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
 
 customerIntro :: CI -> Contents
-customerIntro kWord = Paragraph $ foldlSent [(at_start' $ the customer), 
+customerIntro kWord = foldlSP [(at_start' $ the customer), 
   S "are the", (phrase endUser), S "of", (short kWord)]

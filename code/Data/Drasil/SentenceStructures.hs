@@ -82,17 +82,14 @@ showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [c] -> Sentence
-refineChain (x:y:[]) = S "The" +:+ word x +:+ S "are refined to the" +:+ word y
+refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plural y
 refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
--- | Helper used by refineChain
-word :: NamedIdea c => c -> Sentence
-word = plural
 
 -- | Helper used by refineChain
 rc :: NamedIdea c => [c] -> Sentence
-rc (x:y:[]) = S "and the" +:+ (word x) +:+ S "to the" +:+. 
-  (word y)
-rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
+rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
+  (plural y)
+rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"

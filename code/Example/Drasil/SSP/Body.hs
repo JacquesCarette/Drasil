@@ -358,14 +358,21 @@ data VarContraint where
 
 positiveC :: VarContraint
 positiveC = VarCon (:>) (Int 0)
--- "positive variable chunk"
+
+-- "positive variable chunk" built from an existing concept+quanity+symbolform
 posVarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
 posVarCh s contraints typicalVal = VarCh s (contraints:positiveC) typicalVal
 
-intNormFor  = mkGtZeroConst' $ posVarCh ei [] (15000 :: Integer)
+--"variable chunk with units"
+varChWU :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk [VarContraint] -> a -> VariableChunk
+varChWU i t d s u contraints typicalVal = VarCh (uc' i t d s u) contraints typicalVal
 
-varChShow :: VarCh -> [Sentence]
-varChShow (VarCh s contraints typicalVal) = [getS s, fmtBF' s contraints, fmtU (S (show typicalVal)) (cqs s)]
+--example
+intNormFor = sentVarCh $ posVarCh ei [] (15000 :: Integer)
+
+--"Sentences from Variable Chunk"
+sentVarCh :: VarCh -> [Sentence]
+sentVarCh (VarCh s contraints typicalVal) = [getS s, fmtBF' s contraints, fmtU (S (show typicalVal)) (cqs s)]
 
 fmtBF' ::(SymbolForm a) => a -> [VarContraint] -> Sentence
 fmtBF' _    []             = S "None"  

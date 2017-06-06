@@ -280,7 +280,9 @@ s6_1_2_list_physys1 = [(at_start glaSlab), (foldlSent [S "The point of"
   `isThe` S "distance between the point of", (phrase explosion), 
   S "and the glass"])]
 
-s6_1_3 = goalStmtF [S "FIXME: ADD INPUTS"] [s6_1_3_list] --FIXME: add inputs
+s6_1_3 = goalStmtF [foldlList [S "the dimensions of the glass plane",
+  phrase glassTy, plural characteristic `ofThe` phrase explosion,
+  S "the" +:+ phrase pb_tol]] [s6_1_3_list]
 
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 

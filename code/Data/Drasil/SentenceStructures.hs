@@ -3,7 +3,7 @@ module Data.Drasil.SentenceStructures
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , toThe, tableShows, figureLabel
-  , showingCxnBw, refineChain
+  , showingCxnBw, refineChain, foldlSP
   ) where
 
 import Language.Drasil
@@ -14,6 +14,10 @@ import Data.Drasil.Concepts.Documentation
 -- | partial function application of foldle for sentences specifically
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
+
+-- | fold sentences then turns into content
+foldlSP :: [Sentence] -> Contents
+foldlSP = (Paragraph . foldlSent)
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence

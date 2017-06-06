@@ -50,7 +50,7 @@ s2, s3, s4, s4_2,
 
 s4_1_bullets, s5_intro, s5_1_table, s5_2_bullets,
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list,
-  s6_2_intro, s6_2_5_table1, s6_2_5_table2,
+  s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
   s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s8_list, s9_table1,
   s9_table2, s9_table3, s10_list, s11_intro, fig_glassbr, fig_2,
   fig_3, fig_4, fig_5, fig_6 :: Contents
@@ -295,9 +295,9 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 
 s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2]) []
+  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
-        end = foldlSent [(makeRef s6_2_5_table1), S "gives",
+        end = foldlSent [(makeRef s6_2_5_table2), S "gives",
              (plural value `ofThe` S "specification"), (plural parameter),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
@@ -380,7 +380,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
-  where end = foldlSent [(makeRef s6_2_5_table2), S "gives the",
+  where end = foldlSent [(makeRef s6_2_5_table3), S "gives the",
               (plural value `ofThe` S "specification"), (plural parameter),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
@@ -407,7 +407,8 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
   S "10%"], [(P $ standOffDist ^. symbol), (P $ standOffDist ^. symbol)
   +:+ S "> 0", (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ standOffDist ^. symbol)
   +:+ S "<" +:+ (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb standOffDist),
-  S "10%"]]) (S "Table 2: Input Variables") True
+  S "10%"]]) (titleize table_ +: S "2" +:+ titleize input_ +:+ titleize' variable) 
+  True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)] 
@@ -427,7 +428,7 @@ s6_2_5_intro2 = Paragraph $ foldlSent [(makeRef s6_2_5_table3), S "shows the",
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
   [(\x -> P $ fst(x)), (\x -> snd(x))] 
   [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
-  (S "Table 4: Output Variables") True
+  (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
 
 s7 = reqF [s7_1, s7_2]
 

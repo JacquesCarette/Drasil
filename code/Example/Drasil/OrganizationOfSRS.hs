@@ -68,7 +68,7 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
                     [S "This subsection provides a list of terms",
                     S "that are used in the subsequent", plural section_, S "and their",
                     S "meaning, with the", phrase purpose, S "of reducing ambiguity",
-                    S "and making it easier to correctly understand the",
+                    S "and making it easier to correctly understand the" +:+.
                     plural requirement, lastF end]
 
 --general introduction for Physical System Description

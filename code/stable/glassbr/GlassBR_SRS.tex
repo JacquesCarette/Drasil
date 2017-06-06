@@ -170,7 +170,7 @@ The main purpose of this document is to predict whether a given glass slab is li
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to "fake" a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:SoR}
-The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
+The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:CoIR}
 Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UC}.
@@ -282,7 +282,7 @@ The physical system of GlassBR as shown in Figure~\ref{Figure:Tps}, includes the
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SCS}
-This section explains all the assumptions considered and the theoretical models which are supported by the data definitions.
+The instance models that govern GlassBR are presented in Section~\ref{Sec:IM}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:A}
 This section simplifies the original problem and helps in developing the theoretical model [T] by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TM}], Data Definition [Section~\ref{Sec:DD}], Instance Models [Section~\ref{Sec:IM}], or Likely Changes [Section~\ref{Sec:LC}] in which the respective assumption is used.

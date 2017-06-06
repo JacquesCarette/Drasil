@@ -79,7 +79,7 @@ force (newton)
 </a>
 </div>
 </a>
-<a id="Sec:ToS">
+<a id="Sec:TablofSymb">
 <div class="subsection">
 <h3>
 Table of Symbols
@@ -87,7 +87,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
 </p>
-<a id="Table:ToS">
+<a id="Table:TablofSymb">
 <table class="table">
 <tr>
 <th>
@@ -201,6 +201,17 @@ Glass type, g in {AN, HS, FT}
 </tr>
 <tr>
 <td>
+GTF
+</td>
+<td>
+Glass type factor
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 h
 </td>
 <td>
@@ -263,6 +274,28 @@ Surface flaw parameter
 </td>
 <td>
 N<sup>-7</sup>m<sup>12</sup>
+</td>
+</tr>
+<tr>
+<td>
+LR
+</td>
+<td>
+Load resistance
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LSF
+</td>
+<td>
+Load share factor
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -366,6 +399,39 @@ m
 </tr>
 <tr>
 <td>
+SD<sub>x</sub>
+</td>
+<td>
+Stand off distance (x-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>y</sub>
+</td>
+<td>
+Stand off distance (y-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+SD<sub>z</sub>
+</td>
+<td>
+Stand off distance (z-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 t
 </td>
 <td>
@@ -384,6 +450,17 @@ Duration of load
 </td>
 <td>
 s
+</td>
+</tr>
+<tr>
+<td>
+TNT
+</td>
+<td>
+TNT equivalent factor
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -651,7 +728,7 @@ Purpose of Document
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to "fake" a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
 </a>
@@ -661,7 +738,7 @@ This document will be used as a starting point for subsequent development phases
 Scope of Requirements
 </h3>
 <p class="paragraph">
-The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
+The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 </p>
 </div>
 </a>
@@ -981,7 +1058,7 @@ GS1: Analyze and predict whether the glass slab under consideration will be able
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-This section explains all the assumptions considered and the theoretical models which are supported by the data definitions.
+The instance models that govern GlassBR are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:A">
 <div class="subsubsection">
@@ -2143,7 +2220,7 @@ R2: The system shall set the known values as follows:
     </ul>
 </p>
 <p>
-R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DC>this Section</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataCons>this Section</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </p>
 <p>
 R4: Output the input quantities from R1 and the known quantities from R2.

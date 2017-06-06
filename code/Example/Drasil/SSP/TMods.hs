@@ -11,7 +11,7 @@ import Data.Drasil.Quantities.SolidMechanics
 --------------------------
 
 sspTMods :: [RelationConcept]
-sspTMods = [fs_rc, equilibrium]
+sspTMods = [fs_rc, equilibrium, mcShrStrgth]
 
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"
@@ -44,3 +44,27 @@ eq_rel = (UnaryOp $ Summation Nothing (C genForce)) := (Int 0) --FIXME: add net 
 
 eq_desc :: Sentence
 eq_desc = fixmeS
+
+--
+
+mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")  mcSS_desc mcSS_rel
+
+mcSS_rel :: Relation
+mcSS_rel = (C pi_f) := ((C normStress) :* (UnaryOp $ Tan (C fricAngle)) :+ (C cohesion))
+
+mcSS_desc :: Sentence
+mcSS_desc = fixmeS
+
+--
+
+
+
+{-
+
+mcSS_rel :: Relation
+mcSS_rel = 
+
+mcSS_desc :: Sentence
+mcSS_desc = fixmeS
+
+-}

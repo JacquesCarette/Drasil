@@ -7,7 +7,7 @@ import Control.Lens((^.))
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example
 
-elastMod, mobShear, normForce, poissnsR, shearForce,
+elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness :: ConceptChunk
 
 elastMod   = dccWDS "E" (cn "elastic modulus") (S "The ratio of the" +:+
@@ -21,6 +21,9 @@ mobShear   = dccWDS "S" (cn "mobilized shear force") (S "The amount of" +:+
 normForce  = dccWDS "normForce" (cn' "normal force")
   (S "A" +:+ (phrase force) +:+ S "applied perpendicular" +:+ 
   S "to the plane of the material.")
+  
+nrmStrss   = dccWDS "nrmStrss" (cn "normal stress") (S "The" +:+
+  (phrase stress) +:+ S "exerted perpendicular to the plain of the object")
   
 poissnsR   = dccWDS "nu" (nounPhraseSP "Poisson's ratio") (S "The ratio" +:+
   S "of perpendicular" +:+ (phrase strain) +:+ S "to parellel" +:+.

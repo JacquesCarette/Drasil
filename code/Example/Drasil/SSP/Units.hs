@@ -12,7 +12,7 @@ sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
+sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
@@ -20,7 +20,7 @@ sspUnits = map ucw [fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               delta, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
-fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
+normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, genForce,
@@ -34,6 +34,8 @@ fixme, fsi, fisi :: String
 fixme = "FIXME: Define this or remove the need for definitions"
 fsi = "(for slice index i)"
 fisi = "(for interslice index i)"
+
+normStress  = SM.nrmStrss
 
 fricAngle   = uc' "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++ 

@@ -27,6 +27,8 @@ data Greek = Alpha_L
            | Phi
            | Rho_L
            | Rho
+           | Sigma_L
+           | Sigma
            | Tau_L
            | Tau
            | Theta_L

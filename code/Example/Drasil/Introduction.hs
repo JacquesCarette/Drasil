@@ -9,8 +9,8 @@ module Drasil.Introduction
 
 import Language.Drasil
 import qualified Drasil.SRS as SRS
-import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe',
-  foldlList, foldlsC, refineChain)
+import Data.Drasil.SentenceStructures (ofThe, ofThe',
+  foldlList, foldlsC, refineChain, foldlSP)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation (algorithm)
 
@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.Computation (algorithm)
 
 -- | Contents explaining the development process of this program
 developmentProcessParagraph :: Contents
-developmentProcessParagraph = Paragraph $ foldlSent [S "This", phrase document, 
+developmentProcessParagraph = foldlSP [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
   phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
@@ -71,7 +71,7 @@ introductionSection problemIntroduction programDefinition subSections = SRS.intr
 -- | Constructor for the overview paragraph for the introduction
 -- programDefinition - defintion of the specific example being generated
 overviewParagraph :: Sentence -> Contents
-overviewParagraph programDefinition = Paragraph $ foldlSent [S "The following", phrase section_,
+overviewParagraph programDefinition = foldlSP [S "The following", phrase section_,
   S "provides an overview of the", introduceAbb srs, S "for" +:+. 
   programDefinition, S "This", phrase section_, S "explains the", phrase purpose,
   S "of this", (phrase document) `sC` introductionSubsections]
@@ -89,8 +89,8 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
 scopeOfRequirements :: Sentence -> CI -> Sentence -> Section
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [Paragraph intro] []
-  where intro = foldlSent [(phrase scope) `ofThe'` (plural requirement),
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
+  where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. mainRequirement, S "Given the appropriate inputs, the code for",
                 short programName, S "is intended to" +:+ intendedPurpose]
 
@@ -111,7 +111,7 @@ charIntRdrF know und progName appStandd r =
 --
 intReaderIntro :: Sentence -> Sentence -> CI -> Sentence -> Section -> [Contents]
 intReaderIntro topic1 topic2 progName appStandd userCharacter = 
-  [Paragraph $ foldlSent [S "Reviewers of this",
+  [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
   S "The reviewers should also have an understanding of" +:+. topic2 :+:
   appStandd, S "The", (plural user), S "of", (short progName),
@@ -132,7 +132,7 @@ orgSecWTS i b s t = SRS.orgOfDoc (orgIntro i b s (Just t)) []
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
 orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Maybe Sentence -> [Contents]
-orgIntro intro bottom bottomSec trailingSentence = [Paragraph $ foldlSent [
+orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`

@@ -163,7 +163,7 @@ s3 = genSysF [] userCharIntro [] []
 -- SECTION 3.1 --
 -- User Characteristics automatically generated in genSysF with the userContraints intro below
 userCharIntro :: Contents
-userCharIntro = Paragraph $ foldlSent [S "The", (phrase endUser), S "of",
+userCharIntro = foldlSP [S "The", (phrase endUser), S "of",
   (short ssa), 
   S "should have an understanding of undergraduate Level 1 Calculus and",
   (titleize physics) `sC` S "and be familiar with", (phrase soil),
@@ -198,7 +198,7 @@ s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
 
-s4_1_2_p1 = Paragraph $ foldlSent [at_start analysis, S "of the", (phrase slope),
+s4_1_2_p1 = foldlSP [at_start analysis, S "of the", (phrase slope),
   S "is performed by looking at", (plural property), S "of the",
   (phrase slope), S "as a series of", (phrase slice) +:+. (plural element),
   S "Some", (plural property), S "are", (plural itslPrpty) `sC`
@@ -215,7 +215,7 @@ s4_1_2_bullets = enumBullet [
   ((at_start slice) +:+. S "properties convention is noted by i")
   ]
   
-s4_1_2_p2 = Paragraph $ foldlSent [S "A", (phrase $ fbd), S "of the forces",
+s4_1_2_p2 = foldlSP [S "A", (phrase $ fbd), S "of the forces",
   S "acting on the", (phrase slice), S "is displayed in",
   (makeRef fig_forceacting)]
 
@@ -308,7 +308,7 @@ s4_2_2_tmods = map sspSymMapT sspTMods --FIX fs_rc to use lowercase
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
-s4_2_5_p2 = Paragraph $ foldlSent [S "The", (titleize morPrice),
+s4_2_5_p2 = foldlSP [S "The", (titleize morPrice),
   (phrase method_), S "is a vertical slice, limit equilibrium",
   (phrase ssa) +:+. (phrase method_), at_start analysis, S "is performed by breaking the",
   S "assumed failure", (phrase $ surface), S "into a series of vertical",
@@ -321,7 +321,7 @@ s4_2_5_p2 = Paragraph $ foldlSent [S "The", (titleize morPrice),
   S "of all forces in terms of the physical properties",
   S "of DD1 to DD9, as done in DD10, DD11"]
 
-s4_2_5_p3 = Paragraph $ foldlSent [(S "values") `ofThe'` (S "interslice normal force"),
+s4_2_5_p3 = foldlSP [(S "values") `ofThe'` (S "interslice normal force"),
   S "E the interslice normal/shear force magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", (titleize $ fs_rc), S "(FS)" `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   S "Equations for the unknowns are written in terms of only the values", 

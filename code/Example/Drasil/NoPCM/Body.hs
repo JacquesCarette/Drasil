@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 import Drasil.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
@@ -54,11 +54,11 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2 = introF EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4] --TODO: Placeholder values until content can be added
+s2 = introductionSection EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4] --TODO: Placeholder values until content can be added
 
-s2_1 = prpsOfDocF EmptyS --TODO: Placeholder values until content can be added
+s2_1 = purposeOfDoc EmptyS --TODO: Placeholder values until content can be added
 
-s2_2 = scpOfReqF EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
+s2_2 = scopeOfRequirements EmptyS sWHS EmptyS --TODO: Placeholder values until content can be added
 
 s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.missingP []) --FIXME: referencing this for now until we figure out how to reference auto-generated section (section 3.2)
   where knowledge = ((phrase heat) +:+ S "transfer" +:+. (phrase theory) +:+
@@ -66,7 +66,7 @@ s2_3 = charIntRdrF knowledge understanding (sWHS) (EmptyS) (SRS.userChar SRS.mis
         understanding = (S "differential" +:+ (plural equation) `sC` S "as typically" +:+
                         S "covered in first and second year Calculus courses")
                         
-s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP [])
+s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS
 
 
                         

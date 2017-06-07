@@ -49,7 +49,7 @@ lc9 = LCChunk (nw $ npnc "control" (nounPhraseSP
 
 --lc10 = LCChunk (nw $ npnc "sequence" (nounPhraseSP
 --  "The implementation for the sequence (array) data structure.")) [mod_seq]
-lc10 = lcArray   mod_seq
+lc10 = lcArray mod_seq
 
 lc11 = LCChunk (nw $ npnc "ode" lc11np) [mod_ode]
 

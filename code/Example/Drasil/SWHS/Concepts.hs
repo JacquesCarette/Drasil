@@ -39,7 +39,7 @@ gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
 perfect_insul = dcc "perfect_insul" (nounPhraseSP "perfectly insulated")
   "Describes the property of a material not allowing heat transfer through its boundaries" 
 
-phase_change_material = dcc "pcm" (phsChgMtrl)
+phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
       

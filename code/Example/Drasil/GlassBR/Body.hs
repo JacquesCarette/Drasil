@@ -14,13 +14,13 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils (itemRefToSent,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
-import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
+  showingCxnBw, figureLabel, foldlSP)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
 
 import           Drasil.TableOfSymbols
-import           Drasil.OrganizationOfSRS
 import qualified Drasil.SRS as SRS
 import           Drasil.ReferenceMaterial
 
@@ -34,12 +34,12 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 
 import Drasil.DocumentLanguage
-import Drasil.OrganizationOfSRS (showingCxnBw, figureLabel)
 import Drasil.TraceabilityMandGs
 import Drasil.Stakeholders
 import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
+import Drasil.SpecificSystemDescription
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
@@ -50,7 +50,7 @@ s2, s3, s4, s4_2,
 
 s4_1_bullets, s5_intro, s5_1_table, s5_2_bullets,
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list,
-  s6_2_intro, s6_2_5_table1, s6_2_5_table2,
+  s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
   s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s8_list, s9_table1,
   s9_table2, s9_table3, s10_list, s11_intro, fig_glassbr, fig_2,
   fig_3, fig_4, fig_5, fig_6 :: Contents
@@ -86,7 +86,7 @@ glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
      (incScoR, endScoR)
-     (knowIR, undIR, appStanddIR) True
+     (knowIR, undIR, appStanddIR)
      (s2_3_intro, dataDefn, s6_2_4, s2_3_intro_end)
   where startIntro = foldlSent [(at_start software), 
                      S "is helpful to efficiently and correctly predict the", 
@@ -110,7 +110,7 @@ s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
                     S "and" +:+ (phrase blastRisk))
         undIR     = (foldlList [S "second year calculus", S "structural mechanics",
                     S "computer applications in civil engineering"])
-        appStanddIR = (S " In addition, reviewers should be familiar with the" +:+
+        appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
                        S "applicable standards for constructions using glass" +:+
                        S "from" +:+ sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
 
@@ -161,7 +161,7 @@ s4_2 = systCon [] []
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
-s5_intro = Paragraph $ foldlSent [S "This", phrase section_,
+s5_intro = foldlSP [S "This", phrase section_,
   S "presents the" +:+. phrase (scpOfTheProj phrase),
   S "It describes the expected use of", (short gLassBR), 
   S "as well as the", plural input_, S "and", plural output_, 
@@ -205,8 +205,8 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR),
   S "comparing whether", (phrase capacity), S "is greater than" +:+. 
   (phrase demandq), (at_start capacity) `isThe`
   (capacity ^. defn), S "and", (phrase demandq) `isThe` 
-  phrase requirement +:+. S "which" `isThe` (demandq ^. defn), S "The second", 
-  phrase condition, S "is to check whether the calculated", 
+  phrase requirement +:+. (S "which" `isThe` (demandq ^. defn)),
+  S "The second", phrase condition, S "is to check whether the calculated", 
   (phrase probability), sParen (P $ prob_br ^. symbol), 
   S "is less than the tolerable", (phrase probability), 
   sParen (P $ pb_tol ^. symbol), S "which is obtained from the", phrase user,
@@ -280,7 +280,9 @@ s6_1_2_list_physys1 = [(at_start glaSlab), (foldlSent [S "The point of"
   `isThe` S "distance between the point of", (phrase explosion), 
   S "and the glass"])]
 
-s6_1_3 = goalStmtF [S "FIXME: ADD INPUTS"] [s6_1_3_list] --FIXME: add inputs
+s6_1_3 = goalStmtF [foldlList [S "the dimensions of the glass plane",
+  phrase glassTy, plural characteristic `ofThe` phrase explosion,
+  S "the" +:+ phrase pb_tol]] [s6_1_3_list]
 
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
@@ -293,9 +295,9 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 
 s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2]) []
+  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
-        end = foldlSent [(makeRef s6_2_5_table1), S "gives",
+        end = foldlSent [(makeRef s6_2_5_table2), S "gives",
              (plural value `ofThe` S "specification"), (plural parameter),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
@@ -303,7 +305,7 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
 --s6_2 = SRS.solCharSpec
 --  [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
-s6_2_intro = Paragraph $ foldlSent [S "This", phrase section_, 
+s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", (plural assumption), S "considered and the",
   plural thModel, S "which are supported by the", (plural dataDefn)]
   
@@ -335,7 +337,7 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   S "support", plural condition, S "are simply supported and free to slip in",
   S "plane; (2) glass supported on two sides acts as a simply supported", 
   S "beam and (3) glass supported on one side acts as a cantilever"], 
-  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")),
+  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this practice does not apply to any form of wired, patterned" `sC`
   S "etched, sandblasted, drilled, notched, or grooved glass with",
   (phrase surface), S "and edge treatments that alter the glass strength"],
@@ -378,7 +380,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
-  where end = foldlSent [(makeRef s6_2_5_table1), S "gives the",
+  where end = foldlSent [(makeRef s6_2_5_table3), S "gives the",
               (plural value `ofThe` S "specification"), (plural parameter),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
@@ -405,7 +407,8 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
   S "10%"], [(P $ standOffDist ^. symbol), (P $ standOffDist ^. symbol)
   +:+ S "> 0", (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ standOffDist ^. symbol)
   +:+ S "<" +:+ (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb standOffDist),
-  S "10%"]]) (S "Table 2: Input Variables") True
+  S "10%"]]) (titleize table_ +: S "2" +:+ titleize input_ +:+ titleize' variable) 
+  True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)] 
@@ -419,13 +422,13 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (titleize table_ +: S "3" +:+ titleize specification +:+
   (titleize parameter) +:+ titleize' value) True
 
-s6_2_5_intro2 = Paragraph $ foldlSent [(makeRef s6_2_5_table3), S "shows the",
+s6_2_5_intro2 = foldlSP [(makeRef s6_2_5_table3), S "shows the",
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
   [(\x -> P $ fst(x)), (\x -> snd(x))] 
   [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
-  (S "Table 4: Output Variables") True
+  (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
 
 s7 = reqF [s7_1, s7_2]
 
@@ -504,7 +507,7 @@ s7_1_list =
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
-s7_2_intro = Paragraph $ foldlSent [
+s7_2_intro = foldlSP [
   S "Given the small size, and relative simplicity, of this", 
   phrase problem `sC` (phrase performance), S "is not a" +:+. phrase priority,
   S "Any reasonable", phrase implementation +:+. 
@@ -761,7 +764,7 @@ s10_list = mkRefsList 1
 
 s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 
-s11_intro = Paragraph $ foldlSent [
+s11_intro = foldlSP [
   S "This", phrase appendix, S "holds the", (plural graph),
   sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]

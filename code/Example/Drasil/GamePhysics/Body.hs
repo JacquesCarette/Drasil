@@ -12,7 +12,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Drasil.TraceabilityMandGs
-import Drasil.OrganizationOfSRS
+import Drasil.SpecificSystemDescription
 import Drasil.Introduction
 --import Drasil.Requirements
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
@@ -195,7 +195,7 @@ s2_3_intro = foldlSent
 s2_3 :: Section
 s2_3_intro :: Sentence
 
-s2_3 = orgSec s2_3_intro inModel s4_2_5
+s2_3 = orgSec s2_3_intro inModel s4_2_5 EmptyS
 
 -- FIXME: Citations.
 -- FIXME: This can probably be completely pulled out is we decide on the 

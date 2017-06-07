@@ -63,9 +63,14 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map (Flat) l)
 
+-- | creates a list of references from l starting from s
+-- s - start indices
+-- l - list of references
 mkRefsList :: Integer -> [Sentence] -> Contents
 mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map (Flat) l)
 
+-- | creates a list of sentences of the form "[#]"
+-- start - start indices
 enumWithSquBrk :: Integer -> [Sentence]
 enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 
@@ -81,6 +86,8 @@ fmtUS num EmptyS = num
 fmtUS num units  = num +:+ units
 
 -- | takes a amount and adds a unit to it
+-- n - sentenc representing an amount
+-- u - unit we want to attach to amount
 fmtU :: (Quantity a, SymbolForm a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
@@ -91,7 +98,7 @@ fmtBF _ []      = S "None"
 fmtBF symb [(f,num)]  = E ((C symb) `f` num)
 fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 
--- | makes a constraint table entry from symbol expr and sentence
+-- | makes a constraint table row entry from symbol expr and sentence
 listConstExpr :: (SymbolForm a, Quantity a) => (a, [(Expr -> Expr -> Expr, Expr)], Sentence) -> [Sentence]
 listConstExpr (s, a, b) = [getS s, fmtBF s a, fmtU b s]
 
@@ -163,6 +170,7 @@ enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
 weave :: [[a]] -> [a]
 weave = (concat . transpose)
 
+-- | get a unit symbol if there is one
 unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS

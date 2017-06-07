@@ -2,7 +2,8 @@ module Data.Drasil.SentenceStructures
   ( foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
-  , toThe, tableShows, refineChain
+  , toThe, tableShows, figureLabel
+  , showingCxnBw, refineChain, foldlSP
   ) where
 
 import Language.Drasil
@@ -13,6 +14,10 @@ import Data.Drasil.Concepts.Documentation
 -- | partial function application of foldle for sentences specifically
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
+
+-- | fold sentences then turns into content
+foldlSP :: [Sentence] -> Contents
+foldlSP = (Paragraph . foldlSent)
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
@@ -68,20 +73,27 @@ tableShows :: Contents -> Sentence -> Sentence
 tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
+-- | Function that creates (a label for) a figure
+--FIXME: Is `figureLabel` defined in the correct file?
+figureLabel :: NamedIdea c => [Char] -> c -> Sentence -> [Char]-> Contents
+figureLabel num traceyMG contents filePath = Figure (titleize figure +: 
+  S num +:+ (showingCxnBw (traceyMG) (contents))) filePath
+
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
+  titleize' connection +:+ S "Between" +:+ contents
+
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [c] -> Sentence
-refineChain (x:y:[]) = S "The" +:+ word x +:+ S "are refined to the" +:+ word y
+refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plural y
 refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
--- | Helper used by refineChain
-word :: NamedIdea c => c -> Sentence
-word = plural
 
 -- | Helper used by refineChain
 rc :: NamedIdea c => [c] -> Sentence
-rc (x:y:[]) = S "and the" +:+ (word x) +:+ S "to the" +:+. 
-  (word y)
-rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
+rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
+  (plural y)
+rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"

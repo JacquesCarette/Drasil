@@ -1,6 +1,7 @@
 #Commented lines pending removal
 import warnings
 
+warnings.simplefilter('always', UserWarning)
 
 def verify_output(time, tempW, eW, params):#tempP, eW, eP, params):
     previous = time[0]
@@ -29,8 +30,8 @@ def verify_output(time, tempW, eW, params):#tempP, eW, eP, params):
 #    errorPCM = abs(ePCMTotal - eP[-1]) / eP[-1] * 100
 
     if errorWater > params.ConsTol:
-        warnings.warn('There is > ' + str(params.ConsTol) + '% relative error between the energy in the water output ' +
-                      'and the expected output based on the law of conservation of energy.\n', UserWarning,
+        warnings.warn('There is > ' + str(params.ConsTol) + '% relative error between the energy in the water output' +
+                      ' and the expected output based on the law of conservation of energy.\n', UserWarning,
                       stacklevel=2)
 
 #    if errorPCM > params.ConsTol:

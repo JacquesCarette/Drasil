@@ -13,7 +13,7 @@ reqF = SRS.require [reqIntro]
 
 --generalized requirements introduction
 reqIntro :: Contents
-reqIntro = Paragraph $ foldlSent
+reqIntro = foldlSP
         [S "This", (phrase section_), S "provides the",
         (plural functionalRequirement) `sC` S "the business tasks that the",
         (phrase software), S "is expected to complete, and the", 
@@ -38,4 +38,4 @@ listO explanation_ s priority_ = S "so" +:+ foldlList s +:+ S "are not" +:+. (pl
 listT :: [Sentence] -> Sentence
 listT [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase $ nonfunctionalRequirement)
 listT [s] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is" +:+ s
-listT s = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "are" +:+ foldlList s
+listT s = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are" +:+ foldlList s

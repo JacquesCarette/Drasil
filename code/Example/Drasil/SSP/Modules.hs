@@ -6,7 +6,6 @@ import Data.Drasil.Modules
 import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.SentenceStructures
 
-import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation
@@ -14,6 +13,7 @@ import Data.Drasil.Software.Products
 
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
+import Drasil.SSP.TMods
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
@@ -32,7 +32,7 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
 -- Control module
 mod_ctrl :: ModuleChunk
 mod_ctrl = mod_ctrl_fun (S "The internal" +:+ (plural dataType') +:+ S "and" +:+ (plural algorithm))
-  program [] [mod_inputf, mod_outputf, mod_genalg]
+  ssa [] [mod_inputf, mod_outputf, mod_genalg]
 
 -- input format module
 mod_inputf_desc :: ConceptChunk
@@ -50,7 +50,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
    S "the entrance and exit points of the" +:+ (phrase crtSlpSrf) +:+ S "are inputted.")
 
 mod_inputf :: ModuleChunk
-mod_inputf = mod_io_fun program [] [mod_hw] (plural inDatum) mod_inputf_desc
+mod_inputf = mod_io_fun ssa [] [mod_hw] (plural inDatum) mod_inputf_desc
 
 -- output format module
 mod_outputf_desc :: ConceptChunk
@@ -62,7 +62,7 @@ mod_outputf_desc = mod_outputf_desc_fun ((phrase fs_rc) +:+
    S "displacements as calculated by the RFEM Module.")
 
 mod_outputf :: ModuleChunk
-mod_outputf = mod_io_fun program [] [mod_plot, mod_slipslicer, mod_mp, mod_rfem] 
+mod_outputf = mod_io_fun ssa [] [mod_plot, mod_slipslicer, mod_mp, mod_rfem] 
   (plural outDatum) mod_outputf_desc
 
 -- gen alg module
@@ -76,7 +76,7 @@ mod_genalg = makeImpModule mod_genalg_desc
   ((at_start algorithm) +:+ S "to identify the" +:+ (phrase slpSrf) +:+
    S "that has the" +:+ S "minimum" +:+ (phrase fs_rc) `sC`
    S "based on the" +:+. (plural input_))
-   program
+   ssa
    []
    []
    [mod_slipslicer, mod_kinadm, mod_rng, mod_slipweight, mod_mp]
@@ -97,7 +97,7 @@ mod_kinadm :: ModuleChunk
 mod_kinadm = makeImpModule mod_kinadm_desc
   ((at_start algorithm) +:+ S "to determine if a given" +:+
    (phrase slpSrf) +:+ S "passes or fails a set of admissibility criteria.")
-   program
+   ssa
    []
    []
    []
@@ -115,7 +115,7 @@ mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
   ((at_start algorithm) +:+ S "to determine the coordinates of where the" +:+
    (phrase slpSrf) +:+ (phrase intrslce) +:+ S "nodes occur.")
-   program
+   ssa
    []
    []
    []
@@ -135,7 +135,7 @@ mod_slipweight = makeImpModule mod_slipweight_desc
   (S "The weighting for each" +:+ (phrase slpSrf) +:+ S "in a set of" +:+
    (plural slpSrf) `sC` S "based on each" +:+ (phrase slpSrf) :+: S "'s" +:+. 
    (phrase fs_rc)) --FIXME: use possesive noun function in line above
-  program
+  ssa
   []
   []
   []
@@ -151,7 +151,7 @@ mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
 mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
   (S "The" +:+ (phrase fs_rc) +:+ S "of a given" +:+. (phrase slpSrf))
-  program
+  ssa
   []
   []
   [mod_sps]
@@ -170,7 +170,7 @@ mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
   (S "The" +:+ (phrase algorithm) +:+ S "to perform a" +:+
    (titleize rgFnElm) +:+ S "Method analysis of the" +:+. (phrase slope))
-   program
+   ssa
    []
    []
    [mod_sps]
@@ -194,7 +194,7 @@ mod_sps = makeImpModule mod_sps_desc
   ((at_start algorithm) +:+ S "to assigns" +:+ (plural soilPrpty) +:+
    S "to" +:+ (plural slice) +:+ S "based on the location of the" +:+
    (phrase slice) +:+ S "with respect" +:+S "to the different" +:+. (plural soilLyr))
-   program
+   ssa
    []
    []
    []

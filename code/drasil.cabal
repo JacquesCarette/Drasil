@@ -135,7 +135,7 @@ executable tiny
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
-    , Drasil.OrganizationOfSRS
+    , Drasil.SpecificSystemDescription
     , Drasil.SRS
   Build-Depends:
     base >= 4.7,
@@ -159,7 +159,7 @@ executable nopcm
     , Drasil.SRS
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
-    , Drasil.OrganizationOfSRS
+    , Drasil.SpecificSystemDescription
     , Drasil.Introduction
     , Drasil.Requirements
     , Drasil.GeneralSystDesc
@@ -193,6 +193,7 @@ executable ssp
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
     , Drasil.SSP.Units
+    , Drasil.SSP.TMods
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.DocumentLanguage
@@ -201,7 +202,7 @@ executable ssp
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
-    , Drasil.OrganizationOfSRS
+    , Drasil.SpecificSystemDescription
     , Drasil.Introduction
     , Drasil.Requirements
     , Drasil.GeneralSystDesc
@@ -232,7 +233,7 @@ executable glassbr
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Units
-    , Drasil.OrganizationOfSRS
+    , Drasil.SpecificSystemDescription
     , Drasil.Introduction
     , Drasil.Requirements
     , Drasil.GeneralSystDesc
@@ -273,7 +274,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
-    , Drasil.OrganizationOfSRS
+    , Drasil.SpecificSystemDescription
     , Drasil.Introduction
     , Drasil.Requirements
     , Drasil.TraceabilityMandGs
@@ -304,7 +305,7 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.OrganizationOfSRS
+    , Drasil.SpecificSystemDescription
     , Drasil.Introduction
     , Drasil.Requirements
     , Drasil.GeneralSystDesc

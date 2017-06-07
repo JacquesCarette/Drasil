@@ -72,4 +72,4 @@ phrase n = NP.phrase (n ^. term)
 
 -- | Helper for getting the plural of a phrase from a NamedIdea
 plural :: NamedIdea n => n -> Sentence
-plural n = NP.phrase (n ^. term)
+plural n = NP.plural (n ^. term)

@@ -2,6 +2,7 @@
 import math
 import warnings
 
+
 def verify_valid(params):
     # Check that inputs are valid
     if params.L <= 0:
@@ -49,14 +50,11 @@ def verify_valid(params):
 def verify_recommended(params):
     ## Software Constraints ##
     
-    # Using 'elif' instead of 'or' is a hack. Something keeps going wrong with 'or' and it does not appear to be something in the code.
-    if (params.L < 0.10):
+    warnings.simplefilter('always', UserWarning)
+    
+    if (params.L < 0.10) or (params.L > 50.0):
         warnings.warn('It is recommended that 0.1 <= L <= 50\n', UserWarning)
-    elif (params.L > 50.0):
-        warnings.warn('It is recommended that 0.1 <= L <= 50\n', UserWarning)
-    if params.diam / params.L < 0.002:
-        warnings.warn('It is recommended that 0.002 <= D/L <= 200\n', UserWarning)
-    elif params.diam / params.L > 200:
+    if params.diam / params.L < 0.002 or params.diam / params.L > 200:
         warnings.warn('It is recommended that 0.002 <= D/L <= 200\n', UserWarning)
 #    if params.Vp < 1e-6 * params.Vt:
 #        warnings.warn('It is recommended that Vp be >= 0.0001% of Vt\n', UserWarning)
@@ -72,21 +70,13 @@ def verify_recommended(params):
         ## warning.warn() ##
     if params.Ac > (math.pi * (params.diam / 2.0) ** 2.0):
         warnings.warn('It is recommended that Ac <= pi * (D/2) ^ 2\n', UserWarning)
-    if params.rho_w <= 950:
+    if params.rho_w <= 950.0 or params.rho_w > 1000.0:
         warnings.warn('It is recommended that 950 < rho_w <= 1000\n', UserWarning)
-    elif params.rho_w > 1000:
-        warnings.warn('It is recommended that 950 < rho_w <= 1000\n', UserWarning)
-    if params.C_w <= 4170:
+    if params.C_w <= 4170 or params.C_w >= 4210:
         warnings.warn('It is recommended that 4170 < C_w < 4210\n', UserWarning)
-    elif params.C_w >= 4210:
-        warnings.warn('It is recommended that 4170 < C_w < 4210\n', UserWarning)
-    if params.hc <= 10:
-        warnings.warn('It is recommended that 10 < hc < 10000\n', UserWarning)
-    elif params.hc >= 10000:
+    if params.hc <= 10 or params.hc >= 10000:
         warnings.warn('It is recommended that 10 < hc < 10000\n', UserWarning)
 #    if params.hp <= 10 or params.hp >= 10000:
 #        warnings.warn('It is recommended that 10 < hp < 10000\n', UserWarning)
-    if params.tfinal <= 0:
-        warnings.warn('It is recommended that 0 < tfinal < 86400\n', UserWarning)
-    elif params.tfinal >= 86400:
+    if params.tfinal <= 0 or params.tfinal >= 86400:
         warnings.warn('It is recommended that 0 < tfinal < 86400\n', UserWarning)

@@ -34,9 +34,9 @@ t3descr = (P (QT.latent_heat ^. symbol) +:+ S "is the change in" +:+
   S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE" +:+ 
   S "is the" +:+ phrase rOfChng +:+ S "of" +:+
   P (QT.latent_heat ^. symbol) +:+ S "with respect" +:+
-  S "to" +:+ phrase time :+: EmptyS +:+ P (tau ^. symbol) +:+.
-  sParen (Sy (unit_symb tau))+:+ P (time ^. symbol) +:+
-  S "is the" +:+ phrase time +:+ sParen(Sy (unit_symb time)) +:+ 
+  S "to" +:+ phrase time +:+ P (tau ^. symbol) +:+.
+  sParen (Sy (unit_symb tau)) +:+ P (time ^. symbol) +:+
+  S "is the" +:+ phrase time +:+ sParen (Sy (unit_symb time)) +:+ 
   S "elapsed, as long as the" +:+
   phrase phase_change +:+ S "is not complete. The status of" +:+
   S "the" +:+ phrase phase_change +:+

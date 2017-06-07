@@ -183,7 +183,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Implemented By:]OS
 \end{description}
 \subsection{Behaviour Hiding Module}
-\label{Sec:BHM}
+\label{Sec:BehaHidiModu}
 \begin{description}
 \item[Secrets:]The contents of the required behaviours.
 \item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
@@ -246,28 +246,28 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Software Decision Module}
-\label{Sec:SDM}
+\label{Sec:SoftDeciModu}
 \begin{description}
 \item[Secrets:]The design decision based on mathematical theorems, physical facts, or programming considerations. The secrets of this module are not described in the SRS.
 \item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
 \subsection{Sequence Data Structure Module (M\ref{Mmodseqdesc})}
-\label{Sec:SDSM()}
+\label{Sec:SequDataStruModu()}
 \begin{description}
 \item[Secrets:]The data structure for a sequence data type.
-\item[Services:]Provides array manipulation, including building an array, accessing a specific entry, slicing an array, etc.
+\item[Services:]Provides array manipulation operations, such as building an array, accessing a specific entry, slicing an array, etc.
 \item[Implemented By:]MATLAB
 \end{description}
 \subsection{ODE Solver Module (M\ref{Mmododedesc})}
-\label{Sec:OSM()}
+\label{Sec:ODESolvModu()}
 \begin{description}
 \item[Secrets:]The algorithm to solve a system of first order ODEs.
 \item[Services:]Provides solvers that take the governing equation, initial conditions, and numerical parameters, and solve them.
 \item[Implemented By:]MATLAB
 \end{description}
 \subsection{Plotting Module (M\ref{Mmodplotdesc})}
-\label{Sec:PM()}
+\label{Sec:PlotModu()}
 \begin{description}
 \item[Secrets:]The data structures and algorithms for plotting data graphically.
 \item[Services:]Provides a plot function.

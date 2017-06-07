@@ -20,7 +20,7 @@ cabal.config
 /Physics Engine Families/Papers
 Main
 .idea
-/code/stable/swhs/SWHS_SRS.out
+*.out
 *.iml
 *.vrb
 .DS_Store

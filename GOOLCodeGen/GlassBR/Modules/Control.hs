@@ -13,7 +13,7 @@ control = buildModule "Control"
     lib_Interpolation, 
     lib_Calculations, 
     lib_OutputFormat,
-    "readTable"
+    lib_ReadTable
   ] [] [main_func] []
 
 main_func :: FunctionDecl
@@ -26,12 +26,12 @@ main_func = mainMethod
       valStmt $ funcApp lib_DerivedValues "derived_params" [v_params] ,      
       valStmt $ funcApp lib_InputConstraints "check_constraints" [v_params] ,
       -- TODO:  this is probably wrong, will need specialized handling for list declarations w/ assignment:
-      varDecDef l_w_array (listT float) $ funcApp "readTable" "read_z_array" [litString "TSD.txt"] ,
-      varDecDef l_data_sd (listT $ listT float) $ funcApp "readTable" "read_x_array" [litString "TSD.txt", v_w_array$.listSize] ,
-      varDecDef l_data_q (listT $ listT float) $ funcApp "readTable" "read_y_array" [litString "TSD.txt", v_w_array$.listSize] ,
-      varDecDef l_j_array (listT float) $ funcApp "readTable" "read_z_array" [litString "SDF.txt"] ,
-      varDecDef l_data_asprat (listT $ listT float) $ funcApp "readTable" "read_x_array" [litString "SDF.txt", v_j_array$.listSize] ,
-      varDecDef l_data_qstar (listT $ listT float) $ funcApp "readTable" "read_y_array" [litString "SDF.txt", v_j_array$.listSize] ,
+      varDecDef l_w_array (listT float) $ funcApp lib_ReadTable "read_z_array" [litString "TSD.txt"] ,
+      varDecDef l_data_sd (listT $ listT float) $ funcApp lib_ReadTable "read_x_array" [litString "TSD.txt"] ,
+      varDecDef l_data_q (listT $ listT float) $ funcApp lib_ReadTable "read_y_array" [litString "TSD.txt"] ,
+      varDecDef l_j_array (listT float) $ funcApp lib_ReadTable "read_z_array" [litString "SDF.txt"] ,
+      varDecDef l_data_asprat (listT $ listT float) $ funcApp lib_ReadTable "read_x_array" [litString "SDF.txt"] ,
+      varDecDef l_data_qstar (listT $ listT float) $ funcApp lib_ReadTable "read_y_array" [litString "SDF.txt"] ,
       varDecDef l_q float $ funcApp lib_Interpolation "interpY" [v_data_sd, v_data_q, v_w_array, v_params$->v_sd, v_params$->v_wtnt] ,
       varDecDef l_q_hat float $ funcApp lib_Calculations "calc_q_hat" [v_q, v_params] ,
       varDecDef l_j_tol float $ funcApp lib_Calculations "calc_j_tol" [v_params] ,

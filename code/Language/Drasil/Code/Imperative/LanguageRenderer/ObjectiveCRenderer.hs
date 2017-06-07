@@ -66,6 +66,7 @@ objcConfig options c =
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
+        complexDoc = complexDocD c,
         getEnv = \_ -> error "getEnv not implemented (yet) in ObjC"
     }
 

@@ -63,6 +63,7 @@ goolConfig options c =
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDoc' c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
+        complexDoc = complexDocD c,
         getEnv = \_ -> error "getEnv for GOOL is not defined"
     }
     
@@ -184,13 +185,15 @@ funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
+funcDoc' c (ListSlice b e s) = text "ListSlice" 
+  <+> justValueDoc c b 
+  <+> justValueDoc c e
+  <+> justValueDoc c s
 funcDoc' _ (IterBegin) = text "IterBegin"
 funcDoc' _ (IterEnd) = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
-funcDoc' _ (FileOpen _) = error $
-  "funcDoc' not implemented for _ (FileOpen _) pattern. See " ++
-  "Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer"
+funcDoc' _ (StringSplit d) = text "StringSplit" <+> lbl d
 
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For initv cond upd b) = vcat [
@@ -385,6 +388,10 @@ casesDoc c f = hsVList (\(a,b) -> parens $ f a <> comma <+> bodyDoc c b)
 elseBody :: Config -> Body -> Doc
 elseBody c b = if null b then text "noElse" else bodyDoc c b
 
+justValueDoc :: Config -> Maybe Value -> Doc
+justValueDoc c (Just v) = parens $ text "Just" <+> valueDoc c v
+justValueDoc _ Nothing = text "Nothing" 
+
 justDoc :: Maybe Label -> Doc
-justDoc (Just l) = parens $ text "Just" <+> text l
+justDoc (Just l) = parens $ text "Just" <+> lbl l
 justDoc Nothing = text "Nothing" 

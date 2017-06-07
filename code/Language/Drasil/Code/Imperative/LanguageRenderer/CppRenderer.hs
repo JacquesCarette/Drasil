@@ -65,6 +65,7 @@ cppConfig options c =
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
+        complexDoc = complexDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 

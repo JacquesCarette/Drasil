@@ -59,6 +59,7 @@ pythonConfig _ c =
         functionListDoc = functionListDocD c, functionDoc = functionDoc' c,
         unOpDoc = unOpDocD', valueDoc = valueDoc' c, ioDoc = ioDoc' c,
         inputDoc = inputDoc' c,
+        complexDoc = complexDoc' c,
         getEnv = \_ -> error "getEnv for pythong not yet implemented"
     }
 
@@ -150,6 +151,11 @@ funcDoc' c (ListAdd i v) = dot <> funcAppDoc c "insert" [i, v]
 funcDoc' c (ListPopulate size t) = brackets (valueDoc c dftVal) <+> char '*' <+> valueDoc c size
     where dftVal = case t of Base bt   -> defaultValue bt
                              _         -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
+funcDoc' c (ListSlice b e s) = brackets $ 
+  getVal b <> colon <> getVal e <> colon <> getVal s 
+    where getVal Nothing  = empty
+          getVal (Just v) = valueDoc c v
+funcDoc' c (StringSplit d) = dot <> funcAppDoc c "split" [litString d]
 funcDoc' c f = funcDocD c f
 
 iterationDoc' :: Config -> Iteration -> Doc
@@ -256,6 +262,9 @@ ioDoc' c (OpenFile f n m) = statementDoc c NoLoop (f &= funcApp' "open" [n, litS
   where modeStr Read = "r"
         modeStr Write = "w"  
 ioDoc' c io = ioDocD c io
+
+complexDoc' :: Config -> Complex -> Doc
+complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
   
 -- helpers
 

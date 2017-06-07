@@ -56,6 +56,7 @@ def PCM_ErrorF(Ffile, Pfile, comparator):
         error = errorCalcInterp(timeFor, timePy, eNoPCM, eWPy)
     else:
         error = 1
+        
     print error
     return error
 
@@ -104,6 +105,7 @@ def PCM_ErrorM(Mfile, Pfile, comparator):
     else:
         error = 1
 
+    print error
     return error
 
 
@@ -151,6 +153,7 @@ def PCM_ErrorC(Cfile, Pfile, comparator):
     else:
         error = 1
 
+    print error
     return error
 
 def errorCalcInterp(time1, time2, result1, result2):

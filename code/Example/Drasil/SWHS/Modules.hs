@@ -3,11 +3,15 @@ import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SWHS.Concepts
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Documentation
 import Control.Lens ((^.))
 import Data.Drasil.Modules
 import Data.Drasil.Software.Products
+import Data.Drasil.Quantities.Thermodynamics (temp)
+import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Concepts.Thermodynamics (law_cons_energy, melting)
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
@@ -27,34 +31,35 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
 -- Input Format Module
 mod_inputf :: ModuleChunk
 mod_inputf = mod_io_fun
-  swhsProg [] [mod_hw, mod_inputp, mod_seq] (S "input data") modInputFormat
+  swhsProg [] [mod_hw, mod_inputp, mod_seq] (phrase input_ +:+ plural datum) modInputFormat
 
 -- Input Parameters Module
 mod_inputp :: ModuleChunk
 mod_inputp = mod_io_fun
-  swhsProg [] [mod_seq] (S "input parameters") modInputParam
+  swhsProg [] [mod_seq] (phrase input_ +:+ plural parameter) modInputParam
 
 -- Input Verification Module
 mod_inputv :: ModuleChunk
 mod_inputv = mod_io_fun
-  swhsProg [] [mod_inputp, mod_seq] (S "physical and software constraints") modInputVerif
+  swhsProg [] [mod_inputp, mod_seq] (phrase physical +:+ S "and" +:+
+  phrase software +:+ plural constraint) modInputVerif
 
 -- Output Format Module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (S "input parameters," +:+
-  S "temperatures, energies, and times when melting starts and stops.")
+mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ plural parameter `sC`
+  plural temp `sC` plural energy `sC` S "and" +:+ plural time +:+ S "when" +:+
+  phrase melting +:+. S "starts and stops")
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun
-  swhsProg [] [mod_hw, mod_inputp, mod_seq] (S "output data") mod_outputf_desc
+  swhsProg [] [mod_hw, mod_inputp, mod_seq] (phrase output_ +:+ plural datum) mod_outputf_desc
 
 -- Output Verification Module
 mod_outputv_desc :: ConceptChunk
 mod_outputv_desc = dccWDS "mod_outputv_desc" (cn' "output verification") (
-  S "Verifies that the output " :+:
-  S "energy results follow the law of conservation of " :+:
-  S "energy. Throws a warning if the relative error " :+:
-  S "exceeds the error threshold.")
+  S "Verifies that the" +:+ phrase output_ +:+ phrase energy +:+
+  S "results follow the" +:+. phrase law_cons_energy +:+
+  S "Throws a warning if the relative error exceeds the error threshold.")
 
 mod_outputv :: ModuleChunk
 mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
@@ -63,23 +68,26 @@ mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
 mod_temp_desc = dccWDS "mod_temp_desc" (nounPhraseSP "temperature ODEs") (
-  S "Defines the" +:+ (short ode) :+: S "s using the parameters in the" +:+ --FIXME use a pural abbreviation?
-  S "input parameters module.")
+  S "Defines the" +:+ (short ode) :+: S "s" --FIXME uses a plural abbreviation?
+  +:+ S "using the" +:+ plural parameter +:+ S "in the" +:+
+  phrase input_ +:+ plural parameter +:+. phrase module_)
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+:
-           S "s for solving the temperature, using the input parameters.")
-           swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
+mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+: S "s" +:+
+  S "for solving the" +:+ phrase temp `sC` S "using the" +:+ phrase input_ +:+.
+  plural parameter) swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Energy Equations Module
 mod_ener_desc :: ConceptChunk
 mod_ener_desc = dccWDS "mod_ener_desc" (nounPhraseSP "energy equations") (
-  S "Defines the energy equations using the parameters in the input" +:+
-  S "parameters module.")
+  S "Defines the" +:+ phrase energy +:+ plural equation +:+ S "using the" +:+
+  plural parameter +:+ S "in the" +:+ phrase input_ +:+ plural parameter +:+.
+  phrase module_)
 
 mod_ener :: ModuleChunk
 mod_ener = mod_param_fun swhsProg [mod_inputp, mod_seq]
-  (S "The equations for solving for the energies using the input parameters") mod_ener_desc
+  (S "The" +:+ plural equation +:+ S "for solving for the" +:+ plural energy +:+
+  S "using the" +:+ phrase input_ +:+ plural parameter) mod_ener_desc
 
 -- Control Module
 --mod_ctrl :: ModuleChunk
@@ -88,7 +96,7 @@ mod_ener = mod_param_fun swhsProg [mod_inputp, mod_seq]
 --           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
 --           mod_outputv, mod_outputf, mod_seq] (Just M.mod_behav)
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase $ algorithm))
+mod_ctrl = mod_ctrl_fun (S "The" +:+ phrase algorithm)
   swhsProg [] [mod_hw, mod_inputp, mod_inputf, mod_inputv, mod_temp, mod_ener,
   mod_ode, mod_plot, mod_outputv, mod_outputf, mod_seq]
 

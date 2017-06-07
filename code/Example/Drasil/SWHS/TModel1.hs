@@ -7,7 +7,7 @@ import Drasil.SWHS.Concepts
 
 import Language.Drasil
 import Prelude hiding (id)
-import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Concepts.Documentation (assumption, system)
 import Data.Drasil.Concepts.Thermodynamics hiding (temp, heat_cap_spec)
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (equation)
@@ -49,7 +49,7 @@ t1descr = (S "The above" +:+ phrase equation +:+ S "gives the" +:+
   S "is the" +:+. (gradient ^. defn) +:+ S "For this" +:+ phrase equation +:+
   S "to apply" `sC` S "other forms of" +:+ phrase energy `sC` S "such as" +:+
   phrase mech_energy `sC` 
-  S "are assumed to be negligible in the system" +:+.
+  S "are assumed to be negligible in the" +:+ phrase system +:+.
   sParen (short assumption +:+ S (show 1)))
 
 --referencing within a simple list is not yet implemented.

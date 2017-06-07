@@ -280,7 +280,7 @@ s6_1_2_list_physys1 = [(at_start glaSlab), (foldlSent [S "The point of"
   `isThe` S "distance between the point of", (phrase explosion), 
   S "and the glass"])]
 
-s6_1_3 = goalStmtF [foldlList [S "the dimensions of the glass plane",
+s6_1_3 = goalStmtF [foldlList [S "dimensions" `ofThe`S "glass plane",
   phrase glassTy, plural characteristic `ofThe` phrase explosion,
   S "the" +:+ phrase pb_tol]] [s6_1_3_list]
 

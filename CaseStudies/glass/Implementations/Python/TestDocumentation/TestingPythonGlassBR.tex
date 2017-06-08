@@ -28,32 +28,57 @@
 \end{adjustbox}
 \end{table}
 %Table 2
-\begin{table}[]
+\begin{table}[h!]
 \centering
-\caption{My caption}
-\label{my-label}
-\begin{tabular}{lllllllll}
+\caption{testCheckConstraints}
+\label{testCheckConstraints}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{*{10}{|c}}
+\hline
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
-8 & ? & testCheckConstraints & to ensure a (i.e. length) \textgreater 0 & Following A1 (glass must be of rectangular shape); following physical constraint from Table 2 where “a \textgreater 0” and software constraint from Table 2 where “a =\textgreater dmin” & testInvalidInput1.txt  & a = -1600 & InputError: a and b must be greater than 0 & \\
-9 & ? & testCheckConstraints2 & to ensure b (i.e. breadth) \textgreater 0 & \begin{tabular}[c]{@{}l@{}}Following physical constraint from Table 2 where “b \textgreater 0” and software constraint\\ from Table 2 where “b =\textgreater dmin”\end{tabular} & testInvalidInput2.txt & b = -1500 & InputError: a and b must be greater than 0 & \\
-10 & ? & testCheckConstraints3 & to ensure 1 \textless a/b \textless 5 & length should pertain to the longer side, following physical constraint from Table 2 where “b \textless a” & testInvalidInput3.txt  & b = 2000                                                                & \begin{tabular}[c]{@{}l@{}}(a/b=0.8\textless1)\\ InputError: a/b must be between 1 and 5\end{tabular} & \\
-11 & ? & testCheckConstraints4 & to ensure a/b (i.e. aspect ratio) \textless 5 & following software constraint from Table 2 where “a/b \textless ARmax” & testInvalidInput4.txt  & b = 200 & \begin{tabular}[c]{@{}l@{}}(a/b=8\textgreater5)\\ InputError: a/b must be between 1 and 5\end{tabular} & \\
-12 & ? & testCheckConstraints5 & to ensure input t value (i.e. nominal thickness) is one of the industrial standard thicknesses & \begin{tabular}[c]{@{}l@{}}following\\ R1 (t description)\end{tabular} & testInvalidInput5.txt  & t = 7 & InputError: t must be in,{[}2.5,2.7,3.0,4.0,,5.0,6.0,8.0, 10.0,12.0,16.0,,19.0,22.0{]} & \\
-13 & ? & testCheckConstraints6 & \begin{tabular}[c]{@{}l@{}}to ensure input w value (i.e. weight of charge)\\ is \textgreater minimum permissible input charge weight\end{tabular} & \begin{tabular}[c]{@{}l@{}}following\\ value of wmin (4.5 kg) from Table 3\end{tabular} & testInvalidInput6.txt & w = 3 & InputError: wtnt must be between 4.5 and 910 & \\
-14 & ? & testCheckConstraints7 & \begin{tabular}[c]{@{}l@{}}to ensure input w value (i.e. weight of charge)\\ is \textless maximum permissible input charge weight\end{tabular} & \begin{tabular}[c]{@{}l@{}}following\\ value of wmax (910 kg) from Table 3\end{tabular} & testInvalidInput7.txt & w = 1000 & InputError: wtnt must be between 4.5 and 910 & \\
-15 & ? & testCheckConstraints8 & to ensure input tnt value (i.e. TNT equivalent factor) \textgreater 0                                                                             & following physical constraint from Table 2 where “TNT \textgreater 0” & testInvalidInput8.txt & tnt = -2                                                                & InputError: TNT must be greater than 0 & \\
-16 & ? & testCheckConstraints9 & to see if input SD (i.e. Stand off Distance) is \textgreater minimum stand off distance permissible for input & following value of SDmin (6 m) from Table 3 & testInvalidInput9.txt & \begin{tabular}[c]{@{}l@{}}sdx = 0\\ sdy = 1.0\\ sdz = 2.0\end{tabular} & InputError: SD must be between 6 and 130 & \\
-17 & ? & testCheckConstraints10 & to see if input SD (i.e. Stand off Distance) is \textless maximum stand off distance permissible for input & \begin{tabular}[c]{@{}l@{}}following\\ value of SDmax (130 m) from Table 3\end{tabular} & testInvalidInput10.txt & \begin{tabular}[c]{@{}l@{}}sdx = 0\\ sdy = 200\\ sdz = 100\end{tabular} & InputError: SD must be between 6 and 130 & \\
-18 & ? & testCheckConstraints11 & see 8 & see 8 & testInvalidInput11.txt & a = 0 & InputError: a and b must be greater than 0 & \\
-19 & ? & testCheckConstraints12 & see 9 & see 9 & testInvalidInput12.txt & b = 0 & InputError: a and b must be greater than 0 & \begin{tabular}[c]{@{}l@{}}RuntimeWarning:\\ divide by zero encountered in double\_scalars params.asprat = params.a /\\ params.b\end{tabular} \\
-20 & ? & testCheckConstraints13 & see 15 & see 15 & testInvalidInput13.txt & tnt = 0 & InputError: TNT must be greater than 0 & \\
-21 & ? & testCheckConstraints14 & see 10 & see 10 & testInput7.txt & \begin{tabular}[c]{@{}l@{}}a = 1500\\ b = 1500\end{tabular} & \begin{tabular}[c]{@{}l@{}}(a/b = 1)\\ "Encountered an unexpected exception" à why not the same error as 10?\end{tabular} & \\
-22 & ? & testCheckConstraints15 & see 11 & see 11 & testInput8.txt & \begin{tabular}[c]{@{}l@{}}a = 7500\\ b = 1500\end{tabular} & \begin{tabular}[c]{@{}l@{}}(a/b = 5)\\ "Encountered an unexpected exception"\end{tabular} & \\
-23 & ? & testCheckConstraints16 & see 13 & see 13 & testInput9.txt & w = 4.5 & "Encountered an unexpected exception" & \\
-24 & ? & testCheckConstraints17 & see 14 & see 14 & testInput10.txt & w = 910 & "Encountered an unexpected exception" & \\
-25 & ? & testCheckConstraints18 & " & " & " & " & \begin{tabular}[c]{@{}l@{}}REMOVE? Or was it supposed to follow the pattern and have tnt = 0? like\\ \#15\end{tabular} & \\
-26 & ? & testCheckConstraints19 & see 16 & see 16 & testInput11.txt & \begin{tabular}[c]{@{}l@{}}sdx = 0\\ sdy = 6\\ sdz = 0\end{tabular} & "Encountered an unexpected exception" & \\
-27 & ? & testCheckConstraints20 & see 17 & see 17 & testInput12.txt & \begin{tabular}[c]{@{}l@{}}sdx = 130\\ sdy = 0\\ sdz = 0\end{tabular} & "Encountered an unexpected exception" & \\
+\hline
+\hline
+8 & ? & testCheckConstraints & to ensure a (i.e. length) \textgreater 0 & Following A1 (glass must be of rectangular shape); following physical constraint from Table 2 where “a \textgreater 0” and software constraint from Table 2 where “a =\textgreater dmin” & testInvalidInput1.txt  & a = -1600 & InputError: a and b must be greater than 0 & 
+\\
+9 & ? & testCheckConstraints2 & to ensure b (i.e. breadth) \textgreater 0 & Following physical constraint from Table 2 where “b \textgreater 0” and software constraint from Table 2 where “b =\textgreater dmin” & testInvalidInput2.txt & b = -1500 & InputError: a and b must be greater than 0 &
+\\
+10 & ? & testCheckConstraints3 & to ensure 1 \textless a/b \textless 5 & length should pertain to the longer side, following physical constraint from Table 2 where “b \textless a” & testInvalidInput3.txt  & b = 2000 & (a/b=0.8\textless1); InputError: a/b must be between 1 and 5 &
+\\
+11 & ? & testCheckConstraints4 & to ensure a/b (i.e. aspect ratio) \textless 5 & following software constraint from Table 2 where “a/b \textless ARmax” & testInvalidInput4.txt & b = 200 & (a/b=8\textgreater5); InputError: a/b must be between 1 and 5 & 
+\\
+12 & ? & testCheckConstraints5 & to ensure input t value (i.e. nominal thickness) is one of the industrial standard thicknesses & following R1 (t description) & testInvalidInput5.txt & t = 7 & InputError: t must be in,{[}2.5,2.7,3.0,4.0,,5.0,6.0,8.0, 10.0,12.0,16.0,,19.0,22.0{]} & 
+\\
+13 & ? & testCheckConstraints6 & to ensure input w value (i.e. weight of charge) is \textgreater minimum permissible input charge weight & following value of wmin (4.5 kg) from Table 3 & testInvalidInput6.txt & w = 3 & InputError: wtnt must be between 4.5 and 910 &
+\\
+14 & ? & testCheckConstraints7 & to ensure input w value (i.e. weight of charge) is \textless maximum permissible input charge weight & following value of wmax (910 kg) from Table 3 & testInvalidInput7.txt & w = 1000 & InputError: wtnt must be between 4.5 and 910 & 
+\\
+15 & ? & testCheckConstraints8 & to ensure input tnt value (i.e. TNT equivalent factor) \textgreater 0                                                                             & following physical constraint from Table 2 where “TNT \textgreater 0” & testInvalidInput8.txt & tnt = -2                                                                & InputError: TNT must be greater than 0 &
+\\
+16 & ? & testCheckConstraints9 & to see if input SD (i.e. Stand off Distance) is \textgreater minimum stand off distance permissible for input & following value of SDmin (6 m) from Table 3 & testInvalidInput9.txt & sdx = 0; sdy = 1.0; sdz = 2.0 & InputError: SD must be between 6 and 130 &
+\\
+17 & ? & testCheckConstraints10 & to see if input SD (i.e. Stand off Distance) is \textless maximum stand off distance permissible for input & following value of SDmax (130 m) from Table 3 & testInvalidInput10.txt & sdx = 0; sdy = 200; sdz = 100 & InputError: SD must be between 6 and 130 &
+\\
+18 & ? & testCheckConstraints11 & see 8 & see 8 & testInvalidInput11.txt & a = 0 & InputError: a and b must be greater than 0 &
+\\
+19 & ? & testCheckConstraints12 & see 9 & see 9 & testInvalidInput12.txt & b = 0 & InputError: a and b must be greater than 0 & RuntimeWarning: divide by zero encountered in double\_scalars params.asprat = params.a /params.b
+\\
+20 & ? & testCheckConstraints13 & see 15 & see 15 & testInvalidInput13.txt & tnt = 0 & InputError: TNT must be greater than 0 &
+\\
+21 & ? & testCheckConstraints14 & see 10 & see 10 & testInput7.txt & a = 1500; b = 1500 & (a/b = 1);  "Encountered an unexpected exception" à why not the same error as 10? &
+\\
+22 & ? & testCheckConstraints15 & see 11 & see 11 & testInput8.txt & a = 7500; b = 1500 & (a/b = 5); "Encountered an unexpected exception" &
+\\
+23 & ? & testCheckConstraints16 & see 13 & see 13 & testInput9.txt & w = 4.5 & "Encountered an unexpected exception" & 
+\\
+24 & ? & testCheckConstraints17 & see 14 & see 14 & testInput10.txt & w = 910 & "Encountered an unexpected exception" & 
+\\
+25 & ? & testCheckConstraints18 & " & " & " & " & REMOVE? Or was it supposed to follow the pattern and have tnt = 0? like \#15 &
+\\
+26 & ? & testCheckConstraints19 & see 16 & see 16 & testInput11.txt & sdx = 0; sdy = 6; sdz = 0 & "Encountered an unexpected exception" & 
+\\
+27 & ? & testCheckConstraints20 & see 17 & see 17 & testInput12.txt & sdx = 130; sdy = 0; sdz = 0 & "Encountered an unexpected exception" & \\
+\hline
 \end{tabular}
+\end{adjustbox}
 \end{table}
 \end{document}

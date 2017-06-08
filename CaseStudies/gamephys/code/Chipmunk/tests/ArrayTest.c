@@ -54,9 +54,8 @@ void test_start_index() {
 void test_push() {
   Array * test_array = arrayNew(0);
   int test_val = 196613;
-  void * test_ptr = &test_val;
-  arrayPush(test_array, test_ptr);
-  TEST_ASSERT_TRUE(test_ptr==test_array->arr[0]);
+  arrayPush(test_array, &test_val);
+  TEST_ASSERT_TRUE(&test_val==test_array->arr[0]);
 }
 
 /**
@@ -64,16 +63,15 @@ void test_push() {
  */
 void test_push_n() {
   Array * test_array = arrayNew(4);
-  int test_val1 = 196613;
-  void * test_pointer1 = &test_val1;
-  arrayPush(test_array, test_pointer1);
-  arrayPush(test_array, test_pointer1);
-  arrayPush(test_array, test_pointer1);
-  arrayPush(test_array, test_pointer1);
-  TEST_ASSERT_TRUE(test_pointer1==test_array->arr[0]);
-  TEST_ASSERT_TRUE(test_pointer1==test_array->arr[1]);
-  TEST_ASSERT_TRUE(test_pointer1==test_array->arr[2]);
-  TEST_ASSERT_TRUE(test_pointer1==test_array->arr[3]);
+  int test_val = 196613;
+  arrayPush(test_array, &test_val);
+  arrayPush(test_array, &test_val);
+  arrayPush(test_array, &test_val);
+  arrayPush(test_array, &test_val);
+  TEST_ASSERT_TRUE(&test_val==test_array->arr[0]);
+  TEST_ASSERT_TRUE(&test_val==test_array->arr[1]);
+  TEST_ASSERT_TRUE(&test_val==test_array->arr[2]);
+  TEST_ASSERT_TRUE(&test_val==test_array->arr[3]);
 }
 
 /**
@@ -83,16 +81,32 @@ void test_push_n_diff() {
   Array * test_array = arrayNew(4);
   int test_val1 = 196613;
   char test_val2 = 'a';
-  void * test_pointer1 = &test_val1;
-  void * test_pointer2 = &test_val2;
-  arrayPush(test_array, test_pointer1);
-  arrayPush(test_array, test_pointer2);
-  arrayPush(test_array, test_pointer2);
-  arrayPush(test_array, test_pointer1);
-  TEST_ASSERT_TRUE(test_pointer1==test_array->arr[0]);
-  TEST_ASSERT_TRUE(test_pointer2==test_array->arr[1]);
-  TEST_ASSERT_TRUE(test_pointer2==test_array->arr[2]);
-  TEST_ASSERT_TRUE(test_pointer1==test_array->arr[3]);
+  arrayPush(test_array, &test_val1);
+  arrayPush(test_array, &test_val2);
+  arrayPush(test_array, &test_val2);
+  arrayPush(test_array, &test_val1);
+  TEST_ASSERT_TRUE(&test_val1==test_array->arr[0]);
+  TEST_ASSERT_TRUE(&test_val2==test_array->arr[1]);
+  TEST_ASSERT_TRUE(&test_val2==test_array->arr[2]);
+  TEST_ASSERT_TRUE(&test_val1==test_array->arr[3]);
+}
+
+/**
+ * Pop empty array should throw exception
+ * this test will fail, can't catch an abort?
+ */
+void test_pop() {
+  TEST_FAIL();
+  Array * test_array = arrayNew(0);
+  arrayPop(test_array);
+}
+
+void test_push_pop() {
+  Array * test_array = arrayNew(0);
+  int test_val = 196613;
+  arrayPush(test_array, &test_val);
+  arrayPop(test_array);
+  TEST_ASSERT_TRUE(&test_val!=test_array->arr[0]);
 }
 
 int main() {
@@ -103,5 +117,7 @@ int main() {
   RUN_TEST(test_push);
   RUN_TEST(test_push_n);
   RUN_TEST(test_push_n_diff);
+  RUN_TEST(test_pop);
+  RUN_TEST(test_push_pop);
   return UNITY_END();
 }

@@ -292,9 +292,9 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "relationships is linear with a constant" +:+. phrase slope),
   (S "The" +:+ phrase slope +:+ S "and" +:+ phrase slpSrf +:+.
            S "extends far into and out of the geometry (z coordinate)" +:+
-           S "This implies plane strain" +:+ (plural condition) `sC`
+           S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
            S "making 2D analysis appropriate."),
-  (S "The effective normal stress is large enough" +:+
+  (S "The effective normal" +:+ phrase stress +:+ S "is large enough" +:+
            S "that the resistive shear to effective normal" +:+
            phrase stress +:+ S "relationship can be approximated as a" +:+.
            S "linear relationship"),
@@ -321,26 +321,30 @@ s4_2_4_dataDefs = map sspSymMapD sspDataDefs
 
 s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   phrase method_, S "is a vertical" +:+ phrase slice `sC` S "limit equilibrium",
-  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by breaking the",
-  S "assumed failure", phrase surface, S "into a series of vertical",
-  plural slice +:+ S "of" +:+. phrase mass +:+ S "Static equilibrium analysis using two force", 
-  S "equilibrium, and one moment equation as in T2. The", (phrase problem),
-  S "is statically indeterminate with only these 3 equations and one", --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
-  S "constitutive equation (the Mohr Coulomb shear strength of T3)", 
-  S "so the assumption of GD5 is used. Solving for force", 
-  S "equilibrium allows", (plural definition), 
-  S "of all forces in terms of the physical properties",
-  S "of DD1 to DD9, as done in DD10, DD11"]
+  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by" +:+
+  S "breaking the", S "assumed failure", phrase surface, S "into a series of vertical",
+  plural slice +:+ S "of" +:+. phrase mass +:+ S "Static equilibrium" +:+
+  S "analysis using two" +:+ phrase force, S "equilibrium, and one moment" +:+
+  phrase equation +:+ S "as in" +:+ short thModel :+: S "2. The", phrase problem,
+  S "is statically indeterminate with only these 3" +:+ plural equation +:+ S "and one", --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
+  S "constitutive" +:+ phrase equation +:+ S "(the Mohr Coulomb shear strength of" +:+ short thModel :+: S "3)", 
+  S "so the" +:+ phrase assumption +:+ S "of" +:+ short genDefn +:+ S "5 is used. Solving for" +:+ phrase force, 
+  S "equilibrium allows", plural definition, 
+  S "of all" +:+ plural force +:+ S "in terms of the" +:+ plural physicalProperty,
+  S "of" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+: S "9, as done in" +:+
+  short dataDefn :+: S "10" `sC` short dataDefn :+: S "11"]
 
-s4_2_5_p3 = foldlSP [(S "values") `ofThe'` (S "interslice normal force"),
-  S "E the interslice normal/shear force magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
-  S "and the", (titleize $ fs_rc), S "(FS)" `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
-  S "Equations for the unknowns are written in terms of only the values", 
-  S "in DD1 to DD9, the values of", (getS ri) `sC` 
-  S "and", (getS ti), S "in DD10 and DD11, and each", --FIXME: DD10,DD11 should be references to other things in the body
+s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ S "normal" +:+ phrase force),
+  S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
+  S "and the", titleize fs_rc, S "(FS)" `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
+  at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+
+  plural value, S "in" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+:
+  S "9, the" +:+ plural value +:+ S "of", getS ri `sC` 
+  S "and", getS ti, S "in" +:+ short dataDefn :+: S "10 and" +:+ short dataDefn :+:
+  S "11, and each", --FIXME: DD10,DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear" `sC`
-  S "and therefore explicit equations cannot be derived and an", 
-  S "iterative", (plural solution), S "method is required"]
+  S "and therefore explicit" +:+ plural equation +:+ S "cannot be derived and an", 
+  S "iterative", plural solution, S "method is required"]
   
 s4_2_5_IMods = map sspSymMapT sspIMods
 
@@ -348,8 +352,8 @@ s4_2_5_IMods = map sspSymMapT sspIMods
 -- Data Constraints is automatically generated in solChSpecF using the tables below
 noTypicalVal, vertConvention :: Sentence
 noTypicalVal   = S "N/A"
-vertConvention = S "Consecutive vertexes have increasing x values." +:+.
-                 S "The start and end vertices of all layers go to the same x values"
+vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
+  S "The start and end vertices of all layers go to the same x" +:+. plural value
 
 vertVar :: Sentence -> Sentence
 vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
@@ -359,7 +363,7 @@ verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
 
 waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
-waterVert = verticesConst $ S "water table"
+waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip 
 slopeVert = verticesConst $ phrase slope
 
@@ -416,10 +420,10 @@ dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnR
   fricAng, dryUWght, satUWght, waterUWght]
 
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = Table [S "Var", S "Physical Constraints", S "Typical Value"]
-                      dataConstList (S "Input Variables") True 
-s4_2_6Table3 = Table [S "Var", S "Physical Constraints"]
-                      [fcOfSa, slipVert2, deltax, deltay] (S "Output Variables") True
+s4_2_6Table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+ titleize value]
+                      dataConstList (titleize input_ +:+ titleize' variable) True 
+s4_2_6Table3 = Table [S "Var", titleize' physicalConstraint]
+                      [fcOfSa, slipVert2, deltax, deltay] (titleize output_ +:+ titleize' variable) True
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]
@@ -429,35 +433,35 @@ s5_1 = SRS.funcReq
   [s5_1_list, s5_1_table] []
 
 s5_1_list = enumSimple 1 (short requirement) [
-  (S "Read the input file, and store the" +:+. plural datum +:+
+  (S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+. plural datum +:+
         S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
-        (makeRef table_inputdata)),
-  (S "Generate potential" +:+ (phrase $ crtSlpSrf) :+:
-        S "'s for the input" +:+. (phrase slope)),
-  (S "Test the" +:+ (plural slpSrf) +:+ S "to determine" +:+
+        makeRef table_inputdata),
+  (S "Generate potential" +:+ phrase crtSlpSrf :+:
+        S "'s for the" +:+ phrase input_ +:+. phrase slope),
+  (S "Test the" +:+ plural slpSrf +:+ S "to determine" +:+
         S "if they are physically realizable based" +:+.
         S "on a set of pass or fail criteria"),
-  (S "Prepare the" +:+ (plural slpSrf) +:+ S "for a" +:+ (phrase method_) +:+
-        S "of" +:+ (plural slice) +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+. ((plural $ fs_rc) `ofThe` (plural slpSrf))),
-  (S "Rank and weight the" +:+ (plural slope) +:+ S "based on their" +:+
-        (phrase $ fs_rc) `sC` S "such that a" +:+ (phrase slpSrf) +:+
-        S "with a smaller" +:+ (phrase $ fs_rc) +:+.
+  (S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
+        S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
+  (S "Calculate" +:+. plural fs_rc `ofThe` plural slpSrf),
+  (S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
+        phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
+        S "with a smaller" +:+ phrase fs_rc +:+.
         S "has a larger weighting"),
-  (S "Generate new potential" +:+ (plural $ crtSlpSrf) +:+
-        S "based on previously analysed" +:+ (plural slpSrf) +:+
-        S "with low" +:+. (plural $ fs_rc)),
-  (S "Repeat" +:+ (plural requirement) +:+ S "R3 to R7 until the" +:+
-        S "minimum" +:+ (phrase $ fs_rc) +:+ S "remains approximately" +:+
+  (S "Generate new potential" +:+ plural crtSlpSrf +:+
+        S "based on previously analysed" +:+ plural slpSrf +:+
+        S "with low" +:+. plural fs_rc),
+  (S "Repeat" +:+ plural requirement +:+ S "R3 to R7 until the" +:+
+        S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
         S "the same over a predetermined number of" +:+
         S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-        S "that generates the minimum" +:+ (phrase $ fs_rc) +:+
-        S "as the" +:+. (phrase $ crtSlpSrf)),
-  (S "Prepare the" +:+ (phrase $ crtSlpSrf) +:+ S "for" +:+ (phrase method_) +:+ 
+        S "that generates the minimum" +:+ phrase fs_rc +:+
+        S "as the" +:+. phrase crtSlpSrf),
+  (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ (phrase method_) +:+ 
         S "of" +:+ (plural slice) +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+ ((phrase $ fs_rc) `ofThe` (phrase $ crtSlpSrf)) +:+ 
+  (S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+ 
         S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
-  (S "Display the" +:+ (phrase $ crtSlpSrf) +:+ S "and the" +:+
+  (S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
         (phrase slice) +:+ (phrase element) +:+.
         S "displacements graphically" +:+ S "Give" +:+ 
         ((plural value) `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
@@ -504,6 +508,6 @@ s7_list = mkRefsList 1 [ --FIXME: names should be in italics
             S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008",
   S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
             S "Peter John Cleall. An efficient approach for locating the" +:+
-            (phrase $ crtSlpSrf) +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
+            phrase crtSlpSrf +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
             S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+.
             S "25 June 2010"]

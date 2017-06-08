@@ -22,8 +22,6 @@
  // ARRAY_C - ARRAY MODULE //
 
 #include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
 #include <string.h>
 #include "../include/Chipmunk.h"
 

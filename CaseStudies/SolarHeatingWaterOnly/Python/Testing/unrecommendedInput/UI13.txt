@@ -17,7 +17,7 @@
 #tstep	(10.0)
 10.0
 #tfinal	(50000)
-0
+86500
 #AbsTol	(1e-10)
 1e-10
 #RelTol	(1e-10)

@@ -92,6 +92,13 @@ class TestUnrecommendedInput(unittest.TestCase):
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 0 < tfinal < 86400\n' in str(w[0].message)
+            
+    def test_UI13(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI13.txt')
+        with warnings.catch_warnings(record=True) as w:
+            verify_params.verify_recommended(params)
+            assert issubclass(w[0].category, UserWarning)
+            assert 'It is recommended that 0 < tfinal < 86400\n' in str(w[0].message)
 
 
 class UnrecommendedInputSuite:

@@ -14,6 +14,8 @@ import Control.Lens ((^.))
 import Drasil.TableOfUnits (table_of_units)
 import Drasil.TableOfSymbols (table)
 import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import qualified Drasil.SRS as SRS
+import qualified Drasil.Introduction as Intro
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
@@ -54,12 +56,29 @@ data RefTab where
   TAandA :: RefTab
   TVerb :: Section -> RefTab
   -- add more here
+  
+-- | Introduction subsections
+data IntroSub where
+  IVerb    :: Section -> IntroSub
+  IPurpose :: Sentence -> IntroSub
+  IScope   :: Sentence -> Sentence -> IntroSub
+  IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
+  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 -- | Reference section. Contents are top level followed by a list of subsections.
 -- RefVerb is used for including verbatim subsections
 data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
--- | Document sections are either Verbatim or Reference sections (for now!)
-data DocSection = Verbatim Section | RefSec RefSec
+
+--FIXME: This needs to be updated for the requisite information in introductionF
+-- | Introduction section. Contents are top level followed by a list of 
+-- subsections. IntroVerb is used for including verbatim subsections.
+data IntroSec = IntroProg Sentence Sentence [IntroSub] 
+  -- ^ Temporary, will be modified once we've figured out more about the section.
+              | IntroVerb Section
+
+-- | Document sections are either Verbatim, Reference, or Introduction 
+-- sections (for now!)
+data DocSection = Verbatim Section | RefSec RefSec | IntroSec IntroSec
 
 -- | For creating the table of symbols intro
 data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
@@ -117,6 +136,7 @@ mkSections si l = foldr doit [] l
     doit :: DocSection -> [Section] -> [Section]
     doit (Verbatim s) ls = s : ls
     doit (RefSec rs)  ls = mkRefSec si rs : ls
+    doit (IntroSec is) ls = mkIntroSec si is : ls
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
@@ -212,3 +232,18 @@ tuI Derived = S "In addition to the basic units, several derived units are" +:+
 -- | Default table of units intro contains the 
 defaultTUI :: [TUIntro]
 defaultTUI = [System, Derived, TUPurpose]
+
+mkIntroSec :: SystemInformation -> IntroSec -> Section
+mkIntroSec _ (IntroVerb s) = s
+mkIntroSec si (IntroProg probIntro progDefn l) = 
+  Intro.introductionSection probIntro progDefn $ foldr (mkSubIntro si) [] l
+  where
+    mkSubIntro :: SystemInformation -> IntroSub -> [Section] -> [Section]
+    mkSubIntro _ (IVerb s) l' = s : l'
+    mkSubIntro _ (IPurpose intro) l' = Intro.purposeOfDoc intro : l'
+    mkSubIntro (SI sys _ _ _ _ _ _) (IScope main intendedPurp) l' = 
+      Intro.scopeOfRequirements main sys intendedPurp : l'
+    mkSubIntro (SI sys _ _ _ _ _ _) (IChar know understand appStandd) l' =
+      Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] []) : l'
+    mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
+    -- FIXME: s should be "looked up" using "b" once we have all sections being generated

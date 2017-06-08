@@ -137,6 +137,7 @@ executable tiny
     , Drasil.Template.MIS
     , Drasil.SpecificSystemDescription
     , Drasil.SRS
+    , Drasil.Introduction
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

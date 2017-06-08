@@ -21,7 +21,6 @@ import qualified Drasil.SRS as SRS
 import Drasil.ReferenceMaterial
 import Drasil.DocumentLanguage
 import Drasil.SpecificSystemDescription
-import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
@@ -43,7 +42,7 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 
 --type declarations for sections--
-s2, s3, s4, s5, s6, s7 :: Section
+s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -68,8 +67,15 @@ ssp_si = SI ssa srs [henryFrankis]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro 
-  [TUnits, tsymb s1_2_intro, TAandA]
-  ) : map Verbatim [s2, s3, s4, s5, s6, s7]
+  [TUnits, tsymb s1_2_intro, TAandA]) : 
+  IntroSec (IntroProg startIntro kSent 
+    [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
+    , IChar (S "solid mechanics") (S "undergraduate level 4" +:+ phrase physics)
+        EmptyS
+    , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
+    --FIXME: SRS.inModel should be removed and the instance model section 
+    --should be looked up from "inModel" by the interpreter while generating.
+  map Verbatim [s3, s4, s5, s6, s7]
 
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
@@ -103,10 +109,8 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 --automatically generated in mkSRS 
 
 -- SECTION 2 --
-s2 = introductionF ssa (startIntro, kSent) prpsOfDoc_p1 (scpIncl,scpEnd) 
-  (S "solid mechanics", S "undergraduate level 4" +:+ phrase physics, EmptyS)
-  (orgSecStart, inModel, SRS.inModel SRS.missingP [], orgSecEnd)--FIXME: This is kind of a hack as it is not referencing the real instance model
-  where startIntro = foldlSent [S "A", phrase slope, S "of geological", 
+startIntro, kSent :: Sentence
+startIntro = foldlSent [S "A", phrase slope, S "of geological", 
           phrase mass `sC` S "composed of", phrase soil,
           S "and rock, is subject to the influence of gravity on the" +:+.
           phrase mass, S "For an unstable", phrase slope +:+.
@@ -121,7 +125,7 @@ s2 = introductionF ssa (startIntro, kSent) prpsOfDoc_p1 (scpIncl,scpEnd)
           S "identifying the", phrase surface, S "most likely to",
           S "experience slip and an index of it's relative stability",
           S "known as the", phrase fs_rc]
-        kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+
+kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+
           S "The developed" +:+ phrase program +:+ 
           S "will be referred to as the" +:+ introduceAbb ssa +:+
           phrase program

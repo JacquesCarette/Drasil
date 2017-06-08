@@ -49,9 +49,12 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 --                    --
 -------------------------
 
-introductionF :: CI -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> (Sentence, Sentence, Sentence) -> (Sentence, CI, Section, Sentence) -> Section
-introductionF progName (problemIntroduction, programDefinition) (pOdPart1) (mainRequirement, intendedPurpose) (know, und, appStandd) (i, b, s, t) 
-  = introductionSection problemIntroduction programDefinition subsec
+introductionF :: (NamedIdea a, NamedIdea b) => 
+  a -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> 
+  (Sentence, Sentence, Sentence) -> (Sentence, b, Section, Sentence) -> Section
+introductionF progName (problemIntroduction, programDefinition) (pOdPart1)
+  (mainRequirement, intendedPurpose) (know, und, appStandd) (i, b, s, t) =
+    introductionSection problemIntroduction programDefinition subsec
       where subsec = [(purposeOfDoc pOdPart1), (scopeOfRequirements mainRequirement progName intendedPurpose), (charIntRdrF know und progName appStandd (SRS.userChar [] [])), (orgSec i b s t)]
 
 -- | Constructor for the introduction section
@@ -83,7 +86,7 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: Sentence -> CI -> Sentence -> Section
+scopeOfRequirements :: (NamedIdea a) => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
   where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. mainRequirement, S "Given the appropriate inputs, the code for",
@@ -95,7 +98,8 @@ scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [
 -- progName
 -- appStandd
 -- r
-charIntRdrF :: Sentence -> Sentence -> CI -> Sentence -> Section -> Section
+charIntRdrF :: (NamedIdea a) => 
+  Sentence -> Sentence -> a -> Sentence -> Section -> Section
 charIntRdrF know und progName appStandd r = 
   SRS.charOfIR (intReaderIntro know und progName appStandd r) []
 
@@ -104,7 +108,8 @@ charIntRdrF know und progName appStandd r =
 -- topic2     - sentence the reader should understand
 -- standard   - sentence of the standards the reader should be familiar with
 -- sectionRef - reference to user characteristic section
-intReaderIntro :: Sentence -> Sentence -> CI -> Sentence -> Section -> [Contents]
+intReaderIntro :: (NamedIdea a) => 
+  Sentence -> Sentence -> a -> Sentence -> Section -> [Contents]
 intReaderIntro topic1 topic2 progName standard sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,

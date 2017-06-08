@@ -56,8 +56,7 @@ def PCM_ErrorF(Ffile, Pfile, comparator):
         error = errorCalcInterp(timeFor, timePy, eNoPCM, eWPy)
     else:
         error = 1
-        
-    print error
+
     return error
 
 
@@ -76,6 +75,8 @@ def PCM_ErrorM(Mfile, Pfile, comparator):
         #tempPM += [float(values[2])]
         eWM += [float(values[4])]
         #ePM += [float(values[3])]
+        ##tNoPCM += [float(values[8])] #Adjust as needed
+        ##eNoPCM += [float(values[9])] #Adjust as needed
     f.close()
 
     f = open(Pfile, 'r')
@@ -102,10 +103,13 @@ def PCM_ErrorM(Mfile, Pfile, comparator):
         error = errorCalcInterp(timeM, timePy, eWM, eWPy)
     #elif comparator is "EPCM":
         #error = errorCalcInterp(timeM, timePy, ePM, ePPy)
+    elif comparator is "TWatNoP":
+        error = errorCalcInterp(timeFor, timePy, tNoPCM, tempWPy)
+    elif comparator is "EWatNoP":
+        error = errorCalcInterp(timeFor, timePy, eNoPCM, eWPy)
     else:
         error = 1
 
-    print error
     return error
 
 
@@ -124,6 +128,8 @@ def PCM_ErrorC(Cfile, Pfile, comparator):
         #tempPC += [float(values[2])]
         eWC += [float(values[3])]
         #ePC += [float(values[4])]
+        ##tNoPCM += [float(values[8])] #Adjust as needed
+        ##eNoPCM += [float(values[9])] #Adjust as needed
     f.close()
 
     f = open(Pfile, 'r')
@@ -150,10 +156,13 @@ def PCM_ErrorC(Cfile, Pfile, comparator):
         error = errorCalcInterp(timeC, timePy, eWC, eWPy)
     #elif comparator is "EPCM":
         #error = errorCalcInterp(timeC, timePy, ePC, ePPy)
+    elif comparator is "TWatNoP":
+        error = errorCalcInterp(timeFor, timePy, tNoPCM, tempWPy)
+    elif comparator is "EWatNoP":
+        error = errorCalcInterp(timeFor, timePy, eNoPCM, eWPy)
     else:
         error = 1
 
-    print error
     return error
 
 def errorCalcInterp(time1, time2, result1, result2):

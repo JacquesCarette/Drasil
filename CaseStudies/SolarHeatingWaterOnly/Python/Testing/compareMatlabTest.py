@@ -1,3 +1,6 @@
+#Commented sections pending removal
+#No valid comparison tests available for NoPCM hence the lack of action. If/when useable data becomes available,
+#apply the same setup as compareFortranTest.py as seen in test_CM5
 import sys
 sys.path.insert(0, '.')
 
@@ -50,11 +53,11 @@ class TestCompareMatlab(unittest.TestCase):
         # self.assertAlmostEqual(errEw, 0, places=None, msg='Water energy', delta=self.delta)
         # self.assertAlmostEqual(errEp, 0, places=None, msg='PCM energy', delta=self.delta)
         
-    def test_CF5(self):
-        errTw = PCM_Error.PCM_ErrorM('Testing/compareMatlab/M01.out', 'P05.out', 'TWatNoP')
-        errEw = PCM_Error.PCM_ErrorM('Testing/compareMatlab/M01.out', 'P05.out', 'EWatNoP')
-        self.assertAlmostEqual(errTw, 0, places=None, msg='Water temperature', delta=self.delta)
-        self.assertAlmostEqual(errEw, 0, places=None, msg='Water energy', delta=self.delta)
+    ##def test_CF5(self):##
+        ##errTw = PCM_Error.PCM_ErrorM('Testing/compareMatlab/M01.out', 'P05.out', 'TWatNoP')##
+        ##errEw = PCM_Error.PCM_ErrorM('Testing/compareMatlab/M01.out', 'P05.out', 'EWatNoP')##
+        ##self.assertAlmostEqual(errTw, 0, places=None, msg='Water temperature', delta=self.delta)##
+        ##self.assertAlmostEqual(errEw, 0, places=None, msg='Water energy', delta=self.delta)##
 
 
 class CompareMatlabSuite:

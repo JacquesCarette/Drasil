@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.SolidMechanics
 --------------------------
 
 sspTMods :: [RelationConcept]
-sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress]
+sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hooksLaw]
 
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"
@@ -67,7 +67,14 @@ effS_desc :: Sentence
 effS_desc = fixmeS
 
 --
+hooksLaw :: RelationConcept
+hooksLaw = makeRC "hooksLaw" (nounPhraseSP "Hook's law") hksLw_desc hksLw_rel
 
+hksLw_rel :: Relation
+hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
+
+hksLw_desc :: Sentence
+hksLw_desc = fixmeS
 
 
 {-

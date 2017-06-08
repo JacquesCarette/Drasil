@@ -17,14 +17,14 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, water
               si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
               ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
               omega_i, bi, lbi, lsi, hi_2, genForce, momntOfBdy,
-              delta, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+              genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
   ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, genForce,
-  momntOfBdy, delta, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
+  momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
@@ -200,7 +200,7 @@ momntOfBdy  = uc' "M" (cn $ "moment of a body; assumed 2D allowing a scalar")
   fixme
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
-delta       = uc' "delta" (cn $ "generic displacement of a body")
+genDisplace = uc' "genDisplace" (cn $ "generic displacement of a body")
   fixme
   (Greek Delta_L) metre
 

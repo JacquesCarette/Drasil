@@ -37,57 +37,57 @@ class TestUnrecommendedInput(unittest.TestCase):
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 0.002 <= D/L <= 200\n' in str(w[0].message)
 
-    def test_UI16(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI16.txt')
+    def test_UI05(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI05.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that Ac <= pi * (D/2) ^ 2\n' in str(w[0].message)
 
-    def test_UI17(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI17.txt')
+    def test_UI06(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI06.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 950 < rho_w <= 1000\n' in str(w[0].message)
 
-    def test_UI18(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI18.txt')
+    def test_UI07(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI07.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 950 < rho_w <= 1000\n' in str(w[0].message)
 
-    def test_UI19(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI19.txt')
+    def test_UI08(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI08.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 4170 < C_w < 4210\n' in str(w[0].message)
 
-    def test_UI20(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI20.txt')
+    def test_UI09(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI09.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 4170 < C_w < 4210\n' in str(w[0].message)
 
-    def test_UI21(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI21.txt')
+    def test_UI10(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI10.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 10 < hc < 10000\n' in str(w[0].message)
 
-    def test_UI22(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI22.txt')
+    def test_UI11(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI11.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)
             assert 'It is recommended that 10 < hc < 10000\n' in str(w[0].message)
 
-    def test_UI25(self):
-        params = load_params.load_params('Testing/unrecommendedInput/UI25.txt')
+    def test_UI12(self):
+        params = load_params.load_params('Testing/unrecommendedInput/UI12.txt')
         with warnings.catch_warnings(record=True) as w:
             verify_params.verify_recommended(params)
             assert issubclass(w[0].category, UserWarning)

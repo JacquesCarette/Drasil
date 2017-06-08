@@ -67,9 +67,6 @@ authors = [nikitha, spencerSmith]
 glassBR_srs' :: Document
 glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 
---FIXME: Missing ToS intro because this example was using the default 
--- (nuclear literature related) intro.
-
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]):
   map Verbatim [s2, s3, s4, s5, s6, s7, s8, s9, s10, s11]
@@ -301,9 +298,6 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
              (plural value `ofThe` S "specification"), (plural parameter),
               S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
-
---s6_2 = SRS.solCharSpec
---  [s6_2_intro] [s6_2_1, s6_2_2, s6_2_3, s6_2_4, s6_2_5]
 
 s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", (plural assumption), S "considered and the",

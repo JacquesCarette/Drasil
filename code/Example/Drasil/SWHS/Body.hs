@@ -118,7 +118,7 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
 s2_kSent :: Sentence
 s2_kSent = EmptyS +:+. (phrase swhs_pcm) +:+ S "The developed" +:+
   (phrase program) +:+ S "will be referred to as" +:+
-  (titleize progName) +:+ sParen (short progName)
+  (titleize progName) +:+ sParen (short progName) -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating

@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage[legalpaper, landscape, margin=0.5in]{geometry}
+\usepackage{adjustbox}
+\usepackage{graphicx}
+\begin{document}
+\title{Testing GlassBR}
+\maketitle
+%\begin{table}[]
+%\caption{testCalculations}
+%\label{testCalculations}
+%\begin{tabular}{l|l|l|l|l|l|l|l|l|l}
+%Ref & Test Name & fileName.py & Test Purpose & Traceability & Input File & %Significant Input & Expected Output & Notes \\
+%1 & ? & testCalculations & to make sure returns expected value of pb & %function uses equations from DD1's B and IM1's Pb & defaultInput.txt & see %Input File & `For the given input parameters, the glass is considered safe' %& Improve: instead of equality of floats (assertEqual), should use some %epsilon error \\
+%\end{tabular}
+%\end{table}
+\begin{table}[h!]
+\centering
+\caption{testCalculations}
+\label{testCalculations}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{*{10}{|c}}
+\hline
+\textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
+\hline
+\hline
+1 & ? & testCalculations & to make sure expected pb values is returned & uses equations from DD1's B and IM1's Pb & defaultInput.txt & see Input File & 'For the given input parameters, the glass is considered safe' & Improve: instead of equality of floats (assertEqual), should use some epsilon error \\
+2 & ? & testCalculations2 & " & " & testInput1.txt & " & " & " \\
+3 & ? & testCalculations3 & " & " & testInput2.txt & " & " & " \\
+4 & ? & testCalculations4 & " & " & testInput3.txt & " & " & " \\
+5 & ? & testCalculations5 & " & " & testInput4.txt & " & " & " \\
+6 & ? & testCalculations6 & " & " & testInput5.txt & " & " & " \\
+7 & ? & testCalculations7 & " & " & testInput6.txt & " & " & " \\
+\hline
+\end{tabular}
+\end{adjustbox}
+\end{table}
+\end{document}

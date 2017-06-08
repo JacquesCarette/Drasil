@@ -215,6 +215,40 @@ void test_deleteObject_n() {
   TEST_ASSERT_TRUE((!arrayContains(test_array, &test_val0)));
 }
 
+void test_dynamic_resize() {
+  Array * test_array = arrayNew(3);
+  int test_val = 196613;
+  for (int i = 0; i < 4; i++) {
+    arrayPush(test_array, &test_val);
+  }
+  TEST_ASSERT_TRUE(6==test_array->max);
+}
+
+void test_dynamic_resize_bin() {
+  Array * test_array = arrayNew(0);
+  int test_val = 196613;
+  for (int i = 0; i < 5; i++) {
+    arrayPush(test_array, &test_val);
+  }
+  TEST_ASSERT_TRUE(8==test_array->max);
+  for (int i = 0; i < 4; i++) {
+    arrayPush(test_array, &test_val);
+  }
+  TEST_ASSERT_TRUE(16==test_array->max);
+  for (int i = 0; i < 8; i++) {
+    arrayPush(test_array, &test_val);
+  }
+  TEST_ASSERT_TRUE(32==test_array->max);
+  for (int i = 0; i < 16; i++) {
+    arrayPush(test_array, &test_val);
+  }
+  TEST_ASSERT_TRUE(64==test_array->max);
+  for (int i = 0; i < 32; i++) {
+    arrayPush(test_array, &test_val);
+  }
+  TEST_ASSERT_TRUE(128==test_array->max);
+}
+
 
 int main() {
   UNITY_BEGIN();
@@ -233,5 +267,7 @@ int main() {
   RUN_TEST(test_deleteObject);
   RUN_TEST(test_not_deleteObject);
   RUN_TEST(test_deleteObject_n);
+  RUN_TEST(test_dynamic_resize_bin);
+  RUN_TEST(test_dynamic_resize);
   return UNITY_END();
 }

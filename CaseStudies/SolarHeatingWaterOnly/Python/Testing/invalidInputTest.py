@@ -71,7 +71,7 @@ class TestInvalidInput(unittest.TestCase):
 
     def test_FI17(self):
         params = load_params.load_params('Testing/invalidInput/FI17.txt')
-        self.assertRaisesRegexp(ValueError, 'Tinit must be > 0 and < 100\n', verify_params.verify_valid, params)
+        self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
 
     def test_FI18(self):
         params = load_params.load_params('Testing/invalidInput/FI18.txt')
@@ -79,14 +79,10 @@ class TestInvalidInput(unittest.TestCase):
 
     def test_FI19(self):
         params = load_params.load_params('Testing/invalidInput/FI19.txt')
-        self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
+        self.assertRaisesRegexp(ValueError, 'tfinal must be > 0\n', verify_params.verify_valid, params)
 
     def test_FI20(self):
         params = load_params.load_params('Testing/invalidInput/FI20.txt')
-        self.assertRaisesRegexp(ValueError, 'tfinal must be > 0\n', verify_params.verify_valid, params)
-
-    def test_FI21(self):
-        params = load_params.load_params('Testing/invalidInput/FI21.txt')
         self.assertRaisesRegexp(ValueError, 'tfinal must be > 0\n', verify_params.verify_valid, params)
 
 

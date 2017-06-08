@@ -66,7 +66,8 @@ class TestInvalidInput(unittest.TestCase):
         self.assertRaises(ZeroDivisionError, load_params.load_params, 'Testing/invalidInput/FI15.txt')
 
     def test_FI16(self):
-        self.assertRaises(ZeroDivisionError, load_params.load_params, 'Testing/invalidInput/FI16.txt')
+        params = load_params.load_params('Testing/invalidInput/FI16.txt')
+        self.assertRaisesRegexp(ValueError, 'Tinit must be > 0 and < 100\n', verify_params.verify_valid, params)
 
     def test_FI17(self):
         params = load_params.load_params('Testing/invalidInput/FI17.txt')
@@ -74,7 +75,7 @@ class TestInvalidInput(unittest.TestCase):
 
     def test_FI18(self):
         params = load_params.load_params('Testing/invalidInput/FI18.txt')
-        self.assertRaisesRegexp(ValueError, 'Tinit must be > 0 and < 100\n', verify_params.verify_valid, params)
+        self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
 
     def test_FI19(self):
         params = load_params.load_params('Testing/invalidInput/FI19.txt')
@@ -82,22 +83,10 @@ class TestInvalidInput(unittest.TestCase):
 
     def test_FI20(self):
         params = load_params.load_params('Testing/invalidInput/FI20.txt')
-        self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
+        self.assertRaisesRegexp(ValueError, 'tfinal must be > 0\n', verify_params.verify_valid, params)
 
     def test_FI21(self):
         params = load_params.load_params('Testing/invalidInput/FI21.txt')
-        self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
-
-    def test_FI22(self):
-        params = load_params.load_params('Testing/invalidInput/FI22.txt')
-        self.assertRaisesRegexp(ValueError, 'Tc must be > Tinit\n', verify_params.verify_valid, params)
-
-    def test_FI23(self):
-        params = load_params.load_params('Testing/invalidInput/FI23.txt')
-        self.assertRaisesRegexp(ValueError, 'tfinal must be > 0\n', verify_params.verify_valid, params)
-
-    def test_FI24(self):
-        params = load_params.load_params('Testing/invalidInput/FI24.txt')
         self.assertRaisesRegexp(ValueError, 'tfinal must be > 0\n', verify_params.verify_valid, params)
 
 

@@ -28,8 +28,8 @@
 #include "../include/Chipmunk.h"
 
 //       CONSTANTS       //
-const int START_INDEX  = 0;
-const int DEFAULT_SIZE = 4;
+static const int START_INDEX  = 0;
+static const int DEFAULT_SIZE = 4;
 
 
 /**
@@ -64,7 +64,7 @@ void arrayFree(Array *array) {
  * doubles the maximum size of the array
  * arr - takes a pointer to an array
  */
-void arrayResize(Array *arr) {
+static void arrayResize(Array *arr) {
   arr->max *= 2;
   arr->arr = realloc(arr->arr, arr->max * sizeof(void*));
 }

@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Drasil.SSP.Units
+import Drasil.SSP.Defs
 import Data.Drasil.Quantities.SolidMechanics
 
 --------------------------
@@ -18,13 +19,10 @@ sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress]
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"
 
--- possibly temporary "factor of safety" hack FIXME?
-factor, safety :: NamedChunk
-factor = npnc "factor" (cn' "factor")
-safety = npnc "safety" (cnIES "safety")
+-- 
 
 fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" (factor `of_''` safety) fs_desc fs_rel
+fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel
 
 fs_rel :: Relation
 fs_rel = (C fs) := (C shearRes) / (C mobShear)

@@ -196,6 +196,7 @@ executable ssp
     , Drasil.SSP.TMods
     , Drasil.SSP.GenDefs
     , Drasil.SSP.DataDefs
+    , Drasil.SSP.IMods
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.DocumentLanguage

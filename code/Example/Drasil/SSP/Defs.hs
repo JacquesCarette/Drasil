@@ -2,7 +2,7 @@ module Drasil.SSP.Defs where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Drasil.SSP.TMods
+import Data.Drasil.SentenceStructures
 
 ----Acronyms-----
 acronyms :: [CI]
@@ -45,4 +45,11 @@ plnStrn = dcc "plane strain" (cn' "plane strain")
           
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
     ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
-    (phrase $ fs_rc) `sC` S "and therefore most likely to experience failure.")
+    ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
+    
+--
+factor, safety :: NamedChunk
+factor = npnc "factor" (cn' "factor")
+safety = npnc "safety" (cnIES "safety")
+factorOfSafety :: NP
+factorOfSafety = factor `of_''` safety

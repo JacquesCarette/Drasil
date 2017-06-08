@@ -15,6 +15,7 @@ import Drasil.SSP.Reqs
 import Drasil.SSP.TMods
 import Drasil.SSP.GenDefs
 import Drasil.SSP.DataDefs
+import Drasil.SSP.IMods
 import qualified Drasil.SRS as SRS
 
 import Drasil.ReferenceMaterial
@@ -55,7 +56,7 @@ s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
   s7_list :: Contents
 
-s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs :: [Contents]
+s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -251,7 +252,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
 
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS) 
-      ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, [s4_2_5_p2,s4_2_5_p3], [s4_2_6Table2, s4_2_6Table3]) []
+      ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
   where ddEnding = (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
                   S "can be solved by direct analysis of given inputs. The interslice" +:+ 
                   S "forces DD9 are force variables that must be written" +:+. 
@@ -337,6 +338,8 @@ s4_2_5_p3 = foldlSP [(S "values") `ofThe'` (S "interslice normal force"),
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit equations cannot be derived and an", 
   S "iterative", (plural solution), S "method is required"]
+  
+s4_2_5_IMods = map sspSymMapT sspIMods
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below

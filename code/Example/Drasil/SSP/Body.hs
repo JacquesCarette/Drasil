@@ -14,6 +14,7 @@ import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
 import Drasil.SSP.TMods
 import Drasil.SSP.GenDefs
+import Drasil.SSP.DataDefs
 import qualified Drasil.SRS as SRS
 
 import Drasil.ReferenceMaterial
@@ -54,7 +55,7 @@ s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
   s7_list :: Contents
 
-s4_2_2_tmods, s4_2_3_genDefs :: [Contents]
+s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs :: [Contents]
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -78,6 +79,9 @@ mgBod :: [Section]
 
 sspSymMapT :: RelationConcept -> Contents 
 sspSymMapT = symbolMapFun sspSymbols Theory
+
+sspSymMapD :: QDefinition -> Contents 
+sspSymMapD = symbolMapFun sspSymbols Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -247,7 +251,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
 
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS) 
-      ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, [], [s4_2_5_p2,s4_2_5_p3], [s4_2_6Table2, s4_2_6Table3]) []
+      ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, [s4_2_5_p2,s4_2_5_p3], [s4_2_6Table2, s4_2_6Table3]) []
   where ddEnding = (at_start' definition) +:+ S "DD1 to DD8 are the force variables that" +:+
                   S "can be solved by direct analysis of given inputs. The interslice" +:+ 
                   S "forces DD9 are force variables that must be written" +:+. 
@@ -306,6 +310,7 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
+s4_2_4_dataDefs = map sspSymMapD sspDataDefs
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below

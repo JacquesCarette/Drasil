@@ -16,13 +16,20 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-1 & ? & testCalculations & to make sure expected pb values is returned & uses equations from DD1's B and IM1's Pb & defaultInput.txt & see Input File & 'For the given input parameters, the glass is considered safe' & Improve: instead of equality of floats (assertEqual), should use some epsilon error \\
-2 & ? & testCalculations2 & " & " & testInput1.txt & " & " & " \\
-3 & ? & testCalculations3 & " & " & testInput2.txt & " & " & " \\
-4 & ? & testCalculations4 & " & " & testInput3.txt & " & " & " \\
-5 & ? & testCalculations5 & " & " & testInput4.txt & " & " & " \\
-6 & ? & testCalculations6 & " & " & testInput5.txt & " & " & " \\
-7 & ? & testCalculations7 & " & " & testInput6.txt & " & " & " \\
+1 & ? & testCalculations & to make sure expected pb values is returned & uses equations from DD1's B and IM1's Pb & defaultInput.txt & see Input File & 'For the given input parameters, the glass is considered safe' & Improve: instead of equality of floats (assertEqual), should use some epsilon error 
+\\
+2 & ? & testCalculations2 & " & " & testInput1.txt & " & " & " 
+\\
+3 & ? & testCalculations3 & " & " & testInput2.txt & " & " & " 
+\\
+4 & ? & testCalculations4 & " & " & testInput3.txt & " & " & " 
+\\
+5 & ? & testCalculations5 & " & " & testInput4.txt & " & " & " 
+\\
+6 & ? & testCalculations6 & " & " & testInput5.txt & " & " & " 
+\\
+7 & ? & testCalculations7 & " & " & testInput6.txt & " & " & " 
+\\
 \hline
 \end{tabular}
 \end{adjustbox}
@@ -38,25 +45,25 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-8 & ? & testCheckConstraints & to ensure a (i.e. length) \textgreater 0 & Following A1 (glass must be of rectangular shape); following physical constraint from Table 2 where “a \textgreater 0” and software constraint from Table 2 where “a =\textgreater dmin” & testInvalidInput1.txt  & a = -1600 & InputError: a and b must be greater than 0 & 
+8 & ? & testCheckConstraints & to ensure a (i.e. length) \textgreater 0 & Following A1 (glass must be of rectangular shape); following physical constraint from Table 2 where “a \textgreater 0” and software constraint from Table 2 where “a =\textgreater {d\textsubscript{min}}” & testInvalidInput1.txt  & a = -1600 & InputError: a and b must be greater than 0 & 
 \\
-9 & ? & testCheckConstraints2 & to ensure b (i.e. breadth) \textgreater 0 & Following physical constraint from Table 2 where “b \textgreater 0” and software constraint from Table 2 where “b =\textgreater dmin” & testInvalidInput2.txt & b = -1500 & InputError: a and b must be greater than 0 &
+9 & ? & testCheckConstraints2 & to ensure b (i.e. breadth) \textgreater 0 & Following physical constraint from Table 2 where “b \textgreater 0” and software constraint from Table 2 where “b =\textgreater {d\textsubscript{min}}” & testInvalidInput2.txt & b = -1500 & InputError: a and b must be greater than 0 &
 \\
 10 & ? & testCheckConstraints3 & to ensure 1 \textless a/b \textless 5 & length should pertain to the longer side, following physical constraint from Table 2 where “b \textless a” & testInvalidInput3.txt  & b = 2000 & (a/b=0.8\textless1); InputError: a/b must be between 1 and 5 &
 \\
-11 & ? & testCheckConstraints4 & to ensure a/b (i.e. aspect ratio) \textless 5 & following software constraint from Table 2 where “a/b \textless ARmax” & testInvalidInput4.txt & b = 200 & (a/b=8\textgreater5); InputError: a/b must be between 1 and 5 & 
+11 & ? & testCheckConstraints4 & to ensure a/b (i.e. aspect ratio) \textless 5 & following software constraint from Table 2 where “a/b \textless {AR\textsubscript{max}}” & testInvalidInput4.txt & b = 200 & (a/b=8\textgreater5); InputError: a/b must be between 1 and 5 & 
 \\
-12 & ? & testCheckConstraints5 & to ensure input t value (i.e. nominal thickness) is one of the industrial standard thicknesses & following R1 (t description) & testInvalidInput5.txt & t = 7 & InputError: t must be in,{[}2.5,2.7,3.0,4.0,,5.0,6.0,8.0, 10.0,12.0,16.0,,19.0,22.0{]} & 
+12 & ? & testCheckConstraints5 & to ensure input t value (i.e. nominal thickness) is one of the industrial standard thicknesses & following R1 (t description) & testInvalidInput5.txt & t = 7 & InputError: t must be in {[}2.5,2.7,3.0,4.0,,5.0,6.0,8.0, 10.0,12.0,16.0,,19.0,22.0{]} & 
 \\
-13 & ? & testCheckConstraints6 & to ensure input w value (i.e. weight of charge) is \textgreater minimum permissible input charge weight & following value of wmin (4.5 kg) from Table 3 & testInvalidInput6.txt & w = 3 & InputError: wtnt must be between 4.5 and 910 &
+13 & ? & testCheckConstraints6 & to ensure input w value (i.e. weight of charge) is \textgreater minimum permissible input charge weight & following value of {w\textsubscript{min}} (4.5 kg) from Table 3 & testInvalidInput6.txt & w = 3 & InputError: wtnt must be between 4.5 and 910 &
 \\
-14 & ? & testCheckConstraints7 & to ensure input w value (i.e. weight of charge) is \textless maximum permissible input charge weight & following value of wmax (910 kg) from Table 3 & testInvalidInput7.txt & w = 1000 & InputError: wtnt must be between 4.5 and 910 & 
+14 & ? & testCheckConstraints7 & to ensure input w value (i.e. weight of charge) is \textless maximum permissible input charge weight & following value of {w\textsubscript{max}} (910 kg) from Table 3 & testInvalidInput7.txt & w = 1000 & InputError: wtnt must be between 4.5 and 910 & 
 \\
 15 & ? & testCheckConstraints8 & to ensure input tnt value (i.e. TNT equivalent factor) \textgreater 0                                                                             & following physical constraint from Table 2 where “TNT \textgreater 0” & testInvalidInput8.txt & tnt = -2                                                                & InputError: TNT must be greater than 0 &
 \\
-16 & ? & testCheckConstraints9 & to see if input SD (i.e. Stand off Distance) is \textgreater minimum stand off distance permissible for input & following value of SDmin (6 m) from Table 3 & testInvalidInput9.txt & sdx = 0; sdy = 1.0; sdz = 2.0 & InputError: SD must be between 6 and 130 &
+16 & ? & testCheckConstraints9 & to see if input SD (i.e. Stand off Distance) is \textgreater minimum stand off distance permissible for input & following value of {SD\textsubscript{min}} (6 m) from Table 3 & testInvalidInput9.txt & sdx = 0; sdy = 1.0; sdz = 2.0 & InputError: SD must be between 6 and 130 &
 \\
-17 & ? & testCheckConstraints10 & to see if input SD (i.e. Stand off Distance) is \textless maximum stand off distance permissible for input & following value of SDmax (130 m) from Table 3 & testInvalidInput10.txt & sdx = 0; sdy = 200; sdz = 100 & InputError: SD must be between 6 and 130 &
+17 & ? & testCheckConstraints10 & to see if input SD (i.e. Stand off Distance) is \textless maximum stand off distance permissible for input & following value of {SD\textsubscript{max}} (130 m) from Table 3 & testInvalidInput10.txt & sdx = 0; sdy = 200; sdz = 100 & InputError: SD must be between 6 and 130 &
 \\
 18 & ? & testCheckConstraints11 & see 8 & see 8 & testInvalidInput11.txt & a = 0 & InputError: a and b must be greater than 0 &
 \\
@@ -76,7 +83,8 @@
 \\
 26 & ? & testCheckConstraints19 & see 16 & see 16 & testInput11.txt & sdx = 0; sdy = 6; sdz = 0 & "Encountered an unexpected exception" & 
 \\
-27 & ? & testCheckConstraints20 & see 17 & see 17 & testInput12.txt & sdx = 130; sdy = 0; sdz = 0 & "Encountered an unexpected exception" & \\
+27 & ? & testCheckConstraints20 & see 17 & see 17 & testInput12.txt & sdx = 130; sdy = 0; sdz = 0 & "Encountered an unexpected exception" & 
+\\
 \hline
 \end{tabular}
 \end{adjustbox}

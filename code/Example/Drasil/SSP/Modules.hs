@@ -109,8 +109,8 @@ mod_slipslicer_desc :: ConceptChunk
 mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
   (S "When preparing a" +:+ phrase slpSrf +:+ S "for analysis by the" +:+
   titleize morPrice +:+ titleize module_ +:+ S "or the RFEM" +:+
-  titleize module_ `sC` S "the x-coordinates defining" +:+ S "boundaries" `ofThe`
-  plural slice +:+ S "are identified and stored in a" +:+. phrase vector)
+  titleize module_ `sC` S "the x-coordinates defining" +:+ (S "boundaries" `ofThe`
+  plural slice) +:+ S "are identified and stored in a" +:+. phrase vector)
 
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
@@ -145,7 +145,7 @@ mod_slipweight = makeImpModule mod_slipweight_desc
 -- morg price solver module
 mod_mp_desc :: ConceptChunk
 mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
-  (S "Calculates" +:+ phrase fs_rc `ofGiv` phrase slpSrf `sC`
+  (S "Calculates" +:+ (phrase fs_rc `ofGiv` phrase slpSrf) `sC`
   S "through implementation of a" +:+ titleize morPrice +:+
   phrase ssa +:+. phrase method_)
 
@@ -163,7 +163,7 @@ mod_rfem_desc :: ConceptChunk
 mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
   (S "Calculate" +:+ (S "global" +:+ phrase fs_rc `sC` S "local" +:+
   phrase slice +:+ plural fs_rc `sC` S "and local" +:+
-  phrase slice +:+ S "displacements") `ofGiv` phrase slpSrf +:+
+  phrase slice +:+ S "displacements" `ofGiv` phrase slpSrf) +:+
   S "under given conditions, through implementation of a" +:+
   phrase rgFnElm +:+ phrase ssa +:+. phrase method_)
 

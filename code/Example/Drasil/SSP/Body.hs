@@ -121,7 +121,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
           phrase interest, S "both when analyzing natural", plural slope `sC` 
           S "and when designing an excavated" +:+. phrase slope,
           at_start ssa, S "is", 
-          S "assessment" `ofThe` S "safety of a" +:+ phrase slope `sC`
+          (S "assessment" `ofThe` S "safety of a") +:+ phrase slope `sC`
           S "identifying the", phrase surface, S "most likely to",
           S "experience slip and an index of it's relative stability",
           S "known as the", phrase fs_rc]
@@ -464,12 +464,12 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "as the" +:+. phrase crtSlpSrf),
   (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+ 
         S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+ phrase fs_rc `ofThe` phrase crtSlpSrf +:+ 
+  (S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+ 
         S "using the" +:+ titleize morPrice +:+. phrase method_),
   (S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
         phrase slice +:+ phrase element +:+.
         S "displacements graphically" +:+ S "Give" +:+ 
-        plural value `ofThe` plural fs_rc +:+ S "calculated" +:+
+        (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
         S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
   

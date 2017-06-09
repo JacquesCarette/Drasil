@@ -455,21 +455,22 @@ s5_1_list = enumSimple 1 (short requirement) [
   (S "Generate new potential" +:+ plural crtSlpSrf +:+
         S "based on previously analysed" +:+ plural slpSrf +:+
         S "with low" +:+. plural fs_rc),
-  (S "Repeat" +:+ plural requirement +:+ S "R3 to R7 until the" +:+
+  (S "Repeat" +:+ plural requirement +:+ short requirement :+: S "3 to" +:+
+        short requirement :+: S "7 until the" +:+
         S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
         S "the same over a predetermined number of" +:+
         S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
         S "that generates the minimum" +:+ phrase fs_rc +:+
         S "as the" +:+. phrase crtSlpSrf),
-  (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ (phrase method_) +:+ 
-        S "of" +:+ (plural slice) +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+ 
-        S "using the" +:+ (titleize morPrice) +:+. (phrase method_)),
+  (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+ 
+        S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
+  (S "Calculate" +:+ phrase fs_rc `ofThe` phrase crtSlpSrf +:+ 
+        S "using the" +:+ titleize morPrice +:+. phrase method_),
   (S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
-        (phrase slice) +:+ (phrase element) +:+.
+        phrase slice +:+ phrase element +:+.
         S "displacements graphically" +:+ S "Give" +:+ 
-        ((plural value) `ofThe` (plural $ fs_rc)) +:+ S "calculated" +:+
-        S "by the" +:+ (titleize morPrice) +:+. (phrase method_))
+        plural value `ofThe` plural fs_rc +:+ S "calculated" +:+
+        S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
   
 s5_1_table = table_inputdata
@@ -479,7 +480,8 @@ table_inputdata = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this h
   [cqs poissnsR] ++ map cqs [fricAngle, dryWeight, satWeight, waterWeight])
  
 -- SECTION 5.2 --
-s5_2 = nonFuncReqF [accuracy, performanceSpd] [correctness, understandability, reusability, maintainability] r EmptyS
+s5_2 = nonFuncReqF [accuracy, performanceSpd]
+  [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
@@ -495,7 +497,7 @@ s7_list = mkRefsList 1 [ --FIXME: names should be in italics
   S "D.G. Fredlund and J.Krahn. Comparison of slope stability methods of" +:+.
             phrase analysis +:+. S "Can. Geotech. J., (14):429-439, 4 April 1977",
   S "Nirmitha Koothoor. A document drive approach to certifying" +:+.
-            (phrase sciCompS) +:+ S "Master's thesis, McMaster University," +:+.
+            phrase sciCompS +:+ S "Master's thesis, McMaster University," +:+.
             S "Hamilton, Ontario, Canada, 2013",
   S "David L. Parnas and P.C. Clements. A rational design process: How" +:+
             S "and why to fake it. IEEE Transactions on Software Engineering," +:+.
@@ -508,10 +510,10 @@ s7_list = mkRefsList 1 [ --FIXME: names should be in italics
             S "Engineering Processes, SREP'05, pages 107-121, Paris, France" `sC`
             S "2005. In conjunction with 13th IEEE International Requirements" +:+.
             S "Engineering Conference",
-  S "Dieter Stolle and Peijun Guo. Limit equilibrum" +:+ (phrase ssa) +:+.
+  S "Dieter Stolle and Peijun Guo. Limit equilibrum" +:+ phrase ssa +:+.
             S "using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008",
   S "Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and" +:+ 
             S "Peter John Cleall. An efficient approach for locating the" +:+
-            phrase crtSlpSrf +:+ S "in" +:+ (plural ssa) +:+ S "using a" +:+
+            phrase crtSlpSrf +:+ S "in" +:+ plural ssa +:+ S "using a" +:+
             S "real-coded genetic algorithm. Can. Geotech. J., (47):806-820," +:+.
             S "25 June 2010"]

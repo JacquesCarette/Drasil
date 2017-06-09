@@ -142,33 +142,33 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-34 & ? & testInterp & & & - & & & 
+34 & ? & testInterp & to ensure interpolated values are correctly calculated & - & - & x in {[}x1, x2{]} & & 
 \\
-35 & ? & testInterp2 & & & - & & & 
+35 & ? & testInterp2 & " & - & - & x in {[}x1, x2{]},where x is a Float & & 
 \\
-36 & ? & testInterp3 & & & - & & &  
+36 & ? & testInterp3 & " & - & - & x1 \textless x2 \textless x & &  
 \\
-37 & ? & testInterp4 & & & - & & & &  
+37 & ? & testInterp4 & " & - & - & x \textless x2 \textless x1 & &  
 \\
-38 & ? & testInterp5 & & & - & & &  
+38 & ? & testInterp5 & " & - & - & negative, x \textless x2 \textless x1 & &  
 \\
-39 & ? & testInterp6 & & & - & & &  
+39 & ? & testInterp6 & " & - & - & negative, x in {[}x1, x2{]} & &  
 \\
-40 & ? & testInterp7 & & & - & & &  
+40 & ? & testInterp7 & " & - & - & negative, x1 \textless x2 \textless x & &  
 \\
-41 & ? & testInterp8 & & & - & & &  
+41 & ? & testInterp8 & " & - & - & value1 in data1 and jdx == 0? & &  
 \\
-42 & ? & testInterp9 & & & - & & &  
+42 & ? & testInterp9 & " & - & - & value1 in data1 and jdx == 0 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} & &  
 \\
-43 & ? & testInterp10 & & & - & & &  
+43 & ? & testInterp10 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and value2 \textgreater data2{[}jdx, idx{]} & &  
 \\
-44 & ? & testInterp11 & & & - & & &  
+44 & ? & testInterp11 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and value2 \textless data2{[}jdx, idx{]} & &  
 \\
-45 & ? & testInterp12 & & & - & & &  
+45 & ? & testInterp12 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and jdx+1 == (data2{[}:, idx{]}).argmax and value2 \textgreater data2{[}jdx, idx{]} & &  
 \\
-46 & ? & testInterp13 & & & - & & &  
+46 & ? & testInterp13 & " & - & - & value1 not in data1 and value2 in data2{[}:, idx{]} and kdx == 0 & &  
 \\
-47 & ? & testInterp14 & & & - & & &  
+47 & ? & testInterp14 & " & - & - & value1 not in data1 and value2 in data2{[}:, idx{]} and data2{[}:, idx+1{]} and data2{[}kdx, idx+1{]} = data2 {[}kdx+1, idx+1{]} & &  
 \\
 \hline
 \end{tabular}
@@ -214,11 +214,11 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-55 & ? & testOutputFormat.py & to ensure structure of output data matches desired output formatting & - & defaultInput.txt & see Input File & testoutput.txt = output.txt &
+55 & ? & testOutputFormat & to ensure structure of output data matches desired output formatting & - & defaultInput.txt & see Input File & testoutput.txt = output.txt &
 \\
-56 & ? & testOutputForma2.py & " & - & testInput3.txt & " & testoutput.txt = output3.txt &
+56 & ? & testOutputForma2 & " & - & testInput3.txt & " & testoutput.txt = output3.txt &
 \\
-57 & ? & testOutputForma3.py & " & - & testInput4.txt & " & testoutput.txt = output4.txt &
+57 & ? & testOutputForma3 & " & - & testInput4.txt & " & testoutput.txt = output4.txt &
 \\
 \hline
 \end{tabular}

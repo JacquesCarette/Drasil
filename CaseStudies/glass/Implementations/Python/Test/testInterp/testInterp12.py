@@ -31,7 +31,7 @@ class TestInterp(unittest.TestCase):
 # value1 in data1 and data2[jdx,idx] == data2[jdx+1,idx] and jdx+1 == (data2[:,idx]).argmax
 #   and value2 > data2[jdx,idx]
     def test_find_bounds(self):
-        dx, jdx, kdx, num_interp1, num_interp2 = interp.find_bounds(self.data1, self.data2, 4.5, 2.6)
+        idx, jdx, kdx, num_interp1, num_interp2 = interp.find_bounds(self.data1, self.data2, 4.5, 2.6)
         self.assertEqual(idx, 0)
         self.assertEqual(jdx, 7)
         self.assertEqual(kdx, 4)

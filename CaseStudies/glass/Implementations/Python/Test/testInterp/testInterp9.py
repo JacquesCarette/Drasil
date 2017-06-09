@@ -38,7 +38,7 @@ class TestInterp(unittest.TestCase):
         self.assertEqual(num_interp2, 1)
         
     def test_interp(self):
-        interp_value=interp.interp(3, 1, 0, 0, 1, self.data1, self.data2, self.data3, 140, 4.3)
+        interp_value = interp.interp(3, 1, 0, 0, 1, self.data1, self.data2, self.data3, 140, 4.3)
         self.assertEqual(interp_value, 5.15)
 
 if __name__ == "__main__":

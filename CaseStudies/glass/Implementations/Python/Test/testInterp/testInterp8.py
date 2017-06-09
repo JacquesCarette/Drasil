@@ -29,16 +29,16 @@ class TestInterp(unittest.TestCase):
 
 # value1 in data1 and jdx == 0
     def test_find_bounds(self):
-        idx,jdx,kdx,num_interp1,num_interp2=interp.find_bounds(self.data1,self.data2,4.5,1.0)
-        self.assertEqual(idx,0)
-        self.assertEqual(jdx,0)
-        self.assertEqual(kdx,0)
-        self.assertEqual(num_interp1,0)
-        self.assertEqual(num_interp2,1)
+        idx, jdx, kdx, num_interp1, num_interp2 = interp.find_bounds(self.data1, self.data2, 4.5, 1.0)
+        self.assertEqual(idx, 0)
+        self.assertEqual(jdx, 0)
+        self.assertEqual(kdx, 0)
+        self.assertEqual(num_interp1, 0)
+        self.assertEqual(num_interp2, 1)
 
     def test_interp(self):
-        interp_value=interp.interp(0,0,0,0,1,self.data1,self.data2,self.data3,4.5,1.0)
-        self.assertEqual(interp_value,1.9999999999999998)
+        interp_value = interp.interp(0, 0, 0, 0, 1, self.data1, self.data2, self.data3, 4.5, 1.0)
+        self.assertEqual(interp_value, 1.9999999999999998)
 
 if __name__ == "__main__":
     unittest.main()

@@ -31,7 +31,7 @@ class TestInterp(unittest.TestCase):
 # value1 not in data1 and value2 in data2[:,idx] and data2[:,idx+1] 
 #   and data2[kdx,idx+1] = data2 [kdx+1,idx+1]
     def test_find_bounds(self):
-        dx, jdx, kdx, num_interp1, num_interp2 = interp.find_bounds(self.data1, self.data2, 30, 4.8)
+        idx, jdx, kdx, num_interp1, num_interp2 = interp.find_bounds(self.data1, self.data2, 30, 4.8)
         self.assertEqual(idx, 2)
         self.assertEqual(jdx, 8)
         self.assertEqual(kdx, 4)

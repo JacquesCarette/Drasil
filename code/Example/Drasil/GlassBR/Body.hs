@@ -505,7 +505,7 @@ s7_2_intro = foldlSP [
   S "will be very quick and use minimal storage", 
   S "Rather than", (phrase performance) `sC` S "the", phrase priority, 
   phrase nonfunctional, (short requirement) :+:
-  S "s are correctness, verifiability, understandability, reusability, ", 
+  S "s are correctness, verifiability, understandability, reusability,", 
   S "maintainability and portability"]
 
 s8 = SRS.likeChg [s8_list] []
@@ -728,14 +728,14 @@ s10 = SRS.reference [s10_list] []
 
 s10_list = mkRefsList 1 
   [(S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
-  S "drive approach to certifying" +:+ phrase sciCompS :+: S ", ") +:+
+  S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
   S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."), 
   (S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
-  phrase template +:+ S "for scientific computing, ") +:+ S "in Proceedings of the" +:+
+  phrase template +:+ S "for scientific computing,") +:+ S "in Proceedings of the" +:+
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
   titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 
-  (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France), "
+  (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
   titleize' requirement +:+. S "Engineering Conference, 2005"), 
   (S "J. Robertson and S. Robertson" `sC` Quote (S "Volere" +:+
@@ -745,9 +745,9 @@ s10_list = mkRefsList 1
   (S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
   +:+ S "for determining" +:+ (phrase load) +:+ S "resistance of" +:+
   S "glass in buildings, ") :+: 
-  S " Standard E1300-09a, American Society for Testing and Material (ASTM), "
+  S " Standard E1300-09a, American Society for Testing and Material (ASTM),"
   +:+. S "2009"), 
-  (S "ASTM, developed by subcommittee C1408, Book of standards 15.02, "
+  (S "ASTM, developed by subcommittee C1408, Book of standards 15.02,"
   +:+ Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036")), 
   (S "ASTM, developed by subcommittee C14.08, Book of standards" +:+
   S "15.02" `sC` Quote (at_start specification +:+ S "for" +:+ (plural heat) +:+.

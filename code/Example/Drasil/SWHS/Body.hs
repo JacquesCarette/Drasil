@@ -222,7 +222,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   plural reviewer +:+ S "should also have an understanding of differential" +:+
   (plural $ equation) `sC` S "as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
-  S "of" +:+ short progName +:+ S "can have a lower level of expertise, " +:+
+  S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
   S "as explained in" +:+. (makeRef s3))-}
 -- should reference User characteristics
 
@@ -591,7 +591,7 @@ assump13 = S "The" +:+ phrase simulation +:+ S "will start with the" +:+
 assump14 = S "The operating" +:+
   phrase temp +:+ S "range of the" +:+ phrase system +:+
   S "is such that the" +:+ phrase water +:+
-  S "is always in" +:+. (liquid ^. defn) +:+ S "That is, " +:+
+  S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
   S "the" +:+ phrase temp +:+ S "will not drop below the" +:+
   phrase melt_pt +:+ S "of" +:+
   phrase water `sC` S "or rise above its" +:+
@@ -787,7 +787,7 @@ s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
   [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and", 
   swhsSymbMapDRef dd2HtFluxP, S "for", 
   (P $ ht_flux_C ^. symbol), S "and", (P $ ht_flux_P ^. symbol), 
-  S "respectively, ", S "this can be written as"], 
+  S "respectively,", S "this can be written as"], 
   [S "Dividing (3) by", P (w_mass ^. symbol) :+:
   P (htCap_W ^. symbol) `sC` S "we obtain"], 
   [S "Factoring the negative sign out of the second", S "term of the", 
@@ -889,7 +889,7 @@ s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   phrase energy +:+ S "balance on the" +:+.
   short phsChgMtrl +:+ S "The" +:+ phrase vol +:+
   S "being considered is the" +:+ phrase pcm_vol :+: 
-  S ", " +:+. P (pcm_vol ^. symbol) +:+ S "The derivation" +:+
+  S "," +:+. P (pcm_vol ^. symbol) +:+ S "The derivation" +:+
   S "that follows is initially for the" +:+
   phrase solid +:+ EmptyS +:+. short phsChgMtrl +:+
   S "The" +:+ phrase pcm_mass +:+ S "is" +:+ 

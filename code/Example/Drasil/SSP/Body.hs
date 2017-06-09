@@ -252,7 +252,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
       S "along a given" +:+. phrase slpSrf),
   (S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+ phrase slope `sC` 
       S "with the lowest" +:+. phrase fs_rc),
-  (S "Determine" +:+. S "displacement" `ofThe` phrase slope)
+  (S "Determine" +:+. (S "displacement" `ofThe` phrase slope))
   ]
 
 -- SECTION 4.2 --
@@ -274,7 +274,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "coordinates") `ofThe'` S "failure") +:+ phrase surface
           +:+. S "follow a monotonic function"),
   (S "geometry" `ofThe'` phrase slope `sC` S "and" +:+
-          plural mtrlPrpty `ofThe` plural soilLyr +:+.
+          (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
            S "are given as inputs"),
   (S "different layers" `ofThe'` phrase soil +:+ S "are homogeneous" `sC`
            S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
@@ -282,7 +282,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "with the exception of" +:+ phrase unit_ +:+. S "weight"),
   (at_start' soilLyr +:+ S "are treated as if they have" +:+.
            S "isotropic properties"),
-  (at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S" have a" +:+
+  (at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S "have a" +:+
            S "linear relationship, proportional to a constant" +:+
            sParen (getS lambda) +:+ S "and an" +:+
            phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS fi) +:+.
@@ -291,7 +291,7 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "a linear relationship, dependent on the" +:+
            phrase fs_rc +:+ sParen (getS fs) `sC`
            S "and the Coulomb sliding law."),
-  (S "The" +:+ phrase stress +:+ S "-" +:+ phrase strain +:+ S "curve for" +:+
+  (S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+
            phrase intrslce +:+
            S "relationships is linear with a constant" +:+. phrase slope),
   (S "The" +:+ phrase slope +:+ S "and" +:+ phrase slpSrf +:+.
@@ -332,7 +332,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   phrase equation +:+ S "as in" +:+ short thModel :+: S "2. The", phrase problem,
   S "is statically indeterminate with only these 3" +:+ plural equation +:+ S "and one", --FIXME: T2,T3,GD5, DD1,DD9,DD10,DD11 should be references to other things in the body
   S "constitutive" +:+ phrase equation +:+ S "(the Mohr Coulomb shear strength of" +:+ short thModel :+: S "3)", 
-  S "so the" +:+ phrase assumption +:+ S "of" +:+ short genDefn +:+ S "5 is used. Solving for" +:+ phrase force, 
+  S "so the" +:+ phrase assumption +:+ S "of" +:+ short genDefn :+: S "5 is used. Solving for" +:+ phrase force, 
   S "equilibrium allows", plural definition, 
   S "of all" +:+ plural force +:+ S "in terms of the" +:+ plural physicalProperty,
   S "of" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+: S "9, as done in" +:+
@@ -340,7 +340,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ S "normal" +:+ phrase force),
   S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
-  S "and the", titleize fs_rc, S "(FS)" `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
+  S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+
   plural value, S "in" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+:
   S "9, the" +:+ plural value +:+ S "of", getS ri `sC` 
@@ -447,7 +447,7 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "on a set of pass or fail criteria"),
   (S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
         S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+. plural fs_rc `ofThe` plural slpSrf),
+  (S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)),
   (S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
         phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
         S "with a smaller" +:+ phrase fs_rc +:+.

@@ -1,6 +1,6 @@
 module Main where
 
-import Language.Drasil (DocType(SRS, MG, Website),Recipe(..),gen)
+import Language.Drasil (DocType(SRS, MG, Website), Recipe(..), gen)
 
 import Drasil.GamePhysics.Body (chipmunkSRS', chipmunkMG)
 

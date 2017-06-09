@@ -46,8 +46,8 @@ import Drasil.GeneralSystDesc
 import Data.Drasil.SentenceStructures (showingCxnBw)
 
 acronyms :: [CI]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
-  phsChgMtrl,physSyst,requirement,rightSide,srs,progName,thModel]
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 
+  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel]
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -71,7 +71,7 @@ mkSRS = RefSec (RefProg intro
   ) : map Verbatim [s2, s3, s4, s5, s6, s7]
 
 tsymb_intro :: [TSIntro]
-tsymb_intro = [TSPurpose,SymbConvention
+tsymb_intro = [TSPurpose, SymbConvention
   [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
@@ -222,7 +222,7 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
   plural reviewer +:+ S "should also have an understanding of differential" +:+
   (plural $ equation) `sC` S "as typically covered in" +:+
   S "first and second year Calculus courses. The" +:+ plural user +:+
-  S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
+  S "of" +:+ short progName +:+ S "can have a lower level of expertise, " +:+
   S "as explained in" +:+. (makeRef s3))-}
 -- should reference User characteristics
 
@@ -249,7 +249,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
   plural equation +:+ S "that" +:+
   phrase model +:+ S "the" +:+. phrase swhs_pcm +:+
   short progName +:+ S "solves these" +:+ short ode :+: S "s"
--- This part is close to the function but not exactly,
+-- This part is close to the function but not exactly, 
 -- so keeping it here for reference
 
   {-S "The presentation follows the standard" +:+
@@ -263,7 +263,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
   makeRef s4_2_5 +:+ S "and trace back to find any" +:+
   S "additional" +:+ phrase information +:+ S "they require."-}
 
--- This paragraph is mostly general (besides program name and number of IMs),
+-- This paragraph is mostly general (besides program name and number of IMs), 
 -- but there are some differences between the examples that I'm not sure how to
 -- account for. Specifically, the glass example references a Volere paper that 
 -- is not used for the other examples. Besides that, this paragraph could
@@ -295,7 +295,7 @@ s3 = genSysF [s3_1] s3_2_contents [] []
 --------------------------
 
 s3_1 :: Section
-s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
+s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro, 
   s3_1_2_bullets] []
 
 s3_1_contents ::Contents
@@ -323,16 +323,16 @@ s3_1_2_bullets = Enumeration (Bullet $
   (Bullet $ map (\c -> Flat c)
   [S "Provide the" +:+ phrase input_ +:+ plural datum +:+ S "to the" +:+
   phrase system `sC` S "ensuring no errors in the" +:+ plural datum +:+
-  S "entry",
+  S "entry", 
   S "Take care that consistent" +:+ plural unit_ +:+
   S "are used for" +:+ phrase input_ +:+ plural variable
-  ]),
+  ]), 
   Nested (short progName +: S "Responsibilities")
   (Bullet $ map (\c -> Flat c)
   [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of" +:+
-  S "characters instead of a floating point number",
+  S "characters instead of a floating point number", 
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint,
+  phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint, 
   S "Calculate the required" +:+ plural output_
   ])])
 
@@ -366,7 +366,7 @@ s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
 s4 :: Section
 s4 = specSysDesF s4_intro_end [s4_1, s4_2]
  
--- using plural solutionCharSpec is a hack in order to pluralize the middle word,
+-- using plural solutionCharSpec is a hack in order to pluralize the middle word, 
 -- based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
@@ -491,8 +491,8 @@ s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end 
   ((makeRef s4_2_6_table1 +:+ S "and" +:+ makeRef s4_2_6_table2 +:+
   S "show"), mid, True, end)
-  ([s4_2_1_list], s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_deriv,
-    s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3, (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
+  ([s4_2_1_list], s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_deriv, 
+    s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3, (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2), 
     [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
 
   where mid = S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+ 
@@ -515,12 +515,12 @@ s4_2_1_list = enumSimple 1 (short assumption) s4_2_1_assump_list
 
 s4_2_1_assump_list :: [Sentence]
 
-assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+assump1, assump2, assump3, assump4, assump5, assump6, 
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14, 
   assump15, assump16, assump17, assump18, assump19 :: Sentence
 
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6, 
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14, 
   assump15, assump16, assump17, assump18, assump19]
 
 assump1 = S "The only form of" +:+ phrase energy +:+ S "that is" +:+
@@ -591,7 +591,7 @@ assump13 = S "The" +:+ phrase simulation +:+ S "will start with the" +:+
 assump14 = S "The operating" +:+
   phrase temp +:+ S "range of the" +:+ phrase system +:+
   S "is such that the" +:+ phrase water +:+
-  S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
+  S "is always in" +:+. (liquid ^. defn) +:+ S "That is, " +:+
   S "the" +:+ phrase temp +:+ S "will not drop below the" +:+
   phrase melt_pt +:+ S "of" +:+
   phrase water `sC` S "or rise above its" +:+
@@ -649,17 +649,17 @@ assump19 = S "The pressure in" +:+ S "the" +:+
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
-  +:+ phrase rOfChng +:+ S "of" +: phrase temp),
+  +:+ phrase rOfChng +:+ S "of" +: phrase temp), 
   Paragraph (S "Integrating" +:+ swhsSymbMapTRef t1ConsThermE +:+ 
   S "over a" +:+ phrase vol +:+ sParen (
-  P (vol ^. symbol)) `sC` S "we have:"),
+  P (vol ^. symbol)) `sC` S "we have:"), 
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C gradient) :. (C thFluxVect)) vol))) + 
   UnaryOp (Integral (Just (Low (C vol)), Nothing) 
   (C vol_ht_gen) vol) := 
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density) 
-  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)), 
   Paragraph (S "Applying" +:+ titleize gauss_div +:+ S "to" +:+
   S "the first term over the" +:+ phrase surface +:+
   P (surface ^. symbol) +:+ S "of the" +:+ 
@@ -667,21 +667,21 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   phrase thFluxVect +:+ S "for the" +:+ phrase surface +:+ S "and" +:+
   P (uNormalVect ^. symbol) +:+ S "as a" +:+ phrase unit_ +:+
   S "outward" +:+ phrase uNormalVect +:+ S "for a" +:
-  phrase surface),
+  phrase surface), 
   EqnBlock 
   ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing) 
   ((C thFluxVect) :. (C uNormalVect)) surface))) + 
   (UnaryOp (Integral (Just 
   (Low (C vol)), Nothing) (C vol_ht_gen) vol)) := 
   UnaryOp (Integral (Just (Low (C vol)), Nothing) 
-  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)), 
   Paragraph (S "We consider an arbitrary" +:+. phrase vol +:+ S "The" +:+
-  phrase vol_ht_gen :+: S "is" +: S "assumed constant. Then (1) can be written as"),
+  phrase vol_ht_gen :+: S "is" +: S "assumed constant. Then (1) can be written as"), 
   EqnBlock 
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
   (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral 
   (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
-  Deriv Part (C temp) (C time)) vol)),
+  Deriv Part (C temp) (C time)) vol)), 
   Paragraph (S "Where" +:+ P (ht_flux_in ^. symbol) `sC`
   P (ht_flux_out ^. symbol) `sC` P (in_SA ^. symbol) `sC`
   S "and" +:+ P (out_SA ^. symbol) +:+ S "are explained in" +:+.
@@ -691,14 +691,14 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   S "which is true in our case by" +:+ titleize' assumption +:+
   sParen (acroA "3") `sC` sParen (acroA "4") `sC`
   sParen (acroA "5") `sC` sParen (acroA "6") `sC`
-  S "we have:"),
+  S "we have:"), 
   EqnBlock 
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp) 
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 
-  (C out_SA) + (C vol_ht_gen) * (C vol)),
+  (C out_SA) + (C vol_ht_gen) * (C vol)), 
   Paragraph (S "Using the fact that" +:+ P (density ^. symbol) :+:
   S "=" :+: P (mass ^. symbol) :+: S "/" :+: 
-  P (vol ^. symbol) `sC` S "(2) can be written as:"),
+  P (vol ^. symbol) `sC` S "(2) can be written as:"), 
   EqnBlock 
   ((C mass) * (C heat_cap_spec) * Deriv Total (C temp) (C time) :=
   (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) + 
@@ -745,7 +745,7 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
   plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
   S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
   plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
-  (makeRef s4_2_3)),-}
+  (makeRef s4_2_3)), -}
 
 -- The first paragraph is completely general and repeated in other examples. 
 -- The second paragraph is very specific, and the other examples don't even 
@@ -773,42 +773,42 @@ s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
   (P $ w_vol ^. symbol) `sC` S "which has", phrase w_mass, EmptyS, -- why is EmptyS here?
   (P $ w_mass ^. symbol), S "and" +:+. (phrase htCap_W `sC` 
   (P $ htCap_W ^. symbol)), (P $ ht_flux_C ^. symbol), S "represents the", 
-  phrase ht_flux_C, S "and", (P $ ht_flux_P ^. symbol), S "represents",
-  S "the", phrase ht_flux_P `sC` S "over", phrase coil_SA,
+  phrase ht_flux_C, S "and", (P $ ht_flux_P ^. symbol), S "represents", 
+  S "the", phrase ht_flux_P `sC` S "over", phrase coil_SA, 
   S "and", phrase pcm_SA, S "of", (P $ coil_SA ^. symbol), S "and", 
   (P $ pcm_SA ^. symbol) `sC` S "respectively. No", 
-  phrase CT.heat_trans, S "occurs to the outside of the",
-  phrase tank `sC` S "since it",
+  phrase CT.heat_trans, S "occurs to the outside of the", 
+  phrase tank `sC` S "since it", 
   S "has been assumed to be", phrase perfect_insul +:+. 
   sParen (acroA "15"), S "Assuming no", phrase vol_ht_gen +:+.
-  ((sParen $ S  "A16") `sC` ((P $ vol_ht_gen ^. symbol) :+: S "=0")),
-  S "Therefore, the", phrase equation, S "for GD2 can be",
-  S "written as"],
-  [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and",
+  ((sParen $ S  "A16") `sC` ((P $ vol_ht_gen ^. symbol) :+: S "=0")), 
+  S "Therefore, the", phrase equation, S "for GD2 can be", 
+  S "written as"], 
+  [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and", 
   swhsSymbMapDRef dd2HtFluxP, S "for", 
   (P $ ht_flux_C ^. symbol), S "and", (P $ ht_flux_P ^. symbol), 
-  S "respectively,", S "this can be written as"],
+  S "respectively, ", S "this can be written as"], 
   [S "Dividing (3) by", P (w_mass ^. symbol) :+:
-  P (htCap_W ^. symbol) `sC` S "we obtain"],
+  P (htCap_W ^. symbol) `sC` S "we obtain"], 
   [S "Factoring the negative sign out of the second", S "term of the", 
   short rightSide, S "of", titleize equation, 
   S "(4) and multiplying it by", 
   (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol) :+: S "/" :+: 
-  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), S "yields"],
-  [S "Which simplifies to"],
+  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), S "yields"], 
+  [S "Which simplifies to"], 
   [S "Setting", P (tau_W ^. symbol) :+: S "=" :+:
   (P $ w_mass ^. symbol) :+: (P $ htCap_W ^. symbol) :+: S "/" :+:
   (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), 
   S "and", (P $ eta ^. symbol) :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+: 
   (P $ pcm_SA ^. symbol) :+: S "/" :+: (P $ coil_HTC ^. symbol) :+: 
-  (P $ coil_SA ^. symbol) `sC` titleize  equation, S "(5) can",
-  S "be written as"],
+  (P $ coil_SA ^. symbol) `sC` titleize  equation, S "(5) can", 
+  S "be written as"], 
   [S "Finally, factoring out 1/" :+: (P $ tau_W ^. 
-  symbol) `sC` S "we are left with the governing",
+  symbol) `sC` S "we are left with the governing", 
   short ode, S "for IM1"]]
 
 
-s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
+s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, 
   s4_2_5_d_eqn6, s4_2_5_d_eqn7 :: Expr
 
 s4_2_5_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) := 
@@ -853,11 +853,11 @@ s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_l
   s4_2_5_d2endPara
 
 s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using", 
-  swhsSymbMapDRef dd2HtFluxP, S "for",
-  (P $ ht_flux_P ^. symbol) `sC` S "this", phrase equation,
-   S "can be written as"],
+  swhsSymbMapDRef dd2HtFluxP, S "for", 
+  (P $ ht_flux_P ^. symbol) `sC` S "this", phrase equation, 
+   S "can be written as"], 
   [S "Dividing by", (P $ pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol), 
-  S "we obtain"],
+  S "we obtain"], 
   [S "Setting", P (tau_S_P ^. symbol) :+: S "=" :+:
   P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
   P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) `sC`
@@ -883,13 +883,13 @@ s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
 
 s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   phrase energy +:+ S "balance on the" +:+ short phsChgMtrl +:+
-  S "during" +:+ phrase sens_heat :+: S "ing phase:"),
+  S "during" +:+ phrase sens_heat :+: S "ing phase:"), 
   (S "To find the" +:+ phrase rOfChng +:+ S "of" +:+
   P (temp_PCM ^. symbol) `sC` S "we look at the" +:+
   phrase energy +:+ S "balance on the" +:+.
   short phsChgMtrl +:+ S "The" +:+ phrase vol +:+
   S "being considered is the" +:+ phrase pcm_vol :+: 
-  S "," +:+. P (pcm_vol ^. symbol) +:+ S "The derivation" +:+
+  S ", " +:+. P (pcm_vol ^. symbol) +:+ S "The derivation" +:+
   S "that follows is initially for the" +:+
   phrase solid +:+ EmptyS +:+. short phsChgMtrl +:+
   S "The" +:+ phrase pcm_mass +:+ S "is" +:+ 
@@ -916,13 +916,13 @@ s4_2_5_d2endPara = map Paragraph [(titleize equation +:+ S "(6) applies for the"
   S "this is not included, since the" +:+
   phrase vol +:+ S "change of the" +:+ short phsChgMtrl
   +:+ S "with" +:+ phrase CT.melting +:+.
-  S "is assumed to be negligible (A17)"),
+  S "is assumed to be negligible (A17)"), 
   (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
   S "=" :+: P (temp_melt_P ^. symbol) +:+ S "and not all of" +:+
   S "the" +:+ short phsChgMtrl +:+ S "is melted, the" +:+
   phrase temp_PCM +:+ S "does not change. Therefore, in" +:+
   S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
-  P (time ^. symbol) :+: S "=0."),
+  P (time ^. symbol) :+: S "=0."), 
   (S "This derivation does not consider the" +:+ 
   phrase CT.boiling +:+ S "of the" +:+ 
   short phsChgMtrl `sC` S "as the" +:+ short phsChgMtrl
@@ -945,30 +945,30 @@ s4_2_5_d2endPara = map Paragraph [(titleize equation +:+ S "(6) applies for the"
 
 -- FIXME: Temporary dummy tables
 s4_2_6_table1 :: Contents
-s4_2_6_table1 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
+s4_2_6_table1 = Table [EmptyS, EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
   (S "Table 1")
   True
 
 s4_2_6_table2 :: Contents
-s4_2_6_table2 = Table [EmptyS,EmptyS] [[EmptyS,EmptyS],[EmptyS,EmptyS]]
+s4_2_6_table2 = Table [EmptyS, EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
   (S "Table 2")
   True
 
 
 inputVar :: [UCWrapper]
-inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P] ++ [ucw htFusion] ++ map ucw [coil_SA,
+inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density, 
+  temp_melt_P, htCap_S_P, htCap_L_P] ++ [ucw htFusion] ++ map ucw [coil_SA, 
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
   
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.
 
--- table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
+-- table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints", 
   -- S "Typical Value", S "Uncertainty"] (mkTable
-  -- [\ch -> P (ch ^. symbol),
-  -- \ch -> Sy (ch ^. unit),
-  -- \ch -> Sy (ch ^. unit),
-  -- \ch -> Sy (ch ^. unit),
+  -- [\ch -> P (ch ^. symbol), 
+  -- \ch -> Sy (ch ^. unit), 
+  -- \ch -> Sy (ch ^. unit), 
+  -- \ch -> Sy (ch ^. unit), 
   -- \ch -> Sy (ch ^. unit)] inputVar)
   -- (S "Input Variables") True
 
@@ -1002,21 +1002,21 @@ s4_2_7_deriv = [Paragraph (S "A" +:+ phrase corSol +:+
   S "respective" +:+ phrase surface +:+ S "area of" +:+
   phrase CT.heat_trans `sC`
   S "and integrating each over the" +:+ phrase simulation +:+
-  phrase time `sC` S "as follows:"),
+  phrase time `sC` S "as follows:"), 
   EqnBlock 
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time))) 
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W) 
   [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-  (FCall (C temp_PCM) [C time]))) time)),
+  (FCall (C temp_PCM) [C time]))) time)), 
   Paragraph (S "In addition, the" +:+ phrase pcm_E +:+ 
   S "should equal the" +:+ phrase energy +:+ phrase input_ +:+
   S "to the" +:+ short phsChgMtrl +:+ S "from the" +:+.
-  phrase water +:+ S "This can be expressed as"),
+  phrase water +:+ S "This can be expressed as"), 
   EqnBlock
   ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-  (C temp_PCM) [C time]))) time)),
+  (C temp_PCM) [C time]))) time)), 
   Paragraph (titleize' equation +:+ S "(reference) and" +:+
   S "(reference) can be used as" +:+ Quote (S "sanity") :+: S "checks to" +:+
   S "gain confidence in any" +:+ phrase solution +:+ S "computed by" +:+.
@@ -1050,24 +1050,24 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat
   (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ phrase tank +:+
   S "parameters, material" +:+ plural property +:+ S "and initial" +:
-  plural condition))]),
+  plural condition))]), 
   (Table [phrase symbol_, phrase unit_, phrase description]
   (mkTable
-  [(\ch -> P (ch ^. symbol)),
-  (\ch -> Sy (unit_symb ch)),
+  [(\ch -> P (ch ^. symbol)), 
+  (\ch -> Sy (unit_symb ch)), 
   (\ch -> phrase ch)] inputVar) 
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False), 
 --
   Enumeration (Simple [(acroR "2", Flat 
   (S "Use the" +:+ plural input_ +:+ S "in R1 to find the" +:+
   phrase  mass +:+ S "needed for IM1 to IM4, as follows, where" +:+
   P (w_vol ^. symbol) +:+ S "is the" +:+ phrase w_vol +:+
   S "and" +:+ P (tank_vol ^. symbol) +:+ S "is the" +:+.
-  phrase tank_vol))]),
+  phrase tank_vol))]), 
   EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) - 
-  (C pcm_vol)) * (C w_density)),
-  EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
+  (C pcm_vol)) * (C w_density)), 
+  EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)), 
 --
   enumSimple 3 (short requirement) reqList
   ]
@@ -1230,10 +1230,10 @@ s7_trailing :: [Sentence]
 s7_trailing = [
 
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  S "and" +:+ plural inModel +:+. S "with each other",
+  S "and" +:+ plural inModel +:+. S "with each other", 
 
   plural inModel `sC` plural requirement `sC` S "and" +:+ plural datum +:+
-  plural constraint +:+. S "on each other",
+  plural constraint +:+. S "on each other", 
 
   plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+
@@ -1245,33 +1245,33 @@ s7_trailing = [
 s7_table1 :: Contents
 s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE, swhsSymbMapTRef t2SensHtE, 
   swhsSymbMapTRef t3LatHtE, acroGD "1", acroGD "2", swhsSymbMapDRef dd1HtFluxC, 
-  swhsSymbMapDRef dd2HtFluxP, swhsSymbMapDRef dd3HtFusion, swhsSymbMapDRef dd3HtFusion,
+  swhsSymbMapDRef dd2HtFluxP, swhsSymbMapDRef dd3HtFusion, swhsSymbMapDRef dd3HtFusion, 
   acroIM "1", acroIM "2", acroIM "3", acroIM "4"]
-  [[swhsSymbMapTRef t1ConsThermE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroGD "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroGD "2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS],
-  [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS,
-  S "X", S "X", EmptyS, EmptyS, S "X"],
-  [acroIM "3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroIM "4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
+  [[swhsSymbMapTRef t1ConsThermE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroGD "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroGD "2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS, 
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS], 
+  [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS, 
+  S "X", S "X", EmptyS, EmptyS, S "X"], 
+  [acroIM "3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroIM "4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", 
   EmptyS, S "X", EmptyS, EmptyS]]
   (showingCxnBw traceyMatrix (titleize' item +:+ S "of Different" +:+ titleize' section_))
   True
@@ -1279,86 +1279,86 @@ s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE, swhsSymbMapTRef t2SensH
 -- Wrong DD reference above, change when DD4 is available (twice)
 
 s7_table2 :: Contents
-s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4",
+s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4", 
   makeRef (SRS.datCon SRS.missingP []), acroR "1", acroR "2"]
-  [[acroIM "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroIM "2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"],
-  [acroIM "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroIM "4", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroR "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS],
-  [acroR "3", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS],
-  [acroR "4", S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroR "5", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "6", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "7", EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "8", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS],
-  [acroR "9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS],
-  [acroR "10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [[acroIM "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"], 
+  [acroIM "2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"], 
+  [acroIM "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X"], 
+  [acroIM "4", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"], 
+  [acroR "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroR "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS], 
+  [acroR "3", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS], 
+  [acroR "4", S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"], 
+  [acroR "5", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroR "6", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroR "7", EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS], 
+  [acroR "8", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS], 
+  [acroR "9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS], 
+  [acroR "10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS], 
   [acroR "11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
   (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+ titleize' inModel))
   True
 
 s7_table3 :: Contents
-s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4", acroA "5", acroA "6",
-  acroA "7", acroA "8", acroA "9", acroA "10", acroA "11", acroA "12", acroA "13", acroA "14",
+s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4", acroA "5", acroA "6", 
+  acroA "7", acroA "8", acroA "9", acroA "10", acroA "11", acroA "12", acroA "13", acroA "14", 
   acroA "15", acroA "16", acroA "17", acroA "18", acroA "19"]
-  [[swhsSymbMapTRef t1ConsThermE, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [acroGD "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroGD "2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS],
-  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS,
-  S "X"],
-  [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, S "X", S "X", S "X",
-  EmptyS],
-  [acroIM "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X"],
-  [acroIM "4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  EmptyS],
-  [acroLC "1", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "5", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
+  [[swhsSymbMapTRef t1ConsThermE, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS], 
+  [acroGD "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [acroGD "2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS], 
+  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", 
+  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS], 
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS], 
+  [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS, 
+  S "X"], 
+  [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, S "X", S "X", S "X", 
+  EmptyS], 
+  [acroIM "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, 
+  EmptyS, S "X"], 
+  [acroIM "4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X", 
+  EmptyS], 
+  [acroLC "1", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [acroLC "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [acroLC "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [acroLC "4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [acroLC "5", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS], 
+  [acroLC "6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, 
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, 
   EmptyS, EmptyS]]
   (showingCxnBw traceyMatrix (titleize' assumption +:+ S "and Other" +:+ titleize' item))
   True

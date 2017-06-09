@@ -21,22 +21,22 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
-swhsUnits = map ucw [coil_SA,in_SA,out_SA,pcm_SA,heat_cap_spec,htCap_L,htCap_L_P,htCap_S,
-  htCap_S_P,htCap_V,htCap_W,diam,sens_heat,pcm_initMltE,pcm_E,w_E,vol_ht_gen,
-  htTransCoeff,coil_HTC,pcm_HTC,tank_length,pcm_mass,w_mass,ht_flux,latent_heat,
-  thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,temp,
-  boil_pt,temp_C,temp_env,time_final,temp_init,melt_pt,t_init_melt,
-  t_final_melt,temp_melt_P,temp_PCM,temp_W,vol,pcm_vol,tank_vol,w_vol,deltaT,
-  density,pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W] ++ 
+swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P, htCap_S, 
+  htCap_S_P, htCap_V, htCap_W, diam, sens_heat, pcm_initMltE, pcm_E, w_E, vol_ht_gen, 
+  htTransCoeff, coil_HTC, pcm_HTC, tank_length, pcm_mass, w_mass, ht_flux, latent_heat, 
+  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp, 
+  boil_pt, temp_C, temp_env, time_final, temp_init, melt_pt, t_init_melt, 
+  t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT, 
+  density, pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W] ++ 
   map ucw [htFusion, mass, time]
 
-coil_SA,in_SA,out_SA,pcm_SA,htCap_L,htCap_L_P,htCap_S,htCap_S_P,htCap_V,
-  htCap_W,htFusion,diam,pcm_initMltE,pcm_E,w_E,vol_ht_gen,htTransCoeff,coil_HTC,
-  pcm_HTC,tank_length,pcm_mass,w_mass,
-  thFluxVect,ht_flux_C,ht_flux_in,ht_flux_out,ht_flux_P,latentE_P,
-  temp_C,temp_env,time_final,temp_init,t_init_melt,
-  t_final_melt,temp_melt_P,temp_PCM,temp_W,pcm_vol,tank_vol,w_vol,deltaT,
-  pcm_density,w_density,tau,tau_L_P,tau_S_P,tau_W :: UnitalChunk
+coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V, 
+  htCap_W, htFusion, diam, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC, 
+  pcm_HTC, tank_length, pcm_mass, w_mass, 
+  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, 
+  temp_C, temp_env, time_final, temp_init, t_init_melt, 
+  t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT, 
+  pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
 --symbol names can't begin with a capital
 

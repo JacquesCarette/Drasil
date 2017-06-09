@@ -542,6 +542,39 @@ Angle of the surface of the mass relative to the horizontal (for slice index i)
 </tr>
 <tr>
 <td>
+&gamma;
+</td>
+<td>
+Dry unit weight
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>Sat</sub>
+</td>
+<td>
+Saturated unit weight
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>w</sub>
+</td>
+<td>
+Unit weight of water
+</td>
+<td>
+N/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
 &delta;
 </td>
 <td>
@@ -608,61 +641,6 @@ N
 </tr>
 <tr>
 <td>
-&#8467;<sub>b,i</sub>
-</td>
-<td>
-Total length of the base of a slice (for slice index i)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-&#8467;<sub>s,i</sub>
-</td>
-<td>
-Length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-&gamma;
-</td>
-<td>
-Dry unit weight
-</td>
-<td>
-N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
-&gamma;<sub>Sat</sub>
-</td>
-<td>
-Saturated unit weight
-</td>
-<td>
-N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
-&gamma;<sub>w</sub>
-</td>
-<td>
-Unit weight of water
-</td>
-<td>
-N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
 &lambda;
 </td>
 <td>
@@ -685,13 +663,24 @@ Poisson's ratio
 </tr>
 <tr>
 <td>
-&omega;<sub>i</sub>
+&sigma;
 </td>
 <td>
-Angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
+Normal stress
 </td>
 <td>
-&deg;
+Pa
+</td>
+</tr>
+<tr>
+<td>
+&Upsilon;
+</td>
+<td>
+Generic minimization function or algorithm
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -707,13 +696,35 @@ Effective angle of friction
 </tr>
 <tr>
 <td>
-&Upsilon;
+&omega;<sub>i</sub>
 </td>
 <td>
-Generic minimization function or algorithm
+Angle of imposed surface load acting into the surface relative to the vertical (for slice index i)
 </td>
 <td>
-
+&deg;
+</td>
+</tr>
+<tr>
+<td>
+&#8467;<sub>b,i</sub>
+</td>
+<td>
+Total length of the base of a slice (for slice index i)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+&#8467;<sub>s,i</sub>
+</td>
+<td>
+Length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i)
+</td>
+<td>
+m
 </td>
 </tr>
 </table>
@@ -979,7 +990,7 @@ Plane Strain: The resultant stresses in one of the directions of a 3 dimensional
 Physical System Description
 </h4>
 <p class="paragraph">
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:Indeconvfornumbslicandinteforcvari>this Figure</a>.
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:Indeconvfornumbslicandinteforcvaris>this Figure</a>.
 </p>
 <ul class="list">
 <li>
@@ -992,7 +1003,7 @@ Slice properties convention is noted by i.
 <p class="paragraph">
 A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:Forcactionaslic>this Figure</a>.
 </p>
-<a id="Figure:Indeconvfornumbslicandinteforcvari">
+<a id="Figure:Indeconvfornumbslicandinteforcvaris">
 <img class="figure" src="IndexConvention.png" alt="Index convention for numbering slice and interslice force variables"></img>
 <p class="caption">
 Index convention for numbering slice and interslice force variables
@@ -1130,6 +1141,150 @@ The stability metric of the slope, known as the factor of safety (FS), is determ
 </tr>
 </table>
 </a>
+<a id="T:equilibrium">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+equilibrium
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&sum;(F)=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:mcShrStrgth">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Mohr-Coulumb shear strength
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+P<sub>i</sub>=&sigma;tan(&phiv;')+c'
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:effStress">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+effective stress
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+0=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:hooksLaw">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Hook's law
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+F=K&delta;
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:GeneDefi">
@@ -1140,6 +1295,344 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
+<a id="T:normForcEq">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+normal force equilibrium
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+N<sub>i</sub>=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:bsShrFEq">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+base shear force equilibrium
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+S<sub>i</sub>=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:resShr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+resistive shear
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+P<sub>i</sub>=N'<sub>i</sub>tan(&phiv;')+c'*b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:mobShr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+mobile shear
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+S<sub>i</sub>=<div class="fraction">
+<span class="fup">
+P<sub>i</sub>
+</span>
+<span class="fdn">
+FS
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+N'<sub>i</sub>tan(&phiv;')+c'*b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+</span>
+<span class="fdn">
+FS
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:normShrR">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+interslice normal/shear relationship
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+X<sub>i</sub>=&lambda;f<sub>i</sub>E<sub>i</sub>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:momentEql">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+moment equilibrium
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+0=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:netForce">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+net force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+F=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:hooksLaw2d">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Hook's law 2D
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+0=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:displVect">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+displacement vectors
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+0=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:DataDefi">
@@ -1150,6 +1643,52 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
 </p>
+<a id="DD:W.i">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+W<sub>i</sub>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+W<sub>i</sub> = 0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+W<sub>i</sub> is the weight; downward force caused by gravity on slice i
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:InstMode">
@@ -1164,8 +1703,44 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>this Sectio
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
 </p>
 <p class="paragraph">
-The values of the interslice normal force E the interslice normal/shear force magnitude ratio lambda, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of R<sub>i</sub>, and T<sub>i</sub> in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
+The values of the interslice normal force E the interslice normal/shear force magnitude ratio &lambda;, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of R<sub>i</sub>, and T<sub>i</sub> in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 </p>
+<a id="T:fctSfty">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+factor of safety
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+FS=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+FIXME: add description
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:DataCons">

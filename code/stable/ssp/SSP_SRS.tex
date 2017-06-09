@@ -123,6 +123,12 @@ $\alpha{}_{i}$ & Angle of the base of the mass relative to the horizontal (for s
 \\
 $\beta{}_{i}$ & Angle of the surface of the mass relative to the horizontal (for slice index i) & ${}^{\circ}$
 \\
+$\gamma{}$ & Dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\gamma{}_{Sat}$ & Saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
+\\
+$\gamma{}_{w}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
+\\
 $\delta{}$ & Generic displacement of a body & m
 \\
 $\delta{}u_{i}$ & Shear displacement of a slice (for slice index i) & m
@@ -135,25 +141,21 @@ $\delta{}y_{i}$ & Displacement of a slice in the y-ordinate direction (for slice
 \\
 $\Delta{}H_{i}$ & Difference between interslice forces on acting in the x-ordinate direction of the slice on each side (for interslice index i) & N
 \\
-$\ell{}_{b,i}$ & Total length of the base of a slice (for slice index i) & m
-\\
-$\ell{}_{s,i}$ & Length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i) & m
-\\
-$\gamma{}$ & Dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
-\\
-$\gamma{}_{Sat}$ & Saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
-\\
-$\gamma{}_{w}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
-\\
 $\lambda{}$ & Ratio between interslice normal and shear forces (applied to all interslices) & 
 \\
 $\nu{}$ & Poisson's ratio & 
 \\
-$\omega{}_{i}$ & Angle of imposed surface load acting into the surface relative to the vertical (for slice index i) & ${}^{\circ}$
+$\sigma{}$ & Normal stress & Pa
+\\
+$\Upsilon{}$ & Generic minimization function or algorithm & 
 \\
 $\varphi{}'$ & Effective angle of friction & ${}^{\circ}$
 \\
-$\Upsilon{}$ & Generic minimization function or algorithm & 
+$\omega{}_{i}$ & Angle of imposed surface load acting into the surface relative to the vertical (for slice index i) & ${}^{\circ}$
+\\
+$\ell{}_{b,i}$ & Total length of the base of a slice (for slice index i) & m
+\\
+$\ell{}_{s,i}$ & Length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex (for interslice index i) & m
 \\
 \bottomrule
 \label{Table:TablofSymb}
@@ -239,7 +241,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSystDesc}
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:Indeconvfornumbslicandinteforcvari}.
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:Indeconvfornumbslicandinteforcvaris}.
 \begin{enumerate}
 \item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from 1 $\leq{}$ i $\leq{}$ n-1.}
 \item{Slice properties convention is noted by i.}
@@ -249,7 +251,7 @@ A free body diagram of the forces acting on the slice is displayed in Figure~\re
 \begin{center}
 \includegraphics{IndexConvention.png}
 \caption{Index convention for numbering slice and interslice force variables}
-\label{Figure:Indeconvfornumbslicandinteforcvari}
+\label{Figure:Indeconvfornumbslicandinteforcvaris}
 \end{center}
 \end{figure}
 \begin{figure}
@@ -302,17 +304,229 @@ Equation & $FS=\frac{P}{S}$
 Description & The stability metric of the slope, known as the factor of safety ($FS$), is determined by the ratio of the shear force at the base of the slope ($S$), and the resistive shear ($P$).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:equilibrium}
+\phantomsection 
+\label{T:equilibrium}
+\\ \midrule \\
+Label & equilibrium
+\\ \midrule \\
+Equation & $\sum{F}=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:mcShrStrgth}
+\phantomsection 
+\label{T:mcShrStrgth}
+\\ \midrule \\
+Label & Mohr-Coulumb shear strength
+\\ \midrule \\
+Equation & $P_{i}=\sigma{}\tan(\varphi{}')+c'$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:effStress}
+\phantomsection 
+\label{T:effStress}
+\\ \midrule \\
+Label & effective stress
+\\ \midrule \\
+Equation & $0=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:hooksLaw}
+\phantomsection 
+\label{T:hooksLaw}
+\\ \midrule \\
+Label & Hook's law
+\\ \midrule \\
+Equation & $F=K\delta{}$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{General Definitions}
 \label{Sec:GeneDefi}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:normForcEq}
+\phantomsection 
+\label{T:normForcEq}
+\\ \midrule \\
+Label & normal force equilibrium
+\\ \midrule \\
+Equation & $N_{i}=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:bsShrFEq}
+\phantomsection 
+\label{T:bsShrFEq}
+\\ \midrule \\
+Label & base shear force equilibrium
+\\ \midrule \\
+Equation & $S_{i}=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:resShr}
+\phantomsection 
+\label{T:resShr}
+\\ \midrule \\
+Label & resistive shear
+\\ \midrule \\
+Equation & $P_{i}=N'_{i}\tan(\varphi{}')+c'*b_{i}\sec(\alpha{}_{i})$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:mobShr}
+\phantomsection 
+\label{T:mobShr}
+\\ \midrule \\
+Label & mobile shear
+\\ \midrule \\
+Equation & $S_{i}=\frac{P_{i}}{FS}=\frac{N'_{i}\tan(\varphi{}')+c'*b_{i}\sec(\alpha{}_{i})}{FS}$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:normShrR}
+\phantomsection 
+\label{T:normShrR}
+\\ \midrule \\
+Label & interslice normal/shear relationship
+\\ \midrule \\
+Equation & $X_{i}=\lambda{}f_{i}E_{i}$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:momentEql}
+\phantomsection 
+\label{T:momentEql}
+\\ \midrule \\
+Label & moment equilibrium
+\\ \midrule \\
+Equation & $0=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:netForce}
+\phantomsection 
+\label{T:netForce}
+\\ \midrule \\
+Label & net force
+\\ \midrule \\
+Equation & $F=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:hooksLaw2d}
+\phantomsection 
+\label{T:hooksLaw2d}
+\\ \midrule \\
+Label & Hook's law 2D
+\\ \midrule \\
+Equation & $0=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:displVect}
+\phantomsection 
+\label{T:displVect}
+\\ \midrule \\
+Label & displacement vectors
+\\ \midrule \\
+Equation & $0=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Data Definitions}
 \label{Sec:DataDefi}
 This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:W.i}
+\phantomsection 
+\label{DD:W.i}
+\\ \midrule \\
+Label & $W_{i}$
+\\ \midrule \\
+Units & N
+\\ \midrule \\
+Equation & $W_{i}$ = $0$
+\\ \midrule \\
+Description & $W_{i}$ is the weight; downward force caused by gravity on slice i
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
-The values of the interslice normal force E the interslice normal/shear force magnitude ratio lambda, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R_{i}$, and $T_{i}$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
+The values of the interslice normal force E the interslice normal/shear force magnitude ratio $\lambda{}$, and the Factor of Safety ($FS$), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R_{i}$, and $T_{i}$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:fctSfty}
+\phantomsection 
+\label{T:fctSfty}
+\\ \midrule \\
+Label & factor of safety
+\\ \midrule \\
+Equation & $FS=0$
+\\ \midrule \\
+Description & FIXME: add description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
 Table~\ref{Table:InpuVari} and Table~\ref{Table:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.

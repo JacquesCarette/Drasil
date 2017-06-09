@@ -85,9 +85,9 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
--------------------
--- To Make Intro --
--------------------
+-----------------------
+-- S2: Intro helpers --
+-----------------------
 
 startIntro, knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
 startIntro = foldlSent [(at_start software), 
@@ -109,38 +109,6 @@ incScoR = foldl (+:+) EmptyS [S "getting all", phrase input_, (plural parameter)
   S "related to", (phrase blastTy)]
 endScoR = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the",
   (phrase glaSlab), S "is safe to use or not"]
-
-{-s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
-     (incScoR, endScoR)
-     (knowIR, undIR, appStanddIR)
-     (s2_3_intro, dataDefn, s6_2_4, s2_3_intro_end)
-  where startIntro = foldlSent [(at_start software), 
-                     S "is helpful to efficiently and correctly predict the", 
-                     (phrase blastRisk), S "involved with the" +:+. 
-                     (phrase glaSlab), S "The", (phrase blast), 
-                     S "under consideration is" +:+. (blast ^. defn), S "The",
-                     phrase software `sC` S "herein called", (short gLassBR),
-                     S "aims to predict the", (phrase blastRisk), 
-                     S "involved with the", (phrase glaSlab),
-                     S "using an intuitive interface"]
-        incScoR    = foldl (+:+) EmptyS [S "getting all", phrase input_, 
-                     (plural parameter), S "related to the",
-                     (phrase glaSlab), S "and also the",
-                     (plural parameter), S "related to", 
-                     (phrase blastTy)]
-        endScoR    = foldl (+:+) EmptyS [S "use the", plural datum, 
-                     S "and predict whether the", (phrase glaSlab),
-                     S "is safe to use or not"]
-        knowIR    = (phrase theory +:+ S "behind" +:+
-                    (phrase glBreakage) +:+ 
-                    S "and" +:+ (phrase blastRisk))
-        undIR     = (foldlList [S "second year calculus", S "structural mechanics",
-                    S "computer applications in civil engineering"])
-        appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
-                       S "applicable standards for constructions using glass" +:+
-                       S "from" +:+ sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
--}
-
 --for Purpose of Document Section
 s2_1_intro_p1 :: Sentence
 s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this", 

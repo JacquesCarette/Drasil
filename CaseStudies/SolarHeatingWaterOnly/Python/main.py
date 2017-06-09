@@ -50,7 +50,7 @@ icdict1 = {'Tw': pardict['Tinit']}#,
 
 def DSargs1(t, y):
     return (1 / params.tau_w) * (params.Tc - y)
-waterTemp =  ode(DSargs1).set_integrator('dopri5')
+waterTemp =  ode(DSargs1).set_integrator('vode', method='bdf')
 traj1 = params.Tinit
 waterTemp.set_initial_value(traj1)
 values = int(params.tfinal / params.tstep)

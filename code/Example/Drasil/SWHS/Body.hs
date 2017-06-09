@@ -576,7 +576,7 @@ assump11 = S "The" +:+ phrase model +:+
   S "The" +:+ phrase temp_W +:+ S "and" +:+ 
   phrase temp_PCM +:+ S "can only increase, or remain" +:+
   S "constant; they do not decrease. This implies that the" +:+
-  phrase temp_init +:+ sParen (acroA "12") +:+ is less than (or equal)" +:+
+  phrase temp_init +:+ sParen (acroA "12") +:+ S "is less than (or equal)" +:+
   S "to the" +:+ phrase temp_C +:+. sSqBr ((acroIM "1") `sC` (acroLC "4"))
 --
 assump12 = S "The" +:+
@@ -595,7 +595,7 @@ assump14 = S "The operating" +:+
   S "the" +:+ phrase temp +:+ S "will not drop below the" +:+
   phrase melt_pt +:+ S "of" +:+
   phrase water `sC` S "or rise above its" +:+
-  phrase boil_pt +:+. sSqBr (acroIM "1") `sC` (acroIM "3"))
+  phrase boil_pt +:+. sSqBr (acroIM "1") `sC` (acroIM "3")
 --
 assump15 = S "The" +:+
   phrase tank +:+ S "is" +:+ phrase perfect_insul +:+

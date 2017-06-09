@@ -8,10 +8,11 @@ import energy
 import plot
 import output
 import verify_output
-import PyDSTool
-from PyDSTool import args
+# import PyDSTool
+# from PyDSTool import args
 import sys
-from scipy import integrate
+from scipy.integrate import ode
+import numpy as np
 
 filename = sys.argv[1]
 filenamePrefix = ""
@@ -38,23 +39,31 @@ pardict = {#'Ap': params.Ap,
 icdict1 = {'Tw': pardict['Tinit']}#,
 #          'Tp': pardict['Tinit']}
 
-DSargs1 = args(name='WaterTemp')
+# DSargs1 = args(name='WaterTemp')
 # DSargs1.events = [event.event1(params)]
-DSargs1.pars = pardict
-DSargs1.tdata = [0, params.tfinal]
-DSargs1.algparams = {'init_step': params.tstep, 'rtol': params.RelTol, 'atol': params.AbsTol}
-DSargs1.varspecs = temperature.temperature1()
-DSargs1.ics = icdict1
-waterTemp = PyDSTool.Generator.Vode_ODEsystem(DSargs1)
+# DSargs1.pars = pardict
+# DSargs1.tdata = [0, params.tfinal]
+# DSargs1.algparams = {'init_step': params.tstep, 'rtol': params.RelTol, 'atol': params.AbsTol}
+# DSargs1.varspecs = temperature.temperature1()
+# DSargs1.ics = icdict1
+# waterTemp = PyDSTool.Generator.Vode_ODEsystem(DSargs1)
 
-# def DSargs1(t, y):
-    # return [y[1], -y[0]+sqrt(y[0])]]
-# waterTemp =  ode(DSargs1).set_integrator('dopri5')
-# traj1 = [0.0, params.Tinit]
-# waterTemp.set_initial_value(traj1)
-
-traj1 = waterTemp.compute('waterTemp')
-pts1 = traj1.sample()
+def DSargs1(t, y):
+    return (1 / params.tau_w) * (params.Tc - y)
+waterTemp =  ode(DSargs1).set_integrator('dopri5')
+traj1 = params.Tinit
+waterTemp.set_initial_value(traj1)
+values = int(params.tfinal / params.tstep)
+t = np.linspace(0.00001, params.tfinal, values)
+pts1 = {'t':  t,
+        'Tw': np.zeros(values)}
+        
+for ii in range(len(pts1['t'])):
+    pts1['Tw'][ii] = waterTemp.integrate(t)
+print pts1['Tw']
+##print pts1['Tw']
+# traj1 = waterTemp.compute('waterTemp')
+# pts1 = traj1.sample()
 
 # evs1 = traj1.getEvents('event_melt_begin')
 eWat = energy.energy1Wat(pts1['Tw'], params)

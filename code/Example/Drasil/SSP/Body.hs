@@ -338,7 +338,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   S "of" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+: S "9, as done in" +:+
   short dataDefn :+: S "10" `sC` short dataDefn :+: S "11"]
 
-s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ S "normal" +:+ phrase force),
+s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
   S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+

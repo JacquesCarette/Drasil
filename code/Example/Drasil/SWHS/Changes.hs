@@ -58,18 +58,18 @@ lc12 = LCChunk (nw $ npnc "plot" (nounPhraseSP
 
 --FIXME: These shouldn't be duplicated.
 lc7np, lc11np, uc5np :: NP
-lc7np = nounPhrase'' (S "How the governing" +:+ (getAcc ode) :+: 
+lc7np = nounPhrase'' (S "How the governing" +:+ getAcc ode :+: 
   S "s are defined using the input parameters.") (S "How the governing" +:+ 
   (getAcc ode) :+: S "s are defined using the input parameters.") 
   CapFirst CapWords
   
-lc11np = nounPhrase'' (S "The algorithm used for the" +:+ (getAcc ode) +:+
-  S "solver.") (S "The algorithm used for the" +:+ (getAcc ode) +:+
+lc11np = nounPhrase'' (S "The algorithm used for the" +:+ getAcc ode +:+
+  S "solver.") (S "The algorithm used for the" +:+ getAcc ode +:+
   S "solver.") CapFirst CapWords
   
-uc5np = nounPhrase'' (S "The" +:+ (getAcc ode) :+: S "s for" +:+
+uc5np = nounPhrase'' (S "The" +:+ getAcc ode :+: S "s for" +:+
   S "temperature can be defined using parameters defined in the input" +:+
-  S "parameters module.") (S "The" +:+ (getAcc ode) :+: S "s for" +:+
+  S "parameters module.") (S "The" +:+ getAcc ode :+: S "s for" +:+
   S "temperature can be defined using parameters defined in the input" +:+
   S "parameters module.") CapFirst CapWords
   

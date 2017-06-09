@@ -50,7 +50,7 @@ t1descr = (S "The above" +:+ phrase equation +:+ S "gives the" +:+
   S "to apply" `sC` S "other forms of" +:+ phrase energy `sC` S "such as" +:+
   phrase mech_energy `sC` 
   S "are assumed to be negligible in the" +:+ phrase system +:+.
-  sParen (short assumption :+: S (show 1)))
+  sParen (short assumption :+: S "1"))
 
 --referencing within a simple list is not yet implemented.
 --Forgot many "S" and ":+:" typing out above description

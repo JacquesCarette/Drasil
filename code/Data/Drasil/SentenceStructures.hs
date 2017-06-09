@@ -2,6 +2,7 @@ module Data.Drasil.SentenceStructures
   ( foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
+  , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
   , showingCxnBw, refineChain, foldlSP
   ) where
@@ -63,6 +64,10 @@ sOr p1 p2 = p1 +:+ S "or" +:+ p2
 ofThe, ofThe' :: Sentence -> Sentence -> Sentence
 ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
 ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
+
+ofGiv, ofGiv' :: Sentence -> Sentence -> Sentence
+ofGiv  p1 p2 = S "the" +:+ p1 +:+ S "of a given" +:+ p2
+ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
 
 toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2

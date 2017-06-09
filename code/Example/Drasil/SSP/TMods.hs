@@ -50,7 +50,7 @@ mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")  mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (C pi_f) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
+mcSS_rel = (C shrResI) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = fixmeS
@@ -75,16 +75,3 @@ hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
 
 hksLw_desc :: Sentence
 hksLw_desc = fixmeS
-
-
-{-
-name :: RelationConcept
-name = makeRC "" (nounPhraseSP "") mcSS_desc mcSS_rel
-
-mcSS_rel :: Relation
-mcSS_rel = 
-
-mcSS_desc :: Sentence
-mcSS_desc = fixmeS
-
--}

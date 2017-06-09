@@ -14,15 +14,15 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
-              si, pi_f, ti, ri, wi, hi, dHi, ei, xi_2,
-              ubi, uti, ni, ni_prime, ni_star, qi, alpha_i, beta_i,
+              mobShrI, shrResI, ti, ri, wi, hi, dHi, ei, intShrForce,
+              ubi, uti, ni, nrmFSubWat, ni_star, qi, alpha_i, beta_i,
               omega_i, bi, lbi, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
-  coords, hWT, hUS, hSlip, xi, critCoords, si, pi_f,
-  ti, ri, wi, hi, dHi, ei, xi_2, ubi, uti, ni, ni_prime, ni_star,
+  coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
+  ti, ri, wi, hi, dHi, ei, intShrForce, ubi, uti, ni, nrmFSubWat, ni_star,
   qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i :: UnitalChunk
@@ -93,13 +93,13 @@ critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates that " ++
   (Concat [sub (Atomic "({x") (Atomic "cs"), sub (Atomic "},{y") (Atomic "cs"), 
   Atomic "})"]) metre
 
-si          = uc' "S_i" (cn $ "mobilized shear force for slice i")
+mobShrI     = uc' "S_i" (cn $ "mobilized shear force for slice i")
   fixme
   (sub cS lI) newton
 
 --mobShear    = SM.mobShear
 
-pi_f        = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
+shrResI     = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
   "force that describes the limit of mobilized shear force the slice i " ++
   "can withstand before failure")
   fixme
@@ -134,7 +134,7 @@ ei          = uc' "E_i" (cn $ "interslice normal force being exerted between adj
   fixme
   (sub cE lI) newton
 
-xi_2        = uc' "X_i" (cn $ "interslice shear force being exerted between adjacent slices " ++ fisi)
+intShrForce = uc' "X_i" (cn $ "interslice shear force being exerted between adjacent slices " ++ fisi)
   fixme
   (sub cX lI) newton
 
@@ -150,7 +150,7 @@ ni          = uc' "N_i" (cn $ "total reactive force for a soil surface subject t
   fixme
   (sub cN lI) newton
 
-ni_prime    = uc' "N'_i" (cn $ "effective normal force of a soil surface, subtracting pore water reactive force from total reactive force")
+nrmFSubWat = uc' "N'_i" (cn $ "effective normal force of a soil surface, subtracting pore water reactive force from total reactive force")
   fixme
   (sub (Atomic "N'") lI) newton
 

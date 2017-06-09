@@ -102,10 +102,10 @@ s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
   S "availability, and negative environmental impact of" +:+
   S "fossil fuels, there is a higher demand for renewable" +:+
-  phrase energy +:+ S "sources and" +:+
+  phrase energy +:+ plural source +:+ S "and" +:+
   phrase energy +:+. S "storage technology" +:+ (swhs_pcm ^. defn)
   +:+ sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
-  phrase energy +:+ S "source and provide a novel way of" +:+
+  phrase energy +:+ phrase source +:+ S "and provide a novel way of" +:+
   S "storing" +:+. phrase energy +:+
   at_start swhs_pcm +:+ S "improve over the traditional" +:+
   phrase progName :+: S "s because of their smaller size. The" +:+
@@ -116,9 +116,9 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
   S "storage capacity per" +:+ phrase unit_ +:+. S "weight"
 
 s2_kSent :: Sentence
-s2_kSent = EmptyS +:+. (phrase swhs_pcm) +:+ S "The developed" +:+
-  (phrase program) +:+ S "will be referred to as" +:+
-  (titleize progName) +:+ sParen (short progName) -- SSP has same style sentence here
+s2_kSent = EmptyS +:+. phrase swhs_pcm +:+ S "The developed" +:+
+  phrase program +:+ S "will be referred to as" +:+
+  titleize progName +:+ sParen (short progName) -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a 
 -- similar paragraph in each of the other eolar water heating systems incorporating
@@ -336,7 +336,7 @@ s3_1_2_bullets = Enumeration (Bullet $
 s3_2_contents :: Contents
 s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
   short progName +:+ S "should have an understanding of undergraduate" +:+
-  S "Level 1 Calculus and" +:+. (titleize physics)
+  S "Level 1 Calculus and" +:+. titleize physics
 
 -- Some of these course names are repeated between examples, could potentially 
 -- be abstracted out.
@@ -687,11 +687,13 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified"
   Paragraph (S "Where" +:+ P (ht_flux_in ^. symbol) `sC`
   P (ht_flux_out ^. symbol) `sC` P (in_SA ^. symbol) `sC`
   S "and" +:+ P (out_SA ^. symbol) +:+ S "are explained in" +:+
-  S "GD2. Assuming" +:+ P (density ^. symbol) `sC`
+  short genDefn :+: S "2. Assuming" +:+ P (density ^. symbol) `sC`
   P (heat_cap_spec ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
   S "are constant over the" +:+ phrase vol `sC`
-  S "which is true in our case by" +:+ titleize' assumption +:
-  S "(A3), (A4), (A5), and (A6), we have"),
+  S "which is true in our case by" +:+ titleize' assumption +:+
+  sParen (short assumption :+: S "3") `sC` sParen (short assumption :+: S "4") `sC`
+  sParen (short assumption :+: S "5") `sC` sParen (short assumption :+: S "6") `sC`
+  S "we have:"),
   EqnBlock 
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp) 
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * 

@@ -56,7 +56,7 @@ mod_inputf = mod_io_fun ssa [] [mod_hw] (plural inDatum) mod_inputf_desc
 mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = mod_outputf_desc_fun (phrase fs_rc +:+
   S "for the critical" +:+ phrase slip +:+ S "calculated by the" +:+ titleize morPrice +:+ 
-  titleize module_ +:+ S "and" +:+ titleize rgFnElm +:+ S "Method" +:+
+  titleize module_ +:+ S "and" +:+ titleize rgFnElm +:+ titleize method_ +:+
   titleize module_ `sC` S "and a" +:+
   S "plot of the" +:+ phrase crtSlpSrf +:+ S "on the" +:+ phrase slope +:+
   S "geometry, with the showing the" +:+ phrase element +:+
@@ -151,7 +151,7 @@ mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
 
 mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
-  (S "The" +:+ phrase fs_rc +:+ S "of a given" +:+. phrase slpSrf)
+  (phrase fs_rc `ofGiv'` phrase slpSrf :+: ".")
   ssa
   []
   []
@@ -161,16 +161,16 @@ mod_mp = makeImpModule mod_mp_desc
 -- rfem solver module
 mod_rfem_desc :: ConceptChunk
 mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
-  (S "Calculate the global" +:+ (phrase fs_rc) `sC` S "local" +:+
-  (phrase slice) +:+ (plural fs_rc) `sC` S "and local" +:+
-  (phrase slice) +:+ S "displacements of a given" +:+ (phrase slpSrf) +:+
+  (S "Calculate" +:+ (S "global" +:+ phrase fs_rc `sC` S "local" +:+
+  phrase slice +:+ plural fs_rc `sC` S "and local" +:+
+  phrase slice +:+ S "displacements") `ofGiv` phrase slpSrf +:+
   S "under given conditions, through implementation of a" +:+
-  (phrase rgFnElm) +:+ (phrase ssa) +:+. (phrase method_))
+  phrase rgFnElm +:+ phrase ssa +:+. phrase method_)
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
-  (S "The" +:+ (phrase algorithm) +:+ S "to perform a" +:+
-  (titleize rgFnElm) +:+ S "Method analysis of the" +:+. (phrase slope))
+  (S "The" +:+ phrase algorithm +:+ S "to perform a" +:+
+  titleize rgFnElm +:+ titleize method_ +:+ phrase analysis +:+ S "of the" +:+. phrase slope)
   ssa
   []
   []
@@ -180,21 +180,22 @@ mod_rfem = makeImpModule mod_rfem_desc
 -- slice property sorter module
 mod_sps_desc :: ConceptChunk
 mod_sps_desc = dccWDS "mod_sps_desc" (cn' "slice property sorter")
-  (S "When performing" +:+ (phrase slip) +:+ S "analysis with the RFEM Solver Module" +:+
-  S "or" +:+ (titleize morPrice) +:+ S "Module" `sC` S "the base and" +:+ 
-  (phrase intrslce) +:+ (plural surface) +:+ S "of each" +:+
-  (phrase slice) +:+ S "in the" +:+ S "analysis requires a" +:+ (phrase soil) +:+
-  S "constant." +:+ (titleize mod_sps_desc) +:+ S "Module identifies which" +:+
-  (phrase soilLyr) +:+ S "the" +:+ (phrase surface) +:+ S "is in" +:+
-  S "to assign" +:+ (plural property) +:+ S "from that" +:+ (phrase soilLyr) `sC`
-  S "and uses a weighting scheme when the" +:+ (phrase surface) +:+
-  S "crosses multiple" +:+. (plural soilLyr))
+  (S "When performing" +:+ phrase slip +:+ phrase analysis +:+
+  S "with the RFEM Solver" +:+ titleize module_ +:+
+  S "or" +:+ titleize morPrice +:+ titleize module_ `sC` S "the base and" +:+ 
+  phrase intrslce +:+ plural surface +:+ S "of each" +:+
+  phrase slice +:+ S "in the" +:+ phrase analysis +:+ S "requires a" +:+ phrase soil +:+.
+  S "constant" +:+ titleize mod_sps_desc +:+ titleize module_ +:+ S "identifies which" +:+
+  phrase soilLyr +:+ S "the" +:+ phrase surface +:+ S "is in" +:+
+  S "to assign" +:+ plural property +:+ S "from that" +:+ phrase soilLyr `sC`
+  S "and uses a weighting scheme when the" +:+ phrase surface +:+
+  S "crosses multiple" +:+. plural soilLyr)
 
 mod_sps :: ModuleChunk
 mod_sps = makeImpModule mod_sps_desc
-  ((at_start algorithm) +:+ S "to assigns" +:+ (plural soilPrpty) +:+
-  S "to" +:+ (plural slice) +:+ S "based on the location of the" +:+
-  (phrase slice) +:+ S "with respect" +:+S "to the different" +:+. (plural soilLyr))
+  (at_start algorithm +:+ S "to assigns" +:+ plural soilPrpty +:+
+  S "to" +:+ plural slice +:+ S "based on the location of the" +:+
+  phrase slice +:+ S "with respect" +:+S "to the different" +:+. plural soilLyr)
   ssa
   []
   []
@@ -224,7 +225,7 @@ mod_sds = mod_seq_fun matlab []
 mod_rng :: ModuleChunk
 mod_rng = mod_rng_fun matlab [] (S "Randomly produces numbers between 0 and 1" `sC`
   S "using a chaotic function with an external seed. Used when generating" +:+
-  (plural slpSrf) +:+ S "in the" +:+ (titleize mod_genalg_desc) +:+ S "Module.")
+  plural slpSrf +:+ S "in the" +:+ titleize mod_genalg_desc +:+. titleize module_)
 
 -- plotting module
 -- mod_plot_desc :: ConceptChunk

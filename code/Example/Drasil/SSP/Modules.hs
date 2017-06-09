@@ -151,7 +151,7 @@ mod_mp_desc = dccWDS "mod_mp_desc" (cn "morgenstern price solver")
 
 mod_mp :: ModuleChunk
 mod_mp = makeImpModule mod_mp_desc
-  (phrase fs_rc `ofGiv'` phrase slpSrf :+: ".")
+  (phrase fs_rc `ofGiv'` phrase slpSrf :+: S ".")
   ssa
   []
   []

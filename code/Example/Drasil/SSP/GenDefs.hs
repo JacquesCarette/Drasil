@@ -41,7 +41,7 @@ resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear") resShr_desc resShr_rel
 
 resShr_rel :: Relation
-resShr_rel = (C shrResI) := (C nrmFSubWat) :* tan (C fricAngle) :+ (C cohesion) :* (C bi) :* sec (C alpha_i)
+resShr_rel = (C shrResI) := (C nrmFSubWat) :* tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)
 
 resShr_desc :: Sentence
 resShr_desc = fixmeS
@@ -51,8 +51,8 @@ mobShr :: RelationConcept
 mobShr = makeRC "mobShr" (nounPhraseSP "mobile shear") mobShr_desc mobShr_rel
 
 mobShr_rel :: Relation
-mobShr_rel = (C si) := (C shrResI) :/ (C fs) := 
-  ((C nrmFSubWat) :* tan (C fricAngle) :+ (C cohesion) :* (C bi) :* sec (C alpha_i)) :/ (C fs)
+mobShr_rel = (C mobShrI) := (C shrResI) :/ (C fs) := 
+  ((C nrmFSubWat) :* tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)) :/ (C fs)
 
 mobShr_desc :: Sentence
 mobShr_desc = fixmeS

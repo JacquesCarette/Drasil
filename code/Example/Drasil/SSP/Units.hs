@@ -15,15 +15,15 @@ sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               mobShrI, shrResI, ti, ri, wi, hi, dHi, ei, intShrForce,
-              ubi, uti, ni, nrmFSubWat, ni_star, qi, alpha_i, beta_i,
-              omega_i, bi, lbi, lsi, hi_2, genForce, momntOfBdy,
+              ubi, uti, ni, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
+              omega_i, baseWthX, lbi, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
   ti, ri, wi, hi, dHi, ei, intShrForce, ubi, uti, ni, nrmFSubWat, ni_star,
-  qi, alpha_i, beta_i, omega_i, bi, lbi, lsi, hi_2, genForce,
+  qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i :: UnitalChunk
 
@@ -162,7 +162,7 @@ qi          = uc' "Q_i" (cn $ "imposed surface load; a downward force acting int
   fixme
   (sub cQ lI) newton
 
-alpha_i     = uc' "alpha_i" (cn $ "angle of the base of the mass relative to the horizontal " ++ fsi)
+baseAngle   = uc' "alpha_i" (cn $ "angle of the base of the mass relative to the horizontal " ++ fsi)
   fixme
   (sub (Greek Alpha_L) lI) degree
 
@@ -174,7 +174,7 @@ omega_i     = uc' "omega_i" (cn $ "angle of imposed surface load acting into the
   fixme
   (sub (Greek Omega_L) lI) degree
 
-bi          = uc' "b_i" (cn $ "base width of the slice in the x-ordinate direction only " ++ fsi)
+baseWthX    = uc' "b_i" (cn $ "base width of the slice in the x-ordinate direction only " ++ fsi)
   fixme
   (sub lB lI) metre
 

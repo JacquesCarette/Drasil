@@ -14,15 +14,15 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
-              mobShrI, shrResI, ti, ri, wi, hi, dHi, ei, intShrForce,
-              ubi, uti, ni, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
+              mobShrI, shrResI, ti, ri, wi, hi, dHi, intNormForce, intShrForce,
+              ubi, uti, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
               omega_i, baseWthX, lbi, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
-  ti, ri, wi, hi, dHi, ei, intShrForce, ubi, uti, ni, nrmFSubWat, ni_star,
+  ti, ri, wi, hi, dHi, intNormForce, intShrForce, ubi, uti, totNrmForce, nrmFSubWat, ni_star,
   qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i :: UnitalChunk
@@ -130,7 +130,7 @@ dHi         = uc' "dH_i" (cn $ "difference between interslice forces on acting i
   fixme
   (sub (Concat [Greek Delta, cH]) lI) newton
 
-ei          = uc' "E_i" (cn $ "interslice normal force being exerted between adjacent slices " ++ fisi)
+intNormForce = uc' "E_i" (cn $ "interslice normal force being exerted between adjacent slices " ++ fisi)
   fixme
   (sub cE lI) newton
 
@@ -146,7 +146,7 @@ uti         = uc' "U_t,i" (cn $ "surface hydrostatic force arising from water pr
   fixme
   (sub cU (Atomic "t,i")) newton
 
-ni          = uc' "N_i" (cn $ "total reactive force for a soil surface subject to a body resting on it")
+totNrmForce = uc' "N_i" (cn $ "total reactive force for a soil surface subject to a body resting on it")
   fixme
   (sub cN lI) newton
 
@@ -250,9 +250,9 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
 -- Unitless Symbols --
 
 sspUnitless :: [ConVar]
-sspUnitless = [SM.poissnsR, fs, kc, lambda, fi, n, upsilon, fsloc]
+sspUnitless = [SM.poissnsR, fs, kc, normToShear, scalFunc, n, upsilon, fsloc]
 
-fs, kc, lambda, fi, n, upsilon, fsloc :: ConVar
+fs, kc, normToShear, scalFunc, n, upsilon, fsloc :: ConVar
 
 --poisson     = SM.poissnsR
   
@@ -263,10 +263,10 @@ kc          = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor; proportion
   "factor of force that weight pushes outwards; caused by seismic earth movements")
   fixme) (sub cK lC)
 
-lambda      = cvR (dcc "lambda" (nounPhraseSP $ "ratio between interslice normal and " ++
+normToShear = cvR (dcc "lambda" (nounPhraseSP $ "ratio between interslice normal and " ++
   "shear forces (applied to all interslices)") fixme) (Greek Lambda_L)
   
-fi          = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of interslice " ++ 
+scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of interslice " ++ 
   "forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
   fixme) (sub lF lI)
   

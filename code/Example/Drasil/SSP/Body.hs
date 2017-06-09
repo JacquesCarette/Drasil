@@ -284,8 +284,8 @@ s4_2_1_list = enumSimple 1 (short assumption) [
            S "isotropic properties"),
   (at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S "have a" +:+
            S "linear relationship, proportional to a constant" +:+
-           sParen (getS lambda) +:+ S "and an" +:+
-           phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS fi) +:+.
+           sParen (getS normToShear) +:+ S "and an" +:+
+           phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
            S "depending on x position"),
   (at_start slice +:+ S "to base normal and" +:+ plural shearForce +:+ S "have" +:+
            S "a linear relationship, dependent on the" +:+
@@ -339,7 +339,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   short dataDefn :+: S "10" `sC` short dataDefn :+: S "11"]
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
-  S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio lambda" `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
+  S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio" +:+ getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+
   plural value, S "in" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+:
@@ -390,7 +390,7 @@ varChWU :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk [Var
 varChWU i t d s u contraints typicalVal = VarCh (uc' i t d s u) contraints typicalVal
 
 --example
-intNormFor = sentVarCh $ posVarCh ei [] (15000 :: Integer)
+intNormFor = sentVarCh $ posVarCh intNormForce [] (15000 :: Integer)
 
 --"Sentences from Variable Chunk"
 sentVarCh :: VarCh -> [Sentence]
@@ -402,13 +402,13 @@ fmtBF' symb [VarCon f num] = E $ (C symb) `f` num
 fmtBF' symb (x:xs)         = fmtBF' [x] +:+ S "and" +:+ (fmtBF symb xs)
 --- END OF SECTION -}
 
-intNormFor  = mkGtZeroConst ei          []          (15000 :: Integer)
-effectCohe  = mkGtZeroConst cohesion    []          (10    :: Integer)
-poissnRatio = mkGtZeroConst poissnsR    [((:<), 1)] (0.4   :: Double )
-fricAng     = mkGtZeroConst fricAngle   [((:<), 90)] (25    :: Integer)
-dryUWght    = mkGtZeroConst dryWeight   []          (20    :: Integer)
-satUWght    = mkGtZeroConst satWeight   []          (20    :: Integer)
-waterUWght  = mkGtZeroConst waterWeight []          (9.8   :: Double )
+intNormFor  = mkGtZeroConst intNormForce []           (15000 :: Integer)
+effectCohe  = mkGtZeroConst cohesion     []           (10    :: Integer)
+poissnRatio = mkGtZeroConst poissnsR     [((:<), 1)]  (0.4   :: Double )
+fricAng     = mkGtZeroConst fricAngle    [((:<), 90)] (25    :: Integer)
+dryUWght    = mkGtZeroConst dryWeight    []           (20    :: Integer)
+satUWght    = mkGtZeroConst satWeight    []           (20    :: Integer)
+waterUWght  = mkGtZeroConst waterWeight  []           (9.8   :: Double )
 
 fcOfSa, slipVert2, deltax, deltay :: [Sentence]
 fcOfSa = [S "FS", E $ (V "FS") :> (Int 0)] -- FIXME: Use factor of safety's symbol (currently doesn't have one)

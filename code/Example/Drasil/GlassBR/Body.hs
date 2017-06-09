@@ -36,7 +36,6 @@ import Drasil.GlassBR.DataDefs
 import Drasil.DocumentLanguage
 import Drasil.TraceabilityMandGs
 import Drasil.Stakeholders
-import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 import Drasil.SpecificSystemDescription
@@ -44,7 +43,7 @@ import Drasil.SpecificSystemDescription
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s2, s3, s4, s4_2,
+s3, s4, s4_2,
   s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1,
   s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
@@ -69,7 +68,12 @@ glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]):
-  map Verbatim [s2, s3, s4, s5, s6, s7, s8, s9, s10, s11]
+  IntroSec (IntroProg startIntro (short gLassBR) 
+  [IPurpose (s2_1_intro_p1),
+  IScope incScoR endScoR,
+  IChar knowIR undIR appStanddIR,
+  IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end]) :
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10, s11]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI glassBRProg srs authors this_si this_symbols 
@@ -81,7 +85,32 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
+-------------------
+-- To Make Intro --
+-------------------
+
+startIntro, knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
+startIntro = foldlSent [(at_start software), 
+  S "is helpful to efficiently and correctly predict the",
+  (phrase blastRisk), S "involved with the" +:+. (phrase glaSlab),
+  S "The", (phrase blast), S "under consideration is" +:+. (blast ^. defn),
+  S "The", phrase software `sC` S "herein called", (short gLassBR), 
+  S "aims to predict the", (phrase blastRisk), S "involved with the",
+  (phrase glaSlab), S "using an intuitive interface"]
+knowIR = (phrase theory +:+ S "behind" +:+ (phrase glBreakage) +:+
+  S "and" +:+ (phrase blastRisk))
+undIR = (foldlList [S "second year calculus", S "structural mechanics",
+  S "computer applications in civil engineering"])
+appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
+  S "applicable standards for constructions using glass from" +:+
+  sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
+incScoR = foldl (+:+) EmptyS [S "getting all", phrase input_, (plural parameter),
+  S "related to the", (phrase glaSlab), S "and also the", (plural parameter),
+  S "related to", (phrase blastTy)]
+endScoR = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the",
+  (phrase glaSlab), S "is safe to use or not"]
+
+{-s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
      (incScoR, endScoR)
      (knowIR, undIR, appStanddIR)
      (s2_3_intro, dataDefn, s6_2_4, s2_3_intro_end)
@@ -110,7 +139,7 @@ s2 = introductionF (gLassBR) (startIntro, (short gLassBR)) (s2_1_intro_p1)
         appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
                        S "applicable standards for constructions using glass" +:+
                        S "from" +:+ sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
-
+-}
 
 --for Purpose of Document Section
 s2_1_intro_p1 :: Sentence

@@ -23,7 +23,7 @@ risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C stressDistFac)
 
 hFromt_eq :: Relation
-hFromt_eq = ((C act_thick) := (Case [(Dbl 2.16, (C nom_thick) := Dbl 2.5),
+hFromt_eq = (Case [(Dbl 2.16, (C nom_thick) := Dbl 2.5),
     (Dbl 2.59, (C nom_thick) := Dbl 2.7),
     (Dbl 2.92, (C nom_thick) := Dbl 3.0),
     (Dbl 3.78, (C nom_thick) := Dbl 4.0),
@@ -34,7 +34,7 @@ hFromt_eq = ((C act_thick) := (Case [(Dbl 2.16, (C nom_thick) := Dbl 2.5),
     (Dbl 11.91, (C nom_thick) := Dbl 12.0),
     (Dbl 15.09, (C nom_thick) := Dbl 16.0),
     (Dbl 18.26, (C nom_thick) := Dbl 19.0),
-    (Dbl 21.44, (C nom_thick) := Dbl 22.0)]))
+    (Dbl 21.44, (C nom_thick) := Dbl 22.0)])
 
 hFromt :: QDefinition
 hFromt = fromEqn (act_thick ^. id) 

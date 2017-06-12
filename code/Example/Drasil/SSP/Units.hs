@@ -14,15 +14,15 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
-              mobShrI, shrResI, ti, ri, wi, hi, dHi, intNormForce, intShrForce,
-              ubi, uti, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
+              mobShrI, shrResI, ti, ri, slcWght, hi, dHi, intNormForce, intShrForce,
+              baseHydroForce, uti, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
               omega_i, baseWthX, lbi, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
-  ti, ri, wi, hi, dHi, intNormForce, intShrForce, ubi, uti, totNrmForce, nrmFSubWat, ni_star,
+  ti, ri, slcWght, hi, dHi, intNormForce, intShrForce, baseHydroForce, uti, totNrmForce, nrmFSubWat, ni_star,
   qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i :: UnitalChunk
@@ -117,7 +117,7 @@ ri          = uc' "R_i"
   fixme
   (sub cR lI) newton
 
-wi          = uc' "W_i" (cn $ "weight; downward force caused by gravity on slice i")
+slcWght     = uc' "W_i" (cn $ "weight; downward force caused by gravity on slice i")
   fixme
   (sub cW lI) newton
 
@@ -138,7 +138,7 @@ intShrForce = uc' "X_i" (cn $ "interslice shear force being exerted between adja
   fixme
   (sub cX lI) newton
 
-ubi         = uc' "U_b,i" (cn $ "base hydrostatic force arising from water pressure within the slice " ++ fsi)
+baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force arising from water pressure within the slice " ++ fsi)
   fixme
   (sub cU (Atomic "b,i")) newton
 

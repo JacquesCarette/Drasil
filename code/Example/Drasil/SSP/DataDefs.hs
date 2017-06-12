@@ -6,6 +6,7 @@ import Prelude hiding (id)
 import Language.Drasil
 import Drasil.SSP.Units
 import Data.Drasil.SI_Units
+import Data.Drasil.Utils
 
 ------------------------
 --  Data Definitions  --
@@ -22,7 +23,7 @@ fixmeS = S "FIXME: add description"
 --DD1
 
 sliceWght :: QDefinition
-sliceWght = fromEqn (wi ^. id) (wi ^. term) (wi ^. symbol) newton slcWgtEqn
+sliceWght = fromEqn (slcWght ^. id) (slcWght ^. term) (slcWght ^. symbol) newton slcWgtEqn
 
 slcWgtEqn :: Expr
 slcWgtEqn = (Int 0) --FIXME: add the long equation
@@ -30,7 +31,7 @@ slcWgtEqn = (Int 0) --FIXME: add the long equation
 --DD2
 
 baseWtrF :: QDefinition
-baseWtrF = fromEqn' (ubi ^. id) (ubi ^. term) (ubi ^. symbol) bsWtrFEqn 
+baseWtrF = mkDataDef' baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
 bsWtrFEqn = (Int 0)
@@ -78,7 +79,7 @@ ssmcLFEqn = (Int 0)
 --DD8
 
 surfLoads :: QDefinition
-surfLoads = fromEqn' (qi ^. id) (qi ^. term) (qi ^. symbol) surfLEqn --, wi?
+surfLoads = fromEqn' (qi ^. id) (qi ^. term) (qi ^. symbol) surfLEqn --, slcWght?
 
 surfLEqn :: Expr
 surfLEqn = (Int 0)
@@ -118,7 +119,7 @@ displcmntRxnFEqn = (Int 0)
 --DD13 FIXME: id for "Net Force-Displacement Equilibrium"
 
 netFDsplcmntEqbm :: QDefinition
-netFDsplcmntEqbm = fromEqn' (ti ^. id) (ti ^. term) (ti ^. symbol) netFDsplcmntEqbmEqn
+netFDsplcmntEqbm = fromEqn' (genForce ^. id) (genForce ^. term) (genForce ^. symbol) netFDsplcmntEqbmEqn
 
 netFDsplcmntEqbmEqn :: Expr
 netFDsplcmntEqbmEqn = (Int 0)

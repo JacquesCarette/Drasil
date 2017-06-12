@@ -21,15 +21,18 @@ module Data.Drasil.Utils
   , fmtBF
   , symbolMapFun
   , fterms , fterm
+  , {-mkDataDef,-} mkDataDef'
   ) where
 
+import Prelude hiding (id)
 import Data.List
 import Control.Lens ((^.))
-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
+import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
-  phrase, titleize, titleize', mkTable, Contents(Table))
+  phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
+  UnitalChunk, QDefinition, term, id, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation (description, input_, datum, 
                                             symbol_, fterms, fterm)
 import Data.Drasil.Concepts.Math (unit_)
@@ -179,3 +182,13 @@ unwrap Nothing  = EmptyS
 --FIXME: Not sure what type d should be
 symbolMapFun :: (SymbolForm c, Quantity c, Chunk d) => [c] -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)
+
+{-- Used to help make data definitions when id, term, and symbol come from the same sourse
+--mkDataDef :: UnitalChunk -> Expr -> QDefinition
+mkDataDef concept equation = fromEqn (concept ^. id) (concept ^. term) (concept ^. symbol) 
+  (((ucw concept) {-^. unit-}) ^. usymb) equation-}
+  
+-- Same as unprimed but for when unit isn't needed
+mkDataDef' :: (Chunk c, SymbolForm c, NamedIdea c) => c -> Expr -> QDefinition
+mkDataDef' concept equation = fromEqn' (concept ^. id) (concept ^. term) (concept ^. symbol) 
+  equation

@@ -744,8 +744,8 @@ s10_list = mkRefsList 1
   S "Volere template16.pdf") :+: S ", 2012."), 
   (S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
   +:+ S "for determining" +:+ (phrase load) +:+ S "resistance of" +:+
-  S "glass in buildings, ") :+: 
-  S " Standard E1300-09a, American Society for Testing and Material (ASTM),"
+  S "glass in buildings,") +:+ 
+  S "Standard E1300-09a, American Society for Testing and Material (ASTM),"
   +:+. S "2009"), 
   (S "ASTM, developed by subcommittee C1408, Book of standards 15.02,"
   +:+ Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036")), 

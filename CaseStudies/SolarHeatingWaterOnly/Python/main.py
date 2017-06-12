@@ -49,19 +49,16 @@ icdict1 = {'Tw': pardict['Tinit']}#,
 # waterTemp = PyDSTool.Generator.Vode_ODEsystem(DSargs1)
 
 def DSargs1(t, y):
-    return (1 / params.tau_w) * (params.Tc - y)
+    return (1.0 / params.tau_w) * (params.Tc - y)
 waterTemp =  ode(DSargs1).set_integrator('vode', method='bdf')
-traj1 = params.Tinit
-waterTemp.set_initial_value(traj1)
+waterTemp.set_initial_value(params.Tinit)
 values = int(params.tfinal / params.tstep)
-t = np.linspace(0.00001, params.tfinal, values)
+t = np.linspace(0.0000000001, params.tfinal, values) # Does not work with zero as input
 pts1 = {'t':  t,
         'Tw': np.zeros(values)}
         
 for ii in range(len(pts1['t'])):
-    pts1['Tw'][ii] = waterTemp.integrate(t)
-print pts1['Tw']
-##print pts1['Tw']
+    pts1['Tw'][ii] = waterTemp.integrate(pts1['t'][ii])
 # traj1 = waterTemp.compute('waterTemp')
 # pts1 = traj1.sample()
 

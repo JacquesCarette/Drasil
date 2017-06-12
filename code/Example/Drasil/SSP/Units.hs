@@ -277,4 +277,4 @@ upsilon     = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or
   fixme) (Greek Upsilon)
 
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety specific to a slice i")
-  fixme) (sub (Atomic "FS") (Atomic "Loc,i")
+  fixme) (sub (Atomic "FS") (Atomic "Loc,i"))

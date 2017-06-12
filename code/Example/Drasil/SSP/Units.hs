@@ -20,7 +20,7 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, water
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
-normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight, 
+normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
   ti, ri, wi, hi, dHi, intNormForce, intShrForce, ubi, uti, totNrmForce, nrmFSubWat, ni_star,
   qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
@@ -38,7 +38,7 @@ fisi = "(for interslice index i)"
 normStress  = SM.nrmStrss
 
 fricAngle   = uc' "varphi'" (cn $ "effective angle of friction")
-  ("The angle of inclination with respect to the horizontal axis of " ++ 
+  ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (Concat [Greek Phi_V, Atomic "'"]) degree
 
@@ -60,13 +60,13 @@ waterWeight = uc' "gamma_w" (cn $ "unit weight of water")
 
 --elastMod    = SM.elastMod
 
-coords      = uc' "(x,y)" 
-  (cn $ "cartesian position coordinates; y is considered parallel to the " ++ 
+coords      = uc' "(x,y)"
+  (cn $ "cartesian position coordinates; y is considered parallel to the " ++
   "direction of the force of gravity and x is considered perpendicular to y")
   fixme
   (Atomic "(x,y)") metre
 
-hWT         = uc' "y_wt,i" 
+hWT         = uc' "y_wt,i"
   (cn $ "the y ordinate, or height of the water table at i; refers to either " ++
   "slice i midpoint, or slice interface i")
   fixme
@@ -78,11 +78,11 @@ hUS         = uc' "y_us,i" (cn $ "the y ordinate, or height of the top of the " 
   (sub lY (Atomic "us,i")) metre
 
 hSlip       = uc' "y_slip,i" (cn $ "the y ordinate, or height of the slip " ++
-  "surface at i; refers to either slice i midpoint, or slice interface i") 
+  "surface at i; refers to either slice i midpoint, or slice interface i")
   fixme
   (sub lY (Atomic "slip,i")) metre
 
-xi          = uc' "x_i" 
+xi          = uc' "x_i"
   (cn $ "the x ordinate; refers to either slice i midpoint, or slice interface i")
   fixme
   (sub lX lI) metre
@@ -90,7 +90,7 @@ xi          = uc' "x_i"
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates that " ++
   "describe the vertices of the critical slip surface")
   fixme
-  (Concat [sub (Atomic "({x") (Atomic "cs"), sub (Atomic "},{y") (Atomic "cs"), 
+  (Concat [sub (Atomic "({x") (Atomic "cs"), sub (Atomic "},{y") (Atomic "cs"),
   Atomic "})"]) metre
 
 mobShrI     = uc' "S_i" (cn $ "mobilized shear force for slice i")
@@ -107,12 +107,12 @@ shrResI     = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
 
 --p           = SM.shearRes
 
-ti          = uc' "T_i" 
+ti          = uc' "T_i"
   (cn $ "mobilized shear force without the influence of interslice forces for slice i")
   fixme
   (sub cT lI) newton
 
-ri          = uc' "R_i" 
+ri          = uc' "R_i"
   (cn $ "shear resistance without the influence of interslice forces for slice i")
   fixme
   (sub cR lI) newton
@@ -166,7 +166,7 @@ baseAngle   = uc' "alpha_i" (cn $ "angle of the base of the mass relative to the
   fixme
   (sub (Greek Alpha_L) lI) degree
 
-beta_i      = uc' "beta_i" (cn $ "angle of the surface of the mass relative to the horizontal " ++ fsi) 
+beta_i      = uc' "beta_i" (cn $ "angle of the surface of the mass relative to the horizontal " ++ fsi)
   fixme
   (sub (Greek Beta_L) lI) degree
 
@@ -238,14 +238,14 @@ dv_i        = uc' "dv_i" (cn $ "normal displacement of a slice " ++ fsi)
   fixme
   (sub (Concat [Greek Delta_L, Atomic "v"]) lI) metre
 
-dx_i        = uc' "dx_i" (cn $ "displacement of a slice in the x-ordinate direction " ++ fsi) 
+dx_i        = uc' "dx_i" (cn $ "displacement of a slice in the x-ordinate direction " ++ fsi)
   fixme
   (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre
 
-dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direction " ++ fsi) 
+dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direction " ++ fsi)
   fixme
   (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre
-  
+
 
 -- Unitless Symbols --
 
@@ -255,7 +255,7 @@ sspUnitless = [SM.poissnsR, fs, kc, normToShear, scalFunc, n, upsilon, fsloc]
 fs, kc, normToShear, scalFunc, n, upsilon, fsloc :: ConVar
 
 --poisson     = SM.poissnsR
-  
+
 fs          = cvR (dcc "FS" (nounPhraseSP $ "global factor of safety describing the " ++
   "stability of a surface in a slope") fixme) (Atomic "FS")
 
@@ -265,16 +265,16 @@ kc          = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor; proportion
 
 normToShear = cvR (dcc "lambda" (nounPhraseSP $ "ratio between interslice normal and " ++
   "shear forces (applied to all interslices)") fixme) (Greek Lambda_L)
-  
-scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of interslice " ++ 
+
+scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of interslice " ++
   "forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
   fixme) (sub lF lI)
-  
+
 n           = cvR (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
   fixme) lN
 
 upsilon     = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or algorithm")
-  fixme) (Greek Upsilon)  
-  
+  fixme) (Greek Upsilon)
+
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety specific to a slice i")
-  fixme) (sub (Atomic "FS") (Atomic "Loc,i"))
+  fixme) (sub (Atomic "FS") (Atomic "Loc,i")

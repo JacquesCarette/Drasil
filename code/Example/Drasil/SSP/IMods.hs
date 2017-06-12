@@ -5,7 +5,9 @@ module Drasil.SSP.IMods where
 import Language.Drasil
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
---import Data.Drasil.Quantities.SolidMechanics
+import Data.Drasil.SentenceStructures (foldlSent)
+import Control.Lens ((^.))
+
 
 -----------------------
 --  Instance Models  --
@@ -24,7 +26,11 @@ fcSfty_rel :: Relation
 fcSfty_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 fcSfty_desc :: Sentence
-fcSfty_desc = fixmeS
+fcSfty_desc = foldlSent [S "Equation for the Factor of Safety is the ratio between resistive",
+  S "and mobile shear of the slip surface. The sum of values from each slice is taken to find",
+  S "the total resistive and mobile shear for the slip surface. The constants", P (Greek Phi),
+  S "and", P (Greek Psi), S "convert the resistive and mobile shear without the inluence of", 
+  S "interslice forces, to a calculation considering the interslice forces"]
 
 --
 nrmShrFor :: RelationConcept
@@ -34,7 +40,12 @@ nrmShrF_rel :: Relation
 nrmShrF_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 nrmShrF_desc :: Sentence
-nrmShrF_desc = fixmeS
+nrmShrF_desc = foldlSent [P (Greek Lambda_L), S "is the magnitude ratio between shear and", 
+  S "normal forces at the interslice interfaces as the assumption of the Morgenstern Price", 
+  S "method in GD5. The inclination function f determines the relative magnitude ratio",
+  S "between the different interslices, while", P (Greek Lambda_L), S "determines the" +:+. 
+  S "magnitude", P (Greek Lambda_L), S "uses the sum of interslice normal and shear forces",
+  S "taken from each interslice"] --FIXME: does "i" need to be pulled out?
 
 --
 intsliceFs :: RelationConcept
@@ -44,7 +55,9 @@ sliceFs_rel :: Relation
 sliceFs_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 sliceFs_desc :: Sentence
-sliceFs_desc = fixmeS
+sliceFs_desc = foldlSent [S "The value of the interslice normal force", (P $ intNormForce ^. symbol),
+  S "at interface i. The net force is the weight of the slices adjacent to interface i exert", 
+  S "horizontally on each other"] --FIXME: does "i" need to be pulled out?
 
 --
 forDisEqlb :: RelationConcept
@@ -75,4 +88,7 @@ crtSlpId_rel = (C fs) := (C minFunction) :*  (C critCoords)
 --FIXME: use brackets and comma for this equation rather than :*
 
 crtSlpId_desc :: Sentence
-crtSlpId_desc = fixmeS
+crtSlpId_desc = foldlSent [S "Given the necessary slope inputs, a minimization algorithm",
+  S "or function", (P $ minFunction ^. symbol), S "will identify the critical slip surface", 
+  S "of the slope, with the critical slip coordinates", (P $ critCoords ^. symbol), 
+  S "and the minimum factor of safety FSmin that results"]

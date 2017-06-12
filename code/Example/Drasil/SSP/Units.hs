@@ -250,9 +250,9 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
 -- Unitless Symbols --
 
 sspUnitless :: [ConVar]
-sspUnitless = [SM.poissnsR, fs, kc, normToShear, scalFunc, n, upsilon, fsloc]
+sspUnitless = [SM.poissnsR, fs, kc, normToShear, scalFunc, n, minFunction, fsloc]
 
-fs, kc, normToShear, scalFunc, n, upsilon, fsloc :: ConVar
+fs, kc, normToShear, scalFunc, n, minFunction, fsloc :: ConVar
 
 --poisson     = SM.poissnsR
 
@@ -273,7 +273,7 @@ scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of 
 n           = cvR (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
   fixme) lN
 
-upsilon     = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or algorithm")
+minFunction = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or algorithm")
   fixme) (Greek Upsilon)
 
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety specific to a slice i")

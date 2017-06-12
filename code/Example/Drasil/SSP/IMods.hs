@@ -71,7 +71,8 @@ crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification") crtSlpId_desc crtSlpId_rel
 
 crtSlpId_rel :: Relation
-crtSlpId_rel = (C fs) := (Int 0) --FIXME: add the long equation
+crtSlpId_rel = (C fs) := (C minFunction) :*  (C critCoords)
+--FIXME: use brackets and comma for this equation rather than :*
 
 crtSlpId_desc :: Sentence
 crtSlpId_desc = fixmeS

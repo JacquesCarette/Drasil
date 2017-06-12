@@ -5,8 +5,20 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))
 
+-- acronyms to be used throughout
+-- ex. S "as seen in (A1)"
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroR :: String -> Sentence
+
+acroA numVar = short assumption :+: S numVar
+acroDD numVar = short dataDefn :+: S numVar
+acroGD numVar = short genDefn :+: S numVar
+acroGS numVar = short goalStmt :+: S numVar
+acroIM numVar = short inModel :+: S numVar
+acroLC numVar = short likelyChg :+: S numVar
+acroR numVar = short requirement :+: S numVar
+
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg, 
-  physSyst, requirement, srs, thModel, mg, vav, desSpec :: CI
+  physSyst, requirement, srs, thModel, mg, desSpec :: CI
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
 assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
@@ -22,7 +34,6 @@ requirement = commonIdea "requirement" (cn' "requirement")                      
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG" 
 srs         = commonIdea "srs"      (fterms compoundPhrase''' softwareReq specification)   "SRS"
-vav         = commonIdea "vav"         (cn' "verification and validation")                 "VAV"
 
 ---------------------------------------------------------------------
 
@@ -38,7 +49,7 @@ analysis, appendix, characteristic, client, column, company, component,
   property, purpose, quantity, realtime, reference, requirement_, reviewer, 
   scope, source, section_, simulation, software, solution, specific, 
   specification, stakeholder, statement, symbol_, system, table_, template, 
-  terminology, theory, traceyGraph, traceyMatrix, user, useCase, value, variable, 
+  terminology, theory, traceyGraph, traceyMatrix, user, useCase, validation, value, variable, 
   video, verification, uncertainty :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
@@ -72,7 +83,7 @@ general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
 goal            = npnc "goal"           (cn' "goal")
 guide           = npnc "guide"          (cn' "guide")
 implementation  = npnc "implementation" (cn' "implementation")
-individual      = npnc "individual"     (cn "individual")
+individual      = npnc "individual"     (cn' "individual")
 information     = npnc "information"    (cn "information")
 interest        = npnc "interest"       (cn' "interest")
 input_          = npnc "input"          (cn' "input")
@@ -102,6 +113,7 @@ project         = npnc "project"        (cn' "project")
 property        = npnc "property"       (cnIES "property")
 purpose         = npnc "purpose"        (cn' "purpose")
 quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
+realtime        = npnc "real-time"      (cn' "real-time")
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
 reviewer        = npnc "reviewer"       (cn' "reviewer") 
@@ -126,16 +138,15 @@ traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 uncertainty     = npnc "uncertainty"    (cn' "uncertainty")
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
+validation      = npnc "validation"     (cn' "validation")
 value           = npnc "value"          (cn' "value") --general enough to be in Documentation?
 variable        = npnc "variable"       (cn' "variable")
-video           = npnc "video"          (cn' "video")
 verification    = npnc "verification"   (cn' "verification")
-realtime        = npnc "real-time"      (cn' "real-time")
-
+video           = npnc "video"          (cn' "video")
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol :: NamedChunk
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol, vav :: NamedChunk
 
 corSol       = npnc "corSol"       (cn' "correct solution")
 charOfIR     = npnc "charOfIR"     (characteristic `of__` intReader)
@@ -147,6 +158,7 @@ scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)
 termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
+vav          = npnc "vav"          (verification `and_` validation)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?

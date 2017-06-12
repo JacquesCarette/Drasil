@@ -85,16 +85,6 @@ mgBod :: [Section]
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod
 
--- acronyms to be used throughout
--- ex. S "as seen in (A1)"
-acroA, acroGD, acroGS, acroIM, acroLC, acroR :: String -> Sentence
-
-acroA numVar = short assumption :+: S numVar
-acroGD numVar = short genDefn :+: S numVar
-acroGS numVar = short goalStmt :+: S numVar
-acroIM numVar = short inModel :+: S numVar
-acroLC numVar = short likelyChg :+: S numVar
-acroR numVar = short requirement :+: S numVar
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
@@ -105,7 +95,8 @@ acroR numVar = short requirement :+: S numVar
 ------------------------------
 
 s2 :: Section
-s2 = introductionF progName (s2_intro, s2_kSent) s2_1_par1 s2_2_tuple s2_3_tuple s2_4_tuple
+s2 = introductionF progName (s2_intro, s2_kSent)
+  s2_1_par1 s2_2_tuple s2_3_tuple s2_4_tuple
 -- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
@@ -127,12 +118,12 @@ s2_intro = S "Due to increasing cost, diminishing" +:+
 
 s2_kSent :: Sentence
 s2_kSent = EmptyS +:+. phrase swhs_pcm +:+ S "The developed" +:+
-  phrase program +:+ S "will be referred to as" +:+
-  titleize progName +:+ sParen (short progName) -- SSP has same style sentence here
+  phrase program +:+ S "will be referred to as" +:+ titleize progName +:+
+  sParen (short progName) -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
--- similar paragraph in each of the other eolar water heating systems incorporating
--- PCM" which is not capitlaized whereas the stable version is
+-- similar paragraph in each of the other eolar water heating systems
+-- incorporating PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
 -- sometimes not, sometimes need to be used in different tenses. How to
@@ -211,8 +202,8 @@ s2_3_knowlegde = phrase CT.heat +:+ S "transfer" +:+. phrase theory +:+
   S "is recommended"
 
 s2_3_understanding :: Sentence
-s2_3_understanding = S "differential" +:+ plural equation `sC` S "as typically" +:+
-  S "covered in first and second year Calculus courses"
+s2_3_understanding = S "differential" +:+ plural equation `sC`
+  S "as typically covered in first and second year Calculus courses"
 
 {-s2_3 = SRS.charOfIR [s2_3_contents] []
 
@@ -303,8 +294,8 @@ s3_1_contents ::Contents
 s3_1_contents = Paragraph $ makeRef sys_context_fig +:+ S "shows the" +:+.
   phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
   phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
-  S "rectangle represents the" +:+ phrase softwareSys +:+
-  S "itself" +:+. (sParen $ short progName) +:+ S "Arrows are used to show the" +:+
+  S "rectangle represents the" +:+ phrase softwareSys +:+ S "itself" +:+.
+  sParen (short progName) +:+ S "Arrows are used to show the" +:+
   plural datum +:+ S "flow between the" +:+ phrase system +:+
   S "and its" +:+. phrase environment
 
@@ -367,8 +358,8 @@ s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
 s4 :: Section
 s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 
--- using plural solutionCharSpec is a hack in order to pluralize the middle word,
--- based on compoundNPNC''' in NamedIdea.hs
+-- using plural solutionCharSpec is a hack in order to pluralize the middle
+-- word, based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
 s4_intro_end = plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   S "and finally the" +:+ plural inModel +:+ sParen (short ode :+:
@@ -473,7 +464,8 @@ s4_1_3_intro = Paragraph $ S "Given the" +:+ phrase temp_C `sC`
 -- abstracted out if this paragraph were to be abstracted out.
 
 s4_1_3_list :: Contents
-s4_1_3_list = enumSimple 1 (short goalStmt) $ map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
+s4_1_3_list = enumSimple 1 (short goalStmt) $
+  map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
 
 goalState :: NamedIdea b => b -> Sentence
 goalState b = S "Predict the" +:+ phrase b +:+ S "over" +:+. phrase time
@@ -498,10 +490,11 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
 
   where mid = S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+
-              plural constraint +:+ S "restricts the range of" +:+ plural input_ +:+
-              S "to reasonable" +:+. plural value
+              plural constraint +:+ S "restricts the range of" +:+
+              plural input_ +:+ S "to reasonable" +:+. plural value
         end = sParen (S "The" +:+ plural table_ +:+ S "are left out" +:+.
-              S "because features they should use are not yet implemented in Drasil")
+              S "because features they should use are not yet implemented" +:+
+              S "in Drasil")
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -561,21 +554,19 @@ assump7 = (CT.law_conv_cooling ^. defn) +:+
   S "applies between the" +:+ phrase coil +:+ S "and the" +:+
   phrase water +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC)
 --
-assump8 = S "The" +:+ phrase temp_C +:+ S "is constant over" +:+ phrase time +:+.
-  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "2")
+assump8 = S "The" +:+ phrase temp_C +:+ S "is constant over" +:+
+  phrase time +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "2")
 --
-assump9 = S "The" +:+ phrase temp_C +:+ S "does not vary along its length" +:+. sSqBr
-  (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "3")
+assump9 = S "The" +:+ phrase temp_C +:+ S "does not vary along its length"
+  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "3")
 --
-assump10 = (CT.law_conv_cooling ^.
-  defn) +:+ S "applies between the" +:+
+assump10 = (CT.law_conv_cooling ^. defn) +:+ S "applies between the" +:+
   phrase water +:+ S "and the" +:+ short phsChgMtrl +:+.
   sSqBr (swhsSymbMapDRef dd2HtFluxP)
 --
 assump11 = S "The" +:+ phrase model +:+
-  S "only accounts for" +:+ (charging ^. defn) `sC`
-  S "not" +:+. phrase discharging +:+
-  S "The" +:+ phrase temp_W +:+ S "and" +:+
+  S "only accounts for" +:+ (charging ^. defn) `sC` S "not" +:+.
+  phrase discharging +:+ S "The" +:+ phrase temp_W +:+ S "and" +:+
   phrase temp_PCM +:+ S "can only increase, or remain" +:+
   S "constant; they do not decrease. This implies that the" +:+
   phrase temp_init +:+ sParen (acroA "12") +:+ S "is less than (or equal)" +:+
@@ -615,15 +606,15 @@ assump17 = S "The" +:+ phrase vol +:+ phrase change +:+ S "of the" +:+
   S "is negligible" +:+. sSqBr (acroIM "2")
 --
 assump18 = S "The" +:+
-  short phsChgMtrl +:+ S "is either in a" +:+
-  (liquid ^. defn) +:+ S "or a" +:+ (solid ^. defn) +:+
-  S "but not a" +:+ (gaseous ^. defn) +:+. sSqBr ((acroIM "2") `sC` (acroIM "4"))
+  short phsChgMtrl +:+ S "is either in a" +:+ (liquid ^. defn) +:+
+  S "or a" +:+(solid ^. defn) +:+ S "but not a" +:+ (gaseous ^. defn) +:+.
+  sSqBr ((acroIM "2") `sC` (acroIM "4"))
 --
-assump19 = S "The pressure in" +:+ S "the" +:+
-  phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase melt_pt +:+ S "and" +:+ phrase boil_pt +:+
-  S "are 0" :+: Sy (unit_symb temp) +:+ S "and 100" :+:
-  Sy (unit_symb temp) `sC` S "respectively" +:+. sSqBr ((acroIM "1") `sC` (acroIM "3"))
+assump19 = S "The pressure in" +:+ S "the" +:+ phrase tank +:+
+  S "is atmospheric, so the" +:+ phrase melt_pt +:+ S "and" +:+
+  phrase boil_pt +:+ S "are 0" :+: Sy (unit_symb temp) +:+ S "and 100" :+:
+  Sy (unit_symb temp) `sC` S "respectively" +:+.
+  sSqBr ((acroIM "1") `sC` (acroIM "3"))
 
 -- Again, list structure is same between all examples.
 
@@ -678,7 +669,7 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified" +:+
   UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
   Paragraph (S "We consider an arbitrary" +:+. phrase vol +:+ S "The" +:+
-  phrase vol_ht_gen :+: S "is" +: S "assumed constant. Then (1) can be written as"),
+  phrase vol_ht_gen +: S "is assumed constant. Then (1) can be written as"),
   EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
@@ -727,17 +718,17 @@ s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
 -----------------------------
 
 s4_2_5_subpar :: [Contents]
-s4_2_5_subpar = [Paragraph (S "The goals" +:+  acroGS "1" +:+ S "to" +:+ acroGS "4" +:+
-  S "are solved by" +:+ acroIM "1" +:+ S "to" +:+. acroIM "4" +:+
-  S "The" +:+ plural solution +:+ S "for IM1 and IM2 are coupled since" +:+
-  S "the" +:+ phrase solution +:+ S "for" +:+ P (temp_W ^. symbol) +:+
-  S "and" +:+ P (temp_PCM ^. symbol) +:+. S "depend on one another" +:+ acroIM "3" +:+
-  S "can be solved once" +:+ acroIM "1" +:+ S "has been solved. The" +:+ phrase solution +:+
-  S "of" +:+ acroIM "2" +:+ S "and" +:+ acroIM "4" +:+ S "are also coupled, since the" +:+
-  phrase temp_PCM +:+ S "and" +:+ phrase pcm_E +:+
-  S "depend on the" +:+. phrase CT.phase_change +:+
-  sParen (at_start' inModel +:+ S "are left out because" +:+.
-  S "they are not currently implemented in Drasil"))]
+s4_2_5_subpar = [Paragraph (S "The goals" +:+  acroGS "1" +:+ S "to" +:+
+  acroGS "4" +:+ S "are solved by" +:+ acroIM "1" +:+ S "to" +:+.
+  acroIM "4" +:+ S "The" +:+ plural solution +:+ S "for" +:+ acroIM "1" +:+
+  S "and" +:+ acroIM "2" +:+ S "are coupled since the" +:+ phrase solution +:+
+  S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+ P (temp_PCM ^. symbol) +:+.
+  S "depend on one another" +:+ acroIM "3" +:+ S "can be solved once" +:+
+  acroIM "1" +:+ S "has been solved. The" +:+ phrase solution +:+ S "of" +:+
+  acroIM "2" +:+ S "and" +:+ acroIM "4" +:+ S "are also coupled, since the" +:+
+  phrase temp_PCM +:+ S "and" +:+ phrase pcm_E +:+ S "depend on the" +:+.
+  phrase CT.phase_change +:+ sParen (at_start' inModel +:+.
+  S "are left out because they are not currently implemented in Drasil"))]
 
 {-s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
   (s4_2_5_deriv2)) []
@@ -757,7 +748,8 @@ s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
 -- Instance Models aren't implemented yet
 
 s4_2_5_deriv1 :: [Contents]
-s4_2_5_deriv1 = s4_2_5_d1startPara ++ (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
+s4_2_5_deriv1 = s4_2_5_d1startPara ++
+  (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
 
 s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list,
   s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
@@ -765,15 +757,16 @@ s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list,
 s4_2_5_d1startPara = [Paragraph (S "Derivation of the" +:+
   phrase energy +:+ S "balance on" +: phrase water)]
 
-s4_2_5_d1eqn_list = map (EqnBlock) [s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3,
-  s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
+s4_2_5_d1eqn_list = map (EqnBlock) [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
+  s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
 
 s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
   [S "To find the", phrase rOfChng, S "of", (P $ temp_W ^. symbol) `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
   phrase water, S "The", phrase vol,
   S "being considered is the", phrase w_vol, EmptyS,
-  (P $ w_vol ^. symbol) `sC` S "which has", phrase w_mass, EmptyS, -- why is EmptyS here?
+  (P $ w_vol ^. symbol) `sC` S "which has", phrase w_mass, EmptyS,
+-- why is EmptyS here?
   (P $ w_mass ^. symbol), S "and" +:+. (phrase htCap_W `sC`
   (P $ htCap_W ^. symbol)), (P $ ht_flux_C ^. symbol), S "represents the",
   phrase ht_flux_C, S "and", (P $ ht_flux_P ^. symbol), S "represents",
@@ -852,8 +845,8 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
 -- Fractions in paragraph?
 
 s4_2_5_deriv2 :: [Contents]
-s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++
-  s4_2_5_d2endPara
+s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list,
+  s4_2_5_d2sent_list]) ++ s4_2_5_d2endPara
 
 s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using",
   swhsSymbMapDRef dd2HtFluxP, S "for",
@@ -867,8 +860,8 @@ s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using",
   S "this can be written as"]]
 
 
-s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3,
-  s4_2_5_d2eqn4]
+s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
+  s4_2_5_d2eqn3, s4_2_5_d2eqn4]
 
 s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
 
@@ -906,8 +899,8 @@ s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
   S "=0, the" +:+ phrase equation +:
   S "for" +:+ acroGD "2" +:+ S "can be written as")]
 
-s4_2_5_d2endPara = map Paragraph [(titleize equation +:+ S "(6) applies for the" +:+
-  phrase solid +:+ EmptyS +:+. short phsChgMtrl +:+
+s4_2_5_d2endPara = map Paragraph [(titleize equation +:+
+  S "(6) applies for the" +:+ phrase solid +:+ EmptyS +:+. short phsChgMtrl +:+
   S "In the case where all of the" +:+
   short phsChgMtrl +:+ S "is melted, the same" +:+
   S "derivation applies, except that" +:+ P (htCap_S_P ^.
@@ -1068,9 +1061,9 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
 --
   Enumeration (Simple [(acroR "2", Flat
-  (S "Use the" +:+ plural input_ +:+ S "in" +:+ acroR "1" +:+ S "to find the" +:+
-  phrase mass +:+ S "needed for" +:+ acroIM "1" +:+ S "to" +:+ acroIM "4" `sC`
-  S "as follows, where" +:+
+  (S "Use the" +:+ plural input_ +:+ S "in" +:+ acroR "1" +:+
+  S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM "1" +:+
+  S "to" +:+ acroIM "4" `sC` S "as follows, where" +:+
   P (w_vol ^. symbol) +:+ S "is the" +:+ phrase w_vol +:+
   S "and" +:+ P (tank_vol ^. symbol) +:+ S "is the" +:+.
   phrase tank_vol))]),
@@ -1097,12 +1090,11 @@ req3 = S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
 req4 = titleize output_ +:+ S "the" +:+
   phrase input_ +:+ plural quantity +:+ S "and derived" +:+ plural quantity +:
   S "in the following list" +:+ S "the" +:+ plural quantity +:+ S "from" +:+
-  acroR "1" `sC` S "the" +:+
-  plural mass +:+ S "from" +:+ acroR "2" `sC` P (tau_W ^. symbol) +:+
-  sParen (S "from" +:+ acroIM "1") `sC` P (eta ^. symbol) +:+
-  sParen (S "from" +:+ acroIM "1") `sC`
-  P (tau_S_P ^. symbol) +:+ sParen (S "from" +:+ acroIM "2") +:+ S "and" +:+ P (tau_L_P ^. symbol) +:+.
-  sParen (S "from" +:+ acroIM "2")
+  acroR "1" `sC` S "the" +:+ plural mass +:+ S "from" +:+ acroR "2" `sC`
+  P (tau_W ^. symbol) +:+ sParen (S "from" +:+ acroIM "1") `sC`
+  P (eta ^. symbol) +:+ sParen (S "from" +:+ acroIM "1") `sC`
+  P (tau_S_P ^. symbol) +:+ sParen (S "from" +:+ acroIM "2") +:+ S "and" +:+
+  P (tau_L_P ^. symbol) +:+. sParen (S "from" +:+ acroIM "2")
 --
 req5 = S "Calculate and" +:+
   phrase output_ +:+ S "the" +:+ phrase temp_W +:+ sParen
@@ -1193,10 +1185,10 @@ likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence
 
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
-likeChg1 = acroA "4" +:+ S "-" +:+ short phsChgMtrl +:+ S "is actually a poor" +:+
-  phrase CT.thermal_conductor `sC` S "so" +:+
-  S "the" +:+ phrase assumption +:+
-  S "of uniform" +:+ phrase temp_PCM +:+. S "is not likely"
+likeChg1 = acroA "4" +:+ S "-" +:+ short phsChgMtrl +:+
+  S "is actually a poor" +:+ phrase CT.thermal_conductor `sC` S "so" +:+
+  S "the" +:+ phrase assumption +:+ S "of uniform" +:+ phrase temp_PCM +:+.
+  S "is not likely"
 --
 likeChg2 = acroA "8" +:+ S "- The" +:+ phrase temp_C +:+
   S "will change over the course of the day, depending" +:+
@@ -1255,38 +1247,39 @@ s7_trailing = [
 
 
 s7_table1 :: Contents
-s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE, swhsSymbMapTRef t2SensHtE,
-  swhsSymbMapTRef t3LatHtE, acroGD "1", acroGD "2", swhsSymbMapDRef dd1HtFluxC,
-  swhsSymbMapDRef dd2HtFluxP, swhsSymbMapDRef dd3HtFusion, swhsSymbMapDRef dd3HtFusion,
+s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE,
+  swhsSymbMapTRef t2SensHtE, swhsSymbMapTRef t3LatHtE, acroGD "1", acroGD "2",
+  swhsSymbMapDRef dd1HtFluxC, swhsSymbMapDRef dd2HtFluxP,
+  swhsSymbMapDRef dd3HtFusion, swhsSymbMapDRef dd3HtFusion,
   acroIM "1", acroIM "2", acroIM "3", acroIM "4"]
-  [[swhsSymbMapTRef t1ConsThermE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [[swhsSymbMapTRef t1ConsThermE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [acroGD "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [acroGD "2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
   EmptyS, EmptyS, S "X", EmptyS, EmptyS],
   [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS,
   S "X", S "X", EmptyS, EmptyS, S "X"],
   [acroIM "3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroIM "4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X", S "X",
-  EmptyS, S "X", EmptyS, EmptyS]]
-  (showingCxnBw traceyMatrix (titleize' item +:+ S "of Different" +:+ titleize' section_))
-  True
+  [acroIM "4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X",
+  S "X", EmptyS, S "X", EmptyS, EmptyS]]
+  (showingCxnBw traceyMatrix (titleize' item +:+ S "of Different" +:+
+  titleize' section_)) True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
@@ -1308,40 +1301,41 @@ s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4",
   [acroR "9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS],
   [acroR "10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
   [acroR "11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+ titleize' inModel))
-  True
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
+  titleize' inModel)) True
 
 s7_table3 :: Contents
-s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4", acroA "5", acroA "6",
-  acroA "7", acroA "8", acroA "9", acroA "10", acroA "11", acroA "12", acroA "13", acroA "14",
-  acroA "15", acroA "16", acroA "17", acroA "18", acroA "19"]
-  [[swhsSymbMapTRef t1ConsThermE, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4",
+  acroA "5", acroA "6", acroA "7", acroA "8", acroA "9", acroA "10",
+  acroA "11", acroA "12", acroA "13", acroA "14", acroA "15", acroA "16",
+  acroA "17", acroA "18", acroA "19"]
+  [[swhsSymbMapTRef t1ConsThermE, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
+  EmptyS, EmptyS, EmptyS, EmptyS],
   [acroGD "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS],
-  [acroGD "2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS, EmptyS,
+  [acroGD "2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS],
-  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS],
-  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  S "X", S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
+  EmptyS, EmptyS, EmptyS, EmptyS],
+  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
+  EmptyS, EmptyS, EmptyS, EmptyS],
   [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS,
   S "X"],
@@ -1372,8 +1366,8 @@ s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4", acroA "5"
   [acroLC "6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
   EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
   EmptyS, EmptyS]]
-  (showingCxnBw traceyMatrix (titleize' assumption +:+ S "and Other" +:+ titleize' item))
-  True
+  (showingCxnBw traceyMatrix (titleize' assumption +:+ S "and Other" +:+
+  titleize' item)) True
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1394,14 +1388,11 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC`
 -- Same comments on this paragraph as I had for s7_intro1.
 
 s7_fig1 :: Contents
-s7_fig1 = Figure (
-  showingCxnBw traceyGraph (titleize' item +:+ S "of Different" +:+ titleize' section_)
-  ) "ATrace.png"
+s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+
+  S "of Different" +:+ titleize' section_)) "ATrace.png"
 
 s7_fig2 :: Contents
-s7_fig2 = Figure (
-  showingCxnBw traceyGraph (titleize' requirement `sC`
-  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)
-  ) "RTrace.png"
+s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
+  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
 
 --References?

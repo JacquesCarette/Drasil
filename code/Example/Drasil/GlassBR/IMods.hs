@@ -17,7 +17,7 @@ probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage") --ma
   pbdescr pb_rel 
 
 pb_rel :: Relation
-pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (V "B"))
+pb_rel = (C prob_br) := 1 - (V "e") :^ (Neg (C risk))
 
 pbdescr :: Sentence
 pbdescr =

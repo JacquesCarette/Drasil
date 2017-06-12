@@ -9,7 +9,7 @@ class TestCheckConstraints(unittest.TestCase):
     
     def setUp(self):
         self.params = param.Param()
-        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles","testInvalidInput5.txt"),self.params) # t not in [2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0]
+        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles", "testInvalidInput5.txt"), self.params) # t not in [2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0]
         self.derivedValues = derivedValues.derived_params(self.params)
     
     def test_check_constraints(self):

@@ -10,8 +10,8 @@ class TestCheckConstraints(unittest.TestCase):
     
     def setUp(self):
         self.params = param.Param()
-        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles","testInput8.txt"),self.params) # a/b = 5 
-        self.derivedValues = derivedValues.derived_params(self.params)  
+        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles", "testInput8.txt"), self.params) # a/b = 5 
+        self.derivedValues = derivedValues.derived_params(self.params)
     
     def test_check_constraints(self):
         try:

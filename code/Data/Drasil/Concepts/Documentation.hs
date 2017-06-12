@@ -9,20 +9,20 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, vav, desSpec :: CI
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
-assumption  = commonIdea "assumption"  (cn' "assumption")                                      "A"
-dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                                 "DD"
-desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)                   "DS"
-genDefn     = commonIdea "genDefn"     (cn' "general definition")                              "GD"
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)                         "GS" 
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)                        "IM" 
-likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                                   "LC"
-unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                                 "UC"
-physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)             "PS" 
-requirement = commonIdea "requirement" (cn' "requirement")                                     "R"
-thModel     = commonIdea "thModel"     (cn' "theoretical model")                               "T"
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)                 "MG" 
-srs         = commonIdea "srs"         (fterms compoundPhrase''' softwareReq specification) "SRS"
-vav         = commonIdea "vav"         (cn' "verification and validation")                     "VAV"
+assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
+dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
+desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
+genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"
+goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS" 
+inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM" 
+likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"
+unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"
+physSyst    = commonIdea "physSyst"  (fterms compoundPhrase physicalSystem description)    "PS" 
+requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
+thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
+mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG" 
+srs         = commonIdea "srs"      (fterms compoundPhrase''' softwareReq specification)   "SRS"
+vav         = commonIdea "vav"         (cn' "verification and validation")                 "VAV"
 
 ---------------------------------------------------------------------
 

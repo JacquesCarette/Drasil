@@ -2,19 +2,19 @@ module Drasil.SSP.Defs where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Drasil.SSP.TMods
+import Data.Drasil.SentenceStructures
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,
-  physSyst,requirement,srs,ssa,thModel]
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, 
+  physSyst, requirement, srs, ssa, thModel]
   
 ssa, ssp :: CI
 ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"
 ssp = commonIdea "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
-soil, material, intrslce, surface_, slip, slope, slice,
+soil, material, intrslce, surface_, slip, slope, slice, 
   morPrice, rgFnElm :: NamedChunk
 intrslce = npnc "interslice" (cn' "interslice")
 material = npnc "material"   (cn' "material")
@@ -45,4 +45,11 @@ plnStrn = dcc "plane strain" (cn' "plane strain")
           
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
     ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
-    (phrase $ fs_rc) `sC` S "and therefore most likely to experience failure.")
+    ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
+    
+--
+factor, safety :: NamedChunk
+factor = npnc "factor" (cn' "factor")
+safety = npnc "safety" (cnIES "safety")
+factorOfSafety :: NP
+factorOfSafety = factor `of_''` safety

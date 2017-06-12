@@ -137,6 +137,7 @@ executable tiny
     , Drasil.Template.MIS
     , Drasil.SpecificSystemDescription
     , Drasil.SRS
+    , Drasil.Introduction
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -194,6 +195,9 @@ executable ssp
     , Drasil.SSP.Reqs
     , Drasil.SSP.Units
     , Drasil.SSP.TMods
+    , Drasil.SSP.GenDefs
+    , Drasil.SSP.DataDefs
+    , Drasil.SSP.IMods
     , Drasil.TableOfAbbAndAcronyms
     , Drasil.TableOfSymbols
     , Drasil.DocumentLanguage

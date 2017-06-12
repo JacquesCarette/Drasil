@@ -19,15 +19,15 @@ pcmSymbols :: [CQSWrapper]
 pcmSymbols = map cqs pcmUnits
 
 pcmUnits :: [UCWrapper]
-pcmUnits = map ucw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA,
-  htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol,
-  ht_xfer_co, ht_xfer_CW, mass, tank_D, tank_L, tank_V, temp, temp_coil, temp_diff, temp_env,
-  temp_init, temp_water, thFluxVect, time, time_final, vol, water_dense, water_m,
+pcmUnits = map ucw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA, 
+  htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol, 
+  ht_xfer_co, ht_xfer_CW, mass, tank_D, tank_L, tank_V, temp, temp_coil, temp_diff, temp_env, 
+  temp_init, temp_water, thFluxVect, time, time_final, vol, water_dense, water_m, 
   water_vol]
 
-coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
-  ht_flux_in, ht_flux_out, ht_gen_vol, ht_xfer_co, ht_xfer_CW, tank_D, tank_L, tank_V,
-  temp_coil, temp_diff, temp_env, temp_init, temp_water, thFluxVect, time_final,
+coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C, 
+  ht_flux_in, ht_flux_out, ht_gen_vol, ht_xfer_co, ht_xfer_CW, tank_D, tank_L, tank_V, 
+  temp_coil, temp_diff, temp_env, temp_init, temp_water, thFluxVect, time_final, 
   water_dense, water_m, water_vol :: UnitalChunk
 
 -- convenience
@@ -102,8 +102,8 @@ ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphas
 
 ----Acronyms-----
 acronyms :: [CI]
-acronyms = [assumption,dataDefn,genDefn,goalStmt,inModel,likelyChg,ode,
-            physSyst,requirement,srs,sWHS,thModel]
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 
+            physSyst, requirement, srs, sWHS, thModel]
   
 sWHS, sWHT :: CI
 

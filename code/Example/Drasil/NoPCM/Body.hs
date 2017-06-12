@@ -117,7 +117,7 @@ s4_1_2 = physSystDesc (getAcc sWHS) fig_tank [s4_1_2_list, fig_tank]
 fig_tank = Figure ((at_start sWHT) `sC` S "with" +:+ (phrase ht_flux) +:+ S "from" +:+ (phrase coil) +:+ S "of" +:+
             P (ht_flux_C ^. symbol)) "TankWaterOnly.png"
   
-s4_1_2_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s4_1_2_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
             (S "PS1", (at_start tank) +:+ S "containing" +:+ (phrase water)), 
             (S "PS2", S "Heating" +:+ (phrase coil) +:+ S "at bottom of" +:+. (phrase tank) +:+
            sParen (P (ht_flux_C ^. symbol) +:+ S "represents the" +:+ (phrase ht_flux_C) +:+
@@ -130,7 +130,7 @@ s4_1_3_intro = Paragraph $
             (phrase temp) +:+ S "of the" +:+ (phrase water) `sC`
            S "and material" +:+ (plural property) `sC` S "the goal statement is"
 
-s4_1_3_list = Enumeration $ Simple $ map (\(a,b) -> (a, Flat b)) [
+s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
             (S "GS1", S "predict the" +:+ (phrase temp_water) +:+ S "over time")]
 
 s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS (((makeRef s4_2_6_table1) +:+ S "and" +:+ (makeRef s4_2_6_table2) +:+ S "show"), EmptyS, False, EmptyS)

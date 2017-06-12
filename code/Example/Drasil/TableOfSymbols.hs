@@ -1,8 +1,6 @@
 -- Standard code to make a table of symbols.
 module Drasil.TableOfSymbols 
-  ( table
-  , defnExcept
-  , termExcept) where
+  (table) where
 
 import Control.Lens ((^.))
 
@@ -25,12 +23,3 @@ table ls f = Table
   ( titleize tOfSymb) False
   where sls = filter (isJust . getSymb) ls --Don't use catMaybes
 
--- | Gets the definitions of chunks for the table of symbols, except for the given
--- chunks where terms should be used instead.
-defnExcept :: (Eq s, Concept s) => [s] -> (s -> Sentence)
-defnExcept xs x = if (x `elem` xs) then (phrase x) else (x ^. defn)
-
--- | Gets the terms of chunks for the table of symbols, except for the given
--- chunks where definitions should be used instead.  
-termExcept :: (Concept s, Eq s) => [s] -> (s -> Sentence)
-termExcept xs x = if (x `elem` xs) then (x ^. defn) else (phrase x)

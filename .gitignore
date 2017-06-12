@@ -14,13 +14,13 @@ cabal.config
 *.blg
 *.bbl
 *.nav
-*.out
 *.snm
 *.toc
 *.swp
 /Physics Engine Families/Papers
 Main
 .idea
+*.out
 *.iml
 *.vrb
 .DS_Store

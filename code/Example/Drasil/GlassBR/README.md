@@ -20,9 +20,11 @@ Changes.hs
 Concepts.hs
   - Example-specific concepts for GlassBR
   
-Example.hs
-  - GlassBR's specific knowledge-base. Includes different chunk types, 
-    equations, etc.
+DataDefs.hs
+  - GlassBR's specific knowledge-base for data definitions.
+
+IMods.hs
+  - GlassBR's specific knowledge-base for instance models.
   
 Main.hs 
   - A list of what should be generated
@@ -30,6 +32,9 @@ Main.hs
 Modules.hs
   - A list of modules for GlassBR's design document
   
+Reqs.hs
+  - Contains the requirements needed to create GlassBR's module guide
+
 README.md
   - This file
   
@@ -38,9 +43,15 @@ RTrace.png
   
 Reqs.hs
   - A list of requirement chunks for the GlassBR example
+
+TMods.hs
+  - GlassBR's specific knowledge-base for theoretical models
   
 Trace.png
   - Theoretical/Data Definition traceability graph
   
+Unitals.hs
+  - GlassBR's specific knowledge-base. Includes different chunk types that are wrapped using QSWrapper.
+
 Units.hs
   - Derived units specific to GlassBR  

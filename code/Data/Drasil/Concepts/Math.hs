@@ -28,6 +28,7 @@ norm         = dcc "norm"         (cn' "norm")                    "Positive leng
 normal       = dcc "normal"       (cn' "normal" )                 "Object that is perpendicular to a given object"
 number       = dcc "number"       (cn' "number")                  "A mathematical object used to count, measure, and label"
 parameter    = dcc "parameter"    (cn' "parameter")               "A quantity whose value is selected depending on particular circumstances"
+--FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"

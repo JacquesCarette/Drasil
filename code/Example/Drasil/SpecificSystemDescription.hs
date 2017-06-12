@@ -43,10 +43,10 @@ specSysDesF l_eND subSec = SRS.specSysDes [specSysDesIntro l_eND] subSec
 -- or shortened ending (True) -> identifies key word pertaining to topic or Nothing
 specSysDesIntro ::  Sentence -> Contents
 specSysDesIntro l_end = foldlSP
-            [S "This", phrase section_, S "first presents the",
-            phrase problemDescription `sC` S "which gives a high-level view of the",
-            phrase problem, S "to be solved. This is followed by the",
-            plural solutionCharSpec `sC` S "which presents the",
+            [S "This", phrase section_, S "first presents the", 
+            phrase problemDescription `sC` S "which gives a high-level view of the", 
+            phrase problem, S "to be solved. This is followed by the", 
+            plural solutionCharSpec `sC` S "which presents the", 
             plural assumption `sC` plural theory `sC` l_end]
 
 --Up to change, decide on what ending sentence structure we would like to employ
@@ -68,9 +68,9 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
       where lastF Nothing  = EmptyS
             lastF (Just s) = S "." +:+ s
             intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
-                    [S "This subsection provides a list of terms",
-                    S "that are used in the subsequent", plural section_, S "and their",
-                    S "meaning, with the", phrase purpose, S "of reducing ambiguity",
+                    [S "This subsection provides a list of terms", 
+                    S "that are used in the subsequent", plural section_, S "and their", 
+                    S "meaning, with the", phrase purpose, S "of reducing ambiguity", 
                     S "and making it easier to correctly understand the" +:+
                     plural requirement :+: (lastF end)]
 
@@ -88,24 +88,24 @@ goalStmtF givenInputs otherContents = SRS.goalStmt ((Paragraph intro):otherConte
   where intro = S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
 
--- kWord (ex ssp, progName), the two sections, gendef is True if you want general definitions sections,
---  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints,
+-- kWord (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
+--  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
 solChSpecF :: CI -> (Section, Section) -> Bool -> Sentence -> 
   (Sentence, Sentence, Bool, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
-solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a,t,g,dd,i,dc) adSubSec = SRS.solCharSpec [Paragraph intro] (subSec gendef)
+solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a, t, g, dd, i, dc) adSubSec = SRS.solCharSpec [Paragraph intro] (subSec gendef)
   where intro = foldlSent
-                [S "The", plural inModel, S "that govern",
-                short kWord, S "are presented in" +:+. makeRef (instModels gendef),
-                S "The", phrase information, S "to understand",
-                (S "meaning" `ofThe` plural inModel),
-                S "and their derivation is also presented, so that the",
+                [S "The", plural inModel, S "that govern", 
+                short kWord, S "are presented in" +:+. makeRef (instModels gendef), 
+                S "The", phrase information, S "to understand", 
+                (S "meaning" `ofThe` plural inModel), 
+                S "and their derivation is also presented, so that the", 
                 plural inModel, S "can be verified"]
         subSec True  = [assumption_ True, theModels, generDefn, 
                         dataDefin, instModels True, dataConstr] ++ adSubSec
-        subSec False = [assumption_ False, theModels,
+        subSec False = [assumption_ False, theModels, 
                         dataDefin, instModels False, dataConstr] ++ adSubSec
         assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
         assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
@@ -129,12 +129,12 @@ assumpF' theMod dataDef inMod likeChg otherContents =
 -- takes a bunch of references to things discribed in the wrapper
 assumpIntro :: Section -> Maybe Section -> Section -> Section -> Section -> Contents
 assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent 
-          [S "This", (phrase section_), S "simplifies the original", (phrase problem),
-          S "and helps in developing the", (phrase thModel), S "by filling in the",
-          S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
+          [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
+          S "and helps in developing the", (phrase thModel), S "by filling in the", 
+          S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
           S "The numbers given in the square brackets refer to the", 
           foldr1 sC (map (refs) (itemsAndRefs r2)) `sC` S "or", 
-          refs (likelyChg, r5) `sC` S "in which the respective",
+          refs (likelyChg, r5) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
           where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
                 itemsAndRefs Nothing = [(thModel, r1), (dataDefn, r3), (inModel, r4)]
@@ -148,8 +148,8 @@ thModF kword otherContents = SRS.thModel ((thModIntro kword):otherContents) []
 -- generalized theoretical model introduction: identifies key word pertaining to topic
 thModIntro :: CI -> Contents
 thModIntro k_word = foldlSP
-          [S "This", phrase section_, S "focuses on",
-          S "the", phrase general, (plural equation), S "and",
+          [S "This", phrase section_, S "focuses on", 
+          S "the", phrase general, (plural equation), S "and", 
           S "laws that", short k_word, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
@@ -158,7 +158,7 @@ genDefnF otherContents = SRS.genDefn (genDefnIntro:otherContents) []
   where genDefnIntro = foldlSP [S "This", phrase section_, 
                        S "collects the", S "laws and", (plural equation), 
                        S "that will be used in", S "deriving the", 
-                       plural dataDefn `sC` S "which in turn are used to",
+                       plural dataDefn `sC` S "which in turn are used to", 
                        S "build the", plural inModel]
                        
 -- uses EmptyS if ending sentence is not needed
@@ -166,7 +166,7 @@ dataDefnF :: Sentence -> [Contents] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn ((dataDefnIntro endingSent):otherContents) []
   where dataDefnIntro ending = Paragraph $ foldlSent
             [S "This", phrase section_, 
-            S "collects and defines all the", plural datum,
+            S "collects and defines all the", plural datum, 
             S "needed to build the", plural inModel] +:+ ending
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
@@ -178,11 +178,11 @@ inModelF' probDes datDef theMod otherContents = SRS.inModel ((inModelIntro probD
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Maybe Section -> Contents
-inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
-          S "transforms the", phrase problem, S "defined in", (makeRef r1),
-          S "into one which is expressed in mathematical terms. It uses concrete",
-          plural symbol_, S "defined in", (makeRef r2),
-          S "to replace the abstract", plural symbol_, S "in the",
+inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
+          S "transforms the", phrase problem, S "defined in", (makeRef r1), 
+          S "into one which is expressed in mathematical terms. It uses concrete", 
+          plural symbol_, S "defined in", (makeRef r2), 
+          S "to replace the abstract", plural symbol_, S "in the", 
           plural model, S "identified in", (makeRef r3) :+: end r4]
           where end (Just genDef) = S " and" +:+ (makeRef genDef)
                 end Nothing       = EmptyS
@@ -198,11 +198,11 @@ datConPar tableRef middleSent endingSent trailingSent = Paragraph $ foldlSent [
           tableRef, S "the", plural datumConstraint, S "on the", 
           phrase input_, S "and", phrase output_, 
           plural variable `sC` S "respectively.", S "The", 
-          phrase column, S "for", phrase physical,
-          plural constraint, S "gives the", phrase physical,
-          plural limitation, S "on the range of", plural value,
+          phrase column, S "for", phrase physical, 
+          plural constraint, S "gives the", phrase physical, 
+          plural limitation, S "on the range of", plural value, 
           S "that can be taken by the" +:+. phrase variable, middleSent, -- << if you are wondering where middleSent is
-          S "The", plural constraint, S "are conservative, to give",
+          S "The", plural constraint, S "are conservative, to give", 
           (phrase user `ofThe` phrase model), S "the flexibility to", 
           S "experiment with unusual situations. The", phrase column, S "of", 
           S "typical", plural value, S "is intended to provide a feel for a common scenario"]

@@ -51,7 +51,7 @@ t2descr = (P (QT.sens_heat ^. symbol) +:+ S "is the change in" +:+
   phrase phase_change +:+ S "occurs. A" +:+
   phrase phase_change +:+ S "occurs if" +:+
   P (QT.temp ^. symbol) :+: S "=" :+: P (QT.boil_pt ^. symbol) +:+
-  S "or" +:+ P (QT.temp ^. symbol) :+: S "=" +:+. 
+  S "or" +:+ P (QT.temp ^. symbol) :+: S "=" +.
   P (QT.melt_pt ^. symbol) +:+ S "If this is the case, refer to" +:+ 
   swhsSymbMapTRef t3LatHtE `sC` at_start latent_heat +:+. phrase energy)
   

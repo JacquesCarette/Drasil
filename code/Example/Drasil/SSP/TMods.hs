@@ -76,9 +76,9 @@ effStress :: RelationConcept
 effStress = makeRC "effStress" (nounPhraseSP "effective stress") effS_desc effS_rel
 
 effS_rel :: Relation
-effS_rel = (Int 0) := (Int 0) --(P $ Concat [Greek Sigma_L, Atomic "'"]) := (P $ Greek Sigma_L) :- (P $ Greek Mu_L)
---FIXME: add actual symbols once greek alphabet is finished
-effS_desc :: Sentence -- FIXME: these are not normStress but they are sigma. and some of these are mu
+effS_rel = (C normStress) := (C normStress) :- (C normStress)
+
+effS_desc :: Sentence -- FIXME: these are not normStress but they are sigma. And some of these are mu. Also fix equaiton
 effS_desc = foldlSent [getS normStress, S "is the total stress a soil mass needs to maintain itself as a rigid collection",
   S "of particles. The source of the stress can be provided by the soil skeleton", getS normStress `sC`
   S "or by the pore pressure from water within the soil" +:+. getS normStress, S "The stress from the soil",

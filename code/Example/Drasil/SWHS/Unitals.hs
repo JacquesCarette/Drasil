@@ -21,34 +21,34 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
-swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P, htCap_S, 
-  htCap_S_P, htCap_V, htCap_W, diam, sens_heat, pcm_initMltE, pcm_E, w_E, vol_ht_gen, 
-  htTransCoeff, coil_HTC, pcm_HTC, tank_length, pcm_mass, w_mass, ht_flux, latent_heat, 
-  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp, 
-  boil_pt, temp_C, temp_env, time_final, temp_init, melt_pt, t_init_melt, 
-  t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT, 
-  density, pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W] ++ 
+swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P, htCap_S,
+  htCap_S_P, htCap_V, htCap_W, diam, sens_heat, pcm_initMltE, pcm_E, w_E, vol_ht_gen,
+  htTransCoeff, coil_HTC, pcm_HTC, tank_length, pcm_mass, w_mass, ht_flux, latent_heat,
+  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
+  boil_pt, temp_C, temp_env, time_final, temp_init, melt_pt, t_init_melt,
+  t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT,
+  density, pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [htFusion, mass, time]
 
-coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V, 
-  htCap_W, htFusion, diam, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC, 
-  pcm_HTC, tank_length, pcm_mass, w_mass, 
-  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, 
-  temp_C, temp_env, time_final, temp_init, t_init_melt, 
-  t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT, 
+coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
+  htCap_W, htFusion, diam, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC,
+  pcm_HTC, tank_length, pcm_mass, w_mass,
+  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
+  temp_C, temp_env, time_final, temp_init, t_init_melt,
+  t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT,
   pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
 --symbol names can't begin with a capital
 
-coil_SA      = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase $ coil) (phrase $ coil) CapFirst CapWords) (nounPhrase'' (phrase $ surArea) (phrase $ surArea) CapFirst CapWords)) 
+coil_SA      = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase $ coil) (phrase $ coil) CapFirst CapWords) (nounPhrase'' (phrase $ surArea) (phrase $ surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil"(sub cA cC) m_2
 
-in_SA        = uc' "in_SA" (nounPhraseSP 
+in_SA        = uc' "in_SA" (nounPhraseSP
   "surface area over which heat is transferred in")
   "Surface area over which thermal energy is transferred into an object"
   (sub cA (Atomic "in")) m_2
 
-out_SA       = uc' "out_SA" (nounPhraseSP 
+out_SA       = uc' "out_SA" (nounPhraseSP
   "surface area over which heat is transferred out")
   "Surface area over which thermal energy is transferred out of an object"
   (sub cA (Atomic "out")) m_2
@@ -60,17 +60,17 @@ htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
   ("The amount of energy required to raise the temperature of a given unit mass of " ++
   "a given liquid by a given amount") (sup (heat_cap_spec ^. symbol) cL) UT.heat_cap_spec
 
-htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP 
+htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP
   "specific heat capacity of PCM as a liquid")
   ("The amount of energy required to raise the temperature of a given unit mass of liquid " ++
   "phase change material by a given amount") (sup (sub (heat_cap_spec ^. symbol) cP) cL) UT.heat_cap_spec
 
-htCap_S      = uc' "htCap_S" 
+htCap_S      = uc' "htCap_S"
   (nounPhraseSP "specific heat capacity of a solid")
   "The amount of energy required to raise the temperature of a given unit mass of a given solid by a given amount"
   (sup (heat_cap_spec ^. symbol) cS) UT.heat_cap_spec
 
-htCap_S_P    = uc' "htCap_S_P" 
+htCap_S_P    = uc' "htCap_S_P"
   (nounPhraseSP "specific heat capacity of PCM as a solid")
   ("The amount of energy required to raise the temperature of a given unit mass of solid " ++
   "phase change material by a given amount") (sup (sub (heat_cap_spec ^. symbol) cP) cS) UT.heat_cap_spec
@@ -80,15 +80,15 @@ htCap_V      = uc' "htCap_V"
   "The amount of energy required to raise the temperature of a given unit mass of vapour by a given amount"
   (sup (heat_cap_spec ^. symbol) cV) UT.heat_cap_spec
 
-htCap_W      = uc' "htCap_W" 
+htCap_W      = uc' "htCap_W"
   (heat_cap_spec `of_` water)
   "The amount of energy required to raise the temperature of a given unit mass of water by a given amount"
   (sub (heat_cap_spec ^. symbol) cW) UT.heat_cap_spec
 
-diam         = uc' "diam" 
+diam         = uc' "diam"
   (diameter `of_` tank) "The diameter of the tank" cD metre
 
-pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP 
+pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
   (sup (sub (sens_heat ^. symbol) (Atomic "Pmelt")) (Atomic "init")) joule
@@ -99,28 +99,28 @@ pcm_E        = uc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
 w_E          = uc' "w_E" (nounPhraseSP "change in heat energy in the water")
   "Change in thermal energy within the water" (sub (sens_heat ^. symbol) cW) joule
 
-vol_ht_gen   = uc' "vol_ht_gen" 
+vol_ht_gen   = uc' "vol_ht_gen"
   (nounPhraseSP "volumetric heat generation per unit volume")
-  "Amount of thermal energy generated per unit volume" lG UT.volHtGenU 
+  "Amount of thermal energy generated per unit volume" lG UT.volHtGenU
 
-htTransCoeff = uc' "htTransCoeff" 
+htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
   "The proportionality constant between the heat flux and the thermodynamic driving force for the flow of thermal energy"
   lH UT.heat_transfer_coef
 
-coil_HTC     = uc' "coil_HTC" (nounPhraseSP 
+coil_HTC     = uc' "coil_HTC" (nounPhraseSP
   "convective heat transfer coefficient between coil and water")
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the coil to the surrounding water") (sub (htTransCoeff ^. symbol) cC)
   UT.heat_transfer_coef
 
-htFusion     = makeUCWDS "htFusion" (nounPhraseSP 
+htFusion     = makeUCWDS "htFusion" (nounPhraseSP
   "specific latent heat of fusion")
   (S "amount of " :+: (phrase $ thermal_energy) +:+
   S "required to completely melt a unit " :+: (phrase $ mass) +:+
   S "of a substance.") (sub cH lF) specificE
 
-pcm_HTC      = uc' "pcm_HTC" 
+pcm_HTC      = uc' "pcm_HTC"
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the phase change material to the surrounding water")
@@ -136,12 +136,12 @@ pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
 w_mass       = uc' "w_mass" (nounPhraseSP "mass of water")
   "The quantity of matter within the water" (sub (mass ^. symbol) cW) kilogram
 
-thFluxVect   = uc' "thFluxVect" (nounPhraseSP "thermal flux vector") 
+thFluxVect   = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
   "Vector denoting the direction of thermal flux through a surface"
   (vec lQ) UT.thermal_flux
 
-ht_flux_C    = uc' "ht_flux_C" 
-  (nounPhraseSP "heat flux into the water from the coil") 
+ht_flux_C    = uc' "ht_flux_C"
+  (nounPhraseSP "heat flux into the water from the coil")
   "The rate of heat energy transfer into the water from the coil per unit time"
   (sub (ht_flux ^. symbol) cC) UT.thermal_flux
 
@@ -153,7 +153,7 @@ ht_flux_out  = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
   (sub (ht_flux ^. symbol) (Atomic "out")) UT.thermal_flux
 
-ht_flux_P    = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water") 
+ht_flux_P    = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
   "The rate of heat energy transfer into the phase change material from the water per unit time"
   (sub (ht_flux ^. symbol) cP) UT.thermal_flux
 
@@ -161,10 +161,10 @@ latentE_P    = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, during a constant-temperature " ++
   "process and absorbed by the phase change material") (sub (latent_heat ^. symbol) cP) joule
 
-temp_C       = uc' "temp_C" (nounPhraseSP "temperature of the heating coil") 
+temp_C       = uc' "temp_C" (nounPhraseSP "temperature of the heating coil")
   "The average kinetic energy of the particles within the coil" (sub (temp ^. symbol) cC) centigrade
 
-temp_env     = uc' "temp_env" (nounPhraseSP "temperature of the environment") 
+temp_env     = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment" (sub (temp ^. symbol) (Atomic "env")) centigrade
 
 time_final   = uc' "time_final" (nounPhraseSP "final time")
@@ -172,30 +172,30 @@ time_final   = uc' "time_final" (nounPhraseSP "final time")
   " simulation to its conclusion") (sub (time ^. symbol) (Atomic "final")) second
 
 temp_init    = uc' "temp_init" (nounPhraseSP "initial temperature")
-  "The temperature at the beginning of the simulation" 
+  "The temperature at the beginning of the simulation"
   (sub (temp ^. symbol)(Atomic "init")) centigrade
 
-t_init_melt  = uc' "t_init_melt" 
+t_init_melt  = uc' "t_init_melt"
   (nounPhraseSP "time at which melting of PCM begins")
   "Time at which the phase change material begins changing from a solid to a liquid"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "init")) second
 
-t_final_melt = uc' "t_final_melt" 
+t_final_melt = uc' "t_final_melt"
   (nounPhraseSP "time at which melting of PCM ends")
   "Time at which the phase change material finishes changes from a solid to a liquid"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "final")) second
 
-temp_melt_P  = uc' "temp_melt_P" 
+temp_melt_P  = uc' "temp_melt_P"
   (nounPhraseSP "melting point temperature for PCM")
   "Temperature at which the phase change material transitions from a solid to a liquid"
   (sup (sub (temp ^. symbol) (Atomic "melt")) cP) centigrade
 
-temp_PCM     = uc' "temp_PCM" 
+temp_PCM     = uc' "temp_PCM"
   (nounPhraseSP "temperature of the phase change material" )
   "The average kinetic energy of the particles within the phase change material"
   (sub (temp ^. symbol) cP) centigrade
 
-temp_W       = uc' "temp_W" 
+temp_W       = uc' "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" (sub (temp ^. symbol) cW) centigrade
 
@@ -219,7 +219,7 @@ pcm_density  = uc' "pcm_density" (nounPhraseSP "density of PCM")
 w_density    = uc' "w_density" (density `of_` water)
   "Mass per unit volume of water" (sub (density ^. symbol) cW) densityU
 
-tau          = uc' "tau" (nounPhraseSP "dummy variable for integration over time") 
+tau          = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second
 --Not sure how to define anything after this point
 

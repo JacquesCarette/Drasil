@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 -- acronyms to be used throughout
 -- ex. S "as seen in (A1)"
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroR :: String -> Sentence
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR :: String -> Sentence
 
 acroA numVar = short assumption :+: S numVar
 acroDD numVar = short dataDefn :+: S numVar
@@ -15,9 +15,10 @@ acroGD numVar = short genDefn :+: S numVar
 acroGS numVar = short goalStmt :+: S numVar
 acroIM numVar = short inModel :+: S numVar
 acroLC numVar = short likelyChg :+: S numVar
+acroPS numVar = short physSyst :+: S numVar
 acroR numVar = short requirement :+: S numVar
 
-assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg, 
+assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec :: CI
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
@@ -25,31 +26,31 @@ assumption  = commonIdea "assumption"  (cn' "assumption")                       
 dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
 desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
 genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS" 
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM" 
+goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"
+inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"
 likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"
 unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"
-physSyst    = commonIdea "physSyst"  (fterms compoundPhrase physicalSystem description)    "PS" 
+physSyst    = commonIdea "physSyst"  (fterms compoundPhrase physicalSystem description)    "PS"
 requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG" 
+mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
 srs         = commonIdea "srs"      (fterms compoundPhrase''' softwareReq specification)   "SRS"
 
 ---------------------------------------------------------------------
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, column, company, component, 
-  condition, constraint, connection, content, context, customer, datum, decision, 
+analysis, appendix, characteristic, client, column, company, component,
+  condition, constraint, connection, content, context, customer, datum, decision,
   definition, dependency, description, design, document, documentation, element, endUser,
   environment, figure, functional, game, general, goal, guide, implementation, individual,
   information, interest, input_, instance_, intReader, introduction, item, label, library,
-  limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization, 
-  output_, physics, physical, plan, priority, problem, product_, project, 
-  property, purpose, quantity, realtime, reference, requirement_, reviewer, 
-  scope, source, section_, simulation, software, solution, specific, 
-  specification, stakeholder, statement, symbol_, system, table_, template, 
-  terminology, theory, traceyGraph, traceyMatrix, user, useCase, validation, value, variable, 
+  limitation, method_, module_, model, name_, nonfunctional, offShelf, open, organization,
+  output_, physics, physical, plan, priority, problem, product_, project,
+  property, purpose, quantity, realtime, reference, requirement_, reviewer,
+  scope, source, section_, simulation, software, solution, specific,
+  specification, stakeholder, statement, symbol_, system, table_, template,
+  terminology, theory, traceyGraph, traceyMatrix, user, useCase, validation, value, variable,
   video, verification, uncertainty :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
@@ -116,7 +117,7 @@ quantity        = npnc "quantity"       (cnIES "quantity") --general enough to b
 realtime        = npnc "real-time"      (cn' "real-time")
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
-reviewer        = npnc "reviewer"       (cn' "reviewer") 
+reviewer        = npnc "reviewer"       (cn' "reviewer")
 scope           = npnc "scope"          (cn' "scope")
 source          = npnc "source"         (cn' "source")
 section_        = npnc "section"        (cn' "section")
@@ -165,14 +166,14 @@ scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- 
 
 -- compounds
 
-designDoc, generalSystemDescription, indPRCase, 
+designDoc, generalSystemDescription, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
-  specificsystemdescription, systemdescription, systemConstraint, sysCont, 
-  userCharacteristic, datumConstraint, functionalRequirement, 
+  specificsystemdescription, systemdescription, systemConstraint, sysCont,
+  userCharacteristic, datumConstraint, functionalRequirement,
   nonfunctionalRequirement, softwareDoc, softwareReq, softwareSys, softwareVerif,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim,
   productUC, useCaseTable, physicalProperty, vavPlan :: NamedChunk
-  
+ 
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 functionalRequirement        = compoundNC functional requirement_
@@ -208,7 +209,7 @@ missing = S "..."
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named
--- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of 
+-- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of
 -- @compoundPhrase (t1 ^. term) (t2 ^. term)@
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 fterms f a b = f (a ^. term) (b ^. term)
@@ -218,4 +219,3 @@ fterms f a b = f (a ^. term) (b ^. term)
 -- idea itself. Ex. @fterm titleize t1@ instead of @titleize $ t1 ^. term@
 fterm :: (NamedIdea c) => (NP -> t) -> c -> t
 fterm f t1 = f $ t1 ^. term
-

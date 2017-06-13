@@ -234,8 +234,9 @@ s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
 
 s2_4_trail :: Sentence
 s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
-  makeRef (SRS.inModel SRS.missingP [])) +:+.
-  S "to be solved are referred to as IM1 to IM4" +:+ S "The" +:+
+  makeRef (SRS.inModel SRS.missingP [])) +:+
+  S "to be solved are referred to as" +:+ acroIM "1" +:+ S "to" +:+.
+  acroIM "4" +:+ S "The" +:+
   plural inModel +:+ S "provide the" +:+ phrase ode +:+
   sParen (short ode :+: S "s") +:+ S "and algebraic" +:+
   plural equation +:+ S "that" +:+
@@ -490,11 +491,12 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
 
   where mid = S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+
-              plural constraint +:+ S "restricts the range of" +:+
-              plural input_ +:+ S "to reasonable" +:+. plural value
+          plural constraint +:+ S "restricts the range of" +:+
+          plural input_ +:+ S "to reasonable" +:+. plural value
+          
         end = sParen (S "The" +:+ plural table_ +:+ S "are left out" +:+.
-              S "because features they should use are not yet implemented" +:+
-              S "in Drasil")
+          S "because features they should use are not yet implemented" +:+
+          S "in Drasil")
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.

@@ -31,12 +31,12 @@ t3descr :: Sentence
 t3descr = (P (QT.latent_heat ^. symbol) +:+ S "is the change in" +:+
   phrase thermal_energy +:+ sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy +:+
-  S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE" +:+ 
+  S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE" +:+
   S "is the" +:+ phrase rOfChng +:+ S "of" +:+
   P (QT.latent_heat ^. symbol) +:+ S "with respect" +:+
   S "to" +:+ phrase time +:+ P (tau ^. symbol) +:+.
   sParen (Sy (unit_symb tau)) +:+ P (time ^. symbol) +:+
-  S "is the" +:+ phrase time +:+ sParen (Sy (unit_symb time)) +:+ 
+  S "is the" +:+ phrase time +:+ sParen (Sy (unit_symb time)) +:+
   S "elapsed, as long as the" +:+
   phrase phase_change +:+ S "is not complete. The status of" +:+
   S "the" +:+ phrase phase_change +:+
@@ -48,5 +48,5 @@ t3descr = (P (QT.latent_heat ^. symbol) +:+ S "is the change in" +:+
   S "respectively" +:+. sParen (Sy (unit_symb QT.temp)) +:+
   at_start latent_heat :+: S "ing stops when all material has" +:+.
   S "changed to the new phase")
-  
+ 
 -- Wrong DD reference above, change when DD4 is available

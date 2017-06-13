@@ -8,12 +8,12 @@ import Control.Lens ((^.))
 phsChgMtrl,rightSide,progName :: CI
 
 phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material" "phase change materials")           "PCM"
-rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS" 
-progName    = commonIdea "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS" 
+rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS"
+progName    = commonIdea "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS"
 
 swhsFull :: NamedChunk
 swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
--- I want to include SI as an acronym, but I can't find a way for the 
+-- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.
 
 ---ConceptChunks---
@@ -23,13 +23,13 @@ charging, coil, discharging, gauss_div,
   tank_pcm, transient, water, sWHT :: ConceptChunk
 swhsProg :: NamedChunk
 
-  
+ 
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
 
 coil = dcc "coil" (cn' "heating coil")
   "Coil in tank that heats by absorbing solar energy"
 
-discharging = dcc "discharging" (nounPhraseSP "discharging") 
+discharging = dcc "discharging" (nounPhraseSP "discharging")
   "discharging of the tank"
 
 gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
@@ -37,12 +37,12 @@ gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
 --TODO: Physical property.
 
 perfect_insul = dcc "perfect_insul" (nounPhraseSP "perfectly insulated")
-  "Describes the property of a material not allowing heat transfer through its boundaries" 
+  "Describes the property of a material not allowing heat transfer through its boundaries"
 
 phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
       ("A substance that uses phase changes (such as melting) to absorb or " ++
       "release large amounts of heat at a constant temperature")
-      
+     
 --FIXME: Temporarily have to manually create the compound phrase, because it
 --uses acronym and a sentence.
 
@@ -52,12 +52,12 @@ phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
 --  (short progName +:+ (phrase $ program))
 --  CapFirst CapWords) "SWHS"
 
-swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+ 
+swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
   phrase program) (short progName +:+ phrase program)
   CapFirst CapWords) "SWHS"
 
 --Nounphrase'' hack to get nounPhraseSP words to accept nounPhrases instead of strings
-swhs_pcm = dcc "swhs_pcm" (nounPhrase'' 
+swhs_pcm = dcc "swhs_pcm" (nounPhrase''
   (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
   (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)

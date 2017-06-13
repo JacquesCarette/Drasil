@@ -76,7 +76,7 @@ chipmunkMG :: Document
 chipmunkMG = mgDoc' chipmunk auths mgBod
 
 mgBod :: [Section]
-(mgBod, _) = makeDD lcs ucs reqs modules
+(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 cpSymbMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols

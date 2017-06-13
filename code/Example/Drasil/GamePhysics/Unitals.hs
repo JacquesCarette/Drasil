@@ -51,7 +51,7 @@ cpUnitless :: [VarChunk]
 cpUnitless = [numParticles]
 
 numParticles :: VarChunk
-numParticles = makeVC "n" (nounPhraseSP "number of particles in a rigid body") lN
+numParticles = makeVC "n" (nounPhraseSP "number of particles in a rigid body") lN --Integer
 
 ----- Specific unitals needed for certain models and definitions -----
 

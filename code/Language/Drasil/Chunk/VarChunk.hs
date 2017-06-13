@@ -55,5 +55,5 @@ makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)
 
 -- | Creates a VarChunk from a NamedIdea.
 -- This function will be renamed soon
-vcFromNI :: NamedIdea c => c -> Symbol -> VarChunk
-vcFromNI cc sym = VC (nw cc) sym Rational
+vcFromNI :: NamedIdea c => c -> Symbol -> Space -> VarChunk
+vcFromNI cc sym sp = VC (nw cc) sym sp

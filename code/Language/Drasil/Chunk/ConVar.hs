@@ -4,6 +4,7 @@ module Language.Drasil.Chunk.ConVar
   ( ConVar(..)
   , cv
   , cvR
+  , cvRs -- Temporary identification for the the creation of a quantity with a certain type of unit.  Will eventually change to cvR.
   ) where
 
 import Language.Drasil.Chunk
@@ -48,3 +49,6 @@ cv = CV
 -- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Rational' 'Space'.
 cvR :: ConceptChunk -> Symbol -> ConVar
 cvR c s = CV c s Rational
+
+cvRs :: ConceptChunk -> Symbol -> Space -> ConVar
+cvRs c s p = CV c s p

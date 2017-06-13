@@ -163,12 +163,12 @@ s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can b
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map
-  (listConstS) []) (titleize table +: S "1" +:+ phrase input_ +:+
+  (listConstS) []) (titleize table_ +: S "1" +:+ phrase input_ +:+
   titleize' variable) True
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map
-  (listConstS) []) (titleize table +: S "2" +:+ phrase output_ +:+
+  (listConstS) []) (titleize table_ +: S "2" +:+ phrase output_ +:+
   titleize' variable) True
     
 

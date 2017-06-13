@@ -6,7 +6,6 @@ import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Documentation
-import Control.Lens ((^.))
 import Data.Drasil.Modules
 import Data.Drasil.Software.Products
 import Data.Drasil.Quantities.Thermodynamics (temp)

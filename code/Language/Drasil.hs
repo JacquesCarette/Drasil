@@ -15,7 +15,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, makeVCObj, vcFromNI, SymbolForm(..)
+  , makeVC, makeVCS, makeVCObj, vcFromNI, SymbolForm(..)
   , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
   , Quantity(..), ConVar(..), cvR
   , Concept(..)

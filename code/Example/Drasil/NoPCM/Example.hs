@@ -32,63 +32,69 @@ coil_SA, dummyVar, hIn_SA, hOut_SA, htCap_Liq, htCap_W, ht_flux_C,
 
 -- convenience
 
-coil_SA     = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
-              "Area covered by the outermost layer of the coil" (sub cA cC) m_2
-dummyVar    = uc' "dummyVar" 
+coil_SA     = ucs "coil_SA" (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
+              "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Real
+dummyVar    = ucs "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")
-              "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second
-hIn_SA      = uc' "hIn_SA" 
+              "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second Integer
+hIn_SA      = ucs "hIn_SA" 
               (nounPhraseSP "surface area over which heat is transferred in")
-              "Surface area over which thermal energy is transferred into an object" (sub cA (Atomic "in")) m_2
-hOut_SA     = uc' "hOut_SA" 
+              "Surface area over which thermal energy is transferred into an object" (sub cA (Atomic "in")) m_2 Real
+hOut_SA     = ucs "hOut_SA" 
               (nounPhraseSP "surface area over which heat is transferred out")
-              "Surface area over which thermal energy is transferred out of an object" (sub cA (Atomic "out")) m_2
-htCap_Liq   = uc' "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
-              "The amount of energy required to raise the temperature of a given unit mass of a given liquid by a given amount"  (sup cC cL) U.heat_cap_spec
-htCap_W     = uc' "htCap_W" (heat_cap_spec `of_` water)
-              "The amount of energy required to raise the temperature of a given unit mass of water by a given amount" (sub cC cW) U.heat_cap_spec
-ht_flux_C   = uc' "ht_flux_C" (nounPhraseSP "heat flux from coil")
-              "The rate of thermal energy transfer through the coil per unit time" (sub lQ cC) U.thermal_flux
-ht_flux_in  = uc' "ht_flux_in" (nounPhraseSP "heat flux in")
-              "The rate of thermal energy transfer into an object through a given surface per unit time" (sub lQ (Atomic "in")) U.thermal_flux
-ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux out")
-              "The rate of thermal energy transfer out of an object through a given surface per unit time" (sub lQ (Atomic "out")) U.thermal_flux
-ht_gen_vol  = uc' "ht_gen_vol" 
+              "Surface area over which thermal energy is transferred out of an object" (sub cA (Atomic "out")) m_2 Real
+htCap_Liq   = ucs "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
+              "The amount of energy required to raise the temperature of a given unit mass of a given liquid by a given amount"
+              (sup cC cL) U.heat_cap_spec Real
+htCap_W     = ucs "htCap_W" (heat_cap_spec `of_` water)
+              "The amount of energy required to raise the temperature of a given unit mass of water by a given amount" (sub cC cW)
+              U.heat_cap_spec Real
+ht_flux_C   = ucs "ht_flux_C" (nounPhraseSP "heat flux from coil")
+              "The rate of thermal energy transfer through the coil per unit time" (sub lQ cC) U.thermal_flux Real
+ht_flux_in  = ucs "ht_flux_in" (nounPhraseSP "heat flux in")
+              "The rate of thermal energy transfer into an object through a given surface per unit time" (sub lQ (Atomic "in"))
+              U.thermal_flux Real
+ht_flux_out = ucs "ht_flux_out" (nounPhraseSP "heat flux out")
+              "The rate of thermal energy transfer out of an object through a given surface per unit time" (sub lQ (Atomic "out"))
+              U.thermal_flux Real
+ht_gen_vol  = ucs "ht_gen_vol" 
               (nounPhraseSP "volumetric heat generation per unit volume")
-              "Amount of thermal energy generated per unit volume" lG U.thermal_flux
-ht_xfer_co  = uc' "ht_xfer_co" 
+              "Amount of thermal energy generated per unit volume" lG U.thermal_flux Real
+ht_xfer_co  = ucs "ht_xfer_co" 
               (nounPhraseSP "convective heat transfer coefficient")
-              "The proportionality constant between the heat flux and the thermodynamic driving force for the flow of thermal energy" lH U.heat_transfer_coef
-ht_xfer_CW  = uc' "ht_xfer_CW" 
+              "The proportionality constant between the heat flux and the thermodynamic driving force for the flow of thermal energy"
+              lH U.heat_transfer_coef Real
+ht_xfer_CW  = ucs "ht_xfer_CW" 
               (nounPhraseSP "convective heat transfer coefficient between coil and water")
               ("The convective heat transfer coefficient that models " ++
-              "the thermal flux from the coil to the surrounding water") (sub lH cC) U.heat_transfer_coef
+              "the thermal flux from the coil to the surrounding water") (sub lH cC) U.heat_transfer_coef Real
   -- How do I make a symbol that needs one (or more) Accent? Add to Symbol or
   -- pull Accent out somehow?
-tank_D      = uc' "tank_D" (diameter `of_` tank) "The diameter of the tank" cD metre
-tank_L      = uc' "tank_L" (len `of_` tank) "The length of the tank" cL metre
-tank_V      = uc' "V_tank" (nounPhraseSP "volume of the cylindrical tank") "The amount of space encompassed by the tank" (sub cV (Atomic "tank")) m_3
-temp_coil   = uc' "temp_coil" (temp `of_` coil)
-              "The average kinetic energy of the particles within the coil" (sub cT cC) centigrade
-temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
-              "Measure of the relative amounts of internal energy within two bodies" (Concat [Greek Delta, cT]) centigrade
-temp_env    = uc' "temp_env" (temp `of_` environment)
-              "The tempature of a given environment" (sub cT (Atomic "env")) centigrade
-thFluxVect  = uc' "thFluxVect" (cn' "thermal flux vector")
-              "Vector denoting the direction of thermal flux through a surface" (vec lQ) U.thermal_flux
-time_final  = uc' "time_final" (cn' "time")
+tank_D      = ucs "tank_D" (diameter `of_` tank) "The diameter of the tank" cD metre Real
+tank_L      = ucs "tank_L" (len `of_` tank) "The length of the tank" cL metre Real
+tank_V      = ucs "V_tank" (nounPhraseSP "volume of the cylindrical tank") "The amount of space encompassed by the tank"
+              (sub cV (Atomic "tank")) m_3 Real
+temp_coil   = ucs "temp_coil" (temp `of_` coil)
+              "The average kinetic energy of the particles within the coil" (sub cT cC) centigrade Real
+temp_diff   = ucs "temp_diff" (nounPhraseSP "temperature difference")
+              "Measure of the relative amounts of internal energy within two bodies" (Concat [Greek Delta, cT]) centigrade Real
+temp_env    = ucs "temp_env" (temp `of_` environment)
+              "The tempature of a given environment" (sub cT (Atomic "env")) centigrade Real
+thFluxVect  = ucs "thFluxVect" (cn' "thermal flux vector")
+              "Vector denoting the direction of thermal flux through a surface" (vec lQ) U.thermal_flux (Vect Real)
+time_final  = ucs "time_final" (cn' "time")
               ("The amount of time elapsed from the beginning of the" ++
-              " simulation to its conclusion") (sub lT (Atomic "final")) second
-temp_init   = uc' "temp_init" (cn' "initial temperature")
-              "The temperature at the beginning of the simulation" (sub cT (Atomic "init")) centigrade
-temp_water  = uc' "temp_water" (temp `of_` water)
-              "The average kinetic energy of the particles within the water" (sub cT cW) centigrade
-water_dense = uc' "water_dense" (density `of_` water)
-              "The amount of mass per unit volume of water" (sub (Greek Rho_L) cW) densityU
-water_m     = uc' "water_m" (mass `of_` water)
-              "The amount of matter within a given quantity of water" (sub (mass ^. symbol) cW) kilogram
-water_vol   = uc' "water_vol" (vol `of_` water)
-              "The amount of space occupied by a given quantity of water" (sub cV cW) m_3
+              " simulation to its conclusion") (sub lT (Atomic "final")) second Real
+temp_init   = ucs "temp_init" (cn' "initial temperature")
+              "The temperature at the beginning of the simulation" (sub cT (Atomic "init")) centigrade Real
+temp_water  = ucs "temp_water" (temp `of_` water)
+              "The average kinetic energy of the particles within the water" (sub cT cW) centigrade Real
+water_dense = ucs "water_dense" (density `of_` water)
+              "The amount of mass per unit volume of water" (sub (Greek Rho_L) cW) densityU Real
+water_m     = ucs "water_m" (mass `of_` water)
+              "The amount of matter within a given quantity of water" (sub (mass ^. symbol) cW) kilogram Real
+water_vol   = ucs "water_vol" (vol `of_` water)
+              "The amount of space occupied by a given quantity of water" (sub cV cW) m_3 Real
 --melt_frac   = uc' "Phi" "melt fraction" (Greek Phi) unitless
 
 --Common Terms

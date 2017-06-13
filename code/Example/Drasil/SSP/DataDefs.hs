@@ -39,7 +39,7 @@ bsWtrFEqn = (Int 0)
 --DD3
 
 surfWtrF :: QDefinition
-surfWtrF = fromEqn' (uti ^. id) (uti ^. term) (uti ^. symbol) surfWtrFEqn
+surfWtrF = mkDataDef' surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
 surfWtrFEqn = (Int 0)

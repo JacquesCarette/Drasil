@@ -15,14 +15,14 @@ sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               mobShrI, shrResI, ti, ri, slcWght, hi, dHi, intNormForce, intShrForce,
-              baseHydroForce, uti, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
+              baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
               omega_i, baseWthX, lbi, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
-  ti, ri, slcWght, hi, dHi, intNormForce, intShrForce, baseHydroForce, uti, totNrmForce, nrmFSubWat, ni_star,
+  ti, ri, slcWght, hi, dHi, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star,
   qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i :: UnitalChunk
@@ -142,7 +142,7 @@ baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force arising from water pr
   fixme
   (sub cU (Atomic "b,i")) newton
 
-uti         = uc' "U_t,i" (cn $ "surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface " ++ fsi)
+surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force arising from water pressure acting into the slice from standing water on the slope surface " ++ fsi)
   fixme
   (sub cU (Atomic "t,i")) newton
 

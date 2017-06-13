@@ -111,7 +111,7 @@ sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
 s4 = specSysDesF words_ [s4_1, s4_2]
   where words_ = (plural definition +:+ S "and finally the" +:+
           phrase inModel +:+ sParen (getAcc ode) +:+
-          S "that" plural model +:+ S "the" +:+ phrase sWHT)
+          S "that" +:+ plural model +:+ S "the" +:+ phrase sWHT)
 
 s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
@@ -142,7 +142,7 @@ s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 s4_1_3_intro = Paragraph $ S "Given the" +:+ phrase temp +:+ S "of the" +:+
   phrase coil `sC` S "initial" +:+ phrase temp +:+ S "of the" +:+
   phrase water `sC` S "and material" +:+ plural property `sC`
-  S "the" +:+ hrase goalStmt +:+ S "is"
+  S "the" +:+ phrase goalStmt +:+ S "is"
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   (acroGS "1", S "predict the" +:+ phrase temp_water +:+ S "over time")]

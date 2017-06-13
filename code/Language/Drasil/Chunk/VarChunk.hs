@@ -52,8 +52,3 @@ vc' n s t = VC (nw n) s t
 -- | Creates a VarChunk from an id, term, symbol, and 
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)
-
--- | Creates a VarChunk from a NamedIdea.
--- This function will be renamed soon
-vcFromNI :: NamedIdea c => c -> Symbol -> Space -> VarChunk
-vcFromNI cc sym sp = VC (nw cc) sym sp

@@ -6,11 +6,11 @@ import Drasil.SWHS.Modules
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Changes
 
-lcs :: [LCChunk]
-lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12]
+likelyChanges :: [LCChunk]
+likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12]
 
-ucs :: [UCChunk]
-ucs = [uc1, uc2, uc3, uc4, uc5, uc6]
+unlikelyChanges :: [UCChunk]
+unlikelyChanges = [uc1, uc2, uc3, uc4, uc5, uc6]
 
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12 :: LCChunk
 

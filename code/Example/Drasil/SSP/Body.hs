@@ -82,7 +82,7 @@ ssp_srs = mkDoc mkSRS ssp_si
 ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 
 mgBod :: [Section]
-(mgBod, _) = makeDD lcs ucs reqs modules
+(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 sspSymMapT :: RelationConcept -> Contents
 sspSymMapT = symbolMapFun sspSymbols Theory

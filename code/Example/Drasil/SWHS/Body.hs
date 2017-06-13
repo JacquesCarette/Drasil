@@ -80,7 +80,7 @@ swhs_srs' = mkDoc mkSRS swhs_si
 -- It is sometimes hard to remember to add new sections both here and above.
 
 mgBod :: [Section]
-(mgBod, _) = makeDD lcs ucs reqs modules
+(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 swhs_mg :: Document
 swhs_mg = mgDoc swhsFull authors mgBod

@@ -5,7 +5,7 @@ module Drasil.SSP.IMods where
 import Language.Drasil
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Control.Lens ((^.))
 
 
@@ -67,7 +67,24 @@ fDisEq_rel :: Relation
 fDisEq_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 fDisEq_desc :: Sentence
-fDisEq_desc = fixmeS
+fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
+  S "equations in the x and y directions for each element. System of equations",
+  S "solved for displacements (", (P $ dx_i ^. symbol), S "and",
+  (P $ dy_i ^. symbol), S ")", (P $ dHi ^. symbol), S "=", (P $ hi ^. symbol)
+  `isThe` S "net hydrostatic force across a slice.", (P $ kc ^. symbol)
+  `isThe` S "earthquake load factor.", (P $ slcWght ^. symbol)
+  `isThe` S "weight of the slice.", (P $ baseHydroForce ^. symbol) 
+  `isThe` S "pore water pressure acting on the slice base.", (P $ uti ^. symbol)
+  `isThe` S "pore water pressure acting on the slice surface.", (P $ baseAngle ^. symbol)
+  `isThe` S "angle of the base with the horizontal.", (P $ beta_i ^. symbol)
+  `isThe` S "angle of the surface with the horizontal", (P $ dx_i ^. symbol)
+  `isThe` S "x displacement of slice i", (P $ dy_i ^. symbol)
+  `isThe` S "y displacement of slice i", (P $ lsi ^. symbol) 
+  `isThe` S "length of the interslice surface i", (P $ lbi ^. symbol)
+  `isThe` S "length of the base surface i", (P $ k_sti ^. symbol)
+  `isThe` S "interslice shear stiffness at surface i.", S " Kst,i-1"
+  `isThe` S "interslice normal stiffness at surface i. KbA,i, and KbB,i",
+  S "are the base stiffness values for slice i"]
 
 --
 rfemFoS :: RelationConcept

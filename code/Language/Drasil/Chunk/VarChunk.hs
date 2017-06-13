@@ -38,6 +38,7 @@ nl l f (VC n s t) = fmap (\x -> VC (set l x n) s t) (f (n ^. l))
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Rational type so it compiles
 -- | Creates a VarChunk from an id, term, and symbol. Assumes Rational 'Space'
+-- Needs to be removed
 makeVC :: String -> NP -> Symbol -> VarChunk
 makeVC i des sym = VC (nw $ nc i des) sym Rational
 

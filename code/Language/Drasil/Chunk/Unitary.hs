@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Unitary
   ( UnitaryChunk
-  , unitary , unitary'
+  , unitary'
   , Unitary(..)) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -43,11 +43,6 @@ nl l f (UC qc s u t) = fmap (\x -> UC (set l x qc) s u t) (f (qc ^. l))
 
 -- FIXME: Temporarily hacking in the space for Unitary chunks, these can be fixed
 -- with the use of other constructors.
-
--- | Used to create a UnitaryChunk from a 'NamedIdea', 'Symbol', and 'Unit'.
--- Assumes the 'Space' is Rational
-unitary :: (NamedIdea c, Unit u) => c -> Symbol -> u -> UnitaryChunk
-unitary a b c = UC a b c Rational
 
 -- | Same as 'unitary', except it builds the NamedIdea portion of the UnitaryChunk
 -- from a given id and term. Those are the first two arguments

@@ -74,7 +74,7 @@ fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
   `isThe` S "net hydrostatic force across a slice.", (P $ kc ^. symbol)
   `isThe` S "earthquake load factor.", (P $ slcWght ^. symbol)
   `isThe` S "weight of the slice.", (P $ baseHydroForce ^. symbol) 
-  `isThe` S "pore water pressure acting on the slice base.", (P $ uti ^. symbol)
+  `isThe` S "pore water pressure acting on the slice base.", (P $ surfHydroForce ^. symbol)
   `isThe` S "pore water pressure acting on the slice surface.", (P $ baseAngle ^. symbol)
   `isThe` S "angle of the base with the horizontal.", (P $ beta_i ^. symbol)
   `isThe` S "angle of the surface with the horizontal", (P $ dx_i ^. symbol)

@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.Unital
   , uc
   , uc'
   , ucs
+  , ucs'
   , ucsWS
   ) where
 
@@ -69,6 +70,9 @@ cvl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
 -- Assumes the 'Space' is Rational
 uc :: (Concept c, Unit u) => c -> Symbol -> u -> UnitalChunk
 uc a b c = UC a b c Rational
+
+ucs' :: (Concept c, Unit u) => c -> Symbol -> u -> Space -> UnitalChunk
+ucs' a b c p = UC a b c p
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given id, term, and defn. Those are the first three arguments

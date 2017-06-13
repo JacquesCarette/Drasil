@@ -93,32 +93,33 @@ glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistF
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
   pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
-ar_max      = makeVC "ar_max"        (nounPhraseSP "maximum aspect ratio")
-  (sub (Atomic "AR") (Atomic "max"))
+ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
+  (sub (Atomic "AR") (Atomic "max")) Rational
 risk_fun    = makeVC "risk_fun"      (nounPhraseSP "risk function") cB
 glass_type  = vc "glass_type"    (nounPhraseSP "glass type, g in {AN, HS, FT}")
   lG String
-is_safe1    = makeVC "is_safe1"      (nounPhraseSP $ "true when calculated probability is " ++
+is_safe1    = vc "is_safe1"      (nounPhraseSP $ "true when calculated probability is " ++
   "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
-  Atomic "safe1"])
-is_safe2    = makeVC "is_safe2"      (nounPhraseSP $ "true when load resistance (capacity) " ++
+  Atomic "safe1"]) Boolean
+is_safe2    = vc "is_safe2"      (nounPhraseSP $ "true when load resistance (capacity) " ++
   "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
-  Atomic "safe2"])
+  Atomic "safe2"]) Boolean
 stressDistFac = makeVC "stressDistFac"  (nounPhraseSP "stress distribution factor (Function)") cJ
 sdf_tol     = makeVC "sdf_tol"       (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
-prob_br     = makeVC "prob_br"       (nounPhraseSP "probability of breakage")
-  (sub cP lB)
-pb_tol      = makeVC "pb_tol"        (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
+prob_br     = vc "prob_br"       (nounPhraseSP "probability of breakage")
+  (sub cP lB) Rational
+pb_tol      = vc "pb_tol"        (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
+  Rational
 dimlessLoad = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
-tNT         = makeVC "tNT"           (nounPhraseSP "TNT equivalent factor") (Atomic "TNT")
+tNT         = vc "tNT"           (nounPhraseSP "TNT equivalent factor") (Atomic "TNT") Rational
 lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
-loadSF      = makeVC "loadSF"        (lShareFac ^. term) (Atomic "LSF")
-ar_min      = makeVC "ar_min"        (nounPhraseSP "minimum aspect ratio")
-  (sub (Atomic "AR") (Atomic "min")) --find a way to call aspectR instead of using (Atomic "AR") again
-gTF         = makeVC "gTF"           (glassTypeFac ^. term) (Atomic "GTF")
+loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
+ar_min      = vc "ar_min"        (nounPhraseSP "minimum aspect ratio")
+  (sub (Atomic "AR") (Atomic "min")) Rational --find a way to call aspectR instead of using (Atomic "AR") again
+gTF         = vc "gTF"           (glassTypeFac ^. term) (Atomic "GTF") Integer
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, 

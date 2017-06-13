@@ -109,11 +109,11 @@ r_OB    = uc' "r_OB"
 
 pos_CM, mass_i, pos_i, acc_i, mTot :: UnitalChunk
 
-pos_CM = uc' "p_CM" (nounPhraseSP $ 
+pos_CM = ucs "p_CM" (nounPhraseSP $ 
   "the mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
-  (sub (QP.position ^. symbol) (Atomic "CM")) metre
+  (sub (QP.position ^. symbol) (Atomic "CM")) metre Rational
 
 --FIXME: parametrized hack
 mass_i = ucFromCV massi kilogram

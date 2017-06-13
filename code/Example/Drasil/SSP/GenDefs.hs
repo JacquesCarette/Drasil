@@ -62,7 +62,7 @@ bShFEq_desc = S "For a" +:+ phrase slice +:+ S "of" +:+ phrase mass +:+
   S "equilibrium to satisfy" +:+ acroT "2" +:+ S "in the direction" +:+
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice) +:+ S "Rearranged to solve for the" +:+ phrase shearForce +:+
-  S "on the" +:+ phrase base +:+. getS mobShrI +:+ at_start force +:+ S "equilibrium is" +:+
+  S "on the base" +:+. getS mobShrI +:+ at_start force +:+ S "equilibrium is" +:+
   S "derived from the free body diagram of" +:+
   makeRef (SRS.physSyst SRS.missingP []) +:+ S "Index i" +:+
   S "refers to" +:+ (plural value `ofThe` plural property) +:+ S "for" +:+
@@ -80,14 +80,14 @@ resShr_rel = C shrResI := C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C b
 
 resShr_desc :: Sentence
 resShr_desc = S "The Mohr-Coulomb resistive shear strength of a" +:+
-  phrase slice +:+ getS shrResI S "is adjusted to account for the" +:+
+  phrase slice +:+ getS shrResI +:+ S "is adjusted to account for the" +:+
   S "effective normal" +:+
-  getS nrmStrss :+: "'" +:+ -- FIXME: Need to add prime without hardcoding
-  S "=" +:+ S "N′ = N −Ub of a soil from" +:+. acroT "4" +:+
+  getS nrmStrss :+: S "'" +:+ -- FIXME: Need to add prime without hardcoding
+  S "=" +:+ S "N' = N -Ub of a soil from" +:+. acroT "4" +:+
   S "Also and the cohesion is" +:+
   S "adjusted to account for the length l of the plane where the normal occurs" `sC`
-  S "where lb,i = bi · sec (α), and bi is the x width of the base." +:+
-  S "Therefore c=c′ ·bi ·sec(αi)."
+  S "where lb,i = bi * sec (alpha), and bi is the x width of the base." +:+
+  S "Therefore c=c' *bi *sec(alpha*i)."
   -- FIXME: Still needs to be more automated
 
 --

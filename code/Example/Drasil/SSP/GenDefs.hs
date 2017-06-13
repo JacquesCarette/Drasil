@@ -1,6 +1,5 @@
 module Drasil.SSP.GenDefs where
 
---import Control.Lens ((^.))
 import Prelude hiding (tan)
 
 import Language.Drasil
@@ -99,7 +98,10 @@ mobShr_rel = C mobShrI := C shrResI :/ C fs :=
   (C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)) :/ C fs
 
 mobShr_desc :: Sentence
-mobShr_desc = fixmeS
+mobShr_desc = foldlSent [S "From the definition of the Factor of Safety in T1" `sC`
+  S "and the new definition of", getS shrResI `sC` S "a new relation for the net mobile", 
+  S "shear force of the slice", getS ti, S "is found as the resistive shear" , getS shrResI,
+  S "(GD3) divided by the factor of safety", getS fs]
 
 --
 normShrR :: RelationConcept
@@ -109,7 +111,12 @@ nmShrR_rel :: Relation
 nmShrR_rel = C intShrForce := C normToShear :* C scalFunc :* C intNormForce
 
 nmShrR_desc :: Sentence
-nmShrR_desc = fixmeS
+nmShrR_desc = foldlSent [S "The assumption for the Morgenstern Price method (A5)",
+  S "that the interslice shear force", getS xi, S "is proportional to the interslice", 
+  S "normal force", getS intNormForce, S "by a proportionality constant",
+  (P $ (Greek Lambda_L)), S "and a predetermined scaling function", P (lF) `sC` S "that", 
+  S "changes the proportionality as a function of the x-ordinate position of the interslice.",
+  P (lF), S "is typically either a half-sine along the slip surface, or a constant"]
 
 --
 momentEql :: RelationConcept
@@ -119,7 +126,7 @@ momEql_rel :: Relation
 momEql_rel = (Int 0) := (Int 0) --FIXME: add the long equation
 
 momEql_desc :: Sentence
-momEql_desc = fixmeS
+momEql_desc = foldlSent []
 
 --
 netForce :: RelationConcept
@@ -129,7 +136,18 @@ fNet_rel :: Relation
 fNet_rel = C genForce := (Int 0) --FIXME: requires two lines of equal signs
 
 fNet_desc :: Sentence
-fNet_desc = fixmeS
+fNet_desc = foldlSent [S "The net sum of forces acting on a slice for",
+  S "the RFEM model. The forces that create an applied load on the slice.", 
+  S "Fx,i refers to the load in the direction perpendicular to the", 
+  S "direction of the force of gravity for slice i, while Fy,i refers", 
+  S "to the load in the direction parallel to the force of gravity for", 
+  S "slice i. Forces are found in the free body diagram of Fig2 in section", 
+  S "4.1.2. In this model the elements are not exerting forces on each other" `sC`
+  S "so the interslice forces E and X are not a part of the model. Index i", 
+  S "refers to the values of the properties for slice/interslices following", 
+  S "convention in Fig1 in section 4.1.2. Force variable definitions can",
+  S "be found in DD1 to DD8"]
+  --FIXME:Finish pulling out symbols
 
 --
 hooksLaw2d :: RelationConcept

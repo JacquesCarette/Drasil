@@ -43,46 +43,44 @@ plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
 
-plate_len   = unitary' "plate_len"   (nounPhraseSP "plate length (long dimension)")
-  lA millimetre
-plate_width = unitary' "plate_width" (nounPhraseSP "plate width (short dimension)")
-  lB millimetre
-dim_max     = unitary' "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre
-dim_min     = unitary' "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre
-act_thick   = unitary' "act_thick"   (nounPhraseSP "actual thickness")
-  lH millimetre
-sflawParamK = unitary' "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
-  lK sFlawPU
-sflawParamM = unitary' "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
-  lM sFlawPU
-demand      = unitary' "demand"      (nounPhraseSP "applied load (demand)")
-  lQ kilopascal
-sdx         = unitary' "sdx"         (nounPhraseSP "stand off distance (x-component)")
-  (sub (standOffDist ^. symbol) lX) metre
-sdy         = unitary' "sdy"         (nounPhraseSP "stand off distance (y-component)")
-  (sub (standOffDist ^. symbol) lY) metre
-sdz         = unitary' "sdz"         (nounPhraseSP "stand off distance (z-component)")
-  (sub (standOffDist ^. symbol) lZ) metre
-sd_max      = unitary' "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "max")) metre
-sd_min      = unitary' "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "min")) metre
-nom_thick   = unitary' "nom_thick"   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
-  "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") 
-  lT millimetre
-load_dur    = unitary' "load_dur"    (nounPhraseSP "duration of load")
-  (sub lT lD) second
-char_weight = unitary' "char_weight" (nounPhraseSP "charge weight")
-  lW kilogram
-cWeightMax  = unitary' "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
-  (sub (char_weight ^. symbol) 
-  (Atomic "max")) kilogram
-cWeightMin  = unitary' "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "min")) kilogram
-eqTNTWeight = unitary' "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
-  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram
+plate_len   = unitary "plate_len"   (nounPhraseSP "plate length (long dimension)")
+  lA millimetre Rational
+plate_width = unitary "plate_width" (nounPhraseSP "plate width (short dimension)")
+  lB millimetre Rational
+dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "max")) millimetre Integer
+dim_min     = unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "min")) millimetre Integer
+act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
+  lH millimetre Rational
+sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
+  lK sFlawPU Rational
+sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
+  lM sFlawPU Integer
+demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
+  lQ kilopascal Rational --correct Space used?
+sdx         = unitary "sdx"         (nounPhraseSP "stand off distance (x-component)")
+  (sub (standOffDist ^. symbol) lX) metre Rational
+sdy         = unitary "sdy"         (nounPhraseSP "stand off distance (y-component)")
+  (sub (standOffDist ^. symbol) lY) metre Rational
+sdz         = unitary "sdz"         (nounPhraseSP "stand off distance (z-component)")
+  (sub (standOffDist ^. symbol) lZ) metre Rational
+sd_max      = unitary "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
+  (sub (standOffDist ^. symbol) (Atomic "max")) metre Integer
+sd_min      = unitary "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
+  (sub (standOffDist ^. symbol) (Atomic "min")) metre Integer
+nom_thick   = unitary "nom_thick"   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
+  "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") lT millimetre Rational
+load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
+  (sub lT lD) second Integer
+char_weight = unitary "char_weight" (nounPhraseSP "charge weight")
+  lW kilogram Rational
+cWeightMax  = unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
+  (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational
+cWeightMin  = unitary "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")
+  (sub (char_weight ^. symbol) (Atomic "min")) kilogram Rational
+eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
+  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Rational
 
 {-Quantities-}
 

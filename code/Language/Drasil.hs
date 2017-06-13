@@ -34,7 +34,7 @@ module Language.Drasil (
   , UnitalChunk(..), makeUCWDS, ucFromCV
   , uc, uc', ucs, ucsWS
   -- Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary'
+  , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC
   -- Chunk.Method

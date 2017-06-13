@@ -16,8 +16,6 @@ import Control.Lens ((^.))
 sspIMods :: [RelationConcept]
 sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 
-fixmeS :: Sentence
-fixmeS = S "FIXME: add description"
 --
 fctSfty :: RelationConcept
 fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
@@ -26,7 +24,7 @@ fcSfty_rel :: Relation
 fcSfty_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent [S "Equation for the Factor of Safety is the ratio between resistive",
+fcSfty_desc = foldlSent [S "Equation for the Factor of Safety" `isThe` S "ratio between resistive",
   S "and mobile shear of the slip surface. The sum of values from each slice is taken to find",
   S "the total resistive and mobile shear for the slip surface. The constants", P (Greek Phi),
   S "and", P (Greek Psi), S "convert the resistive and mobile shear without the inluence of", 
@@ -40,7 +38,7 @@ nrmShrF_rel :: Relation
 nrmShrF_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 nrmShrF_desc :: Sentence
-nrmShrF_desc = foldlSent [P (Greek Lambda_L), S "is the magnitude ratio between shear and", 
+nrmShrF_desc = foldlSent [P (Greek Lambda_L) `isThe` S "magnitude ratio between shear and", 
   S "normal forces at the interslice interfaces as the assumption of the Morgenstern Price", 
   S "method in GD5. The inclination function f determines the relative magnitude ratio",
   S "between the different interslices, while", P (Greek Lambda_L), S "determines the" +:+. 
@@ -56,7 +54,7 @@ sliceFs_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 sliceFs_desc :: Sentence
 sliceFs_desc = foldlSent [S "The value of the interslice normal force", (P $ intNormForce ^. symbol),
-  S "at interface i. The net force is the weight of the slices adjacent to interface i exert", 
+  S "at interface i. The net force" `isThe` S "weight of the slices adjacent to interface i exert", 
   S "horizontally on each other"] --FIXME: does "i" need to be pulled out?
 
 --
@@ -77,11 +75,11 @@ fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
   `isThe` S "pore water pressure acting on the slice base.", (P $ surfHydroForce ^. symbol)
   `isThe` S "pore water pressure acting on the slice surface.", (P $ baseAngle ^. symbol)
   `isThe` S "angle of the base with the horizontal.", (P $ beta_i ^. symbol)
-  `isThe` S "angle of the surface with the horizontal", (P $ dx_i ^. symbol)
-  `isThe` S "x displacement of slice i", (P $ dy_i ^. symbol)
-  `isThe` S "y displacement of slice i", (P $ lsi ^. symbol) 
-  `isThe` S "length of the interslice surface i", (P $ lbi ^. symbol)
-  `isThe` S "length of the base surface i", (P $ k_sti ^. symbol)
+  `isThe` S "angle of the surface with the horizontal.", (P $ dx_i ^. symbol)
+  `isThe` S "x displacement of slice i.", (P $ dy_i ^. symbol)
+  `isThe` S "y displacement of slice i.", (P $ lsi ^. symbol) 
+  `isThe` S "length of the interslice surface i.", (P $ lbi ^. symbol)
+  `isThe` S "length of the base surface i.", (P $ k_sti ^. symbol)
   `isThe` S "interslice shear stiffness at surface i.", S " Kst,i-1"
   `isThe` S "interslice normal stiffness at surface i. KbA,i, and KbB,i",
   S "are the base stiffness values for slice i"]
@@ -94,7 +92,15 @@ rfemFoS_rel :: Relation
 rfemFoS_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 rfemFoS_desc :: Sentence
-rfemFoS_desc = fixmeS
+rfemFoS_desc = foldlSent [(P $ fsloc ^. symbol) `isThe` S "factor of safety for slice i.",
+  (P $ fs ^. symbol) `isThe` S "factor of safety for the entire slip surface.",
+  (P $ cohesion ^. symbol) `isThe` S "cohesion of slice i's base.",
+  (P $ fricAngle ^. symbol) `isThe` (phrase fricAngle), S "of slice i's base.",
+  (P $ dv_i ^. symbol) `isThe` S "normal displacement of slice i.",
+  (P $ du_i ^. symbol) `isThe` S "shear displacement of slice i.",
+  (P $ k_bti ^. symbol) `isThe` S "length of the base of slice i.",
+  (P $ k_bni ^. symbol) `isThe` S "base normal stiffness at surface i.",
+  (P $ n ^. symbol) `isThe` S "number of slices in the slip surface"]
 
 --
 crtSlpId :: RelationConcept

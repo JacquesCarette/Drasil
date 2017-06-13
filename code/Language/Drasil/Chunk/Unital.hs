@@ -5,6 +5,8 @@ module Language.Drasil.Chunk.Unital
   , ucFromCV
   , uc
   , uc'
+  , ucs
+  , ucsWS
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -58,6 +60,8 @@ cvl _ _ (UC _ _ _ _) = error $ "Incorrect use of cvl for UC unital chunks. " ++
   "Should only be used with UCV"
 cvl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
 
+--{BEGIN HELPER FUNCTIONS}--
+
 -- FIXME: Temporarily hacking in the space for UC chunks, these can be fixed
 -- with the use of other constructors.
 
@@ -71,14 +75,19 @@ uc a b c = UC a b c Rational
 uc' :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
 uc' i t d s u = UC (dcc i t d) s u Rational
 
---BEGIN HELPER FUNCTIONS--
+-- | Same as 'uc'', but does not assume the 'Space'
+ucs :: (Unit u) => String -> NP -> String -> Symbol -> u -> Space -> UnitalChunk
+ucs nam trm desc sym un space = UC (dcc nam trm desc) sym un space
+
+-- ucs With a Sentence for desc
+ucsWS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Space -> UnitalChunk
+ucsWS nam trm desc sym un space = UC (dccWDS nam trm desc) sym un space
 
 --Better names will come later.
 -- | Create a UnitalChunk in the same way as 'uc'', but with a 'Sentence' for
 -- the definition instead of a String
 makeUCWDS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
 makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Rational
-
 
 -- | Create a UnitalChunk from a 'ConVar' by supplying the additional 'Unit'
 ucFromCV :: Unit u => ConVar -> u -> UnitalChunk

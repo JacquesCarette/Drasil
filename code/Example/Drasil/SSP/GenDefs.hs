@@ -5,7 +5,17 @@ import Prelude hiding (tan)
 
 import Language.Drasil
 import Drasil.SSP.Units
---import Data.Drasil.Quantities.SolidMechanics
+import Data.Drasil.Concepts.Documentation
+import Drasil.SSP.Defs
+import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.Physics
+import Data.Drasil.SentenceStructures
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+import Data.Drasil.Quantities.SolidMechanics
+import Data.Drasil.Concepts.Math
+import Data.Drasil.Utils
+import qualified Drasil.SRS as SRS
+
 
 ---------------------------
 --  General Definitions  --
@@ -25,7 +35,19 @@ nmFEq_rel :: Relation
 nmFEq_rel = C totNrmForce := (Int 0) --FIXME: add the long equation
 
 nmFEq_desc :: Sentence
-nmFEq_desc = fixmeS
+nmFEq_desc = S "For a" +:+ phrase slice +:+ S "of" +:+ phrase mass +:+
+  S "in the" +:+ phrase slope +:+ S "the" +:+ phrase force +:+
+  S "equilibrium to satisfy" +:+ acroT "2" +:+ S "in the direction" +:+
+  S "perpendicular to" +:+. (S "base" +:+ phrase surface `ofThe`
+  phrase slice) +:+ S "Rearranged to solve for" +:+ (phrase normForce `ofThe`
+  phrase surface) +:+. getS totNrmForce +:+ at_start force +:+ S "equilibrium is" +:+
+  S "derived from the free body diagram of" +:+
+  makeRef (SRS.physSyst SRS.missingP []) +:+ S "Index i" +:+
+  S "refers to" +:+ (plural value `ofThe` plural property) +:+ S "for" +:+
+  phrase slice :+: S "/" :+: plural intrslce +:+ S "following convention in" +:+.
+  makeRef (SRS.physSyst SRS.missingP []) +:+ at_start force +:+ phrase variable +:+
+  plural definition +:+ S "can be found in" +:+ acroDD "1" +:+ S "to" +:+.
+  acroDD "9"
 
 --
 bsShrFEq :: RelationConcept
@@ -35,7 +57,19 @@ bShFEq_rel :: Relation
 bShFEq_rel = C mobShrI := (Int 0) --FIXME: add the long equation
 
 bShFEq_desc :: Sentence
-bShFEq_desc = fixmeS
+bShFEq_desc = S "For a" +:+ phrase slice +:+ S "of" +:+ phrase mass +:+
+  S "in the" +:+ phrase slope +:+ S "the" +:+ phrase force +:+
+  S "equilibrium to satisfy" +:+ acroT "2" +:+ S "in the direction" +:+
+  S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
+  phrase slice) +:+ S "Rearranged to solve for the" +:+ phrase shearForce +:+
+  S "on the" +:+ phrase base +:+. getS mobShrI +:+ at_start force +:+ S "equilibrium is" +:+
+  S "derived from the free body diagram of" +:+
+  makeRef (SRS.physSyst SRS.missingP []) +:+ S "Index i" +:+
+  S "refers to" +:+ (plural value `ofThe` plural property) +:+ S "for" +:+
+  phrase slice :+: S "/" :+: plural intrslce +:+ S "following convention in" +:+.
+  makeRef (SRS.physSyst SRS.missingP []) +:+ at_start force +:+ phrase variable +:+
+  plural definition +:+ S "can be found in" +:+ acroDD "1" +:+ S "to" +:+.
+  acroDD "9"
 
 --
 resShr :: RelationConcept
@@ -45,7 +79,16 @@ resShr_rel :: Relation
 resShr_rel = C shrResI := C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)
 
 resShr_desc :: Sentence
-resShr_desc = fixmeS
+resShr_desc = S "The Mohr-Coulomb resistive shear strength of a" +:+
+  phrase slice +:+ getS shrResI S "is adjusted to account for the" +:+
+  S "effective normal" +:+
+  getS nrmStrss :+: "'" +:+ -- FIXME: Need to add prime without hardcoding
+  S "=" +:+ S "N′ = N −Ub of a soil from" +:+. acroT "4" +:+
+  S "Also and the cohesion is" +:+
+  S "adjusted to account for the length l of the plane where the normal occurs" `sC`
+  S "where lb,i = bi · sec (α), and bi is the x width of the base." +:+
+  S "Therefore c=c′ ·bi ·sec(αi)."
+  -- FIXME: Still needs to be more automated
 
 --
 mobShr :: RelationConcept

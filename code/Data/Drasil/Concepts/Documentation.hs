@@ -7,16 +7,17 @@ import Control.Lens ((^.))
 
 -- acronyms to be used throughout
 -- ex. S "as seen in (A1)"
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR :: String -> Sentence
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT :: String -> Sentence
 
-acroA numVar = short assumption :+: S numVar
-acroDD numVar = short dataDefn :+: S numVar
-acroGD numVar = short genDefn :+: S numVar
-acroGS numVar = short goalStmt :+: S numVar
-acroIM numVar = short inModel :+: S numVar
-acroLC numVar = short likelyChg :+: S numVar
-acroPS numVar = short physSyst :+: S numVar
-acroR numVar = short requirement :+: S numVar
+acroA numVar  = short assumption  :+: S numVar
+acroDD numVar = short dataDefn    :+: S numVar
+acroGD numVar = short genDefn     :+: S numVar
+acroGS numVar = short goalStmt    :+: S numVar
+acroIM numVar = short inModel     :+: S numVar
+acroLC numVar = short likelyChg   :+: S numVar
+acroPS numVar = short physSyst    :+: S numVar
+acroR numVar  = short requirement :+: S numVar
+acroT numVar  = short thModel     :+: S numVar
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec :: CI

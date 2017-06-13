@@ -32,7 +32,7 @@ module Language.Drasil (
   , QDefinition(..), fromEqn, fromEqn', getVC
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromCV
-  , uc, uc'
+  , uc, uc', ucs, ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary'
   -- Chunk.Relation
@@ -107,7 +107,7 @@ import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
-                                  , uc, uc')
+                                  , uc, uc', ucs, ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, makeRC)
 import Language.Drasil.Chunk.Req

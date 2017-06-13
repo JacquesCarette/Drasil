@@ -80,7 +80,7 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   ([] :: [CQSWrapper]) acronyms --FIXME: All named ideas, not just acronyms.
 
 mgBod :: [Section]
-(mgBod, _) = makeDD lcs ucs reqs modules
+(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod

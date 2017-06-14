@@ -211,7 +211,7 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
-cap (S s)        CapWords = S $ concat (intersperse " " 
+cap (S s)        CapWords = S $ findHyph $ concat (intersperse " " 
   (map (\x -> (toUpper (head x) : (tail x))) (words s)))
 cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
 cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
@@ -219,6 +219,12 @@ cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
 cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
 cap (s1 :+: s2)  CapFirst = cap s1 CapFirst :+: s2
 cap a _ = a
+
+findHyph :: String -> String
+findHyph "" = ""
+findHyph s
+      | [head s] == "-" = "-" ++ [toUpper (head(tail s))] ++ tail (tail s)
+      | otherwise = [head s] ++ findHyph (tail s)
 
 -- ity, ness, ion :: String -> String
 -- Maybe export these for use in irregular cases?

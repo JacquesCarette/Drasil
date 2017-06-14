@@ -10,8 +10,9 @@ import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils
 import Data.Drasil.Quantities.Physics
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math (normal)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
---import Data.Drasil.Concepts.Physics
+import Data.Drasil.Concepts.Physics (linear, stress, friction)
 
 --------------------------
 --  Theoretical Models  --

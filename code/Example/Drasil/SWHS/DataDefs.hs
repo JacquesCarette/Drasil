@@ -14,8 +14,8 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 
 -- SYMBOL MAP HELPERS --
- swhsSymMap :: SymbolMap
- swhsSymMap = symbolMap swhsSymbols
+swhsSymMap :: SymbolMap
+swhsSymMap = symbolMap swhsSymbols
 
 swhsSymbMapD :: QDefinition -> Contents
 swhsSymbMapD termType = (symbolMapFun swhsSymMap Data) termType

@@ -8,6 +8,7 @@ data Space where
   Integer :: Space
   Rational :: Space
   Real :: Space
+  Natural :: Space
   Boolean :: Space
   Char :: Space
   String :: Space

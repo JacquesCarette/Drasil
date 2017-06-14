@@ -48,7 +48,7 @@ cv = CV
 --FIXME: Remove this hack
 -- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Rational' 'Space'.
 cvR :: ConceptChunk -> Symbol -> ConVar
-cvR c s = CV c s Rational
+cvR c s = CV c s Real
 
 cvRs :: ConceptChunk -> Symbol -> Space -> ConVar
 cvRs c s p = CV c s p

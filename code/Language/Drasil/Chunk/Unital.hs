@@ -69,7 +69,7 @@ cvl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Rational
 uc :: (Concept c, Unit u) => c -> Symbol -> u -> UnitalChunk
-uc a b c = UC a b c Rational
+uc a b c = UC a b c Real
 
 ucs' :: (Concept c, Unit u) => c -> Symbol -> u -> Space -> UnitalChunk
 ucs' a b c p = UC a b c p
@@ -77,7 +77,7 @@ ucs' a b c p = UC a b c p
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given id, term, and defn. Those are the first three arguments
 uc' :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
-uc' i t d s u = UC (dcc i t d) s u Rational
+uc' i t d s u = UC (dcc i t d) s u Real
 
 -- | Same as 'uc'', but does not assume the 'Space'
 ucs :: (Unit u) => String -> NP -> String -> Symbol -> u -> Space -> UnitalChunk
@@ -91,7 +91,7 @@ ucsWS nam trm desc sym un space = UC (dccWDS nam trm desc) sym un space
 -- | Create a UnitalChunk in the same way as 'uc'', but with a 'Sentence' for
 -- the definition instead of a String
 makeUCWDS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
-makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Rational
+makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) sym un Real
 
 -- | Create a UnitalChunk from a 'ConVar' by supplying the additional 'Unit'
 ucFromCV :: Unit u => ConVar -> u -> UnitalChunk

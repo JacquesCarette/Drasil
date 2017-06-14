@@ -27,7 +27,7 @@ import Drasil.GeneralSystDesc
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s2, s2_1, s2_2, s2_3, s2_4, s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
+s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
   s5, s5_1, s5_2, s6, s7 :: Section
 
 s3_1_intro, sys_context_fig, s4_1_intro, s4_1_1_bullets, s4_1_2_list,
@@ -39,9 +39,14 @@ s3_1_intro, sys_context_fig, s4_1_intro, s4_1_1_bullets, s4_1_2_list,
 -------------------------------
   
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention
-  [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
-  map Verbatim [s2, s3, s4, s5, s6, s7]  
+mkSRS = RefSec (RefProg intro
+  [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
+  IntroSec (IntroProg s2s s2e 
+  [IPurpose s2_1,
+  IScope s2_2s s2_2e,
+  IChar (phrase heat +:+ S "transfer" +:+. phrase theory) (S "first or second year Calculus") EmptyS,
+  IOrgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS]) :
+  map Verbatim [s3, s4, s5, s6, s7]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
@@ -57,16 +62,20 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2 = introductionSection EmptyS EmptyS [s2_1, s2_2, s2_3, s2_4]
+s2s, s2e, s2_1, s2_2s, s2_2e  :: Sentence
+
+s2s = EmptyS
+s2e = EmptyS
 --TODO: Placeholder values until content can be added
 
-s2_1 = purposeOfDoc EmptyS
+s2_1 = EmptyS 
 --TODO: Placeholder values until content can be added
 
-s2_2 = scopeOfRequirements EmptyS sWHS EmptyS
+s2_2s = EmptyS
+s2_2e = EmptyS
 --TODO: Placeholder values until content can be added
 
-s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
+{-s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
   (SRS.userChar SRS.missingP [])
   -- FIXME: referencing this for now until we figure out how to reference
   -- auto-generated section (section 3.2)
@@ -76,10 +85,8 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
 
         understanding = S "differential" +:+ plural equation `sC`
           S "as typically covered in first and second year" +:+
-          S "Calculus courses"
+          S "Calculus courses"-}
                         
-s2_4 = orgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS
-
 
                         
 ----------------------------------------

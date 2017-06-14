@@ -16,14 +16,14 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, water
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
               mobShrI, shrResI, ti, ri, slcWght, hi, dHi, intNormForce, intShrForce,
               baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
-              omega_i, baseWthX, lbi, lsi, hi_2, genForce, momntOfBdy,
+              omega_i, baseWthX, baseLngth, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
               dv_i, dx_i, dy_i, porePressure]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
   ti, ri, slcWght, hi, dHi, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star,
-  qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
+  qi, baseAngle, beta_i, omega_i, baseWthX, baseLngth, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i, porePressure :: UnitalChunk
 
@@ -178,9 +178,12 @@ baseWthX    = uc' "b_i" (cn $ "base width of the slice in the x-ordinate directi
   fixme
   (sub lB lI) metre
 
-lbi         = uc' "l_b,i" (cn $ "total length of the base of a slice " ++ fsi)
+baseLngth   = uc' "l_b,i" (cn $ "total length of the base of a slice " ++ fsi)
   fixme
   (sub (Greek Ell) (Atomic "b,i")) metre
+
+lbi :: UnitalChunk --FIXME: temporary to rename
+lbi = baseLngth
 
 lsi         = uc' "l_s,i" (cn $ "length of an interslice surface, from slip base to slope surface in a vertical line from an interslice vertex " ++ fisi)
   fixme
@@ -248,6 +251,7 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
 
 porePressure = ucs "mu" (cn "pore pressure from water within the soil") fixme
   (Greek Mu_L) pascal Real
+
 
 -- Unitless Symbols --
 

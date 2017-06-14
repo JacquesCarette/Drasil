@@ -81,12 +81,13 @@ resShr_desc :: Sentence
 resShr_desc = S "The Mohr-Coulomb resistive shear strength of a" +:+
   phrase slice +:+ getS shrResI +:+ S "is adjusted to account for the" +:+
   S "effective" +:+ phrase normal +:+
-  getS nrmStrss :+: S "'" +:+ -- FIXME: Need to add prime without hardcoding
-  S "=" +:+ S "N' = N - Ub of a soil from" +:+. acroT "4" +:+
+  (E $ (C nrmStrss) := (C nrmFSubWat) := (C totNrmForce) :- (C baseHydroForce)) +:+
+  S "of a soil from" +:+. acroT "4" +:+ -- FIXME: add prime to nrmStrss aboves
   S "Also and the cohesion is adjusted to account for the" +:+ phrase len +:+
-  S "l of the plane where the" +:+ phrase normal +:+ S "occurs" `sC`
-  S "where lb,i = bi * sec (alpha), and bi is the x width of the base." +:+
-  S "Therefore c = c' * bi * sec(alpha * i)."
+  S "l of the plane where the" +:+ phrase normal +:+ S "occurs, where" +:+
+  (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and" +:+ getS baseWthX +:+
+  S "is the x width of the base. Therefore" +:+ --FIXME: do propering indexes and primes here
+  (E $ (C cohesion) := (C cohesion) :* (C baseWthX) :* sec ((C baseAngle)))
   -- FIXME: Still needs to be more automated
 
 --
@@ -117,10 +118,10 @@ nmShrR_desc = foldlSent [S "The", phrase assumption, S "for the Morgenstern Pric
   phrase method_, sParen (acroA "5"), S "that the", phrase intrslce,
   phrase shearForce, getS xi, S "is proportional to the", phrase intrslce, 
   phrase normForce, getS intNormForce, S "by a proportionality constant",
-  (P $ (Greek Lambda_L)), S "and a predetermined scaling function",
-  P (lF) `sC` S "that changes", (S "proportionality as a function" `ofThe`
+  getS normToShear, S "and a predetermined scaling function", --FIXME: indexing on normToShear
+  getS scalFunc `sC` S "that changes", (S "proportionality as a function" `ofThe`
   S "x-ordinate position of the") +:+. phrase intrslce,
-  P (lF), S "is typically either a half-sine along the slip", phrase surface `sC`
+  getS scalFunc, S "is typically either a half-sine along the slip", phrase surface `sC`
   S "or a constant"]
 
 --
@@ -145,7 +146,7 @@ fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   phrase slice, S "for the RFEM" +:+. phrase model, S "The", plural force,
   S "that create an applied load on the" +:+. phrase slice,
   -- FIXME: Sentence does not sound like a sentence
-  S "Fx,i refers to the load in the direction", phrase perp, S "to the", 
+  S "Fx,i refers to the load in the direction", phrase perp, S "to the", --FIXME: Index force
   S "direction of the", phrase force, S "of gravity for", phrase slice,
   S "i, while Fy,i refers to the load in the direction parallel to the",
   phrase force, S "of gravity for", phrase slice,
@@ -153,7 +154,7 @@ fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   makeRef (SRS.physSyst SRS.missingP []), S "In this", phrase model,
   S "the", plural element, S "are not exerting", plural force,
   S "on each other" `sC` S "so the", phrase intrslce, plural force,
-  S "E and X are not a part of the" +:+. phrase model, S "Index i", 
+  getS intNormForce, S "and", getS intShrForce, S "are not a part of the" +:+. phrase model, S "Index i", 
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef (SRS.physSyst SRS.missingP []), 

@@ -2,8 +2,6 @@ module Drasil.SSP.GenDefs where
 
 import Prelude hiding (tan)
 
-import Control.Lens ((^.))
-
 import Language.Drasil
 import Drasil.SSP.Units
 import Data.Drasil.Concepts.Documentation

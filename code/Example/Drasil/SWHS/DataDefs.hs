@@ -13,12 +13,15 @@ import Prelude hiding (id)
 
 import Control.Lens ((^.))
 
+-- SYMBOL MAP HELPERS --
+ swhsSymMap :: SymbolMap
+ swhsSymMap = symbolMap swhsSymbols
 
 swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD termType = (symbolMapFun swhsSymbols Data) termType
+swhsSymbMapD termType = (symbolMapFun swhsSymMap Data) termType
 
 swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT termType = (symbolMapFun swhsSymbols Theory) termType
+swhsSymbMapT termType = (symbolMapFun swhsSymMap Theory) termType
 
 swhsSymbMapDRef :: QDefinition -> Sentence
 swhsSymbMapDRef termType = makeRef $ swhsSymbMapD termType

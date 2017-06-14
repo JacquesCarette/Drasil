@@ -65,16 +65,20 @@ mcSS_rel :: Relation --FIXME: Should be P with no subscript i
 mcSS_rel = (C shrResI) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
-mcSS_desc = foldlSent [S "For a" +:+ phrase soil +:+ S "under stress it will exert a shear resistive strength based on the",
+mcSS_desc = foldlSent [S "For a" +:+ phrase soil +:+ S "under" +:+ phrase stress +:+
+  S "it will exert a shear resistive strength based on the",
   S "Coulomb sliding law. The resistive shear is the maximum amount of shear a",
-  S "surface can experience while remaining rigid, analogous to a maximum normal",
-  S "force. In this model the shear force", getS shrResI, S "is proportional to the product of the",
-  S "normal stress on the plane", getS normStress, S "with it's static friction, in the angular form" +:+.
+  S "surface can experience while remaining rigid, analogous to a maximum" +:+.
+  phrase normForce, S "In this", phrase model, S "the", phrase shearForce,
+  getS shrResI, S "is proportional to the product of the",
+  phrase normal, phrase stress, S "on the plane", getS normStress,
+  S "with it's static", phrase friction, S "in the angular form" +:+.
   (E $ (tan (C fricAngle)) := (C surfHydroForce)), --FIXME: sould say U_s but there is no way to say that yet
-  S "The", getS shrResI, S "versus", getS normStress, S "relationship is not truly linear, but assuming",
-  S "the effective normal force is strong enough it can be approximated with a linear",
-  S "fit (A9), where the cohesion", getS cohesion, S "represents the", getS shrResI, 
-  S "intercept of the fitted line"]
+  S "The", getS shrResI, S "versus", getS normStress, S "relationship is not truly",
+  phrase linear `sC` S "but assuming the effective", phrase normForce,
+  S "is strong enough it can be approximated with a", phrase linear,
+  S "fit", sParen (acroA "9"), S "where the cohesion", getS cohesion,
+  S "represents the", getS shrResI, S "intercept of the fitted line"]
 
 --
 

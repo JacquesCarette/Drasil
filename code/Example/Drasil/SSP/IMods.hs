@@ -83,8 +83,8 @@ fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
   `isThe` S "angle of the base with the horizontal.", (P $ beta_i ^. symbol)
   `isThe` S "angle of the surface with the horizontal.", (P $ dx_i ^. symbol)
   `isThe` S "x displacement of slice i.", (P $ dy_i ^. symbol)
-  `isThe` S "y displacement of slice i.", (P $ lsi ^. symbol) 
-  `isThe` S "length of the interslice surface i.", (P $ lbi ^. symbol)
+  `isThe` S "y displacement of slice i.", (P $ surfLngth ^. symbol) 
+  `isThe` S "length of the interslice surface i.", (P $ baseLngth ^. symbol)
   `isThe` S "length of the base surface i.", (P $ k_sti ^. symbol)
   `isThe` S "interslice shear stiffness at surface i.", S " Kst,i-1"
   `isThe` S "interslice normal stiffness at surface i. KbA,i, and KbB,i",

@@ -63,7 +63,7 @@ anglesEqn = (Int 0)
 --DD6
 
 lengths :: QDefinition
-lengths = fromEqn' (lbi ^. id) (lbi ^. term) (lbi ^. symbol) lengthsEqn --, lsi?, bi?
+lengths = fromEqn' (baseLngth ^. id) (baseLngth ^. term) (baseLngth ^. symbol) lengthsEqn --, surfLngth?, bi?
 
 lengthsEqn :: Expr
 lengthsEqn = (Int 0)

@@ -64,7 +64,7 @@ forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
 fDisEq_rel :: Relation
-fDisEq_rel = ((C qi)*(Language.Drasil.sin(C omega_i)):-(C dHi):-
+fDisEq_rel = ((C qi)*(Language.Drasil.sin(C omega_i)):-(C watrForceDif):-
   (C kc)*(C slcWght):-(C baseHydroForce)*(Language.Drasil.sin(C baseAngle)):+
   (C surfHydroForce)*(Language.Drasil.sin(C beta_i))) := (Int 1) 
   --FIXME: add the other long equation (i.e. Y Equilibrium)
@@ -74,7 +74,7 @@ fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
   S "equations in the x and y directions for each element. System of equations",
   S "solved for displacements (", (P $ dx_i ^. symbol), S "and",
-  (P $ dy_i ^. symbol), S ")", (P $ dHi ^. symbol), S "=", (P $ hi ^. symbol)
+  (P $ dy_i ^. symbol), S ")", (P $ watrForceDif ^. symbol), S "=", (P $ watrForce ^. symbol)
   `isThe` S "net hydrostatic force across a slice.", (P $ kc ^. symbol)
   `isThe` S "earthquake load factor.", (P $ slcWght ^. symbol)
   `isThe` S "weight of the slice.", (P $ baseHydroForce ^. symbol) 

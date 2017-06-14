@@ -14,7 +14,7 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
-              mobShrI, shrResI, ti, ri, slcWght, hi, dHi, intNormForce, intShrForce,
+              mobShrI, shrResI, ti, ri, slcWght, watrForce, watrForceDif, intNormForce, intShrForce,
               baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
               omega_i, baseWthX, baseLngth, surfLngth, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
@@ -22,7 +22,7 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, water
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
-  ti, ri, slcWght, hi, dHi, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star,
+  ti, ri, slcWght, watrForce, watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star,
   qi, baseAngle, beta_i, omega_i, baseWthX, baseLngth, surfLngth, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
   dv_i, dx_i, dy_i, porePressure :: UnitalChunk
@@ -121,12 +121,12 @@ slcWght     = uc' "W_i" (cn $ "weight; downward force caused by gravity on slice
   fixme
   (sub cW lI) newton
 
-hi          = uc' "H_i" (cn $ "interslice water force exerted in the " ++
+watrForce    = uc' "H_i" (cn $ "interslice water force exerted in the " ++
   "x-ordinate direction between adjacent slices " ++ fisi)
   fixme
   (sub cH lI) newton
 
-dHi         = uc' "dH_i" (cn $ "difference between interslice forces on acting in the x-ordinate direction of the slice on each side " ++ fisi)
+watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces on acting in the x-ordinate direction of the slice on each side " ++ fisi)
   fixme
   (sub (Concat [Greek Delta, cH]) lI) newton
 

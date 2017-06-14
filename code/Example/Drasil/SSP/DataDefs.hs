@@ -47,7 +47,7 @@ surfWtrFEqn = (Int 0)
 --DD4
 
 intersliceWtrF :: QDefinition
-intersliceWtrF = fromEqn' (hi ^. id) (hi ^. term) (hi ^. symbol) intersliceWtrFEqn
+intersliceWtrF = fromEqn' (watrForce ^. id) (watrForce ^. term) (watrForce ^. symbol) intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = (Int 0)

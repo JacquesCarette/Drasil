@@ -139,8 +139,8 @@ netForce :: RelationConcept
 netForce = makeRC "netForce" (nounPhraseSP "net force") fNet_desc fNet_rel
 
 fNet_rel :: Relation
-fNet_rel = C genForce := (Int 0) --FIXME: requires two lines of equal signs
-
+fNet_rel = C genForce := (Neg $ C watrForceDif) 
+--FIXME: requires two lines of equal signs
 fNet_desc :: Sentence
 fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   phrase slice, S "for the RFEM" +:+. phrase model, S "The", plural force,

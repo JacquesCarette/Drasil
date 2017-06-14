@@ -272,8 +272,8 @@ scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of 
   "forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
   fixme) (sub lF lI)
 
-n           = cvR (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
-  fixme) lN
+n           = cvRs (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
+  fixme) lN Natural
 
 minFunction = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or algorithm")
   fixme) (Greek Upsilon)

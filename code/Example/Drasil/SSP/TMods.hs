@@ -2,8 +2,6 @@ module Drasil.SSP.TMods where
 
 import Prelude hiding (tan)
 
-import Control.Lens ((^.))
-
 import Language.Drasil
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
@@ -72,7 +70,7 @@ mcSS_desc = foldlSent [S "For a" +:+ phrase soil +:+ S "under stress it will exe
   S "normal stress on the plane", getS normStress, S "with it's static friction, in the angular form" +:+.
   (E $ (tan (C fricAngle)) := (C surfHydroForce)), --FIXME: sould say U_s but there is no way to say that yet
   S "The", getS shrResI, S "versus", getS normStress, S "relationship is not truly linear, but assuming",
-  S "the effective normal force is strong enough it can be approximated with a linear",
+  S "the effective", phrase normForce, S "is strong enough it can be approximated with a linear",
   S "fit (A9), where the cohesion", getS cohesion, S "represents the", getS shrResI, 
   S "intercept of the fitted line"]
 

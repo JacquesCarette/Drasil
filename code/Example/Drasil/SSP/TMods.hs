@@ -76,14 +76,14 @@ effStress :: RelationConcept
 effStress = makeRC "effStress" (nounPhraseSP "effective stress") effS_desc effS_rel
 
 effS_rel :: Relation
-effS_rel = (C normStress) := (C normStress) :- (C normStress)
+effS_rel = (C normStress) := (C normStress) :- (C porePressure)
 
 effS_desc :: Sentence -- FIXME: these are not normStress but they are sigma. And some of these are mu. Also fix equaiton
 effS_desc = foldlSent [getS normStress, S "is the total stress a soil mass needs to maintain itself as a rigid collection",
   S "of particles. The source of the stress can be provided by the soil skeleton", getS normStress `sC`
-  S "or by the pore pressure from water within the soil" +:+. getS normStress, S "The stress from the soil",
+  S "or by the pore pressure from water within the soil" +:+. getS porePressure, S "The stress from the soil",
   S "skeleton is known as the effective stress", getS normStress, S "and is the difference between the",
-  S "total stress", getS normStress, S "and the pore stress", getS normStress]
+  S "total stress", getS normStress, S "and the pore stress", getS porePressure]
 
 --
 hooksLaw :: RelationConcept

@@ -18,14 +18,14 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, water
               baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
               omega_i, baseWthX, lbi, lsi, hi_2, genForce, momntOfBdy,
               genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-              dv_i, dx_i, dy_i]
+              dv_i, dx_i, dy_i, porePressure]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
   ti, ri, slcWght, hi, dHi, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star,
   qi, baseAngle, beta_i, omega_i, baseWthX, lbi, lsi, hi_2, genForce,
   momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-  dv_i, dx_i, dy_i :: UnitalChunk
+  dv_i, dx_i, dy_i, porePressure :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -246,6 +246,8 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
   fixme
   (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre
 
+porePressure = ucs "mu" (cn "pore pressure from water within the soil") fixme
+  (Greek Mu_L) pascal Real
 
 -- Unitless Symbols --
 

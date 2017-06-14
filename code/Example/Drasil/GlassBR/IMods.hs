@@ -12,6 +12,8 @@ import Data.Drasil.Concepts.Documentation
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
 
+{--}
+
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage") --make into an NPNC type? (along with calOfCap, calOfDe)
   pbdescr pb_rel 
@@ -23,6 +25,8 @@ pbdescr :: Sentence
 pbdescr =
   foldlSent [(P $ prob_br ^. symbol) `isThe` (S "calculated" +:+. (phrase prob_br)),
   (P $ risk_fun ^. symbol) `isThe` (phrase risk)]
+
+{--}
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
@@ -43,6 +47,8 @@ capdescr =
   S "plane of the glass. This boundary condition has been shown to be typical" +:+
   S "of many glass installations)") +:+ S "from [4 (pg. 53)]"]
 
+{--}
+
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
   dedescr de_rel
@@ -62,3 +68,5 @@ dedescr =
   (phrase tNT)), (P $ standOffDist ^.symbol) `isThe`
   (phrase standOffDist), S "where", (P $ standOffDist ^. symbol), S "= "]
   --equation in sentence
+
+{--}

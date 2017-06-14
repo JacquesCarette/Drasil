@@ -5,7 +5,7 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Utils(symbolMapFun)
+import Data.Drasil.Utils(symbolMapFun, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.SentenceStructures (foldlSent)

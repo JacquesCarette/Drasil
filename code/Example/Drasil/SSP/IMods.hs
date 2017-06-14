@@ -1,7 +1,5 @@
 module Drasil.SSP.IMods where
 
---import Control.Lens ((^.))
-
 import Language.Drasil
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
@@ -50,7 +48,11 @@ intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces") sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = (C fs) := (Int 0) --FIXME: add the long equation
+sliceFs_rel = (C intNormForce) := (Int 0) --(C intNormForce) := Case [
+  --(((C fs) * (C ti) :- (C ri)) :/ (Int 100), (Int 1)),
+  --((((Int 100) * (C intNormForce) :+ (C fs) * (C ti) :- (C ri)):/Int 100), Int 1),
+  --((Int 0), (Int 0))]
+  --FIXME: update the long equation; where is Phi and Psi in .Units?
 
 sliceFs_desc :: Sentence
 sliceFs_desc = foldlSent [S "The value of the interslice normal force", (P $ intNormForce ^. symbol),
@@ -62,7 +64,11 @@ forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
 fDisEq_rel :: Relation
-fDisEq_rel = (C fs) := (Int 0) --FIXME: add the long equation
+fDisEq_rel = ((C qi)*(Language.Drasil.sin(C omega_i)):-(C dHi):-
+  (C kc)*(C slcWght):-(C baseHydroForce)*(Language.Drasil.sin(C baseAngle)):+
+  (C surfHydroForce)*(Language.Drasil.sin(C beta_i))) := (Int 1) 
+  --FIXME: add the other long equation (i.e. Y Equilibrium)
+  --FIXME: add the second part of X Equilibrium equation
 
 fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
@@ -89,7 +95,8 @@ rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety") rfemFoS_desc rfemFoS_rel
 
 rfemFoS_rel :: Relation
-rfemFoS_rel = (C fs) := (Int 0) --FIXME: add the long equation
+rfemFoS_rel = (C fsloc) := ((C cohesion) :- (C k_bni)*(C dv_i)*(Language.Drasil.tan(C fricAngle))):/((C k_bti)*(C du_i)) 
+  --FIXME: add the other long equation
 
 rfemFoS_desc :: Sentence
 rfemFoS_desc = foldlSent [(P $ fsloc ^. symbol) `isThe` S "factor of safety for slice i.",

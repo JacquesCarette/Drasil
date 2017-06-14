@@ -10,12 +10,7 @@ import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.SentenceStructures (foldlSent)
 
---FIXME: Clean up symbols (use symbol alphabet where possible)
-
 --FIXME: Many of the current terms can be separated into terms and defns!
-
---FIXME: having id "" and term "" is completely bogus, and should not
---  be allowed.  This implicitly says that something here does not make sense.
 
 {--}
 

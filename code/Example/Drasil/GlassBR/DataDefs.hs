@@ -7,6 +7,8 @@ import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
 
+--FIXME: having id "" and term "" is completely bogus, and should not
+--  be allowed.  This implicitly says that something here does not make sense.
 
 dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,

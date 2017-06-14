@@ -43,6 +43,8 @@ data Function = Log
            | Csc
            | Cot
            | Cross
+           | Product (Maybe ((Symbol, Expr), Expr))
+           | Exp
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')
@@ -103,6 +105,7 @@ instance Show ListType where
 instance Show Function where
   show Log = "log"
   show (Summation _) = "&sum;"
+  show (Product _) = "&prod;"
   show Abs = ""
   show Norm = ""
   show (Integral _ _) = "&int;"
@@ -113,4 +116,5 @@ instance Show Function where
   show Csc = "csc"
   show Cot = "cot"
   show Cross = "&#10799;"
+  show Exp = "e"
   

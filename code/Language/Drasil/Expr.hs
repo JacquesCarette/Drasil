@@ -110,6 +110,7 @@ data UFunc where
     -- where index is used in the sum (i.e. 'i') with a low and high bound
     -- OR Nothing for the first term.
     -- Expr is the expression we are summing over
+  Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
   Abs :: Expr -> UFunc -- Absolute value
   Norm :: Expr -> UFunc -- Norm
   Integral :: (SymbolForm c) => 
@@ -122,6 +123,7 @@ data UFunc where
   Sec :: Expr -> UFunc
   Csc :: Expr -> UFunc
   Cot :: Expr -> UFunc
+  Exp :: Expr -> UFunc
   
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -154,6 +156,10 @@ csc e = UnaryOp (Csc e)
 -- | Smart constructor to apply cot to an expression
 cot :: Expr -> Expr 
 cot e = UnaryOp (Cot e)
+
+-- | Smart constructor for the exponential (base e) function
+exp :: Expr -> Expr
+exp e = UnaryOp (Exp e)
 
 -- | Binary Functions
 data BiFunc where

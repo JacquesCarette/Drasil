@@ -56,7 +56,7 @@ ufunc (Log e) = (T.Log, expr e)
 ufunc (Summation (Just (s, Low v, High h)) e) = 
   (T.Summation (Just ((s, expr v), expr h)), expr e)
 ufunc (Summation Nothing e) = (T.Summation Nothing, expr e)
-ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Summation _ _) = error "TeX/Import.hs Incorrect use of Summation"
 ufunc (Abs e) = (T.Abs, expr e)
 ufunc (Norm e) = (T.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
@@ -66,6 +66,11 @@ ufunc (Tan e) = (T.Tan, expr e)
 ufunc (Sec e) = (T.Sec, expr e)
 ufunc (Csc e) = (T.Csc, expr e)
 ufunc (Cot e) = (T.Cot, expr e)
+ufunc (Product (Just (s, Low v, High h)) e) = 
+  (T.Product (Just ((s, expr v), expr h)), expr e)
+ufunc (Product Nothing e) = (T.Product Nothing, expr e)
+ufunc (Product _ _) = error "TeX/Import.hs Incorrect use of Product"
+ufunc (Exp e) = (T.Exp, expr e)
 
 bfunc :: BiFunc -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])

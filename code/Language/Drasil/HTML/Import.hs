@@ -58,6 +58,10 @@ ufunc (Summation (Just (s, Low v, High h)) e) =
   (H.Summation (Just ((s, expr v), expr h)), (expr e))
 ufunc (Summation Nothing e) = (H.Summation Nothing,(expr e))
 ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Product (Just (s, Low v, High h)) e) = 
+  (H.Product (Just ((s, expr v), expr h)), expr e)
+ufunc (Product Nothing e) = (H.Product Nothing, (expr e))
+ufunc (Product _ _) = error "HTML/Import.hs Incorrect use of Product"
 ufunc (Abs e) = (H.Abs, expr e)
 ufunc (Norm e) = (H.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
@@ -67,6 +71,7 @@ ufunc (Tan e) = (H.Tan, expr e)
 ufunc (Sec e) = (H.Sec, expr e)
 ufunc (Csc e) = (H.Csc, expr e)
 ufunc (Cot e) = (H.Cot, expr e)
+ufunc (Exp e) = (H.Exp, expr e)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: BiFunc -> (H.Function, [H.Expr])

@@ -6,7 +6,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..)
-  , log, abs, sin, cos, tan, sec, csc, cot, SymbolMap, symbolMap
+  , log, abs, sin, cos, tan, sec, csc, cot, exp, SymbolMap, symbolMap
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -16,7 +16,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, vc, makeVCObj, SymbolForm(..)
-  , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
+  , dcc, dccWDS, cv, dcc', vc', ccs, cc
   , Quantity(..), ConVar(..), cvR, cvRs
   , Concept(..)
   , CommonIdea(..)

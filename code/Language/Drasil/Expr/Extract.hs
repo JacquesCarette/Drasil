@@ -78,6 +78,8 @@ unpack (Tan e) = e
 unpack (Sec e) = e
 unpack (Csc e) = e
 unpack (Cot e) = e
+unpack (Product _ e) = e
+unpack (Exp e) = e
 
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]

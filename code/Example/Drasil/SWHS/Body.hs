@@ -39,7 +39,6 @@ import Drasil.DocumentLanguage
 import Drasil.Template.MG
 import Drasil.Template.DD
 import Drasil.TraceabilityMandGs
-import Drasil.Introduction
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
@@ -67,8 +66,14 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [ TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA ]
-  ) : map Verbatim [s2, s3, s4, s5, s6, s7]
+  [ TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA ]):
+  IntroSec (IntroProg (s2_intro) (short progName) [
+  IPurpose (s2_1_par1),
+  IScope (s2_2_contents) (s2_2_end),
+  IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),
+  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail)]) :
+  map Verbatim [s3, s4, s5, s6, s7]
+--FIXME:implement use of s2_kSent
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -93,15 +98,6 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 -- Section 2 : INTRODUCTION --
 ------------------------------
-
-s2 :: Section
---s2 = IntroSec (IntroProg startIntro (short gLassBR) 
---[IPurpose (s2_1_intro_p1),
---IScope incScoR endScoR,
---IChar knowIR undIR appStanddIR,
---IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end])
-s2 = introductionF progName (s2_intro, s2_kSent)
-  s2_1_par1 s2_2_tuple s2_3_tuple s2_4_tuple
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+
@@ -165,14 +161,10 @@ s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
-s2_2_tuple :: (Sentence, Sentence)
-s2_2_tuple = (s2_2_contents, s2_2_end)
-
-s2_2_contents :: Sentence
+s2_2_contents, s2_2_end :: Sentence
 s2_2_contents = phrase CT.thermal_analysis +:+ S "of a single" +:+
   phrase tank_pcm --FIXME: Caps issue
 
-s2_2_end :: Sentence
 s2_2_end = S "predict the" +:+
   phrase temp +:+ S "and" +:+ phrase CT.thermal_energy +:+
   S "histories for the" +:+ phrase water +:+ S "and the" +:+.
@@ -197,15 +189,11 @@ s2_2_end = S "predict the" +:+
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3_tuple :: (Sentence, Sentence, Sentence)
-s2_3_tuple = (s2_3_knowlegde, s2_3_understanding, EmptyS)
-
-s2_3_knowlegde :: Sentence
+s2_3_knowlegde, s2_3_understanding :: Sentence
 s2_3_knowlegde = phrase CT.heat +:+ S "transfer" +:+. phrase theory +:+
   S "A third or fourth year Mechanical Engineering course on this topic" +:+
   S "is recommended"
 
-s2_3_understanding :: Sentence
 s2_3_understanding = S "differential" +:+ plural equation `sC`
   S "as typically covered in first and second year Calculus courses"
 
@@ -227,16 +215,12 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4_tuple :: (Sentence, CI, Section, Sentence)
-s2_4_tuple = (s2_4_intro, inModel, (SRS.inModel SRS.missingP []), s2_4_trail)
-
-s2_4_intro :: Sentence
+s2_4_intro, s2_4_trail :: Sentence
 s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
   phrase document +:+ S "follows the template for an" +:+ short srs +:+
   S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+.
   sSqBr (S "citation")
 
-s2_4_trail :: Sentence
 s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
   makeRef (SRS.inModel SRS.missingP [])) +:+
   S "to be solved are referred to as" +:+ acroIM "1" +:+ S "to" +:+.

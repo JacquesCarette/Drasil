@@ -90,8 +90,8 @@ xi          = uc' "x_i"
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates that " ++
   "describe the vertices of the critical slip surface")
   fixme
-  (Concat [sub (Atomic "({x") (Atomic "cs"), sub (Atomic "},{y") (Atomic "cs"),
-  Atomic "})"]) metre
+  (Concat [sub (Atomic "{x") (Atomic "cs"), sub (Atomic ",y") (Atomic "cs"),
+  Atomic "}"]) metre
 
 mobShrI     = uc' "S_i" (cn $ "mobilized shear force for slice i")
   fixme

@@ -28,6 +28,7 @@ data Expr = Var  Variable
           
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
+           | Product (Maybe ((Symbol, Expr),Expr))
            | Abs
            | Norm
            | Integral ((Maybe Expr),(Maybe Expr)) Expr
@@ -38,6 +39,7 @@ data Function = Log
            | Csc
            | Cot
            | Cross
+           | Exp
            
 infixr 5 :+:
 data Spec = E Expr
@@ -94,6 +96,7 @@ data ItemType = Flat Spec
 instance Show Function where
   show Log = "\\log"
   show (Summation _) = "\\sum"
+  show (Product _) = "\\prod"
   show Abs = ""
   show Norm = ""
   show (Integral _ _) = "\\int"
@@ -104,3 +107,4 @@ instance Show Function where
   show Csc = "\\csc"
   show Cot = "\\cot"
   show Cross = "\\times"
+  show Exp = "e"

@@ -2,8 +2,6 @@ module Drasil.SSP.TMods where
 
 import Prelude hiding (tan)
 
-import Control.Lens ((^.))
-
 import Language.Drasil
 import Drasil.SSP.Units
 import Drasil.SSP.Defs
@@ -21,9 +19,6 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 sspTMods :: [RelationConcept]
 sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hooksLaw]
-
-fixmeS :: Sentence
-fixmeS = S "FIXME: add description"
 
 -- 
 

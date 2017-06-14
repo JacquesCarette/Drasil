@@ -84,11 +84,15 @@ ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
+-- SYMBOL MAP HELPERS --
+sspSymMap :: SymbolMap
+sspSymMap = symbolMap sspSymbols
+
 sspSymMapT :: RelationConcept -> Contents
-sspSymMapT = symbolMapFun sspSymbols Theory
+sspSymMapT = symbolMapFun sspSymMap Theory
 
 sspSymMapD :: QDefinition -> Contents
-sspSymMapD = symbolMapFun sspSymbols Data
+sspSymMapD = symbolMapFun sspSymMap Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

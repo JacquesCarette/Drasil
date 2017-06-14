@@ -95,9 +95,13 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 s2 :: Section
+--s2 = IntroSec (IntroProg startIntro (short gLassBR) 
+--[IPurpose (s2_1_intro_p1),
+--IScope incScoR endScoR,
+--IChar knowIR undIR appStanddIR,
+--IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end])
 s2 = introductionF progName (s2_intro, s2_kSent)
   s2_1_par1 s2_2_tuple s2_3_tuple s2_4_tuple
--- Previous: s2 = introF s2_intro s2_kSent [s2_1, s2_2, s2_3, s2_4]
 
 s2_intro :: Sentence
 s2_intro = S "Due to increasing cost, diminishing" +:+

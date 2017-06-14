@@ -10,6 +10,10 @@ import Drasil.SSP.Defs
 import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils
+import Data.Drasil.Quantities.Physics
+import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+--import Data.Drasil.Concepts.Physics
 
 --------------------------
 --  Theoretical Models  --
@@ -31,10 +35,11 @@ fs_rel = (C fs) := (C shearRes) / (C mobShear)
 
 fs_desc :: Sentence
 fs_desc = 
-  S "The stability metric of the" +:+ phrase slope `sC` S "known as the factor of safety" +:+
-  sParen (P $ fs ^. symbol) `sC` S "is determined by the ratio of the" +:+
-  S "shear force at the base of the" +:+ phrase slope +:+ sParen (P $ mobShear ^. symbol) `sC` 
-  S "and the resistive shear" +:+. sParen (P $ shearRes ^. symbol)
+  S "The stability metric of the" +:+ phrase slope `sC` S "known as the" +:+
+  plural factor +:+ S "of" +:+ phrase safety +:+ sParen (getS fs) `sC`
+  S "is determined by" +:+ (S "ratio" `ofThe` phrase shearForce) +:+
+  S "at the base of the" +:+ phrase slope +:+ sParen (getS mobShear) `sC`
+  S "and the resistive shear" +:+. sParen (getS shearRes)
 
 --
   
@@ -42,14 +47,15 @@ equilibrium :: RelationConcept
 equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
 eq_rel :: Relation
-eq_rel = (UnaryOp $ Summation Nothing (C genForce)) := (Int 0) --FIXME: add net x force, net y force, and net moment
+eq_rel = UnaryOp (Summation Nothing (C genForce)) := (Int 0) --FIXME: add net x force, net y force, and net moment
 
 eq_desc :: Sentence
-eq_desc = S "For a body in static equilibrium the net forces, and net moments acting on the" +:+
-  S "body will cancel out. Assuming a 2D problem (A8) the net x-ordinate (Fx)" +:+
-  S "and y-ordinate (Fy) scalar components will be equal to 0. All forces and their" +:+
-  S "distance from the chosen point of rotation will create a net moment equal to" +:+
-  S "0, also able to be analyzed as a scalar in a 2D problem."
+eq_desc = S "For a body in static equilibrium, the net" +:+ plural force +:+
+  S "and net moments acting on the body will cancel out. Assuming a 2D problem" +:+
+  sParen (acroA "8") +:+ S "the net x-ordinate (Fx)" +:+
+  S "and y-ordinate (Fy) scalar components will be equal to 0. All" +:+ plural force +:+
+  S "and their" +:+ phrase distance +:+ S "from the chosen point of rotation will create a" +:+
+  S "net moment equal to 0, also able to be analyzed as a scalar in a 2D problem."
 
 --
 mcShrStrgth :: RelationConcept
@@ -59,7 +65,7 @@ mcSS_rel :: Relation --FIXME: Should be P with no subscript i
 mcSS_rel = (C shrResI) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
-mcSS_desc = foldlSent [S "For a soil under stress it will exert a shear resistive strength based on the",
+mcSS_desc = foldlSent [S "For a" +:+ phrase soil +:+ S "under stress it will exert a shear resistive strength based on the",
   S "Coulomb sliding law. The resistive shear is the maximum amount of shear a",
   S "surface can experience while remaining rigid, analogous to a maximum normal",
   S "force. In this model the shear force", getS shrResI, S "is proportional to the product of the",

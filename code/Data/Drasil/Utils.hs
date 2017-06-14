@@ -180,8 +180,8 @@ unwrap Nothing  = EmptyS
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
-symbolMapFun :: (SymbolForm c, Quantity c, Chunk d) => [c] -> (d -> DType) -> (d -> Contents)
-symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)
+symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
+symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
 
 {-- Used to help make data definitions when id, term, and symbol come from the same sourse
 --mkDataDef :: UnitalChunk -> Expr -> QDefinition

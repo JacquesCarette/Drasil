@@ -237,7 +237,7 @@ gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap temporaryLOSymbols
 
 gbSymbMapD :: QDefinition -> Contents
-gbSymbMapD term_ = (symbolMapFun temporaryLOSymbols Data) term_
+gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_
 
 gbSymbMapT :: RelationConcept -> Contents
-gbSymbMapT term_ = (symbolMapFun temporaryLOSymbols Theory) term_
+gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_

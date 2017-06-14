@@ -2,6 +2,8 @@ module Drasil.SSP.GenDefs where
 
 import Prelude hiding (tan)
 
+import Control.Lens ((^.))
+
 import Language.Drasil
 import Drasil.SSP.Units
 import Data.Drasil.Concepts.Documentation
@@ -100,7 +102,7 @@ mobShr_rel = C mobShrI := C shrResI :/ C fs :=
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", (phrase definition `ofThe` S "Factor of Safety in"), acroT "1" `sC`
+  S "From", phrase definition `ofThe` ((phrase factor) `sOf` (phrase safety)), S "in", acroT "1" `sC` --FIXME: factor of saftey hacked in to avoid cyclical imports
   S "and the new" +:+ phrase definition +:+ S "of", getS shrResI `sC` S "a new",
   S "relation for" +:+ (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
   getS ti, S "is found as the resistive shear" , getS shrResI,

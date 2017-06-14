@@ -15,7 +15,6 @@ import Data.Drasil.Concepts.Math
 import Data.Drasil.Utils
 import qualified Drasil.SRS as SRS
 
-
 ---------------------------
 --  General Definitions  --
 ---------------------------
@@ -167,7 +166,7 @@ hooksLaw2d :: RelationConcept
 hooksLaw2d = makeRC "hooksLaw2d" (nounPhraseSP "Hook's law 2D") hook2d_desc hook2d_rel
 
 hook2d_rel :: Relation
-hook2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matricies
+hook2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 hook2d_desc :: Sentence
 hook2d_desc = fixmeS
@@ -177,7 +176,15 @@ displVect :: RelationConcept
 displVect = makeRC "displVect" (nounPhraseSP "displacement vectors") disVec_desc disVec_rel
 
 disVec_rel :: Relation
-disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matricies
+disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 disVec_desc :: Sentence
-disVec_desc = fixmeS
+disVec_desc = foldlSent [S "Vectors describing the displacement of slice i.", 
+  (P $ (sub (Greek Delta_L) lI)) `isThe` S "displacement in the unrotated coordinate system" `sC`
+  S "where", (getS dx_i) `isThe` S "displacement of the slice perpendicular to the direction",
+  S "of gravity, and", (getS dy_i) `isThe` S "displacement of the slice parallel to the", 
+  S "force of gravity.", (P $ (sub (Greek Epsilon_V) lI)) `isThe` S "displacement in the rotated coordinate system" `sC`
+  S "where", (getS du_i) `isThe` S "displacement of the slice parallel to the slice base, and", 
+  (getS dy_i) `isThe` S "displacement of the slice perpendicular to the slice base.", 
+  (P $ (sub (Greek Epsilon_V) lI)), S "can also be found by rotating ¯)i clockwise by the base angle", (P $ Greek Alpha_L), 
+  S "through a rotation matrix as shown"] --FIXME:check if symbols are correct

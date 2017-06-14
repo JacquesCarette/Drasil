@@ -132,7 +132,7 @@ momEql_rel :: Relation
 momEql_rel = (Int 0) := (Int 0) --FIXME: add the long equation
 
 momEql_desc :: Sentence
-momEql_desc = foldlSent []
+momEql_desc = fixmeS
 
 --
 netForce :: RelationConcept

@@ -20,9 +20,6 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 sspTMods :: [RelationConcept]
 sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hooksLaw]
 
-fixmeS :: Sentence
-fixmeS = S "FIXME: add description"
-
 -- 
 
 fs_rc :: RelationConcept

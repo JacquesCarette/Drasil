@@ -87,14 +87,14 @@ instance Quantity E where
 -- unit, and defining equation.
 fromEqn :: Unit u => String -> NP -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc symb chunk eqn = 
-  EC (ucFromCV (cv (ccStSS nm desc (phrase desc)) symb Rational) chunk) eqn
+  EC (ucFromCV (cv (dccWDS nm desc (phrase desc)) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack
 -- | Same as fromEqn, but has no units.
 fromEqn' :: String -> NP -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc symb eqn = 
-  EC (cv (ccStSS nm desc (phrase desc)) symb Rational) eqn
+  EC (cv (dccWDS nm desc (phrase desc)) symb Rational) eqn
   
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.

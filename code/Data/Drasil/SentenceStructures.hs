@@ -5,6 +5,7 @@ module Data.Drasil.SentenceStructures
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
   , showingCxnBw, refineChain, foldlSP
+  , maybeChanged, maybeExpanded, maybeWOVerb
   ) where
 
 import Language.Drasil
@@ -102,3 +103,12 @@ rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+.
   (plural y)
 rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
+
+
+-- | helper functions for making likely change statements
+likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
+likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
+maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb a b = likelyFrame a EmptyS b
+maybeChanged a b = likelyFrame a (S "changed") b
+maybeExpanded a b = likelyFrame a (S "expanded") b 

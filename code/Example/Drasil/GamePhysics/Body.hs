@@ -252,7 +252,6 @@ s3_2_intro = Paragraph $ S "There are no" +:+. (plural systemConstraint)
 -- have not been encoded.
 
 s4 :: Section
-
 s4 = specSysDescr physLib [s4_1, s4_2]
 
 -------------------------------
@@ -386,24 +385,24 @@ itemsAndRefs = [(thModel, s4_2_2), (genDefn, s4_2_3), (dataDefn, s4_2_4),
   (inModel, s4_2_5)]
 
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
-  s4_2_1_assum6, s4_2_1_assum7 :: Sentence
+  s4_2_1_assum6, s4_2_1_assum7 :: [Sentence]
 
-s4_2_1_assum1 = foldlSent [S "All objects are", (plural $ CP.rigidBody)]
-s4_2_1_assum2 = foldlSent [S "All objects are", (getAcc twoD)]
-s4_2_1_assum3 = foldlSent [S "The library uses a", (phrase $ CP.cartesian)]
-s4_2_1_assum4 = foldlSent [S "The axes are defined using", 
+s4_2_1_assum1 = [S "All objects are", (plural $ CP.rigidBody)]
+s4_2_1_assum2 = [S "All objects are", (getAcc twoD)]
+s4_2_1_assum3 = [S "The library uses a", (phrase $ CP.cartesian)]
+s4_2_1_assum4 = [S "The axes are defined using", 
   (phrase $ CP.rightHand)]
-s4_2_1_assum5 = foldlSent [S "All", (plural $ CP.rigidBody), 
+s4_2_1_assum5 = [S "All", (plural $ CP.rigidBody), 
   (plural $ CP.collision), S "are vertex-to-edge", 
   (plural $ CP.collision)]
-s4_2_1_assum6 = foldlSent [S "There is no damping", 
+s4_2_1_assum6 = [S "There is no damping", 
   S "involved throughout the", (phrase simulation)]
-s4_2_1_assum7 = foldlSent [S "There are no", (plural $ CM.constraint),
+s4_2_1_assum7 = [S "There are no", (plural $ CM.constraint),
   S "and", (plural $ CP.joint), S "involved throughout the", 
   (phrase simulation)]
 
 s4_2_1_list' :: [Sentence]
-s4_2_1_list' = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
+s4_2_1_list' = map (foldlSent) [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
                s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
 
 s4_2_1_list = enumSimple 1 (getAcc assumption) s4_2_1_list'
@@ -667,13 +666,6 @@ s6_intro = Paragraph $ foldlSent [S "This", (phrase section_), S "lists the",
 
 s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
   s6_likelyChg_stmt4 :: Sentence
-
-likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
-likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
-maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
-maybeWOVerb a b = likelyFrame a EmptyS b
-maybeChanged a b = likelyFrame a (S "changed") b
-maybeExpanded a b = likelyFrame a (S "expanded") b 
 
 --these statements look like they could be parametrized
 s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 

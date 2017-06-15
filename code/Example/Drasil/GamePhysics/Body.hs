@@ -58,13 +58,6 @@ auths = manyNames authors
 
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc' mkSRS for' chipmunkSysInfo
-{--
-mkSRS :: DocDesc
-mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA ]) : 
-  IntroSec (IntroVerb s2) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
-    where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
---}
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :

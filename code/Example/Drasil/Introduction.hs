@@ -26,12 +26,12 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
   S "phases, including writing the", phrase desSpec, S "and the", 
   phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
   plural requirement, S "are to be realized, including", plural decision, 
-  S "on the numerical", (plural algorithm), S "and programming" +:+. 
+  S "on the numerical", plural algorithm, S "and programming" +:+. 
   phrase environment, S "The", phrase vavPlan, 
   S "will show the steps that will be used to increase confidence in the",
   phrase softwareDoc, S "and the" +:+. phrase implementation, S "Although",
   S "the", short srs, S "fits in a series of", plural document, 
-  S "that follow the so-called waterfall", (phrase model) `sC` 
+  S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
   S "Parnas and Clements point out, the most logical way", --FIXME: add citation to these people?

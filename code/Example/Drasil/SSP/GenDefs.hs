@@ -203,7 +203,7 @@ disVec_rel :: Relation
 disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 disVec_desc :: Sentence
-disVec_desc = foldlSent [at_star' vector, S "describing the", phrase displacement,
+disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displacement,
   S "of", phrase slice +:+. S "i", getS genDisplace `isThe`
   phrase displacement, S "in the unrotated coordinate system" `sC`
   S "where", getS dx_i `isThe` phrase displacement, S "of the", phrase slice,

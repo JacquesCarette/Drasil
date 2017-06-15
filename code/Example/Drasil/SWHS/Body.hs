@@ -67,7 +67,7 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [ TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA ]):
-  IntroSec (IntroProg (s2_intro) (short progName) [
+  IntroSec (IntroProg (s2_intro) (s2_kSent) [
   IPurpose (s2_1_par1),
   IScope (s2_2_contents) (s2_2_end),
   IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),

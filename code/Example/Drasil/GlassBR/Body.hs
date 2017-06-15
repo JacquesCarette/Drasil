@@ -434,14 +434,15 @@ s7_1_listOfReqs = [{-s7_1_req2,-} s7_1_req3, s7_1_req4, s7_1_req5{-, s7_1_req6-}
 
 s7_1_req1 :: [Contents]
 s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
-   [(((short requirement) :+: S "1"), at_start input_ +:+ S "the following" +:+
-     plural quantity `sC` S "which define the glass dimensions" `sC` 
-     (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase probability) +:+
-     S "of failure and" +: (plural characteristic `ofThe` (phrase blast)))]),
-   s7_1_req1Table]
+  [(acroA "1", at_start input_ +:+ S "the following" +:+
+  plural quantity `sC` S "which define the glass dimensions" `sC` 
+  (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase probability) +:+
+  S "of failure and" +: (plural characteristic `ofThe` phrase blast))]),
+  s7_1_req1Table]
 
+s7_1_req1Table :: Contents
 s7_1_req1Table = (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
-   ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x))
+  ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x))
 
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+ S "shall set the known"
    +:+ plural value +:+ S "as follows: ") (Bullet $ map (\c -> Flat c)

@@ -18,8 +18,12 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 fctSfty :: RelationConcept
 fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 
+--FIXME: first shearRNoIntsl should have local index v, not i, last occurence should have index n
+--       similar case with shearFNoIntsl
 fcSfty_rel :: Relation
-fcSfty_rel = (C fs) := (UnaryOp $ Product (Just (lC, Low $ V "i", High $ (V "n") :- (Int 1))) ((C mobShrC) :/ (C shrResC))) --FIXME: add the long equation
+fcSfty_rel = (C fs) := (sumOp shearRNoIntsl :+ (C shearRNoIntsl)) :/ (sumOp shearFNoIntsl :+ (C shearFNoIntsl))
+  where prodOp = UnaryOp $ Product (Just (lC, Low $ V "i", High $ (V "n") :- (Int 1))) ((C mobShrC) :/ (C shrResC))
+        sumOp sym = (UnaryOp $ Summation (Just (lV, Low $ Int 1, High $ (V "n") :- (Int 1))) ((C sym) :* prodOp))
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent [S "Equation for the Factor of Safety" `isThe` S "ratio between resistive",

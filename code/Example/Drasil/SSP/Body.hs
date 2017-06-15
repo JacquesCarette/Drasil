@@ -226,7 +226,7 @@ s4_1_2_bullets = enumBullet [
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+
     S "1" +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
-    (E $ (C numbSlices) :- Int 1)),
+    (E $ (C numbSlices) :- Int 1)),--FIXME: this whole thing should be one expr
   (at_start slice +:+ plural property +:+. S "convention is noted by i")
   ]
 

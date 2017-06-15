@@ -23,8 +23,6 @@ sspGenDefs :: [RelationConcept]
 sspGenDefs = [normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, netForce, hookesLaw2d, displVect]
 
-fixmeS :: Sentence
-fixmeS = S "FIXME: add description"
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium") nmFEq_desc nmFEq_rel
@@ -77,16 +75,16 @@ resShr_rel :: Relation
 resShr_rel = C shrResI := C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)
 
 resShr_desc :: Sentence
-resShr_desc = S "The Mohr-Coulomb resistive shear strength of a" +:+
-  phrase slice +:+ getS shrResI +:+ S "is adjusted to account for the" +:+
-  S "effective" +:+ phrase normal +:+
-  (E $ (C nrmStrss) := (C nrmFSubWat) := (C totNrmForce) :- (C baseHydroForce)) +:+
-  S "of a soil from" +:+. acroT "4" +:+ -- FIXME: add prime to nrmStrss aboves
-  S "Also and the cohesion is adjusted to account for the" +:+ phrase len +:+
-  S "l of the plane where the" +:+ phrase normal +:+ S "occurs, where" +:+
-  (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and" +:+ getS baseWthX +:+
-  S "is the x width of the base. Therefore" +:+ --FIXME: do propering indexes and primes here
-  (E $ (C cohesion) := (C cohesion) :* (C baseWthX) :* sec ((C baseAngle)))
+resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
+  phrase slice, getS shrResI, S "is adjusted to account for the",
+  S "effective", phrase normal,
+  (E $ (C nrmStrss) := (C nrmFSubWat) := (C totNrmForce) :- (C baseHydroForce)),
+  S "of a soil from" +:+. acroT "4", -- FIXME: add prime to nrmStrss aboves
+  S "Also and the cohesion is adjusted to account for the", phrase len,
+  S "l of the plane where the", phrase normal, S "occurs, where",
+  (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and", getS baseWthX,
+  S "is the x width of the base. Therefore", --FIXME: do propering indexes and primes here
+  (E $ (C cohesion) := (C cohesion) :* (C baseWthX) :* sec ((C baseAngle)))]
   -- FIXME: Still needs to be more automated
 
 --
@@ -181,7 +179,21 @@ hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke’s law as seen in" +:+.
   acroT "5", getS elmPrllDispl, S "is", phrase displacement `ofThe` phrase element,
   S "normal to the", phrase surface, S "and", getS elmNrmDispl, S "is",
-  phrase displacement `ofThe` phrase element, S "parallel to the" +:+. phrase surface, S "pn,i, is the net pressure acting normal to the surface, and pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it’s length. The sti↵ness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in DD14. The pressure forces would be the re- sult of applied loads on the mass, the product of the sti↵ness elements with the displacement would be the mass’s reactive force that cre- ates equilibrium with the applied forces after reaching the equilibrium displacement."]
+  phrase displacement `ofThe` phrase element, S "parallel to the" +:+. phrase surface,
+  S "Pn,i is the net pressure acting normal to the", phrase surface `sC`
+  S "and Pt,i is the net pressure acting parallel to the" +:+. phrase surface,
+  S "Pressure is used in place of", phrase force, S "as the", phrase surface,
+  S "has not been normalized for it’s" +:+. phrase len, S "The stiffness", plural value,
+  S "Kn,i and Kt,i are then the resistance to", phrase displacement,
+  -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
+  S "in the respective directions defined as in" +:+. acroDD "14", S "The pressure",
+  plural force, S "would be the result of applied loads on the", phrase mass `sC`
+  S "the product of the stiffness", plural element, S "with the", phrase displacement,
+  S "would be the", phrase mass, S "’s reactive", phrase force,
+  S "that creates equilibrium with the applied", plural force,
+  S "after reaching the equilibrium" +:+. phrase displacement]
+  -- FIXME: way to give possessive attribute to noun (ex. "mass's")
+
 
 --
 displVect :: RelationConcept
@@ -191,12 +203,15 @@ disVec_rel :: Relation
 disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 disVec_desc :: Sentence
-disVec_desc = foldlSent [S "Vectors describing the displacement of slice i.", 
-  (P $ (sub (Greek Delta_L) lI)) `isThe` S "displacement in the unrotated coordinate system" `sC`
-  S "where", (getS dx_i) `isThe` S "displacement of the slice perpendicular to the direction",
-  S "of gravity, and", (getS dy_i) `isThe` S "displacement of the slice parallel to the", 
-  S "force of gravity.", (P $ (sub (Greek Epsilon_V) lI)) `isThe` S "displacement in the rotated coordinate system" `sC`
-  S "where", (getS shrDispl) `isThe` S "displacement of the slice parallel to the slice base, and", 
+disVec_desc = foldlSent [S "Vectors describing the", phrase displacement, S "of",
+  phrase slice +:+. "i", getS genDisplace `isThe`
+  phrase displacement, S "in the unrotated coordinate system" `sC`
+  S "where", (getS dx_i) `isThe` phrase displacement, S "of the", phrase slice,
+  phrase perp, S "to the direction of gravity, and", (getS dy_i) `isThe`
+  phrase displacement, S "of the", phrase slice, S "parallel to the", 
+  phrase force +:+. S "of gravity", (P $ sub (Greek Epsilon_V) lI) `isThe`
+  S "displacement in the rotated coordinate", phrase system `sC`
+  S "where", (getS shrDispl) `isThe` phrase displacement, S "of the slice parallel to the slice base, and", 
   (getS dy_i) `isThe` S "displacement of the slice perpendicular to the slice base.", 
-  (P $ (sub (Greek Epsilon_V) lI)), S "can also be found by rotating ¯)i clockwise by the base angle", (P $ Greek Alpha_L), 
+  (P $ sub (Greek Epsilon_V) lI), S "can also be found by rotating", getS genDisplace, S "clockwise by the base angle", (P $ Greek Alpha_L), 
   S "through a rotation matrix as shown"] --FIXME:check if symbols are correct

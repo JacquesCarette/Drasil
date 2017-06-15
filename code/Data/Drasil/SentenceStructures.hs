@@ -1,5 +1,5 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlsC, foldlList
+  ( foldlSent_, foldlSent, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
@@ -16,6 +16,10 @@ import Data.Drasil.Concepts.Documentation
 -- | partial function application of foldle for sentences specifically
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
+
+-- | foldlSent but does not end with period
+foldlSent_ :: [Sentence] -> Sentence
+foldlSent_ = foldle (+:+) (+:+) EmptyS
 
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents

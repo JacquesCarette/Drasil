@@ -42,7 +42,7 @@ import Drasil.TraceabilityMandGs
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
-import Data.Drasil.SentenceStructures (showingCxnBw)
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent,foldlSent_)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -100,26 +100,26 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 s2_intro :: Sentence
-s2_intro = S "Due to increasing cost, diminishing" +:+
-  S "availability, and negative environmental impact of" +:+
-  S "fossil fuels, there is a higher demand for renewable" +:+
-  phrase energy +:+ plural source +:+ S "and" +:+
-  phrase energy +:+. S "storage technology" +:+ (swhs_pcm ^. defn) +:+
-  sParen (short phsChgMtrl) +:+ S "use a renewable" +:+
-  phrase energy +:+ phrase source +:+ S "and provide a novel way of" +:+
-  S "storing" +:+. phrase energy +:+
-  at_start swhs_pcm +:+ S "improve over the traditional" +:+
-  phrase progName :+: S "s because of their smaller size. The" +:+
-  S "smaller size is possible because of the ability of" +:+
-  short phsChgMtrl +:+ S "to store" +:+ phrase CT.thermal_energy +:+
-  S "as" +:+ phrase latent_heat `sC`
-  S "which allows higher" +:+ phrase CT.thermal_energy +:+
-  S "storage capacity per" +:+ phrase unit_ +:+. S "weight"
+s2_intro = foldlSent [S "Due to increasing cost, diminishing",
+  S "availability, and negative environmental impact of",
+  S "fossil fuels, there is a higher demand for renewable",
+  phrase energy, plural source, S "and",
+  phrase energy +:+. S "storage technology", (swhs_pcm ^. defn),
+  sParen (short phsChgMtrl), S "use a renewable",
+  phrase energy, phrase source, S "and provide a novel way of",
+  S "storing" +:+. phrase energy,
+  at_start swhs_pcm, S "improve over the traditional",
+  plural progName, S "because of their smaller size. The",
+  S "smaller size is possible because of the ability of",
+  short phsChgMtrl, S "to store", phrase CT.thermal_energy,
+  S "as", phrase latent_heat `sC`
+  S "which allows higher", phrase CT.thermal_energy,
+  S "storage capacity per", phrase unit_, S "weight"]
 
 s2_kSent :: Sentence
-s2_kSent = EmptyS +:+. phrase swhs_pcm +:+ S "The developed" +:+
-  phrase program +:+ S "will be referred to as" +:+ titleize progName +:+
-  sParen (short progName) -- SSP has same style sentence here
+s2_kSent = foldlSent_ [EmptyS +:+. phrase swhs_pcm, S "The developed",
+  phrase program, S "will be referred to as", titleize progName,
+  sParen (short progName)] -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
 -- similar paragraph in each of the other eolar water heating systems
@@ -137,18 +137,17 @@ s2_kSent = EmptyS +:+. phrase swhs_pcm +:+ S "The developed" +:+
 -------------------------------
 
 s2_1_par1 :: Sentence
-s2_1_par1 = S "The main" +:+ phrase purpose +:+ S "of this" +:+
-  phrase document +:+ S "is to describe the modelling of" +:+.
-  phrase swhs_pcm +:+ S "The" +:+ plural goalStmt +:+
-  S "and" +:+ plural thModel +:+ S "used in the" +:+ short progName +:+
-  S "code are provided, with an emphasis on explicitly identifying" +:+
-  plural assumption +:+ S "and unambiguous" +:+. plural definition +:+
-  S "This" +:+ phrase document +:+ S "is intended to be used as a" +:+
-  phrase reference +:+ S "to provide ad hoc access to all" +:+
-  phrase information +:+ S "necessary to understand and verify the" +:+.
-  phrase model +:+ S "The" +:+ short srs +:+
-  S "is abstract because the contents say what" +:+
-  phrase problem +:+. S "is being solved, but do not say how to solve it"
+s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
+  phrase document, S "is to describe the modelling of" +:+.
+  phrase swhs_pcm, S "The", plural goalStmt, S "and", plural thModel,
+  S "used in the", short progName, S "code are provided, with an emphasis",
+  S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
+  plural definition, S "This", phrase document,
+  S "is intended to be used as a", phrase reference,
+  S "to provide ad hoc access to all", phrase information,
+  S "necessary to understand and verify the" +:+. phrase model, S "The",
+  short srs, S "is abstract because the contents say what", phrase problem,
+  S "is being solved, but do not say how to solve it"]
 
 
 -- Besides program name, these two paragraphs are general, mostly repeated

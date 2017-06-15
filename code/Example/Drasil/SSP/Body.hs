@@ -339,17 +339,16 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   S "so the" +:+ phrase assumption +:+ S "of" +:+ short genDefn :+: S "5 is used. Solving for" +:+ phrase force,
   S "equilibrium allows", plural definition,
   S "of all" +:+ plural force +:+ S "in terms of the" +:+ plural physicalProperty,
-  S "of" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+: S "9, as done in" +:+
-  short dataDefn :+: S "10" `sC` short dataDefn :+: S "11"]
+  S "of" +:+ acroDD "1" +:+ S "to" +:+ acroDD "9" `sC` S "as done in" +:+
+  acroDD "10" `sC` acroDD "11"]
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
   S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio" +:+ getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+
-  plural value, S "in" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+:
-  S "9, the" +:+ plural value +:+ S "of", getS ri `sC`
-  S "and", getS ti, S "in" +:+ short dataDefn :+: S "10 and" +:+ short dataDefn :+:
-  S "11, and each", --FIXME: DD10, DD11 should be references to other things in the body
+  plural value, S "in" +:+ acroDD "1" +:+ S "to" +:+ acroDD "9" `sC` S "the" +:+ plural value +:+ S "of", getS shearFNoIntsl `sC`
+  S "and", getS shearFNoIntsl, S "in" +:+ acroDD "10" +:+ S "and" +:+ acroDD "11" `sC`
+  S "and each", --FIXME: DD10, DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit" +:+ plural equation +:+ S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]

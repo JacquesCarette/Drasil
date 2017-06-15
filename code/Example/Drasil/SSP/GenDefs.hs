@@ -7,7 +7,7 @@ import Drasil.SSP.Units
 import Data.Drasil.Concepts.Documentation
 import Drasil.SSP.Defs
 import Data.Drasil.Concepts.PhysicalProperties
-import Data.Drasil.Concepts.Physics
+import Data.Drasil.Quantities.Physics
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.SolidMechanics
@@ -140,7 +140,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start variable, plural definition,
-  S "can be found in", acroDD "1", S "to" +:+. acroDD "9""]
+  S "can be found in", acroDD "1", S "to" +:+. acroDD "9"]
 
 --
 netForce :: RelationConcept
@@ -178,7 +178,10 @@ hooke2d_rel :: Relation
 hooke2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 hooke2d_desc :: Sentence
-hooke2d_desc = S "A 2D component implementation of Hooke’s law as seen in T5.  ni is the displacement of the element normal to the surface and  ti is the displacement of the element parallel to the surface. pn,i, is the net pressure acting normal to the surface, and pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it’s length. The sti↵ness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in DD14. The pressure forces would be the re- sult of applied loads on the mass, the product of the sti↵ness elements with the displacement would be the mass’s reactive force that cre- ates equilibrium with the applied forces after reaching the equilibrium displacement."
+hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke’s law as seen in" +:+.
+  acroT "5", getS elmPrllDispl, S "is", phrase displacement `ofThe` phrase element,
+  S "normal to the", phrase surface, S "and", getS elmNrmDispl, S "is",
+  phrase displacement `ofThe` phrase element, S "parallel to the" +:+. phrase surface, S "pn,i, is the net pressure acting normal to the surface, and pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it’s length. The sti↵ness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in DD14. The pressure forces would be the re- sult of applied loads on the mass, the product of the sti↵ness elements with the displacement would be the mass’s reactive force that cre- ates equilibrium with the applied forces after reaching the equilibrium displacement."]
 
 --
 displVect :: RelationConcept

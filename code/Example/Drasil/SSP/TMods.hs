@@ -13,6 +13,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (normal, surface)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Concepts.Physics (linear, stress, friction)
+import Data.Drasil.Quantities.PhysicalProperties
 
 --------------------------
 --  Theoretical Models  --
@@ -86,7 +87,7 @@ effS_rel = (C normStress) := (C normStress) :- (C porePressure)
 
 effS_desc :: Sentence -- FIXME: these are not normStress but they are sigma. And some of these are mu. Also fix equaiton
 effS_desc = foldlSent [getS normStress, S "is the total", phrase stress,
-  S "a soil mass needs to maintain itself as a rigid collection" +:+.
+  S "a soil", phrase mass, S "needs to maintain itself as a rigid collection" +:+.
   S "of particles", phrase source `ofThe'` phrase stress,
   S "can be provided by the soil skeleton", getS normStress `sC`
   S "or by the pore pressure from water within the soil" +:+. getS porePressure,
@@ -104,7 +105,7 @@ hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
 
 hksLw_desc :: Sentence
 hksLw_desc = foldlSent [S "Description Stiffness", getS stffness, S "is the",
-  S "resistance a body others to deformation by displacement", getS genDisplace,
+  S "resistance a body others to deformation by", phrase displacement, getS genDisplace,
   S "when subject to a", phrase force, getS genForce `sC` S "along the same direction.",
   S "A body with high stiffness will experience little deformation when",
-  S "subject to a", prase force]
+  S "subject to a", phrase force]

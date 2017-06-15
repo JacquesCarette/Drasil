@@ -14,18 +14,23 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
               SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
-              mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, intNormForce, intShrForce,
-              baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
-              impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce, momntOfBdy,
-              genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
+              mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
+              watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce,
+              totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
+              impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
+              momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
+              nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
               nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
-  coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, shrResI,
-  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl,
-  surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
-  momntOfBdy, genDisplace, shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl :: UnitalChunk
+  coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
+  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
+  intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
+  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
+  baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
+  shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
+  nrmStiffRes, shrDispl, nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl,
+  elmPrllDispl, intNormForce :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.

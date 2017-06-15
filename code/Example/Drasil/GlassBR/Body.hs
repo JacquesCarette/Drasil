@@ -245,22 +245,17 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
-  (Bullet $ map (\c -> Flat c) [(((at_start annealedGl) :+: 
-    sParenDash (short annealedGlass)) :+: (annealedGl ^. defn)), 
-  (((at_start fTemperedGl) :+: sParenDash (short fullyTGlass)) :+:
-    (fTemperedGl ^. defn)), 
-  (((at_start hStrengthGl) :+: sParenDash (short heatSGlass)) :+:
-    (hStrengthGl ^. defn))])]
+  (Bullet $ 
+  map (\d -> Flat $ ((at_start d) :+: sParenDash (short d)) :+: (d ^. defn)) 
+  [annealedGl, fTemperedGl, hStrengthGl])]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   (Bullet $ map (\c -> Flat c)
-  [(((at_start specDeLoad) +:+ S "- ") :+: (specDeLoad ^. defn)),
-  (((at_start loadResis) :+: sParenDash (short loadResis)) :+: (loadResis ^. defn)),
-  (((at_start longDurLoad) +:+ S "- ") :+: (longDurLoad ^. defn)),
-  (((at_start nonFL) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" +:+ (nonFactoredL ^. defn))]
+  [(((at_start loadResis) :+: sParenDash (short loadResis)) :+: (loadResis ^. defn)),
+  (((at_start nonFL) +:+ sParenDash (getS nonFL)) :+: (nonFactoredL ^. defn))]
   ++ 
   map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))
-    [glassWL, shortDurLoad])]
+    [glassWL, shortDurLoad, specDeLoad, longDurLoad])]
 
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 

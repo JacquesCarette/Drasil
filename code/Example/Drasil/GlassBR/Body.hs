@@ -515,26 +515,26 @@ s8 = SRS.likeChg [s8_list] []
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
   s8_likelychg5 :: Sentence
 
-s8_likelychg1 = foldlSent [(short assumption) :+: S "3 - The", phrase system, 
+s8_likelychg1 = foldlSent [acroA "3" +:+ S "- The", phrase system, 
   S "currently only calculates for external" +:+. (phrase blastRisk), 
   S "In the future", (plural calculation), 
   S "can be added for the internal", (phrase blastRisk)]
 
-s8_likelychg2 = foldlSent [(short assumption) :+: S "4" `sC` 
-  (short assumption) :+: S "8 - Currently the", plural value, 
-  S "for", (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
+s8_likelychg2 = foldlSent [acroA "4" `sC` acroA "8",
+  S "- Currently the", plural value, S "for",
+  (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
   S "and", (P $ mod_elas ^. symbol), S "are assumed to be the", 
   S "same for all glass. In the future these", plural value, 
   S "can be changed to", phrase variable, plural input_]
 
-s8_likelychg3 = foldlSent [(short assumption) :+: S "5 - The", phrase software, 
+s8_likelychg3 = foldlSent [acroA "5" +:+ S "- The", phrase software, 
   S "may be changed to accommodate more than a single", (phrase lite)]
 
-s8_likelychg4 = foldlSent [(short assumption) :+: S "6 - The", phrase software, 
+s8_likelychg4 = foldlSent [acroA "6" +:+ S "- The", phrase software, 
   S "may be changed to accommodate more boundary", plural condition, 
   S "than 4-sided support"]
 
-s8_likelychg5 = foldlSent [(short assumption) :+: S "7 - The", phrase software, 
+s8_likelychg5 = foldlSent [acroA "7" +:+ S "- The", phrase software, 
   S "may be changed to consider more than just flexure of the glass"]
 
 s8_likelychg_list :: [Sentence]

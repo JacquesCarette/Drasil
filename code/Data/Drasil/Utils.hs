@@ -64,13 +64,13 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 -- t - the title of the list
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map (Flat) l)
+mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map Flat l)
 
 -- | creates a list of references from l starting from s
 -- s - start indices
 -- l - list of references
 mkRefsList :: Integer -> [Sentence] -> Contents
-mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map (Flat) l)
+mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map Flat l)
 
 -- | creates a list of sentences of the form "[#]"
 -- start - start indices

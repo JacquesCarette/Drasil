@@ -425,16 +425,16 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_req1, s7_1_req2 :: [Contents]
+s7_1_req1, s7_1_req2, s7_1_req6 :: [Contents]
 s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
-s7_1_list = s7_1_req1++s7_1_req2++[enumSimple 2 (getAcc requirement) (s7_1_listOfReqs)]
+s7_1_list = s7_1_req1++s7_1_req2++[enumSimple 3 (getAcc requirement) (s7_1_listOfReqs)]++s7_1_req6
 
 s7_1_listOfReqs :: [Sentence]
-s7_1_listOfReqs = [{-s7_1_req2,-} s7_1_req3, s7_1_req4, s7_1_req5{-, s7_1_req6-}]
+s7_1_listOfReqs = [s7_1_req3, s7_1_req4, s7_1_req5]
 
 s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
-  [(acroA "1", at_start input_ +:+ S "the following" +:+
+  [(acroR "1", at_start input_ +:+ S "the following" +:+
   plural quantity `sC` S "which define the glass dimensions" `sC` 
   (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase probability) +:+
   S "of failure and" +: (plural characteristic `ofThe` phrase blast))]),
@@ -445,7 +445,7 @@ s7_1_req1Table = (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thi
   ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x))
 
 s7_1_req2 = [(Enumeration $ Simple $
-   [(acroA "2", Nested (S "The" +:+ phrase system +:+
+   [(acroR "2", Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map (\c -> Flat c) 
      [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
@@ -453,14 +453,6 @@ s7_1_req2 = [(Enumeration $ Simple $
      S "following" +:+ acroA "4", 
      (P $ loadDF ^. symbol) +:+ S "following" +:+ acroA "8", 
      (short lShareFac) +:+ S "following" +:+ acroA "5"]))])]
-
-{-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+ S "shall set the known"
-   +:+ plural value +:+ S "as follows: ") (Bullet $ map (\c -> Flat c)
-    [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
-    (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
-    S "following" +:+ (short assumption) :+: S "4", 
-    (P $ loadDF ^. symbol) +:+ S "following" +:+ acroA "8", 
-    (short lShareFac) +:+ S "following" +:+ acroA "5"]))-}
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   phrase input_, plural value, S "to ensure that they do not exceed the",
@@ -479,8 +471,8 @@ s7_1_req5 = foldlSent [S "If", (P $ is_safe1 ^. symbol), S "and",
   phrase output_, S "the message", Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
   S "the message", Quote (notSafe ^. defn)]
-{-
-s7_1_req6 = Nested (titleize output_ +:+
+
+s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (P $ prob_br ^. symbol) +:+ 
@@ -504,7 +496,7 @@ s7_1_req6 = Nested (titleize output_ +:+
     [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"
-    ]) -}
+    ]))])]
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 

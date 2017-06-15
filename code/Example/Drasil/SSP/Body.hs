@@ -443,7 +443,7 @@ s5_1 = SRS.funcReq
 s5_1_list = enumSimple 1 (short requirement) [
   (S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+. plural datum +:+
         S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
-        makeRef table_inputdata),
+        makeRef s5_1_table),
   (S "Generate potential" +:+ phrase crtSlpSrf :+:
         S "'s for the" +:+ phrase input_ +:+. phrase slope),
   (S "Test the" +:+ plural slpSrf +:+ S "to determine" +:+
@@ -477,10 +477,7 @@ s5_1_list = enumSimple 1 (short requirement) [
         S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
 
-s5_1_table = table_inputdata
-
-table_inputdata :: Contents
-table_inputdata = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this has to be seperate since poisson is a different type
+s5_1_table = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this has to be seperate since poisson is a different type
   [cqs poissnsR] ++ map cqs [fricAngle, dryWeight, satWeight, waterWeight])
 
 -- SECTION 5.2 --

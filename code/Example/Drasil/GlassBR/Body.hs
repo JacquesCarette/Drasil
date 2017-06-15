@@ -465,12 +465,12 @@ s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
   plural quantity, S "from", acroR "1", S "and the known", plural quantity,
   S "from", acroR "2"]
 
-s7_1_req5 = foldlSent [S "If", (P $ is_safe1 ^. symbol), S "and",
-  (P $ is_safe2 ^. symbol), S "(from", (makeRef (gbSymbMapT t1SafetyReq)),
-  S "and", (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
-  phrase output_, S "the message", Quote (safeMessage ^. defn),
-  S "If the", phrase condition, S "is false, then", phrase output_,
-  S "the message", Quote (notSafe ^. defn)]
+s7_1_req5 = S "If" +:+ (P $ is_safe1 ^. symbol) +:+ S "and" +:+
+  (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ (makeRef (gbSymbMapT t1SafetyReq)) +:+
+  S "and" +:+ (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
+  phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
+  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
+  S "the message" +:+ Quote (notSafe ^. defn)
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
   S "the following" +: plural quantity)

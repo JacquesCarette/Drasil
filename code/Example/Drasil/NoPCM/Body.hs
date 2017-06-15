@@ -176,7 +176,7 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $
 s4_1_2 = physSystDesc (getAcc sWHS) fig_tank [s4_1_2_list, fig_tank]
 
 fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
-  S "from" +:+ phrase coil +:+ S "of" +:+ P (ht_flux_C ^. symbol))
+  S "from" +:+ phrase coil +:+ S "of" +:+ getS ht_flux_C)
   "TankWaterOnly.png"
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [

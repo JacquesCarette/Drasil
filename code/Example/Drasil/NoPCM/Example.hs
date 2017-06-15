@@ -3,6 +3,7 @@ module Drasil.NoPCM.Example where
 import Language.Drasil
 
 import Data.Drasil.SI_Units
+import Data.Drasil.Utils(getS)
 import qualified Data.Drasil.Units.Thermodynamics as U
 import Data.Drasil.Quantities.PhysicalProperties
 import Prelude hiding (id)
@@ -131,11 +132,11 @@ t1descr :: Sentence
 t1descr = 
   (S ("This equation gives the conservation of energy for time varying heat " ++
   "transfer in a material of specific heat capacity ") :+: 
-  (P $ heat_cap_spec ^. symbol) :+: S " and density " :+: (P $ density ^. symbol) :+:
-  S ", where " :+: (P $ thFluxVect ^. symbol) +:+ S "is the thermal flux vector," +:+
-  (P $ ht_gen_vol ^. symbol) +:+ S "is the volumetric heat generation," +:+
-  (P $ temp ^. symbol) +:+ S "is the temperature," +:+ (P $ time ^. symbol) +:+
-  S "is time, and" +:+ (P $ gradient ^. symbol) +:+ S "is the gradient operator."
+  (getS heat_cap_spec) :+: S " and density " :+: (getS density) :+:
+  S ", where " :+: (getS thFluxVect) +:+ S "is the thermal flux vector," +:+
+  (getS ht_gen_vol) +:+ S "is the volumetric heat generation," +:+
+  (getS temp) +:+ S "is the temperature," +:+ (getS time) +:+
+  S "is time, and" +:+ (getS gradient) +:+ S "is the gradient operator."
   +:+ S "For this equation to apply, other forms of energy, such as mechanical"
   +:+ S "energy, are assumed to be negligible in the") --FIXME: Add 'system (A1).' or Assumption 1 reference
   

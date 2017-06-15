@@ -36,7 +36,7 @@ coil_SA     = ucs "coil_SA" (compoundPhrase (nounPhrase'' (phrase coil) (phrase 
               "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Real
 dummyVar    = ucs "dummyVar" 
               (nounPhraseSP "dummy variable for integration over time")
-              "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second Integer
+              "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second Boolean
 hIn_SA      = ucs "hIn_SA" 
               (nounPhraseSP "surface area over which heat is transferred in")
               "Surface area over which thermal energy is transferred into an object" (sub cA (Atomic "in")) m_2 Real

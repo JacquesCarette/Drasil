@@ -8,7 +8,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(listConstS)
+import Data.Drasil.Utils(listConstS, getS)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Software
@@ -45,7 +45,8 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg s2s s2e 
   [IPurpose s2_1,
   IScope s2_2s s2_2e,
-  IChar (phrase heat +:+ S "transfer" +:+ phrase theory) (S "first or second year Calculus") EmptyS,
+  IChar (phrase heat +:+ S "transfer" +:+ phrase theory)
+    (S "differential equations, as typically covered in first and second year Calculus courses") EmptyS,
   IOrgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS]) :
   map Verbatim [s3, s4, s5, s6, s7]  
         
@@ -109,7 +110,9 @@ s2_2e = EmptyS
 --Section 3 : GENERAL SYSTEM DESCRIPTION
 ----------------------------------------
 
-s3 = genSysF [s3_1] s3_2_intro [s3_3_intro] []
+s3 = genSysF [s3_1] s3_2_intro [] []
+--TODO: If/when system constraints recieves any content, add s3_3_intro
+--to the first empty list
 
 ------------------------------
 --Section 3.1 : SYSTEM CONTEXT
@@ -178,9 +181,9 @@ fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   
 s4_1_2_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   (acroPS "1", at_start tank +:+ S "containing" +:+ phrase water), 
-  (acroPS "2", foldlSent [S "Heating", phrase coil, S "at bottom of" +:+. phrase tank,
-  sParen (foldlSent [P (ht_flux_C ^. symbol), S "represents the", phrase ht_flux_C,
-  S "into the", phrase water])])]
+  (acroPS "2", foldlSent [S "Heating", phrase coil, S "at bottom of", phrase tank] +:+
+  sParen (foldlSent [getS ht_flux_C, S "represents the", phrase ht_flux_C,
+  S "into the", phrase water]))]
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
@@ -212,12 +215,12 @@ s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can b
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map
-  (listConstS) []) (titleize table_ +: S "1" +:+ phrase input_ +:+
+  (listConstS) []) (titleize table_ +: S "1" +:+ titleize input_ +:+
   titleize' variable) True
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map
-  (listConstS) []) (titleize table_ +: S "2" +:+ phrase output_ +:+
+  (listConstS) []) (titleize table_ +: S "2" +:+ titleize output_ +:+
   titleize' variable) True
     
 

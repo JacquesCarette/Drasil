@@ -226,41 +226,46 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 s6_1_1 = termDefnF (Just (S "All of the terms are extracted from" +:+ 
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s10))) [s6_1_1_bullets]
 
-s6_1_1_bullets = Enumeration $ (Number $ 
-  [Flat $ ((at_start aspectR) :+: sParenDash (short aspectR)) {-P $ aspectR ^. symbol))-} -- conceptually correct to call abbreviation as a symbol?
-  :+: (aspectRatio ^. defn)] ++
+s6_1_1_bullets = Enumeration $ (Number $
+  [Flat $ ((at_start aspectR) :+: sParenDash (short aspectR)) :+: (aspectRatio ^. defn)] {-P $ aspectR ^. symbol))-} -- conceptually correct to call abbreviation as a symbol?
+  ++
+  map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn)) [glBreakage, lite]
+  ++ s6_1_1_bullets_glTySubSec ++
+  map (\c -> Flat c)
+  [(((at_start glTyFac) :+: sParenDash (short glassTypeFac)) :+: (glTyFac ^. defn)),
+  (((at_start lateral) +:+ S "- ") :+: (lateral ^. defn))]
+  ++ s6_1_1_bullets_loadSubSec ++
+  map (\c -> Flat c)
+  [(((at_start loadShareFac) :+: sParenDash (short loadShareFac)) :+: (loadShareFac ^. defn)),
+  (((at_start probBreak) :+: sParenDash (P $ prob_br ^. symbol)) :+: (probBreak ^. defn))]
+  ++
   map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))
-  [glBreakage, lite] ++ [Nested (((titleize glassTy) :+: S ":")) 
+  [specA, blastResisGla, eqTNTChar]
+  ++
+  [Flat $ ((at_start sD) :+: sParenDash (P $ standOffDist ^. symbol)) :+: (sD ^. defn)])
+
+-- Terminology and Definition Subsection Helpers --
+
+s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
+
+s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
   (Bullet $ map (\c -> Flat c) [(((at_start annealedGl) :+: 
     sParenDash (short annealedGlass)) :+: (annealedGl ^. defn)), 
   (((at_start fTemperedGl) :+: sParenDash (short fullyTGlass)) :+:
     (fTemperedGl ^. defn)), 
   (((at_start hStrengthGl) :+: sParenDash (short heatSGlass)) :+:
-    (hStrengthGl ^. defn))])] ++
-  map (\c -> Flat c)
-  [(((at_start glTyFac) :+: sParenDash (short glassTypeFac)) :+: 
-  (glTyFac ^. defn)), 
-  (((at_start lateral) +:+ S "- ") :+: (lateral ^. defn))] ++ 
-  [Nested (((at_start load) :+: S ":")) (Bullet $ map (\c -> Flat c)  
-  [(((at_start specDeLoad) +:+ S "- ") :+: (specDeLoad ^. defn)), 
-  (((at_start loadResis) :+: sParenDash (short lResistance)) :+:
-    (loadResis ^. defn)), 
-  (((at_start longDurLoad) +:+ S "- ") :+: (longDurLoad ^. defn)), 
-  (((at_start nonFL) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" 
-    +:+ (nonFactoredL ^. defn))] ++ 
+    (hStrengthGl ^. defn))])]
+
+s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
+  (Bullet $ map (\c -> Flat c)
+  [(((at_start specDeLoad) +:+ S "- ") :+: (specDeLoad ^. defn)),
+  (((at_start loadResis) :+: sParenDash (short loadResis)) :+: (loadResis ^. defn)),
+  (((at_start longDurLoad) +:+ S "- ") :+: (longDurLoad ^. defn)),
+  (((at_start nonFL) +:+ sParen (P $ nonFL ^. symbol)) +:+ S "-" +:+ (nonFactoredL ^. defn))]
+  ++ 
   map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))
-    [glassWL, shortDurLoad])] ++ 
-  map (\c -> Flat c)
-  [(((at_start loadShareFac) :+: sParenDash (short lShareFac)) :+: 
-  (loadShareFac ^. defn)), 
-  (((at_start probBreak) :+: sParenDash (P $ prob_br ^. symbol)) :+:
-  (probBreak ^. defn))] ++
-  map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn)) 
-  [specA, blastResisGla, eqTNTChar] ++
-  [Flat $ ((at_start sD) :+: sParenDash (P $ standOffDist ^. symbol)) :+:
-  (sD ^. defn)])
-  where sParenDash = \x -> S " (" :+: x :+: S ") - "
-  
+    [glassWL, shortDurLoad])]
+
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"

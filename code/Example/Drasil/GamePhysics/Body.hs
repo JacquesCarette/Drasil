@@ -183,7 +183,7 @@ s2_2_intro = Paragraph $ foldlSent
 
 s2_3 :: Section
 s2_3 = charIntRdrF (S "rigid body dynamics") (S "high school calculus") 
-  (chipmunk) EmptyS (s2_3)
+  (chipmunk) EmptyS (s4_1) --fixme: reference which section?
 
 -------------------------------------
 -- 2.3 : Organization of Documents --

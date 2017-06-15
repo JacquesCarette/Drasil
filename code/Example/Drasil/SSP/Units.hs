@@ -6,21 +6,42 @@ import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
---import Control.Lens ((^.))
-
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
+---------------------------
+-- Imported UnitalChunks --
+---------------------------
+{-
+SM.elastMod, SM.mobShear, SM.shearRes, SM.stffness
+SM.poissnsR <- ConVar
+-}
+normStress = SM.nrmStrss
+genForce = uc CP.force cF newton 
+{-must import from Concept.Physics since Quantities.Physics has Force as a vector-}
+
+-------------
+-- HELPERS --
+-------------
+fixme, fsi, fisi :: String
+fixme = "FIXME: Define this or remove the need for definitions"
+fsi   = "(for slice index i)"
+fisi  = "(for interslice index i)"
+
+---------------------------
+-- START OF UNITALCHUNKS --
+---------------------------
+
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
-              SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
-              mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-              watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce,
-              totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
-              impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
-              momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
-              nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-              nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl]
+sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight,
+  SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
+  mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
+  watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce,
+  totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
+  impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
+  momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
+  nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
+  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl, waterWeight]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
@@ -31,16 +52,9 @@ normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl,
   elmPrllDispl, intNormForce :: UnitalChunk
-
---FIXME: Many of these need to be split into term, defn pairs as their defns are
--- mixed into the terms.
-
-fixme, fsi, fisi :: String
-fixme = "FIXME: Define this or remove the need for definitions"
-fsi = "(for slice index i)"
-fisi = "(for interslice index i)"
-
-normStress  = SM.nrmStrss
+  
+{-FIXME: Many of these need to be split into term, defn pairs as
+         their defns are mixed into the terms.-}
 
 fricAngle   = uc' "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
@@ -62,8 +76,6 @@ satWeight   = uc' "gamma_sat" (cn $ "saturated unit weight")
 waterWeight = uc' "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight
-
---elastMod    = SM.elastMod
 
 coords      = uc' "(x,y)"
   (cn $ "cartesian position coordinates; y is considered parallel to the " ++
@@ -102,15 +114,11 @@ mobShrI     = uc' "S_i" (cn $ "mobilized shear force for slice i")
   fixme
   (sub cS lI) newton
 
---mobShear    = SM.mobShear
-
 shrResI     = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
   "force that describes the limit of mobilized shear force the slice i " ++
   "can withstand before failure")
   fixme
   (sub cP lI) newton
-
---p           = SM.shearRes
 
 shearFNoIntsl = uc' "T_i"
   (cn $ "mobilized shear force without the influence of interslice forces for slice i")
@@ -195,12 +203,6 @@ midpntHght  = uc' "h_i" (cn $ "midpoint height; distance from the slip base to t
   fixme
   (sub lH lI) metre
 
-genForce = uc CP.force cF newton
-
--- genForce    = uc' "F" (cn $ "generic force; assumed 1D allowing a scalar")
-  -- fixme
-  -- cF newton --FIXME: use force from concepts.physics or quantity.physics ?
-
 momntOfBdy  = uc' "M" (cn $ "moment of a body; assumed 2D allowing a scalar")
   fixme
   cM momentOfForceU --FIXME: move in concepts.physics ?
@@ -208,8 +210,6 @@ momntOfBdy  = uc' "M" (cn $ "moment of a body; assumed 2D allowing a scalar")
 genDisplace = uc' "genDisplace" (cn $ "generic displacement of a body")
   fixme
   (Greek Delta_L) metre
-
---k           = SM.stffness
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness of an interslice surface, without length adjustment " ++ fisi)
   fixme
@@ -262,15 +262,14 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
 porePressure = uc' "mu" (cn "pore pressure from water within the soil") fixme
   (Greek Mu_L) pascal
 
-
+----------------------
 -- Unitless Symbols --
+----------------------
 
 sspUnitless :: [ConVar]
-sspUnitless = [SM.poissnsR, fs, earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc]
+sspUnitless = [SM.poissnsR, fs, earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
 
 fs, earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
-
---poisson     = SM.poissnsR
 
 fs          = cvR (dcc "FS" (nounPhraseSP $ "global factor of safety describing the " ++
   "stability of a surface in a slope") fixme) (Atomic "FS")

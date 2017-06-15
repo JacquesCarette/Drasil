@@ -19,7 +19,7 @@ fctSfty :: RelationConcept
 fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 
 fcSfty_rel :: Relation
-fcSfty_rel = (C fs) := (Int 0) --FIXME: add the long equation
+fcSfty_rel = (C fs) := (UnaryOp $ Product (Just (lC, Low $ V "i", High $ (V "n") :- (Int 1))) ((C mobShrC) :/ (C shrResC))) --FIXME: add the long equation
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent [S "Equation for the Factor of Safety" `isThe` S "ratio between resistive",

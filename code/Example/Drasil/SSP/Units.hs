@@ -41,7 +41,8 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl, waterWeight]
+  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl, waterWeight, 
+  mobShrC, shrResC, rotatedDispl]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
@@ -51,7 +52,7 @@ normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl,
-  elmPrllDispl, intNormForce :: UnitalChunk
+  elmPrllDispl, intNormForce, mobShrC, shrResC, rotatedDispl :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -119,6 +120,16 @@ shrResI     = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
   "can withstand before failure")
   fixme
   (sub cP lI) newton
+  
+mobShrC     = uc' "Psi" (cn $ "constant that converts mobile shear without " ++ 
+  "the influence of interslice forces, to a calculation considering the interslice forces")
+  fixme
+  (sub (Greek Psi) lC) newton
+
+shrResC     = uc' "Phi" (cn $ "constant that converts resistive shear without " ++ 
+  "the influence of interslice forces, to a calculation considering the interslice forces")
+  fixme
+  (sub (Greek Phi) lC) newton
 
 shearFNoIntsl = uc' "T_i"
   (cn $ "mobilized shear force without the influence of interslice forces for slice i")
@@ -261,6 +272,9 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
 
 porePressure = uc' "mu" (cn "pore pressure from water within the soil") fixme
   (Greek Mu_L) pascal
+
+rotatedDispl = uc' "varepsilon_i" (cn "displacement in the rotated coordinate system") fixme
+  (sub (Greek Epsilon_V) lI) metre
 
 ----------------------
 -- Unitless Symbols --

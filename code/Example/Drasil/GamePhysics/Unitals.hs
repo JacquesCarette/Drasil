@@ -113,7 +113,7 @@ pos_CM = ucs "p_CM" (nounPhraseSP $
   "the mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
-  (sub (QP.position ^. symbol) (Atomic "CM")) metre Rational
+  (sub (QP.position ^. symbol) (Atomic "CM")) metre Real
 
 --FIXME: parametrized hack
 mass_i = ucFromCV massi kilogram

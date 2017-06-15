@@ -104,7 +104,7 @@ cpSymMapD = symbolMapFun cpSymbMap Data
 s2 :: Section
 s2_intro :: [Contents]
 
-s2 = SRS.intro (s2_intro) [s2_1, s2_2, s2_3]
+s2 = SRS.intro (s2_intro) [s2_1, s2_2, s2_3, s2_4]
 
 para1_s2_intro :: Contents
 para1_s2_intro = Paragraph $ foldlSent
@@ -180,28 +180,24 @@ s2_2_intro = Paragraph $ foldlSent
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
-{--
+
 s2_3 :: Section
-s2_3_intro :: Sentence
+s2_3 = charIntRdrF (S "rigid body dynamics") (S "high school calculus") 
+  (chipmunk) EmptyS (s2_3)
 
-s2_3_intro = foldlSent 
-  [S "Reviewers of this documentation should have knowledge of",
-  S "The reader should also have an understanding of", S "The users of"]
-
---}
 -------------------------------------
 -- 2.3 : Organization of Documents --
 -------------------------------------
 
-s2_3 :: Section
-s2_3_intro :: Sentence
+s2_4 :: Section
+s2_4_intro :: Sentence
 
-s2_3 = orgSec s2_3_intro inModel s4_2_5 EmptyS
+s2_4 = orgSec s2_4_intro inModel s4_2_5 EmptyS
 
 -- FIXME: Citations.
 -- FIXME: This can probably be completely pulled out is we decide on the 
 --  right convention for the intro across examples.
-s2_3_intro = foldlSent 
+s2_4_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
   S "template for an", (getAcc srs), S "for scientific",
   S "computing", (phrase software), S "proposed by [1] and [2]"]

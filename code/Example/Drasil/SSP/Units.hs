@@ -18,14 +18,14 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, water
               baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
               impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce, momntOfBdy,
               genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-              nrmDispl, dx_i, dy_i, porePressure]
+              nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, shrResI,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl,
   surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, dx_i, dy_i, porePressure :: UnitalChunk
+  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -237,6 +237,14 @@ shrDispl = uc' "du_i" (cn $ "shear displacement of a slice " ++ fsi)
 nrmDispl = uc' "dv_i" (cn $ "normal displacement of a slice " ++ fsi)
   fixme
   (sub (Concat [Greek Delta_L, Atomic "v"]) lI) metre
+  
+elmNrmDispl  = uc' "dt_i" (cn $ "displacement of the element normal to the surface " ++ fsi)
+  fixme
+  (sub (Concat [Greek Delta_L, Atomic "t"]) lI) metre
+  
+elmPrllDispl = uc' "dn_i" (cn $ "displacement of the element parallel to the surface " ++ fsi)
+  fixme
+  (sub (Concat [Greek Delta_L, Atomic "n"]) lI) metre
 
 dx_i        = uc' "dx_i" (cn $ "displacement of a slice in the x-ordinate direction " ++ fsi)
   fixme

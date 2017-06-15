@@ -228,7 +228,7 @@ s6_1_1 = termDefnF (Just (S "All of the terms are extracted from" +:+
 
 s6_1_1_bullets = Enumeration $ (Number $
   map (\a -> Flat $ ((at_start a) :+: sParenDash (short a)) :+: (a ^. defn))
-  [aspectRatio, glTyFac, loadShareFac, probBreak] {-(getS aspectR)-} -- conceptually correct to call abbreviation as a symbol?
+  [aspectRatio] {-(getS aspectR)-} -- conceptually correct to call abbreviation as a symbol?
   ++
   map (\b -> Flat $ ((at_start b) +:+ S "- ") :+: (b ^. defn)) 
   [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
@@ -237,8 +237,9 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   s6_1_1_bullets_loadSubSec
   ++
-  map (\c -> Flat c)
-  [((at_start standOffDist) :+: sParenDash (getS standOffDist)) :+: (standOffDist ^. defn)])
+  map (\a -> Flat $ ((at_start a) :+: sParenDash (getS a)) :+: (a ^. defn))
+  [standOffDist])
+--glTyFac, loadShareFac, probBreak?
 
 -- Terminology and Definition Subsection Helpers --
 
@@ -246,8 +247,8 @@ s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
   (Bullet $ 
-  map (\d -> Flat $ ((at_start d) :+: sParenDash (short d)) :+: (d ^. defn)) 
-  [annealedGl, fTemperedGl, hStrengthGl])]
+  map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn)) 
+  [(annealedGl, annealedGlass), (fTemperedGl, fullyTGlass), (hStrengthGl, heatSGlass)])]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   (Bullet $ map (\c -> Flat c)

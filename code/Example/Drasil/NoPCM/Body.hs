@@ -45,7 +45,7 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg s2s s2e 
   [IPurpose s2_1,
   IScope s2_2s s2_2e,
-  IChar (phrase heat +:+ S "transfer" +:+. phrase theory) (S "first or second year Calculus") EmptyS,
+  IChar (phrase heat +:+ S "transfer" +:+ phrase theory) (S "first or second year Calculus") EmptyS,
   IOrgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS]) :
   map Verbatim [s3, s4, s5, s6, s7]  
         

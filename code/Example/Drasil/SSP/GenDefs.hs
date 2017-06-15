@@ -176,20 +176,20 @@ hooke2d_rel :: Relation
 hooke2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 hooke2d_desc :: Sentence
-hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke’s law as seen in" +:+.
+hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as seen in" +:+.
   acroT "5", getS elmPrllDispl, S "is", phrase displacement `ofThe` phrase element,
   S "normal to the", phrase surface, S "and", getS elmNrmDispl, S "is",
   phrase displacement `ofThe` phrase element, S "parallel to the" +:+. phrase surface,
   S "Pn,i is the net pressure acting normal to the", phrase surface `sC`
   S "and Pt,i is the net pressure acting parallel to the" +:+. phrase surface,
   S "Pressure is used in place of", phrase force, S "as the", phrase surface,
-  S "has not been normalized for it’s" +:+. phrase len, S "The stiffness", plural value,
+  S "has not been normalized for it's" +:+. phrase len, S "The stiffness", plural value,
   S "Kn,i and Kt,i are then the resistance to", phrase displacement,
   -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
   S "in the respective directions defined as in" +:+. acroDD "14", S "The pressure",
   plural force, S "would be the result of applied loads on the", phrase mass `sC`
   S "the product of the stiffness", plural element, S "with the", phrase displacement,
-  S "would be the", phrase mass, S "’s reactive", phrase force,
+  S "would be the", phrase mass, S "'s reactive", phrase force,
   S "that creates equilibrium with the applied", plural force,
   S "after reaching the equilibrium" +:+. phrase displacement]
   -- FIXME: way to give possessive attribute to noun (ex. "mass's")

@@ -84,7 +84,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   S "l of the plane where the", phrase normal, S "occurs, where",
   (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and", getS baseWthX,
   S "is the x width of the base. Therefore", --FIXME: do propering indexes and primes here
-  (E $ (C cohesion) := (C cohesion) :* (C baseWthX) :* sec ((C baseAngle)))]
+  (E $ (C cohesion) := (C cohesion) :* (C baseWthX) :* sec (C baseAngle))]
   -- FIXME: Still needs to be more automated
 
 --
@@ -203,15 +203,19 @@ disVec_rel :: Relation
 disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 disVec_desc :: Sentence
-disVec_desc = foldlSent [S "Vectors describing the", phrase displacement, S "of",
-  phrase slice +:+. S "i", getS genDisplace `isThe`
+disVec_desc = foldlSent [at_star' vector, S "describing the", phrase displacement,
+  S "of", phrase slice +:+. S "i", getS genDisplace `isThe`
   phrase displacement, S "in the unrotated coordinate system" `sC`
-  S "where", (getS dx_i) `isThe` phrase displacement, S "of the", phrase slice,
-  phrase perp, S "to the direction of gravity, and", (getS dy_i) `isThe`
+  S "where", getS dx_i `isThe` phrase displacement, S "of the", phrase slice,
+  phrase perp, S "to the direction of gravity, and", getS dy_i `isThe`
   phrase displacement, S "of the", phrase slice, S "parallel to the", 
-  phrase force +:+. S "of gravity", (P $ sub (Greek Epsilon_V) lI) `isThe`
-  S "displacement in the rotated coordinate", phrase system `sC`
-  S "where", (getS shrDispl) `isThe` phrase displacement, S "of the slice parallel to the slice base, and", 
-  (getS dy_i) `isThe` S "displacement of the slice perpendicular to the slice base.", 
-  (P $ sub (Greek Epsilon_V) lI), S "can also be found by rotating", getS genDisplace, S "clockwise by the base angle", (P $ Greek Alpha_L), 
-  S "through a rotation matrix as shown"] --FIXME: some symbols need to be vectors and indexed
+  phrase force +:+. S "of gravity", getS rotatedDispl `isThe`
+  phrase displacement, S "in the rotated coordinate", phrase system `sC`
+  S "where", getS shrDispl `isThe` phrase displacement, S "of the",
+  phrase slice, S "parallel to the", phrase slice, S "base, and", 
+  getS dy_i `isThe` phrase displacement, S "of the", phrase slice,
+  S "perpendicular to the", phrase slice +:+. S "base", getS rotatedDispl,
+  S "can also be found by rotating", getS genDisplace,
+  S "clockwise by the base", phrase angle `sC` getS baseAngle,
+  S "through a rotation", phrase matrix, S "as shown"]
+  --FIXME: some symbols need to be vectors and indexed

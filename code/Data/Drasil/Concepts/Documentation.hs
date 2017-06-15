@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))
 
 -- acronyms to be used throughout
--- ex. S "as seen in (A1)"
+-- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
 acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT :: String -> Sentence
 
 acroA numVar  = short assumption  :+: S numVar

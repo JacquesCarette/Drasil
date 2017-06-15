@@ -10,8 +10,9 @@ area, calculation, diameter, equation, euclidN, euclidSpace, gradient,
 
 ode :: CI
 
-{--algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations" --}
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
+angle        = dcc "angle"        (cn' "area")                    ("The amount of rotation needed to bring one line or plane into" ++
+                                                                  "coincidence with another")
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"

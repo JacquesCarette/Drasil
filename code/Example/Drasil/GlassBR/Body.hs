@@ -201,9 +201,9 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR),
   (capacity ^. defn), S "and", (phrase demandq) `isThe` 
   phrase requirement +:+. (S "which" `isThe` (demandq ^. defn)), 
   S "The second", phrase condition, S "is to check whether the calculated", 
-  (phrase probability), sParen (P $ prob_br ^. symbol), 
+  (phrase probability), sParen (getS prob_br), 
   S "is less than the tolerable", (phrase probability), 
-  sParen (P $ pb_tol ^. symbol), S "which is obtained from the", phrase user, 
+  sParen (getS pb_tol), S "which is obtained from the", phrase user, 
   S "as an" +:+. phrase input_, S "If both", plural condition, 
   S "return true then it's shown that the", (phrase glaSlab), 
   S "is safe to use" `sC` S "else if both return false then the", 
@@ -241,7 +241,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   [(loadShareFac, lShareFac), (glTyFac, glassTypeFac), (aspectRatio, aspectR)]
   ++ 
   map (\c -> Flat c)
-  [(((at_start probBreak) :+: sParenDash (P $ prob_br ^. symbol)) :+: (probBreak ^. defn))])
+  [(((at_start probBreak) :+: sParenDash (getS prob_br)) :+: (probBreak ^. defn))])
 
 -- Terminology and Definition Subsection Helpers --
 
@@ -292,7 +292,7 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
         end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
              (plural value `ofThe` S "specification"), (plural parameter), 
-              S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
+              S "used in" +:+. (makeRef s6_2_5_table1), (getS ar_max), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
 
 s6_2_intro = foldlSP [S "This", phrase section_, 
@@ -309,10 +309,10 @@ s6_2_1_list =
   (EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)), 
   (EqnBlock $ (C load_dur):=(Int 3)), 
   --  (Number $ map (\c -> Flat c) [
-  --  (P $ sflawParamM ^. symbol) +:+ S "= 7" +:+ Sy (sflawParamM ^. unit), 
-  --  (P $ sflawParamK ^. symbol) +:+ S "= 2.86 * 10^(-53)" +:+ Sy (sflawParamK ^. unit), 
-  --  (P $ mod_elas ^. symbol) +:+ S "= 7.17 * 10^7" +:+ Sy (mod_elas ^. unit), 
-  --  (P $ load_dur ^. symbol) +:+ S "= 3" +:+ Sy (load_dur ^. unit)]))] ++
+  --  (getS sflawParamM) +:+ S "= 7" +:+ Sy (sflawParamM ^. unit), 
+  --  (getS sflawParamK) +:+ S "= 2.86 * 10^(-53)" +:+ Sy (sflawParamK ^. unit), 
+  --  (getS mod_elas) +:+ S "= 7.17 * 10^7" +:+ Sy (mod_elas ^. unit), 
+  --  (getS load_dur) +:+ S "= 3" +:+ Sy (load_dur ^. unit)]))] ++
   (enumSimple 5 (short assumption) s6_2_1_list_assum2)]
   --equation in sentence
 
@@ -348,10 +348,10 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
   (foldlSent [S "The response type considered in", (short gLassBR), 
   S "is flexural"]), 
   (foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
-  S "of", (phrase loadDF), sParen (P $ loadDF ^. symbol), 
+  S "of", (phrase loadDF), sParen (getS loadDF), 
   S "is a constant in" +:+. (short gLassBR), S "It is calculated by the" +: 
-  (phrase equation), --(P $ loadDF ^. symbol) +:+ S "=" +:+ (P $ load_dur ^. symbol) :+: 
-  S ". Using this" `sC` (P $ loadDF ^. symbol), S "= 0.27"])]
+  (phrase equation), --(getS loadDF) +:+ S "=" +:+ (getS load_dur) :+: 
+  S ". Using this" `sC` (getS loadDF), S "= 0.27"])]
 
 s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
   
@@ -372,42 +372,42 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
               (plural value `ofThe` S "specification"), (plural parameter), 
-              S "used in" +:+. (makeRef s6_2_5_table1), (P $ ar_max ^. symbol), --FIXME: Issue #167
+              S "used in" +:+. (makeRef s6_2_5_table1), (getS ar_max), --FIXME: Issue #167
               S "refers to the", (phrase ar_max), S "for the plate of glass"]
 
 s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", 
   S "Typical Value", S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), 
-  (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] [[(P $ plate_len ^. symbol), 
-  (P $ plate_len ^. symbol) +:+ S "> 0 and" +:+ (P $ plate_len ^. symbol) :+: 
-  S "/" :+: (P $ plate_width ^. symbol) +:+ S "> 1", (P $ dim_min ^. symbol)
-  +:+ S "<=" +:+ (P $ plate_len ^. symbol) +:+ S "<=" +:+ (P $ dim_max ^. symbol)
-  +:+ S "and" +:+ (P $ plate_len ^. symbol) :+: S "/" :+: 
-  (P $ plate_width ^. symbol) +:+ S "<" +:+ (P $ ar_max ^. symbol), S "1500" +:+
-  Sy (unit_symb plate_len), S "10%"], [(P $ plate_width ^. symbol), 
-  (P $ (plate_width ^. symbol)) +:+ S "> 0 and" +:+ (P $ plate_width ^. symbol) 
-  +:+ S "<" +:+ (P $ plate_len ^. symbol), (P $ dim_min ^. symbol) +:+ S "<=" +:+ 
-  (P $ plate_width ^. symbol) +:+ S "<=" +:+ (P $ dim_max ^.symbol) +:+ S "and" +:+
-  (P $ plate_len ^. symbol) :+: S "/" :+: (P $ plate_width ^. symbol) +:+ S "<" +:+
-  (P $ ar_max ^. symbol), S "1200" +:+ Sy (unit_symb plate_width), S "10%"], 
-  [(P $ pb_tol ^. symbol), S "0 <" +:+ (P $ pb_tol ^. symbol) +:+ S "< 1", S "-", 
-  S "0.008", S "0.1%"], [(P $ char_weight ^. symbol), (P $ char_weight ^. symbol)
-  +:+ S ">= 0", (P $ cWeightMin ^. symbol) +:+ S "<" +:+ (P $ char_weight ^. symbol)
-  +:+ S "<" +:+ (P $ cWeightMax ^. symbol), S "42" +:+ Sy (unit_symb char_weight), 
-  S "10%"], [(P $ tNT ^. symbol), (P $ tNT ^. symbol) :+: S " > 0", S "-", S "1", 
-  S "10%"], [(P $ standOffDist ^. symbol), (P $ standOffDist ^. symbol)
-  +:+ S "> 0", (P $ sd_min ^. symbol) +:+ S "<" +:+ (P $ standOffDist ^. symbol)
-  +:+ S "<" +:+ (P $ sd_max ^. symbol), S "45" :+: Sy (unit_symb standOffDist), 
+  (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] [[(getS plate_len), 
+  (getS plate_len) +:+ S "> 0 and" +:+ (getS plate_len) :+: 
+  S "/" :+: (getS plate_width) +:+ S "> 1", (getS dim_min)
+  +:+ S "<=" +:+ (getS plate_len) +:+ S "<=" +:+ (getS dim_max)
+  +:+ S "and" +:+ (getS plate_len) :+: S "/" :+: 
+  (getS plate_width) +:+ S "<" +:+ (getS ar_max), S "1500" +:+
+  Sy (unit_symb plate_len), S "10%"], [(getS plate_width), 
+  (getS plate_width) +:+ S "> 0 and" +:+ (getS plate_width) 
+  +:+ S "<" +:+ (getS plate_len), (getS dim_min) +:+ S "<=" +:+ 
+  (getS plate_width) +:+ S "<=" +:+ (getS dim_max) +:+ S "and" +:+
+  (getS plate_len) :+: S "/" :+: (getS plate_width) +:+ S "<" +:+
+  (getS ar_max), S "1200" +:+ Sy (unit_symb plate_width), S "10%"], 
+  [(getS pb_tol), S "0 <" +:+ (getS pb_tol) +:+ S "< 1", S "-", 
+  S "0.008", S "0.1%"], [(getS char_weight), (getS char_weight)
+  +:+ S ">= 0", (getS cWeightMin) +:+ S "<" +:+ (getS char_weight)
+  +:+ S "<" +:+ (getS cWeightMax), S "42" +:+ Sy (unit_symb char_weight), 
+  S "10%"], [(getS tNT), (getS tNT) :+: S " > 0", S "-", S "1", 
+  S "10%"], [(getS standOffDist), (getS standOffDist)
+  +:+ S "> 0", (getS sd_min) +:+ S "<" +:+ (getS standOffDist)
+  +:+ S "<" +:+ (getS sd_max), S "45" :+: Sy (unit_symb standOffDist), 
   S "10%"]]) (titleize table_ +: S "2" +:+ titleize input_ +:+ titleize' variable) 
   True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)] 
-  [(P $ dim_min ^. symbol, S "0.1" +:+ Sy (unit_symb standOffDist)), 
-  (P $ dim_max ^.symbol, S "0.1" +:+ Sy (unit_symb standOffDist)), 
-  ((P $ ar_max ^. symbol), S "5"), (P $ cWeightMin ^. symbol, S "4.5" +:+
-  Sy (unit_symb cWeightMin)), (P $ cWeightMax ^. symbol, S "910" +:+ 
-  Sy (unit_symb cWeightMax)), (P $ sd_min ^. symbol, S "6" +:+
-  Sy (unit_symb sd_min)), (P $ sd_max ^. symbol, S "130" +:+
+  [(getS dim_min, S "0.1" +:+ Sy (unit_symb standOffDist)), 
+  (getS dim_max, S "0.1" +:+ Sy (unit_symb standOffDist)), 
+  ((getS ar_max), S "5"), (getS cWeightMin , S "4.5" +:+
+  Sy (unit_symb cWeightMin)), (getS cWeightMax , S "910" +:+ 
+  Sy (unit_symb cWeightMax)), (getS sd_min , S "6" +:+
+  Sy (unit_symb sd_min)), (getS sd_max , S "130" +:+
   Sy (unit_symb sd_max))])
   (titleize table_ +: S "3" +:+ titleize specification +:+
   (titleize parameter) +:+ titleize' value) True
@@ -417,7 +417,7 @@ s6_2_5_intro2 = foldlSP [(makeRef s6_2_5_table3), S "shows the",
 
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
   [(\x -> P $ fst(x)), (\x -> snd(x))] 
-  [(prob_br ^. symbol, S "0 <" +:+ (P $ prob_br ^. symbol) +:+ S "< 1")])
+  [(prob_br ^. symbol, S "0 <" +:+ (getS prob_br) +:+ S "< 1")])
   (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
 
 s7 = reqF [s7_1, s7_2]
@@ -447,10 +447,10 @@ s7_1_req2 = [(Enumeration $ Simple $
    [(acroR "2", Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map (\c -> Flat c) 
-     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
-     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
+     [(getS sflawParamM) `sC` (getS sflawParamK) `sC` 
+     (getS mod_elas) `sC` (getS load_dur) +:+ 
      S "following" +:+ acroA "4", 
-     (P $ loadDF ^. symbol) +:+ S "following" +:+ acroA "8", 
+     (getS loadDF) +:+ S "following" +:+ acroA "8", 
      (short lShareFac) +:+ S "following" +:+ acroA "5"]))])]
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
@@ -464,8 +464,8 @@ s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
   plural quantity, S "from", acroR "1", S "and the known", plural quantity,
   S "from", acroR "2"]
 
-s7_1_req5 = S "If" +:+ (P $ is_safe1 ^. symbol) +:+ S "and" +:+
-  (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ (makeRef (gbSymbMapT t1SafetyReq)) +:+
+s7_1_req5 = S "If" +:+ (getS is_safe1) +:+ S "and" +:+
+  (getS is_safe2) +:+ S "(from" +:+ (makeRef (gbSymbMapT t1SafetyReq)) +:+
   S "and" +:+ (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
@@ -474,28 +474,26 @@ s7_1_req5 = S "If" +:+ (P $ is_safe1 ^. symbol) +:+ S "and" +:+
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
-    [Flat $ (at_start prob_br) +:+ sParen (P $ prob_br ^. symbol) +:+ 
+    [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ 
     sParen (makeRef (gbSymbMapT probOfBr))] ++
     [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ 
     sParen (makeRef (gbSymbMapT calOfCap))] ++
-    [Flat $ (at_start demand) +:+ sParen (P $ demand ^. symbol) +:+
+    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+
     sParen (makeRef (gbSymbMapT calOfDe))] ++
-    [Flat $ (at_start act_thick) +:+ sParen (P $ act_thick ^. symbol) +:+
+    [Flat $ (at_start act_thick) +:+ sParen (getS act_thick) +:+
     sParen (makeRef (gbSymbMapD hFromt))] ++
-    [Flat $ (titleize loadDF) +:+ sParen (P $ loadDF ^. symbol) +:+ 
+    [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ 
     sParen (makeRef (gbSymbMapD loadDF))]++
-    [Flat $ (at_start strDisFac) +:+ sParen (P $ strDisFac ^. symbol) +:+ 
+    [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ 
     sParen (makeRef (gbSymbMapD strDisFac))]++
-    [Flat $ (titleize nonFL) +:+ sParen (P $ nonFL ^. symbol) +:+ 
+    [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ 
     sParen (makeRef (gbSymbMapD nonFL))]++
     [Flat $ (titleize glassTypeFac) +:+ sParen (short glassTypeFac) +:+ 
     sParen (makeRef (gbSymbMapD glaTyFac))] ++
-    map (\c -> Flat $ (at_start c) +:+ sParen (P $ c ^. symbol) +:+ 
-    sParen (makeRef (gbSymbMapD c)))
+    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
     [dimLL, tolPre, tolStrDisFac] ++
-    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-P $ aspectR ^. symbol-})  
-    --S " = a/b)"
-    ]))])]
+    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -})]
+    ))])]
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
@@ -521,8 +519,8 @@ s8_likelychg1 = foldlSent [acroA "3" +:+ S "- The", phrase system,
 
 s8_likelychg2 = foldlSent [acroA "4" `sC` acroA "8",
   S "- Currently the", plural value, S "for",
-  (P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC`
-  S "and", (P $ mod_elas ^. symbol), S "are assumed to be the", 
+  (getS sflawParamM) `sC` (getS sflawParamK) `sC`
+  S "and", (getS mod_elas), S "are assumed to be the", 
   S "same for all glass. In the future these", plural value, 
   S "can be changed to", phrase variable, plural input_]
 
@@ -762,14 +760,14 @@ s11_intro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen
-  (P (demand ^. symbol)) +:+ S "versus" +:+ (at_start sD) +:+
+  (getS demand) +:+ S "versus" +:+ (at_start sD) +:+
   S "versus" +:+ (at_start char_weight) +:+ sParen
-  (P (sflawParamM ^. symbol))) "ASTM_F2248-09.png"
+  (getS sflawParamM)) "ASTM_F2248-09.png"
 
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   (phrase lateral) +:+
   (phrase load) +:+ sParen
-  (P (dimlessLoad ^. symbol)) +:+ S "versus" +:+ (titleize aspectR) +:+ 
-  sParen (short aspectR) {-(P (aspectR ^. symbol))-} +:+ S "versus" +:+
-  (at_start stressDistFac) +:+ sParen (P (stressDistFac ^. symbol)))
+  (getS dimlessLoad) +:+ S "versus" +:+ (titleize aspectR) +:+ 
+  sParen (short aspectR) {-(P (aspectR))-} +:+ S "versus" +:+
+  (at_start stressDistFac) +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"

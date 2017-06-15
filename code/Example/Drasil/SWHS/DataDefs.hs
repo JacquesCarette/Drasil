@@ -18,16 +18,16 @@ swhsSymMap :: SymbolMap
 swhsSymMap = symbolMap swhsSymbols
 
 swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD termType = (symbolMapFun swhsSymMap Data) termType
+swhsSymbMapD = symbolMapFun swhsSymMap Data
 
 swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT termType = (symbolMapFun swhsSymMap Theory) termType
+swhsSymbMapT = symbolMapFun swhsSymMap Theory
 
 swhsSymbMapDRef :: QDefinition -> Sentence
-swhsSymbMapDRef termType = makeRef $ swhsSymbMapD termType
+swhsSymbMapDRef = makeRef . swhsSymbMapD
 
 swhsSymbMapTRef :: RelationConcept -> Sentence
-swhsSymbMapTRef termType = makeRef $ swhsSymbMapT termType
+swhsSymbMapTRef = makeRef . swhsSymbMapT
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.

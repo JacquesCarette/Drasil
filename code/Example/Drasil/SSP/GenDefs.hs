@@ -102,7 +102,7 @@ mobShr_desc = foldlSent [
   S "From", phrase definition `ofThe` ((phrase factor) `sOf` (phrase safety)), S "in", acroT "1" `sC` --FIXME: factor of saftey hacked in to avoid cyclical imports
   S "and the new" +:+ phrase definition +:+ S "of", getS shrResI `sC` S "a new",
   S "relation for" +:+ (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
-  getS ti, S "is found as the resistive shear" , getS shrResI,
+  getS shearFNoIntsl, S "is found as the resistive shear" , getS shrResI,
   sParen (acroGD "3"), S "divided by the factor of safety", getS fs]
 
 --
@@ -193,7 +193,7 @@ disVec_desc = foldlSent [S "Vectors describing the displacement of slice i.",
   S "where", (getS dx_i) `isThe` S "displacement of the slice perpendicular to the direction",
   S "of gravity, and", (getS dy_i) `isThe` S "displacement of the slice parallel to the", 
   S "force of gravity.", (P $ (sub (Greek Epsilon_V) lI)) `isThe` S "displacement in the rotated coordinate system" `sC`
-  S "where", (getS du_i) `isThe` S "displacement of the slice parallel to the slice base, and", 
+  S "where", (getS shrDispl) `isThe` S "displacement of the slice parallel to the slice base, and", 
   (getS dy_i) `isThe` S "displacement of the slice perpendicular to the slice base.", 
   (P $ (sub (Greek Epsilon_V) lI)), S "can also be found by rotating ¯)i clockwise by the base angle", (P $ Greek Alpha_L), 
   S "through a rotation matrix as shown"] --FIXME:check if symbols are correct

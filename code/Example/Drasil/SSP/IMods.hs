@@ -49,8 +49,8 @@ intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces") sliceFs_desc
 
 sliceFs_rel :: Relation
 sliceFs_rel = (C intNormForce) := (Int 0) --(C intNormForce) := Case [
-  --(((C fs) * (C ti) :- (C ri)) :/ (Int 100), (Int 1)),
-  --((((Int 100) * (C intNormForce) :+ (C fs) * (C ti) :- (C ri)):/Int 100), Int 1),
+  --(((C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (Int 100), (Int 1)),
+  --((((Int 100) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/Int 100), Int 1),
   --((Int 0), (Int 0))]
   --FIXME: update the long equation; where is Phi and Psi in .Units?
 
@@ -64,9 +64,9 @@ forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
 fDisEq_rel :: Relation
-fDisEq_rel = ((C qi)*(Language.Drasil.sin(C omega_i)):-(C watrForceDif):-
-  (C kc)*(C slcWght):-(C baseHydroForce)*(Language.Drasil.sin(C baseAngle)):+
-  (C surfHydroForce)*(Language.Drasil.sin(C beta_i))) := (Int 1) 
+fDisEq_rel = ((C surfLoad)*(Language.Drasil.sin(C impLoadAngle)):-(C watrForceDif):-
+  (C earthqkLoadFctr)*(C slcWght):-(C baseHydroForce)*(Language.Drasil.sin(C baseAngle)):+
+  (C surfHydroForce)*(Language.Drasil.sin(C surfAngle))) := (Int 1) 
   --FIXME: add the other long equation (i.e. Y Equilibrium)
   --FIXME: add the second part of X Equilibrium equation
 
@@ -75,17 +75,17 @@ fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
   S "equations in the x and y directions for each element. System of equations",
   S "solved for displacements (", (getS dx_i), S "and",
   (getS dy_i), S ")", (getS watrForceDif), S "=", (getS watrForce)
-  `isThe` S "net hydrostatic force across a slice.", (getS kc)
+  `isThe` S "net hydrostatic force across a slice.", (getS earthqkLoadFctr)
   `isThe` S "earthquake load factor.", (getS slcWght)
   `isThe` S "weight of the slice.", (getS baseHydroForce) 
   `isThe` S "pore water pressure acting on the slice base.", (getS surfHydroForce)
   `isThe` S "pore water pressure acting on the slice surface.", (getS baseAngle)
-  `isThe` S "angle of the base with the horizontal.", (getS beta_i)
+  `isThe` S "angle of the base with the horizontal.", (getS surfAngle)
   `isThe` S "angle of the surface with the horizontal.", (getS dx_i)
   `isThe` S "x displacement of slice i.", (getS dy_i)
   `isThe` S "y displacement of slice i.", (getS surfLngth) 
   `isThe` S "length of the interslice surface i.", (getS baseLngth)
-  `isThe` S "length of the base surface i.", (getS k_sti)
+  `isThe` S "length of the base surface i.", (getS shrStiffIntsl)
   `isThe` S "interslice shear stiffness at surface i.", S " Kst,i-1"
   `isThe` S "interslice normal stiffness at surface i. KbA,i, and KbB,i",
   S "are the base stiffness values for slice i"]
@@ -95,7 +95,7 @@ rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety") rfemFoS_desc rfemFoS_rel
 
 rfemFoS_rel :: Relation
-rfemFoS_rel = (C fsloc) := ((C cohesion) :- (C k_bni)*(C dv_i)*(Language.Drasil.tan(C fricAngle))):/((C k_bti)*(C du_i)) 
+rfemFoS_rel = (C fsloc) := ((C cohesion) :- (C nrmStiffBase)*(C nrmDispl)*(Language.Drasil.tan(C fricAngle))):/((C shrStiffBase)*(C shrDispl)) 
   --FIXME: add the other long equation
 
 rfemFoS_desc :: Sentence
@@ -103,11 +103,11 @@ rfemFoS_desc = foldlSent [(getS fsloc) `isThe` S "factor of safety for slice i."
   (getS fs) `isThe` S "factor of safety for the entire slip surface.",
   (getS cohesion) `isThe` S "cohesion of slice i's base.",
   (getS fricAngle) `isThe` (phrase fricAngle), S "of slice i's base.",
-  (getS dv_i) `isThe` S "normal displacement of slice i.",
-  (getS du_i) `isThe` S "shear displacement of slice i.",
-  (getS k_bti) `isThe` S "length of the base of slice i.",
-  (getS k_bni) `isThe` S "base normal stiffness at surface i.",
-  (getS n) `isThe` S "number of slices in the slip surface"]
+  (getS nrmDispl) `isThe` S "normal displacement of slice i.",
+  (getS shrDispl) `isThe` S "shear displacement of slice i.",
+  (getS shrStiffBase) `isThe` S "length of the base of slice i.",
+  (getS nrmStiffBase) `isThe` S "base normal stiffness at surface i.",
+  (getS numbSlices) `isThe` S "number of slices in the slip surface"]
 
 --
 crtSlpId :: RelationConcept

@@ -13,19 +13,19 @@ sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
 
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
-              SM.elastMod, coords, hWT, hUS, hSlip, xi, critCoords,
-              mobShrI, shrResI, ti, ri, slcWght, watrForce, watrForceDif, intNormForce, intShrForce,
-              baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star, qi, baseAngle, beta_i,
-              omega_i, baseWthX, baseLngth, surfLngth, hi_2, genForce, momntOfBdy,
-              genDisplace, SM.stffness, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-              dv_i, dx_i, dy_i, porePressure]
+              SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
+              mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, intNormForce, intShrForce,
+              baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
+              impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce, momntOfBdy,
+              genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
+              nrmDispl, dx_i, dy_i, porePressure]
 
 normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
-  coords, hWT, hUS, hSlip, xi, critCoords, mobShrI, shrResI,
-  ti, ri, slcWght, watrForce, watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, ni_star,
-  qi, baseAngle, beta_i, omega_i, baseWthX, baseLngth, surfLngth, hi_2, genForce,
-  momntOfBdy, genDisplace, k_sti, k_bti, k_sni, k_bni, k_tr, k_no, du_i,
-  dv_i, dx_i, dy_i, porePressure :: UnitalChunk
+  coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, shrResI,
+  shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl,
+  surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
+  momntOfBdy, genDisplace, shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
+  nrmDispl, dx_i, dy_i, porePressure :: UnitalChunk
 
 --FIXME: Many of these need to be split into term, defn pairs as their defns are
 -- mixed into the terms.
@@ -66,18 +66,18 @@ coords      = uc' "(x,y)"
   fixme
   (Atomic "(x,y)") metre
 
-hWT         = uc' "y_wt,i"
+waterHght   = uc' "y_wt,i"
   (cn $ "the y ordinate, or height of the water table at i; refers to either " ++
   "slice i midpoint, or slice interface i")
   fixme
   (sub lY (Atomic "wt,i")) metre
 
-hUS         = uc' "y_us,i" (cn $ "the y ordinate, or height of the top of the " ++
+slopeHght   = uc' "y_us,i" (cn $ "the y ordinate, or height of the top of the " ++
   "slope at i; refers to either slice i midpoint, or slice interface i")
   fixme
   (sub lY (Atomic "us,i")) metre
 
-hSlip       = uc' "y_slip,i" (cn $ "the y ordinate, or height of the slip " ++
+slipHght    = uc' "y_slip,i" (cn $ "the y ordinate, or height of the slip " ++
   "surface at i; refers to either slice i midpoint, or slice interface i")
   fixme
   (sub lY (Atomic "slip,i")) metre
@@ -107,12 +107,12 @@ shrResI     = uc' "P_i" (cn $ "shear resistance; Mohr Coulomb frictional " ++
 
 --p           = SM.shearRes
 
-ti          = uc' "T_i"
+shearFNoIntsl = uc' "T_i"
   (cn $ "mobilized shear force without the influence of interslice forces for slice i")
   fixme
   (sub cT lI) newton
 
-ri          = uc' "R_i"
+shearRNoIntsl = uc' "R_i"
   (cn $ "shear resistance without the influence of interslice forces for slice i")
   fixme
   (sub cR lI) newton
@@ -154,11 +154,11 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal force of a soil surface, subtrac
   fixme
   (sub (Atomic "N'") lI) newton
 
-ni_star     = uc' "N*_i" (cn $ "effective normal force of a soil surface, neglecting the influence of interslice forces")
+nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force of a soil surface, neglecting the influence of interslice forces")
   fixme
   (sub (Atomic "N*") lI) newton
 
-qi          = uc' "Q_i" (cn $ "imposed surface load; a downward force acting into the surface from midpoint of slice i")
+surfLoad    = uc' "Q_i" (cn $ "imposed surface load; a downward force acting into the surface from midpoint of slice i")
   fixme
   (sub cQ lI) newton
 
@@ -166,11 +166,11 @@ baseAngle   = uc' "alpha_i" (cn $ "angle of the base of the mass relative to the
   fixme
   (sub (Greek Alpha_L) lI) degree
 
-beta_i      = uc' "beta_i" (cn $ "angle of the surface of the mass relative to the horizontal " ++ fsi)
+surfAngle   = uc' "beta_i" (cn $ "angle of the surface of the mass relative to the horizontal " ++ fsi)
   fixme
   (sub (Greek Beta_L) lI) degree
 
-omega_i     = uc' "omega_i" (cn $ "angle of imposed surface load acting into the surface relative to the vertical " ++ fsi)
+impLoadAngle = uc' "omega_i" (cn $ "angle of imposed surface load acting into the surface relative to the vertical " ++ fsi)
   fixme
   (sub (Greek Omega_L) lI) degree
 
@@ -186,7 +186,7 @@ surfLngth   = uc' "l_s,i" (cn $ "length of an interslice surface, from slip base
   fixme
   (sub (Greek Ell) (Atomic "s,i")) metre
 
-hi_2        = uc' "h_i" (cn $ "midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)")
+midpntHght  = uc' "h_i" (cn $ "midpoint height; distance from the slip base to the slope surface in a vertical line from the midpoint of the slice (for slice i)")
   fixme
   (sub lH lI) metre
 
@@ -206,35 +206,35 @@ genDisplace = uc' "genDisplace" (cn $ "generic displacement of a body")
 
 --k           = SM.stffness
 
-k_sti       = uc' "K_st,i" (cn $ "shear stiffness of an interslice surface, without length adjustment " ++ fisi)
+shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness of an interslice surface, without length adjustment " ++ fisi)
   fixme
   (sub cK (Atomic "st,i")) pascal
 
-k_bti       = uc' "K_bt,i" (cn $ "shear stiffness of a slice base surface, without length adjustment " ++ fsi)
+shrStiffBase  = uc' "K_bt,i" (cn $ "shear stiffness of a slice base surface, without length adjustment " ++ fsi)
   fixme
   (sub cK (Atomic "bt,i")) pascal
 
-k_sni       = uc' "K_sn,i" (cn $ "normal stiffness of an interslice surface, without length adjustment " ++ fisi)
+nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness of an interslice surface, without length adjustment " ++ fisi)
   fixme
   (sub cK (Atomic "sn,i")) pascal
 
-k_bni       = uc' "K_bn,i" (cn $ "normal stiffness of a slice base surface, without length adjustment " ++ fsi)
+nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness of a slice base surface, without length adjustment " ++ fsi)
   fixme
   (sub cK (Atomic "bn,i")) pascal
 
-k_tr        = uc' "K_tr" (cn $ "residual shear stiffness")
+shrStiffRes  = uc' "K_tr" (cn $ "residual shear stiffness")
   fixme
   (sub cK (Atomic "tr")) pascal
 
-k_no        = uc' "K_no" (cn $ "residual normal stiffness")
+nrmStiffRes  = uc' "K_no" (cn $ "residual normal stiffness")
   fixme
   (sub cK (Atomic "no")) pascal
 
-du_i        = uc' "du_i" (cn $ "shear displacement of a slice " ++ fsi)
+shrDispl = uc' "du_i" (cn $ "shear displacement of a slice " ++ fsi)
   fixme
   (sub (Concat [Greek Delta_L, Atomic "u"]) lI) metre
 
-dv_i        = uc' "dv_i" (cn $ "normal displacement of a slice " ++ fsi)
+nrmDispl = uc' "dv_i" (cn $ "normal displacement of a slice " ++ fsi)
   fixme
   (sub (Concat [Greek Delta_L, Atomic "v"]) lI) metre
 
@@ -246,23 +246,23 @@ dy_i        = uc' "dy_i" (cn $ "displacement of a slice in the y-ordinate direct
   fixme
   (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre
 
-porePressure = ucs "mu" (cn "pore pressure from water within the soil") fixme
-  (Greek Mu_L) pascal Real
+porePressure = uc' "mu" (cn "pore pressure from water within the soil") fixme
+  (Greek Mu_L) pascal
 
 
 -- Unitless Symbols --
 
 sspUnitless :: [ConVar]
-sspUnitless = [SM.poissnsR, fs, kc, normToShear, scalFunc, n, minFunction, fsloc]
+sspUnitless = [SM.poissnsR, fs, earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc]
 
-fs, kc, normToShear, scalFunc, n, minFunction, fsloc :: ConVar
+fs, earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
 
 --poisson     = SM.poissnsR
 
 fs          = cvR (dcc "FS" (nounPhraseSP $ "global factor of safety describing the " ++
   "stability of a surface in a slope") fixme) (Atomic "FS")
 
-kc          = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor; proportionality " ++
+earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor; proportionality " ++
   "factor of force that weight pushes outwards; caused by seismic earth movements")
   fixme) (sub cK lC)
 
@@ -273,7 +273,7 @@ scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function for magnitude of 
   "forces as a function of the x coordinate (at interslice index i); can be constant or a half-sine")
   fixme) (sub lF lI)
 
-n           = cvRs (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
+numbSlices  = cvRs (dcc "n" (nounPhraseSP "number of slices the slip mass has been divided into")
   fixme) lN Natural
 
 minFunction = cvR (dcc "Upsilon" (nounPhraseSP "generic minimization function or algorithm")

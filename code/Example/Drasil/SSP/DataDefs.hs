@@ -55,7 +55,7 @@ intersliceWtrFEqn = (Int 0)
 --DD5
 
 angles :: QDefinition
-angles = fromEqn' (baseAngle ^. id) (baseAngle ^. term) (baseAngle ^. symbol) anglesEqn --, beta_i?
+angles = fromEqn' (baseAngle ^. id) (baseAngle ^. term) (baseAngle ^. symbol) anglesEqn --, surfAngle?
 
 anglesEqn :: Expr
 anglesEqn = (Int 0)
@@ -71,7 +71,7 @@ lengthsEqn = (Int 0)
 --DD7
 
 seismicLoadF :: QDefinition
-seismicLoadF = fromEqn' (kc ^. id) (kc ^. term) (kc ^. symbol) ssmcLFEqn --correct chunk referenced for definition?
+seismicLoadF = fromEqn' (earthqkLoadFctr ^. id) (earthqkLoadFctr ^. term) (earthqkLoadFctr ^. symbol) ssmcLFEqn --correct chunk referenced for definition?
 
 ssmcLFEqn :: Expr
 ssmcLFEqn = (Int 0)
@@ -79,7 +79,7 @@ ssmcLFEqn = (Int 0)
 --DD8
 
 surfLoads :: QDefinition
-surfLoads = fromEqn' (qi ^. id) (qi ^. term) (qi ^. symbol) surfLEqn --, slcWght?
+surfLoads = fromEqn' (surfLoad ^. id) (surfLoad ^. term) (surfLoad ^. symbol) surfLEqn --, slcWght?
 
 surfLEqn :: Expr
 surfLEqn = (Int 0)
@@ -95,7 +95,7 @@ intrsliceFEqn = (Int 0)
 --DD10
 
 resShearWO :: QDefinition
-resShearWO = fromEqn' (ri ^. id) (ri ^. term) (ri ^. symbol) resShearWOEqn
+resShearWO = fromEqn' (shearRNoIntsl ^. id) (shearRNoIntsl ^. term) (shearRNoIntsl ^. symbol) resShearWOEqn
 
 resShearWOEqn :: Expr
 resShearWOEqn = (Int 0)
@@ -103,7 +103,7 @@ resShearWOEqn = (Int 0)
 --DD11
 
 mobShearWO :: QDefinition
-mobShearWO = fromEqn' (ti ^. id) (ti ^. term) (ti ^. symbol) mobShearWOEqn
+mobShearWO = fromEqn' (shearFNoIntsl ^. id) (shearFNoIntsl ^. term) (shearFNoIntsl ^. symbol) mobShearWOEqn
 
 mobShearWOEqn :: Expr
 mobShearWOEqn = (Int 0)
@@ -111,7 +111,7 @@ mobShearWOEqn = (Int 0)
 --DD12
 
 displcmntRxnF :: QDefinition
-displcmntRxnF = fromEqn' (k_sti ^. id) (k_sti ^. term) (k_sti ^. symbol) displcmntRxnFEqn --, k_bti (correct chunk used?)
+displcmntRxnF = fromEqn' (shrStiffIntsl ^. id) (shrStiffIntsl ^. term) (shrStiffIntsl ^. symbol) displcmntRxnFEqn --, shrStiffBase (correct chunk used?)
 
 displcmntRxnFEqn :: Expr
 displcmntRxnFEqn = (Int 0)
@@ -127,7 +127,7 @@ netFDsplcmntEqbmEqn = (Int 0)
 --DD14
 
 soilStiffness :: QDefinition
-soilStiffness = fromEqn' (ti ^. id) (ti ^. term) (ti ^. symbol) --FIXME: No equation section? Instead, there are "Input" and "Output" sections
+soilStiffness = fromEqn' (shearFNoIntsl ^. id) (shearFNoIntsl ^. term) (shearFNoIntsl ^. symbol) --FIXME: No equation section? Instead, there are "Input" and "Output" sections
   soilStiffnessEqn
 
 soilStiffnessEqn :: Expr

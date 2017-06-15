@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (itemRefToSent, 
+import Data.Drasil.Utils (itemRefToSent, getS,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP)
@@ -227,22 +227,18 @@ s6_1_1 = termDefnF (Just (S "All of the terms are extracted from" +:+
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s10))) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $
-  [Flat $ ((at_start aspectR) :+: sParenDash (short aspectR)) :+: (aspectRatio ^. defn)] {-P $ aspectR ^. symbol))-} -- conceptually correct to call abbreviation as a symbol?
+  map (\a -> Flat $ ((at_start a) :+: sParenDash (short a)) :+: (a ^. defn))
+  [aspectRatio, glTyFac, loadShareFac, probBreak] {-(getS aspectR)-} -- conceptually correct to call abbreviation as a symbol?
   ++
-  map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn)) [glBreakage, lite]
-  ++ s6_1_1_bullets_glTySubSec ++
+  map (\b -> Flat $ ((at_start b) +:+ S "- ") :+: (b ^. defn)) 
+  [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
+  ++
+  s6_1_1_bullets_glTySubSec
+  ++
+  s6_1_1_bullets_loadSubSec
+  ++
   map (\c -> Flat c)
-  [(((at_start glTyFac) :+: sParenDash (short glassTypeFac)) :+: (glTyFac ^. defn)),
-  (((at_start lateral) +:+ S "- ") :+: (lateral ^. defn))]
-  ++ s6_1_1_bullets_loadSubSec ++
-  map (\c -> Flat c)
-  [(((at_start loadShareFac) :+: sParenDash (short loadShareFac)) :+: (loadShareFac ^. defn)),
-  (((at_start probBreak) :+: sParenDash (P $ prob_br ^. symbol)) :+: (probBreak ^. defn))]
-  ++
-  map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))
-  [specA, blastResisGla, eqTNTChar]
-  ++
-  [Flat $ ((at_start sD) :+: sParenDash (P $ standOffDist ^. symbol)) :+: (sD ^. defn)])
+  [((at_start standOffDist) :+: sParenDash (getS standOffDist)) :+: (standOffDist ^. defn)])
 
 -- Terminology and Definition Subsection Helpers --
 

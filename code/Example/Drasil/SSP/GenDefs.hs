@@ -204,7 +204,7 @@ disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [S "Vectors describing the", phrase displacement, S "of",
-  phrase slice +:+. "i", getS genDisplace `isThe`
+  phrase slice +:+. S "i", getS genDisplace `isThe`
   phrase displacement, S "in the unrotated coordinate system" `sC`
   S "where", (getS dx_i) `isThe` phrase displacement, S "of the", phrase slice,
   phrase perp, S "to the direction of gravity, and", (getS dy_i) `isThe`
@@ -214,4 +214,4 @@ disVec_desc = foldlSent [S "Vectors describing the", phrase displacement, S "of"
   S "where", (getS shrDispl) `isThe` phrase displacement, S "of the slice parallel to the slice base, and", 
   (getS dy_i) `isThe` S "displacement of the slice perpendicular to the slice base.", 
   (P $ sub (Greek Epsilon_V) lI), S "can also be found by rotating", getS genDisplace, S "clockwise by the base angle", (P $ Greek Alpha_L), 
-  S "through a rotation matrix as shown"] --FIXME:check if symbols are correct
+  S "through a rotation matrix as shown"] --FIXME: some symbols need to be vectors and indexed

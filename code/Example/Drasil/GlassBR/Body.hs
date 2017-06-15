@@ -227,9 +227,6 @@ s6_1_1 = termDefnF (Just (S "All of the terms are extracted from" +:+
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s10))) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $
-  map (\a -> Flat $ ((at_start a) :+: sParenDash (short a)) :+: (a ^. defn))
-  [aspectRatio] {-(getS aspectR)-} -- conceptually correct to call abbreviation as a symbol?
-  ++
   map (\b -> Flat $ ((at_start b) +:+ S "- ") :+: (b ^. defn)) 
   [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
   ++
@@ -238,8 +235,13 @@ s6_1_1_bullets = Enumeration $ (Number $
   s6_1_1_bullets_loadSubSec
   ++
   map (\a -> Flat $ ((at_start a) :+: sParenDash (getS a)) :+: (a ^. defn))
-  [standOffDist])
---glTyFac, loadShareFac, probBreak?
+  [standOffDist]
+  ++
+  map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn))
+  [(loadShareFac, lShareFac), (glTyFac, glassTypeFac), (aspectRatio, aspectR)]
+  ++ 
+  map (\c -> Flat c)
+  [(((at_start probBreak) :+: sParenDash (P $ prob_br ^. symbol)) :+: (probBreak ^. defn))])
 
 -- Terminology and Definition Subsection Helpers --
 
@@ -252,7 +254,7 @@ s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   (Bullet $ map (\c -> Flat c)
-  [(((at_start loadResis) :+: sParenDash (short loadResis)) :+: (loadResis ^. defn)),
+  [(((at_start loadResis) :+: sParenDash (short lResistance)) :+: (loadResis ^. defn)),
   (((at_start nonFL) +:+ sParenDash (getS nonFL)) :+: (nonFactoredL ^. defn))]
   ++ 
   map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))

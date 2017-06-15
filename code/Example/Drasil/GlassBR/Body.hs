@@ -425,52 +425,45 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_list = 
-  [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
-  [(((short requirement) :+: S "1"), at_start input_ +:+ S "the following" +:+
+s7_1_req1, {-s7_1_req2,-} s7_1_req3, s7_1_req4, s7_1_req5{-, s7_1_req6-} :: Sentence
+
+s7_1_list = [enumSimple 1 (getAcc requirement) s7_1_listOfReqs]
+
+s7_1_listOfReqs :: [Sentence]
+s7_1_listOfReqs = [s7_1_req1, {-s7_1_req2,-} s7_1_req3, s7_1_req4, s7_1_req5{-, s7_1_req6-}]
+
+s7_1_req1 = at_start input_ +:+ S "the following" +:+
     plural quantity `sC` S "which define the glass dimensions" `sC` 
-    (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase probability) +:+
-    S "of failure and" +: (plural characteristic `ofThe` (phrase blast)))]), 
-  (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
-  ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x)), 
---s7_1_table = Table [S "Symbol", S "Units", S "Description"] (mkTable
---  [(\ch -> P (ch ^. symbol)),  
---   (\ch -> maybeUnits $ ch ^. unit'), 
---   (\ch -> ch)
---   ]
---  [plate_len, plate_width, glass_type, pb_tol, sdx, sdy, sdz, nom_thick, tNT, 
---  char_weight])
---  (S "Input Parameters") False
-  (Enumeration $ Simple $
-  [(((short requirement) :+: S "2"), Nested (S "The" +:+ phrase system +:+
-  S "shall set the known" +:+ plural value +:+ S "as follows: ")
-   (Bullet $ map (\c -> Flat c) 
+    (glassTy ^. defn) `sC` S "tolerable" +:+ phrase probability +:+
+    S "of failure and" +: (plural characteristic `ofThe` phrase blast)
+
+{-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+ S "shall set the known"
+   +:+ plural value +:+ S "as follows: ") (Bullet $ map (\c -> Flat c)
     [(P $ sflawParamM ^. symbol) `sC` (P $ sflawParamK ^. symbol) `sC` 
     (P $ mod_elas ^. symbol) `sC` (P $ load_dur ^. symbol) +:+ 
     S "following" +:+ (short assumption) :+: S "4", 
-    (P $ loadDF ^. symbol) +:+ S "following" +:+ (short assumption) 
-    :+: S "8", 
-    (short lShareFac) +:+ S "following" +:+ (short assumption) 
-    :+: S "5"]))] ++
-  map (\(a, b) -> (a, Flat b))
-  [(((short requirement) :+: S "3"), S "The" +:+ phrase system +:+
-  S "shall check the entered" +:+ phrase input_ +:+ plural value +:+ 
-  S "to ensure that they do not exceed the"  +:+ plural datumConstraint +:+
-  S "mentioned in" +:+. (makeRef s6_2_5) +:+ S "If any of" +:+
-  S "the" +:+ phrase input_ +:+ (plural parameter) +:+
-  S "is out of bounds, an error message is displayed and the" +:+
-  (plural calculation) +:+. S "stop"), (((short requirement)
-  :+: S "4"), titleize output_ +:+ S "the" +:+ phrase input_ +:+
-  plural quantity +:+ S "from" +:+ (short requirement) :+: S "1 and the known"
-  +:+ plural quantity +:+ S "from" +:+ (short requirement) :+: S "2."), 
-  (((short requirement) :+: S "5"), S "If" +:+ (P $ is_safe1 ^. symbol)
-  +:+ S "and" +:+ (P $ is_safe2 ^. symbol) +:+ S "(from" +:+ 
-  (makeRef (gbSymbMapT t1SafetyReq)) +:+ S "and" +:+ 
-  (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
-  phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
-  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
-  S "the message" +:+ Quote (notSafe ^. defn))] ++ 
-  [(((short requirement) :+: S "6"), Nested (titleize output_ +:+
+    (P $ loadDF ^. symbol) +:+ S "following" +:+ acroA "8", 
+    (short lShareFac) +:+ S "following" +:+ acroA "5"]))-}
+
+s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
+  phrase input_, plural value, S "to ensure that they do not exceed the",
+  plural datumConstraint, S "mentioned in" +:+. (makeRef s6_2_5),
+  S "If any of the", phrase input_, plural parameter,
+  S "is out of bounds, an error message is displayed and the",
+  plural calculation, S "stop"]
+
+s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
+  plural quantity, S "from", acroR "1", S "and the known", plural quantity,
+  S "from", acroR "2"]
+
+s7_1_req5 = foldlSent [S "If", (P $ is_safe1 ^. symbol), S "and",
+  (P $ is_safe2 ^. symbol), S "(from", (makeRef (gbSymbMapT t1SafetyReq)),
+  S "and", (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
+  phrase output_, S "the message", Quote (safeMessage ^. defn),
+  S "If the", phrase condition, S "is false, then", phrase output_,
+  S "the message", Quote (notSafe ^. defn)]
+{-
+s7_1_req6 = Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (P $ prob_br ^. symbol) +:+ 
@@ -494,7 +487,7 @@ s7_1_list =
     [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-P $ aspectR ^. symbol-})  
     --S " = a/b)"
-    ]))])]
+    ]) -}
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 

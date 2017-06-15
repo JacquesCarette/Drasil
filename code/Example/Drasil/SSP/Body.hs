@@ -224,8 +224,9 @@ s4_1_2_p1 = foldlSP [at_start analysis, S "of the", phrase slope,
 s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
-    S "therefore use the" +:+ plural itslPrpty +:+ S "from 1" +:+
-    P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "numbSlices-1"),
+    S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+
+    S "1" +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
+    (E $ (C numbSlices) :- Int 1)),
   (at_start slice +:+ plural property +:+. S "convention is noted by i")
   ]
 

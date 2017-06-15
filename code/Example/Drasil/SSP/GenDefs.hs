@@ -21,7 +21,7 @@ import qualified Drasil.SRS as SRS
 
 sspGenDefs :: [RelationConcept]
 sspGenDefs = [normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForce, hooksLaw2d, displVect]
+  normShrR, momentEql, netForce, hookesLaw2d, displVect]
 
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"
@@ -131,7 +131,16 @@ momEql_rel :: Relation
 momEql_rel = (Int 0) := (Int 0) --FIXME: add the long equation
 
 momEql_desc :: Sentence
-momEql_desc = fixmeS
+momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
+  S "in the", phrase slope, S "the moment equilibrium to satisfy", acroT "2",
+  S "in the direction", phrase perp,
+  S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
+  S "Moment equilibrium is derived from the free body diagram of" +:+.
+  makeRef (SRS.physSyst SRS.missingP []), S "Index i refers to",
+  plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
+  plural intrslce, S "following convention in" +:+.
+  makeRef (SRS.physSyst SRS.missingP []), at_start variable, plural definition,
+  S "can be found in", acroDD "1", S "to" +:+. acroDD "9""]
 
 --
 netForce :: RelationConcept
@@ -162,14 +171,14 @@ fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   --FIXME:Finish pulling out symbols
 
 --
-hooksLaw2d :: RelationConcept
-hooksLaw2d = makeRC "hooksLaw2d" (nounPhraseSP "Hook's law 2D") hook2d_desc hook2d_rel
+hookesLaw2d :: RelationConcept
+hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D") hooke2d_desc hooke2d_rel
 
-hook2d_rel :: Relation
-hook2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
+hooke2d_rel :: Relation
+hooke2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
-hook2d_desc :: Sentence
-hook2d_desc = fixmeS
+hooke2d_desc :: Sentence
+hooke2d_desc = S "A 2D component implementation of Hooke’s law as seen in T5.  ni is the displacement of the element normal to the surface and  ti is the displacement of the element parallel to the surface. pn,i, is the net pressure acting normal to the surface, and pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it’s length. The sti↵ness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in DD14. The pressure forces would be the re- sult of applied loads on the mass, the product of the sti↵ness elements with the displacement would be the mass’s reactive force that cre- ates equilibrium with the applied forces after reaching the equilibrium displacement."
 
 --
 displVect :: RelationConcept

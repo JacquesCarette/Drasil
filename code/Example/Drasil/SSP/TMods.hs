@@ -10,7 +10,7 @@ import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils
 import Data.Drasil.Quantities.Physics
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (normal)
+import Data.Drasil.Concepts.Math (normal, surface)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Concepts.Physics (linear, stress, friction)
 
@@ -19,7 +19,7 @@ import Data.Drasil.Concepts.Physics (linear, stress, friction)
 --------------------------
 
 sspTMods :: [RelationConcept]
-sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hooksLaw]
+sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hookesLaw]
 
 -- 
 
@@ -64,7 +64,7 @@ mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a" +:+ phrase soil +:+ S "under" +:+ phrase stress +:+
   S "it will exert a shear resistive strength based on the",
   S "Coulomb sliding law. The resistive shear is the maximum amount of shear a",
-  S "surface can experience while remaining rigid, analogous to a maximum" +:+.
+  phrase surface, S "can experience while remaining rigid, analogous to a maximum" +:+.
   phrase normForce, S "In this", phrase model, S "the", phrase shearForce,
   getS shrResI, S "is proportional to the product of the",
   phrase normal, phrase stress, S "on the plane", getS normStress,
@@ -85,15 +85,19 @@ effS_rel :: Relation
 effS_rel = (C normStress) := (C normStress) :- (C porePressure)
 
 effS_desc :: Sentence -- FIXME: these are not normStress but they are sigma. And some of these are mu. Also fix equaiton
-effS_desc = foldlSent [getS normStress, S "is the total stress a soil mass needs to maintain itself as a rigid collection",
-  S "of particles. The source of the stress can be provided by the soil skeleton", getS normStress `sC`
-  S "or by the pore pressure from water within the soil" +:+. getS porePressure, S "The stress from the soil",
-  S "skeleton is known as the effective stress", getS normStress, S "and is the difference between the",
-  S "total stress", getS normStress, S "and the pore stress", getS porePressure]
+effS_desc = foldlSent [getS normStress, S "is the total", phrase stress,
+  S "a soil mass needs to maintain itself as a rigid collection" +:+.
+  S "of particles", phrase source `ofThe'` phrase stress,
+  S "can be provided by the soil skeleton", getS normStress `sC`
+  S "or by the pore pressure from water within the soil" +:+. getS porePressure,
+  S "The", phrase stress, S "from the soil skeleton is known as the effective",
+  phrase stress, getS normStress, S "and is the difference between the",
+  S "total", phrase stress, getS normStress, S "and the pore", phrase stress,
+  getS porePressure]
 
 --
-hooksLaw :: RelationConcept
-hooksLaw = makeRC "hooksLaw" (nounPhraseSP "Hook's law") hksLw_desc hksLw_rel
+hookesLaw :: RelationConcept
+hookesLaw = makeRC "hookesLaw" (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel
 
 hksLw_rel :: Relation
 hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
@@ -101,6 +105,6 @@ hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
 hksLw_desc :: Sentence
 hksLw_desc = foldlSent [S "Description Stiffness", getS stffness, S "is the",
   S "resistance a body others to deformation by displacement", getS genDisplace,
-  S "when subject to a force", getS genForce `sC` S "along the same direction.",
+  S "when subject to a", phrase force, getS genForce `sC` S "along the same direction.",
   S "A body with high stiffness will experience little deformation when",
-  S "subject to a force"]
+  S "subject to a", prase force]

@@ -43,12 +43,14 @@ s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, s4_1_intro, s4_1_1_bullets,
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
+  [TUnits, tsymb [TSPurpose, SymbConvention 
+  [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
   IntroSec (IntroProg s2s s2e 
   [IPurpose s2_1,
   IScope s2_2s s2_2e,
   IChar (phrase heat +:+ S "transfer" +:+ phrase theory)
-    (S "differential equations, as typically covered in first and second year Calculus courses") EmptyS,
+    (S "differential equations, as typically covered in" +:+ 
+    S "first and second year Calculus courses") EmptyS,
   IOrgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS]) :
   map Verbatim [s3, s4, s5, s6, s7]  
         
@@ -189,10 +191,10 @@ s4_1_2_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
-s4_1_3_intro = Paragraph $ S "Given the" +:+ phrase temp +:+ S "of the" +:+
-  phrase coil `sC` S "initial" +:+ phrase temp +:+ S "of the" +:+
-  phrase water `sC` S "and material" +:+ plural property `sC`
-  S "the" +:+ phrase goalStmt +:+ S "is"
+s4_1_3_intro = Paragraph $ foldl (+:+) (EmptyS) [S "Given the", phrase temp, 
+  S "of the", phrase coil `sC` S "initial", phrase temp, S "of the",
+  phrase water `sC` S "and material", plural property `sC`
+  S "the", phrase goalStmt, S "is"]
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   (acroGS "1", S "predict the" +:+ phrase temp_water +:+ S "over time")]

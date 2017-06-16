@@ -12,7 +12,8 @@ coil        = npnc "coil"           (cn' "coil")
 tank        = npnc "tank"           (cn' "tank")
 water       = npnc "water"          (cn "water")
 
-ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase, just a hack to get RefSec to work
+ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase,
+                                                         --just a hack to get RefSec to work
 
 srs_swhs :: ConceptChunk -- Used to make the title of the paper
   

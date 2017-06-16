@@ -115,24 +115,19 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 -- SECTION 2 --
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
-          phrase mass `sC` S "composed of", phrase soil,
-          S "and rock, is subject to the influence of gravity on the" +:+.
-          phrase mass, S "For an unstable", phrase slope +:+.
-          S "this can cause instability in the form of soil/rock movement",
-          S "The effects of soil/rock movement can range from inconvenient",
-          S "to seriously hazardous, resulting in signifcant life and",
-          S "economic loses." +:+ at_start slope +:+ S "stability is of",
-          phrase interest, S "both when analyzing natural", plural slope `sC`
-          S "and when designing an excavated" +:+. phrase slope,
-          at_start ssa, S "is",
-          (S "assessment" `ofThe` S "safety of a") +:+ phrase slope `sC`
-          S "identifying the", phrase surface, S "most likely to",
-          S "experience slip and an index of it's relative stability",
-          S "known as the", phrase fs_rc]
-kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+
-          S "The developed" +:+ phrase program +:+
-          S "will be referred to as the" +:+ introduceAbb ssa +:+
-          phrase program
+  phrase mass `sC` S "composed of", phrase soil, S "and rock, is subject", 
+  S "to the influence of gravity on the" +:+. phrase mass, S "For an unstable",
+  phrase slope +:+. S "this can cause instability in the form of soil/rock movement",
+  S "The effects of soil/rock movement can range from inconvenient to seriously",
+  S "hazardous, resulting in signifcant life and economic loses.", at_start slope,
+  S "stability is of", phrase interest, S "both when analyzing natural", plural slope `sC`
+  S "and when designing an excavated" +:+. phrase slope, at_start ssa, S "is",
+  S "assessment" `ofThe` S "safety of a", phrase slope `sC` S "identifying the",
+  phrase surface, S "most likely to", S "experience slip and an index of", 
+  S "it's relative stability known as the", phrase fs_rc]
+kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+ S "The developed"
+  +:+ phrase program +:+ S "will be referred to as the" +:+ introduceAbb ssa +:+
+  phrase program
 
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in introductionF
@@ -140,7 +135,7 @@ prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = foldlSent [S "The", short ssa, phrase program,
   S "determines the", phrase crtSlpSrf `sC` S "and it's respective",
   phrase fs_rc, S "as a", phrase method_,
-  S "of assessing the stability of a" +:+ phrase slope +:+. phrase design,
+  S "of assessing the stability of a", phrase slope +:+. phrase design,
   S "The", phrase program,
   S "is intended to be used as an educational tool for",
   S "introducing", phrase slope, S "stability issues, and will facilitate the",
@@ -217,7 +212,7 @@ s4_1_2_p1 = foldlSP [at_start analysis, S "of the", phrase slope,
   phrase slope, S "as a series of", phrase slice +:+. plural element,
   S "Some", plural property, S "are", plural itslPrpty `sC`
   S "and some are", phrase slice, S "or", phrase slice,
-  S "base" +:+. plural property +:+ S "The index convention for referencing which",
+  S "base" +:+. plural property, S "The index convention for referencing which",
   phrase intrslce, S "or", phrase slice, S "is being used is shown in",
   makeRef fig_indexconv]
 
@@ -275,41 +270,41 @@ s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
 
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ phrase slpSrf +:+ S "is concave with respect to" +:+
-           S "the" +:+. phrase slopeSrf +:+ ((getS coords +:+
-           S "coordinates") `ofThe'` S "failure") +:+ phrase surface
-          +:+. S "follow a monotonic function"),
+    S "the" +:+. phrase slopeSrf +:+ ((getS coords +:+
+    S "coordinates") `ofThe'` S "failure") +:+ phrase surface +:+.
+    S "follow a monotonic function"),
   (S "geometry" `ofThe'` phrase slope `sC` S "and" +:+
-          (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
-           S "are given as inputs"),
+    (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
+    S "are given as inputs"),
   (S "different layers" `ofThe'` phrase soil +:+ S "are homogeneous" `sC`
-           S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
-           S "and independent of dry or saturated" +:+ plural condition `sC`
-           S "with the exception of" +:+ phrase unit_ +:+. S "weight"),
+    S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
+    S "and independent of dry or saturated" +:+ plural condition `sC`
+    S "with the exception of" +:+ phrase unit_ +:+. S "weight"),
   (at_start' soilLyr +:+ S "are treated as if they have" +:+.
-           S "isotropic properties"),
+    S "isotropic properties"),
   (at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S "have a" +:+
-           S "linear relationship, proportional to a constant" +:+
-           sParen (getS normToShear) +:+ S "and an" +:+
-           phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
-           S "depending on x position"),
+    S "linear relationship, proportional to a constant" +:+
+    sParen (getS normToShear) +:+ S "and an" +:+
+    phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
+    S "depending on x position"),
   (at_start slice +:+ S "to base normal and" +:+ plural shearForce +:+ S "have" +:+
-           S "a linear relationship, dependent on the" +:+
-           phrase fs_rc +:+ sParen (getS fs) `sC`
-           S "and the Coulomb sliding law."),
-  (S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+
-           phrase intrslce +:+
-           S "relationships is linear with a constant" +:+. phrase slope),
+    S "a linear relationship, dependent on the" +:+
+    phrase fs_rc +:+ sParen (getS fs) `sC`
+    S "and the Coulomb sliding law."),
+  (S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+ --FIXME: add hypens to drasil language
+    phrase intrslce +:+ S "relationships is linear with a constant" +:+.
+    phrase slope),
   (S "The" +:+ phrase slope +:+ S "and" +:+ phrase slpSrf +:+.
-           S "extends far into and out of the geometry (z coordinate)" +:+
-           S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
-           S "making 2D analysis appropriate."),
+    S "extends far into and out of the geometry (z coordinate)" +:+
+    S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
+    S "making 2D analysis appropriate."),
   (S "The effective normal" +:+ phrase stress +:+ S "is large enough" +:+
-           S "that the resistive shear to effective normal" +:+
-           phrase stress +:+ S "relationship can be approximated as a" +:+.
-           S "linear relationship"),
+    S "that the resistive shear to effective normal" +:+
+    phrase stress +:+ S "relationship can be approximated as a" +:+.
+    S "linear relationship"),
   (S "The" +:+ phrase surface +:+ S "and base of a" +:+
-            phrase slice +:+ S "between" +:+ phrase intrslce +:+.
-            S "nodes are approximated as straight lines")
+    phrase slice +:+ S "between" +:+ phrase intrslce +:+.
+    S "nodes are approximated as straight lines")
   ]
 
 -- SECTION 4.2.2 --
@@ -329,29 +324,28 @@ s4_2_4_dataDefs = map sspSymMapD sspDataDefs
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
 s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
-  phrase method_, S "is a vertical" +:+ phrase slice `sC` S "limit equilibrium",
-  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by" +:+
+  phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
+  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
   S "breaking the", S "assumed failure", phrase surface, S "into a series of vertical",
-  plural slice +:+ S "of" +:+. phrase mass +:+ S "Static equilibrium" +:+
-  S "analysis using two" +:+ phrase force, S "equilibrium, and one moment" +:+
-  phrase equation +:+ S "as in" +:+ short thModel :+: S "2. The", phrase problem,
-  S "is statically indeterminate with only these 3" +:+ plural equation +:+ S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references to other things in the body
-  S "constitutive" +:+ phrase equation +:+ S "(the Mohr Coulomb shear strength of" +:+ short thModel :+: S "3)",
-  S "so the" +:+ phrase assumption +:+ S "of" +:+ short genDefn :+: S "5 is used. Solving for" +:+ phrase force,
-  S "equilibrium allows", plural definition,
-  S "of all" +:+ plural force +:+ S "in terms of the" +:+ plural physicalProperty,
-  S "of" +:+ acroDD "1" +:+ S "to" +:+ acroDD "9" `sC` S "as done in" +:+
-  acroDD "10" `sC` acroDD "11"]
+  plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
+  S "analysis using two", phrase force, S "equilibrium, and one moment",
+  phrase equation, S "as in" +:+. acroT "2", S "The", phrase problem,
+  S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references to other things in the body
+  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ acroT "3",
+  S "so the", phrase assumption, S "of", acroGD "5", S "is used. Solving for",
+  phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
+  S "in terms of the", plural physicalProperty, S "of", acroDD "1", S "to",
+  acroDD "9" `sC` S "as done in", acroDD "10" `sC` acroDD "11"]
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
-  S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio" +:+ getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
+  S "E the interslice normal/shear", phrase force, S "magnitude ratio", getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
-  at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+
-  plural value, S "in" +:+ acroDD "1" +:+ S "to" +:+ acroDD "9" `sC` S "the" +:+ plural value +:+ S "of", getS shearFNoIntsl `sC`
-  S "and", getS shearFNoIntsl, S "in" +:+ acroDD "10" +:+ S "and" +:+ acroDD "11" `sC`
+  at_start' equation, S "for the unknowns are written in terms of only the",
+  plural value, S "in", acroDD "1", S "to", acroDD "9" `sC` S "the", plural value, S "of", getS shearFNoIntsl `sC`
+  S "and", getS shearFNoIntsl, S "in", acroDD "10", S "and", acroDD "11" `sC`
   S "and each", --FIXME: DD10, DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear" `sC`
-  S "and therefore explicit" +:+ plural equation +:+ S "cannot be derived and an",
+  S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
 
 s4_2_5_IMods = map sspSymMapT sspIMods
@@ -442,39 +436,39 @@ s5_1 = SRS.funcReq
 
 s5_1_list = enumSimple 1 (short requirement) [
   (S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+. plural datum +:+
-        S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
-        makeRef s5_1_table),
+    S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
+    makeRef s5_1_table),
   (S "Generate potential" +:+ phrase crtSlpSrf :+:
-        S "'s for the" +:+ phrase input_ +:+. phrase slope),
+    S "'s for the" +:+ phrase input_ +:+. phrase slope),
   (S "Test the" +:+ plural slpSrf +:+ S "to determine" +:+
-        S "if they are physically realizable based" +:+.
-        S "on a set of pass or fail criteria"),
+    S "if they are physically realizable based" +:+.
+    S "on a set of pass or fail criteria"),
   (S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
-        S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
+    S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
   (S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)),
   (S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
-        phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
-        S "with a smaller" +:+ phrase fs_rc +:+.
-        S "has a larger weighting"),
+    phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
+    S "with a smaller" +:+ phrase fs_rc +:+.
+    S "has a larger weighting"),
   (S "Generate new potential" +:+ plural crtSlpSrf +:+
-        S "based on previously analysed" +:+ plural slpSrf +:+
-        S "with low" +:+. plural fs_rc),
-  (S "Repeat" +:+ plural requirement +:+ short requirement :+: S "3 to" +:+
-        short requirement :+: S "7 until the" +:+
-        S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
-        S "the same over a predetermined number of" +:+
-        S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-        S "that generates the minimum" +:+ phrase fs_rc +:+
-        S "as the" +:+. phrase crtSlpSrf),
+    S "based on previously analysed" +:+ plural slpSrf +:+
+    S "with low" +:+. plural fs_rc),
+  (S "Repeat" +:+ plural requirement +:+ acroR "3" +:+ "to" +:+
+    acroR "7" +:+ S "until the" +:+
+    S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
+    S "the same over a predetermined number of" +:+
+    S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
+    S "that generates the minimum" +:+ phrase fs_rc +:+
+    S "as the" +:+. phrase crtSlpSrf),
   (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+
-        S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
+    S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
   (S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+
-        S "using the" +:+ titleize morPrice +:+. phrase method_),
+    S "using the" +:+ titleize morPrice +:+. phrase method_),
   (S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
-        phrase slice +:+ phrase element +:+.
-        S "displacements graphically" +:+ S "Give" +:+
-        (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
-        S "by the" +:+ titleize morPrice +:+. phrase method_)
+    phrase slice +:+ phrase element +:+.
+    S "displacements graphically" +:+ S "Give" +:+
+    (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
+    S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
 
 s5_1_table = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this has to be seperate since poisson is a different type

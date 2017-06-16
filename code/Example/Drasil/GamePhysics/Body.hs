@@ -138,7 +138,7 @@ para1_s2_1_intro = foldlSent
 s2_2_intro_p1, s2_2_intro_p2 :: Sentence
 
 s2_2_intro_p1 = foldle (+:+) (+:+) EmptyS
-  [S "includes the", (phrase physicalSim),  S "of", (getAcc twoD), 
+  [S "the", (phrase physicalSim),  S "of", (getAcc twoD), 
   (plural CP.rigidBody), S "acted on by forces"] 
   
 s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these", 
@@ -501,16 +501,7 @@ s4_2_6_t2_list = map (listConstExpr) [posConstraint, veloConstraint,
 ------------------------------
 
 s5 :: Section
-s5_intro :: Contents
-
-s5 = SRS.require [s5_intro] [s5_1, s5_2]
-
-s5_intro = foldlSP
-  [S "This", (phrase section_), S "provides the", 
-  (plural functionalRequirement) `sC` S "the business",
-  S "tasks that the", (phrase software), S "is expected to complete, and the",
-  (plural nonfunctionalRequirement) `sC` S "the qualities that the", 
-  (phrase software), S "is expected to exhibit"]
+s5 = reqF [s5_1, s5_2]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --

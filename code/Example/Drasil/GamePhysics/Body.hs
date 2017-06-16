@@ -385,16 +385,13 @@ s4_2_3_GDefs = map (Definition . General) gDefs)
 ------------------------------
 
 s4_2_4 :: Section
-s4_2_4_intro :: Contents
+s4_2_4_intro :: Sentence
 s4_2_4_DDefs :: [Contents]
 
-s4_2_4 = SRS.dataDefn ([s4_2_4_intro] ++
-  (s4_2_4_DDefs)) []
+s4_2_4 = dataDefnF s4_2_4_intro s4_2_4_DDefs
 
-s4_2_4_intro = foldlSP [S "This", (phrase section_), 
-  S "collects and defines all the", (plural datum), S "needed to build the" +:+. 
-  titleize' inModel, S "The", (phrase CPP.dimension), S "of each", 
-  (phrase quantity), S "is also given"]
+s4_2_4_intro = foldlSent [S "The", (phrase CPP.dimension), 
+  S "of each", (phrase quantity), S "is also given"]
 
 s4_2_4_DDefs = map cpSymMapD cpDDefs
 

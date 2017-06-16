@@ -195,7 +195,7 @@ s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
                  +:+ S "that the" +:+ phrase slope +:+ S "will experience"
 
 -- SECTION 4.1.1 --
-s4_1_1 = termDefnF Nothing [s4_1_1_list]
+s4_1_1 = termDefnF EmptyS [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
   ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+
@@ -453,7 +453,7 @@ s5_1_list = enumSimple 1 (short requirement) [
   (S "Generate new potential" +:+ plural crtSlpSrf +:+
     S "based on previously analysed" +:+ plural slpSrf +:+
     S "with low" +:+. plural fs_rc),
-  (S "Repeat" +:+ plural requirement +:+ acroR "3" +:+ "to" +:+
+  (S "Repeat" +:+ plural requirement +:+ acroR "3" +:+ S "to" +:+
     acroR "7" +:+ S "until the" +:+
     S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
     S "the same over a predetermined number of" +:+

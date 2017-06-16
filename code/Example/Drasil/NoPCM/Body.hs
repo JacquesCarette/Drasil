@@ -171,7 +171,7 @@ s4_1_intro = foldlSP [getAcc sWHS, S "is a computer",
   phrase program, S "developed to investigate",
   S "the heating of", phrase water, S "in a", phrase sWHT]
 
-s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
+s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
   (at_start x) :+: S ":" +:+ (x ^. defn)) 

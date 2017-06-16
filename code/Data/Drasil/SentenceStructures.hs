@@ -1,10 +1,10 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent_, foldlSent, foldlsC, foldlList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList
   , sAnd, andIts, andThe, sAre, sIn
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
-  , showingCxnBw, refineChain, foldlSP
+  , showingCxnBw, refineChain, foldlSP, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   ) where
 
@@ -21,9 +21,16 @@ foldlSent = foldle (+:+) (+:+.) EmptyS
 foldlSent_ :: [Sentence] -> Sentence
 foldlSent_ = foldle (+:+) (+:+) EmptyS
 
+-- | foldlSent but ends with colon
+foldlSentCol :: [Sentence] -> Sentence
+foldlSentCol = foldle (+:+) (+:) EmptyS
+
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents
 foldlSP = (Paragraph . foldlSent)
+
+foldlSPCol :: [Sentence] -> Contents
+foldlSPCol = (Paragraph . foldlSentCol)
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence

@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils (enumSimple, foldle, weave)
+import Data.Drasil.Utils (enumSimple, weave, getS)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -42,7 +42,8 @@ import Drasil.TraceabilityMandGs
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent,foldlSent_)
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
+  foldlSP, foldlSPCol)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -146,8 +147,8 @@ s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
   S "is intended to be used as a", phrase reference,
   S "to provide ad hoc access to all", phrase information,
   S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the contents say what", phrase problem,
-  S "is being solved, but do not say how to solve it"]
+  short srs, S "is abstract because the", plural content, S "say what",
+  phrase problem, S "is being solved, but do not say how to solve it"]
 
 
 -- Besides program name, these two paragraphs are general, mostly repeated
@@ -161,16 +162,15 @@ s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
 ---------------------------------
 
 s2_2_contents, s2_2_end :: Sentence
-s2_2_contents = phrase CT.thermal_analysis +:+ S "of a single" +:+
-  phrase tank_pcm --FIXME: Caps issue
+s2_2_contents = foldlSent_ [phrase CT.thermal_analysis, S "of a single",
+  phrase tank_pcm] --FIXME: Caps issue
 
-s2_2_end = S "predict the" +:+
-  phrase temp +:+ S "and" +:+ phrase CT.thermal_energy +:+
-  S "histories for the" +:+ phrase water +:+ S "and the" +:+.
-  short phsChgMtrl +:+ S "This entire" +:+ phrase document +:+
-  S "is written assuming that the substances inside the" +:+
-  phrase sWHT +:+ S "are" +:+ phrase water +:+ S "and" +:+
-  short phsChgMtrl
+s2_2_end = foldlSent_ [S "predict the",
+  phrase temp, S "and", phrase CT.thermal_energy,
+  S "histories for the", phrase water, S "and the" +:+.
+  short phsChgMtrl, S "This entire", phrase document,
+  S "is written assuming that the substances inside the",
+  phrase sWHT, S "are", phrase water, S "and", short phsChgMtrl]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -189,12 +189,12 @@ s2_2_end = S "predict the" +:+
 ----------------------------------------------
 
 s2_3_knowlegde, s2_3_understanding :: Sentence
-s2_3_knowlegde = phrase CT.heat +:+ S "transfer" +:+. phrase theory +:+
-  S "A third or fourth year Mechanical Engineering course on this topic" +:+
-  S "is recommended"
+s2_3_knowlegde = foldlSent_ [phrase CT.heat, S "transfer" +:+. phrase theory,
+  S "A third or fourth year Mechanical Engineering course on this topic",
+  S "is recommended"]
 
-s2_3_understanding = S "differential" +:+ plural equation `sC`
-  S "as typically covered in first and second year Calculus courses"
+s2_3_understanding = foldlSent_ [S "differential", plural equation `sC`
+  S "as typically covered in first and second year Calculus courses"]
 
 {-s2_3 = SRS.charOfIR [s2_3_contents] []
 
@@ -215,20 +215,19 @@ s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
 ------------------------------------
 
 s2_4_intro, s2_4_trail :: Sentence
-s2_4_intro = S "The" +:+ phrase organization +:+ S "of this" +:+
-  phrase document +:+ S "follows the template for an" +:+ short srs +:+
-  S "for" +:+ phrase sciCompS +:+ S "proposed by [citation] and" +:+.
-  sSqBr (S "citation")
+s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
+  phrase document, S "follows the template for an", short srs,
+  S "for", phrase sciCompS, S "proposed by [citation] and",
+  sSqBr (S "citation")]
 
-s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
-  makeRef (SRS.inModel SRS.missingP [])) +:+
-  S "to be solved are referred to as" +:+ acroIM "1" +:+ S "to" +:+.
-  acroIM "4" +:+ S "The" +:+
-  plural inModel +:+ S "provide the" +:+ phrase ode +:+
-  sParen (short ode :+: S "s") +:+ S "and algebraic" +:+
-  plural equation +:+ S "that" +:+
-  phrase model +:+ S "the" +:+. phrase swhs_pcm +:+
-  short progName +:+ S "solves these" +:+ short ode :+: S "s"
+s2_4_trail = foldlSent_ [S "The", plural inModel,
+  sParen (makeRef (SRS.inModel SRS.missingP [])),
+  S "to be solved are referred to as", acroIM "1",
+  S "to" +:+. acroIM "4", S "The", plural inModel,
+  S "provide the", phrase ode, sParen (short ode :+: S "s"),
+  S "and algebraic", plural equation, S "that",
+  phrase model, S "the" +:+. phrase swhs_pcm,
+  short progName, S "solves these", short ode :+: S "s"]
 -- This part is close to the function but not exactly,
 -- so keeping it here for reference
 
@@ -251,8 +250,6 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
 -- include the last sentence, so we might not need to know the number of IMs
 -- after all if we just leave that sentence out)
 
--- The swhs_pcm reference at the end of the first paragraph would be better if
--- singular, but concept is plural.
 -- IM1 to IM4 : reference later
 
 -- how to cite/reference?
@@ -267,8 +264,7 @@ s2_4_trail = S "The" +:+ plural inModel +:+ sParen (
 
 s3 :: Section
 s3 = genSysF [s3_1] s3_2_contents [] []
-
--- Completely general paragraph, same between examples. Easily abstracted out.
+-- First empty list is list of constraints
 
 --------------------------
 -- 3.1 : System Context --
@@ -279,42 +275,49 @@ s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
   s3_1_2_bullets] []
 
 s3_1_contents ::Contents
-s3_1_contents = Paragraph $ makeRef sys_context_fig +:+ S "shows the" +:+.
-  phrase sysCont +:+ S "A circle represents an external entity outside the" +:+
-  phrase software `sC` S "the" +:+ phrase user +:+ S "in this case. A" +:+
-  S "rectangle represents the" +:+ phrase softwareSys +:+ S "itself" +:+.
-  sParen (short progName) +:+ S "Arrows are used to show the" +:+
-  plural datum +:+ S "flow between the" +:+ phrase system +:+
-  S "and its" +:+. phrase environment
+s3_1_contents = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
+  phrase sysCont, S "A circle represents an external entity outside the",
+  phrase software `sC` S "the", phrase user, S "in this case. A",
+  S "rectangle represents the", phrase softwareSys, S "itself" +:+.
+  sParen (short progName), S "Arrows are used to show the",
+  plural datum, S "flow between the", phrase system,
+  S "and its", phrase environment]
 
 sys_context_fig :: Contents
-sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
-  titleize sysCont) "SystemContextFigure.png"
+sys_context_fig = Figure (foldlSent_
+  [makeRef sys_context_fig +: EmptyS, titleize sysCont])
+  "SystemContextFigure.png"
 
 s3_1_2_intro :: Contents
-s3_1_2_intro = Paragraph $ short progName +:+. S "is mostly self-contained" +:+
-  S "The only external interaction is through the" +:+ phrase user +:+
-  S "interface. The responsibilities of the" +:+ phrase user +:+
-  S "and the" +:+ phrase system +: S "are as follows"
+s3_1_2_intro = foldlSPCol [short progName +:+.
+  S "is mostly self-contained",
+  S "The only external interaction is through the", phrase user,
+  S "interface. The responsibilities of the", phrase user,
+  S "and the", phrase system, S "are as follows"]
 
 s3_1_2_bullets :: Contents
-s3_1_2_bullets = Enumeration (Bullet $
-  [Nested (titleize user +: S "Responsibilities")
+s3_1_2_bullets = Enumeration $ Bullet $
+  [
+  Nested (titleize user +: S "Responsibilities")
   (Bullet $ map (\c -> Flat c)
-  [S "Provide the" +:+ phrase input_ +:+ plural datum +:+ S "to the" +:+
-  phrase system `sC` S "ensuring no errors in the" +:+ plural datum +:+
-  S "entry",
-  S "Take care that consistent" +:+ plural unit_ +:+
-  S "are used for" +:+ phrase input_ +:+ plural variable
+  [
+  foldlSent_ [S "Provide the", phrase input_, plural datum, S "to the",
+  phrase system `sC` S "ensuring no errors in the", plural datum,
+  S "entry"],
+  foldlSent_ [S "Take care that consistent", plural unit_,
+  S "are used for", phrase input_, plural variable]
   ]),
+
   Nested (short progName +: S "Responsibilities")
   (Bullet $ map (\c -> Flat c)
-  [S "Detect" +:+ plural datum +:+ S "type mismatch, such as a string of" +:+
-  S "characters instead of a floating point number",
-  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical +:+ S "and" +:+ phrase software +:+ plural constraint,
-  S "Calculate the required" +:+ plural output_
-  ])])
+  [
+  foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",
+  S "characters instead of a floating point number"],
+  foldlSent_ [S "Determine if the", plural input_, S "satisfy the required",
+  phrase physical, S "and", phrase software, plural constraint],
+  foldlSent_ [S "Calculate the required", plural output_]
+  ])
+  ]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -323,9 +326,9 @@ s3_1_2_bullets = Enumeration (Bullet $
 ---s3_2 = SRS.userChar [s3_2_contents] []
 
 s3_2_contents :: Contents
-s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
-  short progName +:+ S "should have an understanding of undergraduate" +:+
-  S "Level 1 Calculus and" +:+. titleize physics
+s3_2_contents = foldlSP [S "The end", phrase user, S "of",
+  short progName, S "should have an understanding of undergraduate",
+  S "Level 1 Calculus and", titleize physics]
 
 -- Some of these course names are repeated between examples, could potentially
 -- be abstracted out.
@@ -333,11 +336,6 @@ s3_2_contents = Paragraph $ S "The end" +:+ phrase user +:+ S "of" +:+
 ------------------------------
 -- 3.3 : System Constraints --
 ------------------------------
-
---s3_3 = systCon Nothing []
-
--- This is the same for all of our examples... but there could potentially be
--- system constraints in other projects so it can't be abstracted out as is...
 
 ---------------------------------------------
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
@@ -349,9 +347,10 @@ s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 -- using plural solutionCharSpec is a hack in order to pluralize the middle
 -- word, based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
-s4_intro_end = plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  S "and finally the" +:+ plural inModel +:+ sParen (short ode :+:
-  S "s") +:+ S "that" +:+ phrase model +:+ S "the" +:+ phrase swhs_pcm
+s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
+  plural dataDefn `sC` S "and finally the", plural inModel,
+  sParen (short ode :+: S "s"), S "that", phrase model, S "the",
+  phrase swhs_pcm]
 
 -- Completely general except for solar water heating tank (object of analysis)
 -- and similar between all examples; can be abstracted out.
@@ -368,9 +367,9 @@ s4_1 = SRS.probDesc [s4_1_intro]
   [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro :: Contents
-s4_1_intro = Paragraph $ short progName +:+ S "is a computer" +:+
-  phrase program +:+ S "developed to investigate the effect of" +:+
-  S "employing" +:+ short phsChgMtrl +:+ S "within a" +:+. phrase sWHT
+s4_1_intro = foldlSP [short progName, S "is a computer",
+  phrase program, S "developed to investigate the effect of",
+  S "employing", short phsChgMtrl, S "within a", phrase sWHT]
 
 -- section is very different between all examples
 
@@ -379,18 +378,18 @@ s4_1_intro = Paragraph $ short progName +:+ S "is a computer" +:+
 -----------------------------------------
 
 s4_1_1 :: Section
-s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
+s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note:
 -- GlassBR has an additional sentence with a reference at the end.)
 
 s4_1_1_bullets :: Contents
-s4_1_1_bullets = Enumeration (Bullet $ map s411_bullet_map_f
+s4_1_1_bullets = Enumeration (Bullet $ map s4_1_1_bullet_map_f
   [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
   CT.thermal_conduction, transient])
 
-s411_bullet_map_f :: Concept c => c -> ItemType
-s411_bullet_map_f c = Flat $ at_start c :+: S ":" +:+. (c ^. defn)
+s4_1_1_bullet_map_f :: Concept c => c -> ItemType
+s4_1_1_bullet_map_f c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 
 -- Structure of this list is same in all examples, probably can be automated.
 
@@ -409,30 +408,28 @@ s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 -- this paragraph can not be abstracted out as is.
 
 s4_1_2_list :: Contents
-s4_1_2_list = enumSimple 1 (short physSyst) s4_1_2_physSystList
+s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ s4_1_2_physSystList
 
-s4_1_2_physSystList :: [Sentence]
-physSyst1, physSyst2, physSyst3 :: Sentence
+s4_1_2_physSystList :: [[Sentence]]
+physSyst1, physSyst2, physSyst3 :: [Sentence]
 s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
 
-physSyst1 = at_start tank +:+ S "containing" +:+. phrase water
+physSyst1 = [at_start tank, S "containing" +:+. phrase water]
 --
-physSyst2 = at_start coil +:+ S "at bottom of" +:+.
-  phrase tank +:+ sParen (P (ht_flux_C ^. symbol) +:+
-  S "represents the" +:+. phrase ht_flux_C)
+physSyst2 = [at_start coil, S "at bottom of", phrase tank,
+  sParen (getS ht_flux_C +:+ S "represents the" +:+. phrase ht_flux_C)]
 --
-physSyst3 = short phsChgMtrl +:+ S "suspended in" +:+.
-  phrase tank +:+ sParen (P (ht_flux_P ^. symbol) +:+
-  S "represents the" +:+. phrase ht_flux_P)
+physSyst3 = [short phsChgMtrl, S "suspended in" +:+. phrase tank,
+  sParen (getS ht_flux_P +:+ S "represents the" +:+ phrase ht_flux_P)]
 
 -- Structure of list would be same between examples but content is completely
 -- different
 -- FIXME: Figures have different IDs than stable structure
 fig_tank :: Contents
-fig_tank = Figure (at_start sWHT `sC` S "with" +:+
-  phrase ht_flux_C +:+ S "of" +:+ P (ht_flux_C ^. symbol) +:+
-  S "and" +:+ (phrase $ ht_flux_P) +:+ S "of" +:+
-  P (ht_flux_P ^. symbol)) "Tank.png"
+fig_tank = Figure (
+  foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
+  getS ht_flux_C, S "and", phrase ht_flux_P, S "of", getS ht_flux_P])
+  "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -442,11 +439,10 @@ s4_1_3 :: Section
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro :: Contents
-s4_1_3_intro = Paragraph $ S "Given the" +:+ phrase temp_C `sC`
-  S "initial" +:+ plural condition +:+ S "for the" +:+
-  phrase temp_W +:+ S "and the" +:+ phrase temp_PCM `sC`
-  S "and material" +:+ plural property `sC` S "the" +:+ plural goalStmt +:
-  S "are"
+s4_1_3_intro = foldlSPCol [S "Given the", phrase temp_C `sC`
+  S "initial", plural condition, S "for the", phrase temp_W,
+  S "and the", phrase temp_PCM `sC` S "and material",
+  plural property `sC` S "the", plural goalStmt, S "are"]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
@@ -455,8 +451,9 @@ s4_1_3_list :: Contents
 s4_1_3_list = enumSimple 1 (short goalStmt) $
   map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
 
-goalState :: NamedIdea b => b -> Sentence
-goalState b = S "Predict the" +:+ phrase b +:+ S "over" +:+. phrase time
+goalState :: NamedIdea varTerm => varTerm -> Sentence
+goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
+  S "over", phrase time]
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -477,13 +474,13 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
   [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
 
-  where mid = S "The" +:+ phrase column +:+ S "for" +:+ phrase software +:+
-          plural constraint +:+ S "restricts the range of" +:+
-          plural input_ +:+ S "to reasonable" +:+. plural value
+  where mid = foldlSent [S "The", phrase column, S "for", phrase software,
+          plural constraint, S "restricts the range of",
+          plural input_, S "to reasonable", plural value]
           
-        end = sParen (S "The" +:+ plural table_ +:+ S "are left out" +:+.
-          S "because features they should use are not yet implemented" +:+
-          S "in Drasil")
+        end = sParen (foldlSent [S "The", plural table_, S "are left out" +:+.
+          S "because features they should use are not yet implemented",
+          S "in Drasil"])
 
 -- General besides progName, repeated in only one other example but it could be
 -- used for all of them. So it can be abstracted out.
@@ -495,115 +492,106 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
 -- General paragraph, repeated in every example. Can be abstracted out.
 
 s4_2_1_list :: Contents
-s4_2_1_list = enumSimple 1 (short assumption) s4_2_1_assump_list
+s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 
-s4_2_1_assump_list :: [Sentence]
+s4_2_1_assump_list :: [[Sentence]]
 
 assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19 :: Sentence
+  assump15, assump16, assump17, assump18, assump19 :: [Sentence]
 
 s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19]
 
-assump1 = S "The only form of" +:+ phrase energy +:+ S "that is" +:+
-  S "relevant for this" +:+ phrase problem +:+ S "is" +:+.
-  phrase CT.thermal_energy +:+ S "All other forms of" +:+
-  phrase energy `sC` S "such as" +:+
-  phrase mech_energy `sC` S "are assumed to be negligible" +:+. sSqBr
-  (swhsSymbMapTRef t1ConsThermE)
+assump1 = [S "The only form of", phrase energy, S "that is",
+  S "relevant for this", phrase problem, S "is" +:+.
+  phrase CT.thermal_energy, S "All other forms of", phrase energy
+  `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
+  sSqBr (swhsSymbMapTRef t1ConsThermE)]
 --
-assump2 = S "All" +:+
-  phrase CT.heat_trans +:+ S "coefficients are constant over" +:+
-  phrase time +:+. sSqBr (acroGD "1")
+assump2 = [S "All", phrase CT.heat_trans, S "coefficients are constant over",
+  phrase time, sSqBr (acroGD "1")]
 --
-assump3 = S "The" +:+
-  phrase water +:+ S "in the" +:+ phrase tank +:+
-  S "is fully mixed, so the" +:+ phrase temp_W +:+
-  S "is the same throughout the entire" +:+ phrase tank +:+. sSqBr
-  (acroGD "2" `sC` swhsSymbMapDRef dd2HtFluxP)
+assump3 = [S "The", phrase water, S "in the", phrase tank,
+  S "is fully mixed, so the", phrase temp_W,
+  S "is the same throughout the entire", phrase tank,
+  sSqBr (acroGD "2" `sC` swhsSymbMapDRef dd2HtFluxP)]
 --
-assump4 = S "The" +:+ phrase temp_PCM +:+ S "is the same throughout the" +:+
-  phrase pcm_vol +:+. sSqBr (acroGD "2" `sC`
-  swhsSymbMapDRef dd2HtFluxP `sC` acroLC "1")
+assump4 = [S "The", phrase temp_PCM, S "is the same throughout the",
+  phrase pcm_vol, sSqBr (acroGD "2" `sC` swhsSymbMapDRef dd2HtFluxP `sC`
+  acroLC "1")]
 --
-assump5 = S "The" +:+
-  phrase w_density +:+ S "and" +:+
-  phrase pcm_density +:+ S "have no spatial variation; that" +:+
-  S "is, they are each constant over their entire" +:+
-  phrase vol +:+. sSqBr (acroGD "2")
+assump5 = [S "The", phrase w_density, S "and",
+  phrase pcm_density, S "have no spatial variation; that is" `sC`
+  S "they are each constant over their entire", phrase vol,
+  sSqBr (acroGD "2")]
 --
-assump6 = S "The" +:+ phrase htCap_W `sC` phrase htCap_S_P `sC` S "and" +:+
-  phrase htCap_L_P +:+ S "have no spatial variation; that" +:+
-  S "is, they are each constant over their entire" +:+
-  phrase vol +:+. sSqBr (acroGD "2")
+assump6 = [S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
+  phrase htCap_L_P, S "have no spatial variation; that",
+  S "is, they are each constant over their entire",
+  phrase vol, sSqBr (acroGD "2")]
 --
-assump7 = (CT.law_conv_cooling ^. defn) +:+
-  S "applies between the" +:+ phrase coil +:+ S "and the" +:+
-  phrase water +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC)
+assump7 = [(CT.law_conv_cooling ^. defn),
+  S "applies between the", phrase coil, S "and the",
+  phrase water, sSqBr (swhsSymbMapDRef dd1HtFluxC)]
 --
-assump8 = S "The" +:+ phrase temp_C +:+ S "is constant over" +:+
-  phrase time +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "2")
+assump8 = [S "The", phrase temp_C, S "is constant over",
+  phrase time, sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "2")]
 --
-assump9 = S "The" +:+ phrase temp_C +:+ S "does not vary along its length"
-  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "3")
+assump9 = [S "The", phrase temp_C, S "does not vary along its length",
+  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "3")]
 --
-assump10 = (CT.law_conv_cooling ^. defn) +:+ S "applies between the" +:+
-  phrase water +:+ S "and the" +:+ short phsChgMtrl +:+.
-  sSqBr (swhsSymbMapDRef dd2HtFluxP)
+assump10 = [(CT.law_conv_cooling ^. defn), S "applies between the",
+  phrase water, S "and the", short phsChgMtrl,
+  sSqBr (swhsSymbMapDRef dd2HtFluxP)]
 --
-assump11 = S "The" +:+ phrase model +:+
-  S "only accounts for" +:+ (charging ^. defn) `sC` S "not" +:+.
-  phrase discharging +:+ S "The" +:+ phrase temp_W +:+ S "and" +:+
-  phrase temp_PCM +:+ S "can only increase, or remain" +:+
-  S "constant; they do not decrease. This implies that the" +:+
-  phrase temp_init +:+ sParen (acroA "12") +:+ S "is less than (or equal)" +:+
-  S "to the" +:+ phrase temp_C +:+. sSqBr ((acroIM "1") `sC` (acroLC "4"))
+assump11 = [S "The", phrase model,
+  S "only accounts for", (charging ^. defn) `sC` S "not" +:+.
+  phrase discharging, S "The", phrase temp_W, S "and",
+  phrase temp_PCM, S "can only increase, or remain",
+  S "constant; they do not decrease. This implies that the",
+  phrase temp_init, sParen (acroA "12"), S "is less than (or equal)",
+  S "to the", phrase temp_C, sSqBr ((acroIM "1") `sC` (acroLC "4"))]
 --
-assump12 = S "The" +:+
-  phrase temp_init +:+ S "of the" +:+
-  phrase water +:+ S "and the" +:+ short phsChgMtrl +:+
-  S "is the same" +:+. sSqBr ((acroIM "1") `sC` (acroIM "2") `sC` (acroLC "5"))
+assump12 = [S "The", phrase temp_init, S "of the", phrase water,
+  S "and the", short phsChgMtrl, S "is the same",
+  sSqBr ((acroIM "1") `sC` (acroIM "2") `sC` (acroLC "5"))]
 --
-assump13 = S "The" +:+ phrase simulation +:+ S "will start with the" +:+
-  short phsChgMtrl +:+ S "in a" +:+ (solid ^. defn) +:+.
-  sSqBr ((acroIM "2") `sC` (acroIM "4"))
+assump13 = [S "The", phrase simulation, S "will start with the",
+  short phsChgMtrl, S "in a", (solid ^. defn),
+  sSqBr ((acroIM "2") `sC` (acroIM "4"))]
 --
-assump14 = S "The operating" +:+
-  phrase temp +:+ S "range of the" +:+ phrase system +:+
-  S "is such that the" +:+ phrase water +:+
-  S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
-  S "the" +:+ phrase temp +:+ S "will not drop below the" +:+
-  phrase melt_pt +:+ S "of" +:+
-  phrase water `sC` S "or rise above its" +:+
-  phrase boil_pt +:+. sSqBr ((acroIM "1") `sC` (acroIM "3"))
+assump14 = [S "The operating", phrase temp, S "range of the",
+  phrase system, S "is such that the", phrase water,
+  S "is always in" +:+. (liquid ^. defn), S "That is,",
+  S "the", phrase temp, S "will not drop below the",
+  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
+  phrase boil_pt, sSqBr ((acroIM "1") `sC` (acroIM "3"))]
 --
-assump15 = S "The" +:+
-  phrase tank +:+ S "is" +:+ phrase perfect_insul +:+
-  S "so that there is no" +:+ phrase CT.heat +:+
-  S "loss from the" +:+ phrase tank +:+. sSqBr ((acroIM "1") `sC` (acroLC "6"))
+assump15 = [S "The", phrase tank, S "is", phrase perfect_insul,
+  S "so that there is no", phrase CT.heat, S "loss from the",
+  phrase tank, sSqBr ((acroIM "1") `sC` (acroLC "6"))]
 --
-assump16 = S "No internal" +:+
-  phrase CT.heat +:+ S "is generated by either the" +:+
-  phrase water +:+ S "or the" +:+ short phsChgMtrl `semiCol`
-  S "therefore, the" +:+ phrase vol_ht_gen +:+
-  S "is zero" +:+. sSqBr ((acroIM "1") `sC` (acroIM "2"))
+assump16 = [S "No internal", phrase CT.heat,
+  S "is generated by either the", phrase water, S "or the",
+  short phsChgMtrl `semiCol` S "therefore, the", phrase vol_ht_gen,
+  S "is zero", sSqBr ((acroIM "1") `sC` (acroIM "2"))]
 --
-assump17 = S "The" +:+ phrase vol +:+ phrase change +:+ S "of the" +:+
-  short phsChgMtrl +:+ S "due to" +:+ phrase CT.melting +:+
-  S "is negligible" +:+. sSqBr (acroIM "2")
+assump17 = [S "The", phrase vol, phrase change, S "of the",
+  short phsChgMtrl, S "due to", phrase CT.melting,
+  S "is negligible", sSqBr (acroIM "2")]
 --
-assump18 = S "The" +:+
-  short phsChgMtrl +:+ S "is either in a" +:+ (liquid ^. defn) +:+
-  S "or a" +:+(solid ^. defn) +:+ S "but not a" +:+ (gaseous ^. defn) +:+.
-  sSqBr ((acroIM "2") `sC` (acroIM "4"))
+assump18 = [S "The",
+  short phsChgMtrl, S "is either in a", (liquid ^. defn),
+  S "or a", (solid ^. defn), S "but not a", (gaseous ^. defn),
+  sSqBr ((acroIM "2") `sC` (acroIM "4"))]
 --
-assump19 = S "The pressure in" +:+ S "the" +:+ phrase tank +:+
-  S "is atmospheric, so the" +:+ phrase melt_pt +:+ S "and" +:+
-  phrase boil_pt +:+ S "are 0" :+: Sy (unit_symb temp) +:+ S "and 100" :+:
-  Sy (unit_symb temp) `sC` S "respectively" +:+.
-  sSqBr ((acroIM "1") `sC` (acroIM "3"))
+assump19 = [S "The pressure in the", phrase tank,
+  S "is atmospheric, so the", phrase melt_pt, S "and",
+  phrase boil_pt, S "are 0" :+: Sy (unit_symb temp),
+  S "and 100" :+: Sy (unit_symb temp) `sC` S "respectively",
+  sSqBr ((acroIM "1") `sC` (acroIM "3"))]
 
 -- Again, list structure is same between all examples.
 
@@ -749,7 +737,7 @@ s4_2_5_d1startPara = [Paragraph (S "Derivation of the" +:+
 s4_2_5_d1eqn_list = map (EqnBlock) [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
   s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
 
-s4_2_5_d1sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [
+s4_2_5_d1sent_list = map foldlSPCol [
   [S "To find the", phrase rOfChng, S "of", (P $ temp_W ^. symbol) `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
   phrase water, S "The", phrase vol,
@@ -837,7 +825,8 @@ s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list,
   s4_2_5_d2sent_list]) ++ s4_2_5_d2endPara
 
-s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using",
+s4_2_5_d2sent_list = map foldlSPCol [
+  [S "Using",
   swhsSymbMapDRef dd2HtFluxP, S "for",
   (P $ ht_flux_P ^. symbol) `sC` S "this", phrase equation,
   S "can be written as"],
@@ -846,7 +835,8 @@ s4_2_5_d2sent_list = map (Paragraph . (foldle (+:+) (+:) EmptyS)) [[S "Using",
   [S "Setting", P (tau_S_P ^. symbol) :+: S "=" :+:
   P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
   P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) `sC`
-  S "this can be written as"]]
+  S "this can be written as"]
+  ]
 
 
 s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,

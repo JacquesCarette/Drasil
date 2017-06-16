@@ -95,7 +95,8 @@ solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Bool -> Sentence ->
   (Sentence, Sentence, Bool, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
-solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a, t, g, dd, i, dc) adSubSec = SRS.solCharSpec [solutionCharSpecIntro kWord (instModels gendef)] (subSec gendef)
+solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a, t, g, dd, i, dc) adSubSec = 
+  SRS.solCharSpec [solutionCharSpecIntro kWord (instModels gendef)] (subSec gendef)
   where subSec True  = [assumption_ True, theModels, generDefn, 
                         dataDefin, instModels True, dataConstr] ++ adSubSec
         subSec False = [assumption_ False, theModels, 
@@ -109,8 +110,9 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
         instModels False = inModelF' probDes dataDefin theModels           i
         dataConstr = datConF tbRef mid end trail dc
 
-solutionCharSpecIntro name instModelSection = foldlSP [S "The", plural inModel, 
-  S "that govern", short name, S "are presented in" +:+. 
+solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
+solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
+  S "that govern", short progName, S "are presented in" +:+. 
   makeRef (instModelSection), S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 

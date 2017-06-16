@@ -351,7 +351,6 @@ s4_2_1_list = enumSimple 1 (getAcc assumption) s4_2_1_list'
 --------------------------------
 
 s4_2_2 :: Section
-s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
 s4_2_2 = thModF (chipmunk) s4_2_2_TMods

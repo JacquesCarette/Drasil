@@ -57,7 +57,7 @@ specSysDesIntro l_end = foldlSP
                   eND (False) =  S "and" +:+. plural definition-}
 
 -- give starting sentence(s), the program name, and finish the last sentence
-probDescF :: Sentence -> CI -> Sentence -> [Section] -> Section
+probDescF :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> Section
 probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
   where intro = foldlSent [start, (short progName), S "is a computer", 
                 (phrase program), S "developed to", ending]
@@ -91,7 +91,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt ((Paragraph intro):otherConte
 -- kWord (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: CI -> (Section, Section) -> Bool -> Sentence -> 
+solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Bool -> Sentence -> 
   (Sentence, Sentence, Bool, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section

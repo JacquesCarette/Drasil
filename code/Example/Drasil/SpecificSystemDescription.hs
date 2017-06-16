@@ -95,15 +95,8 @@ solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Bool -> Sentence ->
   (Sentence, Sentence, Bool, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
-solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a, t, g, dd, i, dc) adSubSec = SRS.solCharSpec [Paragraph intro] (subSec gendef)
-  where intro = foldlSent
-                [S "The", plural inModel, S "that govern", 
-                short kWord, S "are presented in" +:+. makeRef (instModels gendef), 
-                S "The", phrase information, S "to understand", 
-                (S "meaning" `ofThe` plural inModel), 
-                S "and their derivation is also presented, so that the", 
-                plural inModel, S "can be verified"]
-        subSec True  = [assumption_ True, theModels, generDefn, 
+solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a, t, g, dd, i, dc) adSubSec = SRS.solCharSpec [solutionCharSpecIntro kWord (instModels gendef)] (subSec gendef)
+  where subSec True  = [assumption_ True, theModels, generDefn, 
                         dataDefin, instModels True, dataConstr] ++ adSubSec
         subSec False = [assumption_ False, theModels, 
                         dataDefin, instModels False, dataConstr] ++ adSubSec
@@ -116,7 +109,27 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
         instModels False = inModelF' probDes dataDefin theModels           i
         dataConstr = datConF tbRef mid end trail dc
 
- 
+solutionCharSpecIntro name instModelSection = foldlSP [S "The", plural inModel, 
+  S "that govern", short name, S "are presented in" +:+. 
+  makeRef (instModelSection), S "The", phrase information, S "to understand", 
+  (S "meaning" `ofThe` plural inModel), 
+  S "and their derivation is also presented, so that the", plural inModel, 
+  S "can be verified"]
+
+--subSec additionalSection = [assumption_', theModels, dataDefin, instModels', 
+--  dataConstr] ++ additionalSection
+
+{--
+assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
+--assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
+theModels  = thModF kWord t
+generDefn  = genDefnF g
+dataDefin  = dataDefnF ddEndSent dd
+instModels True  = inModelF  probDes dataDefin theModels generDefn i
+--instModels False = inModelF' probDes dataDefin theModels           i
+dataConstr = datConF tbRef mid end trail dc
+--}
+
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg otherContents = 

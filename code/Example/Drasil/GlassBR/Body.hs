@@ -397,23 +397,23 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
   True
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
-  [(\x -> fst x), (\x -> snd x)] 
-  [(getS dim_min, S "0.1" +:+ Sy (unit_symb standOffDist)), 
-  (getS dim_max, S "0.1" +:+ Sy (unit_symb standOffDist)), 
-  ((getS ar_max), S "5"), (getS cWeightMin , S "4.5" +:+
-  Sy (unit_symb cWeightMin)), (getS cWeightMax , S "910" +:+ 
-  Sy (unit_symb cWeightMax)), (getS sd_min , S "6" +:+
-  Sy (unit_symb sd_min)), (getS sd_max , S "130" +:+
-  Sy (unit_symb sd_max))])
-  (titleize table_ +: S "3" +:+ titleize specification +:+
+  [(\x -> fst x), (\x -> snd x)]
+  (zipWith s6_2_5_table2_formatF
+  [dim_min, dim_max, cWeightMin, cWeightMax, sd_min, sd_max]
+  [(Dbl 0.1), (Dbl 0.1), (Dbl 4.5), (Int 910), (Int 6), (Int 130)]))
+  --FIXME: how to incorporate (getS ar_max, E (Int 5))?
+  (titleize table_ +: E (Int 3) +:+ titleize specification +:+
   (titleize parameter) +:+ titleize' value) True
+
+s6_2_5_table2_formatF :: UnitaryChunk -> Expr -> (Sentence, Sentence)
+s6_2_5_table2_formatF varName val = (getS varName, E (val) +:+ Sy (unit_symb varName))
 
 s6_2_5_intro2 = foldlSP [(makeRef s6_2_5_table3), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
   [(\x -> P $ fst(x)), (\x -> snd(x))] 
-  [(prob_br ^. symbol, S "0 <" +:+ (getS prob_br) +:+ S "< 1")])
+  [(prob_br ^. symbol, E (Int 0 :< C prob_br :< Int 1))])
   (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
 
 s7 = reqF [s7_1, s7_2]

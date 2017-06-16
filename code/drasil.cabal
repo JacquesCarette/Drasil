@@ -155,7 +155,9 @@ executable nopcm
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
       Drasil.NoPCM.Body
-    , Drasil.NoPCM.Example
+    , Drasil.NoPCM.TMods
+    , Drasil.NoPCM.Definitions
+    , Drasil.NoPCM.Unitals
     , Drasil.ReferenceMaterial
     , Drasil.SRS
     , Drasil.TableOfAbbAndAcronyms
@@ -279,6 +281,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
     , Drasil.SpecificSystemDescription
+    , Drasil.GeneralSystDesc
     , Drasil.Introduction
     , Drasil.Requirements
     , Drasil.TraceabilityMandGs

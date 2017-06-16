@@ -2,7 +2,9 @@ module Drasil.NoPCM.Body where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Drasil.NoPCM.Example
+import Drasil.NoPCM.TMods
+import Drasil.NoPCM.Definitions
+import Drasil.NoPCM.Unitals
 
 import Language.Drasil
 

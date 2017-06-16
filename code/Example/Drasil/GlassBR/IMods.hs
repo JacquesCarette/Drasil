@@ -2,7 +2,7 @@ module Drasil.GlassBR.IMods where
 
 import Language.Drasil
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Prelude hiding (id)
+import Prelude hiding (id, exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.DataDefs
@@ -20,7 +20,7 @@ probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage") --ma
   pbdescr pb_rel 
 
 pb_rel :: Relation
-pb_rel = (C prob_br) := 1 - (UnaryOp (Exp(Neg (C risk))))
+pb_rel = (C prob_br) := 1 - (exp(Neg (C risk)))
 
 pbdescr :: Sentence
 pbdescr =

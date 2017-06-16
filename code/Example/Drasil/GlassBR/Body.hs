@@ -303,18 +303,14 @@ s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
   [(enumSimple 1 (short assumption) s6_2_1_list_assum1), 
-  (EqnBlock $ (C sflawParamM):=(Int 7)), 
-  (EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^
-    (Neg (Int 53))), 
-  (EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)), 
-  (EqnBlock $ (C load_dur):=(Int 3)), 
-  --  (Number $ map (\c -> Flat c) [
-  --  (getS sflawParamM) +:+ S "= 7" +:+ Sy (sflawParamM ^. unit), 
-  --  (getS sflawParamK) +:+ S "= 2.86 * 10^(-53)" +:+ Sy (sflawParamK ^. unit), 
-  --  (getS mod_elas) +:+ S "= 7.17 * 10^7" +:+ Sy (mod_elas ^. unit), 
-  --  (getS load_dur) +:+ S "= 3" +:+ Sy (load_dur ^. unit)]))] ++
+  assumptionM, assumptionK, assumptionMod_Elas, assumptionLoad_Dur,
   (enumSimple 5 (short assumption) s6_2_1_list_assum2)]
-  --equation in sentence
+
+assumptionM, assumptionK, assumptionMod_Elas, assumptionLoad_Dur :: Contents
+assumptionM = EqnBlock $ (C sflawParamM) := (Int 7)
+assumptionK = EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
+assumptionMod_Elas = EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
+assumptionLoad_Dur = EqnBlock $ (C load_dur):=(Int 3)
 
 s6_2_1_list_assum1 :: [Sentence]
 s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for", 

@@ -128,10 +128,7 @@ This section provides an overview of the module design. Modules are summarized i
 \item[\refstepcounter{modnum}\mthemodnum\label{Mmodenerdesc}:]Energy Equations Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
-\end{description}
-\begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodseqdesc}:]Sequence Data Structure Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodseqserv}:]Sequence Data Structure Module
 \end{description}
 \begin{description}
 \item[\refstepcounter{modnum}\mthemodnum\label{Mmododedesc}:]ODE Solver Module
@@ -238,13 +235,6 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Defines the energy equations using the parameters in the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Control Module (M\ref{MmodControl})}
-\label{Sec:CM()}
-\begin{description}
-\item[Secrets:]The algorithm for coordinating the running of the program.
-\item[Services:]Provides the main program.
-\item[Implemented By:]SWHS
-\end{description}
 \subsection{Software Decision Module}
 \label{Sec:SoftDeciModu}
 \begin{description}
@@ -252,7 +242,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
-\subsection{Sequence Data Structure Module (M\ref{Mmodseqdesc})}
+\subsection{Sequence Data Structure Module (M\ref{Mmodseqserv})}
 \label{Sec:SequDataStruModu()}
 \begin{description}
 \item[Secrets:]The data structure for a sequence data type.
@@ -281,21 +271,21 @@ This section shows two traceability matrices: between the modules and the requir
 Requirement & Modules
 \\
 \midrule
-R1 & M\ref{MhwHiding}, M\ref{MmodInputFormat}, M\ref{MmodInputParams}, M\ref{MmodControl}
+R1 & M\ref{MhwHiding}, M\ref{MmodInputFormat}, M\ref{MmodInputParam}, M\ref{MmodControl}
 \\
-R2 & M\ref{MmodInputFormat}, M\ref{MmodInputParams}
+R2 & M\ref{MmodInputFormat}, M\ref{MmodInputParam}
 \\
 R3 & M\ref{MmodInputVerif}
 \\
 R4 & M\ref{Mmodoutputfdesc}, M\ref{MmodControl}
 \\
-R5 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmododedesc}, M\ref{Mmodplotdesc}
+R5 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}, M\ref{Mmodseqserv}, M\ref{Mmododedesc}, M\ref{Mmodplotdesc}
 \\
-R6 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmododedesc}, M\ref{Mmodplotdesc}
+R6 & M\ref{Mmodoutputfdesc}, M\ref{Mmodtempdesc}, M\ref{MmodControl}, M\ref{Mmodseqserv}, M\ref{Mmododedesc}, M\ref{Mmodplotdesc}
 \\
-R7 & M\ref{Mmodoutputfdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmodplotdesc}
+R7 & M\ref{Mmodoutputfdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}, M\ref{Mmodseqserv}, M\ref{Mmodplotdesc}
 \\
-R8 & M\ref{Mmodoutputfdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}, M\ref{Mmodseqdesc}, M\ref{Mmodplotdesc}
+R8 & M\ref{Mmodoutputfdesc}, M\ref{Mmodenerdesc}, M\ref{MmodControl}, M\ref{Mmodseqserv}, M\ref{Mmodplotdesc}
 \\
 R9 & M\ref{Mmodoutputvdesc}
 \\
@@ -314,13 +304,13 @@ Likely Change & Modules
 \midrule
 LC\ref{LChardware} & M\ref{MhwHiding}
 \\
-LC\ref{LCinputformat} & M\ref{MmodInputFormat}
+LC\ref{LCinput} & M\ref{MmodInputFormat}
 \\
-LC\ref{LCparameters} & M\ref{MmodInputParams}
+LC\ref{LCparameters} & M\ref{MmodInputParam}
 \\
 LC\ref{LCinputverification} & M\ref{MmodInputVerif}
 \\
-LC\ref{LCoutputformat} & M\ref{Mmodoutputfdesc}
+LC\ref{LCoutput} & M\ref{Mmodoutputfdesc}
 \\
 LC\ref{LCoutputverification} & M\ref{Mmodoutputvdesc}
 \\
@@ -330,7 +320,7 @@ LC\ref{LCenergy} & M\ref{Mmodenerdesc}
 \\
 LC\ref{LCcontrol} & M\ref{MmodControl}
 \\
-LC\ref{LCsequence} & M\ref{Mmodseqdesc}
+LC\ref{LCarray} & M\ref{Mmodseqserv}
 \\
 LC\ref{LCode} & M\ref{Mmododedesc}
 \\
@@ -353,22 +343,22 @@ digraph G {
 graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
 node [style = "n"];
 "Input Format Module (M\ref{MmodInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Input Format Module (M\ref{MmodInputFormat})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"Input Parameters Module (M\ref{MmodInputParams})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"Input Verification Module (M\ref{MmodInputVerif})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Input Verification Module (M\ref{MmodInputVerif})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Input Format Module (M\ref{MmodInputFormat})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Input Parameters Module (M\ref{MmodInputParam})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Input Verification Module (M\ref{MmodInputVerif})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Input Verification Module (M\ref{MmodInputVerif})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 "Output Format Module (M\ref{Mmodoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 "Control Module (M\ref{MmodControl})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParams})";
+"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParam})";
 "Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
 "Control Module (M\ref{MmodControl})" -> "Input Verification Module (M\ref{MmodInputVerif})";
 "Control Module (M\ref{MmodControl})" -> "Temperature ODEs Module (M\ref{Mmodtempdesc})";
@@ -377,9 +367,9 @@ node [style = "n"];
 "Control Module (M\ref{MmodControl})" -> "Plotting Module (M\ref{Mmodplotdesc})";
 "Control Module (M\ref{MmodControl})" -> "Output Verification Module (M\ref{Mmodoutputvdesc})";
 "Control Module (M\ref{MmodControl})" -> "Output Format Module (M\ref{Mmodoutputfdesc})";
-"Control Module (M\ref{MmodControl})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"ODE Solver Module (M\ref{Mmododedesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
-"Plotting Module (M\ref{Mmodplotdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqdesc})";
+"Control Module (M\ref{MmodControl})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"ODE Solver Module (M\ref{Mmododedesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Plotting Module (M\ref{Mmodplotdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 }
 \end{dot2tex}
 \end{tikzpicture}

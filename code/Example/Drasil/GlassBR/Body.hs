@@ -493,25 +493,16 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd`
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
-    [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ 
-    sParen (makeRef (gbSymbMapT probOfBr))] ++
-    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ 
-    sParen (makeRef (gbSymbMapT calOfCap))] ++
-    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+
-    sParen (makeRef (gbSymbMapT calOfDe))] ++
-    [Flat $ (at_start act_thick) +:+ sParen (getS act_thick) +:+
-    sParen (makeRef (gbSymbMapD hFromt))] ++
-    [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ 
-    sParen (makeRef (gbSymbMapD loadDF))]++
-    [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ 
-    sParen (makeRef (gbSymbMapD strDisFac))]++
-    [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ 
-    sParen (makeRef (gbSymbMapD nonFL))]++
-    [Flat $ (titleize glassTypeFac) +:+ sParen (short glassTypeFac) +:+ 
-    sParen (makeRef (gbSymbMapD glaTyFac))] ++
-    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
-    [dimLL, tolPre, tolStrDisFac] ++
-    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -})]
+    [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
+    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
+    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))] ++
+    [Flat $ (at_start act_thick) +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt))] ++
+    [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
+    [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
+    [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
+    [Flat $ (titleize glassTypeFac) +:+ sParen (short glassTypeFac) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
+    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
+    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
     ))])]
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []

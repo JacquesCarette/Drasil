@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils (itemRefToSent, getS,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
-  showingCxnBw, figureLabel, foldlSP)
+  showingCxnBw, figureLabel, foldlSP, sAnd)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -97,8 +97,8 @@ startIntro = foldlSent [(at_start software),
   S "The", phrase software `sC` S "herein called", (short gLassBR), 
   S "aims to predict the", (phrase blastRisk), S "involved with the", 
   (phrase glaSlab), S "using an intuitive interface"]
-knowIR = (phrase theory +:+ S "behind" +:+ (phrase glBreakage) +:+
-  S "and" +:+ (phrase blastRisk))
+knowIR = (phrase theory +:+ S "behind" +:+ (phrase glBreakage) `sAnd`
+  (phrase blastRisk))
 undIR = (foldlList [S "second year calculus", S "structural mechanics", 
   S "computer applications in civil engineering"])
 appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
@@ -114,7 +114,7 @@ s2_1_intro_p1 :: Sentence
 s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this", 
   phrase document, S "is to predict whether a given", (phrase glaSlab), 
   S "is likely to resist a specified" +:+. (phrase blast), 
-  S "The", plural goal, S "and", plural thModel, S "used in the", 
+  S "The", plural goal `sAnd` plural thModel, S "used in the", 
   (short gLassBR), S "code are provided" `sC`
   S "with an emphasis on explicitly identifying",   (plural assumption), 
   S "and unambiguous" +:+. plural definition, S "This", phrase document, 
@@ -127,8 +127,8 @@ s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
 --for Organization of Document Section
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this", 
   phrase document, S "follows the", phrase template, S "for an", (short srs), 
-  S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1"), S "and", 
-  sSqBr (S "2"), sParen (S "in" +:+ (makeRef s10)) `sC`
+  S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") `sAnd` sSqBr (S "2"),
+  sParen (S "in" +:+ (makeRef s10)) `sC`
   S "with some aspects taken from Volere", phrase template, S "16", 
   sSqBr (S "3")]
   
@@ -146,8 +146,8 @@ s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+
   (S "equivalent" `ofThe` 
   S "second year of an undergraduate degree in civil or structural engineering")), 
   (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+ (phrase glBreakage) +:+ S "and" +:+.
-  (phrase blastRisk)), (S "The" +:+ phrase endUser +:+
+  phrase theory +:+ S "behind" +:+. ((phrase glBreakage) `sAnd`
+  (phrase blastRisk))), (S "The" +:+ phrase endUser +:+
   S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
 
@@ -158,15 +158,16 @@ s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 s5_intro = foldlSP [S "This", phrase section_, 
   S "presents the" +:+. phrase (scpOfTheProj phrase), 
   S "It describes the expected use of", (short gLassBR), 
-  S "as well as the", plural input_, S "and", plural output_, 
-  S "of each action. The", plural useCase, S "are", phrase input_, S "and", 
-  phrase output_ `sC` S "which defines the action of getting the", 
+  S "as well as the", plural input_ `sAnd` plural output_, 
+  S "of each action. The", plural useCase, S "are", 
+  phrase input_ `sAnd` phrase output_ `sC` 
+  S "which defines the action of getting the", 
   phrase input_, S "and displaying the", phrase output_]
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
 
 s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
-  titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+  titleize name_, S "Actor", titleize input_ `sAnd` titleize output_]
   (mkTable
   [(\x -> (x!!0)), (\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", titleize' input_, titleize user, titleize' characteristic +:+
@@ -183,23 +184,23 @@ s5_2 = SRS.indPRCase [s5_2_bullets] []
 s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
-s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user, 
-  S "providing", phrase input_, S "to", (short gLassBR), 
+s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user,
+  S "providing", phrase input_, S "to", (short gLassBR),
   S "for use within the" +:+. phrase analysis, S "There are two classes of"
-  +: plural input_, (phrase glassGeo), S "and" +:+.
-  (phrase blastTy), (glassGeo ^. defn), (blastTy ^. defn), S "These", 
-  (plural parameter), S "describe", (phrase char_weight), 
-  S "and stand off" +:+. (phrase blast), S "Another", phrase input_, 
-  S "the", phrase user, S "gives" `isThe` S "tolerable", phrase value, S "of", 
+  +: plural input_ +:+. ((phrase glassGeo) `sAnd` (phrase blastTy)),
+  (glassGeo ^. defn), (blastTy ^. defn), S "These",
+  (plural parameter), S "describe", (phrase char_weight),
+  S "and stand off" +:+. (phrase blast), S "Another", phrase input_,
+  S "the", phrase user, S "gives" `isThe` S "tolerable", phrase value, S "of",
   (phrase prob_br)]
 
 s5_2_bt_sent2 :: Sentence
 s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR), 
   plural output_, S "if the", (phrase glaSlab), S "will be safe by", 
   S "comparing whether", (phrase capacity), S "is greater than" +:+. 
-  (phrase demandq), (at_start capacity) `isThe`
-  (capacity ^. defn), S "and", (phrase demandq) `isThe` 
-  phrase requirement +:+. (S "which" `isThe` (demandq ^. defn)), 
+  (phrase demandq), ((at_start capacity) `isThe`
+  (capacity ^. defn)) `sAnd` ((phrase demandq) `isThe` 
+  phrase requirement) +:+. (S "which" `isThe` (demandq ^. defn)), 
   S "The second", phrase condition, S "is to check whether the calculated", 
   (phrase probability), sParen (getS prob_br), 
   S "is less than the tolerable", (phrase probability), 
@@ -376,15 +377,15 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
   (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
   [
   [(getS plate_len), 
-  E ((C plate_len) :> (Int 0)) +:+ S "and" +:+ E ((C plate_len) :/ (C plate_width) :> (Int 1)),
+  E ((C plate_len) :> (Int 0)) `sAnd` E ((C plate_len) :/ (C plate_width) :> (Int 1)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_len) +:+ S "<=" +:+ (getS dim_max)
-  +:+ S "and" +:+ E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
+  `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
   E (Int 1500) +:+ Sy (unit_symb plate_len),
   S "10%"],
   [(getS plate_width),
-  E ((C plate_width) :> Int 0) +:+ S "and" +:+ E ((C plate_width) :< (C plate_len)),
+  E ((C plate_width) :> Int 0) `sAnd` E ((C plate_width) :< (C plate_len)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_width) +:+ S "<=" +:+ (getS dim_max)
-  +:+ S "and" +:+ E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
+  `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
   E (Int 1200) +:+ Sy (unit_symb plate_width),
   S "10%"],
   [(getS pb_tol),
@@ -474,9 +475,9 @@ s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
   plural quantity, S "from", acroR "1", S "and the known", plural quantity,
   S "from", acroR "2"]
 
-s7_1_req5 = S "If" +:+ (getS is_safe1) +:+ S "and" +:+
-  (getS is_safe2) +:+ sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq)) +:+
-  S "and" +:+ (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
+s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd`
+  (getS is_safe2) +:+ sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
+  `sAnd` (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
@@ -551,11 +552,11 @@ s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
 s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
 
 s9 = traceMGF [s9_table1, s9_table2, s9_table3]
-  [(plural thModel `sC` (plural dataDefn) +:+ S "and" +:+ plural inModel +:+.
+  [(plural thModel `sC` (plural dataDefn) `sAnd` plural inModel +:+.
   S "with each other"), (plural requirement +:+ S "on" +:+ plural thModel `sC`
   (plural inModel) `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint), 
   (plural thModel `sC` (plural dataDefn) `sC` plural inModel
-  `sC` plural likelyChg +:+ S "and" +:+ (plural requirement) +:+ S "on the" +:+ 
+  `sC` plural likelyChg `sAnd` (plural requirement) +:+ S "on the" +:+ 
   plural assumption)]
   ([s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4])
   []
@@ -718,7 +719,7 @@ s9_intro2 = traceGIntro [fig_2, fig_3, fig_4]
   (plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
   `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint), 
   (plural thModel `sC` plural inModel `sC` plural dataDefn `sC`
-  plural requirement +:+ S "and" +:+ plural likelyChg +:+ S "on" +:+
+  plural requirement `sAnd` plural likelyChg +:+ S "on" +:+
   plural assumption)]
 
 fig_2 = figureLabel "2" (traceyMatrix)
@@ -766,7 +767,7 @@ s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 
 s11_intro = foldlSP [
   S "This", phrase appendix, S "holds the", (plural graph), 
-  sParen ((makeRef fig_5) +:+ S "and" +:+ (makeRef fig_6)), 
+  sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)), 
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen

@@ -43,7 +43,7 @@ import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSentCol, foldlSP, foldlSP_, foldlSPCol)
+  foldlSP, foldlSP_, foldlSPCol)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,

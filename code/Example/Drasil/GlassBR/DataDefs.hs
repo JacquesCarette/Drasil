@@ -5,7 +5,6 @@ import Data.Drasil.SI_Units
 import Prelude hiding (log, id, exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
-import Drasil.GlassBR.Concepts
 
 --FIXME: having id "" and term "" is completely bogus, and should not
 --  be allowed.  This implicitly says that something here does not make sense.

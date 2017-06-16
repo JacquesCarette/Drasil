@@ -63,10 +63,10 @@ instance Num Expr where
   a * b = a :* b
   a - b = a :- b
   fromInteger a = Int a
-
-  -- these are Num warts
+  abs = UnaryOp . Abs
+  
+  -- this is a Num wart
   signum _ = error "should not use signum in expressions"
-  abs _    = error "should not use abs in expressions"
 
 
 instance Eq Expr where
@@ -127,39 +127,35 @@ data UFunc where
   
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
-log e = UnaryOp (Log e)
-
--- | Smart constructor to take the absolute value of an expression
-abs :: Expr -> Expr 
-abs e = UnaryOp (Abs e)
+log = UnaryOp . Log
 
 -- | Smart constructor to apply sin to an expression
 sin :: Expr -> Expr
-sin e = UnaryOp (Sin e)
+sin = UnaryOp . Sin
 
 -- | Smart constructor to apply cos to an expression
 cos :: Expr -> Expr 
-cos e = UnaryOp (Cos e)
+cos = UnaryOp . Cos
 
 -- | Smart constructor to apply tan to an expression
 tan :: Expr -> Expr
-tan e = UnaryOp (Tan e)
+tan = UnaryOp . Tan
 
 -- | Smart constructor to apply sec to an expression
 sec :: Expr -> Expr 
-sec e = UnaryOp (Sec e)
+sec = UnaryOp . Sec
 
 -- | Smart constructor to apply csc to an expression
 csc :: Expr -> Expr
-csc e = UnaryOp (Csc e)
+csc = UnaryOp . Csc
 
 -- | Smart constructor to apply cot to an expression
 cot :: Expr -> Expr 
-cot e = UnaryOp (Cot e)
+cot = UnaryOp . Cot
 
 -- | Smart constructor for the exponential (base e) function
 exp :: Expr -> Expr
-exp e = UnaryOp (Exp e)
+exp = UnaryOp . Exp
 
 -- | Binary Functions
 data BiFunc where

@@ -142,11 +142,11 @@ assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent
                                               (inModel, r4)]
 
 --wrapper for thModelIntro
-thModF :: CI -> [Contents] -> Section
+thModF :: (NamedIdea a) => a -> [Contents] -> Section
 thModF kword otherContents = SRS.thModel ((thModIntro kword):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: CI -> Contents
+thModIntro :: (NamedIdea a) => a -> Contents
 thModIntro k_word = foldlSP
           [S "This", phrase section_, S "focuses on", 
           S "the", phrase general, (plural equation), S "and", 

@@ -354,8 +354,8 @@ s4_2_2 :: Section
 s4_2_2_intro :: Contents
 s4_2_2_TMods :: [Contents]
 
-s4_2_2 = SRS.thModel ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
---s4_2_2 = thModF 
+--s4_2_2 = SRS.thModel ([s4_2_2_intro] ++ (s4_2_2_TMods)) []
+s4_2_2 = thModF (chipmunk) s4_2_2_TMods
 
 s4_2_2_intro = foldlSP 
   [S "This", (phrase section_), S "focuses on the", (phrase general), 

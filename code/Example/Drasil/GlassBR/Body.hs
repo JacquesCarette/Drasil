@@ -375,41 +375,49 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end
 s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", 
   S "Typical Value", S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), 
   (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
-  [
-  [(getS plate_len), 
+  [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD])
+  (titleize table_ +: S "2" +:+ titleize input_ +:+ titleize' variable) 
+  True
+
+inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
+
+inputVarA = [(getS plate_len), 
   E ((C plate_len) :> (Int 0)) `sAnd` E ((C plate_len) :/ (C plate_width) :> (Int 1)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_len) +:+ S "<=" +:+ (getS dim_max)
   `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
   E (Int 1500) +:+ Sy (unit_symb plate_len),
-  S "10%"],
-  [(getS plate_width),
+  S "10%"]
+
+inputVarB = [(getS plate_width),
   E ((C plate_width) :> Int 0) `sAnd` E ((C plate_width) :< (C plate_len)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_width) +:+ S "<=" +:+ (getS dim_max)
   `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
   E (Int 1200) +:+ Sy (unit_symb plate_width),
-  S "10%"],
-  [(getS pb_tol),
+  S "10%"]
+
+inputVarPbTol = [(getS pb_tol),
   E (Int 0 :< (C pb_tol) :< Int 1),
   S "-",
   E (Dbl 0.008),
-  S "0.1%"],
-  [(getS char_weight),
+  S "0.1%"]
+
+inputVarW = [(getS char_weight),
   (getS char_weight) +:+ S ">=" +:+ E (Int 0),
   E ((C cWeightMin) :< (C char_weight) :< (C cWeightMax)),
   E (Int 42) +:+ Sy (unit_symb char_weight), 
-  S "10%"],
-  [(getS tNT),
+  S "10%"]
+
+inputVarTNT = [(getS tNT),
   E ((C tNT) :> (Int 0)),
   S "-",
   E (Int 1), 
-  S "10%"],
-  [(getS standOffDist),
+  S "10%"]
+
+inputVarSD = [(getS standOffDist),
   E ((C standOffDist) :> (Int 0)),
   E ((C sd_min) :< (C standOffDist) :< (C sd_max)),
   E (Int 45) +:+ Sy (unit_symb standOffDist), 
-  S "10%"]])
-  (titleize table_ +: S "2" +:+ titleize input_ +:+ titleize' variable) 
-  True
+  S "10%"]
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]

@@ -14,27 +14,28 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
-  goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, lDurFac,
-  lGlass, lResistance, lShareFac, notApp, nonFactorL, physSyst, requirement,
+  goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
+  lGlass, lResistance, lShareFac, notApp, physSyst, requirement,
   srs, thModel, eqTNT]
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
-  iGlass, lDurFac, lGlass, lResistance, lShareFac, notApp, nonFactorL,
+  iGlass, lGlass, lResistance, lShareFac, notApp,
   eqTNT, gLassBR :: CI
+
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
+--FIXME: Remove `glassTypeFac` once figured out how to incorporate `glassTypeFac_` into s6_1_1_bullets.
+
 annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
 aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
 fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
 glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
 heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
 iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"
-lDurFac       = commonIdea "lDurFac"       (nounPhraseSP "load duration factor")    "LDF"
 lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
 lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"
 lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
 notApp        = commonIdea "notApp"        (nounPhraseSP "not applicable")          "N/A"
-nonFactorL    = commonIdea "nonFactorL"    (nounPhraseSP "non-factored load")       "NFL"     --lowercase?
 eqTNT         = commonIdea "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
 

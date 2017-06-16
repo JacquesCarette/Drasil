@@ -40,7 +40,7 @@ capdescr :: Sentence
 capdescr =
   foldlSent [(short lResistance) `isThe` (phrase lResistance) `sC`
   S "which" +:+. S "is also called capacity" +:+. ((getS nonFL) `isThe`
-  (phrase nonFL)) +:+. ((short glassTypeFac) `isThe` (phrase glassTypeFac))
+  (phrase nonFL)) +:+. ((short glassTypeFac_) `isThe` (phrase glassTypeFac_))
   +:+. ((short lShareFac) `isThe` (phrase lShareFac)), S "Follows",
   (acroA "2"), S "and", (acroA "1"), sParen (Quote (S "In development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip in the" +:+

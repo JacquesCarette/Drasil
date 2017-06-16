@@ -112,7 +112,7 @@ lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 ar_min      = vc "ar_min"        (nounPhraseSP "minimum aspect ratio")
   (sub (Atomic "AR") (Atomic "min")) Rational --find a way to call aspectR instead of using (Atomic "AR") again
-gTF         = vc "gTF"           (glassTypeFac ^. term) (Atomic "GTF") Integer
+gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, 
@@ -151,7 +151,7 @@ hStrengthGl   = dcc "hStrengthGl"          (heatSGlass ^. term)
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6].")
-glTyFac       = dccWDS "glTyFac"      (glassTypeFac ^. term) 
+glTyFac       = dccWDS "glTyFac"      (nounPhraseSP "glass type factor") 
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
   S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
   (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass" `sC`
@@ -168,7 +168,7 @@ loadResis     = dcc "loadResis"          (lResistance ^. term)
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
-nonFactoredL  = dccWDS "nonFactoredL"    (nonFactoredL ^. term)
+nonFactoredL  = dccWDS "nonFactoredL"    (nounPhraseSP "non-factored load")
   (foldlSent [S "Three second duration uniform load associated with a probability of",
     S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
     (getAcc annealedGlass), S "glass"])
@@ -215,23 +215,23 @@ bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled wit
   "substance designed to exlode on impact or via detonation")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
 
+-- hack; needs to be removed eventually
+lDurFac_ :: VarChunk
+lDurFac_ = makeVC "lDurFac" (nounPhraseSP "load duration factor") (Atomic "LDF")
 
--- hack; needs to be removed eventually; originals are within Concepts.hs
-temporary :: [VarChunk]
-temporary = [nonFactorL_, lDurFac_, glassTypeFac_]
+temporary :: [ConVar]
+temporary = [nonFactorL_, glassTypeFac_]
 
-nonFactorL_, lDurFac_, glassTypeFac_ :: VarChunk
-
-nonFactorL_    = makeVC "nonFactorL"    (nounPhraseSP "non-factored load") cB
-lDurFac_       = makeVC "lDurFac"       (nounPhraseSP "load duration factor") cB
-glassTypeFac_  = makeVC "glassTypeFac"  (nounPhraseSP "glass type factor") cB
+nonFactorL_, glassTypeFac_ :: ConVar
+nonFactorL_    = cvR (nonFactoredL) (Atomic "NFL")
+glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
 temporaryLOSymbols :: [QSWrapper]
-temporaryLOSymbols = this_symbols++map qs (temporary)
+temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac_]
 
 gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap temporaryLOSymbols

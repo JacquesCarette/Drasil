@@ -47,7 +47,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' (lDurFac_ ^. id) (lDurFac ^. term) (Atomic "LDF") loadDF_eq
+loadDF = fromEqn' ("lDurFac") (nounPhraseSP "load duration factor") (Atomic "LDF") loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
@@ -61,7 +61,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL_ ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
+nonFL = fromEqn' (nonFactorL_ ^. id) (nonFactorL_ ^. term) (Atomic "NFL") nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]

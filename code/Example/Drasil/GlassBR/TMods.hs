@@ -25,8 +25,8 @@ t1descr :: Sentence
 t1descr = 
   foldlSent [S "If", (getS is_safe1), S "= True, the glass is" +:+. 
   S "considered safe", (getS is_safe1), S "and", (getS is_safe2),
-  S "(from", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))
-  :+: S ") are either" +:+. S "both True or both False",
+  sParen (S "from" +:+ (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))),
+  S "are either" +:+. S "both True or both False",
   ((getS prob_br) `isThe` (phrase prob_br)) 
   `sC` S "as calculated in" +:+.
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
@@ -44,11 +44,11 @@ safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 t2descr :: Sentence
 t2descr = 
   foldlSent [S "If", (getS is_safe2), S "= True, the glass is" +:+.
-  S "considered safe", (getS is_safe1), S "(from", 
-  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq)),
+  S "considered safe", (getS is_safe1), sParen (S "from" +:+ 
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq))),
   S "and", (getS is_safe2) +:+. S "are either both True or both False",
   (short lResistance) `isThe` (phrase lResistance), 
-  S "(also called capacity, as defined in" +:+. 
+  sParen (S "also called capacity") `sC` S "as defined in" +:+. 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
-  (getS demand), S "(also referred as the", (titleize demandq) :+:
-  S ") is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]
+  (getS demand), sParen (S "also referred as the" +:+ (titleize demandq)),
+  S "is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]

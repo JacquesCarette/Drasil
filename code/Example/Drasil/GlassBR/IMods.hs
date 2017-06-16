@@ -41,12 +41,11 @@ capdescr =
   foldlSent [(short lResistance) `isThe` (phrase lResistance) `sC`
   S "which" +:+. S "is also called capacity" +:+. ((getS nonFL) `isThe`
   (phrase nonFL)) +:+. ((short glassTypeFac) `isThe` (phrase glassTypeFac))
-  +:+. ((short lShareFac) `isThe` (phrase lShareFac)), S "Follows"
-  +:+ (short assumption) :+: S "2 and", (short assumption) :+: S "1 (" :+:
-  Quote (S "In development of this procedure, it was assumed that" +:+
+  +:+. ((short lShareFac) `isThe` (phrase lShareFac)), S "Follows",
+  (acroA "2"), S "and", (acroA "1"), sParen (Quote (S "In development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip in the" +:+
   S "plane of the glass. This boundary condition has been shown to be typical" +:+
-  S "of many glass installations)") +:+ S "from [4 (pg. 53)]"]
+  S "of many glass installations")) +:+ S "from [4 (pg. 53)]"]
 
 {--}
 
@@ -61,7 +60,7 @@ dedescr :: Sentence
 dedescr = 
   foldlSent [(getS demand), S "or", (phrase demandq) `sC`
   S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase standOffDist), S "(" :+: (getS standOffDist) :+: S ") and", 
+  (phrase standOffDist), sParen (getS standOffDist), S "and", 
   (getS eqTNTWeight) +:+. S "as parameters", 
   (getS eqTNTWeight), S "is defined as", (getS eqTNTWeight),
   S "=", (getS char_weight) +:+. S "* TNT" +:+. ((getS char_weight) `isThe`

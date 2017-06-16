@@ -128,8 +128,8 @@ s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this", 
   phrase document, S "follows the", phrase template, S "for an", (short srs), 
   S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1"), S "and", 
-  sSqBr (S "2"), S "(in", (makeRef s10) :+: 
-  S "), with some aspects taken from Volere", phrase template, S "16", 
+  sSqBr (S "2"), sParen (S "in" +:+ (makeRef s10)) `sC`
+  S "with some aspects taken from Volere", phrase template, S "16", 
   sSqBr (S "3")]
   
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn), 
@@ -465,8 +465,8 @@ s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
   S "from", acroR "2"]
 
 s7_1_req5 = S "If" +:+ (getS is_safe1) +:+ S "and" +:+
-  (getS is_safe2) +:+ S "(from" +:+ (makeRef (gbSymbMapT t1SafetyReq)) +:+
-  S "and" +:+ (makeRef (gbSymbMapT t2SafetyReq)) :+: S ") are true" `sC`
+  (getS is_safe2) +:+ sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq)) +:+
+  S "and" +:+ (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
@@ -734,13 +734,13 @@ s10_list = mkRefsList 1
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
   titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 
-  (F Acute 'e') :+: S ", P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
+  (F Acute 'e') `sC` S "P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
   titleize' requirement +:+. S "Engineering Conference, 2005"), 
   (S "J. Robertson and S. Robertson" `sC` Quote (S "Volere" +:+
   plural requirement +:+ phrase specification +:+ phrase template +:+. S "edition 16") +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
-  S "Volere template16.pdf") :+: S ", 2012."), 
+  S "Volere template16.pdf") `sC` S "2012."), 
   (S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
   +:+ S "for determining" +:+ (phrase load) +:+ S "resistance of" +:+
   S "glass in buildings,") +:+ 

@@ -2,9 +2,8 @@
 module Drasil.TableOfSymbols 
   (table) where
 
-import Control.Lens ((^.))
-
 import Data.Maybe (isJust)
+import Data.Drasil.Utils(getS)
 
 import Language.Drasil
 import qualified Data.Drasil.Concepts.Math as CM
@@ -16,10 +15,11 @@ table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
 table ls f = Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable
-  [(\ch -> (\(Just t) -> P (t ^. symbol)) (getSymb ch)),
-  (\ch -> f ch), 
+  [(\ch -> (\(Just t) -> (getS t)) (getSymb ch)),
+  f, 
   unit'2Contents]
   sls)
-  ( titleize tOfSymb) False
+  (titleize tOfSymb) False
   where sls = filter (isJust . getSymb) ls --Don't use catMaybes
 
+-- ^. defn

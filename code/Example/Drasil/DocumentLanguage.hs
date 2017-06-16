@@ -116,6 +116,7 @@ data LFunc where
   Defn :: LFunc
   TermExcept :: Concept c => [c] -> LFunc
   DefnExcept :: Concept c => [c] -> LFunc
+  TAD :: LFunc --Term and Definition
 
 type DocDesc = [DocSection]
 
@@ -165,6 +166,7 @@ mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
           (at_start x) else (x ^. defn))
+        lf TAD = (\tDef -> at_start tDef :+: S ":" +:+ (tDef ^. defn))
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab

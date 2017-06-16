@@ -60,7 +60,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL_ ^. id) (nonFactorL_ ^. term) (Atomic "NFL") nonFL_eq
+nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]

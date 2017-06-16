@@ -216,14 +216,14 @@ bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled wit
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
 
 -- hack; needs to be removed eventually
-lDurFac_ :: VarChunk
-lDurFac_ = makeVC "lDurFac" (nounPhraseSP "load duration factor") (Atomic "LDF")
+lDurFac :: VarChunk
+lDurFac = makeVC "lDurFac" (nounPhraseSP "load duration factor") (Atomic "LDF")
 
 temporary :: [ConVar]
-temporary = [nonFactorL_, glassTypeFac_]
+temporary = [nonFactorL, glassTypeFac_]
 
-nonFactorL_, glassTypeFac_ :: ConVar
-nonFactorL_    = cvR (nonFactoredL) (Atomic "NFL")
+nonFactorL, glassTypeFac_ :: ConVar
+nonFactorL    = cvR (nonFactoredL) (Atomic "NFL")
 glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
@@ -231,7 +231,7 @@ this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless))
 
 temporaryLOSymbols :: [QSWrapper]
-temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac_]
+temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]
 
 gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap temporaryLOSymbols

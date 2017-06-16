@@ -4,7 +4,7 @@ module Data.Drasil.SentenceStructures
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
-  , showingCxnBw, refineChain, foldlSP, foldlSPCol
+  , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   ) where
 
@@ -28,6 +28,9 @@ foldlSentCol = foldle (+:+) (+:) EmptyS
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents
 foldlSP = (Paragraph . foldlSent)
+
+foldlSP_ :: [Sentence] -> Contents
+foldlSP_ = (Paragraph . foldlSent_)
 
 foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = (Paragraph . foldlSentCol)

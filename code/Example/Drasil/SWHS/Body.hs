@@ -43,7 +43,7 @@ import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSP, foldlSPCol)
+  foldlSP, foldlSP_, foldlSPCol)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -618,11 +618,14 @@ assump19 = [S "The pressure in the", phrase tank,
 --General definitions not yet implemented
 
 s4_2_3_deriv :: [Contents]
-s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified" +:+
-  phrase rOfChng +:+ S "of" +: phrase temp),
-  Paragraph (S "Integrating" +:+ swhsSymbMapTRef t1ConsThermE +:+
-  S "over a" +:+ phrase vol +:+ sParen (
-  P (vol ^. symbol)) `sC` S "we have:"),
+s4_2_3_deriv = [
+
+  foldlSPCol [S "Detailed derivation of simplified",
+  phrase rOfChng, S "of", phrase temp],
+
+  foldlSPCol [S "Integrating", swhsSymbMapTRef t1ConsThermE,
+  S "over a", phrase vol, sParen (getS vol) `sC` S "we have"],
+
   EqnBlock
   ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C gradient) :. (C thFluxVect)) vol))) +
@@ -630,49 +633,52 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified" +:+
   (C vol_ht_gen) vol) :=
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
   * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
-  Paragraph (S "Applying" +:+ titleize gauss_div +:+ S "to" +:+
-  S "the first term over the" +:+ phrase surface +:+
-  P (surface ^. symbol) +:+ S "of the" +:+
-  phrase vol `sC` S "with" +:+ P (thFluxVect ^. symbol) +:+ S "as the" +:+
-  phrase thFluxVect +:+ S "for the" +:+ phrase surface +:+ S "and" +:+
-  P (uNormalVect ^. symbol) +:+ S "as a" +:+ phrase unit_ +:+
-  S "outward" +:+ phrase uNormalVect +:+ S "for a" +:
-  phrase surface),
+
+  foldlSPCol [S "Applying", titleize gauss_div, S "to",
+  S "the first term over the", phrase surface, getS surface,
+  S "of the", phrase vol `sC` S "with", getS thFluxVect,
+  S "as the", phrase thFluxVect, S "for the", phrase surface,
+  S "and", getS uNormalVect, S "as a", phrase unit_,
+  S "outward", phrase uNormalVect, S "for a", phrase surface],
+
   EqnBlock
-  ((Neg (UnaryOp (Integral (Just (Low (C surface)), Nothing)
-  ((C thFluxVect) :. (C uNormalVect)) surface))) +
-  (UnaryOp (Integral (Just
-  (Low (C vol)), Nothing) (C vol_ht_gen) vol)) :=
-  UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  ((Neg (UnaryOp (Integral (Just (Low (C surface)),
+  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) +
+  (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
+  vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
-  Paragraph (S "We consider an arbitrary" +:+. phrase vol +:+ S "The" +:+
-  phrase vol_ht_gen +: S "is assumed constant. Then (1) can be written as"),
+
+  foldlSPCol [S "We consider an arbitrary" +:+. phrase vol, S "The",
+  phrase vol_ht_gen, S "is assumed constant. Then (1) can be written as"],
+
   EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
   (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
   Deriv Part (C temp) (C time)) vol)),
-  Paragraph (S "Where" +:+ P (ht_flux_in ^. symbol) `sC`
-  P (ht_flux_out ^. symbol) `sC` P (in_SA ^. symbol) `sC`
-  S "and" +:+ P (out_SA ^. symbol) +:+ S "are explained in" +:+.
-  acroGD "2" +:+ S "Assuming" +:+ P (density ^. symbol) `sC`
-  P (heat_cap_spec ^. symbol) +:+ S "and" +:+ P (temp ^. symbol) +:+
-  S "are constant over the" +:+ phrase vol `sC`
-  S "which is true in our case by" +:+ titleize' assumption +:+
+
+  foldlSPCol [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
+  getS in_SA `sC` S "and", getS out_SA, S "are explained in" +:+.
+  acroGD "2", S "Assuming", getS density `sC` getS heat_cap_spec,
+  S "and", getS temp, S "are constant over the", phrase vol `sC`
+  S "which is true in our case by", titleize' assumption,
   sParen (acroA "3") `sC` sParen (acroA "4") `sC`
-  sParen (acroA "5") `sC` sParen (acroA "6") `sC`
-  S "we have:"),
+  sParen (acroA "5") `sC` sParen (acroA "6") `sC` S "we have"],
+
   EqnBlock
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol)),
-  Paragraph (S "Using the fact that" +:+ P (density ^. symbol) :+:
-  S "=" :+: P (mass ^. symbol) :+: S "/" :+:
-  P (vol ^. symbol) `sC` S "(2) can be written as:"),
+
+  foldlSPCol [S "Using the fact that", getS density :+: S "=" :+:
+  getS mass :+: S "/" :+: getS vol `sC` S "(2) can be written as"],
+
   EqnBlock
-  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp) (C time) :=
-  (C ht_flux_in) * (C in_SA) - (C ht_flux_out) * (C out_SA) +
-  (C vol_ht_gen) * (C vol))]
+  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
+  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  * (C out_SA) + (C vol_ht_gen) * (C vol))
+
+  ]
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)
@@ -684,8 +690,8 @@ s4_2_3_deriv = [Paragraph (S "Detailed derivation of simplified" +:+
 
 
 s4_2_4_intro_end :: Sentence
-s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
-  S "is also given"
+s4_2_4_intro_end = foldlSent [S "The dimension of each",
+  phrase quantity, S "is also given"]
 
 -- General paragraph, repeated in most examples but would work for all. Can be
 -- absracted out.
@@ -695,17 +701,17 @@ s4_2_4_intro_end = S "The dimension of each" +:+ phrase quantity +:+.
 -----------------------------
 
 s4_2_5_subpar :: [Contents]
-s4_2_5_subpar = [Paragraph (S "The goals" +:+  acroGS "1" +:+ S "to" +:+
-  acroGS "4" +:+ S "are solved by" +:+ acroIM "1" +:+ S "to" +:+.
-  acroIM "4" +:+ S "The" +:+ plural solution +:+ S "for" +:+ acroIM "1" +:+
-  S "and" +:+ acroIM "2" +:+ S "are coupled since the" +:+ phrase solution +:+
-  S "for" +:+ P (temp_W ^. symbol) +:+ S "and" +:+ P (temp_PCM ^. symbol) +:+.
-  S "depend on one another" +:+ acroIM "3" +:+ S "can be solved once" +:+
-  acroIM "1" +:+ S "has been solved. The" +:+ phrase solution +:+ S "of" +:+
-  acroIM "2" +:+ S "and" +:+ acroIM "4" +:+ S "are also coupled, since the" +:+
-  phrase temp_PCM +:+ S "and" +:+ phrase pcm_E +:+ S "depend on the" +:+.
-  phrase CT.phase_change +:+ sParen (at_start' inModel +:+.
-  S "are left out because they are not currently implemented in Drasil"))]
+s4_2_5_subpar = [foldlSP_ [S "The goals",  acroGS "1", S "to",
+  acroGS "4", S "are solved by", acroIM "1", S "to" +:+.
+  acroIM "4", S "The", plural solution, S "for", acroIM "1",
+  S "and", acroIM "2", S "are coupled since the", phrase solution,
+  S "for", getS temp_W, S "and", getS temp_PCM +:+.
+  S "depend on one another", acroIM "3", S "can be solved once",
+  acroIM "1", S "has been solved. The", phrase solution, S "of",
+  acroIM "2", S "and", acroIM "4", S "are also coupled, since the",
+  phrase temp_PCM, S "and", phrase pcm_E, S "depend on the" +:+.
+  phrase CT.phase_change, sParen (at_start' inModel +:+.
+  S "are left out because they are not currently implemented in Drasil")]]
 
 {-s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
   (s4_2_5_deriv2)) []
@@ -731,54 +737,56 @@ s4_2_5_deriv1 = s4_2_5_d1startPara ++
 s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list,
   s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
 
-s4_2_5_d1startPara = [Paragraph (S "Derivation of the" +:+
-  phrase energy +:+ S "balance on" +: phrase water)]
+s4_2_5_d1startPara = [foldlSPCol [S "Derivation of the",
+  phrase energy, S "balance on", phrase water]]
 
-s4_2_5_d1eqn_list = map (EqnBlock) [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
+s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
   s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
 
 s4_2_5_d1sent_list = map foldlSPCol [
-  [S "To find the", phrase rOfChng, S "of", (P $ temp_W ^. symbol) `sC`
+  
+  [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
-  phrase water, S "The", phrase vol,
-  S "being considered is the", phrase w_vol, EmptyS,
-  (P $ w_vol ^. symbol) `sC` S "which has", phrase w_mass, EmptyS,
--- why is EmptyS here?
-  (P $ w_mass ^. symbol), S "and" +:+. (phrase htCap_W `sC`
-  (P $ htCap_W ^. symbol)), (P $ ht_flux_C ^. symbol), S "represents the",
-  phrase ht_flux_C, S "and", (P $ ht_flux_P ^. symbol), S "represents",
-  S "the", phrase ht_flux_P `sC` S "over", phrase coil_SA,
-  S "and", phrase pcm_SA, S "of", (P $ coil_SA ^. symbol), S "and",
-  (P $ pcm_SA ^. symbol) `sC` S "respectively. No",
+  phrase water, S "The", phrase vol, S "being considered is the",
+  phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass,
+  getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
+  getS ht_flux_C, S "represents the", phrase ht_flux_C, S "and",
+  getS ht_flux_P, S "represents", S "the", phrase ht_flux_P `sC`
+  S "over", phrase coil_SA, S "and", phrase pcm_SA, S "of",
+  getS coil_SA, S "and", getS pcm_SA `sC` S "respectively. No",
   phrase CT.heat_trans, S "occurs to the outside of the",
-  phrase tank `sC` S "since it",
-  S "has been assumed to be", phrase perfect_insul +:+.
-  sParen (acroA "15"), S "Assuming no", phrase vol_ht_gen +:+.
-  (sParen (acroA "16") `sC` (P $ vol_ht_gen ^. symbol) :+: S "=0"),
-  S "Therefore, the", phrase equation, S "for" +:+ acroGD "2" +:+ S "can be",
-  S "written as"],
+  phrase tank `sC` S "since it has been assumed to be",
+  phrase perfect_insul +:+. sParen (acroA "15"), S "Assuming no",
+  phrase vol_ht_gen +:+. (sParen (acroA "16") `sC` getS vol_ht_gen
+  :+: S "=0"), S "Therefore, the", phrase equation, S "for" +:+
+  acroGD "2" +:+ S "can be written as"],
+
   [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and",
-  swhsSymbMapDRef dd2HtFluxP, S "for",
-  (P $ ht_flux_C ^. symbol), S "and", (P $ ht_flux_P ^. symbol),
-  S "respectively,", S "this can be written as"],
-  [S "Dividing (3) by", P (w_mass ^. symbol) :+:
-  P (htCap_W ^. symbol) `sC` S "we obtain"],
-  [S "Factoring the negative sign out of the second", S "term of the",
+  swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_C, S "and",
+  getS ht_flux_P, S "respectively, this can be written as"],
+
+  [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"],
+
+  [S "Factoring the negative sign out of the second term of the",
   short rightSide, S "of", titleize equation,
   S "(4) and multiplying it by",
-  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol) :+: S "/" :+:
-  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol), S "yields"],
+  getS coil_HTC :+: getS coil_SA :+: S "/" :+:
+  getS coil_HTC :+: getS coil_SA, S "yields"],
+
   [S "Which simplifies to"],
-  [S "Setting", P (tau_W ^. symbol) :+: S "=" :+:
-  (P $ w_mass ^. symbol) :+: (P $ htCap_W ^. symbol) :+: S "/" :+:
-  (P $ coil_HTC ^. symbol) :+: (P $ coil_SA ^. symbol),
-  S "and", (P $ eta ^. symbol) :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+:
+
+  [S "Setting", getS tau_W :+: S "=" :+: getS w_mass :+:
+  getS htCap_W :+: S "/" :+: getS coil_HTC :+: getS coil_SA,
+  S "and", getS eta :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+:
   (P $ pcm_SA ^. symbol) :+: S "/" :+: (P $ coil_HTC ^. symbol) :+:
   (P $ coil_SA ^. symbol) `sC` titleize equation, S "(5) can",
   S "be written as"],
+
   [S "Finally, factoring out 1/" :+: (P $ tau_W ^. symbol) `sC`
   S "we are left with the governing",
-  short ode, S "for" +:+ acroIM "1"]]
+  short ode, S "for" +:+ acroIM "1"]
+
+  ]
 
 
 s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,

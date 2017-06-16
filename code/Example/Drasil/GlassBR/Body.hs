@@ -400,7 +400,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   [(\x -> fst x), (\x -> snd x)]
   (zipWith s6_2_5_table2_formatF
   [dim_min, dim_max, cWeightMin, cWeightMax, sd_min, sd_max]
-  [(Dbl 0.1), (Dbl 0.1), (Dbl 4.5), (Int 910), (Int 6), (Int 130)]))
+  [(Int 100), (Int 100), (Dbl 4.5), (Int 910), (Int 6), (Int 130)]))
   --FIXME: how to incorporate (getS ar_max, E (Int 5))?
   (titleize table_ +: E (Int 3) +:+ titleize specification +:+
   (titleize parameter) +:+ titleize' value) True

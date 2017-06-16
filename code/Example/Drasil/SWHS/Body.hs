@@ -43,7 +43,7 @@ import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSP, foldlSP_, foldlSPCol)
+  foldlSentCol, foldlSP, foldlSP_, foldlSPCol)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -416,11 +416,11 @@ s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
 
 physSyst1 = [at_start tank, S "containing" +:+. phrase water]
 --
-physSyst2 = [at_start coil, S "at bottom of", phrase tank,
+physSyst2 = [at_start coil, S "at bottom of" +:+. phrase tank,
   sParen (getS ht_flux_C +:+ S "represents the" +:+. phrase ht_flux_C)]
 --
 physSyst3 = [short phsChgMtrl, S "suspended in" +:+. phrase tank,
-  sParen (getS ht_flux_P +:+ S "represents the" +:+ phrase ht_flux_P)]
+  sParen (getS ht_flux_P +:+ S "represents the" +:+. phrase ht_flux_P)]
 
 -- Structure of list would be same between examples but content is completely
 -- different
@@ -478,7 +478,7 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
           plural constraint, S "restricts the range of",
           plural input_, S "to reasonable", plural value]
           
-        end = sParen (foldlSent [S "The", plural table_, S "are left out" +:+.
+        end = sParen (foldlSent [S "The", plural table_, S "are left out",
           S "because features they should use are not yet implemented",
           S "in Drasil"])
 
@@ -663,7 +663,7 @@ s4_2_3_deriv = [
   S "and", getS temp, S "are constant over the", phrase vol `sC`
   S "which is true in our case by", titleize' assumption,
   sParen (acroA "3") `sC` sParen (acroA "4") `sC`
-  sParen (acroA "5") `sC` sParen (acroA "6") `sC` S "we have"],
+  sParen (acroA "5") `sC` S "and", sParen (acroA "6") `sC` S "we have"],
 
   EqnBlock
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
@@ -758,8 +758,8 @@ s4_2_5_d1sent_list = map foldlSPCol [
   phrase tank `sC` S "since it has been assumed to be",
   phrase perfect_insul +:+. sParen (acroA "15"), S "Assuming no",
   phrase vol_ht_gen +:+. (sParen (acroA "16") `sC` getS vol_ht_gen
-  :+: S "=0"), S "Therefore, the", phrase equation, S "for" +:+
-  acroGD "2" +:+ S "can be written as"],
+  :+: S "=0"), S "Therefore, the", phrase equation, S "for",
+  acroGD "2", S "can be written as"],
 
   [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and",
   swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_C, S "and",
@@ -777,14 +777,12 @@ s4_2_5_d1sent_list = map foldlSPCol [
 
   [S "Setting", getS tau_W :+: S "=" :+: getS w_mass :+:
   getS htCap_W :+: S "/" :+: getS coil_HTC :+: getS coil_SA,
-  S "and", getS eta :+: S "=" :+: (P $ pcm_HTC ^. symbol) :+:
-  (P $ pcm_SA ^. symbol) :+: S "/" :+: (P $ coil_HTC ^. symbol) :+:
-  (P $ coil_SA ^. symbol) `sC` titleize equation, S "(5) can",
-  S "be written as"],
+  S "and", getS eta :+: S "=" :+: getS pcm_HTC :+:
+  getS pcm_SA :+: S "/" :+: getS coil_HTC :+: getS coil_SA
+  `sC` titleize equation, S "(5) can be written as"],
 
-  [S "Finally, factoring out 1/" :+: (P $ tau_W ^. symbol) `sC`
-  S "we are left with the governing",
-  short ode, S "for" +:+ acroIM "1"]
+  [S "Finally, factoring out 1/" :+: getS tau_W `sC`
+  S "we are left with the governing", short ode, S "for", acroIM "1"]
 
   ]
 
@@ -805,16 +803,16 @@ s4_2_5_d_eqn3 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) *
   (C htCap_W)) * ((C temp_W) - (C temp_PCM)))
 
 s4_2_5_d_eqn4 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W)) + ((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) *
-  (C coil_SA)) * ((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) *
-  (C htCap_W)) * ((C temp_PCM) - (C temp_W)))
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
+  (((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * (C coil_SA))) *
+  (((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * (C htCap_W))) *
+  ((C temp_PCM) - (C temp_W)))
 
 s4_2_5_d_eqn5 = (Deriv Total (C temp_W) (C time) := ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W)) + ((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) *
-  (C coil_SA)) * ((C coil_HTC) * (C coil_SA)) / ((C w_mass) *
-  (C htCap_W)) * ((C temp_PCM) - (C temp_W)))
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
+  (((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) * (C coil_SA))) *
+  (((C coil_HTC) * (C coil_SA)) / ((C w_mass) * (C htCap_W))) *
+  ((C temp_PCM) - (C temp_W)))
 
 s4_2_5_d_eqn6 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
   ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
@@ -834,16 +832,16 @@ s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list,
   s4_2_5_d2sent_list]) ++ s4_2_5_d2endPara
 
 s4_2_5_d2sent_list = map foldlSPCol [
-  [S "Using",
-  swhsSymbMapDRef dd2HtFluxP, S "for",
-  (P $ ht_flux_P ^. symbol) `sC` S "this", phrase equation,
-  S "can be written as"],
-  [S "Dividing by", (P $ pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol),
-  S "we obtain"],
-  [S "Setting", P (tau_S_P ^. symbol) :+: S "=" :+:
-  P (pcm_mass ^. symbol) :+: P (htCap_S_P ^. symbol) :+: S "/" :+:
-  P (pcm_HTC ^. symbol) :+: P (pcm_SA ^. symbol) `sC`
+
+  [S "Using", swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_P `sC`
+  S "this", phrase equation, S "can be written as"],
+
+  [S "Dividing by", getS pcm_mass :+: getS htCap_S_P, S "we obtain"],
+
+  [S "Setting", getS tau_S_P :+: S "=" :+: getS pcm_mass :+: 
+  getS htCap_S_P :+: S "/" :+: getS pcm_HTC :+: getS pcm_SA `sC`
   S "this can be written as"]
+
   ]
 
 
@@ -864,54 +862,52 @@ s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) *
 s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
   ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d2startPara = map Paragraph [(S "Detailed derivation of the" +:+
-  phrase energy +:+ S "balance on the" +:+ short phsChgMtrl +:+
-  S "during" +:+ phrase sens_heat :+: S "ing phase:"),
-  (S "To find the" +:+ phrase rOfChng +:+ S "of" +:+
-  P (temp_PCM ^. symbol) `sC` S "we look at the" +:+
-  phrase energy +:+ S "balance on the" +:+.
-  short phsChgMtrl +:+ S "The" +:+ phrase vol +:+
-  S "being considered is the" +:+ phrase pcm_vol :+:
-  S "," +:+. P (pcm_vol ^. symbol) +:+ S "The derivation" +:+
-  S "that follows is initially for the" +:+
-  phrase solid +:+ EmptyS +:+. short phsChgMtrl +:+
-  S "The" +:+ phrase pcm_mass +:+ S "is" +:+
-  P (pcm_mass ^. symbol) +:+ S "and the" +:+ phrase htCap_S_P +:+
-  S "is" +:+. P (htCap_S_P ^. symbol) +:+
-  S "The" +:+ phrase ht_flux_P +:+ S "is" +:+
-  P (ht_flux_P ^. symbol) +:+ S "over" +:+ phrase pcm_SA +:+.
-  P (pcm_SA ^. symbol) +:+ S "There is no" +:+.
-  phrase ht_flux_out +:+ S "Assuming no" +:+
-  phrase vol_ht_gen +:+ sParen (acroA "16") `sC` P (vol_ht_gen ^. symbol) :+:
-  S "=0, the" +:+ phrase equation +:
-  S "for" +:+ acroGD "2" +:+ S "can be written as")]
+s4_2_5_d2startPara = map foldlSPCol [
 
-s4_2_5_d2endPara = map Paragraph [(titleize equation +:+
-  S "(6) applies for the" +:+ phrase solid +:+ EmptyS +:+. short phsChgMtrl +:+
-  S "In the case where all of the" +:+
-  short phsChgMtrl +:+ S "is melted, the same" +:+
-  S "derivation applies, except that" +:+ P (htCap_S_P ^.
-  symbol) +:+ S "is replaced by" +:+ P (htCap_L_P ^. symbol) `sC`
-  S "and thus" +:+ P (tau_S_P ^. symbol) +:+ S "is" +:+
-  S "replaced by" +:+. P (tau_L_P ^. symbol) +:+
-  S "Although a small change in" +:+ phrase surface +:+
-  S "area would be expected with" +:+ phrase CT.melting `sC`
-  S "this is not included, since the" +:+
-  phrase vol +:+ S "change of the" +:+ short phsChgMtrl +:+
-  S "with" +:+ phrase CT.melting +:+.
-  S "is assumed to be negligible" +:+ sParen (acroA "17")),
-  (S "In the case where" +:+ P (temp_PCM ^. symbol) :+:
-  S "=" :+: P (temp_melt_P ^. symbol) +:+ S "and not all of" +:+
-  S "the" +:+ short phsChgMtrl +:+ S "is melted, the" +:+
-  phrase temp_PCM +:+ S "does not change. Therefore, in" +:+
-  S "this case d" :+: P (temp_PCM ^. symbol) :+: S "/d" :+:
-  P (time ^. symbol) :+: S "=0."),
-  (S "This derivation does not consider the" +:+
-  phrase CT.boiling +:+ S "of the" +:+
-  short phsChgMtrl `sC` S "as the" +:+ short phsChgMtrl +:+
-  S "is assumed to either be in" +:+ S "a" +:+
-  (solid ^. defn) +:+ S "or a" +:+ (liquid ^. defn) +:+.
-  sParen (acroA "18"))]
+  [S "Detailed derivation of the", phrase energy, S "balance on the",
+  short phsChgMtrl, S "during", phrase sens_heat :+: S "ing phase"],
+
+  [S "To find the", phrase rOfChng, S "of", getS temp_PCM `sC`
+  S "we look at the", phrase energy, S "balance on the" +:+.
+  short phsChgMtrl, S "The", phrase vol,
+  S "being considered is the" +:+. (phrase pcm_vol `sC` getS pcm_vol),
+  S "The derivation that follows is initially for the",
+  phrase solid +:+. short phsChgMtrl, S "The", phrase pcm_mass, S "is",
+  getS pcm_mass, S "and the", phrase htCap_S_P, S "is" +:+. getS htCap_S_P,
+  S "The", phrase ht_flux_P, S "is", getS ht_flux_P, S "over",
+  phrase pcm_SA +:+. getS pcm_SA, S "There is no" +:+. phrase ht_flux_out,
+  S "Assuming no", phrase vol_ht_gen, sParen (acroA "16") `sC`
+  getS vol_ht_gen :+: S "=0, the", phrase equation, S "for", acroGD "2",
+  S "can be written as"]
+
+  ]
+
+s4_2_5_d2endPara = map foldlSP [
+
+  [titleize equation,
+  S "(6) applies for the", phrase solid +:+. short phsChgMtrl,
+  S "In the case where all of the", short phsChgMtrl,
+  S "is melted, the same derivation applies, except that",
+  getS htCap_S_P, S "is replaced by", getS htCap_L_P `sC`
+  S "and thus", getS tau_S_P, S "is replaced by" +:+.
+  getS tau_L_P, S "Although a small change in", phrase surface,
+  S "area would be expected with", phrase CT.melting `sC`
+  S "this is not included, since the", phrase vol,
+  S "change of the", short phsChgMtrl, S "with", phrase CT.melting,
+  S "is assumed to be negligible", sParen (acroA "17")],
+
+  [S "In the case where", getS temp_PCM :+: S "=" :+:
+  getS temp_melt_P, S "and not all of the", short phsChgMtrl,
+  S "is melted, the", phrase temp_PCM +:+. S "does not change",
+  S "Therefore, in this case d" :+: getS temp_PCM :+: S "/d" :+:
+  getS time :+: S "=0"],
+
+  [S "This derivation does not consider the", phrase CT.boiling,
+  S "of the", short phsChgMtrl `sC` S "as the", short phsChgMtrl,
+  S "is assumed to either be in", S "a", (solid ^. defn),
+  S "or a", (liquid ^. defn), sParen (acroA "18")]
+
+  ]
 
 -- Add GD, A, and EqnBlock references when available
 -- Replace Derivs with regular derivative when available
@@ -973,20 +969,17 @@ s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
 
 s4_2_7_deriv :: [Contents]
 s4_2_7_deriv = [
-  Paragraph (S "A" +:+ phrase corSol +:+
-  S "must exhibit the" +:+. phrase CT.law_cons_energy +:+
-  S "This means that the" +:+ phrase w_E +:+
-  S "should equal the difference between" +:+
-  S "the total" +:+ phrase energy +:+ phrase input_ +:+
-  S "from the" +:+ phrase coil +:+ S "and the" +:+
-  phrase energy +:+ phrase output_ +:+ S "to the" +:+.
-  short phsChgMtrl +:+ S "This can be shown as an" +:+
-  phrase equation +:+ S "by taking" +:+ swhsSymbMapDRef dd1HtFluxC +:+
-  S "and" +:+ swhsSymbMapDRef dd2HtFluxP `sC` S "multiplying each by their" +:+
-  S "respective" +:+ phrase surface +:+ S "area of" +:+
-  phrase CT.heat_trans `sC`
-  S "and integrating each over the" +:+ phrase simulation +:+
-  phrase time `sC` S "as follows:"),
+
+  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
+  phrase CT.law_cons_energy, S "This means that the", phrase w_E,
+  S "should equal the difference between the total", phrase energy,
+  phrase input_, S "from the", phrase coil, S "and the",
+  phrase energy, phrase output_, S "to the" +:+. short phsChgMtrl,
+  S "This can be shown as an", phrase equation, S "by taking",
+  swhsSymbMapDRef dd1HtFluxC, S "and", swhsSymbMapDRef dd2HtFluxP `sC`
+  S "multiplying each by their respective", phrase surface,
+  S "area of", phrase CT.heat_trans `sC` S "and integrating each",
+  S "over the", phrase simulation, phrase time `sC` S "as follows"],
 
   EqnBlock
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
@@ -995,24 +988,23 @@ s4_2_7_deriv = [
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time]))) time)),
 
-  Paragraph (S "In addition, the" +:+ phrase pcm_E +:+
-  S "should equal the" +:+ phrase energy +:+ phrase input_ +:+
-  S "to the" +:+ short phsChgMtrl +:+ S "from the" +:+.
-  phrase water +:+ S "This can be expressed as"),
+  foldlSP_ [S "In addition, the", phrase pcm_E, S "should equal the",
+  phrase energy, phrase input_, S "to the", short phsChgMtrl,
+  S "from the" +:+. phrase water, S "This can be expressed as"],
 
   EqnBlock
   ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
   (C temp_PCM) [C time]))) time)),
 
-  Paragraph (titleize' equation +:+ S "(reference) and" +:+
-  S "(reference) can be used as" +:+ Quote (S "sanity") :+: S "checks to" +:+
-  S "gain confidence in any" +:+ phrase solution +:+ S "computed by" +:+.
-  short progName +:+ S "The relative error between the results" +:+
-  S "computed by" +:+ short progName +:+ S "and the" +:+
-  S "results calculated from the" +:+ short rightSide +:+
-  S "of these" +:+ plural equation +:+
-  S "should be less than 0.001%" +:+. sParen (acroR "9"))
+  foldlSP [titleize' equation, S "(reference) and",
+  S "(reference) can be used as", Quote (S "sanity") :+:
+  S "checks to gain confidence in any", phrase solution,
+  S "computed by" +:+. short progName, S "The relative",
+  S "error between the results computed by", short progName,
+  S "and the results calculated from the", short rightSide, S "of these",
+  plural equation, S "should be less than 0.001%", sParen (acroR "9")]
+
   ]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
@@ -1034,6 +1026,35 @@ s5 = reqF [s5_1, s5_2]
 s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
+-- FIXME: Errors
+{--
+s5_1_list :: [Contents]
+s5_1_list = [Enumeration (Simple [acroR "1", Flat (foldlSentCol
+  [titleize input_, S "the following", plural quantity `sC`
+  S "which define the", phrase tank, S "parameters, material",
+  plural property, S "and initial", plural condition])]),
+
+  (Table [phrase symbol_, phrase unit_, phrase description]
+  (mkTable
+  [(\ch -> P (ch ^. symbol)),
+  (\ch -> Sy (unit_symb ch)),
+  (\ch -> phrase ch)] inputVar)
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
+--
+  Enumeration (Simple [acroR "2", Flat (foldlSent
+  [S "Use the", plural input_, S "in", acroR "1", S "to find the",
+  phrase mass, S "needed for", acroIM "1", S "to", acroIM "4" `sC`
+  S "as follows, where", getS w_vol, S "is the", phrase w_vol,
+  S "and", getS tank_vol, S "is the", phrase tank_vol])]),
+
+  EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
+  (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
+  (C pcm_vol)) * (C w_density)),
+  EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
+--
+  enumSimple 3 (short requirement) $ map foldlSent reqList
+  ]
+--}
 s5_1_list :: [Contents]
 s5_1_list = [Enumeration (Simple [(acroR "1", Flat
   (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
@@ -1059,71 +1080,60 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat
   (C pcm_vol)) * (C w_density)),
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
-  enumSimple 3 (short requirement) reqList
+  enumSimple 3 (short requirement) $ map foldlSent reqList
   ]
+
 
 -- Want to add req1 and req2 but they include a table and another enumeration
 -- so not sure how to implement yet
 
-reqList :: [Sentence]
+reqList :: [[Sentence]]
 
-req3, req4, req5, req6, req7, req8, req9, req10, req11 :: Sentence
+req3, req4, req5, req6, req7, req8, req9, req10, req11 :: [Sentence]
 
 reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
-req3 = S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical +:+ plural constraint +:+ S "shown in" +:+ makeRef s7_table1
+req3 = [S "Verify that the", plural input_, S "satisfy the required" +:+
+  phrase physical, plural constraint, S "shown in", makeRef s7_table1]
 --
-req4 = titleize output_ +:+ S "the" +:+
-  phrase input_ +:+ plural quantity +:+ S "and derived" +:+ plural quantity +:
-  S "in the following list" +:+ S "the" +:+ plural quantity +:+ S "from" +:+
-  acroR "1" `sC` S "the" +:+ plural mass +:+ S "from" +:+ acroR "2" `sC`
-  P (tau_W ^. symbol) +:+ sParen (S "from" +:+ acroIM "1") `sC`
-  P (eta ^. symbol) +:+ sParen (S "from" +:+ acroIM "1") `sC`
-  P (tau_S_P ^. symbol) +:+ sParen (S "from" +:+ acroIM "2") +:+ S "and" +:+
-  P (tau_L_P ^. symbol) +:+. sParen (S "from" +:+ acroIM "2")
+req4 = [titleize output_, S "the", phrase input_, plural quantity,
+  S "and derived", plural quantity +: S "in the following list",
+  S "the", plural quantity, S "from", acroR "1" `sC` S "the",
+  plural mass, S "from", acroR "2" `sC` getS tau_W,
+  sParen (S "from" +:+ acroIM "1") `sC` getS eta,
+  sParen (S "from" +:+ acroIM "1") `sC` getS tau_S_P,
+  sParen (S "from" +:+ acroIM "2"), S "and" +:+ getS tau_L_P,
+  sParen (S "from" +:+ acroIM "2")]
 --
-req5 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ phrase temp_W +:+ sParen
-  (P (temp_W ^. symbol) :+: sParen (P $ time ^. symbol)) +:+
-  S "over the" +:+ phrase simulation +:+ phrase time +:+.
-  sParen (S "from" +:+ acroIM "1")
+req5 = [S "Calculate and", phrase output_, S "the", phrase temp_W,
+  sParen(getS temp_W :+: sParen (getS time)), S "over the",
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM "1")]
 --
-req6 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ phrase temp_PCM +:+ sParen
-  (P (temp_PCM ^. symbol) :+: sParen (P $ time ^. symbol)) +:+
-  S "over the" +:+ phrase simulation +:+ phrase time +:+.
-  sParen (S "from" +:+ acroIM "2")
+req6 = [S "Calculate and", phrase output_, S "the", phrase temp_PCM,
+  sParen (getS temp_PCM :+: sParen (getS time)), S "over the",
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM "2")]
 --
-req7 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ phrase w_E +:+ sParen
-  (P (w_E ^. symbol) :+: sParen (P $ time ^. symbol)) +:+
-  S "over the" +:+ phrase simulation +:+ phrase time +:+.
-  sParen (S "from" +:+ acroIM "3")
+req7 = [S "Calculate and", phrase output_, S "the", phrase w_E,
+  sParen (getS w_E :+: sParen (getS time)), S "over the",
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM "3")]
 --
-req8 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ phrase pcm_E +:+ sParen
-  (P (pcm_E ^. symbol) :+: sParen (P $ time ^. symbol)) +:+ S "over the" +:+
-  phrase simulation +:+ phrase time +:+. sParen (S "from" +:+ acroIM "4")
+req8 = [S "Calculate and", phrase output_, S "the", phrase pcm_E,
+  sParen (getS pcm_E :+: sParen (getS time)), S "over the",
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM "4")]
 --
-req9 = S "Verify that the" +:+
-  phrase energy +:+ plural output_ +:+ sParen (P (w_E ^. symbol) :+:
-  sParen (P $ time ^. symbol) +:+ S "and" +:+ P (pcm_E ^. symbol) :+:
-  sParen (P $ time ^. symbol)) +:+ S "follow the" +:+
-  phrase CT.law_cons_energy `sC` S "as outlined in" +:+
-  makeRef s4_2_7 `sC` S "with relative error no greater than" +:+.
-  S "0.001%"
+req9 = [S "Verify that the", phrase energy, plural output_,
+  sParen (getS w_E :+: sParen (getS time) +:+ S "and" +:+ getS pcm_E :+:
+  sParen (getS time)), S "follow the", phrase CT.law_cons_energy `sC`
+  S "as outlined in", makeRef s4_2_7 `sC` S "with relative error",
+  S "no greater than 0.001%"]
 --
-req10 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ phrase time +:+
-  S "at which the" +:+ short phsChgMtrl +:+ S "begins to melt" +:+
-  P (t_init_melt ^. symbol) +:+. sParen (S "from" +:+ acroIM "2")
+req10 = [S "Calculate and", phrase output_, S "the", phrase time,
+  S "at which the", short phsChgMtrl, S "begins to melt",
+  getS t_init_melt, sParen (S "from" +:+ acroIM "2")]
 --
-req11 = S "Calculate and" +:+
-  phrase output_ +:+ S "the" +:+ phrase time +:+
-  S "at which the" +:+ short phsChgMtrl +:+
-  S "stops" +:+ phrase CT.melting +:+
-  EmptyS +:+ P (t_final_melt ^. symbol) +:+. sParen (S "from" +:+ acroIM "2")
+req11 = [S "Calculate and", phrase output_, S "the", phrase time,
+  S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
+  getS t_final_melt, sParen (S "from" +:+ acroIM "2")]
 
 -- List structure same between all examples
 

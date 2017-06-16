@@ -19,10 +19,11 @@ risk = fromEqn' (risk_fun ^. id) (nounPhraseSP "risk of failure")
   (risk_fun ^. symbol) risk_eq
 
 risk_eq :: Expr
-risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
-  ((C plate_width):/(Int 1000)))):^((C sflawParamM) - (Int 1))):*
-  (Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick)
-  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(UnaryOp (Exp(C stressDistFac)))
+risk_eq = ((C sflawParamK) :/ (Grouping (((C plate_len) :/ (Int 1000)) :*
+  ((C plate_width) :/ (Int 1000)))) :^ ((C sflawParamM) - (Int 1))) :*
+  (Grouping ((Grouping ((C mod_elas) :* (Int 1000))) :* 
+  (Grouping ((C act_thick) :/ (Int 1000))) :^ (Int 2))) :^ (C sflawParamM) :* 
+  (C loadDF) :* (exp (C stressDistFac))
 
 hFromt_eq :: Relation
 hFromt_eq = (Case (zipWith hFromt_helper

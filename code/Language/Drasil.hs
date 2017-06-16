@@ -86,9 +86,9 @@ module Language.Drasil (
   , personWM', mononym
 ) where
 
-import Prelude hiding (log, abs, sin, cos, tan, id, return, print, break)
+import Prelude hiding (log, abs, sin, cos, tan, id, return, print, break, exp)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
-               Bound(..),DerivType(..), log, abs, sin, cos, tan, sec, csc, cot)
+          Bound(..),DerivType(..), log, abs, sin, cos, tan, sec, csc, cot, exp)
 import Language.Drasil.Expr.Extract (SymbolMap, symbolMap)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 

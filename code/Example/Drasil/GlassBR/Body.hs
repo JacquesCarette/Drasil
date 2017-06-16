@@ -421,15 +421,18 @@ inputVarSD = [(getS standOffDist),
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]
-  (zipWith s6_2_5_table2_formatF
-  [dim_min, dim_max, cWeightMin, cWeightMax, sd_min, sd_max]
-  [(Int 100), (Int 100), (Dbl 4.5), (Int 910), (Int 6), (Int 130)]))
-  --FIXME: how to incorporate (getS ar_max, E (Int 5))? (Issue #272)
+  ([(getS dim_min, E (Dbl 0.1)  +:+ Sy (unit_symb standOffDist)), 
+  (getS dim_max, E (Dbl 0.1) +:+ Sy (unit_symb standOffDist)), 
+  ((getS ar_max), E (Dbl 5))]
+  ++
+  zipWith s6_2_5_table2_formatF2
+  [cWeightMin, cWeightMax, sd_min, sd_max]
+  [4.5, 910, 6, 130]))
   (titleize table_ +: E (Int 3) +:+ titleize specification +:+
   (titleize parameter) +:+ titleize' value) True
 
-s6_2_5_table2_formatF :: UnitaryChunk -> Expr -> (Sentence, Sentence)
-s6_2_5_table2_formatF varName val = (getS varName, E (val) +:+ Sy (unit_symb varName))
+s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
+s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+ Sy (unit_symb varName))
 
 s6_2_5_intro2 = foldlSP [(makeRef s6_2_5_table3), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]

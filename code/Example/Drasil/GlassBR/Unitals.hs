@@ -43,9 +43,9 @@ plate_len   = unitary "plate_len"   (nounPhraseSP "plate length (long dimension)
 plate_width = unitary "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Rational
 dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Integer
+  (sub lD (Atomic "max")) millimetre Real
 dim_min     = unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre Integer
+  (sub lD (Atomic "min")) millimetre Real
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
   lH millimetre Rational
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
@@ -61,9 +61,9 @@ sdy         = unitary "sdy"         (nounPhraseSP "stand off distance (y-compone
 sdz         = unitary "sdz"         (nounPhraseSP "stand off distance (z-component)")
   (sub (standOffDist ^. symbol) lZ) metre Rational
 sd_max      = unitary "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "max")) metre Integer
+  (sub (standOffDist ^. symbol) (Atomic "max")) metre Real
 sd_min      = unitary "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "min")) metre Integer
+  (sub (standOffDist ^. symbol) (Atomic "min")) metre Real
 nom_thick   = unitary "nom_thick"   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") lT millimetre Rational
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")

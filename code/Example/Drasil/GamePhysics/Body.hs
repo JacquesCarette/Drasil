@@ -12,9 +12,6 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Drasil.TraceabilityMandGs
-import Drasil.SpecificSystemDescription
-import Drasil.Introduction
---import Drasil.Requirements
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
   position, torque, force, gravitationalAccel, velocity, 
@@ -229,16 +226,9 @@ s4_1_intro = foldlSP
 -----------------------------------------
 
 s4_1_1 :: Section
-s4_1_1_intro, s4_1_1_bullets :: Contents
+s4_1_1_bullets :: Contents
 
-s4_1_1 = SRS.termAndDefn [s4_1_1_intro, s4_1_1_bullets] []
-
-s4_1_1_intro = Paragraph $ foldle (+:+) (+:) (EmptyS) 
-  [S "This subsection provides a list of terms",
-  S "that are used in subsequent", (plural section_), 
-  S "and their meaning, with the", (phrase purpose), 
-  S "of reducing ambiguity and making it easier to correctly",
-  S "understand the", plural requirement]
+s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
 s4_1_1_terms :: [ConceptChunk]
 s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]

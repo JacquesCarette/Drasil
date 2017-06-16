@@ -67,7 +67,7 @@ ssp_si = SI ssa srs [henryFrankis]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb s1_2_intro, TAandA]) :
+  [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
     , IChar (S "solid mechanics") (S "undergraduate level 4" +:+ phrase physics)

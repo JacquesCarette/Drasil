@@ -33,7 +33,7 @@ fs_rel = (C fs) := (C shearRes) / (C mobShear)
 fs_desc :: Sentence
 fs_desc = 
   S "The stability metric of the" +:+ phrase slope `sC` S "known as the" +:+
-  plural factor +:+ S "of" +:+ phrase safety +:+ sParen (getS fs) `sC`
+  phrase factor +:+ S "of" +:+ phrase safety +:+ sParen (getS fs) `sC`
   S "is determined by" +:+ (S "ratio" `ofThe` phrase shearForce) +:+
   S "at the base of the" +:+ phrase slope +:+ sParen (getS mobShear) `sC`
   S "and the resistive shear" +:+. sParen (getS shearRes)

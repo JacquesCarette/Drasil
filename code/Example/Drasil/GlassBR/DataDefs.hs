@@ -2,7 +2,7 @@ module Drasil.GlassBR.DataDefs where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Prelude hiding (log, id)
+import Prelude hiding (log, id, exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
@@ -22,7 +22,7 @@ risk_eq :: Expr
 risk_eq = ((C sflawParamK):/(Grouping (((C plate_len):/(Int 1000)):*
   ((C plate_width):/(Int 1000)))):^((C sflawParamM) - (Int 1))):*
   (Grouping ((Grouping ((C mod_elas):*(Int 1000))):*(Grouping ((C act_thick)
-  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(V "e"):^(C stressDistFac)
+  :/(Int 1000))):^(Int 2))):^(C sflawParamM):*(C loadDF):*(UnaryOp (Exp(C stressDistFac)))
 
 hFromt_eq :: Relation
 hFromt_eq = (Case (zipWith hFromt_helper

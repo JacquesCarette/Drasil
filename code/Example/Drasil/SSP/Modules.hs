@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Software.Products
 
-import Drasil.SSP.Units
+import Drasil.SSP.Unitals
 import Drasil.SSP.Defs
 import Drasil.SSP.TMods
 

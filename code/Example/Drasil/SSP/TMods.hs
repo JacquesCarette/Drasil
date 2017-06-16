@@ -3,7 +3,7 @@ module Drasil.SSP.TMods where
 import Prelude hiding (tan)
 
 import Language.Drasil
-import Drasil.SSP.Units
+import Drasil.SSP.Unitals
 import Drasil.SSP.Defs
 import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.SentenceStructures

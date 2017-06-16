@@ -37,5 +37,5 @@ Reqs.hs
 TMods.hs
   - A list of theoretical models for the SSP example
   
-Units.hs
+Unitals.hs
   - A list of unital chunks and concept variables for the SSP example

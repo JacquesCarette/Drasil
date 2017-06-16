@@ -4,7 +4,7 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 
 import Language.Drasil
-import Drasil.SSP.Units
+import Drasil.SSP.Unitals
 import Data.Drasil.SI_Units
 import Data.Drasil.Utils
 

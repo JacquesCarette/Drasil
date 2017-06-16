@@ -195,7 +195,7 @@ executable ssp
     , Drasil.SSP.Defs
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
-    , Drasil.SSP.Units
+    , Drasil.SSP.Unitals
     , Drasil.SSP.TMods
     , Drasil.SSP.GenDefs
     , Drasil.SSP.DataDefs

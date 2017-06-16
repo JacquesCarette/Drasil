@@ -1,7 +1,7 @@
 module Drasil.SSP.IMods where
 
 import Language.Drasil
-import Drasil.SSP.Units
+import Drasil.SSP.Unitals
 import Drasil.SSP.Defs
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils

@@ -8,7 +8,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
 import Drasil.SSP.Defs
-import Drasil.SSP.Units
+import Drasil.SSP.Unitals
 import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs

@@ -1,4 +1,4 @@
-module Drasil.SSP.Units where
+module Drasil.SSP.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units

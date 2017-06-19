@@ -738,30 +738,37 @@ fig_4 = figureLabel "4" (traceyMatrix)
 
 s10 = SRS.reference [s10_list] []
 
-s10_list = mkRefsList 1 
-  [(S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
+s10_list= mkRefsList 1 (map (foldl (+:+) EmptyS) [s10_ref1, s10_ref2, 
+  s10_ref3, s10_ref4, s10_ref5, s10_ref6])
+
+s10_ref1 = [(S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
   S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
-  S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."), 
-  (S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
+  S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013.")]
+
+s10_ref2 = [(S "W. S. Smith and L. Lai" `sC` Quote (S "A new" +:+ plural requirement +:+
   phrase template +:+ S "for scientific computing,") +:+ S "in Proceedings of the" +:+
   S "First International Workshop on Situational" +:+ titleize' requirement +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific" +:+
   titleize' requirement +:+ S "Engineering Processes, SREP'05 (J.Ralyt" :+: 
   (F Acute 'e') `sC` S "P.Agerfalk, and N.Kraiem, eds.), (Paris, France),"
   +:+ S "pp. 107-121, In conjunction with 13th IEEE International" +:+
-  titleize' requirement +:+. S "Engineering Conference, 2005"), 
-  (S "J. Robertson and S. Robertson" `sC` Quote (S "Volere" +:+
+  titleize' requirement +:+. S "Engineering Conference, 2005")]
+
+s10_ref3 = [(S "J. Robertson and S. Robertson" `sC` Quote (S "Volere" +:+
   plural requirement +:+ phrase specification +:+ phrase template +:+. S "edition 16") +:+ 
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ 
-  S "Volere template16.pdf") `sC` S "2012."), 
-  (S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
+  S "Volere template16.pdf") `sC` S "2012.")]
+
+s10_ref4 = [(S "ASTM Standards Committee" `sC` Quote (S "Standard practice"
   +:+ S "for determining" +:+ (phrase load) +:+ S "resistance of" +:+
   S "glass in buildings,") +:+ 
   S "Standard E1300-09a, American Society for Testing and Material (ASTM),"
-  +:+. S "2009"), 
-  (S "ASTM, developed by subcommittee C1408, Book of standards 15.02,"
-  +:+ Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036")), 
-  (S "ASTM, developed by subcommittee C14.08, Book of standards" +:+
+  +:+. S "2009")]
+
+s10_ref5 = [(S "ASTM, developed by subcommittee C1408, Book of standards 15.02,"
+  +:+ Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036"))]
+
+s10_ref6 = [(S "ASTM, developed by subcommittee C14.08, Book of standards" +:+
   S "15.02" `sC` Quote (at_start specification +:+ S "for" +:+ (plural heat) +:+.
   S "treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048"))]
 

@@ -90,43 +90,43 @@ glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 -----------------------
 
 startIntro, knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
-startIntro = foldlSent [(at_start software), 
+startIntro = foldlSent [at_start software, 
   S "is helpful to efficiently and correctly predict the", 
-  (phrase blastRisk), S "involved with the" +:+. (phrase glaSlab), 
-  S "The", (phrase blast), S "under consideration is" +:+. (blast ^. defn), 
-  S "The", phrase software `sC` S "herein called", (short gLassBR), 
-  S "aims to predict the", (phrase blastRisk), S "involved with the", 
-  (phrase glaSlab), S "using an intuitive interface"]
-knowIR = (phrase theory +:+ S "behind" +:+ (phrase glBreakage) `sAnd`
-  (phrase blastRisk))
+  phrase blastRisk, S "involved with the" +:+. phrase glaSlab, 
+  S "The", phrase blast, S "under consideration is" +:+. (blast ^. defn), 
+  S "The", phrase software `sC` S "herein called", short gLassBR, 
+  S "aims to predict the", phrase blastRisk, S "involved with the", 
+  phrase glaSlab, S "using an intuitive interface"]
+knowIR = (phrase theory +:+ S "behind" +:+ phrase glBreakage `sAnd`
+  phrase blastRisk)
 undIR = (foldlList [S "second year calculus", S "structural mechanics", 
   S "computer applications in civil engineering"])
 appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
   S "applicable standards for constructions using glass from" +:+
   sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
-incScoR = foldl (+:+) EmptyS [S "getting all", phrase input_, (plural parameter), 
-  S "related to the", (phrase glaSlab), S "and also the", (plural parameter), 
-  S "related to", (phrase blastTy)]
+incScoR = foldl (+:+) EmptyS [S "getting all", (phrase input_), (plural parameter), 
+  S "related to the", phrase glaSlab, S "and also the", plural parameter, 
+  S "related to", phrase blastTy]
 endScoR = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the", 
-  (phrase glaSlab), S "is safe to use or not"]
+  phrase glaSlab, S "is safe to use or not"]
 --for Purpose of Document Section
 s2_1_intro_p1 :: Sentence
-s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this", 
-  phrase document, S "is to predict whether a given", (phrase glaSlab), 
-  S "is likely to resist a specified" +:+. (phrase blast), 
-  S "The", plural goal `sAnd` plural thModel, S "used in the", 
-  (short gLassBR), S "code are provided" `sC`
-  S "with an emphasis on explicitly identifying",   (plural assumption), 
+s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
+  phrase document, S "is to predict whether a given", phrase glaSlab,
+  S "is likely to resist a specified" +:+. phrase blast,
+  S "The", plural goal `sAnd` plural thModel, S "used in the",
+  short gLassBR, S "code are provided" `sC`
+  S "with an emphasis on explicitly identifying", plural assumption,
   S "and unambiguous" +:+. plural definition, S "This", phrase document, 
   S "is intended to be used as a", phrase reference, S "to provide all", 
   phrase information, S "necessary to understand and verify the" +:+.
-  phrase analysis, S "The", (short srs), S "is abstract because the", 
+  phrase analysis, S "The", short srs, S "is abstract because the", 
   plural content, S "say what", phrase problem, 
   S "is being solved, but not how to solve it"]
 
 --for Organization of Document Section
-s2_3_intro = foldlSent [S "The", phrase organization, S "of this", 
-  phrase document, S "follows the", phrase template, S "for an", (short srs), 
+s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
+  phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") `sAnd` sSqBr (S "2"),
   sParen (S "in" +:+ (makeRef s10)) `sC`
   S "with some aspects taken from Volere", phrase template, S "16", 
@@ -142,12 +142,12 @@ s3 = stakehldrGeneral (gLassBR)
 s4 = genSysF [] s4_1_bullets [] []
 
 s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ 
-  (short gLassBR) +:+ S "is expected to have completed at least" +:+.
+  short gLassBR +:+ S "is expected to have completed at least" +:+.
   (S "equivalent" `ofThe` 
   S "second year of an undergraduate degree in civil or structural engineering")), 
   (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+. ((phrase glBreakage) `sAnd`
-  (phrase blastRisk))), (S "The" +:+ phrase endUser +:+
+  phrase theory +:+ S "behind" +:+. (phrase glBreakage `sAnd`
+  phrase blastRisk)), (S "The" +:+ phrase endUser +:+
   S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
 
@@ -157,7 +157,7 @@ s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
 s5_intro = foldlSP [S "This", phrase section_, 
   S "presents the" +:+. phrase (scpOfTheProj phrase), 
-  S "It describes the expected use of", (short gLassBR), 
+  S "It describes the expected use of", short gLassBR,
   S "as well as the", plural input_ `sAnd` plural output_, 
   S "of each action. The", plural useCase, S "are", 
   phrase input_ `sAnd` phrase output_ `sC` 
@@ -171,12 +171,12 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
   (mkTable
   [(\x -> (x!!0)), (\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
   [[S "1", titleize' input_, titleize user, titleize' characteristic +:+
-  S "of the" +:+ (phrase glaSlab) +:+ S "and of the" +:+.
-  (phrase blast) +:+ S "Details in" +:+ (makeRef s5_2)], 
-  [S "2", titleize output_, (short gLassBR), S "Whether or not the" +:+
-  (phrase glaSlab) +:+ S "is safe for the calculated" +:+
-  (phrase load) +:+ S "and supporting" +:+
-  S "calculated" +:+ plural value]]) 
+  S "of the" +:+ phrase glaSlab +:+ S "and of the" +:+.
+  phrase blast +:+ S "Details in" +:+ (makeRef s5_2)], 
+  [S "2", titleize output_, short gLassBR, S "Whether or not the" +:+
+  phrase glaSlab +:+ S "is safe for the calculated" +:+
+  phrase load +:+ S "and supporting calculated" +:+ 
+  plural value]]) 
   (titleize table_ +: S "1" +:+ titleize useCaseTable) True
 
 s5_2 = SRS.indPRCase [s5_2_bullets] []
@@ -185,19 +185,19 @@ s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
 s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user,
-  S "providing", phrase input_, S "to", (short gLassBR),
+  S "providing", phrase input_, S "to", short gLassBR,
   S "for use within the" +:+. phrase analysis, S "There are two classes of"
-  +: plural input_ +:+. ((phrase glassGeo) `sAnd` (phrase blastTy)),
+  +: plural input_ +:+. (phrase glassGeo `sAnd` phrase blastTy),
   (glassGeo ^. defn), (blastTy ^. defn), S "These",
-  (plural parameter), S "describe", (phrase char_weight),
-  S "and stand off" +:+. (phrase blast), S "Another", phrase input_,
+  plural parameter, S "describe", phrase char_weight,
+  S "and stand off" +:+. phrase blast, S "Another", phrase input_,
   S "the", phrase user, S "gives" `isThe` S "tolerable", phrase value, S "of",
-  (phrase prob_br)]
+  phrase prob_br]
 
 s5_2_bt_sent2 :: Sentence
-s5_2_bt_sent2 = foldlSent [S " Use Case 2", (short gLassBR), 
-  plural output_, S "if the", (phrase glaSlab), S "will be safe by", 
-  S "comparing whether", (phrase capacity), S "is greater than" +:+. 
+s5_2_bt_sent2 = foldlSent [S " Use Case 2", short gLassBR,
+  plural output_, S "if the", phrase glaSlab, S "will be safe by",
+  S "comparing whether", phrase capacity, S "is greater than" +:+. 
   (phrase demandq), ((at_start capacity) `isThe`
   (capacity ^. defn)) `sAnd` ((phrase demandq) `isThe` 
   phrase requirement) +:+. (S "which" `isThe` (demandq ^. defn)), 
@@ -503,7 +503,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
     [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
     [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
     [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
-    [Flat $ (titleize glassTypeFac_) +:+ sParen (short glassTypeFac_) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
+    [Flat $ (titleize glassTypeFac_) +:+ sParen (getS glassTypeFac_) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
     ))])]

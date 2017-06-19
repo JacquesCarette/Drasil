@@ -58,11 +58,13 @@ intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces") sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = (C intNormForce) := (Int 0) --(C intNormForce) := Case [
-  --(((C fs) :* (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (Int 100), (Int 1)),
-  --((((Int 100) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/Int 100), Int 1),
-  --((Int 0), (Int 0))]
-  --FIXME: update the long equation; where is Phi and Psi in .Units?
+sliceFs_rel = (C intNormForce) := Case [
+  (((C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (C shrResC),
+    (Int 1) := (Int 1)),
+  (((C mobShrC) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/ (C shrResC),
+    (Int 1) :< (Int 1) :< ((C numbSlices) :- (Int 1))),
+  ((Int 0), (Int 0) := (Int 0) * (V "and") * (Int 0) := (C numbSlices))]
+  -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence
 sliceFs_desc = foldlSent [S "The value of the interslice normal force",

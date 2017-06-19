@@ -20,9 +20,9 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
 import Drasil.Template.MG
 import Drasil.Template.DD
 
-import           Drasil.TableOfSymbols
+import           Drasil.Sections.TableOfSymbols
 import qualified Drasil.SRS as SRS
-import           Drasil.ReferenceMaterial
+import           Drasil.Sections.ReferenceMaterial
 
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
@@ -34,11 +34,11 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 
 import Drasil.DocumentLanguage
-import Drasil.TraceabilityMandGs
-import Drasil.Stakeholders
-import Drasil.Requirements
-import Drasil.GeneralSystDesc
-import Drasil.SpecificSystemDescription
+import Drasil.Sections.TraceabilityMandGs
+import Drasil.Sections.Stakeholders
+import Drasil.Sections.Requirements
+import Drasil.Sections.GeneralSystDesc
+import Drasil.Sections.SpecificSystemDescription
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]

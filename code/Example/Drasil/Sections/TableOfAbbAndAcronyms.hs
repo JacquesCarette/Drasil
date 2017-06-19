@@ -1,5 +1,5 @@
 -- | Standard code to make a table of symbols.
-module Drasil.TableOfAbbAndAcronyms
+module Drasil.Sections.TableOfAbbAndAcronyms
   ( table_of_abb_and_acronyms ) where
 
 import Language.Drasil

@@ -1,4 +1,4 @@
-module Drasil.GeneralSystDesc
+module Drasil.Sections.GeneralSystDesc
   (genSysF, systCon) where
 
 import Language.Drasil

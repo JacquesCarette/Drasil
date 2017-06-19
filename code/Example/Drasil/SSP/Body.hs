@@ -18,11 +18,11 @@ import Drasil.SSP.DataDefs
 import Drasil.SSP.IMods
 import qualified Drasil.SRS as SRS
 
-import Drasil.ReferenceMaterial
+import Drasil.Sections.ReferenceMaterial
 import Drasil.DocumentLanguage
-import Drasil.SpecificSystemDescription
-import Drasil.Requirements
-import Drasil.GeneralSystDesc
+import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.Requirements
+import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics

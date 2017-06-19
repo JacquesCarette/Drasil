@@ -1,4 +1,4 @@
-module Drasil.TraceabilityMandGs
+module Drasil.Sections.TraceabilityMandGs
   ( traceMGF,
     traceGIntro
    ) where

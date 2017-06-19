@@ -18,12 +18,12 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
 
-import Drasil.ReferenceMaterial (intro)
+import Drasil.Sections.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
-import Drasil.SpecificSystemDescription
-import Drasil.Requirements
-import Drasil.GeneralSystDesc
+import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.Requirements
+import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures
 

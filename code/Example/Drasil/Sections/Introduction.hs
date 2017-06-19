@@ -1,4 +1,4 @@
-module Drasil.Introduction 
+module Drasil.Sections.Introduction 
   (introductionF,
    orgSec,
    introductionSection,

@@ -1,4 +1,4 @@
-module Drasil.ReferenceMaterial (refSec, intro) where
+module Drasil.Sections.ReferenceMaterial (refSec, intro) where
 {-
 Depending where this is used, it might be worth combining it with other module(s),
 or simply moving it to Data.Drasil.Documentation since it's highly reusable

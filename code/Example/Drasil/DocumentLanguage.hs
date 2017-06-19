@@ -11,11 +11,11 @@ import Language.Drasil
 
 import Control.Lens ((^.))
 
-import Drasil.TableOfUnits (table_of_units)
-import Drasil.TableOfSymbols (table)
-import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.Sections.TableOfUnits (table_of_units)
+import Drasil.Sections.TableOfSymbols (table)
+import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import qualified Drasil.SRS as SRS
-import qualified Drasil.Introduction as Intro
+import qualified Drasil.Sections.Introduction as Intro
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 

@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Drasil.HGHC.HeatTransfer
 import Drasil.HGHC.Modules
 import Drasil.DocumentLanguage
-import Drasil.ReferenceMaterial (intro)
+import Drasil.Sections.ReferenceMaterial (intro)
 
 import Drasil.Template.DD
 
@@ -17,7 +17,7 @@ import Data.Drasil.Authors (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.Modules
 
-import Drasil.SpecificSystemDescription
+import Drasil.Sections.SpecificSystemDescription
 
 modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,

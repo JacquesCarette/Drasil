@@ -1,5 +1,5 @@
 -- Standard code to make a table of symbols.
-module Drasil.TableOfSymbols 
+module Drasil.Sections.TableOfSymbols 
   (table) where
 
 import Data.Maybe (isJust)

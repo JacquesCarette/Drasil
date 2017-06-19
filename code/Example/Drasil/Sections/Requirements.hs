@@ -1,4 +1,4 @@
-module Drasil.Requirements
+module Drasil.Sections.Requirements
   (reqF, nonFuncReqF) where
 
 import Language.Drasil

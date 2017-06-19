@@ -1,4 +1,4 @@
-module Drasil.SpecificSystemDescription 
+module Drasil.Sections.SpecificSystemDescription 
   ( specSysDesF, specSysDescr
   , probDescF
   , termDefnF

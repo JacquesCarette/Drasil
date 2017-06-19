@@ -11,7 +11,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
-import Drasil.TraceabilityMandGs
+import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
   position, torque, force, gravitationalAccel, velocity, 
@@ -30,7 +30,7 @@ import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
 import qualified Drasil.SRS as SRS
-import qualified Drasil.ReferenceMaterial as RM
+import qualified Drasil.Sections.ReferenceMaterial as RM
 
 import Drasil.GamePhysics.Unitals
 import Drasil.GamePhysics.Concepts
@@ -43,9 +43,9 @@ import Drasil.GamePhysics.Changes
 import Drasil.GamePhysics.Reqs
 
 import Drasil.DocumentLanguage
-import Drasil.SpecificSystemDescription
-import Drasil.Requirements
-import Drasil.GeneralSystDesc
+import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.Requirements
+import Drasil.Sections.GeneralSystDesc
 
 authors :: People
 authors = [alex, luthfi]

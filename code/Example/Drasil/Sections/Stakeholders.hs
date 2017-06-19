@@ -1,4 +1,4 @@
-module Drasil.Stakeholders 
+module Drasil.Sections.Stakeholders 
   ( stakehldrGeneral) where
 
 import Language.Drasil

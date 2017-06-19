@@ -303,18 +303,18 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
-  [(enumSimple 1 (short assumption) s6_2_1_list_assum1), 
-  assumptionM, assumptionK, assumptionMod_Elas, assumptionLoad_Dur,
-  (enumSimple 5 (short assumption) s6_2_1_list_assum2)]
+  [(enumSimple 1 (short assumption) s6_2_1_list_part1), 
+  assump4_M, assump4_K, assump4_ModElas, assump4_LoadDur,
+  (enumSimple 5 (short assumption) s6_2_1_list_part2)]
 
-assumptionM, assumptionK, assumptionMod_Elas, assumptionLoad_Dur :: Contents
-assumptionM = EqnBlock $ (C sflawParamM) := (Int 7)
-assumptionK = EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
-assumptionMod_Elas = EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
-assumptionLoad_Dur = EqnBlock $ (C load_dur):=(Int 3)
+assump4_M, assump4_K, assump4_ModElas, assump4_LoadDur :: Contents
+assump4_M = EqnBlock $ (C sflawParamM) := (Int 7)
+assump4_K = EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
+assump4_ModElas = EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
+assump4_LoadDur = EqnBlock $ (C load_dur):=(Int 3)
 
-s6_2_1_list_assum1 :: [Sentence]
-s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for", 
+s6_2_1_list_part1 :: [Sentence]
+s6_2_1_list_part1 = [foldlSent [S "The standard E1300-09a for", 
   phrase calculation, 
   S "applies only to monolithic, laminated, or insulating", 
   S "glass constructions of rectangular shape with continuous", 
@@ -333,8 +333,8 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   (S "Standard" +:+ plural value +:+ S "used for" +:+
   phrase calculation +:+ S "in" +:+ short gLassBR +: S "are")]
 
-s6_2_1_list_assum2 :: [Sentence]
-s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration", 
+s6_2_1_list_part2 :: [Sentence]
+s6_2_1_list_part2 = [(foldlSent [S "Glass under consideration", 
   S "is assumed to be a single" +:+. phrase lite, S "Hence the", 
   phrase value, S "of", short lShareFac, S "is equal to 1 for all", 
   plural calculation, S "in", short gLassBR]), 

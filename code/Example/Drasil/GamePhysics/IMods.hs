@@ -7,10 +7,9 @@ import Data.Drasil.Utils (foldle1)
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, force, gravitationalAccel, velocity, 
-  momentOfInertia, angularVelocity, position, time)
+  momentOfInertia, angularVelocity, position, time, impulseS)
 --import qualified Data.Drasil.Concepts.Math as QM ()
 --import Data.Drasil.Quantities.Physics
 import Drasil.GamePhysics.Unitals
@@ -30,7 +29,7 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C acc_i) := (Deriv Total (C vel_i) (C QP.time)) := (C QP.gravitationalAccel) + ((C force_i) / (C mass_i))
+im1Rel = (C acc_i) := (Deriv Total (FCall (C vel_i) [C QP.time]) (C QP.time)) := (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
@@ -60,7 +59,7 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation
-im2Rel = (C QP.angularAccel) := Deriv Total (C QP.angularVelocity) (C QP.time) := ((C torque_i) / (C QP.momentOfInertia))
+im2Rel = (C QP.angularAccel) := Deriv Total (FCall (C QP.angularVelocity) [C QP.time]) (C QP.time) := ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 
@@ -82,13 +81,25 @@ im2leg = foldle1 (+:+.) (+:+.)
 {-- --}
 
 im3 :: RelationConcept
-im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel 
+im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1
 
 im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
-im3Rel :: Relation -- FIXME: add proper equation
-im3Rel = (C QP.force) := (C QPP.mass)
+im3Rel1, im3Rel2, im3Rel3, im3Rel4 :: Relation -- FIXME: add proper equation
+im3Rel1 = (FCall (C vel_A) [C time_c]) := (FCall (C vel_A) [C QP.time]) +
+  ((C QP.impulseS) / (C mass_A)) * (C normalVect)
+
+im3Rel2 = (FCall (C vel_B) [C time_c]) := (FCall (C vel_B) [C QP.time]) -
+  ((C QP.impulseS) / (C mass_B)) * (C normalVect)
+
+
+--fixme: these two need to use cross product and parametrized dispUnit symbol
+im3Rel3 = (FCall (C angVel_A) [C time_c]) := (FCall (C angVel_A) [C QP.time]) +
+  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+
+im3Rel4 = (FCall (C angVel_B) [C time_c]) := (FCall (C angVel_B) [C QP.time]) -
+  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
 
 im3descr, im3leg :: Sentence
 im3descr = foldlSent [S "This instance model is based on our assumptions",

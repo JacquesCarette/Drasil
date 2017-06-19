@@ -21,10 +21,11 @@ cpUnits :: [UnitalChunk]
 cpUnits = [QP.acceleration, QP.angularAccel, QP.force, QP.gravitationalAccel, 
   QP.gravitationalConst, QP.momentOfInertia, QP.impulseV, QP.impulseS, QPP.len, 
   QPP.mass, iVect, jVect, normalVect, QP.angularVelocity, QP.position, 
-  QM.orientation, QP.distance, QP.displacement, QP.time, QP.torque, 
+  QM.orientation, QP.distance, QP.displacement, QP.time, QP.torque,
   QP.angularDisplacement, QP.velocity, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLen_A, perpLen_B, force_i, torque_i]
+  perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
+  angVel_A, angVel_B]
     
 -- Chunks with units --
 iVect, jVect, normalVect :: UnitalChunk
@@ -89,7 +90,7 @@ sqrDist = ucFromCV norm m_2
                (phrase $ QM.euclidNorm) ) (sup (QM.euclidNorm ^. symbol) 
                (Atomic "2"))
 -- T4 --
-vel_B, vel_O, r_OB :: UnitalChunk
+vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B :: UnitalChunk
 
 velParam :: String -> Symbol -> ConVar
 velParam n w = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term)
@@ -97,8 +98,20 @@ velParam n w = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term)
                (sub (QP.velocity ^. symbol) w)
 
 -- FIXME: parametrized hack
+vel_A   = ucFromCV (velParam "A" cA) velU
 vel_B   = ucFromCV (velParam "B" cB) velU
 vel_O   = ucFromCV (velParam "origin" cO) velU
+angVel_A = ucFromCV (angParam "A" cA) angVelU
+angVel_B = ucFromCV (angParam "B" cB) angVelU
+
+angParam :: String -> Symbol -> ConVar
+angParam n w = cvR (dccWDS "angular velocity" (compoundPhrase'
+              (cn $ "is the" ++ n ++ "body's") (QP.angularVelocity ^. term))
+              (phrase $ QP.angularVelocity))
+              (sub (QP.angularVelocity ^. symbol) w)
+
+--s the k-th body’s angular velocity at time 
+
 
 r_OB    = uc' "r_OB" 
   (nounPhraseSP "displacement vector between the origin and point B")
@@ -107,7 +120,7 @@ r_OB    = uc' "r_OB"
 
 -- DD1 --
 
-pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i :: UnitalChunk
+pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c :: UnitalChunk
 
 pos_CM = ucs "p_CM" (nounPhraseSP $ 
   "the mass-weighted average position of a rigid " ++
@@ -130,13 +143,13 @@ acc_i = ucFromCV accI accelU
                 (cn "of the i-th body's acceleration")) (phrase $ QP.acceleration))
                 (sub (QP.acceleration ^. symbol) lI)
 
-vel_i = ucFromCV accI accelU
+vel_i = ucFromCV accI velU
   where accI = cvR (dccWDS "vel_i" (compoundPhrase' (QP.velocity ^. term) 
                 (cn "of the i-th body's velocity")) (phrase $ QP.velocity))
                 (sub (QP.velocity ^. symbol) lI)
 
-torque_i = ucFromCV accI accelU
-  where accI = cvR (dccWDS "torque_i"
+torque_i = ucFromCV torI torqueU
+  where torI = cvR (dccWDS "torque_i"
                 (cn "is the torque applied to the i-th body")
                 (phrase $ QP.torque))
                 (sub (QP.torque ^. symbol) lI)
@@ -145,6 +158,11 @@ mTot = ucFromCV mtotal kilogram
   where mtotal = cvR (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
                 (CP.rigidBody ^. term)) (phrase $ QPP.mass)) 
                 cM
+
+time_c = ucFromCV timec second
+  where timec = cvR (dccWDS "time_c" (cn "denotes the time at collision") 
+                (phrase $ QP.time)) 
+                (sub (QP.time ^. symbol) lC)
 -- DD8 --
 
 initRelVel, mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 

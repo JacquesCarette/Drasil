@@ -924,12 +924,12 @@ s4_2_5_d2endPara = map foldlSP [
 
 -- FIXME: Temporary dummy tables
 s4_2_6_table1 :: Contents
-s4_2_6_table1 = Table [EmptyS, EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
+s4_2_6_table1 = Table [S "Dummy Table 1", EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
   (titleize table_ +:+ S "1")
   True
 
 s4_2_6_table2 :: Contents
-s4_2_6_table2 = Table [EmptyS, EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
+s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
   (titleize table_ +:+ S "2")
   True
 
@@ -1435,4 +1435,21 @@ s7_fig2 :: Contents
 s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
 
---References?
+----------------------------
+-- Section 8 : References --
+----------------------------
+
+{--
+s8 :: Section
+s8 = SRS.reference [s8_refList] []
+
+s8_refList :: [Sentence]
+ref1, ref2, ref3, ref4, ref5 :: Sentence
+s8_refList = [ref1, ref2, ref3, ref4, ref5]
+
+ref1 = S "Dummy Text"
+ref2 = S "Dummy Text"
+ref3 = S "Dummy Text"
+ref4 = S "Dummy Text"
+ref5 = S "Dummy Text"
+--}

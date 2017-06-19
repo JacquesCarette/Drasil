@@ -271,7 +271,7 @@ This section first presents the problem description, which gives a high-level vi
 SWHS is a computer program developed to investigate the effect of employing PCM within a solar water heating tank.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{enumerate}
 \item{Heat flux: The rate of thermal energy transfer through a given surface per unit time.}
 \item{Phase change material: A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature.}
@@ -512,7 +512,7 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 Table~\ref{Table:Tabl1} and Table~\ref{Table:Tabl2} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
 \begin{longtable}{l l}
 \toprule
- & 
+Dummy Table 1 & 
 \\
 \midrule
  & 
@@ -525,7 +525,7 @@ Table~\ref{Table:Tabl1} and Table~\ref{Table:Tabl2} show the data constraints on
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
- & 
+Dummy Table 2 & 
 \\
 \midrule
  & 
@@ -607,7 +607,7 @@ m_{W}=V_{W}\rho{}_{W}=(V_{tank}-V_{P})\rho{}_{W}=(\frac{D}{2}L-V_{P})\rho{}_{W}
 m_{P}=V_{P}\rho{}_{P}
 \end{equation}
 \begin{itemize}
-\item[R3:]Verify that the inputs satisfy the required physical constraints shown in Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect}
+\item[R3:]Verify that the inputs satisfy the required physical constraints shown in Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect}.
 \item[R4:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, $\tau{}_{W}$ (from IM1), $\eta{}$ (from IM1), $\tau{}_{P}^{S}$ (from IM2) and $\tau{}_{P}^{L}$ (from IM2).
 \item[R5:]Calculate and output the temperature of the water ($T_{W}$($t$)) over the simulation time (from IM1).
 \item[R6:]Calculate and output the temperature of the phase change material ($T_{P}$($t$)) over the simulation time (from IM2).

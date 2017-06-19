@@ -31,19 +31,19 @@ nmFEq_rel :: Relation
 nmFEq_rel = C totNrmForce := (Int 0) --FIXME: add the long equation
 
 nmFEq_desc :: Sentence
-nmFEq_desc = S "For a" +:+ phrase slice +:+ S "of" +:+ phrase mass +:+
-  S "in the" +:+ phrase slope +:+ S "the" +:+ phrase force +:+
-  S "equilibrium to satisfy" +:+ acroT "2" +:+ S "in the direction" +:+
-  phrase perp +:+ S "to" +:+. (S "base" +:+ phrase surface `ofThe`
-  phrase slice) +:+ S "Rearranged to solve for" +:+ (phrase normForce `ofThe`
-  phrase surface) +:+. getS totNrmForce +:+ at_start force +:+ S "equilibrium is" +:+
-  S "derived from the free body diagram of" +:+
-  makeRef (SRS.physSyst SRS.missingP []) +:+ S "Index i" +:+
-  S "refers to" +:+ (plural value `ofThe` plural property) +:+ S "for" +:+
-  phrase slice :+: S "/" :+: plural intrslce +:+ S "following convention in" +:+.
-  makeRef (SRS.physSyst SRS.missingP []) +:+ at_start force +:+ phrase variable +:+
-  plural definition +:+ S "can be found in" +:+ acroDD "1" +:+ S "to" +:+.
-  acroDD "9"
+nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
+  S "in the", phrase slope, S "the", phrase force,
+  S "equilibrium to satisfy", acroT "2", S "in the direction",
+  phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
+  phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
+  phrase surface) +:+. getS totNrmForce, at_start force, S "equilibrium is",
+  S "derived from the free body diagram of",
+  makeRef (SRS.physSyst SRS.missingP []), S "Index i",
+  S "refers to", (plural value `ofThe` plural property), S "for",
+  phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
+  makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
+  plural definition, S "can be found in", acroDD "1", S "to",
+  acroDD "9"]
 
 --
 bsShrFEq :: RelationConcept
@@ -53,19 +53,19 @@ bShFEq_rel :: Relation
 bShFEq_rel = C mobShrI := (Int 0) --FIXME: add the long equation
 
 bShFEq_desc :: Sentence
-bShFEq_desc = S "For a" +:+ phrase slice +:+ S "of" +:+ phrase mass +:+
-  S "in the" +:+ phrase slope +:+ S "the" +:+ phrase force +:+
-  S "equilibrium to satisfy" +:+ acroT "2" +:+ S "in the direction" +:+
+bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
+  S "in the", phrase slope, S "the", phrase force,
+  S "equilibrium to satisfy", acroT "2", S "in the direction",
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
-  phrase slice) +:+ S "Rearranged to solve for the" +:+ phrase shearForce +:+
-  S "on the base" +:+. getS mobShrI +:+ at_start force +:+ S "equilibrium is" +:+
-  S "derived from the free body diagram of" +:+
-  makeRef (SRS.physSyst SRS.missingP []) +:+ S "Index i" +:+
-  S "refers to" +:+ (plural value `ofThe` plural property) +:+ S "for" +:+
-  phrase slice :+: S "/" :+: plural intrslce +:+ S "following convention in" +:+.
-  makeRef (SRS.physSyst SRS.missingP []) +:+ at_start force +:+ phrase variable +:+
-  plural definition +:+ S "can be found in" +:+ acroDD "1" +:+ S "to" +:+.
-  acroDD "9"
+  phrase slice), S "Rearranged to solve for the", phrase shearForce,
+  S "on the base" +:+. getS mobShrI, at_start force, S "equilibrium is",
+  S "derived from the free body diagram of",
+  makeRef (SRS.physSyst SRS.missingP []), S "Index i",
+  S "refers to", (plural value `ofThe` plural property), S "for",
+  phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
+  makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
+  plural definition, S "can be found in", acroDD "1", S "to",
+  acroDD "9"]
 
 --
 resShr :: RelationConcept
@@ -98,8 +98,8 @@ mobShr_rel = C mobShrI := C shrResI :/ C fs :=
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
   S "From", phrase definition `ofThe` ((phrase factor) `sOf` (phrase safety)), S "in", acroT "1" `sC` --FIXME: factor of saftey hacked in to avoid cyclical imports
-  S "and the new" +:+ phrase definition +:+ S "of", getS shrResI `sC` S "a new",
-  S "relation for" +:+ (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
+  S "and the new", phrase definition, S "of", getS shrResI `sC` S "a new",
+  S "relation for", (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
   getS shearFNoIntsl, S "is found as the resistive shear" , getS shrResI,
   sParen (acroGD "3"), S "divided by the factor of safety", getS fs]
 
@@ -138,7 +138,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start variable, plural definition,
-  S "can be found in", acroDD "1", S "to" +:+. acroDD "9"]
+  S "can be found in", acroDD "1", S "to", acroDD "9"]
 
 --
 netForce :: RelationConcept
@@ -165,7 +165,7 @@ fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef (SRS.physSyst SRS.missingP []), 
   at_start force, phrase variable, plural definition, S "can be found in",
-  acroDD "1", S "to" +:+. acroDD "8"]
+  acroDD "1", S "to", acroDD "8"]
   --FIXME:Finish pulling out symbols
 
 --
@@ -191,7 +191,7 @@ hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as see
   S "the product of the stiffness", plural element, S "with the", phrase displacement,
   S "would be the", phrase mass, S "'s reactive", phrase force,
   S "that creates equilibrium with the applied", plural force,
-  S "after reaching the equilibrium" +:+. phrase displacement]
+  S "after reaching the equilibrium", phrase displacement]
   -- FIXME: way to give possessive attribute to noun (ex. "mass's")
 
 

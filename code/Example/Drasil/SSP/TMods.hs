@@ -31,12 +31,12 @@ fs_rel :: Relation
 fs_rel = (C fs) := (C shearRes) / (C mobShear)
 
 fs_desc :: Sentence
-fs_desc = 
-  S "The stability metric of the" +:+ phrase slope `sC` S "known as the" +:+
-  phrase factor +:+ S "of" +:+ phrase safety +:+ sParen (getS fs) `sC`
-  S "is determined by" +:+ (S "ratio" `ofThe` phrase shearForce) +:+
-  S "at the base of the" +:+ phrase slope +:+ sParen (getS mobShear) `sC`
-  S "and the resistive shear" +:+. sParen (getS shearRes)
+fs_desc = foldlSent [
+  S "The stability metric of the", phrase slope `sC` S "known as the",
+  phrase factor `sOf` phrase safety, sParen (getS fs) `sC`
+  S "is determined by", S "ratio" `ofThe` phrase shearForce,
+  S "at the base of the", phrase slope, sParen (getS mobShear) `sC`
+  S "and the resistive shear", sParen (getS shearRes)]
 
 --
   
@@ -47,12 +47,12 @@ eq_rel :: Relation
 eq_rel = UnaryOp (Summation Nothing (C genForce)) := (Int 0) --FIXME: add net x force, net y force, and net moment
 
 eq_desc :: Sentence
-eq_desc = S "For a body in static equilibrium, the net" +:+ plural force +:+
-  S "and net moments acting on the body will cancel out. Assuming a 2D problem" +:+
-  sParen (acroA "8") +:+ S "the net x-ordinate (Fx)" +:+
-  S "and y-ordinate (Fy) scalar components will be equal to 0. All" +:+ plural force +:+
-  S "and their" +:+ phrase distance +:+ S "from the chosen point of rotation will create a" +:+
-  S "net moment equal to 0, also able to be analyzed as a scalar in a 2D problem."
+eq_desc = foldlSent [S "For a body in static equilibrium, the net", plural force,
+  S "and net moments acting on the body will cancel out. Assuming a 2D problem",
+  sParen (acroA "8"), S "the net x-ordinate (Fx)",
+  S "and y-ordinate (Fy) scalar components will be equal to 0. All", plural force,
+  S "and their", phrase distance, S "from the chosen point of rotation will create a",
+  S "net moment equal to 0, also able to be analyzed as a scalar in a 2D problem"]
 
 --
 mcShrStrgth :: RelationConcept
@@ -62,7 +62,7 @@ mcSS_rel :: Relation --FIXME: Should be P with no subscript i
 mcSS_rel = (C shrResI) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
-mcSS_desc = foldlSent [S "For a" +:+ phrase soil +:+ S "under" +:+ phrase stress +:+
+mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "it will exert a shear resistive strength based on the",
   S "Coulomb sliding law. The resistive shear is the maximum amount of shear a",
   phrase surface, S "can experience while remaining rigid, analogous to a maximum" +:+.

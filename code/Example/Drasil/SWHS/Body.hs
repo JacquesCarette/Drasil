@@ -37,11 +37,11 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 import Drasil.DocumentLanguage
 
-import Drasil.ReferenceMaterial (intro)
-import Drasil.SpecificSystemDescription
-import Drasil.TraceabilityMandGs
-import Drasil.Requirements
-import Drasil.GeneralSystDesc
+import Drasil.Sections.ReferenceMaterial (intro)
+import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.TraceabilityMandGs
+import Drasil.Sections.Requirements
+import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSentCol, foldlSP, foldlSP_, foldlSPCol)

@@ -198,17 +198,17 @@ s5_2_bt_sent2 :: Sentence
 s5_2_bt_sent2 = foldlSent [S " Use Case 2", short gLassBR,
   plural output_, S "if the", phrase glaSlab, S "will be safe by",
   S "comparing whether", phrase capacity, S "is greater than" +:+. 
-  (phrase demandq), ((at_start capacity) `isThe`
-  (capacity ^. defn)) `sAnd` ((phrase demandq) `isThe` 
+  (phrase demandq), (at_start capacity `isThe`
+  (capacity ^. defn)) `sAnd` (phrase demandq `isThe` 
   phrase requirement) +:+. (S "which" `isThe` (demandq ^. defn)), 
   S "The second", phrase condition, S "is to check whether the calculated", 
-  (phrase probability), sParen (getS prob_br), 
-  S "is less than the tolerable", (phrase probability), 
+  phrase probability, sParen (getS prob_br), 
+  S "is less than the tolerable", phrase probability, 
   sParen (getS pb_tol), S "which is obtained from the", phrase user, 
   S "as an" +:+. phrase input_, S "If both", plural condition, 
-  S "return true then it's shown that the", (phrase glaSlab), 
+  S "return true then it's shown that the", phrase glaSlab,
   S "is safe to use" `sC` S "else if both return false then the", 
-  (phrase glaSlab) +:+. S "is considered unsafe", 
+  phrase glaSlab +:+. S "is considered unsafe", 
   S "All the supporting calculated", plural value, S "are also displayed as", 
   phrase output_]
 
@@ -217,11 +217,11 @@ s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
 s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
   where start = foldlSent [S "A", phrase system, 
                 S "is needed to efficiently and correctly predict the", 
-                (phrase blastRisk) +:+ S "involved with the glass"]
+                phrase blastRisk +:+ S "involved with the glass"]
         ending = foldl (+:+) EmptyS [S "interpret the", plural input_, 
                 S "to give out the", plural output_, 
-                S "which predicts whether the", (phrase glaSlab), 
-                S "can withstand the", (phrase blast), S "under the", 
+                S "which predicts whether the", phrase glaSlab,
+                S "can withstand the", phrase blast, S "under the", 
                 plural condition]
 
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
@@ -268,10 +268,10 @@ fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
 s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys1
 
 s6_1_2_list_physys1 :: [Sentence]
-s6_1_2_list_physys1 = [(at_start glaSlab), (foldlSent [S "The point of"
-  +:+. (phrase explosion), S "Where the", (phrase bomb) `sC` 
-  S "or", (blast ^. defn) `sC` S "is located. The", (phrase sD) 
-  `isThe` S "distance between the point of", (phrase explosion), 
+s6_1_2_list_physys1 = [at_start glaSlab, (foldlSent [S "The point of"
+  +:+. phrase explosion, S "Where the", phrase bomb `sC` 
+  S "or", (blast ^. defn) `sC` S "is located. The", phrase sD
+  `isThe` S "distance between the point of", phrase explosion,
   S "and the glass"])]
 
 s6_1_3 = goalStmtF [foldlList [S "dimensions" `ofThe`S "glass plane", 
@@ -282,8 +282,8 @@ s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
 s6_1_3_list_goalStmt1 :: [Sentence]
 s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the", 
-  (phrase glaSlab), S "under consideration", 
-  S "will be able to withstand the", (phrase explosion), 
+  phrase glaSlab, S "under consideration", 
+  S "will be able to withstand the", phrase explosion,
   S "of a certain degree which is calculated based on", phrase user, 
   phrase input_]]
 
@@ -292,13 +292,13 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
   [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
         end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
-             (plural value `ofThe` S "specification"), (plural parameter), 
-              S "used in" +:+. (makeRef s6_2_5_table1), (getS ar_max), --FIXME: Issue #167
-              S "refers to the", (phrase ar_max), S "for the plate of glass"]
+             (plural value `ofThe` S "specification"), plural parameter, 
+              S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
+              S "refers to the", phrase ar_max, S "for the plate of glass"]
 
 s6_2_intro = foldlSP [S "This", phrase section_, 
-  S "explains all the", (plural assumption), S "considered and the", 
-  plural thModel, S "which are supported by the", (plural dataDefn)]
+  S "explains all the", plural assumption, S "considered and the", 
+  plural thModel, S "which are supported by the", plural dataDefn]
   
 s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
@@ -315,10 +315,10 @@ assumptionLoad_Dur = EqnBlock $ (C load_dur):=(Int 3)
 
 s6_2_1_list_assum1 :: [Sentence]
 s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for", 
-  (phrase calculation), 
+  phrase calculation, 
   S "applies only to monolithic, laminated, or insulating", 
   S "glass constructions of rectangular shape with continuous", 
-  (phrase lateral), 
+  phrase lateral,
   S "support along one, two, three, or four edges. This practice assumes", 
   S "that (1) the supported glass edges for two, three and four-sided", 
   S "support", plural condition, S "are simply supported and free to slip in", 
@@ -327,27 +327,26 @@ s6_2_1_list_assum1 = [foldlSent [S "The standard E1300-09a for",
   foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this practice does not apply to any form of wired, patterned" `sC`
   S "etched, sandblasted, drilled, notched, or grooved glass with", 
-  (phrase surface), S "and edge treatments that alter the glass strength"], 
+  phrase surface, S "and edge treatments that alter the glass strength"], 
   foldlSent [S "This", phrase system, S "only considers the external", 
-  (phrase explosion), S "scenario for its", 
-  (plural calculation)], 
+  phrase explosion, S "scenario for its", plural calculation], 
   (S "Standard" +:+ plural value +:+ S "used for" +:+
-  (phrase calculation) +:+ S "in" +:+ (short gLassBR) +: S "are")]
+  phrase calculation +:+ S "in" +:+ short gLassBR +: S "are")]
 
 s6_2_1_list_assum2 :: [Sentence]
 s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration", 
-  S "is assumed to be a single" +:+. (phrase lite), S "Hence the", 
-  phrase value, S "of", (short lShareFac), S "is equal to 1 for all", 
-  (plural calculation), S "in", (short gLassBR)]), 
+  S "is assumed to be a single" +:+. phrase lite, S "Hence the", 
+  phrase value, S "of", short lShareFac, S "is equal to 1 for all", 
+  plural calculation, S "in", short gLassBR]), 
   (foldlSent [S "Boundary", plural condition, S "for the", 
-  (phrase glaSlab), S "is assumed to be 4-sided", 
-  S "support for", (plural calculation)]), 
-  (foldlSent [S "The response type considered in", (short gLassBR), 
+  phrase glaSlab, S "is assumed to be 4-sided support for",
+  plural calculation]), 
+  (foldlSent [S "The response type considered in", short gLassBR,
   S "is flexural"]), 
   (foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
-  S "of", (phrase loadDF), sParen (getS loadDF), 
-  S "is a constant in" +:+. (short gLassBR), S "It is calculated by the" +: 
-  (phrase equation), --(getS loadDF) +:+ S "=" +:+ (getS load_dur) :+: 
+  S "of", phrase loadDF, sParen (getS loadDF), 
+  S "is a constant in" +:+. short gLassBR, S "It is calculated by the" +: 
+  phrase equation, --(getS loadDF) +:+ S "=" +:+ (getS load_dur) :+: 
   S ". Using this" `sC` (getS loadDF), S "= 0.27"])]
 
 s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
@@ -368,9 +367,9 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
-              (plural value `ofThe` S "specification"), (plural parameter), 
-              S "used in" +:+. (makeRef s6_2_5_table1), (getS ar_max), --FIXME: Issue #167
-              S "refers to the", (phrase ar_max), S "for the plate of glass"]
+              (plural value `ofThe` S "specification"), plural parameter,
+              S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
+              S "refers to the", phrase ar_max, S "for the plate of glass"]
 
 s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", 
   S "Typical Value", S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), 
@@ -457,7 +456,7 @@ s7_1_listOfReqs = [s7_1_req3, s7_1_req4, s7_1_req5]
 s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   [(acroR "1", at_start input_ +:+ S "the following" +:+
   plural quantity `sC` S "which define the glass dimensions" `sC` 
-  (glassTy ^. defn) `sC` S "tolerable" +:+ (phrase probability) +:+
+  (glassTy ^. defn) `sC` S "tolerable" +:+ phrase probability +:+
   S "of failure and" +: (plural characteristic `ofThe` phrase blast))]),
   s7_1_req1Table]
 
@@ -473,7 +472,7 @@ s7_1_req2 = [(Enumeration $ Simple $
      (getS mod_elas) `sC` (getS load_dur) +:+ 
      S "following" +:+ acroA "4", 
      (getS loadDF) +:+ S "following" +:+ acroA "8", 
-     (short lShareFac) +:+ S "following" +:+ acroA "5"]))])]
+     short lShareFac +:+ S "following" +:+ acroA "5"]))])]
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   phrase input_, plural value, S "to ensure that they do not exceed the",
@@ -486,8 +485,8 @@ s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
   plural quantity, S "from", acroR "1", S "and the known", plural quantity,
   S "from", acroR "2"]
 
-s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd`
-  (getS is_safe2) +:+ sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
+s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
+  sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
   `sAnd` (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
@@ -512,11 +511,11 @@ s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = foldlSP [
   S "Given the small size, and relative simplicity, of this", 
-  phrase problem `sC` (phrase performance), S "is not a" +:+. phrase priority, 
+  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority, 
   S "Any reasonable", phrase implementation +:+. 
   S "will be very quick and use minimal storage", 
-  S "Rather than", (phrase performance) `sC` S "the", phrase priority, 
-  phrase nonfunctional, (short requirement) :+:
+  S "Rather than", phrase performance `sC` S "the", phrase priority, 
+  phrase nonfunctional, short requirement :+:
   S "s are correctness, verifiability, understandability, reusability,", 
   S "maintainability and portability"]
 
@@ -526,9 +525,9 @@ s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5 :: Sentence
 
 s8_likelychg1 = foldlSent [acroA "3" +:+ S "- The", phrase system, 
-  S "currently only calculates for external" +:+. (phrase blastRisk), 
-  S "In the future", (plural calculation), 
-  S "can be added for the internal", (phrase blastRisk)]
+  S "currently only calculates for external" +:+. phrase blastRisk, 
+  S "In the future", plural calculation,
+  S "can be added for the internal", phrase blastRisk]
 
 s8_likelychg2 = foldlSent [acroA "4" `sC` acroA "8",
   S "- Currently the", plural value, S "for",
@@ -538,7 +537,7 @@ s8_likelychg2 = foldlSent [acroA "4" `sC` acroA "8",
   S "can be changed to", phrase variable, plural input_]
 
 s8_likelychg3 = foldlSent [acroA "5" +:+ S "- The", phrase software, 
-  S "may be changed to accommodate more than a single", (phrase lite)]
+  S "may be changed to accommodate more than a single", phrase lite]
 
 s8_likelychg4 = foldlSent [acroA "6" +:+ S "- The", phrase software, 
   S "may be changed to accommodate more boundary", plural condition, 
@@ -558,7 +557,7 @@ s9 = traceMGF [s9_table1, s9_table2, s9_table3]
   S "with each other"), (plural requirement +:+ S "on" +:+ plural thModel `sC`
   (plural inModel) `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint), 
   (plural thModel `sC` (plural dataDefn) `sC` plural inModel
-  `sC` plural likelyChg `sAnd` (plural requirement) +:+ S "on the" +:+ 
+  `sC` plural likelyChg `sAnd` plural requirement +:+ S "on the" +:+ 
   plural assumption)]
   ([s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4])
   []
@@ -719,7 +718,7 @@ s9_intro2 = traceGIntro [fig_2, fig_3, fig_4]
   [(plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
   `sC` plural dataDefn +:+ S "and" +:+. plural datumConstraint), 
   (plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
-  `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint), 
+  `sC` plural dataDefn +:+ S "and" +:+. plural datumConstraint), 
   (plural thModel `sC` plural inModel `sC` plural dataDefn `sC`
   plural requirement `sAnd` plural likelyChg +:+ S "on" +:+
   plural assumption)]
@@ -779,19 +778,16 @@ s10_ref6 = [S "ASTM", S "developed by subcommittee C14.08", S "Book of standards
 s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 
 s11_intro = foldlSP [
-  S "This", phrase appendix, S "holds the", (plural graph), 
+  S "This", phrase appendix, S "holds the", plural graph, 
   sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)), 
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ sParen
-  (getS demand) +:+ S "versus" +:+ (at_start sD) +:+
-  S "versus" +:+ (at_start char_weight) +:+ sParen
-  (getS sflawParamM)) "ASTM_F2248-09.png"
+fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ 
+  sParen (getS demand) +:+ S "versus" +:+ at_start sD +:+ S "versus" +:+ 
+  at_start char_weight +:+ sParen (getS sflawParamM)) "ASTM_F2248-09.png"
 
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
-  (phrase lateral) +:+
-  (phrase load) +:+ sParen
-  (getS dimlessLoad) +:+ S "versus" +:+ (titleize aspectR) +:+ 
-  sParen (short aspectR) {-(P (aspectR))-} +:+ S "versus" +:+
-  (at_start stressDistFac) +:+ sParen (getS stressDistFac))
+  phrase lateral +:+ phrase load +:+ sParen (getS dimlessLoad)
+  +:+ S "versus" +:+ titleize aspectR +:+ sParen (short aspectR) {-(P (aspectR))-}
+  +:+ S "versus" +:+ at_start stressDistFac +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"

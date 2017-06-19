@@ -741,6 +741,8 @@ s10 = SRS.reference [s10_list] []
 s10_list= mkRefsList 1 (map (foldl (+:+) EmptyS) [s10_ref1, s10_ref2, 
   s10_ref3, s10_ref4, s10_ref5, s10_ref6])
 
+s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6 :: [Sentence]
+
 s10_ref1 = [(S "N. Koothoor" `sC` Quote (S "A" +:+ phrase document +:+ 
   S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
   S "Master's thesis" `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013.")]

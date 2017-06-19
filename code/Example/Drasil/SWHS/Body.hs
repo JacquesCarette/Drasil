@@ -32,18 +32,19 @@ import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
 
-import Drasil.SpecificSystemDescription
 import qualified Drasil.SRS as SRS
-import Drasil.ReferenceMaterial (intro)
-import Drasil.DocumentLanguage
 import Drasil.Template.MG
 import Drasil.Template.DD
+import Drasil.DocumentLanguage
+
+import Drasil.ReferenceMaterial (intro)
+import Drasil.SpecificSystemDescription
 import Drasil.TraceabilityMandGs
 import Drasil.Requirements
 import Drasil.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSP, foldlSP_, foldlSPCol)
+  foldlSentCol, foldlSP, foldlSP_, foldlSPCol)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -1027,12 +1028,12 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 -- FIXME: Errors
-{--
+
 s5_1_list :: [Contents]
-s5_1_list = [Enumeration (Simple [acroR "1", Flat (foldlSentCol
+s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
   [titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, S "parameters, material",
-  plural property, S "and initial", plural condition])]),
+  plural property, S "and initial", plural condition]))]),
 
   (Table [phrase symbol_, phrase unit_, phrase description]
   (mkTable
@@ -1041,11 +1042,11 @@ s5_1_list = [Enumeration (Simple [acroR "1", Flat (foldlSentCol
   (\ch -> phrase ch)] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
 --
-  Enumeration (Simple [acroR "2", Flat (foldlSent
+  Enumeration (Simple [(acroR "2", Flat (foldlSent
   [S "Use the", plural input_, S "in", acroR "1", S "to find the",
   phrase mass, S "needed for", acroIM "1", S "to", acroIM "4" `sC`
   S "as follows, where", getS w_vol, S "is the", phrase w_vol,
-  S "and", getS tank_vol, S "is the", phrase tank_vol])]),
+  S "and", getS tank_vol, S "is the", phrase tank_vol]))]),
 
   EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
@@ -1054,36 +1055,6 @@ s5_1_list = [Enumeration (Simple [acroR "1", Flat (foldlSentCol
 --
   enumSimple 3 (short requirement) $ map foldlSent reqList
   ]
---}
-s5_1_list :: [Contents]
-s5_1_list = [Enumeration (Simple [(acroR "1", Flat
-  (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
-  S "which define the" +:+ phrase tank +:+
-  S "parameters, material" +:+ plural property +:+ S "and initial" +:
-  plural condition))]),
-  (Table [phrase symbol_, phrase unit_, phrase description]
-  (mkTable
-  [(\ch -> P (ch ^. symbol)),
-  (\ch -> Sy (unit_symb ch)),
-  (\ch -> phrase ch)] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
---
-  Enumeration (Simple [(acroR "2", Flat
-  (S "Use the" +:+ plural input_ +:+ S "in" +:+ acroR "1" +:+
-  S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM "1" +:+
-  S "to" +:+ acroIM "4" `sC` S "as follows, where" +:+
-  P (w_vol ^. symbol) +:+ S "is the" +:+ phrase w_vol +:+
-  S "and" +:+ P (tank_vol ^. symbol) +:+ S "is the" +:+.
-  phrase tank_vol))]),
-  EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
-  (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
-  (C pcm_vol)) * (C w_density)),
-  EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
---
-  enumSimple 3 (short requirement) $ map foldlSent reqList
-  ]
-
-
 -- Want to add req1 and req2 but they include a table and another enumeration
 -- so not sure how to implement yet
 
@@ -1148,14 +1119,14 @@ s5_2 :: Section
 s5_2 = SRS.nonfuncReq [s5_2_contents] []
 
 s5_2_contents :: Contents
-s5_2_contents = Paragraph (S "Given the small size, and relative simplicity"
-  `sC` S "of this" +:+ phrase problem `sC` phrase performance +:+
-  S "is not a" +:+. phrase priority +:+
-  S "Any reasonable implementation will be very quick and use" +:+
-  S "minimal storage. Rather than" +:+ phrase performance `sC` S "the" +:+
-  phrase priority +:+ plural nonfunctionalRequirement +:+
+s5_2_contents = foldlSP [S "Given the small size, and relative simplicity"
+  `sC` S "of this", phrase problem `sC` phrase performance,
+  S "is not a" +:+. phrase priority,
+  S "Any reasonable implementation will be very quick and use",
+  S "minimal storage. Rather than", phrase performance `sC` S "the",
+  phrase priority, plural nonfunctionalRequirement,
   S "are correctness" `sC` S "verifiability" `sC`
-  S "understandability" `sC` S "reusability" `sC` S "and maintainability.")
+  S "understandability" `sC` S "reusability" `sC` S "and maintainability"]
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always
@@ -1174,43 +1145,41 @@ s6 = SRS.likeChg [s6_list] []
 -- abstracted out and used for all examples.
 
 s6_list :: Contents
-s6_list = enumSimple 1 (short likelyChg) s6_likeChg_list
+s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
 
-s6_likeChg_list :: [Sentence]
+s6_likeChg_list :: [[Sentence]]
 
-likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Sentence
+likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: [Sentence]
 
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
-likeChg1 = acroA "4" +:+ S "-" +:+ short phsChgMtrl +:+
-  S "is actually a poor" +:+ phrase CT.thermal_conductor `sC` S "so" +:+
-  S "the" +:+ phrase assumption +:+ S "of uniform" +:+ phrase temp_PCM +:+.
-  S "is not likely"
+likeChg1 = [acroA "4", S "-", short phsChgMtrl,
+  S "is actually a poor", phrase CT.thermal_conductor `sC` S "so",
+  S "the", phrase assumption, S "of uniform", phrase temp_PCM,
+  S "is not likely"]
 --
-likeChg2 = acroA "8" +:+ S "- The" +:+ phrase temp_C +:+
-  S "will change over the course of the day, depending" +:+
-  S "on the" +:+ phrase energy +:+. S "received from the sun"
+likeChg2 = [acroA "8", S "- The", phrase temp_C,
+  S "will change over the course of the day, depending",
+  S "on the", phrase energy, S "received from the sun"]
 --
-likeChg3 = acroA "9" +:+ S "- The" +:+ phrase temp_C +:+
-  S "will actually change along its length as the" +:+
-  phrase water +:+. S "within it cools"
+likeChg3 = [acroA "9", S "- The", phrase temp_C,
+  S "will actually change along its length as the",
+  phrase water, S "within it cools"]
 --
-likeChg4 = acroA "11" +:+ S "- The" +:+ phrase model +:+
-  S "currently only accounts for" +:+. (charging ^. defn) +:+
-  S "A more complete" +:+ phrase model +:+ S "would also" +:+
-  S "account for" +:+. (discharging ^. defn)
+likeChg4 = [acroA "11", S "- The", phrase model,
+  S "currently only accounts for" +:+. (charging ^. defn),
+  S "A more complete", phrase model, S "would also",
+  S "account for", (discharging ^. defn)]
 --
-likeChg5 = acroA "12" +:+ S "- To add more" +:+
-  S "flexibility to the" +:+ phrase simulation `sC`
-  S "the" +:+ phrase temp_init +:+
-  S "of the" +:+ phrase water +:+
-  S "and the" +:+ short phsChgMtrl +:+ S "could be" +:+
-  S "allowed to have different" +:+. plural value
+likeChg5 = [acroA "12", S "- To add more",
+  S "flexibility to the", phrase simulation `sC`
+  S "the", phrase temp_init, S "of the", phrase water,
+  S "and the", short phsChgMtrl, S "could be",
+  S "allowed to have different", plural value]
 --
-likeChg6 = acroA "15" +:+ S "- Any real" +:+
-  phrase tank +:+ S "cannot be" +:+
-  phrase perfect_insul +:+ S "and will lose" +:+.
-  phrase CT.heat
+likeChg6 = [acroA "15", S "- Any real", phrase tank,
+  S "cannot be", phrase perfect_insul, S "and will lose",
+  phrase CT.heat]
 
 -- List structure same in all examples.
 
@@ -1230,15 +1199,15 @@ s7_refList = [s7_table1, s7_table2, s7_table3]
 s7_trailing :: [Sentence]
 s7_trailing = [
 
-  plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  S "and" +:+ plural inModel +:+. S "with each other",
+  foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
+  S "and", plural inModel, S "with each other"],
 
-  plural inModel `sC` plural requirement `sC` S "and" +:+ plural datum +:+
-  plural constraint +:+. S "on each other",
+  foldlSent [plural inModel `sC` plural requirement `sC` S "and",
+  plural datum, plural constraint, S "on each other"],
 
-  plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  plural inModel `sC` S "and" +:+ plural likelyChg +:+ S "on the" +:+
-  plural assumption
+  foldlSent_ [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
+  plural inModel `sC` S "and", plural likelyChg, S "on the",
+  plural assumption]
 
   ]
 
@@ -1376,11 +1345,14 @@ s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4",
 ------------------------
 
 s7_intro2 :: [Contents]
-s7_intro2 = traceGIntro [s7_fig1, s7_fig2] [(plural thModel `sC`
-  plural genDefn `sC` plural dataDefn `sC` plural inModel `sC`
-  plural likelyChg `sC` S "and" +:+ plural assumption +:+.
-  S "on each other"), (plural inModel `sC` plural requirement `sC`
-  S "and" +:+ plural datumConstraint +:+ S "on each other")]
+s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
+
+  [foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
+  `sC` plural inModel `sC` plural likelyChg `sC` S "and",
+  plural assumption, S "on each other"],
+
+  foldlSent_ [plural inModel `sC` plural requirement `sC`
+  S "and", plural datumConstraint, S "on each other"]]
 
 -- Same comments on this paragraph as I had for s7_intro1.
 

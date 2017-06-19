@@ -20,7 +20,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec, latent_heat,
 import Data.Drasil.Quantities.PhysicalProperties
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Utils (getS)
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent, isThe, ofThe, ofThe')
 import Drasil.SWHS.DataDefs
 
 import Control.Lens ((^.))
@@ -49,11 +49,11 @@ t1descr = foldlSent [
   getS heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)),
   S "and", phrase density `sC`
   getS density, sParen (Sy (unit_symb density)) `sC`
-  S "where", getS thFluxVect, S "is the",
+  S "where", getS thFluxVect `isThe`
   phrase thFluxVect, sParen (Sy (unit_symb thFluxVect)) `sC`
-  getS vol_ht_gen, S "is the",
+  getS vol_ht_gen `isThe`
   phrase vol_ht_gen, sParen (Sy (unit_symb vol_ht_gen)) `sC`
-  getS temp, S "is the",
+  getS temp `isThe`
   phrase temp, sParen (Sy (unit_symb temp)) `sC`
   getS time, S "is", phrase time,
   sParen (Sy (unit_symb time)) `sC` S "and", getS gradient,
@@ -91,15 +91,15 @@ sensHtEEqn = (C sens_heat) := Case [((C htCap_S) * (C mass) * (C deltaT),
 -- were implemented incorrectly.
 t2descr :: Sentence
 t2descr = foldlSent [
-  getS sens_heat, S "is the change in",
+  getS sens_heat `isThe` S "change in",
   phrase sens_heat, phrase energy +:+. sParen (Sy (joule ^. usymb)),
   getS htCap_S `sC` getS htCap_L `sC` getS htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
-  S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)), getS mass,
-  S "is the", phrase mass +:+. sParen (Sy (unit_symb mass)),
-  getS temp, S "is the", phrase temp,
-  sParen (Sy (unit_symb temp)) `sC` S "and", getS deltaT,
-  S "is the", phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
+  S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)),
+  getS mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
+  getS temp `isThe` phrase temp,
+  sParen (Sy (unit_symb temp)) `sC` S "and", getS deltaT `isThe`
+  phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
   getS melt_pt, S "and", getS boil_pt,
   S "are the", phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
@@ -109,7 +109,7 @@ t2descr = foldlSent [
   phrase phase_change, S "occurs if",
   getS temp :+: S "=" :+: getS boil_pt,
   S "or", getS temp :+: S "=" +. getS melt_pt,
-  S "If this is the case, refer to",
+  S "If this" `isThe` S "case, refer to",
   swhsSymbMapTRef t3LatHtE `sC`
   at_start latent_heat, phrase energy]
  
@@ -141,15 +141,15 @@ latHtEEqn = FCall (C latent_heat) [C time] := UnaryOp (Integral (Just (Low 0),
 
 t3descr :: Sentence
 t3descr = foldlSent [
-  getS latent_heat, S "is the change in",
+  getS latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
-  S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE",
-  S "is the", phrase rOfChng, S "of",
+  S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE"
+  `isThe` phrase rOfChng, S "of",
   getS latent_heat, S "with respect",
   S "to", phrase time, getS tau +:+.
-  sParen (Sy (unit_symb tau)), getS time,
-  S "is the", phrase time, sParen (Sy (unit_symb time)),
+  sParen (Sy (unit_symb tau)), getS time `isThe`
+  phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,

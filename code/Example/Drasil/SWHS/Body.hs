@@ -42,7 +42,7 @@ import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSentCol, foldlSP, foldlSP_, foldlSPCol)
+  foldlSentCol, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe, ofThe')
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -1147,36 +1147,37 @@ s6_list :: Contents
 s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
 
 s6_likeChg_list :: [[Sentence]]
-
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: [Sentence]
-
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
-likeChg1 = [acroA "4", S "-", short phsChgMtrl,
+s6_start :: String -> Sentence
+s6_start numVar = acroA numVar +:+ S "-"
+
+likeChg1 = [s6_start "4", short phsChgMtrl,
   S "is actually a poor", phrase CT.thermal_conductor `sC` S "so",
   S "the", phrase assumption, S "of uniform", phrase temp_PCM,
   S "is not likely"]
 --
-likeChg2 = [acroA "8", S "- The", phrase temp_C,
+likeChg2 = [s6_start "8", S "The", phrase temp_C,
   S "will change over", S "course" `ofThe` S "day, depending",
   S "on the", phrase energy, S "received from the sun"]
 --
-likeChg3 = [acroA "9", S "- The", phrase temp_C,
+likeChg3 = [s6_start "9", S "The", phrase temp_C,
   S "will actually change along its length as the",
   phrase water, S "within it cools"]
 --
-likeChg4 = [acroA "11", S "- The", phrase model,
+likeChg4 = [s6_start "11", S "The", phrase model,
   S "currently only accounts for" +:+. (charging ^. defn),
   S "A more complete", phrase model, S "would also",
   S "account for", (discharging ^. defn)]
 --
-likeChg5 = [acroA "12", S "- To add more",
+likeChg5 = [s6_start "12", S "To add more",
   S "flexibility to the", phrase simulation `sC`
   (phrase temp_init `ofThe` phrase water),
   S "and the", short phsChgMtrl, S "could be",
   S "allowed to have different", plural value]
 --
-likeChg6 = [acroA "15", S "- Any real", phrase tank,
+likeChg6 = [s6_start "15", S "Any real", phrase tank,
   S "cannot be", phrase perfect_insul, S "and will lose",
   phrase CT.heat]
 

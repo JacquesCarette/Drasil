@@ -290,8 +290,8 @@ sys_context_fig = Figure (foldlSent_
 s3_1_2_intro :: Contents
 s3_1_2_intro = foldlSPCol [short progName +:+.
   S "is mostly self-contained",
-  S "The only external interaction is through the", phrase user,
-  S "interface. The responsibilities of the", phrase user,
+  S "The only external interaction is through the", phrase user +:+.
+  S "interface", S "responsibilities" `ofThe'` phrase user,
   S "and the", phrase system, S "are as follows"]
 
 s3_1_2_bullets :: Contents
@@ -513,11 +513,11 @@ assump2 = [S "All", phrase CT.heat_trans, S "coefficients are constant over",
   phrase time, sSqBr (acroGD "1")]
 --
 assump3 = [S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase temp_W,
-  S "is the same throughout the entire", phrase tank,
+  S "is fully mixed, so the", phrase temp_W `isThe`
+  S "same throughout the entire", phrase tank,
   sSqBr (acroGD "2" `sC` swhsSymbMapDRef dd2HtFluxP)]
 --
-assump4 = [S "The", phrase temp_PCM, S "is the same throughout the",
+assump4 = [S "The", phrase temp_PCM `isThe` S "same throughout the",
   phrase pcm_vol, sSqBr (acroGD "2" `sC` swhsSymbMapDRef dd2HtFluxP `sC`
   acroLC "1")]
 --
@@ -553,16 +553,16 @@ assump11 = [S "The", phrase model,
   phrase temp_init, sParen (acroA "12"), S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr ((acroIM "1") `sC` (acroLC "4"))]
 --
-assump12 = [S "The", phrase temp_init, S "of the", phrase water,
-  S "and the", short phsChgMtrl, S "is the same",
+assump12 = [phrase temp_init `ofThe'` phrase water,
+  S "and the", short phsChgMtrl `isThe` S "same",
   sSqBr ((acroIM "1") `sC` (acroIM "2") `sC` (acroLC "5"))]
 --
 assump13 = [S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", (solid ^. defn),
   sSqBr ((acroIM "2") `sC` (acroIM "4"))]
 --
-assump14 = [S "The operating", phrase temp, S "range of the",
-  phrase system, S "is such that the", phrase water,
+assump14 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
+  phrase system), S "is such that the", phrase water,
   S "is always in" +:+. (liquid ^. defn), S "That is,",
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
@@ -577,9 +577,8 @@ assump16 = [S "No internal", phrase CT.heat,
   short phsChgMtrl `semiCol` S "therefore, the", phrase vol_ht_gen,
   S "is zero", sSqBr ((acroIM "1") `sC` (acroIM "2"))]
 --
-assump17 = [S "The", phrase vol, phrase change, S "of the",
-  short phsChgMtrl, S "due to", phrase CT.melting,
-  S "is negligible", sSqBr (acroIM "2")]
+assump17 = [(phrase vol +:+ phrase change `ofThe'` short phsChgMtrl),
+  S "due to", phrase CT.melting, S "is negligible", sSqBr (acroIM "2")]
 --
 assump18 = [S "The",
   short phsChgMtrl, S "is either in a", (liquid ^. defn),
@@ -633,11 +632,10 @@ s4_2_3_deriv = [
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
   * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
 
-  foldlSPCol [S "Applying", titleize gauss_div, S "to",
-  S "the first term over the", phrase surface, getS surface,
-  S "of the", phrase vol `sC` S "with", getS thFluxVect,
-  S "as the", phrase thFluxVect, S "for the", phrase surface,
-  S "and", getS uNormalVect, S "as a", phrase unit_,
+  foldlSPCol [S "Applying", titleize gauss_div, S "to the first term over",
+  (phrase surface +:+ getS surface `ofThe` phrase vol) `sC` S "with",
+  getS thFluxVect, S "as the", phrase thFluxVect, S "for the",
+  phrase surface, S "and", getS uNormalVect, S "as a", phrase unit_,
   S "outward", phrase uNormalVect, S "for a", phrase surface],
 
   EqnBlock
@@ -746,15 +744,15 @@ s4_2_5_d1sent_list = map foldlSPCol [
   
   [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
-  phrase water, S "The", phrase vol, S "being considered is the",
+  phrase water, S "The", phrase vol, S "being considered" `isThe`
   phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass,
   getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
   getS ht_flux_C, S "represents the", phrase ht_flux_C, S "and",
   getS ht_flux_P, S "represents", S "the", phrase ht_flux_P `sC`
   S "over", phrase coil_SA, S "and", phrase pcm_SA, S "of",
   getS coil_SA, S "and", getS pcm_SA `sC` S "respectively. No",
-  phrase CT.heat_trans, S "occurs to the outside of the",
-  phrase tank `sC` S "since it has been assumed to be",
+  phrase CT.heat_trans, S "occurs to", (S "outside" `ofThe`
+  phrase tank) `sC` S "since it has been assumed to be",
   phrase perfect_insul +:+. sParen (acroA "15"), S "Assuming no",
   phrase vol_ht_gen +:+. (sParen (acroA "16") `sC` getS vol_ht_gen
   :+: S "=0"), S "Therefore, the", phrase equation, S "for",
@@ -766,8 +764,9 @@ s4_2_5_d1sent_list = map foldlSPCol [
 
   [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"],
 
-  [S "Factoring the negative sign out of the second term of the",
-  short rightSide, S "of", titleize equation,
+  [S "Factoring the negative sign out of",
+  S "second term" `ofThe` short rightSide,
+  S "of", titleize equation,
   S "(4) and multiplying it by",
   getS coil_HTC :+: getS coil_SA :+: S "/" :+:
   getS coil_HTC :+: getS coil_SA, S "yields"],
@@ -891,8 +890,9 @@ s4_2_5_d2endPara = map foldlSP [
   S "and thus", getS tau_S_P, S "is replaced by" +:+.
   getS tau_L_P, S "Although a small change in", phrase surface,
   S "area would be expected with", phrase CT.melting `sC`
-  S "this is not included, since the", phrase vol,
-  S "change of the", short phsChgMtrl, S "with", phrase CT.melting,
+  S "this is not included, since",
+  (phrase vol +:+ S "change" `ofThe` short phsChgMtrl),
+  S "with", phrase CT.melting,
   S "is assumed to be negligible", sParen (acroA "17")],
 
   [S "In the case where", getS temp_PCM :+: S "=" :+:
@@ -901,8 +901,9 @@ s4_2_5_d2endPara = map foldlSP [
   S "Therefore, in this case d" :+: getS temp_PCM :+: S "/d" :+:
   getS time :+: S "=0"],
 
-  [S "This derivation does not consider the", phrase CT.boiling,
-  S "of the", short phsChgMtrl `sC` S "as the", short phsChgMtrl,
+  [S "This derivation does not consider",
+  (phrase CT.boiling `ofThe` short phsChgMtrl) `sC`
+  S "as the", short phsChgMtrl,
   S "is assumed to either be in", S "a", (solid ^. defn),
   S "or a", (liquid ^. defn), sParen (acroA "18")]
 
@@ -1043,8 +1044,8 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
   Enumeration (Simple [(acroR "2", Flat (foldlSent
   [S "Use the", plural input_, S "in", acroR "1", S "to find the",
   phrase mass, S "needed for", acroIM "1", S "to", acroIM "4" `sC`
-  S "as follows, where", getS w_vol, S "is the", phrase w_vol,
-  S "and", getS tank_vol, S "is the", phrase tank_vol]))]),
+  S "as follows, where", getS w_vol `isThe` phrase w_vol,
+  S "and", getS tank_vol `isThe` phrase tank_vol]))]),
 
   EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
@@ -1157,7 +1158,7 @@ likeChg1 = [acroA "4", S "-", short phsChgMtrl,
   S "is not likely"]
 --
 likeChg2 = [acroA "8", S "- The", phrase temp_C,
-  S "will change over the course of the day, depending",
+  S "will change over", S "course" `ofThe` S "day, depending",
   S "on the", phrase energy, S "received from the sun"]
 --
 likeChg3 = [acroA "9", S "- The", phrase temp_C,
@@ -1171,7 +1172,7 @@ likeChg4 = [acroA "11", S "- The", phrase model,
 --
 likeChg5 = [acroA "12", S "- To add more",
   S "flexibility to the", phrase simulation `sC`
-  S "the", phrase temp_init, S "of the", phrase water,
+  (phrase temp_init `ofThe` phrase water),
   S "and the", short phsChgMtrl, S "could be",
   S "allowed to have different", plural value]
 --

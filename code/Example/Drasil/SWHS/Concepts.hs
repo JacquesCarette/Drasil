@@ -46,15 +46,14 @@ phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
 --FIXME: Temporarily have to manually create the compound phrase, because it
 --uses acronym and a sentence.
 
-<<<<<<< HEAD
+
 {- attempt 1-}
 --swhsProg = npnc' "swhsProg" (nounPhrase''
 --  (compoundNPNC'' short phrase progName (program))
 --  (short progName +:+ (phrase $ program))
 --  CapFirst CapWords) "SWHS"
 {- attempt 2-}
-=======
->>>>>>> Making changes in SWHS to match stable.
+
 swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
   phrase program) (short progName +:+ phrase program)
   CapFirst CapWords) "SWHS"

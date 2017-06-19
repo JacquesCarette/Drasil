@@ -1271,17 +1271,31 @@ s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4",
   titleize' inModel)) True
 
 -------------------------------------------------------------------
+-------------------------------------------------------------------
 
-s7_instaModel, s9_data, s7_funcReq :: [String]
-s9_dataRef, s7_funcReqRef :: [Sentence]
+s7_instaModel, s7_data, s7_funcReq, s7_likelyChanges, s7_dataDefs, s7_genDefs,
+  s7_assumptions, s7_theories :: [String]
+s7_dataRef, s7_funcReqRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
 
-s7_funcReq = ["R1", "R2"]
+s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
+  "R11"]
 s7_funcReqRef = makeListRef s7_funcReq s5_1
 
-s9_data  = ["Data Constraints"]
-s9_dataRef = [makeRef s4_2_6_table1]
+s7_data = ["Data Constraints"]
+s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
+
+s7_assumptions = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+  "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
+
+s7_theories = ["T1", "T2", "T3"]
+
+s7_genDefs = ["GD1", "GD2"]
+
+s7_dataDefs = ["DD1", "DD2", "DD3"]
+
+s7_likelyChanges = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 
 --------------------------------------------------------------------
 
@@ -1324,6 +1338,7 @@ s7_table2_New = Table (EmptyS:s7_row_header_t2)
   (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
   titleize' inModel)) True
 
+-------------------------------------------------------------------
 -------------------------------------------------------------------
 
 s7_table3 :: Contents

@@ -325,9 +325,7 @@ executable swhs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.Modules
     , Drasil.SWHS.Reqs
-    , Drasil.SWHS.TModel1
-    , Drasil.SWHS.TModel2
-    , Drasil.SWHS.TModel3
+    , Drasil.SWHS.TMods
     , Drasil.SWHS.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols

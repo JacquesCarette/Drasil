@@ -24,9 +24,7 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
-import Drasil.SWHS.TModel1
-import Drasil.SWHS.TModel2
-import Drasil.SWHS.TModel3
+import Drasil.SWHS.TMods
 import Drasil.SWHS.DataDefs
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes

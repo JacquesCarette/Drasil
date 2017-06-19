@@ -345,9 +345,9 @@ s6_2_1_list_assum2 = [(foldlSent [S "Glass under consideration",
   S "is flexural"]), 
   (foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
   S "of", phrase loadDF, sParen (getS loadDF), 
-  S "is a constant in" +:+. short gLassBR, S "It is calculated by the" +: 
-  phrase equation, --(getS loadDF) +:+ S "=" +:+ (getS load_dur) :+: 
-  S ". Using this" `sC` (getS loadDF), S "= 0.27"])]
+  S "is a constant in" +:+. short gLassBR, S "It is calculated by the" +:
+  phrase equation, E ((C loadDF) := loadDF_eq),
+  S ". Using this" `sC` E ((C loadDF) := (Dbl 0.27))])]
 
 s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
   

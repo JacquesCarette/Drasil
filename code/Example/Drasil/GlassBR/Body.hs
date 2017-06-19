@@ -225,7 +225,7 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
                 plural condition]
 
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
-  sSqBr (S "4") +:+ S "in" +:+. (makeRef s10)) [s6_1_1_bullets]
+  sSqBr (S "4") +:+ S "in" +:+ (makeRef s10)) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $
   map (\b -> Flat $ ((at_start b) +:+ S "- ") :+: (b ^. defn)) 

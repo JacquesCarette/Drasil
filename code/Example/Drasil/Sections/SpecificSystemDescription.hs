@@ -67,7 +67,7 @@ termDefnF :: Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
       where lastF EmptyS  = EmptyS
             lastF s = S "." +:+ s
-            intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
+            intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS)
                     [S "This subsection provides a list of terms", 
                     S "that are used in the subsequent", plural section_, S "and their", 
                     S "meaning, with the", phrase purpose, S "of reducing ambiguity", 

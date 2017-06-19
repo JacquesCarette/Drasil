@@ -88,7 +88,7 @@ ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_b
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
-risk_fun    = makeVC "risk_fun"      (nounPhraseSP "risk function") cB
+risk_fun    = makeVC "risk_fun"      (nounPhraseSP "risk of failure") cB
 glass_type  = vc "glass_type"    (nounPhraseSP "glass type, g in {AN, HS, FT}")
   lG String
 is_safe1    = vc "is_safe1"      (nounPhraseSP $ "true when calculated probability is " ++

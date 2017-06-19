@@ -160,10 +160,13 @@ compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase'' f1 f2 t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (f1 t1 +:+ f2 t2) CapWords CapWords
 
---Definately a hack but it fixes the pluralization problem with software requirements specification.
-compoundPhrase''' :: (NounPhrase a, NounPhrase b) => a -> b -> NP
-compoundPhrase''' t1 t2 = Phrase 
-  (plural t1 +:+ phrase t2) (plural t1 +:+ plural t2) CapFirst CapWords
+--More primes might not be wanted but fixes two issues
+-- pluralization problem with software requirements specification (Documentation.hs)
+-- SWHS program not being about to use a compound to create the NamedChunk
+--Used when you need a special function apllied to the first term (eg. short or plural)
+compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
+compoundPhrase''' f1 t1 t2 = Phrase 
+  (f1 t1 +:+ phrase t2) (f1 t1 +:+ plural t2) CapFirst CapWords
 
 
 -- === Helpers === 

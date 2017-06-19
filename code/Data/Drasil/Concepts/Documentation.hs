@@ -4,6 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))
+import qualified Language.Drasil.NounPhrase as NP
 
 -- acronyms to be used throughout
 -- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
@@ -35,7 +36,7 @@ physSyst    = commonIdea "physSyst"  (fterms compoundPhrase physicalSystem descr
 requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
-srs         = commonIdea "srs"      (fterms compoundPhrase''' softwareReq specification)   "SRS"
+srs         = commonIdea "srs"      (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))   "SRS"
 
 ---------------------------------------------------------------------
 
@@ -194,7 +195,7 @@ softwareReq                  = compoundNC' software requirement_
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification
-solutionCharSpec             = compoundNC''' solutionCharacteristic specification
+solutionCharSpec             = compoundNC''' (NP.plural) solutionCharacteristic specification
 solutionCharacteristic       = compoundNC solution characteristic
 specificsystemdescription    = compoundNC specific systemdescription
 sysCont                      = compoundNC system context

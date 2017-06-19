@@ -104,7 +104,7 @@ undIR = (foldlList [S "second year calculus", S "structural mechanics",
 appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
   S "applicable standards for constructions using glass from" +:+
   sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
-incScoR = foldl (+:+) EmptyS [S "getting all", (phrase input_), (plural parameter), 
+incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam, 
   S "related to the", phrase glaSlab, S "and also the", plural parameter, 
   S "related to", phrase blastTy]
 endScoR = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the", 
@@ -375,7 +375,7 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
   S "Typical Value", S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), 
   (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
   [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD])
-  (titleize table_ +: S "2" +:+ titleize input_ +:+ titleize' variable) 
+  (titleize table_ +: S "2" +:+ titleize' inVar) 
   True
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
@@ -475,14 +475,14 @@ s7_1_req2 = [(Enumeration $ Simple $
      short lShareFac +:+ S "following" +:+ acroA "5"]))])]
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
-  phrase input_, plural value, S "to ensure that they do not exceed the",
+  plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. (makeRef s6_2_5),
-  S "If any of the", phrase input_, plural parameter,
+  S "If any of the", plural inParam,
   S "is out of bounds, an error message is displayed and the",
   plural calculation, S "stop"]
 
-s7_1_req4 = foldlSent [titleize output_, S "the", phrase input_,
-  plural quantity, S "from", acroR "1", S "and the known", plural quantity,
+s7_1_req4 = foldlSent [titleize output_, S "the", plural inQty,
+  S "from", acroR "1", S "and the known", plural quantity,
   S "from", acroR "2"]
 
 s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+

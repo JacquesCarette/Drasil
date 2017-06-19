@@ -1,6 +1,6 @@
 module Drasil.SSP.GenDefs where
 
-import Prelude hiding (tan)
+import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
@@ -28,7 +28,13 @@ normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium") nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
-nmFEq_rel = C totNrmForce := (Int 0) --FIXME: add the long equation
+nmFEq_rel = C totNrmForce := ((C slcWght :- C intShrForce :+ C intShrForce :+ 
+                          C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
+                          cos (C impLoadAngle)) :* cos (C baseAngle)
+                          :- (Neg (C earthqkLoadFctr) :* C slcWght :- 
+                          C intNormForce :+ C intNormForce :- C watrForce :+ 
+                          C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
+                          C surfLoad :* cos (C impLoadAngle)) :* sin (C baseAngle)) -- FIXME: add the proper index for intShrForce and intNormForce
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -50,7 +56,13 @@ bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium") bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
-bShFEq_rel = C mobShrI := (Int 0) --FIXME: add the long equation
+bShFEq_rel = C mobShrI := ((C slcWght :- C intShrForce :+ C intShrForce :+ 
+                          C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
+                          cos (C impLoadAngle)) :* sin (C baseAngle)
+                          :- (Neg (C earthqkLoadFctr) :* C slcWght :- 
+                          C intNormForce :+ C intNormForce :- C watrForce :+ 
+                          C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
+                          C surfLoad :* cos (C impLoadAngle)) :* cos (C baseAngle)) -- FIXME: add the proper index for intShrForce and intNormForce
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -126,7 +138,16 @@ momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium") momEql_desc momEql_rel
 
 momEql_rel :: Relation
-momEql_rel = (Int 0) := (Int 0) --FIXME: add the long equation
+momEql_rel = (Int 0) := Neg (C intNormForce) :* (Int 1 :- C baseWthX :/ Int 2 :* 
+                        tan (C baseAngle)) :+ C intNormForce :* (Int 1 :- 
+                        C baseWthX :/ Int 2 :* tan (C baseAngle)) :- C watrForce :*
+                        (Int 1 :- C baseWthX :/ Int 2 :* tan (C baseAngle)) :+ 
+                        C watrForce :* (Int 1 :- C baseWthX :/ Int 2 :* 
+                        tan (C baseAngle)) :- C baseWthX :/ Int 2 :* 
+                        (C intShrForce :+ C intShrForce) :+ C earthqkLoadFctr :* 
+                        C slcWght :* C midpntHght :/ Int 2 :- C surfHydroForce :*
+                        sin (C surfAngle) :* C midpntHght :- C surfLoad :* 
+                        sin (C impLoadAngle) :* C midpntHght -- FIXME: replace Int 1 with zi and add the proper index for zi, bi, Ei, Hi and Xi
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,

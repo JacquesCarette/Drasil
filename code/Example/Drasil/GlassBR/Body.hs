@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils (itemRefToSent, getS,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
-  showingCxnBw, figureLabel, foldlSP, sAnd)
+  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -738,44 +738,43 @@ fig_4 = figureLabel "4" (traceyMatrix)
 
 s10 = SRS.reference [s10_list] []
 
-s10_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s10_ref1, s10_ref2, 
+s10_list = mkRefsList 1 (map (foldlsC) [s10_ref1, s10_ref2, 
   s10_ref3, s10_ref4, s10_ref5, s10_ref6])
 
 s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6 :: [Sentence]
 
-s10_ref1 = [S "N. Koothoor" 
-  `sC` Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" +:+ phrase sciCompS :+: S ",")
-  +:+ S "Master's thesis"
-  `sC` S "McMaster University, Hamilton, Ontario, Canada, 2013."]
+s10_ref1 = [S "N. Koothoor",
+  Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
+  S "Master's thesis", S "McMaster University, Hamilton, Ontario, Canada", S "2013."]
 
-s10_ref2 = [S "W. S. Smith and L. Lai" 
-  `sC` Quote (S "A new requirements template for scientific computing,")
+s10_ref2 = [S "W. S. Smith and L. Lai", 
+  Quote (S "A new requirements template for scientific computing,")
   +:+ S "in Proceedings of the First International Workshop on Situational Requirements" +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements" +:+
-  S "Engineering Processes, SREP'05" 
-  +:+ sParen (S "J.Ralyt" :+: (F Acute 'e') `sC` S "P.Agerfalk, and N.Kraiem, eds.")
-  `sC` sParen S "Paris, France"
-  `sC` S "pp. 107-121, In conjunction with 13th IEEE International Requirements"
-  +:+. S "Engineering Conference, 2005"]
+  S "Engineering Processes, SREP'05"
+  +:+ sParen (S "J.Ralyt" :+: (F Acute 'e') `sC` S "P.Agerfalk, and N.Kraiem, eds."),
+  sParen (S "Paris, France"), S "pp. 107-121", 
+  S "In conjunction with 13th IEEE International Requirements Engineering Conference",
+  S "2005."]
   --FIXME:Make a compundNC "requirement template"?
 
-s10_ref3 = [S "J. Robertson and S. Robertson"
-  `sC` Quote (S "Volere requirements specification template edition 16.") +:+ 
-  Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ S "Volere template16.pdf")
-  `sC` S "2012."]
+s10_ref3 = [S "J. Robertson and S. Robertson", 
+  Quote (S "Volere requirements specification template edition 16.") +:+
+  Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ S "Volere template16.pdf"),
+  S "2012."]
   --FIXME:Make a compundNC "requirement specification template"?
 
-s10_ref4 = [(S "ASTM Standards Committee"
-  `sC` Quote (S "Standard practice for determining load resistance of glass in buildings,")
-  +:+ S "Standard E1300-09a, American Society for Testing and Material (ASTM),"
-  +:+. S "2009")]
+s10_ref4 = [S "ASTM Standards Committee",
+  Quote (S "Standard practice for determining load resistance of glass in buildings,")
+  +:+ S "Standard E1300-09a", S "American Society for Testing and Material (ASTM)",
+  S "2009."]
 
-s10_ref5 = [(S "ASTM, developed by subcommittee C1408, Book of standards 15.02,"
-  +:+ Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036"))]
+s10_ref5 = [S "ASTM", S "developed by subcommittee C1408", S "Book of standards 15.02",
+  Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036")]
 
-s10_ref6 = [(S "ASTM, developed by subcommittee C14.08, Book of standards 15.02"
-  `sC` Quote (at_start specification +:+ S "for" +:+ (plural heat) +:+.
-  S "treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048"))]
+s10_ref6 = [S "ASTM", S "developed by subcommittee C14.08", S "Book of standards 15.02",
+  Quote (at_start specification +:+ S "for" +:+ plural heat +:+.
+  S "treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048")]
 
 s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 

@@ -22,9 +22,9 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.force, QP.gravitationalAccel,
   QP.gravitationalConst, QP.momentOfInertia, QP.impulseV, QP.impulseS, QPP.len, 
   QPP.mass, iVect, jVect, normalVect, QP.angularVelocity, QP.position, 
   QM.orientation, QP.distance, QP.displacement, QP.time, QP.torque, 
-  QP.angularDisplacement, QP.velocity, pos_CM, pos_i, mass_i, mTot, acc_i,
+  QP.angularDisplacement, QP.velocity, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLen_A, perpLen_B]
+  perpLen_A, perpLen_B, force_i, torque_i]
     
 -- Chunks with units --
 iVect, jVect, normalVect :: UnitalChunk
@@ -107,7 +107,7 @@ r_OB    = uc' "r_OB"
 
 -- DD1 --
 
-pos_CM, mass_i, pos_i, acc_i, mTot :: UnitalChunk
+pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i :: UnitalChunk
 
 pos_CM = ucs "p_CM" (nounPhraseSP $ 
   "the mass-weighted average position of a rigid " ++
@@ -129,6 +129,17 @@ acc_i = ucFromCV accI accelU
   where accI = cvR (dccWDS "acc_i" (compoundPhrase' (QP.acceleration ^. term) 
                 (cn "of the i-th body's acceleration")) (phrase $ QP.acceleration))
                 (sub (QP.acceleration ^. symbol) lI)
+
+vel_i = ucFromCV accI accelU
+  where accI = cvR (dccWDS "vel_i" (compoundPhrase' (QP.velocity ^. term) 
+                (cn "of the i-th body's velocity")) (phrase $ QP.velocity))
+                (sub (QP.velocity ^. symbol) lI)
+
+torque_i = ucFromCV accI accelU
+  where accI = cvR (dccWDS "torque_i"
+                (cn "is the torque applied to the i-th body")
+                (phrase $ QP.torque))
+                (sub (QP.torque ^. symbol) lI)
 
 mTot = ucFromCV mtotal kilogram
   where mtotal = cvR (dccWDS "M" (compoundPhrase' (cn "total mass of the") 

@@ -8,11 +8,12 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, force, gravitationalAccel, velocity, 
-  momentOfInertia, angularVelocity, position)
+  momentOfInertia, angularVelocity, position, time)
 --import qualified Data.Drasil.Concepts.Math as QM ()
 --import Data.Drasil.Quantities.Physics
+import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
@@ -29,7 +30,7 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C QP.acceleration) := (C QP.velocity) := (C QP.gravitationalAccel) + ((C QP.force) / (C QPP.mass))
+im1Rel = (C acc_i) := (Deriv Total (C vel_i) (C QP.time)) := (C QP.gravitationalAccel) + ((C force_i) / (C mass_i))
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
@@ -58,8 +59,8 @@ im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel
 im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
-im2Rel :: Relation -- FIXME: add proper equation
-im2Rel = (C QP.angularAccel) := (C QP.angularVelocity) := ((C QP.torque) / (C QP.momentOfInertia))
+im2Rel :: Relation
+im2Rel = (C QP.angularAccel) := Deriv Total (C QP.angularVelocity) (C QP.time) := ((C torque_i) / (C QP.momentOfInertia))
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 

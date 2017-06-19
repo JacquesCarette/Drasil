@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils (enumSimple, weave, getS)
+import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef, makeTMatrix)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -1191,10 +1191,10 @@ likeChg6 = [s6_start "15", S "Any real", phrase tank,
 
 s7 :: Section
 s7 = traceMGF s7_refList s7_trailing
-  ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
+  ([s7_table1, s7_table2, s7_table2_New, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
 s7_refList :: [Contents]
-s7_refList = [s7_table1, s7_table2, s7_table3]
+s7_refList = [s7_table1, s7_table2, s7_table2_New, s7_table3]
 
 s7_trailing :: [Sentence]
 s7_trailing = [
@@ -1269,6 +1269,62 @@ s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4",
   [acroR "11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
   (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
   titleize' inModel)) True
+
+-------------------------------------------------------------------
+
+s7_instaModel, s9_data, s7_funcReq :: [String]
+s9_dataRef, s7_funcReqRef :: [Sentence]
+
+s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
+
+s7_funcReq = ["R1", "R2"]
+s7_funcReqRef = makeListRef s7_funcReq s5_1
+
+s9_data  = ["Data Constraints"]
+s9_dataRef = [makeRef s4_2_6_table1]
+
+--------------------------------------------------------------------
+
+s7_row_t2 :: [String]
+s7_row_t2 = s7_funcReq
+
+--column header
+s7_row_header_t2 :: [Sentence]
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_funcReqRef)
+
+s7_columns_t2 :: [[String]]
+s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
+  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
+  s7_t2_R9, s7_t2_R10, s7_t2_R11]
+
+s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
+  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
+  s7_t2_R9, s7_t2_R10, s7_t2_R11 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t2_IM1 = ["IM2", "R1", "R2"]
+s7_t2_IM2 = ["IM1", "IM4", "R1", "R2"]
+s7_t2_IM3 = ["R1", "R2"]
+s7_t2_IM4 = ["IM2", "R1", "R2"]
+s7_t2_R1 = []
+s7_t2_R2 = ["R1"]
+s7_t2_R3 = ["Data Constraints"]
+s7_t2_R4 = ["IM1", "IM2", "R1", "R2"]
+s7_t2_R5 = ["IM1"]
+s7_t2_R6 = ["IM2"]
+s7_t2_R7 = ["IM3"]
+s7_t2_R8 = ["IM4"]
+s7_t2_R9 = ["IM3", "IM4"]
+s7_t2_R10 = ["IM2"]
+s7_t2_R11 = ["IM2"]
+
+s7_table2_New :: Contents
+s7_table2_New = Table (EmptyS:s7_row_header_t2)
+  (makeTMatrix (s7_row_header_t2) (s7_columns_t2) (s7_row_t2))
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
+  titleize' inModel)) True
+
+-------------------------------------------------------------------
 
 s7_table3 :: Contents
 s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4",

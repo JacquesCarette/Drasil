@@ -157,6 +157,11 @@ cot = UnaryOp . Cot
 exp :: Expr -> Expr
 exp = UnaryOp . Exp
 
+-- | Smart constructor for the summation and product operators
+summation, product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> Expr
+summation bounds expr = UnaryOp $ Summation bounds expr
+product   bounds expr = UnaryOp $ Product   bounds expr
+
 -- | Binary Functions
 data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;

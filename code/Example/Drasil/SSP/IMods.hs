@@ -1,11 +1,12 @@
 module Drasil.SSP.IMods where
 
+import Prelude hiding (tan, product)
+
 import Language.Drasil
 import Drasil.SSP.Unitals
 import Drasil.SSP.Defs
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils
-
 
 -----------------------
 --  Instance Models  --
@@ -21,15 +22,19 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 --FIXME: first shearRNoIntsl should have local index v, not i, last occurence should have index n
 --       similar case with shearFNoIntsl
 fcSfty_rel :: Relation
-fcSfty_rel = (C fs) := (sumOp shearRNoIntsl :+ (C shearRNoIntsl)) :/ (sumOp shearFNoIntsl :+ (C shearFNoIntsl))
-  where prodOp = UnaryOp $ Product (Just (lC, Low $ V "i", High $ (V "n") :- (Int 1))) ((C mobShrC) :/ (C shrResC))
-        sumOp sym = (UnaryOp $ Summation (Just (lV, Low $ Int 1, High $ (V "n") :- (Int 1))) ((C sym) :* prodOp))
+fcSfty_rel = (C fs) := (sumOp shearRNoIntsl :+ (C shearRNoIntsl)) :/ 
+                       (sumOp shearFNoIntsl :+ (C shearFNoIntsl))
+  where prodOp    = product   (Just (lC, Low $ V "i", High $ (V "n") :- (Int 1)))
+                              ((C mobShrC) :/ (C shrResC))
+        sumOp sym = summation (Just (lV, Low $ Int 1, High $ (V "n") :- (Int 1)))
+                              ((C sym) :* prodOp)
 
 fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent [S "Equation for the Factor of Safety" `isThe` S "ratio between resistive",
-  S "and mobile shear of the slip surface. The sum of values from each slice is taken to find",
-  S "the total resistive and mobile shear for the slip surface. The constants", getS shrResC,
-  S "and", getS mobShrC, S "convert the resistive and mobile shear without the inluence of", --FIXME: have these constents defined somewhere else
+fcSfty_desc = foldlSent [S "Equation for the", S "Factor of Safety" `isThe` S "ratio",
+  S "between resistive and mobile shear of the slip surface. The sum of values",
+  S "from each slice is taken to find the total resistive and mobile shear for",
+  S "the slip surface. The constants", getS shrResC, S "and", getS mobShrC, 
+  S "convert the resistive and mobile shear without the inluence of", --FIXME: have these constents defined somewhere else
   S "interslice forces, to a calculation considering the interslice forces"]
 
 --
@@ -40,12 +45,13 @@ nrmShrF_rel :: Relation
 nrmShrF_rel = (C fs) := (Int 0) --FIXME: add the long equation
 
 nrmShrF_desc :: Sentence
-nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio between shear and", 
-  S "normal forces at the interslice interfaces as the assumption of the Morgenstern Price", 
-  S "method in GD5. The inclination function f determines the relative magnitude ratio",
-  S "between the different interslices, while", getS normToShear, S "determines the" +:+. 
-  S "magnitude", getS normToShear, S "uses the sum of interslice normal and shear forces",
-  S "taken from each interslice"] --FIXME: does "i" need to be pulled out?
+nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio between",
+  S "shear and normal forces at the interslice interfaces as the assumption of", 
+  S "the Morgenstern Price method in GD5. The inclination function f determines",
+  S "the relative magnitude ratio between the different interslices, while",
+  getS normToShear, S "determines the" +:+. S "magnitude", getS normToShear,
+  S "uses the sum of interslice normal and shear forces taken from each interslice"]
+  --FIXME: "i" needs to be pulled out and used as a symbol
 
 --
 intsliceFs :: RelationConcept
@@ -53,15 +59,16 @@ intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces") sliceFs_desc
 
 sliceFs_rel :: Relation
 sliceFs_rel = (C intNormForce) := (Int 0) --(C intNormForce) := Case [
-  --(((C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (Int 100), (Int 1)),
+  --(((C fs) :* (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (Int 100), (Int 1)),
   --((((Int 100) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/Int 100), Int 1),
   --((Int 0), (Int 0))]
   --FIXME: update the long equation; where is Phi and Psi in .Units?
 
 sliceFs_desc :: Sentence
-sliceFs_desc = foldlSent [S "The value of the interslice normal force", (getS intNormForce),
-  S "at interface i. The net force" `isThe` S "weight of the slices adjacent to interface i exert", 
-  S "horizontally on each other"] --FIXME: does "i" need to be pulled out?
+sliceFs_desc = foldlSent [S "The value of the interslice normal force",
+  getS intNormForce, S "at interface i. The net force" `isThe` S "weight",
+  S "of the slices adjacent to interface i exert horizontally on each other"]
+  --FIXME: "i" needs to be pulled out and used as a symbol
 
 --
 forDisEqlb :: RelationConcept
@@ -99,7 +106,8 @@ rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety") rfemFoS_desc rfemFoS_rel
 
 rfemFoS_rel :: Relation
-rfemFoS_rel = (C fsloc) := ((C cohesion) :- (C nrmStiffBase)*(C nrmDispl)*(Language.Drasil.tan(C fricAngle))):/((C shrStiffBase)*(C shrDispl)) 
+rfemFoS_rel = (C fsloc) := ((C cohesion):-(C nrmStiffBase)*(C nrmDispl)*(tan (C fricAngle))):/
+  ((C shrStiffBase)*(C shrDispl)) 
   --FIXME: add the other long equation
 
 rfemFoS_desc :: Sentence
@@ -121,7 +129,7 @@ crtSlpId_rel :: Relation
 crtSlpId_rel = (C fs) := (FCall (C minFunction) [C critCoords, V "Input"]) --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence
-crtSlpId_desc = foldlSent [S "Given the necessary slope inputs, a minimization algorithm",
-  S "or function", (getS minFunction), S "will identify the critical slip surface", 
-  S "of the slope, with the critical slip coordinates", (getS critCoords), 
+crtSlpId_desc = foldlSent [S "Given the necessary slope inputs, a minimization",
+  S "algorithm or function", getS minFunction, S "will identify the", phrase crtSlpSrf,
+  S "of the slope, with the critical slip coordinates", getS critCoords, 
   S "and the minimum factor of safety FSmin that results"]

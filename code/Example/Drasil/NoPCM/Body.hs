@@ -57,7 +57,8 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7]  
         
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) acronyms
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) 
+  acronyms ([] :: [Block QDefinition]) -- Place Holder until Data Definitions can be created
   
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si

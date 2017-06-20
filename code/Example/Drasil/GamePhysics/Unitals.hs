@@ -14,7 +14,7 @@ import Control.Lens((^.))
 
 cpSymbols :: [QSWrapper]
 cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++ 
-  (map qs cpUnitless)
+  (map qs cpUnitless) ++ (map qs chipmunkConstraints)
 
 
 cpUnits :: [UnitalChunk]
@@ -252,11 +252,11 @@ velTime = ucFromCV velatTime second
 
 
 chipmunkConstraints :: [ConstrainedChunk]
-chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
-  posCons, orientCons, angVeloCons, forceCons, torqueCons]
-
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrainedChunk
+
+chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
+  posCons, orientCons, angVeloCons, forceCons, torqueCons]
 
 lengthCons     = cuc "length_const"      (nounPhraseSP "length") 
   cL metre Real

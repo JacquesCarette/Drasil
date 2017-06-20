@@ -403,7 +403,7 @@ inputVarPbTol = [(getS pb_tol),
 inputVarW = [(getS char_weight),
   (getS char_weight) +:+ S ">=" +:+ E (Int 0),
   E ((C cWeightMin) :< (C char_weight) :< (C cWeightMax)),
-  E (Int 42) +:+ Sy (unit_symb char_weight), 
+  E (Int 42) +:+ (unwrap $ getUnit char_weight), 
   S "10%"]
 
 inputVarTNT = [(getS tNT),
@@ -461,8 +461,9 @@ s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   s7_1_req1Table]
 
 s7_1_req1Table :: Contents
-s7_1_req1Table = (table ((map qs [plate_len, plate_width]) ++ (map qs [sdx, sdy, sdz, nom_thick, char_weight]) 
-  ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x))
+s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight, pb_tol]) ++ 
+  (map qs [sdx, sdy, sdz, nom_thick]) ++ (map qs [glass_type, tNT]))
+  (\x -> at_start x))
 
 s7_1_req2 = [(Enumeration $ Simple $
    [(acroR "2", Nested (S "The" +:+ phrase system +:+

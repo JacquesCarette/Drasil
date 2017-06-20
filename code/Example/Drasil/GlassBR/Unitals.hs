@@ -30,9 +30,9 @@ standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
 {--}
 
 glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len, plate_width]
+glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol]
 
-plate_len, plate_width :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol :: ConstrainedChunk
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -50,16 +50,27 @@ plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
     sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> (C plate_len) :/ c :< (C ar_max) ]
 
+char_weight = cuc "char_weight" (nounPhraseSP "charge weight") 
+  lW kilogram Rational
+  [ physc $ \c -> c :>= (Dbl 0),
+    sfwrc $ \c -> (C cWeightMax) :<= c,
+    sfwrc $ \c -> c :<= (C cWeightMin) ]
+
+pb_tol      = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
+  Rational
+  [ physc $ \c -> (Dbl 0) :< c,
+    physc $ \c -> c :< (Dbl 1) ]
+
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
 glassBRSymbols = [dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
-  char_weight, cWeightMax, cWeightMin, eqTNTWeight]
+  cWeightMax, cWeightMin, eqTNTWeight]
 
 dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
-  char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
+  cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
 
 dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) millimetre Real
@@ -87,8 +98,6 @@ nom_thick   = unitary "nom_thick"   (nounPhraseSP $ "nominal thickness t in {2.5
   "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") lT millimetre Rational
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Integer
-char_weight = unitary "char_weight" (nounPhraseSP "charge weight")
-  lW kilogram Rational
 cWeightMax  = unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
   (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational
 cWeightMin  = unitary "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")
@@ -100,10 +109,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
-  pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF]
+  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF]
 
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
-  pb_tol, dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
+  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
@@ -121,8 +130,6 @@ sdf_tol     = makeVC "sdf_tol"       (nounPhraseSP "stress distribution factor (
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
 prob_br     = vc "prob_br"       (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-pb_tol      = vc "pb_tol"        (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
-  Rational
 dimlessLoad = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))

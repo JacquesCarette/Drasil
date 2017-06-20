@@ -59,7 +59,7 @@ authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
-  this_si swhsSymbols (swhsSymbols) acronyms
+  this_si swhsSymbols (swhsSymbols) acronyms ([] :: [Block QDefinition])
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
@@ -74,7 +74,6 @@ mkSRS = RefSec (RefProg intro
   IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),
   IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail)]) :
   map Verbatim [s3, s4, s5, s6, s7, s8]
---FIXME:implement use of s2_kSent
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -130,7 +129,7 @@ s2_kSent = foldlSent_ [EmptyS +:+. phrase swhs_pcm, S "The developed",
 -- sometimes not, sometimes need to be used in different tenses. How to
 -- accomodate all this?
 
--- The second paragraph is general exceptxamples. It can probably be
+-- The second paragraph is general between examples. It can probably be
 -- abstracted out.
 
 -------------------------------
@@ -181,9 +180,6 @@ s2_2_end = foldlSent_ [S "predict the",
 -- interact with each other, predict whether the glass slab is safe to use or
 -- not, etc.). If that is done, then this paragraph can also be abstracted out.
 
--- The fact that "PCM" must always be capital is especially making things
--- difficult with concept chunks involving PCM (can't use map toLower).
-
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
@@ -195,20 +191,6 @@ s2_3_knowlegde = foldlSent_ [phrase CT.heat, S "transfer" +:+. phrase theory,
 
 s2_3_understanding = foldlSent_ [S "differential", plural equation `sC`
   S "as typically covered in first and second year Calculus courses"]
-
-{-s2_3 = SRS.charOfIR [s2_3_contents] []
-
-s2_3_contents = Paragraph (S "Reviewers of this" +:+ phrase documentation +:+
-  S "should have a strong knowledge in" +:+ (plural $ CT.heat) +:+
-  S "transfer" +:+. phrase theory +:+ S "A third or fourth year" +:+
-  S "Mechanical Engineering course on this topic is recommended. The" +:+
-  plural reviewer +:+ S "should also have an understanding of differential" +:+
-  (plural $ equation) `sC` S "as typically covered in" +:+
-  S "first and second year Calculus courses. The" +:+ plural user +:+
-  S "of" +:+ short progName +:+ S "can have a lower level of expertise," +:+
-  S "as explained in" +:+. (makeRef s3))-}
--- should reference User characteristics
-
 
 ------------------------------------
 -- 2.4 : Organization of Document --
@@ -228,19 +210,6 @@ s2_4_trail = foldlSent_ [S "The", plural inModel,
   S "and algebraic", plural equation, S "that",
   phrase model, S "the" +:+. phrase swhs_pcm,
   short progName, S "solves these", short ode :+: S "s"]
--- This part is close to the function but not exactly,
--- so keeping it here for reference
-
-  {-S "The presentation follows the standard" +:+
-  S "pattern for presenting" +:+ plural goalStmt `sC`
-  plural thModel `sC`
-  (plural dataDefn) `sC` S "and" +:+.
-  (plural assumption) +:+
-  S "For readers that would like a more bottom" +:+
-  S "up approach, they can start reading the" +:+
-  (plural inModel) +:+ S "in" +:+
-  makeRef s4_2_5 +:+ S "and trace back to find any" +:+
-  S "additional" +:+ phrase information +:+ S "they require."-}
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to
@@ -264,7 +233,7 @@ s2_4_trail = foldlSent_ [S "The", plural inModel,
 
 s3 :: Section
 s3 = genSysF [s3_1] s3_2_contents [] []
--- First empty list is list of constraints
+-- First empty list is the list of constraints
 
 --------------------------
 -- 3.1 : System Context --
@@ -272,7 +241,7 @@ s3 = genSysF [s3_1] s3_2_contents [] []
 
 s3_1 :: Section
 s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
-  s3_1_2_bullets] []
+  s3_1_2_respBullets] []
 
 s3_1_contents ::Contents
 s3_1_contents = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
@@ -295,35 +264,38 @@ s3_1_2_intro = foldlSPCol [short progName +:+.
   S "interface", S "responsibilities" `ofThe'` phrase user,
   S "and the", phrase system, S "are as follows"]
 
-s3_1_2_bullets :: Contents
-s3_1_2_bullets = Enumeration $ Bullet $
-  [
-  Nested (titleize user +: S "Responsibilities")
-  (Bullet $ map (\c -> Flat c)
-  [
+s3_1_2_respBullets :: Contents
+s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]
+
+-- User Responsibilities --
+s3_1_2_userResp = Nested (titleize user +: S "Responsibilities")
+  $ Bullet $ map (\c -> Flat c) [
+
   foldlSent_ [S "Provide the", phrase input_, plural datum, S "to the",
-  phrase system `sC` S "ensuring no errors in the", plural datum,
-  S "entry"],
+  phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
+
   foldlSent_ [S "Take care that consistent", plural unit_,
   S "are used for", phrase input_, plural variable]
-  ]),
 
-  Nested (short progName +: S "Responsibilities")
-  (Bullet $ map (\c -> Flat c)
-  [
+  ]
+
+-- SWHS Responsibilities --
+s3_1_2_swhsResp = Nested (short progName +: S "Responsibilities")
+  $ Bullet $ map (\c -> Flat c) [
+
   foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",
   S "characters instead of a floating point number"],
+
   foldlSent_ [S "Determine if the", plural input_, S "satisfy the required",
   phrase physical, S "and", phrase software, plural constraint],
+
   foldlSent_ [S "Calculate the required", plural output_]
-  ])
+
   ]
 
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
-
----s3_2 = SRS.userChar [s3_2_contents] []
 
 s3_2_contents :: Contents
 s3_2_contents = foldlSP [S "The end", phrase user, S "of",
@@ -344,8 +316,6 @@ s3_2_contents = foldlSP [S "The end", phrase user, S "of",
 s4 :: Section
 s4 = specSysDesF s4_intro_end [s4_1, s4_2]
 
--- using plural solutionCharSpec is a hack in order to pluralize the middle
--- word, based on compoundNPNC''' in NamedIdea.hs
 s4_intro_end :: Sentence
 s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` S "and finally the", plural inModel,
@@ -424,7 +394,7 @@ physSyst3 = [short phsChgMtrl, S "suspended in" +:+. phrase tank,
 
 -- Structure of list would be same between examples but content is completely
 -- different
--- FIXME: Figures have different IDs than stable structure
+
 fig_tank :: Contents
 fig_tank = Figure (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
@@ -482,14 +452,9 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
           S "because features they should use are not yet implemented",
           S "in Drasil"])
 
--- General besides progName, repeated in only one other example but it could be
--- used for all of them. So it can be abstracted out.
-
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-
--- General paragraph, repeated in every example. Can be abstracted out.
 
 s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
@@ -607,9 +572,6 @@ assump19 = [S "The pressure in the", phrase tank,
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
--- General paragraph, repeated in one other example but could be included in
--- all. Can be abstracted out.
-
 -- s4_2_3_GDs :: [LayoutObj]
 -- s4_2_3_GDs = map Definition (map General [gd1NewtonCooling])
 
@@ -689,9 +651,6 @@ s4_2_3_deriv = [
 s4_2_4_intro_end :: Sentence
 s4_2_4_intro_end = foldlSent [S "The dimension of each",
   phrase quantity, S "is also given"]
-
--- General paragraph, repeated in most examples but would work for all. Can be
--- absracted out.
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -917,15 +876,15 @@ s4_2_5_d2endPara = map foldlSP [
 -- 4.2.6 Data Constraints --
 ----------------------------
 
---[s4_2_6_table1, s4_2_6_table2]
 
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
 -- FIXME: Temporary dummy tables
 s4_2_6_table1 :: Contents
-s4_2_6_table1 = Table [S "Dummy Table 1", EmptyS]
-  [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "1") True
+s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
+  titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
+  [[getS tank_length, EmptyS, EmptyS, EmptyS]] (titleize table_ +:+ S "1") True
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
@@ -1024,8 +983,6 @@ s5 = reqF [s5_1, s5_2]
 s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
--- FIXME: Errors
-
 s5_1_list :: [Contents]
 s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
   [titleize input_, S "the following", plural quantity `sC`
@@ -1051,9 +1008,9 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
   EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
 --
   enumSimple 3 (short requirement) $ map foldlSent reqList
-  ]
 -- Want to add req1 and req2 but they include a table and another enumeration
 -- so not sure how to implement yet
+  ]
 
 reqList :: [[Sentence]]
 reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
@@ -1136,9 +1093,6 @@ s5_2_contents = foldlSP [S "Given the small size, and relative simplicity"
 
 s6 :: Section
 s6 = SRS.likeChg [s6_list] []
-
--- The game physics example has a short intro paragraph that can likely be
--- abstracted out and used for all examples.
 
 s6_list :: Contents
 s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
@@ -1422,8 +1376,6 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
   foldlSent_ [plural inModel `sC` plural requirement `sC`
   S "and", plural datumConstraint, S "on each other"]]
-
--- Same comments on this paragraph as I had for s7_intro1.
 
 s7_fig1 :: Contents
 s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+

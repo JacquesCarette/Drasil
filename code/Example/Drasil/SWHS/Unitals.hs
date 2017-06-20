@@ -16,14 +16,14 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 
 swhsSymbols :: [CQSWrapper]
-swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless)
+swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map qs swhsConstrained)
 
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
 swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P, htCap_S,
   htCap_S_P, htCap_V, htCap_W, diam, sens_heat, pcm_initMltE, pcm_E, w_E, vol_ht_gen,
-  htTransCoeff, coil_HTC, pcm_HTC, tank_length, pcm_mass, w_mass, ht_flux, latent_heat,
+  htTransCoeff, coil_HTC, pcm_HTC, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_C, temp_env, time_final, temp_init, melt_pt, t_init_melt,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT,
@@ -32,11 +32,16 @@ swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htC
 
 coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
   htCap_W, htFusion, diam, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC,
-  pcm_HTC, tank_length, pcm_mass, w_mass,
+  pcm_HTC, pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_C, temp_env, time_final, temp_init, t_init_melt,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT,
   pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
+
+tank_length :: ConstrainedChunk
+
+swhsConstrained ::[ConstrainedChunk]
+swhsConstrained = [tank_length]
 
 --symbol names can't begin with a capital
 
@@ -126,8 +131,12 @@ pcm_HTC      = uc' "pcm_HTC"
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heat_transfer_coef
 
-tank_length  = uc' "tank_length" (len `of_` tank)
-  "The length of the tank" cL metre
+--tank_length  = uc "tank_length" (len `of_` tank)
+--  "The length of the tank" cL metre
+
+tank_length  = cuc "tank_length" (len `of_` tank)
+  "The length of the tank" cL metre Rational
+  [physc $ \c -> c :> (Dbl 0)]
 
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"

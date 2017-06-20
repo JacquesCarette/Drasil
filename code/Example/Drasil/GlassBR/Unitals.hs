@@ -15,24 +15,18 @@ import Data.Drasil.SentenceStructures (foldlSent)
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
-glassBRSymbolsWithDefns = [mod_elas, standOffDist]
+glassBRSymbolsWithDefns = [mod_elas]
 
-mod_elas, standOffDist :: UnitalChunk
-
+mod_elas :: UnitalChunk
 mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE kilopascal
-standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
-  (foldlSent [S "The distance from the glazing surface to the",
-  S "centroid of a hemispherical high explosive charge. It is represented by", 
-  S "the coordinates (SDx, SDy, SDz)"])
-  (Atomic "SD") metre
 
 {--}
 
 glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT]
+glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist]
 
-plate_len, plate_width, char_weight, pb_tol, tNT :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist :: ConstrainedChunk
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -65,6 +59,12 @@ tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Rational
   [ physc $ \c -> c :> (Dbl 0) ]
 
+standOffDist = cuc "standOffDist" (nounPhraseSP "stand off distance") 
+  (Atomic "SD") metre Rational
+  [ physc $ \c -> c :> 0,
+    sfwrc $ \c -> (C sd_min) :< c,
+    sfwrc $ \c -> c :< (C sd_max) ]
+
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
@@ -88,11 +88,11 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
   lM sFlawPU Integer
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ kilopascal Rational --correct Space used?
-sdx         = unitary "sdx"         (nounPhraseSP "stand off distance (x-component)")
+sdx = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
   (sub (standOffDist ^. symbol) lX) metre Rational
-sdy         = unitary "sdy"         (nounPhraseSP "stand off distance (y-component)")
+sdy = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
   (sub (standOffDist ^. symbol) lY) metre Rational
-sdz         = unitary "sdz"         (nounPhraseSP "stand off distance (z-component)")
+sdz = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (standOffDist ^. symbol) lZ) metre Rational
 sd_max      = unitary "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
   (sub (standOffDist ^. symbol) (Atomic "max")) metre Real
@@ -226,7 +226,9 @@ blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
-sD            = dccWDS "sD"       (standOffDist ^. term) (standOffDist ^. defn)
+sD            = dccWDS "sD"       (standOffDist ^. term) 
+  (S "The distance from the glazing surface to the centroid of a hemispherical" +:+
+   S "high explosive charge. It is represented by the coordinates (SDx, SDy, SDz)")
 blast         = dcc "blast"       (nounPhraseSP "blast") "any kind of man-made explosion"
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++

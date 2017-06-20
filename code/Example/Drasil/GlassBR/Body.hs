@@ -235,8 +235,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   s6_1_1_bullets_loadSubSec
   ++
-  map (\a -> Flat $ ((at_start a) :+: sParenDash (getS a)) :+: (a ^. defn))
-  [standOffDist]
+  [Flat $ ((at_start standOffDist) :+: sParenDash (getS standOffDist) :+: (sD ^. defn))]
   ++
   map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn))
   [(loadShareFac, lShareFac), (glTyFac, glassTypeFac), (aspectRatio, aspectR)]
@@ -415,13 +414,13 @@ inputVarTNT = [(getS tNT),
 inputVarSD = [(getS standOffDist),
   E ((C standOffDist) :> (Int 0)),
   E ((C sd_min) :< (C standOffDist) :< (C sd_max)),
-  E (Int 45) +:+ Sy (unit_symb standOffDist), 
+  E (Int 45) +:+ (unwrap $ getUnit standOffDist), 
   S "10%"]
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]
-  ([(getS dim_min, E (Dbl 0.1)  +:+ Sy (unit_symb standOffDist)), 
-  (getS dim_max, E (Dbl 0.1) +:+ Sy (unit_symb standOffDist)), 
+  ([(getS dim_min, E (Dbl 0.1)  +:+ (unwrap $ getUnit standOffDist)), 
+  (getS dim_max, E (Dbl 0.1) +:+ (unwrap $ getUnit standOffDist)), 
   ((getS ar_max), E (Dbl 5))]
   ++
   zipWith s6_2_5_table2_formatF2

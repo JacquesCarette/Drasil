@@ -30,31 +30,37 @@ standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
 {--}
 
 glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len]
+glassBRConstrained = [plate_len, plate_width]
 
-plate_len :: ConstrainedChunk
-plate_len = cuc "plate_len"   (nounPhraseSP "plate length (long dimension)")
+plate_len, plate_width :: ConstrainedChunk
+
+plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
   [ physc $ \c -> c :>= (Dbl 0),
     physc $ \c -> c :/ (C plate_width) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
-    sfwrc $ \c -> c :>= (C dim_max),
+    sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> c :/ (C plate_width) :< (C ar_max) ]
-    
-    
+
+plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
+  lB millimetre Rational
+  [ physc $ \c -> c :>= (Dbl 0),
+    physc $ \c -> c :< (C plate_len),
+    sfwrc $ \c -> (C dim_min) :<= c,
+    sfwrc $ \c -> c :<= (C dim_max),
+    sfwrc $ \c -> (C plate_len) :/ c :< (C ar_max) ]
+
+{--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [plate_width, dim_max, dim_min, act_thick, sflawParamK,
+glassBRSymbols = [dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight]
 
-plate_width, dim_max, dim_min, act_thick, sflawParamK,
+dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
 
-
-plate_width = unitary "plate_width" (nounPhraseSP "plate width (short dimension)")
-  lB millimetre Rational
 dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) millimetre Real
 dim_min     = unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 

@@ -391,7 +391,7 @@ inputVarB = [(getS plate_width),
   E ((C plate_width) :> Int 0) `sAnd` E ((C plate_width) :< (C plate_len)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_width) +:+ S "<=" +:+ (getS dim_max)
   `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
-  E (Int 1200) +:+ Sy (unit_symb plate_width),
+  E (Int 1200) +:+ (unwrap $ getUnit plate_width),
   S "10%"]
 
 inputVarPbTol = [(getS pb_tol),
@@ -461,7 +461,7 @@ s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   s7_1_req1Table]
 
 s7_1_req1Table :: Contents
-s7_1_req1Table = (table ((map qs [plate_len]) ++ (map qs [plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
+s7_1_req1Table = (table ((map qs [plate_len, plate_width]) ++ (map qs [sdx, sdy, sdz, nom_thick, char_weight]) 
   ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x))
 
 s7_1_req2 = [(Enumeration $ Simple $

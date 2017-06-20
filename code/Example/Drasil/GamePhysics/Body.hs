@@ -433,6 +433,9 @@ lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint,
   forceConstraint, 
   torqueConstraint :: (UnitalChunk, [(Expr -> Expr -> Expr, Expr)], Sentence)
 
+lengthCons :: ConstrainedChunk
+lengthCons = cuc "length_const" (nounPhraseSP "length") cL metre Real
+  [physc $ \c -> c :>= (Dbl 0)]
 
 lengthConstraint = (QPP.len, [((:>),(Int 0))], S "44.2")
 massConstraint = (QPP.mass, [((:>),(Int 0))], S "56.2")

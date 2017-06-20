@@ -10,13 +10,17 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(listConstS, getS)
+import Data.Drasil.Utils(enumSimple, listConstS, getS)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.Concepts.Math (ode, equation)
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Thermodynamics (heat)
+import Data.Drasil.Concepts.PhysicalProperties (liquid, vol)
+import Data.Drasil.Concepts.Physics (energy, mech_energy, time)
+import Data.Drasil.Concepts.Thermodynamics (heat, thermal_analysis, thermal_energy, 
+  heat_trans, law_conv_cooling, melt_pt, boil_pt)
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
+import Data.Drasil.Software.Products (sciCompS)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
@@ -48,10 +52,8 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg s2s s2e 
   [IPurpose s2_1,
   IScope s2_2s s2_2e,
-  IChar (phrase heat +:+ S "transfer" +:+ phrase theory)
-    (S "differential equations, as typically covered in" +:+ 
-    S "first and second year Calculus courses") EmptyS,
-  IOrgSec EmptyS inModel (SRS.inModel SRS.missingP []) EmptyS]) :
+  IChar s2_3kn s2_3un EmptyS,
+  IOrgSec s2_4s inModel (SRS.inModel SRS.missingP []) s2_4e]) :
   map Verbatim [s3, s4, s5, s6, s7]  
         
 pcm_si :: SystemInformation
@@ -69,32 +71,56 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2s, s2e, s2_1, s2_2s, s2_2e  :: Sentence
+s2s, s2e, s2_1, s2_2s, s2_2e, s2_3kn, s2_3un, s2_4s, s2_4e :: Sentence
 
-s2s = EmptyS
+s2s = foldlSent [S "Due to increasing cost, diminishing",
+  S "availability, and negative environmental impact of",
+  S "fossil fuels, there is a higher demand for renewable",
+  phrase energy, plural source, S "and",
+  phrase energy +:+. S "storage technology", (plural sWHS),
+  S "provide a novel way of storing", phrase energy]
 
-s2e = EmptyS
---TODO: Placeholder values until content can be added
+s2e = foldlSent_ [EmptyS +:+. plural sWHS, S "The developed",
+  phrase program, S "will be referred to as", titleize sWHS,
+  sParen (short sWHS)]
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT
 -----------------------------------
 
-s2_1 = EmptyS 
---TODO: Placeholder values until content can be added
+s2_1 = foldlSent [S "The main", phrase purpose, S "of this",
+  phrase document, S "is to describe the modelling of" +:+.
+  phrase sWHS, S "The", plural goal, S "and", plural thModel,
+  S "used in the", short sWHS, S "code are provided, with an emphasis",
+  S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
+  plural definition, S "This", phrase document,
+  S "is intended to be used as a", phrase reference,
+  S "to provide ad hoc access to all", phrase information,
+  S "necessary to understand and verify the" +:+. phrase model, S "The",
+  short srs, S "is abstract because the", plural content, S "say what",
+  phrase problem, S "is being solved, but do not say how to solve it"]
 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS
 -------------------------------------
 
-s2_2s = EmptyS
+s2_2s = foldlSent_ [phrase thermal_analysis, S "of a single",
+  phrase sWHT]
 
-s2_2e = EmptyS
---TODO: Placeholder values until content can be added
+s2_2e = foldlSent_ [S "predict the",
+  phrase temp, S "and", phrase thermal_energy,
+  S "histories for the", phrase water]
 
-----------------------------------------
---Section 2.3 : ORGANIZATION OF DOCUMENT
-----------------------------------------
+--------------------------------------------------
+--Section 2.3 : CHARACTERISTICS Of INTENDED READER
+--------------------------------------------------
+
+s2_3kn = foldlSent_ [phrase heat, S "transfer" +:+. phrase theory,
+  S "A third or fourth year Mechanical Engineering course on this topic",
+  S "is recommended"]
+
+s2_3un = foldlSent_ [S "differential", plural equation `sC`
+  S "as typically covered in first and second year Calculus courses"]
 
 {-s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
   (SRS.userChar SRS.missingP [])
@@ -107,6 +133,22 @@ s2_2e = EmptyS
         understanding = S "differential" +:+ plural equation `sC`
           S "as typically covered in first and second year" +:+
           S "Calculus courses"-}
+          
+---------------------------------------
+--Section 2.4: ORGANIZATION OF DOCUMENT
+---------------------------------------
+
+s2_4s = foldlSent [S "The", phrase organization, S "of this",
+  phrase document, S "follows the template for an", short srs,
+  S "for", phrase sciCompS, S "proposed by [2] and",
+  sSqBr (S "5")]
+
+s2_4e = foldlSent_ [S "The", phrase inModel,
+  sParen (makeRef (SRS.inModel SRS.missingP [])),
+  S "to be solved is referred to as" +:+. acroIM "1",
+  S "The", phrase inModel, S "provides the", 
+  titleize ode, sParen (short ode), S "that model the" +:+. phrase sWHS,
+  short sWHS, S "solves this", short ode]
                         
 
                         
@@ -139,15 +181,17 @@ sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
 --Section 3.2 : USER CHARACTERISTICS
 ------------------------------------
 
-s3_2_intro = Paragraph $ EmptyS
---TODO: Placeholder values until content can be added
+s3_2_intro = foldlSP [S "The end", phrase user, S "of",
+  short sWHS, S "should have an understanding of undergraduate",
+  S "Level 1 Calculus and", titleize physics]
 
 ----------------------------------
 --Section 3.3 : SYSTEM CONSTRAINTS
 ----------------------------------
 
 s3_3_intro = Paragraph $ EmptyS
---TODO: Placeholder values until content can be added
+
+--TODO: Placeholder value until content can be added
 
 
 
@@ -205,8 +249,73 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   
 s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS ((makeRef s4_2_6_table1 +:+
   S "and" +:+ makeRef s4_2_6_table2 +:+ S "show"), EmptyS, False, EmptyS)
-  ([], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro],
+  ([s4_2_1_list], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro],
   [s4_2_6_table1, s4_2_6_table2]) []
+  
+s4_2_1_list :: Contents
+s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
+
+s4_2_1_assump_list :: [[Sentence]]
+
+assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12 :: [Sentence]
+
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12]
+  
+assump1 = [S "The only form of", phrase energy, S "that is",
+  S "relevant for this", phrase problem, S "is" +:+.
+  phrase thermal_energy, S "All other forms of", phrase energy
+  `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible"{-,
+  sSqBr (swhsSymbMapTRef t1consThermE)-}]
+  
+assump2 = [S "All", phrase heat_trans, S "coefficients are constant over",
+  phrase time, sSqBr (acroGD "1")]
+
+assump3 = [S "The", phrase water, S "in the", phrase tank,
+  S "is fully mixed, so the", phrase temp_water `isThe`
+  S "same throughout the entire", phrase tank,
+  sSqBr (acroGD "2")]
+
+assump4 = [S "The", phrase water_dense, S "has no spatial variation; that is"
+  `sC` S "it is constant over their entire", phrase vol, sSqBr (acroGD "2")]
+
+assump5 = [S "The", phrase htCap_W, S "has no spatial variation; that",
+  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD "2")]
+
+assump6 = [at_start law_conv_cooling,
+  S "applies between the", phrase coil, S "and the",
+  phrase water{-, sSqBr (swhsSymbMapDRef dd1HtFluxC)-}]
+
+assump7 = [S "The", phrase temp_coil, S "is constant over",
+  phrase time{-, sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "2")-}]
+
+assump8 = [S "The", phrase temp_coil, S "does not vary along its length"{-,
+  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC "3")-}]
+  
+-- TODO: Re-implement above when Data Definitions is created.
+
+assump9 = [S "The", phrase model,
+  S "only accounts for charging of the tank" `sC` 
+  S "not discharging. The", phrase temp_water, S "can only increase, or remain",
+  S "constant; it cannot decrease. This implies that the",
+  phrase temp_init, sParen (acroA "12"), S "is less than (or equal)",
+  S "to the", phrase temp_coil, sSqBr ((acroIM "1") `sC` (acroLC "4"))]
+
+assump10 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
+  phrase system), S "is such that the", phrase water,
+  S "is always in", phrase liquid, S "form. That is,",
+  S "the", phrase temp, S "will not drop below the",
+  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
+  phrase boil_pt, sSqBr ((acroIM "1") `sC` (acroIM "3"))]
+  
+assump11 = [S "The", phrase tank, S "is perfectly insulated",
+  S "so that there is no", phrase heat, S "loss from the",
+  phrase tank, sSqBr ((acroIM "1") `sC` (acroLC "6"))]
+  
+assump12 = [S "No internal", phrase heat,
+  S "is generated by the", phrase water `semiCol` S "therefore, the", 
+  phrase ht_gen_vol, S "is zero", sSqBr ((acroIM "1") `sC` (acroIM "2"))]
   
 s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]

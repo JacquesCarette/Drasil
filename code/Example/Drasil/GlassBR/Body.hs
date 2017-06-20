@@ -370,7 +370,7 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end
               S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
               S "refers to the", phrase ar_max, S "for the plate of glass"]
 
-s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints", 
+s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints", 
   S "Typical Value", S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), 
   (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
   [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD])
@@ -380,16 +380,16 @@ s6_2_5_table1 = Table [S "Var", S "Physical Cons", S "Software Constraints",
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
 inputVarA = [(getS plate_len), 
-  E ((C plate_len) :> (Int 0)) `sAnd` E ((C plate_len) :/ (C plate_width) :> (Int 1)),
+  E ((C plate_len) :> (Int 0)) `sAnd` E (((C plate_len) :/ (C plate_width)) :> (Int 1)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_len) +:+ S "<=" +:+ (getS dim_max)
-  `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
+  `sAnd` E (((C plate_len) :/ (C plate_width)) :< (C ar_max)),
   E (Int 1500) +:+ (unwrap $ getUnit plate_len),
   S "10%"]
 
 inputVarB = [(getS plate_width),
   E ((C plate_width) :> Int 0) `sAnd` E ((C plate_width) :< (C plate_len)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_width) +:+ S "<=" +:+ (getS dim_max)
-  `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
+  `sAnd` E (((C plate_len) :/ (C plate_width)) :< (C ar_max)),
   E (Int 1200) +:+ (unwrap $ getUnit plate_width),
   S "10%"]
 

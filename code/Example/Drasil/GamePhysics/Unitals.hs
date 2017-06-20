@@ -258,16 +258,19 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
 chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
   posCons, orientCons, angVeloCons, forceCons, torqueCons]
 
-lengthCons     = constrained QPP.len               [physc $ \c -> c :>= (Dbl 0.0)]
-massCons       = constrained QPP.mass              [physc $ \c -> c :>= (Dbl 0.0)]
-mmntOfInCons   = constrained QP.momentOfInertia    [physc $ \c -> c :>= (Dbl 0.0)]
+nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
+nonNegativeConstraint = physc $ \c -> c :>= (Dbl 0.0)
+
+lengthCons     = constrained QPP.len               [nonNegativeConstraint]
+massCons       = constrained QPP.mass              [nonNegativeConstraint]
+mmntOfInCons   = constrained QP.momentOfInertia    [nonNegativeConstraint]
 gravAccelCons  = constrained QP.gravitationalConst []
 posCons        = constrained QP.position           []
 veloCons       = constrained QP.velocity           [] 
-orientCons     = constrained QM.orientation        [physc $ \c -> c :>= (Dbl 0.0),
+orientCons     = constrained QM.orientation        [nonNegativeConstraint,
                                                     physc $ \c -> c :<= (Dbl 6.18)]
 angVeloCons    = constrained QP.angularVelocity    []
 forceCons      = constrained QP.force              []
 torqueCons     = constrained QP.torque             [] 
-restCoefCons   = constrained QP.restitutionCoef    [physc $ \c -> c:>= (Dbl 0.0),
+restCoefCons   = constrained QP.restitutionCoef    [nonNegativeConstraint,
                                                     physc $ \c -> c:<= (Dbl 1.0)]

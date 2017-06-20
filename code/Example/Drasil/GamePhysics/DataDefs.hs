@@ -24,9 +24,7 @@ cpDDefs = [dd1CtrOfMass, dd2linDisp, dd3linVel, dd4linAcc, dd5angDisp,
   dd6angVel, dd7angAccel, dd8impulse]
 
 cpQDefs :: [Block QDefinition]
-cpQDefs = [(Parallel dd1CtrOfMass []), (Parallel dd2linDisp []), 
-  (Parallel dd3linVel []), (Parallel dd4linAcc []), (Parallel dd5angDisp []),
-  (Parallel dd6angVel []), (Parallel dd7angAccel []), (Parallel dd8impulse [])]
+cpQDefs = map (\x -> Parallel x []) cpDDefs
 -- DD1 : Centre of mass --
 
 dd1CtrOfMass :: QDefinition

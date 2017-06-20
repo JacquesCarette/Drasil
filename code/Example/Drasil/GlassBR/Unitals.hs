@@ -24,9 +24,9 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 {--}
 
 glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist]
+glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br]
 
-plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br :: ConstrainedChunk
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -61,9 +61,14 @@ tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
 
 standOffDist = cuc "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Rational
-  [ physc $ \c -> c :> 0,
+  [ physc $ \c -> c :> (Dbl 0),
     sfwrc $ \c -> (C sd_min) :< c,
     sfwrc $ \c -> c :< (C sd_max) ]
+
+prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
+  (sub cP lB) Rational
+  [ physc $ \c -> (Dbl 0) :< c,
+    physc $ \c -> c :< (Dbl 1) ]
 
 {--}
 
@@ -112,10 +117,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
+glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, ar_min, gTF]
 
-ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
+ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
@@ -132,8 +137,6 @@ is_safe2    = vc "is_safe2"      (nounPhraseSP $ "true when load resistance (cap
 stressDistFac = makeVC "stressDistFac"  (nounPhraseSP "stress distribution factor (Function)") cJ
 sdf_tol     = makeVC "sdf_tol"       (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
-prob_br     = vc "prob_br"       (nounPhraseSP "probability of breakage")
-  (sub cP lB) Rational
 dimlessLoad = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))

@@ -29,17 +29,30 @@ standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
 
 {--}
 
+glassBRConstrained :: [ConstrainedChunk]
+glassBRConstrained = [plate_len]
+
+plate_len :: ConstrainedChunk
+plate_len = cuc "plate_len"   (nounPhraseSP "plate length (long dimension)")
+  lA millimetre Rational 
+  [ physc $ \c -> c :>= (Dbl 0),
+    physc $ \c -> c :/ (C plate_width) :> (Dbl 1),
+    sfwrc $ \c -> (C dim_min) :<= c,
+    sfwrc $ \c -> c :>= (C dim_max),
+    sfwrc $ \c -> c :/ (C plate_width) :< (C ar_max) ]
+    
+    
+
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
+glassBRSymbols = [plate_width, dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight]
 
-plate_len, plate_width, dim_max, dim_min, act_thick, sflawParamK,
+plate_width, dim_max, dim_min, act_thick, sflawParamK,
   sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
   char_weight, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
 
-plate_len   = unitary "plate_len"   (nounPhraseSP "plate length (long dimension)")
-  lA millimetre Rational
+
 plate_width = unitary "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Rational
 dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
@@ -228,7 +241,7 @@ glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
-  ++ (map qs glassBRUnitless))
+  ++ (map qs glassBRUnitless) ++ (map qs glassBRConstrained))
 
 temporaryLOSymbols :: [QSWrapper]
 temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]

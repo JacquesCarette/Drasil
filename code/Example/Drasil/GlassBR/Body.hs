@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (itemRefToSent, getS,
+import Data.Drasil.Utils (itemRefToSent, getS, unwrap,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC)
@@ -384,7 +384,7 @@ inputVarA = [(getS plate_len),
   E ((C plate_len) :> (Int 0)) `sAnd` E ((C plate_len) :/ (C plate_width) :> (Int 1)),
   (getS dim_min) +:+ S "<=" +:+ (getS plate_len) +:+ S "<=" +:+ (getS dim_max)
   `sAnd` E ((C plate_len) :/ (C plate_width) :< (C ar_max)),
-  E (Int 1500) +:+ Sy (unit_symb plate_len),
+  E (Int 1500) +:+ (unwrap $ getUnit plate_len),
   S "10%"]
 
 inputVarB = [(getS plate_width),
@@ -461,7 +461,7 @@ s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   s7_1_req1Table]
 
 s7_1_req1Table :: Contents
-s7_1_req1Table = (table ((map qs [plate_len, plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
+s7_1_req1Table = (table ((map qs [plate_len]) ++ (map qs [plate_width, sdx, sdy, sdz, nom_thick, char_weight]) 
   ++ (map qs [glass_type, pb_tol, tNT])) (\x -> at_start x))
 
 s7_1_req2 = [(Enumeration $ Simple $

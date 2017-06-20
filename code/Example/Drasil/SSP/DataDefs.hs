@@ -1,7 +1,7 @@
 module Drasil.SSP.DataDefs where
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
+import Prelude hiding (id, cos, sin)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
@@ -74,7 +74,7 @@ angles :: QDefinition
 angles = fromEqn' (baseAngle ^. id) (baseAngle ^. term) (baseAngle ^. symbol) anglesEqn --, surfAngle?
 
 anglesEqn :: Expr
-anglesEqn = (Int 0)
+anglesEqn = (Int 0) --(C slipHght) :- ()
 
 --DD6
 
@@ -90,7 +90,8 @@ seismicLoadF :: QDefinition
 seismicLoadF = fromEqn' (earthqkLoadFctr ^. id) (earthqkLoadFctr ^. term) (earthqkLoadFctr ^. symbol) ssmcLFEqn --correct chunk referenced for definition?
 
 ssmcLFEqn :: Expr
-ssmcLFEqn = (Int 0)
+ssmcLFEqn = ((C earthqkLoadFctr) :* (C slcWght)) 
+--FIXME: should produce (K_E,i = ...) but produces (K_c = ...)
 
 --DD8
 
@@ -106,7 +107,7 @@ intrsliceF :: QDefinition
 intrsliceF = fromEqn' (intShrForce ^. id) (intShrForce ^. term) (intShrForce ^. symbol) intrsliceFEqn
 
 intrsliceFEqn :: Expr
-intrsliceFEqn = (Int 0)
+intrsliceFEqn = (C normToShear) :* (C scalFunc) :* (C intNormForce)
 
 --DD10
 
@@ -121,8 +122,11 @@ resShearWOEqn = (Int 0)
 mobShearWO :: QDefinition
 mobShearWO = fromEqn' (shearFNoIntsl ^. id) (shearFNoIntsl ^. term) (shearFNoIntsl ^. symbol) mobShearWOEqn
 
-mobShearWOEqn :: Expr
-mobShearWOEqn = (Int 0)
+mobShearWOEqn :: Expr 
+mobShearWOEqn = ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (sin (C baseAngle)) :- 
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle))
 
 --DD12
 

@@ -884,7 +884,7 @@ s4_2_5_d2endPara = map foldlSP [
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] [s4_2_6_conList])
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] s4_2_6_conList)
   (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
@@ -893,18 +893,18 @@ s4_2_6_conList = [con1]
 con1 :: [Sentence]
 con1 = [getS tank_length, E ((C tank_length) :> (Int 0)),
   E (((C tank_length) :<= (C tank_length)) :>= (C tank_length)),
-  E (Int 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
+  E (Dbl 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
   [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "2") True
 
 
-inputVar :: [UCWrapper]
-inputVar = map ucw [diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P] ++ [ucw htFusion] ++ map ucw [coil_SA,
+inputVar :: [QSWrapper]
+inputVar = map qs [diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P] ++ [qs htFusion] ++ map qs [coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-  ++ map ucw [tank_length]
+  ++ map qs [tank_length]
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.
@@ -999,11 +999,12 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
   S "which define the", phrase tank, S "parameters, material",
   plural property, S "and initial", plural condition]))]),
 
-  (Table [phrase symbol_, phrase unit_, phrase description]
+  (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
-  [(\ch -> P (ch ^. symbol)),
-  (\ch -> Sy (unit_symb ch)),
-  (\ch -> phrase ch)] inputVar)
+  [getS,
+  --(\ch -> Sy (unit_symb ch)),
+  unit'2Contents,
+  phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
 --
   Enumeration (Simple [(acroR "2", Flat (foldlSent

@@ -15,8 +15,8 @@ import Data.Drasil.Units.PhysicalProperties
 import Control.Lens ((^.))
 import Prelude hiding (id)
 
-swhsSymbols :: [QSWrapper]
-swhsSymbols = (map qs swhsUnits) ++ (map qs swhsUnitless) ++ (map qs swhsConstrained)
+swhsSymbols :: [CQSWrapper]
+swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) -- ++ (map qs swhsConstrained)
 
 -- Symbols with Units --
 

@@ -26,7 +26,12 @@ sliceWght :: QDefinition
 sliceWght = fromEqn (slcWght ^. id) (slcWght ^. term) (slcWght ^. symbol) newton slcWgtEqn
 
 slcWgtEqn :: Expr
-slcWgtEqn = (Int 0) --FIXME: add the long equation
+slcWgtEqn = (C baseWthX) * (Case [case1,case2,case3])
+  where case1 = (((C slopeHght)-(C slipHght ))*(C satWeight),(C waterHght) :> (C slopeHght))
+        case2 = (((C slopeHght)-(C waterHght))*(C dryWeight) + ((C waterHght)-(C slipHght))*(C satWeight),
+                (C slopeHght) :> (C waterHght) :> (C slipHght))
+        case3 = (((C slopeHght)-(C slipHght ))*(C dryWeight),(C waterHght) :< (C slipHght))
+--FIXME: add the long equation
 
 --DD2
 
@@ -34,7 +39,9 @@ baseWtrF :: QDefinition
 baseWtrF = mkDataDef' baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
-bsWtrFEqn = (Int 0)
+bsWtrFEqn = (C baseLngth)*(Case [case1,case2])
+  where case1 = (((C waterHght)-(C slipHght))*(C waterWeight),(C waterHght) :> (C slipHght))
+        case2 = (Int 0, (C waterHght) :< (C slipHght))
 
 --DD3
 
@@ -42,7 +49,9 @@ surfWtrF :: QDefinition
 surfWtrF = mkDataDef' surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
-surfWtrFEqn = (Int 0)
+surfWtrFEqn = (C surfLngth)*(Case [case1,case2])
+  where case1 = (((C waterHght)-(C slopeHght))*(C waterWeight),(C waterHght) :> (C slopeHght))
+        case2 = (Int 0, (C waterHght) :< (C slopeHght))
 
 --DD4
 

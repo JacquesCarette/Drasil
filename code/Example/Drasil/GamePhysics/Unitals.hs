@@ -249,3 +249,47 @@ velTime = ucFromCV velatTime second
   where velatTime = cvR (dccWDS "t_c" (cn "i-th body's velocity")
                      (phrase $ QP.time))
                      (sub (QP.time ^. symbol) (Atomic "c"))
+
+
+chipmunkConstraints :: [ConstrainedChunk]
+chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
+  posCons, orientCons, angVeloCons, forceCons, torqueCons]
+
+lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
+  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrainedChunk
+
+lengthCons     = cuc "length_const"      (nounPhraseSP "length") 
+  cL metre Real
+  [physc $ \c -> c :>= (Dbl 0)]
+massCons       = cuc "mass_const"        (nounPhraseSP "mass") 
+  cM kilogram Real
+  [physc $ \c -> c :>= (Dbl 0)]
+mmntOfInCons   = cuc "mmntOfIn_const"    (nounPhraseSP "moment of inertia") 
+  (vec cI) momtInertU Real
+  [physc $ \c -> c :>= (Dbl 0)]
+gravAccelCons  = cuc "gravAccl_const"    (nounPhraseSP "gravitational acceleration constant")
+  cG gravConstU Real 
+  []
+posCons        = cuc "position_const"    (nounPhraseSP "position")
+  (vec lP) metre Real 
+  []
+veloCons       = cuc "velocity_const"    (nounPhraseSP "velocity") 
+  (vec lV) velU Real 
+  []
+orientCons     = cuc "orientation_const" (nounPhraseSP "orientation") 
+  (Greek Phi_L) radian Real 
+  [physc $ \c -> c :>= (Dbl 0),
+   physc $ \c -> c :<= (Dbl 6.18)]
+angVeloCons    = cuc "angVelo_const"     (nounPhraseSP "angular velocity") 
+  (Greek Omega_L) angVelU Real 
+  []
+forceCons      = cuc "force_const"       (nounPhraseSP "force") 
+  (vec cF) newton Real 
+  []
+torqueCons     = cuc "torque_const"      (nounPhraseSP "torque") 
+  (Greek Tau_L) torqueU Real 
+  []
+restCoefCons   = cvc "restCoef_const"    (nounPhraseSP "restitution coefficient") 
+  (sub cC cR) Real 
+  [physc $ \c -> c:>= (Dbl 0),
+   physc $ \c -> c:<= (Dbl 1)]

@@ -96,6 +96,7 @@ makeMethod (MeC _ (MOutput IOStd _) _ _ _) _ _ =
 
 makeType :: Space -> StateType
 makeType S.Rational = float
+makeType S.Radians  = float
 makeType S.Real     = float
 makeType S.Boolean  = bool
 makeType S.Integer  = int

@@ -263,6 +263,8 @@ s3_1_2_intro = foldlSPCol [short progName +:+.
   S "The only external interaction is through the", phrase user +:+.
   S "interface", S "responsibilities" `ofThe'` phrase user,
   S "and the", phrase system, S "are as follows"]
+  
+s3_1_2_userResp, s3_1_2_swhsResp :: ItemType
 
 s3_1_2_respBullets :: Contents
 s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]

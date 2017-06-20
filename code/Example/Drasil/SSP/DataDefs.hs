@@ -149,5 +149,7 @@ soilStiffness = fromEqn' (nrmStiffRes ^. id) (nrmStiffRes ^. term) (nrmStiffRes 
 soilStiffnessEqn :: Expr
 soilStiffnessEqn = (Case [case1,case2])
   where case1 = (block, (C SM.poissnsR) :< (Int 0))
-        case2 = ((Dbl 0.01) * block + (V "k") / ((C nrmDispl)+(V "A")), (C SM.poissnsR) :>= (Int 0))
-        block = (C intNormForce)*((Int 1)-(C SM.poissnsR))/(((Int 1)+(C SM.poissnsR)) :* ((Int 1) :- (Int 2):*(C SM.poissnsR) :+ (C baseWthX)))
+        case2 = ((Dbl 0.01) * block + (V "k") / ((C nrmDispl)+(V "A")),
+                (C SM.poissnsR) :>= (Int 0))
+        block = (C intNormForce)*((Int 1)-(C SM.poissnsR))/
+                (((Int 1)+(C SM.poissnsR)) :* ((Int 1) :- (Int 2):*(C SM.poissnsR) :+ (C baseWthX)))

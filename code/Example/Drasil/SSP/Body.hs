@@ -63,7 +63,7 @@ this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbols ([] :: [CQSWrapper]) acronyms ([] :: [Block QDefinition])
+  this_si sspSymbols (map cqs sspDataDefs) acronyms ([] :: [Block QDefinition])
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -368,37 +368,6 @@ waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
 waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
-
-{--- START OF SECTION TO MESS WITH DATA TYPES
-data VariableChunk where
-  VarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
-
-data VarContraint where
-  VarCon :: (Expr -> Expr -> Expr) -> Expr -> VarContraint
-
-positiveC :: VarContraint
-positiveC = VarCon (:>) (Int 0)
-
--- "positive variable chunk" built from an existing concept+quanity+symbolform
-posVarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
-posVarCh s contraints typicalVal = VarCh s (positiveC:contraints) typicalVal
-
---"variable chunk with units"
-varChWU :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk [VarContraint] -> a -> VariableChunk
-varChWU i t d s u contraints typicalVal = VarCh (uc' i t d s u) contraints typicalVal
-
---example
-intNormFor = sentVarCh $ posVarCh intNormForce [] (15000 :: Integer)
-
---"Sentences from Variable Chunk"
-sentVarCh :: VarCh -> [Sentence]
-sentVarCh (VarCh s contraints typicalVal) = [getS s, fmtBF' s contraints, fmtU (S (show typicalVal)) (cqs s)]
-
-fmtBF' ::(SymbolForm a) => a -> [VarContraint] -> Sentence
-fmtBF' _    []             = S "None"
-fmtBF' symb [VarCon f num] = E $ (C symb) `f` num
-fmtBF' symb (x:xs)         = fmtBF' [x] +:+ S "and" +:+ (fmtBF symb xs)
---- END OF SECTION -}
 
 intNormFor  = mkGtZeroConst intNormForce []           (15000 :: Integer)
 effectCohe  = mkGtZeroConst cohesion     []           (10    :: Integer)

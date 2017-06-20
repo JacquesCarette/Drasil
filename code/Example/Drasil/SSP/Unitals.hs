@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
 sspSymbols :: [CQSWrapper]
-sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless)
+sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless) ++ (map cqs sspConstrained)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -26,6 +26,13 @@ genForce = uc CP.force cF newton
 fsi, fisi :: String
 fsi   = "for slice index i"
 fisi  = "for interslice index i"
+
+--------------------------------
+-- START OF CONSTRAINEDCHUNKS --
+--------------------------------
+
+sspConstrained :: [ConstrainedChunk]
+sspConstrained = []
 
 ---------------------------
 -- START OF UNITALCHUNKS --

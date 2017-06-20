@@ -77,6 +77,8 @@ nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
                   :|| (c := (V "5.0")) :|| (c := (V "6.0")) :|| (c := (V "8.0")) :|| (c := (V "10.0"))
                   :|| (c := (V "12.0")) :|| (c := (V "16.0")) :|| (c := (V "19.0")) :|| (c := (V "22.0")) ]
 
+--glass_type??? see Issue #286
+
 {--}
 
 glassBRSymbols :: [UnitaryChunk]

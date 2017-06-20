@@ -15,7 +15,8 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
-import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef, makeTMatrix)
+import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
+  makeTMatrix, mkRefsList)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -42,7 +43,7 @@ import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSentCol, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe, ofThe')
+  foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe')
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -494,14 +495,13 @@ s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 
 s4_2_1_assump_list :: [[Sentence]]
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19]
 
 assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19 :: [Sentence]
-
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19]
 
 assump1 = [S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+.
@@ -924,14 +924,12 @@ s4_2_5_d2endPara = map foldlSP [
 
 -- FIXME: Temporary dummy tables
 s4_2_6_table1 :: Contents
-s4_2_6_table1 = Table [S "Dummy Table 1", EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
-  (titleize table_ +:+ S "1")
-  True
+s4_2_6_table1 = Table [S "Dummy Table 1", EmptyS]
+  [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "1") True
 
 s4_2_6_table2 :: Contents
-s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS] [[EmptyS, EmptyS], [EmptyS, EmptyS]]
-  (titleize table_ +:+ S "2")
-  True
+s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
+  [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "2") True
 
 
 inputVar :: [UCWrapper]
@@ -1058,10 +1056,9 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
 -- so not sure how to implement yet
 
 reqList :: [[Sentence]]
+reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 req3, req4, req5, req6, req7, req8, req9, req10, req11 :: [Sentence]
-
-reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 req3 = [S "Verify that the", plural input_, S "satisfy the required" +:+
   phrase physical, plural constraint, S "shown in", makeRef s7_table1]
@@ -1191,7 +1188,8 @@ likeChg6 = [s6_start "15", S "Any real", phrase tank,
 
 s7 :: Section
 s7 = traceMGF s7_refList s7_trailing
-  ([s7_table1, s7_table2, s7_table2_New, s7_table3] ++ (s7_intro2) ++ [s7_fig1, s7_fig2]) []
+  ([s7_table1, s7_table2, s7_table2_New, s7_table3] ++ (s7_intro2) ++
+  [s7_fig1, s7_fig2]) []
 
 s7_refList :: [Contents]
 s7_refList = [s7_table1, s7_table2, s7_table2_New, s7_table3]
@@ -1439,17 +1437,37 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
 -- Section 8 : References --
 ----------------------------
 
-{--
 s8 :: Section
-s8 = SRS.reference [s8_refList] []
+s8 = SRS.reference [s8_refs] []
 
-s8_refList :: [Sentence]
-ref1, ref2, ref3, ref4, ref5 :: Sentence
+s8_refs :: Contents
+s8_refs = mkRefsList 1 $ map foldlsC s8_refList
+
+s8_refList :: [[Sentence]]
 s8_refList = [ref1, ref2, ref3, ref4, ref5]
 
-ref1 = S "Dummy Text"
-ref2 = S "Dummy Text"
-ref3 = S "Dummy Text"
-ref4 = S "Dummy Text"
-ref5 = S "Dummy Text"
---}
+ref1, ref2, ref3, ref4, ref5 :: [Sentence]
+
+ref1 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
+  S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+
+  S "and Sons", S "United States", S "sixth edition edition", S "2007."]
+
+ref2 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
+  S "scientific computing software. Master's thesis", S "McMaster University",
+  S "Hamilton", S "Ontario", S "Canada", S "2013."]
+
+ref3 = [S "Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes",
+  S "2012."]
+
+ref4 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
+  S "How and why to fake it. IEEE Transactions on Software Engineering",
+  S "12" :+: Quote (S "2") :+: S ":251-257", S "February 1986."]
+
+ref5 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
+  S "scientific computing. In J. Ralyt" :+: (F Acute 'e'), S "P. Agerfalk",
+  S "and N. Kraiem", S "editors", S "Proceedings of the First" +:+
+  S "International Workshop on Situational Requirements Engineering" +:+
+  S "Processes - Methods, Techniques and Tools to Support" +:+
+  S "Situation-Specific Requirements Engineering Processes, SREP’05",
+  S "pages 107-121", S "Paris", S "France", S "2005. In conjunction with" +:+
+  S "13th IEEE International Requirements Engineering Conference."]

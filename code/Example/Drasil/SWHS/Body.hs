@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
-  makeTMatrix, mkRefsList)
+  makeTMatrix, mkRefsList, unwrap)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -884,7 +884,16 @@ s4_2_5_d2endPara = map foldlSP [
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
-  [[getS tank_length, EmptyS, EmptyS, EmptyS]] (titleize table_ +:+ S "1") True
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] [s4_2_6_conList])
+  (titleize input_ +:+ titleize' variable) True
+
+s4_2_6_conList ::[[Sentence]]
+s4_2_6_conList = [s4_2_6_conList]
+
+con1 :: [Sentence]
+con1 = [getS tank_length, E $ (C tank_length) :> (Int 0),
+  E $ (C tank_length) :<= (C tank_length) :>=,
+  E (Int 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]

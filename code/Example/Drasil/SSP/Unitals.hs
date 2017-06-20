@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
 sspSymbols :: [CQSWrapper]
-sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless) ++ (map cqs sspConstrained)
+sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless) -- ++ (map cqs sspConstrained)
 
 ---------------------------
 -- Imported UnitalChunks --

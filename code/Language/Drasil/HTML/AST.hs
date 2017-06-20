@@ -22,6 +22,8 @@ data Expr = Var   Variable
           | Eq    Expr Expr
           | Lt    Expr Expr
           | Gt    Expr Expr
+          | LEq   Expr Expr
+          | GEq   Expr Expr
           | Dot   Expr Expr
           | Neg   Expr
           | Call  Expr [Expr]

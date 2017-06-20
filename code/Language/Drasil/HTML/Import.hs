@@ -47,6 +47,8 @@ expr (Case ps)        = if length ps < 2 then
 expr e@(_ := _)       = rel e
 expr e@(_ :> _)       = rel e
 expr e@(_ :< _)       = rel e
+expr e@(_ :<= _)      = rel e
+expr e@(_ :>= _)      = rel e
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
@@ -82,6 +84,8 @@ rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)
 rel (a :< b) = H.Lt (expr a) (expr b)
 rel (a :> b) = H.Gt (expr a) (expr b)
+rel (a :<= b) = H.LEq (expr a) (expr b)
+rel (a :>= b) = H.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper function for translating Integrals (from 'UFunc')

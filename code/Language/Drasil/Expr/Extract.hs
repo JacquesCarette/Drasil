@@ -38,6 +38,8 @@ dep (Case ls)     = nub (concat (map (dep . fst) ls))
 dep (a := b)      = nub (dep a ++ dep b)
 dep (a :< b)      = nub (dep a ++ dep b)
 dep (a :> b)      = nub (dep a ++ dep b)
+dep (a :>= b)     = nub (dep a ++ dep b)
+dep (a :<= b)     = nub (dep a ++ dep b)
 dep (UnaryOp u)   = dep (unpack u)
 dep (Grouping e)  = dep e
 dep (BinaryOp b)  = nub (concat $ map dep (binop b))
@@ -61,6 +63,8 @@ vars (Case ls)    m = nub (concat (map (\x -> vars (fst x) m) ls))
 vars (a := b)     m = nub (vars a m ++ vars b m)
 vars (a :> b)     m = nub (vars a m ++ vars b m)
 vars (a :< b)     m = nub (vars a m ++ vars b m)
+vars (a :<= b)    m = nub (vars a m ++ vars b m)
+vars (a :>= b)    m = nub (vars a m ++ vars b m)
 vars (UnaryOp u)  m = vars (unpack u) m
 vars (Grouping e) m = vars e m
 vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))

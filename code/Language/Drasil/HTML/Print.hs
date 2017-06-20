@@ -129,6 +129,8 @@ p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
 p_expr (Lt a b)   = p_expr a ++ "&lt;" ++ p_expr b
 p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b
+p_expr (LEq a b)  = p_expr a ++ "&le;" ++ p_expr b
+p_expr (GEq a b)  = p_expr a ++ "&ge;" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)

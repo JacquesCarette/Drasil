@@ -47,6 +47,8 @@ expr (Case ps)         = if length ps < 2 then
 expr x@(_ := _)        = rel x
 expr x@(_ :> _)        = rel x
 expr x@(_ :< _)        = rel x
+expr x@(_ :<= _)       = rel x
+expr x@(_ :>= _)       = rel x
 expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
 expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
@@ -79,6 +81,8 @@ rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
+rel (a :<= b) = T.LEq (expr a) (expr b)
+rel (a :>= b) = T.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 integral :: UFunc -> (T.Function, T.Expr)

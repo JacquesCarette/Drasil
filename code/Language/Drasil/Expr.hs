@@ -48,9 +48,11 @@ data Expr where
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
-  (:=) :: Expr -> Expr -> Expr
-  (:<) :: Expr -> Expr -> Expr
-  (:>) :: Expr -> Expr -> Expr
+  (:=)  :: Expr -> Expr -> Expr
+  (:<)  :: Expr -> Expr -> Expr
+  (:>)  :: Expr -> Expr -> Expr
+  (:<=) :: Expr -> Expr -> Expr
+  (:>=) :: Expr -> Expr -> Expr
  
 type Variable = String
 
@@ -84,10 +86,12 @@ instance Eq Expr where
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  (:=) a b == (:=) c d         =  a == c && b == d || a == d && b == c
-  (:<) a b == (:<) c d         =  a == c && b == d
-  (:>) a b == (:>) c d         =  a == c && b == d
-  (:>) a b == (:<) c d         =  a == d && b == c
+  (:=)  a b == (:=)  c d       =  a == c && b == d || a == d && b == c
+  (:<)  a b == (:<)  c d       =  a == c && b == d
+  (:>)  a b == (:>)  c d       =  a == c && b == d
+  (:<)  a b == (:<)  c d       =  a == d && b == c
+  (:<=) a b == (:<=) c d       =  a == c && b == d || a == d && b == c
+  (:>=) a b == (:>=) c d       =  a == c && b == d || a == d && b == c
   _ == _                       =  False
 
 instance Fractional Expr where

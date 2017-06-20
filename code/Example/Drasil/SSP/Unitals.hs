@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
 sspSymbols :: [CQSWrapper]
-sspSymbols = (map cqs sspUnits) ++ (map cqs sspUnitless) -- ++ (map cqs sspConstrained)
+sspSymbols = (map cqs sspConstrained) ++ (map cqs sspUnits) ++ (map cqs sspUnitless) 
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -31,8 +31,16 @@ fisi  = "for interslice index i"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained :: [ConstrainedChunk]
-sspConstrained = []
+sspConstrained :: [ConstrConcept]
+sspConstrained = [intNormForce]
+
+gtZeroConstr :: [Constraint]
+gtZeroConstr = [physc $ \c -> c :> (Int 0)]
+
+intNormForce :: ConstrConcept
+intNormForce = cuc' "E_i" (cn $ "interslice normal force")
+  ("exerted between adjacent slices " ++ fisi)
+  (sub cE lI) newton Real gtZeroConstr
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -42,7 +50,7 @@ sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight,
   SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intNormForce, intShrForce, baseHydroForce, surfHydroForce,
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
@@ -58,7 +66,7 @@ normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl,
-  elmPrllDispl, intNormForce, mobShrC, shrResC, rotatedDispl :: UnitalChunk
+  elmPrllDispl, mobShrC, shrResC, rotatedDispl :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -150,10 +158,6 @@ watrForce    = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces acting " ++ 
   "in the x-ordinate direction of the slice on each side") fisi
   (sub (Concat [Greek Delta, cH]) lI) newton
-
-intNormForce = uc' "E_i" (cn $ "interslice normal force")
-  ("exerted between adjacent slices " ++ fisi)
-  (sub cE lI) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
   ("exerted between adjacent slices " ++ fisi)

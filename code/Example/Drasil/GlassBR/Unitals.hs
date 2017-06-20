@@ -24,9 +24,9 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 {--}
 
 glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br]
+glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick]
 
-plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick :: ConstrainedChunk
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -70,16 +70,22 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   [ physc $ \c -> (Dbl 0) :< c,
     physc $ \c -> c :< (Dbl 1) ]
 
+nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
+  " {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
+  lT millimetre Rational
+  [ physc $ \c -> c := ((Dbl 2.5) :|| (Dbl 2.7) :|| (Dbl 3) :|| (Dbl 4)
+                       :|| (Dbl 5) :|| (Dbl 6) :|| (Dbl 8) :|| (Dbl 10)
+                       :|| (Dbl 12) :|| (Dbl 16) :|| (Dbl 19) :|| (Dbl 22))]
+
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [dim_max, dim_min, act_thick, sflawParamK,
-  sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
-  cWeightMax, cWeightMin, eqTNTWeight]
+glassBRSymbols = [dim_max, dim_min, act_thick, sflawParamK, sflawParamM,
+  demand, sdx, sdy, sdz, sd_max, sd_min, load_dur, cWeightMax, cWeightMin,
+  eqTNTWeight]
 
-dim_max, dim_min, act_thick, sflawParamK,
-  sflawParamM, demand, sdx, sdy, sdz, sd_max, sd_min, nom_thick, load_dur,
-  cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
+dim_max, dim_min, act_thick, sflawParamK, sflawParamM, demand, sdx, sdy,
+  sdz, sd_max, sd_min, load_dur, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
 
 dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) millimetre Real
@@ -103,8 +109,6 @@ sd_max      = unitary "sd_max"      (nounPhraseSP "maximum stand off distance pe
   (sub (standOffDist ^. symbol) (Atomic "max")) metre Real
 sd_min      = unitary "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
   (sub (standOffDist ^. symbol) (Atomic "min")) metre Real
-nom_thick   = unitary "nom_thick"   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, " ++
-  "5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}") lT millimetre Rational
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Integer
 cWeightMax  = unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")

@@ -3,6 +3,7 @@ module Drasil.GamePhysics.DataDefs where
 import Drasil.GamePhysics.Unitals
 
 import Language.Drasil
+import Drasil.DocumentLanguage
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, collision, 
   position, linDisp, linVelo, linAccel, displacement, velocity, angDisp, angVelo,
@@ -22,6 +23,10 @@ cpDDefs :: [QDefinition]
 cpDDefs = [dd1CtrOfMass, dd2linDisp, dd3linVel, dd4linAcc, dd5angDisp,
   dd6angVel, dd7angAccel, dd8impulse]
 
+cpQDefs :: [Block QDefinition]
+cpQDefs = [(Parallel dd1CtrOfMass []), (Parallel dd2linDisp []), 
+  (Parallel dd3linVel []), (Parallel dd4linAcc []), (Parallel dd5angDisp []),
+  (Parallel dd6angVel []), (Parallel dd7angAccel []), (Parallel dd8impulse [])]
 -- DD1 : Centre of mass --
 
 dd1CtrOfMass :: QDefinition

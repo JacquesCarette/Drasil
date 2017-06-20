@@ -450,13 +450,6 @@ restCoefConstraint :: [Sentence]
 restCoefConstraint = listConstExpr (QP.restitutionCoef, [((:>),(Int 0)), 
   ((:<),(Int 1))], S "0.8")
 
---list of Expr instead of Expr->Expr->Expr
---(E (C QPP.len) :> := (Int 0)))
---(E (C QPP.mass) :> (Int 0)))
---(E (C QP.momentOfInertia) :> (Int 0)))
---(E ((Int 0) :< (C QP.orientation) :< (Dbl 6.18)))
---(E ((Int 0) :< (C QP.restitutionCoef) :< (Int 1)))
-
 
 s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
 --s4_2_6_t1_list = map (listConstExpr) [lengthConstraint,massConstraint]

@@ -258,38 +258,16 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
 chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
   posCons, orientCons, angVeloCons, forceCons, torqueCons]
 
-lengthCons     = cuc "length_const"      (nounPhraseSP "length") 
-  cL metre Real
-  [physc $ \c -> c :>= (Dbl 0)]
-massCons       = cuc "mass_const"        (nounPhraseSP "mass") 
-  cM kilogram Real
-  [physc $ \c -> c :>= (Dbl 0)]
-mmntOfInCons   = cuc "mmntOfIn_const"    (nounPhraseSP "moment of inertia") 
-  (vec cI) momtInertU Real
-  [physc $ \c -> c :>= (Dbl 0)]
-gravAccelCons  = cuc "gravAccl_const"    (nounPhraseSP "gravitational acceleration constant")
-  cG gravConstU Real 
-  []
-posCons        = cuc "position_const"    (nounPhraseSP "position")
-  (vec lP) metre Real 
-  []
-veloCons       = cuc "velocity_const"    (nounPhraseSP "velocity") 
-  (vec lV) velU Real 
-  []
-orientCons     = cuc "orientation_const" (nounPhraseSP "orientation") 
-  (Greek Phi_L) radian Real 
-  [physc $ \c -> c :>= (Dbl 0),
-   physc $ \c -> c :<= (Dbl 6.18)]
-angVeloCons    = cuc "angVelo_const"     (nounPhraseSP "angular velocity") 
-  (Greek Omega_L) angVelU Real 
-  []
-forceCons      = cuc "force_const"       (nounPhraseSP "force") 
-  (vec cF) newton Real 
-  []
-torqueCons     = cuc "torque_const"      (nounPhraseSP "torque") 
-  (Greek Tau_L) torqueU Real 
-  []
-restCoefCons   = cvc "restCoef_const"    (nounPhraseSP "restitution coefficient") 
-  (sub cC cR) Real 
-  [physc $ \c -> c:>= (Dbl 0),
-   physc $ \c -> c:<= (Dbl 1)]
+lengthCons     = constrained QPP.len               [physc $ \c -> c :>= (Dbl 0.0)]
+massCons       = constrained QPP.mass              [physc $ \c -> c :>= (Dbl 0.0)]
+mmntOfInCons   = constrained QP.momentOfInertia    [physc $ \c -> c :>= (Dbl 0.0)]
+gravAccelCons  = constrained QP.gravitationalConst []
+posCons        = constrained QP.position           []
+veloCons       = constrained QP.velocity           [] 
+orientCons     = constrained QM.orientation        [physc $ \c -> c :>= (Dbl 0.0),
+                                                    physc $ \c -> c :<= (Dbl 6.18)]
+angVeloCons    = constrained QP.angularVelocity    []
+forceCons      = constrained QP.force              []
+torqueCons     = constrained QP.torque             [] 
+restCoefCons   = constrained QP.restitutionCoef    [physc $ \c -> c:>= (Dbl 0.0),
+                                                    physc $ \c -> c:<= (Dbl 1.0)]

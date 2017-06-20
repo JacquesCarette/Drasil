@@ -10,7 +10,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(enumSimple, listConstS, getS)
+import Data.Drasil.Utils(enumSimple, listConstS, getS, unwrap)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, equation)
 import Data.Drasil.Concepts.Software
@@ -327,10 +327,26 @@ s4_2_4_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can b
 
 s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 
-s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
-  titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map
-  (listConstS) []) (titleize table_ +: S "1" +:+ titleize input_ +:+
+s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ titleize' constraint, S "Typical" +:+
+  titleize value, titleize uncertainty] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
+  s4_2_6_conList) (titleize table_ +: S "1" +:+ titleize input_ +:+
   titleize' variable) True
+  
+s4_2_6_conList :: [[Sentence]]
+s4_2_6_conList = [con1, con2, con3]
+
+con1, con2, con3 :: [Sentence]
+con1 = [getS tank_L, E ((C tank_L) :> (Int 0)),
+  E (((C tank_L) :<= (C tank_L)) :<= (C tank_L)),
+  E (Dbl 1.5) +:+ (unwrap $ getUnit tank_L), S "10%"]
+
+con2 = [getS tank_D, E ((C tank_D) :> (Int 0)),
+  E (((C tank_D) :<= (C tank_D)) :<= (C tank_D)),
+  E (Dbl 0.412) +:+ (unwrap $ getUnit tank_D), S "10%"]
+  
+con3 = [getS coil_SA, E ((C coil_SA) :> (Int 0)) +:+ sParen (S "*"),
+  E ((C coil_SA) :<= (C coil_SA)),
+  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map

@@ -20,6 +20,51 @@ import Control.Lens ((^.))
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = map cqs pcmUnits
 
+-- All values with constraints; built off of the Unital Chunks
+
+pcmConstrained :: [ConstrConcept]
+pcmConstrained = [coil_SA_con, htCap_W_con, ht_xfer_CW_con, tank_L_con, tank_V_con, 
+  temp_coil_con, time_final_con, temp_init_con, water_dense_con]
+
+coil_SA_con, htCap_W_con, ht_xfer_CW_con, tank_L_con, tank_V_con, 
+  temp_coil_con, time_final_con, temp_init_con, water_dense_con:: ConstrConcept
+
+coil_SA_con = constrained' coil_SA
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> c :<= c]
+  
+htCap_W_con = constrained' htCap_W
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> c :<= c :<= c]
+  
+ht_xfer_CW_con  = constrained' ht_xfer_CW 
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> c :< c :< c]
+  
+tank_L_con = constrained' tank_L
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> c :<= c :<= c]
+
+tank_V_con = constrained' tank_V
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> c :<= c :<= c]
+  
+temp_coil_con = constrained' temp_coil
+  [physc $ \c -> (Dbl 0) :< c :< (Dbl 100)]
+
+time_final_con = constrained' time_final
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> c :<= c]
+  
+temp_init_con = constrained' temp_init
+  [physc $ \c -> c :>= (Dbl 0),
+  sfwrc $ \c -> c :<= c :<= c]
+  
+water_dense_con = constrained' water_dense
+  [physc $ \c -> c :>= (Dbl 0),
+  sfwrc $ \c -> c :< c :<= c]
+  
+
 pcmUnits :: [UCWrapper]
 pcmUnits = map ucw [coil_SA, density, dummyVar, heat_cap_spec, hIn_SA, hOut_SA, 
   htCap_Liq, htCap_W, ht_flux, ht_flux_C, ht_flux_in, ht_flux_out, ht_gen_vol, 

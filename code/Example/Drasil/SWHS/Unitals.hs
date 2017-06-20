@@ -38,9 +38,9 @@ coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT,
   pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
-tank_length :: ConstrainedChunk
+tank_length :: ConstrConcept
 
-swhsConstrained ::[ConstrainedChunk]
+swhsConstrained ::[ConstrConcept]
 swhsConstrained = [tank_length]
 
 --symbol names can't begin with a capital

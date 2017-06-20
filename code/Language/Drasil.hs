@@ -28,8 +28,8 @@ module Language.Drasil (
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
   -- Chunk.Constrained
-  , Constrained(..), ConstrainedChunk(..), Constraint(..), physc, sfwrc
-  , constrained, cuc, cvc, constrained, cuc'
+  , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
+  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc'
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC
   -- Chunk.Unital
@@ -109,8 +109,9 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained (Constrained(..), ConstrainedChunk(..)
-                                  , Constraint(..), physc, sfwrc, constrained
-                                  , cuc, cvc, constrained, cuc' )
+                                  , Constraint(..), ConstrConcept(..)
+                                  , physc, sfwrc, constrained
+                                  , cuc, cvc, constrained', cuc' )
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary

@@ -8,8 +8,8 @@ import qualified Drasil.SRS as SRS
 
 -- wrapper for general system description
 genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
-genSysF sCntxt userIntro constraints systSubSec = SRS.genSysDes [genSysIntro]
-  (sCntxt ++ [SRS.userChar [userIntro] [], systCon constraints systSubSec])
+genSysF sCntxt userIntro cnstrnts systSubSec = SRS.genSysDes [genSysIntro]
+  (sCntxt ++ [SRS.userChar [userIntro] [], systCon cnstrnts systSubSec])
 
 --generalized general system description introduction
 genSysIntro :: Contents

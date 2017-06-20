@@ -15,8 +15,8 @@ import Data.Drasil.Units.PhysicalProperties
 import Control.Lens ((^.))
 import Prelude hiding (id)
 
-swhsSymbols :: [CQSWrapper]
-swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map qs swhsConstrained)
+swhsSymbols :: [QSWrapper]
+swhsSymbols = (map qs swhsUnits) ++ (map qs swhsUnitless) ++ (map qs swhsConstrained)
 
 -- Symbols with Units --
 
@@ -131,10 +131,10 @@ pcm_HTC      = uc' "pcm_HTC"
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heat_transfer_coef
 
---tank_length  = uc "tank_length" (len `of_` tank)
+--tank_length  = uc' "tank_length" (len `of_` tank)
 --  "The length of the tank" cL metre
 
-tank_length  = cuc "tank_length" (len `of_` tank)
+tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
   [physc $ \c -> c :> (Dbl 0)]
 

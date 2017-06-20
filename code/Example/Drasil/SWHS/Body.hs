@@ -888,11 +888,11 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [s4_2_6_conList]
+s4_2_6_conList = [con1]
 
 con1 :: [Sentence]
-con1 = [getS tank_length, E $ (C tank_length) :> (Int 0),
-  E $ (C tank_length) :<= (C tank_length) :>=,
+con1 = [getS tank_length, E ((C tank_length) :> (Int 0)),
+  E (((C tank_length) :<= (C tank_length)) :>= (C tank_length)),
   E (Int 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
 
 s4_2_6_table2 :: Contents
@@ -901,9 +901,10 @@ s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
 
 
 inputVar :: [UCWrapper]
-inputVar = map ucw [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+inputVar = map ucw [diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P] ++ [ucw htFusion] ++ map ucw [coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+  ++ map ucw [tank_length]
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.

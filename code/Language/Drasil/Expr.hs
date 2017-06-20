@@ -27,12 +27,16 @@ data Expr where
   V        :: Variable -> Expr
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
+  Bln      :: Bool -> Expr
   (:^)     :: Expr -> Expr -> Expr -- Power operator
   (:*)     :: Expr -> Expr -> Expr -- Multiplication
   (:/)     :: Expr -> Expr -> Expr -- Division
   (:+)     :: Expr -> Expr -> Expr -- Addition
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
+  (:&&)    :: Expr -> Expr -> Expr -- logical and
+  (:||)    :: Expr -> Expr -> Expr -- logical or
+  Not      :: Expr -> Expr -- logical not
   Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -49,6 +53,7 @@ data Expr where
   BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
   (:=)  :: Expr -> Expr -> Expr
+  (:!=) :: Expr -> Expr -> Expr
   (:<)  :: Expr -> Expr -> Expr
   (:>)  :: Expr -> Expr -> Expr
   (:<=) :: Expr -> Expr -> Expr
@@ -75,23 +80,27 @@ instance Eq Expr where
   V a == V b                   =  a == b
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
+  Bln a == Bln b               =  a == b
   (:^) a b == (:^) c d         =  a == c && b == d
   (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
   (:/) a b == (:/) c d         =  a == c && b == d
   (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
+  (:&&) a b == (:&&) c d       =  a == c && b == d || a == d && b == c
+  (:||) a b == (:||) c d       =  a == c && b == d || a == d && b == c
+  Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   (:=)  a b == (:=)  c d       =  a == c && b == d || a == d && b == c
+  (:!=) a b == (:!=) c d       =  a == c && b == d || a == d && b == c
   (:<)  a b == (:<)  c d       =  a == c && b == d
   (:>)  a b == (:>)  c d       =  a == c && b == d
-  (:<)  a b == (:<)  c d       =  a == d && b == c
-  (:<=) a b == (:<=) c d       =  a == c && b == d || a == d && b == c
-  (:>=) a b == (:>=) c d       =  a == c && b == d || a == d && b == c
+  (:<=) a b == (:<=) c d       =  a == c && b == d
+  (:>=) a b == (:>=) c d       =  a == c && b == d
   _ == _                       =  False
 
 instance Fractional Expr where

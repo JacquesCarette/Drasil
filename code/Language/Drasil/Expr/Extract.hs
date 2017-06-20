@@ -27,15 +27,20 @@ dep (a :+ b)      = nub (dep a ++ dep b)
 dep (a :^ b)      = nub (dep a ++ dep b)
 dep (a :- b)      = nub (dep a ++ dep b)
 dep (a :. b)      = nub (dep a ++ dep b)
+dep (a :&& b)     = nub (dep a ++ dep b)
+dep (a :|| b)     = nub (dep a ++ dep b)
 dep (Deriv _ a b) = nub (dep a ++ dep b)
+dep (Not e)       = dep e
 dep (Neg e)       = dep e
 dep (C c)         = [c ^. id]
 dep (Int _)       = []
 dep (Dbl _)       = []
+dep (Bln _)       = []
 dep (V _)         = []
 dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
 dep (Case ls)     = nub (concat (map (dep . fst) ls))
 dep (a := b)      = nub (dep a ++ dep b)
+dep (a :!= b)     = nub (dep a ++ dep b)
 dep (a :< b)      = nub (dep a ++ dep b)
 dep (a :> b)      = nub (dep a ++ dep b)
 dep (a :>= b)     = nub (dep a ++ dep b)
@@ -52,15 +57,20 @@ vars (a :+ b)     m = nub (vars a m ++ vars b m)
 vars (a :^ b)     m = nub (vars a m ++ vars b m)
 vars (a :- b)     m = nub (vars a m ++ vars b m)
 vars (a :. b)     m = nub (vars a m ++ vars b m)
+vars (a :&& b)    m = nub (vars a m ++ vars b m)
+vars (a :|| b)    m = nub (vars a m ++ vars b m)
 vars (Deriv _ a b) m = nub (vars a m ++ vars b m)
+vars (Not e)      m = vars e m
 vars (Neg e)      m = vars e m
 vars (C c)        m = [toVC c m]
 vars (Int _)      _ = []
 vars (Dbl _)      _ = []
+vars (Bln _)      _ = []
 vars (V _)        _ = []
 vars (FCall f x)  m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
 vars (Case ls)    m = nub (concat (map (\x -> vars (fst x) m) ls))
 vars (a := b)     m = nub (vars a m ++ vars b m)
+vars (a :!= b)    m = nub (vars a m ++ vars b m)
 vars (a :> b)     m = nub (vars a m ++ vars b m)
 vars (a :< b)     m = nub (vars a m ++ vars b m)
 vars (a :<= b)    m = nub (vars a m ++ vars b m)

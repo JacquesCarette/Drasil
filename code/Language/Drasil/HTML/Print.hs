@@ -119,19 +119,24 @@ p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
 p_expr (Int i)    = show i
+p_expr (Bln b)    = show b
 p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
 p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
 p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = p_expr a ++ sup (p_expr b)
+p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
+p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
 p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
+p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
 p_expr (Lt a b)   = p_expr a ++ "&lt;" ++ p_expr b
 p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b
 p_expr (LEq a b)  = p_expr a ++ "&le;" ++ p_expr b
 p_expr (GEq a b)  = p_expr a ++ "&ge;" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
+p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)

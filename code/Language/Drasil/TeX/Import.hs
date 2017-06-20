@@ -26,12 +26,16 @@ expr :: Expr -> T.Expr
 expr (V v)             = T.Var  v
 expr (Dbl d)           = T.Dbl  d
 expr (Int i)           = T.Int  i
+expr (Bln b)           = T.Bln  b
 expr (a :* b)          = T.Mul  (expr a) (expr b)
 expr (a :+ b)          = T.Add  (expr a) (expr b)
 expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
 expr (a :^ b)          = T.Pow  (expr a) (expr b)
 expr (a :- b)          = T.Sub  (expr a) (expr b)
 expr (a :. b)          = T.Dot  (expr a) (expr b)
+expr (a :&& b)         = T.And  (expr a) (expr b)
+expr (a :|| b)         = T.Or   (expr a) (expr b)
+expr (Not a)           = T.Not  (expr a)
 expr (Neg a)           = T.Neg  (expr a)
 expr (C c)             = T.Sym  (c ^. symbol)
 expr (Deriv Part a 1)  = T.Mul (T.Sym (Special Partial)) (expr a)
@@ -45,6 +49,7 @@ expr (Case ps)         = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 expr x@(_ := _)        = rel x
+expr x@(_ :!= _)       = rel x
 expr x@(_ :> _)        = rel x
 expr x@(_ :< _)        = rel x
 expr x@(_ :<= _)       = rel x
@@ -79,6 +84,7 @@ bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)
+rel (a :!= b)= T.NEq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
 rel (a :<= b) = T.LEq (expr a) (expr b)

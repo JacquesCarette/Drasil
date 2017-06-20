@@ -112,19 +112,24 @@ p_expr :: Expr -> String
 p_expr (Var v)    = v
 p_expr (Dbl d)    = show d
 p_expr (Int i)    = show i
+p_expr (Bln b)    = show b
 p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
 p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Mul x y)  = mul x y
 p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
 p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
+p_expr (And x y)  = p_expr x ++ "\\wedge" ++ p_expr y
+p_expr (Or x y)   = p_expr x ++ "\\vee" ++ p_expr y
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
+p_expr (NEq x y)  = p_expr x ++ "\\neq" ++ p_expr y
 p_expr (Lt x y)   = p_expr x ++ "<" ++ p_expr y
 p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
 p_expr (GEq x y)  = p_expr x ++ "\\geq" ++ p_expr y
 p_expr (LEq x y)  = p_expr x ++ "\\leq" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
+p_expr (Not x)    = "\\neg" ++ p_expr x
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"

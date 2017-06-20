@@ -26,12 +26,16 @@ expr :: Expr -> H.Expr
 expr (V v)            = H.Var   v
 expr (Dbl d)          = H.Dbl   d
 expr (Int i)          = H.Int   i
+expr (Bln b)          = H.Bln   b
 expr (a :* b)         = H.Mul   (expr a) (expr b)
 expr (a :+ b)         = H.Add   (expr a) (expr b)
 expr (a :/ b)         = H.Frac  (replace_divs a) (replace_divs b)
 expr (a :^ b)         = H.Pow   (expr a) (expr b)
 expr (a :- b)         = H.Sub   (expr a) (expr b)
 expr (a :. b)         = H.Dot   (expr a) (expr b)
+expr (a :&& b)        = H.And   (expr a) (expr b)
+expr (a :|| b)        = H.Or    (expr a) (expr b)
+expr (Not a)          = H.Not   (expr a)
 expr (Neg a)          = H.Neg   (expr a)
 expr (Deriv Part a 1) = H.Mul (H.Sym (Special Partial)) (expr a)
 expr (Deriv Total a 1)= H.Mul (H.Sym lD) (expr a)
@@ -45,6 +49,7 @@ expr (Case ps)        = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 expr e@(_ := _)       = rel e
+expr e@(_ :!= _)      = rel e
 expr e@(_ :> _)       = rel e
 expr e@(_ :< _)       = rel e
 expr e@(_ :<= _)      = rel e
@@ -82,6 +87,7 @@ bfunc (Cross e1 e2) = (H.Cross, map expr [e1,e2])
 -- | Helper function for translating 'Relation's
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)
+rel (a :!= b)= H.NEq (expr a) (expr b)
 rel (a :< b) = H.Lt (expr a) (expr b)
 rel (a :> b) = H.Gt (expr a) (expr b)
 rel (a :<= b) = H.LEq (expr a) (expr b)

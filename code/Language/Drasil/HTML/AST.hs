@@ -12,19 +12,24 @@ import Language.Drasil.Document (DType (..))
 data Expr = Var   Variable
           | Dbl   Double
           | Int   Integer
+          | Bln   Bool
           | Mul   Expr Expr
           | Add   Expr Expr
           | Frac  Expr Expr
           | Div   Expr Expr
           | Pow   Expr Expr
           | Sub   Expr Expr
+          | And   Expr Expr
+          | Or    Expr Expr
           | Sym   Symbol
           | Eq    Expr Expr
+          | NEq   Expr Expr
           | Lt    Expr Expr
           | Gt    Expr Expr
           | LEq   Expr Expr
           | GEq   Expr Expr
           | Dot   Expr Expr
+          | Not   Expr
           | Neg   Expr
           | Call  Expr [Expr]
           | Case  [(Expr,Expr)]

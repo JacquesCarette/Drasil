@@ -73,9 +73,9 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
   " {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   lT millimetre Rational
-  [ physc $ \c -> c := ((Dbl 2.5) :|| (Dbl 2.7) :|| (Dbl 3) :|| (Dbl 4)
-                       :|| (Dbl 5) :|| (Dbl 6) :|| (Dbl 8) :|| (Dbl 10)
-                       :|| (Dbl 12) :|| (Dbl 16) :|| (Dbl 19) :|| (Dbl 22))]
+  [ physc $ \c -> (c := (Dbl 2.5)) :|| (c := (Dbl 2.7)) :|| (c := (Dbl 3)) :|| (c := (Dbl 4))
+                  :|| (c := (Dbl 5)) :|| (c := (Dbl 6)) :|| (c := (Dbl 8)) :|| (c := (Dbl 10))
+                  :|| (c := (Dbl 12)) :|| (c := (Dbl 16)) :|| (c := (Dbl 19)) :|| (c := (Dbl 22)) ]
 
 {--}
 

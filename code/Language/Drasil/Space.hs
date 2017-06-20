@@ -12,5 +12,6 @@ data Space where
   Boolean :: Space
   Char :: Space
   String :: Space
+  Radians :: Space
   Vect :: Space -> Space
   Obj :: String -> Space

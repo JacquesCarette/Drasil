@@ -20,4 +20,4 @@ euclidNorm = cvRs CM.euclidN (Concat [Atomic "||", (vec lR), Atomic "||"]) Real
 surArea, orientation :: UnitalChunk
 
 surArea = ucs' CM.surArea cA m_2 Real
-orientation = ucs' CM.orient (Greek Phi_L) radian Real
+orientation = ucs' CM.orient (Greek Phi_L) radian Radians

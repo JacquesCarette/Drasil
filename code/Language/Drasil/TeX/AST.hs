@@ -102,8 +102,8 @@ data ItemType = Flat Spec
 
 instance Show Function where
   show Log = "\\log"
-  show (Summation _) = "\\sum"
-  show (Product _) = "\\prod"
+  show (Summation _) = "\\displaystyle\\sum"
+  show (Product _) = "\\displaystyle\\prod"
   show Abs = ""
   show Norm = ""
   show (Integral _ _) = "\\int"

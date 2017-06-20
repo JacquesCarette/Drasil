@@ -30,9 +30,9 @@ standOffDist = makeUCWDS "standOffDist"      (nounPhraseSP "stand off distance")
 {--}
 
 glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol]
+glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT]
 
-plate_len, plate_width, char_weight, pb_tol :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol, tNT :: ConstrainedChunk
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -50,16 +50,20 @@ plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
     sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> (C plate_len) :/ c :< (C ar_max) ]
 
+pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
+  (sub cP (Atomic "btol")) Rational
+  [ physc $ \c -> (Dbl 0) :< c,
+    physc $ \c -> c :< (Dbl 1) ]
+
 char_weight = cuc "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Rational
   [ physc $ \c -> c :>= (Dbl 0),
     sfwrc $ \c -> (C cWeightMax) :<= c,
     sfwrc $ \c -> c :<= (C cWeightMin) ]
 
-pb_tol      = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") (sub cP (Atomic "btol"))
-  Rational
-  [ physc $ \c -> (Dbl 0) :< c,
-    physc $ \c -> c :< (Dbl 1) ]
+tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
+  (Atomic "TNT") Rational
+  [ physc $ \c -> c :> (Dbl 0) ]
 
 {--}
 
@@ -109,10 +113,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
-  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF]
+  dimlessLoad, tolLoad, lRe, loadSF, ar_min, gTF]
 
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol, prob_br,
-  dimlessLoad, tolLoad, tNT, lRe, loadSF, ar_min, gTF :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, ar_min, gTF :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
@@ -133,7 +137,6 @@ prob_br     = vc "prob_br"       (nounPhraseSP "probability of breakage")
 dimlessLoad = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
-tNT         = vc "tNT"           (nounPhraseSP "TNT equivalent factor") (Atomic "TNT") Rational
 lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 ar_min      = vc "ar_min"        (nounPhraseSP "minimum aspect ratio")

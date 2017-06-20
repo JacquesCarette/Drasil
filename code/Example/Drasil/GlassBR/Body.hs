@@ -461,8 +461,8 @@ s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   s7_1_req1Table]
 
 s7_1_req1Table :: Contents
-s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight, pb_tol]) ++ 
-  (map qs [sdx, sdy, sdz, nom_thick]) ++ (map qs [glass_type, tNT]))
+s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight, pb_tol, tNT]) ++ 
+  (map qs [sdx, sdy, sdz, nom_thick]) ++ (map qs [glass_type]))
   (\x -> at_start x))
 
 s7_1_req2 = [(Enumeration $ Simple $

@@ -73,7 +73,7 @@ mkSRS = RefSec (RefProg intro
   IScope (s2_2_contents) (s2_2_end),
   IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),
   IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail)]) :
-  map Verbatim [s3, s4, s5, s6, s7]
+  map Verbatim [s3, s4, s5, s6, s7, s8]
 --FIXME:implement use of s2_kSent
 
 tsymb_intro :: [TSIntro]

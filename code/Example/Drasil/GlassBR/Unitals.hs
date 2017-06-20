@@ -36,7 +36,7 @@ plate_len, plate_width :: ConstrainedChunk
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
-  [ physc $ \c -> c :>= (Dbl 0),
+  [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> c :/ (C plate_width) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
@@ -44,7 +44,7 @@ plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
 
 plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Rational
-  [ physc $ \c -> c :>= (Dbl 0),
+  [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),

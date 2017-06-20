@@ -28,7 +28,8 @@ module Language.Drasil (
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
   -- Chunk.Constrained
-  , Constrained(..), ConstrainedChunk(..), Constraint(..), physc, sfwrc, constrained, cuc, cvc
+  , Constrained(..), ConstrainedChunk(..), Constraint(..), physc, sfwrc
+  , constrained, cuc, cvc, cuc'
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC
   -- Chunk.Unital

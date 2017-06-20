@@ -83,6 +83,11 @@ cuc :: (Unit u) => String -> NP -> Symbol -> u
                   -> Space -> [Constraint] -> ConstrainedChunk
 cuc i t s u space cs = 
   ConstrainedChunk (unitary i t s u space) cs
+  
+cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u 
+                  -> Space -> [Constraint] -> ConstraintedChunk
+cuc' nam trm desc sym un space cs = 
+  ConstrainedChunk (ucs nam trm desc sym un space) cs
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space 

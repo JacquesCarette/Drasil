@@ -7,6 +7,7 @@ import Language.Drasil
 import Drasil.SSP.Unitals
 import Data.Drasil.SI_Units
 import Data.Drasil.Utils
+import qualified Data.Drasil.Quantities.SolidMechanics as SM
 
 ------------------------
 --  Data Definitions  --
@@ -59,7 +60,13 @@ intersliceWtrF :: QDefinition
 intersliceWtrF = fromEqn' (watrForce ^. id) (watrForce ^. term) (watrForce ^. symbol) intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
-intersliceWtrFEqn = (Int 0)
+intersliceWtrFEqn = Case [case1,case2,case3]
+  where case1 = (((C slopeHght)-(C slipHght )):^(Int 2):/(Int 2) :* (C satWeight) +
+                 ((C waterHght)-(C slopeHght)):^(Int 2) :* (C satWeight),
+                (C waterHght) :> (C slopeHght))
+        case2 = (((C waterHght)-(C slipHght )):^(Int 2):/(Int 2) :* (C satWeight),
+                (C slopeHght) :> (C waterHght) :> (C slipHght))
+        case3 = (Int 0,(C waterHght) :< (C slipHght))
 
 --DD5
 
@@ -136,8 +143,11 @@ netFDsplcmntEqbmEqn = (Int 0)
 --DD14
 
 soilStiffness :: QDefinition
-soilStiffness = fromEqn' (shearFNoIntsl ^. id) (shearFNoIntsl ^. term) (shearFNoIntsl ^. symbol) --FIXME: No equation section? Instead, there are "Input" and "Output" sections
+soilStiffness = fromEqn' (nrmStiffRes ^. id) (nrmStiffRes ^. term) (nrmStiffRes ^. symbol) --FIXME: No equation section? Instead, there are "Input" and "Output" sections
   soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
-soilStiffnessEqn = (Int 0)
+soilStiffnessEqn = (Case [case1,case2])
+  where case1 = (block, (C SM.poissnsR) :< (Int 0))
+        case2 = ((Dbl 0.01) * block + (V "k") / ((C nrmDispl)+(V "A")), (C SM.poissnsR) :>= (Int 0))
+        block = (C intNormForce)*((Int 1)-(C SM.poissnsR))/(((Int 1)+(C SM.poissnsR)) :* ((Int 1) :- (Int 2):*(C SM.poissnsR) :+ (C baseWthX)))

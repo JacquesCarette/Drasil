@@ -99,6 +99,7 @@ makeType S.Rational = float
 makeType S.Real     = float
 makeType S.Boolean  = bool
 makeType S.Integer  = int
+makeType S.Natural  = int --FIXME: not sure if this is what's wanted? Needs design
 makeType S.Char     = char
 makeType S.String   = string
 makeType (S.Obj s)  = Type (makeClassNameValid s)

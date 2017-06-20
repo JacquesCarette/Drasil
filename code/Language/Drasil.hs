@@ -109,7 +109,8 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
 import Language.Drasil.Chunk.Constrained (Constrained(..), ConstrainedChunk(..)
-                                  , Constraint(..), physc, sfwrc, constrained, cuc, cvc )
+                                  , Constraint(..), physc, sfwrc, constrained
+                                  , cuc, cvc, cuc' )
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary

@@ -9,6 +9,7 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
+import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Unit
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
@@ -85,7 +86,7 @@ cuc i t s u space cs =
   ConstrainedChunk (unitary i t s u space) cs
   
 cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u 
-                  -> Space -> [Constraint] -> ConstraintedChunk
+                  -> Space -> [Constraint] -> ConstrainedChunk
 cuc' nam trm desc sym un space cs = 
   ConstrainedChunk (ucs nam trm desc sym un space) cs
 

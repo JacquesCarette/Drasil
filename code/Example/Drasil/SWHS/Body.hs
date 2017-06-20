@@ -884,16 +884,23 @@ s4_2_5_d2endPara = map foldlSP [
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] s4_2_6_conList)
-  (titleize input_ +:+ titleize' variable) True
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
+  s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1]
+s4_2_6_conList = [con1, con2]
 
 con1 :: [Sentence]
 con1 = [getS tank_length, E ((C tank_length) :> (Int 0)),
-  E (((C tank_length) :<= (C tank_length)) :>= (C tank_length)),
+  E $ ((C tank_length) :<= (C tank_length)) :>= (C tank_length),
   E (Dbl 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
+
+con2 :: [Sentence]
+con2 = [getS diam, E ((C diam) :> (Int 0)),
+  E $ ((C diam :/ C tank_length_min) :<=
+  (C diam :/ C tank_length)) :>= (C diam :/ C tank_length_max),
+  E (Dbl 0.412) +:+ (unwrap $ getUnit tank_length), S "10%"]
+-- hack to do proper min and max ratio
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
@@ -901,10 +908,10 @@ s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
 
 
 inputVar :: [QSWrapper]
-inputVar = map qs [diam, pcm_vol, pcm_SA, pcm_density,
+inputVar = map qs [pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P] ++ [qs htFusion] ++ map qs [coil_SA,
   temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-  ++ map qs [tank_length]
+  ++ map qs [tank_length, diam]
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.

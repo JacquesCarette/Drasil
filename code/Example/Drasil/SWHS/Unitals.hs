@@ -8,8 +8,8 @@ import qualified Data.Drasil.Units.Thermodynamics as UT
 import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea, diameter)
-import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol, len)
+import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
+import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Units.PhysicalProperties
 
 import Control.Lens ((^.))
@@ -21,9 +21,9 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) -- ++ (map qs swhsCo
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
-swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P, htCap_S,
-  htCap_S_P, htCap_V, htCap_W, diam, sens_heat, pcm_initMltE, pcm_E, w_E, vol_ht_gen,
-  htTransCoeff, coil_HTC, pcm_HTC, pcm_mass, w_mass, ht_flux, latent_heat,
+swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P,
+  htCap_S, htCap_S_P, htCap_V, htCap_W, sens_heat, pcm_initMltE, pcm_E, w_E,
+  vol_ht_gen, htTransCoeff, coil_HTC, pcm_HTC, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_C, temp_env, time_final, temp_init, melt_pt, t_init_melt,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT,
@@ -31,17 +31,17 @@ swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htC
   map ucw [htFusion, mass, time]
 
 coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
-  htCap_W, htFusion, diam, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC,
+  htCap_W, htFusion, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC,
   pcm_HTC, pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_C, temp_env, time_final, temp_init, t_init_melt,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT,
   pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
-tank_length :: ConstrConcept
+diam, tank_length :: ConstrConcept
 
 swhsConstrained ::[ConstrConcept]
-swhsConstrained = [tank_length]
+swhsConstrained = [diam, tank_length]
 
 --symbol names can't begin with a capital
 
@@ -90,9 +90,6 @@ htCap_W      = uc' "htCap_W"
   "The amount of energy required to raise the temperature of a given unit mass of water by a given amount"
   (sub (heat_cap_spec ^. symbol) cW) UT.heat_cap_spec
 
-diam         = uc' "diam"
-  (diameter `of_` tank) "The diameter of the tank" cD metre
-
 pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
@@ -130,13 +127,6 @@ pcm_HTC      = uc' "pcm_HTC"
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heat_transfer_coef
-
---tank_length  = uc' "tank_length" (len `of_` tank)
---  "The length of the tank" cL metre
-
-tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
-  "The length of the tank" cL metre Rational
-  [physc $ \c -> c :> (Dbl 0)]
 
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
@@ -257,3 +247,30 @@ eta          = cvR (dcc "eta" (nounPhraseSP "ODE parameter")
 melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted") --FIXME: Not sure if definition is exactly correct
   (Greek Phi_L)
+
+-- Constraints --
+
+tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
+  "The length of the tank" cL metre Rational
+  [physc $ \c -> c :> (Dbl 0),
+  sfwrc $ \c -> (((C tank_length_min) :<= (C tank_length)) :>= (C tank_length_max))]
+
+
+diam         = cuc' "diam" (nounPhraseSP "diameter of tank")
+  "The diameter of the tank" cD metre Rational
+  [physc $ \c -> c :> (Dbl 0)]
+
+-- Max / Min Variables --
+
+tank_length_min, tank_length_max :: UnitaryChunk
+
+tank_length_min = unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
+  (sub cL (Atomic "min")) metre Rational
+
+tank_length_max = unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
+  (sub cL (Atomic "max")) metre Rational
+
+-- don't think this will be used
+--diam_len_ratio_min = unitary "diam_len_ratio_min" (nounPhraseSP "minimum diameter to length ratio")
+--  (sub (cD :/ cL) (Atomic "min")) metre Rational
+

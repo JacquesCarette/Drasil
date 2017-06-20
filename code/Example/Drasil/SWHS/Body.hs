@@ -1431,6 +1431,6 @@ ref5 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
   S "and N. Kraiem", S "editors", S "Proceedings of the First" +:+
   S "International Workshop on Situational Requirements Engineering" +:+
   S "Processes - Methods, Techniques and Tools to Support" +:+
-  S "Situation-Specific Requirements Engineering Processes, SREP’05",
+  S "Situation-Specific Requirements Engineering Processes, SREP'05",
   S "pages 107-121", S "Paris", S "France", S "2005. In conjunction with" +:+
   S "13th IEEE International Requirements Engineering Conference."]

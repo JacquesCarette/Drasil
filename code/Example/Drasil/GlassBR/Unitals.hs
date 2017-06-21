@@ -31,10 +31,10 @@ plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thi
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
   [ physc $ \c -> c :> (Dbl 0),
-    physc $ \c -> c :/ (C plate_width) :> (Dbl 1),
+    physc $ \c -> (c :/ (C plate_width)) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> c :/ (C plate_width) :< (C ar_max) ]
+    sfwrc $ \c -> (c :/ (C plate_width)) :< (C ar_max) ]
 
 plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Rational
@@ -42,7 +42,7 @@ plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> (C plate_len) :/ c :< (C ar_max) ]
+    sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ]
 
 pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Rational

@@ -26,31 +26,6 @@ import Prelude hiding (id)
 type System = Sentence
 type DocKind = Sentence
 
--- | Data structure for holding all of the requisite information about a system
--- to be used in artefact generation
-data SystemInformation where
---FIXME:
---There should be a way to remove redundant "Quantity" constraint.
--- I'm thinking for getting concepts that are also quantities, we could
--- use a lookup of some sort from their internal (Drasil) ids.
--- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
--- NP is built into NamedIdea.
- SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
-  Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g, 
-  Quantity h, Quantity i) => {
-  _sys :: a,
-  _kind :: b,
-  _authors :: [c],
-  _units :: [d],
-  _quants :: [e],
-  _concepts :: [f],
-  _namedIdeas :: [g],
-  _definitions :: [QDefinition],
-  _inputs :: [h],
-  _outputs :: [i],
-  _defSequence :: [Block QDefinition]
-  } -> SystemInformation
-
 -- anything with 'Verb' in it should eventually go
 -- | Reference subsections
 data RefTab where 
@@ -97,11 +72,6 @@ data TConvention = Vector Emphasis -- ^ How vectors are emphasized
                  
 data Emphasis = Bold
               | Italics
-
--- | for listing QDefs in SystemInformation
-data Block a = Coupled a a [a]
-           | Parallel a [a]
-
 
 instance Show Emphasis where
   show Bold = "bold"

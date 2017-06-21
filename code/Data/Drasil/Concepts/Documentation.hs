@@ -21,7 +21,7 @@ acroR  numVar = short requirement :+: S numVar
 acroT  numVar = short thModel     :+: S numVar
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
-  physSyst, requirement, srs, thModel, mg, desSpec :: CI
+  physSyst, requirement, srs, thModel, mg, desSpec, notApp :: CI
 --FIXME: Add compound NounPhrases instead of cn'
     --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
 assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
@@ -37,6 +37,7 @@ requirement = commonIdea "requirement" (cn' "requirement")                      
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
 srs         = commonIdea "srs"      (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))   "SRS"
+notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
 
 ---------------------------------------------------------------------
 

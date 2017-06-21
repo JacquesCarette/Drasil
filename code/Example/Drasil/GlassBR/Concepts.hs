@@ -15,12 +15,11 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  lGlass, lResistance, lShareFac, notApp, physSyst, requirement,
-  srs, thModel, eqTNT]
+  lGlass, lResistance, lShareFac, physSyst, requirement, srs,
+  thModel, eqTNT]
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
-  iGlass, lGlass, lResistance, lShareFac, notApp,
-  eqTNT, gLassBR :: CI
+  iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR :: CI
 
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
@@ -35,7 +34,6 @@ iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")    
 lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
 lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"
 lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
-notApp        = commonIdea "notApp"        (nounPhraseSP "not applicable")          "N/A"
 eqTNT         = commonIdea "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
 

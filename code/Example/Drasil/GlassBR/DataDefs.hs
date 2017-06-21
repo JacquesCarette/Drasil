@@ -9,9 +9,15 @@ import Drasil.GlassBR.Unitals
 --FIXME: having id "" and term "" is completely bogus, and should not
 --  be allowed.  This implicitly says that something here does not make sense.
 
+----------------------
+-- DATA DEFINITIONS --
+----------------------
+
 dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
+
+--DD1--
 
 risk :: QDefinition
 risk = fromEqn' (risk_fun ^. id) (nounPhraseSP "risk of failure") 
@@ -23,6 +29,8 @@ risk_eq = ((C sflawParamK) :/ (Grouping (((C plate_len) :/ (Int 1000)) :*
   (Grouping ((Grouping ((C mod_elas) :* (Int 1000))) :* 
   (Grouping ((C act_thick) :/ (Int 1000))) :^ (Int 2))) :^ (C sflawParamM) :* 
   (C loadDF) :* (exp (C stressDistFac))
+
+--DD2--
 
 hFromt_eq :: Relation
 hFromt_eq = (Case (zipWith hFromt_helper
@@ -39,6 +47,8 @@ hFromt = fromEqn (act_thick ^. id)
   "in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   (act_thick ^.symbol) millimetre hFromt_eq
 
+--DD3--
+
 loadDF_eq :: Expr 
 loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 
@@ -48,6 +58,8 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 loadDF :: QDefinition
 loadDF = fromEqn' ("lDurFac") (nounPhraseSP "load duration factor") (Atomic "LDF") loadDF_eq
 
+--DD4--
+
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
@@ -55,12 +67,16 @@ strDisFac :: QDefinition
 strDisFac = fromEqn' (stressDistFac ^. id) (stressDistFac ^. term) (stressDistFac ^. symbol) 
   strDisFac_eq
 
+--DD5--
+
 nonFL_eq :: Expr
 nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
 nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
+
+--DD6--
 
 glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
@@ -73,6 +89,8 @@ glaTyFac = fromEqn' (glassTypeFac_ ^. id) (nounPhraseSP $
   "FT is fully tempered glass. HS is heat strengthened glass.") (Atomic "GTF") 
   glaTyFac_eq
 
+--DD7--
+
 dimLL_eq :: Expr
 dimLL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
@@ -81,12 +99,16 @@ dimLL :: QDefinition
 dimLL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
   (dimlessLoad ^. symbol) dimLL_eq
 
+--DD8--
+
 tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
 tolPre :: QDefinition
 tolPre = fromEqn' (tolLoad ^. id) (tolLoad ^. term) (tolLoad ^. symbol) 
   tolPre_eq
+
+--DD9--
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))

@@ -16,10 +16,10 @@ acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
   lGlass, lResistance, lShareFac, physSyst, requirement, srs,
-  thModel, eqTNT]
+  thModel, eqTNT, stdOffDist]
 
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
-  iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR :: CI
+  iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist :: CI
 
 --FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
@@ -36,6 +36,7 @@ lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")     
 lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
 eqTNT         = commonIdea "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
+stdOffDist    = commonIdea "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

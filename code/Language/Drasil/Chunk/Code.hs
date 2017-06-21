@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeEntity(..), CodeName(..)
+    CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
+    codevar, qtoc, codeEquat
   ) where
 
 import Control.Lens
@@ -8,17 +9,27 @@ import Control.Lens
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Space as S
+import Language.Drasil.Code.Code as G (CodeType(..))
 
+import Language.Drasil.Expr
+import Language.Drasil.Unicode
+import Language.Drasil.Spec
+import Language.Drasil.Symbol
+import Language.Drasil.NounPhrase
+
+import Data.String.Utils (replace)
 import Prelude hiding (id)
 
+-- not using lenses for now
 class (Chunk c) => CodeIdea c where
-  codeName      :: Simple Lens c String
+  codeName      :: c -> String
 
 class (CodeIdea c, Quantity c) => CodeEntity c where
-  codeType      :: Simple Lens c CodeType
+  codeType      :: c -> CodeType
 
 data CodeName where
   SFCN :: (SymbolForm c) => c -> CodeName
@@ -29,21 +40,25 @@ instance Chunk CodeName where
 instance CodeIdea CodeName where
   -- want to take symbol lens from SymbolForm and apply symbToCodeName to it
   -- to make codeName lens for CodeName
-  codeName f sfcn@(SFCN _) = sfcnlens symbol f sfcn  
+  codeName (SFCN c) = symbToCodeName (c ^. symbol)
   -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
   -- to make codeName lens for CodeName
-  codeName f nicn@(NICN _) = nicnlens term f nicn
+  codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
 instance Eq CodeName where
   c1 == c2 = 
     (c1 ^. id) == (c2 ^. id)
 
-sfcnlens :: (forall c. (SymbolForm c) => Simple Lens c a) 
-             -> Simple Lens CodeName a
-sfcnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
+cnlens :: (forall c. (Chunk c) => Simple Lens c a) 
+           -> Simple Lens CodeName a
+cnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
+cnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
+--sfcnlens :: (forall c. (SymbolForm c) => Simple Lens c a) 
+--             -> Simple Lens CodeName a
+--sfcnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
 
-nicnlens :: (forall c. (NamedIdea c) => Simple Lens c a) 
-             -> Simple Lens CodeName a
-nicnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
+--nicnlens :: (forall c. (NamedIdea c) => Simple Lens c a) 
+--             -> Simple Lens CodeName a
+--nicnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
   
 
 sentenceToCodeName :: Sentence -> String
@@ -138,4 +153,108 @@ toCodeName s =
     in foldl varNameReplace s illegalChars
     where  varNameReplace :: String -> String -> String
            varNameReplace l old = replace old "_" l
+
+
+data CodeChunk where
+  CodeChunk :: (Quantity c, SymbolForm c) => c -> CodeChunk
+  
+instance Chunk CodeChunk where
+  id = qslens id
+instance NamedIdea CodeChunk where
+  term = qslens term
+  getA (CodeChunk n) = getA n
+instance SymbolForm CodeChunk where
+  symbol = qslens symbol
+instance Quantity CodeChunk where
+  typ = qslens typ
+  getSymb (CodeChunk c) = getSymb c
+  getUnit (CodeChunk c) = getUnit c
+instance CodeIdea CodeChunk where
+  codeName (CodeChunk c) = symbToCodeName (c ^. symbol)
+instance CodeEntity CodeChunk where
+  codeType (CodeChunk c) = spaceToCodeType (c ^. typ)
+instance Eq CodeChunk where
+  (CodeChunk c1) == (CodeChunk c2) = 
+    (c1 ^. id) == (c2 ^. id)
+
+qslens :: (forall c. (Quantity c, SymbolForm c) => Simple Lens c a) 
+           -> Simple Lens CodeChunk a
+qslens l f (CodeChunk a) = 
+  fmap (\x -> CodeChunk (set l x a)) (f (a ^. l))
+  
+  
+codevar :: (Quantity c, SymbolForm c) => c -> CodeChunk
+codevar = CodeChunk
+  
+  
            
+data CodeDefinition where
+  CodeDefinition :: (CodeEntity c, SymbolForm c) => c -> Expr -> CodeDefinition
+  
+instance Chunk CodeDefinition where
+  id = qscdlens id
+instance NamedIdea CodeDefinition where
+  term = qscdlens term
+  getA (CodeDefinition n _) = getA n
+instance SymbolForm CodeDefinition where
+  symbol = qscdlens symbol
+instance Quantity CodeDefinition where
+  typ = qscdlens typ
+  getSymb (CodeDefinition c _) = getSymb c
+  getUnit (CodeDefinition c _) = getUnit c
+instance CodeIdea CodeDefinition where
+  codeName (CodeDefinition c _) = codeName c
+instance CodeEntity CodeDefinition where
+  codeType (CodeDefinition c _) = codeType c
+instance Eq CodeDefinition where
+  (CodeDefinition c1 _) == (CodeDefinition c2 _) = 
+    (c1 ^. id) == (c2 ^. id)
+
+qscdlens :: (forall c. (Quantity c, SymbolForm c) => Simple Lens c a) 
+            -> Simple Lens CodeDefinition a
+qscdlens l f (CodeDefinition a b) = 
+  fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l)) 
+  
+qtoc :: QDefinition -> CodeDefinition
+qtoc (EC q e) = CodeDefinition (codevar q) e
+
+codeEquat :: CodeDefinition -> Expr
+codeEquat (CodeDefinition _ e) = e 
+
+
+
+spaceToCodeType :: Space -> CodeType
+spaceToCodeType S.Integer = G.Integer
+spaceToCodeType S.Natural = G.Integer
+spaceToCodeType S.Real = G.Float
+spaceToCodeType S.Rational = G.Float
+spaceToCodeType S.Boolean = G.Boolean
+spaceToCodeType S.Char = G.Char
+spaceToCodeType S.String = G.String
+spaceToCodeType (S.Vect s) = G.List (spaceToCodeType s)
+spaceToCodeType (S.Obj n) = G.Object (toCodeName n) 
+
+-- codeExpr :: Expr -> Expr
+-- codeExpr (a :/ b)     = (codeExpr a) :/ (codeExpr b)
+-- codeExpr (a :* b)     = (codeExpr a) :* (codeExpr b)
+-- codeExpr (a :+ b)     = (codeExpr a) :+ (codeExpr b)
+-- codeExpr (a :^ b)     = (codeExpr a) :^ (codeExpr b)
+-- codeExpr (a :- b)     = (codeExpr a) :- (codeExpr b)
+-- codeExpr (a :. b)     = (codeExpr a) :. (codeExpr b)
+-- codeExpr (a :&& b)    = (codeExpr a) :&& (codeExpr b)
+-- codeExpr (a :|| b)    = (codeExpr a) :|| (codeExpr b)
+-- codeExpr (Deriv a b c) = Deriv (codeExpr a) (codeExpr b) (codeExpr c)
+-- codeExpr (Not e)      = Not (codeExpr e)
+-- codeExpr (Neg e)      = Neg (codeExpr e)
+-- codeExpr (C c)        = C (SFCN c)
+-- codeExpr (FCall f x)  = FCall (codeExpr f) (map codeExpr x)
+-- codeExpr (Case ls)    = Case (map (\(x,y) -> (codeExpr x, codeExpr y)) ls)
+-- codeExpr (a := b)     = (codeExpr a) := (codeExpr b)
+-- codeExpr (a :!= b)    = (codeExpr a) :!= (codeExpr b)
+-- codeExpr (a :> b)     = (codeExpr a) :> (codeExpr b)
+-- codeExpr (a :< b)     = (codeExpr a) :< (codeExpr b)
+-- codeExpr (a :<= b)    = (codeExpr a) :<= (codeExpr b)
+-- codeExpr (a :>= b)    = (codeExpr a) :>= (codeExpr b)
+-- codeExpr (UnaryOp u)  = codeExpr (unpack u) m
+-- codeExpr (Grouping e) = Grouping (codeExpr e)
+-- codeExpr (BinaryOp b) = nub (concat $ map (\x -> codeExpr x m) (binop b))

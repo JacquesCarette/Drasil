@@ -26,12 +26,12 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 gbConstrained :: [ConstrainedChunk]
 gbConstrained = gbInputs ++ [prob_br]
 
-plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick, prob_br :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick, glass_type, prob_br :: ConstrainedChunk
 
 {--}
 
 gbInputs :: [ConstrainedChunk]
-gbInputs = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick]
+gbInputs = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick, glass_type]
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -72,7 +72,10 @@ nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
                   :|| (c := (V "5.0")) :|| (c := (V "6.0")) :|| (c := (V "8.0")) :|| (c := (V "10.0"))
                   :|| (c := (V "12.0")) :|| (c := (V "16.0")) :|| (c := (V "19.0")) :|| (c := (V "22.0")) ]
 
---glass_type??? see Issue #299
+glass_type  = cvc "glass_type"    (nounPhraseSP "glass type, g in {AN, HS, FT}")
+  lG String
+  [ physc $ \c -> (c := (V "AN")) :|| (c := (V "HS")) :|| (c := (V "FT")) ]
+--FIXME:Creating variables increases duplication; find a way to incorporate preexisting chunks in constraints
 
 {--}
 
@@ -127,17 +130,15 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol,
+glassBRUnitless = [ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF]
 
-ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol,
+ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
 risk_fun    = makeVC "risk_fun"      (nounPhraseSP "risk of failure") cB
-glass_type  = vc "glass_type"    (nounPhraseSP "glass type, g in {AN, HS, FT}")
-  lG String
 is_safe1    = vc "is_safe1"      (nounPhraseSP $ "true when calculated probability is " ++
   "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
   Atomic "safe1"]) Boolean

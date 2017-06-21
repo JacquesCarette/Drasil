@@ -165,8 +165,8 @@ mul a b         = p_expr a ++ p_expr b
 divide :: Expr -> Expr -> String
 divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Add _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions

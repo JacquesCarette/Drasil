@@ -6,13 +6,17 @@ import Drasil.NoPCM.TMods
 import Drasil.NoPCM.Definitions
 import Drasil.NoPCM.Unitals
 
+import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
+  s3, physSyst1, physSyst2, s4_2_4_intro_end)
+import Drasil.SWHS.Concepts (progName)
+
 import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
 import Data.Drasil.Utils(enumSimple, listConstS, getS, unwrap)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, equation)
+import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.PhysicalProperties (liquid, vol)
 import Data.Drasil.Concepts.Physics (energy, mech_energy, time)
@@ -20,25 +24,23 @@ import Data.Drasil.Concepts.Thermodynamics (heat, thermal_analysis, thermal_ener
   heat_trans, law_conv_cooling, melt_pt, boil_pt)
 import Data.Drasil.Units.Thermodynamics
 import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
-import Data.Drasil.Software.Products (sciCompS)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.Requirements
-import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
-s3, s3_1, s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
+s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
   s5, s5_1, s5_2, s6, s7 :: Section
 
-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, s4_1_intro, s4_1_1_bullets, 
-  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, s4_2_3_intro, s4_2_4_intro, 
+s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
+  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, s4_2_3_intro, s4_2_4_intro,
   s4_2_5_intro, s4_2_6_table1, s4_2_6_table2:: Contents
 
 -------------------------------
@@ -48,12 +50,12 @@ s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, s4_1_intro, s4_1_1_bullets,
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb [TSPurpose, SymbConvention 
-  [Lit (nw ht_trans), Doc' (nw sWHS)], SymbOrder], TAandA]) : 
+  [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) : 
   IntroSec (IntroProg s2s s2e 
   [IPurpose s2_1,
   IScope s2_2s s2_2e,
-  IChar s2_3kn s2_3un EmptyS,
-  IOrgSec s2_4s inModel (SRS.inModel SRS.missingP []) s2_4e]) :
+  IChar s2_3_knowlegde s2_3_understanding EmptyS,
+  IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4e]) :
   map Verbatim [s3, s4, s5, s6, s7]  
         
 pcm_si :: SystemInformation
@@ -73,18 +75,18 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2s, s2e, s2_1, s2_2s, s2_2e, s2_3kn, s2_3un, s2_4s, s2_4e :: Sentence
+s2s, s2e, s2_1, s2_2s, s2_2e, {-s2_3kn, s2_3un, s2_4s, -}s2_4e :: Sentence
 
 s2s = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   phrase energy, plural source, S "and",
-  phrase energy +:+. S "storage technology", (plural sWHS),
+  phrase energy +:+. S "storage technology", (plural progName),
   S "provide a novel way of storing", phrase energy]
 
-s2e = foldlSent_ [EmptyS +:+. plural sWHS, S "The developed",
-  phrase program, S "will be referred to as", titleize sWHS,
-  sParen (short sWHS)]
+s2e = foldlSent_ [EmptyS +:+. plural progName, S "The developed",
+  phrase program, S "will be referred to as", titleize progName,
+  sParen (short progName)]
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT
@@ -92,8 +94,8 @@ s2e = foldlSent_ [EmptyS +:+. plural sWHS, S "The developed",
 
 s2_1 = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
-  phrase sWHS, S "The", plural goal, S "and", plural thModel,
-  S "used in the", short sWHS, S "code are provided, with an emphasis",
+  phrase progName, S "The", plural goal, S "and", plural thModel,
+  S "used in the", short progName, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
   plural definition, S "This", phrase document,
   S "is intended to be used as a", phrase reference,
@@ -117,14 +119,14 @@ s2_2e = foldlSent_ [S "predict the",
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER
 --------------------------------------------------
 
-s2_3kn = foldlSent_ [phrase heat, S "transfer" +:+. phrase theory,
+{-s2_3kn = foldlSent_ [phrase heat, S "transfer" +:+. phrase theory,
   S "A third or fourth year Mechanical Engineering course on this topic",
   S "is recommended"]
 
 s2_3un = foldlSent_ [S "differential", plural equation `sC`
   S "as typically covered in first and second year Calculus courses"]
 
-{-s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
+s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
   (SRS.userChar SRS.missingP [])
   -- FIXME: referencing this for now until we figure out how to reference
   -- auto-generated section (section 3.2)
@@ -140,17 +142,17 @@ s2_3un = foldlSent_ [S "differential", plural equation `sC`
 --Section 2.4: ORGANIZATION OF DOCUMENT
 ---------------------------------------
 
-s2_4s = foldlSent [S "The", phrase organization, S "of this",
+{-s2_4s = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by [2] and",
-  sSqBr (S "5")]
+  sSqBr (S "5")]-}
 
 s2_4e = foldlSent_ [S "The", phrase inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM "1",
   S "The", phrase inModel, S "provides the", 
-  titleize ode, sParen (short ode), S "that model the" +:+. phrase sWHS,
-  short sWHS, S "solves this", short ode]
+  titleize ode, sParen (short ode), S "that model the" +:+. phrase progName,
+  short progName, S "solves this", short ode]
                         
 
                         
@@ -158,7 +160,9 @@ s2_4e = foldlSent_ [S "The", phrase inModel,
 --Section 3 : GENERAL SYSTEM DESCRIPTION
 ----------------------------------------
 
-s3 = genSysF [s3_1] s3_2_intro [] []
+--ALL OF THIS SECTION IS NOW PULLED FROM SWHS
+
+--s3 = genSysF [s3_1] s3_2_intro [] []
 --TODO: If/when system constraints recieves any content, add s3_3_intro
 --to the first empty list
 
@@ -166,32 +170,32 @@ s3 = genSysF [s3_1] s3_2_intro [] []
 --Section 3.1 : SYSTEM CONTEXT
 ------------------------------
 
-s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
+{-s3_1 = SRS.sysCont [s3_1_intro, sys_context_fig] []
 
 s3_1_intro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user,
   S "in this case. A rectangle represents the", phrase softwareSys,
-  S "itself" +:+. sParen (getAcc sWHS), S "Arrows are used to show the",
+  S "itself" +:+. sParen (getAcc progName), S "Arrows are used to show the",
   plural datum, S "flow between the", phrase section_,
   S "and its", phrase environment]
             
 sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
-  titleize sysCont) "SystemContextFigure.png"
+  titleize sysCont) "SystemContextFigure.png"-}
   
 ------------------------------------
 --Section 3.2 : USER CHARACTERISTICS
 ------------------------------------
 
-s3_2_intro = foldlSP [S "The end", phrase user, S "of",
-  short sWHS, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus and", titleize physics]
+{-s3_2_intro = foldlSP [S "The end", phrase user, S "of",
+  short progName, S "should have an understanding of undergraduate",
+  S "Level 1 Calculus and", titleize physics]-}
 
 ----------------------------------
 --Section 3.3 : SYSTEM CONSTRAINTS
 ----------------------------------
 
-s3_3_intro = Paragraph $ EmptyS
+--s3_3_intro = Paragraph $ EmptyS
 
 --TODO: Placeholder value until content can be added
 
@@ -213,7 +217,7 @@ s4 = specSysDesF words_ [s4_1, s4_2]
           
 s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_intro = foldlSP [getAcc sWHS, S "is a computer",
+s4_1_intro = foldlSP [getAcc progName, S "is a computer",
   phrase program, S "developed to investigate",
   S "the heating of", phrase water, S "in a", phrase sWHT]
 
@@ -223,17 +227,13 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $
   (at_start x) :+: S ":" +:+ (x ^. defn)) 
   [thermal_flux, heat_cap_spec])
   
-s4_1_2 = physSystDesc (getAcc sWHS) fig_tank [s4_1_2_list, fig_tank]
+s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
 
 fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil +:+ S "of" +:+ getS ht_flux_C)
   "TankWaterOnly.png"
   
-s4_1_2_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
-  (acroPS "1", at_start tank +:+ S "containing" +:+ phrase water), 
-  (acroPS "2", foldlSent [S "Heating", phrase coil, S "at bottom of", phrase tank] +:+
-  sParen (foldlSent [getS ht_flux_C, S "represents the", phrase ht_flux_C,
-  S "into the", phrase water]))]
+s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1, physSyst2]
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
@@ -249,7 +249,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF sWHS (s4_1, s6) True EmptyS ((makeRef s4_2_6_table1 +:+
+s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end ((makeRef s4_2_6_table1 +:+
   S "and" +:+ makeRef s4_2_6_table2 +:+ S "show"), EmptyS, False, EmptyS)
   ([s4_2_1_list], s4_2_2_TMods, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro],
   [s4_2_6_table1, s4_2_6_table2]) []
@@ -350,7 +350,7 @@ con3 = [getS coil_SA, E ((C coil_SA) :> (Int 0)) +:+ sParen (S "*"),
   E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
-  titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ map
+  titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] $ map
   (listConstS) []) (titleize table_ +: S "2" +:+ titleize output_ +:+
   titleize' variable) True
     

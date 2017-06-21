@@ -158,6 +158,15 @@ executable nopcm
     , Drasil.NoPCM.TMods
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.Unitals
+    , Drasil.SWHS.Body
+    , Drasil.SWHS.Concepts
+    , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.Changes
+    , Drasil.SWHS.Modules
+    , Drasil.SWHS.Reqs
+    , Drasil.SWHS.TMods
+    , Drasil.SWHS.Unitals
+    , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms

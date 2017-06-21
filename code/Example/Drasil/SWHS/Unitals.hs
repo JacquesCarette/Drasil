@@ -11,42 +11,40 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Units.PhysicalProperties
+import Data.Drasil.Utils (unwrap)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
 
 swhsSymbols :: [CQSWrapper]
-swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) -- ++ (map qs swhsConstrained)
+swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsConstrained)
 
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
-swhsUnits = map ucw [coil_SA, in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P,
+swhsUnits = map ucw [in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P,
   htCap_S, htCap_S_P, htCap_V, htCap_W, sens_heat, pcm_initMltE, pcm_E, w_E,
   vol_ht_gen, htTransCoeff, coil_HTC, pcm_HTC, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
-  boil_pt, temp_C, temp_env, time_final, temp_init, melt_pt, t_init_melt,
+  boil_pt, temp_env, time_final, temp_init, melt_pt, t_init_melt,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT,
-  density, pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W] ++
-  map ucw [htFusion, mass, time]
+  density, pcm_density, tau, tau_L_P, tau_S_P, tau_W] ++
+  map ucw [htFusion, mass, time] -- ++ [tank_length, diam, coil_SA]
 
-coil_SA, in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
+in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
   htCap_W, htFusion, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC,
   pcm_HTC, pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
-  temp_C, temp_env, time_final, temp_init, t_init_melt,
+  temp_env, time_final, temp_init, t_init_melt,
   t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT,
-  pcm_density, w_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
+  pcm_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
-diam, tank_length :: ConstrConcept
 
-swhsConstrained ::[ConstrConcept]
-swhsConstrained = [diam, tank_length]
+---------------------
+-- Regular Symbols --
+---------------------
 
 --symbol names can't begin with a capital
-
-coil_SA      = uc' "coil_SA" (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
-  "Area covered by the outermost layer of the coil"(sub cA cC) m_2
 
 in_SA        = uc' "in_SA" (nounPhraseSP
   "surface area over which heat is transferred in")
@@ -58,7 +56,9 @@ out_SA       = uc' "out_SA" (nounPhraseSP
   "Surface area over which thermal energy is transferred out of an object"
   (sub cA (Atomic "out")) m_2
 
-pcm_SA       = uc' "pcm_SA" (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl) CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
+pcm_SA       = uc' "pcm_SA"
+  (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl) CapFirst CapWords)
+  (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the phase change material" (sub cA cP) m_2
 
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
@@ -72,7 +72,8 @@ htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP
 
 htCap_S      = uc' "htCap_S"
   (nounPhraseSP "specific heat capacity of a solid")
-  "The amount of energy required to raise the temperature of a given unit mass of a given solid by a given amount"
+  ("The amount of energy required to raise the temperature of" ++
+  "a given unit mass of a given solid by a given amount")
   (sup (heat_cap_spec ^. symbol) cS) UT.heat_cap_spec
 
 htCap_S_P    = uc' "htCap_S_P"
@@ -107,7 +108,8 @@ vol_ht_gen   = uc' "vol_ht_gen"
 
 htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
-  "The proportionality constant between the heat flux and the thermodynamic driving force for the flow of thermal energy"
+  ("The proportionality constant between the heat flux and the" ++
+  "thermodynamic driving force for the flow of thermal energy")
   lH UT.heat_transfer_coef
 
 coil_HTC     = uc' "coil_HTC" (nounPhraseSP
@@ -159,9 +161,6 @@ ht_flux_P    = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water"
 latentE_P    = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, during a constant-temperature " ++
   "process and absorbed by the phase change material") (sub (latent_heat ^. symbol) cP) joule
-
-temp_C       = uc' "temp_C" (nounPhraseSP "temperature of the heating coil")
-  "The average kinetic energy of the particles within the coil" (sub (temp ^. symbol) cC) centigrade
 
 temp_env     = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment" (sub (temp ^. symbol) (Atomic "env")) centigrade
@@ -215,9 +214,6 @@ pcm_density  = uc' "pcm_density" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (sub (density ^. symbol) cP) densityU
 
-w_density    = uc' "w_density" (density `of_` water)
-  "Mass per unit volume of water" (sub (density ^. symbol) cW) densityU
-
 tau          = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second
 --Not sure how to define anything after this point
@@ -234,8 +230,9 @@ tau_W        = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
   "Derived parameter based on rate of change of temperature of water"
   (sub (Greek Tau_L) cW) second
 
+----------------------
 -- Unitless symbols --
-
+----------------------
 swhsUnitless :: [ConVar]
 swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
@@ -248,29 +245,62 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted") --FIXME: Not sure if definition is exactly correct
   (Greek Phi_L)
 
+-----------------
 -- Constraints --
+-----------------
+
+diam, tank_length, coil_SA, temp_C, w_density :: ConstrConcept
+
+swhsConstrained ::[ConstrConcept]
+swhsConstrained = [diam, tank_length, coil_SA, temp_C, w_density]
 
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
-  [physc $ \c -> c :> (Dbl 0),
-  sfwrc $ \c -> (((C tank_length_min) :<= (C tank_length)) :>= (C tank_length_max))]
-
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C tank_length_min :<= c :<= C tank_length_max]
 
 diam         = cuc' "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
-  [physc $ \c -> c :> (Dbl 0)]
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> (c :/ C tank_length_max) :<=
+  (c :/ C tank_length) :<= (c :/ C tank_length_min)]
 
+coil_SA      = cuc' "coil_SA"
+  (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords)
+  (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
+  "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> c :<= C coil_SA_max]
+
+temp_C       = cuc' "temp_C" (nounPhraseSP "temperature of the heating coil")
+  "The average kinetic energy of the particles within the coil"
+  (sub (temp ^. symbol) cC) centigrade Rational
+  [physc $ \c -> Int 0 :< c :< Int 100]
+
+w_density    = cuc' "w_density" (density `of_` water)
+  "Mass per unit volume of water" (sub (density ^. symbol) cW) densityU Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C w_density_min :< c :<= C w_density_max]
+
+-------------------------
 -- Max / Min Variables --
+-------------------------
 
-tank_length_min, tank_length_max :: UnitaryChunk
+tank_length_min, tank_length_max, coil_SA_max,
+  w_density_min, w_density_max :: UnitaryChunk
 
 tank_length_min = unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
-  (sub cL (Atomic "min")) metre Rational
+  (sub (tank_length ^. symbol) (Atomic "min")) metre Rational
 
 tank_length_max = unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
-  (sub cL (Atomic "max")) metre Rational
+  (sub (tank_length ^. symbol) (Atomic "max")) metre Rational
 
--- don't think this will be used
---diam_len_ratio_min = unitary "diam_len_ratio_min" (nounPhraseSP "minimum diameter to length ratio")
---  (sub (cD :/ cL) (Atomic "min")) metre Rational
+coil_SA_max = unitary "coil_SA_max" (nounPhraseSP "maximum surface area of coil")
+  (sub (coil_SA ^. symbol) (Atomic "max")) metre Rational
+
+w_density_min = unitary "w_density_min" (nounPhraseSP "minimum density of water")
+  (sub (w_density ^. symbol) (Atomic "min")) metre Rational
+
+w_density_max = unitary "w_density_max" (nounPhraseSP "maximum density of water")
+  (sub (w_density ^. symbol) (Atomic "max")) metre Rational
 

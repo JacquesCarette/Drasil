@@ -68,7 +68,7 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [ TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA ]):
+  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
   IntroSec (IntroProg (s2_intro) (s2_kSent) [
   IPurpose (s2_1_par1),
   IScope (s2_2_contents) (s2_2_end),
@@ -891,30 +891,41 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1, con2]
+s4_2_6_conList = [con1, con2, con10, con11, con12]
 
-con1 :: [Sentence]
-con1 = [getS tank_length, E ((C tank_length) :> (Int 0)),
-  E $ ((C tank_length) :<= (C tank_length)) :>= (C tank_length),
+con1, con2, con10, con11, con12 :: [Sentence]
+
+con1 = [getS tank_length, E $ C tank_length :> Int 0,
+  E $ C tank_length_min :<= C tank_length :<= C tank_length_max,
   E (Dbl 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
 
-con2 :: [Sentence]
-con2 = [getS diam, E ((C diam) :> (Int 0)),
-  E $ ((C diam :/ C tank_length_min) :<=
-  (C diam :/ C tank_length)) :>= (C diam :/ C tank_length_max),
-  E (Dbl 0.412) +:+ (unwrap $ getUnit tank_length), S "10%"]
+con2 = [getS diam, E $ C diam :> Int 0,
+  E $ (C diam :/ C tank_length_max) :<=
+  (C diam :/ C tank_length) :<= (C diam :/ C tank_length_min),
+  E (Dbl 0.412) +:+ (unwrap $ getUnit diam), S "10%"]
 -- hack to do proper min and max ratio
+
+con10 = [getS coil_SA, E (C coil_SA :> Int 0) +:+ sParen (S "*"),
+  E $ C coil_SA :<= C coil_SA_max,
+  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
+
+con11 = [getS temp_C, E (Int 0 :< C temp_C :< Int 100) +:+ sParen (S "+"),
+  S "N/A", E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
+
+con12 = [getS w_density, E $ C w_density :> Int 0,
+  E $ C w_density_min :< C w_density :<= C w_density_max,
+  E (Int 1000) +:+ (unwrap $ getUnit w_density), S "10%"]
+
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
   [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "2") True
 
-
 inputVar :: [QSWrapper]
 inputVar = map qs [pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P] ++ [qs htFusion] ++ map qs [coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-  ++ map qs [tank_length, diam]
+  temp_melt_P, htCap_S_P, htCap_L_P] ++ [qs htFusion] ++ map qs
+  [htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+  ++ map qs [tank_length, diam, coil_SA, temp_C, w_density]
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.

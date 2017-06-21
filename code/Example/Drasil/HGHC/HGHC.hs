@@ -24,7 +24,8 @@ modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,
   mod_ctrl]
   
 thisSI :: SystemInformation
-thisSI = SI hghc srs [spencerSmith] si_units symbols ([] :: [UCWrapper]) ([] :: [CI]) ([] :: [Block QDefinition])
+thisSI = SI hghc srs [spencerSmith] si_units symbols ([] :: [UCWrapper]) ([] :: [CI]) 
+  ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper]) ([] :: [Block QDefinition])
   
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]

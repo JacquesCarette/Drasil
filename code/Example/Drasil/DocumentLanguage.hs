@@ -36,7 +36,8 @@ data SystemInformation where
 -- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
 -- NP is built into NamedIdea.
  SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
-  Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g, NamedIdea h) => {
+  Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g, 
+  Quantity h, Quantity i) => {
   _sys :: a,
   _kind :: b,
   _authors :: [c],
@@ -44,7 +45,10 @@ data SystemInformation where
   _quants :: [e],
   _concepts :: [f],
   _namedIdeas :: [g],
-  _definitions :: [Block h]
+  _definitions :: [QDefinition],
+  _inputs :: [h],
+  _outputs :: [i],
+  _defSequence :: [Block QDefinition]
   } -> SystemInformation
 
 -- anything with 'Verb' in it should eventually go
@@ -128,12 +132,12 @@ type DocDesc = [DocSection]
 
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI sys kind authors _ _ _ _ _) = Document 
+mkDoc l si@(SI sys kind authors _ _ _ _ _ _ _ _) = Document 
   (kind `for` sys) (manyNames authors) (mkSections si l)
 
 -- | Similar to 'makeDoc', but for when we want to use the short form for titles.  
 mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
-mkDoc' l comb si@(SI sys kind authors _ _ _ _ _) = Document 
+mkDoc' l comb si@(SI sys kind authors _ _ _ _ _ _ _ _) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
 -- | Helper for creating the document sections
@@ -151,13 +155,13 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _ _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
-    mkSubRef (SI _ _ _ u _ _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
-    mkSubRef (SI _ _ _ _ v _ _ _) (TSymb con) l' = 
+    mkSubRef (SI _ _ _ u _ _ _ _ _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
+    mkSubRef (SI _ _ _ u _ _ _ _ _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
+    mkSubRef (SI _ _ _ _ v _ _ _ _ _ _) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table (sort v) at_start)])) : l'
-    mkSubRef (SI _ _ _ _ _ cccs _ _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
-    mkSubRef (SI _ _ _ _ v cccs n _) TAandA l' = (table_of_abb_and_acronyms $ 
+    mkSubRef (SI _ _ _ _ _ cccs _ _ _ _ _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
+    mkSubRef (SI _ _ _ _ v cccs n _ _ _ _) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
@@ -249,9 +253,9 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro :: SystemInformation -> IntroSub -> [Section] -> [Section]
     mkSubIntro _ (IVerb s) l' = s : l'
     mkSubIntro _ (IPurpose intro) l' = Intro.purposeOfDoc intro : l'
-    mkSubIntro (SI sys _ _ _ _ _ _ _) (IScope main intendedPurp) l' = 
+    mkSubIntro (SI sys _ _ _ _ _ _ _ _ _ _) (IScope main intendedPurp) l' = 
       Intro.scopeOfRequirements main sys intendedPurp : l'
-    mkSubIntro (SI sys _ _ _ _ _ _ _) (IChar know understand appStandd) l' =
+    mkSubIntro (SI sys _ _ _ _ _ _ _ _ _ _) (IChar know understand appStandd) l' =
       Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] []) : l'
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated

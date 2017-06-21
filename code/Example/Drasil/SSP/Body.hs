@@ -63,7 +63,8 @@ this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbols (sspSymbols) acronyms [Parallel (head sspDataDefs) sspDataDefs]
+  this_si sspSymbols (sspSymbols) acronyms ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper])
+  [Parallel (head sspDataDefs) sspDataDefs]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro

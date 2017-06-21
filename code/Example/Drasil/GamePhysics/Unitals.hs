@@ -11,6 +11,11 @@ import Data.Drasil.Units.Physics
 import Control.Lens((^.))
 
 ----- Table of Symbols -----
+inputSymbols, outputSymbols :: [QSWrapper]
+inputSymbols = map qs [QP.gravitationalConst, QPP.mass, QP.position, QP.velocity]
+
+outputSymbols = map qs [QP.position, QP.velocity]
+
 
 cpSymbols :: [QSWrapper]
 cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++ 

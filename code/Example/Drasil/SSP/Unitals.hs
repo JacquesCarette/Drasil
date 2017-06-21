@@ -13,8 +13,8 @@ sspSymbols = (map cqs sspConstrained) ++ (map cqs sspUnits) ++ (map cqs sspUnitl
 -- Imported UnitalChunks --
 ---------------------------
 {-
-SM.elastMod, SM.mobShear, SM.shearRes, SM.stffness
-SM.poissnsR <- ConVar
+SM.mobShear, SM.shearRes, SM.stffness
+SM.poissnsR, SM.elastMod <- ConstrainedChunks
 -}
 normStress = SM.nrmStrss
 genForce = uc CP.force cF newton 
@@ -31,22 +31,22 @@ fisi  = "for interslice index i"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained :: [ConstrConcept]
-sspConstrained = [intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight,
-  satWeight, waterWeight, fs, dx_i, dy_i]
+sspConstrained, sspInputs, sspOutputs :: [ConstrConcept]
+sspConstrained = sspInputs ++ sspOutputs
+sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
+              satWeight, waterWeight]
+sspOutputs = [fs, dx_i, dy_i]
 
 gtZeroConstr :: [Constraint]
 gtZeroConstr = [physc $ (:<) (Int 0)]
 
-intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
+elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
   waterWeight, fs, dx_i, dy_i :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-intNormForce = cuc' "E_i" (cn $ "interslice normal force")
-  ("exerted between adjacent slices " ++ fisi)
-  (sub cE lI) newton Real gtZeroConstr
+elasticMod = ConstrConcept SM.elastMod gtZeroConstr
 
 cohesion     = cuc' "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
@@ -88,7 +88,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress,
-  SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
+  coords, waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
@@ -96,7 +96,7 @@ sspUnits = map ucw [normStress,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
-  mobShrC, shrResC, rotatedDispl]
+  mobShrC, shrResC, rotatedDispl, intNormForce]
 
 normStress,
   coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
@@ -106,10 +106,14 @@ normStress,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl,
-  elmPrllDispl, mobShrC, shrResC, rotatedDispl :: UnitalChunk
+  elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
+
+intNormForce = uc' "E_i" (cn $ "interslice normal force")
+  ("exerted between adjacent slices " ++ fisi)
+  (sub cE lI) newton
 
 coords      = uc' "(x,y)"
   (cn $ "cartesian position coordinates" )

@@ -33,8 +33,6 @@ import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
 
-import Data.Drasil.Quantities.SolidMechanics
-
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures
 
@@ -364,13 +362,13 @@ vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
 
-waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
+waterVert, slipVert, slopeVert, elasticModu, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
 waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 
-intNormFor  = displayContr intNormForce (15000 :: Integer)
+elasticModu = displayContr elasticMod   (15000 :: Integer)
 effectCohe  = displayContr cohesion     (10    :: Integer)
 poissnRatio = displayContr poissnsRatio (0.4   :: Double )
 fricAng     = displayContr fricAngle    (25    :: Integer)
@@ -397,7 +395,7 @@ fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
 fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
 
 dataConstList :: [[Sentence]]
-dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
+dataConstList = [waterVert, slipVert, slopeVert, elasticModu, effectCohe, poissnRatio,
   fricAng, dryUWght, satUWght, waterUWght]
 
 s4_2_6Table2, s4_2_6Table3 :: Contents
@@ -450,8 +448,8 @@ s5_1_list = enumSimple 1 (short requirement) [
     S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
 
-s5_1_table = mkInputDatTb (map cqs [coords, elastMod] ++ --this has to be seperate since poisson is a different type
-  map cqs [cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
+s5_1_table = mkInputDatTb ([cqs coords] ++ --this has to be seperate since coords is a different type
+  map cqs [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
 
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd]

@@ -2,6 +2,8 @@
 module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,LPM,Website)
+  -- SystemInformation
+  , SystemInformation(..), Block(..)
   -- Recipe
   , Recipe(..)
   -- Expr
@@ -86,9 +88,12 @@ module Language.Drasil (
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym
+  -- CodeSpec
+  , CodeSpec, codeSpec
 ) where
 
 import Prelude hiding (log, sin, cos, tan, id, return, print, break, exp, product)
+import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
           Bound(..),DerivType(..), log, sin, cos, tan, sec, csc, cot, exp,
           summation, product)
@@ -137,3 +142,4 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym)
+import Language.Drasil.CodeSpec                             

@@ -84,6 +84,9 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   (map qs gbOutputs) 
   (gbQDefns :: [Block QDefinition]) 
   --FIXME: All named ideas, not just acronyms.
+  
+glassBR_code :: CodeSpec
+glassBR_code = codeSpec glassSystInfo
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

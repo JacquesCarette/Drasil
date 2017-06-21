@@ -8,23 +8,13 @@ import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,LPM,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
-import Language.Drasil.Code.Import (toCode)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
-import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea (NamedIdea)
-import Language.Drasil.Code.Imperative.LanguageRenderer
-  hiding (body)
-import Language.Drasil.Code.Imperative.Helpers
-import Control.Lens
+import Language.Drasil.Code.Imperative.Import (generateCode)
+import Language.Drasil.CodeSpec
 
--- temporary
-import Language.Drasil.Code.CodeGeneration
-import Language.Drasil.Code.Imperative.Parsers.ConfigParser
-import Language.Drasil.Expr.Extract (SymbolMap)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: [Recipe] -> IO ()
@@ -80,32 +70,41 @@ writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
--- | Calls the code generator using the 'ModuleChunk's
-genCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
-genCode cc mcs m = prntCode cc (filter generated mcs) m
+-- | Calls the code generator
+genCode :: CodeSpec -> IO ()
+genCode spec = do 
+  workingDir <- getCurrentDirectory
+  createDirectoryIfMissing False "src"
+  setCurrentDirectory "src"
+  generateCode spec
+  setCurrentDirectory workingDir
 
--- | Generate code for all supported languages (will add language selection later)
-prntCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
-prntCode cc mcs m = 
-  let absCode = toCode cc mcs m
-      code l  = makeCode l
-        (Options Nothing Nothing Nothing (Just "Code"))
-        (map (\mc -> makeClassNameValid $ (modcc mc) ^. id) mcs)
-        absCode
-      writeCode c lang = do
-        let newDir = c ++ "/" ++ lang
-        createDirectoryIfMissing False newDir
-        setCurrentDirectory newDir
-        createCodeFiles $ code lang
+-- -- | Calls the code generator using the 'ModuleChunk's
+-- genCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
+-- genCode cc mcs m = prntCode cc (filter generated mcs) m
 
-  in  do
-      workingDir <- getCurrentDirectory
-      let writeCode' = writeCode workingDir
-      writeCode' cppLabel
- --     writeCode' javaLabel
- --     writeCode' luaLabel
- --     writeCode' cSharpLabel
- --     writeCode' goolLabel
- --     writeCode' objectiveCLabel
- --     writeCode' pythonLabel
-      setCurrentDirectory workingDir
+-- -- | Generate code for all supported languages (will add language selection later)
+-- prntCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
+-- prntCode cc mcs m = 
+  -- let absCode = toCode cc mcs m
+      -- code l  = makeCode l
+        -- (Options Nothing Nothing Nothing (Just "Code"))
+        -- (map (\mc -> makeClassNameValid $ (modcc mc) ^. id) mcs)
+        -- absCode
+      -- writeCode c lang = do
+        -- let newDir = c ++ "/" ++ lang
+        -- createDirectoryIfMissing False newDir
+        -- setCurrentDirectory newDir
+        -- createCodeFiles $ code lang
+
+  -- in  do
+      -- workingDir <- getCurrentDirectory
+      -- let writeCode' = writeCode workingDir
+      -- writeCode' cppLabel
+ -- --     writeCode' javaLabel
+ -- --     writeCode' luaLabel
+ -- --     writeCode' cSharpLabel
+ -- --     writeCode' goolLabel
+ -- --     writeCode' objectiveCLabel
+ -- --     writeCode' pythonLabel
+      -- setCurrentDirectory workingDir

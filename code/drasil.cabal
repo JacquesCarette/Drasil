@@ -35,7 +35,8 @@ library
     Data.Drasil.Units.Physics
     Data.Drasil.Units.SolidMechanics
   other-modules:
-      Language.Drasil.Expr
+      Language.Drasil.SystemInformation
+    , Language.Drasil.Expr
     , Language.Drasil.Chunk
     , Language.Drasil.Config
     , Language.Drasil.Document
@@ -53,9 +54,11 @@ library
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
+    , Language.Drasil.CodeSpec
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.Import
     , Language.Drasil.Code.Imperative.AST
+    , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.LanguageRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
@@ -78,6 +81,7 @@ library
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
+    , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.ConVar

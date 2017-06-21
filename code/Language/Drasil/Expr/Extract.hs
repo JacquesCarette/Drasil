@@ -1,5 +1,5 @@
 {-# LANGUAGE RankNTypes #-}
-module Language.Drasil.Expr.Extract(dep, vars, toVC, SymbolMap, symbolMap) where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, toVC, SymbolMap, symbolMap) where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
@@ -8,9 +8,12 @@ import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
 import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Chunk.Wrapper.QSWrapper (QSWrapper, qs)
-import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc')
+import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc', makeVC)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation
+
+import Language.Drasil.NounPhrase -- temporary until Expr can constrain Quantity without circular import
+import Language.Drasil.Chunk.Code
 
 import qualified Data.Map as Map
 
@@ -78,6 +81,36 @@ vars (a :>= b)    m = nub (vars a m ++ vars b m)
 vars (UnaryOp u)  m = vars (unpack u) m
 vars (Grouping e) m = vars e m
 vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
+
+-- | Get a list of CodeChunks from an equation
+codevars :: Expr -> [CodeChunk]
+codevars (a :/ b)     = nub (codevars a ++ codevars b)
+codevars (a :* b)     = nub (codevars a ++ codevars b)
+codevars (a :+ b)     = nub (codevars a ++ codevars b)
+codevars (a :^ b)     = nub (codevars a ++ codevars b)
+codevars (a :- b)     = nub (codevars a ++ codevars b)
+codevars (a :. b)     = nub (codevars a ++ codevars b)
+codevars (a :&& b)    = nub (codevars a ++ codevars b)
+codevars (a :|| b)    = nub (codevars a ++ codevars b)
+codevars (Deriv _ a b) = nub (codevars a ++ codevars b)
+codevars (Not e)      = codevars e
+codevars (Neg e)      = codevars e
+codevars (C c)        = [codevar $ makeVC (c ^. id) (pn "") (c ^. symbol)]
+codevars (Int _)      = []
+codevars (Dbl _)      = []
+codevars (Bln _)      = []
+codevars (V _)        = []
+codevars (FCall f x)  = nub (codevars f ++ (concat $ map (\y -> codevars y) x))
+codevars (Case ls)    = nub (concat (map (\x -> codevars (fst x)) ls))
+codevars (a := b)     = nub (codevars a ++ codevars b)
+codevars (a :!= b)    = nub (codevars a ++ codevars b)
+codevars (a :> b)     = nub (codevars a ++ codevars b)
+codevars (a :< b)     = nub (codevars a ++ codevars b)
+codevars (a :<= b)    = nub (codevars a ++ codevars b)
+codevars (a :>= b)    = nub (codevars a ++ codevars b)
+codevars (UnaryOp u)  = codevars (unpack u)
+codevars (Grouping e) = codevars e
+codevars (BinaryOp b) = nub (concat $ map (\x -> codevars x) (binop b))
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr

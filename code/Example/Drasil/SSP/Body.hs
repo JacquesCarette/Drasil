@@ -371,7 +371,7 @@ slopeVert = verticesConst $ phrase slope
 
 intNormFor  = mkGtZeroConst intNormForce []           (15000 :: Integer)
 effectCohe  = mkGtZeroConst cohesion     []           (10    :: Integer)
-poissnRatio = mkGtZeroConst poissnsR     [((:<), 1)]  (0.4   :: Double )
+poissnRatio = mkGtZeroConst poissnsRatio [((:<), 1)]  (0.4   :: Double )
 fricAng     = mkGtZeroConst fricAngle    [((:<), 90)] (25    :: Integer)
 dryUWght    = mkGtZeroConst dryWeight    []           (20    :: Integer)
 satUWght    = mkGtZeroConst satWeight    []           (20    :: Integer)
@@ -440,8 +440,8 @@ s5_1_list = enumSimple 1 (short requirement) [
     S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
 
-s5_1_table = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this has to be seperate since poisson is a different type
-  [cqs poissnsR] ++ map cqs [fricAngle, dryWeight, satWeight, waterWeight])
+s5_1_table = mkInputDatTb (map cqs [coords, elastMod] ++ --this has to be seperate since poisson is a different type
+  map cqs [cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
 
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd]

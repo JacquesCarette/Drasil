@@ -32,22 +32,47 @@ fisi  = "for interslice index i"
 --------------------------------
 
 sspConstrained :: [ConstrConcept]
-sspConstrained = [intNormForce]
+sspConstrained = [intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight]
 
 gtZeroConstr :: [Constraint]
 gtZeroConstr = [physc $ \c -> c :> (Int 0)]
 
-intNormForce :: ConstrConcept
+intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight :: ConstrConcept
+
 intNormForce = cuc' "E_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
   (sub cE lI) newton Real gtZeroConstr
+
+cohesion     = cuc' "c'" (cn $ "effective cohesion")
+  "internal pressure that sticks particles of soil together"
+  (Atomic "c'") pascal Real gtZeroConstr
+
+poissnsRatio = ConstrConcept SM.poissnsR
+  ((physc $ \c -> c :< (Int 1)):gtZeroConstr)
+
+fricAngle    = cuc' "varphi'" (cn $ "effective angle of friction")
+  ("The angle of inclination with respect to the horizontal axis of " ++
+  "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
+  (Concat [Greek Phi_V, Atomic "'"]) degree Real ((physc $ \c -> c :< (Int 90)):gtZeroConstr)
+
+dryWeight   = cuc' "gamma" (cn $ "dry unit weight")
+  "The weight of a dry soil/ground layer divided by the volume of the layer."
+  (Greek Gamma_L) specific_weight Real gtZeroConstr
+
+satWeight   = cuc' "gamma_sat" (cn $ "saturated unit weight")
+  "The weight of saturated soil/ground layer divided by the volume of the layer."
+  (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real gtZeroConstr
+
+waterWeight = cuc' "gamma_w" (cn $ "unit weight of water")
+  "The weight of one cubic meter of water."
+  (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
 
 ---------------------------
 -- START OF UNITALCHUNKS --
 ---------------------------
 
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight,
+sspUnits = map ucw [normStress,
   SM.elastMod, coords, waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
@@ -55,10 +80,10 @@ sspUnits = map ucw [normStress, fricAngle, cohesion, dryWeight, satWeight,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl, waterWeight, 
+  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl, 
   mobShrC, shrResC, rotatedDispl]
 
-normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
+normStress,
   coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
@@ -70,27 +95,6 @@ normStress, fricAngle, cohesion, dryWeight, satWeight, waterWeight,
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
-
-fricAngle   = uc' "varphi'" (cn $ "effective angle of friction")
-  ("The angle of inclination with respect to the horizontal axis of " ++
-  "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (Concat [Greek Phi_V, Atomic "'"]) degree
-
-cohesion    = uc' "c'" (cn $ "effective cohesion")
-  "internal pressure that sticks particles of soil together"
-  (Atomic "c'") pascal
-
-dryWeight   = uc' "gamma" (cn $ "dry unit weight")
-  "The weight of a dry soil/ground layer divided by the volume of the layer."
-  (Greek Gamma_L) specific_weight
-
-satWeight   = uc' "gamma_sat" (cn $ "saturated unit weight")
-  "The weight of saturated soil/ground layer divided by the volume of the layer."
-  (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight
-
-waterWeight = uc' "gamma_w" (cn $ "unit weight of water")
-  "The weight of one cubic meter of water."
-  (sub (Greek Gamma_L) lW) specific_weight
 
 coords      = uc' "(x,y)"
   (cn $ "cartesian position coordinates" )
@@ -275,7 +279,7 @@ rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate sy
 ----------------------
 
 sspUnitless :: [ConVar]
-sspUnitless = [SM.poissnsR, fs, earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
+sspUnitless = [fs, earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
 
 fs, earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
 

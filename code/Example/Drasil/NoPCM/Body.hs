@@ -2,7 +2,6 @@ module Drasil.NoPCM.Body where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Drasil.NoPCM.TMods
 import Drasil.NoPCM.Definitions hiding (water)
 import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
@@ -324,7 +323,7 @@ assump10 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
   S "is always in", phrase liquid, S "form. That is,",
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr (acroIM "1"))]
+  phrase boil_pt, sSqBr (acroIM "1")]
   
 assump11 = [S "The", phrase tank, S "is perfectly insulated",
   S "so that there is no", phrase heat, S "loss from the",

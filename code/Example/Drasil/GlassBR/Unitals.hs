@@ -23,8 +23,8 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 
 {--}
 
-glassBRConstrained :: [ConstrainedChunk]
-glassBRConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick]
+gbrInputsConstrained :: [ConstrainedChunk]
+gbrInputsConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick]
 
 plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick :: ConstrainedChunk
 
@@ -266,7 +266,7 @@ glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
-  ++ (map qs glassBRUnitless) ++ (map qs glassBRConstrained))
+  ++ (map qs glassBRUnitless) ++ (map qs gbrInputsConstrained))
 
 temporaryLOSymbols :: [QSWrapper]
 temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]

@@ -23,10 +23,15 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 
 {--}
 
-gbInputsConstrained :: [QSWrapper]
-gbInputsConstrained = map qs [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick]
+gbConstrained :: [ConstrainedChunk]
+gbConstrained = gbInputs ++ [prob_br]
 
-plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick :: ConstrainedChunk
+plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick, prob_br :: ConstrainedChunk
+
+{--}
+
+gbInputs :: [ConstrainedChunk]
+gbInputs = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick]
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
@@ -60,11 +65,6 @@ standOffDist = cuc "standOffDist" (nounPhraseSP "stand off distance")
   [ physc $ \c -> c :> (Dbl 0),
     sfwrc $ \c -> (C sd_min) :< c :< (C sd_max) ]
 
-prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
-  (sub cP lB) Rational
-  [ physc $ \c -> (Dbl 0) :< c,
-    physc $ \c -> c :< (Dbl 1) ]
-
 nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
   " {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   lT millimetre Rational
@@ -77,7 +77,11 @@ nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
 {--}
 
 gbOutputs :: [QSWrapper]
-gbOutputs = map qs [is_safe1, is_safe2]
+gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
+
+prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
+  (sub cP lB) Rational
+  [ physc $ \c -> (Dbl 0) :< c :< (Dbl 1) ]
 
 {--}
 
@@ -273,7 +277,7 @@ glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
-  ++ (map qs glassBRUnitless) ++ (map qs gbInputsConstrained))
+  ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
 
 temporaryLOSymbols :: [QSWrapper]
 temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]

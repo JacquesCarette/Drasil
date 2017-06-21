@@ -80,8 +80,8 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   ([] :: [CQSWrapper]) 
   (acronyms)
   (dataDefns)
-  (gbInputsConstrained)
-  (gbOutputs) 
+  (map qs gbInputs)
+  (map qs gbOutputs) 
   (gbQDefns :: [Block QDefinition]) 
   --FIXME: All named ideas, not just acronyms.
 
@@ -369,6 +369,10 @@ s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map gbSymbMapD dataDefns
 
+--------------------
+--Data Constraints--
+--------------------
+
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
@@ -387,12 +391,12 @@ dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, in
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
-inputVarA = displayConstr plate_len   (1500 :: Int) "10%"
-inputVarB = displayConstr plate_width (1200 :: Int) "10%"
-inputVarPbTol = displayConstr pb_tol (0.008 :: Double) "0.1%"
-inputVarW = displayConstr char_weight (42 :: Int) "10%"
-inputVarTNT = displayConstr tNT (1 :: Int) "10%"
-inputVarSD = displayConstr standOffDist (45 :: Int) "10%"
+inputVarA     = displayConstr plate_len    (1500 :: Int)     "10%"
+inputVarB     = displayConstr plate_width  (1200 :: Int)     "10%"
+inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) "0.1%"
+inputVarW     = displayConstr char_weight  (42 :: Int)       "10%"
+inputVarTNT   = displayConstr tNT          (1 :: Int)        "10%"
+inputVarSD    = displayConstr standOffDist (45 :: Int)        "10%"
 
 displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> String -> [Sentence]
 displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),

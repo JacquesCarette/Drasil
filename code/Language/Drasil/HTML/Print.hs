@@ -27,7 +27,9 @@ genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
 build :: String -> Document -> Doc
 build fn (Document t a c) = 
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
-          " \"http://www.w3.org/TR/html4/loose.dtd\">") $$ 
+          " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
+          "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
+          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$ 
   html (head_tag ((linkCSS fn) $$ (title (text (title_spec t)))) $$
   body (article_title (text (p_spec t)) $$ author (text (p_spec a))
   $$ print c

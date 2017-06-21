@@ -124,10 +124,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, ar_min, gTF]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF]
 
 ar_max, risk_fun, glass_type, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, ar_min, gTF :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
@@ -148,8 +148,6 @@ tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
 lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
-ar_min      = vc "ar_min"        (nounPhraseSP "minimum aspect ratio")
-  (sub (Atomic "AR") (Atomic "min")) Rational --find a way to call aspectR instead of using (Atomic "AR") again
 gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
 
 terms :: [ConceptChunk]

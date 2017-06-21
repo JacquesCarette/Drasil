@@ -314,9 +314,9 @@ s6_2_1_list =
 
 assump4_M, assump4_K, assump4_ModElas, assump4_LoadDur :: Contents
 assump4_M = EqnBlock $ (C sflawParamM) := (Int 7)
-assump4_K = EqnBlock $ (C sflawParamK):=(Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
-assump4_ModElas = EqnBlock $ (C mod_elas):=(Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
-assump4_LoadDur = EqnBlock $ (C load_dur):=(Int 3)
+assump4_K = EqnBlock $ (C sflawParamK) := (Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
+assump4_ModElas = EqnBlock $ (C mod_elas) := (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
+assump4_LoadDur = EqnBlock $ (C load_dur) := (Int 3)
 
 s6_2_1_list_part1 :: [Sentence]
 s6_2_1_list_part1 = [foldlSent [S "The standard E1300-09a for", 
@@ -400,11 +400,13 @@ displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstr
 
 fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
 fmtConstrP _ [] = EmptyS
-fmtConstrP s [Phys f] = E $ f (C s)
 fmtConstrP _ [Sfwr _] = EmptyS
-fmtConstrP s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s xs
+fmtConstrP s [Phys f] = E $ f (C s)
+fmtConstrP s ((Phys f):(Sfwr _):_) = E $ f (C s)
+fmtConstrP s ((Phys f):(Phys g):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s ((Phys g):xs)
 fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
---FIXME: merge into a single function?
+--FIXME:Can messy pattern matching of `fmtConstrP` be improved?
+--FIXME:Should messy pattern matching of `fmtConstrP` be implemnented in `fmtConstrS` defintion?
 fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
 fmtConstrS _ [] = EmptyS
 fmtConstrS s [Sfwr f] = E $ f (C s)

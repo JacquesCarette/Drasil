@@ -1,7 +1,7 @@
 module Drasil.SSP.DataDefs where
 
 import Control.Lens ((^.))
-import Prelude hiding (id, cos, sin)
+import Prelude hiding (id, cos, sin, tan)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
@@ -32,7 +32,6 @@ slcWgtEqn = (C baseWthX) * (Case [case1,case2,case3])
         case2 = (((C slopeHght)-(C waterHght))*(C dryWeight) + ((C waterHght)-(C slipHght))*(C satWeight),
                 (C slopeHght) :> (C waterHght) :> (C slipHght))
         case3 = (((C slopeHght)-(C slipHght ))*(C dryWeight),(C waterHght) :< (C slipHght))
---FIXME: add the long equation
 
 --DD2
 
@@ -74,15 +73,19 @@ angles :: QDefinition
 angles = fromEqn' (baseAngle ^. id) (baseAngle ^. term) (baseAngle ^. symbol) anglesEqn --, surfAngle?
 
 anglesEqn :: Expr
-anglesEqn = (Int 0) --(C slipHght) :- ()
+anglesEqn = ((C slipHght) :- (C slipHght)) :/ ((C slipHght) :- (C slipHght))
+--FIXME: x_slip,i and x_us,i are not defined, cannot put two equations here,
+--       need a way to index
 
 --DD6
 
 lengths :: QDefinition
-lengths = fromEqn' (baseLngth ^. id) (baseLngth ^. term) (baseLngth ^. symbol) lengthsEqn --, surfLngth?, bi?
+lengths = fromEqn' (baseWthX ^. id) (baseWthX ^. term) (baseWthX ^. symbol) lengthsEqn --, baseLngth, surfLngth?
 
 lengthsEqn :: Expr
-lengthsEqn = (Int 0)
+lengthsEqn = (C slipHght) :- (C slipHght)
+--(C baseLngth) := (C baseWthX) :* sec (C baseAngle)
+--(C surfLngth) := (C baseWthX) :* sec (C surfAngle)
 
 --DD7
 
@@ -91,7 +94,7 @@ seismicLoadF = fromEqn' (earthqkLoadFctr ^. id) (earthqkLoadFctr ^. term) (earth
 
 ssmcLFEqn :: Expr
 ssmcLFEqn = ((C earthqkLoadFctr) :* (C slcWght)) 
---FIXME: should produce (K_E,i = ...) but produces (K_c = ...)
+--FIXME: need index/ subscript changes
 
 --DD8
 
@@ -99,7 +102,7 @@ surfLoads :: QDefinition
 surfLoads = fromEqn' (surfLoad ^. id) (surfLoad ^. term) (surfLoad ^. symbol) surfLEqn --, slcWght?
 
 surfLEqn :: Expr
-surfLEqn = (Int 0)
+surfLEqn = (C surfLoad) :* (C impLoadAngle) --FIXME: Should actually just be seperated with ','
 
 --DD9
 
@@ -115,7 +118,11 @@ resShearWO :: QDefinition
 resShearWO = fromEqn' (shearRNoIntsl ^. id) (shearRNoIntsl ^. term) (shearRNoIntsl ^. symbol) resShearWOEqn
 
 resShearWOEqn :: Expr
-resShearWOEqn = (Int 0)
+resShearWOEqn = (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)) :*
+  tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)
 
 --DD11
 
@@ -142,7 +149,9 @@ netFDsplcmntEqbm :: QDefinition
 netFDsplcmntEqbm = fromEqn' (genForce ^. id) (genForce ^. term) (genForce ^. symbol) netFDsplcmntEqbmEqn
 
 netFDsplcmntEqbmEqn :: Expr
-netFDsplcmntEqbmEqn = (Int 0)
+netFDsplcmntEqbmEqn = Neg (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) +
+  ((C surfLngth) * (C nrmStiffIntsl) + (C baseLngth) * (C nrmStiffBase) + (C surfLngth) * (C nrmStiffIntsl)) * (C genDisplace) -
+  (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) --FIXME: needs indexing
 
 --DD14
 

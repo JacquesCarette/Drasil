@@ -42,7 +42,12 @@ nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio") nrmShrF_desc nrmShrF_rel
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (C fs) := (Int 0) --FIXME: add the long equation
+nrmShrF_rel = (C fs) := Case [case1,case2,case3]
+  where case1 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , Int 0 := (Int 0))
+        case2 = ((C baseWthX)*((C intNormForce)+(C intNormForce)+(C watrForce)+(C watrForce)) * tan (C baseAngle) , Int 0 := (Int 0))
+        case3 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , Int 0 := (Int 0))
+
+--FIXME: add the long equation
 
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio between",

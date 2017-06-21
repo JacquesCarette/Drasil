@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (itemRefToSent, getS, unwrap,
+import Data.Drasil.Utils (itemRefToSent, getS, unwrap, fmtU,
   makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC)
@@ -294,7 +294,7 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 
 s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
+  [s6_2_5_table1,s6_2_5_table1New, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
         end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
@@ -382,6 +382,41 @@ s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraint
   [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD])
   (titleize table_ +: S "2" +:+ titleize' inVar) 
   True
+
+s6_2_5_table1New = Table [S "Var", S "Physical Constraints", S "Software Constraints",
+  S "Typical Value", S "Typical Uncertainty"]
+  dataConstList
+  (titleize table_ +: S "2NEW" +:+ titleize' inVar) 
+  True
+
+dataConstList :: [[Sentence]]
+dataConstList = [inputVarANew, inputVarBNew, inputVarPbTolNew, inputVarWNew, inputVarTNTNew, inputVarSDNew]
+
+inputVarANew :: [Sentence]
+inputVarANew = displayConstr plate_len   (1500 :: Int) "10%"
+inputVarBNew = displayConstr plate_width (1200 :: Int) "10%"
+inputVarPbTolNew = displayConstr pb_tol (0.008 :: Double) "0.1%"
+inputVarWNew = displayConstr char_weight (42 :: Int) "10%"
+inputVarTNTNew = displayConstr tNT (1 :: Int) "10%"
+inputVarSDNew = displayConstr standOffDist (45 :: Int) "10%"
+
+displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> String -> [Sentence]
+displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
+  fmtU (S (show num)) (qs s), S uncrty]
+
+fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtConstrP _ [] = EmptyS
+fmtConstrP s [Phys f] = E $ f (C s)
+fmtConstrP s [Sfwr f] = EmptyS
+fmtConstrP s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s xs
+fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
+--FIXME: merge into a single function?
+fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtConstrS _ [] = S "None"
+fmtConstrS s [Sfwr f] = E $ f (C s)
+fmtConstrS s [Phys f] = EmptyS
+fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs
+fmtConstrS s ((Phys f):xs) = fmtConstrS s (tail ((Phys f):xs))
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 

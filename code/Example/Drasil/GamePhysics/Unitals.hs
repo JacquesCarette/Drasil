@@ -12,9 +12,11 @@ import Control.Lens((^.))
 
 ----- Table of Symbols -----
 inputSymbols, outputSymbols :: [QSWrapper]
-inputSymbols = map qs [QP.gravitationalConst, QPP.mass, QP.position, QP.velocity]
+inputSymbols = map qs [QP.gravitationalConst, QPP.mass, QP.position, QP.velocity,
+                       QM.orientation, QP.angularVelocity, QP.force, QPP.len, 
+                       QP.momentOfInertia, QP.torque] ++ [qs QP.restitutionCoef]
 
-outputSymbols = map qs [QP.position, QP.velocity]
+outputSymbols = map qs [QP.position, QP.velocity, QM.orientation, QP.angularVelocity]
 
 
 cpSymbols :: [QSWrapper]

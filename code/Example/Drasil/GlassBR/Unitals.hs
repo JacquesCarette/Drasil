@@ -146,7 +146,7 @@ is_safe2    = vc "is_safe2"      (nounPhraseSP $ "true when load resistance (cap
   "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
   Atomic "safe2"]) Boolean
 stressDistFac = makeVC "stressDistFac"  (nounPhraseSP "stress distribution factor (Function)") cJ
-sdf_tol     = makeVC "sdf_tol"       (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
+sdf_tol     = makeVC "sdf_tol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
 dimlessLoad = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
@@ -155,14 +155,16 @@ lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
 
-terms :: [ConceptChunk]
-terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, 
-  loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar, sD]
+terms :: [ConceptChunk] terms = [aspectRatio, glBreakage, lite, glassTy,
+annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad,
+loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac,
+probBreak, specA, blastResisGla, eqTNTChar, sD]
 
-aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad, loadResis, 
-  longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar, 
-  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,
-  notSafe, bomb, explosion :: ConceptChunk
+aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
+glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
+sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,   notSafe, bomb,
+explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 aspectRatio   = dcc "aspectRatio" (aspectR ^. term)
@@ -241,22 +243,26 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
 sD            = dccWDS "sD"       (standOffDist ^. term) 
   (S "The distance from the glazing surface to the centroid of a hemispherical" +:+
    S "high explosive charge. It is represented by the coordinates (SDx, SDy, SDz)")
-blast         = dcc "blast"       (nounPhraseSP "blast") "any kind of man-made explosion"
+blast         = dcc "blast"       (nounPhraseSP "blast") 
+  "any kind of man-made explosion"
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")
 glassGeo      = dcc "glassGeo"    (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
-capacity      = dcc "capacity"    (nounPhraseSP "capacity") "the load resistance calculated"
-demandq       = dcc "demandq"     (nounPhraseSP "demand") "3 second duration equivalent pressure"
+capacity      = dcc "capacity"    (nounPhraseSP "capacity")
+  "the load resistance calculated"
+demandq       = dcc "demandq"     (nounPhraseSP "demand") 
+  "3 second duration equivalent pressure"
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
-bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with a destructive" ++
-  "substance designed to exlode on impact or via detonation")
-explosion     = dcc "explosion"   (nounPhraseSP "explosion") "a destructive shattering of something"
+bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with" ++
+  " a destructive substance designed to exlode on impact or via detonation")
+explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
+  "a destructive shattering of something"
 
 -- hack; needs to be removed eventually
 lDurFac :: VarChunk

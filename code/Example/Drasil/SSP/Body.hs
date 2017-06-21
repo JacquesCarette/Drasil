@@ -61,8 +61,8 @@ this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbols (sspSymbols) acronyms ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper])
-  [Parallel (head sspDataDefs) sspDataDefs]
+  this_si sspSymbols (sspSymbols) acronyms sspDataDefs (map qs sspInputs) (map qs sspOutputs)
+  [Parallel (head sspDataDefs) (tail sspDataDefs)]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -352,7 +352,7 @@ s4_2_5_IMods = map sspSymMapT sspIMods
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below
 noTypicalVal, vertConvention :: Sentence
-noTypicalVal   = S "N/A"
+noTypicalVal   = short notApp
 vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
   S "The start and end vertices of all layers go to the same x" +:+. plural value
 

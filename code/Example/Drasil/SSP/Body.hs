@@ -369,22 +369,31 @@ waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 
-intNormFor  = mkGtZeroConst intNormForce []           (15000 :: Integer)
-effectCohe  = mkGtZeroConst cohesion     []           (10    :: Integer)
-poissnRatio = mkGtZeroConst poissnsRatio [((:<), 1)]  (0.4   :: Double )
-fricAng     = mkGtZeroConst fricAngle    [((:<), 90)] (25    :: Integer)
-dryUWght    = mkGtZeroConst dryWeight    []           (20    :: Integer)
-satUWght    = mkGtZeroConst satWeight    []           (20    :: Integer)
-waterUWght  = mkGtZeroConst waterWeight  []           (9.8   :: Double )
+intNormFor  = displayContr intNormForce (15000 :: Integer)
+effectCohe  = displayContr cohesion     (10    :: Integer)
+poissnRatio = displayContr poissnsRatio (0.4   :: Double )
+fricAng     = displayContr fricAngle    (25    :: Integer)
+dryUWght    = displayContr dryWeight    (20    :: Integer)
+satUWght    = displayContr satWeight    (20    :: Integer)
+waterUWght  = displayContr waterWeight  (9.8   :: Double )
 
 fcOfSa, slipVert2, deltax, deltay :: [Sentence]
-fcOfSa = [S "FS", E $ (V "FS") :> (Int 0)] -- FIXME: Use factor of safety's symbol (currently doesn't have one)
+fcOfSa = displayContr' fs
 slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
-deltax = [getS dx_i, S "None"]
-deltay = [getS dy_i, S "None"]
+deltax = displayContr' dx_i
+deltay = displayContr' dy_i
 
-mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst s other num = [getS s, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
+displayContr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> [Sentence]
+displayContr  s num = [getS s, fmtContr s (s ^. constraints), fmtU (S (show num)) (qs s)]
+displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
+displayContr' s = [getS s, fmtContr s (s ^. constraints)]
+
+fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtContr _ [] = S "None"
+fmtContr s [Phys f] = E $ f (C s)
+fmtContr s [Sfwr f] = E $ f (C s)
+fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
 
 dataConstList :: [[Sentence]]
 dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,

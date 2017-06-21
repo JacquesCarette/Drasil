@@ -32,12 +32,17 @@ fisi  = "for interslice index i"
 --------------------------------
 
 sspConstrained :: [ConstrConcept]
-sspConstrained = [intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight]
+sspConstrained = [intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight,
+  satWeight, waterWeight, fs, dx_i, dy_i]
 
 gtZeroConstr :: [Constraint]
-gtZeroConstr = [physc $ \c -> c :> (Int 0)]
+gtZeroConstr = [physc $ (:<) (Int 0)]
 
-intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight :: ConstrConcept
+intNormForce, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
+  waterWeight, fs, dx_i, dy_i :: ConstrConcept
+
+{-Intput Variables-}
+--FIXME: add (x,y) when we can index or make related unitals
 
 intNormForce = cuc' "E_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
@@ -48,12 +53,12 @@ cohesion     = cuc' "c'" (cn $ "effective cohesion")
   (Atomic "c'") pascal Real gtZeroConstr
 
 poissnsRatio = ConstrConcept SM.poissnsR
-  ((physc $ \c -> c :< (Int 1)):gtZeroConstr)
+  ((physc $ (:>) (Int 1)):gtZeroConstr)
 
 fricAngle    = cuc' "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (Concat [Greek Phi_V, Atomic "'"]) degree Real ((physc $ \c -> c :< (Int 90)):gtZeroConstr)
+  (Concat [Greek Phi_V, Atomic "'"]) degree Real ((physc $ (:>) (Int 90)):gtZeroConstr)
 
 dryWeight   = cuc' "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
@@ -66,6 +71,16 @@ satWeight   = cuc' "gamma_sat" (cn $ "saturated unit weight")
 waterWeight = cuc' "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
+
+{-Output Variables-}
+fs          = ConstrConcept (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
+  "the stability of a surface in a slope") (Atomic "FS")) gtZeroConstr
+
+dx_i        = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)
+  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real []
+
+dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++ fsi)
+  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre Real []
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -80,7 +95,7 @@ sspUnits = map ucw [normStress,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl, elmPrllDispl, 
+  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
   mobShrC, shrResC, rotatedDispl]
 
 normStress,
@@ -90,7 +105,7 @@ normStress,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
-  nrmStiffRes, shrDispl, nrmDispl, dx_i, dy_i, porePressure, elmNrmDispl,
+  nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl,
   elmPrllDispl, mobShrC, shrResC, rotatedDispl :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
@@ -262,12 +277,6 @@ elmPrllDispl = uc' "dn_i" (cn $ "displacement")
   ("for the element parallel to the surface " ++ fsi)
   (sub (Concat [Greek Delta_L, Atomic "n"]) lI) metre
 
-dx_i        = uc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre
-
-dy_i        = uc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre
-
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   (Greek Mu_L) pascal
 
@@ -279,12 +288,9 @@ rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate sy
 ----------------------
 
 sspUnitless :: [ConVar]
-sspUnitless = [fs, earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
+sspUnitless = [earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
 
-fs, earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
-
-fs          = cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
-  "the stability of a surface in a slope") (Atomic "FS")
+earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
 
 earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor") ("proportionality " ++
   "factor of force that weight pushes outwards; caused by seismic earth movements")) (sub cK lC)

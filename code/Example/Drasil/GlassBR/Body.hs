@@ -382,14 +382,14 @@ inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sent
 
 inputVarA = [(getS plate_len), 
   E ((C plate_len) :> (Int 0)) `sAnd` E (((C plate_len) :/ (C plate_width)) :> (Int 1)),
-  (getS dim_min) +:+ S "<=" +:+ (getS plate_len) +:+ S "<=" +:+ (getS dim_max)
+  E ((C dim_min) :<= (C plate_len) :<= (C dim_max))
   `sAnd` E (((C plate_len) :/ (C plate_width)) :< (C ar_max)),
   E (Int 1500) +:+ (unwrap $ getUnit plate_len),
   S "10%"]
 
 inputVarB = [(getS plate_width),
   E ((C plate_width) :> Int 0) `sAnd` E ((C plate_width) :< (C plate_len)),
-  (getS dim_min) +:+ S "<=" +:+ (getS plate_width) +:+ S "<=" +:+ (getS dim_max)
+  E ((C dim_min) :<= (C plate_width) :<= (C dim_max))
   `sAnd` E (((C plate_len) :/ (C plate_width)) :< (C ar_max)),
   E (Int 1200) +:+ (unwrap $ getUnit plate_width),
   S "10%"]
@@ -401,7 +401,7 @@ inputVarPbTol = [(getS pb_tol),
   S "0.1%"]
 
 inputVarW = [(getS char_weight),
-  (getS char_weight) +:+ S ">=" +:+ E (Int 0),
+  E ((C char_weight) :>= (Int 0)),
   E ((C cWeightMin) :< (C char_weight) :< (C cWeightMax)),
   E (Int 42) +:+ (unwrap $ getUnit char_weight), 
   S "10%"]

@@ -20,7 +20,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec, latent_heat,
 import Data.Drasil.Quantities.PhysicalProperties
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Utils (getS)
-import Data.Drasil.SentenceStructures (foldlSent, isThe, ofThe, ofThe')
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Drasil.SWHS.DataDefs
 
 import Control.Lens ((^.))

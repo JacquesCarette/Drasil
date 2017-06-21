@@ -11,7 +11,6 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Units.PhysicalProperties
-import Data.Drasil.Utils (unwrap)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)

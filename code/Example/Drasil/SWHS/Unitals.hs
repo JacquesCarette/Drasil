@@ -21,22 +21,22 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsCons
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
-swhsUnits = map ucw [in_SA, out_SA, pcm_SA, heat_cap_spec, htCap_L, htCap_L_P,
-  htCap_S, htCap_S_P, htCap_V, htCap_W, sens_heat, pcm_initMltE, pcm_E, w_E,
+swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L, htCap_L_P,
+  htCap_S, htCap_V, htCap_W, sens_heat, pcm_initMltE, pcm_E, w_E,
   vol_ht_gen, htTransCoeff, coil_HTC, pcm_HTC, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_env, time_final, temp_init, melt_pt, t_init_melt,
-  t_final_melt, temp_melt_P, temp_PCM, temp_W, vol, pcm_vol, tank_vol, w_vol, deltaT,
-  density, pcm_density, tau, tau_L_P, tau_S_P, tau_W] ++
+  t_final_melt, temp_PCM, temp_W, vol, tank_vol, w_vol, deltaT,
+  density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [htFusion, mass, time] -- ++ [tank_length, diam, coil_SA]
 
-in_SA, out_SA, pcm_SA, htCap_L, htCap_L_P, htCap_S, htCap_S_P, htCap_V,
+in_SA, out_SA, htCap_L, htCap_L_P, htCap_S, htCap_V,
   htCap_W, htFusion, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff, coil_HTC,
   pcm_HTC, pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, time_final, temp_init, t_init_melt,
-  t_final_melt, temp_melt_P, temp_PCM, temp_W, pcm_vol, tank_vol, w_vol, deltaT,
-  pcm_density, tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
+  t_final_melt, temp_PCM, temp_W, tank_vol, w_vol, deltaT,
+  tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
 
 ---------------------
@@ -55,11 +55,6 @@ out_SA       = uc' "out_SA" (nounPhraseSP
   "Surface area over which thermal energy is transferred out of an object"
   (sub cA (Atomic "out")) m_2
 
-pcm_SA       = uc' "pcm_SA"
-  (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl) CapFirst CapWords)
-  (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
-  "Area covered by the outermost layer of the phase change material" (sub cA cP) m_2
-
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
   ("The amount of energy required to raise the temperature of a given unit mass of " ++
   "a given liquid by a given amount") (sup (heat_cap_spec ^. symbol) cL) UT.heat_cap_spec
@@ -71,14 +66,9 @@ htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP
 
 htCap_S      = uc' "htCap_S"
   (nounPhraseSP "specific heat capacity of a solid")
-  ("The amount of energy required to raise the temperature of" ++
+  ("The amount of energy required to raise the temperature of " ++
   "a given unit mass of a given solid by a given amount")
   (sup (heat_cap_spec ^. symbol) cS) UT.heat_cap_spec
-
-htCap_S_P    = uc' "htCap_S_P"
-  (nounPhraseSP "specific heat capacity of PCM as a solid")
-  ("The amount of energy required to raise the temperature of a given unit mass of solid " ++
-  "phase change material by a given amount") (sup (sub (heat_cap_spec ^. symbol) cP) cS) UT.heat_cap_spec
 
 htCap_V      = uc' "htCap_V"
   (nounPhraseSP "specific heat capacity of a vapour")
@@ -107,7 +97,7 @@ vol_ht_gen   = uc' "vol_ht_gen"
 
 htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
-  ("The proportionality constant between the heat flux and the" ++
+  ("The proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
   lH UT.heat_transfer_coef
 
@@ -165,8 +155,8 @@ temp_env     = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment" (sub (temp ^. symbol) (Atomic "env")) centigrade
 
 time_final   = uc' "time_final" (nounPhraseSP "final time")
-  ("The amount of time elapsed from the beginning of the" ++
-  " simulation to its conclusion") (sub (time ^. symbol) (Atomic "final")) second
+  ("The amount of time elapsed from the beginning of the " ++
+  "simulation to its conclusion") (sub (time ^. symbol) (Atomic "final")) second
 
 temp_init    = uc' "temp_init" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
@@ -182,11 +172,6 @@ t_final_melt = uc' "t_final_melt"
   "Time at which the phase change material finishes changes from a solid to a liquid"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "final")) second
 
-temp_melt_P  = uc' "temp_melt_P"
-  (nounPhraseSP "melting point temperature for PCM")
-  "Temperature at which the phase change material transitions from a solid to a liquid"
-  (sup (sub (temp ^. symbol) (Atomic "melt")) cP) centigrade
-
 temp_PCM     = uc' "temp_PCM"
   (nounPhraseSP "temperature of the phase change material" )
   "The average kinetic energy of the particles within the phase change material"
@@ -195,9 +180,6 @@ temp_PCM     = uc' "temp_PCM"
 temp_W       = uc' "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" (sub (temp ^. symbol) cW) centigrade
-
-pcm_vol      = uc' "pcm_vol" (nounPhraseSP "volume of PCM")
-  "The amount of space occupied by a given quantity of phase change material" (sub (vol ^. symbol) cP) m_3
 
 tank_vol     = uc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank" (sub (vol ^. symbol) (Atomic "tank")) m_3
@@ -209,17 +191,14 @@ deltaT       = uc' "deltaT" (nounPhraseSP "change in temperature")
   "Change in the average kinetic energy of a given material"
   (Concat [Greek Delta, (temp ^. symbol)]) centigrade
 
-pcm_density  = uc' "pcm_density" (nounPhraseSP "density of PCM")
-  "Mass per unit volume of the phase change material"
-  (sub (density ^. symbol) cP) densityU
-
 tau          = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time" (Greek Tau_L) second
 --Not sure how to define anything after this point
 
 tau_L_P      = uc' "tau_L_P" (nounPhraseSP "ODE parameter for liquid PCM")
-  ("Derived through melting of phase change material, which changes ODE parameter"
-  ++ "for solid PCM into parameter for liquid") (sup (sub (Greek Tau_L) cP) cL) second
+  ("Derived through melting of phase change material, which changes ODE parameter " ++
+  "for solid PCM into parameter for liquid")
+  (sup (sub (Greek Tau_L) cP) cL) second
 
 tau_S_P      = uc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
   "Derived parameter based on rate of change of temperature of phase change material"
@@ -248,22 +227,65 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
 -- Constraints --
 -----------------
 
-diam, tank_length, coil_SA, temp_C, w_density :: ConstrConcept
-
 swhsConstrained ::[ConstrConcept]
-swhsConstrained = [diam, tank_length, coil_SA, temp_C, w_density]
+swhsConstrained = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, coil_SA, temp_C, w_density]
 
+tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+  htCap_S_P, coil_SA, temp_C, w_density :: ConstrConcept
+
+-- Constraint 1
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
   [physc $ \c -> c :> Int 0,
   sfwrc $ \c -> C tank_length_min :<= c :<= C tank_length_max]
 
+-- Constraint 2
 diam         = cuc' "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
   [physc $ \c -> c :> Int 0,
   sfwrc $ \c -> (c :/ C tank_length_max) :<=
   (c :/ C tank_length) :<= (c :/ C tank_length_min)]
 
+-- Constraint 3
+pcm_vol      = cuc' "pcm_vol" (nounPhraseSP "volume of PCM")
+  "The amount of space occupied by a given quantity of phase change material"
+  (sub (vol ^. symbol) cP) m_3 Rational
+  [physc $ \c -> c :> Int 0,
+  physc $ \c -> c :< C tank_vol]
+
+-- Constraint 4
+pcm_SA       = cuc' "pcm_SA"
+  (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl) CapFirst CapWords)
+  (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
+  "Area covered by the outermost layer of the phase change material"
+  (sub cA cP) m_2 Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C pcm_vol :<= c :<= ((Int 2 :/ C htTransCoeff_min) :* C tank_vol)]
+
+-- Constraint 5
+pcm_density  = cuc' "pcm_density" (nounPhraseSP "density of PCM")
+  "Mass per unit volume of the phase change material"
+  (sub (density ^. symbol) cP) densityU Rational
+  [physc $ \c -> c :> Int 0,
+  physc $ \c -> C pcm_density_min :< c :< C pcm_density_max]
+
+-- Constraint 6
+temp_melt_P  = cuc' "temp_melt_P" (nounPhraseSP "melting point temperature for PCM")
+  "Temperature at which the phase change material transitions from a solid to a liquid"
+  (sup (sub (temp ^. symbol) (Atomic "melt")) cP) centigrade Rational
+  [physc $ \c -> Int 0 :< c :< C temp_C]
+
+-- Constraint 7
+htCap_S_P    = cuc' "htCap_S_P" (nounPhraseSP "specific heat capacity of PCM as a solid")
+  ("The amount of energy required to raise the temperature of a " ++
+  "given unit mass of solid phase change material by a given amount")
+  (sup (sub (heat_cap_spec ^. symbol) cP) cS) UT.heat_cap_spec Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C htCap_S_P_min :< c :< C htCap_S_P_max]
+
+
+-- Constraint 10
 coil_SA      = cuc' "coil_SA"
   (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
@@ -271,11 +293,13 @@ coil_SA      = cuc' "coil_SA"
   [physc $ \c -> c :> Int 0,
   sfwrc $ \c -> c :<= C coil_SA_max]
 
+-- Constraint 11
 temp_C       = cuc' "temp_C" (nounPhraseSP "temperature of the heating coil")
   "The average kinetic energy of the particles within the coil"
   (sub (temp ^. symbol) cC) centigrade Rational
   [physc $ \c -> Int 0 :< c :< Int 100]
 
+-- Constraint 12
 w_density    = cuc' "w_density" (density `of_` water)
   "Mass per unit volume of water" (sub (density ^. symbol) cW) densityU Rational
   [physc $ \c -> c :> Int 0,
@@ -285,21 +309,45 @@ w_density    = cuc' "w_density" (density `of_` water)
 -- Max / Min Variables --
 -------------------------
 
-tank_length_min, tank_length_max, coil_SA_max,
+tank_length_min, tank_length_max, htTransCoeff_min, coil_SA_max,
   w_density_min, w_density_max :: UnitaryChunk
 
+-- Used in Constraint 1
 tank_length_min = unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
   (sub (tank_length ^. symbol) (Atomic "min")) metre Rational
 
 tank_length_max = unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
   (sub (tank_length ^. symbol) (Atomic "max")) metre Rational
 
-coil_SA_max = unitary "coil_SA_max" (nounPhraseSP "maximum surface area of coil")
-  (sub (coil_SA ^. symbol) (Atomic "max")) metre Rational
+-- Used in Constraint 4
+htTransCoeff_min = unitary "htTransCoeff_min"
+  (nounPhraseSP "minimum convective heat transfer coefficient")
+  (sub (htTransCoeff ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
 
+-- Used in Constraint 5
+pcm_density_min = unitary "pcm_density_min" (nounPhraseSP "minimum density of PCM")
+  (sub (pcm_density ^. symbol) (Atomic "min")) densityU Rational
+
+pcm_density_max = unitary "pcm_density_max" (nounPhraseSP "maximum density of PCM")
+  (sub (pcm_density ^. symbol) (Atomic "max")) densityU Rational
+
+-- Used in Constraint 7
+htCap_S_P_min = unitary "htCap_S_P_min"
+  (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
+  (sub (htCap_S_P ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+
+htCap_S_P_max = unitary "htCap_S_P_max"
+  (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
+  (sub (htCap_S_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+
+-- Used in Constraint 10
+coil_SA_max = unitary "coil_SA_max" (nounPhraseSP "maximum surface area of coil")
+  (sub (coil_SA ^. symbol) (Atomic "max")) m_2 Rational
+
+-- Used in Constraint 12
 w_density_min = unitary "w_density_min" (nounPhraseSP "minimum density of water")
-  (sub (w_density ^. symbol) (Atomic "min")) metre Rational
+  (sub (w_density ^. symbol) (Atomic "min")) densityU Rational
 
 w_density_max = unitary "w_density_max" (nounPhraseSP "maximum density of water")
-  (sub (w_density ^. symbol) (Atomic "max")) metre Rational
+  (sub (w_density ^. symbol) (Atomic "max")) densityU Rational
 

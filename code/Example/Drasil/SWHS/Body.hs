@@ -43,7 +43,8 @@ import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe')
+  foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
+  sAnd)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -883,7 +884,6 @@ s4_2_5_d2endPara = map foldlSP [
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
--- FIXME: Temporary dummy tables
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
@@ -891,9 +891,9 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1, con2, con10, con11, con12]
+s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con10, con11, con12]
 
-con1, con2, con10, con11, con12 :: [Sentence]
+con1, con2, con3, con4, con5, con6, con7, con10, con11, con12 :: [Sentence]
 
 con1 = [getS tank_length, E $ C tank_length :> Int 0,
   E $ C tank_length_min :<= C tank_length :<= C tank_length_max,
@@ -905,9 +905,32 @@ con2 = [getS diam, E $ C diam :> Int 0,
   E (Dbl 0.412) +:+ (unwrap $ getUnit diam), S "10%"]
 -- hack to do proper min and max ratio
 
+con3 = [getS pcm_vol,
+  E (C pcm_vol :> Int 0) +:+ sParen (S "*") `sAnd`
+  E (C pcm_vol :< C tank_vol) +:+ sParen (S "D" `sC` S "L"),
+  E (C pcm_vol :>= C tank_vol) +:+ sParen (S "D" `sC` S "L") +:+ S "* minfract",
+  E (Dbl 0.05) +:+ (unwrap $ getUnit pcm_vol), S "10%"]
+
+con4 = [getS pcm_SA,
+  E (C pcm_SA :> Int 0) +:+ sParen (S "*"),
+  E (C pcm_vol :<= C pcm_SA :<= ((Int 2 :/ C htTransCoeff_min) :* C tank_vol)) +:+
+  sParen (S "#"), E (Dbl 1.2) +:+ (unwrap $ getUnit pcm_SA), S "10%"]
+
+con5 = [getS pcm_density, E $ C pcm_SA :> Int 0,
+  E $ C pcm_density_min :< C pcm_density :< C pcm_density_max,
+  E (Dbl 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
+
+con6 = [getS temp_melt_P,
+  E (Int 0 :< C temp_melt_P :< C temp_C) +:+ sParen (S "+"), S "N/A",
+  E (Dbl 44.2) +:+ (unwrap $ getUnit temp_melt_P), S "10%"]
+
+con7 = [getS htCap_S_P, E $ C htCap_S_P :> Int 0,
+  E $ C htCap_S_P_min :< C htCap_S_P :< C htCap_S_P_max,
+  E (Dbl 44.2) +:+ (unwrap $ getUnit htCap_S_P), S "10%"]
+
 con10 = [getS coil_SA, E (C coil_SA :> Int 0) +:+ sParen (S "*"),
   E $ C coil_SA :<= C coil_SA_max,
-  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
+  E (Int 1760) +:+ (unwrap $ getUnit coil_SA), S "10%"]
 
 con11 = [getS temp_C, E (Int 0 :< C temp_C :< Int 100) +:+ sParen (S "+"),
   S "N/A", E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
@@ -917,15 +940,17 @@ con12 = [getS w_density, E $ C w_density :> Int 0,
   E (Int 1000) +:+ (unwrap $ getUnit w_density), S "10%"]
 
 
+inputVar :: [QSWrapper]
+inputVar = map qs [htCap_L_P] ++ [qs htFusion] ++
+  map qs [htCap_W, coil_HTC, pcm_HTC, temp_init, time_final] ++
+  map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+  htCap_S_P, coil_SA, temp_C, w_density]
+
+
+-- FIXME: Temporary dummy table
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
   [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "2") True
-
-inputVar :: [QSWrapper]
-inputVar = map qs [pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P] ++ [qs htFusion] ++ map qs
-  [htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-  ++ map qs [tank_length, diam, coil_SA, temp_C, w_density]
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.
@@ -1428,26 +1453,26 @@ s8_refs :: Contents
 s8_refs = mkRefsList 1 $ map foldlsC s8_refList
 
 s8_refList :: [[Sentence]]
-s8_refList = [ref1, ref2, ref3, ref4, ref5]
+s8_refList = [ref2, ref3, ref4, ref5, ref6]
 
-ref1, ref2, ref3, ref4, ref5 :: [Sentence]
+ref2, ref3, ref4, ref5, ref6 :: [Sentence]
 
-ref1 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
+ref2 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
   S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+
   S "and Sons", S "United States", S "sixth edition edition", S "2007."]
 
-ref2 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
+ref3 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
   S "scientific computing software. Master's thesis", S "McMaster University",
   S "Hamilton", S "Ontario", S "Canada", S "2013."]
 
-ref3 = [S "Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes",
+ref4 = [S "Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes",
   S "2012."]
 
-ref4 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
+ref5 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
   S "How and why to fake it. IEEE Transactions on Software Engineering",
   S "12" :+: Quote (S "2") :+: S ":251-257", S "February 1986."]
 
-ref5 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
+ref6 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
   S "scientific computing. In J. Ralyt" :+: (F Acute 'e'), S "P. Agerfalk",
   S "and N. Kraiem", S "editors", S "Proceedings of the First" +:+
   S "International Workshop on Situational Requirements Engineering" +:+

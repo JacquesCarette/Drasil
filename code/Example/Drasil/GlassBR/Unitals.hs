@@ -155,16 +155,17 @@ lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
 
-terms :: [ConceptChunk] terms = [aspectRatio, glBreakage, lite, glassTy,
-annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad,
-loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac,
-probBreak, specA, blastResisGla, eqTNTChar, sD]
+terms :: [ConceptChunk]
+terms = [aspectRatio, glBreakage, lite, glassTy,
+  annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad,
+  loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac,
+  probBreak, specA, blastResisGla, eqTNTChar, sD]
 
 aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
-glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
-glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
-sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,   notSafe, bomb,
-explosion :: ConceptChunk
+  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
+  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
+  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,   notSafe, bomb,
+  explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 aspectRatio   = dcc "aspectRatio" (aspectR ^. term)

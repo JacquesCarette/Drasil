@@ -294,7 +294,7 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 
 s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1,s6_2_5_table1New, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
+  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
         end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
@@ -376,29 +376,23 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end
               S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
               S "refers to the", phrase ar_max, S "for the plate of glass"]
 
-s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints", 
-  S "Typical Value", S "Uncertainty"] (mkTable [(\x -> x!!0), (\x -> x!!1), 
-  (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
-  [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD])
+s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
+  S "Typical Value", S "Typical Uncertainty"]
+  dataConstList
   (titleize table_ +: S "2" +:+ titleize' inVar) 
   True
 
-s6_2_5_table1New = Table [S "Var", S "Physical Constraints", S "Software Constraints",
-  S "Typical Value", S "Typical Uncertainty"]
-  dataConstList
-  (titleize table_ +: S "2NEW" +:+ titleize' inVar) 
-  True
-
 dataConstList :: [[Sentence]]
-dataConstList = [inputVarANew, inputVarBNew, inputVarPbTolNew, inputVarWNew, inputVarTNTNew, inputVarSDNew]
+dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD]
 
-inputVarANew :: [Sentence]
-inputVarANew = displayConstr plate_len   (1500 :: Int) "10%"
-inputVarBNew = displayConstr plate_width (1200 :: Int) "10%"
-inputVarPbTolNew = displayConstr pb_tol (0.008 :: Double) "0.1%"
-inputVarWNew = displayConstr char_weight (42 :: Int) "10%"
-inputVarTNTNew = displayConstr tNT (1 :: Int) "10%"
-inputVarSDNew = displayConstr standOffDist (45 :: Int) "10%"
+inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
+
+inputVarA = displayConstr plate_len   (1500 :: Int) "10%"
+inputVarB = displayConstr plate_width (1200 :: Int) "10%"
+inputVarPbTol = displayConstr pb_tol (0.008 :: Double) "0.1%"
+inputVarW = displayConstr char_weight (42 :: Int) "10%"
+inputVarTNT = displayConstr tNT (1 :: Int) "10%"
+inputVarSD = displayConstr standOffDist (45 :: Int) "10%"
 
 displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> String -> [Sentence]
 displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
@@ -407,56 +401,16 @@ displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstr
 fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
 fmtConstrP _ [] = EmptyS
 fmtConstrP s [Phys f] = E $ f (C s)
-fmtConstrP s [Sfwr f] = EmptyS
+fmtConstrP _ [Sfwr _] = EmptyS
 fmtConstrP s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s xs
 fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
 --FIXME: merge into a single function?
 fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrS _ [] = S "None"
+fmtConstrS _ [] = EmptyS
 fmtConstrS s [Sfwr f] = E $ f (C s)
-fmtConstrS s [Phys f] = EmptyS
-fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs
+fmtConstrS _ [Phys _] = EmptyS
+fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs 
 fmtConstrS s ((Phys f):xs) = fmtConstrS s (tail ((Phys f):xs))
-
-inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
-
-inputVarA = [(getS plate_len), 
-  E ((C plate_len) :> (Int 0)) `sAnd` E (((C plate_len) :/ (C plate_width)) :> (Int 1)),
-  E ((C dim_min) :<= (C plate_len) :<= (C dim_max))
-  `sAnd` E (((C plate_len) :/ (C plate_width)) :< (C ar_max)),
-  E (Int 1500) +:+ (unwrap $ getUnit plate_len),
-  S "10%"]
-
-inputVarB = [(getS plate_width),
-  E ((C plate_width) :> Int 0) `sAnd` E ((C plate_width) :< (C plate_len)),
-  E ((C dim_min) :<= (C plate_width) :<= (C dim_max))
-  `sAnd` E (((C plate_len) :/ (C plate_width)) :< (C ar_max)),
-  E (Int 1200) +:+ (unwrap $ getUnit plate_width),
-  S "10%"]
-
-inputVarPbTol = [(getS pb_tol),
-  E (Int 0 :< (C pb_tol) :< Int 1),
-  S "-",
-  E (Dbl 0.008),
-  S "0.1%"]
-
-inputVarW = [(getS char_weight),
-  E ((C char_weight) :>= (Int 0)),
-  E ((C cWeightMin) :< (C char_weight) :< (C cWeightMax)),
-  E (Int 42) +:+ (unwrap $ getUnit char_weight), 
-  S "10%"]
-
-inputVarTNT = [(getS tNT),
-  E ((C tNT) :> (Int 0)),
-  S "-",
-  E (Int 1), 
-  S "10%"]
-
-inputVarSD = [(getS standOffDist),
-  E ((C standOffDist) :> (Int 0)),
-  E ((C sd_min) :< (C standOffDist) :< (C sd_max)),
-  E (Int 45) +:+ (unwrap $ getUnit standOffDist), 
-  S "10%"]
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]

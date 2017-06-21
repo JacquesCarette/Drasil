@@ -5,6 +5,7 @@ import Data.Drasil.SI_Units
 import Prelude hiding (log, id, exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
+import Drasil.DocumentLanguage
 
 --FIXME: having id "" and term "" is completely bogus, and should not
 --  be allowed.  This implicitly says that something here does not make sense.
@@ -16,6 +17,11 @@ import Drasil.GlassBR.Unitals
 dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
+
+gbQDefns :: [Block QDefinition]
+gbQDefns = [Parallel hFromt {-DD2-} [loadDF {-DD3-}, glaTyFac {-DD6-}]] ++ --can be calculated on their own
+  map (\x -> Parallel x []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
+  tolStrDisFac {-DD9-}, tolPre {-DD8-}, nonFL {-DD5-}] 
 
 --DD1--
 

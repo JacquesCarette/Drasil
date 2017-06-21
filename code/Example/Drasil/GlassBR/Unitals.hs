@@ -23,8 +23,8 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 
 {--}
 
-gbrInputsConstrained :: [ConstrainedChunk]
-gbrInputsConstrained = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick]
+gbInputsConstrained :: [QSWrapper]
+gbInputsConstrained = map qs [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick]
 
 plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, prob_br, nom_thick :: ConstrainedChunk
 
@@ -77,7 +77,12 @@ nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
                   :|| (c := (V "5.0")) :|| (c := (V "6.0")) :|| (c := (V "8.0")) :|| (c := (V "10.0"))
                   :|| (c := (V "12.0")) :|| (c := (V "16.0")) :|| (c := (V "19.0")) :|| (c := (V "22.0")) ]
 
---glass_type??? see Issue #286
+--glass_type??? see Issue #299
+
+{--}
+
+gbOutputs :: [QSWrapper]
+gbOutputs = map qs [is_safe1, is_safe2]
 
 {--}
 
@@ -266,7 +271,7 @@ glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
-  ++ (map qs glassBRUnitless) ++ (map qs gbrInputsConstrained))
+  ++ (map qs glassBRUnitless) ++ (map qs gbInputsConstrained))
 
 temporaryLOSymbols :: [QSWrapper]
 temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]

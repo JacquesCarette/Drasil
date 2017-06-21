@@ -77,9 +77,13 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]):
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI glassBRProg srs authors this_si this_symbols 
-  ([] :: [CQSWrapper]) acronyms ([] :: [QDefinition])
-  (map qs gbrInputsConstrained)
-  ([] :: [QSWrapper]) (gbQDefns :: [Block QDefinition]) --FIXME: All named ideas, not just acronyms.
+  ([] :: [CQSWrapper]) 
+  (acronyms)
+  (dataDefns)
+  (gbInputsConstrained)
+  (gbOutputs) 
+  (gbQDefns :: [Block QDefinition]) 
+  --FIXME: All named ideas, not just acronyms.
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

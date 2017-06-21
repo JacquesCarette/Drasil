@@ -166,8 +166,15 @@ netForce :: RelationConcept
 netForce = makeRC "netForce" (nounPhraseSP "net force") fNet_desc fNet_rel
 
 fNet_rel :: Relation
-fNet_rel = C genForce := (Neg $ C watrForceDif) 
+fNet_rel = C genForce := (Neg $ C watrForceDif) - (C earthqkLoadFctr)*(C slcWght)
+  - (C baseHydroForce) * sin (C baseAngle) + (C surfHydroForce) * sin (C surfAngle)
+  + (C surfLoad) * sin (C impLoadAngle)
+{-
+C genForce := (Neg $ C slcWght) + (C baseHydroForce) * cos (C baseAngle) - (C surfHydroForce) * cos (C surfAngle)
+  - (C surfLoad) * cos (C impLoadAngle)
+-}
 --FIXME: requires two lines of equal signs
+
 fNet_desc :: Sentence
 fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   phrase slice, S "for the RFEM" +:+. phrase model, S "The", plural force,

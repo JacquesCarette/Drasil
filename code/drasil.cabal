@@ -169,6 +169,7 @@ executable nopcm
     , Drasil.SWHS.Modules
     , Drasil.SWHS.Reqs
     , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
@@ -339,6 +340,7 @@ executable swhs
     , Drasil.SWHS.Modules
     , Drasil.SWHS.Reqs
     , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols

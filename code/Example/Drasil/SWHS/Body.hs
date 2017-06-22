@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
-  makeTMatrix, mkRefsList, unwrap)
+  makeTMatrix, mkRefsList, unwrap, refFromType)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
@@ -26,6 +26,7 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
 import Drasil.SWHS.TMods
+import Drasil.SWHS.IMods
 import Drasil.SWHS.DataDefs
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
@@ -673,16 +674,22 @@ s4_2_5_subpar = [foldlSP_ [S "The goals",  acroGS "1", S "to",
   phrase CT.phase_change, sParen (at_start' inModel +:+.
   S "are left out because they are not currently implemented in Drasil")]]
 
-{-s4_2_5 = SRS.inModel ((s4_2_5_intro) ++ (s4_2_5_deriv1) ++
-  (s4_2_5_deriv2)) []
+s4_2_5 :: Section
+--s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 (s4_2_5_IMods)
+s4_2_5 = inModelF s4_1 s4_1 s4_1 s4_1 (s4_2_5_IMods)
 
+s4_2_5_IMods :: [Contents]
+s4_2_5_IMods = map swhsSymbMapT iModels
+
+{-
 s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
   S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+
   S "into one which is expressed in mathematical terms. It uses concrete" +:+
   plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
   S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
   plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
-  (makeRef s4_2_3)), -}
+  (makeRef s4_2_3))]
+-}
 
 -- The first paragraph is completely general and repeated in other examples.
 -- The second paragraph is very specific, and the other examples don't even
@@ -1284,9 +1291,10 @@ s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4",
 
 s7_instaModel, s7_data, s7_funcReq, s7_likelyChanges, s7_dataDefs, s7_genDefs,
   s7_assumptions, s7_theories :: [String]
-s7_dataRef, s7_funcReqRef :: [Sentence]
+s7_dataRef, s7_funcReqRef, s7_instaModelRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
+s7_instaModelRef = map (refFromType Theory swhsSymMap) iModels
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -1309,11 +1317,11 @@ s7_likelyChanges = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 --------------------------------------------------------------------
 
 s7_row_t2 :: [String]
-s7_row_t2 = s7_funcReq
+s7_row_t2 = s7_funcReq ++ s7_instaModel
 
 --column header
 s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_funcReqRef)
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_funcReqRef ++ s7_instaModelRef)
 
 s7_columns_t2 :: [[String]]
 s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
@@ -1344,7 +1352,7 @@ s7_t2_R11 = ["IM2"]
 s7_table2_New :: Contents
 s7_table2_New = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_row_header_t2) (s7_columns_t2) (s7_row_t2))
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
+  (showingCxnBw traceyMatrix (S "NEW ^" +:+ titleize' requirement +:+ S "and" +:+
   titleize' inModel)) True
 
 -------------------------------------------------------------------

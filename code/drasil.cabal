@@ -165,6 +165,7 @@ executable nopcm
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Modules
     , Drasil.SWHS.Reqs
@@ -336,6 +337,7 @@ executable swhs
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.Modules
     , Drasil.SWHS.Reqs

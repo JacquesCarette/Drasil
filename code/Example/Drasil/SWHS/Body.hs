@@ -28,6 +28,7 @@ import Drasil.SWHS.Concepts
 import Drasil.SWHS.TMods
 import Drasil.SWHS.IMods
 import Drasil.SWHS.DataDefs
+import Drasil.SWHS.GenDefs
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs

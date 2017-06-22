@@ -1,7 +1,7 @@
 module Drasil.SSP.Body where
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
+import Prelude hiding (id, sin, cos, tan)
 
 import Language.Drasil
 import Data.Drasil.SI_Units
@@ -326,12 +326,34 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   S "for Pi of the soil is defined in the perpendicular force equilibrium of a slice from GD2, Using the",
   S "effective normal N0i of T4 shown in equation (1)"],
   
+  EqnBlock $
+  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  
   foldlSP [S "The values of the interslice forces E and X in the equation are unknown, while the other values",
   S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",
   S "the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2)"],
 
+  EqnBlock $
+  (C nrmFNoIntsl) := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  
   foldlSP [S "Using N*i, a resistive shear force neglecting the influence of interslice forces can be solved for in",
-  S "terms of all known values as done in equation (3)"]
+  S "terms of all known values as done in equation (3)"],
+  
+  EqnBlock $
+  C shearRNoIntsl := (C nrmFNoIntsl) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle),
+  
+  EqnBlock $
+  C shearRNoIntsl := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)) :*
+  tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)
   
   ]
 
@@ -413,17 +435,6 @@ s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? i
 
 fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation :: [Contents]
-{-
-fctSftyDerivation = [foldlSP [S ""]]
-
-nrmShrDerivation = [foldlSP [S ""]]
-
-intrSlcDerivation = [foldlSP [S ""]]
-
-rigDisDerivation = [foldlSP [S ""]]
-
-rigFoSDerivation = [foldlSP [S ""]]
--}
 
 fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
   S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",

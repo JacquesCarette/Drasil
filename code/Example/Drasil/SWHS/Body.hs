@@ -1277,8 +1277,8 @@ s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE,
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
-s7_instaModel, s7_data, s7_funcReq, s7_likelyChanges, s7_dataDefs, s7_genDefs,
-  s7_assumptions, s7_theories :: [String]
+s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
+  s7_assump, s7_theories :: [String]
 s7_dataRef, s7_funcReqRef, s7_instaModelRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
@@ -1291,16 +1291,21 @@ s7_funcReqRef = makeListRef s7_funcReq s5_1
 s7_data = ["Data Constraints"]
 s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
-s7_assumptions = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
+s7_assumpRef = makeListRef s7_assump s5_1 --s4_2_1_list
+--FIXME: 's5_1' needs to be replaced by the appropriate Section for assumptions once built
 
 s7_theories = ["T1", "T2", "T3"]
+s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
 
 s7_genDefs = ["GD1", "GD2"]
 
 s7_dataDefs = ["DD1", "DD2", "DD3"]
+s7_dataDefRef = map (refFromType Data swhsSymMap) dataDefns
 
-s7_likelyChanges = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
+s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
+s7_likelyChgRef = makeListRef s7_likelyChg s6
 
 --------------------------------------------------------------------
 
@@ -1349,6 +1354,50 @@ s7_table2 = Table (EmptyS:s7_row_header_t2)
 
 -------------------------------------------------------------------
 -------------------------------------------------------------------
+
+s7_row_t3 :: [String]
+s7_row_t3 = s7_assump
+
+s7_row_header_t3, s7_col_header_t3 :: [Sentence]
+s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
+
+s7_col_header_t3 = zipWith itemRefToSent
+  (s7_theories {-++ s7_genDefs-} ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
+  (s7_theoriesRef {-++ _-} ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
+
+s7_columns_t3 :: [[String]]
+s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
+  s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
+  s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
+
+s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
+  s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
+  s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6 :: [String]
+
+s7_t3_T1  = ["A1"]
+s7_t3_T2  = []
+s7_t3_T3  = []
+s7_t3_GD1 = ["A2"]
+s7_t3_GD2 = ["A3", "A4", "A5", "A6"]
+s7_t3_DD1 = ["A7", "A8", "A9"]
+s7_t3_DD2 = ["A3", "A4"]
+s7_t3_DD3 = []
+s7_t3_DD4 = []
+s7_t3_IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
+s7_t3_IM2 = ["A12", "A13", "A16", "A17", "A18"]
+s7_t3_IM3 = ["A14", "A19"]
+s7_t3_IM4 = ["A13", "A18"]
+s7_t3_LC1 = ["A4"]
+s7_t3_LC2 = ["A8"]
+s7_t3_LC3 = ["A9"]
+s7_t3_LC4 = ["A11"]
+s7_t3_LC5 = ["A12"]
+s7_t3_LC6 = ["A15"]
+
+s7_table3NEW = Table (EmptyS:s7_row_header_t3)
+  (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other"
+  +:+ titleize' item)) True
 
 s7_table3 :: Contents
 s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4",

@@ -25,6 +25,9 @@ import Drasil.SWHS.DataDefs
 
 import Control.Lens ((^.))
 
+tModels :: [RelationConcept]
+tModels = [t1ConsThermE] ++ [t2SensHtE] ++ [t3LatHtE]
+
 -------------------------
 -- Theoretical Model 1 --
 -------------------------

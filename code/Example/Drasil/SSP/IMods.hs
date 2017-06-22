@@ -43,9 +43,10 @@ nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio") nrmShrF
 
 nrmShrF_rel :: Relation
 nrmShrF_rel = (C fs) := Case [case1,case2,case3]
-  where case1 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , Int 0 := (Int 0))
-        case2 = ((C baseWthX)*((C intNormForce)+(C intNormForce)+(C watrForce)+(C watrForce)) * tan (C baseAngle) , Int 0 := (Int 0))
-        case3 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , Int 0 := (Int 0))
+  where case1 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , (V "i") := Int 1) --FIXME: use index i
+        case2 = ((C baseWthX)*((C intNormForce)+(C intNormForce)+(C watrForce)+(C watrForce)) * tan (C baseAngle),
+                Int 2 :<= (V "i") :<= ((C numbSlices) - (Int 1)))
+        case3 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , (V "i") := (C numbSlices))
 
 --FIXME: add the long equation
 

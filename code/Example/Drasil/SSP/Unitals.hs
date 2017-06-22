@@ -37,7 +37,7 @@ sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
               satWeight, waterWeight]
 sspOutputs = [fs, dx_i, dy_i]
 
-gtZeroConstr :: [Constraint]
+gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
 gtZeroConstr = [physc $ (:<) (Int 0)]
 
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
@@ -53,12 +53,12 @@ cohesion     = cuc' "c'" (cn $ "effective cohesion")
   (Atomic "c'") pascal Real gtZeroConstr
 
 poissnsRatio = ConstrConcept SM.poissnsR
-  ((physc $ (:>) (Int 1)):gtZeroConstr)
+  [physc $ \c -> (Int 0) :< c :< (Int 1)]
 
 fricAngle    = cuc' "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (Concat [Greek Phi_V, Atomic "'"]) degree Real ((physc $ (:>) (Int 90)):gtZeroConstr)
+  (Concat [Greek Phi_V, Atomic "'"]) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
 
 dryWeight   = cuc' "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."

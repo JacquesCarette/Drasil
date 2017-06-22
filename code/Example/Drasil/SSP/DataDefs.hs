@@ -28,10 +28,10 @@ sliceWght = fromEqn (slcWght ^. id) (slcWght ^. term) (slcWght ^. symbol) newton
 
 slcWgtEqn :: Expr
 slcWgtEqn = (C baseWthX) * (Case [case1,case2,case3])
-  where case1 = (((C slopeHght)-(C slipHght ))*(C satWeight),(C waterHght) :> (C slopeHght))
+  where case1 = (((C slopeHght)-(C slipHght ))*(C satWeight),(C waterHght) :>= (C slopeHght))
         case2 = (((C slopeHght)-(C waterHght))*(C dryWeight) + ((C waterHght)-(C slipHght))*(C satWeight),
                 (C slopeHght) :> (C waterHght) :> (C slipHght))
-        case3 = (((C slopeHght)-(C slipHght ))*(C dryWeight),(C waterHght) :< (C slipHght))
+        case3 = (((C slopeHght)-(C slipHght ))*(C dryWeight),(C waterHght) :<= (C slipHght))
 
 --DD2
 
@@ -41,7 +41,7 @@ baseWtrF = mkDataDef' baseHydroForce bsWtrFEqn
 bsWtrFEqn :: Expr
 bsWtrFEqn = (C baseLngth)*(Case [case1,case2])
   where case1 = (((C waterHght)-(C slipHght))*(C waterWeight),(C waterHght) :> (C slipHght))
-        case2 = (Int 0, (C waterHght) :< (C slipHght))
+        case2 = (Int 0, (C waterHght) :<= (C slipHght))
 
 --DD3
 
@@ -51,7 +51,7 @@ surfWtrF = mkDataDef' surfHydroForce surfWtrFEqn
 surfWtrFEqn :: Expr
 surfWtrFEqn = (C surfLngth)*(Case [case1,case2])
   where case1 = (((C waterHght)-(C slopeHght))*(C waterWeight),(C waterHght) :> (C slopeHght))
-        case2 = (Int 0, (C waterHght) :< (C slopeHght))
+        case2 = (Int 0, (C waterHght) :<= (C slopeHght))
 
 --DD4
 
@@ -62,10 +62,10 @@ intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
   where case1 = (((C slopeHght)-(C slipHght )):^(Int 2):/(Int 2) :* (C satWeight) +
                  ((C waterHght)-(C slopeHght)):^(Int 2) :* (C satWeight),
-                (C waterHght) :> (C slopeHght))
+                (C waterHght) :>= (C slopeHght))
         case2 = (((C waterHght)-(C slipHght )):^(Int 2):/(Int 2) :* (C satWeight),
                 (C slopeHght) :> (C waterHght) :> (C slipHght))
-        case3 = (Int 0,(C waterHght) :< (C slipHght))
+        case3 = (Int 0,(C waterHght) :<= (C slipHght))
 
 --DD5
 

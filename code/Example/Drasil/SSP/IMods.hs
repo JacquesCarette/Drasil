@@ -67,7 +67,7 @@ sliceFs_rel = (C intNormForce) := Case [
   (((C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (C shrResC),
     (Int 1) := (Int 1)),
   (((C mobShrC) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/ (C shrResC),
-    (Int 1) :< (Int 1) :< ((C numbSlices) :- (Int 1))),
+    (Int 1) :<= (Int 1) :<= ((C numbSlices) :- (Int 1))),
   ((Int 0), (Int 0) := (Int 0) * (V "and") * (Int 0) := (C numbSlices))]
   -- FIXME: Use index i as part of condition
 

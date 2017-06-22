@@ -432,19 +432,19 @@ fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearran
   S "IM1"],
   
   foldlSP [S "The constants Psi and Phi described in equations 20 and 19 are functions of the unknowns: the",
-  S "interslice normal/shear force ratio lambda (IM2) and the Factor of Safety itself FS (IM1)"]
+  S "interslice normal/shear force ratio", getS normToShear, S "(IM2) and the Factor of Safety itself FS (IM1)"]
   ]
 
 nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
   S "taken, with the assumption of GD5. Results in equation (13)"],
   
-  foldlSP [S "The equation in terms of lambda leads to equation (14)"],
+  foldlSP [S "The equation in terms of", getS normToShear, S "leads to equation (14)"],
   
   foldlSP [S "Taking a summation of each slice, and considering the boundary conditions that E0 and En are",
-  S "equal to zero, a general equation for the constant lambda is developed in equation (15), also found in",
+  S "equal to zero, a general equation for the constant", getS normToShear, S "is developed in equation (15), also found in",
   S "IM2"],
   
-  foldlSP [S "Equation (15) for lambda, is a function of the unknown interslice normal force E (IM3)"]
+  foldlSP [S "Equation (15) for", getS normToShear `sC` S "is a function of the unknown interslice normal force E (IM3)"]
   ]
 
 intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
@@ -463,7 +463,7 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   S "to equation (21), also seen in IM3"],
   
   foldlSP [S "The constants Psi and Phi in equation (21) for Ei is a function of the unknown values, the interslice",
-  S "normal/shear force ratio lambda (IM2), and the Factor of Safety FS (IM1)"]
+  S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety FS (IM1)"]
   ]
 
 rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions",
@@ -481,7 +481,7 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equ
   ]
 
 rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element",
-  S "i the displacements delta xi and delta yi, are solved from the system of equations in IM4. The definition of",
+  S "i the displacements", getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in IM4. The definition of",
   S "epsilon i as the rotation of the displacement vector delta i is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice delta u in equation",
   S "(24) and normal to the base of the slice delta v in equation (25)"],
   

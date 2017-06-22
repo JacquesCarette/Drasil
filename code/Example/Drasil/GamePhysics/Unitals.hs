@@ -73,9 +73,9 @@ force_2 = ucFromCV (forceParam "2" "second") newton
 force_i = ucFromCV (forceParam "i" "i-th") newton
 
 forceParam, massParam :: String -> String -> ConVar
-forceParam n w = cvR (dccWDS "force" (cn $ "force exerted by the" ++ w ++ "body (on another body)") (phrase QP.force)) (sub (QP.force ^. symbol) (Atomic n))
+forceParam n w = cvR (dccWDS "force" (cn $ "force exerted by the " ++ w ++ " body (on another body)") (phrase QP.force)) (sub (QP.force ^. symbol) (Atomic n))
 
-massParam n w = cvR (dccWDS "mass" (cn $ "mass of the" ++ w ++ "body") (phrase QPP.mass))
+massParam n w = cvR (dccWDS "mass" (cn $ "mass of the " ++ w ++ " body") (phrase QPP.mass))
                 (sub (QPP.mass ^. symbol) (Atomic n))
 -- T3 --
 mass_1, mass_2, dispUnit, dispNorm, sqrDist :: UnitalChunk
@@ -101,7 +101,7 @@ vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B :: UnitalChunk
 
 velParam :: String -> Symbol -> ConVar
 velParam n w = cvR (dccWDS "velocity" (compoundPhrase' (QP.velocity ^. term)
-               (cn $ "at point" ++ n)) (phrase $ QP.velocity))
+               (cn $ "at point " ++ n)) (phrase $ QP.velocity))
                (sub (QP.velocity ^. symbol) w)
 
 -- FIXME: parametrized hack
@@ -113,7 +113,7 @@ angVel_B = ucFromCV (angParam "B" cB) angVelU
 
 angParam :: String -> Symbol -> ConVar
 angParam n w = cvR (dccWDS "angular velocity" (compoundPhrase'
-              (cn $ "is the" ++ n ++ "body's") (QP.angularVelocity ^. term))
+              (cn $ "is the " ++ n ++ " body's") (QP.angularVelocity ^. term))
               (phrase $ QP.angularVelocity))
               (sub (QP.angularVelocity ^. symbol) w)
 
@@ -186,7 +186,7 @@ initRelVel = ucFromCV relVel velU
 
 rigidParam :: String -> Symbol -> ConVar
 rigidParam n w = cvR (dccWDS "mass" (compoundPhrase' (QPP.mass ^. term)
-                 (cn $ "of rigid body" ++ n)) (phrase $ QPP.mass))
+                 (cn $ "of rigid body " ++ n)) (phrase $ QPP.mass))
                  (sub (QPP.mass ^. symbol) w)
 
 mass_A = ucFromCV (rigidParam "A" cA) kilogram
@@ -229,7 +229,7 @@ perpLen_B = ucFromCV (perpParam "B" (contDisp_B ^. symbol)) metre
 -- FIXME: parametrized hack
 momtParam :: String -> Symbol -> ConVar
 momtParam n w = cvR (dccWDS "momentOfInertia" (compoundPhrase'
-                (QP.momentOfInertia ^. term) (cn $ "of rigid body" ++ n))
+                (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
                 (phrase $ QP.momentOfInertia))
                 (sub (QP.momentOfInertia ^. symbol) w)
 

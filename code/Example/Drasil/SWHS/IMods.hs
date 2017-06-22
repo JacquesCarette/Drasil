@@ -6,6 +6,7 @@ import Prelude hiding (id)
 import Drasil.SWHS.Unitals
 import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
+import Data.Drasil.Quantities.Physics (time)
 
 iModels :: [RelationConcept]
 iModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -44,7 +45,17 @@ htWtr_Rel :: Relation
 htWtr_Rel = Int 0
 
 htWtrDesc :: Sentence
-htWtrDesc = fixmeS
+htWtrDesc = foldlSent [S "The above equation is derived using" +:+. acroT "2", 
+  (getS w_E) `isThe` "change in thermal energy of the liquid water relative to",
+  S "the energy at the initial temperature", sParen (getS temp_init) +:+.
+  sParen (unwrap $ getUnit pcm_initMltE), (getS htCap_W) `isThe` S "specific heat",
+  S "capacity of liquid water", (((sParen (unwrap $ getUnit htCap_S_P)) `sAnd` (getS w_mass))
+  `isThe` S "mass of the water") +:+. sParen (unwrap $ getUnit w_mass), 
+  S "The change in temperature is the difference between the temperature at time", 
+  P (time ^. symbol), sParen (unwrap $ getUnit t_init_melt) `sC` (getS temp_W) `sAnd`
+  S "the", phrase temp_init `sC` getS temp_init +:+. sParen (unwrap $ getUnit temp_init),
+  S "This equation applies as long as", E ((Int 0) :< (C temp_W) :< (Int 0)) :+: 
+  (unwrap $ getUnit temp_W), sParen (acroA "14" `sC` acroA "19")]
 
 {-IM4-}
 

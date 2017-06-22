@@ -324,22 +324,51 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
 resShrDerivation :: [Contents]
 resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as Pi in GD3. The effective normal in the equation",
   S "for Pi of the soil is defined in the perpendicular force equilibrium of a slice from GD2, Using the",
-  S "effective normal N0 i of T4 shown in equation (1)"],
+  S "effective normal N0i of T4 shown in equation (1)"],
   
   foldlSP [S "The values of the interslice forces E and X in the equation are unknown, while the other values",
   S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",
-  S "the affect of interslice forces, to obtain a solvable value as done for N* i in equation (2)"],
+  S "the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2)"],
 
-  foldlSP [S "Using N* i , a resistive shear force neglecting the influence of interslice forces can be solved for in",
+  foldlSP [S "Using N*i, a resistive shear force neglecting the influence of interslice forces can be solved for in",
   S "terms of all known values as done in equation (3)"]
   
   ]
 
 mobShrDerivation :: [Contents]
-mobShrDerivation = [foldlSP [S " mobShrDerivation"]]
+mobShrDerivation = [foldlSP [S "The mobile shear force acting on a slice is defined",
+  S "as Si from the force equilibrium in GD2, also shown in equation (4)"],
+  
+  foldlSP [S "The equation is unsolvable, containing the unknown interslice normal force E and shear force X.",
+  S "Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force",
+  S "without the influence of interslice forces T, as done in equation (5)"],
+  
+  foldlSP [S "The values of Ri and Ti are now defined completely in terms of the known force property values",
+  S "of DD1 to DD9"]
+  ]
 
 stfMtrxDerivation :: [Contents]
-stfMtrxDerivation = [foldlSP [S " stfMtrxDerivation"]]
+stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD8",
+  S "to define stiffness matrix Ki, as seen in equation (6)"],
+
+  foldlSP [S "For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate",
+  S "system,", S "delta" , S "i of GD9. The interslice elements are left in their standard coordinate system, and",
+  S "therefore are described by the same equation from GD8. Seen as Ks,i in DD12. Kst,i is the shear",
+  S "element in the matrix, and Ksn,i is the normal element in the matrix, calculated as in DD14"],
+  
+  foldlSP [S "For basal surfaces the stiffness constants and displacements refer to a system rotated for the base",
+  S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",
+  S "and interslice surfaces of an element i they must reference the same coordinate system. The basal",
+  S "stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface.",
+  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix K*i"],
+  
+  foldlSP [S "The Hooke's law force displacement relationship of GD8 applied to the base also references a",
+  S "displacement vector epsilon i of GD9 rotated for the base angle of the slice alpha i. The basal displacement",
+  S "vector delta i is rotated clockwise to align with the interslice displacement vector delta i, applying the",
+  S "definition of epsilon i in terms of delta i as seen in GD9. Using this with base stiffness matrix K*i, a basal",
+  S "force displacement relationship in the same coordinate system as the interslice relationship can be",
+  S "derived as done in equation (8)"]
+  ]
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below

@@ -384,7 +384,7 @@ s4_2_3_eq = [
   S "and", getS temp, S "are constant over the", phrase vol `sC`
   S "which is true in our case by", titleize' assumption,
   sParen (acroA "3") `sC` sParen (acroA "4") `sC`
-  sParen (acroA "5") `sC` S "and", sParen (acroA "6") `sC` S "we have"],
+  S "and", sParen (acroA "5") `sC` S "we have"],
 
   EqnBlock
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)

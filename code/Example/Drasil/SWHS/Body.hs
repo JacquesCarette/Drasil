@@ -1252,11 +1252,11 @@ s7_trailing = [
 
 
 s7_row_t1 :: [String]
-s7_row_t1 = s7_theories ++ {-s7_genDefs ++-} s7_dataDefs ++ s7_instaModel
+s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
 
 --column header
 s7_row_header_t1 :: [Sentence]
-s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 (s7_theoriesRef {-++ _-} ++ s7_dataDefRef ++ s7_instaModelRef)
+s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
 
 s7_columns_t1 :: [[String]]
 s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
@@ -1294,7 +1294,7 @@ s7_table1 = Table (EmptyS:s7_row_header_t1)
 s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
   s7_assump, s7_theories :: [String]
 s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
-  s7_dataDefRef, s7_likelyChgRef :: [Sentence]
+  s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
 s7_instaModelRef = map (refFromType Theory swhsSymMap) iModels
@@ -1315,6 +1315,7 @@ s7_theories = ["T1", "T2", "T3"]
 s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
 
 s7_genDefs = ["GD1", "GD2"]
+s7_genDefRef = map (refFromType Theory swhsSymMap) swhsGenDefs
 
 s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
 s7_dataDefRef = map (refFromType Data swhsSymMap) dataDefns
@@ -1377,8 +1378,8 @@ s7_row_header_t3, s7_col_header_t3 :: [Sentence]
 s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
 
 s7_col_header_t3 = zipWith itemRefToSent
-  (s7_theories {-++ s7_genDefs-} ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
-  (s7_theoriesRef {-++ _-} ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
+  (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
 
 s7_columns_t3 :: [[String]]
 s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,

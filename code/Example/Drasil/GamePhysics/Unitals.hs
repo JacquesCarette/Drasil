@@ -274,8 +274,7 @@ mmntOfInCons   = constrained QP.momentOfInertia    [nonNegativeConstraint]
 gravAccelCons  = constrained QP.gravitationalConst []
 posCons        = constrained QP.position           []
 veloCons       = constrained QP.velocity           [] 
-orientCons     = constrained QM.orientation        [nonNegativeConstraint,
-                                                    physc $ \c -> c:< (Dbl 6.28)] --should be 2pi
+orientCons     = constrained QM.orientation        [] -- physical constraint not needed space is radians
 angVeloCons    = constrained QP.angularVelocity    []
 forceCons      = constrained QP.force              []
 torqueCons     = constrained QP.torque             [] 

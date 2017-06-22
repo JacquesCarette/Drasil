@@ -79,8 +79,7 @@
 
 \begin{document}
 
-\title{Software Requirements Specification for Solar Water Heating Systems
-  Incorporating Phase Change Material} 
+\title{Software Requirements Specification for Solar Water Heating Systems} 
 \author{Thulasi Jegatheesan and Spencer Smith}
 \date{\today}
 	
@@ -402,7 +401,39 @@ This section provides general information about the system,
 identifies the interfaces between the system and its environment, and describes the
 user characteristics and the system constraints.
 
-%\subsection{System Context}
+\subsection{System Context}
+
+Figure~\ref{Fig_SystemContext} shows the system context.  A circle represents an
+external entity outside the software, the user in this case.  A rectangle
+represents the software system itself (\progname{}).  Arrows are used to show the data
+flow between the system and its environment.
+
+\begin{figure}[h!]
+\begin{center}
+ \includegraphics[width=0.6\textwidth]{SystemContextFigure}
+\caption{System Context}
+\label{Fig_SystemContext} 
+\end{center}
+\end{figure}
+
+\progname{} is mostly self-contained.  The only external interaction is through
+the user interface.  The responsibilities of the user and the system are as
+follows:
+
+\begin{itemize}
+\item User Responsibilities:
+\begin{itemize}
+\item Provide the input data to the system, ensuring no errors in the data entry
+\item Take care that consistent units are used for input variables
+\end{itemize}
+\item \progname{} Responsibilities:
+\begin{itemize}
+\item Detect data type mismatch, such as a string of characters instead of a
+  floating point number
+\item Determine if the inputs satisfy the required physical and software constraints
+\item Calculate the required outputs
+\end{itemize}
+\end{itemize}
 
 \subsection{User Characteristics}
 

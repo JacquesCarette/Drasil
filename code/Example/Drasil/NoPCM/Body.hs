@@ -7,7 +7,7 @@ import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
   s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
-  con1, con2, con10, con11, con12, con13, con14, s6_start, 
+  con1, con2, con10, con11, con12, con13, con14, con16, con17, s6_start, 
   ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
@@ -411,7 +411,7 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   titleize' variable) True
   
 s4_2_6_conList :: [[Sentence]]
-s4_2_6_conList = [con1, con2, con10, con11, con12, con13, con14]
+s4_2_6_conList = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] $ map

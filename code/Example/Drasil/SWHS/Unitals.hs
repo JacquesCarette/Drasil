@@ -23,18 +23,18 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsCons
 swhsUnits :: [UCWrapper]
 swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L, htCap_L_P,
   htCap_S, htCap_V, sens_heat, pcm_initMltE, pcm_E, w_E,
-  vol_ht_gen, htTransCoeff, pcm_HTC, pcm_mass, w_mass, ht_flux, latent_heat,
+  vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
-  boil_pt, temp_env, time_final, temp_init, melt_pt, t_init_melt,
+  boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, temp_PCM, temp_W, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [htFusion, mass, time] -- ++ [tank_length, diam, coil_SA]
 
 in_SA, out_SA, htCap_L, htCap_L_P, htCap_S, htCap_V,
   htFusion, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff,
-  pcm_HTC, pcm_mass, w_mass,
+  pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
-  temp_env, time_final, temp_init, t_init_melt,
+  temp_env, t_init_melt,
   t_final_melt, temp_PCM, temp_W, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
@@ -102,12 +102,6 @@ htFusion     = makeUCWDS "htFusion" (nounPhraseSP
   S "completely melt a unit " +:+ phrase mass +:+. S "of a substance")
   (sub cH lF) specificE
 
-pcm_HTC      = uc' "pcm_HTC"
-  (nounPhraseSP "convective heat transfer coefficient between PCM and water")
-  ("The convective heat transfer coefficient that models " ++
-  "the thermal flux from the phase change material to the surrounding water")
-  (sub lH cP) UT.heat_transfer_coef
-
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
   (sub (mass ^. symbol) cP) kilogram
@@ -142,14 +136,6 @@ latentE_P    = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
 
 temp_env     = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment" (sub (temp ^. symbol) (Atomic "env")) centigrade
-
-time_final   = uc' "time_final" (nounPhraseSP "final time")
-  ("The amount of time elapsed from the beginning of the " ++
-  "simulation to its conclusion") (sub (time ^. symbol) (Atomic "final")) second
-
-temp_init    = uc' "temp_init" (nounPhraseSP "initial temperature")
-  "The temperature at the beginning of the simulation"
-  (sub (temp ^. symbol)(Atomic "init")) centigrade
 
 t_init_melt  = uc' "t_init_melt"
   (nounPhraseSP "time at which melting of PCM begins")
@@ -218,10 +204,12 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
 
 swhsConstrained ::[ConstrConcept]
 swhsConstrained = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, coil_SA, temp_C, w_density, htCap_W, coil_HTC]
+  temp_melt_P, htCap_S_P, coil_SA, temp_C, w_density, htCap_W, coil_HTC, pcm_HTC,
+  temp_init, time_final]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, coil_SA, temp_C, w_density, htCap_W, coil_HTC :: ConstrConcept
+  htCap_S_P, coil_SA, temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, 
+  time_final :: ConstrConcept
 
 -- Constraint 1
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
@@ -308,7 +296,30 @@ coil_HTC     = cuc' "coil_HTC" (nounPhraseSP
   "the thermal flux from the coil to the surrounding water") (sub (htTransCoeff ^. symbol) cC)
   UT.heat_transfer_coef Rational
   [physc $ \c -> c :> Int 0,
-  sfwrc $ \c -> C coil_HTC_min :< c :< C coil_HTC_max]
+  sfwrc $ \c -> C coil_HTC_min :<= c :<= C coil_HTC_max]
+  
+-- Constraint 15
+pcm_HTC      = cuc' "pcm_HTC"
+  (nounPhraseSP "convective heat transfer coefficient between PCM and water")
+  ("The convective heat transfer coefficient that models " ++
+  "the thermal flux from the phase change material to the surrounding water")
+  (sub lH cP) UT.heat_transfer_coef Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C pcm_HTC_min :<= c :<= C pcm_HTC_max]
+  
+-- Constraint 16
+temp_init    = cuc' "temp_init" (nounPhraseSP "initial temperature")
+  "The temperature at the beginning of the simulation"
+  (sub (temp ^. symbol)(Atomic "init")) centigrade Rational
+  [physc $ \c -> 0 :< c :< C melt_pt]
+  
+-- Constraint 17
+time_final   = cuc' "time_final" (nounPhraseSP "final time")
+  ("The amount of time elapsed from the beginning of the " ++
+  "simulation to its conclusion") (sub (time ^. symbol) 
+  (Atomic "final")) second Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> c :< C time_final_max]
 
 -------------------------
 -- Max / Min Variables --
@@ -316,7 +327,8 @@ coil_HTC     = cuc' "coil_HTC" (nounPhraseSP
 
 tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
   pcm_density_max, coil_SA_max, w_density_min, w_density_max, htCap_S_P_min, 
-  htCap_S_P_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max :: UnitaryChunk
+  htCap_S_P_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
+  pcm_HTC_max, time_final_max :: UnitaryChunk
 
 -- Used in Constraint 1
 tank_length_min = unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
@@ -370,3 +382,14 @@ coil_HTC_min = unitary "coil_HTC_min" (nounPhraseSP "minimum convective heat tra
 
 coil_HTC_max = unitary "coil_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between coil and water")
   (sub (coil_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
+  
+-- Used in Constraint 15
+pcm_HTC_min = unitary "pcm_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between PCM and water")
+  (sub (pcm_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
+
+pcm_HTC_max = unitary "pcm_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between PCM and water")
+  (sub (pcm_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
+  
+-- Used in Constraint 17
+time_final_max = unitary "time_final_max" (nounPhraseSP "maximum final time")
+  (sub (time_final ^. symbol) (Atomic "max")) second Rational

@@ -1206,11 +1206,11 @@ likeChg6 = [s6_start "15", S "Any real", phrase tank,
 
 s7 :: Section
 s7 = traceMGF s7_refList s7_trailing
-  ([s7_table1, s7_table2, s7_table2_New, s7_table3] ++ (s7_intro2) ++
+  ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++
   [s7_fig1, s7_fig2]) []
 
 s7_refList :: [Contents]
-s7_refList = [s7_table1, s7_table2, s7_table2_New, s7_table3]
+s7_refList = [s7_table1, s7_table2, s7_table3]
 
 s7_trailing :: [Sentence]
 s7_trailing = [
@@ -1265,27 +1265,6 @@ s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE,
 
 -- Wrong DD reference above, change when DD4 is available (twice)
 
-s7_table2 :: Contents
-s7_table2 = Table [EmptyS, acroIM "1", acroIM "2", acroIM "3", acroIM "4",
-  makeRef (SRS.datCon SRS.missingP []), acroR "1", acroR "2"]
-  [[acroIM "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroIM "2", S "X", EmptyS, EmptyS, S "X", EmptyS, S "X", S "X"],
-  [acroIM "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroIM "4", EmptyS, S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroR "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS],
-  [acroR "3", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS],
-  [acroR "4", S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X"],
-  [acroR "5", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "6", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "7", EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "8", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS],
-  [acroR "9", EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS],
-  [acroR "10", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroR "11", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS]]
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
-  titleize' inModel)) True
-
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 
@@ -1317,11 +1296,15 @@ s7_likelyChanges = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 --------------------------------------------------------------------
 
 s7_row_t2 :: [String]
-s7_row_t2 = s7_funcReq ++ s7_instaModel
+s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
 
 --column header
 s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_instaModelRef ++ s7_funcReqRef)
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
+
+--row header
+s7_col_header_t2 :: [Sentence]
+s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq) (s7_instaModelRef ++ s7_funcReqRef)
 
 s7_columns_t2 :: [[String]]
 s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
@@ -1349,10 +1332,10 @@ s7_t2_R9 = ["IM3", "IM4"]
 s7_t2_R10 = ["IM2"]
 s7_t2_R11 = ["IM2"]
 
-s7_table2_New :: Contents
-s7_table2_New = Table (EmptyS:s7_row_header_t2)
-  (makeTMatrix (s7_row_header_t2) (s7_columns_t2) (s7_row_t2))
-  (showingCxnBw traceyMatrix (S "NEW ^" +:+ titleize' requirement +:+ S "and" +:+
+s7_table2 :: Contents
+s7_table2 = Table (EmptyS:s7_row_header_t2)
+  (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
   titleize' inModel)) True
 
 -------------------------------------------------------------------

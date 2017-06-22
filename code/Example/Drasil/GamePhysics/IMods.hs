@@ -117,7 +117,7 @@ im3leg = foldle1 (+:+.) (+:+.)
   (helper1 QP.angularVelocity "k" EmptyS), 
   S "n is the collision normal vector (m)", 
   S "Its signed direction is determined by (A4)",
-  S "j is the collision impulse (DD8) (N s)", 
+  S "j is the" +:+ (phrase QP.impulseS) +:+ S "(DD8) (N s)", 
   S "P is the point of collision (m)",
   S "rkP is the displacement vector between the center of mass" +:+
   S "of the k-th body and point P (m)"]

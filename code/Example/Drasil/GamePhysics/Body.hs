@@ -149,7 +149,6 @@ s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these",
 -- 2.3 : Organization of Documents --
 -------------------------------------
 
-
 s2_4_intro :: Sentence
 
 -- FIXME: Citations.
@@ -435,7 +434,7 @@ lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint,
 
 
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU (num) (s)]
+makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU num s]
 fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
 fmtContr _ [] = S "None"
 fmtContr s [Phys f] = E $ f (C s)

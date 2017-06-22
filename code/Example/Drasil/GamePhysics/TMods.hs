@@ -106,7 +106,7 @@ t4ChaslesThm = makeRC "t4ChaslesThm" (nounPhraseSP "Chasles' theorem")
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesRel :: Relation
-chaslesRel = (C vel_B) := (C vel_O) + ((C  QP.angularVelocity) * (C r_OB))
+chaslesRel = (C vel_B) := (C vel_O) + (cross (C  QP.angularVelocity) (C r_OB))
 
 -- B should ideally be italicized in 'point B' (line 202).
 t4descr :: Sentence

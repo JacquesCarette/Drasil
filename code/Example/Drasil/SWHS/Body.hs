@@ -1303,7 +1303,7 @@ s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
 
 s7_genDefs = ["GD1", "GD2"]
 
-s7_dataDefs = ["DD1", "DD2", "DD3"{-, DD4-}]
+s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
 s7_dataDefRef = map (refFromType Data swhsSymMap) dataDefns
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]

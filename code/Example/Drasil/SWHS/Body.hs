@@ -445,7 +445,7 @@ s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   ((makeRef s4_2_6_table1 +:+ S "and" +:+ makeRef s4_2_6_table2 +:+
   S "show"), mid, True, end) ([s4_2_1_list],
-  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_deriv,
+  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4,
   (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
   [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
@@ -577,11 +577,10 @@ assump19 = [S "The pressure in the", phrase tank,
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
-
--- s4_2_3_GDs :: [LayoutObj]
--- s4_2_3_GDs = map Definition (map General [gd1NewtonCooling])
-
---General definitions not yet implemented
+-- SECTION 4.2.3 --
+-- General Definitions is automatically generated in solChSpecF
+s4_2_3_genDefs :: [Contents]
+s4_2_3_genDefs = map swhsSymbMapT swhsGenDefs
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [
@@ -652,7 +651,6 @@ s4_2_3_deriv = [
 ------------------------------
 -- 4.2.4 : Data Definitions --
 ------------------------------
-
 
 s4_2_4_intro_end :: Sentence
 s4_2_4_intro_end = foldlSent [S "The dimension of each",

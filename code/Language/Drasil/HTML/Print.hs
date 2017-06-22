@@ -3,6 +3,7 @@ module Language.Drasil.HTML.Print where
 import Prelude hiding (print)
 import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
+import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument)
 import Language.Drasil.HTML.AST
@@ -119,7 +120,7 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
 p_expr (Var v)    = v
-p_expr (Dbl d)    = show d
+p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
 p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b

@@ -5,6 +5,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Data.Maybe (isNothing, fromJust)
+import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
@@ -110,7 +111,7 @@ sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
 p_expr (Var v)    = v
-p_expr (Dbl d)    = show d
+p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
 p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y

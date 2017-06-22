@@ -60,25 +60,23 @@ dd3HtFusion = fromEqn (htFusion ^. id) (htFusion ^. term) (htFusion ^. symbol)
 htFusionEqn :: Expr
 htFusionEqn = (C latent_heat) / (C mass)
 
--- dd4MeltFrac :: QDefinition
---dd4MeltFrac = fromEqn "melt_fraction" dd4descr (melt_frac ^. symbol) unitless
-              --melt_frac_eqn
+dd4MeltFrac :: QDefinition
+dd4MeltFrac = fromEqn' (melt_frac ^. id) (nounPhraseSP "fraction of the PCM that is liquid")
+  (melt_frac ^. symbol) melt_frac_eqn
+--FIXME: "Phi is the melt fraction" is produced; 
+  --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
+  -- produced according to CaseStudies' original
 
--- melt_frac_eqn :: Expr
--- melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
-
--- dd4descr :: Sentence
--- dd4descr = (S "fraction of the " :+: S (phsChgMtrl ^. name) :+:
-           -- S " that is " :+: (sMap (map toLower) (S (liquid ^. name))) :+:
-           -- S ".")
+melt_frac_eqn :: Expr
+melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 
 --Need to add units to data definition descriptions
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3 :: [Contents]
+s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: [Contents]
 s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]
 s4_2_4_DD2 = map swhsSymbMapD [dd2HtFluxP]
 s4_2_4_DD3 = map swhsSymbMapD [dd3HtFusion]
---s4_2_4_DD4 = Definition (Data dd4MeltFrac)
+s4_2_4_DD4 = map swhsSymbMapD [dd4MeltFrac]
 
 --Symbol appears as "Label"
 --There is no actual label

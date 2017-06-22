@@ -1219,7 +1219,7 @@ s7 = traceMGF s7_refList s7_trailing
   [s7_fig1, s7_fig2]) []
 
 s7_refList :: [Contents]
-s7_refList = [s7_table1, s7_table2, s7_table3]
+s7_refList = [s7_table1, s7_table2, s7_table3, s7_table3]
 
 s7_trailing :: [Sentence]
 s7_trailing = [
@@ -1302,7 +1302,7 @@ s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
 
 s7_genDefs = ["GD1", "GD2"]
 
-s7_dataDefs = ["DD1", "DD2", "DD3"]
+s7_dataDefs = ["DD1", "DD2", "DD3"{-, DD4-}]
 s7_dataDefRef = map (refFromType Data swhsSymMap) dataDefns
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
@@ -1381,7 +1381,7 @@ s7_t3_T3  = []
 s7_t3_GD1 = ["A2"]
 s7_t3_GD2 = ["A3", "A4", "A5", "A6"]
 s7_t3_DD1 = ["A7", "A8", "A9"]
-s7_t3_DD2 = ["A3", "A4"]
+s7_t3_DD2 = ["A3", "A4", "A10"]
 s7_t3_DD3 = []
 s7_t3_DD4 = []
 s7_t3_IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
@@ -1395,74 +1395,9 @@ s7_t3_LC4 = ["A11"]
 s7_t3_LC5 = ["A12"]
 s7_t3_LC6 = ["A15"]
 
-s7_table3NEW :: Contents
-s7_table3NEW = Table (EmptyS:s7_row_header_t3)
-  (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other"
-  +:+ titleize' item)) True
-
 s7_table3 :: Contents
-s7_table3 = Table [EmptyS, acroA "1", acroA "2", acroA "3", acroA "4",
-  acroA "5", acroA "6", acroA "7", acroA "8", acroA "9", acroA "10",
-  acroA "11", acroA "12", acroA "13", acroA "14", acroA "15", acroA "16",
-  acroA "17", acroA "18", acroA "19"]
-  [[swhsSymbMapTRef t1ConsThermE, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroGD "1", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroGD "2", EmptyS, EmptyS, S "X", S "X", S "X", S "X", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  S "X", S "X", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", S "X", EmptyS, S "X", S "X", S "X", EmptyS, EmptyS,
-  S "X"],
-  [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, S "X", S "X", EmptyS, EmptyS, S "X", S "X", S "X",
-  EmptyS],
-  [acroIM "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X"],
-  [acroIM "4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  EmptyS],
-  [acroLC "1", EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "2", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X",
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "3", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "4", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "5", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS],
-  [acroLC "6", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
-  EmptyS, EmptyS]]
+s7_table3 = Table (EmptyS:s7_row_header_t3)
+  (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption +:+ S "and Other" +:+
   titleize' item)) True
 

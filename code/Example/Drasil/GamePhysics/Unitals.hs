@@ -263,7 +263,7 @@ lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrainedChunk
 
 chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
-  posCons, orientCons, angVeloCons, forceCons, torqueCons]
+  posCons, orientCons, veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
 nonNegativeConstraint = physc $ \c -> c :>= (Dbl 0.0)
@@ -274,7 +274,8 @@ mmntOfInCons   = constrained QP.momentOfInertia    [nonNegativeConstraint]
 gravAccelCons  = constrained QP.gravitationalConst []
 posCons        = constrained QP.position           []
 veloCons       = constrained QP.velocity           [] 
-orientCons     = constrained QM.orientation        []
+orientCons     = constrained QM.orientation        [nonNegativeConstraint,
+                                                    physc $ \c -> c:< (Dbl 6.28)] --should be 2pi
 angVeloCons    = constrained QP.angularVelocity    []
 forceCons      = constrained QP.force              []
 torqueCons     = constrained QP.torque             [] 

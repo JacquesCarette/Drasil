@@ -7,6 +7,7 @@ import Drasil.SWHS.Unitals
 import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time)
+import Control.Lens ((^.))
 
 iModels :: [RelationConcept]
 iModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -46,7 +47,7 @@ htWtr_Rel = Int 0
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above equation is derived using" +:+. acroT "2", 
-  (getS w_E) `isThe` "change in thermal energy of the liquid water relative to",
+  (getS w_E) `isThe` S "change in thermal energy of the liquid water relative to",
   S "the energy at the initial temperature", sParen (getS temp_init) +:+.
   sParen (unwrap $ getUnit pcm_initMltE), (getS htCap_W) `isThe` S "specific heat",
   S "capacity of liquid water", (((sParen (unwrap $ getUnit htCap_S_P)) `sAnd` (getS w_mass))

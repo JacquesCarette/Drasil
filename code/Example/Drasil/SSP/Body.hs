@@ -317,7 +317,29 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-s4_2_4_dataDefs = map sspSymMapD sspDataDefs
+s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
+  [sspSymMapD (sspDataDefs !! 11)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 12)] ++
+  stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
+
+resShrDerivation :: [Contents]
+resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as Pi in GD3. The effective normal in the equation",
+  S "for Pi of the soil is defined in the perpendicular force equilibrium of a slice from GD2, Using the",
+  S "effective normal N0 i of T4 shown in equation (1)"],
+  
+  foldlSP [S "The values of the interslice forces E and X in the equation are unknown, while the other values",
+  S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",
+  S "the affect of interslice forces, to obtain a solvable value as done for N* i in equation (2)"],
+
+  foldlSP [S "Using N* i , a resistive shear force neglecting the influence of interslice forces can be solved for in",
+  S "terms of all known values as done in equation (3)"]
+  
+  ]
+
+mobShrDerivation :: [Contents]
+mobShrDerivation = [foldlSP [S " mobShrDerivation"]]
+
+stfMtrxDerivation :: [Contents]
+stfMtrxDerivation = [foldlSP [S " stfMtrxDerivation"]]
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
@@ -383,7 +405,7 @@ deltax = displayContr' dx_i
 deltay = displayContr' dy_i
 
 displayContr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> [Sentence]
-displayContr  s num = [getS s, fmtContr s (s ^. constraints), fmtU (S (show num)) (qs s)]
+displayContr  s num = [getS s, fmtContr s (s ^. constraints), fmtU (S (show num)) s]
 displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
 displayContr' s = [getS s, fmtContr s (s ^. constraints)]
 

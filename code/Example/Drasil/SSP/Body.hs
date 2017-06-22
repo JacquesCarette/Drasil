@@ -365,6 +365,12 @@ mobShrDerivation = [foldlSP [S "The mobile shear force acting on a slice is defi
   S "Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force",
   S "without the influence of interslice forces T, as done in equation (5)"],
   
+  EqnBlock $
+  C shearFNoIntsl := ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (sin (C baseAngle)) :- 
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle)),
+  
   foldlSP [S "The values of Ri and Ti are now defined completely in terms of the known force property values",
   S "of DD1 to DD9"]
   ]

@@ -13,19 +13,18 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
-  position, torque, force, gravitationalAccel, velocity, 
-  momentOfInertia, angularVelocity)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass, len)
+import qualified Data.Drasil.Quantities.Physics as QP (time, 
+  position, force, velocity, angularVelocity)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
   cartesian, friction, rightHand, collision, space, joint)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
-import Data.Drasil.Utils (foldle, listConstExpr, 
+import Data.Drasil.Utils (foldle, 
   makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, symbolMapFun)
+  enumBullet, mkRefsList, symbolMapFun, fmtU, getS)
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
@@ -432,42 +431,51 @@ s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
 lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
   posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
   forceConstraint, 
-  torqueConstraint :: (UnitalChunk, [(Expr -> Expr -> Expr, Expr)], Sentence)
+  torqueConstraint :: [Sentence]
 
 
-lengthConstraint = (QPP.len, [((:>),(Int 0))], S "44.2")
-massConstraint = (QPP.mass, [((:>),(Int 0))], S "56.2")
-mmntOfInConstraint = (QP.momentOfInertia, [((:>),(Int 0))], S "74.5")
-gravAccelConstraint = (QP.gravitationalAccel, [], S "9.8")
-posConstraint = (QP.position, [], S "(0.412, 0.502)")
-veloConstraint = (QP.velocity, [], S "2.51")
-orientConstraint = (QM.orientation, [((:>),(Int 0)), ((:<),(Dbl 6.18))], 
-  S "pi/2") --FIXME: this constraint should be 2 * pi not 6.18
-angVeloConstraint = (QP.angularVelocity, [], S "2.1")
-forceConstraint = (QP.force, [], S "98.1")
-torqueConstraint = (QP.torque, [], S "200")
+makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
+makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU (num) (s)]
+fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtContr _ [] = S "None"
+fmtContr s [Phys f] = E $ f (C s)
+fmtContr s [Sfwr f] = E $ f (C s)
+fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+
+
+lengthConstraint = makeConstraint lengthCons (S "44.2")
+massConstraint = makeConstraint massCons (S "56.2")
+mmntOfInConstraint = makeConstraint mmntOfInCons (S "74.5")
+gravAccelConstraint = makeConstraint gravAccelCons (S "9.8")
+posConstraint = makeConstraint posCons (S "(0.412, 0.502)")
+veloConstraint = makeConstraint veloCons (S "2.51")
+orientConstraint = makeConstraint orientCons (S "pi/2")
+angVeloConstraint = makeConstraint angVeloCons (S "2.1")
+forceConstraint = makeConstraint forceCons (S "98.1")
+torqueConstraint = makeConstraint torqueCons (S "200")
+
+
 
 restCoefConstraint :: [Sentence]
-restCoefConstraint = listConstExpr (QP.restitutionCoef, [((:>),(Int 0)), 
-  ((:<),(Int 1))], S "0.8")
+restCoefConstraint = makeConstraint restCoefCons (S "0.8")
 
 
 s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
---s4_2_6_t1_list = map (listConstExpr) [lengthConstraint,massConstraint]
-s4_2_6_t1_list = map (listConstExpr) [lengthConstraint, massConstraint, 
+s4_2_6_t1_list = [lengthConstraint, massConstraint, 
   mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint] ++ [(restCoefConstraint)]
+  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint,
+  restCoefConstraint]
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2)] $ s4_2_6_t1_list) 
-    (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
+  (s4_2_6_t1_list) (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
 
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_t2_list) 
   (S "Table 2:" +:+ (titleize output_) +:+ S "Variables") True
 
-s4_2_6_t2_list = map (listConstExpr) [posConstraint, veloConstraint, 
+s4_2_6_t2_list = [posConstraint, veloConstraint, 
   orientConstraint, angVeloConstraint]
 
 ------------------------------

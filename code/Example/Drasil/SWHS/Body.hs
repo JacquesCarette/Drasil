@@ -899,9 +899,11 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, con13, con14]
+s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, 
+  con13, con14, con15, con16, con17]
 
-con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, con13, con14 :: [Sentence]
+con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, con13, con14, 
+  con15, con16, con17 :: [Sentence]
 
 con1 = [getS tank_length, E $ C tank_length :> Int 0,
   E $ C tank_length_min :<= C tank_length :<= C tank_length_max,
@@ -929,7 +931,7 @@ con5 = [getS pcm_density, E $ C pcm_SA :> Int 0,
   E (Dbl 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
 
 con6 = [getS temp_melt_P,
-  E (Int 0 :< C temp_melt_P :< C temp_C) +:+ sParen (S "+"), S "N/A",
+  E (Int 0 :< C temp_melt_P :< C temp_C) +:+ sParen (S "+"), EmptyS,
   E (Dbl 44.2) +:+ (unwrap $ getUnit temp_melt_P), S "10%"]
 
 con7 = [getS htCap_S_P, E $ C htCap_S_P :> Int 0,
@@ -941,7 +943,7 @@ con10 = [getS coil_SA, E (C coil_SA :> Int 0) +:+ sParen (S "*"),
   E (Int 1760) +:+ (unwrap $ getUnit coil_SA), S "10%"]
 
 con11 = [getS temp_C, E (Int 0 :< C temp_C :< Int 100) +:+ sParen (S "+"),
-  S "N/A", E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
+  EmptyS, E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
 
 con12 = [getS w_density, E $ C w_density :> Int 0,
   E $ C w_density_min :< C w_density :<= C w_density_max,
@@ -949,18 +951,29 @@ con12 = [getS w_density, E $ C w_density :> Int 0,
   
 con13 = [getS htCap_W, E $ C htCap_W :> Int 0,
   E $ C htCap_W_min :< C htCap_W :< C htCap_W_max,
-  E (Int 1000) +:+ (unwrap $ getUnit htCap_W), S "10%"]
+  E (Int 4186) +:+ (unwrap $ getUnit htCap_W), S "10%"]
   
 con14 = [getS coil_HTC, E $ C coil_HTC :> Int 0,
-  E $ C coil_HTC_min :< C coil_HTC :< C coil_HTC_max,
+  E $ C coil_HTC_min :<= C coil_HTC :<= C coil_HTC_max,
   E (Int 1000) +:+ (unwrap $ getUnit coil_HTC), S "10%"]
+  
+con15 = [getS pcm_HTC, E $ C pcm_HTC :> Int 0,
+  E $ C pcm_HTC_min :<= C pcm_HTC :<= C pcm_HTC_max,
+  E (Int 1000) +:+ (unwrap $ getUnit pcm_HTC), S "10%"]
+  
+con16 = [getS temp_init, E $ Int 0 :< C temp_init :< C melt_pt,
+  EmptyS, E (Int 40) +:+ (unwrap $ getUnit temp_init), S "10%"]
+  
+con17 = [getS time_final, E $ C time_final :> Int 0,
+  E $ C time_final :<= C time_final_max,
+  E (Int 50000) +:+ (unwrap $ getUnit time_final), S "10%"]
 
 
 
 inputVar :: [QSWrapper]
 inputVar = map qs [htCap_L_P] ++ [qs htFusion] ++
-  map qs [pcm_HTC, temp_init, time_final] ++
-  map qs [coil_HTC, tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+  map qs [pcm_HTC, temp_init, time_final, coil_HTC, tank_length, 
+  diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, coil_SA, temp_C, htCap_W, w_density]
 
 

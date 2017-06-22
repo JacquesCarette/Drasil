@@ -15,7 +15,7 @@ import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
               LPMParams(..))
-import Language.Drasil.Printing.Helpers
+import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.Preamble
@@ -120,17 +120,17 @@ p_expr (Mul x y)  = mul x y
 p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
 p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = pow x y
-p_expr (And x y)  = p_expr x ++ "\\wedge" ++ p_expr y
-p_expr (Or x y)   = p_expr x ++ "\\vee" ++ p_expr y
+p_expr (And x y)  = p_expr x ++ "\\wedge{}" ++ p_expr y
+p_expr (Or x y)   = p_expr x ++ "\\vee{}" ++ p_expr y
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
-p_expr (NEq x y)  = p_expr x ++ "\\neq" ++ p_expr y
+p_expr (NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
 p_expr (Lt x y)   = p_expr x ++ "<" ++ p_expr y
 p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
-p_expr (GEq x y)  = p_expr x ++ "\\geq" ++ p_expr y
-p_expr (LEq x y)  = p_expr x ++ "\\leq" ++ p_expr y
+p_expr (GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
+p_expr (LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
-p_expr (Not x)    = "\\neg" ++ p_expr x
+p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
@@ -353,7 +353,7 @@ makeFigure r c f =
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
-p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
+p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
 p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 

@@ -369,7 +369,22 @@ s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
 
-s4_2_5_IMods = map sspSymMapT sspIMods
+s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? is there a better way of doing this?
+  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
+  rigDisDerivation, rigFoSDerivation]]
+
+fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
+  rigDisDerivation, rigFoSDerivation :: [Contents]
+
+fctSftyDerivation = [foldlSP [S "fc "]]
+
+nrmShrDerivation = [foldlSP [S "nrm "]]
+
+intrSlcDerivation = [foldlSP [S "int "]]
+
+rigDisDerivation = [foldlSP [S "rigD "]]
+
+rigFoSDerivation = [foldlSP [S "rigFos "]]
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below

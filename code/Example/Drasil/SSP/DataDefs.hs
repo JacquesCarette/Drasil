@@ -15,8 +15,8 @@ import qualified Data.Drasil.Quantities.SolidMechanics as SM
 
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angles,
-  lengths, seismicLoadF, surfLoads, intrsliceF, mobShearWO, resShearWO,
-  mobShearWO, displcmntRxnF, netFDsplcmntEqbm, soilStiffness]
+  lengths, seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO,
+  displcmntRxnF, netFDsplcmntEqbm, soilStiffness]
 
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"

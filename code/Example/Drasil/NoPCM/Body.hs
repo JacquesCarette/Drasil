@@ -7,7 +7,8 @@ import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
   s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
-  s6_start, ref2, ref3, ref4, ref5, ref6)
+  con1, con2, con10, con11, con12, con13, con14, s6_start, 
+  ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
@@ -19,7 +20,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(enumSimple, listConstS, getS, unwrap, mkRefsList)
+import Data.Drasil.Utils(enumSimple, listConstS, getS, mkRefsList)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, unit_, rOfChng)
 import Data.Drasil.Concepts.Software
@@ -410,20 +411,7 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   titleize' variable) True
   
 s4_2_6_conList :: [[Sentence]]
-s4_2_6_conList = [con1, con2, con3]
-
-con1, con2, con3 :: [Sentence]
-con1 = [getS tank_L, E ((C tank_L) :> (Int 0)),
-  E (((C tank_L) :<= (C tank_L)) :<= (C tank_L)),
-  E (Dbl 1.5) +:+ (unwrap $ getUnit tank_L), S "10%"]
-
-con2 = [getS tank_D, E ((C tank_D) :> (Int 0)),
-  E (((C tank_D) :<= (C tank_D)) :<= (C tank_D)),
-  E (Dbl 0.412) +:+ (unwrap $ getUnit tank_D), S "10%"]
-  
-con3 = [getS coil_SA, E ((C coil_SA) :> (Int 0)) +:+ sParen (S "*"),
-  E ((C coil_SA) :<= (C coil_SA)),
-  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
+s4_2_6_conList = [con1, con2, con10, con11, con12, con13, con14]
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
   titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] $ map

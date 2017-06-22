@@ -3,7 +3,6 @@ module Data.Drasil.Utils
   , foldle1
   , mkEnumAbbrevList
   , listConstS
-  , listConstExpr
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -100,10 +99,6 @@ fmtBF ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
 fmtBF _ []      = S "None"  
 fmtBF symb [(f,num)]  = E ((C symb) `f` num)
 fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
-
--- | makes a constraint table row entry from symbol expr and sentence
-listConstExpr :: (SymbolForm a, Quantity a) => (a, [(Expr -> Expr -> Expr, Expr)], Sentence) -> [Sentence]
-listConstExpr (s, a, b) = [getS s, fmtBF s a, fmtU b s]
 
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence

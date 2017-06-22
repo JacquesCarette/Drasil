@@ -24,7 +24,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint)
 import Data.Drasil.Utils (foldle, 
   makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, symbolMapFun, fmtU, getS)
+  enumBullet, mkRefsList, symbolMapFun, makeConstraint)
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
@@ -431,17 +431,6 @@ lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint,
   posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
   forceConstraint, 
   torqueConstraint :: [Sentence]
-
-
-makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU num s]
-fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtContr _ [] = S "None"
-fmtContr s [Phys f] = E $ f (C s)
-fmtContr s [Sfwr f] = E $ f (C s)
-fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
-fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
-
 
 lengthConstraint = makeConstraint lengthCons (S "44.2")
 massConstraint = makeConstraint massCons (S "56.2")

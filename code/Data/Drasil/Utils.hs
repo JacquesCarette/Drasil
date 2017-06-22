@@ -12,6 +12,7 @@ module Data.Drasil.Utils
   , enumSimple
   , enumBullet
   , mkRefsList
+  , makeConstraint
   , mkInputDatTb
   , getS
   , weave
@@ -187,3 +188,15 @@ mkDataDef concept equation = fromEqn (concept ^. id) (concept ^. term) (concept 
 mkDataDef' :: (Chunk c, SymbolForm c, NamedIdea c) => c -> Expr -> QDefinition
 mkDataDef' concept equation = fromEqn' (concept ^. id) (concept ^. term) (concept ^. symbol) 
   equation
+
+
+makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
+makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU num s]
+
+fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtContr _ [] = S "None"
+fmtContr s [Phys f] = E $ f (C s)
+fmtContr s [Sfwr f] = E $ f (C s)
+fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+

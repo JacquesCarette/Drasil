@@ -3,6 +3,7 @@ module Drasil.SWHS.GenDefs where
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
+import Data.Drasil.SentenceStructures (foldlSent)
 
 ---------------------------
 --  General Definitions  --
@@ -23,7 +24,7 @@ nwtnCooling_desc :: Sentence
 nwtnCooling_desc = foldlSent [S "Newton's law of cooling describes convective", 
   S "cooling from a surface. The law is stated as: the rate of heat loss from a", 
   S "body is proportional to the difference in temperatures between the body",
-  S "and its surroundings"]
+  S "and its surroundings", fixmeS]
 
 --
 rocTempSimp :: RelationConcept

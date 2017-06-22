@@ -10,8 +10,6 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, force, gravitationalAccel, velocity, 
   momentOfInertia, angularVelocity, position, time, impulseS)
---import qualified Data.Drasil.Concepts.Math as QM ()
---import Data.Drasil.Quantities.Physics
 import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
 import Control.Lens ((^.))
@@ -115,7 +113,7 @@ im3leg = foldle1 (+:+.) (+:+.)
   (helper1 QP.velocity "k" EmptyS),
   (helper1 QM.orientation "k" EmptyS),
   (helper1 QP.angularVelocity "k" EmptyS), 
-  S "n is the collision normal vector (m)", 
+  S "n is the" +:+ (phrase normalVect) +:+ S "(m)", 
   S "Its signed direction is determined by (A4)",
   S "j is the" +:+ (phrase QP.impulseS) +:+ S "(DD8) (N s)", 
   S "P is the point of collision (m)",

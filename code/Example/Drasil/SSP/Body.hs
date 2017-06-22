@@ -360,14 +360,23 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD
   S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",
   S "and interslice surfaces of an element i they must reference the same coordinate system. The basal",
   S "stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface.",
-  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix K*i"],
+  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix K*_i"],
   
   foldlSP [S "The Hooke's law force displacement relationship of GD8 applied to the base also references a",
   S "displacement vector epsilon i of GD9 rotated for the base angle of the slice alpha i. The basal displacement",
   S "vector delta i is rotated clockwise to align with the interslice displacement vector delta i, applying the",
   S "definition of epsilon i in terms of delta i as seen in GD9. Using this with base stiffness matrix K*i, a basal",
   S "force displacement relationship in the same coordinate system as the interslice relationship can be",
-  S "derived as done in equation (8)"]
+  S "derived as done in equation (8)"],
+  
+  foldlSP [S "The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This",
+  S "is seen as matrix ¯Kb,i in GD12. Kbt,i is the shear element in the matrix, and Kbn,i is the normal",
+  S "element in the matrix, calculated as in DD14. The notation is simplified by the introduction of",
+  S "the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively"],
+  
+  foldlSP [S "A force-displacement relationship for an element i can be written in terms of displacements occurring",
+  S "in the unrotated coordinate system delta i of GD9 using the matrix Ks,i, and Kb,i as seen in",
+  S "DD12"]
   ]
 
 -- SECTION 4.2.5 --
@@ -404,16 +413,105 @@ s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? i
 
 fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation :: [Contents]
+{-
+fctSftyDerivation = [foldlSP [S ""]]
 
-fctSftyDerivation = [foldlSP [S "fc "]]
+nrmShrDerivation = [foldlSP [S ""]]
 
-nrmShrDerivation = [foldlSP [S "nrm "]]
+intrSlcDerivation = [foldlSP [S ""]]
 
-intrSlcDerivation = [foldlSP [S "int "]]
+rigDisDerivation = [foldlSP [S ""]]
 
-rigDisDerivation = [foldlSP [S "rigD "]]
+rigFoSDerivation = [foldlSP [S ""]]
+-}
 
-rigFoSDerivation = [foldlSP [S "rigFos "]]
+fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
+  S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
+  S "IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
+  S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
+  S "IM1"],
+  
+  foldlSP [S "The constants Psi and Phi described in equations 20 and 19 are functions of the unknowns: the",
+  S "interslice normal/shear force ratio lambda (IM2) and the Factor of Safety itself FS (IM1)"]
+  ]
+
+nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
+  S "taken, with the assumption of GD5. Results in equation (13)"],
+  
+  foldlSP [S "The equation in terms of lambda leads to equation (14)"],
+  
+  foldlSP [S "Taking a summation of each slice, and considering the boundary conditions that E0 and En are",
+  S "equal to zero, a general equation for the constant lambda is developed in equation (15), also found in",
+  S "IM2"],
+  
+  foldlSP [S "Equation (15) for lambda, is a function of the unknown interslice normal force E (IM3)"]
+  ]
+
+intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
+  S "that", S "Ni = N0 i - Ub,i" `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
+  S "equation (16)"],
+  
+  foldlSP [S "Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and",
+  S "the assumption of GD5, the equilibrium equation can be rewritten as equation (17)"],
+  
+  foldlSP [S "Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in",
+  S "equation (18)"],
+
+  foldlSP [S "Where Ri and Ti are the resistive and mobile shear of the slice, without the influence of interslice",
+  S "forces E and X, as defined in DD10 and DD11. Making use of the constants, and with full",
+  S "equations found below in equations (19) and (20) respectively, then equation (18) can be simplified",
+  S "to equation (21), also seen in IM3"],
+  
+  foldlSP [S "The constants Psi and Phi in equation (21) for Ei is a function of the unknown values, the interslice",
+  S "normal/shear force ratio lambda (IM2), and the Factor of Safety FS (IM1)"]
+  ]
+
+rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions",
+  S "of the stiffness matrices from DD12, and the force definitions from GD7, a broken down forcedisplacement",
+  S "equilibrium equation can be derived. Equation (22) gives the broken down equation",
+  S "in the x direction, and equation (23) gives the broken down equation in the y direction."],
+
+  foldlSP [S "Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left",
+  S "side of the equations can be solved for. The only unknown in the variables to solve for the stiffness",
+  S "values from DD14 is the displacements. Therefore taking the equation from each slice a set of", E $ (Int 2) * (C numbSlices),
+  S "equations, with", E $ (Int 2) * (C numbSlices), S "unknown displacements in the x and y directions of each slice can be derived.",
+  S "Solutions for the displacements of each slice can then be found. The use of displacement in the",
+  S "definition of the stiffness values makes the equation implicit, which means an iterative solution",
+  S "method, with an initial guess for the displacements in the stiffness values is required"]
+  ]
+
+rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element",
+  S "i the displacements delta xi and delta yi, are solved from the system of equations in IM4. The definition of",
+  S "epsilon i as the rotation of the displacement vector delta i is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice delta u in equation",
+  S "(24) and normal to the base of the slice delta v in equation (25)"],
+  
+  foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base Kbn,i,",
+  S "and the now known base displacement perpendicular to the surface delta vi from equation (25), the",
+  S "normal base stress can be calculated from the force-displacement relationship of T5. Stress sigma is",
+  S "used in place of force F as the stiffness hasn't been normalized for the length of the base. Results",
+  S "in equation (26)"],
+
+  foldlSP [S "The resistive shear to calculate the factor of safety FS in is found from the Mohr Coulomb resistive",
+  S "strength of soil in T3. Using the normal stress sigma from equation (26) as the stress the resistive",
+  S "shear of the slice can be calculated from calculated in equation (27)"],
+  
+  foldlSP [S "Previously the value of the base shear stiffness Kbt,i as seen in equation (28) was unsolvable because",
+  S "the normal stress sigma i was unknown. With the definition of sigma i from equation (26) and the definition",
+  S "of displacement shear to the base delta ui from equation (25), the value of Kbt,i becomes solvable"],
+  
+  foldlSP [S "With shear stiffness Kbt,i calculated in equation (28) and shear displacement delta ui calculated in",
+  S "equation (24) values now known the shear stress acting on the base of a slice tau can be calculated",
+  S "using T5, as done in equation (29). Again stress tau is used in place of force F as the stiffness hasn't",
+  S "been normalized for the length of the base"],
+  
+  foldlSP [S "The shear stress on the base tau acts as the mobile shear acting on the base. Using the definition",
+  S "Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice Si",
+  S "from equation (27) and mobile shear on a slice tau from equation (29) the factor of safety for a slice",
+  S "FSLoc,i can be found from as seen in equation (30), and IM5"],
+  
+  foldlSP [S "The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears",
+  S "for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5"]
+  ]
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below

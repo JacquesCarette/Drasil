@@ -26,7 +26,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L, htCap_L_P,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_env, melt_pt, t_init_melt,
-  t_final_melt, temp_PCM, temp_W, vol, tank_vol, w_vol, deltaT,
+  t_final_melt, temp_diff, temp_PCM, temp_W, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [htFusion, mass, time] -- ++ [tank_length, diam, coil_SA]
 
@@ -35,7 +35,7 @@ in_SA, out_SA, htCap_L, htCap_L_P, htCap_S, htCap_V,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
-  t_final_melt, temp_PCM, temp_W, tank_vol, w_vol, deltaT,
+  t_final_melt, temp_diff, temp_PCM, temp_W, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
 
@@ -147,6 +147,11 @@ t_final_melt = uc' "t_final_melt"
   "Time at which the phase change material finishes changes from a solid to a liquid"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "final")) second
 
+  
+temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
+  "Measure of the relative amounts of internal energy within two bodies" 
+  (Concat [Greek Delta, cT]) centigrade
+              
 temp_PCM     = uc' "temp_PCM"
   (nounPhraseSP "temperature of the phase change material" )
   "The average kinetic energy of the particles within the phase change material"

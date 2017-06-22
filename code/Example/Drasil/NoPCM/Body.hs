@@ -8,11 +8,12 @@ import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
   s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
   s6_start, ref2, ref3, ref4, ref5, ref6)
-import Drasil.SWHS.Concepts (progName, water)
+import Drasil.SWHS.Concepts (progName, water, gauss_div)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
-  diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, dd1HtFluxC)
-import Drasil.SWHS.TMods (s4_2_2_T1)
+  diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
+  in_SA, out_SA, vol_ht_gen)
+import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, s4_2_4_DD1)
+import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 
 import Language.Drasil
 
@@ -20,15 +21,17 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Utils(enumSimple, listConstS, getS, unwrap, mkRefsList)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, unit_)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng)
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.PhysicalProperties (liquid, vol, mass)
+import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Physics (energy)
 import Data.Drasil.Concepts.Thermodynamics (heat, thermal_analysis, thermal_energy, 
   melt_pt, boil_pt)
-import Data.Drasil.Units.Thermodynamics
-import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux)
+import qualified Data.Drasil.Units.Thermodynamics as UT 
+import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux, heat_cap_spec)
 import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
+import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
@@ -45,7 +48,7 @@ s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
   s5, s5_1, s5_2, s6, s7 :: Section
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
-  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, s4_2_3_intro, s4_2_4_intro,
+  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, --s4_2_4_intro,
   s4_2_5_intro, s4_2_6_table1, s4_2_6_table2, s6_list, s7_refs:: Contents
 
 -------------------------------
@@ -230,7 +233,7 @@ s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
   (at_start x) :+: S ":" +:+ (x ^. defn)) 
-  [thermal_flux, heat_cap_spec])
+  [UT.thermal_flux, UT.heat_cap_spec])
   
 s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
 
@@ -256,7 +259,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   
 s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end ((makeRef s4_2_6_table1 +:+
   S "and" +:+ makeRef s4_2_6_table2 +:+ S "show"), mid, True, end) ([s4_2_1_list], 
-  s4_2_2_T1, [s4_2_3_intro], [s4_2_4_intro], [s4_2_5_intro],
+  s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, [s4_2_5_intro],
   [s4_2_6_table1, s4_2_6_table2]) []
   
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
@@ -336,9 +339,68 @@ assump12 = [S "No internal", phrase heat,
 {-s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]-}
 
-s4_2_3_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
+s4_2_3_eq :: [Contents]
+s4_2_3_eq = [
 
-s4_2_4_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
+  foldlSPCol [S "Detailed derivation of simplified",
+  phrase rOfChng, S "of", phrase temp],
+
+  foldlSPCol [S "Integrating", swhsSymbMapTRef t1ConsThermE,
+  S "over a", phrase vol, sParen (getS vol) `sC` S "we have"],
+
+  EqnBlock
+  ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  ((C gradient) :. (C thFluxVect)) vol))) +
+  UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  (C vol_ht_gen) vol) :=
+  UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
+  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+
+  foldlSPCol [S "Applying", titleize gauss_div, S "to the first term over",
+  (phrase surface +:+ getS surface `ofThe` phrase vol) `sC` S "with",
+  getS thFluxVect, S "as the", phrase thFluxVect, S "for the",
+  phrase surface, S "and", getS uNormalVect, S "as a", phrase unit_,
+  S "outward", phrase uNormalVect, S "for a", phrase surface],
+
+  EqnBlock
+  ((Neg (UnaryOp (Integral (Just (Low (C surface)),
+  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) +
+  (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
+  vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+
+  foldlSPCol [S "We consider an arbitrary" +:+. phrase vol, S "The",
+  phrase vol_ht_gen, S "is assumed constant. Then (1) can be written as"],
+
+  EqnBlock
+  ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
+  (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
+  Deriv Part (C temp) (C time)) vol)),
+
+  foldlSPCol [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
+  getS in_SA `sC` S "and", getS out_SA, S "are explained in" +:+.
+  acroGD "2", S "Assuming", getS density `sC` getS heat_cap_spec,
+  S "and", getS temp, S "are constant over the", phrase vol `sC`
+  S "which is true in our case by", titleize' assumption,
+  sParen (acroA "3") `sC` sParen (acroA "4") `sC`
+  sParen (acroA "5") `sC` S "and", sParen (acroA "6") `sC` S "we have"],
+
+  EqnBlock
+  ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
+  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C out_SA) + (C vol_ht_gen) * (C vol)),
+
+  foldlSPCol [S "Using the fact that", getS density :+: S "=" :+:
+  getS mass :+: S "/" :+: getS vol `sC` S "(2) can be written as"],
+
+  EqnBlock
+  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
+  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  * (C out_SA) + (C vol_ht_gen) * (C vol))
+  ]
+
+--s4_2_4_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 
 s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 

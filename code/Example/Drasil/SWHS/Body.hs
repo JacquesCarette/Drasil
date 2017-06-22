@@ -1279,7 +1279,8 @@ s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE,
 
 s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
   s7_assump, s7_theories :: [String]
-s7_dataRef, s7_funcReqRef, s7_instaModelRef :: [Sentence]
+s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
+  s7_dataDefRef, s7_likelyChgRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
 s7_instaModelRef = map (refFromType Theory swhsSymMap) iModels
@@ -1394,6 +1395,7 @@ s7_t3_LC4 = ["A11"]
 s7_t3_LC5 = ["A12"]
 s7_t3_LC6 = ["A15"]
 
+s7_table3NEW :: Contents
 s7_table3NEW = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ S "and Other"

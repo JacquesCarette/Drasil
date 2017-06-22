@@ -1220,7 +1220,7 @@ s7 = traceMGF s7_refList s7_trailing
   [s7_fig1, s7_fig2]) []
 
 s7_refList :: [Contents]
-s7_refList = [s7_table1, s7_table2, s7_table3, s7_table3]
+s7_refList = [s7_table1, s7_table2, s7_table3]
 
 s7_trailing :: [Sentence]
 s7_trailing = [
@@ -1238,43 +1238,43 @@ s7_trailing = [
   ]
 
 
+s7_row_t1 :: [String]
+s7_row_t1 = s7_theories ++ {-s7_genDefs ++-} s7_dataDefs ++ s7_instaModel
+
+--column header
+s7_row_header_t1 :: [Sentence]
+s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 (s7_theoriesRef {-++ _-} ++ s7_dataDefRef ++ s7_instaModelRef)
+
+s7_columns_t1 :: [[String]]
+s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
+  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4]
+
+s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
+  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t1_T1 = []
+s7_t1_T2 = ["T3"]
+s7_t1_T3 = []
+s7_t1_GD1 = []
+s7_t1_GD2 = ["T1"]
+s7_t1_DD1 = ["GD1"]
+s7_t1_DD2 = ["GD1"]
+s7_t1_DD3 = []
+s7_t1_DD4 = ["DD3"]
+s7_t1_IM1 = ["GD2", "DD1", "DD2", "IM2"]
+s7_t1_IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+s7_t1_IM3 = ["T2"]
+s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+
 s7_table1 :: Contents
-s7_table1 = Table [EmptyS, swhsSymbMapTRef t1ConsThermE,
-  swhsSymbMapTRef t2SensHtE, swhsSymbMapTRef t3LatHtE, acroGD "1", acroGD "2",
-  swhsSymbMapDRef dd1HtFluxC, swhsSymbMapDRef dd2HtFluxP,
-  swhsSymbMapDRef dd3HtFusion, swhsSymbMapDRef dd3HtFusion,
-  acroIM "1", acroIM "2", acroIM "3", acroIM "4"]
-  [[swhsSymbMapTRef t1ConsThermE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t2SensHtE, EmptyS, EmptyS, S "X", EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapTRef t3LatHtE, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroGD "1", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroGD "2", S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd1HtFluxC, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd2HtFluxP, EmptyS, EmptyS, EmptyS, S "X", EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [swhsSymbMapDRef dd3HtFusion, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroIM "1", EmptyS, EmptyS, EmptyS, EmptyS, S "X", S "X", S "X", EmptyS,
-  EmptyS, EmptyS, S "X", EmptyS, EmptyS],
-  [acroIM "2", EmptyS, EmptyS, EmptyS, EmptyS, S "X", EmptyS, S "X", EmptyS,
-  S "X", S "X", EmptyS, EmptyS, S "X"],
-  [acroIM "3", EmptyS, S "X", EmptyS, EmptyS, EmptyS, EmptyS, EmptyS, EmptyS,
-  EmptyS, EmptyS, EmptyS, EmptyS, EmptyS],
-  [acroIM "4", EmptyS, S "X", S "X", EmptyS, EmptyS, EmptyS, S "X", S "X",
-  S "X", EmptyS, S "X", EmptyS, EmptyS]]
-  (showingCxnBw traceyMatrix (titleize' item +:+ S "of Different" +:+
-  titleize' section_)) True
+s7_table1 = Table (EmptyS:s7_row_header_t1)
+  (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
+  titleize' inModel)) True
 
 -- Wrong DD reference above, change when DD4 is available (twice)
-
+--FIXME: Above table is inconsistent with CaseStudies Version!
 -------------------------------------------------------------------
 -------------------------------------------------------------------
 

@@ -1229,8 +1229,8 @@ likeChg6 = [s6_start "15", S "Any real", phrase tank,
 
 s7 :: Section
 s7 = traceMGF s7_refList s7_trailing
-  ([s7_table1, s7_table2, s7_table3] ++ (s7_intro2) ++
-  [s7_fig1, s7_fig2]) []
+  ([s7_table1, s7_table2, s7_table3] ++
+  (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 
 s7_refList :: [Contents]
 s7_refList = [s7_table1, s7_table2, s7_table3]
@@ -1249,47 +1249,6 @@ s7_trailing = [
   plural assumption]
 
   ]
-
-
-s7_row_t1 :: [String]
-s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
-
---column header
-s7_row_header_t1 :: [Sentence]
-s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
-
-s7_columns_t1 :: [[String]]
-s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
-  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4]
-
-s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
-  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4 :: [String]
-
---list of each item that "X" item requires for traceability matrix
-s7_t1_T1 = []
-s7_t1_T2 = ["T3"]
-s7_t1_T3 = []
-s7_t1_GD1 = []
-s7_t1_GD2 = ["T1"]
-s7_t1_DD1 = ["GD1"]
-s7_t1_DD2 = ["GD1"]
-s7_t1_DD3 = []
-s7_t1_DD4 = ["DD3"]
-s7_t1_IM1 = ["GD2", "DD1", "DD2", "IM2"]
-s7_t1_IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
-s7_t1_IM3 = ["T2"]
-s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
-
-s7_table1 :: Contents
-s7_table1 = Table (EmptyS:s7_row_header_t1)
-  (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
-  titleize' inModel)) True
-
--- Wrong DD reference above, change when DD4 is available (twice)
---FIXME: Above table is inconsistent with CaseStudies Version!
--------------------------------------------------------------------
--------------------------------------------------------------------
 
 s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
   s7_assump, s7_theories :: [String]
@@ -1323,22 +1282,61 @@ s7_dataDefRef = map (refFromType Data swhsSymMap) dataDefns
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 s7_likelyChgRef = makeListRef s7_likelyChg s6
 
---------------------------------------------------------------------
+{-Traceability Matrix 1-}
+
+s7_row_t1 :: [String]
+s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
+
+s7_row_header_t1 :: [Sentence]
+s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
+
+s7_columns_t1 :: [[String]]
+s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1,
+  s7_t1_DD2, s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4]
+
+s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
+  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t1_T1 = []
+s7_t1_T2 = ["T3"]
+s7_t1_T3 = []
+s7_t1_GD1 = []
+s7_t1_GD2 = ["T1"]
+s7_t1_DD1 = ["GD1"]
+s7_t1_DD2 = ["GD1"]
+s7_t1_DD3 = []
+s7_t1_DD4 = ["DD3"]
+s7_t1_IM1 = ["GD2", "DD1", "DD2", "IM2"]
+s7_t1_IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+s7_t1_IM3 = ["T2"]
+s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+
+s7_table1 :: Contents
+s7_table1 = Table (EmptyS:s7_row_header_t1)
+  (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
+  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
+  titleize' inModel)) True
+
+{-Traceability Matrix 2-}
 
 s7_row_t2 :: [String]
 s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
 
 --column header
 s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 
+  (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
 
 --row header
 s7_col_header_t2 :: [Sentence]
-s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq) (s7_instaModelRef ++ s7_funcReqRef)
+s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq)
+  (s7_instaModelRef ++ s7_funcReqRef)
 
 s7_columns_t2 :: [[String]]
-s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
-  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
+s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, 
+  s7_t2_R2, s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
   s7_t2_R9, s7_t2_R10, s7_t2_R11]
 
 s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
@@ -1368,8 +1366,7 @@ s7_table2 = Table (EmptyS:s7_row_header_t2)
   (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
   titleize' inModel)) True
 
--------------------------------------------------------------------
--------------------------------------------------------------------
+{-Traceability Matrix 3-}
 
 s7_row_t3 :: [String]
 s7_row_t3 = s7_assump
@@ -1382,9 +1379,9 @@ s7_col_header_t3 = zipWith itemRefToSent
   (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
 
 s7_columns_t3 :: [[String]]
-s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
-  s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
-  s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
+s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
+  s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
+  s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
 
 s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
   s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
@@ -1418,8 +1415,6 @@ s7_table3 = Table (EmptyS:s7_row_header_t3)
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
-
--- Wrong DD reference above, change when DD4 is available
 
 ------------------------
 -- Traceabilty Graphs --

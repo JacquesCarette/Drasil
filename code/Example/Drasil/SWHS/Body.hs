@@ -1321,7 +1321,7 @@ s7_row_t2 = s7_funcReq ++ s7_instaModel
 
 --column header
 s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_funcReqRef ++ s7_instaModelRef)
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 (s7_instaModelRef ++ s7_funcReqRef)
 
 s7_columns_t2 :: [[String]]
 s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,

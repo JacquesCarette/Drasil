@@ -1,8 +1,7 @@
 module Drasil.SWHS.IMods where
 
 import Language.Drasil
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Prelude hiding (id, exp)
+import Prelude hiding (id)
 
 iModels :: [RelationConcept]
 iModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

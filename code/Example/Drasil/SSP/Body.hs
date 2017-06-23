@@ -408,6 +408,14 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD
   S "element in the matrix, calculated as in DD14. The notation is simplified by the introduction of",
   S "the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively"],
   
+  EqnBlock $
+  (C shrStiffBase) := (C shrStiffBase) * (cos (C baseAngle)) :^ (Int 2) :+ --FIXME: the first symbol should be K_(bA,i), waiting on indexing
+  (C nrmStiffBase) * (sin (C baseAngle)) :^ (Int 2),
+  
+  EqnBlock $
+  (C shrStiffBase) := ((C shrStiffBase)-(C nrmStiffBase)) * --FIXME: the first symbol should be K_(bB,i), waiting on indexing
+  (sin (C baseAngle)) * (cos (C baseAngle)),
+  
   foldlSP [S "A force-displacement relationship for an element i can be written in terms of displacements occurring",
   S "in the unrotated coordinate system delta i of GD9 using the matrix Ks,i, and Kb,i as seen in",
   S "DD12"]
@@ -454,12 +462,17 @@ fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearran
   S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
   S "IM1"],
   
+  EqnBlock fcSfty_rel,
+  
   foldlSP [S "The constants Psi and Phi described in equations 20 and 19 are functions of the unknowns: the",
   S "interslice normal/shear force ratio", getS normToShear, S "(IM2) and the Factor of Safety itself FS (IM1)"]
   ]
 
 nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
   S "taken, with the assumption of GD5. Results in equation (13)"],
+  
+  EqnBlock momEql_rel, --FIXME: this is not *exactly* the equation but very similar
+  --Need more simbols (z) to finish
   
   foldlSP [S "The equation in terms of", getS normToShear, S "leads to equation (14)"],
   
@@ -471,7 +484,7 @@ nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equili
   ]
 
 intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
-  S "that", S "Ni = N0 i - Ub,i" `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
+  S "that", E ((C totNrmForce) := (C nrmFSubWat) - (C baseHydroForce)) `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
   S "equation (16)"],
   
   foldlSP [S "Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and",

@@ -19,7 +19,7 @@ module Language.Drasil.Code.Imperative.AST (
     -- * Convenience functions
     bool,int,float,char,string,infile,outfile,listT,obj,
     methodType,methodTypeVoid,
-    block,defaultValue,
+    block,defaultValue,defaultValue',
     true,false,
     var, arg, self, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
@@ -251,6 +251,10 @@ defaultValue (String) = litString ""
 defaultValue (FileType _) = error $
   "defaultValue undefined for (File _) pattern. See " ++
   "Language.Drasil.Code.Imperative.AST"
+  
+defaultValue' :: StateType -> Value
+defaultValue' (Base b) = defaultValue b
+defaultValue' _ = error "defaultValue' undefined for type"
 
 true :: Value
 true = Lit $ LitBool True

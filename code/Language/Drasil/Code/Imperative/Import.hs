@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Expr as E
-import Language.Drasil.Expr.Extract
+import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec
 
 import Prelude hiding (log, exp, return)
@@ -21,10 +21,38 @@ generateCode spec = let modules = genModules spec
         (toAbsCode (codeName $ program spec) modules)
 
 genModules :: CodeSpec -> [Module]
-genModules (CodeSpec _ _ _ d) = [genCalcMod d]
+genModules (CodeSpec _ i _ d cm) = genInputMod i cm ++ genCalcMod d
 
-genCalcMod :: [CodeDefinition] -> Module
-genCalcMod defs = buildModule "Calculations" [] [] (genCalcFuncs defs) []     
+genInputMod :: (CodeEntity c) => [c] -> ConstraintMap -> [Module]
+genInputMod ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass ins cm)]]
+
+genInputClass :: (CodeEntity c) => [c] -> ConstraintMap -> Class
+genInputClass ins cm = pubClass
+  "InputParameters"
+  Nothing
+  genInputVars
+  ( 
+    [ constructor 
+        "InputParameters" 
+        []
+        [zipBlockWith (&=) vars vals]
+    ]
+    ++ [(genInputConstraints ins cm)]
+  )  
+  where vars         = map (\x -> var $ codeName x) ins
+        vals         = map (\x -> defaultValue' $ convType $ codeType x) ins        
+        genInputVars = 
+          map (\x -> pubMVar 4 (convType $ codeType x) (codeName x)) ins
+        
+genInputConstraints :: (CodeEntity c) => [c] -> ConstraintMap -> Method
+genInputConstraints vars cm = 
+  let cs = concatMap (\x -> constraintLookup x cm) vars in
+    pubMethod methodTypeVoid "input_constraints" [] [ block $
+      map (\x -> ifCond [(convExpr x, oneLiner $ throw "InputError")] noElse) cs
+      ]
+
+genCalcMod :: [CodeDefinition] -> [Module]
+genCalcMod defs = [buildModule "Calculations" [] [] (genCalcFuncs defs) []]   
         
 genCalcFuncs :: [CodeDefinition] -> [Method]
 genCalcFuncs = map 
@@ -64,6 +92,7 @@ convType (C.Object n) = obj n
 convType _ = error "No type conversion"
 
 convExpr :: Expr -> Value
+convExpr (V v)        = litString v  -- V constructor should be removed
 convExpr (Dbl d)      = litFloat d
 convExpr (Int i)      = litInt i
 convExpr (Bln b)      = litBool b

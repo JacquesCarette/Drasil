@@ -1946,7 +1946,7 @@ Data Constraints
 Var
 </th>
 <th>
-Physical Cons
+Physical Constraints
 </th>
 <th>
 Software Constraints
@@ -1955,7 +1955,7 @@ Software Constraints
 Typical Value
 </th>
 <th>
-Uncertainty
+Typical Uncertainty
 </th>
 </tr>
 <tr>
@@ -1963,10 +1963,24 @@ Uncertainty
 a
 </td>
 <td>
-a > 0 and a/b > 1
+a&gt;0.0 and <div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div>&gt;1.0
 </td>
 <td>
-d<sub>min</sub> <= a <= d<sub>max</sub> and a/b < AR<sub>max</sub>
+d<sub>min</sub>&le;a&le;d<sub>max</sub> and <div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div>&lt;AR<sub>max</sub>
 </td>
 <td>
 1500 mm
@@ -1980,10 +1994,17 @@ d<sub>min</sub> <= a <= d<sub>max</sub> and a/b < AR<sub>max</sub>
 b
 </td>
 <td>
-b > 0 and b < a
+b&gt;0.0 and b&lt;a
 </td>
 <td>
-d<sub>min</sub> <= b <= d<sub>max</sub> and a/b < AR<sub>max</sub>
+d<sub>min</sub>&le;b&le;d<sub>max</sub> and <div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div>&lt;AR<sub>max</sub>
 </td>
 <td>
 1200 mm
@@ -1997,13 +2018,13 @@ d<sub>min</sub> <= b <= d<sub>max</sub> and a/b < AR<sub>max</sub>
 P<sub>btol</sub>
 </td>
 <td>
-0 < P<sub>btol</sub> < 1
+0.0&lt;P<sub>btol</sub>&lt;1.0
 </td>
 <td>
--
+
 </td>
 <td>
-0.008
+8.0e-3
 </td>
 <td>
 0.1%
@@ -2014,10 +2035,10 @@ P<sub>btol</sub>
 w
 </td>
 <td>
-w >= 0
+w&ge;0.0
 </td>
 <td>
-w<sub>min</sub> < w < w<sub>max</sub>
+w<sub>max</sub>&le;w&le;w<sub>min</sub>
 </td>
 <td>
 42 kg
@@ -2031,10 +2052,10 @@ w<sub>min</sub> < w < w<sub>max</sub>
 TNT
 </td>
 <td>
-TNT > 0
+TNT&gt;0.0
 </td>
 <td>
--
+
 </td>
 <td>
 1
@@ -2048,10 +2069,10 @@ TNT > 0
 SD
 </td>
 <td>
-SD > 0
+SD&gt;0.0
 </td>
 <td>
-SD<sub>min</sub> < SD < SD<sub>max</sub>
+SD<sub>min</sub>&lt;SD&lt;SD<sub>max</sub>
 </td>
 <td>
 45 m

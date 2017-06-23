@@ -447,7 +447,7 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   S "show"), mid, True, end) ([s4_2_1_list],
   s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4,
-  (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
+  (s4_2_5_IMods),
   [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
 
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
@@ -461,6 +461,10 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
+
+s4_2_1 :: Section
+--s4_2_1 = assumpF (s4_2_2 {-thModF-}) (s4_2_3 {-genDefnF-}) (s4_2_4 {-dataDefnF-}) (s4_2_5_deriv1 {-inModelF-}) (s6) (s4_2_1_list)
+s4_2_1 = assumpF (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_2_5) (s6) [s4_2_1_list]
 
 s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
@@ -669,33 +673,19 @@ s4_2_5_subpar = [foldlSP_ [S "The goals",  acroGS "1", S "to",
   S "depend on one another", acroIM "3", S "can be solved once",
   acroIM "1", S "has been solved. The", phrase solution, S "of",
   acroIM "2", S "and", acroIM "4", S "are also coupled, since the",
-  phrase temp_PCM, S "and", phrase pcm_E, S "depend on the" +:+.
-  phrase CT.phase_change, sParen (at_start' inModel +:+.
-  S "are left out because they are not currently implemented in Drasil")]]
+  phrase temp_PCM, S "and", phrase pcm_E, S "depend on the",
+  phrase CT.phase_change]]
 
 s4_2_5 :: Section
 --s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 (s4_2_5_IMods)
 s4_2_5 = inModelF s4_1 s4_1 s4_1 s4_1 (s4_2_5_IMods)
 
 s4_2_5_IMods :: [Contents]
-s4_2_5_IMods = map swhsSymbMapT iModels
+s4_2_5_IMods = concat $ weave [s4_2_5_derivations , map (\x -> [swhsSymbMapT x]) iModels]
 
-{-
-s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
-  S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+
-  S "into one which is expressed in mathematical terms. It uses concrete" +:+
-  plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
-  plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
-  (makeRef s4_2_3))]
--}
-
--- The first paragraph is completely general and repeated in other examples.
--- The second paragraph is very specific, and the other examples don't even
--- include a paragraph analogous to this one.
-
--- Instance Models aren't implemented yet
-
+s4_2_5_derivations :: [[Contents]]
+s4_2_5_derivations = [s4_2_5_subpar, s4_2_5_deriv1, s4_2_5_deriv2]
+  
 s4_2_5_deriv1 :: [Contents]
 s4_2_5_deriv1 = s4_2_5_d1startPara ++
   (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
@@ -1265,8 +1255,7 @@ s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-s7_assumpRef = makeListRef s7_assump s5_1 --s4_2_1_list
---FIXME: 's5_1' needs to be replaced by the appropriate Section for assumptions once built
+s7_assumpRef = makeListRef s7_assump s4_2_1
 
 s7_theories = ["T1", "T2", "T3"]
 s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels

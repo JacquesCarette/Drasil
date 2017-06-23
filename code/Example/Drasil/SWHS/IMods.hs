@@ -19,7 +19,7 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to
   balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
-balWtr_Rel = Int 0
+balWtr_Rel = Int 0 := Int 0
 
 balWtrDesc :: Sentence
 balWtrDesc = fixmeS
@@ -31,7 +31,7 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP "Energy balance on PCM to f
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = Int 0
+balPCM_Rel = Int 0 := Int 0
 
 balPCMDesc :: Sentence
 balPCMDesc = fixmeS
@@ -43,7 +43,7 @@ heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtr_Rel
 
 htWtr_Rel :: Relation
-htWtr_Rel = Int 0
+htWtr_Rel = Int 0 := Int 0
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above equation is derived using" +:+. acroT "2", 
@@ -65,7 +65,7 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCM_Rel
 
 htPCM_Rel :: Relation
-htPCM_Rel = Int 0
+htPCM_Rel = Int 0 := Int 0
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above equation is derived using" +:+. (acroT "2" `sAnd` acroT "3"),

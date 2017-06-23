@@ -22,20 +22,20 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsCons
 
 swhsUnits :: [UCWrapper]
 swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
-  htCap_S, htCap_V, sens_heat, pcm_initMltE, pcm_E, w_E,
+  htCap_S, htCap_V, sens_heat, pcm_initMltE,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_env, melt_pt, t_init_melt,
-  t_final_melt, temp_diff, temp_PCM, temp_W, vol, tank_vol, w_vol, deltaT,
+  t_final_melt, temp_diff, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 in_SA, out_SA, htCap_L, htCap_S, htCap_V,
-  pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff,
+  pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
-  t_final_melt, temp_diff, temp_PCM, temp_W, tank_vol, w_vol, deltaT,
+  t_final_melt, temp_diff, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
 
@@ -74,12 +74,6 @@ pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
   (sup (sub (sens_heat ^. symbol) (Atomic "Pmelt")) (Atomic "init")) joule
-
-pcm_E        = uc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
-  "Change in thermal energy within the phase change material" (sub (sens_heat ^. symbol) cP) joule
-
-w_E          = uc' "w_E" (nounPhraseSP "change in heat energy in the water")
-  "Change in thermal energy within the water" (sub (sens_heat ^. symbol) cW) joule
 
 vol_ht_gen   = uc' "vol_ht_gen"
   (nounPhraseSP "volumetric heat generation per unit volume")
@@ -135,21 +129,11 @@ t_final_melt = uc' "t_final_melt"
   (nounPhraseSP "time at which melting of PCM ends")
   "Time at which the phase change material finishes changes from a solid to a liquid"
   (sup (sub (time ^. symbol) (Atomic "melt")) (Atomic "final")) second
-
   
 temp_diff   = uc' "temp_diff" (nounPhraseSP "temperature difference")
   "Measure of the relative amounts of internal energy within two bodies" 
   (Concat [Greek Delta, cT]) centigrade
-              
-temp_PCM     = uc' "temp_PCM"
-  (nounPhraseSP "temperature of the phase change material" )
-  "The average kinetic energy of the particles within the phase change material"
-  (sub (temp ^. symbol) cP) centigrade
-
-temp_W       = uc' "temp_W"
-  (nounPhraseSP "temperature of the water")
-  "The average kinetic energy of the particles within the water" (sub (temp ^. symbol) cW) centigrade
-
+  
 tank_vol     = uc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank" (sub (vol ^. symbol) (Atomic "tank")) m_3
 
@@ -199,12 +183,16 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
 swhsConstrained ::[ConstrConcept]
 swhsConstrained = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, 
+  temp_PCM, temp_W, w_E, pcm_E]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final :: ConstrConcept
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, temp_PCM, 
+  temp_W, w_E, pcm_E :: ConstrConcept
 
+-- Input Constraints
+  
 -- Constraint 1
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
@@ -328,6 +316,37 @@ time_final   = cuc' "time_final" (nounPhraseSP "final time")
   (Atomic "final")) second Rational
   [physc $ \c -> c :> Int 0,
   sfwrc $ \c -> c :< C time_final_max]
+  
+  
+-- Output Constraints
+
+-- Constraint 18
+temp_W       = cuc' "temp_W"
+  (nounPhraseSP "temperature of the water")
+  "The average kinetic energy of the particles within the water" 
+  (sub (temp ^. symbol) cW) centigrade Rational
+  [physc $ \c -> C temp_init :<= c :<= C temp_C]
+
+-- Constraint 19
+temp_PCM     = cuc' "temp_PCM"
+  (nounPhraseSP "temperature of the phase change material" )
+  "The average kinetic energy of the particles within the phase change material"
+  (sub (temp ^. symbol) cP) centigrade Rational
+  [physc $ \c -> C temp_init :<= c :<= C temp_C]
+  
+-- Constraint 20
+w_E          = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")
+  "Change in thermal energy within the water" 
+  (sub (sens_heat ^. symbol) cW) joule Rational
+  [physc $ \c -> c :>= Int 0]
+  
+-- Constraint 21
+pcm_E        = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
+  "Change in thermal energy within the phase change material" 
+  (sub (sens_heat ^. symbol) cP) joule Rational
+  [physc $ \c -> c :>= Int 0]
+
+
 
 -------------------------
 -- Max / Min Variables --

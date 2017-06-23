@@ -884,10 +884,10 @@ s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
+  s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
 
-s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con8,
+s4_2_6_conListIn ::[[Sentence]]
+s4_2_6_conListIn = [con1, con2, con3, con4, con5, con6, con7, con8,
   con9, con10, con11, con12, con13, con14, con15, con16, con17]
 
 con1, con2, con3, con4, con5, con6, con7, con8, con9, con10,
@@ -972,10 +972,23 @@ inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 
--- FIXME: Temporary dummy table
+s4_2_6_conListOut ::[[Sentence]]
+s4_2_6_conListOut = [con18, con19, con20, con21]
+  
+con18, con19, con20, con21 :: [Sentence]
+
+con18 = [getS temp_W, E $ C temp_init :<= C temp_W :<= C temp_C]
+
+con19 = [getS temp_PCM, E $ C temp_init :<= C temp_PCM :<= C temp_C]
+
+con20 = [getS w_E, E $ C w_E :> Int 0]
+
+con21 = [getS pcm_E, E $ C pcm_E :> Int 0]
+  
 s4_2_6_table2 :: Contents
-s4_2_6_table2 = Table [S "Dummy Table 2", EmptyS]
-  [[EmptyS, EmptyS], [EmptyS, EmptyS]] (titleize table_ +:+ S "2") True
+s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut) 
+  (titleize table_ +: S "2" +:+ titleize output_ +:+ titleize' variable) True
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.

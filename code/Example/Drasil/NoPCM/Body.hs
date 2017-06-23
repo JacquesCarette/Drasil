@@ -59,12 +59,12 @@ pcmUnits :: [UCWrapper]
 pcmUnits = map ucw [density, tau, in_SA, out_SA, 
   htCap_L, ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen, 
   htTransCoeff, mass, tank_vol, temp, heat_cap_spec,
-  temp_diff, temp_env, temp_W, thFluxVect, time, ht_flux_C,
+  temp_diff, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol]
   
 pcmConstraints :: [ConstrConcept]
 pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init, 
-  time_final, tank_length, temp_C, w_density, diam]
+  time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
   s5, s5_1, s5_2, s6, s7 :: Section

@@ -182,7 +182,7 @@ symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
 
 -- Used to help make data definitions when id, term, and symbol come from the same sourse
---mkDataDef :: (Chunk c, SymbolForm c, NamedIdea c, Quantity c) => c -> Expr -> QDefinition
+mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
 mkDataDef concept equation = datadef $ getUnit concept
   where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term)
                            (concept ^. symbol) a equation

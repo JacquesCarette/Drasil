@@ -3,16 +3,10 @@ module Drasil.GamePhysics.DataDefs where
 import Drasil.GamePhysics.Unitals
 
 import Language.Drasil
-import Drasil.DocumentLanguage
-import Data.Drasil.SI_Units
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, collision, 
-  position, linDisp, linVelo, linAccel, displacement, velocity, angDisp, angVelo,
-  angAccel)
 import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time, 
   angularVelocity, angularAccel, angularDisplacement, velocity, displacement,
   position, linearAccel, linearDisplacement, linearVelocity, impulseS)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import Data.Drasil.Units.Physics
 import Data.Drasil.Utils (mkDataDef)
 
 import Prelude hiding (id)

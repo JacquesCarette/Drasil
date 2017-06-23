@@ -12,6 +12,7 @@ module Data.Drasil.SentenceStructures
 import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1)
 import Data.Drasil.Concepts.Documentation
+import Control.Lens ((^.))
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -128,5 +129,5 @@ maybeWOVerb a b = likelyFrame a EmptyS b
 maybeChanged a b = likelyFrame a (S "changed") b
 maybeExpanded a b = likelyFrame a (S "expanded") b
 
-tAndDWAcc :: Sentence
-tAndDWAcc tD acc = ((at_start tD) :+: sParenDash (short acc)) :+: (tD ^. defn)
+--tAndDWAcc :: (NamedIdea s, Concept s, Concept c) => s -> c -> Sentence
+tAndDWAcc tD acc = Flat $ ((at_start tD) :+: sParenDash (short acc)) :+: (tD ^. defn)
